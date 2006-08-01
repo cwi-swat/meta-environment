@@ -1,9 +1,18 @@
 module Versioning
 
   class BOMReader
-    def initialize(path)
-      File.open(path) do |f|
-        @bom = f.read
+    attr_accessor :bom
+    def self.from_text(text)
+      b = self.new()
+      b.bom = text
+      return b
+    end
+
+    def initialize(path = nil)
+      if path then
+        File.open(path) do |f|
+          @bom = f.read
+        end
       end
     end    
   end

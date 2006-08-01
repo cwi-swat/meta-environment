@@ -40,6 +40,7 @@ module Building
     end
 
     def path
+      raise "Deprecated!!!!"
       return revision.checkout_path
     end
 
@@ -81,9 +82,8 @@ module Building
 
     def do_the_build
       context = Context.new(config, @item)
-      @log.info("Checking out to #{path}...")
-      
-      cd path do 
+      checkout = @revision.checkout
+      cd checkout.path do 
         execute_actions(context)
       end
       @session.add(@revision, @item)

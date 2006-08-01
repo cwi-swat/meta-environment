@@ -89,7 +89,8 @@ module Versioning
     end
 
     def svn_time(time)
-      return time.strftime("%Y%m%dT%H%M")
+      t = time.strftime("%Y%m%dT%H%M")
+      return t
     end
 
     def svn_checkout(user, path, time, dirname)
@@ -100,6 +101,18 @@ module Versioning
     def svn_trunk_checkout(user, path, dirname)
       url = svn_url(path)
       @shell.execute("svn --username #{user} checkout #{url}/trunk #{dirname}")
+    end
+
+    def svn_cat_pkgconfig_file(user, path, time)
+      return svn_cat(user, path, time, "#{path}.pc.in")
+    end
+
+    def svn_cat(user, path, time, subpath)
+      url = svn_url(path)
+      if time.is_a?(Time) then
+        time = svn_time(time)
+      end
+      return @shell.read("svn --username #{user} cat --revision {#{time}} #{url}/trunk/#{subpath}") 
     end
 
     def checkout_path(targetdir, dirname)
@@ -115,9 +128,8 @@ module Versioning
 
 
     def checkout(user, time, path, targetdir, dirname = File.basename(path))
-      time = svn_time(time)
       prepare(targetdir, dirname) do 
-        svn_checkout(user, path, time, dirname)
+        svn_checkout(user, path, svn_time(time), dirname)
       end
       r = revision(user, time, path)
       return SVNCheckout.new(self, checkout_path(targetdir, dirname), r)
@@ -130,12 +142,10 @@ module Versioning
       return Revision.new(c, v)
     end
 
-
-    private 
-
+    
     def version(user, time, path)
       url = svn_url(path)      
-      info = @shell.read("svn --username #{user} info --revision {#{time}} #{url}/trunk")
+      info = @shell.read("svn --username #{user} info --revision {#{svn_time(time)}} #{url}/trunk")
       info.split("\n").each do |line|
         if line =~ /Last Changed Rev: ([0-9]+)/ then
           return $1.to_i
@@ -143,8 +153,7 @@ module Versioning
       end
       raise RuntimeError.new("subversion didn't behave as expected: #{info.split.inspect}")
     end
-    
-    
+        
   end
 
   

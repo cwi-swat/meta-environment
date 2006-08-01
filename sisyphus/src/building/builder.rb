@@ -40,6 +40,9 @@ module Building
     end
 
     def requires_build?(target)
+      #if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
+      #  return true
+      #end
       if @forced.include?(target.name) then
         return true
       end

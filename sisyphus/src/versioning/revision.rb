@@ -1,21 +1,50 @@
 module Versioning
+  require 'versioning/boms'
 
   class Revision
     attr_reader :deps, :component, :version, :checkout
 
     def Revision.from_checkout(component, checkout)
-      revision = Revision.new(component, checkout.version, checkout)
+      revision = Revision.new(component, checkout.version, checkout, checkout.repository)
       checkout.extract_deps.each do |d|
         revision.add_dep(Component.new(d))
       end
       return revision
     end
 
-    def initialize(component, version, checkout = nil)
+    def initialize(component, version, checkout = nil, repository = nil, user = nil, time = nil, checkout_dir = nil)
       @component = component
       @version = version
       @checkout = checkout
+      @repository = repository
+      @user = user
+      @time = time
+      @checkout_dir = checkout_dir
       @deps = []
+    end
+
+    def version 
+      if @version == nil then
+        @version = @repository.version(@user, @time, @component.name)
+      end
+      return @version
+    end
+
+    def deps
+      pkgconfig = @repository.svn_cat_pkgconfig_file(@user, component.name, @time)
+      PKGConfigBOMReader.from_text(pkgconfig).dependencies.each do |dep|
+        add_dep(Component.new(dep))
+      end
+      return @deps
+    end
+
+    def checkout
+      #create checkout for component and version
+      if not @checkout then
+        @checkout = @repository.checkout(@user, @time, component.name, @checkout_dir)
+        @version = checkout.version
+      end
+      return @checkout
     end
 
     def dep_names
@@ -67,7 +96,7 @@ module Versioning
     end
 
     def checkout_path
-      return checkout.path
+      return @checkout.path
     end
 
     def to_s
@@ -148,7 +177,15 @@ module Versioning
     end
 
     def repository_revision(component)
-      revision = Revision.from_checkout(component, checkout(component))
+      # oud:
+      #revision = Revision.from_checkout(component, checkout(component))
+
+      # nieuw:
+      repo = @repo_factory.repository(component.name, @repositories)
+      version  = nil
+      checkout = nil
+      revision = Revision.new(component, version, checkout, repo, @vcs_user, @time, @checkout_dir)
+
       return revision
     end
 
