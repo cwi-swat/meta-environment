@@ -1,9 +1,6 @@
 require 'active_record'
 
 class Helper < ActiveRecord::Base
-  belongs_to :profile
-  belongs_to :variable
-  acts_as_list :scope => :profile
-  validates_presence_of :name, :template
+  has_and_belongs_to_many :profiles
 end
 

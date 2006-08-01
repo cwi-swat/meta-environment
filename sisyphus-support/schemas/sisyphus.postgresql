@@ -156,18 +156,25 @@ create table variables (
 	name text not null unique
 );
 
-insert into variables values (default, 'prefix');
 insert into variables values (default, 'dependencies');
 insert into variables values (default, 'assets');
+insert into variables values (default, 'version');
 insert into variables values (default, 'distribution');
 insert into variables values (default, 'emails');
-insert into variables values (default, 'version');
-
 
 create table helpers (
 	id serial primary key,
-	profile_id integer references profiles
+	name text not null unique
 );
+
+insert into helpers values (default, 'default');
+
+create table profiles_helpers (
+	profile_id integer references profiles,
+	helper_id integer references profiles,
+	unique (profile_id, helper_id)
+);
+
 
 create table functions (
 	id serial primary key,
@@ -178,4 +185,45 @@ create table functions (
 	unique (helper_id, variable_id)
 );
 
+
+insert into functions values (
+	default, 
+	0,  /* position */
+	1,
+	1,
+	'cat <%=name%>.pc.in | grep Requires | sed -e s/Requires: \\(.*\\)/\\1/'
+);
+
+insert into functions values (
+	default, 
+	1,  /* position */
+	1,
+	2,
+	'find <%=prefix%>'
+);
+
+insert into functions values (
+	default, 
+	2,  /* position */
+	1,
+	3,
+	'cat <%=name%>.pc.in | grep Version | sed -e s/Version: \\(.*\\)/\\1/'
+);
+
+
+insert into functions values (
+	default, 
+	3,  /* position */
+	1,
+	4,
+	'echo <%=name%>-<%=version%>.tar.gz'
+);
+
+insert into functions values (
+	default, 
+	4,  /* position */
+	1,
+	5,
+	'cat <%=name%>.pc.in | grep Maintainers | sed -e s/Maintainers=\\(.*\\)/\\1/'
+);
 
