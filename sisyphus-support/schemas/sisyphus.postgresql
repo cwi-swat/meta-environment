@@ -83,13 +83,6 @@ create table targets (
 	
 );
 
-create table roots (
-	id serial primary key,
-	profile_id integer references profiles,
-	component_id integer references components,
-	unique (profile_id, component_id)
-);
-
 create table environments (
 	id serial primary key,
 	profile_id integer references profiles,
