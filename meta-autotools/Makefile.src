@@ -58,7 +58,7 @@ $(AUTO_DIRS): $(AUTO_ARCHIVES)
 
 install-autotools: $(AUTO_DIRS)
 	set -e ; \
-	PATH=${prefix}:${PATH}; \
+	PATH=${prefix}/bin:${PATH}; \
 	export PATH; \
 	for dir in $(AUTO_DIRS); do  \
 		cd $$dir ; \
