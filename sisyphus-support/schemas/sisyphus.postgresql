@@ -1,26 +1,5 @@
 /* -*- sql -*- */
 
-
-drop table builds cascade;
-drop table results cascade;
-drop table trees cascade;
-drop table components cascade;
-drop table status cascade;
-drop table actions cascade;
-drop table sources cascade;
-drop table profiles cascade;
-drop table releases cascade;
-drop table dependencies cascade;
-drop table designators cascade;
-drop table environments cascade;
-drop table platforms cascade;
-drop table hosts cascade;
-drop table roots cascade;
-drop table repositories cascade;
-drop table projects cascade;
-drop table projects_components cascade;
-drop table profiles_projects cascade;
-
 create table repositories (
 	id serial primary key,
 	location text not null unique
@@ -166,6 +145,29 @@ create table status (
 	build_id integer references builds,
 	result_id integer references results,
 	message text not null
+);
+
+
+create table variables (
+	id serial primary key,
+	name text not null unique
+);
+
+insert into variables values (default, 'prefix');
+insert into variables values (default, 'dependencies');
+insert into variables values (default, 'installation_directory');
+insert into variables values (default, 'assets');
+insert into variables values (default, 'distribution');
+insert into variables values (default, 'emails');
+insert into variables values (default, 'version');
+
+
+create table functions (
+	id serial primary key,
+	position integer not null,
+	profile_id integer references profiles,
+	variable_id integer references variables,
+	unique (profile_id, variable_id)
 );
 
 
