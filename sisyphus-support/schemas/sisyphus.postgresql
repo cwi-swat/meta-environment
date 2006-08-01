@@ -148,8 +148,9 @@ create table results (
 	id serial primary key,
 	build_id integer references builds,
 	action_id integer references actions,
-	output text,
-	error_output text,
+	script text,
+	stdout text,
+	stderr text,
 	success boolean,
 	unique (build_id, action_id)
 );
