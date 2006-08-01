@@ -1,3 +1,9 @@
+2006-08-01    <storm@cwi.nl>
+
+	* Feature: implemented "simple" backtracking. This means that if
+	dependencies have failed for a target, older dependencies are
+	used. This prevents too many "not trieds" in Sisyphus.
+
 2006-07-28    <{storm,kooiker}@cwi.nl>
 
 	* Feature: roll now supports an options -D that can be used in

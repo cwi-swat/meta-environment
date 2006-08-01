@@ -3,9 +3,10 @@ module Building
   require 'model/db'
 
   class Builder
-    def initialize(store, forced, log)
+    def initialize(store, forced, config, log)
       @store = store
       @forced = forced
+      @config = config
       @log = log
     end
 
@@ -76,19 +77,51 @@ module Building
         item.set_progress(false)
         item.save
       else
-        target.obtain_item(@store)
-        build_target(target)
+        item = target.obtain_item(@store)
+        build_target(target, item)
         target.save(@store)
         return target.item
       end
     end
 
-    def build_target(target)
+    def compatible?(deps1, deps2)
+      names1 = deps1.collect { |d| d.name }
+      names2 = deps2.collect { |d| d.name }
+      return names1.sort == names2.sort
+    end
+
+    def prefixes_still_exist?(dep_items)
+      dep_items.each do |item|
+        prefix = item.prefix(@config.install_dir)
+        if not File.exist?(prefix) then
+          @log.info("found no prefix for #{item} at #{prefix}")
+          return false
+        end       
+      end
+      return true
+    end
+
+    def build_target(target, item)
       if target.deps_are_successful? then
         target.fire
       else
+        @log.info("dependencies in this session have failed, trying older ones...")
+        older_item = Model::SiItem.find(:first, :conditions => ['id < ? and success = true and si_revision_id = ?',
+                                                                item.id, item.si_revision.id],
+                                        :order => 'id desc')
+        if older_item then
+          if compatible?(older_item.dep_items, item.dep_items) then
+            @log.info("found older build with compatible dependencies #{older_item.dep_items.join(', ')}")
+            if prefixes_still_exist?(older_item.dep_items)
+              target.obtain_new_item(@store, older_item.dep_items)
+              target.fire
+              return
+            end
+            @log.warn("But not all prefixes are still there...")
+          end
+        end
+        @log.warn("no suitable dependencies were found; no build performed.")
         target.not_tried
-        @log.warn("there were failed dependencies; no build performed.")
       end
     end
   end

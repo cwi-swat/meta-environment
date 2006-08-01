@@ -170,5 +170,3 @@ group by
 	si_items.si_host_id,
 	si_components.id
 ;
-
-	

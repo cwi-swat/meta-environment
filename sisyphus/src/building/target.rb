@@ -63,6 +63,16 @@ module Building
       @item = store.item_for_target(self, @dep_items)
       @log.info("Obtaining new build item from store: #{@item}")
       @log.info("With dependencies: #{@dep_items.join(', ')}")
+      return @item
+    end
+
+    def obtain_new_item(store, dep_items)
+      if @item then
+        @item.destroy
+      end
+      @dep_items = dep_items
+      @item = store.item_for_target(self, dep_items)
+      return @item
     end
 
     def save(store)
@@ -113,10 +123,12 @@ module Building
           break
         end
         item = find_build_for_build_env_package(implicit_dep)
+        @log.info("adding #{item} to PATH in environment")
         path = File.join(item.prefix(config.install_dir), 'bin')
         env += "PATH=#{path}:$PATH\n"
         env += "export PATH\n";
       end
+      @log.info("the environment is:\n #{env}")
       return env
     end
 
@@ -125,7 +137,7 @@ module Building
       env = script_environment
       context.actions do |action, command|
         @log.info("Performing action #{action}: #{command}")
-        if not execute_command(action, command, env).success then
+        if not execute_command(action, command, env).success then          
           return
         end
       end

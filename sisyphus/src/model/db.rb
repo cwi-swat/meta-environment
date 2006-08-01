@@ -206,7 +206,6 @@ module Model
     #fields name, version, informative_version
   end
 
-
   class DBStore
     include Utils::SimpleDiff
     include Utils::UnameDir
