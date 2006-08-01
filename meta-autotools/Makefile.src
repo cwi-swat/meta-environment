@@ -9,64 +9,58 @@ DIST_DIR=$(STEM)
 pkgdatadir=$(prefix)/share/$(PACKAGE)
 bindir=$(prefix)/bin
 
+EXTRA_DIST = \
+	     Makefile.src \
+	     meta-autotools.pc.in \
+	     configure \
+	     reconf \
+	     ChangeLog \
+	     $(wildcard *.tar.gz)
 
-AUTOCONF_VERSION=2.59
-AUTOMAKE_VERSION=1.9.6
-LIBTOOL_VERSION=1.5.22
-PKGCONFIG_VERSION=0.20
+AUTO_TOOLS=autoconf automake libtool pkgconfig
 
-AUTOCONF_ARCHIVE=autoconf-$(AUTOCONF_VERSION).tar.gz
-AUTOMAKE_ARCHIVE=automake-$(AUTOMAKE_VERSION).tar.gz
-LIBTOOL_ARCHIVE=libtool-$(LIBTOOL_VERSION).tar.gz
-PKGCONFIG_ARCHIVE=pkg-config-$(PKGCONFIG_VERSION).tar.gz
+autoconf_VERSION=2.59
+automake_VERSION=1.9.6
+libtool_VERSION=1.5.22
+pkgconfig_VERSION=0.20
 
-AUTO_ARCHIVES = $(AUTOCONF_ARCHIVE) $(AUTOMAKE_ARCHIVE) $(LIBTOOL_ARCHIVE) $(PKGCONFIG_ARCHIVE)
-AUTO_DIRS := $(AUTO_ARCHIVES:.tar.gz=)
+automake_NAME=automake
+autoconf_NAME=autoconf
+libtool_NAME=libtool
+pkgconfig_NAME=pkg-config
 
 GNU=http://ftp.gnu.org/gnu
-AUTOCONF=$(GNU)/autoconf/$(AUTOCONF_ARCHIVE)
-AUTOMAKE=$(GNU)/automake/$(AUTOMAKE_ARCHIVE)
-LIBTOOL=$(GNU)/libtool/$(LIBTOOL_ARCHIVE)
-PKGCONFIG=http://pkgconfig.freedesktop.org/releases/$(PKGCONFIG_ARCHIVE)
+autoconf_URI=$(GNU)/autoconf/$(autoconf_NAME)-$(autoconf_VERSION).tar.gz
+automake_URI=$(GNU)/automake/$(automake_NAME)-$(automake_VERSION).tar.gz
+libtool_URI=$(GNU)/libtool/$(libtool_NAME)-$(libtool_VERSION).tar.gz
+pkgconfig_URI=http://pkgconfig.freedesktop.org/releases/$(pkgconfig_NAME)-$(pkgconfig_VERSION).tar.gz
 
-AUTO_TOOLS = $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(PKGCONFIG)
-
-WGET=wget
-
-EXTRA_DIST = Makefile.src meta-autotools.pc.in configure reconf ChangeLog $(AUTO_ARCHIVES)
+WGET=wget --tries=5 $($*_URI) -O $*.tar.gz
+UNZIP=gunzip -c $< | tar xvf - 
 
 CLEANFILES = meta-autotools.pc
+
+.SECONDARY: $(foreach i, $(AUTO_TOOLS), $i.dir $i.tar.gz)
 
 all: 
 	@true
 
-install: all install-autotools
+install: all $(foreach i,$(AUTO_TOOLS),$i.installed)
 	@echo "ADD ${prefix}/bin to your PATH!"
 
+%.tar.gz : 
+	$(WGET) 
 
-$(AUTO_ARCHIVES):
-	for tool in $(AUTO_TOOLS); do  \
-		$(WGET) --tries=5 $$tool ; \
-	done; \
+%.dir : %.tar.gz
+	$(UNZIP)
+	mv $($*_NAME)-$($*_VERSION) $*.dir
 
-$(AUTO_DIRS): $(AUTO_ARCHIVES)
-	for tool in $(AUTO_ARCHIVES); do  \
-		gunzip -c $$tool | tar xvf - ; \
-	done 
-
-
-
-install-autotools: $(AUTO_DIRS)
-	set -e ; \
-	PATH=${prefix}/bin:${PATH}; \
-	export PATH; \
-	for dir in $(AUTO_DIRS); do  \
-		cd $$dir ; \
-		./configure --prefix=${prefix}; \
-		make ; \
-		make install ; \
-		cd .. ; \
-	done 
+%.installed: %.dir
+	cd $< ; \
+	PATH=${prefix}/bin:${PATH}; export PATH; \
+	./configure --prefix=${prefix}; \
+	make ; \
+	make install ; 
 
 dist: $(EXTRA_DIST)
 	rm -rf $(DIST_DIR)
@@ -81,3 +75,5 @@ check:
 distcheck: dist
 	@true
 
+clean:
+	rm -rf *.dir *.tar.gz

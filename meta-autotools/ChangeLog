@@ -1,16 +1,19 @@
+
+Tue Aug  1 14:57:44 CEST 2006 <{jurgenv@cwi.nl>
+ * Makefile.src: removed for loops from targets to prevent
+   downloading and installing everything 4 times. Extreme use of
+   implicit rules to factor out commonalities.
+
 2006-08-01    <{kooiker,storm}@cwi.nl>
 
 	* Fix: added export PATH to the rule that installs autotools.
 
 2006-07-31    <storm@cwi.nl>
-
 	* Fix; moved from curl to wget.
 
 2006-07-27    <storm@cwi.nl>
-
 	* Fix: distcheck didn't dist.
 
 2006-07-27    <{storm,kooiker,martinrw}@cwi.nl>
-
 	* Boot: initial version of package capturing autotools.
 
