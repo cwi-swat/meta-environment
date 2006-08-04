@@ -21,5 +21,15 @@ class Session < ActiveRecord::Base
     return Session.find(:first, :conditions => ['host_id = ?', host], :order => 'time desc')
   end
 
+  protected
+
+  def validate
+    previous_session_must_be_of_same_host
+  end
+
+  def previous_session_must_be_of_same_host
+    return previous.host == host
+  end
+
 end
 

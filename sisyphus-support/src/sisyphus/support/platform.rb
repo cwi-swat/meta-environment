@@ -24,5 +24,13 @@ class Platform < ActiveRecord::Base
       return p
     end
   end
+
+  def ==(o)
+    return kernel_name == o.kernel_name &&
+      kernel_release == o.kernel_release &&
+      hardware_platform == o.hardware_platform &&
+      hardware_class == o.hardware_class &&
+      processor_type == o.processor_type
+  end
   
 end

@@ -14,5 +14,14 @@ class Host < ActiveRecord::Base
     return h
   end
 
+  def ==(o)
+    return name == o.name &&
+      platform == o.platform
+  end
+
+  def <=>(o)
+    return name <=> o.name
+  end
+
 end
 
