@@ -1,6 +1,7 @@
 require 'active_record'
 
 class Host < ActiveRecord::Base
+  has_many :sessions
   belongs_to :platform
   validates_presence_of :name
 

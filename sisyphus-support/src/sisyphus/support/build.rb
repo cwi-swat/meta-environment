@@ -3,8 +3,9 @@ require 'active_record'
 class Build < ActiveRecord::Base
   belongs_to :target
   belongs_to :session
-
+  has_one :release
   has_many :results
+
   has_and_belongs_to_many :dependencies,
   :classname => 'Build',
   :join_table => 'dependencies',
@@ -12,10 +13,23 @@ class Build < ActiveRecord::Base
   :assocation_foreign-key => 'dependency_id'
 
 
-  validates_presence_of :time
-
   def name
     return target.name
+  end
+
+  def time
+    return session.time
+  end
+
+  def revision
+    return target.revision
+  end
+
+  def version
+    if release then
+      return release.version
+    end
+    return nil
   end
 
   def requires

@@ -14,6 +14,10 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def roots
+    return components
+  end
+
   def sources_for_name(name)
     sources.each do |source|
       if source.name == name then

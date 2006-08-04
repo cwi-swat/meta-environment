@@ -2,6 +2,7 @@ require 'active_record'
 
 class Tree < ActiveRecord::Base
   belongs_to :designator
+  has_many :targets
   validates_presence_of :revision
 
   def self.find_by_designator_and_revision(designator, revision)

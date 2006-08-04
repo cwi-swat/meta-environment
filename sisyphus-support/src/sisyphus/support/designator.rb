@@ -2,6 +2,7 @@ require 'active_record'
 
 class Designator < ActiveRecord::Base
   belongs_to :repository
+  has_many :trees
   validates_presence_of :path
 
   def self.find_by_repository_and_path(repository, path)

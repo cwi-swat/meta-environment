@@ -11,6 +11,10 @@ class Target < ActiveRecord::Base
     return source.name
   end
 
+  def revision
+    return tree.revision
+  end
+
   def ==(o)
     return project == o.project &&
       source == o.source &&

@@ -110,7 +110,7 @@ create table builds (
 	session_id integer references sessions,
 	created_on timestamp,
 	success boolean,
-	unique (target_id, host_id)
+	unique (target_id, session_id)
 );
 
 create table dependencies (

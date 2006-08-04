@@ -18,23 +18,27 @@ class Profile < ActiveRecord::Base
     return p
   end
 
-  def designation(tree)
-    # this works because of the constraints on project/profile
-    project_sources.each do |source|
-      if tree.designator == source.designator then
-        return source.component
+  def designator(component)
+    sources.each do |source|
+      if source.component == component then
+        return source.designator
       end
     end
-    raise "Consistency error: #{tree} has no designation in #{self}!"
+    raise "Consistency error: #{component} has no designation in #{self}!"
   end
 
-  def project_sources
-    result = []
-    projects.each do |project|
-      result += project.sources
+  def roots
+    return reduce_projects do |project|
+      project.components
     end
-    return result
   end
+
+  def sources
+    return reduce_projects do |project|
+      project.sources
+    end
+  end
+
 
   def ==(o)
     return name == o.name && 
@@ -49,6 +53,14 @@ class Profile < ActiveRecord::Base
 
 
   protected
+
+  def reduce_projects
+    result = []
+    projects.each do |project|
+      result += yield project
+    end
+    return result.uniq
+  end
 
   def validate
     components_must_have_unique_sources_across_projects

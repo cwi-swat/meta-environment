@@ -2,6 +2,8 @@
 require 'active_record'
 
 class Platform < ActiveRecord::Base
+  has_many :hosts
+
   validates_presence_of 
   :kernel_name, 
   :kernel_release, 
