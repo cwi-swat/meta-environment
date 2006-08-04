@@ -109,10 +109,21 @@ module Versioning
 
     def svn_cat(user, path, time, subpath)
       url = svn_url(path)
-      if time.is_a?(Time) then
-        time = svn_time(time)
+      time_str = ''
+      if time then
+        time_str = " --revision "
+        if time.is_a?(Time) then
+          time_str += "{" + svn_time(time) + "}"
+        else
+          time_str += time.to_s
+        end
       end
-      return @shell.read("svn --username #{user} cat --revision {#{time}} #{url}/trunk/#{subpath}") 
+      if user then
+        user_str = "--username #{user}"
+      else
+        user_str = ''
+      end
+      return @shell.read("svn #{user_str} cat #{time_str} #{url}/trunk/#{subpath}") 
     end
 
     def checkout_path(targetdir, dirname)
