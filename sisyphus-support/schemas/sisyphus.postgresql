@@ -98,11 +98,16 @@ create table hosts (
 );
 
 
+create table session (
+       id serial primary key,
+       host_id integer references hosts,
+       time timestamp
+);
+
 create table builds (
 	id serial primary key, 
 	target_id integer references targets,
-	host_id integer references hosts,
-	time timestamp not null unique,
+	session_id integer references sessions,
 	created_on timestamp,
 	success boolean,
 	unique (target_id, host_id)

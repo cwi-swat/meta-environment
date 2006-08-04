@@ -2,7 +2,7 @@ require 'active_record'
 
 class Build < ActiveRecord::Base
   belongs_to :target
-  belongs_to :host
+  belongs_to :session
 
   has_many :results
   has_and_belongs_to_many :dependencies,
