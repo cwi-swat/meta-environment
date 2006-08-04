@@ -3,6 +3,8 @@ require 'active_record'
 
 class Session < ActiveRecord::Base
   has_many :builds
+  has_many :changes
+  belongs_to :previous, :class_name => 'Session', :foreign_key => 'previous_id'
   belongs_to :host
   validates_presence_of :time
 

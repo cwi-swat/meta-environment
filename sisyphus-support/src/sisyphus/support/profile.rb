@@ -39,6 +39,11 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def repositories
+    return reduce_projects do |project|
+      project.repositories
+    end
+  end
 
   def ==(o)
     return name == o.name && 

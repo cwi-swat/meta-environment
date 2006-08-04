@@ -5,8 +5,6 @@ SUBDIRS = src schemas script
 
 ACLOCAL_AMFLAGS = -I .
 
-
-
 gems = activerecord-1.13.2 activesupport-1.2.5 postgres-pr-0.4.0
 
 install-data-hook: 

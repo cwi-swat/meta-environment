@@ -1,9 +1,9 @@
 
-bin_SCRIPTS     = create-sisyphus-tables sisyphus-support-config psql-sisyphus drop-sisyphus-tables postgresql-to-sqlite
+bin_SCRIPTS     = create-sisyphus-tables sisyphus-support-config psql-sisyphus drop-sisyphus-tables schema-to-sqlite3
 
 EXTRA_DIST      = $(wildcard *.sh.src)
 
-CLEANFILES      = create-sisyphus-tables sisyphus-support-config psql-sisyphus drop-sisyphus-tables postgresql-to-sqlite
+CLEANFILES      = create-sisyphus-tables sisyphus-support-config psql-sisyphus drop-sisyphus-tables schema-to-sqlite3
 
 % : %.sh.src
 	sed "s@__PREFIX__@$(prefix)@g;\

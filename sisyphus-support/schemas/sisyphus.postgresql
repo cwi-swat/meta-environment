@@ -98,10 +98,19 @@ create table hosts (
 );
 
 
-create table session (
+create table sessions (
        id serial primary key,
        host_id integer references hosts,
+       previous_id integer references sessions,
        time timestamp
+);
+
+create table changes (
+       id serial primary key,
+       session_id integer references sessions,
+       designator_id integer references designators,
+       path text,
+       unique (session_id, designator_id, path)
 );
 
 create table builds (

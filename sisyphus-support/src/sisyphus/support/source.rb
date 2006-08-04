@@ -11,6 +11,10 @@ class Source < ActiveRecord::Base
                                              component, project])
   end
 
+  def repository
+    return designator.repository
+  end
+
   def name
     return component.name
   end

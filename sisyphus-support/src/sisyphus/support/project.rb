@@ -34,8 +34,20 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def repositories
+    sources.collect do |source|
+      source.repostory
+    end.uniq
+  end
+
+  def designators
+    sources.collect do |source|
+      source.designator
+    end
+  end
 
   protected
+
 
   def validate
     root_components_must_be_in_sources
