@@ -36,6 +36,18 @@ class Profile < ActiveRecord::Base
     return result
   end
 
+  def ==(o)
+    return name == o.name && 
+      environment == o.environment &&
+      helper == o.helper &&
+      script == o.script
+  end
+
+  def <=>(o)
+    return name <=> o.name
+  end
+
+
   protected
 
   def validate

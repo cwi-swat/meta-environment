@@ -14,18 +14,14 @@ class Build < ActiveRecord::Base
 
   validates_presence_of :time
 
-  def self.find_by_target_and_host(target, host)
-    b = Build.find(:first, :conditions => ['target_id = ? and host_id = ?',
-                                           target, host])
-    if not b then
-      b = Build.new(:target => target, :host => host)
-      b.save
-    end
-    return b
-  end
-
   def name
     return target.name
+  end
+
+  def requires
+    return dependencies.collect do |dep|
+      dep.name
+    end
   end
 
   def extent

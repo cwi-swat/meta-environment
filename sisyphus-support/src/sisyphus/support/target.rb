@@ -11,8 +11,12 @@ class Target < ActiveRecord::Base
     return source.name
   end
 
-  
-
+  def ==(o)
+    return project == o.project &&
+      source == o.source &&
+      profile == o.profile &&
+      tree == o.tree
+  end
 
   protected
 
