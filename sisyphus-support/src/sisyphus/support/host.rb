@@ -14,5 +14,10 @@ class Host < ActiveRecord::Base
     return name <=> o.name
   end
 
+  def to_s
+    return name
+  end
+
+
 end
 

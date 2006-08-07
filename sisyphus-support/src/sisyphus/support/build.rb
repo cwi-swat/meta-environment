@@ -46,6 +46,27 @@ class Build < ActiveRecord::Base
     return extent
   end
 
+
+  def profile
+    return target.profile
+  end
+
+  def platform
+    return host.platform
+  end
+
+  def component
+    return target.component
+  end
+
+  def designator
+    return target.designator
+  end
+
+  def tree
+    return target.tree
+  end
+
   protected
 
   def validate

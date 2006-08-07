@@ -37,6 +37,23 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def changes_since_session(session)
+    result = []
+    repositories.each do |repository|
+      result += repository.changes_since_session(session)
+    end
+    return result
+  end
+
+
+  def actions
+    return script.actions
+  end
+
+  def function(name)
+    return helper.function(name)
+  end
+
   def ==(o)
     return name == o.name && 
       environment == o.environment &&
@@ -48,6 +65,9 @@ class Profile < ActiveRecord::Base
     return name <=> o.name
   end
 
+  def to_s
+    return "#{name}@#{version}"
+  end
 
   protected
 

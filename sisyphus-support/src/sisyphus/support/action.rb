@@ -9,5 +9,15 @@ class Action < ActiveRecord::Base
   belongs_to :script
   acts_as_list :scope => :script
   validates_presence_of :name, :template
+
+  def ==(o)
+    return name == o.name &&
+      template == o.template
+  end
+
+  def <=>(o)
+    return name <=> o.name
+  end
+
 end
 

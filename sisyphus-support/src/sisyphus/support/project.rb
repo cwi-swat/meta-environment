@@ -46,6 +46,10 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def to_s
+    return name
+  end
+
   protected
 
 

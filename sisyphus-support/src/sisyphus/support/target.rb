@@ -15,12 +15,39 @@ class Target < ActiveRecord::Base
     return tree.revision
   end
 
+
+  def actions
+    return profile.actions
+  end
+
+  def environment
+    return profile.environment
+  end
+
+  def designator
+    return source.designator
+  end
+
+  def component
+    return source.component
+  end
+
+  def checkout(path)
+    return tree.checkout_as(path, name)
+  end
+
+  def function(name)
+    return profile.find_function(name)
+  end
+
+
   def ==(o)
     return project == o.project &&
       source == o.source &&
       profile == o.profile &&
       tree == o.tree
   end
+
 
   protected
 

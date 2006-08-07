@@ -1,9 +1,37 @@
+
 require 'active_record'
 
 class Tree < ActiveRecord::Base
   belongs_to :designator
   has_many :targets
   validates_presence_of :revision
+
+
+  def checkout_as(path, dirname)
+    repository.checkout(path, dirname, revision)
+  end
+
+  def maintainers
+    if bom =~ /Maintainers\s*=\s*([^\n]*)/m then
+      return $1.split(',')
+    end
+    return []
+  end
+
+  def version
+    if bom =~ /Version\s*:\s*([0-9\.a-bA-Z_\-]+)/m then
+      return $1
+    end
+    raise "Error parsing version in: #{bom}"
+  end
+
+  def requires
+    if bom =~ /^Requires\s*:\s*([^\n]*)/m then
+      return $1.split(/[, ]/)
+    end
+    return []
+  end
+
 
   def repository
     return designator.repository
@@ -29,6 +57,34 @@ class Tree < ActiveRecord::Base
     end
     return order
   end
+
+  private
+
+  def bom
+    if @bom then
+      return @bom
+    end
+    @bom = read(bom_file_name)
+    return @bom
+  end
+
+  def bom_file_name
+    # TODO: this should be parameterized somehow using helpers.
+    return "#{name}.pc.in"
+  end
+
+  def read(subpath)
+    return repository.read(expand_path(subpath), revision)
+  end
+
+  def exist?(subpath)
+    return repository.exist?(expand_path(subpath), revision)
+  end
+
+  def expand_path(subpath)
+    return File.join(path, subpath)
+  end
+
 
 
 end

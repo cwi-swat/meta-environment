@@ -10,5 +10,9 @@ class Function < ActiveRecord::Base
     return variable.name
   end
 
+  def to_s
+    return name + ' ::= ' + "{#{template}}"
+  end
+
 end
 
