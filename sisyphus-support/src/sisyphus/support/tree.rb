@@ -42,7 +42,7 @@ class Tree < ActiveRecord::Base
   end
 
   def to_s
-    return "<#{designator}, #{revision}>"
+    return "#{designator}@#{revision}"
   end
 
   def ==(o)

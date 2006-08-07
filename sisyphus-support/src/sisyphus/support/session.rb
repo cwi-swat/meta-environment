@@ -12,6 +12,24 @@ class Session < ActiveRecord::Base
     return Session.find_by_host(host, :order => 'time desc')
   end
 
+  def to_s
+    return "session@#{host}@{time}"
+  end
+
+  def ==(o)
+    return previous == o.previous &&
+      host == o.host &&
+      time == o.time
+  end
+
+  def <=>(o)
+    order = host <=> o.host
+    if order == 0 then
+      order = time <=> host.time
+    end
+    return order
+  end
+
   protected
 
   def validate

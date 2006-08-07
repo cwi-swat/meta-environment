@@ -67,6 +67,21 @@ class Build < ActiveRecord::Base
     return target.tree
   end
 
+  def ==(o)
+    return target == o.target &&
+      session == o.session &&
+      release == o.release &&
+      id == o.id
+  end
+
+  def <=>(o)
+    return session <=> o.session
+  end
+
+  def to_s
+    return "#{target}@#{session}"
+  end
+
   protected
 
   def validate
