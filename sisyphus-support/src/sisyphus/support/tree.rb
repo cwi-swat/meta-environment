@@ -5,16 +5,6 @@ class Tree < ActiveRecord::Base
   has_many :targets
   validates_presence_of :revision
 
-  def self.find_by_designator_and_revision(designator, revision)
-    t = Tree.find(:first, :conditions => ['designator_id = ? and revision = ?',
-                                         designator, revision])
-    if not t then
-      t = Tree.new(:designator => designator, :revision => revision)
-      t.save
-    end
-    return t
-  end
-  
   def repository
     return designator.repository
   end

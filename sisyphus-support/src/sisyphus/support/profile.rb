@@ -10,14 +10,6 @@ class Profile < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  def self.find_by_name(name)
-    p = Profile.find(:first, :condition => ['name = ?', name], :order => 'version desc')
-    if not p then
-      p = Profile.new(:name => name)
-    end
-    return p
-  end
-
   def designator(component)
     sources.each do |source|
       if source.component == component then
