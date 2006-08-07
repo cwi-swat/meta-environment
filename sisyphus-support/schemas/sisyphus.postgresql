@@ -474,7 +474,7 @@ insert into functions values (
 );
 
 
-create view component_builds 
+create view successes 
 	(id, name, revision, version, host_id, profile_id,  build_id) as
 select 
 	builds.id,
@@ -493,6 +493,7 @@ from
 	sources,
 	sessions
 where
+	builds.success = true and
 	builds.target_id = targets.id and
 	builds.session_id = sessions.id and
 	targets.tree_id = trees.id and
@@ -500,3 +501,23 @@ where
 	sources.component_id = components.id
 ;
 
+
+
+create view latests (id, component_id, build_id) as
+select
+	sessions.host_id, components.id, max(builds.id)
+from 
+	sessions,
+	components,
+	builds,
+	targets,
+	sources
+where 
+	builds.target_id = targets.id and
+	builds.session_id = sessions.id and
+	targets.source_id = sources.id and
+	sources.component_id = components.id
+group by 
+	sessions.host_id,
+	components.id
+;
