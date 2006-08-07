@@ -1,9 +1,7 @@
 
-SUBDIRS = model utils
-
 RUBY_FILES = $(wildcard *.rb)
 
-supportdir = $(pkgdatadir)/sisyphus/support
+supportdir = $(pkgdatadir)/sisyphus/support/utils
 
 support_DATA = $(RUBY_FILES)
 
