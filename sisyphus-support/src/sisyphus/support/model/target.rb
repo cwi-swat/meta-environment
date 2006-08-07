@@ -7,6 +7,8 @@ class Target < ActiveRecord::Base
   belongs_to :profile
   belongs_to :tree
 
+  has_many :builds, :order => 'id desc'
+
   def name
     return source.name
   end

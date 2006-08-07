@@ -206,6 +206,7 @@ insert into sources values(default, 6, 6, 1);
 insert into sources values(default, 7, 7, 1);
 insert into sources values(default, 8, 8, 1);
 insert into sources values(default, 9, 9, 1);
+
 insert into sources values(default, 10, 10, 1);
 insert into sources values(default, 11, 11, 1);
 insert into sources values(default, 12, 12, 1);
@@ -216,6 +217,7 @@ insert into sources values(default, 16, 16, 1);
 insert into sources values(default, 17, 17, 1);
 insert into sources values(default, 18, 18, 1);
 insert into sources values(default, 19, 19, 1);
+
 insert into sources values(default, 20, 20, 1);
 insert into sources values(default, 21, 21, 1);
 insert into sources values(default, 22, 22, 1);
@@ -226,6 +228,7 @@ insert into sources values(default, 26, 26, 1);
 insert into sources values(default, 27, 27, 1);
 insert into sources values(default, 28, 28, 1);
 insert into sources values(default, 29, 29, 1);
+
 insert into sources values(default, 30, 30, 1);
 insert into sources values(default, 31, 31, 1);
 insert into sources values(default, 32, 32, 1);
@@ -236,6 +239,7 @@ insert into sources values(default, 36, 36, 1);
 insert into sources values(default, 37, 37, 1);
 insert into sources values(default, 38, 38, 1);
 insert into sources values(default, 39, 39, 1);
+
 insert into sources values(default, 40, 40, 1);
 insert into sources values(default, 41, 41, 1);
 insert into sources values(default, 42, 42, 1);
@@ -246,6 +250,7 @@ insert into sources values(default, 46, 46, 1);
 insert into sources values(default, 47, 47, 1);
 insert into sources values(default, 48, 48, 1);
 insert into sources values(default, 49, 49, 1);
+
 insert into sources values(default, 50, 50, 1);
 insert into sources values(default, 51, 51, 1);
 insert into sources values(default, 52, 52, 1);
@@ -467,4 +472,31 @@ insert into functions values (
 	5,
 	'cat <%=name%>.pc.in | grep Maintainers | sed -e s/Maintainers=\\(.*\\)/\\1/'
 );
+
+
+create view component_builds 
+	(id, name, revision, version, host_id, profile_id,  build_id) as
+select 
+	builds.id,
+	components.name, 
+	trees.revision,
+	releases.version,
+	sessions.host_id,
+	targets.profile_id,
+	builds.id
+from
+	builds,
+	components,
+	trees,
+	releases,
+	targets,
+	sources,
+	sessions
+where
+	builds.target_id = targets.id and
+	builds.session_id = sessions.id and
+	targets.tree_id = trees.id and
+	targets.source_id = sources.id and
+	sources.component_id = components.id
+;
 

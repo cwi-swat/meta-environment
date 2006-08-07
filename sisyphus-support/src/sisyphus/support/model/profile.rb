@@ -5,6 +5,8 @@ class Profile < ActiveRecord::Base
   has_one :helper
   has_one :script
 
+  has_many :targets, :order => 'id desc'
+
   has_and_belongs_to_many :projects
   
   validates_presence_of :name
@@ -22,6 +24,28 @@ class Profile < ActiveRecord::Base
   def roots
     return reduce_projects do |project|
       project.components
+    end
+  end
+ 
+  def builds_for_host(host)
+    return builds do |build|
+      build.host == host
+    end
+  end
+
+  def builds_for_name(name)
+    return builds do |build|
+      build.name == name
+    end      
+  end
+
+  def builds_for_names2(names)
+
+  end
+
+  def builds_for_names(names)
+    return builds do |build|
+      names.include?(build.name)
     end
   end
 
@@ -93,5 +117,20 @@ class Profile < ActiveRecord::Base
       end
     end
   end  
+
+  private
+
+  def builds
+    result = []
+    targets.each do |target|
+      target.builds.each do |build|
+        if yield build then
+          result << build
+        end
+      end
+    end
+    return result.uniq.compact
+  end
+
 
 end
