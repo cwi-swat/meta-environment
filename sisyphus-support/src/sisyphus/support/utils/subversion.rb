@@ -35,8 +35,8 @@ module Subversion
     return true
   end
 
-  def checkout(path, dirname = File.split(path).last, revision = nil)
-    svn_command('checkout', path, revision, dirname)
+  def checkout(path, dirname, dest_dir, revision = nil)
+    svn_command('checkout', path, revision, File.join(dest_dir, dirname))
   end
 
 

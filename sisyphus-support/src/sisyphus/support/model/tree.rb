@@ -7,8 +7,8 @@ class Tree < ActiveRecord::Base
   validates_presence_of :revision
 
 
-  def checkout_as(path, dirname)
-    repository.checkout(path, dirname, revision)
+  def checkout(destdir = '.', dirname = File.basename(path))
+    return Checkout.new(repository, self, destdir, dirname)
   end
 
   def maintainers
