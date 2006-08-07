@@ -10,7 +10,7 @@ class Change < ActiveRecord::Base
   def ==(o)
     return designator == o.designator &&
       session == o.session &&
-      path = o.path &&
+      path = o.path
   end
 
   def <=>(o)

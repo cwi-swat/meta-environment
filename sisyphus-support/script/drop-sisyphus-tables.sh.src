@@ -18,7 +18,7 @@ read
 
 cat ${SCHEMA} | \
     grep 'create table' | \
-    sed -e 's/^create table \(.*\) .$/drop table \1;/' | \
+    sed -e 's/^create table \(.*\) .$/drop table \1 cascade;/' | \
     tac | \
     ${POSTGRESQL} \
     --host ${DB_HOST} \

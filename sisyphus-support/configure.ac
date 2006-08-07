@@ -3,6 +3,7 @@ AC_INIT
 META_SETUP
 
 META_REQUIRE_SOFTWARE(postgresql, psql)
+META_REQUIRE_SOFTWARE(ruby, ruby)
 
 AC_ARG_WITH(name,
    [  --with-database-name=NAME   Sisyphus database name ],
