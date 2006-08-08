@@ -1,5 +1,9 @@
 
 
+Tue Aug  8 15:25:16 CEST 2006 <kooiker@cwi.nl>
+ * meta-build.m4: fixed processing of PkgConfigPath by translating : into
+   space
+
 Mon Jul 31 13:39:18 CEST 2006 <kooiker@cwi.nl>
  * meta-build.m4: fixed passing paramater to META_IF_CONTAINS in 
    meta_recursive_requires
