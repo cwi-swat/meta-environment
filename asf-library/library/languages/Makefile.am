@@ -7,4 +7,5 @@ SUBDIRS = \
 	casl \
 	fdl \
 	pico \
-	sdf2  
+	sdf2   \
+	tex
