@@ -27,11 +27,12 @@ class Tree < ActiveRecord::Base
 
   def requires
     if bom =~ /^Requires\s*:\s*([^\n]*)/m then
-      return $1.split(/[, ]/)
+      return $1.split(/[, ]/).collect do |name|
+        Component.new(:name => name)
+      end
     end
     return []
   end
-
 
   def repository
     return designator.repository

@@ -10,6 +10,10 @@ class Component < ActiveRecord::Base
     return name == o.name
   end
 
+  def eql?(o)
+    return self == o
+  end
+
   def <=>(o)
     return name <=> o.name
   end

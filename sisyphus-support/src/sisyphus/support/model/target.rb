@@ -14,6 +14,16 @@ class Target < ActiveRecord::Base
     return tree.revision
   end
 
+  def requires
+    return tree.requires
+  end
+
+  def each_dependency
+    requires.each do |dependency|
+      yield dependency
+    end
+  end
+  
   def designator
     return source.designator
   end

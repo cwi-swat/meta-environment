@@ -14,24 +14,57 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def target_for_component(component, time)
+    target = Target.new(:component => component, 
+                        :source => source_for_component(component),
+                        :tree => tree_for_component(component, time))
+    target.save
+    return target
+  end
+
+  def tree_for_component(component, time)
+    return source_for_component(component).tree(time)
+  end
+
+  def trees_for_components(components, time)
+    return components.collect do |component|
+      tree_for_component(component, time)
+    end
+  end
+
+  def trees_for_root_components(time)
+    return trees_for_components(roots)
+  end
+
   def roots
     return components
   end
 
-  def sources_for_name(name)
+  def source_for_name(name)
     sources.each do |source|
       if source.name == name then
         return source
       end
     end
+    raise "Inconsistency: no source found for #{name}"
   end
 
-  def sources_for_designator(designator)
+  def source_for_designator(designator)
     sources.each do |source|
       if source.designator == designator then
         return source
       end
     end
+    raise "Inconsistency: no source found for #{designator}"
+  end
+
+  def source_for_component(component)
+    sources.each do |source|
+      if source.component == component then
+        return source
+      end
+    end
+    raise "Inconsistency: no source found for #{component}"
   end
 
   def repositories
