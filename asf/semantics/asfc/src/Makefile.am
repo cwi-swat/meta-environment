@@ -22,9 +22,9 @@ noinst_HEADERS = asfc.tif.h \
 
 
 
-ASFC_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${libexecdir}/libtool@g')
+ASFC_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${libexecdir}/libtool@g;s@-o.*@@')
 abs_topbuilddir=$(shell cd ${top_builddir}; pwd)
-ASFC_TEST_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${abs_topbuilddir}/libtool@g')
+ASFC_TEST_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${abs_topbuilddir}/libtool@g;s@-o.*@@')
 
 asfc_DEPENDENCIES =
 asfc_LDADD   = $(ASC_SUPPORT_LIBS)

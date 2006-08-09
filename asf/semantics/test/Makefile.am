@@ -61,7 +61,7 @@ IN=${srcdir}/input
 OUT=${srcdir}/output
 CODE=${srcdir}/c-code
 
-CLEANFILES = *.out *.c ${TEST_MODULES} *.sh .cvsignore
+CLEANFILES = *.o *.out *.c ${TEST_MODULES} *.sh .cvsignore
 
 TESTS = \
 	$(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh) \
