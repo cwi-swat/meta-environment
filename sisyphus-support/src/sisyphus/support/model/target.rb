@@ -4,10 +4,7 @@ require 'active_record'
 class Target < ActiveRecord::Base
   belongs_to :project
   belongs_to :source
-  belongs_to :profile
   belongs_to :tree
-
-  has_many :builds, :order => 'id desc'
 
   def name
     return source.name
@@ -15,15 +12,6 @@ class Target < ActiveRecord::Base
 
   def revision
     return tree.revision
-  end
-
-
-  def actions
-    return profile.actions
-  end
-
-  def environment
-    return profile.environment
   end
 
   def designator
@@ -38,36 +26,33 @@ class Target < ActiveRecord::Base
     return tree.checkout_as(path, name)
   end
 
-  def function(name)
-    return profile.find_function(name)
-  end
-
-
   def ==(o)
-    return project == o.project &&
-      source == o.source &&
-      profile == o.profile &&
-      tree == o.tree
+    return project == o.project && equal_modulo_project(o)
   end
 
+  def <=>(o)
+    order = project <=> o.project
+    if order == 0 then
+      order = tree <=> o.tree
+    end
+    return order
+  end
+
+  def equal_modulo_project(o)
+    return source == o.source &&
+      tree == o.tree
+  end    
 
   protected
 
   def validate
     source_must_be_in_project
-    project_must_be_in_profile
     tree_must_have_same_designator_as_source
   end
 
   def source_must_be_in_project
     if source.project != project then
       errors.add('source', "the project #{target} belongs to is not the same as the project its source #{source} belongs to.")
-    end
-  end
-
-  def project_must_be_in_profile
-    if not profile.projects.include?(project) then
-      errors.add('project', "project #{project} is not part of profile #{profile}")
     end
   end
 

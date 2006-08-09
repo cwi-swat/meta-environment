@@ -1,28 +1,41 @@
 require 'active_record'
 
 class Build < ActiveRecord::Base
-  belongs_to :target
+  belongs_to :profile
   belongs_to :session
   has_one :release
   has_many :results
-
+  has_and_belongs_to_many :targets
   has_and_belongs_to_many :dependencies,
   :class_name => 'Build',
   :join_table => 'dependencies',
   :foreign_key => 'build_id',
   :association_foreign_key => 'dependency_id'
 
-  def name
-    return target.name
-  end
-
   def time
     return session.time
   end
 
-  def revision
-    return target.revision
+  def name
+    return targets.first.name
   end
+
+  def revision
+    return targets.first.revision
+  end
+
+  def component
+    return targets.first.component
+  end
+
+  def designator
+    return targets.first.designator
+  end
+
+  def tree
+    return targets.first.tree
+  end
+
 
   def version
     if release then
@@ -44,27 +57,11 @@ class Build < ActiveRecord::Base
     end
     return extent
   end
-
-
-  def profile
-    return target.profile
-  end
-
+  
   def platform
     return host.platform
   end
 
-  def component
-    return target.component
-  end
-
-  def designator
-    return target.designator
-  end
-
-  def tree
-    return target.tree
-  end
 
   def ==(o)
     return target == o.target &&
@@ -87,6 +84,7 @@ class Build < ActiveRecord::Base
     result_actions_must_be_profile_actions
     extent_must_be_homogeneous
     extent_must_be_single_hosted
+    targets_must_be_equal_modulo_project
   end
 
   def result_actions_must_be_profile_actions
@@ -118,5 +116,15 @@ class Build < ActiveRecord::Base
     return hosts.legnth == 1
   end
 
+  def targets_must_be_equal_modulo_project
+    targets.each do |t1|
+      targets.each do |t2|
+        if not t1.equal_modulo_project(t2) then
+          return false
+        end
+      end
+    end
+    return true
+  end
 
 end

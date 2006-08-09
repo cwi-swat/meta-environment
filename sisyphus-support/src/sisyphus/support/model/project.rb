@@ -50,6 +50,10 @@ class Project < ActiveRecord::Base
     return name
   end
 
+  def <=>(o)
+    return name <=> o.name
+  end
+
   protected
 
 
