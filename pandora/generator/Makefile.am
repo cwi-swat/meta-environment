@@ -20,6 +20,8 @@ pandora_SOURCES = \
 pandora_CPPFLAGS = ${ASC_SUPPORT_CFLAGS}
 pandora_LDADD = ${ASC_SUPPORT_LIBS}
 
+CLEANFILES += pandora.idef
+
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
