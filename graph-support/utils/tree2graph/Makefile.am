@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = graph-converter.idef.src
 
-CLEANFILES = graph-converter.idef
+CLEANFILES += graph-converter.idef
 
 bin_PROGRAMS = tree2graph
 
