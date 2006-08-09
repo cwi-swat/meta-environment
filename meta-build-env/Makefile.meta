@@ -19,37 +19,29 @@ docdatadir    = $(datadir)/doc/$(PACKAGE)
 
 if MAINTAINER_MODE
 
-SUFFIXES += .eqs .adt .idef
+# In maintainer mode we assume that bootstrapping utilities such as
+# toolbus -gentifs, tifstoc, tifstojava, apigen and asfc are available
+# on the path. If not, we will use touch to update the timestamp of
+# the needed file if it exists, and fail if it does not exist.
 
-# Make rules for ASF programs
-#%.eqs : Makefile
-#	eqs-dump -m ${TOP_MODULE} -o $@
-#
-#%.c : %.eqs
-#	asfc -i $< -o $@ -v $(ASFC_FLAGS) 
-#
-# Making an SDF definition
-#%.def : Makefile
-#	@(echo "definition" ; cat $(SDF_MODULES)) > $@
-#
-# Generating an ADT from an SDF definition
-#%.adt : %.def
-#	sdf2-to-adt --imploded --input $< --name $* 
-#
-# Generating a jar from an ADT
-#%.jar : %.adt Makefile
-#	adt-to-jave --input $< --version ${VERSION} --name $* --output .
-#	mv $*-${VERSION}.jar $*.jar
+check_available = \
+  @if which $1; then \
+    echo "$2"; $2; \
+  else \
+    echo "missing $1 to generate $@";  \
+    if [ -f $@ ]; then \
+      echo "touch $@"; touch $@; \
+    else \
+      echo "missing $@!";  \
+      false; \
+    fi; \
+  fi
 
-# Generating C code from an ADT
-#%.c %.h : %.adt Makefile
-#	adt-to-c --input $< --prefix ${API_PREFIX} --output $*
-#	indent $*.h
-#	indent $*.c
+stemvar = $($(shell echo "$*" | tr '-' '_')$1)
 
-# Generating ToolBus interfaces
-#%.c %.h : %.idef Makefile
-#	toolbus -gentifs $<
-#	tifstoc -tool ${TOOLNAME} -tifs $*.tifs
+SUFFIXES += .eqs .adt .idef .tifs
+
+CLEANFILES += *.tifs *.tif.[ch]
+
 endif
 

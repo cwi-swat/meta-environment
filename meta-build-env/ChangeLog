@@ -1,5 +1,10 @@
 
 
+Wed Aug  9 19:31:18 CEST 2006 <jurgenv@cwi.nl>
+ * Makefile.rules: added definitions of generic make rules for
+   ToolBus, Apigen and ASF. In progress, and will be merged with
+   Makefile.meta as soon as it is working.
+
 Wed Aug  9 09:23:23 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
  * meta-build.m4: META_IF_CONTAINS used ' ' quotes which prevented
    substitution of variables.

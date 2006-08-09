@@ -1,0 +1,58 @@
+# a temporary location for generic make rules (these will
+# be in Makefile.meta in the near future, for now they are
+# being tested, and many Makefile's need to be adapted for
+# these rules to work...
+
+# ToolBus rules
+#
+%.tifs: %.idef 
+	$(call check_available, toolbus, \
+       	toolbus -output $@ -gentifs $<)
+
+%.tif.c %.tif.h: %.tifs Makefile
+	$(call check_available, tifstoc, \
+	tifstoc -tool $(call stemvar,_TOOLNAME) $<)
+
+
+# Generating SDF definition out of a list of modules
+%.def: %.modules
+	(echo "definition" ; cat `cat $<`) > $@
+
+# Generating (possibly imploded) ADT files from SDF using apigen 
+%.adt: %.def
+	$(call check_available, sdf2-to-c, \
+	sdf2-to-adt \
+	   $(call stemvar,_APIFLAGS) \
+	   --input $< \
+	   --output $@)
+
+# Generating a C API for an ADT
+%.c %.h: %.adt
+	$(call check_available, adt-to-c, \
+	adt-to-c \
+	   --input $< \
+	   --name $(call stemvar,_APINAME) \
+	   --prefix $(call stemvar,_APIPREFIX) \
+	   --output . ; \
+	 indent $*.h)
+
+# Generating a Java API for an ADT
+%api.jar: %.adt
+	$(call check_available, adt-to-java, \
+	adt-to-java \
+	    --input $< \
+	    --name $(call stemvar,_APIPACKAGE) \
+	    --visitable \
+	    --output . \
+	    --version ${VERSION}; \
+	mv $(call stemvar,_APIPACKAGE)-$(VERSION).jar $@)
+
+# Make rules for ASF programs
+%.eqs : %.asfmodules
+	$(call check_available, eqs-dump, \
+	eqs-dump -m $(call stemvar,_TOP_MODULE) -o $@)
+
+%.c : %.eqs
+	$(call check_available, asfc, \
+	asfc -i $< -o $@ -v $(call stemvar,_ASFCFLAGS))
+
