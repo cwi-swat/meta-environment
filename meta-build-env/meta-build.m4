@@ -81,6 +81,7 @@ AC_DEFUN([META_ARG_WITH_PACKAGE],
 	    [AC_Var[]_PREFIX=$withval],
 	    [])
   AC_MSG_CHECKING([whether location of $1 is explicitly set using --with-$1])
+
   if test "${AC_Var[]_PREFIX:+set}" = set; then
     AC_MSG_RESULT([yes])
     TMP_PKGCONFIG_PATH="$AC_Var[]_PREFIX/lib/pkgconfig"
@@ -88,7 +89,7 @@ AC_DEFUN([META_ARG_WITH_PACKAGE],
       PKG_CONFIG_PATH="${TMP_PKGCONFIG_PATH}:${PKG_CONFIG_PATH}"
     ])
     export PKG_CONFIG_PATH
-    TMP_PKGCONFIG_DEPS=META_INSTALLED_PKG_CONFIG_PATH(${TMP_PKGCONFIG_PATH}/$1.pc) | tr ':' ' '
+    TMP_PKGCONFIG_DEPS="META_INSTALLED_PKG_CONFIG_PATH(${TMP_PKGCONFIG_PATH}/$1.pc)"
     for deppath in ${TMP_PKGCONFIG_DEPS}; do
       META_IF_NOT_CONTAINS([${PKG_CONFIG_PATH}],[${deppath}],[
         PKG_CONFIG_PATH="${deppath}:${PKG_CONFIG_PATH}"
@@ -98,6 +99,7 @@ AC_DEFUN([META_ARG_WITH_PACKAGE],
   else
     AC_MSG_RESULT([no])
   fi
+
 m4_popdef([AC_Var])dnl
 ])
 
@@ -387,7 +389,7 @@ dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)
 dnl checks whether SUBSTRING is a part of STRING, and runs CODE if yes
 dnl (this is supposed to be a portable way to do this)
 AC_DEFUN([META_IF_NOT_CONTAINS],[
-  if test `expr x"$1" : 'x.*$2.*'` -eq 0; then 
+  if test `expr X"$1" : "X.*$2.*"` -eq 0; then 
     $3
   else
     :

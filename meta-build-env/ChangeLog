@@ -1,5 +1,9 @@
 
 
+Wed Aug  9 09:23:23 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * meta-build.m4: META_IF_CONTAINS used ' ' quotes which prevented
+   substitution of variables.
+
 Tue Aug  8 15:25:16 CEST 2006 <kooiker@cwi.nl>
  * meta-build.m4: fixed processing of PkgConfigPath by translating : into
    space
