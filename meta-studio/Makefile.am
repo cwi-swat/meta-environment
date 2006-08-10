@@ -2,7 +2,11 @@
 
 include $(top_srcdir)/Makefile.java.meta
 
+EXTRA_DIST+=gui.idef.src
+
 pkgdata_DATA=gui.idef
+
+CLEANFILES += gui.idef
 
 ACLOCAL_AMFLAGS = -I .
 
