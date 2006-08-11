@@ -66,7 +66,7 @@ dist: $(EXTRA_DIST)
 	rm -rf $(DIST_DIR)
 	mkdir $(DIST_DIR)
 	cp $(EXTRA_DIST) $(DIST_DIR)
-	tar cv $(DIST_DIR)/* | gzip > $(STEM).tar.gz
+	tar cvf - $(DIST_DIR)/* | gzip > $(STEM).tar.gz
 	rm -rf $(DIST_DIR)
 
 check:
