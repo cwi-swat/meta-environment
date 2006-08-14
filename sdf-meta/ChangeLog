@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 14 14:29:04 CEST 2006 <jurgenv@cwi.nl>
+ * sdf-meta.pc.in: changed dependency on pgen to dependency
+   on sdf package.
+
 Fri Jul 14 15:58:11 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
    - Replaced all propagation and contra propagation rules with 2 modal logic
