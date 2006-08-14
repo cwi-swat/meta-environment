@@ -2,6 +2,7 @@
 #define __SDF_MODULE_ACTIONS__
 
 #include <sdf-namespace.h>
+#include <graph-namespace.h>
 #include <navigator.idef>
 #include <graph-painter.idef>
 #include <configuration-manager.idef>
