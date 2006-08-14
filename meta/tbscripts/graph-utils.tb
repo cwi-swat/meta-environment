@@ -1,8 +1,7 @@
 #ifndef __GRAPH_UTILS__
 #define __GRAPH_UTILS__
 
-#define GRAPH_NAMESPACE "graph"
-
+#include <graph-namespace.tb>
 #include <idle-state.tb>
 #include <layout-graph.idef>
 #include <graph-converter.idef>

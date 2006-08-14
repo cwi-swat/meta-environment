@@ -5,8 +5,7 @@
 #include <attribute-changed-event.tb>
 #include <dependencies-changed-event.tb>
 #include <undefined.h>
-
-#define GRAPH_NAMESPACE "graph"
+#include <graph-namespace.tb>
 
 process MM-RegisterInheritedAttribute(Namespace: term, Key: term, Negation: term, OldValue: term, ChildValue: term, NewValue: term, Type: term) is
   snd-msg(mm-register-inherited-attribute(Namespace, Key, Negation, OldValue, ChildValue, NewValue, Type))
