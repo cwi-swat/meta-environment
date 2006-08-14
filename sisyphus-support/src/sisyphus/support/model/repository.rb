@@ -25,6 +25,15 @@ class Repository < ActiveRecord::Base
     designators.each do |designator|
       result += changes_since(designator.path, session.time)
     end
+    return result
+  end
+
+  def changes_between_sessions(session1, session2)
+    result = []
+    designators.each do |designator|
+      result += changes_since(designator.path, session1.time, session2.time)
+    end
+    return result    
   end
 
 

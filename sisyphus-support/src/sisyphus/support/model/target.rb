@@ -5,6 +5,7 @@ class Target < ActiveRecord::Base
   belongs_to :project
   belongs_to :source
   belongs_to :tree
+  has_many :builds
 
   def name
     return source.name
@@ -40,6 +41,15 @@ class Target < ActiveRecord::Base
     return project == o.project && equal_modulo_project(o)
   end
 
+  def equal_modulo_project(o)
+    return source == o.source &&
+      tree == o.tree
+  end    
+
+  def eql?(o)
+    return self == o
+  end
+
   def <=>(o)
     order = project <=> o.project
     if order == 0 then
@@ -47,11 +57,6 @@ class Target < ActiveRecord::Base
     end
     return order
   end
-
-  def equal_modulo_project(o)
-    return source == o.source &&
-      tree == o.tree
-  end    
 
   protected
 

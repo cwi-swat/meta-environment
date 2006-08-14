@@ -1,6 +1,8 @@
 require 'active_record'
 
 class Profile < ActiveRecord::Base
+  include Enumerable
+
   has_one :environment
   has_one :helper
   has_one :script
@@ -49,6 +51,12 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def each
+    projects.each do |project|
+      yield project
+    end
+  end
+
   def sources
     return reduce_projects do |project|
       project.sources
@@ -69,6 +77,14 @@ class Profile < ActiveRecord::Base
     return result
   end
 
+  def changes_between_sessions(session1, session2)
+    result = []
+    repositories.each do |repository|
+      result += repository.changes_between_sessions(session1, session2)
+    end
+    return result
+  end
+    
 
   def actions
     return script.actions

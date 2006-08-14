@@ -12,6 +12,12 @@ class Session < ActiveRecord::Base
     return Session.find_by_host(host, :order => 'time desc')
   end
 
+
+  def changes(profile)
+    return profile.changes_between_sessions(previous, self)
+  end
+
+
   def to_s
     return "session@#{host}@{time}"
   end

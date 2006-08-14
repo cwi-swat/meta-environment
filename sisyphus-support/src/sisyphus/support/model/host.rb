@@ -5,6 +5,13 @@ class Host < ActiveRecord::Base
   belongs_to :platform
   validates_presence_of :name
 
+  def self.current
+    name = `uname -n`.chomp
+    platform = Platform.current
+    return find_or_create_by_name_and_platform(:name => name, :platform => platform)
+  end
+
+
   def ==(o)
     return name == o.name &&
       platform == o.platform
