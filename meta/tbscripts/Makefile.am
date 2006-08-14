@@ -13,6 +13,7 @@ TBSCRIPTS = \
 	    graph-utils.tb \
 	    gui-actions.tb \
 	    gui-utils.tb \
+	    graph-namespace.tb \
 	    io-utils.tb \
 	    meta.tb \
 	    module-manager.tb \
