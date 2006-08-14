@@ -41,9 +41,9 @@ module Building
     end
 
     def requires_build?(target)
-      #if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
-      #  return true
-      #end
+      if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
+        return true
+      end
       if @forced.include?(target.name) then
         return true
       end
@@ -106,8 +106,8 @@ module Building
         target.fire
       else
         @log.info("dependencies in this session have failed, trying older ones...")
-        older_item = Model::SiItem.find(:first, :conditions => ['id < ? and success = true and si_revision_id = ?',
-                                                                item.id, item.si_revision.id],
+        older_item = Model::SiItem.find(:first, :conditions => ['id < ? and success = true and si_revision_id = ? and si_host_id = ?',
+                                                                item.id, item.si_revision.id, item.si_host.id],
                                         :order => 'id desc')
         if older_item then
           if compatible?(older_item.dep_items, item.dep_items) then
