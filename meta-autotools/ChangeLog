@@ -1,3 +1,7 @@
+2006-08-14    <{jurgenv,storm}@cwi.nl>
+
+	* Fix: downloading autotools wreaked havoc. Commited the archives
+	to the repository.
 
 Tue Aug  1 14:57:44 CEST 2006 <{jurgenv@cwi.nl>
  * Makefile.src: removed for loops from targets to prevent
