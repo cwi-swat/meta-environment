@@ -8,6 +8,7 @@ class Session < ActiveRecord::Base
   belongs_to :host
   validates_presence_of :time
 
+
   def self.find_latest_for_host(host)
     return Session.find_by_host(host, :order => 'time desc')
   end

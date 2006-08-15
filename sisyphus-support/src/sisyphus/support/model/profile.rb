@@ -2,7 +2,6 @@ require 'active_record'
 
 class Profile < ActiveRecord::Base
   include Enumerable
-
   has_one :environment
   has_one :helper
   has_one :script
@@ -12,7 +11,11 @@ class Profile < ActiveRecord::Base
   has_and_belongs_to_many :projects
   
   validates_presence_of :name
-  validates_uniqueness_of :name
+  
+  def self.find_or_create_by_name(name)
+    return self.find(:first, :conditions => ['name = ?'], 
+                     :order => 'version desc')
+  end
 
   def designator(component)
     sources.each do |source|

@@ -37,6 +37,10 @@ class Build < ActiveRecord::Base
   end
 
 
+  def requires
+    return targets.first.requires
+  end
+
   def version
     if release then
       return release.version
@@ -44,11 +48,6 @@ class Build < ActiveRecord::Base
     return nil
   end
 
-  def requires
-    return dependencies.collect do |dep|
-      dep.name
-    end
-  end
 
   def extent
     result = [self]

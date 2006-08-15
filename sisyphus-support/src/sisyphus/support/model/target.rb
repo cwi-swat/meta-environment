@@ -3,12 +3,13 @@ require 'active_record'
 
 class Target < ActiveRecord::Base
   belongs_to :project
+
   belongs_to :source
   belongs_to :tree
   has_many :builds
 
   def name
-    return source.name
+    return tree.name
   end
 
   def revision
@@ -26,11 +27,15 @@ class Target < ActiveRecord::Base
   end
   
   def designator
-    return source.designator
+    return tree.designator
   end
 
   def component
     return source.component
+  end
+
+  def goal
+    return [source, tree]
   end
 
   def checkout(path)
@@ -42,8 +47,7 @@ class Target < ActiveRecord::Base
   end
 
   def equal_modulo_project(o)
-    return source == o.source &&
-      tree == o.tree
+    return goal == o.goal
   end    
 
   def eql?(o)
@@ -53,7 +57,7 @@ class Target < ActiveRecord::Base
   def <=>(o)
     order = project <=> o.project
     if order == 0 then
-      order = tree <=> o.tree
+      order = goal <=> o.goal
     end
     return order
   end

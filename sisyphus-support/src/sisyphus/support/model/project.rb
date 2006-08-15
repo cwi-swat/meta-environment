@@ -4,7 +4,7 @@ require 'active_record'
 class Project < ActiveRecord::Base
   has_many :sources
   has_many :profiles
-  has_and_belongs_to_many :components
+  has_and_belongs_to_many :roots, :join_table =>, 'project_roots', :class_name => 'Component'
   validates_presence_of :name
   validates_uniqueness_of :name
 
@@ -15,10 +15,9 @@ class Project < ActiveRecord::Base
   end
 
   def target_for_component(component, time)
-    target = Target.new(:component => component, 
-                        :source => source_for_component(component),
-                        :tree => tree_for_component(component, time))
-    target.save
+    target = Target.find_or_create_by_component_and_source_and_tree(component, 
+                                                                    source_for_component(component),
+                                                                    tree_for_component(component, time))
     return target
   end
 
@@ -34,10 +33,6 @@ class Project < ActiveRecord::Base
 
   def trees_for_root_components(time)
     return trees_for_components(roots)
-  end
-
-  def roots
-    return components
   end
 
   def source_for_name(name)
@@ -97,7 +92,7 @@ class Project < ActiveRecord::Base
 
   def root_components_must_be_in_sources
     cs = components_with_sources
-    components.each do |component|
+    roots.each do |component|
       if not cs.include?(component) then
         errors.add('sources', "root component #{component} has no source")
       end
