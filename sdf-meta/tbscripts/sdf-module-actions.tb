@@ -6,6 +6,7 @@
 #include <navigator.idef>
 #include <graph-painter.idef>
 #include <configuration-manager.idef>
+#include <graph-utils.tb>
 
 process ImportGraphPainter is
 let
