@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Tue Aug 29 09:11:27 CEST 2006 <kooiker@cwi.nl>
+ * src/eqs-dump.sh.src:
+   - Added missing \ on line 78. Closes #635.
+
 Fri Jun  9 13:40:30 CEST 2006 <kooiker@cwi.nl>
  * asf-listeners.tb:
    - Add ASFModuleRegistrar listener that listens for SDF modules to be
