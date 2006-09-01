@@ -304,17 +304,21 @@ static PT_Tree transformBox(PT_Tree tree, ATbool isLex)
   PT_Args args = PT_getTreeArgs(tree);
   PT_Args boxArgs = PT_makeArgsEmpty();
 
+  /* TODO: rewrite use of append (very expensive!) */
   while (!PT_isArgsEmpty(args)) {
     PT_Tree arg = PT_getArgsHead(args);
-
+    
     if (PT_isTreeLexical(arg) || PT_isTreeLayout(arg) || PT_isTreeLit(arg)) {
       boxArgs = PT_appendArgs(boxArgs, arg);
     } 
     else if (PT_isTreeAppl(arg)) {
       if (hasProductionToBoxAttribute(PT_getTreeProd(arg))) {
         BOX_Box boxArg = processTree(arg, isLex);
-        boxArgs = PT_appendArgs(boxArgs, 
-				PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
+	
+	if (boxArg != NULL) {
+	  boxArgs = PT_appendArgs(boxArgs, 
+				  PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
+	}
       } else {
         boxArgs = PT_appendArgs(boxArgs, transformBox(arg, isLex));
       }
@@ -323,7 +327,8 @@ static PT_Tree transformBox(PT_Tree tree, ATbool isLex)
       return transformBox(PT_getArgsHead(PT_getTreeArgs(arg)), isLex);
     }
     else {
-      boxArgs = PT_appendArgs(boxArgs, transformBox(arg, isLex));
+      PT_Tree res = transformBox(arg, isLex);
+      boxArgs = PT_appendArgs(boxArgs, res);
     }
     args = PT_getArgsTail(args);
   }
