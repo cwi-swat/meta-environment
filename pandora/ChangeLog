@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Fri Sep  1 11:31:45 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * generator/pandora.c: fixed a bug. When a to-box function returned
+   nothing (an empty list of boxes) pandora would crash with 
+   very unclear symptoms.
+
 Wed Jun 21 10:02:54 CEST 2006 <jurgenv@cwi.nl>
  * generator/pandora.c: choosing first alternative of an ambiguity
    cluster while emiting a warning message.
