@@ -8,8 +8,7 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root relational-aterms \
-    --force relational-aterms \
+    --root asfsdf-meta \
     --profile verfrol \
     --interval 120 \
     --weekday Mon \

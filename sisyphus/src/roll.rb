@@ -216,6 +216,7 @@ module Roll
       end
     end
     deps.compact! 
+    name = component
     prefix = File.join(install_dir, component)
     t = ERB.new(template)
     result = t.result(binding())

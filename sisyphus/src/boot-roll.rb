@@ -15,7 +15,7 @@ module BootRoll
 boot_roll: 
   build_dir: ./bla
   install_dir: /tmp
-  vcs_user: storm
+  build-env: [meta-autotools, meta-build-env]
 sisyphus:
   url: sisyphus-configuration
   host: sjofar.sen.cwi.nl
@@ -36,6 +36,7 @@ Note: the tunnel section is optional.
     def self.parse(args)
       options = OpenStruct.new
       options.sources = nil
+      options.build_env = false
 
       opts = OptionParser.new do |opts|
 
@@ -46,6 +47,9 @@ Note: the tunnel section is optional.
         opts.separator ""    
         opts.separator "Options:"
 
+        opts.on("-b", "--[no-]build-env", "Include build environment packages") do |b|
+          options.build_env = true
+        end
 
         opts.on("-s Sources", "--sources Sources",
                 "Override sources configuration") do |sources|
@@ -85,7 +89,6 @@ Note: the tunnel section is optional.
         $stderr << "checked out #{component}\n"
         graph[revision] ||= []
         done << component
-        
         deps = revision.deps
         if deps.nil? then
           $stderr << "Warning: deps == nil for #{revision}; assuming []\n"
@@ -146,6 +149,9 @@ Note: the tunnel section is optional.
   end
 
   def BootRoll.obtain_checkouts(conf, roots, options)
+    if options.build_env then
+      roots += conf['boot_roll']['build-env']
+    end
     s = conf['sisyphus']
     config_manager = nil
     if s.has_key?('tunnel') then

@@ -17,6 +17,7 @@ module Model
 
   class SiComponent < ActiveRecord::Base
     # fields: name
+    has_many :si_revisions
 
     def prefix(root)
       return File.join(root, name)
@@ -25,6 +26,7 @@ module Model
 
   class SiRevision < ActiveRecord::Base
     belongs_to :si_component
+    has_many :si_items
     # fields: version, changelog_diff
 
     def name
