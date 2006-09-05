@@ -70,10 +70,9 @@ if [ "a${OUTPUTFILE}" == "a" ]; then
   exit 1
 fi
 
-INCLUDES=`__PREFIX__/bin/sdf-meta-config --toolbus-includes`
 __TOOLBUS__/bin/toolbus \
   ${VIEWER} \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   -DOUTPUTFILE=\\\"${OUTPUTFILE}\\\" \
-  ${INCLUDES} \
+  __TBSCRIPTS__ \
   __PREFIX__/share/sdf-meta/start-def-dump.tb $*
