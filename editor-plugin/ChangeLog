@@ -5,7 +5,8 @@ Wed Sep  6 14:43:11 CEST 2006 <kooiker@cwi.nl>
    - |Save Copy| now allows you to give the name of the file. Difference with
      |Save As| functionallity is that |Save Copy| allows you to save a copy of
      the active file and allows you to go on with this active file in stead of
-     activating the copied one (as word processors for example do).
+     activating the copied one (as word processors for example do). Closes
+     #626.
 
 Fri Jun 23 13:33:03 CEST 2006 <kooiker@cwi.nl>
  * src/**/Editor{Kit,Pane}.java:
