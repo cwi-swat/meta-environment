@@ -10,19 +10,21 @@ process SynchronizeModuleSelection is
 let
   Event: attribute-changed-event,
   EventModuleId: term,
+  GraphId: term,
   ModuleId: term
 in
   ModuleId := UNDEFINED
   . subscribe(nav-module-selected(<term>))
-  . subscribe(gp-node-selected(<str>,<term>))
+  . subscribe(gp-node-selected(<str>,<term>,<term>))
   . MM-Subscribe-Attribute-Changed(<term>,<term>,<term>,<term>,<term>)
   .
   (
     rec-note(nav-module-selected(ModuleId?))
-    . snd-msg(gp-select-node("import-graph", ModuleId))
+    . TODO("MODULE_SELECTION_LISTENER: parameterize GraphId")
+    . snd-msg(gp-select-node("import-graph", "0", ModuleId))
     . ShowModuleDetails(ModuleId)
   +
-    rec-note(gp-node-selected("import-graph", ModuleId?))
+    rec-note(gp-node-selected("import-graph", GraphId?, ModuleId?))
     . snd-msg(nav-select-module(ModuleId))
     . ShowModuleDetails(ModuleId)
   +

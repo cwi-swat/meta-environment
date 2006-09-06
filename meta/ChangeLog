@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Sep  6 14:16:02 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/module-selection-listener.tb:
+   - fixed: now also uses GraphId
+
 Fri Jul 28 11:50:54 CEST 2006 <jurgenv@cwi.nl>
  * src: removed generation of config script (replaced by pkg-config)
 
