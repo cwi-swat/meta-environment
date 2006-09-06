@@ -2,11 +2,12 @@ module languages/sdf2/syntax/RightNullables
 
 imports languages/sdf2/syntax/Properties
 imports languages/sdf2/syntax/Kernel
+imports basic/NatCon
 
 exports
  sorts RightNullableProduction
 
   context-free syntax
-    Production Integer                                        -> RightNullableProduction {cons("default")}
+    Production prefix-length:NatCon -> RightNullableProduction {cons("default")}
 
     "right" "nullable" "productions" RightNullableProduction* -> Property {cons("right-nullable-productions")}
