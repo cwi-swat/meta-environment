@@ -1,0 +1,36 @@
+module languages/sdf2/analysis/RightNullables
+
+imports languages/sdf2/syntax/RightNullables
+imports languages/sdf2/projection/Symbol-Sets
+
+exports
+
+context-free syntax
+    right-nullable(Productions, nullables:Symbols) -> Property
+
+hiddens
+  context-free start-symbols
+     Property
+
+  lexical syntax
+     [A-Za-z]+ -> Symbol
+
+  context-free syntax
+    right-nullable(nullables:SymbolSet, Productions, RightNullableProduction*) -> RightNullableProduction*
+
+variables
+    "Symbols"[0-9]* -> Symbols
+    "Symbol*"[0-9]* -> Symbol*
+    "Symbol+"[0-9]* -> Symbol+
+    "Symbol"[0-9]*  -> Symbol
+    "Production"[0-9]* -> Production
+    "Productions"[0-9]* -> Productions
+    "Production*"[0-9]* -> Production*
+    "Production+"[0-9]* -> Production+
+    
+    "Attributes"[0-9]* -> Attributes
+    "SymbolSet"[0-9]* -> SymbolSet
+    "RightNullableProduction*"[0-9]* -> RightNullableProduction*
+    "Nullables"[0-9]* -> SymbolSet
+    "Length"[0-9]* -> NatCon
+

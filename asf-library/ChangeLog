@@ -1,5 +1,13 @@
 $Id$
 
+Wed Sep  6 17:00:53 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/analysis: added a new collection
+   of modules for SDF2: analyses. Here we collect analyses of
+   grammars and store the results in a Kernel module for later
+   use by static checkers or the parsetable generator. 
+   Added Nullable analysis and right-nullable analysis for the
+   sake of RNGLR.
+
 Wed May 31 14:57:04 CEST 2006 <kooiker@cwi.nl>
  * library/containers/Set.{sdf,asf}:
    - Fixed merge error

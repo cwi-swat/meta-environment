@@ -1,0 +1,23 @@
+equations
+
+[main] right-nullable(Productions, Symbol*) = 
+       right nullable productions
+         right-nullable({Symbol*}, Productions, )
+
+equations
+
+[one] { Symbol+2 } / Nullables == { },
+      Length := |Symbol+1|
+      ====>
+      right-nullable(Nullables, Symbol+1 Symbol+2 -> Symbol Attributes, RightNullableProduction*) =
+      Symbol+1 Symbol+2 -> Symbol Attributes Length 
+      RightNullableProduction*
+
+
+[loop] RightNullableProduction*2 := right-nullable(Nullables, Production, RightNullableProduction*),
+       RightNullableProduction*3 := right-nullable(Nullables, Production+, RightNullableProduction*2)
+       ===>
+       right-nullable(Nullables, Production Production+, RightNullableProduction*) = RightNullableProduction*3 
+
+[default-no-match]
+      right-nullable(Nullables, Production*, RightNullableProduction*) = RightNullableProduction*

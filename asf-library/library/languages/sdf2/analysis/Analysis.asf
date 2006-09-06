@@ -1,0 +1,18 @@
+equations
+
+[] Property1 := nullable(Production*),
+   nullable symbols Symbol* := Property1,
+   Property2 := right-nullable(Production*, Symbol*)
+   ===>
+   analysis[[syntax Production*]] =
+   properties
+     Property1
+     Property2
+
+[] analysis[[Grammar1 Grammar2]] = analysis[[Grammar1]] analysis[[Grammar2]]
+
+[default] analysis[[Grammar]] = properties
+
+equations
+
+[] properties Property*1 properties Property*2 = properties Property*1 Property*2
