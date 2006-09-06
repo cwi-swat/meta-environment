@@ -1,5 +1,13 @@
 $Id$
 
+Wed Sep  6 16:06:42 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/{Properties,Nullables,RightNullables}.sdf:
+   added a new type of 'Grammar' which contains derived facts from
+   SDF2 syntax definitions. These facts may be used by static checkers
+   or by the parse table generator. So far, we have a list of all
+   nullable non-terminals, and a list of all right nullable productions.
+   This will be used for constructing RN tables for the RNGLR algorithm.
+
 Mon Feb 13 13:47:36 CET 2006 <jurgenv@cwi.nl>
  * package: Initial version 1.0
  * library: Copied all syntax definitions from asf-library

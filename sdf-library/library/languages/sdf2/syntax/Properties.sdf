@@ -1,0 +1,12 @@
+module languages/sdf2/syntax/Properties
+
+imports languages/sdf2/syntax/Kernel
+
+exports
+  sorts Property
+
+  context-free syntax
+ 
+  "properties" list:Property* -> Grammar {cons("properties")}
+
+
