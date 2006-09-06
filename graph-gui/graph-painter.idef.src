@@ -35,7 +35,7 @@ in
     . snd-do(T, select-node(GraphType, GraphId, NodeId))
   +
     rec-event(T, node-selected(GraphType?, GraphId?, NodeId?))
-    . snd-note(gp-node-selected(GraphType, GraphId?, NodeId))
+    . snd-note(gp-node-selected(GraphType, GraphId, NodeId))
     . snd-ack-event(T, node-selected(GraphType, GraphId, NodeId))
   +
     rec-event(T, request-popup-event(GraphType?, GraphId?, NodeId?))

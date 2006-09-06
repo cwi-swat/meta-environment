@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep  6 14:14:53 CEST 2006 <kooiker@cwi.nl>
+ * graph-painter.idef.src:
+   - fixed gp-node-selected snd-note message
+
 Tue Jun 20 13:35:38 CEST 2006 <jurgenv@cwi.nl>
  * graph-painter.idef.src,**/GraphPainter.java: split GraphId 
    into graphType (str) and graphId (term), such that several
