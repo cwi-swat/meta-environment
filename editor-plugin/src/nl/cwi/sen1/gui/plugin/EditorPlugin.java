@@ -196,17 +196,11 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 if (chooser.showDialog(StudioImpl.getFrame(), "Save Copy") == JFileChooser.APPROVE_OPTION) {
                     String path = chooser.getSelectedFile().getAbsolutePath();
-                    String filename = editor.getFilename();
-                    int beginIndex = filename.lastIndexOf("/");
-                    String componentName = filename.substring(beginIndex,
-                            filename.length());
-                    System.err
-                            .println("Writing " + path + ", " + componentName);
                     try {
-                        editor.writeContents(path + componentName);
+                        editor.writeContents(path);
                     } catch (IOException e1) {
                         try {
                             showErrorDialog(editor, JOptionPane.OK_OPTION,
