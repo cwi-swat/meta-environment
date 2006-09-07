@@ -16,3 +16,9 @@ equations
 equations
 
 [] properties Property*1 properties Property*2 = properties Property*1 Property*2
+
+
+tests
+
+[simple-example]
+analysis[[ syntax A -> B  -> A  C A B -> D  a -> C ]] == properties nullable symbols A B right nullable productions C A B -> D 1

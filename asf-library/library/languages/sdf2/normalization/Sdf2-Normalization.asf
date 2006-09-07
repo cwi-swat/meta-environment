@@ -13,8 +13,8 @@ equations
 %% of the definition. The definition is normalized by first expanding module
 %% $M$ by means of function \fun{m}. Then the normalization functions \fun{b}
 %% (Basic), \fun{a} (Alias), \fun{r} (Regular),  \fun{p} (Priorities),
-%% \fun{l} (Literals) and
-%% \fun{k} (Kernel) are applied to the resulting grammar. The function
+%% \fun{l} (Literals), \fun{k} (Kernel) and \fun{analysis} (Analysis) are 
+%% applied to the resulting grammar. The function
 %% \fun{topsorts}, defined below, is used to add special productions for
 %% the top sorts of the definition and to remove productions not reachable
 %% from those top sorts.
@@ -27,9 +27,10 @@ equations
         _G7 := p[[ _G5 ]],
         _G8 := r[[ _G7 ]],
         _G10 := l[[ _G8 ]],
-        _G11 := k[[ _G10 ]]
+        _G11 := k[[ _G10 ]],
+        _G12 := analysis[[ _G11 ]]
         ================
-        normalize[[definition d]](M, _A) = _G11
+        normalize[[definition d]](M, _A) = _G12
 
 %% <PO> rhs was: reachable({<Start>}, _G8)
 

@@ -21,3 +21,9 @@ equations
 
 [default-no-match]
       right-nullable(Nullables, Production*, RightNullableProduction*) = RightNullableProduction*
+
+
+tests
+
+[simple-example]
+right-nullable(A -> F  A B C -> D, B C) == right nullable productions A B C -> D 1

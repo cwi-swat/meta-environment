@@ -1,5 +1,9 @@
 $Id$
 
+Thu Sep  7 17:13:51 CEST 2006 <economop@cwi.nl>
+ * Added the analysis of right nullable and nullable rules to the 
+   normaliser.
+
 Thu Sep  7 13:57:38 CEST 2006 <economop@cwi.nl>
  * library/languages/sdf2/analysis: added |Makefile.am|.
 
