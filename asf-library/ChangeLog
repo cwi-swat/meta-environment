@@ -1,5 +1,8 @@
 $Id$
 
+Thu Sep  7 13:57:38 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/analysis: added |Makefile.am|.
+
 Wed Sep  6 17:00:53 CEST 2006 <economop@cwi.nl>
  * library/languages/sdf2/analysis: added a new collection
    of modules for SDF2: analyses. Here we collect analyses of
