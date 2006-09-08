@@ -37,7 +37,7 @@ UTILSRCS = \
 	import-operations.c \
 	sort.c 
 
-LIBRARY = ../../asf-library/library
+LIBRARY = ../../sdf-library/library
 ATERM_SDF = $(shell ls $(LIBRARY)/languages/aterm/syntax/*.sdf)
 SDF2_SDF = $(shell ls $(LIBRARY)/languages/sdf2/syntax/*.sdf)
 BASIC_SDF = \

@@ -1,5 +1,10 @@
 $Id$
 
+Fri Sep  8 13:51:46 CEST 2006 <{economop,kooiker}@cwi.nl>
+ * src/Makefile.am: 
+   - changed the library path to sdf-library path.
+ * Regenerated API.
+
 Thu Jul 27 12:06:51 CEST 2006 <martin.bravenboer@gmail.com>
 
  * utils/Makefile.am: removed generation of sdf-support-config,

@@ -291,6 +291,15 @@ exports
   lexical restrictions
     ModuleWord -/- [A-Za-z0-9\_\-]
     ModuleId -/- [\/]
+module languages/sdf2/syntax/Nullables
+
+imports languages/sdf2/syntax/Properties
+imports languages/sdf2/syntax/Symbols
+
+exports
+  context-free syntax
+    "nullable" "symbols" Symbols -> Property {cons("nullable-symbols")} 
+
 %%% $Id$   
 
 module languages/sdf2/syntax/Priority
@@ -324,6 +333,18 @@ exports
     list:{Priority  ","}* -> Priorities
 
     "priorities" Priorities  -> Grammar  {cons("priorities")}
+module languages/sdf2/syntax/Properties
+
+imports languages/sdf2/syntax/Kernel
+
+exports
+  sorts Property
+
+  context-free syntax
+ 
+  "properties" list:Property* -> Grammar {cons("properties")}
+
+
 %%% $Id$  
 
 module languages/sdf2/syntax/Regular
@@ -395,6 +416,19 @@ exports
   context-free priorities    
     CharClass "." Lookaheads    -> Lookahead >
     Lookaheads "|" Lookaheads   -> Lookaheads
+module languages/sdf2/syntax/RightNullables
+
+imports languages/sdf2/syntax/Properties
+imports languages/sdf2/syntax/Kernel
+imports basic/NatCon
+
+exports
+ sorts RightNullableProduction
+
+  context-free syntax
+    Production prefix-length:NatCon -> RightNullableProduction {cons("default")}
+
+    "right" "nullable" "productions" RightNullableProduction* -> Property {cons("right-nullable-productions")}
 %%% $Id$
 
 module languages/sdf2/syntax/Sdf2
@@ -600,7 +634,7 @@ imports
 
 exports
   lexical syntax
-    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line")}
-    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested")}
+    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line"),category("Comment")}
+    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested"),category("Comment")}
   context-free restrictions
     LAYOUT? -/- [\%]
