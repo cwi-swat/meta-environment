@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep 13 15:54:37 CEST 2006 <economop@cwi.nl>
+ * src/Sdf2-Normalization.c: regenerated because the normalisation was
+   changed.
+
 Wed May  3 14:00:05 CEST 2006 <jurgenv@cwi.nl>
  * Bumped to 2.4
 
