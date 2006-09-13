@@ -1,7 +1,10 @@
 $Id$
 
+Wed Sep 13 16:08:12 CEST 2006 <economop@cwi.nl>
+ * Regenerated API because there was a change in the sdf specification.
+
 Fri Sep  8 13:51:46 CEST 2006 <{economop,kooiker}@cwi.nl>
- * src/Makefile.am: 
+ * lib/Makefile.am: 
    - changed the library path to sdf-library path.
  * Regenerated API.
 

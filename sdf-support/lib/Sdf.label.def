@@ -338,11 +338,12 @@ module languages/sdf2/syntax/Properties
 imports languages/sdf2/syntax/Kernel
 
 exports
-  sorts Property
+  sorts Property Properties
 
   context-free syntax
  
-  "properties" list:Property* -> Grammar {cons("properties")}
+  list:Property*          -> Properties
+  "properties" Properties -> Grammar {cons("properties")}
 
 
 %%% $Id$  
