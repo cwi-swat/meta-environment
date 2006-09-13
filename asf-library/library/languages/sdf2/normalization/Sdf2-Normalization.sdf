@@ -12,7 +12,6 @@ imports
         languages/sdf2/normalization/Start-Symbols
         languages/sdf2/normalization/Restrictions
         languages/sdf2/normalization/Aliases
-        languages/sdf2/analysis/Analysis
 
 exports
   context-free syntax
