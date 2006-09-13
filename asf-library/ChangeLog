@@ -1,5 +1,8 @@
 $Id$
 
+Wed Sep 13 16:18:17 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/normalization/Sdf2-Normalization.asf: removed comma.
+
 Wed Sep 13 14:23:14 CEST 2006 <economop@cwi.nl>
  * Removed the analysis of right nullable and nullable rules from the 
    normaliser (the extra data will not be used in the trunk yet and the cost
