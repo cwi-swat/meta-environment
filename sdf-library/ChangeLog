@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep 13 15:57:47 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/Properties.sdf: Added Properties production 
+   to be consistent with other definitions.
+
 Wed Sep  6 16:06:42 CEST 2006 <economop@cwi.nl>
  * library/languages/sdf2/syntax/{Properties,Nullables,RightNullables}.sdf:
    added a new type of 'Grammar' which contains derived facts from
