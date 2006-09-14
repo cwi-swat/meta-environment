@@ -1,5 +1,10 @@
 $Id$
 
+Thu Sep 14 16:59:50 CEST 2006 <economop@cwi.nl>
+ * reconf: modified to use new build env.
+ * package: removed file.
+ * *.m4: removed files.
+
 Thu Sep 14 16:32:40 CEST 2006 <economop@cwi.nl>
  * Incorporated new build environment.
 
