@@ -1,14 +1,11 @@
 # $Id$
 
-lib_LIBRARIES           = libptable.a
+lib_LTLIBRARIES         = libptable.la
 include_HEADERS         = ptable.h ptable-utils.h ptable_dict.h
-libptable_a_SOURCES 	= ptable.c ptable-utils.c ptable_dict.c
+libptable_la_LDFLAGS    = -avoid-version -no-undefined $(AM_LDFLAGS)
+libptable_la_SOURCES 	= ptable.c ptable-utils.c ptable_dict.c
 
-#CFLAGS += -DDISABLE_DYNAMIC_CHECKING                          
-INCLUDES = -I${ATERM}/include -I${PT_SUPPORT}/include
-
-EXTRA_DIST = ptable.adt
-
+libmept_la_CPPFLAGS = $(PT_SUPPORT_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
 
 # Developers only, put location of ADT-support here:
 ADT      = ${prefix}
@@ -21,3 +18,5 @@ api: ${NAME}.adt
 		--name ${NAME} \
 		--prefix ${PREFIX} 
 
+api-clean:
+	$(RM) ${NAME}.[ch] ${NAME}_dict.[ch] ${NAME}.dict
