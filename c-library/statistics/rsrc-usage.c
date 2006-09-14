@@ -6,7 +6,7 @@
 #include <sys/resource.h>
 #include "rsrc-usage.h"
 
-static int AT_calcAllocatedSize();
+/*static int AT_calcAllocatedSize();*/
 static struct rusage rsrc_usage;
 static struct rusage flt_rsrc_usage;
 
@@ -66,7 +66,8 @@ long STATS_Allocated(void) {
   long tmp;
 
   tmp = allocated;
-  allocated = AT_calcAllocatedSize();
+  /** \todo: AT_calcAllocatedSize() is unreachable. Fix. */
+  /*allocated = AT_calcAllocatedSize();*/
 
   return allocated - tmp;
 }
