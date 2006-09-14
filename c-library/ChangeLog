@@ -1,5 +1,8 @@
 $Id$
 
+Thu Sep 14 16:50:33 CEST 2006 <economop@cwi.nl>
+ * Incorporated new build environment.
+
 Thu May 18 14:42:01 CEST 2006 <economop@cwi.nl>
  * Added a warning for failure to open logging file. 
 
