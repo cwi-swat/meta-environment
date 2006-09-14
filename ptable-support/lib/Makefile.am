@@ -1,11 +1,21 @@
 # $Id$
 
-lib_LTLIBRARIES         = libptable.la
-include_HEADERS         = ptable.h ptable-utils.h ptable_dict.h
-libptable_la_LDFLAGS    = -avoid-version -no-undefined $(AM_LDFLAGS)
-libptable_la_SOURCES 	= ptable.c ptable-utils.c ptable_dict.c
+include $(top_srcdir)/Makefile.meta
 
-libmept_la_CPPFLAGS = $(PT_SUPPORT_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
+lib_LTLIBRARIES = libptable.la
+
+include_HEADERS = \
+	ptable.h \
+	ptable-utils.h \
+	ptable_dict.h
+
+libptable_la_CPPFLAGS = $(PT_SUPPORT_CFLAGS) $(ATERM_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
+libptable_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
+libptable_la_LIBADD  = $(PT_SUPPORT_LIBS) $(ATERM_LIBS)
+libptable_la_SOURCES = \
+	ptable.c \
+	ptable-utils.c \
+	ptable_dict.c
 
 # Developers only, put location of ADT-support here:
 ADT      = ${prefix}
