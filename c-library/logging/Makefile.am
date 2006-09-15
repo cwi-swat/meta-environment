@@ -2,15 +2,15 @@
 
 include $(top_srcdir)/Makefile.meta
 
-lib_LTLIBRARIES = libLogging.la
+lib_LTLIBRARIES = liblogging.la
 include_HEADERS = logging.h 
 
-libLogging_la_CPPFLAGS = \
+liblogging_la_CPPFLAGS = \
         $(ATERM_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
 
-libLogging_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
-libLogging_la_LIBADD = $(ATERM_LIBS)
-libLogging_la_SOURCES = logging.c
+liblogging_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
+liblogging_la_LIBADD = $(ATERM_LIBS)
+liblogging_la_SOURCES = logging.c
 
 
 

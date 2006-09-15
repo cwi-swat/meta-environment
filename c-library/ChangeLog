@@ -1,5 +1,8 @@
 $Id$
 
+Fri Sep 15 15:10:53 CEST 2006 <economop@cwi.nl>
+ * logging/Makefile.am, statistics/Makefile.am: made library names consistent.
+
 Thu Sep 14 19:24:02 CEST 2006 <economop@cwi.nl>
  * statistics/rsrc-usage.c: commented out the AT_calcAllocatedSize().
 
