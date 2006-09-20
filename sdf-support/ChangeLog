@@ -1,5 +1,8 @@
 $Id$
 
+Wed Sep 20 11:00:04 CEST 2006 <economop@cwi.nl>
+ * src/prop.c: added functionality to extract the property list from a grammar.
+
 Wed Sep 13 16:08:12 CEST 2006 <economop@cwi.nl>
  * Regenerated API because there was a change in the sdf specification.
 
