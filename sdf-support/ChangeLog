@@ -1,5 +1,8 @@
 $Id$
 
+Thu Sep 21 13:04:10 CEST 2006 <economop@cwi.nl>
+ * Forgot to add file ;-)
+
 Wed Sep 20 11:00:04 CEST 2006 <economop@cwi.nl>
  * src/prop.c: added functionality to extract the property list from a grammar.
 
