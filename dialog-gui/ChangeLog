@@ -1,5 +1,9 @@
 $Id$
 
+Thu Sep 21 16:44:28 CEST 2006 <kooiker@cwi.nl>
+ * src/**/Dialog.java:
+   - Show empty filename field
+
 Wed Apr 26 10:03:32 CEST 2006 <kooiker@cwi.nl>
  * src/**/*.java:
    - Show dialogs using Studio frame as parent (closes #590)

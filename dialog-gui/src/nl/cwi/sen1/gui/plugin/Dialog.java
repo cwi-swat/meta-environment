@@ -53,6 +53,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         }
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+        chooser.setSelectedFile(new File(""));
         if (chooser.showDialog(StudioImpl.getFrame(), title) == JFileChooser.APPROVE_OPTION) {
             String path = chooser.getSelectedFile().getAbsolutePath();
             return studio.getATermFactory().make(
@@ -88,6 +89,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
             }
         };
 
+        chooser.setSelectedFile(new File(""));
         chooser.addChoosableFileFilter(filter);
         if (chooser.showDialog(StudioImpl.getFrame(), title) == JFileChooser.APPROVE_OPTION) {
             String path = chooser.getSelectedFile().getAbsolutePath();
