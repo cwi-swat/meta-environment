@@ -60,13 +60,14 @@ void rec_terminate(int cid, ATerm t)
 /*}}}  */
 /*{{{  ATerm tree2graph(int cid, ATerm tree, ATerm leaves_on, */
 
-ATerm tree2graph(int cid, ATerm tree, ATerm leaves_on,
+ATerm tree2graph(int cid, ATerm tree, ATerm layout_on, ATerm leaves_on,
 		 ATerm sharing_on)
 {
+  ATbool layoutFlag = ATmatch(layout_on, "true");
   ATbool leavesFlag = ATmatch(leaves_on, "true");
   ATbool sharingFlag = ATmatch(sharing_on, "true");
 
-  Graph graph = PT_printAnyToGraph(tree, leavesFlag, ATtrue, leavesFlag, 
+  Graph graph = PT_printAnyToGraph(tree, leavesFlag, ATtrue, layoutFlag, 
 				   leavesFlag, sharingFlag);
 
   return ATmake("snd-value(graph(<term>))", GraphToTerm(graph));
