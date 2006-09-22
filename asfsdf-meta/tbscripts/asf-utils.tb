@@ -347,7 +347,8 @@ in
     ) 
     . snd-note(ui-status(endstat(Id))) 
   else
-    snd-msg(ui-show-feedback-summary(Summary)) 
+    TODO("Summary is undefined here!\n")
+    . snd-msg(ui-show-feedback-summary(Summary)) 
     . snd-note(ui-status(endstat(Id))) 
     . snd-note(ui-status(errorf("Equations incomplete for %s", [Modulename])))
   fi

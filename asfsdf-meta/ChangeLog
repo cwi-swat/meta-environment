@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Fri Sep 22 13:48:51 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/standard.asf.actions.src:
+   - Add |View| -> |Full Tree w/o Layout| menu item showing a full tree
+   without all the layout paths (closes #634)
+
 Tue Aug 29 09:11:27 CEST 2006 <kooiker@cwi.nl>
  * src/eqs-dump.sh.src:
    - Added missing \ on line 78. Closes #635.
