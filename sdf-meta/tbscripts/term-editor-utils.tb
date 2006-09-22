@@ -101,6 +101,7 @@ in
       (
         rec-msg(term-editor-started(Filename, ModuleId, Sid?))
         . SE-UpdateTree(Sid, Tree)
+	. PutCachedValue(TERM_TREE_CACHE, ModuleId, Tree)
       +
         rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
         . Error(ErrorMessage, [])

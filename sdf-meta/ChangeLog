@@ -1,5 +1,12 @@
 $Id$
 
+Fri Sep 22 15:31:28 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/term-utils.tb:
+   - Initialize and add ClearCacheHandler for terms
+   - Use cache when getting parsetrees for terms
+ * tbscripts/term-editor-utils.tb:
+   - After reducing cache result in term cache (closes #556 and #625)
+
 Fri Sep 22 13:47:14 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/standard.sdf.actions.src:
    - Add |View| -> |Full Tree w/o Layout| menu item showing a full tree

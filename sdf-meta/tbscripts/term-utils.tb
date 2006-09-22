@@ -3,9 +3,13 @@
 
 #include <undefined.h>
 #define NO_NONTERMINAL ""
+#define TERM_TREE_CACHE "term-annotated-tree"
 
 process GetTermParseTable(ModuleId: term, Table: term?) is
   GetParseTable(ModuleId, trm, Table?)
+
+toolbus(InitCache(TERM_TREE_CACHE))
+toolbus(ClearCacheHandler(TERM_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
 
 process GetTermParsetree(ModuleId: term, Path: str, Result: term?) is
 let
@@ -15,28 +19,35 @@ let
   Type: term,
   Tree: term
 in
-  Type := trm
-  . GetTermParseTable(ModuleId, ParseTable?)
+  GetCachedValue(TERM_TREE_CACHE, ModuleId, Tree?)
   .
-  if not-equal(ParseTable, UNDEFINED) then
-    ReadFile(Path, Text?)
+  if equal(Tree, UNDEFINED) then
+    Type := trm
+    . GetTermParseTable(ModuleId, ParseTable?)
     .
-    if not-equal(Text, "") then
-      create(ParseTreeHandler(ModuleId, Path), Pid?)
-      . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
+    if not-equal(ParseTable, UNDEFINED) then
+      ReadFile(Path, Text?)
       .
-      (
-        rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
-        . AnnotateTree(Tree, Path, Result?)
-      +
-        rec-msg(parse-handler-done(Pid))
-        . Result := UNDEFINED
-      )  
+      if not-equal(Text, "") then
+        create(ParseTreeHandler(ModuleId, Path), Pid?)
+        . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
+        .
+        (
+          rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+          . AnnotateTree(Tree, Path, Result?)
+	  . PutCachedValue(TERM_TREE_CACHE, ModuleId, Result)
+        +
+          rec-msg(parse-handler-done(Pid))
+          . Result := UNDEFINED
+        )  
+      else
+        Result := UNDEFINED
+      fi
     else
       Result := UNDEFINED
     fi
   else
-    Result := UNDEFINED
+    Result := Tree
   fi
 endlet
 
