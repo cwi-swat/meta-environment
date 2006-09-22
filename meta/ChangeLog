@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Sep 22 13:45:48 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/{gui-actions,graph-utils}.tb:
+   - Add layout option for ShowTree
+
 Wed Sep  6 14:16:02 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/module-selection-listener.tb:
    - fixed: now also uses GraphId

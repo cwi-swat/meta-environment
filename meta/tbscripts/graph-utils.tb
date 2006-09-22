@@ -52,12 +52,12 @@ process UpdateGraphAttributes(GraphType: str, GraphId: term, Graph: term) is
   snd-msg(gp-update-graph(GraphType, GraphId, Graph))
 
 
-process ShowTree(Tree: term, ShowLeafs: term, 
+process ShowTree(Tree: term, ShowLayout: term, ShowLeafs: term, 
                  SharingOn: term) is
 let
   Graph: term
 in
-  snd-msg(gc-tree-to-graph(Tree, ShowLeafs, SharingOn))
+  snd-msg(gc-tree-to-graph(Tree, ShowLayout, ShowLeafs, SharingOn))
   . rec-msg(gc-graph(Graph?))
   . RenderGraph("parsetree","0",false,true,Graph?)
 endlet

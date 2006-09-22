@@ -76,7 +76,20 @@ in
   GetFocus(EditorId, Tree?)
   .
   if not-equal(Tree, UNDEFINED) then
-    ShowTree(Tree, false, false)
+    ShowTree(Tree, false, false, false)
+  else
+    tau
+  fi
+endlet
+
+process ShowFullTreeWithoutLayoutAction(EditorId : term) is
+let
+  Tree : term
+in
+  GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    ShowTree(Tree, false, true, false)
   else
     tau
   fi
@@ -89,7 +102,7 @@ in
   GetFocus(EditorId, Tree?)
   .
   if not-equal(Tree, UNDEFINED) then
-    ShowTree(Tree, true, false)
+    ShowTree(Tree, true, true, false)
   else
     tau
   fi
@@ -102,7 +115,7 @@ in
   GetFocus(EditorId, Tree?)
   .
   if not-equal(Tree, UNDEFINED) then
-    ShowTree(Tree, true, true)
+    ShowTree(Tree, true, true, true)
   else
     tau
   fi
