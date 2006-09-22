@@ -1,5 +1,10 @@
 $Id$
 
+Fri Sep 22 13:47:14 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/standard.sdf.actions.src:
+   - Add |View| -> |Full Tree w/o Layout| menu item showing a full tree
+   without all the layout paths (closes #634)
+
 Mon Aug 14 14:29:04 CEST 2006 <jurgenv@cwi.nl>
  * sdf-meta.pc.in: changed dependency on pgen to dependency
    on sdf package.
