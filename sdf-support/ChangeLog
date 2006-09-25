@@ -1,5 +1,9 @@
 $Id$
 
+Mon Sep 25 18:19:41 CEST 2006 <economop@cwi.nl>
+ * lib/SDFME-utils.{c,h}: Added functionality to extract the int value from an
+   SDF_NatCon.
+
 Mon Sep 25 12:49:01 CEST 2006 <economop@cwi.nl>
  * lib/prop.c: Fixed bug.
 

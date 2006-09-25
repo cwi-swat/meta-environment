@@ -76,4 +76,6 @@ SDF_StrCon SDF_makeStrCon(const char *str);
 SDF_SingleQuotedStrCon SDF_makeSingleQuotedStrCon(const char *str);
 SDF_Sort SDF_makeSort(const char *str);
 
+int SDF_SDFNatConToInt(SDF_NatCon sdfNatCon);
+
 #endif /* _SDF_UTILS_H */

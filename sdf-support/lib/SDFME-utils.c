@@ -349,3 +349,14 @@ SDF_Sort SDF_makeSort(const char *str)
 }
 
 /*}}}  */
+
+/*{{{  SDF_Sort SDF_makeSort(const char *str) */
+
+int SDF_SDFNatConToInt(SDF_NatCon sdfNatCon) {
+  char *valStr = PT_yieldTree((PT_Tree) sdfNatCon);
+  int result = atoi(valStr);
+
+  return result;
+}
+
+/*}}}  */
