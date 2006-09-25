@@ -1,5 +1,8 @@
 $Id$
 
+Mon Sep 25 12:49:01 CEST 2006 <economop@cwi.nl>
+ * lib/prop.c: Fixed bug.
+
 Thu Sep 21 13:04:10 CEST 2006 <economop@cwi.nl>
  * Forgot to add file ;-)
 

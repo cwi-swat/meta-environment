@@ -2,7 +2,7 @@
 
 static void
 collect_kernel_props(SDF_Grammar grammar, SDF_PropertyList *props) {
-  if (SDF_isGrammarSyntax(grammar)) {
+  if (SDF_isGrammarProperties(grammar)) {
     SDF_Properties grammarProps = SDF_getGrammarProperties(grammar);
     SDF_PropertyList propertyList = SDF_getPropertiesList(grammarProps);
 
