@@ -152,7 +152,7 @@
     repositories, located at CWI and INRIA, to a single Subversion repository,
     located at CWI. Because of this migration, the cvsmerge script has lost
     its purpose. Instead you should use the SvnMerge script ("svnmerge")
-    provided with the Subversion source. </para>
+    provided with the Subversion source.</para>
   </section>
 
   <section>
@@ -228,7 +228,7 @@
       branches allow independent parallel development with the possibility to
       commit intermediate changes to the branch. These branches (and their
       associated working copies) can be kept up-to-date with the trunk using
-      the svnmerge script. Further information can be found at: </para>
+      the svnmerge script. Further information can be found at:</para>
 
       <itemizedlist>
         <listitem>
@@ -253,7 +253,7 @@
     </section>
 
     <section>
-      <title> Differences between CvsMerge and SvnMerge</title>
+      <title>Differences between CvsMerge and SvnMerge</title>
 
       <para>The following table describes some difference between the use of
       cvsmerge and svnmerge. Options and arguments for CvsMerge and SvnMerge
@@ -280,7 +280,7 @@
 
               <entry>cvsmerge begin-branch</entry>
 
-              <entry>svn copy svnmerge init svn commit</entry>
+              <entry>svn copy ; svnmerge init ; svn commit</entry>
             </row>
 
             <row>
@@ -296,13 +296,13 @@
 
               <entry>cvsmerge import-from-trunk cvs commit</entry>
 
-              <entry>svnmerge merge svn commit</entry>
+              <entry>svnmerge merge ; svn commit</entry>
             </row>
 
             <row>
               <entry>Revert changes</entry>
 
-              <entry>rm cvs update cvsmerge reset-import </entry>
+              <entry>rm cvs update cvsmerge reset-import</entry>
 
               <entry>svn revert (or) cd ..; rm -rf</entry>
             </row>
@@ -318,7 +318,7 @@
         </tgroup>
       </informaltable>
 
-      <para> </para>
+      <para></para>
     </section>
 
     <section>

@@ -1,6 +1,5 @@
 #! /bin/sh
 
-set -x
 set -e
 
 CATEGORIES="getting-started howto demos understanding courses project"
