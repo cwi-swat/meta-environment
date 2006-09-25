@@ -44,6 +44,7 @@ in
       +
         rec-msg(te-contents-changed(Sid))
         . TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree. Closes #555")
+        . snd-note(term-modified(Path))
       +
         rec-msg(te-contents-saved(Sid))
         . UpdateTermStructure(Sid)
@@ -102,7 +103,7 @@ in
       (
         rec-msg(term-editor-started(Filename, ModuleId, Sid?))
         . SE-UpdateTree(Sid, Tree)
-	. PutCachedValue(TERM_TREE_CACHE, ModuleId, Tree)
+	. PutCachedValue(TERM_TREE_CACHE, Filename, Tree)
       +
         rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
         . Error(ErrorMessage, [])

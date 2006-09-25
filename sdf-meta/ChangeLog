@@ -1,5 +1,10 @@
 $Id$
 
+Mon Sep 25 10:23:55 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/term-{editor-utils,utils}.tb:
+   - Clear cache when term has been edited
+   - Fix caching issue where only one term could be edited over a module
+
 Fri Sep 22 15:31:28 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/term-utils.tb:
    - Initialize and add ClearCacheHandler for terms

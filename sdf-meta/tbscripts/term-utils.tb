@@ -11,15 +11,31 @@ process GetTermParseTable(ModuleId: term, Table: term?) is
 toolbus(InitCache(TERM_TREE_CACHE))
 toolbus(ClearCacheHandler(TERM_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
 
+process ClearTermParsetreeCache is
+let
+  Path: str
+in
+  subscribe(term-modified(<str>))
+  .
+  (
+    rec-note(term-modified(Path?))
+    . snd-msg(ts-remove-value(TERM_TREE_CACHE, Path))
+  )
+  * delta
+endlet
+
+toolbus(ClearTermParsetreeCache)
+
 process GetTermParsetree(ModuleId: term, Path: str, Result: term?) is
 let
+  AmbPid: int,
   ParseTable: term,
   Pid: int,
   Text: str,
   Type: term,
   Tree: term
 in
-  GetCachedValue(TERM_TREE_CACHE, ModuleId, Tree?)
+  GetCachedValue(TERM_TREE_CACHE, Path, Tree?)
   .
   if equal(Tree, UNDEFINED) then
     Type := trm
@@ -30,12 +46,14 @@ in
       .
       if not-equal(Text, "") then
         create(ParseTreeHandler(ModuleId, Path), Pid?)
+	. RemoveAmbiguitySummary(Path)
         . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
         .
         (
           rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+	  . create(AmbiguityHandler(Tree, Path), AmbPid?)
           . AnnotateTree(Tree, Path, Result?)
-	  . PutCachedValue(TERM_TREE_CACHE, ModuleId, Result)
+	  . PutCachedValue(TERM_TREE_CACHE, Path, Result)
         +
           rec-msg(parse-handler-done(Pid))
           . Result := UNDEFINED
