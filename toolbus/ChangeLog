@@ -1,5 +1,10 @@
 $Id$
 
+Mon Sep 25 11:49:45 CEST 2006 <kooiker@cwi.nl>
+ * toolbus/main.c:
+   - Check on ToolBus script argument fixes null pointer for script name 
+     (closes #644)
+
 Fri May 19 14:26:51 CEST 2006 <jurgenv@cwi.nl>
  * toolbus/script.l: changed the maximum length of a string
    from BUFSIZ (??) to 5000. BUFSIZ is OS dependent and is 

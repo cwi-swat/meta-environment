@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
   /* The system module is always present */
   system_init_module(); 
  
-  if(argc < 2) {
+  if(argc < 2 || sname == NULL) {
     usage(argv[0], 1);
   }
 
