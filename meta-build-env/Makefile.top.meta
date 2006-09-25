@@ -17,8 +17,12 @@ CLEANFILES+=Doxyfile
 
 .PHONY: doc
 
-doc: Doxyfile
-	        doxygen
+# if the user defined EXTRA_DOC, then use that, otherwise always
+# use doxygen for documentation generation.
+doc: $(if $(EXTRA_DOC), $(EXTRA_DOC), doxygen)
+
+doxygen: Doxyfile
+	doxygen 
 
 Doxyfile: Doxyfile.meta
 	        sed 's@__PACKAGE__@$(PACKAGE)@g' < $< > $@

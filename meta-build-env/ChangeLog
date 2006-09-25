@@ -1,5 +1,11 @@
 
 
+Mon Sep 25 17:19:34 CEST 2006 <jurgenv@cwi.nl>
+ * Makefile.top.meta: if the including Makefile.am defines the
+   EXTRA_DOC variable, then this variable defines the dependencies
+   of the 'doc' target, otherwise doxygen will be used to generate
+   documentation.
+
 Wed Aug  9 19:31:18 CEST 2006 <jurgenv@cwi.nl>
  * Makefile.rules: added definitions of generic make rules for
    ToolBus, Apigen and ASF. In progress, and will be merged with
