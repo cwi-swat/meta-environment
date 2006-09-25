@@ -112,6 +112,7 @@ toolbus(ClearCacheHandler(ASF_TREE_CACHE, SDF_NAMESPACE, "status", <term>,comple
 
 process GetASFParseTree(ModuleId: term, Result: term?) is
 let
+  AmbPid: int,
   ParseTable: term,
   Path: str,
   Pid: int,
@@ -131,10 +132,12 @@ in
       .
       if not-equal(ParseTable, UNDEFINED) then
         create(ParseTreeHandler(ModuleId, Path), Pid?)
+	. RemoveAmbiguitySummary(Path)
         . ParseText(Pid, Text, ParseTable, ASF_TOPSORT, on)
         .
         (
           rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+	  . create(AmbiguityHandler(Tree, Path), AmbPid?)
           . AnnotateTree(Tree, Path, Result?) 
           . PutCachedValue(ASF_TREE_CACHE, ModuleId, Result)
         +

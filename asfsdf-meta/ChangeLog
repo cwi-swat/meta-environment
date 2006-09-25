@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Sep 25 10:25:04 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/asf-utils.tb:
+   - Call Ambiguity Handler after parsing
+
 Fri Sep 22 13:48:51 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/standard.asf.actions.src:
    - Add |View| -> |Full Tree w/o Layout| menu item showing a full tree
