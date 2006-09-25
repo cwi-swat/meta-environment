@@ -53,10 +53,13 @@ process AmbiguityHandler(ParseResult: term, Path: str) is
 let
   Summary : term
 in
-    RemoveSummary("ambtracker", Path)
+    RemoveAmbiguitySummary(Path)
     . ReportAmbs(ParseResult, Path, Summary?)
     . DisplaySummary(Summary)
 endlet
+
+process RemoveAmbiguitySummary(Path: str) is
+  RemoveSummary("ambtracker", Path)
 
 process ParseTreeHandler(ModuleId: term, Path: str) is
 let
@@ -72,7 +75,6 @@ in
   (
     rec-msg(parse-tree(Pid, ParseResult?))
     . RemoveSummary("sglr", Path)
-    . create(AmbiguityHandler(ParseResult, Path), P?)
     . snd-msg(parse-handler-done(Pid, ModuleId, ParseResult))
   +
     rec-msg(parse-error(Pid, ErrorMessage?))
@@ -80,7 +82,6 @@ in
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
     . RemoveSummary("sglr", Path)
-    . RemoveSummary("ambtracker", Path)
     . DisplaySummary(Summary)
     . snd-msg(parse-handler-done(Pid))
   )

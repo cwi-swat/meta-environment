@@ -1,6 +1,8 @@
 #ifndef __ERROR_OUTPUT__
 #define __ERROR_OUTPUT__
 
+#include <error-support.idef>
+
 /* This is for commandline error output only */
 process AddJob(Message: str) is
   tau
@@ -13,8 +15,7 @@ process Error(Message: str, MessageArgs: list) is
   . printf("%s: %t\n", Message, MessageArgs)
 
 process DisplaySummary(Summary: term) is
-  TODO("Use error support utils to print error")
-  . printf("%t\n", Summary) 
+  snd-msg(display-feedback(Summary))
 
 process RemoveSummary(Producer: str, SummaryId: str) is
   tau
