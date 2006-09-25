@@ -43,7 +43,7 @@ in
         MouseClicked(Sid)
       +
         rec-msg(te-contents-changed(Sid))
-        . TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree. Closes #555")
+        . TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree.")
         . snd-note(term-modified(Path))
       +
         rec-msg(te-contents-saved(Sid))
