@@ -2,9 +2,9 @@
 
 # The prefixes to be merged into one tar
 # and be distributed in binary form.
-prefixes=$1
+prefixes=$*
 
-if [ -z ${prefixes} ]; then
+if [ -z "${prefixes}" ]; then
     echo "Usage: $0 <list of (package) prefixes>"
     exit 1
 fi
