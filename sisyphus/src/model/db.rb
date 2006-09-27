@@ -22,6 +22,10 @@ module Model
     def prefix(root)
       return File.join(root, name)
     end
+
+    def ==(o)
+      return name == o.name
+    end
   end
 
   class SiRevision < ActiveRecord::Base
@@ -38,6 +42,11 @@ module Model
                                                   self.si_component_id, self.version],
                           :order => 'version desc')
       return p
+    end
+
+    def ==(o)
+      return version == o.version &&
+        si_component == o.si_component
     end
 
     def prefix(root)
