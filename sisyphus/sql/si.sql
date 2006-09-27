@@ -62,7 +62,8 @@ create table si_hosts (
 	si_platform_id integer references si_platforms,
 	uname varchar(512) not null unique,
 	status text,
-	progress text
+	progress text,
+	active boolean default false
 );
 
 
