@@ -1,9 +1,8 @@
 module languages/sdf2/syntax/Nullables
 
 imports languages/sdf2/syntax/Properties
-imports languages/sdf2/syntax/Symbols
 
 exports
   context-free syntax
-    "nullable" "symbols" Symbols -> Property {cons("nullable-symbols")} 
+    "nullable" "productions" Productions -> Property {cons("nullable-productions")} 
 

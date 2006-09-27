@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep 27 15:57:01 CEST 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/Nullables.sdf: Modified syntax to work with
+   Productions instead of Symbols.
+
 Wed Sep 13 15:57:47 CEST 2006 <economop@cwi.nl>
  * library/languages/sdf2/syntax/Properties.sdf: Added Properties production 
    to be consistent with other definitions.
