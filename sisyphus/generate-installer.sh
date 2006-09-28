@@ -1,10 +1,8 @@
 #! /bin/sh
-set -x
 
 # TODO
 # - check at compile time
 #   - external deps
-#   - prefixes are abolute
 # - generate checks for:
 #   - tools used
 #   - well-formedness of target_prefix
@@ -16,9 +14,35 @@ set -x
 prefixes=$*
 
 if [ -z "${prefixes}" ]; then
-    echo "Usage: $0 <list of (package-)prefixes>"
+    echo >&2 "Usage: $0 <list of (package-)prefixes>"
     exit 1
 fi
+
+# Check that given prefixes exist and are well-formed.
+errors=""
+for prefix in ${prefixes} ; do 
+    if [ `echo ${prefix} | cut -b 1` = "/" ] ; then
+	if [ `echo ${prefix} | tr -d ' '` = ${prefix} ] ; then
+	    if [ ! -d ${prefix} ] ; then
+		echo >&2 "error: directory ${prefix} does not exist."
+		errors=1
+	    fi
+	else
+	    echo >&2 "error: prefix ${prefix} contains spaces."
+	    errors=1
+	fi
+    else
+	echo >&2 "error: prefix ${prefix} is not absolute."
+	errors=1
+    fi
+done
+
+if [ ! -z "${errors}" ] ; then
+    echo >&2 "can't continue due to errors."
+    exit 1
+fi
+
+
 
 # Add the contents of all prefixes to a tar archive
 archive=/tmp/sisyphus_bin_dister.$$.tar
@@ -53,12 +77,13 @@ cat <<EOF
 set -e
 target_prefix=\$1
 if [ -z \$target_prefix ] ; then
-  echo "Usage: \$0 <prefix>"
+  echo >&2 "Usage: \$0 <prefix>"
   exit 1
 fi
 target_prefix_length=\${#target_prefix}
 if [ \${target_prefix_length} -gt ${minimum_length} ]; then
-  echo "Error: target prefix \${target_prefix} is longer than ${minimum_length}."
+  echo >&2 "Error: target prefix \${target_prefix} is longer than ${minimum_length}."
+  echo >&2 "This means that some files cannot be relocated. Please choose a shorter one."
   exit 1
 fi
 mkdir -p \$target_prefix
