@@ -2,14 +2,34 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <article>
-  <title>Understanding Term Rewriting</title>
+  <title>Understanding Term Rewriting (under construction)</title>
+
+  <authorblurb>
+    <para>Paul Klint</para>
+  </authorblurb>
 
   <section>
     <title>Motivation and introduction</title>
 
+    <para>Consider the following, back-of-an-envelope, calculation:</para>
+
+    <programlisting>(9 - 5)<superscript>2</superscript> * (7 + 4) =
+
+4<superscript>2</superscript>  * (7 + 4) =
+
+16 * (7 + 4) =
+
+16 * 11 =
+
+176</programlisting>
+
+    <para>This is a perfect example of <emphasis>term rewriting</emphasis>:
+    the initial expression (9 - 5)<superscript>2</superscript> * (7 + 4) is
+    simplified in a number of steps using the rules of elementary arithmetic.
+    The result is the number 176.</para>
+
     <para>Many forms of simplification or symbolic manipulation can be
-    expressed by <emphasis>term rewriting</emphasis>. Recall the
-    simplification rule</para>
+    expressed by term rewriting. Recall the simplification rule</para>
 
     <para><programlisting>(<emphasis>a</emphasis> + <emphasis>b</emphasis>)<superscript>2</superscript> = <emphasis>a</emphasis><superscript>2</superscript> + 2<emphasis>ab</emphasis> + <emphasis>b</emphasis><superscript>2</superscript></programlisting>from
     high school algebra or the rule to calculate the derivative of the sum of
@@ -20,13 +40,13 @@
     <para>In both cases, there is a complex <emphasis>left-hand
     side</emphasis> that can be simplified into the expression appearing at
     the <emphasis>right-hand side</emphasis>. These expressions are called
-    <emphasis>term</emphasis>s and this explains the name <emphasis>term
-    rewriting</emphasis>. The precise form of such a term may differ and is
-    explained below. Observe that some of the items on the left-hand side
-    re-appear at the right-hand side (e.g., <emphasis>a</emphasis>,
-    <emphasis>b</emphasis>, <emphasis>u</emphasis>, <emphasis>v</emphasis>);
-    they are called <emphasis>variables</emphasis> and are used during the
-    simplification.</para>
+    <emphasis>term</emphasis>s and this explains the name
+    <emphasis><emphasis>term rewriting</emphasis></emphasis>. The precise form
+    of such a term may differ and is explained below. Observe that some of the
+    items on the left-hand side re-appear at the right-hand side (e.g.,
+    <emphasis>a</emphasis>, <emphasis>b</emphasis>, <emphasis>u</emphasis>,
+    <emphasis>v</emphasis>); they are called <emphasis>variables</emphasis>
+    and are used during the simplification.</para>
 
     <para>In order to apply such a simplifcation rule (or better:
     <emphasis>rewrite rule</emphasis>), several ingredients play a
@@ -67,19 +87,114 @@
   <section>
     <title>Terms</title>
 
-    <para></para>
+    <para>Traditionally, terms are defined in a strict prefix format:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A single variable is a term, e.g. X, Y or Z.</para>
+      </listitem>
+
+      <listitem>
+        <para>A function name applied to zero or more arguments is a term,
+        e.g., add(X,Y).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Using this definition, complex hierarchical structures of arbitrary
+    depth can be defined.</para>
+
+    <para>Later, we will relax this definition of terms a bit and use a more
+    flexible notation. Instead of add(X,Y) we will, for instance, also write
+    (X + Y).</para>
+  </section>
+
+  <section>
+    <title>Substitution</title>
+
+    <para>A substitution is an important auxiliary notion that we need on our
+    road towards understanding term rewriting. A substitution is an
+    association between variables and terms. For instance,</para>
+
+    <programlisting>{ X -&gt; 0, Y -&gt; succ(0) }</programlisting>
+
+    <para>is a substitution that maps the variable X to the term 0 (a function
+    without arguments), and the variable Y to the term
+    <literal>succ(0)</literal>.</para>
+
+    <para>Substitution can be used to create new terms from old ones. Using
+    the above substitution and applying it to the term mul(succ(X), Y) will
+    yield the new term mul(succ(0), succ(0)). The basic idea is that variables
+    are replaced by the term they are mapped to by the substitution.</para>
   </section>
 
   <section>
     <title>Matching</title>
 
-    <para></para>
+    <para>Matching has as goal to determine whether two terms
+    T<subscript>1</subscript> and T<subscript>2</subscript> can be made equal.
+    More precisely, whether a substitution exists that can make
+    T<subscript>1</subscript> equal to T<subscript>2</subscript>. For
+    instance, the two terms mul(succ(X), Y) and mul(succ(0), succ(0)) match
+    since we can use the substitution { X -&gt; 0 Y -&gt; succ(0) } to make
+    them identical. If no such substitution can be found, the two terms cannot
+    be matched.</para>
   </section>
 
   <section>
     <title>Examples</title>
 
-    <para></para>
+    <para>Let´s consider two simple examples of term rewriting systems for
+    natural numbers and booleans.</para>
+
+    <section>
+      <title>Numerals</title>
+
+      <para>How can we specify natural numbers with 0, successor, addition and
+      multiplication using term rewriting? A usual approach is as
+      follows:</para>
+
+      <programlisting>[add1] add(0, X) = X
+
+[add2] add(succ(X), Y) = succ(add(X, Y))
+
+[mul1] mul(0, X) = 0
+
+[mul2] mul(succ(X), Y) = add(mul(X, Y), Y)</programlisting>
+
+      <para>Here, 0 represents the constant zero, and add and mul the
+      arithmetic operations addition and multiplication. Natural numbers are
+      represented as 0, succ(0), succ(succ(0)), and so on. In other words,
+      <emphasis>N</emphasis> applications of the successor to the constant 0,
+      represent the number <emphasis>N</emphasis>.</para>
+
+      <para>For mere mortals, the above rules could also be written in a more
+      readable form:</para>
+
+      <para><programlisting>[add1´] 0 + X = X
+
+[add2´] succ(X) + Y = succ(X + Y)
+
+[mul1´] 0 * X = 0
+
+[mul2´] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let´s follow the
+      simplification of add(succ(succ(0)), succ(succ(0))):</para>
+
+      <figure>
+        <title></title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="two-plus-two.png" scale="70" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Booleans</title>
+
+      <para></para>
+    </section>
   </section>
 
   <section>
