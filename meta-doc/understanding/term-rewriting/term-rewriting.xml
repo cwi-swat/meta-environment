@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+  <title>Understanding Term Rewriting</title>
+
+  <section>
+    <title>Motivation and introduction</title>
+
+    <para>Many forms of simplification or symbolic manipulation can be
+    expressed by <emphasis>term rewriting</emphasis>. Recall the
+    simplification rule</para>
+
+    <para><programlisting>(<emphasis>a</emphasis> + <emphasis>b</emphasis>)<superscript>2</superscript> = <emphasis>a</emphasis><superscript>2</superscript> + 2<emphasis>ab</emphasis> + <emphasis>b</emphasis><superscript>2</superscript></programlisting>from
+    high school algebra or the rule to calculate the derivative of the sum of
+    two functions <emphasis>u</emphasis> and <emphasis>v</emphasis>:</para>
+
+    <programlisting>d(<emphasis>u</emphasis> + <emphasis>v</emphasis>)/d<emphasis>x</emphasis> = d<emphasis>u</emphasis>/d<emphasis>x</emphasis> + d<emphasis>v</emphasis>/d<emphasis>x</emphasis></programlisting>
+
+    <para>In both cases, there is a complex <emphasis>left-hand
+    side</emphasis> that can be simplified into the expression appearing at
+    the <emphasis>right-hand side</emphasis>. These expressions are called
+    <emphasis>term</emphasis>s and this explains the name <emphasis>term
+    rewriting</emphasis>. The precise form of such a term may differ and is
+    explained below. Observe that some of the items on the left-hand side
+    re-appear at the right-hand side (e.g., <emphasis>a</emphasis>,
+    <emphasis>b</emphasis>, <emphasis>u</emphasis>, <emphasis>v</emphasis>);
+    they are called <emphasis>variables</emphasis> and are used during the
+    simplification.</para>
+
+    <para>In order to apply such a simplifcation rule (or better:
+    <emphasis>rewrite rule</emphasis>), several ingredients play a
+    role:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>an initial expression (a term) that is to be simplified.</para>
+      </listitem>
+
+      <listitem>
+        <para>a subexpression where the rule might be applied (this is called
+        the <emphasis>redex</emphasis>); there must be a
+        <emphasis>match</emphasis>, between the redex and the left-hand side
+        of the rule we want to apply; finding a match means that we can find
+        values for the variables in the left-hand side of the rule that make
+        the left-hand side and the redex identical.</para>
+      </listitem>
+
+      <listitem>
+        <para>next, the redex in the initial expression is replaced by the
+        right-hand side of the rule, after replacing the variables by the
+        values found during the match.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Term rewriting is a simplification process that starts with one or
+    more rewrite rules and an initial term. This initial term is gradually
+    reduced to a term that cannot be further simplified: this is the outcome
+    of the rewriting process and is called the <emphasis>normal
+    form</emphasis>.</para>
+
+    <para>In each step, a redex is searched for in (the possibly already
+    simplified) initial term and it is replaced by the rewrite rule that can
+    be applied.</para>
+  </section>
+
+  <section>
+    <title>Terms</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Matching</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Examples</title>
+
+    <para></para>
+  </section>
+</article>
