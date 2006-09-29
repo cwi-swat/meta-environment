@@ -29,13 +29,15 @@ for i in ${CATEGORIES}; do
 	(docbook2html --output ${WEB}/$i/$b --nochunks $i/$b/$b.xml)	
 	title=`getTitle $i/$b/$b.xml`
 	echo "<li><a href=\"./$i/$b/$b.html\">${title} (html)</a></li>" >> ${INDEX}
-      else 
-	if [ -f $i/$b/$b.pdf ]; then
+      elif [ -f $i/$b/$b.pdf ]; then
 	  mkdir -p ${WEB}/$i/$b
 	  cp $i/$b/$b.pdf ${WEB}/$i/$b/$b.pdf
 	  title=`cat $i/$b/TITLE`
 	  echo "<li><a href=\"./$i/$b/$b.pdf\">${title} (pdf)</a></li>" >> ${INDEX}
-	fi
+      elif [ -f $i/$b/$b.url ]; then
+	  title=`cat $i/$b/TITLE`
+	  url=`cat $i/$b/$b.url`
+	  echo "<li><a href=\"${url}\">${title}</a></li>" >> ${INDEX}
       fi
     fi
   done
