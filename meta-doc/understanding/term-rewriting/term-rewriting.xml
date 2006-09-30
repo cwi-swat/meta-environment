@@ -4,9 +4,9 @@
 <article>
   <title>Understanding Term Rewriting (under construction)</title>
 
-  <authorblurb>
-    <para>Paul Klint</para>
-  </authorblurb>
+  <address><authorblurb>
+      <para>Paul Klint</para>
+    </authorblurb></address>
 
   <section>
     <title>Motivation and introduction</title>
@@ -29,7 +29,7 @@
     The result is the number 176.</para>
 
     <para>Many forms of simplification or symbolic manipulation can be
-    expressed by term rewriting. Recall the simplification rule</para>
+    expressed in this way. Recall the simplification rule</para>
 
     <para><programlisting>(<emphasis>a</emphasis> + <emphasis>b</emphasis>)<superscript>2</superscript> = <emphasis>a</emphasis><superscript>2</superscript> + 2<emphasis>ab</emphasis> + <emphasis>b</emphasis><superscript>2</superscript></programlisting>from
     high school algebra or the rule to calculate the derivative of the sum of
@@ -141,6 +141,74 @@
   </section>
 
   <section>
+    <title>The rewriting algorithm</title>
+
+    <para>We can now assemble the ingredients we have described so far into a
+    comprehensive description of the rewriting algorithm (Figure <olink
+    targetptr="The rewriting algorithm">X</olink>).This algortihm still leaves
+    some aspects unspecified:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>In what way is the redex selected?</para>
+      </listitem>
+
+      <listitem>
+        <para>In what order are the rules applied?</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Various methods are possible for selecting the redex:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>From the top (root) of the term to the bottom or from the leaves
+        to the root.</para>
+      </listitem>
+
+      <listitem>
+        <para>From left to right or from right to left.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We will mostly be using a leaves-to-root and left-to right order.
+    This is called the <emphasis>left-most innermost reduction
+    strategy</emphasis>.</para>
+
+    <para>Also various methods exist for selecting the rules to be
+    tried:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Textual order.</para>
+      </listitem>
+
+      <listitem>
+        <para>Specificity order (rules with more precise lefthand sides are
+        tried before rules with more general left-hand sides).</para>
+      </listitem>
+
+      <listitem>
+        <para>No order.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We will be using no ordering of the rules.</para>
+
+    <figure xreflabel="">
+      <title>The rewriting algortihm</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="rewriting-algorithm.png" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para></para>
+  </section>
+
+  <section>
     <title>Examples</title>
 
     <para>Let´s consider two simple examples of term rewriting systems for
@@ -170,21 +238,26 @@
       <para>For mere mortals, the above rules could also be written in a more
       readable form:</para>
 
-      <para><programlisting>[add1´] 0 + X = X
+      <para><programlisting format="linespecific">[add1´] 0 + X = X
 
 [add2´] succ(X) + Y = succ(X + Y)
 
 [mul1´] 0 * X = 0
 
 [mul2´] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let´s follow the
-      simplification of add(succ(succ(0)), succ(succ(0))):</para>
+      simplification of add(succ(succ(0)), succ(succ(0))) as shown in Figure
+      Y. Each redex is shown as a yellow box with a thick border.</para>
+
+      <para>The name of the rule that is applied in each step is shown on the
+      right of each vertical arrow.</para>
 
       <figure>
-        <title></title>
+        <title>Rewriting an arithmetic term</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="two-plus-two.png" scale="70" />
+            <imagedata align="center" dir="lro" fileref="./two-plus-two.png"
+                       scale="100" scalefit="" />
           </imageobject>
         </mediaobject>
       </figure>
