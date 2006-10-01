@@ -25,6 +25,7 @@ for i in ${CATEGORIES}; do
   mkdir -p ${WEB}/$i || true
   for b in ${BOOKS}; do
     if [ -d $i/$b ]; then
+      cp $i/$b/*.{png,jpg,gif} ${WEB}/$i/$b >& /dev/null || true
       if [ -f $i/$b/$b.xml ]; then
 	(docbook2html --output ${WEB}/$i/$b --nochunks $i/$b/$b.xml)	
 	title=`getTitle $i/$b/$b.xml`

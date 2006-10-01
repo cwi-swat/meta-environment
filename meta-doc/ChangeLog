@@ -1,5 +1,9 @@
 
 
+Sun Oct  1 19:42:07 CEST 2006 <jurgenv@cwi.nl>
+ * website.sh: png, gif and jpg pictures in every directory are
+   also put online by website.sh
+
 Wed Jul  5 12:56:17 CEST 2006 <jurgenv@cwi.nl>
  * applications: added directory to contain testimonials and
    other reports on applications of Meta-Environment software.
