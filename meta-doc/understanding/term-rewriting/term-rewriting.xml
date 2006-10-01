@@ -9,18 +9,24 @@
     </authorblurb></address>
 
   <section>
-    <title>Motivation and introduction</title>
+    <title>Motivation</title>
+
+    <para>Term rewriting is a surprisingly simple computational paradigm that
+    is based on the repeated application of simplification rules. It is
+    particularly suited for tasks like symbolic computation, program analysis
+    and program transformation. Understanding term rewriting will help you to
+    solve such tasks in a very effective manner.</para>
+  </section>
+
+  <section>
+    <title>Introduction</title>
 
     <para>Consider the following, back-of-an-envelope, calculation:</para>
 
     <programlisting>(9 - 5)<superscript>2</superscript> * (7 + 4) =
-
 4<superscript>2</superscript>  * (7 + 4) =
-
 16 * (7 + 4) =
-
 16 * 11 =
-
 176</programlisting>
 
     <para>This is a perfect example of <emphasis>term rewriting</emphasis>:
@@ -103,9 +109,9 @@
     <para>Using this definition, complex hierarchical structures of arbitrary
     depth can be defined.</para>
 
-    <para>Later, we will relax this definition of terms a bit and use a more
-    flexible notation. Instead of add(X,Y) we will, for instance, also write
-    (X + Y).</para>
+    <para>Occasionally, we will relax this definition of terms a bit and use a
+    more flexible notation. Instead of add(X,Y) we will, for instance, also
+    write X + Y.</para>
   </section>
 
   <section>
@@ -204,15 +210,41 @@
         </imageobject>
       </mediaobject>
     </figure>
-
-    <para></para>
   </section>
 
   <section>
     <title>Examples</title>
 
     <para>Let´s consider two simple examples of term rewriting systems for
-    natural numbers and booleans.</para>
+    natural numbers and booleans. More elaborate examples that fall outside
+    the scope of this article are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Typechecking of programs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Interpretation (= execution) of programs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Code generation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Fact extraction from source code for the benefit of quality
+        assurance or defect detection.</para>
+      </listitem>
+
+      <listitem>
+        <para>Software transformation for the benefit of translation or code
+        improvement.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>See the Further Reading section for pointers to such
+    examples.</para>
 
     <section>
       <title>Numerals</title>
@@ -246,10 +278,13 @@
 
 [mul2´] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let´s follow the
       simplification of add(succ(succ(0)), succ(succ(0))) as shown in Figure
-      Y. Each redex is shown as a yellow box with a thick border.</para>
+      Y. Each redex is shown as a yellow box with a thick border. An arrow
+      connects the redex with its replacement that is surround by a rectangle
+      with a thin border.</para>
 
       <para>The name of the rule that is applied in each step is shown on the
-      right of each vertical arrow.</para>
+      right of each vertical arrow. As expected, the answer is
+      succ(succ(succ(succ0)))) or, in other words, 2 + 2 equals 4.</para>
 
       <figure>
         <title>Rewriting an arithmetic term</title>
@@ -266,13 +301,123 @@
     <section>
       <title>Booleans</title>
 
-      <para></para>
+      <para>How can we define Boolean expressions with constants true and
+      false and the operations and, or and not? Consider the following
+      definition that structly follows the truth table definitions of Boolean
+      operators:</para>
+
+      <programlisting>[or1] or(true, true) = true
+[or2] or(true, false) = true
+[or3] or(false, true) = true
+[or4] or(false, false) = false
+
+[and1] and(true, true) = true
+[and2] and(true, false) = false
+[and3] and(false, true) = false
+[and4] and(false, false) = false
+
+[not1] not(true) = false
+[not2] not(false) = true</programlisting>
+
+      <para>Consider the simplification of the Boolean expression
+      not(or(false, and(true,not(false)))) as shown in Figure Z.</para>
+
+      <figure>
+        <title>Rewriting as Boolean term</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="not-or.png" />
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
+  </section>
+
+  <section>
+    <title>Extensions of term rewriting</title>
+
+    <para>Term rewriting has been extended in various ways to make it even
+    more practical. These extensions include:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>User-defined syntax</emphasis>. Instead of writing
+        and(true, false) we would rather like to write true &amp; false. We
+        want to relax the strict prefix format of functions and use arbitrary
+        notation for them.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Conditional rules</emphasis>. So far we have only seen
+        rewrite rules that are applied when they <emphasis>can</emphasis> be
+        applied. To conditional rewrite rules, one or more conditions are
+        attached that are first evaluated in order to determine whether the
+        rule should be applied at all.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Default rules</emphasis>. So far we have used no
+        ordering for the rewrite rules. Default rules are only applied when no
+        other rules can be applied an capture the idea of a
+        <emphasis>catch-all rule</emphasis> that covers the cases that are not
+        addressed by other, more specific, rules.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Lists and list matching</emphasis>. Terms can be
+        extended with a notion of lists. This is particularly handy when
+        representing repeated items in a structure such as a list of
+        identifiers in a declaration, or a list of statements in a procedure
+        body. The matching between two terms has to be extended to cover the
+        case of matching lists of terms rather than a single term. In this
+        way, one can, for instance, define patterns that match a list of
+        statements that contains a statement of a particular form.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Traversal functions</emphasis>. In many problem
+        domains it may occur that a large structure has to be searched while
+        only a few elements are relevant for the operation at hand. Consider
+        counting goto statements in C or Cobol programs: we are only
+        interested to do something when we encounter a goto statement and we
+        just want to travel over the other statements kinds. Traversal
+        functions automate this kind of behaviour and can hugely reduce the
+        number of rewrite rules that are needed in industrial size
+        applications.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>All these -- and more -- extensions our provided by the ASF+SDF
+    formalism that is supported by The Meta-Environment.</para>
   </section>
 
   <section>
     <title>Further reading</title>
 
-    <para></para>
+    <itemizedlist>
+      <listitem>
+        <para>Several articles on this website give detailed examples of term
+        rewriting applications.</para>
+      </listitem>
+
+      <listitem>
+        <para>The book <emphasis>Term Rewriting and All That</emphasis> by
+        Franz Baader and Tobias Nipkow (Cambridge University Press, 1998)
+        gives an introduction to the theory of term rewriting.</para>
+      </listitem>
+
+      <listitem>
+        <para>The book <emphasis>Term Rewriting Systems</emphasis> by the
+        Terese collective (Cambridge Tracts in Theoretical Computer Science,
+        2003) gives a comprehensive overview of research in this area.</para>
+      </listitem>
+
+      <listitem>
+        <para>The Meta-Environment (<uri>www.meta-environment.org</uri>) is
+        the tools suite par excellence to explore applications of term
+        rewriting.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
