@@ -321,11 +321,11 @@
 
       <para><programlisting>[add1´] 0 + X = X
 
-[add2´] succ(X) + Y = succ(X + Y)
+[add2'] succ(X) + Y = succ(X + Y)
 
-[mul1´] 0 * X = 0
+[mul1'] 0 * X = 0
 
-[mul2´] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let´s follow the
+[mul2'] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let's follow the
       simplification of <literal>add(succ(succ(0)), succ(succ(0)))</literal>
       as shown in Figure <link linkend="fig_arithmetic">Rewriting an
       arithmetic term</link>. Each redex is shown as a yellow box with a thick
