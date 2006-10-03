@@ -319,7 +319,7 @@
       <para>For mere mortals, the above rules could also be written in a more
       readable form:</para>
 
-      <para><programlisting>[add1´] 0 + X = X
+      <para><programlisting>[add1'] 0 + X = X
 
 [add2'] succ(X) + Y = succ(X + Y)
 
