@@ -1,22 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Coding standards for the Meta-Environment</title>
 
-<info><title>Coding standards for the Meta-Environment</title>
-  
+  <authorblurb>
+    <para><authorinitials>Jurgen Vinju</authorinitials></para>
 
-    <author><personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname></author>
-</info>
+    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+        <imageobject>
+          <imagedata fileref="../../logos/cwi.gif" />
+        </imageobject>
+      </mediaobject></para>
+  </authorblurb>
 
-  <section><info><title>Introduction</title></info>
-    
+  <section>
+    <title>Introduction</title>
 
     <para>This document represents an ongoing effort to document our coding
     standards. The descriptions are to be short and clear. This information is
     not complete, please help.</para>
   </section>
 
-  <section><info><title>Coding style in C and Java</title></info>
-    
+  <section>
+    <title>Coding style in C and Java</title>
 
     <itemizedlist>
       <listitem>
@@ -95,8 +102,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in Makefile.am and configure.{ac,in}</title></info>
-    
+  <section>
+    <title>Coding style in Makefile.am and configure.{ac,in}</title>
 
     <itemizedlist>
       <listitem>
@@ -112,8 +119,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in T-script (ToolBus)</title></info>
-    
+  <section>
+    <title>Coding style in T-script (ToolBus)</title>
 
     <itemizedlist>
       <listitem>
@@ -132,8 +139,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in SDF</title></info>
-    
+  <section>
+    <title>Coding style in SDF</title>
 
     <itemizedlist>
       <listitem>
@@ -157,8 +164,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in ASF+SDF</title></info>
-    
+  <section>
+    <title>Coding style in ASF+SDF</title>
 
     <itemizedlist>
       <listitem>
