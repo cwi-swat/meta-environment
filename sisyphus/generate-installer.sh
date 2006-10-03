@@ -112,6 +112,15 @@ for prefix in ${prefixes} ; do
     sed --in-place  -e "s@${prefix}@${replacement}@g" ${archive}
 done
 
+# check existence of externals in tar
+for external in ${externals}; do
+  occurs=`strings ${archive} | grep -c ${external}`
+  if [ ${occurs} = "0" ]; then
+    echo >&2 "error: ${external} is not present anywhere in ${archive}"
+    exit 1;
+  fi
+done
+
 generate_dialog() {
 for external in ${externals}; do
 cat<<ENDCAT
