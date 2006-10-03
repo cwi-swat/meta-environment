@@ -8,9 +8,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>Understanding Term Rewriting</title>
-  </info>
 
-  <address><personname>Paul Klint</personname></address>
+  <author><personname><firstname>Paul</firstname><surname>Klint</surname></personname></author>
+  </info>
 
   <caution>
     <para>This article is under construction and may contain errors or
@@ -70,7 +70,7 @@
     <literal>v</literal>); they are called <emphasis>variables</emphasis> and
     are used during the simplification.</para>
 
-    <para>In order to apply such a simplifcation rule (or better:
+    <para>In order to apply such a simplification rule (or better:
     <emphasis>rewrite rule</emphasis>), several ingredients play a
     role:</para>
 
@@ -226,7 +226,7 @@
       </listitem>
 
       <listitem>
-        <para>Specificity order (rules with more precise lefthand sides are
+        <para>Specificity order (rules with more precise left-hand sides are
         tried before rules with more general left-hand sides).</para>
       </listitem>
 
@@ -284,9 +284,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>See the <link xlink:href="???"><link
-    linkend="further_reading">Further Reading</link></link> section for
-    pointers to such examples.</para>
+    <para>See the <link linkend="further_reading">Further Reading</link>
+    section for pointers to such examples.</para>
 
     <section>
       <info>
