@@ -1,5 +1,9 @@
 $Id$
 
+Tue Oct  3 10:40:26 CEST 2006 <economop@cwi.nl>
+ * Regenerated the api in lib given the changed nullable productions
+   calculations.
+
 Mon Sep 25 18:19:41 CEST 2006 <economop@cwi.nl>
  * lib/SDFME-utils.{c,h}: Added functionality to extract the int value from an
    SDF_NatCon.
