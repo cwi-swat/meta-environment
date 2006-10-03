@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:ns6="http://www.w3.org/1999/xhtml"
-         xmlns:ns5="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook">
-  <info>
-    <title>Understanding Term Rewriting</title>
-  </info>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+  <title>Understanding Term Rewriting</title>
 
-  <address><personname>Paul Klint</personname></address>
+  <address>Paul Klint</address>
 
   <caution>
     <para>This article is under construction and may contain errors or
     inaccuracies.</para>
   </caution>
 
-  <section xml:id="motivation">
-    <info>
-      <title>Motivation</title>
-    </info>
+  <section id="motivation">
+    <title>Motivation</title>
 
     <para>Term rewriting is a surprisingly simple computational paradigm that
     is based on the repeated application of simplification rules. It is
@@ -29,13 +21,10 @@
     solve such tasks in a very effective manner.</para>
   </section>
 
-  <section xml:id="introduction">
-    <info>
-      <title>Introduction</title>
-    </info>
+  <section id="introduction">
+    <title>Introduction</title>
 
-    <para>Consider the following, <emphasis>back-of-an-envelope</emphasis>,
-    calculation:</para>
+    <para>Consider the following, back-of-an-envelope, calculation:</para>
 
     <programlisting>(9 - 5)<superscript>2</superscript> * (7 + 4) =
 4<superscript>2</superscript>  * (7 + 4) =
@@ -107,17 +96,13 @@
   </section>
 
   <section>
-    <info>
-      <title>Basic concepts</title>
-    </info>
+    <title>Basic concepts</title>
 
     <para>In order to understand term rewriting three basic concepts are
     essential: terms, substitution and matching.</para>
 
-    <section xml:id="terms">
-      <info>
-        <title>Terms</title>
-      </info>
+    <section id="terms">
+      <title>Terms</title>
 
       <para>Traditionally, terms are defined in a strict prefix format:</para>
 
@@ -141,10 +126,8 @@
       will, for instance, also write <literal>X + Y</literal>.</para>
     </section>
 
-    <section xml:id="substitution">
-      <info>
-        <title>Substitution</title>
-      </info>
+    <section id="substitution">
+      <title>Substitution</title>
 
       <para>A substitution is an important auxiliary notion that we need on
       our road towards understanding term rewriting. A substitution is an
@@ -155,7 +138,7 @@
       <para>is a substitution that maps the variable <literal>X</literal> to
       the term <literal>0</literal> (a function without arguments), and the
       variable <literal>Y</literal> to the term
-      <literal>succ(0)</literal>.</para>
+      <literal><literal>succ(0)</literal></literal>.</para>
 
       <para>Substitution can be used to create new terms from old ones. Using
       the above substitution and applying it to the term <literal>mul(succ(X),
@@ -164,10 +147,8 @@
       term they are mapped to by the substitution.</para>
     </section>
 
-    <section xml:id="matching">
-      <info>
-        <title>Matching</title>
-      </info>
+    <section id="matching">
+      <title>Matching</title>
 
       <para>Matching has as goal to determine whether two terms
       T<subscript>1</subscript> and T<subscript>2</subscript> can be made
@@ -180,10 +161,8 @@
     </section>
   </section>
 
-  <section xml:id="term_rewriting_algorithm">
-    <info>
-      <title>The term rewriting algorithm</title>
-    </info>
+  <section id="term_rewriting_algorithm">
+    <title>The term rewriting algorithm</title>
 
     <para>We can now assemble the ingredients we have described so far into a
     comprehensive description of the rewriting algorithm (Figure <link
@@ -237,24 +216,20 @@
 
     <para>We will be using no ordering of the rules.</para>
 
-    <figure xreflabel="" xml:id="fig_rewriting_algorithm">
-      <info>
-        <title>The rewriting algorithm</title>
-      </info>
+    <figure id="fig_rewriting_algorithm" xreflabel="">
+      <title>The rewriting algorithm</title>
 
       <mediaobject>
         <imageobject>
           <imagedata align="center" dir="lro"
-                     fileref="rewriting-algorithm.png"></imagedata>
+                     fileref="rewriting-algorithm.png" />
         </imageobject>
       </mediaobject>
     </figure>
   </section>
 
-  <section xml:id="examples">
-    <info>
-      <title>Examples</title>
-    </info>
+  <section id="examples">
+    <title>Examples</title>
 
     <para>Let´s consider two simple examples of term rewriting systems for
     natural numbers and booleans. More elaborate examples that fall outside
@@ -284,14 +259,11 @@
       </listitem>
     </itemizedlist>
 
-    <para>See the <link xlink:href="???"><link
-    linkend="further_reading">Further Reading</link></link> section for
-    pointers to such examples.</para>
+    <para>See the <ulink url="???"><link linkend="further_reading">Further
+    Reading</link></ulink> section for pointers to such examples.</para>
 
     <section>
-      <info>
-        <title>Numerals</title>
-      </info>
+      <title>Numerals</title>
 
       <para>How can we specify natural numbers with 0, successor, addition and
       multiplication using term rewriting? A usual approach is as
@@ -319,7 +291,7 @@
       <para>For mere mortals, the above rules could also be written in a more
       readable form:</para>
 
-      <para><programlisting>[add1´] 0 + X = X
+      <para><programlisting format="linespecific">[add1´] 0 + X = X
 
 [add2´] succ(X) + Y = succ(X + Y)
 
@@ -337,24 +309,20 @@
       <literal>succ(succ(succ(succ0))))</literal> or, in other words,
       <literal>2 + 2</literal> equals <literal>4</literal>.</para>
 
-      <figure xml:id="fig_arithmetic">
-        <info>
-          <title>Rewriting an arithmetic term</title>
-        </info>
+      <figure id="fig_arithmetic">
+        <title>Rewriting an arithmetic term</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" dir="lro" fileref="./two-plus-two.png"
-                       scale="100" scalefit="0"></imagedata>
+                       scale="100" scalefit="" />
           </imageobject>
         </mediaobject>
       </figure>
     </section>
 
     <section>
-      <info>
-        <title>Booleans</title>
-      </info>
+      <title>Booleans</title>
 
       <para>How can we define Boolean expressions with constants
       <literal>true</literal> and <literal>false</literal> and the operations
@@ -380,24 +348,20 @@
       Figure <link linkend="fig_boolean">Rewriting a Boolean
       term</link>.</para>
 
-      <figure dir="lro" xml:id="fig_boolean">
-        <info>
-          <title>Rewriting as Boolean term</title>
-        </info>
+      <figure dir="lro" id="fig_boolean">
+        <title>Rewriting as Boolean term</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" fileref="not-or.png"></imagedata>
+            <imagedata align="center" fileref="not-or.png" />
           </imageobject>
         </mediaobject>
       </figure>
     </section>
   </section>
 
-  <section xml:id="extensions">
-    <info>
-      <title>Extensions of term rewriting</title>
-    </info>
+  <section id="extensions">
+    <title>Extensions of term rewriting</title>
 
     <para>Term rewriting has been extended in various ways to make it even
     more practical. These extensions include:</para>
@@ -451,20 +415,17 @@
     </itemizedlist>
 
     <para>All these -- and more -- extensions are provided by the ASF+SDF
-    formalism that is supported by <link
-    xlink:href="http://www.meta-environment.org">The
-    Meta-Environment</link>.</para>
+    formalism that is supported by <ulink
+    url="http://www.meta-environment.org">The Meta-Environment</ulink>.</para>
   </section>
 
-  <section xml:id="further_reading">
-    <info>
-      <title>Further reading</title>
-    </info>
+  <section id="further_reading">
+    <title>Further reading</title>
 
     <itemizedlist>
       <listitem>
-        <para>Several articles on this website (<link
-        xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>)
+        <para>Several articles on this website (<ulink
+        url="http://www.meta-environment.org">www.meta-environment.org</ulink>)
         give detailed examples of term rewriting applications.</para>
       </listitem>
 
@@ -481,9 +442,9 @@
       </listitem>
 
       <listitem>
-        <para><link xlink:href="http://www.meta-environment.org">The
-        Meta-Environment</link> is the tool suite par excellence for exploring
-        applications of term rewriting.</para>
+        <para><ulink url="http://www.meta-environment.org">The
+        Meta-Environment</ulink> is the tool suite par excellence for
+        exploring applications of term rewriting.</para>
       </listitem>
     </itemizedlist>
   </section>
