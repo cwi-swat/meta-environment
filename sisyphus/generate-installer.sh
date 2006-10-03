@@ -115,32 +115,34 @@ done
 generate_dialog() {
 for external in ${externals}; do
 cat<<ENDCAT
-  binary=`basename ${external}`
-  default_location=\`which \${binary}\`
-  printf "Absolute path of \${binary} [\${default_location}]:"
-  read read_location
-  if [ -z \${read_location} ]; then
-    location=\${default_location}
-  else 
-    location=\${read_location}
-  fi
-  if [ ! \`echo \${location} | cut -b 1\` = "/" ] ; then
-    echo >&2 "error: \${location} is not an absolute path"
-    exit 1;
-  fi
+binary=`basename ${external}`
+default_location=\`which \${binary}\`
+printf "Absolute path of \${binary} [\${default_location}]:"
+read read_location
+if [ -z \${read_location} ]; then
+  location=\${default_location}
+else 
+  location=\${read_location}
+fi
+if [ ! \`echo \${location} | cut -b 1\` = "/" ] ; then
+  echo >&2 "error: \${location} is not an absolute path"
+  exit 1;
+fi
 
-  if [ -x \${location} -a -f \${location} ]; then
-    space=\$((${#external} - \${#location}))
-    if [ \${space} -lt 0 ]; then
-      echo >&2 "error: binary relocation demands that the target path be shorter than ${#external}, and \${location} is longer than that."
-      exit 1
-    fi
-    padding=\`printf "%0\${space}s" "" | tr " " "/"\`
-    external_substs="s@${external}@\${padding}\${location}@g;\${external_substs}"
-  else
-    echo >&2 "error: \${location} is not an executable." 
-    exit 1 
+if [ -x \${location} -a -f \${location} ]; then
+  space=\$((${#external} - \${#location}))
+  if [ \${space} -lt 0 ]; then
+    echo >&2 "error: binary relocation demands that the target path be shorter than ${#external}, and \${location} is longer than that."
+    exit 1
   fi
+  padding=\`printf "%0\${space}s" "" | tr " " "/"\`
+  external_substs="s@${external}@\${padding}\${location}@g;\${external_substs}"
+else
+  echo >&2 "error: \${location} is not an executable." 
+  exit 1 
+fi
+
+
 ENDCAT
 done
 }
@@ -167,7 +169,18 @@ fi
 
 `generate_dialog`
 
-mkdir -p \$target_prefix
+mkdir -p \${target_prefix}
+
+file_count=\`ls -1 \${target_prefix} | wc -l\`
+
+if [ \${file_count} -gt 0 ]; then
+  printf "There are files in \${target_prefix}, really overwrite (yes,no) ? [no]"
+  read answer
+  if [ "a\${answer}" != "ayes" ]; then
+    echo >&2 "Aborting installation"
+    exit 1;
+  fi
+fi
 
 relocate() {
   space=\$((\${#target_prefix} - 1))
