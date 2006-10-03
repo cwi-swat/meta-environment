@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
-"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
-<article>
-  <title>Build environment of the Meta-Environment</title>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Build environment of the Meta-Environment</title>
 
-  <authorblurb>
-    <para><authorinitials>Gerco Ballintijn, Taeke Kooiker, Tijs van der Storm,
-    and Jurgen Vinju</authorinitials>,</para>
+    <authorgroup>
+      <author>
+        <personname><firstname>Gerco</firstname><surname>Ballintijn</surname></personname>
+      </author>
 
-    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
-        <imageobject>
-          <imagedata fileref="../../logos/cwi.gif" />
-        </imageobject>
-      </mediaobject></para>
-  </authorblurb>
+      <author>
+        <personname><firstname>Taeke</firstname><surname>Kooiker</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Tijs</firstname><surname>van der
+        Storm</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
 
   <section>
     <title>Introduction</title>
@@ -72,7 +86,7 @@
 
       <listitem>
         <para>to hide autoconf/automake ideosyncrasies as much as possible
-        (not 100% possible) </para>
+        (not 100% possible)</para>
       </listitem>
 
       <listitem>
@@ -117,7 +131,7 @@
     </section>
 
     <section>
-      <title>Files </title>
+      <title>Files</title>
 
       <para>The following files are installed by meta-build. The use of these
       files is <emphasis>obligatory, </emphasis>not optional. This rule makes
@@ -151,7 +165,7 @@
       </itemizedlist>
 
       <para>The following files should be present in the toplevel directory of
-      each package: </para>
+      each package:</para>
 
       <itemizedlist>
         <listitem>
@@ -399,8 +413,7 @@ sudo gem install rails</programlisting>
       </listitem>
 
       <listitem>
-        <para>download sisyphus from the <ulink
-        url="http://sisyphus.sen.cwi.nl:8080/">sisyphus website</ulink></para>
+        <para>download sisyphus from the <link xlink:href="http://sisyphus.sen.cwi.nl:8080">sisyphus website</link></para>
       </listitem>
 
       <listitem>
