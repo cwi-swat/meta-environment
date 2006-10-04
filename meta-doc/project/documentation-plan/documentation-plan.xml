@@ -11,7 +11,7 @@
 </info>
 
 
-  <section><info><title>Background</title></info>
+  <section><title>Background</title>
     
 
     <para>The ASF+SDF Meta-Environment is an interactive development
@@ -52,7 +52,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Current situation</title></info>
+  <section><title>Current situation</title>
     
 
     <para>Currently, we use the following mechanisms to document (parts of)
@@ -118,7 +118,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>The ideal situation</title></info>
+  <section><title>The ideal situation</title>
     
 
     <para>In an ideal situation we have a coherent plan for the
@@ -126,7 +126,7 @@
     our audience, a clear framework/structure for placing documents in, and a
     list of important documents.</para>
 
-    <section><info><title>Requirements and design decisions</title></info>
+    <section><title>Requirements and design decisions</title>
       
 
       <para>We have two main desires that this documentation plan must
@@ -212,7 +212,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Audience</title></info>
+    <section><title>Audience</title>
       
 
       <para>Our audience consists of the following groups of people:</para>
@@ -302,7 +302,7 @@
       the expected audience is.</para>
     </section>
 
-    <section><info><title>Topics</title></info>
+    <section><title>Topics</title>
       
 
       <para>There is a wide range of topics to discuss,
@@ -397,7 +397,7 @@
     </section>
   </section>
 
-  <section><info><title>Documents</title></info>
+  <section><title>Documents</title>
     
 
     <para>Each category will be described and a number of documents to be
@@ -406,7 +406,7 @@
     Still, this plan mentions a number of documents that need to be written to
     get things started (or rather to catch up).</para>
 
-    <section><info><title>Getting started ...</title></info>
+    <section><title>Getting started ...</title>
       
 
       <para><emphasis>Getting started</emphasis> articles describe howto
@@ -467,7 +467,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>How to ...</title></info>
+    <section><title>How to ...</title>
       
 
       <para><emphasis>How to</emphasis> articles provide tutorials for various
@@ -593,7 +593,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Applications ...</title></info>
+    <section><title>Applications ...</title>
       
 
       <para>Contains summaries of successful applications of the software. We
@@ -655,7 +655,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Demonstrations</title></info>
+    <section><title>Demonstrations</title>
       
 
       <para>We will use interactive demonstrations (using Flash?) to
@@ -679,7 +679,7 @@
         </itemizedlist></para>
     </section>
 
-    <section><info><title>Courses</title></info>
+    <section><title>Courses</title>
       
 
       <para>The courses section of the documentation contains slides and
@@ -688,7 +688,7 @@
       slides, we allow powerpoint, open-office and latex documents.</para>
     </section>
 
-    <section><info><title>Understanding ...</title></info>
+    <section><title>Understanding ...</title>
       
 
       <para>Articles in the category <emphasis>understanding</emphasis>
@@ -796,7 +796,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Scientific Publications</title></info>
+    <section><title>Scientific Publications</title>
       
 
       <para>This category is targeted at the scientific audience, it is a
@@ -805,7 +805,7 @@
       bibliography file.</para>
     </section>
 
-    <section><info><title>Project managament ...</title></info>
+    <section><title>Project managament ...</title>
       
 
       <para><itemizedlist>
@@ -852,7 +852,7 @@
         </itemizedlist></para>
     </section>
 
-    <section><info><title>Source code documentation</title></info>
+    <section><title>Source code documentation</title>
       
 
       <para>This is the documentation located with and inside the source
@@ -921,7 +921,7 @@
     </section>
   </section>
 
-  <section><info><title>How to get there?</title></info>
+  <section><title>How to get there?</title>
     
 
     <para>It seems that the most widely used technology for documenting
@@ -968,10 +968,10 @@
     <application>emacs</application> for editing of the XML source.</para>
   </section>
 
-  <section><info><title>Resources</title></info>
+  <section><title>Resources</title>
     
 
-    <section><info><title>DocBook resources</title></info>
+    <section><title>DocBook resources</title>
       
 
       <para>Useful links related to DocBook:</para>
@@ -1003,7 +1003,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Image resources</title></info>
+    <section><title>Image resources</title>
       
 
       <para>Documentation becomes more lively and inspiring with good use of
@@ -1082,7 +1082,7 @@
     </section>
   </section>
 
-  <section><info><title>Plan</title></info>
+  <section><title>Plan</title>
     
 
     <para><itemizedlist>
