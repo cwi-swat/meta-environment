@@ -2,7 +2,7 @@
 <article xmlns="http://docbook.org/ns/docbook" version="5.0"><info><title>Communication Plan Meta-Environment</title></info>
   
 
-  <section><info><title xreflabel="section-situation-analysis">Situation analysis</title></info>
+  <section><title xreflabel="section-situation-analysis">Situation analysis</title>
     
 
     <para>The ASF+SDF Meta-Environment is an interactive development
@@ -223,7 +223,7 @@
     name?). </remark></para>
   </section>
 
-  <section><info><title>Goals</title></info>
+  <section><title>Goals</title>
     
 
     <itemizedlist>
@@ -259,7 +259,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Target Audiences</title></info>
+  <section><title>Target Audiences</title>
     
 
     <itemizedlist>
@@ -293,7 +293,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Key messages</title></info>
+  <section><title>Key messages</title>
     
 
     <itemizedlist>
@@ -415,13 +415,13 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Strategies</title></info>
+  <section><title>Strategies</title>
     
 
     <para/>
   </section>
 
-  <section><info><title>Activities</title></info>
+  <section><title>Activities</title>
     
 
     <itemizedlist>
@@ -508,7 +508,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Logo design</title></info>
+  <section><title>Logo design</title>
     
 
     <para>Apart from asking Tobias Baanders, there are many logo design firms
@@ -606,13 +606,13 @@
     </mediaobject>
   </section>
 
-  <section><info><title>Timing and timelines</title></info>
+  <section><title>Timing and timelines</title>
     
 
     <para/>
   </section>
 
-  <section><info><title>Evaluation mechanisms</title></info>
+  <section><title>Evaluation mechanisms</title>
     
 
     <para>We will monitor values of the indicators listed in Section 1.</para>
