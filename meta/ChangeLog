@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Oct  4 15:29:59 CEST 2006 <jurgenv@cwi.nl>
+ * config: removed plugin configuration tool.
+
 Mon Sep 25 10:22:46 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * tbscripts/parse-utils.tb:
    - Ambiguity Handler not called by default
