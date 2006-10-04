@@ -142,20 +142,18 @@ else
   location=\${read_location}
 fi
 if [ ! \`echo \${location} | cut -b 1\` = "/" ] ; then
-  echo >&2 "error: \${location} is not an absolute path"
-  exit 1;
+  abort_dialog "\${location} is not an absolute path"
 fi
 
 if [ -x \${location} -a -f \${location} ]; then
   space=\$((${#external} - \${#location}))
   if [ \${space} -lt 0 ]; then
-    echo >&2 "error: binary relocation demands that the target path be shorter than ${#external}, and \${location} is longer than that."
-    exit 1
+    abort_dialog "binary relocation demands that the target path be shorter than ${#external}, and \${location} is longer than that."
   fi
   padding=\`printf "%0\${space}s" "" | tr " " "/"\`
   external_substs="s@${external}@\${padding}\${location}@g;\${external_substs}"
 else
-  echo >&2 "error: \${location} is not an executable." 
+  abort_dialog "\${location} is not an executable." 
   exit 1 
 fi
 
@@ -170,16 +168,33 @@ set -e
 
 echo >&2 "Checking preconditions..."
 
-checkfor() {
-  which \$1 || (echo "error: \$1 not found, aborting installation"; exit 1)
-}
 
 java_version() {
   echo "\`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 1\`.\`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 2\`"
 }
 
 libc_version() {
-  ldd `which cat` | grep libc.so | cut -d '=' -f 1 | cut -d '.' -f 3
+  ldd \`which cat\` | grep libc.so | cut -d '=' -f 1 | cut -d '.' -f 3
+}
+
+continue_dialog() {
+  echo "warning: \$1"
+  printf "Do you still want to continue the installation (yes,no)? [no]"
+  read answer
+  if [ "a\${answer}" != "ayes" ]; then
+    echo >&2 "Aborting installation"
+    exit 1;
+  fi
+}
+
+abort_dialog() {
+  echo "error: \$1"
+  echo "Aborting installation!"
+  exit 1;
+}
+
+checkfor() {
+  which \$1 || (abort_dialog "\$1 not found.")
 }
 
 checkfor tar
@@ -194,29 +209,18 @@ checkfor ldd
 checkfor cut
 
 if [ "a`java_version`" != "a\`java_version\`" ]; then
-  echo >&2 "error: java version should be `java_version`, but is \`java_version\`"
-  echo >&2 "Aborting installation"
-  exit 1;
+  continue_dialog "java code was compiled with version `java_version`, but is \`java_version\` on this system. The resulting installation may be unstable."
 fi
 
 if [ "a`libc_version`" != "a\`libc_version\`" ]; then
-  echo >&2 "error: libc version should be `libc_version`, but is \`libc_version\`"
-  echo >&2 "Aborting installation"
-  exit 1;
+  continue_dialog "C code was compiled with libc version `libc_version`, but is \`libc_version\` on this system. The resulting installation may be unstable."
 fi
 
 if [ "a`uname -mo`" != "a\`uname -mo\`" ]; then
-  echo "warning: this binary release was built on a `uname -mo` system."
-  echo "warning: the current system is a \`uname -mo\` system."
-  printf "Do you want to continue (yes,no)? [no]"
-  read answer
-  if [ "a\${answer}" != "ayes" ]; then
-    echo >&2 "Aborting installation"
-    exit 1;
-  fi
+  continue_dialog "this binary release was built on a `uname -mo` system, but this system is a \`uname -mo\`. The resulting installation may be unstable."
 fi
 
-echo >&2 "Preconditions check was successfull"
+echo >&2 "Preconditions checked."
 
 default_target_prefix="\${HOME}/\`basename \$0 .bin.sh\`"
 printf "Where to install? [\${default_target_prefix}]:"
@@ -229,9 +233,7 @@ fi
  
 target_prefix_length=\${#target_prefix}
 if [ \${target_prefix_length} -gt ${minimum_length} ]; then
-  echo >&2 "error: target prefix \${target_prefix} is longer than ${minimum_length}."
-  echo >&2 "This means that some files cannot be relocated. Please choose a shorter one."
-  exit 1
+  abort_dialog "target prefix \${target_prefix} is longer than ${minimum_length}.\nThis means that some files cannot be relocated. Please choose a shorter one."
 fi
 
 `generate_dialog`
@@ -241,12 +243,7 @@ mkdir -p \${target_prefix}
 file_count=\`ls -1 \${target_prefix} | wc -l\`
 
 if [ \${file_count} -gt 0 ]; then
-  printf "There are files in \${target_prefix}, really overwrite (yes,no) ? [no]"
-  read answer
-  if [ "a\${answer}" != "ayes" ]; then
-    echo >&2 "Aborting installation"
-    exit 1;
-  fi
+  continue_dialog "There are files in \${target_prefix}, really overwrite (yes,no) ? [no]"
 fi
 
 relocate() {
