@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<article xmlns="http://docbook.org/ns/docbook" version="5.0"><info><title>Communication Plan Meta-Environment</title></info>
-  
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+  <title>Communication Plan Meta-Environment</title>
 
-  <section><info><title xreflabel="section-situation-analysis">Situation analysis</title></info>
-    
+  <section>
+    <title xreflabel="section-situation-analysis">Situation analysis</title>
 
     <para>The ASF+SDF Meta-Environment is an interactive development
     environment for</para>
@@ -81,8 +83,8 @@
 
     <para>The following key words characterize this system/technology:</para>
 
-    <table><info><title>Characterization of the technology</title></info>
-      
+    <table>
+      <title>Characterization of the technology</title>
 
       <tgroup cols="3">
         <tbody>
@@ -141,10 +143,9 @@
     and the desired increase in visibility:</para>
 
     <table>
-    <title>Current and desired values of key indicators</title>
-      
+      <title>Key indicators</title>
 
-      <tgroup cols="3" >
+      <tgroup cols="3" title="Current and desired values of key indicators">
         <tbody>
           <row>
             <entry><emphasis role="bold">Indicator</emphasis></entry>
@@ -219,12 +220,12 @@
 
     <para><remark>We are planning to organize the development of this system
     more explicitly in the fashion of an open source project. We will relabel
-    the project to "OpenMetaEnvironment" (Is this the best
-    name?). </remark></para>
+    the project to "OpenMetaEnvironment" <remark>(Is this the best
+    name?)</remark>. </remark></para>
   </section>
 
-  <section><info><title>Goals</title></info>
-    
+  <section>
+    <title>Goals</title>
 
     <itemizedlist>
       <listitem>
@@ -259,8 +260,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Target Audiences</title></info>
-    
+  <section>
+    <title>Target Audiences</title>
 
     <itemizedlist>
       <listitem>
@@ -293,8 +294,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Key messages</title></info>
-    
+  <section>
+    <title>Key messages</title>
 
     <itemizedlist>
       <listitem>
@@ -415,14 +416,14 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Strategies</title></info>
-    
+  <section>
+    <title>Strategies</title>
 
-    <para/>
+    <para></para>
   </section>
 
-  <section><info><title>Activities</title></info>
-    
+  <section>
+    <title>Activities</title>
 
     <itemizedlist>
       <listitem>
@@ -434,7 +435,8 @@
       </listitem>
 
       <listitem>
-        <para>Animated demo's (using wink, see <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.debugmode.com">www.debugmode.com</link>).</para>
+        <para>Animated demo's (using wink, see <ulink
+        url="http://www.debugmode.com">www.debugmode.com</ulink>).</para>
       </listitem>
 
       <listitem>
@@ -508,8 +510,8 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Logo design</title></info>
-    
+  <section>
+    <title>Logo design</title>
 
     <para>Apart from asking Tobias Baanders, there are many logo design firms
     on the web (search for "logo design").</para>
@@ -569,7 +571,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../../logos/ome1.png"/>
+        <imagedata fileref="../../logos/ome1.png" />
       </imageobject>
     </mediaobject>
 
@@ -577,7 +579,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../../logos/ome2.png"/>
+        <imagedata fileref="../../logos/ome2.png" />
       </imageobject>
     </mediaobject>
 
@@ -585,7 +587,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../../logos/ome3.png"/>
+        <imagedata fileref="../../logos/ome3.png" />
       </imageobject>
     </mediaobject>
 
@@ -593,7 +595,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../../logos/ome4.png"/>
+        <imagedata fileref="../../logos/ome4.png" />
       </imageobject>
     </mediaobject>
 
@@ -601,19 +603,19 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../../logos/ome5.png"/>
+        <imagedata fileref="../../logos/ome5.png" />
       </imageobject>
     </mediaobject>
   </section>
 
-  <section><info><title>Timing and timelines</title></info>
-    
+  <section>
+    <title>Timing and timelines</title>
 
-    <para/>
+    <para></para>
   </section>
 
-  <section><info><title>Evaluation mechanisms</title></info>
-    
+  <section>
+    <title>Evaluation mechanisms</title>
 
     <para>We will monitor values of the indicators listed in Section 1.</para>
   </section>
