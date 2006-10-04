@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Wed Oct  4 16:03:16 CEST 2006 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: removed dependency on asf-library
+
 Mon Sep 25 10:25:04 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * tbscripts/asf-utils.tb:
    - Call Ambiguity Handler after parsing
