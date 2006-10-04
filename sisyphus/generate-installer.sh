@@ -121,6 +121,14 @@ for external in ${externals}; do
   fi
 done
 
+java_version() {
+  echo "`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 1`.`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 2`"
+}
+
+libc_version() {
+  ldd `which cat` | grep libc.so | cut -d '=' -f 1 | cut -d '.' -f 3
+}
+
 generate_dialog() {
 for external in ${externals}; do
 cat<<ENDCAT
@@ -162,6 +170,41 @@ set -e
 
 echo >&2 "Checking preconditions..."
 
+checkfor() {
+  which \$1 || (echo "error: \$1 not found, aborting installation"; exit 1)
+}
+
+java_version() {
+  echo "\`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 1\`.\`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 2\`"
+}
+
+libc_version() {
+  ldd `which cat` | grep libc.so | cut -d '=' -f 1 | cut -d '.' -f 3
+}
+
+checkfor tar
+checkfor uudecode
+checkfor gunzip
+checkfor sed
+checkfor mkdir
+checkfor java
+checkfor uname
+checkfor grep
+checkfor ldd
+checkfor cut
+
+if [ "a`java_version`" != "a\`java_version\`" ]; then
+  echo >&2 "error: java version should be `java_version`, but is \`java_version\`"
+  echo >&2 "Aborting installation"
+  exit 1;
+fi
+
+if [ "a`libc_version`" != "a\`libc_version\`" ]; then
+  echo >&2 "error: libc version should be `libc_version`, but is \`libc_version\`"
+  echo >&2 "Aborting installation"
+  exit 1;
+fi
+
 if [ "a`uname -mo`" != "a\`uname -mo\`" ]; then
   echo "warning: this binary release was built on a `uname -mo` system."
   echo "warning: the current system is a \`uname -mo\` system."
@@ -172,16 +215,6 @@ if [ "a`uname -mo`" != "a\`uname -mo\`" ]; then
     exit 1;
   fi
 fi
-
-checkfor() {
-  which \$1 || (echo "error: \$1 not found, aborting installation"; exit 1)
-}
-
-checkfor tar
-checkfor uudecode
-checkfor gunzip
-checkfor sed
-checkfor mkdir
 
 echo >&2 "Preconditions check was successfull"
 
