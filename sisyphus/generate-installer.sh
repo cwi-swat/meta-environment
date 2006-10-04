@@ -121,7 +121,7 @@ generate_dialog() {
 for external in ${externals}; do
 cat<<ENDCAT
 binary=`basename ${external}`
-default_location=\`which \${binary}\`
+default_location=\`which \${binary} || true\`
 printf "Absolute path of \${binary} [\${default_location}]:"
 read read_location
 if [ -z \${read_location} ]; then
@@ -129,6 +129,15 @@ if [ -z \${read_location} ]; then
 else 
   location=\${read_location}
 fi
+
+if [ -z \${location} ]; then
+  abort_dialog "You need \${binary} installed."
+fi
+
+if [ ! -f \${location} ]; then
+  abort_dialog "You need \${binary} installed."
+fi
+
 if [ ! \`echo \${location} | cut -b 1\` = "/" ] ; then
   abort_dialog "\${location} is not an absolute path"
 fi
@@ -154,7 +163,7 @@ cat <<EOF
 #! /bin/sh
 set -e
 
-echo >&2 "Checking preconditions..."
+echo >&2 "Checking installation conditions..."
 
 
 java_version() {
@@ -208,7 +217,7 @@ if [ "a`uname -mo`" != "a\`uname -mo\`" ]; then
   continue_dialog "this binary release was built on a `uname -mo` system, but this system is a \`uname -mo\`. The resulting installation may be unstable."
 fi
 
-echo >&2 "Preconditions checked."
+echo >&2 "Installation conditions checked."
 
 default_target_prefix="\${HOME}/\`basename \$0 .bin.sh\`"
 printf "Where to install? [\${default_target_prefix}]:"
