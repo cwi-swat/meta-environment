@@ -3,7 +3,8 @@
 GENERATED_TBSCRIPTS = \
 	asf-initialize.tb \
 	start-meta-studio.tb \
-	start-eqs-dump.tb
+	start-eqs-dump.tb \
+	start-test-eqs-dump.tb
 
 TBSCRIPTS = \
 	asf-actions.tb \
@@ -44,7 +45,3 @@ pkgdata_DATA = \
 standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
 	sed "s@__SDF_META__@${SDF_META_PREFIX}@g; \
 	     s@__ASF_LIBRARY__@${ASF_LIBRARY_PREFIX}/share/asf-library/library@g" < $< > $@
-
-install-data-hook:
-	$(META_PREFIX)/bin/plugin-config -add $(pkgdatadir)/asf-initialize.tb
-	$(META_PREFIX)/bin/plugin-config -generate

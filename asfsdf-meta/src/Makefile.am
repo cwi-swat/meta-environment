@@ -4,11 +4,13 @@ EXTRA_DIST = $(wildcard *.src)
 
 bin_SCRIPTS = \
 	      asfsdf-meta \
-	      eqs-dump 
+	      eqs-dump  \
+	      test-eqs-dump
 
 CLEANFILES = \
 	     asfsdf-meta \
 	     eqs-dump
+	     test-eqs-dump
 
 % : %.sh.src Makefile
 	sed "s@__TOOLBUS__@${TOOLBUS_PREFIX}@g;\

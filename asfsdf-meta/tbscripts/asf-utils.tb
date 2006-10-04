@@ -213,6 +213,36 @@ in
   . DumpEquationsGivenFile(ModuleId, Path)
 endlet
 
+process DumpTestEquationsGivenFile(ModuleId : term, Path: str) is
+let
+  Equations: term,
+  Error: term,
+  Filename: str,
+  Id: int,
+  Pid: int,
+  Specification: term
+in
+  AddJob(Path)
+  . GetSpecification(ModuleId, Specification?)
+  .
+  if not-equal(Specification, UNDEFINED) then
+    GetSpecificationTests(Specification, Equations?)
+    . snd-msg(io-unpack-and-write-term-in-baf(Path, Equations))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Path, Error])))
+    )
+  else   
+     snd-note(ui-status(statf(Id, "Specification could not be dumped")))
+  fi
+  . snd-note(ui-status(stop(Id)))
+  . JobDone(Path)
+endlet
+
+
 process DumpEquationsGivenFile(ModuleId : term, Path: str) is
 let
   Equations: term,

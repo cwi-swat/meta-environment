@@ -7,7 +7,6 @@
 #include <initialize-config.tb>
 
 /* sdf-meta */
-#include <sdf-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>
 #include <parsetable-utils.tb>
