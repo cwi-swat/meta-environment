@@ -1,26 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<article xmlns="http://docbook.org/ns/docbook" version="5.0">
-<info>
-   <title>Recommended titles on programming and software engineering</title>
-  
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Recommended titles on programming and software engineering</title>
 
-  <authorgroup>
-      <author>
-        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
-      </author>
+  <authorblurb>
+    <para><authorinitials>Jurgen Vinju</authorinitials>,</para>
 
-  </authorgroup>
-</info>
+    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+        <imageobject>
+          <imagedata fileref="../../logos/cwi.gif" />
+        </imageobject>
+      </mediaobject></para>
+  </authorblurb>
 
-  <section><info><title>Introduction</title></info>
-    
+  <section>
+    <title>Introduction</title>
 
     <para>Meta-Environment programmers have found the following titles
     interesting.</para>
   </section>
 
-  <section><info><title>Reading list</title></info>
-    
+  <section>
+    <title>Reading list</title>
 
     <itemizedlist>
       <listitem>
