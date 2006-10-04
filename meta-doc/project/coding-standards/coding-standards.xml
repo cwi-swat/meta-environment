@@ -14,7 +14,7 @@
     <author><personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname></author>
 </info>
 
-  <section><info><title>Introduction</title></info>
+  <section><title>Introduction</title>
     
 
     <para>This document represents an ongoing effort to document our coding
@@ -22,7 +22,7 @@
     not complete, please help.</para>
   </section>
 
-  <section><info><title>Coding style in C and Java</title></info>
+  <section><title>Coding style in C and Java</title>
     
 
     <itemizedlist>
@@ -102,7 +102,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in Makefile.am and configure.{ac,in}</title></info>
+  <section><title>Coding style in Makefile.am and configure.{ac,in}</title>
     
 
     <itemizedlist>
@@ -119,7 +119,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in T-script (ToolBus)</title></info>
+  <section><title>Coding style in T-script (ToolBus)</title>
     
 
     <itemizedlist>
@@ -139,7 +139,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in SDF</title></info>
+  <section><title>Coding style in SDF</title>
     
 
     <itemizedlist>
@@ -164,7 +164,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Coding style in ASF+SDF</title></info>
+  <section><title>Coding style in ASF+SDF</title>
     
 
     <itemizedlist>
