@@ -4,13 +4,13 @@
 #include <module-utils.tb>
 #include <error-utils.tb>
 #include <error-output.tb>
-#include <initialize-config.tb>
 
 /* sdf-meta */
 #include <sdf-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>
 #include <sdf2-language.tb>
+#include <sdf-initialize.tb>
 #include <term-parsetable.tb>
 
 process StartDefinitionDumper is

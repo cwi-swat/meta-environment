@@ -41,8 +41,8 @@ pkgdata_DATA = \
 	       $(GENERATED_TBSCRIPTS) \
 	       standard.sdf.actions
 
-LIBRARY_LOCATION = \
-		   ${SDF_LIBRARY_PREFIX}/share/sdf-library/library
+LIBRARY_LOCATION = ${SDF_LIBRARY_PREFIX}/share/sdf-library/library
+LIBRARY_LOCATION2 = ${ASF_LIBRARY_PREFIX}/share/asf-library/library
 
 %.tb: %.tb.src Makefile
 	sed "s@__SDF2TABLE__@$(PGEN_PREFIX)/share/pgen/Sdf2.baf@g; \
@@ -50,4 +50,5 @@ LIBRARY_LOCATION = \
 	    < $< > $@ 
 
 standard.sdf.actions:  standard.sdf.actions.src Makefile
-	sed "s@__SDF_LIBRARY__@${LIBRARY_LOCATION}@g;" < $< > $@
+	sed "s@__SDF_LIBRARY__@${LIBRARY_LOCATION}@g; \
+	     s@__ASF_LIBRARY__@${LIBRARY_LOCATION2}@g;" < $< > $@

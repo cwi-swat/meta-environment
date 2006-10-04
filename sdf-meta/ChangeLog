@@ -1,5 +1,11 @@
 $Id$
 
+Wed Oct  4 15:42:29 CEST 2006 <jurgenv@cwi.nl>
+ * sdf-meta.pc.in: added dependency on asf-library, for now,
+   to make sure that pt-dump will be able to find all library 
+   modules. TODO: figure out a better way to configure pt-dump
+   with newly installed libraries.
+
 Mon Sep 25 10:23:55 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * tbscripts/term-{editor-utils,utils}.tb:
    - Clear cache when term has been edited (Closes #555)

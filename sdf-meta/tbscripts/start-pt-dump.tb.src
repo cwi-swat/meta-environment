@@ -13,7 +13,7 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
 #include <sdf-utils.tb>
 #include <sdf2-language.tb>
 #include <term-parsetable.tb>
-#include <initialize-sdf.tb>
+#include <sdf-initialize.tb>
 
 process StartPtDumper is
 let

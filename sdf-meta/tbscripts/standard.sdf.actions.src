@@ -1,5 +1,6 @@
 configuration([
   library-path("SDF Grammar Library","__SDF_LIBRARY__"),
+  library-path("ASF+SDF Library","__ASF_LIBRARY__"),
   action([description(tree-panel, click)],
          "ShowAreaAction"),
   action([description(feedback-list, click)],
