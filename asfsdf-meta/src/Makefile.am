@@ -9,7 +9,7 @@ bin_SCRIPTS = \
 
 CLEANFILES = \
 	     asfsdf-meta \
-	     eqs-dump
+	     eqs-dump \
 	     test-eqs-dump
 
 % : %.sh.src Makefile
