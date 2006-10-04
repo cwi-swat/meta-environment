@@ -160,6 +160,31 @@ cat <<EOF
 #! /bin/sh
 set -e
 
+echo >&2 "Checking preconditions..."
+
+if [ "a`uname -mo`" != "a\`uname -mo\`" ]; then
+  echo "warning: this binary release was built on a `uname -mo` system."
+  echo "warning: the current system is a \`uname -mo\` system."
+  printf "Do you want to continue (yes,no)? [no]"
+  read answer
+  if [ "a\${answer}" != "ayes" ]; then
+    echo >&2 "Aborting installation"
+    exit 1;
+  fi
+fi
+
+checkfor() {
+  which \$1 || (echo "error: \$1 not found, aborting installation"; exit 1)
+}
+
+checkfor tar
+checkfor uudecode
+checkfor gunzip
+checkfor sed
+checkfor mkdir
+
+echo >&2 "Preconditions check was successfull"
+
 default_target_prefix="\${HOME}/\`basename \$0 .bin.sh\`"
 printf "Where to install? [\${default_target_prefix}]:"
 read read_target_prefix
@@ -171,7 +196,7 @@ fi
  
 target_prefix_length=\${#target_prefix}
 if [ \${target_prefix_length} -gt ${minimum_length} ]; then
-  echo >&2 "Error: target prefix \${target_prefix} is longer than ${minimum_length}."
+  echo >&2 "error: target prefix \${target_prefix} is longer than ${minimum_length}."
   echo >&2 "This means that some files cannot be relocated. Please choose a shorter one."
   exit 1
 fi
