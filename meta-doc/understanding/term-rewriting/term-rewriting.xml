@@ -18,9 +18,7 @@
   </caution>
 
   <section xml:id="motivation">
-    <info>
       <title>Motivation</title>
-    </info>
 
     <para>Term rewriting is a surprisingly simple computational paradigm that
     is based on the repeated application of simplification rules. It is
@@ -30,9 +28,7 @@
   </section>
 
   <section xml:id="introduction">
-    <info>
       <title>Introduction</title>
-    </info>
 
     <para>Consider the following, <emphasis>back-of-an-envelope</emphasis>,
     calculation:</para>
@@ -107,17 +103,13 @@
   </section>
 
   <section>
-    <info>
       <title>Basic concepts</title>
-    </info>
 
     <para>In order to understand term rewriting three basic concepts are
     essential: terms, substitution and matching.</para>
 
     <section xml:id="terms">
-      <info>
         <title>Terms</title>
-      </info>
 
       <para>Traditionally, terms are defined in a strict prefix format:</para>
 
@@ -142,9 +134,7 @@
     </section>
 
     <section xml:id="substitution">
-      <info>
         <title>Substitution</title>
-      </info>
 
       <para>A substitution is an important auxiliary notion that we need on
       our road towards understanding term rewriting. A substitution is an
@@ -165,9 +155,7 @@
     </section>
 
     <section xml:id="matching">
-      <info>
         <title>Matching</title>
-      </info>
 
       <para>Matching has as goal to determine whether two terms
       T<subscript>1</subscript> and T<subscript>2</subscript> can be made
@@ -181,9 +169,7 @@
   </section>
 
   <section xml:id="term_rewriting_algorithm">
-    <info>
       <title>The term rewriting algorithm</title>
-    </info>
 
     <para>We can now assemble the ingredients we have described so far into a
     comprehensive description of the rewriting algorithm (Figure <link
@@ -238,9 +224,7 @@
     <para>We will be using no ordering of the rules.</para>
 
     <figure xreflabel="" xml:id="fig_rewriting_algorithm">
-      <info>
         <title>The rewriting algorithm</title>
-      </info>
 
       <mediaobject>
         <imageobject>
@@ -252,9 +236,7 @@
   </section>
 
   <section xml:id="examples">
-    <info>
       <title>Examples</title>
-    </info>
 
     <para>Let´s consider two simple examples of term rewriting systems for
     natural numbers and booleans. More elaborate examples that fall outside
@@ -288,9 +270,7 @@
     section for pointers to such examples.</para>
 
     <section>
-      <info>
         <title>Numerals</title>
-      </info>
 
       <para>How can we specify natural numbers with 0, successor, addition and
       multiplication using term rewriting? A usual approach is as
@@ -337,9 +317,7 @@
       <literal>2 + 2</literal> equals <literal>4</literal>.</para>
 
       <figure xml:id="fig_arithmetic">
-        <info>
           <title>Rewriting an arithmetic term</title>
-        </info>
 
         <mediaobject>
           <imageobject>
@@ -351,9 +329,7 @@
     </section>
 
     <section>
-      <info>
         <title>Booleans</title>
-      </info>
 
       <para>How can we define Boolean expressions with constants
       <literal>true</literal> and <literal>false</literal> and the operations
@@ -380,9 +356,7 @@
       term</link>.</para>
 
       <figure dir="lro" xml:id="fig_boolean">
-        <info>
           <title>Rewriting as Boolean term</title>
-        </info>
 
         <mediaobject>
           <imageobject>
@@ -394,9 +368,7 @@
   </section>
 
   <section xml:id="extensions">
-    <info>
       <title>Extensions of term rewriting</title>
-    </info>
 
     <para>Term rewriting has been extended in various ways to make it even
     more practical. These extensions include:</para>
@@ -456,9 +428,7 @@
   </section>
 
   <section xml:id="further_reading">
-    <info>
       <title>Further reading</title>
-    </info>
 
     <itemizedlist>
       <listitem>
