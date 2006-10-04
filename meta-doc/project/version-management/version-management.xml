@@ -16,7 +16,7 @@
     </authorgroup>
 
   </info>
-  <section><info><title>Introduction</title></info>
+  <section><title>Introduction</title>
     
 
     <para>One can use a version management system in different ways. This
@@ -59,7 +59,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Goals</title></info>
+  <section><title>Goals</title>
     
 
     <para>The Meta-Environment development team has two overall version
@@ -81,7 +81,7 @@
     chosen specifically to support these two goals.</para>
   </section>
 
-  <section><info><title>Overview</title></info>
+  <section><title>Overview</title>
     
 
     <para>The Meta-Environment consists of between 40 and 60 packages. These
@@ -144,7 +144,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Migration from CVS to Subversion</title></info>
+  <section><title>Migration from CVS to Subversion</title>
     
 
     <para>On May 12th 2006, we have migrated the GLT modules from two CVS
@@ -154,7 +154,7 @@
     provided with the Subversion source.</para>
   </section>
 
-  <section><info><title>Development branches</title></info>
+  <section><title>Development branches</title>
     
 
     <para>To protect the stability of the trunk, a developer should always
@@ -171,7 +171,7 @@
     conflicts is spread over time.</para>
   </section>
 
-  <section><info><title>Release branches</title></info>
+  <section><title>Release branches</title>
     
 
     <para>A second source of branches is the release process. Every time a
@@ -183,7 +183,7 @@
     script.</para>
   </section>
 
-  <section><info><title>ChangeLog entries</title></info>
+  <section><title>ChangeLog entries</title>
     
 
     <para>Each package has a ChangeLog file in its root directory that records
@@ -211,10 +211,10 @@
     the trunk.</para>
   </section>
 
-  <section><info><title>The use of the SvnMerge script</title></info>
+  <section><title>The use of the SvnMerge script</title>
     
 
-    <section><info><title>Background</title></info>
+    <section><title>Background</title>
       
 
       <para>The svnmerge script simplifies the use of branches using the
@@ -240,7 +240,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Generated commit message</title></info>
+    <section><title>Generated commit message</title>
       
 
       <para>To ease the writing of correct commit messages the SvnMerge script
@@ -249,7 +249,7 @@
       needed, during the svn commit.</para>
     </section>
 
-    <section><info><title>Differences between CvsMerge and SvnMerge</title></info>
+    <section><title>Differences between CvsMerge and SvnMerge</title>
       
 
       <para>The following table describes some difference between the use of
@@ -318,7 +318,7 @@
       <para/>
     </section>
 
-    <section><info><title>Example 1: Start a Branch</title></info>
+    <section><title>Example 1: Start a Branch</title>
       
 
       <itemizedlist>
@@ -353,7 +353,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Example 2: Work on Branch</title></info>
+    <section><title>Example 2: Work on Branch</title>
       
 
       <itemizedlist>
@@ -388,7 +388,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Example 3: End a Branch</title></info>
+    <section><title>Example 3: End a Branch</title>
       
 
       <itemizedlist>
@@ -426,7 +426,7 @@
     </section>
   </section>
 
-  <section><info><title>Document TODO's</title></info>
+  <section><title>Document TODO's</title>
     
 
     <itemizedlist>
