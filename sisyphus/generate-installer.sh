@@ -1,17 +1,5 @@
 #! /bin/sh
 
-# TODO
-# - check at compile time
-#   - external deps
-# - generate checks for:
-#   - tools used
-#   - well-formedness of target_prefix
-#   - content of target prefix
-# - generate substitutions for external deps.
-
-# The prefixes to be merged into one tar
-# and be distributed in binary form.
-
 collect_prefixes=1
 prefixes=
 externals=
