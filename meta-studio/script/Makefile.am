@@ -11,5 +11,5 @@ CLEANFILES = gui
 	     s@__JARFILE__@${JAVA_JAR}@g;\
 	     s@__LOCALJARS__@${datadir}/idw-gpl-1.4.0.jar@g;\
 	     s@__MAINCLASS__@${JAVA_MAIN_CLASS}@g;\
-	     s@__EXTERNAL_JARS__@${EXTERNAL_JARS}@g;\
+	     s@__EXTERNAL_JARS__@${EXTERNAL_INSTALLED_JARS}@g;\
 	" < $< > $@ && chmod +x $@
