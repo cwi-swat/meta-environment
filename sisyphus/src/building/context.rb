@@ -19,6 +19,10 @@ module Building
       return @item.name
     end
 
+    def binary_dist_name
+      return "#{name}-#{@item.version}.#{@item.id}.bin.sh"
+    end
+
     def binary_dist_dir
       path = @item.prefix(@config.binary_dist_dir)
       make_dir_if_needed(path)
