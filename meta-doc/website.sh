@@ -4,8 +4,8 @@ set -e
 
 CATEGORIES="getting-started howto demos understanding courses project"
 WEB="./doc/html"
-DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
-# DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
+# DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
+DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
 
 mkdir -p ${WEB} || true
 
@@ -21,15 +21,20 @@ echo "<html><head><title>" > ${INDEX}
 echo " Online Documentation of The Meta-Environment" >> ${INDEX}
 echo "</title></head><body>" >> ${INDEX}
 
+# Copy all logos to the website
+
+mkdir -p ${WEB}/logos
+cp logos/*.{png,gif} ${WEB}/logos
+
+# Convert all books in all categories
+
 for cat in ${CATEGORIES}; do
   echo "<h1>`cat $cat/TITLE`</h1><ul>" >> ${INDEX}
   BOOKS=`ls $cat`
   mkdir -p ${WEB}/$cat || true
   for book in ${BOOKS}; do
     if [ -d $cat/$book ]; then
-      if [ ! -d ${WEB}/$cat/$book ]; then
-         mkdir ${WEB}/$cat/$book
-      fi
+      mkdir -p ${WEB}/$cat/$book
       cp $cat/$book/*.{png,jpg,gif} ${WEB}/$cat/$book >& /dev/null || true
       if [ -f $cat/$book/$book.xml ]; then
 	(xsltproc  --output ${WEB}/$cat/$book/$book.html ${DOCBOOKXSL} $cat/$book/$book.xml)	
