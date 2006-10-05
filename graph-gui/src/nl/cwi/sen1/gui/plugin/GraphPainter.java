@@ -213,6 +213,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
 			}
 		});
 		animation.add(item);
+		item.setSelected(true);
 		menu.add(item);
 
 		item = new JRadioButtonMenuItem("No animation");
@@ -222,7 +223,6 @@ public class GraphPainter extends DefaultStudioPlugin implements
 			}
 		});
 		animation.add(item);
-		item.setSelected(true);
 		menu.add(item);
 
 		menu.add(new JSeparator());

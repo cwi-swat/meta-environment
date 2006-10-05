@@ -25,7 +25,10 @@ import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.FontAction;
 import prefuse.action.layout.CircleLayout;
 import prefuse.action.layout.RandomLayout;
+import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.action.layout.graph.FruchtermanReingoldLayout;
+import prefuse.action.layout.graph.NodeLinkTreeLayout;
+import prefuse.action.layout.graph.RadialTreeLayout;
 import prefuse.activity.Activity;
 import prefuse.activity.SlowInSlowOutPacer;
 import prefuse.controls.ControlAdapter;
@@ -43,7 +46,10 @@ import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.util.display.ExportDisplayAction;
+import prefuse.util.force.DragForce;
 import prefuse.util.force.ForceSimulator;
+import prefuse.util.force.NBodyForce;
+import prefuse.util.force.SpringForce;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
@@ -227,12 +233,6 @@ public class GraphPanel extends JPanel {
         currentAnimation = animation;
     }
 
-    // private class Hierarchy extends VerticalTreeLayout {
-    // public Hierarchy() {
-    // m_heightInc = 100;
-    // }
-    // }
-
     private void createLayouts() {
         layouts = new HashSet<String>();
 
@@ -241,37 +241,16 @@ public class GraphPanel extends JPanel {
         vis.putAction("Dot", dot);
         layouts.add("Dot");
 
-        // ActionList manual = new ActionList();
-        // vis.putAction("Manual", manual);
-        // layouts.add("Manual");
-
-        // ActionList hierarchy = new ActionList(vis);
-        // hierarchy.add(new TreeFilter(false, true, false));
-        // hierarchy.add(new Hierarchy());
-        // vis.putAction("Vertical Tree", hierarchy);
-
-        // ActionList radial = new ActionList();
-        // radial.add(new RadialTreeLayout(GraphConstants.GRAPH));
-        // vis.putAction("Radial Tree", radial);
-        // layouts.add("Radial Tree");
-
-        // ActionList indented = new ActionList(registry);
-        // indented.add(new TreeFilter(false, true, false));
-        // indented.add(new IndentedTreeLayout());
-        // indented.add(new RepaintAction());
-        // registry.putAction("Indented Tree", indented);
-
-        // forceSimulator = new ForceSimulator();
-        // forceSimulator.addForce(new NBodyForce(-.4f, 0f, .1f));
-        // forceSimulator.addForce(new SpringForce(4E-5f, 80f));
-        // forceSimulator.addForce(new DragForce(-0.005f));
-        //
-        // ActionList contforce = new ActionList(-1, 50);
-        // contforce.add(new GraphFilter());
-        // contforce.add(new ForceDirectedLayout(GraphConstants.GRAPH,
-        // forceSimulator, false));
-        // vis.putAction("Force", contforce);
-        // layouts.add("Force");
+        forceSimulator = new ForceSimulator();
+        forceSimulator.addForce(new NBodyForce());
+        forceSimulator.addForce(new SpringForce());
+        forceSimulator.addForce(new DragForce());
+        
+        ActionList contforce = new ActionList(Action.INFINITY);
+        contforce.add(new ForceDirectedLayout(GraphConstants.GRAPH, forceSimulator, false));
+        contforce.add(new RepaintAction());
+        vis.putAction("Force", contforce);
+        layouts.add("Force");
 
         ActionList random = new ActionList();
         random.add(new RandomLayout());
@@ -279,14 +258,19 @@ public class GraphPanel extends JPanel {
         layouts.add("Random");
 
         ActionList circle = new ActionList();
-        circle.add(new CircleLayout(GraphConstants.GRAPH));
+        circle.add(new CircleLayout(GraphConstants.NODES));
         vis.putAction("Circle", circle);
         layouts.add("Circle");
 
-        // ActionList grid = new ActionList();
-        // grid.add(new GridLayout(GraphConstants.NODES));
-        // vis.putAction("Grid", grid);
-        //        layouts.add("Grid");
+        ActionList nodeLink = new ActionList();
+        nodeLink.add(new NodeLinkTreeLayout(GraphConstants.GRAPH));
+        vis.putAction("NodeLink", nodeLink);
+        layouts.add("NodeLink");
+
+        ActionList radialTree = new ActionList();
+        radialTree.add(new RadialTreeLayout(GraphConstants.GRAPH));
+        vis.putAction("Radial", radialTree);
+        layouts.add("Radial");
 
         ActionList funny = new ActionList();
         funny.add(new FruchtermanReingoldLayout(GraphConstants.GRAPH));
