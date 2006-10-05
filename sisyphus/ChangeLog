@@ -1,5 +1,8 @@
 2006-10-05    <storm@cwi.nl>
 
+	* Feature during builder's sleep, sending signal USR1 will restart
+	the build cycle immediately.
+
 	* Fixed transitive dependency derivation in script contexts.
 
 2006-08-01    <storm@cwi.nl>

@@ -55,11 +55,29 @@ module Sisyphus
     end
 
     def run
+      ignore_signal("USR1")
       loop do
         check_if_updated
         do_iteration
-        wait_interval
+        trapping_signal("USR1") do 
+          wait_interval
+        end
       end
+    end
+
+    def trapping_signal(signal)
+      Signal.trap(signal) do
+        run
+      end
+      begin
+        yield
+      ensure
+        ignore_signal(signal)
+      end
+    end
+
+    def ignore_signal(signal)
+      Signal.trap(signal, "IGNORE")        
     end
 
     def ensure_log(time)

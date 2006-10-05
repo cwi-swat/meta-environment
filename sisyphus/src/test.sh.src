@@ -8,9 +8,10 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root asfsdf-meta \
+    --root shared-objects \
     --profile verfrol \
-    --interval 120 \
+    --force shared-objects \
+    --interval 300 \
     --weekday Mon \
     --weekday Tue \
     --weekday Wed \
