@@ -8,9 +8,8 @@
          xmlns:ns="http://docbook.org/ns/docbook">
 
 
-<info><title>Coding standards for the Meta-Environment</title>
-  
-
+<info>
+    <title>Coding standards for the Meta-Environment</title>
     <author><personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname></author>
 </info>
 
