@@ -4,8 +4,9 @@ set -e
 
 CATEGORIES="getting-started howto demos understanding courses project"
 WEB="./doc/html"
-# DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
-DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
+DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
+# DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
+STYLESHEET="meta-doc-style.css"
 
 mkdir -p ${WEB} || true
 
@@ -37,9 +38,12 @@ for cat in ${CATEGORIES}; do
       mkdir -p ${WEB}/$cat/$book
       cp $cat/$book/*.{png,jpg,gif} ${WEB}/$cat/$book >& /dev/null || true
       if [ -f $cat/$book/$book.xml ]; then
-	(xsltproc  --output ${WEB}/$cat/$book/$book.html ${DOCBOOKXSL} $cat/$book/$book.xml)	
+	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
+                   --output ${WEB}/$cat/$book/$book.html \
+                   ${DOCBOOKXSL} $cat/$book/$book.xml)	
 	title=`getTitle $cat/$book/$book.xml`
 	echo "<li><a href=\"./$cat/$book/$book.html\">${title} (html)</a></li>" >> ${INDEX}
+        cp ${STYLESHEET} ${WEB}/$cat/$book/${STYLESHEET}
       elif [ -f $cat/$book/$book.pdf ]; then
 	  mkdir -p ${WEB}/$cat/$book
 	  cp $cat/$book/$book.pdf ${WEB}/$cat/$book/$book.pdf

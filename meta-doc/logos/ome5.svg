@@ -14,8 +14,11 @@
    id="svg4320"
    sodipodi:version="0.32"
    inkscape:version="0.42.2"
-   sodipodi:docbase="/home/paulk/logo"
-   sodipodi:docname="ome5.svg">
+   sodipodi:docbase="/home/paulk/research/meta-doc/trunk/logos"
+   sodipodi:docname="ome5.svg"
+   inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome5.png"
+   inkscape:export-xdpi="90.000000"
+   inkscape:export-ydpi="90.000000">
   <defs
      id="defs4322">
     <linearGradient
@@ -95,7 +98,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.0400000"
-     inkscape:cx="108.75522"
+     inkscape:cx="68.920433"
      inkscape:cy="62.452215"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -138,7 +141,7 @@
          dx="0 0 0 0 0 -2.6101258 0 0 0 0 -3.5592625"><tspan
    style="font-size:18.000000px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
    id="tspan4332"
-   dx="0 0 0 0 -0.94913667">Open </tspan>Meta Environment</tspan></text>
+   dx="0 0 0 0 -0.94913667">The  </tspan>Meta Environment</tspan></text>
     <path
        sodipodi:type="arc"
        style="opacity:1.0000000;fill:url(#radialGradient5812);fill-opacity:1.0000000;stroke:#000000;stroke-width:0.69999999;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
@@ -150,7 +153,7 @@
        d="M 104.00761,46.603025 A 24.328859,20.949306 0 1 1 104.00683,46.599138"
        sodipodi:start="6.1121920"
        sodipodi:end="12.395189"
-       transform="matrix(0.889442,0.000000,0.000000,0.916352,-5.147190,4.344783)"
+       transform="matrix(0.889442,0.000000,0.000000,0.916352,-13.06798,4.344783)"
        sodipodi:open="true" />
   </g>
 </svg>

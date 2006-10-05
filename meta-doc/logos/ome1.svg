@@ -14,8 +14,8 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.42.2"
-   sodipodi:docbase="/home/paulk/logo"
-   sodipodi:docname="logo10.svg">
+   sodipodi:docbase="/home/paulk/research/meta-doc/trunk/logos"
+   sodipodi:docname="ome1.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -73,7 +73,7 @@
      inkscape:cy="28.508126"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="742"
+     inkscape:window-width="771"
      inkscape:window-height="519"
      inkscape:window-x="236"
      inkscape:window-y="0" />
@@ -100,12 +100,18 @@
        x="4.9843879e-07"
        y="0.58724868"
        rx="0.41946313"
-       ry="2.7265100" />
+       ry="2.7265100"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome1.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000" />
     <path
        style="fill:url(#linearGradient3588);fill-opacity:1.0"
        d="M -1.9798658e-06,0.41946411 L 200.50336,48.657718 L -0.41946506,91.023492 L -1.9798658e-06,0.41946411 z "
        id="rect1306"
-       sodipodi:nodetypes="cccc" />
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome1.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000" />
     <path
        sodipodi:type="arc"
        style="opacity:1.0000000;fill:url(#linearGradient3596);fill-opacity:1.0000000;stroke:#000000;stroke-width:3.8712537;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:0.13690473"
@@ -118,20 +124,26 @@
        transform="matrix(0.908679,0.000000,0.000000,1.311910,-0.285692,-57.79788)"
        sodipodi:start="0.0000000"
        sodipodi:end="6.2822361"
-       sodipodi:open="true" />
+       sodipodi:open="true"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome1.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000" />
     <text
        xml:space="preserve"
        style="font-size:18.000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Adobe Sans MM"
-       x="3.3556921"
-       y="92.281898"
+       x="4.6140814"
+       y="96.895988"
        id="text2048"
-       sodipodi:linespacing="125.00000%"><tspan
+       sodipodi:linespacing="125.00000%"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome1.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000"><tspan
          sodipodi:role="line"
          id="tspan2050"
-         x="3.3556921"
-         y="92.281898"
+         x="4.6140814"
+         y="96.895988"
          style="font-size:18.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"><tspan
    style="font-size:18.000000px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
-   id="tspan3546">Open</tspan>MetaEnvironment</tspan></text>
+   id="tspan3546">The </tspan>Meta-Environment</tspan></text>
   </g>
 </svg>
