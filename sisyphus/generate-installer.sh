@@ -104,8 +104,7 @@ done
 for external in ${externals}; do
   occurs=`strings ${archive} | grep -c ${external}`
   if [ ${occurs} = "0" ]; then
-    echo >&2 "error: ${external} is not present anywhere in ${archive}"
-    exit 1;
+    echo >&2 "warning: ${external} is not present anywhere in ${archive}"
   fi
 done
 
@@ -159,7 +158,10 @@ ENDCAT
 done
 }
 
-cat <<EOF
+installer_script=/tmp/installer-script.$$
+checksum=`sum ${archive}`
+
+cat > ${installer_script}<<EOF
 #! /bin/sh
 set -e
 
@@ -194,8 +196,35 @@ checkfor() {
   which \$1 || (abort_dialog "\$1 not found.")
 }
 
+checksum() {
+  checksum=\`tail -n +__LENGTH_OF_SCRIPT__ \$0 | gunzip -c | sum\`
+  if [ "a\${checksum}" != "a${checksum}" ]; then
+    abort_dialog "The installer file appears to be corrupted, according to the checksum."
+  fi
+}
+
+relocate() {
+  space=\$((\${#target_prefix} - 1))
+  redex=\`printf "%0\${space}s#" "" | tr " " "/"\`
+  sed -e "s@\${redex}@\${target_prefix}@g"
+}
+
+rebind_externals() {
+  sed -e "\${external_substs}"
+}
+
+unpack() {
+  (cd \${target_prefix}; tar xvf -)
+}
+
+expand() {
+  tail -n +__LENGTH_OF_SCRIPT__ \$0 | gunzip -c
+}
+
+checksum
+
 checkfor tar
-checkfor uudecode
+checkfor sum
 checkfor gunzip
 checkfor sed
 checkfor mkdir
@@ -243,30 +272,14 @@ if [ \${file_count} -gt 0 ]; then
   continue_dialog "There are files in \${target_prefix}, really overwrite (yes,no) ? [no]"
 fi
 
-relocate() {
-  space=\$((\${#target_prefix} - 1))
-  redex=\`printf "%0\${space}s#" "" | tr " " "/"\`
-  sed -e "s@\${redex}@\${target_prefix}@g"
-}
-
-rebind_externals() {
-  sed -e "\${external_substs}"
-}
-
-unpack() {
-  (cd \${target_prefix}; tar xvf -)
-}
-
-expand() {
-  cat | uudecode | gunzip -c
-}
 
 echo "Please wait while installing in \${target_prefix}"
 
-(expand | relocate | rebind_externals | unpack) <<THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG
-EOF
-cat ${archive} | gzip | uuencode -m - 
-cat<<EOF
-THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG
+expand | relocate | rebind_externals | unpack
 echo "Successfully installed \$0 in \${target_prefix}."
+exit 0
 EOF
+
+file_length=$((`wc -l < ${installer_script}` + 1))
+sed -e "s@__LENGTH_OF_SCRIPT__@${file_length}@g" < ${installer_script}
+gzip -c < ${archive} || echo "You need to redirect the output to a file"
