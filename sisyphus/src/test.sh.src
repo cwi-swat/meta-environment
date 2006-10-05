@@ -8,9 +8,9 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root shared-objects \
+    --root asfsdf-meta \
     --profile verfrol \
-    --force shared-objects \
+    --force aterm-java \
     --interval 300 \
     --weekday Mon \
     --weekday Tue \

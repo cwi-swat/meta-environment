@@ -65,6 +65,7 @@ create table si_hosts (
 	progress text,
 	active boolean default false
 	dists boolean default false
+	busy boolean default false
 );
 
 
