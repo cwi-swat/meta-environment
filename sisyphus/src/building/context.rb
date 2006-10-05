@@ -64,41 +64,24 @@ module Building
   end
 
   class Context < ContextItem
-    attr_reader :deps, :tr_deps
-    
     def initialize(config, item)
       super(config, item)
-      @deps = item.dep_items.collect do |dep|
-        ContextItem.new(config, dep)
-      end
-      @tr_deps = @deps
-      # @tr_deps = trans_close(config, item)
+      @deps = contexts_for_items(config, item.dep_items)
+      @tr_deps = contexts_for_items(config, item.tr_deps)
     end
 
+
+    def tr_deps
+      return @tr_deps.reject do |dep| 
+        @config.build_env_packages.include?(dep.name)
+      end
+    end
 
     def deps
       return @deps.reject do |dep| 
         @config.build_env_packages.include?(dep.name)
       end
     end
-
-    # BUggy?
-    def trans_close(config, item)
-      todo = [item]
-      ds = []
-      while todo != [] do
-        i = todo.pop
-        items = i.dep_items
-        if items.is_a?(Array) then
-          ds |= [i] + items
-          todo |= items
-        end
-      end
-      return ds.collect do |dep|
-        ContextItem.new(config, item)
-      end
-    end
-
 
     def actions
       @config.actions.each do |name|
@@ -111,6 +94,21 @@ module Building
       t = ERB.new(template)
       return t.result(binding())
     end
+
+    private
+
+    def without_build_env_pkgs(deps)
+      return deps.reject do |dep| 
+        @config.build_env_packages.include?(dep.name)
+      end
+    end
+
+    def contexts_for_items(config, items)
+      items.collect do |item|
+        ContextItem.new(config, item)
+      end
+    end
+
   end
 
 end
