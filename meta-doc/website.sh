@@ -4,6 +4,7 @@ set -e
 
 CATEGORIES="getting-started howto demos understanding courses project"
 WEB="./doc/html"
+DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
 
 mkdir -p ${WEB} || true
 
@@ -27,7 +28,7 @@ for i in ${CATEGORIES}; do
     if [ -d $i/$b ]; then
       cp $i/$b/*.{png,jpg,gif} ${WEB}/$i/$b >& /dev/null || true
       if [ -f $i/$b/$b.xml ]; then
-	(docbook2html --output ${WEB}/$i/$b --nochunks $i/$b/$b.xml)	
+	(xsltproc ${DOCBOOKXSL} --output ${WEB}/$i/$b $i/$b/$b.xml)	
 	title=`getTitle $i/$b/$b.xml`
 	echo "<li><a href=\"./$i/$b/$b.html\">${title} (html)</a></li>" >> ${INDEX}
       elif [ -f $i/$b/$b.pdf ]; then
