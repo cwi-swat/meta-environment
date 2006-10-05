@@ -160,6 +160,10 @@ module Model
     end
 
 
+    def tr_deps
+      return extent
+    end
+
     def extent
       set = []
       as_nodes do |n|
