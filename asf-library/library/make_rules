@@ -4,7 +4,7 @@ LIBROOT=${top_srcdir}/lib
 
 # What gets installed, distributed, cleaned
 EXAMPLES=
-EXTRA_DIST = $(wildcard *.sdf) $(wildcard *.asf)
+EXTRA_DIST = $(wildcard *.sdf) $(wildcard *.asf) ${EXAMPLES}
 
 # Determine installation directory
 librarydir=${pkgdatadir}/library$(subst ./library,,$(subdir))
