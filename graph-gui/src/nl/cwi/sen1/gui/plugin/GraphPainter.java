@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
@@ -142,16 +143,16 @@ public class GraphPainter extends DefaultStudioPlugin implements
 			setPanel(graphType, graphId.toString(), panel);
 			((StudioWithPredefinedLayout) studio).addComponent(comp,
 					StudioImplWithPredefinedLayout.TOP_RIGHT);
-			studio.addComponentMenu(comp, createGraphMenu(panel, "Dot"));
+			studio.addComponentMenu(comp, createGraphMenu(panel, "Dot", graphType, graphId.toString()));
 			panel.setLayout("Dot");
 		}
 	}
 
-	private JMenu createGraphMenu(final GraphPanel panel, String initialLayout) {
+	private JMenu createGraphMenu(final GraphPanel panel, String initialLayout, String graphId, String id) {
 		JMenu graph = new JMenu("Graph");
 		JMenu layouts = createLayoutMenu(graph, panel, initialLayout);
 		graph.add(new JSeparator());
-		JMenu toggles = createTogglesMenu(graph, panel);
+		JMenu toggles = createTogglesMenu(graph, panel, graphId, id);
 
 		graph.add(layouts);
 		graph.add(toggles);
@@ -171,7 +172,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		return graph;
 	}
 
-	private JMenu createTogglesMenu(JMenu menu, final GraphPanel panel) {
+	private JMenu createTogglesMenu(JMenu menu, final GraphPanel panel, final String graphId, final String id) {
 		JMenuItem item;
 		ButtonGroup edge = new ButtonGroup();
 
@@ -227,19 +228,19 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
 		menu.add(new JSeparator());
 
-		// item = new JCheckBoxMenuItem("Show force panel");
-		// item.addActionListener(new AbstractAction() {
-		// public void actionPerformed(ActionEvent e) {
-		// JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-		// if (item.isSelected()) {
-		// showForcePanel(panel.getId(), true);
-		// } else {
-		// showForcePanel(panel.getId(), false);
-		// }
-		// }
-		// });
-		// item.setSelected(false);
-		// menu.add(item);
+//		 item = new JCheckBoxMenuItem("Show force panel");
+//		 item.addActionListener(new AbstractAction() {
+//		 public void actionPerformed(ActionEvent e) {
+//		 JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+//		 if (item.isSelected()) {
+//		 showForcePanel(graphId, id, true);
+//		 } else {
+//		 showForcePanel(graphId, id, false);
+//		 }
+//		 }
+//		 });
+//		 item.setSelected(false);
+//		 menu.add(item);
 
 		return menu;
 	}
