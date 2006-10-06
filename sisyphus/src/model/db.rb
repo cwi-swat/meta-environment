@@ -121,6 +121,10 @@ module Model
       end
     end
 
+    def informative_version
+      si_revision.informative_version.strip
+    end
+
     def set_result(result)
       self.success = result.success
     end
