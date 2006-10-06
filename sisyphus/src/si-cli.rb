@@ -103,9 +103,6 @@ module Sisyphus
     def start_iteration(time)
       ensure_log(time)
       @store.connect
-      the_host = @store.db_host(@host)
-      the_host.busy = true
-      the_host.save
     end
 
     def record_failure(e)
@@ -122,9 +119,6 @@ module Sisyphus
           @log.close
         end
       end
-      the_host = @store.db_host(@host)
-      the_host.busy = false
-      the_host.save
       @store.disconnect
     end
 

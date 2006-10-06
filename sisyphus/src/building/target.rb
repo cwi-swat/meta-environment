@@ -85,9 +85,17 @@ module Building
     end
 
     def fire
+      host = @item.si_host
+      host.busy = true
+      host.save
       set_progress(true)
-      do_the_build
-      set_progress(false)
+      begin
+        do_the_build
+      ensure
+        set_progress(false)
+        host.busy = false
+        host.save
+      end
     end
 
     def do_the_build
