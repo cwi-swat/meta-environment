@@ -1,22 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
-<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Documentation Plan for The Meta-Environment</title>
 
-<info>
-<title>Documentation Plan for the Meta-Environment</title>
-  
-<authorgroup>
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
 
-    <author><personname><firstname>Paul</firstname><surname>Klint</surname></personname> </author>
-    <author><personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname> </author>
-</authorgroup>
-</info>
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
 
+  <section>
+    <title>Background</title>
 
-  <section><title>Background</title>
-    
-
-    <para>The ASF+SDF Meta-Environment is an interactive development
-    environment for</para>
+    <para>The Meta-Environment is an interactive development environment
+    for</para>
 
     <para><itemizedlist>
         <listitem>
@@ -28,33 +36,32 @@
           <para>performing analysis and transformation of existing
           software.</para>
         </listitem>
-      </itemizedlist>See <uri>www.meta-environment.org</uri> for further
-    details. We are planning to organize the development of this system in the
-    fashion of an open source project. First of all, we will relabel the
-    project as "Meta-Environment" <remark>(Is this the best name?)</remark>.
-    Next we need to present our documentation in a coherent fashion. The
-    purpose of the current document is three-fold:</para>
+      </itemizedlist>See <link
+    xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>
+    for further details. We want to present our documentation in a more
+    coherent fashion. The purpose of the current document is
+    three-fold:</para>
 
     <itemizedlist>
       <listitem>
-        <para>to describe a general documentation policy for the
-        Meta-Environment</para>
+        <para>to describe a general documentation policy for The
+        Meta-Environment.</para>
       </listitem>
 
       <listitem>
-        <para>to identify precisely a number of documents that will be written
-        or rewritten</para>
+        <para>to identify the documents that will be written or will be
+        rewritten.</para>
       </listitem>
 
       <listitem>
         <para>to make a selection of tools and techniques that can be used to
-        implement this policy</para>
+        implement this policy.</para>
       </listitem>
     </itemizedlist>
   </section>
 
-  <section><title>Current situation</title>
-    
+  <section>
+    <title>Current situation</title>
 
     <para>Currently, we use the following mechanisms to document (parts of)
     the system:</para>
@@ -98,8 +105,8 @@
       </listitem>
 
       <listitem>
-        <para>Technical documentation on how it works on an engineering level
-        (only on a scientific level).</para>
+        <para>Technical documentation on how things work on an engineering
+        level (we only explain things on a scientific level).</para>
       </listitem>
 
       <listitem>
@@ -116,26 +123,30 @@
         <para>An indexable overview of all documentation on the
         Meta-Environment.</para>
       </listitem>
+
+      <listitem>
+        <para>Online help.</para>
+      </listitem>
     </itemizedlist>
   </section>
 
-  <section><title>The ideal situation</title>
-    
+  <section>
+    <title>The ideal situation</title>
 
-    <para>In an ideal situation we have a coherent plan for the
-    Meta-Environment documentation. This includes a common style, a model of
-    our audience, a clear framework/structure for placing documents in, and a
-    list of important documents.</para>
+    <para>In an ideal situation we have a coherent plan for The
+    Meta-Environment 's documentation. This includes a common style, a model
+    of our audience, a clear framework/structure for placing documents in, and
+    a list of important documents.</para>
 
-    <section><title>Requirements and design decisions</title>
-      
+    <section>
+      <title>Requirements and design decisions</title>
 
       <para>We have two main desires that this documentation plan must
       fulfill:</para>
 
       <para><itemizedlist>
           <listitem>
-            <para>To facilitate the application of the Meta-Environment by
+            <para>To facilitate the application of The Meta-Environment by
             more people to more applications. This implies better user
             documentation.</para>
           </listitem>
@@ -148,7 +159,7 @@
         </itemizedlist></para>
 
       <para>We have identified the following requirements for our
-      documents:<orderedlist inheritnum="ignore" continuation="restarts">
+      documents:<orderedlist continuation="restarts" inheritnum="ignore">
           <listitem>
             <para>Ideally, we want to present all information about our system
             in a unified (read "predictable") manner. Documentation can be
@@ -162,7 +173,7 @@
           <listitem>
             <para>We want the information to be targeted at specific
             audiences; better documentation is written for a (more or less)
-            specific audience</para>
+            specific audience.</para>
           </listitem>
 
           <listitem>
@@ -213,64 +224,89 @@
       </itemizedlist>
     </section>
 
-    <section><title>Audience</title>
-      
+    <section>
+      <title>Audience</title>
 
       <para>Our audience consists of the following groups of people:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Users of the ASF+SDF Meta-Environment.</para>
+          <para><emphasis role="bold">Users</emphasis> are people that are not
+          interested in the source code level of the software: they deal with
+          the commandline and GUI interfaces, and nothing else.<itemizedlist>
+              <listitem>
+                <para>Users of the ASF+SDF Meta-Environment.</para>
+              </listitem>
+
+              <listitem>
+                <para>ASF+SDF Meta-Environment newbies.</para>
+              </listitem>
+
+              <listitem>
+                <para>Users of SDF.</para>
+              </listitem>
+
+              <listitem>
+                <para>Users of the ATerm library and ApiGen.</para>
+              </listitem>
+
+              <listitem>
+                <para>Bachelor and master students.</para>
+              </listitem>
+
+              <listitem>
+                <para>Scientific colleagues working on related topics.</para>
+              </listitem>
+
+              <listitem>
+                <para>Scientific colleagues working on topics that could be
+                applications of the Meta-Environment.</para>
+              </listitem>
+            </itemizedlist></para>
         </listitem>
 
         <listitem>
-          <para>ASF+SDF Meta-Environment newbies.</para>
+          <para><emphasis role="bold">Developers</emphasis> are interested in
+          the source code level and want to know all technical details.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Developers of any of the components.</para>
+            </listitem>
+
+            <listitem>
+              <para>Advanced users (contributors of applications).</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
 
         <listitem>
-          <para>Users of SDF.</para>
-        </listitem>
+          <para><emphasis role="bold">Decision makers</emphasis> are
+          interested in global scientific impact, innovation level and
+          economic impact.</para>
 
-        <listitem>
-          <para>Users of the ATerm library and ApiGen.</para>
-        </listitem>
+          <itemizedlist>
+            <listitem>
+              <para>Project managers who may decide to use our technology in
+              their projects.</para>
+            </listitem>
 
-        <listitem>
-          <para>Bachelor and master students.</para>
-        </listitem>
+            <listitem>
+              <para>Decision makers at funding agencies who can decide to fund
+              research and development related to The Meta-Environment.</para>
+            </listitem>
 
-        <listitem>
-          <para>Developers of any of the components.</para>
-        </listitem>
-
-        <listitem>
-          <para>Advanced users (contributors of applications).</para>
-        </listitem>
-
-        <listitem>
-          <para>Project managers.</para>
-        </listitem>
-
-        <listitem>
-          <para>Scientific colleagues working on related topics.</para>
-        </listitem>
-
-        <listitem>
-          <para>Scientific colleagues working on topics that could be
-          applications of the Meta-Environment.</para>
+            <listitem>
+              <para>Decision makers in industry who can decide that using The
+              Meta-Environment has business value for them.</para>
+            </listitem>
+          </itemizedlist>
         </listitem>
       </itemizedlist>
 
-      <para>To simplify this complex situation, we split these groups into two
-      main groups: <emphasis role="bold">Users</emphasis> and <emphasis role="bold">Developers</emphasis>. Users are people that are not
-      interested in the source code level of the software: they deal with the
-      commandline and GUI interfaces, and nothing else. Developers are all
-      other people. Documentation can be targeted at
-      <emphasis>Users</emphasis>, or at <emphasis>Developers</emphasis>, or at
-      both at the same time. Then, we classify members of each group into
-      maturity levels:</para>
+      <para>We classify members of each group into maturity levels:</para>
 
-      <orderedlist inheritnum="ignore" continuation="restarts">
+      <orderedlist continuation="restarts" inheritnum="ignore">
         <listitem>
           <para><emphasis role="bold">Novice</emphasis>: has expressed the
           intention of participating, does not know where to start, or where
@@ -279,10 +315,10 @@
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">Advanced</emphasis>: has adequate
+          <para><emphasis role="bold">Professional</emphasis>: has adequate
           experience, has a certain overview of the system, knows the scope
           and limitations, can provide feedback to
-          <emphasis>Newbies.</emphasis></para>
+          <emphasis>Novices.</emphasis></para>
         </listitem>
 
         <listitem>
@@ -303,8 +339,8 @@
       the expected audience is.</para>
     </section>
 
-    <section><title>Topics</title>
-      
+    <section>
+      <title>Topics</title>
 
       <para>There is a wide range of topics to discuss,
       including:<itemizedlist>
@@ -398,8 +434,8 @@
     </section>
   </section>
 
-  <section><title>Documents</title>
-    
+  <section>
+    <title>Documents</title>
 
     <para>Each category will be described and a number of documents to be
     written is identified. The idea is that these categories are easily
@@ -407,8 +443,8 @@
     Still, this plan mentions a number of documents that need to be written to
     get things started (or rather to catch up).</para>
 
-    <section><title>Getting started ...</title>
-      
+    <section>
+      <title>Getting started ...</title>
 
       <para><emphasis>Getting started</emphasis> articles describe howto
       download, install and run our software. This is a separate category
@@ -468,8 +504,8 @@
       </itemizedlist>
     </section>
 
-    <section><title>How to ...</title>
-      
+    <section>
+      <title>How to ...</title>
 
       <para><emphasis>How to</emphasis> articles provide tutorials for various
       aspects of the software. These articles are written with a particular
@@ -570,7 +606,8 @@
 
         <listitem>
           <para>Written by either <emphasis role="bold">Specialist
-          Users</emphasis> or <emphasis role="bold">Developers</emphasis></para>
+          Users</emphasis> or <emphasis
+          role="bold">Developers</emphasis></para>
         </listitem>
 
         <listitem>
@@ -594,8 +631,8 @@
       </itemizedlist>
     </section>
 
-    <section><title>Applications ...</title>
-      
+    <section>
+      <title>Applications ...</title>
 
       <para>Contains summaries of successful applications of the software. We
       will invite our main users to write a few pages on their particular
@@ -656,8 +693,8 @@
       </itemizedlist>
     </section>
 
-    <section><title>Demonstrations</title>
-      
+    <section>
+      <title>Demonstrations</title>
 
       <para>We will use interactive demonstrations (using Flash?) to
       demonstrate GUI related features. These demonstrations:</para>
@@ -680,8 +717,8 @@
         </itemizedlist></para>
     </section>
 
-    <section><title>Courses</title>
-      
+    <section>
+      <title>Courses</title>
 
       <para>The courses section of the documentation contains slides and
       hand-outs for use in bachelor and master level courses on
@@ -689,8 +726,8 @@
       slides, we allow powerpoint, open-office and latex documents.</para>
     </section>
 
-    <section><title>Understanding ...</title>
-      
+    <section>
+      <title>Understanding ...</title>
 
       <para>Articles in the category <emphasis>understanding</emphasis>
       explain a fundamental concept.</para>
@@ -797,8 +834,8 @@
       </itemizedlist>
     </section>
 
-    <section><title>Scientific Publications</title>
-      
+    <section>
+      <title>Scientific Publications</title>
 
       <para>This category is targeted at the scientific audience, it is a
       bibliography of our scientific papers, including literal pdf or
@@ -806,8 +843,8 @@
       bibliography file.</para>
     </section>
 
-    <section><title>Project managament ...</title>
-      
+    <section>
+      <title>Project managament ...</title>
 
       <para><itemizedlist>
           <para>The project management category contains information for
@@ -853,8 +890,8 @@
         </itemizedlist></para>
     </section>
 
-    <section><title>Source code documentation</title>
-      
+    <section>
+      <title>Source code documentation</title>
 
       <para>This is the documentation located with and inside the source
       code:</para>
@@ -922,11 +959,12 @@
     </section>
   </section>
 
-  <section><title>How to get there?</title>
-    
+  <section>
+    <title>How to get there?</title>
 
     <para>It seems that the most widely used technology for documenting
-    software projects is DocBook (see, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.docbook.org">www.docbook.org</link>). Docbook is an
+    software projects is DocBook (see, <link
+    xlink:href="http://www.docbook.org">www.docbook.org</link>). Docbook is an
     XML-based standard for the semantic mark-up of text and can be used to
     generate a wide variety of output formats including HTML, PDF, man pages,
     javahelp, and eclipsehelp. This means that we can use a single source for
@@ -934,58 +972,72 @@
 
     <para>The downside of using DocBook is that we have to learn yet another
     text processing technology. The number of predefined tags in DocBook is
-    large (400) and the markup is more verbose than, for instance,
-    LaTex.</para>
+    large (400) and the markup is more verbose than, for instance, LaTex.
+    Another issue to observe is that DocBook is under active development.
+    DocBook V4.5 is froozen and DocBook V5.0 is in an advanced stage of
+    development. After experimenting with both versions, it seems better to
+    start using V5.0 immediately, otherwise we start writing legacy
+    documentation and need to convert later on.</para>
 
-    <para>I have tried a number of DocBook editors including:</para>
+    <para>We have tried a number of DocBook editors including:</para>
 
     <itemizedlist>
       <listitem>
-        <para>The <application>xxe</application> editor by XMLMind (<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://xmlmind.com.xmleditor">www.xmlmind.com/xmleditor</link>).
+        <para>The <application>xxe</application> editor by XMLMind (<link
+        xlink:href="http://xmlmind.com.xmleditor">www.xmlmind.com/xmleditor</link>).
         The standard edition of <application>xxe</application> is freely
         available.</para>
       </listitem>
 
       <listitem>
-        <para>The Eclipse-based editor Vex (<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://vex.sourceforge.net">vex.sourceforge.net</link>).</para>
+        <para>The Eclipse-based editor Vex (<link
+        xlink:href="http://vex.sourceforge.net">vex.sourceforge.net</link>).</para>
       </listitem>
 
       <listitem>
-        <para>The conglomerate editor (<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.conglomerate.org">www.conglomerate.org</link>).</para>
+        <para>The conglomerate editor (<link
+        xlink:href="http://www.conglomerate.org">www.conglomerate.org</link>).</para>
       </listitem>
 
       <listitem>
-        <para>The nXML extention of <application>emacs</application> (<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://hack.oreilly.com/pub/h/2044">hacks.oreilly.com/pub/h/2044</link>).</para>
+        <para>The nXML extention of <application>emacs</application> (<link
+        xlink:href="http://hack.oreilly.com/pub/h/2044">hacks.oreilly.com/pub/h/2044</link>).</para>
       </listitem>
 
       <listitem>
         <para>The DocBook extension of <application>openoffice</application>
-        (<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://xml.openoffice.org/xmerge/docbook/index.html">xml.openoffice.org/xmerge/docbook/index.html</link>).</para>
+        (<link
+        xlink:href="http://xml.openoffice.org/xmerge/docbook/index.html">xml.openoffice.org/xmerge/docbook/index.html</link>).</para>
       </listitem>
     </itemizedlist>
 
-    <para>Based on this experience I recommend to use
+    <para>Based on this experience we recommend to use
     <application>xxe</application> for wysiwyg editing and
-    <application>emacs</application> for editing of the XML source.</para>
+    <application>emacs</application> for editing of the XML source. Note that
+    the DocBook V5.0 addon has to be installed explicitly after installation
+    of xxe itself.</para>
   </section>
 
-  <section><title>Resources</title>
-    
+  <section>
+    <title>Resources</title>
 
-    <section><title>DocBook resources</title>
-      
+    <section>
+      <title>DocBook resources</title>
 
       <para>Useful links related to DocBook:</para>
 
       <itemizedlist>
         <listitem>
-          <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.docbook.org">www.docbook.org</link>
-          (see in particular the DocBook wiki at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wiki.docbook.org">wiki.docbook.org</link> with many
-          tutorials, tools and examples)</para>
+          <para><link
+          xlink:href="http://www.docbook.org">www.docbook.org</link> (see in
+          particular the DocBook wiki at <link
+          xlink:href="http://wiki.docbook.org">wiki.docbook.org</link> with
+          many tutorials, tools and examples)</para>
         </listitem>
 
         <listitem>
-          <para>The DocBook project (<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://docbook.sourceforge.net">docbook.sourceforge.net</link>)</para>
+          <para>The DocBook project (<link
+          xlink:href="http://docbook.sourceforge.net">docbook.sourceforge.net</link>)</para>
         </listitem>
       </itemizedlist>
 
@@ -994,18 +1046,23 @@
       <itemizedlist>
         <listitem>
           <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
-          Guide</emphasis>, O'Reilly, 1999. See also <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://docbook.org/tdg">www.docbook.org/tdg</link>.</para>
+          Guide</emphasis>, O'Reilly, 1999. See also <link
+          xlink:href="http://docbook.org/tdg">www.docbook.org/tdg</link>. Note
+          that a <link
+          xlink:href="http://www.docbook.org/tdg5/en/html/docbook.html">new
+          version</link> describing DocBook V5.0 is in the works.</para>
         </listitem>
 
         <listitem>
           <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill, 2005.
-          See also <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.sagehill.net/docbookxsl">www.sagehill.net/docbookxsl</link>.</para>
+          See also <link
+          xlink:href="http://www.sagehill.net/docbookxsl">www.sagehill.net/docbookxsl</link>.</para>
         </listitem>
       </itemizedlist>
     </section>
 
-    <section><title>Image resources</title>
-      
+    <section>
+      <title>Image resources</title>
 
       <para>Documentation becomes more lively and inspiring with good use of
       illustrations and pictures. Think of the following associations:</para>
@@ -1060,20 +1117,24 @@
 
       <itemizedlist>
         <listitem>
-          <para>Image databases of the University of Amsterdam: <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.uba.uva.nl/dpc/beelddatabanken.cfm">www.uba.uva.nl/dpc/beelddatabanken.cfm</link>.
+          <para>Image databases of the University of Amsterdam: <link
+          xlink:href="http://www.uba.uva.nl/dpc/beelddatabanken.cfm">www.uba.uva.nl/dpc/beelddatabanken.cfm</link>.
           In particular the botany and map collections are interesting.</para>
         </listitem>
 
         <listitem>
-          <para>The electronic zoo: <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://netvet.wustl.edu/pix.htm">netvet.wustl.edu/pix.htm</link>.</para>
+          <para>The electronic zoo: <link
+          xlink:href="http://netvet.wustl.edu/pix.htm">netvet.wustl.edu/pix.htm</link>.</para>
         </listitem>
 
         <listitem>
-          <para>CalPhotos: <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://calphotos.berkeley.edu/">calphotos.berkeley.edu</link>.</para>
+          <para>CalPhotos: <link
+          xlink:href="http://calphotos.berkeley.edu/">calphotos.berkeley.edu</link>.</para>
         </listitem>
 
         <listitem>
-          <para>Masks: <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://exchanges.state.gov/culprop/bolivia/sect1.htm">exchanges.state.gov/culprop/bolivia/sect1.htm</link>.</para>
+          <para>Masks: <link
+          xlink:href="http://exchanges.state.gov/culprop/bolivia/sect1.htm">exchanges.state.gov/culprop/bolivia/sect1.htm</link>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1083,8 +1144,8 @@
     </section>
   </section>
 
-  <section><title>Plan</title>
-    
+  <section>
+    <title>Plan</title>
 
     <para><itemizedlist>
         <listitem>
@@ -1142,7 +1203,8 @@
         </listitem>
 
         <listitem>
-          <para>Extend meta-studio with a java help browser. See http <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</link></para>
+          <para>Extend meta-studio with a java help browser. See http <link
+          xlink:href="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</link></para>
         </listitem>
 
         <listitem>
