@@ -102,8 +102,8 @@
      inkscape:cy="62.452215"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="919"
-     inkscape:window-height="569"
+     inkscape:window-width="1357"
+     inkscape:window-height="675"
      inkscape:window-x="145"
      inkscape:window-y="59" />
   <metadata
@@ -125,23 +125,30 @@
        style="fill:url(#radialGradient2062);fill-opacity:1.0000000;stroke:#000000;stroke-width:0.0000000;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000"
        d="M 173.01981,38.610123 C 143.06931,35.157447 149.52108,31.601612 127.28960,31.327146 C 107.24010,31.079619 83.663362,42.088134 91.831682,40.095265 L 194.55446,40.597793 L 173.01981,38.610123 z "
        id="rect1323"
-       sodipodi:nodetypes="csccc" />
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome5.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000" />
     <text
        xml:space="preserve"
-       style="font-size:20.000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Adobe Sans MM"
-       x="0.50192231"
-       y="55.157654"
+       style="font-size:20.311676px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Adobe Sans MM"
+       x="-1.2811813"
+       y="56.017216"
        id="text4328"
-       sodipodi:linespacing="125.00000%"><tspan
+       sodipodi:linespacing="125.00000%"
+       transform="scale(1.015583,0.984656)"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome5.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000"><tspan
          sodipodi:role="line"
          id="tspan4330"
-         x="0.50192231"
-         y="55.157654"
-         style="font-size:18.000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
-         dx="0 0 0 0 0 -2.6101258 0 0 0 0 -3.5592625"><tspan
-   style="font-size:18.000000px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
+         x="-1.2811813"
+         y="56.017216"
+         style="font-size:18.280508px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
+         dx="0 0 0 0 0 0 -0.67060351 0 0 0.74257427 0 -4.6048284"><tspan
+   style="font-size:18.280508px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125.00000%;writing-mode:lr-tb;text-anchor:start;font-family:Arial"
    id="tspan4332"
-   dx="0 0 0 0 -0.94913667">The  </tspan>Meta Environment</tspan></text>
+   dx="0 0 0 0 -3.6867001">The  </tspan>Meta- Environment</tspan></text>
     <path
        sodipodi:type="arc"
        style="opacity:1.0000000;fill:url(#radialGradient5812);fill-opacity:1.0000000;stroke:#000000;stroke-width:0.69999999;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-opacity:1.0000000"
@@ -154,6 +161,9 @@
        sodipodi:start="6.1121920"
        sodipodi:end="12.395189"
        transform="matrix(0.889442,0.000000,0.000000,0.916352,-13.06798,4.344783)"
-       sodipodi:open="true" />
+       sodipodi:open="true"
+       inkscape:export-filename="/home/paulk/research/meta-doc/trunk/logos/ome5.png"
+       inkscape:export-xdpi="90.000000"
+       inkscape:export-ydpi="90.000000" />
   </g>
 </svg>

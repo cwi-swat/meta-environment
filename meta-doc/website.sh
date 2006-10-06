@@ -5,7 +5,7 @@ set -e
 CATEGORIES="getting-started howto demos understanding courses project"
 WEB="./doc/html"
 DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
-# DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
+#DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
 STYLESHEET="meta-doc-style.css"
 
 mkdir -p ${WEB} || true

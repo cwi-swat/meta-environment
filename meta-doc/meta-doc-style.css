@@ -1,9 +1,9 @@
 pre.programlisting {
   background-color: #FFFF99 ;
-  border: lpx solid #006600 ;
+  border: 1px solid #006600 ;
 }
 
-body:after { content: url(../../logos/ome4.png); 
+body:after { content: url(../../logos/ome5.png); 
              float: right;
              
 }
