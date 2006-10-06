@@ -19,8 +19,13 @@ module Building
       return @item.name
     end
 
+
+    def pkg_version(item)
+      return "#{item.informative_version}pre.#{item.version}.#{item.id}"
+    end
+
     def binary_dist_name
-      return "#{name}-#{@item.version}.#{@item.id}.bin.sh"
+      return "#{item.name}-#{pkg_version(item)}.bin.sh"
     end
 
     def binary_dist_dir
