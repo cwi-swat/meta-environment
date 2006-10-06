@@ -264,8 +264,15 @@ public class GraphPanel extends JPanel {
 
         ActionList nodeLink = new ActionList();
         nodeLink.add(new NodeLinkTreeLayout(GraphConstants.GRAPH));
-        vis.putAction("NodeLink", nodeLink);
-        layouts.add("NodeLink");
+        vis.putAction("NodeLink Horizontal", nodeLink);
+        layouts.add("NodeLink Horizontal");
+        
+        ActionList nodeLinkV = new ActionList();
+        NodeLinkTreeLayout nodeLinkVlayout = new NodeLinkTreeLayout(GraphConstants.GRAPH);
+        nodeLinkVlayout.setOrientation(Constants.ORIENT_TOP_BOTTOM);
+        nodeLinkV.add(nodeLinkVlayout);
+        vis.putAction("NodeLink Vertical", nodeLinkV);
+        layouts.add("NodeLink Vertical");
 
         ActionList radialTree = new ActionList();
         radialTree.add(new RadialTreeLayout(GraphConstants.GRAPH));
