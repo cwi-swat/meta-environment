@@ -9,7 +9,9 @@
   <info>
     <title>Understanding Term Rewriting</title>
 
-  <author><personname><firstname>Paul</firstname><surname>Klint</surname></personname></author>
+    <author>
+      <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+    </author>
   </info>
 
   <caution>
@@ -18,7 +20,7 @@
   </caution>
 
   <section xml:id="motivation">
-      <title>Motivation</title>
+    <title>Motivation</title>
 
     <para>Term rewriting is a surprisingly simple computational paradigm that
     is based on the repeated application of simplification rules. It is
@@ -28,7 +30,7 @@
   </section>
 
   <section xml:id="introduction">
-      <title>Introduction</title>
+    <title>Introduction</title>
 
     <para>Consider the following, <emphasis>back-of-an-envelope</emphasis>,
     calculation:</para>
@@ -65,6 +67,26 @@
     <literal>a</literal>, <literal>b</literal>, <literal>u</literal>,
     <literal>v</literal>); they are called <emphasis>variables</emphasis> and
     are used during the simplification.</para>
+
+    <para>A simple view on term rewriting is shown in the figure <link
+    linkend="fig_simple_rewriting_algorithm">The rewriting process</link>.
+    Given a set of rewrite rules and an initial term T, the rewriting
+    algorithm is applied and will yield a simplified (or normalized) term T'
+    as answer. T' is called the <emphasis>normal form</emphasis> of T. Later
+    (in <link linkend="term_rewriting_algorithm">The term rewriting
+    algorithm</link> below ) we will further explain the internals of the term
+    rewriting algorithm.</para>
+
+    <figure>
+      <title xml:id="fig_simple_rewriting_algorithm">The rewriting
+      process</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="simple-rewriting-algorithm.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
 
     <para>In order to apply such a simplification rule (or better:
     <emphasis>rewrite rule</emphasis>), several ingredients play a
@@ -103,13 +125,13 @@
   </section>
 
   <section>
-      <title>Basic concepts</title>
+    <title>Basic concepts</title>
 
     <para>In order to understand term rewriting three basic concepts are
     essential: terms, substitution and matching.</para>
 
     <section xml:id="terms">
-        <title>Terms</title>
+      <title>Terms</title>
 
       <para>Traditionally, terms are defined in a strict prefix format:</para>
 
@@ -134,7 +156,7 @@
     </section>
 
     <section xml:id="substitution">
-        <title>Substitution</title>
+      <title>Substitution</title>
 
       <para>A substitution is an important auxiliary notion that we need on
       our road towards understanding term rewriting. A substitution is an
@@ -155,7 +177,7 @@
     </section>
 
     <section xml:id="matching">
-        <title>Matching</title>
+      <title>Matching</title>
 
       <para>Matching has as goal to determine whether two terms
       T<subscript>1</subscript> and T<subscript>2</subscript> can be made
@@ -169,7 +191,7 @@
   </section>
 
   <section xml:id="term_rewriting_algorithm">
-      <title>The term rewriting algorithm</title>
+    <title>The term rewriting algorithm</title>
 
     <para>We can now assemble the ingredients we have described so far into a
     comprehensive description of the rewriting algorithm (Figure <link
@@ -224,7 +246,7 @@
     <para>We will be using no ordering of the rules.</para>
 
     <figure xreflabel="" xml:id="fig_rewriting_algorithm">
-        <title>The rewriting algorithm</title>
+      <title>The rewriting algorithm</title>
 
       <mediaobject>
         <imageobject>
@@ -236,7 +258,7 @@
   </section>
 
   <section xml:id="examples">
-      <title>Examples</title>
+    <title>Examples</title>
 
     <para>Let´s consider two simple examples of term rewriting systems for
     natural numbers and booleans. More elaborate examples that fall outside
@@ -270,7 +292,7 @@
     section for pointers to such examples.</para>
 
     <section>
-        <title>Numerals</title>
+      <title>Numerals</title>
 
       <para>How can we specify natural numbers with 0, successor, addition and
       multiplication using term rewriting? A usual approach is as
@@ -317,7 +339,7 @@
       <literal>2 + 2</literal> equals <literal>4</literal>.</para>
 
       <figure xml:id="fig_arithmetic">
-          <title>Rewriting an arithmetic term</title>
+        <title>Rewriting an arithmetic term</title>
 
         <mediaobject>
           <imageobject>
@@ -329,7 +351,7 @@
     </section>
 
     <section>
-        <title>Booleans</title>
+      <title>Booleans</title>
 
       <para>How can we define Boolean expressions with constants
       <literal>true</literal> and <literal>false</literal> and the operations
@@ -356,7 +378,7 @@
       term</link>.</para>
 
       <figure dir="lro" xml:id="fig_boolean">
-          <title>Rewriting as Boolean term</title>
+        <title>Rewriting as Boolean term</title>
 
         <mediaobject>
           <imageobject>
@@ -368,7 +390,7 @@
   </section>
 
   <section xml:id="extensions">
-      <title>Extensions of term rewriting</title>
+    <title>Extensions of term rewriting</title>
 
     <para>Term rewriting has been extended in various ways to make it even
     more practical. These extensions include:</para>
@@ -427,8 +449,37 @@
     Meta-Environment</link>.</para>
   </section>
 
+  <section>
+    <title>The role of term rewriting in The Meta-Environment</title>
+
+    <para>The Meta-Environment supports a language called ASF+SDF that
+    supports, amongst others, defining and executing rewrite rules. One of the
+    distinguishing features of ASF+SDF is that rewrite rules may be written
+    using arbitrary (user-defined) syntax. Continuing the simple example of
+    the Booleans above, this means that we are not limited to writing
+    <literal>and(true,false)</literal> but can use any syntax we want for the
+    <literal>and</literal> function, and for all other functions of our
+    liking.</para>
+
+    <para>This does not yet sound very exciting, right? But consider that we
+    are working on something serious like analyzing Java programs. In that
+    case, we have to write rewrite rules that describe the kind of analysis we
+    want to do, say, finding calls to and data exchanges with untrusted
+    components. For all Java statements that are involved in this analysis, we
+    write rules that extract the desired information. The nice thing is that
+    we can write these rules using ordinary Java text and that we don't have
+    to resort to some complicated abstract syntax tree representation as is
+    usual in compiler-based systems. In ASF+SDF the text
+    <emphasis>is</emphasis> the tree!</para>
+
+    <para>How do the pieces now fit together? The source text of the Java
+    program is first parsed (parsing is explained elsewhere) and converted to
+    a term. Next, we can apply an analysis function to the Java program and
+    get the results we want. It is as simple and exciting as that.</para>
+  </section>
+
   <section xml:id="further_reading">
-      <title>Further reading</title>
+    <title>Further reading</title>
 
     <itemizedlist>
       <listitem>
