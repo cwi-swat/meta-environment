@@ -21,21 +21,22 @@
     </author>
   </info>
 
-  <section>
+  <section xml:id="motivation">
     <title>Motivation</title>
 
     <para><emphasis>Syntax analysis</emphasis> or <emphasis>parsing</emphasis>
     is about discovering structure in text and is used to determine whether or
     not a text conforms to an expected format. "Is this a textually correct
     Java program?" or "Is this bibliographic entry textually correct?" are
-    typical answers that can be answered by syntax analysis. We are mostly
+    typical questions that can be answered by syntax analysis. We are mostly
     interested in syntax analysis to determine that the source code of a
     program is correct and to convert it into a more structured representation
-    (term) for further processing like analysis or transformation.</para>
+    (parse tree) for further processing like semantic analysis or
+    transformation.</para>
   </section>
 
-  <section>
-    <title xml:id="introduction">Introduction</title>
+  <section xml:id="introduction">
+    <title>Introduction</title>
 
     <para>Consider the following text fragment from a program (this example is
     taken from A.V. Aho, R. Sethi and J.D. Ullman, Compiler: Principles,
@@ -96,7 +97,8 @@
     scanning</emphasis>, the result is shown in the figure <link
     linkend="fig_example_lex">Lexical analysis of example</link>. Observe that
     the spaces have disappeared and are left unclassified (we will come back
-    to this in XXX).</para>
+    to this in <link linkend="lexical_versus_context_free_grammar">Lexical
+    versus context-freee syntax</link> ).</para>
 
     <figure xml:id="fig_example_lex">
       <title>Lexical analysis of example</title>
@@ -220,7 +222,7 @@
     grammar</emphasis> or <emphasis>grammar</emphasis> for short.</para>
   </section>
 
-  <section>
+  <section xml:id="basic_concepts">
     <title>Basic concepts</title>
 
     <para>We will now discuss the basic concepts that are vital for
@@ -228,7 +230,7 @@
     written in SDF, the Syntax Definition Formalism used in The
     Meta-Environment. (***refs***)</para>
 
-    <section>
+    <section xml:id="lexical_grammar">
       <title>Lexical grammar</title>
 
       <para>At the lowest level, the lexical notions of a language like
@@ -271,7 +273,7 @@
       parentheses.</para>
     </section>
 
-    <section>
+    <section xml:id="context_free_grammar">
       <title>Context-free grammar</title>
 
       <para>It is time to move on to the definition of the structure of our
@@ -301,7 +303,7 @@ Expression "*" Expression -&gt; Expression
 "if" "(" Expression ")" Statement          -&gt; Statement</programlisting>
     </section>
 
-    <section>
+    <section xml:id="lexical_versus_context_free_grammar">
       <title>Lexical versus context-free grammar</title>
 
       <para>Traditionally, a strict distinction is being made between lexical
@@ -313,7 +315,7 @@ Expression "*" Expression -&gt; Expression
       <emphasis>scannerless parsing</emphasis>.</para>
     </section>
 
-    <section>
+    <section xml:id="ambiguous_grammars_and_disambiguation">
       <title>Ambiguous grammars and disambiguation</title>
 
       <para>The careful reader will observe that we have skipped over an
@@ -345,7 +347,7 @@ Expression "*" Expression -&gt; Expression
       and rejection of certain parses.</para>
     </section>
 
-    <section>
+    <section xml:id="recongnizing_versus_parsing">
       <title>Recognizing versus parsing</title>
 
       <para>In its simplest form, syntax analysis amounts to recognizing that
@@ -386,8 +388,8 @@ Expression "*" Expression -&gt; Expression
       </figure>
     </section>
 
-    <section>
-      <title xml:id="parsing_methods">Parsing methods</title>
+    <section xml:id="parsing_methods">
+      <title>Parsing methods</title>
 
       <para>Syntax analysis is one of the very mature areas of language theory
       and many methods have been proposed to implement parsers. Giving even a
@@ -473,13 +475,14 @@ Expression "*" Expression -&gt; Expression
   </section>
 
   <section>
-    <title>Extensions of grammars and syntax analysis</title>
+    <title xml:id="extensions_of_grammars_syntax_analysis">Extensions of
+    grammars and syntax analysis</title>
 
     <para>There are many extensions to the grammar descriptions we have seen
     so far. We single out lists, disambiguation methods and modular grammar
     for further clarification.</para>
 
-    <section>
+    <section xml:id="lists">
       <title>Lists</title>
 
       <para>Repeated items are pervasive in programming language grammars:
@@ -506,7 +509,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
       equations becomes more easy.</para>
     </section>
 
-    <section>
+    <section xml:id="disambiguation_methods">
       <title>Disambiguation methods</title>
 
       <para>Many mechanisms exist to disambiguate a given grammar. We mention
@@ -533,7 +536,12 @@ Statement ";" Statements -&gt; Statements</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Follow restrictions</emphasis>.</para>
+          <para><emphasis>Follow restrictions</emphasis>. Forbid that certain
+          constructs follow each other. Typical example: forbid that an
+          identifier is followed by letters or digits. In this way we can
+          ensure that all possible characters are part of the identifier. In
+          other words, we enforce the longest possible match for all
+          characters that may belong to the identifier.</para>
         </listitem>
 
         <listitem>
@@ -542,12 +550,16 @@ Statement ";" Statements -&gt; Statements</programlisting>
 
         <listitem>
           <para><emphasis>Reject</emphasis>. Reject a parse in which a certain
-          grammar rule occurs.</para>
+          grammar rule occurs. For instance, a text like
+          <literal>while</literal> may be a keyword or an identifier. By
+          rejecting the parse with <literal>while</literal> as identifier we
+          enforce that <literal>while</literal> is only used as keyword. This
+          is usual in most languages but not in all (e.g., PL/I).</para>
         </listitem>
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="modular_grammars">
       <title>Modular grammars</title>
 
       <para>As we have seen in <link linkend="parsing_methods">Parsing
@@ -604,7 +616,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="role_of_syntax_analysis_in_The_Meta_Environment">
     <title>The role of syntax analysis in The Meta-Environment</title>
 
     <para>Syntax analysis plays a prominent role in The
@@ -630,12 +642,12 @@ Statement ";" Statements -&gt; Statements</programlisting>
     </itemizedlist>
   </section>
 
-  <section>
-    <title xml:id="further_reading">Further reading</title>
+  <section xml:id="further_reading">
+    <title>Further reading</title>
 
     <itemizedlist>
       <listitem>
-        <para>The classical work on grammars in natural language is N.
+        <para>The classical work on grammars in natural languages is N.
         Chomsky, Three models for the description of language, <emphasis>IRE
         Transactions on Information Theory</emphasis>, <emphasis
         role="bold">IT-2:3</emphasis>, 113-124, 1956.</para>
