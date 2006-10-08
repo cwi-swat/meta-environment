@@ -395,6 +395,10 @@
         </itemizedlist>We have identified the following categories of
       topics:<itemizedlist>
           <listitem>
+            <para>Learning about - For Novice Users.</para>
+          </listitem>
+
+          <listitem>
             <para>Getting started - For Novice Users.</para>
           </listitem>
 
@@ -444,6 +448,56 @@
     get things started (or rather to catch up).</para>
 
     <section>
+      <title>Learning about ...</title>
+
+      <para><emphasis>Learning about</emphasis> articles describe essential
+      concepts and global application areas. Typical subjects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Learning about software analysis</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about software transformation</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about domain-specific languages</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about syntax analysis</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about term rewriting</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><emphasis>Learning about</emphasis> articles:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Target novices.</para>
+        </listitem>
+
+        <listitem>
+          <para>Are amply illustrated.</para>
+        </listitem>
+
+        <listitem>
+          <para>Are circa 5 pages long.</para>
+        </listitem>
+
+        <listitem>
+          <para>Gives pointers to the general literature as well as to
+          Meta-Environment related documents.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
       <title>Getting started ...</title>
 
       <para><emphasis>Getting started</emphasis> articles describe howto
@@ -484,12 +538,11 @@
         </listitem>
       </itemizedlist>
 
-      <para>Characterization of <emphasis>Getting started</emphasis>
-      articles:</para>
+      <para><emphasis>Getting started</emphasis> articles:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Targeted at users with a modest technical background.</para>
+          <para>Target novice and professional users.</para>
         </listitem>
 
         <listitem>
@@ -497,7 +550,7 @@
         </listitem>
 
         <listitem>
-          <para>Reference immediately to both <emphasis>How to</emphasis>
+          <para>Refer immediately to both <emphasis>How to</emphasis>
           documents, <emphasis>Demonstrations</emphasis> and
           <emphasis>Understanding</emphasis> documents</para>
         </listitem>
@@ -584,8 +637,7 @@
       hierarchical dependency such as: 'How to analyse source code in ASF',
       which references 'How to write a grammar in SDF'.</para>
 
-      <para>We formulate a number of requirements for each of these
-      <emphasis>How to's:</emphasis></para>
+      <para><emphasis>How to</emphasis> articles:</para>
 
       <itemizedlist>
         <listitem>
@@ -594,9 +646,7 @@
         </listitem>
 
         <listitem>
-          <para>Targeted at either <emphasis role="bold">Novice
-          Users</emphasis> or <emphasis role="bold">Advanced
-          Users</emphasis></para>
+          <para>Target either novice or professional users</para>
         </listitem>
 
         <listitem>
@@ -605,9 +655,7 @@
         </listitem>
 
         <listitem>
-          <para>Written by either <emphasis role="bold">Specialist
-          Users</emphasis> or <emphasis
-          role="bold">Developers</emphasis></para>
+          <para>Written by either specialists or owners</para>
         </listitem>
 
         <listitem>
@@ -634,9 +682,9 @@
     <section>
       <title>Applications ...</title>
 
-      <para>Contains summaries of successful applications of the software. We
-      will invite our main users to write a few pages on their particular
-      subject.</para>
+      <para><emphasis>Application</emphasis> articles summarize successful
+      applications of the software. We will invite our main users to write a
+      few pages on their particular subject.</para>
 
       <itemizedlist>
         <listitem>
@@ -644,12 +692,11 @@
         </listitem>
 
         <listitem>
-          <para>Written by <emphasis role="bold">Advanced Users</emphasis> or
-          <emphasis role="bold">Developers</emphasis></para>
+          <para>Written by specialists or developers.</para>
         </listitem>
 
         <listitem>
-          <para>Targeted at <emphasis role="bold">Users</emphasis></para>
+          <para>Targeted at users</para>
         </listitem>
 
         <listitem>
