@@ -7,17 +7,12 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Understanding Term Rewriting</title>
+    <title>Learning about term rewriting</title>
 
     <author>
       <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
     </author>
   </info>
-
-  <caution>
-    <para>This article is under construction and may contain errors or
-    inaccuracies.</para>
-  </caution>
 
   <section xml:id="motivation">
     <title>Motivation</title>

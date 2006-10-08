@@ -2,7 +2,7 @@
 
 set -e
 
-CATEGORIES="getting-started howto demos understanding courses project"
+CATEGORIES="learning-about getting-started howto demos understanding courses project"
 WEB="./doc/html"
 DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
 #DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
@@ -30,7 +30,8 @@ cp logos/*.{png,gif} ${WEB}/logos
 # Convert all books in all categories
 
 for cat in ${CATEGORIES}; do
-  echo "<h1>`cat $cat/TITLE`</h1><ul>" >> ${INDEX}
+  cat $cat/TITLE  >> ${INDEX}
+  echo "<ul>" >> ${INDEX}
   BOOKS=`ls $cat`
   mkdir -p ${WEB}/$cat || true
   for book in ${BOOKS}; do

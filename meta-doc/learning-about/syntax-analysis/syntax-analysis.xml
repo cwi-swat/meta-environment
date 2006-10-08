@@ -14,7 +14,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>Understanding syntax analysis</title>
+    <title>Learning about syntax analysis</title>
 
     <author>
       <personname>Paul Klint</personname>
@@ -59,7 +59,7 @@
       </mediaobject>
     </figure>
 
-    <para> It makes sense to first group these character as follows:</para>
+    <para>It makes sense to first group these character as follows:</para>
 
     <itemizedlist>
       <listitem>
@@ -178,7 +178,7 @@
       <listitem>
         <para>If <emphasis>Identifier</emphasis><subscript>1</subscript> is an
         identifier and <emphasis>Expression</emphasis><subscript>2</subscript>
-        is an expression, then </para>
+        is an expression, then</para>
 
         <itemizedlist>
           <listitem>
@@ -187,7 +187,7 @@
           </listitem>
         </itemizedlist>
 
-        <para> is a statement.</para>
+        <para>is a statement.</para>
       </listitem>
 
       <listitem>
@@ -533,7 +533,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Follow restrictions</emphasis>. </para>
+          <para><emphasis>Follow restrictions</emphasis>.</para>
         </listitem>
 
         <listitem>
