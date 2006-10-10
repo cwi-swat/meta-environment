@@ -15,7 +15,6 @@ let
   Modulename: str,
   Path: str,
   Editable: bool,
-  SdfExt: str,
   Sid: term,
   Event: attribute-changed-event,
   Tree: term
