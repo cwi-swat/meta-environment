@@ -1,0 +1,65 @@
+#    Meta-Environment - An environment for language prototyping.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, 
+#                        Amsterdam, The Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or (at
+#    your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful, but
+#    WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#    USA
+#
+#
+# $Id: NEWS 17511 2006-01-30 14:33:40Z kooiker $
+
+Version 0.3.3
+  * user-manual.ps and exercises.ps are now included in the distribution. 
+  * Bug fix: equations of module of which the syntax was changed were not
+    made unavailable.
+
+Version 0.2.3
+  * Bug fix: in module-db, equations of module of which the syntax
+    was changed were not made unavailable. 
+  * in-output-tool now ignores duplicate entries in search-path.
+  * in-output-tool also requires inodes to be different before complaining
+    about duplicate entries. This reduces overzealous complaints involving
+    entries duplicated by a soft- or hardlink.
+  * Bug fix: closing unparsed equations and syntax definitions
+    resulted in module-db inconsistency.
+  * Bug fix: deadlock occurred when dumping equations over incomplete
+    specifications
+  * Restructured {in-output,module-db.tbscripts} so that asf-sections,
+    .sdf.baf, .asf.baf, and parsetables are now read/looked up/written
+    in the same directory that its respective .sdf file is situated.
+  * Fixed a bug with respect initializing structure editors with
+    start symbols when tree is already parsed. 
+  * relaxed the version checking of wish. If the script is unable to
+    check the version of wish, it generates a warning banner. After that
+    it assumes the right version is available in the environment.
+  * changed the .eqs extension to .asf. The following extensions change:
+      .eqs     -> .asf
+      .asf.baf -> .eqs
+      .eqs.baf -> .asf.baf
+      .eqs.tbl -> .asf.tbl
+  * added change-eqs-ext tool that does the above renamings for all files
+    in a directory.
+  * bugfix in config-manager: searchpaths were delivered in reverse order
+
+Version 0.2
+  * Release to consolidate changes
+
+Version 0.0.13
+  * Online help files are now installed in <prefix>/share/meta
+  * replaced --with-tcldot option by --with-graphviz option to make
+     configuration more easy.
+Version 0.0.12
+
+  * ASF+SDF Meta-Environment is now configured/build using automake
