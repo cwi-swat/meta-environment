@@ -34,6 +34,6 @@ pkgdata_DATA = \
 	       standard.java.actions
 
 %.tb: %.tb.src Makefile
-	sed "s@__JAVATABLE__@/ufs/sen1/software/installed/java-source-analysis-0.1/linux/i386/share/java-source-analysis/grammar/Java.trm.tbl@g; \
+	sed "s@__JAVATABLE__@$(prefix)/share/java-meta/Java.trm.tbl@g; \
              s@__JAVA_META__@$(prefix)/share/java-meta@g;" \
 	    < $< > $@ 

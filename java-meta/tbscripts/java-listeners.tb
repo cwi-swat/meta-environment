@@ -22,7 +22,7 @@ process InitializeInheritedStatus is
 toolbus(InitializeInheritedStatus)
 
 
-process JAVAModuleLabelSetter is
+process JavaModuleLabelSetter is
 let
   Event: attribute-changed-event,
   Extension: str,
@@ -48,9 +48,9 @@ in
   delta
 endlet
 
-toolbus(JAVAModuleLabelSetter)
+toolbus(JavaModuleLabelSetter)
 
-process JAVAModuleColorChanger is
+process JavaModuleColorChanger is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -83,9 +83,9 @@ in
   delta
 endlet
 
-toolbus(JAVAModuleColorChanger)
+toolbus(JavaModuleColorChanger)
 
-process JAVAModuleVisualizeEditable is
+process JavaModuleVisualizeEditable is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -112,9 +112,9 @@ in
 endlet
 
 
-toolbus(JAVAModuleVisualizeEditable)
+toolbus(JavaModuleVisualizeEditable)
 
-process JAVAModuleParser is
+process JavaModuleParser is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -125,7 +125,7 @@ in
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . GetJAVAParseTree(ModuleId, Tree?)
+    . GetJavaParseTree(ModuleId, Tree?)
     .
     if equal(Tree, UNDEFINED) then
        MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", error)
@@ -138,49 +138,24 @@ in
   delta
 endlet
 
-toolbus(JAVAModuleParser)
+toolbus(JavaModuleParser)
 
-process JAVAModuleIdentifier is
+process JavaSetModuleImports is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
-  Tree: term,
-  Result: term
+  Import: str,
+  ImportId: term,
+  Imports: list,
+  ModuleId: term
 in
   MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,parsed)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . JAVAIdentifyModule(ModuleId, Result?)
-    . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", Result)
-  )
-  *
-  delta
-endlet
-
-toolbus(JAVAModuleIdentifier)
-
-
-
-process JAVASetModuleImports is
-let
-  Event: attribute-changed-event,
-  Import: str,
-  ImportId: term,
-  Imports: list,
-  ModuleId: term,
-  Tree: term
-in
-  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,identified)
-  .
-  (
-    rec-note(mm-attribute-changed(Event?))
-    . ACE-GetModuleId(Event, ModuleId?)
     . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opening)
-    . GetJAVAParseTree(ModuleId, Tree?)
     . MM-DeleteModuleDependencies(ModuleId)
-    . GetImportedModulenames(Tree, Imports?)
+    . GetImportedModulenames(ModuleId, Imports?)
     .
     if not-equal(Imports, []) then 
       if not-equal(Imports, []) then 
@@ -201,9 +176,9 @@ in
   delta
 endlet
 
-toolbus(JAVASetModuleImports)
+toolbus(JavaSetModuleImports)
 
-process JAVARemoveDependencies is
+process JavaRemoveDependencies is
 let
   Event: attribute-changed-event,
   ModuleId: term
@@ -219,6 +194,6 @@ in
   delta
 endlet
 
-toolbus(JAVARemoveDependencies)
+toolbus(JavaRemoveDependencies)
 
 #endif /* __JAVA_LISTENERS__ */

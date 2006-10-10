@@ -10,5 +10,6 @@
 #include <java-editor-actions.tb>
 #include <java-progress-listener.tb>
 #include <java-editor-listeners.tb>
+#include <generic-adapter.idef>
 
 #endif /* __JAVA_META__ */

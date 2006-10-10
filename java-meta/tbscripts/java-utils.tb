@@ -104,7 +104,7 @@ in
   .
   if and(not-equal(Runner, []),not-equal(Incomplete,true)) then
     ModuleId := first(Runner)
-    . GetJAVAParseTree(ModuleId, ModuleTree?)
+    . GetJavaParseTree(ModuleId, ModuleTree?)
     . 
     if equal(ModuleTree, UNDEFINED) then
       Incomplete := true
@@ -156,9 +156,26 @@ in
   fi
 endlet
 
-process GetImportedModulenames(Tree: term, Imports: list?) is
-  snd-msg(sm-get-imported-module-names(Tree))
-  . rec-msg(sm-imported-module-names(Imports?)) 
+
+process GetImportedModulenames(ModuleId: term, Imports: list?) is
+let
+  Pid: int,
+  Action: str,
+  Contents: term,
+  Modulepath: str,
+  Result: str,
+  Tree: term
+in
+  Pid := process-id
+  . GetModulePath(ModuleId, JAVA_NAMESPACE, Modulepath?)
+  . Action := concat("extract-imports.sh ", Modulepath)
+  . snd-msg(gen-adapter-activate(Pid, Action))
+  . rec-msg(gen-adapter-result(Pid, Result?))
+  . snd-msg(io-read-term("/tmp/IMPORT.trm"))
+  . rec-msg(io-term(Contents?))
+  . printf("Received: [%t]\n", Contents)
+  . Imports := []
+endlet
 
 process CloseModule(ModuleId: term, Recursive: bool) is
 let
@@ -424,7 +441,7 @@ endlet
 toolbus(InitCache(JAVA_TREE_CACHE))
 toolbus(ClearCacheHandler(JAVA_TREE_CACHE, JAVA_NAMESPACE, "status", <term>, edited))
 
-process GetJAVAParseTree(ModuleId: term, Result: term?) is
+process GetJavaParseTree(ModuleId: term, Result: term?) is
 let
   ParseTable: term,
   Path: str,
@@ -465,39 +482,6 @@ in
     Result := Tree
   fi
 endlet
-
-process JAVAIdentifyModule(ModuleId: term, ResultStatus: term?) is
-let
-  Tree: term,
-  Path: str,
-  Directory: str,
-  Modulename: str,
-  File: str
-in
-  GetJAVAParseTree(ModuleId, Tree?)
-  .
-  if not-equal(Tree, UNDEFINED) then
-    GetModulePath(ModuleId, JAVA_NAMESPACE, Path?)
-    . snd-msg(sm-get-module-id(Tree))
-    . rec-msg(sm-module-id(Modulename?))
-    . snd-msg(io-get-path-directory(Path))
-    . rec-msg(io-directory(Path, Directory?))
-    . snd-msg(sm-get-module-path(Directory, Modulename))
-    . rec-msg(sm-module-path(Directory?))
-    . BuildPath(Directory, Modulename, JAVA_EXTENSION, File?)
-    .
-    if equal(File, Path) then
-      MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename)
-      . ResultStatus := identified
-    else
-      Error("Module %s should be in a file named %s\n", [Modulename, File])
-      . ResultStatus := error
-    fi
-  else
-    tau
-  fi
-endlet
-
 
 process GetImportsForRenaming(ModuleId: term, ModuleIds: list, Imports: term?) is
 let

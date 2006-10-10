@@ -3,12 +3,14 @@
 EXTRA_DIST = $(wildcard *.src)
 
 bin_SCRIPTS = \
-	      java-meta
+	      java-meta \
+	      extract-imports.sh
 
 CLEANFILES = \
-	     java-meta
+	     java-meta \
+	     extract-imports.sh
 
 % : %.sh.src Makefile
 	sed "s@__TOOLBUS__@${TOOLBUS_PREFIX}@g;\
 	     s@__PREFIX__@$(prefix)@g;\
-	     s@__TBSCRIPTS__@$(TOOLBUSFLAGS) -I${prefix}/share/java-meta@g;" < $< > $@ && chmod +x $@
+	     s@__TBSCRIPTS__@$(TOOLBUSFLAGS) -I${TOOLBUS_PREFIX}/share/toolbus -I${prefix}/share/java-meta@g;" < $< > $@ && chmod +x $@
