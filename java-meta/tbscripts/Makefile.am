@@ -10,22 +10,15 @@ TBSCRIPTS = \
 	    sdf-editor-listeners.tb \
 	    sdf-editor-utils.tb \
 	    sdf-listeners.tb \
-	    sdf-meta.tb \
+	    java-meta.tb \
 	    java-namespace.h \
 	    sdf-progress-listener.tb \
-	    sdf-utils.tb \
-	    term-actions.tb \
-	    term-editor-actions.tb \
-	    term-editor-utils.tb \
-	    term-parsetable.tb \
-	    term-utils.tb
+	    java-utils.tb
   
 GENERATED_TBSCRIPTS = \
-		      sdf2-language.tb \
-		      sdf-initialize.tb \
-		      start-meta-studio.tb \
-		      start-def-dump.tb \
-		      start-pt-dump.tb
+		      java-language.tb \
+		      java-initialize.tb \
+		      start-meta-studio.tb
 
 EXTRA_DIST = \
 	     $(TBSCRIPTS) \
