@@ -3,5 +3,5 @@ Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 Name: java-meta
 Version: 1.0
 Description:
-Requires: meta,toolbus
+Requires: meta,pgen,toolbus
 ToolBusFlags=-I${prefix}/share/java-meta

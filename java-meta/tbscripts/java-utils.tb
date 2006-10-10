@@ -1,7 +1,7 @@
 #ifndef __JAVA_UTILS__
 #define __JAVA_UTILS__
 
-#include <java-modules.idef>
+/*#include <sdf-modules.idef>*/
 #include <parse-utils.tb>
 #include <error-utils.tb>
 #include <io-utils.tb>
