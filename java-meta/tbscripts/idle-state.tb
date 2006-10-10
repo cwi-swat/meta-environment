@@ -14,18 +14,18 @@ let
   Value: term,
   Worklist: list
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,complete)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,opened)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unavailable)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,unknown)
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,complete)
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,opened)
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,unavailable)
   . MM-Subscribe-Attribute-Changed(<term>,GRAPH_NAMESPACE,<term>,<term>,<term>)
   . MM-Subscribe-Dependencies-Changed(<term>)
   . subscribe(mm-module-deleted(<term>))
   . Worklist := []
   .
   (
-    rec-note(mm-attribute-changed(attribute-changed-event(ModuleId?, SDF_NAMESPACE, Key?, OldValue?, Value?)))
+    rec-note(mm-attribute-changed(attribute-changed-event(ModuleId?, JAVA_NAMESPACE, Key?, OldValue?, Value?)))
     .
     if equal(Value, unknown) then
       Worklist := join(Worklist, [ModuleId])

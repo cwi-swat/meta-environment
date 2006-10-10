@@ -1,5 +1,5 @@
-#ifndef __SDF_MODULE_ACTIONS__
-#define __SDF_MODULE_ACTIONS__
+#ifndef __JAVA_MODULE_ACTIONS__
+#define __JAVA_MODULE_ACTIONS__
 
 #include <java-namespace.h>
 #include <graph-namespace.tb>
@@ -20,7 +20,7 @@ in
     rec-note(is-state(idle))
     . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
     . snd-msg(nav-set-modules(ImportGraph))
-    . RenderGraph("import-graph", SDF_NAMESPACE, true, false, ImportGraph?)
+    . RenderGraph("import-graph", JAVA_NAMESPACE, true, false, ImportGraph?)
   )
   *
   delta
@@ -30,14 +30,14 @@ toolbus(ImportGraphPainter)
 
 process SelectModule(ModuleId: term) is
   snd-msg(nav-select-module(ModuleId))
-  . snd-msg(gp-select-node("import-graph", SDF_NAMESPACE, ModuleId))
+  . snd-msg(gp-select-node("import-graph", JAVA_NAMESPACE, ModuleId))
 
 process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is
 let
   Action: str,
   Modulename: str
 in
-  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
   . snd-msg(cm-get-module-action(Type, Event, Modulename))
   . rec-msg(cm-module-action(Action?))
   . Action(ModuleId)
@@ -55,7 +55,7 @@ let
 in
   (
     NAV-RequestPopup(ModuleId?)
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
     . snd-msg(cm-get-module-events(module-popup, Modulename))
     . rec-msg(cm-module-events(PopupMenu?))
     . NAV-ShowPopup(ModuleId, PopupMenu)
@@ -66,10 +66,10 @@ in
     GP-RequestPopup(GraphType?, GraphId?, ModuleId?)
     .
     if equal(GraphType, "import-graph") then
-      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+      MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
       . snd-msg(cm-get-module-events(module-popup, Modulename))
       . rec-msg(cm-module-events(PopupMenu?))
-      . GP-ShowPopup("import-graph", SDF_NAMESPACE, ModuleId, PopupMenu)
+      . GP-ShowPopup("import-graph", JAVA_NAMESPACE, ModuleId, PopupMenu)
     else
       tau
     fi
@@ -88,4 +88,4 @@ endlet
 
 toolbus(HandleModulePopup)
 
-#endif /* __SDF_MODULE_ACTIONS__ */
+#endif /* __JAVA_MODULE_ACTIONS__ */
