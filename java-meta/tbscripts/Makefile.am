@@ -9,7 +9,7 @@ TBSCRIPTS = \
 	    sdf-editor-actions.tb \
 	    sdf-editor-listeners.tb \
 	    sdf-editor-utils.tb \
-	    sdf-listeners.tb \
+	    java-listeners.tb \
 	    java-meta.tb \
 	    java-namespace.h \
 	    sdf-progress-listener.tb \
