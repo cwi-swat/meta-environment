@@ -1,5 +1,8 @@
 $Id$
 
+Tue Oct 10 10:48:17 CEST 2006 <{economop,jurgenv}@cwi.nl>
+ * lib/builtin-io.c: fixed interfacing with sglr to parse bytes.
+
 Thu Jul 27 12:12:06 CEST 2006 <martin.bravenboer@gmail.com>
  * utils/asc-support-config.src: removed asc-support-config
    generation which is obsolete now we are using pkg-config.

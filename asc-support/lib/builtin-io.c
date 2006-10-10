@@ -53,7 +53,9 @@ static CO_Summary makeGeneralError(const char *msg)
 
 static CO_Summary makeParseError(ATerm t)
 {
-  ERR_Summary summary = ERR_SummaryFromTerm(t);
+  ERR_Error error = ERR_ErrorFromTerm(t);
+  ERR_Summary summary = ERR_makeSummarySummary("asf-builtins","asf-builtins",
+					       ERR_makeErrorListSingle(error));
 
   return (CO_Summary) ERR_liftSummary(summary);
 }
@@ -162,7 +164,7 @@ static PT_Tree parse_result(const char *sort, const char *file, ATerm result)
       return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l,l, error,l);
     }
   }
-  else if (SGisParseError(result)) {
+  else if (SGisParseError(result))  {
     return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l, l,
 					       makeParseError(result), l);
   }
@@ -242,9 +244,9 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
   initParser(toolname, NULL);
   parseTable = getParseTable();
   if (parseTable != NULL) {
-    ATerm result = SGparseString(PT_yieldTreeToString(bytes, ATfalse), 
-				 (SGLR_ParseTable) parseTable, 
-				 sort, NULL); 
+    ATerm result = SGparseStringWithLoadedTable(toolname,ATparse(toolname),
+				 PT_yieldTreeToString(bytes, ATfalse),
+				  sort, "unknown-file");
     return parse_result(toolname, "anonymous", result);
   }
 
