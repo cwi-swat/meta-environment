@@ -1,14 +1,14 @@
-#ifndef __SDF_META__
-#define __SDF_META__
+#ifndef __JAVA_META__
+#define __JAVA_META__
 
 #include <java-module-actions.tb>
 #include <java-listeners.tb>
-#include <sdf-actions.tb>
+#include <java-actions.tb>
 #include <java-utils.tb>
 #include <parsetable-utils.tb>
 #include <java-language.tb>
-#include <sdf-editor-actions.tb>
-#include <sdf-progress-listener.tb>
-#include <sdf-editor-listeners.tb>
+#include <java-editor-actions.tb>
+#include <java-progress-listener.tb>
+#include <java-editor-listeners.tb>
 
-#endif /* __SDF_META__ */
+#endif /* __JAVA_META__ */

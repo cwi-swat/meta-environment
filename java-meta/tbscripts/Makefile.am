@@ -5,14 +5,14 @@ TBSCRIPTS = \
 	    idle-state.tb \
 	    parsetable-utils.tb \
 	    java-module-actions.tb \
-	    sdf-actions.tb \
-	    sdf-editor-actions.tb \
-	    sdf-editor-listeners.tb \
-	    sdf-editor-utils.tb \
+	    java-actions.tb \
+	    java-editor-actions.tb \
+	    java-editor-listeners.tb \
+	    java-editor-utils.tb \
 	    java-listeners.tb \
 	    java-meta.tb \
 	    java-namespace.h \
-	    sdf-progress-listener.tb \
+	    java-progress-listener.tb \
 	    java-utils.tb
   
 GENERATED_TBSCRIPTS = \
