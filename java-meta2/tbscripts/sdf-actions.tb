@@ -1,0 +1,260 @@
+#ifndef __SDF_ACTIONS__
+#define __SDF_ACTIONS__
+
+#include <config-utils.tb>
+#include <java-namespace.h>
+#include <gui-utils.tb>
+
+process ChangeWorkspaceAction is
+let
+  Cancel: bool,
+  Path: str
+in
+  PromptForDirectory("Workspace", [], Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(cm-change-workspace(Path))
+  fi
+endlet
+
+process CloseAllAction is
+let
+  Id: term,
+  ModuleId: term,
+  Modules: list
+in
+  Id := process-id
+  . MM-GetAllModules(Modules?)
+  . CloseModules(Modules)
+endlet
+
+process NewModuleAction is
+let
+  Cancel: bool,
+  Extension : str,
+  Directory : str,
+  Pid: int,
+  FileName : str,
+  Path : str,
+  Paths: list
+in
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("New Module", Paths, SDF_EXTENSION, Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    SplitFilename(Path, FileName?, Directory?, Extension?)
+    . create(NewModuleContentHandler(), Pid?)
+    . CreateNewModule(Pid, Directory, FileName)
+  fi
+endlet
+
+process OpenModuleAction is
+let
+  Cancel: bool,
+  Extension : str,
+  Directory : str,
+  Path : str,
+  Filename : str,
+  RelativeFilename : str,
+  ModuleId : term,
+  Paths: list,
+  FoundPath: str,
+  Prefix: str
+in
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Open Module", Paths, SDF_EXTENSION, Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    if equal(Path, "") then
+      tau
+    else
+      SplitFilename(Path, Filename?, Directory?, Extension?)
+      . snd-msg(io-get-relative-filename(Paths, Path, Extension))
+      . rec-msg(io-filename(Paths, Path, Extension, Prefix?, RelativeFilename?))
+      . BuildPath(Prefix, RelativeFilename, Extension, FoundPath?)
+      .
+      if equal(FoundPath, Path) then
+        OpenModule(RelativeFilename, ModuleId?)
+        . SelectModule(ModuleId)
+      else
+        Error("The chosen Module is shadowed by another module in the search path: %t", [FoundPath])
+      fi
+    fi
+  fi
+endlet
+
+
+process DumpParseTableAction(ModuleId : term) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Export Term ParseTable", [], ".trm.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(ModuleId, Path, trm)
+  fi
+endlet
+
+process EditorDumpParseTableAction(EditorId : term) is
+let
+  Cancel: bool,
+  Path : str,
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . PromptForFileWithExtension("Export Term ParseTable", [], ".trm.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(ModuleId, Path, trm)
+  fi
+endlet
+
+process DumpSdfDefinitionAction(ModuleId : term) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Export SDF Definition", [], ".def", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpSdfDefinition(ModuleId, Path)
+  fi
+endlet
+
+
+process CloseModuleAction(ModuleId : term) is
+let
+  Answer     : term,
+  Recursive  : bool
+in
+  AskQuestion("Do you want to recursively close the imported modules?", Answer?)
+  . if equal(Answer, cancel) then
+      tau
+    else
+      if equal(Answer, yes) then
+        Recursive := true
+      else
+        Recursive := false
+      fi 
+      . CloseModule(ModuleId, Recursive)
+    fi
+endlet
+
+#ifdef DEAD
+process RenameModuleAction(Modulename : str) is
+let
+  Cancel: bool,
+  Directory : str,
+  Filename : str,
+  Extension : str,
+  Path : str,
+  Paths : list
+in
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Rename module to", Paths, SDF_EXTENSION, Cancel?, Path?)
+  . 
+  if equal(Cancel, true) then
+    tau
+  else
+    SplitFilename(Path, Filename?, Directory?, Extension?)
+    . RenameModule(Modulename, Directory, Filename)
+  fi
+endlet
+
+process CopyModuleAction(Modulename : str) is
+let
+  Cancel: bool,
+  Path : str,
+  Directory : str,
+  Filename : str,
+  Extension : str,
+  Paths : list
+in
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Copy module to", Paths, SDF_EXTENSION, Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    SplitFilename(Path, Filename?, Directory?, Extension?)
+    . CopySdfModule(Modulename, Directory, Filename)
+    . CopyAsfModule(Modulename, Directory, Filename)
+  fi
+endlet
+
+process DeleteModuleAction(Modulename : str) is
+let
+  Answer : term
+in
+  AskQuestion("Are you sure you want delete this module (from disk)?", Answer?)
+  . if equal(Answer, cancel) then
+      tau
+    else
+      if equal(Answer, yes) then
+        DeleteModule(Modulename)
+      else
+        tau
+      fi 
+    fi
+endlet
+
+
+process AddImportAction(Modulename: str) is
+let
+  Id: int,
+  Import: str,
+  Options: list
+in
+  Id := process-id
+  . snd-msg(get-all-module-names)
+  . rec-msg(all-module-names(Options?))
+  . snd-msg(show-list-choice(Modulename, "Choose a module to import", Options))
+  .
+  (
+    rec-msg(list-choice(Modulename, Import?))
+    . snd-note(ui-status(statf(Id, "Adding import %s to %s",
+                               [Import, Modulename])))
+    . AddImport(Modulename, Import)
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(cancel-list-choice(Modulename))
+  )
+endlet
+
+process RemoveImportAction(Modulename: str) is
+let
+  Id: int,
+  Import: str,
+  Options: list
+in
+  Id := process-id
+  . snd-msg(get-imported-modules(Modulename))
+  . rec-msg(imported-modules(Options?))
+  . snd-msg(show-list-choice(Modulename, "Choose an import to remove", Options))
+  .
+  (
+    rec-msg(list-choice(Modulename, Import?))
+    . snd-note(ui-status(statf(Id, "Removing import %s from %s",
+                               [Import, Modulename])))
+    . RemoveImport(Modulename, Import)
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(cancel-list-choice(Modulename))
+  )
+endlet
+
+#endif
+#endif /*__SDF_ACTIONS__*/
