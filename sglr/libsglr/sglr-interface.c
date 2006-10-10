@@ -209,6 +209,35 @@ ATerm SGparseFile(const char *prgname,
   return (ATerm) ret;
 }
 
+ATerm SGparseStringWithLoadedTable(const char *prgname, 
+		  language L, 
+		  const char *input,
+		  const char *topSort, 
+		  const char *path)
+{
+  forest ret;
+  parse_table *pt;
+
+  SG_Validate("SGparseFile");
+  if ((pt = SG_LookupParseTable(L, path)) == NULL) {
+    IF_VERBOSE(ATwarning("no such parse table (%s)\n", 
+			 SG_SAFE_LANGUAGE(L)));
+    return NULL;
+  }
+
+  SG_theText = strdup(input);
+  SG_textIndex = 0;
+  SG_textEnd = strlen(SG_theText);
+
+  if (topSort != NULL && *topSort == '\0') {
+    topSort = NULL;
+  }
+  
+  ret = SG_Parse(path, pt, topSort, SG_GetChar, SG_textEnd);
+  SG_Free(SG_theText);
+  return (ATerm) ret;
+}
+
 /*
  Opening a file for writing and write a term to it.
  */

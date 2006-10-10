@@ -76,6 +76,8 @@ ATerm SGparseFile(const char *prgname, language L, const char *G, const char *FN
 ATerm SGparseFileUsingTable(const char *prg, const char *tbl, const char *sort,
                             const char *in, const char *out);
 
+ATerm SGparseStringWithLoadedTable(const char *prgname, language L, const char *input, const char *topSort, const char *path);
+
 ATbool SGisParseTree(ATerm t);
 ATbool SGisParseError(ATerm t);
 
