@@ -29,6 +29,11 @@
     </authorgroup>
   </info>
 
+  <warning>
+    <para>This document is in transition between Meta-Environemtn V1.5 and
+    V2.0.</para>
+  </warning>
+
   <section>
     <title>An Introduction to ASF+SDF</title>
 
@@ -47,7 +52,7 @@
     representation of) text and introduces user-defined notation in
     specifications. ASF+SDF is therefore a modular specification formalism for
     the integrated definition of syntax and semantics of a (programming)
-    language. Other views on ASF+SDF are: </para>
+    language. Other views on ASF+SDF are:</para>
 
     <itemizedlist>
       <listitem>
@@ -134,7 +139,7 @@ equations
       sections of <replaceable>M</replaceable> and
       <replaceable>M</replaceable><literal>.asf</literal> contains the
       equations section of <replaceable>M</replaceable>. \index{compound
-      module name@compound module name} </para>
+      module name@compound module name}</para>
 
       <para>A <literal>&lt;ModuleName&gt;</literal> is either a simple
       <literal>&lt;ModuleId&gt;</literal> or a
@@ -148,7 +153,7 @@ equations
       <literal>basic</literal>. \index{exports section@{\tt exports} section}
       \index{hiddens section@{\tt hiddens} section}</para>
 
-      <para> An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
+      <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
       <emphasis>export section</emphasis> or a <emphasis>hidden
       section</emphasis>. The former starts with the keyword
       <literal>exports</literal> and makes all entities in the section visible
@@ -159,7 +164,7 @@ equations
   &lt;Grammar&gt;+</programlisting>or<programlisting>hiddens
   &lt;Grammar&gt;+
 </programlisting> A <literal>&lt;Grammar&gt;</literal> can be a definition of
-      one of the following: </para>
+      one of the following:</para>
 
       <itemizedlist>
         <listitem>
@@ -220,11 +225,11 @@ equations
         </listitem>
 
         <listitem>
-          <para> <link linkend="Disambiguation">Disambiguation</link>.</para>
+          <para><link linkend="Disambiguation">Disambiguation</link>.</para>
         </listitem>
 
         <listitem>
-          <para> <link linkend="ParametersRenamings">Parameterization and
+          <para><link linkend="ParametersRenamings">Parameterization and
           Renamings</link>.</para>
         </listitem>
 
@@ -244,7 +249,7 @@ equations
     <section xml:id="SdfComment">
       <title>SDF comment convention</title>
 
-      <para>\index{Sdf comment@\sdf\ comment} </para>
+      <para>\index{Sdf comment@\sdf\ comment}</para>
 
       <para>The comment convention within an SDF specification is that
       characters between <literal>%%</literal> and the end of line is comment
@@ -278,7 +283,7 @@ exports
     <section xml:id="Imports">
       <title>Imports</title>
 
-      <para> \index{imports@{\tt imports}} \index{{\tt
+      <para>\index{imports@{\tt imports}} \index{{\tt
       &lt;ImportSection&gt;}@{\tt &lt;ImportSection&gt;} Each
       <literal>&lt;ImportSection&gt;</literal> starts with the keyword
       <literal>imports</literal> followed by zero or more module names:
@@ -321,7 +326,7 @@ exports
           <para><emphasis>literal</emphasis>: corresponds to a terminal, e.g.,
           <literal>"true"</literal> or <literal>"\&amp;"</literal>. Terminals
           must always be quoted, also the terminals consisting of only
-          letters. </para>
+          letters.</para>
         </listitem>
 
         <listitem>
@@ -333,7 +338,7 @@ exports
         </listitem>
       </itemizedlist>
 
-      <para> Starting with the elementary symbols, more complex symbols can be
+      <para>Starting with the elementary symbols, more complex symbols can be
       constructed by way of the following operators. Examples of the use of
       the various operators will be given in the sections <link
       linkend="LexicalSyntax">Lexical Syntax</link> and <link
@@ -345,7 +350,7 @@ exports
         <para>\index{option operator@option operator} \index{{\tt ?}@{\tt
         ?}}</para>
 
-        <para> The postfix option operator <literal>?</literal> describes an
+        <para>The postfix option operator <literal>?</literal> describes an
         optional part in a syntax rule. For instance,
         <literal>ElsePart?</literal> defines zero or exactly one occurrence of
         <literal>ElsePart</literal>.</para>
@@ -357,7 +362,7 @@ exports
         <para>\index{sequence operator@sequence operator} \index{{\tt
         (...)}@{\tt (...)}}</para>
 
-        <para> The sequence operator <literal>(...)</literal> describes the
+        <para>The sequence operator <literal>(...)</literal> describes the
         grouping of two or more symbols, e.g., <literal>(Bool
         "\&amp;")</literal>. Sequences are mostly used to group symbols
         together to form a more complex symbol using one of the available
@@ -369,11 +374,11 @@ exports
       <section xml:id="RepetitionOperator">
         <title>Repetition</title>
 
-        <para> \index{repetition operator@repetition operator}
+        <para>\index{repetition operator@repetition operator}
         \index{list@list} \index{{\tt *}@{\tt *}} \index{{\tt +}@{\tt
         +}}</para>
 
-        <para> Repetition operators express that a symbol should occur several
+        <para>Repetition operators express that a symbol should occur several
         times. In this way it is possible to construct flat lists and
         therefore we usually refer to repetitions as \emph{lists}. Repetition
         operators come in two flavors, with and without separators.
@@ -393,7 +398,7 @@ exports
           </listitem>
         </itemizedlist>
 
-        <para> In case of a separated list the element can be an arbitrary
+        <para>In case of a separated list the element can be an arbitrary
         symbol, but the separator can only be a plain literal. It is possible
         to write, for instance <literal>{Int Bool\}*</literal> or
         <literal>{Int (","|";")}*</literal>, but the <link
@@ -407,10 +412,10 @@ exports
       <section xml:id="AlternativeOperator">
         <title>Alternative</title>
 
-        <para> \index{alternative operator@alternative operator} \index{{\tt
+        <para>\index{alternative operator@alternative operator} \index{{\tt
         |}@{\tt |}</para>
 
-        <para> The alternative operator <literal>|</literal> expresses the
+        <para>The alternative operator <literal>|</literal> expresses the
         choice between two symbols, e.g., <literal>"true" | "false"</literal>
         represents that either a <literal>"true"</literal> symbol or a
         <literal>"false"</literal> symbol may occur here. The alternative
@@ -425,9 +430,9 @@ exports
       <section xml:id="TupleOperator">
         <title>Tuple</title>
 
-        <para> \index{tuple operator@tuple operator}</para>
+        <para>\index{tuple operator@tuple operator}</para>
 
-        <para> The tuple operator describes the grouping of a sequence of
+        <para>The tuple operator describes the grouping of a sequence of
         symbols of a fixed length into a tuple. The notation for tuples is
         <literal>&lt; , , &gt;</literal>, i.e., a comma-separated list of
         elements enclosed in angle brackets. For example, <literal>&lt;Bool,
@@ -444,7 +449,7 @@ exports
         <para>\index{function operator@function operator} \index{{\tt
         (...=&gt;...)}@{\tt (...=&gt;...)}}</para>
 
-        <para> The function operator <literal>(...=&gt;...)</literal> allows
+        <para>The function operator <literal>(...=&gt;...)</literal> allows
         the definition of function types. Left of <literal>=&gt;</literal>
         zero or more symbols may occur, right of <literal>=&gt;</literal>
         exactly one symbol may occur. For example, <literal>(Bool Int) =&gt;
@@ -459,7 +464,7 @@ exports
         <para>\index{parameterized sort@parameterized sort} \index{{\tt
         ...[[...]]}@{\tt ...[[...]]}}</para>
 
-        <para> Sort names can have parameters. This provides a way of
+        <para>Sort names can have parameters. This provides a way of
         distinguishing a generic sort <literal>List</literal> from a list for
         integers, e.g. <literal>List[[Int]]</literal>, or one for booleans,
         e.g. <literal>List[[Bool]]</literal>. These sort parameters can be
@@ -478,7 +483,7 @@ exports
         <para>\index{lifting operator@lifting operator} \index{{\tt
         `...`}@{\tt `...`}}</para>
 
-        <para> The lifting operator <literal>`...`</literal> translates the
+        <para>The lifting operator <literal>`...`</literal> translates the
         name of an arbitrary complex symbol to a literal syntax definition of
         that name. It makes a symbol a part of the defined syntax. An example:
         <literal>`X?`</literal> defines the syntax <literal>("X"
@@ -674,7 +679,7 @@ exports
           <listitem>
             <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
             both lower-case letters and c<subscript>2</subscript> follows
-            c<subscript>1</subscript> in the alphabet, or </para>
+            c<subscript>1</subscript> in the alphabet, or</para>
           </listitem>
         </itemizedlist>
 
@@ -682,7 +687,7 @@ exports
           <listitem>
             <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
             both upper-case letters and c<subscript>2</subscript> follows
-            c<subscript>1</subscript> in the alphabet, or </para>
+            c<subscript>1</subscript> in the alphabet, or</para>
           </listitem>
         </itemizedlist>
 
@@ -690,7 +695,7 @@ exports
           <listitem>
             <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
             both digits and the numeric value of c<subscript>2</subscript> is
-            greater than that of c<subscript>1</subscript>, or </para>
+            greater than that of c<subscript>1</subscript>, or</para>
           </listitem>
         </itemizedlist>
 
@@ -707,7 +712,7 @@ exports
         upper-case letters (<literal>UCLetter</literal>), lower-case and
         upper-case letters (<literal>Letter</literal>) and digits
         (<literal>Digit</literal>) are shown in the first example <link
-        linkend="CODE_LettersDigits1">below</link>}. </para>
+        linkend="CODE_LettersDigits1">below</link>}.</para>
 
         <example xml:id="CODE_LettersDigits1">
           <title>Defining letter (lower-case and upper-case) and digit</title>
@@ -759,7 +764,7 @@ exports
 
         <itemizedlist>
           <listitem>
-            <para><literal>"</literal>: double quote </para>
+            <para><literal>"</literal>: double quote</para>
           </listitem>
 
           <listitem>
@@ -772,7 +777,7 @@ exports
 
         <itemizedlist>
           <listitem>
-            <para><literal>\n</literal>: newline character </para>
+            <para><literal>\n</literal>: newline character</para>
           </listitem>
 
           <listitem>
@@ -780,7 +785,7 @@ exports
           </listitem>
 
           <listitem>
-            <para><literal>\t</literal>: horizontal tabulation </para>
+            <para><literal>\t</literal>: horizontal tabulation</para>
           </listitem>
 
           <listitem>
@@ -812,7 +817,7 @@ exports
           </listitem>
 
           <listitem>
-            <para> <literal>\/</literal>: union of two character classes.
+            <para><literal>\/</literal>: union of two character classes.
             Accepts all characters that are accepted by either character
             class.</para>
           </listitem>
@@ -874,7 +879,7 @@ exports
 
         <para>\index{repetition operator@repetition operator}</para>
 
-        <para> Lexical tokens are often described by patterns that exhibit a
+        <para>Lexical tokens are often described by patterns that exhibit a
         certain repetition. The operator described in \link*{Repetition}[
         Section~\Ref]{RepetitionOperator} can be used to express repetitions.
         The example <link linkend="CODE_repetition">below</link> demonstrates
@@ -906,7 +911,7 @@ exports
 
         <para>\index{option operator@option operator}</para>
 
-        <para> If zero or exactly one occurrence of a lexical token is desired
+        <para>If zero or exactly one occurrence of a lexical token is desired
         the option operator described in \link*{Option}[
         Section~\Ref]{OptionOperator} can be used. The use of the option
         operator is illustrated <link linkend="CODE_option">below</link>.
@@ -939,7 +944,7 @@ exports
 
         <para>\index{alternative operator@alternative operator}</para>
 
-        <para> Functions with the same result sort together define the lexical
+        <para>Functions with the same result sort together define the lexical
         syntax of tokens for that sort. The left-hand sides of these function
         definitions form the alternatives for this function. Sometimes, it is
         more convenient to list these alternatives explicitly in a single
@@ -952,7 +957,7 @@ exports
 
         <itemizedlist>
           <listitem>
-            <para>zero or more lower-case letters, </para>
+            <para>zero or more lower-case letters,</para>
           </listitem>
 
           <listitem>
@@ -1104,42 +1109,40 @@ exports
         </example>
       </section>
     </section>
-  </section>
 
-  <!--
+    <section xml:id="ContextFreeSyntax">
+      <title>Context-free Syntax</title>
 
-\subsection{Context-free Syntax}
-\label{ContexFreeSyntax}
+      <para>The context-free syntax describes the concrete and abstract
+      syntactic structure of sentences in a language. A context-free syntax
+      contains a set of declarations for <emphasis>context-free
+      functions</emphasis>, each consisting of zero or more symbols followed
+      by <literal>-&gt;</literal> and a result symbol. They may be followed by
+      attributes that control how parentheses and brackets affect the abstract
+      syntax, by attributes that define the associativity of a rule, or by
+      <link linkend="Attributes">attributes</link> which influence the
+      rewriting process. All functions with the same result sort together
+      define the alternatives for that symbol. Elements of the left-hand side
+      of a context-free functionare separated by an invisible non-terminal
+      <literal>LAYOUT?</literal> (optional <literal>LAYOUT</literal>) in order
+      to permit layout between these members. This optional layout
+      non-terminal is automatically inserted.</para>
 
-The context-free syntax describes the concrete and abstract syntactic
-structure of sentences in a language. A context-free syntax contains a set of
-declarations for \emph{context-free functions}, each consisting of zero or
-more symbols followed by `$\rightarrow$' and a result symbol.  They may be
-followed by attributes that control how parentheses and brackets affect the
-abstract syntax, by attributes that define the associativity of a rule, or by
-\link{attributes}[ (Section~\Ref)]{Attributes} which influence the rewriting
-process.  All functions with the same result sort together define the
-alternatives for that symbol.
+      <section xml:id="ContextFreeFunctions">
+        <title>Context-free Functions</title>
 
-Elements of the left-hand side of a context-free function
-are separated by an invisible non-terminal {\tt LAYOUT?} 
-(optional {\tt LAYOUT}) in order to permit layout between these members.
-This optional layout non-terminal is automatically inserted.
+        <para>In their simplest form, declarations of context-free functions
+        consist of a sequence of zero or more symbols followed by
+        <literal>-&gt;</literal> and a result symbol. All literal strings
+        appearing in a context-free function declaration are implicitly added
+        to the lexical syntax. Consider the language of coordinates and
+        drawing commands presented <link
+        linkend="CODE_simple-cf">below</link>.</para>
 
-\subsubsection{Context-free Functions}
+        <example xml:id="CODE_simple-cf">
+          <title>Simple context-free syntax definition</title>
 
-In their simplest form, declarations of context-free functions consist of a
-sequence of zero or more symbols followed by `$\rightarrow$'
-and a result symbol. All literal strings appearing in a context-free
-function declaration are implicitly added to the lexical syntax. Consider the
-language of coordinates and drawing commands presented
-\link*{below}[in Figure~\Ref]{CODE:simple-cf}.
-
-\begin{figure}
-\begin{Label}{CODE:simple-cf}
-\begin{IncCode}
-\begin{verbatim}
-module DrawingCommands
+          <para><programlisting>module DrawingCommands
 
 imports basic/Whitespace
 
@@ -1148,75 +1151,68 @@ exports
   sorts NAT COORD CMND 
 
   lexical syntax
-    [0-9]+ -> NAT 
+    [0-9]+ -&gt; NAT 
 
   context-free syntax
-    "(" NAT "," NAT ")" -> COORD
-    "line" "to" COORD   -> CMND 
-    "move" "to" COORD   -> CMND
-\end{verbatim}
-\end{IncCode}
-\caption{Simple context-free syntax definition}
-\end{Label}
-\end{figure}   
+    "(" NAT "," NAT ")" -&gt; COORD
+    "line" "to" COORD   -&gt; CMND 
+    "move" "to" COORD   -&gt; CMND
+</programlisting></para>
+        </example>
 
+        <para>An equivalent conventional BNF grammar (and not considering
+        lexical syntax) of the <link linkend="CODE_simple-cf">above
+        grammar</link> is <link linkend="CODE_simple-bnf">as
+        follows</link>:</para>
 
-An equivalent conventional BNF grammar (and not considering lexical syntax) 
-of the \link{above grammar}[ of Figure~\Ref]{CODE:simple-cf} is
-\T presented in Figure \ref{CODE:simple-bnf}.
-\W \link{as follows}[]{CODE:simple-bnf}.
+        <example xml:id="CODE_simple-bnf">
+          <title>BNF definition of simple grammar</title>
 
-\begin{figure}
-\begin{Label}{CODE:simple-bnf}
-\begin{IncCode}
-\begin{verbatim}
-<COORD> ::= "(" <NAT> "," <NAT> ")" 
-<CMND>  ::= "line" "to" <COORD> | "move" "to" <COORD>
-\end{verbatim}
-\end{IncCode}
-\caption{BNF definition of simple grammar}
-\end{Label}
-\end{figure}   
+          <para><programlisting>&lt;COORD&gt; ::= "(" &lt;NAT&gt; "," &lt;NAT&gt; ")" 
+&lt;CMND&gt;  ::= "line" "to" &lt;COORD&gt; | "move" "to" &lt;COORD&gt;
+</programlisting></para>
+        </example>
 
-When a literal in a context-free function consists only of lower-case letters
-and digits and is not a keyword of \asfsdf, it need not be surrounded by
-quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-\link{previous definition}[ given in Figure~\Ref]{CODE:simple-cf}. But is 
-better to always write the quotes.
+        <para>When a literal in a context-free function consists only of
+        lower-case letters and digits and is not a keyword of ASF+SDF, it need
+        not be surrounded by quotes. You may therefore write <literal>move to
+        COORD -&gt; CMND</literal> instead of the <link
+        linkend="CODE_simple-cf">previous definition</link>. But is better to
+        always write the quotes.</para>
+      </section>
 
-\subsubsection{Prefix Functions}
-\label{PrefixFunctions}
+      <section xml:id="PrefixFunctions">
+        <title>Prefix Functions</title>
 
-Prefix functions are a special kind of context-free functions. They have
-a ``fix'' syntax. They can be considered as an abbreviation mechanism for
-functions written as expected. For instance the function {\tt f(X,Y) -> Z}
-is a prefix function. This function can also be defined as an ordinary
-context-free function {\tt "f" "(" X "," Y ")" -> Z}. The prefix functions
-are often used in combination with ASF equations.
+        <para>Prefix functions are a special kind of context-free functions.
+        They have a prefix syntax. They can be considered as an abbreviation
+        mechanism for functions written as expected. For instance the function
+        <literal>f(X,Y) -&gt; Z</literal> is a prefix function. This function
+        can also be defined as an ordinary context-free function <literal>"f"
+        "(" X "," Y ")" -&gt; Z</literal>. The prefix functions are often used
+        in combination with ASF equations.</para>
+      </section>
 
-\subsubsection{Lists}
+      <section xml:id="Lists">
+        <title>Lists</title>
 
-Context-free syntax often requires the description of
-the repetition of a syntactic notion or of list structures (with or without
-separators) containing a syntactic notion. The 
-\link{repetition operator}[ described in Section~\Ref]{RepetitionOperator}
-can be used for this purpose.
+        <para>Context-free syntax often requires the description of the
+        repetition of a syntactic notion or of list structures (with or
+        without separators) containing a syntactic notion. The <link
+        linkend="RepetitionOperator">repetition operator</link> can be used
+        for this purpose. Lists may be used in both the left-hand side and
+        right-hand side of a context-free function as well as in the
+        right-hand side of a <link linkend="Variables">variable
+        declaration</link>.</para>
 
-Lists may be used in both the left-hand side and right-hand side of a
-context-free function as well as in the right-hand side of a 
-\link{variable declaration}[ (see Section~\Ref)]{Variables}.
+        <para><link linkend="???">Below</link> an example is given of how
+        lists can be used to define the syntax of a list of identifiers
+        (occurring in a declaration in a Pascal-like language).</para>
 
-\T Figure \ref{CODE:pascal-ids} shows 
-\W \link{Below}[]{CODE:pascal-ids} an example is given of
-how lists can be used to define 
-the syntax of a list of identifiers (occurring in a declaration
-in a Pascal-like language).
+        <example xml:id="CODE_pascal-ids">
+          <title>Definition of a list of identifiers</title>
 
-\begin{figure}
-\begin{Label}{CODE:pascal-ids}
-\begin{IncCode}
-\begin{verbatim}
-module Decls
+          <para><programlisting>module Decls
 
 imports basic/Whitespace
 
@@ -1225,54 +1221,78 @@ exports
   sorts Id Decl Type 
 
   lexical syntax
-    [a-z]+ -> Id 
+    [a-z]+ -&gt; Id 
 
   context-free syntax
-    "decl" {Id ","}+ ":" Type -> Decl
-    "integer"                 -> Type 
-    "real"                    -> Type
-\end{verbatim}
-\end{IncCode}
-\caption{Definition of a list of identifiers}
-\end{Label}
-\end{figure}
+    "decl" {Id ","}+ ":" Type -&gt; Decl
+    "integer"                 -&gt; Type 
+    "real"                    -&gt; Type
+</programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Chain Functions}
+      <section xml:id="ChainFunctions">
+        <title>Chain Functions</title>
 
-A context-free syntax may contain functions that do not add syntax, but serve
-the sole purpose of including a smaller syntactic notion into a larger one. 
-This notion is also known as {\em injections}. 
-Injections are functions ``without a name'' and with one argument sort
-like {\tt Id -> Data}.
-A typical example is the inclusion of identifiers in expressions or of natural
-numbers in reals. Such a \emph{chain function} has one of the following forms:
+        <para>A context-free syntax may contain functions that do not add
+        syntax, but serve the sole purpose of including a smaller syntactic
+        notion into a larger one. This notion is also known as
+        <emphasis>injections</emphasis>. Injections are functions
+        <emphasis>without a name</emphasis> and with one argument sort
+        like<literal> Id -&gt; Data</literal>. A typical example is the
+        inclusion of identifiers in expressions or of natural numbers in
+        reals. Such a <emphasis>chain function</emphasis> has one of the
+        following forms:</para>
 
-\begin{itemize}
+        <itemizedlist>
+          <listitem>
+            <para><literal>SMALL -&gt; BIG</literal></para>
+          </listitem>
 
-\item {\tt SMALL -> BIG} 
-\item {\tt \{SMALL SEP\}* -> BIG} 
-\item {\tt SMALL* -> BIG} 
-\item {\tt \{SMALL SEP\}+ -> BIG} 
-\item {\tt SMALL+ -> BIG}
-\item {\tt \{SMALL SEP\}n+ -> BIG} 
-\item {\tt SMALLn+ -> BIG}
+          <listitem>
+            <para><literal>{SMALL SEP}* -&gt; BIG</literal></para>
+          </listitem>
 
-\end{itemize}
+          <listitem>
+            <para><literal>SMALL* -&gt; BIG</literal></para>
+          </listitem>
 
-Chain functions do not appear in the abstract syntax but correspond to a
-\emph{subsort relation} between {\tt SMALL} and {\tt BIG}.
-If {\tt SORT-A} is a subsort of {\tt SORT-B} then in the abstract syntax
-tree a tree of sort {\tt SORT-A} can be put wherever a tree of
-sort {\tt SORT-B} is required.
-\T In Figure~\ref{CODE:inj-exp} 
-\W In the example \link{below}[]{CODE:inj-exp}
-the symbols {\tt Nat} and {\tt Var} are injected in {\tt Exp}.
+          <listitem>
+            <para>{SMALL SEP}+ -&gt; BIG</para>
+          </listitem>
 
-\begin{figure}
-\begin{Label}{CODE:inj-exp}
-\begin{IncCode}
-\begin{verbatim}
-module Exp
+          <listitem>
+            <para><literal>SMALL+ -&gt; BIG</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{SMALL SEP}n+ -&gt; BIG </literal></para>
+          </listitem>
+
+          <listitem>
+            <para>SMALL n+ -&gt; BIG</para>
+
+            <warning>
+              <para>Last two no longer supported!</para>
+            </warning>
+          </listitem>
+        </itemizedlist>
+
+        <para> Chain functions do not appear in the abstract syntax but
+        correspond to a <emphasis>subsort relation</emphasis> between
+        <literal>SMALL</literal> and <literal>BIG</literal>. If
+        <literal>SORT-A</literal> is a subsort of <literal>SORT-B</literal>
+        then in the abstract syntax tree a tree of sort
+        <literal>SORT-A</literal> can be put wherever a tree of sort
+        <literal>SORT-B</literal> is required. In the example <link
+        linkend="CODE_inj-exp">below</link> the symbols <literal>Nat</literal>
+        and <literal>Var</literal> are injected in
+        <literal>Exp</literal>.</para>
+
+        <example xml:id="CODE_inj-exp">
+          <title>Definition of expressions that uses injections</title>
+
+          <para><programlisting>module Exp
 
 imports basic/Whitespace
 
@@ -1281,41 +1301,36 @@ exports
   sorts Nat Var Exp
 
   lexical syntax
-    [0-9]+   -> Nat
-    [XYZ]    -> Var
+    [0-9]+   -&gt; Nat
+    [XYZ]    -&gt; Var
 
   context-free syntax
-    Nat                 -> Exp
-    Var                 -> Exp
-    Exp "+" Exp         -> Exp
-\end{verbatim}
-\end{IncCode}
-\caption{Definition of expressions that uses injections}
-\end{Label}
-\end{figure}
+    Nat                 -&gt; Exp
+    Var                 -&gt; Exp
+    Exp "+" Exp         -&gt; Exp</programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Miscellaneous Operators}
+      <section xml:id="MiscellaneousOperators">
+        <title>Miscellaneous Operators</title>
 
-In \link*{Symbols}[ Section~\Ref]{Symbols}
-a number of sophisticated operators, like
-alternative, option, set, function, sequence, tuple, and permutation
-are discussed. These operators allow a concise manner of defining
-grammars. There are, however, a number of issues to be taken into consideration
-when using this operators. 
+        <para>In <link linkend="???">Symbols</link> a number of sophisticated
+        operators, like alternative, option, set, function, sequence, tuple,
+        and permutation are discussed. These operators allow a concise manner
+        of defining grammars. There are, however, a number of issues to be
+        taken into consideration when using this operators.</para>
 
-\paragraph{Definition of lists}
+        <para><emphasis role="bold">Definition of lists</emphasis> In the
+        example <link linkend="CODE_lists-usage">below</link>, two different
+        lists are defined, <literal>List1</literal> represents a list of
+        naturals separated by commas whereas <literal>List2</literal>
+        represents a list of naturals separated by commas and terminated by a
+        comma.</para>
 
-In the example \link*{below}[ in Figure~\Ref]{CODE:lists-usage},
-two different lists are defined, 
-{\tt List1} represents a list of naturals separated
-by commas whereas {\tt List2} represents a list of naturals separated by
-commas and terminated by a comma.
+        <example xml:id="CODE_lists-usage">
+          <title>Definition of two list variants</title>
 
-\begin{figure}[t]
-\begin{Label}{CODE:lists-usage}
-\begin{IncCode}
-\begin{verbatim}
-module Lists
+          <para><programlisting>module Lists
 
 imports basic/Whitespace
 
@@ -1324,36 +1339,31 @@ exports
   sorts Nat List1 List2
 
   lexical syntax
-    [0-9]+   -> Nat
+    [0-9]+   -&gt; Nat
 
   context-free syntax
-    {Nat ","}+ -> List1
-    (Nat ",")+ -> List2
-\end{verbatim}
-\end{IncCode}
-\caption{Definition of two list variants}
-\end{Label}
-\end{figure}
+    {Nat ","}+ -&gt; List1
+    (Nat ",")+ -&gt; List2</programlisting></para>
+        </example>
 
-\paragraph{Alternative alternatives}
-The choice between two symbols can be defined in two different ways: by two
-separate syntax rules or by a single syntax rule using an alternative
-operator. 
-Both styles are shown
-\link*{below}[ in Figure~\Ref]{CODE:alternative-alternatives}.
+        <para><emphasis role="bold">Alternative alternatives</emphasis></para>
 
-The definition of the binary operators {\tt "|"} and {\tt "\&"} can
-be made more concise as shown by {\tt Bool2}, however, it is now
-impossible to express that {\tt "\&"} has a higher priority
-than {\tt "|"}, see 
-\link*{Priorities}[ Section~\Ref]{Priorities}
-for more details on priority definitions.
+        <para>The choice between two symbols can be defined in two different
+        ways: by two separate syntax rules or by a single syntax rule using an
+        alternative operator. Both styles are shown <link
+        linkend="CODE_alternative-alternatives">below</link>. The definition
+        of the binary operators <literal>|</literal> and
+        <literal>&amp;</literal> can be made more concise as shown by
+        <literal>Bool2</literal>, however, it is now impossible to express
+        that <literal>&amp;</literal> has a higher priority than
+        <literal>|</literal>, see <link linkend="Priorities">Priorities</link>
+        for more details on priority definitions.</para>
 
-\begin{figure}
-\begin{Label}{CODE:alternative-alternatives}
-\begin{IncCode}
-\begin{verbatim}
-module Bool
+        <example xml:id="CODE_alternative-alternatives">
+          <title>Two ways of defining <literal>|</literal> and
+          <literal>&amp;</literal></title>
+
+          <para><programlisting>module Bool
 
 imports basic/Whitespace
 
@@ -1362,35 +1372,32 @@ exports
   sorts Bool1 Bool2
 
   context-free syntax
-    "true"                  -> Bool1
-    "false"                 -> Bool1
-    Bool1 "|" Bool1         -> Bool1 {left}
-    Bool1 "&" Bool1         -> Bool1 {left}
+    "true"                  -&gt; Bool1
+    "false"                 -&gt; Bool1
+    Bool1 "|" Bool1         -&gt; Bool1 {left}
+    Bool1 "&amp;" Bool1         -&gt; Bool1 {left}
 
-    "true" | "false"        -> Bool2
-    Bool2 ("|" | "&") Bool2 -> Bool2 {left}
-\end{verbatim}
-\end{IncCode}
-\caption{Two ways of defining {\tt |} and {\tt \&}}
-\end{Label}
-\end{figure}
+    "true" | "false"        -&gt; Bool2
+    Bool2 ("|" | "&amp;") Bool2 -&gt; Bool2 {left}</programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Lists in combination with optionals or empty producing
-sorts}
+      <section>
+        <title>Lists in combination with optionals or empty producing
+        sorts</title>
 
-The combination of lists and optionals or empty producing sorts leads to
-cycles in the parse tree. Cycles are considered parse errors.
-The parser will produce an error message whenever during parsing
-a cycle is detected. No parse tree is constructed in such a case.
-Cycles will not lead to non-termination during parsing.
-See \link*{below}[ Figure~\Ref]{CODE:listcycle}
-for an example of such a specification.
+        <para>The combination of lists and optionals or empty producing sorts
+        leads to cycles in the parse tree. Cycles are considered parse errors.
+        The parser will produce an error message whenever during parsing a
+        cycle is detected. No parse tree is constructed in such a case. Cycles
+        will not lead to non-termination during parsing. See <link
+        linkend="CODE_listcycle">below</link> for an example of such a
+        specification.</para>
 
-\begin{figure}
-\begin{Label}{CODE:listcycle}
-\begin{IncCode}
-\begin{verbatim}   
-module Cycle
+        <example xml:id="CODE_listcycle">
+          <title>Dangerous combination of lists and optionals}</title>
+
+          <para><programlisting>module Cycle
 
 imports basic/Whitespace
 
@@ -1399,32 +1406,30 @@ exports
   sorts A P T
 
   context-free syntax
-    "a"        -> A
-    A?         -> P
-    "[" P+ "]" -> T
-\end{verbatim}
-\end{IncCode}
-\caption{Dangerous combination of lists and optionals}
-\end{Label}
-\end{figure}
+    "a"        -&gt; A
+    A?         -&gt; P
+    "[" P+ "]" -&gt; T</programlisting>Sometimes commenting out parts of a
+          production rule may lead to cycles, because a non-terminal becomes
+          an empty producing non-terminal. This in combination with lists may
+          then produce unexpected cycles.</para>
+        </example>
+      </section>
 
-Sometimes commenting out parts of a production rule may lead to cycles,
-because a non-terminal becomes an empty producing non-terminal.
-This in combination with lists may then produce unexpected cycles.
+      <section>
+        <title>Labels in the left-hand side of Functions</title>
 
-\subsection{Labels in the left-hand side of Functions}
-It is possible to decorate the members in the left-hand side of a
-production rule with labels. These labels have no effect when
-parsing input terms. However, when an SDF module is used as input
-for generating APIs these labels will be used.
-See \link*{below}[ Figure~\Ref]{CODE:labels}
-for an example of an SDF specification containing labels.
+        <para> It is possible to decorate the members in the left-hand side of
+        a production rule with labels. These labels have no effect when
+        parsing input terms. However, when an SDF module is used as input for
+        generating APIs these labels will be used. See <link
+        linkend="CODE_labels">below</link> for an example of an SDF
+        specification containing labels.</para>
 
-\begin{figure}
-\begin{Label}{CODE:labels}
-\begin{IncCode}
-\begin{verbatim}   
-module Booleans
+        <example xml:id="CODE_labels">
+          <title>The module <literal>basic/Booleans</literal> decorated with
+          labels</title>
+
+          <para><programlisting>module Booleans
 
 imports basic/Whitespace
 
@@ -1433,151 +1438,200 @@ exports
   sorts Boolean
 
   context-free syntax
-    lhs:Boolean "|" rhs:Boolean -> Boolean
-    lhs:Boolean "&" rhs:Boolean -> Boolean
-\end{verbatim}
-\end{IncCode}
-\caption{The module {\tt basic/Booleans} decorated with labels}
-\end{Label}
-\end{figure}
+    lhs:Boolean "|" rhs:Boolean -&gt; Boolean
+    lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean</programlisting></para>
+        </example>
+      </section>
 
-\subsection{Attributes of Lexical and Context-free Functions}
-\label{Attributes}
+      <section xml:id="Attributes">
+        <title>Attributes of Lexical and Context-free Functions</title>
 
-\index{attribute@attribute}
-The definition of a lexical or context-free functions may be followed by
-\emph{attributes} that define additional (syntactic or semantic) properties of
-that function.  The attributes are written between curly brackets after the
-non-terminal in the right hand side. If a production rule has more than
-one attribute they are separated by commas.
-\begin{verbatim}
-context-free syntax
-   "{" {Attribute ","}* "}" -> Attributes {cons("attrs")}
-                            -> Attributes {cons("no-attrs")}
-\end{verbatim}
-The following syntax-related attributes exist:
+        <para>\index{attribute@attribute}</para>
 
-\begin{itemize}
+        <para>The definition of a lexical or context-free functions may be
+        followed by <emphasis>attributes</emphasis> that define additional
+        (syntactic or semantic) properties of that function. The attributes
+        are written between curly brackets after the non-terminal in the right
+        hand side. If a production rule has more than one attribute they are
+        separated by commas.<programlisting>context-free syntax
+   "{" {Attribute ","}* "}" -&gt; Attributes {cons("attrs")}
+                            -&gt; Attributes {cons("no-attrs")}</programlisting>
+        The following syntax-related attributes exist:</para>
 
-\index{bracket attribute@bracket attribute}
-\item {\tt bracket} allows the definitions of parenthesis and other
-kinds of brackets that are mostly used for overruling the priorities
-of operators in expressions
-(see \link*{Bracket Functions}[Section~\Ref]{BracketFunctions}).
+        <para>\index{bracket attribute@bracket attribute}</para>
 
-\index{left attribute@left attribute}
-\index{right attribute@right attribute}
-\index{non-assoc attribute@non-assoc attribute}
-\index{assoc attribute@assoc attribute}
-\item {\tt left}, {\tt right}, {\tt non-assoc}, and {\tt assoc}
-are used to define the associativity of functions 
-(see \link*{Priorities}[Section~\Ref]{Priorities}).
+        <para>\index{left attribute@left attribute} \index{right
+        attribute@right attribute} \index{non-assoc attribute@non-assoc
+        attribute}</para>
 
-\index{prefer attribute@prefer attribute}
-\item {\tt prefer} is used to indicate that the attributed function should
-always be preferred over other functions (without this attribute)
-in certain cases of syntactic ambiguity
-(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+        <para>\index{assoc attribute@assoc attribute}</para>
 
-\index{avoid attribute@avoid attribute}
-\item {\tt avoid} is used to indicate that a function should
-only be used as a last resort in certain cases of
-syntactic ambiguity
-(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+        <para>\index{prefer attribute@prefer attribute}</para>
 
-\index{reject attribute@reject attribute}
-\item {\tt reject} can be used to explicitly forbid certain syntactic
-  constructs
-  (see  \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+        <para>index{avoid attribute@avoid attribute}</para>
 
+        <para>\index{reject attribute@reject attribute}</para>
 
-\end{itemize}
+        <itemizedlist>
+          <listitem>
+            <para> <literal>bracket</literal> allows the definitions of
+            parenthesis and other kinds of brackets that are mostly used for
+            overruling the priorities of operators in expressions (see <link
+            linkend="BracketFunctions">Bracket Functions</link>).</para>
+          </listitem>
 
-\noindent The remaining attributes define semantic properties of a function:
+          <listitem>
+            <para><literal>left</literal>, <literal>right</literal>,
+            <literal>non-assoc</literal>, and <literal>assoc</literal> are
+            used to define the associativity of functions (see <link
+            linkend="Priorities">Priorities</link>).</para>
+          </listitem>
 
-\begin{itemize}
+          <listitem>
+            <para><literal>prefer</literal> is used to indicate that the
+            attributed function should always be preferred over other
+            functions (without this attribute) in certain cases of syntactic
+            ambiguity (see <link linkend="PreferAvoidReject">Preferring,
+            Avoiding or Rejecting Parses</link>).</para>
+          </listitem>
 
-\index{constructor attribute@constructor attribute}
-\item {\tt constructor} declares a function to be a \emph{constructor
-function}, this means that for this function \emph{no} equations
-may be defined with this function as outermost function symbol
-in the left hand side.
+          <listitem>
+            <para><literal>avoid</literal> is used to indicate that a function
+            should only be used as a last resort in certain cases of syntactic
+            ambiguity (see <link linkend="PreferAvoidReject">Preferring,
+            Avoiding or Rejecting Parses}</link>).</para>
+          </listitem>
 
-\index{memo attribute@memo attribute}
-\item {\tt memo} declares a function to be a \emph{memo function} for
-which all calls and results will be cached during evaluation
-(see \link*{Memo Functions}[Section~\Ref]{MemoFunctions}).
+          <listitem>
+            <para><literal>reject</literal> can be used to explicitly forbid
+            certain syntactic construct (see <link
+            linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+            Parses</link>).</para>
+          </listitem>
+        </itemizedlist>
 
-%%\item {\tt delay} is used to influence the evaluation order of the
-%%arguments of a function (Section~\ref{Delay}).
+        <para>The remaining attributes define semantic properties of a
+        function:</para>
 
-\index{traversal attribute@traversal attribute}
-\item {\tt traversal} is used to declare so-called traversal functions
-that greatly simply the specification of functions that have to visit
-(parts of) a term 
-(see \link*{Traversal Functions}[Section~\Ref]{Traversal}).
+        <para>\index{constructor attribute@constructor attribute}</para>
 
-\index{ATerm attribute@ATerm attribute}
-\item arbitrary ATerms may also be used as attributes. In the context-free
-syntax definition of the {\tt Attributes}, the ATerms {\tt cons("attrs")}
-and {\tt cons("no-attrs")} are used. The {\tt cons} attribute is used by
-other tools, such as ApiGen.
-\end{itemize}
+        <para>\index{memo attribute@memo attribute}</para>
 
-Not all combinations of attributes make sense. If one uses the attribute
-{\tt left} in combination with {\tt bracket}, {\tt right}, {\tt assoc}
-or {\tt non-assoc}, this will result in an error message. The combination
-of {\tt avoid} and {\tt prefer} does not make sense either.
-Furthermore, the combination of the traversal attributes is also very strict.
+        <para>\index{traversal attribute@traversal attribute}</para>
 
-\subsection{Priorities}
-\label{Priorities}
+        <para>\index{ATerm attribute@ATerm attribute}</para>
 
-\index{priorities@priorities}
-The context-free syntax defined in an ASF+SDF specification may be 
-ambiguous: there are sentences which have more than one associated tree. 
-The common example is the arithmetic expression in which definitions 
-of the priority or associativity of operators are missing. There are 
-three mechanisms for defining associativity and priority:
+        <itemizedlist>
+          <listitem>
+            <para><literal>constructor</literal> declares a function to be a
+            <emphasis>constructor function</emphasis>, this means that for
+            this function <emphasis>no</emphasis> equations may be defined
+            with this function as outermost function symbol in the left hand
+            side.</para>
+          </listitem>
 
-\begin{itemize}
-  
-\item \link{Relative priorities of functions}[ (see Section~\Ref)]{RelativePriorities}
-  defined in the {\tt context-free priorities} section.
+          <listitem>
+            <para><literal>memo</literal> declares a function to be a
+            <emphasis>memo function</emphasis> for which all calls and results
+            will be cached during evaluatio (see <link
+            linkend="MemoFunctions">Memo Functions</link>).</para>
+          </listitem>
 
-\index{associativity@associativity}
-\item \link{Associativity of functions}[ (see Section~\Ref)]{AssociativeFunctions}
- defined as attributes following the function declaration.
-  
-\item \link{Associativity of groups of functions}[ (see Section~\Ref)]{GroupAssoc}
-  defined in the {\tt context-free priorities} section.
+          <listitem>
+            <para> <literal>traversal</literal> is used to declare so-called
+            traversal functions that greatly simply the specification of
+            functions that have to visit (parts of) a term (see <link
+            linkend="TraversalFunctions">Traversal Functions</link>).</para>
+          </listitem>
 
-\end{itemize}
+          <listitem>
+            <para>Arbitrary ATerms may also be used as attributes. In the
+            context-free syntax definition of the
+            <literal>Attributes</literal>, the ATerms
+            <literal>cons("attrs")</literal> and
+            <literal>cons("no-attrs")</literal> are used. The
+            <literal>cons</literal> attribute is used by other tools, such as
+            <productname>ApiGen</productname>.</para>
+          </listitem>
+        </itemizedlist>
 
-Closely related with priorities are brackets that can be used to
-overrule priorities.  We will first describe bracket functions,
-and then the various methods for defining priorities.
+        <warning>
+          <para>%%\item {\tt delay} is used to influence the evaluation order
+          of the %%arguments of a function (Section~\ref{Delay}).</para>
+        </warning>
 
-\subsubsection{Bracket Functions}
-\label{BracketFunctions}
+        <para>Not all combinations of attributes make sense. If one uses the
+        attribute <literal>left</literal> in combination with
+        <literal>bracket</literal>, <literal>right</literal>,
+        <literal>assoc</literal> or <literal>non-assoc</literal>, this will
+        result in an error message. The combination of
+        <literal>avoid</literal> and <literal>prefer</literal> does not make
+        sense either. Furthermore, the combination of the traversal attributes
+        is also very strict.</para>
+      </section>
+    </section>
 
-\index{bracket functions@bracket functions}
-A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
-and $close$ are literals acting as opening and closing parenthesis for sort
-$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions.
-In most cases, such brackets are only
-introduced for grouping and disambiguation, but have no further meaning. By
-adding the attribute {\tt bracket} to the function declaration, it will not be
-included in the abstract syntax.
-The definition of a bracket function for the sort {\tt Expr} 
-is given
-\link*{below}[ in Figure~\Ref]{CODE:bracket-expr}.
+    <section xml:id="Priorities">
+      <title>Priorities</title>
 
-\begin{figure}
-\begin{Label}{CODE:bracket-expr}
-\begin{IncCode}
-\begin{verbatim}
-module BracketExpr
+      <para>\index{priorities@priorities}</para>
+
+      <para> The context-free syntax defined in an ASF+SDF specification may
+      be ambiguous: there are sentences which have more than one associated
+      tree. The common example is the arithmetic expression in which
+      definitions of the priority or associativity of operators are missing.
+      There are three mechanisms for defining associativity and
+      priority:</para>
+
+      <para>\index{associativity@associativity}</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="RelativePriorities">Relative priorities of
+          functions </link>defined in the <literal>context-free
+          priorities</literal> section.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="AssociativeFunctions">Associativity of
+          functions</link> defined as attributes following the function
+          declaration.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="GroupAssoc">Associativity of groups of
+          functions</link> defined in the <literal>context-free
+          priorities</literal> section.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Closely related with priorities are brackets that can be used to
+      overrule priorities. We will first describe bracket functions, and then
+      the various methods for defining priorities.</para>
+
+      <section xml:id="BracketFunctions">
+        <title>Bracket Functions</title>
+
+        <para>\index{bracket functions@bracket functions}</para>
+
+        <para> A bracket function has the form <replaceable>open</replaceable>
+        <replaceable>S</replaceable> <replaceable>close</replaceable>
+        <literal>-&gt;</literal> <replaceable>S</replaceable> where
+        <replaceable>open</replaceable> and <replaceable>close</replaceable>
+        are literals acting as opening and closing parenthesis for sort
+        <replaceable>S</replaceable>. Examples are <literal>(</literal> and
+        <literal>)</literal> in arithmetic expressions. In most cases, such
+        brackets are only introduced for grouping and disambiguation, but have
+        no further meaning. By adding the attribute <literal>bracket</literal>
+        to the function declaration, it will not be included in the abstract
+        syntax. The definition of a bracket function for the sort
+        <literal>Expr</literal> is given <link
+        linkend="CODE_bracket-expr">below</link>.</para>
+
+        <example xml:id="CODE_bracket-expr">
+          <title>Syntax definition with a bracket function</title>
+
+          <para><programlisting>module BracketExpr
 
 imports basic/Whitespace
 imports basic/NatCon
@@ -1587,89 +1641,120 @@ exports
   sorts E
 
   context-free syntax
-    NatCon    -> E
-    "(" E ")" -> E {bracket}
-\end{verbatim}
-\end{IncCode}
-\caption{Syntax definition with a bracket function}
-\end{Label}
-\end{figure}
+    NatCon    -&gt; E
+    "(" E ")" -&gt; E {bracket}</programlisting></para>
+        </example>
 
-Since brackets are necessary for overruling the priority and associativity of
-functions,  it is required that bracket 
-functions are declared for the argument and result sorts of
+        <para>Since brackets are necessary for overruling the priority and
+        associativity of functions, it is required that bracket functions are
+        declared for the argument and result sorts of</para>
 
-\begin{itemize}
+        <itemizedlist>
+          <listitem>
+            <para>all functions appearing in priority declarations, and</para>
+          </listitem>
 
-\item all functions appearing in priority declarations, and
-  
-\item all functions having one of the attributes {\tt left}, {\tt right}, 
-{\tt assoc}, or {\tt non-assoc}.
+          <listitem>
+            <para>all functions having one of the attributes
+            <literal>left</literal>, <literal>right</literal>,
+            <literal>assoc</literal>, or <literal>non-assoc</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
 
-\end{itemize}
+      <section xml:id="RelativePriorities">
+        <title>Relative Priorities</title>
 
-\subsubsection{Relative Priorities}
-\label{RelativePriorities}
+        <para>\index{relative priorities@relative priorities}</para>
 
-\index{relative priorities@relative priorities}
-The relative priority of two functions is defined 
-in the `{\tt context-free priorities}' section 
-by including {\tt $F$ > $G$},
-where $F$ and $G$ are 
-as written in the context-free grammar. Functions with a higher 
-priority bind more strongly than functions with lower priorities and 
-the nodes corresponding to them should
-thus appear at lower levels in the tree than nodes corresponding to functions
-with lower priorities. Lists of functions may be used in a priority
-declaration: {\tt $F$ > \{$G$, $H$\}} is an 
-abbreviation for {\tt $F$ > $G$, $F$ > $H$}.
-Note that this tells us nothing about the priority relation between $G$ and $H$. 
+        <para> The relative priority of two functions is defined in the
+        <literal>context-free priorities</literal> section by
+        including<replaceable> F</replaceable> <literal>&gt;</literal>
+        <replaceable>G</replaceable>, where <replaceable>F</replaceable> and
+        <replaceable>G</replaceable> are as written in the context-free
+        grammar. Functions with a higher priority bind more strongly than
+        functions with lower priorities and the nodes corresponding to them
+        should thus appear at lower levels in the tree than nodes
+        corresponding to functions with lower priorities. Lists of functions
+        may be used in a priority declaration: <replaceable>F</replaceable>
+        <literal>&gt;
+        {</literal><replaceable>G</replaceable><literal>,</literal>
+        <replaceable>H</replaceable><literal>}</literal> is an abbreviation
+        for <replaceable>F</replaceable> <literal>&gt;
+        </literal><replaceable>G</replaceable><literal>,</literal>
+        <replaceable>F</replaceable> <literal>&gt;</literal>
+        <replaceable>H</replaceable>. Note that this tells us nothing about
+        the priority relation between <replaceable>G</replaceable> and
+        <replaceable>H</replaceable>. </para>
+      </section>
 
-\subsubsection{Associative Functions}
-\label{AssociativeFunctions}
+      <section xml:id="AssociativeFunctions">
+        <title>Associative Functions</title>
 
-\index{associativity functions@associativity functions}
-Associativity attributes can be attached to binary functions of the form 
-`{\tt $S$ $op$ $S$ -> $S$}', where $op$ is a symbol or empty. 
-Without associativity attributes, nested occurrences of such 
-functions immediately lead to ambiguities, as is shown by the 
-sentence `{\tt S-string op S-string op S-string}' where 
-`{\tt S-string}' is a string produced by symbol $S$. 
-The particular associativity 
-associated with $op$ determines the intended interpretation of such sentences.
-  
-We call two occurrences of functions $F$ and $G$ \emph{related}, when the node
-corresponding to $F$ has a node corresponding to $G$ as first or last child.
-The associativity attributes define how to accept or reject trees containing
-related occurrences of the same function, $F$:
+        <para>\index{associativity functions@associativity functions}</para>
 
-\begin{itemize}
+        <para> Associativity attributes can be attached to binary functions of
+        the form <replaceable>S</replaceable>
+        <literal><replaceable>op</replaceable></literal>
+        <replaceable>S</replaceable> <literal>-&gt;</literal>
+        <replaceable>S</replaceable>, where
+        <literal><replaceable>op</replaceable></literal> is a symbol or empty.
+        Without associativity attributes, nested occurrences of such functions
+        immediately lead to ambiguities, as is shown by the sentence
+        <replaceable>S-string</replaceable>
+        <literal><replaceable>op</replaceable></literal>
+        <replaceable>S-string</replaceable>
+        <literal><replaceable>op</replaceable></literal>
+        <replaceable>S-string</replaceable> where
+        <replaceable>S-string</replaceable> is a string produced by symbol
+        <replaceable>S</replaceable>. The particular associativity associated
+        with <replaceable>op</replaceable> determines the intended
+        interpretation of such sentences. We call two occurrences of functions
+        <replaceable>F</replaceable> and <replaceable>G</replaceable>
+        <emphasis>related</emphasis>, when the node corresponding to
+        <replaceable>F</replaceable> has a node corresponding to
+        <replaceable>G</replaceable> as first or last child. The associativity
+        attributes define how to accept or reject trees containing related
+        occurrences of the same function, <replaceable>F</replaceable>:</para>
 
-\item {\tt left}: related occurrences of $F$ associate from left to right. 
+        <itemizedlist>
+          <listitem>
+            <para><literal>left</literal>: related occurrences of
+            <replaceable>F</replaceable> associate from left to right. </para>
+          </listitem>
 
-\item {\tt right}: related occurrences of $F$ associate from right to left. 
+          <listitem>
+            <para><literal>right</literal>: related occurrences of
+            <replaceable>F</replaceable> associate from right to left. </para>
+          </listitem>
 
-\item{\tt  assoc}: related occurrences of $F$ associate from left to right.
+          <listitem>
+            <para><literal>assoc</literal>: related occurrences of
+            <replaceable>F</replaceable> associate from left to right.</para>
+          </listitem>
 
-\item {\tt non-assoc}: related occurrences of $F$ are not allowed.
+          <listitem>
+            <para><literal>non-assoc</literal>: related occurrences of
+            <replaceable>F</replaceable> are not allowed.</para>
+          </listitem>
+        </itemizedlist>
 
-\end{itemize}
+        <para>Currently, there is no syntactic or semantic difference between
+        <literal>left</literal> and <literal>assoc</literal>, but we may
+        change the semantics of the assoc attribute in the future.</para>
 
-Currently, there is no syntactic or semantic difference between `{\tt left}'
-and `{\tt assoc}', but we may change the semantics of the `{\tt assoc}'
-attribute in the future.
+        <warning>
+          <para>Really?</para>
+        </warning>
 
-\T Figure \ref{CODE:simple-prio} gives 
-\W \link{Below}[]{CODE:simple-prio} we give
-an example of a definition of
-simple arithmetic expressions with the usual priorities and
-associativities.
+        <para><link linkend="???">Below</link> we give an example of a
+        definition of simple arithmetic expressions with the usual priorities
+        and associativities.</para>
 
-\begin{figure}
-\begin{Label}{CODE:simple-prio}
-\begin{IncCode}
-\begin{verbatim}
-module SimpleExpr
+        <example xml:id="CODE_simple-prio">
+          <title>Simple context-free priority definition</title>
+
+          <para><programlisting>module SimpleExpr
 
 imports basic/Whitespace
 imports basic/NatCon
@@ -1679,46 +1764,58 @@ exports
   sorts E 
 
   context-free syntax
-    NatCon    -> E
-    E "+" E   -> E {left}
-    E "*" E   -> E {left}
-    "(" E ")" -> E {bracket}
+    NatCon    -&gt; E
+    E "+" E   -&gt; E {left}
+    E "*" E   -&gt; E {left}
+    "(" E ")" -&gt; E {bracket}
 
   context-free priorities
-    E "*" E -> E > 
-    E "+" E -> E
-\end{verbatim}
-\end{IncCode}
-\caption{Simple context-free priority definition}
-\end{Label}
-\end{figure}   
+    E "*" E -&gt; E &gt; 
+    E "+" E -&gt; E
+</programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Groups of Associative Functions}
-\label{GroupAssoc}
+      <section xml:id="GroupAssoc">
+        <title>Groups of Associative Functions</title>
 
-\index{associativity groups@associativity groups}
-Groups of associative functions define how to accept or reject trees
-containing related occurrences of different functions with the same priority.
-They are defined by prefixing a list of context-free functions in a priority
-declaration with one of the following attributes:
+        <para>\index{associativity groups@associativity groups}</para>
 
-\begin{itemize}
+        <para>Groups of associative functions define how to accept or reject
+        trees containing related occurrences of different functions with the
+        same priority. They are defined by prefixing a list of context-free
+        functions in a priority declaration with one of the following
+        attributes:</para>
 
-\item {\tt left}: related occurrences of $F$ and $G$ associate from left to right. 
-\item {\tt right}: related occurrences of $F$ and $G$ associate from right to left.
-\item {\tt non-assoc}: related occurrences of $F$ and $G$ are not allowed.
+        <itemizedlist>
+          <listitem>
+            <para><literal>left</literal>: related occurrences of
+            <replaceable>F</replaceable> and <replaceable>G</replaceable>
+            associate from left to right. </para>
+          </listitem>
 
-\end{itemize}
+          <listitem>
+            <para><literal>right</literal>: related occurrences of
+            <replaceable>F</replaceable> and <replaceable>G</replaceable>
+            associate from right to left.</para>
+          </listitem>
 
-\noindent where $F$ and $G$ are functions appearing in the list.
-\link*{below}[ Figure~\Ref]{CODE:complex-prio},
-an example of the use of grouped associativity.
+          <listitem>
+            <para><literal>non-assoc</literal>: related occurrences of
+            <replaceable>F</replaceable> and <replaceable>G</replaceable> are
+            not allowed.</para>
+          </listitem>
+        </itemizedlist>
 
-\begin{figure}
-\begin{Label}{CODE:complex-prio}
-\begin{IncCode}
-\begin{verbatim}
-module ComplexExpr
+        <para>where <replaceable>F</replaceable> and
+        <replaceable>G</replaceable> are functions appearing in the list.
+        <link linkend="CODE_complex-prio">Below</link> is an example of the
+        use of grouped associativity.</para>
+
+        <example xml:id="CODE_complex-prio">
+          <title>More complex associativity and priority definitions</title>
+
+          <para><programlisting>module ComplexExpr
 
 imports basic/Whitespace
 imports basic/NatCon
@@ -1729,91 +1826,85 @@ exports
   sorts E 
 
   context-free syntax
-    NatCon    -> E
-    E "+" E   -> E {left}
-    E "-" E   -> E {non-assoc}
-    E "*" E   -> E {left}
-    E "/" E   -> E {non-assoc}
-    E "^" E   -> E {right}
-    "(" E ")" -> E {bracket}
+    NatCon    -&gt; E
+    E "+" E   -&gt; E {left}
+    E "-" E   -&gt; E {non-assoc}
+    E "*" E   -&gt; E {left}
+    E "/" E   -&gt; E {non-assoc}
+    E "^" E   -&gt; E {right}
+    "(" E ")" -&gt; E {bracket}
 
   context-free priorities
-    E "^" E -> E > 
-    {non-assoc: E "*" E -> E
-                E "/" E -> E} >
-    {left: E "+" E -> E
-           E "-" E -> E}
-\end{verbatim}
-\end{IncCode}
-\caption{More complex associativity and priority definitions}
-\end{Label}
-\end{figure}   
+    E "^" E -&gt; E &gt; 
+    {non-assoc: E "*" E -&gt; E
+                E "/" E -&gt; E} &gt;
+    {left: E "+" E -&gt; E
+           E "-" E -&gt; E} </programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Restrictions}
-\label{Restrictions}
-\label{ContextFreeRestrictions}
-\label{LexicalRestrictions}
+      <section xml:id="Restrictions">
+        <title>Restrictions</title>
 
-\index{restrictions@restrictions}
-\index{lexical restrictions@lexical restrictions}
-\index{context-free restrictions@context-free restrictions}
-\index{{\tt -/-}@{\tt -/-}}
-\index{{\tt <Lookaheads>}@{\tt <Lookaheads>}}
-Lexical syntax can be highly ambiguous.  Consider 
-a simple lexical definition for identifiers
-like the one given \link{earlier}[ in Figure~\Ref]{CODE:repetition}.
-When recognizing the text {\tt abc}, what should we return: {\tt a}, {\tt ab}
-or, {\tt abc}? 
-We discuss the strategy \emph{Prefer Longest Match} for
-resolving this kind of ambiguity in
-\link*{Lexical Ambiguities}[ Section~\Ref]{lex-ambiguity}.
+        <para> \index{restrictions@restrictions} \index{lexical
+        restrictions@lexical restrictions} \index{context-free
+        restrictions@context-free restrictions} \index{{\tt -/-}@{\tt -/-}}
+        \index{{\tt &lt;Lookaheads&gt;}@{\tt &lt;Lookaheads&gt;}}</para>
 
-Here, we describe the notion of \emph{restrictions} that enable the formulation
-of this and other lexical disambiguation strategies.
+        <para> Lexical syntax can be highly ambiguous. Consider a simple
+        lexical definition for identifiers like the one given <link
+        linkend="CODE_repetition">earlier</link>. When recognizing the text
+        <literal>abc</literal>, what should we return: <literal>a</literal>,
+        <literal>ab</literal> or, <literal>abc</literal>? We discuss the
+        strategy <emphasis>Prefer Longest Match</emphasis> for resolving this
+        kind of ambiguity in <link linkend="lex-ambiguity">Lexical
+        Ambiguities</link>}. Here, we describe the notion of
+        <emphasis>restrictions</emphasis> that enable the formulation of this
+        and other lexical disambiguation strategies. A restriction limits the
+        <emphasis>lookahead</emphasis> for a given symbol; it indicates that a
+        symbol may not be followed by a character from a given character
+        class. A lookahead may consist of more than one character class.
+        Restrictions come in two flavors:</para>
 
-A restriction limits the \emph{lookahead} for a given symbol; it indicates
-that a symbol may not be followed by a character from a given character class.
-A lookahead may consist of more than one character class.  Restrictions come
-in two flavors:
+        <itemizedlist>
+          <listitem>
+            <para>lexical restrictions;</para>
+          </listitem>
 
-\begin{itemize}
-\item lexical restrictions;
-\item context-free restrictions.
-\end{itemize}
+          <listitem>
+            <para> context-free restrictions.</para>
+          </listitem>
+        </itemizedlist>
 
-\noindent The general form of a restriction is 
+        <para>The general form of a restriction is:<programlisting>&lt;Symbol&gt;+ -/- &lt;Lookaheads&gt;</programlisting>In
+        case of lexical restrictions <literal>&lt;Symbol&gt;</literal> may be
+        either a literal or sort. In case of context-free restrictions only a
+        sort or symbol is allowed. The restriction operator
+        <literal>-/-</literal> should be read as <emphasis>may not befollowed
+        by</emphasis>. Before the restriction operator <literal>-/-</literal>
+        a list of symbols is given for which the restriction holds.</para>
 
-\begin{verbatim}
-<Symbol>+ -/- <Lookaheads>
-\end{verbatim}
- 
-\noindent In case of lexical restrictions {\tt <Symbol>} may be   
-either a literal or sort.  
-In case of context-free restrictions only a sort or symbol is allowed.
-The restriction operator {\tt -/-} should be read as ``may not be
-followed by''.
-Before the restriction operator {\tt -/-} a list of symbols
-is given for which the restriction holds.
- 
-In the example\footnote{Taken from~\cite{Vis97}}
-\link*{below}[ in Figure~\Ref]{CODE:functional}
-both {\tt let} and {\tt in} may not be followed by a letter.
-This example shows how lexical restrictions can be used to prevent
-the recognition of erroneous expressions in a small functional language.
-The lexical restriction deals with the possible confusion between
-the reserved words {\tt let} and {\tt in} and variables (of sort {\tt Var}).
-It forbids the recognition of, for instance, {\tt let} as part
-of {\tt letter}. Without this restriction {\tt letter} would be recognized
-as the keyword {\tt let} followed by the variable  {\tt ter}.
-The context-free restriction forbids that a variable is directly
-followed by a letter. It does not forbid layout characters between
-the letters, e.g. {\tt a b} is a legal recognizable string.
+        <para>In the example(taken from~\cite{Vis97}) <link
+        linkend="CODE_functional">below</link> both <literal>let</literal> and
+        <literal>in</literal> may not be followed by a letter. This example
+        shows how lexical restrictions can be used to prevent the recognition
+        of erroneous expressions in a small functional language. The lexical
+        restriction deals with the possible confusion between the reserved
+        words <literal>let</literal> and <literal>in</literal> and variables
+        (of sort <literal>Var</literal>). It forbids the recognition of, for
+        instance, <literal>let</literal> as part of <literal>letter</literal>.
+        Without this restriction <literal>letter</literal> would be recognized
+        as the keyword <literal>let</literal> followed by the variable
+        <literal>ter</literal>. The context-free restriction forbids that a
+        variable is directly followed by a letter. It does not forbid layout
+        characters between the letters, e.g. <literal>a b</literal> is a legal
+        recognizable string.</para>
 
-\begin{figure}
-\begin{Label}{CODE:functional}
-\begin{IncCode}
-\begin{verbatim}
-module Functional
+        <example xml:id="CODE_functional">
+          <title>Using restrictions in the definition of a simple functional
+          language</title>
+
+          <para><programlisting>module Functional
 
 imports basic/Whitespace
 
@@ -1821,129 +1912,106 @@ exports
   context-free start-symbols Term 
   sorts Var Term
   lexical syntax
-    [a-z]+ -> Var
+    [a-z]+ -&gt; Var
   context-free syntax
-    Var                          -> Term
-    Term Term                    -> Term {left}
-    "let" Var "=" Term "in" Term -> Term
+    Var                          -&gt; Term
+    Term Term                    -&gt; Term {left}
+    "let" Var "=" Term "in" Term -&gt; Term
 
   lexical restrictions
     "let" "in" -/- [a-z]
 
   context-free restrictions
-    Var -/- [a-z]
-\end{verbatim}
-\end{IncCode}
-\caption{Using restrictions in the definition of a simple functional language}
-\end{Label}
-\end{figure}   
+    Var -/- [a-z]  </programlisting></para>
+        </example>
 
-{\tt <Lookaheads>} are slightly more complex.  The most compact way is to
-give the SDF definition of the {\tt <Lookaheads>} and illustrate their use by
-means of some examples.
+        <para><literal>&lt;Lookaheads&gt;</literal> are slightly more complex.
+        The most compact way is to give the SDF definition of the
+        <literal>&lt;Lookaheads&gt;</literal> and illustrate their use by
+        means of some examples:</para>
 
-\begin{verbatim}
-context-free syntax
-  CharClass                    -> Lookahead
-  CharClass "." Lookaheads     -> Lookahead
-  Lookahead                    -> Lookaheads
-  Lookaheads "|" Lookaheads    -> Lookaheads {right}
-  "(" Lookaheads ")"           -> Lookaheads {bracket}
-  "[[" {Lookahead ","}* "]]"   -> Lookaheads 
-\end{verbatim}
+        <para><programlisting>context-free syntax
+  CharClass                    -&gt; Lookahead
+  CharClass "." Lookaheads     -&gt; Lookahead
+  Lookahead                    -&gt; Lookaheads
+  Lookaheads "|" Lookaheads    -&gt; Lookaheads {right}
+  "(" Lookaheads ")"           -&gt; Lookaheads {bracket}
+  "[[" {Lookahead ","}* "]]"   -&gt; Lookaheads 
+</programlisting>The next example illustrates the use of restrictions to
+        define a <emphasis>safe</emphasis> way of layout. <link
+        linkend="LexicalSyntax">Recall</link> that optional layout,
+        represented by the symbol<literal> LAYOUT?</literal>, may be
+        recognized between the members of the left-hand side of a context-free
+        syntax rule. However, if a such a member recognizes the empty string,
+        this gives rise to a <link linkend="lex-ambiguity">lexical
+        ambiguity</link>. This problem is avoided by the definition given
+        <link linkend="CODE_safe-layout">below</link>: it simply forbids that
+        optional layout is followed by layout characters.</para>
 
-The next example illustrates the use of restrictions to define a
-`safe' way of layout.  
-\link{Recall}[ from Section~\Ref]{LexicalSyntax}
-that optional layout, represented by the symbol {\tt LAYOUT?},
-may be recognized between the 
-members of the left-hand side of a context-free syntax rule.
+        <example xml:id="CODE_safe-layout">
+          <title>Safe way of defining <literal>LAYOUT</literal></title>
 
-However, if a such a member recognizes the empty string, this gives rise to a
-\link{lexical ambiguity}[ (Section~\Ref)]{lex-ambiguity}. 
-This problem is avoided by the definition 
-given \link*{below}[in Figure~\Ref]{CODE:safe-layout}:
-it simply forbids that optional layout is followed by layout characters.
-
-\begin{figure}
-\begin{Label}{CODE:safe-layout}
-\begin{IncCode}
-\begin{verbatim}
-module basic/Whitespace
+          <para><programlisting>module basic/Whitespace
 
 exports
   lexical syntax
-    [\ \t\n] -> LAYOUT
+    [\ \t\n] -&gt; LAYOUT
 
   context-free restrictions
-    LAYOUT? -/- [\ \t\n]
-\end{verbatim}
-\end{IncCode}
-\caption{Safe way of defining {\tt LAYOUT}}
-\end{Label}
-\end{figure}
+    LAYOUT? -/- [\ \t\n]</programlisting></para>
+        </example>
 
-The example shown \link*{below}[in Figure~\Ref]{CODE:c-comment}
-illustrates the
-use of restrictions to extend the previous layout definition with C-style
-comments. For readability we give here \emph{two} restrictions whereas the
-first one is already imported from 
-\link{module {\tt basic/Whitespace}}[ (Figure~\Ref)]{CODE:safe-layout}.  
-The repetition of this first restriction is
-redundant and could be eliminated.
+        <para>The example shown <link linkend="CODE_c-comment">below</link>
+        illustrates the use of restrictions to extend the previous layout
+        definition with C-style comments. For readability we give here
+        <emphasis>two</emphasis> restrictions whereas the first one is already
+        imported from <link linkend="CODE_safe-layout">module
+        basic/Whitespace</link>. The repetition of this first restriction is
+        redundant and could be eliminated.<example xml:id="CODE_c-comment">
+            <title>Definition of C comments</title>
 
-\begin{figure}
-\begin{Label}{CODE:c-comment}
-\begin{IncCode}
-\begin{verbatim}
-module Comment
+            <para><programlisting>module Comment
 
 imports basic/Whitespace
 
 exports
   sorts ComWord Comment
   lexical syntax
-    ~[\ \n\t\/]+ -> ComWord
+    ~[\ \n\t\/]+ -&gt; ComWord
 
   context-free syntax
-    "/*" ComWord* "*/" -> Comment
-    Comment            -> LAYOUT
+    "/*" ComWord* "*/" -&gt; Comment
+    Comment            -&gt; LAYOUT
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n]
-    LAYOUT? -/- [\/].[\*]
-\end{verbatim}
-\end{IncCode}
-\caption{Definition of C comments}
-\end{Label}
-\end{figure}
+    LAYOUT? -/- [\/].[\*]</programlisting></para>
+          </example></para>
 
-A frequently asked question is when to use \emph{lexical} restrictions
-and when to use \emph{context-free} restrictions. 
-In one of the \link{previous examples}[ (Figure \Ref)]{CODE:functional}
-the lexical restrictions on {\tt let} and {\tt in}
-cannot be defined using context-free restrictions
-because these keywords do not "live" at the context-free level.
-Is it possible to put a lexical restriction on {\tt Var}?
-Yes, but it will have no effect, because internally the
-lexical {\tt Var} is injected in the context-free {\tt Var}.
-The general rule is to define the restrictions always on the
-context-free level and not on the lexical level unless a situation 
-as will be discussed in the next paragraph occurs.
+        <para>A frequently asked question is when to use
+        <emphasis>lexical</emphasis> restrictions and when to use
+        <emphasis>context-free</emphasis> restrictions. In one of the <link
+        linkend="CODE_functional">previous examples</link> the lexical
+        restrictions on <filename>let</filename> and <literal>in</literal>
+        cannot be defined using context-free restrictions because these
+        keywords do not "live" at the context-free level. Is it possible to
+        put a lexical restriction on <literal>Var</literal>? Yes, but it will
+        have no effect, because internally the lexical <literal>Var</literal>
+        is injected in the context-free <literal>Var</literal>. The general
+        rule is to define the restrictions always on the context-free level
+        and not on the lexical level unless a situation as will be discussed
+        in the next paragraph occurs. The specification <link
+        linkend="CODE_restrictedexpressions">below</link> is an example of an
+        erroneous use of context-free expressions, because it prevents the
+        recognition of <literal>(abc)def</literal>. If we want to enforce the
+        correct restriction, it is necessary to transform this context-free
+        restriction into a lexical restriction.</para>
 
-The specification 
-\link*{below}[in Figure~\Ref]{CODE:restrictedexpressions} is an example of
-an erroneous use of
-context-free expressions, because it prevents the recognition of
-{\tt (abc)def}. If we want to enforce the correct restriction, it
-is necessary to transform this context-free restriction into
-a lexical restriction.
+        <example xml:id="CODE_restrictedexpressions">
+          <title>Erroneous use of restrictions in the definition of simple
+          expressions</title>
 
-\begin{figure}
-\begin{Label}{CODE:restrictedexpressions}
-\begin{IncCode}
-\begin{verbatim}
-module RestrictedExpressions
+          <para><programlisting>module RestrictedExpressions
 
 imports basic/Whitespace
 
@@ -1952,92 +2020,88 @@ exports
   sorts Expr
 
   lexical syntax
-    [a-z]+ -> Expr
+    [a-z]+ -&gt; Expr
 
   context-free syntax
-    Expr Expr    -> Expr {left}
-    "(" Expr ")" -> Expr {bracket}
+    Expr Expr    -&gt; Expr {left}
+    "(" Expr ")" -&gt; Expr {bracket}
 
   context-free restrictions
-    Expr -/- [a-z]
-\end{verbatim}
-\end{IncCode}
-\caption{Erroneous use of restrictions in the definition of simple expressions}
-\end{Label}
-\end{figure}   
+    Expr -/- [a-z]</programlisting></para>
+        </example>
+      </section>
 
+      <section xml:id="PreferAvoidReject">
+        <title>Preferring, Avoiding or Rejecting Parses</title>
 
+        <para>Priorities can be used to define a priority between two
+        functions or between two groups of functions. In both cases the
+        functions involved have to be listed explicitly in the priority
+        declaration. In certain cases, however, it is desirable to define that
+        a single rule has higher or lower priority than all other functions or
+        to explicitly reject certain syntactic constructs. The former is
+        achieved by the attributes <literal>prefer</literal> and
+        <literal>avoid</literal>. The latter by the attribute
+        <literal>reject</literal>. The use of the <literal>reject</literal>
+        attribute leads also to improvements in the performance of the parser,
+        see \cite{BSVV02} for more implementation details. If a function
+        <replaceable>F</replaceable> is attributed with
+        <literal>prefer</literal> and there is a syntactic ambiguity in which
+        it is involved, only the parse using <replaceable>F</replaceable> will
+        remain. If a function <replaceable>F</replaceable> is attributed with
+        <literal>avoid</literal> and there is no ambiguity, then
+        <replaceable>F</replaceable> will be used. If there is an ambiguity,
+        then <replaceable>F</replaceable> will be immediately removed from the
+        set of ambiguities. If a function <replaceable>F</replaceable> is
+        attributed with <literal>reject</literal>, then independently of the
+        number of ambiguities, the parse using <replaceable>F</replaceable>
+        will be removed. While <link
+        linkend="Restrictions">restrictions</link> only impose limitations on
+        the immediate lookahead that follows a symbol, the reject mechanism
+        can be used to eliminate complicated syntactic structures. Examples of
+        the use of <literal>prefer</literal>, <literal>avoid</literal> and
+        <literal>reject</literal> in order to solve lexical ambiguities are
+        discussed in <link linkend="lex-ambiguity">Lexical Ambiguities</link>.
+        In <link linkend="cf-ambiguity">Context-free Ambiguities</link> we
+        will give examples of how to use these attributes to solve
+        context-free ambiguities, such as the famous dangling else
+        problem.</para>
+      </section>
+    </section>
 
-\subsubsection{Preferring, Avoiding or Rejecting Parses} 
-\label{PreferAvoidReject}
+    <section xml:id="Disambiguation">
+      <title>Disambiguation</title>
 
-Priorities can be used to define a priority between two functions or between
-two groups of functions. In both cases the functions involved have to be
-listed explicitly in the priority declaration. In certain cases, however, it
-is desirable to define that a single rule has higher or lower priority than
-all other functions or to explicitly reject certain syntactic constructs.
-The former is achieved by the attributes {\tt prefer} and {\tt avoid}. The
-latter by the attribute {\tt reject}. 
+      <section xml:id="lex-ambiguity">
+        <title>Lexical Ambiguities</title>
 
-The use of the {\tt reject} attribute leads also to improvements in the 
-performance of the parser, see \cite{BSVV02} for more implementation
-details.
+        <para>SDF provides a number of elementary lexical disambiguation
+        features but does not offer <emphasis>fully automated</emphasis>
+        lexical disambiguation. As a result, the specification writer has to
+        be aware of lexical ambiguities and has to specify disambiguation
+        rules explicitly. We will discuss various approaches to lexical
+        disambiguation and illustrate them by means of examples.</para>
 
-If a function $F$ is attributed with {\tt prefer} and there is a syntactic
-ambiguity in which it is involved, only the parse using $F$ will remain.
+        <formalpara>
+          <title>Prefer Longest Match per Sort</title>
 
-If a function $F$ is attributed with {\tt avoid} and there is no ambiguity,
-then $F$ will be used. If there is an ambiguity, then $F$ will be immediately
-removed from the set of ambiguities.
+          <para>Reject all interpretations of the input text that are included
+          in a longer interpretation of the same sort. Given a standard
+          definition of identifiers, the input <literal>xyz</literal> will
+          thus lead to recognition of the identifier <literal>xyz</literal>
+          and not to either <literal>x</literal> or <literal>xy</literal>.
+          This is achieved by defining a restriction on this lexical sort.
+          This can be done using either lexical or context-free <link
+          linkend="Restrictions">restrictions</link>. The specification <link
+          linkend="CODE_restrict-id">below</link> shows how to enforce the
+          longest match for the sort <literal>Id</literal>.</para>
+        </formalpara>
 
-If a function $F$ is attributed with {\tt reject}, then independently of the
-number of ambiguities, the parse using $F$ will be removed.  While
-\link{restrictions}[ (Section~\Ref)]{Restrictions}
-only impose limitations on the
-immediate lookahead that follows a symbol, the reject mechanism can be used
-to eliminate complicated syntactic structures.
+        <example xml:id="CODE_restrict-id">
+          <title>Using context-free restrictions to define a longest match for
+          identifiers</title>
 
-Examples of the use of {\tt prefer}, {\tt avoid} and {\tt reject} in order
-to solve lexical ambiguities are discussed in
-\link*{Lexical Ambiguities}[ Section~\Ref]{lex-ambiguity}.
-In \link*{Context-free Ambiguities}[ Section~\Ref]{cf-ambiguity}
-we will give examples of how to use
-these attributes to solve context-free ambiguities, such as the
-famous dangling else problem.
-
-\subsection{Disambiguation}
-\label{Disambiguation}
-
-\subsubsection{Lexical Ambiguities}
-\label{lex-ambiguity}
-
-SDF provides a number of elementary lexical disambiguation features but does
-not offer {\em fully automated} lexical disambiguation.
-As a result, the specification writer has to be aware of lexical ambiguities
-and has to specify disambiguation rules explicitly.
-We will discuss various
-approaches to lexical disambiguation and illustrate them by means of examples.
-
-\W We will discuss:
-\W \htmlmenu{1}
-
-\paragraph{Prefer Longest Match per Sort} Reject all interpretations of 
-the input text that are included in a longer interpretation of the same 
-sort. Given a standard definition of identifiers, the input `{\tt xyz}' 
-will thus lead to recognition of the identifier `{\tt xyz}' and not to 
-either `{\tt x}' or `{\tt xy}'.
-
-This is achieved by defining a restriction on this lexical sort. This
-can be done using either lexical or context-free
-\link{restrictions}[ (see Section~\Ref)]{Restrictions}.
-The specification \link*{below}[ in Figure~\Ref]{CODE:restrict-id} 
-shows how to enforce the longest match for the sort {\tt Id}.
-
-\begin{figure}
-\begin{Label}{CODE:restrict-id}
-\begin{IncCode}
-\begin{verbatim}
-module Identifiers-restrict
+          <para><programlisting>module Identifiers-restrict
 
 imports basic/Whitespace
 
@@ -2045,48 +2109,46 @@ exports
   context-free start-symbols Id
   sorts Id
   lexical syntax
-    [a-zA-Z][a-zA-Z0-9]* -> Id
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
 
   context-free restrictions
-    Id -/- [a-zA-Z0-9]  
-\end{verbatim}
-\end{IncCode}
-\caption{Using context-free restrictions to define a longest match for
-    identifiers}
-\end{Label}
-\end{figure}   
+    Id -/- [a-zA-Z0-9]</programlisting></para>
+        </example>
 
-\paragraph{Prefer Literals} 
+        <para></para>
 
-In the left-hand side of a context-free syntax rule literals (keywords
-and/or operators) may be used.  If these literals overlap with  more
-general lexical tokens (such as identifier) this causes ambiguities.
+        <formalpara>
+          <title>Prefer Literals</title>
 
-The strategy \emph{Prefer Literals} gives preference to interpretation
-as a literal, over interpretation as a more general lexical token.
-For instance, the keyword {\tt begin} may be recognized as an identifier
-given the lexical definition \link*{below}[ in Figure~\Ref]{CODE:restrict-id}.
+          <para>In the left-hand side of a context-free syntax rule literals
+          (keywords and/or operators) may be used. If these literals overlap
+          with more general lexical tokens (such as identifier) this causes
+          ambiguities. The strategy <emphasis>Prefer Literals</emphasis> gives
+          preference to interpretation as a literal, over interpretation as a
+          more general lexical token. For instance, the keyword
+          <literal>begin</literal> may be recognized as an identifier given
+          the lexical definition <link
+          linkend="CODE_restrict-id">below</link>. There are two approaches to
+          implement Prefer Literals. In the first approach, we can explicitly
+          forbid the recognition of literals as tokens of a specific sort
+          using the <link linkend="PreferAvoidReject">reject mechanism</link>.
+          The idea is to define context-free grammar rules for all literals
+          with the undesired lexical sort (e.g., <literal>Id</literal>) in the
+          right-hand side followed by the attribute <literal>reject</literal>.
+          This is illustrated <link linkend="CODE_restrict-id">below</link>.
+          The <literal>reject</literal> attribute indicates here that the
+          recognition of a keyword as a literal of the sort
+          <literal>Id</literal> should be rejected. This approach has the
+          major disadvantage that the addition of a literal in any
+          context-free rule also requires the addition of a new reject rule
+          for that literal.</para>
+        </formalpara>
 
-There are two approaches to implement Prefer Literals.
+        <example xml:id="CODE_reject-id">
+          <title>Using <literal>reject</literal> to implement Prefer
+          Literals</title>
 
-In the first approach, we can explicitly forbid the recognition of
-literals as tokens of a specific sort using the
-\link{reject mechanism}[ (see Section~\Ref)]{PreferAvoidReject}.  
-The idea is to define context-free
-grammar rules for all literals with the undesired lexical sort (e.g.,
-{\tt Id}) in the right-hand side followed by the attribute {\tt reject}.
-This is illustrated \link*{below}[in Figure~\Ref]{CODE:reject-id}.
-The {\tt reject} attribute
-indicates here that the recognition of a keyword as a literal of the sort
-{\tt Id} should be rejected. This approach has the major disadvantage
-that the addition of a literal in any context-free rule also requires
-the addition of a new reject rule for that literal.
-
-\begin{figure}
-\begin{Label}{CODE:reject-id}
-\begin{IncCode}
-\begin{verbatim}
-module Identifiers-reject
+          <para><programlisting>module Identifiers-reject
 
 imports basic/Whitespace
 
@@ -2095,36 +2157,32 @@ exports
   sorts Id
 
   lexical syntax
-    [a-zA-Z][a-zA-Z0-9]* -> Id
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
 
   context-free restrictions
     Id -/- [a-zA-Z0-9]  
 
   context-free syntax
-    "begin" -> Id {reject}
-\end{verbatim}
-\end{IncCode}
-\caption{Using {\tt reject} to implement Prefer Literals}
-\end{Label}
-\end{figure}   
+    "begin" -&gt; Id {reject}   </programlisting></para>
+        </example>
 
-The second approach is more attractive. The lexical definition of the general
-notion that interferes with our literals is written in such a way that it is
-only used as a last resort. In other words, it is avoided as much as possible
-and is only used when no alternative exists.  
-The attribute {\tt avoid} defines precisely this behaviour
-(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
-\link*{The next example}[Figure~\Ref]{CODE:avoid-id} shows
-how the lexical definition of {\tt Id} is attributed with {\tt avoid}.
+        <para>The second approach is more attractive. The lexical definition
+        of the general notion that interferes with our literals is written in
+        such a way that it is only used as a last resort. In other words, it
+        is avoided as much as possible and is only used when no alternative
+        exists. The attribute avoid defines precisely this behaviour <link
+        linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+        Parses</link>. The <link linkend="CODE_avoid-id">next example</link>
+        shows how the lexical definition of <literal>Id</literal> is
+        attributed with <literal>avoid</literal>. Although the first approach
+        is more tedious, it allows more flexibility than the second
+        one.</para>
 
-Although the first approach is more tedious, it allows more flexibility
-than the second one.
+        <example xml:id="CODE_avoid-id">
+          <title>Using <literal>avoid</literal> to implement Prefer
+          Literals</title>
 
-\begin{figure}
-\begin{Label}{CODE:avoid-id}
-\begin{IncCode}
-\begin{verbatim}
-module Identifiers-avoid
+          <para><programlisting>module Identifiers-avoid
 
 imports basic/Whitespace
 
@@ -2133,28 +2191,36 @@ exports
   sorts Id
 
   lexical syntax
-    [a-zA-Z][a-zA-Z0-9]* -> Id {avoid}
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id {avoid}
 
   context-free restrictions
-    Id -/- [a-zA-Z0-9]  
-\end{verbatim}
-\end{IncCode}
-\caption{Using {\tt avoid} to implement Prefer Literals}
-\end{Label}
-\end{figure}   
+    Id -/- [a-zA-Z0-9]</programlisting></para>
+        </example>
 
-\paragraph{Prefer Non-Layout} If there are interpretations of the text as
-layout symbol and as non-layout symbol, eliminate all interpretations as layout
-symbol. This is built-in behaviour of \asfsdf.
+        <formalpara>
+          <title>Prefer Non-Layout</title>
 
-\paragraph{Prefer Variables} Give preference to interpretation as a 
-variable (as defined in a variables section) over interpretation as a lexical
-token. Thus built-in behaviour of \asfsdf. It is achieved by automatically
-extending each variable declaration with 
-the attribute {\tt prefer}
-(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+          <para>If there are interpretations of the text as layout symbol and
+          as non-layout symbol, eliminate all interpretations as layout
+          symbol. This is built-in behaviour of ASF+SDF.</para>
+        </formalpara>
 
-\subsubsection{Context-free Ambiguities}
+        <formalpara>
+          <title>Prefer Variables</title>
+
+          <para>Give preference to interpretation as a variable (as defined in
+          a variables section) over interpretation as a lexical token. Thus
+          built-in behaviour of \asfsdf. It is achieved by automatically
+          extending each variable declaration with the attribute
+          <literal>prefer</literal> (see <link
+          linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+          Parses</link>.</para>
+        </formalpara>
+      </section>
+    </section>
+  </section>
+
+  <!--\subsubsection{Context-free Ambiguities}
 \label{cf-ambiguity}
 
 Context-free grammars may be ambiguous and, as a result, the parser may yield
