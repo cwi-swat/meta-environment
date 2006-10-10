@@ -1,5 +1,5 @@
-#ifndef __SDF_EDITOR_UTILS__
-#define __SDF_EDITOR_UTILS__
+#ifndef __JAVA_EDITOR_UTILS__
+#define __JAVA_EDITOR_UTILS__
 
 #include <editing.tb>
 #include <config-utils.tb>
@@ -15,18 +15,17 @@ let
   Modulename: str,
   Path: str,
   Editable: bool,
-  SdfExt: str,
   Sid: term,
   Event: attribute-changed-event,
   Tree: term
 in
   EditorType := syntax-editor
-  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . GetModulePath(ModuleId, JAVA_NAMESPACE, Path?)
   . 
   if equal(Path, EMPTY_PATH) then
     TODO("dit is ook raar\n")
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?) 
-    . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
+    . MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?) 
+    . BuildPath(".", Modulename, JAVA_EXTENSION, Path?)
     . printf("EditSyntax: Use CreateNewModule instead???\n")
   else
     tau
@@ -36,19 +35,19 @@ in
   . snd-msg(syntax-editor-started(ModuleId, Sid))
   .
   if equal(AlreadyExists, false) then
-    MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+    MM-HasAttribute(ModuleId, JAVA_NAMESPACE, "editable", HasAttribute?)
     .
     if equal(HasAttribute, true) then
-      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+      MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "editable", Editable?)
     else
       Editable := true
     fi
     . snd-msg(te-set-editable(Sid, Editable))
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetSDFParseTree(ModuleId, Tree?)
+    . GetJAVAParseTree(ModuleId, Tree?)
     . SE-UpdateTree(Sid, Tree)
-    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,parsed)
+    . MM-Subscribe-Attribute-Changed(ModuleId,JAVA_NAMESPACE,"status",<term>,parsed)
     .
     (
       MenuSelected(Sid, EditorType)
@@ -56,10 +55,10 @@ in
       MouseClicked(Sid)
     +
       rec-msg(te-contents-changed(Sid))
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
+      . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", edited)
     +
       rec-msg(te-contents-saved(Sid))
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+      . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", available)
       . UpdateSyntaxStructure(Sid)
     +
       rec-note(mm-attribute-changed(Event?))
@@ -80,8 +79,8 @@ let
   Tree: term
 in
   GetModuleId(Sid, ModuleId?)
-  . GetSDFParseTree(ModuleId, Tree?)
+  . GetJAVAParseTree(ModuleId, Tree?)
   . SE-UpdateTree(Sid, Tree) 
 endlet
 
-#endif /* __SDF_EDITOR_UTILS__ */
+#endif /* __JAVA_EDITOR_UTILS__ */

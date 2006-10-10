@@ -1,28 +1,28 @@
-#ifndef __SDF_PROGRESS_LISTENER__
-#define __SDF_PROGRESS_LISTENER__
+#ifndef __JAVA_PROGRESS_LISTENER__
+#define __JAVA_PROGRESS_LISTENER__
 
-process SDFStatusToProgress is
+process JAVAStatusToProgress is
 let
   Event: attribute-changed-event,
   ModuleId: term,
   Name: str,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,<term>)
   . subscribe(mm-module-deleted(<term>))
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Name?)
+    . MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Name?)
     . ACE-GetNewValue(Event, Value?)
-    . snd-msg(pro-set-status(ModuleId, Name, SDF_NAMESPACE, Value))
+    . snd-msg(pro-set-status(ModuleId, Name, JAVA_NAMESPACE, Value))
   +
     rec-note(mm-module-deleted(ModuleId?)) 
     . snd-msg(pro-remove-status(ModuleId))
   ) * delta 
 endlet
 
-toolbus(SDFStatusToProgress)
+toolbus(JAVAStatusToProgress)
 
-#endif /* __SDF_PROGRESS_LISTENER__ */
+#endif /* __JAVA_PROGRESS_LISTENER__ */

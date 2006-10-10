@@ -1,9 +1,9 @@
-#ifndef __SDF_EDITOR_LISTENERS__
-#define __SDF_EDITOR_LISTENERS__
+#ifndef __JAVA_EDITOR_LISTENERS__
+#define __JAVA_EDITOR_LISTENERS__
 
 #include <java-namespace.h>
 
-process StartSDFEditor is
+process StartJAVAEditor is
 let
   ModuleId: term,
   Path: str,
@@ -11,16 +11,16 @@ let
   Sid: term
 in
   (
-    rec-msg(start-editor(SDF_EXTENSION, Path?))
-    . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", path(Path), ModuleId?)
+    rec-msg(start-editor(JAVA_EXTENSION, Path?))
+    . MM-GetModuleIdByAttribute(JAVA_NAMESPACE, "path", path(Path), ModuleId?)
     . create(EditSyntax(ModuleId), Pid?)
     . rec-msg(syntax-editor-started(ModuleId, Sid?))
-    . snd-msg(editor-started(SDF_EXTENSION, Path))
+    . snd-msg(editor-started(JAVA_EXTENSION, Path))
   )
   *
   delta
 endlet
 
-toolbus(StartSDFEditor)
+toolbus(StartJAVAEditor)
 
-#endif /* __SDF_EDITOR_LISTENERS__ */
+#endif /* __JAVA_EDITOR_LISTENERS__ */
