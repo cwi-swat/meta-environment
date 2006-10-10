@@ -1,5 +1,5 @@
-#ifndef __SDF_LISTENERS__
-#define __SDF_LISTENERS__
+#ifndef __JAVA_LISTENERS__
+#define __JAVA_LISTENERS__
 
 #include <module-manager.tb>
 #include <java-namespace.h>
@@ -14,15 +14,15 @@ process InitializeInheritedStatus is
   /* the first one must not have any <term> holes because of a ToolBus bug */
   
   /* Once we are opened and our kids are opened, then we become complete */
-  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", is-set, opened, opened, complete, all)
+  MM-RegisterInheritedAttribute(JAVA_NAMESPACE, "status", is-set, opened, opened, complete, all)
 
   /* When we are not in error and one of our kids has an error, we become child-error */
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", is-not-set, error, error, child-error, one)
+  . MM-RegisterInheritedAttribute(JAVA_NAMESPACE, "status", is-not-set, error, error, child-error, one)
 
 toolbus(InitializeInheritedStatus)
 
 
-process SDFModuleLabelSetter is
+process JAVAModuleLabelSetter is
 let
   Event: attribute-changed-event,
   Extension: str,
@@ -32,7 +32,7 @@ let
   Name: str,
   Prefix: str
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"name",<term>,<term>)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -48,9 +48,9 @@ in
   delta
 endlet
 
-toolbus(SDFModuleLabelSetter)
+toolbus(JAVAModuleLabelSetter)
 
-process SDFModuleColorChanger is
+process JAVAModuleColorChanger is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -58,10 +58,10 @@ let
   Tree: term,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,child-error)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",error,<term>)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",child-error,<term>)  
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,error)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,child-error)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",error,<term>)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",child-error,<term>)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -83,9 +83,9 @@ in
   delta
 endlet
 
-toolbus(SDFModuleColorChanger)
+toolbus(JAVAModuleColorChanger)
 
-process SDFModuleVisualizeEditable is
+process JAVAModuleVisualizeEditable is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -93,8 +93,8 @@ let
   Tree: term,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,true)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,false)  
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"editable",<term>,true)  
+  . MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"editable",<term>,false)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -112,25 +112,25 @@ in
 endlet
 
 
-toolbus(SDFModuleVisualizeEditable)
+toolbus(JAVAModuleVisualizeEditable)
 
-process SDFModuleParser is
+process JAVAModuleParser is
 let
   Event: attribute-changed-event,
   ModuleId: term,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,available)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . GetSDFParseTree(ModuleId, Tree?)
+    . GetJAVAParseTree(ModuleId, Tree?)
     .
     if equal(Tree, UNDEFINED) then
-       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
+       MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", error)
     else
-       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
+       MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", parsed)
     fi
     . Tree := help-garbage-collector
   )
@@ -138,32 +138,32 @@ in
   delta
 endlet
 
-toolbus(SDFModuleParser)
+toolbus(JAVAModuleParser)
 
-process SDFModuleIdentifier is
+process JAVAModuleIdentifier is
 let
   Event: attribute-changed-event,
   ModuleId: term,
   Tree: term,
   Result: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,parsed)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . SDFIdentifyModule(ModuleId, Result?)
-    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", Result)
+    . JAVAIdentifyModule(ModuleId, Result?)
+    . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", Result)
   )
   *
   delta
 endlet
 
-toolbus(SDFModuleIdentifier)
+toolbus(JAVAModuleIdentifier)
 
 
 
-process SDFSetModuleImports is
+process JAVASetModuleImports is
 let
   Event: attribute-changed-event,
   Import: str,
@@ -172,13 +172,13 @@ let
   ModuleId: term,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,identified)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
-    . GetSDFParseTree(ModuleId, Tree?)
+    . MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opening)
+    . GetJAVAParseTree(ModuleId, Tree?)
     . MM-DeleteModuleDependencies(ModuleId)
     . GetImportedModulenames(Tree, Imports?)
     .
@@ -191,24 +191,24 @@ in
       fi
       *
       if equal(Imports, []) then
-        MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened)
+        MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opened)
       fi
     else
-      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened) 
+      MM-SetAttribute(ModuleId, JAVA_NAMESPACE, "status", opened) 
     fi
   )
   *
   delta
 endlet
 
-toolbus(SDFSetModuleImports)
+toolbus(JAVASetModuleImports)
 
-process SDFRemoveDependencies is
+process JAVARemoveDependencies is
 let
   Event: attribute-changed-event,
   ModuleId: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
+  MM-Subscribe-Attribute-Changed(<term>,JAVA_NAMESPACE,"status",<term>,unknown)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -219,6 +219,6 @@ in
   delta
 endlet
 
-toolbus(SDFRemoveDependencies)
+toolbus(JAVARemoveDependencies)
 
-#endif /* __SDF_LISTENERS__ */
+#endif /* __JAVA_LISTENERS__ */
