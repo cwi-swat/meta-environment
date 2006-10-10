@@ -1,7 +1,7 @@
 #ifndef __SDF_META__
 #define __SDF_META__
 
-#include <sdf-module-actions.tb>
+#include <java-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-actions.tb>
 #include <java-utils.tb>

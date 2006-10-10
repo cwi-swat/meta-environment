@@ -4,7 +4,7 @@
 TBSCRIPTS = \
 	    idle-state.tb \
 	    parsetable-utils.tb \
-	    sdf-module-actions.tb \
+	    java-module-actions.tb \
 	    sdf-actions.tb \
 	    sdf-editor-actions.tb \
 	    sdf-editor-listeners.tb \
