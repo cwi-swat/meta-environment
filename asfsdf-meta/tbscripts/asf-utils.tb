@@ -398,6 +398,7 @@ let
   Specification: term,
   Text: str,
   Errors: list,
+  ParseTable: term,
   NormalFormWithoutBrackets: term
 in
   Id := process-id
@@ -405,9 +406,10 @@ in
   .
   if not-equal(Specification, UNDEFINED) then
     GetSpecificationEquations(Specification, Equations?)
+    . GetTermParseTable(ModuleId, ParseTable?)
     . SetStatus("Rewriting...")
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . snd-msg(asfe-rewrite(Modulename, Equations, Tree, Debugging))
+    . snd-msg(asfe-rewrite(Modulename, Equations, ParseTable, Tree, Debugging))
     .
     (
       rec-msg(asfe-rewrite-result(NormalFormWithoutBrackets?))
