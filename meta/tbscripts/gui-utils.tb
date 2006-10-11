@@ -15,14 +15,48 @@ process AddJob(Message: str) is
 process JobDone(Message: str) is
   snd-msg(gui-job-done(Message))
 
-process Error(Message: str, MessageArgs: list) is
-  snd-note(ui-status(errorf(Message, MessageArgs)))
+process ClearError(Producer : str, Id : str) is
+  RemoveSummary(Producer, Id)
+
+process Error(Message: str, SubjectStrings: list) is
+ printf("TODO\n")
+
+/*
+process Error(Producer: str, Id: str, Message: str, SubjectStrings: list) is
+let
+  Error : term,
+  SubjectString : str,
+  Subject : term,
+  Subjects: list,
+  Runner : list,
+  Summary : term
+in
+  Runner := SubjectStrings
+  . Subjects := []
+  . 
+  if not-equal(Runner, []) then
+    SubjectString := first(Runner)
+    . Runner := next(Runner)
+    . snd-msg(es-make-subject(SubjectString))
+    . rec-msg(es-subject(Subject?))
+    . Subjects := join(Subject, Subjects)
+  fi
+  *
+  if equal(Runner, []) then
+    snd-msg(es-make-error(Message, Subjects))
+    . rec-msg(es-error(Error?))
+    . snd-msg(es-make-summary(Producer, Id, [Error]))
+    . rec-msg(es-summary(Summary?))
+    . DisplaySummary(Summary)
+  fi  
+endlet
+*/
 
 process RemoveSummary(Producer: str, SummaryId: str) is
-  snd-msg(ui-remove-feedback-summary(Producer, SummaryId))
+  snd-msg(ui-remove-feedback-summary("Issues", Producer, SummaryId))
   
 process DisplaySummary(Summary: term) is
-  snd-msg(ui-show-feedback-summary(Summary))
+  snd-msg(ui-show-feedback-summary("Issues", Summary))
 
 process HandleEvent(Type: term, Event: term) is
 let
