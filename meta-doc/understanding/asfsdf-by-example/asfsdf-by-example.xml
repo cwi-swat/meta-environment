@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+<!ENTITY euro "&#8364;">
+<!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
+%dbcent;
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>Understanding ASF+SDF by example</title>
+
+  <warning>
+    <para>This document is work in progress. It is in transition from The
+    Meta-environment V1.5 to V2.0.</para>
+  </warning>
+
+  <note>
+    <para>Here are some small examples of ASF+SDF specifications, which are
+    selected to illustrate specific features of the formalism. Larger examples
+    can be found in the online specifications and the ASF+SDF library.</para>
+  </note>
+
+  <section>
+    <title>A simple evaluation function</title>
+
+    <para>Suppose we want to define a very simple evaluation function for the
+    expressions as defined in \link*{Simple Expressions}[
+    Figure~\Ref]{CODE:simple-prio}. The specification <link
+    linkend="CODE_simple-eval">below</link> shows how to do this.</para>
+
+    <example xml:id="CODE_simple-eval">
+      <title>ASF+SDF specification of a very simple <literal>eval</literal>
+      function</title>
+
+      <para><programlisting>module Eval 
+
+imports SimpleExpr
+imports basic/Integers
+
+exports
+  context-free syntax
+    eval(E) -&gt; Integer
+
+hiddens
+  variables
+    "E"[0-9]* -&gt; E
+    "N"[0-9]* -&gt; NatCon
+
+equations
+ [e1] eval(E1 + E2) = eval(E1) + eval(E2)
+ [e2] eval(E1 * E2) = eval(E1) * eval(E2)
+ [e3] eval(N) = N</programlisting></para>
+    </example>
+  </section>
+
+  <section>
+    <title>Symbolic Differentiation</title>
+
+    <para>Computing the derivative of an expression with respect to some
+    variable is a classical problem. Computing the derivative of <literal>X *
+    (X + Y + Z)</literal> with respect to <literal>X</literal>
+    gives:<programlisting>d(X * (X + Y + Z)) / dX = X + Y + Z + X</programlisting>Differentiation
+    is defined in several stages in the specification <link
+    linkend="CODE_diff">below</link>. First, the sorts <literal>Nat</literal>
+    (natural numbers), <literal>Var</literal> (variables), and
+    <literal>Exp</literal> (expressions) are introduced. Next, a
+    differentiation operator of the form <literal>d E / d V</literal> is
+    defined. Then, the differentiation rules are defined (equations
+    <literal>[1]</literal>-<literal>[5]</literal>). Finally, some rules for
+    simplifying expressions are given. As the above example shows, further
+    simplification rules could have been added to collect multiple occurrences
+    of a variable (giving <literal>2*X + Y + Z</literal>) or to compute
+    constant expressions.</para>
+
+    <example xml:id="CODE_diff">
+      <title>ASF+SDF specification for differentiation</title>
+
+      <para><programlisting>module Diff 
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols Exp
+  sorts Var Exp
+ 
+  lexical syntax
+    [XYZ]    -&gt; Var
+
+  context-free syntax
+    NatCon              -&gt; Exp 
+    Var                 -&gt; Exp 
+    Exp "+" Exp         -&gt; Exp {left} 
+    Exp "*" Exp         -&gt; Exp {left} 
+    "(" Exp ")"         -&gt; Exp {bracket} 
+    "d" Exp "/" "d" Var -&gt; Exp
+
+ context-free priorities
+   Exp "*" Exp -&gt; Exp &gt; Exp "+" Exp -&gt; Exp
+
+hiddens
+  variables
+    "N"       -&gt; NatCon
+    "V"[0-9]* -&gt; Var 
+    "E"[0-9]* -&gt; Exp 
+equations 
+  [ 1] dN/dV = 0            
+  [ 2] dV/dV = 1 
+  [ 3] V1 != V2 
+       ====&gt; 
+       dV1/dV2 = 0 
+  [ 4] d(E1+E2)/dV = dE1/dV + dE2/dV 
+  [ 5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
+  [ 6] E + 0 = E            
+  [ 7] 0 + E = E 
+  [ 8] E * 1 = E            
+  [ 9] 1 * E = E 
+  [10] 0 * E = 0            
+  [11] E * 0 = 0</programlisting></para>
+    </example>
+  </section>
+
+  <section>
+    <title>Sorting</title>
+
+    <para>The use of list structures is illustrated by the specification of
+    the <emphasis>Dutch National Flag</emphasis> problem presented <link
+    linkend="CODE_flag">below</link>: given an arbitrary list of the colours
+    red, white and blue, sort them in the order as they appear in the Dutch
+    National Flag. We want:<programlisting>{white blue red blue red white red} -&gt; {red red red white white blue blue}</programlisting>In
+    this specification, the list variables <literal>Cs1</literal> and
+    <literal>Cs2</literal> permit a succinct formulation of the search for
+    adjacent colours that are in the wrong order.</para>
+
+    <example xml:id="CODE_flag">
+      <title>ASF+SDF specification for sorting</title>
+
+      <para><programlisting>module Flag
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Flag 
+  sorts Color Flag 
+
+  context-free syntax
+    "red"          -&gt; Color 
+    "white"        -&gt; Color 
+    "blue"         -&gt; Color 
+    "{" Color+ "}" -&gt; Flag 
+
+hiddens
+  variables
+    "Cs"[0-9]* -&gt; Color* 
+    "C"[0-9]*  -&gt; Color 
+
+equations
+
+  [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
+
+  [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
+
+  [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}</programlisting></para>
+    </example>
+  </section>
+
+  <section>
+    <title>Code Generation</title>
+
+    <para>Consider a simple statement language (with assignment, if-statement
+    and while-statement) and suppose we want to compile this language to the
+    following stack machine code:</para>
+
+    <table border="1">
+      <caption>A simple stack language</caption>
+
+      <tr>
+        <td><literal>push</literal> <replaceable>N</replaceable></td>
+
+        <td>Push the number <replaceable>N</replaceable></td>
+      </tr>
+
+      <tr>
+        <td><literal>rvalue</literal> <replaceable>Loc</replaceable></td>
+
+        <td>Push the contents of data location
+        <replaceable>Loc</replaceable></td>
+      </tr>
+
+      <tr>
+        <td><literal>lvalue</literal> <replaceable>Loc</replaceable></td>
+
+        <td>Push the address of data location
+        <replaceable>Loc</replaceable></td>
+      </tr>
+
+      <tr>
+        <td><literal>pop</literal></td>
+
+        <td>Remove the top of the stack</td>
+      </tr>
+
+      <tr>
+        <td><literal>copy</literal></td>
+
+        <td>Push a copy of the top value on the stack</td>
+      </tr>
+
+      <tr>
+        <td><literal>assign</literal></td>
+
+        <td>The r-value on top of the stack is stored in the l-value below it
+        and both are popped</td>
+      </tr>
+
+      <tr>
+        <td><literal>add</literal>, <literal>sub</literal>,
+        <literal>mul</literal></td>
+
+        <td>Replace the two values on top of the stack by their sum
+        (difference, product)</td>
+      </tr>
+
+      <tr>
+        <td><literal>label</literal> <replaceable>Lab</replaceable></td>
+
+        <td>Place a label (target of jumps)</td>
+      </tr>
+
+      <tr>
+        <td><literal>goto</literal> <replaceable>Lab</replaceable></td>
+
+        <td>Next instruction is taken from statement following label
+        <replaceable>Lab</replaceable></td>
+      </tr>
+
+      <tr>
+        <td><literal>gotrue</literal> <replaceable>Lab</replaceable></td>
+
+        <td>Pop the top value; jump if it is nonzero</td>
+      </tr>
+
+      <tr>
+        <td><literal>gofalse</literal> <replaceable>Lab</replaceable></td>
+
+        <td>Pop the top value; jump if it is zero</td>
+      </tr>
+    </table>
+
+    <para>The statement:<programlisting>while a do a := a - 1; b := a * c od</programlisting>will
+    now be translated to the following instruction sequence:</para>
+
+    <para><programlisting>label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
+label xxx</programlisting> Defining a code generator now proceeds in several
+    steps that we describe in more detail.</para>
+
+    <formalpara>
+      <title>Basic Notions</title>
+
+      <para>The specification <link linkend="CODE_basicnotions">below</link>
+      defines the sorts <literal>Nat</literal> (numbers) and
+      <literal>Id</literal> (identifiers).</para>
+    </formalpara>
+
+    <example xml:id="CODE_basicnotions">
+      <title>ASF+SDF specification for BasicNotions</title>
+
+      <para><programlisting>module BasicNotions 
+exports
+  context-free start-symbols Nat Id
+  sorts Nat Id 
+
+  lexical syntax
+    [0-9]+         -&gt; Nat 
+    [a-z][a-z0-9]* -&gt; Id</programlisting></para>
+    </example>
+
+    <formalpara>
+      <title>Expressions and Statements</title>
+
+      <para>Given these basic notions the <link
+      linkend="CODE_expressions">expressions</link> and <link
+      linkend="CODE_statements">statements</link> of our little source
+      language are defined.</para>
+    </formalpara>
+
+    <example xml:id="CODE_expressions">
+      <title>ASF+SDF specification for Expressions</title>
+
+      <para><programlisting>module Expressions 
+
+imports BasicNotions
+
+exports
+  context-free start-symbols Exp
+  sorts Exp 
+
+  context-free syntax
+    Nat         -&gt; Exp 
+    Id          -&gt; Exp 
+    Exp "+" Exp -&gt; Exp {left}
+    Exp "-" Exp -&gt; Exp {left}
+    Exp "*" Exp -&gt; Exp {left}
+
+  context-free priorities
+    Exp "*" Exp -&gt; Exp &gt; {left: Exp "+" Exp -&gt; Exp
+                                Exp "-" Exp -&gt; Exp}</programlisting></para>
+    </example>
+
+    <example xml:id="CODE_statements">
+      <title>ASF+SDF specification for Statements</title>
+
+      <para><programlisting>module Statements 
+
+imports Expressions 
+
+exports
+  context-free start-symbols Stats
+  sorts Stat Stats 
+
+  context-free syntax
+    Id ":=" Exp                 -&gt; Stat 
+    "if" Exp "then" Stats "fi"  -&gt; Stat 
+    "while" Exp "do" Stats "od" -&gt; Stat
+    {Stat ";"}+                 -&gt; Stats</programlisting></para>
+    </example>
+
+    <formalpara>
+      <title>Assembly Language</title>
+
+      <para>The instructions of the assembly language for the stack machine
+      are defined <link linkend="CODE_assemblylanguage">below</link>.</para>
+    </formalpara>
+
+    <example xml:id="CODE_assemblylanguage">
+      <title>ASF+SDF specification for AssemblyLanguage</title>
+
+      <para><programlisting>module AssemblyLanguage
+
+imports BasicNotions 
+exports 
+  context-free start-symbols Instrs
+  sorts Label Instr Instrs
+
+  lexical syntax
+    [a-z0-9]+ -&gt; Label 
+  context-free syntax
+    "push" Nat      -&gt; Instr
+    "rvalue" Id     -&gt; Instr 
+    "lvalue" Id     -&gt; Instr 
+    "assign"        -&gt; Instr 
+    "add"           -&gt; Instr 
+    "sub"           -&gt; Instr 
+    "mul"           -&gt; Instr 
+    "label" Label   -&gt; Instr 
+    "goto" Label    -&gt; Instr 
+    "gotrue" Label  -&gt; Instr 
+    "gofalse" Label -&gt; Instr
+    {Instr ";"}+    -&gt; Instrs</programlisting></para>
+    </example>
+
+    <formalpara>
+      <title>Label generation</title>
+
+      <para>Next, we define a function to construct a next label given the
+      previous one <link linkend="CODE_nextlabel">as follows</link>. It is
+      defined on the lexical notion of labels (<literal>Label</literal>). The
+      scheme of appending the character <literal>x</literal> to the previous
+      label is, of course, naive and will in real life be replaced by a more
+      sophisticated one.</para>
+    </formalpara>
+
+    <example xml:id="CODE_nextlabel">
+      <title>ASF+SDF specification for NextLabel</title>
+
+      <para><programlisting>module NextLabel
+  
+imports AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -&gt; Label 
+
+hiddens
+  variables
+    "Char*"[0-9]* -&gt; CHAR*
+
+equations
+
+ [1] nextlabel(label(Char*)) = label(Char* "x")</programlisting></para>
+
+      <formalpara>
+        <title>Codegenerator</title>
+
+        <para>It remains to define a function <literal>tr</literal> that
+        translates statements into instructions. During code generation we
+        should generate new label names for the translation of if- and
+        while-statements. This is an instance of a frequently occurring
+        problem: how do we maintain global information (in this case: the last
+        label name generated)? A standard solution is to introduce an
+        auxiliary sort (<literal>Instrs-Lab</literal>) that contains both the
+        generated instruction sequence and the last label name generated so
+        far. The <link linkend="CODE_codegenerator.sdf">SDF part</link> and
+        the <link linkend="CODE_codegenerator.asf">ASF part</link> of module
+        <literal>CodeGenerator</literal> define the actual translation
+        function.</para>
+      </formalpara>
+    </example>
+
+    <example xml:id="CODE_codegenerator.sdf">
+      <title>ASF+SDF specification for CodeGenerator (SDF part)</title>
+
+      <para><programlisting>module CodeGenerator
+
+imports Statements AssemblyLanguage NextLabel 
+  
+exports
+  context-free start-symbols Instrs
+
+  context-free syntax
+    tr(Stats) -&gt; Instrs
+  
+hiddens
+  sorts Instrs-lab 
+  context-free syntax
+    Instrs # Label -&gt; Instrs-lab 
+
+  context-free syntax
+    tr(Stats, Label) -&gt; Instrs-lab 
+    tr(Exp)          -&gt; Instrs
+
+hiddens
+  variables
+    "Exp"[0-9\']*        -&gt; Exp 
+    "Id"[0-9\']*         -&gt; Id
+    "Instr"[0-9\']*      -&gt; Instr 
+    "Instr-list"[0-9\']* -&gt; {Instr ";"}+
+    "Label"[0-9\']*      -&gt; Label
+    "Nat"[0-9\']*        -&gt; Nat 
+    "Stat"[0-9\']*       -&gt; Stat
+    "Stat+"[0-9\']*      -&gt; {Stat ";"}+</programlisting></para>
+    </example>
+
+    <example xml:id="CODE_codegenerator.asf">
+      <title>ASF+SDF specification for CodeGenerator (ASF part)</title>
+
+      <para><programlisting>equations 
+
+[1] &lt;Instr-list, Label&gt; := tr(Stat-list, x)
+    ====&gt;
+    tr(Stat-list) = Instr-list
+
+[2] &lt;Instr-list1, Label'&gt; := tr(Stat, Label),
+    &lt;Instr-list2, Label''&gt; := tr(Stat-list, Label')
+    ====&gt;
+    tr(Stat ; Stat-list, Label) = &lt;Instr-list1 ; Instr-list2, Label''&gt;
+
+[3] Instr-list := tr(Exp)
+    ====&gt;
+    tr(Id := Exp, Label) = &lt;lvalue Id; Instr-list; assign, Label&gt;
+
+[4] Instr-list1 := tr(Exp), 
+    &lt;Instr-list2, Label'&gt; := tr(Stat-list, Label),
+    Label'' := nextlabel(Label')
+    ====&gt;
+    tr(if Exp then Stat-list fi, Label) =
+    &lt;Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''&gt;
+
+[5] Instr-list1 := tr(Exp), 
+    &lt;Instr-list2, Label'&gt; := tr(Stat-list, Label),
+    Label'' := nextlabel(Label'), 
+    Label''' := nextlabel(Label'')
+    ====&gt;
+    tr(while Exp do Stat-list od, Label) =
+    &lt;label Label''; Instr-list1; gofalse Label'''; Instr-list2;
+     goto Label''; label Label''', Label'''&gt;
+
+[6] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====&gt;
+    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
+
+[7] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====&gt;
+    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
+
+[8] Instr-list1 := tr(Exp1), 
+    Instr-list2 := tr(Exp2)
+    ====&gt;
+    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
+
+[9] tr(Nat) = push Nat
+
+[10] tr(Id) = rvalue Id</programlisting></para>
+    </example>
+  </section>
+
+  <section>
+    <title>Larger ASF+SDF Specifications</title>
+
+    <para>There are a quite a few very large ASF+SDF specifications around
+    that are good subjects of study:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The asf2c compiler.</para>
+      </listitem>
+
+      <listitem>
+        <para>Part of the parse table generator for SDF.</para>
+      </listitem>
+
+      <listitem>
+        <para>The SDF checker.</para>
+      </listitem>
+
+      <listitem>
+        <para>Various transformation system for improving COBOL
+        programs.</para>
+      </listitem>
+
+      <listitem>
+        <para>A system for detecting code smells in Java refactoring.</para>
+      </listitem>
+
+      <listitem>
+        <para>Tooling for Action Semantics.</para>
+      </listitem>
+
+      <listitem>
+        <para>Tooling for CASL.</para>
+      </listitem>
+
+      <listitem>
+        <para>Tooling for ELAN.</para>
+      </listitem>
+
+      <listitem>
+        <para>Analysis of C code (ASML).</para>
+      </listitem>
+
+      <listitem>
+        <para>A compiler from UML diagrams to various target languages
+        (Progress, Java, DB2).</para>
+      </listitem>
+
+      <listitem>
+        <para>The syntax and type checking of a domain specific language for
+        describing financial products.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
