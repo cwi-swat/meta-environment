@@ -414,7 +414,7 @@ in
     (
       rec-msg(asfe-rewrite-result(NormalFormWithoutBrackets?))
       . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
-      . snd-msg(ui-remove-feedback-summary("asfe", "all"))
+      . RemoveSummary("asfe", "all"))
     +
       rec-msg(asfe-rewrite-result-with-errors(NormalFormWithoutBrackets?,Errors?))
       . RemoveSummary("asfe", "all")
