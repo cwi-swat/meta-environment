@@ -1,6 +1,6 @@
 // Java tool bridge ErrorViewerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:56:30 AM
+// generation time: Oct 11, 2006 1:39:32 PM
 
 package nl.cwi.sen1.error.viewer;
 
@@ -17,28 +17,28 @@ public class ErrorViewerBridge
     this.tool = tool;
   }
 
-  public void showFeedbackSummary(ATerm t0)
+  public void showFeedbackSummary(String s0, ATerm t1)
   {
     if (tool != null) {
-      tool.showFeedbackSummary(t0);
+      tool.showFeedbackSummary(s0, t1);
     }
     else {
       throw new UnsupportedOperationException("method `showFeedbackSummary' not supported.");
-    }
-  }
-  public void removeFeedbackSummary(String s0)
-  {
-    if (tool != null) {
-      tool.removeFeedbackSummary(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");
     }
   }
   public void removeFeedbackSummary(String s0, String s1)
   {
     if (tool != null) {
       tool.removeFeedbackSummary(s0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");
+    }
+  }
+  public void removeFeedbackSummary(String s0, String s1, String s2)
+  {
+    if (tool != null) {
+      tool.removeFeedbackSummary(s0, s1, s2);
     }
     else {
       throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");

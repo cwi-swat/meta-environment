@@ -1,6 +1,6 @@
 // Java tool interface class ErrorViewerTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:56:30 AM
+// generation time: Oct 11, 2006 1:39:32 PM
 
 package nl.cwi.sen1.error.viewer;
 
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,7 +16,7 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class ErrorViewerTool
-  extends SwingTool
+  extends AbstractTool
   implements ErrorViewerTif
 {
   // This table will hold the complete input signature
@@ -41,9 +41,9 @@ abstract public class ErrorViewerTool
   private void initSigTable()
   {
     Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<error-viewer>,show-feedback-summary(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<error-viewer>,show-feedback-summary(<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>,<str>,<str>))"), btrue);
     sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>,<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>))"), btrue);
     sigTable.put(factory.parse("rec-ack-event(<error-viewer>,<term>)"), btrue);
     sigTable.put(factory.parse("rec-terminate(<error-viewer>,<term>)"), btrue);
   }
@@ -51,9 +51,9 @@ abstract public class ErrorViewerTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
-    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>))");
-    PremoveFeedbackSummary1 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
+    PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<str>,<term>))");
+    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
+    PremoveFeedbackSummary1 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -65,17 +65,17 @@ abstract public class ErrorViewerTool
 
     result = term.match(PshowFeedbackSummary0);
     if (result != null) {
-      showFeedbackSummary((ATerm)result.get(0));
+      showFeedbackSummary((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PremoveFeedbackSummary0);
     if (result != null) {
-      removeFeedbackSummary((String)result.get(0));
+      removeFeedbackSummary((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PremoveFeedbackSummary1);
     if (result != null) {
-      removeFeedbackSummary((String)result.get(0), (String)result.get(1));
+      removeFeedbackSummary((String)result.get(0), (String)result.get(1), (String)result.get(2));
       return null;
     }
     result = term.match(PrecAckEvent0);

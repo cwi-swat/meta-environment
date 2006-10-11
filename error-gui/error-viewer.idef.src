@@ -8,20 +8,21 @@ let
   Path: str,
   Producer : str,
   Summary : term,
-  SummaryId : str
+  SummaryId : str,
+  Panel: str
 in
   StartErrorViewer()
   . rec-connect(T?)
   . 
   (
-    rec-msg(ui-show-feedback-summary(Summary?))
-    . snd-do(T, show-feedback-summary(Summary))
+    rec-msg(ui-show-feedback-summary(Panel?, Summary?))
+    . snd-do(T, show-feedback-summary(Panel, Summary))
   +
-    rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))
-    . snd-do(T, remove-feedback-summary(Producer, SummaryId))
+    rec-msg(ui-remove-feedback-summary(Panel?, Producer?, SummaryId?))
+    . snd-do(T, remove-feedback-summary(Panel, Producer, SummaryId))
   +
-    rec-msg(ui-remove-feedback-summary(Path?))
-    . snd-do(T, remove-feedback-summary(Path))
+    rec-msg(ui-remove-feedback-summary(Panel?, Path?))
+    . snd-do(T, remove-feedback-summary(Panel, Path))
   +
     rec-event(T, error-selected(Error?))
     . snd-msg(ui-error-selected(Error))

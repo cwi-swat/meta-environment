@@ -1,5 +1,7 @@
 package nl.cwi.sen1.error.viewer;
 
+import java.util.HashMap;
+
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -28,7 +30,7 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 
 	errorapi.Factory errorFactory;
 
-	private ErrorPanel panel;
+	private HashMap<String,ErrorPanel> panels = new HashMap<String,ErrorPanel>();
 
 	public String getName() {
 		return TOOL_NAME;
@@ -40,28 +42,18 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		ATermFactory factory = studio.getATermFactory();
 		errorFactory = Factory.getInstance((PureFactory) factory);
 
-		panel = new ErrorPanel();
-		addListener();
-
 		bridge = new ErrorViewerBridge(factory, this);
 		bridge.setLockObject(this);
 
-		StudioComponent comp = new StudioComponentImpl("Error Viewer", panel) {
-			public void requestClose() throws CloseAbortedException {
-				throw new CloseAbortedException();
-			}
-		};
+		
 		studio.connect(getName(), bridge);
-		((StudioWithPredefinedLayout) studio).addComponent(comp,
-				StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
 	}
 
 	public ErrorViewer() {
 	}
 
-	private void addListener() {
+	private void addListener(ErrorPanel panel) {
 		final JTree tree = panel.getTree();
-		
 		
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
@@ -77,17 +69,46 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		});
 	}
 
-	public void showFeedbackSummary(ATerm summaryTerm) {
+	private ErrorPanel createPanel(String panelId) {
+		ErrorPanel panel = new ErrorPanel();
+		addListener(panel);
+		
+		StudioComponent comp = new StudioComponentImpl(panelId, panel) {
+			public void requestClose() throws CloseAbortedException {
+				throw new CloseAbortedException();
+			}
+		};
+		
+		((StudioWithPredefinedLayout) studio).addComponent(comp,
+				StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
+		
+		return panel;
+	}
+	
+	private ErrorPanel getPanel(String panelId) {
+		ErrorPanel panel = panels.get(panelId);
+		
+		if (panel != null) {
+			return panel;
+		}
+		else {
+			panel = createPanel(panelId);
+			panels.put(panelId, panel);
+			return panel;
+		}
+	}
+	
+	public void showFeedbackSummary(String panelId, ATerm summaryTerm) {
 		Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
-		panel.addError(summary);
+		getPanel(panelId).addError(summary);
 	}
 
-	public void removeFeedbackSummary(String producer, String id) {
-		panel.removeAllMatchingErrors(producer, id);
+	public void removeFeedbackSummary(String panelId, String producer, String id) {
+		getPanel(panelId).removeAllMatchingErrors(producer, id);
 	}
     
-    public void removeFeedbackSummary(String path) {
-        panel.removeAllMatchingErrors(path);
+    public void removeFeedbackSummary(String panelId, String path) {
+        getPanel(panelId).removeAllMatchingErrors(path);
     }
 
 	public void recAckEvent(ATerm t0) {

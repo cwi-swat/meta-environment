@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Oct 11 14:07:46 CEST 2006 <jurgenv@cwi.nl>
+ * **/*.java: this tool now handles multiple tabs of error messages
+   using a panelId (String) to identify to which panel which message
+   will go.
+
 Mon Apr 13 10:29:17 CET 2006 <jurgenv@cwi.nl>
  * src/**/*.java: new errors arrive at the top of the list now
  * src/**/*.java: added grouping of errors on files or on error message.
