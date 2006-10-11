@@ -287,7 +287,7 @@ ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
 /*}}}  */
 /*{{{  ATerm make_subject(int conn, const char *description, ATerm loc) */
 
-ATerm make_subject(int conn, const char *description, ATerm loc)
+ATerm make_localized_subject(int conn, const char *description, ATerm loc)
 {
   ERR_Location location = ERR_LocationFromTerm(loc);
   ERR_Subject subject = ERR_makeSubjectLocalized(description, location);
@@ -307,7 +307,23 @@ ATerm make_summary(int conn, const char *producer, const char *id, ATerm errors)
 }
 
 /*}}}  */
+/*{{{  ATerm make_subject(int conn, const char *description) */
 
+ATerm make_subject(int conn, const char *description)
+{
+  return ATmake("snd-value(subject(<term>))", ERR_makeSubjectSubject(description));
+}
+
+/*}}}  */
+/*{{{  ATerm make_error(int conn, const char* description, ATerm subjects)  */
+
+ATerm make_error(int conn, const char* description, ATerm subjects) 
+{
+  ERR_SubjectList subjectList = ERR_SubjectListFromTerm(subjects);
+  return ATmake("snd-value(error(<term>))", ERR_makeErrorError(description, subjectList));
+}
+
+/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])

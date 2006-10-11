@@ -1,5 +1,8 @@
 $Id$
 
+Wed Oct 11 13:25:32 CEST 2006 <jurgenv@cwi.nl>
+ * utils/error-support.idef: added some functions to create error messages.
+
 Tue Jul 25 09:16:05 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
  * **: adapted package to use the standard meta-build-env.
  * error-support.pc.in: added locally generated jar files to ExternalJars,

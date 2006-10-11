@@ -136,15 +136,30 @@ in
     . rec-value(ES, error(Error?))
     . snd-msg(es-filename-in-error(Filename, Error))
   +
-    rec-msg(es-make-subject(Description?, Location?))
-    . snd-eval(ES, make-subject(Description, Location))
-    . rec-value(ES, subject(Subject?))
-    . snd-msg(es-subject(Subject))
-  +
     rec-msg(es-make-summary(Producer?, Id?, Errors?))
     . snd-eval(ES, make-summary(Producer, Id, Errors))
     . rec-value(ES, summary(Summary?))
     . snd-msg(es-summary(Summary))
+  +
+    rec-msg(es-make-error(Description, Subjects)) 
+    . snd-eval(ES, make-error(Description, Subject))
+    . rec-value(ES, error(Error?))
+    . snd-msg(es-error(Error))
+  +
+    rec-msg(es-make-error(Description, Subjects)) 
+    . snd-eval(ES, make-error(Description, Subject))
+    . rec-value(ES, error(Error?))
+    . snd-msg(es-error(Error))
+  +
+    rec-msg(es-make-subject(Description?, Location?))
+    . snd-eval(ES, make-localized-subject(Description, Location))
+    . rec-value(ES, subject(Subject?))
+    . snd-msg(es-subject(Subject))
+  +
+    rec-msg(es-make-subject(Description?))
+    . snd-eval(ES, make-subject(Description))
+    . rec-value(ES, subject(Subject?))
+    . snd-msg(es-subject(Subject))
   ) * delta
 endlet
 
