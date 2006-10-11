@@ -222,7 +222,7 @@ ATerm SGparseStringWithLoadedTable(const char *prgname,
   if ((pt = SG_LookupParseTable(L, path)) == NULL) {
     IF_VERBOSE(ATwarning("no such parse table (%s)\n", 
 			 SG_SAFE_LANGUAGE(L)));
-    return NULL;
+    return (ATerm) ERR_makeErrorError("Parse table not found", ERR_makeSubjectListEmpty());
   }
 
   SG_theText = strdup(input);
