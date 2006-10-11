@@ -125,7 +125,7 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable,
   ATbool debug;
 
   if (!ATmatch(parseTable, "none")) {
-    setParseTable(parseTable); 
+    setParseTable(ATBunpack(parseTable)); 
   }
 
   setCid(cid);		// render cid accessible from the outside
