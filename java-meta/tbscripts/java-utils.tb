@@ -161,7 +161,7 @@ process GetImportedModulenames(ModuleId: term, Imports: list?) is
 let
   Pid: int,
   Action: str,
-  Contents: term,
+  Contents: list,
   Modulepath: str,
   Result: str,
   Tree: term
@@ -173,9 +173,60 @@ in
   . rec-msg(gen-adapter-result(Pid, Result?))
   . snd-msg(io-read-term("/tmp/IMPORT.trm"))
   . rec-msg(io-term(Contents?))
-  . printf("Received: [%t]\n", Contents)
-  . Imports := []
+  . ExtractImportsFromTerm(Contents, Imports?)
 endlet
+
+process ExtractImportsFromTerm(Contents: list, Imports: list?) is
+let
+  List : list,
+  Path: str,
+  Term : term,
+  Segments: list
+in
+  Term := first(Contents)
+  . List := first(next(next(args(Term))))
+  . Imports := []
+  .
+  if not-equal(List, []) then
+    Term := first(List)
+    . List := next(List)
+    . Segments := first(args(Term))
+    . ConstructImportPath(Segments, Path?)
+    . Imports := join(Imports, Path)
+  fi
+  *
+  if equal(List, []) then
+    tau
+  fi
+endlet
+
+process ConstructImportPath(Segments: list, Path: str?) is
+let
+  List: list,
+  Term: term,
+  Segment: str
+in
+  Path := ""
+  . List := Segments
+  .
+  if not-equal(List, []) then
+    Term := first(List)
+    . List := next(List)
+    . Segment := first(args(Term))
+    . Path := concat(Path, Segment)
+    .
+    if not-equal(List, []) then
+      Path := concat(Path, "/")
+    else
+      tau
+    fi
+  fi
+  *
+  if equal(List, []) then
+    tau
+  fi
+endlet
+
 
 process CloseModule(ModuleId: term, Recursive: bool) is
 let
