@@ -30,8 +30,8 @@
   </info>
 
   <warning>
-    <para>This document is in transition between Meta-Environemtn V1.5 and
-    V2.0.</para>
+    <para>This document is work in progress. It is in transition between The
+    Meta-Enviroment V1.5 and V2.0.</para>
   </warning>
 
   <section>
@@ -574,8 +574,8 @@ exports
       expression and a result sort. All functions with the same result sort
       together define the lexical syntax of tokens of that sort. Regular
       expressions may contain any basic symbol and any symbol operator as
-      described in the section <link linkend="???">Symbols</link>. Spaces are
-      only significant inside strings and character classes. The sort name
+      described in the section <link linkend="Symbols">Symbols</link>. Spaces
+      are only significant inside strings and character classes. The sort name
       <literal>LAYOUT</literal> is predefined and may not be redeclared.
       <literal>LAYOUT</literal> defines which parts of the text are
       <emphasis>layout symbols</emphasis> (also known as <emphasis>white
@@ -628,7 +628,7 @@ exports
         reading-desk used in primary education) recognizes the single string
         <literal>aapnootmies</literal>.</para>
 
-        <example>
+        <example xml:id="CODE_simplelex">
           <title>Simple lexical functions</title>
 
           <para><programlisting>module LeesPlank
@@ -1041,13 +1041,18 @@ exports
 
         <para>We will present a number of non-trivial lexical syntax
         definitions in order to get some ideas what can be specified using
-        SDF. <emphasis role="bold">Defining Numbers</emphasis> Definitions of
-        integers and real numbers are shown <link
-        linkend="CODE_numbers">below</link>. Note the use of the alternative
-        operator in the definitions of <literal>UnsignedInt</literal> and
-        <literal>Number</literal>. Also note the use of the option operator in
-        the definitions of <literal>SignedInt</literal> and
-        <literal>UnsignedReal</literal>.</para>
+        SDF. </para>
+
+        <formalpara>
+          <title>Defining Numbers</title>
+
+          <para>Definitions of integers and real numbers are shown <link
+          linkend="CODE_numbers">below</link>. Note the use of the alternative
+          operator in the definitions of <literal>UnsignedInt</literal> and
+          <literal>Number</literal>. Also note the use of the option operator
+          in the definitions of <literal>SignedInt</literal> and
+          <literal>UnsignedReal</literal>.</para>
+        </formalpara>
 
         <example xml:id="CODE_numbers">
           <title>Lexical definition of Numbers</title>
@@ -1071,11 +1076,14 @@ exports
     UnsignedInt | UnsignedReal                    -&gt; Number  </programlisting></para>
         </example>
 
-        <para><emphasis role="bold">Defining Strings</emphasis> The
-        specification <link linkend="CODE_string">below</link>, gives the
-        lexical definition of strings which may contain escaped double quote
-        characters. It defines a <literal>StringChar</literal> as
-        either</para>
+        <formalpara>
+          <title>Defining Strings</title>
+
+          <para>The specification <link linkend="CODE_string">below</link>,
+          gives the lexical definition of strings which may contain escaped
+          double quote characters. It defines a <literal>StringChar</literal>
+          as either</para>
+        </formalpara>
 
         <itemizedlist>
           <listitem>
@@ -1205,8 +1213,8 @@ exports
         right-hand side of a <link linkend="Variables">variable
         declaration</link>.</para>
 
-        <para><link linkend="???">Below</link> an example is given of how
-        lists can be used to define the syntax of a list of identifiers
+        <para><link linkend="CODE_pascal-ids">Below</link> an example is given
+        of how lists can be used to define the syntax of a list of identifiers
         (occurring in a declaration in a Pascal-like language).</para>
 
         <example xml:id="CODE_pascal-ids">
@@ -1314,11 +1322,12 @@ exports
       <section xml:id="MiscellaneousOperators">
         <title>Miscellaneous Operators</title>
 
-        <para>In <link linkend="???">Symbols</link> a number of sophisticated
-        operators, like alternative, option, set, function, sequence, tuple,
-        and permutation are discussed. These operators allow a concise manner
-        of defining grammars. There are, however, a number of issues to be
-        taken into consideration when using this operators.</para>
+        <para>In <link linkend="Symbols">Symbols</link> a number of
+        sophisticated operators, like alternative, option, set, function,
+        sequence, tuple, and permutation are discussed. These operators allow
+        a concise manner of defining grammars. There are, however, a number of
+        issues to be taken into consideration when using this
+        operators.</para>
 
         <para><emphasis role="bold">Definition of lists</emphasis> In the
         example <link linkend="CODE_lists-usage">below</link>, two different
@@ -1747,9 +1756,9 @@ exports
           <para>Really?</para>
         </warning>
 
-        <para><link linkend="???">Below</link> we give an example of a
-        definition of simple arithmetic expressions with the usual priorities
-        and associativities.</para>
+        <para><link linkend="CODE_simple-prio">Below</link> we give an example
+        of a definition of simple arithmetic expressions with the usual
+        priorities and associativities.</para>
 
         <example xml:id="CODE_simple-prio">
           <title>Simple context-free priority definition</title>
@@ -2115,8 +2124,6 @@ exports
     Id -/- [a-zA-Z0-9]</programlisting></para>
         </example>
 
-        <para></para>
-
         <formalpara>
           <title>Prefer Literals</title>
 
@@ -2217,109 +2224,187 @@ exports
           Parses</link>.</para>
         </formalpara>
       </section>
-    </section>
-  </section>
 
-  <!--\subsubsection{Context-free Ambiguities}
-\label{cf-ambiguity}
+      <section xml:id="cf-ambiguity">
+        <title>Context-free Ambiguities</title>
 
-Context-free grammars may be ambiguous and, as a result, the parser may yield
-different parses of a text. More precisely, the result of a parse is a single
-tree in which the ambiguities are explicitly marked. Each marked ambiguity
-consists of a set of different parse trees for that ambiguity.  
- Many, but notall, of these different parses can be eliminated by the following
-strategies that are built-in the \ASmetaenv. These strategies use the
-priorities and associativities as defined in the specification. In addition,
-some standard heuristics are used.
+        <para>Context-free grammars may be ambiguous and, as a result, the
+        parser may yield different parses of a text. More precisely, the
+        result of a parse is a single tree in which the ambiguities are
+        explicitly marked. Each marked ambiguity consists of a set of
+        different parse trees for that ambiguity. Many, but notall, of these
+        different parses can be eliminated by the following strategies that
+        are built-in in The Meta-Environment. These strategies use the
+        priorities and associativities as defined in the specification. In
+        addition, some standard heuristics are used.</para>
 
-\paragraph{Associativity filtering} The associativity filtering
-is performed during the generation of the parse table. Based
-on the associativity relations certain entries in the parse table
-are removed.
+        <formalpara>
+          <title>Associativity filtering</title>
 
-\paragraph{Removing Trees containing Conflicts}
+          <para>The associativity filtering is performed during the generation
+          of the parse table. Based on the associativity relations certain
+          entries in the parse table are removed.</para>
+        </formalpara>
 
-The simplest application of priority and associativity declarations is the
-elimination of trees that contain conflicts:
+        <formalpara>
+          <title>Removing Trees containing Conflicts</title>
 
-\begin{itemize}
+          <para>The simplest application of priority and associativity
+          declarations is the elimination of trees that contain
+          conflicts:</para>
+        </formalpara>
 
-\item A parent node has a child with a lower priority than the parent itself.
-  
-\item A parent has a first or last child that is in conflict with
-  an associativity relation between this parent and child.
+        <itemizedlist>
+          <listitem>
+            <para> A parent node has a child with a lower priority than the
+            parent itself.</para>
+          </listitem>
 
-\end{itemize}
+          <listitem>
+            <para>A parent has a first or last child that is in conflict wit
+            an associativity relation between this parent and child. </para>
+          </listitem>
+        </itemizedlist>
 
-Reconsidering the example of complex priorities shown \link*{earlier}[in
-Figure~\Ref]{CODE:complex-prio} we will give a number of example sentences and
-the interpretation given to them by that language definition.
+        <para>Reconsidering the example of complex priorities shown <link
+        linkend="CODE_complex-prio">earlier</link> we will give a number of
+        example sentences and the interpretation given to them by that
+        language definition.</para>
 
-\begin{center}
-\begin{tabular}{ll}
-  Sentence   & Interpretation \\
-\verb"1^2^3" & \verb"1^(2^3)" \\
-\verb"1^2*3" & \verb"(1^2)*3" \\
-\verb"1*2*3" & \verb"(1*2)*3" \\
-\verb"1/2/3" & error \\
-\verb"1*2/3" & error \\
-\verb"1-2-3" & error \\
-\verb"1+2+3" & \verb"(1+2)+3" \\
-\verb"1-2+3" & \verb"(1-2)+3" \\
-\verb"1+2-3" & \verb"(1+2)-3"\\
-\end{tabular}
-\end{center}
+        <table border="1">
+          <caption>Arithmetic expressions and their interpretation</caption>
 
-\paragraph{Removing Trees using {\tt prefer}/{\tt avoid} Attributes at the Root}
+          <tr>
+            <td>Sentence</td>
 
-The priority declarations are used to eliminate trees 
-in three phases: 
+            <td>Interpretation</td>
+          </tr>
 
-\begin{enumerate}
-  
-\item If there are trees of which the syntax rule at the top node has a {\tt
-    prefer} attribute, all other trees are removed.
+          <tr>
+            <td><literal>1^2^3</literal></td>
 
-\item  If there are trees of which the syntax rule at the top node has an {\tt
-    avoid} attribute and there are other trees without an {\tt avoid} attribute at
-  the root node, then all trees with {\tt avoid} attribute are removed.
-  
-\end{enumerate}
+            <td><literal>1^(2^3)</literal></td>
+          </tr>
 
-\paragraph{Removing Trees containing {\tt prefer}/{\tt avoid} Attributes}
+          <tr>
+            <td><literal>1^2*3</literal></td>
 
-After removing all trees containing conflicts, more than one tree may
-still remain.  To further reduce this set of remaining trees, the number
-of context-free functions with {\tt prefer}/{\tt avoid} attributes is
-calculated and compared.  A tree in the set is then rejected if there
-is another tree in the set with more {\tt prefer}s and less or equal
-{\tt avoid}s, or with equal {\tt prefer}s and more {\tt avoid}s.
+            <td><literal>(1^2)*3</literal></td>
+          </tr>
 
-\paragraph{Injection count}
-Finally, the number of injections in each of the resulting trees
-is calculated, the tree with the smallest number of injections
-is prefered.
+          <tr>
+            <td><literal>1*2*3</literal></td>
 
+            <td><literal>(1*2)*3</literal></td>
+          </tr>
 
-\paragraph{Examples}
+          <tr>
+            <td><literal>1/2/3</literal></td>
 
-The following examples show how the interaction (and resulting ambiguities)
-between general context-free functions and special case functions can be
-described using {\tt prefer} attribute. 
+            <td><emphasis>error</emphasis></td>
+          </tr>
 
-The \link{first example}[(Figure~\Ref]{CODE:eqn-exprs} concerns expressions
-for describing subscripts and superscripts in the typesetting language EQN.
-The crucial point is that, for typesetting reasons, we want to treat a
-subscript followed by a superscript in a special way. Therefore, the special
-case `{\tt E sub E sup E -> E}' is introduced, which is prefered over a
-combination of the two functions `{\tt E sub E -> E}' and `{\tt E sup E ->
-  E}'.
+          <tr>
+            <td><literal>1*2/3</literal></td>
 
-\begin{figure}
-\begin{Label}{CODE:eqn-exprs}
-\begin{IncCode}
-\begin{verbatim}
-module Eqn
+            <td><emphasis>error</emphasis></td>
+          </tr>
+
+          <tr>
+            <td><literal>1-2-3</literal></td>
+
+            <td><emphasis>error</emphasis></td>
+          </tr>
+
+          <tr>
+            <td><literal>1+2+3</literal></td>
+
+            <td><literal>(1+2)+3</literal></td>
+          </tr>
+
+          <tr>
+            <td><literal>1-2+3</literal></td>
+
+            <td><literal>(1-2)+3</literal></td>
+          </tr>
+
+          <tr>
+            <td><literal>1+2-3</literal></td>
+
+            <td><literal>(1+2)-3</literal></td>
+          </tr>
+        </table>
+
+        <formalpara>
+          <title>Removing Trees using
+          <literal>prefer</literal>/<literal>avoid</literal> Attributes at the
+          Root</title>
+
+          <para>The priority declarations are used to eliminate trees in three
+          phases: </para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para> If there are trees of which the syntax rule at the top node
+            has a <literal>prefer</literal> attribute, all other trees are
+            removed.</para>
+          </listitem>
+
+          <listitem>
+            <para> If there are trees of which the syntax rule at the top node
+            has an <literal>avoid</literal> attribute and there are other
+            trees without an <literal>avoid</literal> attribute at the root
+            node, then all trees with <literal>avoid</literal> attribute are
+            removed.</para>
+          </listitem>
+        </itemizedlist>
+
+        <formalpara>
+          <title>Removing Trees containing
+          <literal>prefer</literal>/<literal>avoid</literal>
+          Attributes</title>
+
+          <para>After removing all trees containing conflicts, more than one
+          tree may still remain. To further reduce this set of remaining
+          trees, the number of context-free functions with
+          <literal>prefer</literal>/<literal>avoid</literal> attributes is
+          calculated and compared. A tree in the set is then rejected if there
+          is another tree in the set with more {\tt prefer}s and less or equal
+          <literal>avoid</literal>s, or with equal <literal>prefer</literal>s
+          and more <literal>avoid</literal>s.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Injection count</title>
+
+          <para>Finally, the number of injections in each of the resulting
+          trees is calculated, the tree with the smallest number of injections
+          is prefered.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Examples</title>
+
+          <para>The following examples show how the interaction (and resulting
+          ambiguities) between general context-free functions and special case
+          functions can be described using <literal>prefer</literal>
+          attribute. </para>
+        </formalpara>
+
+        <para>The <link linkend="CODEEqn-exprs">first example</link> concerns
+        expressions for describing subscripts and superscripts in the
+        typesetting language EQN. The crucial point is that, for typesetting
+        reasons, we want to treat a subscript followed by a superscript in a
+        special way. Therefore, the special case <literal>E sub E sup E -&gt;
+        E</literal> is introduced, which is prefered over a combination of the
+        two functions <literal>E sub E -&gt; E </literal>and <literal>E sup E
+        -&gt; E</literal>.</para>
+
+        <example xml:id="CODE_eqn-exprs">
+          <title>Syntax definition of EQN expressions</title>
+
+          <para><programlisting>module Eqn
 
 imports basic/Whitespace
 
@@ -2328,38 +2413,32 @@ exports
   sorts E 
 
   context-free syntax
-    E "sub" E         -> E {left}
-    E "sup" E         -> E {left}
-    E "sub" E "sup" E -> E {prefer}
-    "{" E "}"         -> E {bracket}
-    "a"               -> E 
-\end{verbatim}
-\end{IncCode}
-\caption{Syntax definition of EQN expressions}
-\end{Label}
-\end{figure}
+    E "sub" E         -&gt; E {left}
+    E "sup" E         -&gt; E {left}
+    E "sub" E "sup" E -&gt; E {prefer}
+    "{" E "}"         -&gt; E {bracket}
+    "a"               -&gt; E</programlisting></para>
+        </example>
 
-In the \link{second example}[ (Figure~\Ref)]{CODE:dangling-else}
-the {\tt prefer} attribute is used to
-solve the dangling else problem in a nice way.
-The input sentence {\tt "if 0 then if 1 then hi else ho"} can be parsed
-in two ways: {\tt if 0 then (if 1 then hi) else ho} and
-{\tt if 0 then (if 1 then hi else ho)}.
-We can select the latter derivation by adding the {\tt prefer}
-attribute to the production without the {\tt else} part.
-The parser will still construct an ambiguity node containing both
-deriviations,
-namely, {\tt if 0 then (if 1 then hi \{prefer\}) else ho} and
-{\tt if 0 then (if 1 then hi else ho) \{prefer\}}.
-But given the fact that the \emph{top} node of the latter derivation tree
-has the prefer attribute this derivation is selected and the other
-tree is removed from the ambiguity node.
+        <para>In the <link linkend="CODE_dangling-else">second example</link>
+        the <literal>prefer</literal> attribute is used to solve the dangling
+        else problem in a nice way. The input sentence <literal>if 0 then if 1
+        then hi else ho</literal> can be parsed in two ways: <literal>if 0
+        then (if 1 then hi) else ho</literal> and <literal>if 0 then (if 1
+        then hi else ho)</literal>. We can select the latter derivation by
+        adding the {\tt prefer} attribute to the production without the {\tt
+        else} part. The parser will still construct an ambiguity node
+        containing both deriviations, namely, if 0 then (if 1 then hi
+        {prefer}) else ho} and <literal>if 0 then (if 1 then hi else ho)
+        {prefer}</literal>. But given the fact that the
+        <emphasis>top</emphasis> node of the latter derivation tree has the
+        prefer attribute this derivation is selected and the other tree is
+        removed from the ambiguity node.</para>
 
-\begin{figure}
-\begin{Label}{CODE:dangling-else}
-\begin{IncCode}
-\begin{verbatim}
-module DanglingElse
+        <example xml:id="CODE_dangling-else">
+          <title>Syntax definition of conditionals</title>
+
+          <para><programlisting>module DanglingElse
 
 imports basic/Whitespace
 
@@ -2368,52 +2447,46 @@ exports
   sorts E S
 
   context-free syntax
-    "a"                      -> E 
-    "if" E "then" S          -> S {prefer}
-    "if" E "then" S "else" S -> S
-    "s"                      -> S
-\end{verbatim}
-\end{IncCode}
-\caption{Syntax definition of conditionals}
-\end{Label}
-\end{figure}
+    "a"                      -&gt; E 
+    "if" E "then" S          -&gt; S {prefer}
+    "if" E "then" S "else" S -&gt; S
+    "s"                      -&gt; S</programlisting></para>
+        </example>
+      </section>
+    </section>
 
-\subsection{Parameterization and Renaming}
-\label{ParametersRenamings}
+    <section xml:id="ParametersRenamings">
+      <title>Parameterization and Renaming</title>
 
-Parameterization and renaming were in fact features of 
-the original ASF as described
-in \cite{BHK89}, but they were never supported by the ASF+SDF
-used in the first version of the \ASmetaenv~\cite{Kli93}. 
-Based on the work described in \cite{Vis97}, ASF+SDF is extended
-with parameterization and symbol renaming\footnote{In \cite{Vis97} the
-notion of production renaming is also introduced, but this
-will not be supported.}. We will first explain the notion
-of parameterization, later we will give details on symbol renaming.
+      <para>Parameterization and renaming were in fact features of the
+      original ASF as described in \cite{BHK89}, but they were never supported
+      by the ASF+SDF used in the first version of the ASF+SDF Meta-Environment
+      \cite{Kli93}. Based on the work described in \cite{Vis97}, ASF+SDF is
+      extended with parameterization and symbol renaming (the notion of
+      production renaming will not be supported.. We will first explain the
+      notion of parameterization, later we will give details on symbol
+      renaming.</para>
 
-\subsubsection{Parameterization}
-\label{Parameters}
+      <section xml:id="Parameterization">
+        <title>Parameterization</title>
 
-Module parameterization allows the definition of generic modules
-for lists, pairs, sets, etc. The operations defined in these
-modules are independent of a specific type. When importing a
-parameterized module and instantiating the formal by actual
-parameters the operations become "sort" specific.
+        <para>Module parameterization allows the definition of generic modules
+        for lists, pairs, sets, etc. The operations defined in these modules
+        are independent of a specific type. When importing a parameterized
+        module and instantiating the formal by actual parameters the
+        operations become sort specific. Modules can have formal parameters
+        when defining them. The module name is then followed by a list of
+        symbols, representing the formal parameters of this module. The
+        specification <link linkend="CODE_generic-pairs">below</link> shows an
+        example of a parameterized module. In this example the formal
+        parameters are used in the parameterized sorts as well, in order to
+        increase readability and to avoid name clashes between different
+        instances of the same module.</para>
 
-Modules can have formal parameters when defining them. The module name
-is then followed by a list of symbols, representing the formal
-parameters of this module. 
-The specification \link*{below}[in Figure~\Ref]{CODE:generic-pairs} shows 
-an example of a parameterized module. In this example the
-formal parameters are used in the parameterized sorts as well,
-in order to increase readability and to avoid name clashes between
-different instances of the same module.
+        <example xml:id="CODE_generic-pairs">
+          <title>Definition of generic pairs</title>
 
-\begin{figure}
-\begin{Label}{CODE:generic-pairs}
-\begin{IncCode}
-\begin{verbatim}
-module Pair[X Y]
+          <para><programlisting>module Pair[X Y]
 
 imports basic/Whitespace
 imports basic/Booleans
@@ -2426,61 +2499,51 @@ exports
   sorts Pair[[X,Y]]
 
   context-free syntax
-    "[" X "," Y "]"      -> Pair[[X,Y]]
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
 
-    make-pair(X, Y)      -> Pair[[X,Y]]
-    first(Pair[[X,Y]])   -> X
-    second(Pair[[X,Y]])  -> Y
-    is-pair(Pair[[X,Y]]) -> Boolean
-\end{verbatim}
-\end{IncCode}
-\caption{Definition of generic pairs}
-\end{Label}
-\end{figure}
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
+        </example>
 
-When importing a parameterized module the formal parameters have
-to be replaced by actual parameters. 
-The specification \link*{below}[in Figure~\Ref]{CODE:importing-pairs} shows 
-an example of a rather complicated import of a parameterized module. 
-The symbols {\tt Pair[[Boolean,Boolean]]} and {\tt Pair[[Integer,Integer]]} are the
-actual parameters of the module {\tt Pair[X Y]} in the last import.
+        <para>When importing a parameterized module the formal parameters have
+        to be replaced by actual parameters. The specification <link
+        linkend="CODE_importing-pairs">below</link> shows an example of a
+        rather complicated import of a parameterized module. The symbols
+        <literal>Pair[[Boolean,Boolean]] </literal>and
+        <literal>Pair[[Integer,Integer]]</literal> are the actual parameters
+        of the module <literal>Pair[X Y]</literal> in the last import.</para>
 
-\begin{figure}
-\begin{Label}{CODE:importing-pairs}
-\begin{IncCode}
-\begin{verbatim}
-module TestPair
+        <example xml:id="CODE_importing-pairs">
+          <title>Use of generic pair module</title>
+
+          <para><programlisting>module TestPair
 
 imports basic/Booleans 
 imports basic/Integers 
 imports Pair[Boolean Boolean]
 imports Pair[Integer Integer]
-imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]
-\end{verbatim}
-\end{IncCode}
-\caption{Use of generic pair module}
-\end{Label}
-\end{figure}
+imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Symbol Renaming}
-\label{Renamings}
+      <section xml:id="SymbolRenaming">
+        <title>Symbol Renaming</title>
 
-Symbol renaming is in fact very similar to parameterization except
-that it is not necessary to add formal parameters to a module.
-The mechanism of symbol renaming allows the overriding of one
-symbol or a set of symbols by another symbol or symbols, respectively. 
-It allows a flexible and concise way of adapting specifications.
-The specification \link*{below}[in Figure~\Ref]{CODE:pairs} shows 
-an example of the {\tt Pair} module without parameters. 
-The idea is to achieve the same effect as parameterization
-by explicitly renaming {\tt X} and {\tt Y} to the desired
-names when {\tt Pair} is imported.
+        <para>Symbol renaming is in fact very similar to parameterization
+        except that it is not necessary to add formal parameters to a module.
+        The mechanism of symbol renaming allows the overriding of one symbol
+        or a set of symbols by another symbol or symbols, respectively. It
+        allows a flexible and concise way of adapting specifications. The
+        specification <link linkend="CODE_pairs">below</link> shows an example
+        of the <literal>Pair</literal> module without parameters. The idea is
+        to achieve the same effect as parameterization by explicitly renaming
+        <literal>X</literal> and <literal>Y</literal> to the desired names
+        when <literal>Pair</literal> is imported.<example xml:id="CODE_pairs">
+            <title>Definition of generic pairs</title>
 
-\begin{figure}
-\begin{Label}{CODE:pairs}
-\begin{IncCode}
-\begin{verbatim}
-module Pair
+            <para><programlisting>module Pair
 
 imports basic/Whitespace
 imports basic/Booleans
@@ -2493,68 +2556,62 @@ exports
   sorts Pair[[X,Y]]
 
   context-free syntax
-    "[" X "," Y "]"      -> Pair[[X,Y]]
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
 
-    make-pair(X, Y)      -> Pair[[X,Y]]
-    first(Pair[[X,Y]])   -> X
-    second(Pair[[X,Y]])  -> Y
-    is-pair(Pair[[X,Y]]) -> Boolean
-\end{verbatim}
-\end{IncCode}
-\caption{Definition of generic pairs}
-\end{Label}
-\end{figure}
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
+          </example></para>
 
-During import such module symbols can be renamed via symbol renaming.
-The specification \link*{below}[in Figure~\Ref]{CODE:renaming-pairs} shows 
-an example of a rather complicated import of the module {\tt Pair}
-using renamings. Renaming {\tt X} to {\tt Boolean} is, for instance,
-written as {\tt X => Boolean}.
+        <para>During import such module symbols can be renamed via symbol
+        renaming. The specification <link
+        linkend="CODE_renaming-pairs">below</link> shows an example of a
+        rather complicated import of the module <literal>Pair</literal> using
+        renamings. Renaming <literal>X</literal> to <literal>Boolean</literal>
+        is, for instance, written as <literal>X =&gt;
+        Boolean.</literal></para>
 
-\begin{figure}
-\begin{Label}{CODE:renaming-pairs}
-\begin{IncCode}
-\begin{verbatim}
-module TestPair
+        <para><example xml:id="CODE_renaming-pairs">
+            <title>Use of generic pair module</title>
+
+            <para><programlisting>module TestPair
 
 imports basic/Booleans 
 imports basic/Integers 
-imports Pair[X => Boolean Y => Boolean]
-imports Pair[X => Integer  Y => Integer]
-imports Pair[X => Pair[[Boolean,Boolean]] Y => Pair[[Integer,Integer]]]
-\end{verbatim}
-\end{IncCode}
-\caption{Use of generic pair module}
-\end{Label}
-\end{figure}
+imports Pair[X =&gt; Boolean Y =&gt; Boolean]
+imports Pair[X =&gt; Integer  Y =&gt; Integer]
+imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</programlisting></para>
+          </example></para>
+      </section>
+    </section>
 
-\subsection{Variables}
-\label{Variables}
+    <section xml:id="Variables">
+      <title>Variables</title>
 
-\index{variables@variables}
-Variables are declared in the `{\tt variables}' section of a module.  Like all
-other entities in a 
-module, except equations, variables may be exported
-(see \link*{Modules}[Section~\Ref]{modules}). 
-A variables section consists of a list of variable
-names followed by a symbol. In fact, a variable declaration can define an
-infinite collection of variables by using a \emph{naming scheme} instead of a
-simple variable name.  A naming scheme is a regular expression like the ones
-allowed in the \link{lexical syntax}[ (Section~\Ref)]{lexical-syntax} except that sorts
-are not allowed. A variable may represent any symbol. 
+      <para>\index{variables@variables}</para>
 
-In the specification \link*{below}[in Figure~\Ref]{CODE:variables},
-`{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
-are examples of variables declared by the naming schemes in 
-the {\tt variables} section.
-Strings that occur in the left-hand side of variable declarations
-should {\em always} be quoted.
+      <para> Variables are declared in the <literal>variables</literal>
+      section of a module. Like all other entities in a module, except
+      equations, variables may be exported (see section <link
+      linkend="Modules">Modules</link>). A variables section consists of a
+      list of variable names followed by a symbol. In fact, a variable
+      declaration can define an infinite collection of variables by using a
+      \emph{naming scheme} instead of a simple variable name. A naming scheme
+      is a regular expression like the ones allowed in the <link
+      linkend="LexicalSyntax">lexical syntax</link>except that sorts are not
+      allowed. A variable may represent any symbol. In the specification <link
+      linkend="CODE_variables">below</link>, <literal>Id</literal>,
+      <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
+      variables declared by the naming schemes in the
+      <literal>variables</literal> section. Strings that occur in the
+      left-hand side of variable declarations should
+      <emphasis>always</emphasis> be quoted.</para>
 
-\begin{figure}
-\begin{Label}{CODE:variables}
-\begin{IncCode}
-\begin{verbatim}
-module VarDecls
+      <example xml:id="CODE_variables">
+        <title>Variable declarations using naming schemes</title>
+
+        <para><programlisting>module VarDecls
 
 imports basic/Whitespace
 
@@ -2563,269 +2620,319 @@ exports
   sorts Id Decl Type 
 
   lexical syntax
-    [a-z]+ -> Id
+    [a-z]+ -&gt; Id
  
   context-free syntax
-    "decl" {Id ","}+ ":" Type -> Decl 
-    "integer"                 -> Type 
-    "real"                    -> Type 
+    "decl" {Id ","}+ ":" Type -&gt; Decl 
+    "integer"                 -&gt; Type 
+    "real"                    -&gt; Type 
 
 hiddens
   variables
-    "Id"           -> Id 
-    "Type"[0-9]*   -> Type 
-    "Id-list"[\']* -> {Id ","}* 
-    "Id-ne-list"   -> {Id ","}+
-\end{verbatim}
-\end{IncCode}
-\caption{Variable declarations using naming schemes}
-\end{Label}
-\end{figure}         
+    "Id"           -&gt; Id 
+    "Type"[0-9]*   -&gt; Type 
+    "Id-list"[\']* -&gt; {Id ","}* 
+    "Id-ne-list"   -&gt; {Id ","}+</programlisting></para>
+      </example>
 
-Declared variables can only be used when defining equations. It is not
-allowed to use them in terms.
+      <para>Declared variables can only be used when defining equations. It is
+      not allowed to use them in terms. Ambiguities due to variables are
+      resolved by the <emphasis>Prefer Variables</emphasis> strategy that was
+      discussed in <link linkend="lex-ambiguity">Lexical
+      Ambiguities</link>.</para>
+    </section>
 
-Ambiguities due to variables are resolved by the {\em Prefer Variables}
-strategy that was discussed in
-\link*{Lexical Ambiguities}[Section~\Ref]{lex-ambiguity}.
+    <section xml:id="Libraries">
+      <title>Libraries</title>
 
-\subsection{Libraries}
-\label{Libraries}
+      <warning>
+        <para>This text is outdated. Move it to a separate article:
+        "Understanding the ASF+SDF libraries".</para>
+      </warning>
 
-Via the graphical user interface of the \ASmetaenv\ one has access to
-a number of predefined modules. These library modules are divided into
-4 different categories:
-\begin{enumerate}
-\item {\tt basic}
-\item {\tt containers}
-\item {\tt languages}
-\item {\tt utilities}
-\end{enumerate}
+      <para> Via the graphical user interface of the ASF+SDF Meta-Environment
+      one has access to a number of predefined modules. These library modules
+      are divided into 4 different categories:</para>
 
-Each of these categories offers a number of useful library modules, e.g.,
-the category {\tt basic} offers the library modules for {\tt Booleans},
-{\tt Integers}, {\tt Strings}, etc. The category {\tt containers} offers
-modules {\tt List}, {\tt Set}, and {\tt Table}. The category {\tt
-languages} offers a number of predefined syntax definitions. 
+      <itemizedlist>
+        <listitem>
+          <para><literal>basic</literal></para>
+        </listitem>
 
-One can import these library modules in a specification in the following
-way:
-{\tt imports basic/Booleans} for a library module without parameters and
-{\tt imports containers/List[Boolean]} if it is a parameterized library
-module. In the various examples presented upto now the library modules
-are used whenever appropriate.
+        <listitem>
+          <para><literal>containers</literal></para>
+        </listitem>
 
-When developing a new specification make sure that you check the libraries
-in order to reduce the amount of work.
+        <listitem>
+          <para><literal>languages</literal></para>
+        </listitem>
 
-\subsubsection{Position Information}
-In a number of cases, for instance when producing error messages, it can
-be very useful to retrieve the position information of subterms.
-\subsubsection{Error messages}
+        <listitem>
+          <para><literal>utilities</literal></para>
+        </listitem>
+      </itemizedlist>
 
-\subsection{Equations}
-\label{Equations}
+      <para>Each of these categories offers a number of useful library
+      modules, e.g., the category <literal>basic</literal> offers the library
+      modules for <literal>Booleans</literal>, <literal>Integers</literal>,
+      <literal>Strings</literal>, etc. The category
+      <literal>containers</literal> offers modules <literal>List</literal>,
+      <literal>Set</literal>, and <literal>Table</literal>. The category
+      <literal>languages</literal> offers a number of predefined syntax
+      definitions. One can import these library modules in a specification in
+      the following way</para>
 
-\index{equations@equations}
-\index{Asf+Sdf@\asfsdf}
-With equations a meaning or semantics may be added to functions declared in
-the lexical and context-free syntax sections. 
-In particular, equations consist of two \emph{open terms}, i.e.
-terms possibly containing variables.
+      <itemizedlist>
+        <listitem>
+          <para><literal>basic/Booleans</literal> for a library module without
+          parameters, and</para>
+        </listitem>
 
-In the context of \asfsdf, an open term is any string that can be parsed
-according to one of the sorts in the specification (possibly including
-variables).  
-Examples of (open) terms are `{\tt true}', `{\tt not(false)}',
-and `{\tt true | Bool}'.
+        <listitem>
+          <para><literal>imports containers/List[Boolean]</literal> if it is a
+          parameterized library module.</para>
+        </listitem>
+      </itemizedlist>
 
-\W We will discuss the following aspects of equations:
-\W \htmlmenu{1}
+      <para>In the various examples presented upto now the library modules are
+      used whenever appropriate. When developing a new specification make sure
+      that you check the libraries in order to reduce the amount of
+      work.</para>
 
-\subsubsection{Unconditional Equations}
+      <warning>
+        <para>\subsubsection{Position Information} In a number of cases, for
+        instance when producing error messages, it can be very useful to
+        retrieve the position information of subterms. \subsubsection{Error
+        messages}</para>
+      </warning>
+    </section>
 
-\index{unconditional equations@unconditional equations}
-An equality then consists of two (possibly open) terms $L$ (lefthand side) and $R$ (righthand
-side) such that:
+    <section xml:id="Equations">
+      <title>Equations</title>
 
-\begin{itemize}
+      <para>\index{equations@equations} \index{Asf+Sdf@\asfsdf}</para>
 
-\item $L$ and $R$ are of the same sort.
+      <para> With equations a meaning or semantics may be added to functions
+      declared in the lexical and context-free syntax sections. In particular,
+      equations consist of two \emph{open terms}, i.e. terms possibly
+      containing variables. In the context of ASF+SDF, an open term is any
+      string that can be parsed according to one of the sorts in the
+      specification (possibly including variables). Examples of (open) terms
+      are <literal>true</literal>, <literal>not(false)</literal>, and
+      <literal>true | Bool</literal>.</para>
 
-\item $L$ is not a single variable.
-  
-\item The variables that occur in $R$ also occur in $L$.
+      <section xml:id="UnconditionalEquations">
+        <title>Unconditional Equations</title>
 
-\end{itemize}
+        <para>\index{unconditional equations@unconditional equations}</para>
 
-It is assumed that the
-variables occurring in the equation are universally quantified. In other
-words, the equality holds for all possible values of the variables.
+        <para> An equality then consists of two (possibly open) terms
+        <replaceable>L</replaceable> (lefthand side) and
+        <replaceable>R</replaceable> (righthand side) such that:</para>
 
-The equality of two terms $L$ and $R$ is defined  in ASF+SDF by the following
-\emph{unconditional} equation:
+        <itemizedlist>
+          <listitem>
+            <para><replaceable>L</replaceable> and
+            <replaceable>R</replaceable> are of the same sort.</para>
+          </listitem>
 
-\begin{quote}
-{\tt [$TagId$] $L$ = $R$} 
-\end{quote}
+          <listitem>
+            <para><replaceable>L</replaceable> is not a single
+            variable.</para>
+          </listitem>
 
-\noindent where $TagId$ is a sequence of letters, digits, and/or minus
-signs ({\tt -}) starting with a letter or a digit.
+          <listitem>
+            <para>The variables that occur in <replaceable>R</replaceable>
+            also occur in <replaceable>L</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
 
+        <para>It is assumed that the variables occurring in the equation are
+        universally quantified. In other words, the equality holds for all
+        possible values of the variables. The equality of two terms
+        <replaceable>L</replaceable> and <replaceable>R</replaceable> is
+        defined in ASF+SDF by the following <emphasis>unconditional</emphasis>
+        equation:<programlisting>[<replaceable>TagId</replaceable>] <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>where
+        <replaceable>TagId</replaceable> is a sequence of letters, digits,
+        and/or minus signs (<literal>-</literal>) starting with a letter or a
+        digit.</para>
+      </section>
 
-\subsubsection{Conditional Equations}
+      <section xml:id="ConditionalEquations">
+        <title>Conditional Equations</title>
 
-\index{conditional equations@conditional equations}
-An unconditional equation is a special case of a \emph{conditional equation},
-i.e., an equality with one or more associated conditions (premises).  The
-equality is sometimes called the \emph{conclusion} of the conditional
-equation.
+        <para>\index{conditional equations@conditional equations}</para>
 
-In ASF+SDF a conditional equation can be written in three (syntactically
-different, but semantically equivalent) ways:
+        <para> An unconditional equation is a special case of a
+        <emphasis>conditional equation</emphasis>, i.e., an equality with one
+        or more associated conditions (premises). The equality is sometimes
+        called the \emph{conclusion} of the conditional equation. In ASF+SDF a
+        conditional equation can be written in three (syntactically different,
+        but semantically equivalent) ways. Using
+        <literal>when</literal><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>L</replaceable> = <replaceable>R</replaceable> when <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ...</programlisting>or
+        using an implication arrow <literal>===&gt;</literal><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ... ===&gt; <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>or
+        using an horizontal bar</para>
 
-\begin{tabbing}
-(a) \= {\tt [$TagId$]} \= {\tt $L$ = $R$ when $C_1$, $C_2$, ...} \\\\
-(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ===> $L$ = $R$} \\ 
-(c) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ...} \\
-             \>    \> {\tt =================} \\
-             \>    \> \ \ \ \ \ {\tt $L$ = $R$}
-\end{tabbing}
+        <para><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ... 
+        =============
+            <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting></para>
 
+        <para> where <replaceable>C</replaceable><subscript>1</subscript> ,
+        <replaceable>C</replaceable><subscript>2</subscript> , ... are
+        conditions which may be of one of the following forms:</para>
 
-\noindent where ${\tt C}_1$, ${\tt C}_2$, ...  are conditions which may be 
-either matching (and have the form `{\tt $S$ := $T$}'),
-negative matching (and have the form `{\tt $S$ !:= $T$}'),
-positive (and have  the form `{\tt $S$ == $T$}'), 
-or negative (and have the form `{\tt $S$ != $T$}').
+        <itemizedlist>
+          <listitem>
+            <para>match: <replaceable>S</replaceable><literal> :=
+            </literal><replaceable>T</replaceable></para>
+          </listitem>
 
-The conditions of an equation are evaluated from left to right. Let,
-initially, $V$ be the set of variables occurring in the left-hand 
-side $L$ of the conclusion of the equation. 
-For the evaluation of matching conditions we have the following case:
-\begin{itemize}
+          <listitem>
+            <para>non-match: <replaceable>S</replaceable><literal>
+            !:=</literal><replaceable> T</replaceable></para>
+          </listitem>
 
-\item Left-hand side of a matching condition must contain at least one
-  new or fresh variable not in $V$.
-  Reduce the right-hand side of the matching condition to a normal form 
-  and the matching condition succeeds if this normal form and the 
-  left-hand side of the condition match. 
-  The new variables resulting from this match are added
-  to $V$. This kind of condition is called a \emph{match} condition.
-  The variables occurring in both $V$ and the left-hand side must
-  represent the syntactically the same subterm.
+          <listitem>
+            <para>equality (positive): <replaceable>S</replaceable><literal>
+            ==</literal><replaceable> T</replaceable> (also known as
+            <emphasis>positive</emphasis> condition)</para>
+          </listitem>
 
-\end{itemize}
-For the evaluation of each positive condition we
-distinguish the following cases:
+          <listitem>
+            <para>non-equality: <replaceable>S</replaceable><literal> !=
+            </literal><replaceable>T</replaceable> (also known as
+            <emphasis>negative</emphasis> condition)</para>
+          </listitem>
+        </itemizedlist>
 
-\begin{itemize}
-  
-\item The condition contains only variables in $V$. Reduce both sides of the
-  condition to normal form and the condition succeeds if both normal 
-  forms are identical. 
-  Technically, this is called a \emph{join} condition.
-  
-\end{itemize}
-  
-The evaluation of negative conditions is described by replacing in the above
-description `identical' and `match' by `not identical' and `do not
-match', respectively.
- 
-\warning{}
-It is not allowed to introduce new variables in a negative condition.
-%%A warning is appropriate here: a negative condition that introduces
-%%new variables nearly always succeeds (unless the sort has exactly one
-%% element) and this is almost certainly not what you want.
+        <para>The conditions of an equation are evaluated from left to right.
+        Let, initially, <replaceable>Vars</replaceable> be the set of
+        variables occurring in the left-hand side
+        <replaceable>LVars</replaceable> of the conclusion of the equation.
+        </para>
 
-After the successful evaluation of the conditions, all variables occurring in
-the right-hand side of the conclusion of the equation should be in $V$.
+        <para>Match conditions are evaluated as follows. The left-hand side of
+        a matching condition must contain at least one new or fresh variable
+        not in <replaceable>Vars</replaceable>. Reduce the right-hand side of
+        the match condition to a normal form and the match condition succeeds
+        if this normal form and the left-hand side of the condition match. The
+        new variables resulting from this match are added to
+        <replaceable>Vars</replaceable>. </para>
 
-New variables (see above) should therefore {\bf not} occur on \emph{both} 
-sides of a positive condition, in a negative condition, 
-or in the right-hand side of the conclusion.
+        <warning>
+          <para>The variables occurring in both
+          <replaceable>Vars</replaceable> and the left-hand side must
+          represent the syntactically the same subterm.</para>
+        </warning>
 
+        <para>For the evaluation of each equality condition we require that
+        the condition contains only variables in
+        <replaceable>Vars</replaceable>. Reduce both sides of the condition to
+        normal form and the condition succeeds if both normal forms are
+        identical. Technically, this is called a <emphasis>join</emphasis>
+        condition. The evaluation of negative conditions is described by
+        replacing in the above description `identical' and `match' by `not
+        identical' and `do not match', respectively. <warning>
+            <para>It is not allowed to introduce new variables in a negative
+            condition.</para>
+          </warning>After the successful evaluation of the conditions, all
+        variables occurring in the right-hand side of the conclusion of the
+        equation should be in <replaceable>Vars</replaceable>. New variables
+        (see above) should therefore <emphasis>not</emphasis> occur on
+        <emphasis>both</emphasis> sides of a positive condition, in a negative
+        condition, or in the right-hand side of the conclusion.</para>
+      </section>
 
+      <section xml:id="ExecutingEquations">
+        <title>Executing Equations</title>
 
+        <para>\index{leftmost-innermost@leftmost-innermost} \index{rewrite
+        rules@rewrite rules} \index{default equations@default
+        equations}</para>
 
-\subsubsection{Executing Equations}
-\label{ExecutingEquations}
+        <para> In the ASF+SDF Meta-Environment, equations can be executed as
+        <emphasis>rewrite rules</emphasis>. The above equation is thus
+        executed as the rewrite rule <replaceable>L</replaceable> -&gt;
+        <replaceable>R</replaceable>. This can be used to reduce some initial
+        closed term (i.e., not containing variables) to a <emphasis>normal
+        form</emphasis> (i.e., a term that is not reducible any further) by
+        repeatedly applying rules from the specification. A term is always
+        reduced in the context of a certain module, say
+        <replaceable>M</replaceable>. The rewrite rules that may be used for
+        the reduction of the term are the rules declared in
+        <replaceable>M</replaceable> itself and in the modules that are
+        (directly or indirectly) imported by <replaceable>M</replaceable>. The
+        search for an applicable rule is determined by the reduction strategy,
+        that is, the procedure used to select a subterm for possible
+        reduction. In our case the<emphasis> leftmost-innermost</emphasis>
+        reduction strategy is used. This means that a left-to-right,
+        depth-first traversal of the term is performed and that for each
+        subterm encountered an attempt is made to reduce it. Next, the rules
+        are traversed one after the other. The textual order of the rules is
+        irrelevant. Instead they are ordered according to their
+        <emphasis>specificity</emphasis>: more specific rules come before more
+        general rules and <link linkend="DefaultEquations">default
+        equations</link>} come last. <emphasis>Independent of the specificity,
+        a specification should always be confluent and terminating.</emphasis>
+        If the selected subterm and the left-hand side of a rule (more
+        precisely: of the left-hand side of its conclusion) match, we say that
+        a <emphasis>redex</emphasis> has been found and the following happens.
+        The conditions of the rule are evaluated and if the evaluation of a
+        condition fails, other rules (if any) with matching left-hand sides
+        are tried. If the evaluation of all conditions succeeds, the selected
+        subterm is replaced by the right-hand side of the rule (more
+        precisely: the right-hand side of the conclusion of the rule) after
+        performing proper <emphasis>substitutions</emphasis>. Substitutions
+        come into existence by the initial matching of the rule and by the
+        evaluation of its conditions. For the resulting term the above process
+        is repeated until no further reductions are possible and a normal form
+        is reached (if any).</para>
+      </section>
 
-\index{leftmost-innermost@leftmost-innermost}
-\index{rewrite rules@rewrite rules}
-\index{default equations@default equations}
-In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
-above equation is thus executed as the rewrite rule $L \rightarrow R$. This
-can be used to reduce some initial closed term (i.e., not containing
-variables) to a \emph{normal form} (i.e., a term that is not reducible any
-further) by repeatedly applying rules from the specification.
+      <section xml:id="ListMatching">
+        <title>List Matching</title>
 
-A term is always reduced in the context of a certain module, say $M$. The
-rewrite rules that may be used for the reduction of the term are the rules
-declared in $M$ itself and in the modules that are (directly or indirectly)
-imported by $M$.
+        <para>\index{list matching@list matching} \index{associative
+        matching@associative matching}</para>
 
-The search for an applicable rule is determined by the reduction strategy,
-that is, the procedure used to select a subterm for possible reduction. In our
-case the \emph{leftmost-innermost} reduction strategy is used. This means that a
-left-to-right, depth-first traversal of the term is performed and that for
-each subterm encountered an attempt is made to reduce it.
+        <para> List matching, also known as <emphasis>associative
+        matching</emphasis>, is a powerful mechanism to describe complex
+        functionality in a compact way. The example <link
+        linkend="CODE_sets">below</link> shows a compact specification to
+        remove double elements from a set. Unlike the matching of ordinary
+        (non-list) variables, the matching of a list variable may have more
+        than one solution since the variable can match lists of arbitrary
+        length. As a result, backtracking is needed. For instance, to match
+        <literal>X Y</literal> (a list expression containing the two list
+        variables <literal>X</literal> and <literal>Y</literal> indicating the
+        division of a list into two sublists) with the list
+        <literal>ab</literal> (a list containing two elements) the following
+        three alternatives have to be considered:</para>
 
-Next, the rules are traversed one after the other.  The textual order of the
-rules is irrelevant.  Instead they are ordered according to their
-\emph{specificity}: more specific rules come before more general rules and
-\link{default equations}[ (see Section~\Ref)]{DefaultEquations} come last.  
-\emph{Independent of the specificity, a specification should always be
-confluent and terminating.}
+        <itemizedlist>
+          <listitem>
+            <para>X = (empty), Y = ab</para>
+          </listitem>
 
-If the selected subterm and the left-hand side of a
-rule (more precisely: of the left-hand side of its conclusion) match, we say
-that a \emph{redex} has been found and the following happens. The conditions
-of the rule are evaluated and if the evaluation of a condition fails, other
-rules (if any) with matching left-hand sides are tried.  If the evaluation of
-all conditions succeeds, the selected subterm is replaced by the right-hand
-side of the rule (more precisely: the right-hand side of the conclusion of the
-rule) after performing proper \emph{substitutions}. Substitutions come into
-existence by the initial matching of the rule and by the evaluation of its
-conditions.  For the resulting term the above process is repeated until no
-further reductions are possible and a normal form is reached (if any).
+          <listitem>
+            <para>X = a, Y = b</para>
+          </listitem>
 
-\subsubsection{List Matching}
+          <listitem>
+            <para>X = ab, Y = (empty).</para>
+          </listitem>
+        </itemizedlist>
 
-\index{list matching@list matching}
-\index{associative matching@associative matching}
-List matching, also known as \emph{associative matching}, is a powerful
-mechanism to describe complex functionality in a compact way.  
+        <para>In the unconditional case, backtracking occurs only during
+        matching. When conditions are present, the failure of a condition
+        following the match of a list variable leads to the trial of the next
+        possible match of the list variable and the repeated evaluation of
+        following conditions.</para>
 
-The example \link*{below}[in Figure~\Ref]{CODE:sets}
-shows a compact specification to remove double elements from a set.
+        <example xml:id="CODE_sets">
+          <title>Set specification</title>
 
-Unlike the matching of ordinary (non-list) variables, the matching of a list
-variable may have more than one solution since the variable can match lists of
-arbitrary length.
-
-As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
-expression containing the two list variables {\tt X} and {\tt Y} indicating
-the division of a list into two sublists) with the list {\tt ab} (a list
-containing two elements) the following three alternatives have to be
-considered:
-
-\begin{quote}
-{\tt X = (empty), Y = ab, \\
-X = a, Y = b, \\
-X = ab, Y = (empty)}.
-\end{quote}
-
-In the unconditional case, backtracking occurs only during matching. When
-conditions are present, the failure of a condition following the match of a
-list variable leads to the trial of the next possible match of the list
-variable and the repeated evaluation of following conditions.
-
-\begin{figure}[tb]
-\begin{Label}{CODE:sets}
-\begin{IncCode}
-\begin{verbatim}
-module Sets
+          <para><programlisting>module Sets
 
 imports basic/Whitespace
 
@@ -2834,37 +2941,32 @@ exports
   sorts Elem Set
 
   lexical syntax
-    [a-z]+ -> Elem
+    [a-z]+ -&gt; Elem
 
   context-free syntax
-    Set[Elem] -> Set
+    Set[Elem] -&gt; Set
 
 hiddens
   variables
-    "Elem"[0-9]*  -> Elem
-    "Elem*"[0-9]* -> {Elem ","}*
+    "Elem"[0-9]*  -&gt; Elem
+    "Elem*"[0-9]* -&gt; {Elem ","}*
 
 equations
   
-  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
-\end{verbatim}
-\end{IncCode}
-\caption{Set specification}
-\end{Label}
-\end{figure}   
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3}</programlisting></para>
+        </example>
 
-Another example of list matching in combination with the evaluation
-of conditions is shown \link*{below}[ in Figure~\Ref]{CODE:split}.
-A list of elements is split into two parts of equal length, if the list
-has an even number of elements. In case of a list of uneven length
-the middle element is ignored. The first part of the list is returned
-as result.
+        <para>Another example of list matching in combination with the
+        evaluation of conditions is shown <link
+        linkend="CODE_split">below</link>. A list of elements is split into
+        two parts of equal length, if the list has an even number of elements.
+        In case of a list of uneven length the middle element is ignored. The
+        first part of the list is returned as result.</para>
 
-\begin{figure}[t]
-\begin{Label}{CODE:split}
-\begin{IncCode}
-\begin{verbatim}
-%% Split.sdf
+        <example xml:id="CODE_split">
+          <title>Split-in-two specification</title>
+
+          <para><programlisting>%% Split.sdf
 module Split
 
 imports basic/Integers
@@ -2875,16 +2977,16 @@ exports
   sorts El List
 
   lexical syntax
-    [a-z]+ -> El
+    [a-z]+ -&gt; El
   context-free syntax
-    {El ","}*          -> List
-    length(List)       -> Integer
-    split-in-two(List) -> List
+    {El ","}*          -&gt; List
+    length(List)       -&gt; Integer
+    split-in-two(List) -&gt; List
 
 hiddens
   variables
-    "El"[0-9]*  -> El
-    "El*"[0-9]* -> {El ","}* 
+    "El"[0-9]*  -&gt; El
+    "El*"[0-9]* -&gt; {El ","}* 
 
 %% Split.asf
 equations
@@ -2894,55 +2996,36 @@ equations
   [l-2] length(El, El*) = 1 + length(El*)
 
   [s-1] length(El*1) == length(El*2)
-        ====>
+        ====&gt;
         split-in-two(El*1, El*2) = El*1
 
   [s-1] length(El*1) == length(El*2)
-        ====>
-        split-in-two(El*1, El, El*2) = El*1 
-\end{verbatim}
-\end{IncCode}
-\caption{Split-in-two specification}
-\end{Label}
-\end{figure}  
+        ====&gt;
+        split-in-two(El*1, El, El*2) = El*1</programlisting></para>
+        </example>
+      </section>
 
+      <section xml:id="LexicalConstructorFunctions">
+        <title>Lexical Constructor Functions</title>
 
+        <para>The only way to access the actual characters of a lexical token
+        is by means of the so-called lexical constructor functions. For each
+        lexical sort <replaceable>LEX</replaceable> a lexical constructor
+        function is automatically derived, the corresponding syntax definition
+        is: <programlisting><replaceable>lex</replaceable>( CHAR* ) -&gt; <replaceable>LEX</replaceable></programlisting>
+        The sort <replaceable>CHAR</replaceable> is a predefined sort to
+        access the characters. Characters can be directly addressed by the
+        representation or via variables which may be of the sorts
+        <literal>CHAR</literal>, <literal>CHAR*</literal>, or
+        <literal>CHAR+</literal>. The latter two represent lists of
+        characters. In the example <link linkend="CODE_lcfs">below</link> the
+        lexical constructor function <literal>nat-con</literal> is used to
+        remove the leading zeros from a number.</para>
 
-\subsubsection{Lexical Constructor Functions}
+        <para><example xml:id="CODE_lcfs">
+            <title>Use of lexical constructor</title>
 
-The only way to access the actual characters of a lexical token is
-by means of the so-called {\em lexical constructor functions}.
-For each lexical sort $LEX$ a lexical constructor function is automatically
-derived, the corresponding syntax definition is:
-$lex${\tt ( CHAR* ) -> }$LEX$.
-The sort {\tt CHAR} is a predefined sort to access the characters.
-
-Characters can be directly addressed by the representation or via
-variables which may be of the sorts {\tt CHAR}, {\tt CHAR*}, or
-{\tt CHAR+}.
-The latter two represent lists of characters.
-In the example \link*{below}[in Figure~\Ref]{CODE:lcfs} 
-the lexical constructor function {\tt nat-con} is used to remove the leading
-zeros from a number.
-
-\warning{}
-The argument of a lexical constructor may be an
-arbitrary list of characters and there is \emph{no check that they match
-the lexical definition of the corresponding sort}.
-This means that when writing a specification one should be aware that
-it is possible to construct illegal lexical entities, for instance,
-by inserting letters in an integer.
-In the example \link*{below}[in Figure~\Ref]{CODE:illegallcfs} 
-via the lexical constructor function {\tt nat-con} a natural
-number containing the letter {\tt a} is constructed.
-
-
-\begin{figure}[tb]
-\begin{Label}{CODE:lcfs}
-\begin{IncCode}
-\begin{verbatim}
-%% Nats.sdf
-module Nats
+            <para><programlisting>module Nats
 
 imports basic/Whitespace
 
@@ -2951,28 +3034,32 @@ exports
   sorts Nat-con
 
   lexical syntax
-    [0-9]+ -> Nat-con 
+    [0-9]+ -&gt; Nat-con 
 
 hiddens
   variables
-    "Char+"[0-9]* -> CHAR+
-
-%% Nats.asf
+    "Char+"[0-9]* -&gt; CHAR+
 equations
 
-  [1] nat-con("0" Char+) = nat-con(Char+)  
-\end{verbatim}
-\end{IncCode}
-\caption{Use of lexical constructor functions}
-\end{Label}
-\end{figure}    
+  [1] nat-con("0" Char+) = nat-con(Char+)</programlisting></para>
+          </example></para>
 
-\begin{figure}[tb]
-\begin{Label}{CODE:illegallcfs}
-\begin{IncCode}
-\begin{verbatim}
-%% Nats.sdf
-module Nats
+        <warning>
+          <para>The argument of a lexical constructor may be an arbitrary list
+          of characters and there is <emphasis>no check that they match the
+          lexical definition of the corresponding sort</emphasis>. This means
+          that when writing a specification one should be aware that it is
+          possible to construct illegal lexical entities, for instance, by
+          inserting letters in an integer. In the example <link
+          linkend="CODE_illegallcfs">below</link> via the lexical constructor
+          function <literal>nat-con</literal> a natural number containing the
+          letter <literal>a</literal> is constructed.</para>
+        </warning>
+
+        <example xml:id="CODE_illegallcfs">
+          <title>Illegal use of lexical constructor functions</title>
+
+          <para><programlisting>module Nats
 
 imports basic/Whitespace
 
@@ -2981,45 +3068,42 @@ exports
   sorts Nat-con
 
   lexical syntax
-    [0-9]+ -> Nat-con 
+    [0-9]+ -&gt; Nat-con 
 
 hiddens
   variables
-    "Char+"[0-9]* -> CHAR+
+    "Char+"[0-9]* -&gt; CHAR+
 
-%% Nats.asf
 equations
 
-  [1] nat-con(Char+) = nat-con(Char+ "a")  
-\end{verbatim}
-\end{IncCode}
-\caption{Illegal use of lexical constructor functions}
-\end{Label}
-\end{figure}    
+  [1] nat-con(Char+) = nat-con(Char+ "a")      </programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Default Equations}
-\label{DefaultEquations}
+      <section xml:id="DefaultEquations">
+        <title>Default Equations</title>
 
-\index{default equations@default equations}
-The evaluation strategy for normalizing terms given the equations is
-based on innermost rewriting. All equations have the same priority.
-Given the outermost function symbol of a redex the set of equations with
-this outermost function symbol in the left-hand side is selected and all
-these rules will be tried.  However, sometimes a specification writer
-would like to write down a rule with a special status ``{\em try this rule
-if all other rules fail}''.  A kind of default behaviour is needed. ASF
-offers functionality in order to obtain this behaviour. If the $TagId$
-of an equation starts with {\tt default-} this equation is considered to
-be a special equation which will only be applied if no other rule matches.
-The specification \link*{below}[in Figure~\Ref]{CODE:types} shows
-an example of the use of a default equation.
+        <para>\index{default equations@default equations}</para>
 
-\begin{figure}
-\begin{Label}{CODE:types}
-\begin{IncCode}
-\begin{verbatim}
-%% Types.sdf
-module Types
+        <para>The evaluation strategy for normalizing terms given the
+        equations is based on innermost rewriting. All equations have the same
+        priority. Given the outermost function symbol of a redex the set of
+        equations with this outermost function symbol in the left-hand side is
+        selected and all these rules will be tried. However, sometimes a
+        specification writer would like to write down a rule with a special
+        status: <emphasis>try this rule if all other rules fail</emphasis>. A
+        kind of default behaviour is needed. ASF offers functionality in order
+        to obtain this behaviour. If the <replaceable>TagId</replaceable> of
+        an equation starts with <literal>default-</literal> this equation is
+        considered to be a special equation which will only be applied if no
+        other rule matches. The specification <link
+        linkend="CODE_types">below</link> shows an example of the use of a
+        default equation.</para>
+
+        <example xml:id="CODE_types">
+          <title>Using a default equation</title>
+
+          <para><programlisting>module Types
 
 imports basic/Whitespace
 imports basic/Booleans
@@ -3029,62 +3113,53 @@ exports
   sorts Type
 
   context-free syntax
-    "natural"     -> Type
-    "string"      -> Type
-    "nil-type"    -> Type
-    compatible(Type, Type) -> Boolean
+    "natural"     -&gt; Type
+    "string"      -&gt; Type
+    "nil-type"    -&gt; Type
+    compatible(Type, Type) -&gt; Boolean
 
 hiddens
   variables
-    "Type"[0-9]*  -> Type
+    "Type"[0-9]*  -&gt; Type
 
-%% Types.asf
 equations
 
   [Type-1]  compatible(natural, natural) = true
 
   [Type-2]  compatible(string, string) = true
 
-  [default-Type] compatible(Type1,Type2) = false
-\end{verbatim}
-\end{IncCode}
-\caption{Using a default equation}
-\end{Label}
-\end{figure}   
+  [default-Type] compatible(Type1,Type2) = false   </programlisting></para>
+        </example>
+      </section>
 
-\subsubsection{Memo Functions}
-\label{MemoFunctions}
+      <section xml:id="MemoFunctions">
+        <title>Memo Functions</title>
 
-\index{memo functions@memo functions} 
+        <para>\index{memo functions@memo functions} Computations may contain
+        unnecessary repetitions. This is the case when a function with the
+        same argument values is computed more than once. Memo functions
+        exploit this behaviour and can improve the efficiency of ASF+SDF
+        specifications. Given a set of argument values for some function the
+        normal form can be obtained via rewriting. It is possible that some
+        function is called with the same set of arguments over and over again.
+        Each time the function is rewritten to obtain the same normal again.
+        By means of adding the <literal>memo</literal> attribute, this
+        behaviour is improved by storing the set of argument values and the
+        derived normal form in a memo-table. For each set of argument values
+        it is checked whether there exists a normal form in the memo-table. If
+        so, this normal form is returned. If not, the function given this set
+        of argument values is normalized and stored in the memo-table. There
+        is some overhead involved in accessing the memo-table. Therefore, it
+        is not wise to add the memo attribute to each function. With respect
+        to the operational behaviour adding a memo attribute does not have any
+        effect. The Fibonacci function shown <link
+        linkend="CODE_fib">below</link> is decorated with the memo attribute
+        to improve its efficiency.</para>
 
-Computations may contain unnecessary repetitions.  This is the case when a
-function with the same argument values is computed more than once.  Memo
-functions exploit this behaviour and can improve the efficiency of ASF+SDF 
-specifications.
+        <example xml:id="CODE_fib">
+          <title>Using the memo attribute when defining Fibonacci</title>
 
-Given a set of argument values for some function the normal form can be
-obtained via rewriting. It is possible that some function is called with the
-same set of arguments over and over again. Each time the function is rewritten
-to obtain the same normal again. By means of adding the {\tt memo} attribute,
-this behaviour is improved by storing the set of argument values and the
-derived normal form in a memo-table.  For each set of argument values it is
-checked whether there exists a normal form in the memo-table. If so, this
-normal form is returned.  If not, the function given this set of argument
-values is normalized and stored in the memo-table.
-There is some overhead involved in accessing the memo-table.  Therefore,
-it is not wise to add the memo attribute to each function.  With respect
-to the operational behaviour adding a memo attribute does not have any
-effect.
-
-The Fibonacci function shown \link*{below}[in Figure~\Ref]{CODE:fib}
-is decorated with the memo attribute to improve its efficiency.
-
-\begin{figure}
-\begin{Label}{CODE:fib}
-\begin{IncCode}
-\begin{verbatim}
-%% Fib.sdf
-module Fib
+          <para><programlisting>module Fib
 
 imports basic/Whitespace
 
@@ -3093,19 +3168,18 @@ exports
   sorts Int
 
   context-free syntax
-    "0"             -> Int
-    "s" "(" Int ")" -> Int
+    "0"             -&gt; Int
+    "s" "(" Int ")" -&gt; Int
 
   context-free syntax
-    add(Int, Int) -> Int
+    add(Int, Int) -&gt; Int
 
-    fib(Int)      -> Int {memo}
+    fib(Int)      -&gt; Int {memo}
 
 hiddens
   variables
-    [xy][0-9]* -> Int
+    [xy][0-9]* -&gt; Int
 
-%% Fib.asf
 equations
 
   [add-s] add(s(x), y) = s(add(x, y))
@@ -3113,38 +3187,395 @@ equations
 
   [fib-z] fib(0) = s(0)
   [fib-o] fib(s(0)) = s(0)
-  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))
+  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))</programlisting></para>
+        </example>
 
-\end{verbatim}
-\end{IncCode}
-\caption{Using the memo attribute when defining Fibonacci}
-\end{Label}
-\end{figure}   
+        <para>The resulting improvement in performance is shown as
+        follows:</para>
 
-The resulting improvement in performance is shown
-\T in Table~\ref{TABLE:fibn}.
-\W as follows:
+        <table border="1">
+          <caption>Execution times for the evaluation of fib(n)</caption>
 
-\begin{table}
-\begin{center}
-\begin{Label}{TABLE:fibn}
+          <tr>
+            <td><emphasis role="bold">fib(n)</emphasis></td>
 
-\begin{tabular}{|l|c|c|} \hline
-fib(n) & Time without memo (sec) & Time with memo (sec) \\ \hline \hline
-fib(16)          & \ 2.0 & 0.7  \\ \hline
-fib(17)          & \ 3.5 & 1.1  \\ \hline
-fib(18)          & \ 5.9 & 1.8  \\ \hline
-fib(19)          &  10.4 & 3.3  \\ \hline
-\end{tabular}
-\caption{Execution times for the evaluation of $\mbox{\em fib}(n)$}
+            <td><emphasis role="bold">Time without memo (sec)</emphasis></td>
 
-\end{Label}
-\end{center}
-\end{table}
+            <td><emphasis role="bold">Time with memo (sec)</emphasis></td>
+          </tr>
 
+          <tr>
+            <td><literal>fib(16)</literal></td>
 
+            <td>2.0</td>
 
-%%\subsubsection{Delaying} \label{Delay}
+            <td>0.7</td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(17)</literal></td>
+
+            <td>3.5</td>
+
+            <td>1.1</td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(18)</literal></td>
+
+            <td>5.9</td>
+
+            <td>1.8</td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(19)</literal></td>
+
+            <td>10.4</td>
+
+            <td>3.3</td>
+          </tr>
+        </table>
+      </section>
+
+      <section xml:id="TraversalFunctions">
+        <title>Traversal Functions</title>
+
+        <para>\index{traversal functions@traversal functions}
+        \index{accumulator@accumulator} \index{transformer@transformer}</para>
+
+        <para> Program analysis and program transformation usually take the
+        syntax tree of a program as starting point. One common problem that
+        one encounters is how to express the <emphasis>traversal</emphasis> of
+        the tree: visit all the nodes of the tree and extract information from
+        some nodes or make changes to certain other nodes. The kinds of nodes
+        that may appear in a program's syntax tree are determined by the
+        grammar of the language the program is written in. Typically, each
+        rule in the grammar corresponds to a node category in the syntax tree.
+        Real-life languages are described by grammars which can easily contain
+        several hundred, if not thousands of grammar rules. This immediately
+        reveals a hurdle for writing tree traversals: a naive recursive
+        traversal function should consider many node categories and the size
+        of its definition will grow accordingly. This becomes even more
+        dramatic if we realize that the traversal function will only do some
+        real work (apart from traversing) for very few node categories.
+        Traversal functions in ASF+SDF \cite{BKV03} solve this problem. We
+        distinguish three kinds of traversal functions, defined as
+        follows.</para>
+
+        <formalpara>
+          <title>Tranformer</title>
+
+          <para>A <emphasis>transformer</emphasis> is a sort-preserving
+          transformation that will traverse its first argument. Possible extra
+          arguments may contain additional data that can be used (but not
+          modified) during the traversal. A transformer is declared as
+          follows: <programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, ..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>1</subscript> {traversal(trafo, ...)}</programlisting>Because
+          a transformer always returns the same sort, it is type-safe. A
+          transformer is used to transform a tree.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Accumulator</title>
+
+          <para>An <emphasis>accumulator</emphasis> is a mapping of all node
+          types to a single type. It will traverse its first argument, while
+          the second argument keeps the accumulated value. An accumulator is
+          declared as follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>2</subscript> {traversal(accu, ...)}</programlisting>After
+          each application of an accumulator, the accumulated argument is
+          updated. The next application of the accumulator, possibly somewhere
+          else in the term, will use the <emphasis>new</emphasis> value of the
+          accumulated argument. In other words, the accumulator acts as a
+          global, modifiable, state during the traversal. An accumulator
+          function never changes the tree, only its accumulated argument.
+          Furthermore, the type of the second argument has to be equal to the
+          result type. The end-result of an accumulator is the value of the
+          accumulated argument. By these restrictions, an accumulator is also
+          type-safe for every instantiation. An accumulator is meant to be
+          used to extract information from a tree.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Accumulating transformer</title>
+
+          <para>An <emphasis>accumulating transformer</emphasis> is a sort
+          preserving transformation that accumulates information while
+          traversing its first argument. The second argument maintains the
+          accumulated value. The return value of an accumulating transformer
+          is a tuple consisting of the transformed first argument and
+          accumulated value. An accumulating transformer is declared as
+          follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>&lt;<replaceable>S</replaceable><subscript>1</subscript>, S</replaceable><subscript>2</subscript>&gt; {traversal(accu, trafo, ...)}</programlisting>An
+          accumulating transformer is used to simultaneously extract
+          information from a tree and transform it.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Visiting Orders</title>
+
+          <para>Having these three types of traversals, they must be completed
+          with visiting orders. Visiting orders determine the order of
+          traversal and the <emphasis>depth</emphasis> of the traversal. We
+          provide the following two strategies for each type of
+          traversal:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>Bottom-up: the traversal visits <emphasis>all</emphasis> the
+            subtrees of a node where the visiting function applies in an
+            <emphasis>bottom-up</emphasis> fashion. The annotation
+            <literal>bottom-up</literal> selects this behavior. A traversal
+            function without an explicit indication of a visiting strategy
+            also uses the bottom-up strategy.</para>
+          </listitem>
+
+          <listitem>
+            <para>Top-down: the traversal visits the subtrees of a node in an
+            top-down fashion and stops recurring at the first node where the
+            visiting function applies and does not visit the subtrees of that
+            node. The annotation <literal>top-down</literal> selects this
+            behavior.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Beside the three types of traversals and the order of visiting,
+        we can also influence whether we want to stop or continue at the
+        matching occurrences:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Break: the traversal stops at matching occurrences.</para>
+          </listitem>
+
+          <listitem>
+            <para>Continue: the traversal continues at matching
+            occurrences.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The visiting strategies in combination with the continuation
+        strategies is visualized in the \link{``traversal cube''}[, see
+        Figure~\Ref]{FIG:treetraversals}. The current implementation of the
+        traversal mechanism only supports the left-to-right visiting
+        strategy.</para>
+
+        <para> \begin{figure} \begin{center} \begin{Label}{FIG:treetraversals}
+        \T \includegraphics[width=8cm]{order} \W \htmlimage{order.gif}
+        \caption{The ``traversal cube'': principal ways of traversing a tree}
+        \end{Label} \end{center} \end{figure} We give two simple examples of
+        traversal functions that are bothbased on the <link
+        linkend="CODE_tree-language">tree language</link> that describes
+        binary prefix expressions with natural numbers as leaves. Examples are
+        <literal>f(0,1)</literal> and <literal>f(g(1,2),
+        h(3,4))</literal>.</para>
+
+        <example xml:id="CODE_tree-language">
+          <title>A simple tree language</title>
+
+          <para><programlisting>module Tree-syntax
+
+imports basic/Integer
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Tree
+  sorts Tree
+
+  context-free syntax
+    Integer       -&gt; Tree
+    f(Tree, Tree) -&gt; Tree
+    g(Tree, Tree) -&gt; Tree
+    h(Tree, Tree) -&gt; Tree</programlisting></para>
+        </example>
+
+        <para>Our <link linkend="CODE_inc">first example</link> transforms a
+        given tree into a new tree in which all numbers have been incremented.
+        </para>
+
+        <example xml:id="CODE_inc">
+          <title>The transformer <literal>inc</literal> increments all numbers
+          in a tree</title>
+
+          <para><programlisting>module Tree-inc
+imports Tree-syntax
+
+exports
+  context-free syntax
+    inc(Tree) -&gt; Tree {traversal(trafo, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -&gt; Integer
+
+equations
+  [1] inc(N) = N + 1</programlisting></para>
+        </example>
+
+        <para>Our <link linkend="CODE_sum">second example</link> computes the
+        sum of all numbers in a tree. For more examples and a detailed
+        description of traversal functions see \cite{BKV01}.</para>
+
+        <example xml:id="CODE_sum">
+          <title>The accumulator <literal>sum</literal> that sums all numbers
+          in a tree</title>
+
+          <para><programlisting>module Tree-sum
+imports Tree-syntax
+exports
+  context-free syntax
+    sum(Tree, Integer) -&gt; Integer {traversal(accu, top-down, continue)}
+  
+hiddens
+  variables
+    "N"[0-9]* -&gt; Integer
+
+equations
+  [1] sum(N1, N2) = N1 + N2</programlisting></para>
+
+          <para>The SDF definition of a traversal function has to fulfill a
+          number of requirements:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Traversal functions can only be defined in the
+              context-free syntax section.</para>
+            </listitem>
+
+            <listitem>
+              <para>Traversal functions must be <link
+              linkend="PrefixFunctions">prefix functions</link>}.</para>
+            </listitem>
+
+            <listitem>
+              <para>The first argument of the prefix function is always a sort
+              of a node of the tree that is traversed, for both accumulating
+              as well as transformation functions.</para>
+            </listitem>
+
+            <listitem>
+              <para>In case of a transformation function the result sort
+              <replaceable>Tree</replaceable> should always be same as the
+              sort of the first argument:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable> {traversal(trafo, ...)}</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para> In case of an accumulating function, the second argument
+              <replaceable>Accu</replaceable> represents the accumulator and
+              the result sort should be of the same sort:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Accu</replaceable> {traversal(accu, ...)}</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para> In case of an accumulating transformation function, the
+              first argument represents the tree node
+              <replaceable>Tree</replaceable>, the second the accumulator
+              <replaceable>Accu</replaceable>, and the result sort should be a
+              tuple consisting of the tree node sort (first element of the
+              tuple) and the accumulator (second element of the
+              tuple):<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; &lt;<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>&gt; {traversal(accu, trafo, ...)}</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>The traversal functions may have more arguments, the only
+              restriction is that they should be consistent over the various
+              occurrences of the same traversal function. <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, continue, top-down)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>2</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>The order of the traversal attributes is free, but should
+              be used consistently, for instance the following definition is
+              not allowed:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, top-down, continue)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}
+</programlisting></para>
+            </listitem>
+
+            <listitem>
+              <para>If the number of arguments of the traversal function
+              changes, you should introduce a new function name. The following
+              definitions are not correct: <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>)      -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, top-down, continue)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>,<replaceable> A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting>but
+              should be:<programlisting><replaceable>tf</replaceable>1(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>)      -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, top-down, continue)}
+<replaceable>tf</replaceable>2(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>,<replaceable> A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting></para>
+            </listitem>
+          </itemizedlist>
+        </example>
+
+        <para>In the SDF part of a module it is needed to define traversal
+        functions for all sorts which are needed in the equations. </para>
+      </section>
+
+      <section>
+        <title>Which Specifications are Executable?</title>
+
+        <para>Which ASF+SDF specifications can be executed? The <link
+        linkend="CODE_itemsets">specification of sets</link> illustrates a
+        non-executable specification, since equation<literal> [2]</literal>,
+        which expresses that two elements in a set may be exchanged, will lead
+        to an infinite rewriting loop.</para>
+
+        <example xml:id="CODE_itemsets">
+          <title>Non-executable specification for sets</title>
+
+          <para><programlisting>module ItemSet
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Set
+  sorts Item Set 
+
+  lexical syntax
+    [a-z]+ -&gt; Item 
+
+  context-free syntax
+    Set[Item] -&gt; Set
+
+hiddens
+  variables
+    "i"[0-9]* -&gt; Item
+    "l"[0-9]* -&gt; {Item ","}* 
+
+equations
+
+  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
+  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3} </programlisting></para>
+        </example>
+
+        <section>
+          <title>Common Errors when Executing Specifications</title>
+
+          <itemizedlist>
+            <listitem>
+              <para>When using the inequality operator <literal> !=</literal>
+              in a condition, no new variables may be introduced in either
+              side of the inequality.</para>
+            </listitem>
+
+            <listitem>
+              <para> If the normal form of a term still contains function
+              symbols that should have been removed during rewriting, you
+              probably have forgotten one or more equations that define the
+              function. A typical situation is that you have given an
+              <emphasis>incomplete</emphasis> set of equations defining the
+              function.</para>
+            </listitem>
+
+            <listitem>
+              <para>The rewriting process does not stop. Your equations
+              probably contain an infinite loop.</para>
+            </listitem>
+
+            <listitem>
+              <para>Be careful when a condition contains both instantiated and
+              uninstantiated variables.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+      </section>
+    </section>
+  </section>
+
+  <!--%%\subsubsection{Delaying} \label{Delay}
 %%
 %%Both the compiler and the evaluator are based on innermost rewriting.
 %%In some cases it is more efficient to overrule this rewriting
@@ -3187,331 +3618,6 @@ fib(19)          &  10.4 & 3.3  \\ \hline
 %%
 %%\index{getter functions@getter functions}
 %%\index{setter functions@setter functions}
-
-\subsubsection{Traversal Functions}
-\label{Traversal}
-
-\index{traversal functions@traversal functions}
-\index{accumulator@accumulator}
-\index{transformer@transformer}
-Program analysis and program transformation usually take the syntax
-tree of a program as starting point.  One common
-problem that one encounters is how to express the \emph{traversal} of
-the tree: visit all the nodes of the tree and extract information from
-some nodes or make changes to certain other nodes.
-
-The kinds of nodes that may appear in a program's syntax tree are
-determined by the grammar of the language the program is written
-in. Typically, each rule in the grammar corresponds to a node category
-in the syntax tree. Real-life languages are described by grammars which
-can easily contain several hundred, if not thousands of grammar rules.
-This immediately reveals a hurdle for writing tree traversals: a naive
-recursive traversal function should consider many node categories and
-the size of its definition will grow accordingly.  This becomes even
-more dramatic if we realize that the traversal function will only do
-some real work (apart from traversing) for very few node categories.
-
-Traversal functions in \asfsdf~\cite{BKV03} solve this problem.
-We distinguish three kinds of traversal functions, defined as follows.
-
-\begin{description}
-
-\item[Transformer:] a sort-preserving transformation that 
-will traverse its first argument. Possible extra arguments may contain
-additional data that can be used (but not modified) during the traversal.
-A transformer is declared as follows:
-
-\[f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt \{traversal(trafo, ...)\}}\]
-
-Because a transformer always returns the same sort, it is type-safe. A
-transformer is used to transform a tree.
-
-\item[Accumulator:] a mapping of all node types to a single type. 
-It will traverse its first argument, while the second
-argument keeps the accumulated value. An accumulator is declared as follows:
-
-\[f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt \{traversal(accu, ...)\}}\] 
-
-After each application of an accumulator, the accumulated argument is updated.
-The next application of the accumulator, possibly somewhere else in the term,
-will use the \emph{new} value of the accumulated argument. In other words,
-the accumulator acts as a global, modifiable, state during the traversal.
-
-An accumulator function never changes the tree, only its accumulated argument.
-Furthermore, the type of the second argument has to be equal to the result
-type. The end-result of an accumulator is the value of the accumulated
-argument. By these restrictions, an accumulator is also type-safe for every
-instantiation.
-
-An accumulator is meant to be used to extract information from a tree.
-
-\item[Accumulating transformer:] a sort preserving transformation
-that accumulates information while traversing its first argument. The
-second argument maintains the accumulated value. The return value of
-an accumulating transformer is a tuple consisting of the transformed
-first argument and accumulated value. An accumulating transformer
-is declared as follows:
-
-**** [f(S_1 , S_2 , ..., S_n) \rightarrow <S_1, S_2> \mbox{\{{\tt
-traversal(accu, trafo, ...)}\}}\]
-
-An accumulating transformer is used to simultaneously extract information from a
-tree and transform it.
-\end{description}
-
-Having these three types of traversals, they must be provided with visiting
-strategies. Visiting strategies determine the order of traversal and the
-``depth'' of the traversal. We provide the following two strategies for each
-type of traversal:
-
-\begin{description}
-\item[Bottom-up:] the traversal visits \emph{all} the subtrees of a node where
-  the visiting function applies in an \emph{bottom-up}\ fashion.  The
-  annotation {\tt bottom-up} selects this behavior.  A traversal function without an
-  explicit indication of a visiting strategy also uses the bottom-up strategy.
-  
-\item[Top-down:] the traversal visits the subtrees of a node in an top-down
-  fashion and stops recurring at the first node where the visiting function
-  applies and does not visit the subtrees of that node. The annotation
-  {\tt top-down} selects this behavior.
-\end{description}
-
-Beside the three types of traversals and the order of visiting, we can also
-influence whether we want to stop or continue at the matching occurrences:
-\begin{description}
-\item[Break:] the traversal stops at matching occurrences.
-\item[Continue:] the traversal continues at matching occurrences.
-\end{description}
-
-The visiting strategies in combination with the continuation strategies
-is visualized in the \link{``traversal cube''}[, see
-Figure~\Ref]{FIG:treetraversals}. The current implementation of the
-traversal mechanism only supports the left-to-right visiting strategy.
-
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:treetraversals}
-\T \includegraphics[width=8cm]{order}
-\W \htmlimage{order.gif}
-\caption{The ``traversal cube'': principal ways of traversing a tree}
-\end{Label}
-\end{center}
-\end{figure}
-
-
-We give two simple examples of traversal functions that are both
-based on the \link{tree language}[ defined in
-Figure~\Ref]{FIG:tree-language}
-that describes binary prefix expressions with natural numbers as leaves.
-Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
-
-\begin{figure}
-\begin{Label}{FIG:tree-language}
-\begin{IncCode}
-\begin{verbatim}
-module Tree-syntax
-
-imports basic/Integer
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Tree
-  sorts Tree
-
-  context-free syntax
-    Integer       -> Tree
-    f(Tree, Tree) -> Tree
-    g(Tree, Tree) -> Tree
-    h(Tree, Tree) -> Tree
-\end{verbatim}
-\end{IncCode}
-\caption{A simple tree language}
-\end{Label}
-\end{figure}     
-
-
-Our \link{first example}[ (Figure~\Ref)]{FIG:inc} 
-transforms a given tree into a new tree in which
-all numbers have been incremented. 
-
-\begin{figure}
-\begin{Label}{FIG:inc}
-\begin{IncCode}
-\begin{verbatim}
-%% Tree-inc.sdf
-module Tree-inc
-imports Tree-syntax
-
-exports
-  context-free syntax
-    inc(Tree) -> Tree {traversal(trafo, top-down, continue)}
-  
-hiddens
-  variables
-    "N"[0-9]* -> Integer
-
-%% Tree-inc.asf
-equations
-  [1] inc(N) = N + 1  
-\end{verbatim}
-\end{IncCode}
-\caption{The transformer {\tt inc} increments all numbers in a tree}
-\end{Label}
-\end{figure}   
-
-Our \link{second example}[ (Figure~\Ref)]{FIG:sum}
-computes the sum of all numbers in a tree.
-For more examples and a detailed description of traversal functions
-see~\cite{BKV01}.
-
-\begin{figure}
-\begin{Label}{FIG:sum} 
-\begin{IncCode}
-\begin{verbatim}
-%% Tree-sum.sdf
-module Tree-sum
-imports Tree-syntax
-exports
-  context-free syntax
-    sum(Tree, Integer) -> Integer {traversal(accu, top-down, continue)}
-  
-hiddens
-  variables
-    "N"[0-9]* -> Integer
-
-%% Tree-inc.asf
-equations
-  [1] sum(N1, N2) = N1 + N2
-\end{verbatim}
-\end{IncCode}
-\caption{The accumulator {\tt sum} that sums all numbers in a tree.}
-\end{Label}
-\end{figure}   
-
-The SDF definition of a traversal function has to fulfill a number of 
-requirements:
-\begin{itemize}
-\item Traversal functions can only be defined in the context-free syntax
-section.
-\item Traversal functions must be \link{prefix functions}[, see Section
-\Ref]{PrefixFunctions}.
-\item The first argument of the prefix function is always a sort of a node
-of the tree that is traversed, for both accumulating as well as
-transformation functions.
-\item In case of a transformation function the result sort should always
-be same as the sort of the first argument.
-\begin{verbatim}
-tf(Tree, A_1, ..., A_n) -> Tree {traversal(trafo, ...)}
-\end{verbatim}
-\item In case of an accumulating function, the second argument represents
-the accumulator and the result sort should be of the same sort.
-\begin{verbatim}
-tf(Tree, Accu, A_1, ..., A_n) -> Accu {traversal(accu, ...)}
-\end{verbatim}
-\item In case of an accumulating transformation function, the first
-argument
-represents the tree node, the second the accumulator, and the result sort
-should be a tuple consisting of the tree node sort (first element
-of the tuple) and the accumulator (second element of the tuple).
-\begin{verbatim}
-tf(Tree, Accu, A_1, ..., A_n) -> <Tree, Accu> {traversal(accu, trafo, ...)}
-\end{verbatim}
-\item The traversal functions may have more arguments, the only restriction
-is that they should be consistent over the various occurrences of the
-same traversal function.
-\begin{verbatim}
-tf(Tree1, Accu, A_1, A_2, ..., A_n) -> Tree1 {traversal(trafo, continue, top-down)}
-tf(Tree2, Accu, A_2, A_1, ..., A_n) -> Tree2 {traversal(trafo, continue, top-down)}
-\end{verbatim}
-\item The order of the traversal attributes is free, but should be used
-consistently, for instance the following definition is not allowed.
-\begin{verbatim}
-tf(Tree1, Accu, A_1, ..., A_n) -> Tree1 {traversal(trafo, top-down, continue)}
-tf(Tree2, Accu, A_1, ..., A_n) -> Tree2 {traversal(trafo, continue, top-down)}
-\end{verbatim}
-\item If the number of arguments of the traversal function changes, you
-should introduce a new function name. The following definitions are not
-correct:
-\begin{verbatim}
-tf(Tree1, Accu, A_1, A_2) -> Tree1 {traversal(trafo, top-down, continue)}
-tf(Tree2, Accu, A_1, A_2, A_3) -> Tree2 {traversal(trafo, continue, top-down)}
-\end{verbatim}
-but should be:
-\begin{verbatim}
-tf1(Tree1, Accu, A_1, A_2) -> Tree1 {traversal(trafo, top-down, continue)}
-tf2(Tree2, Accu, A_1, A_2, A_3) -> Tree2 {traversal(trafo, continue, top-down)}
-\end{verbatim}
-
-\end{itemize}
-In the SDF part of a module it is needed to define traversal functions
-for all sorts which are needed in the equations. 
-
-\subsubsection{Which Specifications are Executable?}
-
-Which ASF+SDF specifications can be executed? 
-The \link{specification of sets}[ in
-Figure~\Ref]{CODE:itemsets} 
-illustrates a non-executable specification,
-since equation {\tt [2]}, which expresses that two elements in a set may
-be exchanged, will lead to an infinite rewriting loop.
-
-\begin{figure}
-\begin{Label}{CODE:itemsets}
-\begin{IncCode}
-\begin{verbatim}
-%% ItemSet.sdf
-module ItemSet
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Set
-  sorts Item Set 
-
-  lexical syntax
-    [a-z]+ -> Item 
-
-  context-free syntax
-    Set[Item] -> Set
-
-hiddens
-  variables
-    "i"[0-9]* -> Item
-    "l"[0-9]* -> {Item ","}* 
-
-%% ItemSet.asf
-equations
-
-  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
-  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
-\end{verbatim}
-\end{IncCode}
-\caption{Non-executable specification for sets}
-\end{Label}
-\end{figure}   
-
-\subsubsection{Common Errors when Executing Specifications}
-
-\begin{itemize}
-
-\item When using the inequality operator {\tt !=} in a condition,
-no new variables may be introduced in either side of the inequality.
-
-\item If the normal form of a term still contains function symbols
-that should have been removed during rewriting, you probably have
-forgotten one or more equations that define the function.
-A typical situation is that you have given an \emph{incomplete} set of equations
-defining the function.
-
-\item The rewriting process does not stop. Your equations probably contain
-an infinite loop.
-
-\item Be careful when a condition contains both instantiated and 
-uninstantiated variables.
-
-\end{itemize}
-
 
 \subsection{Tests}
 
