@@ -15,14 +15,7 @@ process AddJob(Message: str) is
 process JobDone(Message: str) is
   snd-msg(gui-job-done(Message))
 
-process ClearError(Producer : str, Id : str) is
-  RemoveSummary(Producer, Id)
-
 process Error(Message: str, SubjectStrings: list) is
- printf("TODO\n")
-
-/*
-process Error(Producer: str, Id: str, Message: str, SubjectStrings: list) is
 let
   Error : term,
   SubjectString : str,
@@ -45,12 +38,12 @@ in
   if equal(Runner, []) then
     snd-msg(es-make-error(Message, Subjects))
     . rec-msg(es-error(Error?))
-    . snd-msg(es-make-summary(Producer, Id, [Error]))
+    . snd-msg(es-make-summary("alert", "alert", [Error]))
     . rec-msg(es-summary(Summary?))
-    . DisplaySummary(Summary)
+    . snd-msg(ui-remove-feedback-summary("Alerts", "alert", "alert"))
+    . snd-msg(ui-show-feedback-summary("Alerts", Summary))
   fi  
 endlet
-*/
 
 process RemoveSummary(Producer: str, SummaryId: str) is
   snd-msg(ui-remove-feedback-summary("Issues", Producer, SummaryId))
