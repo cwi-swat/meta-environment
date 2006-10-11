@@ -74,8 +74,8 @@ in
     . rec-msg(summary-errors(Errors?)) 
     . snd-msg(es-make-summary("asfsdf-checker", Modulename, Errors)) 
     . rec-msg(es-summary(Summary?)) 
-    . snd-msg(ui-remove-feedback-summary("asfsdf-checker", Modulename)) 
-    . snd-msg(ui-show-feedback-summary(Summary))
+    . RemoveSummary("asfsdf-checker", Modulename)
+    . DisplaySummary(Summary)
     . Syntax := UNDEFINED
   else
     tau
@@ -96,10 +96,10 @@ in
     snd-msg(check-asf(Tree))
     . rec-msg(messages(Errors?))
     . MM-GetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename?) 
-    . snd-msg(ui-remove-feedback-summary("asf-checker", Modulename))
+    . RemoveSummary("asf-checker", Modulename)
     . snd-msg(es-make-summary("asf-checker", Modulename, Errors))
     . rec-msg(es-summary(Summary?))
-    . snd-msg(ui-show-feedback-summary(Summary))
+    . DisplaySummary(Summary)
   else
     tau
   fi
@@ -367,21 +367,21 @@ in
     (
       rec-msg(asfe-test-results(Errors?)) 
       . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-      . snd-msg(ui-remove-feedback-summary("asf-tests",Modulename)) 
+      . RemoveSummary("asf-tests",Modulename)
       . snd-msg(es-make-summary("asf-tests", Modulename, Errors))
       . rec-msg(es-summary(Summary?))
-      . snd-msg(ui-show-feedback-summary(Summary))
+      . DisplaySummary(Summary)
     +
       rec-msg(asfe-rewrite-errors(Errors?))
-      . snd-msg(ui-remove-feedback-summary("asfe", "all")) 
+      . RemoveSummary("asfe", "all")
       . snd-msg(es-make-summary("asfe", "all", Errors)) 
       . rec-msg(es-summary(Summary?)) 
-      . snd-msg(ui-show-feedback-summary(Summary))
+      . DisplaySummary(Summary)
     ) 
     . snd-note(ui-status(endstat(Id))) 
   else
     TODO("Summary is undefined here!\n")
-    . snd-msg(ui-show-feedback-summary(Summary)) 
+    . DisplaySummary(Summary)
     . snd-note(ui-status(endstat(Id))) 
     . snd-note(ui-status(errorf("Equations incomplete for %s", [Modulename])))
   fi
@@ -417,10 +417,10 @@ in
       . snd-msg(ui-remove-feedback-summary("asfe", "all"))
     +
       rec-msg(asfe-rewrite-result-with-errors(NormalFormWithoutBrackets?,Errors?))
-      . snd-msg(ui-remove-feedback-summary("asfe", "all")) 
+      . RemoveSummary("asfe", "all")
       . snd-msg(es-make-summary("asfe", "all", Errors)) 
       . rec-msg(es-summary(Summary?)) 
-      . snd-msg(ui-show-feedback-summary(Summary))
+      . DisplaySummary(Summary)
       . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
     )
     . SetStatus("")
