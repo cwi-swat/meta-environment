@@ -147,7 +147,7 @@ static PT_Tree parse_result(const char *sort, const char *file, ATerm result)
       after = PT_getParseTreeLayoutAfterTree(pt);
 
       return (PT_Tree)
-	CO_makeParsetreeXSuccess((ATerm) type, 
+	CO_makeParsetreeXSuccess((ATerm) PT_makeSymbolCf(type), 
 				 (ATerm) type,
 				l, l,
 				(CO_Bytes) unparse_to_bytes(before),
