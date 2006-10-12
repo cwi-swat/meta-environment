@@ -423,6 +423,7 @@ void init_procs(void)
   EXPDEF("diff",          e_diff,          List, TBtrue, 2, List, List, NULL);
   EXPDEF("inter",         e_inter,         List, TBtrue, 2, List, List, NULL);
   EXPDEF("join",          e_join,          List, TBtrue, 2, Term, Term, NULL);
+  EXPDEF("concat",        e_concat,        Str, TBtrue, 2, Str, Str, NULL);
   EXPDEF("functions",     e_functions,     List, TBfalse,0, NULL, NULL, NULL);
 
   EXPDEF("process-id",    e_process_id,    Int,  TBfalse, 0, NULL, NULL, NULL);

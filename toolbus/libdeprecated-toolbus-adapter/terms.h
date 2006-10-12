@@ -209,6 +209,7 @@ term_list *list_put(term_list *, term *, term *);
 TBbool     list_equal(term_list *, term_list *);
 term_list *list_reverse(term_list *);
 
+term      *str_concat(term*, term*);
 term      *get_list_as_env(term_list *, term *);
 
 TBbool     term_equal(term *, term *);

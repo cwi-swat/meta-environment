@@ -1145,6 +1145,8 @@ static term *itp1(register term *T)
 	  /* Note: in the following two lines a mysterious divide by 10
 	     is necessary, why??
 	     */
+	case e_concat:
+	  return str_concat(V[0],V[1]);
 	case e_sec:
 	  return V[0];
 	case e_msec:

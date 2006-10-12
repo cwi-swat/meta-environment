@@ -111,7 +111,7 @@ typedef enum pkind
   e_size, e_index, e_replace,
   e_get, e_put, e_first, e_next,
   e_member, e_subset, 
-  e_diff, e_inter, e_join, e_functions,
+  e_diff, e_inter, e_join, e_concat, e_functions,
 
   e_process_id, e_process_name, e_quote,
   e_current_time, e_sec,

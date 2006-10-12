@@ -1,5 +1,11 @@
 $Id$
 
+Thu Oct 12 14:21:17 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * toolbus/{interpreter,procs}.c:
+   - Extended ToolBus script language with |concat| keyword
+   libdeprecated-toolbus-adapter/terms.{c,h},procs.h:
+   - Implementation of concat returns str1str2 on input of str1 and str2
+
 Mon Sep 25 11:49:45 CEST 2006 <kooiker@cwi.nl>
  * toolbus/main.c:
    - Check on ToolBus script argument fixes null pointer for script name 

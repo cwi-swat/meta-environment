@@ -1336,6 +1336,22 @@ term_list *list_join(term *L, term *M)
   }
 }
 
+term *str_concat(term *S1, term *S2)
+{
+  char* str1 = str_val(S1); 
+  char* str2 = str_val(S2);
+  size_t len1 = strlen(str1); 
+  size_t len2 = strlen(str2); 
+  char* result = malloc(len1 + len2 + 1);
+
+  if (result != NULL) {
+    strncpy(result, str1, len1);
+    strcpy(result+len1, str2); 
+    return mk_str(result);
+  }
+  return NULL;
+}
+
 /* return term v if list tl contains an immdediate sublist [key,v] */
 /* return [] otherwise */
 
