@@ -160,12 +160,16 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable,
 /*}}}  */
 /*{{{  ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm tide) */
 
-ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm tide)
+ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm parseTable, ATerm tide)
 {
   ASF_ASFConditionalEquationList eqsList;
   ASF_ASFTestEquationTestList testList;
   ATerm result;
   ATbool debug;
+
+  if (!ATmatch(parseTable, "none")) {
+    setParseTable(ATBunpack(parseTable)); 
+  }
 
   /* connect to TIDE debugger in case TIDE support is currently active */
   if (ATmatch(tide, "on")) {
