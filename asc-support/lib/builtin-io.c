@@ -124,7 +124,7 @@ static char* getSort(PT_Symbol type)
 static PT_Tree parse_result(const char *sort, const char *file, ATerm result)
 {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
-  PT_Symbol type = PT_makeSymbolCf(PT_makeSymbolSort(sort));
+  PT_Symbol type = PT_makeSymbolSort(sort);
 
   if (result == NULL) {
     return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l, l,
@@ -186,7 +186,7 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
   char *filename = getFilename(file);
 
   if (sort == NULL) {
-    return  (PT_Tree) CO_makeParsetreeXFailure((ATerm) type,
+    return  (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort),
 						l,l,
 		makeGeneralError("complex symbols are not supported"),
 	       	l);
@@ -200,7 +200,7 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file)
     return parse_result(sort, filename, result);
   }
 
-  return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l,l,
+  return (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
 					     makeGeneralError(
 					      "no parsetable available"),
 					     l);
@@ -236,7 +236,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
   ATerm parseTable;
 
   if (sort == NULL) {
-    return  (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l,l,
+    return  (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
 		makeGeneralError("complex symbols are not supported"),
 	       	l);
   }
@@ -250,7 +250,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
     return parse_result(sort, "anonymous", result);
   }
 
-  return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l,l,
+  return (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
 		     makeGeneralError("no parsetable available"),
 		     l);
 }
@@ -345,7 +345,7 @@ static PT_Tree read_term_from_file(PT_Symbol type, PT_Tree file_arg)
   const char *sort = getSort(type);
 
   if (sort == NULL) {
-    return  (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l,l,
+    return  (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
 		makeGeneralError("complex symbols are not supported"),
 	       	l);
   }
