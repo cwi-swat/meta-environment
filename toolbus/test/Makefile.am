@@ -17,7 +17,8 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-TESTS           = TBmatch1 TermIO test-removesocket read test-annos dyncall $(OK_TESTS) $(ERROR_TESTS)
+TESTS           = TBmatch1 TermIO test-removesocket read test-annos dyncall \
+		  concat $(OK_TESTS) $(ERROR_TESTS)
 
 noinst_PROGRAMS = TBmatch1 TermIO
 
@@ -25,7 +26,8 @@ EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   notes.tb scope.tb tc-errors.tb tc.tb types.tb \
                   expr-errors.tb.ref scope.tb.ref tc-errors.tb.ref \
                   test-removesocket.src anno.tb test-annos.src read.src \
-		  read.tb bug-481.tb bug-481.tb.ref dyncall.tb dyncall.src
+		  read.tb bug-481.tb bug-481.tb.ref dyncall.tb dyncall.src \
+		  concat.tb concat.src
 
 LDADD           = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
 AM_CPPFLAGS     = -I$(top_srcdir)/libdeprecated-toolbus-adapter
@@ -62,6 +64,7 @@ CLEANFILES = \
 	$(GENERATED_BY_TESTS) \
 	test-removesocket \
 	test-annos \
+	concat \
 	dyncall \
 	read
 
