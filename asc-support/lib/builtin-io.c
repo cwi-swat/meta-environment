@@ -247,7 +247,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
     ATerm result = SGparseStringWithLoadedTable(toolname,ATparse(toolname),
 				 PT_yieldTreeToString(bytes, ATfalse),
 				  sort, "unknown-file");
-    return parse_result(toolname, "anonymous", result);
+    return parse_result(sort, "anonymous", result);
   }
 
   return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l,l,
