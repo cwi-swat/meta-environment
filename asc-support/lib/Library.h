@@ -1,28 +1,21 @@
 #ifndef _LIBRARY_H
 #define _LIBRARY_H
 
-/*{{{  includes */
-
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
 #include "Library_dict.h"
 
-/*}}}  */
-
-/*{{{  typedefs */
-
 typedef struct _CO_OptLayout *CO_OptLayout;
 typedef struct _CO_Layout *CO_Layout;
 typedef struct _CO_LexLayoutList *CO_LexLayoutList;
 typedef struct _CO_LexLayout *CO_LexLayout;
-typedef struct _CO_Boolean *CO_Boolean;
 typedef struct _CO_Start *CO_Start;
 typedef struct _CO_LexStrChar *CO_LexStrChar;
 typedef struct _CO_StrChar *CO_StrChar;
 typedef struct _CO_LexStrCon *CO_LexStrCon;
 typedef struct _CO_StrCon *CO_StrCon;
-typedef struct _CO_LexStrCharLine *CO_LexStrCharLine;
+typedef struct _CO_LexStrCharChars *CO_LexStrCharChars;
 typedef struct _CO_BoolCon *CO_BoolCon;
 typedef struct _CO_LexNatCon *CO_LexNatCon;
 typedef struct _CO_NatCon *CO_NatCon;
@@ -42,47 +35,70 @@ typedef struct _CO_Read *CO_Read;
 typedef struct _CO_Write *CO_Write;
 typedef struct _CO_ParsetreeX *CO_ParsetreeX;
 typedef struct _CO_X *CO_X;
-
-/*}}}  */
+typedef struct _CO_Boolean *CO_Boolean;
 
 void CO_initLibraryApi(void);
 
-/*{{{  protect functions */
-
 void CO_protectOptLayout(CO_OptLayout *arg);
+void CO_unprotectOptLayout(CO_OptLayout *arg);
 void CO_protectLayout(CO_Layout *arg);
+void CO_unprotectLayout(CO_Layout *arg);
 void CO_protectLexLayoutList(CO_LexLayoutList *arg);
+void CO_unprotectLexLayoutList(CO_LexLayoutList *arg);
 void CO_protectLexLayout(CO_LexLayout *arg);
-void CO_protectBoolean(CO_Boolean *arg);
+void CO_unprotectLexLayout(CO_LexLayout *arg);
 void CO_protectStart(CO_Start *arg);
+void CO_unprotectStart(CO_Start *arg);
 void CO_protectLexStrChar(CO_LexStrChar *arg);
+void CO_unprotectLexStrChar(CO_LexStrChar *arg);
 void CO_protectStrChar(CO_StrChar *arg);
+void CO_unprotectStrChar(CO_StrChar *arg);
 void CO_protectLexStrCon(CO_LexStrCon *arg);
+void CO_unprotectLexStrCon(CO_LexStrCon *arg);
 void CO_protectStrCon(CO_StrCon *arg);
-void CO_protectLexStrCharLine(CO_LexStrCharLine *arg);
+void CO_unprotectStrCon(CO_StrCon *arg);
+void CO_protectLexStrCharChars(CO_LexStrCharChars *arg);
+void CO_unprotectLexStrCharChars(CO_LexStrCharChars *arg);
 void CO_protectBoolCon(CO_BoolCon *arg);
+void CO_unprotectBoolCon(CO_BoolCon *arg);
 void CO_protectLexNatCon(CO_LexNatCon *arg);
+void CO_unprotectLexNatCon(CO_LexNatCon *arg);
 void CO_protectNatCon(CO_NatCon *arg);
+void CO_unprotectNatCon(CO_NatCon *arg);
 void CO_protectLexByte(CO_LexByte *arg);
+void CO_unprotectLexByte(CO_LexByte *arg);
 void CO_protectByte(CO_Byte *arg);
+void CO_unprotectByte(CO_Byte *arg);
 void CO_protectLexBytes(CO_LexBytes *arg);
+void CO_unprotectLexBytes(CO_LexBytes *arg);
 void CO_protectBytes(CO_Bytes *arg);
+void CO_unprotectBytes(CO_Bytes *arg);
 void CO_protectLexByteList(CO_LexByteList *arg);
+void CO_unprotectLexByteList(CO_LexByteList *arg);
 void CO_protectSubject(CO_Subject *arg);
+void CO_unprotectSubject(CO_Subject *arg);
 void CO_protectError(CO_Error *arg);
+void CO_unprotectError(CO_Error *arg);
 void CO_protectSummary(CO_Summary *arg);
+void CO_unprotectSummary(CO_Summary *arg);
 void CO_protectSubjectList(CO_SubjectList *arg);
+void CO_unprotectSubjectList(CO_SubjectList *arg);
 void CO_protectErrorList(CO_ErrorList *arg);
+void CO_unprotectErrorList(CO_ErrorList *arg);
 void CO_protectLocation(CO_Location *arg);
+void CO_unprotectLocation(CO_Location *arg);
 void CO_protectArea(CO_Area *arg);
+void CO_unprotectArea(CO_Area *arg);
 void CO_protectRead(CO_Read *arg);
+void CO_unprotectRead(CO_Read *arg);
 void CO_protectWrite(CO_Write *arg);
+void CO_unprotectWrite(CO_Write *arg);
 void CO_protectParsetreeX(CO_ParsetreeX *arg);
+void CO_unprotectParsetreeX(CO_ParsetreeX *arg);
 void CO_protectX(CO_X *arg);
-
-/*}}}  */
-/*{{{  term conversion functions */
-
+void CO_unprotectX(CO_X *arg);
+void CO_protectBoolean(CO_Boolean *arg);
+void CO_unprotectBoolean(CO_Boolean *arg);
 CO_OptLayout CO_OptLayoutFromTerm(ATerm t);
 ATerm CO_OptLayoutToTerm(CO_OptLayout arg);
 CO_Layout CO_LayoutFromTerm(ATerm t);
@@ -91,8 +107,6 @@ CO_LexLayoutList CO_LexLayoutListFromTerm(ATerm t);
 ATerm CO_LexLayoutListToTerm(CO_LexLayoutList arg);
 CO_LexLayout CO_LexLayoutFromTerm(ATerm t);
 ATerm CO_LexLayoutToTerm(CO_LexLayout arg);
-CO_Boolean CO_BooleanFromTerm(ATerm t);
-ATerm CO_BooleanToTerm(CO_Boolean arg);
 CO_Start CO_StartFromTerm(ATerm t);
 ATerm CO_StartToTerm(CO_Start arg);
 CO_LexStrChar CO_LexStrCharFromTerm(ATerm t);
@@ -103,8 +117,8 @@ CO_LexStrCon CO_LexStrConFromTerm(ATerm t);
 ATerm CO_LexStrConToTerm(CO_LexStrCon arg);
 CO_StrCon CO_StrConFromTerm(ATerm t);
 ATerm CO_StrConToTerm(CO_StrCon arg);
-CO_LexStrCharLine CO_LexStrCharLineFromTerm(ATerm t);
-ATerm CO_LexStrCharLineToTerm(CO_LexStrCharLine arg);
+CO_LexStrCharChars CO_LexStrCharCharsFromTerm(ATerm t);
+ATerm CO_LexStrCharCharsToTerm(CO_LexStrCharChars arg);
 CO_BoolCon CO_BoolConFromTerm(ATerm t);
 ATerm CO_BoolConToTerm(CO_BoolCon arg);
 CO_LexNatCon CO_LexNatConFromTerm(ATerm t);
@@ -143,10 +157,8 @@ CO_ParsetreeX CO_ParsetreeXFromTerm(ATerm t);
 ATerm CO_ParsetreeXToTerm(CO_ParsetreeX arg);
 CO_X CO_XFromTerm(ATerm t);
 ATerm CO_XToTerm(CO_X arg);
-
-/*}}}  */
-/*{{{  list functions */
-
+CO_Boolean CO_BooleanFromTerm(ATerm t);
+ATerm CO_BooleanToTerm(CO_Boolean arg);
 int CO_getLexLayoutListLength (CO_LexLayoutList arg);
 CO_LexLayoutList CO_reverseLexLayoutList(CO_LexLayoutList arg);
 CO_LexLayoutList CO_appendLexLayoutList(CO_LexLayoutList arg, CO_LexLayout elem);
@@ -159,18 +171,18 @@ CO_LexLayoutList CO_makeLexLayoutList3(CO_LexLayout elem1, CO_LexLayout elem2, C
 CO_LexLayoutList CO_makeLexLayoutList4(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4);
 CO_LexLayoutList CO_makeLexLayoutList5(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4, CO_LexLayout elem5);
 CO_LexLayoutList CO_makeLexLayoutList6(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4, CO_LexLayout elem5, CO_LexLayout elem6);
-int CO_getLexStrCharLineLength (CO_LexStrCharLine arg);
-CO_LexStrCharLine CO_reverseLexStrCharLine(CO_LexStrCharLine arg);
-CO_LexStrCharLine CO_appendLexStrCharLine(CO_LexStrCharLine arg, CO_LexStrChar elem);
-CO_LexStrCharLine CO_concatLexStrCharLine(CO_LexStrCharLine arg0, CO_LexStrCharLine arg1);
-CO_LexStrCharLine CO_sliceLexStrCharLine(CO_LexStrCharLine arg, int start, int end);
-CO_LexStrChar CO_getLexStrCharLineLexStrCharAt(CO_LexStrCharLine arg, int index);
-CO_LexStrCharLine CO_replaceLexStrCharLineLexStrCharAt(CO_LexStrCharLine arg, CO_LexStrChar elem, int index);
-CO_LexStrCharLine CO_makeLexStrCharLine2(CO_LexStrChar elem1, CO_LexStrChar elem2);
-CO_LexStrCharLine CO_makeLexStrCharLine3(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3);
-CO_LexStrCharLine CO_makeLexStrCharLine4(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4);
-CO_LexStrCharLine CO_makeLexStrCharLine5(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5);
-CO_LexStrCharLine CO_makeLexStrCharLine6(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5, CO_LexStrChar elem6);
+int CO_getLexStrCharCharsLength (CO_LexStrCharChars arg);
+CO_LexStrCharChars CO_reverseLexStrCharChars(CO_LexStrCharChars arg);
+CO_LexStrCharChars CO_appendLexStrCharChars(CO_LexStrCharChars arg, CO_LexStrChar elem);
+CO_LexStrCharChars CO_concatLexStrCharChars(CO_LexStrCharChars arg0, CO_LexStrCharChars arg1);
+CO_LexStrCharChars CO_sliceLexStrCharChars(CO_LexStrCharChars arg, int start, int end);
+CO_LexStrChar CO_getLexStrCharCharsLexStrCharAt(CO_LexStrCharChars arg, int index);
+CO_LexStrCharChars CO_replaceLexStrCharCharsLexStrCharAt(CO_LexStrCharChars arg, CO_LexStrChar elem, int index);
+CO_LexStrCharChars CO_makeLexStrCharChars2(CO_LexStrChar elem1, CO_LexStrChar elem2);
+CO_LexStrCharChars CO_makeLexStrCharChars3(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3);
+CO_LexStrCharChars CO_makeLexStrCharChars4(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4);
+CO_LexStrCharChars CO_makeLexStrCharChars5(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5);
+CO_LexStrCharChars CO_makeLexStrCharChars6(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5, CO_LexStrChar elem6);
 int CO_getLexByteListLength (CO_LexByteList arg);
 CO_LexByteList CO_reverseLexByteList(CO_LexByteList arg);
 CO_LexByteList CO_appendLexByteList(CO_LexByteList arg, CO_LexByte elem);
@@ -207,10 +219,6 @@ CO_ErrorList CO_makeErrorList3(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep
 CO_ErrorList CO_makeErrorList4(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error elem1, CO_Error elem2, CO_Error elem3, CO_Error elem4);
 CO_ErrorList CO_makeErrorList5(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error elem1, CO_Error elem2, CO_Error elem3, CO_Error elem4, CO_Error elem5);
 CO_ErrorList CO_makeErrorList6(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error elem1, CO_Error elem2, CO_Error elem3, CO_Error elem4, CO_Error elem5, CO_Error elem6);
-
-/*}}}  */
-/*{{{  constructors */
-
 CO_OptLayout CO_makeOptLayoutAbsent(void);
 CO_OptLayout CO_makeOptLayoutPresent(CO_Layout layout);
 CO_Layout CO_makeLayoutLexToCf(CO_LexLayoutList list);
@@ -218,31 +226,26 @@ CO_LexLayoutList CO_makeLexLayoutListEmpty(void);
 CO_LexLayoutList CO_makeLexLayoutListSingle(CO_LexLayout head);
 CO_LexLayoutList CO_makeLexLayoutListMany(CO_LexLayout head, CO_LexLayoutList tail);
 CO_LexLayout CO_makeLexLayoutWhitespace(char ch);
-CO_Boolean CO_makeBooleanConstant(CO_BoolCon BoolCon);
-CO_Boolean CO_makeBooleanOr(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterBar, CO_Boolean rhs);
-CO_Boolean CO_makeBooleanAnd(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterAmp, CO_Boolean rhs);
-CO_Boolean CO_makeBooleanNot(CO_OptLayout wsAfterNot, CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
-CO_Boolean CO_makeBooleanBracket(CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
-CO_Start CO_makeStartBoolean(CO_OptLayout wsBefore, CO_Boolean topBoolean, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartStrCon(CO_OptLayout wsBefore, CO_StrCon topStrCon, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartBoolCon(CO_OptLayout wsBefore, CO_BoolCon topBoolCon, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartSummary(CO_OptLayout wsBefore, CO_Summary topSummary, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartError(CO_OptLayout wsBefore, CO_Error topError, CO_OptLayout wsAfter, int ambCnt);
+CO_Start CO_makeStartBoolean(CO_OptLayout wsBefore, CO_Boolean topBoolean, CO_OptLayout wsAfter, int ambCnt);
 CO_LexStrChar CO_makeLexStrCharNewline(void);
 CO_LexStrChar CO_makeLexStrCharTab(void);
 CO_LexStrChar CO_makeLexStrCharQuote(void);
 CO_LexStrChar CO_makeLexStrCharBackslash(void);
-CO_LexStrChar CO_makeLexStrCharOctal(char a, char b, char c);
+CO_LexStrChar CO_makeLexStrCharDecimal(char a, char b, char c);
 CO_LexStrChar CO_makeLexStrCharNormal(char ch);
 CO_StrChar CO_makeStrCharLexToCf(CO_LexStrChar StrChar);
-CO_LexStrCon CO_makeLexStrConDefault(CO_LexStrCharLine line);
+CO_LexStrCon CO_makeLexStrConDefault(CO_LexStrCharChars chars);
 CO_StrCon CO_makeStrConLexToCf(CO_LexStrCon StrCon);
-CO_LexStrCharLine CO_makeLexStrCharLineEmpty(void);
-CO_LexStrCharLine CO_makeLexStrCharLineSingle(CO_LexStrChar head);
-CO_LexStrCharLine CO_makeLexStrCharLineMany(CO_LexStrChar head, CO_LexStrCharLine tail);
+CO_LexStrCharChars CO_makeLexStrCharCharsEmpty(void);
+CO_LexStrCharChars CO_makeLexStrCharCharsSingle(CO_LexStrChar head);
+CO_LexStrCharChars CO_makeLexStrCharCharsMany(CO_LexStrChar head, CO_LexStrCharChars tail);
 CO_BoolCon CO_makeBoolConTrue(void);
 CO_BoolCon CO_makeBoolConFalse(void);
-CO_LexNatCon CO_makeLexNatConDefault(const char* list);
+CO_LexNatCon CO_makeLexNatConDigits(const char* list);
 CO_NatCon CO_makeNatConLexToCf(CO_LexNatCon NatCon);
 CO_LexByte CO_makeLexByteByte(char ch);
 CO_Byte CO_makeByteLexToCf(CO_LexByte Byte);
@@ -275,21 +278,21 @@ CO_Write CO_makeWriteFailure(CO_OptLayout wsAfterWriteError, CO_OptLayout wsAfte
 CO_ParsetreeX CO_makeParsetreeXSuccess(ATerm typeOfTree, ATerm typeOfX, CO_OptLayout wsAfterParseTree, CO_OptLayout wsAfterParenOpen, CO_Bytes leftLayout, CO_OptLayout wsAfterLeftLayout, CO_OptLayout wsAfterComma, CO_X tree, CO_OptLayout wsAfterTree, CO_OptLayout wsAfterComma1, CO_Bytes rightLayout, CO_OptLayout wsAfterRightLayout, CO_OptLayout wsAfterComma2, CO_NatCon ambCnt, CO_OptLayout wsAfterAmbCnt);
 CO_ParsetreeX CO_makeParsetreeXFailure(ATerm typeOfX, CO_OptLayout wsAfterParseError, CO_OptLayout wsAfterParenOpen, CO_Summary Summary, CO_OptLayout wsAfterSummary);
 CO_X CO_makeXCast(ATerm X);
-
-/*}}}  */
-/*{{{  equality functions */
-
+CO_Boolean CO_makeBooleanConstant(CO_BoolCon BoolCon);
+CO_Boolean CO_makeBooleanOr(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterBar, CO_Boolean rhs);
+CO_Boolean CO_makeBooleanAnd(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterAmp, CO_Boolean rhs);
+CO_Boolean CO_makeBooleanNot(CO_OptLayout wsAfterNot, CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
+CO_Boolean CO_makeBooleanBracket(CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
 ATbool CO_isEqualOptLayout(CO_OptLayout arg0, CO_OptLayout arg1);
 ATbool CO_isEqualLayout(CO_Layout arg0, CO_Layout arg1);
 ATbool CO_isEqualLexLayoutList(CO_LexLayoutList arg0, CO_LexLayoutList arg1);
 ATbool CO_isEqualLexLayout(CO_LexLayout arg0, CO_LexLayout arg1);
-ATbool CO_isEqualBoolean(CO_Boolean arg0, CO_Boolean arg1);
 ATbool CO_isEqualStart(CO_Start arg0, CO_Start arg1);
 ATbool CO_isEqualLexStrChar(CO_LexStrChar arg0, CO_LexStrChar arg1);
 ATbool CO_isEqualStrChar(CO_StrChar arg0, CO_StrChar arg1);
 ATbool CO_isEqualLexStrCon(CO_LexStrCon arg0, CO_LexStrCon arg1);
 ATbool CO_isEqualStrCon(CO_StrCon arg0, CO_StrCon arg1);
-ATbool CO_isEqualLexStrCharLine(CO_LexStrCharLine arg0, CO_LexStrCharLine arg1);
+ATbool CO_isEqualLexStrCharChars(CO_LexStrCharChars arg0, CO_LexStrCharChars arg1);
 ATbool CO_isEqualBoolCon(CO_BoolCon arg0, CO_BoolCon arg1);
 ATbool CO_isEqualLexNatCon(CO_LexNatCon arg0, CO_LexNatCon arg1);
 ATbool CO_isEqualNatCon(CO_NatCon arg0, CO_NatCon arg1);
@@ -309,29 +312,18 @@ ATbool CO_isEqualRead(CO_Read arg0, CO_Read arg1);
 ATbool CO_isEqualWrite(CO_Write arg0, CO_Write arg1);
 ATbool CO_isEqualParsetreeX(CO_ParsetreeX arg0, CO_ParsetreeX arg1);
 ATbool CO_isEqualX(CO_X arg0, CO_X arg1);
-
-/*}}}  */
-/*{{{  CO_OptLayout accessors */
-
+ATbool CO_isEqualBoolean(CO_Boolean arg0, CO_Boolean arg1);
 ATbool CO_isValidOptLayout(CO_OptLayout arg);
 inline ATbool CO_isOptLayoutAbsent(CO_OptLayout arg);
 inline ATbool CO_isOptLayoutPresent(CO_OptLayout arg);
 ATbool CO_hasOptLayoutLayout(CO_OptLayout arg);
 CO_Layout CO_getOptLayoutLayout(CO_OptLayout arg);
 CO_OptLayout CO_setOptLayoutLayout(CO_OptLayout arg, CO_Layout layout);
-
-/*}}}  */
-/*{{{  CO_Layout accessors */
-
 ATbool CO_isValidLayout(CO_Layout arg);
 inline ATbool CO_isLayoutLexToCf(CO_Layout arg);
 ATbool CO_hasLayoutList(CO_Layout arg);
 CO_LexLayoutList CO_getLayoutList(CO_Layout arg);
 CO_Layout CO_setLayoutList(CO_Layout arg, CO_LexLayoutList list);
-
-/*}}}  */
-/*{{{  CO_LexLayoutList accessors */
-
 ATbool CO_isValidLexLayoutList(CO_LexLayoutList arg);
 inline ATbool CO_isLexLayoutListEmpty(CO_LexLayoutList arg);
 inline ATbool CO_isLexLayoutListSingle(CO_LexLayoutList arg);
@@ -342,99 +334,47 @@ CO_LexLayout CO_getLexLayoutListHead(CO_LexLayoutList arg);
 CO_LexLayoutList CO_getLexLayoutListTail(CO_LexLayoutList arg);
 CO_LexLayoutList CO_setLexLayoutListHead(CO_LexLayoutList arg, CO_LexLayout head);
 CO_LexLayoutList CO_setLexLayoutListTail(CO_LexLayoutList arg, CO_LexLayoutList tail);
-
-/*}}}  */
-/*{{{  CO_LexLayout accessors */
-
 ATbool CO_isValidLexLayout(CO_LexLayout arg);
 inline ATbool CO_isLexLayoutWhitespace(CO_LexLayout arg);
 ATbool CO_hasLexLayoutCh(CO_LexLayout arg);
 char CO_getLexLayoutCh(CO_LexLayout arg);
 CO_LexLayout CO_setLexLayoutCh(CO_LexLayout arg, char ch);
-
-/*}}}  */
-/*{{{  CO_Boolean accessors */
-
-ATbool CO_isValidBoolean(CO_Boolean arg);
-inline ATbool CO_isBooleanConstant(CO_Boolean arg);
-inline ATbool CO_isBooleanOr(CO_Boolean arg);
-inline ATbool CO_isBooleanAnd(CO_Boolean arg);
-inline ATbool CO_isBooleanNot(CO_Boolean arg);
-inline ATbool CO_isBooleanBracket(CO_Boolean arg);
-ATbool CO_hasBooleanBoolCon(CO_Boolean arg);
-ATbool CO_hasBooleanLhs(CO_Boolean arg);
-ATbool CO_hasBooleanWsAfterLhs(CO_Boolean arg);
-ATbool CO_hasBooleanWsAfterBar(CO_Boolean arg);
-ATbool CO_hasBooleanRhs(CO_Boolean arg);
-ATbool CO_hasBooleanWsAfterAmp(CO_Boolean arg);
-ATbool CO_hasBooleanWsAfterNot(CO_Boolean arg);
-ATbool CO_hasBooleanWsAfterParenOpen(CO_Boolean arg);
-ATbool CO_hasBooleanBoolean(CO_Boolean arg);
-ATbool CO_hasBooleanWsAfterBoolean(CO_Boolean arg);
-CO_BoolCon CO_getBooleanBoolCon(CO_Boolean arg);
-CO_Boolean CO_getBooleanLhs(CO_Boolean arg);
-CO_OptLayout CO_getBooleanWsAfterLhs(CO_Boolean arg);
-CO_OptLayout CO_getBooleanWsAfterBar(CO_Boolean arg);
-CO_Boolean CO_getBooleanRhs(CO_Boolean arg);
-CO_OptLayout CO_getBooleanWsAfterAmp(CO_Boolean arg);
-CO_OptLayout CO_getBooleanWsAfterNot(CO_Boolean arg);
-CO_OptLayout CO_getBooleanWsAfterParenOpen(CO_Boolean arg);
-CO_Boolean CO_getBooleanBoolean(CO_Boolean arg);
-CO_OptLayout CO_getBooleanWsAfterBoolean(CO_Boolean arg);
-CO_Boolean CO_setBooleanBoolCon(CO_Boolean arg, CO_BoolCon BoolCon);
-CO_Boolean CO_setBooleanLhs(CO_Boolean arg, CO_Boolean lhs);
-CO_Boolean CO_setBooleanWsAfterLhs(CO_Boolean arg, CO_OptLayout wsAfterLhs);
-CO_Boolean CO_setBooleanWsAfterBar(CO_Boolean arg, CO_OptLayout wsAfterBar);
-CO_Boolean CO_setBooleanRhs(CO_Boolean arg, CO_Boolean rhs);
-CO_Boolean CO_setBooleanWsAfterAmp(CO_Boolean arg, CO_OptLayout wsAfterAmp);
-CO_Boolean CO_setBooleanWsAfterNot(CO_Boolean arg, CO_OptLayout wsAfterNot);
-CO_Boolean CO_setBooleanWsAfterParenOpen(CO_Boolean arg, CO_OptLayout wsAfterParenOpen);
-CO_Boolean CO_setBooleanBoolean(CO_Boolean arg, CO_Boolean Boolean);
-CO_Boolean CO_setBooleanWsAfterBoolean(CO_Boolean arg, CO_OptLayout wsAfterBoolean);
-
-/*}}}  */
-/*{{{  CO_Start accessors */
-
 ATbool CO_isValidStart(CO_Start arg);
-inline ATbool CO_isStartBoolean(CO_Start arg);
 inline ATbool CO_isStartStrCon(CO_Start arg);
 inline ATbool CO_isStartBoolCon(CO_Start arg);
 inline ATbool CO_isStartSummary(CO_Start arg);
 inline ATbool CO_isStartError(CO_Start arg);
+inline ATbool CO_isStartBoolean(CO_Start arg);
 ATbool CO_hasStartWsBefore(CO_Start arg);
-ATbool CO_hasStartTopBoolean(CO_Start arg);
+ATbool CO_hasStartTopStrCon(CO_Start arg);
 ATbool CO_hasStartWsAfter(CO_Start arg);
 ATbool CO_hasStartAmbCnt(CO_Start arg);
-ATbool CO_hasStartTopStrCon(CO_Start arg);
 ATbool CO_hasStartTopBoolCon(CO_Start arg);
 ATbool CO_hasStartTopSummary(CO_Start arg);
 ATbool CO_hasStartTopError(CO_Start arg);
+ATbool CO_hasStartTopBoolean(CO_Start arg);
 CO_OptLayout CO_getStartWsBefore(CO_Start arg);
-CO_Boolean CO_getStartTopBoolean(CO_Start arg);
+CO_StrCon CO_getStartTopStrCon(CO_Start arg);
 CO_OptLayout CO_getStartWsAfter(CO_Start arg);
 int CO_getStartAmbCnt(CO_Start arg);
-CO_StrCon CO_getStartTopStrCon(CO_Start arg);
 CO_BoolCon CO_getStartTopBoolCon(CO_Start arg);
 CO_Summary CO_getStartTopSummary(CO_Start arg);
 CO_Error CO_getStartTopError(CO_Start arg);
+CO_Boolean CO_getStartTopBoolean(CO_Start arg);
 CO_Start CO_setStartWsBefore(CO_Start arg, CO_OptLayout wsBefore);
-CO_Start CO_setStartTopBoolean(CO_Start arg, CO_Boolean topBoolean);
+CO_Start CO_setStartTopStrCon(CO_Start arg, CO_StrCon topStrCon);
 CO_Start CO_setStartWsAfter(CO_Start arg, CO_OptLayout wsAfter);
 CO_Start CO_setStartAmbCnt(CO_Start arg, int ambCnt);
-CO_Start CO_setStartTopStrCon(CO_Start arg, CO_StrCon topStrCon);
 CO_Start CO_setStartTopBoolCon(CO_Start arg, CO_BoolCon topBoolCon);
 CO_Start CO_setStartTopSummary(CO_Start arg, CO_Summary topSummary);
 CO_Start CO_setStartTopError(CO_Start arg, CO_Error topError);
-
-/*}}}  */
-/*{{{  CO_LexStrChar accessors */
-
+CO_Start CO_setStartTopBoolean(CO_Start arg, CO_Boolean topBoolean);
 ATbool CO_isValidLexStrChar(CO_LexStrChar arg);
 inline ATbool CO_isLexStrCharNewline(CO_LexStrChar arg);
 inline ATbool CO_isLexStrCharTab(CO_LexStrChar arg);
 inline ATbool CO_isLexStrCharQuote(CO_LexStrChar arg);
 inline ATbool CO_isLexStrCharBackslash(CO_LexStrChar arg);
-inline ATbool CO_isLexStrCharOctal(CO_LexStrChar arg);
+inline ATbool CO_isLexStrCharDecimal(CO_LexStrChar arg);
 inline ATbool CO_isLexStrCharNormal(CO_LexStrChar arg);
 ATbool CO_hasLexStrCharA(CO_LexStrChar arg);
 ATbool CO_hasLexStrCharB(CO_LexStrChar arg);
@@ -448,112 +388,64 @@ CO_LexStrChar CO_setLexStrCharA(CO_LexStrChar arg, char a);
 CO_LexStrChar CO_setLexStrCharB(CO_LexStrChar arg, char b);
 CO_LexStrChar CO_setLexStrCharC(CO_LexStrChar arg, char c);
 CO_LexStrChar CO_setLexStrCharCh(CO_LexStrChar arg, char ch);
-
-/*}}}  */
-/*{{{  CO_StrChar accessors */
-
 ATbool CO_isValidStrChar(CO_StrChar arg);
 inline ATbool CO_isStrCharLexToCf(CO_StrChar arg);
 ATbool CO_hasStrCharStrChar(CO_StrChar arg);
 CO_LexStrChar CO_getStrCharStrChar(CO_StrChar arg);
 CO_StrChar CO_setStrCharStrChar(CO_StrChar arg, CO_LexStrChar StrChar);
-
-/*}}}  */
-/*{{{  CO_LexStrCon accessors */
-
 ATbool CO_isValidLexStrCon(CO_LexStrCon arg);
 inline ATbool CO_isLexStrConDefault(CO_LexStrCon arg);
-ATbool CO_hasLexStrConLine(CO_LexStrCon arg);
-CO_LexStrCharLine CO_getLexStrConLine(CO_LexStrCon arg);
-CO_LexStrCon CO_setLexStrConLine(CO_LexStrCon arg, CO_LexStrCharLine line);
-
-/*}}}  */
-/*{{{  CO_StrCon accessors */
-
+ATbool CO_hasLexStrConChars(CO_LexStrCon arg);
+CO_LexStrCharChars CO_getLexStrConChars(CO_LexStrCon arg);
+CO_LexStrCon CO_setLexStrConChars(CO_LexStrCon arg, CO_LexStrCharChars chars);
 ATbool CO_isValidStrCon(CO_StrCon arg);
 inline ATbool CO_isStrConLexToCf(CO_StrCon arg);
 ATbool CO_hasStrConStrCon(CO_StrCon arg);
 CO_LexStrCon CO_getStrConStrCon(CO_StrCon arg);
 CO_StrCon CO_setStrConStrCon(CO_StrCon arg, CO_LexStrCon StrCon);
-
-/*}}}  */
-/*{{{  CO_LexStrCharLine accessors */
-
-ATbool CO_isValidLexStrCharLine(CO_LexStrCharLine arg);
-inline ATbool CO_isLexStrCharLineEmpty(CO_LexStrCharLine arg);
-inline ATbool CO_isLexStrCharLineSingle(CO_LexStrCharLine arg);
-inline ATbool CO_isLexStrCharLineMany(CO_LexStrCharLine arg);
-ATbool CO_hasLexStrCharLineHead(CO_LexStrCharLine arg);
-ATbool CO_hasLexStrCharLineTail(CO_LexStrCharLine arg);
-CO_LexStrChar CO_getLexStrCharLineHead(CO_LexStrCharLine arg);
-CO_LexStrCharLine CO_getLexStrCharLineTail(CO_LexStrCharLine arg);
-CO_LexStrCharLine CO_setLexStrCharLineHead(CO_LexStrCharLine arg, CO_LexStrChar head);
-CO_LexStrCharLine CO_setLexStrCharLineTail(CO_LexStrCharLine arg, CO_LexStrCharLine tail);
-
-/*}}}  */
-/*{{{  CO_BoolCon accessors */
-
+ATbool CO_isValidLexStrCharChars(CO_LexStrCharChars arg);
+inline ATbool CO_isLexStrCharCharsEmpty(CO_LexStrCharChars arg);
+inline ATbool CO_isLexStrCharCharsSingle(CO_LexStrCharChars arg);
+inline ATbool CO_isLexStrCharCharsMany(CO_LexStrCharChars arg);
+ATbool CO_hasLexStrCharCharsHead(CO_LexStrCharChars arg);
+ATbool CO_hasLexStrCharCharsTail(CO_LexStrCharChars arg);
+CO_LexStrChar CO_getLexStrCharCharsHead(CO_LexStrCharChars arg);
+CO_LexStrCharChars CO_getLexStrCharCharsTail(CO_LexStrCharChars arg);
+CO_LexStrCharChars CO_setLexStrCharCharsHead(CO_LexStrCharChars arg, CO_LexStrChar head);
+CO_LexStrCharChars CO_setLexStrCharCharsTail(CO_LexStrCharChars arg, CO_LexStrCharChars tail);
 ATbool CO_isValidBoolCon(CO_BoolCon arg);
 inline ATbool CO_isBoolConTrue(CO_BoolCon arg);
 inline ATbool CO_isBoolConFalse(CO_BoolCon arg);
-
-/*}}}  */
-/*{{{  CO_LexNatCon accessors */
-
 ATbool CO_isValidLexNatCon(CO_LexNatCon arg);
-inline ATbool CO_isLexNatConDefault(CO_LexNatCon arg);
+inline ATbool CO_isLexNatConDigits(CO_LexNatCon arg);
 ATbool CO_hasLexNatConList(CO_LexNatCon arg);
 char* CO_getLexNatConList(CO_LexNatCon arg);
 CO_LexNatCon CO_setLexNatConList(CO_LexNatCon arg, const char* list);
-
-/*}}}  */
-/*{{{  CO_NatCon accessors */
-
 ATbool CO_isValidNatCon(CO_NatCon arg);
 inline ATbool CO_isNatConLexToCf(CO_NatCon arg);
 ATbool CO_hasNatConNatCon(CO_NatCon arg);
 CO_LexNatCon CO_getNatConNatCon(CO_NatCon arg);
 CO_NatCon CO_setNatConNatCon(CO_NatCon arg, CO_LexNatCon NatCon);
-
-/*}}}  */
-/*{{{  CO_LexByte accessors */
-
 ATbool CO_isValidLexByte(CO_LexByte arg);
 inline ATbool CO_isLexByteByte(CO_LexByte arg);
 ATbool CO_hasLexByteCh(CO_LexByte arg);
 char CO_getLexByteCh(CO_LexByte arg);
 CO_LexByte CO_setLexByteCh(CO_LexByte arg, char ch);
-
-/*}}}  */
-/*{{{  CO_Byte accessors */
-
 ATbool CO_isValidByte(CO_Byte arg);
 inline ATbool CO_isByteLexToCf(CO_Byte arg);
 ATbool CO_hasByteByte(CO_Byte arg);
 CO_LexByte CO_getByteByte(CO_Byte arg);
 CO_Byte CO_setByteByte(CO_Byte arg, CO_LexByte Byte);
-
-/*}}}  */
-/*{{{  CO_LexBytes accessors */
-
 ATbool CO_isValidLexBytes(CO_LexBytes arg);
 inline ATbool CO_isLexBytesBytes(CO_LexBytes arg);
 ATbool CO_hasLexBytesList(CO_LexBytes arg);
 CO_LexByteList CO_getLexBytesList(CO_LexBytes arg);
 CO_LexBytes CO_setLexBytesList(CO_LexBytes arg, CO_LexByteList list);
-
-/*}}}  */
-/*{{{  CO_Bytes accessors */
-
 ATbool CO_isValidBytes(CO_Bytes arg);
 inline ATbool CO_isBytesLexToCf(CO_Bytes arg);
 ATbool CO_hasBytesBytes(CO_Bytes arg);
 CO_LexBytes CO_getBytesBytes(CO_Bytes arg);
 CO_Bytes CO_setBytesBytes(CO_Bytes arg, CO_LexBytes Bytes);
-
-/*}}}  */
-/*{{{  CO_LexByteList accessors */
-
 ATbool CO_isValidLexByteList(CO_LexByteList arg);
 inline ATbool CO_isLexByteListEmpty(CO_LexByteList arg);
 inline ATbool CO_isLexByteListSingle(CO_LexByteList arg);
@@ -564,10 +456,6 @@ CO_LexByte CO_getLexByteListHead(CO_LexByteList arg);
 CO_LexByteList CO_getLexByteListTail(CO_LexByteList arg);
 CO_LexByteList CO_setLexByteListHead(CO_LexByteList arg, CO_LexByte head);
 CO_LexByteList CO_setLexByteListTail(CO_LexByteList arg, CO_LexByteList tail);
-
-/*}}}  */
-/*{{{  CO_Subject accessors */
-
 ATbool CO_isValidSubject(CO_Subject arg);
 inline ATbool CO_isSubjectSubject(CO_Subject arg);
 inline ATbool CO_isSubjectLocalized(CO_Subject arg);
@@ -595,10 +483,6 @@ CO_Subject CO_setSubjectWsAfterLocalized(CO_Subject arg, CO_OptLayout wsAfterLoc
 CO_Subject CO_setSubjectWsAfterComma(CO_Subject arg, CO_OptLayout wsAfterComma);
 CO_Subject CO_setSubjectLocation(CO_Subject arg, CO_Location Location);
 CO_Subject CO_setSubjectWsAfterLocation(CO_Subject arg, CO_OptLayout wsAfterLocation);
-
-/*}}}  */
-/*{{{  CO_Error accessors */
-
 ATbool CO_isValidError(CO_Error arg);
 inline ATbool CO_isErrorInfo(CO_Error arg);
 inline ATbool CO_isErrorWarning(CO_Error arg);
@@ -640,10 +524,6 @@ CO_Error CO_setErrorWsAfterBracketClose(CO_Error arg, CO_OptLayout wsAfterBracke
 CO_Error CO_setErrorWsAfterWarning(CO_Error arg, CO_OptLayout wsAfterWarning);
 CO_Error CO_setErrorWsAfterError(CO_Error arg, CO_OptLayout wsAfterError);
 CO_Error CO_setErrorWsAfterFatal(CO_Error arg, CO_OptLayout wsAfterFatal);
-
-/*}}}  */
-/*{{{  CO_Summary accessors */
-
 ATbool CO_isValidSummary(CO_Summary arg);
 inline ATbool CO_isSummarySummary(CO_Summary arg);
 ATbool CO_hasSummaryWsAfterSummary(CO_Summary arg);
@@ -682,10 +562,6 @@ CO_Summary CO_setSummaryWsAfterBracketOpen(CO_Summary arg, CO_OptLayout wsAfterB
 CO_Summary CO_setSummaryList(CO_Summary arg, CO_ErrorList list);
 CO_Summary CO_setSummaryWsAfterList(CO_Summary arg, CO_OptLayout wsAfterList);
 CO_Summary CO_setSummaryWsAfterBracketClose(CO_Summary arg, CO_OptLayout wsAfterBracketClose);
-
-/*}}}  */
-/*{{{  CO_SubjectList accessors */
-
 ATbool CO_isValidSubjectList(CO_SubjectList arg);
 inline ATbool CO_isSubjectListEmpty(CO_SubjectList arg);
 inline ATbool CO_isSubjectListSingle(CO_SubjectList arg);
@@ -702,10 +578,6 @@ CO_SubjectList CO_setSubjectListHead(CO_SubjectList arg, CO_Subject head);
 CO_SubjectList CO_setSubjectListWsAfterHead(CO_SubjectList arg, CO_OptLayout wsAfterHead);
 CO_SubjectList CO_setSubjectListWsAfterSep(CO_SubjectList arg, CO_OptLayout wsAfterSep);
 CO_SubjectList CO_setSubjectListTail(CO_SubjectList arg, CO_SubjectList tail);
-
-/*}}}  */
-/*{{{  CO_ErrorList accessors */
-
 ATbool CO_isValidErrorList(CO_ErrorList arg);
 inline ATbool CO_isErrorListEmpty(CO_ErrorList arg);
 inline ATbool CO_isErrorListSingle(CO_ErrorList arg);
@@ -722,10 +594,6 @@ CO_ErrorList CO_setErrorListHead(CO_ErrorList arg, CO_Error head);
 CO_ErrorList CO_setErrorListWsAfterHead(CO_ErrorList arg, CO_OptLayout wsAfterHead);
 CO_ErrorList CO_setErrorListWsAfterSep(CO_ErrorList arg, CO_OptLayout wsAfterSep);
 CO_ErrorList CO_setErrorListTail(CO_ErrorList arg, CO_ErrorList tail);
-
-/*}}}  */
-/*{{{  CO_Location accessors */
-
 ATbool CO_isValidLocation(CO_Location arg);
 inline ATbool CO_isLocationFile(CO_Location arg);
 inline ATbool CO_isLocationArea(CO_Location arg);
@@ -757,10 +625,6 @@ CO_Location CO_setLocationArea(CO_Location arg, CO_Area Area);
 CO_Location CO_setLocationWsAfterArea(CO_Location arg, CO_OptLayout wsAfterArea);
 CO_Location CO_setLocationWsAfterAreaInFile(CO_Location arg, CO_OptLayout wsAfterAreaInFile);
 CO_Location CO_setLocationWsAfterComma(CO_Location arg, CO_OptLayout wsAfterComma);
-
-/*}}}  */
-/*{{{  CO_Area accessors */
-
 ATbool CO_isValidArea(CO_Area arg);
 inline ATbool CO_isAreaArea(CO_Area arg);
 ATbool CO_hasAreaWsAfterArea(CO_Area arg);
@@ -820,10 +684,6 @@ CO_Area CO_setAreaWsAfterOffset(CO_Area arg, CO_OptLayout wsAfterOffset);
 CO_Area CO_setAreaWsAfterComma4(CO_Area arg, CO_OptLayout wsAfterComma4);
 CO_Area CO_setAreaLength(CO_Area arg, CO_NatCon length);
 CO_Area CO_setAreaWsAfterLength(CO_Area arg, CO_OptLayout wsAfterLength);
-
-/*}}}  */
-/*{{{  CO_Read accessors */
-
 ATbool CO_isValidRead(CO_Read arg);
 inline ATbool CO_isReadSuccess(CO_Read arg);
 inline ATbool CO_isReadFailure(CO_Read arg);
@@ -848,10 +708,6 @@ CO_Read CO_setReadWsAfterValue(CO_Read arg, CO_OptLayout wsAfterValue);
 CO_Read CO_setReadWsAfterReadError(CO_Read arg, CO_OptLayout wsAfterReadError);
 CO_Read CO_setReadSummary(CO_Read arg, CO_Summary Summary);
 CO_Read CO_setReadWsAfterSummary(CO_Read arg, CO_OptLayout wsAfterSummary);
-
-/*}}}  */
-/*{{{  CO_Write accessors */
-
 ATbool CO_isValidWrite(CO_Write arg);
 inline ATbool CO_isWriteSuccess(CO_Write arg);
 inline ATbool CO_isWriteFailure(CO_Write arg);
@@ -867,10 +723,6 @@ CO_Write CO_setWriteWsAfterWriteError(CO_Write arg, CO_OptLayout wsAfterWriteErr
 CO_Write CO_setWriteWsAfterParenOpen(CO_Write arg, CO_OptLayout wsAfterParenOpen);
 CO_Write CO_setWriteSummary(CO_Write arg, CO_Summary Summary);
 CO_Write CO_setWriteWsAfterSummary(CO_Write arg, CO_OptLayout wsAfterSummary);
-
-/*}}}  */
-/*{{{  CO_ParsetreeX accessors */
-
 ATbool CO_isValidParsetreeX(CO_ParsetreeX arg);
 inline ATbool CO_isParsetreeXSuccess(CO_ParsetreeX arg);
 inline ATbool CO_isParsetreeXFailure(CO_ParsetreeX arg);
@@ -928,30 +780,57 @@ CO_ParsetreeX CO_setParsetreeXWsAfterAmbCnt(CO_ParsetreeX arg, CO_OptLayout wsAf
 CO_ParsetreeX CO_setParsetreeXWsAfterParseError(CO_ParsetreeX arg, CO_OptLayout wsAfterParseError);
 CO_ParsetreeX CO_setParsetreeXSummary(CO_ParsetreeX arg, CO_Summary Summary);
 CO_ParsetreeX CO_setParsetreeXWsAfterSummary(CO_ParsetreeX arg, CO_OptLayout wsAfterSummary);
-
-/*}}}  */
-/*{{{  CO_X accessors */
-
 ATbool CO_isValidX(CO_X arg);
 inline ATbool CO_isXCast(CO_X arg);
 ATbool CO_hasXX(CO_X arg);
 ATerm CO_getXX(CO_X arg);
 CO_X CO_setXX(CO_X arg, ATerm X);
-
-/*}}}  */
-/*{{{  sort visitors */
-
+ATbool CO_isValidBoolean(CO_Boolean arg);
+inline ATbool CO_isBooleanConstant(CO_Boolean arg);
+inline ATbool CO_isBooleanOr(CO_Boolean arg);
+inline ATbool CO_isBooleanAnd(CO_Boolean arg);
+inline ATbool CO_isBooleanNot(CO_Boolean arg);
+inline ATbool CO_isBooleanBracket(CO_Boolean arg);
+ATbool CO_hasBooleanBoolCon(CO_Boolean arg);
+ATbool CO_hasBooleanLhs(CO_Boolean arg);
+ATbool CO_hasBooleanWsAfterLhs(CO_Boolean arg);
+ATbool CO_hasBooleanWsAfterBar(CO_Boolean arg);
+ATbool CO_hasBooleanRhs(CO_Boolean arg);
+ATbool CO_hasBooleanWsAfterAmp(CO_Boolean arg);
+ATbool CO_hasBooleanWsAfterNot(CO_Boolean arg);
+ATbool CO_hasBooleanWsAfterParenOpen(CO_Boolean arg);
+ATbool CO_hasBooleanBoolean(CO_Boolean arg);
+ATbool CO_hasBooleanWsAfterBoolean(CO_Boolean arg);
+CO_BoolCon CO_getBooleanBoolCon(CO_Boolean arg);
+CO_Boolean CO_getBooleanLhs(CO_Boolean arg);
+CO_OptLayout CO_getBooleanWsAfterLhs(CO_Boolean arg);
+CO_OptLayout CO_getBooleanWsAfterBar(CO_Boolean arg);
+CO_Boolean CO_getBooleanRhs(CO_Boolean arg);
+CO_OptLayout CO_getBooleanWsAfterAmp(CO_Boolean arg);
+CO_OptLayout CO_getBooleanWsAfterNot(CO_Boolean arg);
+CO_OptLayout CO_getBooleanWsAfterParenOpen(CO_Boolean arg);
+CO_Boolean CO_getBooleanBoolean(CO_Boolean arg);
+CO_OptLayout CO_getBooleanWsAfterBoolean(CO_Boolean arg);
+CO_Boolean CO_setBooleanBoolCon(CO_Boolean arg, CO_BoolCon BoolCon);
+CO_Boolean CO_setBooleanLhs(CO_Boolean arg, CO_Boolean lhs);
+CO_Boolean CO_setBooleanWsAfterLhs(CO_Boolean arg, CO_OptLayout wsAfterLhs);
+CO_Boolean CO_setBooleanWsAfterBar(CO_Boolean arg, CO_OptLayout wsAfterBar);
+CO_Boolean CO_setBooleanRhs(CO_Boolean arg, CO_Boolean rhs);
+CO_Boolean CO_setBooleanWsAfterAmp(CO_Boolean arg, CO_OptLayout wsAfterAmp);
+CO_Boolean CO_setBooleanWsAfterNot(CO_Boolean arg, CO_OptLayout wsAfterNot);
+CO_Boolean CO_setBooleanWsAfterParenOpen(CO_Boolean arg, CO_OptLayout wsAfterParenOpen);
+CO_Boolean CO_setBooleanBoolean(CO_Boolean arg, CO_Boolean Boolean);
+CO_Boolean CO_setBooleanWsAfterBoolean(CO_Boolean arg, CO_OptLayout wsAfterBoolean);
 CO_OptLayout CO_visitOptLayout(CO_OptLayout arg, CO_Layout (*acceptLayout)(CO_Layout));
 CO_Layout CO_visitLayout(CO_Layout arg, CO_LexLayoutList (*acceptList)(CO_LexLayoutList));
 CO_LexLayoutList CO_visitLexLayoutList(CO_LexLayoutList arg, CO_LexLayout (*acceptHead)(CO_LexLayout));
 CO_LexLayout CO_visitLexLayout(CO_LexLayout arg, char (*acceptCh)(char));
-CO_Boolean CO_visitBoolean(CO_Boolean arg, CO_BoolCon (*acceptBoolCon)(CO_BoolCon), CO_OptLayout (*acceptWsAfterLhs)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBar)(CO_OptLayout), CO_OptLayout (*acceptWsAfterAmp)(CO_OptLayout), CO_OptLayout (*acceptWsAfterNot)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBoolean)(CO_OptLayout));
-CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_Boolean (*acceptTopBoolean)(CO_Boolean), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_StrCon (*acceptTopStrCon)(CO_StrCon), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Summary (*acceptTopSummary)(CO_Summary), CO_Error (*acceptTopError)(CO_Error));
+CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_StrCon (*acceptTopStrCon)(CO_StrCon), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Summary (*acceptTopSummary)(CO_Summary), CO_Error (*acceptTopError)(CO_Error), CO_Boolean (*acceptTopBoolean)(CO_Boolean));
 CO_LexStrChar CO_visitLexStrChar(CO_LexStrChar arg, char (*acceptA)(char), char (*acceptB)(char), char (*acceptC)(char), char (*acceptCh)(char));
 CO_StrChar CO_visitStrChar(CO_StrChar arg, CO_LexStrChar (*acceptStrChar)(CO_LexStrChar));
-CO_LexStrCon CO_visitLexStrCon(CO_LexStrCon arg, CO_LexStrCharLine (*acceptLine)(CO_LexStrCharLine));
+CO_LexStrCon CO_visitLexStrCon(CO_LexStrCon arg, CO_LexStrCharChars (*acceptChars)(CO_LexStrCharChars));
 CO_StrCon CO_visitStrCon(CO_StrCon arg, CO_LexStrCon (*acceptStrCon)(CO_LexStrCon));
-CO_LexStrCharLine CO_visitLexStrCharLine(CO_LexStrCharLine arg, CO_LexStrChar (*acceptHead)(CO_LexStrChar));
+CO_LexStrCharChars CO_visitLexStrCharChars(CO_LexStrCharChars arg, CO_LexStrChar (*acceptHead)(CO_LexStrChar));
 CO_BoolCon CO_visitBoolCon(CO_BoolCon arg);
 CO_LexNatCon CO_visitLexNatCon(CO_LexNatCon arg, char* (*acceptList)(char*));
 CO_NatCon CO_visitNatCon(CO_NatCon arg, CO_LexNatCon (*acceptNatCon)(CO_LexNatCon));
@@ -971,7 +850,6 @@ CO_Read CO_visitRead(CO_Read arg, CO_OptLayout (*acceptWsAfterRead)(CO_OptLayout
 CO_Write CO_visitWrite(CO_Write arg, CO_OptLayout (*acceptWsAfterWriteError)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Summary (*acceptSummary)(CO_Summary), CO_OptLayout (*acceptWsAfterSummary)(CO_OptLayout));
 CO_ParsetreeX CO_visitParsetreeX(CO_ParsetreeX arg, ATerm (*acceptTypeOfTree)(ATerm), ATerm (*acceptTypeOfX)(ATerm), CO_OptLayout (*acceptWsAfterParseTree)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Bytes (*acceptLeftLayout)(CO_Bytes), CO_OptLayout (*acceptWsAfterLeftLayout)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma)(CO_OptLayout), CO_X (*acceptTree)(CO_X), CO_OptLayout (*acceptWsAfterTree)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma1)(CO_OptLayout), CO_Bytes (*acceptRightLayout)(CO_Bytes), CO_OptLayout (*acceptWsAfterRightLayout)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma2)(CO_OptLayout), CO_NatCon (*acceptAmbCnt)(CO_NatCon), CO_OptLayout (*acceptWsAfterAmbCnt)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParseError)(CO_OptLayout), CO_Summary (*acceptSummary)(CO_Summary), CO_OptLayout (*acceptWsAfterSummary)(CO_OptLayout));
 CO_X CO_visitX(CO_X arg, ATerm (*acceptX)(ATerm));
-
-/*}}}  */
+CO_Boolean CO_visitBoolean(CO_Boolean arg, CO_BoolCon (*acceptBoolCon)(CO_BoolCon), CO_OptLayout (*acceptWsAfterLhs)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBar)(CO_OptLayout), CO_OptLayout (*acceptWsAfterAmp)(CO_OptLayout), CO_OptLayout (*acceptWsAfterNot)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBoolean)(CO_OptLayout));
 
 #endif /* _LIBRARY_H */

@@ -1,13 +1,13 @@
 #include "Library.h"
 #include <ctype.h>
 
-/*{{{  CO_StrCon CO_makeStrCon(const char* str) */
+/*{{{  CO_LexStrCon CO_makeLexStrCon(const char* str) */
 
-CO_StrCon CO_makeStrCon(const char* str)
+static CO_LexStrCon CO_makeLexStrCon(const char* str)
 {
   int len = strlen(str);
   int i;
-  CO_LexStrCharLine list = CO_makeLexStrCharLineEmpty();
+  CO_LexStrCharChars list = CO_makeLexStrCharCharsEmpty();
 
   for (i = len - 1; i >= 0; i--) {
     CO_LexStrChar ch;
@@ -26,7 +26,7 @@ CO_StrCon CO_makeStrCon(const char* str)
 	ch = CO_makeLexStrCharBackslash();
 	break;
       default:
-	if ((int) isprint((int) str[i])) {
+	if (isprint((int) str[i])) {
 	  ch = CO_makeLexStrCharNormal(str[i]);
 	}
 	else {
@@ -39,16 +39,20 @@ CO_StrCon CO_makeStrCon(const char* str)
 	  value /= 10;
 	  a = value;
 
-	  ch = CO_makeLexStrCharOctal(a,b,c);
+	  ch = CO_makeLexStrCharDecimal(a,b,c);
 	}
     }
 
-    list = CO_makeLexStrCharLineMany(ch, list);
+    list = CO_makeLexStrCharCharsMany(ch, list);
   }
 
 
-  return CO_makeStrConLexToCf(CO_makeLexStrConDefault(list));
+  return CO_makeLexStrConDefault(list);
 }
 
 /*}}}  */
+CO_StrCon CO_makeStrCon(const char* str)
+{
+  return CO_makeStrConLexToCf(CO_makeLexStrCon(str));
+}
 

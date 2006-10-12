@@ -68,7 +68,7 @@ static PT_Tree make_natcon(int value)
 {
   char str[100];
   sprintf(str, "%d", value);
-  return (PT_Tree) CO_makeNatConLexToCf(CO_makeLexNatConDefault(str));
+  return (PT_Tree) CO_makeNatConLexToCf(CO_makeLexNatConDigits(str));
 }
 
 /*}}}  */
@@ -552,7 +552,7 @@ static CO_NatCon execute_command(PT_Tree cmd_arg)
 
   sprintf(nat, "%d", result);
 
-  return CO_makeNatConLexToCf(CO_makeLexNatConDefault(nat));
+  return CO_makeNatConLexToCf(CO_makeLexNatConDigits(nat));
 }
 
 /*}}}  */
