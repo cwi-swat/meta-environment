@@ -37,7 +37,7 @@ public class Progress extends DefaultStudioPlugin implements ProgressTif {
         };
         studio.connect(getName(), bridge);
         ((StudioWithPredefinedLayout) studio).addComponent(comp,
-                StudioImplWithPredefinedLayout.TOP_LEFT);
+                StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
     }
     
     public void setStatus(ATerm id, String message, String column, ATerm value) {
