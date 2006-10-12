@@ -1,5 +1,9 @@
 $Id$
 
+Thu Oct 12 12:18:56 CEST 2006 <jeroen@bja-electronics.com,jurgenv@cwi.nl>
+ * lib/builtin-io.c: fixed a number of errors in the construction of
+   parse trees of errors that may occur during parsing.
+
 Tue Oct 10 10:48:17 CEST 2006 <{economop,jurgenv}@cwi.nl>
  * lib/builtin-io.c: fixed interfacing with sglr to parse bytes.
 
