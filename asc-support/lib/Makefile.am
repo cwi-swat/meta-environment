@@ -38,9 +38,8 @@ BUILTIN_SOURCEFILES=\
 	builtin-unique.c
 
 # The names of the modules that need to be included in a generated lib
-LIBRARY_MODULES=\
+SDF_LIBRARY_MODULES=\
 	basic/Whitespace \
-	basic/Booleans \
 	basic/StrCon \
 	basic/BoolCon \
 	basic/NatCon \
@@ -51,6 +50,8 @@ LIBRARY_MODULES=\
 	basic/ReadWriteCon \
 	basic/ParsetreeCon 
 
+ASF_LIBRARY_MODULES=\
+	basic/Booleans 
 
 lib_LTLIBRARIES = libasc-support-me.la 
 
@@ -154,7 +155,8 @@ api-clean:
 	rm -f Library.[ch] Library_dict.* Library.adt 
 
 LIBRARYLIST = \
-$(foreach i,$(LIBRARY_MODULES),$(top_srcdir)/../asf-library/library/$i.sdf)
+$(foreach i,$(SDF_LIBRARY_MODULES),$(top_srcdir)/../sdf-library/library/$i.sdf) \
+$(foreach i,$(ASF_LIBRARY_MODULES),$(top_srcdir)/../asf-library/library/$i.sdf)
 
 Library.def:
 	@(echo "definition" ; \
