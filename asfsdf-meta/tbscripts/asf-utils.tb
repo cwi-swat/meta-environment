@@ -346,6 +346,7 @@ process TestAsfSpecification(ModuleId: term) is
 let
   Specification : term,
   Equations : term,
+  ParseTable : term,
   Tests : term,
   Id : int,
   Pid : int,
@@ -360,9 +361,10 @@ in
   if not-equal(Specification, UNDEFINED) then
     GetSpecificationEquations(Specification, Equations?) 
     . GetSpecificationTests(Specification, Tests?) 
+    . GetTermParseTable(ModuleId, ParseTable?)
     . snd-note(ui-status(endstat(Id))) 
     . snd-note(ui-status(stat(Id, "Running tests"))) 
-    . snd-msg(asfe-run-tests(Equations, Tests)) 
+    . snd-msg(asfe-run-tests(Equations, Tests, ParseTable)) 
     .
     (
       rec-msg(asfe-test-results(Errors?)) 
