@@ -43,6 +43,7 @@ public class ModuleTreeNode {
 
     public ModuleTreeNode addChild(ATerm id, String p, File file) {
         Path path = file.getPath();
+        
         SegmentList segments = path.getList();
         ModuleTreeNode childNode = null;
 

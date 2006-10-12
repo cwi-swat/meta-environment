@@ -34,9 +34,6 @@ public class Module implements Comparable {
         setFile(file);
         initParentList();
 
-        assert(file != null);
-        assert(id != null);
-        assert(name != null);
         childListModel = new ListModel<String>(_child);
         parentListModel = new ListModel<String>(_parent);
         initChildList();

@@ -83,7 +83,7 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
         ATerm moduleId = module.getId();
         File file = module.getFile();
 
-        if (moduleTable.put(moduleId, module) == null) {
+        if (file != null && moduleTable.put(moduleId, module) == null) {
             root.addChild(moduleId, "", file);
             repaintTree();
         }
