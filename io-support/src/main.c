@@ -119,6 +119,20 @@ static char *expandPath(const char *relative_path) {
   return absolute_path;
 }
 
+static char *normalizePath(char *normalized, const char *path) {
+  const char *p;
+  char *q; 
+
+  for(p = path, q = normalized; *p != '\0'; p++) {
+    if (*p != PATH_SEPARATOR || *(p+1) != PATH_SEPARATOR) {
+      *q++ = *p;
+    }
+  }
+  *q = '\0';
+
+  return normalized;
+}
+
 static ATerm makeResultMessage(ERR_Summary summary) {
   ATerm result;
 
@@ -392,18 +406,20 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
   while (!CFG_isPropertyListEmpty(searchPaths) && !result) {
     CFG_Property searchPath = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(searchPath);
-    if (strncmp(pathString, path, strlen(pathString)) == 0) {
+    char *normalizedPath = (char *) calloc(PATH_LEN + 1, sizeof(char));
+    normalizedPath = normalizePath(normalizedPath, pathString);
+    if (strncmp(normalizedPath, path, strlen(normalizedPath)) == 0) {
       char *copy;
       char *extension;
 
-      copy = strdup(path + strlen(pathString) + 1);
+      copy = strdup(path + strlen(normalizedPath) + 1);
       assert(copy != NULL);
 
       extension = strrchr(copy, EXTENSION_SEPARATOR);
       if (extension != NULL) {
         *extension = EOS;
       }
-      result = ATmake("filename(<str>,<str>)", pathString, copy);
+      result = ATmake("filename(<str>,<str>)", normalizedPath, copy);
       free(copy);
     }
     searchPaths = CFG_getPropertyListTail(searchPaths);
