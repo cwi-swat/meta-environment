@@ -568,7 +568,7 @@ static ATerm call_using_array(funcptr func, ATerm *arg, int arity)
 /*}}}  */
 /*{{{  static ATerm call_using_list(funcptr func, ATermList arg) */
 
-static ATerm call_using_list(funcptr func, ATermList args)
+ATerm call_using_list(funcptr func, ATermList args)
 {
   ATermList list = args;
   ATerm arg[55];

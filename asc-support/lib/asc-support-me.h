@@ -129,6 +129,7 @@ unsigned int calc_hash(ATerm t);
 void register_prod(ATerm prod, funcptr func, Symbol sym);
 
 funcptr lookup_func_given_sym(Symbol sym);
+funcptr prefix_lookup_func(PT_Symbols lhs);
 funcptr basic_lookup_func(ATerm prod);
 funcptr lookup_func(ATerm prod);
 Symbol lookup_sym(ATerm prod);
@@ -335,6 +336,7 @@ extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
 extern ATerm get_sort(ATerm tree);
 extern ATerm unquote(ATerm t);
+extern ATerm call_using_list(funcptr func, ATermList args);
 extern ATerm call_kids_trafo(funcptr trav, ATerm arg, ATermList extra_args);
 extern ATerm call_kids_accu(funcptr trav, ATerm arg, ATerm accu, 
 			    ATermList extra_args);

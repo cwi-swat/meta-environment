@@ -87,48 +87,7 @@ void c_rehash(int newsize)
 }
 
 /*}}}  */
-/*{{{  unsigned int calc_hash(ATerm t) */
 
-#ifdef NO_SHARING
-unsigned int calc_hash(ATerm t)
-{
-  unsigned int hnr = 0;
-
-  switch(ATgetType(t)) {
-    case AT_APPL:
-      {
-	ATermAppl appl = (ATermAppl)t;
-	AFun sym = ATgetAFun(appl);
-	int i, arity = ATgetArity(sym);
-	hnr = AT_hashSymbol(ATgetName(sym), arity);
-
-	for(i=0; i<arity; i++) {
-	  hnr = hnr * MAGIC_HASH_CONST_APPL + calc_hash(ATgetArgument(appl, i));
-	}
-      }
-      break;
-
-    case AT_INT:
-      hnr = ATgetInt((ATermInt)t);
-      break;
-
-    case AT_LIST:
-      {
-	ATermList list = (ATermList)t;
-	hnr = 123;
-	while(!ATisEmpty(list)) {
-	  hnr = hnr * MAGIC_HASH_CONST_LIST + 
-	    calc_hash(ATgetFirst(list));
-	  list = ATgetNext(list);
-	}
-      }
-      break;
-  }
-
-  return hnr;
-}
-#endif
-/*}}}  */
 /*{{{  void register_prod(ATerm prod, funcptr func, Symbol sym) */
 
 void register_prod(ATerm prod, funcptr func, Symbol sym)
@@ -141,13 +100,7 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
     c_rehash(table_size*2);
   }
 
-#ifdef NO_SHARING
-  /* calc_hash is recursive, so no mod included */
-  hnr = calc_hash(prod); 
-  hnr %= table_size;
-#else
   hnr = HASH_PROD(prod, table_size);
-#endif
 
   /* Find out if this function has already been registered */
   b = prod_table[hnr];
@@ -209,12 +162,7 @@ funcptr basic_lookup_func(ATerm prod)
   bucket *b;
   unsigned int hnr;
 
-#ifdef NO_SHARING
-  hnr = calc_hash(prod);
-  hnr %= table_size;
-#else
   hnr = HASH_PROD(prod, table_size);
-#endif
 
   b = prod_table[hnr];
 
@@ -222,6 +170,28 @@ funcptr basic_lookup_func(ATerm prod)
     if(ATisEqual(b->prod, prod))
       return b->func;
     b = b->next_prod;
+  } 
+
+  return (funcptr) NULL;
+}
+
+/*}}}  */
+/*{{{  funcptr basic_lookup_func(ATerm prod) */
+
+funcptr prefix_lookup_func(PT_Symbols lhs)
+{
+  unsigned int hnr;
+
+  for (hnr = 0; hnr < table_size; hnr++) { 
+    bucket *b = prod_table[hnr];
+
+    for ( ; b; b = b->next_prod) {
+      PT_Production p = (PT_Production) b->prod;
+
+      if (PT_isEqualSymbols(lhs, PT_getProductionLhs(p))) {
+	return b->func;
+      }
+    }
   } 
 
   return (funcptr) NULL;
@@ -248,12 +218,7 @@ Symbol lookup_sym(ATerm prod)
   bucket *b;
   unsigned int hnr;
 
-#ifdef NO_SHARING
-  hnr = calc_hash(prod);
-  hnr %= table_size;
-#else
   hnr = HASH_PROD(prod, table_size);
-#endif
 
   b = prod_table[hnr];
 

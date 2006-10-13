@@ -17,6 +17,7 @@
 #include "asc-support2-me.h"
 #include "Library.h"
 #include "builtin-common.h"
+#include "asc-client.h"
 
 /*}}}  */
 /*{{{  globals */
@@ -253,7 +254,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 
   if (toolbusMode(argc, argv)) {
      ATBinit(argc, argv, bottomOfStack);
-     ATBconnect(NULL, NULL, -1, handler);
+     ATBconnect(NULL, NULL, -1, asf_toolbus_handler);
      ATBeventloop();
   }
   else {
