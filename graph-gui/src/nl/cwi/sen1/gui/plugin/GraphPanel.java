@@ -169,7 +169,10 @@ public class GraphPanel extends JPanel {
 
             public void itemPressed(VisualItem item, MouseEvent e) {
                 if (e.isPopupTrigger()) {
-                    firePopupRequested(item.getString(GraphConstants.ID), e);
+                	String id = item.getString(GraphConstants.ID);
+                	if (id != null) {
+                      firePopupRequested(id, e);
+                	}
                 }
             }
 
