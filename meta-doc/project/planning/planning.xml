@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Planning Releases of The Meta-Environment</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <para>This document is being written at this time: work in progress.</para>
+
+  <section>
+    <title>Introduction and discussion</title>
+
+    <para>Since The Meta-Environment is a product family, of which also
+    sub-components are released, this document describes the planning for
+    components as well as products in The Meta-Environment. Work on The
+    Meta-Environment can be categorized:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Programming - Implementing (new) features</para>
+      </listitem>
+
+      <listitem>
+        <para>Refactoring - Improving non-functional quality attributes</para>
+      </listitem>
+
+      <listitem>
+        <para>Fixing Bugs - Fixing known issues that are registered the
+        Bugzilla system</para>
+      </listitem>
+
+      <listitem>
+        <para>Documenting - Producing user-documentation and other
+        documents</para>
+      </listitem>
+
+      <listitem>
+        <para>Building - Work on the build and configuration
+        environment</para>
+      </listitem>
+
+      <listitem>
+        <para>Deployment - Work on continous integration and deployment</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The work on The Meta-Environment, and thus its releases, are driven
+    mostly by research. Deadlines for papers about components of The
+    Meta-Environment, or using components of The Meta-Environment, provide the
+    basic structure for this planning. These deadlines may be self-imposed or
+    provided from outside. In any case, the above categories of work organize
+    naturally around these kinds of deadlines. For example: when writing a
+    research paper there is no time for Refactoring, other kinds of
+    Documentation, the Build environment, or Deployment. The focus is then
+    simply on Programming and Fixing Bugs. On the other hand, Refactoring and
+    Documenting are done during explorative research and Friday afternoons,
+    when time seems more abundant.</para>
+
+    <para>Since research deadlines are induced on a personal level (of the
+    researchers/programmers), they can be very dynamic (read irregular). One
+    could say that this makes planning impossible, but we still want to get
+    things done. Therefore, the contents of this planning are the
+    responsability of all programmers: please check it, execute it, adapt
+    it.</para>
+
+    <section>
+      <title>Risks</title>
+
+      <para>There are two risks that this document intends to mitigate:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>There will never be a release</emphasis>, because
+          research always gets higher priority than the software. The effect
+          is a large disinvestment in software that is written, debugged and
+          maintained but never used outside of the development team. This will
+          also harm users of the software that either use The Meta-Environment
+          for their teaching, research or commercial activities.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Research deadlines are not met</emphasis>, because
+          the software prohibits easy experimentation. This may be caused by
+          badly maintained, buggy or undocumented software. The effect is
+          missed deadlines, and a possible disinvestment in a laboratory
+          designed for experimental research in language analysis and
+          transformation that can not be used for experimental
+          research.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These two risks influence each other. I think it is safe to assume
+      that software quality generally decreases when working on research
+      deadlines, and it generally improves when working towards releasing the
+      software. Still, for doing good research, you need good software, and
+      for good software you need good research. Finding the proper balance is
+      a dynamic process that needs constant monitoring and assessment.</para>
+    </section>
+
+    <section>
+      <title>Efficiency</title>
+
+      <para>To walk the line, we have invested and keep investing in making
+      our software process more efficient. Standardization on the ATerm
+      data-type is one trick that worked. Code generation has also been a
+      successful method in increasing efficiency. Another success is the
+      continous integration and release system Sisyphus. </para>
+
+      <para>However, the most imporant method to make releases of The
+      Meta-Environment possible is version management. Please read this
+      document: version management. By keeping low code quality experiments on
+      separate branches we facilitate experimentation without jeopardizing the
+      quality of the trunk.</para>
+    </section>
+
+    <section>
+      <title>Deliverables</title>
+
+      <para>We deliver the following products, which are all compositions of
+      one or several of our components, including the respective
+      documentation:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ATerm library in C</para>
+        </listitem>
+
+        <listitem>
+          <para>ATerm library in Java</para>
+        </listitem>
+
+        <listitem>
+          <para>ApiGen code generator</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF ApiGen: SDF front-end for ApiGen</para>
+        </listitem>
+
+        <listitem>
+          <para>JJTraveler: tree traversal library for Java </para>
+        </listitem>
+
+        <listitem>
+          <para>ToolBus in C, including adapters</para>
+        </listitem>
+
+        <listitem>
+          <para>ToolBus in Java, including adapters</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF: parser generator and parser libraries and tools,
+          including the sdf-library of grammars for programming
+          languages</para>
+        </listitem>
+
+        <listitem>
+          <para>Asc-support: the run-time environment for compiled ASF+SDF
+          specifications</para>
+        </listitem>
+
+        <listitem>
+          <para>ASF+SDF Meta-Environment: the programming environment for
+          ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Sisyphus continous integration system</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Know that all releases of The Meta-Environment are accompanied by
+      at least a full source code distribution. Binary distributions are
+      complementary, and based on the availability of platforms to generate
+      the distributions on. A delivered source code distribition has:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>a tested build environment (configure script and
+          Makefiles)</para>
+        </listitem>
+
+        <listitem>
+          <para>documentation online at www.meta-environment.org</para>
+        </listitem>
+
+        <listitem>
+          <para>and a link to the tarball on the
+          www.meta-environment.org</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Versions</title>
+
+      <para>Each released product has a human readable version number:
+      &lt;major&gt;.&lt;minor&gt;.&lt;patchlevel&gt;. These numbers are
+      maintained with the top-level component of each product. This implies
+      that the version of the top-level component identifies the version
+      number of the product, and that each product must have a single
+      top-level component.</para>
+
+      <para>Release Candidates are releases of products that are incomplete,
+      but testable and possibly usable by end-users. The intention is to get
+      early feedback from a less prejudices audience than ourselves. The
+      version scheme is
+      &lt;major&gt;.&lt;minor&gt;-RC&lt;candidate-number&gt;.</para>
+
+      <para>Continous releases (See Sisyphus) have generated version numbers
+      based on the Subversion repository version and the Sisyphus Build
+      identifier. </para>
+    </section>
+  </section>
+
+  <section>
+    <title>Planning</title>
+
+    <table>
+      <title>Planning the work of the Meta-Environment</title>
+
+      <tgroup cols="5">
+        <colspec align="center" />
+
+        <thead>
+          <row>
+            <entry align="center">Deliverable&#160;</entry>
+
+            <entry align="center">Activity&#160;</entry>
+
+            <entry>Category</entry>
+
+            <entry>Team</entry>
+
+            <entry>Deadline</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>ASF+SDF Meta-Environment 2.0-RC2</entry>
+
+            <entry>Writing user documentation</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Paul,Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Speed up the ASF normalizer</entry>
+
+            <entry>Refactoring</entry>
+
+            <entry>Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Implement replacement for 'meta.conf' expansion of the
+            search path for modules</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Taeke</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Synchronization data in module-manager, to prevent race
+            conditions and unnecessary visualization of partially collected
+            data.</entry>
+
+            <entry>Refactoring</entry>
+
+            <entry>Taeke,Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Merging code-tuning-tue branch of the ATerm library in the
+            trunk, and putting the 'no-global-buffers' experiment on a
+            branch</entry>
+
+            <entry>Refactoring</entry>
+
+            <entry>Erik</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Documenting the architecture of The
+            Meta-Environment</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Paul,Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Bringing up more Sisyphus builders in the CWI build farm:
+            linux, MacOsX, cygwin</entry>
+
+            <entry>Building</entry>
+
+            <entry>Taeke,Tijs,Alex</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>SDF documentation of Martin and Eelco included in
+            meta-doc</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Martin,Paul,Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>ASF+SDF Meta-Environment 2.0-RC3</entry>
+
+            <entry>Optimization of ATerm serialization in Java and C</entry>
+
+            <entry>Refactoring</entry>
+
+            <entry>Arnold</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Fixing known bugs from Bugzilla</entry>
+
+            <entry>Bug fixing</entry>
+
+            <entry>Paul,Arnold,Tijs,Taeke,Jurgen,Rob</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Merging Rob's branches of SGLR into the trunk, exluding
+            RNGLR, but including the doxygen annotated code and the refactored
+            library interfaces.</entry>
+
+            <entry>Refactoring</entry>
+
+            <entry>Rob,Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Cross-compilation to native Windows iin Sisyphus</entry>
+
+            <entry>Building</entry>
+
+            <entry>Tijs,Jurgen</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>ASF+SDF Meta-Environment 2.0-RC4</entry>
+
+            <entry>RNGLR merged into the trunk</entry>
+
+            <entry>Refactoring</entry>
+
+            <entry>Rob</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Unified configuration management in the same vain as error
+            management, including GUI, and partial implementation in the most
+            important tools.</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Taeke</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Working prototype of Meta-Environment on ToolBus NG</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Paul,Arnold</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>TODO: merge Roadmap from old website into here</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>Jurgen</entry>
+
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+</article>
