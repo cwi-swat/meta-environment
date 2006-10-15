@@ -1,0 +1,2447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+<!ENTITY euro "&#8364;">
+<!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
+%dbcent;
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Learning about the architecture of The Meta-Environment</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <warning>
+    <para>This is work in progress; this document has not yet been reviewed
+    and approved.</para>
+  </warning>
+
+  <section>
+    <title>Motivation</title>
+
+    <para>The Meta-Environment is a powerful system that can be viewed from
+    different angles. From the user that only uses the graphical user
+    interface, via the power user that uses the command line interface, to the
+    application builder and the system developer. For all these stakeholders
+    we present architectural views that will help to better understand the
+    system and its possibilities.</para>
+  </section>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Meta-Environment is a framework for<emphasis> language
+    engineering</emphasis> (language development, source code analysis and
+    source code transformation) consisting of:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Syntax analysis tools.</para>
+      </listitem>
+
+      <listitem>
+        <para>Semantic analysis and transformation tools.</para>
+      </listitem>
+
+      <listitem>
+        <para>An interactive development environment.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Meta-Environment is an open framework that</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>can be easily extended with third-party components;</para>
+      </listitem>
+
+      <listitem>
+        <para>can be easily tailored, modified, or extended;</para>
+      </listitem>
+
+      <listitem>
+        <para>is supported by an open source community.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Meta-Environment is a generalization of the ASF+SDF
+    Meta-Environment that has been successfully used in a wide variety of
+    analysis, transformation and renovation projects.</para>
+
+    <para>The Meta-Environment can be used for many different purposes,
+    including:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Parsing (new and old) programming languages, for further
+        processing the trees, (e.g. COBOL, C, Java, PL/I, SQL)</para>
+      </listitem>
+
+      <listitem>
+        <para>Analysis of source code (fact extraction, type analysis).</para>
+      </listitem>
+
+      <listitem>
+        <para>Transformation of source code.</para>
+      </listitem>
+
+      <listitem>
+        <para>Generation of source code.</para>
+      </listitem>
+
+      <listitem>
+        <para>Design and implementation of domain-specific languages.</para>
+      </listitem>
+
+      <listitem>
+        <para>Generation and rapid prototyping of IDE's (Integrated
+        Development Environments) for programming languages and domain
+        specific languages</para>
+      </listitem>
+
+      <listitem>
+        <para>Generation of documentation from source code.</para>
+      </listitem>
+
+      <listitem>
+        <para>Compilation of domain specific languages (DSL).</para>
+      </listitem>
+
+      <listitem>
+        <para>Formal description of the syntax and semantics of (programming)
+        languages.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Stakeholders and views</title>
+
+      <para>We identify the following stakeholders of The
+      Meta-Environment:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>End users</emphasis> that only use the system via
+          the graphical user-interface (GUI).</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Power users</emphasis> that use both the GUI and the
+          command-line interface of the system.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Application builders</emphasis> that use and extend
+          the system with components that they have programmed themselves
+          using the libraries and Application Programming Interfaces (APIs)
+          provided by the system.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>System developers</emphasis> involved in the design,
+          implementation, testing, maintenance and deployment of the
+          system.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following views on the system will be described:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The <link linkend="end-user-view">end user view</link>
+          describes the system as an interactive black box.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <link linkend="decomposition-view">decomposition
+          view</link> describes how the system is organized in
+          components.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <link linkend="coordination-view">coordination view</link>
+          describes the cooperation between components.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <link linkend="package-view">package view</link> describes
+          the mapping between architecture elements and implementation
+          packages.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <link linkend="power-user-view">power user view</link>
+          describes the system for power users.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <link linkend="build-and-deployment-view">build and
+          deployment view</link> describes the build architecture and
+          deployment aspects.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Obviously, not all views are relevant for all stakeholders. Here
+      is a mapping between stakeholders and views:</para>
+
+      <table border="1">
+        <caption>Mapping between stakeholders and views</caption>
+
+        <tr>
+          <td><emphasis role="bold">Stakeholder</emphasis></td>
+
+          <td><emphasis role="bold"><link linkend="end-user-view">End-user
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="decomposition-view">Decomposition
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="coordination-view">Coordination view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link linkend="package-view">Package
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link linkend="power-user-view">Power-user
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="build-and-deployment-view">Build &amp; deployment
+          view</link></emphasis></td>
+        </tr>
+
+        <tr>
+          <td>End user</td>
+
+          <td>d</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>s</td>
+        </tr>
+
+        <tr>
+          <td>Power user</td>
+
+          <td>s</td>
+
+          <td>o</td>
+
+          <td> </td>
+
+          <td>s</td>
+
+          <td>x</td>
+
+          <td>s</td>
+        </tr>
+
+        <tr>
+          <td>Application builder</td>
+
+          <td>s</td>
+
+          <td>d</td>
+
+          <td>d</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>s</td>
+        </tr>
+
+        <tr>
+          <td>System developer</td>
+
+          <td>s</td>
+
+          <td>d</td>
+
+          <td>d</td>
+
+          <td>x</td>
+
+          <td>d</td>
+
+          <td>d</td>
+        </tr>
+      </table>
+
+      <para>Key: d = detailed information, s = some details, overview
+      information, x = anything</para>
+    </section>
+
+    <section>
+      <title>The elements in views</title>
+
+      <formalpara xml:id="def-GUI">
+        <title>Graphical user interface (GUI)</title>
+
+        <para>The graphical user-interface (GUI) gives end users access to the
+        system's functionality. It is a "sovereign" user-interface that
+        occupies the complete desktop window and provdies functionality
+        like:</para>
+      </formalpara>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Opening, editing and closing ASF+SDF modules.</para>
+          </listitem>
+
+          <listitem>
+            <para>Opening, editing, reducing and closing input terms.</para>
+          </listitem>
+
+          <listitem>
+            <para>A graphical and tree-structured display of the import
+            relations between ASF+SDF modules.</para>
+          </listitem>
+
+          <listitem>
+            <para>Error and progress indications.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <formalpara xml:id="def-text-editor">
+        <title>Text editor</title>
+
+        <para>The text editor allows text editing on ASF+SDF modules and input
+        terms. Multiple editors may be opened; each appears as a tabbed window
+        in one of the panes of the GUI.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-structure-editor">
+        <title>Structure editor</title>
+
+        <para>A syntax-directed editor that closely cooperates with the text
+        editor. It is mostly used for syntax-directed navigation thorugh the
+        text. The structure-editor does not appear as such in the GUI but all
+        its functionality is visible throught the text editor.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-ASFSDF-modules">
+        <title>ASF+SDF modules</title>
+
+        <para>The ASF+SDF modules describe:</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>the syntax of the base language,</para>
+        </listitem>
+
+        <listitem>
+          <para>the functions that can be applied to base language
+          programs.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that the ASF+SDF modules may define several base languages at
+      the same time.</para>
+
+      <formalpara xml:id="def-input-term">
+        <title>Input term</title>
+
+        <para>A text that conforms to the syntax defined in the ASF+SDF
+        modules. This includes</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>the syntax of the base language in which the input term is
+          written (e.g., C, Java, Boolean expressions, a domain-specific
+          language),</para>
+        </listitem>
+
+        <listitem>
+          <para>the functions that may be applied to programs in the base
+          language (e.g., typecheck, extract facts, compile).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The input term can be freely edited and is checked for syntactic
+      correctness before any function is applied to it. It is possible to
+      simultaneously edit different input terms in different base
+      languages.</para>
+
+      <formalpara xml:id="def-output-term">
+        <title>Output term</title>
+
+        <para>A text that describes the result of applying a function to a
+        program in the base language. Note that this text conforms to the
+        syntax R, where R is the result sort of the function that was applied.
+        When no function is applied, the output term is identical to the input
+        term.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-errors-and-warnings">
+        <title>Error &amp; warnings</title>
+
+        <para>Errors &amp; warnings pinpoint any errors in the ASF+SDF modules
+        or input terms.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-SDF-operations">
+        <title>SDF operations</title>
+
+        <para>SDF operations provides all operations to read and modify SDF
+        definitions.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-SDF-checker">
+        <title>SDF checker</title>
+
+        <para>SDF checker performs static checking on SDF definitions.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-parse-table-generator">
+        <title>Parse table generator</title>
+
+        <para>The parse table generator takes syntax sections from the ASF+SDF
+        specification and converts them to a parse table to be used for the
+        parsing of terms.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-parse-table">
+        <title>Parse table</title>
+
+        <para>It is possible to transform the syntax of the base language as
+        defined by the ASF+SDF modules into a form (a <emphasis>parse
+        table</emphasis>) that is usable via the command line
+        interface.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-parser">
+        <title>Parser</title>
+
+        <para>It generates a parse tree as output.The parser takes a parse
+        table (as provided by the parse table generator) and text (as provided
+        by a text editor) and produces a parse tree. Any errors are shown in
+        the error display of the GUI.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-parse-tree">
+        <title>Parse tree</title>
+
+        <para>Tree-structured representation of a text that has been analyzed
+        by a parser.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-formatter-generator">
+        <title>Formatter generator</title>
+
+        <para>Prettyprinter generator. Converts parse trees to text. (***The
+        formatter uses default rules to insert layout in a parse tree so that
+        its corresponding text is presented in a uniform way. Optionally, the
+        ASF+SDF specification may contain formatting rules that can replace
+        this default behaviour.***)<warning>
+            <para>It is clear that formatting is not yet fully integrated in
+            the architecture.</para>
+          </warning></para>
+      </formalpara>
+
+      <formalpara xml:id="def-module-manager">
+        <title>Module manager</title>
+
+        <para>The module manager is responsible for all parsed information
+        that resides in the system:</para>
+      </formalpara>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>The parse tree for each ASF+SDF module.</para>
+          </listitem>
+
+          <listitem>
+            <para>The parse tree for each parsed input term.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <formalpara xml:id="def-ASF-operations">
+        <title>ASF operations</title>
+
+        <para>ASF operations provides all operations to read and modify ASF
+        definitions.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-ASF-checker">
+        <title>ASF checker</title>
+
+        <para>ASF checker performs static checking on ASF definitions.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-ASFSDF-checker">
+        <title>ASF+SDF checker</title>
+
+        <para>The ASF compiler compiles ASF specifications to C. Compilation
+        takes some time but leads to very fast executable
+        specifications.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-ASF-interpreter">
+        <title>ASF interpreter</title>
+
+        <para>The ASF interpreter takes the equation sections from the ASF+SDF
+        specification and applies them to the parsed input term. It produces
+        another parse tree as output.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-ASF-compiler">
+        <title>ASF compiler</title>
+
+        <para>compiles ASF specifications to an efficient executable
+        form.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-compiled-specification">
+        <title>Compiled specification</title>
+
+        <para>It is possible to compile the ASF+SDF into a very efficient
+        executable form. Compiled specifications can be used via the command
+        line interface of The Meta-Environment by power users.</para>
+      </formalpara>
+
+      <formalpara xml:id="def-toolbus">
+        <title>ToolBus</title>
+
+        <para>The ToolBus coordination architecture enables the flexible and
+        controlled combination and orchestration of software components. It is
+        used as backbone for The Meta-Environment. The ToolBus has the
+        following characteristics:</para>
+      </formalpara>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Components (or <emphasis>tools</emphasis> in ToolBus
+            parlance) can be written in different programming
+            languages.</para>
+          </listitem>
+
+          <listitem>
+            <para>Components can be running on different machines.</para>
+          </listitem>
+
+          <listitem>
+            <para>All interactions between components are regulated by a
+            ToolBus script (or Tscript for short) that is executing in the
+            ToolBus. The Tscript is a concurrent language that allows the
+            definition of parallel processes, messaging between these
+            processes and interaction between processes and tools.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <formalpara xml:id="def-APIGEN">
+        <title>APIGEN</title>
+
+        <para>API generator. Given a datastructure definition, APIGEN
+        generates C or Java code to access that datastructure. Internally, the
+        datastructure is represented as ATerm.</para>
+      </formalpara>
+    </section>
+
+    <section>
+      <title>Glossary of terminology</title>
+
+      <formalpara>
+        <title>ASF</title>
+
+        <para>Algebraic Specification Formalism. This a notation for
+        describing rewrite rules and is mostly used for defining software
+        analysis, fact extraction, and software transformation.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>ASF+SDF</title>
+
+        <para>The combination of the formalisms ASF and SDF. ASF+SDF can
+        describe both the syntax of a language and the operations on that
+        language (checking, execution, analysis, transformation).</para>
+      </formalpara>
+
+      <formalpara>
+        <title>AsFix</title>
+
+        <para>ASF+SDF Fixed format. The dataformat used to represent parse
+        trees. AsFix is a specialized view on ATerms.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>ATerms</title>
+
+        <para>Annotated terms. A dataformat used for the internal
+        representation of data</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Box</title>
+
+        <para>Intermediate representation of the formatter. A parse tree is
+        first converted to a box term that includes all desired formatting
+        directives (alignment, font and color directives, and the like). Next,
+        the box term is converted to various output formats (plain text, html,
+        etc.).</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Rscript</title>
+
+        <para>A small scripting language for defining relational expressions.
+        Used for the analysis of facts extracted from software.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>SDF</title>
+
+        <para>Syntax Definition Formalism. A notation for describing the
+        grammar of programming and application languages.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>SGLR</title>
+
+        <para>Scannerless Generalized LR parsing. The parsing technique used
+        for syntax analysis.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Summaries</title>
+
+        <para>An error or message summary. A dataformat for the internal
+        representation of errors and messages. Summaries are produced by
+        checker and compilers and are used by the GUI.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Tscript</title>
+
+        <para>The script that describes the cooperation between components in
+        a ToolBus-based application.</para>
+      </formalpara>
+    </section>
+
+    <section>
+      <title>Rationale for the architecture</title>
+
+      <para>The following quality attributes guide the design of the
+      architecture of the Meta-Environment.</para>
+
+      <formalpara>
+        <title>Usability</title>
+
+        <para>We want to support our users at all levels of experience in as
+        many ways as possible:</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>Through a GUI that automates many of the tasks involved in
+          language engineering. For instance, the user only sees a grammar and
+          the fact that they can be sued for parsinbg but is unaware that
+          parse table generation is going on behind the scenes.</para>
+        </listitem>
+
+        <listitem>
+          <para>Through a command line interface that allows the batch-like
+          combination of components.</para>
+        </listitem>
+
+        <listitem>
+          <para>Through libraries that package specific functionality that can
+          be called directly from user-written programs.</para>
+        </listitem>
+
+        <listitem>
+          <para>Through ToolBus components that can be included in interactive
+          applications.</para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Adaptability</title>
+
+        <para>The Meta-Environment is at the same time a framework for
+        building applications in the area of language engineering and a
+        testbed for doing research. This implies that we want to be able to
+        combine existing components in new and flexible manners and to enable
+        the easy integration of new components.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Performance</title>
+
+        <para>The Meta-Environment is not primarily intended for large scale
+        industrial or commercial use. However, the performance should be such
+        that experiments with real source code of industrial size (millionsof
+        lines of code) are possible.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Testability</title>
+
+        <para>It should be possible to test individual components
+        separately.</para>
+      </formalpara>
+
+      <para>We pay less attention to other important quality attributes such
+      as <emphasis>availability</emphasis> and security, but we expect that
+      they will become more important as the system evolves.</para>
+    </section>
+
+    <section>
+      <title>Mapping between elements and views</title>
+
+      <para>Figure <link linkend="table-mapping-elements-views">Mapping
+      between elements and views</link> keeps track of which elements are used
+      in which views.</para>
+
+      <table border="1">
+        <caption xml:id="table-mapping-elements-views">Mapping between
+        elements and views</caption>
+
+        <tr>
+          <td><emphasis role="bold">Element</emphasis></td>
+
+          <td><emphasis role="bold"><link linkend="end-user-view">End-user
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="decomposition-view">Decomposition
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="coordination-view">Coordination view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link linkend="power-user-view">Power-user
+          view</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="build-and-deployment-view">Build &amp; deployment
+          view</link></emphasis></td>
+        </tr>
+
+        <tr>
+          <td>Graphical user interface (GUI)</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Text editor</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Structure editor</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF modules</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Input term</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Output term</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Errors &amp; warnings</td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>SDF operations</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>SDF checker</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Parse table generator</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Parse table</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Parser</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Parse tree</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Formatter generator</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Module manager</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ASF operations</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ASF checker</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF checker</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ASF interpreter</td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ASF compiler</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Compiled specification</td>
+
+          <td>x</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>ToolBus</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>APIGEN</td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td>x</td>
+        </tr>
+      </table>
+    </section>
+  </section>
+
+  <section xml:id="end-user-view">
+    <title>The end user view</title>
+
+    <section>
+      <title>Primary presentation</title>
+
+      <figure xml:id="fig-end-user-view">
+        <title>End-user view of The Meta-environment</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="gui-view.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para><link linkend="def-input-term">Input term</link>, <link
+      linkend="def-output-term">Output term</link>, <link
+      linkend="def-ASFSDF-modules">ASF+SDF modules</link>, <link
+      linkend="def-errors-and-warnings">Errors&amp; warnings</link>, <link
+      linkend="def-compiled-specification">Compiled
+      specifications</link>,<link linkend="def-parse-table"> Parse
+      tables</link>.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <figure>
+        <title>Context end-user view</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="gui-view-context.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para>No variability exists in this view.</para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para>In the end-user view, we try to make life as easy as possible
+        for the user and try to automate whatever we can. For instance, when a
+        user reduces the input term to the output term, he needs not be aware
+        of the fact that first a parse table has to be generated and that the
+        input term is then parsed. The fact that after editing an ASF+SDF
+        module, it may be neccessary to regenerate the parse table is alo
+        implicit. The user is all shielded from all internal
+        representations.</para>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para>The Meta-Environment satisfies the design goal of simplicity.
+        The other side of the coin is, of course, that when the user dislikes
+        the automatic choices that have been, he has to resort to the command
+        line interface.</para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para>The current system assumes that the user can write ASF+SDF
+        specifications without further automatic support. It truns out that
+        writing syntax definitions is not so easy and that some automatic
+        support is welcome.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Other information</title>
+
+      <para>This view does not provide any details on the actual operation of
+      the user-interface. Some details are helpful:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The user-interface is a <emphasis>sovereign
+          application</emphasis>, i.e., it can occupy the full window of the
+          desktop.</para>
+        </listitem>
+
+        <listitem>
+          <para>The user-interface provides a graphical view on the import
+          relations between ASF+SDF modules.</para>
+        </listitem>
+
+        <listitem>
+          <para>The user-interface provides a debugging view on the execution
+          of ASF+SDF specifications.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="decomposition-view">
+    <title>The decomposition view</title>
+
+    <section>
+      <title>Primary presentation</title>
+
+      <para>The decomposition of the system in parts is shown in figure <link
+      linkend="decomposition-view">The decomposition view</link>. It
+      emphasizes the parts that are needed to transform an input term to an
+      output term. Not shown are the interaction with the user-interface, the
+      precise processing of the ASF+SDF modules, and the generation of
+      compiles specifications.</para>
+
+      <figure xml:id="fig-decomposition-view">
+        <title>The decomposition view</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="decomposition-view.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para><link linkend="def-ASFSDF-modules">ASF+SDF modules</link>, <link
+      linkend="def-parse-table-generator">Parse table generator</link>, <link
+      linkend="def-parse-table">Parse table</link>, <link
+      linkend="def-parser">Parser</link>, <link linkend="def-parse-tree">Parse
+      tree</link>, <link linkend="def-input-term">Input term</link>, <link
+      linkend="def-ASF-interpreter">ASF interpreter</link>, Formatter, <link
+      linkend="def-output-term">Output term</link>.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para>No variability exists in this view.</para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <para></para>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Other information</title>
+
+      <para>Various simplifications have been applied in this view:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The graphical user-interface.</para>
+        </listitem>
+
+        <listitem>
+          <para>We abstract from the internal processing of ASF+SDF
+          specifications.</para>
+        </listitem>
+
+        <listitem>
+          <para>The various internal formats that play a role are not
+          shown.</para>
+        </listitem>
+
+        <listitem>
+          <para>The compilation of specifications is not shown.</para>
+        </listitem>
+
+        <listitem>
+          <para>The generation of parse trees (for external) use is not
+          shown.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="uses-view">
+    <title>The uses view</title>
+
+    <para></para>
+  </section>
+
+  <section xml:id="coordination-view">
+    <title>The coordination view</title>
+
+    <para>Figure <link linkend="fig-coordination-view">The coordination
+    view</link> shows the interaction between the components of The
+    Meta-Environment</para>
+
+    <para>via the ToolBus middleware layer. This view can be separated in
+    three parts:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Kernel: components providing basic functionality, like
+        user-interface and editing.</para>
+      </listitem>
+
+      <listitem>
+        <para>SDF: all components related to SDF and syntax analysis.</para>
+      </listitem>
+
+      <listitem>
+        <para>ASF: all components related to ASF and term rewriting.</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure xml:id="fig-coordination-view">
+      <title>The coordination view</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="coordination-view.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para><link linkend="def-toolbus">ToolBus</link>, <link
+      linkend="def-GUI">GUI</link>, <link linkend="def-text-editor">Text
+      editor</link>, <link linkend="def-structure-editor">Structure
+      editor</link>, <link linkend="def-parser">Parser</link>, <link
+      linkend="def-module-manager">Module Manager</link>, <link
+      linkend="def-SDF-operations">SDF operations</link>, <link
+      linkend="def-SDF-checker">SDF checker</link>, <link
+      linkend="def-parse-table-generator">Parse table generator</link>,<link
+      linkend="def-formatter-generator"> Formatter generator</link>, <link
+      linkend="def-ASF-operations">ASF operations</link>, <link
+      linkend="def-ASF-checker">ASF checker</link>, <link
+      linkend="def-ASFSDF-checker">ASF+SDF checker</link>, <link
+      linkend="def-ASF-interpreter">ASF interpreter</link>, <link
+      linkend="def-ASF-compiler">ASF compiler</link>.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para>This architecture was designed with variability in mind. By
+      replacing the Tscript in the ToolBus, largely different applications can
+      be built.</para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para>The rationale for this architecture is to:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Decouple the components as much as possible.</para>
+          </listitem>
+
+          <listitem>
+            <para>Enable the composition of components written in different
+            languages.</para>
+          </listitem>
+
+          <listitem>
+            <para>Enable the execution of components in a distributed fashion
+            on more than one computer.</para>
+          </listitem>
+
+          <listitem>
+            <para>Enable variability by allowing the composition of existing
+            and new components in new ways.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para>It is fair to say that the above design goals have been
+        achieved. Components become less aware of their context and are more
+        easily composable. Unavoidable, the Tscript has to describe all these
+        compositions and becomes the central information hub. In large
+        applications like The Meta-Environment these Tscripts become quite
+        large and complex, but they are fortunately the only location where
+        this composition information resides.</para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Other information</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section xml:id="package-view">
+    <title>The package view</title>
+
+    <para><table border="1">
+        <caption xml:id="table-mapping-elements-packages">Mapping between
+        elements and packages</caption>
+
+        <tr>
+          <td><emphasis role="bold">Element</emphasis></td>
+
+          <td><emphasis role="bold">Implementing packages</emphasis></td>
+        </tr>
+
+        <tr>
+          <td>Graphical user interface (GUI)</td>
+
+          <td>dialog-gui, graph-gui, graph-support, meta-studio,
+          module-details-gui, navigator-gui, progress-gui</td>
+        </tr>
+
+        <tr>
+          <td>Text editor</td>
+
+          <td>editor-manager,editor-plugin</td>
+        </tr>
+
+        <tr>
+          <td>Structure editor</td>
+
+          <td>structure-editor</td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF modules</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Input term</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Output term</td>
+
+          <td> </td>
+        </tr>
+
+        <tr>
+          <td>Errors &amp; warnings</td>
+
+          <td>error-gui, error-support</td>
+        </tr>
+
+        <tr>
+          <td>SDF operations</td>
+
+          <td>sdf-support</td>
+        </tr>
+
+        <tr>
+          <td>SDF checker</td>
+
+          <td>pgen</td>
+        </tr>
+
+        <tr>
+          <td>Parse table generator</td>
+
+          <td>pgen</td>
+        </tr>
+
+        <tr>
+          <td>Parse table</td>
+
+          <td>pgen</td>
+        </tr>
+
+        <tr>
+          <td>Parser</td>
+
+          <td>sglr</td>
+        </tr>
+
+        <tr>
+          <td>Parse tree</td>
+
+          <td>pt-support</td>
+        </tr>
+
+        <tr>
+          <td>Formatter generator</td>
+
+          <td>pandora</td>
+        </tr>
+
+        <tr>
+          <td>Module manager</td>
+
+          <td>module-manager, module-support</td>
+        </tr>
+
+        <tr>
+          <td>ASF operations</td>
+
+          <td>asf-support</td>
+        </tr>
+
+        <tr>
+          <td>ASF checker</td>
+
+          <td>asf</td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF checker</td>
+
+          <td>asf</td>
+        </tr>
+
+        <tr>
+          <td>ASF interpreter</td>
+
+          <td>asf</td>
+        </tr>
+
+        <tr>
+          <td>ASF compiler</td>
+
+          <td>asf, asc-support</td>
+        </tr>
+
+        <tr>
+          <td>Compiled specification</td>
+
+          <td>asf</td>
+        </tr>
+
+        <tr>
+          <td>ToolBus</td>
+
+          <td>toolbus, toolbus-java-adapter</td>
+        </tr>
+
+        <tr>
+          <td>APIGEN</td>
+
+          <td></td>
+        </tr>
+      </table>Unused: asf-library, asfsdf-meta, aterm, aterm-java,
+    config-manager, config-support, sdf-library, sdf-meta, term-store, tide,
+    tide-support, io-support, meta, shared-objects, JJTraveler.</para>
+  </section>
+
+  <section xml:id="power-user-view">
+    <title>The power user view</title>
+
+    <para>Power users can use the system in three ways:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>By using some of the commands. </para>
+      </listitem>
+
+      <listitem>
+        <para>By writing programs and using the provided libraries.</para>
+      </listitem>
+
+      <listitem>
+        <para>By modyfying or extending the standard ToolBus scripts that are
+        provided.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In advanced applications all three ways will play a role. This can
+    be used to implement completely tailored Mate-Environments.</para>
+
+    <para>The relevant information is shown in the two tables <link
+    linkend="table-main-commands">Main commands</link> and <link
+    linkend="table-all-commands-libraries">All commands and libraries per
+    package</link>.</para>
+
+    <para>The power-user is alo confronted with the various data formats that
+    are used: ATerms, AsFix, Parse tables</para>
+
+    <para><table xml:id="table-main-commands">
+        <title>Main commands</title>
+
+        <tgroup cols="3">
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Command</emphasis></entry>
+
+              <entry><emphasis role="bold">Inputs</emphasis></entry>
+
+              <entry><emphasis role="bold">Output</emphasis></entry>
+            </row>
+
+            <row>
+              <entry>pt-dump</entry>
+
+              <entry>Module name (String)</entry>
+
+              <entry>Parse table (ATerm)</entry>
+            </row>
+
+            <row>
+              <entry>sdf2table</entry>
+
+              <entry>SDF definition</entry>
+
+              <entry>Parse table (ATerm)</entry>
+            </row>
+
+            <row>
+              <entry>eqs-dump</entry>
+
+              <entry>Module name (String)</entry>
+
+              <entry>Equations (AsFix)</entry>
+            </row>
+
+            <row>
+              <entry>asfe</entry>
+
+              <entry>Equations (AsFix)</entry>
+
+              <entry>Parse tree (AsFix)</entry>
+            </row>
+
+            <row>
+              <entry>asf2c</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>sglr</entry>
+
+              <entry>Parse table (ATerm), String</entry>
+
+              <entry>Parse tree (AsFix)</entry>
+            </row>
+
+            <row>
+              <entry>unparsePT</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>apply-function</entry>
+
+              <entry>Function name (String), Sort name (String), Module name
+              (String), Term (AsFix)</entry>
+
+              <entry>Term (AsFix)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></para>
+
+    <table xml:id="table-all-commands-libraries">
+      <title>All commands and libraries per package</title>
+
+      <tgroup cols="8">
+        <tbody>
+          <row>
+            <entry><emphasis role="bold">Package</emphasis></entry>
+
+            <entry>Summary</entry>
+
+            <entry><emphasis role="bold">Commands</emphasis></entry>
+
+            <entry><emphasis role="bold">C Include files</emphasis></entry>
+
+            <entry><emphasis role="bold">Libraries</emphasis></entry>
+
+            <entry><emphasis role="bold">Tscript (idef)
+            files</emphasis></entry>
+
+            <entry><emphasis role="bold">ASF+SDF files</emphasis></entry>
+
+            <entry><emphasis role="bold">ADT</emphasis></entry>
+          </row>
+
+          <row>
+            <entry>asc-support</entry>
+
+            <entry></entry>
+
+            <entry>asc-support-config</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libasc-support-me.a</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>asf</entry>
+
+            <entry>All tools for implementing ASF</entry>
+
+            <entry>ASFSDFApigen, addeqssyntax, asfc asfchecker, asfe ,
+            asfoperations, asfsdfchecker, concat-asf lift-asf</entry>
+
+            <entry>No</entry>
+
+            <entry>None</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>asf-library</entry>
+
+            <entry>The ASF+SDF libraries of built-in definitions</entry>
+
+            <entry>asf-library-config</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>asf-support</entry>
+
+            <entry>Support libraries for ASF tools</entry>
+
+            <entry>asf-support-config</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libASFME.a</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>asfsdf-meta</entry>
+
+            <entry>The ASF+SDF Meta-Environment</entry>
+
+            <entry>asfsdf-meta asfsdf-meta-config eqs-dump</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>aterm</entry>
+
+            <entry>The ATerm library and supporting tools</entry>
+
+            <entry>atdiff, atrmannos, atsum, baf2taf, baf2trm, baflle, dicttoc
+            taf2baf, taf2trm, termsize, trm2baf, trm2taf, trmcat</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libATerm</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>aterm-java</entry>
+
+            <entry>Java version of ATerm library</entry>
+
+            <entry>aterm-java-config</entry>
+
+            <entry>No</entry>
+
+            <entry>aterm-1.6.jar</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>config-manager</entry>
+
+            <entry>Configuration manager</entry>
+
+            <entry>config-manager-config configmanager</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>config-support</entry>
+
+            <entry>Support library for configuration manager</entry>
+
+            <entry>config-support-config </entry>
+
+            <entry>Yes</entry>
+
+            <entry>libConfigAPI.a, configapi.jar</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>dialog-gui</entry>
+
+            <entry></entry>
+
+            <entry>dialog-gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>dialog.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>editor-manager</entry>
+
+            <entry></entry>
+
+            <entry>editor-manager</entry>
+
+            <entry>No</entry>
+
+            <entry>libEditorManager.a</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>editor-plugin</entry>
+
+            <entry></entry>
+
+            <entry>editor-plugin-config</entry>
+
+            <entry>No</entry>
+
+            <entry>editor-plugin-1.0.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>error-gui</entry>
+
+            <entry></entry>
+
+            <entry>error-gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>error-viewer-1.0.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>error-support</entry>
+
+            <entry></entry>
+
+            <entry>error-diff error-support error-support-config lift-error
+            lower-error</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libErrorAPI.a libLocationAPI.a errorapi.jar
+            locationapi.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>graph-gui</entry>
+
+            <entry></entry>
+
+            <entry>graph-gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>graph-painter.jar prefuse.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>graph-support</entry>
+
+            <entry></entry>
+
+            <entry>graph-support-config graph2dot layoutgraph
+            tree2graph</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libGraph.a graph-0.2.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+          </row>
+
+          <row>
+            <entry>io-support</entry>
+
+            <entry></entry>
+
+            <entry>in-output io-support-config</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libIOAPI.a ioapi.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+          </row>
+
+          <row>
+            <entry>meta</entry>
+
+            <entry></entry>
+
+            <entry>meta-config plugin-config</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+          </row>
+
+          <row>
+            <entry>meta-studio</entry>
+
+            <entry></entry>
+
+            <entry>gui gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>gui-util.jar gui.jar idw-gpl-1.4.0.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+          </row>
+
+          <row>
+            <entry>module-details-gui</entry>
+
+            <entry></entry>
+
+            <entry>module-details-gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>moduledetails.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+          </row>
+
+          <row>
+            <entry>module-manager</entry>
+
+            <entry></entry>
+
+            <entry>module-manager module-manager-config</entry>
+
+            <entry>No</entry>
+
+            <entry>module-manager-1.0.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>module-support</entry>
+
+            <entry></entry>
+
+            <entry>module-support-config</entry>
+
+            <entry>No</entry>
+
+            <entry>moduleapi.jar</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>navigator-gui</entry>
+
+            <entry></entry>
+
+            <entry>navigator-gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>navigator.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>pandora</entry>
+
+            <entry>The formatter generator</entry>
+
+            <entry>pandora</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>pgen</entry>
+
+            <entry>Parse table generator</entry>
+
+            <entry>parse-sdf2 parsetablegen removevarsyntax sdf2table
+            sdfchecker</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>progress-gui</entry>
+
+            <entry></entry>
+
+            <entry>progress-gui-config</entry>
+
+            <entry>No</entry>
+
+            <entry>progress.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>pt-support</entry>
+
+            <entry>Support libraries for parse trees</entry>
+
+            <entry>addPosInfo ambtracker apply-function comparePT flattenPT
+            implodePT liftPT unparsePT unparseProd</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libPTMEPT.a libmept.a</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>sdf-library</entry>
+
+            <entry>Library of SDF definitions</entry>
+
+            <entry>sdf-library-config</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>sdf-meta</entry>
+
+            <entry>An SDF-only Meta-Environment</entry>
+
+            <entry>def-dump pt-dump sdf-meta sdf-meta-config</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>sdf-support</entry>
+
+            <entry>Support libraries for handling SDF definitions</entry>
+
+            <entry>sdf-modules sdf-renaming sdf-support-config</entry>
+
+            <entry></entry>
+
+            <entry>libPT2SDF.a libSDF2PT.a libSDFME.a</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>sglr</entry>
+
+            <entry>SGLR parser</entry>
+
+            <entry>dump-actions dump-gotos dump-priorities dump-productions
+            restorebrackets sglr</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libsglr.a</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>shared-objects</entry>
+
+            <entry></entry>
+
+            <entry>shared-objects-config</entry>
+
+            <entry>No</entry>
+
+            <entry>shared-objects-1.4.jar</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>structure-editor</entry>
+
+            <entry></entry>
+
+            <entry>structure-editor</entry>
+
+            <entry>No</entry>
+
+            <entry>libStructureEditor.a</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>term-store</entry>
+
+            <entry></entry>
+
+            <entry>term-store</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>tide</entry>
+
+            <entry></entry>
+
+            <entry>tide tide-gdb</entry>
+
+            <entry>No</entry>
+
+            <entry>tide.jar</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>tide-support</entry>
+
+            <entry></entry>
+
+            <entry>tide-support-config</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libtide-adapter.a</entry>
+
+            <entry>Yes</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toolbus</entry>
+
+            <entry></entry>
+
+            <entry>bc-adapter emacs-adapter idef2tif merge-tifs start-emacs
+            tblog toolbus uri-encode ctif gen-adapter informer perl-adapter
+            tbgraph tifstoc toolbus-adapter wish-adapter</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toolbus-java-adapter</entry>
+
+            <entry></entry>
+
+            <entry>java-adapter tifstojava toolbus-java-adapter-config</entry>
+
+            <entry>No</entry>
+
+            <entry>toolbus-java-adapter-1.0.jar</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>toolbuslib</entry>
+
+            <entry></entry>
+
+            <entry>tbunpack toolbuslib-config</entry>
+
+            <entry>Yes</entry>
+
+            <entry>libATB.a</entry>
+
+            <entry>No</entry>
+
+            <entry>No</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>JJTraveler</entry>
+
+            <entry>The traversal pattern in Java.</entry>
+
+            <entry>jjtraveler-config</entry>
+
+            <entry>Yes</entry>
+
+            <entry>jjtraveler-0.5.jar</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section xml:id="build-and-deployment-view">
+    <title>The build and deployment view</title>
+
+    <para></para>
+  </section>
+</article>
