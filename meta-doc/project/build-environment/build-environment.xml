@@ -7,7 +7,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Build environment of the Meta-Environment</title>
+    <title>Build environment of The Meta-Environment</title>
 
     <authorgroup>
       <author>
@@ -413,7 +413,9 @@ sudo gem install rails</programlisting>
       </listitem>
 
       <listitem>
-        <para>download sisyphus from the <link xlink:href="http://sisyphus.sen.cwi.nl:8080">sisyphus website</link></para>
+        <para>download sisyphus from the <link
+        xlink:href="http://sisyphus.sen.cwi.nl:8080">sisyphus
+        website</link></para>
       </listitem>
 
       <listitem>

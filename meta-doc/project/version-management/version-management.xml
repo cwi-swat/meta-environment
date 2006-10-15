@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Version management in The Meta-Environment</title>
 
-<info>
-   <title>Version management in the Meta-Environment</title>
-
-
-<authorgroup>
+    <authorgroup>
       <author>
         <personname><firstname>Gerco</firstname><surname>Ballintijn</surname></personname>
       </author>
@@ -14,10 +18,10 @@
         <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
       </author>
     </authorgroup>
-
   </info>
-  <section><title>Introduction</title>
-    
+
+  <section>
+    <title>Introduction</title>
 
     <para>One can use a version management system in different ways. This
     document describes our methods concerning checkout, commits, branching,
@@ -48,19 +52,21 @@
 
     <itemizedlist>
       <listitem>
-        <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://svnbook.red-bean.com/nightly/en/svn-book.html">Subversion
+        <para><link
+        xlink:href="http://svnbook.red-bean.com/nightly/en/svn-book.html">Subversion
         manual</link></para>
       </listitem>
 
       <listitem>
-        <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.cwi.nl/htbin/www-cst/Twiki/view/Cst/ServerServiceSVN">CWI
+        <para><link
+        xlink:href="http://www.cwi.nl/htbin/www-cst/Twiki/view/Cst/ServerServiceSVN">CWI
         subversion server online documentation</link></para>
       </listitem>
     </itemizedlist>
   </section>
 
-  <section><title>Goals</title>
-    
+  <section>
+    <title>Goals</title>
 
     <para>The Meta-Environment development team has two overall version
     management goals:</para>
@@ -81,8 +87,8 @@
     chosen specifically to support these two goals.</para>
   </section>
 
-  <section><title>Overview</title>
-    
+  <section>
+    <title>Overview</title>
 
     <para>The Meta-Environment consists of between 40 and 60 packages. These
     packages are managed using the Subversion version management system,
@@ -144,8 +150,8 @@
     </itemizedlist>
   </section>
 
-  <section><title>Migration from CVS to Subversion</title>
-    
+  <section>
+    <title>Migration from CVS to Subversion</title>
 
     <para>On May 12th 2006, we have migrated the GLT modules from two CVS
     repositories, located at CWI and INRIA, to a single Subversion repository,
@@ -154,8 +160,8 @@
     provided with the Subversion source.</para>
   </section>
 
-  <section><title>Development branches</title>
-    
+  <section>
+    <title>Development branches</title>
 
     <para>To protect the stability of the trunk, a developer should always
     create a branch for an intended change, unless he is sure the change is
@@ -171,8 +177,8 @@
     conflicts is spread over time.</para>
   </section>
 
-  <section><title>Release branches</title>
-    
+  <section>
+    <title>Release branches</title>
 
     <para>A second source of branches is the release process. Every time a
     package is released, a branch is created for this release. All bug fixes
@@ -183,8 +189,8 @@
     script.</para>
   </section>
 
-  <section><title>ChangeLog entries</title>
-    
+  <section>
+    <title>ChangeLog entries</title>
 
     <para>Each package has a ChangeLog file in its root directory that records
     all (important) changes to the package. The ChangeLog file consists of
@@ -211,11 +217,11 @@
     the trunk.</para>
   </section>
 
-  <section><title>The use of the SvnMerge script</title>
-    
+  <section>
+    <title>The use of the SvnMerge script</title>
 
-    <section><title>Background</title>
-      
+    <section>
+      <title>Background</title>
 
       <para>The svnmerge script simplifies the use of branches using the
       mainline and task branch SCM patterns. In these usage patterns, the
@@ -231,17 +237,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.dellroad.org/svnmerge/index">http://www.dellroad.org/svnmerge/index</link></para>
+          <para><link
+          xlink:href="http://www.dellroad.org/svnmerge/index">http://www.dellroad.org/svnmerge/index</link></para>
         </listitem>
 
         <listitem>
-          <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.sipfoundry.org/tools/svnmerge.html">http://www.sipfoundry.org/tools/svnmerge.html</link></para>
+          <para><link
+          xlink:href="http://www.sipfoundry.org/tools/svnmerge.html">http://www.sipfoundry.org/tools/svnmerge.html</link></para>
         </listitem>
       </itemizedlist>
     </section>
 
-    <section><title>Generated commit message</title>
-      
+    <section>
+      <title>Generated commit message</title>
 
       <para>To ease the writing of correct commit messages the SvnMerge script
       creates its own commit message, per default in the file
@@ -249,8 +257,8 @@
       needed, during the svn commit.</para>
     </section>
 
-    <section><title>Differences between CvsMerge and SvnMerge</title>
-      
+    <section>
+      <title>Differences between CvsMerge and SvnMerge</title>
 
       <para>The following table describes some difference between the use of
       cvsmerge and svnmerge. Options and arguments for CvsMerge and SvnMerge
@@ -315,11 +323,11 @@
         </tgroup>
       </informaltable>
 
-      <para/>
+      <para></para>
     </section>
 
-    <section><title>Example 1: Start a Branch</title>
-      
+    <section>
+      <title>Example 1: Start a Branch</title>
 
       <itemizedlist>
         <listitem>
@@ -353,8 +361,8 @@
       </itemizedlist>
     </section>
 
-    <section><title>Example 2: Work on Branch</title>
-      
+    <section>
+      <title>Example 2: Work on Branch</title>
 
       <itemizedlist>
         <listitem>
@@ -388,8 +396,8 @@
       </itemizedlist>
     </section>
 
-    <section><title>Example 3: End a Branch</title>
-      
+    <section>
+      <title>Example 3: End a Branch</title>
 
       <itemizedlist>
         <listitem>
@@ -426,8 +434,8 @@
     </section>
   </section>
 
-  <section><title>Document TODO's</title>
-    
+  <section>
+    <title>Document TODO's</title>
 
     <itemizedlist>
       <listitem>
