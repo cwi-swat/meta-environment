@@ -2,11 +2,14 @@ module basic/BoolCon
 
 exports
 
-sorts BoolCon
+sorts BoolCon BoolOr BoolAnd BoolNot
 context-free syntax
 
     "true"  -> BoolCon {cons("true")}
     "false" -> BoolCon {cons("false")}
+    "|" -> BoolOr
+    "&" -> BoolAnd
+    "not" -> BoolNot
 
 hiddens
 context-free start-symbols

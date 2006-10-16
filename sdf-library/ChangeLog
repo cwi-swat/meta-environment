@@ -1,5 +1,9 @@
 $Id$
 
+Mon Oct 16 10:05:08 CEST 2006 <kooiker@cwi.nl>
+ * library/languages/java:
+   - Added Java grammar
+
 Wed Sep 27 15:57:01 CEST 2006 <economop@cwi.nl>
  * library/languages/sdf2/syntax/Nullables.sdf: Modified syntax to work with
    Productions instead of Symbols.

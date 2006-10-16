@@ -1,0 +1,8 @@
+module Layout
+exports
+  lexical syntax
+    [\ \t\n\013] -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\013]
+
