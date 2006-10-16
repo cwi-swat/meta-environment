@@ -67,9 +67,11 @@ module Building
     end
 
     def obtain_new_item(store, dep_items)
-      if @item then
-        @item.destroy
-      end
+      # This leads to postgres errors...
+      
+      #if @item then
+      #  @item.destroy
+      #end
       @dep_items = dep_items
       @item = store.item_for_target(self, dep_items)
       return @item
