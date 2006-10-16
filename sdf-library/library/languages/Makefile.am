@@ -12,4 +12,5 @@ SUBDIRS = \
 	fdl \
 	pico \
 	sdf2  \
-	generic-cpp 
+	generic-cpp \
+	java
