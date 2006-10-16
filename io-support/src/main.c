@@ -406,20 +406,22 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
   while (!CFG_isPropertyListEmpty(searchPaths) && !result) {
     CFG_Property searchPath = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(searchPath);
+    char *normalizedSearchPath = (char *) calloc(PATH_LEN + 1, sizeof(char));
+    normalizedSearchPath = normalizePath(normalizedSearchPath, pathString);
     char *normalizedPath = (char *) calloc(PATH_LEN + 1, sizeof(char));
-    normalizedPath = normalizePath(normalizedPath, pathString);
-    if (strncmp(normalizedPath, path, strlen(normalizedPath)) == 0) {
+    normalizedPath = normalizePath(normalizedPath, path);
+    if (strncmp(normalizedSearchPath, normalizedPath, strlen(normalizedSearchPath)) == 0) {
       char *copy;
       char *extension;
 
-      copy = strdup(path + strlen(normalizedPath) + 1);
+      copy = strdup(normalizedPath + strlen(normalizedSearchPath) + 1);
       assert(copy != NULL);
 
       extension = strrchr(copy, EXTENSION_SEPARATOR);
       if (extension != NULL) {
         *extension = EOS;
       }
-      result = ATmake("filename(<str>,<str>)", normalizedPath, copy);
+      result = ATmake("filename(<str>,<str>)", normalizedSearchPath, copy);
       free(copy);
     }
     searchPaths = CFG_getPropertyListTail(searchPaths);
