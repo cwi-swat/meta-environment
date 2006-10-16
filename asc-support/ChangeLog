@@ -1,5 +1,11 @@
 $Id$
 
+Mon Oct 16 11:03:49 CEST 2006 <jurgenv@cwi.nl>
+ * asc-support/trunk/lib/asc-muasf2pt.c:
+   - unprotected terms need to be set to NULL to prevent funny warnings 
+     from the check_term macro in the ATerm library when checking is on. 
+     (closes #643)
+
 Thu Oct 12 12:18:56 CEST 2006 <jeroen@bja-electronics.com,jurgenv@cwi.nl>
  * lib/builtin-io.c: fixed a number of errors in the construction of
    parse trees of errors that may occur during parsing.
