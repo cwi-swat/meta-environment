@@ -350,6 +350,7 @@ PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
   treeTable = NULL;
   destroyTermStore();
   ATunprotect((ATerm*) ((void*) &defaultLayout));
+  defaultLayout = NULL;
 
   return result;
 }
@@ -359,7 +360,7 @@ PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
 
 PT_Tree muASFToTree(ATerm tree) 
 {
-  return muASFToTreeWithLayout(tree, (PT_Tree) ASF_makeLayoutSpace());
+  return muASFToTreeWithLayout(tree,  (PT_Tree) ASF_makeLayoutSpace());
 }
 
 /*}}}  */
