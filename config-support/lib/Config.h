@@ -362,6 +362,8 @@ CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreUP (void);
 CFG_Color CFG_makeColorRgb (int red, int green, int blue);
 CFG_Configuration CFG_makeConfigurationConfiguration (CFG_PropertyList list);
 CFG_Property CFG_makePropertyImport (const char *path);
+CFG_Property CFG_makePropertyScript (const char *path);
+CFG_Property CFG_makePropertyScriptPath (const char *path);
 CFG_Property CFG_makePropertyAction (CFG_ActionDescriptionList list,
 				     const char *action);
 CFG_Property CFG_makePropertyExtension (const char *language,
@@ -573,6 +575,8 @@ CFG_Configuration CFG_setConfigurationList (CFG_Configuration arg,
 					    CFG_PropertyList list);
 ATbool CFG_isValidProperty (CFG_Property arg);
 inline ATbool CFG_isPropertyImport (CFG_Property arg);
+inline ATbool CFG_isPropertyScript (CFG_Property arg);
+inline ATbool CFG_isPropertyScriptPath (CFG_Property arg);
 inline ATbool CFG_isPropertyAction (CFG_Property arg);
 inline ATbool CFG_isPropertyExtension (CFG_Property arg);
 inline ATbool CFG_isPropertyLibraryPath (CFG_Property arg);
