@@ -42,4 +42,5 @@ pkgdata_DATA = \
 	     > $@
 
 standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
-	sed "s@__SDF_META__@${SDF_META_PREFIX}@g;" < $< > $@
+	sed "s@__SDF_META__@${SDF_META_PREFIX}@g; \
+	     s@__PREFIX__@${prefix}@g" < $< > $@

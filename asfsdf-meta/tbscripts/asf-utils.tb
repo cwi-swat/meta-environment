@@ -182,8 +182,7 @@ let
   Table: term,
   Modulename: str
 in
-   AddJob(OutputFile)
-   . snd-note(ui-status(start(Id, "Compile Module")))
+   AddJob("Compiling")
    . GetSpecification(ModuleId, Specification?)
    .
    if not-equal(Specification, UNDEFINED) then
@@ -200,7 +199,7 @@ in
      snd-note(ui-status(statf(Id, "Specification could not be compiled")))
      . snd-note(ui-status(stop(Id)))
    fi
-   . JobDone(OutputFile)
+   . JobDone("Compiling")
 endlet
 
 process DumpEquations(ModuleId: term) is
@@ -222,7 +221,7 @@ let
   Pid: int,
   Specification: term
 in
-  AddJob(Path)
+  AddJob("Dumping tests...")
   . GetSpecification(ModuleId, Specification?)
   .
   if not-equal(Specification, UNDEFINED) then
@@ -239,7 +238,7 @@ in
      snd-note(ui-status(statf(Id, "Specification could not be dumped")))
   fi
   . snd-note(ui-status(stop(Id)))
-  . JobDone(Path)
+  . JobDone("Dumping tests...")
 endlet
 
 
@@ -252,7 +251,7 @@ let
   Pid: int,
   Specification: term
 in
-  AddJob(Path)
+  AddJob("Dumping equations...")
   . GetSpecification(ModuleId, Specification?)
   .
   if not-equal(Specification, UNDEFINED) then
@@ -269,7 +268,7 @@ in
      snd-note(ui-status(statf(Id, "Specification could not be dumped")))
   fi
   . snd-note(ui-status(stop(Id)))
-  . JobDone(Path)
+  . JobDone("Dumping equations...")
 endlet
 
 process GetSpecification(ModuleId: term, Result: term?) is
@@ -354,7 +353,7 @@ let
   Summary: term,
   Modulename: str
 in
-  AddJob("TestAsfSpecification")
+  AddJob("Testing ASF Specification")
   . snd-note(ui-status(stat(Id, "Retrieving equations and tests"))) 
   . GetSpecification(ModuleId, Specification?)
   .

@@ -1,5 +1,6 @@
 configuration([
   import("__SDF_META__/share/sdf-meta/standard.sdf.actions"),
+  import("./meta.actions"),
   action([description(term-editor, menu-shortcut([label("Module"), label("Edit"), label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
          "EditorEditEquationsAction"),
   action([description(term-editor, menu-shortcut([label("Term"),label("Reduce")], shortcut([M_ALT,M_CTRL],VK_R)))],
