@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Wed Oct 18 22:24:46 CEST 2006 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: added dependency on config-manager
+ * src/asfsdf-meta.sh.src: added loading of user defined and
+   library-defined toolbus scripts before starting.
+
 Wed Oct  4 16:03:16 CEST 2006 <jurgenv@cwi.nl>
  * asfsdf-meta.pc.in: removed dependency on asf-library
 
