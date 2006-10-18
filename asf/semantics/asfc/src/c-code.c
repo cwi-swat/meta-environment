@@ -8,8 +8,6 @@
 
 /*}}}  */
 
-extern ATbool make_toolbus_tool;
-
 /*{{{  static void make_header(FILE *file, const char* compiler_version) */
 
 static void make_header(FILE *file, const char* compiler_version)
@@ -28,12 +26,6 @@ static void make_main(ATbool parse_io, ATbool keep_annos,
 {
 
   ATfprintf(file, "#ifdef ASF_MAIN\n");
-
-  if (make_toolbus_tool) {
-    ATfprintf(file,
-	      "#include <asc-client.h>\n"
-	      "#include <tool%s.tif.h>\n", name);
-  }
 
   ATfprintf(file,
 	    "int main(int argc, char *argv[])                         \n"
@@ -61,12 +53,8 @@ static void make_main(ATbool parse_io, ATbool keep_annos,
 
   ATfprintf(file, ", %s\n", parse_io ? "ATtrue" : "ATfalse");
 
-  if (make_toolbus_tool) {
-    ATfprintf(file, ", tool%s_handler);\n", name);
-  }
-  else {
-    ATfprintf(file, ", NULL);\n");
-  }
+  /* \todo remove this statement and update asc-support, etc */
+  ATfprintf(file, ", NULL);\n"); /* for backward compatibility */
 
   ATfprintf(file, "}\n#endif\n");
 

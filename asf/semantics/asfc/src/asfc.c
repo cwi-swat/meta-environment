@@ -32,14 +32,12 @@
 #include "c-code.h"
 #include "c-compiler.h"
 #include "chars.h"
-#include "idef.h"
 
 /*}}}  */
 /*{{{  global variables */
 
 ATbool run_verbose;
 ATbool toolbus_mode;
-ATbool make_toolbus_tool;
 ATbool output_muasf;
 ATbool input_muasf;
 ATbool use_c_compiler;
@@ -89,7 +87,6 @@ static void usage(void)
 	    "\t-o filename     output c code to file         (default stdout)\n"
 	    "\t-p filename     include parse table           (default none)\n"
 	    "\t-s              parse input and output, requires -p option (%s)\n"
-	    "\t-t              make toolbus tool             (%s)\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
 	    myname, 
@@ -99,7 +96,6 @@ static void usage(void)
 	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
 	    parse_io ? "on" : "off",
-	    make_toolbus_tool ? "on" : "off",
 	    myversion);
   exit(0);
 }
@@ -215,17 +211,6 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
 	     myversion);
     fclose(fp);
 
-    if (make_toolbus_tool) {
-      VERBOSE("generating idef script");
-
-      make_idef_script(prefix, saveName);
-
-      
-      if (use_c_compiler) {
-	idef2c(prefix, saveName);
-      }
-    }
-
     if (use_c_compiler) {
       
       VERBOSE("invoking C compiler");
@@ -298,7 +283,6 @@ int main(int argc, char *argv[])
   output_muasf = ATfalse;
   use_c_compiler = ATfalse;
   toolbus_mode = ATfalse;
-  make_toolbus_tool = ATfalse;
   parse_io = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
@@ -335,7 +319,6 @@ int main(int argc, char *argv[])
       case 'o':  output=optarg;         break;
       case 'p':  table=optarg;          break;
       case 's':  parse_io=ATtrue;       break;
-      case 't':  make_toolbus_tool=ATtrue; break;
       case 'V':  version();             break;
       case 'h':  /* drop intended */
       default:   usage();               break;

@@ -16,7 +16,6 @@ noinst_HEADERS = asfc.tif.h \
                  asfc.tif.h \
                  muasf2c.h \
                  c-compiler.h \
-                 idef.h \
 		 MuASF.h \
 		 MuASF_dict.h
 
@@ -31,8 +30,6 @@ asfc_LDADD   = $(ASC_SUPPORT_LIBS)
 asfc_CPPFLAGS =  \
 		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
 		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
-		-DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
-		-DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
 		-DCOMPILE="\"$(CC)\"" \
 		-DLINK="\"$(ASFC_C_LINKER)\"" \
 		$(ASC_SUPPORT_CFLAGS)
@@ -43,7 +40,6 @@ asfc_SOURCES = asfc.tif.c \
                asf2muasf.c \
                muasf2c.c \
                c-compiler.c \
-               idef.c \
                Compiler.c \
 	       MuASF.c \
 	       MuASF_dict.c
@@ -53,8 +49,6 @@ test_asfc_LDADD = $(asfc_LDADD)
 test_asfc_CPPFLAGS =  \
 		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
 		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
-		-DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
-		-DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
 		-DCOMPILE="\"$(CC)\"" \
 		-DLINK="\"$(ASFC_TEST_C_LINKER)\"" \
 		$(ASC_SUPPORT_CFLAGS)
