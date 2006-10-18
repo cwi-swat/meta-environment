@@ -3,5 +3,5 @@ Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: asfsdf-meta
 Version: 2.0
 Description:
-Requires: asf,meta,sdf-meta,toolbus
+Requires: asf,meta,sdf-meta,toolbus,config-manager
 ToolBusFlags=${prefix}/share/asfsdf-meta
