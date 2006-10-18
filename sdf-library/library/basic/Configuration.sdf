@@ -16,6 +16,9 @@ context-free syntax
 sorts Property
 context-free syntax
   "import" "(" path:StrCon ")" -> Property {cons("import")}
+  "load-script" "(" path:StrCon ")" -> Property {cons("script")}
+  "script-path" "(" path:StrCon ")" -> Property {cons("script-path")}
+
   "action" "(" "[" list:{ActionDescription ","}* "]" "," action:StrCon ")" -> Property {cons("action")}
   "extension" "(" language:StrCon "," extension:StrCon ")" -> Property {cons("extension")}
   "library-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("library-path")}
