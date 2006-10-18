@@ -12,6 +12,7 @@
 #define MAX_PATH_LENGTH 1024
 
 static char myversion[] = "5.0";     
+static char myargs[] = "Isi:";
 
 static ATermTable userDescriptionsByType = NULL;
 static ATermTable systemDescriptionsByType = NULL;
@@ -27,6 +28,9 @@ static ATermList systemTextCategories = NULL;
 
 static CFG_PropertyList modulePaths = NULL;
 static CFG_PropertyList libraryPaths = NULL;
+
+static CFG_PropertyList scripts = NULL;
+static CFG_PropertyList scriptPaths = NULL;
 
 static void add_configuration_properties(ATerm actions);
 
@@ -150,11 +154,17 @@ static void addSystemProperty(CFG_Property property) {
       add_configuration_properties(import_contents);
     }
     else {
-      ATwarning("Could not import properties from: %s\n", path);
+      ATwarning("Configuration file %s not used.\n", path);
     }
   }
   else if (CFG_isPropertyExtension(property)) {
     systemExtensions = addExtension(systemExtensions, property);
+  }
+  else if (CFG_isPropertyScript(property)) {
+    scripts = CFG_makePropertyListMany(property, scripts);
+  }
+  else if (CFG_isPropertyScriptPath(property)) {
+    scriptPaths = CFG_makePropertyListMany(property, scriptPaths);
   }
   else if (CFG_isPropertyModulePath(property)) {
     modulePaths = CFG_makePropertyListMany(property, modulePaths);
@@ -209,6 +219,17 @@ static void addUserProperty(CFG_Property property) {
   if (CFG_isPropertyExtension(property)) {
     userExtensions = addExtension(userExtensions, property);
   }
+  else if (CFG_isPropertyImport(property)) {
+    char *path = CFG_getPropertyPath(property);
+    ATerm import_contents = ATreadFromNamedFile(path);
+
+    if (import_contents != NULL) {
+      add_configuration_properties(import_contents);
+    }
+    else {
+      ATwarning("Could not import properties from: %s\n", path);
+    }
+  }
   else if (CFG_isPropertyAction(property)) {
     const char *action = CFG_getPropertyAction(property);
     CFG_ActionDescriptionList list = CFG_getPropertyList(property);
@@ -218,6 +239,12 @@ static void addUserProperty(CFG_Property property) {
       setAction(userActionsByDescription, cur, action);
       list = CFG_getActionDescriptionListTail(list);
     }
+  }
+  else if (CFG_isPropertyScript(property)) {
+    scripts = CFG_makePropertyListMany(property, scripts);
+  }
+  else if (CFG_isPropertyScriptPath(property)) {
+    scriptPaths = CFG_makePropertyListMany(property, scriptPaths);
   }
   else if (CFG_isPropertyTextCategory(property)) {
     userTextCategories = addTextCategory(userTextCategories, property);
@@ -426,9 +453,10 @@ ATerm get_text_categories(int cid) {
 }
 
 void usage(char *prg, ATbool is_err) {
-  ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
-  ATwarning("use '%s -at-help' to get more options.\n", prg);
-  ATwarning("This program can only be used as a ToolBus tool!\n");
+  ATwarning("usage: %s -[Is] -i <config-file>\n"
+	    "\t-I print ToolBus include path\n"
+	    "\t-s print ToolBus main scripts\n"
+	    "\t-i input configuration file [multiple]\n", prg);
   exit(is_err ? 1 : 0);
 }
 
@@ -465,28 +493,93 @@ static void initConfigurationManager(void) {
 					   TABLE_RESIZE_PERCENTAGE);
   systemActionsByDescription = ATtableCreate(INITIAL_TABLE_SIZE,
 					     TABLE_RESIZE_PERCENTAGE);
+
+  scripts = CFG_makePropertyListEmpty();
+  CFG_protectPropertyList(&scripts);
+
+  scriptPaths = CFG_makePropertyListEmpty();
+  CFG_protectPropertyList(&scriptPaths);
 }
+
+void printScriptPath() 
+{
+  CFG_PropertyList runner = scriptPaths;
+
+  for ( ; !CFG_isPropertyListEmpty(runner); runner = CFG_getPropertyListTail(runner)) {
+    printf("%s ", CFG_getPropertyPath(CFG_getPropertyListHead(runner)));
+  }
+}
+
+void printScripts() 
+{
+  CFG_PropertyList runner = scripts;
+
+  for ( ; !CFG_isPropertyListEmpty(runner); runner = CFG_getPropertyListTail(runner)) {
+    printf("%s ", CFG_getPropertyPath(CFG_getPropertyListHead(runner)));
+  }
+}
+
 
 int main(int argc, char *argv[]) {
   int i, cid;
   ATerm bottomOfStack;
+  ATbool toolbus_tool = ATfalse;
 
-  for (i=1; i<argc; i++) {
-    if (strcmp(argv[i], "-h") == 0) {
-      usage(argv[0], ATfalse);
-    } else if (strcmp(argv[i], "-V") == 0) {
-      version(argv[0]);
-    }
+
+  for (i=1; !toolbus_tool && i<argc; i++) {
+    toolbus_tool = !strcmp(argv[i], "-TB_TOOL_NAME");
   }
 
-  ATBinit(argc, argv, &bottomOfStack);
+  ATinit(argc, argv, &bottomOfStack);
   CFG_initConfigApi();
   initConfigurationManager();
-  /*ATsetChecking(ATtrue);*/
 
-  cid = ATBconnect(NULL, NULL, -1, configuration_manager_handler);
+  if (toolbus_tool) {
+    ATBinit(argc, argv, &bottomOfStack);
+    cid = ATBconnect(NULL, NULL, -1, configuration_manager_handler);
+    ATBeventloop();
+  }
+  else {
+    ATerm input = NULL;
+    ATbool print_script_path = ATfalse;
+    ATbool print_scripts = ATfalse;
+    int c;
 
-  ATBeventloop();
+    while ((c = getopt(argc, argv, myargs)) != -1) {
+      switch (c) {
+	case 'i':
+	  input = ATreadFromNamedFile(optarg);
+	  if (input != NULL) {
+	    add_configuration_properties(input);
+	  }
+	  else {
+	    ATerror("%s: error parsing %s\n", argv[0], optarg);
+	    return 1;
+	  }
+	  break;
+	case 'I':
+	  print_script_path = ATtrue;
+	  break;
+	case 's':
+	  print_scripts = ATtrue;
+	  break;
+	default:
+	  usage(argv[0], ATtrue);
+      }
+    }
+
+    if (print_scripts && print_script_path) {
+      ATerror("%s: can not have both -s and -I options\n", argv[0]);
+      return 1;
+    }
+
+    if (print_script_path) {
+      printScriptPath();
+    }
+    else if (print_scripts) {
+      printScripts();
+    }
+  }
 
   return 0;
 }         
