@@ -3,6 +3,7 @@
 Thu Oct 19 10:49:54 CEST 2006 <kooiker@cwi.nl>
  * src/**/SwingEditor.java:
    - Made input and output streams buffered
+   - Close streams when done
 
 Wed Sep  6 14:43:11 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:

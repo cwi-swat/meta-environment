@@ -65,8 +65,10 @@ public class SwingEditor extends JPanel implements Editor {
 
 	private String readContents(String filename) throws IOException,
 			FileToBigException {
+		InputStream fis = null;
+		
 		try {
-			InputStream fis = new BufferedInputStream(new FileInputStream(
+			fis = new BufferedInputStream(new FileInputStream(
 					filename));
 			int x = fis.available();
 
@@ -80,6 +82,10 @@ public class SwingEditor extends JPanel implements Editor {
 			return content;
 		} catch (FileNotFoundException e) {
 			return "";
+		} finally {
+			if (fis != null) {
+				fis.close();
+			}
 		}
 	}
 
@@ -89,6 +95,7 @@ public class SwingEditor extends JPanel implements Editor {
 		OutputStream fos = new BufferedOutputStream(new FileOutputStream(
 				filename));
 		fos.write(text.getBytes());
+		fos.close();
 
 		editorPane.setModified(false);
 	}
