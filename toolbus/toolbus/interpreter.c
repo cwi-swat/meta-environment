@@ -389,12 +389,16 @@ static TBbool do_is_enabled(atom *Atom, proc_inst *ProcInst)
 
 /*{{{  static proc *sum(proc *p1, proc *p2) */
 
-static proc *sum(proc *p1, proc *p2)
+
+static proc *doSum(proc *p1, proc *p2, int leftBiased)
 {
-  if(CHOICE){
-    proc *p3 = p1;
-    p1 = p2;
-    p2 = p3;
+  /* if leftBiased is false, we throw a coin */
+  if(!leftBiased) {
+    if (CHOICE) {
+      proc *p3 = p1;
+      p1 = p2;
+      p2 = p3;
+    }
   }
   if(is_delta(p1))                 /* sum(delta, AP) = AP */
     return p2;
@@ -416,6 +420,16 @@ static proc *sum(proc *p1, proc *p2)
   }
   return                           /* sum(AP1, AP2) = <AP1 + AP2> */
     mk_list2(p1,p2);
+}
+
+static proc *sum(proc *p1, proc *p2) 
+{
+  return doSum(p1, p2, 0);
+}
+
+static proc *leftSum(proc *p1, proc *p2) 
+{
+  return doSum(p1, p2, 1);
 }
 
 /*}}}  */
@@ -542,6 +556,7 @@ static proc *force_null_env(proc *P)
       case p_fmerge:
       case p_lmerge:
       case p_plus:
+      case p_leftplus:
       case p_star:
       case p_semi:
       case p_dot:
@@ -593,6 +608,7 @@ static proc *propagate_env(proc *P, env *Env)
       case p_fmerge:
       case p_lmerge:
       case p_plus:
+      case p_leftplus:
       case p_star:
       case p_semi:
       case p_dot:
@@ -687,6 +703,10 @@ static ap_form *expand(sym_idx procName, proc *P, env *Env)
       case p_plus:                   /* exp((P1+P2)) = sum(exp(P1), exp(P2)) */
 
 	return sum(expand(procName, P1, Env), expand(procName, right(P), Env));
+
+      case p_leftplus:                   /* exp((P1<+P2)) = sum(exp(P1), exp(P2)) */
+
+	return leftSum(expand(procName, P1, Env), expand(procName, right(P), Env));
 
       case p_star:                   /* exp( P ) = sum(exp(P1.P1*P2), exp(P2))
 				      *

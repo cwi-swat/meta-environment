@@ -4,6 +4,7 @@ Thu Oct 19 11:47:58 CEST 2006 <jurgenv@cwi.nl>
  * toolbus/calls.c: if a dynamic call fails because no such
    process can be found or the signature of the arguments do
    no match, the process call reduces to 'delta'.
+ * toolbus/*: added <+, the left-biased choice operator.   
 
 Thu Oct 12 14:21:17 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * toolbus/{interpreter,procs}.c:

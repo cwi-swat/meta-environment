@@ -328,6 +328,7 @@ void init_procs(void)
   SYMDEF("rec-monitor", a_rec_monitor);
 
   SYMDEF("plus", p_plus);
+  SYMDEF("leftplus", p_leftplus);
   SYMDEF("dot", p_dot);
   SYMDEF("star", p_star);
   SYMDEF("call", p_call);

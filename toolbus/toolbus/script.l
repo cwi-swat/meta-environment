@@ -89,6 +89,7 @@ else          { ll_inc_pos(4); return(ELSE); }
 fi            { ll_inc_pos(2); return(FI); }
 :=            { ll_inc_pos(2); return(ASSIGN); }
 \|\|          { ll_inc_pos(2); return(FMERGE); }
+\<\+          { ll_inc_pos(2); return(LEFTCHOICE); }
 delay         { ll_inc_pos(5); return(REL_DELAY); }
 abs-delay     { ll_inc_pos(9); return(ABS_DELAY); }
 timeout       { ll_inc_pos(7); return(REL_TIMEOUT); }
