@@ -32,6 +32,20 @@ static CFG_PropertyList libraryPaths = NULL;
 static CFG_PropertyList scripts = NULL;
 static CFG_PropertyList scriptPaths = NULL;
 
+static ATerm getSuperType(ATerm type)
+{
+  if (ATgetType(type) == AT_APPL) {
+    AFun fun = ATgetAFun((ATermAppl) type);
+    ATerm super = (ATerm) ATmakeAppl0(ATmakeAFun(ATgetName(fun), 0, ATisQuoted(fun)));
+
+    if (!ATisEqual(super, type)) {
+      return super;
+    }
+  }
+
+  return NULL;
+}
+
 static void add_configuration_properties(ATerm actions);
 
 static void addDescription(ATermTable table, CFG_ActionDescription desc) {
@@ -76,14 +90,14 @@ static void setAction(ATermTable table, CFG_ActionDescription desc, const char *
   ATtablePut(table, key, (ATerm) ATmakeAppl0(ATmakeAFun(action, 0, ATtrue)));
 }
 
-static ATermList getActions(CFG_ActionDescription desc) {
+static ATerm getAction(CFG_ActionDescription desc) {
   ATerm key;
-  ATermList value;
-
+  ATerm value;
+ATwarning("desc: %t\n", desc);
   key = CFG_ActionDescriptionToTerm(desc);
-  value = (ATermList) ATtableGet(userActionsByDescription, key);
+  value = ATtableGet(userActionsByDescription, key);
   if (value == NULL) {
-    value = (ATermList) ATtableGet(systemActionsByDescription, key);
+    value = ATtableGet(systemActionsByDescription, key);
   }
 
   return value;
@@ -312,62 +326,43 @@ static ATermList getEvents(ATerm actionType) {
 
 ATerm get_events(int cid, ATerm actionType) {
   ATermList result = getEvents(actionType);
+  ATerm super = getSuperType(actionType);
+
+  if (super != NULL) {
+    result = ATconcat(result, getEvents(super));
+  }
+
   return ATmake("snd-value(events(<term>))", result);
 }
 
-ATerm get_module_events(int cid, ATerm type, ATerm moduleId) {
-  ATerm boundType;
-  ATermList result1, result2;
-
-  char *fun = ATgetName(ATgetAFun((ATermAppl)type));
-  boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
-                                           ATmake("<str>", 
-						  ATwriteToString(moduleId)));
-
-  result1 = getEvents(type);
-  result2 = getEvents(boundType);
-
-  return ATmake("snd-value(events(<term>))", ATconcat(result1, result2));
-}
-
-static ATermList getEventActions(ATerm type, ATerm event) {
+static ATerm getEventAction(ATerm type, ATerm event) {
   CFG_ActionDescription desc;
-  ATermList actions;
+  ATerm action;
 
   desc = CFG_makeActionDescriptionDescription(type,
 					      CFG_EventFromTerm(event));
-  actions = getActions(desc);
+  action = getAction(desc);
 
-  return actions;
+  return action;
 }
 
 ATerm get_action(int cid, ATerm type, ATerm event) {
-  ATermList actions = getEventActions(type, event);
+  ATerm action = getEventAction(type, event);
+  
+  if (action == NULL) {
+    ATerm super = getSuperType(type);
 
-  if (actions == NULL) {
-    ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
-  }
-
-  return ATmake("snd-value(action(<term>))", actions);
-}
-
-ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId) {
-  ATerm boundType;
-  ATermList actions;
-
-  char *fun = ATgetName(ATgetAFun((ATermAppl)type));
-  boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
-                                           ATmake("<str>", ATwriteToString(moduleId)));
-
-  actions = getEventActions(boundType, event);
-  if (actions == NULL) {
-    actions = getEventActions(type, event);
-    
-    if (actions == NULL) {
-      ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
+    if (super != NULL) {
+      action = getEventAction(super, event);
     }
   }
-  return ATmake("snd-value(action(<term>))", actions);
+
+  if (action == NULL) {
+      ATwarning("%s:get_action: no actions for: %t, %t\n", __FILE__, type, event);
+      action = ATparse("DefaultAction");
+  }
+
+  return ATmake("snd-value(action(<term>))", action);
 }
 
 static ATermList getExtensions() {

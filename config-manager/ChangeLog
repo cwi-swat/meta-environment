@@ -1,5 +1,16 @@
 # $Id$
 
+Thu Oct 19 14:45:41 CEST 2006 <jurgenv@cwi.nl>
+ * src/**: big change in the interface of the config-manager.
+   An action is tied to a GUI element, which is a free term like:
+   f(g). If an event matches this term, the process name that belongs
+   to it is returned. If it does not match, the function name (read
+   superType), of the GUI element (in this case 'f'), is used to 
+   search again. 
+   We use this to store actions for specific modulenames for example:
+   term-editor("basic/Booleans").
+
+
 Fri Mar 10 11:52:36 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library
