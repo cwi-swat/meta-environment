@@ -162,18 +162,23 @@ proc *expand_dyncall(sym_idx procName, proc *P, env *Env)
     proc_name = str_val(Val);
     pd = definition(TBlookup(proc_name));
 
-    if(!pd)
-	err_fatal("Cannot create process name %s", proc_name);
-    n_expanded_calls++;
-    CALLSDB(TBmsg("expanding %t\n", P);)
-    if(check_formal_actual(TBlookup(proc_name), c, proc_name, pd_formals(pd), args)) {
-	e = create_env(pd_formals(pd), get_txt(pd_name(pd)), args, Env);
-	P1 = replace_formals(pd_body(pd), e);
-	CPC_join(pd_name(pd), procName);
-	CALLSDB(TBmsg("into %t\n", P1);)
+    if(!pd) {
+      return Delta;
+    }
+    else {
+      n_expanded_calls++;
+      CALLSDB(TBmsg("expanding %t\n", P);)
+	if(check_formal_actual(TBlookup(proc_name), c, proc_name, pd_formals(pd), args)) {
+	  e = create_env(pd_formals(pd), get_txt(pd_name(pd)), args, Env);
+	  P1 = replace_formals(pd_body(pd), e);
+	  CPC_join(pd_name(pd), procName);
+	  CALLSDB(TBmsg("into %t\n", P1);)
 	    return P1;
-    } else
-       err_fatal("Cannot create process %s since formals/actuals do not match", proc_name);
+	} else {
+	  return Delta;
+	}
+    }
+
     return Delta;
 }
 
