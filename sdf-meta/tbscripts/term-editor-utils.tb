@@ -16,12 +16,12 @@ let
   Tree: term,
   Valid: bool
 in
-  EditorType := term-editor
-  . CheckSanity(Path, ModuleId, Valid?)
+  CheckSanity(Path, ModuleId, Valid?)
   .
   if equal(Valid, true) then
     Edit(Path, Sid?)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . EditorType := quote(term-editor(Modulename))
     . EditText(Sid, EditorType, Modulename, AlreadyExists?)
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .

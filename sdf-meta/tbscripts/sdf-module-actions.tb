@@ -38,8 +38,8 @@ let
   Modulename: str
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-  . snd-msg(cm-get-module-action(Type, Event, Modulename))
-  . rec-msg(cm-module-action(Action?))
+  . snd-msg(cm-get-action(Type, Event))
+  . rec-msg(cm-action(Action?))
   . Action(ModuleId)
 endlet
 
@@ -56,8 +56,8 @@ in
   (
     NAV-RequestPopup(ModuleId?)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . snd-msg(cm-get-module-events(module-popup, Modulename))
-    . rec-msg(cm-module-events(PopupMenu?))
+    . snd-msg(cm-get-events(module-popup(Modulename)))
+    . rec-msg(cm-events(PopupMenu?))
     . NAV-ShowPopup(ModuleId, PopupMenu)
   +
     NAV-PopupEvent(ModuleId?, Menu?)
@@ -67,8 +67,8 @@ in
     .
     if equal(GraphType, "import-graph") then
       MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-      . snd-msg(cm-get-module-events(module-popup, Modulename))
-      . rec-msg(cm-module-events(PopupMenu?))
+      . snd-msg(cm-get-events(module-popup(Modulename)))
+      . rec-msg(cm-events(PopupMenu?))
       . GP-ShowPopup("import-graph", SDF_NAMESPACE, ModuleId, PopupMenu)
     else
       tau
