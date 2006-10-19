@@ -195,6 +195,11 @@
         </listitem>
 
         <listitem>
+          <para>The <link linkend="data-layer-view">data layer view</link>
+          describes shows the relation between datatypes.</para>
+        </listitem>
+
+        <listitem>
           <para>The <link linkend="package-view">package view</link> describes
           the mapping between architecture elements and implementation
           packages.</para>
@@ -231,6 +236,9 @@
           <td><emphasis role="bold"><link
           linkend="coordination-view">Coordination view</link></emphasis></td>
 
+          <td><emphasis role="bold"><link linkend="data-layer-view">Data layer
+          view</link></emphasis></td>
+
           <td><emphasis role="bold"><link linkend="package-view">Package
           view</link></emphasis></td>
 
@@ -238,7 +246,7 @@
           view</link></emphasis></td>
 
           <td><emphasis role="bold"><link
-          linkend="build-and-deployment-view">Build &amp; deployment
+          linkend="build-and-deployment-view">Build and deployment
           view</link></emphasis></td>
         </tr>
 
@@ -247,13 +255,15 @@
 
           <td>d</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
 
           <td>s</td>
         </tr>
@@ -269,6 +279,8 @@
 
           <td>s</td>
 
+          <td>s</td>
+
           <td>x</td>
 
           <td>s</td>
@@ -278,6 +290,8 @@
           <td>System developer</td>
 
           <td>s</td>
+
+          <td>d</td>
 
           <td>d</td>
 
@@ -778,7 +792,21 @@
         </tr>
 
         <tr>
-          <td>Graphical user interface (GUI)</td>
+          <td>APIGEN</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td>x</td>
+
+          <td>x</td>
+        </tr>
+
+        <tr>
+          <td>ASF checker</td>
 
           <td></td>
 
@@ -792,7 +820,7 @@
         </tr>
 
         <tr>
-          <td>Text editor</td>
+          <td>ASF compiler</td>
 
           <td></td>
 
@@ -806,7 +834,21 @@
         </tr>
 
         <tr>
-          <td>Structure editor</td>
+          <td>ASF interpreter</td>
+
+          <td></td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>ASF operations</td>
 
           <td></td>
 
@@ -815,6 +857,20 @@
           <td>x</td>
 
           <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF library</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
         </tr>
@@ -827,6 +883,76 @@
           <td>x</td>
 
           <td></td>
+
+          <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF checker</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>Compiled specification</td>
+
+          <td>x</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>Configuration manager</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>Errors &amp; warnings</td>
+
+          <td>x</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>Graphical user interface (GUI)</td>
+
+          <td>x</td>
+
+          <td></td>
+
+          <td>x</td>
 
           <td>x</td>
 
@@ -848,6 +974,20 @@
         </tr>
 
         <tr>
+          <td>Module manager</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td></td>
+        </tr>
+
+        <tr>
           <td>Output term</td>
 
           <td>x</td>
@@ -855,48 +995,6 @@
           <td>x</td>
 
           <td></td>
-
-          <td>x</td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td>Errors &amp; warnings</td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td>SDF operations</td>
-
-          <td></td>
-
-          <td></td>
-
-          <td>x</td>
-
-          <td>x</td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td>SDF checker</td>
-
-          <td></td>
-
-          <td></td>
-
-          <td>x</td>
 
           <td>x</td>
 
@@ -974,7 +1072,7 @@
         </tr>
 
         <tr>
-          <td>Module manager</td>
+          <td>SDF checker</td>
 
           <td></td>
 
@@ -988,7 +1086,7 @@
         </tr>
 
         <tr>
-          <td>ASF operations</td>
+          <td>SDF operations</td>
 
           <td></td>
 
@@ -1002,7 +1100,7 @@
         </tr>
 
         <tr>
-          <td>ASF checker</td>
+          <td>Structure editor</td>
 
           <td></td>
 
@@ -1016,55 +1114,13 @@
         </tr>
 
         <tr>
-          <td>ASF+SDF checker</td>
+          <td>Text editor</td>
 
           <td></td>
 
           <td></td>
 
           <td>x</td>
-
-          <td>x</td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td>ASF interpreter</td>
-
-          <td></td>
-
-          <td>x</td>
-
-          <td>x</td>
-
-          <td>x</td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td>ASF compiler</td>
-
-          <td></td>
-
-          <td></td>
-
-          <td>x</td>
-
-          <td>x</td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td>Compiled specification</td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
 
           <td>x</td>
 
@@ -1083,20 +1139,6 @@
           <td>x</td>
 
           <td></td>
-        </tr>
-
-        <tr>
-          <td>APIGEN</td>
-
-          <td></td>
-
-          <td></td>
-
-          <td></td>
-
-          <td>x</td>
-
-          <td>x</td>
         </tr>
       </table>
     </section>
@@ -1360,7 +1402,7 @@
       linkend="def-SDF-operations">SDF operations</link>, <link
       linkend="def-SDF-checker">SDF checker</link>, <link
       linkend="def-parse-table-generator">Parse table generator</link>,<link
-      linkend="def-formatter-generator"> Formatter generator</link>, <link
+      linkend="def-prettyprinter"> Prettyprinter</link>, <link
       linkend="def-ASF-operations">ASF operations</link>, <link
       linkend="def-ASF-checker">ASF checker</link>, <link
       linkend="def-ASFSDF-checker">ASF+SDF checker</link>, <link
@@ -1455,13 +1497,16 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="data-layer-view">
     <title>The data layer view</title>
 
-    <para></para>
+    <para>The Meta-Environment uses ATerms as pervasive data format to store
+    and exchange data. On top of the ATerms, various specialized data formats
+    have been defined as shown in the Figure <link
+    linkend="fig-data-layer-view">The data layer view</link>.</para>
 
-    <figure>
-      <title></title>
+    <figure xml:id="fig-data-layer-view">
+      <title>The data layer view</title>
 
       <mediaobject>
         <imageobject>
@@ -1494,22 +1539,45 @@
         </tr>
 
         <tr>
-          <td>Graphical user interface (GUI)</td>
+          <td>APIGEN</td>
 
-          <td>dialog-gui, graph-gui, graph-support, meta-studio,
-          module-details-gui, navigator-gui, progress-gui</td>
+          <td></td>
         </tr>
 
         <tr>
-          <td>Text editor</td>
+          <td>ASF checker</td>
 
-          <td>editor-manager,editor-plugin</td>
+          <td>asf</td>
         </tr>
 
         <tr>
-          <td>Structure editor</td>
+          <td>ASF compiler</td>
 
-          <td>structure-editor</td>
+          <td>asf, asc-support</td>
+        </tr>
+
+        <tr>
+          <td>ASF interpreter</td>
+
+          <td>asf</td>
+        </tr>
+
+        <tr>
+          <td>ASF operations</td>
+
+          <td>asf-support</td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF checker</td>
+
+          <td>asf</td>
+        </tr>
+
+        <tr>
+          <td>ASF+SDF library</td>
+
+          <td>asf-library, sdf-library</td>
         </tr>
 
         <tr>
@@ -1519,15 +1587,15 @@
         </tr>
 
         <tr>
-          <td>Input term</td>
+          <td>Compiled specification</td>
 
-          <td></td>
+          <td>asf</td>
         </tr>
 
         <tr>
-          <td>Output term</td>
+          <td>Configuration manager</td>
 
-          <td></td>
+          <td>config-manager, config-support</td>
         </tr>
 
         <tr>
@@ -1537,15 +1605,28 @@
         </tr>
 
         <tr>
-          <td>SDF operations</td>
+          <td>Graphical user interface (GUI)</td>
 
-          <td>sdf-support</td>
+          <td>dialog-gui, graph-gui, graph-support, meta-studio,
+          module-details-gui, navigator-gui, progress-gui</td>
         </tr>
 
         <tr>
-          <td>SDF checker</td>
+          <td>Input term</td>
 
-          <td>pgen</td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>Module manager</td>
+
+          <td>module-manager, module-support</td>
+        </tr>
+
+        <tr>
+          <td>Output term</td>
+
+          <td></td>
         </tr>
 
         <tr>
@@ -1573,67 +1654,42 @@
         </tr>
 
         <tr>
-          <td>Formatter generator</td>
+          <td>Prettyprinter</td>
 
           <td>pandora</td>
         </tr>
 
         <tr>
-          <td>Module manager</td>
+          <td>SDF checker</td>
 
-          <td>module-manager, module-support</td>
+          <td>pgen</td>
         </tr>
 
         <tr>
-          <td>ASF operations</td>
+          <td>SDF operations</td>
 
-          <td>asf-support</td>
+          <td>sdf-support</td>
         </tr>
 
         <tr>
-          <td>ASF checker</td>
+          <td>Structure editor</td>
 
-          <td>asf</td>
+          <td>structure-editor</td>
         </tr>
 
         <tr>
-          <td>ASF+SDF checker</td>
+          <td>Text editor</td>
 
-          <td>asf</td>
-        </tr>
-
-        <tr>
-          <td>ASF interpreter</td>
-
-          <td>asf</td>
-        </tr>
-
-        <tr>
-          <td>ASF compiler</td>
-
-          <td>asf, asc-support</td>
-        </tr>
-
-        <tr>
-          <td>Compiled specification</td>
-
-          <td>asf</td>
+          <td>editor-manager,editor-plugin</td>
         </tr>
 
         <tr>
           <td>ToolBus</td>
 
-          <td>toolbus, toolbus-java-adapter</td>
+          <td>toolbus, toolbuslib, toolbus-java-adapter</td>
         </tr>
-
-        <tr>
-          <td>APIGEN</td>
-
-          <td></td>
-        </tr>
-      </table>Unused: asf-library, asfsdf-meta, aterm, aterm-java,
-    config-manager, config-support, sdf-library, sdf-meta, term-store, tide,
-    tide-support, io-support, meta, shared-objects, JJTraveler.</para>
+      </table>Unused: asfsdf-meta, aterm, aterm-java, sdf-meta, term-store,
+    tide, tide-support, io-support, meta, shared-objects, JJTraveler.</para>
   </section>
 
   <section xml:id="power-user-view">
@@ -1719,9 +1775,9 @@
             <row>
               <entry>asf2c</entry>
 
-              <entry> </entry>
+              <entry></entry>
 
-              <entry> </entry>
+              <entry></entry>
             </row>
 
             <row>
@@ -1735,9 +1791,9 @@
             <row>
               <entry>unparsePT</entry>
 
-              <entry> </entry>
+              <entry></entry>
 
-              <entry> </entry>
+              <entry></entry>
             </row>
 
             <row>
@@ -2311,7 +2367,7 @@
 
             <entry>sdf-modules sdf-renaming</entry>
 
-            <entry> </entry>
+            <entry>No</entry>
 
             <entry>libPT2SDF.a libSDF2PT.a libSDFME.a</entry>
 
@@ -2344,7 +2400,7 @@
           <row>
             <entry>shared-objects</entry>
 
-            <entry> </entry>
+            <entry>Library for maxiamlly shared objects in Java</entry>
 
             <entry> </entry>
 
@@ -2362,7 +2418,7 @@
           <row>
             <entry>structure-editor</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>structure-editor</entry>
 
@@ -2380,7 +2436,7 @@
           <row>
             <entry>term-store</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>term-store</entry>
 
@@ -2398,7 +2454,7 @@
           <row>
             <entry>tide</entry>
 
-            <entry> </entry>
+            <entry>Interactive debugger for equations</entry>
 
             <entry>tide tide-gdb</entry>
 
@@ -2416,7 +2472,7 @@
           <row>
             <entry>tide-support</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry> </entry>
 
@@ -2440,9 +2496,9 @@
             tblog toolbus uri-encode ctif gen-adapter informer perl-adapter
             tbgraph tifstoc toolbus-adapter wish-adapter</entry>
 
-            <entry> </entry>
+            <entry>Yes</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry></entry>
 
