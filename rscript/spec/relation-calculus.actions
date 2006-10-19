@@ -1,0 +1,11 @@
+configuration([
+ script("./rscript.tb"),
+ extension("relation-calculus/Rscript", ".rscript"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("Check (interpreted)")]))], "RscriptCheckInterpreted"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("Check (compiled)")]))], "RscriptCheck"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("Run")]))], "RscriptRun"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("Run (interpreted)")]))], "RscriptRunInterpreted"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("Run...")]))], "RscriptRunWithRstore"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("TestSuite (interpreted)")]))], "RscriptRunTestSuite"),
+ action([description(term-editor("relation-calculus/Rscript"), menu([label("RScript"),label("View RStore")]))], "RscriptRunTestSuite")
+])
