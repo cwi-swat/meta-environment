@@ -1,0 +1,6 @@
+process LoadedRscript is printf("Loaded RScript ToolBus script")
+
+process RscriptCheckInterpreted(ModuleId: term) is printf("interpreting %t", ModuleId)
+
+
+toolbus(LoadedRscript)
