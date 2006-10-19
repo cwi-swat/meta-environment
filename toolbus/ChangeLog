@@ -5,6 +5,10 @@ Thu Oct 19 11:47:58 CEST 2006 <jurgenv@cwi.nl>
    process can be found or the signature of the arguments do
    no match, the process call reduces to 'delta'.
  * toolbus/*: added <+, the left-biased choice operator.   
+ * toolbus/*: replaced <+ by right-biased choise +>. The reason is 
+   that the current interpreter optimizes by normalizing only one
+   of the arguments to head normal form. The +> fitted the code
+   much better, so we chose for the easy solution.
 
 Thu Oct 12 14:21:17 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * toolbus/{interpreter,procs}.c:

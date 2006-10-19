@@ -362,7 +362,7 @@ TBbool is_defined_formal_or_var_string(char *str)
 %token FI
 %token ASSIGN
 %token FMERGE
-%token LEFTCHOICE
+%token RIGHTCHOICE
 %token REL_DELAY
 %token ABS_DELAY
 %token REL_TIMEOUT
@@ -636,7 +636,7 @@ proc : atom          { $$.u.proc = $1.u.proc; range($$,$1,$1); }
            range($$,$1,$5);
          }   
      | proc '+' proc  { $$.u.proc = mk_plus($1.u.proc, $3.u.proc); range($$,$1,$3); }
-     | proc LEFTCHOICE proc  { $$.u.proc = mk_leftplus($1.u.proc, $3.u.proc); range($$,$1,$3); }
+     | proc RIGHTCHOICE proc  { $$.u.proc = mk_rightplus($1.u.proc, $3.u.proc); range($$,$1,$3); }
      | proc '.' proc  { $$.u.proc = mk_dot($1.u.proc,$3.u.proc); range($$,$1,$3); }   
      | proc '*' proc  { $$.u.proc = mk_star($1.u.proc,$3.u.proc);  range($$,$1,$3); }   
      | proc FMERGE proc  { $$.u.proc = mk_fmerge($1.u.proc,$3.u.proc);  range($$,$1,$3); }   
