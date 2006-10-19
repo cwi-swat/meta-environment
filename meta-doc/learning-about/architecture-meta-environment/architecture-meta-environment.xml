@@ -255,15 +255,15 @@
 
           <td>d</td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
           <td>s</td>
         </tr>
@@ -337,6 +337,13 @@
           language (checking, execution, analysis, transformation).</para>
         </formalpara>
 
+        <formalpara xml:id="def-ASFSDF-library">
+          <title>ASF+SDF library</title>
+
+          <para>A collection of elementary datatypes (lists, tables, etc.),
+          language grammars (C, COBOL, Java, SDF, etc.) and utilities.</para>
+        </formalpara>
+
         <formalpara xml:id="def-ASFSDF-modules">
           <title>ASF+SDF modules</title>
 
@@ -399,7 +406,7 @@
         <para>The Meta-Environment provides a number of languages and data
         formats that are relevant.</para>
 
-        <formalpara>
+        <formalpara xml:id="def-ADT">
           <title>Abstract Data Type (ADT)</title>
 
           <para>Structural description of the interface of a component. Used
@@ -407,21 +414,21 @@
           for the component.</para>
         </formalpara>
 
-        <formalpara>
+        <formalpara xml:id="def-asfix">
           <title>AsFix</title>
 
           <para>ASF+SDF Fixed format. The dataformat used to represent parse
           trees. AsFix is a specialized view on ATerms.</para>
         </formalpara>
 
-        <formalpara>
-          <title>ATerms</title>
+        <formalpara xml:id="def-aterm">
+          <title>ATerm</title>
 
           <para>Annotated terms. A dataformat used for the internal
           representation of data</para>
         </formalpara>
 
-        <formalpara>
+        <formalpara xml:id="def-box">
           <title>Box</title>
 
           <para>Intermediate representation of the formatter. A parse tree is
@@ -459,10 +466,16 @@
         possible to simultaneously edit different input terms in different
         base languages.</para>
 
-        <formalpara>
+        <formalpara xml:id="def-graph">
           <title>Graph</title>
 
           <para>Data format to describe graphs.</para>
+        </formalpara>
+
+        <formalpara xml:id="def-location">
+          <title>Location</title>
+
+          <para>Data format to describe locations in source code.</para>
         </formalpara>
 
         <formalpara xml:id="def-output-term">
@@ -475,8 +488,8 @@
           to the input term.</para>
         </formalpara>
 
-        <formalpara>
-          <title>Summaries</title>
+        <formalpara xml:id="def-summary">
+          <title>Summary</title>
 
           <para>An error or message summary. A dataformat for the internal
           representation of errors and messages. Summaries are produced by
@@ -548,6 +561,13 @@
           specifications.</para>
         </formalpara>
 
+        <formalpara>
+          <title>Configuration manager</title>
+
+          <para>The configuration manager handles user settings and
+          preferences.</para>
+        </formalpara>
+
         <formalpara xml:id="def-errors-and-warnings">
           <title>Errors &amp; warnings</title>
 
@@ -583,6 +603,30 @@
             </listitem>
           </itemizedlist></para>
 
+        <formalpara xml:id="def-module-manager">
+          <title>Module manager</title>
+
+          <para>The module manager is responsible for all parsed information
+          that resides in the system:</para>
+        </formalpara>
+
+        <formalpara xml:id="def-parse-table-generator">
+          <title>Parse table generator</title>
+
+          <para>The parse table generator takes syntax sections from the
+          ASF+SDF specification and converts them to a parse table to be used
+          for the parsing of terms.</para>
+        </formalpara>
+
+        <formalpara xml:id="def-parser">
+          <title>Parser</title>
+
+          <para>It generates a parse tree as output.The parser takes a parse
+          table (as provided by the parse table generator) and text (as
+          provided by a text editor) and produces a parse tree. Any errors are
+          shown in the error display of the GUI.</para>
+        </formalpara>
+
         <formalpara xml:id="def-prettyprinter">
           <title>Prettyprinter</title>
 
@@ -603,47 +647,6 @@
           after each change.</para>
         </formalpara>
 
-        <formalpara xml:id="def-structure-editor">
-          <title>Structure editor</title>
-
-          <para>A syntax-directed editor that closely cooperates with the text
-          editor. It is mostly used for syntax-directed navigation thorugh the
-          text. The structure-editor does not appear as such in the GUI but
-          all its functionality is visible throught the text editor.</para>
-        </formalpara>
-
-        <formalpara xml:id="def-text-editor">
-          <title>Text editor</title>
-
-          <para>The text editor allows text editing on ASF+SDF modules and
-          input terms. Multiple editors may be opened; each appears as a
-          tabbed window in one of the panes of the GUI.</para>
-        </formalpara>
-
-        <formalpara xml:id="def-module-manager">
-          <title>Module manager</title>
-
-          <para>The module manager is responsible for all parsed information
-          that resides in the system:</para>
-        </formalpara>
-
-        <formalpara xml:id="def-parser">
-          <title>Parser</title>
-
-          <para>It generates a parse tree as output.The parser takes a parse
-          table (as provided by the parse table generator) and text (as
-          provided by a text editor) and produces a parse tree. Any errors are
-          shown in the error display of the GUI.</para>
-        </formalpara>
-
-        <formalpara xml:id="def-parse-table-generator">
-          <title>Parse table generator</title>
-
-          <para>The parse table generator takes syntax sections from the
-          ASF+SDF specification and converts them to a parse table to be used
-          for the parsing of terms.</para>
-        </formalpara>
-
         <formalpara xml:id="def-SDF-operations">
           <title>SDF operations</title>
 
@@ -656,6 +659,31 @@
 
           <para>SDF checker performs static checking on SDF
           definitions.</para>
+        </formalpara>
+
+        <formalpara xml:id="def-structure-editor">
+          <title>Structure editor</title>
+
+          <para>A syntax-directed editor that closely cooperates with the text
+          editor. It is mostly used for syntax-directed navigation thorugh the
+          text. The structure-editor does not appear as such in the GUI but
+          all its functionality is visible throught the text editor.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Term store</title>
+
+          <para>The term store contains all parse tables, parse trees and
+          other intermediate data that is generated during execution of The
+          Meta-Environment.</para>
+        </formalpara>
+
+        <formalpara xml:id="def-text-editor">
+          <title>Text editor</title>
+
+          <para>The text editor allows text editing on ASF+SDF modules and
+          input terms. Multiple editors may be opened; each appears as a
+          tabbed window in one of the panes of the GUI.</para>
         </formalpara>
 
         <formalpara xml:id="def-toolbus">
@@ -1114,6 +1142,20 @@
         </tr>
 
         <tr>
+          <td>Term store</td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+        </tr>
+
+        <tr>
           <td>Text editor</td>
 
           <td></td>
@@ -1164,13 +1206,13 @@
     <section>
       <title>Element catalog</title>
 
-      <para><link linkend="def-input-term">Input term</link>, <link
-      linkend="def-output-term">Output term</link>, <link
+      <para><link linkend="def-ASFSDF-library">ASF+SDF library</link>, <link
       linkend="def-ASFSDF-modules">ASF+SDF modules</link>, <link
-      linkend="def-errors-and-warnings">Errors &amp; warnings</link>, <link
-      linkend="def-compiled-specification">Compiled
-      specifications</link>,<link linkend="def-parse-table"> Parse
-      tables</link>.</para>
+      linkend="def-compiled-specification">Compiled specification</link>,
+      <link linkend="def-errors-and-warnings">Errors &amp;
+      warnings</link>,<link linkend="def-input-term"> Input term</link>, <link
+      linkend="def-output-term">Output term</link>, <link
+      linkend="def-parse-table">Parse table.</link></para>
     </section>
 
     <section>
@@ -1277,14 +1319,15 @@
     <section>
       <title>Element catalog</title>
 
-      <para><link linkend="def-ASFSDF-modules">ASF+SDF modules</link>, <link
-      linkend="def-parse-table-generator">Parse table generator</link>, <link
+      <para><link linkend="def-ASF-interpreter">ASF interpreter</link>, <link
+      linkend="def-ASFSDF-library">ASF+SDF library</link>, <link
+      linkend="def-ASFSDF-modules">ASF+SDF modules</link>, Default prettyprint
+      rules, <link linkend="def-errors-and-warnings">Errors &amp;
+      warnings</link>, <link linkend="def-input-term">Input term</link>, <link
+      linkend="def-output-term">Output term</link>, <link
+      linkend="def-parser">Parser</link>, <link
       linkend="def-parse-table">Parse table</link>, <link
-      linkend="def-parser">Parser</link>, <link linkend="def-parse-tree">Parse
-      tree</link>, <link linkend="def-input-term">Input term</link>, <link
-      linkend="def-ASF-interpreter">ASF interpreter</link>, <link
-      linkend="def-prettyprinter">Prettyprinter</link>, <link
-      linkend="def-output-term">Output term</link>.</para>
+      linkend="def-parse-table-generator">Parse table generator</link>.</para>
     </section>
 
     <section>
@@ -1394,20 +1437,25 @@
     <section>
       <title>Element catalog</title>
 
-      <para><link linkend="def-toolbus">ToolBus</link>, <link
-      linkend="def-GUI">GUI</link>, <link linkend="def-text-editor">Text
-      editor</link>, <link linkend="def-structure-editor">Structure
-      editor</link>, <link linkend="def-parser">Parser</link>, <link
-      linkend="def-module-manager">Module Manager</link>, <link
-      linkend="def-SDF-operations">SDF operations</link>, <link
-      linkend="def-SDF-checker">SDF checker</link>, <link
-      linkend="def-parse-table-generator">Parse table generator</link>,<link
-      linkend="def-prettyprinter"> Prettyprinter</link>, <link
+      <para><link linkend="def-ASF-checker">ASF checker</link>, <link
+      linkend="def-ASF-compiler">ASF compiler</link>, <link
       linkend="def-ASF-operations">ASF operations</link>, <link
-      linkend="def-ASF-checker">ASF checker</link>, <link
-      linkend="def-ASFSDF-checker">ASF+SDF checker</link>, <link
       linkend="def-ASF-interpreter">ASF interpreter</link>, <link
-      linkend="def-ASF-compiler">ASF compiler</link>.</para>
+      linkend="def-ASFSDF-checker">ASF+SDF checker</link>, Default prettyprint
+      rules, <link linkend="def-errors-and-warnings">Errors &amp;
+      warnings</link>,<link linkend="def-GUI">GUI</link>, <link
+      linkend="def-input-term">Input term</link>, <link
+      linkend="def-module-manager">Module manager</link>, <link
+      linkend="def-output-term">Output term</link>, <link
+      linkend="def-parser">Parser</link>, <link
+      linkend="def-parse-table">Parse table</link>, <link
+      linkend="def-parse-table-generator">Parse table generator</link>, <link
+      linkend="def-prettyprinter">Prettyprinter</link>, <link
+      linkend="def-SDF-checker">SDF checker</link>, <link
+      linkend="def-SDF-operations">SDF operations</link>, <link
+      linkend="def-structure-editor">Structure editor</link>, <link
+      linkend="def-text-editor">Text editor</link>, <link
+      linkend="def-toolbus">ToolBus</link>.</para>
     </section>
 
     <section>
@@ -1514,6 +1562,18 @@
         </imageobject>
       </mediaobject>
     </figure>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para><link linkend="def-ADT">ADT</link>, <link
+      linkend="def-asfix">AsFix</link>, <link
+      linkend="def-aterm">ATerm</link>, <link linkend="def-box">Box</link>,
+      <link linkend="def-graph">Graph</link>, <link
+      linkend="def-location">Location</link>, <link
+      linkend="def-parse-table">Parse table</link>, <link
+      linkend="def-summary">Summary</link>.</para>
+    </section>
   </section>
 
   <section xml:id="package-view">
@@ -1529,8 +1589,7 @@
     are implemented by one or more packages.</para>
 
     <para><table border="1" xml:id="table-mapping-elements-packages">
-        <caption xml:id="table-mapping-elements-packages">Mapping between
-        elements and packages</caption>
+        <caption>Mapping between elements and packages</caption>
 
         <tr>
           <td><emphasis role="bold">Element</emphasis></td>
@@ -1684,12 +1743,18 @@
         </tr>
 
         <tr>
+          <td>Term store</td>
+
+          <td>term-store, io-support</td>
+        </tr>
+
+        <tr>
           <td>ToolBus</td>
 
           <td>toolbus, toolbuslib, toolbus-java-adapter</td>
         </tr>
-      </table>Unused: asfsdf-meta, aterm, aterm-java, sdf-meta, term-store,
-    tide, tide-support, io-support, meta, shared-objects, JJTraveler.</para>
+      </table>Unused: asfsdf-meta, aterm, aterm-java, sdf-meta, tide,
+    tide-support, meta, shared-objects, JJTraveler.</para>
   </section>
 
   <section xml:id="power-user-view">
@@ -1833,12 +1898,30 @@
           </row>
 
           <row>
+            <entry>apigen</entry>
+
+            <entry>API generator for C and Java</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
             <entry>asc-support</entry>
 
             <entry>Run-time library used by compiled ASF+SDF
             specifications.</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>Yes</entry>
 
@@ -1875,7 +1958,7 @@
 
             <entry>Source library of ASF+SDF definitions</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -1893,7 +1976,7 @@
 
             <entry>Support libraries for ASF tools</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>Yes</entry>
 
@@ -1948,7 +2031,7 @@
 
             <entry>Java version of ATerm library</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -1984,7 +2067,7 @@
 
             <entry>Support library for configuration manager</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>Yes</entry>
 
@@ -2000,9 +2083,9 @@
           <row>
             <entry>dialog-gui</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2018,7 +2101,7 @@
           <row>
             <entry>editor-manager</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>editor-manager</entry>
 
@@ -2036,9 +2119,9 @@
           <row>
             <entry>editor-plugin</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2054,9 +2137,9 @@
           <row>
             <entry>error-gui</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2093,7 +2176,7 @@
 
             <entry>Display graphs in GUI</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2147,7 +2230,7 @@
 
             <entry>Bare Meta-Environment</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2181,9 +2264,9 @@
           <row>
             <entry>module-details-gui</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2199,7 +2282,7 @@
           <row>
             <entry>module-manager</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>module-manager</entry>
 
@@ -2217,9 +2300,9 @@
           <row>
             <entry>module-support</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2235,9 +2318,9 @@
           <row>
             <entry>navigator-gui</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2290,9 +2373,9 @@
           <row>
             <entry>progress-gui</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2329,7 +2412,7 @@
 
             <entry>Source library of SDF definitions</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2402,7 +2485,7 @@
 
             <entry>Library for maxiamlly shared objects in Java</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>No</entry>
 
@@ -2474,7 +2557,7 @@
 
             <entry></entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>Yes</entry>
 
@@ -2548,7 +2631,7 @@
 
             <entry>Traversal pattern in Java.</entry>
 
-            <entry> </entry>
+            <entry></entry>
 
             <entry>Yes</entry>
 
@@ -2568,6 +2651,20 @@
   <section xml:id="build-and-deployment-view">
     <title>The build and deployment view</title>
 
-    <para></para>
+    <para>To be written. Some issues:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>External tools needed for build.</para>
+      </listitem>
+
+      <listitem>
+        <para>APIGEN and Sisyphus</para>
+      </listitem>
+
+      <listitem>
+        <para>External dependencies, graphviz, etc.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
