@@ -147,8 +147,8 @@ process SetEditActions(Sid: term, Type: term, Name: str) is
 let
   Events: list
 in
-  snd-msg(cm-get-module-events(Type, Name))
-  . rec-msg(cm-module-events(Events?))
+  snd-msg(cm-get-events(Type))
+  . rec-msg(cm-events(Events?))
   . snd-msg(te-add-actions(Sid, Events))
 endlet
 
@@ -203,7 +203,8 @@ process MenuSelected(Sid: term, EditorType: term) is
 let
   Action: str,
   Event: term,
-  ModuleId: term
+  ModuleId: term,
+  Modulename: str
 in
   rec-msg(te-menu-event(Sid, Event?))
   . snd-msg(em-request-transaction(Sid))
@@ -213,9 +214,14 @@ in
   +
     rec-msg(em-transaction-started(Sid))
     . GetModuleId(Sid, ModuleId?)
-    . snd-msg(cm-get-module-action(EditorType, Event, ModuleId))
-    . rec-msg(cm-module-action(Action?))
-    . Action(Sid)
+    . snd-msg(cm-get-action(EditorType, Event))
+    . rec-msg(cm-action(Action?))
+    . 
+    (
+      Action(Sid)
+    <+
+      printf("Warning: process %s was not found\n", Action)
+    )
     . snd-msg(em-end-transaction(Sid))
   )
 endlet

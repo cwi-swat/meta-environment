@@ -58,7 +58,12 @@ let
 in
   snd-msg(cm-get-action(Type, Event))
   . rec-msg(cm-action(Action?))
-  . Action()
+  .
+  (
+    Action()
+  <+
+    printf("Warning: process not found %s\n", Action)
+  )
 endlet
 
 process LocationSelected(Location: term) is
@@ -67,7 +72,12 @@ let
 in
   snd-msg(cm-get-action(feedback-list, click))
   . rec-msg(cm-action(Action?))
-  . Action(Location)
+  . 
+  (
+    Action(Location)
+  <+
+    printf("Warning: process not found %s\n", Action)
+  )
 endlet
 
 process MessageSelected(Modulename: str, Tree: term) is
@@ -76,7 +86,12 @@ let
 in
   snd-msg(get-action(click, message-list, Modulename))
   . rec-msg(action(click, message-list, Modulename, Action?))
-  . Action(Tree, Modulename)
+  . 
+  (
+    Action(Tree, Modulename)
+  <+
+    printf("Warning: process not found %s\n", Action)
+  )
 endlet
 
 process NodeSelected(GraphId: str, Node: term) is
@@ -90,7 +105,12 @@ in
     rec-msg(gc-origin(Location?))
     . snd-msg(cm-get-action(tree-panel, click))
     . rec-msg(cm-action(Action?))
-    . Action("Tree Panel selection", Location)
+    .
+    (
+      Action("Tree Panel selection", Location)
+    <+ 
+      printf("Warning: process not found %s\n", Action)
+    )
   +
     rec-msg(gc-no-origin)
   )
