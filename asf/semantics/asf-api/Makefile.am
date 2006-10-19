@@ -1,1 +1,1 @@
-SUBDIRS=spec src
+SUBDIRS=spec 
