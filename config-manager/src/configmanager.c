@@ -93,7 +93,6 @@ static void setAction(ATermTable table, CFG_ActionDescription desc, const char *
 static ATerm getAction(CFG_ActionDescription desc) {
   ATerm key;
   ATerm value;
-ATwarning("desc: %t\n", desc);
   key = CFG_ActionDescriptionToTerm(desc);
   value = ATtableGet(userActionsByDescription, key);
   if (value == NULL) {
