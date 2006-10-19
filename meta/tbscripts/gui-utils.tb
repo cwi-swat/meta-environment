@@ -60,9 +60,9 @@ in
   . rec-msg(cm-action(Action?))
   .
   (
-    Action()
-  <+
     printf("Warning: process not found %s\n", Action)
+  +>
+    Action()
   )
 endlet
 
@@ -74,9 +74,9 @@ in
   . rec-msg(cm-action(Action?))
   . 
   (
-    Action(Location)
-  <+
     printf("Warning: process not found %s\n", Action)
+  +>
+    Action(Location)
   )
 endlet
 
@@ -88,9 +88,9 @@ in
   . rec-msg(action(click, message-list, Modulename, Action?))
   . 
   (
-    Action(Tree, Modulename)
-  <+
     printf("Warning: process not found %s\n", Action)
+  +>
+    Action(Tree, Modulename)
   )
 endlet
 
@@ -107,9 +107,9 @@ in
     . rec-msg(cm-action(Action?))
     .
     (
-      Action("Tree Panel selection", Location)
-    <+ 
       printf("Warning: process not found %s\n", Action)
+    +>
+      Action("Tree Panel selection", Location)
     )
   +
     rec-msg(gc-no-origin)

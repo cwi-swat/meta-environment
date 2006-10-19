@@ -218,9 +218,9 @@ in
     . rec-msg(cm-action(Action?))
     . 
     (
-      Action(Sid)
-    <+
       printf("Warning: process %s was not found\n", Action)
+    +>
+      Action(Sid)
     )
     . snd-msg(em-end-transaction(Sid))
   )
