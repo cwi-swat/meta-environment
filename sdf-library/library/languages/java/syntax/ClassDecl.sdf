@@ -1,5 +1,9 @@
-module ClassDecl
-imports Statements MethodDecl Interfaces ConstructorDecl
+module languages/java/syntax/ClassDecl
+
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/Interfaces 
+imports languages/java/syntax/ConstructorDecl
 
 exports
   sorts ClassBody ClassDeclaration Super Interfaces ClassBodyDeclaration ClassMemberDeclaration StaticInitializer

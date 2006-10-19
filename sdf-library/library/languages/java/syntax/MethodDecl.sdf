@@ -1,6 +1,9 @@
-module MethodDecl
-imports JavaTypes
-imports FieldDecl Statements Modifiers
+module languages/java/syntax/MethodDecl
+
+imports languages/java/syntax/JavaTypes
+imports languages/java/syntax/FieldDecl 
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/Modifiers
 
 exports
   sorts MethodDeclaration FormalParameter MethodHeader MethodDeclarator Throws MethodBody

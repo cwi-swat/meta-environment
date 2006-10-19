@@ -1,5 +1,6 @@
-module Main
-imports Java
+module languages/java/syntax/Main
+
+imports languages/java/syntax/Java
 
 exports
   sorts CompilationUnits

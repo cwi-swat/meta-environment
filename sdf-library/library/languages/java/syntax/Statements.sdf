@@ -1,5 +1,8 @@
-module Statements
-imports Expressions MethodDecl ClassDecl
+module languages/java/syntax/Statements
+
+imports languages/java/syntax/Expressions 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/ClassDecl
 
 exports sorts Block BlockStatement Finally CatchClause TryStatement
   SynchronizedStatement ThrowStatement ReturnStatement ContinueStatement

@@ -1,4 +1,4 @@
-module Lexical
+module languages/java/syntax/Lexical
 
 imports basic/Whitespace
 imports basic/NatCon

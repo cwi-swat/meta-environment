@@ -1,5 +1,11 @@
-module Java
-imports ClassDecl ConstructorDecl FieldDecl MethodDecl Statements Comment
+module languages/java/syntax/Java
+
+imports languages/java/syntax/ClassDecl 
+imports languages/java/syntax/ConstructorDecl 
+imports languages/java/syntax/FieldDecl 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/Comment
 
 exports
   context-free start-symbols CompilationUnit

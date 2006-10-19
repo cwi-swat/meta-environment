@@ -1,5 +1,7 @@
-module Interfaces
-imports Modifiers MethodDecl
+module languages/java/syntax/Interfaces
+
+imports languages/java/syntax/Modifiers 
+imports languages/java/syntax/MethodDecl
 
 exports
   sorts InterfaceDeclaration ExtendsInterfaces InterfaceBody InterfaceMemberDeclaration ConstantDeclaration AbstractMethodDeclaration

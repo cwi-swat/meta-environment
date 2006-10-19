@@ -1,4 +1,4 @@
-module Comment
+module languages/java/syntax/Comment
 
 imports basic/Whitespace
 

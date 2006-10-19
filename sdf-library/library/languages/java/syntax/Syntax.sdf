@@ -1,5 +1,6 @@
-module Syntax
-imports Main
+module languages/java/syntax/Syntax
+
+imports languages/java/syntax/Main
 
 exports
   sorts Top-sort

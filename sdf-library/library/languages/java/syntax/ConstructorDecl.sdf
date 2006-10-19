@@ -1,5 +1,8 @@
-module ConstructorDecl
-imports Statements MethodDecl Modifiers
+module languages/java/syntax/ConstructorDecl
+
+imports languages/java/syntax/Statements 
+imports languages/java/syntax/MethodDecl 
+imports languages/java/syntax/Modifiers
 
 exports
   sorts ConstructorDeclaration ConstructorBody ExplicitConstructorInvocation ConstructorDeclarator

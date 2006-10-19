@@ -1,6 +1,8 @@
-module FieldDecl
-imports JavaTypes
-imports Expressions Modifiers
+module languages/java/syntax/FieldDecl
+
+imports languages/java/syntax/JavaTypes
+imports languages/java/syntax/Expressions 
+imports languages/java/syntax/Modifiers
 
 exports
   sorts FieldDeclaration VariableDeclaratorId VariableDeclarator ArrayInitializer VariableInitializer

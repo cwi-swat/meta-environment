@@ -1,5 +1,6 @@
-module Names
-imports Lexical
+module languages/java/syntax/Names
+
+imports languages/java/syntax/Lexical
 
 exports
   sorts SimpleName Name

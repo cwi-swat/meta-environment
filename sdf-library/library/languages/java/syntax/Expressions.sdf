@@ -1,6 +1,8 @@
-module Expressions
-imports JavaTypes
-imports FieldDecl ClassDecl
+module languages/java/syntax/Expressions
+
+imports languages/java/syntax/JavaTypes
+imports languages/java/syntax/FieldDecl 
+imports languages/java/syntax/ClassDecl
 
 exports sorts Expression MethodInvocation StatementExpression Assignment Dim
   AssignmentOperator LeftHandSide ArrayAccess FieldAccess Primary

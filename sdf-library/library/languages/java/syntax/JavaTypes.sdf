@@ -1,5 +1,6 @@
-module JavaTypes
-imports Names
+module languages/java/syntax/JavaTypes
+
+imports languages/java/syntax/Names
 
 exports
   sorts ClassType InterfaceType ClassOrInterfaceType PrimitiveType ReferenceType Type ArrayType FloatingPointType IntegralType NumericType
