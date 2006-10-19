@@ -705,8 +705,10 @@ static ap_form *expand(sym_idx procName, proc *P, env *Env)
 	return sum(expand(procName, P1, Env), expand(procName, right(P), Env));
 
       case p_leftplus:                   /* exp((P1<+P2)) = sum(exp(P1), exp(P2)) */
-
-	return leftSum(expand(procName, P1, Env), expand(procName, right(P), Env));
+	/* watch out! this depends on the fact that <+ is flattened to a list
+	 * and the list is reversed.
+	 */
+	return leftSum(expand(procName, right(P), Env), expand(procName, P1, Env));
 
       case p_star:                   /* exp( P ) = sum(exp(P1.P1*P2), exp(P2))
 				      *
