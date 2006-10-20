@@ -150,24 +150,18 @@ public class ModuleDatabase {
 
 		ATerm oldValue = getValueOfInheritedAttribute(attr, module);
 		ATerm oldPredicate = module.getPredicate(namespace, key);
-		ATerm newValue = attr.getNewValue();
+		ATerm newPredicate = attr.getNewValue();
 
 		Boolean noMatch = noMatchForOldValue(attr, oldValue);
 		if (attr.isNotSet()) {
 			noMatch = !noMatch;
 		}
 
-		if (noMatch) {
-			if (oldPredicate != null && newValue.equals(oldPredicate)) {
-				module.deletePredicate(namespace, key);
-				fireAttributeSetListener(id, namespace, key, oldPredicate,
-						oldValue);
-				propagateToParents(id);
-			}
-		} else {
+		if (!noMatch) {
 			if (checkPreconditionOnChildren(attr, getAllChildren(id))) {
-				updatePredicate(id, namespace, key, newValue);
-			} else if (oldPredicate != null && newValue.equals(oldPredicate)) {
+				updatePredicate(id, namespace, key, newPredicate);
+			} else if (oldPredicate != null
+					&& newPredicate.equals(oldPredicate)) {
 				module.deletePredicate(namespace, key);
 				fireAttributeSetListener(id, namespace, key, oldPredicate,
 						oldValue);
