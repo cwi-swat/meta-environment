@@ -144,15 +144,13 @@ public class ModuleDatabase {
      */
     private void inherit(InheritedAttribute attr, ModuleId id) {
         Module module = modules.get(id);
-        ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
+        ATerm currentAttribute = getValueOfInheritedAttribute(attr, module);
         ATerm namespace = attr.getNamespace();
         ATerm key = attr.getKey();
         ATerm oldPredicate = module.getPredicate(namespace, key);
         ATerm newValue = attr.getNewValue();
 
-        ATerm currentAttribute = module.getAttribute(namespace, key);
-
-        Boolean noMatch = noMatchForOldValue(attr, comparedValue);
+        Boolean noMatch = noMatchForOldValue(attr, currentAttribute);
         if (attr.isNotSet()) {
             noMatch = !noMatch;
         }
