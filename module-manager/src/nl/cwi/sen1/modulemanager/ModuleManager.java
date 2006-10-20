@@ -43,7 +43,12 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
-				bridge.run();
+				try {
+					bridge.run();
+				}
+				catch (java.lang.RuntimeException e) {
+					moduleDB.printStatistics();
+				}
 			}
 		});
 		thread.setName("ModuleManager");
@@ -231,6 +236,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public void recTerminate(ATerm t0) {
+		moduleDB.printStatistics();
 	}
 
 	public static void main(String[] args) {
@@ -261,10 +267,8 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 						.toTerm(), namespace, key, oldValue, newValue));
 	}
 
-	public void registerInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm negation, ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
-		moduleDB.registerInheritedAttribute(namespace, key, negation, oldValue, childValue, newValue,
-				type);
+	public void registerAttributeUpdateRule(ATerm namespace, ATerm key, ATerm rule, ATerm value) {
+		moduleDB.registerAttributeUpdateRule(namespace, key, rule, value);
 	}
 
 	public void recAckEvent(ATerm t0) {

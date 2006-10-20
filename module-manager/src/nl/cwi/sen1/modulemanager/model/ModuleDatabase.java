@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,20 +49,6 @@ public class ModuleDatabase {
 		modules.remove(moduleId);
 		descendants.remove(moduleId);
 		ascendants.remove(moduleId);
-	}
-
-	public void registerInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm negation, ATerm oldValue, ATerm childValue, ATerm newValue,
-			ATerm type) {
-		inheritedAttributes.put(namespace, key, negation, oldValue, childValue,
-				newValue, type);
-		triggerAllAttributeOnAllModules();
-	}
-
-	public void unregisterInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm oldValue, ATerm childValue, ATerm newValue) {
-		inheritedAttributes.remove(namespace, key, oldValue, childValue,
-				newValue);
 	}
 
 	private void triggerAllAttributeOnAllModules() {
@@ -124,6 +111,7 @@ public class ModuleDatabase {
 	private void fireAttributeSetListener(ModuleId id, ATerm namespace,
 			ATerm key, ATerm oldValue, ATerm newValue) {
 		listener.attributeSet(id, namespace, key, oldValue, newValue);
+		System.err.println("Module " + id + ": " + newValue);
 	}
 
 	private void propagateToParents(ModuleId id) {
@@ -133,75 +121,29 @@ public class ModuleDatabase {
 		}
 	}
 
-	/**
-	 * Changes an attribute of a certain module if: (a) the old value of the
-	 * attribute matches the registered old value (b) {all,one} of it's
-	 * dependencies is set to the new value
-	 * 
-	 * @param attr
-	 *            all info about an inherited attribute
-	 * @param moduleId
-	 *            reference to a module
-	 */
 	private void inherit(InheritedAttribute attr, ModuleId id) {
 		Module module = modules.get(id);
 		ATerm namespace = attr.getNamespace();
 		ATerm key = attr.getKey();
-
-		ATerm oldValue = getValueOfInheritedAttribute(attr, module);
+		
 		ATerm oldPredicate = module.getPredicate(namespace, key);
 		ATerm newPredicate = attr.getNewValue();
 
-		Boolean noMatch = noMatchForOldValue(attr, oldValue);
-		if (attr.isNotSet()) {
-			noMatch = !noMatch;
+		ATerm oldValue = module.getAttribute(namespace, key);
+
+		ATerm rule = attr.getRule();
+		Boolean result = innermostRuleEvaluation(rule, id, namespace, key);
+		System.err.println("Module " + id + ": " + rule + " = " + result);
+
+		if (result) {
+			updatePredicate(id, namespace, key, newPredicate);
+		} 
+		else if (oldPredicate != null && newPredicate.equals(oldPredicate)) {
+			module.deletePredicate(namespace, key);
+			fireAttributeSetListener(id, namespace, key, oldPredicate,
+					oldValue);
+			propagateToParents(id);
 		}
-
-		if (!noMatch) {
-			if (checkPreconditionOnChildren(attr, getAllChildren(id))) {
-				updatePredicate(id, namespace, key, newPredicate);
-			} else if (oldPredicate != null
-					&& newPredicate.equals(oldPredicate)) {
-				module.deletePredicate(namespace, key);
-				fireAttributeSetListener(id, namespace, key, oldPredicate,
-						oldValue);
-				propagateToParents(id);
-			}
-		}
-	}
-
-	private boolean checkPreconditionOnChildren(InheritedAttribute attr,
-			Set<ModuleId> children) {
-		boolean allSet = true;
-		boolean oneSet = false;
-
-		for (Iterator<ModuleId> iter = children.iterator(); iter.hasNext();) {
-			ModuleId id = iter.next();
-
-			Module module = modules.get(id);
-
-			ATerm value = getValueOfInheritedAttribute(attr, module);
-
-			if (!value.isEqual(attr.getChildValue())) {
-				allSet = false;
-			} else {
-				oneSet = true;
-			}
-		}
-
-		return (attr.inheritFromAll() && allSet)
-				|| (attr.inheritFromOne() && oneSet);
-	}
-
-	private ATerm getValueOfInheritedAttribute(InheritedAttribute attr,
-			Module module) {
-		return module.getAttribute(attr.getNamespace(), attr.getKey());
-	}
-
-	private boolean noMatchForOldValue(InheritedAttribute attr, ATerm oldValue) {
-		return (attr.getOldValue().getType() != ATerm.PLACEHOLDER)
-				&& (oldValue == null || (oldValue != null && !attr
-						.getOldValue().isEqual(oldValue)));
 	}
 
 	public ATerm getModuleAttribute(ModuleId moduleId, ATerm namespace,
@@ -429,5 +371,116 @@ public class ModuleDatabase {
 
 	public Map<ModuleId, Set<ModuleId>> getDependencies() {
 		return descendants;
+	}
+
+	public void printStatistics() {
+		int sumDeps = 0;
+		for (Iterator<Set<ModuleId>> iter = descendants.values().iterator(); iter
+				.hasNext();) {
+			sumDeps += iter.next().size();
+		}
+		System.err.println(modules.size() + " modules");
+		System.err.println(sumDeps + " dependencies");
+	}
+
+	public void registerAttributeUpdateRule(ATerm namespace, ATerm key,
+			ATerm rule, ATerm value) {
+		inheritedAttributes.put(namespace, key, rule, value);
+		triggerAllAttributeOnAllModules();
+	}
+
+	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id,
+			ATerm namespace, ATerm key) {
+		List result;
+
+		result = rule.match("and(<term>,<term>)");
+		if (result != null) {
+			return evaluateAnd((ATerm) result.get(0), (ATerm) result.get(1),
+					id, namespace, key);
+		}
+		result = rule.match("or(<term>,<term>)");
+		if (result != null) {
+			return evaluateOr((ATerm) result.get(0), (ATerm) result.get(1), id,
+					namespace, key);
+		}
+		result = rule.match("not(<term>)");
+		if (result != null) {
+			return evaluateNot((ATerm) result.get(0), id, namespace, key);
+		}
+		result = rule.match("one(<term>)");
+		if (result != null) {
+			return evaluateOne((ATerm) result.get(0), id, namespace, key);
+		}
+		result = rule.match("all(<term>)");
+		if (result != null) {
+			return evaluateAll((ATerm) result.get(0), id, namespace, key);
+		}
+		result = rule.match("set(<term>)");
+		if (result != null) {
+			return evaluateSet((ATerm) result.get(0), id, namespace, key);
+		}
+
+		System.err.println("Error evaluating attribute update rule [" + rule
+				+ "]; forgot set?");
+		System.exit(1);
+		return null;
+	}
+
+	private Boolean evaluateAnd(ATerm op1, ATerm op2, ModuleId id,
+			ATerm namespace, ATerm key) {
+		return (innermostRuleEvaluation(op1, id, namespace, key) && innermostRuleEvaluation(
+				op2, id, namespace, key));
+	}
+
+	private Boolean evaluateOr(ATerm op1, ATerm op2, ModuleId id,
+			ATerm namespace, ATerm key) {
+		return (innermostRuleEvaluation(op1, id, namespace, key) || innermostRuleEvaluation(
+				op2, id, namespace, key));
+	}
+
+	private Boolean evaluateNot(ATerm op, ModuleId id, ATerm namespace,
+			ATerm key) {
+		return !(innermostRuleEvaluation(op, id, namespace, key));
+	}
+
+	private Boolean evaluateOne(ATerm op, ModuleId id, ATerm namespace,
+			ATerm key) {
+		Boolean result = false;
+		Set<ModuleId> children = getChildren(id);
+		Iterator<ModuleId> iter = children.iterator();
+
+		while (iter.hasNext() && result == false) {
+			ModuleId childId = iter.next();
+			result = result
+					&& innermostRuleEvaluation(op, childId, namespace, key);
+		}
+
+		return result;
+	}
+
+	private Boolean evaluateAll(ATerm op, ModuleId id, ATerm namespace,
+			ATerm key) {
+		Boolean result = true;
+		Set<ModuleId> children = getAllChildren(id);
+		Iterator<ModuleId> iter = children.iterator();
+
+		while (iter.hasNext() && result == true) {
+			ModuleId childId = iter.next();
+			result = result
+					&& innermostRuleEvaluation(op, childId, namespace, key);
+		}
+
+		return result;
+	}
+
+	private Boolean evaluateSet(ATerm op, ModuleId id, ATerm namespace,
+			ATerm key) {
+//		ATerm value = modules.get(id).getPredicate(namespace, key);
+//		if (value == null) {
+//			value = modules.get(id).getAttribute(namespace, key);
+//		}
+		ATerm value = modules.get(id).getAttribute(namespace, key);
+
+		return op.equals(value);
 	}
 }

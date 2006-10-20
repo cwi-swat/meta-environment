@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Jul 14, 2006 3:19:22 PM
+// generation time: Oct 20, 2006 11:54:15 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -29,7 +29,7 @@ abstract public class ModuleManagerTool
   private ATerm PdeleteAttribute0;
   private ATerm PdeleteDependency0;
   private ATerm PaddAttribute0;
-  private ATerm PregisterInheritedAttribute0;
+  private ATerm PregisterAttributeUpdateRule0;
   private ATerm PgetAttribute0;
   private ATerm PgetAllAttributes0;
   private ATerm PgetDependencies0;
@@ -61,7 +61,7 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), btrue);
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), btrue);
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,register-inherited-attribute(<term>,<term>,<term>,<term>,<term>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,register-attribute-update-rule(<term>,<term>,<term>,<term>))"), btrue);
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), btrue);
     sigTable.put(factory.parse("rec-ack-event(<module-manager>,<term>)"), btrue);
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), btrue);
@@ -89,7 +89,7 @@ abstract public class ModuleManagerTool
     PdeleteAttribute0 = factory.parse("rec-do(delete-attribute(<term>,<term>,<term>))");
     PdeleteDependency0 = factory.parse("rec-do(delete-dependency(<term>,<term>))");
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<term>,<term>,<term>,<term>))");
-    PregisterInheritedAttribute0 = factory.parse("rec-do(register-inherited-attribute(<term>,<term>,<term>,<term>,<term>,<term>,<term>))");
+    PregisterAttributeUpdateRule0 = factory.parse("rec-do(register-attribute-update-rule(<term>,<term>,<term>,<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
     PgetAllAttributes0 = factory.parse("rec-eval(get-all-attributes(<term>))");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
@@ -141,9 +141,9 @@ abstract public class ModuleManagerTool
       addAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
       return null;
     }
-    result = term.match(PregisterInheritedAttribute0);
+    result = term.match(PregisterAttributeUpdateRule0);
     if (result != null) {
-      registerInheritedAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3), (ATerm)result.get(4), (ATerm)result.get(5), (ATerm)result.get(6));
+      registerAttributeUpdateRule((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
       return null;
     }
     result = term.match(PgetAttribute0);

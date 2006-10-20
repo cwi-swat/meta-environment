@@ -6,4 +6,4 @@ set -e
 CLASSPATH=__EXTERNAL_JARS__
 CLASSPATH=$CLASSPATH:__JARDIR__/__JARFILE__
 
-__JAVA__ -classpath $CLASSPATH __MAINCLASS__ $@
+time __JAVA__ -classpath $CLASSPATH __MAINCLASS__ $@

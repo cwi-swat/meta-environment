@@ -1,10 +1,9 @@
 $Id$
 
-Fri Oct 20 11:07:25 CEST 2006 <kooiker@cwi.nl>
- * src/**/model/ModuleDatabase.jav:
-   - Removed redundant retrieval of attribute value
-   - Fixed order of updating parents and then checking for rules that trigger
-     on your newly set value
+Fri Oct 20 13:25:27 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Use innermost modal logic evaluator so any modal logic formula can be
+     used now (without the limits of the earlier version)
 
 Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
  * src/**/model/ModuleDatabase.java:

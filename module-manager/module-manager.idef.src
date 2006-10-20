@@ -18,15 +18,13 @@ let
   Modulename : term,
   Modules : list,
   Namespace : term,
-  Negation: term,
   NewModuleId : term,
   Path : str,
   To : term,
   Value : term,
   OldValue: term,
   NewValue: term,
-  ChildValue: term,
-  AttributeType: term
+  Rule: term
 in
   execute(module-manager, MM?)
   .
@@ -55,8 +53,8 @@ in
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))
   +
-    rec-msg(mm-register-inherited-attribute(Namespace?, Key?, Negation?, OldValue?, ChildValue?, NewValue?, AttributeType?))
-    . snd-do(MM, register-inherited-attribute(Namespace, Key, Negation, OldValue, ChildValue, NewValue, AttributeType))
+    rec-msg(mm-register-attribute-update-rule(Namespace?, Key?, Rule?, NewValue?))
+    . snd-do(MM, register-attribute-update-rule(Namespace, Key, Rule, NewValue))
   +
     rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
     . snd-do(MM, add-attribute(ModuleId, Namespace, Key, Value))
