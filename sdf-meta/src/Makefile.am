@@ -15,4 +15,5 @@ CLEANFILES = \
 % : %.sh.src Makefile
 	sed "s@__TOOLBUS__@${TOOLBUS_PREFIX}@g;\
 	     s@__PREFIX__@$(prefix)@g;\
+	     s@__CONFIG_MANAGER__@${CONFIG_MANAGER_PREFIX}@g;\
 	     s@__TBSCRIPTS__@$(TOOLBUSFLAGS) -I${prefix}/share/sdf-meta@g;" < $< > $@ && chmod +x $@

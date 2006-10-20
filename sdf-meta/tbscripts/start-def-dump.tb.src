@@ -30,7 +30,7 @@ in
   if or(equal(Value, error), equal(Value, unavailable)) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
-    DumpSdfDefinition(ModuleId, OUTPUTFILE)
+    tau
   fi
   . shutdown("")
 endlet
