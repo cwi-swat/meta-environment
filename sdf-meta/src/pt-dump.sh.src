@@ -76,5 +76,5 @@ __TOOLBUS__/bin/toolbus \
   -DOUTPUTFILE=\\\"${OUTPUTFILE}\\\" \
   __TBSCRIPTS__ \
   __PREFIX__/share/sdf-meta/start-pt-dump.tb \
-  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.asfsdf.actions` \
+  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/sdf-meta/standard.sdf.actions` \
   $*

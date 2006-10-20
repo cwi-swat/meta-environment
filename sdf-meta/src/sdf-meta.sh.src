@@ -53,5 +53,5 @@ __TOOLBUS__/bin/toolbus \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   __TBSCRIPTS__ \
   __PREFIX__/share/sdf-meta/start-meta-studio.tb \
-  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.sdf.actions` \
+  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/sdf-meta/standard.sdf.actions` \
   $*
