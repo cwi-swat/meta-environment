@@ -65,4 +65,6 @@ __TOOLBUS__/bin/toolbus \
   ${VIEWER} \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   __TBSCRIPTS__ \
-  __PREFIX__/share/asfsdf-meta/start-test-eqs-dump.tb $*
+  __PREFIX__/share/asfsdf-meta/start-test-eqs-dump.tb \
+  `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.asfsdf.actionsa` \
+  $*
