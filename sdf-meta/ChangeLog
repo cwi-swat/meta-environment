@@ -1,5 +1,9 @@
 $Id$
 
+Fri Oct 20 13:28:35 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Changed to new attribute update rules
+
 Wed Oct  4 15:42:29 CEST 2006 <jurgenv@cwi.nl>
  * sdf-meta.pc.in: added dependency on asf-library, for now,
    to make sure that pt-dump will be able to find all library 
