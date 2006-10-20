@@ -145,9 +145,10 @@ public class ModuleDatabase {
 	 */
 	private void inherit(InheritedAttribute attr, ModuleId id) {
 		Module module = modules.get(id);
-		ATerm oldValue = getValueOfInheritedAttribute(attr, module);
 		ATerm namespace = attr.getNamespace();
 		ATerm key = attr.getKey();
+
+		ATerm oldValue = getValueOfInheritedAttribute(attr, module);
 		ATerm oldPredicate = module.getPredicate(namespace, key);
 		ATerm newValue = attr.getNewValue();
 
@@ -163,15 +164,15 @@ public class ModuleDatabase {
 						oldValue);
 				propagateToParents(id);
 			}
-			return;
-		}
-
-		if (checkPreconditionOnChildren(attr, getAllChildren(id))) {
-			updatePredicate(id, namespace, key, newValue);
-		} else if (oldPredicate != null && newValue.equals(oldPredicate)) {
-			module.deletePredicate(namespace, key);
-			fireAttributeSetListener(id, namespace, key, oldPredicate, oldValue);
-			propagateToParents(id);
+		} else {
+			if (checkPreconditionOnChildren(attr, getAllChildren(id))) {
+				updatePredicate(id, namespace, key, newValue);
+			} else if (oldPredicate != null && newValue.equals(oldPredicate)) {
+				module.deletePredicate(namespace, key);
+				fireAttributeSetListener(id, namespace, key, oldPredicate,
+						oldValue);
+				propagateToParents(id);
+			}
 		}
 	}
 
@@ -203,8 +204,7 @@ public class ModuleDatabase {
 		return module.getAttribute(attr.getNamespace(), attr.getKey());
 	}
 
-	private boolean noMatchForOldValue(InheritedAttribute attr,
-			ATerm oldValue) {
+	private boolean noMatchForOldValue(InheritedAttribute attr, ATerm oldValue) {
 		return (attr.getOldValue().getType() != ATerm.PLACEHOLDER)
 				&& (oldValue == null || (oldValue != null && !attr
 						.getOldValue().isEqual(oldValue)));
