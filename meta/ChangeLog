@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Oct 20 13:27:48 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/module-manager.tb:
+   - Use new attribute update rule registrar
+
 Wed Oct  4 15:29:59 CEST 2006 <jurgenv@cwi.nl>
  * config: removed plugin configuration tool.
 

@@ -7,8 +7,8 @@
 #include <undefined.h>
 #include <graph-namespace.tb>
 
-process MM-RegisterInheritedAttribute(Namespace: term, Key: term, Negation: term, OldValue: term, ChildValue: term, NewValue: term, Type: term) is
-  snd-msg(mm-register-inherited-attribute(Namespace, Key, Negation, OldValue, ChildValue, NewValue, Type))
+process MM-RegisterAttributeUpdateRule(Namespace: term, Key: term, Rule: term, Value: term) is
+  snd-msg(mm-register-attribute-update-rule(Namespace, Key, Rule, Value))
 
 process MM-NotifyAboutChangedAttributes is
 let
