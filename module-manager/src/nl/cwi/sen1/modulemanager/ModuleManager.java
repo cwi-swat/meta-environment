@@ -236,7 +236,6 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public void recTerminate(ATerm t0) {
-		moduleDB.printStatistics();
 	}
 
 	public static void main(String[] args) {

@@ -111,7 +111,6 @@ public class ModuleDatabase {
 	private void fireAttributeSetListener(ModuleId id, ATerm namespace,
 			ATerm key, ATerm oldValue, ATerm newValue) {
 		listener.attributeSet(id, namespace, key, oldValue, newValue);
-		System.err.println("Module " + id + ": " + newValue);
 	}
 
 	private void propagateToParents(ModuleId id) {
@@ -125,7 +124,7 @@ public class ModuleDatabase {
 		Module module = modules.get(id);
 		ATerm namespace = attr.getNamespace();
 		ATerm key = attr.getKey();
-		
+
 		ATerm oldPredicate = module.getPredicate(namespace, key);
 		ATerm newPredicate = attr.getNewValue();
 
@@ -133,16 +132,17 @@ public class ModuleDatabase {
 
 		ATerm rule = attr.getRule();
 		Boolean result = innermostRuleEvaluation(rule, id, namespace, key);
-		System.err.println("Module " + id + ": " + rule + " = " + result);
 
 		if (result) {
 			updatePredicate(id, namespace, key, newPredicate);
-		} 
-		else if (oldPredicate != null && newPredicate.equals(oldPredicate)) {
-			module.deletePredicate(namespace, key);
-			fireAttributeSetListener(id, namespace, key, oldPredicate,
-					oldValue);
-			propagateToParents(id);
+		} else {
+			/* Fall back to attribute value by removing predicate */
+			if (oldPredicate != null && newPredicate.equals(oldPredicate)) {
+				module.deletePredicate(namespace, key);
+				fireAttributeSetListener(id, namespace, key, oldPredicate,
+						oldValue);
+				propagateToParents(id);
+			}
 		}
 	}
 
@@ -446,13 +446,12 @@ public class ModuleDatabase {
 	private Boolean evaluateOne(ATerm op, ModuleId id, ATerm namespace,
 			ATerm key) {
 		Boolean result = false;
-		Set<ModuleId> children = getChildren(id);
+		Set<ModuleId> children = getAllChildren(id);
 		Iterator<ModuleId> iter = children.iterator();
 
 		while (iter.hasNext() && result == false) {
 			ModuleId childId = iter.next();
-			result = result
-					&& innermostRuleEvaluation(op, childId, namespace, key);
+			result = innermostRuleEvaluation(op, childId, namespace, key);
 		}
 
 		return result;
@@ -466,8 +465,7 @@ public class ModuleDatabase {
 
 		while (iter.hasNext() && result == true) {
 			ModuleId childId = iter.next();
-			result = result
-					&& innermostRuleEvaluation(op, childId, namespace, key);
+			result = innermostRuleEvaluation(op, childId, namespace, key);
 		}
 
 		return result;
@@ -475,10 +473,6 @@ public class ModuleDatabase {
 
 	private Boolean evaluateSet(ATerm op, ModuleId id, ATerm namespace,
 			ATerm key) {
-//		ATerm value = modules.get(id).getPredicate(namespace, key);
-//		if (value == null) {
-//			value = modules.get(id).getAttribute(namespace, key);
-//		}
 		ATerm value = modules.get(id).getAttribute(namespace, key);
 
 		return op.equals(value);
