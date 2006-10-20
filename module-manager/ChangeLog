@@ -1,5 +1,11 @@
 $Id$
 
+Fri Oct 20 11:07:25 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.jav:
+   - Removed redundant retrieval of attribute value
+   - Fixed order of updating parents and then checking for rules that trigger
+     on your newly set value
+
 Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
  * src/**/model/ModuleDatabase.java:
    - Use modal logic to compute predicate values, which fixes problems with

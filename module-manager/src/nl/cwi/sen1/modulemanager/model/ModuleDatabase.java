@@ -101,8 +101,8 @@ public class ModuleDatabase {
 		if (oldValue == null || !oldValue.isEqual(value)) {
 			module.setAttribute(namespace, key, value);
 			fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
-			triggerAllInheritedAttributes(moduleId);
 			propagateToParents(moduleId);
+			triggerAllInheritedAttributes(moduleId);
 		}
 	}
 
@@ -183,9 +183,9 @@ public class ModuleDatabase {
 		for (Iterator<ModuleId> iter = children.iterator(); iter.hasNext();) {
 			ModuleId id = iter.next();
 
-			Module innerModule = modules.get(id);
+			Module module = modules.get(id);
 
-			ATerm value = getValueOfInheritedAttribute(attr, innerModule);
+			ATerm value = getValueOfInheritedAttribute(attr, module);
 
 			if (!value.isEqual(attr.getChildValue())) {
 				allSet = false;
@@ -204,10 +204,10 @@ public class ModuleDatabase {
 	}
 
 	private boolean noMatchForOldValue(InheritedAttribute attr,
-			ATerm comparedValue) {
+			ATerm oldValue) {
 		return (attr.getOldValue().getType() != ATerm.PLACEHOLDER)
-				&& (comparedValue == null || (comparedValue != null && !attr
-						.getOldValue().isEqual(comparedValue)));
+				&& (oldValue == null || (oldValue != null && !attr
+						.getOldValue().isEqual(oldValue)));
 	}
 
 	public ATerm getModuleAttribute(ModuleId moduleId, ATerm namespace,
