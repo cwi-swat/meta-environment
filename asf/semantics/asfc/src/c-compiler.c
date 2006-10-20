@@ -5,7 +5,6 @@
 #define BUFFER_SIZE 10240
 
 extern ATbool run_verbose;
-extern ATbool make_toolbus_tool;
 
 void call_c_compiler(ATbool keep_annos,
 		     const char* binary, 
@@ -17,14 +16,8 @@ void call_c_compiler(ATbool keep_annos,
   char sourcefiles[BUFFER_SIZE];
   char objectfiles[BUFFER_SIZE];
 
-  if (make_toolbus_tool) {
-    sprintf(sourcefiles, "%s tool%s.tif.c", output, name);
-    sprintf(objectfiles, "%s.o tool%s.tif.o", stem, name);
-  }
-  else {
-    sprintf(sourcefiles, "%s", output);
-    sprintf(objectfiles, "%s.o", stem);
-  }
+  sprintf(sourcefiles, "%s", output);
+  sprintf(objectfiles, "%s.o", stem);
 
   sprintf(commandline,
          COMPILE " " 
