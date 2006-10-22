@@ -206,6 +206,11 @@
         </listitem>
 
         <listitem>
+          <para>The <link linkend="package-dependency-view">package dependency
+          view</link> shows how the various packages use each other.</para>
+        </listitem>
+
+        <listitem>
           <para>The <link linkend="power-user-view">power-user view</link>
           describes the system as a suite of commands and libraries.</para>
         </listitem>
@@ -217,10 +222,11 @@
         </listitem>
       </itemizedlist>
 
-      <para>Obviously, not all views are relevant for all stakeholders. Here
-      is a mapping between stakeholders and views:</para>
+      <para>Obviously, not all views are relevant for all stakeholders. Table
+      <link linkend="table-stakeholders-views">Mapping between stakeholders
+      and views</link> shows the details.</para>
 
-      <table border="1">
+      <table border="1" xml:id="table-stakeholders-views">
         <caption>Mapping between stakeholders and views</caption>
 
         <tr>
@@ -245,6 +251,9 @@
           <td><emphasis role="bold"><link linkend="power-user-view">Power-user
           view</link></emphasis></td>
 
+          <td><link linkend="package-dependency-view"><emphasis
+          role="bold">Package dependency view</emphasis></link></td>
+
           <td><emphasis role="bold"><link
           linkend="build-and-deployment-view">Build and deployment
           view</link></emphasis></td>
@@ -255,15 +264,17 @@
 
           <td>d</td>
 
-          <td></td>
+          <td>s</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
 
           <td>s</td>
         </tr>
@@ -284,6 +295,8 @@
           <td>x</td>
 
           <td>s</td>
+
+          <td>s</td>
         </tr>
 
         <tr>
@@ -301,7 +314,9 @@
 
           <td>d</td>
 
-          <td>d</td>
+          <td>x</td>
+
+          <td>x</td>
         </tr>
       </table>
 
@@ -313,7 +328,7 @@
       <title>The elements in views</title>
 
       <para>For later reference, we give here a comprehensive overview of all
-      l<link linkend="language-elements">anguage elements</link>, <link
+      <link linkend="language-elements">language elements</link>, <link
       linkend="data-elements">data elements</link>, and <link
       linkend="processing-elements">processing elements</link> that occur in
       the various architecture views.</para>
@@ -385,6 +400,10 @@
           software.</para>
         </formalpara>
 
+        <note>
+          <para>Rscript is not yet integrated in V2.0.</para>
+        </note>
+
         <formalpara>
           <title>SDF</title>
 
@@ -435,7 +454,7 @@
           first converted to a box term that includes all desired formatting
           directives (alignment, font and color directives, and the like).
           Next, the box term is converted to various output formats (plain
-          text, html, etc.).</para>
+          text, HTML, etc.).</para>
         </formalpara>
 
         <formalpara xml:id="def-compiled-specification">
@@ -580,7 +599,7 @@
 
           <para>The graphical user-interface (GUI) gives end-users access to
           the system's functionality. It is a "sovereign" user-interface that
-          occupies the complete desktop window and provdies functionality
+          occupies the complete desktop window and provides functionality
           like:</para>
         </formalpara>
 
@@ -634,10 +653,10 @@
           prettyprinter uses default rules to insert layout in a parse tree so
           that its corresponding text is presented in a uniform way.
           Optionally, the ASF+SDF specification may contain formatting rules
-          that can replace this default behaviour.<warning>
-              <para>It is clear that formatting is not yet fully integrated in
-              the architecture.</para>
-            </warning></para>
+          that can replace this default behaviour.<note>
+              <para>The prettyprinter is not yet fully integrated in
+              V2.0.</para>
+            </note></para>
         </formalpara>
 
         <formalpara>
@@ -665,9 +684,9 @@
           <title>Structure editor</title>
 
           <para>A syntax-directed editor that closely cooperates with the text
-          editor. It is mostly used for syntax-directed navigation thorugh the
+          editor. It is mostly used for syntax-directed navigation through the
           text. The structure-editor does not appear as such in the GUI but
-          all its functionality is visible throught the text editor.</para>
+          all its functionality is visible through the text editor.</para>
         </formalpara>
 
         <formalpara>
@@ -770,7 +789,7 @@
 
         <para>The Meta-Environment is not primarily intended for large scale
         industrial or commercial use. However, the performance should be such
-        that experiments with real source code of industrial size (millionsof
+        that experiments with real source code of industrial size (millions of
         lines of code) are possible.</para>
       </formalpara>
 
@@ -811,6 +830,12 @@
           <td><emphasis role="bold"><link
           linkend="coordination-view">Coordination view</link></emphasis></td>
 
+          <td><link linkend="package-view"><emphasis linkend="package-view"
+          role="bold">Package view</emphasis></link></td>
+
+          <td><link linkend="package-dependency-view"><emphasis
+          role="bold">Package dependency view</emphasis></link></td>
+
           <td><emphasis role="bold"><link linkend="power-user-view">Power-user
           view</link></emphasis></td>
 
@@ -822,11 +847,15 @@
         <tr>
           <td>APIGEN</td>
 
-          <td></td>
+          <td>-</td>
 
-          <td></td>
+          <td>-</td>
 
-          <td></td>
+          <td>-</td>
+
+          <td>-</td>
+
+          <td>-</td>
 
           <td>x</td>
 
@@ -836,11 +865,15 @@
         <tr>
           <td>ASF checker</td>
 
-          <td></td>
+          <td>-</td>
 
-          <td></td>
+          <td>-</td>
 
           <td>x</td>
+
+          <td>-</td>
+
+          <td>-</td>
 
           <td>x</td>
 
@@ -856,6 +889,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -869,6 +906,10 @@
           <td>x</td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td>x</td>
 
@@ -884,6 +925,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -891,6 +936,10 @@
 
         <tr>
           <td>ASF+SDF library</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -912,6 +961,10 @@
 
           <td></td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -926,6 +979,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -935,6 +992,10 @@
           <td>Compiled specification</td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -957,12 +1018,20 @@
           <td></td>
 
           <td></td>
+
+          <td></td>
+
+          <td></td>
         </tr>
 
         <tr>
           <td>Errors &amp; warnings</td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -982,6 +1051,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -993,6 +1066,10 @@
           <td>x</td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -1010,6 +1087,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1021,6 +1102,10 @@
           <td>x</td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -1038,6 +1123,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1049,6 +1138,10 @@
           <td>x</td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -1066,6 +1159,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1077,6 +1174,10 @@
           <td></td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -1094,6 +1195,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1107,6 +1212,10 @@
           <td></td>
 
           <td>x</td>
+
+          <td></td>
+
+          <td></td>
 
           <td>x</td>
 
@@ -1122,6 +1231,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1136,6 +1249,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1143,6 +1260,10 @@
 
         <tr>
           <td>Term store</td>
+
+          <td></td>
+
+          <td></td>
 
           <td></td>
 
@@ -1164,6 +1285,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1178,6 +1303,10 @@
 
           <td>x</td>
 
+          <td></td>
+
+          <td></td>
+
           <td>x</td>
 
           <td></td>
@@ -1189,19 +1318,32 @@
   <section xml:id="end-user-view">
     <title>The end-user view</title>
 
-    <section>
-      <title>Primary presentation</title>
+    <para>Figure <link linkend="fig-end-user-view">End-user view of The
+    Meta-Environment</link> shows how simple The Meta-Environment is for an
+    end-user. Via a graphical user interface, the user can edit ASF+SDF
+    modules that describe the syntax and semantics of some user-defined
+    language, let's say Java. The ASF+SDF modules will define the grammar of
+    the Java language (this is actually already provided in the ASF+SDF
+    library) and some functions on Java programs such as extracting facts or
+    describing transformations on the Java code. The user can also edit an
+    input term, that is a text that conforms to the definitions in the ASF+SDF
+    specification (say, a Java program with a transformation function applied
+    to it). Via the user-interface the user can not activate the application
+    of the equations in the ASF+SDF specification to the input. The answer is
+    an output term that will consist in this example of a transformed Java
+    program. Of course, errors may occur and theyr are shown. As an aid for
+    power-users some additional information like compiled ASF+SDF
+    specifications and parse tables can be exported.</para>
 
-      <figure xml:id="fig-end-user-view">
-        <title>End-user view of The Meta-environment</title>
+    <figure xml:id="fig-end-user-view">
+      <title>End-user view of The Meta-environment</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="gui-view.png"></imagedata>
-          </imageobject>
-        </mediaobject>
-      </figure>
-    </section>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="gui-view.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
 
     <section>
       <title>Element catalog</title>
@@ -1246,7 +1388,7 @@
         user reduces the input term to the output term, he needs not be aware
         of the fact that first a parse table has to be generated and that the
         input term is then parsed. The fact that after editing an ASF+SDF
-        module, it may be neccessary to regenerate the parse table is alo
+        module, it may be necessary to regenerate the parse table is also
         implicit. The end-user is shielded from all internal
         representations.</para>
       </section>
@@ -1285,12 +1427,19 @@
 
         <listitem>
           <para>The user-interface provides a graphical view on the import
-          relations between ASF+SDF modules.</para>
+          relations between ASF+SDF modules and the parse trees of selected
+          modules or terms.</para>
         </listitem>
 
         <listitem>
           <para>The user-interface provides a debugging view on the execution
           of ASF+SDF specifications.</para>
+        </listitem>
+
+        <listitem>
+          <para>This view only shows one input term and corresponding output
+          term. In reality, several input terms may be edited and be reduced
+          to the corresponding output term.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1333,7 +1482,7 @@
     <section>
       <title>Context diagram</title>
 
-      <para></para>
+      <para>TBD</para>
     </section>
 
     <section>
@@ -1345,24 +1494,24 @@
     <section>
       <title>Architecture background</title>
 
-      <para></para>
+      <para>TBD</para>
 
       <section>
         <title>Design rationale</title>
 
-        <para></para>
+        <para>TBD</para>
       </section>
 
       <section>
         <title>Analysis of results</title>
 
-        <para></para>
+        <para>TBD</para>
       </section>
 
       <section>
         <title>Assumptions</title>
 
-        <para></para>
+        <para>TBD</para>
       </section>
     </section>
 
@@ -1461,7 +1610,7 @@
     <section>
       <title>Context diagram</title>
 
-      <para></para>
+      <para>TBD</para>
     </section>
 
     <section>
@@ -1541,7 +1690,7 @@
     <section>
       <title>Other information</title>
 
-      <para></para>
+      <para>TBD</para>
     </section>
   </section>
 
@@ -1550,7 +1699,7 @@
 
     <para>The Meta-Environment uses ATerms as pervasive data format to store
     and exchange data. On top of the ATerms, various specialized data formats
-    have been defined as shown in the Figure <link
+    have been defined as shown in figure <link
     linkend="fig-data-layer-view">The data layer view</link>.</para>
 
     <figure xml:id="fig-data-layer-view">
@@ -1573,6 +1722,48 @@
       linkend="def-location">Location</link>, <link
       linkend="def-parse-table">Parse table</link>, <link
       linkend="def-summary">Summary</link>.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <para></para>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Other information</title>
+
+      <para></para>
     </section>
   </section>
 
@@ -1755,6 +1946,323 @@
         </tr>
       </table>Unused: asfsdf-meta, aterm, aterm-java, sdf-meta, tide,
     tide-support, meta, shared-objects, JJTraveler.</para>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para>All architecture elements and nearly all packages appear in this
+      view.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para>TBD</para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para>The following variability issues have been identified.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All packages have written with portability in mind.</para>
+        </listitem>
+
+        <listitem>
+          <para>We use configuration tools (autoconf) to adjust packages to
+          local installation requirements.</para>
+        </listitem>
+
+        <listitem>
+          <para>All software development has been done on Linux. However, the
+          majority (but certainly not all) of the packages have been compiled
+          successfully on Windows as well.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para>The reasons for splitting up the system in so many packages is
+        the following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Each package represents a clearly defined functionality.
+            This localizes the impact of future modifications.</para>
+          </listitem>
+
+          <listitem>
+            <para>Each package can be reused independently.</para>
+          </listitem>
+
+          <listitem>
+            <para>The package structure makes explicit dependencies between
+            packages mandatory. This makes it easier to study the impact of
+            more global changes.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para>On the positive side, we do have achieved an incredibly modular
+        and flexible architecture. On the negative side, we do have to admit
+        the following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Although "all packages are considered equal" in our
+            approach, in reality this is not the true. A handful of primary
+            packages (asfsdf-meta, aterm, pandora, pgen, sglr, shared-objects,
+            toolbus) are frequently downloaded and reused in a variety of
+            applications, the others are just implementation details for those
+            primary packages.</para>
+          </listitem>
+
+          <listitem>
+            <para>Initially, we exposed the flat list of all our packages to
+            the outside world. This turned out the be very confusing.</para>
+          </listitem>
+
+          <listitem>
+            <para>In some cases, a more monolithic structure for subcomponents
+            would make the life of implementors somewhat easier.</para>
+          </listitem>
+
+          <listitem>
+            <para>There are some costs involved in creating and maintaining a
+            new package. We are therefore continuously simplifying and
+            optimizing our build environment to reduce these costs.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Despite these critical notes, we do think that the overall
+        package approach is highly effective.</para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para>We have made the following assumptions that are mostly hardwired
+        in this architecture:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Most packages can read/write data in the form of ATerms or
+            any of the dataformats built on top of ATerms.</para>
+          </listitem>
+
+          <listitem>
+            <para>Most packages provide their functionality in three
+            forms;</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>As command line tools.</para>
+              </listitem>
+
+              <listitem>
+                <para>As a library that can be called from other
+                programs.</para>
+              </listitem>
+
+              <listitem>
+                <para>As a ToolBus tool that can be connected to a
+                ToolBus-based system.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="package-dependency-view">
+    <title>The package dependency view</title>
+
+    <para>The dependencies between the packages of the Meta-Environment are
+    shown in figure <link linkend="fig-package-dependency-view">The package
+    dependency view</link>. Clearly, four separate layers can be distinguished
+    (from bottom to top):</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The infrastructure/utilities layer that provides common
+        facilities.</para>
+      </listitem>
+
+      <listitem>
+        <para>The "meta" layer that provides a kernel meta-environment.</para>
+      </listitem>
+
+      <listitem>
+        <para>The "sdf-meta" layer that provides a meta-environment for
+        editing SDF specifications.</para>
+      </listitem>
+
+      <listitem>
+        <para>The "asfsdf-meta" layer that provides the full ASF+SDF
+        Meta-Environment.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In order to reduce the visual clutter in this figure, various
+    simplifications have been applied:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>All uses by elements in the top layers of facilities in the
+        bottom layer are summarized by one arrow: "may use any of".</para>
+      </listitem>
+
+      <listitem>
+        <para>An element uses all other elements to which it is directly or
+        indirectly connected.</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure xml:id="fig-package-dependency-view">
+      <title>The package dependency view</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="package-dependencies.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para>Package.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para>TBD</para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para>TBD</para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para>The design rationale for this package structure is the
+        following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>We come from a situation in which many packages had
+            dependencies on ASF+SDF. We considered this undesirable, from the
+            perspective of modifiability and extensibility.</para>
+          </listitem>
+
+          <listitem>
+            <para>By organizing the package dependencies in layers, we achieve
+            an architecture that can be easily extended. Starting with a
+            widely used infrastructure layer, we first provide a kernel
+            meta-environment that has a user-interface and basic editing
+            facilities. Next, we add an SDF layer that provides syntax
+            definitions via SDF, parser generation and parsing. Finally, we
+            add ASF to provide semantic definitions and term rewriting.</para>
+          </listitem>
+
+          <listitem>
+            <para>Each of these layers can form the starting point for the
+            implementation of systems with widely varying
+            functionality.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para>The fact that various "clones" of the Meta-Environment exist
+        proves the success of this approach.</para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <itemizedlist>
+          <listitem>
+            <para>The primary program representation is the parse tree (using
+            AsFix). This assumptions is becoming more and more true in the
+            context of software analysis, program transformation and software
+            renovation. However, in the context of ordinary compilation this
+            maybe overkill and lead to inefficiencies.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Further information</title>
+
+      <para>For the record, there are some issues that should be resolved in
+      this view:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Only the dependency on graphviz is made explicit in the
+          package definitions.</para>
+        </listitem>
+
+        <listitem>
+          <para>The mutual dependency between tide and meta-studio is curious
+          and should be investigated.</para>
+        </listitem>
+
+        <listitem>
+          <para>It is a pity that there are still dependencies between the
+          "meta" layer and asc-support. This means that not yet all ASF
+          dependencies have been cut out of the kernel
+          meta-environment.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Running The Meta-Environment is currently dependent on the
+      following external packages:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link xlink:href="http://www.graphviz.org">Graphviz</link> for
+          graph layout algorithms.</para>
+        </listitem>
+
+        <listitem>
+          <para><link xlink:href="http://prefuse.org">Prefuse</link> for graph
+          visualization.</para>
+        </listitem>
+
+        <listitem>
+          <para><link xlink:href="http://www.infonode.net">Infonode</link> for
+          docking windows.</para>
+        </listitem>
+
+        <listitem>
+          <para><link xlink:href="http://www.gnu.org">GCC</link> the GNU C
+          compiler.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 
   <section xml:id="power-user-view">
@@ -1776,7 +2284,7 @@
       </listitem>
 
       <listitem>
-        <para>By modyfying or extending the standard ToolBus scripts that are
+        <para>By modifying or extending the standard ToolBus scripts that are
         provided.</para>
       </listitem>
     </itemizedlist>
@@ -2083,7 +2591,7 @@
           <row>
             <entry>dialog-gui</entry>
 
-            <entry></entry>
+            <entry>GUI component for dialogs</entry>
 
             <entry></entry>
 
@@ -2101,7 +2609,8 @@
           <row>
             <entry>editor-manager</entry>
 
-            <entry></entry>
+            <entry>Editor manager supervises concurrent editing
+            sesssions</entry>
 
             <entry>editor-manager</entry>
 
@@ -2119,7 +2628,7 @@
           <row>
             <entry>editor-plugin</entry>
 
-            <entry></entry>
+            <entry>Java embeddable editor component</entry>
 
             <entry></entry>
 
@@ -2137,7 +2646,7 @@
           <row>
             <entry>error-gui</entry>
 
-            <entry></entry>
+            <entry>GUI components for error display</entry>
 
             <entry></entry>
 
@@ -2174,7 +2683,7 @@
           <row>
             <entry>graph-gui</entry>
 
-            <entry>Display graphs in GUI</entry>
+            <entry>GUI component for graph display</entry>
 
             <entry></entry>
 
@@ -2244,9 +2753,45 @@
           </row>
 
           <row>
+            <entry>meta-autotools</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>meta-build-env</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
             <entry>meta-studio</entry>
 
-            <entry>GUI</entry>
+            <entry>Main GUI component</entry>
 
             <entry>gui</entry>
 
@@ -2264,7 +2809,8 @@
           <row>
             <entry>module-details-gui</entry>
 
-            <entry></entry>
+            <entry>GUI component for display detailed info about
+            modules</entry>
 
             <entry></entry>
 
@@ -2282,7 +2828,7 @@
           <row>
             <entry>module-manager</entry>
 
-            <entry></entry>
+            <entry>Manages a collection of modules</entry>
 
             <entry>module-manager</entry>
 
@@ -2300,7 +2846,7 @@
           <row>
             <entry>module-support</entry>
 
-            <entry></entry>
+            <entry>Tools for handling modules</entry>
 
             <entry></entry>
 
@@ -2318,7 +2864,8 @@
           <row>
             <entry>navigator-gui</entry>
 
-            <entry></entry>
+            <entry>GUI components for navigating through module
+            hierarchy</entry>
 
             <entry></entry>
 
@@ -2373,7 +2920,7 @@
           <row>
             <entry>progress-gui</entry>
 
-            <entry></entry>
+            <entry>GUI component that display progress of an operation</entry>
 
             <entry></entry>
 
@@ -2501,7 +3048,7 @@
           <row>
             <entry>structure-editor</entry>
 
-            <entry></entry>
+            <entry>Tools for syntax-directed editing</entry>
 
             <entry>structure-editor</entry>
 
@@ -2519,7 +3066,7 @@
           <row>
             <entry>term-store</entry>
 
-            <entry></entry>
+            <entry>Generic store for terms</entry>
 
             <entry>term-store</entry>
 
@@ -2537,7 +3084,7 @@
           <row>
             <entry>tide</entry>
 
-            <entry>Interactive debugger for equations</entry>
+            <entry>Generic debug framework</entry>
 
             <entry>tide tide-gdb</entry>
 
@@ -2555,7 +3102,7 @@
           <row>
             <entry>tide-support</entry>
 
-            <entry></entry>
+            <entry>Tools for connecting C-based tools to tide</entry>
 
             <entry></entry>
 
@@ -2646,6 +3193,55 @@
         </tbody>
       </tgroup>
     </table>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para>This view shows all packages and some of their most important
+      contents.</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <para></para>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Other information</title>
+
+      <para></para>
+    </section>
   </section>
 
   <section xml:id="build-and-deployment-view">
@@ -2666,5 +3262,75 @@
         <para>External dependencies, graphviz, etc.</para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>Element catalog</title>
+
+      <para>TBD</para>
+    </section>
+
+    <section>
+      <title>Context diagram</title>
+
+      <para>TBD</para>
+    </section>
+
+    <section>
+      <title>Variability guide</title>
+
+      <para>TBD</para>
+    </section>
+
+    <section>
+      <title>Architecture background</title>
+
+      <para>TBD</para>
+
+      <section>
+        <title>Design rationale</title>
+
+        <para>TBD</para>
+      </section>
+
+      <section>
+        <title>Analysis of results</title>
+
+        <para>TBD</para>
+      </section>
+
+      <section>
+        <title>Assumptions</title>
+
+        <para>TBD</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Other information</title>
+
+      <para>The system is currently dependent on the following external
+      packages:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Java Development Kit (JDK) 1.5 or higher, see<link
+          xlink:href="http://java.sun.com"> java.sun.com</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Graphviz 1.12. or higher, see <link
+          xlink:href="http://www.graphviz.org">graphviz.org</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>GNU make</para>
+        </listitem>
+
+        <listitem>
+          <para>GNU gcc 3.4.x from <link
+          xlink:href="http://www.gnu.org">gnu.org</link>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 </article>
