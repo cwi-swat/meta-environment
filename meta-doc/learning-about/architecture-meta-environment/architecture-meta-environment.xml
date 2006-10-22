@@ -37,7 +37,7 @@
 
     <para>The Meta-Environment is a powerful system that can be viewed from
     different angles. From the end-user who creates languages and tools using
-    the graphical user interface, via the power-user who build applications
+    the graphical user interface, via the power-user who builds applications
     using the command line interface and the system libraries to the system
     developer who is maintaining and extending the system. For all these
     stakeholders we present architectural views that will help to better
@@ -336,6 +336,18 @@
       <section xml:id="language-elements">
         <title>The language elements</title>
 
+        <para>The language elements are formalisms for specification,
+        programming or scripting. Programs in these languages are read and
+        written by humans and are intended to solve specific problems.</para>
+
+        <formalpara xml:id="def-ADT">
+          <title>Abstract Data Type (ADT)</title>
+
+          <para>Structural description of the interface of a component. Used
+          by APIGEN to generate an Application Programmer's Interface (API)
+          for the component.</para>
+        </formalpara>
+
         <formalpara>
           <title>ASF</title>
 
@@ -379,18 +391,41 @@
         <para>Note that the ASF+SDF modules may define several base languages
         at the same time.</para>
 
+        <formalpara xml:id="def-input-term">
+          <title>Input term</title>
+
+          <para>A text that conforms to the syntax defined in the ASF+SDF
+          modules. This includes: </para>
+        </formalpara>
+
         <itemizedlist>
           <listitem>
-            <para>the syntax of the base language in which the input term is
-            written (e.g., C, Java, Boolean expressions, a domain-specific
-            language),</para>
+            <para>the syntax of the base language (e.g., C, Java, Boolean
+            expressions, a domain-specific language),</para>
           </listitem>
 
           <listitem>
-            <para>the functions that may be applied to programs in the base
-            language (e.g., typecheck, extract facts, compile).</para>
+            <para>the functions that can be applied to base language programs
+            (e.g., typecheck, extract facts, compile, remove unused
+            methods).</para>
           </listitem>
         </itemizedlist>
+
+        <para>The input term can be freely edited and is checked for syntactic
+        correctness before any function is applied to it. It is possible to
+        simultaneously edit different input terms in different base
+        languages.</para>
+
+        <formalpara xml:id="def-output-term">
+          <title>Output term</title>
+
+          <para>A text that describes the result of applying a function to a
+          program in the base language. Note that this text conforms to the
+          syntax R, where R is the result sort of the function that was
+          applied. With Javv-to-Java transformation the result sort will be
+          Java. When no function is applied, the output term is identical to
+          the input term.</para>
+        </formalpara>
 
         <formalpara>
           <title>Rscript</title>
@@ -422,16 +457,8 @@
       <section xml:id="data-elements">
         <title>The data elements</title>
 
-        <para>The Meta-Environment provides a number of languages and data
-        formats that are relevant.</para>
-
-        <formalpara xml:id="def-ADT">
-          <title>Abstract Data Type (ADT)</title>
-
-          <para>Structural description of the interface of a component. Used
-          by APIGEN to generate an Application Programmer's Interface (API)
-          for the component.</para>
-        </formalpara>
+        <para>The data elements are formats for representing domain-specific
+        data. The corresponding data are written and read by programs.</para>
 
         <formalpara xml:id="def-asfix">
           <title>AsFix</title>
@@ -444,17 +471,31 @@
           <title>ATerm</title>
 
           <para>Annotated terms. A dataformat used for the internal
-          representation of data</para>
+          representation of all data. Distinguishing features are:</para>
         </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>ATerms are language-independent and can be processed by
+            programs in any language.</para>
+          </listitem>
+
+          <listitem>
+            <para>ATerms preserve <emphasis>maximal subterm
+            sharing</emphasis>. This means that common parts of the data are
+            not duplicated but shared. This leads to considerable
+            size-reduction of the data.</para>
+          </listitem>
+        </itemizedlist>
 
         <formalpara xml:id="def-box">
           <title>Box</title>
 
-          <para>Intermediate representation of the formatter. A parse tree is
-          first converted to a box term that includes all desired formatting
-          directives (alignment, font and color directives, and the like).
-          Next, the box term is converted to various output formats (plain
-          text, HTML, etc.).</para>
+          <para>Intermediate representation of the prettyprinter. A parse tree
+          is first converted to a box term that includes all desired
+          formatting directives (alignment, font and color directives, and the
+          like). Next, the box term is converted to various output formats
+          (plain text, HTML, etc.).</para>
         </formalpara>
 
         <formalpara xml:id="def-compiled-specification">
@@ -465,46 +506,17 @@
           line interface of The Meta-Environment by power users.</para>
         </formalpara>
 
-        <formalpara xml:id="def-input-term">
-          <title>Input term</title>
-
-          <para>A text that conforms to the syntax defined in the ASF+SDF
-          modules. This includes</para>
-        </formalpara>
-
-        <para><itemizedlist>
-            <listitem>
-              <para>The parse tree for each ASF+SDF module.</para>
-            </listitem>
-
-            <listitem>
-              <para>The parse tree for each parsed input term.</para>
-            </listitem>
-          </itemizedlist>The input term can be freely edited and is checked
-        for syntactic correctness before any function is applied to it. It is
-        possible to simultaneously edit different input terms in different
-        base languages.</para>
-
         <formalpara xml:id="def-graph">
           <title>Graph</title>
 
-          <para>Data format to describe graphs.</para>
+          <para>Data format to represent graphs. Used as representation of
+          import graphs and parse trees that are displayed in the GUI.</para>
         </formalpara>
 
         <formalpara xml:id="def-location">
           <title>Location</title>
 
           <para>Data format to describe locations in source code.</para>
-        </formalpara>
-
-        <formalpara xml:id="def-output-term">
-          <title>Output term</title>
-
-          <para>A text that describes the result of applying a function to a
-          program in the base language. Note that this text conforms to the
-          syntax R, where R is the result sort of the function that was
-          applied. When no function is applied, the output term is identical
-          to the input term.</para>
         </formalpara>
 
         <formalpara xml:id="def-summary">
@@ -518,10 +530,9 @@
         <formalpara xml:id="def-parse-table">
           <title>Parse table</title>
 
-          <para>It is possible to transform the syntax of the base language as
-          defined by the ASF+SDF modules into a form (a <emphasis>parse
-          table</emphasis>) that is usable via the command line
-          interface.</para>
+          <para>A parse table is an efficient representation of the base
+          language as defined by the ASF+SDF modules and enables efficient
+          parsing.</para>
         </formalpara>
 
         <formalpara xml:id="def-parse-tree">
@@ -535,12 +546,17 @@
       <section xml:id="processing-elements">
         <title>The processing elements</title>
 
+        <para>The processing elements are "active" parts of the system that
+        usually transform inputs to outputs. Inputs and outputs may both be
+        machine or human readable or writable.</para>
+
         <formalpara xml:id="def-APIGEN">
           <title>APIGEN</title>
 
-          <para>API generator. Given a datastructure definition, APIGEN
-          generates C or Java code to access that datastructure. Internally,
-          the datastructure is represented as ATerm.</para>
+          <para>API generator. Given a datastructure definition (in the form
+          of an Abstract Data Type), APIGEN generates C or Java code to access
+          that datastructure. Internally, the datastructure is represented as
+          ATerm.</para>
         </formalpara>
 
         <formalpara xml:id="def-ASF-checker">
@@ -553,8 +569,8 @@
         <formalpara xml:id="def-ASF-compiler">
           <title>ASF compiler</title>
 
-          <para>compiles ASF specifications to an efficient executable
-          form.</para>
+          <para>The ASF compiler transforms ASF specifications to an efficient
+          executable form.</para>
         </formalpara>
 
         <formalpara xml:id="def-ASF-interpreter">
@@ -585,6 +601,13 @@
 
           <para>The configuration manager handles user settings and
           preferences.</para>
+        </formalpara>
+
+        <formalpara xml:id="def-debugger">
+          <title>Debugger</title>
+
+          <para>The debugger allows a step-by-step execution of the rewrite
+          rules defined in ASF+SDF specifications.</para>
         </formalpara>
 
         <formalpara xml:id="def-errors-and-warnings">
@@ -625,8 +648,8 @@
         <formalpara xml:id="def-module-manager">
           <title>Module manager</title>
 
-          <para>The module manager is responsible for all parsed information
-          that resides in the system:</para>
+          <para>The module manager is responsible for all information related
+          to the ASF+SDF modules that reside in the system.</para>
         </formalpara>
 
         <formalpara xml:id="def-parse-table-generator">
@@ -640,10 +663,10 @@
         <formalpara xml:id="def-parser">
           <title>Parser</title>
 
-          <para>It generates a parse tree as output.The parser takes a parse
-          table (as provided by the parse table generator) and text (as
-          provided by a text editor) and produces a parse tree. Any errors are
-          shown in the error display of the GUI.</para>
+          <para>The parser takes a parse table (as produced by the parse table
+          generator) and text (as provided by a text editor) as input and
+          produces a parse tree as output. Any errors are shown in the error
+          display of the GUI.</para>
         </formalpara>
 
         <formalpara xml:id="def-prettyprinter">
@@ -694,8 +717,22 @@
 
           <para>The term store contains all parse tables, parse trees and
           other intermediate data that is generated during execution of The
-          Meta-Environment.</para>
+          Meta-Environment. This includes:</para>
         </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>The parse tree for each ASF+SDF module.</para>
+          </listitem>
+
+          <listitem>
+            <para>The parse tree for each parsed input term.</para>
+          </listitem>
+
+          <listitem>
+            <para>The parse tree for each generated output term.</para>
+          </listitem>
+        </itemizedlist>
 
         <formalpara xml:id="def-text-editor">
           <title>Text editor</title>
@@ -703,6 +740,13 @@
           <para>The text editor allows text editing on ASF+SDF modules and
           input terms. Multiple editors may be opened; each appears as a
           tabbed window in one of the panes of the GUI.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>The Meta-Environment</title>
+
+          <para>The architecture of The Meta-Environment (or just "the
+          system") is the primary object of study of this document.</para>
         </formalpara>
 
         <formalpara xml:id="def-toolbus">
@@ -728,7 +772,7 @@
             <listitem>
               <para>All interactions between components are regulated by a
               ToolBus script (or Tscript for short) that is executing in the
-              ToolBus. The Tscript is a concurrent language that allows the
+              ToolBus. Tscript is a concurrent language that allows the
               definition of parallel processes, messaging between these
               processes and interaction between processes and tools.</para>
             </listitem>
@@ -1295,6 +1339,24 @@
         </tr>
 
         <tr>
+          <td>The Meta-Environment</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+
+          <td>x</td>
+        </tr>
+
+        <tr>
           <td>ToolBus</td>
 
           <td></td>
@@ -1328,12 +1390,12 @@
     describing transformations on the Java code. The user can also edit an
     input term, that is a text that conforms to the definitions in the ASF+SDF
     specification (say, a Java program with a transformation function applied
-    to it). Via the user-interface the user can not activate the application
+    to it). Via the user-interface the user can now activate the application
     of the equations in the ASF+SDF specification to the input. The answer is
-    an output term that will consist in this example of a transformed Java
-    program. Of course, errors may occur and theyr are shown. As an aid for
-    power-users some additional information like compiled ASF+SDF
-    specifications and parse tables can be exported.</para>
+    an output term that will consist -- in this example -- of a transformed
+    Java program. Of course, errors may occur and they are shown in the GUI.
+    As an aid for power-users some additional information like compiled
+    ASF+SDF specifications and parse tables can be exported.</para>
 
     <figure xml:id="fig-end-user-view">
       <title>End-user view of The Meta-environment</title>
@@ -1441,6 +1503,11 @@
           term. In reality, several input terms may be edited and be reduced
           to the corresponding output term.</para>
         </listitem>
+
+        <listitem>
+          <para>This view does not show the step-by-step debugging of ASF+SDF
+          specifications.</para>
+        </listitem>
       </itemizedlist>
     </section>
   </section>
@@ -1453,7 +1520,7 @@
     the parts that are needed to transform an input term to an output term.
     Not shown are the interaction with the user-interface, the precise
     processing of the ASF+SDF modules, and the generation of compiled
-    specifications.</para>
+    specifications and parse tables.</para>
 
     <para><figure xml:id="fig-decomposition-view">
         <title>The decomposition view</title>
@@ -1522,7 +1589,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>The graphical user-interface.</para>
+          <para>The graphical user-interface is not shown.</para>
         </listitem>
 
         <listitem>
@@ -1571,7 +1638,9 @@
     </itemizedlist>
 
     <para>The connections between the components are established by the
-    Tscript that is executing in the ToolBus.</para>
+    Tscript that is executing in the ToolBus. Note that multiple instances may
+    exist of some components. For instance, a separate instance of the text
+    editor exists for editing different terms or modules.</para>
 
     <figure xml:id="fig-coordination-view">
       <title>The coordination view</title>
@@ -1680,8 +1749,14 @@
           </listitem>
 
           <listitem>
+            <para>For all relevant languages adapters exist to connect
+            programs written in those languages to the ToolBus.</para>
+          </listitem>
+
+          <listitem>
             <para>It is possible to execute components on different,
-            connected, physical computers.</para>
+            connected, physical computers. In some situations firewall
+            settings may prevent this.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -1777,7 +1852,9 @@
     provide a wide range of functionality. The table <link
     linkend="table-mapping-elements-packages">Mapping between elements and
     packages</link> shows how the architecture elements in the various views
-    are implemented by one or more packages.</para>
+    are implemented by one or more packages. Note that some packages (e.g.,
+    aterm, aterm-java, shared-objects, JJTraveler) are used by most package;
+    they are not listed in the table.</para>
 
     <para><table border="1" xml:id="table-mapping-elements-packages">
         <caption>Mapping between elements and packages</caption>
@@ -1791,7 +1868,7 @@
         <tr>
           <td>APIGEN</td>
 
-          <td></td>
+          <td>apigen</td>
         </tr>
 
         <tr>
@@ -1849,6 +1926,12 @@
         </tr>
 
         <tr>
+          <td>Debugger</td>
+
+          <td>tide, tide-support</td>
+        </tr>
+
+        <tr>
           <td>Errors &amp; warnings</td>
 
           <td>error-gui, error-support</td>
@@ -1864,7 +1947,7 @@
         <tr>
           <td>Input term</td>
 
-          <td></td>
+          <td>pt-support</td>
         </tr>
 
         <tr>
@@ -1876,7 +1959,7 @@
         <tr>
           <td>Output term</td>
 
-          <td></td>
+          <td>pt-support, pandora</td>
         </tr>
 
         <tr>
@@ -1940,12 +2023,17 @@
         </tr>
 
         <tr>
+          <td>The Meta-Environment</td>
+
+          <td>asfsdf-meta, sdf-meta, meta</td>
+        </tr>
+
+        <tr>
           <td>ToolBus</td>
 
           <td>toolbus, toolbuslib, toolbus-java-adapter</td>
         </tr>
-      </table>Unused: asfsdf-meta, aterm, aterm-java, sdf-meta, tide,
-    tide-support, meta, shared-objects, JJTraveler.</para>
+      </table></para>
 
     <section>
       <title>Element catalog</title>
@@ -2095,22 +2183,23 @@
 
     <itemizedlist>
       <listitem>
-        <para>The infrastructure/utilities layer that provides common
-        facilities.</para>
+        <para>The <emphasis>infrastructure layer</emphasis> that provides
+        common facilities.</para>
       </listitem>
 
       <listitem>
-        <para>The "meta" layer that provides a kernel meta-environment.</para>
+        <para>The <emphasis>kernel layer</emphasis> that provides a kernel
+        meta-environment.</para>
       </listitem>
 
       <listitem>
-        <para>The "sdf-meta" layer that provides a meta-environment for
-        editing SDF specifications.</para>
+        <para>The <emphasis>SDF layer</emphasis> that provides a
+        meta-environment for editing SDF specifications.</para>
       </listitem>
 
       <listitem>
-        <para>The "asfsdf-meta" layer that provides the full ASF+SDF
-        Meta-Environment.</para>
+        <para>The <emphasis>ASF layer</emphasis> that provides the full
+        ASF+SDF Meta-Environment.</para>
       </listitem>
     </itemizedlist>
 
