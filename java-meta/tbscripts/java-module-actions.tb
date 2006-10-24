@@ -37,8 +37,7 @@ let
   Action: str,
   Modulename: str
 in
-  MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
-  . snd-msg(cm-get-action(Type, Event, Modulename))
+  snd-msg(cm-get-action(Type, Event))
   . rec-msg(cm-action(Action?))
   . Action(ModuleId)
 endlet
@@ -56,7 +55,7 @@ in
   (
     NAV-RequestPopup(ModuleId?)
     . MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
-    . snd-msg(cm-get-events(module-popup, Modulename))
+    . snd-msg(cm-get-events(module-popup(Modulename)))
     . rec-msg(cm-events(PopupMenu?))
     . NAV-ShowPopup(ModuleId, PopupMenu)
   +
@@ -67,7 +66,7 @@ in
     .
     if equal(GraphType, "import-graph") then
       MM-GetAttribute(ModuleId, JAVA_NAMESPACE, "name", Modulename?)
-      . snd-msg(cm-get-events(module-popup, Modulename))
+      . snd-msg(cm-get-events(module-popup(Modulename)))
       . rec-msg(cm-events(PopupMenu?))
       . GP-ShowPopup("import-graph", JAVA_NAMESPACE, ModuleId, PopupMenu)
     else
