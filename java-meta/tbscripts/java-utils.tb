@@ -25,7 +25,6 @@ in
   )
 endlet
 
-
 process DumpParseTable(ModuleId : term, Filename : str, Type : term) is
 let
   Directory: str,
@@ -156,7 +155,6 @@ in
   fi
 endlet
 
-
 process GetImportedModulenames(ModuleId: term, Imports: list?) is
 let
   Pid: int,
@@ -174,6 +172,155 @@ in
   . snd-msg(io-read-term("/tmp/IMPORT.trm"))
   . rec-msg(io-term(Contents?))
   . ExtractImportsFromTerm(Contents, Imports?)
+endlet
+
+process GetInheritedModulenames(ModuleId: term, Inheritance: list?) is
+let
+  Pid: int,
+  Action: str,
+  Contents: list,
+  Deps: list,
+  ExtendsClass: list,
+  ExtendsInterface: list,
+  Implements: list,
+  Imports: list,
+  Modulepath: str,
+  Package: list,
+  PackagePath: str,
+  Result: str,
+  Prefix: str,
+  Filename: str
+in
+  Pid := process-id
+  . GetModulePath(ModuleId, JAVA_NAMESPACE, Modulepath?)
+  . Action := concat("extract-relations.sh ", Modulepath)
+  . snd-msg(gen-adapter-activate(Pid, Action))
+  . rec-msg(gen-adapter-result(Pid, Result?))
+  . snd-msg(io-read-term("/tmp/IMPLEMENTS.trm"))
+  . rec-msg(io-term(Implements?))
+  . snd-msg(io-read-term("/tmp/EXTENDS_CLASS.trm"))
+  . rec-msg(io-term(ExtendsClass?))
+  . snd-msg(io-read-term("/tmp/EXTENDS_INTERFACE.trm"))
+  . rec-msg(io-term(ExtendsInterface?))
+  . snd-msg(io-read-term("/tmp/IMPORT.trm"))
+  . rec-msg(io-term(Contents?))
+  . snd-msg(io-read-term("/tmp/PACKAGE.trm"))
+  . rec-msg(io-term(Package?))
+  . Deps := []
+  . ExtractInheritanceFromTerm(Implements, Deps?)
+  . ExtractInheritanceFromTerm(ExtendsClass, Deps?)
+  . ExtractInheritanceFromTerm(ExtendsInterface, Deps?)
+  . ExtractImportsFromTerm(Contents, Imports?)
+  . ExtractPackageFromTerm(Package, PackagePath?)
+  . GetInheritedModules(Deps, PackagePath, Imports, Inheritance?)
+endlet
+
+process GetInheritedModules(Deps: list, Path: str, Imports: list, Inheritance: list?) is
+let
+  Dep: str,
+  Dep2: str,
+  Dep3: str,
+  File: str,
+  List: list,
+  List2: list,
+  Inherit: str
+in
+  List := Deps
+  . Inheritance := []
+  .
+  if not-equal(List, []) then
+    Dep := first(List)
+    . List := next(List)
+    .
+    if equal(Path, "") then
+      File := concat(Dep, JAVA_EXTENSION)
+    else
+      BuildPath(Path, Dep, JAVA_EXTENSION, File?)
+    fi
+    . snd-msg(io-exists-file(File))
+    .
+    (
+      rec-msg(io-file-exists)
+      . BuildPath(Path, Dep, "", File?)
+      . Inheritance := join(Inheritance, File) 
+    +
+      rec-msg(io-file-not-exists)
+      . List2 := Imports
+      . Inherit := ""
+      .
+      if not-equal(List2, []) then
+	Dep2 := first(List2)
+	. List2 := next(List2)
+	.
+	if equal(Inherit, "") then
+	  snd-msg(io-get-path-filename(Dep2))
+	  . rec-msg(io-filename(Dep2, Dep3?))
+          .
+	  if equal(Dep3, Dep) then
+	    Inherit := Dep2
+	  else
+            tau
+          fi
+        else
+	  tau
+	fi
+      fi
+      *
+      if equal(List2, []) then
+	if equal(Inherit, "") then
+	  Inheritance := join(Inheritance, Dep)
+        else
+	  Inheritance := join(Inheritance, Inherit)
+	fi
+      fi
+    )
+  fi
+  *
+  if equal(List, []) then
+    tau
+  fi
+endlet
+
+process ExtractPackageFromTerm(Contents: list, Path: str?) is
+let
+  List: list
+in
+  ExtractImportsFromTerm(Contents, List?)
+  . Path := first(List)
+  .
+  if equal(Path, "<default-package>") then
+    Path := ""
+  else
+    tau
+  fi
+endlet
+
+process ExtractInheritanceFromTerm(Contents: list, Deps: list?) is
+let
+  List: list,
+  List2: list,
+  Path: str,
+  Term: term
+in
+  Term := first(Contents)
+  . List := first(next(next(args(Term))))
+  .
+  if not-equal(List, []) then
+    Term := first(List)
+    . List := next(List)
+    . List2 := first(next(args(Term)))
+    .
+    if not-equal(List2, []) then
+      Path := first(args(first(List2)))
+      . Deps := join(Deps, Path)
+    else
+      tau
+    fi
+  fi
+  *
+  if equal(List, []) then
+    tau
+  fi
 endlet
 
 process ExtractImportsFromTerm(Contents: list, Imports: list?) is
