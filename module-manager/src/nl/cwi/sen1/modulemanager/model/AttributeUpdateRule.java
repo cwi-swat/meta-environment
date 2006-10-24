@@ -7,16 +7,16 @@ public class AttributeUpdateRule {
 
 	private ATerm key;
 
-	private ATerm rule;
+	private ATerm formula;
 
-	private ATerm newValue;
+	private ATerm predicateValue;
 
-	public AttributeUpdateRule(ATerm namespace, ATerm key, ATerm rule,
-			ATerm newValue) {
+	public AttributeUpdateRule(ATerm namespace, ATerm key, ATerm formula,
+			ATerm predicateValue) {
 		this.namespace = namespace;
 		this.key = key;
-		this.newValue = newValue;
-		this.rule = rule;
+		this.predicateValue = predicateValue;
+		this.formula = formula;
 	}
 
 	public ATerm getKey() {
@@ -27,23 +27,23 @@ public class AttributeUpdateRule {
 		return namespace;
 	}
 
-	public ATerm getNewValue() {
-		return newValue;
+	public ATerm getPredicateValue() {
+		return predicateValue;
 	}
 
-	public ATerm getRule() {
-		return rule;
+	public ATerm getFormula() {
+		return formula;
 	}
 
 	public boolean equals(Object o) {
 		AttributeUpdateRule attr = (AttributeUpdateRule) o;
 		return attr.namespace.isEqual(namespace) && attr.key.isEqual(key)
-				&& attr.newValue.isEqual(newValue)
-				&& attr.rule.isEqual(rule);
+				&& attr.predicateValue.isEqual(predicateValue)
+				&& attr.formula.isEqual(formula);
 	}
 
 	public String toString() {
-		return "attr[" + namespace + ", " + key + ", rule:" + rule
-				+ ", new:" + newValue + "]";
+		return "attr[" + namespace + ", " + key + ", rule:" + formula
+				+ ", new:" + predicateValue + "]";
 	}
 }

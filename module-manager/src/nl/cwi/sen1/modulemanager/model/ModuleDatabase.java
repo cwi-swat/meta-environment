@@ -19,7 +19,7 @@ public class ModuleDatabase {
 
 	protected Map<ModuleId, Set<ModuleId>> descendants;
 
-	private AttributeUpdateRuleMap inheritedAttributes;
+	private AttributeUpdateRuleMap attributeUpdateRules;
 
 	private Map<ModuleId, Set<ModuleId>> ascendants;
 
@@ -31,7 +31,7 @@ public class ModuleDatabase {
 		descendants = new HashMap<ModuleId, Set<ModuleId>>();
 		ascendants = new HashMap<ModuleId, Set<ModuleId>>();
 		listener = l;
-		inheritedAttributes = new AttributeUpdateRuleMap();
+		attributeUpdateRules = new AttributeUpdateRuleMap();
 	}
 
 	public int getNextModuleId() {
@@ -51,17 +51,17 @@ public class ModuleDatabase {
 		ascendants.remove(moduleId);
 	}
 
-	private void triggerAllAttributeOnAllModules() {
+	private void triggerAllAttributeUpdateRulesOnAllModules() {
 		for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
 				.hasNext();) {
-			triggerAllInheritedAttributes(iter.next());
+			triggerAllAttributeUpdateRules(iter.next());
 		}
 	}
 
-	private void triggerAllInheritedAttributes(ModuleId id) {
-		for (Iterator<AttributeUpdateRule> iter = inheritedAttributes.iterator(); iter
+	private void triggerAllAttributeUpdateRules(ModuleId id) {
+		for (Iterator<AttributeUpdateRule> iter = attributeUpdateRules.iterator(); iter
 				.hasNext();) {
-			inherit(iter.next(), id);
+			propagate(iter.next(), id);
 		}
 	}
 
@@ -96,21 +96,21 @@ public class ModuleDatabase {
 						value);
 			}
 			propagateToParents(moduleId);
-			triggerAllInheritedAttributes(moduleId);
+			triggerAllAttributeUpdateRules(moduleId);
 		}
 	}
 
 	private void updatePredicate(ModuleId moduleId, ATerm namespace, ATerm key,
-			ATerm value) {
+			ATerm predicate) {
 		Module module = modules.get(moduleId);
 		ATerm oldValue = module.getPredicate(namespace, key);
 		if (oldValue == null) {
 			oldValue = module.getAttribute(namespace, key);
 		}
 
-		if (oldValue == null || !oldValue.isEqual(value)) {
-			module.setPredicate(namespace, key, value);
-			fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
+		if (oldValue == null || !oldValue.isEqual(predicate)) {
+			module.setPredicate(namespace, key, predicate);
+			fireAttributeSetListener(moduleId, namespace, key, oldValue, predicate);
 			propagateToParents(moduleId);
 		}
 	}
@@ -123,22 +123,22 @@ public class ModuleDatabase {
 	private void propagateToParents(ModuleId id) {
 		Set<ModuleId> parents = getParents(id);
 		for (Iterator<ModuleId> iter = parents.iterator(); iter.hasNext();) {
-			triggerAllInheritedAttributes(iter.next());
+			triggerAllAttributeUpdateRules(iter.next());
 		}
 	}
 
-	private void inherit(AttributeUpdateRule attr, ModuleId id) {
+	private void propagate(AttributeUpdateRule rule, ModuleId id) {
 		Module module = modules.get(id);
-		ATerm namespace = attr.getNamespace();
-		ATerm key = attr.getKey();
+		ATerm namespace = rule.getNamespace();
+		ATerm key = rule.getKey();
 
 		ATerm oldPredicate = module.getPredicate(namespace, key);
-		ATerm newPredicate = attr.getNewValue();
+		ATerm newPredicate = rule.getPredicateValue();
 
 		ATerm oldValue = module.getAttribute(namespace, key);
 
-		ATerm rule = attr.getRule();
-		Boolean result = innermostRuleEvaluation(rule, id, namespace, key);
+		ATerm formula = rule.getFormula();
+		Boolean result = innermostRuleEvaluation(formula, id, namespace, key);
 
 		if (result) {
 			updatePredicate(id, namespace, key, newPredicate);
@@ -392,8 +392,8 @@ public class ModuleDatabase {
 
 	public void registerAttributeUpdateRule(ATerm namespace, ATerm key,
 			ATerm rule, ATerm value) {
-		inheritedAttributes.put(namespace, key, rule, value);
-		triggerAllAttributeOnAllModules();
+		attributeUpdateRules.put(namespace, key, rule, value);
+		triggerAllAttributeUpdateRulesOnAllModules();
 	}
 
 	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id,
