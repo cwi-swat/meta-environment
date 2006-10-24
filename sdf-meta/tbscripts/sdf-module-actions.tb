@@ -37,8 +37,7 @@ let
   Action: str,
   Modulename: str
 in
-  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-  . snd-msg(cm-get-action(Type, Event))
+  snd-msg(cm-get-action(Type, Event))
   . rec-msg(cm-action(Action?))
   . Action(ModuleId)
 endlet
