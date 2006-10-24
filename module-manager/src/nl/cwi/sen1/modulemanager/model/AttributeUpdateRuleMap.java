@@ -6,11 +6,11 @@ import java.util.Map;
 
 import aterm.ATerm;
 
-public class InheritedAttributeMap {
-	private Map<ATerm, InheritedAttribute> map;
+public class AttributeUpdateRuleMap {
+	private Map<ATerm, AttributeUpdateRule> map;
 
-	public InheritedAttributeMap() {
-		this.map = new HashMap<ATerm, InheritedAttribute>();
+	public AttributeUpdateRuleMap() {
+		this.map = new HashMap<ATerm, AttributeUpdateRule>();
 	}
 
 	private ATerm getKey(ATerm namespace, ATerm key, ATerm value) {
@@ -18,16 +18,16 @@ public class InheritedAttributeMap {
 				value);
 	}
 
-	public InheritedAttribute put(ATerm namespace, ATerm key, ATerm rule,
+	public AttributeUpdateRule put(ATerm namespace, ATerm key, ATerm rule,
 			ATerm newValue) {
-		InheritedAttribute attr = makeInheritedAttribute(namespace, key, rule,
+		AttributeUpdateRule attr = makeInheritedAttribute(namespace, key, rule,
 				newValue);
 
 		map.put(getKey(namespace, key, newValue), attr);
 		return attr;
 	}
 
-	public Iterator<InheritedAttribute> iterator() {
+	public Iterator<AttributeUpdateRule> iterator() {
 		return map.values().iterator();
 	}
 
@@ -35,9 +35,9 @@ public class InheritedAttributeMap {
 		map.remove(getKey(namespace, key, newValue));
 	}
 
-	private InheritedAttribute makeInheritedAttribute(ATerm namespace,
+	private AttributeUpdateRule makeInheritedAttribute(ATerm namespace,
 			ATerm key, ATerm rule, ATerm newValue) {
-		InheritedAttribute attr = new InheritedAttribute(namespace, key, rule,
+		AttributeUpdateRule attr = new AttributeUpdateRule(namespace, key, rule,
 				newValue);
 		return attr;
 	}

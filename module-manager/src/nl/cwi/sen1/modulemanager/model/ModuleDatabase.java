@@ -19,7 +19,7 @@ public class ModuleDatabase {
 
 	protected Map<ModuleId, Set<ModuleId>> descendants;
 
-	private InheritedAttributeMap inheritedAttributes;
+	private AttributeUpdateRuleMap inheritedAttributes;
 
 	private Map<ModuleId, Set<ModuleId>> ascendants;
 
@@ -31,7 +31,7 @@ public class ModuleDatabase {
 		descendants = new HashMap<ModuleId, Set<ModuleId>>();
 		ascendants = new HashMap<ModuleId, Set<ModuleId>>();
 		listener = l;
-		inheritedAttributes = new InheritedAttributeMap();
+		inheritedAttributes = new AttributeUpdateRuleMap();
 	}
 
 	public int getNextModuleId() {
@@ -59,7 +59,7 @@ public class ModuleDatabase {
 	}
 
 	private void triggerAllInheritedAttributes(ModuleId id) {
-		for (Iterator<InheritedAttribute> iter = inheritedAttributes.iterator(); iter
+		for (Iterator<AttributeUpdateRule> iter = inheritedAttributes.iterator(); iter
 				.hasNext();) {
 			inherit(iter.next(), id);
 		}
@@ -82,12 +82,19 @@ public class ModuleDatabase {
 			ATerm value) {
 		Module module = modules.get(moduleId);
 		ATerm oldValue = module.getAttribute(namespace, key);
+		ATerm oldPredicate = module.getPredicate(namespace, key);
 
 		module.deletePredicate(namespace, key);
 
 		if (oldValue == null || !oldValue.isEqual(value)) {
 			module.setAttribute(namespace, key, value);
-			fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
+			if (oldPredicate != null) {
+				fireAttributeSetListener(moduleId, namespace, key,
+						oldPredicate, value);
+			} else {
+				fireAttributeSetListener(moduleId, namespace, key, oldValue,
+						value);
+			}
 			propagateToParents(moduleId);
 			triggerAllInheritedAttributes(moduleId);
 		}
@@ -120,7 +127,7 @@ public class ModuleDatabase {
 		}
 	}
 
-	private void inherit(InheritedAttribute attr, ModuleId id) {
+	private void inherit(AttributeUpdateRule attr, ModuleId id) {
 		Module module = modules.get(id);
 		ATerm namespace = attr.getNamespace();
 		ATerm key = attr.getKey();

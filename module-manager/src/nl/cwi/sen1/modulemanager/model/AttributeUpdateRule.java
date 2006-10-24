@@ -2,7 +2,7 @@ package nl.cwi.sen1.modulemanager.model;
 
 import aterm.ATerm;
 
-public class InheritedAttribute {
+public class AttributeUpdateRule {
 	private ATerm namespace;
 
 	private ATerm key;
@@ -11,7 +11,7 @@ public class InheritedAttribute {
 
 	private ATerm newValue;
 
-	public InheritedAttribute(ATerm namespace, ATerm key, ATerm rule,
+	public AttributeUpdateRule(ATerm namespace, ATerm key, ATerm rule,
 			ATerm newValue) {
 		this.namespace = namespace;
 		this.key = key;
@@ -36,7 +36,7 @@ public class InheritedAttribute {
 	}
 
 	public boolean equals(Object o) {
-		InheritedAttribute attr = (InheritedAttribute) o;
+		AttributeUpdateRule attr = (AttributeUpdateRule) o;
 		return attr.namespace.isEqual(namespace) && attr.key.isEqual(key)
 				&& attr.newValue.isEqual(newValue)
 				&& attr.rule.isEqual(rule);
