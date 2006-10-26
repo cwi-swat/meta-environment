@@ -111,6 +111,7 @@ void remove_socketfile()
 
 /*}}}  */
 
+#ifdef OLD_STYLE_TOOLBUS
 /*{{{  static int connect_unix_socket(int port) */
 
 static int connect_unix_socket(int port)
@@ -158,6 +159,7 @@ static int connect_unix_socket(int port)
 }
 
 /*}}}  */
+#endif
 /*{{{  static int connect_inet_socket(const char *host, int port) */
 
 static int connect_inet_socket(const char *host, int port)
@@ -206,11 +208,15 @@ static int connect_inet_socket(const char *host, int port)
 
 static int connect_socket (const char *host, int port)
 {    
+#ifdef OLD_STYLE_TOOLBUS
   if(host == NULL) {
     return connect_unix_socket(port);
   } else {
     return connect_inet_socket(host, port);
   }
+#else
+   return connect_inet_socket(host ? host : this_host, port);
+#endif
 }
 
 /*}}}  */
