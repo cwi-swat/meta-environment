@@ -682,7 +682,7 @@ ATerm ATBcheckSignature(ATerm signature, char *sigs[], int nrsigs)
 }
 
 /*}}}  */
-
+#ifdef OLD_STYLE_TOOLBUS
 /*{{{  static int connect_unix_socket(int port) */
 
 /**
@@ -722,6 +722,7 @@ static int connect_to_unix_socket(int port)
 }
 
 /*}}}  */
+#endif
 /*{{{  static int connect_to_inet_socket(const char *host, int port) */
 
 /**
@@ -773,10 +774,14 @@ static int connect_to_inet_socket(const char *host, int port)
 
 static int connect_to_socket (const char *host, int port)
 {
+#ifdef OLD_STYLE_TOOLBUS
   if(!host || streq(host, this_host))
     return connect_to_unix_socket(port);
   else
     return connect_to_inet_socket(host, port);
+#else
+    return connect_to_inet_socket(host ? host : this_host, port);
+#endif
 }
 
 /*}}}  */
