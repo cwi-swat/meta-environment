@@ -139,28 +139,31 @@
 
       <itemizedlist>
         <listitem>
-          <para>meta-build.m4: macros that extend autoconf to use pkg-config
-          files to retrieve dependencies, and to set up a Java build
-          environment, etc.</para>
+          <para><filename>meta-build.m4</filename>: macros that extend
+          autoconf to use pkg-config files to retrieve dependencies, and to
+          set up a Java build environment, etc.</para>
         </listitem>
 
         <listitem>
-          <para>Makefile.top.meta: Makefile to include in all toplevel
-          Makefile.am's of C-based packages</para>
+          <para><filename>Makefile.top.meta</filename>: Makefile to include in
+          all toplevel <filename>Makefile.am</filename>'s of C-based
+          packages</para>
         </listitem>
 
         <listitem>
-          <para>Makefile.java.meta: Makefile to include in all toplevel
-          Makefile.am's of Java-based packages</para>
+          <para><filename>Makefile.java.meta</filename>: Makefile to include
+          in all toplevel <filename>Makefile.am</filename>'s of Java-based
+          packages</para>
         </listitem>
 
         <listitem>
-          <para>Makefile.meta: Makefile to include in all other
-          Makefile.am's</para>
+          <para><filename>Makefile.meta</filename>: Makefile to include in all
+          other <filename>Makefile.am</filename>'s</para>
         </listitem>
 
         <listitem>
-          <para>meta-build.ant: ant targets for Java compilation</para>
+          <para><filename>meta-build.ant</filename>: ant targets for Java
+          compilation</para>
         </listitem>
       </itemizedlist>
 
@@ -169,43 +172,51 @@
 
       <itemizedlist>
         <listitem>
-          <para>configure.ac: calls AC_INIT, then calls META_SETUP, and then
-          META_JAVA_SETUP if it is a Java package, and calls appropriate AC_
-          macros to resolve C configuration issues.</para>
+          <para><filename>configure.ac</filename>: calls
+          <command>AC_INIT</command>, then calls
+          <command>META_SETUP</command>, and then
+          <command>META_JAVA_SETUP</command> if it is a Java package, and
+          calls appropriate <command>AC_</command> macros to resolve C
+          configuration issues.</para>
         </listitem>
 
         <listitem>
-          <para>&lt;package&gt;.pc.in: contains most information about the
-          package, including the name and the version and the dependencies.
-          This file is used by meta-build.m4 to generate configure flags and
-          to set up the CLASSPATH, and all other things needed for modular
-          source tree composition.</para>
+          <para><replaceable>package</replaceable><filename>.pc.in</filename>:
+          contains most information about the package, including the name and
+          the version and the dependencies. This file is used by
+          <filename>meta-build.m4</filename> to generate configure flags and
+          to set up the <replaceable>CLASSPATH</replaceable>, and all other
+          things needed for modular source tree composition.</para>
         </listitem>
 
         <listitem>
-          <para>./reconf: contains a call to meta-build</para>
+          <para><command>./reconf</command>: contains a call to
+          <command>meta-build</command></para>
         </listitem>
 
         <listitem>
-          <para>ChangeLog: contains a description of all changes (usually
-          equal to the commit message, but sometimes more extensive, or on a
-          slightly higher level of abstraction)</para>
+          <para><filename>ChangeLog</filename>: contains a description of all
+          changes (usually equal to the commit message, but sometimes more
+          extensive, or on a slightly higher level of abstraction)</para>
         </listitem>
 
         <listitem>
-          <para>Makefile.am: includes either Makefile.top.meta or
-          Makefile.java.meta, and declares the SUBDIRS variable, contains
-          <computeroutput>ACLOCAL_AMFLAGS = -I .</computeroutput></para>
+          <para><filename>Makefile.am</filename>: includes either
+          <filename>Makefile.top.meta</filename> or
+          <filename>Makefile.java.meta</filename>, and declares the
+          <replaceable>SUBDIRS</replaceable> variable, contains
+          <programlisting>ACLOCAL_AMFLAGS = -I</programlisting></para>
         </listitem>
 
         <listitem>
-          <para>COPYING: contains a copy of the GNU Lesser General Public
-          License</para>
+          <para><filename>COPYING</filename>: contains a copy of the GNU
+          Lesser General Public License</para>
         </listitem>
       </itemizedlist>
 
-      <para>This is an example &lt;package&gt;.pc.in file for a C based
-      package:</para>
+      <para>This is an example
+      <replaceable>package</replaceable><filename>.pc.in</filename> file for a
+      C based package:</para>
 
       <programlisting>prefix=@prefix@
 
@@ -219,16 +230,18 @@ Cflags: -I${prefix}/include
 Requires: aterm</programlisting>
 
       <para>The prefix line is obligatory, as well as Name, Description and
-      Version. The #uninstalled lines declare the location of exported
-      libraries in the local source tree. This is used to compose source
-      trees. Libs and Cflags declare the location of headers and libraries
-      after installation. This file is constructed by
-      <command>configure</command>, so you may use configure variables that
-      you introduced in <filename>configure.ac</filename> (e.g.
-      <computeroutput>@SOCKETLIBS@</computeroutput>).</para>
+      Version. The <literal>#uninstalled</literal> lines declare the location
+      of exported libraries in the local source tree. This is used to compose
+      source trees. <literal>Libs</literal> and <literal>Cflags</literal>
+      declare the location of headers and libraries after installation. This
+      file is constructed by <command>configure</command>, so you may use
+      configure variables that you introduced in
+      <filename>configure.ac</filename> (e.g.
+      <literal>@SOCKETLIBS@</literal>).</para>
 
-      <para>This is an example &lt;package&gt;.pc.in file for a Java based
-      package:</para>
+      <para>This is an example
+      <replaceable>package</replaceable><filename>.pc.in</filename> file for a
+      Java based package:</para>
 
       <programlisting>prefix=@prefix@
 
@@ -242,16 +255,19 @@ LocalJars=
 ExternalJars=@EXTERNAL_JARS@
 TestClass=</programlisting>
 
-      <para>Some extra variables are declared (notice the '=', instead of the
-      ':'). Java packages all have the same directory structure. The sources
-      must be in './src'. The extra variables are used to configure ant to do
-      it's job. They are all obligatory. The ExternalJars=@EXTERNAL_JARS@ line
-      is only needed if the packages has dependencies in the 'Requires' field.
-      EXTERNAL_JARS will be substituted by all Jar files needed to compile and
-      run this package, but you may add your own external dependencies here.
-      LocalJars can be used to add jars that are needed to build the package,
-      but are not build from Java source directly. These are typically third
-      party packages like junit.jar.</para>
+      <para>Some extra variables are declared (notice the
+      '<literal>=</literal>', instead of the '<literal>:</literal>'). Java
+      packages all have the same directory structure. The sources must be in
+      '<filename>./src</filename>'. The extra variables are used to configure
+      <command>ant</command> to do it's job. They are all obligatory. The
+      <literal>ExternalJars=@EXTERNAL_JARS@</literal> line is only needed if
+      the packages has dependencies in the '<literal>Requires</literal>'
+      field. <literal>EXTERNAL_JARS</literal> will be substituted by all Jar
+      files needed to compile and run this package, but you may add your own
+      external dependencies here. <literal>LocalJars</literal> can be used to
+      add jars that are needed to build the package, but are not build from
+      Java source directly. These are typically third party packages like
+      <filename>junit.jar</filename>.</para>
     </section>
   </section>
 
@@ -259,18 +275,18 @@ TestClass=</programlisting>
     <title>Building Meta-Environment packages from Subversion using
     Sisyphus</title>
 
-    <para>To initiate a build environment for the Meta-Environment can be hard
+    <para>To set up a build environment for the Meta-Environment can be hard
     because:</para>
 
     <itemizedlist>
       <listitem>
         <para>It is so modular, that it is hard to know which packages to
-        checkout, configure, build etc, and in which order</para>
+        checkout, configure, build etc, and in which order.</para>
       </listitem>
 
       <listitem>
         <para>The configure and build interface of the packages (using the GNU
-        autotools) is sometimes hard to remember</para>
+        autotools) is sometimes hard to remember.</para>
       </listitem>
     </itemizedlist>
 
@@ -278,10 +294,10 @@ TestClass=</programlisting>
     thing, we use it in our continuous integration, but we can reuse it to
     construct a build environment for a developer.</para>
 
-    <para>Sisyphus takes a top-level packages as argument, and a Sisyphus
-    configuration, and uses the repositories to find out in which order
-    packages need to be build and with which commands. This information is
-    cached locally in a <filename>.rollrc</filename> file. The
+    <para>Sisyphus takes a top-level package as argument, and a Sisyphus
+    configuration, and uses the central repositories to find out in which
+    order packages need to be build and with which commands. This information
+    is cached locally in a <filename>.rollrc</filename> file. The
     <filename>.rollrc</filename> file is constructed by running
     <command>boot-roll</command> once.</para>
 
@@ -289,40 +305,39 @@ TestClass=</programlisting>
       <title>How to use <command>boot-roll</command> and
       <command>roll</command> to checkout and build software</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>Add /ufs/sen1/software/installed/sisyphus/linux/i686/bin to
-          your PATH or add 'sisyphus' to your .pkgrc file, or install Sisyphus
-          somewhere.</para>
-        </listitem>
+      <section>
+        <title>Step 1: get access to the Sisyphus tools
+        <command>boot-roll</command> and <command>roll</command></title>
 
-        <listitem>
-          <para>Make a file .bootrollrc in your home and edit the build_dir,
-          install_dir and vcs_user variables to your settings</para>
-        </listitem>
+        <para>You can get access to <command>boot-roll</command> and
+        <command>roll</command> as follows:</para>
 
-        <listitem>
-          <para>Run 'boot-roll asfsdf-meta', this generates a file '.rollrc'
-          which can be used by subsequent calls to the 'roll' command.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>When you are working in the CWI domain add
+            <filename>/ufs/sen1/software/installed/sisyphus/linux/i686/bin</filename>
+            to your <replaceable>PATH</replaceable> or add
+            '<literal>sisyphus</literal>' to your <filename>.pkgrc</filename>
+            file.</para>
+          </listitem>
 
-        <listitem>
-          <para>Run 'roll reconf'</para>
-        </listitem>
+          <listitem>
+            <para>Otherwise, you should install Sisyphus yourself as <link
+            linkend="installing-sisyphus">explained below</link>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
 
-        <listitem>
-          <para>Run 'roll configure'</para>
-        </listitem>
+      <section>
+        <title>Step 2: Initialize boot-roll</title>
 
-        <listitem>
-          <para>Run 'roll install'</para>
-        </listitem>
-      </itemizedlist>
+        <para>Make a file <filename>.bootrollrc</filename> in your home
+        directory and edit the <literal>build_dir</literal>,
+        <literal>install_dir</literal> and <literal>vcs_user</literal>
+        variables according to your settings. The following is an example
+        <filename>.bootrollrc</filename> file:</para>
 
-      <para>The following is an example <filename>.bootrollrc</filename>
-      file:</para>
-
-      <programlisting>boot_roll:
+        <programlisting>boot_roll:
   build_dir: /ufs/jurgenv/glt/build
   install_dir: /ufs/jurgenv/glt/installed/roll
   vcs_user: jurgenv
@@ -341,17 +356,16 @@ templates:
  check: make check
  distcheck: DISTCHECK_CONFIGURE_FLAGS="&lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt;" make distcheck
  clean: make uninstall clean 
- update: make uninstall ; cvs update
+ update: make uninstall ; svn update
  maintainer-clean: make uninstall maintainer-clean
 
  configure-user: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --with-cflags="-Wall -Werror -g -O2"
 </programlisting>
 
-      <para>If your workstation is outside the CWI domain, it is necessary to
-      use a tunnel specification. Replace the sisyphus tag with the following
-      to tunnel from ssh.cwi.nl to sjofar.sen.cwi.nl:</para>
-
-      <programlisting>sisyphus:
+        <para>If your workstation is outside the CWI domain, it is necessary
+        to use a tunnel specification. Replace the <literal>sisyphus</literal>
+        tag with the following to tunnel from <literal>ssh.cwi.nl</literal> to
+        <literal>sjofar.sen.cwi.nl</literal>: <programlisting>sisyphus:
   url: sisyphus-configuration
   host: sjofar.sen.cwi.nl
   port: 3960
@@ -360,45 +374,73 @@ templates:
   password: daybuild
   tunnel:
     host: ssh.cwi.nl
-    user: jurgenv
-</programlisting>
-    </section>
+    user: jurgenv</programlisting><warning>
+            <para>The connection with the Subversion repository uses the
+            Secure Shell. Be aware that this set up will not work if you use
+            password-protected identities like <literal>id_rsa</literal> as
+            used by the Secure Shell. Currently, the only solution is to
+            remove those passwords.</para>
+          </warning></para>
+      </section>
 
-    <section>
-      <title>Notes</title>
+      <section>
+        <title>Step 3: Run <command>boot-roll</command></title>
 
-      <itemizedlist>
-        <listitem>
-          <para>'<command>roll -h</command>' and '<command>roll -l</command>'
-          give helpful hints on the usage of roll</para>
-        </listitem>
+        <para>Run the command:</para>
 
-        <listitem>
-          <para>roll is no substitute for understanding the build interface of
-          the Meta-Environment. It just automates a number of repetitive
-          tasks, and manages the order in which they are executed. You are
-          expected to fully understand the contents of your .bootrollrc file
-          and your <filename>.rollrc</filename> file.</para>
-        </listitem>
-      </itemizedlist>
+        <programlisting>boot-roll asfsdf-meta</programlisting>
+
+        <para>This generates a file '<filename>.rollrc</filename>' which
+        contains, amongst others, the dependencies between the packages. The
+        .rollrc file will be used by subsequent calls to the
+        <command>roll</command> command.</para>
+      </section>
+
+      <section>
+        <title>Step 4: Run <command>roll</command></title>
+
+        <para>As explained earlier, each package can be built by way of the
+        standard operation sequence: <literal>reconf</literal>,
+        <literal>configure</literal>, install. For first time installations,
+        it is mandatory to apply these operations to each package first before
+        moving on to the next package. This is achieved by executing:</para>
+
+        <para><programlisting>roll -s reconf configure install</programlisting></para>
+
+        <para>The option '<literal>-s</literal>' means apply to each package
+        the sequence of operations that follow it. <command>roll -h</command>
+        and <command>roll -l</command> give helpful hints on the usage of
+        <command>roll</command>.</para>
+
+        <para>The command <command>roll</command> is no substitute for
+        understanding the build interface of the Meta-Environment. It just
+        automates a number of repetitive tasks, and manages the order in which
+        they are executed. You are expected to fully understand the contents
+        of your <filename>.bootrollrc</filename> file and your
+        <filename>.rollrc</filename> file.</para>
+      </section>
     </section>
   </section>
 
-  <section>
-    <title>Installation of Sisyphus</title>
+  <section xml:id="installing-sisyphus">
+    <title>Installing Sisyphus</title>
+
+    <para>The following steps are needed for a full installation of
+    Sisyphus:</para>
 
     <itemizedlist>
       <listitem>
-        <para>install ruby-1.8.x</para>
+        <para>install <filename>ruby-1.8.x</filename></para>
       </listitem>
 
       <listitem>
-        <para>make sure your ruby binary is called 'ruby' and not
-        'ruby1.8'</para>
+        <para>make sure your ruby binary is called '<command>ruby</command>'
+        and not '<command>ruby1.8</command>' or something similar.</para>
       </listitem>
 
       <listitem>
-        <para>install rubygems, using the following script:</para>
+        <para>install <filename>rubygems</filename>, using the following
+        script:</para>
 
         <programlisting>wget http://rubyforge.org/frs/download.php/5207/rubygems-0.8.11.tgz
 tar zxvf rubygems-0.8.11.tgz
@@ -419,11 +461,11 @@ sudo gem install rails</programlisting>
       </listitem>
 
       <listitem>
-        <para>./configure --prefix=/your/prefix</para>
+        <para><command>./configure --prefix=/your/prefix</command></para>
       </listitem>
 
       <listitem>
-        <para>make install</para>
+        <para><command>make install</command></para>
       </listitem>
     </itemizedlist>
   </section>
