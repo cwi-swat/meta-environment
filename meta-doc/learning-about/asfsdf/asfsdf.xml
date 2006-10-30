@@ -11,7 +11,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Understanding ASF+SDF</title>
+    <title>Learning ASF+SDF</title>
 
     <authorgroup>
       <author>
@@ -3573,14 +3573,14 @@ equations
       </listitem>
     </itemizedlist>
 
-    <para> We will briefly discuss each of the error messages and indicate
-    what is exactly wrong in the specification. Furthermore we will hint at
-    how the error can be fixed.</para>
+    <para>We will briefly discuss each of the error messages and indicate what
+    is exactly wrong in the specification. Furthermore we will hint at how the
+    error can be fixed.</para>
 
     <section>
       <title>Parse Errors</title>
 
-      <para> There are three different types of parse errors:</para>
+      <para>There are three different types of parse errors:</para>
 
       <itemizedlist>
         <listitem>
@@ -3663,7 +3663,7 @@ equations
         </listitem>
 
         <listitem>
-          <para> <literal>used in priorities but undefined</literal>: This
+          <para><literal>used in priorities but undefined</literal>: This
           warning is generated whenever a production rule is used in a
           priority section which is not defined in this module or in one of
           the imported modules. It is possible that this production rule will
@@ -3672,7 +3672,7 @@ equations
         </listitem>
 
         <listitem>
-          <para> <literal>inconsistent rhs in priorities</literal>: This
+          <para><literal>inconsistent rhs in priorities</literal>: This
           warning is caused by a production rule which has not the same
           right-hand side as the other production rules in the priority
           relation. Whenever this occurs the effect of the expressed priority
