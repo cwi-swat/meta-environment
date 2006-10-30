@@ -14,7 +14,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>Learning about syntax analysis</title>
+    <title>Syntax analysis</title>
 
     <author>
       <personname>Paul Klint</personname>

@@ -7,7 +7,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Learning about term rewriting</title>
+    <title>Term rewriting</title>
 
     <author>
       <personname><firstname>Paul</firstname><surname>Klint</surname></personname>

@@ -14,7 +14,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>Learning about the architecture of The Meta-Environment</title>
+    <title>The architecture of The Meta-Environment</title>
 
     <authorgroup>
       <author>
@@ -266,15 +266,15 @@
 
           <td>s</td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
-          <td> </td>
+          <td></td>
 
           <td>s</td>
         </tr>
@@ -395,7 +395,7 @@
           <title>Input term</title>
 
           <para>A text that conforms to the syntax defined in the ASF+SDF
-          modules. This includes: </para>
+          modules. This includes:</para>
         </formalpara>
 
         <itemizedlist>
