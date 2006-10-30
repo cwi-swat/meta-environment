@@ -20,6 +20,10 @@
     </authorgroup>
   </info>
 
+  <note>
+    <para>Updated October 30, 2006.</para>
+  </note>
+
   <section>
     <title>Background</title>
 
@@ -340,7 +344,7 @@
     </section>
 
     <section>
-      <title>Topics</title>
+      <title>Topics and presentation model</title>
 
       <para>There is a wide range of topics to discuss,
       including:<itemizedlist>
@@ -392,34 +396,38 @@
           <listitem>
             <para>Access to (archived) mailing lists.</para>
           </listitem>
-        </itemizedlist>We have identified the following categories of
-      topics:<itemizedlist>
+        </itemizedlist></para>
+
+      <para>We will use the following three-step presentation model:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Learning about - overview of concepts and features of key
+          components.</para>
+        </listitem>
+
+        <listitem>
+          <para>How to - using key components and solve problems.</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding - detailed knowledge about concepts and
+          implementation.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Based on this model, we will use the following
+      categories:<itemizedlist>
           <listitem>
-            <para>Learning about - For Novice Users.</para>
+            <para>Learning about - For novices and professionals.</para>
           </listitem>
 
           <listitem>
-            <para>Getting started - For Novice Users.</para>
+            <para>How to - For novices and professionals.</para>
           </listitem>
 
           <listitem>
-            <para>How to - For Novice and Advanced Users.</para>
-          </listitem>
-
-          <listitem>
-            <para>Understanding - For Specialist Users and Developers.</para>
-          </listitem>
-
-          <listitem>
-            <para>Project - For Developers.</para>
-          </listitem>
-
-          <listitem>
-            <para>Demonstrations - For Novice and Advanced Users.</para>
-          </listitem>
-
-          <listitem>
-            <para>Applications - For Novice and Advanced Users.</para>
+            <para>Understanding - For specialists and oweners.</para>
           </listitem>
 
           <listitem>
@@ -427,8 +435,7 @@
           </listitem>
 
           <listitem>
-            <para>Scientific Publications - For Specialists Users and
-            Developers.</para>
+            <para>Project - For Developers.</para>
           </listitem>
 
           <listitem>
@@ -451,9 +458,15 @@
       <title>Learning about ...</title>
 
       <para><emphasis>Learning about</emphasis> articles describe essential
-      concepts and global application areas. Typical subjects:</para>
+      concepts, global application areas and give overviews of the features of
+      components of the system. Typical subjects:</para>
 
       <itemizedlist>
+        <listitem>
+          <para>Learning about the architecture of The
+          Meta-Environment.</para>
+        </listitem>
+
         <listitem>
           <para>Learning about software analysis</para>
         </listitem>
@@ -473,13 +486,25 @@
         <listitem>
           <para>Learning about term rewriting</para>
         </listitem>
+
+        <listitem>
+          <para>Learning about SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about ASF+SDF</para>
+        </listitem>
       </itemizedlist>
 
       <para><emphasis>Learning about</emphasis> articles:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Target novices.</para>
+          <para>Target novices or professionals.</para>
         </listitem>
 
         <listitem>
@@ -487,72 +512,8 @@
         </listitem>
 
         <listitem>
-          <para>Are circa 5 pages long.</para>
-        </listitem>
-
-        <listitem>
           <para>Gives pointers to the general literature as well as to
           Meta-Environment related documents.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Getting started ...</title>
-
-      <para><emphasis>Getting started</emphasis> articles describe howto
-      download, install and run our software. This is a separate category
-      because these articles need to be found easily online (i.e. at the top
-      of a page).The idea is of course to make the technology as accessible as
-      possible. These articles provide pointers to other articles and online
-      resources. Typical documents:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Downloading and installing SDF (on linux, macos,
-          windows)</para>
-        </listitem>
-
-        <listitem>
-          <para>Downloading and installing the ASF+SDF Meta-Environment</para>
-        </listitem>
-
-        <listitem>
-          <para>Downloading and installing the ToolBus</para>
-        </listitem>
-
-        <listitem>
-          <para>Starting the ASF+SDF Meta-Environment</para>
-        </listitem>
-
-        <listitem>
-          <para>Starting the SDF Meta-Environment</para>
-        </listitem>
-
-        <listitem>
-          <para>The basic SDF commandline</para>
-        </listitem>
-
-        <listitem>
-          <para>The basic ASF commandline</para>
-        </listitem>
-      </itemizedlist>
-
-      <para><emphasis>Getting started</emphasis> articles:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Target novice and professional users.</para>
-        </listitem>
-
-        <listitem>
-          <para>Short: 1-2 pages.</para>
-        </listitem>
-
-        <listitem>
-          <para>Refer immediately to both <emphasis>How to</emphasis>
-          documents, <emphasis>Demonstrations</emphasis> and
-          <emphasis>Understanding</emphasis> documents</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -564,9 +525,39 @@
       aspects of the software. These articles are written with a particular
       use-case in mind, and provide a domain specific view of the technology.
       The focus is on what you can do with it, and not on how it actually
-      works.</para>
+      works. Typical subjects:</para>
 
       <itemizedlist>
+        <listitem>
+          <para>How to download and install SDF (on linux, macos,
+          windows)</para>
+        </listitem>
+
+        <listitem>
+          <para>How to download and install the ASF+SDF
+          Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto downloading and install the ToolBus</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto start the ASF+SDF Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto start the SDF Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto use the basic SDF commandline</para>
+        </listitem>
+
+        <listitem>
+          <para>Howto use the basic ASF commandline</para>
+        </listitem>
+
         <listitem>
           <para>How to write a grammar in SDF</para>
         </listitem>
@@ -631,6 +622,12 @@
         <listitem>
           <para>How to write parameterized ASF+SDF modules</para>
         </listitem>
+
+        <listitem>
+          <para>How to apply ... summarizes successful applications of the
+          software. We will invite our main users to write a few pages on
+          their particular subject.</para>
+        </listitem>
       </itemizedlist>
 
       <para>The above articles may be cross-linked. Especially if there is a
@@ -660,7 +657,7 @@
 
         <listitem>
           <para>Reference <emphasis>Understanding</emphasis> documents where
-          the information would become to technical (example: explain how to
+          the information would become too technical (example: explain how to
           use SDF priorities and what for, but not how they work)</para>
         </listitem>
 
@@ -670,120 +667,74 @@
         </listitem>
 
         <listitem>
-          <para>Medium sized (up to 10 pages, average 5)</para>
-        </listitem>
-
-        <listitem>
           <para>Targeted at users with modest technical background</para>
         </listitem>
       </itemizedlist>
-    </section>
 
-    <section>
-      <title>Applications ...</title>
-
-      <para><emphasis>Application</emphasis> articles summarize successful
-      applications of the software. We will invite our main users to write a
-      few pages on their particular subject.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Short (1-3) pages</para>
-        </listitem>
-
-        <listitem>
-          <para>Written by specialists or developers.</para>
-        </listitem>
-
-        <listitem>
-          <para>Targeted at users</para>
-        </listitem>
-
-        <listitem>
-          <para>References to relevant websites and scientific
-          publications</para>
-        </listitem>
-
-        <listitem>
-          <para>Mentions domain (application area)</para>
-        </listitem>
-
-        <listitem>
-          <para>Mentions software used</para>
-        </listitem>
-
-        <listitem>
-          <para>Mentions future work</para>
-        </listitem>
-
-        <listitem>
-          <para>Mentions all scientific and industrial partners</para>
-        </listitem>
-
-        <listitem>
-          <para>Mentions all people involved</para>
-        </listitem>
-
-        <listitem>
-          <para>The list itself is worth publishing first-class on the website
-          (including the names of the authors)</para>
-        </listitem>
-
-        <listitem>
-          <para>Each application is one docbook file</para>
-        </listitem>
-
-        <listitem>
-          <para>If possible, each application has a correspondong
-          <emphasis>Demonstration</emphasis></para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Demonstrations</title>
-
-      <para>We will use interactive demonstrations (using Flash?) to
-      demonstrate GUI related features. These demonstrations:</para>
+      <para>How to apply articles:</para>
 
       <para><itemizedlist>
           <listitem>
-            <para>Provide an overview of an <emphasis>How to</emphasis>
-            document</para>
+            <para>Short (1-3) pages</para>
           </listitem>
 
           <listitem>
-            <para>Detail typical GUI related stuff (that is likely to be hard
-            to guess, but also highly volatile)</para>
+            <para>Written by specialists or developers.</para>
           </listitem>
 
           <listitem>
-            <para>Typical applications (demonstrations of COBOL
-            transformations, e.g. For use in presentations)</para>
+            <para>Targeted at users</para>
+          </listitem>
+
+          <listitem>
+            <para>References to relevant websites and scientific
+            publications</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions domain (application area)</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions software used</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions future work</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions all scientific and industrial partners</para>
+          </listitem>
+
+          <listitem>
+            <para>Mentions all people involved</para>
+          </listitem>
+
+          <listitem>
+            <para>The list itself is worth publishing first-class on the
+            website (including the names of the authors)</para>
+          </listitem>
+
+          <listitem>
+            <para>Each application is one docbook file</para>
+          </listitem>
+
+          <listitem>
+            <para>If possible, each application has a correspondong
+            <emphasis>Demonstration</emphasis></para>
           </listitem>
         </itemizedlist></para>
     </section>
 
     <section>
-      <title>Courses</title>
-
-      <para>The courses section of the documentation contains slides and
-      hand-outs for use in bachelor and master level courses on
-      Meta-Environment related subjects. Since layout is very important for
-      slides, we allow powerpoint, open-office and latex documents.</para>
-    </section>
-
-    <section>
       <title>Understanding ...</title>
 
-      <para>Articles in the category <emphasis>understanding</emphasis>
-      explain a fundamental concept.</para>
+      <para>Articles in the category <emphasis>understanding</emphasis> give
+      in-depth, detailed, information about concepts, technology or
+      implementation. Typical subjects:</para>
 
       <itemizedlist>
-        <listitem>
-          <para>Understanding the architecture of the Meta-Environment</para>
-        </listitem>
-
         <listitem>
           <para>Understanding ATerm data representation and
           manipulation</para>
@@ -876,18 +827,22 @@
 
         <listitem>
           <para>Provides plenty links to related work and related
-          software</para>
+          software.</para>
+        </listitem>
+
+        <listitem>
+          <para>May also be a pointer to a scientific publication.</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Scientific Publications</title>
+      <title>Courses</title>
 
-      <para>This category is targeted at the scientific audience, it is a
-      bibliography of our scientific papers, including literal pdf or
-      reference to online resource. This can be organized as one docbook
-      bibliography file.</para>
+      <para>The courses section of the documentation contains slides and
+      hand-outs for use in bachelor and master level courses on
+      Meta-Environment related subjects. Since layout is very important for
+      slides, we allow powerpoint, open-office and latex documents.</para>
     </section>
 
     <section>
