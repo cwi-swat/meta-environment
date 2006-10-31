@@ -1,8 +1,7 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -11,23 +10,19 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import nl.cwi.sen1.gui.plugin.Navigator;
 import nl.cwi.sen1.gui.plugin.data.Module;
 import nl.cwi.sen1.gui.plugin.data.ModuleSelectionListener;
 import nl.cwi.sen1.gui.plugin.data.ModuleSelectionModel;
 import nl.cwi.sen1.gui.plugin.data.ModuleTreeModel;
 import nl.cwi.sen1.gui.plugin.data.ModuleTreeNode;
+import aterm.ATerm;
 
 public class ModuleTree extends JPanel {
 	private JTree tree;
 
 	private final ModuleTreeModel manager;
 
-	private Navigator navigator;
-
-	public ModuleTree(Navigator modulebrowser,
-			final ModuleTreeModel manager) {
-		this.navigator = modulebrowser;
+	public ModuleTree(Navigator modulebrowser, final ModuleTreeModel manager) {
 		this.manager = manager;
 
 		setLayout(new BorderLayout());
@@ -40,17 +35,6 @@ public class ModuleTree extends JPanel {
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				manager.selectModule(getCurrentModule());
-			}
-		});
-		tree.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					handlePopupRequest(e);
-				}
-			}
-
-			public void mouseReleased(MouseEvent e) {
-				mousePressed(e);
 			}
 		});
 
@@ -69,16 +53,15 @@ public class ModuleTree extends JPanel {
 		});
 	}
 
-	private void handlePopupRequest(MouseEvent e) {
-		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
+	public ATerm selectModule(int X, int Y) {
+		TreePath path = tree.getClosestPathForLocation(X, Y);
 		if (path != null) {
 			tree.setSelectionPath(path);
+			ModuleTreeNode selectedModule = (ModuleTreeNode) path
+					.getLastPathComponent();
+			return selectedModule.getId();
 		}
-
-		Module current = getCurrentModule();
-		if (current != null) {
-			navigator.postPopupRequest(e, current);
-		}
+		return null;
 	}
 
 	private Module getCurrentModule() {
@@ -91,5 +74,9 @@ public class ModuleTree extends JPanel {
 		}
 
 		return null;
+	}
+
+	public void addMouseListener(MouseListener l) {
+		tree.addMouseListener(l);
 	}
 }

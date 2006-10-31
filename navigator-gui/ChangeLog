@@ -1,5 +1,9 @@
 $Id$
 
+Tue Oct 31 10:12:52 CET 2006 <jurgenv@cwi.nl>
+ * src/**/Navigator.java: refactored use of the mouse en menu
+   event interfaces to the ToolBus.
+
 Mon Jul 17 11:53:25 CEST 2006 <kooiker@cwi.nl>
  * src/**/{Module,ListModel}.java:
    - Use of generics

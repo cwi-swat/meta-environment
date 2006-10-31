@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.graph.Factory;
 import nl.cwi.sen1.graph.types.Attribute;
@@ -25,18 +26,14 @@ import nl.cwi.sen1.gui.plugin.data.Module;
 import nl.cwi.sen1.gui.plugin.data.ModuleSelectionListener;
 import nl.cwi.sen1.gui.plugin.data.ModuleTreeModel;
 import nl.cwi.sen1.ioapi.types.File;
-import nl.cwi.sen1.util.PopupHandler;
-import nl.cwi.sen1.util.Preferences;
-import nl.cwi.sen1.util.StudioPopupMenu;
+import nl.cwi.sen1.util.DefaultPopupImpl;
+import nl.cwi.sen1.util.MouseAdapter;
 import aterm.ATerm;
 import aterm.ATermFactory;
-import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     private static final String TOOL_NAME = "navigator";
-
-    private static final String RESOURCE_DIR = "/resources";
 
     private NavigatorBridge bridge;
 
@@ -52,21 +49,13 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 
     private nl.cwi.sen1.ioapi.Factory ioFactory;
 
-    // TODO: use preferences
-    private Preferences preferences;
-
     private boolean suspendSelectionNotification;
-
-    private MouseEvent popupEvent;
 
     private StudioComponent navigatorComponent;
 
+	private nl.cwi.sen1.configapi.Factory configFactory;
+	
     public Navigator() {
-        String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
-                + ".properties");
-        this.preferences = new Preferences(getClass().getResourceAsStream(
-                propertyPath));
-
         statusBarComponents = new HashMap<String, JComponent>();
         status = new JLabel(" ");
         status.setPreferredSize(new Dimension(100, 18));
@@ -121,23 +110,16 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     }
 
     public void postPopupRequest(MouseEvent e, Module module) {
-        popupEvent = e;
         ATermFactory factory = studio.getATermFactory();
         ATerm moduleId = module.getId();
         bridge.postEvent(factory.make("request-popup-event(<term>)", moduleId));
     }
 
-    public void showPopup(final ATerm id, ATerm menu) {
-        StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
-        popup.setPopupHandler(new PopupHandler() {
-            public void popupSelected(Event action) {
-                bridge.postEvent(studio.getATermFactory().make(
-                        "popup-menu-event(<term>,<term>)", id, action.toTerm()));
-            }
-
-        });
-        popup.show(popupEvent.getComponent(), popupEvent.getX(), popupEvent
-                .getY());
+    public void showPopup(final ATerm id, final ATerm menu) {
+    	nl.cwi.sen1.configapi.Factory f = nl.cwi.sen1.configapi.Factory.getInstance((PureFactory) id.getFactory());
+		ActionDescriptionList list = f.ActionDescriptionListFromTerm(menu);
+		DefaultPopupImpl popup = new DefaultPopupImpl(bridge);
+		popup.showPopup(id, list);
     }
 
     public void recAckEvent(ATerm t0) {
@@ -151,11 +133,16 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     public String getName() {
         return TOOL_NAME;
     }
+    
+    private ATerm createEventId(ATerm moduleId) {
+    	return studio.getATermFactory().make(TOOL_NAME + "(<term>)", moduleId);
+    }
 
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
         graphFactory = Factory.getInstance((PureFactory) studio
                 .getATermFactory());
+        configFactory = nl.cwi.sen1.configapi.Factory.getInstance((PureFactory) studio.getATermFactory());
         ioFactory = nl.cwi.sen1.ioapi.Factory.getInstance((PureFactory) studio
                 .getATermFactory());
         bridge = new NavigatorBridge(studio.getATermFactory(), this);
@@ -183,6 +170,19 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 
     private void addNavigatorComponent() {
         final ModuleTree tree = new ModuleTree(this, moduleModel);
+        final ATerm id = configFactory.getPureFactory().parse(TOOL_NAME);
+        final Event popupAction = configFactory.makeEvent_Popup();
+        
+        tree.addMouseListener(new MouseAdapter(id, bridge, popupAction) {
+			public void mousePressed(MouseEvent e) {
+				ATerm moduleId = tree.selectModule(e.getX(), e.getY());
+				if (moduleId != null) {
+				  setId(createEventId(moduleId));
+				  super.mousePressed(e);
+				}
+			}
+		});
+        
         navigatorComponent = new StudioComponentImpl("Navigator", tree) {
             public void requestClose() throws CloseAbortedException {
                 throw new CloseAbortedException();

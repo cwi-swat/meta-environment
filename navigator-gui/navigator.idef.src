@@ -26,16 +26,17 @@ in
       . snd-note(nav-module-selected(ModuleId))
       . snd-ack-event(T, module-selected(ModuleId))
     +
-      rec-event(T, request-popup-event(ModuleId?))
+      rec-event(T, mouse-event(navigator(ModuleId?),popup))
+      . printf(" request-popup-event: %t\n", ModuleId)
       . snd-msg(nav-request-popup-event(ModuleId))
-      . snd-ack-event(T, request-popup-event(ModuleId))
+      . snd-ack-event(T, mouse-event(navigator(ModuleId),popup))
     +
       rec-msg(nav-show-popup(ModuleId, PopupMenu?))
       . snd-do(T, show-popup(ModuleId, PopupMenu))
     +
-      rec-event(T, popup-menu-event(ModuleId?, Menu?))
+      rec-event(T, menu-event(ModuleId?, Menu?))
       . snd-msg(nav-menu-selected(ModuleId, Menu))
-      . snd-ack-event(T, popup-menu-event(ModuleId, Menu))
+      . snd-ack-event(T, menu-event(ModuleId, Menu))
     )
     *
       rec-disconnect(T)
