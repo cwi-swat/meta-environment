@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:54:18 AM
+// generation time: Oct 27, 2006 6:00:00 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -96,6 +96,15 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `setCursorAtOffset' not supported.");
+    }
+  }
+  public void showPopup(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.showPopup(t0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showPopup' not supported.");
     }
   }
   public void editFile(ATerm t0, String s1, String s2)

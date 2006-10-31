@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:54:18 AM
+// generation time: Oct 27, 2006 6:00:00 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -32,6 +32,7 @@ abstract public class EditorPluginTool
   private ATerm PdisplayMessage0;
   private ATerm PkillEditor0;
   private ATerm PsetCursorAtOffset0;
+  private ATerm PshowPopup0;
   private ATerm PeditFile0;
   private ATerm PsetEditable0;
   private ATerm PhighlightSlices0;
@@ -66,6 +67,7 @@ abstract public class EditorPluginTool
     sigTable.put(factory.parse("rec-do(<editor-plugin>,display-message(<term>,<str>))"), btrue);
     sigTable.put(factory.parse("rec-do(<editor-plugin>,editor-to-front(<term>))"), btrue);
     sigTable.put(factory.parse("rec-do(<editor-plugin>,kill-editor(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<editor-plugin>,show-popup(<term>,<list>))"), btrue);
     sigTable.put(factory.parse("rec-ack-event(<editor-plugin>,<term>)"), btrue);
     sigTable.put(factory.parse("rec-terminate(<editor-plugin>,<term>)"), btrue);
   }
@@ -82,6 +84,7 @@ abstract public class EditorPluginTool
     PdisplayMessage0 = factory.parse("rec-do(display-message(<term>,<str>))");
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PsetCursorAtOffset0 = factory.parse("rec-do(set-cursor-at-offset(<term>,<int>))");
+    PshowPopup0 = factory.parse("rec-do(show-popup(<term>,<term>))");
     PeditFile0 = factory.parse("rec-do(edit-file(<term>,<str>,<str>))");
     PsetEditable0 = factory.parse("rec-do(set-editable(<term>,<term>))");
     PhighlightSlices0 = factory.parse("rec-do(highlight-slices(<term>,<term>))");
@@ -139,6 +142,11 @@ abstract public class EditorPluginTool
     result = term.match(PsetCursorAtOffset0);
     if (result != null) {
       setCursorAtOffset((ATerm)result.get(0), ((Integer)result.get(1)).intValue());
+      return null;
+    }
+    result = term.match(PshowPopup0);
+    if (result != null) {
+      showPopup((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PeditFile0);

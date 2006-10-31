@@ -2,7 +2,6 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,14 +11,15 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputAdapter;
 
 import nl.cwi.sen1.configapi.Factory;
+import nl.cwi.sen1.configapi.types.ActionDescription;
+import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;
-import nl.cwi.sen1.configapi.types.ItemList;
+import nl.cwi.sen1.configapi.types.ItemLabels;
 import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.configapi.types.shortcut.Shortcut;
 import nl.cwi.sen1.gui.CloseAbortedException;
@@ -32,6 +32,9 @@ import nl.cwi.sen1.gui.component.StudioComponentAdapter;
 import nl.cwi.sen1.gui.component.StudioComponentImpl;
 import nl.cwi.sen1.gui.plugin.editor.FileToBigException;
 import nl.cwi.sen1.gui.plugin.editor.SwingEditor;
+import nl.cwi.sen1.util.DefaultPopupImpl;
+import nl.cwi.sen1.util.MenuAction;
+import nl.cwi.sen1.util.MouseAdapter;
 import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.ATermList;
@@ -52,15 +55,18 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     private Studio studio;
 
     private EditorPluginBridge bridge;
-
+    
+    private DefaultPopupImpl popup;
+    
     public EditorPlugin() {
         editors = new HashMap<String, Editor>();
         componentsById = new HashMap<String, StudioComponent>();
         statusbarsById = new HashMap<String, Map<String, JComponent>>();
+        
     }
 
     public void isModified(ATerm editorId) {
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
         String modified;
 
         if (panel != null && panel.isModified()) {
@@ -76,7 +82,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void writeContents(ATerm editorId) {
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
 
         if (panel != null) {
             try {
@@ -99,18 +105,22 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         errorapi.Factory factory = errorapi.Factory
                 .getInstance((PureFactory) studio.getATermFactory());
 
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
 
         if (panel != null) {
             panel.setFocus(factory.AreaFromTerm(focus));
         }
     }
 
+	private Editor getEditorPanel(ATerm editorId) {
+		return editors.get(editorId.toString());
+	}
+
     public void clearFocus(ATerm editorId) {
     }
 
     public void registerTextCategories(ATerm editorId, ATerm categories) {
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
 
         if (panel != null) {
             PropertyList properties = Factory.getInstance(
@@ -122,40 +132,43 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     public void addActions(final ATerm editorId, ATerm menuList) {
         StudioComponent comp = componentsById.get(editorId.toString());
-
+        final Editor panel = getEditorPanel(editorId);
+        
         if (comp != null) {
-            addEditorMenus(editorId, comp, (ATermList) menuList);
-
+            addEditorActions(editorId, comp, (ATermList) menuList, panel);
             createFileMenu(editorId, comp);
-            createEditMenu(editors.get(editorId.toString()), comp);
+            createEditMenu(getEditorPanel(editorId), comp);
+            panel.addMouseListener(new MouseInputAdapter() {
+            	public void mousePressed(MouseEvent e) {
+            		int offset = panel.getMouseOffset(e.getX(), e.getY());
+            		bridge.postEvent(editorId.getFactory().make("offset-event(<term>,<int>)",
+            				editorId, offset));
+            	}
+            });
         }
     }
 
-    private void addEditorMenus(final ATerm editorId, StudioComponent comp,
-            ATermList menuList) {
-        while (!menuList.isEmpty()) {
-            final Event menuPath = configFactory.EventFromTerm(menuList
-                    .getFirst());
-
-            studio.addComponentMenu(comp, menuPath, new AbstractAction(menuPath
-                    .toString()) {
-                public void actionPerformed(ActionEvent e) {
-                    ATerm event = studio.getATermFactory().make(
-                            "menu-event(<term>,<term>)", editorId,
-                            menuPath.toTerm());
-                    bridge.postEvent(event);
-                }
-            });
-            menuList = menuList.getNext();
+    private void addEditorActions(final ATerm editorId, StudioComponent comp,
+            ATermList actionList, final Editor panel) {
+        while (!actionList.isEmpty()) {
+        	ActionDescription desc = configFactory.ActionDescriptionFromTerm(actionList.getFirst());
+        	Event action = desc.getEvent();
+        	
+        	if (action.isMenu() || action.isMenuShortcut()) {
+        		   studio.addComponentMenu(comp, action, new MenuAction(editorId, bridge,action));
+        	}
+        	else if (action.isClick() || action.isPopup()) {
+        		panel.addMouseListener(new MouseAdapter(editorId, bridge, action));
+        	}
+            actionList = actionList.getNext();
         }
-
     }
 
     private void createFileMenu(final ATerm editorId, final StudioComponent comp) {
         Factory factory = Factory.getInstance((PureFactory) studio
                 .getATermFactory());
 
-        ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
+        ItemLabels items = factory.makeItemLabels(factory.makeItem_Label("File"),
                 factory.makeItem_Label("Save"));
 
         Shortcut shortcut = factory.makeShortCut_Shortcut(
@@ -166,7 +179,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
         studio.addComponentMenu(comp, event, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                Editor editor = editors.get(editorId.toString());
+                Editor editor = getEditorPanel(editorId);
                 try {
                     editor.writeContents(editor.getFilename());
                     ATerm event = studio.getATermFactory().make(
@@ -186,13 +199,13 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         });
 
-        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+        items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Save a copy"));
 
         event = factory.makeEvent_Menu(items);
 
         studio.addComponentMenu(comp, event, new AbstractAction() {
-            Editor editor = editors.get(editorId.toString());
+            Editor editor = getEditorPanel(editorId);
 
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
@@ -212,7 +225,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         });
 
-        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+        items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Save All"));
 
         shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
@@ -249,13 +262,13 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         });
 
-        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+        items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Refresh"));
 
         event = factory.makeEvent_Menu(items);
 
         studio.addComponentMenu(comp, event, new AbstractAction() {
-            Editor editor = editors.get(editorId.toString());
+            Editor editor = getEditorPanel(editorId);
 
             public void actionPerformed(ActionEvent e) {
                 editor.rereadContents();
@@ -270,7 +283,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         });
 
-        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+        items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Close"));
 
         shortcut = factory.makeShortCut_Shortcut(
@@ -285,7 +298,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         });
 
-        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+        items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Close All"));
 
         shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
@@ -327,7 +340,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             edit = false;
         }
 
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
         if (panel != null) {
             panel.setEditable(edit);
         }
@@ -364,7 +377,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
 
         if (panel != null) {
             panel.setCursorAtOffset(offset);
@@ -394,7 +407,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void highlightSlices(ATerm editorId, ATerm slices) {
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
         if (panel != null && !panel.isModified()) {
             panel.registerSlices(slices);
         }
@@ -409,7 +422,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void rereadContents(ATerm editorId) {
-        Editor panel = editors.get(editorId.toString());
+        Editor panel = getEditorPanel(editorId);
         if (panel != null) {
             panel.rereadContents();
         }
@@ -425,6 +438,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 .getATermFactory());
         bridge = new EditorPluginBridge(studio.getATermFactory(), this);
         bridge.setLockObject(this);
+        popup = new DefaultPopupImpl(bridge);
         studio.connect(getName(), bridge);
     }
 
@@ -437,7 +451,6 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             final SwingEditor panel = new SwingEditor(id, filename);
             editorPanel = panel;
 
-            addMouseListener(editorId, panel);
             addEditorModifiedListener(editorId, panel);
 
             final JLabel status = new JLabel(" ");
@@ -471,23 +484,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
         return editorPanel;
     }
-
-    private void addMouseListener(final ATerm editorId, final Editor panel) {
-        // Add mousemotion listener showing sorts in tooltips
-        panel.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                int offset = panel.getMouseOffset(e.getX(), e.getY());
-
-                if (e.getClickCount() == 1) {
-                    ATerm aoffset = studio.getATermFactory().makeInt(offset);
-                    ATerm event = studio.getATermFactory().make(
-                            "mouse-event(<term>,<term>)", editorId, aoffset);
-                    bridge.postEvent(event);
-                }
-            }
-        });
-    }
-
+    
     private void addEditorModifiedListener(final ATerm editorId,
             final Editor panel) {
         panel.addEditorModifiedListener(new EditorModifiedListener() {
@@ -596,19 +593,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         }
     }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame frame = new JFrame("S w i n g E d i t o r D E M O");
-                try {
-                    frame.add(new SwingEditor("", ""));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                frame.setSize(640,480);
-                frame.setVisible(true);
-            }
-        });
-    }
+
+	public void showPopup(final ATerm editorId, ATerm menuList) {
+		ActionDescriptionList l = configFactory.ActionDescriptionListFromTerm(menuList);
+		popup.showPopup(editorId, l);
+	}
 }

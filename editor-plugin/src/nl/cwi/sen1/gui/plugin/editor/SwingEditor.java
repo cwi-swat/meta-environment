@@ -45,7 +45,7 @@ public class SwingEditor extends JPanel implements Editor {
 
 		add(scroller, BorderLayout.CENTER);
 	}
-
+	
 	public void rereadContents() {
 		try {
 			readFileContents(filename);

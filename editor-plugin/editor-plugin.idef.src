@@ -13,14 +13,15 @@ let
   Editor : str,
   Filename : str,
   Line: int,
-  MenuEvent : term,
+  Event : term,
   Message : str,
   Modified : term,
   Modulename: str,
   Offset : int,
   Pid: int,
   Categories: term,
-  Slices: term
+  Slices: term,
+  MenuList: list
 in
   StartEditorPanel()
   . rec-connect(T?)
@@ -68,6 +69,9 @@ in
     rec-msg(te-kill-text-editor(EditorId?)) 
     . snd-do(T, kill-editor(EditorId))
   +
+    rec-msg(te-show-popup(EditorId?, MenuList?))
+    . snd-do(T, show-popup(EditorId, MenuList))
+  +
     rec-event(T, is-modified(EditorId?, Modified?))
     . create(EditorModified(EditorId, Modified), Pid?)
     . snd-ack-event(T, is-modified(EditorId, Modified))
@@ -84,17 +88,17 @@ in
     . create(ContentsSaved(EditorId), Pid?)
     . snd-ack-event(T, contents-saved(EditorId))
   +
-    rec-event(T, mouse-event(EditorId?, Line?, Column?))
-    . create(MouseEventXY(EditorId, Line, Column), Pid?)
-    . snd-ack-event(T, mouse-event(EditorId, Line, Column))
+    rec-event(T, mouse-event(EditorId?, Event?))
+    . create(ActionEvent(EditorId, Event), Pid?)
+    . snd-ack-event(T, mouse-event(EditorId, Event))
   +
-    rec-event(T, mouse-event(EditorId?, Offset?))
-    . create(MouseEventOffset(EditorId, Offset), Pid?)
-    . snd-ack-event(T, mouse-event(EditorId, Offset))
-  +
-    rec-event(T, menu-event(EditorId?, MenuEvent?))
-    . create(MenuEvent(EditorId, MenuEvent), Pid?)
-    . snd-ack-event(T, menu-event(EditorId, MenuEvent))
+    rec-event(T, offset-event(EditorId, Offset?))
+    . create(OffSetEvent(EditorId, Offset), Pid?)
+    . snd-ack-event(T, offset-event(EditorId, Offset))
+ +
+    rec-event(T, menu-event(EditorId?, Event?))
+    . create(ActionEvent(EditorId, Event), Pid?)
+    . snd-ack-event(T, menu-event(EditorId, Event))
   +
     rec-event(T, editor-disconnected(EditorId?))
     . create(EditorHasDisconnected(EditorId), Pid?)
@@ -109,14 +113,11 @@ process ContentsChanged(EditorId: term) is
 process ContentsSaved(EditorId: term) is
   snd-msg(te-contents-saved(EditorId))
 
-process MouseEventXY(EditorId: term, Line: int, Column: int) is
-  snd-msg(te-mouse-click-at-line-column(EditorId, Line, Column))
-  
-process MouseEventOffset(EditorId: term, Offset: int) is 
-  snd-msg(te-mouse-click-at-offset(EditorId, Offset))
+process OffSetEvent(Id: term, Offset: int) is 
+  snd-msg(te-mouse-click-at-offset(Id, Offset))
 
-process MenuEvent(EditorId: term, MenuEvent: term) is    
-  snd-msg(te-menu-event(EditorId, MenuEvent))
+process ActionEvent(EditorId: term, ActionEvent: term) is    
+  snd-msg(te-event(EditorId, ActionEvent))
 
 process EditorHasDisconnected(EditorId: term) is
     snd-msg(te-text-editor-disconnected(EditorId))

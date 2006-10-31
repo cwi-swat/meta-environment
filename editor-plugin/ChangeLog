@@ -1,5 +1,10 @@
 # $Id$
 
+Tue Oct 31 10:08:31 CET 2006 <jurgenv@cwi.nl>
+ * src/**/*.java: added support for popupmenu's in the editors.
+   We can have different popups for different non-terminals that
+   have the focus.
+
 Thu Oct 19 10:49:54 CEST 2006 <kooiker@cwi.nl>
  * src/**/SwingEditor.java:
    - Made input and output streams buffered
