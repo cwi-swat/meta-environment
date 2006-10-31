@@ -13,7 +13,8 @@ let
   JarName: str,
   ClassName: str,
   Title: str,
-  GUI: gui
+  GUI: gui,
+  Id : term
 in
   execute(gui, GUI?)
   .
@@ -42,9 +43,9 @@ in
     rec-msg(gui-add-menu-events(MenuEventList?))
     . snd-do(GUI, add-menu-events(MenuEventList))
   +
-    rec-event(GUI, menu-event(MenuEvent?))
-    . snd-msg(ui-button-selected(studio-menubar, MenuEvent))
-    . snd-ack-event(GUI, menu-event(MenuEvent))
+    rec-event(GUI, menu-event(Id?,MenuEvent?))
+    . snd-msg(ui-button-selected(Id, MenuEvent))
+    . snd-ack-event(GUI, menu-event(Id, MenuEvent))
   +
     rec-event(GUI, window-closing-event)
     . snd-msg(gui-window-closing)

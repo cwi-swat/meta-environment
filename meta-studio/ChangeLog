@@ -1,5 +1,14 @@
 $Id$
 
+Tue Oct 31 10:09:22 CET 2006 <jurgenv@cwi.nl>
+ * **/utils/*.java: refactored the two implementations of menu's
+   by introducting a MenuBuilder. Both PopupMenu's and the MenuBar
+   now use the MenuBuilder, such that code duplication can be
+   avoided despite the mismatch between these two interfaces.
+ * **/utils/*.java: added reusable utilities for sending mouse-events
+   and menu-events to the ToolBus. Every plugin may use these, but
+   must add the appropriate rec-events to their .idef file!
+
 Wed Apr 26 09:54:54 CEST 2006 <kooiker@cwi.nl>
  * studio/**/StudioImpl.java:
    - Add static method that gets the Studio frame
