@@ -1,5 +1,9 @@
 $Id$
 
+Tue Oct 31 10:12:13 CET 2006 <jurgenv@cwi.nl>
+ * **/GraphPainter.java: refactored use of the menu and mouse
+   event interfaces to the ToolBus.
+
 Thu Oct  5 22:38:53 CEST 2006 <jurgenv@cwi.nl>
  * lib/prefuse.jar: upgraded to latest beta
  * **/GraphPanel.java: fixed commented out layouts.

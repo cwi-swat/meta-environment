@@ -13,7 +13,10 @@ let
   Menu: term,
   PopupMenu: list,
   NodeId: term,
-  GraphId: term
+  GraphId: term,
+  Button: term,
+  Event: term
+
 in
   rec-connect(T?)
   .
@@ -34,13 +37,15 @@ in
     rec-msg(gp-select-node(GraphType?, GraphId?, NodeId?))
     . snd-do(T, select-node(GraphType, GraphId, NodeId))
   +
-    rec-event(T, node-selected(GraphType?, GraphId?, NodeId?))
-    . snd-note(gp-node-selected(GraphType, GraphId, NodeId))
-    . snd-ack-event(T, node-selected(GraphType, GraphId, NodeId))
-  +
-    rec-event(T, request-popup-event(GraphType?, GraphId?, NodeId?))
-    . snd-msg(gp-request-popup-event(GraphType, GraphId, NodeId))
-    . snd-ack-event(T, request-popup-event(GraphType, GraphId, NodeId))
+    rec-event(T, mouse-event(graph-painter(GraphType?, GraphId?, NodeId?),Event?))
+    .
+    /* \todo make mouse events configurable */
+    if equal(Event,popup) then
+      snd-msg(gp-request-popup-event(GraphType, GraphId, NodeId))
+    else
+      snd-note(gp-node-selected(GraphType, GraphId, NodeId))
+    fi
+    . snd-ack-event(T, mouse-event(graph-painter(GraphType, GraphId, NodeId),Event))
   +
     rec-event(T, panel-closed(GraphType?, GraphId?))
     . snd-note(gp-panel-closed(GraphType, GraphId))
@@ -49,9 +54,9 @@ in
     rec-msg(gp-show-popup(GraphType?, GraphId, NodeId?, PopupMenu?))
     . snd-do(T, show-popup(GraphType, GraphId, NodeId, PopupMenu))
   +
-    rec-event(T, popup-menu-event(GraphType?, GraphId?, NodeId?, Menu?))
+    rec-event(T, menu-event(graph-node(GraphType?, GraphId?, NodeId?), Menu?))
     . snd-msg(gp-menu-selected(GraphType, GraphId, NodeId, Menu))
-    . snd-ack-event(T, popup-menu-event(GraphType, GraphId, NodeId, Menu))
+    . snd-ack-event(T, menu-event(graph-node(GraphType, GraphId, NodeId), Menu))
   )
   *
   rec-disconnect(T)

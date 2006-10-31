@@ -8,12 +8,12 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
+import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.graph.Factory;
 import nl.cwi.sen1.graph.types.Graph;
@@ -24,11 +24,13 @@ import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.gui.component.StudioComponent;
 import nl.cwi.sen1.gui.component.StudioComponentImpl;
-import nl.cwi.sen1.util.PopupHandler;
+import nl.cwi.sen1.util.DefaultPopupImpl;
+import nl.cwi.sen1.util.MouseAdapter;
 import nl.cwi.sen1.util.Preferences;
-import nl.cwi.sen1.util.StudioPopupMenu;
+import prefuse.controls.ControlAdapter;
+import prefuse.visual.VisualItem;
 import aterm.ATerm;
-import aterm.ATermList;
+import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
 public class GraphPainter extends DefaultStudioPlugin implements
@@ -40,6 +42,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 	private Studio studio;
 
 	private Factory graphFactory;
+	
+	private nl.cwi.sen1.configapi.Factory configFactory;
 
 	private Map<String, GraphPanel> graphs;
 
@@ -63,6 +67,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
 		graphFactory = Factory.getInstance((PureFactory) studio
+				.getATermFactory());
+		configFactory = nl.cwi.sen1.configapi.Factory.getInstance((PureFactory) studio
 				.getATermFactory());
 		bridge = new GraphPainterBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
@@ -99,6 +105,12 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		return shared.getFactory().parse("snd-value(panel-created)");
 	}
 	
+	private ATerm createEventId(String graphType, ATerm graphId, String nodeId) {
+		ATerm termId = studio.getATermFactory().parse(nodeId);
+		return studio.getATermFactory().make(TOOL_NAME + "(<str>,<term>,<term>)",
+				graphType, graphId, termId);
+	}
+	
 	private void createPanel(final String graphType, final ATerm graphId, boolean shared, boolean close) {
 		GraphPanel panel = getPanel(graphType, graphId.toString());
 
@@ -121,22 +133,32 @@ public class GraphPainter extends DefaultStudioPlugin implements
                     		"panel-closed(<str>,<term>)", graphType, graphId));
 				}
 			};
-
+			
+			final Event popup = configFactory.makeEvent_Popup();
+			final ATerm id = configFactory.getPureFactory().parse(TOOL_NAME);
+			panel.addControlListener(new ControlAdapter(){
+				MouseAdapter ma = new MouseAdapter(id, bridge, popup);
+				
+				public void itemPressed(VisualItem item, MouseEvent e) {
+					String nodeId = item.getString(GraphConstants.ID);
+					
+					if (nodeId != null) {
+					  ma.setId(createEventId(graphType, graphId, nodeId));
+					  ma.mousePressed(e);
+					}
+				}
+				public void itemReleased(VisualItem item, MouseEvent e) {
+					if (e.isPopupTrigger()) { 
+					  itemPressed(item, e);
+					}
+				}
+			});
+			
 			panel.setGraphPanelListener(new GraphPanelListener() {
 				public void nodeSelected(String id) {
-					NodeId nodeId = graphFactory.NodeIdFromString(id);
+					ATerm eventId = createEventId(graphType,graphId, id);
 					bridge.postEvent(studio.getATermFactory().make(
-							"node-selected(<str>,<term>,<term>)", graphType, graphId,
-							nodeId.toTerm()));
-				}
-
-				public void popupRequested(String id, MouseEvent e) {
-					popupEvent = e;
-
-					NodeId nodeId = graphFactory.NodeIdFromString(id);
-					bridge.postEvent(studio.getATermFactory().make(
-							"request-popup-event(<str>,<term>,<term>)", graphType, graphId,
-							nodeId.toTerm()));
+							"mouse-event(<term>,click([],BUTTON1))", eventId));
 				}
 			});
 			
@@ -331,17 +353,13 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		}
 	}
 
-	public void showPopup(final String graphType, final ATerm graphId, final ATerm nodeId, ATerm menu) {
-		StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
-		popup.setPopupHandler(new PopupHandler() {
-			public void popupSelected(Event action) {
-				bridge.postEvent(studio.getATermFactory().make(
-						"popup-menu-event(<str>,<term>,<term>,<term>)", graphType, graphId,
-						nodeId, action.toTerm()));
-			}
-		});
-		popup.show(popupEvent.getComponent(), popupEvent.getX(), popupEvent
-				.getY());
+	public void showPopup(final String graphType, final ATerm graphId, final ATerm nodeId, final ATerm menu) {
+		DefaultPopupImpl popup = new DefaultPopupImpl(bridge);
+		ATermFactory f = graphId.getFactory();
+		nl.cwi.sen1.configapi.Factory cf = nl.cwi.sen1.configapi.Factory.getInstance((PureFactory) graphId.getFactory());
+		ActionDescriptionList list = cf.ActionDescriptionListFromTerm(menu);
+		
+		popup.showPopup(f.make("graph-node(<str>,<term>,<term>)", graphType, graphId, nodeId), list);
 	}
 
 	public ATerm sizeGraph(String graphType, ATerm graphId, ATerm graphTerm) {

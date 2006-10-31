@@ -31,6 +31,7 @@ import prefuse.action.layout.graph.NodeLinkTreeLayout;
 import prefuse.action.layout.graph.RadialTreeLayout;
 import prefuse.activity.Activity;
 import prefuse.activity.SlowInSlowOutPacer;
+import prefuse.controls.Control;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
@@ -167,7 +168,7 @@ public class GraphPanel extends JPanel {
                 }
             }
 
-            public void itemPressed(VisualItem item, MouseEvent e) {
+/*            public void itemPressed(VisualItem item, MouseEvent e) {
                 if (e.isPopupTrigger()) {
                 	String id = item.getString(GraphConstants.ID);
                 	if (id != null) {
@@ -176,9 +177,7 @@ public class GraphPanel extends JPanel {
                 }
             }
 
-            public void itemReleased(VisualItem gi, MouseEvent e) {
-                itemPressed(gi, e);
-            }
+            }*/
         });
 
         TupleSet focusGroup = vis.getGroup(Visualization.FOCUS_ITEMS);
@@ -196,7 +195,13 @@ public class GraphPanel extends JPanel {
 
         add(display, BorderLayout.CENTER);
     }
-
+    
+    
+    public void addControlListener(Control cl) {
+    	display.addControlListener(cl);
+    }
+   
+    
     public AbstractAction getSaveImageAction() {
         return new ExportDisplayAction(display);
     }
@@ -338,10 +343,6 @@ public class GraphPanel extends JPanel {
         listener.nodeSelected(selectedNodeId);
     }
 
-    protected void firePopupRequested(String nodeId, MouseEvent e) {
-        listener.popupRequested(nodeId, e);
-    }
-
     void setGraph(Graph g) {
         vis.removeGroup(GraphConstants.GRAPH);
         vis.addGraph(GraphConstants.GRAPH, g);
@@ -362,6 +363,7 @@ public class GraphPanel extends JPanel {
             }
         }
     }
+    
 
     public void restoreZoomAndPan() {
         try {
