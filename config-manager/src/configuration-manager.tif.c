@@ -5,13 +5,15 @@
 
 #include "configuration-manager.tif.h"
 
-#define NR_SIG_ENTRIES	10
+#define NR_SIG_ENTRIES	12
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<configuration-manager>,add-system-properties(<str>))",
   "rec-do(<configuration-manager>,change-workspace(<str>))",
   "rec-eval(<configuration-manager>,get-events(<term>))",
+  "rec-eval(<configuration-manager>,get-subtype-events(<term>,<term>))",
   "rec-eval(<configuration-manager>,get-action(<term>,<term>))",
+  "rec-eval(<configuration-manager>,get-subtype-action(<term>,<term>,<term>))",
   "rec-eval(<configuration-manager>,get-extension-modulename(<str>))",
   "rec-eval(<configuration-manager>,get-modulename-extension(<term>))",
   "rec-eval(<configuration-manager>,get-module-paths)",
@@ -26,13 +28,19 @@ ATerm configuration_manager_handler(int conn, ATerm term)
   ATerm in, out;
   /* We need some temporary variables during matching */
   char *s0;
-  ATerm t0, t1;
+  ATerm t0, t1, t2;
 
-  if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
-    return get_extension_modulename(conn, s0);
+  if(ATmatch(term, "rec-eval(get-subtype-action(<term>,<term>,<term>))", &t0, &t1, &t2)) {
+    return get_subtype_action(conn, t0, t1, t2);
   }
   if(ATmatch(term, "rec-eval(get-action(<term>,<term>))", &t0, &t1)) {
     return get_action(conn, t0, t1);
+  }
+  if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
+    return get_extension_modulename(conn, s0);
+  }
+  if(ATmatch(term, "rec-eval(get-subtype-events(<term>,<term>))", &t0, &t1)) {
+    return get_subtype_events(conn, t0, t1);
   }
   if(ATmatch(term, "rec-eval(get-modulename-extension(<term>))", &t0)) {
     return get_modulename_extension(conn, t0);

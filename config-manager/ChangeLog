@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Oct 31 10:06:54 CET 2006 <jurgenv@cwi.nl>
+ * src/**: improved support for 'subtyping' gui elements. Now
+   we can connect popupmenu's to non-terminals in editors.
+
 Thu Oct 19 14:45:41 CEST 2006 <jurgenv@cwi.nl>
  * src/**: big change in the interface of the config-manager.
    An action is tied to a GUI element, which is a free term like:

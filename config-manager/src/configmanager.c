@@ -46,6 +46,21 @@ static ATerm getSuperType(ATerm type)
   return NULL;
 }
 
+static ATerm makeSubType(ATerm type, ATerm subtype) {
+  if (ATgetType(type) == AT_APPL) {
+    AFun fun = ATgetAFun((ATermAppl) type);
+
+    if (ATgetArity(fun) == 0) {
+      AFun newfun = ATmakeAFun(ATgetName(fun), 1, ATisQuoted(fun));
+      return (ATerm) ATmakeAppl1(newfun, subtype);
+    }
+  }
+
+  ATwarning("configmanager: warning: ignoring subtype %t because supertype %t is already specified.\n", subtype, type);
+  return type;
+}
+
+
 static void add_configuration_properties(ATerm actions);
 
 static void addDescription(ATermTable table, CFG_ActionDescription desc) {
@@ -59,7 +74,6 @@ static void addDescription(ATermTable table, CFG_ActionDescription desc) {
     list = ATempty;
   }
   list = ATinsert(list, CFG_ActionDescriptionToTerm(desc));
-
   ATtablePut(table, type, (ATerm) list);
 }
 
@@ -307,31 +321,20 @@ void remove_user_properties(int cid) {
   modulePaths = CFG_makePropertyListSingle(getWorkspace());
 }
 
-static ATermList getEvents(ATerm actionType) {
-  ATermList result = ATempty;
-  CFG_ActionDescriptionList list = getDescriptions(actionType);
-
-  if (list != NULL) {
-    while (!CFG_isActionDescriptionListEmpty(list)) {
-      CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
-      CFG_Event event = CFG_getActionDescriptionEvent(cur);
-      result = ATinsert(result, CFG_EventToTerm(event));
-      list = CFG_getActionDescriptionListTail(list);
-    }
-  }
-
-  return result;
-}
 
 ATerm get_events(int cid, ATerm actionType) {
-  ATermList result = getEvents(actionType);
+  CFG_ActionDescriptionList result = getDescriptions(actionType);
   ATerm super = getSuperType(actionType);
 
   if (super != NULL) {
-    result = ATconcat(result, getEvents(super));
+    result = CFG_concatActionDescriptionList(result, getDescriptions(super));
   }
 
   return ATmake("snd-value(events(<term>))", result);
+}
+
+ATerm get_subtype_events(int cid, ATerm type, ATerm subType) {
+  return get_events(cid, makeSubType(type, subType));
 }
 
 static ATerm getEventAction(ATerm type, ATerm event) {
@@ -357,11 +360,14 @@ ATerm get_action(int cid, ATerm type, ATerm event) {
   }
 
   if (action == NULL) {
-      ATwarning("%s:get_action: no actions for: %t, %t\n", __FILE__, type, event);
-      action = ATparse("DefaultAction");
+    action = ATparse("\"DefaultAction\"");
   }
 
   return ATmake("snd-value(action(<term>))", action);
+}
+
+ATerm get_subtype_action(int cid, ATerm type, ATerm subtype, ATerm event) {
+  return get_action(cid, makeSubType(type, subtype), event);
 }
 
 static ATermList getExtensions() {
