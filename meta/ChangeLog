@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Oct 31 10:14:26 CET 2006 <jurgenv@cwi.nl>
+* tbscripts/added support for 'sub-gui's', a naming scheme of gui actions where
+  a more specialized part of a gui can have a more specialed menu.
+
 Fri Oct 20 13:27:48 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/module-manager.tb:
    - Use new attribute update rule registrar
