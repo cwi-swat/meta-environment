@@ -1,5 +1,10 @@
 $Id$
 
+Tue Oct 31 13:53:21 CET 2006 <jurgenv@cwi.nl>
+ * Regenerated API with support for all kinds of mouse button clicks,
+   including popups. Popups are hard-wired because different kinds of
+   mouse clicks trigger a popup on different kinds of operating systems.
+
 Tue Feb 21 13:14:46 CET 2006 <kooiker@cwi.nl>
  * Generate api from Configuration.sdf
 

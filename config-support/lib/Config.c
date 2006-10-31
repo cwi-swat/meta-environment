@@ -59,6 +59,7 @@ char CFG_charToByte(ATerm arg) {
 }
 
 
+typedef struct ATerm _CFG_VirtualButton;
 typedef struct ATerm _CFG_KeyModifier;
 typedef struct ATerm _CFG_VirtualKey;
 typedef struct ATerm _CFG_Color;
@@ -74,14 +75,30 @@ typedef struct ATerm _CFG_TextStyle;
 typedef struct ATerm _CFG_PropertyList;
 typedef struct ATerm _CFG_ActionDescriptionList;
 typedef struct ATerm _CFG_TextAttributeMap;
-typedef struct ATerm _CFG_ItemList;
 typedef struct ATerm _CFG_KeyModifierList;
+typedef struct ATerm _CFG_ItemLabels;
 
 /**
  * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
  */
 void CFG_initConfigApi(void) {
   init_Config_dict();
+}
+
+/**
+ * Protect a CFG_VirtualButton from the ATerm garbage collector. Every CFG_VirtualButton that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a CFG_VirtualButton
+ */
+void CFG_protectVirtualButton(CFG_VirtualButton *arg) {
+  ATprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Unprotect a CFG_VirtualButton from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a CFG_VirtualButton
+ */
+void CFG_unprotectVirtualButton(CFG_VirtualButton *arg) {
+  ATunprotect((ATerm*)((void*) arg));
 }
 
 /**
@@ -325,22 +342,6 @@ void CFG_unprotectTextAttributeMap(CFG_TextAttributeMap *arg) {
 }
 
 /**
- * Protect a CFG_ItemList from the ATerm garbage collector. Every CFG_ItemList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
- * \param[in] arg pointer to a CFG_ItemList
- */
-void CFG_protectItemList(CFG_ItemList *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Unprotect a CFG_ItemList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
- * \param[in] arg pointer to a CFG_ItemList
- */
-void CFG_unprotectItemList(CFG_ItemList *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-/**
  * Protect a CFG_KeyModifierList from the ATerm garbage collector. Every CFG_KeyModifierList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_KeyModifierList
  */
@@ -354,6 +355,40 @@ void CFG_protectKeyModifierList(CFG_KeyModifierList *arg) {
  */
 void CFG_unprotectKeyModifierList(CFG_KeyModifierList *arg) {
   ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a CFG_ItemLabels from the ATerm garbage collector. Every CFG_ItemLabels that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a CFG_ItemLabels
+ */
+void CFG_protectItemLabels(CFG_ItemLabels *arg) {
+  ATprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Unprotect a CFG_ItemLabels from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a CFG_ItemLabels
+ */
+void CFG_unprotectItemLabels(CFG_ItemLabels *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Transforms an ATerm to a CFG_VirtualButton. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return CFG_VirtualButton that was encoded by \arg
+ */
+CFG_VirtualButton CFG_VirtualButtonFromTerm(ATerm t) {
+  return (CFG_VirtualButton)t;
+}
+
+/**
+ * Transforms a CFG_VirtualButtonto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg CFG_VirtualButton to be converted
+ * \return ATerm that represents the CFG_VirtualButton
+ */
+ATerm CFG_VirtualButtonToTerm(CFG_VirtualButton arg) {
+  return (ATerm)arg;
 }
 
 /**
@@ -627,24 +662,6 @@ ATerm CFG_TextAttributeMapToTerm(CFG_TextAttributeMap arg) {
 }
 
 /**
- * Transforms an ATerm to a CFG_ItemList. This is just a wrapper for a cast, so no structural validation is done!
- * \param[in] t ATerm to be converted
- * \return CFG_ItemList that was encoded by \arg
- */
-CFG_ItemList CFG_ItemListFromTerm(ATerm t) {
-  return (CFG_ItemList)t;
-}
-
-/**
- * Transforms a CFG_ItemListto an ATerm. This is just a wrapper for a cast.
- * \param[in] arg CFG_ItemList to be converted
- * \return ATerm that represents the CFG_ItemList
- */
-ATerm CFG_ItemListToTerm(CFG_ItemList arg) {
-  return (ATerm)arg;
-}
-
-/**
  * Transforms an ATerm to a CFG_KeyModifierList. This is just a wrapper for a cast, so no structural validation is done!
  * \param[in] t ATerm to be converted
  * \return CFG_KeyModifierList that was encoded by \arg
@@ -659,6 +676,24 @@ CFG_KeyModifierList CFG_KeyModifierListFromTerm(ATerm t) {
  * \return ATerm that represents the CFG_KeyModifierList
  */
 ATerm CFG_KeyModifierListToTerm(CFG_KeyModifierList arg) {
+  return (ATerm)arg;
+}
+
+/**
+ * Transforms an ATerm to a CFG_ItemLabels. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return CFG_ItemLabels that was encoded by \arg
+ */
+CFG_ItemLabels CFG_ItemLabelsFromTerm(ATerm t) {
+  return (CFG_ItemLabels)t;
+}
+
+/**
+ * Transforms a CFG_ItemLabelsto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg CFG_ItemLabels to be converted
+ * \return ATerm that represents the CFG_ItemLabels
+ */
+ATerm CFG_ItemLabelsToTerm(CFG_ItemLabels arg) {
   return (ATerm)arg;
 }
 
@@ -1053,136 +1088,6 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap6(CFG_TextAttribute elem1, CFG_Text
 }
 
 /**
- * Retrieve the length of a CFG_ItemList. 
- * \param[in] arg input CFG_ItemList
- * \return The number of elements in the CFG_ItemList
- */
-int CFG_getItemListLength (CFG_ItemList arg) {
-  return ATgetLength((ATermList) arg);
-}
-
-/**
- * Reverse a CFG_ItemList. 
- * \param[in] arg CFG_ItemList to be reversed
- * \return a reversed #arg
- */
-CFG_ItemList CFG_reverseItemList(CFG_ItemList arg) {
-  return (CFG_ItemList) ATreverse((ATermList) arg);
-}
-
-/**
- * Append a CFG_Item to the end of a CFG_ItemList. 
- * \param[in] arg CFG_ItemList to append the CFG_Item to
- * \param[in] elem CFG_Item to be appended
- * \return new CFG_ItemList with #elem appended
- */
-CFG_ItemList CFG_appendItemList(CFG_ItemList arg, CFG_Item elem) {
-  return (CFG_ItemList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
-}
-
-/**
- * Concatenate two CFG_ItemLists. 
- * \param[in] arg0 first CFG_ItemList
- * \param[in] arg1 second CFG_ItemList
- * \return CFG_ItemList with the elements of #arg0 before the elements of #arg1
- */
-CFG_ItemList CFG_concatItemList(CFG_ItemList arg0, CFG_ItemList arg1) {
-  return (CFG_ItemList) ATconcat((ATermList) arg0, (ATermList) arg1);
-}
-
-/**
- * Extract a sublist from a CFG_ItemList. 
- * \param[in] arg CFG_ItemList to extract a slice from
- * \param[in] start inclusive start index of the sublist
- * \param[in] end exclusive end index of the sublist
- * \return new CFG_ItemList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
- */
-CFG_ItemList CFG_sliceItemList(CFG_ItemList arg, int start, int end) {
-  return (CFG_ItemList) ATgetSlice((ATermList) arg, start, end);
-}
-
-/**
- * Retrieve the CFG_Item at #index from a CFG_ItemList. 
- * \param[in] arg CFG_ItemList to retrieve the CFG_Item from
- * \param[in] index index to use to point in the CFG_ItemList
- * \return CFG_Item at position #index in #arg
- */
-CFG_Item CFG_getItemListItemAt(CFG_ItemList arg, int index) {
- return (CFG_Item)ATelementAt((ATermList) arg,index);
-}
-
-/**
- * Replace the CFG_Item at #index from a CFG_ItemList by a new one. 
- * \param[in] arg CFG_ItemList to retrieve the CFG_Item from
- * \param[in] elem new CFG_Item to replace another
- * \param[in] index index to use to point in the CFG_ItemList
- * \return A new CFG_ItemListwith #elem replaced in #arg at position #index
- */
-CFG_ItemList CFG_replaceItemListItemAt(CFG_ItemList arg, CFG_Item elem, int index) {
- return (CFG_ItemList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
-}
-
-/**
- * Builds a CFG_ItemList of 2 consecutive elements. 
- * \param[in] elem1 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem2 One CFG_Item element of the new CFG_ItemList
- * \return A new CFG_ItemList consisting of 2 CFG_Items
- */
-CFG_ItemList CFG_makeItemList2(CFG_Item elem1, CFG_Item elem2) {
-  return (CFG_ItemList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
-}
-
-/**
- * Builds a CFG_ItemList of 3 consecutive elements. 
- * \param[in] elem1 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem2 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem3 One CFG_Item element of the new CFG_ItemList
- * \return A new CFG_ItemList consisting of 3 CFG_Items
- */
-CFG_ItemList CFG_makeItemList3(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3) {
-  return (CFG_ItemList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
-}
-
-/**
- * Builds a CFG_ItemList of 4 consecutive elements. 
- * \param[in] elem1 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem2 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem3 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem4 One CFG_Item element of the new CFG_ItemList
- * \return A new CFG_ItemList consisting of 4 CFG_Items
- */
-CFG_ItemList CFG_makeItemList4(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4) {
-  return (CFG_ItemList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
-}
-
-/**
- * Builds a CFG_ItemList of 5 consecutive elements. 
- * \param[in] elem1 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem2 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem3 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem4 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem5 One CFG_Item element of the new CFG_ItemList
- * \return A new CFG_ItemList consisting of 5 CFG_Items
- */
-CFG_ItemList CFG_makeItemList5(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5) {
-  return (CFG_ItemList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
-}
-
-/**
- * Builds a CFG_ItemList of 6 consecutive elements. 
- * \param[in] elem1 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem2 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem3 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem4 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem5 One CFG_Item element of the new CFG_ItemList
- * \param[in] elem6 One CFG_Item element of the new CFG_ItemList
- * \return A new CFG_ItemList consisting of 6 CFG_Items
- */
-CFG_ItemList CFG_makeItemList6(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5, CFG_Item elem6) {
-  return (CFG_ItemList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
-}
-
-/**
  * Retrieve the length of a CFG_KeyModifierList. 
  * \param[in] arg input CFG_KeyModifierList
  * \return The number of elements in the CFG_KeyModifierList
@@ -1313,711 +1218,869 @@ CFG_KeyModifierList CFG_makeKeyModifierList6(CFG_KeyModifier elem1, CFG_KeyModif
 }
 
 /**
+ * Retrieve the length of a CFG_ItemLabels. 
+ * \param[in] arg input CFG_ItemLabels
+ * \return The number of elements in the CFG_ItemLabels
+ */
+int CFG_getItemLabelsLength (CFG_ItemLabels arg) {
+  return ATgetLength((ATermList) arg);
+}
+
+/**
+ * Reverse a CFG_ItemLabels. 
+ * \param[in] arg CFG_ItemLabels to be reversed
+ * \return a reversed #arg
+ */
+CFG_ItemLabels CFG_reverseItemLabels(CFG_ItemLabels arg) {
+  return (CFG_ItemLabels) ATreverse((ATermList) arg);
+}
+
+/**
+ * Append a CFG_Item to the end of a CFG_ItemLabels. 
+ * \param[in] arg CFG_ItemLabels to append the CFG_Item to
+ * \param[in] elem CFG_Item to be appended
+ * \return new CFG_ItemLabels with #elem appended
+ */
+CFG_ItemLabels CFG_appendItemLabels(CFG_ItemLabels arg, CFG_Item elem) {
+  return (CFG_ItemLabels) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+
+/**
+ * Concatenate two CFG_ItemLabelss. 
+ * \param[in] arg0 first CFG_ItemLabels
+ * \param[in] arg1 second CFG_ItemLabels
+ * \return CFG_ItemLabels with the elements of #arg0 before the elements of #arg1
+ */
+CFG_ItemLabels CFG_concatItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
+  return (CFG_ItemLabels) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+
+/**
+ * Extract a sublist from a CFG_ItemLabels. 
+ * \param[in] arg CFG_ItemLabels to extract a slice from
+ * \param[in] start inclusive start index of the sublist
+ * \param[in] end exclusive end index of the sublist
+ * \return new CFG_ItemLabels with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
+ */
+CFG_ItemLabels CFG_sliceItemLabels(CFG_ItemLabels arg, int start, int end) {
+  return (CFG_ItemLabels) ATgetSlice((ATermList) arg, start, end);
+}
+
+/**
+ * Retrieve the CFG_Item at #index from a CFG_ItemLabels. 
+ * \param[in] arg CFG_ItemLabels to retrieve the CFG_Item from
+ * \param[in] index index to use to point in the CFG_ItemLabels
+ * \return CFG_Item at position #index in #arg
+ */
+CFG_Item CFG_getItemLabelsItemAt(CFG_ItemLabels arg, int index) {
+ return (CFG_Item)ATelementAt((ATermList) arg,index);
+}
+
+/**
+ * Replace the CFG_Item at #index from a CFG_ItemLabels by a new one. 
+ * \param[in] arg CFG_ItemLabels to retrieve the CFG_Item from
+ * \param[in] elem new CFG_Item to replace another
+ * \param[in] index index to use to point in the CFG_ItemLabels
+ * \return A new CFG_ItemLabelswith #elem replaced in #arg at position #index
+ */
+CFG_ItemLabels CFG_replaceItemLabelsItemAt(CFG_ItemLabels arg, CFG_Item elem, int index) {
+ return (CFG_ItemLabels) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+
+/**
+ * Builds a CFG_ItemLabels of 2 consecutive elements. 
+ * \param[in] elem1 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem2 One CFG_Item element of the new CFG_ItemLabels
+ * \return A new CFG_ItemLabels consisting of 2 CFG_Items
+ */
+CFG_ItemLabels CFG_makeItemLabels2(CFG_Item elem1, CFG_Item elem2) {
+  return (CFG_ItemLabels) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
+}
+
+/**
+ * Builds a CFG_ItemLabels of 3 consecutive elements. 
+ * \param[in] elem1 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem2 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem3 One CFG_Item element of the new CFG_ItemLabels
+ * \return A new CFG_ItemLabels consisting of 3 CFG_Items
+ */
+CFG_ItemLabels CFG_makeItemLabels3(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3) {
+  return (CFG_ItemLabels) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
+}
+
+/**
+ * Builds a CFG_ItemLabels of 4 consecutive elements. 
+ * \param[in] elem1 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem2 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem3 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem4 One CFG_Item element of the new CFG_ItemLabels
+ * \return A new CFG_ItemLabels consisting of 4 CFG_Items
+ */
+CFG_ItemLabels CFG_makeItemLabels4(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4) {
+  return (CFG_ItemLabels) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
+}
+
+/**
+ * Builds a CFG_ItemLabels of 5 consecutive elements. 
+ * \param[in] elem1 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem2 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem3 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem4 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem5 One CFG_Item element of the new CFG_ItemLabels
+ * \return A new CFG_ItemLabels consisting of 5 CFG_Items
+ */
+CFG_ItemLabels CFG_makeItemLabels5(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5) {
+  return (CFG_ItemLabels) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
+}
+
+/**
+ * Builds a CFG_ItemLabels of 6 consecutive elements. 
+ * \param[in] elem1 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem2 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem3 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem4 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem5 One CFG_Item element of the new CFG_ItemLabels
+ * \param[in] elem6 One CFG_Item element of the new CFG_ItemLabels
+ * \return A new CFG_ItemLabels consisting of 6 CFG_Items
+ */
+CFG_ItemLabels CFG_makeItemLabels6(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5, CFG_Item elem6) {
+  return (CFG_ItemLabels) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
+}
+
+/**
+ * Constructs a NOBUTTON of type CFG_VirtualButton. Like all ATerm types, CFG_VirtualButtons are maximally shared.
+ * \return A pointer to a NOBUTTON, either newly constructed or shared
+ */
+CFG_VirtualButton CFG_makeVirtualButtonNOBUTTON(void) {
+  return (CFG_VirtualButton)(ATerm)ATmakeAppl0(CFG_afun0);
+}
+/**
+ * Constructs a BUTTON1 of type CFG_VirtualButton. Like all ATerm types, CFG_VirtualButtons are maximally shared.
+ * \return A pointer to a BUTTON1, either newly constructed or shared
+ */
+CFG_VirtualButton CFG_makeVirtualButtonBUTTON1(void) {
+  return (CFG_VirtualButton)(ATerm)ATmakeAppl0(CFG_afun1);
+}
+/**
+ * Constructs a BUTTON2 of type CFG_VirtualButton. Like all ATerm types, CFG_VirtualButtons are maximally shared.
+ * \return A pointer to a BUTTON2, either newly constructed or shared
+ */
+CFG_VirtualButton CFG_makeVirtualButtonBUTTON2(void) {
+  return (CFG_VirtualButton)(ATerm)ATmakeAppl0(CFG_afun2);
+}
+/**
+ * Constructs a BUTTON3 of type CFG_VirtualButton. Like all ATerm types, CFG_VirtualButtons are maximally shared.
+ * \return A pointer to a BUTTON3, either newly constructed or shared
+ */
+CFG_VirtualButton CFG_makeVirtualButtonBUTTON3(void) {
+  return (CFG_VirtualButton)(ATerm)ATmakeAppl0(CFG_afun3);
+}
+/**
  * Constructs a M_ALT of type CFG_KeyModifier. Like all ATerm types, CFG_KeyModifiers are maximally shared.
  * \return A pointer to a M_ALT, either newly constructed or shared
  */
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreALT(void) {
-  return (CFG_KeyModifier)(ATerm)ATmakeAppl0(CFG_afun0);
+  return (CFG_KeyModifier)(ATerm)ATmakeAppl0(CFG_afun4);
 }
 /**
  * Constructs a M_CTRL of type CFG_KeyModifier. Like all ATerm types, CFG_KeyModifiers are maximally shared.
  * \return A pointer to a M_CTRL, either newly constructed or shared
  */
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreCTRL(void) {
-  return (CFG_KeyModifier)(ATerm)ATmakeAppl0(CFG_afun1);
+  return (CFG_KeyModifier)(ATerm)ATmakeAppl0(CFG_afun5);
 }
 /**
  * Constructs a M_SHIFT of type CFG_KeyModifier. Like all ATerm types, CFG_KeyModifiers are maximally shared.
  * \return A pointer to a M_SHIFT, either newly constructed or shared
  */
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreSHIFT(void) {
-  return (CFG_KeyModifier)(ATerm)ATmakeAppl0(CFG_afun2);
+  return (CFG_KeyModifier)(ATerm)ATmakeAppl0(CFG_afun6);
 }
 /**
  * Constructs a VK_0 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_0, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore0(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun3);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun7);
 }
 /**
  * Constructs a VK_1 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_1, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore1(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun4);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun8);
 }
 /**
  * Constructs a VK_2 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_2, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore2(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun5);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun9);
 }
 /**
  * Constructs a VK_3 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_3, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore3(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun6);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun10);
 }
 /**
  * Constructs a VK_4 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_4, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore4(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun7);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun11);
 }
 /**
  * Constructs a VK_5 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_5, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore5(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun8);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun12);
 }
 /**
  * Constructs a VK_6 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_6, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore6(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun9);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun13);
 }
 /**
  * Constructs a VK_7 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_7, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore7(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun10);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun14);
 }
 /**
  * Constructs a VK_8 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_8, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore8(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun11);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun15);
 }
 /**
  * Constructs a VK_9 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_9, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscore9(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun12);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun16);
 }
 /**
  * Constructs a VK_A of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_A, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreA(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun13);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun17);
 }
 /**
  * Constructs a VK_B of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_B, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreB(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun14);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun18);
 }
 /**
  * Constructs a VK_C of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_C, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreC(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun15);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun19);
 }
 /**
  * Constructs a VK_D of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_D, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreD(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun16);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun20);
 }
 /**
  * Constructs a VK_E of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_E, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun17);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun21);
 }
 /**
  * Constructs a VK_F of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun18);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun22);
 }
 /**
  * Constructs a VK_G of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_G, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreG(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun19);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun23);
 }
 /**
  * Constructs a VK_H of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_H, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreH(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun20);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun24);
 }
 /**
  * Constructs a VK_I of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_I, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreI(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun21);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun25);
 }
 /**
  * Constructs a VK_J of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_J, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreJ(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun22);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun26);
 }
 /**
  * Constructs a VK_K of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_K, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreK(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun23);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun27);
 }
 /**
  * Constructs a VK_L of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_L, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreL(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun24);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun28);
 }
 /**
  * Constructs a VK_M of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_M, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreM(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun25);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun29);
 }
 /**
  * Constructs a VK_N of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_N, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreN(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun26);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun30);
 }
 /**
  * Constructs a VK_O of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_O, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreO(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun27);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun31);
 }
 /**
  * Constructs a VK_P of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_P, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreP(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun28);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun32);
 }
 /**
  * Constructs a VK_Q of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_Q, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreQ(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun29);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun33);
 }
 /**
  * Constructs a VK_R of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_R, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreR(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun30);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun34);
 }
 /**
  * Constructs a VK_S of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_S, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreS(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun31);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun35);
 }
 /**
  * Constructs a VK_T of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_T, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun32);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun36);
 }
 /**
  * Constructs a VK_U of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_U, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreU(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun33);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun37);
 }
 /**
  * Constructs a VK_V of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_V, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreV(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun34);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun38);
 }
 /**
  * Constructs a VK_W of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_W, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreW(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun35);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun39);
 }
 /**
  * Constructs a VK_X of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_X, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreX(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun36);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun40);
 }
 /**
  * Constructs a VK_Y of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_Y, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreY(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun37);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun41);
 }
 /**
  * Constructs a VK_Z of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_Z, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreZ(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun38);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun42);
 }
 /**
  * Constructs a VK_AMPERSAND of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_AMPERSAND, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreAMPERSAND(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun39);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun43);
 }
 /**
  * Constructs a VK_ASTERISK of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_ASTERISK, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreASTERISK(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun40);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun44);
 }
 /**
  * Constructs a VK_AT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_AT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreAT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun41);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun45);
 }
 /**
  * Constructs a VK_BACK_QUOTE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_BACK_QUOTE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreBACKUnderscoreQUOTE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun42);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun46);
 }
 /**
  * Constructs a VK_BACK_SLASH of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_BACK_SLASH, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreBACKUnderscoreSLASH(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun43);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun47);
 }
 /**
  * Constructs a VK_BACK_SPACE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_BACK_SPACE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreBACKUnderscoreSPACE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun44);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun48);
 }
 /**
  * Constructs a VK_BEGIN of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_BEGIN, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreBEGIN(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun45);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun49);
 }
 /**
  * Constructs a VK_BRACE_LEFT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_BRACE_LEFT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreBRACEUnderscoreLEFT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun46);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun50);
 }
 /**
  * Constructs a VK_BRACE_RIGHT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_BRACE_RIGHT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreBRACEUnderscoreRIGHT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun47);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun51);
 }
 /**
  * Constructs a VK_CIRCUMFLEX of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_CIRCUMFLEX, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreCIRCUMFLEX(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun48);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun52);
 }
 /**
  * Constructs a VK_CLEAR of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_CLEAR, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreCLEAR(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun49);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun53);
 }
 /**
  * Constructs a VK_CLOSE_BRACKET of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_CLOSE_BRACKET, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreCLOSEUnderscoreBRACKET(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun50);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun54);
 }
 /**
  * Constructs a VK_COLON of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_COLON, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreCOLON(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun51);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun55);
 }
 /**
  * Constructs a VK_COMMA of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_COMMA, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreCOMMA(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun52);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun56);
 }
 /**
  * Constructs a VK_DECIMAL of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_DECIMAL, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreDECIMAL(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun53);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun57);
 }
 /**
  * Constructs a VK_DELETE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_DELETE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreDELETE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun54);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun58);
 }
 /**
  * Constructs a VK_DIVIDE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_DIVIDE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreDIVIDE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun55);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun59);
 }
 /**
  * Constructs a VK_DOLLAR of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_DOLLAR, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreDOLLAR(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun56);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun60);
 }
 /**
  * Constructs a VK_DOWN of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_DOWN, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreDOWN(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun57);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun61);
 }
 /**
  * Constructs a VK_END of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_END, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreEND(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun58);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun62);
 }
 /**
  * Constructs a VK_ENTER of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_ENTER, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreENTER(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun59);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun63);
 }
 /**
  * Constructs a VK_EQUALS of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_EQUALS, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreEQUALS(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun60);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun64);
 }
 /**
  * Constructs a VK_ESCAPE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_ESCAPE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreESCAPE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun61);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun65);
 }
 /**
  * Constructs a VK_EXCLAMATION_MARK of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_EXCLAMATION_MARK, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreEXCLAMATIONUnderscoreMARK(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun62);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun66);
 }
 /**
  * Constructs a VK_F1 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F1, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF1(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun63);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun67);
 }
 /**
  * Constructs a VK_F2 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F2, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF2(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun64);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun68);
 }
 /**
  * Constructs a VK_F3 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F3, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF3(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun65);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun69);
 }
 /**
  * Constructs a VK_F4 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F4, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF4(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun66);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun70);
 }
 /**
  * Constructs a VK_F5 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F5, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF5(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun67);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun71);
 }
 /**
  * Constructs a VK_F6 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F6, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF6(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun68);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun72);
 }
 /**
  * Constructs a VK_F7 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F7, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF7(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun69);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun73);
 }
 /**
  * Constructs a VK_F8 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F8, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF8(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun70);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun74);
 }
 /**
  * Constructs a VK_F9 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F9, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF9(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun71);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun75);
 }
 /**
  * Constructs a VK_F10 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F10, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF10(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun72);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun76);
 }
 /**
  * Constructs a VK_F11 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F11, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF11(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun73);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun77);
 }
 /**
  * Constructs a VK_F12 of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_F12, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreF12(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun74);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun78);
 }
 /**
  * Constructs a VK_GREATER of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_GREATER, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreGREATER(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun75);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun79);
 }
 /**
  * Constructs a VK_HOME of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_HOME, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreHOME(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun76);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun80);
 }
 /**
  * Constructs a VK_INSERT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_INSERT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreINSERT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun77);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun81);
 }
 /**
  * Constructs a VK_LEFT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_LEFT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreLEFT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun78);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun82);
 }
 /**
  * Constructs a VK_LEFT_PARENTHESIS of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_LEFT_PARENTHESIS, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreLEFTUnderscorePARENTHESIS(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun79);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun83);
 }
 /**
  * Constructs a VK_MINUS of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_MINUS, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreMINUS(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun80);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun84);
 }
 /**
  * Constructs a VK_MULTIPLY of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_MULTIPLY, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreMULTIPLY(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun81);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun85);
 }
 /**
  * Constructs a VK_NUMBER_SIGN of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_NUMBER_SIGN, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreNUMBERUnderscoreSIGN(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun82);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun86);
 }
 /**
  * Constructs a VK_OPEN_BRACKET of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_OPEN_BRACKET, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreOPENUnderscoreBRACKET(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun83);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun87);
 }
 /**
  * Constructs a VK_PAGE_DOWN of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_PAGE_DOWN, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscorePAGEUnderscoreDOWN(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun84);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun88);
 }
 /**
  * Constructs a VK_PAGE_UP of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_PAGE_UP, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscorePAGEUnderscoreUP(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun85);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun89);
 }
 /**
  * Constructs a VK_PAUSE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_PAUSE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscorePAUSE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun86);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun90);
 }
 /**
  * Constructs a VK_PERIOD of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_PERIOD, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscorePERIOD(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun87);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun91);
 }
 /**
  * Constructs a VK_PLUS of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_PLUS, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscorePLUS(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun88);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun92);
 }
 /**
  * Constructs a VK_PRINTSCREEN of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_PRINTSCREEN, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscorePRINTSCREEN(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun89);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun93);
 }
 /**
  * Constructs a VK_QUOTE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_QUOTE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreQUOTE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun90);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun94);
 }
 /**
  * Constructs a VK_QUOTEDBL of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_QUOTEDBL, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreQUOTEDBL(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun91);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun95);
 }
 /**
  * Constructs a VK_RIGHT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_RIGHT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreRIGHT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun92);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun96);
 }
 /**
  * Constructs a VK_RIGHT_PARENTHESIS of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_RIGHT_PARENTHESIS, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreRIGHTUnderscorePARENTHESIS(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun93);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun97);
 }
 /**
  * Constructs a VK_SEMICOLON of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_SEMICOLON, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreSEMICOLON(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun94);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun98);
 }
 /**
  * Constructs a VK_SLASH of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_SLASH, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreSLASH(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun95);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun99);
 }
 /**
  * Constructs a VK_SPACE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_SPACE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreSPACE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun96);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun100);
 }
 /**
  * Constructs a VK_SUBTRACT of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_SUBTRACT, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreSUBTRACT(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun97);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun101);
 }
 /**
  * Constructs a VK_TAB of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_TAB, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreTAB(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun98);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun102);
 }
 /**
  * Constructs a VK_UNDERSCORE of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_UNDERSCORE, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreUNDERSCORE(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun99);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun103);
 }
 /**
  * Constructs a VK_UP of type CFG_VirtualKey. Like all ATerm types, CFG_VirtualKeys are maximally shared.
  * \return A pointer to a VK_UP, either newly constructed or shared
  */
 CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreUP(void) {
-  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun100);
+  return (CFG_VirtualKey)(ATerm)ATmakeAppl0(CFG_afun104);
 }
 /**
  * Constructs a rgb of type CFG_Color. Like all ATerm types, CFG_Colors are maximally shared.
@@ -2027,7 +2090,7 @@ CFG_VirtualKey CFG_makeVirtualKeyVKUnderscoreUP(void) {
  * \return A pointer to a rgb, either newly constructed or shared
  */
 CFG_Color CFG_makeColorRgb(int red, int green, int blue) {
-  return (CFG_Color)(ATerm)ATmakeAppl3(CFG_afun101, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
+  return (CFG_Color)(ATerm)ATmakeAppl3(CFG_afun105, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
 /**
  * Constructs a configuration of type CFG_Configuration. Like all ATerm types, CFG_Configurations are maximally shared.
@@ -2035,7 +2098,7 @@ CFG_Color CFG_makeColorRgb(int red, int green, int blue) {
  * \return A pointer to a configuration, either newly constructed or shared
  */
 CFG_Configuration CFG_makeConfigurationConfiguration(CFG_PropertyList list) {
-  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun102, (ATerm) list);
+  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun106, (ATerm) list);
 }
 /**
  * Constructs a import of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2043,7 +2106,7 @@ CFG_Configuration CFG_makeConfigurationConfiguration(CFG_PropertyList list) {
  * \return A pointer to a import, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyImport(const char* path) {
-  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun103, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun107, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 /**
  * Constructs a script of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2051,7 +2114,7 @@ CFG_Property CFG_makePropertyImport(const char* path) {
  * \return A pointer to a script, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyScript(const char* path) {
-  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun104, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun108, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 /**
  * Constructs a script-path of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2059,7 +2122,7 @@ CFG_Property CFG_makePropertyScript(const char* path) {
  * \return A pointer to a script-path, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyScriptPath(const char* path) {
-  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun105, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun109, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 /**
  * Constructs a action of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2068,7 +2131,7 @@ CFG_Property CFG_makePropertyScriptPath(const char* path) {
  * \return A pointer to a action, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList list, const char* action) {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun106, (ATerm) list, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun110, (ATerm) list, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue)));
 }
 /**
  * Constructs a extension of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2077,7 +2140,7 @@ CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList list, const char* 
  * \return A pointer to a extension, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyExtension(const char* language, const char* extension) {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun107, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun111, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue)));
 }
 /**
  * Constructs a library-path of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2086,7 +2149,7 @@ CFG_Property CFG_makePropertyExtension(const char* language, const char* extensi
  * \return A pointer to a library-path, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path) {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun108, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun112, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 /**
  * Constructs a module-path of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2095,7 +2158,7 @@ CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path) {
  * \return A pointer to a module-path, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyModulePath(const char* label, const char* path) {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun109, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun113, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 /**
  * Constructs a text-category of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -2104,7 +2167,7 @@ CFG_Property CFG_makePropertyModulePath(const char* label, const char* path) {
  * \return A pointer to a text-category, either newly constructed or shared
  */
 CFG_Property CFG_makePropertyTextCategory(CFG_TextCategoryName category, CFG_TextAttributeMap map) {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun110, (ATerm) category, (ATerm) map);
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun114, (ATerm) category, (ATerm) map);
 }
 /**
  * Constructs a description of type CFG_ActionDescription. Like all ATerm types, CFG_ActionDescriptions are maximally shared.
@@ -2113,14 +2176,23 @@ CFG_Property CFG_makePropertyTextCategory(CFG_TextCategoryName category, CFG_Tex
  * \return A pointer to a description, either newly constructed or shared
  */
 CFG_ActionDescription CFG_makeActionDescriptionDescription(ATerm context, CFG_Event event) {
-  return (CFG_ActionDescription)(ATerm)ATmakeAppl2(CFG_afun111, (ATerm) context, (ATerm) event);
+  return (CFG_ActionDescription)(ATerm)ATmakeAppl2(CFG_afun115, (ATerm) context, (ATerm) event);
+}
+/**
+ * Constructs a popup of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
+ * \return A pointer to a popup, either newly constructed or shared
+ */
+CFG_Event CFG_makeEventPopup(void) {
+  return (CFG_Event)(ATerm)ATmakeAppl0(CFG_afun116);
 }
 /**
  * Constructs a click of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
+ * \param[in] list a child of the new click
+ * \param[in] button a child of the new click
  * \return A pointer to a click, either newly constructed or shared
  */
-CFG_Event CFG_makeEventClick(void) {
-  return (CFG_Event)(ATerm)ATmakeAppl0(CFG_afun112);
+CFG_Event CFG_makeEventClick(CFG_KeyModifierList list, CFG_VirtualButton button) {
+  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun117, (ATerm) list, (ATerm) button);
 }
 /**
  * Constructs a icon of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
@@ -2129,24 +2201,24 @@ CFG_Event CFG_makeEventClick(void) {
  * \return A pointer to a icon, either newly constructed or shared
  */
 CFG_Event CFG_makeEventIcon(const char* title, const char* path) {
-  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun113, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun118, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 /**
  * Constructs a menu of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
- * \param[in] list a child of the new menu
+ * \param[in] labels a child of the new menu
  * \return A pointer to a menu, either newly constructed or shared
  */
-CFG_Event CFG_makeEventMenu(CFG_ItemList list) {
-  return (CFG_Event)(ATerm)ATmakeAppl1(CFG_afun114, (ATerm) list);
+CFG_Event CFG_makeEventMenu(CFG_ItemLabels labels) {
+  return (CFG_Event)(ATerm)ATmakeAppl1(CFG_afun119, (ATerm) labels);
 }
 /**
  * Constructs a menu-shortcut of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
- * \param[in] list a child of the new menu-shortcut
+ * \param[in] labels a child of the new menu-shortcut
  * \param[in] shortcut a child of the new menu-shortcut
  * \return A pointer to a menu-shortcut, either newly constructed or shared
  */
-CFG_Event CFG_makeEventMenuShortcut(CFG_ItemList list, CFG_ShortCut shortcut) {
-  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun115, (ATerm) list, (ATerm) shortcut);
+CFG_Event CFG_makeEventMenuShortcut(CFG_ItemLabels labels, CFG_ShortCut shortcut) {
+  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun120, (ATerm) labels, (ATerm) shortcut);
 }
 /**
  * Constructs a label of type CFG_Item. Like all ATerm types, CFG_Items are maximally shared.
@@ -2154,28 +2226,28 @@ CFG_Event CFG_makeEventMenuShortcut(CFG_ItemList list, CFG_ShortCut shortcut) {
  * \return A pointer to a label, either newly constructed or shared
  */
 CFG_Item CFG_makeItemLabel(const char* name) {
-  return (CFG_Item)(ATerm)ATmakeAppl1(CFG_afun116, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (CFG_Item)(ATerm)ATmakeAppl1(CFG_afun121, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 /**
  * Constructs a focus of type CFG_TextCategoryName. Like all ATerm types, CFG_TextCategoryNames are maximally shared.
  * \return A pointer to a focus, either newly constructed or shared
  */
 CFG_TextCategoryName CFG_makeTextCategoryNameFocus(void) {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun117);
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun122);
 }
 /**
  * Constructs a selection of type CFG_TextCategoryName. Like all ATerm types, CFG_TextCategoryNames are maximally shared.
  * \return A pointer to a selection, either newly constructed or shared
  */
 CFG_TextCategoryName CFG_makeTextCategoryNameSelection(void) {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun118);
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun123);
 }
 /**
  * Constructs a normal of type CFG_TextCategoryName. Like all ATerm types, CFG_TextCategoryNames are maximally shared.
  * \return A pointer to a normal, either newly constructed or shared
  */
 CFG_TextCategoryName CFG_makeTextCategoryNameNormal(void) {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun119);
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun124);
 }
 /**
  * Constructs a extern of type CFG_TextCategoryName. Like all ATerm types, CFG_TextCategoryNames are maximally shared.
@@ -2183,7 +2255,7 @@ CFG_TextCategoryName CFG_makeTextCategoryNameNormal(void) {
  * \return A pointer to a extern, either newly constructed or shared
  */
 CFG_TextCategoryName CFG_makeTextCategoryNameExtern(const char* name) {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl1(CFG_afun120, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl1(CFG_afun125, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 /**
  * Constructs a foreground-color of type CFG_TextAttribute. Like all ATerm types, CFG_TextAttributes are maximally shared.
@@ -2191,7 +2263,7 @@ CFG_TextCategoryName CFG_makeTextCategoryNameExtern(const char* name) {
  * \return A pointer to a foreground-color, either newly constructed or shared
  */
 CFG_TextAttribute CFG_makeTextAttributeForegroundColor(CFG_Color color) {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun121, (ATerm) color);
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun126, (ATerm) color);
 }
 /**
  * Constructs a background-color of type CFG_TextAttribute. Like all ATerm types, CFG_TextAttributes are maximally shared.
@@ -2199,7 +2271,7 @@ CFG_TextAttribute CFG_makeTextAttributeForegroundColor(CFG_Color color) {
  * \return A pointer to a background-color, either newly constructed or shared
  */
 CFG_TextAttribute CFG_makeTextAttributeBackgroundColor(CFG_Color color) {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun122, (ATerm) color);
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun127, (ATerm) color);
 }
 /**
  * Constructs a style of type CFG_TextAttribute. Like all ATerm types, CFG_TextAttributes are maximally shared.
@@ -2207,7 +2279,7 @@ CFG_TextAttribute CFG_makeTextAttributeBackgroundColor(CFG_Color color) {
  * \return A pointer to a style, either newly constructed or shared
  */
 CFG_TextAttribute CFG_makeTextAttributeStyle(CFG_TextStyle style) {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun123, (ATerm) style);
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun128, (ATerm) style);
 }
 /**
  * Constructs a font of type CFG_TextAttribute. Like all ATerm types, CFG_TextAttributes are maximally shared.
@@ -2215,7 +2287,7 @@ CFG_TextAttribute CFG_makeTextAttributeStyle(CFG_TextStyle style) {
  * \return A pointer to a font, either newly constructed or shared
  */
 CFG_TextAttribute CFG_makeTextAttributeFont(const char* name) {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun124, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun129, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 /**
  * Constructs a size of type CFG_TextAttribute. Like all ATerm types, CFG_TextAttributes are maximally shared.
@@ -2223,7 +2295,7 @@ CFG_TextAttribute CFG_makeTextAttributeFont(const char* name) {
  * \return A pointer to a size, either newly constructed or shared
  */
 CFG_TextAttribute CFG_makeTextAttributeSize(int point) {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun125, (ATerm) (ATerm) ATmakeInt(point));
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun130, (ATerm) (ATerm) ATmakeInt(point));
 }
 /**
  * Constructs a shortcut of type CFG_ShortCut. Like all ATerm types, CFG_ShortCuts are maximally shared.
@@ -2232,28 +2304,28 @@ CFG_TextAttribute CFG_makeTextAttributeSize(int point) {
  * \return A pointer to a shortcut, either newly constructed or shared
  */
 CFG_ShortCut CFG_makeShortCutShortcut(CFG_KeyModifierList list, CFG_VirtualKey key) {
-  return (CFG_ShortCut)(ATerm)ATmakeAppl2(CFG_afun126, (ATerm) list, (ATerm) key);
+  return (CFG_ShortCut)(ATerm)ATmakeAppl2(CFG_afun131, (ATerm) list, (ATerm) key);
 }
 /**
  * Constructs a bold of type CFG_TextStyle. Like all ATerm types, CFG_TextStyles are maximally shared.
  * \return A pointer to a bold, either newly constructed or shared
  */
 CFG_TextStyle CFG_makeTextStyleBold(void) {
-  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun127);
+  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun132);
 }
 /**
  * Constructs a italics of type CFG_TextStyle. Like all ATerm types, CFG_TextStyles are maximally shared.
  * \return A pointer to a italics, either newly constructed or shared
  */
 CFG_TextStyle CFG_makeTextStyleItalics(void) {
-  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun128);
+  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun133);
 }
 /**
  * Constructs a underlined of type CFG_TextStyle. Like all ATerm types, CFG_TextStyles are maximally shared.
  * \return A pointer to a underlined, either newly constructed or shared
  */
 CFG_TextStyle CFG_makeTextStyleUnderlined(void) {
-  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun129);
+  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun134);
 }
 /**
  * Constructs a empty of type CFG_PropertyList. Like all ATerm types, CFG_PropertyLists are maximally shared.
@@ -2328,30 +2400,6 @@ CFG_TextAttributeMap CFG_makeTextAttributeMapMany(CFG_TextAttribute head, CFG_Te
   return (CFG_TextAttributeMap)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 /**
- * Constructs a empty of type CFG_ItemList. Like all ATerm types, CFG_ItemLists are maximally shared.
- * \return A pointer to a empty, either newly constructed or shared
- */
-CFG_ItemList CFG_makeItemListEmpty(void) {
-  return (CFG_ItemList)(ATerm)ATempty;
-}
-/**
- * Constructs a single of type CFG_ItemList. Like all ATerm types, CFG_ItemLists are maximally shared.
- * \param[in] head a child of the new single
- * \return A pointer to a single, either newly constructed or shared
- */
-CFG_ItemList CFG_makeItemListSingle(CFG_Item head) {
-  return (CFG_ItemList)(ATerm)ATmakeList1((ATerm) head);
-}
-/**
- * Constructs a many of type CFG_ItemList. Like all ATerm types, CFG_ItemLists are maximally shared.
- * \param[in] head a child of the new many
- * \param[in] tail a child of the new many
- * \return A pointer to a many, either newly constructed or shared
- */
-CFG_ItemList CFG_makeItemListMany(CFG_Item head, CFG_ItemList tail) {
-  return (CFG_ItemList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
-}
-/**
  * Constructs a empty of type CFG_KeyModifierList. Like all ATerm types, CFG_KeyModifierLists are maximally shared.
  * \return A pointer to a empty, either newly constructed or shared
  */
@@ -2374,6 +2422,40 @@ CFG_KeyModifierList CFG_makeKeyModifierListSingle(CFG_KeyModifier head) {
  */
 CFG_KeyModifierList CFG_makeKeyModifierListMany(CFG_KeyModifier head, CFG_KeyModifierList tail) {
   return (CFG_KeyModifierList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+/**
+ * Constructs a empty of type CFG_ItemLabels. Like all ATerm types, CFG_ItemLabelss are maximally shared.
+ * \return A pointer to a empty, either newly constructed or shared
+ */
+CFG_ItemLabels CFG_makeItemLabelsEmpty(void) {
+  return (CFG_ItemLabels)(ATerm)ATempty;
+}
+/**
+ * Constructs a single of type CFG_ItemLabels. Like all ATerm types, CFG_ItemLabelss are maximally shared.
+ * \param[in] head a child of the new single
+ * \return A pointer to a single, either newly constructed or shared
+ */
+CFG_ItemLabels CFG_makeItemLabelsSingle(CFG_Item head) {
+  return (CFG_ItemLabels)(ATerm)ATmakeList1((ATerm) head);
+}
+/**
+ * Constructs a many of type CFG_ItemLabels. Like all ATerm types, CFG_ItemLabelss are maximally shared.
+ * \param[in] head a child of the new many
+ * \param[in] tail a child of the new many
+ * \return A pointer to a many, either newly constructed or shared
+ */
+CFG_ItemLabels CFG_makeItemLabelsMany(CFG_Item head, CFG_ItemLabels tail) {
+  return (CFG_ItemLabels)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/**
+ * Tests equality of two CFG_VirtualButtons. A constant time operation.
+ * \param[in] arg0 first CFG_VirtualButton to be compared
+ * \param[in] arg1 second CFG_VirtualButton to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool CFG_isEqualVirtualButton(CFG_VirtualButton arg0, CFG_VirtualButton arg1) {
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
 /**
@@ -2527,16 +2609,6 @@ ATbool CFG_isEqualTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeM
 }
 
 /**
- * Tests equality of two CFG_ItemLists. A constant time operation.
- * \param[in] arg0 first CFG_ItemList to be compared
- * \param[in] arg1 second CFG_ItemList to be compared
- * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
- */
-ATbool CFG_isEqualItemList(CFG_ItemList arg0, CFG_ItemList arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-/**
  * Tests equality of two CFG_KeyModifierLists. A constant time operation.
  * \param[in] arg0 first CFG_KeyModifierList to be compared
  * \param[in] arg1 second CFG_KeyModifierList to be compared
@@ -2544,6 +2616,129 @@ ATbool CFG_isEqualItemList(CFG_ItemList arg0, CFG_ItemList arg1) {
  */
 ATbool CFG_isEqualKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+/**
+ * Tests equality of two CFG_ItemLabelss. A constant time operation.
+ * \param[in] arg0 first CFG_ItemLabels to be compared
+ * \param[in] arg1 second CFG_ItemLabels to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool CFG_isEqualItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+/**
+ * Assert whether a CFG_VirtualButton is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input CFG_VirtualButton
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool CFG_isValidVirtualButton(CFG_VirtualButton arg) {
+  if (CFG_isVirtualButtonNOBUTTON(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isVirtualButtonBUTTON1(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isVirtualButtonBUTTON2(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isVirtualButtonBUTTON3(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a CFG_VirtualButton is a NOBUTTON. . May not be used to assert correctness of the CFG_VirtualButton
+ * \param[in] arg input CFG_VirtualButton
+ * \return ATtrue if #arg corresponds to the signature of a NOBUTTON, or ATfalse otherwise
+ */
+inline ATbool CFG_isVirtualButtonNOBUTTON(CFG_VirtualButton arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonNOBUTTON);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a CFG_VirtualButton is a BUTTON1. . May not be used to assert correctness of the CFG_VirtualButton
+ * \param[in] arg input CFG_VirtualButton
+ * \return ATtrue if #arg corresponds to the signature of a BUTTON1, or ATfalse otherwise
+ */
+inline ATbool CFG_isVirtualButtonBUTTON1(CFG_VirtualButton arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonBUTTON1);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a CFG_VirtualButton is a BUTTON2. . May not be used to assert correctness of the CFG_VirtualButton
+ * \param[in] arg input CFG_VirtualButton
+ * \return ATtrue if #arg corresponds to the signature of a BUTTON2, or ATfalse otherwise
+ */
+inline ATbool CFG_isVirtualButtonBUTTON2(CFG_VirtualButton arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonBUTTON2);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a CFG_VirtualButton is a BUTTON3. . May not be used to assert correctness of the CFG_VirtualButton
+ * \param[in] arg input CFG_VirtualButton
+ * \return ATtrue if #arg corresponds to the signature of a BUTTON3, or ATfalse otherwise
+ */
+inline ATbool CFG_isVirtualButtonBUTTON3(CFG_VirtualButton arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonBUTTON3);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /**
@@ -6051,7 +6246,10 @@ CFG_ActionDescription CFG_setActionDescriptionEvent(CFG_ActionDescription arg, C
  * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
  */
 ATbool CFG_isValidEvent(CFG_Event arg) {
-  if (CFG_isEventClick(arg)) {
+  if (CFG_isEventPopup(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isEventClick(arg)) {
     return ATtrue;
   }
   else if (CFG_isEventIcon(arg)) {
@@ -6064,6 +6262,29 @@ ATbool CFG_isValidEvent(CFG_Event arg) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/**
+ * Assert whether a CFG_Event is a popup. . May not be used to assert correctness of the CFG_Event
+ * \param[in] arg input CFG_Event
+ * \return ATtrue if #arg corresponds to the signature of a popup, or ATfalse otherwise
+ */
+inline ATbool CFG_isEventPopup(CFG_Event arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventPopup);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /**
@@ -6081,7 +6302,7 @@ inline ATbool CFG_isEventClick(CFG_Event arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventClick);
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventClick, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -6159,6 +6380,30 @@ inline ATbool CFG_isEventMenuShortcut(CFG_Event arg) {
 }
 
 /**
+ * Assert whether a CFG_Event has a list. 
+ * \param[in] arg input CFG_Event
+ * \return ATtrue if the CFG_Event had a list, or ATfalse otherwise
+ */
+ATbool CFG_hasEventList(CFG_Event arg) {
+  if (CFG_isEventClick(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a CFG_Event has a button. 
+ * \param[in] arg input CFG_Event
+ * \return ATtrue if the CFG_Event had a button, or ATfalse otherwise
+ */
+ATbool CFG_hasEventButton(CFG_Event arg) {
+  if (CFG_isEventClick(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
  * Assert whether a CFG_Event has a title. 
  * \param[in] arg input CFG_Event
  * \return ATtrue if the CFG_Event had a title, or ATfalse otherwise
@@ -6183,11 +6428,11 @@ ATbool CFG_hasEventPath(CFG_Event arg) {
 }
 
 /**
- * Assert whether a CFG_Event has a list. 
+ * Assert whether a CFG_Event has a labels. 
  * \param[in] arg input CFG_Event
- * \return ATtrue if the CFG_Event had a list, or ATfalse otherwise
+ * \return ATtrue if the CFG_Event had a labels, or ATfalse otherwise
  */
-ATbool CFG_hasEventList(CFG_Event arg) {
+ATbool CFG_hasEventLabels(CFG_Event arg) {
   if (CFG_isEventMenu(arg)) {
     return ATtrue;
   }
@@ -6207,6 +6452,26 @@ ATbool CFG_hasEventShortcut(CFG_Event arg) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/**
+ * Get the list CFG_KeyModifierList of a CFG_Event. Note that the precondition is that this CFG_Event actually has a list
+ * \param[in] arg input CFG_Event
+ * \return the list of #arg, if it exist or an undefined value if it does not
+ */
+CFG_KeyModifierList CFG_getEventList(CFG_Event arg) {
+  
+    return (CFG_KeyModifierList)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/**
+ * Get the button CFG_VirtualButton of a CFG_Event. Note that the precondition is that this CFG_Event actually has a button
+ * \param[in] arg input CFG_Event
+ * \return the button of #arg, if it exist or an undefined value if it does not
+ */
+CFG_VirtualButton CFG_getEventButton(CFG_Event arg) {
+  
+    return (CFG_VirtualButton)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /**
@@ -6230,16 +6495,16 @@ char* CFG_getEventPath(CFG_Event arg) {
 }
 
 /**
- * Get the list CFG_ItemList of a CFG_Event. Note that the precondition is that this CFG_Event actually has a list
+ * Get the labels CFG_ItemLabels of a CFG_Event. Note that the precondition is that this CFG_Event actually has a labels
  * \param[in] arg input CFG_Event
- * \return the list of #arg, if it exist or an undefined value if it does not
+ * \return the labels of #arg, if it exist or an undefined value if it does not
  */
-CFG_ItemList CFG_getEventList(CFG_Event arg) {
+CFG_ItemLabels CFG_getEventLabels(CFG_Event arg) {
   if (CFG_isEventMenu(arg)) {
-    return (CFG_ItemList)ATgetArgument((ATermAppl)arg, 0);
+    return (CFG_ItemLabels)ATgetArgument((ATermAppl)arg, 0);
   }
   else 
-    return (CFG_ItemList)ATgetArgument((ATermAppl)arg, 0);
+    return (CFG_ItemLabels)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /**
@@ -6250,6 +6515,36 @@ CFG_ItemList CFG_getEventList(CFG_Event arg) {
 CFG_ShortCut CFG_getEventShortcut(CFG_Event arg) {
   
     return (CFG_ShortCut)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/**
+ * Set the list of a CFG_Event. The precondition being that this CFG_Event actually has a list
+ * \param[in] arg input CFG_Event
+ * \param[in] list new CFG_KeyModifierList to set in #arg
+ * \return A new CFG_Event with list at the right place, or a core dump if #arg did not have a list
+ */
+CFG_Event CFG_setEventList(CFG_Event arg, CFG_KeyModifierList list) {
+  if (CFG_isEventClick(arg)) {
+    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
+  }
+
+  ATabort("Event has no List: %t\n", arg);
+  return (CFG_Event)NULL;
+}
+
+/**
+ * Set the button of a CFG_Event. The precondition being that this CFG_Event actually has a button
+ * \param[in] arg input CFG_Event
+ * \param[in] button new CFG_VirtualButton to set in #arg
+ * \return A new CFG_Event with button at the right place, or a core dump if #arg did not have a button
+ */
+CFG_Event CFG_setEventButton(CFG_Event arg, CFG_VirtualButton button) {
+  if (CFG_isEventClick(arg)) {
+    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) button), 1);
+  }
+
+  ATabort("Event has no Button: %t\n", arg);
+  return (CFG_Event)NULL;
 }
 
 /**
@@ -6283,20 +6578,20 @@ CFG_Event CFG_setEventPath(CFG_Event arg, const char* path) {
 }
 
 /**
- * Set the list of a CFG_Event. The precondition being that this CFG_Event actually has a list
+ * Set the labels of a CFG_Event. The precondition being that this CFG_Event actually has a labels
  * \param[in] arg input CFG_Event
- * \param[in] list new CFG_ItemList to set in #arg
- * \return A new CFG_Event with list at the right place, or a core dump if #arg did not have a list
+ * \param[in] labels new CFG_ItemLabels to set in #arg
+ * \return A new CFG_Event with labels at the right place, or a core dump if #arg did not have a labels
  */
-CFG_Event CFG_setEventList(CFG_Event arg, CFG_ItemList list) {
+CFG_Event CFG_setEventLabels(CFG_Event arg, CFG_ItemLabels labels) {
   if (CFG_isEventMenu(arg)) {
-    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
+    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) labels), 0);
   }
   else if (CFG_isEventMenuShortcut(arg)) {
-    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
+    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) labels), 0);
   }
 
-  ATabort("Event has no List: %t\n", arg);
+  ATabort("Event has no Labels: %t\n", arg);
   return (CFG_Event)NULL;
 }
 
@@ -7517,175 +7812,6 @@ CFG_TextAttributeMap CFG_setTextAttributeMapTail(CFG_TextAttributeMap arg, CFG_T
 }
 
 /**
- * Assert whether a CFG_ItemList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
- * \param[in] arg input CFG_ItemList
- * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
- */
-ATbool CFG_isValidItemList(CFG_ItemList arg) {
-  if (CFG_isItemListEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (CFG_isItemListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (CFG_isItemListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a CFG_ItemList is a empty. . May not be used to assert correctness of the CFG_ItemList
- * \param[in] arg input CFG_ItemList
- * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
- */
-inline ATbool CFG_isItemListEmpty(CFG_ItemList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternItemListEmpty));
-#endif
-  return ATtrue;
-}
-
-/**
- * Assert whether a CFG_ItemList is a single. . May not be used to assert correctness of the CFG_ItemList
- * \param[in] arg input CFG_ItemList
- * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
- */
-inline ATbool CFG_isItemListSingle(CFG_ItemList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternItemListSingle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a CFG_ItemList is a many. . May not be used to assert correctness of the CFG_ItemList
- * \param[in] arg input CFG_ItemList
- * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
- */
-inline ATbool CFG_isItemListMany(CFG_ItemList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternItemListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a CFG_ItemList has a head. 
- * \param[in] arg input CFG_ItemList
- * \return ATtrue if the CFG_ItemList had a head, or ATfalse otherwise
- */
-ATbool CFG_hasItemListHead(CFG_ItemList arg) {
-  if (CFG_isItemListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (CFG_isItemListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a CFG_ItemList has a tail. 
- * \param[in] arg input CFG_ItemList
- * \return ATtrue if the CFG_ItemList had a tail, or ATfalse otherwise
- */
-ATbool CFG_hasItemListTail(CFG_ItemList arg) {
-  if (CFG_isItemListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Get the head CFG_Item of a CFG_ItemList. Note that the precondition is that this CFG_ItemList actually has a head
- * \param[in] arg input CFG_ItemList
- * \return the head of #arg, if it exist or an undefined value if it does not
- */
-CFG_Item CFG_getItemListHead(CFG_ItemList arg) {
-  if (CFG_isItemListSingle(arg)) {
-    return (CFG_Item)ATgetFirst((ATermList)arg);
-  }
-  else 
-    return (CFG_Item)ATgetFirst((ATermList)arg);
-}
-
-/**
- * Get the tail CFG_ItemList of a CFG_ItemList. Note that the precondition is that this CFG_ItemList actually has a tail
- * \param[in] arg input CFG_ItemList
- * \return the tail of #arg, if it exist or an undefined value if it does not
- */
-CFG_ItemList CFG_getItemListTail(CFG_ItemList arg) {
-  
-    return (CFG_ItemList)ATgetNext((ATermList)arg);
-}
-
-/**
- * Set the head of a CFG_ItemList. The precondition being that this CFG_ItemList actually has a head
- * \param[in] arg input CFG_ItemList
- * \param[in] head new CFG_Item to set in #arg
- * \return A new CFG_ItemList with head at the right place, or a core dump if #arg did not have a head
- */
-CFG_ItemList CFG_setItemListHead(CFG_ItemList arg, CFG_Item head) {
-  if (CFG_isItemListSingle(arg)) {
-    return (CFG_ItemList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-  else if (CFG_isItemListMany(arg)) {
-    return (CFG_ItemList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("ItemList has no Head: %t\n", arg);
-  return (CFG_ItemList)NULL;
-}
-
-/**
- * Set the tail of a CFG_ItemList. The precondition being that this CFG_ItemList actually has a tail
- * \param[in] arg input CFG_ItemList
- * \param[in] tail new CFG_ItemList to set in #arg
- * \return A new CFG_ItemList with tail at the right place, or a core dump if #arg did not have a tail
- */
-CFG_ItemList CFG_setItemListTail(CFG_ItemList arg, CFG_ItemList tail) {
-  if (CFG_isItemListMany(arg)) {
-    return (CFG_ItemList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
-  }
-
-  ATabort("ItemList has no Tail: %t\n", arg);
-  return (CFG_ItemList)NULL;
-}
-
-/**
  * Assert whether a CFG_KeyModifierList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
  * \param[in] arg input CFG_KeyModifierList
  * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
@@ -7854,6 +7980,195 @@ CFG_KeyModifierList CFG_setKeyModifierListTail(CFG_KeyModifierList arg, CFG_KeyM
   return (CFG_KeyModifierList)NULL;
 }
 
+/**
+ * Assert whether a CFG_ItemLabels is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input CFG_ItemLabels
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool CFG_isValidItemLabels(CFG_ItemLabels arg) {
+  if (CFG_isItemLabelsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isItemLabelsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isItemLabelsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a CFG_ItemLabels is a empty. . May not be used to assert correctness of the CFG_ItemLabels
+ * \param[in] arg input CFG_ItemLabels
+ * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
+ */
+inline ATbool CFG_isItemLabelsEmpty(CFG_ItemLabels arg) {
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, CFG_patternItemLabelsEmpty));
+#endif
+  return ATtrue;
+}
+
+/**
+ * Assert whether a CFG_ItemLabels is a single. . May not be used to assert correctness of the CFG_ItemLabels
+ * \param[in] arg input CFG_ItemLabels
+ * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
+ */
+inline ATbool CFG_isItemLabelsSingle(CFG_ItemLabels arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternItemLabelsSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a CFG_ItemLabels is a many. . May not be used to assert correctness of the CFG_ItemLabels
+ * \param[in] arg input CFG_ItemLabels
+ * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
+ */
+inline ATbool CFG_isItemLabelsMany(CFG_ItemLabels arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternItemLabelsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a CFG_ItemLabels has a head. 
+ * \param[in] arg input CFG_ItemLabels
+ * \return ATtrue if the CFG_ItemLabels had a head, or ATfalse otherwise
+ */
+ATbool CFG_hasItemLabelsHead(CFG_ItemLabels arg) {
+  if (CFG_isItemLabelsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isItemLabelsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a CFG_ItemLabels has a tail. 
+ * \param[in] arg input CFG_ItemLabels
+ * \return ATtrue if the CFG_ItemLabels had a tail, or ATfalse otherwise
+ */
+ATbool CFG_hasItemLabelsTail(CFG_ItemLabels arg) {
+  if (CFG_isItemLabelsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Get the head CFG_Item of a CFG_ItemLabels. Note that the precondition is that this CFG_ItemLabels actually has a head
+ * \param[in] arg input CFG_ItemLabels
+ * \return the head of #arg, if it exist or an undefined value if it does not
+ */
+CFG_Item CFG_getItemLabelsHead(CFG_ItemLabels arg) {
+  if (CFG_isItemLabelsSingle(arg)) {
+    return (CFG_Item)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (CFG_Item)ATgetFirst((ATermList)arg);
+}
+
+/**
+ * Get the tail CFG_ItemLabels of a CFG_ItemLabels. Note that the precondition is that this CFG_ItemLabels actually has a tail
+ * \param[in] arg input CFG_ItemLabels
+ * \return the tail of #arg, if it exist or an undefined value if it does not
+ */
+CFG_ItemLabels CFG_getItemLabelsTail(CFG_ItemLabels arg) {
+  
+    return (CFG_ItemLabels)ATgetNext((ATermList)arg);
+}
+
+/**
+ * Set the head of a CFG_ItemLabels. The precondition being that this CFG_ItemLabels actually has a head
+ * \param[in] arg input CFG_ItemLabels
+ * \param[in] head new CFG_Item to set in #arg
+ * \return A new CFG_ItemLabels with head at the right place, or a core dump if #arg did not have a head
+ */
+CFG_ItemLabels CFG_setItemLabelsHead(CFG_ItemLabels arg, CFG_Item head) {
+  if (CFG_isItemLabelsSingle(arg)) {
+    return (CFG_ItemLabels)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (CFG_isItemLabelsMany(arg)) {
+    return (CFG_ItemLabels)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("ItemLabels has no Head: %t\n", arg);
+  return (CFG_ItemLabels)NULL;
+}
+
+/**
+ * Set the tail of a CFG_ItemLabels. The precondition being that this CFG_ItemLabels actually has a tail
+ * \param[in] arg input CFG_ItemLabels
+ * \param[in] tail new CFG_ItemLabels to set in #arg
+ * \return A new CFG_ItemLabels with tail at the right place, or a core dump if #arg did not have a tail
+ */
+CFG_ItemLabels CFG_setItemLabelsTail(CFG_ItemLabels arg, CFG_ItemLabels tail) {
+  if (CFG_isItemLabelsMany(arg)) {
+    return (CFG_ItemLabels)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("ItemLabels has no Tail: %t\n", arg);
+  return (CFG_ItemLabels)NULL;
+}
+
+/**
+ * Apply functions to the children of a CFG_VirtualButton. 
+ * \return A new CFG_VirtualButton with new children where the argument functions might have applied
+ */
+CFG_VirtualButton CFG_visitVirtualButton(CFG_VirtualButton arg) {
+  if (CFG_isVirtualButtonNOBUTTON(arg)) {
+    return CFG_makeVirtualButtonNOBUTTON();
+  }
+  if (CFG_isVirtualButtonBUTTON1(arg)) {
+    return CFG_makeVirtualButtonBUTTON1();
+  }
+  if (CFG_isVirtualButtonBUTTON2(arg)) {
+    return CFG_makeVirtualButtonBUTTON2();
+  }
+  if (CFG_isVirtualButtonBUTTON3(arg)) {
+    return CFG_makeVirtualButtonBUTTON3();
+  }
+  ATabort("not a VirtualButton: %t\n", arg);
+  return (CFG_VirtualButton)NULL;
+}
 /**
  * Apply functions to the children of a CFG_KeyModifier. 
  * \return A new CFG_KeyModifier with new children where the argument functions might have applied
@@ -8261,9 +8576,14 @@ CFG_ActionDescription CFG_visitActionDescription(CFG_ActionDescription arg, ATer
  * Apply functions to the children of a CFG_Event. 
  * \return A new CFG_Event with new children where the argument functions might have applied
  */
-CFG_Event CFG_visitEvent(CFG_Event arg, char* (*acceptTitle)(char*), char* (*acceptPath)(char*), CFG_ItemList (*acceptList)(CFG_ItemList), CFG_ShortCut (*acceptShortcut)(CFG_ShortCut)) {
+CFG_Event CFG_visitEvent(CFG_Event arg, CFG_KeyModifierList (*acceptList)(CFG_KeyModifierList), CFG_VirtualButton (*acceptButton)(CFG_VirtualButton), char* (*acceptTitle)(char*), char* (*acceptPath)(char*), CFG_ItemLabels (*acceptLabels)(CFG_ItemLabels), CFG_ShortCut (*acceptShortcut)(CFG_ShortCut)) {
+  if (CFG_isEventPopup(arg)) {
+    return CFG_makeEventPopup();
+  }
   if (CFG_isEventClick(arg)) {
-    return CFG_makeEventClick();
+    return CFG_makeEventClick(
+        acceptList ? acceptList(CFG_getEventList(arg)) : CFG_getEventList(arg),
+        acceptButton ? acceptButton(CFG_getEventButton(arg)) : CFG_getEventButton(arg));
   }
   if (CFG_isEventIcon(arg)) {
     return CFG_makeEventIcon(
@@ -8272,11 +8592,11 @@ CFG_Event CFG_visitEvent(CFG_Event arg, char* (*acceptTitle)(char*), char* (*acc
   }
   if (CFG_isEventMenu(arg)) {
     return CFG_makeEventMenu(
-        acceptList ? acceptList(CFG_getEventList(arg)) : CFG_getEventList(arg));
+        acceptLabels ? acceptLabels(CFG_getEventLabels(arg)) : CFG_getEventLabels(arg));
   }
   if (CFG_isEventMenuShortcut(arg)) {
     return CFG_makeEventMenuShortcut(
-        acceptList ? acceptList(CFG_getEventList(arg)) : CFG_getEventList(arg),
+        acceptLabels ? acceptLabels(CFG_getEventLabels(arg)) : CFG_getEventLabels(arg),
         acceptShortcut ? acceptShortcut(CFG_getEventShortcut(arg)) : CFG_getEventShortcut(arg));
   }
   ATabort("not a Event: %t\n", arg);
@@ -8434,26 +8754,6 @@ CFG_TextAttributeMap CFG_visitTextAttributeMap(CFG_TextAttributeMap arg, CFG_Tex
   return (CFG_TextAttributeMap)NULL;
 }
 /**
- * Apply functions to the children of a CFG_ItemList. 
- * \return A new CFG_ItemList with new children where the argument functions might have applied
- */
-CFG_ItemList CFG_visitItemList(CFG_ItemList arg, CFG_Item (*acceptHead)(CFG_Item)) {
-  if (CFG_isItemListEmpty(arg)) {
-    return CFG_makeItemListEmpty();
-  }
-  if (CFG_isItemListSingle(arg)) {
-    return CFG_makeItemListSingle(
-        acceptHead ? acceptHead(CFG_getItemListHead(arg)) : CFG_getItemListHead(arg));
-  }
-  if (CFG_isItemListMany(arg)) {
-    return CFG_makeItemListMany(
-        acceptHead ? acceptHead(CFG_getItemListHead(arg)) : CFG_getItemListHead(arg),
-        CFG_visitItemList(CFG_getItemListTail(arg), acceptHead));
-  }
-  ATabort("not a ItemList: %t\n", arg);
-  return (CFG_ItemList)NULL;
-}
-/**
  * Apply functions to the children of a CFG_KeyModifierList. 
  * \return A new CFG_KeyModifierList with new children where the argument functions might have applied
  */
@@ -8472,5 +8772,25 @@ CFG_KeyModifierList CFG_visitKeyModifierList(CFG_KeyModifierList arg, CFG_KeyMod
   }
   ATabort("not a KeyModifierList: %t\n", arg);
   return (CFG_KeyModifierList)NULL;
+}
+/**
+ * Apply functions to the children of a CFG_ItemLabels. 
+ * \return A new CFG_ItemLabels with new children where the argument functions might have applied
+ */
+CFG_ItemLabels CFG_visitItemLabels(CFG_ItemLabels arg, CFG_Item (*acceptHead)(CFG_Item)) {
+  if (CFG_isItemLabelsEmpty(arg)) {
+    return CFG_makeItemLabelsEmpty();
+  }
+  if (CFG_isItemLabelsSingle(arg)) {
+    return CFG_makeItemLabelsSingle(
+        acceptHead ? acceptHead(CFG_getItemLabelsHead(arg)) : CFG_getItemLabelsHead(arg));
+  }
+  if (CFG_isItemLabelsMany(arg)) {
+    return CFG_makeItemLabelsMany(
+        acceptHead ? acceptHead(CFG_getItemLabelsHead(arg)) : CFG_getItemLabelsHead(arg),
+        CFG_visitItemLabels(CFG_getItemLabelsTail(arg), acceptHead));
+  }
+  ATabort("not a ItemLabels: %t\n", arg);
+  return (CFG_ItemLabels)NULL;
 }
 

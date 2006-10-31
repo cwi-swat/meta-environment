@@ -3,6 +3,7 @@
 
 #include <aterm2.h>
 
+extern AFun CFG_afun130;
 extern AFun CFG_afun121;
 extern AFun CFG_afun3;
 extern AFun CFG_afun78;
@@ -82,7 +83,9 @@ extern AFun CFG_afun36;
 extern AFun CFG_afun111;
 extern AFun CFG_afun17;
 extern AFun CFG_afun110;
+extern AFun CFG_afun133;
 extern AFun CFG_afun92;
+extern AFun CFG_afun132;
 extern AFun CFG_afun34;
 extern AFun CFG_afun63;
 extern AFun CFG_afun19;
@@ -90,6 +93,7 @@ extern AFun CFG_afun26;
 extern AFun CFG_afun37;
 extern AFun CFG_afun105;
 extern AFun CFG_afun115;
+extern AFun CFG_afun131;
 extern AFun CFG_afun25;
 extern AFun CFG_afun18;
 extern AFun CFG_afun114;
@@ -119,6 +123,7 @@ extern AFun CFG_afun70;
 extern AFun CFG_afun20;
 extern AFun CFG_afun21;
 extern AFun CFG_afun65;
+extern AFun CFG_afun134;
 extern AFun CFG_afun5;
 extern AFun CFG_afun113;
 extern AFun CFG_afun93;
@@ -134,12 +139,12 @@ extern AFun CFG_afun125;
 extern AFun CFG_afun24;
 extern AFun CFG_afun46;
 
+extern ATerm CFG_patternItemLabelsMany;
+extern ATerm CFG_patternItemLabelsSingle;
+extern ATerm CFG_patternItemLabelsEmpty;
 extern ATerm CFG_patternKeyModifierListMany;
 extern ATerm CFG_patternKeyModifierListSingle;
 extern ATerm CFG_patternKeyModifierListEmpty;
-extern ATerm CFG_patternItemListMany;
-extern ATerm CFG_patternItemListSingle;
-extern ATerm CFG_patternItemListEmpty;
 extern ATerm CFG_patternTextAttributeMapMany;
 extern ATerm CFG_patternTextAttributeMapSingle;
 extern ATerm CFG_patternTextAttributeMapEmpty;
@@ -167,6 +172,7 @@ extern ATerm CFG_patternEventMenuShortcut;
 extern ATerm CFG_patternEventMenu;
 extern ATerm CFG_patternEventIcon;
 extern ATerm CFG_patternEventClick;
+extern ATerm CFG_patternEventPopup;
 extern ATerm CFG_patternActionDescriptionDescription;
 extern ATerm CFG_patternPropertyTextCategory;
 extern ATerm CFG_patternPropertyModulePath;
@@ -279,6 +285,10 @@ extern ATerm CFG_patternVirtualKeyVKUnderscore0;
 extern ATerm CFG_patternKeyModifierMUnderscoreSHIFT;
 extern ATerm CFG_patternKeyModifierMUnderscoreCTRL;
 extern ATerm CFG_patternKeyModifierMUnderscoreALT;
+extern ATerm CFG_patternVirtualButtonBUTTON3;
+extern ATerm CFG_patternVirtualButtonBUTTON2;
+extern ATerm CFG_patternVirtualButtonBUTTON1;
+extern ATerm CFG_patternVirtualButtonNOBUTTON;
 
 extern void init_Config_dict();
 

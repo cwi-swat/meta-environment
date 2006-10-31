@@ -6,6 +6,7 @@
 #include <aterm1.h>
 #include "Config_dict.h"
 
+typedef struct _CFG_VirtualButton *CFG_VirtualButton;
 typedef struct _CFG_KeyModifier *CFG_KeyModifier;
 typedef struct _CFG_VirtualKey *CFG_VirtualKey;
 typedef struct _CFG_Color *CFG_Color;
@@ -21,11 +22,13 @@ typedef struct _CFG_TextStyle *CFG_TextStyle;
 typedef struct _CFG_PropertyList *CFG_PropertyList;
 typedef struct _CFG_ActionDescriptionList *CFG_ActionDescriptionList;
 typedef struct _CFG_TextAttributeMap *CFG_TextAttributeMap;
-typedef struct _CFG_ItemList *CFG_ItemList;
 typedef struct _CFG_KeyModifierList *CFG_KeyModifierList;
+typedef struct _CFG_ItemLabels *CFG_ItemLabels;
 
 void CFG_initConfigApi (void);
 
+void CFG_protectVirtualButton (CFG_VirtualButton * arg);
+void CFG_unprotectVirtualButton (CFG_VirtualButton * arg);
 void CFG_protectKeyModifier (CFG_KeyModifier * arg);
 void CFG_unprotectKeyModifier (CFG_KeyModifier * arg);
 void CFG_protectVirtualKey (CFG_VirtualKey * arg);
@@ -56,10 +59,12 @@ void CFG_protectActionDescriptionList (CFG_ActionDescriptionList * arg);
 void CFG_unprotectActionDescriptionList (CFG_ActionDescriptionList * arg);
 void CFG_protectTextAttributeMap (CFG_TextAttributeMap * arg);
 void CFG_unprotectTextAttributeMap (CFG_TextAttributeMap * arg);
-void CFG_protectItemList (CFG_ItemList * arg);
-void CFG_unprotectItemList (CFG_ItemList * arg);
 void CFG_protectKeyModifierList (CFG_KeyModifierList * arg);
 void CFG_unprotectKeyModifierList (CFG_KeyModifierList * arg);
+void CFG_protectItemLabels (CFG_ItemLabels * arg);
+void CFG_unprotectItemLabels (CFG_ItemLabels * arg);
+CFG_VirtualButton CFG_VirtualButtonFromTerm (ATerm t);
+ATerm CFG_VirtualButtonToTerm (CFG_VirtualButton arg);
 CFG_KeyModifier CFG_KeyModifierFromTerm (ATerm t);
 ATerm CFG_KeyModifierToTerm (CFG_KeyModifier arg);
 CFG_VirtualKey CFG_VirtualKeyFromTerm (ATerm t);
@@ -90,10 +95,10 @@ CFG_ActionDescriptionList CFG_ActionDescriptionListFromTerm (ATerm t);
 ATerm CFG_ActionDescriptionListToTerm (CFG_ActionDescriptionList arg);
 CFG_TextAttributeMap CFG_TextAttributeMapFromTerm (ATerm t);
 ATerm CFG_TextAttributeMapToTerm (CFG_TextAttributeMap arg);
-CFG_ItemList CFG_ItemListFromTerm (ATerm t);
-ATerm CFG_ItemListToTerm (CFG_ItemList arg);
 CFG_KeyModifierList CFG_KeyModifierListFromTerm (ATerm t);
 ATerm CFG_KeyModifierListToTerm (CFG_KeyModifierList arg);
+CFG_ItemLabels CFG_ItemLabelsFromTerm (ATerm t);
+ATerm CFG_ItemLabelsToTerm (CFG_ItemLabels arg);
 int CFG_getPropertyListLength (CFG_PropertyList arg);
 CFG_PropertyList CFG_reversePropertyList (CFG_PropertyList arg);
 CFG_PropertyList CFG_appendPropertyList (CFG_PropertyList arg,
@@ -205,25 +210,6 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap6 (CFG_TextAttribute elem1,
 						CFG_TextAttribute elem4,
 						CFG_TextAttribute elem5,
 						CFG_TextAttribute elem6);
-int CFG_getItemListLength (CFG_ItemList arg);
-CFG_ItemList CFG_reverseItemList (CFG_ItemList arg);
-CFG_ItemList CFG_appendItemList (CFG_ItemList arg, CFG_Item elem);
-CFG_ItemList CFG_concatItemList (CFG_ItemList arg0, CFG_ItemList arg1);
-CFG_ItemList CFG_sliceItemList (CFG_ItemList arg, int start, int end);
-CFG_Item CFG_getItemListItemAt (CFG_ItemList arg, int index);
-CFG_ItemList CFG_replaceItemListItemAt (CFG_ItemList arg, CFG_Item elem,
-					int index);
-CFG_ItemList CFG_makeItemList2 (CFG_Item elem1, CFG_Item elem2);
-CFG_ItemList CFG_makeItemList3 (CFG_Item elem1, CFG_Item elem2,
-				CFG_Item elem3);
-CFG_ItemList CFG_makeItemList4 (CFG_Item elem1, CFG_Item elem2,
-				CFG_Item elem3, CFG_Item elem4);
-CFG_ItemList CFG_makeItemList5 (CFG_Item elem1, CFG_Item elem2,
-				CFG_Item elem3, CFG_Item elem4,
-				CFG_Item elem5);
-CFG_ItemList CFG_makeItemList6 (CFG_Item elem1, CFG_Item elem2,
-				CFG_Item elem3, CFG_Item elem4,
-				CFG_Item elem5, CFG_Item elem6);
 int CFG_getKeyModifierListLength (CFG_KeyModifierList arg);
 CFG_KeyModifierList CFG_reverseKeyModifierList (CFG_KeyModifierList arg);
 CFG_KeyModifierList CFG_appendKeyModifierList (CFG_KeyModifierList arg,
@@ -257,6 +243,30 @@ CFG_KeyModifierList CFG_makeKeyModifierList6 (CFG_KeyModifier elem1,
 					      CFG_KeyModifier elem4,
 					      CFG_KeyModifier elem5,
 					      CFG_KeyModifier elem6);
+int CFG_getItemLabelsLength (CFG_ItemLabels arg);
+CFG_ItemLabels CFG_reverseItemLabels (CFG_ItemLabels arg);
+CFG_ItemLabels CFG_appendItemLabels (CFG_ItemLabels arg, CFG_Item elem);
+CFG_ItemLabels CFG_concatItemLabels (CFG_ItemLabels arg0,
+				     CFG_ItemLabels arg1);
+CFG_ItemLabels CFG_sliceItemLabels (CFG_ItemLabels arg, int start, int end);
+CFG_Item CFG_getItemLabelsItemAt (CFG_ItemLabels arg, int index);
+CFG_ItemLabels CFG_replaceItemLabelsItemAt (CFG_ItemLabels arg, CFG_Item elem,
+					    int index);
+CFG_ItemLabels CFG_makeItemLabels2 (CFG_Item elem1, CFG_Item elem2);
+CFG_ItemLabels CFG_makeItemLabels3 (CFG_Item elem1, CFG_Item elem2,
+				    CFG_Item elem3);
+CFG_ItemLabels CFG_makeItemLabels4 (CFG_Item elem1, CFG_Item elem2,
+				    CFG_Item elem3, CFG_Item elem4);
+CFG_ItemLabels CFG_makeItemLabels5 (CFG_Item elem1, CFG_Item elem2,
+				    CFG_Item elem3, CFG_Item elem4,
+				    CFG_Item elem5);
+CFG_ItemLabels CFG_makeItemLabels6 (CFG_Item elem1, CFG_Item elem2,
+				    CFG_Item elem3, CFG_Item elem4,
+				    CFG_Item elem5, CFG_Item elem6);
+CFG_VirtualButton CFG_makeVirtualButtonNOBUTTON (void);
+CFG_VirtualButton CFG_makeVirtualButtonBUTTON1 (void);
+CFG_VirtualButton CFG_makeVirtualButtonBUTTON2 (void);
+CFG_VirtualButton CFG_makeVirtualButtonBUTTON3 (void);
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreALT (void);
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreCTRL (void);
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreSHIFT (void);
@@ -375,10 +385,12 @@ CFG_Property CFG_makePropertyTextCategory (CFG_TextCategoryName category,
 					   CFG_TextAttributeMap map);
 CFG_ActionDescription CFG_makeActionDescriptionDescription (ATerm context,
 							    CFG_Event event);
-CFG_Event CFG_makeEventClick (void);
+CFG_Event CFG_makeEventPopup (void);
+CFG_Event CFG_makeEventClick (CFG_KeyModifierList list,
+			      CFG_VirtualButton button);
 CFG_Event CFG_makeEventIcon (const char *title, const char *path);
-CFG_Event CFG_makeEventMenu (CFG_ItemList list);
-CFG_Event CFG_makeEventMenuShortcut (CFG_ItemList list,
+CFG_Event CFG_makeEventMenu (CFG_ItemLabels labels);
+CFG_Event CFG_makeEventMenuShortcut (CFG_ItemLabels labels,
 				     CFG_ShortCut shortcut);
 CFG_Item CFG_makeItemLabel (const char *name);
 CFG_TextCategoryName CFG_makeTextCategoryNameFocus (void);
@@ -409,13 +421,15 @@ CFG_TextAttributeMap CFG_makeTextAttributeMapEmpty (void);
 CFG_TextAttributeMap CFG_makeTextAttributeMapSingle (CFG_TextAttribute head);
 CFG_TextAttributeMap CFG_makeTextAttributeMapMany (CFG_TextAttribute head,
 						   CFG_TextAttributeMap tail);
-CFG_ItemList CFG_makeItemListEmpty (void);
-CFG_ItemList CFG_makeItemListSingle (CFG_Item head);
-CFG_ItemList CFG_makeItemListMany (CFG_Item head, CFG_ItemList tail);
 CFG_KeyModifierList CFG_makeKeyModifierListEmpty (void);
 CFG_KeyModifierList CFG_makeKeyModifierListSingle (CFG_KeyModifier head);
 CFG_KeyModifierList CFG_makeKeyModifierListMany (CFG_KeyModifier head,
 						 CFG_KeyModifierList tail);
+CFG_ItemLabels CFG_makeItemLabelsEmpty (void);
+CFG_ItemLabels CFG_makeItemLabelsSingle (CFG_Item head);
+CFG_ItemLabels CFG_makeItemLabelsMany (CFG_Item head, CFG_ItemLabels tail);
+ATbool CFG_isEqualVirtualButton (CFG_VirtualButton arg0,
+				 CFG_VirtualButton arg1);
 ATbool CFG_isEqualKeyModifier (CFG_KeyModifier arg0, CFG_KeyModifier arg1);
 ATbool CFG_isEqualVirtualKey (CFG_VirtualKey arg0, CFG_VirtualKey arg1);
 ATbool CFG_isEqualColor (CFG_Color arg0, CFG_Color arg1);
@@ -437,9 +451,14 @@ ATbool CFG_isEqualActionDescriptionList (CFG_ActionDescriptionList arg0,
 					 CFG_ActionDescriptionList arg1);
 ATbool CFG_isEqualTextAttributeMap (CFG_TextAttributeMap arg0,
 				    CFG_TextAttributeMap arg1);
-ATbool CFG_isEqualItemList (CFG_ItemList arg0, CFG_ItemList arg1);
 ATbool CFG_isEqualKeyModifierList (CFG_KeyModifierList arg0,
 				   CFG_KeyModifierList arg1);
+ATbool CFG_isEqualItemLabels (CFG_ItemLabels arg0, CFG_ItemLabels arg1);
+ATbool CFG_isValidVirtualButton (CFG_VirtualButton arg);
+inline ATbool CFG_isVirtualButtonNOBUTTON (CFG_VirtualButton arg);
+inline ATbool CFG_isVirtualButtonBUTTON1 (CFG_VirtualButton arg);
+inline ATbool CFG_isVirtualButtonBUTTON2 (CFG_VirtualButton arg);
+inline ATbool CFG_isVirtualButtonBUTTON3 (CFG_VirtualButton arg);
 ATbool CFG_isValidKeyModifier (CFG_KeyModifier arg);
 inline ATbool CFG_isKeyModifierMUnderscoreALT (CFG_KeyModifier arg);
 inline ATbool CFG_isKeyModifierMUnderscoreCTRL (CFG_KeyModifier arg);
@@ -620,21 +639,28 @@ CFG_ActionDescription CFG_setActionDescriptionContext (CFG_ActionDescription
 CFG_ActionDescription CFG_setActionDescriptionEvent (CFG_ActionDescription
 						     arg, CFG_Event event);
 ATbool CFG_isValidEvent (CFG_Event arg);
+inline ATbool CFG_isEventPopup (CFG_Event arg);
 inline ATbool CFG_isEventClick (CFG_Event arg);
 inline ATbool CFG_isEventIcon (CFG_Event arg);
 inline ATbool CFG_isEventMenu (CFG_Event arg);
 inline ATbool CFG_isEventMenuShortcut (CFG_Event arg);
+ATbool CFG_hasEventList (CFG_Event arg);
+ATbool CFG_hasEventButton (CFG_Event arg);
 ATbool CFG_hasEventTitle (CFG_Event arg);
 ATbool CFG_hasEventPath (CFG_Event arg);
-ATbool CFG_hasEventList (CFG_Event arg);
+ATbool CFG_hasEventLabels (CFG_Event arg);
 ATbool CFG_hasEventShortcut (CFG_Event arg);
+CFG_KeyModifierList CFG_getEventList (CFG_Event arg);
+CFG_VirtualButton CFG_getEventButton (CFG_Event arg);
 char *CFG_getEventTitle (CFG_Event arg);
 char *CFG_getEventPath (CFG_Event arg);
-CFG_ItemList CFG_getEventList (CFG_Event arg);
+CFG_ItemLabels CFG_getEventLabels (CFG_Event arg);
 CFG_ShortCut CFG_getEventShortcut (CFG_Event arg);
+CFG_Event CFG_setEventList (CFG_Event arg, CFG_KeyModifierList list);
+CFG_Event CFG_setEventButton (CFG_Event arg, CFG_VirtualButton button);
 CFG_Event CFG_setEventTitle (CFG_Event arg, const char *title);
 CFG_Event CFG_setEventPath (CFG_Event arg, const char *path);
-CFG_Event CFG_setEventList (CFG_Event arg, CFG_ItemList list);
+CFG_Event CFG_setEventLabels (CFG_Event arg, CFG_ItemLabels labels);
 CFG_Event CFG_setEventShortcut (CFG_Event arg, CFG_ShortCut shortcut);
 ATbool CFG_isValidItem (CFG_Item arg);
 inline ATbool CFG_isItemLabel (CFG_Item arg);
@@ -726,16 +752,6 @@ CFG_TextAttributeMap CFG_setTextAttributeMapHead (CFG_TextAttributeMap arg,
 						  CFG_TextAttribute head);
 CFG_TextAttributeMap CFG_setTextAttributeMapTail (CFG_TextAttributeMap arg,
 						  CFG_TextAttributeMap tail);
-ATbool CFG_isValidItemList (CFG_ItemList arg);
-inline ATbool CFG_isItemListEmpty (CFG_ItemList arg);
-inline ATbool CFG_isItemListSingle (CFG_ItemList arg);
-inline ATbool CFG_isItemListMany (CFG_ItemList arg);
-ATbool CFG_hasItemListHead (CFG_ItemList arg);
-ATbool CFG_hasItemListTail (CFG_ItemList arg);
-CFG_Item CFG_getItemListHead (CFG_ItemList arg);
-CFG_ItemList CFG_getItemListTail (CFG_ItemList arg);
-CFG_ItemList CFG_setItemListHead (CFG_ItemList arg, CFG_Item head);
-CFG_ItemList CFG_setItemListTail (CFG_ItemList arg, CFG_ItemList tail);
 ATbool CFG_isValidKeyModifierList (CFG_KeyModifierList arg);
 inline ATbool CFG_isKeyModifierListEmpty (CFG_KeyModifierList arg);
 inline ATbool CFG_isKeyModifierListSingle (CFG_KeyModifierList arg);
@@ -748,6 +764,18 @@ CFG_KeyModifierList CFG_setKeyModifierListHead (CFG_KeyModifierList arg,
 						CFG_KeyModifier head);
 CFG_KeyModifierList CFG_setKeyModifierListTail (CFG_KeyModifierList arg,
 						CFG_KeyModifierList tail);
+ATbool CFG_isValidItemLabels (CFG_ItemLabels arg);
+inline ATbool CFG_isItemLabelsEmpty (CFG_ItemLabels arg);
+inline ATbool CFG_isItemLabelsSingle (CFG_ItemLabels arg);
+inline ATbool CFG_isItemLabelsMany (CFG_ItemLabels arg);
+ATbool CFG_hasItemLabelsHead (CFG_ItemLabels arg);
+ATbool CFG_hasItemLabelsTail (CFG_ItemLabels arg);
+CFG_Item CFG_getItemLabelsHead (CFG_ItemLabels arg);
+CFG_ItemLabels CFG_getItemLabelsTail (CFG_ItemLabels arg);
+CFG_ItemLabels CFG_setItemLabelsHead (CFG_ItemLabels arg, CFG_Item head);
+CFG_ItemLabels CFG_setItemLabelsTail (CFG_ItemLabels arg,
+				      CFG_ItemLabels tail);
+CFG_VirtualButton CFG_visitVirtualButton (CFG_VirtualButton arg);
 CFG_KeyModifier CFG_visitKeyModifier (CFG_KeyModifier arg);
 CFG_VirtualKey CFG_visitVirtualKey (CFG_VirtualKey arg);
 CFG_Color CFG_visitColor (CFG_Color arg, int (*acceptRed) (int),
@@ -772,9 +800,13 @@ CFG_ActionDescription CFG_visitActionDescription (CFG_ActionDescription arg,
 						  (ATerm),
 						  CFG_Event (*acceptEvent)
 						  (CFG_Event));
-CFG_Event CFG_visitEvent (CFG_Event arg, char *(*acceptTitle) (char *),
+CFG_Event CFG_visitEvent (CFG_Event arg,
+			  CFG_KeyModifierList (*acceptList)
+			  (CFG_KeyModifierList),
+			  CFG_VirtualButton (*acceptButton)
+			  (CFG_VirtualButton), char *(*acceptTitle) (char *),
 			  char *(*acceptPath) (char *),
-			  CFG_ItemList (*acceptList) (CFG_ItemList),
+			  CFG_ItemLabels (*acceptLabels) (CFG_ItemLabels),
 			  CFG_ShortCut (*acceptShortcut) (CFG_ShortCut));
 CFG_Item CFG_visitItem (CFG_Item arg, char *(*acceptName) (char *));
 CFG_TextCategoryName CFG_visitTextCategoryName (CFG_TextCategoryName arg,
@@ -802,10 +834,10 @@ CFG_TextAttributeMap CFG_visitTextAttributeMap (CFG_TextAttributeMap arg,
 						CFG_TextAttribute
 						(*acceptHead)
 						(CFG_TextAttribute));
-CFG_ItemList CFG_visitItemList (CFG_ItemList arg,
-				CFG_Item (*acceptHead) (CFG_Item));
 CFG_KeyModifierList CFG_visitKeyModifierList (CFG_KeyModifierList arg,
 					      CFG_KeyModifier (*acceptHead)
 					      (CFG_KeyModifier));
+CFG_ItemLabels CFG_visitItemLabels (CFG_ItemLabels arg,
+				    CFG_Item (*acceptHead) (CFG_Item));
 
 #endif /* _CONFIG_H */
