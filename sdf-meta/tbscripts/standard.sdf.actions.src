@@ -47,6 +47,9 @@ configuration([
   action([description(syntax-editor, menu-shortcut([label("Structure"), label("Move"), label("Down")],shortcut([M_ALT,M_CTRL],VK_DOWN))),
           description(term-editor, menu-shortcut([label("Structure"), label("Move"), label("Down")], shortcut([M_ALT,M_CTRL],VK_DOWN)))],
          "MoveCursorDownAction"),
+  action([description(syntax-editor, popup)], "EditorPopup"),
+  action([description(equations-editor, popup)], "EditorPopup"),
+  action([description(term-editor, popup)], "EditorPopup"),
 
   action([description(module-popup, menu([label("Close...")]))],
          "CloseModuleAction"),
