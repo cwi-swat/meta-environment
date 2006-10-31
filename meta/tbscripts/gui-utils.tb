@@ -45,6 +45,9 @@ in
   fi  
 endlet
 
+process RemoveSummaryFor(SummaryId: str) is
+  snd-msg(ui-remove-feedback-summary("Issues", SummaryId))
+  
 process RemoveSummary(Producer: str, SummaryId: str) is
   snd-msg(ui-remove-feedback-summary("Issues", Producer, SummaryId))
   

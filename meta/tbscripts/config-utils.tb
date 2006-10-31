@@ -37,4 +37,5 @@ in
   )
 endlet
 
+process DefaultAction(Arg:term) is tau
 #endif /* __CONFIG_UTILS__ */

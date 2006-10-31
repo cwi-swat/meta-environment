@@ -199,14 +199,26 @@ in
   )
 endlet
 
+process GetFocusSort(Sid: term, Sort: str?) is
+  Sort := ""
+  . snd-msg(se-get-sort-at-cursor(Sid))
+  .
+  (
+    rec-msg(se-sort-at-cursor(Sid, Sort?))
+  +
+    rec-msg(se-no-cursor(Sid))
+  )
+
+
 process MenuSelected(Sid: term, EditorType: term) is
 let
   Action: str,
   Event: term,
   ModuleId: term,
-  Modulename: str
+  Modulename: str,
+  Sort: str
 in
-  rec-msg(te-menu-event(Sid, Event?))
+  rec-msg(te-event(Sid, Event?))
   . snd-msg(em-request-transaction(Sid))
   .
   (
@@ -214,11 +226,14 @@ in
   +
     rec-msg(em-transaction-started(Sid))
     . GetModuleId(Sid, ModuleId?)
-    . snd-msg(cm-get-action(EditorType, Event))
+    . GetFocusSort(Sid, Sort?)
+    . snd-msg(cm-get-action(EditorType, Sort, Event))
     . rec-msg(cm-action(Action?))
     . 
     (
       printf("Warning: process %s was not found\n", Action)
+    +>
+      Action(Sid, EditorType, Sort)
     +>
       Action(Sid)
     )
@@ -532,5 +547,15 @@ in
     . Origin := no-origin
   )
 endlet
+
+process EditorPopup(Sid : term, EditorType: term, FocusSort: term) is
+let
+  MenuList : list
+in
+  snd-msg(cm-get-events(EditorType, FocusSort))
+  . rec-msg(cm-events(MenuList?))
+  . snd-msg(te-show-popup(Sid, MenuList)) 
+endlet
+
 
 #endif /* __EDITING__ */
