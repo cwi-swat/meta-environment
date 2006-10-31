@@ -31,10 +31,12 @@ context-free syntax
 
 sorts Event
 context-free syntax
-  "click" -> Event {cons("click")}
+  "popup" -> Event {cons("popup")}
+  "click" "(" "[" list:{KeyModifier ","}* "]" "," button:VirtualButton ")" -> Event {cons("click")}
+
   "icon" "(" title:StrCon "," path:StrCon ")" -> Event {cons("icon")}
-  "menu" "(" "[" list:{Item ","}* "]" ")" -> Event {cons("menu")}
-  "menu-shortcut" "(" "[" list:{Item ","}* "]" "," shortcut:ShortCut ")" -> Event {cons("menu-shortcut")}
+  "menu" "(" "[" labels:{Item ","}* "]" ")" -> Event {cons("menu")}
+  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," shortcut:ShortCut ")" -> Event {cons("menu-shortcut")}
 
 sorts Item
 context-free syntax

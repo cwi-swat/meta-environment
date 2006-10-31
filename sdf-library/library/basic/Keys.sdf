@@ -2,6 +2,13 @@ module basic/Keys
 
 exports
 
+sorts VirtualButton
+context-free syntax
+"NOBUTTON" -> VirtualButton {cons("NOBUTTON")}
+"BUTTON1" -> VirtualButton {cons("BUTTON1")}
+"BUTTON2" -> VirtualButton {cons("BUTTON2")}
+"BUTTON3" -> VirtualButton {cons("BUTTON3")}
+
 sorts KeyModifier
 context-free syntax
 "M_ALT" -> KeyModifier {cons("M_ALT")}
