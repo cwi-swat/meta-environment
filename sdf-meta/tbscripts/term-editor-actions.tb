@@ -28,7 +28,6 @@ in
   if equal(Cancel, true) then
     tau
   else
-    printf("Filename: %t\n", Filename) .
     create(EditTerm(Filename, ModuleId, true), Pid?)
     .
     (
