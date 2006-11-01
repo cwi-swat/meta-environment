@@ -24,7 +24,7 @@ let
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
   . PromptForFile("Edit Term", [], Modulename, Cancel?, Filename?)
-  .  printf("Hoeria: %t %t\n", Cancel, Filename) .
+  .  
   if equal(Cancel, true) then
     tau
   else
