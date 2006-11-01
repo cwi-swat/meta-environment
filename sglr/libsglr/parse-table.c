@@ -1320,6 +1320,8 @@ void SG_SaveParseTable(language L, parse_table *pt)
     SG_DiscardParseTable(tables[0].table);
   }
   tables[0].name  = L;
+
+  ATprotect(((ATerm*) (void*) &(tables[0].name)));
   tables[0].table = pt;
   IF_DEBUG(ATfprintf(SG_log(),
                      "Table for %t added to parse table database\n", L));
