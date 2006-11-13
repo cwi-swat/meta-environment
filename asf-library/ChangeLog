@@ -1,5 +1,9 @@
 $Id$
 
+Mon Nov 13 10:29:37 CET 2006 <economop@cwi.nl>
+ * library/languages/sdf2/analysis: removed as the code is not used in the 
+   trunk. It is implemented in the branch: enable-rn-analysis.
+
 Wed Sep 13 16:18:17 CEST 2006 <economop@cwi.nl>
  * library/languages/sdf2/normalization/Sdf2-Normalization.asf: removed comma.
 
