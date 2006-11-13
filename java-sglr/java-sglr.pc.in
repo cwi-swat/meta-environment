@@ -7,4 +7,5 @@ Packages=sglr
 
 Name: java-sglr
 Description: A Java implementation of the SDF parse table interpreter
+Requires: aterm-java
 Version: 0.1
