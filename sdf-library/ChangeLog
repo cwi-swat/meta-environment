@@ -1,5 +1,9 @@
 $Id$
 
+Mon Nov 13 10:42:34 CET 2006 <economop@cwi.nl>
+ * library/languages/sdf2/syntax/{Properties,Nullables,RightNullables}.sdf:
+   removed and implemented in the branch: enable-rn-analysis.
+
 Tue Oct 31 13:56:32 CET 2006 <jurgenv@cwi.nl>
  * library/basic/BoolCon.sdf: removed BoolAnd, BoolOr and stuff because
    that breaks the bootstrap process, and it is not used by

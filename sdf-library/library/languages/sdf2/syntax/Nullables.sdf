@@ -1,8 +1,0 @@
-module languages/sdf2/syntax/Nullables
-
-imports languages/sdf2/syntax/Properties
-
-exports
-  context-free syntax
-    "nullable" "productions" Productions -> Property {cons("nullable-productions")} 
-
