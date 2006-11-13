@@ -1,5 +1,9 @@
 $Id$
 
+Mon Nov 13 14:13:02 CET 2006 <economop@cwi.nl>
+ * libsglr/forest.c: Applied Martin Bravenboer's patch that allows a lexical 
+   sort to be defined as start symbol; resolves bug 657.
+
 Tue Oct 10 10:46:48 CEST 2006 <{economop,jurgenv}@cwi.nl>
  * libsglr/sglr-interface.c: introduced a workaround function
    to be able to call sglr from another C binary. This is
