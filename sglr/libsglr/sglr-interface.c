@@ -375,6 +375,11 @@ FILE  *SG_log(void)
   return SG_Log;
 }
 
+void SG_SetLog(FILE* stream)
+{
+  SG_Log = stream;
+}
+
 void SG_CloseLog(void)
 {
   if(SG_Log) fclose(SG_Log);

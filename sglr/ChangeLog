@@ -1,5 +1,9 @@
 $Id$
 
+Mon Nov 13 14:30:44 CET 2006 <economop@cwi.nl>
+ * libsglr/sglr.h, libsglr/sglr-interface.c: Applied Martin Bravenboer's patch
+   that allows clients to set the log FILE* of libsglr; resolves bug 658.
+
 Mon Nov 13 14:13:02 CET 2006 <economop@cwi.nl>
  * libsglr/forest.c: Applied Martin Bravenboer's patch that allows a lexical 
    sort to be defined as start symbol; resolves bug 657.
