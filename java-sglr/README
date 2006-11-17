@@ -1,0 +1,6 @@
+
+This directory contains the following experimental Java implementations of
+SGLR:
+
+ - cathal-sglr -- the implementation due to Cathal Boogerd (unmaintained)
+ - org.spoofax.jsglr -- the implementaiton due to Karl Trygve Kalleberg
