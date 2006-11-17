@@ -1,0 +1,6 @@
+ jsglr -- Scannerless GLR parsing for Java
+===========================================
+
+This package is a parse table interpreter for the CWI SGLR parse table format, 
+written in Java. It permits execution of SGLR parse tables on Java.
+

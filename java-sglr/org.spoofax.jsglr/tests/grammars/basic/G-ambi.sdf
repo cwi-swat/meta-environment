@@ -1,0 +1,21 @@
+%%
+%% Test of trivial, temporary ambiguity
+%%
+%% Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk@ii.uib.no>
+%%
+
+module basic/G-ambi
+
+exports
+  sorts A C D
+  
+context-free syntax
+
+  "a" ( "x" | "y" ) "c" "d" -> A
+  "a" ( "y" | "z" ) "c" "f" -> C
+  
+  A | C -> D
+    
+context-free start-symbols
+
+  D

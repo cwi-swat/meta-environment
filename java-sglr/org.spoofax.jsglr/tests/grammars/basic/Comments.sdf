@@ -1,0 +1,9 @@
+module basic/Comments
+
+exports
+  lexical syntax
+
+    [\ \t\12\r\n]               -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]

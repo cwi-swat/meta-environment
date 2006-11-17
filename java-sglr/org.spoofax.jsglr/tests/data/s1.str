@@ -1,0 +1,4 @@
+module foo
+strategies
+
+  main = foo

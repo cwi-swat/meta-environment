@@ -1,0 +1,38 @@
+module basic/Booleans
+
+imports 
+  basic/BoolCon
+
+exports
+  sorts Boolean
+  
+  context-free syntax
+  
+    BoolCon                          -> Boolean {cons("constant")}
+    lhs:Boolean "|" rhs:Boolean      -> Boolean {left, cons("or")}
+    lhs:Boolean "&" rhs:Boolean      -> Boolean {left, cons("and")}
+    "not" "(" Boolean ")"            -> Boolean {cons("not")}
+    "(" Boolean ")"                  -> Boolean {bracket, cons("bracket")}
+
+  context-free priorities
+  
+      Boolean "&" Boolean              -> Boolean
+    > Boolean "|" Boolean              -> Boolean
+
+    
+hiddens
+  sorts
+    S
+
+  context-free syntax
+    Boolean -> S
+      
+  context-free start-symbols
+    S
+        
+  imports
+    basic/Comments
+    
+  variables
+    "Bool"[0-9]*                    -> Boolean
+    "Bool-con"[0-9]*                -> BoolCon

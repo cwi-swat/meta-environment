@@ -1,0 +1,29 @@
+%%
+%% Test of trivial ambiguity with priorities
+%%
+%% Copyright (c) 2006-2007, Karl Trygve Kalleberg <karltk@ii.uib.no>
+%%
+module basic/G-prio-1
+
+exports
+  sorts A C D E F
+  
+context-free syntax
+
+  "a" E "c" "d" -> A
+  "a" F "c" "d" -> C
+ 
+  "x" | "y" -> E
+  "y" | "z" -> F
+  
+  A -> D
+  C -> D
+
+context-free priorities
+
+   A -> D
+>  C -> D
+    
+context-free start-symbols
+
+  D

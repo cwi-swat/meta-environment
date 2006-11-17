@@ -1,0 +1,86 @@
+<project name="aterm" default="compile" basedir=".">
+
+    <property name="compiler.debug" value="on"/>
+
+    <property name="src.dir" value="../src"/>
+    <property name="lib.dir" value="../ext"/>
+    <property name="build.dir" value=".."/>
+    <property name="classes.dir" value="${build.dir}/bin"/>
+    <property name="version" value="0.1"/>
+    <property name="jar.file" value="jsglr-${version}.jar"/>
+    <property name="test.out.dir" value="../testout"/>
+    <property name="haltonfailure" value="no"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}">
+            <include name="jjtraveler-0.4.3.jar"/>
+            <include name="shared-objects-1.4.jar"/>
+            <include name="junit-3.8.1.jar"/>
+        </fileset>
+        <!-- todo: better idea? -->
+        <pathelement location="../../org.spoofax.aterm/aterm-1.6.jar"/>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${classes.dir}"/>
+    </target>
+
+    <!-- ############################ Compile ############################ -->
+    <target name="compile" depends="init">
+        <mkdir dir="${classes.dir}"/>
+        <javac
+          srcdir="${src.dir}"
+          destdir="${classes.dir}"
+          nowarn="on"
+          debug="${compiler.debug}">
+            <classpath refid="classpath"/>
+        </javac>
+
+    </target>
+
+    <!-- ############################ Jar ############################ -->
+    <target name="jar" depends="compile">
+        <jar jarfile="${build.dir}/${jar.file}"
+             basedir="${classes.dir}"/>
+    </target>
+	
+    <!-- ############################ Tests ############################ -->
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+        <classpath refid="classpath"/>
+    </taskdef>
+
+    <target name="run.tests" depends="jar">
+        <mkdir dir="${test.out.dir}"/>
+        <junit printsummary="yes" fork="no" haltonfailure="no">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${build.dir}/${jar.file}"/>
+                <!--<pathelement location="../../../shared-objects-JJTraveler-bundle/shared-objects-1.4.2/classes"/>-->
+            </classpath>
+            <formatter type="plain"/>
+        	<test name="org.spoofax.jsglr.tests.TestG_ambi" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+	        <test name="org.spoofax.jsglr.tests.TestG_avoid_1" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_avoid_2" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_prefer_1" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_prefer_2" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_reject_1" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_reject_2" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_right_assoc" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG_left_assoc" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG1" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestG2" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestStratego" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+            <test name="org.spoofax.jsglr.tests.TestBooleans" todir="${test.out.dir}" haltonfailure="${haltonfailure}"/>
+        </junit>
+    </target>
+	
+    <!-- ############################ Clean ############################ -->
+    <target name="clean">
+        <delete dir="${classes.dir}"/>
+    </target>
+
+    <target name="clean.full" depends="clean">
+        <delete file="${build.dir}/${jar.file}"/>
+    </target>
+</project>
+

@@ -1,0 +1,6 @@
+module foo
+
+strategies
+
+  main = <foo> Bar
+
