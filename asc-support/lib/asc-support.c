@@ -31,7 +31,7 @@ unsigned int rewrite_steps = 0;
 
 #ifdef MEMO_PROFILING
 ATermTable prof_table = NULL;
-Symbol record_sym = -1;
+AFun record_sym = -1;
 #endif
 
 /*}}}  */
@@ -47,31 +47,19 @@ static ATerm term_store[MAX_STORE];
  */
 ATerm char_table[256] = {NULL};
 
-/* These quoted symbols are used in combination with
- * outermost evaluation! So, 
- * "if" Bool "then" S "else" S "fi" -> S {delay2, delay3}
- * Symbols are quoted to prevent innermost reduction of
- * functions. Also symbols related to list (matching)
- * have to be quoted: make_listsym, concsym and conssym.
- */
-Symbol sym_quote0;
-Symbol sym_quote1;
-Symbol sym_quote2;
-Symbol sym_quote3;
-Symbol sym_quote4;
-Symbol sym_quote5;
-Symbol sym_quote6;
-Symbol sym_quote7;
-
-Symbol tuplesym;
-Symbol make_listsym;
-Symbol concsym;    
+AFun tuplesym;
+AFun make_listsym;
+AFun concsym;    
 
 /* The ambiguity cache is needed to prevent exponential 
  * behavior in case of nested ambiguities.
  */
 ATermTable ambiguityCache = NULL;
 
+/* 
+ * configuration options that guide the mapping
+ * from parse trees to muasf terms and back
+ */
 ATbool keep_annotations = ATfalse;
 ATbool keep_layout = ATfalse;
 
@@ -291,7 +279,7 @@ static ATerm call_unknown(PT_Production prod, ATermList args)
   char *escaped = prodToEscapedString(prod);
   ATerm result = NULL;
   int arity;
-  Symbol sym;
+  AFun sym;
   
   if (PT_isProductionDefault(prod)) {
     arity = ATgetLength(args);
@@ -648,7 +636,7 @@ ATerm callLiteralConstructor(PT_Symbol symbol)
 
 ATerm unquote(ATerm t)
 {
-  Symbol s;
+  AFun s;
   ATerm a0,a1,a2,a3,a4,a5,a6;
 
   if (ATmatch(t,"quote(<int>)",&s)) {
@@ -836,7 +824,7 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
   ATerm annos = keep_annotations ? ATgetAnnotations(arg0) : NULL;
 
   if (type == AT_APPL) {
-    Symbol sym;
+    AFun sym;
     funcptr func;
     ATerm arg[33];
     int idx;
@@ -934,7 +922,7 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
 }
 
 /*}}}  */
-/*{{{  ATerm call_kids_accutrafo(funcptr trav, Symbol tuple, ATerm arg0, ATerm arg1,  */
+/*{{{  ATerm call_kids_accutrafo(funcptr trav, AFun tuple, ATerm arg0, ATerm arg1,  */
 
 ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, 
 			  ATermList extra_args)
@@ -945,7 +933,7 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
   if (type == AT_APPL) {
     int idx;
     ATermList args;
-    Symbol sym;
+    AFun sym;
     funcptr func;
     ATerm arg[33];
     ATermList list;
@@ -1114,7 +1102,7 @@ ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg0, ATermList extra_args)
   ATbool fail = ATtrue;
 
   if (type == AT_APPL) {
-    Symbol sym;
+    AFun sym;
     funcptr func;
     ATerm arg[33];
     int idx;
@@ -1248,7 +1236,7 @@ ATerm call_kids_accu_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
 }
 
 /*}}}  */
-/*{{{  ATerm call_kids_accutrafo(funcptr trav, Symbol tuple, ATerm arg0, ATerm arg1,  */
+/*{{{  ATerm call_kids_accutrafo(funcptr trav, AFun tuple, ATerm arg0, ATerm arg1,  */
 
 ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg0, ATerm arg1, 
 				    ATermList extra_args)
@@ -1260,7 +1248,7 @@ ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
   if (type == AT_APPL) {
     int idx;
     ATermList args;
-    Symbol sym;
+    AFun sym;
     funcptr func;
     ATerm arg[33];
     ATermList list;
@@ -1348,7 +1336,7 @@ void write_memo_profile()
   while(!ATisEmpty(keys)) {
     ATerm key = ATgetFirst(keys);
     ATermAppl stats = (ATermAppl)ATtableGet(prof_table, key);
-    ATerm asfix = lookup_prod(ATgetSymbol((ATermAppl)key));
+    ATerm asfix = lookup_prod(ATgetAFun((ATermAppl)key));
 		
     ATfprintf(f, "%t ", stats);
     AFsourceToFile(asfix, f);
@@ -1376,31 +1364,10 @@ void ASC_initRunTime(int tableSize)
     char_table[i] = (ATerm) ATmakeInt(i);
   }
 
-  sym_quote0 = ATmakeSymbol("quote", 1, ATfalse);
-  ATprotectSymbol(sym_quote0);
-  sym_quote1 = ATmakeSymbol("quote", 2, ATfalse);
-  ATprotectSymbol(sym_quote1);
-  sym_quote2 = ATmakeSymbol("quote", 3, ATfalse);
-  ATprotectSymbol(sym_quote2);
-  sym_quote3 = ATmakeSymbol("quote", 4, ATfalse);
-  ATprotectSymbol(sym_quote3);
-  sym_quote4 = ATmakeSymbol("quote", 5, ATfalse);
-  ATprotectSymbol(sym_quote4);
-  sym_quote5 = ATmakeSymbol("quote", 6, ATfalse);
-  ATprotectSymbol(sym_quote5);
-  sym_quote6 = ATmakeSymbol("quote", 7, ATfalse);
-  ATprotectSymbol(sym_quote6);
-  sym_quote7 = ATmakeSymbol("quote", 8, ATfalse);
-  ATprotectSymbol(sym_quote7);
-  make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
-  ATprotectSymbol(make_listsym);
-  tuplesym = ATmakeSymbol("tuple", 2, ATfalse);
-  ATprotectSymbol(tuplesym);
-
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
-  record_sym = ATmakeSymbol("stats", 2, ATfalse);
-  ATprotectSymbol(record_sym);
+  record_sym = ATmakeAFun("stats", 2, ATfalse);
+  ATprotectAFun(record_sym);
 
   atexit(write_memo_profile);
 #endif
@@ -1456,7 +1423,7 @@ PT_ParseTree toasfixNoLayout(ATerm term)
 ATerm get_sort(ATerm tree)
 {
   if (ATgetType(tree) == AT_APPL) {
-    Symbol sym = get_sym(tree);
+    AFun sym = get_sym(tree);
 
     if (sym) {
       return PT_SymbolToTerm(PT_getProductionRhs(PT_ProductionFromTerm(lookup_prod(sym)))); 

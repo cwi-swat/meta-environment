@@ -1,5 +1,9 @@
 $Id$
 
+Thu Nov 23 19:05:32 CET 2006 <jurgenv@cwi.nl>
+ * lib/asc-support*.[ch]: removed dead code that used to support delay
+   attributes. Replaced all deprecated use of Symbol with AFun.
+
 Mon Oct 16 11:03:49 CEST 2006 <jurgenv@cwi.nl>
  * asc-support/trunk/lib/asc-muasf2pt.c:
    - unprotected terms need to be set to NULL to prevent funny warnings 
