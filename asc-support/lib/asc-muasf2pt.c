@@ -199,6 +199,11 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     for (i = 0; !ATisEmpty(elems); elems = ATgetNext(elems)) {
       PT_Tree newTree = termToTree(ATgetFirst(elems));
       ASSERT_VALID_INDEX(i);
+      /* Note that TERM_STORE contains a reference to a global
+       * that may be updated by termToTree, so do not remove the
+       * newTree temporary variable and do not inline the call to termToTree
+       * in the following assignment. 
+       */
       TERM_STORE[i] = newTree;
       i++;
     } 
