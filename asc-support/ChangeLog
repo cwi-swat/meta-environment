@@ -1,5 +1,12 @@
 $Id$
 
+Wed Nov 29 15:57:05 CET 2006 <economop@cwi.nl>
+ * lib/asc-muasf2pt.c: fixed Bug #662, the lvalue of an assignment
+   depended on the execution of the rvalue of an assigment via a
+   reference to a global variable. Between 3.x and 4.x versions of
+   GCC the order of execution was changed, triggering this bug.
+   We introduced a variable to fix the bug.
+
 Thu Nov 23 19:05:32 CET 2006 <jurgenv@cwi.nl>
  * lib/asc-support*.[ch]: removed dead code that used to support delay
    attributes. Replaced all deprecated use of Symbol with AFun.

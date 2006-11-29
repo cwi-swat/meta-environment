@@ -197,8 +197,10 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     index = getTermStore(ATgetLength(elems));
 
     for (i = 0; !ATisEmpty(elems); elems = ATgetNext(elems)) {
+      PT_Tree newTree = termToTree(ATgetFirst(elems));
       ASSERT_VALID_INDEX(i);
-      TERM_STORE[i++] = termToTree(ATgetFirst(elems));
+      TERM_STORE[i] = newTree;
+      i++;
     } 
 
     while(--i >= 0) {
