@@ -1364,6 +1364,11 @@ void ASC_initRunTime(int tableSize)
     char_table[i] = (ATerm) ATmakeInt(i);
   }
 
+   make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
+   ATprotectSymbol(make_listsym);
+   tuplesym = ATmakeSymbol("tuple", 2, ATfalse);
+   ATprotectSymbol(tuplesym);
+
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
   record_sym = ATmakeAFun("stats", 2, ATfalse);
