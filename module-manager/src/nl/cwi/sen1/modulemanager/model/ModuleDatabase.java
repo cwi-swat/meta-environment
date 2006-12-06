@@ -56,7 +56,6 @@ public class ModuleDatabase {
 		modules.put(moduleId, module);
 		descendants.put(moduleId, new HashSet<ModuleId>());
 		ascendants.put(moduleId, new HashSet<ModuleId>());
-		System.err.println("Nr. of modules: " + modules.size());
 	}
 
 	public void removeModule(ModuleId moduleId) {
