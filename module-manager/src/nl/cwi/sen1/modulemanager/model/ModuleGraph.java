@@ -26,7 +26,7 @@ public class ModuleGraph extends ModuleDatabase {
     private Factory factory;
 
     public ModuleGraph(PureFactory pureFactory, AttributeSetListener l) {
-        super(l);
+        super(l, pureFactory);
         factory = Factory.getInstance(pureFactory);
     }
 

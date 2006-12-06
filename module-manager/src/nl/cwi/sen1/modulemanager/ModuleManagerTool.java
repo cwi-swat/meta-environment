@@ -4,12 +4,11 @@
 
 package nl.cwi.sen1.modulemanager;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import toolbus.AbstractTool;
-
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -20,7 +19,7 @@ abstract public class ModuleManagerTool
   implements ModuleManagerTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
   private ATerm PdeleteDependencies0;
@@ -56,28 +55,27 @@ abstract public class ModuleManagerTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,create-module)"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,register-attribute-update-rule(<term>,<term>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-ack-event(<module-manager>,<term>)"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-children-modules(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-parent-modules(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies)"), btrue);
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-graph(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<module-manager>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-eval(<module-manager>,create-module)"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-modules)"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-module(<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,register-attribute-update-rule(<term>,<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-ack-event(<module-manager>,<term>)"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-children-modules(<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-parent-modules(<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-dependencies)"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-module-graph(<term>))"));
+    sigTable.add(factory.parse("rec-terminate(<module-manager>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
@@ -215,7 +213,7 @@ abstract public class ModuleManagerTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }

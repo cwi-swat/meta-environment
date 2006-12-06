@@ -1,5 +1,11 @@
 $Id$
 
+Wed Dec  6 14:17:03 CET 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Pattern matching on ATerms was not efficient enough when evaluating for
+     lots of modules. Now use equal on AFun's.
+   - Added caching for computation of transitive closure of children
+
 Fri Oct 20 13:25:27 CEST 2006 <kooiker@cwi.nl>
  * src/**/model/ModuleDatabase.java:
    - Use innermost modal logic evaluator so any modal logic formula can be

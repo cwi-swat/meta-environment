@@ -246,7 +246,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 //        args[3] = "8999";
 //        args[4] = "-TB_TOOL_NAME";
 //        args[5] = "module-manager";
-//
+
         new ModuleManager(args);
 	}
 

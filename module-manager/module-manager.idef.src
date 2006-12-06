@@ -2,6 +2,7 @@
 #define __MODULE_MANAGER_IDEF
 
 tool module-manager is { command = "__PREFIX__/bin/module-manager" }
+/*tool module-manager is { }*/
 
 process ModuleManager is
 let
@@ -27,36 +28,47 @@ let
   Rule: term
 in
   execute(module-manager, MM?)
+  /*rec-connect(MM?)*/
   .
   (
     rec-msg(mm-create-module)
+    . printf("MM - create module IN\n")
     . snd-eval(MM, create-module)
     . rec-value(MM, module-id(ModuleId?))
+    . printf("MM - create module OUT\n")
     . snd-msg(mm-module-created(ModuleId))
   +
     rec-msg(mm-get-module-id-by-attribute(Namespace?, Key?, Value?))
+    . printf("MM - get module id by attribute IN\n")
     . snd-eval(MM, get-module-id-by-attribute(Namespace, Key, Value))
     .
     (
       rec-value(MM, module-id(ModuleId?))
+      . printf("MM - get module id by attribute OUT\n")
       . snd-msg(mm-module-id(Namespace, Key, Value, ModuleId))
     +
       rec-value(MM, no-such-module)
+    . printf("MM - get module id by attribute OUT\n")
       . snd-msg(mm-no-such-module(Namespace, Key, Value))
     )
   +
     rec-msg(mm-get-all-modules)
+    . printf("MM - get all modules IN\n")
     . snd-eval(MM, get-all-modules)
     . rec-value(MM, modules(Modules?))
+    . printf("MM - get all modules OUT\n")
     . snd-msg(mm-modules(Modules))
   +
     rec-msg(mm-delete-module(ModuleId?))
+    . printf("MM - delete module\n")
     . snd-do(MM, delete-module(ModuleId))
   +
     rec-msg(mm-register-attribute-update-rule(Namespace?, Key?, Rule?, NewValue?))
+    . printf("MM - register attribute update rule\n")
     . snd-do(MM, register-attribute-update-rule(Namespace, Key, Rule, NewValue))
   +
     rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
+    . printf("MM - add attribute\n")
     . snd-do(MM, add-attribute(ModuleId, Namespace, Key, Value))
   +
     rec-event(MM, attribute-changed(ModuleId?, Namespace?, Key?, OldValue?, NewValue?))
@@ -64,93 +76,121 @@ in
     . snd-msg(mm-attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
   +
     rec-msg(mm-get-attribute(ModuleId?, Namespace?, Key?))
+    . printf("MM - get attribute IN\n")
     . snd-eval(MM, get-attribute(ModuleId, Namespace, Key))
     .
     (
       rec-value(MM, attribute(Value?))
+      . printf("MM - get attribute OUT\n")
       . snd-msg(mm-attribute(ModuleId, Namespace, Key, Value))
     +
       rec-value(MM, no-such-module)
+      . printf("MM - get attribute OUT\n")
       . snd-msg(mm-no-such-module(ModuleId, Namespace, Key))
     +
       rec-value(MM, no-such-key)
+      . printf("MM - get attribute OUT\n")
       . snd-msg(mm-no-such-key(ModuleId, Namespace, Key))
     )
   +
     rec-msg(mm-get-all-attributes(ModuleId?))
+    . printf("MM - get all attributes IN\n")
     . snd-eval(MM, get-all-attributes(ModuleId))
     . rec-value(MM, attributes(AttributeList?))
+    . printf("MM - get all attributes OUT\n")
     . snd-msg(mm-attributes(ModuleId, AttributeList))
   +
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
+    . printf("MM - delete attribute\n")
     . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
   +
     rec-msg(mm-add-dependency(From?, To?))
+    . printf("MM - add depencency\n")
     . snd-do(MM, add-dependency(From, To))
   +
     rec-msg(mm-get-children-modules(ModuleId?))
+    . printf("MM - get children IN\n")
     . snd-eval(MM, get-children-modules(ModuleId))
     .
     (
       rec-value(MM, children-modules(Modules?))
+      . printf("MM - get children OUT\n")
       . snd-msg(mm-children-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
+      . printf("MM - get children OUT\n")
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
     rec-msg(mm-get-all-children-modules(ModuleId?))
+    . printf("MM - get all children IN\n")
     . snd-eval(MM, get-all-children-modules(ModuleId))
     .
     (
       rec-value(MM, all-children-modules(Modules?))
+      . printf("MM - get all children OUT\n")
       . snd-msg(mm-all-children-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
+      . printf("MM - get all children OUT\n")
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
     rec-msg(mm-get-all-parent-modules(ModuleId?))
+    . printf("MM - get all parents IN\n")
     . snd-eval(MM, get-all-parent-modules(ModuleId))
     .
     (
       rec-value(MM, all-parent-modules(Modules?))
+      . printf("MM - get all parents OUT\n")
       . snd-msg(mm-all-parent-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
+      . printf("MM - get all parents OUT\n")
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
     rec-msg(mm-get-parent-modules(ModuleId?))
+    . printf("MM - get parents IN\n")
     . snd-eval(MM, get-parent-modules(ModuleId))
     .
     (
       rec-value(MM, parent-modules(Modules?))
+      . printf("MM - get parents OUT\n")
       . snd-msg(mm-parent-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
+      . printf("MM - get parents OUT\n")
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
     rec-msg(mm-get-closable-modules(ModuleId?))
+    . printf("MM - get closable modules IN\n")
     . snd-eval(MM, get-closable-modules(ModuleId))
     . rec-value(MM, closable-modules(Modules?))
+    . printf("MM - get closable modules OUT\n")
     . snd-msg(mm-closable-modules(ModuleId, Modules))
   +
     rec-msg(mm-delete-dependency(From?, To?))
+    . printf("MM - delete dependency\n")
     . snd-do(MM, delete-dependency(From, To))
   +
     rec-msg(mm-get-dependencies)
+    . printf("MM - get dependencies IN\n")
     . snd-eval(MM, get-dependencies)
     . rec-value(MM, dependencies(Dependencies?))
+    . printf("MM - get dependencies OUT\n")
     . snd-msg(mm-dependencies(Dependencies))
   +
     rec-msg(mm-delete-dependencies(ModuleId?))
+    . printf("MM - delete dependencies\n")
     . snd-do(MM, delete-dependencies(ModuleId))
   +
     rec-msg(mm-get-module-graph(Namespace?))
+    . printf("MM - get module graph IN\n")
     . snd-eval(MM, get-module-graph(Namespace))
     . rec-value(MM, module-graph(Graph?))
+    . printf("MM - get module graph OUT\n")
     . snd-msg(mm-module-graph(Namespace, Graph))
   )
   *

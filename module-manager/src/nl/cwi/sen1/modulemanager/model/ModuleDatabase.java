@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import nl.cwi.sen1.moduleapi.types.AttributeStore;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
+import aterm.AFun;
 import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.pure.PureFactory;
 
 public class ModuleDatabase {
 	private int moduleCount;
@@ -19,19 +21,31 @@ public class ModuleDatabase {
 
 	protected Map<ModuleId, Set<ModuleId>> descendants;
 
+	private Map<ModuleId, Set<ModuleId>> transDescendants;
+
 	private AttributeUpdateRuleMap attributeUpdateRules;
 
 	private Map<ModuleId, Set<ModuleId>> ascendants;
 
 	private AttributeSetListener listener;
 
-	public ModuleDatabase(AttributeSetListener l) {
+	private AFun modalAND, modalOR, modalNOT, modalONE, modalALL, modalSET;
+
+	public ModuleDatabase(AttributeSetListener l, PureFactory factory) {
 		moduleCount = 0;
 		modules = new HashMap<ModuleId, Module>();
 		descendants = new HashMap<ModuleId, Set<ModuleId>>();
+		transDescendants = new HashMap<ModuleId, Set<ModuleId>>();
 		ascendants = new HashMap<ModuleId, Set<ModuleId>>();
 		listener = l;
 		attributeUpdateRules = new AttributeUpdateRuleMap();
+		
+		modalAND = factory.makeAFun("and", 2, false);
+		modalOR = factory.makeAFun("or", 2, false);
+		modalNOT = factory.makeAFun("not", 1, false);
+		modalONE = factory.makeAFun("one", 1, false);
+		modalALL = factory.makeAFun("all", 1, false);
+		modalSET = factory.makeAFun("set", 1, false);
 	}
 
 	public int getNextModuleId() {
@@ -42,6 +56,7 @@ public class ModuleDatabase {
 		modules.put(moduleId, module);
 		descendants.put(moduleId, new HashSet<ModuleId>());
 		ascendants.put(moduleId, new HashSet<ModuleId>());
+		System.err.println("Nr. of modules: " + modules.size());
 	}
 
 	public void removeModule(ModuleId moduleId) {
@@ -59,8 +74,8 @@ public class ModuleDatabase {
 	}
 
 	private void triggerAllAttributeUpdateRules(ModuleId id) {
-		for (Iterator<AttributeUpdateRule> iter = attributeUpdateRules.iterator(); iter
-				.hasNext();) {
+		for (Iterator<AttributeUpdateRule> iter = attributeUpdateRules
+				.iterator(); iter.hasNext();) {
 			propagate(iter.next(), id);
 		}
 	}
@@ -104,13 +119,16 @@ public class ModuleDatabase {
 			ATerm predicate) {
 		Module module = modules.get(moduleId);
 		ATerm oldValue = module.getPredicate(namespace, key);
+		// If there was no predicate get the old value. The listener gives the
+		// new value as well as the old value.
 		if (oldValue == null) {
 			oldValue = module.getAttribute(namespace, key);
 		}
 
 		if (oldValue == null || !oldValue.isEqual(predicate)) {
 			module.setPredicate(namespace, key, predicate);
-			fireAttributeSetListener(moduleId, namespace, key, oldValue, predicate);
+			fireAttributeSetListener(moduleId, namespace, key, oldValue,
+					predicate);
 			propagateToParents(moduleId);
 		}
 	}
@@ -246,6 +264,8 @@ public class ModuleDatabase {
 
 		dependencies = ascendants.get(moduleToId);
 		dependencies.add(moduleFromId);
+
+		transDescendants = new HashMap<ModuleId, Set<ModuleId>>();
 	}
 
 	public Set<ModuleId> getChildren(ModuleId moduleId) {
@@ -253,18 +273,24 @@ public class ModuleDatabase {
 	}
 
 	public Set<ModuleId> getAllChildren(ModuleId moduleId) {
-		Set<ModuleId> dependencies = new HashSet<ModuleId>();
-		LinkedList<ModuleId> temp = new LinkedList<ModuleId>();
+		Set<ModuleId> dependencies = transDescendants.get(moduleId);
 
-		temp.addAll(getChildren(moduleId));
+		if (dependencies == null) {
+			dependencies = new HashSet<ModuleId>();
+			LinkedList<ModuleId> temp = new LinkedList<ModuleId>();
 
-		while (!temp.isEmpty()) {
-			ModuleId tempId = temp.getFirst();
-			if (!dependencies.contains(tempId)) {
-				dependencies.add(tempId);
-				temp.addAll(getChildren(tempId));
+			temp.addAll(getChildren(moduleId));
+
+			while (!temp.isEmpty()) {
+				ModuleId tempId = temp.getFirst();
+				if (!dependencies.contains(tempId)) {
+					dependencies.add(tempId);
+					temp.addAll(getChildren(tempId));
+				}
+				temp.removeFirst();
 			}
-			temp.removeFirst();
+
+			transDescendants.put(moduleId, dependencies);
 		}
 
 		return dependencies;
@@ -338,6 +364,8 @@ public class ModuleDatabase {
 
 		deps = (LinkedList) ascendants.get(moduleToId);
 		deps.remove(moduleFromId);
+
+		transDescendants = new HashMap<ModuleId, Set<ModuleId>>();
 	}
 
 	public void deleteDependencies(ModuleId moduleId) {
@@ -398,39 +426,28 @@ public class ModuleDatabase {
 
 	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id,
 			ATerm namespace, ATerm key) {
-		List result;
-
-		result = rule.match("and(<term>,<term>)");
-		if (result != null) {
-			return evaluateAnd((ATerm) result.get(0), (ATerm) result.get(1),
-					id, namespace, key);
+		if (((ATermAppl) rule).getAFun().equals(modalAND)) {
+			return evaluateAnd((ATerm) rule.getChildAt(0), (ATerm) rule.getChildAt(1), id, namespace, key);
 		}
-		result = rule.match("or(<term>,<term>)");
-		if (result != null) {
-			return evaluateOr((ATerm) result.get(0), (ATerm) result.get(1), id,
-					namespace, key);
+		if (((ATermAppl) rule).getAFun().equals(modalOR)) {
+			return evaluateOr((ATerm) rule.getChildAt(0), (ATerm) rule.getChildAt(1), id, namespace, key);
 		}
-		result = rule.match("not(<term>)");
-		if (result != null) {
-			return evaluateNot((ATerm) result.get(0), id, namespace, key);
+		if (((ATermAppl) rule).getAFun().equals(modalNOT)) {
+			return evaluateNot((ATerm) rule.getChildAt(0), id, namespace, key);
 		}
-		result = rule.match("one(<term>)");
-		if (result != null) {
-			return evaluateOne((ATerm) result.get(0), id, namespace, key);
+		if (((ATermAppl) rule).getAFun().equals(modalONE)) {
+			return evaluateOne((ATerm) rule.getChildAt(0), id, namespace, key);
 		}
-		result = rule.match("all(<term>)");
-		if (result != null) {
-			return evaluateAll((ATerm) result.get(0), id, namespace, key);
+		if (((ATermAppl) rule).getAFun().equals(modalALL)) {
+			return evaluateAll((ATerm) rule.getChildAt(0), id, namespace, key);
 		}
-		result = rule.match("set(<term>)");
-		if (result != null) {
-			return evaluateSet((ATerm) result.get(0), id, namespace, key);
+		if (((ATermAppl) rule).getAFun().equals(modalSET)) {
+			return evaluateSet((ATerm) rule.getChildAt(0), id, namespace, key);
 		}
 
 		System.err.println("Error evaluating attribute update rule [" + rule
 				+ "]; forgot set?");
-		System.exit(1);
-		return null;
+		return false;
 	}
 
 	private Boolean evaluateAnd(ATerm op1, ATerm op2, ModuleId id,
