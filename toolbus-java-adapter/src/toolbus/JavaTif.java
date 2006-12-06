@@ -269,7 +269,7 @@ public class JavaTif {
     private void genSigTable(PrintWriter out) {
         out.println("  // This table will hold the complete input signature");
         out
-                .println("  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();");
+                .println("  private Set<ATerm> sigTable = new HashSet<ATerm>();");
         out.println();
     }
 
@@ -285,9 +285,9 @@ public class JavaTif {
             out.println("package " + package_name + ";");
         }
         out.println();
-        out.println("import java.util.HashMap;");
+        out.println("import java.util.HashSet;");
         out.println("import java.util.List;");
-        out.println("import java.util.Map;");
+        out.println("import java.util.Set;");
         out.println();
         if (swingTool) {
 			out.println("import toolbus.SwingTool;");
@@ -352,14 +352,13 @@ public class JavaTif {
                 .println("  // This method initializes the table with input signatures");
         out.println("  " + decl);
         out.println("  {");
-        out.println("    Boolean btrue = new Boolean(true);");
         ATermList sigs = tifs;
         while (!sigs.isEmpty()) {
             ATerm sig = sigs.getFirst();
             sigs = sigs.getNext();
-            out.print("    sigTable.put(factory.parse(\"");
+            out.print("    sigTable.add(factory.parse(\"");
             out.print(sig.toString());
-            out.println("\"), btrue);");
+            out.println("\"));");
         }
         out.println("  }");
     }
@@ -458,7 +457,7 @@ public class JavaTif {
         out.println("    while(!sigs.isEmpty()) {");
         out.println("      ATermAppl sig = (ATermAppl)sigs.getFirst();");
         out.println("      sigs = sigs.getNext();");
-        out.println("      if (!sigTable.containsKey(sig)) {");
+        out.println("      if (!sigTable.contains(sig)) {");
         out
                 .println("        // Sorry, but the term is not in the input signature!");
         out.println("        notInInputSignature(sig);");

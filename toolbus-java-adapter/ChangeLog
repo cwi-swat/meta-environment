@@ -1,5 +1,9 @@
 $Id$
 
+Wed Dec  6 14:13:18 CET 2006 <kooiker@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - Change Map with signatures into Set since the Map was only used as a Set.
+
 Thu Mar  9 13:55:30 CET 2006 <gerco@cwi.nl>
  * src/toolbus/AbstractTool.java:
    - To avoid a race condition, clear the variable connected earlier.
