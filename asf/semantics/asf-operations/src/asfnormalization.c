@@ -68,11 +68,8 @@ ASF_ASFModule normalize(ASF_ASFModule input)
   PT_ParseTree asfix;
   ASF_ASFModule lowered;
 
-  ATwarning("lifting\n");
   lifted = ASF_liftModule(input);
-  ATwarning("lifting done\n");
 
-  ATwarning("normalizing\n");
   applied = PT_applyFunctionToTree("normalize", 
 					"ASF-Module",
 					1,
@@ -82,11 +79,7 @@ ASF_ASFModule normalize(ASF_ASFModule input)
   reduct = innermost(applied);
   asfix = toasfix(reduct);
 
-  ATwarning("normalizing done\n");
-
-  ATwarning("lowering\n");
   lowered = ASF_lowerModule(ASF_getStartTopASFModule((ASF_Start) asfix));
-  ATwarning("lowering done\n");
 
   return lowered;
 }

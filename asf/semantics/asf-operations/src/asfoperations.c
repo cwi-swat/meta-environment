@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
 
       start = (ASF_Start) PT_setParseTreeTree((PT_ParseTree) start, (PT_Tree) result);
       output = ASF_StartToTerm(start);
-      ATwriteToNamedTextFile(output, outputFile);
+      ATwriteToNamedBinaryFile(output, outputFile);
     }
     else {
       ATerror("could not read input file\n");
