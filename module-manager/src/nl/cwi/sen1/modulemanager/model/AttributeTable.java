@@ -23,6 +23,10 @@ public class AttributeTable {
         entries.put(key, value);
     }
 
+    public void addEntries(AttributeTable table) {
+    	entries.putAll(table.entries);
+   	}
+    
     public ATerm getValue(ATerm key) {
         return entries.get(key);
     }

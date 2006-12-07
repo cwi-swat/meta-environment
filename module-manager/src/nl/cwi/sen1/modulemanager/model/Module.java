@@ -45,7 +45,7 @@ public class Module {
     }
 
     public AttributeTable getAttributes(ATerm namespace) {
-        return getTable(namespace);
+    	return getTable(namespace);
     }
 
     public AttributeStore getAttributes() {
@@ -78,8 +78,12 @@ public class Module {
     }
 
     private AttributeTable getPredicateTable(ATerm namespace) {
-        AttributeTable table = predicates.get(namespace);
+    	AttributeTable table = predicates.get(namespace);
         return table;
+    }    
+    
+    public AttributeTable getPredicates(ATerm namespace) {
+    	return getPredicateTable(namespace);
     }
 
     public void setPredicate(ATerm namespace, ATerm key, ATerm value) {

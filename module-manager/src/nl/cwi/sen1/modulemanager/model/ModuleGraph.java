@@ -41,6 +41,10 @@ public class ModuleGraph extends ModuleDatabase {
             AttributeList attrList = factory.makeAttributeList();
 
             AttributeTable table = module.getAttributes(namespace);
+            AttributeTable predicates = module.getPredicates(namespace);
+            if (predicates != null) {
+            	table.addEntries(module.getPredicates(namespace));
+            }
             if (table != null) {
                 Map<ATerm, ATerm> entries = table.getEntries();
                 

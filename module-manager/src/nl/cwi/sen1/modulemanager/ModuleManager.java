@@ -34,7 +34,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 		bridge = new ModuleManagerBridge(pureFactory, this);
 		try {
 			bridge.init(args);
-            bridge.connect();
+			bridge.connect();
 		} catch (IOException e) {
 			System.err.println("Could not establish connection to ToolBus: "
 					+ e);
@@ -45,8 +45,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 			public void run() {
 				try {
 					bridge.run();
-				}
-				catch (java.lang.RuntimeException e) {
+				} catch (java.lang.RuntimeException e) {
 					moduleDB.printStatistics();
 				}
 			}
@@ -191,12 +190,14 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 		DependencyList list = factory.makeDependencyList();
 		Map<ModuleId, Set<ModuleId>> dependencies = moduleDB.getDependencies();
 
-		for (Iterator<ModuleId> iter = dependencies.keySet().iterator(); iter.hasNext();) {
+		for (Iterator<ModuleId> iter = dependencies.keySet().iterator(); iter
+				.hasNext();) {
 			ModuleId moduleId = iter.next();
 			Set<ModuleId> deps = dependencies.get(moduleId);
 
 			ModuleIdList moduleList = factory.makeModuleIdList();
-			for (Iterator<ModuleId> depsIter = deps.iterator(); depsIter.hasNext();) {
+			for (Iterator<ModuleId> depsIter = deps.iterator(); depsIter
+					.hasNext();) {
 				moduleList = moduleList.append(depsIter.next());
 			}
 
@@ -239,15 +240,15 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public static void main(String[] args) {
-//        args = new String[6];
-//        args[0] = "-TB_HOST_NAME";
-//        args[1] = "localhost";
-//        args[2] = "-TB_PORT";
-//        args[3] = "8999";
-//        args[4] = "-TB_TOOL_NAME";
-//        args[5] = "module-manager";
+		// args = new String[6];
+		// args[0] = "-TB_HOST_NAME";
+		// args[1] = "localhost";
+		// args[2] = "-TB_PORT";
+		// args[3] = "8999";
+		// args[4] = "-TB_TOOL_NAME";
+		// args[5] = "module-manager";
 
-        new ModuleManager(args);
+		new ModuleManager(args);
 	}
 
 	public void attributeSet(ModuleId id, ATerm namespace, ATerm key,
@@ -266,7 +267,8 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 						.toTerm(), namespace, key, oldValue, newValue));
 	}
 
-	public void registerAttributeUpdateRule(ATerm namespace, ATerm key, ATerm rule, ATerm value) {
+	public void registerAttributeUpdateRule(ATerm namespace, ATerm key,
+			ATerm rule, ATerm value) {
 		moduleDB.registerAttributeUpdateRule(namespace, key, rule, value);
 	}
 

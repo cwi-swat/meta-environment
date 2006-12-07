@@ -39,13 +39,13 @@ public class ModuleDatabase {
 		ascendants = new HashMap<ModuleId, Set<ModuleId>>();
 		listener = l;
 		attributeUpdateRules = new AttributeUpdateRuleMap();
-		
+
 		modalAND = factory.makeAFun("and", 2, false);
 		modalOR = factory.makeAFun("or", 2, false);
 		modalNOT = factory.makeAFun("not", 1, false);
 		modalONE = factory.makeAFun("one", 1, false);
 		modalALL = factory.makeAFun("all", 1, false);
-		modalSET = factory.makeAFun("set", 1, false);
+		modalSET = factory.makeAFun("set", 3, false);
 	}
 
 	public int getNextModuleId() {
@@ -155,7 +155,7 @@ public class ModuleDatabase {
 		ATerm oldValue = module.getAttribute(namespace, key);
 
 		ATerm formula = rule.getFormula();
-		Boolean result = innermostRuleEvaluation(formula, id, namespace, key);
+		Boolean result = innermostRuleEvaluation(formula, id);
 
 		if (result) {
 			updatePredicate(id, namespace, key, newPredicate);
@@ -423,25 +423,27 @@ public class ModuleDatabase {
 		triggerAllAttributeUpdateRulesOnAllModules();
 	}
 
-	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id,
-			ATerm namespace, ATerm key) {
+	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id) {
 		if (((ATermAppl) rule).getAFun().equals(modalAND)) {
-			return evaluateAnd((ATerm) rule.getChildAt(0), (ATerm) rule.getChildAt(1), id, namespace, key);
+			return evaluateAnd((ATerm) rule.getChildAt(0), (ATerm) rule
+					.getChildAt(1), id);
 		}
 		if (((ATermAppl) rule).getAFun().equals(modalOR)) {
-			return evaluateOr((ATerm) rule.getChildAt(0), (ATerm) rule.getChildAt(1), id, namespace, key);
+			return evaluateOr((ATerm) rule.getChildAt(0), (ATerm) rule
+					.getChildAt(1), id);
 		}
 		if (((ATermAppl) rule).getAFun().equals(modalNOT)) {
-			return evaluateNot((ATerm) rule.getChildAt(0), id, namespace, key);
+			return evaluateNot((ATerm) rule.getChildAt(0), id);
 		}
 		if (((ATermAppl) rule).getAFun().equals(modalONE)) {
-			return evaluateOne((ATerm) rule.getChildAt(0), id, namespace, key);
+			return evaluateOne((ATerm) rule.getChildAt(0), id);
 		}
 		if (((ATermAppl) rule).getAFun().equals(modalALL)) {
-			return evaluateAll((ATerm) rule.getChildAt(0), id, namespace, key);
+			return evaluateAll((ATerm) rule.getChildAt(0), id);
 		}
 		if (((ATermAppl) rule).getAFun().equals(modalSET)) {
-			return evaluateSet((ATerm) rule.getChildAt(0), id, namespace, key);
+			return evaluateSet((ATerm) rule.getChildAt(2), id, (ATerm) rule
+					.getChildAt(0), (ATerm) rule.getChildAt(1));
 		}
 
 		System.err.println("Error evaluating attribute update rule [" + rule
@@ -449,46 +451,41 @@ public class ModuleDatabase {
 		return false;
 	}
 
-	private Boolean evaluateAnd(ATerm op1, ATerm op2, ModuleId id,
-			ATerm namespace, ATerm key) {
-		return (innermostRuleEvaluation(op1, id, namespace, key) && innermostRuleEvaluation(
-				op2, id, namespace, key));
+	private Boolean evaluateAnd(ATerm op1, ATerm op2, ModuleId id) {
+		return (innermostRuleEvaluation(op1, id) && innermostRuleEvaluation(
+				op2, id));
 	}
 
-	private Boolean evaluateOr(ATerm op1, ATerm op2, ModuleId id,
-			ATerm namespace, ATerm key) {
-		return (innermostRuleEvaluation(op1, id, namespace, key) || innermostRuleEvaluation(
-				op2, id, namespace, key));
+	private Boolean evaluateOr(ATerm op1, ATerm op2, ModuleId id) {
+		return (innermostRuleEvaluation(op1, id) || innermostRuleEvaluation(
+				op2, id));
 	}
 
-	private Boolean evaluateNot(ATerm op, ModuleId id, ATerm namespace,
-			ATerm key) {
-		return !(innermostRuleEvaluation(op, id, namespace, key));
+	private Boolean evaluateNot(ATerm op, ModuleId id) {
+		return !(innermostRuleEvaluation(op, id));
 	}
 
-	private Boolean evaluateOne(ATerm op, ModuleId id, ATerm namespace,
-			ATerm key) {
+	private Boolean evaluateOne(ATerm op, ModuleId id) {
 		Boolean result = false;
 		Set<ModuleId> children = getAllChildren(id);
 		Iterator<ModuleId> iter = children.iterator();
 
 		while (iter.hasNext() && result == false) {
 			ModuleId childId = iter.next();
-			result = innermostRuleEvaluation(op, childId, namespace, key);
+			result = innermostRuleEvaluation(op, childId);
 		}
 
 		return result;
 	}
 
-	private Boolean evaluateAll(ATerm op, ModuleId id, ATerm namespace,
-			ATerm key) {
+	private Boolean evaluateAll(ATerm op, ModuleId id) {
 		Boolean result = true;
 		Set<ModuleId> children = getAllChildren(id);
 		Iterator<ModuleId> iter = children.iterator();
 
 		while (iter.hasNext() && result == true) {
 			ModuleId childId = iter.next();
-			result = innermostRuleEvaluation(op, childId, namespace, key);
+			result = innermostRuleEvaluation(op, childId);
 		}
 
 		return result;
