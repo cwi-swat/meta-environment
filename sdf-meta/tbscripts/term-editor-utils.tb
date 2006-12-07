@@ -4,7 +4,7 @@
 #include <editing.tb>
 #include <term-utils.tb>
 
-process EditTerm(Path: str, ModuleId: term, GetTree: term) is
+process EditTerm(Path: str, ModuleId: term, GetTree: bool) is
 let
   Event: attribute-changed-event,
   AlreadyExists: bool,
