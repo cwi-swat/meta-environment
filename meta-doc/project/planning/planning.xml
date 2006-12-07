@@ -266,7 +266,33 @@
 
             <entry>Paul,Jurgen</entry>
 
+            <entry>feb 1, 2007</entry>
+          </row>
+
+          <row>
             <entry></entry>
+
+            <entry>Documenting the architecture of The
+            Meta-Environment</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Paul,Jurgen</entry>
+
+            <entry>jan 1, 2007</entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>SDF documentation of Martin and Eelco included in
+            meta-doc</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Martin,Paul,Jurgen</entry>
+
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -278,7 +304,7 @@
 
             <entry>Jurgen</entry>
 
-            <entry></entry>
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -291,7 +317,7 @@
 
             <entry>Taeke</entry>
 
-            <entry></entry>
+            <entry>march 1, 2007</entry>
           </row>
 
           <row>
@@ -305,7 +331,19 @@
 
             <entry>Taeke,Jurgen</entry>
 
+            <entry>jan 1, 2007</entry>
+          </row>
+
+          <row>
             <entry></entry>
+
+            <entry>Integration of user-defined pretty printing</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Taeke</entry>
+
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -317,22 +355,9 @@
 
             <entry>Refactoring</entry>
 
-            <entry>Erik</entry>
+            <entry>Erik, Jurgen,Taeke</entry>
 
-            <entry></entry>
-          </row>
-
-          <row>
-            <entry></entry>
-
-            <entry>Documenting the architecture of The
-            Meta-Environment</entry>
-
-            <entry>Documenting</entry>
-
-            <entry>Paul,Jurgen</entry>
-
-            <entry></entry>
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -345,20 +370,7 @@
 
             <entry>Taeke,Tijs,Alex</entry>
 
-            <entry></entry>
-          </row>
-
-          <row>
-            <entry></entry>
-
-            <entry>SDF documentation of Martin and Eelco included in
-            meta-doc</entry>
-
-            <entry>Documenting</entry>
-
-            <entry>Martin,Paul,Jurgen</entry>
-
-            <entry></entry>
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -370,7 +382,7 @@
 
             <entry>Jurgen</entry>
 
-            <entry></entry>
+            <entry>march 1, 2007</entry>
           </row>
 
           <row>
@@ -382,7 +394,7 @@
 
             <entry>Arnold</entry>
 
-            <entry></entry>
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -394,7 +406,19 @@
 
             <entry>Paul,Arnold,Tijs,Taeke,Jurgen,Rob</entry>
 
+            <entry>march 1, 2007</entry>
+          </row>
+
+          <row>
             <entry></entry>
+
+            <entry>Conservative pretty printing</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Taeke, Jurgen</entry>
+
+            <entry>april 1, 2007</entry>
           </row>
 
           <row>
@@ -408,7 +432,7 @@
 
             <entry>Rob,Jurgen</entry>
 
-            <entry></entry>
+            <entry>feb 1, 2007</entry>
           </row>
 
           <row>
@@ -420,7 +444,7 @@
 
             <entry>Jurgen</entry>
 
-            <entry></entry>
+            <entry>may, 2007</entry>
           </row>
 
           <row>
@@ -432,7 +456,7 @@
 
             <entry>Tijs,Jurgen</entry>
 
-            <entry></entry>
+            <entry>june, 2007</entry>
           </row>
 
           <row>
@@ -444,7 +468,7 @@
 
             <entry>Rob</entry>
 
-            <entry></entry>
+            <entry>may, 2007</entry>
           </row>
 
           <row>
@@ -458,7 +482,7 @@
 
             <entry>Taeke</entry>
 
-            <entry></entry>
+            <entry>july 1, 2007</entry>
           </row>
 
           <row>
@@ -470,7 +494,7 @@
 
             <entry>Paul,Arnold</entry>
 
-            <entry></entry>
+            <entry>may 1, 2007</entry>
           </row>
 
           <row>
@@ -482,7 +506,7 @@
 
             <entry>Jurgen</entry>
 
-            <entry></entry>
+            <entry>feb 1, 2007</entry>
           </row>
         </tbody>
       </tgroup>
