@@ -19,7 +19,7 @@ process InitializeInheritedStatus is
   /* When we are not in error and one of our kids has an error, we become child-error */
   . MM-RegisterAttributeUpdateRule(SDF_NAMESPACE, "status", and(not(set(SDF_NAMESPACE, "status", error)), one(set(SDF_NAMESPACE, "status", error))), child-error)
 
-  /* Error -> Background color */ 
+   /*Error -> Background color  */
   /*. MM-RegisterAttributeUpdateRule(GRAPH_NAMESPACE, "bgcolor", set(SDF_NAMESPACE, "status", error), fill-color(BG_ERROR_COLOR))*/
 
   /* Child-error -> Background color */ 
@@ -78,7 +78,6 @@ in
     else
       if equal(Value,child-error) then
         MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CHILD_ERROR_COLOR))
-        . Errors := add(Errors, 1)
       else
         MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
       fi
