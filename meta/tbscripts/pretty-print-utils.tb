@@ -11,7 +11,7 @@ let
   Feedback: term
 in
   Id := process-id
-  . AddJob("Pretty printing")
+  . AddJob("Generic pretty printing")
   . snd-msg(pretty-print(Tree))
   .
   (
@@ -21,7 +21,7 @@ in
     rec-msg(pretty-print-error(Feedback?))
     . Result := UNDEFINED
   )
-  . JobDone("Pretty printing")
+  . JobDone("Generic pretty printing")
 endlet
 
 #endif /* __PRETTY_PRINT_UTILS__ */
