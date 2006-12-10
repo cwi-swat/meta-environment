@@ -4,6 +4,31 @@
 #include <asf-utils.tb>
 #include <term-utils.tb>
 #include <undefined.h>
+#include <asf-pretty-print.tb>
+
+
+process PrettyPrintAction(EditorId : term, EditorType : term, Sort: str) is
+let
+  Tree : term,
+  RTree : term,
+  ModuleId: term,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    BoxAndPrettyPrint(ModuleId, Path, Tree, RTree?)
+    . 
+    if not-equal(RTree, UNDEFINED) then
+      ReplaceFocus(EditorId, RTree)
+    else 
+      tau
+    fi
+  else tau
+  fi
+endlet
 
 process ReduceAction(EditorId : term) is
 let

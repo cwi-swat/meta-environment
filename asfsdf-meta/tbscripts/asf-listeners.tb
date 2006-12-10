@@ -58,7 +58,7 @@ in
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . CheckASFSDFSyntax(ModuleId) 
+    /* . CheckASFSDFSyntax(ModuleId)  */
   )
   *
   delta
