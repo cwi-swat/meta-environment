@@ -1,3 +1,5 @@
+#ifndef IN_OUTPUT_IDEF
+#define IN_OUTPUT_IDEF
 tool in-output is { command = "__PREFIX__/bin/in-output -TB_COLLECT_LOOP 1" }
 
 process IO is
@@ -222,3 +224,5 @@ in
 endlet
 
 toolbus(IO)
+
+#endif
