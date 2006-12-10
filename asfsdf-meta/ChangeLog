@@ -1,5 +1,14 @@
 /* $Id$ */
 
+Sun Dec 10 20:39:53 CET 2006 <jurgenv@cwi.nl>
+ * tbscripts/asf-actions.tb,asf-pretty-printer.tb: added a new implementation
+   of the Pretty Print menu option for term windows. The script computes
+   a new module name from the module for the current term as follows.
+   Example: languages/aterm/syntax/ATerms becomes
+   languages/aterm/pretty/ATerms. This new module is used to reduce the
+   term (the convention is that this module contains a mapping to Box),
+   and the result is given to the pandora pretty printer.
+
 Wed Oct 18 22:24:46 CEST 2006 <jurgenv@cwi.nl>
  * asfsdf-meta.pc.in: added dependency on config-manager
  * src/asfsdf-meta.sh.src: added loading of user defined and
