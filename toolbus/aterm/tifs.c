@@ -146,30 +146,33 @@ ATermList generalize_tifs(ATermList tifs)
     char *name;
     ATermList newargs = ATempty;
     ATerm tif = ATgetFirst(tifs), newtif, tool;
-    ATermAppl appl;
+    ATerm call;
+
+    ATwarning("tif: %t\n", tif);
 
     if (ATmatch(tif, "rec-terminate(<term>,<term>)", NULL, NULL)
 	|| ATmatch(tif, "rec-ack-event(<term>,<term>)", NULL, NULL)) {
       result = ATinsert(result, tif);
-    } else if(ATmatch(tif, "<appl(<term>,<term>)>", &name, &tool, &appl)) {
-      Symbol sym = ATgetSymbol(appl);
-      for (i=ATgetArity(sym)-1; i>=0; --i) {
-	ATerm arg = ATgetArgument(appl, i);
-	if (ATisEqual(arg, ATparse("<int>"))
-	    || ATisEqual(arg, ATparse("<str>"))
-	    || ATisEqual(arg, ATparse("<real>"))) {
-	  newargs = ATinsert(newargs, arg);
+    } else if(ATmatch(tif, "<appl(<term>,<term>)>", &name, &tool, &call)) {
+      if (ATgetType(call) == AT_APPL) {
+	Symbol sym = ATgetSymbol(call);
+	for (i=ATgetArity(sym)-1; i>=0; --i) {
+	  ATerm arg = ATgetArgument(call, i);
+	  if (ATisEqual(arg, ATparse("<int>"))
+	      || ATisEqual(arg, ATparse("<str>"))
+	      || ATisEqual(arg, ATparse("<real>"))) {
+	    newargs = ATinsert(newargs, arg);
+	  }
+	  else {
+	    newargs = ATinsert(newargs, ATparse("<term>"));
+	  }
 	}
-	else {
-	  newargs = ATinsert(newargs, ATparse("<term>"));
-	}
+
+	newtif = ATmake("<appl(<term>,<appl(<list>)>)>", 
+			name, tool, ATgetName(sym), newargs);
+	result = ATinsert(result, newtif);
       }
-
-      newtif = ATmake("<appl(<term>,<appl(<list>)>)>", 
-		      name, tool, ATgetName(sym), newargs);
-      result = ATinsert(result, newtif);
     }
-
     tifs = ATgetNext(tifs);
   }
   return result;
