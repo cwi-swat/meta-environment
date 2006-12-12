@@ -608,9 +608,13 @@ int ATBhandleAny(void)
     return -1;
   }
 
-  count = select(max, &set, NULL, NULL, NULL);
-  assert(count > 0);
+  /* only if the select is interrupted try again */
+  errno = 0;
+  do {
+    count = select(max, &set, NULL, NULL, NULL);
+  } while (count <= 0 && errno == EINTR);
 
+  assert(count > 0 );
 
   start = last+1;	
   cur = start;

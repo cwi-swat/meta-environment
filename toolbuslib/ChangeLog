@@ -1,5 +1,11 @@
 $Id$
 
+Tue Dec 12 13:19:17 CET 2006 <jurgenv@cwi.nl>
+ * src/atb-tool.c: wrapped call to select in ATBhandleAny with a while
+   loop. As long as the select was interupted by a non-blocked signal
+   we try again. This error popped up while profiling the library, since
+   under those circumstances there are more frequent interrupts...
+
 Tue Jul 25 09:16:05 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
  * **: adapted package to use the standard meta-build-env.
 
