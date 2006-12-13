@@ -1,39 +1,40 @@
 module basic/RStores
 
-exports 
-
-imports basic/NatCon
 imports basic/StrCon
+imports basic/IntCon
 imports basic/Locations
+imports basic/IdentifierCon
 
-sorts RElem RStore RType RTuple
+exports 
+sorts RElem RStore RType RTuple IntCon
 
-%% This module defines a syntax/API for stores of typed relations
+%% This module defines a syntax for stores of typed relations
 
 context-free syntax
+	IntCon -> RElem {cons("integer")}
+	StrCon -> RElem {cons("string")}
+	Location -> RElem {cons("location")}
 
- "int" "(" int-value:NatCon ")"       -> RElem {cons("int")}
- "str" "(" str-value:StrCon ")"       -> RElem {cons("str")}
- "loc" "(" location:Location ")"      -> RElem {cons("location")}
- "set"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("set")}
- "bag"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("bag")}
- "tuple" "(" "[" {RElem ","}+ "]" ")" -> RElem {cons("tuple")}
+	"{" elements:{RElem ","}* "}" -> RElem {cons("set")}
+	"{|" elements:{RElem ","}* "|}" -> RElem {cons("bag")}
+	"<" elements:{RElem ","}+ ">" -> RElem {cons("tuple")}	
+	"int" -> RType {cons("integer")}
+	"bool" -> RType {cons("boolean")}
+	"str" -> RType {cons("string")}
+	"loc" -> RType {cons("location")}
 
- "int" 				      -> RType {cons("integer")}
- "str"				      -> RType {cons("str")}
- "loc"				      -> RType {cons("location")}
- "tuple" "(" "[" {RType ","}+ "]" ")" -> RType {cons("tuple")}
- "set"   "(" RType  ")"               -> RType {cons("set")}
- "bag"   "(" RType  ")"               -> RType {cons("bag")}
- "rel" "(" "[" {RType ","}* "]" ")"   -> RType {cons("rel")}
- "user" "(" StrCon ")"                -> RType {cons("user")} 
- "parameter" "(" StrCon ")"           -> RType {cons("parameter")}                                      
+	"<" column-types:{RType ","}+ ">" -> RType {cons("tuple")}	
+	"set" "[" element-type:RType  "]" -> RType {cons("set")}
+	"bag" "[" element-type:RType  "]" -> RType {cons("bag")}
+	"rel" "[" column-types:{RType ","}+ "]" -> RType {cons("relation")}
+	name:IdCon  -> RType {cons("user-defined")} 
+	"&" name:IdCon -> RType {cons("parameter")}                            
 
- "rtuple" "(" id:StrCon "," rtype:RType "," data:RElem ")" -> RTuple {cons("rtuple")}
-
- "rstore" "(" "[" { RTuple ","}* "]" ")" -> RStore {cons("rstore")}
+	"<" variable:IdCon "," type:RType "," value:RElem ">" -> RTuple {cons("rtuple")}
+	 "rstore" "(" "[" rtuples:{ RTuple ","}* "]" ")" -> RStore {cons("rstore")}
 
 hiddens
 context-free start-symbols	
 		RStore
+
 

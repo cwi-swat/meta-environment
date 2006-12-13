@@ -1,0 +1,11 @@
+module basic/IntCon
+
+imports basic/NatCon
+exports
+
+sorts IntCon
+
+lexical syntax
+	digits:NatCon -> IntCon {cons("positive")}
+	[\-] digits:NatCon -> IntCon {cons("negative")}
+
