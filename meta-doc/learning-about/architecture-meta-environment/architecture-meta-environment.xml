@@ -16,6 +16,8 @@
   <info>
     <title>The architecture of The Meta-Environment</title>
 
+    <pubdate>$Date$ (Revision $Rev$, Last changed by $Author$)</pubdate>
+
     <authorgroup>
       <author>
         <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
