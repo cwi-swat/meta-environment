@@ -705,7 +705,7 @@ ATerm slice(ATerm l1, ATerm l2)
     return l1;
   }
 
-  len = slice_length(l1, l2);
+  len = slice_length((ATermList) l1, (ATermList) l2);
   if( MAX_STORE < len )
     len = MAX_STORE;
 
