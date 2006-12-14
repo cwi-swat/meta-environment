@@ -116,7 +116,7 @@ create table si_results (
 	error_output text,
 	success boolean,
 	action text default "unspecified",
-	unique (command, si_item_id)
+	unique (action, si_item_id)
 );
 
 drop table si_logs cascade;

@@ -44,6 +44,15 @@ module Building
       #if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
       #  return true
       #end
+
+      ## ALWAYS remove stale buiild items.
+      item = @store.last_item_for_target(target)
+      if not item.nil? and item.in_progress? then
+        @log.info("cleaning up stale buid item: #{item}")
+        remove_stale_build_items(item)
+        return requires_build?(target)
+      end
+
       if @forced.include?(target.name) then
         return true
       end
@@ -56,13 +65,7 @@ module Building
         return true
       end
 
-      item = @store.last_item_for_target(target)
-      if not item.nil? and item.in_progress? then
-        @log.info("cleaning up stale buid item: #{item}")
-        remove_stale_build_items(item)
-        return requires_build?(target)
-      end
-      
+     
       return false
     end
     

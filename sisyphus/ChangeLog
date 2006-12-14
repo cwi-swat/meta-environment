@@ -1,3 +1,15 @@
+2006-12-14    <storm@cwi.nl>
+
+	* Fix: sometimes stale build items weren't removed properly, thus
+	causing a primary key constraint violation in the database. This
+	caused apps to never build again. Stale build items are now *always*
+	removed before it is determined whether a build is needed or not.
+
+2006-10-06    <storm@cwi.nl>
+
+	* Fix: the busy bit of hosts (in DB) is only set to true when
+	actually building something (not when an iteration is started).
+
 2006-10-05    <storm@cwi.nl>
 
 	* Feature during builder's sleep, sending signal USR1 will restart
