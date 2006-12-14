@@ -1,5 +1,7 @@
 2006-12-14    <storm@cwi.nl>
 
+	* Feature: added action(-name) field to to si_result table.
+
 	* Fix: sometimes stale build items weren't removed properly, thus
 	causing a primary key constraint violation in the database. This
 	caused apps to never build again. Stale build items are now *always*
