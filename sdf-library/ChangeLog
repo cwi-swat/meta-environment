@@ -2,9 +2,18 @@ $Id$
 
 2006-12-14    <storm@cwi.nl>
 
-	* library/basic/Rstores.sdf: changed "name" labels to "type-name" and
-	"parameter-name" respectively, as it bites sdf2-to-java generated
-	apis.
+  * library/basic/RStores.sdf: imported basic/BoolCon.
+
+  * library/basic/RStores.sdf: Renamed cons/label attributes to
+    prevent name clashes with ATerm and Java identifiers when
+    generating a Java API using apigen. 
+
+
+2006-12-14    <storm@cwi.nl>
+
+ * library/basic/Rstores.sdf: changed "name" labels to "type-name" and
+   "parameter-name" respectively, as it bites sdf2-to-java generated
+   apis.
 
 2006-12-13    <storm@cwi.nl>
  * library/basic/Rstores.sdf: made a proper syntax (with curlies and all), and
