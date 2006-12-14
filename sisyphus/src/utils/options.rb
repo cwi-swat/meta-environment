@@ -117,7 +117,7 @@ module Utils
           end 
 
           opts.on("-C", "--COMMAND_LINE commandline", "(Internal)") do |command_line|
-            options.command_line = command_line
+            options.command_line = "#{command_line} --COMMAND_LINE #{command_line}"
           end
 
           begin
