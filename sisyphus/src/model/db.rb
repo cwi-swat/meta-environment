@@ -275,7 +275,12 @@ module Model
     end
 
     def last_item_for_target(target)
-      return latest_item(target.host, target.config, target.revision)
+      begin
+        # In this context we can call this function.
+        return latest_item(target.host, target.config, target.revision)
+      rescue RuntimeError
+        return nil
+      end
     end
 
     def item_for_target(target, dep_items)

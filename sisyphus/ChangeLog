@@ -1,5 +1,9 @@
 2006-12-14    <storm@cwi.nl>
 
+	* src/model/db.rb (Model::DBStore::last_item_for_target): an
+	exception was raised that should only be thown on direct calls of
+	latest_item. last_item_for_target should just return nil.
+
 	* Feature: added action(-name) field to to si_result table.
 
 	* Fix: sometimes stale build items weren't removed properly, thus
