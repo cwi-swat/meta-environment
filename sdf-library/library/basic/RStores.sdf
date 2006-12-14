@@ -27,8 +27,8 @@ context-free syntax
 	"set" "[" element-type:RType  "]" -> RType {cons("set")}
 	"bag" "[" element-type:RType  "]" -> RType {cons("bag")}
 	"rel" "[" column-types:{RType ","}+ "]" -> RType {cons("relation")}
-	name:IdCon  -> RType {cons("user-defined")} 
-	"&" name:IdCon -> RType {cons("parameter")}                            
+	type-name:IdCon  -> RType {cons("user-defined")} 
+	"&" parameter-name:IdCon -> RType {cons("parameter")}                            
 
 	"<" variable:IdCon "," type:RType "," value:RElem ">" -> RTuple {cons("rtuple")}
 	 "rstore" "(" "[" rtuples:{ RTuple ","}* "]" ")" -> RStore {cons("rstore")}
