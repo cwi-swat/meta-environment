@@ -39,7 +39,7 @@ module Roll
       $stderr << "File #{Utils::Roll::boot_roll_rcfile} is newer than #{Utils::Roll::roll_rcfile}; run boot-roll? [Yn] "
       answer = $stdin.gets.chomp
       if answer != 'n' then
-        boot_roll(conf['config']['roots'])
+        BootRoll.boot_roll(conf['config']['roots'])
         # reread rollrc
         conf = read_roll_conf
       end
@@ -101,6 +101,7 @@ module Roll
       options.package = nil
       options.revert = false
       options.force = false
+      options.pretend = false
       options.sequence = false
       options.deps_only = false
 
@@ -163,6 +164,11 @@ module Roll
           options.deps_only = d
         end
 
+        opts.on("-P", "--pretend", 
+                "Print commands instead of execute") do |p|
+          options.pretend = true
+        end
+
         opts.on("-d", "--deps", "Print out dependencies") do 
           deps = the_conf['dependencies']
           deps.keys.sort.each do |client|
@@ -204,26 +210,49 @@ module Roll
     end
   end
 
-  def Roll.instantiate(component, template, graph, locations, install_dir)
+  def Roll.instantiate(component, template, graph, locations, install_dir, options)
     deps = []
     graph[component].each do |d|
       if locations.has_key?(d) then
         # e.g. graphviz has no location
         o = OpenStruct.new
         o.name = d
-        o.prefix = File.join(install_dir, d)
+        if options.pretend then
+          o.prefix = '${INSTALL_DIR}'
+        else
+          o.prefix = File.join(install_dir, d)          
+        end
         deps << o
       end
     end
     deps.compact! 
     name = component
-    prefix = File.join(install_dir, component)
+    if options.pretend then
+      prefix = '${INSTALL_DIR}'
+    else
+      prefix = File.join(install_dir, component)          
+    end
     t = ERB.new(template)
     result = t.result(binding())
+    if options.pretend then
+      result = "cd ${BUILD_DIR}/#{component}; #{result}; cd -"
+    end
     return result
   end
 
   def Roll.run_command(command, options)
+    if options.pretend then
+      Roll.print_command(command, options)
+    else
+      Roll.execute_command(command, options)
+    end
+  end
+
+  def Roll.print_command(command, options)
+    puts command
+  end
+
+  def Roll.execute_command(command, options)
     $stderr << "Executing #{command} in #{Dir.getwd}\n"
     begin
       system(command)
@@ -238,10 +267,10 @@ module Roll
     end
   end
 
-  def Roll.make_command(action, component, templates, deps, locations, install_dir)
+  def Roll.make_command(action, component, templates, deps, locations, install_dir, options)
     if templates.has_key?(action) then
       return instantiate(component, templates[action], 
-                         deps, locations, install_dir)
+                         deps, locations, install_dir, options)
     else
       return action
     end
@@ -306,7 +335,7 @@ module Roll
         actions = [actions.join(' ')]
       end
       actions.each do |action|
-        command = make_command(action, component, templates, deps, locations, install_dir)
+        command = make_command(action, component, templates, deps, locations, install_dir, options)
         run_command(command, options)
       end
       Dir.chdir(pwd)
@@ -318,6 +347,12 @@ module Roll
     deps = conf['dependencies']
     locations = conf['locations']
     install_dir = conf['config']['install_dir']
+    build_dir = conf['config']['build_dir']
+    if options.pretend then
+      puts "INSTALL_DIR=#{install_dir}"
+      puts "BUILD_DIR=#{build_dir}"
+      install_dir = '${INSTALL_DIR}'
+    end
     templates = conf['config']['templates']
     run_commands(actions, locations, deps, templates, install_dir, options)
   end

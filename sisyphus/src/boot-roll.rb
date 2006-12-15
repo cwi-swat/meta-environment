@@ -206,7 +206,7 @@ Note: the tunnel section is optional.
 
 
 
-  def BootRoll.boot_roll(roots, options)
+  def BootRoll.boot_roll(roots, options = OpenStruct.new)
     if roots == [] then
       $stderr << "Usage: boot-roll <rootpackages>\n"
       exit(1)
