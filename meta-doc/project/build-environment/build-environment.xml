@@ -8,7 +8,8 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>Build environment of The Meta-Environment</title>
-
+<pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
+    (Wed, 13 Dec 2006)$</pubdate>
     <authorgroup>
       <author>
         <personname><firstname>Gerco</firstname><surname>Ballintijn</surname></personname>
