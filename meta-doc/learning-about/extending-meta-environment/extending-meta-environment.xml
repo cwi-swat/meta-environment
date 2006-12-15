@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+<!ENTITY euro "&#8364;">
+<!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
+%dbcent;
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>The extension points of The Meta-Environment</title>
+
+  <info>
+    <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
+    (Wed, 13 Dec 2006)$</pubdate>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <warning>
+    <para>This is work in progress; this document has not yet been reviewed
+    and approved.</para>
+  </warning>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>This document describes what the extension points of The
+    Meta-Environment are, and how they are used by prototypical extensions.
+    The Meta-Environment has several types of extension points. Each type of
+    extension points may have several goals. </para>
+
+    <section>
+      <title>Goals of extensions</title>
+
+      <para>The goals of extending it are for example:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Permanently extending (or building on top of) the
+            Meta-Environment with language specific tools:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Instantiating an IDE for any domain specific
+                language</para>
+              </listitem>
+
+              <listitem>
+                <para>Building an extension to the SDF Meta-Environment</para>
+              </listitem>
+
+              <listitem>
+                <para>Building an extension to the ASF+SDF
+                Meta-Environment</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Permanently extending (or expanding) The Meta-Environment
+            with language independent tools:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Adding version management support</para>
+              </listitem>
+
+              <listitem>
+                <para>Adding generic vizualizations</para>
+              </listitem>
+
+              <listitem>
+                <para>Adding ...</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Temporarily extending The Meta-Environment with user-defined
+            menu options:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Constructing a prototype of an IDE for a domain specific
+                language.</para>
+              </listitem>
+
+              <listitem>
+                <para>Automating repetitive or otherwise cumbersome GUI
+                interaction for large software analysis or transformation
+                projects.</para>
+              </listitem>
+
+              <listitem>
+                <para>Connecting third-party commandline tools.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Types of extensions</title>
+
+      <para>The types of extension points to fulfill these goals
+      are:<itemizedlist>
+          <listitem>
+            <para>Package infra-structure. An extension package:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Depends on other (Meta-Environment) packages</para>
+              </listitem>
+
+              <listitem>
+                <para>Uses C and Java libraries and ToolBus scripts from the
+                other packages</para>
+              </listitem>
+
+              <listitem>
+                <para>Is separately compilable and distributable</para>
+              </listitem>
+
+              <listitem>
+                <para>Preferably, but not necessarily, shares the
+                configuration, build and install interface of other
+                Meta-Environment packages</para>
+              </listitem>
+
+              <listitem>
+                <para>Introduces a start-up shell script for loading the
+                Meta-Environment and the new extensions</para>
+              </listitem>
+
+              <listitem>
+                <para>Contains implementations of the following extension
+                points</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Configuration scripts (i.e. ".actions" files)</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Can add menu options to the MetaStudio</para>
+              </listitem>
+
+              <listitem>
+                <para>Can load other configuration scripts</para>
+              </listitem>
+
+              <listitem>
+                <para>Can load additional ToolBus scripts</para>
+              </listitem>
+
+              <listitem>
+                <para>Can add syntactic categories for syntax
+                highlighting</para>
+              </listitem>
+
+              <listitem>
+                <para>Can add workspace locations and library locations to the
+                file dialog plugins</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>ToolBus scripts (.tb) files</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Can use any existing ToolBus scripts that make generic
+                tools of The Meta-Environment available.</para>
+              </listitem>
+
+              <listitem>
+                <para>Can connect any tool to the ToolBus</para>
+              </listitem>
+
+              <listitem>
+                <para>Can implement the behavior for new menu options</para>
+              </listitem>
+
+              <listitem>
+                <para>Can instantiate language specific, syntax highlighting,
+                text editors.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Any tools</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Written in languages that we provide a stable ToolBus
+                adapter for (C, Java, ASF+SDF)</para>
+              </listitem>
+
+              <listitem>
+                <para>Having their own ToolBus adapter included</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>MetaStudio plugins written in Java:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Can (dynamically) load new jars into the virtual machine
+                of the MetaStudio GUI</para>
+              </listitem>
+
+              <listitem>
+                <para>Can add and coordinate new tabs to the collection of
+                viewable windows in the MetaStudio.</para>
+              </listitem>
+
+              <listitem>
+                <para>Can add new menu options to the MetaStudio</para>
+              </listitem>
+
+              <listitem>
+                <para>Can send events and receive evaluation requests from
+                ToolBus scripts</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>TIDE adapters (optional)</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Can instantiate a language specific debugger with source
+                browser and stack viewer.</para>
+              </listitem>
+
+              <listitem>
+                <para>Can add new visualizations to TIDE (written as
+                MetaStudio plugins with a more specialized interface).</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Step-by-step example (high level of abstraction)</title>
+
+      <para>To make the anove concrete we give an example. When we build an
+      IDE for a domain specific language on top of the Meta-Environment, we
+      will execute the following tasks:<orderedlist>
+          <listitem>
+            <para>Create a new package with a GNU style build environment
+            (make, configure, etc)</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The package at least depends on the 'meta'
+                package.</para>
+              </listitem>
+
+              <listitem>
+                <para>The package usually also depends on the 'aterm' package
+                or the 'aterm-java' package.</para>
+              </listitem>
+
+              <listitem>
+                <para>Make directories for the source code new tools, ToolBus
+                scripts, Configuration Files, GUI Plugins</para>
+              </listitem>
+
+              <listitem>
+                <para>A single extension may be spread over several packages
+                (i.e. for separating data representation, coordination,
+                computation and user-interaction from each other)</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Add a configuration script</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Import the standard meta.actions configuration
+                script</para>
+              </listitem>
+
+              <listitem>
+                <para>Add menu options with the names of ToolBus processes to
+                be executed when the button is pressed. I.e. Compile program.,
+                Run program., etc.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Add ToolBus scripts</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>For each menu option there needs to be at least one
+                ToolBus process to handle it (i.e. CompileAction,
+                RunAction).</para>
+              </listitem>
+
+              <listitem>
+                <para>Dispatch the work to other ToolBus processes that
+                already exist from the 'meta' package (i.e.
+                ShowFileDialog)</para>
+              </listitem>
+
+              <listitem>
+                <para>Or, write new ToolBus processes that call possibly new
+                tools (i.e. CompileDSLFile)</para>
+              </listitem>
+
+              <listitem>
+                <para>For each new kind of file that can be edited by the IDE,
+                a ToolBus script must be added that binds a language specific
+                parse-table to the file extension, and binds editor specific
+                actions to editor events (file saving, editing, menu
+                options).</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Implement (or generate) new tools</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Write the tool in C, Java or ASF+SDF (i.e. a DSL
+                compiler)</para>
+              </listitem>
+
+              <listitem>
+                <para>Write a ToolBus process as an API for the tool</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Implement (in Java) the GUI extensions</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Implement the StudioPlugin interface</para>
+              </listitem>
+
+              <listitem>
+                <para>Implement several StudioComponent interfaces
+                (windows)</para>
+              </listitem>
+
+              <listitem>
+                <para>Write a ToolBus process for dynamically loading the jar
+                into the MetaStudio</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Implement a small shell script for starting the ToolBus with
+            the apropriate scripts</para>
+          </listitem>
+        </orderedlist>For some extensions not all of the above steps are
+      necessary. The IDE construction goal is the most demanding extension,
+      while the other goals will be less of an effort. The rest of this
+      document highlights each extension point and how to use it in more
+      detail.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Creating a new package</title>
+
+    <para>Basic package structure, meta-build-env. reference to build
+    environment document</para>
+  </section>
+
+  <section>
+    <title>Adding a configuration script</title>
+
+    <para>Explain syntax and semantics of .action files</para>
+  </section>
+
+  <section>
+    <title>Adding new ToolBus scripts</title>
+
+    <para>Explain relation between action files and ToolBus processes. Explain
+    library of processes and rec-msg of the meta-package</para>
+  </section>
+
+  <section>
+    <title>Implementing new tools</title>
+
+    <para>Refer to ToolBus manual, explain generation of tools by compiling
+    ASF+SDF programs with the -t flag.</para>
+  </section>
+
+  <section>
+    <title>Implementing GUI extensions</title>
+
+    <para>Explain the StudioPlugin interface, and the StudioComponent
+    interface. </para>
+  </section>
+
+  <section>
+    <title>Implementing a start-up shell script</title>
+
+    <para>Explain the commandline parameters of the ToolBus. Explain the usage
+    of config-manager tool for computing the commandline parameters for the
+    ToolBus from a .actions configuration file.</para>
+  </section>
+</article>
