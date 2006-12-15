@@ -206,7 +206,7 @@
           </listitem>
 
           <listitem>
-            <para>Any tools</para>
+            <para>Any tools (optional)</para>
 
             <itemizedlist>
               <listitem>
@@ -221,7 +221,7 @@
           </listitem>
 
           <listitem>
-            <para>MetaStudio plugins written in Java:</para>
+            <para>MetaStudio plugins written in Java (optional):</para>
 
             <itemizedlist>
               <listitem>
@@ -395,28 +395,94 @@
   <section>
     <title>Creating a new package</title>
 
-    <para>Basic package structure, meta-build-env. reference to build
-    environment document</para>
+    <itemizedlist>
+      <listitem>
+        <para>basic package structure</para>
+      </listitem>
+
+      <listitem>
+        <para>use of meta-build-env</para>
+      </listitem>
+
+      <listitem>
+        <para>build environment document reference</para>
+      </listitem>
+
+      <listitem>
+        <para>version management document reference</para>
+      </listitem>
+
+      <listitem>
+        <para> that this is optional</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
     <title>Adding a configuration script</title>
 
-    <para>Explain syntax and semantics of .action files</para>
+    <itemizedlist>
+      <listitem>
+        <para>elements of .action files: syntax and semantics</para>
+      </listitem>
+
+      <listitem>
+        <para>importing other action files</para>
+      </listitem>
+
+      <listitem>
+        <para>the ./meta.actions file</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
     <title>Adding new ToolBus scripts</title>
 
-    <para>Explain relation between action files and ToolBus processes. Explain
-    library of processes and rec-msg of the meta-package</para>
+    <itemizedlist>
+      <listitem>
+        <para>relation between configuration scripts and ToolBus scripts (menu
+        calls processes)</para>
+      </listitem>
+
+      <listitem>
+        <para>explain all available processes from meta package, and
+        rec-msgs</para>
+      </listitem>
+
+      <listitem>
+        <para>explain coding conventions for ToolBus scripts (small
+        scripts)</para>
+      </listitem>
+
+      <listitem>
+        <para>explain instantiation of language specific editors (connecting
+        parser/parsetable)</para>
+      </listitem>
+
+      <listitem>
+        <para>explain connection between text-categories in configuration
+        script, and syntax highlighter</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
     <title>Implementing new tools</title>
 
-    <para>Refer to ToolBus manual, explain generation of tools by compiling
-    ASF+SDF programs with the -t flag.</para>
+    <itemizedlist>
+      <listitem>
+        <para>refer to ToolBus manuals, and ATerm manuals</para>
+      </listitem>
+
+      <listitem>
+        <para>refer to -t flag of asfc compiler</para>
+      </listitem>
+
+      <listitem>
+        <para>refer to generic adapter (does it still work?)</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
@@ -424,6 +490,29 @@
 
     <para>Explain the StudioPlugin interface, and the StudioComponent
     interface. </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>How to implement the StudioPlugin interface</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement the StudioComponent interface</para>
+      </listitem>
+
+      <listitem>
+        <para>How to load the jarfile into the MetaStudio</para>
+      </listitem>
+
+      <listitem>
+        <para>How to add menu options via the MetaStudio interface</para>
+      </listitem>
+
+      <listitem>
+        <para>How to load StudioComponents at certain tab positions using the
+        MetaStudio interface</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
@@ -432,5 +521,17 @@
     <para>Explain the commandline parameters of the ToolBus. Explain the usage
     of config-manager tool for computing the commandline parameters for the
     ToolBus from a .actions configuration file.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Explain commandline parameters of the ToolBus interpreter</para>
+      </listitem>
+
+      <listitem>
+        <para>Explain the usage of the commandline interface of the
+        config-manager tool for generating instantiations of ToolBus
+        commandline parameters from configurations files</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
