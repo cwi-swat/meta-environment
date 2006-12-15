@@ -3,7 +3,7 @@ pre.programlisting {
   border: 1px solid #006600 ;
 }
 
-body:after { content: <para>This document was generated <?dbtimestamp format= "Y-m-d H:M:S"?>.</para>;
+body:after { content: url(../../logos/ome4.png);
              float: right;
              
 }
