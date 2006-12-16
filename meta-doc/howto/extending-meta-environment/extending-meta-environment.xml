@@ -41,7 +41,7 @@
     <para>This document describes what the extension points of The
     Meta-Environment are, and how they are used by prototypical extensions.
     The Meta-Environment has several types of extension points. Each type of
-    extension points may have several goals. </para>
+    extension points may have several goals.</para>
 
     <section>
       <title>Goals of extensions</title>
@@ -116,8 +116,16 @@
     <section>
       <title>Types of extensions</title>
 
-      <para>The types of extension points to fulfill these goals
-      are:<itemizedlist>
+      <para>The types of extension points to fulfill these goals are listed in
+      this section. For some extension goals, several of the extension points
+      should be considered. Firstly, the source code for a particular
+      extension needs to be organized in a new <emphasis>package</emphasis>.
+      Secondly, this new package needs a <emphasis>configuration
+      script</emphasis>. Then, we need new ToolBus scripts, new tools and new
+      MetaStudio GUI plugins that implement the extension and coordinate its
+      behavior with the rest of the system. Finally, if the extension
+      represents an executable language, a debugging adapter may be included.
+      <itemizedlist>
           <listitem>
             <para>Package infra-structure. An extension package:</para>
 
@@ -266,9 +274,9 @@
     <section>
       <title>Step-by-step example (high level of abstraction)</title>
 
-      <para>To make the anove concrete we give an example. When we build an
-      IDE for a domain specific language on top of the Meta-Environment, we
-      will execute the following tasks:<orderedlist>
+      <para>To make the above a bit more concrete we give an example. When we
+      build an IDE for a domain specific language on top of the
+      Meta-Environment, we will execute the following tasks:<orderedlist>
           <listitem>
             <para>Create a new package with a GNU style build environment
             (make, configure, etc)</para>
@@ -395,27 +403,186 @@
   <section>
     <title>Creating a new package</title>
 
-    <itemizedlist>
-      <listitem>
-        <para>basic package structure</para>
-      </listitem>
+    <para>Extensions are to be separated from the rest of the
+    Meta-Environment. This promotes quality aspects like configurability,
+    maintainability, understandability, and independence. All Meta-Environment
+    packages have a similar package structure. For extensions, we advise to
+    reuse this design. This will improve easy integration and deployment of
+    your extension. For details regarding the build tools for Meta-Environment
+    package see the "Build environment for the Meta-Environment"
+    document.</para>
 
-      <listitem>
-        <para>use of meta-build-env</para>
-      </listitem>
+    <para>Every package corresponds to a module in a version control system,
+    and contains at least the following files. For each file we explain what
+    it is, and what should be at least in it.</para>
 
-      <listitem>
-        <para>build environment document reference</para>
-      </listitem>
+    <section>
+      <title>reconf</title>
 
-      <listitem>
-        <para>version management document reference</para>
-      </listitem>
+      <para><programlisting>#! /bin/sh
 
-      <listitem>
-        <para> that this is optional</para>
-      </listitem>
-    </itemizedlist>
+meta-build || ("Please make sure meta-build is in your PATH" &amp;&amp; false)</programlisting>This
+      file bootstraps the build environment of a package. The use runs
+      <command>./reconf</command>, and the <command>meta-build</command>
+      command runs the appropriate tools like automake, libtool, aclocal, and
+      autoconf to set up the package's configure script and makefiles. These
+      tools generate files, and create several softlinks in the working
+      directory for later use.</para>
+    </section>
+
+    <section>
+      <title>configure.ac</title>
+
+      <para><programlisting>AC_INIT
+META_SETUP
+META_C_SETUP
+META_JAVA_SETUP
+AC_PROG_LIBTOOL
+AC_OUTPUT</programlisting>This file is used by autoconf to generate a
+      configure script. The example file here prepares the package for C and
+      Java code. The C code will use dynamically linked libraries.
+      Configure.ac must contain AC_INIT, META_SETUP, and AC_OUTPUT. It may
+      contain META_C_SETUP, or META_JAVA_SETUP, or both. Furthermore, any
+      autoconf macros are allowed if your package needs more detailed
+      configuration. Please read the autoconf manual for details. </para>
+
+      <para>Note that the META_ macros take care of inter-package dependencies
+      (see the &lt;packagename&gt;.pc.in file).</para>
+    </section>
+
+    <section>
+      <title>&lt;packagename&gt;.pc.in</title>
+
+      <para><programlisting>prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,economop@cwi.nl
+Name: &lt;packagename&gt;
+Version: &lt;packageversion&gt;
+Description: &lt;packagedescription&gt;
+Requires: &lt;dependency1&gt;,&lt;dependency2&gt;,&lt;...&gt;
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -l&lt;libraryname1&gt; -l&lt;libraryname2&gt; &lt;...&gt;
+#uninstalled Libs: -L@abs_top_builddir@/lib -l&lt;libraryname1&gt; -l&lt;libraryname2&gt; &lt;...&gt;
+#uninstalled Cflags: -I@abs_top_builddir@/lib 
+ToolBusFlags=-I${prefix}/share/&lt;packagename&gt;
+JarFile=&lt;packagename&gt;.jar
+Jars=${prefix}/share/${JarFile} 
+#uninstalled UninstalledJars=@abs_top_srcdir@/${JarFile}
+Packages=&lt;javapackagenames&gt;
+TestClass=&lt;toptestclassname&gt;</programlisting>This is the defining file
+      for a package. The file declares all there is to know about a package.
+      This information is typically used by the <command>reconf</command>
+      script, by continous integration toolkits, by package managers, and
+      other deployment and product composition tools.</para>
+
+      <para>The prefix variable is an obligatory implementation detail. The
+      #uninstalled variables are used for compiling compositions of packages
+      before they are installed (packages may refer to the source locations
+      instead of the installed locations using this information). The Requires
+      field is most important. It declares the dependencies on other packages.
+      The pc.in file currently supports three kinds of programming languages.
+      If a package contains any of these, the associated variables are needed,
+      otherwise not. </para>
+
+      <para>C packages that export libraries use Cflags, Libs and their
+      uninstalled variants. This information is used by the makefiles of other
+      packages. Namely, for each package they depend on variables will be made
+      available. Example: If your package depends on the aterm package, then
+      you will have ATERM_CFLAGS, and ATERM_LIBS at your disposal in the
+      makefiles. </para>
+
+      <para>Java packages export jar files, and have a test interface. From
+      this information a full <command>ant</command> build configuration is
+      instantiated. This assumes that the source code is located in the
+      subdirectory <emphasis>src.</emphasis> The other variables explain where
+      the jar file should be installed and which packages should be included.
+      </para>
+
+      <para>Packages containing ToolBus scripts explain where the scripts are
+      installed such that dependent packages may set their search paths
+      automatically.</para>
+
+      <para>Note that the implementation of the semantics of the .pc.in file
+      is located in the package <emphasis>meta-build-env</emphasis>. This
+      package contains extension to automake and autoconf, written as shell
+      scripts and m4 macros. Writing such a package is considered a black art,
+      but it does allow us to remove a lot of code duplication, and improve
+      consistency, in the infra-structure of packages.</para>
+    </section>
+
+    <section>
+      <title>COPYING, AUTHORS, README, NEWS</title>
+
+      <para>The COPYING file contains the license for the source code located
+      in this package. This is usually the LGPL license for Meta-Environment
+      packages. The AUTHORS file lists the authors email addresses. The README
+      file should contain a brief description of the package. The NEWS file
+      should list remarks on the evolution of the package on a high level of
+      abstraction. Note that README and NEWS files are usually not maintained
+      too well in Meta-Environment packages.</para>
+    </section>
+
+    <section>
+      <title>ChangeLog</title>
+
+      <para><programlisting>Fri Jun 30 21:43:04 CEST 2006 &lt;jurgenv@cwi.nl&gt;
+ * libmept/MEPT-utils.[ch]: reorganized this long file into a number of smaller files that each deal with a specific topic.
+ * libmept/*.c: added much documentation.
+ * libmept/*.h: fixed bug #774
+ * pt-support.pc.in: Bumped version to 0.1231</programlisting>This is a
+      snippet of an existing ChangeLog file. This file contains remarks on all
+      changes to the source code of a package, in reverse order of date.
+      Maintaining this information in this file makes it independent of a
+      version management system. It should contain references to bug numbers
+      when bugs are fixed. The ChangeLog file has a fixed format. Editors such
+      as gvim and emacs have plugins for its syntax. ChangeLog files are
+      maintained very well in Meta-Environment packages.</para>
+    </section>
+
+    <section>
+      <title>Makefile.am</title>
+
+      <para><programlisting>include $(top_srcdir)/Makefile.top.meta
+
+SUBDIRS = &lt;subdirs&gt;
+
+ACLOCAL_AMFLAGS = -I .</programlisting>This very important file in the
+      toplevel of the package is used to generate a Makefile. The entire tool
+      chain of automake, autoconf, aclocal, configure, etc. starts here. Note
+      that the exact number of spaces on the line ACLOCAL_AMFLAGS should be
+      copied. </para>
+
+      <para>The example above is relevant for ToolBus and C packages. For
+      these kinds of packages, each subdirectory should contain its own
+      Makefile.am. Please read the automake manual on how to write Makefile.am
+      files for compiling C libraries and C programs. Each Makefile.am may
+      include Makefile.meta, such that reusable make rules and other utilities
+      become available. You are advised to look at the Makefile.am files of
+      existing packages for inspiration. Inclusion of the Makefile.meta file
+      is not obligatory however.<programlisting>include $(top_srcdir)/Makefile.meta</programlisting></para>
+
+      <para>In case of a Java package. The toplevel Makefile.am should look
+      like this:<programlisting>include $(top_srcdir)/Makefile.java.meta
+
+ACLOCAL_AMFLAGS = -I .</programlisting></para>
+
+      <para>Java packages should have all their code in a subdirectory called
+      src. This subdirectory may contain packages, but the corresponding
+      directories do not need copies of a Makefile.am file.</para>
+    </section>
+
+    <section>
+      <title>src, lib, tbscripts, spec, utils, scripts</title>
+
+      <para>These are standard subdirectory names. Src contains Java source
+      code packages. Lib contains source code for C libraries. Tbscript
+      contains ToolBus scripts. Spec contains ASF+SDF specifications. Utils
+      contains C programs with a main that link the libraries in lib. Scripts
+      contain shell scripts. Each of these directories, except for src, has a
+      Makefile.am file.</para>
+
+      <para>The above directory names are not obliged, and are not used
+      consistently by the existing Meta-Environment packages either.</para>
+    </section>
   </section>
 
   <section>
@@ -489,7 +656,7 @@
     <title>Implementing GUI extensions</title>
 
     <para>Explain the StudioPlugin interface, and the StudioComponent
-    interface. </para>
+    interface.</para>
 
     <itemizedlist>
       <listitem>
