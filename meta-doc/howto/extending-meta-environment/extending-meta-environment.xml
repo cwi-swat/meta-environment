@@ -588,7 +588,104 @@ ACLOCAL_AMFLAGS = -I .</programlisting></para>
   <section>
     <title>Adding a configuration script</title>
 
+    <para>Each instance of a Meta-Environment IDE has one toplevel
+    configuration script. This script may import other scripts. At startup
+    time, the configuration script is used to initialize the ToolBus with the
+    right scripts, then after the ToolBus is started, the same script is used
+    to initialize the configuration manager tool. At run-time this tool
+    provides tools and scripts with configuration information
+    on-demand.</para>
+
+    <para>This is the syntax of a configuration file, as found in
+    sdf-library/library/basic/Configuration.sdf. Note that currently the set
+    of configuration options is closed. Obviously, for real extensibility,
+    this set needs to be opened. For now, this is what is offered to configure
+    the existing generic components of The Meta-Environment.</para>
+
+    <para><programlisting>sorts Configuration
+context-free syntax
+  "configuration" "(" "[" list:{Property ","}* "]" ")" -&gt; Configuration {cons("configuration")} 
+
+sorts Property
+context-free syntax
+  %% imports another configuration file:
+  "import" "(" path:StrCon ")" -&gt; Property {cons("import")}
+
+  %% loads another ToolBus script into the ToolBus:
+  "load-script" "(" path:StrCon ")" -&gt; Property {cons("script")}
+
+  %% extends the script path of the ToolBus:
+  "script-path" "(" path:StrCon ")" -&gt; Property {cons("script-path")}
+
+  %% Registers an action with the selection of a certain user-interface element:
+  "action" "(" "[" list:{ActionDescription ","}* "]" "," action:StrCon ")" -&gt; Property {cons("action")}
+
+  %% Couples a language name (SDF module name), with a file extension for use in file browsers:
+  "extension" "(" language:StrCon "," extension:StrCon ")" -&gt; Property {cons("extension")}
+
+  %% Extends the list of workspaces with a new path:
+  "library-path" "(" label:StrCon "," path:StrCon ")" -&gt; Property {cons("library-path")}
+
+  %% Extends the list of workspaces with a new path, takes precedence over library paths when searching:
+  "module-path" "(" label:StrCon "," path:StrCon ")" -&gt; Property {cons("module-path")}
+
+  %% Registers the font properties of a certain text category name, for use with syntax highlighting: 
+  "text-category" "(" category:TextCategoryName "," "[" map:{TextAttribute ","}* "]" ")" -&gt; Property {cons("text-category")}
+
+sorts ActionDescription
+context-free syntax
+  %% describes a GUI element. The context is the name of the element, the event is may happen to it.
+  "description" "(" context:TermCon "," event:Event ")" -&gt; ActionDescription {cons("description")}
+
+sorts Event
+context-free syntax
+  %% here is a list of things that may happen to a GUI element, these are used for construction of the
+  %% GUI, as well as identifying which process is called finally:
+  "popup" -&gt; Event {cons("popup")}
+  "click" "(" "[" list:{KeyModifier ","}* "]" "," button:VirtualButton ")" -&gt; Event {cons("click")}
+
+  "icon" "(" title:StrCon "," path:StrCon ")" -&gt; Event {cons("icon")}
+  "menu" "(" "[" labels:{Item ","}* "]" ")" -&gt; Event {cons("menu")}
+  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," shortcut:ShortCut ")" -&gt; Event {cons("menu-shortcut")}
+
+sorts Item
+context-free syntax
+  %% describe paths in menu's:
+  "label" "(" name:StrCon ")" -&gt; Item {cons("label")}
+
+sorts TextCategoryName
+context-free syntax
+  %% There are three built-int text categories, and we can add our own:
+  "focus" -&gt; TextCategoryName {cons("focus")}
+  "selection" -&gt; TextCategoryName {cons("selection")}
+  "normal" -&gt; TextCategoryName {cons("normal")}
+  "extern" "(" name:StrCon ")" -&gt; TextCategoryName {cons("extern")}
+
+sorts TextAttribute
+context-free syntax
+  "foreground-color" "(" color:Color ")" -&gt; TextAttribute {cons("foreground-color")}
+  "background-color" "(" color:Color ")" -&gt; TextAttribute {cons("background-color")}
+  "style" "(" style:TextStyle ")" -&gt; TextAttribute {cons("style")}
+  "font" "(" name:StrCon ")" -&gt; TextAttribute {cons("font")}
+  "size" "(" point:NatCon ")" -&gt; TextAttribute {cons("size")}
+
+sorts ShortCut
+context-free syntax
+  %% The shortcut syntax is based on the Java virtual key interface
+  "shortcut" "(" "[" list:{KeyModifier ","}* "]" "," key:VirtualKey ")" -&gt; ShortCut {cons("shortcut")}
+
+sorts TextStyle
+context-free syntax
+  "bold" -&gt; TextStyle {cons("bold")}
+  "italics" -&gt; TextStyle {cons("italics")}
+  "underlined" -&gt; TextStyle {cons("underlined")}
+</programlisting> Here is a part of an example configuration file called
+    <filename>standard.sdf.actions</filename>:</para>
+
     <programlisting>configuration([
+  import("__META__/share/meta/meta.actions"),
+  script-path("__SDFMETA__/share/sdf-meta"),
+  load-script("__SDFMETA__/share/sdf-meta/init-sdf.tb"),
   library-path("SDF Grammar Library","__SDF_LIBRARY__"),
   library-path("ASF+SDF Library","__ASF_LIBRARY__"),
   action([description(tree-panel, click)], "ShowAreaAction"),
@@ -621,19 +718,9 @@ ACLOCAL_AMFLAGS = -I .</programlisting></para>
   text-category(extern("Fatal"),[style(bold),background-color(rgb(255,0,0))])
 ])</programlisting>
 
-    <itemizedlist>
-      <listitem>
-        <para>elements of .action files: syntax and semantics</para>
-      </listitem>
-
-      <listitem>
-        <para>importing other action files</para>
-      </listitem>
-
-      <listitem>
-        <para>the ./meta.actions file</para>
-      </listitem>
-    </itemizedlist>
+    <para>Once a configuration file is constructed it will be used by the
+    start-up shell script (see the section about that script), and by a
+    initial ToolBus process (see the section on ToolBus scripts).</para>
   </section>
 
   <section>
