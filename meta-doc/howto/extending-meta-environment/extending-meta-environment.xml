@@ -805,20 +805,27 @@ context-free syntax
   <section>
     <title>Implementing a start-up shell script</title>
 
-    <para>Explain the commandline parameters of the ToolBus. Explain the usage
-    of config-manager tool for computing the commandline parameters for the
-    ToolBus from a .actions configuration file.</para>
+    <para>The startup shell script of a Meta-Environment based IDE looks like
+    this:</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>Explain commandline parameters of the ToolBus interpreter</para>
-      </listitem>
+    <programlisting>#! /bin/sh
 
-      <listitem>
-        <para>Explain the usage of the commandline interface of the
-        config-manager tool for generating instantiations of ToolBus
-        commandline parameters from configurations files</para>
-      </listitem>
-    </itemizedlist>
+__TOOLBUS__/bin/toolbus \
+  `__CONFIG_MANAGER__/bin/configmanager -I -i __PACKAGEPREFIX__/share/&lt;configfile&gt;.actions` \
+  `__CONFIG_MANAGER__/bin/configmanager -s -i __PACKAGEPREFIX__/share/&lt;configfile&gt;.actions`</programlisting>
+
+    <para>This script needs to be instantiated with the correct paths at
+    installation time. Use a Makefile.am rule for this for example. The script
+    simply starts the ToolBus and uses the configmanager tool (wrapped in
+    backquotes for inline substitution) to generate the necessary commandline
+    options to the ToolBus. The following is the usage information from this
+    commandline tool:</para>
+
+    <para><programlisting>usage: configmanager -[Is] -i &lt;config-file&gt;
+        -I print ToolBus include path
+        -s print ToolBus main scripts
+        -i input configuration file [multiple]</programlisting>See the ToolBus
+    manual and toolbus usage information for more information on ToolBus
+    commandline parameters. </para>
   </section>
 </article>
