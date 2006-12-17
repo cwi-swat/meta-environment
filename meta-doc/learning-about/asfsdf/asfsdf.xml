@@ -299,7 +299,28 @@
     <section>
       <title>Examples</title>
 
-      <section>
+      <para>We give here a number of elementary examples with the sole purpose
+      to illustrate a range of features of ASF+SDF:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="AdditionMultiplicationOfNumerals">Addition and
+          Multiplication on Numerals</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Booleans">Booleans</link>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For larger and more <emphasis>interesting</emphasis> examples, we
+      refer to XXX.</para>
+
+      <important>
+        <para>Add ref</para>
+      </important>
+
+      <section xml:id="AdditionMultiplicationOfNumerals">
         <title>Addition and Multiplication on Numerals</title>
 
         <para>The natural numbers 0, 1, 2, ... can be represented in a form
@@ -379,16 +400,16 @@ exports
         </example>
 
         <caution>
-          <para>It is a common mistake to forget to include
+          <para>It is a common mistake to forget to either include
           <literal>basic/Whitespace</literal> or to define layout and comments
           yourself. The effect will be that you get seemingly unexplainable
           parse errors in your equations.</para>
         </caution>
 
         <caution>
-          <para> If you forget the definition of a start symbol, no input
-          terms can be parsed for the sort that you are probably interested
-          in. Better safe than sorry: add start symbols.</para>
+          <para>If you forget the definition of a start symbol, no input terms
+          can be parsed for the sort that you are probably interested in.
+          Better safe than sorry: add start symbols.</para>
         </caution>
 
         <para>Having defined numerals, we can parse texts like
@@ -406,13 +427,13 @@ exports
 
           <programlisting>module Adder
 exports
-  imports Numerals                      <co xml:id="co.imp-numerals" />
+  imports Numerals                    <co xml:id="co.imp-numerals" />
   context-free syntax
-      "add" "(" NUM "," NUM ")"  -&gt; NUM <co xml:id="co.add" /> 
+      add(NUM, NUM)  -&gt; NUM           <co xml:id="co.add" /> 
   variables
-      "<replaceable>X</replaceable>"          -&gt; NUM               <co
+      "<replaceable>X</replaceable>"            -&gt; NUM           <co
               xml:id="co.adder-x" />
-      "<replaceable>Y</replaceable>"          -&gt; NUM</programlisting>
+      "<replaceable>Y</replaceable>"            -&gt; NUM</programlisting>
 
           <para>Notes:</para>
 
@@ -441,15 +462,17 @@ exports
           module</title>
 
           <programlisting>equations                             <co
-              xml:id="co.numerals-equaltions" />
+              xml:id="co.numerals-equations" />
 
 [1] add(0, <replaceable>X</replaceable>) = <replaceable>X                     </replaceable><co
               xml:id="co.numerals-1" />
 [2] add(succ(<replaceable>X</replaceable>), Y) = succ(add(<replaceable>X</replaceable>,<replaceable>Y</replaceable>))  <co
               xml:id="co.numerals-2" /></programlisting>
 
+          <para>Notes:</para>
+
           <calloutlist>
-            <callout arearefs="co.numerals-equaltions">
+            <callout arearefs="co.numerals-equations">
               <para>The ASF part starts with the keyword
               <literal>equations</literal>.</para>
             </callout>
@@ -494,7 +517,227 @@ exports
         </itemizedlist>
 
         <para>We complete this example by defining a multiplication operator
-        on nmuemrals as well.</para>
+        on numerals as well.</para>
+
+        <example>
+          <title>Muliplier.sdf</title>
+
+          <programlisting>module Multiplier
+exports
+  imports Adder                       <co xml:id="co.multiplier-import-adder" />
+  context-free syntax
+    mul(NUM,NUM) -&gt; NUM               <co xml:id="co.multiplier-mul" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.multiplier-import-adder">
+              <para>Import the previoulsy defined module Adder.</para>
+            </callout>
+
+            <callout arearefs="co.multiplier-mul">
+              <para>Define the syntax of the function mul.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>The equations that define <literal>mul</literal> are as
+        follows:</para>
+
+        <example>
+          <title>Multiplier.asf</title>
+
+          <para><programlisting>equations
+
+[1] mul(0, <replaceable>X</replaceable>) = 0                      <co
+                xml:id="co.multiplier-mul-1" />
+[2] mul(succ(<replaceable>X</replaceable>), Y) = add(mul(<replaceable>X</replaceable>,<replaceable>Y</replaceable>), <replaceable>Y</replaceable>) <co
+                xml:id="co.multiplier-mul-2" /></programlisting>Notes:<calloutlist>
+              <callout arearefs="co.multiplier-mul-1">
+                <para>Multiplying any numeral by zero yields zero.</para>
+              </callout>
+
+              <callout arearefs="co.multiplier-mul-2">
+                <para>Reduce multiplication to addition: multiplying
+                <replaceable>Y</replaceable> by <replaceable>X</replaceable>+1
+                is the same as multiplying <replaceable>Y</replaceable> by
+                <replaceable>X</replaceable> and then adding
+                <replaceable>Y</replaceable>.</para>
+              </callout>
+            </calloutlist></para>
+        </example>
+
+        <para>We can now parse and reduce terms using the module
+        Multiplier:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The term <literal>mul(succ(succ(succ(0))),
+            succ(succ(0)))</literal> reduces to
+            <literal>succ(succ(succ(succ(succ(succ(0))))))</literal>; this
+            corresponds to 3 * 2 = 6.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="Booleans">
+        <title>Booleans</title>
+
+        <para>The Boolean constants <literal>true</literal> and
+        <literal>false</literal> and the Boolean functions
+        <literal>and</literal>, <literal>or</literal> and
+        <literal>not</literal> are also completely elementary and therefore
+        well-suited for illustrating some more features of ASF+SDF. The syntax
+        of Booleans is given in <link
+        linkend="Booleans.sdf">Booleans.sdf</link>.</para>
+
+        <example xml:id="Booleans.sdf">
+          <title>Booleans.sdf</title>
+
+          <programlisting>module Booleans
+exports
+  sorts BoolCon                        <co xml:id="co.booleans.boolcon" />
+  context-free syntax
+     "true"  -&gt; BoolCon                <co xml:id="co.booleans.true" />
+     "false" -&gt; BoolCon
+
+  sorts Boolean                        <co xml:id="co.booleans.boolean" />
+  context-free start-symbols           <co xml:id="co.booleans.startsymbols" />
+        Boolean
+  context-free syntax
+     BoolCon               -&gt; Boolean  <co
+              xml:id="co.booleans.boolcon-boolean" />
+     and(Boolean, Boolean) -&gt; Boolean  <co xml:id="co.booleans.and" />
+     or(Boolean,Boolean)   -&gt; Boolean  
+     not(Boolean)          -&gt; Boolean  
+
+hiddens                                <co xml:id="co.booleans.hiddens" />
+  imports basic/Comments               <co xml:id="co.booleans.comments" />
+  variables
+     <replaceable>B</replaceable> -&gt; Boolean                      <co
+              xml:id="co.booleans.var" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.booleans.boolcon">
+              <para>Introduce the sort BoolCon that will represent the
+              constants <literal>true</literal> and <literal>false</literal>.
+              It is good practice to define constants as a separate
+              sort.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.true">
+              <para>Here are the definitions of the constants
+              themselves.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.boolean">
+              <para>Introduce our sort of interest:
+              <literal>Boolean</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.startsymbols">
+              <para>Since we will be dealing with Boolean terms, it is
+              mandatory that they can be parsed. Hence we need to define a
+              start symbol for them.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.boolcon-boolean">
+              <para>Every Boolean constant <literal>BoolCon</literal> is a
+              <literal>Boolean</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.and">
+              <para>Definition of <literal>and</literal>,
+              <literal>or</literal> and <literal>not</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.hiddens">
+              <para>It is good practice to define comments (as needed in the
+              equations) and variables as hidden. This has the advantage that
+              comment conventions and variable declaration do propagate to the
+              modules that import the current module.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.comments">
+              <para>Import standard comments.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.var">
+              <para>Define the single variable <replaceable>B</replaceable>
+              for later use in the equations.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>After these preparations we are ready to parse Boolean terms
+        like:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>true</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>and(true,false)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>and(or(true,not(false)),true)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>or(true,
+            <replaceable>B</replaceable>)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para>and so on and so forth.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The definition of the functions on Booleans now simply requires
+        writing down the truth tables in the form of equations and is given in
+        <link linkend="Booleans.asf">Booleans.asf</link>.</para>
+
+        <example xml:id="Booleans.asf">
+          <title>Booleans.asf</title>
+
+          <programlisting>equations
+
+[or1] or(true, true)     = true
+[or2] or(true, false)    = true
+[or3] or(false, true)    = true
+[or4] or(false, false)   = false
+
+[and1] and(true, true)   = true
+[and2] and(true, false)  = false
+[and3] and(false, true)  = false
+[and4] and(false, false) = false
+
+[not1] not(true) = false
+[not2] not(false) = true</programlisting>
+        </example>
+
+        <para>We can now parse and reduce terms using Booleans:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The term <literal>true</literal> reduces to
+            <literal>true</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The term <literal>and(true,false)</literal> reduces to
+            <literal>false</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The term <literal>and(or(true,not(false)),true)</literal>
+            reduces to <literal>true</literal>.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
   </section>
@@ -1050,8 +1293,7 @@ equations
           </listitem>
 
           <listitem>
-            <para>Traversal functions must be <link
-            linkend="PrefixFunctions">prefix functions</link>}.</para>
+            <para>Traversal functions must be prefix functions.</para>
           </listitem>
 
           <listitem>
