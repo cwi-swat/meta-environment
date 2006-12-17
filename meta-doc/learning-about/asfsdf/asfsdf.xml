@@ -177,12 +177,12 @@
       <para>An unconditional equation is a special case of a
       <emphasis>conditional equation</emphasis>, i.e., an equality with one or
       more associated conditions (premises). The equality is sometimes called
-      the \emph{conclusion} of the conditional equation. In ASF+SDF a
-      conditional equation can be written in three (syntactically different,
-      but semantically equivalent) ways. Using
+      the <emphasis>conclusion</emphasis> of the conditional equation. In
+      ASF+SDF a conditional equation can be written in three (syntactically
+      different, but semantically equivalent) ways. Using
       <literal>when</literal><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>L</replaceable> = <replaceable>R</replaceable> when <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ...</programlisting>or
       using an implication arrow <literal>===&gt;</literal><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ... ===&gt; <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>or
-      using an horizontal bar</para>
+      using a horizontal bar</para>
 
       <para><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ... 
         =============
@@ -229,11 +229,11 @@
       variables resulting from this match are added to
       <replaceable>Vars</replaceable>.</para>
 
-      <warning>
+      <important>
         <para>The variables occurring in both <replaceable>Vars</replaceable>
         and the left-hand side must represent the syntactically the same
         subterm.</para>
-      </warning>
+      </important>
 
       <para>For the evaluation of each equality condition we require that the
       condition contains only variables in <replaceable>Vars</replaceable>.
@@ -242,10 +242,10 @@
       a <emphasis>join</emphasis> condition. The evaluation of negative
       conditions is described by replacing in the above description
       `identical' and `match' by `not identical' and `do not match',
-      respectively. <warning>
+      respectively. <important>
           <para>It is not allowed to introduce new variables in a negative
           condition.</para>
-        </warning>After the successful evaluation of the conditions, all
+        </important>After the successful evaluation of the conditions, all
       variables occurring in the right-hand side of the conclusion of the
       equation should be in <replaceable>Vars</replaceable>. New variables
       (see above) should therefore <emphasis>not</emphasis> occur on
@@ -276,24 +276,30 @@
       strategy is used. This means that a left-to-right, depth-first traversal
       of the term is performed and that for each subterm encountered an
       attempt is made to reduce it. Next, the rules are traversed one after
-      the other. The textual order of the rules is irrelevant. Instead they
-      are ordered according to their <emphasis>specificity</emphasis>: more
-      specific rules come before more general rules and <link
-      linkend="DefaultEquations">default equations</link> come last.
-      <emphasis>Independent of the specificity, a specification should always
-      be confluent and terminating.</emphasis> If the selected subterm and the
-      left-hand side of a rule (more precisely: of the left-hand side of its
-      conclusion) match, we say that a <emphasis>redex</emphasis> has been
-      found and the following happens. The conditions of the rule are
-      evaluated and if the evaluation of a condition fails, other rules (if
-      any) with matching left-hand sides are tried. If the evaluation of all
-      conditions succeeds, the selected subterm is replaced by the right-hand
-      side of the rule (more precisely: the right-hand side of the conclusion
-      of the rule) after performing proper <emphasis>substitutions</emphasis>.
-      Substitutions come into existence by the initial matching of the rule
-      and by the evaluation of its conditions. For the resulting term the
-      above process is repeated until no further reductions are possible and a
-      normal form is reached (if any).</para>
+      the other. The textual order of the rules is irrelevant, but <link
+      linkend="DefaultEquations">default equations</link> come last.</para>
+
+      <important>
+        <para>A specification should always be <emphasis>confluent</emphasis>
+        and <emphasis>terminating</emphasis>. Confluent means that the order
+        in which the rules are applied has no effect on the outcome.
+        Terminating means that the application of rules cannot go on
+        indefinitely. We do not check for these two properties.</para>
+      </important>
+
+      <para> If the selected subterm and the left-hand side of a rule (more
+      precisely: of the left-hand side of its conclusion) match, we say that a
+      <emphasis>redex</emphasis> has been found and the following happens. The
+      conditions of the rule are evaluated and if the evaluation of a
+      condition fails, other rules (if any) with matching left-hand sides are
+      tried. If the evaluation of all conditions succeeds, the selected
+      subterm is replaced by the right-hand side of the rule (more precisely:
+      the right-hand side of the conclusion of the rule) after performing
+      proper <emphasis>substitutions</emphasis>. Substitutions come into
+      existence by the initial matching of the rule and by the evaluation of
+      its conditions. For the resulting term the above process is repeated
+      until no further reductions are possible and a normal form is reached
+      (if any).</para>
     </section>
 
     <section>
@@ -309,7 +315,13 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="Booleans">Booleans</link>.</para>
+          <para><link linkend="Booleans">Booleans</link>: simple truth values
+          and operations.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="FriendlyBooleans">FriendlyBooleans</link>:
+          truth values with user-defined syntax.</para>
         </listitem>
       </itemizedlist>
 
@@ -399,18 +411,18 @@ exports
           </calloutlist>
         </example>
 
-        <caution>
+        <important>
           <para>It is a common mistake to forget to either include
           <literal>basic/Whitespace</literal> or to define layout and comments
           yourself. The effect will be that you get seemingly unexplainable
           parse errors in your equations.</para>
-        </caution>
+        </important>
 
-        <caution>
+        <important>
           <para>If you forget the definition of a start symbol, no input terms
           can be parsed for the sort that you are probably interested in.
           Better safe than sorry: add start symbols.</para>
-        </caution>
+        </important>
 
         <para>Having defined numerals, we can parse texts like
         <literal>0</literal>, <literal>succ(0)</literal>, etc. as
@@ -614,7 +626,7 @@ exports
 hiddens                                <co xml:id="co.booleans.hiddens" />
   imports basic/Comments               <co xml:id="co.booleans.comments" />
   variables
-     <replaceable>B</replaceable> -&gt; Boolean                      <co
+     "<replaceable>B</replaceable>" -&gt; Boolean                    <co
               xml:id="co.booleans.var" /></programlisting>
 
           <para>Notes:</para>
@@ -738,12 +750,151 @@ hiddens                                <co xml:id="co.booleans.hiddens" />
             reduces to <literal>true</literal>.</para>
           </listitem>
         </itemizedlist>
+
+        <para>As a final touch, a similar but shorter definition of the
+        Boolean functions is possible. By using variable
+        <replaceable>B</replaceable>, which we did declare but have not used
+        so far, a shorter definition is possible see, for instance, the
+        definition for <literal>or</literal> <link
+        linkend="shorter-def-or">below</link>.</para>
+
+        <example xml:id="shorter-def-or">
+          <title>A shorter definition for <literal>or</literal>.</title>
+
+          <programlisting>[or1'] or(true, <replaceable>B</replaceable>)  = true
+[or2'] or(false, <replaceable>B</replaceable>) = <replaceable>B</replaceable></programlisting>
+        </example>
+      </section>
+
+      <section xml:id="FriendlyBooleans">
+        <title>Booleans with user-defined syntax</title>
+
+        <para>The Booleans we have seen in the <link
+        linkend="Booleans">previous example</link> are fine, but the strict
+        prefix notation makes Boolean terms less readable. Would it be
+        possible to use more friendly notation like <literal>true &amp;
+        false</literal> instead of <literal>and(true, false)</literal> or
+        <literal>true | false</literal> instead of <literal>or(true,
+        false)</literal>?</para>
+
+        <example xml:id="FriendlyBooleans.sdf">
+          <title><literal>FriendlyBooleans.sdf</literal></title>
+
+          <programlisting>module FriendlyBooleans
+exports
+  sorts BoolCon
+  context-free syntax
+     "true"  -&gt; BoolCon
+     "false" -&gt; BoolCon
+
+  sorts Boolean
+  context-free start-symbols
+        Boolean
+  context-free syntax
+     BoolCon               -&gt; Boolean
+     Boolean "&amp;" Boolean   -&gt; Boolean {left}     <co
+              xml:id="co.friendlybooleans-and" />
+     Boolean "|" Boolean   -&gt; Boolean {left}
+     not(Boolean)          -&gt; Boolean
+     "(" Boolean ")"       -&gt; Boolean {bracket}  <co
+              xml:id="co.friendlybooleans-bracket" />
+  context-free priorities                        <co
+              xml:id="co.friendlybooleans.priority" />
+     Boolean "&amp;" Boolean -&gt; Boolean &gt;
+     Boolean "|" Boolean -&gt; Boolean
+hiddens
+  imports basic/Comments
+  variables
+     "<replaceable>B</replaceable>" -&gt; Boolean</programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.friendlybooleans-and">
+              <para>Here the infix syntax for the and and or function is
+              defined.</para>
+            </callout>
+
+            <callout arearefs="co.friendlybooleans-bracket">
+              <para>Since we have infix functions, parentheses are needed for
+              grouping.</para>
+            </callout>
+
+            <callout arearefs="co.friendlybooleans.priority">
+              <para>A priority rules defines that <literal>&amp;</literal>
+              binds stronger than <literal>|</literal>.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>After these preparations, the equations are shown in <link
+        linkend="FriendlyBooleans.asf">FriendlyBooleans.asf</link>.</para>
+
+        <example xml:id="FriendlyBooleans.asf">
+          <title><literal>FriendlyBooleans.asf</literal></title>
+
+          <programlisting>equations
+
+[or1] true | <replaceable>B</replaceable>    = true
+[or2] false | <replaceable>B</replaceable>   = <replaceable>B</replaceable>
+
+[and1] true &amp; <replaceable>B</replaceable>   = <replaceable>B</replaceable>
+[and2] false &amp; <replaceable>B</replaceable>  = false
+
+[not1] not(true)  = false
+[not2] not(false) = true</programlisting>
+        </example>
+
+        <important>
+          <para>Something interesting is going on here: we defined syntax
+          rules in <literal>FriendlyBooleans.sdf</literal> and use them here
+          in <literal>FriendlyBooleans.sdf</literal>. This means that we use
+          syntax in the equations that we have defined ourselves! Think about
+          the implications of this: if we have an SDF definition for a
+          programming language, we can easily write equations that contain
+          programming language fragments. This unique feature makes ASF+SDF
+          the ultimate language for writing program transformations.</para>
+        </important>
       </section>
     </section>
   </section>
 
   <section xml:id="Equations">
     <title>Advanced Equations</title>
+
+    <para>The simple equations described in the previous section are powerfull
+    enough to formulate the solution of any computational problem. However,
+    ASF+SDF provides some more advanced features that can make the life of the
+    specification writer a lot simpler:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="DefaultEquations">Default equations</link>:
+        equations that apply when no other equations is applicable.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ListMatching">List matching</link>: decompose and
+        compose arbitrary lists.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="MemoFunctions">Memo functions</link>: memoize the
+        values of previous function invocations.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="LexicalConstructorFunctions">Lexical constructor
+        functions</link>: get acces to and modify the lexical (string)
+        representation of programs.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="TraversalFunctions">Traversal functions</link>:
+        traverse complex structures with a minimal specification
+        effort.</para>
+      </listitem>
+    </itemizedlist>
 
     <section xml:id="DefaultEquations">
       <title>Default Equations</title>
@@ -757,15 +908,27 @@ hiddens                                <co xml:id="co.booleans.hiddens" />
       these rules will be tried. However, sometimes a specification writer
       would like to write down a rule with a special status: <emphasis>try
       this rule if all other rules fail</emphasis>. A kind of default
-      behaviour is needed. ASF offers functionality in order to obtain this
-      behaviour. If the <replaceable>TagId</replaceable> of an equation starts
-      with <literal>default-</literal> this equation is considered to be a
-      special equation which will only be applied if no other rule matches.
-      The specification <link linkend="CODE_types">below</link> shows an
-      example of the use of a default equation.</para>
+      behaviour is needed. ASF+SDF offers functionality in order to obtain
+      this behaviour. If the <replaceable>TagId</replaceable> of an equation
+      starts with <literal>default-</literal> this equation is considered to
+      be a special equation which will only be applied if no other rule
+      matches. </para>
+
+      <para>The modules <link
+      linkend="CODE_types"><literal>Types.sdf</literal></link> and <link
+      linkend="Types.asf">Types.asf</link> show an example of the use of a
+      default equation. The problem we want to solve is as follows. Suppose we
+      are solving a typechecking problem and have a sort
+      <literal>Type</literal> that represents the possible types. It is likely
+      that we will need a function <literal>compatible</literal> that checks
+      whether two types are compatible, for instance, when they appear on the
+      left-hand and right-hand side of an assignment statement or when the
+      actual/formal correspondence of procedure parameters has to be checked.
+      Potentially, Type may contain a lot of different type values and
+      comparing them all is a combinatorial problem.</para>
 
       <example xml:id="CODE_types">
-        <title>Using a default equation</title>
+        <title>Types.sdf</title>
 
         <para><programlisting>module Types
 
@@ -784,16 +947,64 @@ exports
 
 hiddens
   variables
-    "Type"[0-9]*  -&gt; Type
+    "<replaceable>Type</replaceable>"[0-9]*  -&gt; Type</programlisting></para>
+      </example>
 
-equations
+      <para>In Types.sdf, we define a sort <literal>Type</literal> that can
+      have values <literal>natural</literal>, <literal>string</literal> and
+      <literal>nil-type</literal>.</para>
+
+      <example xml:id="Types.asf">
+        <title>Types.asf</title>
+
+        <programlisting>equations
 
   [Type-1]  compatible(natural, natural) = true
-
-  [Type-2]  compatible(string, string) = true
-
-  [default-Type] compatible(Type1,Type2) = false   </programlisting></para>
+  [Type-2]  compatible(string, string)   = true
+  [default-Type] 
+            compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>)      = false </programlisting>
       </example>
+
+      <para>In <link linkend="CODE_types"><literal>Types.sdf</literal></link>,
+      we define three equations: two for checking the cases that the arguments
+      of <literal>compatible</literal> are equal and one default equation for
+      checking the remaining cases.</para>
+
+      <para>An alternative definition is given in <link
+      linkend="Types2.asf">Types2.asf</link> where equation
+      <literal>[Type-1]</literal> has a left-hand side that contains the same
+      variable (<replaceable>Type</replaceable>) twice. This has as effect
+      that the left-hand side only matches if the two arguments of
+      <literal>compatible</literal> are identical.</para>
+
+      <example xml:id="Types2.asf">
+        <title>Types2.asf</title>
+
+        <programlisting>equations
+
+  [Type-1]  compatible(<replaceable>Type</replaceable>, <replaceable>Type</replaceable>)  = true
+  [default-Type] 
+            compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>) = false </programlisting>
+      </example>
+
+      <para>To complete this story, yet another specification style for this
+      problem exists that uses a negative condition instead of a default
+      equation. This is shown in <link
+      linkend="Types3.asf">Types3.asf</link>.<example xml:id="Types3.asf">
+          <title>Types3.asf</title>
+
+          <programlisting>equations
+
+  [Type-1]  compatible(<replaceable>Type</replaceable>, <replaceable>Type</replaceable>)  = true
+  [Type-2]       <replaceable>Type1</replaceable> != <replaceable>Type2</replaceable>
+            ===============================
+            compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>) = false </programlisting>
+        </example></para>
+
+      <para>You may not be impressed by the savings that we get in this tiny
+      example. You will, however, be pleasantly surprised when you use the
+      above techniques and see how short specification become when dealing
+      with real-life cases.</para>
     </section>
 
     <section xml:id="ListMatching">
@@ -803,12 +1014,10 @@ equations
 
       <para>List matching, also known as <emphasis>associative
       matching</emphasis>, is a powerful mechanism to describe complex
-      functionality in a compact way. The example <link
-      linkend="CODE_sets">below</link> shows a compact specification to remove
-      double elements from a set. Unlike the matching of ordinary (non-list)
-      variables, the matching of a list variable may have more than one
-      solution since the variable can match lists of arbitrary length. As a
-      result, backtracking is needed. For instance, to match <literal>X
+      functionality in a compact way. Unlike the matching of ordinary
+      (non-list) variables, the matching of a list variable may have more than
+      one solution since the variable can match lists of arbitrary length. As
+      a result, backtracking is needed. For instance, to match <literal>X
       Y</literal> (a list expression containing the two list variables
       <literal>X</literal> and <literal>Y</literal> indicating the division of
       a list into two sublists) with the list <literal>ab</literal> (a list
@@ -835,8 +1044,11 @@ equations
       possible match of the list variable and the repeated evaluation of
       following conditions.</para>
 
-      <example xml:id="CODE_sets">
-        <title>Set specification</title>
+      <para>Let's consider the problem of removing double elements from a
+      list. This shown in Sets.sdf and Sets.asf.</para>
+
+      <example xml:id="Sets.sdf">
+        <title>Sets.sdf</title>
 
         <para><programlisting>module Sets
 
@@ -847,20 +1059,109 @@ exports
   sorts Elem Set
 
   lexical syntax
-    [a-z]+ -&gt; Elem
+    [a-z]+ -&gt; Elem                <co xml:id="co.sets.elem" />
 
   context-free syntax
-    Set[Elem] -&gt; Set
+    "{" {Elem ","}* "}" -&gt; Set    <co xml:id="co.sets.syntax" />
 
 hiddens
   variables
-    "Elem"[0-9]*  -&gt; Elem
-    "Elem*"[0-9]* -&gt; {Elem ","}*
+    "Elem"[0-9]*  -&gt; Elem         <co xml:id="co.sets.var-elem" />
+    "Elem*"[0-9]* -&gt; {Elem ","}*  <co xml:id="co.sets.var-elem-list" /></programlisting>Notes:</para>
 
-equations
-  
-  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3}</programlisting></para>
+        <calloutlist>
+          <callout arearefs="co.sets.elem">
+            <para>This defines elements as single letters.</para>
+          </callout>
+
+          <callout arearefs="co.sets.syntax">
+            <para>This defines the syntax of a <literal>Set</literal>: an
+            opening curly bracket, a list of zero or more
+            <literal>Elem</literal>s separated by comma's, followed by a
+            closing curly bracket. This is a typical syntax pattern; don't get
+            confused for the different roles that the curly brackets play: the
+            <literal>"{"</literal> and <literal>"}"</literal> are literal
+            string that are part of the syntax of <literal>Set</literal>s,
+            while <literal>{Elem ","}*</literal> describes a syntactic list of
+            <literal>Elem</literal>s separated by commas.</para>
+          </callout>
+
+          <callout arearefs="co.sets.var-elem">
+            <para>This defines variables <literal>Elem1</literal>,
+            <literal>Elem2</literal> and so on of sort
+            <literal>Elem</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.sets.var-elem-list">
+            <para>This defines variables <literal>Elem*1</literal>,
+            <literal>Elem*2</literal> and so on of sort <literal>{Elem
+            ","}*</literal>. Observe the funny variable name containing the
+            non-alphanumeric character <literal>*</literal>. Some ASF+SDF
+            specification writers use the convention that variables that range
+            over list sorts end on either <literal>*</literal> or
+            <literal>+</literal>.</para>
+          </callout>
+        </calloutlist>
       </example>
+
+      <para>The can now parse Sets like:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>{}</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{a}</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{a, b}</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q,
+          r, s, t, u, v, w, x, y, z}</literal></para>
+        </listitem>
+
+        <listitem>
+          <para>and so on.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The actual solution of our problem, removed duplicates from a
+      list, is shown in <link linkend="Sets.asf">Sets.asf</link>. Observe that
+      the single equation has a left-hand side with two occurences of variable
+      Elem, so it will match on a list that contains two identical
+      elements.</para>
+
+      <para>In the right-hand side, one of these occurences is removed.
+      However, this same equation remains applicable as long as the list
+      contains duplicate elements.<example xml:id="Sets.asf">
+          <title>Sets.asf</title>
+
+          <programlisting>equations
+  
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3}</programlisting>
+        </example></para>
+
+      <important>
+        <para>This specification of sets is very elegant but may become very
+        expensive to execute when applied to large sets. There are several
+        strategies to solve this:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Use ordered lists and ensure that the insert operation
+            checks for duplicates.</para>
+          </listitem>
+
+          <listitem>
+            <para>Use a more sophisticated representation like, for instance,
+            a balanced tree.</para>
+          </listitem>
+        </itemizedlist>
+      </important>
 
       <para>Another example of list matching in combination with the
       evaluation of conditions is shown <link
@@ -1057,7 +1358,7 @@ equations
   [1] nat-con("0" Char+) = nat-con(Char+)</programlisting></para>
         </example></para>
 
-      <warning>
+      <important>
         <para>The argument of a lexical constructor may be an arbitrary list
         of characters and there is <emphasis>no check that they match the
         lexical definition of the corresponding sort</emphasis>. This means
@@ -1067,7 +1368,7 @@ equations
         linkend="CODE_illegallcfs">below</link> via the lexical constructor
         function <literal>nat-con</literal> a natural number containing the
         letter <literal>a</literal> is constructed.</para>
-      </warning>
+      </important>
 
       <example xml:id="CODE_illegallcfs">
         <title>Illegal use of lexical constructor functions</title>
