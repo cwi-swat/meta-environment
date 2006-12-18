@@ -56,7 +56,7 @@ equations
 	reserved-chars(Tree)
 
 [deconstruct-subclassed-CHAR-variable-to-lexical-variable]
-	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),_Attributes),[appl(prod([cf(parameterized-sort("CHAR",[Symbol2]))],cf(sort("CHAR")),_Attributes2),[appl(prod([varsym(cf(parameterized-sort("CHAR",[Symbol2])))],cf(parameterized-sort("CHAR",[Symbol2])),no-attrs),[appl(prod(Symbols,varsym(cf(parameterized-sort("CHAR",[Symbol2]))),Attributes),Args)Ann1])_Ann2])_Ann3])_Ann4)
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(parameterized-sort("CHAR",[Symbol2]))],cf(sort("CHAR")),_Attributes2),[appl(prod([varsym(cf(parameterized-sort("CHAR",[Symbol2])))],cf(parameterized-sort("CHAR",[Symbol2])),no-attrs),[appl(prod(Symbols,varsym(cf(parameterized-sort("CHAR",[Symbol2]))),Attributes),Args)Ann1])_Ann2])_Ann3])_Ann4)
 	= 
 	appl(prod([varsym(lex(Symbol2))],lex(Symbol2),no-attrs),[appl(prod(Symbols,varsym(lex(Symbol2)),Attributes),Args)]) Ann1
 

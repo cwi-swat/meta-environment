@@ -11,6 +11,8 @@ hiddens
   context-free start-symbols
 	Boolean	
 	Declaration-list-opt
+         CESI-tuple
+	Expression
 
   sorts CE-pair CEEI-tuple CEI-tuple CEELI-tuple
         CESI-tuple CESLI-tuple CEDI-tuple CEDLI-tuple
@@ -21,8 +23,8 @@ hiddens
     "(" {CE-pair ","}* "," Declaration "," Integer ")"      -> CEDI-tuple
     "(" {CE-pair ","}* "," Declaration-list "," Integer ")" -> CEDLI-tuple
 
-    "(" {CE-pair ","}* "," Expression "," Integer ")"       -> CEEI-tuple
-    "(" {CE-pair ","}* "," Argument-expression-list ","
+    "(" {CE-pair ","}* "," Expression "," Statement-list-opt "," Integer ")"  -> CEEI-tuple
+    "(" {CE-pair ","}* "," Argument-expression-list "," Statement-list-opt "," 
         Integer ")"                                         -> CEELI-tuple
 
     "(" {CE-pair ","}* "," Statement "," Integer ")"          -> CESI-tuple
@@ -98,3 +100,4 @@ variables
 	"Modid" -> ModId
 	"$Arg"[0-9]* -> Expression
 	"IdCon"[0-9]* -> IdCon
+	"String"[0-9]* -> String

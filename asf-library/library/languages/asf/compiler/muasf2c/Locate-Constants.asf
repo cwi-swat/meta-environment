@@ -68,21 +68,25 @@ equations
 
 equations
 
-  [lcis-2'1] (ce-pair*2,Stat2,Aint2) :=
+  [lcis-2'1] (ce-pair*2,Stat3,Aint2) :=
                locate-constants-in-stat(Stat1,(ce-pair*1,Aint1))
              =========================
              locate-constants-in-statlist(Stat1,(ce-pair*1,Aint1)) =
-               (ce-pair*2,Stat2,Aint2)
+               (ce-pair*2,Stat3,Aint2)
 
   [lcis-2'2] (ce-pair*2,Stat+2,Aint2) :=
                locate-constants-in-statlist(Stat+1,(ce-pair*1,Aint1)),
-             (ce-pair*3,Stat2,Aint3) :=
+             (ce-pair*3,Stat3,Aint3) :=
                locate-constants-in-stat(Stat1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-statlist(Stat+1 Stat1,(ce-pair*1,Aint1)) =
-               (ce-pair*3,Stat+2 Stat2,Aint3)
+               (ce-pair*3,Stat+2 Stat3,Aint3)
 
 equations
+
+  [lcis-3'0] (ce-pair*2,$Expression2,Stat*, Aint2) := locate-constants-in-expression($Expression,(ce-pair*, Aint))
+             ===>
+             locate-constants-in-stat(FUNC_EXIT($Expression);, (ce-pair*,Aint)) = (ce-pair*2, {Stat* ++ FUNC_EXIT($Expression2);}, Aint2)
 
   [lcis-3'1] locate-constants-in-stat(FUNC_ENTRY($Expression1,$Expression2) ;,(ce-pair*,Aint)) =
                (ce-pair*,FUNC_ENTRY($Expression1,$Expression2) ;,Aint)
@@ -90,12 +94,23 @@ equations
   [lcis-3'1] locate-constants-in-stat(CONS_ENTRY($Expression1,$Expression2) ;,(ce-pair*,Aint)) =
                (ce-pair*,CONS_ENTRY($Expression1,$Expression2) ;,Aint)
 
+  [lcis-3'1] $Expression3 := flatten-list-of-chars($Expression2),
+             (ce-pair*2,$Expression4,Stat*,Aint2) := locate-constants-in-expression($Expression3,(ce-pair*1,Aint1))
+             ===>
+             locate-constants-in-stat($Expression1 = $Expression2;, (ce-pair*1,Aint1) ) = (ce-pair*2, {Stat* ++ $Expression1 = $Expression4;}, Aint2)
+
+  [lcis-3'1] $Expression3 := flatten-list-of-chars($Expression2),
+             (ce-pair*2,$Expression4,Stat*,Aint2) := locate-constants-in-expression($Expression3,(ce-pair*1,Aint1))
+             ===>
+             locate-constants-in-stat(($Expression1 = $Expression2);, (ce-pair*1,Aint1) ) = (ce-pair*2, {Stat* ++ $Expression1 = $Expression4;}, Aint2)
+
+             
   [default-lcis-3'1] $Expression2 := flatten-list-of-chars($Expression1),
-                     (ce-pair*2,$Expression3,Aint2) :=
+                     (ce-pair*2,$Expression3,Stat*,Aint2) :=
                        locate-constants-in-expression($Expression2,(ce-pair*1,Aint1))
                      ===============================
                      locate-constants-in-stat($Expression1 ;,(ce-pair*1,Aint1)) =
-                       (ce-pair*2,$Expression3 ;,Aint2)
+                       (ce-pair*2,{Stat* ++ $Expression3 ;},Aint2)
 
   [lcis-3'2] (ce-pair*2,Stat*2,Aint2) :=
                locate-constants-in-stats(Stat*1,(ce-pair*1,Aint1))
@@ -104,16 +119,16 @@ equations
                (ce-pair*2,{Decl* Stat*2},Aint2)
 
   [lcis-3'3] $Expression2 := flatten-list-of-chars($Expression1),
-             (ce-pair*2,$Expression3,Aint2) :=
+             (ce-pair*2,$Expression3,Stat*,Aint2) :=
                locate-constants-in-expression($Expression2,(ce-pair*1,Aint1)),
              (ce-pair*3,Stat2,Aint3) :=
                locate-constants-in-stat(Stat1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-stat(if ($Expression1) Stat1,(ce-pair*1,Aint1)) =
-               (ce-pair*3,if ($Expression3) Stat2,Aint3)
+               (ce-pair*3, {Stat* ++ if ($Expression3) Stat2},Aint3)
 
   [lcis-3'4] $Expression2 := flatten-list-of-chars($Expression1),
-             (ce-pair*2,$Expression3,Aint2) :=
+             (ce-pair*2,$Expression3,Stat*, Aint2) :=
                locate-constants-in-expression($Expression2,(ce-pair*1,Aint1)),
              (ce-pair*3,Stat3,Aint3) :=
                locate-constants-in-stat(Stat1,(ce-pair*2,Aint2)),
@@ -122,16 +137,16 @@ equations
              =========================
              locate-constants-in-stat(if ($Expression1) Stat1 else Stat2,
                (ce-pair*1,Aint1)) =
-               (ce-pair*4,if ($Expression3) Stat3 else Stat4,Aint4)
+               (ce-pair*4,{Stat* ++ if ($Expression3) Stat3 else Stat4},Aint4)
 
   [lcis-3'5] $Expression2 := flatten-list-of-chars($Expression1),
-             (ce-pair*2,$Expression3,Aint2) :=
+             (ce-pair*2,$Expression3,Stat*,Aint2) :=
                locate-constants-in-expression($Expression2,(ce-pair*1,Aint1)),
              (ce-pair*3,Stat2,Aint3) :=
                locate-constants-in-stat(Stat1,(ce-pair*2,Aint2))
              =========================
              locate-constants-in-stat(while ($Expression1) Stat1,(ce-pair*1,Aint1)) =
-               (ce-pair*3,while ($Expression3) Stat2,Aint3)
+               (ce-pair*3,{Stat* ++ while ($Expression3) Stat2},Aint3)
 
   [default-lcis-3'7] locate-constants-in-stat(Stat,(ce-pair*,Aint)) =
                        (ce-pair*,Stat,Aint)
@@ -143,60 +158,66 @@ equations
              expression-contains-variables($Expression) == false,
 	     is-traversal-function($Expression) == false,
              is-sym-symbol($Expression) == false,
-             (ce-pair*2,Ident,Aint2) := add-to-ce-pairs($Expression,ce-pair*1,Aint1)
+             (ce-pair*2,Ident, ,Aint2) := add-to-ce-pairs($Expression,ce-pair*1,Aint1)
              =====================================================================
              locate-constants-in-expression(FUNC_EXIT($Expression),(ce-pair*1,Aint1)) =
-               (ce-pair*2,FUNC_EXIT_CONST(Ident,$Expression),Aint2)
+               (ce-pair*2,FUNC_EXIT_CONST(Ident,$Expression), ,Aint2)
 
   [lcie-1'1] is-integer($Expression) == false,
              is-make-char-function-call($Expression) == false,
              expression-contains-variables($Expression) == false,
 	     is-traversal-function($Expression) == false,
              is-sym-symbol($Expression) == false,
-             (ce-pair*2,Ident,Aint2) := add-to-ce-pairs($Expression,ce-pair*1,Aint1)
+             (ce-pair*2,Ident, ,Aint2) := add-to-ce-pairs($Expression,ce-pair*1,Aint1)
              =====================================================================
              locate-constants-in-expression(CONS_EXIT($Expression),(ce-pair*1,Aint1)) =
-               (ce-pair*2,CONS_EXIT_CONST(Ident,$Expression),Aint2)
+               (ce-pair*2,CONS_EXIT_CONST(Ident,$Expression), ,Aint2)
 
   [lcie-1'2] is-integer($Expression) == false,
              is-exit-func($Expression) == false,
              is-make-char-function-call($Expression) == false,
              expression-contains-variables($Expression) == false,
              is-sym-symbol($Expression) == false,
-             (ce-pair*2,Ident,Aint2) := add-to-ce-pairs($Expression,ce-pair*1,Aint1)
+             (ce-pair*2,Ident, ,Aint2) := add-to-ce-pairs($Expression,ce-pair*1,Aint1),
+             $Expression2 := flatten-list-of-chars($Expression)
              =====================================================================
              locate-constants-in-expression($Expression,(ce-pair*1,Aint1)) =
-               (ce-pair*2,(Ident ? Ident : (Ident = $Expression)),Aint2)
+%%               (ce-pair*2,(Ident ? Ident : (Ident = ($Expression))),Aint2)
+                 (ce-pair*2,Ident, if (!Ident) { Ident = $Expression2; }, Aint2) 	
 
   [lcie-1'3] Prime != make_char,
              Prime != check_sym,
              Prime != FUNC_EXIT,
              Prime != CONS_EXIT,
+             Prime != ATmakeList,
              expression-contains-variables(Prime($ActualArg*1)) == true,
-             (ce-pair*2,$ActualArg*2,Aint2) :=
+             (ce-pair*2,$ActualArg*2, Stat*, Aint2) :=
                locate-constants-in-expressions($ActualArg*1,(ce-pair*1,Aint1))
              ==============================
              locate-constants-in-expression(Prime($ActualArg*1),(ce-pair*1,Aint1)) =
-               (ce-pair*2,Prime($ActualArg*2),Aint2)
+               (ce-pair*2,Prime($ActualArg*2), Stat*, Aint2)
 
-  [lcie-1'3] (ce-pair*2,$Expression3,Aint2) :=
+  [lcie-1'4] locate-constants-in-expression(ATmakeList(0),(ce-pair*1,Aint1)) = 
+               (ce-pair*1,ATempty, ,Aint1)
+
+  [lcie-1'3] (ce-pair*2,$Expression3, Stat*, Aint2) :=
                locate-constants-in-expression($Expression2,(ce-pair*1,Aint1))
              ===============================
              locate-constants-in-expression($Expression1 = $Expression2,(ce-pair*1,Aint1)) =
-               (ce-pair*2,$Expression1 = $Expression3,Aint2)
+               (ce-pair*2,$Expression1 = $Expression3, Stat*, Aint2)
 
   [default-lcie-1'4] locate-constants-in-expression($Expression,(ce-pair*,Aint)) =
-                       (ce-pair*,$Expression,Aint)
+                       (ce-pair*,$Expression, ,Aint)
 
-  [lcie-2'1] locate-constants-in-expressions(,(ce-pair*,Aint)) = (ce-pair*,,Aint)
+  [lcie-2'1] locate-constants-in-expressions(,(ce-pair*,Aint)) = (ce-pair*,,,Aint)
 
-  [lcie-2'2] (ce-pair*2,$ActualArg2,Aint2) :=
+  [lcie-2'2] (ce-pair*2,$ActualArg2,Stat*1,Aint2) :=
                locate-constants-in-expression($ActualArg1,(ce-pair*1,Aint1)),
-             (ce-pair*3,$ActualArg*2,Aint3) :=
+             (ce-pair*3,$ActualArg*2,Stat*2,Aint3) :=
                locate-constants-in-expressions($ActualArg*1,(ce-pair*2,Aint2))
              ===============================
              locate-constants-in-expressions($ActualArg1, $ActualArg*1,(ce-pair*1,Aint1)) =
-               (ce-pair*3,$ActualArg2, $ActualArg*2,Aint3)
+               (ce-pair*3,$ActualArg2, $ActualArg*2, Stat*1 ++ Stat*2, Aint3)
 
 equations
 
@@ -211,9 +232,13 @@ equations
 
   [ecv-1'4] expression-contains-variables(identifier(head tail sym)) = false
 
+  [ecv-1'5] expression-contains-variables(String) = false
+
   [default-ecv-1'5] expression-contains-variables($Expression) = true
 
   [escv-2'1] expressions-contain-variables() = false
+
+  [escv-2'3] expression-contains-variables(($Expression)) = expression-contains-variables($Expression)
 
   [escv-2'2] Bool1 := expression-contains-variables($ActualArg1),
              Bool2 := expressions-contain-variables($ActualArg*1)
@@ -324,17 +349,17 @@ equations
              Aint2 := (1+Aint1),
              Ident := int2identifier(constant,Aint1)
              ==================================================
-             add-to-ce-pairs($Expression,,Aint1) = ((Ident,$Expression),Ident,Aint2)
+             add-to-ce-pairs($Expression,,Aint1) = ((Ident,$Expression),Ident,,Aint2)
 
   [acep-1'2] add-to-ce-pairs($Expression,(Ident,$Expression),ce-pair*,Aint) =
-               ((Ident,$Expression),ce-pair*,Ident,Aint)
+               ((Ident,$Expression),ce-pair*,Ident,,Aint)
 
   [acep-1'3] $Expression1 != $Expression2,
-             (ce-pair*2,Ident2,Aint2) :=
+             (ce-pair*2,Ident2,,Aint2) :=
                add-to-ce-pairs($Expression1,ce-pair*1,Aint1)
              ===============================
              add-to-ce-pairs($Expression1,(Ident1,$Expression2),ce-pair*1,Aint1) =
-               ((Ident1,$Expression2),ce-pair*2,Ident2,Aint2)
+               ((Ident1,$Expression2),ce-pair*2,Ident2,,Aint2)
 
 equations
 

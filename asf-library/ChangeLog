@@ -1,5 +1,26 @@
 $Id$
 
+Mon Dec 18 14:56:49 CET 2006 <jurgenv@cwi.nl>
+ * library/languages/asf/compiler/muasf2c/Locate-Constants.{asf,sdf}:
+   changed the way constants are located, and which code is generated
+   for located constants. Before, a constant expression was replaced
+   by an inline lookup such as (constant? constant : expr), which has
+   undefined semantics if a single constant occurs more than once in an 
+   expression. The compiler now collects all constants in an expression,
+   and checks just before the statement that contains the expression
+   whether or not to initialize the constant: 
+   if(!constant) { constant = expr; }.
+   
+   This change allows the compiler to search for more constants in more
+   locations, such as in the FUNC_EXIT (rhs of an equation). Several
+   specifications have shown 2 times more constants detected. Also, it
+   now detects instances of parse_sort and parse_cc as constants,
+   which could take up a significant amount of user time when many traversal
+   functions are used that have variable in the first argument of 
+   the traversal function on the left-hand side of an equation.
+ * library/languages/asf/normalization/Lexicals.asf: fixed an asf warning.
+   (strict variable was not used)
+
 Mon Nov 13 10:29:37 CET 2006 <economop@cwi.nl>
  * library/languages/sdf2/analysis: removed as the code is not used in the 
    trunk. It is implemented in the branch: enable-rn-analysis.
