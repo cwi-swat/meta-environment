@@ -41,7 +41,5 @@ stemvar = $($(shell echo "$*" | tr '-' '_')$1)
 
 SUFFIXES += .eqs .adt .idef .tifs
 
-CLEANFILES += *.tifs *.tif.[ch]
-
 endif
 
