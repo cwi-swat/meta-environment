@@ -2238,53 +2238,72 @@ equations
   <section xml:id="HistoricalNotes">
     <title>Historical Notes</title>
 
-    <para></para>
+    <para>The main publications on ASF+SDF are (inchronological order):</para>
+
+    <itemizedlist>
+      <listitem>
+        <para> J.A. Bergstra, J. Heering and P. Klint (eds), Algebraic
+        Specification, ACM Press/Addison-Wesley, 1989.</para>
+      </listitem>
+
+      <listitem>
+        <para>A. van Deursen, J. Heering and P. Klint, Language Prototyping:
+        An Algebraic Specification Approach Volume 5 of AMAST Series in
+        Computing, World Scientific, Singapore, 1996.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The main publications on implementation techniques related to
+    ASF+SDF are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>P.R.H. Hendriks, Implementation of Modular Algebraic
+        Specifications, dissertation, University of Amsterdam, 1991. </para>
+      </listitem>
+
+      <listitem>
+        <para>H.R. Walters, On Equal terms: implementing Algebraic
+        Specifications, dissertation, University of Amsterdam, 1991.</para>
+      </listitem>
+
+      <listitem>
+        <para>P. Klint, A Meta-Environment for Generating Programming
+        Environments, ACM Transactions on Software Engineering and
+        Methodology, 2(2):176-201,1993.</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, H.A. de Jong, P. Klint and P.A. Olivier,
+        Efficient Annotated Terms, Software, Practice &amp; Experience,
+        30(3):259--291, 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>P.A. Olivier, A Framework for Debugging Heterogeneous
+        Applications, dissertation, University of Amsterdam, 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, J. Heering, P. Klint and P.A. Olivier,
+        Compiling language definitions: The ASF+SDF compiler. ACM Transactions
+        on Programming Languages and Systems, 24 (4):334-368, July
+        2002,</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, P. Klint, and J.J. Vinju, Term Rewriting
+        with Traversal Functions, ACM Transactions on Software Engineering
+        Methodology, 12 (2):152-190, 2003.</para>
+      </listitem>
+
+      <listitem>
+        <para>J. Vinju, Analysis and Transformation of Source Code by Parsing
+        and Rewriting, dissertation, University of Amsterdam, 2005.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Historical notes for SDF only, are given in The Syntax Definition
+    Formalism SDF.</para>
   </section>
-
-  <!--%%\subsubsection{Delaying} \label{Delay}
-%%
-%%Both the compiler and the evaluator are based on innermost rewriting.
-%%In some cases it is more efficient to overrule this rewriting
-%%strategy. The disadvantage of innermost rewriting are redundant work
-%%in some cases and in some cases even non-termination. An example
-%%of the first point and indirectly of the second point is the
-%%evaluation of a conditional (see Figure~\ref{CODE:conditional}), 
-%%using innermost rewriting the evaluation of an conditional 
-%%amounts to evaluating the expression, then part, and else part, independent
-%%of the result of the evaluation of the expression.
-%%
-%%\begin{figure}
-%%\label{CODE:conditional}
-%%\begin{IncCode}
-%%\begin{verbatim}
-%%module Conditional
-%%
-%%imports Layout Expr Booleans
-%%
-
-%%exports
-%%  context-free syntax
-%%    "if" Bool "then" Expr "else" Expr "fi" -> Expr
-%%
-%%hiddens
-%%  variables
-%%    "Bool"[0-9]* -> Bool
-%%    "Expr"[0-9]* -> Expr
-%%
-%%equations
-%%
-%%  [if-t] if true then Expr1 else Expr2 fi = Expr1
-%%  [if-f] if false then Expr1 else Expr2 fi = Expr2
-%%\end{verbatim}
-%%\end{IncCode}
-%%\caption{Equations for conditions}
-%%\end{figure}   
-
-%%\subsubsection{Getters and Setters Functions}
-%%\label{GettersSetters}
-%%
-%%\index{getter functions@getter functions}
-%%\index{setter functions@setter functions}
-
--->
 </article>
