@@ -914,23 +914,26 @@ hiddens
       be a special equation which will only be applied if no other rule
       matches. </para>
 
-      <para>The modules <link
-      linkend="CODE_types"><literal>Types.sdf</literal></link> and <link
-      linkend="Types.asf">Types.asf</link> show an example of the use of a
-      default equation. The problem we want to solve is as follows. Suppose we
-      are solving a typechecking problem and have a sort
-      <literal>Type</literal> that represents the possible types. It is likely
-      that we will need a function <literal>compatible</literal> that checks
-      whether two types are compatible, for instance, when they appear on the
-      left-hand and right-hand side of an assignment statement or when the
-      actual/formal correspondence of procedure parameters has to be checked.
-      Potentially, Type may contain a lot of different type values and
-      comparing them all is a combinatorial problem.</para>
+      <section>
+        <title>Example: Comparing Types</title>
 
-      <example xml:id="CODE_types">
-        <title>Types.sdf</title>
+        <para>The modules <link
+        linkend="CODE_types"><literal>Types.sdf</literal></link> and <link
+        linkend="Types.asf">Types.asf</link> show an example of the use of a
+        default equation. The problem we want to solve is as follows. Suppose
+        we are solving a typechecking problem and have a sort
+        <literal>Type</literal> that represents the possible types. It is
+        likely that we will need a function <literal>compatible</literal> that
+        checks whether two types are compatible, for instance, when they
+        appear on the left-hand and right-hand side of an assignment statement
+        or when the actual/formal correspondence of procedure parameters has
+        to be checked. Potentially, Type may contain a lot of different type
+        values and comparing them all is a combinatorial problem.</para>
 
-        <para><programlisting>module Types
+        <example xml:id="CODE_types">
+          <title>Types.sdf</title>
+
+          <para><programlisting>module Types
 
 imports basic/Whitespace
 imports basic/Booleans
@@ -948,63 +951,65 @@ exports
 hiddens
   variables
     "<replaceable>Type</replaceable>"[0-9]*  -&gt; Type</programlisting></para>
-      </example>
+        </example>
 
-      <para>In Types.sdf, we define a sort <literal>Type</literal> that can
-      have values <literal>natural</literal>, <literal>string</literal> and
-      <literal>nil-type</literal>.</para>
+        <para>In Types.sdf, we define a sort <literal>Type</literal> that can
+        have values <literal>natural</literal>, <literal>string</literal> and
+        <literal>nil-type</literal>.</para>
 
-      <example xml:id="Types.asf">
-        <title>Types.asf</title>
+        <example xml:id="Types.asf">
+          <title>Types.asf</title>
 
-        <programlisting>equations
+          <programlisting>equations
 
   [Type-1]  compatible(natural, natural) = true
   [Type-2]  compatible(string, string)   = true
   [default-Type] 
             compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>)      = false </programlisting>
-      </example>
+        </example>
 
-      <para>In <link linkend="CODE_types"><literal>Types.sdf</literal></link>,
-      we define three equations: two for checking the cases that the arguments
-      of <literal>compatible</literal> are equal and one default equation for
-      checking the remaining cases.</para>
+        <para>In <link
+        linkend="CODE_types"><literal>Types.sdf</literal></link>, we define
+        three equations: two for checking the cases that the arguments of
+        <literal>compatible</literal> are equal and one default equation for
+        checking the remaining cases.</para>
 
-      <para>An alternative definition is given in <link
-      linkend="Types2.asf">Types2.asf</link> where equation
-      <literal>[Type-1]</literal> has a left-hand side that contains the same
-      variable (<replaceable>Type</replaceable>) twice. This has as effect
-      that the left-hand side only matches if the two arguments of
-      <literal>compatible</literal> are identical.</para>
+        <para>An alternative definition is given in <link
+        linkend="Types2.asf">Types2.asf</link> where equation
+        <literal>[Type-1]</literal> has a left-hand side that contains the
+        same variable (<replaceable>Type</replaceable>) twice. This has as
+        effect that the left-hand side only matches if the two arguments of
+        <literal>compatible</literal> are identical.</para>
 
-      <example xml:id="Types2.asf">
-        <title>Types2.asf</title>
+        <example xml:id="Types2.asf">
+          <title>Types2.asf</title>
 
-        <programlisting>equations
+          <programlisting>equations
 
   [Type-1]  compatible(<replaceable>Type</replaceable>, <replaceable>Type</replaceable>)  = true
   [default-Type] 
             compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>) = false </programlisting>
-      </example>
+        </example>
 
-      <para>To complete this story, yet another specification style for this
-      problem exists that uses a negative condition instead of a default
-      equation. This is shown in <link
-      linkend="Types3.asf">Types3.asf</link>.<example xml:id="Types3.asf">
-          <title>Types3.asf</title>
+        <para>To complete this story, yet another specification style for this
+        problem exists that uses a negative condition instead of a default
+        equation. This is shown in <link
+        linkend="Types3.asf">Types3.asf</link>.<example xml:id="Types3.asf">
+            <title>Types3.asf</title>
 
-          <programlisting>equations
+            <programlisting>equations
 
   [Type-1]  compatible(<replaceable>Type</replaceable>, <replaceable>Type</replaceable>)  = true
   [Type-2]       <replaceable>Type1</replaceable> != <replaceable>Type2</replaceable>
             ===============================
             compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>) = false </programlisting>
-        </example></para>
+          </example></para>
 
-      <para>You may not be impressed by the savings that we get in this tiny
-      example. You will, however, be pleasantly surprised when you use the
-      above techniques and see how short specification become when dealing
-      with real-life cases.</para>
+        <para>You may not be impressed by the savings that we get in this tiny
+        example. You will, however, be pleasantly surprised when you use the
+        above techniques and see how short specification become when dealing
+        with real-life cases.</para>
+      </section>
     </section>
 
     <section xml:id="ListMatching">
@@ -1044,13 +1049,16 @@ hiddens
       possible match of the list variable and the repeated evaluation of
       following conditions.</para>
 
-      <para>Let's consider the problem of removing double elements from a
-      list. This shown in Sets.sdf and Sets.asf.</para>
+      <section>
+        <title>Example: Sets</title>
 
-      <example xml:id="Sets.sdf">
-        <title>Sets.sdf</title>
+        <para>Let's consider the problem of removing double elements from a
+        list. This shown in Sets.sdf and Sets.asf.</para>
 
-        <para><programlisting>module Sets
+        <example xml:id="Sets.sdf">
+          <title>Sets.sdf</title>
+
+          <para><programlisting>module Sets
 
 imports basic/Whitespace
 
@@ -1069,147 +1077,252 @@ hiddens
     "Elem"[0-9]*  -&gt; Elem         <co xml:id="co.sets.var-elem" />
     "Elem*"[0-9]* -&gt; {Elem ","}*  <co xml:id="co.sets.var-elem-list" /></programlisting>Notes:</para>
 
-        <calloutlist>
-          <callout arearefs="co.sets.elem">
-            <para>This defines elements as single letters.</para>
-          </callout>
+          <calloutlist>
+            <callout arearefs="co.sets.elem">
+              <para>This defines elements as single letters.</para>
+            </callout>
 
-          <callout arearefs="co.sets.syntax">
-            <para>This defines the syntax of a <literal>Set</literal>: an
-            opening curly bracket, a list of zero or more
-            <literal>Elem</literal>s separated by comma's, followed by a
-            closing curly bracket. This is a typical syntax pattern; don't get
-            confused for the different roles that the curly brackets play: the
-            <literal>"{"</literal> and <literal>"}"</literal> are literal
-            string that are part of the syntax of <literal>Set</literal>s,
-            while <literal>{Elem ","}*</literal> describes a syntactic list of
-            <literal>Elem</literal>s separated by commas.</para>
-          </callout>
+            <callout arearefs="co.sets.syntax">
+              <para>This defines the syntax of a <literal>Set</literal>: an
+              opening curly bracket, a list of zero or more
+              <literal>Elem</literal>s separated by comma's, followed by a
+              closing curly bracket. This is a typical syntax pattern; don't
+              get confused for the different roles that the curly brackets
+              play: the <literal>"{"</literal> and <literal>"}"</literal> are
+              literal string that are part of the syntax of
+              <literal>Set</literal>s, while <literal>{Elem ","}*</literal>
+              describes a syntactic list of <literal>Elem</literal>s separated
+              by commas.</para>
+            </callout>
 
-          <callout arearefs="co.sets.var-elem">
-            <para>This defines variables <literal>Elem1</literal>,
-            <literal>Elem2</literal> and so on of sort
-            <literal>Elem</literal>.</para>
-          </callout>
+            <callout arearefs="co.sets.var-elem">
+              <para>This defines variables <literal>Elem1</literal>,
+              <literal>Elem2</literal> and so on of sort
+              <literal>Elem</literal>.</para>
+            </callout>
 
-          <callout arearefs="co.sets.var-elem-list">
-            <para>This defines variables <literal>Elem*1</literal>,
-            <literal>Elem*2</literal> and so on of sort <literal>{Elem
-            ","}*</literal>. Observe the funny variable name containing the
-            non-alphanumeric character <literal>*</literal>. Some ASF+SDF
-            specification writers use the convention that variables that range
-            over list sorts end on either <literal>*</literal> or
-            <literal>+</literal>.</para>
-          </callout>
-        </calloutlist>
-      </example>
+            <callout arearefs="co.sets.var-elem-list">
+              <para>This defines variables <literal>Elem*1</literal>,
+              <literal>Elem*2</literal> and so on of sort <literal>{Elem
+              ","}*</literal>. Observe the funny variable name containing the
+              non-alphanumeric character <literal>*</literal>. Some ASF+SDF
+              specification writers use the convention that variables that
+              range over list sorts end on either <literal>*</literal> or
+              <literal>+</literal> and maybe followed by digits.</para>
+            </callout>
+          </calloutlist>
+        </example>
 
-      <para>The can now parse Sets like:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>{}</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>{a}</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>{a, b}</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q,
-          r, s, t, u, v, w, x, y, z}</literal></para>
-        </listitem>
-
-        <listitem>
-          <para>and so on.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The actual solution of our problem, removed duplicates from a
-      list, is shown in <link linkend="Sets.asf">Sets.asf</link>. Observe that
-      the single equation has a left-hand side with two occurences of variable
-      Elem, so it will match on a list that contains two identical
-      elements.</para>
-
-      <para>In the right-hand side, one of these occurences is removed.
-      However, this same equation remains applicable as long as the list
-      contains duplicate elements.<example xml:id="Sets.asf">
-          <title>Sets.asf</title>
-
-          <programlisting>equations
-  
-  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3}</programlisting>
-        </example></para>
-
-      <important>
-        <para>This specification of sets is very elegant but may become very
-        expensive to execute when applied to large sets. There are several
-        strategies to solve this:</para>
+        <para>We can now parse sets like:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Use ordered lists and ensure that the insert operation
-            checks for duplicates.</para>
+            <para><literal>{}</literal></para>
           </listitem>
 
           <listitem>
-            <para>Use a more sophisticated representation like, for instance,
-            a balanced tree.</para>
+            <para><literal>{a}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{a, b}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q,
+            r, s, t, u, v, w, x, y, z}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para>and so on.</para>
           </listitem>
         </itemizedlist>
-      </important>
 
-      <para>Another example of list matching in combination with the
-      evaluation of conditions is shown <link
-      linkend="CODE_split">below</link>. A list of elements is split into two
-      parts of equal length, if the list has an even number of elements. In
-      case of a list of uneven length the middle element is ignored. The first
-      part of the list is returned as result.</para>
+        <para>The actual solution of our problem, removed duplicates from a
+        list, is shown in <link linkend="Sets.asf">Sets.asf</link>. Observe
+        that the single equation has a left-hand side with two occurences of
+        variable Elem, so it will match on a list that contains two identical
+        elements.</para>
 
-      <example xml:id="CODE_split">
-        <title>Split-in-two specification</title>
+        <para>In the right-hand side, one of these occurences is removed.
+        However, this same equation remains applicable as long as the list
+        contains duplicate elements.<example xml:id="Sets.asf">
+            <title>Sets.asf</title>
 
-        <para><programlisting>%% Split.sdf
-module Split
+            <programlisting>equations
+  
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3}</programlisting>
+          </example></para>
 
+        <important>
+          <para>This specification of sets is very elegant but may become very
+          expensive to execute when applied to large sets. There are several
+          strategies to solve this:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Use ordered lists and ensure that the insert operation
+              checks for duplicates.</para>
+            </listitem>
+
+            <listitem>
+              <para>Use a more sophisticated representation like, for
+              instance, a balanced tree.</para>
+            </listitem>
+          </itemizedlist>
+        </important>
+      </section>
+
+      <section>
+        <title>Example: Lists</title>
+
+        <para>A sample of operations on lists of integers is shown in <link
+        linkend="Lists.sdf">Lists.sdf</link> and <link
+        linkend="Lists.asf">Lists.asf</link>.</para>
+
+        <example xml:id="Lists.sdf">
+          <title>Lists.sdf</title>
+
+          <para><programlisting>module Lists
+
+imports basic/Booleans
 imports basic/Integers
 imports basic/Whitespace
 
 exports
-  context-free start-symbols List
-  sorts El List
+  context-free start-symbols 
+        Boolean Integer List             <co xml:id="co.lists.start" />
+  sorts List
 
-  lexical syntax
-    [a-z]+ -&gt; El
   context-free syntax
-    {El ","}*          -&gt; List
-    length(List)       -&gt; Integer
-    split-in-two(List) -&gt; List
+    "[" {Integer ","}*  "]"   -&gt; List    <co xml:id="co.lists.list" />
+    List "++" Integer         -&gt; List    <co xml:id="co.lists.conc1" />
+    Integer "++" List         -&gt; List    <co xml:id="co.lists.conc2" />
+    is-element(Integer, List) -&gt; Boolean <co xml:id="co.lists.is-element" />
+    length(List)              -&gt; Integer <co xml:id="co.lists.length" />
+    reverse(List)             -&gt; List    <co xml:id="co.lists.reverse" />
+    sort(List)                -&gt; List    <co xml:id="co.lists.sort" />
 
 hiddens
   variables
-    "El"[0-9]*  -&gt; El
-    "El*"[0-9]* -&gt; {El ","}* 
+    "Int"[0-9]*  -&gt; Integer
+    "Int*"[0-9]* -&gt; {Integer ","}* </programlisting>Notes:<calloutlist>
+              <callout arearefs="co.lists.start">
+                <para>Below, we define functions with result sorts
+                <literal>Boolean</literal>, <literal>Integer</literal> and
+                <literal>List</literal> and all these sorts will probably
+                occur in input terms. It is therefore a good idea declare all
+                these sort as start symbol.</para>
+              </callout>
 
-%% Split.asf
-equations
+              <callout arearefs="co.lists.list">
+                <para>Define the syntax of lists of integers.</para>
+              </callout>
 
-  [l-1] length() = 0
+              <callout arearefs="co.lists.conc1">
+                <para>Append an integer to a list.</para>
+              </callout>
 
-  [l-2] length(El, El*) = 1 + length(El*)
+              <callout arearefs="co.lists.conc2">
+                <para>Prepend an integer to a list.</para>
+              </callout>
 
-  [s-1] length(El*1) == length(El*2)
-        ====&gt;
-        split-in-two(El*1, El*2) = El*1
+              <callout arearefs="co.lists.is-element">
+                <para>Check for element in list.</para>
+              </callout>
 
-  [s-1] length(El*1) == length(El*2)
-        ====&gt;
-        split-in-two(El*1, El, El*2) = El*1</programlisting></para>
-      </example>
+              <callout arearefs="co.lists.length">
+                <para>Determine length of list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.reverse">
+                <para>Reverse a list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.sort">
+                <para>Sort a list</para>
+              </callout>
+            </calloutlist></para>
+
+          <para>Given these syntax definitions, we can define the meaning of
+          the various functions in <link
+          linkend="Lists.asf">Lists.asf</link>.</para>
+        </example>
+
+        <example xml:id="Lists.asf">
+          <title>Lists.asf</title>
+
+          <programlisting>equations
+  [app-1] [Int*] ++ Int = [Int*, Int]                       <co
+              xml:id="co.lists.asf.app" />
+  [pre-1] Int ++ [Int*] = [Int, Int*]
+
+  [len-1] length([]) = 0                                    <co
+              xml:id="co.lists.asf.length" />
+  [len-2] length([Int, Int*]) = 1 + length([Int*])
+
+  [is-1] is-element(Int, [Int*1, Int, Int*2]) = true        <co
+              xml:id="co.lists.asf.is-element" />
+  [default-is]
+         is-element(Int, [Int*]) = false
+
+  [rev-1] reverse([]) = []                                  <co
+              xml:id="co.lists.asf.reverse" />
+  [rev-2] reverse([Int, Int*]) = reverse([Int*]) ++ Int
+
+  [srt-1]                          Int1 &gt; Int2 == true      <co
+              xml:id="co.lists.asf.sort" />
+          ================================================================================
+         sort([Int*1, Int1, Int*2, Int2, Int*3]) = sort([Int*1, Int2, Int*2, Int1, Int*3])
+   [default-srt]
+          sort([Int*]) = [Int*]</programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.lists.asf.app">
+              <para>The definition of the append and prepend operators
+              <literal>++</literal> illustrates how list variables like
+              <literal>Int*</literal> can be used to first extract elements
+              from a list and later insert them in a new list.</para>
+            </callout>
+
+            <callout arearefs="co.lists.asf.length">
+              <para>The <literal>length</literal> function is defined by a
+              simple induction on lists.</para>
+            </callout>
+
+            <callout arearefs="co.lists.asf.is-element">
+              <para>The two occurrences of the variable <literal>Int</literal>
+              in equation <literal>[is-1]</literal> illustrate the use of list
+              matching for a search for a given element in a list.</para>
+            </callout>
+
+            <callout arearefs="co.lists.asf.reverse">
+              <para>The reverse functions is defined by recurring over the
+              elements of the list. Note how the append operator
+              <literal>++</literal> is used in equation
+              <literal>[rev-2]</literal>. One can avoid using an auxiliary
+              operator at the expense of introducing a condition and an extra
+              variable:</para>
+
+              <programlisting>[rev-2']      [Int*1] := reverse([Int*])
+          ===================================
+          reverse([Int, Int*]) = [Int*1, Int]</programlisting>
+            </callout>
+
+            <callout arearefs="co.lists.asf.sort">
+              <para>The equations for sort show, once more, the expressive
+              power of list matching: in the left-hand side of
+              <literal>[srt-1]</literal> two elements
+              <replaceable>Int1</replaceable> and
+              <replaceable>Int2</replaceable> are picked and if Int is greater
+              than <replaceable>Int2</replaceable>, the elements are swapped
+              and sort is applied again.</para>
+            </callout>
+          </calloutlist>
+        </example>
+      </section>
     </section>
 
     <section xml:id="MemoFunctions">
