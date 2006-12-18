@@ -30,9 +30,12 @@ asfc_LDADD   = $(ASC_SUPPORT_LIBS)
 asfc_CPPFLAGS =  \
 		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
 		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
+		-DCFLAGS="\"$(CFLAGS)\""   \
 		-DCOMPILE="\"$(CC)\"" \
 		-DLINK="\"$(ASFC_C_LINKER)\"" \
-		$(ASC_SUPPORT_CFLAGS)
+		$(ASC_SUPPORT_CFLAGS) \
+		-Wno-sequence-point
+
 asfc_SOURCES = asfc.tif.c \
                asfc.c \
                chars.c \
@@ -50,6 +53,7 @@ test_asfc_CPPFLAGS =  \
 		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
 		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
 		-DCOMPILE="\"$(CC)\"" \
+		-DCFLAGS="\"$(CFLAGS)\""   \
 		-DLINK="\"$(ASFC_TEST_C_LINKER)\"" \
 		$(ASC_SUPPORT_CFLAGS)
 test_asfc_SOURCES = $(asfc_SOURCES)

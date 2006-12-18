@@ -1,5 +1,14 @@
 $Id$
 
+Mon Dec 18 12:59:02 CET 2006 <jurgenv@cwi.nl>
+ * semantics/asfc/src/c-compiler.c,Makefile.am: gcc uses
+   CFLAGS variable (bound at compile-time of asfc) for compiling
+   specifications.
+ * semantics/asfc/src/Compiler.c: regenerated code with smarter and
+   more efficient constant caching.
+ * semantics/asf-operations/src/ASF-Normalizations.c: regenerated code
+   with smarter and more efficient constant caching.
+
 Mon Jul 31 22:37:31 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfc/src/c-compiler.c,Makefile.am: the ASF compiler now
    uses libtool to link ASF compiled specifications. The size of
