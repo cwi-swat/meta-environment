@@ -18,8 +18,8 @@ equations
    [default-srt]
           sort([Int*]) = [Int*]
 
-%%tests
-%%   [append1] [1,2,3] ++ 4 == [1,2,3,4]
-%%   [append2] 1 ++ [2,3,4] == [1,2,3,4]
-%%   [length1] length([1,2,3]) == 3
-%%  [is-element1] is-element(2, [1,2,3]) == true
+tests
+  [append1] [1,2,3] ++ 4 == [1,2,3,4]
+   [append2] 1 ++ [2,3,4] == [1,2,3,4]
+   [length1] length([1,2,3]) == 3
+  [is-element1] is-element(2, [1,2,3]) == true

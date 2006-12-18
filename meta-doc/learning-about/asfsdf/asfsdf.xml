@@ -133,6 +133,28 @@
     <literal>true</literal>, <literal>not(false)</literal>, and <literal>true
     | Bool</literal>.</para>
 
+    <section>
+      <title>The Equations section</title>
+
+      <para>Equations are always contained in an equations section that has
+      the following structure:</para>
+
+      <programlisting>equations
+    &lt;Equation&gt;*</programlisting>
+
+      <para>In other words, zero or more equations. These may be unconditonal
+      or conditional equations as described below.</para>
+
+      <important>
+        <para> It is a common mistake to forget to either include
+        basic/Whitespace or <literal>basic/Comments</literal> or to define
+        layout or comments yourself. The effect is that no syntax for
+        whitespace or comments is defined, that the equations cannot be
+        parsed, and that you get seemingly unexplainable error messages about
+        parse errors.</para>
+      </important>
+    </section>
+
     <section xml:id="UnconditionalEquations">
       <title>Unconditional Equations</title>
 
@@ -412,10 +434,12 @@ exports
         </example>
 
         <important>
-          <para>It is a common mistake to forget to either include
-          <literal>basic/Whitespace</literal> or to define layout and comments
-          yourself. The effect will be that you get seemingly unexplainable
-          parse errors in your equations.</para>
+          <para> It is a common mistake to forget to either include
+          basic/Whitespace or <literal>basic/Comments</literal> or to define
+          layout or comments yourself. The effect is that no syntax for
+          whitespace or comments is defined, that the equations cannot be
+          parsed, and that you get seemingly unexplainable error messages
+          about parse errors.</para>
         </important>
 
         <important>
@@ -1053,12 +1077,13 @@ hiddens
         <title>Example: Sets</title>
 
         <para>Let's consider the problem of removing double elements from a
-        list. This shown in Sets.sdf and Sets.asf.</para>
+        list. This shown is in <link linkend="Sets.sdf">Sets.sdf</link> and
+        <link linkend="Sets.asf">Sets.asf</link>.</para>
 
         <example xml:id="Sets.sdf">
           <title>Sets.sdf</title>
 
-          <para><programlisting>module Sets
+          <programlisting>module Sets
 
 imports basic/Whitespace
 
@@ -1075,7 +1100,9 @@ exports
 hiddens
   variables
     "Elem"[0-9]*  -&gt; Elem         <co xml:id="co.sets.var-elem" />
-    "Elem*"[0-9]* -&gt; {Elem ","}*  <co xml:id="co.sets.var-elem-list" /></programlisting>Notes:</para>
+    "Elem*"[0-9]* -&gt; {Elem ","}*  <co xml:id="co.sets.var-elem-list" /></programlisting>
+
+          <para>Notes:</para>
 
           <calloutlist>
             <callout arearefs="co.sets.elem">
@@ -1206,7 +1233,7 @@ exports
 hiddens
   variables
     "Int"[0-9]*  -&gt; Integer
-    "Int*"[0-9]* -&gt; {Integer ","}* </programlisting>Notes:<calloutlist>
+    "Int*"[0-9]* -&gt; {Integer ","}* </programlisting>Notes: <calloutlist>
               <callout arearefs="co.lists.start">
                 <para>In the context-free syntax below, we define functions
                 with result sorts <literal>Boolean</literal>,
@@ -1244,11 +1271,11 @@ hiddens
                 <para>Sort a list</para>
               </callout>
             </calloutlist></para>
-
-          <para>Given these syntax definitions, we can define the meaning of
-          the various functions in <link
-          linkend="Lists.asf">Lists.asf</link>.</para>
         </example>
+
+        <para>Given these syntax definitions, we can define the meaning of the
+        various functions in <link
+        linkend="Lists.asf">Lists.asf</link>.</para>
 
         <example xml:id="Lists.asf">
           <title>Lists.asf</title>
@@ -1460,6 +1487,10 @@ exports
     <section xml:id="LexicalConstructorFunctions">
       <title>Lexical Constructor Functions</title>
 
+      <warning>
+        <para>This section has still to be converted to V2.0.</para>
+      </warning>
+
       <para>The only way to access the actual characters of a lexical token is
       by means of <emphasis>lexical constructor functions</emphasis>. For each
       lexical sort <literal>LEX</literal> a lexical constructor function is
@@ -1543,8 +1574,6 @@ equations
     <section xml:id="TraversalFunctions">
       <title>Traversal Functions</title>
 
-      <!--\index{traversal functions@traversal functions} \index{accumulator@accumulator} \index{transformer@transformer}-->
-
       <para>Program analysis and program transformation usually take the
       syntax tree of a program as starting point. One common problem that one
       encounters is how to express the <emphasis>traversal</emphasis> of the
@@ -1559,119 +1588,119 @@ equations
       should consider many node categories and the size of its definition will
       grow accordingly. This becomes even more dramatic if we realize that the
       traversal function will only do some real work (apart from traversing)
-      for very few node categories. Traversal functions in ASF+SDF
-      \cite{BKV03} solve this problem. We distinguish three kinds of traversal
-      functions, defined as follows.</para>
+      for very few node categories. Traversal functions in ASF+SDF solve this
+      problem.</para>
 
-      <formalpara>
-        <title>Transformer</title>
+      <section>
+        <title>Definition</title>
 
-        <para>A <emphasis>transformer</emphasis> is a sort-preserving
-        transformation that will traverse its first argument. Possible extra
-        arguments may contain additional data that can be used (but not
-        modified) during the traversal. A transformer is declared as follows:
-        <programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, ..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>1</subscript> {traversal(trafo, ...)}</programlisting>Because
-        a transformer always returns the same sort, it is type-safe. A
-        transformer is used to transform a tree.</para>
-      </formalpara>
+        <para>We distinguish three kinds of traversal functions, defined as
+        follows.</para>
 
-      <formalpara>
-        <title>Accumulator</title>
+        <formalpara>
+          <title>Transformer</title>
 
-        <para>An <emphasis>accumulator</emphasis> is a mapping of all node
-        types to a single type. It will traverse its first argument, while the
-        second argument keeps the accumulated value. An accumulator is
-        declared as follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>2</subscript> {traversal(accu, ...)}</programlisting>After
-        each application of an accumulator, the accumulated argument is
-        updated. The next application of the accumulator, possibly somewhere
-        else in the term, will use the <emphasis>new</emphasis> value of the
-        accumulated argument. In other words, the accumulator acts as a
-        global, modifiable, state during the traversal. An accumulator
-        function never changes the tree, only its accumulated argument.
-        Furthermore, the type of the second argument has to be equal to the
-        result type. The end-result of an accumulator is the value of the
-        accumulated argument. By these restrictions, an accumulator is also
-        type-safe for every instantiation. An accumulator is meant to be used
-        to extract information from a tree.</para>
-      </formalpara>
+          <para>A <emphasis>transformer</emphasis> is a sort-preserving
+          transformation that will traverse its first argument. Possible extra
+          arguments may contain additional data that can be used (but not
+          modified) during the traversal. A transformer is declared as
+          follows: <programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, ..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>1</subscript> {traversal(trafo, ...)}</programlisting>Because
+          a transformer always returns the same sort, it is type-safe. A
+          transformer is used to transform a tree.</para>
+        </formalpara>
 
-      <formalpara>
-        <title>Accumulating transformer</title>
+        <formalpara>
+          <title>Accumulator</title>
 
-        <para>An <emphasis>accumulating transformer</emphasis> is a sort
-        preserving transformation that accumulates information while
-        traversing its first argument. The second argument maintains the
-        accumulated value. The return value of an accumulating transformer is
-        a tuple consisting of the transformed first argument and accumulated
-        value. An accumulating transformer is declared as
-        follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>&lt;<replaceable>S</replaceable><subscript>1</subscript>, S</replaceable><subscript>2</subscript>&gt; {traversal(accu, trafo, ...)}</programlisting>An
-        accumulating transformer is used to simultaneously extract information
-        from a tree and transform it.</para>
-      </formalpara>
+          <para>An <emphasis>accumulator</emphasis> is a mapping of all node
+          types to a single type. It will traverse its first argument, while
+          the second argument keeps the accumulated value. An accumulator is
+          declared as follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>2</subscript> {traversal(accu, ...)}</programlisting>After
+          each application of an accumulator, the accumulated argument is
+          updated. The next application of the accumulator, possibly somewhere
+          else in the term, will use the <emphasis>new</emphasis> value of the
+          accumulated argument. In other words, the accumulator acts as a
+          global, modifiable, state during the traversal. An accumulator
+          function never changes the tree, only its accumulated argument.
+          Furthermore, the type of the second argument has to be equal to the
+          result type. The end-result of an accumulator is the value of the
+          accumulated argument. By these restrictions, an accumulator is also
+          type-safe for every instantiation. An accumulator is meant to be
+          used to extract information from a tree.</para>
+        </formalpara>
 
-      <formalpara>
-        <title>Visiting Orders</title>
+        <formalpara>
+          <title>Accumulating transformer</title>
 
-        <para>Having these three types of traversals, they must be completed
-        with visiting orders. Visiting orders determine the order of traversal
-        and the <emphasis>depth</emphasis> of the traversal. We provide the
-        following two strategies for each type of traversal:</para>
-      </formalpara>
+          <para>An <emphasis>accumulating transformer</emphasis> is a sort
+          preserving transformation that accumulates information while
+          traversing its first argument. The second argument maintains the
+          accumulated value. The return value of an accumulating transformer
+          is a tuple consisting of the transformed first argument and
+          accumulated value. An accumulating transformer is declared as
+          follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>&lt;<replaceable>S</replaceable><subscript>1</subscript>, S</replaceable><subscript>2</subscript>&gt; {traversal(accu, trafo, ...)}</programlisting>An
+          accumulating transformer is used to simultaneously extract
+          information from a tree and transform it.</para>
+        </formalpara>
 
-      <itemizedlist>
-        <listitem>
-          <para>Bottom-up: the traversal visits <emphasis>all</emphasis> the
-          subtrees of a node where the visiting function applies in an
-          <emphasis>bottom-up</emphasis> fashion. The annotation
-          <literal>bottom-up</literal> selects this behavior. A traversal
-          function without an explicit indication of a visiting strategy also
-          uses the bottom-up strategy.</para>
-        </listitem>
+        <formalpara>
+          <title>Visiting Orders</title>
 
-        <listitem>
-          <para>Top-down: the traversal visits the subtrees of a node in an
-          top-down fashion and stops recurring at the first node where the
-          visiting function applies and does not visit the subtrees of that
-          node. The annotation <literal>top-down</literal> selects this
-          behavior.</para>
-        </listitem>
-      </itemizedlist>
+          <para>Having these three types of traversals, they must be completed
+          with visiting orders. Visiting orders determine the order of
+          traversal and the <emphasis>depth</emphasis> of the traversal. We
+          provide the following two strategies for each type of
+          traversal:</para>
+        </formalpara>
 
-      <para>Beside the three types of traversals and the order of visiting, we
-      can also influence whether we want to stop or continue at the matching
-      occurrences:</para>
+        <itemizedlist>
+          <listitem>
+            <para>Bottom-up: the traversal visits <emphasis>all</emphasis> the
+            subtrees of a node where the visiting function applies in an
+            <emphasis>bottom-up</emphasis> fashion. The annotation
+            <literal>bottom-up</literal> selects this behavior. A traversal
+            function without an explicit indication of a visiting strategy
+            also uses the bottom-up strategy.</para>
+          </listitem>
 
-      <itemizedlist>
-        <listitem>
-          <para>Break: the traversal stops at matching occurrences.</para>
-        </listitem>
+          <listitem>
+            <para>Top-down: the traversal visits the subtrees of a node in an
+            top-down fashion and stops recurring at the first node where the
+            visiting function applies and does not visit the subtrees of that
+            node. The annotation <literal>top-down</literal> selects this
+            behavior.</para>
+          </listitem>
+        </itemizedlist>
 
-        <listitem>
-          <para>Continue: the traversal continues at matching
-          occurrences.</para>
-        </listitem>
-      </itemizedlist>
+        <para>Beside the three types of traversals and the order of visiting,
+        we can also influence whether we want to stop or continue at the
+        matching occurrences:</para>
 
-      <para>The visiting strategies in combination with the continuation
-      strategies is visualized in the \link{``traversal cube''}[, see
-      Figure~\Ref]{FIG:treetraversals}. The current implementation of the
-      traversal mechanism only supports the left-to-right visiting
-      strategy.</para>
+        <itemizedlist>
+          <listitem>
+            <para>Break: the traversal stops at matching occurrences.</para>
+          </listitem>
 
-      <para>\begin{figure} \begin{center} \begin{Label}{FIG:treetraversals} \T
-      \includegraphics[width=8cm]{order} \W \htmlimage{order.gif} \caption{The
-      ``traversal cube'': principal ways of traversing a tree} \end{Label}
-      \end{center} \end{figure} We give two simple examples of traversal
-      functions that are both based on the <link
-      linkend="CODE_tree-language">tree language</link> that describes binary
-      prefix expressions with natural numbers as leaves. Examples are
-      <literal>f(0,1)</literal> and <literal>f(g(1,2),
-      h(3,4))</literal>.</para>
+          <listitem>
+            <para>Continue: the traversal continues at matching
+            occurrences.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
 
-      <example xml:id="CODE_tree-language">
-        <title>A simple tree language</title>
+      <section>
+        <title>Examples</title>
 
-        <para><programlisting>module Tree-syntax
+        <para>We give two simple examples of traversal functions that are both
+        based on the <link linkend="CODE_tree-language">tree language</link>
+        that describes binary prefix expressions with natural numbers as
+        leaves. Examples are <literal>f(0,1)</literal> and <literal>f(g(1,2),
+        h(3,4))</literal>.</para>
+
+        <example xml:id="CODE_tree-language">
+          <title>A simple tree language</title>
+
+          <para><programlisting>module Tree-syntax
 
 imports basic/Integer
 imports basic/Whitespace
@@ -1685,17 +1714,17 @@ exports
     f(Tree, Tree) -&gt; Tree
     g(Tree, Tree) -&gt; Tree
     h(Tree, Tree) -&gt; Tree</programlisting></para>
-      </example>
+        </example>
 
-      <para>Our <link linkend="CODE_inc">first example</link> transforms a
-      given tree into a new tree in which all numbers have been
-      incremented.</para>
+        <para>Our <link linkend="CODE_inc">first example</link> transforms a
+        given tree into a new tree in which all numbers have been
+        incremented.</para>
 
-      <example xml:id="CODE_inc">
-        <title>The transformer <literal>inc</literal> increments all numbers
-        in a tree</title>
+        <para><example xml:id="CODE_inc">
+            <title>The transformer <literal>inc</literal> increments all
+            numbers in a tree</title>
 
-        <para><programlisting>module Tree-inc
+            <para><programlisting>module Tree-inc
 imports Tree-syntax
 
 exports
@@ -1708,16 +1737,14 @@ hiddens
 
 equations
   [1] inc(N) = N + 1</programlisting></para>
-      </example>
+          </example>Our <link linkend="CODE_sum">second example</link>
+        computes the sum of all numbers in a tree.</para>
 
-      <para>Our <link linkend="CODE_sum">second example</link> computes the
-      sum of all numbers in a tree.</para>
+        <example>
+          <title>The accumulator <literal>sum</literal> that sums all numbers
+          in a tree</title>
 
-      <example xml:id="CODE_sum">
-        <title>The accumulator <literal>sum</literal> that sums all numbers in
-        a tree</title>
-
-        <para><programlisting>module Tree-sum
+          <para><programlisting>module Tree-sum
 imports Tree-syntax
 exports
   context-free syntax
@@ -1729,8 +1756,13 @@ hiddens
 
 equations
   [1] sum(N1, N2) = N1 + N2</programlisting></para>
+        </example>
+      </section>
 
-        <para>The SDF definition of a traversal function has to fulfill a
+      <section>
+        <title>Requirements</title>
+
+        <para>The ASF+SDF definition of a traversal function has to fulfill a
         number of requirements:</para>
 
         <itemizedlist>
@@ -1745,30 +1777,28 @@ equations
 
           <listitem>
             <para>The first argument of the prefix function is always a sort
-            of a node of the tree that is traversed, for both accumulating as
-            well as transformation functions.</para>
+            of a node of the tree that is traversed.</para>
           </listitem>
 
           <listitem>
-            <para>In case of a transformation function the result sort
+            <para>In case of a transformer, the result sort
             <replaceable>Tree</replaceable> should always be same as the sort
             of the first argument:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable> {traversal(trafo, ...)}</programlisting></para>
           </listitem>
 
           <listitem>
-            <para>In case of an accumulating function, the second argument
-            <replaceable>Accu</replaceable> represents the accumulator and the
-            result sort should be of the same sort:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Accu</replaceable> {traversal(accu, ...)}</programlisting></para>
+            <para>In case of an accumulator, the second argument
+            <replaceable>Accu</replaceable> represents the accumulated value
+            and the result sort should be of the same sort:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Accu</replaceable> {traversal(accu, ...)}</programlisting></para>
           </listitem>
 
           <listitem>
-            <para>In case of an accumulating transformation function, the
-            first argument represents the tree node
-            <replaceable>Tree</replaceable>, the second the accumulator
-            <replaceable>Accu</replaceable>, and the result sort should be a
-            tuple consisting of the tree node sort (first element of the
-            tuple) and the accumulator (second element of the
-            tuple):<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; &lt;<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>&gt; {traversal(accu, trafo, ...)}</programlisting></para>
+            <para>In case of an accumulating transformer, the first argument
+            represents the tree node <replaceable>Tree</replaceable>, the
+            second the accumulator <replaceable>Accu</replaceable>, and the
+            result sort should be a tuple consisting of the tree node sort
+            (first element of the tuple) and the accumulator (second element
+            of the tuple):<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; &lt;<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>&gt; {traversal(accu, trafo, ...)}</programlisting></para>
           </listitem>
 
           <listitem>
@@ -1795,16 +1825,40 @@ equations
 <replaceable>tf</replaceable>2(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>,<replaceable> A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting></para>
           </listitem>
         </itemizedlist>
-      </example>
 
-      <para>In the SDF part of a module it is needed to define traversal
-      functions for all sorts which are needed in the equations.</para>
+        <para>In the SDF part of a module it is needed to define traversal
+        functions for all sorts which are needed in the equations.</para>
+      </section>
     </section>
 
     <section xml:id="Tests">
       <title>Tests</title>
 
-      <para></para>
+      <para>Specification writers are supposed to make no errors, but we are
+      all human. It is therefore convenient to explicitly state your
+      expectations about the normal forms for some typical input terms. The
+      tests in ASF+SDF provide a convenient way to document this and to run
+      unit test for a module.</para>
+
+      <para>Tests are always contained in an tests section that has the
+      following structure:</para>
+
+      <programlisting>tests
+    &lt;Test&gt;*</programlisting>
+
+      <para>Each test has the form</para>
+
+      <programlisting>[<replaceable>TagId</replaceable>] <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>
+
+      <para>where <replaceable>L</replaceable> and
+      <replaceable>R</replaceable> are both closed terms (i.e., terms without
+      variables) of the same sort.</para>
+
+      <section>
+        <title>Example</title>
+
+        <para></para>
+      </section>
     </section>
 
     <section xml:id="WhichSpecsAreExecutable">
@@ -2242,7 +2296,7 @@ equations
 
     <itemizedlist>
       <listitem>
-        <para> J.A. Bergstra, J. Heering and P. Klint (eds), Algebraic
+        <para>J.A. Bergstra, J. Heering and P. Klint (eds), Algebraic
         Specification, ACM Press/Addison-Wesley, 1989.</para>
       </listitem>
 
@@ -2259,7 +2313,7 @@ equations
     <itemizedlist>
       <listitem>
         <para>P.R.H. Hendriks, Implementation of Modular Algebraic
-        Specifications, dissertation, University of Amsterdam, 1991. </para>
+        Specifications, dissertation, University of Amsterdam, 1991.</para>
       </listitem>
 
       <listitem>
