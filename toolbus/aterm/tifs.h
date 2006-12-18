@@ -8,6 +8,7 @@ ATermList read_tifs_from_named_file(const char *file);
 
 ATermList extract_rec_from_tifs(ATermList tifs);
 ATermList extract_tool_from_tifs(ATermList tifs, const char *tool);
+const char* extract_toolname(ATermList tifs);
 
 void write_tifs_to_named_file(ATermList tifs, const char *file);
 

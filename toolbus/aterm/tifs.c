@@ -115,14 +115,14 @@ ATermList extract_rec_from_tifs(ATermList tifs)
 ATermList extract_tool_from_tifs(ATermList tifs, const char *tool)
 {
   ATermList result = ATempty;
+  const char *name = NULL;
 
   while (!ATisEmpty(tifs)) {
     ATerm tif = ATgetFirst(tifs);
     ATermPlaceholder ph;
     char *primitive;
     if (ATmatch(tif, "<appl(<placeholder>,<list>)>", &primitive, &ph, NULL)) {
-      char *name;
-      if (ATmatch((ATerm)ph, "<appl>", &name) && streq(name, tool)) {
+      if (ATmatch((ATerm)ph, "<appl>", &name) && ((tool == NULL) || streq(name, tool))) {
 	result = ATinsert(result, tif);
       }
     }
@@ -131,6 +131,29 @@ ATermList extract_tool_from_tifs(ATermList tifs, const char *tool)
   }
 
   return result;
+}
+
+/*}}}  */
+/*{{{  ATermList extract_tool_from_tifs(ATermList tifs, const char *tool) */
+
+const char* extract_toolname(ATermList tifs)
+{
+  const char *name = NULL;
+
+  while (!ATisEmpty(tifs)) {
+    ATerm tif = ATgetFirst(tifs);
+    ATermPlaceholder ph;
+    char *primitive;
+    if (ATmatch(tif, "<appl(<placeholder>,<list>)>", &primitive, &ph, NULL)) {
+      if (ATmatch((ATerm)ph, "<appl>", &name)) {
+	return name;
+      }
+    }
+
+    tifs = ATgetNext(tifs);
+  }
+
+  return NULL;
 }
 
 /*}}}  */
@@ -147,8 +170,6 @@ ATermList generalize_tifs(ATermList tifs)
     ATermList newargs = ATempty;
     ATerm tif = ATgetFirst(tifs), newtif, tool;
     ATerm call;
-
-    ATwarning("tif: %t\n", tif);
 
     if (ATmatch(tif, "rec-terminate(<term>,<term>)", NULL, NULL)
 	|| ATmatch(tif, "rec-ack-event(<term>,<term>)", NULL, NULL)) {

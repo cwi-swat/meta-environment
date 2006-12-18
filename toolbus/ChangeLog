@@ -1,5 +1,11 @@
 $Id$
 
+Mon Dec 18 16:02:09 CET 2006 <jurgenv@cwi.nl>
+ * aterms/{tifs,tifstoc}.[ch]: made tifstoc usage simpler. You can
+   omit the -tool argument (which is always wrong) if there is only
+   one tool interface in the tifs file. This is typically so for generating
+   tifs from .idef files. 
+
 Thu Oct 19 11:47:58 CEST 2006 <jurgenv@cwi.nl>
  * toolbus/calls.c: if a dynamic call fails because no such
    process can be found or the signature of the arguments do
