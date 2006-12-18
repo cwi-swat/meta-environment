@@ -1,0 +1,4 @@
+equations
+
+[1] add(0, X) = X
+[2] add(succ(X), Y) = succ(add(X,Y))

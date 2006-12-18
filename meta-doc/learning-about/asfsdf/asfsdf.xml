@@ -287,7 +287,7 @@
         indefinitely. We do not check for these two properties.</para>
       </important>
 
-      <para> If the selected subterm and the left-hand side of a rule (more
+      <para>If the selected subterm and the left-hand side of a rule (more
       precisely: of the left-hand side of its conclusion) match, we say that a
       <emphasis>redex</emphasis> has been found and the following happens. The
       conditions of the rule are evaluated and if the evaluation of a
@@ -912,7 +912,7 @@ hiddens
       this behaviour. If the <replaceable>TagId</replaceable> of an equation
       starts with <literal>default-</literal> this equation is considered to
       be a special equation which will only be applied if no other rule
-      matches. </para>
+      matches.</para>
 
       <section>
         <title>Example: Comparing Types</title>
@@ -1208,11 +1208,12 @@ hiddens
     "Int"[0-9]*  -&gt; Integer
     "Int*"[0-9]* -&gt; {Integer ","}* </programlisting>Notes:<calloutlist>
               <callout arearefs="co.lists.start">
-                <para>Below, we define functions with result sorts
-                <literal>Boolean</literal>, <literal>Integer</literal> and
-                <literal>List</literal> and all these sorts will probably
-                occur in input terms. It is therefore a good idea declare all
-                these sort as start symbol.</para>
+                <para>In the context-free syntax below, we define functions
+                with result sorts <literal>Boolean</literal>,
+                <literal>Integer</literal> and <literal>List</literal> and all
+                these sorts will probably occur in input terms. It is
+                therefore a good idea to declare all these sort as start
+                symbol.</para>
               </callout>
 
               <callout arearefs="co.lists.list">
@@ -1272,10 +1273,10 @@ hiddens
 
   [srt-1]                          Int1 &gt; Int2 == true      <co
               xml:id="co.lists.asf.sort" />
-          ================================================================================
+         =================================================================================
          sort([Int*1, Int1, Int*2, Int2, Int*3]) = sort([Int*1, Int2, Int*2, Int1, Int*3])
-   [default-srt]
-          sort([Int*]) = [Int*]</programlisting>
+  [default-srt]
+         sort([Int*]) = [Int*]</programlisting>
 
           <para>Notes:</para>
 
@@ -1284,7 +1285,8 @@ hiddens
               <para>The definition of the append and prepend operators
               <literal>++</literal> illustrates how list variables like
               <literal>Int*</literal> can be used to first extract elements
-              from a list and later insert them in a new list.</para>
+              from a list (on the left-hand side) and later insert them in a
+              new list (on the right-hand side).</para>
             </callout>
 
             <callout arearefs="co.lists.asf.length">
@@ -1333,126 +1335,152 @@ hiddens
       <para>Computations may contain unnecessary repetitions. This is the case
       when a function with the same argument values is computed more than
       once. Memo functions exploit this behaviour and can improve the
-      efficiency of ASF+SDF specifications. Given a set of argument values for
-      some function the normal form can be obtained via rewriting. It is
-      possible that some function is called with the same set of arguments
-      over and over again. Each time the function is rewritten to obtain the
-      same normal again. By means of adding the <literal>memo</literal>
-      attribute, this behaviour is improved by storing the set of argument
-      values and the derived normal form in a memo-table. For each set of
-      argument values it is checked whether there exists a normal form in the
-      memo-table. If so, this normal form is returned. If not, the function
-      given this set of argument values is normalized and stored in the
-      memo-table. There is some overhead involved in accessing the memo-table.
-      Therefore, it is not wise to add the memo attribute to each function.
-      With respect to the operational behaviour adding a memo attribute does
-      not have any effect. The Fibonacci function shown <link
-      linkend="CODE_fib">below</link> is decorated with the memo attribute to
-      improve its efficiency.</para>
+      efficiency of ASF+SDF specifications considerably. They are defined by
+      adding a <literal>memo</literal> attribute to function definition</para>
 
-      <example xml:id="CODE_fib">
-        <title>Using the memo attribute when defining Fibonacci</title>
+      <para>Memo functions are executed in a special manner by storing, on
+      each invocation, the set of argument values and the derived normal form
+      in a <emphasis>memo table</emphasis>. On a subsequent invocation with
+      given arguments, it is first checked whether the function has been
+      computed before with those arguments. If this is the case, the normal
+      form stored in the memo table is returned as value. If not, the function
+      is normalized as usual, the combination of arguments and computed normal
+      form is stored in the memo table, and the normal form is returned as
+      value.</para>
 
-        <para><programlisting>module Fib
+      <para>Adding a <literal>memo</literal> attribute does not affect the
+      meaning of a function. There is, however, some overhead involved in
+      accessing the memo table and it is therefore not a good idea to add the
+      memo attribute to each function.</para>
+
+      <important>
+        <para>There are currently no good tools to determine which functions
+        should become memo functions. This can only be determined by
+        experimentation.</para>
+      </important>
+
+      <section>
+        <title>Example: Fibonacci</title>
+
+        <para>The Fibonacci function shown in <link
+        linkend="Fib.sdf">Fib.sdf</link> and <link
+        linkend="Fib.asf">Fib.asf</link> below illustrates the use of
+        memoization.</para>
+
+        <para>is decorated with the memo attribute to improve its
+        efficiency.</para>
+
+        <example xml:id="Fib.sdf">
+          <title>Fib.sdf</title>
+
+          <para><programlisting>module Fib
 
 imports basic/Whitespace
+imports Adder                 <co xml:id="co.fib.sdf.adder" />
 
 exports
-  context-free start-symbols Int
-  sorts Int
-
   context-free syntax
-    "0"             -&gt; Int
-    "s" "(" Int ")" -&gt; Int
+    fib(NUM)  -&gt; NUM {memo}   <co xml:id="co.fib.sdf.memo" /></programlisting>Notes:<calloutlist>
+              <callout arearefs="co.fib.sdf.adder">
+                <para>Import the module Adder we have seen before in the
+                section <link
+                linkend="AdditionMultiplicationOfNumerals">Addition and
+                Multiplication of Numerals</link>.</para>
+              </callout>
 
-  context-free syntax
-    add(Int, Int) -&gt; Int
+              <callout arearefs="co.fib.sdf.memo">
+                <para>Define the syntax of the <literal>fib</literal>
+                function. The memo attribute indicates that memoization should
+                be used when exeuting this function.</para>
+              </callout>
+            </calloutlist>The well-known definition of the Fibonacci function
+          fib is given in <link linkend="Fib.asf">Fib.asf</link>.</para>
+        </example>
 
-    fib(Int)      -&gt; Int {memo}
+        <example xml:id="Fib.asf">
+          <title>Fib.asf</title>
 
-hiddens
-  variables
-    [xy][0-9]* -&gt; Int
+          <programlisting>equations
 
-equations
+  [fib-0] fib(0)             = succ(0)
+  [fib-1] fib(succ(0))       = succ(0)
+  [fib-n] fib(succ(succ(X))) = add(fib(succ(X)), fib(X))</programlisting>
+        </example>
 
-  [add-s] add(s(x), y) = s(add(x, y))
-  [add-z] add(0, y) = y
+        <para>The resulting improvement in performance as follows:</para>
 
-  [fib-z] fib(0) = s(0)
-  [fib-o] fib(s(0)) = s(0)
-  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))</programlisting></para>
-      </example>
+        <table border="1">
+          <caption>Execution times for the evaluation of fib(n)</caption>
 
-      <para>The resulting improvement in performance is shown as
-      follows:</para>
+          <tr>
+            <td><emphasis role="bold">fib(n)</emphasis></td>
 
-      <table border="1">
-        <caption>Execution times for the evaluation of fib(n)</caption>
+            <td><emphasis role="bold">Execution time without memo
+            (sec)</emphasis></td>
 
-        <tr>
-          <td><emphasis role="bold">fib(n)</emphasis></td>
+            <td><emphasis role="bold">Execution time with memo
+            (sec)</emphasis></td>
+          </tr>
 
-          <td><emphasis role="bold">Time without memo (sec)</emphasis></td>
+          <tr>
+            <td><literal>fib(16)</literal></td>
 
-          <td><emphasis role="bold">Time with memo (sec)</emphasis></td>
-        </tr>
+            <td>2.0</td>
 
-        <tr>
-          <td><literal>fib(16)</literal></td>
+            <td>0.7</td>
+          </tr>
 
-          <td>2.0</td>
+          <tr>
+            <td><literal>fib(17)</literal></td>
 
-          <td>0.7</td>
-        </tr>
+            <td>3.5</td>
 
-        <tr>
-          <td><literal>fib(17)</literal></td>
+            <td>1.1</td>
+          </tr>
 
-          <td>3.5</td>
+          <tr>
+            <td><literal>fib(18)</literal></td>
 
-          <td>1.1</td>
-        </tr>
+            <td>5.9</td>
 
-        <tr>
-          <td><literal>fib(18)</literal></td>
+            <td>1.8</td>
+          </tr>
 
-          <td>5.9</td>
+          <tr>
+            <td><literal>fib(19)</literal></td>
 
-          <td>1.8</td>
-        </tr>
+            <td>10.4</td>
 
-        <tr>
-          <td><literal>fib(19)</literal></td>
-
-          <td>10.4</td>
-
-          <td>3.3</td>
-        </tr>
-      </table>
+            <td>3.3</td>
+          </tr>
+        </table>
+      </section>
     </section>
 
     <section xml:id="LexicalConstructorFunctions">
       <title>Lexical Constructor Functions</title>
 
       <para>The only way to access the actual characters of a lexical token is
-      by means of the so-called lexical constructor functions. For each
-      lexical sort <replaceable>LEX</replaceable> a lexical constructor
-      function is automatically derived, the corresponding syntax definition
-      is: <programlisting><replaceable>lex</replaceable>( CHAR* ) -&gt; <replaceable>LEX</replaceable></programlisting>
-      The sort <replaceable>CHAR</replaceable> is a predefined sort to access
-      the characters. Characters can be directly addressed by the
-      representation or via variables which may be of the sorts
-      <literal>CHAR</literal>, <literal>CHAR*</literal>, or
-      <literal>CHAR+</literal>. The latter two represent lists of characters.
-      In the example <link linkend="CODE_lcfs">below</link> the lexical
-      constructor function <literal>nat-con</literal> is used to remove the
-      leading zeros from a number.</para>
+      by means of <emphasis>lexical constructor functions</emphasis>. For each
+      lexical sort <literal>LEX</literal> a lexical constructor function is
+      automatically derived as follows: <programlisting><replaceable>lex</replaceable>( CHAR* ) -&gt; <replaceable>LEX</replaceable></programlisting>The
+      sort <literal>CHAR</literal> is predefined in ASF+SDF and represents
+      characters. Characters can be directly addressed by the representation
+      or via variables which may be of the sorts <literal>CHAR</literal>,
+      <literal>CHAR*</literal>, or <literal>CHAR+</literal>. The latter two
+      represent lists of characters.</para>
 
-      <para><example xml:id="CODE_lcfs">
-          <title>Use of lexical constructor</title>
+      <section>
+        <title>Example: Removing Leading Zeros</title>
 
-          <para><programlisting>module Nats
+        <para>In the example <link linkend="CODE_lcfs">below</link> the
+        lexical constructor function <literal>nat-con</literal> is used to
+        remove the leading zeros from a number.</para>
+
+        <para><example xml:id="CODE_lcfs">
+            <title>Use of lexical constructor</title>
+
+            <para><programlisting>module Nats
 
 imports basic/Whitespace
 
@@ -1469,24 +1497,28 @@ hiddens
 equations
 
   [1] nat-con("0" Char+) = nat-con(Char+)</programlisting></para>
-        </example></para>
+          </example></para>
 
-      <important>
-        <para>The argument of a lexical constructor may be an arbitrary list
-        of characters and there is <emphasis>no check that they match the
-        lexical definition of the corresponding sort</emphasis>. This means
-        that when writing a specification one should be aware that it is
-        possible to construct illegal lexical entities, for instance, by
-        inserting letters in an integer. In the example <link
-        linkend="CODE_illegallcfs">below</link> via the lexical constructor
-        function <literal>nat-con</literal> a natural number containing the
-        letter <literal>a</literal> is constructed.</para>
-      </important>
+        <important>
+          <para>The argument of a lexical constructor may be an arbitrary list
+          of characters and there is <emphasis>no check that they match the
+          lexical definition of the corresponding sort</emphasis>. This means
+          that when writing a specification one should be aware that it is
+          possible to construct illegal lexical entities, for instance, by
+          inserting letters in an integer. In the example <link
+          linkend="CODE_illegallcfs">below</link> via the lexical constructor
+          function <literal>nat-con</literal> a natural number containing the
+          letter <literal>a</literal> is constructed.</para>
+        </important>
+      </section>
 
-      <example xml:id="CODE_illegallcfs">
-        <title>Illegal use of lexical constructor functions</title>
+      <section>
+        <title>Example: Illegal Use of Lexical Constructor Function</title>
 
-        <para><programlisting>module Nats
+        <example xml:id="CODE_illegallcfs">
+          <title>Illegal use of lexical constructor functions</title>
+
+          <para><programlisting>module Nats
 
 imports basic/Whitespace
 
@@ -1504,7 +1536,8 @@ hiddens
 equations
 
   [1] nat-con(Char+) = nat-con(Char+ "a")      </programlisting></para>
-      </example>
+        </example>
+      </section>
     </section>
 
     <section xml:id="TraversalFunctions">

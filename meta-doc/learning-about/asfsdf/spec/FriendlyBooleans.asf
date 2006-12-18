@@ -1,0 +1,10 @@
+equations
+
+[or1] true | B    = true
+[or2] false | B   = B
+
+[and1] true & B   = B
+[and2] false & B  = false
+
+[not1] not(true)  = false
+[not2] not(false) = true

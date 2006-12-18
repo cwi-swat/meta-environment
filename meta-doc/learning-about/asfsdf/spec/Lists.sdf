@@ -1,0 +1,24 @@
+module Lists
+
+imports basic/Booleans
+imports basic/Integers
+imports basic/Whitespace
+
+exports
+  context-free start-symbols 
+        Boolean Integer List
+  sorts List
+
+  context-free syntax
+    "[" {Integer ","}*  "]"   -> List
+     List "++" Integer        -> List
+     Integer "++" List        -> List
+    is-element(Integer, List)  -> Boolean
+    length(List)              -> Integer
+    reverse(List)             -> List
+    sort(List)                -> List
+
+hiddens
+  variables
+    "Int"[0-9]*  -> Integer
+    "Int*"[0-9]* -> {Integer ","}* 
