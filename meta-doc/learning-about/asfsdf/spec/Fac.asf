@@ -1,5 +1,4 @@
 equations
 
-[fac0] fac(0)       = succ(0)
 [fac1] fac(succ(0)) = succ(0)
-[default-fac] fac(succ(X)) = mul(X,fac(X))
+[fac2] X != 0 ===> fac(succ(X)) = mul(X,fac(X))

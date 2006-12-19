@@ -104,17 +104,36 @@
 
     <itemizedlist>
       <listitem>
-        <para>Simple Equations: unconditional and conditional
-        equations.</para>
+        <para><link linkend="SimpleEquations">Simple Equations</link>:
+        unconditional and conditional equations.</para>
       </listitem>
 
       <listitem>
-        <para>Advanced Equations: default equations, list matching, memo
-        functions, lexical functions, traversal functions.</para>
+        <para><link linkend="AdvancedEquations">Advanced Equations</link>:
+        default equations, list matching, memo functions, lexical functions,
+        traversal functions.</para>
       </listitem>
 
       <listitem>
-        <para>Tests.</para>
+        <para><link linkend="Tests">Tests</link>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We conclude the description of ASF+SDF with:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="WellFormedness">Well-formedness of ASF+SDF
+        specifications</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="CommonErrors">Common errors when executing
+        ASF+SDF specifications</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="HistoricalNotes">Historical notes</link>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -125,21 +144,42 @@
     <!--\index{equations@equations} \index{Asf+Sdf@\asfsdf}-->
 
     <para>With equations a meaning or semantics may be added to functions
-    declared in the lexical and context-free syntax sections. In particular,
-    equations consist of two \emph{open terms}, i.e. terms possibly containing
-    variables. In the context of ASF+SDF, an open term is any string that can
-    be parsed according to one of the sorts in the specification (possibly
-    including variables). Examples of (open) terms are
-    <literal>true</literal>, <literal>not(false)</literal>, and <literal>true
-    | Bool</literal>.</para>
+    declared in the lexical and context-free syntax sections. We will now
+    describe:</para>
 
-    <section>
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="EquationsSection">The equations
+        section</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="UnconditionalEquations">Unconditonal
+        equations</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ConditionalEquations">Conditional
+        equations</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ExecutingEquations">Executing
+        equations</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="SimpleEquationsExamples">Examples</link>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="EquationsSection">
       <title>The Equations section</title>
 
       <para>Equations are always contained in an equations section that has
       the following structure:</para>
 
-      <programlisting>equations
+      <programlisting><emphasis role="bold">equations</emphasis>
     &lt;Equation&gt;*</programlisting>
 
       <para>In other words, zero or more equations. These may be unconditonal
@@ -160,35 +200,37 @@
 
       <!--\index{unconditional equations@unconditional equations}-->
 
-      <para>An equality then consists of two (possibly open) terms
-      <replaceable>L</replaceable> (lefthand side) and
-      <replaceable>R</replaceable> (righthand side) such that:</para>
+      <para>An unconditional equation has the form<programlisting><emphasis
+            role="bold">[</emphasis>&lt;TagId&gt;<emphasis role="bold">]</emphasis> &lt;Term&gt; <emphasis
+            role="bold">=</emphasis> &lt;Term&gt;</programlisting>where
+      &lt;TagId&gt; is the name of the equation. It is a sequence of letters,
+      digits, and/or minus signs (<literal>-</literal>) starting with a letter
+      or a digit. Next follows an equality between two &lt;Term&gt;s. A
+      &lt;Term&gt; is any string described by the SDF part of the module in
+      which the equation occurs. There are some restrictions on the terms in
+      an equation:</para>
 
       <itemizedlist>
         <listitem>
-          <para><replaceable>L</replaceable> and <replaceable>R</replaceable>
-          are of the same sort.</para>
+          <para>The terms on both sides of the equal sign are of the same
+          sort.</para>
         </listitem>
 
         <listitem>
-          <para><replaceable>L</replaceable> is not a single variable.</para>
+          <para>The term on the left-hand side is not a single
+          variable.</para>
         </listitem>
 
         <listitem>
-          <para>The variables that occur in <replaceable>R</replaceable> also
-          occur in <replaceable>L</replaceable>.</para>
+          <para>The variables that occur in the term on the right-hand side
+          also occur in the term on the left-hand side of the equal
+          sign.</para>
         </listitem>
       </itemizedlist>
 
       <para>It is assumed that the variables occurring in the equation are
       universally quantified. In other words, the equality holds for all
-      possible values of the variables. The equality of two terms
-      <replaceable>L</replaceable> and <replaceable>R</replaceable> is defined
-      in ASF+SDF by the following <emphasis>unconditional</emphasis>
-      equation:<programlisting>[<replaceable>TagId</replaceable>] <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>where
-      <replaceable>TagId</replaceable> is a sequence of letters, digits,
-      and/or minus signs (<literal>-</literal>) starting with a letter or a
-      digit.</para>
+      possible values of the variables. </para>
     </section>
 
     <section xml:id="ConditionalEquations">
@@ -202,45 +244,57 @@
       the <emphasis>conclusion</emphasis> of the conditional equation. In
       ASF+SDF a conditional equation can be written in three (syntactically
       different, but semantically equivalent) ways. Using
-      <literal>when</literal><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>L</replaceable> = <replaceable>R</replaceable> when <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ...</programlisting>or
-      using an implication arrow <literal>===&gt;</literal><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ... ===&gt; <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>or
+      <literal>when</literal><programlisting><emphasis role="bold">[</emphasis>&lt;TagId<emphasis
+            role="bold">&gt;]</emphasis>  &lt;Term<subscript>1</subscript>&gt; <emphasis
+            role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt; <emphasis
+            role="bold">when</emphasis> &lt;Condition<subscript>1</subscript>&gt;<emphasis
+            role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+            role="bold">,</emphasis> ...</programlisting>or using an
+      implication arrow <literal>===&gt;</literal><programlisting><emphasis
+            role="bold">[</emphasis>&lt;TagId&gt;<emphasis role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
+            role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+            role="bold">,</emphasis> ... <emphasis role="bold">===&gt;</emphasis> &lt;Term<subscript>1</subscript>&gt; <emphasis
+            role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting>or
       using a horizontal bar</para>
 
-      <para><programlisting>[<replaceable>TagId</replaceable>]  <replaceable>C</replaceable><subscript>1</subscript>, <replaceable>C</replaceable><subscript>2</subscript>, ... 
-        =============
-           <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting></para>
+      <para><programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
+            role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
+            role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+            role="bold">,</emphasis> ... 
+           <emphasis role="bold">===============================</emphasis>
+                 &lt;Term<subscript>1</subscript>&gt; <emphasis role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
 
-      <para>where <replaceable>C</replaceable><subscript>1</subscript> ,
-      <replaceable>C</replaceable><subscript>2</subscript> , ... are
-      conditions which may be of one of the following forms:</para>
+      <para>where &lt;Condition<subscript>1</subscript>&gt;,
+      &lt;Condition<subscript>2</subscript>&gt;, ... are conditions which may
+      be of one of the following forms:</para>
 
       <itemizedlist>
         <listitem>
-          <para>match: <replaceable>S</replaceable><literal> :=
-          </literal><replaceable>T</replaceable></para>
+          <para>match: &lt;Term&gt; <emphasis role="bold">:=</emphasis>
+          &lt;Term&gt;</para>
         </listitem>
 
         <listitem>
-          <para>non-match: <replaceable>S</replaceable><literal>
-          !:=</literal><replaceable> T</replaceable></para>
+          <para>non-match: &lt;Term&gt;<emphasis role="bold"> !:=</emphasis>
+          &lt;Term&gt;</para>
         </listitem>
 
         <listitem>
-          <para>equality (positive): <replaceable>S</replaceable><literal>
-          ==</literal><replaceable> T</replaceable> (also known as
+          <para>equality (positive): &lt;Term&gt;<emphasis role="bold">
+          ==</emphasis> &lt;Term&gt; (also known as
           <emphasis>positive</emphasis> condition)</para>
         </listitem>
 
         <listitem>
-          <para>non-equality: <replaceable>S</replaceable><literal> !=
-          </literal><replaceable>T</replaceable> (also known as
-          <emphasis>negative</emphasis> condition)</para>
+          <para>non-equality: &lt;Term&gt;<emphasis role="bold">
+          </emphasis><emphasis role="bold">!=</emphasis> &lt;Term&gt; (also
+          known as <emphasis>negative</emphasis> condition)</para>
         </listitem>
       </itemizedlist>
 
       <para>The conditions of an equation are evaluated from left to right.
       Let, initially, <replaceable>Vars</replaceable> be the set of variables
-      occurring in the left-hand side <replaceable>LVars</replaceable> of the
+      occurring in the left-hand side Term<subscript>1</subscript> of the
       conclusion of the equation.</para>
 
       <para>Match conditions are evaluated as follows. The left-hand side of a
@@ -324,7 +378,7 @@
       (if any).</para>
     </section>
 
-    <section>
+    <section xml:id="SimpleEquationsExamples">
       <title>Examples</title>
 
       <para>We give here a number of elementary examples with the sole purpose
@@ -388,7 +442,7 @@
         <para>Let's first formalize the grammar of these numeralsin an SDF
         definition:</para>
 
-        <example xml:id="EX_Numerals">
+        <example xml:id="Numerals.sdf">
           <title>SDF Definition of Numerals</title>
 
           <programlisting linenumbering="numbered">module Numerals
@@ -883,7 +937,7 @@ hiddens
     </section>
   </section>
 
-  <section xml:id="Equations">
+  <section xml:id="AdvancedEquations">
     <title>Advanced Equations</title>
 
     <para>The simple equations described in the previous section are powerfull
@@ -1843,16 +1897,16 @@ equations
       <para>Tests are always contained in an tests section that has the
       following structure:</para>
 
-      <programlisting>tests
+      <programlisting><emphasis role="bold">tests</emphasis>
     &lt;Test&gt;*</programlisting>
 
       <para>The global structure of the ASF part of a module then
       becomes:</para>
 
-      <programlisting>equations
+      <programlisting><emphasis role="bold">equations</emphasis>
   &lt;Equation&gt;*
 
-tests
+<emphasis role="bold">tests</emphasis>
   &lt;Test&gt;*</programlisting>
 
       <para>In fact, a module may contain an <emphasis>several</emphasis> test
@@ -1860,13 +1914,11 @@ tests
 
       <para>Each test has the form of a condition preceeded by a label:</para>
 
-      <programlisting>[<replaceable>TagId</replaceable>] <replaceable>&lt;Condition&gt;</replaceable></programlisting>
+      <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
+          role="bold">]</emphasis> &lt;Condition&gt;</programlisting>
 
-      <para>where <replaceable>L</replaceable> and
-      <replaceable>R</replaceable> are both closed terms (i.e., terms without
-      variables) of the same sort. Since a test may not contain variables,
-      only the operators <literal>++</literal> and<literal> !=</literal> can
-      be used.</para>
+      <para>Since a test may not contain variables, only the operators
+      <literal>==</literal> and<literal> !=</literal> can be used.</para>
 
       <para>The tests for each module can be run via the
       <guimenuitem>check</guimenuitem> menu item in the user-interface.</para>
@@ -1894,308 +1946,21 @@ tests
         </example>
       </section>
     </section>
-
-    <section xml:id="WhichSpecsAreExecutable">
-      <title>Which Specifications are Executable?</title>
-
-      <para>Which ASF+SDF specifications can be executed? The <link
-      linkend="CODE_itemsets">specification of sets</link> illustrates a
-      non-executable specification, since equation<literal> [2]</literal>,
-      which expresses that two elements in a set may be exchanged, will lead
-      to an infinite rewriting loop.</para>
-
-      <example xml:id="CODE_itemsets">
-        <title>Non-executable specification for sets</title>
-
-        <para><programlisting>module ItemSet
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Set
-  sorts Item Set 
-
-  lexical syntax
-    [a-z]+ -&gt; Item 
-
-  context-free syntax
-    Set[Item] -&gt; Set
-
-hiddens
-  variables
-    "i"[0-9]* -&gt; Item
-    "l"[0-9]* -&gt; {Item ","}* 
-
-equations
-
-  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
-  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3} </programlisting></para>
-      </example>
-    </section>
-
-    <section>
-      <title>Common Errors when Executing Specifications</title>
-
-      <para></para>
-
-      <section>
-        <title>Non-termination</title>
-
-        <para>Like in any executable formalism with full computaional power,
-        it is possible to write ASF+SDF specifications that do not terminate.
-        Non-termination comes in several flavours.</para>
-
-        <formalpara>
-          <title>Erreneous inductive definition</title>
-
-          <para>As in any language, if the equations that describe the
-          induction over a given structure are wrong, this may lead to
-          infinite recursion. Consider the following errorneous definition of
-          the factorial function over the numerals.</para>
-        </formalpara>
-
-        <example>
-          <title>Fact.sdf</title>
-
-          <para></para>
-        </example>
-      </section>
-    </section>
-
-    <section xml:id="CommonErrors">
-      <title>Common Errors when Executing Specifications</title>
-
-      <itemizedlist>
-        <listitem>
-          <para>When using the inequality operator <literal>!=</literal> in a
-          condition, no new variables may be introduced in either side of the
-          inequality.</para>
-        </listitem>
-
-        <listitem>
-          <para>If the normal form of a term still contains function symbols
-          that should have been removed during rewriting, you probably have
-          forgotten one or more equations that define the function. A typical
-          situation is that you have given an <emphasis>incomplete</emphasis>
-          set of equations defining the function.</para>
-        </listitem>
-
-        <listitem>
-          <para>The rewriting process does not stop. Your equations probably
-          contain an infinite loop.</para>
-        </listitem>
-
-        <listitem>
-          <para>Be careful when a condition contains both instantiated and
-          uninstantiated variables.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
   </section>
 
-  <section xml:id="ASFSDF-checker">
-    <title>Well-formedness checks on ASF+SDF</title>
+  <section xml:id="WellFormedness">
+    <title>Well-formedness of ASF+SDF</title>
 
     <para>In order to improve the quality of the written specifications, a
-    number of checks are performed before an SDF specification is transformed
-    into a parse table. The checks are performed on two levels: the first
-    level are SDF specific checks, the second level are ASF+SDF specific
-    checks. There are various categories of messages in The
-    Meta-Environment</para>
+    number of checks are performed before an ASF+SDF specification can be
+    executed. The checks are performed on two levels: the first level are SDF
+    specific checks; these are further discussed in the article The Syntax
+    Definition Formalism SDF. The second level are ASF+SDF specific checks
+    that we discuss here.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>Parse errors.</para>
-      </listitem>
-
-      <listitem>
-        <para>SDF type check warnings.</para>
-      </listitem>
-
-      <listitem>
-        <para>SDF type check errors.</para>
-      </listitem>
-
-      <listitem>
-        <para>ASF type check errors.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>We will briefly discuss each of the error messages and indicate what
-    is exactly wrong in the specification. Furthermore we will hint at how the
-    error can be fixed.</para>
-
-    <section>
-      <title>Parse Errors</title>
-
-      <para>There are three different types of parse errors:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>A syntax error, which is reported by pinpointing the exact
-          location in the file and the message <literal>Parse error near
-          cursor</literal> in case of an editor or in the message pane an
-          error message similar to<literal>Parse error: character
-          '<replaceable>c</replaceable>' unexpected</literal>. This means that
-          the parser detected a syntax error in the text to be parsed and can
-          not proceed its parsing process. Clicking on the error in the
-          <literal>Errors</literal>-pane moves the cursor to the exact error
-          location and launches if needed the editor. A variant of the syntax
-          error message is: <literal>Parse error: eof
-          unexpected</literal>.</para>
-        </listitem>
-
-        <listitem>
-          <para>A cycle, in case of an editor the cursor is positioned at the
-          position where the first cycle is detected in the input and the
-          message is <literal>Cycle:
-          &lt;list_of_production_rules&gt;</literal> is printed. A cycle is
-          reported whenever the parser detects a non terminating chain of
-          reductions. All production rules in the cycle are shown as
-          <literal>&lt;list_of_production_rules&gt;</literal>.</para>
-        </listitem>
-
-        <listitem>
-          <para>An ambiguity, again in case of an editor the cursor is
-          positioned at the position where the first ambiguity is detected in
-          the input and the message <literal>Ambiguity:
-          &lt;list_of_production_rules&gt;</literal> is printed. An ambiguity
-          is reported whenever the parser was able to recognized a (part of)
-          the input sentence in different ways. The
-          <literal>&lt;list_of_production_rules&gt;</literal> shows all
-          production rules that are involved in the ambiguity.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="PlainSDFwarnings">
-      <title>Type check warnings for plain SDF</title>
-
-      <para>The warnings and error for SDF are separated into 4 sections.
-      First we will discuss the type check warnings and <link
-      linkend="PlainSDFerrors">errors</link> for plain SDF. This variant of
-      SDF is independent of ASF. Later we will discuss the <link
-      linkend="ASFSDFwarnings">warnings</link> and <link
-      linkend="ASFSDFerrors">errors</link> for SDF used in combination with
-      ASF. In this case we need to be more strict and every SDF construct is
-      supported by ASF. Warnings do not break the specification, but it is
-      advisable to fix them anyway. Often they point out some not well-formed
-      part in the specification.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>undeclared sorts</literal>: This warning indicates
-          that a sort is used which is not explicitly declared, or it is
-          declared but in a hidden section.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>double declared sort</literal>: This warning points
-          out that the sort is already declared somewhere in this module, or
-          in one of the imported modules.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>double declared start-symbol</literal>: This warning
-          indicates that the start-symbol is previously defined as
-          start-symbol as well. This can be in the current module or in one of
-          the imported modules.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>illegal attribute: {bracket, left, right, assoc,
-          non-assoc}</literal>: This warning is generated because the
-          syntactic form of the production rule and the attribute do not
-          match. Given this mismatch the intended behaviour will not be
-          effective.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>used in priorities but undefined</literal>: This
-          warning is generated whenever a production rule is used in a
-          priority section which is not defined in this module or in one of
-          the imported modules. It is possible that this production rule will
-          be defined in one of the modules which imports this module.
-          Normally, this indicates a typo.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>inconsistent rhs in priorities</literal>: This
-          warning is caused by a production rule which has not the same
-          right-hand side as the other production rules in the priority
-          relation. Whenever this occurs the effect of the expressed priority
-          relation will be ignored. This check is performed modulo
-          injections.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>unknown constructor used in priorities</literal>:
-          This warning indicates the use of a constructor which is not used in
-          the corresponding set of production rules with the same right-hand
-          side. This is a very weak check on consistent use of constructor
-          information.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>sort CHAR used in production rule</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>deprecated tuple notation</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>deprecated unquoted symbol notation</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>deprecated non-plain sort
-          definition</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>aliased symbol already declared</literal>:</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="PlainSDFerrors">
-      <title>Type check errors for plain SDF</title>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>module not available</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>start-symbols in &lt;ModuleName&gt; not defined in
-          any right-hand</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>literal in right-hand-side not
-          allowed</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>only sort allowed in right-hand-side of
-          lexical-function</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>double used label</literal>:</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>constructor has already been used</literal>:&#160;The
-          combination of right-hand symbol and the constructor information
-          should be unique. This warning points this out. It is advisable not
-          to ignore this warning. In fact, for the parser these double
-          constructors are no problem, but there are tools based on SDF for
-          which this is problematic.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
+    <warning>
+      <para>We should add explanatory text for each message.</para>
+    </warning>
 
     <section xml:id="ASFSDFwarnings">
       <title>Type check warnings for ASF+SDF</title>
@@ -2215,6 +1980,20 @@ equations
 
         <listitem>
           <para><literal>not supported symbol</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Lexical probably intended to be a
+          variable</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Deprecated condition syntax "="</literal></para>
+        </listitem>
+
+        <listitem>
+          <para>constructor not expected as outermost function symbol of left
+          hand side</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2276,77 +2055,208 @@ equations
           syntax</literal></para>
         </listitem>
       </itemizedlist>
+
+      <para><itemizedlist>
+          <listitem>
+            <para><literal>equations contain ambiguities</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>uninstantiated variable occurrence</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>negative condition introduces
+            variable(s)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>uninstantiated variables in both sides of
+            condition</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>uninstantiated variables in equality
+            condition</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>right-hand side of matching condition introduces
+            variables</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>matching condition does not introduce new
+            variables</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>strange condition encountered</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Left hand side is contained in a
+            list</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>no variables may be introduced in left hand side of
+            test</literal></para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </section>
+
+  <section xml:id="CommonErrors">
+    <title>Common Errors when executing Specifications</title>
+
+    <warning>
+      <para>The examples in this section have not yet been checked. Section as
+      a whole is incomplete.</para>
+    </warning>
+
+    <para>Apart from the warnings and errors that are detected before
+    execution, various errors remain that are only discovered during
+    execution. We will use the factorial function as running example, see
+    <link linkend="Fac.sdf">Fac.sdf</link> and <link
+    linkend="Fac.asf">Fac.asf</link>.<example xml:id="Fac.sdf">
+        <title>Fac.sdf</title>
+
+        <programlisting>module Fac
+exports
+  imports Multiplier   <co xml:id="co.fac.multiplier" />
+
+  context-free syntax
+     fac(NUM) -&gt; NUM</programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="co.fac.multiplier">
+            <para>We re-use here the module <literal>Multiplier</literal>
+            defined <link
+            linkend="AdditionMultiplicationOfNumerals">earlier</link>. Observe
+            that <link linkend="Numerals.sdf">Numerals.sdf</link> exports two
+            variables <literal>X</literal> and <literal>Y</literal> that we
+            are now happy to re-use. Note however, that it is in general
+            considered bad practice to export variables from a module.</para>
+          </callout>
+        </calloutlist>
+      </example></para>
+
+    <para><example xml:id="Fac.asf">
+        <title>Fac.asf</title>
+
+        <programlisting>equations
+
+[fac0] fac(0)       = 0
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===&gt; fac(succ(X)) = mul(X,fac(X))</programlisting>
+      </example></para>
+
+    <section>
+      <title>Missing Equations</title>
+
+      <para>If the normal form of a term still contains function symbols that
+      should have been removed during rewriting, you probably have forgotten
+      one or more equations that define the function. A typical situation is
+      that you have given an <emphasis>incomplete</emphasis> set of equations
+      defining the function.<example xml:id="FacError1.asf">
+          <title>FacError1.asf</title>
+
+          <programlisting>equations
+
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===&gt; fac(succ(X)) = mul(X,fac(X))</programlisting>
+        </example></para>
     </section>
 
     <section>
-      <title>Type check warnings for ASF</title>
+      <title>Execution depends on Ordering of Equations</title>
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>Lexical probably intended to be a
-          variable</literal></para>
-        </listitem>
+      <para><example xml:id="FacError2asf">
+          <title>FacError2.asf</title>
 
-        <listitem>
-          <para><literal>Deprecated condition syntax "="</literal></para>
-        </listitem>
+          <programlisting>equations
 
-        <listitem>
-          <para><literal>constructor not expected as outermost function symbol
-          of left hand side</literal></para>
-        </listitem>
-      </itemizedlist>
+[fac0] fac(0)       = 0
+[fac1] fac(succ(0)) = succ(0)
+[fac2] fac(succ(X)) = mul(X,fac(X))</programlisting>
+        </example></para>
     </section>
 
     <section>
-      <title>Type check errors for ASF</title>
+      <title>Incorrect Inductive Definition</title>
+
+      <para>As in any language, if the equations that describe the induction
+      over a given structure are wrong, this may lead to infinite recursion.
+      Consider the following errorneous definition of the factorial function
+      over the numerals.</para>
+
+      <para><example xml:id="FacError3.asf">
+          <title>FacError3.asf</title>
+
+          <programlisting>equations
+
+[fac0] fac(0)       = 0
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===&gt; fac(succ(X)) = mul(X,fac(succ(X)))</programlisting>
+        </example></para>
+    </section>
+
+    <section>
+      <title>Non-termination due to Commutative Equations</title>
+
+      <para>The <link linkend="CODE_itemsets">specification of sets</link>
+      illustrates a specification that lead to non-termination, since
+      equation<literal> [2]</literal>, which expresses that two elements in a
+      set may be exchanged, will lead to an infinite rewriting loop.</para>
+
+      <example xml:id="CODE_itemsets">
+        <title>Non-executable specification for sets</title>
+
+        <para><programlisting>module ItemSet
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Set
+  sorts Item Set 
+
+  lexical syntax
+    [a-z]+ -&gt; Item 
+
+  context-free syntax
+    Set[Item] -&gt; Set
+
+hiddens
+  variables
+    "i"[0-9]* -&gt; Item
+    "l"[0-9]* -&gt; {Item ","}* 
+
+equations
+
+  [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
+  [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3} </programlisting></para>
+      </example>
+    </section>
+
+    <section>
+      <title>Erroneous Conditions</title>
+
+      <para>There are a few issues to be aware of when writing
+      conditions:</para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>equations contain ambiguities</literal></para>
+          <para>When using the inequality operator <literal>!=</literal> in a
+          condition, no new variables may be introduced in either side of the
+          inequality.</para>
         </listitem>
 
         <listitem>
-          <para><literal>uninstantiated variable occurrence</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>negative condition introduces
-          variable(s)</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>uninstantiated variables in both sides of
-          condition</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>uninstantiated variables in equality
-          condition</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>right-hand side of matching condition introduces
-          variables</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>matching condition does not introduce new
-          variables</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>strange condition encountered</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>Left hand side is contained in a
-          list</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>no variables may be introduced in left hand side of
-          test</literal></para>
+          <para>Be careful when a condition contains both instantiated and
+          uninstantiated variables.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2355,7 +2265,8 @@ equations
   <section xml:id="HistoricalNotes">
     <title>Historical Notes</title>
 
-    <para>The main publications on ASF+SDF are (inchronological order):</para>
+    <para>The main publications on ASF+SDF are (in chronological
+    order):</para>
 
     <itemizedlist>
       <listitem>
@@ -2420,7 +2331,7 @@ equations
       </listitem>
     </itemizedlist>
 
-    <para>Historical notes for SDF only, are given in The Syntax Definition
-    Formalism SDF.</para>
+    <para>Historical notes for SDF are given in the article The Syntax
+    Definition Formalism SDF.</para>
   </section>
 </article>
