@@ -146,7 +146,7 @@
       or conditional equations as described below.</para>
 
       <important>
-        <para> It is a common mistake to forget to either include
+        <para>It is a common mistake to forget to either include
         basic/Whitespace or <literal>basic/Comments</literal> or to define
         layout or comments yourself. The effect is that no syntax for
         whitespace or comments is defined, that the equations cannot be
@@ -434,7 +434,7 @@ exports
         </example>
 
         <important>
-          <para> It is a common mistake to forget to either include
+          <para>It is a common mistake to forget to either include
           basic/Whitespace or <literal>basic/Comments</literal> or to define
           layout or comments yourself. The effect is that no syntax for
           whitespace or comments is defined, that the equations cannot be
@@ -1740,7 +1740,7 @@ equations
           </example>Our <link linkend="CODE_sum">second example</link>
         computes the sum of all numbers in a tree.</para>
 
-        <example>
+        <example xml:id="CODE_sum">
           <title>The accumulator <literal>sum</literal> that sums all numbers
           in a tree</title>
 
@@ -1846,18 +1846,52 @@ equations
       <programlisting>tests
     &lt;Test&gt;*</programlisting>
 
-      <para>Each test has the form</para>
+      <para>The global structure of the ASF part of a module then
+      becomes:</para>
 
-      <programlisting>[<replaceable>TagId</replaceable>] <replaceable>L</replaceable> = <replaceable>R</replaceable></programlisting>
+      <programlisting>equations
+  &lt;Equation&gt;*
+
+tests
+  &lt;Test&gt;*</programlisting>
+
+      <para>In fact, a module may contain an <emphasis>several</emphasis> test
+      and equations sections in arbitrary order.</para>
+
+      <para>Each test has the form of a condition preceeded by a label:</para>
+
+      <programlisting>[<replaceable>TagId</replaceable>] <replaceable>&lt;Condition&gt;</replaceable></programlisting>
 
       <para>where <replaceable>L</replaceable> and
       <replaceable>R</replaceable> are both closed terms (i.e., terms without
-      variables) of the same sort.</para>
+      variables) of the same sort. Since a test may not contain variables,
+      only the operators <literal>++</literal> and<literal> !=</literal> can
+      be used.</para>
+
+      <para>The tests for each module can be run via the
+      <guimenuitem>check</guimenuitem> menu item in the user-interface.</para>
 
       <section>
         <title>Example</title>
 
-        <para></para>
+        <para>Reconsider the functions on lists given <link
+        linkend="ListMatching">earlier</link>. We can add tests to that
+        definition as follows.</para>
+
+        <example xml:id="ListsWithTests.asf">
+          <title>Lists with tests</title>
+
+          <programlisting>equations
+ ... see <link linkend="Lists.asf">List.asf</link> ...
+
+tests
+ [sanity]      []                      != [1]
+ [append1]     [1,2,3] ++ 4            == [1,2,3,4]
+ [append2]     1 ++ [2,3,4]            == [1,2,3,4]
+ [length1]     length([1,2,3])         == 3
+ [is-element1] is-element(2, [1,2,3])  == true
+ [is-element2] is-element(5, {1,2,3])) != true</programlisting>
+        </example>
       </section>
     </section>
 
@@ -1897,6 +1931,35 @@ equations
   [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
   [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3} </programlisting></para>
       </example>
+    </section>
+
+    <section>
+      <title>Common Errors when Executing Specifications</title>
+
+      <para></para>
+
+      <section>
+        <title>Non-termination</title>
+
+        <para>Like in any executable formalism with full computaional power,
+        it is possible to write ASF+SDF specifications that do not terminate.
+        Non-termination comes in several flavours.</para>
+
+        <formalpara>
+          <title>Erreneous inductive definition</title>
+
+          <para>As in any language, if the equations that describe the
+          induction over a given structure are wrong, this may lead to
+          infinite recursion. Consider the following errorneous definition of
+          the factorial function over the numerals.</para>
+        </formalpara>
+
+        <example>
+          <title>Fact.sdf</title>
+
+          <para></para>
+        </example>
+      </section>
     </section>
 
     <section xml:id="CommonErrors">
