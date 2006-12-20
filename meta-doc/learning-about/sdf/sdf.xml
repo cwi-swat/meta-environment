@@ -41,100 +41,187 @@
   <section xml:id="Introduction">
     <title>An Introduction to SDF</title>
 
-    <para>The Syntax Definition Formalism SDF is intended for the high-level,
-    modular, description of grammars for programming languages, application
-    languages, domain-specific languages, data formats and other
-    computer-based formal languages.</para>
-
-    <para>SDF allows the simultaneous definition of concrete (i.e., lexical
-    and context-free) and abstract syntax and implicitly defines a translation
-    from text strings to syntax trees. The main idea is to define a standard
-    mapping from text to syntax tree.</para>
-  </section>
-
-  <section>
-    <title xml:id="YetAnotherFormalism">Why using SDF?</title>
-
-    <para>EBNF-like and Lex+Yacc-like grammar formalisms are well-known and
-    have been used to describe the grammar of many programming languages. SDF
-    has, however, a number of advantages over Lex+Yacc-like formalisms:</para>
+    <para>If you want to:</para>
 
     <itemizedlist>
       <listitem>
-        <para>SDF allows modular grammar definitions. This enables the
-        combination and re-use of grammars and makes it easy to handle
-        embedded languages or different dialects of a common base
-        language.</para>
+        <para>describe the syntax of an existing language like C, C++, Java,
+        or Cobol,</para>
       </listitem>
 
       <listitem>
-        <para>SDF allows more declarative grammars definitions and this
-        results in simpler and more "natural" grammars that are not polluted
-        by idiosyncrasies of particular parsing techniques.</para>
+        <para>describe an embedded language and need to combine several
+        language grammars,</para>
       </listitem>
 
       <listitem>
-        <para>SDF allows the integrated definition of lexical and context-free
-        syntax.</para>
+        <para>describe the syntax of your newly designed domain-specific
+        language,</para>
+      </listitem>
+
+      <listitem>
+        <para>prepare yourself for the semantic analysis of programming or
+        application languages,</para>
       </listitem>
     </itemizedlist>
 
-    <para>In order to support modular grammars, grammars need to be composed.
-    This is, unfortunately, not possible for well-known subclasses of the
-    context-free grammars such as LL(1) and LALR(1) that are used by many
-    parser generator tools. SDF is therefore based on the assumption that all
-    context-free grammars can be recognized and uses Scannerless Generalized
-    LR (SGLR) as parsing technique.</para>
+    <para>then SDF may be the right technology to use.</para>
 
-    <para>The basic assumption of SDF is that <emphasis>all</emphasis>
-    derivations of an input string will be produced. This guarantees that
-    <emphasis>no implicit disambiguation</emphasis> will take place. To
-    disambiguate, the user has to give explicit (declarative) disambiguation
-    rules. Examples of disambiguation rules are
-    <emphasis>longest-match</emphasis> and <emphasis>priorities</emphasis>.
-    Separating grammar rules from disambiguation rules leads to more natural
-    syntax definitions. This is also due to the automatic way of constructing
-    syntax trees. In Lex+Yacc the specification writer has to explicitly
-    program how syntax trees are constructed while in SDF this is done
-    implicitly.</para>
+    <section>
+      <title xml:id="YetAnotherFormalism">Why using SDF?</title>
 
-    <para>SDF provides an integrated definition of lexical and context-free
-    syntax. EBNF does not provide, or only very restrictive, support for
-    defining lexical syntax rules. In Lex+Yacc the lexical syntax and concrete
-    syntax are defined in two separate formalisms.</para>
+      <para>The Syntax Definition Formalism SDF is intended for the
+      high-level, modular, description of grammars for programming languages,
+      application languages, domain-specific languages, data formats and other
+      computer-based formal languages.</para>
 
-    <para>The most striking (but also most trivial) difference between SDF and
-    EBNF is the way the production rules are written in SDF. In EBNF one
-    writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
-    in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
-    the left- and right-hand side of the production rules are swapped. The
-    reason is that SDF takes a more syntax tree oriented view and considers a
-    such a rule as the definition of a function with arguments
-    <literal>D</literal> and <literal>S</literal> and result type
-    <literal>P</literal>.</para>
-  </section>
+      <para>SDF allows the simultaneous definition of concrete (i.e., lexical
+      and context-free) and abstract syntax and implicitly defines a
+      translation from text strings to syntax trees. The main idea is to
+      define a standard mapping from text to syntax tree.</para>
 
-  <section>
-    <title>How to use SDF?</title>
+      <para>EBNF-like and Lex+Yacc-like grammar formalisms are well-known and
+      have been used to describe the grammar of many programming languages.
+      SDF has, however, a number of advantages over Lex+Yacc-like
+      formalisms:</para>
 
-    <para>There are two ways to write an SDF specification, generate a parser
-    for it, and use that parser:</para>
+      <itemizedlist>
+        <listitem>
+          <para>SDF allows modular grammar definitions. This enables the
+          combination and re-use of grammars and makes it easy to handle
+          embedded languages or different dialects of a common base
+          language.</para>
+        </listitem>
 
-    <itemizedlist>
-      <listitem>
-        <para>By far the simplest way is to use the ASF+SDF Meta-Environment
-        which provides interactive editing of SDF modules and completely
-        automates the parser generation phase. After editing an SDF
-        specification you can directly use it to parse input text.</para>
-      </listitem>
+        <listitem>
+          <para>SDF allows more declarative grammars definitions and this
+          results in simpler and more "natural" grammars that are not polluted
+          by idiosyncrasies of particular parsing techniques.</para>
+        </listitem>
 
-      <listitem>
-        <para>At the command line you can use the programs
-        <command>pgen</command> to generate a parse table and
-        <command>sglr</command> to parse text using the generated parse
-        table.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>SDF allows the integrated definition of lexical and
+          context-free syntax.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In order to support modular grammars, grammars need to be
+      composed. This is, unfortunately, not possible for well-known subclasses
+      of the context-free grammars such as LL(1) and LALR(1) that are used by
+      many parser generator tools. SDF is therefore based on the assumption
+      that all context-free grammars can be recognized and uses Scannerless
+      Generalized LR (SGLR) as parsing technique.</para>
+
+      <para>The basic assumption of SDF is that <emphasis>all</emphasis>
+      derivations of an input string will be produced. This guarantees that
+      <emphasis>no implicit disambiguation</emphasis> will take place. To
+      disambiguate, the user has to give explicit (declarative) disambiguation
+      rules. Examples of disambiguation rules are
+      <emphasis>longest-match</emphasis> and <emphasis>priorities</emphasis>.
+      Separating grammar rules from disambiguation rules leads to more natural
+      syntax definitions. This is also due to the automatic way of
+      constructing syntax trees. In Lex+Yacc the specification writer has to
+      explicitly program how syntax trees are constructed while in SDF this is
+      done implicitly.</para>
+
+      <para>SDF provides an integrated definition of lexical and context-free
+      syntax. EBNF does not provide, or only very restrictive, support for
+      defining lexical syntax rules. In Lex+Yacc the lexical syntax and
+      concrete syntax are defined in two separate formalisms.</para>
+    </section>
+
+    <section>
+      <title>How to use SDF?</title>
+
+      <para>There are two ways to write an SDF specification, generate a
+      parser for it, and use that parser:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By far the simplest way is to use the ASF+SDF Meta-Environment
+          which provides interactive editing of SDF modules and completely
+          automates the parser generation phase. After editing an SDF
+          specification you can directly use it to parse input text.</para>
+        </listitem>
+
+        <listitem>
+          <para>At the command line you can use the programs
+          <command>pgen</command> to generate a parse table and
+          <command>sglr</command> to parse text using the generated parse
+          table.</para>
+        </listitem>
+      </itemizedlist>
+
+      <warning>
+        <para>Add links to relevant documents.</para>
+      </warning>
+    </section>
+
+    <section>
+      <title>Learning more</title>
+
+      <para>You may want to refresh you knowledge of grammars and parsing by
+      reading Syntax Analysis.</para>
+
+      <warning>
+        <para>Add cross link.</para>
+      </warning>
+
+      <para>We will now describe the ingredients of an SDF
+      specification:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="Modules">Modules and Modular Structure</link>:
+          a key aspect of SDF is that syntax specifications can be divided in
+          modules.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Symbols">Symbols</link>: the building blocks
+          for writing grammar rules.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Grammars">Grammars</link>: a catch-all concept
+          that covers production rules, import sections, priority declarations
+          and more.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Examples">Examples</link>: numerous examples
+          how to define common syntactic constructs.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Priorities">Priorities</link>: the mechanisms
+          needed to resolve ambiguities in grammars.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Disambiguation">Disambiguation</link>: applying
+          priorities.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Parameterization">Parameterization and
+          Renaming</link>: increase the re-usability of modules.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Variables">Variables</link>: add variables to
+          grammars for the benefit of semantic formalisms.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="WellformednessSDF">Well-formedness</link>:
+          well-formedness checks applied to SDF specifications.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In <link linkend="HistoricalNotes">Historical Notes</link>, we
+      give background and key references.</para>
+    </section>
   </section>
 
   <section xml:id="Modules">
@@ -683,6 +770,16 @@
       to describe lexical as well as context-free syntax. All productions with
       the same result sort together define the alternatives for that symbol.
       Spaces are only significant inside strings and character classes.</para>
+
+      <para>The most striking (but also most trivial) difference between SDF
+      and EBNF is the way the production rules are written in SDF. In EBNF one
+      writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
+      in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
+      the left- and right-hand side of the production rules are swapped. The
+      reason is that SDF takes a more syntax tree oriented view and considers
+      a such a rule as the definition of a function with arguments
+      <literal>D</literal> and <literal>S</literal> and result type
+      <literal>P</literal>.</para>
 
       <section xml:id="Attributes">
         <title>Attributes</title>
@@ -2562,6 +2659,10 @@ imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</p
   <section xml:id="SdfComment">
     <title>SDF comment convention</title>
 
+    <warning>
+      <para>This has a too prominent place; move it.</para>
+    </warning>
+
     <!--\index{Sdf comment@\sdf\ comment}-->
 
     <para>The comment convention within an SDF specification is that
@@ -2865,7 +2966,7 @@ hiddens
     </section>
   </section>
 
-  <section>
+  <section xml:id="HistoricalNotes">
     <title>Historical Notes</title>
 
     <para>The main publications on SDF are (in historical order):</para>
