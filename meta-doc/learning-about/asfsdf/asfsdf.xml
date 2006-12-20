@@ -34,109 +34,171 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0. See To Do list at the end of the
-    document.</para>
+    Meta-Enviroment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link> list
+    at the end of the document.</para>
   </warning>
 
   <section>
-    <title>An Introduction to ASF+SDF</title>
+    <title>Introduction to ASF+SDF</title>
 
-    <para>ASF+SDF is intended for the high-level, modular, description of the
-    syntax <emphasis>and</emphasis> semantics of computer-based formal
-    languages. It is the result of the marriage of two formalisms ASF
-    (Algebraic Specification Formalism) and SDF (Syntax Definition
-    Formalism).</para>
-
-    <para>ASF is based on the notion of a module consisting of a signature
-    defining the abstract syntax of functions and a set of conditional
-    equations defining their semantics. Modules can be imported in other
-    modules.</para>
-
-    <para>SDF allows the simultaneous definition of concrete (i.e., lexical
-    and context-free) and abstract syntax and implicitly defines a translation
-    from text strings to syntax trees. See The Syntax Definion Formalism SDF
-    for complete coverage of SDF.</para>
-
-    <para>The main idea of ASF+SDF is to identify the abstract syntax defined
-    by the signature in ASF specifications with the abstract syntax defined
-    implicitly by an SDF specification, thus yielding a standard mapping from
-    text to abstract syntax tree. This allows the association of semantics
-    with (the tree representation of) text and introduces user-defined
-    notation in specifications. ASF+SDF is therefore a modular specification
-    formalism for the integrated definition of syntax and semantics of a
-    (programming) language. Other views on ASF+SDF are:</para>
+    <para>I you want to</para>
 
     <itemizedlist>
       <listitem>
-        <para>a first-order functional programming language with</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>user-defined synyax,</para>
-          </listitem>
-
-          <listitem>
-            <para>tree traversal capabilities</para>
-          </listitem>
-        </itemizedlist>
+        <para>create an Interactive Development Environment (IDE) for some
+        existing or new programming language,</para>
       </listitem>
 
       <listitem>
-        <para>an algebraic specification formalism.</para>
+        <para>design and implement your own domain-specific language,</para>
+      </listitem>
+
+      <listitem>
+        <para>analyze existing source code, or</para>
+      </listitem>
+
+      <listitem>
+        <para>transform existing source code,</para>
       </listitem>
     </itemizedlist>
 
-    <para>Whatever viewpoint is taken, ASF+SDF is a powerful formalism for the
-    declarative description of programming languages and meta programs.</para>
+    <para>then ASF+SDF may be the right technology to use.</para>
 
-    <para>Each module <replaceable>M</replaceable> in an SDF specification is
-    stored in a file <replaceable>M</replaceable><literal>.sdf</literal>. To
-    each module <replaceable>M</replaceable> one can simply add equations as
-    needed by providing them in a file
-    <replaceable>M</replaceable><literal>.asf</literal>. The result is an
-    ASF+SDF specification. We call
-    <replaceable>M</replaceable><literal>.sdf</literal> the <emphasis>SDF
-    part</emphasis> of module <replaceable>M</replaceable> and
-    <replaceable>M</replaceable><literal>.asf</literal> the <emphasis>ASF
-    part</emphasis> of <replaceable>M</replaceable>.</para>
+    <section>
+      <title>Why using ASF+SDF?</title>
 
-    <para>We will now describe the ingredients of the ASF part of
-    modules:</para>
+      <para>ASF+SDF is intended for the high-level, modular, description of
+      the syntax <emphasis>and</emphasis> semantics of computer-based formal
+      languages. It is the result of the marriage of two formalisms ASF
+      (Algebraic Specification Formalism) and SDF (Syntax Definition
+      Formalism).</para>
 
-    <itemizedlist>
-      <listitem>
-        <para><link linkend="SimpleEquations">Simple Equations</link>:
-        unconditional and conditional equations.</para>
-      </listitem>
+      <para>ASF is based on the notion of a module consisting of a signature
+      defining the abstract syntax of functions and a set of conditional
+      equations defining their semantics. Modules can be imported in other
+      modules.</para>
 
-      <listitem>
-        <para><link linkend="AdvancedEquations">Advanced Equations</link>:
-        default equations, list matching, memo functions, lexical functions,
-        traversal functions.</para>
-      </listitem>
+      <para>SDF allows the simultaneous definition of concrete (i.e., lexical
+      and context-free) and abstract syntax and implicitly defines a
+      translation from text strings to syntax trees. See The Syntax Definion
+      Formalism SDF for complete coverage of SDF.</para>
 
-      <listitem>
-        <para><link linkend="Tests">Tests</link>.</para>
-      </listitem>
-    </itemizedlist>
+      <para>The main idea of ASF+SDF is to identify the abstract syntax
+      defined by the signature in ASF specifications with the abstract syntax
+      defined implicitly by an SDF specification, thus yielding a standard
+      mapping from text to abstract syntax tree. This allows the association
+      of semantics with (the tree representation of) text and introduces
+      user-defined notation in specifications. ASF+SDF is therefore a modular
+      specification formalism for the integrated definition of syntax and
+      semantics of a (programming) language. Other views on ASF+SDF
+      are:</para>
 
-    <para>We conclude the description of ASF+SDF with:</para>
+      <itemizedlist>
+        <listitem>
+          <para>a first-order functional programming language with</para>
 
-    <itemizedlist>
-      <listitem>
-        <para><link linkend="WellFormedness">Well-formedness of ASF+SDF
-        specifications</link>.</para>
-      </listitem>
+          <itemizedlist>
+            <listitem>
+              <para>user-defined synyax,</para>
+            </listitem>
 
-      <listitem>
-        <para><link linkend="CommonErrors">Common errors when executing
-        ASF+SDF specifications</link>.</para>
-      </listitem>
+            <listitem>
+              <para>tree traversal capabilities</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="HistoricalNotes">Historical notes</link>.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>an algebraic specification formalism.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Whatever viewpoint is taken, ASF+SDF is a powerful formalism for
+      the declarative description of programming languages and meta
+      programs.</para>
+    </section>
+
+    <section>
+      <title>How to use ASF+SDF?</title>
+
+      <para>There are two ways to write ASF+SDF specifications and to execute
+      them:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By far the simplest way is to use the ASF+SDF Meta-Environment
+          that enables the interactive editing and execution of
+          specifications. It also supports the compilation of specifications
+          and the generation of all necessary information (including parse
+          tables) to execute specifications from the command line.</para>
+        </listitem>
+
+        <listitem>
+          <para>Command line tools including <command>asfe</command> (for
+          interpreting ASF+SDF specifications) and <command>asfc</command>
+          (for compiling ASF+SDF specifications) enable the execution of
+          ASF+SDF specifications from the command line.</para>
+        </listitem>
+      </itemizedlist>
+
+      <warning>
+        <para>Link to relevant documentation.</para>
+      </warning>
+    </section>
+
+    <section>
+      <title>Learning more</title>
+
+      <para>Each module <replaceable>M</replaceable> in an SDF specification
+      is stored in a file <replaceable>M</replaceable><literal>.sdf</literal>.
+      To each module <replaceable>M</replaceable> one can simply add equations
+      as needed by providing them in a file
+      <replaceable>M</replaceable><literal>.asf</literal>. The result is an
+      ASF+SDF specification. We call
+      <replaceable>M</replaceable><literal>.sdf</literal> the <emphasis>SDF
+      part</emphasis> of module <replaceable>M</replaceable> and
+      <replaceable>M</replaceable><literal>.asf</literal> the <emphasis>ASF
+      part</emphasis> of <replaceable>M</replaceable>.</para>
+
+      <para>We will now describe the ingredients of the ASF part of
+      modules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="SimpleEquations">Simple Equations</link>:
+          unconditional and conditional equations.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="AdvancedEquations">Advanced Equations</link>:
+          default equations, list matching, memo functions, lexical functions,
+          traversal functions.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Tests">Tests</link>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We conclude the description of ASF+SDF with:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="WellFormedness">Well-formedness of ASF+SDF
+          specifications</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="CommonErrors">Common errors when executing
+          ASF+SDF specifications</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="HistoricalNotes">Historical
+          notes</link>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 
   <section xml:id="SimpleEquations">
@@ -2292,51 +2354,63 @@ equations
       </listitem>
 
       <listitem>
-        <para>H.R. Walters, On Equal terms: implementing Algebraic
-        Specifications, dissertation, University of Amsterdam, 1991.</para>
+        <para>H.R. Walters, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Walters.ps.gz">On
+        Equal terms: implementing Algebraic Specifications</link>,
+        dissertation, University of Amsterdam, 1991.</para>
       </listitem>
 
       <listitem>
-        <para>P. Klint, A Meta-Environment for Generating Programming
-        Environments, ACM Transactions on Software Engineering and
-        Methodology, 2(2):176-201,1993.</para>
+        <para>P. Klint, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOSEM93.pdf">A
+        Meta-Environment for Generating Programming Environments</link>, ACM
+        Transactions on Software Engineering and Methodology,
+        2(2):176-201,1993.</para>
       </listitem>
 
       <listitem>
         <para>M.G.J. van den Brand, H.A. de Jong, P. Klint and P.A. Olivier,
-        Efficient Annotated Terms, Software, Practice &amp; Experience,
+        <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/SPE00.pdf">Efficient
+        Annotated Terms</link>, Software, Practice &amp; Experience,
         30(3):259--291, 2000.</para>
       </listitem>
 
       <listitem>
-        <para>P.A. Olivier, A Framework for Debugging Heterogeneous
-        Applications, dissertation, University of Amsterdam, 2000.</para>
+        <para>P.A. Olivier, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Olivier.ps.gz">A
+        Framework for Debugging Heterogeneous Applications</link>,
+        dissertation, University of Amsterdam, 2000.</para>
       </listitem>
 
       <listitem>
         <para>M.G.J. van den Brand, J. Heering, P. Klint and P.A. Olivier,
-        Compiling language definitions: The ASF+SDF compiler. ACM Transactions
-        on Programming Languages and Systems, 24 (4):334-368, July
-        2002,</para>
+        <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOPLAS02.pdf">Compiling
+        language definitions: The ASF+SDF compiler.</link> ACM Transactions on
+        Programming Languages and Systems, 24 (4):334-368, July 2002,</para>
       </listitem>
 
       <listitem>
-        <para>M.G.J. van den Brand, P. Klint, and J.J. Vinju, Term Rewriting
-        with Traversal Functions, ACM Transactions on Software Engineering
-        Methodology, 12 (2):152-190, 2003.</para>
+        <para>M.G.J. van den Brand, P. Klint, and J.J. Vinju, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOSEM03.pdf">Term
+        Rewriting with Traversal Functions</link>, ACM Transactions on
+        Software Engineering Methodology, 12 (2):152-190, 2003.</para>
       </listitem>
 
       <listitem>
-        <para>J. Vinju, Analysis and Transformation of Source Code by Parsing
-        and Rewriting, dissertation, University of Amsterdam, 2005.</para>
+        <para>J. Vinju, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Vinju.pdf">Analysis
+        and Transformation of Source Code by Parsing and Rewriting</link>,
+        dissertation, University of Amsterdam, 2005.</para>
       </listitem>
     </itemizedlist>
 
-    <para>Historical notes for SDF are given in the article The Syntax
-    Definition Formalism SDF.</para>
+    <para>Historical notes for SDF are given in the companian article The
+    Syntax Definition Formalism SDF.</para>
   </section>
 
-  <section>
+  <section xml:id="ToDo">
     <title>To Do</title>
 
     <para>Needed:</para>
@@ -2347,17 +2421,8 @@ equations
       </listitem>
 
       <listitem>
-        <para>Improve introduction; restructure in a why? and a how?
-        part.</para>
-      </listitem>
-
-      <listitem>
         <para>Add explanations to the error messages in wellformedness
         section.</para>
-      </listitem>
-
-      <listitem>
-        <para>Add pointers to PDFs in historiacl notes section.</para>
       </listitem>
 
       <listitem>
