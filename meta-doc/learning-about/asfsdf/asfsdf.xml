@@ -34,7 +34,8 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0.</para>
+    Meta-Enviroment V1.5 and V2.0. See To Do list at the end of the
+    document.</para>
   </warning>
 
   <section>
@@ -230,7 +231,7 @@
 
       <para>It is assumed that the variables occurring in the equation are
       universally quantified. In other words, the equality holds for all
-      possible values of the variables. </para>
+      possible values of the variables.</para>
     </section>
 
     <section xml:id="ConditionalEquations">
@@ -2333,5 +2334,53 @@ equations
 
     <para>Historical notes for SDF are given in the article The Syntax
     Definition Formalism SDF.</para>
+  </section>
+
+  <section>
+    <title>To Do</title>
+
+    <para>Needed:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Describe structured lexicals.</para>
+      </listitem>
+
+      <listitem>
+        <para>Improve introduction; restructure in a why? and a how?
+        part.</para>
+      </listitem>
+
+      <listitem>
+        <para>Add explanations to the error messages in wellformedness
+        section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Add pointers to PDFs in historiacl notes section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Add cross references to other documents like the SDF
+        manual.</para>
+      </listitem>
+
+      <listitem>
+        <para>Complete Common Errors Section.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Optional, may be for later versions:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Give more examples in the text.</para>
+      </listitem>
+
+      <listitem>
+        <para>Add a section on syntax errors in ASF+SDF specifications and how
+        to solve them.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
