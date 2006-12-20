@@ -13,7 +13,8 @@
   <info>
     <title>The Syntax Definition Formalism SDF</title>
 
-    <pubdate>$Rev$ by $Author$ at $Date$</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
+    +0100 (Sat, 16 Dec 2006) $</pubdate>
 
     <authorgroup>
       <author>
@@ -121,7 +122,7 @@
     be visible or invisible to other modules. A module can use another module
     from the specification by importing it. As a result, all visible names of
     the imported module become available in the importing module. The overall
-    structure of a module is:<programlisting>module &lt;ModuleName&gt;
+    structure of a module is:<programlisting><emphasis role="bold">module</emphasis> &lt;ModuleName&gt;
   &lt;ImportSection&gt;*
   &lt;ExportOrHiddenSection&gt;*</programlisting> A module consists of a
     module header, followed by a list of zero or more import sections,
@@ -153,8 +154,8 @@
     to other modules. The latter starts with the keyword
     <literal>hiddens</literal> and makes all entities in the section local to
     the module. An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus
-    one of the two forms:<programlisting>exports 
-  &lt;Grammar&gt;+</programlisting>or<programlisting>hiddens
+    one of the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
+  &lt;Grammar&gt;+</programlisting>or<programlisting><emphasis role="bold">hiddens</emphasis>
   &lt;Grammar&gt;+
 </programlisting> A <literal>&lt;Grammar&gt;</literal> can be a definition of
     one of the following:</para>
@@ -485,8 +486,12 @@
       <literal>X</literal> and <literal>Y</literal> are generic sorts which
       will be provided via the parameters of the module name. See <link
       linkend="ParametersRenamings">Parameterization and Renamings</link> for
-      more details. The context-free syntax rule describing parameterized
-      sorts is: <programlisting> Sort "[[" {Symbol ","}+ "]]" -&gt; Symbol</programlisting></para>
+      more details. Parameterized sorts have the following
+      form:<programlisting> &lt;Sort&gt;<emphasis role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
+            role="bold">]]</emphasis></programlisting></para>
+
+      <para>In other words, a sort followed by a list of one or more sorts
+      enclosed by <literal>[[</literal> and <literal>]]</literal>.</para>
     </section>
 
     <section xml:id="LiftingOperator">
@@ -563,7 +568,7 @@
 
       <para>Each <literal>&lt;ImportSection&gt;</literal> starts with the
       keyword <literal>imports</literal> followed by zero or more module
-      names: <programlisting>imports
+      names: <programlisting><emphasis role="bold">imports</emphasis>
   &lt;ModuleName&gt;*</programlisting>Modules can be combined by importing one
       module in another. Imports can occur as
       <literal>&lt;ImportSection&gt;</literal> at the topmost level of a
@@ -591,7 +596,15 @@
       to represent literals or constant values. In SDF it is good practice to
       give a name (alias') to complicated symbols that occur repeatedly in the
       specification. An alias is thus a named abbreviation for a complicated
-      symbol. For example,<programlisting>aliases
+      symbol and has the following form:</para>
+
+      <programlisting><emphasis role="bold">aliases</emphasis>
+  &lt;Sort<subscript>1</subscript>&gt; -&gt; &lt;Sort<subscript>2</subscript>&gt;</programlisting>
+
+      <para>where the alias Sort<subscript>2</subscript> is given to
+      Sort<subscript>1</subscript>.</para>
+
+      <para>For example,<programlisting>aliases
   &lt;Bool, Int, Id&gt; -&gt; Tuple3</programlisting>introduces the alias
       Tuple3 for the symbol <literal>&lt;Bool, Int, Id&gt;</literal> and
       instead of using <literal>&lt;Bool, Int, Id&gt;</literal> one can use
@@ -615,7 +628,7 @@
       <title>Sorts</title>
 
       <para>Sorts are declared by listing their name in a sorts section of the
-      form:<programlisting>sorts
+      form:<programlisting><emphasis role="bold">sorts</emphasis>
   &lt;Symbol&gt;*</programlisting>Only plain <literal>Sort</literal>s and
       parameterized <literal>Sort</literal>s can be declared in the
       <literal>sorts</literal> section, but more complex
@@ -640,7 +653,7 @@
       contains a symbol and an optional list of attributes. This is summarized
       as follows:</para>
 
-      <programlisting>&lt;Symbol&gt;* -&gt; &lt;Symbol&gt; &lt;Attributes&gt;</programlisting>
+      <programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt;</programlisting>
 
       <para>The symbols in a production can be arbitrarily complex but the
       implementation may impose some limitations on this. Productions are used
@@ -658,9 +671,10 @@
         (syntactic or semantic) properties of that function. The attributes
         are written between curly brackets after the non-terminal in the right
         hand side. If a production rule has more than one attribute they are
-        separated by commas.<programlisting>context-free syntax
-   "{" {Attribute ","}* "}" -&gt; Attributes {cons("attrs")}
-                            -&gt; Attributes {cons("no-attrs")}</programlisting>
+        separated by commas. Productions with attributes have thus the
+        following form:<programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt; <emphasis
+              role="bold">{</emphasis> &lt;Attribute1&gt;<emphasis role="bold">,</emphasis> &lt;Attribute2&gt;<emphasis
+              role="bold">,</emphasis> ...<emphasis role="bold">}</emphasis></programlisting>
         The following syntax-related attributes exist:</para>
 
         <!--\index{bracket attribute@bracket attribute}
@@ -815,7 +829,7 @@ index{avoid attribute@avoid attribute}
 
         <para>Lexical syntax is described as follows:</para>
 
-        <programlisting>lexical syntax
+        <programlisting><emphasis role="bold">lexical syntax</emphasis>
   &lt;Production&gt;*</programlisting>
       </section>
 
@@ -831,7 +845,7 @@ index{avoid attribute@avoid attribute}
         these members. This optional layout non-terminal is automatically
         inserted. Context-free syntax has the form:</para>
 
-        <programlisting>context-free syntax
+        <programlisting><emphasis role="bold">context-free syntax</emphasis>
    &lt;Production&gt;*</programlisting>
       </section>
     </section>
@@ -847,12 +861,12 @@ index{avoid attribute@avoid attribute}
       have to define explicitly the sort <literal>Boolean</literal> as a start
       symbol in the module <literal>Booleans</literal>. Any symbol, also
       lists, tuples, etc., can serve as a start-symbol. A definition of
-      lexical start symbols looks like<programlisting>lexical start-symbols
+      lexical start symbols looks like<programlisting><emphasis role="bold">lexical start-symbols</emphasis>
   &lt;Symbol&gt;*</programlisting></para>
 
       <para>while context-free start symbols are defined as</para>
 
-      <para><programlisting>context-free start-symbols
+      <para><programlisting><emphasis role="bold">context-free start-symbols</emphasis>
   &lt;Symbol&gt;*</programlisting>Lexical or context-free start-symbol
       sections can either be hidden or exported. The effect of defined symbols
       as start symbols for the grammar may lead to an explosion of start
@@ -2879,6 +2893,35 @@ hiddens
         Disambiguation Filters for Scannerless Generalized LR Parsers,
         Proceedings of the 11th International Conference on Compiler
         Construction (CC'02), 143--158, 2002.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>To Do</title>
+
+    <para>Needed:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Improve Disambiguation section</para>
+      </listitem>
+
+      <listitem>
+        <para>Add explanatory text to error messages (or even
+        examples!).</para>
+      </listitem>
+
+      <listitem>
+        <para>Add links to PDFs in historical notes section.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Optional:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para></para>
       </listitem>
     </itemizedlist>
   </section>
