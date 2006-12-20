@@ -34,7 +34,8 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0.</para>
+    Meta-Enviroment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link>
+    section.</para>
   </warning>
 
   <section xml:id="Introduction">
@@ -52,8 +53,7 @@
   </section>
 
   <section>
-    <title xml:id="YetAnotherFormalism">Why yet another Formalism beyond EBNF
-    and Lex+Yacc?</title>
+    <title xml:id="YetAnotherFormalism">Why using SDF?</title>
 
     <para>EBNF-like and Lex+Yacc-like grammar formalisms are well-known and
     have been used to describe the grammar of many programming languages. SDF
@@ -112,6 +112,29 @@
     such a rule as the definition of a function with arguments
     <literal>D</literal> and <literal>S</literal> and result type
     <literal>P</literal>.</para>
+  </section>
+
+  <section>
+    <title>How to use SDF?</title>
+
+    <para>There are two ways to write an SDF specification, generate a parser
+    for it, and use that parser:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>By far the simplest way is to use the ASF+SDF Meta-Environment
+        which provides interactive editing of SDF modules and completely
+        automates the parser generation phase. After editing an SDF
+        specification you can directly use it to parse input text.</para>
+      </listitem>
+
+      <listitem>
+        <para>At the command line you can use the programs
+        <command>pgen</command> to generate a parse table and
+        <command>sglr</command> to parse text using the generated parse
+        table.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section xml:id="Modules">
@@ -731,11 +754,7 @@ index{avoid attribute@avoid attribute}
 
         <itemizedlist>
           <listitem>
-            <para>Arbitrary ATerms may also be used as attributes. In the
-            context-free syntax definition of the
-            <literal>Attributes</literal>, the ATerms
-            <literal>cons("attrs")</literal> and
-            <literal>cons("no-attrs")</literal> are used. The
+            <para>Arbitrary ATerms may also be used as attributes. The
             <literal>cons</literal> attribute is used by other tools, such as
             <productname>ApiGen</productname>.</para>
           </listitem>
@@ -1596,18 +1615,17 @@ exports
 
       <!--\index{bracket Productions@bracket Productions}-->
 
-      <para>A bracket function has the form <replaceable>open</replaceable>
-      <replaceable>S</replaceable> <replaceable>close</replaceable>
-      <literal>-&gt;</literal> <replaceable>S</replaceable> where
-      <replaceable>open</replaceable> and <replaceable>close</replaceable> are
-      literals acting as opening and closing parenthesis for sort
-      <replaceable>S</replaceable>. Examples are <literal>(</literal> and
-      <literal>)</literal> in arithmetic expressions. In most cases, such
-      brackets are only introduced for grouping and disambiguation, but have
-      no further meaning. By adding the attribute <literal>bracket</literal>
-      to the function declaration, it will not be included in the abstract
-      syntax. The definition of a bracket function for the sort
-      <literal>Expr</literal> is given <link
+      <para>A bracket function has the form:<programlisting>&lt;Open&gt; &lt;Sort&gt; &lt;Close&gt; <emphasis
+            role="bold"><emphasis role="bold">-&gt;</emphasis></emphasis> <replaceable>&lt;</replaceable>Sort&gt;</programlisting></para>
+
+      <para>where &lt;Open&gt; and &lt;Close&gt; are literals acting as
+      opening and closing parenthesis for sort &lt;Sort&gt;. Examples are
+      <literal>(</literal> and <literal>)</literal> in arithmetic expressions.
+      In most cases, such brackets are only introduced for grouping and
+      disambiguation, but have no further meaning. By adding the attribute
+      <literal>bracket</literal> to the function declaration, it will not be
+      included in the abstract syntax. The definition of a bracket function
+      for the sort <literal>Expr</literal> is given <link
       linkend="CODE_bracket-expr">below</link>.</para>
 
       <example xml:id="CODE_bracket-expr">
@@ -1852,7 +1870,8 @@ exports
         </listitem>
       </itemizedlist>
 
-      <para>The general form of a restriction is:<programlisting>&lt;Symbol&gt;+ -/- &lt;Lookaheads&gt;</programlisting>In
+      <para>The general form of a restriction is:<programlisting>&lt;Symbol&gt;+ <emphasis
+            role="bold">-/-</emphasis> &lt;Lookaheads&gt;</programlisting>In
       case of lexical restrictions <literal>&lt;Symbol&gt;</literal> may be
       either a literal or sort. In case of context-free restrictions only a
       sort or symbol is allowed. The restriction operator
@@ -1875,6 +1894,8 @@ exports
       followed by a letter. It does not forbid layout characters between the
       letters, e.g. <literal>a b</literal> is a legal recognizable
       string.</para>
+
+      <para></para>
 
       <example xml:id="CODE_functional">
         <title>Using restrictions in the definition of a simple functional
@@ -1924,10 +1945,10 @@ exports
       linkend="CODE_safe-layout">below</link>: it simply forbids that optional
       layout is followed by layout characters.</para>
 
-      <example xml:id="CODE_safe-layout">
-        <title>Safe way of defining <literal>LAYOUT</literal></title>
+      <para><example xml:id="CODE_safe-layout">
+          <title>Safe way of defining <literal>LAYOUT</literal></title>
 
-        <para><programlisting>module basic/Whitespace
+          <para><programlisting>module basic/Whitespace
 
 exports
   lexical syntax
@@ -1935,7 +1956,7 @@ exports
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n]</programlisting></para>
-      </example>
+        </example></para>
 
       <para>The example shown <link linkend="CODE_c-comment">below</link>
       illustrates the use of restrictions to extend the previous layout
@@ -1983,11 +2004,11 @@ exports
       correct restriction, it is necessary to transform this context-free
       restriction into a lexical restriction.</para>
 
-      <example xml:id="CODE_restrictedexpressions">
-        <title>Erroneous use of restrictions in the definition of simple
-        expressions</title>
+      <para><example xml:id="CODE_restrictedexpressions">
+          <title>Erroneous use of restrictions in the definition of simple
+          expressions</title>
 
-        <para><programlisting>module RestrictedExpressions
+          <para><programlisting>module RestrictedExpressions
 
 imports basic/Whitespace
 
@@ -2004,7 +2025,7 @@ exports
 
   context-free restrictions
     Expr -/- [a-z]</programlisting></para>
-      </example>
+        </example></para>
     </section>
 
     <section xml:id="PreferAvoidReject">
@@ -2181,7 +2202,7 @@ exports
 
         <para>Give preference to interpretation as a variable (as defined in a
         variables section) over interpretation as a lexical token. Thus
-        built-in behaviour of \asfsdf. It is achieved by automatically
+        built-in behaviour of ASF+SDF. It is achieved by automatically
         extending each variable declaration with the attribute
         <literal>prefer</literal> (see <link
         linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
@@ -2420,15 +2441,6 @@ exports
   <section xml:id="ParametersRenamings">
     <title>Parameterization and Renaming</title>
 
-    <para>Parameterization and renaming were in fact features of the original
-    ASF as described in \cite{BHK89}, but they were never supported by the
-    ASF+SDF used in the first version of the ASF+SDF Meta-Environment
-    \cite{Kli93}. Based on the work described in \cite{Vis97}, ASF+SDF is
-    extended with parameterization and symbol renaming (the notion of
-    production renaming will not be supported.. We will first explain the
-    notion of parameterization, later we will give details on symbol
-    renaming.</para>
-
     <section xml:id="Parameterization">
       <title>Parameterization</title>
 
@@ -2591,10 +2603,10 @@ exports
     variables may be exported (see section <link
     linkend="Modules">Modules</link>). A variables section consists of a list
     of variable names followed by a symbol. In fact, a variable declaration
-    can define an infinite collection of variables by using a \emph{naming
-    scheme} instead of a simple variable name. A naming scheme is a regular
-    expression like the ones allowed in the <link
-    linkend="LexicalSyntax">lexical syntax</link>except that sorts are not
+    can define an infinite collection of variables by using a <emphasis>naming
+    scheme</emphasis> instead of a simple variable name. A naming scheme is a
+    regular expression like the ones allowed in the <link
+    linkend="LexicalSyntax">lexical syntax</link> except that sorts are not
     allowed. A variable may represent any symbol. In the specification <link
     linkend="CODE_variables">below</link>, <literal>Id</literal>,
     <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
@@ -2659,10 +2671,6 @@ hiddens
       <listitem>
         <para>SDF type check errors.</para>
       </listitem>
-
-      <listitem>
-        <para>ASF type check errors.</para>
-      </listitem>
     </itemizedlist>
 
     <para>We will briefly discuss each of the error messages and indicate what
@@ -2676,50 +2684,70 @@ hiddens
 
       <itemizedlist>
         <listitem>
-          <para>A syntax error, which is reported by pinpointing the exact
-          location in the file and the message <literal>Parse error near
-          cursor</literal> in case of an editor or in the message pane an
-          error message similar to<literal>Parse error: character
-          '<replaceable>c</replaceable>' unexpected</literal>. This means that
-          the parser detected a syntax error in the text to be parsed and can
-          not proceed its parsing process. Clicking on the error in the
-          <literal>Errors</literal>-pane moves the cursor to the exact error
-          location and launches if needed the editor. A variant of the syntax
-          error message is: <literal>Parse error: eof
-          unexpected</literal>.</para>
+          <para>A <emphasis>syntax error</emphasis>, which is reported by
+          pinpointing the exact location in the file and a message like</para>
+
+          <programlisting><literal>Parse error near cursor</literal></programlisting>
+
+          <para>or</para>
+
+          <programlisting>Parse error: character '<replaceable>c</replaceable>' unexpected</programlisting>
+
+          <para>or</para>
+
+          <programlisting>Parse error: eof unexpected</programlisting>
+
+          <para>This means that the parser detected a syntax error in the text
+          to be parsed and cannot proceed its parsing process. Clicking on the
+          error in the <literal>Errors</literal> pane moves the cursor to the
+          exact error location and launches if needed the editor.</para>
         </listitem>
 
         <listitem>
-          <para>A cycle, in case of an editor the cursor is positioned at the
-          position where the first cycle is detected in the input and the
-          message is <literal>Cycle:
-          &lt;list_of_production_rules&gt;</literal> is printed. A cycle is
-          reported whenever the parser detects a non terminating chain of
-          reductions. All production rules in the cycle are shown as
-          <literal>&lt;list_of_production_rules&gt;</literal>.</para>
+          <para>A <emphasis>cycle</emphasis> is reported whenever the parser
+          detects a non-terminating chain of reductions; the message is
+          <programlisting><literal>Cycle: &lt;list_of_production_rules&gt;</literal></programlisting></para>
         </listitem>
 
         <listitem>
-          <para>An ambiguity, again in case of an editor the cursor is
-          positioned at the position where the first ambiguity is detected in
-          the input and the message <literal>Ambiguity:
-          &lt;list_of_production_rules&gt;</literal> is printed. An ambiguity
-          is reported whenever the parser was able to recognized a (part of)
-          the input sentence in different ways. The
-          <literal>&lt;list_of_production_rules&gt;</literal> shows all
-          production rules that are involved in the ambiguity.</para>
+          <para>An <emphasis>ambiguity</emphasis> is reported whenever the
+          parser was able to recognize a (part of) the input sentence in
+          different ways and gives the message:</para>
+
+          <programlisting><literal>Ambiguity: &lt;list_of_production_rules&gt;</literal></programlisting>
         </listitem>
       </itemizedlist>
     </section>
 
     <section xml:id="PlainSDFwarnings">
-      <title>Type check warnings for plain SDF</title>
+      <title>Type check warnings for SDF</title>
 
-      <para>The warnings and error for SDF are separated into 4 sections.
-      First we will discuss the type check warnings and <link
-      linkend="PlainSDFerrors">errors</link> for plain SDF. Warnings do not
-      break the specification, but it is advisable to fix them anyway. Often
-      they point out some not well-formed part in the specification.</para>
+      <warning>
+        <para>It would be nice to rewrite this and the next section in the
+        style:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Error message</para>
+          </listitem>
+
+          <listitem>
+            <para>Explanation</para>
+          </listitem>
+
+          <listitem>
+            <para>Example of error.</para>
+          </listitem>
+
+          <listitem>
+            <para>Example of correction.</para>
+          </listitem>
+        </itemizedlist>
+      </warning>
+
+      <para>Warnings do not break the specification, but it is advisable to
+      fix them anyway. Often they point out some not well-formed part in the
+      specification.</para>
 
       <itemizedlist>
         <listitem>
@@ -2799,7 +2827,7 @@ hiddens
     </section>
 
     <section xml:id="PlainSDFerrors">
-      <title>Type check errors for plain SDF</title>
+      <title>Type check errors for SDF</title>
 
       <itemizedlist>
         <listitem>
@@ -2851,18 +2879,21 @@ hiddens
       </listitem>
 
       <listitem>
-        <para>J. Heering, P. Hendriks, P. Klint and J. Rekers, The syntax
-        definition formalism SDF - reference manual, SIGPLAN Notices <emphasis
-        role="bold">24</emphasis>(11): 43-75, 1989. <emphasis>The first
-        reference manual for SDF</emphasis>.</para>
+        <para>J. Heering, P. Hendriks, P. Klint and J. Rekers, <link
+        xlink:href="http://www.acm.org/pubs/citations/proceedings/pldi/73141/p179-heering/">The
+        syntax definition formalism SDF - reference manual</link>, SIGPLAN
+        Notices <emphasis role="bold">24</emphasis>(11): 43-75, 1989.
+        <emphasis>The first reference manual for SDF</emphasis>.</para>
       </listitem>
 
       <listitem>
-        <para>E. Visser, Syntax Definition for Language Prototyping,
-        dissertation, University of Amsterdam, 1997. <emphasis>A redesign of
-        SDF that adds modularization (modelled after the modularization
-        constructs of ASF), unifies lexical and concrete syntax, and proposes
-        a normalisation procedure.</emphasis></para>
+        <para>E. Visser, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Visser.ps.gz">Syntax
+        Definition for Language Prototyping</link>, dissertation, University
+        of Amsterdam, 1997. <emphasis>A redesign of SDF that adds
+        modularization (modeled after the modularization constructs of ASF),
+        unifies lexical and concrete syntax, and proposes a normalisation
+        procedure.</emphasis></para>
       </listitem>
     </itemizedlist>
 
@@ -2871,33 +2902,46 @@ hiddens
 
     <itemizedlist>
       <listitem>
-        <para>J. Heering, P. Klint and J. Rekers, Incremental Generation of
-        Parsers, IEEE Transactions on Software Engineering, <emphasis
-        role="bold">16</emphasis>(12):1344--1350, 1990</para>
+        <para>J. Heering, P. Klint and J. Rekers,<link
+        xlink:href="http://www.acm.org/pubs/citations/proceedings/pldi/73141/p179-heering/">
+        Incremental Generation of Parsers</link>, IEEE Transactions on
+        Software Engineering, <emphasis
+        role="bold">16</emphasis>(12):1344--1350, 1990. <emphasis>This and the
+        next publication describe our variant of Generalized LR parsing as
+        well as the just-in-time generation of scanners and
+        parsers.</emphasis></para>
       </listitem>
 
       <listitem>
-        <para>J. Heering, P. Klint and J. Rekers, Incremental generation of
-        lexical scanners, ACM Transactions on Programming Languages and
-        Systems <emphasis role="bold">14</emphasis>(4):490--520, October
-        1992.</para>
+        <para>J. Heering, P. Klint and J. Rekers,<link
+        xlink:href="http://www.acm.org/pubs/citations/journals/toplas/1992-14-4/p490-heering/">
+        Incremental generation of lexical scanners</link>, ACM Transactions on
+        Programming Languages and Systems <emphasis
+        role="bold">14</emphasis>(4):490--520, October 1992.</para>
       </listitem>
 
       <listitem>
-        <para>J. Rekers, Parser Generation for Interactive Environments,
-        dissertation, University of Amsterdam, 1992.</para>
+        <para>J. Rekers, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Rekers.ps.gz">Parser
+        Generation for Interactive Environments</link>, dissertation,
+        University of Amsterdam, 1992. <emphasis>Detailed description of the
+        GLR algorithm.</emphasis></para>
       </listitem>
 
       <listitem>
         <para>M.G. J. van den Brand, J. Scheerder, J. J. Vinju and E. Visser,
-        Disambiguation Filters for Scannerless Generalized LR Parsers,
-        Proceedings of the 11th International Conference on Compiler
-        Construction (CC'02), 143--158, 2002.</para>
+        <link
+        xlink:href="http://www.springerlink.com/content/03359k0cerupftfh/">Disambiguation
+        Filters for Scannerless Generalized LR Parsers</link>, Proceedings of
+        the 11th International Conference on Compiler Construction (CC'02),
+        143--158, 2002. <emphasis>Describes current disambiguation methods
+        that are used in combination with scannerless
+        parsing.</emphasis></para>
       </listitem>
     </itemizedlist>
   </section>
 
-  <section>
+  <section xml:id="ToDo">
     <title>To Do</title>
 
     <para>Needed:</para>
@@ -2908,12 +2952,12 @@ hiddens
       </listitem>
 
       <listitem>
-        <para>Add explanatory text to error messages (or even
-        examples!).</para>
+        <para>Add explanatory text to error messages.</para>
       </listitem>
 
       <listitem>
-        <para>Add links to PDFs in historical notes section.</para>
+        <para>Refer to the visualization of module structure, parse trees and
+        ambiguities (may be in a separate MetaEnv sidebar).</para>
       </listitem>
     </itemizedlist>
 
@@ -2921,7 +2965,7 @@ hiddens
 
     <itemizedlist>
       <listitem>
-        <para></para>
+        <para>Restructure sections on errors and add xamples.</para>
       </listitem>
     </itemizedlist>
   </section>
