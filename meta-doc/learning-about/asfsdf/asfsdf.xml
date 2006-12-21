@@ -130,13 +130,14 @@
           that enables the interactive editing and execution of
           specifications. It also supports the compilation of specifications
           and the generation of all necessary information (including parse
-          tables) to execute specifications from the command line.</para>
+          tables and compiled specifications) to execute specifications from
+          the command line.</para>
         </listitem>
 
         <listitem>
           <para>Command line tools including <command>asfe</command> (for
           interpreting ASF+SDF specifications) and <command>asfc</command>
-          (for compiling ASF+SDF specifications) enable the execution of
+          (for compiling ASF+SDF specifications to C) enable the execution of
           ASF+SDF specifications from the command line.</para>
         </listitem>
       </itemizedlist>
@@ -149,10 +150,20 @@
     <section>
       <title>Learning more</title>
 
-      <para>Each module <replaceable>M</replaceable> in an SDF specification
-      is stored in a file <replaceable>M</replaceable><literal>.sdf</literal>.
-      To each module <replaceable>M</replaceable> one can simply add equations
-      as needed by providing them in a file
+      <para>For a detailed description of SDF see The Syntax Definition
+      Formalism SDF.</para>
+
+      <para>In Term Rewriting the notions<emphasis> rewrite rules</emphasis>
+      and <emphasis>term rewriting</emphasis> are explained that play an
+      important role when executing ASF+SDF specifications.<warning>
+          <para>Add links the mentioned documents.</para>
+        </warning></para>
+
+      <para>ASF+SDF uses the module mechanism provided by SDF. Each module
+      <replaceable>M</replaceable> in an SDF specification is stored in a file
+      <replaceable>M</replaceable><literal>.sdf</literal>. To each module
+      <replaceable>M</replaceable> one can simply add equations as needed by
+      providing them in a file
       <replaceable>M</replaceable><literal>.asf</literal>. The result is an
       ASF+SDF specification. We call
       <replaceable>M</replaceable><literal>.sdf</literal> the <emphasis>SDF
@@ -237,7 +248,7 @@
     </itemizedlist>
 
     <section xml:id="EquationsSection">
-      <title>The Equations section</title>
+      <title>The Equations Section</title>
 
       <para>Equations are always contained in an equations section that has
       the following structure:</para>
@@ -465,11 +476,11 @@
       </itemizedlist>
 
       <para>For larger and more <emphasis>interesting</emphasis> examples, we
-      refer to XXX.</para>
+      refer to ASF+SDF by Example.</para>
 
-      <important>
-        <para>Add ref</para>
-      </important>
+      <warning>
+        <para>Add link.</para>
+      </warning>
 
       <section xml:id="AdditionMultiplicationOfNumerals">
         <title>Addition and Multiplication on Numerals</title>
@@ -2019,6 +2030,10 @@ tests
     executed. The checks are performed on two levels: the first level are SDF
     specific checks; these are further discussed in the article The Syntax
     Definition Formalism SDF. The second level are ASF+SDF specific checks
+    (leading to <link linkend="ASFSDFwarnings">warnings</link> or <link
+    linkend="ASFSDFerrors">errors</link>) that we discuss here.</para>
+
+    <para>There also some issues of writing style for ASF+SDF specifications
     that we discuss here.</para>
 
     <warning>
@@ -2168,6 +2183,42 @@ tests
           </listitem>
         </itemizedlist></para>
     </section>
+
+    <section xml:id="MatterOfStyle">
+      <title>A Matter of Style</title>
+
+      <para></para>
+
+      <section>
+        <title>Howto indent your specification</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Howto name Variables</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Importing Layout and Comment Definitions</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Using hiddens</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Using the ASF+SDF Module Library</title>
+
+        <para></para>
+      </section>
+    </section>
   </section>
 
   <section xml:id="CommonErrors">
@@ -2212,7 +2263,7 @@ exports
 
         <programlisting>equations
 
-[fac0] fac(0)       = 0
+[fac0] fac(0)       = succ(0)
 [fac1] fac(succ(0)) = succ(0)
 [fac2] X != 0 ===&gt; fac(succ(X)) = mul(X,fac(X))</programlisting>
       </example></para>
@@ -2221,10 +2272,24 @@ exports
       <title>Missing Equations</title>
 
       <para>If the normal form of a term still contains function symbols that
-      should have been removed during rewriting, you probably have forgotten
-      one or more equations that define the function. A typical situation is
-      that you have given an <emphasis>incomplete</emphasis> set of equations
-      defining the function.<example xml:id="FacError1.asf">
+      should have been removed during rewriting, you probably have </para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>forgotten</emphasis> one or more equations that
+          define the function,</para>
+        </listitem>
+
+        <listitem>
+          <para>made an <emphasis>error in one of the conditions</emphasis>
+          that prevents one of the equations from being applied in some
+          cases.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A typical example of a forgotten equation is shown in <link
+      linkend="FacError1.asf">FacError1.asf</link>.<example
+          xml:id="FacError1.asf">
           <title>FacError1.asf</title>
 
           <programlisting>equations
@@ -2232,17 +2297,31 @@ exports
 [fac1] fac(succ(0)) = succ(0)
 [fac2] X != 0 ===&gt; fac(succ(X)) = mul(X,fac(X))</programlisting>
         </example></para>
+
+      <para>Trying to reduce <literal>fac(0)</literal> will now yield
+      <literal>fac(0)</literal> instead of <literal>succ(0)</literal>.</para>
     </section>
 
-    <section>
+    <section xml:id="CommonErrors.Order">
       <title>Execution depends on Ordering of Equations</title>
+
+      <para>If the left-hand sides of two equations can match the same term,
+      then two reductions are possible and the outcome of rewriting becomes
+      uncertain. Consider the example in <link
+      linkend="FacError2asf">FacError2.asf</link> where the condition in
+      equation <literal>[fac3]</literal> is forgotten. Now the left-hand sides
+      of both<literal>[fac1]</literal> and <literal>[fac2]</literal> can match
+      the term <literal>fac(succ(0))</literal> and lead to different outcomes
+      depending on the implementation. Always make sure that such overlapping
+      left-hand sides are guarded by a condition that determines which
+      equation to apply.</para>
 
       <para><example xml:id="FacError2asf">
           <title>FacError2.asf</title>
 
           <programlisting>equations
 
-[fac0] fac(0)       = 0
+[fac0] fac(0)       = succ(0)
 [fac1] fac(succ(0)) = succ(0)
 [fac2] fac(succ(X)) = mul(X,fac(X))</programlisting>
         </example></para>
@@ -2253,30 +2332,77 @@ exports
 
       <para>As in any language, if the equations that describe the induction
       over a given structure are wrong, this may lead to infinite recursion.
-      Consider the following errorneous definition of the factorial function
-      over the numerals.</para>
+      Consider the erroneous definition of the factorial function in <link
+      linkend="FacError3.asf">FacError3.asf</link>.</para>
 
       <para><example xml:id="FacError3.asf">
           <title>FacError3.asf</title>
 
           <programlisting>equations
 
-[fac0] fac(0)       = 0
+[fac0] fac(0)       = succ(0)
 [fac1] fac(succ(0)) = succ(0)
 [fac2] X != 0 ===&gt; fac(succ(X)) = mul(X,fac(succ(X)))</programlisting>
         </example></para>
+
+      <important>
+        <para>Don't try this at home :-)</para>
+
+        <para>Currently, The ASF+SDF Meta-Environment does not have good
+        support for recovering from non-terminating specifications. In some
+        cases the system can recover gracefully, for instance, when a stack
+        overflow is discovered, in other cases you have to restart the
+        system.</para>
+      </important>
     </section>
 
     <section>
       <title>Non-termination due to Commutative Equations</title>
 
+      <para>Some operators are inheritantly commutative, i.e., it does not
+      matter in which order the arguments occur. It is tempting to express
+      this in a specification.</para>
+
+      <para>Consider the following, extended, definition of addition in <link
+      linkend="AdderError.asf">AdderError.asf</link>. Mathematically, this is
+      a fine specification. However, executing <emphasis>may</emphasis> lead
+      to non-termination. The carefull reader will observe that equation [0]
+      also overlaps with equations [1] and [2], therefore the outcome is
+      uncertain as explained <link
+      linkend="CommonErrors.Order">above</link>.<example
+          xml:id="AdderError.asf">
+          <title><literal>AdderError.asf</literal></title>
+
+          <programlisting>equations                             
+
+[0] add(X, Y) = add(Y, X)   <co xml:id="co.adder.error-1" />
+[1] add(0, <replaceable>X</replaceable>) = <replaceable>X                     </replaceable>
+[2] add(succ(<replaceable>X</replaceable>), Y) = succ(add(<replaceable>X</replaceable>,<replaceable>Y</replaceable>))  </programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.adder.error-1">
+              <para>New equation that expresses commutativity of
+              addition.</para>
+            </callout>
+          </calloutlist>
+        </example></para>
+    </section>
+
+    <section>
+      <title>Non-termination due to Commutative List Equations</title>
+
+      <para>Commutative equations may also occur in the disguise of an
+      equation containing list matching.</para>
+
       <para>The <link linkend="CODE_itemsets">specification of sets</link>
-      illustrates a specification that lead to non-termination, since
-      equation<literal> [2]</literal>, which expresses that two elements in a
+      illustrates a specification that leads to non-termination, since
+      equation<literal>[2]</literal>, which expresses that two elements in a
       set may be exchanged, will lead to an infinite rewriting loop.</para>
 
       <example xml:id="CODE_itemsets">
-        <title>Non-executable specification for sets</title>
+        <title>Non-terminating specification of sets</title>
 
         <para><programlisting>module ItemSet
 
@@ -2306,6 +2432,10 @@ equations
 
     <section>
       <title>Erroneous Conditions</title>
+
+      <warning>
+        <para>Add examples here.</para>
+      </warning>
 
       <para>There are a few issues to be aware of when writing
       conditions:</para>
@@ -2432,6 +2562,27 @@ equations
 
       <listitem>
         <para>Complete Common Errors Section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Write the <link linkend="MatterOfStyle">Matter of Style</link>
+        section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Not yet discussed are the following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The <literal>constructor</literal> attribute.</para>
+          </listitem>
+
+          <listitem>
+            <para>How to use ASF+SDF in the Meta-Environment (e.g., which
+            button to push when reducing a term). It is probably better to
+            locate this in a separate User-interface Manual.</para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
 
