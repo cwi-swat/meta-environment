@@ -200,8 +200,13 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="CommonErrors">Common errors when executing
+          <para><link linkend="CommonSyntaxErrors">Common syntax errors in
           ASF+SDF specifications</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="CommonExecutionErrors">Common errors when
+          executing ASF+SDF specifications</link>.</para>
         </listitem>
 
         <listitem>
@@ -2187,7 +2192,8 @@ tests
     <section xml:id="MatterOfStyle">
       <title>A Matter of Style</title>
 
-      <para></para>
+      <para>We can give you some advice on the writing style for ASF+SDF
+      specifications. Consider them as current best practices.</para>
 
       <section>
         <title>Howto indent your specification</title>
@@ -2221,7 +2227,43 @@ tests
     </section>
   </section>
 
-  <section xml:id="CommonErrors">
+  <section xml:id="CommonSyntaxErrors">
+    <title>Common Syntax Errors in Specifications</title>
+
+    <para></para>
+
+    <section>
+      <title>Forgotten Hiddens or Exports in SDF part</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Forgotten Layout</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Equation Tag overlaps with Literal</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Forgotten Comma in Conditions</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Type Inconsistency in Equation</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section xml:id="CommonExecutionErrors">
     <title>Common Errors when executing Specifications</title>
 
     <warning>
@@ -2272,7 +2314,7 @@ exports
       <title>Missing Equations</title>
 
       <para>If the normal form of a term still contains function symbols that
-      should have been removed during rewriting, you probably have </para>
+      should have been removed during rewriting, you probably have</para>
 
       <itemizedlist>
         <listitem>
@@ -2561,7 +2603,7 @@ equations
       </listitem>
 
       <listitem>
-        <para>Complete Common Errors Section.</para>
+        <para>Complete Common Errors Sections.</para>
       </listitem>
 
       <listitem>
@@ -2581,6 +2623,11 @@ equations
             <para>How to use ASF+SDF in the Meta-Environment (e.g., which
             button to push when reducing a term). It is probably better to
             locate this in a separate User-interface Manual.</para>
+          </listitem>
+
+          <listitem>
+            <para>The ASF+SDF Library (a new Section or a separate
+            document?)</para>
           </listitem>
         </itemizedlist>
       </listitem>
