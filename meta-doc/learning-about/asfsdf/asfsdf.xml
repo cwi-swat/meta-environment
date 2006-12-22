@@ -34,7 +34,7 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link> list
+    Meta-Environment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link> list
     at the end of the document.</para>
   </warning>
 
@@ -80,7 +80,7 @@
 
       <para>SDF allows the simultaneous definition of concrete (i.e., lexical
       and context-free) and abstract syntax and implicitly defines a
-      translation from text strings to syntax trees. See The Syntax Definion
+      translation from text strings to syntax trees. See The Syntax Definition
       Formalism SDF for complete coverage of SDF.</para>
 
       <para>The main idea of ASF+SDF is to identify the abstract syntax
@@ -99,7 +99,7 @@
 
           <itemizedlist>
             <listitem>
-              <para>user-defined synyax,</para>
+              <para>user-defined syntax,</para>
             </listitem>
 
             <listitem>
@@ -233,7 +233,7 @@
       </listitem>
 
       <listitem>
-        <para><link linkend="UnconditionalEquations">Unconditonal
+        <para><link linkend="UnconditionalEquations">Unconditional
         equations</link>.</para>
       </listitem>
 
@@ -261,7 +261,7 @@
       <programlisting><emphasis role="bold">equations</emphasis>
     &lt;Equation&gt;*</programlisting>
 
-      <para>In other words, zero or more equations. These may be unconditonal
+      <para>In other words, zero or more equations. These may be Unconditional
       or conditional equations as described below.</para>
 
       <important>
@@ -518,7 +518,7 @@
           </listitem>
         </itemizedlist>
 
-        <para>Let's first formalize the grammar of these numeralsin an SDF
+        <para>Let's first formalize the grammar of these numerals in an SDF
         definition:</para>
 
         <example xml:id="Numerals.sdf">
@@ -552,9 +552,9 @@ exports
             </callout>
 
             <callout arearefs="co.succ">
-              <para>Define the succesor function <literal>succ</literal>. Note
-              that we use a prefix function here; the unabbreviated definition
-              would be</para>
+              <para>Define the successor function <literal>succ</literal>.
+              Note that we use a prefix function here; the unabbreviated
+              definition would be</para>
 
               <programlisting>"succ" "(" NUM ")" -&gt; NUM</programlisting>
             </callout>
@@ -701,7 +701,7 @@ exports
 
           <calloutlist>
             <callout arearefs="co.multiplier-import-adder">
-              <para>Import the previoulsy defined module Adder.</para>
+              <para>Import the previously defined module Adder.</para>
             </callout>
 
             <callout arearefs="co.multiplier-mul">
@@ -1019,7 +1019,7 @@ hiddens
   <section xml:id="AdvancedEquations">
     <title>Advanced Equations</title>
 
-    <para>The simple equations described in the previous section are powerfull
+    <para>The simple equations described in the previous section are powerful
     enough to formulate the solution of any computational problem. However,
     ASF+SDF provides some more advanced features that can make the life of the
     specification writer a lot simpler:</para>
@@ -1036,13 +1036,13 @@ hiddens
       </listitem>
 
       <listitem>
-        <para><link linkend="MemoFunctions">Memo functions</link>: memoize the
-        values of previous function invocations.</para>
+        <para><link linkend="MemoFunctions">Memo functions</link>: memorize
+        the values of previous function invocations.</para>
       </listitem>
 
       <listitem>
         <para><link linkend="LexicalConstructorFunctions">Lexical constructor
-        functions</link>: get acces to and modify the lexical (string)
+        functions</link>: get access to and modify the lexical (string)
         representation of programs.</para>
       </listitem>
 
@@ -1300,18 +1300,19 @@ hiddens
 
         <para>The actual solution of our problem, removed duplicates from a
         list, is shown in <link linkend="Sets.asf">Sets.asf</link>. Observe
-        that the single equation has a left-hand side with two occurences of
+        that the single equation has a left-hand side with two occurrences of
         variable Elem, so it will match on a list that contains two identical
         elements.</para>
 
-        <para>In the right-hand side, one of these occurences is removed.
+        <para>In the right-hand side, one of these occurrences is removed.
         However, this same equation remains applicable as long as the list
         contains duplicate elements.<example xml:id="Sets.asf">
             <title>Sets.asf</title>
 
             <programlisting>equations
   
-  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3}</programlisting>
+  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = 
+        {Elem*1, Elem, Elem*2, Elem*3}</programlisting>
           </example></para>
 
         <important>
@@ -1340,10 +1341,10 @@ hiddens
         linkend="Lists.sdf">Lists.sdf</link> and <link
         linkend="Lists.asf">Lists.asf</link>.</para>
 
-        <example xml:id="Lists.sdf">
-          <title>Lists.sdf</title>
+        <para><example xml:id="Lists.sdf">
+            <title>Lists.sdf</title>
 
-          <para><programlisting>module Lists
+            <programlisting>module Lists
 
 imports basic/Booleans
 imports basic/Integers
@@ -1366,7 +1367,11 @@ exports
 hiddens
   variables
     "Int"[0-9]*  -&gt; Integer
-    "Int*"[0-9]* -&gt; {Integer ","}* </programlisting>Notes: <calloutlist>
+    "Int*"[0-9]* -&gt; {Integer ","}* </programlisting>
+
+            <para>Notes:</para>
+
+            <calloutlist>
               <callout arearefs="co.lists.start">
                 <para>In the context-free syntax below, we define functions
                 with result sorts <literal>Boolean</literal>,
@@ -1401,10 +1406,10 @@ hiddens
               </callout>
 
               <callout arearefs="co.lists.sort">
-                <para>Sort a list</para>
+                <para>Sort a list.</para>
               </callout>
-            </calloutlist></para>
-        </example>
+            </calloutlist>
+          </example></para>
 
         <para>Given these syntax definitions, we can define the meaning of the
         various functions in <link
@@ -1431,10 +1436,11 @@ hiddens
               xml:id="co.lists.asf.reverse" />
   [rev-2] reverse([Int, Int*]) = reverse([Int*]) ++ Int
 
-  [srt-1]                          Int1 &gt; Int2 == true      <co
+  [srt-1]            Int1 &gt; Int2 == true                    <co
               xml:id="co.lists.asf.sort" />
-         =================================================================================
-         sort([Int*1, Int1, Int*2, Int2, Int*3]) = sort([Int*1, Int2, Int*2, Int1, Int*3])
+         =========================================
+         sort([Int*1, Int1, Int*2, Int2, Int*3]) = 
+         sort([Int*1, Int2, Int*2, Int1, Int*3])
   [default-srt]
          sort([Int*]) = [Int*]</programlisting>
 
@@ -1456,12 +1462,12 @@ hiddens
 
             <callout arearefs="co.lists.asf.is-element">
               <para>The two occurrences of the variable <literal>Int</literal>
-              in equation <literal>[is-1]</literal> illustrate the use of list
-              matching for a search for a given element in a list.</para>
+              in equation <literal>[is-1]</literal> illustrates the use of
+              list matching for a search for a given element in a list.</para>
             </callout>
 
             <callout arearefs="co.lists.asf.reverse">
-              <para>The reverse functions is defined by recurring over the
+              <para>The reverse function is defined by recurring over the
               elements of the list. Note how the append operator
               <literal>++</literal> is used in equation
               <literal>[rev-2]</literal>. One can avoid using an auxiliary
@@ -1551,7 +1557,7 @@ exports
               <callout arearefs="co.fib.sdf.memo">
                 <para>Define the syntax of the <literal>fib</literal>
                 function. The memo attribute indicates that memoization should
-                be used when exeuting this function.</para>
+                be used when executing this function.</para>
               </callout>
             </calloutlist>The well-known definition of the Fibonacci function
           fib is given in <link linkend="Fib.asf">Fib.asf</link>.</para>
@@ -1916,13 +1922,13 @@ equations
           <listitem>
             <para>In case of a transformer, the result sort
             <replaceable>Tree</replaceable> should always be same as the sort
-            of the first argument:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable> {traversal(trafo, ...)}</programlisting></para>
+            of the first argument:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable> {traversal(trafo,...)}</programlisting></para>
           </listitem>
 
           <listitem>
             <para>In case of an accumulator, the second argument
             <replaceable>Accu</replaceable> represents the accumulated value
-            and the result sort should be of the same sort:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Accu</replaceable> {traversal(accu, ...)}</programlisting></para>
+            and the result sort should be of the same sort:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Accu</replaceable> {traversal(accu,...)}</programlisting></para>
           </listitem>
 
           <listitem>
@@ -1931,31 +1937,31 @@ equations
             second the accumulator <replaceable>Accu</replaceable>, and the
             result sort should be a tuple consisting of the tree node sort
             (first element of the tuple) and the accumulator (second element
-            of the tuple):<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; &lt;<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>&gt; {traversal(accu, trafo, ...)}</programlisting></para>
+            of the tuple):<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; &lt;<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>&gt; {traversal(accu,trafo,...)}</programlisting></para>
           </listitem>
 
           <listitem>
             <para>The traversal functions may have more arguments, the only
             restriction is that they should be consistent over the various
-            occurrences of the same traversal function. <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, continue, top-down)}
-<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>2</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting></para>
+            occurrences of the same traversal function. <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,continue,top-down)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>2</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}</programlisting></para>
           </listitem>
 
           <listitem>
             <para>The order of the traversal attributes is free, but should be
             used consistently, for instance the following definition is not
-            allowed:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, top-down, continue)}
-<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, ..., <replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}
+            allowed:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,top-down,continue)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}
 </programlisting></para>
           </listitem>
 
           <listitem>
             <para>If the number of arguments of the traversal function
             changes, you should introduce a new function name. The following
-            definitions are not correct: <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>)      -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, top-down, continue)}
-<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>,<replaceable> A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting>but
-            should be:<programlisting><replaceable>tf</replaceable>1(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>)      -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo, top-down, continue)}
-<replaceable>tf</replaceable>2(<replaceable>Tree</replaceable><subscript>1</subscript>, <replaceable>Accu</replaceable>, <replaceable>A</replaceable><subscript>1</subscript>, <replaceable>A</replaceable><subscript>2</subscript>,<replaceable> A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo, continue, top-down)}</programlisting></para>
+            definitions are not correct: <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>)     -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,top-down,continue)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>,<replaceable>A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}</programlisting>but
+            should be:<programlisting><replaceable>tf</replaceable>1(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>)    -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,top-down,continue)}
+<replaceable>tf</replaceable>2(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>,<replaceable>A</replaceable><subscript>3</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}</programlisting></para>
           </listitem>
         </itemizedlist>
 
@@ -1991,7 +1997,7 @@ equations
       <para>In fact, a module may contain an <emphasis>several</emphasis> test
       and equations sections in arbitrary order.</para>
 
-      <para>Each test has the form of a condition preceeded by a label:</para>
+      <para>Each test has the form of a condition preceded by a label:</para>
 
       <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
           role="bold">]</emphasis> &lt;Condition&gt;</programlisting>
@@ -2221,7 +2227,7 @@ tests
       possible.</para>
 
       <section xml:id="StyleEquations">
-        <title>Howto indent your Equations</title>
+        <title>How to indent your Equations</title>
 
         <para>The preferred style for writing equations is as follows:</para>
 
@@ -2244,27 +2250,27 @@ tests
         <para>Here is an example:</para>
 
         <programlisting>[check-tuple-exp1]
-        &lt;$Etype1, $Tenv'&gt; := check($Exp1, $Tenv),
-        &lt;&lt;$Etype+&gt;, $Tenv''&gt; := check(&lt;$Exp2, $Exp+&gt;, $Tenv')
-        ===================================================================
-        check(&lt;$Exp1, $Exp2, $Exp+&gt;, $Tenv) = &lt;&lt;$Etype1, $Etype+&gt;, $Tenv''&gt;
+   &lt;$Etype1, $Tenv'&gt; := check($Exp1, $Tenv),
+   &lt;&lt;$Etype+&gt;, $Tenv''&gt; := check(&lt;$Exp2, $Exp+&gt;, $Tenv')
+   ===================================================================
+   check(&lt;$Exp1, $Exp2, $Exp+&gt;, $Tenv) = &lt;&lt;$Etype1, $Etype+&gt;, $Tenv''&gt;
 
 [check-tuple-exp2]
-        &lt;$Etype1, $Tenv'&gt; := check($Exp1, $Tenv),
-        &lt;$Etype2, $Tenv''&gt; := check($Exp2, $Tenv')
-        ============================================================
-        check(&lt;$Exp1, $Exp2&gt;, $Tenv) = &lt;&lt;$Etype1, $Etype2&gt;, $Tenv''&gt;</programlisting>
+   &lt;$Etype1, $Tenv'&gt; := check($Exp1, $Tenv),
+   &lt;$Etype2, $Tenv''&gt; := check($Exp2, $Tenv')
+    ============================================================
+    check(&lt;$Exp1, $Exp2&gt;, $Tenv) = &lt;&lt;$Etype1, $Etype2&gt;, $Tenv''&gt;</programlisting>
 
         <para>Some authors prefer to make the implication sign as wide as the
-        conclusion (as shown above). This looks nices but requires some
+        conclusion (as shown above). This looks nice but requires some
         maintenance when you change the conclusion. For that reason, other
-        authoars always use one implication sign of a fixed length (3-4 equals
+        authors always use one implication sign of a fixed length (3-4 equals
         characters): <literal>====</literal> or even
         <literal>===&gt;</literal></para>
       </section>
 
       <section xml:id="StyleVariables">
-        <title>Howto name Variables</title>
+        <title>How to name Variables</title>
 
         <para>ASF+SDF provides a large freedom in the way you can name
         variables; they are not limited to alphanumeric strings as in most
@@ -2290,8 +2296,8 @@ tests
         <itemizedlist>
           <listitem>
             <para>Variables start with an uppercase letter, followed by
-            letters, underscores or hyphes. Optionally they may be followed by
-            digits or single quotes.</para>
+            letters, underscores or hyphens. Optionally they may be followed
+            by digits or single quotes.</para>
           </listitem>
 
           <listitem>
@@ -2355,12 +2361,12 @@ tests
       </section>
 
       <section xml:id="StyleCommentImport">
-        <title>Importing Layout and Comment Definitions</title>
+        <title>How to import Layout and Comment Definitions</title>
 
         <para>As we have explained before, there is no built-in definition for
         the layout or comments in the ASF part of a module
         <replaceable>M</replaceable> and you need to import definitions for
-        layour or comments yourself. If you forget to do this, you get a parse
+        layout or comments yourself. If you forget to do this, you get a parse
         error when trying to parse the equations. There are, in principle, two
         standard modules that do the job: <literal>basic/Whitespace</literal>
         or <literal>basic/Comments</literal> (that imports
@@ -2378,8 +2384,8 @@ tests
             module <replaceable>M</replaceable>. However, there are cases
             where the definitions in <literal>basic/Comments</literal>
             interferes with the syntax definitions in the modules that import
-            <replaceable>M</replaceable>. In thiose cases, the second method
-            is applicable.</para>
+            <replaceable>M</replaceable>. In those cases, the second method is
+            applicable.</para>
           </listitem>
 
           <listitem>
@@ -2416,38 +2422,268 @@ tests
   </section>
 
   <section xml:id="CommonSyntaxErrors">
-    <title>Common Syntax Errors in Specifications</title>
+    <title>Common Syntax Errors in Specifications or Input Terms</title>
 
-    <para></para>
+    <para>Syntax errors are unavoidable when writing any program or
+    specification. Here we have collected some case that are typical for
+    ASF+SDF:</para>
 
-    <section>
-      <title>Forgotten Hiddens or Exports in SDF part</title>
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="SyntaxErrorsEquations">Parse error after
+        equations keyword</link>.</para>
+      </listitem>
 
-      <para></para>
+      <listitem>
+        <para><link linkend="SyntaxErrorsTag">Equation tag does not parse
+        correctly</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="SyntaxErrorsEquals">Parse error in equation just
+        after = sign</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="SyntaxErrorsConditions">Parse error in
+        conditions</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="SyntaxErrorsTerms">Common syntax errors in input
+        terms</link>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="SyntaxErrorsEquations">
+      <title>Parse Error after Equations Keyword</title>
+
+      <para>Consider the specification in <link
+      linkend="BlackOrWhite.sdf">BlackOrWhite.sdf</link> and <link
+      linkend="BlackOrWhite.asf">BlackOrWhite.asf</link>. They define a sort
+      <literal>BlackOrWhite</literal> which contains the values
+      <literal>black</literal> and <literal>white</literal> and a
+      <literal>flip</literal> function to switch colors.</para>
+
+      <example xml:id="BlackOrWhite.sdf">
+        <title>BlackOrWhite.sdf</title>
+
+        <programlisting>module BlackOrWhite
+exports
+   sorts BlackOrWhite
+   context-free syntax
+     "white" -&gt; BlackOrWhite
+     "black" -&gt; BlackOrWhite
+
+    flip(BlackOrWhite) -&gt; BlackOrWhite</programlisting>
+      </example>
+
+      <example xml:id="BlackOrWhite.asf">
+        <title>BlackOrWhite.asf</title>
+
+        <programlisting>equations
+[1] flip(black) = white
+[2] flip(white) = black</programlisting>
+      </example>
+
+      <para>After carefully designing this specification, you save it. To your
+      distress, you get an error message that resembles the following:</para>
+
+      <screen>character '' expected, line 2, column 0</screen>
+
+      <para>What is going on here? Well, actually two things:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The message tries to tell you that it could not parse the
+          newline symbol at the end of the first line (but the actual newline
+          is not displayed in the message).</para>
+        </listitem>
+
+        <listitem>
+          <para>You have forgotten to include basic/Comments in your
+          module.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This is easily corrected as shown in <link
+      linkend="BlackOrWhiteCorrected.sdf">BlackOrWhiteCorrected.sdf</link> and
+      <link
+      linkend="BlackOrWhiteCorrected.asf">BlackOrWhiteCorrected.asf</link>.</para>
+
+      <example xml:id="BlackOrWhiteCorrected.sdf">
+        <title>BlackOrWhiteCorrected.sdf</title>
+
+        <programlisting>module BlackOrWhiteCorrected
+exports
+   imports basic/Comments              <co
+            xml:id="co.blackorwhitecorreccted.1" />
+   sorts BlackOrWhite
+   context-free syntax
+     "white" -&gt; BlackOrWhite
+     "black" -&gt; BlackOrWhite
+
+    flip(BlackOrWhite) -&gt; BlackOrWhite</programlisting>
+
+        <para>Note:</para>
+
+        <calloutlist>
+          <callout arearefs="co.blackorwhitecorreccted.1">
+            <para>The missing import is inserted here.</para>
+          </callout>
+        </calloutlist>
+      </example>
+
+      <example xml:id="BlackOrWhiteCorrected.asf">
+        <title>BlackOrWhiteCorrected.asf</title>
+
+        <programlisting>equations
+[1] flip(black) = white
+[2] flip(white) = black</programlisting>
+      </example>
     </section>
 
-    <section>
-      <title>Forgotten Layout</title>
+    <section xml:id="SyntaxErrorsTag">
+      <title>Tag of Equation does not parse</title>
 
-      <para></para>
+      <para>Now let's embellish the previous example further by giving better
+      names to the equations. See <link
+      linkend="BlackOrWhiteWithTags.asf">BlackOrWhiteWithTags.asf</link>.<example
+          xml:id="BlackOrWhiteWithTags.asf">
+          <title>BlackOrWhiteWithTags.asf</title>
+
+          <programlisting>equations
+[flip] flip(black) = white
+[flip] flip(white) = black</programlisting>
+        </example></para>
+
+      <para>Unfortunately, this leads to an error message in the following
+      spirit:</para>
+
+      <screen>character ']' unexpected, line 2, column 6</screen>
+
+      <para>The explanation is that the tag of an equation and a function name
+      in the specification interfere with each other. The simple solution is
+      shown in <link
+      linkend="BlackOrWhiteWithCorrectedTags.asf">BlackOrWhiteWithCorrectedTags.asf</link>.
+      Whether you change <literal>[flip]</literal> to
+      <literal>[flip1]</literal>, <literal>[flip-1]</literal>,
+      <literal>[flipa]</literal>, or something else is not important as long
+      as you avoid the tag <literal>[flip]</literal> itself.</para>
+
+      <example xml:id="BlackOrWhiteWithCorrectedTags.asf">
+        <title>BlackOrWhiteWithCorrectedTags.asf</title>
+
+        <programlisting>equations
+[flip-1] flip(black) = white
+[flip-2] flip(white) = black</programlisting>
+      </example>
     </section>
 
-    <section>
-      <title>Equation Tag overlaps with Literal</title>
+    <section xml:id="SyntaxErrorsEquals">
+      <title>Parse Error in Equation just after = Sign</title>
 
-      <para></para>
+      <para>It is not unusual to equate the Boolean values true and false with
+      the respective integers 1 and 0. You specify this in <link
+      linkend="BoolAsInt.sdf">BoolAsInt.sdf</link> and <link
+      linkend="BoolAsInt.asf">BoolAsInt.asf</link>.</para>
+
+      <example xml:id="BoolAsInt.sdf">
+        <title>BoolAsInt.sdf</title>
+
+        <programlisting>module BoolAsInt
+exports
+  imports basic/Comments</programlisting>
+      </example>
+
+      <example xml:id="BoolAsInt.asf">
+        <title>BoolAsInt.asf</title>
+
+        <programlisting>equations
+[t1] true  = 1
+[f0] false = 0</programlisting>
+      </example>
+
+      <para>You are confident that you did a good job: a proper tag, a Boolean
+      constant on the left-hand side and Integer constant on the right-hand
+      side of each equation. Unfortunately, this experiment ends in the
+      following error message:</para>
+
+      <screen>character '1' unexpected, line 2, column 14</screen>
+
+      <para>The story behind this error is as follows. The implementors of The
+      Meta-Environment are clever (maybe too clever?) and they use the parser
+      to do the type checking of equations as well. In this example, the
+      left-hand side is of type Boolean and the right-hand side of type
+      Integer, a clear type error. Unfortunately, the system reports this type
+      error as a parse error.</para>
     </section>
 
-    <section>
-      <title>Forgotten Comma in Conditions</title>
+    <section xml:id="SyntaxErrorsConditions">
+      <title>Syntax Errors in Conditions</title>
 
-      <para></para>
+      <para>It is sometimes hard to find syntax errors in conditional
+      equations with many, complex, conditions. Here are the most likely
+      causes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A textual error in one of the sides of a condition. Remedy:
+          correct it.</para>
+        </listitem>
+
+        <listitem>
+          <para>A parse error just before the right-hand side of a condition.
+          Probably a type check error disguised as a parse error (see <link
+          linkend="SyntaxErrorsEquals">Parse Error in Equation just after =
+          Sign</link>). Remedy: check the sorts of the arguments and the
+          results of the functions on both sides of the condition and correct
+          the type error.</para>
+        </listitem>
+
+        <listitem>
+          <para>Conditions are separated by commas and, unfortunately, these
+          commas <emphasis>have</emphasis> to be there. They are easily
+          forgotten. Remedy: add the missing comma.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
-    <section>
-      <title>Type Inconsistency in Equation</title>
+    <section xml:id="SyntaxErrorsTerms">
+      <title>Common Syntax Errors in Input Terms</title>
 
-      <para></para>
+      <para>When you have completed your specification you want to write some
+      input terms and parse and reduce them in order to validate your
+      specification. As in ordinary programming when you are hit by a syntax
+      error detected by the compiler, you can also get a parse error after
+      entering an input term. There are three possible explanation for
+      this:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>You simply made a textual error in the input term. Remedy:
+          correct the textual error and try again.</para>
+        </listitem>
+
+        <listitem>
+          <para>You made an error in your syntax definition; the input can
+          impossibly be parsed according to the given syntax definition.
+          Remedy: adjust the syntax definition and try again.</para>
+        </listitem>
+
+        <listitem>
+          <para>None of the above seems to apply. In this case it is likely
+          that you want to parse an input term for some sort, say
+          <replaceable>S</replaceable>, but a start symbols declaration for
+          the sort <replaceable>S</replaceable> is missing. Remedy: add a
+          start symbols declaration for <replaceable>S</replaceable> and try
+          again.</para>
+
+          <warning>
+            <para>Add cross ref to start symbols.</para>
+          </warning>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
@@ -2589,14 +2825,14 @@ exports
     <section>
       <title>Non-termination due to Commutative Equations</title>
 
-      <para>Some operators are inheritantly commutative, i.e., it does not
+      <para>Some operators are inherently commutative, i.e., it does not
       matter in which order the arguments occur. It is tempting to express
       this in a specification.</para>
 
       <para>Consider the following, extended, definition of addition in <link
       linkend="AdderError.asf">AdderError.asf</link>. Mathematically, this is
       a fine specification. However, executing <emphasis>may</emphasis> lead
-      to non-termination. The carefull reader will observe that equation [0]
+      to non-termination. The careful reader will observe that equation [0]
       also overlaps with equations [1] and [2], therefore the outcome is
       uncertain as explained <link
       linkend="CommonErrors.Order">above</link>.<example
@@ -2766,7 +3002,7 @@ equations
       </listitem>
     </itemizedlist>
 
-    <para>Historical notes for SDF are given in the companian article The
+    <para>Historical notes for SDF are given in the companion article The
     Syntax Definition Formalism SDF.</para>
   </section>
 
@@ -2788,15 +3024,6 @@ equations
       <listitem>
         <para>Add cross references to other documents like the SDF
         manual.</para>
-      </listitem>
-
-      <listitem>
-        <para>Complete Common Errors Sections.</para>
-      </listitem>
-
-      <listitem>
-        <para>Write the <link linkend="MatterOfStyle">Matter of Style</link>
-        section.</para>
       </listitem>
 
       <listitem>
@@ -2826,11 +3053,6 @@ equations
     <itemizedlist>
       <listitem>
         <para>Give more examples in the text.</para>
-      </listitem>
-
-      <listitem>
-        <para>Add a section on syntax errors in ASF+SDF specifications and how
-        to solve them.</para>
       </listitem>
     </itemizedlist>
   </section>
