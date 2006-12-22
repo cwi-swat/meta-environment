@@ -2193,36 +2193,224 @@ tests
       <title>A Matter of Style</title>
 
       <para>We can give you some advice on the writing style for ASF+SDF
-      specifications. Consider them as current best practices.</para>
+      specifications:</para>
 
-      <section>
-        <title>Howto indent your specification</title>
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="StyleEquations">Indentation style of
+          equations</link>.</para>
+        </listitem>
 
-        <para></para>
+        <listitem>
+          <para><link linkend="StyleVariables">Naming conventions for
+          variables</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="StyleCommentImport">Importing layout and
+          comment definitions</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="StyleLibrary">Using the ASF+SDF
+          library</link>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Consider them as current best practices and apply them as much as
+      possible.</para>
+
+      <section xml:id="StyleEquations">
+        <title>Howto indent your Equations</title>
+
+        <para>The preferred style for writing equations is as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Place the tag of the equation on a separate line.</para>
+          </listitem>
+
+          <listitem>
+            <para>Place the conditions of the equation on separate
+            lines.</para>
+          </listitem>
+
+          <listitem>
+            <para>Vertically align the left-hand sides of the conditions, the
+            implication sign, and the conclusion.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Here is an example:</para>
+
+        <programlisting>[check-tuple-exp1]
+        &lt;$Etype1, $Tenv'&gt; := check($Exp1, $Tenv),
+        &lt;&lt;$Etype+&gt;, $Tenv''&gt; := check(&lt;$Exp2, $Exp+&gt;, $Tenv')
+        ===================================================================
+        check(&lt;$Exp1, $Exp2, $Exp+&gt;, $Tenv) = &lt;&lt;$Etype1, $Etype+&gt;, $Tenv''&gt;
+
+[check-tuple-exp2]
+        &lt;$Etype1, $Tenv'&gt; := check($Exp1, $Tenv),
+        &lt;$Etype2, $Tenv''&gt; := check($Exp2, $Tenv')
+        ============================================================
+        check(&lt;$Exp1, $Exp2&gt;, $Tenv) = &lt;&lt;$Etype1, $Etype2&gt;, $Tenv''&gt;</programlisting>
+
+        <para>Some authors prefer to make the implication sign as wide as the
+        conclusion (as shown above). This looks nices but requires some
+        maintenance when you change the conclusion. For that reason, other
+        authoars always use one implication sign of a fixed length (3-4 equals
+        characters): <literal>====</literal> or even
+        <literal>===&gt;</literal></para>
       </section>
 
-      <section>
+      <section xml:id="StyleVariables">
         <title>Howto name Variables</title>
 
-        <para></para>
+        <para>ASF+SDF provides a large freedom in the way you can name
+        variables; they are not limited to alphanumeric strings as in most
+        languages, but you can define arbitrary syntax for them. This freedom
+        has, unfortunately, also a dark side: using too much of this freedom
+        leads to ununderstandable specifications. Here is an example in the
+        context where the library module <literal>Integers</literal> has been
+        imported:</para>
+
+        <programlisting>variables
+
+ "2 + 3" -&gt; Integer</programlisting>
+
+        <para>Given this definition, nobody will understand what the meaning
+        of "1 + 2 + 3" will be. [Answer: an addition with two operands, the
+        constant <literal>1</literal> and the Integer variable <literal>2 +
+        3</literal>.]</para>
+
+        <para>Although there are some rare cases where this can be used to
+        your advantage, we strongly advise against this and suggest the
+        following conventions for defining variables:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Variables start with an uppercase letter, followed by
+            letters, underscores or hyphes. Optionally they may be followed by
+            digits or single quotes.</para>
+          </listitem>
+
+          <listitem>
+            <para>If syntactic constraints make this mandatory, start
+            variables with a distinctive character. Preferred is a dollar sign
+            (<literal>$</literal>), but others like a number sign
+            (<literal>#</literal>) can be considered.</para>
+          </listitem>
+
+          <listitem>
+            <para>In case a variable is of a list sort, plus
+            (<literal>+</literal>) or star (<literal>*</literal>) characters
+            may be used.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>These rules are followed in the following variable
+        declarations:</para>
+
+        <programlisting>variables
+
+  "Integer" [0-9]* -&gt; Integer          <co xml:id="co.vars.1" />
+  "Int" [0-9']*    -&gt; Integer          <co xml:id="co.vars.2" />
+  "$int" [0-9]*    -&gt; Integer          <co xml:id="co.vars.3" />
+  "Int*" [0-9']*   -&gt; {Integer ","}*   <co xml:id="co.vars.4" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="co.vars.1">
+            <para>A plain variable declarations that declares<literal>
+            Integer</literal>, <literal>Integer1</literal>,
+            <literal>Integer2</literal>, <literal>Integer123</literal>, ...
+            .</para>
+          </callout>
+
+          <callout arearefs="co.vars.2">
+            <para>A similar declarations but using digits and quote as suffix:
+            <literal>Int</literal>, <literal>Int'</literal>,
+            <literal>Int''</literal>, <literal>Int'''</literal>,
+            <literal>Int1</literal>, <literal>Int123</literal>, ... .</para>
+          </callout>
+
+          <callout arearefs="co.vars.3">
+            <para>Using <literal>$</literal> as prefix: this declares
+            <literal>$int</literal>, <literal>$int1</literal>,
+            <literal>$int123</literal>, ... .</para>
+          </callout>
+
+          <callout arearefs="co.vars.4">
+            <para>Using <literal>*</literal> in a list variable:
+            <literal>Int*</literal>, <literal>Int*1</literal>,
+            <literal>Int*123</literal>, ... .</para>
+          </callout>
+        </calloutlist>
+
+        <important>
+          <para>Restrain yourself in the choice of variable names and follow
+          the above naming conventions.</para>
+        </important>
       </section>
 
-      <section>
+      <section xml:id="StyleCommentImport">
         <title>Importing Layout and Comment Definitions</title>
 
-        <para></para>
+        <para>As we have explained before, there is no built-in definition for
+        the layout or comments in the ASF part of a module
+        <replaceable>M</replaceable> and you need to import definitions for
+        layour or comments yourself. If you forget to do this, you get a parse
+        error when trying to parse the equations. There are, in principle, two
+        standard modules that do the job: <literal>basic/Whitespace</literal>
+        or <literal>basic/Comments</literal> (that imports
+        <literal>basic/Whitespace</literal>).</para>
+
+        <para>But what is the best way to do this? There are two
+        options:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Add the import of <literal>basic/Comments</literal> in the
+            exports section of module <replaceable>M</replaceable>. This is
+            the simplest method since it exports the definitions in
+            <literal>basic/Comments</literal> to all other modules that import
+            module <replaceable>M</replaceable>. However, there are cases
+            where the definitions in <literal>basic/Comments</literal>
+            interferes with the syntax definitions in the modules that import
+            <replaceable>M</replaceable>. In thiose cases, the second method
+            is applicable.</para>
+          </listitem>
+
+          <listitem>
+            <para>Add the import of <literal>basic/Comments</literal> to the
+            hiddens section of module <replaceable>M</replaceable>. In this
+            way, the definitions in <literal>basic/Comments</literal> remain
+            localized to M. The disadvantage of this approach is that the
+            import of <literal>basic/Comments</literal> has to be repeated in
+            every module.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>It is common practice to start with the first approach and
+        switch to the second approach when syntactic problems occur.</para>
+
+        <important>
+          <para>Be aware of the way in which you import the layout and comment
+          conventions for your equations.</para>
+        </important>
       </section>
 
-      <section>
-        <title>Using hiddens</title>
-
-        <para></para>
-      </section>
-
-      <section>
+      <section xml:id="StyleLibrary">
         <title>Using the ASF+SDF Module Library</title>
 
-        <para></para>
+        <para>ASF+SDF comes with a library of predefined grammars and
+        datatypes. Use them to save yourself work. See XXX for an overview of
+        the library.</para>
+
+        <warning>
+          <para>Add ref to library overview, but write it first ;-)</para>
+        </warning>
       </section>
     </section>
   </section>
