@@ -148,13 +148,9 @@
           <para>At the command line you can use the programs
           <command>pgen</command> to generate a parse table and
           <command>sglr</command> to parse text using the generated parse
-          table.</para>
+          table. <remark>Add links to relevant documents.</remark></para>
         </listitem>
       </itemizedlist>
-
-      <warning>
-        <para>Add links to relevant documents.</para>
-      </warning>
     </section>
 
     <section>
@@ -1122,8 +1118,8 @@ exports
 
       <para>The example <link linkend="CODE_LettersDigits3">below</link> gives
       the definition of a single letter or digit using the alternative
-      operator {\tt \verb+\+/}. This definition is equivalent to the one given
-      <link linkend="CODE_LettersDigits2">above</link>.</para>
+      operator <literal>\/</literal>. This definition is equivalent to the one
+      given <link linkend="CODE_LettersDigits2">above</link>.</para>
 
       <example xml:id="CODE_LettersDigits3">
         <title>Defining a single letter or digit using the alternative
@@ -1190,8 +1186,7 @@ exports
   context-free syntax
     "(" NAT "," NAT ")" -&gt; COORD
     "line" "to" COORD   -&gt; CMND 
-    "move" "to" COORD   -&gt; CMND
-</programlisting></para>
+    "move" "to" COORD   -&gt; CMND</programlisting></para>
       </example>
 
       <para>An equivalent conventional BNF grammar (and not considering
@@ -1836,12 +1831,9 @@ exports
       </itemizedlist>
 
       <para>Currently, there is no syntactic or semantic difference between
-      <literal>left</literal> and <literal>assoc</literal>, but we may change
-      the semantics of the assoc attribute in the future.</para>
-
-      <warning>
-        <para>Really?</para>
-      </warning>
+      <literal>left</literal> and <literal>assoc</literal>, but &#160;we may
+      change the semantics of the assoc attribute in the future. <remark>Is
+      this really true?</remark></para>
 
       <para><link linkend="CODE_simple-prio">Below</link> we give an example
       of a definition of simple arithmetic expressions with the usual
@@ -2659,9 +2651,7 @@ imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</p
   <section xml:id="SdfComment">
     <title>SDF comment convention</title>
 
-    <warning>
-      <para>This has a too prominent place; move it.</para>
-    </warning>
+    <para><remark>This has a too prominent place; move it.</remark></para>
 
     <!--\index{Sdf comment@\sdf\ comment}-->
 
@@ -3059,6 +3049,10 @@ hiddens
       <listitem>
         <para>Refer to the visualization of module structure, parse trees and
         ambiguities (may be in a separate MetaEnv sidebar).</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove all <remark>remarks</remark> from the text.</para>
       </listitem>
     </itemizedlist>
 
