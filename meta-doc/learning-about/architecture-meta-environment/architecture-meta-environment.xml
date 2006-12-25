@@ -14,7 +14,7 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
-    <title>The architecture of The Meta-Environment</title>
+    <title>The Architecture of The Meta-Environment</title>
 
     <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
     (Wed, 13 Dec 2006)$</pubdate>
@@ -32,27 +32,28 @@
 
   <warning>
     <para>This is work in progress; this document has not yet been reviewed
-    and approved.</para>
+    and approved. See <link linkend="ToDo">To Do</link> section.</para>
   </warning>
 
   <section>
     <title>Motivation</title>
 
     <para>The Meta-Environment is a powerful system that can be viewed from
-    different angles. From the end-user who creates languages and tools using
-    the graphical user interface, via the power-user who builds applications
-    using the command line interface and the system libraries to the system
-    developer who is maintaining and extending the system. For all these
-    stakeholders we present architectural views that will help to better
-    understand the system and its possibilities.</para>
+    different angles. From the angle of the end-user who creates languages and
+    tools using the graphical user interface, from the angle of the power-user
+    who builds applications using the command line interface and the system
+    libraries to the angle of the system developer who is maintaining and
+    extending the system. For all these stakeholders we present architectural
+    views that will help them to better understand the system and its
+    possibilities.</para>
   </section>
 
   <section>
     <title>Introduction</title>
 
     <para>The Meta-Environment is a framework for<emphasis> language
-    engineering</emphasis> (language development, source code analysis and
-    source code transformation) consisting of:</para>
+    engineering</emphasis> (language design and implementation, source code
+    analysis and source code transformation) consisting of:</para>
 
     <itemizedlist>
       <listitem>
@@ -124,7 +125,7 @@
       </listitem>
 
       <listitem>
-        <para>Compilation of domain specific languages (DSL).</para>
+        <para>Compilation of domain specific languages (DSLs).</para>
       </listitem>
 
       <listitem>
@@ -143,7 +144,7 @@
       </listitem>
 
       <listitem>
-        <para>To provide expert users with a powerfull tool suite.</para>
+        <para>To provide expert users with a powerful tool suite.</para>
       </listitem>
 
       <listitem>
@@ -153,7 +154,7 @@
     </itemizedlist>
 
     <section>
-      <title>Stakeholders and views</title>
+      <title>Stakeholders and Views</title>
 
       <para>We identify the following stakeholders of The
       Meta-Environment:</para>
@@ -182,46 +183,42 @@
 
       <itemizedlist>
         <listitem>
-          <para>The <link linkend="end-user-view">end-user view</link>
+          <para>The <link linkend="end-user-view">end-user view</link> (USR)
           describes the system as an interactive black box.</para>
         </listitem>
 
         <listitem>
           <para>The <link linkend="decomposition-view">decomposition
-          view</link> describes how the system is organized in
+          view</link> (DCP) describes how the system is organized in
           components.</para>
         </listitem>
 
         <listitem>
           <para>The <link linkend="coordination-view">coordination view</link>
-          describes the cooperation between components.</para>
+          (CRD) describes the cooperation between components.</para>
         </listitem>
 
         <listitem>
           <para>The <link linkend="data-layer-view">data layer view</link>
-          describes shows the relation between datatypes.</para>
+          (DAT) describes shows the relation between datatypes.</para>
         </listitem>
 
         <listitem>
-          <para>The <link linkend="package-view">package view</link> describes
-          the mapping between architecture elements and implementation
-          packages.</para>
+          <para>The <link linkend="package-view">package view</link> (PCK)
+          describes the mapping between architecture elements and
+          implementation packages.</para>
         </listitem>
 
         <listitem>
           <para>The <link linkend="package-dependency-view">package dependency
-          view</link> shows how the various packages use each other.</para>
+          view</link> (DEP) shows how the various packages use each
+          other.</para>
         </listitem>
 
         <listitem>
           <para>The <link linkend="power-user-view">power-user view</link>
-          describes the system as a suite of commands and libraries.</para>
-        </listitem>
-
-        <listitem>
-          <para>The <link linkend="build-and-deployment-view">build and
-          deployment view</link> describes the build architecture and
-          deployment aspects.</para>
+          (PWR) describes the system as a suite of commands and
+          libraries.</para>
         </listitem>
       </itemizedlist>
 
@@ -235,31 +232,26 @@
         <tr>
           <td><emphasis role="bold">Stakeholder</emphasis></td>
 
-          <td><emphasis role="bold"><link linkend="end-user-view">End-user
-          view</link></emphasis></td>
+          <td><emphasis role="bold"><link
+          linkend="end-user-view">USR</link></emphasis></td>
 
           <td><emphasis role="bold"><link
-          linkend="decomposition-view">Decomposition
-          view</link></emphasis></td>
+          linkend="decomposition-view">DCP</link></emphasis></td>
 
           <td><emphasis role="bold"><link
-          linkend="coordination-view">Coordination view</link></emphasis></td>
+          linkend="coordination-view">CRD</link></emphasis></td>
 
-          <td><emphasis role="bold"><link linkend="data-layer-view">Data layer
-          view</link></emphasis></td>
+          <td><emphasis role="bold"><link
+          linkend="data-layer-view">DAT</link></emphasis></td>
 
-          <td><emphasis role="bold"><link linkend="package-view">Package
-          view</link></emphasis></td>
+          <td><emphasis role="bold"><link
+          linkend="package-view">PCK</link></emphasis></td>
 
-          <td><emphasis role="bold"><link linkend="power-user-view">Power-user
-          view</link></emphasis></td>
+          <td><emphasis role="bold"><link
+          linkend="power-user-view">PWR</link></emphasis></td>
 
           <td><link linkend="package-dependency-view"><emphasis
-          role="bold">Package dependency view</emphasis></link></td>
-
-          <td><emphasis role="bold"><link
-          linkend="build-and-deployment-view">Build and deployment
-          view</link></emphasis></td>
+          role="bold">DEP</emphasis></link></td>
         </tr>
 
         <tr>
@@ -269,17 +261,15 @@
 
           <td>s</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>s</td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -296,8 +286,6 @@
           <td>s</td>
 
           <td>x</td>
-
-          <td>s</td>
 
           <td>s</td>
         </tr>
@@ -318,8 +306,6 @@
           <td>d</td>
 
           <td>x</td>
-
-          <td>x</td>
         </tr>
       </table>
 
@@ -328,7 +314,7 @@
     </section>
 
     <section xml:id="elements-in-views">
-      <title>The elements in views</title>
+      <title>The Elements in Views</title>
 
       <para>For later reference, we give here a comprehensive overview of all
       <link linkend="language-elements">language elements</link>, <link
@@ -337,7 +323,7 @@
       the various architecture views.</para>
 
       <section xml:id="language-elements">
-        <title>The language elements</title>
+        <title>The Language Elements</title>
 
         <para>The language elements are formalisms for specification,
         programming or scripting. Programs in these languages are read and
@@ -425,7 +411,7 @@
           <para>A text that describes the result of applying a function to a
           program in the base language. Note that this text conforms to the
           syntax R, where R is the result sort of the function that was
-          applied. With Javv-to-Java transformation the result sort will be
+          applied. With Java-to-Java transformation the result sort will be
           Java. When no function is applied, the output term is identical to
           the input term.</para>
         </formalpara>
@@ -438,9 +424,9 @@
           software.</para>
         </formalpara>
 
-        <note>
+        <warning>
           <para>Rscript is not yet integrated in V2.0.</para>
-        </note>
+        </warning>
 
         <formalpara>
           <title>SDF</title>
@@ -458,7 +444,7 @@
       </section>
 
       <section xml:id="data-elements">
-        <title>The data elements</title>
+        <title>The Data Elements</title>
 
         <para>The data elements are formats for representing domain-specific
         data. The corresponding data are written and read by programs.</para>
@@ -467,8 +453,30 @@
           <title>AsFix</title>
 
           <para>ASF+SDF Fixed format. The dataformat used to represent parse
-          trees. AsFix is a specialized view on ATerms.</para>
+          trees. AsFix is a specialized view on ATerms. Important features
+          are:</para>
         </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>The AsFix format is a full parse trees that contains all the
+            original layout and comments from the original source code program
+            that was parsed.</para>
+          </listitem>
+
+          <listitem>
+            <para>The AsFix format is self-descriptive: each subtree contains
+            information about the exact grammar production that has been used
+            to parse the text that has resulted in that parse tree.</para>
+          </listitem>
+
+          <listitem>
+            <para>The AsFix format does not contain source code coordinates
+            per se, but a separate tool (<command>addPosInfo</command>) can
+            easily compute these coordinates and add them to the parse tree in
+            the form of annotations.</para>
+          </listitem>
+        </itemizedlist>
 
         <formalpara xml:id="def-aterm">
           <title>ATerm</title>
@@ -481,6 +489,11 @@
           <listitem>
             <para>ATerms are language-independent and can be processed by
             programs in any language.</para>
+          </listitem>
+
+          <listitem>
+            <para>ATerms can be annotated with auxiliary information that does
+            not affect the tree structure.</para>
           </listitem>
 
           <listitem>
@@ -533,21 +546,21 @@
         <formalpara xml:id="def-parse-table">
           <title>Parse table</title>
 
-          <para>A parse table is an efficient representation of the base
-          language as defined by the ASF+SDF modules and enables efficient
-          parsing.</para>
+          <para>A parse table is an efficient representation (ATerm) of the
+          base language as defined by the ASF+SDF modules and enables
+          efficient parsing.</para>
         </formalpara>
 
         <formalpara xml:id="def-parse-tree">
           <title>Parse tree</title>
 
-          <para>Tree-structured representation of a text that has been
-          analyzed by a parser.</para>
+          <para>Tree-structured representation (in AsFix) of a text that has
+          been analyzed by a parser.</para>
         </formalpara>
       </section>
 
       <section xml:id="processing-elements">
-        <title>The processing elements</title>
+        <title>The Processing Elements</title>
 
         <para>The processing elements are "active" parts of the system that
         usually transform inputs to outputs. Inputs and outputs may both be
@@ -556,10 +569,10 @@
         <formalpara xml:id="def-APIGEN">
           <title>APIGEN</title>
 
-          <para>API generator. Given a datastructure definition (in the form
-          of an Abstract Data Type), APIGEN generates C or Java code to access
-          that datastructure. Internally, the datastructure is represented as
-          ATerm.</para>
+          <para>Application Programming Interface (API) generator. Given a
+          datastructure definition (in the form of an Abstract Data Type),
+          APIGEN generates C or Java code to access that datastructure.
+          Internally, the datastructure is represented as ATerm.</para>
         </formalpara>
 
         <formalpara xml:id="def-ASF-checker">
@@ -572,8 +585,9 @@
         <formalpara xml:id="def-ASF-compiler">
           <title>ASF compiler</title>
 
-          <para>The ASF compiler transforms ASF specifications to an efficient
-          executable form.</para>
+          <para>The ASF compiler transforms ASF specifications to C code. That
+          C code is compiled and linked with a run-time library. This leads
+          very efficient execution of specifications.</para>
         </formalpara>
 
         <formalpara xml:id="def-ASF-interpreter">
@@ -644,6 +658,10 @@
             </listitem>
 
             <listitem>
+              <para>A graphical display of parse trees.</para>
+            </listitem>
+
+            <listitem>
               <para>Error and progress indications.</para>
             </listitem>
           </itemizedlist></para>
@@ -679,17 +697,17 @@
           prettyprinter uses default rules to insert layout in a parse tree so
           that its corresponding text is presented in a uniform way.
           Optionally, the ASF+SDF specification may contain formatting rules
-          that can replace this default behaviour.<note>
+          that can replace this default behaviour.<warning>
               <para>The prettyprinter is not yet fully integrated in
               V2.0.</para>
-            </note></para>
+            </warning></para>
         </formalpara>
 
         <formalpara>
           <title>Sisyphus</title>
 
           <para>A system for continuous integration that rebuilds the system
-          after each change.</para>
+          after each change that is committed by a developer.</para>
         </formalpara>
 
         <formalpara xml:id="def-SDF-operations">
@@ -784,7 +802,7 @@
     </section>
 
     <section>
-      <title>Rationale for the architecture</title>
+      <title>Rationale for the Architecture</title>
 
       <para>The following quality attributes guide the design of the
       architecture of the Meta-Environment.</para>
@@ -854,7 +872,7 @@
     </section>
 
     <section>
-      <title>Mapping between elements and views</title>
+      <title>Mapping between Elements and Views</title>
 
       <para>Figure <link linkend="table-mapping-elements-views">Mapping
       between elements and views</link> keeps track of which elements are used
@@ -867,136 +885,134 @@
         <tr>
           <td><emphasis role="bold">Element</emphasis></td>
 
-          <td><emphasis role="bold"><link linkend="end-user-view">End-user
-          view</link></emphasis></td>
+          <td><emphasis role="bold"><link
+          linkend="end-user-view">USR</link></emphasis></td>
 
           <td><emphasis role="bold"><link
-          linkend="decomposition-view">Decomposition
-          view</link></emphasis></td>
+          linkend="decomposition-view">DCP</link></emphasis></td>
 
           <td><emphasis role="bold"><link
-          linkend="coordination-view">Coordination view</link></emphasis></td>
+          linkend="coordination-view">CRD</link></emphasis></td>
+
+          <td><emphasis role="bold"><link
+          linkend="data-layer-view">DAT</link></emphasis></td>
 
           <td><link linkend="package-view"><emphasis linkend="package-view"
-          role="bold">Package view</emphasis></link></td>
-
-          <td><link linkend="package-dependency-view"><emphasis
-          role="bold">Package dependency view</emphasis></link></td>
-
-          <td><emphasis role="bold"><link linkend="power-user-view">Power-user
-          view</link></emphasis></td>
+          role="bold">PCK</emphasis></link></td>
 
           <td><emphasis role="bold"><link
-          linkend="build-and-deployment-view">Build &amp; deployment
-          view</link></emphasis></td>
+          linkend="power-user-view">PWR</link></emphasis></td>
+
+          <td><link linkend="package-dependency-view"><emphasis
+          role="bold">DEP</emphasis></link></td>
         </tr>
 
         <tr>
           <td>APIGEN</td>
 
-          <td>-</td>
+          <td> </td>
 
-          <td>-</td>
+          <td> </td>
 
-          <td>-</td>
+          <td> </td>
 
-          <td>-</td>
+          <td> </td>
 
-          <td>-</td>
-
-          <td>x</td>
+          <td> </td>
 
           <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>ASF checker</td>
 
-          <td>-</td>
+          <td> </td>
 
-          <td>-</td>
-
-          <td>x</td>
-
-          <td>-</td>
-
-          <td>-</td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>ASF compiler</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>ASF interpreter</td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>ASF operations</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>ASF+SDF library</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -1006,33 +1022,33 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>ASF+SDF checker</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
@@ -1040,35 +1056,35 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Configuration manager</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -1076,17 +1092,17 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -1094,17 +1110,17 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -1114,33 +1130,33 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Module manager</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
@@ -1150,33 +1166,33 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Parse table generator</td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -1186,163 +1202,163 @@
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Parser</td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Parse tree</td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Prettyprinter</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>SDF checker</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>SDF operations</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>Structure editor</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
           <td>Term store</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
           <td>Text editor</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
 
         <tr>
-          <td>The Meta-Environment</td>
+          <td>The Meta- Environment</td>
 
           <td>x</td>
 
@@ -1350,7 +1366,7 @@
 
           <td>x</td>
 
-          <td>x</td>
+          <td> </td>
 
           <td>x</td>
 
@@ -1362,26 +1378,26 @@
         <tr>
           <td>ToolBus</td>
 
-          <td></td>
+          <td> </td>
 
-          <td></td>
-
-          <td>x</td>
-
-          <td></td>
-
-          <td></td>
+          <td> </td>
 
           <td>x</td>
 
-          <td></td>
+          <td> </td>
+
+          <td> </td>
+
+          <td>x</td>
+
+          <td> </td>
         </tr>
       </table>
     </section>
   </section>
 
   <section xml:id="end-user-view">
-    <title>The end-user view</title>
+    <title>The End-User View (USR)</title>
 
     <para>Figure <link linkend="fig-end-user-view">End-user view of The
     Meta-Environment</link> shows how simple The Meta-Environment is for an
@@ -1411,7 +1427,7 @@
     </figure>
 
     <section>
-      <title>Element catalog</title>
+      <title>Element Catalog</title>
 
       <para><link linkend="def-ASFSDF-library">ASF+SDF library</link>, <link
       linkend="def-ASFSDF-modules">ASF+SDF modules</link>, <link
@@ -1422,8 +1438,8 @@
       linkend="def-parse-table">Parse table.</link></para>
     </section>
 
-    <section>
-      <title>Context diagram</title>
+    <section xml:id="end-user-view-context">
+      <title>Context Diagram</title>
 
       <figure>
         <title>Context end-user view</title>
@@ -1437,16 +1453,38 @@
     </section>
 
     <section>
-      <title>Variability guide</title>
+      <title>Variability Guide</title>
 
-      <para>No variability exists in this view.</para>
+      <para>The user has the following options for variability:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The filesystem directory from which The Meta-Environment is
+          started (using the command <command>asfsdf-meta</command>)
+          determines the working directory to be used during the session with
+          the system.</para>
+        </listitem>
+
+        <listitem>
+          <para>The file configuration file <filename>meta.actions</filename>
+          (in the current working directory) can be used to extend the
+          behaviour of the sytem. This is further explained in Extension
+          Points of The Meta-Environment. (<remark>LINK</remark>)</para>
+        </listitem>
+
+        <listitem>
+          <para>The GUI provides some options to change the overall graphical
+          appearance (skinning) and the way in which graphs are
+          displayed.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
-      <title>Architecture background</title>
+      <title>Architecture Background</title>
 
       <section>
-        <title>Design rationale</title>
+        <title>Design Rationale</title>
 
         <para>In the end-user view, we try to make life as easy as possible
         for the user and try to automate whatever we can. For instance, when a
@@ -1459,12 +1497,32 @@
       </section>
 
       <section>
-        <title>Analysis of results</title>
+        <title>Analysis of Results</title>
 
-        <para>The Meta-Environment satisfies the design goal of usability. The
-        other side of the coin is, of course, that when the user dislikes the
-        automatic choices that have been, he has to resort to the command line
-        interface.</para>
+        <para>The Meta-Environment mostly satisfies the design goal of
+        usability. Some known usability weaknesses are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The error messages generated by the parser are poor.</para>
+          </listitem>
+
+          <listitem>
+            <para>There is no support for finding errors in syntax
+            definitions.</para>
+          </listitem>
+
+          <listitem>
+            <para>Certain features found in other IDEs are still missing
+            (e.g., autocompletion, context-dependent help menus, and
+            others).</para>
+          </listitem>
+
+          <listitem>
+            <para>The user documentation is still not yet complete and
+            up-to-date, but we are working on this ;-)</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section>
@@ -1478,7 +1536,7 @@
     </section>
 
     <section>
-      <title>Other information</title>
+      <title>Other Information</title>
 
       <para>This view does not provide any details on the actual operation of
       the user-interface. Some details are helpful:</para>
@@ -1506,17 +1564,12 @@
           term. In reality, several input terms may be edited and be reduced
           to the corresponding output term.</para>
         </listitem>
-
-        <listitem>
-          <para>This view does not show the step-by-step debugging of ASF+SDF
-          specifications.</para>
-        </listitem>
       </itemizedlist>
     </section>
   </section>
 
   <section xml:id="decomposition-view">
-    <title>The decomposition view</title>
+    <title>The Decomposition View (DCP)</title>
 
     <para>The decomposition of the system in parts is shown in figure <link
     linkend="decomposition-view">The decomposition view</link>. It emphasizes
@@ -1536,7 +1589,7 @@
       </figure></para>
 
     <section>
-      <title>Element catalog</title>
+      <title>Element Catalog</title>
 
       <para><link linkend="def-ASF-interpreter">ASF interpreter</link>, <link
       linkend="def-ASFSDF-library">ASF+SDF library</link>, <link
@@ -1550,43 +1603,68 @@
     </section>
 
     <section>
-      <title>Context diagram</title>
+      <title>Context Diagram</title>
 
-      <para>TBD</para>
+      <para>Identical to the <link linkend="end-user-view-context">context
+      diagram of the end-user view</link>.</para>
     </section>
 
     <section>
-      <title>Variability guide</title>
+      <title>Variability Guide</title>
 
-      <para>No variability exists in this view.</para>
+      <para>In addition to the ASF+SDF modules that determine the
+      characteristics of the languages that are being defined, the user can
+      override the default pretty printing rules for each language by giving
+      extra ASF+SDF modules containing specialized pretty printing
+      rules.</para>
     </section>
 
     <section>
-      <title>Architecture background</title>
-
-      <para>TBD</para>
+      <title>Architecture Background</title>
 
       <section>
-        <title>Design rationale</title>
+        <title>Design Rationale</title>
 
-        <para>TBD</para>
+        <para>This system decomposition is rather traditional. It
+        distinguishes parser, semantic operations and prettyprinter. For
+        reasons of uniformity, pretty printing rules are also specified in
+        ASF+SDF.</para>
       </section>
 
       <section>
-        <title>Analysis of results</title>
+        <title>Analysis of Results</title>
 
-        <para>TBD</para>
+        <para>None.</para>
       </section>
 
       <section>
         <title>Assumptions</title>
 
-        <para>TBD</para>
+        <para>The following assumptions have been made:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Full parse trees (e.g., parse trees containing all
+            structural and textual information, including layout and comments,
+            of the original source text) are the best intermediate
+            representation for programs. This is motivated by the need in
+            software renovation projects to perform source code
+            transformations that preserve as much of the original source text
+            as possible.</para>
+          </listitem>
+
+          <listitem>
+            <para>All extra information that has to be attached to parse trees
+            can be expressed as annotations to that parse tree. This regards
+            source code coordinates, information about constructors, and the
+            like.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
 
     <section>
-      <title>Other information</title>
+      <title>Other Information</title>
 
       <para>Various simplifications have been applied in this view:</para>
 
@@ -1618,7 +1696,7 @@
   </section>
 
   <section xml:id="coordination-view">
-    <title>The coordination view</title>
+    <title>The Coordination View (CRD)</title>
 
     <para>Figure <link linkend="fig-coordination-view">The coordination
     view</link> shows the interaction between the components of The
@@ -1656,7 +1734,7 @@
     </figure>
 
     <section>
-      <title>Element catalog</title>
+      <title>Element Catalog</title>
 
       <para><link linkend="def-ASF-checker">ASF checker</link>, <link
       linkend="def-ASF-compiler">ASF compiler</link>, <link
@@ -1680,13 +1758,13 @@
     </section>
 
     <section>
-      <title>Context diagram</title>
+      <title>Context Diagram</title>
 
-      <para>TBD</para>
+      <para>None.</para>
     </section>
 
     <section>
-      <title>Variability guide</title>
+      <title>Variability Guide</title>
 
       <para>This architecture was designed with variability in mind. By
       replacing the Tscript in the ToolBus, largely different applications can
@@ -1694,10 +1772,10 @@
     </section>
 
     <section>
-      <title>Architecture background</title>
+      <title>Architecture Background</title>
 
       <section>
-        <title>Design rationale</title>
+        <title>Design Rationale</title>
 
         <para>The rationale for this architecture is to:</para>
 
@@ -1724,7 +1802,7 @@
       </section>
 
       <section>
-        <title>Analysis of results</title>
+        <title>Analysis of Results</title>
 
         <para>It is fair to say that the above design goals have been
         achieved. Components become less aware of their context and are more
@@ -1766,14 +1844,19 @@
     </section>
 
     <section>
-      <title>Other information</title>
+      <title>Other Information</title>
 
-      <para>TBD</para>
+      <itemizedlist>
+        <listitem>
+          <para>The ToolBus uses TCP/IP sockets to implement the connections
+          with tools.</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
   <section xml:id="data-layer-view">
-    <title>The data layer view</title>
+    <title>The Data Layer View (DAT)</title>
 
     <para>The Meta-Environment uses ATerms as pervasive data format to store
     and exchange data. On top of the ATerms, various specialized data formats
@@ -1791,7 +1874,7 @@
     </figure>
 
     <section>
-      <title>Element catalog</title>
+      <title>Element Catalog</title>
 
       <para><link linkend="def-ADT">ADT</link>, <link
       linkend="def-asfix">AsFix</link>, <link
@@ -1803,50 +1886,79 @@
     </section>
 
     <section>
-      <title>Context diagram</title>
+      <title>Context Diagram</title>
 
-      <para></para>
+      <para>None.</para>
     </section>
 
     <section>
-      <title>Variability guide</title>
+      <title>Variability Guide</title>
 
-      <para></para>
+      <para>New data formats can be added by writing new data definitions
+      (using ADT) and generating the interfaces for these data using
+      APIGEN.</para>
     </section>
 
     <section>
-      <title>Architecture background</title>
-
-      <para></para>
+      <title>Architecture Background</title>
 
       <section>
-        <title>Design rationale</title>
+        <title>Design Rationale</title>
 
-        <para></para>
+        <para>The fundamental assumption is that tools exchange data in the
+        form of ATerms. Since specialized services require specialized data
+        formats, it makes sense to build them on top of ATerms.</para>
       </section>
 
       <section>
-        <title>Analysis of results</title>
+        <title>Analysis of Results</title>
 
-        <para></para>
+        <para>The above data formats have been added out of necessity. It is
+        likely that more data format will be added for:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Rstores: (name, relation) pairs as used by Rscript.</para>
+          </listitem>
+
+          <listitem>
+            <para>Configuration information.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>An issue that requires attention is whether the ToolBus should
+        be aware of these datatypes. Currently, it just pumps ATerms around,
+        but more specialized typing of the tool interfaces would help
+        implementors with early error detection.</para>
       </section>
 
       <section>
         <title>Assumptions</title>
 
-        <para></para>
+        <para>The assumptions in this view are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>These data format are versatile enough.</para>
+          </listitem>
+
+          <listitem>
+            <para>The mapping of these data formats is sufficiently
+            efficient.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
 
     <section>
       <title>Other information</title>
 
-      <para></para>
+      <para>None.</para>
     </section>
   </section>
 
   <section xml:id="package-view">
-    <title>The package view</title>
+    <title>The package view (PCK)</title>
 
     <para>For reasons of modularity, reuse and maintenance, the implementation
     of The Meta-Environment is subdivided in <emphasis>packages</emphasis>. A
@@ -1913,7 +2025,7 @@
         <tr>
           <td>ASF+SDF modules</td>
 
-          <td></td>
+          <td> </td>
         </tr>
 
         <tr>
@@ -2039,26 +2151,27 @@
       </table></para>
 
     <section>
-      <title>Element catalog</title>
+      <title>Element Catalog</title>
 
       <para>All architecture elements and nearly all packages appear in this
       view.</para>
     </section>
 
     <section>
-      <title>Context diagram</title>
+      <title>Context Diagram</title>
 
-      <para>TBD</para>
+      <para>None.</para>
     </section>
 
     <section>
-      <title>Variability guide</title>
+      <title>Variability Guide</title>
 
       <para>The following variability issues have been identified.</para>
 
       <itemizedlist>
         <listitem>
-          <para>All packages have written with portability in mind.</para>
+          <para>All packages have been written with portability in
+          mind.</para>
         </listitem>
 
         <listitem>
@@ -2075,10 +2188,10 @@
     </section>
 
     <section>
-      <title>Architecture background</title>
+      <title>Architecture Background</title>
 
       <section>
-        <title>Design rationale</title>
+        <title>Design Rationale</title>
 
         <para>The reasons for splitting up the system in so many packages is
         the following:</para>
@@ -2102,7 +2215,7 @@
       </section>
 
       <section>
-        <title>Analysis of results</title>
+        <title>Analysis of Results</title>
 
         <para>On the positive side, we do have achieved an incredibly modular
         and flexible architecture. On the negative side, we do have to admit
@@ -2177,7 +2290,7 @@
   </section>
 
   <section xml:id="package-dependency-view">
-    <title>The package dependency view</title>
+    <title>The Package Dependency View (DEP)</title>
 
     <para>The dependencies between the packages of the Meta-Environment are
     shown in figure <link linkend="fig-package-dependency-view">The package
@@ -2232,28 +2345,31 @@
     </figure>
 
     <section>
-      <title>Element catalog</title>
+      <title>Element Catalog</title>
 
-      <para>Package.</para>
+      <para>All packages.</para>
     </section>
 
     <section>
-      <title>Context diagram</title>
+      <title>Context Diagram</title>
 
-      <para>TBD</para>
+      <para>None.</para>
     </section>
 
     <section>
-      <title>Variability guide</title>
+      <title>Variability Guide</title>
 
-      <para>TBD</para>
+      <para>This package structure has been designed to accommodate
+      variability; it enables arbitrary combinations of packages. This
+      variability can be achieved by building new packages that depend on
+      combinations of existing packages.</para>
     </section>
 
     <section>
-      <title>Architecture background</title>
+      <title>Architecture Background</title>
 
       <section>
-        <title>Design rationale</title>
+        <title>Design Rationale</title>
 
         <para>The design rationale for this package structure is the
         following:</para>
@@ -2284,7 +2400,7 @@
       </section>
 
       <section>
-        <title>Analysis of results</title>
+        <title>Analysis of Results</title>
 
         <para>The fact that various "clones" of the Meta-Environment exist
         proves the success of this approach.</para>
@@ -2300,6 +2416,11 @@
             context of software analysis, program transformation and software
             renovation. However, in the context of ordinary compilation this
             maybe overkill and lead to inefficiencies.</para>
+          </listitem>
+
+          <listitem>
+            <para>All packages need to use the same build interface in order
+            to cooperate in this package structure.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -2358,7 +2479,7 @@
   </section>
 
   <section xml:id="power-user-view">
-    <title>The power-user view</title>
+    <title>The Power-User View (PWR)</title>
 
     <para>Power-users can use the system in four ways:</para>
 
@@ -2440,9 +2561,9 @@
             <row>
               <entry>asf2c</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -2456,9 +2577,9 @@
             <row>
               <entry>unparsePT</entry>
 
-              <entry></entry>
+              <entry> </entry>
 
-              <entry></entry>
+              <entry> </entry>
             </row>
 
             <row>
@@ -2476,25 +2597,19 @@
     <table xml:id="table-all-commands-libraries">
       <title>All commands and libraries per package</title>
 
-      <tgroup cols="8">
+      <tgroup cols="5">
         <tbody>
           <row>
             <entry><emphasis role="bold">Package</emphasis></entry>
 
-            <entry>Summary</entry>
+            <entry><emphasis role="bold">Summary</emphasis></entry>
 
             <entry><emphasis role="bold">Commands</emphasis></entry>
 
-            <entry><emphasis role="bold">C Include files</emphasis></entry>
-
             <entry><emphasis role="bold">Libraries</emphasis></entry>
 
-            <entry><emphasis role="bold">Tscript (idef)
-            files</emphasis></entry>
-
-            <entry><emphasis role="bold">ASF+SDF files</emphasis></entry>
-
-            <entry><emphasis role="bold">ADT</emphasis></entry>
+            <entry><emphasis role="bold">C includes (C), Tscript (T), ASF+SDF
+            (ASF), Abstract Data Type (ADT)</emphasis></entry>
           </row>
 
           <row>
@@ -2502,17 +2617,11 @@
 
             <entry>API generator for C and Java</entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
@@ -2521,17 +2630,11 @@
             <entry>Run-time library used by compiled ASF+SDF
             specifications.</entry>
 
-            <entry></entry>
-
-            <entry>Yes</entry>
+            <entry> </entry>
 
             <entry>libasc-support-me.a</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C</entry>
           </row>
 
           <row>
@@ -2542,15 +2645,9 @@
             <entry>ASFSDFApigen addeqssyntax asfc asfchecker asfe
             asfoperations asfsdfchecker concat-asf lift-asf</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>None</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2558,17 +2655,11 @@
 
             <entry>Source library of ASF+SDF definitions</entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry></entry>
+            <entry>ASF</entry>
           </row>
 
           <row>
@@ -2576,17 +2667,11 @@
 
             <entry>Support libraries for ASF tools</entry>
 
-            <entry></entry>
-
-            <entry>Yes</entry>
+            <entry> </entry>
 
             <entry>libASFME.a</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C</entry>
           </row>
 
           <row>
@@ -2596,15 +2681,9 @@
 
             <entry>asfsdf-meta eqs-dump</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2615,15 +2694,9 @@
             <entry>atdiff atrmannos atsum baf2taf baf2trm baflle dicttoc
             taf2baf taf2trm termsize trm2baf trm2taf trmcat</entry>
 
-            <entry>Yes</entry>
-
             <entry>libATerm</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C</entry>
           </row>
 
           <row>
@@ -2631,17 +2704,11 @@
 
             <entry>Java version of ATerm library</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>aterm-1.6.jar</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
@@ -2651,15 +2718,9 @@
 
             <entry>configmanager</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2667,17 +2728,11 @@
 
             <entry>Support library for configuration manager</entry>
 
-            <entry></entry>
-
-            <entry>Yes</entry>
+            <entry> </entry>
 
             <entry>libConfigAPI.a, configapi.jar</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C</entry>
           </row>
 
           <row>
@@ -2685,17 +2740,11 @@
 
             <entry>GUI component for dialogs</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>dialog.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2706,15 +2755,9 @@
 
             <entry>editor-manager</entry>
 
-            <entry>No</entry>
-
             <entry>libEditorManager.a</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2722,17 +2765,11 @@
 
             <entry>Java embeddable editor component</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>editor-plugin-1.0.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2740,17 +2777,11 @@
 
             <entry>GUI components for error display</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>error-viewer-1.0.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2760,16 +2791,10 @@
 
             <entry>error-diff error-support lift-error lower-error</entry>
 
-            <entry>Yes</entry>
-
             <entry>libErrorAPI.a libLocationAPI.a errorapi.jar
             locationapi.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C,T</entry>
           </row>
 
           <row>
@@ -2777,17 +2802,11 @@
 
             <entry>GUI component for graph display</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>graph-painter.jar prefuse.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2797,15 +2816,9 @@
 
             <entry>graph2dot layoutgraph tree2graph</entry>
 
-            <entry>Yes</entry>
-
             <entry>libGraph.a graph-0.2.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry>Yes</entry>
+            <entry>C, T, ADT</entry>
           </row>
 
           <row>
@@ -2815,15 +2828,9 @@
 
             <entry>in-output</entry>
 
-            <entry>Yes</entry>
-
             <entry>libIOAPI.a ioapi.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry>Yes</entry>
+            <entry>C, T, ADT</entry>
           </row>
 
           <row>
@@ -2831,53 +2838,35 @@
 
             <entry>Bare Meta-Environment</entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry>No</entry>
+            <entry>T</entry>
           </row>
 
           <row>
             <entry>meta-autotools</entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
             <entry>meta-build-env</entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
@@ -2887,15 +2876,9 @@
 
             <entry>gui</entry>
 
-            <entry>No</entry>
-
             <entry>gui-util.jar gui.jar idw-gpl-1.4.0.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry>No</entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2904,17 +2887,11 @@
             <entry>GUI component for display detailed info about
             modules</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>moduledetails.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry>No</entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2924,15 +2901,9 @@
 
             <entry>module-manager</entry>
 
-            <entry>No</entry>
-
             <entry>module-manager-1.0.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2940,17 +2911,11 @@
 
             <entry>Tools for handling modules</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>moduleapi.jar</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
@@ -2959,17 +2924,11 @@
             <entry>GUI components for navigating through module
             hierarchy</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>navigator.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2979,15 +2938,9 @@
 
             <entry>pandora</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -2998,15 +2951,9 @@
             <entry>parse-sdf2 parsetablegen removevarsyntax sdf2table
             sdfchecker</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3014,17 +2961,11 @@
 
             <entry>GUI component that display progress of an operation</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>progress.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3035,15 +2976,9 @@
             <entry>addPosInfo ambtracker apply-function comparePT flattenPT
             implodePT liftPT unparsePT unparseProd</entry>
 
-            <entry>Yes</entry>
-
             <entry>libPTMEPT.a libmept.a</entry>
 
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C, T</entry>
           </row>
 
           <row>
@@ -3051,17 +2986,11 @@
 
             <entry>Source library of SDF definitions</entry>
 
-            <entry></entry>
+            <entry> </entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry></entry>
+            <entry>ASF</entry>
           </row>
 
           <row>
@@ -3071,15 +3000,9 @@
 
             <entry>def-dump pt-dump sdf-meta</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3089,15 +3012,9 @@
 
             <entry>sdf-modules sdf-renaming</entry>
 
-            <entry>No</entry>
-
             <entry>libPT2SDF.a libSDF2PT.a libSDFME.a</entry>
 
-            <entry>Yes</entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3108,15 +3025,9 @@
             <entry>dump-actions dump-gotos dump-priorities dump-productions
             restorebrackets sglr</entry>
 
-            <entry>Yes</entry>
-
             <entry>libsglr.a</entry>
 
-            <entry>Yes</entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>C, T</entry>
           </row>
 
           <row>
@@ -3124,17 +3035,11 @@
 
             <entry>Library for maxiamlly shared objects in Java</entry>
 
-            <entry></entry>
-
-            <entry>No</entry>
+            <entry> </entry>
 
             <entry>shared-objects-1.4.jar</entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
@@ -3144,15 +3049,9 @@
 
             <entry>structure-editor</entry>
 
-            <entry>No</entry>
-
             <entry>libStructureEditor.a</entry>
 
-            <entry>Yes</entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3162,15 +3061,9 @@
 
             <entry>term-store</entry>
 
-            <entry>No</entry>
+            <entry> </entry>
 
-            <entry>No</entry>
-
-            <entry>Yes</entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3180,15 +3073,9 @@
 
             <entry>tide tide-gdb</entry>
 
-            <entry>No</entry>
-
             <entry>tide.jar</entry>
 
-            <entry>Yes</entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>T</entry>
           </row>
 
           <row>
@@ -3196,17 +3083,11 @@
 
             <entry>Tools for connecting C-based tools to tide</entry>
 
-            <entry></entry>
-
-            <entry>Yes</entry>
+            <entry> </entry>
 
             <entry>libtide-adapter.a</entry>
 
-            <entry>Yes</entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>C, T</entry>
           </row>
 
           <row>
@@ -3218,15 +3099,9 @@
             tblog toolbus uri-encode ctif gen-adapter informer perl-adapter
             tbgraph tifstoc toolbus-adapter wish-adapter</entry>
 
-            <entry>Yes</entry>
+            <entry> </entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry>C</entry>
           </row>
 
           <row>
@@ -3236,15 +3111,9 @@
 
             <entry>java-adapter tifstojava</entry>
 
-            <entry>No</entry>
-
             <entry>toolbus-java-adapter-1.0.jar</entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
 
           <row>
@@ -3254,15 +3123,9 @@
 
             <entry>tbunpack</entry>
 
-            <entry>Yes</entry>
-
             <entry>libATB.a</entry>
 
-            <entry>No</entry>
-
-            <entry>No</entry>
-
-            <entry></entry>
+            <entry>C</entry>
           </row>
 
           <row>
@@ -3270,17 +3133,11 @@
 
             <entry>Traversal pattern in Java.</entry>
 
-            <entry></entry>
-
-            <entry>Yes</entry>
+            <entry> </entry>
 
             <entry>jjtraveler-0.5.jar</entry>
 
-            <entry></entry>
-
-            <entry></entry>
-
-            <entry></entry>
+            <entry> </entry>
           </row>
         </tbody>
       </tgroup>
@@ -3296,133 +3153,39 @@
     <section>
       <title>Context diagram</title>
 
-      <para></para>
+      <para>None.</para>
     </section>
 
     <section>
       <title>Variability guide</title>
 
-      <para></para>
+      <para>See <link linkend="package-dependency-view">Package Dependency
+      View</link>.</para>
     </section>
 
     <section>
       <title>Architecture background</title>
 
-      <para></para>
-
-      <section>
-        <title>Design rationale</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Analysis of results</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Assumptions</title>
-
-        <para></para>
-      </section>
+      <para>See <link linkend="package-dependency-view">Package Dependency
+      View</link>.</para>
     </section>
 
     <section>
       <title>Other information</title>
 
-      <para></para>
+      <para>Also see Extension Points for The Meta-Environment and Build
+      Environment for The Meta-Environment. <remark>(Add
+      Links).</remark></para>
     </section>
   </section>
 
-  <section xml:id="build-and-deployment-view">
-    <title>The build and deployment view</title>
-
-    <para>To be written. Some issues:</para>
+  <section xml:id="ToDo">
+    <title>To Do</title>
 
     <itemizedlist>
       <listitem>
-        <para>External tools needed for build.</para>
-      </listitem>
-
-      <listitem>
-        <para>APIGEN and Sisyphus</para>
-      </listitem>
-
-      <listitem>
-        <para>External dependencies, graphviz, etc.</para>
+        <para><remark>Remove all remarks from the text.</remark></para>
       </listitem>
     </itemizedlist>
-
-    <section>
-      <title>Element catalog</title>
-
-      <para>TBD</para>
-    </section>
-
-    <section>
-      <title>Context diagram</title>
-
-      <para>TBD</para>
-    </section>
-
-    <section>
-      <title>Variability guide</title>
-
-      <para>TBD</para>
-    </section>
-
-    <section>
-      <title>Architecture background</title>
-
-      <para>TBD</para>
-
-      <section>
-        <title>Design rationale</title>
-
-        <para>TBD</para>
-      </section>
-
-      <section>
-        <title>Analysis of results</title>
-
-        <para>TBD</para>
-      </section>
-
-      <section>
-        <title>Assumptions</title>
-
-        <para>TBD</para>
-      </section>
-    </section>
-
-    <section>
-      <title>Other information</title>
-
-      <para>The system is currently dependent on the following external
-      packages:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Java Development Kit (JDK) 1.5 or higher, see<link
-          xlink:href="http://java.sun.com"> java.sun.com</link>.</para>
-        </listitem>
-
-        <listitem>
-          <para>Graphviz 1.12. or higher, see <link
-          xlink:href="http://www.graphviz.org">graphviz.org</link>.</para>
-        </listitem>
-
-        <listitem>
-          <para>GNU make</para>
-        </listitem>
-
-        <listitem>
-          <para>GNU gcc 3.4.x from <link
-          xlink:href="http://www.gnu.org">gnu.org</link>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
   </section>
 </article>
