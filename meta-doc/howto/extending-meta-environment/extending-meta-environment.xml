@@ -13,7 +13,7 @@
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <title>The extension points of The Meta-Environment</title>
+  <title>The Extension Points of The Meta-Environment</title>
 
   <info>
     <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
@@ -38,57 +38,18 @@
   <section>
     <title>Introduction</title>
 
-    <para>This document describes what the extension points of The
-    Meta-Environment are, and how they are used by prototypical extensions.
-    The Meta-Environment has several types of extension points. Each type of
-    extension points may have several goals.</para>
+    <para>How can the The Meta-Environment be adjusted or extended? This
+    document describes what the extension points of The Meta-Environment are
+    and how they are used in typical applications. Each type of extension
+    points may have several goals.</para>
 
-    <section>
-      <title>Goals of extensions</title>
+    <section xml:id="GoalsExtensions">
+      <title>Goals of Extensions</title>
 
-      <para>The goals of extending it are for example:</para>
+      <para>Extensions may have different goals (from less to more
+      ambitious):</para>
 
       <para><itemizedlist>
-          <listitem>
-            <para>Permanently extending (or building on top of) the
-            Meta-Environment with language specific tools:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>Instantiating an IDE for any domain specific
-                language</para>
-              </listitem>
-
-              <listitem>
-                <para>Building an extension to the SDF Meta-Environment</para>
-              </listitem>
-
-              <listitem>
-                <para>Building an extension to the ASF+SDF
-                Meta-Environment</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-
-          <listitem>
-            <para>Permanently extending (or expanding) The Meta-Environment
-            with language independent tools:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>Adding version management support</para>
-              </listitem>
-
-              <listitem>
-                <para>Adding generic vizualizations</para>
-              </listitem>
-
-              <listitem>
-                <para>Adding ...</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-
           <listitem>
             <para>Temporarily extending The Meta-Environment with user-defined
             menu options:</para>
@@ -106,91 +67,131 @@
               </listitem>
 
               <listitem>
-                <para>Connecting third-party commandline tools.</para>
+                <para>Connecting third-party command line tools.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Permanently extending (or expanding) The Meta-Environment
+            with language independent tools:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Adding version management support.</para>
+              </listitem>
+
+              <listitem>
+                <para>Adding generic visualizations.</para>
+              </listitem>
+
+              <listitem>
+                <para>Adding ...</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Permanently extending (or building on top of) the
+            Meta-Environment with language specific tools:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Instantiating an IDE for a domain specific
+                language.</para>
+              </listitem>
+
+              <listitem>
+                <para>Building an extension to the SDF
+                Meta-Environment.</para>
+              </listitem>
+
+              <listitem>
+                <para>Building an extension to the ASF+SDF
+                Meta-Environment.</para>
               </listitem>
             </itemizedlist>
           </listitem>
         </itemizedlist></para>
+
+      <para>Some of these goals can be achieved by adding some configuration
+      information and some scripting, others require full-fledged software
+      development.</para>
     </section>
 
-    <section>
-      <title>Types of extensions</title>
+    <section xml:id="TypesExtensions">
+      <title>Types of Extensions</title>
 
-      <para>The types of extension points to fulfill these goals are listed in
-      this section. For some extension goals, several of the extension points
-      should be considered. Firstly, the source code for a particular
-      extension needs to be organized in a new <emphasis>package</emphasis>.
-      Secondly, this new package needs a <emphasis>configuration
-      script</emphasis>. Then, we need new ToolBus scripts, new tools and new
-      MetaStudio GUI plugins that implement the extension and coordinate its
-      behavior with the rest of the system. Finally, if the extension
-      represents an executable language, a debugging adapter may be included.
-      <itemizedlist>
+      <para>There are various types of extension points to achieve these
+      goals. For some of these goals, more than one type of extension point
+      should be considered. We distinguish:<itemizedlist>
           <listitem>
-            <para>Package infra-structure. An extension package:</para>
+            <para>New (extension) packages:</para>
 
             <itemizedlist>
               <listitem>
-                <para>Depends on other (Meta-Environment) packages</para>
+                <para>Depend on other (Meta-Environment) packages.</para>
               </listitem>
 
               <listitem>
-                <para>Uses C and Java libraries and ToolBus scripts from the
-                other packages</para>
+                <para>Use C and Java libraries and ToolBus scripts from the
+                other packages.</para>
               </listitem>
 
               <listitem>
-                <para>Is separately compilable and distributable</para>
+                <para>Are separately compilable and distributable.</para>
               </listitem>
 
               <listitem>
-                <para>Preferably, but not necessarily, shares the
-                configuration, build and install interface of other
-                Meta-Environment packages</para>
+                <para>Preferably, the share the configuration, build and
+                install interface of other Meta-Environment packages.</para>
               </listitem>
 
               <listitem>
-                <para>Introduces a start-up shell script for loading the
-                Meta-Environment and the new extensions</para>
+                <para>Introduce a start-up shell script for loading the
+                Meta-Environment and the new extensions.</para>
               </listitem>
 
               <listitem>
-                <para>Contains implementations of the following extension
-                points</para>
+                <para>Contain implementations of the following extension
+                points. <remark>Explain this better:
+                following?</remark></para>
               </listitem>
             </itemizedlist>
           </listitem>
 
           <listitem>
-            <para>Configuration scripts (i.e. ".actions" files)</para>
+            <para>Configuration scripts (i.e., files with the
+            <literal>.actions</literal> extension):</para>
 
             <itemizedlist>
               <listitem>
-                <para>Can add menu options to the MetaStudio</para>
+                <para>Can add menu options to MetaStudio.</para>
               </listitem>
 
               <listitem>
-                <para>Can load other configuration scripts</para>
+                <para>Can load other configuration scripts.</para>
               </listitem>
 
               <listitem>
-                <para>Can load additional ToolBus scripts</para>
+                <para>Can load additional ToolBus scripts.</para>
               </listitem>
 
               <listitem>
                 <para>Can add syntactic categories for syntax
-                highlighting</para>
+                highlighting.</para>
               </listitem>
 
               <listitem>
                 <para>Can add workspace locations and library locations to the
-                file dialog plugins</para>
+                file dialog plugins of MetaStudio.</para>
               </listitem>
             </itemizedlist>
           </listitem>
 
           <listitem>
-            <para>ToolBus scripts (.tb) files</para>
+            <para>ToolBus scripts (i.e., files with the <literal>.tb</literal>
+            extension):</para>
 
             <itemizedlist>
               <listitem>
@@ -199,11 +200,11 @@
               </listitem>
 
               <listitem>
-                <para>Can connect any tool to the ToolBus</para>
+                <para>Can connect any tool to the ToolBus.</para>
               </listitem>
 
               <listitem>
-                <para>Can implement the behavior for new menu options</para>
+                <para>Can implement the behavior for new menu options.</para>
               </listitem>
 
               <listitem>
@@ -214,16 +215,16 @@
           </listitem>
 
           <listitem>
-            <para>Any tools (optional)</para>
+            <para>Any new tools (optional):</para>
 
             <itemizedlist>
               <listitem>
-                <para>Written in languages that we provide a stable ToolBus
-                adapter for (C, Java, ASF+SDF)</para>
+                <para>Are written in languages that we provide a stable
+                ToolBus adapter for (C, Java, ASF+SDF), or</para>
               </listitem>
 
               <listitem>
-                <para>Having their own ToolBus adapter included</para>
+                <para>Provide their own ToolBus adapter.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -234,21 +235,21 @@
             <itemizedlist>
               <listitem>
                 <para>Can (dynamically) load new jars into the virtual machine
-                of the MetaStudio GUI</para>
+                of the MetaStudio GUI.</para>
               </listitem>
 
               <listitem>
                 <para>Can add and coordinate new tabs to the collection of
-                viewable windows in the MetaStudio.</para>
+                viewable windows in MetaStudio.</para>
               </listitem>
 
               <listitem>
-                <para>Can add new menu options to the MetaStudio</para>
+                <para>Can add new menu options to MetaStudio.</para>
               </listitem>
 
               <listitem>
                 <para>Can send events and receive evaluation requests from
-                ToolBus scripts</para>
+                ToolBus scripts.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -271,76 +272,98 @@
         </itemizedlist></para>
     </section>
 
-    <section>
-      <title>Step-by-step example (high level of abstraction)</title>
+    <section xml:id="StepByStep">
+      <title>Step-by-Step Guide</title>
 
-      <para>To make the above a bit more concrete we give an example. When we
-      build an IDE for a domain specific language on top of the
-      Meta-Environment, we will execute the following tasks:<orderedlist>
+      <para>Firstly, the source code for a particular extension needs to be
+      organized in a new <emphasis>package</emphasis>. Secondly, this new
+      package needs a <emphasis>configuration script</emphasis>. Then, we need
+      new ToolBus scripts, new tools and new MetaStudio GUI plugins that
+      implement the extension and coordinate its behavior with the rest of the
+      system. Finally, if the extension represents an executable language, a
+      debugging adapter may be included. </para>
+
+      <para>To make the above a bit more explicit, we describe the steps that
+      are needed to build an IDE for a domain specific language on top of the
+      Meta-Environment:</para>
+
+      <para><orderedlist>
           <listitem>
             <para>Create a new package with a GNU style build environment
-            (make, configure, etc)</para>
+            (<command>make</command>, <command>configure</command>,
+            etc):</para>
 
             <itemizedlist>
               <listitem>
-                <para>The package at least depends on the 'meta'
-                package.</para>
+                <para>The package should at least depend on the
+                <literal>meta</literal> package.</para>
               </listitem>
 
               <listitem>
-                <para>The package usually also depends on the 'aterm' package
-                or the 'aterm-java' package.</para>
+                <para>The package usually also depends on the
+                <literal>aterm</literal> package or the
+                <literal>aterm-java</literal> package.</para>
               </listitem>
 
               <listitem>
                 <para>Make directories for the source code new tools, ToolBus
-                scripts, Configuration Files, GUI Plugins</para>
+                scripts, Configuration Files, GUI Plugins, and the
+                like.</para>
               </listitem>
 
               <listitem>
-                <para>A single extension may be spread over several packages
-                (i.e. for separating data representation, coordination,
-                computation and user-interaction from each other)</para>
+                <para>The implementation of a single extension may be spread
+                over several packages (i.e., for separating data
+                representation, coordination, computation and user-interaction
+                from each other).</para>
               </listitem>
             </itemizedlist>
+
+            <para>See <link linkend="NewPackage">Adding a new
+            package.</link></para>
           </listitem>
 
           <listitem>
-            <para>Add a configuration script</para>
+            <para>Add a configuration script:</para>
 
             <itemizedlist>
               <listitem>
-                <para>Import the standard meta.actions configuration
-                script</para>
+                <para>Import the standard <filename>meta.actions</filename>
+                configuration script.</para>
               </listitem>
 
               <listitem>
                 <para>Add menu options with the names of ToolBus processes to
-                be executed when the button is pressed. I.e. Compile program.,
-                Run program., etc.</para>
+                be executed when the button is pressed, i.e.,
+                <guimenuitem>Compile program</guimenuitem>, <guimenuitem>Run
+                program</guimenuitem>, etc.</para>
               </listitem>
             </itemizedlist>
+
+            <para>See <link linkend="NewConfigurationScript">Adding a
+            configuration script</link> .</para>
           </listitem>
 
           <listitem>
-            <para>Add ToolBus scripts</para>
+            <para>Add ToolBus scripts:</para>
 
             <itemizedlist>
               <listitem>
                 <para>For each menu option there needs to be at least one
-                ToolBus process to handle it (i.e. CompileAction,
-                RunAction).</para>
+                ToolBus process to handle it (i.e.,
+                <literal>CompileAction</literal>,
+                <literal>RunAction</literal>).</para>
               </listitem>
 
               <listitem>
                 <para>Dispatch the work to other ToolBus processes that
-                already exist from the 'meta' package (i.e.
-                ShowFileDialog)</para>
+                already exist from the <literal>meta</literal> package (i.e.,
+                <literal>ShowFileDialog</literal>)</para>
               </listitem>
 
               <listitem>
                 <para>Or, write new ToolBus processes that call possibly new
-                tools (i.e. CompileDSLFile)</para>
+                tools (i.e., <command>CompileDSLFile</command>).</para>
               </listitem>
 
               <listitem>
@@ -351,87 +374,149 @@
                 options).</para>
               </listitem>
             </itemizedlist>
+
+            <para>See <link linkend="NewToolBusScripts">Adding ToolBus
+            scripts</link> .</para>
           </listitem>
 
           <listitem>
-            <para>Implement (or generate) new tools</para>
+            <para>Implement (or generate) new tools:</para>
 
             <itemizedlist>
               <listitem>
-                <para>Write the tool in C, Java or ASF+SDF (i.e. a DSL
-                compiler)</para>
+                <para>Write the tool in C, Java or ASF+SDF (i.e., a DSL
+                compiler).</para>
               </listitem>
 
               <listitem>
-                <para>Write a ToolBus process as an API for the tool</para>
+                <para>Write a ToolBus process as an API for the tool.</para>
               </listitem>
             </itemizedlist>
+
+            <para>See <link linkend="NewToolBusScripts">Adding ToolBus
+            scripts</link>.</para>
           </listitem>
 
           <listitem>
-            <para>Implement (in Java) the GUI extensions</para>
+            <para>Implement (in Java) the GUI extensions:</para>
 
             <itemizedlist>
               <listitem>
-                <para>Implement the StudioPlugin interface</para>
+                <para>Implement the <literal>StudioPlugin</literal>
+                interface.</para>
               </listitem>
 
               <listitem>
-                <para>Implement several StudioComponent interfaces
-                (windows)</para>
+                <para>Implement several <literal>StudioComponent</literal>
+                interfaces (windows).</para>
               </listitem>
 
               <listitem>
                 <para>Write a ToolBus process for dynamically loading the jar
-                into the MetaStudio</para>
+                into the MetaStudio.</para>
               </listitem>
             </itemizedlist>
+
+            <para>See <link linkend="NewGuiExtensions">Adding GUI
+            extensions</link>.</para>
           </listitem>
 
           <listitem>
             <para>Implement a small shell script for starting the ToolBus with
-            the apropriate scripts</para>
+            the appropriate scripts.</para>
+
+            <para>See <link linkend="NewStartUpScript">Adding a start-up
+            script</link> .</para>
           </listitem>
         </orderedlist>For some extensions not all of the above steps are
       necessary. The IDE construction goal is the most demanding extension,
-      while the other goals will be less of an effort. The rest of this
-      document highlights each extension point and how to use it in more
-      detail.</para>
+      while the other goals will require less effort. </para>
     </section>
   </section>
 
-  <section>
-    <title>Creating a new package</title>
+  <section xml:id="NewPackage">
+    <title>Adding a new Package</title>
 
     <para>Extensions are to be separated from the rest of the
-    Meta-Environment. This promotes quality aspects like configurability,
-    maintainability, understandability, and independence. All Meta-Environment
-    packages have a similar package structure. For extensions, we advise to
-    reuse this design. This will improve easy integration and deployment of
-    your extension. For details regarding the build tools for Meta-Environment
-    package see the "Build environment for the Meta-Environment"
-    document.</para>
+    Meta-Environment. This promotes configurability, maintainability,
+    understandability, and independence of the extensions. All
+    Meta-Environment packages have a similar package structure. For
+    extensions, we advise to reuse this design. This will enable easy
+    integration and deployment of your extension. For details regarding the
+    build tools for Meta-Environment package see the "Build environment for
+    the Meta-Environment" document. <remark>(add link)</remark></para>
 
     <para>Every package corresponds to a module in a version control system,
-    and contains at least the following files. For each file we explain what
-    it is, and what should be at least in it.</para>
+    and contains at least the following files. </para>
 
-    <section>
-      <title>reconf</title>
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="reconf">reconf</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="configure.ac">configure.ac</link></para>
+      </listitem>
+
+      <listitem>
+        <para><filename><link
+        linkend="packagename.pc.in">&lt;packagename&gt;.pc.in</link></filename></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="StandardDirectories">Standard directories</link>:
+        <filename>src</filename>, <filename>lib</filename>,
+        <filename>tbscripts</filename>, <filename>spec</filename>,
+        <filename>utils</filename>, <filename>scripts</filename></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="Makefile.am">Makefile.am</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ChangeLog">ChangeLog</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="StandardFiles">Standard files</link>:
+        <filename>COPYING</filename>, <filename>AUTHORS</filename>,
+        <filename>README</filename>, <filename>NEWS</filename></para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="reconf">
+      <title>Setting-up the Build Environment with
+      <filename>reconf</filename></title>
+
+      <para>For each new package you have to set-up the build environment.
+      This is done as follows:</para>
 
       <para><programlisting>#! /bin/sh
 
 meta-build || ("Please make sure meta-build is in your PATH" &amp;&amp; false)</programlisting>This
-      file bootstraps the build environment of a package. The use runs
+      file bootstraps the build environment of a package. Make
+      <command>reconf</command> executable and run the command
       <command>./reconf</command>, and the <command>meta-build</command>
-      command runs the appropriate tools like automake, libtool, aclocal, and
-      autoconf to set up the package's configure script and makefiles. These
-      tools generate files, and create several softlinks in the working
-      directory for later use.</para>
+      command runs the appropriate tools like <command>automake</command>,
+      <command>libtool</command>, <command>aclocal</command>, and
+      <command>autoconf</command> to set up the package's configure script and
+      makefiles. These tools generate files, and create several soft links in
+      the working directory for later use.</para>
     </section>
 
-    <section>
-      <title>configure.ac</title>
+    <section xml:id="configure.ac">
+      <title>Configuring the Build Environment with
+      <filename>configure.ac</filename></title>
+
+      <para>A major issue in software development is how to configure the
+      software to compile and run on as many computing platforms as possible.
+      Typical issues are: Where is the C compiler? Which command line options
+      does it accept? How do I run the Java compiler? How do I build
+      libraries? Where should the binaries or documentation be installed? And
+      so on and so forth. We use an extended version of the
+      <command>autoconf</command> system to achieve this. Consider the
+      following example:</para>
 
       <para><programlisting>AC_INIT
 META_SETUP
@@ -441,17 +526,29 @@ AC_PROG_LIBTOOL
 AC_OUTPUT</programlisting>This file is used by autoconf to generate a
       configure script. The example file here prepares the package for C and
       Java code. The C code will use dynamically linked libraries.
-      Configure.ac must contain AC_INIT, META_SETUP, and AC_OUTPUT. It may
-      contain META_C_SETUP, or META_JAVA_SETUP, or both. Furthermore, any
-      autoconf macros are allowed if your package needs more detailed
-      configuration. Please read the autoconf manual for details. </para>
+      <filename>Configure.ac</filename> must at least contain (in this order):
+      <literal>AC_INIT</literal>, <literal>META_SETUP</literal>, and
+      <literal>AC_OUTPUT</literal>. It may contain
+      <literal>META_C_SETUP</literal>, or <literal>META_JAVA_SETUP</literal>,
+      or both. Furthermore, any autoconf macros are allowed if your package
+      needs more detailed configuration. Please read the <link
+      xlink:href="http://www.gnu.org/software/autoconf/manual/autoconf-2.57/autoconf.html">autoconf
+      manual</link> for details.</para>
 
-      <para>Note that the META_ macros take care of inter-package dependencies
-      (see the &lt;packagename&gt;.pc.in file).</para>
+      <para>Note that the macros with the prefix <literal>META_</literal> take
+      care of inter-package dependencies, see the <link
+      linkend="packagename.pc.in">&lt;packagename&gt;.pc.in</link>
+      file.</para>
     </section>
 
-    <section>
-      <title>&lt;packagename&gt;.pc.in</title>
+    <section xml:id="packagename.pc.in">
+      <title>Defining the Package with
+      <filename>&lt;packagename&gt;.pc.in</filename></title>
+
+      <para>Having set-up the build environment, it is now time to define the
+      properties of the new package such as its name, version, required
+      packages and the like. Here is a skeleton that also contains some
+      example information:</para>
 
       <para><programlisting>prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,economop@cwi.nl
@@ -461,104 +558,145 @@ Description: &lt;packagedescription&gt;
 Requires: &lt;dependency1&gt;,&lt;dependency2&gt;,&lt;...&gt;
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -l&lt;libraryname1&gt; -l&lt;libraryname2&gt; &lt;...&gt;
-#uninstalled Libs: -L@abs_top_builddir@/lib -l&lt;libraryname1&gt; -l&lt;libraryname2&gt; &lt;...&gt;
+#uninstalled Libs: -L@abs_top_builddir@/lib -l&lt;libraryname1&gt; \
+ -l&lt;libraryname2&gt; &lt;...&gt;
 #uninstalled Cflags: -I@abs_top_builddir@/lib 
 ToolBusFlags=-I${prefix}/share/&lt;packagename&gt;
 JarFile=&lt;packagename&gt;.jar
 Jars=${prefix}/share/${JarFile} 
 #uninstalled UninstalledJars=@abs_top_srcdir@/${JarFile}
 Packages=&lt;javapackagenames&gt;
-TestClass=&lt;toptestclassname&gt;</programlisting>This is the defining file
-      for a package. The file declares all there is to know about a package.
-      This information is typically used by the <command>reconf</command>
-      script, by continous integration toolkits, by package managers, and
-      other deployment and product composition tools.</para>
+TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
+      <literal>&lt;packagename&gt;</literal> the package description file has
+      the name <filename>&lt;packagename&gt;.pc.in</filename> after, of
+      course, replacing <literal>&lt;packagename&gt;</literal> by the actual
+      name, e.g., <filename>sglr.pc.in</filename> or
+      <filename>meta.pc.in</filename>. This file declares all there is to know
+      about a package. This information is typically used by the
+      <command>reconf</command> script, by continuous integration toolkits, by
+      package managers, and other deployment and product composition
+      tools.</para>
 
-      <para>The prefix variable is an obligatory implementation detail. The
-      #uninstalled variables are used for compiling compositions of packages
-      before they are installed (packages may refer to the source locations
-      instead of the installed locations using this information). The Requires
-      field is most important. It declares the dependencies on other packages.
-      The pc.in file currently supports three kinds of programming languages.
-      If a package contains any of these, the associated variables are needed,
-      otherwise not. </para>
+      <para>Before using the package definition file, it is instantiated by
+      substituting all variables like <literal>@prefix@</literal>,
+      <literal>@abs_top_builddir@</literal> by their actual,
+      installation-dependent, values. The first line regarding the
+      <literal>prefix</literal> variable is an obligatory implementation
+      detail. The <literal>#uninstalled</literal> variables are used for
+      compiling compositions of packages before they are installed (packages
+      may refer to the source locations instead of the installed locations
+      using this information). The <literal>Requires</literal> field is very
+      important. It declares the dependencies on other packages. The package
+      definition file given above supports three different programming
+      languages (C, Java and ToolBus scripts). If a package contains any of
+      these, the associated variables are needed, otherwise not.</para>
 
-      <para>C packages that export libraries use Cflags, Libs and their
-      uninstalled variants. This information is used by the makefiles of other
-      packages. Namely, for each package they depend on variables will be made
-      available. Example: If your package depends on the aterm package, then
-      you will have ATERM_CFLAGS, and ATERM_LIBS at your disposal in the
-      makefiles. </para>
+      <para>C packages that export libraries use <literal>Cflags</literal>,
+      <literal>Libs</literal> and their uninstalled variants. This information
+      is used by the makefiles of other packages. Namely, for each package
+      they depend on those variables will be made available. Example: If your
+      package depends on the <literal>aterm</literal> package, then you will
+      have <literal>ATERM_CFLAGS</literal>, and <literal>ATERM_LIBS</literal>
+      at your disposal in the makefiles.</para>
 
       <para>Java packages export jar files, and have a test interface. From
       this information a full <command>ant</command> build configuration is
-      instantiated. This assumes that the source code is located in the
-      subdirectory <emphasis>src.</emphasis> The other variables explain where
-      the jar file should be installed and which packages should be included.
-      </para>
+      created. This assumes that the source code is located in the
+      subdirectory <filename>src</filename>. The other variables explain where
+      the jar file should be installed and which packages should be
+      included.</para>
 
       <para>Packages containing ToolBus scripts explain where the scripts are
       installed such that dependent packages may set their search paths
       automatically.</para>
 
       <para>Note that the implementation of the semantics of the .pc.in file
-      is located in the package <emphasis>meta-build-env</emphasis>. This
-      package contains extension to automake and autoconf, written as shell
-      scripts and m4 macros. Writing such a package is considered a black art,
-      but it does allow us to remove a lot of code duplication, and improve
-      consistency, in the infra-structure of packages.</para>
+      can be found in the package <filename>meta-build-env</filename>. This
+      package contains extension to <command>automake</command> and
+      <command>autoconf</command>, written as shell scripts and m4 macros.
+      Understanding, writing or changing <filename>meta-build-env</filename>
+      is considered to be a black art, but it does allow us to remove a lot of
+      code duplication, and improve consistency, in the infra-structure of
+      packages.</para>
     </section>
 
-    <section>
-      <title>COPYING, AUTHORS, README, NEWS</title>
+    <section xml:id="StandardDirectories">
+      <title>Standard Directories: src, lib, tbscripts, spec, utils,
+      scripts</title>
 
-      <para>The COPYING file contains the license for the source code located
-      in this package. This is usually the LGPL license for Meta-Environment
-      packages. The AUTHORS file lists the authors email addresses. The README
-      file should contain a brief description of the package. The NEWS file
-      should list remarks on the evolution of the package on a high level of
-      abstraction. Note that README and NEWS files are usually not maintained
-      too well in Meta-Environment packages.</para>
+      <para>The following naming conventions are used for source code
+      subdirectories: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para><filename>src</filename> contains Java source code
+          packages.</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>lib</filename> contains source code for C
+          libraries.</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>tbscript</filename> contains ToolBus scripts.</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>spec</filename> contains ASF+SDF specifications.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para><filename>utils</filename> contains C programs with a main
+          that link the libraries in lib.</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>scripts</filename> contain shell scripts.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Each of these directories, except for <filename>src</filename>,
+      has a <filename>Makefile.am</filename> file. Most (but not all)
+      Meta-Environment packages follow this convention.</para>
     </section>
 
-    <section>
-      <title>ChangeLog</title>
+    <section xml:id="Makefile.am">
+      <title>Defining the Build Process with Makefile.am</title>
 
-      <para><programlisting>Fri Jun 30 21:43:04 CEST 2006 &lt;jurgenv@cwi.nl&gt;
- * libmept/MEPT-utils.[ch]: reorganized this long file into a number of smaller files that each deal with a specific topic.
- * libmept/*.c: added much documentation.
- * libmept/*.h: fixed bug #774
- * pt-support.pc.in: Bumped version to 0.1231</programlisting>This is a
-      snippet of an existing ChangeLog file. This file contains remarks on all
-      changes to the source code of a package, in reverse order of date.
-      Maintaining this information in this file makes it independent of a
-      version management system. It should contain references to bug numbers
-      when bugs are fixed. The ChangeLog file has a fixed format. Editors such
-      as gvim and emacs have plugins for its syntax. ChangeLog files are
-      maintained very well in Meta-Environment packages.</para>
-    </section>
-
-    <section>
-      <title>Makefile.am</title>
+      <para>Now we have reached the level of actual source files and their
+      build instructions. We use automatically generated
+      <filename>Makefile</filename>s that have been tailored with
+      installation-dependent information. The recipe for generating each
+      <filename>Makefile</filename> is given in an
+      <filename>Makefile.am</filename> file. The suffix <literal>.am</literal>
+      refers to the tool <command>automake</command> that is used to do the
+      actual <filename>Makefile</filename> generation. The entire tool chain
+      of <command>automake</command>, <command>autoconf</command>,
+      <command>aclocal</command>, <command>configure</command>, etc. starts
+      with the <filename>Makefile.am</filename> file. Here is an
+      example:</para>
 
       <para><programlisting>include $(top_srcdir)/Makefile.top.meta
 
 SUBDIRS = &lt;subdirs&gt;
 
-ACLOCAL_AMFLAGS = -I .</programlisting>This very important file in the
-      toplevel of the package is used to generate a Makefile. The entire tool
-      chain of automake, autoconf, aclocal, configure, etc. starts here. Note
-      that the exact number of spaces on the line ACLOCAL_AMFLAGS should be
-      copied. </para>
+ACLOCAL_AMFLAGS = -I .</programlisting>Makefiles are notoriously sensitive to
+      spaces. For instance, the exact number of spaces as given on the line
+      <literal>ACLOCAL_AMFLAGS</literal> should be used.</para>
 
       <para>The example above is relevant for ToolBus and C packages. For
       these kinds of packages, each subdirectory should contain its own
-      Makefile.am. Please read the automake manual on how to write Makefile.am
-      files for compiling C libraries and C programs. Each Makefile.am may
-      include Makefile.meta, such that reusable make rules and other utilities
-      become available. You are advised to look at the Makefile.am files of
-      existing packages for inspiration. Inclusion of the Makefile.meta file
-      is not obligatory however.<programlisting>include $(top_srcdir)/Makefile.meta</programlisting></para>
+      <filename>Makefile.am</filename>. Please read the automake manual on how
+      to write <filename>Makefile.am</filename> files for compiling C
+      libraries and C programs. Each <filename>Makefile.am</filename> may
+      include <filename>Makefile.meta</filename>, such that make rules and
+      other utilities become available and can be reused. You are advised to
+      look at the <filename>Makefile.am</filename> files of existing packages
+      for inspiration. Inclusion of the <filename>Makefile.meta</filename>
+      file is not obligatory however. <remark>What do we illustrate with the
+      following:</remark><programlisting>include $(top_srcdir)/Makefile.meta</programlisting></para>
 
       <para>In case of a Java package. The toplevel Makefile.am should look
       like this:<programlisting>include $(top_srcdir)/Makefile.java.meta
@@ -566,27 +704,55 @@ ACLOCAL_AMFLAGS = -I .</programlisting>This very important file in the
 ACLOCAL_AMFLAGS = -I .</programlisting></para>
 
       <para>Java packages should have all their code in a subdirectory called
-      src. This subdirectory may contain packages, but the corresponding
-      directories do not need copies of a Makefile.am file.</para>
+      <filename>src</filename>. This subdirectory may contain packages, but
+      the corresponding directories do not need copies of a Makefile.am
+      file.</para>
     </section>
 
-    <section>
-      <title>src, lib, tbscripts, spec, utils, scripts</title>
+    <section xml:id="ChangeLog">
+      <title>Maintaining Change Information in
+      <filename>ChangeLog</filename></title>
 
-      <para>These are standard subdirectory names. Src contains Java source
-      code packages. Lib contains source code for C libraries. Tbscript
-      contains ToolBus scripts. Spec contains ASF+SDF specifications. Utils
-      contains C programs with a main that link the libraries in lib. Scripts
-      contain shell scripts. Each of these directories, except for src, has a
-      Makefile.am file.</para>
+      <para>It helps other developers to describe the changes you have made to
+      source files. The file <filename>ChangeLog</filename> is the place for
+      collecting this information. Usually, it contains verbatim copies of the
+      entries in the version management system. Here is an example:</para>
 
-      <para>The above directory names are not obliged, and are not used
-      consistently by the existing Meta-Environment packages either.</para>
+      <para><programlisting>Fri Jun 30 21:43:04 CEST 2006 &lt;jurgenv@cwi.nl&gt;
+ * libmept/MEPT-utils.[ch]: reorganized this long file into a number 
+   of smaller files that each deal with a specific topic.
+ * libmept/*.c: added much documentation.
+ * libmept/*.h: fixed bug #774
+ * pt-support.pc.in: Bumped version to 0.1231</programlisting><filename>ChangeLog</filename>
+      contains remarks on all changes to the source code of a package, in
+      reverse order of date. Maintaining this information in this file makes
+      it independent of a version management system. It should contain
+      references to bug numbers when bugs are fixed. The
+      <filename>ChangeLog</filename> file has a fixed format. Editors such as
+      <command>gvim</command> and <command>emacs</command> have plugins for
+      its syntax. <filename>ChangeLog</filename> files are maintained very
+      well in Meta-Environment packages.</para>
+    </section>
+
+    <section xml:id="StandardFiles">
+      <title>Adding Standard Files: <filename>COPYING</filename>,
+      <filename>AUTHORS</filename>, <filename>README</filename>,
+      <filename>NEWS</filename></title>
+
+      <para>The <filename>COPYING</filename> file contains the license for the
+      source code located in this package. This is usually the LGPL license
+      for Meta-Environment packages. The <filename>AUTHORS</filename> file
+      lists the authors email addresses. The <filename>README</filename> file
+      should contain a brief description of the package. The
+      <filename>NEWS</filename> file should list remarks on the evolution of
+      the package on a high level of abstraction. Note that
+      <filename>README</filename> and <filename>NEWS</filename> files are
+      usually not maintained too well in Meta-Environment packages.</para>
     </section>
   </section>
 
-  <section>
-    <title>Adding a configuration script</title>
+  <section xml:id="NewConfigurationScript">
+    <title>Adding a Configuration Script</title>
 
     <para>Each instance of a Meta-Environment IDE has one toplevel
     configuration script. This script may import other scripts. At startup
@@ -597,56 +763,73 @@ ACLOCAL_AMFLAGS = -I .</programlisting></para>
     on-demand.</para>
 
     <para>This is the syntax of a configuration file, as found in
-    sdf-library/library/basic/Configuration.sdf. Note that currently the set
-    of configuration options is closed. Obviously, for real extensibility,
-    this set needs to be opened. For now, this is what is offered to configure
-    the existing generic components of The Meta-Environment.</para>
+    <filename>sdf-library/library/basic/Configuration.sdf</filename>. Note
+    that currently the set of configuration options is fixed. Obviously, for
+    real extensibility, this set needs to be opened. For now, this is what is
+    offered to configure the existing generic components of The
+    Meta-Environment.</para>
 
     <para><programlisting>sorts Configuration
 context-free syntax
-  "configuration" "(" "[" list:{Property ","}* "]" ")" -&gt; Configuration {cons("configuration")} 
+  "configuration" "(" "[" list:{Property ","}* "]" ")" 
+                             -&gt; Configuration {cons("configuration")} 
 
 sorts Property
 context-free syntax
   %% imports another configuration file:
-  "import" "(" path:StrCon ")" -&gt; Property {cons("import")}
+  "import" "(" path:StrCon ")"           -&gt; Property {cons("import")}
 
   %% loads another ToolBus script into the ToolBus:
-  "load-script" "(" path:StrCon ")" -&gt; Property {cons("script")}
+  "load-script" "(" path:StrCon ")"      -&gt; Property {cons("script")}
 
   %% extends the script path of the ToolBus:
   "script-path" "(" path:StrCon ")" -&gt; Property {cons("script-path")}
 
-  %% Registers an action with the selection of a certain user-interface element:
-  "action" "(" "[" list:{ActionDescription ","}* "]" "," action:StrCon ")" -&gt; Property {cons("action")}
+  %% Registers an action with the selection of a certain 
+  %%user-interface element:
+  "action" "(" "[" list:{ActionDescription ","}* "]" "," 
+                       action:StrCon ")" -&gt; Property {cons("action")}
 
-  %% Couples a language name (SDF module name), with a file extension for use in file browsers:
-  "extension" "(" language:StrCon "," extension:StrCon ")" -&gt; Property {cons("extension")}
+  %% Couples a language name (SDF module name), 
+  %% with a file extension for use in file browsers:
+  "extension" "(" language:StrCon "," extension:StrCon ")" 
+                                      -&gt; Property {cons("extension")}
 
   %% Extends the list of workspaces with a new path:
-  "library-path" "(" label:StrCon "," path:StrCon ")" -&gt; Property {cons("library-path")}
+  "library-path" "(" label:StrCon "," path:StrCon ")" 
+                                    -&gt; Property {cons("library-path")}
 
-  %% Extends the list of workspaces with a new path, takes precedence over library paths when searching:
-  "module-path" "(" label:StrCon "," path:StrCon ")" -&gt; Property {cons("module-path")}
+  %% Extends the list of workspaces with a new path, 
+  %% takes precedence over library paths when searching:
+  "module-path" "(" label:StrCon "," path:StrCon ")" 
+                                     -&gt; Property {cons("module-path")}
 
-  %% Registers the font properties of a certain text category name, for use with syntax highlighting: 
-  "text-category" "(" category:TextCategoryName "," "[" map:{TextAttribute ","}* "]" ")" -&gt; Property {cons("text-category")}
+  %% Registers the font properties of a certain text category name, 
+  %% for use with syntax highlighting: 
+  "text-category" "(" category:TextCategoryName ","
+        "[" map:{TextAttribute ","}* "]" ")" 
+                                   -&gt; Property {cons("text-category")}
 
 sorts ActionDescription
 context-free syntax
-  %% describes a GUI element. The context is the name of the element, the event is may happen to it.
-  "description" "(" context:TermCon "," event:Event ")" -&gt; ActionDescription {cons("description")}
+  %% describes a GUI element. The context is the name of the element,
+  %% the event is may happen to it.
+  "description" "(" context:TermCon "," event:Event ")" 
+                            -&gt; ActionDescription {cons("description")}
 
 sorts Event
 context-free syntax
-  %% here is a list of things that may happen to a GUI element, these are used for construction of the
+  %% here is a list of things that may happen to a GUI element, 
+  %% these are used for construction of the
   %% GUI, as well as identifying which process is called finally:
-  "popup" -&gt; Event {cons("popup")}
-  "click" "(" "[" list:{KeyModifier ","}* "]" "," button:VirtualButton ")" -&gt; Event {cons("click")}
+  "popup"                                     -&gt; Event {cons("popup")}
+  "click" "(" "[" list:{KeyModifier ","}* "]" "," 
+      button:VirtualButton ")"                -&gt; Event {cons("click")}
 
-  "icon" "(" title:StrCon "," path:StrCon ")" -&gt; Event {cons("icon")}
-  "menu" "(" "[" labels:{Item ","}* "]" ")" -&gt; Event {cons("menu")}
-  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," shortcut:ShortCut ")" -&gt; Event {cons("menu-shortcut")}
+  "icon" "(" title:StrCon "," path:StrCon ")"  -&gt; Event {cons("icon")}
+  "menu" "(" "[" labels:{Item ","}* "]" ")"    -&gt; Event {cons("menu")}
+  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," 
+     shortcut:ShortCut ")"            -&gt; Event {cons("menu-shortcut")}
 
 sorts Item
 context-free syntax
@@ -655,31 +838,35 @@ context-free syntax
 
 sorts TextCategoryName
 context-free syntax
-  %% There are three built-int text categories, and we can add our own:
-  "focus" -&gt; TextCategoryName {cons("focus")}
-  "selection" -&gt; TextCategoryName {cons("selection")}
-  "normal" -&gt; TextCategoryName {cons("normal")}
+  %% There are three built-int text categories, 
+  %% and we can add our own:
+  "focus"                      -&gt; TextCategoryName {cons("focus")}
+  "selection"                  -&gt; TextCategoryName {cons("selection")}
+  "normal"                     -&gt; TextCategoryName {cons("normal")}
   "extern" "(" name:StrCon ")" -&gt; TextCategoryName {cons("extern")}
 
 sorts TextAttribute
 context-free syntax
-  "foreground-color" "(" color:Color ")" -&gt; TextAttribute {cons("foreground-color")}
-  "background-color" "(" color:Color ")" -&gt; TextAttribute {cons("background-color")}
-  "style" "(" style:TextStyle ")" -&gt; TextAttribute {cons("style")}
-  "font" "(" name:StrCon ")" -&gt; TextAttribute {cons("font")}
-  "size" "(" point:NatCon ")" -&gt; TextAttribute {cons("size")}
+  "foreground-color" "(" color:Color ")" 
+                           -&gt; TextAttribute {cons("foreground-color")}
+  "background-color" "(" color:Color ")" 
+                           -&gt; TextAttribute {cons("background-color")}
+  "style" "(" style:TextStyle ")"     -&gt; TextAttribute {cons("style")}
+  "font" "(" name:StrCon ")"           -&gt; TextAttribute {cons("font")}
+  "size" "(" point:NatCon ")"          -&gt; TextAttribute {cons("size")}
 
 sorts ShortCut
 context-free syntax
   %% The shortcut syntax is based on the Java virtual key interface
-  "shortcut" "(" "[" list:{KeyModifier ","}* "]" "," key:VirtualKey ")" -&gt; ShortCut {cons("shortcut")}
+  "shortcut" "(" "[" list:{KeyModifier ","}* "]" "," 
+     key:VirtualKey ")"                 -&gt; ShortCut {cons("shortcut")}
 
 sorts TextStyle
 context-free syntax
-  "bold" -&gt; TextStyle {cons("bold")}
-  "italics" -&gt; TextStyle {cons("italics")}
-  "underlined" -&gt; TextStyle {cons("underlined")}
-</programlisting> Here is a part of an example configuration file called
+  "bold"       -&gt; TextStyle {cons("bold")}
+  "italics"    -&gt; TextStyle {cons("italics")}
+  "underlined" -&gt; TextStyle {cons("underlined")}</programlisting> Here is a
+    part of an example configuration file called
     <filename>standard.sdf.actions</filename>:</para>
 
     <programlisting>configuration([
@@ -689,42 +876,95 @@ context-free syntax
   library-path("SDF Grammar Library","__SDF_LIBRARY__"),
   library-path("ASF+SDF Library","__ASF_LIBRARY__"),
   action([description(tree-panel, click)], "ShowAreaAction"),
-  action([description(studio-menubar, menu([label("File"), label("Exit")]))], "ExitAction"),
-  action([description(studio-menubar, menu-shortcut([label("Module"), label("New...")], shortcut([M_ALT,M_SHIFT],VK_N))),
-          description(studio-toolbar, icon("New Module", "New24.gif"))], "NewModuleAction"),
-  action([description(term-editor, menu-shortcut([label("Term"),label("Add Brackets")], shortcut([M_ALT,M_CTRL],VK_B)))], "AddBracketsAction"),
-  action([description(syntax-editor, menu-shortcut([label("Module"), label("Edit"), label("Term")], shortcut([M_CTRL,M_SHIFT],VK_T)))], "EditorEditTermAction"),
+  action([
+    description(
+      studio-menubar, 
+      menu([label("File"), label("Exit")]))], 
+      "ExitAction"),
+  action([
+    description(
+      studio-menubar, 
+      menu-shortcut([label("Module"), label("New...")], 
+                    shortcut([M_ALT,M_SHIFT],VK_N))),
+    description(
+      studio-toolbar, 
+      icon("New Module", "New24.gif"))], 
+      "NewModuleAction"),
+  action([
+    description(
+      term-editor, 
+      menu-shortcut([label("Term"),label("Add Brackets")], 
+                    shortcut([M_ALT,M_CTRL],VK_B)))], 
+      "AddBracketsAction"),
+  action([
+    description(
+      syntax-editor, 
+      menu-shortcut([label("Module"), label("Edit"), label("Term")],
+                    shortcut([M_CTRL,M_SHIFT],VK_T)))], 
+      "EditorEditTermAction"),
   action([description(syntax-editor, popup)], "EditorPopup"),
   action([description(equations-editor, popup)], "EditorPopup"),
   action([description(term-editor, popup)], "EditorPopup"),
 
-  action([description(module-popup, menu([label("Close...")]))], "CloseModuleAction"),
+  action([
+    description(
+      module-popup, 
+      menu([label("Close...")]))], 
+    "CloseModuleAction"),
 
-  text-category(normal,[foreground-color(rgb(0,0,0)), background-color(rgb(255,255,255)), font("Monospaced"), size(14)]),
-  text-category(focus,    [foreground-color(rgb(0,0,0)),background-color(rgb(255,250,148))]),
-  text-category(selection,[foreground-color(rgb(255,255,255)),background-color(rgb(65,101,172))]),
-  text-category(extern("MetaKeyword"),[style(bold),foreground-color(rgb(123,0,82))]),
-  text-category(extern("MetaVariable"),[style(italics),foreground-color(rgb(0,0,255))]),
-  text-category(extern("MetaAmbiguity"),[style(bold),foreground-color(rgb(186,29,29))]),
-  text-category(extern("Todo"),[style(bold),background-color(rgb(255,255,255)),foreground-color(rgb(123,157,198))]),
-  text-category(extern("Comment"),[style(italics),foreground-color(rgb(82,141,115))]),
-  text-category(extern("Constant"),[style(italics),foreground-color(rgb(139,0,139))]),
-  text-category(extern("Variable"),[foreground-color(rgb(144,238,144))]),
-  text-category(extern("Identifier"),[foreground-color(rgb(255,69,0))]),
-  text-category(extern("Type"),[foreground-color(rgb(255,127,36))]),
-  text-category(extern("Error"),[style(bold),foreground-color(rgb(255,0,0))]),
-  text-category(extern("Warning"),[style(bold),foreground-color(rgb(0,0,255))]),
-  text-category(extern("Info"),[style(bold),foreground-color(rgb(0,255,0))]),
-  text-category(extern("Fatal"),[style(bold),background-color(rgb(255,0,0))])
+  text-category(normal,[foreground-color(rgb(0,0,0)), 
+                        background-color(rgb(255,255,255)), 
+                        font("Monospaced"), 
+                        size(14)]),
+  text-category(focus,    [foreground-color(rgb(0,0,0)),
+                           background-color(rgb(255,250,148))]),
+  text-category(selection,[foreground-color(rgb(255,255,255)),
+                           background-color(rgb(65,101,172))]),
+  text-category(extern("MetaKeyword"),
+                [style(bold),foreground-color(rgb(123,0,82))]),
+  text-category(extern("MetaVariable"),
+                [style(italics),foreground-color(rgb(0,0,255))]),
+  text-category(extern("MetaAmbiguity"),
+                [style(bold),foreground-color(rgb(186,29,29))]),
+  text-category(extern("Todo"),
+                [style(bold),background-color(rgb(255,255,255)),
+                 foreground-color(rgb(123,157,198))]),
+  text-category(extern("Comment"),
+                [style(italics),foreground-color(rgb(82,141,115))]),
+  text-category(extern("Constant"),
+                [style(italics),foreground-color(rgb(139,0,139))]),
+  text-category(extern("Variable"),
+                [foreground-color(rgb(144,238,144))]),
+  text-category(extern("Identifier"),
+                [foreground-color(rgb(255,69,0))]),
+  text-category(extern("Type"),
+                [foreground-color(rgb(255,127,36))]),
+  text-category(extern("Error"),
+                [style(bold),foreground-color(rgb(255,0,0))]),
+  text-category(extern("Warning"),
+                [style(bold),foreground-color(rgb(0,0,255))]),
+  text-category(extern("Info"),
+                [style(bold),foreground-color(rgb(0,255,0))]),
+  text-category(extern("Fatal"),
+                [style(bold),background-color(rgb(255,0,0))])
 ])</programlisting>
 
+    <para>Note that the configuration file contains of ToolBus processes like
+    ShowAreaAction, ExitAction, and others. These are described in ...</para>
+
     <para>Once a configuration file is constructed it will be used by the
-    start-up shell script (see the section about that script), and by a
-    initial ToolBus process (see the section on ToolBus scripts).</para>
+    <link linkend="NewStartUpScript">start-up script</link>, and by an <link
+    linkend="NewToolBusScripts">initial ToolBus process</link> .</para>
   </section>
 
   <section>
-    <title>Adding new ToolBus scripts</title>
+    <title>The standard ToolBus Actions.</title>
+
+    <para><remark>TBD</remark></para>
+  </section>
+
+  <section xml:id="NewToolBusScripts">
+    <title>Adding new ToolBus Scripts</title>
 
     <itemizedlist>
       <listitem>
@@ -754,8 +994,8 @@ context-free syntax
     </itemizedlist>
   </section>
 
-  <section>
-    <title>Implementing new tools</title>
+  <section xml:id="NewTools">
+    <title>Implementing new Tools</title>
 
     <itemizedlist>
       <listitem>
@@ -772,8 +1012,8 @@ context-free syntax
     </itemizedlist>
   </section>
 
-  <section>
-    <title>Implementing GUI extensions</title>
+  <section xml:id="NewGuiExtensions">
+    <title>Implementing GUI Extensions</title>
 
     <para>Explain the StudioPlugin interface, and the StudioComponent
     interface.</para>
@@ -802,8 +1042,8 @@ context-free syntax
     </itemizedlist>
   </section>
 
-  <section>
-    <title>Implementing a start-up shell script</title>
+  <section xml:id="NewStartUpScript">
+    <title>Implementing a Start-up Shell Script</title>
 
     <para>The startup shell script of a Meta-Environment based IDE looks like
     this:</para>
@@ -815,17 +1055,18 @@ __TOOLBUS__/bin/toolbus \
   `__CONFIG_MANAGER__/bin/configmanager -s -i __PACKAGEPREFIX__/share/&lt;configfile&gt;.actions`</programlisting>
 
     <para>This script needs to be instantiated with the correct paths at
-    installation time. Use a Makefile.am rule for this for example. The script
-    simply starts the ToolBus and uses the configmanager tool (wrapped in
-    backquotes for inline substitution) to generate the necessary commandline
-    options to the ToolBus. The following is the usage information from this
-    commandline tool:</para>
+    installation time. Use a <filename>Makefile.am</filename> rule for this
+    for example. The script simply starts the ToolBus and uses the
+    <command>configmanager</command> tool (wrapped in backquotes for inline
+    substitution) to generate the necessary command line options to the
+    ToolBus. The following is the usage information from this command line
+    tool:</para>
 
     <para><programlisting>usage: configmanager -[Is] -i &lt;config-file&gt;
         -I print ToolBus include path
         -s print ToolBus main scripts
         -i input configuration file [multiple]</programlisting>See the ToolBus
-    manual and toolbus usage information for more information on ToolBus
-    commandline parameters. </para>
+    manual and ToolBus usage information for more information on ToolBus
+    command line parameters.</para>
   </section>
 </article>
