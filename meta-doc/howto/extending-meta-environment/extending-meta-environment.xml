@@ -281,7 +281,7 @@
       new ToolBus scripts, new tools and new MetaStudio GUI plugins that
       implement the extension and coordinate its behavior with the rest of the
       system. Finally, if the extension represents an executable language, a
-      debugging adapter may be included. </para>
+      debugging adapter may be included.</para>
 
       <para>To make the above a bit more explicit, we describe the steps that
       are needed to build an IDE for a domain specific language on top of the
@@ -430,7 +430,7 @@
           </listitem>
         </orderedlist>For some extensions not all of the above steps are
       necessary. The IDE construction goal is the most demanding extension,
-      while the other goals will require less effort. </para>
+      while the other goals will require less effort.</para>
     </section>
   </section>
 
@@ -447,7 +447,7 @@
     the Meta-Environment" document. <remark>(add link)</remark></para>
 
     <para>Every package corresponds to a module in a version control system,
-    and contains at least the following files. </para>
+    and contains at least the following files.</para>
 
     <itemizedlist>
       <listitem>
@@ -625,7 +625,7 @@ TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
       scripts</title>
 
       <para>The following naming conventions are used for source code
-      subdirectories: </para>
+      subdirectories:</para>
 
       <itemizedlist>
         <listitem>
@@ -643,8 +643,8 @@ TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
         </listitem>
 
         <listitem>
-          <para><filename>spec</filename> contains ASF+SDF specifications.
-          </para>
+          <para><filename>spec</filename> contains ASF+SDF
+          specifications.</para>
         </listitem>
 
         <listitem>
@@ -949,18 +949,14 @@ context-free syntax
                 [style(bold),background-color(rgb(255,0,0))])
 ])</programlisting>
 
-    <para>Note that the configuration file contains of ToolBus processes like
-    ShowAreaAction, ExitAction, and others. These are described in ...</para>
+    <para>Note that the configuration file contains names of ToolBus processes
+    like <literal>ShowAreaAction</literal>, <literal>ExitAction</literal>, and
+    others. These are described <link
+    linkend="StandardToolBusActions">below</link>.</para>
 
     <para>Once a configuration file is constructed it will be used by the
     <link linkend="NewStartUpScript">start-up script</link>, and by an <link
     linkend="NewToolBusScripts">initial ToolBus process</link> .</para>
-  </section>
-
-  <section>
-    <title>The standard ToolBus Actions.</title>
-
-    <para><remark>TBD</remark></para>
   </section>
 
   <section xml:id="NewToolBusScripts">
@@ -992,6 +988,316 @@ context-free syntax
         script, and syntax highlighter</para>
       </listitem>
     </itemizedlist>
+
+    <section xml:id="StandardToolBusActions">
+      <title>The standard ToolBus Actions</title>
+
+      <para>The ToolBus scripts that implement The Meta-Environment already
+      provide a wealth of functionality that you can reuse in configuration
+      scripts.</para>
+
+      <para><table xml:id="Table.StandardToolBusActions">
+          <title>Standard ToolBus actions available for configuration
+          scripts.</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><emphasis role="bold">Action</emphasis></entry>
+
+                <entry><emphasis role="bold">Purpose</emphasis></entry>
+              </row>
+
+              <row>
+                <entry>ActionAddPosInfo(EditorId : term, Tree : term,
+                ResultTree : term?)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ActionEvent(EditorId: term, ActionEvent: term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>AddBracketsAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>AddImportAction(Modulename: str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>AsfSdfApiGenAction(ModuleId: term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ChangeWorkspaceAction</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>CloseAllAction</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>CloseModuleAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>CompileModuleAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>CopyModuleAction(Modulename : str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DebugReduceAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DebugRunAsfTestsAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DefaultAction(Arg:term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DeleteModuleAction(Modulename : str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DumpEquationsAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DumpEquationsParseTableAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DumpParseTableAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>DumpSdfDefinitionAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditEquationsAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditSyntaxAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditTermAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditorDumpEquationsParseTableAction(EditorId :
+                term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditorDumpParseTableAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditorEditEquationsAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditorEditSyntaxAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditorEditTermAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>EditorRunAsfTestsAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ExitAction</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>MoveCursorDownAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>MoveCursorLeftAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>MoveCursorRightAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>MoveCursorUpAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>NewModuleAction</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>OpenModuleAction</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>PrettyPrintAction(EditorId : term, EditorType : term,
+                Sort: str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>PrintModuleAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ReduceAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>RemoveImportAction(Modulename: str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>RenameModuleAction(Modulename : str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>RunAsfTestsAction(ModuleId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>SetEditActions(Sid: term, Type: term, Name:
+                str)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ShowAreaAction(Message : str, Location : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ShowFullTreeAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ShowFullTreeWithoutLayoutAction(EditorId :
+                term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ShowOriginAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ShowSharedTreeAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>ShowTreeAction(EditorId : term)</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+    </section>
   </section>
 
   <section xml:id="NewTools">
