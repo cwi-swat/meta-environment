@@ -16,7 +16,8 @@
   <title>The Extension Points of The Meta-Environment</title>
 
   <info>
-    <pubdate>$Rev$ by $Author$ at $Date$</pubdate>
+    <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
+    (Wed, 13 Dec 2006)$</pubdate>
 
     <authorgroup>
       <author>
@@ -1292,11 +1293,12 @@ endlet</programlisting>
             <filename>-actions.tb</filename>.</para>
           </listitem>
         </itemizedlist>So, for implementing a certain Action, you should start
-      looking for functionality in -utils.tb files, if not found you should
-      fall back to .tb files, if still not found, there is a chance of finding
-      things in the .idef files of specific tools. Note that the -actions.tb
-      files are usually too specific for reuse, but in some very simple cases
-      they may come in handy.<table xml:id="Table.StandardToolBusActions">
+      looking for functionality in <filename>-utils.tb</filename> files, if
+      not found you should fall back to .tb files, if still not found, there
+      is a chance of finding things in the .idef files of specific tools. Note
+      that the -actions.tb files are usually too specific for reuse, but in
+      some very simple cases they may come in handy.<table
+          xml:id="Table.StandardToolBusActions">
           <title>Standard ToolBus actions available for configuration
           scripts.</title>
 
