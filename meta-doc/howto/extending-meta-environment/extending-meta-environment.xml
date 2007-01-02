@@ -211,6 +211,11 @@
                 <para>Can instantiate language specific, syntax highlighting,
                 text editors.</para>
               </listitem>
+
+              <listitem>
+                <para>Can instantiate a language specific module manager and
+                module browser.</para>
+              </listitem>
             </itemizedlist>
           </listitem>
 
@@ -373,6 +378,12 @@
                 actions to editor events (file saving, editing, menu
                 options).</para>
               </listitem>
+
+              <listitem>
+                <para>If you are building an IDE for a modular language, you
+                should instantiate the module manager by initializing it, and
+                registering module event note listeners.</para>
+              </listitem>
             </itemizedlist>
 
             <para>See <link linkend="NewToolBusScripts">Adding ToolBus
@@ -490,7 +501,8 @@
       <filename>reconf</filename></title>
 
       <para>For each new package you have to set-up the build environment.
-      This is done as follows:</para>
+      This is done as follows in the <filename>./reconf</filename>
+      file:</para>
 
       <para><programlisting>#! /bin/sh
 
@@ -516,7 +528,7 @@ meta-build || ("Please make sure meta-build is in your PATH" &amp;&amp; false)</
       libraries? Where should the binaries or documentation be installed? And
       so on and so forth. We use an extended version of the
       <command>autoconf</command> system to achieve this. Consider the
-      following example:</para>
+      following example of <filename>configure.ac</filename>:</para>
 
       <para><programlisting>AC_INIT
 META_SETUP
@@ -585,11 +597,13 @@ TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
       detail. The <literal>#uninstalled</literal> variables are used for
       compiling compositions of packages before they are installed (packages
       may refer to the source locations instead of the installed locations
-      using this information). The <literal>Requires</literal> field is very
-      important. It declares the dependencies on other packages. The package
-      definition file given above supports three different programming
-      languages (C, Java and ToolBus scripts). If a package contains any of
-      these, the associated variables are needed, otherwise not.</para>
+      using this information). </para>
+
+      <para>The <literal>Requires</literal> field is very important. It
+      declares the dependencies on other packages. The package definition file
+      given above supports three different programming languages (C, Java and
+      ToolBus scripts). If a package contains any of these, the associated
+      variables are needed, otherwise not.</para>
 
       <para>C packages that export libraries use <literal>Cflags</literal>,
       <literal>Libs</literal> and their uninstalled variants. This information
@@ -684,10 +698,14 @@ SUBDIRS = &lt;subdirs&gt;
 
 ACLOCAL_AMFLAGS = -I .</programlisting>Makefiles are notoriously sensitive to
       spaces. For instance, the exact number of spaces as given on the line
-      <literal>ACLOCAL_AMFLAGS</literal> should be used.</para>
+      <literal>ACLOCAL_AMFLAGS</literal> should be used (this is also due to
+      tools such as <command>autoreconf</command> that scan the contents of
+      Makefile.am files using rather brittle regular expressions).</para>
 
-      <para>The example above is relevant for ToolBus and C packages. For
-      these kinds of packages, each subdirectory should contain its own
+      <para>The example above is relevant the top level directory of each
+      package. For C packages and ToolBus packages there are additional
+      <filename>Makefile.am</filename> files. For these kinds of packages,
+      each subdirectory should contain its own
       <filename>Makefile.am</filename>. Please read the automake manual on how
       to write <filename>Makefile.am</filename> files for compiling C
       libraries and C programs. Each <filename>Makefile.am</filename> may
@@ -698,15 +716,19 @@ ACLOCAL_AMFLAGS = -I .</programlisting>Makefiles are notoriously sensitive to
       file is not obligatory however. <remark>What do we illustrate with the
       following:</remark><programlisting>include $(top_srcdir)/Makefile.meta</programlisting></para>
 
-      <para>In case of a Java package. The toplevel Makefile.am should look
-      like this:<programlisting>include $(top_srcdir)/Makefile.java.meta
+      <para>There is an exception, in case of a Java package. The
+      <emphasis>toplevel</emphasis> Makefile.am should look like
+      this:<programlisting>include $(top_srcdir)/Makefile.java.meta
 
 ACLOCAL_AMFLAGS = -I .</programlisting></para>
 
       <para>Java packages should have all their code in a subdirectory called
       <filename>src</filename>. This subdirectory may contain packages, but
-      the corresponding directories do not need copies of a Makefile.am
-      file.</para>
+      the corresponding directories do not need copies of a Makefile.am file.
+      Note that by including <filename>Makefile.java.meta</filename> the
+      package will use <command>ant</command> to compile your source code
+      using the information from
+      <filename>&lt;package&gt;.pc.in.</filename></para>
     </section>
 
     <section xml:id="ChangeLog">
@@ -989,12 +1011,204 @@ context-free syntax
       </listitem>
     </itemizedlist>
 
+    <section>
+      <title>The relation between configuration scripts and ToolBus
+      scripts</title>
+
+      <para>Recall that the configuration manager provides a ToolBus API for
+      the configuration parameters that have been loaded from the
+      configuration scripts. This information is used by a number of generic
+      tools in the Meta-Environment:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>MetaStudio: uses it to construct the menu bar and all of its
+          contents.</para>
+        </listitem>
+
+        <listitem>
+          <para>editor-plugin: uses it to construct editor specific additions
+          to the menubar in MetaStudio, and for (language specific) popup
+          menus in the editors, and for selecting font properties for syntax
+          highlighting.</para>
+        </listitem>
+
+        <listitem>
+          <para>navigator-gui: uses it to construct navigator specific
+          additions to the menubar in MetaStudio, and for popup menus on the
+          navigator tree.</para>
+        </listitem>
+
+        <listitem>
+          <para>graph-gui: uses it to construct graph display specific
+          additions to the menubar in MetaStudio, and for popup menus on graph
+          nodes.</para>
+        </listitem>
+
+        <listitem>
+          <para>error-gui: registers listeners for clicking on errors.</para>
+        </listitem>
+
+        <listitem>
+          <para>... in principle, this list is extensible with any tool
+          interested in configuration information.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Let's focus on 'action' configuration parameters. Each action
+      identifies for which component it is relevent, which menu option or
+      other user-interface component it should be associated with, and which
+      ToolBus process should be called when the action is activated (see <link
+      linkend="NewConfigurationScript">configuration scripts</link>).</para>
+
+      <para>The above named tools use the configuration information to build
+      up menu's and register listeners to GUI events. They translate the
+      events to ToolBus events, and then <emphasis>inside the ToolBus
+      script</emphasis> such an event is used to call the specific ToolBus
+      process. Each component may pass different parameters to the configured
+      process name. </para>
+
+      <para>For example, the editor-plugin provides an
+      <varname>EditorId</varname>. Suppose there is a menu option called
+      CompileDSL configured for a certain editor:</para>
+
+      <programlisting>action([
+    description(
+      term-editor, 
+      menu-shortcut([label("DSL"),label("Compile")], 
+                    shortcut([M_ALT,M_CTRL],VK_C)))], 
+      "CompileDSL"),</programlisting>
+
+      <para>Which means that the process CompileDSL will be called when
+      somebody clicks DSL-&gt;Compile, or types ALT+CTRL+C. Then, we need to
+      implement the following ToolBus script:</para>
+
+      <programlisting>process CompileDSL(EditorId : term) is
+let
+  ...
+in
+  ...
+endlet</programlisting>
+
+      <para>The EditorId term can be used to look up information about the
+      editor, such as filename (see <link linkend="StandardToolBusActions">the
+      standard ToolBus actions</link> ).</para>
+
+      <para>These are currently the ways processes are called from each
+      component:</para>
+
+      <table>
+        <title>Process call interface per configured component</title>
+
+        <tgroup cols="4">
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Component name</emphasis></entry>
+
+              <entry><emphasis role="bold">Process definition (first
+              alternative)</emphasis></entry>
+
+              <entry><emphasis role="bold">Process definition (second
+              alternative)</emphasis></entry>
+
+              <entry><emphasis role="bold">Reference to source
+              code</emphasis></entry>
+            </row>
+
+            <row>
+              <entry>MetaStudio</entry>
+
+              <entry>process &lt;name&gt; is ...</entry>
+
+              <entry> </entry>
+
+              <entry>meta/tbscripts/gui-utils.tb</entry>
+            </row>
+
+            <row>
+              <entry>editor-plugin</entry>
+
+              <entry>process &lt;name&gt;(EditorId : term) is ...</entry>
+
+              <entry>process &lt;name&gt;(EditorId : term, EditorType: term,
+              Sort : str)</entry>
+
+              <entry>meta/tbscripts/editing.tb</entry>
+            </row>
+
+            <row>
+              <entry>navigator-gui</entry>
+
+              <entry>process &lt;name&gt;(ModuleId : term) is ...</entry>
+
+              <entry> </entry>
+
+              <entry>sdf-meta/tbscripts/sdf-module-actions.tb</entry>
+            </row>
+
+            <row>
+              <entry>error-gui</entry>
+
+              <entry>process &lt;name&gt;(Location : term) is ...</entry>
+
+              <entry> </entry>
+
+              <entry>meta/tbscripts/gui-utils.tb</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The basic design pattern for the above is as follows. We provide
+      it here because the referenced source code is more complex. The real
+      source code introduces one more layer of abstraction, by not letting a
+      tool interface communicate directly with the configuration manager. This
+      is also advised for any new components you develop, but we have left
+      this out in the following example for clarity:</para>
+
+      <programlisting>tool exampleTool is { ... }
+process ExampleToolInterface is
+let 
+  T : exampleTool,
+  Id: term,
+  Event : term,
+  Events : list,
+  Action : str
+in
+  rec-connect(T?)                                                               /* a tool initiates a connection, for example a MetaStudio plugin */
+  . snd-msg(cm-get-events(example-tool-identifier))                             /* retrieve the appropriate menus from the configuration manager */
+  . rec-msg(cm-events(Events?))
+  . snd-do(T, register-events(Events))                                          /* Use the menus to initialize the tool, the tool should store the Events information somewhere */
+  .
+  (
+    rec-event(T, event(Event?))                                                 /* an event is send back by the tool, (this is one of elements of the original Events list) */
+    . snd-msg(cm-get-action(example-tool-identifier, Event))                    /* lookup the related process name from the configuration manager */
+    . rec-msg(cm-action(Action?))
+    .
+    (
+      printf("Warning: process not found: %s\n", Action)
+    +&gt;
+      Action()                                                                  /* The process is called dynamically, if it is not found, the printf above is executed */
+    )
+  +
+    ...                                                                         /* The process will have rec-msg's and snd-do's for implementing the rest of the tool API */
+  )*
+  rec-disconnect(T) /* This process terminates when the tool disconnects */
+endlet</programlisting>
+
+      <para>The above skeleton can be extended by calling
+      <varname>Action</varname> with different parameters, by adding more
+      kinds of events, by adding different 'example-tool-identifiers' in the
+      same tool, etc. Of course, any tool interface will probably have more
+      snd-do's and snd-evals than is shown in the above skeleton.</para>
+    </section>
+
     <section xml:id="StandardToolBusActions">
       <title>The standard ToolBus Actions</title>
 
       <para>The ToolBus scripts that implement The Meta-Environment already
       provide a wealth of functionality that you can reuse in configuration
-      scripts.</para>
+      scripts. </para>
 
       <para><table xml:id="Table.StandardToolBusActions">
           <title>Standard ToolBus actions available for configuration
