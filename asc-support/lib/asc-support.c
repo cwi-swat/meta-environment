@@ -22,6 +22,7 @@
 #include "asc-muasf2pt.h"
 #include "asc-prod2str.h"
 #include "asc-ambiguity.h"
+#include "asc-termstore.h"
 
 /*}}}  */
 
@@ -36,12 +37,6 @@ AFun record_sym = -1;
 
 /*}}}  */
 /*{{{  global variables */
-
-/* This term_store is used for temporary storage of
- * list elements, e.g. used in slice.
- */
-#define MAX_STORE 10240
-static ATerm term_store[MAX_STORE];
 
 /* A table to convert integers to ATermInts. 
  */
@@ -215,46 +210,18 @@ static ATermList innermost_list(PT_Args args)
   ATermList result = ATempty;
   int length = PT_getArgsLength(args);
   ATerm el;
- 
-  /* When a list is shorter than 16 elements, we assume that
-     it is not worth it to malloc a buffer. We use ATreverse
-     to restore the correct list order. */
-  if(length < 16) {
-    while(PT_hasArgsHead(args)) {
-      el = innermost(PT_getArgsHead(args));
-      if(el) {
-	if (ATgetType(el) == AT_LIST) {
-	  /* happens only when a function returns a list directly */
-	    result = ATconcat(result, ATreverse((ATermList) el));
-	}
-	else {
-	    result = ATinsert(result, el); 
-	}
-      }
-      args = PT_getArgsTail(args);
-    }
-    return ATreverse(result);
-  } else {
+  int idx = 0;
 
-    /* We don't use term_store here because of the
-     * recursive calls to innermost, and the fact that
-     * slice (which uses term_store) may be called by
-     * the generated code.
-     */
-    int idx = 0;
-    ATerm *elems = (ATerm *)malloc(sizeof(ATerm)*length);
-    if(!elems) {
-      ATabort("innermost_list: no room for %d elements.\n", length);
-    }
-
+  if (length > 0) {
+    TERM_STORE_FRAME(length,
     while(PT_hasArgsHead(args)) {
-      elems[idx++] = PT_TreeToTerm(PT_getArgsHead(args));
+      TERM_STORE[idx++] = PT_TreeToTerm(PT_getArgsHead(args));
       args = PT_getArgsTail(args);
     }
     assert(idx == length);
 
     for(--idx; idx>=0; idx--) {
-      el = innermost(PT_TreeFromTerm(elems[idx]));
+      el = innermost(PT_TreeFromTerm(TERM_STORE[idx]));
       if (el) {
 	if (ATgetType(el) == AT_LIST) {
 	  /* happens only when a function returns a list directly */
@@ -265,10 +232,9 @@ static ATermList innermost_list(PT_Args args)
 	}
       }
     }
-		
-    free(elems);
-    return result;
+    )		
   }
+  return result;
 }
 
 /*}}}  */
@@ -698,7 +664,7 @@ ATerm unquote(ATerm t)
 
 ATerm slice(ATerm l1, ATerm l2)
 {
-  ATermList result;
+  ATermList result = ATempty;
   int i, len;
 
   if(ATisEmpty((ATermList)l2)) {
@@ -706,23 +672,22 @@ ATerm slice(ATerm l1, ATerm l2)
   }
 
   len = slice_length((ATermList) l1, (ATermList) l2);
-  if( MAX_STORE < len )
-    len = MAX_STORE;
+  if (len > 0) {
+  TERM_STORE_FRAME(len,
 
   for(i=0; i<len; i++) {
-    term_store[i] = ATgetFirst((ATermList)l1);
+    TERM_STORE[i] = ATgetFirst((ATermList)l1);
     l1 = (ATerm)ATgetNext((ATermList)l1);
   }
 
   result = ATempty;
 
-  while(l1 != l2) {
-    result = ATappend(result, ATgetFirst((ATermList)l1));
-    l1 = (ATerm)ATgetNext((ATermList)l1); 
-  }
+  assert(l1 == l2);
 
   for(i=len-1; i>=0; i--) {
-    result = ATinsert(result, term_store[i]);
+    result = ATinsert(result, TERM_STORE[i]);
+  }
+  )
   }
  
   return (ATerm)result;
@@ -754,22 +719,46 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
 				 ATermList extra_args)
 {
   ATermList result = ATempty;
-  ATerm el;
+  int length = ATgetLength(args);
 
-  for (; !ATisEmpty(args); args = ATgetNext(args)) {
-    el = call_using_list(trav, ATinsert(extra_args, ATgetFirst(args)));
-    
-    if (el) {
-      if (ATgetType(el) == AT_LIST) {
-	result = ATconcat(result, ATreverse((ATermList) el));
+  if (length > 0) {
+    int i = 0;
+    ATbool changed = ATfalse;
+    ATermList origArgs = args;
+
+    TERM_STORE_FRAME(length,
+    for ( ; !ATisEmpty(args); args = ATgetNext(args)) {
+      ATerm arg = ATgetFirst(args);
+      ATerm tmp = call_using_list(trav, ATinsert(extra_args, arg));
+      if (tmp != arg) {
+        changed = ATtrue;
       }
-      else {
-	result = ATinsert(result, el);
+      TERM_STORE[i++] = tmp;
+    }
+
+    assert(i == length);
+
+    if (changed) {
+      for (--i; i >= 0; i--) {
+        ATerm el = TERM_STORE[i];
+  
+        if (el) {
+    	  if (ATgetType(el) == AT_LIST) {
+  	    result = ATconcat(result, ATreverse((ATermList) el));
+	  }
+	  else {
+	    result = ATinsert(result, el);
+  	  }
+        }
       }
     }
+    else {
+      result = origArgs;
+    }
+    )
   }
 
-  return ATreverse(result);
+  return result;
 }
 /*}}}  */
 /*{{{  static ATermList call_kids_accu_list(funcptr trav, ATermList args,  */
@@ -794,22 +783,46 @@ static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, ATerm accu,
 {
   ATerm tuple;
   ATermList result = ATempty;
-  ATerm el;
+  int length = ATgetLength(args);
 
-  for(;!ATisEmpty(args); args = ATgetNext(args)) {
-    tuple = call_using_list(trav,ATinsert(
-				  ATinsert(extra_args, accu),
-				    ATgetFirst(args)));
+  if (length > 0) {
+    TERM_STORE_FRAME(length,
+    int i = 0;
+    ATbool changed = ATfalse;
+    ATermList origArgs = args;
 
-    el = ATgetArgument((ATermAppl) tuple, 0);
-    accu = ATgetArgument((ATermAppl) tuple, 1);
+    for(;!ATisEmpty(args); args = ATgetNext(args)) {
+      ATerm arg = ATgetFirst(args);
+      ATerm tmp;
+      tuple = call_using_list(trav,ATinsert(
+					    ATinsert(extra_args, accu),
+					    arg));
 
-    if (el) {
-      result = ATinsert(result, el);
+      tmp = ATgetArgument((ATermAppl) tuple, 0);
+      TERM_STORE[i++] = tmp;
+
+      if (tmp != arg) {
+        changed = ATtrue;
+      }
+      accu = ATgetArgument((ATermAppl) tuple, 1);
     }
-  }
 
-  result = ATreverse(result);
+    assert(i == length);
+
+    if (changed) {
+      for (--i; i >=0; i--) {
+        ATerm el = TERM_STORE[i];
+    
+        if (el) {
+        result = ATinsert(result, el);
+        }
+      }
+    }
+    else {
+      result = origArgs;
+    }
+    )
+  }
 
   return (ATerm) ATmakeAppl2(tuplesym, (ATerm) result,accu);
 }
@@ -1000,25 +1013,43 @@ static ATermList call_kids_trafo_list_with_fail(funcptr trav, ATermList args,
 						ATermList extra_args)
 {
   ATermList result = ATempty;
-  ATerm el;
   ATbool fail = ATtrue;
+  int length = ATgetLength(args);
 
-  for (; !ATisEmpty(args); args = ATgetNext(args)) {
-    ATerm head = ATgetFirst(args);
-    el = call_using_list(trav,ATinsert(extra_args,head));
-    
-    if (el) {
-      fail = ATfalse;
+  if (length > 0) {
+    int i = 0;
+    ATermList origArgs = args;
+
+    TERM_STORE_FRAME(length,
+    for (; !ATisEmpty(args); args = ATgetNext(args)) {
+      ATerm head = ATgetFirst(args);
+      ATerm tmp = call_using_list(trav,ATinsert(extra_args,head));
+
+      if (tmp) {
+	fail = ATfalse;
+	TERM_STORE[i++] = tmp;
+      }
+      else {
+	TERM_STORE[i++] = head;
+      }
+    }
+
+    assert(i == length);
+
+    if (!fail) {
+      for (--i; i >= 0; i--) {
+        ATerm el = TERM_STORE[i];
+        result = ATinsert(result, el);
+      }
     }
     else {
-      el = head;
+      result = origArgs;
     }
-
-    result = ATinsert(result, el);
+    )
   }
 
   if (!fail) {
-    return ATreverse(result);
+    return result;
   }
   else {
     return NULL;
@@ -1061,29 +1092,41 @@ static ATerm call_kids_accutrafo_list_with_fail(funcptr trav, ATermList args,
 {
   ATerm tuple;
   ATermList result = ATempty;
-  ATerm el;
   ATbool fail = ATtrue;
+  int length = ATgetLength(args);
 
-  for(;!ATisEmpty(args); args = ATgetNext(args)) {
-    ATerm head = ATgetFirst(args);
-    tuple = call_using_list(trav,ATinsert(
-				  ATinsert(extra_args, accu), head));
+  if (length > 0) {
+    int i = 0;
+    ATermList origArgs = args;
 
-    if (tuple) {
-      fail = ATfalse;
-      el = ATgetArgument((ATermAppl) tuple, 0);
-      accu = ATgetArgument((ATermAppl) tuple, 1);
+    TERM_STORE_FRAME(length,
+    for(;!ATisEmpty(args); args = ATgetNext(args)) {
+      ATerm head = ATgetFirst(args);
+      tuple = call_using_list(trav,ATinsert(
+					    ATinsert(extra_args, accu), head));
+
+      if (tuple) {
+	fail = ATfalse;
+	TERM_STORE[i++] = ATgetArgument((ATermAppl) tuple, 0);
+	accu = ATgetArgument((ATermAppl) tuple, 1);
+      }
+      else {
+	TERM_STORE[i++] = head;
+      }
+    }
+
+    assert(i == length);
+
+    if (!fail) {
+      for (--i; i >= 0; i--) {
+        result = ATinsert(result, TERM_STORE[i]);
+      }
     }
     else {
-      el = head;
+      result = origArgs;
     }
-
-    if (el) {
-      result = ATinsert(result, el);
-    }
+    )
   }
-
-  result = ATreverse(result);
 
   if (!fail) {
     return (ATerm) ATmakeAppl2(tuplesym, (ATerm) result,accu);
@@ -1380,6 +1423,7 @@ void ASC_initRunTime(int tableSize)
   PT_initMEPTApi();
   ASF_initASFMEApi();
   initBuiltins();
+  TS_create();
 
   ambiguityCache = ATtableCreate(1024, 75);
   c_rehash(tableSize);

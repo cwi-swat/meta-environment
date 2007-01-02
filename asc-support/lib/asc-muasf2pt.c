@@ -18,6 +18,7 @@
 
 #include "asc-support-me.h"
 #include "asc-muasf2pt.h"
+#include "asc-termstore.h"
 
 /*}}}  */
 
@@ -27,14 +28,7 @@
 #define TREE_TABLE_MAX_LOAD_PERCENTAGE 75
 static ATermTable treeTable = NULL;
 
-#define TERM_STORE_INITIAL_SIZE    512
-#define TERM_STORE (term_store+term_store_begin)
-#define ASSERT_VALID_INDEX(i) assert(term_store_begin + (i) <= term_store_end)
 
-static size_t term_store_begin; 
-static size_t term_store_end;   
-static size_t term_store_size;
-static PT_Tree* term_store = NULL;
 static PT_Tree defaultLayout  = NULL;
 extern ATbool keep_layout;
 /*}}}  */
@@ -45,97 +39,9 @@ static PT_Tree termToTree(ATerm tree);
 static PT_Tree listToTree(PT_Production prod, ATermList elems);
 static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl);
 
-static size_t getTermStore(size_t size);
-static void createTermStore(void);
-static void destroyTermStore(void);
 
 /*}}}  */
 
-/* This term_store is built to cope with a recursive function. Each
- * of its calls needs its own term_store, but we want to reuse allocated
- * memory. It works somewhat like a stack using getTermStore as a push and
- * resetTermStore as a pop. Term_store_end holds the top of the stack.
- */
-/*{{{  static void createTermStore(void) */
-
-static void createTermStore(void)
-{
-  term_store_size = TERM_STORE_INITIAL_SIZE;
-  term_store_begin = -1;
-  term_store_end = -1;
-
-  term_store = (PT_Tree*) calloc(term_store_size, sizeof(PT_Tree));
-
-  if (term_store == NULL) {
-    ATerror("createTermStore: unable to allocate memory for %d Trees",
-	    term_store_size);
-  }
-
-  ATprotectArray((ATerm*) term_store, term_store_size);
-}
-
-/*}}}  */
-/*{{{  static size_t getTermStore(size_t size) */
-
-static size_t getTermStore(size_t size)
-{
-  size_t old_begin;
-
-  assert(size > 0);
-
-  if (term_store_size <= size + term_store_end) {
-    size_t old_size = term_store_size;
-    ATunprotectArray((ATerm*) term_store);
-
-    /* Allocate at least enough memory for the request, and then
-     * some more to prevent this from happening too often.
-     */
-    term_store_size = size + term_store_end + 1 + TERM_STORE_INITIAL_SIZE;
-    term_store = (PT_Tree *) realloc(term_store,
-				     term_store_size * sizeof(PT_Tree));
-
-    if (term_store == NULL) {
-      ATerror("resizeTermStore: unable to allocate memory for %d PT_Trees",
-	      term_store_size);
-      return -1;
-    }
-
-    /* Make sure 0 is in the uninitialized part of the array */
-    memset(term_store + old_size, 0, 
-	   (term_store_size - old_size) * sizeof(PT_Tree));
-
-    ATprotectArray((ATerm*) term_store, term_store_size);
-  }
-
-  /* begin and end are both inclusive boundaries */
-  old_begin        = term_store_begin;
-  term_store_begin = term_store_end + 1;
-  term_store_end   = term_store_begin + size - 1;
-  return old_begin;
-}
-
-/*}}}  */
-/*{{{  static void resetTermStoreTo(size_t index) */
-
-static void resetTermStoreTo(size_t index)
-{
-  term_store_end = term_store_begin - 1;
-  term_store_begin = index;
-}
-
-/*}}}  */
-/*{{{  static void destroyTermStore(void) */
-
-static void destroyTermStore(void)
-{
-  ATunprotectArray((ATerm*) term_store);
-
-  free(term_store);
-  term_store_size = 0;
-  term_store = NULL;
-}
-
-/*}}}  */
 
 /*{{{  static PT_Tree restoreLiteral(PT_Symbol symbol) */
 
@@ -171,7 +77,6 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
   ATbool contextfree;
   int sepLength = 0;
   int i;
-  size_t index;
   
   rhs = PT_getProductionRhs(prod);
 
@@ -194,22 +99,22 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
 
   if (!ATisEmpty(elems)) {
     /* get a free part of the term store */
-    index = getTermStore(ATgetLength(elems));
+    TERM_STORE_FRAME(ATgetLength(elems),
 
     for (i = 0; !ATisEmpty(elems); elems = ATgetNext(elems)) {
       PT_Tree newTree = termToTree(ATgetFirst(elems));
-      ASSERT_VALID_INDEX(i);
       /* Note that TERM_STORE contains a reference to a global
        * that may be updated by termToTree, so do not remove the
        * newTree temporary variable and do not inline the call to termToTree
        * in the following assignment. 
        */
-      TERM_STORE[i] = newTree;
+      TERM_STORE_CHECK(i);
+      TERM_STORE[i] = (ATerm) newTree;
       i++;
     } 
 
     while(--i >= 0) {
-      args = PT_makeArgsMany(TERM_STORE[i], args);
+      args = PT_makeArgsMany((PT_Tree) TERM_STORE[i], args);
 
       if (i != 0) {
         if (sepTree) {
@@ -227,9 +132,7 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
         }
       }
     }
-
-    /* release my part of the term store */
-    resetTermStoreTo(index);
+    )
   }
 
   return PT_makeTreeAppl(prod, args);
@@ -349,13 +252,10 @@ PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
   ATprotect((ATerm*) ((void*) &defaultLayout));
   defaultLayout = layout;
 
-  createTermStore();
-
   result = termToTree(tree);
 
   ATtableDestroy(treeTable);
   treeTable = NULL;
-  destroyTermStore();
   ATunprotect((ATerm*) ((void*) &defaultLayout));
   defaultLayout = NULL;
 

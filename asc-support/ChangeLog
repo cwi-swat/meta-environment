@@ -1,5 +1,14 @@
 $Id$
 
+Tue Dec 26 10:02:36 CET 2006 <jurgenv@cwi.nl>
+ * lib/asc-termstore.[ch]: factored out term_store stack data-structure
+   for reuse in different functions of the ASF runtime.
+ * lib/asc-support.c,asf-muasf2pt.c: (re)use of term_store for all recursions
+   over the parse tree structures.
+ * lib/asc-support.c: use of term_store temporary arrays for optimizing
+   traversal functions. This saves about 5 to 10% running time in 
+   'traversal functions intensive' specifications. 
+
 Wed Nov 29 15:57:05 CET 2006 <economop@cwi.nl>
  * lib/asc-muasf2pt.c: fixed Bug #662, the lvalue of an assignment
    depended on the execution of the rvalue of an assigment via a

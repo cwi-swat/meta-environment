@@ -63,6 +63,7 @@ include_HEADERS = \
 	asc-client.h \
 	asc-muasf2pt.h \
 	asc-ambiguity.h \
+	asc-termstore.h \
 	builtin-common.h
 
 libasc_support_me_la_CPPFLAGS = $(AM_CPPFLAGS)
@@ -90,6 +91,7 @@ libasc_support_me_la_SOURCES = \
 	asc-client.c\
 	asc-tide.c\
 	asc-ambiguity.c\
+	asc-termstore.c\
 	builtin-forward.c\
 	Library.c\
 	Library.h\
