@@ -41,7 +41,7 @@
     <para>How can the The Meta-Environment be adjusted or extended? This
     document describes what the extension points of The Meta-Environment are
     and how they are used in typical applications. Each type of extension
-    points may have several goals.</para>
+    points may have several goals. </para>
 
     <section xml:id="GoalsExtensions">
       <title>Goals of Extensions</title>
@@ -442,6 +442,38 @@
         </orderedlist>For some extensions not all of the above steps are
       necessary. The IDE construction goal is the most demanding extension,
       while the other goals will require less effort.</para>
+    </section>
+
+    <section>
+      <title>Disclaimer</title>
+
+      <para>The Meta-Environment has many extension points, and some of them
+      are still in flux. Still, this document provides an overview of the more
+      stable extension points, and a brief explanation of how to use them. It
+      is a first attempt at making these APIs more widely usable (meaning
+      outside of the Meta-Environment development team).</para>
+
+      <para>When this document does not provide you with enough detailed
+      information, please refer to the following ToolBus scripts:<itemizedlist>
+          <listitem>
+            <para>meta/tbscripts/*.tb</para>
+          </listitem>
+
+          <listitem>
+            <para>sdf-meta/tbscripts/*.tb</para>
+          </listitem>
+
+          <listitem>
+            <para>asfsdf-meta/tbscripts/*.tb</para>
+          </listitem>
+
+          <listitem>
+            <para>any .idef files as found by the following command:
+            <command>find . -name "*.idef.src"</command></para>
+          </listitem>
+        </itemizedlist>These files implement or directly control all extension
+      points of the Meta-Environment, since they control all features of The
+      Meta-Environment.</para>
     </section>
   </section>
 
@@ -1159,12 +1191,18 @@ endlet</programlisting>
         </tgroup>
       </table>
 
-      <para>The basic design pattern for the above is as follows. We provide
-      it here because the referenced source code is more complex. The real
-      source code introduces one more layer of abstraction, by not letting a
-      tool interface communicate directly with the configuration manager. This
-      is also advised for any new components you develop, but we have left
-      this out in the following example for clarity:</para>
+      <para>The above information is enough for anybody implementing actions
+      for existing components.</para>
+
+      <para>When you implement a completely new component, you should
+      instantiate a connection between defined actions in a configuration
+      script, and the way a ToolBus process is called. The basic design
+      pattern for this is as follows. We provide it here because the
+      referenced source code is more complex. The real source code introduces
+      one more layer of abstraction, by not letting a tool interface
+      communicate directly with the configuration manager. This is also
+      advised for any new components you develop, but we have left this out in
+      the following example for clarity:</para>
 
       <programlisting>tool exampleTool is { ... }
 process ExampleToolInterface is
@@ -1176,13 +1214,13 @@ let
   Action : str
 in
   rec-connect(T?)                                                               /* a tool initiates a connection, for example a MetaStudio plugin */
-  . snd-msg(cm-get-events(example-tool-identifier))                             /* retrieve the appropriate menus from the configuration manager */
-  . rec-msg(cm-events(Events?))
+  . snd-msg(cm-get-events(example-tool-identifier))                             /* retrieve the appropriate menus from the configuration manager, */
+  . rec-msg(cm-events(Events?))                                                 /* the 'example-tool-identifier' will occur in configuration scripts! */
   . snd-do(T, register-events(Events))                                          /* Use the menus to initialize the tool, the tool should store the Events information somewhere */
   .
-  (
-    rec-event(T, event(Event?))                                                 /* an event is send back by the tool, (this is one of elements of the original Events list) */
-    . snd-msg(cm-get-action(example-tool-identifier, Event))                    /* lookup the related process name from the configuration manager */
+  (                                                                             /* After initialization, the tool goes into a processing loop */
+    rec-event(T, event(Event?))                                                 /* An event is send back by the tool, (this is one of elements of the original Events list) */
+    . snd-msg(cm-get-action(example-tool-identifier, Event))                    /* Lookup the related process name from the configuration manager */
     . rec-msg(cm-action(Action?))
     .
     (
@@ -1208,21 +1246,74 @@ endlet</programlisting>
 
       <para>The ToolBus scripts that implement The Meta-Environment already
       provide a wealth of functionality that you can reuse in configuration
-      scripts. </para>
+      scripts. This functionality is separated in three layers: meta, sdf-meta
+      and asfsdf-meta. The meta layer contains only language independent
+      processes. The sdf-meta layer introduces SDF specific scripts. The
+      asfsdf-meta layer introduces ASF specific scripts. Note that the
+      sdf-meta layer depends on the meta layer, and the asfsdf-meta layer
+      depends on the sdf-meta layer. To load them use any or all of the
+      following include statements:</para>
 
-      <para><table xml:id="Table.StandardToolBusActions">
+      <programlisting>#include &lt;meta.tb&gt;
+#include &lt;sdf-meta.tb&gt;
+#include &lt;asfsdf-meta.tb&gt;</programlisting>
+
+      <para>Including these files makes a number of things readily
+      available:<itemizedlist>
+          <listitem>
+            <para><emphasis>tools</emphasis> (such as in-output) with an
+            interface that can be accessed via snd-msg/rec-msg.</para>
+
+            <para>These interfaces are found in files that have the
+            <filename>.idef</filename> extension.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>processes</emphasis> that translate the
+            snd-msg/rec-msg interface of selected tools to process definitions
+            for your convenience.</para>
+
+            <para>These interfaces are found in files that have the
+            <filename>.tb</filename> extension.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>aggregrated processes</emphasis> that implement
+            specific reusable scenarios using the above two interfaces.</para>
+
+            <para>These interfaces are found in files that end with
+            <filename>-utils.tb</filename>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>specific processes</emphasis> that are already
+            tied to specific menu's or user actions.</para>
+
+            <para>These processes are found in files that end with
+            <filename>-actions.tb</filename>.</para>
+          </listitem>
+        </itemizedlist>So, for implementing a certain Action, you should start
+      looking for functionality in -utils.tb files, if not found you should
+      fall back to .tb files, if still not found, there is a chance of finding
+      things in the .idef files of specific tools. Note that the -actions.tb
+      files are usually too specific for reuse, but in some very simple cases
+      they may come in handy.<table xml:id="Table.StandardToolBusActions">
           <title>Standard ToolBus actions available for configuration
           scripts.</title>
 
-          <tgroup cols="2">
+          <tgroup cols="3">
             <tbody>
               <row>
+                <entry><emphasis role="bold">Layer</emphasis></entry>
+
                 <entry><emphasis role="bold">Action</emphasis></entry>
 
                 <entry><emphasis role="bold">Purpose</emphasis></entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>ActionAddPosInfo(EditorId : term, Tree : term,
                 ResultTree : term?)</entry>
 
