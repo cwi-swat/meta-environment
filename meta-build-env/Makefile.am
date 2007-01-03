@@ -8,7 +8,8 @@ pkgdata_DATA 	= \
 		  Makefile.top.meta \
 		  Makefile.java.meta \
 		  meta-build.ant \
-		  Doxyfile.meta
+		  Doxyfile.meta \
+		  doc-header.html
 
 EXTRA_DIST	= meta-build.src $(pkgdata_DATA)
 

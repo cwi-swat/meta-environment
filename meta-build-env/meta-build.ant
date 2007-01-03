@@ -70,6 +70,7 @@
       linksource="yes"
       version="true"
       windowtitle="${env.PACKAGE}"
+      header="${env.DOCHEADER}"
     >
       <classpath refid="project.classpath"/>
     </javadoc>

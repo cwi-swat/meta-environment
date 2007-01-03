@@ -24,7 +24,8 @@ ANT_ENV = \
   JAVA_EXTERNAL_JARS=${EXTERNAL_JARS} \
   JAVA_PACKAGES=${JAVA_PACKAGES} \
   JAVA_TEST_CLASS=${JAVA_TEST_CLASS} \
-  PACKAGE=${PACKAGE}
+  PACKAGE=${PACKAGE} \
+  DOCHEADER="$(shell cat $(top_srcdir)/doc-header.html | sed 's@\"@\\\"@g;')"
 
 
 if MAINTAINER_MODE
