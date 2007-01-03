@@ -225,7 +225,7 @@ static ATermList innermost_list(PT_Args args)
       if (el) {
 	if (ATgetType(el) == AT_LIST) {
 	  /* happens only when a function returns a list directly */
-	  result = ATconcat(result, ATreverse((ATermList) el));
+	  result = ATconcat(result, (ATermList) el);
 	}
 	else {
 	  result = ATinsert(result, el);
@@ -744,7 +744,7 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
   
         if (el) {
     	  if (ATgetType(el) == AT_LIST) {
-  	    result = ATconcat(result, ATreverse((ATermList) el));
+  	    result = ATconcat(result, (ATermList) el);
 	  }
 	  else {
 	    result = ATinsert(result, el);
