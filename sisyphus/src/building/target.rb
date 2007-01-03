@@ -15,7 +15,8 @@ module Building
   class Target
     include Utils::UnameDir
     include FileUtils
-    attr_reader :revision, :config, :session, :item, :dep_items
+    attr_reader :revision, :config, :session, :item
+    attr_accessor :dep_items
 
     def initialize(revision, dep_items, config, session, log, dist_conf)
       @revision = revision

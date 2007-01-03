@@ -24,7 +24,7 @@ module Building
     def delete_stale_build_item_if_any(target)
       item = @store.last_item_for_target(target)
       if not item.nil? and item.in_progress? then
-        remove_stale_build_items(item)
+        remove_stale_build_items(item)        
       end
     end
 
@@ -48,7 +48,7 @@ module Building
       ## ALWAYS remove stale buiild items.
       item = @store.last_item_for_target(target)
       if not item.nil? and item.in_progress? then
-        @log.info("cleaning up stale buid item: #{item}")
+        @log.info("cleaning up stale build item: #{item}")
         remove_stale_build_items(item)
         return requires_build?(target)
       end
@@ -116,7 +116,14 @@ module Building
           if compatible?(older_item.dep_items, item.dep_items) then
             @log.info("found older build with compatible dependencies #{older_item.dep_items.join(', ')}")
             if prefixes_still_exist?(older_item.dep_items)
-              target.obtain_new_item(@store, older_item.dep_items)
+              target.item.si_deps = []
+              target.item.save
+              older_item.dep_items.each do |i|
+                target.item.si_deps << i
+              end
+              target.item.save
+              #target.item.si_deps = older_item.dep_items
+              #target.obtain_new_item(@store, older_item.dep_items)
               target.fire
               return
             end

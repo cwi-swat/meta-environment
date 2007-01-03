@@ -1,3 +1,8 @@
+2007-01-03    <storm@cwi.nl>
+
+	* src/building/builder.rb (Building::Builder::build_target): fixed
+	a bug when resuing older dependencies in a build that was done before.
+
 2006-12-15    <storm@cwi.nl>
 
 	* src/roll.rb (Roll::CommandlineParser::self.parse): added a
