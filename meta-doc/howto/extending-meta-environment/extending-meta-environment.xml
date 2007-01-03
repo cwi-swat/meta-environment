@@ -6,7 +6,9 @@
 <!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
 %dbcent;
 ]>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<article version="5.0"
+         xlink:href="http://homepages.cwi.nl/~daybuild/daily-books/extending-meta-environment/index.html"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:svg="http://www.w3.org/2000/svg"
@@ -473,7 +475,13 @@
           </listitem>
         </itemizedlist>These files implement or directly control all extension
       points of the Meta-Environment, since they control all features of The
-      Meta-Environment.</para>
+      Meta-Environment. </para>
+
+      <para>Note that all ToolBus scripts (.tb and .idef.src) files can be
+      found online via the <uri
+      xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs">online
+      Meta-Environment API reference</uri>, althought the syntax highlighting
+      and linking does not work correctly for these files.</para>
     </section>
   </section>
 
@@ -486,8 +494,9 @@
     Meta-Environment packages have a similar package structure. For
     extensions, we advise to reuse this design. This will enable easy
     integration and deployment of your extension. For details regarding the
-    build tools for Meta-Environment package see the "Build environment for
-    the Meta-Environment" document. <remark>(add link)</remark></para>
+    build tools for Meta-Environment package see the <link linkend="bla"><uri
+    xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/project/build-environment.html">Build
+    Environment documentation</uri></link>.</para>
 
     <para>Every package corresponds to a module in a version control system,
     and contains at least the following files.</para>
@@ -1016,32 +1025,15 @@ context-free syntax
   <section xml:id="NewToolBusScripts">
     <title>Adding new ToolBus Scripts</title>
 
-    <itemizedlist>
-      <listitem>
-        <para>relation between configuration scripts and ToolBus scripts (menu
-        calls processes)</para>
-      </listitem>
+    <para>Since the ToolBus is the coordination infra-structure of the
+    Meta-Environment, this is the centralized domain for extending and
+    manipulating The Meta-Environment. The ToolBus scripts control each
+    individual tool that is connected to the environment in every way: when
+    they are started and stopped, how they are initialized, and when and how
+    they are used to compute or store information. </para>
 
-      <listitem>
-        <para>explain all available processes from meta package, and
-        rec-msgs</para>
-      </listitem>
-
-      <listitem>
-        <para>explain coding conventions for ToolBus scripts (small
-        scripts)</para>
-      </listitem>
-
-      <listitem>
-        <para>explain instantiation of language specific editors (connecting
-        parser/parsetable)</para>
-      </listitem>
-
-      <listitem>
-        <para>explain connection between text-categories in configuration
-        script, and syntax highlighter</para>
-      </listitem>
-    </itemizedlist>
+    <para>This section explains which tools are configurable by writing
+    ToolBus scripts and how.</para>
 
     <section>
       <title>The relation between configuration scripts and ToolBus
@@ -1297,8 +1289,14 @@ endlet</programlisting>
       not found you should fall back to .tb files, if still not found, there
       is a chance of finding things in the .idef files of specific tools. Note
       that the -actions.tb files are usually too specific for reuse, but in
-      some very simple cases they may come in handy.<table
-          xml:id="Table.StandardToolBusActions">
+      some very simple cases they may come in handy.</para>
+
+      <para>The best resource for finding out about tools and processes is
+      reading the source code of .idef and .tb files at the <uri
+      xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs">Meta-Environment
+      online API reference</uri>. </para>
+
+      <para><table xml:id="Table.StandardToolBusActions">
           <title>Standard ToolBus actions available for configuration
           scripts.</title>
 
@@ -1318,291 +1316,426 @@ endlet</programlisting>
                 <entry>ActionAddPosInfo(EditorId : term, Tree : term,
                 ResultTree : term?)</entry>
 
-                <entry></entry>
+                <entry>Annotates the tree that is associated to an editor with
+                position information. Position information is necessary for
+                extracting source code locations, and is needed for syntax
+                highlighting.</entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>ActionEvent(EditorId: term, ActionEvent: term)</entry>
 
-                <entry></entry>
+                <entry>??</entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>AddBracketsAction(EditorId : term)</entry>
 
-                <entry></entry>
+                <entry>Takes the tree associated with the current editor,
+                looks up the language that is was parsed over and add brackets
+                to the term where possible.</entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>AddImportAction(Modulename: str)</entry>
 
-                <entry></entry>
+                <entry><emphasis>dead</emphasis></entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>AsfSdfApiGenAction(ModuleId: term)</entry>
 
-                <entry></entry>
+                <entry><emphasis>dead</emphasis></entry>
               </row>
 
               <row>
-                <entry>ChangeWorkspaceAction</entry>
+                <entry>meta</entry>
 
-                <entry></entry>
+                <entry>ShowSharedTreeAction(EditorId : term)</entry>
+
+                <entry>Displays a tree with unique nodes for the focus of the
+                referenced editor.</entry>
               </row>
 
               <row>
-                <entry>CloseAllAction</entry>
+                <entry>meta</entry>
 
-                <entry></entry>
+                <entry>ShowTreeAction(EditorId : term)</entry>
+
+                <entry>Displays a tree without layout nodes for the focus of
+                the references editor.</entry>
               </row>
 
               <row>
-                <entry>CloseModuleAction(ModuleId : term)</entry>
+                <entry>meta</entry>
 
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>CompileModuleAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>CopyModuleAction(Modulename : str)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DebugReduceAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DebugRunAsfTestsAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DefaultAction(Arg:term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DeleteModuleAction(Modulename : str)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DumpEquationsAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DumpEquationsParseTableAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DumpParseTableAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>DumpSdfDefinitionAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditEquationsAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditSyntaxAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditTermAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditorDumpEquationsParseTableAction(EditorId :
-                term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditorDumpParseTableAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditorEditEquationsAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditorEditSyntaxAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditorEditTermAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>EditorRunAsfTestsAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>ExitAction</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>MoveCursorDownAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>MoveCursorLeftAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>MoveCursorRightAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>MoveCursorUpAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>NewModuleAction</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>OpenModuleAction</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>PrettyPrintAction(EditorId : term, EditorType : term,
-                Sort: str)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>PrintModuleAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>ReduceAction(EditorId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>RemoveImportAction(Modulename: str)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>RenameModuleAction(Modulename : str)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>RunAsfTestsAction(ModuleId : term)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
-                <entry>SetEditActions(Sid: term, Type: term, Name:
-                str)</entry>
-
-                <entry></entry>
-              </row>
-
-              <row>
                 <entry>ShowAreaAction(Message : str, Location : term)</entry>
 
-                <entry></entry>
+                <entry>Opens a fresh editor and jumps to the specific
+                location, displaying a message in the status bar of the
+                editor.</entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>ShowFullTreeAction(EditorId : term)</entry>
 
-                <entry></entry>
+                <entry>Displays a tree with layout and lexical structure for
+                the focus of the referenced editor.</entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
                 <entry>ShowFullTreeWithoutLayoutAction(EditorId :
                 term)</entry>
 
-                <entry></entry>
+                <entry>Displays a tree without layout, but with lexical
+                structure for the focus of the referenced editor.</entry>
               </row>
 
               <row>
+                <entry>meta</entry>
+
+                <entry>ExitAction</entry>
+
+                <entry>Exits the Meta-Environment</entry>
+              </row>
+
+              <row>
+                <entry>meta</entry>
+
+                <entry>MoveCursorDownAction(EditorId : term)</entry>
+
+                <entry>Moves the focus around for the referenced
+                editor</entry>
+              </row>
+
+              <row>
+                <entry>meta</entry>
+
+                <entry>MoveCursorLeftAction(EditorId : term)</entry>
+
+                <entry>Moves the focus around for the referenced
+                editor</entry>
+              </row>
+
+              <row>
+                <entry>meta</entry>
+
+                <entry>MoveCursorRightAction(EditorId : term)</entry>
+
+                <entry>Moves the focus around for the referenced
+                editor</entry>
+              </row>
+
+              <row>
+                <entry>meta</entry>
+
+                <entry>MoveCursorUpAction(EditorId : term)</entry>
+
+                <entry>Moves the focus around for the referenced
+                editor</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>CloseAllAction</entry>
+
+                <entry>Closes all SDF modules</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>CloseModuleAction(ModuleId : term)</entry>
+
+                <entry>Closes one SDF module</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>CopyModuleAction(Modulename : str)</entry>
+
+                <entry><emphasis>dead</emphasis></entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>DeleteModuleAction(Modulename : str)</entry>
+
+                <entry><emphasis>dead</emphasis></entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>NewModuleAction</entry>
+
+                <entry>Starts the scenario for creating a new SDF
+                module</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>OpenModuleAction</entry>
+
+                <entry>Starts the scenario of opening an SDF module</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>DumpParseTableAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario for dumping a term parse table for
+                the referenced module to a certain file</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>DumpSdfDefinitionAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario for dumping the full SDF definition
+                for the referenced module.</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>EditTermAction(ModuleId : term)</entry>
+
+                <entry>Starts an editor using the term parse table for the
+                referenced module to parse the contents.</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>EditorDumpParseTableAction(EditorId : term)</entry>
+
+                <entry>Starts the scenario for dumping a term parse table for
+                the module associated with the referenced editor to a certain
+                file</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>EditorEditTermAction(EditorId : term)</entry>
+
+                <entry>Starts an editor using the language associated with the
+                current editor.</entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>RemoveImportAction(Modulename: str)</entry>
+
+                <entry><emphasis>dead</emphasis></entry>
+              </row>
+
+              <row>
+                <entry>sdf</entry>
+
+                <entry>RenameModuleAction(Modulename : str)</entry>
+
+                <entry><emphasis>dead</emphasis></entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>EditorEditEquationsAction(EditorId : term)</entry>
+
+                <entry>Starts an ASF editor for the module that the current
+                editor is associated with.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>EditorEditSyntaxAction(EditorId : term)</entry>
+
+                <entry>Starts an SDF editor for the module that the current
+                editor is associated with.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>EditorRunAsfTestsAction(EditorId : term)</entry>
+
+                <entry>Runs all ASF test equations for the module that the
+                current editor is associated with.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>PrettyPrintAction(EditorId : term, EditorType : term,
+                Sort: str)</entry>
+
+                <entry>??</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>PrintModuleAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario for exporing a full ASF+SDF module
+                to a certain text file.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>ReduceAction(EditorId : term)</entry>
+
+                <entry>Starts the scenario of rewriting the term in the
+                current editor over the equations for the language that the
+                current editor is associated with.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>RunAsfTestsAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario of running all test equations for
+                the referenced module.</entry>
+              </row>
+
+              <row>
+                <entry>??</entry>
+
+                <entry>SetEditActions(Sid: term, Type: term, Name:
+                str)</entry>
+
+                <entry>??</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
                 <entry>ShowOriginAction(EditorId : term)</entry>
 
-                <entry></entry>
+                <entry>If the current editor is the result of a reduction,
+                then this action takes the focus of the referenced editor,
+                extracts origin information, and opens a new editor for
+                displaying this origin.</entry>
               </row>
 
               <row>
-                <entry>ShowSharedTreeAction(EditorId : term)</entry>
+                <entry>asf</entry>
 
-                <entry></entry>
+                <entry>CompileModuleAction(ModuleId : term)</entry>
+
+                <entry>Compiles the module associated with this Module Id to
+                an executable</entry>
               </row>
 
               <row>
-                <entry>ShowTreeAction(EditorId : term)</entry>
+                <entry>asf</entry>
 
-                <entry></entry>
+                <entry>DebugReduceAction(EditorId : term)</entry>
+
+                <entry>Starts the scenario of rewriting the term in the
+                current editor over the equations for the language that the
+                current editor is associated with. The rewriter is started
+                with a debugging interface (TIDE).</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>DebugRunAsfTestsAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario of running all test equations for
+                the referenced module. The rewriting is done with a debugging
+                interface (TIDE).</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>DumpEquationsAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario of collecting all equations for the
+                referenced module and dumping them to a certain file.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>DumpEquationsParseTableAction(ModuleId : term)</entry>
+
+                <entry>Starts the scenario of exporting the parse table for
+                parsing the .asf file of the referenced module to a certain
+                file.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>EditorDumpEquationsParseTableAction(EditorId :
+                term)</entry>
+
+                <entry>Starts the scenario of exporting the parse table for
+                parsing the .asf file of the module associated to the
+                referenced editor to a certain file.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>EditEquationsAction(ModuleId : term)</entry>
+
+                <entry>Starts an ASF equation editor for the referenced
+                module.</entry>
+              </row>
+
+              <row>
+                <entry>asf</entry>
+
+                <entry>EditSyntaxAction(ModuleId : term)</entry>
+
+                <entry>Starts an SDF syntax editor for the referenced
+                module.</entry>
               </row>
             </tbody>
           </tgroup>
         </table></para>
+    </section>
+
+    <section>
+      <title>Instantiating the generic module manager for a specific
+      language</title>
+
+      <para>Todo</para>
+    </section>
+
+    <section>
+      <title>Creating a language specific structure editor with syntax
+      highlighting</title>
+
+      <para>Todo</para>
     </section>
   </section>
 
