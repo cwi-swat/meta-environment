@@ -617,6 +617,7 @@ Libs: -L${prefix}/lib -l&lt;libraryname1&gt; -l&lt;libraryname2&gt; &lt;...&gt;
 ToolBusFlags=-I${prefix}/share/&lt;packagename&gt;
 JarFile=&lt;packagename&gt;.jar
 Jars=${prefix}/share/${JarFile} 
+MainClass=&lt;mainclassname&gt;
 #uninstalled UninstalledJars=@abs_top_srcdir@/${JarFile}
 Packages=&lt;javapackagenames&gt;
 TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
@@ -658,8 +659,11 @@ TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
       this information a full <command>ant</command> build configuration is
       created. This assumes that the source code is located in the
       subdirectory <filename>src</filename>. The other variables explain where
-      the jar file should be installed and which packages should be
-      included.</para>
+      the jar file should be installed and which packages should be included.
+      The MainClass variable is used to properly instantiate a jar file
+      manifest. This is also relevant for constructing correctly working <link
+      linkend="ImplementingGUIExtensions">plugins of the
+      MetaStudio</link>.</para>
 
       <para>Packages containing ToolBus scripts explain where the scripts are
       installed such that dependent packages may set their search paths
@@ -1725,6 +1729,12 @@ endlet</programlisting>
     </section>
 
     <section>
+      <title>Error messages</title>
+
+      <para>Todo</para>
+    </section>
+
+    <section>
       <title>Instantiating the generic module manager for a specific
       language</title>
 
@@ -1758,10 +1768,77 @@ endlet</programlisting>
   </section>
 
   <section xml:id="NewGuiExtensions">
-    <title>Implementing GUI Extensions</title>
+    <title xml:id="ImplementingGUIExtensions">Implementing GUI
+    Extensions</title>
 
-    <para>Explain the StudioPlugin interface, and the StudioComponent
-    interface.</para>
+    <para>We refer to the <uri
+    xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/meta-studio">javadoc
+    documentation of MetaStudio</uri>. Each invididual plugin needs at
+    least:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A ToolBus interface file (.idef.src). From this file the ToolBus
+        adapter files are generated (...Bridge.java, ...Tif.java, and
+        ...Tool.java)</para>
+      </listitem>
+
+      <listitem>
+        <para>An implementation of the
+        <interfacename>StudioPlugin</interfacename> interface. This contains
+        the main method the plugin.</para>
+      </listitem>
+
+      <listitem>
+        <para>An implementation of the
+        <interfacename>StudioComponent</interfacename> interface. This is a
+        window that will be registered with the studio by the plugin.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Java code should be compiled to a .jar file. This .jar file will
+    be loaded into the MetaStudio by the ToolBus. The following example
+    illustrates how a jar file containing a plugin is send to MetaStudio for
+    loading in the context of a certain class path:</para>
+
+    <programlisting>process LoadMyPlugin is 
+  snd-msg(load-jar("/home/mydir/myplugin.jar","/home/mydir/aterm-java.jar:/usr/local/bla/classes"))</programlisting>
+
+    <para>Make sure that you substiture the correct directories in this
+    ToolBus script at installation time.</para>
+
+    <para>Note that the main class that is executed must implement the
+    StudioPlugin interface, and it must be declared to be the MainClass in the
+    <link linkend="packagename.pc.in">&lt;package&gt;.pc.in file (if you are
+    using the Meta-Environment package structure).</link> If you are not using
+    the automated package infra-structure, you must make sure that the .jar
+    file contains an appropriate META-INF/MANIFEST.MF that contains the
+    following line:</para>
+
+    <programlisting>Main-Class: package.path.to.my.main.PluginClass</programlisting>
+
+    <para>The ToolBus interface idef script should look like the following
+    skeleton:</para>
+
+    <programlisting>tool myplugin is { }
+
+process MyPlugin is 
+let 
+  T : myplugin
+in
+  rec-connect(T?)
+  .
+  (
+     rec-msg(do-something)
+     . snd-do(T, do-something)
+  +
+     rec-event(T, some-event)
+     . snd-note(some-event-happened)
+     . snd-ack-event(T, some-event)
+  ) *
+  rec-disconnect(T)</programlisting>
+
+    <para></para>
 
     <itemizedlist>
       <listitem>
