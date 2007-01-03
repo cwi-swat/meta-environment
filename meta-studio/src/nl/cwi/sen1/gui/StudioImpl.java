@@ -65,6 +65,12 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
+/** Toplevel window of The Meta-Environment. This class wraps two
+ * functionalities. First it builds up a toplevel window with tabs
+ * and menu's. Second it dynamically loads jars provided by the ToolBus.
+ * The loaded jars will add tabs to the GUI, and register menus using
+ * the Studio interface.
+ */ 
 public class StudioImpl implements Studio, GuiTif {
     private static int nextUniqueComponentID = 0;
 

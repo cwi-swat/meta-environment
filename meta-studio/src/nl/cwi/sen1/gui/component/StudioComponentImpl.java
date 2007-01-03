@@ -6,6 +6,11 @@ import javax.swing.event.EventListenerList;
 
 import nl.cwi.sen1.gui.CloseAbortedException;
 
+/**
+ * A default implementation of a StudioComponent. This is the starting
+ * point for any StudioComponent. This convience class wraps a JComponent,
+ * and implements the default behavior for the StudioComponent interface.
+ */
 public class StudioComponentImpl implements StudioComponent {
     private Icon icon;
 
@@ -15,6 +20,11 @@ public class StudioComponentImpl implements StudioComponent {
 
     private JComponent viewComponent;
 
+    /**
+     * Construct a new component.
+     * @param name the name of the component (for a tab label).
+     * @param viewComponent the Swing component to show in the tab.
+     */
     public StudioComponentImpl(String name, JComponent viewComponent) {
         this.name = name;
         this.viewComponent = viewComponent;
