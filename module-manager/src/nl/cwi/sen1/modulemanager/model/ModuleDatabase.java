@@ -425,6 +425,7 @@ public class ModuleDatabase {
 			if (checkRuleViolation(check.getNamespace(), check.getKey(), check
 					.getPredicateValue(), rule)) {
 				System.err.println("Rule " + rule + " violates " + check);
+				return;
 			}
 		}
 		attributeUpdateRules.put(namespace, key, rule, value);
