@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jan  4 14:16:04 CET 2007 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Added check for violation of use of predicate values within new rules
+
 Wed Dec  6 14:17:03 CET 2006 <kooiker@cwi.nl>
  * src/**/model/ModuleDatabase.java:
    - Pattern matching on ATerms was not efficient enough when evaluating for

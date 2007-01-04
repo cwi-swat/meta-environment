@@ -419,8 +419,33 @@ public class ModuleDatabase {
 
 	public void registerAttributeUpdateRule(ATerm namespace, ATerm key,
 			ATerm rule, ATerm value) {
+		for (Iterator<AttributeUpdateRule> iter = attributeUpdateRules
+				.iterator(); iter.hasNext();) {
+			AttributeUpdateRule check = iter.next();
+			if (checkRuleViolation(check.getNamespace(), check.getKey(), check
+					.getPredicateValue(), rule)) {
+				System.err.println("Rule " + rule + " violates " + check);
+			}
+		}
 		attributeUpdateRules.put(namespace, key, rule, value);
 		triggerAllAttributeUpdateRulesOnAllModules();
+	}
+
+	private Boolean checkRuleViolation(ATerm namespace, ATerm key,
+			ATerm predicate, ATerm rule) {
+		if (((ATermAppl) rule).getAFun().equals(modalSET)) {
+			return (rule.getChildAt(0).equals(namespace)
+					&& rule.getChildAt(1).equals(key) && rule.getChildAt(2)
+					.equals(predicate));
+		}
+
+		Boolean violation = false;
+		for (int i = 0; i < rule.getChildCount(); i++) {
+			violation = violation
+					|| checkRuleViolation(namespace, key, predicate,
+							(ATerm) rule.getChildAt(i));
+		}
+		return violation;
 	}
 
 	private Boolean innermostRuleEvaluation(ATerm rule, ModuleId id) {
