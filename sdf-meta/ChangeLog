@@ -4,7 +4,8 @@ Fri Jan  5 14:38:58 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * tbscripts/*.tb:
    - OpenModule and GraphPainter are in lock step
    - Reimplemented idle state
-   - Navigator doesn't flicker anymore when changing graph attributes
+   - Navigator doesn't flicker anymore when changing graph attributes (Closes
+   #115)
 
 Fri Oct 20 13:28:35 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
