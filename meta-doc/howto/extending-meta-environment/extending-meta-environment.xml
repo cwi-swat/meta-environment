@@ -18,7 +18,8 @@
   <title>The Extension Points of The Meta-Environment</title>
 
   <info>
-    <pubdate>$Rev$ by $Author$ at $Date$</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2007-01-03 22:17:02
+    +0100 (Wed, 03 Jan 2007) $</pubdate>
 
     <authorgroup>
       <author>
@@ -42,7 +43,7 @@
     <para>How can the The Meta-Environment be adjusted or extended? This
     document describes what the extension points of The Meta-Environment are
     and how they are used in typical applications. Each type of extension
-    points may have several goals. </para>
+    points may have several goals.</para>
 
     <section xml:id="GoalsExtensions">
       <title>Goals of Extensions</title>
@@ -474,7 +475,7 @@
           </listitem>
         </itemizedlist>These files implement or directly control all extension
       points of the Meta-Environment, since they control all features of The
-      Meta-Environment. </para>
+      Meta-Environment.</para>
 
       <para>Note that all ToolBus scripts (.tb and .idef.src) files can be
       found online via the <uri
@@ -638,7 +639,7 @@ TestClass=&lt;toptestclassname&gt;</programlisting>For a package with name
       detail. The <literal>#uninstalled</literal> variables are used for
       compiling compositions of packages before they are installed (packages
       may refer to the source locations instead of the installed locations
-      using this information). </para>
+      using this information).</para>
 
       <para>The <literal>Requires</literal> field is very important. It
       declares the dependencies on other packages. The package definition file
@@ -1033,7 +1034,7 @@ context-free syntax
     manipulating The Meta-Environment. The ToolBus scripts control each
     individual tool that is connected to the environment in every way: when
     they are started and stopped, how they are initialized, and when and how
-    they are used to compute or store information. </para>
+    they are used to compute or store information.</para>
 
     <para>This section explains which tools are configurable by writing
     ToolBus scripts and how.</para>
@@ -1093,7 +1094,7 @@ context-free syntax
       events to ToolBus events, and then <emphasis>inside the ToolBus
       script</emphasis> such an event is used to call the specific ToolBus
       process. Each component may pass different parameters to the configured
-      process name. </para>
+      process name.</para>
 
       <para>For example, the editor-plugin provides an
       <varname>EditorId</varname>. Suppose there is a menu option called
@@ -1147,7 +1148,7 @@ endlet</programlisting>
 
               <entry>process &lt;name&gt; is ...</entry>
 
-              <entry> </entry>
+              <entry></entry>
 
               <entry>meta/tbscripts/gui-utils.tb</entry>
             </row>
@@ -1168,7 +1169,7 @@ endlet</programlisting>
 
               <entry>process &lt;name&gt;(ModuleId : term) is ...</entry>
 
-              <entry> </entry>
+              <entry></entry>
 
               <entry>sdf-meta/tbscripts/sdf-module-actions.tb</entry>
             </row>
@@ -1178,7 +1179,7 @@ endlet</programlisting>
 
               <entry>process &lt;name&gt;(Location : term) is ...</entry>
 
-              <entry> </entry>
+              <entry></entry>
 
               <entry>meta/tbscripts/gui-utils.tb</entry>
             </row>
@@ -1297,7 +1298,7 @@ endlet</programlisting>
       <para>The best resource for finding out about tools and processes is
       reading the source code of .idef and .tb files at the <uri
       xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs">Meta-Environment
-      online API reference</uri>. </para>
+      online API reference</uri>.</para>
 
       <para><table xml:id="Table.StandardToolBusActions">
           <title>Standard ToolBus actions available for configuration
