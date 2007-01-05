@@ -118,7 +118,7 @@ in
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . GetASFParseTree(ModuleId, Tree?)
-    . 
+    .
     if not-equal(Tree, UNDEFINED) then
        MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", parsed)
     else

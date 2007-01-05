@@ -5,7 +5,6 @@ process ASFStatusToProgress is
 let
   Event: attribute-changed-event,
   ModuleId: term,
-  Name: str,
   Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,<term>)
@@ -13,9 +12,8 @@ in
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . MM-GetAttribute(ModuleId, ASF_NAMESPACE, "name", Name?)
     . ACE-GetNewValue(Event, Value?)
-    . snd-msg(pro-set-status(ModuleId, Name, ASF_NAMESPACE, Value))
+    . snd-msg(pro-set-status(ModuleId, ASF_NAMESPACE, Value))
   ) * delta
 endlet
 

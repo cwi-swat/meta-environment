@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Jan  5 14:57:05 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/*.tb:
+   - Use transaction management for opening modules
+
 Sun Dec 10 20:39:53 CET 2006 <jurgenv@cwi.nl>
  * tbscripts/asf-actions.tb,asf-pretty-printer.tb: added a new implementation
    of the Pretty Print menu option for term windows. The script computes
