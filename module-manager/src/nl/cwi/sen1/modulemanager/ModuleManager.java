@@ -46,7 +46,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 				try {
 					bridge.run();
 				} catch (java.lang.RuntimeException e) {
-					moduleDB.printStatistics();
+					e.printStackTrace();
 				}
 			}
 		});
@@ -260,6 +260,14 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 			 * any term
 			 */
 			oldValue = key.getFactory().parse("undefined");
+		}
+
+		if (newValue == null) {
+			/*
+			 * The new value is unknown, so we construct a pattern that may mean
+			 * any term
+			 */
+			newValue = key.getFactory().parse("undefined");
 		}
 
 		bridge.postEvent(pureFactory.make(
