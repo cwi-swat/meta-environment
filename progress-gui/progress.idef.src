@@ -14,8 +14,11 @@ in
   rec-connect(T?)
   .
   (
-    rec-msg(pro-set-status(Id?, Message?, Columnname?, Status?))
-    . snd-do(T, set-status(Id, Message, Columnname, Status))
+    rec-msg(pro-set-status(Id?, Columnname?, Status?))
+    . snd-do(T, set-status(Id, Columnname, Status))
+  +
+    rec-msg(pro-set-message(Id?, Message?))
+    . snd-do(T, set-message(Id, Message))
   +
     rec-msg(pro-remove-status(Id?))
     . snd-do(T, remove-status(Id))

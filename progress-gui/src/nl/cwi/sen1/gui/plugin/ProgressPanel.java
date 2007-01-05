@@ -36,7 +36,11 @@ public class ProgressPanel extends JPanel {
       repaint();
     }
 
-    public void setStatus(ATerm id, String message, String columnName, String value) {
-        model.setStatus(id, message, columnName, value);
+    public void setStatus(ATerm id, String columnName, String value) {
+        model.setStatus(id, columnName, value);
+    }
+    
+    public void setMessage(ATerm id, String message) {
+    	model.setMessage(id, message);
     }
 }
