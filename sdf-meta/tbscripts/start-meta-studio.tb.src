@@ -7,7 +7,6 @@
 /* sdf-meta */
 #include <sdf-meta.tb>
 #include <sdf-initialize.tb>
-/*#include <idle-state.tb>*/
 
 process InitializeSDFMetaEnvironment is
 let
