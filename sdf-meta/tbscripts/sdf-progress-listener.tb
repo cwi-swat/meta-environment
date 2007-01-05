@@ -3,21 +3,27 @@
 
 process SDFStatusToProgress is
 let
+  Event: attribute-changed-event,
+  Key: term,
   ModuleId: term,
   Name: str,
-  OldValue: term,
-  NewValue: term
+  Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
   . subscribe(mm-module-deleted(<term>))
   .
   (
-    rec-note(mm-attribute-changed(attribute-changed-event(ModuleId?, SDF_NAMESPACE, "status", OldValue?, NewValue?)))
-    . snd-msg(pro-set-status(ModuleId, SDF_NAMESPACE, NewValue))
-  +
-    rec-note(mm-attribute-changed(attribute-changed-event(ModuleId?, SDF_NAMESPACE, "name", OldValue?, NewValue?)))
-    . snd-msg(pro-set-message(ModuleId, NewValue))
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    . ACE-GetKey(Event, Key?)
+    .
+    if equal(Key, "status") then
+      snd-msg(pro-set-status(ModuleId, SDF_NAMESPACE, Value))
+    else
+      snd-msg(pro-set-message(ModuleId, Value))
+    fi
   +
     rec-note(mm-module-deleted(ModuleId?)) 
     . snd-msg(pro-remove-status(ModuleId))
