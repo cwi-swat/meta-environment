@@ -5,7 +5,7 @@
 #include <attribute-changed-event.tb>
 #include <dependencies-changed-event.tb>
 #include <undefined.h>
-#include <graph-namespace.tb>
+#include <graph-namespace.h>
 
 process MM-RegisterAttributeUpdateRule(Namespace: term, Key: term, Rule: term, Value: term) is
   snd-msg(mm-register-attribute-update-rule(Namespace, Key, Rule, Value))
@@ -34,6 +34,7 @@ process MM-SetModuleGraphAttribute(ModuleId: term, Key: term, Value: term) is
 process MM-CreateModule(ModuleId: term?) is
   snd-msg(mm-create-module)
   . rec-msg(mm-module-created(ModuleId?))
+  . snd-note(mm-module-created(ModuleId))
 
 process MM-GetModuleIdByAttribute(Namespace: term, Key: term, Value: term, ModuleId: term?) is
   snd-msg(mm-get-module-id-by-attribute(Namespace, Key, Value))

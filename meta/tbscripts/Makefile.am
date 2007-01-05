@@ -13,15 +13,17 @@ TBSCRIPTS = \
 	    graph-utils.tb \
 	    gui-actions.tb \
 	    gui-utils.tb \
-	    graph-namespace.tb \
+	    graph-namespace.h \
 	    io-utils.tb \
 	    meta.tb \
+	    meta-namespace.h \
 	    module-manager.tb \
 	    module-selection-listener.tb \
 	    module-utils.tb \
 	    parse-utils.tb \
 	    pretty-print-utils.tb \
 	    serialization-utils.tb \
+	    transaction-management.tb \
 	    undefined.h
   
 EXTRA_DIST = \

@@ -1,8 +1,7 @@
 #ifndef __GRAPH_UTILS__
 #define __GRAPH_UTILS__
 
-#include <graph-namespace.tb>
-#include <idle-state.tb>
+#include <graph-namespace.h>
 #include <layout-graph.idef>
 #include <graph-converter.idef>
 #include <graph-painter.idef>
