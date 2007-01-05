@@ -2,7 +2,6 @@
 
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
-	    idle-state.tb \
 	    parsetable-utils.tb \
 	    sdf-module-actions.tb \
 	    sdf-actions.tb \

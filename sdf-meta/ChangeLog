@@ -1,5 +1,10 @@
 $Id$
 
+Fri Jan  5 14:38:58 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/*.tb:
+   - Reimplemented idle state
+   - Navigator doesn't flicker anymore when changing graph attributes
+
 Fri Oct 20 13:28:35 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
    - Changed to new attribute update rules

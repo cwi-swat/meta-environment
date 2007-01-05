@@ -1,6 +1,7 @@
 #ifndef __SDF_LISTENERS__
 #define __SDF_LISTENERS__
 
+#include <meta-namespace.h>
 #include <module-manager.tb>
 #include <sdf-namespace.h>
 #include <progress.idef>
@@ -10,6 +11,12 @@
 #define BG_CORRECT_COLOR rgb(255,255,221)
 #define BG_GRAYED_OUT rgb (211,211,211)
 
+#define MODULE_OPENED set(SDF_NAMESPACE, "status", opened)
+#define MODULE_ERROR set(SDF_NAMESPACE, "status", error)
+#define MODULE_UNAVAILABLE set(SDF_NAMESPACE, "status", unavailable)
+#define MODULE_IDLE or(MODULE_OPENED,or(MODULE_UNAVAILABLE,MODULE_ERROR))
+#define ALL_MODULES_IDLE and(MODULE_IDLE, all(MODULE_IDLE))
+
 process InitializeInheritedStatus is
   /* the first one must not have any <term> holes because of a ToolBus bug */
   
@@ -18,6 +25,8 @@ process InitializeInheritedStatus is
 
   /* When we are not in error and one of our kids has an error, we become child-error */
   . MM-RegisterAttributeUpdateRule(SDF_NAMESPACE, "status", and(not(set(SDF_NAMESPACE, "status", error)), one(set(SDF_NAMESPACE, "status", error))), child-error)
+
+  . MM-RegisterAttributeUpdateRule(META_NAMESPACE, "idle", ALL_MODULES_IDLE, yes)
 
    /*Error -> Background color  */
   /*. MM-RegisterAttributeUpdateRule(GRAPH_NAMESPACE, "bgcolor", set(SDF_NAMESPACE, "status", error), fill-color(BG_ERROR_COLOR))*/
@@ -63,7 +72,7 @@ let
   Tree: term,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)  
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,child-error)  
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",error,<term>)  
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",child-error,<term>)  

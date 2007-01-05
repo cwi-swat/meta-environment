@@ -55,6 +55,7 @@ endlet
 process OpenModuleAction is
 let
   Cancel: bool,
+  Event: attribute-changed-event,
   Extension : str,
   Directory : str,
   Path : str,
@@ -80,7 +81,11 @@ in
       . BuildPath(Prefix, RelativeFilename, Extension, FoundPath?)
       .
       if equal(FoundPath, Path) then
-        OpenModule(RelativeFilename, ModuleId?)
+	snd-msg(tm-request-transaction("OpenModuleAction"))
+        . OpenModule(RelativeFilename, ModuleId?)
+	. MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
+        . rec-note(mm-attribute-changed(Event?))
+	. snd-msg(tm-end-transaction("OpenModuleAction"))
         . SelectModule(ModuleId)
       else
         Error("The chosen Module is shadowed by another module in the search path: %t", [FoundPath])

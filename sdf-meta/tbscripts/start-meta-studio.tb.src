@@ -2,13 +2,16 @@
 
 /* meta-kernel */
 #include <meta.tb>
+#include <meta-namespace.h>
 
 /* sdf-meta */
 #include <sdf-meta.tb>
 #include <sdf-initialize.tb>
+/*#include <idle-state.tb>*/
 
 process InitializeSDFMetaEnvironment is
 let
+  Event: attribute-changed-event,
   MenuEventList: list,
   ModuleId: term
 in
@@ -23,7 +26,11 @@ in
   . StartModuledetailsPanel()
   .
   if not-equal(MODULENAME, "") then
-    OpenModule(MODULENAME, ModuleId?)
+    snd-msg(tm-request-transaction("OpenSDFModule"))
+    . OpenModule(MODULENAME, ModuleId?)
+    . MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
+    . rec-note(mm-attribute-changed(Event?))
+    . snd-msg(tm-end-transaction("OpenSDFModule"))
   else
     tau
   fi 
