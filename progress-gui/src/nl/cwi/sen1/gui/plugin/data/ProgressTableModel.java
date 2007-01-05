@@ -38,7 +38,7 @@ public class ProgressTableModel extends DefaultTableModel {
 		}
 
 		if (found != null) {
-			found.setElementAt(status, column);
+			found.setElementAt(new ProgressCell(id, status), column);
 		} else {
 			ProgressCell[] rowData = new ProgressCell[getColumnCount()];
 			rowData[0] = new ProgressCell(id, id.toString());
@@ -60,7 +60,7 @@ public class ProgressTableModel extends DefaultTableModel {
 		}
 		
 		if (found != null) {
-			found.setElementAt(message, 0);
+			found.setElementAt(new ProgressCell(id, message), 0);
 		} else {
 			ProgressCell[] rowData = new ProgressCell[getColumnCount()];
 			rowData[0] = new ProgressCell(id, message);
