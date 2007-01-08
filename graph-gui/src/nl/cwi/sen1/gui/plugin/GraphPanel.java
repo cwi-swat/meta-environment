@@ -358,7 +358,6 @@ public class GraphPanel extends JPanel {
 			node.setValidated(false);
 			vis.run("draw");
 			vis.repaint();
-			System.err.println("Updated " + nodeId + ": " + attr.toString());
 		}
 	}
 
