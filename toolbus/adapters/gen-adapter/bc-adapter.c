@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
   connect_to_bc(handle_input_from_bc);
-  TBeventloop();
+  TBeventloop(TBfalse);
   return 0;
 }
 

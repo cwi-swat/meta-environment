@@ -75,12 +75,12 @@ int    TB_parseArgs(int argc, char *argv[],
 				TBcallback handler, TBsigcheck checker);
 int    TB_connect(int cid);
 int    TB_send(int cid, term *t);
-term  *TB_receive(int cid);
+term  *TB_receive(int cid, TBbool parseVars);
 TBbool TB_peek(int cid);
 int    TB_peek_next();
-int    TB_handle_one(int cid);
-int    TB_handle_any();
-int    TB_eventloop();
+int    TB_handle_one(int cid, TBbool parseVars);
+int    TB_handle_any(TBbool parseVars);
+int    TB_eventloop(TBbool parseVars);
 
 int    TB_setFds(fd_set *set);
 int    TB_match(term *trm, char *fmt, ...);

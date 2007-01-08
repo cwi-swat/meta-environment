@@ -977,7 +977,7 @@ main(int argc, char *argv[])
   wish_start();
   signals_set();
 
-  TBeventloop();
+  TBeventloop(TBtrue);
 
   return 0;
 }

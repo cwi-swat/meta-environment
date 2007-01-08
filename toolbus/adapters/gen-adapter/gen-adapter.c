@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
   tmp_out = tempnam(NULL, name);
 
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
-  TBeventloop();
+  TBeventloop(TBfalse);
   return 0;
 }
 

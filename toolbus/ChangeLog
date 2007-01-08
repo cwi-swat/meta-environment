@@ -1,5 +1,15 @@
 $Id$
 
+Mon Jan 8  16:02:09 CET 2006 <jurgenv@cwi.nl>
+ * libdeprecated*adapter/*.[ch]: changed the interface to the 
+   deprecated toolbus adapter for C. Each tool now declares in the
+   interface whether or not the tool will want to understand the syntax
+   of ToolBus variables. If this argument is set to TBtrue, the tool
+   will interpret terms that start with a capital letter as a variable.
+   If the argument is TBfalse, this means that terms with a capital letter
+   will be terms. This means that if it is set to TBtrue, the tool will
+   not be able to understand terms with capital letters.
+
 Mon Dec 18 16:02:09 CET 2006 <jurgenv@cwi.nl>
  * aterms/{tifs,tifstoc}.[ch]: made tifstoc usage simpler. You can
    omit the -tool argument (which is always wrong) if there is only

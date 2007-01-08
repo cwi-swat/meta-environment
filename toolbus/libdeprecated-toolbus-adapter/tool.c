@@ -334,7 +334,7 @@ retry:
   /* <PO> unreachable code from lcc: return TB_ERROR; */
 }
 
-static term *tool_read_term(void)
+static term *tool_read_term(TBbool parseVars)
 {
   int nelem;
   term *trm, *rtrm;
@@ -353,7 +353,7 @@ static term *tool_read_term(void)
       continue;
     }
     if(inp && inp->term_port){
-      if((trm = parse_buffer(TBfalse))){
+      if((trm = parse_buffer(parseVars))){
 	/*TBmsg("tool_read_term: ***%t***\n", trm);*/
 	if(streq(get_txt(fun_sym(trm)), "rec-do"))
           sndvoid = TBtrue;
@@ -380,10 +380,10 @@ void TBsend(term *e)
 
 /*--- TBreceive ----------------------------------*/
 
-void TBreceive(void)
+void TBreceive(TBbool parseVars)
 { term *e;
 
-      if((e = tool_read_term()))
+      if((e = tool_read_term(parseVars)))
 	TBsend(e);
       TBcollect();
 }
@@ -437,18 +437,18 @@ void TBresume(int inport)
 
 /*--- TBeventloop ------------------------------*/
 
-void TBeventloop(void)
+void TBeventloop(TBbool parseVars)
 {
   while(TBtrue)
-    TBreceive();
+    TBreceive(parseVars);
 }
 
 /*--- TBmultiloop ------------------------------*/
 
-void TBmultiloop(void)
+void TBmultiloop(TBbool parseVars)
 {
   while(TBtrue) {
-    tool_read_term();
+    tool_read_term(parseVars);
     TBcollect();
   }
 }

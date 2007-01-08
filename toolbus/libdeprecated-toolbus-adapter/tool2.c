@@ -159,11 +159,11 @@ int TB_send(int cid, term *t)
 /*}}}  */
 /*{{{  term *TB_receive(int cid) */
 
-term *TB_receive(int cid)
+term *TB_receive(int cid, TBbool parseVars)
 {
   assert_valid_cid(cid);
 
-  return TBread(connections[cid]->socket, TBfalse);
+  return TBread(connections[cid]->socket, parseVars);
 }
 
 /*}}}  */
@@ -216,14 +216,14 @@ TBbool TB_peek(int cid)
 /*}}}  */
 /*{{{  int TB_handle_one(int cid) */
 
-int TB_handle_one(int cid)
+int TB_handle_one(int cid, TBbool parseVars)
 {
   term *trm, *result;
   TBbool sndvoid = TBfalse;
 
   assert_valid_cid(cid);
 
-  trm = TB_receive(cid);
+  trm = TB_receive(cid, parseVars);
   if(!trm) {
     err_fatal("contact with ToolBus lost.\n");
   }
@@ -245,11 +245,11 @@ int TB_handle_one(int cid)
 /*}}}  */
 /*{{{  void TB_handle_any() */
 
-int TB_handle_any()
+int TB_handle_any(TBbool parseVars)
 {
   int cid = TB_peek_next();
   if(cid >= 0)
-    return TB_handle_one(cid);
+    return TB_handle_one(cid, parseVars);
 
   return cid;
 }
@@ -258,10 +258,10 @@ int TB_handle_any()
 
 /*{{{  int TB_eventloop(void) */
 
-int TB_eventloop(void)
+int TB_eventloop(TBbool parseVars)
 {
   while(TBtrue) {
-    if(TB_handle_any() < 0)
+    if(TB_handle_any(parseVars) < 0)
       return -1;
     TBcollect();
   }

@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
 
   tname = TBmake(TBfalse, name);
   connect_to_perl(script, handle_input_from_perl);
-  TBeventloop();
+  TBeventloop(TBfalse);
   unlink_tmp();
   return 0;
 }

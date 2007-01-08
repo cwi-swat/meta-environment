@@ -33,10 +33,10 @@ int  TBaddTermPort(int, TBcallbackTerm);
 int  TBaddCharPort(int, TBcallbackChar);
 void TBfreePort(int port);
 void TBsend(term *);
-void TBreceive(void);
+void TBreceive(TBbool parseVars);
 int  TBpeek(void);
-void TBeventloop(void);
-void TBmultiloop(void);
+void TBeventloop(TBbool parseVars);
+void TBmultiloop(TBbool parseVars);
 void TBsuspend(int inport); /* -1 to suspend input form standard toolbus */
 void TBresume(int inport);  /* idem */
 int  mkports(TBbool, char *, char *, int *, int *, int *);

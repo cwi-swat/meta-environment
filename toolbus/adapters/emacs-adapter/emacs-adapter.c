@@ -421,7 +421,7 @@ int main(int argc, char *argv[]) {
   } 
 
 /* And start the main event loop */
-  TBeventloop();
+  TBeventloop(TBfalse);
 
   /* To keep gcc happy */
   return 0;
