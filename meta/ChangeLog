@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Jan  8 13:37:01 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Implemented UpdateGraphAttribute
+
 Fri Jan  5 14:30:32 CET 2007 <kooiker@cwi.nl>
  * tbscripts/transaction-management.tb:
    - Add support for transactions
