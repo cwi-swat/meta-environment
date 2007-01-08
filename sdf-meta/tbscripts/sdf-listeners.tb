@@ -5,6 +5,10 @@
 #include <module-manager.tb>
 #include <sdf-namespace.h>
 #include <progress.idef>
+#include <graph-utils.tb>
+#include <graph-painter.idef>
+#include <navigator.idef>
+#include <graph-namespace.h>
 
 #define BG_ERROR_COLOR rgb(224,64,60)
 #define BG_CHILD_ERROR_COLOR rgb(255,128,114)
@@ -35,6 +39,81 @@ process InitializeInheritedStatus is
   /*. MM-RegisterAttributeUpdateRule(GRAPH_NAMESPACE, "bgcolor", and(not(set(SDF_NAMESPACE, "status", error)), one(set(SDF_NAMESPACE, "status", error))), fill-color(BG_CHILD_ERROR_COLOR))*/
 
 toolbus(InitializeInheritedStatus)
+
+process ImportGraphPainter is
+let
+  AllNotes: term,
+  DependenciesEvent: dependencies-changed-event,
+  ImportGraph: term,
+  ModuleId: term,
+  UpdateGraphOnly: bool
+in
+  MM-Subscribe-Dependencies-Changed(<term>)
+  . subscribe(mm-module-deleted(<term>))
+  . subscribe(mm-module-created(<term>))
+  .
+  (
+    UpdateGraphOnly := true
+    .
+    (
+      rec-note(mm-dependencies-changed(DependenciesEvent?))
+    +
+      rec-note(mm-module-deleted(ModuleId?))
+      . UpdateGraphOnly := false
+    +
+      rec-note(mm-module-created(ModuleId?))
+      . UpdateGraphOnly := false
+    )
+    .
+    (
+      rec-note(mm-dependencies-changed(DependenciesEvent?))
+    +
+      rec-note(mm-module-deleted(ModuleId?))
+      . UpdateGraphOnly := false
+    +
+      rec-note(mm-module-created(ModuleId?))
+      . UpdateGraphOnly := false
+    )
+    *
+    no-note(AllNotes?)
+    . snd-msg(tm-request-transaction("ImportGraphPainter"))
+    . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
+    .
+    if equal(UpdateGraphOnly, false) then
+      snd-msg(nav-set-modules(ImportGraph))
+    else
+      tau
+    fi
+    . RenderGraph("import-graph", SDF_NAMESPACE, true, false, ImportGraph?)
+    . snd-msg(tm-end-transaction("ImportGraphPainter"))
+  )
+  *
+  delta
+endlet
+
+toolbus(ImportGraphPainter)
+
+process ImportGraphUpdater is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Key: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,GRAPH_NAMESPACE,<term>,<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetKey(Event, Key?)
+    . ACE-GetNewValue(Event, Value?)
+    . UpdateGraphAttribute("import-graph", SDF_NAMESPACE, ModuleId, Key, Value)
+  )
+  *
+  delta
+endlet
+
+toolbus(ImportGraphUpdater)
 
 process SDFModuleLabelSetter is
 let

@@ -1,5 +1,12 @@
 $Id$
 
+Mon Jan  8 13:40:08 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Split ImportGraphPainter into ImportGraphPainter and ImportGraphUpdater
+   - ImportGraphPainter redraws tree on create, delete and dependency change
+   of modules
+   - ImportGraphUpdater updates existing tree on attribute change
+
 Fri Jan  5 14:38:58 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * tbscripts/*.tb:
    - OpenModule and GraphPainter are in lock step
