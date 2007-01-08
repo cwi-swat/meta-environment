@@ -1,5 +1,10 @@
 $Id$
 
+Mon Jan  8 13:34:51 CET 2007 <kooiker@cwi.nl>
+ * graph-painter.idef.src:
+   - Added update graph message that only updates a single attribute of a node
+     (no need to recalculate complete graph for a single change anymore)
+
 Tue Oct 31 10:12:13 CET 2006 <jurgenv@cwi.nl>
  * **/GraphPainter.java: refactored use of the menu and mouse
    event interfaces to the ToolBus.

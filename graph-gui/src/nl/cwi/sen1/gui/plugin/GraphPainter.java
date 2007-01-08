@@ -17,7 +17,6 @@ import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.graph.Factory;
 import nl.cwi.sen1.graph.types.Graph;
-import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
@@ -42,7 +41,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
 	private Studio studio;
 
 	private Factory graphFactory;
-	
+
 	private nl.cwi.sen1.configapi.Factory configFactory;
 
 	private Map<String, GraphPanel> graphs;
@@ -52,8 +51,6 @@ public class GraphPainter extends DefaultStudioPlugin implements
 	private Preferences preferences;
 
 	private GraphPainterBridge bridge;
-
-	private MouseEvent popupEvent;
 
 	public GraphPainter() {
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
@@ -68,8 +65,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		this.studio = studio;
 		graphFactory = Factory.getInstance((PureFactory) studio
 				.getATermFactory());
-		configFactory = nl.cwi.sen1.configapi.Factory.getInstance((PureFactory) studio
-				.getATermFactory());
+		configFactory = nl.cwi.sen1.configapi.Factory
+				.getInstance((PureFactory) studio.getATermFactory());
 		bridge = new GraphPainterBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
@@ -80,97 +77,120 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		if (panel != null) {
 			Graph graph = graphFactory.GraphFromTerm(graphTerm);
 			panel.setGraph(new GraphAdapter(graph));
+		} else {
+			System.err
+					.println("Graph not displayed because it was not created before");
 		}
-		else {
-			System.err.println("Graph not displayed because it was not created before");
+	}
+
+	public void updateGraph(String graphType, ATerm graphId, ATerm nodeId,
+			ATerm key, ATerm value) {
+		GraphPanel panel = getPanel(graphType, graphId.toString());
+		if (panel != null) {
+			panel.updateNode(nodeId.toString(), graphFactory
+					.AttributeFromTerm(value));
 		}
 	}
 
 	private boolean isTrue(ATerm bool) {
 		return !bool.isEqual(bool.getFactory().parse("false"));
 	}
-	
+
 	/**
-	 * create a panel for displaying a graph. Before sizing, or displaying a graph
-	 * a graph panel must be created.
+	 * create a panel for displaying a graph. Before sizing, or displaying a
+	 * graph a graph panel must be created.
 	 * 
-	 * @param graphType  The type of graph shown, for identifying apropriate menu's etc.
-	 * @param graphId  The unique id of the graph (modulo graphId)
-	 * @param shared   Reuse a panel if a panel with the same (graphId,graphId) exists
-	 * @param closable Let the user be able to close the panel 
+	 * @param graphType
+	 *            The type of graph shown, for identifying apropriate menu's
+	 *            etc.
+	 * @param graphId
+	 *            The unique id of the graph (modulo graphId)
+	 * @param shared
+	 *            Reuse a panel if a panel with the same (graphId,graphId)
+	 *            exists
+	 * @param closable
+	 *            Let the user be able to close the panel
 	 */
-	public ATerm createPanel(String graphType, ATerm graphId, ATerm shared, ATerm closable) 
-	{
+	public ATerm createPanel(String graphType, ATerm graphId, ATerm shared,
+			ATerm closable) {
 		createPanel(graphType, graphId, isTrue(shared), isTrue(closable));
 		return shared.getFactory().parse("snd-value(panel-created)");
 	}
-	
+
 	private ATerm createEventId(String graphType, ATerm graphId, String nodeId) {
 		ATerm termId = studio.getATermFactory().parse(nodeId);
-		return studio.getATermFactory().make(TOOL_NAME + "(<str>,<term>,<term>)",
-				graphType, graphId, termId);
+		return studio.getATermFactory()
+				.make(TOOL_NAME + "(<str>,<term>,<term>)", graphType, graphId,
+						termId);
 	}
-	
-	private void createPanel(final String graphType, final ATerm graphId, boolean shared, boolean close) {
+
+	private void createPanel(final String graphType, final ATerm graphId,
+			boolean shared, boolean close) {
 		GraphPanel panel = getPanel(graphType, graphId.toString());
 
 		if (!shared && panel != null) {
-			System.err.println("Graph not created because a panel with the same id exists already.");
+			System.err
+					.println("Graph not created because a panel with the same id exists already.");
 			return;
 		}
-		
+
 		if (panel == null) {
-			panel = new GraphPanel(graphType, graphId.toString(), preferences, close);
+			panel = new GraphPanel(graphType, graphId.toString(), preferences,
+					close);
 			final GraphPanel graphPanel = panel;
-			StudioComponent comp = new StudioComponentImpl(panelKey(graphType, graphId.toString()), panel) {
+			StudioComponent comp = new StudioComponentImpl(panelKey(graphType,
+					graphId.toString()), panel) {
 				public void requestClose() throws CloseAbortedException {
 					if (!graphPanel.isClosable()) {
 						throw new CloseAbortedException();
 					}
-                    removePanel(graphType, graphId.toString());
-                    studio.removeComponent(this);
-                    bridge.postEvent(studio.getATermFactory().make(
-                    		"panel-closed(<str>,<term>)", graphType, graphId));
+					removePanel(graphType, graphId.toString());
+					studio.removeComponent(this);
+					bridge.postEvent(studio.getATermFactory().make(
+							"panel-closed(<str>,<term>)", graphType, graphId));
 				}
 			};
-			
+
 			final Event popup = configFactory.makeEvent_Popup();
 			final ATerm id = configFactory.getPureFactory().parse(TOOL_NAME);
-			panel.addControlListener(new ControlAdapter(){
+			panel.addControlListener(new ControlAdapter() {
 				MouseAdapter ma = new MouseAdapter(id, bridge, popup);
-				
+
 				public void itemPressed(VisualItem item, MouseEvent e) {
 					String nodeId = item.getString(GraphConstants.ID);
-					
+
 					if (nodeId != null) {
-					  ma.setId(createEventId(graphType, graphId, nodeId));
-					  ma.mousePressed(e);
+						ma.setId(createEventId(graphType, graphId, nodeId));
+						ma.mousePressed(e);
 					}
 				}
+
 				public void itemReleased(VisualItem item, MouseEvent e) {
-					if (e.isPopupTrigger()) { 
-					  itemPressed(item, e);
+					if (e.isPopupTrigger()) {
+						itemPressed(item, e);
 					}
 				}
 			});
-			
+
 			panel.setGraphPanelListener(new GraphPanelListener() {
 				public void nodeSelected(String id) {
-					ATerm eventId = createEventId(graphType,graphId, id);
+					ATerm eventId = createEventId(graphType, graphId, id);
 					bridge.postEvent(studio.getATermFactory().make(
 							"mouse-event(<term>,click([],BUTTON1))", eventId));
 				}
 			});
-			
+
 			setPanel(graphType, graphId.toString(), panel);
 			((StudioWithPredefinedLayout) studio).addComponent(comp,
 					StudioImplWithPredefinedLayout.TOP_RIGHT);
-			studio.addComponentMenu(comp, createGraphMenu(panel, "Dot", graphType, graphId.toString()));
+			studio.addComponentMenu(comp, createGraphMenu(panel, "Dot",
+					graphType, graphId.toString()));
 			panel.setLayout("Dot");
 		}
 	}
 
-	private JMenu createGraphMenu(final GraphPanel panel, String initialLayout, String graphId, String id) {
+	private JMenu createGraphMenu(final GraphPanel panel, String initialLayout,
+			String graphId, String id) {
 		JMenu graph = new JMenu("Graph");
 		JMenu layouts = createLayoutMenu(graph, panel, initialLayout);
 		graph.add(new JSeparator());
@@ -194,7 +214,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		return graph;
 	}
 
-	private JMenu createTogglesMenu(JMenu menu, final GraphPanel panel, final String graphId, final String id) {
+	private JMenu createTogglesMenu(JMenu menu, final GraphPanel panel,
+			final String graphId, final String id) {
 		JMenuItem item;
 		ButtonGroup edge = new ButtonGroup();
 
@@ -250,19 +271,19 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
 		menu.add(new JSeparator());
 
-//		 item = new JCheckBoxMenuItem("Show force panel");
-//		 item.addActionListener(new AbstractAction() {
-//		 public void actionPerformed(ActionEvent e) {
-//		 JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-//		 if (item.isSelected()) {
-//		 showForcePanel(graphId, id, true);
-//		 } else {
-//		 showForcePanel(graphId, id, false);
-//		 }
-//		 }
-//		 });
-//		 item.setSelected(false);
-//		 menu.add(item);
+		// item = new JCheckBoxMenuItem("Show force panel");
+		// item.addActionListener(new AbstractAction() {
+		// public void actionPerformed(ActionEvent e) {
+		// JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+		// if (item.isSelected()) {
+		// showForcePanel(graphId, id, true);
+		// } else {
+		// showForcePanel(graphId, id, false);
+		// }
+		// }
+		// });
+		// item.setSelected(false);
+		// menu.add(item);
 
 		return menu;
 	}
@@ -272,8 +293,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 			GraphPanel graphPanel = getPanel(graphType, graphId);
 			GraphForcePanel forcePanel = new GraphForcePanel(graphPanel
 					.getForceSimulator(), preferences);
-			StudioComponent comp = new StudioComponentImpl("Forces for " + graphType,
-					forcePanel);
+			StudioComponent comp = new StudioComponentImpl("Forces for "
+					+ graphType, forcePanel);
 			((StudioWithPredefinedLayout) studio).addComponent(comp,
 					StudioImplWithPredefinedLayout.BOTTOM_LEFT);
 			setForcePanel(graphType, graphId, comp);
@@ -290,7 +311,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		return forcePanels.get(panelKey(graphType, graphId));
 	}
 
-	private void setForcePanel(String graphType, String graphId, StudioComponent comp) {
+	private void setForcePanel(String graphType, String graphId,
+			StudioComponent comp) {
 		forcePanels.put(panelKey(graphType, graphId), comp);
 	}
 
@@ -326,11 +348,11 @@ public class GraphPainter extends DefaultStudioPlugin implements
 	private GraphPanel getPanel(String graphType, String graphId) {
 		return graphs.get(panelKey(graphType, graphId));
 	}
-	
+
 	private void setPanel(String graphType, String graphId, GraphPanel panel) {
 		graphs.put(panelKey(graphType, graphId), panel);
 	}
-	
+
 	private void removePanel(String graphType, String graphId) {
 		graphs.remove(panelKey(graphType, graphId));
 	}
@@ -353,28 +375,32 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		}
 	}
 
-	public void showPopup(final String graphType, final ATerm graphId, final ATerm nodeId, final ATerm menu) {
+	public void showPopup(final String graphType, final ATerm graphId,
+			final ATerm nodeId, final ATerm menu) {
 		DefaultPopupImpl popup = new DefaultPopupImpl(bridge);
 		ATermFactory f = graphId.getFactory();
-		nl.cwi.sen1.configapi.Factory cf = nl.cwi.sen1.configapi.Factory.getInstance((PureFactory) graphId.getFactory());
+		nl.cwi.sen1.configapi.Factory cf = nl.cwi.sen1.configapi.Factory
+				.getInstance((PureFactory) graphId.getFactory());
 		ActionDescriptionList list = cf.ActionDescriptionListFromTerm(menu);
-		
-		popup.showPopup(f.make("graph-node(<str>,<term>,<term>)", graphType, graphId, nodeId), list);
+
+		popup.showPopup(f.make("graph-node(<str>,<term>,<term>)", graphType,
+				graphId, nodeId), list);
 	}
 
 	public ATerm sizeGraph(String graphType, ATerm graphId, ATerm graphTerm) {
 		GraphPanel panel = getPanel(graphType, graphId.toString());
-		
+
 		if (panel != null) {
-		Graph graph = graphFactory.GraphFromTerm(graphTerm);
-		FontMetrics metrics = panel.getFontMetrics(preferences
-				.getFont(GraphConstants.NODE_FONT));
-		graph = GraphAdapter.sizeGraph(metrics, preferences, graph);
-		return graphFactory.getPureFactory().make(
-				"snd-value(sized-graph(<term>))", graph.toTerm());
+			Graph graph = graphFactory.GraphFromTerm(graphTerm);
+			FontMetrics metrics = panel.getFontMetrics(preferences
+					.getFont(GraphConstants.NODE_FONT));
+			graph = GraphAdapter.sizeGraph(metrics, preferences, graph);
+			return graphFactory.getPureFactory().make(
+					"snd-value(sized-graph(<term>))", graph.toTerm());
 		}
-        System.err.println("graph not sized, because a panel was not created yet");
-        return graphFactory.getPureFactory().make(
-        		"snd-value(sized-graph(<term>))", graphTerm);
+		System.err
+				.println("graph not sized, because a panel was not created yet");
+		return graphFactory.getPureFactory().make(
+				"snd-value(sized-graph(<term>))", graphTerm);
 	}
 }

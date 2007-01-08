@@ -6,23 +6,27 @@ tool graph-painter is { }
 process GraphPainter is
 let
   T: graph-painter,
+  Button: term,
   Closable: bool,
-  Shared: bool,
+  Event: term,
+  GraphId: term,
   Graph: term,
   GraphType: str,
+  Key: term,
   Menu: term,
-  PopupMenu: list,
   NodeId: term,
-  GraphId: term,
-  Button: term,
-  Event: term
-
+  PopupMenu: list,
+  Shared: bool,
+  Value: term
 in
   rec-connect(T?)
   .
   (
     rec-msg(gp-display-graph(GraphType?, GraphId?, Graph?))
     . snd-do(T, display-graph(GraphType, GraphId, Graph))
+  +
+    rec-msg(gp-update-graph(GraphType?, GraphId?, NodeId?, Key?, Value?))
+    . snd-do(T, update-graph(GraphType, GraphId, NodeId, Key, Value))
   +
     rec-msg(gp-create-panel(GraphType?, GraphId?, Shared?, Closable?))
     . snd-eval(T, create-panel(GraphType, GraphId, Shared, Closable))

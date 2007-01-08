@@ -1,14 +1,14 @@
 // Java tool interface class GraphPainterTool
 // This file is generated automatically, please do not edit!
-// generation time: Jun 20, 2006 12:59:46 PM
+// generation time: Jan 8, 2007 10:36:07 AM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,15 +16,16 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class GraphPainterTool
-  extends SwingTool
+  extends AbstractTool
   implements GraphPainterTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
   private ATerm PdisplayGraph0;
   private ATerm PselectNode0;
+  private ATerm PupdateGraph0;
   private ATerm PshowPopup0;
   private ATerm PcreatePanel0;
   private ATerm PsizeGraph0;
@@ -42,14 +43,14 @@ abstract public class GraphPainterTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<graph-painter>,create-panel(<str>,<term>,<bool>,<bool>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<term>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-ack-event(<graph-painter>,<term>)"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<graph-painter>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<graph-painter>,update-graph(<str>,<term>,<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<graph-painter>,create-panel(<str>,<term>,<bool>,<bool>))"));
+    sigTable.add(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<term>,<list>))"));
+    sigTable.add(factory.parse("rec-ack-event(<graph-painter>,<term>)"));
+    sigTable.add(factory.parse("rec-terminate(<graph-painter>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
@@ -57,6 +58,7 @@ abstract public class GraphPainterTool
   {
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>,<term>))");
     PselectNode0 = factory.parse("rec-do(select-node(<str>,<term>,<term>))");
+    PupdateGraph0 = factory.parse("rec-do(update-graph(<str>,<term>,<term>,<term>,<term>))");
     PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<term>,<term>,<term>))");
     PcreatePanel0 = factory.parse("rec-eval(create-panel(<str>,<term>,<term>,<term>))");
     PsizeGraph0 = factory.parse("rec-eval(size-graph(<str>,<term>,<term>))");
@@ -77,6 +79,11 @@ abstract public class GraphPainterTool
     result = term.match(PselectNode0);
     if (result != null) {
       selectNode((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
+      return null;
+    }
+    result = term.match(PupdateGraph0);
+    if (result != null) {
+      updateGraph((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3), (ATerm)result.get(4));
       return null;
     }
     result = term.match(PshowPopup0);
@@ -113,7 +120,7 @@ abstract public class GraphPainterTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }
