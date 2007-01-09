@@ -18,7 +18,6 @@ import nl.cwi.sen1.configapi.types.KeyModifierList;
 import nl.cwi.sen1.configapi.types.ShortCut;
 import toolbus.AbstractTool;
 import aterm.ATerm;
-import aterm.ATermFactory;
 
 public class MenuBuilder {
 	private AbstractTool bridge;
@@ -44,8 +43,6 @@ public class MenuBuilder {
 	 * @return
 	 */
 	public void fill(JMenu menu, ATerm id, ActionDescriptionList menuList, Action action) {
-		ATermFactory f = menuList.getFactory();
-
 		for (; !menuList.isEmpty(); menuList = menuList.getTail()) {
 			ActionDescription first = menuList.getHead();
 			Event event = first.getEvent();

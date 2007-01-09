@@ -68,10 +68,9 @@ public class MouseAdapter extends MouseInputAdapter {
 		if (e.isPopupTrigger()) {
 			popupEvent = e;
 			return factory.makeEvent_Popup();
-		} else {
-			int mask = e.getModifiers();
-			return factory.makeEvent_Click(modifiers(mask), button(mask));
 		}
+		int mask = e.getModifiers();
+		return factory.makeEvent_Click(modifiers(mask), button(mask));
 	}
 
 	private KeyModifierList modifiers(int modifiers) {
@@ -99,8 +98,7 @@ public class MouseAdapter extends MouseInputAdapter {
 		}
 		if ((modifiers & InputEvent.BUTTON3_DOWN_MASK) != 0) {
 			return factory.makeVirtualButton_BUTTON3();
-		} else {
-			return factory.makeVirtualButton_NOBUTTON();
 		}
+		return factory.makeVirtualButton_NOBUTTON();
 	}
 }
