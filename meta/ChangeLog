@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan  9 12:53:39 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/navigator.tb:
+   - Add support for updating the navigator module-by-module
+
 Mon Jan  8 13:37:01 CET 2007 <kooiker@cwi.nl>
  * tbscripts/graph-utils.tb:
    - Implemented UpdateGraphAttribute

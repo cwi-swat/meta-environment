@@ -1,14 +1,14 @@
 #ifndef __META__
 #define __META__
 
-#include <module-utils.tb>
-#include <gui-actions.tb>
-#include <tide.tb>
-#include <module-selection-listener.tb>
-#include <error-utils.tb>
-#include <gui-utils.tb>
 #include <editing.tb>
+#include <error-utils.tb>
 #include <graph-utils.tb>
+#include <gui-actions.tb>
+#include <gui-utils.tb>
+#include <module-selection-listener.tb>
+#include <module-utils.tb>
+#include <tide.tb>
 #include <transaction-management.tb>
 
 #endif /* __META__ */

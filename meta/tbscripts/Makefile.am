@@ -20,6 +20,7 @@ TBSCRIPTS = \
 	    module-manager.tb \
 	    module-selection-listener.tb \
 	    module-utils.tb \
+	    navigator.tb \
 	    parse-utils.tb \
 	    pretty-print-utils.tb \
 	    serialization-utils.tb \
