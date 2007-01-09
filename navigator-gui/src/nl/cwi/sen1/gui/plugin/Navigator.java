@@ -11,11 +11,7 @@ import javax.swing.JLabel;
 import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.graph.Factory;
-import nl.cwi.sen1.graph.types.Attribute;
-import nl.cwi.sen1.graph.types.AttributeList;
 import nl.cwi.sen1.graph.types.Graph;
-import nl.cwi.sen1.graph.types.Node;
-import nl.cwi.sen1.graph.types.NodeList;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
@@ -63,45 +59,20 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         statusBarComponents.put("Status", status);
     }
 
-    private void setModules(Graph graph) {
-        moduleModel.clearModules();
+	public void deleteModule(ATerm moduleId) {
+		moduleModel.removeModule(moduleId);
+	}
 
-        for (NodeList nodes = graph.getNodes(); !nodes.isEmpty(); nodes = nodes
-                .getTail()) {
-            Node node = nodes.getHead();
-
-            addModule(node);
-        }
-    }
-
-    private Module addModule(Node node) {
-        ATerm moduleId = node.getId().getId();
-
+	public void updateModule(ATerm moduleId, ATerm path) {
         Module module = moduleModel.getModule(moduleId);
         if (module == null) {
-            String label = moduleId.toString();
-            File file = null;
-            AttributeList attrs = node.getAttributes();
-
-            while (!attrs.isEmpty()) {
-                Attribute attr = attrs.getHead();
-                if (attr.isFile()) {
-                    ATerm term = attr.getFile().toTerm();
-                    file = ioFactory.FileFromTerm(term);
-                }
-                if (attr.isLabel()) {
-                    label = attr.getLabel();
-                }
-
-                attrs = attrs.getTail();
-            }
-
+            File file = ioFactory.FileFromTerm(path);
+            String label = file.getName();
+            
             module = new Module(moduleId, file, label);
             moduleModel.addModule(module);
         }
-
-        return module;
-    }
+	}
 
     public void setModules(ATerm graphTerm) {
         Graph graph = graphFactory.GraphFromTerm(graphTerm);
@@ -202,5 +173,4 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         moduleModel.selectModule(moduleId);
         suspendSelectionNotification = false;
     }
-
 }

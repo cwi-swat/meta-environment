@@ -1,6 +1,6 @@
 // Java tool bridge NavigatorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:59:25 AM
+// generation time: Jan 9, 2007 11:51:32 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -26,13 +26,22 @@ public class NavigatorBridge
       throw new UnsupportedOperationException("method `selectModule' not supported.");
     }
   }
-  public void setModules(ATerm t0)
+  public void updateModule(ATerm t0, ATerm t1)
   {
     if (tool != null) {
-      tool.setModules(t0);
+      tool.updateModule(t0, t1);
     }
     else {
-      throw new UnsupportedOperationException("method `setModules' not supported.");
+      throw new UnsupportedOperationException("method `updateModule' not supported.");
+    }
+  }
+  public void deleteModule(ATerm t0)
+  {
+    if (tool != null) {
+      tool.deleteModule(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `deleteModule' not supported.");
     }
   }
   public void showPopup(ATerm t0, ATerm t1)

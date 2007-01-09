@@ -1,14 +1,14 @@
 // Java tool interface class NavigatorTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:59:25 AM
+// generation time: Jan 9, 2007 11:51:32 AM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,15 +16,16 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class NavigatorTool
-  extends SwingTool
+  extends AbstractTool
   implements NavigatorTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
   private ATerm PselectModule0;
-  private ATerm PsetModules0;
+  private ATerm PupdateModule0;
+  private ATerm PdeleteModule0;
   private ATerm PshowPopup0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -40,19 +41,20 @@ abstract public class NavigatorTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<navigator>,set-modules(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<navigator>,select-module(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<navigator>,show-popup(<term>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-ack-event(<navigator>,<term>)"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<navigator>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-do(<navigator>,update-module(<term>,<file>))"));
+    sigTable.add(factory.parse("rec-do(<navigator>,delete-module(<term>))"));
+    sigTable.add(factory.parse("rec-do(<navigator>,select-module(<term>))"));
+    sigTable.add(factory.parse("rec-do(<navigator>,show-popup(<term>,<list>))"));
+    sigTable.add(factory.parse("rec-ack-event(<navigator>,<term>)"));
+    sigTable.add(factory.parse("rec-terminate(<navigator>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
     PselectModule0 = factory.parse("rec-do(select-module(<term>))");
-    PsetModules0 = factory.parse("rec-do(set-modules(<term>))");
+    PupdateModule0 = factory.parse("rec-do(update-module(<term>,<term>))");
+    PdeleteModule0 = factory.parse("rec-do(delete-module(<term>))");
     PshowPopup0 = factory.parse("rec-do(show-popup(<term>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -68,9 +70,14 @@ abstract public class NavigatorTool
       selectModule((ATerm)result.get(0));
       return null;
     }
-    result = term.match(PsetModules0);
+    result = term.match(PupdateModule0);
     if (result != null) {
-      setModules((ATerm)result.get(0));
+      updateModule((ATerm)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PdeleteModule0);
+    if (result != null) {
+      deleteModule((ATerm)result.get(0));
       return null;
     }
     result = term.match(PshowPopup0);
@@ -99,7 +106,7 @@ abstract public class NavigatorTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }

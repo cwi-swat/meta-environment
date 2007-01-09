@@ -2,6 +2,7 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseListener;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,6 +52,24 @@ public class ModuleTree extends JPanel {
 				}
 			}
 		});
+	}
+
+	public Vector<TreePath> savePaths() {
+		Vector<TreePath> v = new Vector<TreePath>();
+
+		for (int i = 0; i < tree.getRowCount(); i++) {
+			if (tree.isExpanded(i)) {
+				v.add(tree.getPathForRow(i));
+			}
+		}
+
+		return v;
+	}
+
+	public void loadPaths(Vector<TreePath> v) {
+		for (int i = 0; i < v.size(); i++) {
+			tree.expandPath(v.get(i));
+		}
 	}
 
 	public ATerm selectModule(int X, int Y) {

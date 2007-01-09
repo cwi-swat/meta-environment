@@ -1,45 +1,48 @@
-#ifndef _GUI_NAVIGATOR_
-#define _GUI_NAVIGATOR_
+#ifndef __GUI_NAVIGATOR__
+#define __GUI_NAVIGATOR__
 
 tool navigator is { }
 
 process Navigator is
 let
-  Menu: term,
+  T: navigator,
   Graph: term,
+  Menu: term,
   ModuleId: term,
-  ImportGraph : term,
+  File: file,
   PopupMenu: list,
-  Str : str,
-  T: navigator
+  Str : str
 in
   rec-connect(T?)
   .
-    (
-      rec-msg(nav-set-modules(ImportGraph?))
-      . snd-do(T, set-modules(ImportGraph))
-    +
-      rec-msg(nav-select-module(ModuleId?))
-      . snd-do(T, select-module(ModuleId))
-    +
-      rec-event(T, module-selected(ModuleId?))
-      . snd-note(nav-module-selected(ModuleId))
-      . snd-ack-event(T, module-selected(ModuleId))
-    +
-      rec-event(T, mouse-event(navigator(ModuleId?),popup))
-      . printf(" request-popup-event: %t\n", ModuleId)
-      . snd-msg(nav-request-popup-event(ModuleId))
-      . snd-ack-event(T, mouse-event(navigator(ModuleId),popup))
-    +
-      rec-msg(nav-show-popup(ModuleId, PopupMenu?))
-      . snd-do(T, show-popup(ModuleId, PopupMenu))
-    +
-      rec-event(T, menu-event(ModuleId?, Menu?))
-      . snd-msg(nav-menu-selected(ModuleId, Menu))
-      . snd-ack-event(T, menu-event(ModuleId, Menu))
-    )
-    *
-      rec-disconnect(T)
+  (
+    rec-msg(nav-update-module(ModuleId?, File?))
+    . snd-do(T, update-module(ModuleId, File))
+  +
+    rec-msg(nav-delete-module(ModuleId?))
+    . snd-do(T, delete-module(ModuleId))
+  +
+    rec-msg(nav-select-module(ModuleId?))
+    . snd-do(T, select-module(ModuleId))
+  +
+    rec-event(T, module-selected(ModuleId?))
+    . snd-note(nav-module-selected(ModuleId))
+    . snd-ack-event(T, module-selected(ModuleId))
+  +
+    rec-event(T, mouse-event(navigator(ModuleId?),popup))
+    . printf("request-popup-event: %t\n", ModuleId)
+    . snd-msg(nav-request-popup-event(ModuleId))
+    . snd-ack-event(T, mouse-event(navigator(ModuleId),popup))
+  +
+    rec-msg(nav-show-popup(ModuleId, PopupMenu?))
+    . snd-do(T, show-popup(ModuleId, PopupMenu))
+  +
+    rec-event(T, menu-event(ModuleId?, Menu?))
+    . snd-msg(nav-menu-selected(ModuleId, Menu))
+    . snd-ack-event(T, menu-event(ModuleId, Menu))
+  )
+  *
+  rec-disconnect(T)
 endlet
 
 process NAV-AddListener is
@@ -59,4 +62,4 @@ process StartNavigator is
 
 toolbus(Navigator)
 
-#endif /*_GUI_NAVIGATOR_*/
+#endif /*__GUI_NAVIGATOR__*/

@@ -11,187 +11,197 @@ import nl.cwi.sen1.ioapi.types.SegmentList;
 import aterm.ATerm;
 
 public class ModuleTreeNode {
-    ATerm id;
+	ATerm id;
 
-    String name;
+	String name;
 
-    String prefix;
+	String prefix;
 
-    ArrayList<ModuleTreeNode> children;
+	ArrayList<ModuleTreeNode> children;
 
-    boolean leaf;
+	boolean leaf;
 
-    public ModuleTreeNode(ATerm id, String name, String prefix, boolean leaf) {
-        this.id = id;
-        this.name = name;
-        this.prefix = prefix;
-        this.leaf = leaf;
-        children = new ArrayList<ModuleTreeNode>();
-    }
+	public ModuleTreeNode(ATerm id, String name, String prefix, boolean leaf) {
+		this.id = id;
+		this.name = name;
+		this.prefix = prefix;
+		this.leaf = leaf;
+		children = new ArrayList<ModuleTreeNode>();
+	}
 
-    public ATerm getId() {
-        return id;
-    }
+	public ATerm getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getFullName() {
-        return prefix + getName();
-    }
+	public String getFullName() {
+		return prefix + getName();
+	}
 
-    public ModuleTreeNode addChild(ATerm id, String p, File file) {
-        Path path = file.getPath();
-        
-        SegmentList segments = path.getList();
-        ModuleTreeNode childNode = null;
+	public ModuleTreeNode addChild(ATerm id, String p, File file) {
+		Path path = file.getPath();
 
-        if (segments.isEmpty()) {
-            childNode = new ModuleTreeNode(id, file.getName(), p, true);
-            children.add(getInsertIndex(file.getName()), childNode);
+		SegmentList segments = path.getList();
+		ModuleTreeNode childNode = null;
 
-            return childNode;
-        }
+		if (segments.isEmpty()) {
+			childNode = new ModuleTreeNode(id, file.getName(), p, true);
+			children.add(getInsertIndex(file.getName()), childNode);
 
-        Segment segment = segments.getHead();
-        String childName = segment.getName();
-        int childIndex = getNodeChild(childName);
+			return childNode;
+		}
 
-        if (childIndex != -1) {
-            childNode = getChild(childIndex);
-        }
-        if (childNode == null) {
-            childNode = new ModuleTreeNode(id, childName, p, false);
-            children.add(getInsertIndex(childName), childNode);
-        }
-        path = path.getIoapiFactory().makePath_Relative(segments.getTail());
-        file = file.getIoapiFactory().makeFile_File(path, file.getName(),
-                file.getExtension());
+		Segment segment = segments.getHead();
+		String childName = segment.getName();
+		int childIndex = getNodeChild(childName);
 
-        return childNode.addChild(id, p + childName + "/", file);
-    }
+		if (childIndex != -1) {
+			childNode = getChild(childIndex);
+		}
+		if (childNode == null) {
+			childNode = new ModuleTreeNode(id, childName, p, false);
+			children.add(getInsertIndex(childName), childNode);
+		}
+		path = path.getIoapiFactory().makePath_Relative(segments.getTail());
+		file = file.getIoapiFactory().makeFile_File(path, file.getName(),
+				file.getExtension());
 
-    public void removeChild(StringTokenizer tokens) {
-        String childName = tokens.nextToken();
-        int childIndex = getChild(childName);
-        ModuleTreeNode childNode = getChild(childIndex);
+		return childNode.addChild(id, p + childName + "/", file);
+	}
 
-        if (childNode != null) {
-            if (tokens.hasMoreTokens()) {
-                childNode.removeChild(tokens);
-            }
-            if (childNode.getChildCount() == 0) {
-                children.remove(childIndex);
-            }
-        }
-    }
+	public void removeChild(File file) {
+		SegmentList segments = file.getPath().getList();
+		segments = segments.append(file.getIoapiFactory().makeSegment_Segment(
+				file.getName()));
+		removeChild(segments);
+	}
 
-    public void clearChildren() {
-        children.clear();
-    }
+	public void removeChild(SegmentList segments) {
+		if (!segments.isEmpty()) {
+			String childName = segments.getHead().getName();
+			int childIndex = getChild(childName);
+			ModuleTreeNode childNode = getChild(childIndex);
 
-    public ModuleTreeNode getChild(int index) {
-        if ((index < 0) || (index >= children.size())) {
-            return null;
-        }
+			if (childNode != null) {
+				if (!segments.isEmpty()) {
+					childNode.removeChild(segments.getTail());
+				}
+				if (childNode.getChildCount() == 0) {
+					children.remove(childIndex);
+				}
+			}
+		}
+	}
 
-        return children.get(index);
-    }
+	public void clearChildren() {
+		children.clear();
+	}
 
-    public int getChild(String n) {
-        for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = children.get(i);
+	public ModuleTreeNode getChild(int index) {
+		if ((index < 0) || (index >= children.size())) {
+			return null;
+		}
 
-            if (curNode.getName().equals(n)) {
-                return i;
-            }
-        }
+		return children.get(index);
+	}
 
-        return -1;
-    }
+	public int getChild(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			ModuleTreeNode curNode = children.get(i);
 
-    public int getLeafChild(String n) {
-        for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = children.get(i);
+			if (curNode.getName().equals(n)) {
+				return i;
+			}
+		}
 
-            if (curNode.getName().equals(n) && curNode.isLeaf()) {
-                return i;
-            }
-        }
+		return -1;
+	}
 
-        return -1;
-    }
+	public int getLeafChild(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			ModuleTreeNode curNode = children.get(i);
 
-    public int getNodeChild(String n) {
-        for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = children.get(i);
+			if (curNode.getName().equals(n) && curNode.isLeaf()) {
+				return i;
+			}
+		}
 
-            if (curNode.getName().equals(n) && !curNode.isLeaf()) {
-                return i;
-            }
-        }
+		return -1;
+	}
 
-        return -1;
-    }
+	public int getNodeChild(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			ModuleTreeNode curNode = children.get(i);
 
-    public int getInsertIndex(String n) {
-        for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = children.get(i);
+			if (curNode.getName().equals(n) && !curNode.isLeaf()) {
+				return i;
+			}
+		}
 
-            if (curNode.getName().compareTo(n) > 0) {
-                return i;
-            }
-        }
+		return -1;
+	}
 
-        return children.size();
-    }
+	public int getInsertIndex(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			ModuleTreeNode curNode = children.get(i);
 
-    public int getChildCount() {
-        return children.size();
-    }
+			if (curNode.getName().compareTo(n) > 0) {
+				return i;
+			}
+		}
 
-    public boolean isLeaf() {
-        return leaf;
-    }
+		return children.size();
+	}
 
-    public int getIndexOfChild(ModuleTreeNode child) {
-        if (child == null)
-            return -1;
+	public int getChildCount() {
+		return children.size();
+	}
 
-        for (int i = 0; i < children.size(); i++) {
-            if (children.get(i) == child) {
-                return i;
-            }
-        }
-        return -1;
-    }
+	public boolean isLeaf() {
+		return leaf;
+	}
 
-    public List<ModuleTreeNode> makePath(StringTokenizer tokens, List<ModuleTreeNode> result) {
-        result.add(this);
+	public int getIndexOfChild(ModuleTreeNode child) {
+		if (child == null)
+			return -1;
 
-        if (isLeaf()) {
-            return result;
-        }
+		for (int i = 0; i < children.size(); i++) {
+			if (children.get(i) == child) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
-        String childName = tokens.nextToken();
-        ModuleTreeNode childNode;
-        if (tokens.hasMoreTokens()) {
-            childNode = getChild(getNodeChild(childName));
-        } else {
-            childNode = getChild(getLeafChild(childName));
-        }
-        if (childNode != null) {
-            if (tokens.hasMoreTokens()) {
-                return childNode.makePath(tokens, result);
-            }
-            result.add(childNode);
-        }
+	public List<ModuleTreeNode> makePath(StringTokenizer tokens,
+			List<ModuleTreeNode> result) {
+		result.add(this);
 
-        return result;
-    }
+		if (isLeaf()) {
+			return result;
+		}
 
-    public String toString() {
-        return name;
-    }
+		String childName = tokens.nextToken();
+		ModuleTreeNode childNode;
+		if (tokens.hasMoreTokens()) {
+			childNode = getChild(getNodeChild(childName));
+		} else {
+			childNode = getChild(getLeafChild(childName));
+		}
+		if (childNode != null) {
+			if (tokens.hasMoreTokens()) {
+				return childNode.makePath(tokens, result);
+			}
+			result.add(childNode);
+		}
+
+		return result;
+	}
+
+	public String toString() {
+		return name;
+	}
 }

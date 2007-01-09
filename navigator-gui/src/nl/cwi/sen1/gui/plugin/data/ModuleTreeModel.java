@@ -89,9 +89,12 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
         }
     }
 
-    public void removeModule(ATerm id, String name) {
-        moduleTable.remove(id);
-        root.removeChild(new StringTokenizer(name, "/"));
+    public void removeModule(ATerm id) {
+    	Module module = getModule(id);
+    	File file = module.getFile();
+    	
+    	moduleTable.remove(id);
+    	root.removeChild(file);
         repaintTree();
     }
 
