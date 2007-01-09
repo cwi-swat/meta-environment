@@ -2,7 +2,7 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.Enumeration;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,6 +20,8 @@ import aterm.ATerm;
 
 public class ModuleTree extends JPanel {
 	private JTree tree;
+
+	private Enumeration expansionState;
 
 	private final ModuleTreeModel manager;
 
@@ -54,21 +56,17 @@ public class ModuleTree extends JPanel {
 		});
 	}
 
-	public Vector<TreePath> savePaths() {
-		Vector<TreePath> v = new Vector<TreePath>();
-
-		for (int i = 0; i < tree.getRowCount(); i++) {
-			if (tree.isExpanded(i)) {
-				v.add(tree.getPathForRow(i));
-			}
-		}
-
-		return v;
+	public void saveExpansionState() {
+		expansionState = tree.getExpandedDescendants(new TreePath(tree
+				.getModel().getRoot()));
 	}
 
-	public void loadPaths(Vector<TreePath> v) {
-		for (int i = 0; i < v.size(); i++) {
-			tree.expandPath(v.get(i));
+	public void loadExpansionState() {
+		if (expansionState != null) {
+			while (expansionState.hasMoreElements()) {
+				TreePath treePath = (TreePath) expansionState.nextElement();
+				tree.expandPath(treePath);
+			}
 		}
 	}
 

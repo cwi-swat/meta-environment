@@ -4,6 +4,8 @@ Tue Jan  9 12:52:40 CET 2007 <kooiker@cwi.nl>
  * navigator.idef.src:
    - Use add and remove module for single modules
    - Remove graph support
+ * src/**/{Navigator,ModuleTree}.java:
+   - Remember expansion state of tree
 
 Tue Oct 31 10:12:52 CET 2006 <jurgenv@cwi.nl>
  * src/**/Navigator.java: refactored use of the mouse en menu
