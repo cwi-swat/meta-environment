@@ -25,6 +25,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
     private ProgressList progressList;
 
     private JFileChooser sharedChooser;
+    private FileFilter sharedFilter;
 
     public Dialog() {
         sharedChooser = new JFileChooser(System.getProperty(WORKING_DIRECTORY));
@@ -74,7 +75,8 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
             chooser.setFileView(new DialogFileView(fsv));
         }
 
-        FileFilter filter = new FileFilter() {
+        chooser.removeChoosableFileFilter(sharedFilter);
+        sharedFilter = new FileFilter() {
             public boolean accept(File file) {
                 if (file.isDirectory()) {
                     return true;
@@ -90,13 +92,33 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         };
 
         chooser.setSelectedFile(new File(""));
-        chooser.addChoosableFileFilter(filter);
+        chooser.addChoosableFileFilter(sharedFilter);
+        
+        
         if (chooser.showDialog(StudioImpl.getFrame(), title) == JFileChooser.APPROVE_OPTION) {
-            String path = chooser.getSelectedFile().getAbsolutePath();
+            File file = chooser.getSelectedFile();
+            
+            String path = buildSelectedFile(file, extension);
             return studio.getATermFactory().make(
                     "snd-value(file-dialog-approve(<str>))", path);
         }
         return studio.getATermFactory().make("snd-value(file-dialog-cancel)");
+    }
+    
+    private String buildSelectedFile(File file, String extension) {
+    	String path = file.getAbsolutePath();
+    	String last = file.getName();
+    	
+    	if (last.lastIndexOf('.') == -1) { 
+    		/* no extension */
+    		path = path.concat(extension.startsWith(".") ? extension : ("." + extension));
+    	}
+    	else if (last.endsWith(".")) {
+    		/* file ends in . */
+    		path = path.concat(extension.startsWith(".") ? extension.substring(1) : extension);
+    	}
+    	
+    	return path;
     }
 
     public void recTerminate(ATerm t0) {
