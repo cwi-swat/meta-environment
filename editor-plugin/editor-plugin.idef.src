@@ -51,13 +51,13 @@ in
     rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(T, set-cursor-at-offset(EditorId, Offset))
   +
-    rec-msg(te-clear-focus(EditorId))
+    rec-msg(te-clear-focus(EditorId?))
     . snd-do(T, clear-focus(EditorId))
   +
-    rec-msg(te-register-text-categories(EditorId, Categories?)) 
+    rec-msg(te-register-text-categories(EditorId?, Categories?)) 
     . snd-do(T, register-text-categories(EditorId, Categories))
   +
-    rec-msg(te-highlight-slices(EditorId, Slices?)) 
+    rec-msg(te-highlight-slices(EditorId?, Slices?)) 
     . snd-do(T, highlight-slices(EditorId, Slices))
   +
     rec-msg(te-display-message(EditorId?, Message?))
@@ -92,7 +92,7 @@ in
     . create(ActionEvent(EditorId, Event), Pid?)
     . snd-ack-event(T, mouse-event(EditorId, Event))
   +
-    rec-event(T, offset-event(EditorId, Offset?))
+    rec-event(T, offset-event(EditorId?, Offset?))
     . create(OffSetEvent(EditorId, Offset), Pid?)
     . snd-ack-event(T, offset-event(EditorId, Offset))
  +
