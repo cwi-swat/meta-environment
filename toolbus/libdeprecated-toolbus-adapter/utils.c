@@ -200,7 +200,7 @@ static type *parse_type(TBbool parseVars)
 
 static term *parse_anno(term *t, TBbool parseVars)
 {
-  term_list args;
+  term_list *args = mk_list1(NULL); /* make list with dummy head */
   term *arg;
   term *anno,*t2,*res;
   char close_char;
@@ -211,14 +211,13 @@ static term *parse_anno(term *t, TBbool parseVars)
        As in term{anno{anno'}}, since an annotation is a term. */
     /* anno = parse_anno(parse_term0()); */
     close_char = '}';
-    next(&args) = NULL;
     get_char(); skip_layout();
 
     while(lastc != close_char){
       if(lastc == '%') {
 	if(get_char() == 'l'){
-	  next(&args) = 
-	    list_concat(next(&args),
+	  next(args) = 
+	    list_concat(next(args),
 			va_arg(mk_term_args, term_list *));
 	  get_char(); skip_layout();
 	  goto list_args_seen_anno;
@@ -228,7 +227,7 @@ static term *parse_anno(term *t, TBbool parseVars)
       }
       arg = parse_anno(parse_term0(parseVars), parseVars);
 
-      next(&args) = list_concat_term(next(&args), arg);
+      next(args) = list_concat_term(next(args), arg);
       skip_layout();
       if(lastc == ','){
 	get_char(); skip_layout(); continue;
@@ -241,7 +240,7 @@ list_args_seen_anno:
       return NULL;
     } 
     get_char(); skip_layout();
-    anno = next(&args);
+    anno = next(args);
     t2 = mk_anno(anno,t);
     /* Now, we can have _another_ annotation:
        term{anno}{anno'} */
@@ -444,20 +443,20 @@ static term *parse_term0(TBbool parseVars)
 	  }
 	} else
 	  if(lastc == '['){                      /* list */
-	    term_list args;
+	    term_list *args;    
 	    term *arg;
 
 	    close_char = ']';
 	    id_sym = -1; /* pedantic */
 make_list:
-	    next(&args) = NULL;
+            args = mk_list1(NULL);/* list with dummy first */
 	    get_char(); skip_layout();
 
 	    while(lastc != close_char){
 	      if(lastc == '%') {
 		if(get_char() == 'l'){
-		  next(&args) = 
-		    list_concat(next(&args),
+		  next(args) = 
+		    list_concat(next(args),
 				va_arg(mk_term_args, term_list *));
 		  get_char(); skip_layout();
 		  goto list_args_seen;
@@ -467,7 +466,7 @@ make_list:
 	      }
 	      arg = parse_anno(parse_term0(parseVars), parseVars);
 
-	      next(&args) = list_concat_term(next(&args), arg);
+	      next(args) = list_concat_term(next(args), arg);
 	      skip_layout();
 	      if(lastc == ','){
 		get_char(); skip_layout(); continue;
@@ -481,9 +480,9 @@ list_args_seen:
 	    } else
 	      get_char(); skip_layout();
 	    if(close_char == ']')
-	      return next(&args);
+	      return next(args);
 	    else {
-	      term *t = mk_appl(id_sym, next(&args));
+	      term *t = mk_appl(id_sym, next(args));
 	      fun_str_sym(t) = is_str_sym;
 	      return t;
 	    }

@@ -1,5 +1,11 @@
 $Id$
 
+Wed Jan 10 10:19:09 CET 2007 <jurgenv@cwi.nl>
+ * libdeprecated*adapter/utils.c: fixed a terrific bug. A next pointer
+   in a dummy head of a list that was never allocated was used anyway.
+   Apparantly, this worked because older versions of gcc (< 4) initialized
+   more memory to NULL than the 4 series do.
+
 Mon Jan 8  16:02:09 CET 2006 <jurgenv@cwi.nl>
  * libdeprecated*adapter/*.[ch]: changed the interface to the 
    deprecated toolbus adapter for C. Each tool now declares in the
