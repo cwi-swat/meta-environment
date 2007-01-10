@@ -243,6 +243,7 @@ public class GraphPanel extends JPanel {
 
 		ActionList dot = new ActionList();
 		dot.add(new GraphDotLayout(GraphConstants.GRAPH));
+		dot.add(new RepaintAction());
 		vis.putAction("Dot", dot);
 		layouts.add("Dot");
 
@@ -260,16 +261,19 @@ public class GraphPanel extends JPanel {
 
 		ActionList random = new ActionList();
 		random.add(new RandomLayout());
+		random.add(new RepaintAction());
 		vis.putAction("Random", random);
 		layouts.add("Random");
 
 		ActionList circle = new ActionList();
 		circle.add(new CircleLayout(GraphConstants.NODES));
+		circle.add(new RepaintAction());
 		vis.putAction("Circle", circle);
 		layouts.add("Circle");
 
 		ActionList nodeLink = new ActionList();
 		nodeLink.add(new NodeLinkTreeLayout(GraphConstants.GRAPH));
+		nodeLink.add(new RepaintAction());
 		vis.putAction("NodeLink Horizontal", nodeLink);
 		layouts.add("NodeLink Horizontal");
 
@@ -278,16 +282,19 @@ public class GraphPanel extends JPanel {
 				GraphConstants.GRAPH);
 		nodeLinkVlayout.setOrientation(Constants.ORIENT_TOP_BOTTOM);
 		nodeLinkV.add(nodeLinkVlayout);
+		nodeLinkV.add(new RepaintAction());
 		vis.putAction("NodeLink Vertical", nodeLinkV);
 		layouts.add("NodeLink Vertical");
 
 		ActionList radialTree = new ActionList();
 		radialTree.add(new RadialTreeLayout(GraphConstants.GRAPH));
+		radialTree.add(new RepaintAction());
 		vis.putAction("Radial", radialTree);
 		layouts.add("Radial");
 
 		ActionList funny = new ActionList();
 		funny.add(new FruchtermanReingoldLayout(GraphConstants.GRAPH));
+		funny.add(new RepaintAction());
 		vis.putAction("Funny", funny);
 		layouts.add("Funny");
 	}

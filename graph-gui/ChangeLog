@@ -1,5 +1,8 @@
 $Id$
 
+Wed Jan 10 10:42:26 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * **/GraphPanel.java: added RepaintActions to each layout.
+
 Mon Jan  8 13:34:51 CET 2007 <kooiker@cwi.nl>
  * graph-painter.idef.src:
    - Added update graph message that only updates a single attribute of a node
