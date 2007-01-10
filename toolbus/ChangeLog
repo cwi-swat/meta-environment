@@ -1,6 +1,12 @@
 $Id$
 
-Wed Jan 10 10:19:09 CET 2007 <jurgenv@cwi.nl>
+Wed Jan 10 21:40:29 CET 2007 <{jurgenv,paulk}@cwi.nl>
+ * toolbus/interpreter.c: create used to inherited all subscriptions
+   to notes, and also the current note queue. We've turned this
+   off to fix a number of bugs in the Meta-Environment. The
+   tests still succeed.
+
+Wed Jan 10 10:19:09 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * libdeprecated*adapter/utils.c: fixed a terrific bug. A next pointer
    in a dummy head of a list that was never allocated was used anyway.
    Apparantly, this worked because older versions of gcc (< 4) initialized

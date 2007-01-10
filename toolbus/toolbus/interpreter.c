@@ -1298,8 +1298,8 @@ static TBbool simple_atomic_step(atom *Atom)
 	pid = create_process(fun_sym(pcall),
 			     fun_args(pcall),
 			     pi_mon(current_ProcInst),   /* inherit of current process */
-			     pi_subs(current_ProcInst),
-			     pi_notes(current_ProcInst));
+			     NULL,
+			     NULL);
 	pi_env(current_ProcInst) = assign(v, pid, pi_env(current_ProcInst));
 	/* add_free_list(args); */
 	return TBtrue;
