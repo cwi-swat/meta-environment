@@ -59,6 +59,14 @@ void print_process_snd_msgs_only(term *proc)
 }
 
 /*}}}  */
+void print_process_note_queue(term *proc)
+{
+  term *notes = pi_notes(proc);
+
+  if (notes != NULL) {
+    TBprintf(stderr, "%t: queue: %t\n", pi_name(proc), notes);
+  }
+}
 
 /*{{{  void print_alternatives(term_list *alts) */
 

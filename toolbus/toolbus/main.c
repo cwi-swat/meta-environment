@@ -152,6 +152,7 @@ static void debug_handler(int sig)
       }
     }
     print_process_snd_msgs_only(ProcInst);
+    print_process_note_queue(ProcInst);
   }
 }
 

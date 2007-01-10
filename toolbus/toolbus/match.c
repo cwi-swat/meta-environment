@@ -2,8 +2,11 @@
 #include "terms.h"
 #include "env.h"
 #include "match.h"
+#include "procs.h"
+#include "tools.h"
+#include "utils.h"
 
-#define MATCHDB(x)
+#define MATCHDB(x) 
 
 /*--- substitution -----------------------------*/
 
