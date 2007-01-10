@@ -282,7 +282,7 @@ ATerm get_cursor(int cid, ATerm editorId) {
 
   if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
     SE_Tree cursor = SE_getStructureEditorCursor(editor);
-    return ATmake("snd-value(cursor(<term>))", cursor);
+    return ATmake("snd-value(cursor(<term>))", ATBpack((ATerm) cursor));
   }
 
   return ATparse("snd-value(no-cursor)");
