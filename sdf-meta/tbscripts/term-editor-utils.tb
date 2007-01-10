@@ -50,6 +50,8 @@ in
         . UpdateTermStructure(Sid)
       +
         rec-note(mm-attribute-changed(Event?))
+        . printf("SDF changed so must reparse editor\n")
+        . ClearTermParsetreeCache(Path)
         . UpdateTermStructure(Sid)
       )
       *
@@ -74,6 +76,7 @@ let
 in
   GetModuleId(Sid, ModuleId?)
   . GetPath(Sid, Path?)
+  . DeleteStructureEditor(Sid)
   . GetTermParsetree(ModuleId, Path, Tree?) 
   .
   if not-equal(Tree, UNDEFINED) then

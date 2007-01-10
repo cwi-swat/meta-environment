@@ -11,7 +11,7 @@ process GetTermParseTable(ModuleId: term, Table: term?) is
 toolbus(InitCache(TERM_TREE_CACHE))
 toolbus(ClearCacheHandler(TERM_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
 
-process ClearTermParsetreeCache is
+process ClearTermParsetreeCacheListener is
 let
   Path: str
 in
@@ -24,7 +24,10 @@ in
   * delta
 endlet
 
-toolbus(ClearTermParsetreeCache)
+process ClearTermParsetreeCache(Path : str) is
+    snd-msg(ts-remove-value(TERM_TREE_CACHE, Path))
+
+toolbus(ClearTermParsetreeCacheListener)
 
 process GetTermParsetree(ModuleId: term, Path: str, Result: term?) is
 let

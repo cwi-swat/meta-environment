@@ -58,7 +58,7 @@ in
       . JobDone("Generating parser")
     else
       snd-msg(parsetable(ModuleId, Type, Table))
-    fi
+    fi 
   )
   * delta
 endlet
