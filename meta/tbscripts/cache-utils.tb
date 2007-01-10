@@ -40,4 +40,7 @@ process GetCachedValue(TableName: str, Key: term, Value: term?) is
 process PutCachedValue(TableName: str, Key: term, Value: term) is
   snd-msg(ts-put-term-value(TableName, Key, Value))
 
+process ClearCachedValue(TableName: str, Key: term) is
+  snd-msg(ts-remove-value(TableName, Key))
+
 #endif /* __CACHE_UTILS__ */
