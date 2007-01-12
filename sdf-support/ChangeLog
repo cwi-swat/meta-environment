@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jan 12 15:45:37 CET 2007 <jurgenv@cwi.nl>
+ * src/SDFME.[ch]: regenerated with new syntax for "." operator.
+ * src/prop.c: removed dead code.
+
 Tue Oct  3 10:40:26 CEST 2006 <economop@cwi.nl>
  * Regenerated the api in lib given the changed nullable productions
    calculations.

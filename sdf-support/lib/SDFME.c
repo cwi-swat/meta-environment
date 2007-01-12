@@ -117,7 +117,6 @@ typedef struct ATerm _SDF_ModuleList;
 typedef struct ATerm _SDF_ImpSectionList;
 typedef struct ATerm _SDF_SectionList;
 typedef struct ATerm _SDF_ImportList;
-typedef struct ATerm _SDF_Property;
 typedef struct ATerm _SDF_Associativity;
 typedef struct ATerm _SDF_ArgumentIndicator;
 typedef struct ATerm _SDF_Group;
@@ -126,8 +125,6 @@ typedef struct ATerm _SDF_Priorities;
 typedef struct ATerm _SDF_NatConArguments;
 typedef struct ATerm _SDF_GroupList;
 typedef struct ATerm _SDF_PriorityList;
-typedef struct ATerm _SDF_Properties;
-typedef struct ATerm _SDF_PropertyList;
 typedef struct ATerm _SDF_SymbolTail;
 typedef struct ATerm _SDF_SymbolRest;
 typedef struct ATerm _SDF_Renamings;
@@ -139,8 +136,6 @@ typedef struct ATerm _SDF_Restriction;
 typedef struct ATerm _SDF_Restrictions;
 typedef struct ATerm _SDF_LookaheadList;
 typedef struct ATerm _SDF_RestrictionList;
-typedef struct ATerm _SDF_RightNullableProduction;
-typedef struct ATerm _SDF_RightNullableProductionList;
 typedef struct ATerm _SDF_Sort;
 typedef struct ATerm _SDF_SDF;
 typedef struct ATerm _SDF_LexSort;
@@ -1094,22 +1089,6 @@ void SDF_unprotectImportList(SDF_ImportList *arg) {
 }
 
 /**
- * Protect a SDF_Property from the ATerm garbage collector. Every SDF_Property that is not rooted somewhere on the C call stack must be protected. Examples are global variables
- * \param[in] arg pointer to a SDF_Property
- */
-void SDF_protectProperty(SDF_Property *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Unprotect a SDF_Property from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
- * \param[in] arg pointer to a SDF_Property
- */
-void SDF_unprotectProperty(SDF_Property *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-/**
  * Protect a SDF_Associativity from the ATerm garbage collector. Every SDF_Associativity that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a SDF_Associativity
  */
@@ -1234,38 +1213,6 @@ void SDF_protectPriorityList(SDF_PriorityList *arg) {
  * \param[in] arg pointer to a SDF_PriorityList
  */
 void SDF_unprotectPriorityList(SDF_PriorityList *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Protect a SDF_Properties from the ATerm garbage collector. Every SDF_Properties that is not rooted somewhere on the C call stack must be protected. Examples are global variables
- * \param[in] arg pointer to a SDF_Properties
- */
-void SDF_protectProperties(SDF_Properties *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Unprotect a SDF_Properties from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
- * \param[in] arg pointer to a SDF_Properties
- */
-void SDF_unprotectProperties(SDF_Properties *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Protect a SDF_PropertyList from the ATerm garbage collector. Every SDF_PropertyList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
- * \param[in] arg pointer to a SDF_PropertyList
- */
-void SDF_protectPropertyList(SDF_PropertyList *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Unprotect a SDF_PropertyList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
- * \param[in] arg pointer to a SDF_PropertyList
- */
-void SDF_unprotectPropertyList(SDF_PropertyList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -1442,38 +1389,6 @@ void SDF_protectRestrictionList(SDF_RestrictionList *arg) {
  * \param[in] arg pointer to a SDF_RestrictionList
  */
 void SDF_unprotectRestrictionList(SDF_RestrictionList *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Protect a SDF_RightNullableProduction from the ATerm garbage collector. Every SDF_RightNullableProduction that is not rooted somewhere on the C call stack must be protected. Examples are global variables
- * \param[in] arg pointer to a SDF_RightNullableProduction
- */
-void SDF_protectRightNullableProduction(SDF_RightNullableProduction *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Unprotect a SDF_RightNullableProduction from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
- * \param[in] arg pointer to a SDF_RightNullableProduction
- */
-void SDF_unprotectRightNullableProduction(SDF_RightNullableProduction *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Protect a SDF_RightNullableProductionList from the ATerm garbage collector. Every SDF_RightNullableProductionList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
- * \param[in] arg pointer to a SDF_RightNullableProductionList
- */
-void SDF_protectRightNullableProductionList(SDF_RightNullableProductionList *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-/**
- * Unprotect a SDF_RightNullableProductionList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
- * \param[in] arg pointer to a SDF_RightNullableProductionList
- */
-void SDF_unprotectRightNullableProductionList(SDF_RightNullableProductionList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -2778,24 +2693,6 @@ ATerm SDF_ImportListToTerm(SDF_ImportList arg) {
 }
 
 /**
- * Transforms an ATerm to a SDF_Property. This is just a wrapper for a cast, so no structural validation is done!
- * \param[in] t ATerm to be converted
- * \return SDF_Property that was encoded by \arg
- */
-SDF_Property SDF_PropertyFromTerm(ATerm t) {
-  return (SDF_Property)t;
-}
-
-/**
- * Transforms a SDF_Propertyto an ATerm. This is just a wrapper for a cast.
- * \param[in] arg SDF_Property to be converted
- * \return ATerm that represents the SDF_Property
- */
-ATerm SDF_PropertyToTerm(SDF_Property arg) {
-  return (ATerm)arg;
-}
-
-/**
  * Transforms an ATerm to a SDF_Associativity. This is just a wrapper for a cast, so no structural validation is done!
  * \param[in] t ATerm to be converted
  * \return SDF_Associativity that was encoded by \arg
@@ -2936,42 +2833,6 @@ SDF_PriorityList SDF_PriorityListFromTerm(ATerm t) {
  * \return ATerm that represents the SDF_PriorityList
  */
 ATerm SDF_PriorityListToTerm(SDF_PriorityList arg) {
-  return (ATerm)arg;
-}
-
-/**
- * Transforms an ATerm to a SDF_Properties. This is just a wrapper for a cast, so no structural validation is done!
- * \param[in] t ATerm to be converted
- * \return SDF_Properties that was encoded by \arg
- */
-SDF_Properties SDF_PropertiesFromTerm(ATerm t) {
-  return (SDF_Properties)t;
-}
-
-/**
- * Transforms a SDF_Propertiesto an ATerm. This is just a wrapper for a cast.
- * \param[in] arg SDF_Properties to be converted
- * \return ATerm that represents the SDF_Properties
- */
-ATerm SDF_PropertiesToTerm(SDF_Properties arg) {
-  return (ATerm)arg;
-}
-
-/**
- * Transforms an ATerm to a SDF_PropertyList. This is just a wrapper for a cast, so no structural validation is done!
- * \param[in] t ATerm to be converted
- * \return SDF_PropertyList that was encoded by \arg
- */
-SDF_PropertyList SDF_PropertyListFromTerm(ATerm t) {
-  return (SDF_PropertyList)t;
-}
-
-/**
- * Transforms a SDF_PropertyListto an ATerm. This is just a wrapper for a cast.
- * \param[in] arg SDF_PropertyList to be converted
- * \return ATerm that represents the SDF_PropertyList
- */
-ATerm SDF_PropertyListToTerm(SDF_PropertyList arg) {
   return (ATerm)arg;
 }
 
@@ -3170,42 +3031,6 @@ SDF_RestrictionList SDF_RestrictionListFromTerm(ATerm t) {
  * \return ATerm that represents the SDF_RestrictionList
  */
 ATerm SDF_RestrictionListToTerm(SDF_RestrictionList arg) {
-  return (ATerm)arg;
-}
-
-/**
- * Transforms an ATerm to a SDF_RightNullableProduction. This is just a wrapper for a cast, so no structural validation is done!
- * \param[in] t ATerm to be converted
- * \return SDF_RightNullableProduction that was encoded by \arg
- */
-SDF_RightNullableProduction SDF_RightNullableProductionFromTerm(ATerm t) {
-  return (SDF_RightNullableProduction)t;
-}
-
-/**
- * Transforms a SDF_RightNullableProductionto an ATerm. This is just a wrapper for a cast.
- * \param[in] arg SDF_RightNullableProduction to be converted
- * \return ATerm that represents the SDF_RightNullableProduction
- */
-ATerm SDF_RightNullableProductionToTerm(SDF_RightNullableProduction arg) {
-  return (ATerm)arg;
-}
-
-/**
- * Transforms an ATerm to a SDF_RightNullableProductionList. This is just a wrapper for a cast, so no structural validation is done!
- * \param[in] t ATerm to be converted
- * \return SDF_RightNullableProductionList that was encoded by \arg
- */
-SDF_RightNullableProductionList SDF_RightNullableProductionListFromTerm(ATerm t) {
-  return (SDF_RightNullableProductionList)t;
-}
-
-/**
- * Transforms a SDF_RightNullableProductionListto an ATerm. This is just a wrapper for a cast.
- * \param[in] arg SDF_RightNullableProductionList to be converted
- * \return ATerm that represents the SDF_RightNullableProductionList
- */
-ATerm SDF_RightNullableProductionListToTerm(SDF_RightNullableProductionList arg) {
   return (ATerm)arg;
 }
 
@@ -6164,171 +5989,6 @@ SDF_PriorityList SDF_makePriorityList6(SDF_OptLayout wsAfterHead, SDF_OptLayout 
 }
 
 /**
- * Retrieve the number of elements in a SDF_PropertyList. 
- * \param[in] arg input SDF_PropertyList
- * \return The number of elements in #arg, excluding any separators
- */
-int SDF_getPropertyListLength (SDF_PropertyList arg) {
-  if (ATisEmpty((ATermList) arg)) {
-    return 0;
-  }
-  return (ATgetLength((ATermList) arg) / 2) + 1;
-}
-
-/**
- * Reverses the elements of a SDF_PropertyList. Note that separators are reversed with the list, but the order in which each set of separators inbetween two elements occurs does not change
- * \param[in] arg SDF_PropertyList to be reversed
- * \return #arg reversed
- */
-SDF_PropertyList SDF_reversePropertyList(SDF_PropertyList arg) {
-  ATermList list = (ATermList) arg;
-  ATerm head;
-  ATerm sep0;
-  ATermList result;
-
- if (ATisEmpty(list) || ATgetLength(list) == 1) {
-    return arg;
-  }
-
-  result = ATmakeList1(ATgetFirst(list));
-      list = ATgetNext(list);
-  sep0 = ATgetFirst(list);
-  list = ATgetNext(list);
-
-  while (!ATisEmpty(list)) {
-    result = ATinsert(result, sep0);
-
-   head = ATgetFirst(list);
-   result = ATinsert(result, head);
-    list = ATgetNext(list);
-
-   if (!ATisEmpty(list)) {
-  sep0 = ATgetFirst(list);
-  list = ATgetNext(list);
-   }
-  }
-
-  return (SDF_PropertyList) result;
-}
-
-/**
- * Append a SDF_Property to the end of a SDF_PropertyList. 
- * \param[in] arg SDF_PropertyList to append the SDF_Property to
- * \param[in] elem SDF_Property to be appended
- * \return new SDF_PropertyList with #elem appended after the separators
- */
-SDF_PropertyList SDF_appendPropertyList(SDF_PropertyList arg0, SDF_OptLayout wsAfterHead, SDF_Property arg1) {
-  return SDF_concatPropertyList(arg0, wsAfterHead, SDF_makePropertyListSingle(arg1));
-}
-
-/**
- * Concatenate two SDF_PropertyLists. 
- * \param[in] arg0 first SDF_PropertyList
- * \param[in] arg1 second SDF_PropertyList
- * \return SDF_PropertyList with the elements of #arg0 before the elements of #arg1, with the separators in between.
- */
-SDF_PropertyList SDF_concatPropertyList(SDF_PropertyList arg0, SDF_OptLayout wsAfterHead, SDF_PropertyList arg1) {
-  if (ATisEmpty((ATermList) arg0)) {
-    return arg1;
-  }
-  arg1 = SDF_makePropertyListMany((SDF_Property)ATgetFirst((ATermList) arg0), wsAfterHead,  arg1);
-  arg1 = (SDF_PropertyList) ATgetNext((ATermList) arg1);
-  return (SDF_PropertyList) ATconcat((ATermList) arg0, (ATermList) arg1);
-}
-
-/**
- * Extract a sublist from a SDF_PropertyList. 
- * \param[in] arg SDF_PropertyList to extract a slice from
- * \param[in] start inclusive start index of the sublist
- * \param[in] end exclusive end index of the sublist
- * \return new SDF_PropertyList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
- */
-SDF_PropertyList SDF_slicePropertyList(SDF_PropertyList arg, int start, int end) {
-  return (SDF_PropertyList) ATgetSlice((ATermList) arg, start * 2, end * 2);
-}
-
-/**
- * Retrieve the SDF_Property at #index from a SDF_PropertyList. 
- * \param[in] arg SDF_PropertyList to retrieve the SDF_Property from
- * \param[in] index index to use to point in the SDF_PropertyList
- * \return SDF_Property at position #index in #arg
- */
-SDF_Property SDF_getPropertyListPropertyAt(SDF_PropertyList arg, int index) {
- return (SDF_Property)ATelementAt((ATermList) arg,index * 2);
-}
-
-/**
- * Replace the SDF_Property at #index from a SDF_PropertyList by a new one. 
- * \param[in] arg SDF_PropertyList to retrieve the SDF_Property from
- * \param[in] elem new SDF_Property to replace another
- * \param[in] index index to use to point in the SDF_PropertyList
- * \return A new SDF_PropertyListwith #elem replaced in #arg at position #index
- */
-SDF_PropertyList SDF_replacePropertyListPropertyAt(SDF_PropertyList arg, SDF_Property elem, int index) {
- return (SDF_PropertyList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 2);
-}
-
-/**
- * Builds a SDF_PropertyList of 2 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem2 One SDF_Property element of the new SDF_PropertyList
- * \return A new SDF_PropertyList consisting of 2 SDF_Propertys
- */
-SDF_PropertyList SDF_makePropertyList2(SDF_OptLayout wsAfterHead, SDF_Property elem1, SDF_Property elem2) {
-  return SDF_makePropertyListMany(elem1, wsAfterHead, SDF_makePropertyListSingle(elem2));
-}
-
-/**
- * Builds a SDF_PropertyList of 3 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem2 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem3 One SDF_Property element of the new SDF_PropertyList
- * \return A new SDF_PropertyList consisting of 3 SDF_Propertys
- */
-SDF_PropertyList SDF_makePropertyList3(SDF_OptLayout wsAfterHead, SDF_Property elem1, SDF_Property elem2, SDF_Property elem3) {
-  return SDF_makePropertyListMany(elem1, wsAfterHead, SDF_makePropertyList2(wsAfterHead, elem2, elem3));
-}
-
-/**
- * Builds a SDF_PropertyList of 4 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem2 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem3 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem4 One SDF_Property element of the new SDF_PropertyList
- * \return A new SDF_PropertyList consisting of 4 SDF_Propertys
- */
-SDF_PropertyList SDF_makePropertyList4(SDF_OptLayout wsAfterHead, SDF_Property elem1, SDF_Property elem2, SDF_Property elem3, SDF_Property elem4) {
-  return SDF_makePropertyListMany(elem1, wsAfterHead, SDF_makePropertyList3(wsAfterHead, elem2, elem3, elem4));
-}
-
-/**
- * Builds a SDF_PropertyList of 5 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem2 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem3 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem4 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem5 One SDF_Property element of the new SDF_PropertyList
- * \return A new SDF_PropertyList consisting of 5 SDF_Propertys
- */
-SDF_PropertyList SDF_makePropertyList5(SDF_OptLayout wsAfterHead, SDF_Property elem1, SDF_Property elem2, SDF_Property elem3, SDF_Property elem4, SDF_Property elem5) {
-  return SDF_makePropertyListMany(elem1, wsAfterHead, SDF_makePropertyList4(wsAfterHead, elem2, elem3, elem4, elem5));
-}
-
-/**
- * Builds a SDF_PropertyList of 6 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem2 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem3 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem4 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem5 One SDF_Property element of the new SDF_PropertyList
- * \param[in] elem6 One SDF_Property element of the new SDF_PropertyList
- * \return A new SDF_PropertyList consisting of 6 SDF_Propertys
- */
-SDF_PropertyList SDF_makePropertyList6(SDF_OptLayout wsAfterHead, SDF_Property elem1, SDF_Property elem2, SDF_Property elem3, SDF_Property elem4, SDF_Property elem5, SDF_Property elem6) {
-  return SDF_makePropertyListMany(elem1, wsAfterHead, SDF_makePropertyList5(wsAfterHead, elem2, elem3, elem4, elem5, elem6));
-}
-
-/**
  * Retrieve the number of elements in a SDF_SymbolTail. 
  * \param[in] arg input SDF_SymbolTail
  * \return The number of elements in #arg, excluding any separators
@@ -7175,171 +6835,6 @@ SDF_RestrictionList SDF_makeRestrictionList5(SDF_OptLayout wsAfterHead, SDF_Rest
  */
 SDF_RestrictionList SDF_makeRestrictionList6(SDF_OptLayout wsAfterHead, SDF_Restriction elem1, SDF_Restriction elem2, SDF_Restriction elem3, SDF_Restriction elem4, SDF_Restriction elem5, SDF_Restriction elem6) {
   return SDF_makeRestrictionListMany(elem1, wsAfterHead, SDF_makeRestrictionList5(wsAfterHead, elem2, elem3, elem4, elem5, elem6));
-}
-
-/**
- * Retrieve the number of elements in a SDF_RightNullableProductionList. 
- * \param[in] arg input SDF_RightNullableProductionList
- * \return The number of elements in #arg, excluding any separators
- */
-int SDF_getRightNullableProductionListLength (SDF_RightNullableProductionList arg) {
-  if (ATisEmpty((ATermList) arg)) {
-    return 0;
-  }
-  return (ATgetLength((ATermList) arg) / 2) + 1;
-}
-
-/**
- * Reverses the elements of a SDF_RightNullableProductionList. Note that separators are reversed with the list, but the order in which each set of separators inbetween two elements occurs does not change
- * \param[in] arg SDF_RightNullableProductionList to be reversed
- * \return #arg reversed
- */
-SDF_RightNullableProductionList SDF_reverseRightNullableProductionList(SDF_RightNullableProductionList arg) {
-  ATermList list = (ATermList) arg;
-  ATerm head;
-  ATerm sep0;
-  ATermList result;
-
- if (ATisEmpty(list) || ATgetLength(list) == 1) {
-    return arg;
-  }
-
-  result = ATmakeList1(ATgetFirst(list));
-      list = ATgetNext(list);
-  sep0 = ATgetFirst(list);
-  list = ATgetNext(list);
-
-  while (!ATisEmpty(list)) {
-    result = ATinsert(result, sep0);
-
-   head = ATgetFirst(list);
-   result = ATinsert(result, head);
-    list = ATgetNext(list);
-
-   if (!ATisEmpty(list)) {
-  sep0 = ATgetFirst(list);
-  list = ATgetNext(list);
-   }
-  }
-
-  return (SDF_RightNullableProductionList) result;
-}
-
-/**
- * Append a SDF_RightNullableProduction to the end of a SDF_RightNullableProductionList. 
- * \param[in] arg SDF_RightNullableProductionList to append the SDF_RightNullableProduction to
- * \param[in] elem SDF_RightNullableProduction to be appended
- * \return new SDF_RightNullableProductionList with #elem appended after the separators
- */
-SDF_RightNullableProductionList SDF_appendRightNullableProductionList(SDF_RightNullableProductionList arg0, SDF_OptLayout wsAfterHead, SDF_RightNullableProduction arg1) {
-  return SDF_concatRightNullableProductionList(arg0, wsAfterHead, SDF_makeRightNullableProductionListSingle(arg1));
-}
-
-/**
- * Concatenate two SDF_RightNullableProductionLists. 
- * \param[in] arg0 first SDF_RightNullableProductionList
- * \param[in] arg1 second SDF_RightNullableProductionList
- * \return SDF_RightNullableProductionList with the elements of #arg0 before the elements of #arg1, with the separators in between.
- */
-SDF_RightNullableProductionList SDF_concatRightNullableProductionList(SDF_RightNullableProductionList arg0, SDF_OptLayout wsAfterHead, SDF_RightNullableProductionList arg1) {
-  if (ATisEmpty((ATermList) arg0)) {
-    return arg1;
-  }
-  arg1 = SDF_makeRightNullableProductionListMany((SDF_RightNullableProduction)ATgetFirst((ATermList) arg0), wsAfterHead,  arg1);
-  arg1 = (SDF_RightNullableProductionList) ATgetNext((ATermList) arg1);
-  return (SDF_RightNullableProductionList) ATconcat((ATermList) arg0, (ATermList) arg1);
-}
-
-/**
- * Extract a sublist from a SDF_RightNullableProductionList. 
- * \param[in] arg SDF_RightNullableProductionList to extract a slice from
- * \param[in] start inclusive start index of the sublist
- * \param[in] end exclusive end index of the sublist
- * \return new SDF_RightNullableProductionList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
- */
-SDF_RightNullableProductionList SDF_sliceRightNullableProductionList(SDF_RightNullableProductionList arg, int start, int end) {
-  return (SDF_RightNullableProductionList) ATgetSlice((ATermList) arg, start * 2, end * 2);
-}
-
-/**
- * Retrieve the SDF_RightNullableProduction at #index from a SDF_RightNullableProductionList. 
- * \param[in] arg SDF_RightNullableProductionList to retrieve the SDF_RightNullableProduction from
- * \param[in] index index to use to point in the SDF_RightNullableProductionList
- * \return SDF_RightNullableProduction at position #index in #arg
- */
-SDF_RightNullableProduction SDF_getRightNullableProductionListRightNullableProductionAt(SDF_RightNullableProductionList arg, int index) {
- return (SDF_RightNullableProduction)ATelementAt((ATermList) arg,index * 2);
-}
-
-/**
- * Replace the SDF_RightNullableProduction at #index from a SDF_RightNullableProductionList by a new one. 
- * \param[in] arg SDF_RightNullableProductionList to retrieve the SDF_RightNullableProduction from
- * \param[in] elem new SDF_RightNullableProduction to replace another
- * \param[in] index index to use to point in the SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionListwith #elem replaced in #arg at position #index
- */
-SDF_RightNullableProductionList SDF_replaceRightNullableProductionListRightNullableProductionAt(SDF_RightNullableProductionList arg, SDF_RightNullableProduction elem, int index) {
- return (SDF_RightNullableProductionList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 2);
-}
-
-/**
- * Builds a SDF_RightNullableProductionList of 2 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem2 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionList consisting of 2 SDF_RightNullableProductions
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionList2(SDF_OptLayout wsAfterHead, SDF_RightNullableProduction elem1, SDF_RightNullableProduction elem2) {
-  return SDF_makeRightNullableProductionListMany(elem1, wsAfterHead, SDF_makeRightNullableProductionListSingle(elem2));
-}
-
-/**
- * Builds a SDF_RightNullableProductionList of 3 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem2 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem3 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionList consisting of 3 SDF_RightNullableProductions
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionList3(SDF_OptLayout wsAfterHead, SDF_RightNullableProduction elem1, SDF_RightNullableProduction elem2, SDF_RightNullableProduction elem3) {
-  return SDF_makeRightNullableProductionListMany(elem1, wsAfterHead, SDF_makeRightNullableProductionList2(wsAfterHead, elem2, elem3));
-}
-
-/**
- * Builds a SDF_RightNullableProductionList of 4 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem2 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem3 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem4 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionList consisting of 4 SDF_RightNullableProductions
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionList4(SDF_OptLayout wsAfterHead, SDF_RightNullableProduction elem1, SDF_RightNullableProduction elem2, SDF_RightNullableProduction elem3, SDF_RightNullableProduction elem4) {
-  return SDF_makeRightNullableProductionListMany(elem1, wsAfterHead, SDF_makeRightNullableProductionList3(wsAfterHead, elem2, elem3, elem4));
-}
-
-/**
- * Builds a SDF_RightNullableProductionList of 5 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem2 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem3 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem4 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem5 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionList consisting of 5 SDF_RightNullableProductions
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionList5(SDF_OptLayout wsAfterHead, SDF_RightNullableProduction elem1, SDF_RightNullableProduction elem2, SDF_RightNullableProduction elem3, SDF_RightNullableProduction elem4, SDF_RightNullableProduction elem5) {
-  return SDF_makeRightNullableProductionListMany(elem1, wsAfterHead, SDF_makeRightNullableProductionList4(wsAfterHead, elem2, elem3, elem4, elem5));
-}
-
-/**
- * Builds a SDF_RightNullableProductionList of 6 consecutive elements. The elements are separated.
- * \param[in] elem1 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem2 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem3 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem4 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem5 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \param[in] elem6 One SDF_RightNullableProduction element of the new SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionList consisting of 6 SDF_RightNullableProductions
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionList6(SDF_OptLayout wsAfterHead, SDF_RightNullableProduction elem1, SDF_RightNullableProduction elem2, SDF_RightNullableProduction elem3, SDF_RightNullableProduction elem4, SDF_RightNullableProduction elem5, SDF_RightNullableProduction elem6) {
-  return SDF_makeRightNullableProductionListMany(elem1, wsAfterHead, SDF_makeRightNullableProductionList5(wsAfterHead, elem2, elem3, elem4, elem5, elem6));
 }
 
 /**
@@ -8252,22 +7747,13 @@ SDF_Grammar SDF_makeGrammarPriorities(SDF_OptLayout wsAfterPriorities, SDF_Prior
   return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun79)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Priorities), (ATerm) wsAfterPriorities), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))));
 }
 /**
- * Constructs a properties of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
- * \param[in] wsAfterProperties a child of the new properties
- * \param[in] Properties a child of the new properties
- * \return A pointer to a properties, either newly constructed or shared
- */
-SDF_Grammar SDF_makeGrammarProperties(SDF_OptLayout wsAfterProperties, SDF_Properties Properties) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun80)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun81)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Properties), (ATerm) wsAfterProperties), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(112)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))));
-}
-/**
  * Constructs a restrictions of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
  * \param[in] wsAfterRestrictions a child of the new restrictions
  * \param[in] Restrictions a child of the new restrictions
  * \return A pointer to a restrictions, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarRestrictions(SDF_OptLayout wsAfterRestrictions, SDF_Restrictions Restrictions) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun82)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun83))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun83)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Restrictions), (ATerm) wsAfterRestrictions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun83)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun80)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun81)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Restrictions), (ATerm) wsAfterRestrictions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))));
 }
 /**
  * Constructs a lexical-priorities of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8277,7 +7763,7 @@ SDF_Grammar SDF_makeGrammarRestrictions(SDF_OptLayout wsAfterRestrictions, SDF_R
  * \return A pointer to a lexical-priorities, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarLexicalPriorities(SDF_OptLayout wsAfterLexical, SDF_OptLayout wsAfterPriorities, SDF_Priorities Priorities) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun84)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Priorities), (ATerm) wsAfterPriorities), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))), (ATerm) wsAfterLexical), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun82)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Priorities), (ATerm) wsAfterPriorities), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))), (ATerm) wsAfterLexical), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
 }
 /**
  * Constructs a context-free-priorities of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8287,7 +7773,7 @@ SDF_Grammar SDF_makeGrammarLexicalPriorities(SDF_OptLayout wsAfterLexical, SDF_O
  * \return A pointer to a context-free-priorities, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarContextFreePriorities(SDF_OptLayout wsAfterContextFree, SDF_OptLayout wsAfterPriorities, SDF_Priorities Priorities) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun85)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Priorities), (ATerm) wsAfterPriorities), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))), (ATerm) wsAfterContextFree), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(99)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun83)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Priorities), (ATerm) wsAfterPriorities), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun79)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))), (ATerm) wsAfterContextFree), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(99)))));
 }
 /**
  * Constructs a lexical-restrictions of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8297,7 +7783,7 @@ SDF_Grammar SDF_makeGrammarContextFreePriorities(SDF_OptLayout wsAfterContextFre
  * \return A pointer to a lexical-restrictions, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarLexicalRestrictions(SDF_OptLayout wsAfterLexical, SDF_OptLayout wsAfterRestrictions, SDF_Restrictions Restrictions) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun82)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun83))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun86)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Restrictions), (ATerm) wsAfterRestrictions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun83)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))), (ATerm) wsAfterLexical), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun80)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun84)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Restrictions), (ATerm) wsAfterRestrictions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))), (ATerm) wsAfterLexical), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
 }
 /**
  * Constructs a context-free-restrictions of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8307,7 +7793,7 @@ SDF_Grammar SDF_makeGrammarLexicalRestrictions(SDF_OptLayout wsAfterLexical, SDF
  * \return A pointer to a context-free-restrictions, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarContextFreeRestrictions(SDF_OptLayout wsAfterContextFree, SDF_OptLayout wsAfterRestrictions, SDF_Restrictions Restrictions) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun82)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun83))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun87)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Restrictions), (ATerm) wsAfterRestrictions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun83)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))), (ATerm) wsAfterContextFree), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(99)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun80)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun85)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Restrictions), (ATerm) wsAfterRestrictions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun81)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))), (ATerm) wsAfterContextFree), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(99)))));
 }
 /**
  * Constructs a sorts of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8316,7 +7802,7 @@ SDF_Grammar SDF_makeGrammarContextFreeRestrictions(SDF_OptLayout wsAfterContextF
  * \return A pointer to a sorts, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarSorts(SDF_OptLayout wsAfterSorts, SDF_Symbols Symbols) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun89))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun89)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterSorts), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun89)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(115)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun87))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun87)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterSorts), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun87)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(115)))));
 }
 /**
  * Constructs a kernel-start-symbols of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8325,7 +7811,7 @@ SDF_Grammar SDF_makeGrammarSorts(SDF_OptLayout wsAfterSorts, SDF_Symbols Symbols
  * \return A pointer to a kernel-start-symbols, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarKernelStartSymbols(SDF_OptLayout wsAfterStartSymbols, SDF_Symbols Symbols) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun90))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun91)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterStartSymbols), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(121)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun90)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(121)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun88))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun89)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterStartSymbols), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(121)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun88)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(121)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)))));
 }
 /**
  * Constructs a lexical-start-symbols of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8335,7 +7821,7 @@ SDF_Grammar SDF_makeGrammarKernelStartSymbols(SDF_OptLayout wsAfterStartSymbols,
  * \return A pointer to a lexical-start-symbols, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarLexicalStartSymbols(SDF_OptLayout wsAfterLexical, SDF_OptLayout wsAfterStartSymbols, SDF_Symbols Symbols) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun90))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun92)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterStartSymbols), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(121)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun90)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(121)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)))), (ATerm) wsAfterLexical), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun88))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun90)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterStartSymbols), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(121)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun88)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(121)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)))), (ATerm) wsAfterLexical), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun64)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
 }
 /**
  * Constructs a context-free-start-symbols of type SDF_Grammar. Like all ATerm types, SDF_Grammars are maximally shared.
@@ -8345,7 +7831,7 @@ SDF_Grammar SDF_makeGrammarLexicalStartSymbols(SDF_OptLayout wsAfterLexical, SDF
  * \return A pointer to a context-free-start-symbols, either newly constructed or shared
  */
 SDF_Grammar SDF_makeGrammarContextFreeStartSymbols(SDF_OptLayout wsAfterContextFree, SDF_OptLayout wsAfterStartSymbols, SDF_Symbols Symbols) {
-  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun90))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun93)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterStartSymbols), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(121)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun90)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(121)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)))), (ATerm) wsAfterContextFree), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(99)))));
+  return (SDF_Grammar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun88))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun91)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Symbols), (ATerm) wsAfterStartSymbols), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(121)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun88)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(121)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(115)))), (ATerm) wsAfterContextFree), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun66)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(99)))));
 }
 /**
  * Constructs a alias of type SDF_Alias. Like all ATerm types, SDF_Aliass are maximally shared.
@@ -8356,7 +7842,7 @@ SDF_Grammar SDF_makeGrammarContextFreeStartSymbols(SDF_OptLayout wsAfterContextF
  * \return A pointer to a alias, either newly constructed or shared
  */
 SDF_Alias SDF_makeAliasAlias(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_OptLayout wsAfterArrow, SDF_Symbol alias) {
-  return (SDF_Alias)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun96))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun97)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) alias), (ATerm) wsAfterArrow), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
+  return (SDF_Alias)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun95)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) alias), (ATerm) wsAfterArrow), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
 }
 /**
  * Constructs a Default of type SDF_Aliases. Like all ATerm types, SDF_Aliasess are maximally shared.
@@ -8364,7 +7850,7 @@ SDF_Alias SDF_makeAliasAlias(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Aliases SDF_makeAliasesDefault(SDF_AliasList list) {
-  return (SDF_Aliases)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun96))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun59))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun96))))), (ATerm) list)));
+  return (SDF_Aliases)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun59))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))))), (ATerm) list)));
 }
 /**
  * Constructs a empty of type SDF_AliasList. Like all ATerm types, SDF_AliasLists are maximally shared.
@@ -8403,7 +7889,7 @@ SDF_AliasList SDF_makeAliasListMany(SDF_Alias head, SDF_OptLayout wsAfterHead, S
  * \return A pointer to a cf, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolCf(SDF_OptLayout wsAfterLessThan, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_OptLayout wsAfterCF) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun99))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun100)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterCF), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(70)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(67)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun99)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(70)), (ATerm)ATmakeInt(67)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun97))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun98)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterCF), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(70)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(67)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun97)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(70)), (ATerm)ATmakeInt(67)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a lex of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8414,7 +7900,7 @@ SDF_Symbol SDF_makeSymbolCf(SDF_OptLayout wsAfterLessThan, SDF_Symbol Symbol, SD
  * \return A pointer to a lex, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolLex(SDF_OptLayout wsAfterLessThan, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_OptLayout wsAfterLEX) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun101))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun102)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterLEX), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(88)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(69)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun101)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(88)), (ATerm)ATmakeInt(69)), (ATerm)ATmakeInt(76)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun99))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun100)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterLEX), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(88)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(69)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun99)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(88)), (ATerm)ATmakeInt(69)), (ATerm)ATmakeInt(76)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a varsym of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8425,14 +7911,14 @@ SDF_Symbol SDF_makeSymbolLex(SDF_OptLayout wsAfterLessThan, SDF_Symbol Symbol, S
  * \return A pointer to a varsym, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolVarsym(SDF_OptLayout wsAfterLessThan, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_OptLayout wsAfterVAR) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun103))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun104)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterVAR), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(82)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(86)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun103)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(82)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(86)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun101))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun102)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterVAR), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(82)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(86)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun101)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(82)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(86)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a layout of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
  * \return A pointer to a layout, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolLayout(void) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun106)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(85)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(89)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun105)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(85)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(89)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(76)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun103))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun104)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(85)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(89)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun103)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(85)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(89)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(76)))));
 }
 /**
  * Constructs a char-class of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8440,7 +7926,7 @@ SDF_Symbol SDF_makeSymbolLayout(void) {
  * \return A pointer to a char-class, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolCharClass(SDF_CharClass CharClass) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun108)))))), (ATerm)ATmakeList1((ATerm) CharClass));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun106)))))), (ATerm)ATmakeList1((ATerm) CharClass));
 }
 /**
  * Constructs a label of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8451,7 +7937,7 @@ SDF_Symbol SDF_makeSymbolCharClass(SDF_CharClass CharClass) {
  * \return A pointer to a label, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolLabel(SDF_Label Label, SDF_OptLayout wsAfterLabel, SDF_OptLayout wsAfterColon, SDF_Symbol Symbol) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun109))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun110)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun111)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Symbol), (ATerm) wsAfterColon), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun109)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm) wsAfterLabel), (ATerm) Label));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun108)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun109)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Symbol), (ATerm) wsAfterColon), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun107)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm) wsAfterLabel), (ATerm) Label));
 }
 /**
  * Constructs a lifting of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8461,7 +7947,7 @@ SDF_Symbol SDF_makeSymbolLabel(SDF_Label Label, SDF_OptLayout wsAfterLabel, SDF_
  * \return A pointer to a lifting, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolLifting(SDF_OptLayout wsAfterLeftQuote, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun112))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun112))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun113)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun112)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLeftQuote), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun112)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun110))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun110))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun111)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun110)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterLeftQuote), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun110)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(96)))));
 }
 /**
  * Constructs a lit of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8469,7 +7955,7 @@ SDF_Symbol SDF_makeSymbolLifting(SDF_OptLayout wsAfterLeftQuote, SDF_Symbol Symb
  * \return A pointer to a lit, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolLit(SDF_StrCon string) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun114)))))), (ATerm)ATmakeList1((ATerm) string));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun112)))))), (ATerm)ATmakeList1((ATerm) string));
 }
 /**
  * Constructs a ci-lit of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8477,7 +7963,7 @@ SDF_Symbol SDF_makeSymbolLit(SDF_StrCon string) {
  * \return A pointer to a ci-lit, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolCiLit(SDF_SingleQuotedStrCon ciString) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun115)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun116)))))), (ATerm)ATmakeList1((ATerm) ciString));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun113)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun114)))))), (ATerm)ATmakeList1((ATerm) ciString));
 }
 /**
  * Constructs a empty of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8485,7 +7971,7 @@ SDF_Symbol SDF_makeSymbolCiLit(SDF_SingleQuotedStrCon ciString) {
  * \return A pointer to a empty, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolEmpty(SDF_OptLayout wsAfterParenOpen) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun117)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun115)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a seq of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8497,7 +7983,7 @@ SDF_Symbol SDF_makeSymbolEmpty(SDF_OptLayout wsAfterParenOpen) {
  * \return A pointer to a seq, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolSeq(SDF_OptLayout wsAfterParenOpen, SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_SymbolTail tail, SDF_OptLayout wsAfterTail) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun118)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterTail), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))))), (ATerm) tail)), (ATerm) wsAfterHead), (ATerm) head), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun116)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterTail), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))))), (ATerm) tail)), (ATerm) wsAfterHead), (ATerm) head), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a opt of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8506,7 +7992,7 @@ SDF_Symbol SDF_makeSymbolSeq(SDF_OptLayout wsAfterParenOpen, SDF_Symbol head, SD
  * \return A pointer to a opt, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolOpt(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun119))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun120)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(63)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun119)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(63)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun117))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun118)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(63)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun117)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(63)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
 }
 /**
  * Constructs a iter of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8515,7 +8001,7 @@ SDF_Symbol SDF_makeSymbolOpt(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
  * \return A pointer to a iter, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolIter(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun121)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun119)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
 }
 /**
  * Constructs a iter-star of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8524,7 +8010,7 @@ SDF_Symbol SDF_makeSymbolIter(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
  * \return A pointer to a iter-star, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolIterStar(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun122))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun123)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun122)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun120))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun121)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun120)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm) wsAfterSymbol), (ATerm) Symbol));
 }
 /**
  * Constructs a iter-sep of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8537,7 +8023,7 @@ SDF_Symbol SDF_makeSymbolIterStar(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol
  * \return A pointer to a iter-sep, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolIterSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_Symbol sep, SDF_OptLayout wsAfterSep, SDF_OptLayout wsAfterBraceClose) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun124)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm) wsAfterBraceClose), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterSep), (ATerm) sep), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun122)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun49)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(43)))), (ATerm) wsAfterBraceClose), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterSep), (ATerm) sep), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
 }
 /**
  * Constructs a iter-star-sep of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8550,7 +8036,7 @@ SDF_Symbol SDF_makeSymbolIterSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symb
  * \return A pointer to a iter-star-sep, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolIterStarSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_Symbol sep, SDF_OptLayout wsAfterSep, SDF_OptLayout wsAfterBraceClose) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun122))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun125)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun122)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm) wsAfterBraceClose), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterSep), (ATerm) sep), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun120))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun123)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun120)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(42)))), (ATerm) wsAfterBraceClose), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterSep), (ATerm) sep), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
 }
 /**
  * Constructs a tuple of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8563,7 +8049,7 @@ SDF_Symbol SDF_makeSymbolIterStarSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol 
  * \return A pointer to a tuple, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolTuple(SDF_OptLayout wsAfterLessThan, SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterComma, SDF_SymbolRest rest, SDF_OptLayout wsAfterRest) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun126)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterRest), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) rest)), (ATerm) wsAfterComma), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(44)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(44)))), (ATerm) wsAfterHead), (ATerm) head), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun124)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterRest), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) rest)), (ATerm) wsAfterComma), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(44)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(44)))), (ATerm) wsAfterHead), (ATerm) head), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a func of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8576,7 +8062,7 @@ SDF_Symbol SDF_makeSymbolTuple(SDF_OptLayout wsAfterLessThan, SDF_Symbol head, S
  * \return A pointer to a func, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolFunc(SDF_OptLayout wsAfterParenOpen, SDF_Symbols arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Symbol results, SDF_OptLayout wsAfterResults) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun128)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterResults), (ATerm) results), (ATerm) wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(61)))), (ATerm) wsAfterArguments), (ATerm) arguments), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun125))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun126)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterResults), (ATerm) results), (ATerm) wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun125)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(61)))), (ATerm) wsAfterArguments), (ATerm) arguments), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a alt of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8587,7 +8073,7 @@ SDF_Symbol SDF_makeSymbolFunc(SDF_OptLayout wsAfterParenOpen, SDF_Symbols argume
  * \return A pointer to a alt, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolAlt(SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterBar, SDF_Symbol right) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun129))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun130)))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun131))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterBar), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun129)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun128)))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun129))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterBar), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a strategy of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8600,21 +8086,21 @@ SDF_Symbol SDF_makeSymbolAlt(SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_Opt
  * \return A pointer to a strategy, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolStrategy(SDF_OptLayout wsAfterParenOpen, SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol right, SDF_OptLayout wsAfterRight) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun132)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterRight), (ATerm) right), (ATerm) wsAfterGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterLeft), (ATerm) left), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun130)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterRight), (ATerm) right), (ATerm) wsAfterGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterLeft), (ATerm) left), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a start of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
  * \return A pointer to a start, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolStart(void) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun44))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun133)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(82)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(83)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun44)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(82)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(83)), (ATerm)ATmakeInt(60)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun44))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun131)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(82)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(83)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun44)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(82)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(83)), (ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a file-start of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
  * \return A pointer to a file-start, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolFileStart(void) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun134))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun135)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(83)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun134)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(83)), (ATerm)ATmakeInt(60)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun132))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun133)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(83)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun132)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(83)), (ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a sort of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8622,7 +8108,7 @@ SDF_Symbol SDF_makeSymbolFileStart(void) {
  * \return A pointer to a sort, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolSort(SDF_Sort Sort) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun136)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun137)))))), (ATerm)ATmakeList1((ATerm) Sort));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun134)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun135)))))), (ATerm)ATmakeList1((ATerm) Sort));
 }
 /**
  * Constructs a parameterized-sort of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8634,7 +8120,7 @@ SDF_Symbol SDF_makeSymbolSort(SDF_Sort Sort) {
  * \return A pointer to a parameterized-sort, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolParameterizedSort(SDF_Sort Sort, SDF_OptLayout wsAfterSort, SDF_OptLayout wsAfterBracketOpenBracketOpen, SDF_SymbolParameters parameters, SDF_OptLayout wsAfterParameters) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun138))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun136)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun140)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun138)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(93)), (ATerm)ATmakeInt(93)))), (ATerm) wsAfterParameters), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) parameters)), (ATerm) wsAfterBracketOpenBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun139)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(91)), (ATerm)ATmakeInt(91)))), (ATerm) wsAfterSort), (ATerm) Sort));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun136))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun137))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun134)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun138)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun136)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(93)), (ATerm)ATmakeInt(93)))), (ATerm) wsAfterParameters), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) parameters)), (ATerm) wsAfterBracketOpenBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun137)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(91)), (ATerm)ATmakeInt(91)))), (ATerm) wsAfterSort), (ATerm) Sort));
 }
 /**
  * Constructs a Bracket of type SDF_Symbol. Like all ATerm types, SDF_Symbols are maximally shared.
@@ -8644,7 +8130,7 @@ SDF_Symbol SDF_makeSymbolParameterizedSort(SDF_Sort Sort, SDF_OptLayout wsAfterS
  * \return A pointer to a Bracket, either newly constructed or shared
  */
 SDF_Symbol SDF_makeSymbolBracket(SDF_OptLayout wsAfterParenOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol) {
-  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Symbol)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterSymbol), (ATerm) Symbol), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a Default of type SDF_CharRange. Like all ATerm types, SDF_CharRanges are maximally shared.
@@ -8652,7 +8138,7 @@ SDF_Symbol SDF_makeSymbolBracket(SDF_OptLayout wsAfterParenOpen, SDF_Symbol Symb
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_CharRange SDF_makeCharRangeDefault(SDF_Character Character) {
-  return (SDF_CharRange)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) Character));
+  return (SDF_CharRange)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun140))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) Character));
 }
 /**
  * Constructs a range of type SDF_CharRange. Like all ATerm types, SDF_CharRanges are maximally shared.
@@ -8663,7 +8149,7 @@ SDF_CharRange SDF_makeCharRangeDefault(SDF_Character Character) {
  * \return A pointer to a range, either newly constructed or shared
  */
 SDF_CharRange SDF_makeCharRangeRange(SDF_Character start, SDF_OptLayout wsAfterStart, SDF_OptLayout wsAfter, SDF_Character end) {
-  return (SDF_CharRange)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun51))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun143)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) end), (ATerm) wsAfter), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun51)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm) wsAfterStart), (ATerm) start));
+  return (SDF_CharRange)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun51))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun140))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun141)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) end), (ATerm) wsAfter), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun51)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm) wsAfterStart), (ATerm) start));
 }
 /**
  * Constructs a Default of type SDF_CharRanges. Like all ATerm types, SDF_CharRangess are maximally shared.
@@ -8671,7 +8157,7 @@ SDF_CharRange SDF_makeCharRangeRange(SDF_Character start, SDF_OptLayout wsAfterS
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_CharRanges SDF_makeCharRangesDefault(SDF_CharRange CharRange) {
-  return (SDF_CharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) CharRange));
+  return (SDF_CharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun140)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) CharRange));
 }
 /**
  * Constructs a conc of type SDF_CharRanges. Like all ATerm types, SDF_CharRangess are maximally shared.
@@ -8681,7 +8167,7 @@ SDF_CharRanges SDF_makeCharRangesDefault(SDF_CharRange CharRange) {
  * \return A pointer to a conc, either newly constructed or shared
  */
 SDF_CharRanges SDF_makeCharRangesConc(SDF_CharRanges left, SDF_OptLayout wsAfterLeft, SDF_CharRanges right) {
-  return (SDF_CharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl0(SDF_afun145))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun131))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun146)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_CharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl0(SDF_afun143))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun129))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun144)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a Bracket of type SDF_CharRanges. Like all ATerm types, SDF_CharRangess are maximally shared.
@@ -8691,14 +8177,14 @@ SDF_CharRanges SDF_makeCharRangesConc(SDF_CharRanges left, SDF_OptLayout wsAfter
  * \return A pointer to a Bracket, either newly constructed or shared
  */
 SDF_CharRanges SDF_makeCharRangesBracket(SDF_OptLayout wsAfterParenOpen, SDF_CharRanges CharRanges, SDF_OptLayout wsAfterCharRanges) {
-  return (SDF_CharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterCharRanges), (ATerm) CharRanges), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_CharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterCharRanges), (ATerm) CharRanges), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a absent of type SDF_OptCharRanges. Like all ATerm types, SDF_OptCharRangess are maximally shared.
  * \return A pointer to a absent, either newly constructed or shared
  */
 SDF_OptCharRanges SDF_makeOptCharRangesAbsent(void) {
-  return (SDF_OptCharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun147))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun56)))))), (ATerm)ATempty);
+  return (SDF_OptCharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun145))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun56)))))), (ATerm)ATempty);
 }
 /**
  * Constructs a present of type SDF_OptCharRanges. Like all ATerm types, SDF_OptCharRangess are maximally shared.
@@ -8706,7 +8192,7 @@ SDF_OptCharRanges SDF_makeOptCharRangesAbsent(void) {
  * \return A pointer to a present, either newly constructed or shared
  */
 SDF_OptCharRanges SDF_makeOptCharRangesPresent(SDF_CharRanges CharRanges) {
-  return (SDF_OptCharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun144)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun147))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun55)))))), (ATerm)ATmakeList1((ATerm) CharRanges));
+  return (SDF_OptCharRanges)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun142)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun145))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun55)))))), (ATerm)ATmakeList1((ATerm) CharRanges));
 }
 /**
  * Constructs a simple-charclass of type SDF_CharClass. Like all ATerm types, SDF_CharClasss are maximally shared.
@@ -8716,7 +8202,7 @@ SDF_OptCharRanges SDF_makeOptCharRangesPresent(SDF_CharRanges CharRanges) {
  * \return A pointer to a simple-charclass, either newly constructed or shared
  */
 SDF_CharClass SDF_makeCharClassSimpleCharclass(SDF_OptLayout wsAfterBracketOpen, SDF_OptCharRanges OptCharRanges, SDF_OptLayout wsAfterOptCharRanges) {
-  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun147)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun148)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm) wsAfterOptCharRanges), (ATerm) OptCharRanges), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))));
+  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun145)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun146)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm) wsAfterOptCharRanges), (ATerm) OptCharRanges), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))));
 }
 /**
  * Constructs a comp of type SDF_CharClass. Like all ATerm types, SDF_CharClasss are maximally shared.
@@ -8725,7 +8211,7 @@ SDF_CharClass SDF_makeCharClassSimpleCharclass(SDF_OptLayout wsAfterBracketOpen,
  * \return A pointer to a comp, either newly constructed or shared
  */
 SDF_CharClass SDF_makeCharClassComp(SDF_OptLayout wsAfterTilde, SDF_CharClass CharClass) {
-  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun150)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) CharClass), (ATerm) wsAfterTilde), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(126)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(126)))));
+  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun147))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun148)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) CharClass), (ATerm) wsAfterTilde), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(126)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun147)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(126)))));
 }
 /**
  * Constructs a diff of type SDF_CharClass. Like all ATerm types, SDF_CharClasss are maximally shared.
@@ -8736,7 +8222,7 @@ SDF_CharClass SDF_makeCharClassComp(SDF_OptLayout wsAfterTilde, SDF_CharClass Ch
  * \return A pointer to a diff, either newly constructed or shared
  */
 SDF_CharClass SDF_makeCharClassDiff(SDF_CharClass left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterSlash, SDF_CharClass right) {
-  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun151))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl0(SDF_afun145))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun152))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun153)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterSlash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun151)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl0(SDF_afun143))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun150))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun151)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterSlash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a isect of type SDF_CharClass. Like all ATerm types, SDF_CharClasss are maximally shared.
@@ -8747,7 +8233,7 @@ SDF_CharClass SDF_makeCharClassDiff(SDF_CharClass left, SDF_OptLayout wsAfterLef
  * \return A pointer to a isect, either newly constructed or shared
  */
 SDF_CharClass SDF_makeCharClassIsect(SDF_CharClass left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterSlashBackslash, SDF_CharClass right) {
-  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun154))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl0(SDF_afun145))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun152))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun155)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterSlashBackslash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun154)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(92)), (ATerm)ATmakeInt(47)))), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun152))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl0(SDF_afun143))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun150))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun153)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterSlashBackslash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun152)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(92)), (ATerm)ATmakeInt(47)))), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a union of type SDF_CharClass. Like all ATerm types, SDF_CharClasss are maximally shared.
@@ -8758,7 +8244,7 @@ SDF_CharClass SDF_makeCharClassIsect(SDF_CharClass left, SDF_OptLayout wsAfterLe
  * \return A pointer to a union, either newly constructed or shared
  */
 SDF_CharClass SDF_makeCharClassUnion(SDF_CharClass left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterBackslashSlash, SDF_CharClass right) {
-  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun156))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun152))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun157)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterBackslashSlash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun156)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(47)), (ATerm)ATmakeInt(92)))), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun154))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun150))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun155)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterBackslashSlash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun154)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(47)), (ATerm)ATmakeInt(92)))), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a Bracket of type SDF_CharClass. Like all ATerm types, SDF_CharClasss are maximally shared.
@@ -8768,7 +8254,7 @@ SDF_CharClass SDF_makeCharClassUnion(SDF_CharClass left, SDF_OptLayout wsAfterLe
  * \return A pointer to a Bracket, either newly constructed or shared
  */
 SDF_CharClass SDF_makeCharClassBracket(SDF_OptLayout wsAfterParenOpen, SDF_CharClass CharClass, SDF_OptLayout wsAfterCharClass) {
-  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl0(SDF_afun158)), (ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterCharClass), (ATerm) CharClass), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_CharClass)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl0(SDF_afun156)), (ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterCharClass), (ATerm) CharClass), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a digits of type SDF_LexNumChar. Like all ATerm types, SDF_LexNumChars are maximally shared.
@@ -8776,7 +8262,7 @@ SDF_CharClass SDF_makeCharClassBracket(SDF_OptLayout wsAfterParenOpen, SDF_CharC
  * \return A pointer to a digits, either newly constructed or shared
  */
 SDF_LexNumChar SDF_makeLexNumCharDigits(const char* number) {
-  return (SDF_LexNumChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun161)))))), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm) ((ATerm) SDF_stringToChars(number)))), (ATerm)ATmakeInt(92)));
+  return (SDF_LexNumChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun158))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun159)))))), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm) ((ATerm) SDF_stringToChars(number)))), (ATerm)ATmakeInt(92)));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_NumChar. Like all ATerm types, SDF_NumChars are maximally shared.
@@ -8784,7 +8270,7 @@ SDF_LexNumChar SDF_makeLexNumCharDigits(const char* number) {
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_NumChar SDF_makeNumCharLexToCf(SDF_LexNumChar NumChar) {
-  return (SDF_NumChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) NumChar));
+  return (SDF_NumChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun158)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun158))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) NumChar));
 }
 /**
  * Constructs a regular of type SDF_LexShortChar. Like all ATerm types, SDF_LexShortChars are maximally shared.
@@ -8792,7 +8278,7 @@ SDF_NumChar SDF_makeNumCharLexToCf(SDF_LexNumChar NumChar) {
  * \return A pointer to a regular, either newly constructed or shared
  */
 SDF_LexShortChar SDF_makeLexShortCharRegular(char character) {
-  return (SDF_LexShortChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun162))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun163)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(character))));
+  return (SDF_LexShortChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun161)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(character))));
 }
 /**
  * Constructs a escaped of type SDF_LexShortChar. Like all ATerm types, SDF_LexShortChars are maximally shared.
@@ -8800,7 +8286,7 @@ SDF_LexShortChar SDF_makeLexShortCharRegular(char character) {
  * \return A pointer to a escaped, either newly constructed or shared
  */
 SDF_LexShortChar SDF_makeLexShortCharEscaped(char escape) {
-  return (SDF_LexShortChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(123), (ATerm)ATmakeInt(255))), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(91), (ATerm)ATmakeInt(96))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(58), (ATerm)ATmakeInt(64))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(32), (ATerm)ATmakeInt(47))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun162))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun164)))))), (ATerm)ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(escape))), (ATerm)ATmakeInt(92)));
+  return (SDF_LexShortChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(123), (ATerm)ATmakeInt(255))), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(91), (ATerm)ATmakeInt(96))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(58), (ATerm)ATmakeInt(64))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(32), (ATerm)ATmakeInt(47))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun162)))))), (ATerm)ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(escape))), (ATerm)ATmakeInt(92)));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_ShortChar. Like all ATerm types, SDF_ShortChars are maximally shared.
@@ -8808,7 +8294,7 @@ SDF_LexShortChar SDF_makeLexShortCharEscaped(char escape) {
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_ShortChar SDF_makeShortCharLexToCf(SDF_LexShortChar ShortChar) {
-  return (SDF_ShortChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun162)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun162))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) ShortChar));
+  return (SDF_ShortChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) ShortChar));
 }
 /**
  * Constructs a numeric of type SDF_Character. Like all ATerm types, SDF_Characters are maximally shared.
@@ -8816,7 +8302,7 @@ SDF_ShortChar SDF_makeShortCharLexToCf(SDF_LexShortChar ShortChar) {
  * \return A pointer to a numeric, either newly constructed or shared
  */
 SDF_Character SDF_makeCharacterNumeric(SDF_NumChar NumChar) {
-  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun165)))))), (ATerm)ATmakeList1((ATerm) NumChar));
+  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun158)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun163)))))), (ATerm)ATmakeList1((ATerm) NumChar));
 }
 /**
  * Constructs a short of type SDF_Character. Like all ATerm types, SDF_Characters are maximally shared.
@@ -8824,35 +8310,35 @@ SDF_Character SDF_makeCharacterNumeric(SDF_NumChar NumChar) {
  * \return A pointer to a short, either newly constructed or shared
  */
 SDF_Character SDF_makeCharacterShort(SDF_ShortChar ShortChar) {
-  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun162)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun166)))))), (ATerm)ATmakeList1((ATerm) ShortChar));
+  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun160)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun164)))))), (ATerm)ATmakeList1((ATerm) ShortChar));
 }
 /**
  * Constructs a top of type SDF_Character. Like all ATerm types, SDF_Characters are maximally shared.
  * \return A pointer to a top, either newly constructed or shared
  */
 SDF_Character SDF_makeCharacterTop(void) {
-  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun167))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun168)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(80)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun167)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(80)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(92)))));
+  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun165))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun166)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(80)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun165)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(80)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a eof of type SDF_Character. Like all ATerm types, SDF_Characters are maximally shared.
  * \return A pointer to a eof, either newly constructed or shared
  */
 SDF_Character SDF_makeCharacterEof(void) {
-  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun169))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun170)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(70)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(69)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun169)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(70)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(69)), (ATerm)ATmakeInt(92)))));
+  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun167))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun168)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(70)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(69)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun167)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(70)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(69)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a bot of type SDF_Character. Like all ATerm types, SDF_Characters are maximally shared.
  * \return A pointer to a bot, either newly constructed or shared
  */
 SDF_Character SDF_makeCharacterBot(void) {
-  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun171))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun172)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(66)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun171)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(66)), (ATerm)ATmakeInt(92)))));
+  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun169))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun170)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(79)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(66)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun169)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(79)), (ATerm)ATmakeInt(66)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a label_start of type SDF_Character. Like all ATerm types, SDF_Characters are maximally shared.
  * \return A pointer to a label_start, either newly constructed or shared
  */
 SDF_Character SDF_makeCharacterLabelUnderscoreStart(void) {
-  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun173))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun141))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun174)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(82)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(83)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(95)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(69)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(66)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun173)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(82)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(83)), (ATerm)ATmakeInt(95)), (ATerm)ATmakeInt(76)), (ATerm)ATmakeInt(69)), (ATerm)ATmakeInt(66)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(76)), (ATerm)ATmakeInt(92)))));
+  return (SDF_Character)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun171))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun172)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(82)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(84)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(83)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(95)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(69)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(66)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(65)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(76)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun171)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(82)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(84)), (ATerm)ATmakeInt(83)), (ATerm)ATmakeInt(95)), (ATerm)ATmakeInt(76)), (ATerm)ATmakeInt(69)), (ATerm)ATmakeInt(66)), (ATerm)ATmakeInt(65)), (ATerm)ATmakeInt(76)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a default of type SDF_ATermAttribute. Like all ATerm types, SDF_ATermAttributes are maximally shared.
@@ -8860,7 +8346,7 @@ SDF_Character SDF_makeCharacterLabelUnderscoreStart(void) {
  * \return A pointer to a default, either newly constructed or shared
  */
 SDF_ATermAttribute SDF_makeATermAttributeDefault(SDF_ATerm aterm) {
-  return (SDF_ATermAttribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun19)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun175))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATmakeList1((ATerm) aterm));
+  return (SDF_ATermAttribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun19)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun173))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATmakeList1((ATerm) aterm));
 }
 /**
  * Constructs a term of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
@@ -8868,7 +8354,7 @@ SDF_ATermAttribute SDF_makeATermAttributeDefault(SDF_ATerm aterm) {
  * \return A pointer to a term, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributeTerm(SDF_ATermAttribute ATermAttribute) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun175)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun177)))))), (ATerm)ATmakeList1((ATerm) ATermAttribute));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun173)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun175)))))), (ATerm)ATmakeList1((ATerm) ATermAttribute));
 }
 /**
  * Constructs a id of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
@@ -8879,14 +8365,14 @@ SDF_Attribute SDF_makeAttributeTerm(SDF_ATermAttribute ATermAttribute) {
  * \return A pointer to a id, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributeId(SDF_OptLayout wsAfterId, SDF_OptLayout wsAfterParenOpen, SDF_ModuleName ModuleName, SDF_OptLayout wsAfterModuleName) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun178)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun179))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun179)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterModuleName), (ATerm) ModuleName), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm) wsAfterId), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun179)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(105)))));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun177))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun177)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterModuleName), (ATerm) ModuleName), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm) wsAfterId), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun177)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(105)))));
 }
 /**
  * Constructs a bracket of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
  * \return A pointer to a bracket, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributeBracket(void) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun180))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun180)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(107)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun180)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(107)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(98)))));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun178))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun178)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(107)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun178)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(107)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(98)))));
 }
 /**
  * Constructs a assoc of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
@@ -8894,28 +8380,28 @@ SDF_Attribute SDF_makeAttributeBracket(void) {
  * \return A pointer to a assoc, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributeAssoc(SDF_Associativity Associativity) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun182)))))), (ATerm)ATmakeList1((ATerm) Associativity));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun180)))))), (ATerm)ATmakeList1((ATerm) Associativity));
 }
 /**
  * Constructs a reject of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
  * \return A pointer to a reject, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributeReject(void) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun183))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun183)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(106)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun183)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(106)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun181))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun181)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(106)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun181)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(106)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)))));
 }
 /**
  * Constructs a prefer of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
  * \return A pointer to a prefer, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributePrefer(void) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun184))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun184)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun184)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun182))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun182)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun182)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))));
 }
 /**
  * Constructs a avoid of type SDF_Attribute. Like all ATerm types, SDF_Attributes are maximally shared.
  * \return A pointer to a avoid, either newly constructed or shared
  */
 SDF_Attribute SDF_makeAttributeAvoid(void) {
-  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun185))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun185)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(118)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun185)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(118)), (ATerm)ATmakeInt(97)))));
+  return (SDF_Attribute)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun183))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun183)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(118)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun183)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(118)), (ATerm)ATmakeInt(97)))));
 }
 /**
  * Constructs a attrs of type SDF_Attributes. Like all ATerm types, SDF_Attributess are maximally shared.
@@ -8925,14 +8411,14 @@ SDF_Attribute SDF_makeAttributeAvoid(void) {
  * \return A pointer to a attrs, either newly constructed or shared
  */
 SDF_Attributes SDF_makeAttributesAttrs(SDF_OptLayout wsAfterBraceOpen, SDF_AttributeList list, SDF_OptLayout wsAfterList) {
-  return (SDF_Attributes)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun186))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun187)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) list)), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
+  return (SDF_Attributes)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun184))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun185)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun174)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) list)), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
 }
 /**
  * Constructs a no-attrs of type SDF_Attributes. Like all ATerm types, SDF_Attributess are maximally shared.
  * \return A pointer to a no-attrs, either newly constructed or shared
  */
 SDF_Attributes SDF_makeAttributesNoAttrs(void) {
-  return (SDF_Attributes)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun186))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun188)))))), (ATerm)ATempty);
+  return (SDF_Attributes)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun184))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun186)))))), (ATerm)ATempty);
 }
 /**
  * Constructs a prod of type SDF_Production. Like all ATerm types, SDF_Productions are maximally shared.
@@ -8945,7 +8431,7 @@ SDF_Attributes SDF_makeAttributesNoAttrs(void) {
  * \return A pointer to a prod, either newly constructed or shared
  */
 SDF_Production SDF_makeProductionProd(SDF_Symbols Symbols, SDF_OptLayout wsAfterSymbols, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol result, SDF_OptLayout wsAfterResult, SDF_Attributes Attributes) {
-  return (SDF_Production)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun186)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun190)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Attributes), (ATerm) wsAfterResult), (ATerm) result), (ATerm) wsAfterGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbols), (ATerm) Symbols));
+  return (SDF_Production)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun184)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun188)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Attributes), (ATerm) wsAfterResult), (ATerm) result), (ATerm) wsAfterGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbols), (ATerm) Symbols));
 }
 /**
  * Constructs a prefix-fun of type SDF_Production. Like all ATerm types, SDF_Productions are maximally shared.
@@ -8962,7 +8448,7 @@ SDF_Production SDF_makeProductionProd(SDF_Symbols Symbols, SDF_OptLayout wsAfter
  * \return A pointer to a prefix-fun, either newly constructed or shared
  */
 SDF_Production SDF_makeProductionPrefixFun(SDF_FunctionName fun, SDF_OptLayout wsAfterFun, SDF_OptLayout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterParenClose, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol result, SDF_OptLayout wsAfterResult, SDF_Attributes Attributes) {
-  return (SDF_Production)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun186)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun191)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun192)))), (ATerm)ATmakeAppl0(SDF_afun158)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Attributes), (ATerm) wsAfterResult), (ATerm) result), (ATerm) wsAfterGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun95)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterParenClose), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterArguments), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) arguments)), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm) wsAfterFun), (ATerm) fun));
+  return (SDF_Production)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun184)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun190)))), (ATerm)ATmakeAppl0(SDF_afun156)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Attributes), (ATerm) wsAfterResult), (ATerm) result), (ATerm) wsAfterGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun93)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterParenClose), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterArguments), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) arguments)), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm) wsAfterFun), (ATerm) fun));
 }
 /**
  * Constructs a Default of type SDF_Productions. Like all ATerm types, SDF_Productionss are maximally shared.
@@ -8970,7 +8456,7 @@ SDF_Production SDF_makeProductionPrefixFun(SDF_FunctionName fun, SDF_OptLayout w
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Productions SDF_makeProductionsDefault(SDF_ProductionList list) {
-  return (SDF_Productions)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189))))), (ATerm) list)));
+  return (SDF_Productions)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187))))), (ATerm) list)));
 }
 /**
  * Constructs a empty of type SDF_AttributeList. Like all ATerm types, SDF_AttributeLists are maximally shared.
@@ -9035,7 +8521,7 @@ SDF_ProductionList SDF_makeProductionListMany(SDF_Production head, SDF_OptLayout
  * \return A pointer to a quoted, either newly constructed or shared
  */
 SDF_Label SDF_makeLabelQuoted(SDF_StrCon StrCon) {
-  return (SDF_Label)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun110))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun15)))))), (ATerm)ATmakeList1((ATerm) StrCon));
+  return (SDF_Label)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun108))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun15)))))), (ATerm)ATmakeList1((ATerm) StrCon));
 }
 /**
  * Constructs a unquoted of type SDF_Label. Like all ATerm types, SDF_Labels are maximally shared.
@@ -9043,35 +8529,35 @@ SDF_Label SDF_makeLabelQuoted(SDF_StrCon StrCon) {
  * \return A pointer to a unquoted, either newly constructed or shared
  */
 SDF_Label SDF_makeLabelUnquoted(SDF_IdCon IdCon) {
-  return (SDF_Label)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun16)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun110))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun17)))))), (ATerm)ATmakeList1((ATerm) IdCon));
+  return (SDF_Label)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun16)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun108))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun17)))))), (ATerm)ATmakeList1((ATerm) IdCon));
 }
 /**
  * Constructs a newline of type SDF_LexSingleQuotedStrChar. Like all ATerm types, SDF_LexSingleQuotedStrChars are maximally shared.
  * \return A pointer to a newline, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharNewline(void) {
-  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun193))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun195)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun193)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun191))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun193)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun191)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a tab of type SDF_LexSingleQuotedStrChar. Like all ATerm types, SDF_LexSingleQuotedStrChars are maximally shared.
  * \return A pointer to a tab, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharTab(void) {
-  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun196))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun197)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun196)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun195)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun194)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a quote of type SDF_LexSingleQuotedStrChar. Like all ATerm types, SDF_LexSingleQuotedStrChars are maximally shared.
  * \return A pointer to a quote, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharQuote(void) {
-  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun198))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun199)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(39)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun198)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(39)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun196))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun197)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(39)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun196)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(39)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a backslash of type SDF_LexSingleQuotedStrChar. Like all ATerm types, SDF_LexSingleQuotedStrChars are maximally shared.
  * \return A pointer to a backslash, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharBackslash(void) {
-  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun201)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(92)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun198))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun199)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun198)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(92)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a decimal of type SDF_LexSingleQuotedStrChar. Like all ATerm types, SDF_LexSingleQuotedStrChars are maximally shared.
@@ -9081,7 +8567,7 @@ SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharBackslash(void) {
  * \return A pointer to a decimal, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharDecimal(char a, char b, char c) {
-  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun202))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun203)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(c))), (ATerm) ((ATerm) SDF_byteToChar(b))), (ATerm) ((ATerm) SDF_byteToChar(a))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun202)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))));
+  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun201)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(c))), (ATerm) ((ATerm) SDF_byteToChar(b))), (ATerm) ((ATerm) SDF_byteToChar(a))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a normal of type SDF_LexSingleQuotedStrChar. Like all ATerm types, SDF_LexSingleQuotedStrChars are maximally shared.
@@ -9089,7 +8575,7 @@ SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharDecimal(char a, char b,
  * \return A pointer to a normal, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharNormal(char ch) {
-  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(93), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(40), (ATerm)ATmakeInt(91))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(32), (ATerm)ATmakeInt(38))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun204)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(ch))));
+  return (SDF_LexSingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(93), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(40), (ATerm)ATmakeInt(91))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(32), (ATerm)ATmakeInt(38))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun202)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(ch))));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_SingleQuotedStrChar. Like all ATerm types, SDF_SingleQuotedStrChars are maximally shared.
@@ -9097,7 +8583,7 @@ SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharNormal(char ch) {
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_SingleQuotedStrChar SDF_makeSingleQuotedStrCharLexToCf(SDF_LexSingleQuotedStrChar SingleQuotedStrChar) {
-  return (SDF_SingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) SingleQuotedStrChar));
+  return (SDF_SingleQuotedStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) SingleQuotedStrChar));
 }
 /**
  * Constructs a default of type SDF_LexSingleQuotedStrCon. Like all ATerm types, SDF_LexSingleQuotedStrCons are maximally shared.
@@ -9105,7 +8591,7 @@ SDF_SingleQuotedStrChar SDF_makeSingleQuotedStrCharLexToCf(SDF_LexSingleQuotedSt
  * \return A pointer to a default, either newly constructed or shared
  */
 SDF_LexSingleQuotedStrCon SDF_makeLexSingleQuotedStrConDefault(SDF_LexSingleQuotedStrCharChars chars) {
-  return (SDF_LexSingleQuotedStrCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(39)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(39)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun115))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(39)), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun194))))), (ATerm) chars)), (ATerm)ATmakeInt(39)));
+  return (SDF_LexSingleQuotedStrCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(39)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(39)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun113))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(39)), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun192))))), (ATerm) chars)), (ATerm)ATmakeInt(39)));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_SingleQuotedStrCon. Like all ATerm types, SDF_SingleQuotedStrCons are maximally shared.
@@ -9113,7 +8599,7 @@ SDF_LexSingleQuotedStrCon SDF_makeLexSingleQuotedStrConDefault(SDF_LexSingleQuot
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_SingleQuotedStrCon SDF_makeSingleQuotedStrConLexToCf(SDF_LexSingleQuotedStrCon SingleQuotedStrCon) {
-  return (SDF_SingleQuotedStrCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun115)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun115))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) SingleQuotedStrCon));
+  return (SDF_SingleQuotedStrCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun113)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun113))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) SingleQuotedStrCon));
 }
 /**
  * Constructs a unquoted-fun of type SDF_FunctionName. Like all ATerm types, SDF_FunctionNames are maximally shared.
@@ -9121,7 +8607,7 @@ SDF_SingleQuotedStrCon SDF_makeSingleQuotedStrConLexToCf(SDF_LexSingleQuotedStrC
  * \return A pointer to a unquoted-fun, either newly constructed or shared
  */
 SDF_FunctionName SDF_makeFunctionNameUnquotedFun(SDF_IdCon IdCon) {
-  return (SDF_FunctionName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun16)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun191))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun205)))))), (ATerm)ATmakeList1((ATerm) IdCon));
+  return (SDF_FunctionName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun16)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun203)))))), (ATerm)ATmakeList1((ATerm) IdCon));
 }
 /**
  * Constructs a quoted-fun of type SDF_FunctionName. Like all ATerm types, SDF_FunctionNames are maximally shared.
@@ -9129,7 +8615,7 @@ SDF_FunctionName SDF_makeFunctionNameUnquotedFun(SDF_IdCon IdCon) {
  * \return A pointer to a quoted-fun, either newly constructed or shared
  */
 SDF_FunctionName SDF_makeFunctionNameQuotedFun(SDF_StrCon StrCon) {
-  return (SDF_FunctionName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun191))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun206)))))), (ATerm)ATmakeList1((ATerm) StrCon));
+  return (SDF_FunctionName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun204)))))), (ATerm)ATmakeList1((ATerm) StrCon));
 }
 /**
  * Constructs a empty of type SDF_LexSingleQuotedStrCharChars. Like all ATerm types, SDF_LexSingleQuotedStrCharCharss are maximally shared.
@@ -9190,7 +8676,7 @@ SDF_SymbolArguments SDF_makeSymbolArgumentsMany(SDF_Symbol head, SDF_OptLayout w
  * \return A pointer to a word, either newly constructed or shared
  */
 SDF_LexModuleWord SDF_makeLexModuleWordWord(const char* letters) {
-  return (SDF_LexModuleWord)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeInt(95)), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun208)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeInt(95)), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm) ((ATerm) SDF_stringToChars(letters)))));
+  return (SDF_LexModuleWord)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeInt(95)), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun205))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun206)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeInt(95)), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm) ((ATerm) SDF_stringToChars(letters)))));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_ModuleWord. Like all ATerm types, SDF_ModuleWords are maximally shared.
@@ -9198,7 +8684,7 @@ SDF_LexModuleWord SDF_makeLexModuleWordWord(const char* letters) {
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_ModuleWord SDF_makeModuleWordLexToCf(SDF_LexModuleWord ModuleWord) {
-  return (SDF_ModuleWord)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) ModuleWord));
+  return (SDF_ModuleWord)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun205)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun205))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) ModuleWord));
 }
 /**
  * Constructs a leaf of type SDF_LexModuleId. Like all ATerm types, SDF_LexModuleIds are maximally shared.
@@ -9206,7 +8692,7 @@ SDF_ModuleWord SDF_makeModuleWordLexToCf(SDF_LexModuleWord ModuleWord) {
  * \return A pointer to a leaf, either newly constructed or shared
  */
 SDF_LexModuleId SDF_makeLexModuleIdLeaf(SDF_LexModuleWord ModuleWord) {
-  return (SDF_LexModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun210)))))), (ATerm)ATmakeList1((ATerm) ModuleWord));
+  return (SDF_LexModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun205)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun208)))))), (ATerm)ATmakeList1((ATerm) ModuleWord));
 }
 /**
  * Constructs a root of type SDF_LexModuleId. Like all ATerm types, SDF_LexModuleIds are maximally shared.
@@ -9214,7 +8700,7 @@ SDF_LexModuleId SDF_makeLexModuleIdLeaf(SDF_LexModuleWord ModuleWord) {
  * \return A pointer to a root, either newly constructed or shared
  */
 SDF_LexModuleId SDF_makeLexModuleIdRoot(SDF_LexModuleId basename) {
-  return (SDF_LexModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun151))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun211)))))), (ATerm)ATinsert(ATmakeList1((ATerm) basename), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun151)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))));
+  return (SDF_LexModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun209)))))), (ATerm)ATinsert(ATmakeList1((ATerm) basename), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))));
 }
 /**
  * Constructs a path of type SDF_LexModuleId. Like all ATerm types, SDF_LexModuleIds are maximally shared.
@@ -9223,7 +8709,7 @@ SDF_LexModuleId SDF_makeLexModuleIdRoot(SDF_LexModuleId basename) {
  * \return A pointer to a path, either newly constructed or shared
  */
 SDF_LexModuleId SDF_makeLexModuleIdPath(SDF_LexModuleWord dirname, SDF_LexModuleId basename) {
-  return (SDF_LexModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun151))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun212)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) basename), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun151)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm) dirname));
+  return (SDF_LexModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun205)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun210)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) basename), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun149)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm) dirname));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_ModuleId. Like all ATerm types, SDF_ModuleIds are maximally shared.
@@ -9231,7 +8717,7 @@ SDF_LexModuleId SDF_makeLexModuleIdPath(SDF_LexModuleWord dirname, SDF_LexModule
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_ModuleId SDF_makeModuleIdLexToCf(SDF_LexModuleId ModuleId) {
-  return (SDF_ModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) ModuleId));
+  return (SDF_ModuleId)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) ModuleId));
 }
 /**
  * Constructs a Default of type SDF_Definition. Like all ATerm types, SDF_Definitions are maximally shared.
@@ -9239,7 +8725,7 @@ SDF_ModuleId SDF_makeModuleIdLexToCf(SDF_LexModuleId ModuleId) {
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleList list) {
-  return (SDF_Definition)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun45))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun213))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun45))))), (ATerm) list)));
+  return (SDF_Definition)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun45))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun211))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun45))))), (ATerm) list)));
 }
 /**
  * Constructs a module of type SDF_Module. Like all ATerm types, SDF_Modules are maximally shared.
@@ -9252,7 +8738,7 @@ SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleList list) {
  * \return A pointer to a module, either newly constructed or shared
  */
 SDF_Module SDF_makeModuleModule(SDF_OptLayout wsAfterModule, SDF_ModuleName ModuleName, SDF_OptLayout wsAfterModuleName, SDF_ImpSectionList list, SDF_OptLayout wsAfterList, SDF_Sections Sections) {
-  return (SDF_Module)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun214)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun76))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun178)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun215))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun45))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun215)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Sections), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun76))))), (ATerm) list)), (ATerm) wsAfterModuleName), (ATerm) ModuleName), (ATerm) wsAfterModule), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(117)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun215)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(117)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(109)))));
+  return (SDF_Module)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun212)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun76))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun213))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun45))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun213)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Sections), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun76))))), (ATerm) list)), (ATerm) wsAfterModuleName), (ATerm) ModuleName), (ATerm) wsAfterModule), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(117)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun213)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(117)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(109)))));
 }
 /**
  * Constructs a exports of type SDF_Section. Like all ATerm types, SDF_Sections are maximally shared.
@@ -9261,7 +8747,7 @@ SDF_Module SDF_makeModuleModule(SDF_OptLayout wsAfterModule, SDF_ModuleName Modu
  * \return A pointer to a exports, either newly constructed or shared
  */
 SDF_Section SDF_makeSectionExports(SDF_OptLayout wsAfterExports, SDF_Grammar Grammar) {
-  return (SDF_Section)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun216))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun217))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun216)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Grammar), (ATerm) wsAfterExports), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun216)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(112)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)))));
+  return (SDF_Section)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun214))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun215))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun214)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Grammar), (ATerm) wsAfterExports), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(120)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun214)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(112)), (ATerm)ATmakeInt(120)), (ATerm)ATmakeInt(101)))));
 }
 /**
  * Constructs a hiddens of type SDF_Section. Like all ATerm types, SDF_Sections are maximally shared.
@@ -9270,7 +8756,7 @@ SDF_Section SDF_makeSectionExports(SDF_OptLayout wsAfterExports, SDF_Grammar Gra
  * \return A pointer to a hiddens, either newly constructed or shared
  */
 SDF_Section SDF_makeSectionHiddens(SDF_OptLayout wsAfterHiddens, SDF_Grammar Grammar) {
-  return (SDF_Section)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun218))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun217))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun218)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Grammar), (ATerm) wsAfterHiddens), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(104)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun218)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(104)))));
+  return (SDF_Section)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun61)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun216))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun215))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun216)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Grammar), (ATerm) wsAfterHiddens), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(104)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun216)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(104)))));
 }
 /**
  * Constructs a Default of type SDF_Sections. Like all ATerm types, SDF_Sectionss are maximally shared.
@@ -9278,7 +8764,7 @@ SDF_Section SDF_makeSectionHiddens(SDF_OptLayout wsAfterHiddens, SDF_Grammar Gra
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Sections SDF_makeSectionsDefault(SDF_SectionList list) {
-  return (SDF_Sections)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun217))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun214))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun217))))), (ATerm) list)));
+  return (SDF_Sections)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun215))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun212))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun215))))), (ATerm) list)));
 }
 /**
  * Constructs a unparameterized of type SDF_ModuleName. Like all ATerm types, SDF_ModuleNames are maximally shared.
@@ -9286,7 +8772,7 @@ SDF_Sections SDF_makeSectionsDefault(SDF_SectionList list) {
  * \return A pointer to a unparameterized, either newly constructed or shared
  */
 SDF_ModuleName SDF_makeModuleNameUnparameterized(SDF_ModuleId ModuleId) {
-  return (SDF_ModuleName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun178))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun219)))))), (ATerm)ATmakeList1((ATerm) ModuleId));
+  return (SDF_ModuleName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun217)))))), (ATerm)ATmakeList1((ATerm) ModuleId));
 }
 /**
  * Constructs a parameterized of type SDF_ModuleName. Like all ATerm types, SDF_ModuleNames are maximally shared.
@@ -9298,7 +8784,7 @@ SDF_ModuleName SDF_makeModuleNameUnparameterized(SDF_ModuleId ModuleId) {
  * \return A pointer to a parameterized, either newly constructed or shared
  */
 SDF_ModuleName SDF_makeModuleNameParameterized(SDF_ModuleId ModuleId, SDF_OptLayout wsAfterModuleId, SDF_OptLayout wsAfterBracketOpen, SDF_Symbols params, SDF_OptLayout wsAfterParams) {
-  return (SDF_ModuleName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun209)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun178))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun220)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm) wsAfterParams), (ATerm) params), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm) wsAfterModuleId), (ATerm) ModuleId));
+  return (SDF_ModuleName)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun207)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun218)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm) wsAfterParams), (ATerm) params), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm) wsAfterModuleId), (ATerm) ModuleId));
 }
 /**
  * Constructs a imports of type SDF_ImpSection. Like all ATerm types, SDF_ImpSections are maximally shared.
@@ -9307,7 +8793,7 @@ SDF_ModuleName SDF_makeModuleNameParameterized(SDF_ModuleId ModuleId, SDF_OptLay
  * \return A pointer to a imports, either newly constructed or shared
  */
 SDF_ImpSection SDF_makeImpSectionImports(SDF_OptLayout wsAfterImports, SDF_Imports list) {
-  return (SDF_ImpSection)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun222))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun76))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun222)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) list), (ATerm) wsAfterImports), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun222)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(112)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(105)))));
+  return (SDF_ImpSection)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun219)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun220))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun76))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun220)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) list), (ATerm) wsAfterImports), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(109)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun220)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(112)), (ATerm)ATmakeInt(109)), (ATerm)ATmakeInt(105)))));
 }
 /**
  * Constructs a Default of type SDF_Imports. Like all ATerm types, SDF_Importss are maximally shared.
@@ -9315,7 +8801,7 @@ SDF_ImpSection SDF_makeImpSectionImports(SDF_OptLayout wsAfterImports, SDF_Impor
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Imports SDF_makeImportsDefault(SDF_ImportList list) {
-  return (SDF_Imports)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun223))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun223))))), (ATerm) list)));
+  return (SDF_Imports)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun219))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221))))), (ATerm) list)));
 }
 /**
  * Constructs a module of type SDF_Import. Like all ATerm types, SDF_Imports are maximally shared.
@@ -9323,7 +8809,7 @@ SDF_Imports SDF_makeImportsDefault(SDF_ImportList list) {
  * \return A pointer to a module, either newly constructed or shared
  */
 SDF_Import SDF_makeImportModule(SDF_ModuleName ModuleName) {
-  return (SDF_Import)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun178)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun223))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun215)))))), (ATerm)ATmakeList1((ATerm) ModuleName));
+  return (SDF_Import)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun213)))))), (ATerm)ATmakeList1((ATerm) ModuleName));
 }
 /**
  * Constructs a renamed-module of type SDF_Import. Like all ATerm types, SDF_Imports are maximally shared.
@@ -9333,7 +8819,7 @@ SDF_Import SDF_makeImportModule(SDF_ModuleName ModuleName) {
  * \return A pointer to a renamed-module, either newly constructed or shared
  */
 SDF_Import SDF_makeImportRenamedModule(SDF_ModuleName ModuleName, SDF_OptLayout wsAfterModuleName, SDF_Renamings Renamings) {
-  return (SDF_Import)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun224)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun178)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun223))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun225)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Renamings), (ATerm) wsAfterModuleName), (ATerm) ModuleName));
+  return (SDF_Import)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun222)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun176)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun223)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Renamings), (ATerm) wsAfterModuleName), (ATerm) ModuleName));
 }
 /**
  * Constructs a Bracket of type SDF_Import. Like all ATerm types, SDF_Imports are maximally shared.
@@ -9343,7 +8829,7 @@ SDF_Import SDF_makeImportRenamedModule(SDF_ModuleName ModuleName, SDF_OptLayout 
  * \return A pointer to a Bracket, either newly constructed or shared
  */
 SDF_Import SDF_makeImportBracket(SDF_OptLayout wsAfterParenOpen, SDF_Import Import, SDF_OptLayout wsAfterImport) {
-  return (SDF_Import)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun223)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun223))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterImport), (ATerm) Import), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Import)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun221))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterImport), (ATerm) Import), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a empty of type SDF_ModuleList. Like all ATerm types, SDF_ModuleLists are maximally shared.
@@ -9458,53 +8944,32 @@ SDF_ImportList SDF_makeImportListMany(SDF_Import head, SDF_OptLayout wsAfterHead
   return (SDF_ImportList)(ATerm)ATinsert(ATinsert((ATermList)tail, (ATerm) wsAfterHead), (ATerm) head);
 }
 /**
- * Constructs a nullable-productions of type SDF_Property. Like all ATerm types, SDF_Propertys are maximally shared.
- * \param[in] wsAfterNullable a child of the new nullable-productions
- * \param[in] wsAfterProductions a child of the new nullable-productions
- * \param[in] Productions a child of the new nullable-productions
- * \return A pointer to a nullable-productions, either newly constructed or shared
- */
-SDF_Property SDF_makePropertyNullableProductions(SDF_OptLayout wsAfterNullable, SDF_OptLayout wsAfterProductions, SDF_Productions Productions) {
-  return (SDF_Property)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun226))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun227))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun229)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Productions), (ATerm) wsAfterProductions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(117)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun226)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(117)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))), (ATerm) wsAfterNullable), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(117)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun227)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(117)), (ATerm)ATmakeInt(110)))));
-}
-/**
- * Constructs a right-nullable-productions of type SDF_Property. Like all ATerm types, SDF_Propertys are maximally shared.
- * \param[in] wsAfterRight a child of the new right-nullable-productions
- * \param[in] wsAfterNullable a child of the new right-nullable-productions
- * \param[in] wsAfterProductions a child of the new right-nullable-productions
- * \param[in] list a child of the new right-nullable-productions
- * \return A pointer to a right-nullable-productions, either newly constructed or shared
- */
-SDF_Property SDF_makePropertyRightNullableProductions(SDF_OptLayout wsAfterRight, SDF_OptLayout wsAfterNullable, SDF_OptLayout wsAfterProductions, SDF_RightNullableProductionList list) {
-  return (SDF_Property)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun230))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun226))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun227))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun231))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun232)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun230))))), (ATerm) list)), (ATerm) wsAfterProductions), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(117)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(112)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun226)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(117)), (ATerm)ATmakeInt(100)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(114)), (ATerm)ATmakeInt(112)))), (ATerm) wsAfterNullable), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(98)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(117)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun227)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(98)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(108)), (ATerm)ATmakeInt(117)), (ATerm)ATmakeInt(110)))), (ATerm) wsAfterRight), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(104)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(103)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun231)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(104)), (ATerm)ATmakeInt(103)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)))));
-}
-/**
  * Constructs a left of type SDF_Associativity. Like all ATerm types, SDF_Associativitys are maximally shared.
  * \return A pointer to a left, either newly constructed or shared
  */
 SDF_Associativity SDF_makeAssociativityLeft(void) {
-  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun233))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun233)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun233)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
+  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun224))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun224)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(108)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun224)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(108)))));
 }
 /**
  * Constructs a right of type SDF_Associativity. Like all ATerm types, SDF_Associativitys are maximally shared.
  * \return A pointer to a right, either newly constructed or shared
  */
 SDF_Associativity SDF_makeAssociativityRight(void) {
-  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun231))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun231)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(104)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(103)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun231)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(104)), (ATerm)ATmakeInt(103)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)))));
+  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun225))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun225)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(104)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(103)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(114)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun225)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(104)), (ATerm)ATmakeInt(103)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(114)))));
 }
 /**
  * Constructs a non-assoc of type SDF_Associativity. Like all ATerm types, SDF_Associativitys are maximally shared.
  * \return A pointer to a non-assoc, either newly constructed or shared
  */
 SDF_Associativity SDF_makeAssociativityNonAssoc(void) {
-  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun234))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun234)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun234)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(110)))));
+  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun226))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun226)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun226)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(97)), (ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(110)))));
 }
 /**
  * Constructs a assoc of type SDF_Associativity. Like all ATerm types, SDF_Associativitys are maximally shared.
  * \return A pointer to a assoc, either newly constructed or shared
  */
 SDF_Associativity SDF_makeAssociativityAssoc(void) {
-  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun182))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun182)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun182)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(97)))));
+  return (SDF_Associativity)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun180))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun180)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(99)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(115)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(97)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun180)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(99)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(115)), (ATerm)ATmakeInt(97)))));
 }
 /**
  * Constructs a default of type SDF_ArgumentIndicator. Like all ATerm types, SDF_ArgumentIndicators are maximally shared.
@@ -9514,7 +8979,7 @@ SDF_Associativity SDF_makeAssociativityAssoc(void) {
  * \return A pointer to a default, either newly constructed or shared
  */
 SDF_ArgumentIndicator SDF_makeArgumentIndicatorDefault(SDF_OptLayout wsAfterLessThan, SDF_NatConArguments arguments, SDF_OptLayout wsAfterArguments) {
-  return (SDF_ArgumentIndicator)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun235))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterArguments), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) arguments)), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
+  return (SDF_ArgumentIndicator)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun227))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm) wsAfterArguments), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) arguments)), (ATerm) wsAfterLessThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun32)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(60)))));
 }
 /**
  * Constructs a with-arguments of type SDF_Group. Like all ATerm types, SDF_Groups are maximally shared.
@@ -9524,7 +8989,16 @@ SDF_ArgumentIndicator SDF_makeArgumentIndicatorDefault(SDF_OptLayout wsAfterLess
  * \return A pointer to a with-arguments, either newly constructed or shared
  */
 SDF_Group SDF_makeGroupWithArguments(SDF_Group Group, SDF_OptLayout wsAfterGroup, SDF_ArgumentIndicator ArgumentIndicator) {
-  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun235)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun237)))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun238))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) ArgumentIndicator), (ATerm) wsAfterGroup), (ATerm) Group));
+  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun227)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun229)))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun230))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) ArgumentIndicator), (ATerm) wsAfterGroup), (ATerm) Group));
+}
+/**
+ * Constructs a non-transitive of type SDF_Group. Like all ATerm types, SDF_Groups are maximally shared.
+ * \param[in] Group a child of the new non-transitive
+ * \param[in] wsAfterGroup a child of the new non-transitive
+ * \return A pointer to a non-transitive, either newly constructed or shared
+ */
+SDF_Group SDF_makeGroupNonTransitive(SDF_Group Group, SDF_OptLayout wsAfterGroup) {
+  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun57))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun231)))), (ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun230))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(46)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun57)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(46)))), (ATerm) wsAfterGroup), (ATerm) Group));
 }
 /**
  * Constructs a simple-group of type SDF_Group. Like all ATerm types, SDF_Groups are maximally shared.
@@ -9532,7 +9006,7 @@ SDF_Group SDF_makeGroupWithArguments(SDF_Group Group, SDF_OptLayout wsAfterGroup
  * \return A pointer to a simple-group, either newly constructed or shared
  */
 SDF_Group SDF_makeGroupSimpleGroup(SDF_Production Production) {
-  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun239)))))), (ATerm)ATmakeList1((ATerm) Production));
+  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun232)))))), (ATerm)ATmakeList1((ATerm) Production));
 }
 /**
  * Constructs a prods-group of type SDF_Group. Like all ATerm types, SDF_Groups are maximally shared.
@@ -9542,7 +9016,7 @@ SDF_Group SDF_makeGroupSimpleGroup(SDF_Production Production) {
  * \return A pointer to a prods-group, either newly constructed or shared
  */
 SDF_Group SDF_makeGroupProdsGroup(SDF_OptLayout wsAfterBraceOpen, SDF_Productions Productions, SDF_OptLayout wsAfterProductions) {
-  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun240)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterProductions), (ATerm) Productions), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
+  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun233)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterProductions), (ATerm) Productions), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
 }
 /**
  * Constructs a assoc-group of type SDF_Group. Like all ATerm types, SDF_Groups are maximally shared.
@@ -9555,7 +9029,7 @@ SDF_Group SDF_makeGroupProdsGroup(SDF_OptLayout wsAfterBraceOpen, SDF_Production
  * \return A pointer to a assoc-group, either newly constructed or shared
  */
 SDF_Group SDF_makeGroupAssocGroup(SDF_OptLayout wsAfterBraceOpen, SDF_Associativity Associativity, SDF_OptLayout wsAfterAssociativity, SDF_OptLayout wsAfterColon, SDF_Productions Productions, SDF_OptLayout wsAfterProductions) {
-  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun109))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun241)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterProductions), (ATerm) Productions), (ATerm) wsAfterColon), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun109)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm) wsAfterAssociativity), (ATerm) Associativity), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
+  return (SDF_Group)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun62)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun107))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun234)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun40)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(125)))), (ATerm) wsAfterProductions), (ATerm) Productions), (ATerm) wsAfterColon), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun107)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(58)))), (ATerm) wsAfterAssociativity), (ATerm) Associativity), (ATerm) wsAfterBraceOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun41)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(123)))));
 }
 /**
  * Constructs a chain of type SDF_Priority. Like all ATerm types, SDF_Prioritys are maximally shared.
@@ -9563,7 +9037,7 @@ SDF_Group SDF_makeGroupAssocGroup(SDF_OptLayout wsAfterBraceOpen, SDF_Associativ
  * \return A pointer to a chain, either newly constructed or shared
  */
 SDF_Priority SDF_makePriorityChain(SDF_GroupList list) {
-  return (SDF_Priority)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun243)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))))), (ATerm) list)));
+  return (SDF_Priority)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun235))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun236)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun26, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun31))))), (ATerm) list)));
 }
 /**
  * Constructs a assoc of type SDF_Priority. Like all ATerm types, SDF_Prioritys are maximally shared.
@@ -9575,7 +9049,7 @@ SDF_Priority SDF_makePriorityChain(SDF_GroupList list) {
  * \return A pointer to a assoc, either newly constructed or shared
  */
 SDF_Priority SDF_makePriorityAssoc(SDF_Group left, SDF_OptLayout wsAfterLeft, SDF_Associativity Associativity, SDF_OptLayout wsAfterAssociativity, SDF_Group right) {
-  return (SDF_Priority)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun181)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun236)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun182)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterAssociativity), (ATerm) Associativity), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_Priority)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun179)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun235))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun180)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterAssociativity), (ATerm) Associativity), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a Default of type SDF_Priorities. Like all ATerm types, SDF_Prioritiess are maximally shared.
@@ -9583,7 +9057,7 @@ SDF_Priority SDF_makePriorityAssoc(SDF_Group left, SDF_OptLayout wsAfterLeft, SD
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityList list) {
-  return (SDF_Priorities)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) list)));
+  return (SDF_Priorities)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun235)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun78))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun235)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) list)));
 }
 /**
  * Constructs a empty of type SDF_NatConArguments. Like all ATerm types, SDF_NatConArgumentss are maximally shared.
@@ -9673,42 +9147,6 @@ SDF_PriorityList SDF_makePriorityListMany(SDF_Priority head, SDF_OptLayout wsAft
   return (SDF_PriorityList)(ATerm)ATinsert(ATinsert(ATinsert(ATinsert((ATermList)tail, (ATerm) wsAfterSep), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(44)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(44)))), (ATerm) wsAfterHead), (ATerm) head);
 }
 /**
- * Constructs a Default of type SDF_Properties. Like all ATerm types, SDF_Propertiess are maximally shared.
- * \param[in] list a child of the new Default
- * \return A pointer to a Default, either newly constructed or shared
- */
-SDF_Properties SDF_makePropertiesDefault(SDF_PropertyList list) {
-  return (SDF_Properties)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun80))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun228))))), (ATerm) list)));
-}
-/**
- * Constructs a empty of type SDF_PropertyList. Like all ATerm types, SDF_PropertyLists are maximally shared.
- * \return A pointer to a empty, either newly constructed or shared
- */
-SDF_PropertyList SDF_makePropertyListEmpty(void) {
-  return (SDF_PropertyList)(ATerm)ATempty;
-}
-/**
- * Constructs a single of type SDF_PropertyList. Like all ATerm types, SDF_PropertyLists are maximally shared.
- * \param[in] head a child of the new single
- * \return A pointer to a single, either newly constructed or shared
- */
-SDF_PropertyList SDF_makePropertyListSingle(SDF_Property head) {
-  return (SDF_PropertyList)(ATerm)ATmakeList1((ATerm) head);
-}
-/**
- * Constructs a many of type SDF_PropertyList. Like all ATerm types, SDF_PropertyLists are maximally shared.
- * \param[in] head a child of the new many
- * \param[in] wsAfterHead a child of the new many
- * \param[in] tail a child of the new many
- * \return A pointer to a many, either newly constructed or shared
- */
-SDF_PropertyList SDF_makePropertyListMany(SDF_Property head, SDF_OptLayout wsAfterHead, SDF_PropertyList tail) {
-  if (SDF_isPropertyListEmpty(tail)) {
-    return SDF_makePropertyListSingle(head);
-  }
-  return (SDF_PropertyList)(ATerm)ATinsert(ATinsert((ATermList)tail, (ATerm) wsAfterHead), (ATerm) head);
-}
-/**
  * Constructs a empty of type SDF_SymbolTail. Like all ATerm types, SDF_SymbolTails are maximally shared.
  * \return A pointer to a empty, either newly constructed or shared
  */
@@ -9773,7 +9211,7 @@ SDF_SymbolRest SDF_makeSymbolRestMany(SDF_Symbol head, SDF_OptLayout wsAfterHead
  * \return A pointer to a renamings, either newly constructed or shared
  */
 SDF_Renamings SDF_makeRenamingsRenamings(SDF_OptLayout wsAfterBracketOpen, SDF_RenamingList list, SDF_OptLayout wsAfterList) {
-  return (SDF_Renamings)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun244))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun224))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun245)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun244))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))));
+  return (SDF_Renamings)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun237))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun222))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun238)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun34)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun237))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun36)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))));
 }
 /**
  * Constructs a symbol of type SDF_Renaming. Like all ATerm types, SDF_Renamings are maximally shared.
@@ -9784,7 +9222,7 @@ SDF_Renamings SDF_makeRenamingsRenamings(SDF_OptLayout wsAfterBracketOpen, SDF_R
  * \return A pointer to a symbol, either newly constructed or shared
  */
 SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_OptLayout wsAfterFrom, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Symbol to) {
-  return (SDF_Renaming)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun244))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun246)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) to), (ATerm) wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(61)))), (ATerm) wsAfterFrom), (ATerm) from));
+  return (SDF_Renaming)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun125))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun237))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun239)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) to), (ATerm) wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun125)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(61)))), (ATerm) wsAfterFrom), (ATerm) from));
 }
 /**
  * Constructs a production of type SDF_Renaming. Like all ATerm types, SDF_Renamings are maximally shared.
@@ -9795,7 +9233,7 @@ SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_OptLayout wsAfterFrom, 
  * \return A pointer to a production, either newly constructed or shared
  */
 SDF_Renaming SDF_makeRenamingProduction(SDF_Production fromProd, SDF_OptLayout wsAfterFromProd, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Production toProd) {
-  return (SDF_Renaming)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun244))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun247)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) toProd), (ATerm) wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(61)))), (ATerm) wsAfterFromProd), (ATerm) fromProd));
+  return (SDF_Renaming)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun125))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun187)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun237))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun240)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) toProd), (ATerm) wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(62)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(61)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun125)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(62)), (ATerm)ATmakeInt(61)))), (ATerm) wsAfterFromProd), (ATerm) fromProd));
 }
 /**
  * Constructs a empty of type SDF_RenamingList. Like all ATerm types, SDF_RenamingLists are maximally shared.
@@ -9831,7 +9269,7 @@ SDF_RenamingList SDF_makeRenamingListMany(SDF_Renaming head, SDF_OptLayout wsAft
  * \return A pointer to a char-class, either newly constructed or shared
  */
 SDF_Lookahead SDF_makeLookaheadCharClass(SDF_CharClass CharClass) {
-  return (SDF_Lookahead)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun248))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun108)))))), (ATerm)ATmakeList1((ATerm) CharClass));
+  return (SDF_Lookahead)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun241))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun106)))))), (ATerm)ATmakeList1((ATerm) CharClass));
 }
 /**
  * Constructs a seq of type SDF_Lookahead. Like all ATerm types, SDF_Lookaheads are maximally shared.
@@ -9842,7 +9280,7 @@ SDF_Lookahead SDF_makeLookaheadCharClass(SDF_CharClass CharClass) {
  * \return A pointer to a seq, either newly constructed or shared
  */
 SDF_Lookahead SDF_makeLookaheadSeq(SDF_CharClass head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterPeriod, SDF_Lookaheads tail) {
-  return (SDF_Lookahead)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun57))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun107)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun248))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun118)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) tail), (ATerm) wsAfterPeriod), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(46)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun57)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(46)))), (ATerm) wsAfterHead), (ATerm) head));
+  return (SDF_Lookahead)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun57))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun105)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun241))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun116)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) tail), (ATerm) wsAfterPeriod), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(46)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun57)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(46)))), (ATerm) wsAfterHead), (ATerm) head));
 }
 /**
  * Constructs a single of type SDF_Lookaheads. Like all ATerm types, SDF_Lookaheadss are maximally shared.
@@ -9850,7 +9288,7 @@ SDF_Lookahead SDF_makeLookaheadSeq(SDF_CharClass head, SDF_OptLayout wsAfterHead
  * \return A pointer to a single, either newly constructed or shared
  */
 SDF_Lookaheads SDF_makeLookaheadsSingle(SDF_Lookahead Lookahead) {
-  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun248)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun250)))))), (ATerm)ATmakeList1((ATerm) Lookahead));
+  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun241)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun243)))))), (ATerm)ATmakeList1((ATerm) Lookahead));
 }
 /**
  * Constructs a alt of type SDF_Lookaheads. Like all ATerm types, SDF_Lookaheadss are maximally shared.
@@ -9861,7 +9299,7 @@ SDF_Lookaheads SDF_makeLookaheadsSingle(SDF_Lookahead Lookahead) {
  * \return A pointer to a alt, either newly constructed or shared
  */
 SDF_Lookaheads SDF_makeLookaheadsAlt(SDF_Lookaheads left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterBar, SDF_Lookaheads right) {
-  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun129))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun131))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun130)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterBar), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun129)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm) wsAfterLeft), (ATerm) left));
+  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun73, (ATerm)ATmakeAppl0(SDF_afun129))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun128)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) right), (ATerm) wsAfterBar), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun127)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(124)))), (ATerm) wsAfterLeft), (ATerm) left));
 }
 /**
  * Constructs a Bracket of type SDF_Lookaheads. Like all ATerm types, SDF_Lookaheadss are maximally shared.
@@ -9871,7 +9309,7 @@ SDF_Lookaheads SDF_makeLookaheadsAlt(SDF_Lookaheads left, SDF_OptLayout wsAfterL
  * \return A pointer to a Bracket, either newly constructed or shared
  */
 SDF_Lookaheads SDF_makeLookaheadsBracket(SDF_OptLayout wsAfterParenOpen, SDF_Lookaheads Lookaheads, SDF_OptLayout wsAfterLookaheads) {
-  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterLookaheads), (ATerm) Lookaheads), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
+  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl0(SDF_afun75)))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun25)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(41)))), (ATerm) wsAfterLookaheads), (ATerm) Lookaheads), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun28)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(40)))));
 }
 /**
  * Constructs a list of type SDF_Lookaheads. Like all ATerm types, SDF_Lookaheadss are maximally shared.
@@ -9881,7 +9319,7 @@ SDF_Lookaheads SDF_makeLookaheadsBracket(SDF_OptLayout wsAfterParenOpen, SDF_Loo
  * \return A pointer to a list, either newly constructed or shared
  */
 SDF_Lookaheads SDF_makeLookaheadsList(SDF_OptLayout wsAfterBracketOpenBracketOpen, SDF_LookaheadList list, SDF_OptLayout wsAfterList) {
-  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun138))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun248)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun139))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun37)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun138)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(93)), (ATerm)ATmakeInt(93)))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun248)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) list)), (ATerm) wsAfterBracketOpenBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun139)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(91)), (ATerm)ATmakeInt(91)))));
+  return (SDF_Lookaheads)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun136))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun241)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun137))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun37)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(93)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun136)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(93)), (ATerm)ATmakeInt(93)))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl2(SDF_afun35, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun241)), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun27))))), (ATerm) list)), (ATerm) wsAfterBracketOpenBracketOpen), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(91)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun137)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(91)), (ATerm)ATmakeInt(91)))));
 }
 /**
  * Constructs a follow of type SDF_Restriction. Like all ATerm types, SDF_Restrictions are maximally shared.
@@ -9892,7 +9330,7 @@ SDF_Lookaheads SDF_makeLookaheadsList(SDF_OptLayout wsAfterBracketOpenBracketOpe
  * \return A pointer to a follow, either newly constructed or shared
  */
 SDF_Restriction SDF_makeRestrictionFollow(SDF_Symbols Symbols, SDF_OptLayout wsAfterSymbols, SDF_OptLayout wsAfterSlash, SDF_Lookaheads Lookaheads) {
-  return (SDF_Restriction)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun249)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun251))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun252))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun253)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Lookaheads), (ATerm) wsAfterSlash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun251)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(47)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbols), (ATerm) Symbols));
+  return (SDF_Restriction)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun242)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun244))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun245))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun246)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) Lookaheads), (ATerm) wsAfterSlash), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(47)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(45)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun244)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(45)), (ATerm)ATmakeInt(47)), (ATerm)ATmakeInt(45)))), (ATerm) wsAfterSymbols), (ATerm) Symbols));
 }
 /**
  * Constructs a Default of type SDF_Restrictions. Like all ATerm types, SDF_Restrictionss are maximally shared.
@@ -9900,7 +9338,7 @@ SDF_Restriction SDF_makeRestrictionFollow(SDF_Symbols Symbols, SDF_OptLayout wsA
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionList list) {
-  return (SDF_Restrictions)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun252))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun82))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun252))))), (ATerm) list)));
+  return (SDF_Restrictions)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun245))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun80))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun245))))), (ATerm) list)));
 }
 /**
  * Constructs a empty of type SDF_LookaheadList. Like all ATerm types, SDF_LookaheadLists are maximally shared.
@@ -9960,50 +9398,12 @@ SDF_RestrictionList SDF_makeRestrictionListMany(SDF_Restriction head, SDF_OptLay
   return (SDF_RestrictionList)(ATerm)ATinsert(ATinsert((ATermList)tail, (ATerm) wsAfterHead), (ATerm) head);
 }
 /**
- * Constructs a default of type SDF_RightNullableProduction. Like all ATerm types, SDF_RightNullableProductions are maximally shared.
- * \param[in] Production a child of the new default
- * \param[in] wsAfterProduction a child of the new default
- * \param[in] prefixLength a child of the new default
- * \return A pointer to a default, either newly constructed or shared
- */
-SDF_RightNullableProduction SDF_makeRightNullableProductionDefault(SDF_Production Production, SDF_OptLayout wsAfterProduction, SDF_NatCon prefixLength) {
-  return (SDF_RightNullableProduction)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun189)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun230))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) prefixLength), (ATerm) wsAfterProduction), (ATerm) Production));
-}
-/**
- * Constructs a empty of type SDF_RightNullableProductionList. Like all ATerm types, SDF_RightNullableProductionLists are maximally shared.
- * \return A pointer to a empty, either newly constructed or shared
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionListEmpty(void) {
-  return (SDF_RightNullableProductionList)(ATerm)ATempty;
-}
-/**
- * Constructs a single of type SDF_RightNullableProductionList. Like all ATerm types, SDF_RightNullableProductionLists are maximally shared.
- * \param[in] head a child of the new single
- * \return A pointer to a single, either newly constructed or shared
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionListSingle(SDF_RightNullableProduction head) {
-  return (SDF_RightNullableProductionList)(ATerm)ATmakeList1((ATerm) head);
-}
-/**
- * Constructs a many of type SDF_RightNullableProductionList. Like all ATerm types, SDF_RightNullableProductionLists are maximally shared.
- * \param[in] head a child of the new many
- * \param[in] wsAfterHead a child of the new many
- * \param[in] tail a child of the new many
- * \return A pointer to a many, either newly constructed or shared
- */
-SDF_RightNullableProductionList SDF_makeRightNullableProductionListMany(SDF_RightNullableProduction head, SDF_OptLayout wsAfterHead, SDF_RightNullableProductionList tail) {
-  if (SDF_isRightNullableProductionListEmpty(tail)) {
-    return SDF_makeRightNullableProductionListSingle(head);
-  }
-  return (SDF_RightNullableProductionList)(ATerm)ATinsert(ATinsert((ATermList)tail, (ATerm) wsAfterHead), (ATerm) head);
-}
-/**
  * Constructs a Lex-to-cf of type SDF_Sort. Like all ATerm types, SDF_Sorts are maximally shared.
  * \param[in] Sort a child of the new Lex-to-cf
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_Sort SDF_makeSortLexToCf(SDF_LexSort Sort) {
-  return (SDF_Sort)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun136)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun136))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) Sort));
+  return (SDF_Sort)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun134)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun134))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) Sort));
 }
 /**
  * Constructs a definition of type SDF_SDF. Like all ATerm types, SDF_SDFs are maximally shared.
@@ -10012,7 +9412,7 @@ SDF_Sort SDF_makeSortLexToCf(SDF_LexSort Sort) {
  * \return A pointer to a definition, either newly constructed or shared
  */
 SDF_SDF SDF_makeSDFDefinition(SDF_OptLayout wsAfterDefinition, SDF_Definition Definition) {
-  return (SDF_SDF)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun213)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun254))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun46))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun254)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Definition), (ATerm) wsAfterDefinition), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun254)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(100)))));
+  return (SDF_SDF)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun211)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun3, (ATerm)ATmakeAppl0(SDF_afun4)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun247))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun46))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun247)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) Definition), (ATerm) wsAfterDefinition), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(111)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(105)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(102)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(101)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(100)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun247)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(111)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(105)), (ATerm)ATmakeInt(102)), (ATerm)ATmakeInt(101)), (ATerm)ATmakeInt(100)))));
 }
 /**
  * Constructs a one-char of type SDF_LexSort. Like all ATerm types, SDF_LexSorts are maximally shared.
@@ -10020,7 +9420,7 @@ SDF_SDF SDF_makeSDFDefinition(SDF_OptLayout wsAfterDefinition, SDF_Definition De
  * \return A pointer to a one-char, either newly constructed or shared
  */
 SDF_LexSort SDF_makeLexSortOneChar(char head) {
-  return (SDF_LexSort)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun136))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun255)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(head))));
+  return (SDF_LexSort)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun134))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun248)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(head))));
 }
 /**
  * Constructs a more-chars of type SDF_LexSort. Like all ATerm types, SDF_LexSorts are maximally shared.
@@ -10030,7 +9430,7 @@ SDF_LexSort SDF_makeLexSortOneChar(char head) {
  * \return A pointer to a more-chars, either newly constructed or shared
  */
 SDF_LexSort SDF_makeLexSortMoreChars(char head, const char* middle, char last) {
-  return (SDF_LexSort)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun136))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun256)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(last))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm) ((ATerm) SDF_stringToChars(middle)))), (ATerm) ((ATerm) SDF_byteToChar(head))));
+  return (SDF_LexSort)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun134))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun249)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(last))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm) ((ATerm) SDF_stringToChars(middle)))), (ATerm) ((ATerm) SDF_byteToChar(head))));
 }
 /**
  * Constructs a empty of type SDF_SymbolParameters. Like all ATerm types, SDF_SymbolParameterss are maximally shared.
@@ -10067,7 +9467,7 @@ SDF_SymbolParameters SDF_makeSymbolParametersMany(SDF_Symbol head, SDF_OptLayout
  * \return A pointer to a Default, either newly constructed or shared
  */
 SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolList list) {
-  return (SDF_Symbols)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun88))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun94))))), (ATerm) list)));
+  return (SDF_Symbols)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun86))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun92))))), (ATerm) list)));
 }
 /**
  * Constructs a empty of type SDF_SymbolList. Like all ATerm types, SDF_SymbolLists are maximally shared.
@@ -10103,7 +9503,7 @@ SDF_SymbolList SDF_makeSymbolListMany(SDF_Symbol head, SDF_OptLayout wsAfterHead
  * \return A pointer to a whitespace, either newly constructed or shared
  */
 SDF_LexLayout SDF_makeLexLayoutWhitespace(char ch) {
-  return (SDF_LexLayout)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(32)), (ATerm)ATmakeInt(13)), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(9), (ATerm)ATmakeInt(10))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl0(SDF_afun4)), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun257)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(ch))));
+  return (SDF_LexLayout)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(32)), (ATerm)ATmakeInt(13)), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(9), (ATerm)ATmakeInt(10))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl0(SDF_afun4)), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun250)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(ch))));
 }
 /**
  * Constructs a line of type SDF_LexLayout. Like all ATerm types, SDF_LexLayouts are maximally shared.
@@ -10111,7 +9511,7 @@ SDF_LexLayout SDF_makeLexLayoutWhitespace(char ch) {
  * \return A pointer to a line, either newly constructed or shared
  */
 SDF_LexLayout SDF_makeLexLayoutLine(const char* line) {
-  return (SDF_LexLayout)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun259))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl0(SDF_afun4)), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun260, (ATerm)ATmakeAppl0(SDF_afun261)))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun262)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(10)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun258)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(10)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm) ((ATerm) SDF_stringToChars(line)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun259)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(37)), (ATerm)ATmakeInt(37)))));
+  return (SDF_LexLayout)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun251))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun252))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl0(SDF_afun4)), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun253, (ATerm)ATmakeAppl0(SDF_afun254)))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun255)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(10)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun251)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(10)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm) ((ATerm) SDF_stringToChars(line)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun252)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(37)), (ATerm)ATmakeInt(37)))));
 }
 /**
  * Constructs a nested of type SDF_LexLayout. Like all ATerm types, SDF_LexLayouts are maximally shared.
@@ -10119,35 +9519,35 @@ SDF_LexLayout SDF_makeLexLayoutLine(const char* line) {
  * \return A pointer to a nested, either newly constructed or shared
  */
 SDF_LexLayout SDF_makeLexLayoutNested(const char* content) {
-  return (SDF_LexLayout)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun263))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(38), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(36))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun263))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl0(SDF_afun4)), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun260, (ATerm)ATmakeAppl0(SDF_afun261)))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun264)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun263)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(38), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(36))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm) ((ATerm) SDF_stringToChars(content)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun263)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))));
+  return (SDF_LexLayout)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun256))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(38), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(36))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun256))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl0(SDF_afun4)), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun253, (ATerm)ATmakeAppl0(SDF_afun254)))), (ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun257)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun256)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(38), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(11), (ATerm)ATmakeInt(36))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(9))))))), (ATerm) ((ATerm) SDF_stringToChars(content)))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun256)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(37)))));
 }
 /**
  * Constructs a newline of type SDF_LexStrChar. Like all ATerm types, SDF_LexStrChars are maximally shared.
  * \return A pointer to a newline, either newly constructed or shared
  */
 SDF_LexStrChar SDF_makeLexStrCharNewline(void) {
-  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun193))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun195)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun193)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun191))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun193)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(110)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun191)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(110)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a tab of type SDF_LexStrChar. Like all ATerm types, SDF_LexStrChars are maximally shared.
  * \return A pointer to a tab, either newly constructed or shared
  */
 SDF_LexStrChar SDF_makeLexStrCharTab(void) {
-  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun196))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun197)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun196)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun194))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun195)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(116)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun194)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(116)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a quote of type SDF_LexStrChar. Like all ATerm types, SDF_LexStrChars are maximally shared.
  * \return A pointer to a quote, either newly constructed or shared
  */
 SDF_LexStrChar SDF_makeLexStrCharQuote(void) {
-  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun266))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun199)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(34)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun266)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(34)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun259))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun197)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(34)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun259)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(34)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a backslash of type SDF_LexStrChar. Like all ATerm types, SDF_LexStrChars are maximally shared.
  * \return A pointer to a backslash, either newly constructed or shared
  */
 SDF_LexStrChar SDF_makeLexStrCharBackslash(void) {
-  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun201)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(92)), (ATerm)ATmakeInt(92)))));
+  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun198))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun199)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun198)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeInt(92)), (ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a decimal of type SDF_LexStrChar. Like all ATerm types, SDF_LexStrChars are maximally shared.
@@ -10157,7 +9557,7 @@ SDF_LexStrChar SDF_makeLexStrCharBackslash(void) {
  * \return A pointer to a decimal, either newly constructed or shared
  */
 SDF_LexStrChar SDF_makeLexStrCharDecimal(char a, char b, char c) {
-  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun202))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun203)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(c))), (ATerm) ((ATerm) SDF_byteToChar(b))), (ATerm) ((ATerm) SDF_byteToChar(a))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun202)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))));
+  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun201)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(c))), (ATerm) ((ATerm) SDF_byteToChar(b))), (ATerm) ((ATerm) SDF_byteToChar(a))), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))), (ATerm)ATmakeAppl1(SDF_afun24, (ATerm)ATmakeAppl0(SDF_afun200)), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm)ATmakeInt(92)))));
 }
 /**
  * Constructs a normal of type SDF_LexStrChar. Like all ATerm types, SDF_LexStrChars are maximally shared.
@@ -10165,7 +9565,7 @@ SDF_LexStrChar SDF_makeLexStrCharDecimal(char a, char b, char c) {
  * \return A pointer to a normal, either newly constructed or shared
  */
 SDF_LexStrChar SDF_makeLexStrCharNormal(char ch) {
-  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(93), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(35), (ATerm)ATmakeInt(91))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(32), (ATerm)ATmakeInt(33))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun204)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(ch))));
+  return (SDF_LexStrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(93), (ATerm)ATmakeInt(255))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(35), (ATerm)ATmakeInt(91))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(32), (ATerm)ATmakeInt(33))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun202)))))), (ATerm)ATmakeList1((ATerm) ((ATerm) SDF_byteToChar(ch))));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_StrChar. Like all ATerm types, SDF_StrChars are maximally shared.
@@ -10173,7 +9573,7 @@ SDF_LexStrChar SDF_makeLexStrCharNormal(char ch) {
  * \return A pointer to a Lex-to-cf, either newly constructed or shared
  */
 SDF_StrChar SDF_makeStrCharLexToCf(SDF_LexStrChar StrChar) {
-  return (SDF_StrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) StrChar));
+  return (SDF_StrChar)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))), (ATerm)ATmakeAppl0(SDF_afun5)), (ATerm)ATmakeList1((ATerm) StrChar));
 }
 /**
  * Constructs a default of type SDF_LexStrCon. Like all ATerm types, SDF_LexStrCons are maximally shared.
@@ -10181,7 +9581,7 @@ SDF_StrChar SDF_makeStrCharLexToCf(SDF_LexStrChar StrChar) {
  * \return A pointer to a default, either newly constructed or shared
  */
 SDF_LexStrCon SDF_makeLexStrConDefault(SDF_LexStrCharChars chars) {
-  return (SDF_LexStrCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(34)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(34)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(34)), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun265))))), (ATerm) chars)), (ATerm)ATmakeInt(34)));
+  return (SDF_LexStrCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(34)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeInt(34)))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun10))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeInt(34)), (ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun258))))), (ATerm) chars)), (ATerm)ATmakeInt(34)));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_StrCon. Like all ATerm types, SDF_StrCons are maximally shared.
@@ -10221,7 +9621,7 @@ SDF_LexStrCharChars SDF_makeLexStrCharCharsMany(SDF_LexStrChar head, SDF_LexStrC
  * \return A pointer to a digits, either newly constructed or shared
  */
 SDF_LexNatCon SDF_makeLexNatConDigits(const char* list) {
-  return (SDF_LexNatCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun161)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm) ((ATerm) SDF_stringToChars(list)))));
+  return (SDF_LexNatCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun47))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun159)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))))))), (ATerm) ((ATerm) SDF_stringToChars(list)))));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_NatCon. Like all ATerm types, SDF_NatCons are maximally shared.
@@ -10238,7 +9638,7 @@ SDF_NatCon SDF_makeNatConLexToCf(SDF_LexNatCon NatCon) {
  * \return A pointer to a default, either newly constructed or shared
  */
 SDF_LexIdCon SDF_makeLexIdConDefault(char head, const char* tail) {
-  return (SDF_LexIdCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun16))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun98, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun159, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm) ((ATerm) SDF_stringToChars(tail)))), (ATerm) ((ATerm) SDF_byteToChar(head))));
+  return (SDF_LexIdCon)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))))), (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun9, (ATerm)ATmakeAppl0(SDF_afun16))), (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun13, (ATerm)ATmakeAppl1(SDF_afun14, (ATerm)ATmakeAppl0(SDF_afun42)))))), (ATerm)ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl1(SDF_afun6, (ATerm)ATmakeAppl1(SDF_afun96, (ATerm)ATmakeAppl1(SDF_afun30, (ATerm)ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(97), (ATerm)ATmakeInt(122))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(65), (ATerm)ATmakeInt(90))), (ATerm)ATmakeAppl2(SDF_afun157, (ATerm)ATmakeInt(48), (ATerm)ATmakeInt(57))), (ATerm)ATmakeInt(45)))))), (ATerm) ((ATerm) SDF_stringToChars(tail)))), (ATerm) ((ATerm) SDF_byteToChar(head))));
 }
 /**
  * Constructs a Lex-to-cf of type SDF_IdCon. Like all ATerm types, SDF_IdCons are maximally shared.
@@ -10830,16 +10230,6 @@ ATbool SDF_isEqualImportList(SDF_ImportList arg0, SDF_ImportList arg1) {
 }
 
 /**
- * Tests equality of two SDF_Propertys. A constant time operation.
- * \param[in] arg0 first SDF_Property to be compared
- * \param[in] arg1 second SDF_Property to be compared
- * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
- */
-ATbool SDF_isEqualProperty(SDF_Property arg0, SDF_Property arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-/**
  * Tests equality of two SDF_Associativitys. A constant time operation.
  * \param[in] arg0 first SDF_Associativity to be compared
  * \param[in] arg1 second SDF_Associativity to be compared
@@ -10916,26 +10306,6 @@ ATbool SDF_isEqualGroupList(SDF_GroupList arg0, SDF_GroupList arg1) {
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
 ATbool SDF_isEqualPriorityList(SDF_PriorityList arg0, SDF_PriorityList arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-/**
- * Tests equality of two SDF_Propertiess. A constant time operation.
- * \param[in] arg0 first SDF_Properties to be compared
- * \param[in] arg1 second SDF_Properties to be compared
- * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
- */
-ATbool SDF_isEqualProperties(SDF_Properties arg0, SDF_Properties arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-/**
- * Tests equality of two SDF_PropertyLists. A constant time operation.
- * \param[in] arg0 first SDF_PropertyList to be compared
- * \param[in] arg1 second SDF_PropertyList to be compared
- * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
- */
-ATbool SDF_isEqualPropertyList(SDF_PropertyList arg0, SDF_PropertyList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -11046,26 +10416,6 @@ ATbool SDF_isEqualLookaheadList(SDF_LookaheadList arg0, SDF_LookaheadList arg1) 
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
 ATbool SDF_isEqualRestrictionList(SDF_RestrictionList arg0, SDF_RestrictionList arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-/**
- * Tests equality of two SDF_RightNullableProductions. A constant time operation.
- * \param[in] arg0 first SDF_RightNullableProduction to be compared
- * \param[in] arg1 second SDF_RightNullableProduction to be compared
- * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
- */
-ATbool SDF_isEqualRightNullableProduction(SDF_RightNullableProduction arg0, SDF_RightNullableProduction arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-/**
- * Tests equality of two SDF_RightNullableProductionLists. A constant time operation.
- * \param[in] arg0 first SDF_RightNullableProductionList to be compared
- * \param[in] arg1 second SDF_RightNullableProductionList to be compared
- * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
- */
-ATbool SDF_isEqualRightNullableProductionList(SDF_RightNullableProductionList arg0, SDF_RightNullableProductionList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -14548,9 +13898,6 @@ ATbool SDF_isValidGrammar(SDF_Grammar arg) {
   else if (SDF_isGrammarPriorities(arg)) {
     return ATtrue;
   }
-  else if (SDF_isGrammarProperties(arg)) {
-    return ATtrue;
-  }
   else if (SDF_isGrammarRestrictions(arg)) {
     return ATtrue;
   }
@@ -14827,29 +14174,6 @@ inline ATbool SDF_isGrammarPriorities(SDF_Grammar arg) {
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarPriorities, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_Grammar is a properties. . May not be used to assert correctness of the SDF_Grammar
- * \param[in] arg input SDF_Grammar
- * \return ATtrue if #arg corresponds to the signature of a properties, or ATfalse otherwise
- */
-inline ATbool SDF_isGrammarProperties(SDF_Grammar arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarProperties, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -15311,30 +14635,6 @@ ATbool SDF_hasGrammarPriorities(SDF_Grammar arg) {
 }
 
 /**
- * Assert whether a SDF_Grammar has a ws-after-properties. 
- * \param[in] arg input SDF_Grammar
- * \return ATtrue if the SDF_Grammar had a ws-after-properties, or ATfalse otherwise
- */
-ATbool SDF_hasGrammarWsAfterProperties(SDF_Grammar arg) {
-  if (SDF_isGrammarProperties(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Grammar has a Properties. 
- * \param[in] arg input SDF_Grammar
- * \return ATtrue if the SDF_Grammar had a Properties, or ATfalse otherwise
- */
-ATbool SDF_hasGrammarProperties(SDF_Grammar arg) {
-  if (SDF_isGrammarProperties(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
  * Assert whether a SDF_Grammar has a ws-after-restrictions. 
  * \param[in] arg input SDF_Grammar
  * \return ATtrue if the SDF_Grammar had a ws-after-restrictions, or ATfalse otherwise
@@ -15633,26 +14933,6 @@ SDF_Priorities SDF_getGrammarPriorities(SDF_Grammar arg) {
   }
   else 
     return (SDF_Priorities)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-}
-
-/**
- * Get the ws-after-properties SDF_OptLayout of a SDF_Grammar. Note that the precondition is that this SDF_Grammar actually has a ws-after-properties
- * \param[in] arg input SDF_Grammar
- * \return the ws-after-properties of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getGrammarWsAfterProperties(SDF_Grammar arg) {
-  
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/**
- * Get the Properties SDF_Properties of a SDF_Grammar. Note that the precondition is that this SDF_Grammar actually has a Properties
- * \param[in] arg input SDF_Grammar
- * \return the Properties of #arg, if it exist or an undefined value if it does not
- */
-SDF_Properties SDF_getGrammarProperties(SDF_Grammar arg) {
-  
-    return (SDF_Properties)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
 }
 
 /**
@@ -16023,36 +15303,6 @@ SDF_Grammar SDF_setGrammarPriorities(SDF_Grammar arg, SDF_Priorities Priorities)
   }
 
   ATabort("Grammar has no Priorities: %t\n", arg);
-  return (SDF_Grammar)NULL;
-}
-
-/**
- * Set the ws-after-properties of a SDF_Grammar. The precondition being that this SDF_Grammar actually has a ws-after-properties
- * \param[in] arg input SDF_Grammar
- * \param[in] wsAfterProperties new SDF_OptLayout to set in #arg
- * \return A new SDF_Grammar with wsAfterProperties at the right place, or a core dump if #arg did not have a wsAfterProperties
- */
-SDF_Grammar SDF_setGrammarWsAfterProperties(SDF_Grammar arg, SDF_OptLayout wsAfterProperties) {
-  if (SDF_isGrammarProperties(arg)) {
-    return (SDF_Grammar)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterProperties), 1), 1);
-  }
-
-  ATabort("Grammar has no WsAfterProperties: %t\n", arg);
-  return (SDF_Grammar)NULL;
-}
-
-/**
- * Set the Properties of a SDF_Grammar. The precondition being that this SDF_Grammar actually has a Properties
- * \param[in] arg input SDF_Grammar
- * \param[in] Properties new SDF_Properties to set in #arg
- * \return A new SDF_Grammar with Properties at the right place, or a core dump if #arg did not have a Properties
- */
-SDF_Grammar SDF_setGrammarProperties(SDF_Grammar arg, SDF_Properties Properties) {
-  if (SDF_isGrammarProperties(arg)) {
-    return (SDF_Grammar)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Properties), 2), 1);
-  }
-
-  ATabort("Grammar has no Properties: %t\n", arg);
   return (SDF_Grammar)NULL;
 }
 
@@ -26490,270 +25740,6 @@ SDF_ImportList SDF_setImportListTail(SDF_ImportList arg, SDF_ImportList tail) {
 }
 
 /**
- * Assert whether a SDF_Property is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
- * \param[in] arg input SDF_Property
- * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
- */
-ATbool SDF_isValidProperty(SDF_Property arg) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isPropertyRightNullableProductions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Property is a nullable-productions. . May not be used to assert correctness of the SDF_Property
- * \param[in] arg input SDF_Property
- * \return ATtrue if #arg corresponds to the signature of a nullable-productions, or ATfalse otherwise
- */
-inline ATbool SDF_isPropertyNullableProductions(SDF_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternPropertyNullableProductions, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_Property is a right-nullable-productions. . May not be used to assert correctness of the SDF_Property
- * \param[in] arg input SDF_Property
- * \return ATtrue if #arg corresponds to the signature of a right-nullable-productions, or ATfalse otherwise
- */
-inline ATbool SDF_isPropertyRightNullableProductions(SDF_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternPropertyRightNullableProductions, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_Property has a ws-after-nullable. 
- * \param[in] arg input SDF_Property
- * \return ATtrue if the SDF_Property had a ws-after-nullable, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyWsAfterNullable(SDF_Property arg) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isPropertyRightNullableProductions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Property has a ws-after-productions. 
- * \param[in] arg input SDF_Property
- * \return ATtrue if the SDF_Property had a ws-after-productions, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyWsAfterProductions(SDF_Property arg) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isPropertyRightNullableProductions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Property has a Productions. 
- * \param[in] arg input SDF_Property
- * \return ATtrue if the SDF_Property had a Productions, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyProductions(SDF_Property arg) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Property has a ws-after-right. 
- * \param[in] arg input SDF_Property
- * \return ATtrue if the SDF_Property had a ws-after-right, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyWsAfterRight(SDF_Property arg) {
-  if (SDF_isPropertyRightNullableProductions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Property has a list. 
- * \param[in] arg input SDF_Property
- * \return ATtrue if the SDF_Property had a list, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyList(SDF_Property arg) {
-  if (SDF_isPropertyRightNullableProductions(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Get the ws-after-nullable SDF_OptLayout of a SDF_Property. Note that the precondition is that this SDF_Property actually has a ws-after-nullable
- * \param[in] arg input SDF_Property
- * \return the ws-after-nullable of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getPropertyWsAfterNullable(SDF_Property arg) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-  }
-  else 
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
-}
-
-/**
- * Get the ws-after-productions SDF_OptLayout of a SDF_Property. Note that the precondition is that this SDF_Property actually has a ws-after-productions
- * \param[in] arg input SDF_Property
- * \return the ws-after-productions of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getPropertyWsAfterProductions(SDF_Property arg) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
-  }
-  else 
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-}
-
-/**
- * Get the Productions SDF_Productions of a SDF_Property. Note that the precondition is that this SDF_Property actually has a Productions
- * \param[in] arg input SDF_Property
- * \return the Productions of #arg, if it exist or an undefined value if it does not
- */
-SDF_Productions SDF_getPropertyProductions(SDF_Property arg) {
-  
-    return (SDF_Productions)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-}
-
-/**
- * Get the ws-after-right SDF_OptLayout of a SDF_Property. Note that the precondition is that this SDF_Property actually has a ws-after-right
- * \param[in] arg input SDF_Property
- * \return the ws-after-right of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getPropertyWsAfterRight(SDF_Property arg) {
-  
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/**
- * Get the list SDF_RightNullableProductionList of a SDF_Property. Note that the precondition is that this SDF_Property actually has a list
- * \param[in] arg input SDF_Property
- * \return the list of #arg, if it exist or an undefined value if it does not
- */
-SDF_RightNullableProductionList SDF_getPropertyList(SDF_Property arg) {
-  
-    return (SDF_RightNullableProductionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), 1);
-}
-
-/**
- * Set the ws-after-nullable of a SDF_Property. The precondition being that this SDF_Property actually has a ws-after-nullable
- * \param[in] arg input SDF_Property
- * \param[in] wsAfterNullable new SDF_OptLayout to set in #arg
- * \return A new SDF_Property with wsAfterNullable at the right place, or a core dump if #arg did not have a wsAfterNullable
- */
-SDF_Property SDF_setPropertyWsAfterNullable(SDF_Property arg, SDF_OptLayout wsAfterNullable) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterNullable), 1), 1);
-  }
-  else if (SDF_isPropertyRightNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterNullable), 3), 1);
-  }
-
-  ATabort("Property has no WsAfterNullable: %t\n", arg);
-  return (SDF_Property)NULL;
-}
-
-/**
- * Set the ws-after-productions of a SDF_Property. The precondition being that this SDF_Property actually has a ws-after-productions
- * \param[in] arg input SDF_Property
- * \param[in] wsAfterProductions new SDF_OptLayout to set in #arg
- * \return A new SDF_Property with wsAfterProductions at the right place, or a core dump if #arg did not have a wsAfterProductions
- */
-SDF_Property SDF_setPropertyWsAfterProductions(SDF_Property arg, SDF_OptLayout wsAfterProductions) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterProductions), 3), 1);
-  }
-  else if (SDF_isPropertyRightNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterProductions), 5), 1);
-  }
-
-  ATabort("Property has no WsAfterProductions: %t\n", arg);
-  return (SDF_Property)NULL;
-}
-
-/**
- * Set the Productions of a SDF_Property. The precondition being that this SDF_Property actually has a Productions
- * \param[in] arg input SDF_Property
- * \param[in] Productions new SDF_Productions to set in #arg
- * \return A new SDF_Property with Productions at the right place, or a core dump if #arg did not have a Productions
- */
-SDF_Property SDF_setPropertyProductions(SDF_Property arg, SDF_Productions Productions) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Productions), 4), 1);
-  }
-
-  ATabort("Property has no Productions: %t\n", arg);
-  return (SDF_Property)NULL;
-}
-
-/**
- * Set the ws-after-right of a SDF_Property. The precondition being that this SDF_Property actually has a ws-after-right
- * \param[in] arg input SDF_Property
- * \param[in] wsAfterRight new SDF_OptLayout to set in #arg
- * \return A new SDF_Property with wsAfterRight at the right place, or a core dump if #arg did not have a wsAfterRight
- */
-SDF_Property SDF_setPropertyWsAfterRight(SDF_Property arg, SDF_OptLayout wsAfterRight) {
-  if (SDF_isPropertyRightNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterRight), 1), 1);
-  }
-
-  ATabort("Property has no WsAfterRight: %t\n", arg);
-  return (SDF_Property)NULL;
-}
-
-/**
- * Set the list of a SDF_Property. The precondition being that this SDF_Property actually has a list
- * \param[in] arg input SDF_Property
- * \param[in] list new SDF_RightNullableProductionList to set in #arg
- * \return A new SDF_Property with list at the right place, or a core dump if #arg did not have a list
- */
-SDF_Property SDF_setPropertyList(SDF_Property arg, SDF_RightNullableProductionList list) {
-  if (SDF_isPropertyRightNullableProductions(arg)) {
-    return (SDF_Property)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 6), (ATerm)((ATerm) list), 1), 6), 1);
-  }
-
-  ATabort("Property has no List: %t\n", arg);
-  return (SDF_Property)NULL;
-}
-
-/**
  * Assert whether a SDF_Associativity is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
  * \param[in] arg input SDF_Associativity
  * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
@@ -27011,6 +25997,9 @@ ATbool SDF_isValidGroup(SDF_Group arg) {
   if (SDF_isGroupWithArguments(arg)) {
     return ATtrue;
   }
+  else if (SDF_isGroupNonTransitive(arg)) {
+    return ATtrue;
+  }
   else if (SDF_isGroupSimpleGroup(arg)) {
     return ATtrue;
   }
@@ -27039,6 +26028,29 @@ inline ATbool SDF_isGroupWithArguments(SDF_Group arg) {
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupWithArguments, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a SDF_Group is a non-transitive. . May not be used to assert correctness of the SDF_Group
+ * \param[in] arg input SDF_Group
+ * \return ATtrue if #arg corresponds to the signature of a non-transitive, or ATfalse otherwise
+ */
+inline ATbool SDF_isGroupNonTransitive(SDF_Group arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupNonTransitive, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -27124,6 +26136,9 @@ ATbool SDF_hasGroupGroup(SDF_Group arg) {
   if (SDF_isGroupWithArguments(arg)) {
     return ATtrue;
   }
+  else if (SDF_isGroupNonTransitive(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -27134,6 +26149,9 @@ ATbool SDF_hasGroupGroup(SDF_Group arg) {
  */
 ATbool SDF_hasGroupWsAfterGroup(SDF_Group arg) {
   if (SDF_isGroupWithArguments(arg)) {
+    return ATtrue;
+  }
+  else if (SDF_isGroupNonTransitive(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -27250,7 +26268,10 @@ ATbool SDF_hasGroupWsAfterColon(SDF_Group arg) {
  * \return the Group of #arg, if it exist or an undefined value if it does not
  */
 SDF_Group SDF_getGroupGroup(SDF_Group arg) {
-  
+  if (SDF_isGroupWithArguments(arg)) {
+    return (SDF_Group)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+  }
+  else 
     return (SDF_Group)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
 }
 
@@ -27260,7 +26281,10 @@ SDF_Group SDF_getGroupGroup(SDF_Group arg) {
  * \return the ws-after-Group of #arg, if it exist or an undefined value if it does not
  */
 SDF_OptLayout SDF_getGroupWsAfterGroup(SDF_Group arg) {
-  
+  if (SDF_isGroupWithArguments(arg)) {
+    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+  }
+  else 
     return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
 }
 
@@ -27363,6 +26387,9 @@ SDF_Group SDF_setGroupGroup(SDF_Group arg, SDF_Group Group) {
   if (SDF_isGroupWithArguments(arg)) {
     return (SDF_Group)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Group), 0), 1);
   }
+  else if (SDF_isGroupNonTransitive(arg)) {
+    return (SDF_Group)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Group), 0), 1);
+  }
 
   ATabort("Group has no Group: %t\n", arg);
   return (SDF_Group)NULL;
@@ -27376,6 +26403,9 @@ SDF_Group SDF_setGroupGroup(SDF_Group arg, SDF_Group Group) {
  */
 SDF_Group SDF_setGroupWsAfterGroup(SDF_Group arg, SDF_OptLayout wsAfterGroup) {
   if (SDF_isGroupWithArguments(arg)) {
+    return (SDF_Group)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterGroup), 1), 1);
+  }
+  else if (SDF_isGroupNonTransitive(arg)) {
     return (SDF_Group)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterGroup), 1), 1);
   }
 
@@ -28602,280 +27632,6 @@ SDF_PriorityList SDF_setPriorityListTail(SDF_PriorityList arg, SDF_PriorityList 
 
   ATabort("PriorityList has no Tail: %t\n", arg);
   return (SDF_PriorityList)NULL;
-}
-
-/**
- * Assert whether a SDF_Properties is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
- * \param[in] arg input SDF_Properties
- * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
- */
-ATbool SDF_isValidProperties(SDF_Properties arg) {
-  if (SDF_isPropertiesDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_Properties is a Default. Always returns ATtrue
- * \param[in] arg input SDF_Properties
- * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
- */
-inline ATbool SDF_isPropertiesDefault(SDF_Properties arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SDF_patternPropertiesDefault, NULL));
-#endif
-  return ATtrue;
-}
-
-/**
- * Assert whether a SDF_Properties has a list. 
- * \param[in] arg input SDF_Properties
- * \return ATtrue if the SDF_Properties had a list, or ATfalse otherwise
- */
-ATbool SDF_hasPropertiesList(SDF_Properties arg) {
-  if (SDF_isPropertiesDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Get the list SDF_PropertyList of a SDF_Properties. Note that the precondition is that this SDF_Properties actually has a list
- * \param[in] arg input SDF_Properties
- * \return the list of #arg, if it exist or an undefined value if it does not
- */
-SDF_PropertyList SDF_getPropertiesList(SDF_Properties arg) {
-  
-    return (SDF_PropertyList)ATgetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), 1);
-}
-
-/**
- * Set the list of a SDF_Properties. The precondition being that this SDF_Properties actually has a list
- * \param[in] arg input SDF_Properties
- * \param[in] list new SDF_PropertyList to set in #arg
- * \return A new SDF_Properties with list at the right place, or a core dump if #arg did not have a list
- */
-SDF_Properties SDF_setPropertiesList(SDF_Properties arg, SDF_PropertyList list) {
-  if (SDF_isPropertiesDefault(arg)) {
-    return (SDF_Properties)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), (ATerm)((ATerm) list), 1), 0), 1);
-  }
-
-  ATabort("Properties has no List: %t\n", arg);
-  return (SDF_Properties)NULL;
-}
-
-/**
- * Assert whether a SDF_PropertyList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
- */
-ATbool SDF_isValidPropertyList(SDF_PropertyList arg) {
-  if (SDF_isPropertyListEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isPropertyListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isPropertyListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_PropertyList is a empty. . May not be used to assert correctness of the SDF_PropertyList
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
- */
-inline ATbool SDF_isPropertyListEmpty(SDF_PropertyList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SDF_patternPropertyListEmpty));
-#endif
-  return ATtrue;
-}
-
-/**
- * Assert whether a SDF_PropertyList is a single. . May not be used to assert correctness of the SDF_PropertyList
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
- */
-inline ATbool SDF_isPropertyListSingle(SDF_PropertyList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternPropertyListSingle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_PropertyList is a many. . May not be used to assert correctness of the SDF_PropertyList
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
- */
-inline ATbool SDF_isPropertyListMany(SDF_PropertyList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternPropertyListMany, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_PropertyList has a head. 
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if the SDF_PropertyList had a head, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyListHead(SDF_PropertyList arg) {
-  if (SDF_isPropertyListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isPropertyListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_PropertyList has a ws-after-head. 
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if the SDF_PropertyList had a ws-after-head, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyListWsAfterHead(SDF_PropertyList arg) {
-  if (SDF_isPropertyListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_PropertyList has a tail. 
- * \param[in] arg input SDF_PropertyList
- * \return ATtrue if the SDF_PropertyList had a tail, or ATfalse otherwise
- */
-ATbool SDF_hasPropertyListTail(SDF_PropertyList arg) {
-  if (SDF_isPropertyListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Returns a list of all but the first element of a SDF_PropertyList. 
- * \param[in] arg input SDF_PropertyList
- * \return A new SDF_PropertyList, without the first element and the separator(s) just after it.)
- */
-SDF_PropertyList SDF_getPropertyListTail(SDF_PropertyList arg) {
-  assert(!SDF_isPropertyListEmpty(arg) && "getTail on an empty list");
-  if (SDF_isPropertyListSingle(arg)) {
-    return (SDF_PropertyList) SDF_makePropertyListEmpty();
-  }
-  else {
-  
-    return (SDF_PropertyList)ATgetTail((ATermList)arg, 2);
-  }
-}
-
-/**
- * Get the head SDF_Property of a SDF_PropertyList. Note that the precondition is that this SDF_PropertyList actually has a head
- * \param[in] arg input SDF_PropertyList
- * \return the head of #arg, if it exist or an undefined value if it does not
- */
-SDF_Property SDF_getPropertyListHead(SDF_PropertyList arg) {
-  if (SDF_isPropertyListSingle(arg)) {
-    return (SDF_Property)ATgetFirst((ATermList)arg);
-  }
-  else 
-    return (SDF_Property)ATgetFirst((ATermList)arg);
-}
-
-/**
- * Get the ws-after-head SDF_OptLayout of a SDF_PropertyList. Note that the precondition is that this SDF_PropertyList actually has a ws-after-head
- * \param[in] arg input SDF_PropertyList
- * \return the ws-after-head of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getPropertyListWsAfterHead(SDF_PropertyList arg) {
-  
-    return (SDF_OptLayout)ATelementAt((ATermList)arg, 1);
-}
-
-/**
- * Set the head of a SDF_PropertyList. The precondition being that this SDF_PropertyList actually has a head
- * \param[in] arg input SDF_PropertyList
- * \param[in] head new SDF_Property to set in #arg
- * \return A new SDF_PropertyList with head at the right place, or a core dump if #arg did not have a head
- */
-SDF_PropertyList SDF_setPropertyListHead(SDF_PropertyList arg, SDF_Property head) {
-  if (SDF_isPropertyListSingle(arg)) {
-    return (SDF_PropertyList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-  else if (SDF_isPropertyListMany(arg)) {
-    return (SDF_PropertyList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("PropertyList has no Head: %t\n", arg);
-  return (SDF_PropertyList)NULL;
-}
-
-/**
- * Set the ws-after-head of a SDF_PropertyList. The precondition being that this SDF_PropertyList actually has a ws-after-head
- * \param[in] arg input SDF_PropertyList
- * \param[in] wsAfterHead new SDF_OptLayout to set in #arg
- * \return A new SDF_PropertyList with wsAfterHead at the right place, or a core dump if #arg did not have a wsAfterHead
- */
-SDF_PropertyList SDF_setPropertyListWsAfterHead(SDF_PropertyList arg, SDF_OptLayout wsAfterHead) {
-  if (SDF_isPropertyListMany(arg)) {
-    return (SDF_PropertyList)ATreplace((ATermList)arg, (ATerm)((ATerm) wsAfterHead), 1);
-  }
-
-  ATabort("PropertyList has no WsAfterHead: %t\n", arg);
-  return (SDF_PropertyList)NULL;
-}
-
-/**
- * Set the tail of a SDF_PropertyList. The precondition being that this SDF_PropertyList actually has a tail
- * \param[in] arg input SDF_PropertyList
- * \param[in] tail new SDF_PropertyList to set in #arg
- * \return A new SDF_PropertyList with tail at the right place, or a core dump if #arg did not have a tail
- */
-SDF_PropertyList SDF_setPropertyListTail(SDF_PropertyList arg, SDF_PropertyList tail) {
-  if (SDF_isPropertyListMany(arg)) {
-    return (SDF_PropertyList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 2);
-  }
-
-  ATabort("PropertyList has no Tail: %t\n", arg);
-  return (SDF_PropertyList)NULL;
 }
 
 /**
@@ -31479,354 +30235,6 @@ SDF_RestrictionList SDF_setRestrictionListTail(SDF_RestrictionList arg, SDF_Rest
 }
 
 /**
- * Assert whether a SDF_RightNullableProduction is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
- * \param[in] arg input SDF_RightNullableProduction
- * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
- */
-ATbool SDF_isValidRightNullableProduction(SDF_RightNullableProduction arg) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_RightNullableProduction is a default. Always returns ATtrue
- * \param[in] arg input SDF_RightNullableProduction
- * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
- */
-inline ATbool SDF_isRightNullableProductionDefault(SDF_RightNullableProduction arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SDF_patternRightNullableProductionDefault, NULL, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-/**
- * Assert whether a SDF_RightNullableProduction has a Production. 
- * \param[in] arg input SDF_RightNullableProduction
- * \return ATtrue if the SDF_RightNullableProduction had a Production, or ATfalse otherwise
- */
-ATbool SDF_hasRightNullableProductionProduction(SDF_RightNullableProduction arg) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_RightNullableProduction has a ws-after-Production. 
- * \param[in] arg input SDF_RightNullableProduction
- * \return ATtrue if the SDF_RightNullableProduction had a ws-after-Production, or ATfalse otherwise
- */
-ATbool SDF_hasRightNullableProductionWsAfterProduction(SDF_RightNullableProduction arg) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_RightNullableProduction has a prefix-length. 
- * \param[in] arg input SDF_RightNullableProduction
- * \return ATtrue if the SDF_RightNullableProduction had a prefix-length, or ATfalse otherwise
- */
-ATbool SDF_hasRightNullableProductionPrefixLength(SDF_RightNullableProduction arg) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Get the Production SDF_Production of a SDF_RightNullableProduction. Note that the precondition is that this SDF_RightNullableProduction actually has a Production
- * \param[in] arg input SDF_RightNullableProduction
- * \return the Production of #arg, if it exist or an undefined value if it does not
- */
-SDF_Production SDF_getRightNullableProductionProduction(SDF_RightNullableProduction arg) {
-  
-    return (SDF_Production)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
-}
-
-/**
- * Get the ws-after-Production SDF_OptLayout of a SDF_RightNullableProduction. Note that the precondition is that this SDF_RightNullableProduction actually has a ws-after-Production
- * \param[in] arg input SDF_RightNullableProduction
- * \return the ws-after-Production of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getRightNullableProductionWsAfterProduction(SDF_RightNullableProduction arg) {
-  
-    return (SDF_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/**
- * Get the prefix-length SDF_NatCon of a SDF_RightNullableProduction. Note that the precondition is that this SDF_RightNullableProduction actually has a prefix-length
- * \param[in] arg input SDF_RightNullableProduction
- * \return the prefix-length of #arg, if it exist or an undefined value if it does not
- */
-SDF_NatCon SDF_getRightNullableProductionPrefixLength(SDF_RightNullableProduction arg) {
-  
-    return (SDF_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 2);
-}
-
-/**
- * Set the Production of a SDF_RightNullableProduction. The precondition being that this SDF_RightNullableProduction actually has a Production
- * \param[in] arg input SDF_RightNullableProduction
- * \param[in] Production new SDF_Production to set in #arg
- * \return A new SDF_RightNullableProduction with Production at the right place, or a core dump if #arg did not have a Production
- */
-SDF_RightNullableProduction SDF_setRightNullableProductionProduction(SDF_RightNullableProduction arg, SDF_Production Production) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return (SDF_RightNullableProduction)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Production), 0), 1);
-  }
-
-  ATabort("RightNullableProduction has no Production: %t\n", arg);
-  return (SDF_RightNullableProduction)NULL;
-}
-
-/**
- * Set the ws-after-Production of a SDF_RightNullableProduction. The precondition being that this SDF_RightNullableProduction actually has a ws-after-Production
- * \param[in] arg input SDF_RightNullableProduction
- * \param[in] wsAfterProduction new SDF_OptLayout to set in #arg
- * \return A new SDF_RightNullableProduction with wsAfterProduction at the right place, or a core dump if #arg did not have a wsAfterProduction
- */
-SDF_RightNullableProduction SDF_setRightNullableProductionWsAfterProduction(SDF_RightNullableProduction arg, SDF_OptLayout wsAfterProduction) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return (SDF_RightNullableProduction)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterProduction), 1), 1);
-  }
-
-  ATabort("RightNullableProduction has no WsAfterProduction: %t\n", arg);
-  return (SDF_RightNullableProduction)NULL;
-}
-
-/**
- * Set the prefix-length of a SDF_RightNullableProduction. The precondition being that this SDF_RightNullableProduction actually has a prefix-length
- * \param[in] arg input SDF_RightNullableProduction
- * \param[in] prefixLength new SDF_NatCon to set in #arg
- * \return A new SDF_RightNullableProduction with prefixLength at the right place, or a core dump if #arg did not have a prefixLength
- */
-SDF_RightNullableProduction SDF_setRightNullableProductionPrefixLength(SDF_RightNullableProduction arg, SDF_NatCon prefixLength) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return (SDF_RightNullableProduction)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) prefixLength), 2), 1);
-  }
-
-  ATabort("RightNullableProduction has no PrefixLength: %t\n", arg);
-  return (SDF_RightNullableProduction)NULL;
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
- */
-ATbool SDF_isValidRightNullableProductionList(SDF_RightNullableProductionList arg) {
-  if (SDF_isRightNullableProductionListEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isRightNullableProductionListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isRightNullableProductionListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList is a empty. . May not be used to assert correctness of the SDF_RightNullableProductionList
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
- */
-inline ATbool SDF_isRightNullableProductionListEmpty(SDF_RightNullableProductionList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, SDF_patternRightNullableProductionListEmpty));
-#endif
-  return ATtrue;
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList is a single. . May not be used to assert correctness of the SDF_RightNullableProductionList
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
- */
-inline ATbool SDF_isRightNullableProductionListSingle(SDF_RightNullableProductionList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternRightNullableProductionListSingle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList is a many. . May not be used to assert correctness of the SDF_RightNullableProductionList
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
- */
-inline ATbool SDF_isRightNullableProductionListMany(SDF_RightNullableProductionList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SDF_patternRightNullableProductionListMany, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList has a head. 
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if the SDF_RightNullableProductionList had a head, or ATfalse otherwise
- */
-ATbool SDF_hasRightNullableProductionListHead(SDF_RightNullableProductionList arg) {
-  if (SDF_isRightNullableProductionListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isRightNullableProductionListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList has a ws-after-head. 
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if the SDF_RightNullableProductionList had a ws-after-head, or ATfalse otherwise
- */
-ATbool SDF_hasRightNullableProductionListWsAfterHead(SDF_RightNullableProductionList arg) {
-  if (SDF_isRightNullableProductionListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Assert whether a SDF_RightNullableProductionList has a tail. 
- * \param[in] arg input SDF_RightNullableProductionList
- * \return ATtrue if the SDF_RightNullableProductionList had a tail, or ATfalse otherwise
- */
-ATbool SDF_hasRightNullableProductionListTail(SDF_RightNullableProductionList arg) {
-  if (SDF_isRightNullableProductionListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/**
- * Returns a list of all but the first element of a SDF_RightNullableProductionList. 
- * \param[in] arg input SDF_RightNullableProductionList
- * \return A new SDF_RightNullableProductionList, without the first element and the separator(s) just after it.)
- */
-SDF_RightNullableProductionList SDF_getRightNullableProductionListTail(SDF_RightNullableProductionList arg) {
-  assert(!SDF_isRightNullableProductionListEmpty(arg) && "getTail on an empty list");
-  if (SDF_isRightNullableProductionListSingle(arg)) {
-    return (SDF_RightNullableProductionList) SDF_makeRightNullableProductionListEmpty();
-  }
-  else {
-  
-    return (SDF_RightNullableProductionList)ATgetTail((ATermList)arg, 2);
-  }
-}
-
-/**
- * Get the head SDF_RightNullableProduction of a SDF_RightNullableProductionList. Note that the precondition is that this SDF_RightNullableProductionList actually has a head
- * \param[in] arg input SDF_RightNullableProductionList
- * \return the head of #arg, if it exist or an undefined value if it does not
- */
-SDF_RightNullableProduction SDF_getRightNullableProductionListHead(SDF_RightNullableProductionList arg) {
-  if (SDF_isRightNullableProductionListSingle(arg)) {
-    return (SDF_RightNullableProduction)ATgetFirst((ATermList)arg);
-  }
-  else 
-    return (SDF_RightNullableProduction)ATgetFirst((ATermList)arg);
-}
-
-/**
- * Get the ws-after-head SDF_OptLayout of a SDF_RightNullableProductionList. Note that the precondition is that this SDF_RightNullableProductionList actually has a ws-after-head
- * \param[in] arg input SDF_RightNullableProductionList
- * \return the ws-after-head of #arg, if it exist or an undefined value if it does not
- */
-SDF_OptLayout SDF_getRightNullableProductionListWsAfterHead(SDF_RightNullableProductionList arg) {
-  
-    return (SDF_OptLayout)ATelementAt((ATermList)arg, 1);
-}
-
-/**
- * Set the head of a SDF_RightNullableProductionList. The precondition being that this SDF_RightNullableProductionList actually has a head
- * \param[in] arg input SDF_RightNullableProductionList
- * \param[in] head new SDF_RightNullableProduction to set in #arg
- * \return A new SDF_RightNullableProductionList with head at the right place, or a core dump if #arg did not have a head
- */
-SDF_RightNullableProductionList SDF_setRightNullableProductionListHead(SDF_RightNullableProductionList arg, SDF_RightNullableProduction head) {
-  if (SDF_isRightNullableProductionListSingle(arg)) {
-    return (SDF_RightNullableProductionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-  else if (SDF_isRightNullableProductionListMany(arg)) {
-    return (SDF_RightNullableProductionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("RightNullableProductionList has no Head: %t\n", arg);
-  return (SDF_RightNullableProductionList)NULL;
-}
-
-/**
- * Set the ws-after-head of a SDF_RightNullableProductionList. The precondition being that this SDF_RightNullableProductionList actually has a ws-after-head
- * \param[in] arg input SDF_RightNullableProductionList
- * \param[in] wsAfterHead new SDF_OptLayout to set in #arg
- * \return A new SDF_RightNullableProductionList with wsAfterHead at the right place, or a core dump if #arg did not have a wsAfterHead
- */
-SDF_RightNullableProductionList SDF_setRightNullableProductionListWsAfterHead(SDF_RightNullableProductionList arg, SDF_OptLayout wsAfterHead) {
-  if (SDF_isRightNullableProductionListMany(arg)) {
-    return (SDF_RightNullableProductionList)ATreplace((ATermList)arg, (ATerm)((ATerm) wsAfterHead), 1);
-  }
-
-  ATabort("RightNullableProductionList has no WsAfterHead: %t\n", arg);
-  return (SDF_RightNullableProductionList)NULL;
-}
-
-/**
- * Set the tail of a SDF_RightNullableProductionList. The precondition being that this SDF_RightNullableProductionList actually has a tail
- * \param[in] arg input SDF_RightNullableProductionList
- * \param[in] tail new SDF_RightNullableProductionList to set in #arg
- * \return A new SDF_RightNullableProductionList with tail at the right place, or a core dump if #arg did not have a tail
- */
-SDF_RightNullableProductionList SDF_setRightNullableProductionListTail(SDF_RightNullableProductionList arg, SDF_RightNullableProductionList tail) {
-  if (SDF_isRightNullableProductionListMany(arg)) {
-    return (SDF_RightNullableProductionList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 2);
-  }
-
-  ATabort("RightNullableProductionList has no Tail: %t\n", arg);
-  return (SDF_RightNullableProductionList)NULL;
-}
-
-/**
  * Assert whether a SDF_Sort is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
  * \param[in] arg input SDF_Sort
  * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
@@ -34133,7 +32541,7 @@ SDF_RealCon SDF_visitRealCon(SDF_RealCon arg, SDF_IntCon (*acceptBase)(SDF_IntCo
  * Apply functions to the children of a SDF_Grammar. 
  * \return A new SDF_Grammar with new children where the argument functions might have applied
  */
-SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_OptLayout (*acceptWsAfterAliases)(SDF_OptLayout), SDF_Aliases (*acceptAliases)(SDF_Aliases), SDF_OptLayout (*acceptWsAfterLexical)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSyntax)(SDF_OptLayout), SDF_Productions (*acceptProductions)(SDF_Productions), SDF_OptLayout (*acceptWsAfterContextFree)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterVariables)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGrammar)(SDF_OptLayout), SDF_ImpSection (*acceptImpSection)(SDF_ImpSection), SDF_OptLayout (*acceptWsAfterPriorities)(SDF_OptLayout), SDF_Priorities (*acceptPriorities)(SDF_Priorities), SDF_OptLayout (*acceptWsAfterProperties)(SDF_OptLayout), SDF_Properties (*acceptProperties)(SDF_Properties), SDF_OptLayout (*acceptWsAfterRestrictions)(SDF_OptLayout), SDF_Restrictions (*acceptRestrictions)(SDF_Restrictions), SDF_OptLayout (*acceptWsAfterSorts)(SDF_OptLayout), SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterStartSymbols)(SDF_OptLayout)) {
+SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_OptLayout (*acceptWsAfterAliases)(SDF_OptLayout), SDF_Aliases (*acceptAliases)(SDF_Aliases), SDF_OptLayout (*acceptWsAfterLexical)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSyntax)(SDF_OptLayout), SDF_Productions (*acceptProductions)(SDF_Productions), SDF_OptLayout (*acceptWsAfterContextFree)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterVariables)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGrammar)(SDF_OptLayout), SDF_ImpSection (*acceptImpSection)(SDF_ImpSection), SDF_OptLayout (*acceptWsAfterPriorities)(SDF_OptLayout), SDF_Priorities (*acceptPriorities)(SDF_Priorities), SDF_OptLayout (*acceptWsAfterRestrictions)(SDF_OptLayout), SDF_Restrictions (*acceptRestrictions)(SDF_Restrictions), SDF_OptLayout (*acceptWsAfterSorts)(SDF_OptLayout), SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterStartSymbols)(SDF_OptLayout)) {
   if (SDF_isGrammarAliases(arg)) {
     return SDF_makeGrammarAliases(
         acceptWsAfterAliases ? acceptWsAfterAliases(SDF_getGrammarWsAfterAliases(arg)) : SDF_getGrammarWsAfterAliases(arg),
@@ -34167,14 +32575,14 @@ SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_OptLayout (*acceptWsAfterAlias
   }
   if (SDF_isGrammarConcGrammars(arg)) {
     return SDF_makeGrammarConcGrammars(
-        SDF_visitGrammar(SDF_getGrammarLeft(arg), acceptWsAfterAliases, acceptAliases, acceptWsAfterLexical, acceptWsAfterSyntax, acceptProductions, acceptWsAfterContextFree, acceptWsAfterVariables, acceptWsAfterLeft, acceptWsAfterParenOpen, acceptWsAfterGrammar, acceptImpSection, acceptWsAfterPriorities, acceptPriorities, acceptWsAfterProperties, acceptProperties, acceptWsAfterRestrictions, acceptRestrictions, acceptWsAfterSorts, acceptSymbols, acceptWsAfterStartSymbols),
+        SDF_visitGrammar(SDF_getGrammarLeft(arg), acceptWsAfterAliases, acceptAliases, acceptWsAfterLexical, acceptWsAfterSyntax, acceptProductions, acceptWsAfterContextFree, acceptWsAfterVariables, acceptWsAfterLeft, acceptWsAfterParenOpen, acceptWsAfterGrammar, acceptImpSection, acceptWsAfterPriorities, acceptPriorities, acceptWsAfterRestrictions, acceptRestrictions, acceptWsAfterSorts, acceptSymbols, acceptWsAfterStartSymbols),
         acceptWsAfterLeft ? acceptWsAfterLeft(SDF_getGrammarWsAfterLeft(arg)) : SDF_getGrammarWsAfterLeft(arg),
-        SDF_visitGrammar(SDF_getGrammarRight(arg), acceptWsAfterAliases, acceptAliases, acceptWsAfterLexical, acceptWsAfterSyntax, acceptProductions, acceptWsAfterContextFree, acceptWsAfterVariables, acceptWsAfterLeft, acceptWsAfterParenOpen, acceptWsAfterGrammar, acceptImpSection, acceptWsAfterPriorities, acceptPriorities, acceptWsAfterProperties, acceptProperties, acceptWsAfterRestrictions, acceptRestrictions, acceptWsAfterSorts, acceptSymbols, acceptWsAfterStartSymbols));
+        SDF_visitGrammar(SDF_getGrammarRight(arg), acceptWsAfterAliases, acceptAliases, acceptWsAfterLexical, acceptWsAfterSyntax, acceptProductions, acceptWsAfterContextFree, acceptWsAfterVariables, acceptWsAfterLeft, acceptWsAfterParenOpen, acceptWsAfterGrammar, acceptImpSection, acceptWsAfterPriorities, acceptPriorities, acceptWsAfterRestrictions, acceptRestrictions, acceptWsAfterSorts, acceptSymbols, acceptWsAfterStartSymbols));
   }
   if (SDF_isGrammarBracket(arg)) {
     return SDF_makeGrammarBracket(
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(SDF_getGrammarWsAfterParenOpen(arg)) : SDF_getGrammarWsAfterParenOpen(arg),
-        SDF_visitGrammar(SDF_getGrammarGrammar(arg), acceptWsAfterAliases, acceptAliases, acceptWsAfterLexical, acceptWsAfterSyntax, acceptProductions, acceptWsAfterContextFree, acceptWsAfterVariables, acceptWsAfterLeft, acceptWsAfterParenOpen, acceptWsAfterGrammar, acceptImpSection, acceptWsAfterPriorities, acceptPriorities, acceptWsAfterProperties, acceptProperties, acceptWsAfterRestrictions, acceptRestrictions, acceptWsAfterSorts, acceptSymbols, acceptWsAfterStartSymbols),
+        SDF_visitGrammar(SDF_getGrammarGrammar(arg), acceptWsAfterAliases, acceptAliases, acceptWsAfterLexical, acceptWsAfterSyntax, acceptProductions, acceptWsAfterContextFree, acceptWsAfterVariables, acceptWsAfterLeft, acceptWsAfterParenOpen, acceptWsAfterGrammar, acceptImpSection, acceptWsAfterPriorities, acceptPriorities, acceptWsAfterRestrictions, acceptRestrictions, acceptWsAfterSorts, acceptSymbols, acceptWsAfterStartSymbols),
         acceptWsAfterGrammar ? acceptWsAfterGrammar(SDF_getGrammarWsAfterGrammar(arg)) : SDF_getGrammarWsAfterGrammar(arg));
   }
   if (SDF_isGrammarSyntax(arg)) {
@@ -34190,11 +32598,6 @@ SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_OptLayout (*acceptWsAfterAlias
     return SDF_makeGrammarPriorities(
         acceptWsAfterPriorities ? acceptWsAfterPriorities(SDF_getGrammarWsAfterPriorities(arg)) : SDF_getGrammarWsAfterPriorities(arg),
         acceptPriorities ? acceptPriorities(SDF_getGrammarPriorities(arg)) : SDF_getGrammarPriorities(arg));
-  }
-  if (SDF_isGrammarProperties(arg)) {
-    return SDF_makeGrammarProperties(
-        acceptWsAfterProperties ? acceptWsAfterProperties(SDF_getGrammarWsAfterProperties(arg)) : SDF_getGrammarWsAfterProperties(arg),
-        acceptProperties ? acceptProperties(SDF_getGrammarProperties(arg)) : SDF_getGrammarProperties(arg));
   }
   if (SDF_isGrammarRestrictions(arg)) {
     return SDF_makeGrammarRestrictions(
@@ -35201,27 +33604,6 @@ SDF_ImportList SDF_visitImportList(SDF_ImportList arg, SDF_Import (*acceptHead)(
   return (SDF_ImportList)NULL;
 }
 /**
- * Apply functions to the children of a SDF_Property. 
- * \return A new SDF_Property with new children where the argument functions might have applied
- */
-SDF_Property SDF_visitProperty(SDF_Property arg, SDF_OptLayout (*acceptWsAfterNullable)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterProductions)(SDF_OptLayout), SDF_Productions (*acceptProductions)(SDF_Productions), SDF_OptLayout (*acceptWsAfterRight)(SDF_OptLayout), SDF_RightNullableProductionList (*acceptList)(SDF_RightNullableProductionList)) {
-  if (SDF_isPropertyNullableProductions(arg)) {
-    return SDF_makePropertyNullableProductions(
-        acceptWsAfterNullable ? acceptWsAfterNullable(SDF_getPropertyWsAfterNullable(arg)) : SDF_getPropertyWsAfterNullable(arg),
-        acceptWsAfterProductions ? acceptWsAfterProductions(SDF_getPropertyWsAfterProductions(arg)) : SDF_getPropertyWsAfterProductions(arg),
-        acceptProductions ? acceptProductions(SDF_getPropertyProductions(arg)) : SDF_getPropertyProductions(arg));
-  }
-  if (SDF_isPropertyRightNullableProductions(arg)) {
-    return SDF_makePropertyRightNullableProductions(
-        acceptWsAfterRight ? acceptWsAfterRight(SDF_getPropertyWsAfterRight(arg)) : SDF_getPropertyWsAfterRight(arg),
-        acceptWsAfterNullable ? acceptWsAfterNullable(SDF_getPropertyWsAfterNullable(arg)) : SDF_getPropertyWsAfterNullable(arg),
-        acceptWsAfterProductions ? acceptWsAfterProductions(SDF_getPropertyWsAfterProductions(arg)) : SDF_getPropertyWsAfterProductions(arg),
-        acceptList ? acceptList(SDF_getPropertyList(arg)) : SDF_getPropertyList(arg));
-  }
-  ATabort("not a Property: %t\n", arg);
-  return (SDF_Property)NULL;
-}
-/**
  * Apply functions to the children of a SDF_Associativity. 
  * \return A new SDF_Associativity with new children where the argument functions might have applied
  */
@@ -35265,6 +33647,11 @@ SDF_Group SDF_visitGroup(SDF_Group arg, SDF_OptLayout (*acceptWsAfterGroup)(SDF_
         SDF_visitGroup(SDF_getGroupGroup(arg), acceptWsAfterGroup, acceptArgumentIndicator, acceptProduction, acceptWsAfterBraceOpen, acceptProductions, acceptWsAfterProductions, acceptAssociativity, acceptWsAfterAssociativity, acceptWsAfterColon),
         acceptWsAfterGroup ? acceptWsAfterGroup(SDF_getGroupWsAfterGroup(arg)) : SDF_getGroupWsAfterGroup(arg),
         acceptArgumentIndicator ? acceptArgumentIndicator(SDF_getGroupArgumentIndicator(arg)) : SDF_getGroupArgumentIndicator(arg));
+  }
+  if (SDF_isGroupNonTransitive(arg)) {
+    return SDF_makeGroupNonTransitive(
+        SDF_visitGroup(SDF_getGroupGroup(arg), acceptWsAfterGroup, acceptArgumentIndicator, acceptProduction, acceptWsAfterBraceOpen, acceptProductions, acceptWsAfterProductions, acceptAssociativity, acceptWsAfterAssociativity, acceptWsAfterColon),
+        acceptWsAfterGroup ? acceptWsAfterGroup(SDF_getGroupWsAfterGroup(arg)) : SDF_getGroupWsAfterGroup(arg));
   }
   if (SDF_isGroupSimpleGroup(arg)) {
     return SDF_makeGroupSimpleGroup(
@@ -35385,39 +33772,6 @@ SDF_PriorityList SDF_visitPriorityList(SDF_PriorityList arg, SDF_Priority (*acce
   }
   ATabort("not a PriorityList: %t\n", arg);
   return (SDF_PriorityList)NULL;
-}
-/**
- * Apply functions to the children of a SDF_Properties. 
- * \return A new SDF_Properties with new children where the argument functions might have applied
- */
-SDF_Properties SDF_visitProperties(SDF_Properties arg, SDF_PropertyList (*acceptList)(SDF_PropertyList)) {
-  if (SDF_isPropertiesDefault(arg)) {
-    return SDF_makePropertiesDefault(
-        acceptList ? acceptList(SDF_getPropertiesList(arg)) : SDF_getPropertiesList(arg));
-  }
-  ATabort("not a Properties: %t\n", arg);
-  return (SDF_Properties)NULL;
-}
-/**
- * Apply functions to the children of a SDF_PropertyList. 
- * \return A new SDF_PropertyList with new children where the argument functions might have applied
- */
-SDF_PropertyList SDF_visitPropertyList(SDF_PropertyList arg, SDF_Property (*acceptHead)(SDF_Property), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout)) {
-  if (SDF_isPropertyListEmpty(arg)) {
-    return SDF_makePropertyListEmpty();
-  }
-  if (SDF_isPropertyListSingle(arg)) {
-    return SDF_makePropertyListSingle(
-        acceptHead ? acceptHead(SDF_getPropertyListHead(arg)) : SDF_getPropertyListHead(arg));
-  }
-  if (SDF_isPropertyListMany(arg)) {
-    return SDF_makePropertyListMany(
-        acceptHead ? acceptHead(SDF_getPropertyListHead(arg)) : SDF_getPropertyListHead(arg),
-        acceptWsAfterHead ? acceptWsAfterHead(SDF_getPropertyListWsAfterHead(arg)) : SDF_getPropertyListWsAfterHead(arg),
-        SDF_visitPropertyList(SDF_getPropertyListTail(arg), acceptHead, acceptWsAfterHead));
-  }
-  ATabort("not a PropertyList: %t\n", arg);
-  return (SDF_PropertyList)NULL;
 }
 /**
  * Apply functions to the children of a SDF_SymbolTail. 
@@ -35638,41 +33992,6 @@ SDF_RestrictionList SDF_visitRestrictionList(SDF_RestrictionList arg, SDF_Restri
   }
   ATabort("not a RestrictionList: %t\n", arg);
   return (SDF_RestrictionList)NULL;
-}
-/**
- * Apply functions to the children of a SDF_RightNullableProduction. 
- * \return A new SDF_RightNullableProduction with new children where the argument functions might have applied
- */
-SDF_RightNullableProduction SDF_visitRightNullableProduction(SDF_RightNullableProduction arg, SDF_Production (*acceptProduction)(SDF_Production), SDF_OptLayout (*acceptWsAfterProduction)(SDF_OptLayout), SDF_NatCon (*acceptPrefixLength)(SDF_NatCon)) {
-  if (SDF_isRightNullableProductionDefault(arg)) {
-    return SDF_makeRightNullableProductionDefault(
-        acceptProduction ? acceptProduction(SDF_getRightNullableProductionProduction(arg)) : SDF_getRightNullableProductionProduction(arg),
-        acceptWsAfterProduction ? acceptWsAfterProduction(SDF_getRightNullableProductionWsAfterProduction(arg)) : SDF_getRightNullableProductionWsAfterProduction(arg),
-        acceptPrefixLength ? acceptPrefixLength(SDF_getRightNullableProductionPrefixLength(arg)) : SDF_getRightNullableProductionPrefixLength(arg));
-  }
-  ATabort("not a RightNullableProduction: %t\n", arg);
-  return (SDF_RightNullableProduction)NULL;
-}
-/**
- * Apply functions to the children of a SDF_RightNullableProductionList. 
- * \return A new SDF_RightNullableProductionList with new children where the argument functions might have applied
- */
-SDF_RightNullableProductionList SDF_visitRightNullableProductionList(SDF_RightNullableProductionList arg, SDF_RightNullableProduction (*acceptHead)(SDF_RightNullableProduction), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout)) {
-  if (SDF_isRightNullableProductionListEmpty(arg)) {
-    return SDF_makeRightNullableProductionListEmpty();
-  }
-  if (SDF_isRightNullableProductionListSingle(arg)) {
-    return SDF_makeRightNullableProductionListSingle(
-        acceptHead ? acceptHead(SDF_getRightNullableProductionListHead(arg)) : SDF_getRightNullableProductionListHead(arg));
-  }
-  if (SDF_isRightNullableProductionListMany(arg)) {
-    return SDF_makeRightNullableProductionListMany(
-        acceptHead ? acceptHead(SDF_getRightNullableProductionListHead(arg)) : SDF_getRightNullableProductionListHead(arg),
-        acceptWsAfterHead ? acceptWsAfterHead(SDF_getRightNullableProductionListWsAfterHead(arg)) : SDF_getRightNullableProductionListWsAfterHead(arg),
-        SDF_visitRightNullableProductionList(SDF_getRightNullableProductionListTail(arg), acceptHead, acceptWsAfterHead));
-  }
-  ATabort("not a RightNullableProductionList: %t\n", arg);
-  return (SDF_RightNullableProductionList)NULL;
 }
 /**
  * Apply functions to the children of a SDF_Sort. 

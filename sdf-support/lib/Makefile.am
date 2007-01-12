@@ -35,8 +35,7 @@ UTILSRCS = \
 	prod.c \
 	restrict.c \
 	import-operations.c \
-	sort.c \
-	prop.c
+	sort.c 
 
 LIBRARY = ../../sdf-library/library
 ATERM_SDF = $(shell ls $(LIBRARY)/languages/aterm/syntax/*.sdf)

@@ -291,14 +291,6 @@ exports
   lexical restrictions
     ModuleWord -/- [A-Za-z0-9\_\-]
     ModuleId -/- [\/]
-module languages/sdf2/syntax/Nullables
-
-imports languages/sdf2/syntax/Properties
-
-exports
-  context-free syntax
-    "nullable" "productions" Productions -> Property {cons("nullable-productions")} 
-
 %%% $Id$   
 
 module languages/sdf2/syntax/Priority
@@ -320,6 +312,7 @@ exports
     "<" arguments:{NatCon ","}+ ">" -> ArgumentIndicator {cons("default")}
 
     Group ArgumentIndicator               -> Group {non-assoc,cons("with-arguments")}
+    Group "."                             -> Group {non-assoc,cons("non-transitive")}
 
     Production                            -> Group  {cons("simple-group")}
     "{" Productions "}"                   -> Group  {cons("prods-group")}
@@ -332,19 +325,6 @@ exports
     list:{Priority  ","}* -> Priorities
 
     "priorities" Priorities  -> Grammar  {cons("priorities")}
-module languages/sdf2/syntax/Properties
-
-imports languages/sdf2/syntax/Kernel
-
-exports
-  sorts Property Properties
-
-  context-free syntax
- 
-  list:Property*          -> Properties
-  "properties" Properties -> Grammar {cons("properties")}
-
-
 %%% $Id$  
 
 module languages/sdf2/syntax/Regular
@@ -416,19 +396,6 @@ exports
   context-free priorities    
     CharClass "." Lookaheads    -> Lookahead >
     Lookaheads "|" Lookaheads   -> Lookaheads
-module languages/sdf2/syntax/RightNullables
-
-imports languages/sdf2/syntax/Properties
-imports languages/sdf2/syntax/Kernel
-imports basic/NatCon
-
-exports
- sorts RightNullableProduction
-
-  context-free syntax
-    Production prefix-length:NatCon -> RightNullableProduction {cons("default")}
-
-    "right" "nullable" "productions" RightNullableProduction* -> Property {cons("right-nullable-productions")}
 %%% $Id$
 
 module languages/sdf2/syntax/Sdf2

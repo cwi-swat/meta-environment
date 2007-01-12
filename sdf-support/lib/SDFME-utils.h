@@ -46,8 +46,6 @@ SDF_PriorityList    SDF_getGrammarKernelPriorities(SDF_Grammar grammar);
 
 SDF_RestrictionList SDF_getGrammarKernelRestrictions(SDF_Grammar grammar);
 
-SDF_PropertyList SDF_getGrammarKernelProperties(SDF_Grammar grammar);
-
 SDF_Production SDF_removeAttributes(SDF_Production prod);
 
 ATbool SDF_hasRejectAttribute(SDF_Production prod);
