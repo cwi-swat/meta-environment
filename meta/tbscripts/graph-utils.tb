@@ -7,7 +7,7 @@
 #include <graph-painter.idef>
 
 process GraphCleanup(GraphType: str, GraphId: term, Sid: term) is
-  GP-AddCloseListener
+  GP-AddCloseListener(GraphType, GraphId)
   . rec-note(gp-panel-closed(GraphType, GraphId)) 
   . snd-msg(em-delete-session(Sid)) 
 
