@@ -58,6 +58,7 @@ in
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
+    /* Add transaction */
     /* . CheckASFSDFSyntax(ModuleId)  */
   )
   *
