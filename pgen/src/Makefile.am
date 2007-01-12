@@ -46,7 +46,7 @@ parsetablegen_LDADD = \
 	$(ASF_SUPPORT_LIBS) \
 	$(ERROR_SUPPORT_LIBS) \
 	$(TOOLBUSLIB_LIBS) \
-	$(ATERM_CFLAGS)
+	$(ATERM_LIBS)
 
 CLEANFILES += \
 	parse-sdf2 \

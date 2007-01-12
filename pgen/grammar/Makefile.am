@@ -3,7 +3,7 @@ CLEANFILES = Sdf2.asfix
 
 pkgdata_DATA = Sdf2.baf
 
-LIBRARY_DIR = ../../asf-library/library
+LIBRARY_DIR = ../../sdf-library/library
 
 TOP_MODULE = languages/sdf2/syntax/Sdf2
 SDF_MODULES = `find ${LIBRARY_DIR}/languages/sdf2/syntax -name '*.sdf'`

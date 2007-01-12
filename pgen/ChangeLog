@@ -1,5 +1,23 @@
 $Id$
 
+Fri Jan 12 15:35:46 CET 2007 <jurgenv@cwi.nl>
+ * grammars/Sdf2.baf: introduced a new operator for priorities. The "."
+   can stop (full stop) the transitive closure of priorities. Example:
+   A "+" A -> A > A "*" A -> A . > A "/" A -> A
+                              ^^^
+			      This dot makes that + is not bigger than /.
+ * src/Sdf2-Normalization.c,src/ksdf2table.c: implemented the semantics
+   of the . operator. 
+ * src/Sdf2-Normalization.c: the normalizer translates associativities
+   to non-transitive priorities now. This solves bug #678 which was
+   introduced by the mapping of associativity to priority in specific
+   arguments.
+ * tests/tables/*: tables contain much less priorities now since the
+   associativities are no longer closed under transitivity. This changes
+   both the action table and the list of priorities. The regression
+   tests for the terms parsed with the new tables did not need any
+   updating.
+
 Wed Sep 13 15:54:37 CEST 2006 <economop@cwi.nl>
  * src/Sdf2-Normalization.c: regenerated because the normalisation was
    changed.

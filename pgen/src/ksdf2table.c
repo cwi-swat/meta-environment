@@ -381,7 +381,7 @@ static ATerm getGroupArgument(SDF_Group group)
 /*}}}  */
 /*{{{  static ATerm processChainPriority(SDF_Priority prio) */
 
-static ATerm processChainPriority(SDF_Priority prio)
+static ATerm processChainPriority(SDF_Priority prio, ATbool *nonTransitive)
 {
   ATerm leftnr = NULL, rightnr = NULL;
   ATerm prioentry = NULL;
@@ -396,6 +396,14 @@ static ATerm processChainPriority(SDF_Priority prio)
 
     if (SDF_isGroupListSingle(groupList)) {
       rightGroup = SDF_getGroupListHead(groupList);
+
+      if (SDF_isGroupNonTransitive(leftGroup)) {
+	*nonTransitive = ATtrue;
+	leftGroup = SDF_getGroupGroup(leftGroup);
+      }
+      else {
+	*nonTransitive = ATfalse;
+      }
 
       if (SDF_isGroupSimpleGroup(leftGroup)) {
 	leftnr = getProductionNumberForGroup(leftGroup);
@@ -452,6 +460,7 @@ static ATerm process_priorities(SDF_PriorityList prios)
 {
   ATerm prioentry = NULL;
   ATermList prioentries = ATempty;
+  ATermList nonTransitivePrioEntries = ATempty;
   int cnt = 0;
   ATbool isnew;
   int idx, localIdx1, localIdx2, max_idx; 
@@ -460,10 +469,14 @@ static ATerm process_priorities(SDF_PriorityList prios)
   /* Store the chain priorities */
   max_idx = -1;
   while (SDF_hasPriorityListHead(localPrios)) {
+    ATbool nonTransitive;
     SDF_Priority prio = SDF_getPriorityListHead(localPrios);
-   
+  
+    assert(!SDF_isPriorityAssoc(prio) && "assoc should be normalized to prio");
+
     if (SDF_isPriorityChain(prio)) {
-      prioentry = processChainPriority(prio);
+      nonTransitive = ATfalse;
+      prioentry = processChainPriority(prio, &nonTransitive);
     }
     else {
       ATwarning("process_priorities: illegal priority encountered: %t\n", prio);
@@ -471,14 +484,21 @@ static ATerm process_priorities(SDF_PriorityList prios)
     }
 
     if (prioentry) {
-      idx = ATindexedSetPut(priority_table, prioentry, &isnew);
-      if (isnew) {
-        if (idx > max_idx) {
-          max_idx = idx;
-        } 
-	prioentries = ATinsert(prioentries, prioentry);
-	cnt++;
+      if (nonTransitive) {
+	nonTransitivePrioEntries = ATinsert(nonTransitivePrioEntries, 
+					    prioentry);
       }
+      else {
+	idx = ATindexedSetPut(priority_table, prioentry, &isnew);
+	if (isnew) {
+	  if (idx > max_idx) {
+	    max_idx = idx;
+	  } 
+
+	  prioentries = ATinsert(prioentries, prioentry);
+	}
+      }
+      cnt++;
     }
   
     if (SDF_isPriorityListSingle(localPrios)) {
@@ -487,7 +507,7 @@ static ATerm process_priorities(SDF_PriorityList prios)
     localPrios = SDF_getPriorityListTail(localPrios);
   }
 
-  /* Calculate the transitive closure of the chain priorities */
+  /* Calculate the transitive closure of the priorities */
   for (localIdx1=0; localIdx1<=max_idx; localIdx1++) {    
     ATerm prioentry1 = ATindexedSetGetElem(priority_table, localIdx1);
     ATerm rightnr1 = getPrioRight(prioentry1);
@@ -512,32 +532,9 @@ static ATerm process_priorities(SDF_PriorityList prios)
     }
   }
 
-  /* Store the associativity priorities */
-  while (SDF_hasPriorityListHead(prios)) {
-    SDF_Priority prio = SDF_getPriorityListHead(prios);
-    
-    if (SDF_isPriorityAssoc(prio)) {
-      ATabort("Assoc priorities may not occur after normalization %t\n", prio);
-      prioentry = NULL;
-    }
-
-    if (prioentry) {
-      ATindexedSetPut(priority_table, prioentry, &isnew);
-      if (isnew) {
-	prioentries = ATinsert(prioentries, prioentry);
-	cnt++;
-      }
-    }
-  
-    if (SDF_isPriorityListSingle(prios)) {
-      break;
-    }
-    prios = SDF_getPriorityListTail(prios);
-  }
-
   IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));
 
-  return ATmake("[<list>]", prioentries);
+  return (ATerm) ATconcat(prioentries, nonTransitivePrioEntries);
 }
 
 /*}}}  */
