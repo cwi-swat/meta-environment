@@ -131,8 +131,7 @@ let
   Modules: list,
   Status: term
 in
-  snd-msg(tm-request-transaction(getSyntaxDefinition))
-  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "status", Status?)
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "status", Status?)
   .
   if equal(Status, complete) then
     MM-GetAllModuleDependencies(ModuleId, ModuleIds?)
@@ -154,8 +153,6 @@ in
   else
     Syntax := UNDEFINED
   fi
-  .
-  snd-msg(tm-end-transaction(getSyntaxDefinition))
 endlet
 
 process GetImportedModulenames(Tree: term, Imports: list?) is

@@ -135,7 +135,9 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpSdfDefinition(ModuleId, Path)
+    snd-msg(tm-request-transaction(dumpSdfDefinition))
+    . DumpSdfDefinition(ModuleId, Path)
+    . snd-msg(tm-end-transaction(dumpSdfDefinition))
   fi
 endlet
 

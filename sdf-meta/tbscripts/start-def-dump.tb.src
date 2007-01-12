@@ -30,7 +30,9 @@ in
   if or(equal(Value, error), equal(Value, unavailable)) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
-    DumpSdfDefinition(ModuleId, OUTPUTFILE)
+    snd-msg(tm-request-transaction(dumpSdfDefinition))
+    . DumpSdfDefinition(ModuleId, OUTPUTFILE)
+    . snd-msg(tm-end-transaction(dumpSdfDefinition))
   fi
   . shutdown("")
 endlet

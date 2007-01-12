@@ -39,7 +39,9 @@ in
     .
     if equal(Table, UNDEFINED) then
       AddJob("Generating parser")
+      . snd-msg(tm-request-transaction("BuildParsetable"))
       . GetSyntaxDefinition(ModuleId, Syntax?)
+      . snd-msg(tm-end-transaction("BuildParsetable"))
       . 
       if not-equal(Syntax, UNDEFINED) then
 	MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
