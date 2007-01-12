@@ -16,6 +16,9 @@ hiddens
     "trans0" "[[" Priorities "]]" -> Priorities
     "trans1" "[[" Priority "|" Priorities "]]" -> Priorities
     "trans2" "[[" Priorities "]]" -> Priorities
+
+    "[[" Group "]]" -> Group {bracket}
+
   context-free start-symbols
     Grammar
   
