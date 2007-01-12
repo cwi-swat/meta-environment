@@ -423,6 +423,12 @@ in
       . rec-msg(es-summary(Summary?)) 
       . DisplaySummary(Summary)
       . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
+    +
+      rec-msg(asfe-rewrite-errors(Errors?))
+      . RemoveSummary("asfe", "all")
+      . snd-msg(es-make-summary("asfe", "all", Errors)) 
+      . rec-msg(es-summary(Summary?)) 
+      . DisplaySummary(Summary)
     )
     . SetStatus("")
   else
