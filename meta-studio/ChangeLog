@@ -1,5 +1,12 @@
 $Id$
 
+Fri Jan 12 15:01:57 CET 2007 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Commented out overwriting of windowHidden method in the
+   DockingWindowAdapter. It caused the menu's and status bar to update when a
+   window was deselected or closed, but this is also handled in the focus
+   changed and window closed listeners.
+
 Tue Oct 31 10:09:22 CET 2006 <jurgenv@cwi.nl>
  * **/utils/*.java: refactored the two implementations of menu's
    by introducting a MenuBuilder. Both PopupMenu's and the MenuBar
