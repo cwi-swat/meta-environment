@@ -78,7 +78,7 @@ static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
       fprintf(file, "static char %s_parsetable_baf[%d] = {\n\t", name, size); 
 
       for (i = 0; i < size - 1; i++) {
-	fprintf(file,"0x%02X, ", data[i]);
+	fprintf(file,"0x%02X, ", (unsigned char) data[i]);
 
 	if (i % rowlength == rowlength-1) {
 	  fprintf(file, "\n\t");
