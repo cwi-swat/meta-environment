@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Sun Jan 14 17:31:55 CET 2007 <jurgenv@cwi.nl>
+ * generator: renamed to src
+ * formatter: renamed to spec
+
 Fri Sep  1 11:31:45 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
  * generator/pandora.c: fixed a bug. When a to-box function returned
    nothing (an empty list of boxes) pandora would crash with 

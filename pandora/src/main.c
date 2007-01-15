@@ -207,6 +207,7 @@ int main(int argc, char *argv[])
 
 	ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
 
+
 	if (run_verbose) {
 	  ATwarning("pandora: yielding characters to output\n");
 	}

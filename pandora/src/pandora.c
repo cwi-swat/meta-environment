@@ -347,7 +347,15 @@ static BOX_Box processBox(PT_Tree tree, ATbool isLex)
     PT_Tree arg = PT_getArgsHead(args);
 
     if (!PT_isTreeLayout(arg) && !PT_isTreeLit(arg)) {
-      return BOX_BoxFromTerm(PT_TreeToTerm(transformBox(arg, isLex)));
+      PT_Symbol sym = PT_getProductionRhs(PT_getTreeProd(arg));
+
+      if (PT_isEqualSymbol(sym, PT_makeSymbolCf(PT_makeSymbolSort("Box")))) {
+	return BOX_BoxFromTerm(PT_TreeToTerm(transformBox(arg, isLex)));
+      }
+      else {
+	ATwarning("FromBox production is wrong (no Box child): %t\n", PT_getTreeProd(arg));
+	return NULL;
+      }
     }
     args = PT_getArgsTail(args);
   }

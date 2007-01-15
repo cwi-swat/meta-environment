@@ -1,6 +1,6 @@
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = generator
+SUBDIRS = src
 
 ACLOCAL_AMFLAGS = -I .
 
