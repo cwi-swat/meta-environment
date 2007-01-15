@@ -2,14 +2,11 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JTree;
-import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;

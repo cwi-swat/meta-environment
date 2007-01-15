@@ -2,7 +2,6 @@ package nl.cwi.sen1.gui.plugin.data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import nl.cwi.sen1.ioapi.types.File;
 import nl.cwi.sen1.ioapi.types.Path;
@@ -176,7 +175,14 @@ public class ModuleTreeNode {
 		return -1;
 	}
 
-	public List<ModuleTreeNode> makePath(StringTokenizer tokens,
+	public List<ModuleTreeNode> makePath(File file) {
+		SegmentList segments = file.getPath().getList();
+		segments = segments.append(file.getIoapiFactory().makeSegment_Segment(
+				file.getName()));
+		return makePath(segments, new ArrayList<ModuleTreeNode>());
+	}
+
+	public List<ModuleTreeNode> makePath(SegmentList segments,
 			List<ModuleTreeNode> result) {
 		result.add(this);
 
@@ -184,18 +190,25 @@ public class ModuleTreeNode {
 			return result;
 		}
 
-		String childName = tokens.nextToken();
-		ModuleTreeNode childNode;
-		if (tokens.hasMoreTokens()) {
-			childNode = getChild(getNodeChild(childName));
-		} else {
-			childNode = getChild(getLeafChild(childName));
-		}
-		if (childNode != null) {
-			if (tokens.hasMoreTokens()) {
-				return childNode.makePath(tokens, result);
+		if (!segments.isEmpty()) {
+			String childName = segments.getHead().getName();
+			segments = segments.getTail();
+
+			ModuleTreeNode childNode;
+			int childIndex;
+			if (!segments.isEmpty()) {
+				childIndex = getNodeChild(childName);
+			} else {
+				childIndex = getLeafChild(childName);
 			}
-			result.add(childNode);
+			childNode = getChild(childIndex);
+
+			if (childNode != null) {
+				if (!segments.isEmpty()) {
+					return childNode.makePath(segments, result);
+				}
+				result.add(childNode);
+			}
 		}
 
 		return result;

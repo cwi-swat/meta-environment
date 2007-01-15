@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan 15 09:33:10 CET 2007 <kooiker@cwi.nl>
+ * src/**/ModuleTreeNode.java:
+   - makePath works on File segments
+
 Tue Jan  9 12:52:40 CET 2007 <kooiker@cwi.nl>
  * navigator.idef.src:
    - Use add and remove module for single modules

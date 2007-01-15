@@ -46,7 +46,7 @@ public class ModuleTree extends JPanel {
 		manager.addModuleSelectionListener(new ModuleSelectionListener() {
 			public void moduleSelected(Module module) {
 				if (module != null) {
-					TreePath path = manager.makeTreePath(module.getName());
+					TreePath path = manager.makeTreePath(module.getFile());
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
 				} else {
