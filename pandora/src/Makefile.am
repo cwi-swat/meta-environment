@@ -27,7 +27,7 @@ CLEANFILES += pandora.idef
 
 asfc:
 	asfc \
-		-i ${top_builddir}/formatter/text/Box-to-Text.eqs \
+		-i ${top_builddir}/spec/text/Box-to-Text.eqs \
 		-o Box-to-Text.c -v
 api:
 	unparsePT < Box.def.pt > Box.def
