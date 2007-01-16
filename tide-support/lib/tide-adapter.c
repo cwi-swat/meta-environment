@@ -478,7 +478,7 @@ int TA_createRule(int pid, TA_Port port, TA_Expr cond, TA_Expr act, ATerm tag,
       rule->action    = act;
       rule->tag       = tag;
 
-      ATprotect((ATerm *)&rule->port);
+      ATprotectTerm(&rule->port);
       ATprotect((ATerm *)&rule->condition);
       ATprotect((ATerm *)&rule->action);
       ATprotect((ATerm *)&rule->tag);
