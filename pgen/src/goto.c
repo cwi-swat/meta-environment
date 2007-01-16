@@ -197,7 +197,7 @@ static void init_goto()
 {
   ATprotectArray(goto_states, MAX_STATES);
   ATprotectArray(goto_classes, MAX_STATES);
-  ATprotectArrayList((ATerm *)action_actions, MAX_STATES);
+  ATprotectArray((ATerm *)(void *)action_actions, MAX_STATES);
 }
 
 /*}}}  */
@@ -206,7 +206,7 @@ static void init_goto()
 
 static void free_goto()
 {
-  ATunprotectArrayList((ATerm *)action_actions);
+  ATunprotectArray((ATerm *)(void *)action_actions);
   memset(action_actions, 0, MAX_STATES*sizeof(ATerm));
   ATunprotectArray(goto_classes);
   memset(goto_classes, 0, MAX_STATES*sizeof(ATerm));
