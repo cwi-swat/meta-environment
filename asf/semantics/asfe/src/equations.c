@@ -95,13 +95,13 @@ static void flush_equations(equation_table * table)
     while (entry) {
       old = entry;
       entry = entry->hnext;
-      ATunprotect((ATerm*)&old->equation);
-      ATunprotect((ATerm*)&old->top_ofs);
-      ATunprotect((ATerm*)&old->first_ofs);
-      ATunprotect((ATerm*)&old->tag);
-      ATunprotect((ATerm*)&old->lhs);
-      ATunprotect((ATerm*)&old->rhs);
-      ATunprotect((ATerm*)&old->conds);
+      ATunprotectTerm(&old->equation);
+      ATunprotectTerm(&old->top_ofs);
+      ATunprotectTerm(&old->first_ofs);
+      ATunprotectTerm(&old->tag);
+      ATunprotectTerm(&old->lhs);
+      ATunprotectTerm(&old->rhs);
+      ATunprotectTerm(&old->conds);
       free(old);
     }
     table->table[i] = NULL;
@@ -371,28 +371,28 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
   entry->hashnr = hnr;
 
   entry->top_ofs = top_ofs;
-  ATprotect((ATerm*)&entry->top_ofs);
+  ATprotectTerm(&entry->top_ofs);
 
   entry->first_ofs = first_ofs;
-  ATprotect((ATerm*)&entry->first_ofs);
+  ATprotectTerm(&entry->first_ofs);
 
   entry->equation = equation;
-  ATprotect((ATerm*)&entry->equation);
+  ATprotectTerm(&entry->equation);
 
   entry->tag = tag;
-  ATprotect((ATerm*)&entry->tag);
+  ATprotectTerm(&entry->tag);
 
   entry->lhs = lhs;
-  ATprotect((ATerm*)&entry->lhs);
+  ATprotectTerm(&entry->lhs);
 
   entry->rhs = rhs;
-  ATprotect((ATerm*)&entry->rhs);
+  ATprotectTerm(&entry->rhs);
 
   entry->posinfo_equals = getPosInfoEquals(equ);
   ATprotect((ATerm *)&entry->posinfo_equals);
 
   entry->conds = conds;
-  ATprotect((ATerm *) (&entry->conds));
+  ATprotectTerm(&entry->conds);
 
   cur = table->table[hnr];
   if (cur) {
