@@ -10,7 +10,7 @@ hiddens
     "Frame"[0-9]*  -> Frame
     "'C"[0-9]*     -> Context
     "Point"[0-9]*  -> Point
-    [f][0-9]*     -> FontOperator
+    [f][0-9]*     -> BoxOperator
     "Struct"[0-9]*  -> TextStruct
-
+    "fo*"           -> FontOption*
 

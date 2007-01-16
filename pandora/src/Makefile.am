@@ -30,7 +30,6 @@ asfc:
 		-i ${top_builddir}/spec/text/Box-to-Text.eqs \
 		-o Box-to-Text.c -v
 api:
-	unparsePT < Box.def.pt > Box.def
 	sdf2-to-c -i Box.def --prefix BOX_ -v
 
 tif:

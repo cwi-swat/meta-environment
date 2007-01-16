@@ -14,6 +14,7 @@
 /* }}} */
 /*{{{  Declarations */
 static BOX_Box treeToBox(PT_Tree tree, ATbool isLex);
+static PT_Tree getTree(PT_Tree tree);
 /*}}}  */
 
 /*{{{  BOX_LexStrCon BOX_makeLexStrCon(const char *str) */
@@ -153,12 +154,33 @@ static BOX_BoxList argsManyToBox(PT_Args args, ATbool isLex, ATbool indent)
     PT_Tree head = PT_getArgsHead(args);
     BOX_Box prettyHead = treeToBox(head, isLex);
 
-    if (prettyHead != NULL) {
-      if (isNonTerminal(head) && indent) {
-	prettyHead = BOX_makeIBox(prettyHead);
-      } 
-      boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
-    }
+    assert(prettyHead != NULL);
+
+    if (isNonTerminal(head) && indent) {
+      prettyHead = BOX_makeIBox(prettyHead);
+    } 
+    boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+
+    args = PT_getArgsTail(args);
+  }
+
+  return BOX_reverseBoxList(boxList);
+}
+
+/*}}}  */
+/*{{{  static BOX_BoxList argsManyToBox(PT_Args args, ATbool isLex, ATbool indent) */
+
+static BOX_BoxList argsManySpliceToBox(PT_Args args, ATbool isLex)
+{
+  BOX_BoxList boxList = BOX_makeBoxListEmpty();
+  BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
+  
+  while (!PT_isArgsEmpty(args)) {
+    PT_Tree head = PT_getArgsHead(args);
+    BOX_Box prettyHead = treeToBox(head, isLex);
+
+    assert(prettyHead != NULL);
+    boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
 
     args = PT_getArgsTail(args);
   }
@@ -253,7 +275,7 @@ static BOX_Box listToBox(PT_Tree tree, ATbool isLex)
   }
 
   if (BOX_isBoxListEmpty(boxList)) {
-    return NULL;
+    return BOX_makeEmptyHBox();
   }
 
   if (isLex) {
@@ -264,10 +286,65 @@ static BOX_Box listToBox(PT_Tree tree, ATbool isLex)
 }
 
 /*}}}  */
+/*{{{  static BOX_BoxList sepListSpliceToBox(PT_Args args, ATbool isLex, ATbool indent) */
 
-/*{{{  static BOX_Box processTree(PT_Tree tree, ATbool isLex) */
+static BOX_BoxList sepListSpliceToBox(PT_Args args, ATbool isLex)
+{
+  BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
+  BOX_BoxList boxList = BOX_makeBoxListEmpty();
 
-static BOX_Box processTree(PT_Tree tree, ATbool isLex)
+  while (!PT_isArgsEmpty(args)) {
+    if (PT_getArgsLength(args) >= SEPLISTELEMLENGTH) {
+      int i;
+      PT_Args slice = PT_sliceArgs(args, 0, SEPLISTELEMLENGTH - 1);
+      BOX_BoxList elem = argsManySpliceToBox(slice, isLex);
+      boxList = BOX_concatBoxList(BOX_reverseBoxList(elem), optLayout, boxList);
+
+      for (i = 0; i < SEPLISTELEMLENGTH; i++) {
+	args = PT_getArgsTail(args);
+      }
+    }
+    else {
+      BOX_Box listArgBox = treeToBox(PT_getArgsHead(args), isLex);
+      args = PT_getArgsTail(args);
+      boxList = BOX_makeBoxListMany(listArgBox, optLayout, boxList);
+    }
+
+  }
+
+  return BOX_reverseBoxList(boxList);
+}
+
+/*}}}  */
+/*{{{  static BOX_Box listSpliceToBox(PT_Tree tree, ATbool isLex) */
+
+static BOX_BoxList listSpliceToBox(PT_Tree tree, ATbool isLex)
+{
+  PT_Production production = PT_getTreeProd(tree);
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Symbol symbol = PT_getProductionRhs(production);
+  BOX_BoxList boxList = BOX_makeBoxListEmpty();
+  
+  if (PT_isArgsEmpty(args)) {
+      return boxList;
+  }
+
+  symbol = PT_getSymbolSymbol(symbol);
+
+  if (PT_isSymbolIterStarSep(symbol) || PT_isSymbolIterPlusSep(symbol)) {
+    boxList = sepListSpliceToBox(args, isLex);
+  } else {
+    boxList = argsManySpliceToBox(args, isLex);
+  }
+
+  return boxList;
+}
+
+/*}}}  */
+
+/*{{{  static PT_Tree getTree(PT_Tree tree) */
+
+static PT_Tree getTree(PT_Tree tree)
 {
   PT_Args args = PT_getTreeArgs(tree);
   PT_Tree treeTree = NULL;
@@ -286,11 +363,22 @@ static BOX_Box processTree(PT_Tree tree, ATbool isLex)
     args = PT_getArgsTail(args);
   }
 
+  return treeTree;
+}
+
+/*}}}  */
+
+/*{{{  static BOX_Box processTree(PT_Tree tree, ATbool isLex) */
+
+static BOX_Box processTree(PT_Tree tree, ATbool isLex)
+{
+  PT_Tree treeTree = getTree(tree);
+
   if (treeTree) {
     return treeToBox(treeTree, isLex);
   }
   else {
-    return NULL;
+    return BOX_makeEmptyHBox();
   }
 }
 
@@ -312,10 +400,27 @@ static PT_Tree transformBox(PT_Tree tree, ATbool isLex)
       boxArgs = PT_appendArgs(boxArgs, arg);
     } 
     else if (PT_isTreeAppl(arg)) {
-      if (hasProductionToBoxAttribute(PT_getTreeProd(arg))) {
-        BOX_Box boxArg = processTree(arg, isLex);
-	
-	if (boxArg != NULL) {
+      PT_Production prod = PT_getTreeProd(arg);
+
+      if (hasProductionToBoxAttribute(prod)) {
+	if (PT_prodHasIterAsRhs(prod)) {
+	  PT_Tree listTree = getTree(arg);
+
+	  if (PT_isTreeApplList(listTree)) {
+	    /* splice in the elements of the list */
+	    boxArgs = PT_concatArgs(boxArgs, 
+				    (PT_Args) listSpliceToBox(getTree(arg), 
+							      isLex));
+	  }
+	  else {
+	    ATwarning("pandora: ignoring wrong to-box tree, to Box* does not have a list as argument.\n");
+	  }
+
+	}
+	else {
+	  BOX_Box boxArg = processTree(arg, isLex);
+
+	  assert(boxArg != NULL);
 	  boxArgs = PT_appendArgs(boxArgs, 
 				  PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
 	}
@@ -354,13 +459,13 @@ static BOX_Box processBox(PT_Tree tree, ATbool isLex)
       }
       else {
 	ATwarning("FromBox production is wrong (no Box child): %t\n", PT_getTreeProd(arg));
-	return NULL;
+	return BOX_makeEmptyHBox();
       }
     }
     args = PT_getArgsTail(args);
   }
 
-  return NULL;
+  return BOX_makeEmptyHBox();
 }
 
 /*}}}  */
@@ -375,7 +480,7 @@ static BOX_Box treeToBox(PT_Tree tree, ATbool isLex)
     return BOX_makeBoxString(strcon);
   }
   else if (PT_isArgsEmpty(PT_getTreeArgs(tree))) {
-    return NULL;
+    return BOX_makeEmptyHBox();
   }
   else if (hasProductionFromBoxAttribute(PT_getTreeProd(tree))) {
     return processBox(tree, isLex);
@@ -385,7 +490,7 @@ static BOX_Box treeToBox(PT_Tree tree, ATbool isLex)
   }
   else if (!isLex && (PT_isTreeLexical(tree) || PT_isTreeLit(tree))) {
     if (isWhitespace(tree)) {
-      return NULL;
+      return BOX_makeEmptyHBox();
     } else {
       return treeToBox(tree, ATtrue); 
     }

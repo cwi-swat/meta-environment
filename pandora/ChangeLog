@@ -1,5 +1,38 @@
 /* $Id$ */
 
+Tue Jan 16 10:21:04 CET 2007 <jurgenv@cwi.nl>
+ * spec/text/Groups.{asf,sdf}: added a new operator to Box: G. The G grouping
+   operator splits a list of boxes a list of smaller lists, wrapped by
+   another box operator. The result is spliced into the surrounding box.
+   Example: V [ G gs=2 op=H [ "1" "2" "3" "4" ] ]
+   Means:   V [ H [ "1" "2" ] H [ "3" "4" ] ]
+ * spec/text/Groups.{asf,sdf}: added a new operator to Box: SL. SL is 
+   an abbreviation for "G gs=3", which is a typical grouping for separated
+   lists.
+ * src/pandora.c: *drastic change*. Instead of returning NULL for whitespace
+   pandora now generates the empty HBox "H []". This is needed for the
+   consistency of lists. When no comment is in between elements, the list
+   would be shorter, but with comments in between elements, there would be
+   an extra box node. For the Grouping operator to work nicely, it is
+   necessary to have all lists look the same.
+ * src/pandora.c: added a new semantics for to-box productions. If a to-box
+   productions wraps a list and returns a Box* list, the elements of the
+   wrapped lists are all converted to box by the default pretty printer,
+   and then spliced into the surrounding box. Example:
+   context-free syntax
+     from-box(Box)   -> Program
+     to-box( Decl* ) -> Box {to-box}
+   equations
+     \[] begin Decl* end = from-box(H ["begin" to-box(Decl*) "end"])
+   This would place begin, end and the elements of Decl* all
+   next to eachother.
+ * spec/text/*: the syntax of Box has been refactored. A generic application
+   operator replaces the specific Box operators: BoxOperator "[" Box* "]" ->
+   Box. This made it possible for the G operator to have any BoxOperator as
+   an argument.
+ * src/Box-to-Text.c: recompiled with new ASF+SDF sources for the above
+   functionality.
+
 Sun Jan 14 17:31:55 CET 2007 <jurgenv@cwi.nl>
  * generator: renamed to src
  * formatter: renamed to spec

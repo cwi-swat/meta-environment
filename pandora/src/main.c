@@ -10,6 +10,7 @@
 #include <PTMEPT.h>
 #include <asc-support2-me.h>
 #include <Error.h>
+#include <aterm2.h>
 
 #include "pandora.h"
 #include "pandora.tif.h"
@@ -19,7 +20,7 @@
 
 static char* myname = "pandora";
 static char* myversion = VERSION;
-static char* myarguments = "bi:o:tvVh";
+static char* myarguments = "bBi:o:tvVh";
 
 static ATbool run_verbose = ATfalse;
 
@@ -50,9 +51,10 @@ static void usage(void)
 	    "Usage: %s [options]\n"
 	    "Options:\n"
 	    "\t-b              output box format\n"
+	    "\t-B              output bytes tree\n"
 	    "\t-h              display help information\n"
 	    "\t-i filename     input (parsed) file                [stdin]\n"
-	    "\t-o filename     output (parsed) file               [stdout]\n"
+	    "\t-o filename     output (text) file                [stdout]\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
 	    myname, myversion);
@@ -150,6 +152,7 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   ATbool boxOutput = ATfalse;
+  ATbool bytesOutput = ATfalse;
   int c;
   int i;
   ATbool useToolbus = ATfalse;
@@ -179,6 +182,7 @@ int main(int argc, char *argv[])
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
 	case 'b':  boxOutput=ATtrue; break;
+	case 'B':  bytesOutput=ATtrue; break;
 	case 'i':  input=optarg; break;
 	case 'o':  output=optarg; break;
 	case 'v':  run_verbose = ATtrue; break;
@@ -213,15 +217,25 @@ int main(int argc, char *argv[])
 	}
 
 	if (!strcmp(output, "-")) {
-	  PT_yieldTreeToFile(PT_getParseTreeTop(ptText), stdout, ATfalse);
-	}
-	else {
-	  FILE *fp = fopen(output, "wb");
-	  if (fp != NULL) {
-	    PT_yieldTreeToFile(PT_getParseTreeTop(ptText), fp, ATfalse);
+	  if (!bytesOutput) {
+	    PT_yieldTreeToFile(PT_getParseTreeTop(ptText), stdout, ATfalse);
 	  }
 	  else {
-	    ATerror("Could not open %s for writing.\n", output);
+	    ATwriteToNamedBinaryFile((ATerm) ptText, "-");
+	  }
+	}
+	else {
+	  if (!bytesOutput) {
+	    FILE *fp = fopen(output, "wb");
+	    if (fp != NULL) {
+	      PT_yieldTreeToFile(PT_getParseTreeTop(ptText), fp, ATfalse);
+	    }
+	    else {
+	      ATerror("Could not open %s for writing.\n", output);
+	    }
+	  }
+	  else {
+	    ATwriteToNamedBinaryFile((ATerm) ptText, output);
 	  }
 	}
       }

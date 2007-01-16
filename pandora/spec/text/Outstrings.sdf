@@ -10,11 +10,17 @@ exports
   context-free syntax
     "string" "of" Integer "layoutchars"  -> Bytes 
     "string" "of" Integer Bytes "chars" -> Bytes
- 
-    %% nesting on the right makes concatenation faster 
-    Bytes "||" Bytes -> Bytes {right} 
+
+  context-free syntax
+    %% visible concatenation 
+    Bytes "||" Bytes -> Bytes {left}
 
 hiddens
+  context-free syntax
+  %% invisible concatenation
+    Bytes Bytes -> Bytes {non-assoc}
+    "(" Bytes ")" -> Bytes {bracket}
+
   lexical variables
     "byte"[0-9]* -> Byte {strict}
     "byte*"[0-9]* -> Byte* {strict}
@@ -26,3 +32,4 @@ hiddens
   variables
     "Int"[0-9]*    -> Integer
     "String"[0-9]* -> String
+    "Bytes"[0-9]*  -> Bytes
