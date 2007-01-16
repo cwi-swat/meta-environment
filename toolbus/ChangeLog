@@ -1,5 +1,13 @@
 $Id$
 
+Tue Jan 16 12:51:48 CET 2007 <jurgenv@cwi.nl>
+ * toolbus/typechecker.c: type checking errors are not printed to stderr
+   anymore when the ToolBus is running. This is too prevent spamming of the
+   terminal when a number of dynamic process calls are tried until one
+   of the calls finds a suitable process to run. The implementation trick
+   is too see whether there are currently any running processes via
+   inspecting the AllProcesses global variable. Not too pretty.
+
 Wed Jan 10 21:40:29 CET 2007 <{jurgenv,paulk}@cwi.nl>
  * toolbus/interpreter.c: create used to inherited all subscriptions
    to notes, and also the current note queue. We've turned this

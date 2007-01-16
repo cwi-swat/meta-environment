@@ -703,11 +703,15 @@ TBbool check_formal_actual(sym_idx name_idx, coords *c, char *p_or_t,
   int n = 1, sv_nerror = nerror;
   type *ft;
   term *act;
+  extern term *AllProcesses;
+  TBbool busIsRunning = (AllProcesses != NULL);
 
   for( ; formals; formals = next(formals), actuals = next(actuals)){
     if(!actuals){
-      pr_coords(c);
-      TBprintf(stderr, "%s `%f': too few actuals\n", p_or_t, get_txt(name_idx)); 
+      if (!busIsRunning) { /* the ToolBus is running, so ignore */
+	pr_coords(c);
+	TBprintf(stderr, "%s `%f': too few actuals\n", p_or_t, get_txt(name_idx)); 
+      }
       nerror++;
       return TBfalse;
     }
@@ -715,26 +719,34 @@ TBbool check_formal_actual(sym_idx name_idx, coords *c, char *p_or_t,
     act = first(actuals);
 
     if(!assign_compatible(ft, act)){
-      pr_coords(c);
-      TBprintf(stderr, "%s `%f': type mismatch for argument %d\n", p_or_t, get_txt(name_idx), n);
+      if (!busIsRunning) {
+	pr_coords(c);
+	TBprintf(stderr, "%s `%f': type mismatch for argument %d\n", p_or_t, get_txt(name_idx), n);
+      }
       nerror++;
     }
     if(var_result(first(formals)) && !(is_var(act) && var_result(act))){
-      pr_coords(c);
-      TBprintf(stderr, "%s `%f': result variable required for argument %d\n", p_or_t, get_txt(name_idx), n);
+      if (!busIsRunning) {
+	pr_coords(c);
+	TBprintf(stderr, "%s `%f': result variable required for argument %d\n", p_or_t, get_txt(name_idx), n);
+      }
       nerror++;
     }
     if(!var_result(first(formals)) && (is_var(act) && var_result(act))){
-      pr_coords(c);
-      TBprintf(stderr, "%s `%f': result variable not allowed for argument %d\n", p_or_t, get_txt(name_idx), n);
-      TBmsg("formals = %t, actuals =%t\n", formals, actuals);
+      if (!busIsRunning) {
+	pr_coords(c);
+	TBprintf(stderr, "%s `%f': result variable not allowed for argument %d\n", p_or_t, get_txt(name_idx), n);
+	TBmsg("formals = %t, actuals =%t\n", formals, actuals);
+      }
       nerror++;
     }
     n++;     
   }
   if(actuals){     
-    pr_coords(c);
-    TBprintf(stderr, "%s `%f': too many actuals\n", p_or_t, get_txt(name_idx)); 
+    if (!busIsRunning) { /* the ToolBus is running, so ignore */
+      pr_coords(c);
+      TBprintf(stderr, "%s `%f': too many actuals\n", p_or_t, get_txt(name_idx)); 
+    }
     nerror++;
   }
   return sv_nerror == nerror;
