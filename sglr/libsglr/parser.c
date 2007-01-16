@@ -175,7 +175,7 @@ path *SG_NewPath(stack *st, ATermList sons, size_t length, path *ps)
     p->args  = sons;
     p->length = length;
     p->next  = ps;
-    ATprotect((ATerm *) &(p->args));
+    ATprotectList(&(p->args));
   }
   return p;
 }

@@ -1,5 +1,11 @@
 $Id$
 
+Tue Jan 16 13:30:20 CET 2007 <jong@metamud.org,kooiker@cwi.nl>
+ * libsglr/{parser,stack}.c:
+   - Fixed warning: dereferencing type-punned pointer will break strict-aliasing
+   rules by using the convenience macros in aterm1.h that circumvent this
+   warning
+
 Mon Nov 13 14:30:44 CET 2006 <economop@cwi.nl>
  * libsglr/sglr.h, libsglr/sglr-interface.c: Applied Martin Bravenboer's patch
    that allows clients to set the log FILE* of libsglr; resolves bug 658.
