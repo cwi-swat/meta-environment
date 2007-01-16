@@ -3,7 +3,7 @@ equations
 [program2box-0]
   begin Decls Statement* end = 
     box2program(V ["begin" 
-                      V vs=2 [I [decls2box(Decls)]
+                      V vs=2 [I [ decls2box(Decls)]
                               I [statementlist2box(Statement*)]]
                    "end"])
 

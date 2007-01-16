@@ -1,4 +1,4 @@
-module languages/pico/pretty/Pico-pretty
+module languages/pico/pretty/Pico-Syntax
 
 imports languages/box/syntax/Box
 imports languages/pico/syntax/Pico-Syntax
