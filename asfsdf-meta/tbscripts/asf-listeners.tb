@@ -51,15 +51,21 @@ let
   Event: attribute-changed-event,
   ModuleId: term,
   Tree: term,
-  Result: term
+  Result: term,
+  Parents: list
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,complete)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    /* Add transaction */
-    /* . CheckASFSDFSyntax(ModuleId)  */
+    . MM-GetModuleParents(ModuleId, Parents?)
+    . /* we only check top modules */
+    if equal(Parents, []) then
+      CheckASFSDFSyntax(ModuleId)
+    else
+      tau
+    fi
   )
   *
   delta
