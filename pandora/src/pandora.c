@@ -1,6 +1,5 @@
 /* Disclaimer: guaranteed to the spacebar(tm) */
 
-#include <assert.h>
 #include <ctype.h>
 #include <string.h>
 #include <MEPT-utils.h>
@@ -154,12 +153,12 @@ static BOX_BoxList argsManyToBox(PT_Args args, ATbool isLex, ATbool indent)
     PT_Tree head = PT_getArgsHead(args);
     BOX_Box prettyHead = treeToBox(head, isLex);
 
-    assert(prettyHead != NULL);
-
-    if (isNonTerminal(head) && indent) {
-      prettyHead = BOX_makeIBox(prettyHead);
-    } 
-    boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+    if (prettyHead != NULL) {
+      if (isNonTerminal(head) && indent) {
+	prettyHead = BOX_makeIBox(prettyHead);
+      } 
+      boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+    }
 
     args = PT_getArgsTail(args);
   }
@@ -179,8 +178,9 @@ static BOX_BoxList argsManySpliceToBox(PT_Args args, ATbool isLex)
     PT_Tree head = PT_getArgsHead(args);
     BOX_Box prettyHead = treeToBox(head, isLex);
 
-    assert(prettyHead != NULL);
-    boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+    if (prettyHead != NULL) {
+      boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+    }
 
     args = PT_getArgsTail(args);
   }
@@ -420,9 +420,10 @@ static PT_Tree transformBox(PT_Tree tree, ATbool isLex)
 	else {
 	  BOX_Box boxArg = processTree(arg, isLex);
 
-	  assert(boxArg != NULL);
-	  boxArgs = PT_appendArgs(boxArgs, 
-				  PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
+	  if (boxArg != NULL) {
+	    boxArgs = PT_appendArgs(boxArgs, 
+				    PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
+	  }
 	}
       } else {
         boxArgs = PT_appendArgs(boxArgs, transformBox(arg, isLex));
@@ -490,9 +491,18 @@ static BOX_Box treeToBox(PT_Tree tree, ATbool isLex)
   }
   else if (!isLex && (PT_isTreeLexical(tree) || PT_isTreeLit(tree))) {
     if (isWhitespace(tree)) {
-      return BOX_makeEmptyHBox();
+      return NULL;
     } else {
       return treeToBox(tree, ATtrue); 
+    }
+  }
+  else if (PT_isTreeLayout(tree)) {
+    BOX_Box result = applToBox(tree, isLex);
+    if (result == NULL) {
+      return BOX_makeEmptyHBox();
+    }
+    else {
+      return result;
     }
   }
   else if (PT_isTreeAppl(tree)) {

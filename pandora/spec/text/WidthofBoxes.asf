@@ -28,10 +28,10 @@ equations
   [WoB1'6]   width of HOV so* [B*] with Frame =
                width of V so* [B*] with Frame
 
-  [WoB1'7]   width of I so* [B] with Frame =
-               width of B with Frame
+  [WoB1'7]   width of I so* [B*] with Frame =
+               width of B* with Frame
 
-  [WoB1'8]   width of WD [B] with Frame =
-               width of B with Frame
+  [WoB1'8]   width of WD [B*] with Frame =
+               width of B* with Frame
 
   [WoB1'9]   width of with Frame = 0

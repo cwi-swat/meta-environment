@@ -1,5 +1,12 @@
 /* $Id$ */
 
+Wed Jan 17 10:53:50 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * spec/text/*.asf: made I and WD boxes work with more than one argument.
+ * src/pandora.c: fixed bugs with the generation of empty H boxes for
+   whitespace layout. Instead of nested boxes, it now only generates
+   one toplevel empty H box for each LAYOUT? tree that contains only
+   whitespace.
+
 Wed Jan 17 08:17:29 CET 2007 <jurgenv@cwi.nl>
  * spec/text/Group-Normalization.{asf,sdf}: groups fill out the
    last group with empty H [] boxes, such that each group contains 

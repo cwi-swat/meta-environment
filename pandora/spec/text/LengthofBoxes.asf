@@ -61,23 +61,23 @@ equations
              length of HOV so* [B+] with Frame and 'C =
                select operator B*2 ## Point and so*
 
-%% The operators {\sf I} and {\sf WD} have exactly one box as argument.
+%% The operators {\sf I} and {\sf WD}.
 %% The effect of the {\sf I} operator is context dependent, if this
 %% operator occurs in a `horizontal' context the operator can be ignored.
 %% If it occurs in a `vertical' context the operator becomes affective.
 %%\smallskip
 
   [LoB1'14]  Is := set is value given so* and Frame,
-             B* ## (Int1,Int2) := length of B1 with Frame and V
+             B*2 ## (Int1,Int2) := length of B*1 with Frame and V
              =================================================
-             length of I so* [B1] with Frame and V =
-               I so* [H [B*]] (Int1,Int2) ## (Int1 + Is,Int2)
+             length of I so* [B*1] with Frame and V =
+               I so* [H [B*2]] (Int1,Int2) ## (Int1 + Is,Int2)
 
   [LoB1'15]  'C != V,
-             B* ## Point := length of B1 with Frame and 'C
+             B*2 ## Point := length of B*1 with Frame and 'C
              ============================================
-             length of I so* [B1] with Frame and 'C =
-               I so* [H [B*]] Point ## Point
+             length of I so* [B*1] with Frame and 'C =
+               I so* [H [B*2]] Point ## Point
 
 %% The {\sf WD} has no textual effect except for a number of space characters
 %% that are to be produced. Only the length of the last line is relevant
@@ -85,10 +85,10 @@ equations
 %% characters can be ignored.
 %%\smallskip
 
-  [LoB1'16]  B* ## (X,Y) := length of B1 with Frame and 'C
+  [LoB1'16]  B*2 ## (X,Y) := length of B*1 with Frame and 'C
              ============================================
-             length of WD [B1] with Frame and 'C =
-               WD [H [B*]] (X,0) ## (X,0)
+             length of WD [B*1] with Frame and 'C =
+               WD [H [B*2]] (X,0) ## (X,0)
 
 %% This default equation takes care of the cases which are not `treated'
 %% by the 16 other equations. It deals not only with erroneous box terms

@@ -173,13 +173,13 @@ equations
 
   [BtT2'19]  Is := set is value given so* and (X1,Y1) & Defs
              ==============================================
-             place I so* [B] with (X1,Y1) & Defs and Struct and V =
-               place B with (X1+Is,Y1) & Defs and Struct and V
+             place I so* [B*] with (X1,Y1) & Defs and Struct and V =
+               place H so* [ B* ] with (X1+Is,Y1) & Defs and Struct and V
 
   [BtT2'20]  'C != V
              =======
-             place I so* [B] with Frame and Struct and 'C =
-               place B with Frame and Struct and 'C
+             place I so* [B*] with Frame and Struct and 'C =
+               place H so* [B*] with Frame and Struct and 'C
 
 %% The equation \ref{Eq:BtT2'21} deals with the box
 %% operator {\sf WD}. The argument is placed but the resulting text will be
@@ -189,10 +189,10 @@ equations
 %% of newlines that need to be inserted.
 %%\smallskip
 
-  [BtT2'21]  Text2 && (X3,Y3) := place B with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C,
+  [BtT2'21]  Text2 && (X3,Y3) := place H hs=0 [B*] with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C,
              String := string of X3-X1 layoutchars
              ====================================
-             place WD [B] with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
+             place WD [B*] with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
               place String with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C
 
 %% The equation \ref{Eq:BtT2'22} deals with the situation a box is not processed
