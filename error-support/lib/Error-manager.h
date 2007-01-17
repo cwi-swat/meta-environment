@@ -6,6 +6,7 @@
  */
 void ERR_initErrorManager(const char *producer, const char *jobId);
 void ERR_cleanupErrorManager();
+void ERR_resetErrorManager();
 ERR_Summary ERR_getManagerSummary();
 int ERR_getManagerCount();
 
