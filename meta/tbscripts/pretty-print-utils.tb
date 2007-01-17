@@ -12,6 +12,7 @@ let
 in
   Id := process-id
   . AddJob("Generic pretty printing")
+  . RemoveSummary("pandora", "all")
   . snd-msg(pretty-print(Tree))
   .
   (
@@ -19,6 +20,7 @@ in
     . AnnotateTree(Result, Path, Result?)
   +
     rec-msg(pretty-print-error(Feedback?))
+    . DisplaySummary(Feedback)
     . Result := UNDEFINED
   )
   . JobDone("Generic pretty printing")
