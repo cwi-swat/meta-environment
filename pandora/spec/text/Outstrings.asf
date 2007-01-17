@@ -6,25 +6,24 @@ equations
               string of Int bytes(_byte) chars = bytes()
 
     [Out6'2]  string of 1 bytes(byte) chars = bytes(byte)
-    [Out6'3]  string of 2 bytes(byte) chars = bytes(byte) || bytes(byte)
-    [Out6'4]  string of 3 bytes(byte) chars = string of 2 bytes(byte) chars || bytes(byte)
-    [Out6'5]  string of 4 bytes(byte) chars = string of 2 bytes(byte) chars || string of 2 bytes(byte) chars
-    [Out6'6]  string of 5 bytes(byte) chars = string of 4 bytes(byte) chars || bytes(byte)
+    [Out6'3]  string of 2 bytes(byte) chars = bytes(byte byte)
+    [Out6'4]  string of 3 bytes(byte) chars = bytes(byte byte byte)
+    [Out6'5]  string of 4 bytes(byte) chars = bytes(byte byte byte byte)
+    [Out6'6]  string of 5 bytes(byte) chars = bytes(byte byte byte byte byte)
 
   [Out6'7] 
-    string of 6 bytes(byte) chars = string of 3 bytes(byte) chars || string of 3 bytes(byte) chars
+    string of 6 bytes(byte) chars = bytes(byte byte byte byte byte byte)
 
   [Out6'8]
-    string of 7 bytes(byte) chars = string of 6 bytes(byte) chars || bytes(byte)
+    string of 7 bytes(byte) chars = bytes(byte byte byte byte byte byte byte )
 
   [Out6'9]  
     Int > 7 == true
     ===>
-    string of Int bytes(byte) chars = string of 7 bytes(byte) chars
+    string of Int bytes(byte) chars = bytes(byte byte byte byte byte byte byte) 
       || string of Int-7 bytes(byte) chars
 
 equations
 
   [concat]
-    Bytes1 || Bytes2 = (Bytes1)(Bytes2)
-
+    bytes(byte*1) || bytes(byte*2) = bytes(byte*1 byte*2)

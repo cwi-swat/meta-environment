@@ -1,5 +1,12 @@
 /* $Id$ */
 
+Wed Jan 17 08:17:29 CET 2007 <jurgenv@cwi.nl>
+ * spec/text/Group-Normalization.{asf,sdf}: groups fill out the
+   last group with empty H [] boxes, such that each group contains 
+   the same amount of elements. This is good for building tables, with
+   A and R boxes, sinces they need to be complete.
+ * added some reasonable error messages.
+
 Tue Jan 16 10:21:04 CET 2007 <jurgenv@cwi.nl>
  * spec/text/Groups.{asf,sdf}: added a new operator to Box: G. The G grouping
    operator splits a list of boxes a list of smaller lists, wrapped by

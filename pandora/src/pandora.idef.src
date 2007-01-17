@@ -16,7 +16,7 @@ in
       rec-value(P, pretty-printed(Result?)) .
       snd-msg(pretty-print-result(Result))
     + 
-      rec-value(P, error(Feedback?)) .
+      rec-value(P, pretty-print-error(Feedback?)) .
       snd-msg(pretty-print-error(Feedback))
     ).
     snd-terminate(P, "done")

@@ -11,6 +11,7 @@
 #include <asc-support2-me.h>
 #include <Error.h>
 #include <aterm2.h>
+#include <Error-manager.h>
 
 #include "pandora.h"
 #include "pandora.tif.h"
@@ -97,9 +98,33 @@ static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree)
 static PT_ParseTree toText(PT_ParseTree parseTree)
 {
   PT_Tree tree = addBoxToTextFunction(parseTree);
-
+  PT_Production func = PT_getTreeProd(tree);
   ATerm reduct = innermost(tree);
-  return toasfixNoLayout(reduct);
+  PT_ParseTree result = toasfixNoLayout(reduct);
+
+  if (result == NULL) {
+    ERR_managerStoreError(
+       "Could not format Box expression (unexpected behavior)",
+       ERR_makeSubjectListEmpty());
+    return NULL;
+  }
+  else if (PT_isTreeAppl(PT_getParseTreeTree(result)) 
+      && PT_isEqualProduction(PT_getTreeProd(PT_getParseTreeTree(result)), func)) {
+    FILE *fp = NULL;
+    ERR_managerStoreLocatedError(
+         "Could not format Box expression for unknown reasons", 
+	 "Box expression", "./debug.box",1,0,1,0,0,1);
+   
+    fp = fopen("./debug.box", "wb"); 
+    if (fp != NULL) {
+      PT_yieldParseTreeToFile(parseTree, fp, ATfalse);
+      fclose(fp);
+    }
+    return NULL;
+  }
+
+  return result;
+
 }
 
 /*}}}  */
@@ -111,6 +136,8 @@ ATerm pretty_print(int cid, ATerm input)
   PT_ParseTree parsetree;
   BOX_Start box;
   PT_ParseTree result = NULL;
+
+  ERR_resetErrorManager();
 
   parsetree = PT_ParseTreeFromTerm(ATBunpack(input));
   box = pandora(parsetree);
@@ -124,8 +151,7 @@ ATerm pretty_print(int cid, ATerm input)
     return ATmake("snd-value(pretty-printed(<term>))", value);
   }
   else {
-    ERR_Summary summary = ERR_makeSummarySummary("pandora","all", 
-						  ERR_makeErrorListEmpty());
+    ERR_Summary summary = ERR_getManagerSummary();
     return ATmake("snd-value(pretty-print-error(<term>))", summary);
   }
 }
@@ -162,6 +188,7 @@ int main(int argc, char *argv[])
   PT_initMEPTApi(); 
   PTPT_initPTMEPTApi();
   BOX_initBoxApi();
+  ERR_initErrorManager("pandora", "all");
 
   register_Box_to_Text();
   resolve_Box_to_Text();
