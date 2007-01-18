@@ -20,7 +20,7 @@ install-data-hook:
 			--no-rdoc \
 			--install-dir $$install_dir \
 			--include-dependencies \
-			${GEM_DIR}/$(g) ; \
+			${GEM_DIR}/$$g.gem ; \
 	done)
 
 uninstall-hook:
