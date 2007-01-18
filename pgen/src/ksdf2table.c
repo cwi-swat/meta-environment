@@ -461,6 +461,7 @@ static ATerm process_priorities(SDF_PriorityList prios)
   ATerm prioentry = NULL;
   ATermList prioentries = ATempty;
   ATermList nonTransitivePrioEntries = ATempty;
+  ATermList loop = NULL;
   int cnt = 0;
   ATbool isnew;
   int idx, localIdx1, localIdx2, max_idx; 
@@ -530,6 +531,16 @@ static ATerm process_priorities(SDF_PriorityList prios)
 	}
       }
     }
+  }
+
+  loop = nonTransitivePrioEntries;
+  while(!ATisEmpty(loop)) {
+    ATerm next = ATgetFirst(loop);
+    idx = ATindexedSetPut(priority_table, next, &isnew);
+    if (isnew) {
+      cnt++;
+    }
+    loop = ATgetNext(loop);
   }
 
   IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));

@@ -1,5 +1,22 @@
 $Id$
 
+Thu Jan 18 18:12:59 CET 2007 <martin.bravenboer@gmail.com>
+
+  Fixes for Bug 685: Associatvity no longer applied to parse table
+
+  * src/ksdf2table.c: the elements of 'nonTransitivePrioEntries'
+    should be added to the priority_table, which should happen after
+    determining the transitive closure.
+  * grammar/Sdf2.baf: regenerated for the bug fixed by this commit.
+  * test/tables/*.tbl: regenerated the parse tables use for
+    regression testing.
+  * pgen desperately needs a better testsuite. In particular, the
+    various filters should be tested at a more fined-grained level. In
+    this case, the bug did not popup earlier because of the post-parse
+    priority filter that still resolved the ambiguities. For this
+    particular issue that is now a test in Stratego/XT, but pgen
+    itself should really check this.
+
 Fri Jan 12 15:35:46 CET 2007 <jurgenv@cwi.nl>
  * grammars/Sdf2.baf: introduced a new operator for priorities. The "."
    can stop (full stop) the transitive closure of priorities. Example:
