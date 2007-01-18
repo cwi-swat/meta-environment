@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jan 18 13:59:52 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Only delete dependencies when there were dependencies, to avoid
+   superfluous dependency-changed events
+
 Tue Jan  9 12:54:18 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
    - Separated navigator and import-graph update processes by adding an

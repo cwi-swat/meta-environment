@@ -282,7 +282,13 @@ in
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
     . GetSDFParseTree(ModuleId, Tree?)
-    . MM-DeleteModuleDependencies(ModuleId)
+    . MM-GetModuleDependencies(ModuleId, Imports?)
+    . 
+    if not-equal(Imports, []) then
+      MM-DeleteModuleDependencies(ModuleId)
+    else
+      tau
+    fi
     . GetImportedModulenames(Tree, Imports?)
     .
     if not-equal(Imports, []) then 
@@ -309,14 +315,21 @@ toolbus(SDFSetModuleImports)
 process SDFRemoveDependencies is
 let
   Event: attribute-changed-event,
-  ModuleId: term
+  ModuleId: term,
+  Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
   .
   (
     rec-note(mm-attribute-changed(Event?))
-    . ACE-GetModuleId(Event, ModuleId?)
-    . MM-DeleteModuleDependencies(ModuleId)
+    . ACE-GetOldValue(Event, Value?)
+    .
+    if not-equal(Value, undefined) then
+      ACE-GetModuleId(Event, ModuleId?)
+      . MM-DeleteModuleDependencies(ModuleId)
+    else
+      tau
+    fi
   )
   *
   delta
