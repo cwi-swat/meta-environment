@@ -79,11 +79,15 @@ module Versioning
       @shell = Utils::CommandSpecificShell.new('svn_ssh')
     end
     
-    def svn_url(path)
+    def svn_url(path, user = nil)
       if @protocol == 'svn+ssh' or
           @protocol == 'svn' or
           @protocol == 'file' then 
-        return File.join("#{@protocol}://#{@location}", path)
+        if user then
+          return File.join("#{@protocol}://#{user}@#{@location}", path)
+        else
+          return File.join("#{@protocol}://#{@location}", path)
+        end
       end
       raise RuntimeError.new("unsupported SVN protocol: #{@protocol}")
     end
@@ -94,13 +98,13 @@ module Versioning
     end
 
     def svn_checkout(user, path, time, dirname)
-      url = svn_url(path)
-      @shell.execute("svn --username #{user} checkout --revision {#{time}} #{url}/trunk #{dirname}")
+      url = svn_url(path, user)
+      @shell.execute("svn checkout --revision {#{time}} #{url}/trunk #{dirname}")
     end
 
     def svn_trunk_checkout(user, path, dirname)
-      url = svn_url(path)
-      @shell.execute("svn --username #{user} checkout #{url}/trunk #{dirname}")
+      url = svn_url(path, user)
+      @shell.execute("svn checkout #{url}/trunk #{dirname}")
     end
 
     def svn_cat_pkgconfig_file(user, path, time)
@@ -108,7 +112,7 @@ module Versioning
     end
 
     def svn_cat(user, path, time, subpath)
-      url = svn_url(path)
+      url = svn_url(path, user)
       time_str = ''
       if time then
         time_str = " --revision "
@@ -155,8 +159,8 @@ module Versioning
 
     
     def version(user, time, path)
-      url = svn_url(path)      
-      info = @shell.read("svn --username #{user} info --revision {#{svn_time(time)}} #{url}/trunk")
+      url = svn_url(path, user)      
+      info = @shell.read("svn info --revision {#{svn_time(time)}} #{url}/trunk")
       info.split("\n").each do |line|
         if line =~ /Last Changed Rev: ([0-9]+)/ then
           return $1.to_i

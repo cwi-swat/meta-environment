@@ -1,3 +1,8 @@
+2007-01-18    <storm@cwi.nl>
+
+	* sr/versioning/vcs.rb: made user explict in the URL instead of
+	using --username.
+
 2007-01-03    <storm@cwi.nl>
 
 	* src/building/builder.rb (Building::Builder::build_target): fixed
