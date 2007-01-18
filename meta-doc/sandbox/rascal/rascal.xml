@@ -53,6 +53,10 @@
     <emphasis>connection.</emphasis> Alas, any bridge between the two
     languages is both complex to manage and an efficiency bottleneck. This
     work is an attempt to consolidate this engineering trade-off.</para>
+
+    <para>In section Integration with Tscripts we will also explore the issues
+    when we take integration one step further and also include Tscripts in the
+    considerations.</para>
   </section>
 
   <section>
@@ -392,26 +396,25 @@ imports Tree-syntax
 function cnt(TREE)       -&gt; INT
 [] cnt(T) = #{N | INT N : T}
 
-%% Idee: INT N : T genereert alle INT leaves uit de boom
-%% # is de built-in length-of operator
+%% Idea: INT N : T generates alle INT leaves in the tree
+%% # is the built-in length-of operator
 
 %% Ex2: Sum all leaves in a TREE
 
 function sum_tree(TREE)       -&gt; INT
 [] sum_tree(T) = sum({N | INT N : T})
 
-%% NB sum is een built-in die de elementen van een set sommeert.
+%% NB sum is a built-in that add all elements in a set.
 
 %% Ex3: Increment all leaves in a TREE
 
 function inc(TREE)        -&gt; TREE
 [] inc(T) = INT N : T =&gt; N+1
 
-%% Idee: INT N : T genereert alle INT leaves uit de boom
-%% INT N : T =&gt; N+1 vervangt elke N door N+1
-%% De expressie als geheel levert de gemodificeerde term op.
-%% Dit is een super compacte notatie voor transformers!
-
+%% Idea: INT N : T generates alle INT leaves in the tree
+%% INT N : T =&gt; N+1 replaces each N by N+1
+%% The expression as a whole returns the modified term.
+%% This is an extremely compact manner of writing a transformer!
 
 %% Ex4: full replacement of g by i
 
@@ -432,16 +435,16 @@ function srepl(TREE)  -&gt; TREE
     </section>
 
     <section>
-      <title>Lambda Substitutie</title>
+      <title>Lambda Substitution</title>
 
-      <para>hieronder een definitie van substitutie in lambda expressies. Het
-      zou goed zijn om dit zo simpel mogelijk te krijgen omdat het model staat
-      voor heel veel bindingsmechanismen. Het is ook een uitdaging om een
-      generieke substitutiefunctie te schrijven (die alleen van de syntax van
-      variabelen en argumentbinding afhangt). <programlisting>module Lambda
+      <para>Below a definition of substitution in lambda expressions. It would
+      be nice to get this as simple as possible since it is a model for many
+      binding mechanisms. It is also a challenge to write a generic
+      substitution function that only depends on the syntax of variables and
+      argument binding.<programlisting>module Lambda
 
 sorts Var %% variables
-     Exp %% expressions
+      Exp %% expressions
 
 context-free functions
      "prime" "(" Var ")"  -&gt; Var              %% generate unique name
@@ -459,8 +462,8 @@ function boundVars(Exp) -&gt; set[Var]
 function freeVars(Exp) -&gt; set[Var]
 [] freeVars(E) = allVars(E) \ boundVars(E)
 
-%% Genereer een verse variabele als V niet in gegeven set voorkomt.
-function fresh(Var, set[V])
+%% Generate a fresh variable if V does not occur in given set.
+function fresh(Var, set[Var]) -&gt; Var
 [] fresh(V, S) = if V in S then prime(V) else V fi
 
 %% Substitution: replace all occurrences of V in E2 by E1
@@ -504,21 +507,21 @@ context-free functions
 
 %% Rename all bound variables in an Exp
 
-%% Version 1: puur functioneel
+%% Version 1: purely functional
 
-%% Exp: gegeven expressie
+%% Exp: given expression to be renamed
 
 %% rel[Var,Var]: renaming table
 
-%% Int: counter om globale varaibelen te genereren
+%% Int: counter to generate global variables
 
-function rename(Exp, rel[Var,Var], Int) -&gt; Exp
+function rename(Exp E, rel[Var,Var] Rn, Int Cnt) -&gt; Exp
 
 [] rename(let V = E1 in E2 end, Rn, Cnt) =
   let Y = rename(E1, Rn, Cnt) in rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') end
 
   when
-    Y := "x" + Cnt,                             %% deze + concateneert (na conversie)
+    Y := "x" + Cnt,                             %% this + concatenates (after conversion)
 
     Cnt' := Cnt + 1
 
@@ -534,15 +537,15 @@ function rename(Exp, rel[Var,Var], Int) -&gt; Exp
 
 %% Rename all bound variables in an Exp
 
-%% Version 2: met globale variabele om nieuwe variabelen te genereren
+%% Version 2: using global variables to generate new variables
 
 global variable
 
-      Cnt -&gt; int := 0                           %% Globale moet ergens geinitialiseerd worden
+      Cnt -&gt; int := 0                           %% Global has to be initialyzed somewhere
 
 function newVar() -&gt; Var
 
-[] newVar() = "x" + Cnt                           %% deze + concateneert (na conversie)
+[] newVar() = "x" + Cnt        
 
   when Cnt := Cnt + 1
 
@@ -566,7 +569,7 @@ function rename(Exp, rel[Var,Var])
 
   rename(E, Rn) = E
 
-%% Rename -- Version 3, met Rn ook als globale variabele
+%% Rename -- Version 3, with Rn also as global variabele
 
 global variable
 
@@ -624,7 +627,7 @@ function tc(PROGRAM)     -&gt; bool
 [] tc(begin Decls Stats end) = tcs(Stats)
   when Env := tcd(Decls)
 
-traversal function(Decls) -&gt; void
+traversal function tcd(Decls) -&gt; void
 [] tcd(Id : Type) = void
    when Env := Env union {&lt;Id,Type&gt;}
 
@@ -718,16 +721,131 @@ context-free syntax
 
 context-free syntax
   %% Symbol from the Sdf definition of Sdf:
-  Symbol              -&gt; Type
-  "&amp;" Type            -&gt; Type
-  TypeName            -&gt; Type
-  "set" "[" Type "]"  -&gt; Type
-  "list" "[" Type "]" -&gt; Type
-  "&lt;" {Type","}* "&gt;"  -&gt; Type
-  "void"              -&gt; Type
-  "natural"           -&gt; Type
-  "boolean"           -&gt; Type
+  Symbol                    -&gt; Type
+  "&amp;" Type                  -&gt; Type
+  TypeName                  -&gt; Type
+  "list" "[" Type "]"       -&gt; Type
+  "set" "[" Type "]"        -&gt; Type
 
-</programlisting></para>
+  "rel" "[" {Type ","}+ "]" -&gt; Type
+  "&lt;" {Type","}* "&gt;"        -&gt; Type
+  "void"                    -&gt; Type
+  "natural"                 -&gt; Type
+  "boolean"                 -&gt; Type
+  "loc"                     -&gt; TYpe</programlisting></para>
+  </section>
+
+  <section>
+    <title>Integration with Tscripts</title>
+
+    <section>
+      <title>Introduction</title>
+
+      <para>It is possible to speculate on an even further integration of
+      formalisms and combining the above amalgan of ASF+SDF and Rscript with
+      Tscripts.</para>
+    </section>
+
+    <section>
+      <title>Requirements</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>R12: The resulting language uses a single type system. This
+          means that relational types (possible including syntactic objects)
+          can be used in Tscripts.</para>
+        </listitem>
+
+        <listitem>
+          <para>R13: The current "expressions" in Tscript (terms that occur at
+          the rhs of an assignment) are replaced by calls to ASF+SDF or
+          Rscript functions.</para>
+        </listitem>
+
+        <listitem>
+          <para>R14: There is minimal duplication in functionality between
+          ASF+SDF/Rscript/Tscript.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Different styles of Type Declarations</title>
+
+      <para>We have at the moment, unfortunately, a .proliferation of
+      declaration styles for types.</para>
+
+      <para>Functions are declared in ASF+SDF as:</para>
+
+      <programlisting>typecheck(PROGRAM) -&gt; Boolean</programlisting>
+
+      <para>Observe that only the type of the parameter is given but that it
+      does not have a name.</para>
+
+      <para>In Rscript we have:</para>
+
+      <programlisting>int sum(set[int] SI) = ...</programlisting>
+
+      <para>while in Tscript processes are declared as</para>
+
+      <programlisting>process mkWave(N : int) is ...</programlisting>
+
+      <para>For variables a similar story applies. Variables are declared in
+      ASF+SDF as:</para>
+
+      <programlisting>"X" [0-9]+    -&gt; INT</programlisting>
+
+      <para>In Rscript we have:</para>
+
+      <programlisting>int X
+
+int X : S   (in comprehensions)</programlisting>
+
+      <para>and in Tscript we have:</para>
+
+      <programlisting>X : int</programlisting>
+
+      <para>In order to unify these styles, we might do the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The type of an entity is always written before the entity
+          itself.</para>
+        </listitem>
+
+        <listitem>
+          <para>Formal parameters have a name.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In essence, this amounts to using the declaration style as used in
+      Rscript. So we get:</para>
+
+      <programlisting>Boolean typecheck(PROGRAM P) is ...
+
+process mkWave(int N) is ...</programlisting>
+
+      <para>Or do we want things like:</para>
+
+      <programlisting>function typeckeck(PROGRAM P) returns Boolean is ...
+
+var X -&gt; int
+
+process mkWave(int N) is ...</programlisting>
+
+      <para>Advantages are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The category of the entity is immediately clear (function,
+          var, process, tool, ...).</para>
+        </listitem>
+
+        <listitem>
+          <para>It is readable to further qualify the category, i.e.,
+          traversal function, hidden var, restartable tool)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 </article>
