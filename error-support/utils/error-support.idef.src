@@ -141,6 +141,11 @@ in
     . rec-value(ES, summary(Summary?))
     . snd-msg(es-summary(Summary))
   +
+    rec-msg(es-set-summary-id(Summary?, Id?))
+    . snd-eval(ES, set-summary-id(Summary, Id))
+    . rec-value(ES, summary(Summary?))
+    . snd-msg(es-summary(Summary))
+  +
     rec-msg(es-make-error(Description?, Subjects?)) 
     . snd-eval(ES, make-error(Description, Subjects))
     . rec-value(ES, error(Error?))

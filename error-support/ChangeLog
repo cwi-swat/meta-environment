@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jan 19 12:52:19 CET 2007 <kooiker@cwi.nl>
+ * utils/error-support.idef: add function to set id of summary
+
 Wed Oct 11 13:25:32 CEST 2006 <jurgenv@cwi.nl>
  * utils/error-support.idef: added some functions to create error messages.
 
