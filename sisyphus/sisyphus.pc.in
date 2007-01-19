@@ -1,6 +1,6 @@
 prefix=@prefix@
 Maintainers=storm@cwi.nl
 Name: sisyphus
-Version: 0.33
+Version: 0.34
 Description:
 Requires: 

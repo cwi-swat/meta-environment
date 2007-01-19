@@ -1,6 +1,16 @@
+2007-01-19    <storm@cwi.nl>
+
+	* Bumped to version 0.34.
+
+	* Fix: distcheck was broken; gems weren't found. 
+
 2007-01-18    <storm@cwi.nl>
 
-	* sr/versioning/vcs.rb: made user explict in the URL instead of
+	* Fix: added dependency gems to the repository so that no remote
+	operations can break the installation of sisyphus. Adapted the
+	Makefile. 
+
+	* src/versioning/vcs.rb: made user explict in the URL instead of
 	using --username.
 
 2007-01-03    <storm@cwi.nl>

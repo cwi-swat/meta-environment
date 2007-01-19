@@ -1,13 +1,13 @@
 
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = src script doc
+SUBDIRS = src script doc gems
 
 ACLOCAL_AMFLAGS = -I .
 
 gems = activerecord-1.13.2 activesupport-1.2.5 postgres-pr-0.4.0
 
-GEM_DIR := $(shell pwd)/gems
+GEM_DIR = $(top_srcdir)/gems
 
 install-data-hook: 
 	(RUBYLIB=${RUBYGEMS_PREFIX}/lib/ruby/site_ruby/1.8:${RUBY_PREFIX}/lib/ruby/site_ruby/1.8 ;\
