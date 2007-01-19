@@ -386,7 +386,7 @@ in
     . snd-note(ui-status(endstat(Id))) 
     . snd-note(ui-status(errorf("Equations incomplete for %s", [Modulename])))
   fi
-  . JobDone("TestAsfSpecification")
+  . JobDone("Testing ASF Specification")
 endlet
 
 process ReduceTerm(Tree: term, ModuleId: term, Debugging: term, NormalForm: term?) is
