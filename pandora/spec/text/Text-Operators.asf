@@ -45,6 +45,8 @@ equations
                string of Int4 layoutchars || String
                Text2 && (X2,Y2)
 
+equations
+
   [TOp4'1]   Text3 := add to last line (Text1,string of X3 - X1 layoutchars)
              ==============================================================
              concat ( Text1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y1) & Defs =
@@ -54,6 +56,14 @@ equations
              ========
              concat ( Text1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs =
                concat ( Text1 || newlinechar && (0,Y1 + 1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs
+
+  []  Text3 && (X4,Y4) := concat ( Text1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs
+      ===>
+      concat ( Text1 Texts1 && (X1,Y1), Text2 && (X2,Y2) ) with (X3,Y3) & Defs =
+      Text3 Texts1 && (X3,Y3)
+
+
+equations
 
   [TOp9'1]   add to last line (String1, String2) = String1 || String2
 

@@ -19,7 +19,7 @@ exports
 
 hiddens
   context-free start-symbols
-    AlignInfo
+    AlignInfo TextStruct
 
   context-free syntax
     "get" "column" Box                            -> Box*

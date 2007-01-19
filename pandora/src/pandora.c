@@ -153,7 +153,7 @@ static BOX_BoxList argsManyToBox(PT_Args args, ATbool isLex, ATbool indent)
     PT_Tree head = PT_getArgsHead(args);
     BOX_Box prettyHead = treeToBox(head, isLex);
 
-    if (prettyHead != NULL) {
+    if (prettyHead != NULL && prettyHead != BOX_makeEmptyHBox()) {
       if (isNonTerminal(head) && indent) {
 	prettyHead = BOX_makeIBox(prettyHead);
       } 

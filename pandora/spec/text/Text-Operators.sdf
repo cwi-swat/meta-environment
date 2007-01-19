@@ -18,5 +18,6 @@ hiddens
     "Int"[0-9]* -> Integer
     "String"[0-9]* -> Bytes
     "Text"[0-9]* -> Bytes
+    "Texts"[0-9]* -> Bytes+
     "X"[0-9]* -> Integer
     "Y"[0-9]* -> Integer
