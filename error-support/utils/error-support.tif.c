@@ -29,7 +29,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<error-support>,display-summary(<term>))",
   "rec-eval(<error-support>,add-filename-in-error(<str>,<term>))",
   "rec-eval(<error-support>,make-summary(<str>,<str>,<list>))",
-  "rec-eval(<error-support>,change-summary-id(<term>,<str>))",
+  "rec-eval(<error-support>,set-summary-id(<term>,<str>))",
   "rec-eval(<error-support>,make-error(<str>,<list>))",
   "rec-eval(<error-support>,make-localized-subject(<str>,<term>))",
   "rec-eval(<error-support>,make-subject(<str>))",
