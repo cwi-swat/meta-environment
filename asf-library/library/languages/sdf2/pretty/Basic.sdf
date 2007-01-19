@@ -1,0 +1,22 @@
+module languages/sdf2/pretty/Basic
+
+imports languages/sdf2/syntax/Basic
+imports languages/sdf2/pretty/Kernel
+
+hiddens
+
+context-free start-symbols
+  Grammar
+
+context-free syntax
+
+"[" Production* "]" -> Box {to-box}
+"<" Box ">"         -> Grammar {from-box}
+"<" Box ">"      -> Symbol {from-box}
+"[" Symbol "]" -> Box {to-box}
+
+variables
+ 
+"Symbol" -> Symbol
+"Production*" -> Production*
+

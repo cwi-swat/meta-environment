@@ -1,0 +1,3 @@
+equations
+
+[] Grammar1 Grammar2 = <V vs=2 [[Grammar1] [Grammar2] ]>

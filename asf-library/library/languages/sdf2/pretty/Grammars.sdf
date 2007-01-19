@@ -1,0 +1,12 @@
+module languages/sdf2/pretty/Grammars
+
+imports languages/sdf2/syntax/Grammars
+imports languages/box/syntax/Box
+
+hiddens
+
+context-free syntax
+  "[" Grammar "]" -> Box {to-box}
+  "<" Box ">" -> Grammar {from-box}
+variables
+  "Grammar"[0-9]* -> Grammar

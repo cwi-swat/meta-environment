@@ -1,0 +1,22 @@
+module languages/sdf2/pretty/Sorts
+
+imports languages/sdf2/syntax/Sorts
+imports languages/sdf2/pretty/Kernel
+
+hiddens
+
+context-free start-symbols
+  Grammar
+
+context-free syntax
+  "[" {Symbol ","}+ "]" -> Box* {to-box}
+  "<" Box ">"     -> Symbol {from-box}
+  "<" Box ">"     -> Grammar {from-box}
+  "[" Symbols "]" -> Box {to-box}
+
+variables
+
+"Sort" -> Sort
+"Symbol+" -> {Symbol ","}+
+"Symbols" -> Symbols
+
