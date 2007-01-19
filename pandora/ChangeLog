@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Jan 19 14:12:45 CET 2007 <{kooiker,jurgenv,jong}@cwi.nl>
+ * spec/text/*.asf,src/pandora.c: fixed several small issues with
+   tabular material and splicing lists.
+
 Wed Jan 17 10:53:50 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * spec/text/*.asf: made I and WD boxes work with more than one argument.
  * src/pandora.c: fixed bugs with the generation of empty H boxes for

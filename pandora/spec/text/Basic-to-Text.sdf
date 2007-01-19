@@ -52,3 +52,4 @@ hiddens
     "Vs"[0-9]*     -> Integer
     "Is"[0-9]*     -> Integer
     "Ts"[0-9]*     -> Integer
+    "Op"[0-9]*     -> BoxOperator

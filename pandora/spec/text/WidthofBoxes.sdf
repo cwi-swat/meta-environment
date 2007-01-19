@@ -17,3 +17,4 @@ hiddens
     "Int"[0-9]* -> Integer
     "Hs"[0-9]* -> Integer
     "so*"[0-9]* -> SpaceOption*
+    "Op"[0-9]* -> BoxOperator

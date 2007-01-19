@@ -15,8 +15,12 @@ exports
     "align" Box "given" AlignmentOptions SpaceOption*
       "with" Frame "and" TextStruct "and" AlignInfo -> TextStruct
     "calc-width" Box "with" Frame "and" AlignInfo -> AlignInfo
+    "remove" "v" ("and" "r")? "from" Box* "boxes" -> Box*
 
 hiddens
+  context-free start-symbols
+    AlignInfo
+
   context-free syntax
     "get" "column" Box                            -> Box*
     "remove" "column" Box                         -> Box
@@ -52,3 +56,5 @@ hiddens
     "ao*"[0-9]* -> {AlignmentOption ","}*
     "ao+"[0-9]* -> {AlignmentOption ","}+
     "so*"[0-9]* -> SpaceOption*
+    "Op"[0-9]* -> BoxOperator
+    "AndR?"    -> ("and" "r")?

@@ -230,7 +230,7 @@ static BOX_BoxList sepListToBox(PT_Args args, ATbool isLex, ATbool indent)
 
     if (PT_getArgsLength(args) >= SEPLISTELEMLENGTH) {
       int i;
-      PT_Args slice = PT_sliceArgs(args, 0, SEPLISTELEMLENGTH - 1);
+      PT_Args slice = PT_sliceArgs(args, 0, SEPLISTELEMLENGTH);
       BOX_BoxList elem = argsManyToBox(slice, isLex, indent);
       listArgBox = BOX_makeHBoxWithHs(elem, HSOPTION);
 
@@ -286,36 +286,6 @@ static BOX_Box listToBox(PT_Tree tree, ATbool isLex)
 }
 
 /*}}}  */
-/*{{{  static BOX_BoxList sepListSpliceToBox(PT_Args args, ATbool isLex, ATbool indent) */
-
-static BOX_BoxList sepListSpliceToBox(PT_Args args, ATbool isLex)
-{
-  BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
-  BOX_BoxList boxList = BOX_makeBoxListEmpty();
-
-  while (!PT_isArgsEmpty(args)) {
-    if (PT_getArgsLength(args) >= SEPLISTELEMLENGTH) {
-      int i;
-      PT_Args slice = PT_sliceArgs(args, 0, SEPLISTELEMLENGTH - 1);
-      BOX_BoxList elem = argsManySpliceToBox(slice, isLex);
-      boxList = BOX_concatBoxList(BOX_reverseBoxList(elem), optLayout, boxList);
-
-      for (i = 0; i < SEPLISTELEMLENGTH; i++) {
-	args = PT_getArgsTail(args);
-      }
-    }
-    else {
-      BOX_Box listArgBox = treeToBox(PT_getArgsHead(args), isLex);
-      args = PT_getArgsTail(args);
-      boxList = BOX_makeBoxListMany(listArgBox, optLayout, boxList);
-    }
-
-  }
-
-  return BOX_reverseBoxList(boxList);
-}
-
-/*}}}  */
 /*{{{  static BOX_Box listSpliceToBox(PT_Tree tree, ATbool isLex) */
 
 static BOX_BoxList listSpliceToBox(PT_Tree tree, ATbool isLex)
@@ -331,11 +301,7 @@ static BOX_BoxList listSpliceToBox(PT_Tree tree, ATbool isLex)
 
   symbol = PT_getSymbolSymbol(symbol);
 
-  if (PT_isSymbolIterStarSep(symbol) || PT_isSymbolIterPlusSep(symbol)) {
-    boxList = sepListSpliceToBox(args, isLex);
-  } else {
-    boxList = argsManySpliceToBox(args, isLex);
-  }
+  boxList = argsManySpliceToBox(args, isLex);
 
   return boxList;
 }

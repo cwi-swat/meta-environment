@@ -142,6 +142,7 @@ ATerm pretty_print(int cid, ATerm input)
   parsetree = PT_ParseTreeFromTerm(ATBunpack(input));
   box = pandora(parsetree);
 
+  ATwriteToNamedTextFile((ATerm) box, "hoi.box");
   if (box != NULL) {
     result = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
   }

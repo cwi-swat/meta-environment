@@ -8,11 +8,14 @@ equations
 
   [WoB1'2]   width of H so* [B] with Frame = width of B with Frame
 
-  [WoB1'2]   Int1 := width of B with Frame,
+  [WoB1'2]   Op [] !:= B,
+             Int1 := width of B with Frame,
              Hs := set hs value given so* and Frame,
              Int2 := width of H so* [B+] with Frame
              =====================================
              width of H so* [B B+] with Frame = Int1 + Hs + Int2
+
+  [WoB1'2]   width of H so* [Op [] B+] with Frame = width of H so* [B+] with Frame
 
   [WoB1'3]   width of V so* [] with Frame = 0
 
