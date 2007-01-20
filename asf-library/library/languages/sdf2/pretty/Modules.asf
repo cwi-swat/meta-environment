@@ -1,0 +1,23 @@
+equations
+
+[] exports Grammar = <V ["exports" [Grammar]]>
+
+equations
+
+[] hiddens Grammar = <V ["hiddens" [Grammar]]>
+
+equations
+
+[] imports Import* = <H ["imports" HV [[Import*]] ]>
+
+equations
+
+[] module ModuleName ImpSection* Section* = <V vs=2[ H ["module" [ModuleName] ] V vs=1 [[[ImpSection*]]] V vs=2 [[Section*]] ]>
+
+equations
+
+[] ModuleId [ Symbol* ] = <H hs=0[ [ModuleId] "[" H [[Symbol*]] "]"]>
+
+equations
+
+[] ModuleName Renamings = <H hs=1 [[ModuleName] [Renamings] ]>

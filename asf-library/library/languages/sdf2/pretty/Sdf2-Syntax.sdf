@@ -3,9 +3,33 @@ module languages/sdf2/pretty/Sdf2-Syntax
 imports languages/sdf2/syntax/Sdf2-Syntax
 imports languages/sdf2/pretty/Sorts
 imports languages/sdf2/pretty/Basic
+imports languages/sdf2/pretty/Modules
+imports languages/sdf2/pretty/Regular
+imports languages/sdf2/pretty/Restrictions
+imports languages/sdf2/pretty/Priority
+imports languages/sdf2/pretty/Start-Symbols
+imports languages/sdf2/pretty/Aliases
+imports languages/sdf2/pretty/Literals
+imports languages/sdf2/pretty/Lifting
+imports languages/sdf2/pretty/Labels
 
 hiddens
 
 context-free start-symbols
   Grammar Module
 
+context-free syntax
+"[" {Priority ","}* "]" -> Box* {to-box}
+"[" Restriction* "]" -> Box* {to-box}
+"[" Module* "]" -> Box* {to-box}
+
+"<" Box ">" -> Grammar {from-box}
+"<" Box ">" -> SDF {from-box}
+
+variables
+"Production*"[0-9]* -> Production*
+"Production"[0-9]* -> Production
+"Priority"[0-9]* -> Priority
+"Priority*" -> {Priority ","}*
+"Restriction*" -> Restriction*
+"Module*" -> Module*

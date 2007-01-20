@@ -1,0 +1,13 @@
+equations
+
+[] lexical priorities Priority* = <V [H hs=1 ["lexical" "priorities"] I is=2 [V [SL op=H hs=0 [[Priority*] ] ] ]]>
+[] context-free priorities Priority* = <V [H hs=1 ["context-free" "priorities"] I is=2 [V [SL op=H hs=0 [[Priority*] ] ] ]]>
+
+equations
+
+[] lexical restrictions Restriction* = <V [H hs=1 ["lexical" "restrictions"] I is=2 [ V [[Restriction*]] ] ]>
+[] context-free restrictions Restriction* = <V [H hs=1 ["context-free" "restrictions"] I is=2 [ V [[Restriction*]] ] ]>
+
+equations
+
+[] definition Module* = <V vs=2 ["definition" [Module*] ]>

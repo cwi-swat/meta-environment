@@ -1,0 +1,14 @@
+module languages/sdf2/pretty/Lifting
+
+imports languages/sdf2/syntax/Lifting
+imports languages/sdf2/pretty/Kernel
+
+hiddens
+
+context-free syntax
+
+"[" Symbol "]" -> Box {to-box}
+"<" Box ">" -> Symbol {from-box}
+
+variables
+"Symbol" -> Symbol

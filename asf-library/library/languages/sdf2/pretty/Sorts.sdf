@@ -6,7 +6,7 @@ imports languages/sdf2/pretty/Kernel
 hiddens
 
 context-free start-symbols
-  Grammar
+  Grammar ATerm
 
 context-free syntax
   "[" {Symbol ","}+ "]" -> Box* {to-box}

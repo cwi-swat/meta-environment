@@ -10,7 +10,7 @@ context-free start-symbols
 
 context-free syntax
 
-"[" Production* "]" -> Box {to-box}
+"[" Production* "]" -> Box* {to-box}
 "<" Box ">"         -> Grammar {from-box}
 "<" Box ">"      -> Symbol {from-box}
 "[" Symbol "]" -> Box {to-box}

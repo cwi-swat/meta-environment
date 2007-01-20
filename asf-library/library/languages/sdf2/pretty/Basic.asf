@@ -1,0 +1,12 @@
+equations
+
+[] context-free syntax Production* = <V [H hs=1 ["context-free" "syntax"] I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] ]>
+
+[] lexical syntax Production* = <V [ H hs=1 ["lexical" "syntax"] I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] ]>
+
+[] variables Production* = <V ["variables" I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] ]>
+
+[] lexical variables Production* = <V [H hs=1 ["lexical" "variables"] I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] ]>
+
+
+

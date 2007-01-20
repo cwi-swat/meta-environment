@@ -1,0 +1,18 @@
+module languages/sdf2/pretty/Aliases
+
+imports languages/sdf2/syntax/Aliases
+imports languages/sdf2/pretty/Kernel
+
+hiddens
+
+context-free syntax
+"[" Symbol "]" -> Box {to-box}
+"[" Alias* "]" -> Box* {to-box}
+
+"<" Box ">" -> Grammar {from-box}
+"<" Box ">" -> Alias {from-box}
+
+variables
+
+"Alias*" -> Alias*
+"Symbol"[0-9]* -> Symbol

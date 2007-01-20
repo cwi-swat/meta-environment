@@ -1,0 +1,7 @@
+equations
+
+[] aliases Alias* = <V ["aliases" I is=2 [ V [[Alias*]]]]>
+
+equations
+
+[] Symbol1 -> Symbol2 = <H hs=1 [[Symbol1] "->" [Symbol2]]>

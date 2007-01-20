@@ -1,0 +1,3 @@
+equations
+
+[] FunctionName ( Symbol* ) -> Symbol = < G [ H hs=0 [ [FunctionName] H hs=1 [ SL op=H hs=0 [[Symbol*]]]] "->" [Symbol] [Attributes]] > 

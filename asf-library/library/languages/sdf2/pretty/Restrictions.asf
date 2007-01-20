@@ -1,0 +1,16 @@
+equations
+
+[] restrictions Restriction* = <V ["restrictions" I is=2 [ V [[Restriction*]] ] ]>
+
+equations
+
+[] Symbol* -/- Lookaheads = <H hs=1 [ HOV [[Symbol*]] "-/-" [Lookaheads] ]>
+
+equations
+
+[] Lookaheads1 | Lookaheads2 = <HV [ [Lookaheads1] H ["|" [Lookaheads2]]]> 
+[] [[ Lookahead* ]] = <H[ HV  [ SL op=H hs=0 [[Lookahead*] ]]]>
+
+equations
+
+[] CharClass . Lookaheads = <H hs=0[[CharClass] "." [Lookaheads]]>
