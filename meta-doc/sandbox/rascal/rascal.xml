@@ -717,7 +717,10 @@ context-free syntax
   Term "!:=" Term -&gt; Condition {cons("not-match")}
   Term "==" Term  -&gt; Condition {cons("equals")}
   Term "!=" Term  -&gt; Condition {cons("not-equals")}
-  Term "::" Term  -&gt; Condition {cons("generator")}  %% only applicable in comprehensions for now, not rules (although a semantics similar to list matching might apply, i.e. find the first element that satisfies the following conditions)
+  Term "::" Term  -&gt; Condition {cons("generator")}  %% only applicable in comprehensions for now, 
+                                                    %% not rules (although a semantics similar to 
+                                                    %% list matching might apply, i.e. find the first 
+                                                    %% element that satisfies the following conditions)
 
 context-free syntax
   %% Symbol from the Sdf definition of Sdf:
@@ -844,6 +847,124 @@ process mkWave(int N) is ...</programlisting>
         <listitem>
           <para>It is readable to further qualify the category, i.e.,
           traversal function, hidden var, restartable tool)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Global Flow of Control</title>
+
+      <para>We have to settle the possible flow of control between the three
+      entities ASF+SDF, Rscript and Tscript. Since Tscript imposes the notion
+      of an atomic action it would be problematic to have completely
+      unrestricted flow of control. Therefore it is logical to use Tscript for
+      the top-level control and to limit the use of ASF+SDF and Rscript to
+      computations within atomic actions. There is no reason to restrict the
+      flow of control between ASF+SDF and Rscript.</para>
+
+      <para>What are the consequences of the above choice? Let's analyze two
+      cases:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Parse a file from within an ASF+SDF specification. This (and
+          similar built-ins) that use the operating system are removed from
+          ASF+SDF. Their effect has to be achieved at the Tscript-level which
+          is the natural place for such primitives.</para>
+        </listitem>
+
+        <listitem>
+          <para>Describe I/O for a defined language. Consider Pico extended
+          with a read statement. Here the situation is more complicated. We
+          cannot argue that the flow of control in the Pico program (as
+          determined by an interpreter written in ASF+SDF) should be moved to
+          the Tscript level since Tscript simply does not have the primitives
+          to express this. On the other hand, we have to interrupt the flow of
+          control of the Pico interpreter when we need to execute a read
+          statement. The obvious way to achieve this is </para>
+
+          <itemizedlist>
+            <listitem>
+              <para>At the Tscript level, a loop repeatedly calls the Pico
+              interpreter until it is done.</para>
+            </listitem>
+
+            <listitem>
+              <para>After each call the Pico interpreter returns with
+              either:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>An indication that the eecution is complete (and
+                  possibly a final state and/or final value).</para>
+                </listitem>
+
+                <listitem>
+                  <para>An indication that an external action has to be
+                  executed, for instance the read statement. This indication
+                  should also contain the intermediate state of the
+                  interpreter. When the external action has been executed, the
+                  Pico interpreter can be restarted with as arguments the
+                  value of the external action and the intermediate
+                  state.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Experimentation will have to show whether such a framework is
+      acceptable.</para>
+    </section>
+
+    <section>
+      <title>Modularization</title>
+
+      <para>Rscript and Tscript have no, respectively, very limited mechanisms
+      for modularization. ASF+SDF, however, provides a module mechanism with
+      imports, hiding, parameters and renaming. This mechanism was originally
+      included in ASF, was taken over by SDF and is now reused in ASF+SDF.
+      Currently, there are not yet sufficiently large Rscripts to feel the
+      need for modules. In Tscript, there is a strong need for restricted name
+      spaces and for imposing limitations on name visibility in order to limit
+      the possible interactions of a process with its surroundings and to make
+      it possible to create nested process definitions. What are the design
+      options we have to explore?</para>
+
+      <para>First, we can design a new module system that is more suited for
+      our current requirements. The advantage is that we can create an optimal
+      solution, the disadvantage is that there are high costs involved
+      regarding implementation effort and migrations of existing ASF+SDF
+      specifications to the new module scheme.</para>
+
+      <para>Second, we can design an add-on to the ASF+SDF module system that
+      addresses our current needs.</para>
+
+      <para>Third, we can try to reuse the current ASF+SDF module
+      system.</para>
+
+      <para>Note: parameterized modules and polymorphics types are competing
+      features. We should understand what we want.</para>
+
+      <para>Before delving into one of the above alternatives, let's list our
+      requirements first.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>We need grammar modules that allow the following operations:
+          import, renaming, deletion (currently not supported but important to
+          have a fixed base grammar on many variations on it).
+          Parameterization and export/hidden: unclear.</para>
+        </listitem>
+
+        <listitem>
+          <para>We need function modules (ASF+SDF and Rscript) that provide:
+          import, maybe parametrization, and export/hidden.</para>
+        </listitem>
+
+        <listitem>
+          <para>We need process modules (Tscript).</para>
         </listitem>
       </itemizedlist>
     </section>
