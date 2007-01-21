@@ -1,56 +1,53 @@
 module basic/Integers
 
 imports basic/NatCon
-imports
-  basic/Booleans
+imports basic/Booleans
 
 hiddens
-   context-free start-symbols 
-     Natural Integer Boolean
+context-free start-symbols
+  Natural Integer Boolean
 
 exports
-  sorts Natural Integer
+sorts Natural
+      Integer
 
-  context-free syntax
-     NatCon           		-> Natural
-     Natural "-/" Natural	-> Natural {left}
-     "(" Natural ")"       	-> Natural {bracket}
-     Natural               	-> Integer
-     "+" Natural           	-> Integer
-     "-" Natural           	-> Integer
-     Integer "+" Integer       	-> Integer {left}
-     Integer "-" Integer       	-> Integer {left}
-     Integer "*" Integer       	-> Integer {left}
-     Integer ">" Integer       	-> Boolean
-     Integer ">=" Integer      	-> Boolean
-     Integer "<" Integer       	-> Boolean
-     Integer "<=" Integer      	-> Boolean
-     max(Integer, Integer)      -> Integer
+context-free syntax
+  NatCon                -> Natural           
+  Natural "-/" Natural  -> Natural {left}    
+  "(" Natural ")"       -> Natural {bracket} 
+  Natural               -> Integer           
+  "+" Natural           -> Integer           
+  "-" Natural           -> Integer           
+  Integer "+" Integer   -> Integer {left}    
+  Integer "-" Integer   -> Integer {left}    
+  Integer "*" Integer   -> Integer {left}    
+  Integer ">" Integer   -> Boolean           
+  Integer ">=" Integer  -> Boolean           
+  Integer "<" Integer   -> Boolean           
+  Integer "<=" Integer  -> Boolean           
+  max(Integer, Integer) -> Integer           
+  "(" Integer ")"       -> Integer {bracket} 
 
-     "(" Integer ")"       	-> Integer {bracket}
-
-  context-free priorities
-    Integer "*" Integer -> Integer >
-    {left: Integer "+" Integer -> Integer
-           Integer "-" Integer -> Integer}
-
-
+context-free priorities
+  Integer "*" Integer -> Integer >
+  { left: Integer "+" Integer -> Integer  
+          Integer "-" Integer -> Integer   }
 
 hiddens
-  imports basic/Comments
-   
-  context-free syntax
-    "gt" "(" Natural "," Natural ")" -> Boolean
-    Natural "-//" Natural          -> Natural
-    Natural ">-" Natural           -> Natural
+imports basic/Comments
 
-  variables
-    "Nat" [0-9\']*      -> Natural 
-    "Nat-con" [0-9\']*  -> NatCon
-    "Int" [0-9\']*      -> Integer
+context-free syntax
+  "gt" "(" Natural "," Natural ")" -> Boolean  
+  Natural "-//" Natural            -> Natural  
+  Natural ">-" Natural             -> Natural  
 
-  lexical variables 
-    "n" [0-9]* -> NatCon
-    "c" [0-9]* -> [0-9]
-    "x" [0-9]* -> [0-9]*
-    "y" [0-9]* -> [0-9]+
+variables
+  "Nat" [0-9\']*     -> Natural  
+  "Nat-con" [0-9\']* -> NatCon   
+  "Int" [0-9\']*     -> Integer  
+
+lexical variables
+  "n" [0-9]* -> NatCon  
+  "c" [0-9]* -> [0-9]   
+  "x" [0-9]* -> [0-9]*  
+  "y" [0-9]* -> [0-9]+  

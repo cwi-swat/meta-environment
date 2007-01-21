@@ -5,7 +5,7 @@ exports
   sorts Boolean
 
    context-free syntax
-    BoolCon                     -> Boolean {cons("constant")}
+    BoolCon                 -> Boolean {cons("constant")}
     lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
     lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
     "not" "(" Boolean ")" 	-> Boolean {cons("not")}
