@@ -172,7 +172,7 @@ in
     MM-GetClosableModules(ModuleId, CloseModules?)
     .
     if equal(CloseModules, []) then
-      Error("Unable to close %s, it would break some import(s).", [Modulename])
+      Error("Unable to close module, it would break some import(s).", [Modulename])
     else
       CloseModules(CloseModules)
     fi
@@ -182,7 +182,7 @@ in
     if equal(Dependencies, []) then
       CloseModules([ModuleId])
     else
-      Error("Unable to close %s, it would break the import of: %t",
+      Error("Unable to close module, it would break the import of: %t",
             [Modulename, Dependencies])
     fi
   fi
@@ -403,7 +403,7 @@ in
     LocateFile(Modulename, SDF_EXTENSION, Path?)
     .
     if equal(Path, EMPTY_PATH) then
-      Error("Unable to locate module: %s", [Modulename])
+      Error("Unable to locate module", [Modulename])
       . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
       . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
