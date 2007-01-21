@@ -5,9 +5,8 @@ imports languages/box/syntax/Basic
 exports
   sorts AlignmentOption AlignmentOptions
   context-free syntax
-    "A" alignments:AlignmentOptions options:SpaceOption* "[" list:Box* "]" 
-      -> Box {cons("alignment")}
-    "R" "[" list:Box* "]" -> Box {cons("row")}
+    "A" alignments:AlignmentOptions options:SpaceOption* -> BoxOperator {cons("alignment")}
+    "R"                                                  -> BoxOperator {cons("row")}
 
     "l" options:SpaceOption* -> AlignmentOption {cons("left")}
     "c" options:SpaceOption* -> AlignmentOption {cons("centre")}

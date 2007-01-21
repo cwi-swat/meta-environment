@@ -19,9 +19,11 @@ exports
 
   context-free syntax
     StrCon                                       -> Box {cons("string")}
-    "H" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("h")}
-    "V" options:SpaceOption* "[" list:Box* "]"   -> Box {cons("v")}
-    "HV" options:SpaceOption* "[" list:Box* "]"  -> Box {cons("hv")}
-    "HOV" options:SpaceOption* "[" list:Box* "]" -> Box {cons("hov")}
-    "I" options:SpaceOption* "[" Box "]"         -> Box {cons("i")}
-    "WD" "[" Box "]"                             -> Box {cons("wd")}
+    operator:BoxOperator "[" list:Box* "]"       -> Box {cons("appl")}
+
+    "H" options:SpaceOption*                     -> BoxOperator {cons("h")}
+    "V" options:SpaceOption*                     -> BoxOperator {cons("v")}
+    "HV" options:SpaceOption*                    -> BoxOperator {cons("hv")}
+    "HOV" options:SpaceOption*                   -> BoxOperator {cons("hov")}
+    "I" options:SpaceOption*                     -> BoxOperator {cons("i")}
+    "WD"                                         -> BoxOperator {cons("wd")}

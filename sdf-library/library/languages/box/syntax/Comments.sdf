@@ -6,4 +6,4 @@ module languages/box/syntax/Comments
 imports languages/box/syntax/Basic
 exports
   context-free syntax
-    "COMM" "[" list: Box* "]" -> Box
+    "COMM" -> BoxOperator {cons("comment")}
