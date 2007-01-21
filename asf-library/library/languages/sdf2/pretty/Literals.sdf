@@ -9,6 +9,7 @@ context-free syntax
 
 "[" {Symbol ","}* "]" -> Box* {to-box}
 "[" FunctionName "]" -> Box {to-box}
+"[" Attributes "]" -> Box {to-box}
 
 "<" Box ">" -> Production {from-box}
 
