@@ -1,6 +1,14 @@
 /* $Id$ */
 
-Fri Jan 19 14:12:45 CET 2007 <{kooiker,jurgenv,jong}@cwi.nl>
+Mon Jan 22 16:47:12 CET 2007 <jurgenv@cwi.nl>
+ * src/pandora.c: added new production attribute {layout-to-box} for
+   transporting comments to boxes. Example:
+   context-free syntax
+     "_" "_" -> LAYOUT {layout-to-box}
+   equations
+   [] E1 L1 + L2 E2 = to-box(H [ from-box(E1) _L1_ "+" _L2_ from-box(E2) ])
+
+Fri Jan 19 14:12:45 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * spec/text/*.asf,src/pandora.c: fixed several small issues with
    tabular material and splicing lists.
 
