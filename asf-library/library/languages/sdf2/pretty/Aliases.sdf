@@ -12,7 +12,13 @@ context-free syntax
 "<" Box ">" -> Grammar {from-box}
 "<" Box ">" -> Alias {from-box}
 
+"_" "_" -> Box {layout-to-box}
+
 variables
 
 "Alias*" -> Alias*
 "Symbol"[0-9]* -> Symbol
+
+lexical variables
+
+"C"[0-9]*  -> LAYOUT 

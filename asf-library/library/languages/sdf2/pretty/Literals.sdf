@@ -4,18 +4,18 @@ imports languages/sdf2/syntax/Literals
 imports languages/sdf2/pretty/Kernel
 
 hiddens
-
 context-free syntax
+  "[" {Symbol ","}* "]" -> Box*       {to-box}        
+  "[" FunctionName "]"  -> Box        {to-box}        
+  "[" Attributes "]"    -> Box        {to-box}        
+  "<" Box ">"           -> Production {from-box}      
+  "_" LAYOUT "_"        -> Box        {layout-to-box} 
 
-"[" {Symbol ","}* "]" -> Box* {to-box}
-"[" FunctionName "]" -> Box {to-box}
-"[" Attributes "]" -> Box {to-box}
-
-"<" Box ">" -> Production {from-box}
+lexical variables
+  "C" -> LAYOUT  
 
 variables
-
-"Symbol" -> Symbol
-"Symbol*" -> {Symbol ","}*
-"FunctionName" -> FunctionName
-"Attributes" -> Attributes
+  "Symbol"       -> Symbol         
+  "Symbol*"      -> {Symbol ","}*  
+  "FunctionName" -> FunctionName   
+  "Attributes"   -> Attributes     

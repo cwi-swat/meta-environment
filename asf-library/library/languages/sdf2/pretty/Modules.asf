@@ -1,18 +1,18 @@
 equations
 
-[] exports Grammar = <V ["exports" [Grammar]]>
+[] exports C Grammar = <V ["exports" _C_  [Grammar]]>
 
 equations
 
-[] hiddens Grammar = <V ["hiddens" [Grammar]]>
+[] hiddens C Grammar = <V ["hiddens" _C_ [Grammar]]>
 
 equations
 
-[] imports Import* = <H ["imports" HV [[Import*]] ]>
+[] imports C Import* = <V [ _C_ H ["imports" HV [[Import*]] ] ]>
 
 equations
 
-[] module ModuleName ImpSection* Section* = <V vs=2[ H ["module" [ModuleName] ] V vs=1 [[[ImpSection*]]] V vs=2 [[Section*]] ]>
+[] module ModuleName C1 ImpSection* C2 Section* = <V vs=2[ H ["module" [ModuleName] ] V vs=1 [ _C1_ [[ImpSection*]] _C2_] V vs=2 [[Section*]] ]>
 
 equations
 
@@ -20,4 +20,4 @@ equations
 
 equations
 
-[] ModuleName Renamings = <H hs=1 [[ModuleName] [Renamings] ]>
+[] ModuleName C Renamings = <H hs=1 [[ModuleName] _C_ [Renamings] ]>

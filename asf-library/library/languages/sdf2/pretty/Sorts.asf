@@ -4,4 +4,4 @@ equations
 
 equations
 
-[] sorts Symbols = <H ["sorts" [Symbols]] >  
+[] sorts C Symbols = <H ["sorts" _C_ [Symbols]] >  

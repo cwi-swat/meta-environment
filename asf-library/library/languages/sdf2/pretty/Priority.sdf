@@ -4,28 +4,28 @@ imports languages/sdf2/syntax/Priority
 imports languages/sdf2/pretty/Kernel
 
 hiddens
-
 context-free syntax
-
-"[" {Priority ","}* "]" -> Box* {to-box}
-"[" Group* "]" -> Box* {to-box}
-"[" Production* "]" -> Box* {to-box}
-"[" Associativity "]" -> Box {to-box}
-"[" {NatCon ","}* "]" -> Box* {to-box}
-
-"<" Box ">" -> Grammar {from-box}
-"<" Box ">" -> Group {from-box}
-"<" Box ">" -> Priority {from-box}
+  "[" {Priority ","}* "]" -> Box*     {to-box}        
+  "[" Group* "]"          -> Box*     {to-box}        
+  "[" Production* "]"     -> Box*     {to-box}        
+  "[" Associativity "]"   -> Box      {to-box}        
+  "[" {NatCon ","}* "]"   -> Box*     {to-box}        
+  "_" "_"                 -> Box      {layout-to-box} 
+  "<" Box ">"             -> Grammar  {from-box}      
+  "<" Box ">"             -> Group    {from-box}      
+  "<" Box ">"             -> Priority {from-box}      
 
 variables
-"Group"[0-9]* -> Group
-"Production*"[0-9]* -> Production*
-"Production"[0-9]* -> Production
-"NatCon"[0-9]* -> NatCon
-"Priority"[0-9]* -> Priority
-"Priority*" -> {Priority ","}*
-"Production,*"[0-9]* -> {Production ","}*
-"Associativity" -> Associativity
-"NatCon+" -> {NatCon ","}+
-"Group+" -> {Group ">"}+
+  "Group" [0-9]*        -> Group              
+  "Production*" [0-9]*  -> Production*        
+  "Production" [0-9]*   -> Production         
+  "NatCon" [0-9]*       -> NatCon             
+  "Priority" [0-9]*     -> Priority           
+  "Priority*"           -> {Priority ","}*    
+  "Production,*" [0-9]* -> {Production ","}*  
+  "Associativity"       -> Associativity      
+  "NatCon+"             -> {NatCon ","}+      
+  "Group+"              -> {Group ">"}+       
 
+lexical variables
+  "C"[0-9]* -> LAYOUT

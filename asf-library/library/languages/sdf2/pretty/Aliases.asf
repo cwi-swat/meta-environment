@@ -1,6 +1,6 @@
 equations
 
-[] aliases Alias* = <V ["aliases" I is=2 [ V [[Alias*]]]]>
+[] aliases C Alias* = <V ["aliases" _C_ I is=2 [ V [[Alias*]]]]>
 
 equations
 

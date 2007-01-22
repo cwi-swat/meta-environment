@@ -4,19 +4,19 @@ imports languages/sdf2/syntax/Basic
 imports languages/sdf2/pretty/Kernel
 
 hiddens
-
 context-free start-symbols
   Grammar
 
 context-free syntax
-
-"[" Production* "]" -> Box* {to-box}
-"<" Box ">"         -> Grammar {from-box}
-"<" Box ">"      -> Symbol {from-box}
-"[" Symbol "]" -> Box {to-box}
+  "[" Production* "]" -> Box*    {to-box}        
+  "<" Box ">"         -> Grammar {from-box}      
+  "<" Box ">"         -> Symbol  {from-box}      
+  "[" Symbol "]"      -> Box     {to-box}        
+  "_" "_"             -> Box     {layout-to-box} 
 
 variables
- 
-"Symbol" -> Symbol
-"Production*" -> Production*
+  "Symbol"      -> Symbol       
+  "Production*" -> Production*  
 
+lexical variables
+  "C" [0-9]* -> LAYOUT  

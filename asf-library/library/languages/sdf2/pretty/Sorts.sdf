@@ -4,19 +4,20 @@ imports languages/sdf2/syntax/Sorts
 imports languages/sdf2/pretty/Kernel
 
 hiddens
-
 context-free start-symbols
   Grammar ATerm
 
 context-free syntax
-  "[" {Symbol ","}+ "]" -> Box* {to-box}
-  "<" Box ">"     -> Symbol {from-box}
-  "<" Box ">"     -> Grammar {from-box}
-  "[" Symbols "]" -> Box {to-box}
+  "[" {Symbol ","}+ "]" -> Box*    {to-box}          
+  "<" Box ">"           -> Symbol  {from-box}        
+  "<" Box ">"           -> Grammar {from-box}        
+  "[" Symbols "]"       -> Box     {to-box}          
+  "_" "_"               -> Box     {layout-from-box} 
 
 variables
+  "Sort"    -> Sort           
+  "Symbol+" -> {Symbol ","}+  
+  "Symbols" -> Symbols        
 
-"Sort" -> Sort
-"Symbol+" -> {Symbol ","}+
-"Symbols" -> Symbols
-
+lexical variables
+  "C" [0-9]* -> LAYOUT  

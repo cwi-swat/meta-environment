@@ -1,12 +1,12 @@
 equations
 
-[] priorities Priority* = <V ["priorities" I is=2 [V [SL op=H hs=0 [[Priority*] ] ] ]]>
+[] priorities C Priority* = <V ["priorities" _C_ I is=2 [V [SL op=H hs=0 [[Priority*] ] ] ]]>
 
 equations
 
 [] Production = <H hs=1[[Production]]>
-[] { Production* } = <HOV hs=1 vs=1 ["{" I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] "}" ]>
-[] { Associativity: Production* } = <V [ H hs=1 [ "{" H hs=0 [[Associativity] ":" ] I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ]   "}"] ]>
+[] { C1 Production* C2 } = <HOV hs=1 vs=1 ["{" _C1_ I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] _C2_ "}" ]>
+[] { C1 Associativity: C2 Production* C3 } = <V [ H hs=1 [ "{" _C1_ H hs=0 [[Associativity] ":" _C2_ ] I is=2 [ A(l,c,l,l,l) [ G op=R gs=2  [[Production*]] ] ] _C2_  "}"] ]>
 [] Group . = <H hs=1 [[Group] "."]>
 [] Group <NatCon+> = <H hs=1 [[Group] "<" H hs=1 [SL op=H hs=0 [[NatCon+]]] ">"]>
 

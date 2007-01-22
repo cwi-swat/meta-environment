@@ -14,22 +14,24 @@ imports languages/sdf2/pretty/Lifting
 imports languages/sdf2/pretty/Labels
 
 hiddens
-
 context-free start-symbols
   Grammar Module
 
 context-free syntax
-"[" {Priority ","}* "]" -> Box* {to-box}
-"[" Restriction* "]" -> Box* {to-box}
-"[" Module* "]" -> Box* {to-box}
-
-"<" Box ">" -> Grammar {from-box}
-"<" Box ">" -> SDF {from-box}
+  "[" {Priority ","}* "]" -> Box*    {to-box}        
+  "[" Restriction* "]"    -> Box*    {to-box}        
+  "[" Module* "]"         -> Box*    {to-box}        
+  "_" "_"                 -> Box     {layout-to-box} 
+  "<" Box ">"             -> Grammar {from-box}      
+  "<" Box ">"             -> SDF     {from-box}      
 
 variables
-"Production*"[0-9]* -> Production*
-"Production"[0-9]* -> Production
-"Priority"[0-9]* -> Priority
-"Priority*" -> {Priority ","}*
-"Restriction*" -> Restriction*
-"Module*" -> Module*
+  "Production*" [0-9]* -> Production*      
+  "Production" [0-9]*  -> Production       
+  "Priority" [0-9]*    -> Priority         
+  "Priority*"          -> {Priority ","}*  
+  "Restriction*"       -> Restriction*     
+  "Module*"            -> Module*          
+
+lexical variables
+  "C" [0-9]* -> LAYOUT  

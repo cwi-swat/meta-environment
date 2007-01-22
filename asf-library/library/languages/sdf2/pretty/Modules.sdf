@@ -4,31 +4,32 @@ imports languages/sdf2/syntax/Modules
 imports languages/sdf2/pretty/Renaming
 
 hiddens
+context-free syntax
+  "[[" ImpSection* "]]" -> Box* {to-box}        
+  "[" Import* "]"       -> Box* {to-box}        
+  "[" Section* "]"      -> Box* {to-box}        
+  "[" Grammar "]"       -> Box  {to-box}        
+  "[" Symbol* "]"       -> Box* {to-box}        
+  "[" Renamings "]"     -> Box  {to-box}        
+  "_" "_"               -> Box  {layout-to-box} 
 
 context-free syntax
-
- "[[" ImpSection* "]]" -> Box* {to-box}
- "[" Import*  "]" -> Box* {to-box}
- "[" Section* "]" -> Box* {to-box}
- "[" Grammar  "]" -> Box {to-box}
- "[" Symbol*  "]" -> Box* {to-box}
- "[" Renamings "]" -> Box {to-box}
-
-context-free syntax
-  "<" Box ">" -> Section {from-box}
-  "<" Box ">" -> Grammar {from-box}
-  "<" Box ">" -> ImpSection {from-box}
-  "<" Box ">" -> Module {from-box}
-  "<" Box ">" -> ModuleName {from-box}
+  "<" Box ">" -> Section    {from-box} 
+  "<" Box ">" -> Grammar    {from-box} 
+  "<" Box ">" -> ImpSection {from-box} 
+  "<" Box ">" -> Module     {from-box} 
+  "<" Box ">" -> ModuleName {from-box} 
 
 variables
+  "Section*"    -> Section*     
+  "Grammar"     -> Grammar      
+  "ImpSection*" -> ImpSection*  
+  "Import"      -> Import       
+  "Import*"     -> Import*      
+  "ModuleName"  -> ModuleName   
+  "ModuleId"    -> ModuleId     
+  "Symbol*"     -> Symbol*      
+  "Renamings"   -> Renamings    
 
-"Section*" -> Section*
-"Grammar"  -> Grammar
-"ImpSection*" -> ImpSection*
-"Import" -> Import
-"Import*" -> Import*
-"ModuleName" -> ModuleName
-"ModuleId" -> ModuleId
-"Symbol*" -> Symbol*
-"Renamings" -> Renamings
+lexical variables
+  "C" [0-9]* -> LAYOUT  
