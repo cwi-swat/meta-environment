@@ -4,21 +4,16 @@ imports languages/sdf2/syntax/Aliases
 imports languages/sdf2/pretty/Kernel
 
 hiddens
-
 context-free syntax
-"[" Symbol "]" -> Box {to-box}
-"[" Alias* "]" -> Box* {to-box}
-
-"<" Box ">" -> Grammar {from-box}
-"<" Box ">" -> Alias {from-box}
-
-"_" "_" -> Box {layout-to-box}
+  "[" Symbol "]" -> Box     {to-box}        
+  "[" Alias* "]" -> Box*    {to-box}        
+  "<" Box ">"    -> Grammar {from-box}      
+  "<" Box ">"    -> Alias   {from-box}      
+  "_" "_"        -> Box     {layout-to-box} 
 
 variables
-
-"Alias*" -> Alias*
-"Symbol"[0-9]* -> Symbol
+  "Alias*"        -> Alias*  
+  "Symbol" [0-9]* -> Symbol  
 
 lexical variables
-
-"C"[0-9]*  -> LAYOUT 
+  "C" [0-9]* -> LAYOUT  

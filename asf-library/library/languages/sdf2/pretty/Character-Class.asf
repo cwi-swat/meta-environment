@@ -13,7 +13,7 @@ equations
 
 equations
 
-[] ~ CharClass = <H hs=0 [[CharClass]]>
+[] ~ CharClass = <H hs=0 ["~" [CharClass]]>
 
 equations
 
