@@ -65,7 +65,6 @@ bootstrap:
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 
-EXTRA_DIST += MuASF.label.def
 
 if MAINTAINER_MODE
 
