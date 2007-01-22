@@ -8,7 +8,7 @@ Scenario for guided-tour-booleans.
 
 - start wink and initiate capturing (continuous mode, 4 frames per second).
 - TAKE CARE:
-  - Move VERY slowly when selecting menus; make sure that a snapshot was
+  - Move VERY slowly when selecting menus; make sure that a snapshot was made
   - Always use Open buttons rather than keyboard shortcuts (when possible)
 
 OPEN Booleans
