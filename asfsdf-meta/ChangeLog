@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Mon Jan 22 16:19:12 CET 2007 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: added dependency on sdf-pretty
+
 Fri Jan  5 14:57:05 CET 2007 <kooiker@cwi.nl>
  * tbscripts/*.tb:
    - Use transaction management for opening modules
