@@ -4,7 +4,7 @@ equations
 [] Symbol? = <H hs=0 [[Symbol] "?"]>
 [] Symbol+ = <H hs=0 [[Symbol] "+"]>
 [] Symbol* = <H hs=0 [[Symbol] "*"]>
-[] (Symbol Symbol+) = <H hs= 0 ["(" HV hs=1 [[Symbol] [Symbol+] ] ")" ]>
+[] (Symbol Symbol+) = <H hs= 0 ["(" HV hs=1 [[Symbol] {Symbol+} ] ")" ]>
 [] {Symbol1 Symbol2}* = <H hs=0 ["{" H hs=1 [[Symbol1] [Symbol2]] "}" "*"]>
 [] {Symbol1 Symbol2}+ = <H hs=0 ["{" H hs=1 [[Symbol1] [Symbol2]] "}" "+"]>
 [] <Symbol, Symbol,+> = <H hs=0 ["<" G gs=4 op=HV hs=0 [[Symbol] H[] "," H[] [[Symbol,+]]] ">"]>
