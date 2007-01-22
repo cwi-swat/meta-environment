@@ -25,8 +25,9 @@ configuration([
 
   action([description(equations-editor, menu-shortcut([label("Module"),label("Edit"),label("Term")], shortcut([M_CTRL,M_SHIFT],VK_T)))],
          "EditorEditTermAction"),
-  action([description(term-editor, menu-shortcut([label("Term"),label("Pretty Print")], shortcut([M_ALT,M_CTRL],VK_P)))],
-         "PrettyPrintAction"),
+  action([description(term-editor, menu-shortcut([label("Term"),label("Pretty Print")], shortcut([M_ALT,M_CTRL],VK_P)))], "PrettyPrintAction"),
+  action([description(syntax-editor, menu-shortcut([label("Module"),label("Pretty Print")], shortcut([M_ALT,M_CTRL],VK_P)))],
+         "PrettyPrintSdfAction"),
   action([description(equations-editor, menu([label("Module"),label("Equations"), label("Run Tests")]))],
          "EditorRunAsfTestsAction"),
   action([description(syntax-editor, menu([label("Module"),label("Equations"), label("Run Tests")]))],

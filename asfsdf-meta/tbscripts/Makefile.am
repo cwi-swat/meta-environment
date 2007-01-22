@@ -4,7 +4,8 @@ GENERATED_TBSCRIPTS = \
 	asf-initialize.tb \
 	start-meta-studio.tb \
 	start-eqs-dump.tb \
-	start-test-eqs-dump.tb
+	start-test-eqs-dump.tb \
+	sdf-pretty.tb
 
 TBSCRIPTS = \
 	asf-actions.tb \
@@ -37,6 +38,7 @@ pkgdata_DATA = \
 %.tb : %.tb.src Makefile
 	sed "s@__ASF__@${ASF_PREFIX}@g; \
 	     s@__ASFSDF_META__@${prefix}/share/asfsdf-meta/@g; \
+	     s@__SDF2_PRETTY__@${SDF_PRETTY_PREFIX}/share/sdf-pretty/Sdf2-pretty.eqs@g; \
 	     s@__META__@${META_PREFIX}@g; \
 	     s@__VERSION__@${VERSION}@g;" \
 	     < $< \
