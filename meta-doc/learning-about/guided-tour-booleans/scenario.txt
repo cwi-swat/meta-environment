@@ -101,7 +101,7 @@ CREATE MyBooleans.asf
   Goto Edit -> Equations;
   Type:
 equations
-[xor-1] true xor true = true
+[xor-1] true xor true = false
 [xor-2] true xor false = true
 [xor-3] false xor true = true
 [xor-4] false xor false = false

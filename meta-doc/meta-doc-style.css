@@ -3,7 +3,12 @@ pre.programlisting {
   border: 1px solid #006600 ;
 }
 
-body:after { content: url(../../logos/ome4.png);
+body:before { content: url(../../logos/ome4.png);
              float: right;
+             
+}
+
+body:after { content: url(../../logos/ome4.png);
+             float: left;
              
 }

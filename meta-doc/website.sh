@@ -50,6 +50,12 @@ for cat in ${CATEGORIES}; do
 	  cp $cat/$book/$book.pdf ${WEB}/$cat/$book/$book.pdf
 	  title=`cat $cat/$book/TITLE`
 	  echo "<li><a href=\"./$cat/$book/$book.pdf\">${title} (pdf)</a></li>" >> ${INDEX}
+      elif [ -f $cat/$book/$book.swf ]; then
+          mkdir -p ${WEB}/$cat/$book
+          cp $cat/$book/$book.swf ${WEB}/$cat/$book/$book.swf
+          cp $cat/$book/$book.htm ${WEB}/$cat/$book/$book.htm
+          title=`cat $cat/$book/TITLE`
+          echo "<li><a href=\"./$cat/$book/$book.htm\">${title} (flash)</a></li>" >> ${INDEX}
       elif [ -f $cat/$book/$book.url ]; then
 	  title=`cat $cat/$book/TITLE`
 	  url=`cat $cat/$book/$book.url`

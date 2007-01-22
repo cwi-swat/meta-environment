@@ -494,45 +494,32 @@ function subst(Var, Exp, Exp)  -&gt; Exp
       <para><programlisting>module Renaming
 
 sorts Var %% variables
-
      Exp %% expressions
 
 context-free functions
-
      Var                                -&gt; Exp   %% single variable
-
      "let" Var "=" Exp "in Exp "end"    -&gt; Exp   %% function
-
      abstraction
 
 %% Rename all bound variables in an Exp
-
 %% Version 1: purely functional
-
 %% Exp: given expression to be renamed
-
 %% rel[Var,Var]: renaming table
-
 %% Int: counter to generate global variables
 
 function rename(Exp E, rel[Var,Var] Rn, Int Cnt) -&gt; Exp
 
 [] rename(let V = E1 in E2 end, Rn, Cnt) =
   let Y = rename(E1, Rn, Cnt) in rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') end
-
   when
     Y := "x" + Cnt,                             %% this + concatenates (after conversion)
-
     Cnt' := Cnt + 1
 
 [] rename(V, Rn, Cnt) = V1
-
   when
-
     { V1 } = Rn[V]
 
 [default]
-
   rename(E, Rn, Cnt) = E
 
 %% Rename all bound variables in an Exp
@@ -540,13 +527,10 @@ function rename(Exp E, rel[Var,Var] Rn, Int Cnt) -&gt; Exp
 %% Version 2: using global variables to generate new variables
 
 global variable
-
       Cnt -&gt; int := 0                           %% Global has to be initialyzed somewhere
 
 function newVar() -&gt; Var
-
 [] newVar() = "x" + Cnt        
-
   when Cnt := Cnt + 1
 
 %% Rename -- Version 2
@@ -555,44 +539,33 @@ function rename(Exp, rel[Var,Var])
 
 [] rename(let V = E1 in E2 end, Rn) =
   let Y = rename(E1, Rn) in rename(E2, {&lt;V, Y&gt;} union Rn) end
-
   when
     Y := newVar
 
 [] rename(V, Rn) = V1
-
   when
-
     { V1 } = Rn[V]
 
 [default]
-
   rename(E, Rn) = E
 
 %% Rename -- Version 3, with Rn also as global variabele
-
 global variable
-
       Rn -&gt; rel[Var, Var]
 
 function rename(Exp)
 
 [] rename(let V = E1 in E2 end) =
   let Y = rename(E1) in rename(E2) end
-
   when
     Y := newVar,
-
     Rn :=  {&lt;V, Y&gt;} union Rn
 
 [] rename(V) = V1
-
   when
-
     { V1 } = Rn[V]
 
 [default]
-
   rename(E) = E </programlisting></para>
     </section>
 
@@ -618,6 +591,7 @@ variables
  "Exp"   -&gt; EXP
  "Nat"   -&gt; NatCon
  "Str"   -&gt; StrCon
+
 global variables
  "Env"   -&gt; Environment
 
@@ -688,7 +662,8 @@ context-free syntax
   Definition Rule*                -&gt; Section
   "equations" Rule*               -&gt; Section
   "tests" Test*                   -&gt; Section
-  Modifier+ Section               -&gt; Section {non-assoc} %% to distribute modifiers over all elements of a section
+  Modifier+ Section               -&gt; Section {non-assoc} %% to distribute modifiers over all 
+                                                         %% elements of a section
 
   Modifier* Name "(" {Type ","}* ")" "-&gt;" Type -&gt; Definition
   Modifier* {Name ","}+ "-&gt;" Type              -&gt; VariableDefinition 
@@ -881,7 +856,7 @@ process mkWave(int N) is ...</programlisting>
           the Tscript level since Tscript simply does not have the primitives
           to express this. On the other hand, we have to interrupt the flow of
           control of the Pico interpreter when we need to execute a read
-          statement. The obvious way to achieve this is </para>
+          statement. The obvious way to achieve this is</para>
 
           <itemizedlist>
             <listitem>
@@ -944,11 +919,12 @@ process mkWave(int N) is ...</programlisting>
       <para>Third, we can try to reuse the current ASF+SDF module
       system.</para>
 
-      <para>Note: parameterized modules and polymorphics types are competing
-      features. We should understand what we want.</para>
+      <para>As a general note, parameterized modules, polymorphics types and
+      renamings are competing features. We should understand what we want. It
+      is likely that we do not need all of them.</para>
 
-      <para>Before delving into one of the above alternatives, let's list our
-      requirements first.</para>
+      <para>Before delving into one of the above alternative approaches, let's
+      list our requirements first.</para>
 
       <itemizedlist>
         <listitem>
@@ -964,7 +940,8 @@ process mkWave(int N) is ...</programlisting>
         </listitem>
 
         <listitem>
-          <para>We need process modules (Tscript).</para>
+          <para>We need process modules (Tscript) that provide: import,
+          export, hiding. So far</para>
         </listitem>
       </itemizedlist>
     </section>
