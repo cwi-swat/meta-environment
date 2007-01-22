@@ -1,0 +1,5 @@
+$Id: ChangeLog 19259 2006-07-20 23:13:41Z martinrw $
+
+Mon Jan 22 09:26:52 CET 2007 <jurgenv@cwi.nl>
+ * sdf-pretty.pc.in: this package contains the (generated) source
+   code for an SDF2 pretty printer based on ASF+SDF and Pandora's Box.
