@@ -60,6 +60,15 @@ static ATbool hasProductionToBoxAttribute(PT_Production prod)
 }
 
 /*}}}  */
+/*{{{  static ATbool hasProductionToBoxAttribute(PT_Production prod) */
+
+static ATbool hasProductionLayoutToBoxAttribute(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod,
+				     PT_makeAttrTerm(ATparse("layout-to-box")));
+}
+
+/*}}}  */
  
 /*{{{  static ATbool isIndentedType(PT_Production production) */
 
@@ -333,12 +342,47 @@ static PT_Tree getTree(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  static PT_Tree getTree(PT_Tree tree) */
+
+static PT_Tree getLayoutTree(PT_Tree tree)
+{
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Tree treeTree = NULL;
+
+  while (!PT_isArgsEmpty(args) && treeTree == NULL) {
+    PT_Tree arg = PT_getArgsHead(args);
+
+    if (PT_isTreeLayout(arg)) {
+      treeTree = arg;
+    }
+    args = PT_getArgsTail(args);
+  }
+
+  return treeTree;
+}
+
+/*}}}  */
 
 /*{{{  static BOX_Box processTree(PT_Tree tree, ATbool isLex) */
 
 static BOX_Box processTree(PT_Tree tree, ATbool isLex)
 {
   PT_Tree treeTree = getTree(tree);
+
+  if (treeTree) {
+    return treeToBox(treeTree, isLex);
+  }
+  else {
+    return BOX_makeEmptyHBox();
+  }
+}
+
+/*}}}  */
+/*{{{  static BOX_Box processTree(PT_Tree tree, ATbool isLex) */
+
+static BOX_Box processLayoutTree(PT_Tree tree, ATbool isLex)
+{
+  PT_Tree treeTree = getLayoutTree(tree);
 
   if (treeTree) {
     return treeToBox(treeTree, isLex);
@@ -391,7 +435,16 @@ static PT_Tree transformBox(PT_Tree tree, ATbool isLex)
 				    PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
 	  }
 	}
-      } else {
+      }
+      else if (hasProductionLayoutToBoxAttribute(prod)) {
+	  BOX_Box boxArg = processLayoutTree(arg, isLex);
+
+	  if (boxArg != NULL) {
+	    boxArgs = PT_appendArgs(boxArgs, 
+				    PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
+	  }
+      }	
+      else {
         boxArgs = PT_appendArgs(boxArgs, transformBox(arg, isLex));
       }
     }
