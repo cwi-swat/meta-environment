@@ -106,6 +106,7 @@ equations
 [xor-3] false xor true = true
 [xor-4] false xor false = false
 
+- Goto File -> Save
 
 REDUCE mybool.trm
 
