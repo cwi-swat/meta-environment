@@ -40,12 +40,12 @@ equations
 	sort2str(sort(h)) = strcon(\" strchar(h) \")
 
  [0]
-	sort2str(sort(h t)) = strcon(\" strchar(h) strchar(t) \")
+	sort2str(sort(h l)) = strcon(\" strchar(h) strchar(l) \")
 
  [0]
-	sort2str(sort(h m t)) = strcon(\" strchar(h) strchar(m) strchar(t) \")
+	sort2str(sort(h m l)) = strcon(\" strchar(h) strchar(m) strchar(l) \")
 
  [0]
-	sort2str(sort(h1 h2 m* t)) = strcon(\" strchar(h1) C* strchar(t) \")
-		when strcon(\" C* strchar(t) \") := sort2str(sort(h2 m* t))
+	sort2str(sort(h1 h2 m* l)) = strcon(\" strchar(h1) C* strchar(l) \")
+		when strcon(\" C* strchar(l) \") := sort2str(sort(h2 m* l))
 

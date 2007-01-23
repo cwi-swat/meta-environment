@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jan 23 11:26:49 CEST 2006 <{storm,economop}@cwi.nl>
+ * library/languages/sdf2/normalization/Lifting.asf: fixed a
+   bug concerning the lifting of `Sort`'s to syntax. Only one-character
+   sort names were lifted correctly (due to a typo in the spec).
+
 Mon Dec 18 14:56:49 CET 2006 <jurgenv@cwi.nl>
  * library/languages/asf/compiler/muasf2c/Locate-Constants.{asf,sdf}:
    changed the way constants are located, and which code is generated
