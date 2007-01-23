@@ -13,10 +13,12 @@ context-free syntax
   "<" Box ">"           -> Grammar {from-box}        
   "[" Symbols "]"       -> Box     {to-box}          
   "_" "_"               -> Box     {layout-from-box} 
+  "{" Symbol* "}"       -> Box*    {to-box}
 
 variables
   "Sort"    -> Sort           
   "Symbol+" -> {Symbol ","}+  
+  "Symbol*" -> Symbol*
   "Symbols" -> Symbols        
 
 lexical variables
