@@ -1,4 +1,6 @@
 
+EXTRA_DIST = Sdf2-pretty.eqs
+
 pkgdata_DATA = Sdf2-pretty.eqs
 
 dump:
