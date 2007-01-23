@@ -49,8 +49,8 @@ public class SwingEditor extends JPanel implements Editor {
 	public void rereadContents() {
 		try {
 			readFileContents(filename);
-			((EditorKit) editorPane.getEditorKit()).getUndoManager()
-					.discardAllEdits();
+//			((EditorKit) editorPane.getEditorKit()).getUndoManager()
+//					.discardAllEdits();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (FileToBigException e) {

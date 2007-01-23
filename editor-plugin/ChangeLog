@@ -1,5 +1,12 @@
 # $Id$
 
+Tue Jan 23 09:26:27 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorKit.java:
+   - Add support for undo sequences using CompoundEdit
+ * src/**/EditorPane.java:
+   - Only add undoableEditListener once
+   - Wrap setText in undo sequence
+
 Tue Oct 31 10:08:31 CET 2006 <jurgenv@cwi.nl>
  * src/**/*.java: added support for popupmenu's in the editors.
    We can have different popups for different non-terminals that

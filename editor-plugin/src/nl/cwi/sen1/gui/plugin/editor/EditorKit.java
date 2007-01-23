@@ -13,322 +13,348 @@ import javax.swing.text.TextAction;
 import javax.swing.text.Highlighter.Highlight;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 
 import nl.cwi.sen1.gui.StudioImpl;
 
 public class EditorKit extends StyledEditorKit {
-    private static final int UNDO_LIMIT = 1000;
+	private static final int UNDO_LIMIT = 1000;
 
-    private static UndoManager undoManager = new EditorUndoManager();
+	private static UndoManager undoManager = new EditorUndoManager();
 
-    private UndoAction undo;
+	private UndoAction undo;
 
-    private RedoAction redo;
+	private RedoAction redo;
 
-    private DeleteLineAction deleteLine;
+	private DeleteLineAction deleteLine;
 
-    private FindAction find;
+	private FindAction find;
 
-    private GotoLineAction gotoLine;
+	private GotoLineAction gotoLine;
 
-    private GotoMatchingBracketAction gotoMatchingBracket;
+	private GotoMatchingBracketAction gotoMatchingBracket;
 
-    private SelectFocusAction selectFocus;
+	private SelectFocusAction selectFocus;
 
-    private DeletePreviousWordAction deletePreviousWord;
+	private DeletePreviousWordAction deletePreviousWord;
 
-    private DeleteNextWordAction deleteNextWord;
+	private DeleteNextWordAction deleteNextWord;
 
-    public static final String undoAction = "undo";
+	public static final String undoAction = "undo";
 
-    public static final String redoAction = "redo";
+	public static final String redoAction = "redo";
 
-    public static final String findAction = "find";
+	public static final String findAction = "find";
 
-    public static final String gotoLineAction = "goto-line";
+	public static final String gotoLineAction = "goto-line";
 
-    public static final String deleteLineAction = "delete-line";
+	public static final String deleteLineAction = "delete-line";
 
-    public static final String gotoMatchingBracketAction = "goto-matching-bracket";
+	public static final String gotoMatchingBracketAction = "goto-matching-bracket";
 
-    public static final String selectFocusAction = "select-focus";
+	public static final String selectFocusAction = "select-focus";
 
-    public static final String deletePreviousWordAction = "delete-previous-word";
-    
-    public static final String deleteNextWordAction = "delete-next-word";
+	public static final String deletePreviousWordAction = "delete-previous-word";
 
-    private UndoableEditListener undoListener;
+	public static final String deleteNextWordAction = "delete-next-word";
 
-    public EditorKit() {
-        undoListener = new UndoableEditListener() {
-            public void undoableEditHappened(UndoableEditEvent e) {
-                undoManager.addEdit(e.getEdit());
-                undo.updateUndoState();
-                redo.updateRedoState();
-            }
-        };
-        undoManager.setLimit(UNDO_LIMIT);
+	private UndoableEditListener undoListener;
 
-        createActions();
-    }
+	private CompoundEdit compoundEdit = null;
 
-    public UndoManager getUndoManager() {
-        return undoManager;
-    }
+	private boolean undoableSequence = false;
 
-    public UndoableEditListener getUndoListener() {
-        return undoListener;
-    }
+	public EditorKit() {
+		undoListener = new UndoableEditListener() {
+			public void undoableEditHappened(UndoableEditEvent e) {
+				if (undoableSequence == true) {
+					if (compoundEdit == null) {
+						compoundEdit = new CompoundEdit();
+						undoManager.addEdit(compoundEdit);
+					}
+					compoundEdit.addEdit(e.getEdit());
+				} else {
+					undoManager.addEdit(e.getEdit());
+				}
+				undo.updateUndoState();
+				redo.updateRedoState();
+			}
+		};
+		undoManager.setLimit(UNDO_LIMIT);
 
-    private void createActions() {
-        undo = new UndoAction();
-        redo = new RedoAction();
-        find = new FindAction();
-        gotoLine = new GotoLineAction();
-        gotoMatchingBracket = new GotoMatchingBracketAction();
-        deleteLine = new DeleteLineAction();
-        selectFocus = new SelectFocusAction();
-        deletePreviousWord = new DeletePreviousWordAction();
-        deleteNextWord = new DeleteNextWordAction();
-    }
+		createActions();
+	}
 
-    public Action[] getActions() {
-        return TextAction.augmentList(super.getActions(), new Action[] { undo,
-                redo, find, gotoLine, deleteLine, gotoMatchingBracket,
-                selectFocus, deletePreviousWord, deleteNextWord});
-    }
+	public UndoManager getUndoManager() {
+		return undoManager;
+	}
 
-    public Action getAction(String name) {
-        Action[] actions = getActions();
+	public UndoableEditListener getUndoListener() {
+		return undoListener;
+	}
 
-        for (int i = 0; i < actions.length; i++) {
-            if (actions[i].getValue(Action.NAME).equals(name)) {
-                return actions[i];
-            }
-        }
+	protected void startUndoableSequence() {
+		endUndoableSequence();
+		undoableSequence = true;
+	}
 
-        return null;
-    }
+	protected void endUndoableSequence() {
+		if (compoundEdit != null && compoundEdit.isInProgress()) {
+			compoundEdit.end();
+		}
+		compoundEdit = null;
+		undoableSequence = false;
+	}
 
-    public abstract static class EditorTextAction extends StyledTextAction {
-        public EditorTextAction(String nm) {
-            super(nm);
-        }
+	private void createActions() {
+		undo = new UndoAction();
+		redo = new RedoAction();
+		find = new FindAction();
+		gotoLine = new GotoLineAction();
+		gotoMatchingBracket = new GotoMatchingBracketAction();
+		deleteLine = new DeleteLineAction();
+		selectFocus = new SelectFocusAction();
+		deletePreviousWord = new DeletePreviousWordAction();
+		deleteNextWord = new DeleteNextWordAction();
+	}
 
-        protected final EditorPane getEditorPane(ActionEvent e) {
-            JEditorPane editorPane = getEditor(e);
-            if (editorPane instanceof EditorPane) {
-                return (EditorPane) editorPane;
-            }
-            return null;
-        }
-    }
+	public Action[] getActions() {
+		return TextAction.augmentList(super.getActions(), new Action[] { undo,
+				redo, find, gotoLine, deleteLine, gotoMatchingBracket,
+				selectFocus, deletePreviousWord, deleteNextWord });
+	}
 
-    public class UndoAction extends AbstractAction {
+	public Action getAction(String name) {
+		Action[] actions = getActions();
 
-        public UndoAction() {
-            super(undoAction);
-            setEnabled(false);
-        }
+		for (int i = 0; i < actions.length; i++) {
+			if (actions[i].getValue(Action.NAME).equals(name)) {
+				return actions[i];
+			}
+		}
 
-        public void actionPerformed(ActionEvent e) {
-            try {
-                undoManager.undo();
-            } catch (CannotUndoException ex) {
-                System.out.println("Unable to undo: " + ex);
-                ex.printStackTrace();
-            }
-            updateUndoState();
-            redo.updateRedoState();
-        }
+		return null;
+	}
 
-        protected void updateUndoState() {
-            if (undoManager.canUndo()) {
-                setEnabled(true);
-                putValue(Action.NAME, undoAction);
-            } else {
-                setEnabled(false);
-                putValue(Action.NAME, undoAction);
-            }
-        }
-    }
+	public abstract static class EditorTextAction extends StyledTextAction {
+		public EditorTextAction(String nm) {
+			super(nm);
+		}
 
-    public class RedoAction extends AbstractAction {
+		protected final EditorPane getEditorPane(ActionEvent e) {
+			JEditorPane editorPane = getEditor(e);
+			if (editorPane instanceof EditorPane) {
+				return (EditorPane) editorPane;
+			}
+			return null;
+		}
+	}
 
-        public RedoAction() {
-            super(redoAction);
-            setEnabled(false);
-        }
+	public class UndoAction extends AbstractAction {
 
-        public void actionPerformed(ActionEvent e) {
-            try {
-                undoManager.redo();
-            } catch (CannotRedoException ex) {
-                System.out.println("Unable to redo: " + ex);
-                ex.printStackTrace();
-            }
-            updateRedoState();
-            undo.updateUndoState();
-        }
+		public UndoAction() {
+			super(undoAction);
+			setEnabled(false);
+		}
 
-        protected void updateRedoState() {
-            if (undoManager.canRedo()) {
-                setEnabled(true);
-                putValue(Action.NAME, redoAction);
-            } else {
-                setEnabled(false);
-                putValue(Action.NAME, redoAction);
-            }
-        }
-    }
+		public void actionPerformed(ActionEvent e) {
+			try {
+				undoManager.undo();
+			} catch (CannotUndoException ex) {
+				System.out.println("Unable to undo: " + ex);
+				ex.printStackTrace();
+			}
+			updateUndoState();
+			redo.updateRedoState();
+		}
 
-    public class FindAction extends EditorTextAction {
-        private SearchReplaceDialog searchReplaceDialog;
+		protected void updateUndoState() {
+			if (undoManager.canUndo()) {
+				setEnabled(true);
+				putValue(Action.NAME, undoAction);
+			} else {
+				setEnabled(false);
+				putValue(Action.NAME, undoAction);
+			}
+		}
+	}
 
-        public FindAction() {
-            super(findAction);
-        }
+	public class RedoAction extends AbstractAction {
 
-        public void actionPerformed(ActionEvent e) {
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                if (searchReplaceDialog == null) {
-                    searchReplaceDialog = new SearchReplaceDialog(editor,
-                            StudioImpl.getFrame());
-                }
-                searchReplaceDialog.setVisible(true);
-            }
-        }
-    }
+		public RedoAction() {
+			super(redoAction);
+			setEnabled(false);
+		}
 
-    public class GotoLineAction extends EditorTextAction {
-        public GotoLineAction() {
-            super(gotoLineAction);
-        }
+		public void actionPerformed(ActionEvent e) {
+			try {
+				undoManager.redo();
+			} catch (CannotRedoException ex) {
+				System.out.println("Unable to redo: " + ex);
+				ex.printStackTrace();
+			}
+			updateRedoState();
+			undo.updateUndoState();
+		}
 
-        public void actionPerformed(ActionEvent e) {
-            GotoLineDialog d = new GotoLineDialog();
-            d.setVisible(true);
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                editor.gotoLine(d.getLineNumber());
-            }
-        }
-    }
+		protected void updateRedoState() {
+			if (undoManager.canRedo()) {
+				setEnabled(true);
+				putValue(Action.NAME, redoAction);
+			} else {
+				setEnabled(false);
+				putValue(Action.NAME, redoAction);
+			}
+		}
+	}
 
-    public class GotoMatchingBracketAction extends EditorTextAction {
-        public GotoMatchingBracketAction() {
-            super(gotoMatchingBracketAction);
-        }
+	public class FindAction extends EditorTextAction {
+		private SearchReplaceDialog searchReplaceDialog;
 
-        public void actionPerformed(ActionEvent e) {
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                try {
-                    int offset = TextUtilities.findMatchingBracket(editor
-                            .getDocument(), editor.getCaretPosition() - 1);
-                    if (offset != -1) {
-                        editor.setCaretPosition(offset + 1);
-                    }
-                } catch (BadLocationException e1) {
-                }
-            }
-        }
-    }
+		public FindAction() {
+			super(findAction);
+		}
 
-    public class DeleteLineAction extends EditorTextAction {
-        public DeleteLineAction() {
-            super(deleteLineAction);
-        }
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				if (searchReplaceDialog == null) {
+					searchReplaceDialog = new SearchReplaceDialog(editor,
+							StudioImpl.getFrame());
+				}
+				searchReplaceDialog.setVisible(true);
+			}
+		}
+	}
 
-        public void actionPerformed(ActionEvent e) {
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                getAction(selectLineAction).actionPerformed(e);
-                int selectionStart = editor.getSelectionStart();
-                int selectionEnd = editor.getSelectionEnd();
-                int offset = selectionStart;
-                int length = selectionEnd - selectionStart;
+	public class GotoLineAction extends EditorTextAction {
+		public GotoLineAction() {
+			super(gotoLineAction);
+		}
 
-                if ((selectionEnd + 1) < editor.getDocument().getLength()) {
-                    length++;
-                } else {
-                    if (selectionStart - 1 > 0) {
-                        offset = selectionStart - 1;
-                        length++;
-                    }
-                }
+		public void actionPerformed(ActionEvent e) {
+			GotoLineDialog d = new GotoLineDialog();
+			d.setVisible(true);
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				editor.gotoLine(d.getLineNumber());
+			}
+		}
+	}
 
-                try {
-                    editor.getDocument().remove(offset, length);
-                } catch (BadLocationException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
+	public class GotoMatchingBracketAction extends EditorTextAction {
+		public GotoMatchingBracketAction() {
+			super(gotoMatchingBracketAction);
+		}
 
-    public class SelectFocusAction extends EditorTextAction {
-        public SelectFocusAction() {
-            super(selectFocusAction);
-        }
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				try {
+					int offset = TextUtilities.findMatchingBracket(editor
+							.getDocument(), editor.getCaretPosition() - 1);
+					if (offset != -1) {
+						editor.setCaretPosition(offset + 1);
+					}
+				} catch (BadLocationException e1) {
+				}
+			}
+		}
+	}
 
-        public void actionPerformed(ActionEvent e) {
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                Highlight highlight = (Highlight) editor.getFocusTag();
+	public class DeleteLineAction extends EditorTextAction {
+		public DeleteLineAction() {
+			super(deleteLineAction);
+		}
 
-                editor.clearFocus();
-                editor.setSelectionStart(highlight.getStartOffset());
-                editor.setSelectionEnd(highlight.getEndOffset());
-            }
-        }
-    }
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				getAction(selectLineAction).actionPerformed(e);
+				int selectionStart = editor.getSelectionStart();
+				int selectionEnd = editor.getSelectionEnd();
+				int offset = selectionStart;
+				int length = selectionEnd - selectionStart;
 
-    public class DeletePreviousWordAction extends EditorTextAction {
-        public DeletePreviousWordAction() {
-            super(deletePreviousWordAction);
-        }
+				if ((selectionEnd + 1) < editor.getDocument().getLength()) {
+					length++;
+				} else {
+					if (selectionStart - 1 > 0) {
+						offset = selectionStart - 1;
+						length++;
+					}
+				}
 
-        public void actionPerformed(ActionEvent e) {
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                getAction(selectionPreviousWordAction).actionPerformed(e);
-                int selectionStart = editor.getSelectionStart();
-                int selectionEnd = editor.getSelectionEnd();
-                int offset = selectionStart;
-                int length = selectionEnd - selectionStart;
+				try {
+					editor.getDocument().remove(offset, length);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
 
-                try {
-                    editor.getDocument().remove(offset, length);
-                } catch (BadLocationException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
+	public class SelectFocusAction extends EditorTextAction {
+		public SelectFocusAction() {
+			super(selectFocusAction);
+		}
 
-    public class DeleteNextWordAction extends EditorTextAction {
-        public DeleteNextWordAction() {
-            super(deleteNextWordAction);
-        }
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				Highlight highlight = (Highlight) editor.getFocusTag();
 
-        public void actionPerformed(ActionEvent e) {
-            EditorPane editor = getEditorPane(e);
-            if (editor != null) {
-                getAction(selectionNextWordAction).actionPerformed(e);
-                int selectionStart = editor.getSelectionStart();
-                int selectionEnd = editor.getSelectionEnd();
-                int offset = selectionStart;
-                int length = selectionEnd - selectionStart;
+				editor.clearFocus();
+				editor.setSelectionStart(highlight.getStartOffset());
+				editor.setSelectionEnd(highlight.getEndOffset());
+			}
+		}
+	}
 
-                try {
-                    editor.getDocument().remove(offset, length);
-                } catch (BadLocationException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
+	public class DeletePreviousWordAction extends EditorTextAction {
+		public DeletePreviousWordAction() {
+			super(deletePreviousWordAction);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				getAction(selectionPreviousWordAction).actionPerformed(e);
+				int selectionStart = editor.getSelectionStart();
+				int selectionEnd = editor.getSelectionEnd();
+				int offset = selectionStart;
+				int length = selectionEnd - selectionStart;
+
+				try {
+					editor.getDocument().remove(offset, length);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public class DeleteNextWordAction extends EditorTextAction {
+		public DeleteNextWordAction() {
+			super(deleteNextWordAction);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = getEditorPane(e);
+			if (editor != null) {
+				getAction(selectionNextWordAction).actionPerformed(e);
+				int selectionStart = editor.getSelectionStart();
+				int selectionEnd = editor.getSelectionEnd();
+				int offset = selectionStart;
+				int length = selectionEnd - selectionStart;
+
+				try {
+					editor.getDocument().remove(offset, length);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
 }
