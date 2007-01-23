@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jan 23 13:36:29 CET 2007 <kooiker@cwi.nl>
+ * src/**/Navigator.java:
+   - fix null pointer exception when Navigator is not initialized when updates
+     are received
+
 Mon Jan 15 09:33:10 CET 2007 <kooiker@cwi.nl>
  * src/**/ModuleTreeNode.java:
    - makePath works on File segments

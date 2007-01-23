@@ -73,10 +73,12 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 			File file = ioFactory.FileFromTerm(path);
 			String label = file.getName();
 
-			tree.saveExpansionState();
-			module = new Module(moduleId, file, label);
-			moduleModel.addModule(module);
-			tree.loadExpansionState();
+			if (tree != null) {
+				tree.saveExpansionState();
+				module = new Module(moduleId, file, label);
+				moduleModel.addModule(module);
+				tree.loadExpansionState();
+			}
 		}
 	}
 
