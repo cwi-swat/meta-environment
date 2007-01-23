@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jan 23 13:43:49 CEST 2006 <storm@cwi.nl>
+ * library/languages/sdf2/normalization/Lifting.{sdf,asf}: fixed another
+   bug concerning the lifting of `Sort`'s to syntax. It only worked for
+   completely uppercase sort-names without dashes. Fixed now.
+
 Tue Jan 23 11:26:49 CEST 2006 <{storm,economop}@cwi.nl>
  * library/languages/sdf2/normalization/Lifting.asf: fixed a
    bug concerning the lifting of `Sort`'s to syntax. Only one-character

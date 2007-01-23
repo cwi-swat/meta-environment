@@ -46,6 +46,6 @@ equations
 	sort2str(sort(h m l)) = strcon(\" strchar(h) strchar(m) strchar(l) \")
 
  [0]
-	sort2str(sort(h1 h2 m* l)) = strcon(\" strchar(h1) C* strchar(l) \")
-		when strcon(\" C* strchar(l) \") := sort2str(sort(h2 m* l))
+	sort2str(sort(h1 m m+ l)) = strcon(\" strchar(h1) strchar(m) C* strchar(l) \")
+		when strcon(\" strchar(X) C* strchar(l) \") := sort2str(sort(X m+ l))
 
