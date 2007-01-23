@@ -1,5 +1,10 @@
 $Id$
 
+Tue 2007-01-23    <storm@cwi.nl>
+  * src/Sdf2-Normalization.c: incorporated fixes wrt lifting of 
+    sorts (only completely uppercase sorts with no dashes were 
+    correctly lifted to syntax).
+
 Thu Jan 18 18:12:59 CET 2007 <martin.bravenboer@gmail.com>
 
   Fixes for Bug 685: Associatvity no longer applied to parse table
