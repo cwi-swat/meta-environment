@@ -132,6 +132,9 @@ static void treeToSlices(PT_Tree tree)
   if (PT_isTreeAmb(tree)) {
     storeTree(tree, "MetaAmbiguity");
   }
+  else if (PT_isTreeCycle(tree)) {
+    storeTree(tree, "MetaCycle");
+  }
   else if ((categoryAnno = getAnnotationCategory(tree)) != NULL) {
     storeTree(tree, ATwriteToString(categoryAnno)); 
   }
@@ -139,7 +142,15 @@ static void treeToSlices(PT_Tree tree)
     storeTree(tree, ATwriteToString(categoryAnno)); 
   }
   else {
-    if (PT_isTreeLit(tree) || PT_isTreeCilit(tree)) {
+    /* Check var before lit, since there could be a variable
+     * of type lit.
+     */
+    if (PT_isTreeVar(tree)) {
+      storeTree(tree, "MetaVariable");
+      ATtablePut(visited, (ATerm) tree, (ATerm) tree);
+      return;
+    }
+    else if (PT_isTreeLit(tree) || PT_isTreeCilit(tree)) {
       PT_Args chars = PT_getTreeArgs(tree);
 
       if (hasAlphanumericChars(chars)) {
@@ -147,11 +158,6 @@ static void treeToSlices(PT_Tree tree)
 	ATtablePut(visited, (ATerm) tree, (ATerm) tree);
 	return;
       }
-    }
-    else if (PT_isTreeVar(tree)) {
-      storeTree(tree, "MetaVariable");
-      ATtablePut(visited, (ATerm) tree, (ATerm) tree);
-      return;
     }
   }
 
