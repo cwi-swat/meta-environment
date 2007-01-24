@@ -105,6 +105,8 @@ public class EditorKit extends StyledEditorKit {
 		}
 		compoundEdit = null;
 		undoableSequence = false;
+		undo.updateUndoState();
+		redo.updateRedoState();
 	}
 
 	private void createActions() {
@@ -152,7 +154,6 @@ public class EditorKit extends StyledEditorKit {
 	}
 
 	public class UndoAction extends AbstractAction {
-
 		public UndoAction() {
 			super(undoAction);
 			setEnabled(false);

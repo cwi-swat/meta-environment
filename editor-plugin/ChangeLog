@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jan 24 15:57:58 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorKit.java:
+   - After ending the undo sequence, update the undo and redo states
+
 Tue Jan 23 09:26:27 CET 2007 <kooiker@cwi.nl>
  * src/**/EditorKit.java:
    - Add support for undo sequences using CompoundEdit
