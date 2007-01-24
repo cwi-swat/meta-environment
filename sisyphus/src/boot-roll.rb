@@ -37,6 +37,7 @@ Note: the tunnel section is optional.
       options = OpenStruct.new
       options.sources = nil
       options.build_env = false
+      options.bundle = false
 
       opts = OptionParser.new do |opts|
 
@@ -74,9 +75,6 @@ Note: the tunnel section is optional.
       return options
     end
   end
-
-
-
 
   def BootRoll.checkout_all(roots, revision_factory)
     todo = roots

@@ -104,6 +104,7 @@ module Roll
       options.pretend = false
       options.sequence = false
       options.deps_only = false
+      options.export = nil
 
       opts = OptionParser.new do |opts|
 
@@ -168,6 +169,11 @@ module Roll
                 "Print commands instead of execute") do |p|
           options.pretend = true
         end
+
+        opts.on("-e Dir", "--export Dir", "Export source to given directory") do |d|
+          options.export = d
+        end
+
 
         opts.on("-d", "--deps", "Print out dependencies") do 
           deps = the_conf['dependencies']
