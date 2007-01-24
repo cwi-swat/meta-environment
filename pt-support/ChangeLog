@@ -1,5 +1,10 @@
 $Id$
 
+Wed Jan 24 16:10:17 CET 2007 <jurgenv@cwi.nl>
+ * libmept/MEPT-yield.c: fixed a bug in the yielder (unparser)
+   with cycles. Cycles should not prevent the yielding of 
+   non-cyclic alternatives in an ambiguity cluster.
+
 Fri Jul 21 00:49:31 CEST 2006 <martin.bravenboer@gmail.com>
  * test/Makefile.am:  replaced noinst_ with check_: these
    programs and libraries are used for testing, so they should not be

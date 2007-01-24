@@ -21,6 +21,7 @@ typedef struct _TreeYielder
 {
   charYielder yieldChar;
   ambiguityAcceptor acceptAmbiguities;
+  ATbool sawCycle;
 } *TreeYielder;
 
 
@@ -49,6 +50,7 @@ static void visitTree(PT_Tree tree, TreeYielder yielder)
     yielder->yieldChar(PT_getTreeCharacter(tree));
   }
   else if (PT_isTreeCycle(tree)) {
+    yielder->sawCycle = ATtrue;
     return;
   }
   else if (PT_isTreeAppl(tree)) {
@@ -56,7 +58,16 @@ static void visitTree(PT_Tree tree, TreeYielder yielder)
   }
   else if (PT_isTreeAmb(tree)) {
     if (yielder->acceptAmbiguities == NULL) {
-      visitTree(PT_getArgsHead(PT_getTreeArgs(tree)), yielder);
+      PT_Args args = PT_getTreeArgs(tree);
+
+      if (!PT_isArgsEmpty(args)) {
+	do {
+	  visitTree(PT_getArgsHead(args), yielder);
+	  args = PT_getArgsTail(args);
+	} while (yielder->sawCycle && !PT_isArgsEmpty(args));
+      }
+
+      yielder->sawCycle = ATfalse;
     }
     else {
       ATabort("yieldAll ambiguities not yet implemented.");
@@ -109,6 +120,8 @@ void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities)
     treeToFile.acceptAmbiguities = NULL; /* TODO */
   }
 
+  treeToFile.sawCycle = ATfalse;
+
   outputFile = f;
   visitTree(tree, &treeToFile);
   outputFile = NULL;
@@ -123,6 +136,8 @@ void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities)
   if (yieldAllAmbiguities) {
     treeToFile.acceptAmbiguities = NULL; /* TODO */
   }
+
+  treeToFile.sawCycle = ATfalse;
 
   outputFile = f;
   visitArgs(args, &treeToFile);
@@ -197,6 +212,8 @@ char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities)
     treeToString.acceptAmbiguities = NULL; /* TODO */
   }
 
+  treeToString.sawCycle = ATfalse;
+
   stringCur = stringStart;
   visitTree(tree, &treeToString);
   yieldCharToString('\0');
@@ -211,6 +228,8 @@ char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities)
   if (yieldAllAmbiguities) {
     treeToString.acceptAmbiguities = NULL; /* TODO */
   }
+
+  treeToString.sawCycle = ATfalse;
 
   memset(stringStart, 0, stringCapacity);
   stringCur = stringStart;
