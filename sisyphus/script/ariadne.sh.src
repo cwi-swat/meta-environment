@@ -1,0 +1,9 @@
+#! /bin/sh
+
+RUBY_INTERPRETER=__RUBY__
+
+DATA_DIR=__DATA_DIR__
+BUNDLE=bundle.rb
+
+
+${RUBY_INTERPRETER} -I ${DATA_DIR} ${DATA_DIR}/${BUNDLE} $@

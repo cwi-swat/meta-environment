@@ -30,6 +30,13 @@ end
 class BundleGenerator
   include BundleTemplates
   attr_reader :bundle
+
+  # Fix this, please
+  AUTOCONF = '/ufs/sen1/software/installed/autoconf-2.59/linux/i686/bin/autoconf'
+  AUTOMAKE = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/automake'
+  ACLOCAL = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/aclocal'
+
+
   def initialize(bundle, target_dir = '.')
     @bundle = bundle
     @target_dir = target_dir
@@ -40,11 +47,14 @@ class BundleGenerator
     generate_readme
     generate_authors
     generate_news
+    generate_changelog
     generate_prechecks_makefile_am
     generate_collect_sh
+    generate_acinclude
     generate_makefile_am
     generate_configure_ac
     generate_pkg_list
+    run_autotools
   end
 
   def bundle_dir
@@ -79,12 +89,21 @@ class BundleGenerator
     write_file(bundle_dir, 'NEWS', instantiate(NEWS))
   end
 
+  def generate_changelog
+    write_file(bundle_dir, 'ChangeLog', instantiate(CHANGELOG))
+  end
+
   def generate_prechecks_makefile_am
     write_file(prechecks_dir, 'Makefile.am', PRE_CHECKS_MAKEFILE_AM)
   end
 
   def generate_collect_sh
-    write_file(prechecks_dir, 'collect.sh', COLLECT_SH)
+    write_file(bundle_dir, 'collect.sh', COLLECT_SH)
+    `chmod +x #{File.join(bundle_dir, 'collect.sh')}`
+  end
+
+  def generate_acinclude
+    write_file(bundle_dir, 'acinclude.m4', ACINCLUDE)
   end
 
   def generate_makefile_am
@@ -104,6 +123,11 @@ class BundleGenerator
   end
 
   def run_autotools
+    Dir.chdir(bundle_dir) do
+      `#{ACLOCAL}`
+      `#{AUTOCONF}`
+      `#{AUTOMAKE} -a -c --include-deps`
+    end
   end
 end
 

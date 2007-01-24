@@ -1,3 +1,9 @@
+2007-01-24    <storm@cwi.nl>
+
+	* Feature: (alpha quality) version of a bundle tool "ariadne";
+	mimics autobundle exactly (exception for commandline options and
+	input).
+
 2007-01-19    <storm@cwi.nl>
 
 	* Bumped to version 0.34.
