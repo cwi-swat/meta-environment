@@ -220,7 +220,9 @@ int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool m
   moduloAmbOrdering = modAmbOrdering;
   moduloLayout = modLayout;
 
-  assert(PT_isEqualSymbol(PT_getProductionRhs(PT_getTreeProd(tree1)),
+  assert(PT_isTreeAmb(tree1) 
+	 || PT_isTreeAmb(tree2) 
+	 || PT_isEqualSymbol(PT_getProductionRhs(PT_getTreeProd(tree1)),
 			  PT_getProductionRhs(PT_getTreeProd(tree2))));
 
   return PT_compareTreeRec(tree1, tree2);
