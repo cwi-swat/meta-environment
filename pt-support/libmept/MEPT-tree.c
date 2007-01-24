@@ -69,6 +69,27 @@ PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack)
 /*@{ predicates */
 
 
+static ATbool PT_containsArgsCycle(PT_Args args) {
+  for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    if (PT_containsTreeCycle(PT_getArgsHead(args))) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
+}
+
+ATbool PT_containsTreeCycle(PT_Tree tree) {
+  if (PT_isTreeCycle(tree)) {
+    return ATtrue;
+  }
+
+  if (PT_hasTreeArgs(tree)) {
+    return PT_containsArgsCycle(PT_getTreeArgs(tree));
+  }
+
+  return ATfalse;
+}
+
 ATbool PT_isTreeAlt(PT_Tree tree)
 {
   PT_Production prod;

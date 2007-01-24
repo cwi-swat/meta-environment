@@ -12,6 +12,7 @@ PT_Tree PT_makeTreeCilit(const char* string);
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
 PT_Tree PT_makeTreeFlatLexicalFromString(const char *str);
 
+ATbool PT_containsTreeCycle(PT_Tree tree);
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isTreeAlt(PT_Tree tree);
 ATbool PT_isTreeLit(PT_Tree tree);
