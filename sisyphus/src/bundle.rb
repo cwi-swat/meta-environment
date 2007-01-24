@@ -32,9 +32,12 @@ class BundleGenerator
   attr_reader :bundle
 
   # Fix this, please
-  AUTOCONF = '/ufs/sen1/software/installed/autoconf-2.59/linux/i686/bin/autoconf'
-  AUTOMAKE = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/automake'
-  ACLOCAL = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/aclocal'
+  #AUTOCONF = '/ufs/sen1/software/installed/autoconf-2.59/linux/i686/bin/autoconf'
+  #AUTOMAKE = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/automake'
+  #ACLOCAL = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/aclocal' 
+  AUTOCONF = 'autoconf'
+  AUTOMAKE = 'automake'
+  ACLOCAL = 'aclocal'
 
 
   def initialize(bundle, target_dir = '.')
@@ -55,10 +58,15 @@ class BundleGenerator
     generate_configure_ac
     generate_pkg_list
     run_autotools
+    make_tar_gz
+  end
+
+  def bundle_stem
+    "#{bundle.name}-bundle-#{bundle.version}"
   end
 
   def bundle_dir
-    File.join(@target_dir, "#{bundle.name}-bundle-#{bundle.version}")
+    File.join(@target_dir, bundle_stem)
   end
 
   def prechecks_dir
@@ -123,12 +131,15 @@ class BundleGenerator
   end
 
   def run_autotools
-    Dir.chdir(bundle_dir) do
-      `#{ACLOCAL}`
-      `#{AUTOCONF}`
-      `#{AUTOMAKE} -a -c --include-deps`
-    end
+    `cd #{bundle_dir} ; #{ACLOCAL} ; cd - `
+    `cd #{bundle_dir} ; #{AUTOCONF} ; cd -`
+    `cd #{bundle_dir} ; #{AUTOMAKE} -a -c --include-deps ; cd -`
   end
+
+  def make_tar_gz
+    `cd #{@target_dir} ; tar cvf - #{bundle_stem} | gzip -c > #{bundle_stem}.tar.gz ; cd -`
+  end
+  
 end
 
 class BundlePackage

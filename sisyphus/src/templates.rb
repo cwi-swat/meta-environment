@@ -40,7 +40,7 @@ dnl     the same configure flags
 dnl    -Use multiple calls to AB_CONFIG_PKG to configure multiple packages
 dnl     differently.
 
-AC_DEFUN(AB_CONFIG_PKG,
+AC_DEFUN([AB_CONFIG_PKG],
 [
    AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])
    dnl Save configuration flags
@@ -56,7 +56,7 @@ AC_DEFUN(AB_CONFIG_PKG,
 
 dnl Autobundle initialization macro.
 dnl It makes sure that all configure results are cached
-AC_DEFUN(AB_INIT_AUTOBUNDLE,
+AC_DEFUN([AB_INIT_AUTOBUNDLE],
 [
 dnl If a cache file is not specified, autoconf will by default
 dnl _not_ cache it results.
@@ -585,10 +585,7 @@ MAKEFILE_AM = <<END_OF_MAKEFILE_AM
 
 # $Id: Makefile.am.templ 7349 2004-09-14 12:10:28Z merijn $
 
-# If you want to exclude packages from the build process, issue
-#    gmake EXCLUDE="<packages_to_exclude>"
-# Note that this may lead to build failures due to package dependencies.
-BUILD_PKGS   = $(filter-out $(EXCLUDE), $(PKGS))
+BUILD_PKGS   = $(PKGS)
 DIST_SUBDIRS = pre-checks \\
                $(BUILD_PKGS)
 
