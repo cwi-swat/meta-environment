@@ -237,15 +237,30 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
     PT_Args new = PT_makeArgsEmpty();
     PT_Position save = *current;
     PT_Position newPos = save;
+    PT_Args cycles = PT_makeArgsEmpty();
 
     for (;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       PT_Tree arg = PT_getArgsHead(args);
+      PT_Tree newArg;
       *current = save;
-      new = PT_makeArgsMany(PT_addTreePosInfo(arg, current), new);
+      newArg = PT_addTreePosInfo(arg, current);
 
       if (current->offset != save.offset) {
 	/* only update newPos if this amb was not a cycle */
 	newPos = *current;
+	/* add the non-cycle */
+	new = PT_makeArgsMany(newArg, new);
+      }
+      else if (newPos.offset == save.offset) {
+	/* did not process a non-cycle yet, so this cycle has to be
+	 * revisited.
+	 */
+	/* delay the not correctly annotated cycle */
+	cycles = PT_makeArgsMany(arg, cycles);
+      }
+      else {
+	/* add the correctly annotated cycles */
+	new = PT_makeArgsMany(newArg, new);
       }
     }
 
@@ -253,6 +268,13 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
      * an amb that was not a cycle
      */
     *current = newPos;
+
+    /* now re-annotate the not correctly annotated cycles */
+    for ( ; !PT_isArgsEmpty(cycles); cycles = PT_getArgsTail(cycles)) {
+      PT_Tree arg = PT_getArgsHead(cycles);
+      new = PT_makeArgsMany(PT_addTreePosInfo(arg, current), new);
+    }
+
 
     tree = PT_makeTreeAmb(PT_reverseArgs(new));
   }
