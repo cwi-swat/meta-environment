@@ -190,7 +190,6 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
 
   keys = ATtableKeys(slices);
 
-
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);
     const char* cat = ATgetName(ATgetAFun((ATermAppl) key));
@@ -202,7 +201,6 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
     slice = LOC_makeSliceSlice(cat, areas);
 
     result = ATinsert(result, LOC_SliceToTerm(slice));
-
   }
 
   ATtableDestroy(slices);
