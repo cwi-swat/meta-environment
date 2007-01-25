@@ -1,50 +1,63 @@
 module languages/asf/normalization/ASF-Normalization
 
+imports languages/asf/normalization/RenamedNormalization [
+                                                         %% Here we rename all renamed sorts back to their ORIGINAL names.
+                                                         %% This ensures that the specification matches ASF specifications
+                                                         %% as they are parsed:
 
+                                                           Equation =>
+                                                           ASF-Equation
+                                                           Condition =>
+                                                           ASF-Condition
+                                                           Tag => ASF-Tag
+                                                           Module => ASF-Module
+                                                           Section =>
+                                                           ASF-Section
+                                                           ConditionalEquation
+                                                           =>
+                                                           ASF-ConditionalEquation
+                                                           Conditions =>
+                                                           ASF-Conditions
+                                                           TestEquation =>
+                                                           ASF-TestEquation
+                                                           BarEnd => ASF-BarEnd
+                                                           Implies =>
+                                                           ASF-Implies
+                                                           TagId => ASF-TagId
+                                                           NumChar =>
+                                                           ASF-NumChar
+                                                           ShortChar =>
+                                                           ASF-ShortChar
+                                                           Character => CHAR
+                                                           P-Tree => Tree
+                                                           P-Args => Args
+                                                           P-Symbol => Symbol
+                                                           P-Symbols => Symbols
+                                                           P-Attributes =>
+                                                           Attributes
+                                                           P-Attr => Attr
+                                                           P-Attrs => Attrs
+                                                           P-Production =>
+                                                           Production
+                                                           P-Annotation =>
+                                                           Annotation
 
-imports languages/asf/normalization/RenamedNormalization[
+                                                           %% Here we takes measures to prevent this specification to normalize itself.
+                                                           %% All traversal function names are renamed here.
 
-%% Here we rename all renamed sorts back to their ORIGINAL names.
-%% This ensures that the specification matches ASF specifications
-%% as they are parsed:
+                                                           "lift" => "LIFT"
+                                                           "lower" => "LOWER"
+                                                           "brackets" =>
+                                                           "BRACKETS"
+                                                           "deconstruct" =>
+                                                           "DECONSTRUCT"
+                                                           "reconstruct" =>
+                                                           "RECONSTRUCT"
+                                                           "unwrap" => "UNWRAP"
 
-	Equation 	=> ASF-Equation
-	Condition 	=> ASF-Condition
-	Tag		=> ASF-Tag
-	Module 		=> ASF-Module
-	Section 	=> ASF-Section
-	ConditionalEquation 	=> ASF-ConditionalEquation
-	Conditions 	=> ASF-Conditions
-	TestEquation 	=> ASF-TestEquation
-	BarEnd 		=> ASF-BarEnd
-	Implies 	=> ASF-Implies
-	TagId 		=> ASF-TagId
-	NumChar 	=> ASF-NumChar
-	ShortChar 	=> ASF-ShortChar
-	Character 	=> CHAR
+                                                           %% And we mangle the 'basic' sorts to prevent that they reduce themselves:
+                                                           %%	Natural => NATURAL
 
-	P-Tree 		=> Tree
-	P-Args 		=> Args
-	P-Symbol 	=> Symbol
-	P-Symbols 	=> Symbols
-	P-Attributes 	=> Attributes
-	P-Attr 		=> Attr
-	P-Attrs		=> Attrs
-	P-Production	=> Production
-	P-Annotation	=> Annotation
-
-%% Here we takes measures to prevent this specification to normalize itself.
-%% All traversal function names are renamed here.
-	"lift" 		=> "LIFT"
-	"lower"		=> "LOWER"
-	"brackets" 	=> "BRACKETS"
-	"deconstruct" 	=> "DECONSTRUCT"
-	"reconstruct" 	=> "RECONSTRUCT"
-	"unwrap" 	=> "UNWRAP"
-
-%% And we mangle the 'basic' sorts to prevent that they reduce themselves:
-
-	Natural => NATURAL
-	Boolean => BOOLEAN
-	Integer => INTEGER
-]
+                                                           Boolean => BOOLEAN
+                                                           Integer => INTEGER
+                                                         ]

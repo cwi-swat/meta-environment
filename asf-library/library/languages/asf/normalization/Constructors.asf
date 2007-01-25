@@ -7,7 +7,7 @@ equations
 	constructors(Module) = deconstruct(Module)
 
 equations
-%% This function maps lexical constructor syntax back to normal syntax.
+%% This function maps constructor syntax back to normal syntax.
 %% The resulting tree are ``as if the parser produced them''.
 
 [deconstruct-lexical]
@@ -64,6 +64,10 @@ equations
 	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),no-attrs),[appl(prod([varsym(cf(sort("CHAR")))],cf(sort("CHAR")),no-attrs),[appl(prod(Symbols,varsym(cf(sort("CHAR"))),Attributes),Args)_Ann3])_Ann2]) Ann1)
 =
 	appl(prod([varsym(lex(Symbol))],lex(Symbol),no-attrs),[appl(prod(Symbols,varsym(lex(Symbol)),Attributes),Args)]) Ann1
+
+[deconstruct-start-constructors]
+	deconstruct(appl(prod([lit("start"),cf(opt(layout)),lit("("),cf(opt(layout)),_Symbol,cf(opt(layout)),lit(","),cf(opt(layout)),cf(Symbol),cf(opt(layout)),lit(")")],cf(sort("ASF-START")),_Attributes),[_Tree1,_Tree2,_Tree3,_Tree4,_Tree5,_Tree6,_Tree7,Tree1,Tree2,Tree3,_Tree8]))
+         = appl(prod([cf(opt(layout)),cf(Symbol),cf(opt(layout))],sort("<START>"),no-attrs),[Tree1,Tree2,Tree3])
 
 equations
 
@@ -170,6 +174,17 @@ equations
 
 [non-empty-after-right]
 	remove-tag(attrs([Attr+,term(lexical-constructor),Attr*])) =
+		attrs([Attr+,Attr*])
+
+[empty-after]
+	remove-tag(attrs([term(start-constructor)])) = no-attrs
+
+[non-empty-after-left]
+	remove-tag(attrs([Attr*,term(start-constructor),Attr+])) =
+		attrs([Attr*,Attr+])
+
+[non-empty-after-right]
+	remove-tag(attrs([Attr+,term(start-constructor),Attr*])) =
 		attrs([Attr+,Attr*])
 
 equations
