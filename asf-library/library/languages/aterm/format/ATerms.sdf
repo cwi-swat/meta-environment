@@ -1,4 +1,4 @@
-module languages/aterm/pretty/ATerms
+module languages/aterm/format/ATerms
 
 imports languages/aterm/syntax/ATerms
 imports languages/box/syntax/Box
