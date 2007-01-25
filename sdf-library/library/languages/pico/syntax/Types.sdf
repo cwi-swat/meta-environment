@@ -1,4 +1,4 @@
-module languages/pico/syntax/Pico-Types
+module languages/pico/syntax/Types
 
 exports
   sorts TYPE

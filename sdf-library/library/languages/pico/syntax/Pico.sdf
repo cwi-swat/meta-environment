@@ -1,7 +1,7 @@
-module languages/pico/syntax/Pico-Syntax
+module languages/pico/syntax/Pico
 
-imports languages/pico/syntax/Pico-Identifiers 
-imports languages/pico/syntax/Pico-Types
+imports languages/pico/syntax/Identifiers 
+imports languages/pico/syntax/Types
 imports basic/NatCon 
 imports basic/StrCon 
 
