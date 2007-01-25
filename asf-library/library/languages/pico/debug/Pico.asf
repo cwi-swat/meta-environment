@@ -1,9 +1,13 @@
 equations
 
+[Main] start(PROGRAM, Program) = start(VENV, dvp(Program))
+
+equations
+
 [Ev1]   tide-connect("PICO", Decls) == true,
         tide-step(Decls) == true,
         Venv := dvs(Series, evd(Decls)),
-        tide-disconnect("PICO") == true
+        Bool := tide-disconnect("PICO")
         =====================================================
         dvp(begin Decls Series end) = Venv
 

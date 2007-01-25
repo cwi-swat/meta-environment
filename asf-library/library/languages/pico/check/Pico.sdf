@@ -16,7 +16,7 @@ exports
 
 hiddens
   context-free start-symbols
-    Boolean
+    Boolean PROGRAM
 
   variables
     "Decls"[0-9\']*   -> DECLS
@@ -30,3 +30,4 @@ hiddens
     "Str-con"[0-9\']* -> StrCon
     "Tenv"[0-9\']*    -> TENV
     "Type"[0-9\']*    -> TYPE
+    "Program"[0-9\']* -> PROGRAM

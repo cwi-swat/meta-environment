@@ -1,5 +1,9 @@
 equations
 
+[Main] start(PROGRAM, Program) = start(Boolean, tcp(Program))
+
+equations
+
 [Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))
 
 [Tc2]  tcd(declare Id-type*;) = tcits(Id-type*,new-table)

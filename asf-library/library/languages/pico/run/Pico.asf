@@ -1,4 +1,8 @@
 equations
+
+[Main] start(PROGRAM, Program) = start(VALUE-ENV, evp(Program))
+
+equations
 [Ev1]  evp(begin Decls Series end) = evs(Series, evd(Decls))
 
 [Ev2]  evd(declare Id-type*;) = evits(Id-type*)
