@@ -4,19 +4,15 @@ imports languages/sdf2/syntax/Character-Class
 imports languages/box/syntax/Box
 
 hiddens
-
 context-free syntax
-
-"[" CharClass "]" -> Box {to-box}
-"[" CharRanges "]" -> Box {to-box}
-
-"<" Box ">" -> CharClass {from-box}
-"<" Box ">" -> CharRanges {from-box}
-"<" Box ">" -> CharRange {from-box}
+  "[" CharClass "]"  -> Box        {to-box}   
+  "[" CharRanges "]" -> Box        {to-box}   
+  "<" Box ">"        -> CharClass  {from-box} 
+  "<" Box ">"        -> CharRanges {from-box} 
+  "<" Box ">"        -> CharRange  {from-box} 
 
 variables
-
-"CharRanges"[0-9]* -> CharRanges 
-"CharRange*" -> CharRange*
-"Character"[0-9]* -> Character
-"CharClass"[0-9]* -> CharClass
+  "CharRanges" [0-9]* -> CharRanges  
+  "CharRange*"        -> CharRange*  
+  "Character" [0-9]*  -> Character   
+  "CharClass" [0-9]*  -> CharClass   
