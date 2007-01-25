@@ -1,0 +1,11 @@
+#! /bin/sh
+
+top_builddir=__TOP_BUILDDIR__
+
+${top_builddir}/src/eqs-dump -m basic/Booleans -o booleans.eqs > booleans-eqs.ref 2>&1
+fgrep "FAIL" booleans-eqs.ref > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+  exit 0
+else
+  exit 1
+fi

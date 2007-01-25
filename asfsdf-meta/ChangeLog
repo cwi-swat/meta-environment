@@ -1,5 +1,11 @@
 /* $Id$ */
 
+Thu Jan 25 11:29:23 CET 2007 <kooiker@cwi.nl>
+ * test:
+   - Added meta.actions and timeout.tb to terminate ToolBus scripts when
+   running for more than 60 seconds
+   - Added test for eqs-dump
+
 Mon Jan 22 16:19:12 CET 2007 <jurgenv@cwi.nl>
  * asfsdf-meta.pc.in: added dependency on sdf-pretty
 
