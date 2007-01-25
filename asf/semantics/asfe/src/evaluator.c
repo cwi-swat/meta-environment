@@ -48,7 +48,7 @@ ATerm evaluator(const char *name, PT_ParseTree parseTree, ASF_ASFConditionalEqua
 
   RWclearErrors();
 
-  tree = PT_getParseTreeTree(parseTree);
+  tree = PT_getParseTreeTop(parseTree);
 
   if (runVerbose) {
     ATwarning("rewriting...\n");
@@ -73,7 +73,7 @@ ATerm evaluator(const char *name, PT_ParseTree parseTree, ASF_ASFConditionalEqua
   memo_table = NULL;
   destroy_equation_table();
 
-  parseTree = PT_setParseTreeTree(parseTree, result);
+  parseTree = PT_setParseTreeTop(parseTree, result);
 
   if (remove_layout) {
     parseTree = PT_replaceParseTreeLayout(parseTree, 

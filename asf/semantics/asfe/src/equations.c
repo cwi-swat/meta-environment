@@ -469,6 +469,7 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
 equation_entry *find_equation(equation_entry * from, PT_Production top_ofs, 
 			      PT_Production first_ofs)
 {
+
   if (equations->size == 0) {
     return NULL;
   }
