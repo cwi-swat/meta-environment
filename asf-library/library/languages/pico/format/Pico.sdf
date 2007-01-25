@@ -18,10 +18,9 @@ exports
     box2idtype(Box)                     -> ID-TYPE {from-box}
     box2program(Box)                    -> PROGRAM {from-box}
     box2statement(Box)                  -> STATEMENT {from-box}
+    "_" "_"                             -> Box {layout-to-box}
 
 hiddens
-  context-free syntax
-
   variables
     "Decls"[0-9]*      -> DECLS
     "Exp"[0-9]*        -> EXP
@@ -29,3 +28,6 @@ hiddens
     "PicoId"[0-9]*     -> PICO-ID
     "Statement*"[0-9]* -> {STATEMENT ";"}*
     "Type"[0-9]*       -> TYPE
+
+lexical variables
+    "C"[0-9]*  -> LAYOUT
