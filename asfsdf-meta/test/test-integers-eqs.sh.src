@@ -13,3 +13,16 @@ fgrep "FAIL" test.ref > /dev/null 2>&1
 if [ $? -ne 1 ]; then
   exit 1
 fi
+
+COMPARE="__ATERM__/bin/atdiff"
+EVALUATOR="__ASF__/bin/asfe"
+
+$EVALUATOR -e integers.eqs -i test-integers.eqs > test.ref 2>/dev/null
+if $COMPARE test.ref integers.org > /dev/null
+then
+  echo "Equations test for basic/Integers succeeded"
+  exit 0
+else
+  echo "Equations test for basic/Integers failed"
+  exit 1
+fi

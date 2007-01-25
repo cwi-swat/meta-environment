@@ -18,5 +18,6 @@ CLEANFILES = \
 	$(GENERATED_BY_TESTS)
 
 % : %.src Makefile
-	sed "s@__TOP_BUILDDIR__@$(top_builddir)@g" < $< > $@
-	chmod +x $@
+	sed "s@__ATERM__@$(ATERM_PREFIX)@g;\
+	     s@__ASF__@$(ASF_PREFIX)@g;\
+	     s@__TOP_BUILDDIR__@$(top_builddir)@g" < $< > $@ && chmod +x $@
