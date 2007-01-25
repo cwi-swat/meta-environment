@@ -24,11 +24,13 @@ let
   Event: attribute-changed-event,
   Value: term
 in
-  OpenModule(MODULENAME, ModuleId?)
+  snd-msg(tm-request-transaction(openSDFModule))
+  . OpenModule(MODULENAME, ModuleId?)
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,unavailable)
   . MM-Subscribe-Attribute-Changed(<term>,<term>,"status",<term>,error)
   . rec-note(mm-attribute-changed(Event?))
+  . snd-msg(tm-end-transaction(openSDFModule))
   . ACE-GetNewValue(Event, Value?)
   . 
   if or(equal(Value, error),equal(Value, unknown)) then
