@@ -8,3 +8,6 @@ equations
 
 [B5]   not ( false ) = true
 [B6]   not ( true )  = false
+
+
+

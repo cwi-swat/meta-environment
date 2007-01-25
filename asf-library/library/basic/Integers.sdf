@@ -1,23 +1,15 @@
 module basic/Integers
 
-imports basic/NatCon
+imports basic/IntCon
 imports basic/Booleans
 
 hiddens
 context-free start-symbols
-  Natural Integer Boolean
+  Integer Boolean
 
 exports
-sorts Natural
-      Integer
-
 context-free syntax
-  NatCon                -> Natural           
-  Natural "-/" Natural  -> Natural {left}    
-  "(" Natural ")"       -> Natural {bracket} 
-  Natural               -> Integer           
-  "+" Natural           -> Integer           
-  "-" Natural           -> Integer           
+  Integer "-/" Integer  -> Integer {left}    
   Integer "+" Integer   -> Integer {left}    
   Integer "-" Integer   -> Integer {left}    
   Integer "*" Integer   -> Integer {left}    
@@ -29,6 +21,10 @@ context-free syntax
   "(" Integer ")"       -> Integer {bracket} 
 
 context-free priorities
+ {non-assoc:
+    "+" integer:Integer -> Integer {non-assoc }
+    "-" integer:Integer -> Integer {non-assoc }
+  } >
   Integer "*" Integer -> Integer >
   { left: Integer "+" Integer -> Integer  
           Integer "-" Integer -> Integer   }
@@ -37,12 +33,12 @@ hiddens
 imports basic/Comments
 
 context-free syntax
-  "gt" "(" Natural "," Natural ")" -> Boolean  
-  Natural "-//" Natural            -> Natural  
-  Natural ">-" Natural             -> Natural  
+  "gt" "(" Integer "," Integer ")" -> Boolean  
+  Integer "-//" Integer            -> Integer  
+  Integer ">-" Integer             -> Integer  
 
 variables
-  "Nat" [0-9\']*     -> Natural  
+  "Nat" [0-9\']*     -> Integer  
   "Nat-con" [0-9\']* -> NatCon   
   "Int" [0-9\']*     -> Integer  
 

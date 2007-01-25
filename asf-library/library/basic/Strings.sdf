@@ -4,42 +4,41 @@ imports basic/StrCon
 imports basic/Integers
 imports basic/Bytes
 
-hiddens 
-  sorts Escaped Normal
+hiddens
+sorts Escaped
+      Normal
 
-  context-free start-symbols 
-    String
-  
+context-free start-symbols
+  String
+
 exports
-  sorts String
+sorts String
 
-  context-free syntax
-    StrCon             -> String {constructor}
-    String "||" String -> String {left}
-    "(" String ")"     -> String {bracket}
-   
-    String "<"  String  -> Boolean
-    String "<=" String  -> Boolean
-    String ">"  String  -> Boolean
-    String ">=" String  -> Boolean
+context-free syntax
+  StrCon             -> String  {constructor} 
+  String "||" String -> String  {left}        
+  "(" String ")"     -> String  {bracket}     
+  String "<" String  -> Boolean               
+  String "<=" String -> Boolean               
+  String ">" String  -> Boolean               
+  String ">=" String -> Boolean               
 
-  context-free syntax
-    length(String)         -> Integer
-    subst(pattern:String,replacement:String,in:String) -> String
-    split(String,splitter:String)			 -> {String ";"}+
+context-free syntax
+  length(String)                                       -> Integer        
+  subst(pattern:String, replacement:String, in:String) -> String         
+  split(String, splitter:String)                       -> {String ";"}+  
 
 hiddens
-  imports
-    basic/Whitespace
+imports basic/Whitespace
 
-  lexical variables
-    "char"[0-9]*     -> StrChar
-    "char*"[0-9]*    -> StrChar* 
-    "match"[0-9]*    -> StrChar* 
-    "replacement"[0-9]*    -> StrChar* 
+lexical variables
+  "char" [0-9]*        -> StrChar   
+  "char*" [0-9]*       -> StrChar*  
+  "match" [0-9]*       -> StrChar*  
+  "replacement" [0-9]* -> StrChar*  
 
-  variables
-    "Str" [0-9\']*     -> StrCon
+variables
+  "Str" [0-9\']* -> StrCon  
 
-  context-free start-symbols
-    String {String ";"}+
+context-free start-symbols
+  String {String ";"}+
