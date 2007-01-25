@@ -1,7 +1,7 @@
-module languages/pico/typechecker/Type-environments
+module languages/pico/check/Type-environments
 
-imports languages/pico/typechecker/Check-types 
-imports languages/pico/syntax/Pico-Identifiers 
+imports languages/pico/check/Check-types 
+imports languages/pico/syntax/Identifiers 
 imports containers/Table[PICO-ID TYPE]
 
 exports 

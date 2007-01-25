@@ -1,4 +1,4 @@
-module languages/pico/typechecker/Check-types
+module languages/pico/checker/Check-types
 
 imports languages/pico/syntax/Pico-Types 
 imports basic/Booleans basic/Comments

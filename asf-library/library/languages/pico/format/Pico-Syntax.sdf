@@ -1,7 +1,7 @@
-module languages/pico/pretty/Pico-Syntax
+module languages/pico/format/Pico
 
 imports languages/box/syntax/Box
-imports languages/pico/syntax/Pico-Syntax
+imports languages/pico/syntax/Pico
 
 exports
   context-free start-symbols

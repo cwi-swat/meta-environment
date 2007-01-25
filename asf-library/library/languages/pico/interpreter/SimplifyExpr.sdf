@@ -1,6 +1,6 @@
-module languages/pico/interpreter/SimplifyExpr
+module languages/pico/run/SimplifyExpr
 
-imports languages/pico/syntax/Pico-Syntax
+imports languages/pico/syntax/Pico
 
 exports
   context-free syntax

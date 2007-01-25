@@ -1,7 +1,7 @@
-module languages/pico/debugger/Pico-debug
+module languages/pico/debug/Pico
 
-imports languages/pico/syntax/Pico-Syntax 
-imports languages/pico/interpreter/Pico-eval
+imports languages/pico/syntax/Pico
+imports languages/pico/run/Pico
 imports utilities/Debug[STATEMENT]
 imports utilities/Debug[EXP]
 imports utilities/Debug[DECLS]

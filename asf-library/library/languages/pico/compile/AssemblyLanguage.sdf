@@ -1,7 +1,7 @@
-module languages/pico/compiler/AssemblyLanguage
+module languages/pico/compile/AssemblyLanguage
 
 imports basic/Integers basic/Strings 
-imports languages/pico/syntax/Pico-Identifiers
+imports languages/pico/syntax/Identifiers
 
 exports 
   sorts Label Instr

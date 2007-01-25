@@ -1,7 +1,7 @@
-module languages/pico/interpreter/Pico-eval
+module languages/pico/run/Pico
 
-imports languages/pico/syntax/Pico-Syntax 
-imports languages/pico/interpreter/Value-environments
+imports languages/pico/syntax/Pico
+imports languages/pico/run/Value-environments
 
 exports
   sorts VALUE-ENV

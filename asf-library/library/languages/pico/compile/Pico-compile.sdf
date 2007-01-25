@@ -1,8 +1,8 @@
-module languages/pico/compiler/Pico-compile
+module languages/pico/compile/Pico
 
-imports languages/pico/syntax/Pico-Syntax 
-imports languages/pico/compiler/AssemblyLanguage 
-imports languages/pico/compiler/NextLabel 
+imports languages/pico/syntax/Pico
+imports languages/pico/compile/AssemblyLanguage 
+imports languages/pico/compile/NextLabel 
 
   
 exports

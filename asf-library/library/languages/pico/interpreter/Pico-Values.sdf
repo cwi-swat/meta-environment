@@ -1,4 +1,4 @@
-module languages/pico/interpreter/Pico-Values
+module languages/pico/run/Values
 
 imports basic/Integers basic/Strings
 
