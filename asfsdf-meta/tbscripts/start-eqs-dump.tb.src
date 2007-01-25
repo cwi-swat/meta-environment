@@ -10,6 +10,7 @@
 #include <sdf-utils.tb>
 #include <parsetable-utils.tb>
 #include <sdf2-language.tb>
+#include <transaction-management.tb>
 
 /* asf-sdf-meta */
 #include <asf-language.tb>
