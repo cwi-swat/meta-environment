@@ -4,29 +4,23 @@ imports languages/aterm/syntax/ATerms
 imports languages/box/syntax/Box
 
 hiddens
-
 context-free start-symbols
-	ATerm
-
+  ATerm
 
 context-free syntax
-
-"[" {ATerm ","}* "]" -> Box* {to-box}
-
-"<" Box ">" -> ATerm {from-box}
-"<" Box ">" -> Annotation {from-box}
-"<" Box ">" -> {ATerm ","}* {from-box}
+  "[" {ATerm ","}* "]" -> Box*         {to-box}   
+  "<" Box ">"          -> ATerm        {from-box} 
+  "<" Box ">"          -> Annotation   {from-box} 
+  "<" Box ">"          -> {ATerm ","}* {from-box} 
 
 variables
-
-"ATerm*"[0-9]* -> {ATerm ","}* {strict}
-"ATerm"[0-9]* -> ATerm {strict}
-"ATerm+"[0-9]* -> {ATerm ","}+ {strict}
-"AFun"[0-9]*  -> AFun {strict}
-"Ann"[0-9]* -> Annotation {strict}
-"Box*"[0-9]* -> Box* {strict}
-"Box+"[0-9]* -> Box* {strict}
-"Box"[0-9]* -> Box {strict}
-"Opt*"[0-9]* -> SpaceOption* 
-
-"_Box"[0-9]* -> Box {wild}
+  "ATerm*" [0-9]* -> {ATerm ","}* {strict} 
+  "ATerm" [0-9]*  -> ATerm        {strict} 
+  "ATerm+" [0-9]* -> {ATerm ","}+ {strict} 
+  "AFun" [0-9]*   -> AFun         {strict} 
+  "Ann" [0-9]*    -> Annotation   {strict} 
+  "Box*" [0-9]*   -> Box*         {strict} 
+  "Box+" [0-9]*   -> Box*         {strict} 
+  "Box" [0-9]*    -> Box          {strict} 
+  "Opt*" [0-9]*   -> SpaceOption*          
+  "_Box" [0-9]*   -> Box          {wild}   
