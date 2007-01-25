@@ -6,7 +6,8 @@ TESTS = \
 	booleans-eqs.sh
 
 GENERATED_BY_TESTS = \
-	booleans.eqs
+	booleans.eqs \
+	booleans-eqs.ref
 
 CLEANFILES = \
 	$(TESTS) \
