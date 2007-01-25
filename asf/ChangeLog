@@ -1,5 +1,14 @@
 $Id$
 
+Thu Jan 25 15:16:33 CET 2007 <jurgenv@cwi.nl>
+ * syntax/addeqsyntax/src/Add-Eqs-Syntax.c: added generation of start
+   constructors. For every start-symbol in SDF, a start constructor
+   is generated in ASF: start(`Symbol`, Symbol). This can be used
+   to address the layout surrounding a start symbol, and to make rewrite
+   rules that trigger on the topmost level of a term. This will frequently
+   make the use of apply-function unnecessary.
+ * TODO: add normalization of start contructors.
+
 Mon Dec 18 12:59:02 CET 2006 <jurgenv@cwi.nl>
  * semantics/asfc/src/c-compiler.c,Makefile.am: gcc uses
    CFLAGS variable (bound at compile-time of asfc) for compiling
