@@ -1,13 +1,17 @@
 EXTRA_DIST = \
 	timeout.tb \
-	booleans-eqs.sh.src
+	booleans-eqs.sh.src \
+	test-integers-eqs.sh.src
 
 TESTS = \
-	booleans-eqs.sh
+	booleans-eqs.sh \
+	test-integers-eqs.sh
 
 GENERATED_BY_TESTS = \
+	test.ref \
 	booleans.eqs \
-	booleans-eqs.ref
+	integers.eqs \
+	test-integers.eqs
 
 CLEANFILES = \
 	$(TESTS) \

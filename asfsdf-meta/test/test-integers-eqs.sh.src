@@ -1,0 +1,15 @@
+#! /bin/sh
+
+top_builddir=__TOP_BUILDDIR__
+
+${top_builddir}/src/eqs-dump -m basic/Integers -o integers.eqs > test.ref 2>&1
+fgrep "FAIL" test.ref > /dev/null 2>&1
+if [ $? -ne 1 ]; then
+  exit 1
+fi
+
+${top_builddir}/src/test-eqs-dump -m basic/Integers -o test-integers.eqs > test.ref 2>&1
+fgrep "FAIL" test.ref > /dev/null 2>&1
+if [ $? -ne 1 ]; then
+  exit 1
+fi
