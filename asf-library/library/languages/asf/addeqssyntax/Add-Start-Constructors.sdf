@@ -1,0 +1,28 @@
+module languages/asf/addeqssyntax/Add-Start-Constructors
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+
+context-free syntax
+
+add-start-constructors(Definition) -> Definition
+
+hiddens
+
+context-free syntax
+
+asc(Definition) -> Definition {traversal(trafo,top-down,break)}
+asc(Grammar) -> Grammar {traversal(trafo,top-down,break)}
+
+gen-start(Symbol*)            -> Production*
+
+variables
+
+"Symbol*"[0-9]* -> Symbol*
+"Symbol+"[0-9]* -> Symbol+
+"Symbol"[0-9]* -> Symbol
+"Module*" -> Module*
+"Production*"[0-9]* -> Production*
+
+

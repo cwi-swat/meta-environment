@@ -4,7 +4,8 @@
 
 equations
 
-  [ceac-1'1] create-eqs-and-conds(, SymbolsSet) =
+  [ceac-1'1] create-eqs-and-conds(, SymbolsSet) = Prod*
+             when (SymbolsSet2,Prod*) := eqs-and-conds-for-grammar(sorts ASF-START, [])
 
   [ceac-1'2] (SymbolsSet2,Prod*1) := eqs-and-conds-for-mod(Module, SymbolsSet1),
              Prod*2 := create-eqs-and-conds(Module*, SymbolsSet1)

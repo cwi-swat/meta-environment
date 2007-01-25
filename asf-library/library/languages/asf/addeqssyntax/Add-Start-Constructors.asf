@@ -1,0 +1,23 @@
+equations
+
+[main] add-start-constructors(Module*) = asc(Module*)
+
+equations
+
+[] asc(context-free start-symbols Symbol*) =
+   context-free start-symbols Symbol*
+   context-free syntax gen-start(Symbol*)
+
+[] asc(lexical start-symbols Symbol*) =
+   lexical start-symbols Symbol*
+   context-free syntax gen-start(Symbol*)
+
+[] asc(start-symbols Symbol*) =
+   start-symbols Symbol*
+   context-free syntax gen-start(Symbol*)
+
+equations
+
+[] gen-start() =
+[] gen-start(Symbol Symbol+) = gen-start(Symbol) gen-start(Symbol+)
+[] gen-start(Symbol) = "start" "(" `Symbol` "," Symbol ")" -> ASF-START {start-constructor}

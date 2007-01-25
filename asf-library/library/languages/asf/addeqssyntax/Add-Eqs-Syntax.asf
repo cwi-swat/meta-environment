@@ -4,15 +4,16 @@ equations
 
   [aem-1'2] Prod*1 := create-eqs-and-conds(Module*1, [LAYOUT]),
             Prod*3 := add-tagid-rejects(Module*1),
-            Module*2 := add-prefer-vars(Module*1),
-            Module*3 := add-shadow-syntax(Module*2),
-            Module*4 := add-eqs-to-module(ModName, Module*3)
+            Module*2 := add-start-constructors(Module*1),
+            Module*3 := add-prefer-vars(Module*2),
+            Module*4 := add-shadow-syntax(Module*3),
+            Module*5 := add-eqs-to-module(ModName, Module*4)
             ===============================================
             add-equation-module(ModName, definition Module*1) =
 
 definition
               
-Module*4
+Module*5
 
 %% TODO NOTE: copies like this in this module are bad. We should use the
 %% TODO library and find out a way to hide the imported modules from the
@@ -119,7 +120,6 @@ exports
     ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
 
     Prod*1
-
 
 
 

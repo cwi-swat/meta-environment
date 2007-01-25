@@ -4,11 +4,14 @@ imports languages/sdf2/syntax/Sdf2
 
 exports
   context-free syntax
-    "upper2lower" "(" IdCon ")" -> IdCon
-    "sort2id" "(" Sort ")"      -> IdCon
-    "id2str" "(" IdCon ")"      -> StrCon
+    "upper2lower" "(" IdCon ")" -> IdCon  {complete}
+    "sort2id" "(" Sort ")"      -> IdCon  {complete}
+    "id2str" "(" IdCon ")"      -> StrCon {complete}
 
 hiddens
+
+context-free start-symbols
+  IdCon StrCon
 
 variables
     "Sort"[0-9]*        -> Sort
@@ -20,6 +23,7 @@ lexical variables
 	"h"[0-9\']*	-> [A-Za-z]
 	"t"[0-9\']*	-> [A-Za-z\-0-9]*
 	"m*"[0-9]*	-> [A-Za-z0-9\-]*
-	"m"[0-9]*	-> [A-Za-z0-9\-]
-	"l"[0-9]*	-> [A-Za-z0-9]
+	"m"[0-9\']*	-> [A-Za-z0-9\-]
 	"f"[0-9]*	-> [A-Z]
+         "d"[0-9]*         -> [a-z0-9]
+         "l"[0-9\']*       -> [A-Za-z0-9]
