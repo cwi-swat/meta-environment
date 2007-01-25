@@ -1,0 +1,11 @@
+#! /bin/sh
+
+top_builddir=__TOP_BUILDDIR__
+
+${top_builddir}/src/pt-dump -m basic/Booleans -o booleans.pt > test.ref 2>&1
+fgrep "FAIL" test.ref > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+  exit 0
+else
+  exit 1
+fi

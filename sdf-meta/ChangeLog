@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jan 25 16:01:16 CET 2007 <kooiker@cwi.nl>
+ * test:
+   - Added tests for pt-dump and def-dump scenario's
+
 Thu Jan 25 10:33:52 CET 2007 <kooiker@cwi.nl>
  * src/def-dump.sh.src:
    - Fixed --viewer option

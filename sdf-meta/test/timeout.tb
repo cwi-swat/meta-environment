@@ -1,0 +1,4 @@
+process Timeout is
+  shutdown("FAIL\n") delay(60)
+
+toolbus(Timeout)
