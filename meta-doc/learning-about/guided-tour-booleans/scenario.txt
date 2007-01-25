@@ -4,7 +4,7 @@ Scenario for guided-tour-booleans.
 
 - Start asfsdf-meta from the command line
 
-- Resize window to circa 31 x 21 cm (X x Y)
+- Resize window to circa 20 x 14 cm (= 840 x 590 pixels)
 
 - start wink and initiate capturing (continuous mode, 4 frames per second).
 - TAKE CARE:
@@ -37,7 +37,7 @@ CREATE bool.trm
 
 VIEW STRUCTURE OF bool.trm
 
-- Select the text in bool.trm
+- Select the text of the & in bool.trm
 
 - Goto Structure -> View -> Tree;
   Close the tab
@@ -81,6 +81,8 @@ CREATE mybool.trm
 - Select mybool.trm;
   Type true xor false
   Goto File -> Save
+  <Gives error message Parse table error>
+  Click on that message
   < Gives error message (No start state).>
   Select tab MyBooleans.sdf
   Type:
