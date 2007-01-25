@@ -1,6 +1,6 @@
 module languages/pico/checker/Check-types
 
-imports languages/pico/syntax/Pico-Types 
+imports languages/pico/syntax/Types 
 imports basic/Booleans basic/Comments
 
 exports
