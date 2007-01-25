@@ -1,5 +1,19 @@
 $Id$
 
+
+Thu Jan 25 18:58:51 CET 2007 <jurgenv@cwi.nl>
+ * basic/Integers.{asf,sdf}: important change in the integers. The Natural
+   sort has been removed completely, while an IntCon module has been
+   introduced. The reason for this drastic change is to accomodate the
+   creation of an API for RStores that supports both positive and negative
+   Integers. Having two different types of integers was not wanted, and
+   quickly lead to ambiguity.
+
+Thu Jan 25 18:01:10 CET 2007 <jurgenv@cwi.nl>
+ * library/languages/asf/*: added start constructors, both in 
+   add-eqs-syntax and asf-normalization.
+
+
 Tue Jan 23 13:43:49 CEST 2006 <storm@cwi.nl>
  * library/languages/sdf2/normalization/Lifting.{sdf,asf}: fixed another
    bug concerning the lifting of `Sort`'s to syntax. It only worked for
