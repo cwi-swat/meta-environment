@@ -1,0 +1,31 @@
+definition
+
+%% The backquote is a brittle construct, it has to be adapted 
+%% every time SDF symbols are changed. This module lists a few
+%% of its uses as a smoke test.
+
+module Main
+imports Backquote
+
+module Backquote
+imports Layout
+
+exports
+  sorts S
+  context-free start-symbols S
+
+  context-free syntax
+    ` {S ","}+ ` -> S
+    ` SSS `      -> S
+    ` Ssss `     -> S
+    ` S? `       -> S
+    ` S** `      -> S
+    ` <S1,S2> `  -> S
+    ` <{Instr ";"}+ , Label> ` -> S
+
+module Layout
+   exports
+      lexical syntax
+         [\ \n]          -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
