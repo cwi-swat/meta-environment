@@ -13,5 +13,6 @@
 #include <term-actions.tb>
 #include <sdf-progress-listener.tb>
 #include <sdf-editor-listeners.tb>
+#include <sdf-gui-listeners.tb>
 
 #endif /* __SDF_META__ */

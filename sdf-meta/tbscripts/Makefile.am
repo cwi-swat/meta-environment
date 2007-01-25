@@ -8,6 +8,7 @@ TBSCRIPTS = \
 	    sdf-editor-actions.tb \
 	    sdf-editor-listeners.tb \
 	    sdf-editor-utils.tb \
+	    sdf-gui-listeners.tb \
 	    sdf-listeners.tb \
 	    sdf-meta.tb \
 	    sdf-namespace.h \

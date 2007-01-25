@@ -24,7 +24,7 @@ Version() {
 }
 
 # getopt handles command line...
-args=`getopt --options $myarguments -- $* 2> /dev/null`
+args=`getopt --options $myarguments --longoptions $options -- $* 2> /dev/null`
 if test $? != 0
 then
         Usage

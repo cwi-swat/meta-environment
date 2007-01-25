@@ -1,5 +1,11 @@
 $Id$
 
+Thu Jan 25 10:33:52 CET 2007 <kooiker@cwi.nl>
+ * src/def-dump.sh.src:
+   - Fixed --viewer option
+ * tbscripts/sdf{-gui}-listeners.tb:
+   - Moved gui listeners in separate script
+
 Thu Jan 18 13:59:52 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
    - Only delete dependencies when there were dependencies, to avoid

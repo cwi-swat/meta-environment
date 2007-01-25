@@ -25,11 +25,11 @@ in
   . StartModuledetailsPanel()
   .
   if not-equal(MODULENAME, "") then
-    snd-msg(tm-request-transaction("OpenSDFModule"))
+    snd-msg(tm-request-transaction(openSDFModule))
     . OpenModule(MODULENAME, ModuleId?)
     . MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
     . rec-note(mm-attribute-changed(Event?))
-    . snd-msg(tm-end-transaction("OpenSDFModule"))
+    . snd-msg(tm-end-transaction(openSDFModule))
   else
     tau
   fi 
