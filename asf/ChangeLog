@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jan 25 18:13:34 CET 2007 <jurgenv@cwi.nl>
+ * semantics/asf-operations/ASF-Normalization.c: added normalization of start
+   constructors to start productions. 
+
 Thu Jan 25 15:49:32 CET 2007 <kooiker@cwi.nl>
  * semantics/asfe/src/asfe.c:
    - Check input file and run tests or rewrite term accordingly
