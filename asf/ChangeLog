@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jan 25 15:49:32 CET 2007 <kooiker@cwi.nl>
+ * semantics/asfe/src/asfe.c:
+   - Check input file and run tests or rewrite term accordingly
+
 Thu Jan 25 15:16:33 CET 2007 <jurgenv@cwi.nl>
  * syntax/addeqsyntax/src/Add-Eqs-Syntax.c: added generation of start
    constructors. For every start-symbol in SDF, a start constructor

@@ -229,11 +229,13 @@ int main(int argc, char *argv[])
   ATbool remove_layout = ATfalse;
   ATbool mark_new_layout = ATfalse;
   ATbool allow_ambs = ATfalse;
+  ATbool run_tests = ATfalse;
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
-  ASF_ASFConditionalEquationList eqsList;
-  PT_ParseTree parseTree;
+  ASF_ASFConditionalEquationList eqsList = NULL;
+  ASF_ASFTestEquationTestList testList = NULL;
+  PT_ParseTree parseTree = NULL;
 
   /*  Check whether we're a ToolBus process  */
   for (c = 1; !toolbus_mode && c < argc; c++) {
@@ -317,8 +319,16 @@ int main(int argc, char *argv[])
       ATerror("%s: input file %s is not an ATerm\n", myname, input);
     }
 
-    parseTree = PT_ParseTreeFromTerm(term);
+    if (ATgetType(term) == AT_LIST) {
+      run_tests = ATtrue;
+    }
 
+    if (run_tests == ATtrue) {
+      testList = ASF_ASFTestEquationTestListFromTerm(term); 
+    } 
+    else {
+      parseTree = PT_ParseTreeFromTerm(term);
+    }
 
     if (fileno(iofile) != fileno(stdin)) {
       fclose(iofile);
@@ -334,9 +344,14 @@ int main(int argc, char *argv[])
     }
 
     /*ATsetChecking(ATtrue);*/
+    if (run_tests == ATtrue) {
+      result = (ATerm) runTests(eqsList, testList, use_tide); 
+    }
+    else {
     /* Rewrite the term */
-    result = evaluator(name, parseTree, eqsList, use_tide, 
-		       remove_layout, mark_new_layout, allow_ambs);
+      result = evaluator(name, parseTree, eqsList, use_tide, 
+			 remove_layout, mark_new_layout, allow_ambs);
+    }
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetErrors() == NULL || 
