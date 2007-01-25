@@ -1,3 +1,7 @@
+equations
+
+[main] start(PROGRAM, Program) = start(Instrs, trp(Program))
+
 equations 
 
 [Tr1]  Instr*1 := trd(Decls),

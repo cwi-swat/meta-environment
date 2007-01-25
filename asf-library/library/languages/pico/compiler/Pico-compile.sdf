@@ -11,7 +11,7 @@ exports
   
 hiddens
   context-free start-symbols
-    <{Instr ";"}+ , Label>
+    PROGRAM Instrs
   context-free syntax
     trd(DECLS)                    -> {Instr ";"}+
     trits({ID-TYPE  ","}*)        -> {Instr ";"}+ 
@@ -25,7 +25,6 @@ hiddens
     "Exp"[0-9\']*     -> EXP
     "Id"[0-9]*        -> PICO-ID
     "Id-type*"[0-9]*  -> {ID-TYPE ","}*
-    "Nat"[0-9\']*     -> Natural
     "Nat-con"[0-9\']* -> NatCon
     "Series"[0-9\']*  -> {STATEMENT ";"}+
     "Stat"[0-9\']*    -> STATEMENT
@@ -35,3 +34,5 @@ hiddens
 
     "Instr*"[0-9\']*  -> {Instr ";"}+
     "Label" [0-9\']*  -> Label
+    "Program" -> PROGRAM
+
