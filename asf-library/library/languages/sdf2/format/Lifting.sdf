@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/Lifting
+module languages/sdf2/format/Lifting
 
 imports languages/sdf2/syntax/Lifting
-imports languages/sdf2/pretty/Kernel
+imports languages/sdf2/format/Kernel
 
 hiddens
 

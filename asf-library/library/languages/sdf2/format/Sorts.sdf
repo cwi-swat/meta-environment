@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/Sorts
+module languages/sdf2/format/Sorts
 
 imports languages/sdf2/syntax/Sorts
-imports languages/sdf2/pretty/Kernel
+imports languages/sdf2/format/Kernel
 
 hiddens
 context-free start-symbols

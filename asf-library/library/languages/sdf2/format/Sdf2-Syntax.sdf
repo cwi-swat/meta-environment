@@ -1,17 +1,17 @@
-module languages/sdf2/pretty/Sdf2-Syntax
+module languages/sdf2/format/Sdf2-Syntax
 
 imports languages/sdf2/syntax/Sdf2-Syntax
-imports languages/sdf2/pretty/Sorts
-imports languages/sdf2/pretty/Basic
-imports languages/sdf2/pretty/Modules
-imports languages/sdf2/pretty/Regular
-imports languages/sdf2/pretty/Restrictions
-imports languages/sdf2/pretty/Priority
-imports languages/sdf2/pretty/Start-Symbols
-imports languages/sdf2/pretty/Aliases
-imports languages/sdf2/pretty/Literals
-imports languages/sdf2/pretty/Lifting
-imports languages/sdf2/pretty/Labels
+imports languages/sdf2/format/Sorts
+imports languages/sdf2/format/Basic
+imports languages/sdf2/format/Modules
+imports languages/sdf2/format/Regular
+imports languages/sdf2/format/Restrictions
+imports languages/sdf2/format/Priority
+imports languages/sdf2/format/Start-Symbols
+imports languages/sdf2/format/Aliases
+imports languages/sdf2/format/Literals
+imports languages/sdf2/format/Lifting
+imports languages/sdf2/format/Labels
 
 hiddens
 context-free start-symbols

@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/Modules
+module languages/sdf2/format/Modules
 
 imports languages/sdf2/syntax/Modules
-imports languages/sdf2/pretty/Renaming
+imports languages/sdf2/format/Renaming
 
 hiddens
 context-free syntax

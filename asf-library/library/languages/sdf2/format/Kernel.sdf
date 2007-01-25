@@ -1,9 +1,9 @@
-module languages/sdf2/pretty/Kernel
+module languages/sdf2/format/Kernel
 
 imports languages/sdf2/syntax/Kernel
-imports languages/aterm/pretty/ATerms
-imports languages/sdf2/pretty/Symbols
-imports languages/sdf2/pretty/Grammars
+imports languages/aterm/format/ATerms
+imports languages/sdf2/format/Symbols
+imports languages/sdf2/format/Grammars
 
 hiddens
 context-free syntax

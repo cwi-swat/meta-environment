@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/CC
+module languages/sdf2/format/CC
 
 imports languages/sdf2/syntax/CC
-imports languages/sdf2/pretty/Character-Class
+imports languages/sdf2/format/Character-Class
 
 hiddens
 

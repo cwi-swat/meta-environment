@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/Start-Symbols
+module languages/sdf2/format/Start-Symbols
 
 imports languages/sdf2/syntax/Start-Symbols
-imports languages/sdf2/pretty/Kernel
+imports languages/sdf2/format/Kernel
 
 hiddens
 

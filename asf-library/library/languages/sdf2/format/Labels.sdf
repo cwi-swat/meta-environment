@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/Labels
+module languages/sdf2/format/Labels
 
 imports languages/sdf2/syntax/Labels
-imports languages/sdf2/pretty/Kernel
+imports languages/sdf2/format/Kernel
 
 hiddens
 context-free syntax

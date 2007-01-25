@@ -1,4 +1,4 @@
-module languages/sdf2/pretty/Symbols
+module languages/sdf2/format/Symbols
 
 imports languages/sdf2/syntax/Symbols
 imports languages/box/syntax/Box

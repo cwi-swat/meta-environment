@@ -1,7 +1,7 @@
-module languages/sdf2/pretty/Basic
+module languages/sdf2/format/Basic
 
 imports languages/sdf2/syntax/Basic
-imports languages/sdf2/pretty/Kernel
+imports languages/sdf2/format/Kernel
 
 hiddens
 context-free start-symbols

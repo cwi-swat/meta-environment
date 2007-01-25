@@ -1,8 +1,8 @@
-module languages/sdf2/pretty/Restrictions
+module languages/sdf2/format/Restrictions
 
 imports languages/sdf2/syntax/Restrictions
-imports languages/sdf2/pretty/CC
-imports languages/sdf2/pretty/Kernel
+imports languages/sdf2/format/CC
+imports languages/sdf2/format/Kernel
 
 hiddens
 

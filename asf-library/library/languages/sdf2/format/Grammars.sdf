@@ -1,4 +1,4 @@
-module languages/sdf2/pretty/Grammars
+module languages/sdf2/format/Grammars
 
 imports languages/sdf2/syntax/Grammars
 imports languages/box/syntax/Box

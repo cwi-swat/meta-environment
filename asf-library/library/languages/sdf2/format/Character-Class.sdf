@@ -1,4 +1,4 @@
-module languages/sdf2/pretty/Character-Class
+module languages/sdf2/format/Character-Class
 
 imports languages/sdf2/syntax/Character-Class
 imports languages/box/syntax/Box
