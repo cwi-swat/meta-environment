@@ -4,6 +4,7 @@
 #include <module-utils.tb>
 #include <error-utils.tb>
 #include <error-output.tb>
+#include <transaction-management.tb>
 
 /* sdf-meta */
 #include <sdf-listeners.tb>
@@ -24,7 +25,9 @@ let
   Event: attribute-changed-event,
   Value: term
 in
-  OpenModule(MODULENAME, ModuleId?)
+  snd-msg(tm-request-transaction(openSDFModule))
+  . OpenModule(MODULENAME, ModuleId?)
+  . snd-msg(tm-end-transaction(openSDFModule))
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,unavailable)
   . MM-Subscribe-Attribute-Changed(<term>,<term>,"status",<term>,error)
@@ -40,4 +43,4 @@ in
   . shutdown("")
 endlet
 
-toolbus(StartEqsDumper)
+toolbus(StartTestEqsDumper)

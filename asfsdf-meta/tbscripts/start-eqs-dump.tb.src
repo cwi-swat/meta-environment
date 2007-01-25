@@ -4,13 +4,13 @@
 #include <module-utils.tb>
 #include <error-utils.tb>
 #include <error-output.tb>
+#include <transaction-management.tb>
 
 /* sdf-meta */
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>
 #include <parsetable-utils.tb>
 #include <sdf2-language.tb>
-#include <transaction-management.tb>
 
 /* asf-sdf-meta */
 #include <asf-language.tb>
