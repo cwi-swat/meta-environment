@@ -38,7 +38,7 @@ in
   else
     tau
   fi 
-  . PrettyModulename := concat(concat(Prefix,"pretty/"), Name)
+  . PrettyModulename := concat(concat(Prefix,"format/"), Name)
   . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", PrettyModulename, PrettyModuleId?)
   . 
   if equal(PrettyModuleId, UNDEFINED) then
