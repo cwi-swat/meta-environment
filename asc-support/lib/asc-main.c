@@ -313,7 +313,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
     }
 
     if (PT_isValidParseTree(pt)) {
-      trm = PT_getParseTreeTree(pt);
+      trm = PT_getParseTreeTop(pt);
 
       if(run_verbose) {
 	ATfprintf(stderr,"Reducing ...\n");

@@ -1441,14 +1441,7 @@ PT_ParseTree toasfix(ATerm term)
 
   tree = muASFToTree(term);
 
-  pt = PT_makeValidParseTreeFromTree(tree);
-
-  /* we replace the outermost layout by nothing here, to
-   * make the regression tests work for now. 
-   * TODO: throw away this code and regenerate the tests
-   */
-  pt = PT_setParseTreeLayoutBeforeTree(pt, (PT_Tree) ASF_makeLayoutSpace());
-  pt = PT_setParseTreeLayoutAfterTree(pt, (PT_Tree) ASF_makeLayoutSpace());
+  pt = PT_makeParseTreeTop(tree, 0);
 
   return pt;
 }
