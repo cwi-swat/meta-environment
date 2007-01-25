@@ -10,7 +10,7 @@ TESTS = \
 GENERATED_BY_TESTS = \
 	test.ref \
 	booleans.def \
-	booleans.pt
+	booleans.tbl
 
 CLEANFILES = \
 	$(TESTS) \
