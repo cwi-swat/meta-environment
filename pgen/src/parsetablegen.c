@@ -108,8 +108,6 @@ static PT_Tree normalize(const char *topModule, PT_ParseTree parseTree)
   PT_Tree tree = addNormalizeFunction(topModule, parseTree);
 
   ATerm reduct = innermost(tree);
-  ATwriteToNamedTextFile((ATerm) reduct, "reduct.txt");
-  ATwriteToNamedTextFile((ATerm) toasfix(reduct), "asfix.txt");
   return toasfix(reduct);
 }
 
