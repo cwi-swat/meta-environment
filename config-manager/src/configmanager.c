@@ -63,6 +63,22 @@ static ATerm makeSubType(ATerm type, ATerm subtype) {
 
 static void add_configuration_properties(ATerm actions);
 
+static void removeDescription(ATermTable table, CFG_ActionDescription desc) {
+  ATerm type;
+  ATermList list;
+
+  type = CFG_getActionDescriptionContext(desc);
+
+  list = (ATermList) ATtableGet(table, type);
+
+  if (list == NULL) {
+    return;
+  }
+  list = ATremoveElement(list, (ATerm) CFG_ActionDescriptionToTerm(desc));
+  ATtablePut(table, type, (ATerm) list);
+
+}
+
 static void addDescription(ATermTable table, CFG_ActionDescription desc) {
   ATerm type;
   ATermList list;
@@ -97,6 +113,11 @@ static CFG_ActionDescriptionList getDescriptions(ATerm key) {
   }
 
   return result;
+}
+
+static void unsetAction(ATermTable table, CFG_ActionDescription desc) {
+  ATerm key = CFG_ActionDescriptionToTerm(desc);
+  ATtableRemove(table, key);
 }
 
 static void setAction(ATermTable table, CFG_ActionDescription desc, const char *action) {
@@ -172,6 +193,21 @@ static ATermList addTextCategory(ATermList categories, CFG_Property property) {
   return ATinsert(categories, CFG_PropertyToTerm(property));
 }
 
+static void removeSystemProperty(CFG_Property property) {
+  if (CFG_isPropertyAction(property)) {
+    CFG_ActionDescriptionList list = CFG_getPropertyList(property);
+    while (!CFG_isActionDescriptionListEmpty(list)) {
+      CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
+      removeDescription(systemDescriptionsByType, cur);
+      unsetAction(systemActionsByDescription, cur);
+      list = CFG_getActionDescriptionListTail(list);
+    }
+  }
+  else {
+    ATwarning(__FILE__ ":removeSystemProperty: unhandled property: %t\n", property);
+  }
+}
+
 static void addSystemProperty(CFG_Property property) {
   if (CFG_isPropertyImport(property)) {
     char *path = CFG_getPropertyPath(property);
@@ -229,6 +265,18 @@ static void add_configuration_properties(ATerm actions) {
     modulePaths = CFG_reversePropertyList(modulePaths);
     libraryPaths = CFG_reversePropertyList(libraryPaths);
   }
+}
+
+void remove_system_property(int cid, ATerm property)
+{
+  CFG_Property prop = CFG_PropertyFromTerm(property);
+  removeSystemProperty(prop);
+}
+
+void add_system_property(int cid, ATerm property)
+{
+  CFG_Property prop = CFG_PropertyFromTerm(property);
+  addSystemProperty(prop);
 }
 
 void add_system_properties(int cid, const char *contents) {

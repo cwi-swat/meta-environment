@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Jan 26 14:58:33 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * src/*: added add-system-property and remove-system-property.
+
 Tue Oct 31 10:06:54 CET 2006 <jurgenv@cwi.nl>
  * src/**: improved support for 'subtyping' gui elements. Now
    we can connect popupmenu's to non-terminals in editors.

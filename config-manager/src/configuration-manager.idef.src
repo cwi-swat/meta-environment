@@ -17,13 +17,20 @@ let
   ModulePaths: list,
   Path: str,
   Type: term,
-  SubType: term
+  SubType: term,
+  Property: term
 in
   execute(configuration-manager, CM?)
   .
   (
     rec-msg(cm-add-system-properties(Contents?))
     . snd-do(CM, add-system-properties(Contents))
+  +
+    rec-msg(cm-add-system-property(Property))
+    . snd-do(CM, add-system-property(Property))
+  +
+    rec-msg(cm-remove-system-property(Property))
+    . snd-do(CM, remove-system-property(Property))
   +
     rec-msg(cm-change-workspace(Path?))
     . snd-do(CM, change-workspace(Path))
