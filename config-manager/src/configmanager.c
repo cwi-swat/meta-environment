@@ -89,6 +89,7 @@ static void addDescription(ATermTable table, CFG_ActionDescription desc) {
   if (list == NULL) {
     list = ATempty;
   }
+
   list = ATinsert(list, CFG_ActionDescriptionToTerm(desc));
   ATtablePut(table, type, (ATerm) list);
 }
@@ -276,6 +277,7 @@ void remove_system_property(int cid, ATerm property)
 void add_system_property(int cid, ATerm property)
 {
   CFG_Property prop = CFG_PropertyFromTerm(property);
+  
   addSystemProperty(prop);
 }
 
