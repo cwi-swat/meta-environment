@@ -7,6 +7,7 @@
 #include <asf-pretty-print.tb>
 #include <sdf-pretty.tb>
 #include <sdf-utils.tb>
+#include <sdf-module-utils.tb>
 
 process PrettyPrintSdfAction(EditorId : term) is
 let
@@ -52,6 +53,45 @@ in
       tau
     fi
   else tau
+  fi
+endlet
+
+process RunAction(EditorId : term) is
+let
+  ModuleId : term,
+  RunModuleId : term,
+  Path: str,
+  ResultTree: term,
+  Sid: term,
+  Pid: int,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "run", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    File := "run.out"
+    . GetPath(EditorId, Path?)
+    . AddJob(Path)
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(em-get-session-by-path(File))
+      .
+      (
+        rec-msg(em-session(File, Sid?))
+        . DeleteSession(Sid)
+      +
+        rec-msg(em-no-such-session(File))
+      )
+      . ActivateEditorWithTree(ResultTree, ModuleId, File)
+      . create(AmbiguityHandler(ResultTree, File), Pid?)
+    else
+      tau
+    fi
+    . JobDone(Path)
+  else
+    tau
   fi
 endlet
 
