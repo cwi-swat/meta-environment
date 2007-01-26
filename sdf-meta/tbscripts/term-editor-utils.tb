@@ -14,15 +14,23 @@ let
   Modulename: str,
   Sid: term,
   Tree: term,
-  Valid: bool
+  Valid: bool,
+  Languagename: str,
+  MenuName: str
 in
   CheckSanity(Path, ModuleId, Valid?)
   .
   if equal(Valid, true) then
     Edit(Path, Sid?)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . LanguageNameFromModuleName(Modulename, Languagename?)
     . EditorType := quote(term-editor(Modulename))
     . EditText(Sid, EditorType, Modulename, AlreadyExists?)
+    . snd-msg(io-get-path-filename(Modulename))
+    . rec-msg(io-filename(Modulename, MenuName?))
+    . Languagename := concat(Languagename, MenuName)
+    . EditorType := quote(language-feature(Languagename))
+    . SetEditActions(Sid, EditorType, "TODO remove this string")
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .
     if equal(AlreadyExists, false) then

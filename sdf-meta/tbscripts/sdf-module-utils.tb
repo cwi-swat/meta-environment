@@ -3,6 +3,41 @@
 
 #include <undefined.h>
 
+process LanguageNameFromModuleName(Modulename: str, Languagename: str?) is
+let
+  Directory: str,
+  Prefix: str,
+  Name: str
+in
+  snd-msg(io-get-path-directory(Modulename)) 
+  . rec-msg(io-directory(Modulename, Directory?))
+  .
+  if not-equal(Directory, "") then
+    snd-msg(io-get-path-directory(Directory)) 
+    . rec-msg(io-directory(Directory, Languagename?))
+  else
+    Languagename := UNDEFINED 
+  fi
+endlet
+
+process ComputeFeatureModulename(Modulename : str, Feature : str, FeatureModulename : str?) is
+let
+  Directory: str,
+  Prefix: str,
+  Name: str
+in
+  LanguageNameFromModuleName(Modulename, Prefix?)
+  . snd-msg(io-get-path-filename(Modulename))
+  . rec-msg(io-filename(Modulename, Name?))
+  .
+  if not-equal(Prefix, UNDEFINED) then
+    Prefix := concat(Prefix, "/")
+  else
+    tau
+  fi 
+  . FeatureModulename := concat(concat(Prefix,concat(Feature, "/")), Name)
+endlet
+
 /**
  * This process connects two modules, by taking the dirname of a 
  * module name twice, then add the feature string, and then adding the
@@ -18,24 +53,7 @@ let
 in
   NewModuleId := UNDEFINED
   . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-  . snd-msg(io-get-path-directory(Modulename)) 
-  . rec-msg(io-directory(Modulename, Directory?))
-  . snd-msg(io-get-path-filename(Modulename))
-  . rec-msg(io-filename(Modulename, Name?))
-  .
-  if not-equal(Directory, "") then
-    snd-msg(io-get-path-directory(Directory)) 
-    . rec-msg(io-directory(Directory, Prefix?))
-  else
-    Prefix := Directory 
-  fi
-  . 
-  if not-equal(Prefix, "") then
-    Prefix := concat(Prefix, "/")
-  else
-    tau
-  fi 
-  . FeatureModulename := concat(concat(Prefix,concat(Feature, "/")), Name)
+  . ComputeFeatureModulename(Modulename, Feature, FeatureModulename?)
   . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", FeatureModulename, NewModuleId?)
 endlet
 
