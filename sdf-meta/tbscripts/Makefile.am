@@ -14,6 +14,7 @@ TBSCRIPTS = \
 	    sdf-namespace.h \
 	    sdf-progress-listener.tb \
 	    sdf-utils.tb \
+	    sdf-module-utils.tb \
 	    term-actions.tb \
 	    term-editor-actions.tb \
 	    term-editor-utils.tb \

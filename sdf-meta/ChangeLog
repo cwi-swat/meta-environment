@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jan 26 13:22:49 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * tbscripts/sdf-module-utils.tb: added a generic process to compute
+   a module id from another by the feature name convention.
+
 Thu Jan 25 16:01:16 CET 2007 <kooiker@cwi.nl>
  * test:
    - Added tests for pt-dump and def-dump scenario's

@@ -1,0 +1,42 @@
+#ifndef __SDF_MODULE_UTILS__
+#define __SDF_MODULE_UTILS__
+
+#include <undefined.h>
+
+/**
+ * This process connects two modules, by taking the dirname of a 
+ * module name twice, then add the feature string, and then adding the
+ * basename again to construct a new file name.
+ */
+process LookupFeatureModuleId(ModuleId: term, Feature : str, NewModuleId : term?) is
+let
+  Modulename: str,
+  Directory: str,
+  Prefix: str,
+  Name: str,
+  FeatureModulename: str
+in
+  NewModuleId := UNDEFINED
+  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . snd-msg(io-get-path-directory(Modulename)) 
+  . rec-msg(io-directory(Modulename, Directory?))
+  . snd-msg(io-get-path-filename(Modulename))
+  . rec-msg(io-filename(Modulename, Name?))
+  .
+  if not-equal(Directory, "") then
+    snd-msg(io-get-path-directory(Directory)) 
+    . rec-msg(io-directory(Directory, Prefix?))
+  else
+    Prefix := Directory 
+  fi
+  . 
+  if not-equal(Prefix, "") then
+    Prefix := concat(Prefix, "/")
+  else
+    tau
+  fi 
+  . FeatureModulename := concat(concat(Prefix,concat(Feature, "/")), Name)
+  . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", FeatureModulename, NewModuleId?)
+endlet
+
+#endif
