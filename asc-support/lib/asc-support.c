@@ -1446,13 +1446,13 @@ PT_Tree toasfix(ATerm term)
 /*}}}  */
 /*{{{  PT_ParseTree toasfixNoLayout(ATerm term) */
 
-PT_ParseTree toasfixNoLayout(ATerm term)
+PT_Tree toasfixNoLayout(ATerm term)
 {
   PT_Tree tree;
 
   tree = muASFToTreeWithLayout(term, PT_makeTreeLayoutEmpty());
 
-  return PT_makeValidParseTreeFromTree(tree);
+  return tree;
 }
 
 /*}}}  */
