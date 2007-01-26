@@ -3,6 +3,7 @@
 
 #include <undefined.h>
 #include <asf-utils.tb>
+#include <sdf-module-utils.tb>
 
 /**
  * \file This file coordinates the process of pretty printing a term.
@@ -11,42 +12,6 @@
  * rewrite rules), and then applies the default mapping to a box and
  * returns the pretty printed result as text.
  */
-
-process ComputePrettyModuleId(ModuleId: term, PrettyModuleId : term?) is
-let
-  Modulename: str,
-  Directory: str,
-  Prefix: str,
-  Name: str,
-  PrettyModulename: str
-in
-  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-  . snd-msg(io-get-path-directory(Modulename)) 
-  . rec-msg(io-directory(Modulename, Directory?))
-  . snd-msg(io-get-path-filename(Modulename))
-  . rec-msg(io-filename(Modulename, Name?))
-  .
-  if not-equal(Directory, "") then
-    snd-msg(io-get-path-directory(Directory)) 
-    . rec-msg(io-directory(Directory, Prefix?))
-  else
-    Prefix := Directory 
-  fi
-  . 
-  if not-equal(Prefix, "") then
-    Prefix := concat(Prefix, "/")
-  else
-    tau
-  fi 
-  . PrettyModulename := concat(concat(Prefix,"format/"), Name)
-  . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", PrettyModulename, PrettyModuleId?)
-  . 
-  if equal(PrettyModuleId, UNDEFINED) then
-    Error("A user defined pretty print module is not opened.", [PrettyModulename]) 
-  else
-    tau
-  fi
-endlet
 
 process BoxAndPrettyPrint(ModuleId : term, Path: str, Tree: term, RTree :term?) is
 let
@@ -57,7 +22,7 @@ let
   Result: term
 in
   RTree := UNDEFINED
-  . ComputePrettyModuleId(ModuleId, PrettyModuleId?)
+  . LookupFeatureModuleId(ModuleId, "format", PrettyModuleId?)
   .
   if not-equal(PrettyModuleId, UNDEFINED) then 
      AddJob("User defined pretty printing")
