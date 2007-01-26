@@ -27,14 +27,14 @@ let
 in
   snd-msg(tm-request-transaction(openSDFModule))
   . OpenModule(MODULENAME, ModuleId?)
-  . snd-msg(tm-end-transaction(openSDFModule))
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
-  . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,unavailable)
+  . MM-Subscribe-Attribute-Changed(ModuleId,<term>,"status",<term>,unavailable)
   . MM-Subscribe-Attribute-Changed(<term>,<term>,"status",<term>,error)
+  . snd-msg(tm-end-transaction(openSDFModule))
   . rec-note(mm-attribute-changed(Event?))
   . ACE-GetNewValue(Event, Value?)
   . 
-  if or(equal(Value, error),equal(Value, unknown)) then
+  if or(equal(Value, error),equal(Value, unavailable)) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
     printf("Dumping...\n").
