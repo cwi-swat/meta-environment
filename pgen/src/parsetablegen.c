@@ -147,7 +147,7 @@ static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2ter
   max_nr_items = 0;
 
   if (ksdf)  {
-    pt = generate_parse_table(version_nr, ksdf);
+    pt = generate_parse_table(version_nr, SDF_GrammarFromTerm((ATerm)ksdf));
   }
   destroy_table_gen();       
 
@@ -165,14 +165,6 @@ ATerm generate_table(int cid, ATerm sdf, const char *name)
 {
   ATerm pt, packed;
   ATerm unpackSdf;
-/*
-  FILE *f;
-    
-  f = fopen("definition.baf", "wb");
-  assert(f);
-  ATwriteToBinaryFile(sdf, f);
-  fclose(f);
-*/
 
   unpackSdf = ATBunpack(sdf);
 

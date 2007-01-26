@@ -729,13 +729,12 @@ static ATermList compress_gotos(ATermList goto_list)
 
 /*{{{  ATerm generate_parse_table(int version_nr, ATerm t) */
 
-ATerm generate_parse_table(int version_nr, PT_Tree ptTree)
+ATerm generate_parse_table(int version_nr, SDF_Grammar grammarTerm)
 {
   int i, nr_actions = 0, nr_gotos = 0;
   ATerm labelsection, priosection, vnr, vertex, state;
   ATermList statelist = ATempty, gotos, actions;
 
-  SDF_Grammar grammarTerm = SDF_GrammarFromTerm(PT_TreeToTerm(ptTree));
   if (SDF_isValidGrammar(grammarTerm)) {
     SDF_ProductionList  prods = SDF_getGrammarKernelProductions(grammarTerm);
     SDF_PriorityList    prios = SDF_getGrammarKernelPriorities(grammarTerm);

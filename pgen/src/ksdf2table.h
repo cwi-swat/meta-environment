@@ -67,7 +67,7 @@ extern int max_nr_lhs_members;
 extern int MAX_PROD;
 
 /*}}}  */
-ATerm generate_parse_table(int version_nr, PT_Tree g);
+ATerm generate_parse_table(int version_nr, SDF_Grammar g);
 void init_table_gen();
 void destroy_table_gen();
 AFun get_afun_char_class();
