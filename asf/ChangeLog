@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jan 26 09:27:09 CET 2007 <jurgenv@cwi.nl>
+ * **/*.c: adapted all compiled ASF specifications to new toasfix function.
+
 Thu Jan 25 18:13:34 CET 2007 <jurgenv@cwi.nl>
  * semantics/asf-operations/ASF-Normalization.c: added normalization of start
    constructors to start productions. 

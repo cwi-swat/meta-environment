@@ -36,7 +36,6 @@ static void initialize()
 
 PT_Tree normalizeCharacter(PT_Tree tree)
 {
-  PT_ParseTree resultParsetree;
   PT_Tree resultTree;
 
   initialize();
@@ -48,9 +47,8 @@ PT_Tree normalizeCharacter(PT_Tree tree)
 				1,
 				(PT_Tree) tree);
 
-  resultParsetree = toasfix(innermost(tree));
-  resultTree = PTPT_lowerTree((PTPT_Tree)
-			      PT_getParseTreeTree(resultParsetree));
+  resultTree = toasfix(innermost(tree));
+  resultTree = PTPT_lowerTree((PTPT_Tree) resultTree);
 
   return resultTree;
 
@@ -65,7 +63,7 @@ ASF_ASFModule normalize(ASF_ASFModule input)
   ASF_ASFModule lifted;
   PT_Tree applied;
   ATerm reduct;
-  PT_ParseTree asfix;
+  PT_Tree asfix;
   ASF_ASFModule lowered;
 
   lifted = ASF_liftModule(input);
@@ -79,7 +77,7 @@ ASF_ASFModule normalize(ASF_ASFModule input)
   reduct = innermost(applied);
   asfix = toasfix(reduct);
 
-  lowered = ASF_lowerModule(ASF_getStartTopASFModule((ASF_Start) asfix));
+  lowered = ASF_lowerModule((ASF_ASFModule) asfix);
 
   return lowered;
 }

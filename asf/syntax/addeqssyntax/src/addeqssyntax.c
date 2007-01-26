@@ -76,9 +76,9 @@ static ATerm addEqsSyntax(char *name, ATerm term)
   PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
   PT_Tree ptApplied = addEqsSyntaxFunction(name, parseTree);
   ATerm reduct = innermost(ptApplied);
-  PT_ParseTree asfix = toasfix(reduct);
+  PT_Tree asfix = toasfix(reduct);
   
-  return PT_ParseTreeToTerm(asfix);
+  return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(asfix));
 }
 
 /*{{{  ATerm add_eqs_syntax(int cid, char *name, ATerm t) */

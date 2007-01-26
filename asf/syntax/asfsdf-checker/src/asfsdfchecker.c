@@ -90,7 +90,7 @@ static ATerm checkAsfSdf(ATerm term, const char *name, ATbool top)
   PT_ParseTree parseTree;
   PT_Tree ptApplied;
   ATerm reduct;
-  PT_ParseTree asfix;
+  PT_Tree asfix;
 
   setKeepAnnotations(ATtrue);
   parseTree = PT_ParseTreeFromTerm(term);
@@ -105,7 +105,7 @@ static ATerm checkAsfSdf(ATerm term, const char *name, ATbool top)
   reduct = innermost(ptApplied);
   asfix = toasfix(reduct);
 
-  return PT_ParseTreeToTerm(asfix);
+  return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(asfix));
 }
 
 static void displayMessages(ATerm term)

@@ -13,7 +13,7 @@ PT_ParseTree muasfToC(MA_Module muasf)
 {
   PT_Tree term;
   ATerm reduct;
-  PT_ParseTree result;
+  PT_Tree result;
 
   term = PT_applyFunctionToTree("compile-muasf", "CProgram", 1, (PT_Tree)muasf);
 
@@ -26,5 +26,5 @@ PT_ParseTree muasfToC(MA_Module muasf)
   reduct = innermost(term);
   result = toasfix(reduct);
 
-  return result;
+  return PT_makeValidParseTreeFromTree(result);
 }
