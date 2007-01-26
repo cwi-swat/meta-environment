@@ -103,11 +103,13 @@ static PT_Tree addNormalizeFunction(const char *str, PT_ParseTree parseTree)
 
 /*{{{  static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree) */
 
-static PT_ParseTree normalize(const char *topModule, PT_ParseTree parseTree)
+static PT_Tree normalize(const char *topModule, PT_ParseTree parseTree)
 {
   PT_Tree tree = addNormalizeFunction(topModule, parseTree);
 
   ATerm reduct = innermost(tree);
+  ATwriteToNamedTextFile((ATerm) reduct, "reduct.txt");
+  ATwriteToNamedTextFile((ATerm) toasfix(reduct), "asfix.txt");
   return toasfix(reduct);
 }
 
@@ -118,12 +120,12 @@ static PT_ParseTree normalize(const char *topModule, PT_ParseTree parseTree)
 static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term)
 {
   ATerm pt = NULL;
-  PT_ParseTree ksdf;
+  PT_Tree ksdf;
 
   IF_PGEN_STATISTICS(PT_Timer()); 
 
   if (generationMode) {
-    ksdf = sdf2term;
+    ksdf = PT_getParseTreeTree(sdf2term);
   } else {
     ksdf = normalize(name, sdf2term); 
   }
@@ -132,7 +134,7 @@ static ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2ter
                 "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
 
   if (normalizationMode) {
-    return PT_ParseTreeToTerm(ksdf);
+    return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(ksdf));
   }
 
   init_table_gen();

@@ -1,5 +1,10 @@
 $Id$
 
+Fri Jan 26 09:28:10 CET 2007 <jurgenv@cwi.nl>
+ * src/parsetablegen.c: adapted to new interface of toasfix function.
+ * removevarsyntax/src/removevarssyntax.c: adapted to new interface of toasfix function.
+ * sdf-checker/src/sdfchecker.c: adapted to new interface of toasfix function.
+
 Thu Jan 25 19:07:17 CET 2007 <jurgenv@cwi.nl>
  * tests/grammars: added Backquote test grammar
 

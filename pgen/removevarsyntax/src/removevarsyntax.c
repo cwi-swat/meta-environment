@@ -67,9 +67,9 @@ static ATerm removeVarSyntax(char *name, ATerm term) {
   PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
   PT_Tree ptApplied = addRemoveVarsFunction(name, parseTree);
   ATerm reduct = innermost(ptApplied);
-  PT_ParseTree asfix = toasfix(reduct);
+  PT_Tree asfix = toasfix(reduct);
   
-  return PT_ParseTreeToTerm(asfix);
+  return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(asfix));
 }
 
 ATerm remove_var_syntax(int cid, char *name, ATerm term) {
