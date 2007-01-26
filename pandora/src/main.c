@@ -95,12 +95,12 @@ static PT_Tree addBoxToTextFunction(PT_ParseTree parseTree)
 /*}}}  */
 /*{{{  static PT_ParseTree toText(PT_ParseTree parseTree) */
 
-static PT_ParseTree toText(PT_ParseTree parseTree)
+static PT_Tree toText(PT_ParseTree parseTree)
 {
   PT_Tree tree = addBoxToTextFunction(parseTree);
   PT_Production func = PT_getTreeProd(tree);
   ATerm reduct = innermost(tree);
-  PT_ParseTree result = toasfixNoLayout(reduct);
+  PT_Tree result = toasfixNoLayout(reduct);
 
   if (result == NULL) {
     ERR_managerStoreError(
@@ -108,8 +108,8 @@ static PT_ParseTree toText(PT_ParseTree parseTree)
        ERR_makeSubjectListEmpty());
     return NULL;
   }
-  else if (PT_isTreeAppl(PT_getParseTreeTree(result)) 
-      && PT_isEqualProduction(PT_getTreeProd(PT_getParseTreeTree(result)), func)) {
+  else if (PT_isTreeAppl(result) 
+      && PT_isEqualProduction(PT_getTreeProd(result), func)) {
     FILE *fp = NULL;
     ERR_managerStoreLocatedError(
          "Could not format Box expression for unknown reasons", 
@@ -135,7 +135,7 @@ ATerm pretty_print(int cid, ATerm input)
 {
   PT_ParseTree parsetree = NULL;
   BOX_Start box = NULL;
-  PT_ParseTree result = NULL;
+  PT_Tree result = NULL;
 
   ERR_resetErrorManager();
 
@@ -152,7 +152,8 @@ ATerm pretty_print(int cid, ATerm input)
   }
 
   if (result != NULL) {
-    ATerm value = ATBpack(PT_ParseTreeToTerm(result));
+    PT_ParseTree presult = PT_makeValidParseTreeFromTree(result);
+    ATerm value = ATBpack(PT_ParseTreeToTerm(presult));
     return ATmake("snd-value(pretty-printed(<term>))", value);
   }
   else {
@@ -178,7 +179,8 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
   ATerm at_tree;
   char *ATlibArgv[] = {"pandora", "-at-termtable", "21"};
-  PT_ParseTree tree, ptText;
+  PT_ParseTree tree; 
+  PT_Tree ptText;
   BOX_Start box;
   char *input = "-";
   char *output = "-";
@@ -250,30 +252,34 @@ int main(int argc, char *argv[])
 
 	if (!strcmp(output, "-")) {
 	  if (!bytesOutput) {
-	    PT_yieldTreeToFile(PT_getParseTreeTop(ptText), stdout, ATfalse);
+	    PT_yieldTreeToFile(ptText, stdout, ATfalse);
 	  }
 	  else {
-	    ATwriteToNamedBinaryFile((ATerm) ptText, "-");
+	    ATwriteToNamedBinaryFile((ATerm) 
+				     PT_makeValidParseTreeFromTree(ptText), 
+				     "-");
 	  }
 	}
 	else {
 	  if (!bytesOutput) {
 	    FILE *fp = fopen(output, "wb");
 	    if (fp != NULL) {
-	      PT_yieldTreeToFile(PT_getParseTreeTop(ptText), fp, ATfalse);
+	      PT_yieldTreeToFile(ptText, fp, ATfalse);
 	    }
 	    else {
 	      ATerror("Could not open %s for writing.\n", output);
 	    }
 	  }
 	  else {
-	    ATwriteToNamedBinaryFile((ATerm) ptText, output);
+	    ATwriteToNamedBinaryFile((ATerm) 
+				     PT_makeValidParseTreeFromTree(ptText), 
+				     output);
 	  }
 	}
       }
       else {
-	ptText = PT_ParseTreeFromTerm(BOX_StartToTerm(box));
-	ATwriteToNamedSharedTextFile((ATerm) ptText, output);
+	PT_ParseTree ptBox = PT_ParseTreeFromTerm(BOX_StartToTerm(box));
+	ATwriteToNamedSharedTextFile((ATerm) ptBox, output);
       }
     }
     else {

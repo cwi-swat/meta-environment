@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Fri Jan 26 09:34:56 CET 2007 <jurgenv@cwi.nl>
+ * src/pandora.c: adapted to new interface of toasfix.
+
 Mon Jan 22 16:47:12 CET 2007 <jurgenv@cwi.nl>
  * src/pandora.c: added new production attribute {layout-to-box} for
    transporting comments to boxes. Example:
