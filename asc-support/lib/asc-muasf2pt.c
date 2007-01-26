@@ -238,7 +238,7 @@ static PT_Tree termToTree(ATerm tree)
 
 /*}}}  */
 
-/*{{{  PT_Tree muASFToTree(ATerm tree, PT_Tree layout) */
+/*{{{  PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout) */
 
 PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
 {

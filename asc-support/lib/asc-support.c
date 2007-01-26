@@ -1432,18 +1432,15 @@ void ASC_initRunTime(int tableSize)
 /*}}}  */
 /*{{{  PT_ParseTree toasfix(ATerm term) */
 
-PT_ParseTree toasfix(ATerm term)
+PT_Tree toasfix(ATerm term)
 {
   PT_Tree tree;
-  PT_ParseTree pt;
 
   assert(term != NULL && "parameter check");
 
   tree = muASFToTree(term);
 
-  pt = PT_makeParseTreeTop(tree, 0);
-
-  return pt;
+  return tree;
 }
 
 /*}}}  */

@@ -227,8 +227,9 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 		     )
 {
   PT_ParseTree pt = NULL;
-  PT_ParseTree asfix;
+  PT_Tree asfix;
   PT_Tree trm;
+  PT_ParseTree rpt = NULL;
   ATerm reduct;
   ATbool produce_output = ATtrue;
   ATbool run_verbose = ATfalse;
@@ -331,6 +332,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 
       if (produce_output) {
 	asfix = toasfix(reduct);
+	rpt = PT_makeParseTreeTop(asfix, 0);
 
 	if (parseInput) {
 	  FILE *fp = NULL;
@@ -343,7 +345,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 	  }
 
 	  if (fp != NULL) {
-	    PT_yieldParseTreeToFile(asfix, fp, ATfalse);
+	    PT_yieldParseTreeToFile(rpt, fp, ATfalse);
 	  }
 	  else {
 	    ATerror("asc-main: unable to open %s for writing\n", output);
@@ -351,10 +353,10 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 	}
 	else {
 	  if (bafmode) {
-	    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(asfix),output);
+	    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(rpt),output);
 	  }
 	  else {
-	    ATwriteToNamedTextFile(PT_ParseTreeToTerm(asfix),output);
+	    ATwriteToNamedTextFile(PT_ParseTreeToTerm(rpt),output);
 	  }
 	}
       }

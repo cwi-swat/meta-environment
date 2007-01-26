@@ -131,8 +131,7 @@ static ATerm apply(ATerm input)
 
     if (func) {
       ATerm result = call_using_list(func, normalforms);
-      PT_ParseTree pt = toasfix(result);
-      PT_Tree tree = PT_getParseTreeTree(pt);
+      PT_Tree tree = toasfix(result);
       return ATmake("snd-value(<term>)", convert(name, tree));
     }
     else {

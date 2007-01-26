@@ -1,5 +1,14 @@
 $Id$
 
+Fri Jan 26 09:17:01 CET 2007 <jurgenv@cwi.nl>
+ * lib/*.h: API CHANGE! toasfix() will return a PT_Tree instead of 
+   a PT_ParseTree from now on. To create a PT_ParseTree with default
+   surrounding layout and a correct start production use the function:
+   PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree t);
+   This changes makes innermost and toasfix eachothers dual, such that
+   the way we deal with start injections can be handled outside of these
+   functions in a balanced manner.
+
 Tue Dec 26 10:02:36 CET 2006 <jurgenv@cwi.nl>
  * lib/asc-termstore.[ch]: factored out term_store stack data-structure
    for reuse in different functions of the ASF runtime.
