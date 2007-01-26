@@ -10,6 +10,7 @@ let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
+  LanguageType: term,
   Error: str,
   Modulename: str,
   Sid: term,
@@ -29,7 +30,7 @@ in
     . snd-msg(io-get-path-filename(Modulename))
     . rec-msg(io-filename(Modulename, MenuName?))
     . Languagename := concat(Languagename, MenuName)
-    . EditorType := quote(language-feature(Languagename))
+    . LanguageType := quote(language-feature(Languagename))
     . SetEditActions(Sid, EditorType, "TODO remove this string")
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .
@@ -47,6 +48,8 @@ in
       .
       (
         MenuSelected(Sid, EditorType)
+      +
+        MenuSelected(Sid, LanguageType)
       +
         MouseClicked(Sid)
       +
