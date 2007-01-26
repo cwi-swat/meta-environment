@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Jan 26 16:22:15 CET 2007 <{kooiker,jong,jurgenv}@cwi.nl>
+ * tbscripts/*: added dynamic generation of menu's for language
+   features.
+
 Thu Jan 25 11:29:23 CET 2007 <kooiker@cwi.nl>
  * test:
    - Added meta.actions and timeout.tb to terminate ToolBus scripts when

@@ -17,7 +17,8 @@ TBSCRIPTS = \
 	asf-progress-listener.tb \
 	asf-utils.tb \
 	asf-pretty-print.tb \
-	asfsdf-meta.tb
+	asfsdf-meta.tb \
+	asf-gui-listeners.tb
 
 EXTRA_DIST = \
 	$(TBSCRIPTS) \
