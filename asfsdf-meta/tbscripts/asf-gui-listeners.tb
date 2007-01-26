@@ -1,0 +1,49 @@
+#ifndef __ASF_GUI_LISTENERS__
+#define __ASF_GUI_LISTENERS__
+
+#include <undefined.h>
+#include <sdf-module-utils.tb>
+
+process LanguageFeatureMenuListener(Feature : str, Action : str) is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Path: term,
+  Menu: term,
+  Modulename: str,
+  FeatureModulename: str,
+  Languagename: str,
+  MenuName: str
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified) 
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    .
+    if not-equal(Modulename, UNDEFINED) then
+      ComputeFeatureModulename(Modulename, Feature, FeatureModulename?)
+      .
+      if equal(Modulename, FeatureModulename) then
+         snd-msg(io-get-path-filename(Modulename))
+         . rec-msg(io-filename(Modulename, MenuName?))
+	 . LanguageNameFromModuleName(Modulename, Languagename?)
+	 . Languagename := concat(Languagename, MenuName)
+	 . Menu := quote(action([description(language-feature(Languagename),menu([label(MenuName),label(Feature)]))],Action))
+	 . snd-msg(cm-add-system-property(Menu))
+      else
+        tau
+      fi	 
+    else
+      tau
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(LanguageFeatureMenuListener("format", "PrettyPrintAction"))
+toolbus(LanguageFeatureMenuListener("run", "RunAction"))
+
+#endif
