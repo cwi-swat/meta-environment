@@ -139,8 +139,6 @@ ATerm pretty_print(int cid, ATerm input)
 
   ERR_resetErrorManager();
 
-  ATwriteToNamedBinaryFile(input, "pandora.debug");
-
   parsetree = PT_ParseTreeFromTerm(ATBunpack(input));
 
   if (parsetree != NULL) {
