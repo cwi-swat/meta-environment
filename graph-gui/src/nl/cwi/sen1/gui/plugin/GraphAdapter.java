@@ -210,7 +210,7 @@ public class GraphAdapter extends prefuse.data.Graph {
 				return attr.getTooltip();
 			}
 		}
-		return node.getId().getId().toString();
+		return null;
 	}
 
 	static private Size getSizeAttribute(Node node) {
