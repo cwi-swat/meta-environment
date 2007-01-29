@@ -34,4 +34,6 @@ public class GraphConstants {
     public static final String EDGES = "graph.edges";
 
     public static final String ID = "id";
+    
+    public static final String TOOLTIP = "tooltip";
 }

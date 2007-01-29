@@ -37,6 +37,7 @@ import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
+import prefuse.controls.ToolTipControl;
 import prefuse.controls.ZoomControl;
 import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Graph;
@@ -178,6 +179,7 @@ public class GraphPanel extends JPanel {
 			 * firePopupRequested(id, e); } } } }
 			 */
 		});
+		display.addControlListener(new ToolTipControl(GraphConstants.TOOLTIP));
 
 		TupleSet focusGroup = vis.getGroup(Visualization.FOCUS_ITEMS);
 		focusGroup.addTupleSetListener(new TupleSetListener() {

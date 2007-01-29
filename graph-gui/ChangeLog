@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan 29 10:52:40 CET 2007 <kooiker@cwi.nl>
+ * lib/Graph.adt:
+   - added tooltip
+
 Wed Jan 10 10:42:26 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * **/GraphPanel.java: added RepaintActions to each layout.
 

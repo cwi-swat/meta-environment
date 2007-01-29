@@ -43,6 +43,7 @@ public class GraphAdapter extends prefuse.data.Graph {
 		addColumn(GraphDotLayout.CURVE_POINTS, Point2D[].class);
 		addColumn(GraphConstants.COLOR, int.class);
 		addColumn(GraphConstants.FILLCOLOR, int.class);
+		addColumn(GraphConstants.TOOLTIP, String.class);
 
 		for (NodeList nodes = graph.getNodes(); !nodes.isEmpty(); nodes = nodes
 				.getTail()) {
@@ -50,12 +51,13 @@ public class GraphAdapter extends prefuse.data.Graph {
 
 			prefuse.data.Node pNode = addNode();
 			pNode.setString(GraphConstants.ID, node.getId().getId().toString());
-			pNode.setString(GraphConstants.LABEL, getNodeLabel(node));
+			pNode.setString(GraphConstants.LABEL, getLabel(node));
 			pNode.setInt(GraphDotLayout.DOT_X, getX(node));
 			pNode.setInt(GraphDotLayout.DOT_Y, getY(node));
 			pNode.setInt(GraphDotLayout.DOT_WIDTH, getWidth(node));
 			pNode.setInt(GraphDotLayout.DOT_HEIGHT, getHeight(node));
 			pNode.set(GraphConstants.SHAPE, getShape(node));
+			pNode.set(GraphConstants.TOOLTIP, getTooltip(node));
 
 			Color fillColor = getFillColorAttribute(node);
 			if (fillColor != null) {
@@ -187,13 +189,25 @@ public class GraphAdapter extends prefuse.data.Graph {
 		return size.getHeight();
 	}
 
-	static private String getNodeLabel(Node node) {
+	static private String getLabel(Node node) {
 		AttributeList attrs = node.getAttributes();
 
 		for (; !attrs.isEmpty(); attrs = attrs.getTail()) {
 			Attribute attr = attrs.getHead();
 			if (attr.isLabel()) {
 				return attr.getLabel();
+			}
+		}
+		return node.getId().getId().toString();
+	}
+
+	static private String getTooltip(Node node) {
+		AttributeList attrs = node.getAttributes();
+
+		for (; !attrs.isEmpty(); attrs = attrs.getTail()) {
+			Attribute attr = attrs.getHead();
+			if (attr.isTooltip()) {
+				return attr.getTooltip();
 			}
 		}
 		return node.getId().getId().toString();
@@ -233,7 +247,7 @@ public class GraphAdapter extends prefuse.data.Graph {
 		Factory factory = node.getGraphFactory();
 		int borderWidth = prefs.getInt(GraphConstants.NODE_BORDER_WIDTH);
 		int borderHeight = prefs.getInt(GraphConstants.NODE_BORDER_HEIGHT);
-		String label = getNodeLabel(node);
+		String label = getLabel(node);
 		int width = metrics.stringWidth(label) + borderWidth * 2;
 		int height = metrics.getHeight() + borderHeight * 2;
 
