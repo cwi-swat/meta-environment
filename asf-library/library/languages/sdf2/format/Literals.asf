@@ -1,4 +1,4 @@
 equations
 
-[] FunctionName ( Symbol* ) -> Symbol C Attributes = 
-   < G [ H hs=0 [ [FunctionName] "(" H hs=1 [  SL op=H hs=0 [[Symbol*]]] ")" ] "->" [Symbol] _C_ [Attributes]] > 
+[] FunctionName ( Symbol* ) -> Symbol Attributes = 
+   < G [ H hs=0 [ [FunctionName] "(" H hs=1 [  SL op=H hs=0 [[Symbol*]]] ")" ] "->" [Symbol] [Attributes]] > 

@@ -9,7 +9,7 @@ context-free syntax
   "[" FunctionName "]"  -> Box        {to-box}        
   "[" Attributes "]"    -> Box        {to-box}        
   "<" Box ">"           -> Production {from-box}      
-  "_" LAYOUT "_"        -> Box        {layout-to-box} 
+  "_" "_"               -> Box        {layout-to-box} 
 
 lexical variables
   "C" -> LAYOUT  
