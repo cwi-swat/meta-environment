@@ -3,6 +3,7 @@
 
 #include <editing.tb>
 #include <term-utils.tb>
+#include <sdf-module-utils.tb>
 
 process EditTerm(Path: str, ModuleId: term, GetTree: bool) is
 let
@@ -17,7 +18,7 @@ let
   Tree: term,
   Valid: bool,
   Languagename: str,
-  MenuName: str
+  Menuname: str
 in
   CheckSanity(Path, ModuleId, Valid?)
   .
@@ -28,8 +29,8 @@ in
     . EditorType := quote(term-editor(Modulename))
     . EditText(Sid, EditorType, Modulename, AlreadyExists?)
     . snd-msg(io-get-path-filename(Modulename))
-    . rec-msg(io-filename(Modulename, MenuName?))
-    . Languagename := concat(Languagename, MenuName)
+    . rec-msg(io-filename(Modulename, Menuname?))
+    . Languagename := concat(Languagename, Menuname)
     . LanguageType := quote(language-feature(Languagename))
     . SetEditActions(Sid, EditorType, "TODO remove this string")
     . snd-msg(term-editor-started(Path, ModuleId, Sid))

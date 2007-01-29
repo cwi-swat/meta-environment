@@ -69,6 +69,26 @@ endlet
 
 toolbus(SDFModuleLabelSetter)
 
+process SDFModuleTooltipSetter is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Modulename: str
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Modulename?)
+    . MM-SetModuleGraphAttribute(ModuleId, "tooltip", tooltip(Modulename))
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleTooltipSetter)
+
 process SDFModuleColorChanger is
 let
   Event: attribute-changed-event,

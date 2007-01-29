@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan 29 10:58:17 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Add listener for setting tooltips
+
 Fri Jan 26 13:22:49 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * tbscripts/sdf-module-utils.tb: added a generic process to compute
    a module id from another by the feature name convention.
