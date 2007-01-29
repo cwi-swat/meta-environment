@@ -97,13 +97,15 @@ static void printAttribute(ATerm id, Attribute attr, FILE *file)
   else if (isAttributeDirection(attr)) {
     ATfprintf(file, "dir=%t", DirectionToTerm(getAttributeDirection(attr)));   
   }
-  else if (isAttributeInfo(attr)) {
-  }
   else if (isAttributeLevel(attr)) {
     ATerm level = ATmake("<str>", getAttributeLevel(attr));
     storeLevel(id, level);
   }
   else if (isAttributeFile(attr)) {
+  }
+  else if (isAttributeTooltip(attr)) {
+  }
+  else if (isAttributeInfo(attr)) {
   }
   else {
     ATwarning("unknown attribute type: %t\n", attr);

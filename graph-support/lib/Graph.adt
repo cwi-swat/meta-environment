@@ -17,6 +17,7 @@
   constructor(Attribute, fill-color, fill-color(<color(Color)>)),
   constructor(Attribute, info, info(<key(str)>, <value(term)>)),
   constructor(Attribute, label, label(<label(str)>)),
+  constructor(Attribute, tooltip, tooltip(<tooltip(str)>)),
   constructor(Attribute, location, location(<x(int)>, <y(int)>)),
   constructor(Attribute, shape, shape(<shape(Shape)>)),
   constructor(Attribute, size, size(<width(int)>, <height(int)>)),

@@ -4,10 +4,12 @@
 #include <deprecated.h>
 #include "Graph.h"
 
-/*{{{  conversion functions */
-
-ATerm stringToChars(const char *str)
-{
+/**
+ * Converts a string to an ATermList of integers (ASCII values). 
+ * \param[in] str An ASCII string
+ * \return An ATermList containing the ASCII values of #arg as ATermInts
+ */
+ATerm stringToChars(const char *str) {
   int len = strlen(str);
   int i;
   ATermList result = ATempty;
@@ -19,13 +21,21 @@ ATerm stringToChars(const char *str)
   return (ATerm) result;
 }
 
-ATerm byteToChar(char ch)
-{
+/**
+ * Converts an ASCII char to an ATermInt. 
+ * \param[in] ch an ASCII character
+ * \return An ATerm representing the ASCII value of #arg
+ */
+ATerm byteToChar(char ch) {
     return (ATerm) ATmakeInt(ch);
 }
 
-char *charsToString(ATerm arg)
-{
+/**
+ * Converts a list of integers (ASCII values) to a C string. 
+ * \param[in] arg An ATermList with ATermInts, such as [32,32,10]
+ * \return String containing the characters from #arg as characters
+ */
+char *charsToString(ATerm arg) {
   ATermList list = (ATermList) arg;
   int len = ATgetLength(list);
   int i;
@@ -44,15 +54,10 @@ char *charsToString(ATerm arg)
   return str;
 }
 
-char charToByte(ATerm arg)
-{
+char charToByte(ATerm arg) {
     return (char) ATgetInt((ATermInt) arg);
 }
 
-
-/*}}}  */
-
-/*{{{  typedefs */
 
 typedef struct ATerm _Graph;
 typedef struct ATerm _NodeList;
@@ -70,1019 +75,1642 @@ typedef struct ATerm _Edge;
 typedef struct ATerm _Polygon;
 typedef struct ATerm _Point;
 
-/*}}}  */
-
-/*{{{  void initGraphApi(void) */
-
-void initGraphApi(void)
-{
+/**
+ * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
+ */
+void initGraphApi(void) {
   init_Graph_dict();
 }
 
-/*}}}  */
-
-/*{{{  protect functions */
-
-void protectGraph(Graph *arg)
-{
+/**
+ * Protect a Graph from the ATerm garbage collector. Every Graph that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Graph
+ */
+void protectGraph(Graph *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectNodeList(NodeList *arg)
-{
+/**
+ * Unprotect a Graph from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Graph
+ */
+void unprotectGraph(Graph *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a NodeList from the ATerm garbage collector. Every NodeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a NodeList
+ */
+void protectNodeList(NodeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectNode(Node *arg)
-{
+/**
+ * Unprotect a NodeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a NodeList
+ */
+void unprotectNodeList(NodeList *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Node from the ATerm garbage collector. Every Node that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Node
+ */
+void protectNode(Node *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectNodeId(NodeId *arg)
-{
+/**
+ * Unprotect a Node from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Node
+ */
+void unprotectNode(Node *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a NodeId from the ATerm garbage collector. Every NodeId that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a NodeId
+ */
+void protectNodeId(NodeId *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectAttributeList(AttributeList *arg)
-{
+/**
+ * Unprotect a NodeId from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a NodeId
+ */
+void unprotectNodeId(NodeId *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a AttributeList from the ATerm garbage collector. Every AttributeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a AttributeList
+ */
+void protectAttributeList(AttributeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectAttribute(Attribute *arg)
-{
+/**
+ * Unprotect a AttributeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a AttributeList
+ */
+void unprotectAttributeList(AttributeList *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Attribute from the ATerm garbage collector. Every Attribute that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Attribute
+ */
+void protectAttribute(Attribute *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectFile(File *arg)
-{
+/**
+ * Unprotect a Attribute from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Attribute
+ */
+void unprotectAttribute(Attribute *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a File from the ATerm garbage collector. Every File that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a File
+ */
+void protectFile(File *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectColor(Color *arg)
-{
+/**
+ * Unprotect a File from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a File
+ */
+void unprotectFile(File *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Color from the ATerm garbage collector. Every Color that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Color
+ */
+void protectColor(Color *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectStyle(Style *arg)
-{
+/**
+ * Unprotect a Color from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Color
+ */
+void unprotectColor(Color *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Style from the ATerm garbage collector. Every Style that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Style
+ */
+void protectStyle(Style *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectShape(Shape *arg)
-{
+/**
+ * Unprotect a Style from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Style
+ */
+void unprotectStyle(Style *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Shape from the ATerm garbage collector. Every Shape that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Shape
+ */
+void protectShape(Shape *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectDirection(Direction *arg)
-{
+/**
+ * Unprotect a Shape from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Shape
+ */
+void unprotectShape(Shape *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Direction from the ATerm garbage collector. Every Direction that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Direction
+ */
+void protectDirection(Direction *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectEdgeList(EdgeList *arg)
-{
+/**
+ * Unprotect a Direction from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Direction
+ */
+void unprotectDirection(Direction *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a EdgeList from the ATerm garbage collector. Every EdgeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a EdgeList
+ */
+void protectEdgeList(EdgeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectEdge(Edge *arg)
-{
+/**
+ * Unprotect a EdgeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a EdgeList
+ */
+void unprotectEdgeList(EdgeList *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Edge from the ATerm garbage collector. Every Edge that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Edge
+ */
+void protectEdge(Edge *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectPolygon(Polygon *arg)
-{
+/**
+ * Unprotect a Edge from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Edge
+ */
+void unprotectEdge(Edge *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Polygon from the ATerm garbage collector. Every Polygon that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Polygon
+ */
+void protectPolygon(Polygon *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void protectPoint(Point *arg)
-{
+/**
+ * Unprotect a Polygon from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Polygon
+ */
+void unprotectPolygon(Polygon *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a Point from the ATerm garbage collector. Every Point that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a Point
+ */
+void protectPoint(Point *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
+/**
+ * Unprotect a Point from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a Point
+ */
+void unprotectPoint(Point *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
 
-/*}}}  */
-/*{{{  term conversion functions */
-
-/*{{{  Graph GraphFromTerm(ATerm t) */
-
-Graph GraphFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Graph. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Graph that was encoded by \arg
+ */
+Graph GraphFromTerm(ATerm t) {
   return (Graph)t;
 }
 
-/*}}}  */
-/*{{{  ATerm GraphToTerm(Graph arg) */
-
-ATerm GraphToTerm(Graph arg)
-{
+/**
+ * Transforms a Graphto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Graph to be converted
+ * \return ATerm that represents the Graph
+ */
+ATerm GraphToTerm(Graph arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  NodeList NodeListFromTerm(ATerm t) */
-
-NodeList NodeListFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a NodeList. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return NodeList that was encoded by \arg
+ */
+NodeList NodeListFromTerm(ATerm t) {
   return (NodeList)t;
 }
 
-/*}}}  */
-/*{{{  ATerm NodeListToTerm(NodeList arg) */
-
-ATerm NodeListToTerm(NodeList arg)
-{
+/**
+ * Transforms a NodeListto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg NodeList to be converted
+ * \return ATerm that represents the NodeList
+ */
+ATerm NodeListToTerm(NodeList arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Node NodeFromTerm(ATerm t) */
-
-Node NodeFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Node. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Node that was encoded by \arg
+ */
+Node NodeFromTerm(ATerm t) {
   return (Node)t;
 }
 
-/*}}}  */
-/*{{{  ATerm NodeToTerm(Node arg) */
-
-ATerm NodeToTerm(Node arg)
-{
+/**
+ * Transforms a Nodeto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Node to be converted
+ * \return ATerm that represents the Node
+ */
+ATerm NodeToTerm(Node arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  NodeId NodeIdFromTerm(ATerm t) */
-
-NodeId NodeIdFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a NodeId. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return NodeId that was encoded by \arg
+ */
+NodeId NodeIdFromTerm(ATerm t) {
   return (NodeId)t;
 }
 
-/*}}}  */
-/*{{{  ATerm NodeIdToTerm(NodeId arg) */
-
-ATerm NodeIdToTerm(NodeId arg)
-{
+/**
+ * Transforms a NodeIdto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg NodeId to be converted
+ * \return ATerm that represents the NodeId
+ */
+ATerm NodeIdToTerm(NodeId arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  AttributeList AttributeListFromTerm(ATerm t) */
-
-AttributeList AttributeListFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a AttributeList. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return AttributeList that was encoded by \arg
+ */
+AttributeList AttributeListFromTerm(ATerm t) {
   return (AttributeList)t;
 }
 
-/*}}}  */
-/*{{{  ATerm AttributeListToTerm(AttributeList arg) */
-
-ATerm AttributeListToTerm(AttributeList arg)
-{
+/**
+ * Transforms a AttributeListto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg AttributeList to be converted
+ * \return ATerm that represents the AttributeList
+ */
+ATerm AttributeListToTerm(AttributeList arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Attribute AttributeFromTerm(ATerm t) */
-
-Attribute AttributeFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Attribute. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Attribute that was encoded by \arg
+ */
+Attribute AttributeFromTerm(ATerm t) {
   return (Attribute)t;
 }
 
-/*}}}  */
-/*{{{  ATerm AttributeToTerm(Attribute arg) */
-
-ATerm AttributeToTerm(Attribute arg)
-{
+/**
+ * Transforms a Attributeto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Attribute to be converted
+ * \return ATerm that represents the Attribute
+ */
+ATerm AttributeToTerm(Attribute arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  File FileFromTerm(ATerm t) */
-
-File FileFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a File. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return File that was encoded by \arg
+ */
+File FileFromTerm(ATerm t) {
   return (File)t;
 }
 
-/*}}}  */
-/*{{{  ATerm FileToTerm(File arg) */
-
-ATerm FileToTerm(File arg)
-{
+/**
+ * Transforms a Fileto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg File to be converted
+ * \return ATerm that represents the File
+ */
+ATerm FileToTerm(File arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Color ColorFromTerm(ATerm t) */
-
-Color ColorFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Color. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Color that was encoded by \arg
+ */
+Color ColorFromTerm(ATerm t) {
   return (Color)t;
 }
 
-/*}}}  */
-/*{{{  ATerm ColorToTerm(Color arg) */
-
-ATerm ColorToTerm(Color arg)
-{
+/**
+ * Transforms a Colorto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Color to be converted
+ * \return ATerm that represents the Color
+ */
+ATerm ColorToTerm(Color arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Style StyleFromTerm(ATerm t) */
-
-Style StyleFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Style. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Style that was encoded by \arg
+ */
+Style StyleFromTerm(ATerm t) {
   return (Style)t;
 }
 
-/*}}}  */
-/*{{{  ATerm StyleToTerm(Style arg) */
-
-ATerm StyleToTerm(Style arg)
-{
+/**
+ * Transforms a Styleto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Style to be converted
+ * \return ATerm that represents the Style
+ */
+ATerm StyleToTerm(Style arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Shape ShapeFromTerm(ATerm t) */
-
-Shape ShapeFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Shape. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Shape that was encoded by \arg
+ */
+Shape ShapeFromTerm(ATerm t) {
   return (Shape)t;
 }
 
-/*}}}  */
-/*{{{  ATerm ShapeToTerm(Shape arg) */
-
-ATerm ShapeToTerm(Shape arg)
-{
+/**
+ * Transforms a Shapeto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Shape to be converted
+ * \return ATerm that represents the Shape
+ */
+ATerm ShapeToTerm(Shape arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Direction DirectionFromTerm(ATerm t) */
-
-Direction DirectionFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Direction. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Direction that was encoded by \arg
+ */
+Direction DirectionFromTerm(ATerm t) {
   return (Direction)t;
 }
 
-/*}}}  */
-/*{{{  ATerm DirectionToTerm(Direction arg) */
-
-ATerm DirectionToTerm(Direction arg)
-{
+/**
+ * Transforms a Directionto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Direction to be converted
+ * \return ATerm that represents the Direction
+ */
+ATerm DirectionToTerm(Direction arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  EdgeList EdgeListFromTerm(ATerm t) */
-
-EdgeList EdgeListFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a EdgeList. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return EdgeList that was encoded by \arg
+ */
+EdgeList EdgeListFromTerm(ATerm t) {
   return (EdgeList)t;
 }
 
-/*}}}  */
-/*{{{  ATerm EdgeListToTerm(EdgeList arg) */
-
-ATerm EdgeListToTerm(EdgeList arg)
-{
+/**
+ * Transforms a EdgeListto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg EdgeList to be converted
+ * \return ATerm that represents the EdgeList
+ */
+ATerm EdgeListToTerm(EdgeList arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Edge EdgeFromTerm(ATerm t) */
-
-Edge EdgeFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Edge. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Edge that was encoded by \arg
+ */
+Edge EdgeFromTerm(ATerm t) {
   return (Edge)t;
 }
 
-/*}}}  */
-/*{{{  ATerm EdgeToTerm(Edge arg) */
-
-ATerm EdgeToTerm(Edge arg)
-{
+/**
+ * Transforms a Edgeto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Edge to be converted
+ * \return ATerm that represents the Edge
+ */
+ATerm EdgeToTerm(Edge arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Polygon PolygonFromTerm(ATerm t) */
-
-Polygon PolygonFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Polygon. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Polygon that was encoded by \arg
+ */
+Polygon PolygonFromTerm(ATerm t) {
   return (Polygon)t;
 }
 
-/*}}}  */
-/*{{{  ATerm PolygonToTerm(Polygon arg) */
-
-ATerm PolygonToTerm(Polygon arg)
-{
+/**
+ * Transforms a Polygonto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Polygon to be converted
+ * \return ATerm that represents the Polygon
+ */
+ATerm PolygonToTerm(Polygon arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  Point PointFromTerm(ATerm t) */
-
-Point PointFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a Point. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return Point that was encoded by \arg
+ */
+Point PointFromTerm(ATerm t) {
   return (Point)t;
 }
 
-/*}}}  */
-/*{{{  ATerm PointToTerm(Point arg) */
-
-ATerm PointToTerm(Point arg)
-{
+/**
+ * Transforms a Pointto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg Point to be converted
+ * \return ATerm that represents the Point
+ */
+ATerm PointToTerm(Point arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  list functions */
-
+/**
+ * Retrieve the length of a NodeList. 
+ * \param[in] arg input NodeList
+ * \return The number of elements in the NodeList
+ */
 int getNodeListLength (NodeList arg) {
   return ATgetLength((ATermList) arg);
 }
+
+/**
+ * Reverse a NodeList. 
+ * \param[in] arg NodeList to be reversed
+ * \return a reversed #arg
+ */
 NodeList reverseNodeList(NodeList arg) {
   return (NodeList) ATreverse((ATermList) arg);
 }
+
+/**
+ * Append a Node to the end of a NodeList. 
+ * \param[in] arg NodeList to append the Node to
+ * \param[in] elem Node to be appended
+ * \return new NodeList with #elem appended
+ */
 NodeList appendNodeList(NodeList arg, Node elem) {
   return (NodeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
+
+/**
+ * Concatenate two NodeLists. 
+ * \param[in] arg0 first NodeList
+ * \param[in] arg1 second NodeList
+ * \return NodeList with the elements of #arg0 before the elements of #arg1
+ */
 NodeList concatNodeList(NodeList arg0, NodeList arg1) {
   return (NodeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
+
+/**
+ * Extract a sublist from a NodeList. 
+ * \param[in] arg NodeList to extract a slice from
+ * \param[in] start inclusive start index of the sublist
+ * \param[in] end exclusive end index of the sublist
+ * \return new NodeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
+ */
 NodeList sliceNodeList(NodeList arg, int start, int end) {
   return (NodeList) ATgetSlice((ATermList) arg, start, end);
 }
+
+/**
+ * Retrieve the Node at #index from a NodeList. 
+ * \param[in] arg NodeList to retrieve the Node from
+ * \param[in] index index to use to point in the NodeList
+ * \return Node at position #index in #arg
+ */
 Node getNodeListNodeAt(NodeList arg, int index) {
  return (Node)ATelementAt((ATermList) arg,index);
 }
+
+/**
+ * Replace the Node at #index from a NodeList by a new one. 
+ * \param[in] arg NodeList to retrieve the Node from
+ * \param[in] elem new Node to replace another
+ * \param[in] index index to use to point in the NodeList
+ * \return A new NodeListwith #elem replaced in #arg at position #index
+ */
 NodeList replaceNodeListNodeAt(NodeList arg, Node elem, int index) {
  return (NodeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
+
+/**
+ * Builds a NodeList of 2 consecutive elements. 
+ * \param[in] elem1 One Node element of the new NodeList
+ * \param[in] elem2 One Node element of the new NodeList
+ * \return A new NodeList consisting of 2 Nodes
+ */
 NodeList makeNodeList2(Node elem1, Node elem2) {
-  return (NodeList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+  return (NodeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
+
+/**
+ * Builds a NodeList of 3 consecutive elements. 
+ * \param[in] elem1 One Node element of the new NodeList
+ * \param[in] elem2 One Node element of the new NodeList
+ * \param[in] elem3 One Node element of the new NodeList
+ * \return A new NodeList consisting of 3 Nodes
+ */
 NodeList makeNodeList3(Node elem1, Node elem2, Node elem3) {
-  return (NodeList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+  return (NodeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
+
+/**
+ * Builds a NodeList of 4 consecutive elements. 
+ * \param[in] elem1 One Node element of the new NodeList
+ * \param[in] elem2 One Node element of the new NodeList
+ * \param[in] elem3 One Node element of the new NodeList
+ * \param[in] elem4 One Node element of the new NodeList
+ * \return A new NodeList consisting of 4 Nodes
+ */
 NodeList makeNodeList4(Node elem1, Node elem2, Node elem3, Node elem4) {
-  return (NodeList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+  return (NodeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
+
+/**
+ * Builds a NodeList of 5 consecutive elements. 
+ * \param[in] elem1 One Node element of the new NodeList
+ * \param[in] elem2 One Node element of the new NodeList
+ * \param[in] elem3 One Node element of the new NodeList
+ * \param[in] elem4 One Node element of the new NodeList
+ * \param[in] elem5 One Node element of the new NodeList
+ * \return A new NodeList consisting of 5 Nodes
+ */
 NodeList makeNodeList5(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5) {
-  return (NodeList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+  return (NodeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
+
+/**
+ * Builds a NodeList of 6 consecutive elements. 
+ * \param[in] elem1 One Node element of the new NodeList
+ * \param[in] elem2 One Node element of the new NodeList
+ * \param[in] elem3 One Node element of the new NodeList
+ * \param[in] elem4 One Node element of the new NodeList
+ * \param[in] elem5 One Node element of the new NodeList
+ * \param[in] elem6 One Node element of the new NodeList
+ * \return A new NodeList consisting of 6 Nodes
+ */
 NodeList makeNodeList6(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5, Node elem6) {
-  return (NodeList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+  return (NodeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
+
+/**
+ * Retrieve the length of a AttributeList. 
+ * \param[in] arg input AttributeList
+ * \return The number of elements in the AttributeList
+ */
 int getAttributeListLength (AttributeList arg) {
   return ATgetLength((ATermList) arg);
 }
+
+/**
+ * Reverse a AttributeList. 
+ * \param[in] arg AttributeList to be reversed
+ * \return a reversed #arg
+ */
 AttributeList reverseAttributeList(AttributeList arg) {
   return (AttributeList) ATreverse((ATermList) arg);
 }
+
+/**
+ * Append a Attribute to the end of a AttributeList. 
+ * \param[in] arg AttributeList to append the Attribute to
+ * \param[in] elem Attribute to be appended
+ * \return new AttributeList with #elem appended
+ */
 AttributeList appendAttributeList(AttributeList arg, Attribute elem) {
   return (AttributeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
+
+/**
+ * Concatenate two AttributeLists. 
+ * \param[in] arg0 first AttributeList
+ * \param[in] arg1 second AttributeList
+ * \return AttributeList with the elements of #arg0 before the elements of #arg1
+ */
 AttributeList concatAttributeList(AttributeList arg0, AttributeList arg1) {
   return (AttributeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
+
+/**
+ * Extract a sublist from a AttributeList. 
+ * \param[in] arg AttributeList to extract a slice from
+ * \param[in] start inclusive start index of the sublist
+ * \param[in] end exclusive end index of the sublist
+ * \return new AttributeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
+ */
 AttributeList sliceAttributeList(AttributeList arg, int start, int end) {
   return (AttributeList) ATgetSlice((ATermList) arg, start, end);
 }
+
+/**
+ * Retrieve the Attribute at #index from a AttributeList. 
+ * \param[in] arg AttributeList to retrieve the Attribute from
+ * \param[in] index index to use to point in the AttributeList
+ * \return Attribute at position #index in #arg
+ */
 Attribute getAttributeListAttributeAt(AttributeList arg, int index) {
  return (Attribute)ATelementAt((ATermList) arg,index);
 }
+
+/**
+ * Replace the Attribute at #index from a AttributeList by a new one. 
+ * \param[in] arg AttributeList to retrieve the Attribute from
+ * \param[in] elem new Attribute to replace another
+ * \param[in] index index to use to point in the AttributeList
+ * \return A new AttributeListwith #elem replaced in #arg at position #index
+ */
 AttributeList replaceAttributeListAttributeAt(AttributeList arg, Attribute elem, int index) {
  return (AttributeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
+
+/**
+ * Builds a AttributeList of 2 consecutive elements. 
+ * \param[in] elem1 One Attribute element of the new AttributeList
+ * \param[in] elem2 One Attribute element of the new AttributeList
+ * \return A new AttributeList consisting of 2 Attributes
+ */
 AttributeList makeAttributeList2(Attribute elem1, Attribute elem2) {
-  return (AttributeList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+  return (AttributeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
+
+/**
+ * Builds a AttributeList of 3 consecutive elements. 
+ * \param[in] elem1 One Attribute element of the new AttributeList
+ * \param[in] elem2 One Attribute element of the new AttributeList
+ * \param[in] elem3 One Attribute element of the new AttributeList
+ * \return A new AttributeList consisting of 3 Attributes
+ */
 AttributeList makeAttributeList3(Attribute elem1, Attribute elem2, Attribute elem3) {
-  return (AttributeList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+  return (AttributeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
+
+/**
+ * Builds a AttributeList of 4 consecutive elements. 
+ * \param[in] elem1 One Attribute element of the new AttributeList
+ * \param[in] elem2 One Attribute element of the new AttributeList
+ * \param[in] elem3 One Attribute element of the new AttributeList
+ * \param[in] elem4 One Attribute element of the new AttributeList
+ * \return A new AttributeList consisting of 4 Attributes
+ */
 AttributeList makeAttributeList4(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4) {
-  return (AttributeList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+  return (AttributeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
+
+/**
+ * Builds a AttributeList of 5 consecutive elements. 
+ * \param[in] elem1 One Attribute element of the new AttributeList
+ * \param[in] elem2 One Attribute element of the new AttributeList
+ * \param[in] elem3 One Attribute element of the new AttributeList
+ * \param[in] elem4 One Attribute element of the new AttributeList
+ * \param[in] elem5 One Attribute element of the new AttributeList
+ * \return A new AttributeList consisting of 5 Attributes
+ */
 AttributeList makeAttributeList5(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5) {
-  return (AttributeList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+  return (AttributeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
+
+/**
+ * Builds a AttributeList of 6 consecutive elements. 
+ * \param[in] elem1 One Attribute element of the new AttributeList
+ * \param[in] elem2 One Attribute element of the new AttributeList
+ * \param[in] elem3 One Attribute element of the new AttributeList
+ * \param[in] elem4 One Attribute element of the new AttributeList
+ * \param[in] elem5 One Attribute element of the new AttributeList
+ * \param[in] elem6 One Attribute element of the new AttributeList
+ * \return A new AttributeList consisting of 6 Attributes
+ */
 AttributeList makeAttributeList6(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5, Attribute elem6) {
-  return (AttributeList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+  return (AttributeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
+
+/**
+ * Retrieve the length of a EdgeList. 
+ * \param[in] arg input EdgeList
+ * \return The number of elements in the EdgeList
+ */
 int getEdgeListLength (EdgeList arg) {
   return ATgetLength((ATermList) arg);
 }
+
+/**
+ * Reverse a EdgeList. 
+ * \param[in] arg EdgeList to be reversed
+ * \return a reversed #arg
+ */
 EdgeList reverseEdgeList(EdgeList arg) {
   return (EdgeList) ATreverse((ATermList) arg);
 }
+
+/**
+ * Append a Edge to the end of a EdgeList. 
+ * \param[in] arg EdgeList to append the Edge to
+ * \param[in] elem Edge to be appended
+ * \return new EdgeList with #elem appended
+ */
 EdgeList appendEdgeList(EdgeList arg, Edge elem) {
   return (EdgeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
+
+/**
+ * Concatenate two EdgeLists. 
+ * \param[in] arg0 first EdgeList
+ * \param[in] arg1 second EdgeList
+ * \return EdgeList with the elements of #arg0 before the elements of #arg1
+ */
 EdgeList concatEdgeList(EdgeList arg0, EdgeList arg1) {
   return (EdgeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
+
+/**
+ * Extract a sublist from a EdgeList. 
+ * \param[in] arg EdgeList to extract a slice from
+ * \param[in] start inclusive start index of the sublist
+ * \param[in] end exclusive end index of the sublist
+ * \return new EdgeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
+ */
 EdgeList sliceEdgeList(EdgeList arg, int start, int end) {
   return (EdgeList) ATgetSlice((ATermList) arg, start, end);
 }
+
+/**
+ * Retrieve the Edge at #index from a EdgeList. 
+ * \param[in] arg EdgeList to retrieve the Edge from
+ * \param[in] index index to use to point in the EdgeList
+ * \return Edge at position #index in #arg
+ */
 Edge getEdgeListEdgeAt(EdgeList arg, int index) {
  return (Edge)ATelementAt((ATermList) arg,index);
 }
+
+/**
+ * Replace the Edge at #index from a EdgeList by a new one. 
+ * \param[in] arg EdgeList to retrieve the Edge from
+ * \param[in] elem new Edge to replace another
+ * \param[in] index index to use to point in the EdgeList
+ * \return A new EdgeListwith #elem replaced in #arg at position #index
+ */
 EdgeList replaceEdgeListEdgeAt(EdgeList arg, Edge elem, int index) {
  return (EdgeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
+
+/**
+ * Builds a EdgeList of 2 consecutive elements. 
+ * \param[in] elem1 One Edge element of the new EdgeList
+ * \param[in] elem2 One Edge element of the new EdgeList
+ * \return A new EdgeList consisting of 2 Edges
+ */
 EdgeList makeEdgeList2(Edge elem1, Edge elem2) {
-  return (EdgeList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+  return (EdgeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
+
+/**
+ * Builds a EdgeList of 3 consecutive elements. 
+ * \param[in] elem1 One Edge element of the new EdgeList
+ * \param[in] elem2 One Edge element of the new EdgeList
+ * \param[in] elem3 One Edge element of the new EdgeList
+ * \return A new EdgeList consisting of 3 Edges
+ */
 EdgeList makeEdgeList3(Edge elem1, Edge elem2, Edge elem3) {
-  return (EdgeList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+  return (EdgeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
+
+/**
+ * Builds a EdgeList of 4 consecutive elements. 
+ * \param[in] elem1 One Edge element of the new EdgeList
+ * \param[in] elem2 One Edge element of the new EdgeList
+ * \param[in] elem3 One Edge element of the new EdgeList
+ * \param[in] elem4 One Edge element of the new EdgeList
+ * \return A new EdgeList consisting of 4 Edges
+ */
 EdgeList makeEdgeList4(Edge elem1, Edge elem2, Edge elem3, Edge elem4) {
-  return (EdgeList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+  return (EdgeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
+
+/**
+ * Builds a EdgeList of 5 consecutive elements. 
+ * \param[in] elem1 One Edge element of the new EdgeList
+ * \param[in] elem2 One Edge element of the new EdgeList
+ * \param[in] elem3 One Edge element of the new EdgeList
+ * \param[in] elem4 One Edge element of the new EdgeList
+ * \param[in] elem5 One Edge element of the new EdgeList
+ * \return A new EdgeList consisting of 5 Edges
+ */
 EdgeList makeEdgeList5(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5) {
-  return (EdgeList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+  return (EdgeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
+
+/**
+ * Builds a EdgeList of 6 consecutive elements. 
+ * \param[in] elem1 One Edge element of the new EdgeList
+ * \param[in] elem2 One Edge element of the new EdgeList
+ * \param[in] elem3 One Edge element of the new EdgeList
+ * \param[in] elem4 One Edge element of the new EdgeList
+ * \param[in] elem5 One Edge element of the new EdgeList
+ * \param[in] elem6 One Edge element of the new EdgeList
+ * \return A new EdgeList consisting of 6 Edges
+ */
 EdgeList makeEdgeList6(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5, Edge elem6) {
-  return (EdgeList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+  return (EdgeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
+
+/**
+ * Retrieve the length of a Polygon. 
+ * \param[in] arg input Polygon
+ * \return The number of elements in the Polygon
+ */
 int getPolygonLength (Polygon arg) {
   return ATgetLength((ATermList) arg);
 }
+
+/**
+ * Reverse a Polygon. 
+ * \param[in] arg Polygon to be reversed
+ * \return a reversed #arg
+ */
 Polygon reversePolygon(Polygon arg) {
   return (Polygon) ATreverse((ATermList) arg);
 }
+
+/**
+ * Append a Point to the end of a Polygon. 
+ * \param[in] arg Polygon to append the Point to
+ * \param[in] elem Point to be appended
+ * \return new Polygon with #elem appended
+ */
 Polygon appendPolygon(Polygon arg, Point elem) {
   return (Polygon) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
+
+/**
+ * Concatenate two Polygons. 
+ * \param[in] arg0 first Polygon
+ * \param[in] arg1 second Polygon
+ * \return Polygon with the elements of #arg0 before the elements of #arg1
+ */
 Polygon concatPolygon(Polygon arg0, Polygon arg1) {
   return (Polygon) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
+
+/**
+ * Extract a sublist from a Polygon. 
+ * \param[in] arg Polygon to extract a slice from
+ * \param[in] start inclusive start index of the sublist
+ * \param[in] end exclusive end index of the sublist
+ * \return new Polygon with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
+ */
 Polygon slicePolygon(Polygon arg, int start, int end) {
   return (Polygon) ATgetSlice((ATermList) arg, start, end);
 }
+
+/**
+ * Retrieve the Point at #index from a Polygon. 
+ * \param[in] arg Polygon to retrieve the Point from
+ * \param[in] index index to use to point in the Polygon
+ * \return Point at position #index in #arg
+ */
 Point getPolygonPointAt(Polygon arg, int index) {
  return (Point)ATelementAt((ATermList) arg,index);
 }
+
+/**
+ * Replace the Point at #index from a Polygon by a new one. 
+ * \param[in] arg Polygon to retrieve the Point from
+ * \param[in] elem new Point to replace another
+ * \param[in] index index to use to point in the Polygon
+ * \return A new Polygonwith #elem replaced in #arg at position #index
+ */
 Polygon replacePolygonPointAt(Polygon arg, Point elem, int index) {
  return (Polygon) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
+
+/**
+ * Builds a Polygon of 2 consecutive elements. 
+ * \param[in] elem1 One Point element of the new Polygon
+ * \param[in] elem2 One Point element of the new Polygon
+ * \return A new Polygon consisting of 2 Points
+ */
 Polygon makePolygon2(Point elem1, Point elem2) {
-  return (Polygon) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+  return (Polygon) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
+
+/**
+ * Builds a Polygon of 3 consecutive elements. 
+ * \param[in] elem1 One Point element of the new Polygon
+ * \param[in] elem2 One Point element of the new Polygon
+ * \param[in] elem3 One Point element of the new Polygon
+ * \return A new Polygon consisting of 3 Points
+ */
 Polygon makePolygon3(Point elem1, Point elem2, Point elem3) {
-  return (Polygon) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+  return (Polygon) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
+
+/**
+ * Builds a Polygon of 4 consecutive elements. 
+ * \param[in] elem1 One Point element of the new Polygon
+ * \param[in] elem2 One Point element of the new Polygon
+ * \param[in] elem3 One Point element of the new Polygon
+ * \param[in] elem4 One Point element of the new Polygon
+ * \return A new Polygon consisting of 4 Points
+ */
 Polygon makePolygon4(Point elem1, Point elem2, Point elem3, Point elem4) {
-  return (Polygon) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+  return (Polygon) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
+
+/**
+ * Builds a Polygon of 5 consecutive elements. 
+ * \param[in] elem1 One Point element of the new Polygon
+ * \param[in] elem2 One Point element of the new Polygon
+ * \param[in] elem3 One Point element of the new Polygon
+ * \param[in] elem4 One Point element of the new Polygon
+ * \param[in] elem5 One Point element of the new Polygon
+ * \return A new Polygon consisting of 5 Points
+ */
 Polygon makePolygon5(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5) {
-  return (Polygon) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+  return (Polygon) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
+
+/**
+ * Builds a Polygon of 6 consecutive elements. 
+ * \param[in] elem1 One Point element of the new Polygon
+ * \param[in] elem2 One Point element of the new Polygon
+ * \param[in] elem3 One Point element of the new Polygon
+ * \param[in] elem4 One Point element of the new Polygon
+ * \param[in] elem5 One Point element of the new Polygon
+ * \param[in] elem6 One Point element of the new Polygon
+ * \return A new Polygon consisting of 6 Points
+ */
 Polygon makePolygon6(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5, Point elem6) {
-  return (Polygon) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+  return (Polygon) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
-/*}}}  */
-/*{{{  constructors */
-
-/*{{{  Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes) */
-
-Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes)
-{
+/**
+ * Constructs a default of type Graph. Like all ATerm types, Graphs are maximally shared.
+ * \param[in] nodes a child of the new default
+ * \param[in] edges a child of the new default
+ * \param[in] attributes a child of the new default
+ * \return A pointer to a default, either newly constructed or shared
+ */
+Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes) {
   return (Graph)(ATerm)ATmakeAppl3(afun0, (ATerm) nodes, (ATerm) edges, (ATerm) attributes);
 }
-
-/*}}}  */
-/*{{{  NodeList makeNodeListEmpty(void) */
-
-NodeList makeNodeListEmpty(void)
-{
+/**
+ * Constructs a empty of type NodeList. Like all ATerm types, NodeLists are maximally shared.
+ * \return A pointer to a empty, either newly constructed or shared
+ */
+NodeList makeNodeListEmpty(void) {
   return (NodeList)(ATerm)ATempty;
 }
-
-/*}}}  */
-/*{{{  NodeList makeNodeListSingle(Node head) */
-
-NodeList makeNodeListSingle(Node head)
-{
+/**
+ * Constructs a single of type NodeList. Like all ATerm types, NodeLists are maximally shared.
+ * \param[in] head a child of the new single
+ * \return A pointer to a single, either newly constructed or shared
+ */
+NodeList makeNodeListSingle(Node head) {
   return (NodeList)(ATerm)ATmakeList1((ATerm) head);
 }
-
-/*}}}  */
-/*{{{  NodeList makeNodeListMany(Node head, NodeList tail) */
-
-NodeList makeNodeListMany(Node head, NodeList tail)
-{
+/**
+ * Constructs a many of type NodeList. Like all ATerm types, NodeLists are maximally shared.
+ * \param[in] head a child of the new many
+ * \param[in] tail a child of the new many
+ * \return A pointer to a many, either newly constructed or shared
+ */
+NodeList makeNodeListMany(Node head, NodeList tail) {
   return (NodeList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-
-/*}}}  */
-/*{{{  Node makeNodeDefault(NodeId id, AttributeList attributes) */
-
-Node makeNodeDefault(NodeId id, AttributeList attributes)
-{
+/**
+ * Constructs a default of type Node. Like all ATerm types, Nodes are maximally shared.
+ * \param[in] id a child of the new default
+ * \param[in] attributes a child of the new default
+ * \return A pointer to a default, either newly constructed or shared
+ */
+Node makeNodeDefault(NodeId id, AttributeList attributes) {
   return (Node)(ATerm)ATmakeAppl2(afun1, (ATerm) id, (ATerm) attributes);
 }
-
-/*}}}  */
-/*{{{  NodeId makeNodeIdDefault(ATerm id) */
-
-NodeId makeNodeIdDefault(ATerm id)
-{
+/**
+ * Constructs a default of type NodeId. Like all ATerm types, NodeIds are maximally shared.
+ * \param[in] id a child of the new default
+ * \return A pointer to a default, either newly constructed or shared
+ */
+NodeId makeNodeIdDefault(ATerm id) {
   return (NodeId)(ATerm) id;
 }
-
-/*}}}  */
-/*{{{  AttributeList makeAttributeListEmpty(void) */
-
-AttributeList makeAttributeListEmpty(void)
-{
+/**
+ * Constructs a empty of type AttributeList. Like all ATerm types, AttributeLists are maximally shared.
+ * \return A pointer to a empty, either newly constructed or shared
+ */
+AttributeList makeAttributeListEmpty(void) {
   return (AttributeList)(ATerm)ATempty;
 }
-
-/*}}}  */
-/*{{{  AttributeList makeAttributeListSingle(Attribute head) */
-
-AttributeList makeAttributeListSingle(Attribute head)
-{
+/**
+ * Constructs a single of type AttributeList. Like all ATerm types, AttributeLists are maximally shared.
+ * \param[in] head a child of the new single
+ * \return A pointer to a single, either newly constructed or shared
+ */
+AttributeList makeAttributeListSingle(Attribute head) {
   return (AttributeList)(ATerm)ATmakeList1((ATerm) head);
 }
-
-/*}}}  */
-/*{{{  AttributeList makeAttributeListMany(Attribute head, AttributeList tail) */
-
-AttributeList makeAttributeListMany(Attribute head, AttributeList tail)
-{
+/**
+ * Constructs a many of type AttributeList. Like all ATerm types, AttributeLists are maximally shared.
+ * \param[in] head a child of the new many
+ * \param[in] tail a child of the new many
+ * \return A pointer to a many, either newly constructed or shared
+ */
+AttributeList makeAttributeListMany(Attribute head, AttributeList tail) {
   return (AttributeList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeBoundingBox(Point first, Point second) */
-
-Attribute makeAttributeBoundingBox(Point first, Point second)
-{
+/**
+ * Constructs a bounding-box of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] first a child of the new bounding-box
+ * \param[in] second a child of the new bounding-box
+ * \return A pointer to a bounding-box, either newly constructed or shared
+ */
+Attribute makeAttributeBoundingBox(Point first, Point second) {
   return (Attribute)(ATerm)ATmakeAppl2(afun2, (ATerm) first, (ATerm) second);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeColor(Color color) */
-
-Attribute makeAttributeColor(Color color)
-{
+/**
+ * Constructs a color of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] color a child of the new color
+ * \return A pointer to a color, either newly constructed or shared
+ */
+Attribute makeAttributeColor(Color color) {
   return (Attribute)(ATerm)ATmakeAppl1(afun3, (ATerm) color);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeCurvePoints(Polygon points) */
-
-Attribute makeAttributeCurvePoints(Polygon points)
-{
+/**
+ * Constructs a curve-points of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] points a child of the new curve-points
+ * \return A pointer to a curve-points, either newly constructed or shared
+ */
+Attribute makeAttributeCurvePoints(Polygon points) {
   return (Attribute)(ATerm)ATmakeAppl1(afun4, (ATerm) points);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeDirection(Direction direction) */
-
-Attribute makeAttributeDirection(Direction direction)
-{
+/**
+ * Constructs a direction of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] direction a child of the new direction
+ * \return A pointer to a direction, either newly constructed or shared
+ */
+Attribute makeAttributeDirection(Direction direction) {
   return (Attribute)(ATerm)ATmakeAppl1(afun5, (ATerm) direction);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeFillColor(Color color) */
-
-Attribute makeAttributeFillColor(Color color)
-{
+/**
+ * Constructs a fill-color of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] color a child of the new fill-color
+ * \return A pointer to a fill-color, either newly constructed or shared
+ */
+Attribute makeAttributeFillColor(Color color) {
   return (Attribute)(ATerm)ATmakeAppl1(afun6, (ATerm) color);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeInfo(const char* key, ATerm value) */
-
-Attribute makeAttributeInfo(const char* key, ATerm value)
-{
+/**
+ * Constructs a info of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] key a child of the new info
+ * \param[in] value a child of the new info
+ * \return A pointer to a info, either newly constructed or shared
+ */
+Attribute makeAttributeInfo(const char* key, ATerm value) {
   return (Attribute)(ATerm)ATmakeAppl2(afun7, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(key, 0, ATtrue)), (ATerm) value);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeLabel(const char* label) */
-
-Attribute makeAttributeLabel(const char* label)
-{
+/**
+ * Constructs a label of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] label a child of the new label
+ * \return A pointer to a label, either newly constructed or shared
+ */
+Attribute makeAttributeLabel(const char* label) {
   return (Attribute)(ATerm)ATmakeAppl1(afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)));
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeLocation(int x, int y) */
-
-Attribute makeAttributeLocation(int x, int y)
-{
-  return (Attribute)(ATerm)ATmakeAppl2(afun9, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
+/**
+ * Constructs a tooltip of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] tooltip a child of the new tooltip
+ * \return A pointer to a tooltip, either newly constructed or shared
+ */
+Attribute makeAttributeTooltip(const char* tooltip) {
+  return (Attribute)(ATerm)ATmakeAppl1(afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(tooltip, 0, ATtrue)));
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeShape(Shape shape) */
-
-Attribute makeAttributeShape(Shape shape)
-{
-  return (Attribute)(ATerm)ATmakeAppl1(afun10, (ATerm) shape);
+/**
+ * Constructs a location of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] x a child of the new location
+ * \param[in] y a child of the new location
+ * \return A pointer to a location, either newly constructed or shared
+ */
+Attribute makeAttributeLocation(int x, int y) {
+  return (Attribute)(ATerm)ATmakeAppl2(afun10, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeSize(int width, int height) */
-
-Attribute makeAttributeSize(int width, int height)
-{
-  return (Attribute)(ATerm)ATmakeAppl2(afun11, (ATerm) (ATerm) ATmakeInt(width), (ATerm) (ATerm) ATmakeInt(height));
+/**
+ * Constructs a shape of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] shape a child of the new shape
+ * \return A pointer to a shape, either newly constructed or shared
+ */
+Attribute makeAttributeShape(Shape shape) {
+  return (Attribute)(ATerm)ATmakeAppl1(afun11, (ATerm) shape);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeStyle(Style style) */
-
-Attribute makeAttributeStyle(Style style)
-{
-  return (Attribute)(ATerm)ATmakeAppl1(afun12, (ATerm) style);
+/**
+ * Constructs a size of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] width a child of the new size
+ * \param[in] height a child of the new size
+ * \return A pointer to a size, either newly constructed or shared
+ */
+Attribute makeAttributeSize(int width, int height) {
+  return (Attribute)(ATerm)ATmakeAppl2(afun12, (ATerm) (ATerm) ATmakeInt(width), (ATerm) (ATerm) ATmakeInt(height));
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeLevel(const char* level) */
-
-Attribute makeAttributeLevel(const char* level)
-{
-  return (Attribute)(ATerm)ATmakeAppl1(afun13, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue)));
+/**
+ * Constructs a style of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] style a child of the new style
+ * \return A pointer to a style, either newly constructed or shared
+ */
+Attribute makeAttributeStyle(Style style) {
+  return (Attribute)(ATerm)ATmakeAppl1(afun13, (ATerm) style);
 }
-
-/*}}}  */
-/*{{{  Attribute makeAttributeFile(File file) */
-
-Attribute makeAttributeFile(File file)
-{
-  return (Attribute)(ATerm)ATmakeAppl1(afun14, (ATerm) file);
+/**
+ * Constructs a level of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] level a child of the new level
+ * \return A pointer to a level, either newly constructed or shared
+ */
+Attribute makeAttributeLevel(const char* level) {
+  return (Attribute)(ATerm)ATmakeAppl1(afun14, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue)));
 }
-
-/*}}}  */
-/*{{{  File makeFileExternal(ATerm file) */
-
-File makeFileExternal(ATerm file)
-{
+/**
+ * Constructs a file of type Attribute. Like all ATerm types, Attributes are maximally shared.
+ * \param[in] file a child of the new file
+ * \return A pointer to a file, either newly constructed or shared
+ */
+Attribute makeAttributeFile(File file) {
+  return (Attribute)(ATerm)ATmakeAppl1(afun15, (ATerm) file);
+}
+/**
+ * Constructs a external of type File. Like all ATerm types, Files are maximally shared.
+ * \param[in] file a child of the new external
+ * \return A pointer to a external, either newly constructed or shared
+ */
+File makeFileExternal(ATerm file) {
   return (File)(ATerm) file;
 }
-
-/*}}}  */
-/*{{{  Color makeColorRgb(int red, int green, int blue) */
-
-Color makeColorRgb(int red, int green, int blue)
-{
-  return (Color)(ATerm)ATmakeAppl3(afun15, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
+/**
+ * Constructs a rgb of type Color. Like all ATerm types, Colors are maximally shared.
+ * \param[in] red a child of the new rgb
+ * \param[in] green a child of the new rgb
+ * \param[in] blue a child of the new rgb
+ * \return A pointer to a rgb, either newly constructed or shared
+ */
+Color makeColorRgb(int red, int green, int blue) {
+  return (Color)(ATerm)ATmakeAppl3(afun16, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
-
-/*}}}  */
-/*{{{  Style makeStyleBold(void) */
-
-Style makeStyleBold(void)
-{
-  return (Style)(ATerm)ATmakeAppl0(afun16);
-}
-
-/*}}}  */
-/*{{{  Style makeStyleDashed(void) */
-
-Style makeStyleDashed(void)
-{
+/**
+ * Constructs a bold of type Style. Like all ATerm types, Styles are maximally shared.
+ * \return A pointer to a bold, either newly constructed or shared
+ */
+Style makeStyleBold(void) {
   return (Style)(ATerm)ATmakeAppl0(afun17);
 }
-
-/*}}}  */
-/*{{{  Style makeStyleDotted(void) */
-
-Style makeStyleDotted(void)
-{
+/**
+ * Constructs a dashed of type Style. Like all ATerm types, Styles are maximally shared.
+ * \return A pointer to a dashed, either newly constructed or shared
+ */
+Style makeStyleDashed(void) {
   return (Style)(ATerm)ATmakeAppl0(afun18);
 }
-
-/*}}}  */
-/*{{{  Style makeStyleFilled(void) */
-
-Style makeStyleFilled(void)
-{
+/**
+ * Constructs a dotted of type Style. Like all ATerm types, Styles are maximally shared.
+ * \return A pointer to a dotted, either newly constructed or shared
+ */
+Style makeStyleDotted(void) {
   return (Style)(ATerm)ATmakeAppl0(afun19);
 }
-
-/*}}}  */
-/*{{{  Style makeStyleInvisible(void) */
-
-Style makeStyleInvisible(void)
-{
+/**
+ * Constructs a filled of type Style. Like all ATerm types, Styles are maximally shared.
+ * \return A pointer to a filled, either newly constructed or shared
+ */
+Style makeStyleFilled(void) {
   return (Style)(ATerm)ATmakeAppl0(afun20);
 }
-
-/*}}}  */
-/*{{{  Style makeStyleSolid(void) */
-
-Style makeStyleSolid(void)
-{
+/**
+ * Constructs a invisible of type Style. Like all ATerm types, Styles are maximally shared.
+ * \return A pointer to a invisible, either newly constructed or shared
+ */
+Style makeStyleInvisible(void) {
   return (Style)(ATerm)ATmakeAppl0(afun21);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeBox(void) */
-
-Shape makeShapeBox(void)
-{
-  return (Shape)(ATerm)ATmakeAppl0(afun22);
+/**
+ * Constructs a solid of type Style. Like all ATerm types, Styles are maximally shared.
+ * \return A pointer to a solid, either newly constructed or shared
+ */
+Style makeStyleSolid(void) {
+  return (Style)(ATerm)ATmakeAppl0(afun22);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeCircle(void) */
-
-Shape makeShapeCircle(void)
-{
+/**
+ * Constructs a box of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a box, either newly constructed or shared
+ */
+Shape makeShapeBox(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun23);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeDiamond(void) */
-
-Shape makeShapeDiamond(void)
-{
+/**
+ * Constructs a circle of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a circle, either newly constructed or shared
+ */
+Shape makeShapeCircle(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun24);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeEgg(void) */
-
-Shape makeShapeEgg(void)
-{
+/**
+ * Constructs a diamond of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a diamond, either newly constructed or shared
+ */
+Shape makeShapeDiamond(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun25);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeEllipse(void) */
-
-Shape makeShapeEllipse(void)
-{
+/**
+ * Constructs a egg of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a egg, either newly constructed or shared
+ */
+Shape makeShapeEgg(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun26);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeHexagon(void) */
-
-Shape makeShapeHexagon(void)
-{
+/**
+ * Constructs a ellipse of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a ellipse, either newly constructed or shared
+ */
+Shape makeShapeEllipse(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun27);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeHouse(void) */
-
-Shape makeShapeHouse(void)
-{
+/**
+ * Constructs a hexagon of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a hexagon, either newly constructed or shared
+ */
+Shape makeShapeHexagon(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun28);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeOctagon(void) */
-
-Shape makeShapeOctagon(void)
-{
+/**
+ * Constructs a house of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a house, either newly constructed or shared
+ */
+Shape makeShapeHouse(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun29);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeParallelogram(void) */
-
-Shape makeShapeParallelogram(void)
-{
+/**
+ * Constructs a octagon of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a octagon, either newly constructed or shared
+ */
+Shape makeShapeOctagon(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun30);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapePlaintext(void) */
-
-Shape makeShapePlaintext(void)
-{
+/**
+ * Constructs a parallelogram of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a parallelogram, either newly constructed or shared
+ */
+Shape makeShapeParallelogram(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun31);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeTrapezium(void) */
-
-Shape makeShapeTrapezium(void)
-{
+/**
+ * Constructs a plaintext of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a plaintext, either newly constructed or shared
+ */
+Shape makeShapePlaintext(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun32);
 }
-
-/*}}}  */
-/*{{{  Shape makeShapeTriangle(void) */
-
-Shape makeShapeTriangle(void)
-{
+/**
+ * Constructs a trapezium of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a trapezium, either newly constructed or shared
+ */
+Shape makeShapeTrapezium(void) {
   return (Shape)(ATerm)ATmakeAppl0(afun33);
 }
-
-/*}}}  */
-/*{{{  Direction makeDirectionForward(void) */
-
-Direction makeDirectionForward(void)
-{
-  return (Direction)(ATerm)ATmakeAppl0(afun34);
+/**
+ * Constructs a triangle of type Shape. Like all ATerm types, Shapes are maximally shared.
+ * \return A pointer to a triangle, either newly constructed or shared
+ */
+Shape makeShapeTriangle(void) {
+  return (Shape)(ATerm)ATmakeAppl0(afun34);
 }
-
-/*}}}  */
-/*{{{  Direction makeDirectionBack(void) */
-
-Direction makeDirectionBack(void)
-{
+/**
+ * Constructs a forward of type Direction. Like all ATerm types, Directions are maximally shared.
+ * \return A pointer to a forward, either newly constructed or shared
+ */
+Direction makeDirectionForward(void) {
   return (Direction)(ATerm)ATmakeAppl0(afun35);
 }
-
-/*}}}  */
-/*{{{  Direction makeDirectionBoth(void) */
-
-Direction makeDirectionBoth(void)
-{
+/**
+ * Constructs a back of type Direction. Like all ATerm types, Directions are maximally shared.
+ * \return A pointer to a back, either newly constructed or shared
+ */
+Direction makeDirectionBack(void) {
   return (Direction)(ATerm)ATmakeAppl0(afun36);
 }
-
-/*}}}  */
-/*{{{  Direction makeDirectionNone(void) */
-
-Direction makeDirectionNone(void)
-{
+/**
+ * Constructs a both of type Direction. Like all ATerm types, Directions are maximally shared.
+ * \return A pointer to a both, either newly constructed or shared
+ */
+Direction makeDirectionBoth(void) {
   return (Direction)(ATerm)ATmakeAppl0(afun37);
 }
-
-/*}}}  */
-/*{{{  EdgeList makeEdgeListEmpty(void) */
-
-EdgeList makeEdgeListEmpty(void)
-{
+/**
+ * Constructs a none of type Direction. Like all ATerm types, Directions are maximally shared.
+ * \return A pointer to a none, either newly constructed or shared
+ */
+Direction makeDirectionNone(void) {
+  return (Direction)(ATerm)ATmakeAppl0(afun38);
+}
+/**
+ * Constructs a empty of type EdgeList. Like all ATerm types, EdgeLists are maximally shared.
+ * \return A pointer to a empty, either newly constructed or shared
+ */
+EdgeList makeEdgeListEmpty(void) {
   return (EdgeList)(ATerm)ATempty;
 }
-
-/*}}}  */
-/*{{{  EdgeList makeEdgeListSingle(Edge head) */
-
-EdgeList makeEdgeListSingle(Edge head)
-{
+/**
+ * Constructs a single of type EdgeList. Like all ATerm types, EdgeLists are maximally shared.
+ * \param[in] head a child of the new single
+ * \return A pointer to a single, either newly constructed or shared
+ */
+EdgeList makeEdgeListSingle(Edge head) {
   return (EdgeList)(ATerm)ATmakeList1((ATerm) head);
 }
-
-/*}}}  */
-/*{{{  EdgeList makeEdgeListMany(Edge head, EdgeList tail) */
-
-EdgeList makeEdgeListMany(Edge head, EdgeList tail)
-{
+/**
+ * Constructs a many of type EdgeList. Like all ATerm types, EdgeLists are maximally shared.
+ * \param[in] head a child of the new many
+ * \param[in] tail a child of the new many
+ * \return A pointer to a many, either newly constructed or shared
+ */
+EdgeList makeEdgeListMany(Edge head, EdgeList tail) {
   return (EdgeList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-
-/*}}}  */
-/*{{{  Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes) */
-
-Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes)
-{
-  return (Edge)(ATerm)ATmakeAppl3(afun38, (ATerm) from, (ATerm) to, (ATerm) attributes);
+/**
+ * Constructs a default of type Edge. Like all ATerm types, Edges are maximally shared.
+ * \param[in] from a child of the new default
+ * \param[in] to a child of the new default
+ * \param[in] attributes a child of the new default
+ * \return A pointer to a default, either newly constructed or shared
+ */
+Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes) {
+  return (Edge)(ATerm)ATmakeAppl3(afun39, (ATerm) from, (ATerm) to, (ATerm) attributes);
 }
-
-/*}}}  */
-/*{{{  Polygon makePolygonEmpty(void) */
-
-Polygon makePolygonEmpty(void)
-{
+/**
+ * Constructs a empty of type Polygon. Like all ATerm types, Polygons are maximally shared.
+ * \return A pointer to a empty, either newly constructed or shared
+ */
+Polygon makePolygonEmpty(void) {
   return (Polygon)(ATerm)ATempty;
 }
-
-/*}}}  */
-/*{{{  Polygon makePolygonSingle(Point head) */
-
-Polygon makePolygonSingle(Point head)
-{
+/**
+ * Constructs a single of type Polygon. Like all ATerm types, Polygons are maximally shared.
+ * \param[in] head a child of the new single
+ * \return A pointer to a single, either newly constructed or shared
+ */
+Polygon makePolygonSingle(Point head) {
   return (Polygon)(ATerm)ATmakeList1((ATerm) head);
 }
-
-/*}}}  */
-/*{{{  Polygon makePolygonMany(Point head, Polygon tail) */
-
-Polygon makePolygonMany(Point head, Polygon tail)
-{
+/**
+ * Constructs a many of type Polygon. Like all ATerm types, Polygons are maximally shared.
+ * \param[in] head a child of the new many
+ * \param[in] tail a child of the new many
+ * \return A pointer to a many, either newly constructed or shared
+ */
+Polygon makePolygonMany(Point head, Polygon tail) {
   return (Polygon)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-
-/*}}}  */
-/*{{{  Point makePointDefault(int x, int y) */
-
-Point makePointDefault(int x, int y)
-{
-  return (Point)(ATerm)ATmakeAppl2(afun39, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
+/**
+ * Constructs a default of type Point. Like all ATerm types, Points are maximally shared.
+ * \param[in] x a child of the new default
+ * \param[in] y a child of the new default
+ * \return A pointer to a default, either newly constructed or shared
+ */
+Point makePointDefault(int x, int y) {
+  return (Point)(ATerm)ATmakeAppl2(afun40, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  equality functions */
-
-ATbool isEqualGraph(Graph arg0, Graph arg1)
-{
+/**
+ * Tests equality of two Graphs. A constant time operation.
+ * \param[in] arg0 first Graph to be compared
+ * \param[in] arg1 second Graph to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualGraph(Graph arg0, Graph arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualNodeList(NodeList arg0, NodeList arg1)
-{
+/**
+ * Tests equality of two NodeLists. A constant time operation.
+ * \param[in] arg0 first NodeList to be compared
+ * \param[in] arg1 second NodeList to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualNodeList(NodeList arg0, NodeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualNode(Node arg0, Node arg1)
-{
+/**
+ * Tests equality of two Nodes. A constant time operation.
+ * \param[in] arg0 first Node to be compared
+ * \param[in] arg1 second Node to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualNode(Node arg0, Node arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualNodeId(NodeId arg0, NodeId arg1)
-{
+/**
+ * Tests equality of two NodeIds. A constant time operation.
+ * \param[in] arg0 first NodeId to be compared
+ * \param[in] arg1 second NodeId to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualNodeId(NodeId arg0, NodeId arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1)
-{
+/**
+ * Tests equality of two AttributeLists. A constant time operation.
+ * \param[in] arg0 first AttributeList to be compared
+ * \param[in] arg1 second AttributeList to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualAttribute(Attribute arg0, Attribute arg1)
-{
+/**
+ * Tests equality of two Attributes. A constant time operation.
+ * \param[in] arg0 first Attribute to be compared
+ * \param[in] arg1 second Attribute to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualAttribute(Attribute arg0, Attribute arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualFile(File arg0, File arg1)
-{
+/**
+ * Tests equality of two Files. A constant time operation.
+ * \param[in] arg0 first File to be compared
+ * \param[in] arg1 second File to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualFile(File arg0, File arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualColor(Color arg0, Color arg1)
-{
+/**
+ * Tests equality of two Colors. A constant time operation.
+ * \param[in] arg0 first Color to be compared
+ * \param[in] arg1 second Color to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualColor(Color arg0, Color arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualStyle(Style arg0, Style arg1)
-{
+/**
+ * Tests equality of two Styles. A constant time operation.
+ * \param[in] arg0 first Style to be compared
+ * \param[in] arg1 second Style to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualStyle(Style arg0, Style arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualShape(Shape arg0, Shape arg1)
-{
+/**
+ * Tests equality of two Shapes. A constant time operation.
+ * \param[in] arg0 first Shape to be compared
+ * \param[in] arg1 second Shape to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualShape(Shape arg0, Shape arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualDirection(Direction arg0, Direction arg1)
-{
+/**
+ * Tests equality of two Directions. A constant time operation.
+ * \param[in] arg0 first Direction to be compared
+ * \param[in] arg1 second Direction to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualDirection(Direction arg0, Direction arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1)
-{
+/**
+ * Tests equality of two EdgeLists. A constant time operation.
+ * \param[in] arg0 first EdgeList to be compared
+ * \param[in] arg1 second EdgeList to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualEdge(Edge arg0, Edge arg1)
-{
+/**
+ * Tests equality of two Edges. A constant time operation.
+ * \param[in] arg0 first Edge to be compared
+ * \param[in] arg1 second Edge to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualEdge(Edge arg0, Edge arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualPolygon(Polygon arg0, Polygon arg1)
-{
+/**
+ * Tests equality of two Polygons. A constant time operation.
+ * \param[in] arg0 first Polygon to be compared
+ * \param[in] arg1 second Polygon to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualPolygon(Polygon arg0, Polygon arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool isEqualPoint(Point arg0, Point arg1)
-{
+/**
+ * Tests equality of two Points. A constant time operation.
+ * \param[in] arg0 first Point to be compared
+ * \param[in] arg1 second Point to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool isEqualPoint(Point arg0, Point arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-/*}}}  */
-/*{{{  Graph accessors */
-
-/*{{{  ATbool isValidGraph(Graph arg) */
-
-ATbool isValidGraph(Graph arg)
-{
+/**
+ * Assert whether a Graph is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Graph
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidGraph(Graph arg) {
   if (isGraphDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isGraphDefault(Graph arg) */
-
-inline ATbool isGraphDefault(Graph arg)
-{
+/**
+ * Assert whether a Graph is a default. Always returns ATtrue
+ * \param[in] arg input Graph
+ * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
+ */
+inline ATbool isGraphDefault(Graph arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternGraphDefault, NULL, NULL, NULL));
@@ -1090,71 +1718,79 @@ inline ATbool isGraphDefault(Graph arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasGraphNodes(Graph arg) */
-
-ATbool hasGraphNodes(Graph arg)
-{
+/**
+ * Assert whether a Graph has a nodes. 
+ * \param[in] arg input Graph
+ * \return ATtrue if the Graph had a nodes, or ATfalse otherwise
+ */
+ATbool hasGraphNodes(Graph arg) {
   if (isGraphDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasGraphEdges(Graph arg) */
-
-ATbool hasGraphEdges(Graph arg)
-{
+/**
+ * Assert whether a Graph has a edges. 
+ * \param[in] arg input Graph
+ * \return ATtrue if the Graph had a edges, or ATfalse otherwise
+ */
+ATbool hasGraphEdges(Graph arg) {
   if (isGraphDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasGraphAttributes(Graph arg) */
-
-ATbool hasGraphAttributes(Graph arg)
-{
+/**
+ * Assert whether a Graph has a attributes. 
+ * \param[in] arg input Graph
+ * \return ATtrue if the Graph had a attributes, or ATfalse otherwise
+ */
+ATbool hasGraphAttributes(Graph arg) {
   if (isGraphDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  NodeList getGraphNodes(Graph arg) */
-
-NodeList getGraphNodes(Graph arg)
-{
+/**
+ * Get the nodes NodeList of a Graph. Note that the precondition is that this Graph actually has a nodes
+ * \param[in] arg input Graph
+ * \return the nodes of #arg, if it exist or an undefined value if it does not
+ */
+NodeList getGraphNodes(Graph arg) {
   
     return (NodeList)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  EdgeList getGraphEdges(Graph arg) */
-
-EdgeList getGraphEdges(Graph arg)
-{
+/**
+ * Get the edges EdgeList of a Graph. Note that the precondition is that this Graph actually has a edges
+ * \param[in] arg input Graph
+ * \return the edges of #arg, if it exist or an undefined value if it does not
+ */
+EdgeList getGraphEdges(Graph arg) {
   
     return (EdgeList)ATgetArgument((ATermAppl)arg, 1);
 }
 
-/*}}}  */
-/*{{{  AttributeList getGraphAttributes(Graph arg) */
-
-AttributeList getGraphAttributes(Graph arg)
-{
+/**
+ * Get the attributes AttributeList of a Graph. Note that the precondition is that this Graph actually has a attributes
+ * \param[in] arg input Graph
+ * \return the attributes of #arg, if it exist or an undefined value if it does not
+ */
+AttributeList getGraphAttributes(Graph arg) {
   
     return (AttributeList)ATgetArgument((ATermAppl)arg, 2);
 }
 
-/*}}}  */
-/*{{{  Graph setGraphNodes(Graph arg, NodeList nodes) */
-
-Graph setGraphNodes(Graph arg, NodeList nodes)
-{
+/**
+ * Set the nodes of a Graph. The precondition being that this Graph actually has a nodes
+ * \param[in] arg input Graph
+ * \param[in] nodes new NodeList to set in #arg
+ * \return A new Graph with nodes at the right place, or a core dump if #arg did not have a nodes
+ */
+Graph setGraphNodes(Graph arg, NodeList nodes) {
   if (isGraphDefault(arg)) {
     return (Graph)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) nodes), 0);
   }
@@ -1163,11 +1799,13 @@ Graph setGraphNodes(Graph arg, NodeList nodes)
   return (Graph)NULL;
 }
 
-/*}}}  */
-/*{{{  Graph setGraphEdges(Graph arg, EdgeList edges) */
-
-Graph setGraphEdges(Graph arg, EdgeList edges)
-{
+/**
+ * Set the edges of a Graph. The precondition being that this Graph actually has a edges
+ * \param[in] arg input Graph
+ * \param[in] edges new EdgeList to set in #arg
+ * \return A new Graph with edges at the right place, or a core dump if #arg did not have a edges
+ */
+Graph setGraphEdges(Graph arg, EdgeList edges) {
   if (isGraphDefault(arg)) {
     return (Graph)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) edges), 1);
   }
@@ -1176,11 +1814,13 @@ Graph setGraphEdges(Graph arg, EdgeList edges)
   return (Graph)NULL;
 }
 
-/*}}}  */
-/*{{{  Graph setGraphAttributes(Graph arg, AttributeList attributes) */
-
-Graph setGraphAttributes(Graph arg, AttributeList attributes)
-{
+/**
+ * Set the attributes of a Graph. The precondition being that this Graph actually has a attributes
+ * \param[in] arg input Graph
+ * \param[in] attributes new AttributeList to set in #arg
+ * \return A new Graph with attributes at the right place, or a core dump if #arg did not have a attributes
+ */
+Graph setGraphAttributes(Graph arg, AttributeList attributes) {
   if (isGraphDefault(arg)) {
     return (Graph)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) attributes), 2);
   }
@@ -1189,15 +1829,12 @@ Graph setGraphAttributes(Graph arg, AttributeList attributes)
   return (Graph)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  NodeList accessors */
-
-/*{{{  ATbool isValidNodeList(NodeList arg) */
-
-ATbool isValidNodeList(NodeList arg)
-{
+/**
+ * Assert whether a NodeList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input NodeList
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidNodeList(NodeList arg) {
   if (isNodeListEmpty(arg)) {
     return ATtrue;
   }
@@ -1210,11 +1847,12 @@ ATbool isValidNodeList(NodeList arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isNodeListEmpty(NodeList arg) */
-
-inline ATbool isNodeListEmpty(NodeList arg)
-{
+/**
+ * Assert whether a NodeList is a empty. . May not be used to assert correctness of the NodeList
+ * \param[in] arg input NodeList
+ * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
+ */
+inline ATbool isNodeListEmpty(NodeList arg) {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -1225,11 +1863,12 @@ inline ATbool isNodeListEmpty(NodeList arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isNodeListSingle(NodeList arg) */
-
-inline ATbool isNodeListSingle(NodeList arg)
-{
+/**
+ * Assert whether a NodeList is a single. . May not be used to assert correctness of the NodeList
+ * \param[in] arg input NodeList
+ * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
+ */
+inline ATbool isNodeListSingle(NodeList arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -1250,11 +1889,12 @@ inline ATbool isNodeListSingle(NodeList arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isNodeListMany(NodeList arg) */
-
-inline ATbool isNodeListMany(NodeList arg)
-{
+/**
+ * Assert whether a NodeList is a many. . May not be used to assert correctness of the NodeList
+ * \param[in] arg input NodeList
+ * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
+ */
+inline ATbool isNodeListMany(NodeList arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -1275,11 +1915,12 @@ inline ATbool isNodeListMany(NodeList arg)
   }
 }
 
-/*}}}  */
-/*{{{  ATbool hasNodeListHead(NodeList arg) */
-
-ATbool hasNodeListHead(NodeList arg)
-{
+/**
+ * Assert whether a NodeList has a head. 
+ * \param[in] arg input NodeList
+ * \return ATtrue if the NodeList had a head, or ATfalse otherwise
+ */
+ATbool hasNodeListHead(NodeList arg) {
   if (isNodeListSingle(arg)) {
     return ATtrue;
   }
@@ -1289,22 +1930,24 @@ ATbool hasNodeListHead(NodeList arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasNodeListTail(NodeList arg) */
-
-ATbool hasNodeListTail(NodeList arg)
-{
+/**
+ * Assert whether a NodeList has a tail. 
+ * \param[in] arg input NodeList
+ * \return ATtrue if the NodeList had a tail, or ATfalse otherwise
+ */
+ATbool hasNodeListTail(NodeList arg) {
   if (isNodeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  Node getNodeListHead(NodeList arg) */
-
-Node getNodeListHead(NodeList arg)
-{
+/**
+ * Get the head Node of a NodeList. Note that the precondition is that this NodeList actually has a head
+ * \param[in] arg input NodeList
+ * \return the head of #arg, if it exist or an undefined value if it does not
+ */
+Node getNodeListHead(NodeList arg) {
   if (isNodeListSingle(arg)) {
     return (Node)ATgetFirst((ATermList)arg);
   }
@@ -1312,20 +1955,23 @@ Node getNodeListHead(NodeList arg)
     return (Node)ATgetFirst((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  NodeList getNodeListTail(NodeList arg) */
-
-NodeList getNodeListTail(NodeList arg)
-{
+/**
+ * Get the tail NodeList of a NodeList. Note that the precondition is that this NodeList actually has a tail
+ * \param[in] arg input NodeList
+ * \return the tail of #arg, if it exist or an undefined value if it does not
+ */
+NodeList getNodeListTail(NodeList arg) {
   
     return (NodeList)ATgetNext((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  NodeList setNodeListHead(NodeList arg, Node head) */
-
-NodeList setNodeListHead(NodeList arg, Node head)
-{
+/**
+ * Set the head of a NodeList. The precondition being that this NodeList actually has a head
+ * \param[in] arg input NodeList
+ * \param[in] head new Node to set in #arg
+ * \return A new NodeList with head at the right place, or a core dump if #arg did not have a head
+ */
+NodeList setNodeListHead(NodeList arg, Node head) {
   if (isNodeListSingle(arg)) {
     return (NodeList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
@@ -1337,11 +1983,13 @@ NodeList setNodeListHead(NodeList arg, Node head)
   return (NodeList)NULL;
 }
 
-/*}}}  */
-/*{{{  NodeList setNodeListTail(NodeList arg, NodeList tail) */
-
-NodeList setNodeListTail(NodeList arg, NodeList tail)
-{
+/**
+ * Set the tail of a NodeList. The precondition being that this NodeList actually has a tail
+ * \param[in] arg input NodeList
+ * \param[in] tail new NodeList to set in #arg
+ * \return A new NodeList with tail at the right place, or a core dump if #arg did not have a tail
+ */
+NodeList setNodeListTail(NodeList arg, NodeList tail) {
   if (isNodeListMany(arg)) {
     return (NodeList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
@@ -1350,26 +1998,24 @@ NodeList setNodeListTail(NodeList arg, NodeList tail)
   return (NodeList)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Node accessors */
-
-/*{{{  ATbool isValidNode(Node arg) */
-
-ATbool isValidNode(Node arg)
-{
+/**
+ * Assert whether a Node is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Node
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidNode(Node arg) {
   if (isNodeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isNodeDefault(Node arg) */
-
-inline ATbool isNodeDefault(Node arg)
-{
+/**
+ * Assert whether a Node is a default. Always returns ATtrue
+ * \param[in] arg input Node
+ * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
+ */
+inline ATbool isNodeDefault(Node arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternNodeDefault, NULL, NULL));
@@ -1377,51 +2023,57 @@ inline ATbool isNodeDefault(Node arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasNodeId(Node arg) */
-
-ATbool hasNodeId(Node arg)
-{
+/**
+ * Assert whether a Node has a id. 
+ * \param[in] arg input Node
+ * \return ATtrue if the Node had a id, or ATfalse otherwise
+ */
+ATbool hasNodeId(Node arg) {
   if (isNodeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasNodeAttributes(Node arg) */
-
-ATbool hasNodeAttributes(Node arg)
-{
+/**
+ * Assert whether a Node has a attributes. 
+ * \param[in] arg input Node
+ * \return ATtrue if the Node had a attributes, or ATfalse otherwise
+ */
+ATbool hasNodeAttributes(Node arg) {
   if (isNodeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  NodeId getNodeId(Node arg) */
-
-NodeId getNodeId(Node arg)
-{
+/**
+ * Get the id NodeId of a Node. Note that the precondition is that this Node actually has a id
+ * \param[in] arg input Node
+ * \return the id of #arg, if it exist or an undefined value if it does not
+ */
+NodeId getNodeId(Node arg) {
   
     return (NodeId)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  AttributeList getNodeAttributes(Node arg) */
-
-AttributeList getNodeAttributes(Node arg)
-{
+/**
+ * Get the attributes AttributeList of a Node. Note that the precondition is that this Node actually has a attributes
+ * \param[in] arg input Node
+ * \return the attributes of #arg, if it exist or an undefined value if it does not
+ */
+AttributeList getNodeAttributes(Node arg) {
   
     return (AttributeList)ATgetArgument((ATermAppl)arg, 1);
 }
 
-/*}}}  */
-/*{{{  Node setNodeId(Node arg, NodeId id) */
-
-Node setNodeId(Node arg, NodeId id)
-{
+/**
+ * Set the id of a Node. The precondition being that this Node actually has a id
+ * \param[in] arg input Node
+ * \param[in] id new NodeId to set in #arg
+ * \return A new Node with id at the right place, or a core dump if #arg did not have a id
+ */
+Node setNodeId(Node arg, NodeId id) {
   if (isNodeDefault(arg)) {
     return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) id), 0);
   }
@@ -1430,11 +2082,13 @@ Node setNodeId(Node arg, NodeId id)
   return (Node)NULL;
 }
 
-/*}}}  */
-/*{{{  Node setNodeAttributes(Node arg, AttributeList attributes) */
-
-Node setNodeAttributes(Node arg, AttributeList attributes)
-{
+/**
+ * Set the attributes of a Node. The precondition being that this Node actually has a attributes
+ * \param[in] arg input Node
+ * \param[in] attributes new AttributeList to set in #arg
+ * \return A new Node with attributes at the right place, or a core dump if #arg did not have a attributes
+ */
+Node setNodeAttributes(Node arg, AttributeList attributes) {
   if (isNodeDefault(arg)) {
     return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) attributes), 1);
   }
@@ -1443,26 +2097,24 @@ Node setNodeAttributes(Node arg, AttributeList attributes)
   return (Node)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  NodeId accessors */
-
-/*{{{  ATbool isValidNodeId(NodeId arg) */
-
-ATbool isValidNodeId(NodeId arg)
-{
+/**
+ * Assert whether a NodeId is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input NodeId
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidNodeId(NodeId arg) {
   if (isNodeIdDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isNodeIdDefault(NodeId arg) */
-
-inline ATbool isNodeIdDefault(NodeId arg)
-{
+/**
+ * Assert whether a NodeId is a default. Always returns ATtrue
+ * \param[in] arg input NodeId
+ * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
+ */
+inline ATbool isNodeIdDefault(NodeId arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternNodeIdDefault, NULL));
@@ -1470,31 +2122,35 @@ inline ATbool isNodeIdDefault(NodeId arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasNodeIdId(NodeId arg) */
-
-ATbool hasNodeIdId(NodeId arg)
-{
+/**
+ * Assert whether a NodeId has a id. 
+ * \param[in] arg input NodeId
+ * \return ATtrue if the NodeId had a id, or ATfalse otherwise
+ */
+ATbool hasNodeIdId(NodeId arg) {
   if (isNodeIdDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATerm getNodeIdId(NodeId arg) */
-
-ATerm getNodeIdId(NodeId arg)
-{
+/**
+ * Get the id ATerm of a NodeId. Note that the precondition is that this NodeId actually has a id
+ * \param[in] arg input NodeId
+ * \return the id of #arg, if it exist or an undefined value if it does not
+ */
+ATerm getNodeIdId(NodeId arg) {
   
     return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  NodeId setNodeIdId(NodeId arg, ATerm id) */
-
-NodeId setNodeIdId(NodeId arg, ATerm id)
-{
+/**
+ * Set the id of a NodeId. The precondition being that this NodeId actually has a id
+ * \param[in] arg input NodeId
+ * \param[in] id new ATerm to set in #arg
+ * \return A new NodeId with id at the right place, or a core dump if #arg did not have a id
+ */
+NodeId setNodeIdId(NodeId arg, ATerm id) {
   if (isNodeIdDefault(arg)) {
     return (NodeId)((ATerm) id);
   }
@@ -1503,15 +2159,12 @@ NodeId setNodeIdId(NodeId arg, ATerm id)
   return (NodeId)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  AttributeList accessors */
-
-/*{{{  ATbool isValidAttributeList(AttributeList arg) */
-
-ATbool isValidAttributeList(AttributeList arg)
-{
+/**
+ * Assert whether a AttributeList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input AttributeList
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidAttributeList(AttributeList arg) {
   if (isAttributeListEmpty(arg)) {
     return ATtrue;
   }
@@ -1524,11 +2177,12 @@ ATbool isValidAttributeList(AttributeList arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeListEmpty(AttributeList arg) */
-
-inline ATbool isAttributeListEmpty(AttributeList arg)
-{
+/**
+ * Assert whether a AttributeList is a empty. . May not be used to assert correctness of the AttributeList
+ * \param[in] arg input AttributeList
+ * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
+ */
+inline ATbool isAttributeListEmpty(AttributeList arg) {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -1539,11 +2193,12 @@ inline ATbool isAttributeListEmpty(AttributeList arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeListSingle(AttributeList arg) */
-
-inline ATbool isAttributeListSingle(AttributeList arg)
-{
+/**
+ * Assert whether a AttributeList is a single. . May not be used to assert correctness of the AttributeList
+ * \param[in] arg input AttributeList
+ * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
+ */
+inline ATbool isAttributeListSingle(AttributeList arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -1564,11 +2219,12 @@ inline ATbool isAttributeListSingle(AttributeList arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeListMany(AttributeList arg) */
-
-inline ATbool isAttributeListMany(AttributeList arg)
-{
+/**
+ * Assert whether a AttributeList is a many. . May not be used to assert correctness of the AttributeList
+ * \param[in] arg input AttributeList
+ * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
+ */
+inline ATbool isAttributeListMany(AttributeList arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -1589,11 +2245,12 @@ inline ATbool isAttributeListMany(AttributeList arg)
   }
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeListHead(AttributeList arg) */
-
-ATbool hasAttributeListHead(AttributeList arg)
-{
+/**
+ * Assert whether a AttributeList has a head. 
+ * \param[in] arg input AttributeList
+ * \return ATtrue if the AttributeList had a head, or ATfalse otherwise
+ */
+ATbool hasAttributeListHead(AttributeList arg) {
   if (isAttributeListSingle(arg)) {
     return ATtrue;
   }
@@ -1603,22 +2260,24 @@ ATbool hasAttributeListHead(AttributeList arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeListTail(AttributeList arg) */
-
-ATbool hasAttributeListTail(AttributeList arg)
-{
+/**
+ * Assert whether a AttributeList has a tail. 
+ * \param[in] arg input AttributeList
+ * \return ATtrue if the AttributeList had a tail, or ATfalse otherwise
+ */
+ATbool hasAttributeListTail(AttributeList arg) {
   if (isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  Attribute getAttributeListHead(AttributeList arg) */
-
-Attribute getAttributeListHead(AttributeList arg)
-{
+/**
+ * Get the head Attribute of a AttributeList. Note that the precondition is that this AttributeList actually has a head
+ * \param[in] arg input AttributeList
+ * \return the head of #arg, if it exist or an undefined value if it does not
+ */
+Attribute getAttributeListHead(AttributeList arg) {
   if (isAttributeListSingle(arg)) {
     return (Attribute)ATgetFirst((ATermList)arg);
   }
@@ -1626,20 +2285,23 @@ Attribute getAttributeListHead(AttributeList arg)
     return (Attribute)ATgetFirst((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  AttributeList getAttributeListTail(AttributeList arg) */
-
-AttributeList getAttributeListTail(AttributeList arg)
-{
+/**
+ * Get the tail AttributeList of a AttributeList. Note that the precondition is that this AttributeList actually has a tail
+ * \param[in] arg input AttributeList
+ * \return the tail of #arg, if it exist or an undefined value if it does not
+ */
+AttributeList getAttributeListTail(AttributeList arg) {
   
     return (AttributeList)ATgetNext((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  AttributeList setAttributeListHead(AttributeList arg, Attribute head) */
-
-AttributeList setAttributeListHead(AttributeList arg, Attribute head)
-{
+/**
+ * Set the head of a AttributeList. The precondition being that this AttributeList actually has a head
+ * \param[in] arg input AttributeList
+ * \param[in] head new Attribute to set in #arg
+ * \return A new AttributeList with head at the right place, or a core dump if #arg did not have a head
+ */
+AttributeList setAttributeListHead(AttributeList arg, Attribute head) {
   if (isAttributeListSingle(arg)) {
     return (AttributeList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
@@ -1651,11 +2313,13 @@ AttributeList setAttributeListHead(AttributeList arg, Attribute head)
   return (AttributeList)NULL;
 }
 
-/*}}}  */
-/*{{{  AttributeList setAttributeListTail(AttributeList arg, AttributeList tail) */
-
-AttributeList setAttributeListTail(AttributeList arg, AttributeList tail)
-{
+/**
+ * Set the tail of a AttributeList. The precondition being that this AttributeList actually has a tail
+ * \param[in] arg input AttributeList
+ * \param[in] tail new AttributeList to set in #arg
+ * \return A new AttributeList with tail at the right place, or a core dump if #arg did not have a tail
+ */
+AttributeList setAttributeListTail(AttributeList arg, AttributeList tail) {
   if (isAttributeListMany(arg)) {
     return (AttributeList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
@@ -1664,15 +2328,12 @@ AttributeList setAttributeListTail(AttributeList arg, AttributeList tail)
   return (AttributeList)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Attribute accessors */
-
-/*{{{  ATbool isValidAttribute(Attribute arg) */
-
-ATbool isValidAttribute(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidAttribute(Attribute arg) {
   if (isAttributeBoundingBox(arg)) {
     return ATtrue;
   }
@@ -1692,6 +2353,9 @@ ATbool isValidAttribute(Attribute arg)
     return ATtrue;
   }
   else if (isAttributeLabel(arg)) {
+    return ATtrue;
+  }
+  else if (isAttributeTooltip(arg)) {
     return ATtrue;
   }
   else if (isAttributeLocation(arg)) {
@@ -1715,11 +2379,12 @@ ATbool isValidAttribute(Attribute arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeBoundingBox(Attribute arg) */
-
-inline ATbool isAttributeBoundingBox(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a bounding-box. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a bounding-box, or ATfalse otherwise
+ */
+inline ATbool isAttributeBoundingBox(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1737,11 +2402,12 @@ inline ATbool isAttributeBoundingBox(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeColor(Attribute arg) */
-
-inline ATbool isAttributeColor(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a color. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a color, or ATfalse otherwise
+ */
+inline ATbool isAttributeColor(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1759,11 +2425,12 @@ inline ATbool isAttributeColor(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeCurvePoints(Attribute arg) */
-
-inline ATbool isAttributeCurvePoints(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a curve-points. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a curve-points, or ATfalse otherwise
+ */
+inline ATbool isAttributeCurvePoints(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1781,11 +2448,12 @@ inline ATbool isAttributeCurvePoints(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeDirection(Attribute arg) */
-
-inline ATbool isAttributeDirection(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a direction. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a direction, or ATfalse otherwise
+ */
+inline ATbool isAttributeDirection(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1803,11 +2471,12 @@ inline ATbool isAttributeDirection(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeFillColor(Attribute arg) */
-
-inline ATbool isAttributeFillColor(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a fill-color. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a fill-color, or ATfalse otherwise
+ */
+inline ATbool isAttributeFillColor(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1825,11 +2494,12 @@ inline ATbool isAttributeFillColor(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeInfo(Attribute arg) */
-
-inline ATbool isAttributeInfo(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a info. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a info, or ATfalse otherwise
+ */
+inline ATbool isAttributeInfo(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1847,11 +2517,12 @@ inline ATbool isAttributeInfo(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeLabel(Attribute arg) */
-
-inline ATbool isAttributeLabel(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a label. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a label, or ATfalse otherwise
+ */
+inline ATbool isAttributeLabel(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1869,11 +2540,35 @@ inline ATbool isAttributeLabel(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeLocation(Attribute arg) */
+/**
+ * Assert whether a Attribute is a tooltip. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a tooltip, or ATfalse otherwise
+ */
+inline ATbool isAttributeTooltip(Attribute arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
 
-inline ATbool isAttributeLocation(Attribute arg)
-{
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternAttributeTooltip, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a Attribute is a location. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a location, or ATfalse otherwise
+ */
+inline ATbool isAttributeLocation(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1891,11 +2586,12 @@ inline ATbool isAttributeLocation(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeShape(Attribute arg) */
-
-inline ATbool isAttributeShape(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a shape. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a shape, or ATfalse otherwise
+ */
+inline ATbool isAttributeShape(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1913,11 +2609,12 @@ inline ATbool isAttributeShape(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeSize(Attribute arg) */
-
-inline ATbool isAttributeSize(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a size. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a size, or ATfalse otherwise
+ */
+inline ATbool isAttributeSize(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1935,11 +2632,12 @@ inline ATbool isAttributeSize(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeStyle(Attribute arg) */
-
-inline ATbool isAttributeStyle(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a style. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a style, or ATfalse otherwise
+ */
+inline ATbool isAttributeStyle(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1957,11 +2655,12 @@ inline ATbool isAttributeStyle(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeLevel(Attribute arg) */
-
-inline ATbool isAttributeLevel(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a level. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a level, or ATfalse otherwise
+ */
+inline ATbool isAttributeLevel(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1979,11 +2678,12 @@ inline ATbool isAttributeLevel(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isAttributeFile(Attribute arg) */
-
-inline ATbool isAttributeFile(Attribute arg)
-{
+/**
+ * Assert whether a Attribute is a file. . May not be used to assert correctness of the Attribute
+ * \param[in] arg input Attribute
+ * \return ATtrue if #arg corresponds to the signature of a file, or ATfalse otherwise
+ */
+inline ATbool isAttributeFile(Attribute arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2001,33 +2701,36 @@ inline ATbool isAttributeFile(Attribute arg)
   }
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeFirst(Attribute arg) */
-
-ATbool hasAttributeFirst(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a first. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a first, or ATfalse otherwise
+ */
+ATbool hasAttributeFirst(Attribute arg) {
   if (isAttributeBoundingBox(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeSecond(Attribute arg) */
-
-ATbool hasAttributeSecond(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a second. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a second, or ATfalse otherwise
+ */
+ATbool hasAttributeSecond(Attribute arg) {
   if (isAttributeBoundingBox(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeColor(Attribute arg) */
-
-ATbool hasAttributeColor(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a color. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a color, or ATfalse otherwise
+ */
+ATbool hasAttributeColor(Attribute arg) {
   if (isAttributeColor(arg)) {
     return ATtrue;
   }
@@ -2037,172 +2740,200 @@ ATbool hasAttributeColor(Attribute arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributePoints(Attribute arg) */
-
-ATbool hasAttributePoints(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a points. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a points, or ATfalse otherwise
+ */
+ATbool hasAttributePoints(Attribute arg) {
   if (isAttributeCurvePoints(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeDirection(Attribute arg) */
-
-ATbool hasAttributeDirection(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a direction. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a direction, or ATfalse otherwise
+ */
+ATbool hasAttributeDirection(Attribute arg) {
   if (isAttributeDirection(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeKey(Attribute arg) */
-
-ATbool hasAttributeKey(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a key. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a key, or ATfalse otherwise
+ */
+ATbool hasAttributeKey(Attribute arg) {
   if (isAttributeInfo(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeValue(Attribute arg) */
-
-ATbool hasAttributeValue(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a value. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a value, or ATfalse otherwise
+ */
+ATbool hasAttributeValue(Attribute arg) {
   if (isAttributeInfo(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeLabel(Attribute arg) */
-
-ATbool hasAttributeLabel(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a label. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a label, or ATfalse otherwise
+ */
+ATbool hasAttributeLabel(Attribute arg) {
   if (isAttributeLabel(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeX(Attribute arg) */
+/**
+ * Assert whether a Attribute has a tooltip. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a tooltip, or ATfalse otherwise
+ */
+ATbool hasAttributeTooltip(Attribute arg) {
+  if (isAttributeTooltip(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
 
-ATbool hasAttributeX(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a x. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a x, or ATfalse otherwise
+ */
+ATbool hasAttributeX(Attribute arg) {
   if (isAttributeLocation(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeY(Attribute arg) */
-
-ATbool hasAttributeY(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a y. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a y, or ATfalse otherwise
+ */
+ATbool hasAttributeY(Attribute arg) {
   if (isAttributeLocation(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeShape(Attribute arg) */
-
-ATbool hasAttributeShape(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a shape. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a shape, or ATfalse otherwise
+ */
+ATbool hasAttributeShape(Attribute arg) {
   if (isAttributeShape(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeWidth(Attribute arg) */
-
-ATbool hasAttributeWidth(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a width. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a width, or ATfalse otherwise
+ */
+ATbool hasAttributeWidth(Attribute arg) {
   if (isAttributeSize(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeHeight(Attribute arg) */
-
-ATbool hasAttributeHeight(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a height. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a height, or ATfalse otherwise
+ */
+ATbool hasAttributeHeight(Attribute arg) {
   if (isAttributeSize(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeStyle(Attribute arg) */
-
-ATbool hasAttributeStyle(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a style. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a style, or ATfalse otherwise
+ */
+ATbool hasAttributeStyle(Attribute arg) {
   if (isAttributeStyle(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeLevel(Attribute arg) */
-
-ATbool hasAttributeLevel(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a level. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a level, or ATfalse otherwise
+ */
+ATbool hasAttributeLevel(Attribute arg) {
   if (isAttributeLevel(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasAttributeFile(Attribute arg) */
-
-ATbool hasAttributeFile(Attribute arg)
-{
+/**
+ * Assert whether a Attribute has a file. 
+ * \param[in] arg input Attribute
+ * \return ATtrue if the Attribute had a file, or ATfalse otherwise
+ */
+ATbool hasAttributeFile(Attribute arg) {
   if (isAttributeFile(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  Point getAttributeFirst(Attribute arg) */
-
-Point getAttributeFirst(Attribute arg)
-{
+/**
+ * Get the first Point of a Attribute. Note that the precondition is that this Attribute actually has a first
+ * \param[in] arg input Attribute
+ * \return the first of #arg, if it exist or an undefined value if it does not
+ */
+Point getAttributeFirst(Attribute arg) {
   
     return (Point)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  Point getAttributeSecond(Attribute arg) */
-
-Point getAttributeSecond(Attribute arg)
-{
+/**
+ * Get the second Point of a Attribute. Note that the precondition is that this Attribute actually has a second
+ * \param[in] arg input Attribute
+ * \return the second of #arg, if it exist or an undefined value if it does not
+ */
+Point getAttributeSecond(Attribute arg) {
   
     return (Point)ATgetArgument((ATermAppl)arg, 1);
 }
 
-/*}}}  */
-/*{{{  Color getAttributeColor(Attribute arg) */
-
-Color getAttributeColor(Attribute arg)
-{
+/**
+ * Get the color Color of a Attribute. Note that the precondition is that this Attribute actually has a color
+ * \param[in] arg input Attribute
+ * \return the color of #arg, if it exist or an undefined value if it does not
+ */
+Color getAttributeColor(Attribute arg) {
   if (isAttributeColor(arg)) {
     return (Color)ATgetArgument((ATermAppl)arg, 0);
   }
@@ -2210,128 +2941,153 @@ Color getAttributeColor(Attribute arg)
     return (Color)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  Polygon getAttributePoints(Attribute arg) */
-
-Polygon getAttributePoints(Attribute arg)
-{
+/**
+ * Get the points Polygon of a Attribute. Note that the precondition is that this Attribute actually has a points
+ * \param[in] arg input Attribute
+ * \return the points of #arg, if it exist or an undefined value if it does not
+ */
+Polygon getAttributePoints(Attribute arg) {
   
     return (Polygon)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  Direction getAttributeDirection(Attribute arg) */
-
-Direction getAttributeDirection(Attribute arg)
-{
+/**
+ * Get the direction Direction of a Attribute. Note that the precondition is that this Attribute actually has a direction
+ * \param[in] arg input Attribute
+ * \return the direction of #arg, if it exist or an undefined value if it does not
+ */
+Direction getAttributeDirection(Attribute arg) {
   
     return (Direction)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  char* getAttributeKey(Attribute arg) */
-
-char* getAttributeKey(Attribute arg)
-{
+/**
+ * Get the key char* of a Attribute. Note that the precondition is that this Attribute actually has a key
+ * \param[in] arg input Attribute
+ * \return the key of #arg, if it exist or an undefined value if it does not
+ */
+char* getAttributeKey(Attribute arg) {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
-/*}}}  */
-/*{{{  ATerm getAttributeValue(Attribute arg) */
-
-ATerm getAttributeValue(Attribute arg)
-{
+/**
+ * Get the value ATerm of a Attribute. Note that the precondition is that this Attribute actually has a value
+ * \param[in] arg input Attribute
+ * \return the value of #arg, if it exist or an undefined value if it does not
+ */
+ATerm getAttributeValue(Attribute arg) {
   
     return (ATerm)ATgetArgument((ATermAppl)arg, 1);
 }
 
-/*}}}  */
-/*{{{  char* getAttributeLabel(Attribute arg) */
-
-char* getAttributeLabel(Attribute arg)
-{
+/**
+ * Get the label char* of a Attribute. Note that the precondition is that this Attribute actually has a label
+ * \param[in] arg input Attribute
+ * \return the label of #arg, if it exist or an undefined value if it does not
+ */
+char* getAttributeLabel(Attribute arg) {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
-/*}}}  */
-/*{{{  int getAttributeX(Attribute arg) */
+/**
+ * Get the tooltip char* of a Attribute. Note that the precondition is that this Attribute actually has a tooltip
+ * \param[in] arg input Attribute
+ * \return the tooltip of #arg, if it exist or an undefined value if it does not
+ */
+char* getAttributeTooltip(Attribute arg) {
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
 
-int getAttributeX(Attribute arg)
-{
+/**
+ * Get the x int of a Attribute. Note that the precondition is that this Attribute actually has a x
+ * \param[in] arg input Attribute
+ * \return the x of #arg, if it exist or an undefined value if it does not
+ */
+int getAttributeX(Attribute arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
-/*}}}  */
-/*{{{  int getAttributeY(Attribute arg) */
-
-int getAttributeY(Attribute arg)
-{
+/**
+ * Get the y int of a Attribute. Note that the precondition is that this Attribute actually has a y
+ * \param[in] arg input Attribute
+ * \return the y of #arg, if it exist or an undefined value if it does not
+ */
+int getAttributeY(Attribute arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
-/*}}}  */
-/*{{{  Shape getAttributeShape(Attribute arg) */
-
-Shape getAttributeShape(Attribute arg)
-{
+/**
+ * Get the shape Shape of a Attribute. Note that the precondition is that this Attribute actually has a shape
+ * \param[in] arg input Attribute
+ * \return the shape of #arg, if it exist or an undefined value if it does not
+ */
+Shape getAttributeShape(Attribute arg) {
   
     return (Shape)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  int getAttributeWidth(Attribute arg) */
-
-int getAttributeWidth(Attribute arg)
-{
+/**
+ * Get the width int of a Attribute. Note that the precondition is that this Attribute actually has a width
+ * \param[in] arg input Attribute
+ * \return the width of #arg, if it exist or an undefined value if it does not
+ */
+int getAttributeWidth(Attribute arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
-/*}}}  */
-/*{{{  int getAttributeHeight(Attribute arg) */
-
-int getAttributeHeight(Attribute arg)
-{
+/**
+ * Get the height int of a Attribute. Note that the precondition is that this Attribute actually has a height
+ * \param[in] arg input Attribute
+ * \return the height of #arg, if it exist or an undefined value if it does not
+ */
+int getAttributeHeight(Attribute arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
-/*}}}  */
-/*{{{  Style getAttributeStyle(Attribute arg) */
-
-Style getAttributeStyle(Attribute arg)
-{
+/**
+ * Get the style Style of a Attribute. Note that the precondition is that this Attribute actually has a style
+ * \param[in] arg input Attribute
+ * \return the style of #arg, if it exist or an undefined value if it does not
+ */
+Style getAttributeStyle(Attribute arg) {
   
     return (Style)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  char* getAttributeLevel(Attribute arg) */
-
-char* getAttributeLevel(Attribute arg)
-{
+/**
+ * Get the level char* of a Attribute. Note that the precondition is that this Attribute actually has a level
+ * \param[in] arg input Attribute
+ * \return the level of #arg, if it exist or an undefined value if it does not
+ */
+char* getAttributeLevel(Attribute arg) {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
-/*}}}  */
-/*{{{  File getAttributeFile(Attribute arg) */
-
-File getAttributeFile(Attribute arg)
-{
+/**
+ * Get the file File of a Attribute. Note that the precondition is that this Attribute actually has a file
+ * \param[in] arg input Attribute
+ * \return the file of #arg, if it exist or an undefined value if it does not
+ */
+File getAttributeFile(Attribute arg) {
   
     return (File)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeFirst(Attribute arg, Point first) */
-
-Attribute setAttributeFirst(Attribute arg, Point first)
-{
+/**
+ * Set the first of a Attribute. The precondition being that this Attribute actually has a first
+ * \param[in] arg input Attribute
+ * \param[in] first new Point to set in #arg
+ * \return A new Attribute with first at the right place, or a core dump if #arg did not have a first
+ */
+Attribute setAttributeFirst(Attribute arg, Point first) {
   if (isAttributeBoundingBox(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) first), 0);
   }
@@ -2340,11 +3096,13 @@ Attribute setAttributeFirst(Attribute arg, Point first)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeSecond(Attribute arg, Point second) */
-
-Attribute setAttributeSecond(Attribute arg, Point second)
-{
+/**
+ * Set the second of a Attribute. The precondition being that this Attribute actually has a second
+ * \param[in] arg input Attribute
+ * \param[in] second new Point to set in #arg
+ * \return A new Attribute with second at the right place, or a core dump if #arg did not have a second
+ */
+Attribute setAttributeSecond(Attribute arg, Point second) {
   if (isAttributeBoundingBox(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) second), 1);
   }
@@ -2353,11 +3111,13 @@ Attribute setAttributeSecond(Attribute arg, Point second)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeColor(Attribute arg, Color color) */
-
-Attribute setAttributeColor(Attribute arg, Color color)
-{
+/**
+ * Set the color of a Attribute. The precondition being that this Attribute actually has a color
+ * \param[in] arg input Attribute
+ * \param[in] color new Color to set in #arg
+ * \return A new Attribute with color at the right place, or a core dump if #arg did not have a color
+ */
+Attribute setAttributeColor(Attribute arg, Color color) {
   if (isAttributeColor(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) color), 0);
   }
@@ -2369,11 +3129,13 @@ Attribute setAttributeColor(Attribute arg, Color color)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributePoints(Attribute arg, Polygon points) */
-
-Attribute setAttributePoints(Attribute arg, Polygon points)
-{
+/**
+ * Set the points of a Attribute. The precondition being that this Attribute actually has a points
+ * \param[in] arg input Attribute
+ * \param[in] points new Polygon to set in #arg
+ * \return A new Attribute with points at the right place, or a core dump if #arg did not have a points
+ */
+Attribute setAttributePoints(Attribute arg, Polygon points) {
   if (isAttributeCurvePoints(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) points), 0);
   }
@@ -2382,11 +3144,13 @@ Attribute setAttributePoints(Attribute arg, Polygon points)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeDirection(Attribute arg, Direction direction) */
-
-Attribute setAttributeDirection(Attribute arg, Direction direction)
-{
+/**
+ * Set the direction of a Attribute. The precondition being that this Attribute actually has a direction
+ * \param[in] arg input Attribute
+ * \param[in] direction new Direction to set in #arg
+ * \return A new Attribute with direction at the right place, or a core dump if #arg did not have a direction
+ */
+Attribute setAttributeDirection(Attribute arg, Direction direction) {
   if (isAttributeDirection(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) direction), 0);
   }
@@ -2395,11 +3159,13 @@ Attribute setAttributeDirection(Attribute arg, Direction direction)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeKey(Attribute arg, const char* key) */
-
-Attribute setAttributeKey(Attribute arg, const char* key)
-{
+/**
+ * Set the key of a Attribute. The precondition being that this Attribute actually has a key
+ * \param[in] arg input Attribute
+ * \param[in] key new const char* to set in #arg
+ * \return A new Attribute with key at the right place, or a core dump if #arg did not have a key
+ */
+Attribute setAttributeKey(Attribute arg, const char* key) {
   if (isAttributeInfo(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(key, 0, ATtrue))), 0);
   }
@@ -2408,11 +3174,13 @@ Attribute setAttributeKey(Attribute arg, const char* key)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeValue(Attribute arg, ATerm value) */
-
-Attribute setAttributeValue(Attribute arg, ATerm value)
-{
+/**
+ * Set the value of a Attribute. The precondition being that this Attribute actually has a value
+ * \param[in] arg input Attribute
+ * \param[in] value new ATerm to set in #arg
+ * \return A new Attribute with value at the right place, or a core dump if #arg did not have a value
+ */
+Attribute setAttributeValue(Attribute arg, ATerm value) {
   if (isAttributeInfo(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) value), 1);
   }
@@ -2421,11 +3189,13 @@ Attribute setAttributeValue(Attribute arg, ATerm value)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeLabel(Attribute arg, const char* label) */
-
-Attribute setAttributeLabel(Attribute arg, const char* label)
-{
+/**
+ * Set the label of a Attribute. The precondition being that this Attribute actually has a label
+ * \param[in] arg input Attribute
+ * \param[in] label new const char* to set in #arg
+ * \return A new Attribute with label at the right place, or a core dump if #arg did not have a label
+ */
+Attribute setAttributeLabel(Attribute arg, const char* label) {
   if (isAttributeLabel(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue))), 0);
   }
@@ -2434,11 +3204,28 @@ Attribute setAttributeLabel(Attribute arg, const char* label)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeX(Attribute arg, int x) */
+/**
+ * Set the tooltip of a Attribute. The precondition being that this Attribute actually has a tooltip
+ * \param[in] arg input Attribute
+ * \param[in] tooltip new const char* to set in #arg
+ * \return A new Attribute with tooltip at the right place, or a core dump if #arg did not have a tooltip
+ */
+Attribute setAttributeTooltip(Attribute arg, const char* tooltip) {
+  if (isAttributeTooltip(arg)) {
+    return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(tooltip, 0, ATtrue))), 0);
+  }
 
-Attribute setAttributeX(Attribute arg, int x)
-{
+  ATabort("Attribute has no Tooltip: %t\n", arg);
+  return (Attribute)NULL;
+}
+
+/**
+ * Set the x of a Attribute. The precondition being that this Attribute actually has a x
+ * \param[in] arg input Attribute
+ * \param[in] x new int to set in #arg
+ * \return A new Attribute with x at the right place, or a core dump if #arg did not have a x
+ */
+Attribute setAttributeX(Attribute arg, int x) {
   if (isAttributeLocation(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(x)), 0);
   }
@@ -2447,11 +3234,13 @@ Attribute setAttributeX(Attribute arg, int x)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeY(Attribute arg, int y) */
-
-Attribute setAttributeY(Attribute arg, int y)
-{
+/**
+ * Set the y of a Attribute. The precondition being that this Attribute actually has a y
+ * \param[in] arg input Attribute
+ * \param[in] y new int to set in #arg
+ * \return A new Attribute with y at the right place, or a core dump if #arg did not have a y
+ */
+Attribute setAttributeY(Attribute arg, int y) {
   if (isAttributeLocation(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(y)), 1);
   }
@@ -2460,11 +3249,13 @@ Attribute setAttributeY(Attribute arg, int y)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeShape(Attribute arg, Shape shape) */
-
-Attribute setAttributeShape(Attribute arg, Shape shape)
-{
+/**
+ * Set the shape of a Attribute. The precondition being that this Attribute actually has a shape
+ * \param[in] arg input Attribute
+ * \param[in] shape new Shape to set in #arg
+ * \return A new Attribute with shape at the right place, or a core dump if #arg did not have a shape
+ */
+Attribute setAttributeShape(Attribute arg, Shape shape) {
   if (isAttributeShape(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) shape), 0);
   }
@@ -2473,11 +3264,13 @@ Attribute setAttributeShape(Attribute arg, Shape shape)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeWidth(Attribute arg, int width) */
-
-Attribute setAttributeWidth(Attribute arg, int width)
-{
+/**
+ * Set the width of a Attribute. The precondition being that this Attribute actually has a width
+ * \param[in] arg input Attribute
+ * \param[in] width new int to set in #arg
+ * \return A new Attribute with width at the right place, or a core dump if #arg did not have a width
+ */
+Attribute setAttributeWidth(Attribute arg, int width) {
   if (isAttributeSize(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(width)), 0);
   }
@@ -2486,11 +3279,13 @@ Attribute setAttributeWidth(Attribute arg, int width)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeHeight(Attribute arg, int height) */
-
-Attribute setAttributeHeight(Attribute arg, int height)
-{
+/**
+ * Set the height of a Attribute. The precondition being that this Attribute actually has a height
+ * \param[in] arg input Attribute
+ * \param[in] height new int to set in #arg
+ * \return A new Attribute with height at the right place, or a core dump if #arg did not have a height
+ */
+Attribute setAttributeHeight(Attribute arg, int height) {
   if (isAttributeSize(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(height)), 1);
   }
@@ -2499,11 +3294,13 @@ Attribute setAttributeHeight(Attribute arg, int height)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeStyle(Attribute arg, Style style) */
-
-Attribute setAttributeStyle(Attribute arg, Style style)
-{
+/**
+ * Set the style of a Attribute. The precondition being that this Attribute actually has a style
+ * \param[in] arg input Attribute
+ * \param[in] style new Style to set in #arg
+ * \return A new Attribute with style at the right place, or a core dump if #arg did not have a style
+ */
+Attribute setAttributeStyle(Attribute arg, Style style) {
   if (isAttributeStyle(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) style), 0);
   }
@@ -2512,11 +3309,13 @@ Attribute setAttributeStyle(Attribute arg, Style style)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeLevel(Attribute arg, const char* level) */
-
-Attribute setAttributeLevel(Attribute arg, const char* level)
-{
+/**
+ * Set the level of a Attribute. The precondition being that this Attribute actually has a level
+ * \param[in] arg input Attribute
+ * \param[in] level new const char* to set in #arg
+ * \return A new Attribute with level at the right place, or a core dump if #arg did not have a level
+ */
+Attribute setAttributeLevel(Attribute arg, const char* level) {
   if (isAttributeLevel(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue))), 0);
   }
@@ -2525,11 +3324,13 @@ Attribute setAttributeLevel(Attribute arg, const char* level)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-/*{{{  Attribute setAttributeFile(Attribute arg, File file) */
-
-Attribute setAttributeFile(Attribute arg, File file)
-{
+/**
+ * Set the file of a Attribute. The precondition being that this Attribute actually has a file
+ * \param[in] arg input Attribute
+ * \param[in] file new File to set in #arg
+ * \return A new Attribute with file at the right place, or a core dump if #arg did not have a file
+ */
+Attribute setAttributeFile(Attribute arg, File file) {
   if (isAttributeFile(arg)) {
     return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) file), 0);
   }
@@ -2538,26 +3339,24 @@ Attribute setAttributeFile(Attribute arg, File file)
   return (Attribute)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  File accessors */
-
-/*{{{  ATbool isValidFile(File arg) */
-
-ATbool isValidFile(File arg)
-{
+/**
+ * Assert whether a File is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input File
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidFile(File arg) {
   if (isFileExternal(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isFileExternal(File arg) */
-
-inline ATbool isFileExternal(File arg)
-{
+/**
+ * Assert whether a File is a external. Always returns ATtrue
+ * \param[in] arg input File
+ * \return ATtrue if #arg corresponds to the signature of a external, or ATfalse otherwise
+ */
+inline ATbool isFileExternal(File arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternFileExternal, NULL));
@@ -2565,31 +3364,35 @@ inline ATbool isFileExternal(File arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasFileFile(File arg) */
-
-ATbool hasFileFile(File arg)
-{
+/**
+ * Assert whether a File has a file. 
+ * \param[in] arg input File
+ * \return ATtrue if the File had a file, or ATfalse otherwise
+ */
+ATbool hasFileFile(File arg) {
   if (isFileExternal(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATerm getFileFile(File arg) */
-
-ATerm getFileFile(File arg)
-{
+/**
+ * Get the file ATerm of a File. Note that the precondition is that this File actually has a file
+ * \param[in] arg input File
+ * \return the file of #arg, if it exist or an undefined value if it does not
+ */
+ATerm getFileFile(File arg) {
   
     return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  File setFileFile(File arg, ATerm file) */
-
-File setFileFile(File arg, ATerm file)
-{
+/**
+ * Set the file of a File. The precondition being that this File actually has a file
+ * \param[in] arg input File
+ * \param[in] file new ATerm to set in #arg
+ * \return A new File with file at the right place, or a core dump if #arg did not have a file
+ */
+File setFileFile(File arg, ATerm file) {
   if (isFileExternal(arg)) {
     return (File)((ATerm) file);
   }
@@ -2598,26 +3401,24 @@ File setFileFile(File arg, ATerm file)
   return (File)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Color accessors */
-
-/*{{{  ATbool isValidColor(Color arg) */
-
-ATbool isValidColor(Color arg)
-{
+/**
+ * Assert whether a Color is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Color
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidColor(Color arg) {
   if (isColorRgb(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isColorRgb(Color arg) */
-
-inline ATbool isColorRgb(Color arg)
-{
+/**
+ * Assert whether a Color is a rgb. Always returns ATtrue
+ * \param[in] arg input Color
+ * \return ATtrue if #arg corresponds to the signature of a rgb, or ATfalse otherwise
+ */
+inline ATbool isColorRgb(Color arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternColorRgb, NULL, NULL, NULL));
@@ -2625,71 +3426,79 @@ inline ATbool isColorRgb(Color arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasColorRed(Color arg) */
-
-ATbool hasColorRed(Color arg)
-{
+/**
+ * Assert whether a Color has a red. 
+ * \param[in] arg input Color
+ * \return ATtrue if the Color had a red, or ATfalse otherwise
+ */
+ATbool hasColorRed(Color arg) {
   if (isColorRgb(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasColorGreen(Color arg) */
-
-ATbool hasColorGreen(Color arg)
-{
+/**
+ * Assert whether a Color has a green. 
+ * \param[in] arg input Color
+ * \return ATtrue if the Color had a green, or ATfalse otherwise
+ */
+ATbool hasColorGreen(Color arg) {
   if (isColorRgb(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasColorBlue(Color arg) */
-
-ATbool hasColorBlue(Color arg)
-{
+/**
+ * Assert whether a Color has a blue. 
+ * \param[in] arg input Color
+ * \return ATtrue if the Color had a blue, or ATfalse otherwise
+ */
+ATbool hasColorBlue(Color arg) {
   if (isColorRgb(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  int getColorRed(Color arg) */
-
-int getColorRed(Color arg)
-{
+/**
+ * Get the red int of a Color. Note that the precondition is that this Color actually has a red
+ * \param[in] arg input Color
+ * \return the red of #arg, if it exist or an undefined value if it does not
+ */
+int getColorRed(Color arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
-/*}}}  */
-/*{{{  int getColorGreen(Color arg) */
-
-int getColorGreen(Color arg)
-{
+/**
+ * Get the green int of a Color. Note that the precondition is that this Color actually has a green
+ * \param[in] arg input Color
+ * \return the green of #arg, if it exist or an undefined value if it does not
+ */
+int getColorGreen(Color arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
-/*}}}  */
-/*{{{  int getColorBlue(Color arg) */
-
-int getColorBlue(Color arg)
-{
+/**
+ * Get the blue int of a Color. Note that the precondition is that this Color actually has a blue
+ * \param[in] arg input Color
+ * \return the blue of #arg, if it exist or an undefined value if it does not
+ */
+int getColorBlue(Color arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 2));
 }
 
-/*}}}  */
-/*{{{  Color setColorRed(Color arg, int red) */
-
-Color setColorRed(Color arg, int red)
-{
+/**
+ * Set the red of a Color. The precondition being that this Color actually has a red
+ * \param[in] arg input Color
+ * \param[in] red new int to set in #arg
+ * \return A new Color with red at the right place, or a core dump if #arg did not have a red
+ */
+Color setColorRed(Color arg, int red) {
   if (isColorRgb(arg)) {
     return (Color)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(red)), 0);
   }
@@ -2698,11 +3507,13 @@ Color setColorRed(Color arg, int red)
   return (Color)NULL;
 }
 
-/*}}}  */
-/*{{{  Color setColorGreen(Color arg, int green) */
-
-Color setColorGreen(Color arg, int green)
-{
+/**
+ * Set the green of a Color. The precondition being that this Color actually has a green
+ * \param[in] arg input Color
+ * \param[in] green new int to set in #arg
+ * \return A new Color with green at the right place, or a core dump if #arg did not have a green
+ */
+Color setColorGreen(Color arg, int green) {
   if (isColorRgb(arg)) {
     return (Color)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(green)), 1);
   }
@@ -2711,11 +3522,13 @@ Color setColorGreen(Color arg, int green)
   return (Color)NULL;
 }
 
-/*}}}  */
-/*{{{  Color setColorBlue(Color arg, int blue) */
-
-Color setColorBlue(Color arg, int blue)
-{
+/**
+ * Set the blue of a Color. The precondition being that this Color actually has a blue
+ * \param[in] arg input Color
+ * \param[in] blue new int to set in #arg
+ * \return A new Color with blue at the right place, or a core dump if #arg did not have a blue
+ */
+Color setColorBlue(Color arg, int blue) {
   if (isColorRgb(arg)) {
     return (Color)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(blue)), 2);
   }
@@ -2724,15 +3537,12 @@ Color setColorBlue(Color arg, int blue)
   return (Color)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Style accessors */
-
-/*{{{  ATbool isValidStyle(Style arg) */
-
-ATbool isValidStyle(Style arg)
-{
+/**
+ * Assert whether a Style is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidStyle(Style arg) {
   if (isStyleBold(arg)) {
     return ATtrue;
   }
@@ -2754,11 +3564,12 @@ ATbool isValidStyle(Style arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isStyleBold(Style arg) */
-
-inline ATbool isStyleBold(Style arg)
-{
+/**
+ * Assert whether a Style is a bold. . May not be used to assert correctness of the Style
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the signature of a bold, or ATfalse otherwise
+ */
+inline ATbool isStyleBold(Style arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2776,11 +3587,12 @@ inline ATbool isStyleBold(Style arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isStyleDashed(Style arg) */
-
-inline ATbool isStyleDashed(Style arg)
-{
+/**
+ * Assert whether a Style is a dashed. . May not be used to assert correctness of the Style
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the signature of a dashed, or ATfalse otherwise
+ */
+inline ATbool isStyleDashed(Style arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2798,11 +3610,12 @@ inline ATbool isStyleDashed(Style arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isStyleDotted(Style arg) */
-
-inline ATbool isStyleDotted(Style arg)
-{
+/**
+ * Assert whether a Style is a dotted. . May not be used to assert correctness of the Style
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the signature of a dotted, or ATfalse otherwise
+ */
+inline ATbool isStyleDotted(Style arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2820,11 +3633,12 @@ inline ATbool isStyleDotted(Style arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isStyleFilled(Style arg) */
-
-inline ATbool isStyleFilled(Style arg)
-{
+/**
+ * Assert whether a Style is a filled. . May not be used to assert correctness of the Style
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the signature of a filled, or ATfalse otherwise
+ */
+inline ATbool isStyleFilled(Style arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2842,11 +3656,12 @@ inline ATbool isStyleFilled(Style arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isStyleInvisible(Style arg) */
-
-inline ATbool isStyleInvisible(Style arg)
-{
+/**
+ * Assert whether a Style is a invisible. . May not be used to assert correctness of the Style
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the signature of a invisible, or ATfalse otherwise
+ */
+inline ATbool isStyleInvisible(Style arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2864,11 +3679,12 @@ inline ATbool isStyleInvisible(Style arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isStyleSolid(Style arg) */
-
-inline ATbool isStyleSolid(Style arg)
-{
+/**
+ * Assert whether a Style is a solid. . May not be used to assert correctness of the Style
+ * \param[in] arg input Style
+ * \return ATtrue if #arg corresponds to the signature of a solid, or ATfalse otherwise
+ */
+inline ATbool isStyleSolid(Style arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2886,15 +3702,12 @@ inline ATbool isStyleSolid(Style arg)
   }
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Shape accessors */
-
-/*{{{  ATbool isValidShape(Shape arg) */
-
-ATbool isValidShape(Shape arg)
-{
+/**
+ * Assert whether a Shape is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidShape(Shape arg) {
   if (isShapeBox(arg)) {
     return ATtrue;
   }
@@ -2934,11 +3747,12 @@ ATbool isValidShape(Shape arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeBox(Shape arg) */
-
-inline ATbool isShapeBox(Shape arg)
-{
+/**
+ * Assert whether a Shape is a box. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a box, or ATfalse otherwise
+ */
+inline ATbool isShapeBox(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2956,11 +3770,12 @@ inline ATbool isShapeBox(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeCircle(Shape arg) */
-
-inline ATbool isShapeCircle(Shape arg)
-{
+/**
+ * Assert whether a Shape is a circle. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a circle, or ATfalse otherwise
+ */
+inline ATbool isShapeCircle(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2978,11 +3793,12 @@ inline ATbool isShapeCircle(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeDiamond(Shape arg) */
-
-inline ATbool isShapeDiamond(Shape arg)
-{
+/**
+ * Assert whether a Shape is a diamond. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a diamond, or ATfalse otherwise
+ */
+inline ATbool isShapeDiamond(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3000,11 +3816,12 @@ inline ATbool isShapeDiamond(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeEgg(Shape arg) */
-
-inline ATbool isShapeEgg(Shape arg)
-{
+/**
+ * Assert whether a Shape is a egg. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a egg, or ATfalse otherwise
+ */
+inline ATbool isShapeEgg(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3022,11 +3839,12 @@ inline ATbool isShapeEgg(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeEllipse(Shape arg) */
-
-inline ATbool isShapeEllipse(Shape arg)
-{
+/**
+ * Assert whether a Shape is a ellipse. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a ellipse, or ATfalse otherwise
+ */
+inline ATbool isShapeEllipse(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3044,11 +3862,12 @@ inline ATbool isShapeEllipse(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeHexagon(Shape arg) */
-
-inline ATbool isShapeHexagon(Shape arg)
-{
+/**
+ * Assert whether a Shape is a hexagon. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a hexagon, or ATfalse otherwise
+ */
+inline ATbool isShapeHexagon(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3066,11 +3885,12 @@ inline ATbool isShapeHexagon(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeHouse(Shape arg) */
-
-inline ATbool isShapeHouse(Shape arg)
-{
+/**
+ * Assert whether a Shape is a house. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a house, or ATfalse otherwise
+ */
+inline ATbool isShapeHouse(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3088,11 +3908,12 @@ inline ATbool isShapeHouse(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeOctagon(Shape arg) */
-
-inline ATbool isShapeOctagon(Shape arg)
-{
+/**
+ * Assert whether a Shape is a octagon. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a octagon, or ATfalse otherwise
+ */
+inline ATbool isShapeOctagon(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3110,11 +3931,12 @@ inline ATbool isShapeOctagon(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeParallelogram(Shape arg) */
-
-inline ATbool isShapeParallelogram(Shape arg)
-{
+/**
+ * Assert whether a Shape is a parallelogram. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a parallelogram, or ATfalse otherwise
+ */
+inline ATbool isShapeParallelogram(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3132,11 +3954,12 @@ inline ATbool isShapeParallelogram(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapePlaintext(Shape arg) */
-
-inline ATbool isShapePlaintext(Shape arg)
-{
+/**
+ * Assert whether a Shape is a plaintext. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a plaintext, or ATfalse otherwise
+ */
+inline ATbool isShapePlaintext(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3154,11 +3977,12 @@ inline ATbool isShapePlaintext(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeTrapezium(Shape arg) */
-
-inline ATbool isShapeTrapezium(Shape arg)
-{
+/**
+ * Assert whether a Shape is a trapezium. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a trapezium, or ATfalse otherwise
+ */
+inline ATbool isShapeTrapezium(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3176,11 +4000,12 @@ inline ATbool isShapeTrapezium(Shape arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isShapeTriangle(Shape arg) */
-
-inline ATbool isShapeTriangle(Shape arg)
-{
+/**
+ * Assert whether a Shape is a triangle. . May not be used to assert correctness of the Shape
+ * \param[in] arg input Shape
+ * \return ATtrue if #arg corresponds to the signature of a triangle, or ATfalse otherwise
+ */
+inline ATbool isShapeTriangle(Shape arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3198,15 +4023,12 @@ inline ATbool isShapeTriangle(Shape arg)
   }
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Direction accessors */
-
-/*{{{  ATbool isValidDirection(Direction arg) */
-
-ATbool isValidDirection(Direction arg)
-{
+/**
+ * Assert whether a Direction is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Direction
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidDirection(Direction arg) {
   if (isDirectionForward(arg)) {
     return ATtrue;
   }
@@ -3222,11 +4044,12 @@ ATbool isValidDirection(Direction arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isDirectionForward(Direction arg) */
-
-inline ATbool isDirectionForward(Direction arg)
-{
+/**
+ * Assert whether a Direction is a forward. . May not be used to assert correctness of the Direction
+ * \param[in] arg input Direction
+ * \return ATtrue if #arg corresponds to the signature of a forward, or ATfalse otherwise
+ */
+inline ATbool isDirectionForward(Direction arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3244,11 +4067,12 @@ inline ATbool isDirectionForward(Direction arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isDirectionBack(Direction arg) */
-
-inline ATbool isDirectionBack(Direction arg)
-{
+/**
+ * Assert whether a Direction is a back. . May not be used to assert correctness of the Direction
+ * \param[in] arg input Direction
+ * \return ATtrue if #arg corresponds to the signature of a back, or ATfalse otherwise
+ */
+inline ATbool isDirectionBack(Direction arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3266,11 +4090,12 @@ inline ATbool isDirectionBack(Direction arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isDirectionBoth(Direction arg) */
-
-inline ATbool isDirectionBoth(Direction arg)
-{
+/**
+ * Assert whether a Direction is a both. . May not be used to assert correctness of the Direction
+ * \param[in] arg input Direction
+ * \return ATtrue if #arg corresponds to the signature of a both, or ATfalse otherwise
+ */
+inline ATbool isDirectionBoth(Direction arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3288,11 +4113,12 @@ inline ATbool isDirectionBoth(Direction arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isDirectionNone(Direction arg) */
-
-inline ATbool isDirectionNone(Direction arg)
-{
+/**
+ * Assert whether a Direction is a none. . May not be used to assert correctness of the Direction
+ * \param[in] arg input Direction
+ * \return ATtrue if #arg corresponds to the signature of a none, or ATfalse otherwise
+ */
+inline ATbool isDirectionNone(Direction arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -3310,15 +4136,12 @@ inline ATbool isDirectionNone(Direction arg)
   }
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  EdgeList accessors */
-
-/*{{{  ATbool isValidEdgeList(EdgeList arg) */
-
-ATbool isValidEdgeList(EdgeList arg)
-{
+/**
+ * Assert whether a EdgeList is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input EdgeList
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidEdgeList(EdgeList arg) {
   if (isEdgeListEmpty(arg)) {
     return ATtrue;
   }
@@ -3331,11 +4154,12 @@ ATbool isValidEdgeList(EdgeList arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isEdgeListEmpty(EdgeList arg) */
-
-inline ATbool isEdgeListEmpty(EdgeList arg)
-{
+/**
+ * Assert whether a EdgeList is a empty. . May not be used to assert correctness of the EdgeList
+ * \param[in] arg input EdgeList
+ * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
+ */
+inline ATbool isEdgeListEmpty(EdgeList arg) {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -3346,11 +4170,12 @@ inline ATbool isEdgeListEmpty(EdgeList arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isEdgeListSingle(EdgeList arg) */
-
-inline ATbool isEdgeListSingle(EdgeList arg)
-{
+/**
+ * Assert whether a EdgeList is a single. . May not be used to assert correctness of the EdgeList
+ * \param[in] arg input EdgeList
+ * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
+ */
+inline ATbool isEdgeListSingle(EdgeList arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -3371,11 +4196,12 @@ inline ATbool isEdgeListSingle(EdgeList arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isEdgeListMany(EdgeList arg) */
-
-inline ATbool isEdgeListMany(EdgeList arg)
-{
+/**
+ * Assert whether a EdgeList is a many. . May not be used to assert correctness of the EdgeList
+ * \param[in] arg input EdgeList
+ * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
+ */
+inline ATbool isEdgeListMany(EdgeList arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -3396,11 +4222,12 @@ inline ATbool isEdgeListMany(EdgeList arg)
   }
 }
 
-/*}}}  */
-/*{{{  ATbool hasEdgeListHead(EdgeList arg) */
-
-ATbool hasEdgeListHead(EdgeList arg)
-{
+/**
+ * Assert whether a EdgeList has a head. 
+ * \param[in] arg input EdgeList
+ * \return ATtrue if the EdgeList had a head, or ATfalse otherwise
+ */
+ATbool hasEdgeListHead(EdgeList arg) {
   if (isEdgeListSingle(arg)) {
     return ATtrue;
   }
@@ -3410,22 +4237,24 @@ ATbool hasEdgeListHead(EdgeList arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasEdgeListTail(EdgeList arg) */
-
-ATbool hasEdgeListTail(EdgeList arg)
-{
+/**
+ * Assert whether a EdgeList has a tail. 
+ * \param[in] arg input EdgeList
+ * \return ATtrue if the EdgeList had a tail, or ATfalse otherwise
+ */
+ATbool hasEdgeListTail(EdgeList arg) {
   if (isEdgeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  Edge getEdgeListHead(EdgeList arg) */
-
-Edge getEdgeListHead(EdgeList arg)
-{
+/**
+ * Get the head Edge of a EdgeList. Note that the precondition is that this EdgeList actually has a head
+ * \param[in] arg input EdgeList
+ * \return the head of #arg, if it exist or an undefined value if it does not
+ */
+Edge getEdgeListHead(EdgeList arg) {
   if (isEdgeListSingle(arg)) {
     return (Edge)ATgetFirst((ATermList)arg);
   }
@@ -3433,20 +4262,23 @@ Edge getEdgeListHead(EdgeList arg)
     return (Edge)ATgetFirst((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  EdgeList getEdgeListTail(EdgeList arg) */
-
-EdgeList getEdgeListTail(EdgeList arg)
-{
+/**
+ * Get the tail EdgeList of a EdgeList. Note that the precondition is that this EdgeList actually has a tail
+ * \param[in] arg input EdgeList
+ * \return the tail of #arg, if it exist or an undefined value if it does not
+ */
+EdgeList getEdgeListTail(EdgeList arg) {
   
     return (EdgeList)ATgetNext((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  EdgeList setEdgeListHead(EdgeList arg, Edge head) */
-
-EdgeList setEdgeListHead(EdgeList arg, Edge head)
-{
+/**
+ * Set the head of a EdgeList. The precondition being that this EdgeList actually has a head
+ * \param[in] arg input EdgeList
+ * \param[in] head new Edge to set in #arg
+ * \return A new EdgeList with head at the right place, or a core dump if #arg did not have a head
+ */
+EdgeList setEdgeListHead(EdgeList arg, Edge head) {
   if (isEdgeListSingle(arg)) {
     return (EdgeList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
@@ -3458,11 +4290,13 @@ EdgeList setEdgeListHead(EdgeList arg, Edge head)
   return (EdgeList)NULL;
 }
 
-/*}}}  */
-/*{{{  EdgeList setEdgeListTail(EdgeList arg, EdgeList tail) */
-
-EdgeList setEdgeListTail(EdgeList arg, EdgeList tail)
-{
+/**
+ * Set the tail of a EdgeList. The precondition being that this EdgeList actually has a tail
+ * \param[in] arg input EdgeList
+ * \param[in] tail new EdgeList to set in #arg
+ * \return A new EdgeList with tail at the right place, or a core dump if #arg did not have a tail
+ */
+EdgeList setEdgeListTail(EdgeList arg, EdgeList tail) {
   if (isEdgeListMany(arg)) {
     return (EdgeList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
@@ -3471,26 +4305,24 @@ EdgeList setEdgeListTail(EdgeList arg, EdgeList tail)
   return (EdgeList)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Edge accessors */
-
-/*{{{  ATbool isValidEdge(Edge arg) */
-
-ATbool isValidEdge(Edge arg)
-{
+/**
+ * Assert whether a Edge is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Edge
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidEdge(Edge arg) {
   if (isEdgeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isEdgeDefault(Edge arg) */
-
-inline ATbool isEdgeDefault(Edge arg)
-{
+/**
+ * Assert whether a Edge is a default. Always returns ATtrue
+ * \param[in] arg input Edge
+ * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
+ */
+inline ATbool isEdgeDefault(Edge arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternEdgeDefault, NULL, NULL, NULL));
@@ -3498,71 +4330,79 @@ inline ATbool isEdgeDefault(Edge arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasEdgeFrom(Edge arg) */
-
-ATbool hasEdgeFrom(Edge arg)
-{
+/**
+ * Assert whether a Edge has a from. 
+ * \param[in] arg input Edge
+ * \return ATtrue if the Edge had a from, or ATfalse otherwise
+ */
+ATbool hasEdgeFrom(Edge arg) {
   if (isEdgeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasEdgeTo(Edge arg) */
-
-ATbool hasEdgeTo(Edge arg)
-{
+/**
+ * Assert whether a Edge has a to. 
+ * \param[in] arg input Edge
+ * \return ATtrue if the Edge had a to, or ATfalse otherwise
+ */
+ATbool hasEdgeTo(Edge arg) {
   if (isEdgeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasEdgeAttributes(Edge arg) */
-
-ATbool hasEdgeAttributes(Edge arg)
-{
+/**
+ * Assert whether a Edge has a attributes. 
+ * \param[in] arg input Edge
+ * \return ATtrue if the Edge had a attributes, or ATfalse otherwise
+ */
+ATbool hasEdgeAttributes(Edge arg) {
   if (isEdgeDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  NodeId getEdgeFrom(Edge arg) */
-
-NodeId getEdgeFrom(Edge arg)
-{
+/**
+ * Get the from NodeId of a Edge. Note that the precondition is that this Edge actually has a from
+ * \param[in] arg input Edge
+ * \return the from of #arg, if it exist or an undefined value if it does not
+ */
+NodeId getEdgeFrom(Edge arg) {
   
     return (NodeId)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  NodeId getEdgeTo(Edge arg) */
-
-NodeId getEdgeTo(Edge arg)
-{
+/**
+ * Get the to NodeId of a Edge. Note that the precondition is that this Edge actually has a to
+ * \param[in] arg input Edge
+ * \return the to of #arg, if it exist or an undefined value if it does not
+ */
+NodeId getEdgeTo(Edge arg) {
   
     return (NodeId)ATgetArgument((ATermAppl)arg, 1);
 }
 
-/*}}}  */
-/*{{{  AttributeList getEdgeAttributes(Edge arg) */
-
-AttributeList getEdgeAttributes(Edge arg)
-{
+/**
+ * Get the attributes AttributeList of a Edge. Note that the precondition is that this Edge actually has a attributes
+ * \param[in] arg input Edge
+ * \return the attributes of #arg, if it exist or an undefined value if it does not
+ */
+AttributeList getEdgeAttributes(Edge arg) {
   
     return (AttributeList)ATgetArgument((ATermAppl)arg, 2);
 }
 
-/*}}}  */
-/*{{{  Edge setEdgeFrom(Edge arg, NodeId from) */
-
-Edge setEdgeFrom(Edge arg, NodeId from)
-{
+/**
+ * Set the from of a Edge. The precondition being that this Edge actually has a from
+ * \param[in] arg input Edge
+ * \param[in] from new NodeId to set in #arg
+ * \return A new Edge with from at the right place, or a core dump if #arg did not have a from
+ */
+Edge setEdgeFrom(Edge arg, NodeId from) {
   if (isEdgeDefault(arg)) {
     return (Edge)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) from), 0);
   }
@@ -3571,11 +4411,13 @@ Edge setEdgeFrom(Edge arg, NodeId from)
   return (Edge)NULL;
 }
 
-/*}}}  */
-/*{{{  Edge setEdgeTo(Edge arg, NodeId to) */
-
-Edge setEdgeTo(Edge arg, NodeId to)
-{
+/**
+ * Set the to of a Edge. The precondition being that this Edge actually has a to
+ * \param[in] arg input Edge
+ * \param[in] to new NodeId to set in #arg
+ * \return A new Edge with to at the right place, or a core dump if #arg did not have a to
+ */
+Edge setEdgeTo(Edge arg, NodeId to) {
   if (isEdgeDefault(arg)) {
     return (Edge)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) to), 1);
   }
@@ -3584,11 +4426,13 @@ Edge setEdgeTo(Edge arg, NodeId to)
   return (Edge)NULL;
 }
 
-/*}}}  */
-/*{{{  Edge setEdgeAttributes(Edge arg, AttributeList attributes) */
-
-Edge setEdgeAttributes(Edge arg, AttributeList attributes)
-{
+/**
+ * Set the attributes of a Edge. The precondition being that this Edge actually has a attributes
+ * \param[in] arg input Edge
+ * \param[in] attributes new AttributeList to set in #arg
+ * \return A new Edge with attributes at the right place, or a core dump if #arg did not have a attributes
+ */
+Edge setEdgeAttributes(Edge arg, AttributeList attributes) {
   if (isEdgeDefault(arg)) {
     return (Edge)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) attributes), 2);
   }
@@ -3597,15 +4441,12 @@ Edge setEdgeAttributes(Edge arg, AttributeList attributes)
   return (Edge)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Polygon accessors */
-
-/*{{{  ATbool isValidPolygon(Polygon arg) */
-
-ATbool isValidPolygon(Polygon arg)
-{
+/**
+ * Assert whether a Polygon is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Polygon
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidPolygon(Polygon arg) {
   if (isPolygonEmpty(arg)) {
     return ATtrue;
   }
@@ -3618,11 +4459,12 @@ ATbool isValidPolygon(Polygon arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isPolygonEmpty(Polygon arg) */
-
-inline ATbool isPolygonEmpty(Polygon arg)
-{
+/**
+ * Assert whether a Polygon is a empty. . May not be used to assert correctness of the Polygon
+ * \param[in] arg input Polygon
+ * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
+ */
+inline ATbool isPolygonEmpty(Polygon arg) {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -3633,11 +4475,12 @@ inline ATbool isPolygonEmpty(Polygon arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isPolygonSingle(Polygon arg) */
-
-inline ATbool isPolygonSingle(Polygon arg)
-{
+/**
+ * Assert whether a Polygon is a single. . May not be used to assert correctness of the Polygon
+ * \param[in] arg input Polygon
+ * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
+ */
+inline ATbool isPolygonSingle(Polygon arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -3658,11 +4501,12 @@ inline ATbool isPolygonSingle(Polygon arg)
   }
 }
 
-/*}}}  */
-/*{{{  inline ATbool isPolygonMany(Polygon arg) */
-
-inline ATbool isPolygonMany(Polygon arg)
-{
+/**
+ * Assert whether a Polygon is a many. . May not be used to assert correctness of the Polygon
+ * \param[in] arg input Polygon
+ * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
+ */
+inline ATbool isPolygonMany(Polygon arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -3683,11 +4527,12 @@ inline ATbool isPolygonMany(Polygon arg)
   }
 }
 
-/*}}}  */
-/*{{{  ATbool hasPolygonHead(Polygon arg) */
-
-ATbool hasPolygonHead(Polygon arg)
-{
+/**
+ * Assert whether a Polygon has a head. 
+ * \param[in] arg input Polygon
+ * \return ATtrue if the Polygon had a head, or ATfalse otherwise
+ */
+ATbool hasPolygonHead(Polygon arg) {
   if (isPolygonSingle(arg)) {
     return ATtrue;
   }
@@ -3697,22 +4542,24 @@ ATbool hasPolygonHead(Polygon arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasPolygonTail(Polygon arg) */
-
-ATbool hasPolygonTail(Polygon arg)
-{
+/**
+ * Assert whether a Polygon has a tail. 
+ * \param[in] arg input Polygon
+ * \return ATtrue if the Polygon had a tail, or ATfalse otherwise
+ */
+ATbool hasPolygonTail(Polygon arg) {
   if (isPolygonMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  Point getPolygonHead(Polygon arg) */
-
-Point getPolygonHead(Polygon arg)
-{
+/**
+ * Get the head Point of a Polygon. Note that the precondition is that this Polygon actually has a head
+ * \param[in] arg input Polygon
+ * \return the head of #arg, if it exist or an undefined value if it does not
+ */
+Point getPolygonHead(Polygon arg) {
   if (isPolygonSingle(arg)) {
     return (Point)ATgetFirst((ATermList)arg);
   }
@@ -3720,20 +4567,23 @@ Point getPolygonHead(Polygon arg)
     return (Point)ATgetFirst((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  Polygon getPolygonTail(Polygon arg) */
-
-Polygon getPolygonTail(Polygon arg)
-{
+/**
+ * Get the tail Polygon of a Polygon. Note that the precondition is that this Polygon actually has a tail
+ * \param[in] arg input Polygon
+ * \return the tail of #arg, if it exist or an undefined value if it does not
+ */
+Polygon getPolygonTail(Polygon arg) {
   
     return (Polygon)ATgetNext((ATermList)arg);
 }
 
-/*}}}  */
-/*{{{  Polygon setPolygonHead(Polygon arg, Point head) */
-
-Polygon setPolygonHead(Polygon arg, Point head)
-{
+/**
+ * Set the head of a Polygon. The precondition being that this Polygon actually has a head
+ * \param[in] arg input Polygon
+ * \param[in] head new Point to set in #arg
+ * \return A new Polygon with head at the right place, or a core dump if #arg did not have a head
+ */
+Polygon setPolygonHead(Polygon arg, Point head) {
   if (isPolygonSingle(arg)) {
     return (Polygon)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
@@ -3745,11 +4595,13 @@ Polygon setPolygonHead(Polygon arg, Point head)
   return (Polygon)NULL;
 }
 
-/*}}}  */
-/*{{{  Polygon setPolygonTail(Polygon arg, Polygon tail) */
-
-Polygon setPolygonTail(Polygon arg, Polygon tail)
-{
+/**
+ * Set the tail of a Polygon. The precondition being that this Polygon actually has a tail
+ * \param[in] arg input Polygon
+ * \param[in] tail new Polygon to set in #arg
+ * \return A new Polygon with tail at the right place, or a core dump if #arg did not have a tail
+ */
+Polygon setPolygonTail(Polygon arg, Polygon tail) {
   if (isPolygonMany(arg)) {
     return (Polygon)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
@@ -3758,26 +4610,24 @@ Polygon setPolygonTail(Polygon arg, Polygon tail)
   return (Polygon)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Point accessors */
-
-/*{{{  ATbool isValidPoint(Point arg) */
-
-ATbool isValidPoint(Point arg)
-{
+/**
+ * Assert whether a Point is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input Point
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool isValidPoint(Point arg) {
   if (isPointDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool isPointDefault(Point arg) */
-
-inline ATbool isPointDefault(Point arg)
-{
+/**
+ * Assert whether a Point is a default. Always returns ATtrue
+ * \param[in] arg input Point
+ * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
+ */
+inline ATbool isPointDefault(Point arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
   assert(ATmatchTerm((ATerm)arg, patternPointDefault, NULL, NULL));
@@ -3785,51 +4635,57 @@ inline ATbool isPointDefault(Point arg)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool hasPointX(Point arg) */
-
-ATbool hasPointX(Point arg)
-{
+/**
+ * Assert whether a Point has a x. 
+ * \param[in] arg input Point
+ * \return ATtrue if the Point had a x, or ATfalse otherwise
+ */
+ATbool hasPointX(Point arg) {
   if (isPointDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool hasPointY(Point arg) */
-
-ATbool hasPointY(Point arg)
-{
+/**
+ * Assert whether a Point has a y. 
+ * \param[in] arg input Point
+ * \return ATtrue if the Point had a y, or ATfalse otherwise
+ */
+ATbool hasPointY(Point arg) {
   if (isPointDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  int getPointX(Point arg) */
-
-int getPointX(Point arg)
-{
+/**
+ * Get the x int of a Point. Note that the precondition is that this Point actually has a x
+ * \param[in] arg input Point
+ * \return the x of #arg, if it exist or an undefined value if it does not
+ */
+int getPointX(Point arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
-/*}}}  */
-/*{{{  int getPointY(Point arg) */
-
-int getPointY(Point arg)
-{
+/**
+ * Get the y int of a Point. Note that the precondition is that this Point actually has a y
+ * \param[in] arg input Point
+ * \return the y of #arg, if it exist or an undefined value if it does not
+ */
+int getPointY(Point arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
-/*}}}  */
-/*{{{  Point setPointX(Point arg, int x) */
-
-Point setPointX(Point arg, int x)
-{
+/**
+ * Set the x of a Point. The precondition being that this Point actually has a x
+ * \param[in] arg input Point
+ * \param[in] x new int to set in #arg
+ * \return A new Point with x at the right place, or a core dump if #arg did not have a x
+ */
+Point setPointX(Point arg, int x) {
   if (isPointDefault(arg)) {
     return (Point)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(x)), 0);
   }
@@ -3838,11 +4694,13 @@ Point setPointX(Point arg, int x)
   return (Point)NULL;
 }
 
-/*}}}  */
-/*{{{  Point setPointY(Point arg, int y) */
-
-Point setPointY(Point arg, int y)
-{
+/**
+ * Set the y of a Point. The precondition being that this Point actually has a y
+ * \param[in] arg input Point
+ * \param[in] y new int to set in #arg
+ * \return A new Point with y at the right place, or a core dump if #arg did not have a y
+ */
+Point setPointY(Point arg, int y) {
   if (isPointDefault(arg)) {
     return (Point)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(y)), 1);
   }
@@ -3851,15 +4709,11 @@ Point setPointY(Point arg, int y)
   return (Point)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  sort visitors */
-
-/*{{{  Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList)) */
-
-Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList))
-{
+/**
+ * Apply functions to the children of a Graph. 
+ * \return A new Graph with new children where the argument functions might have applied
+ */
+Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList)) {
   if (isGraphDefault(arg)) {
     return makeGraphDefault(
         acceptNodes ? acceptNodes(getGraphNodes(arg)) : getGraphNodes(arg),
@@ -3869,12 +4723,11 @@ Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*accept
   ATabort("not a Graph: %t\n", arg);
   return (Graph)NULL;
 }
-
-/*}}}  */
-/*{{{  NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node)) */
-
-NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node))
-{
+/**
+ * Apply functions to the children of a NodeList. 
+ * \return A new NodeList with new children where the argument functions might have applied
+ */
+NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node)) {
   if (isNodeListEmpty(arg)) {
     return makeNodeListEmpty();
   }
@@ -3890,12 +4743,11 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node))
   ATabort("not a NodeList: %t\n", arg);
   return (NodeList)NULL;
 }
-
-/*}}}  */
-/*{{{  Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList)) */
-
-Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList))
-{
+/**
+ * Apply functions to the children of a Node. 
+ * \return A new Node with new children where the argument functions might have applied
+ */
+Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList)) {
   if (isNodeDefault(arg)) {
     return makeNodeDefault(
         acceptId ? acceptId(getNodeId(arg)) : getNodeId(arg),
@@ -3904,12 +4756,11 @@ Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttri
   ATabort("not a Node: %t\n", arg);
   return (Node)NULL;
 }
-
-/*}}}  */
-/*{{{  NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm)) */
-
-NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm))
-{
+/**
+ * Apply functions to the children of a NodeId. 
+ * \return A new NodeId with new children where the argument functions might have applied
+ */
+NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm)) {
   if (isNodeIdDefault(arg)) {
     return makeNodeIdDefault(
         acceptId ? acceptId(getNodeIdId(arg)) : getNodeIdId(arg));
@@ -3917,12 +4768,11 @@ NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm))
   ATabort("not a NodeId: %t\n", arg);
   return (NodeId)NULL;
 }
-
-/*}}}  */
-/*{{{  AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute)) */
-
-AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute))
-{
+/**
+ * Apply functions to the children of a AttributeList. 
+ * \return A new AttributeList with new children where the argument functions might have applied
+ */
+AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute)) {
   if (isAttributeListEmpty(arg)) {
     return makeAttributeListEmpty();
   }
@@ -3938,12 +4788,11 @@ AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attr
   ATabort("not a AttributeList: %t\n", arg);
   return (AttributeList)NULL;
 }
-
-/*}}}  */
-/*{{{  Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style), char* (*acceptLevel)(char*), File (*acceptFile)(File)) */
-
-Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style), char* (*acceptLevel)(char*), File (*acceptFile)(File))
-{
+/**
+ * Apply functions to the children of a Attribute. 
+ * \return A new Attribute with new children where the argument functions might have applied
+ */
+Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), char* (*acceptTooltip)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style), char* (*acceptLevel)(char*), File (*acceptFile)(File)) {
   if (isAttributeBoundingBox(arg)) {
     return makeAttributeBoundingBox(
         acceptFirst ? acceptFirst(getAttributeFirst(arg)) : getAttributeFirst(arg),
@@ -3974,6 +4823,10 @@ Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acc
     return makeAttributeLabel(
         acceptLabel ? acceptLabel(getAttributeLabel(arg)) : getAttributeLabel(arg));
   }
+  if (isAttributeTooltip(arg)) {
+    return makeAttributeTooltip(
+        acceptTooltip ? acceptTooltip(getAttributeTooltip(arg)) : getAttributeTooltip(arg));
+  }
   if (isAttributeLocation(arg)) {
     return makeAttributeLocation(
         acceptX ? acceptX(getAttributeX(arg)) : getAttributeX(arg),
@@ -4003,12 +4856,11 @@ Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acc
   ATabort("not a Attribute: %t\n", arg);
   return (Attribute)NULL;
 }
-
-/*}}}  */
-/*{{{  File visitFile(File arg, ATerm (*acceptFile)(ATerm)) */
-
-File visitFile(File arg, ATerm (*acceptFile)(ATerm))
-{
+/**
+ * Apply functions to the children of a File. 
+ * \return A new File with new children where the argument functions might have applied
+ */
+File visitFile(File arg, ATerm (*acceptFile)(ATerm)) {
   if (isFileExternal(arg)) {
     return makeFileExternal(
         acceptFile ? acceptFile(getFileFile(arg)) : getFileFile(arg));
@@ -4016,12 +4868,11 @@ File visitFile(File arg, ATerm (*acceptFile)(ATerm))
   ATabort("not a File: %t\n", arg);
   return (File)NULL;
 }
-
-/*}}}  */
-/*{{{  Color visitColor(Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int)) */
-
-Color visitColor(Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int))
-{
+/**
+ * Apply functions to the children of a Color. 
+ * \return A new Color with new children where the argument functions might have applied
+ */
+Color visitColor(Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int)) {
   if (isColorRgb(arg)) {
     return makeColorRgb(
         acceptRed ? acceptRed(getColorRed(arg)) : getColorRed(arg),
@@ -4031,12 +4882,11 @@ Color visitColor(Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int 
   ATabort("not a Color: %t\n", arg);
   return (Color)NULL;
 }
-
-/*}}}  */
-/*{{{  Style visitStyle(Style arg) */
-
-Style visitStyle(Style arg)
-{
+/**
+ * Apply functions to the children of a Style. 
+ * \return A new Style with new children where the argument functions might have applied
+ */
+Style visitStyle(Style arg) {
   if (isStyleBold(arg)) {
     return makeStyleBold();
   }
@@ -4058,12 +4908,11 @@ Style visitStyle(Style arg)
   ATabort("not a Style: %t\n", arg);
   return (Style)NULL;
 }
-
-/*}}}  */
-/*{{{  Shape visitShape(Shape arg) */
-
-Shape visitShape(Shape arg)
-{
+/**
+ * Apply functions to the children of a Shape. 
+ * \return A new Shape with new children where the argument functions might have applied
+ */
+Shape visitShape(Shape arg) {
   if (isShapeBox(arg)) {
     return makeShapeBox();
   }
@@ -4103,12 +4952,11 @@ Shape visitShape(Shape arg)
   ATabort("not a Shape: %t\n", arg);
   return (Shape)NULL;
 }
-
-/*}}}  */
-/*{{{  Direction visitDirection(Direction arg) */
-
-Direction visitDirection(Direction arg)
-{
+/**
+ * Apply functions to the children of a Direction. 
+ * \return A new Direction with new children where the argument functions might have applied
+ */
+Direction visitDirection(Direction arg) {
   if (isDirectionForward(arg)) {
     return makeDirectionForward();
   }
@@ -4124,12 +4972,11 @@ Direction visitDirection(Direction arg)
   ATabort("not a Direction: %t\n", arg);
   return (Direction)NULL;
 }
-
-/*}}}  */
-/*{{{  EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge)) */
-
-EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge))
-{
+/**
+ * Apply functions to the children of a EdgeList. 
+ * \return A new EdgeList with new children where the argument functions might have applied
+ */
+EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge)) {
   if (isEdgeListEmpty(arg)) {
     return makeEdgeListEmpty();
   }
@@ -4145,12 +4992,11 @@ EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge))
   ATabort("not a EdgeList: %t\n", arg);
   return (EdgeList)NULL;
 }
-
-/*}}}  */
-/*{{{  Edge visitEdge(Edge arg, NodeId (*acceptFrom)(NodeId), NodeId (*acceptTo)(NodeId), AttributeList (*acceptAttributes)(AttributeList)) */
-
-Edge visitEdge(Edge arg, NodeId (*acceptFrom)(NodeId), NodeId (*acceptTo)(NodeId), AttributeList (*acceptAttributes)(AttributeList))
-{
+/**
+ * Apply functions to the children of a Edge. 
+ * \return A new Edge with new children where the argument functions might have applied
+ */
+Edge visitEdge(Edge arg, NodeId (*acceptFrom)(NodeId), NodeId (*acceptTo)(NodeId), AttributeList (*acceptAttributes)(AttributeList)) {
   if (isEdgeDefault(arg)) {
     return makeEdgeDefault(
         acceptFrom ? acceptFrom(getEdgeFrom(arg)) : getEdgeFrom(arg),
@@ -4160,12 +5006,11 @@ Edge visitEdge(Edge arg, NodeId (*acceptFrom)(NodeId), NodeId (*acceptTo)(NodeId
   ATabort("not a Edge: %t\n", arg);
   return (Edge)NULL;
 }
-
-/*}}}  */
-/*{{{  Polygon visitPolygon(Polygon arg, Point (*acceptHead)(Point)) */
-
-Polygon visitPolygon(Polygon arg, Point (*acceptHead)(Point))
-{
+/**
+ * Apply functions to the children of a Polygon. 
+ * \return A new Polygon with new children where the argument functions might have applied
+ */
+Polygon visitPolygon(Polygon arg, Point (*acceptHead)(Point)) {
   if (isPolygonEmpty(arg)) {
     return makePolygonEmpty();
   }
@@ -4181,12 +5026,11 @@ Polygon visitPolygon(Polygon arg, Point (*acceptHead)(Point))
   ATabort("not a Polygon: %t\n", arg);
   return (Polygon)NULL;
 }
-
-/*}}}  */
-/*{{{  Point visitPoint(Point arg, int (*acceptX)(int), int (*acceptY)(int)) */
-
-Point visitPoint(Point arg, int (*acceptX)(int), int (*acceptY)(int))
-{
+/**
+ * Apply functions to the children of a Point. 
+ * \return A new Point with new children where the argument functions might have applied
+ */
+Point visitPoint(Point arg, int (*acceptX)(int), int (*acceptY)(int)) {
   if (isPointDefault(arg)) {
     return makePointDefault(
         acceptX ? acceptX(getPointX(arg)) : getPointX(arg),
@@ -4196,6 +5040,3 @@ Point visitPoint(Point arg, int (*acceptX)(int), int (*acceptY)(int))
   return (Point)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */

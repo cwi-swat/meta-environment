@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan 29 10:56:50 CET 2007 <kooiker@cwi.nl>
+ * lib/Graph.adt:
+   - Added tooltip
+
 Fri Sep 22 13:44:08 CEST 2006 <kooiker@cwi.nl>
  * utils/tree2graph/graph-converter.idef.src:
    - Possible to switch on/off layout when generating tree
