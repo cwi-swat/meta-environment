@@ -37,17 +37,17 @@ equations
 
    [85a]  natcon(x c) := natcon(c1) + natcon(c2),
           natcon(y) := natcon (y1) + natcon(y2) + natcon(0 x)
-          ========================================================
+          ===>
           natcon(y1 c1) + natcon(y2 c2) = natcon(y c)
 
    [85b]  natcon(x c) := natcon(c1) + natcon(c2),
           natcon(y) := natcon(y2) + natcon(0 x)
-          ======================================
+          ===>
           natcon(c1) + natcon(y2 c2) = natcon(y c)
 
    [85c]  natcon(x c) := natcon(c1) + natcon(c2),
           natcon(y) := natcon(y1) + natcon(0 x)
-          ======================================
+          ===>
           natcon(y1 c1) + natcon(c2) = natcon(y c)
 
    [86]   natcon(c) -// natcon(c) = 0
@@ -75,13 +75,13 @@ equations
 
    [133]  natcon(c) := natcon(c1) -// natcon(c2),
           natcon(c) != 0
-          =========================================================
+          ===>
           gt(natcon(c1), natcon(c2)) = true
 
    [134]  gt(natcon(y1 c1), natcon(c2)) = true
    [135]  gt(natcon(y c1), natcon(y c2)) = gt(natcon(c1), natcon(c2))
    [136]  gt(natcon(y1), natcon(y2)) == true
-          =========================================
+          ===>
           gt(natcon(y1 c1), natcon(y2 c2)) = true
 
 %% -- auxiliary function >- , partial substraction
@@ -92,14 +92,14 @@ equations
 
    [139a] natcon(c3)    := natcon(c1)  -// natcon(c2),
           natcon(y) := natcon (y1) >- natcon(0 x2)
-          ==================================================
+          ===>
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c3)
 
    [139b] natcon(c3) := natcon(c2)  -// natcon(c1),
           natcon(c) := 10 -// natcon(c3),
           Nat := natcon (0 x2) + 1,
           natcon(y) := natcon(y1) >- Nat
-          ==================================================
+          ===>
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c)
 
 
@@ -117,11 +117,11 @@ equations
    [144] Nat * 0 = 0
    [145] Nat * 1 = Nat
    [146] gt(natcon(c), 1) == true
-         ===============================================
+         ===>
          Nat * natcon(c) = Nat + Nat * (natcon(c) - 1)
 
    [147] natcon(y) := natcon(y1) * natcon(y2)
-         ========================================================
+         ===>
          natcon(y1) * natcon(y2 c) =
                         natcon(y 0) + natcon(y1) * natcon(c)
 
@@ -158,6 +158,29 @@ equations
 
    [168] max(Int1, Int2) = Int1 when Int1 > Int2 == true
    [default] max(Int1, Int2) = Int2
+
+   [169] min(Int1, Int2) = Int1 when Int1 < Int2 == true
+   [default] min(Int1, Int2) = Int2
+
+   [170] Nat1 > Nat2 == true
+         ===>
+         remainder(Nat1, Nat2) = remainder(Nat1 -/ Nat2, Nat2)
+   [default] remainder(Nat1, Nat2) = Nat1
+
+   [171] ndiv(Nat, Nat) = 1
+   [172] Nat1 > Nat2 == true, 
+         Nat :=  1 + ndiv(Nat1 -/ Nat2, Nat2)
+         ===>
+         ndiv(Nat1, Nat2) = Nat
+   [173] Nat1 < Nat2 == true === ndiv(Nat1, Nat2) = 0
+
+   [174] (- Nat1) / Nat2 = - ndiv(Nat1, Nat2)
+   [175] Nat1 / (- Nat2) = - ndiv(Nat1, Nat2)
+   [176] (- Nat1) / (- Nat2) = ndiv(Nat1, Nat2)
+   [177] Nat1 / Nat2 = ndiv(Nat1, Nat2)
+
+   [178] Int == Int = true
+   [default] Int1 == Int2 = false
 
 tests
 

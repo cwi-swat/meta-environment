@@ -1,7 +1,8 @@
 module basic/AreaOperations
 
 imports basic/Areas
-imports basic/NatCon
+imports basic/Integers
+imports basic/Booleans
 
 exports
 context-free syntax
@@ -12,6 +13,12 @@ context-free syntax
   get-offset(Area)       -> NatCon  
   get-length(Area)       -> NatCon  
 
+  Area "==" Area         -> Boolean
+  Area "<" Area 	       -> Boolean
+  Area "<=" Area 	       -> Boolean
+  Area ">" Area 	       -> Boolean
+  Area ">=" Area 	       -> Boolean	
+
 hiddens
 imports basic/Whitespace
 
@@ -19,9 +26,10 @@ context-free start-symbols
   NatCon
 
 variables
-  "BeginLine"   -> NatCon  
-  "BeginColumn" -> NatCon  
-  "EndLine"     -> NatCon  
-  "EndColumn"   -> NatCon  
-  "Offset"      -> NatCon  
-  "Length"      -> NatCon  
+  "Area"[0-9]*          -> Area
+  "BeginLine"[0-9\']*   -> NatCon  
+  "BeginColumn"[0-9\']* -> NatCon  
+  "EndLine"[0-9\']*     -> NatCon  
+  "EndColumn"[0-9\']*   -> NatCon  
+  "Offset"[0-9\']*      -> NatCon  
+  "Length"[0-9\']*      -> NatCon  

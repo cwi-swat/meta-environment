@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jan 29 16:19:00 CET 2007 <kooiker@cwi.nl>
+ * basic/Integers.{asf,sdf}: added division, remainder and min
+ * basic/{Area,Location}Operations.{asf,sdf}: added access functions
 
 Thu Jan 25 18:58:51 CET 2007 <jurgenv@cwi.nl>
  * basic/Integers.{asf,sdf}: important change in the integers. The Natural

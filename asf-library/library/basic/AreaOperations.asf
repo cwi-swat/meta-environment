@@ -17,3 +17,21 @@ equations
 
 [get-length-0]
   get-length(area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length)) = Length
+
+[equal] 
+  Area == Area = true
+
+[default-equal]
+  Area1 == Area2 = false
+
+[aleq]
+  area(BeginLine, BeginColumn, EndLine, EndColumn, Offset, Length) <=
+    area(BeginLine', BeginColumn', EndLine', EndColumn', Offset', Length') =
+    ((BeginLine > BeginLine') | ((BeginLine == BeginLine') & (BeginColumn >= BeginColumn'))) &
+    ((EndLine < EndLine') | ((EndLine == EndLine') & (EndColumn <= EndColumn')))
+
+[default-aleq]
+  Area1 <= Area2 = false
+
+[alt]	
+  Area1 < Area2 = Area1 <= Area2 & not(Area1 == Area2)

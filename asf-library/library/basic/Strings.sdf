@@ -22,6 +22,7 @@ context-free syntax
   String "<=" String -> Boolean               
   String ">" String  -> Boolean               
   String ">=" String -> Boolean               
+  String "==" String -> Boolean
 
 context-free syntax
   length(String)                                       -> Integer        

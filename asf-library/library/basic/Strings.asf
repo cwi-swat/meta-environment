@@ -43,3 +43,11 @@ Str1 >= Str2 = string-to-bytes(Str1) >= string-to-bytes(Str2)
 
 [forward-greater]
 Str1 > Str2 = string-to-bytes(Str1) > string-to-bytes(Str2)
+
+equations
+
+[equal] 
+Str == Str = true
+
+[default-equal] 
+Str1 == Str2 = false

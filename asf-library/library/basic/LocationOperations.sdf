@@ -1,18 +1,32 @@
 module basic/LocationOperations
 
 imports basic/Locations
+imports basic/AreaOperations
 
 exports
 context-free syntax
   get-filename(Location) -> StrCon
   get-area(Location) -> Area
 
-hiddens
-  imports basic/Whitespace
- 
-  context-free start-symbols
-    Area StrCon
+  Location "<" Location	  -> Boolean
+  Location "<=" Location     -> Boolean
+  Location ">" Location      -> Boolean
+  Location ">=" Location	  -> Boolean
 
-  variables
-    "Filename" -> StrCon
-    "Area" -> Area
+  get-begin-line(Location)   -> NatCon
+  get-begin-column(Location) -> NatCon
+  get-end-line(Location) 	  -> NatCon
+  get-end-column(Location)   -> NatCon
+  get-offset(Location)       -> NatCon
+  get-length(Location)       -> NatCon
+
+hiddens
+imports basic/Whitespace
+ 
+context-free start-symbols
+  Area StrCon
+
+variables
+  "Filename"    -> StrCon
+  "Area"        -> Area
+  "Loc"[0-9\']* -> Location
