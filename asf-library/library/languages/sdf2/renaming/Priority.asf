@@ -22,6 +22,7 @@ equations
 
 %% Groups.
 
+  [0] (g .)G'r          = (g)G'r .
   [0] (g <n+>)G'r       = (g)G'r <n+>
   [0] (g)G'r            = p' when p := g, p' := (p)'r
   [0] ({p*})G'r         = {(p*)*'r}

@@ -8,7 +8,7 @@ equations
 
 equations
 
-[] imports C Import* = <V [ _C_ H ["imports" HV [[Import*]] ] ]>
+[] imports C Import* = <V [ _C_ H ["imports" V [[Import*]] ] ]>
 
 equations
 
