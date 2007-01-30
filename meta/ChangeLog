@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan 30 13:39:53 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Refactored editText 
+
 Tue Jan  9 12:53:39 CET 2007 <kooiker@cwi.nl>
  * tbscripts/navigator.tb:
    - Add support for updating the navigator module-by-module

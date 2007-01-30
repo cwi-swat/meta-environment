@@ -121,13 +121,12 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-process EditText(Sid: term, Type: term, Name: str, AlreadyExists: bool?) is
+process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
 let
   Path: str,
   Categories: term,
   ModuleId: term
 in
-  TODO("Often an empty Name is supplied, refactor!").
   IsTextEditorRegistered(Sid, AlreadyExists?)
   .
   if equal(AlreadyExists, true) then
@@ -135,15 +134,15 @@ in
   else
     snd-msg(em-register-editor(Sid, text))
     . GetPath(Sid, Path?)
-    . snd-msg(te-edit-text(Sid, Path, Name))
-    . SetEditActions(Sid, Type, Name)
+    . snd-msg(te-edit-text(Sid, Path))
+    . SetEditActions(Sid, Type)
     . snd-msg(get-text-categories)
     . rec-msg(text-categories(Categories?)) 
     . snd-msg(te-register-text-categories(Sid, Categories))
   fi
 endlet
 
-process SetEditActions(Sid: term, Type: term, Name: str) is
+process SetEditActions(Sid: term, Type: term) is
 let
   Events: list
 in

@@ -25,6 +25,7 @@ in
     . ShowModuleDetails(ModuleId)
   +
     rec-note(gp-node-selected("import-graph", GraphId?, ModuleId?))
+    . TODO("MODULE_SELECTION_LISTENER: graph node selected")
     . snd-msg(nav-select-module(ModuleId))
     . ShowModuleDetails(ModuleId)
   +
