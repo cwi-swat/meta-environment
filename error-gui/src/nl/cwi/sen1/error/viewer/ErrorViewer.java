@@ -99,17 +99,27 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 	}
 	
 	public void showFeedbackSummary(String panelId, ATerm summaryTerm) {
+	  try {
 		Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
 		getPanel(panelId).addError(summary);
+	    } 
+	    catch (IllegalArgumentException ex) {
+	      System.err.println("Summary is not valid");
+	    }
 	}
 
 	public void refreshFeedbackSummary(String panelId, ATerm summaryTerm) {
+	    try {
 		Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
 		String producer = summary.getProducer();
 		String id = summary.getId();
 
 		getPanel(panelId).removeAllMatchingErrors(producer, id);
 		getPanel(panelId).addError(summary);
+	    } 
+	    catch (IllegalArgumentException ex) {
+	      System.err.println("Summary is not valid");
+	    }
 	}
 
 	public void removeFeedbackSummary(String panelId, String producer, String id) {
