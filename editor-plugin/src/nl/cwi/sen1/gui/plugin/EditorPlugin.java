@@ -497,8 +497,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		panel.addEditorModifiedListener(new EditorModifiedListener() {
 			public void editorModified(EditorModifiedEvent e) {
 				StudioComponent comp = componentsById.get(editorId.toString());
-				if (!comp.getName().endsWith("*")) {
-					comp.setName(comp.getName() + "*");
+				if (comp != null) {
+					if (!comp.getName().endsWith("*")) {
+						comp.setName(comp.getName() + "*");
+					}
 				}
 				ATerm event = studio.getATermFactory().make(
 						"contents-changed(<term>)", editorId);
