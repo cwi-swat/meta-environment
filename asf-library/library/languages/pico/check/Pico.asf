@@ -1,58 +1,58 @@
 equations
 
-[Main] start(PROGRAM, Program) = start(Boolean, tcp(Program))
+[Main] start(PROGRAM, Program) = start(Summary, summary("pico-check",get-filename(get-location(Program)), [tcp(Program)]))
 
 equations
 
 [Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))
 
-[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*,new-table)
+equations
+
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)
+
+equations
 
 [Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type, Tenv))
 
 [Tc3b] tcits(,Tenv) = Tenv
 
+equations
+
 [Tc4a] lookup(Tenv, Id) == not-in-table
        ===============================
        tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
 
-[Tc4b] lookup(Tenv, Id) != not-in-table
-       ================================
-       tcit(Id:Type, Tenv) = Tenv
+[default] tcit(Id:Type, Tenv) = Tenv
+
+equations
 
 [Tc5a] tcs(Stat ; Stat*, Tenv) =
-       tcst(Stat,Tenv) & tcs(Stat*,Tenv)
+       tcst(Stat,Tenv), tcs(Stat*,Tenv)
 
-[Tc5b] tcs(,Tenv) = true
+[Tc5b] tcs(,Tenv) = 
 
-[Tc6a] tcst(Id := Exp, Tenv) = compatible(tce(Id,Tenv), tce(Exp,Tenv))
+equations
 
-[Tc6b]              tce(Exp,Tenv) == natural
-        ======================================================
-        tcst(if Exp then Series1 else Series2 fi, Tenv) =
-        tcs(Series1, Tenv) & tcs(Series2, Tenv)
+[Tc6a] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) 
 
-[Tc6c]   tce(Exp, Tenv) == natural
-        =================================================
-         tcst(while Exp do Series od, Tenv) = tcs(Series, Tenv)
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =
+        tce(Exp, natural, Tenv), tcs(Series1, Tenv), tcs(Series2, Tenv)
 
-[default-Tc6] tcst(Stat, Tenv) = false
+[Tc6c]  tcst(while Exp do Series od, Tenv) = 
+        tce(Exp, natural, Tenv), tcs(Series, Tenv)
 
-[Tc7a]  tce(Id, Tenv) = lookup(Tenv, Id)
-[Tc7b]  tce(Nat-con, Tenv) = natural
-[Tc7c]  tce(Str-con, Tenv) = string
+equations
 
-[Tc7d]  tce(Exp1, Tenv) == natural, tce(Exp2, Tenv) == natural
-        ==================================================
-           tce(Exp1 + Exp2, Tenv) = natural
+[default] tce(Exp, natural, Tenv) = error("Expression should be of type natural", [localized("Expression", get-location(Exp))])
+[default] tce(Exp, string, Tenv) = error("Expression should be of type string", [localized("Expression", get-location(Exp))])
 
-[Tc7e]  tce(Exp1, Tenv) == natural, tce(Exp2, Tenv) == natural
-        ==================================================
-           tce(Exp1 - Exp2, Tenv) = natural
+[Tc7a]  tce(Id, Type, Tenv) = when Type == lookup(Tenv, Id)
+[Tc7b]  tce(Nat-con, natural, Tenv) = 
+[Tc7c]  tce(Str-con, string, Tenv) = 
+[Tc7d]  tce(Exp1 || Exp2, string, Tenv) = tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)
+[Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
+[Tc7d]  tce(Exp1 - Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
 
-[Tc7f]  tce(Exp1, Tenv) == string, tce(Exp2, Tenv) == string
-        ================================================
-           tce(Exp1 || Exp2, Tenv) = string
 
-[default-Tc7] tce(Exp,Tenv) = nil-type
+
 

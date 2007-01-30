@@ -1,33 +1,40 @@
 module languages/pico/check/Pico
 
-imports basic/Booleans 
+imports basic/Booleans
+imports basic/Errors
 imports languages/pico/syntax/Pico
 imports languages/pico/check/Type-environments
+imports utilities/PosInfo[EXP]
+imports utilities/PosInfo[PROGRAM]
 
 exports
-  context-free syntax
-    "tcp"(PROGRAM)                 -> Boolean
-    "tcd"(DECLS)                   -> TENV
-    "tcits"({ID-TYPE  ","}*, TENV) -> TENV
-    "tcit"(ID-TYPE, TENV)          -> TENV
-    "tcs"({STATEMENT ";"}*, TENV)  -> Boolean
-    "tcst"(STATEMENT, TENV)        -> Boolean
-    "tce"(EXP, TENV)               -> TYPE
+context-free syntax
+  "tcp"(PROGRAM) -> {Error ","}*  
 
 hiddens
-  context-free start-symbols
-    Boolean PROGRAM
+context-free syntax
+  "tcd"(DECLS)                  -> TENV          
+  "tcits"({ID-TYPE ","}*, TENV) -> TENV          
+  "tcit"(ID-TYPE, TENV)         -> TENV          
+  "tcs"({STATEMENT ";"}*, TENV) -> {Error ","}*  
+  "tcst"(STATEMENT, TENV)       -> {Error ","}*  
+  "tce"(EXP, TYPE, TENV)        -> {Error ","}*  
 
-  variables
-    "Decls"[0-9\']*   -> DECLS
-    "Exp"[0-9\']*     -> EXP
-    "Id"[0-9\']*      -> PICO-ID
-    "Id-type*"[0-9]*  -> { ID-TYPE ","}*
-    "Nat-con"[0-9\']* -> NatCon
-    "Series"[0-9\']*  -> {STATEMENT ";"}+
-    "Stat"[0-9\']*    -> STATEMENT
-    "Stat*"[0-9\']*   -> {STATEMENT ";"}*
-    "Str-con"[0-9\']* -> StrCon
-    "Tenv"[0-9\']*    -> TENV
-    "Type"[0-9\']*    -> TYPE
-    "Program"[0-9\']* -> PROGRAM
+context-free start-symbols
+  Summary PROGRAM
+
+variables
+  "Message"          -> StrCon            
+  "Error*" [0-9\']*  -> {Error ","}*      
+  "Decls" [0-9\']*   -> DECLS             
+  "Exp" [0-9\']*     -> EXP               
+  "Id" [0-9\']*      -> PICO-ID           
+  "Id-type*" [0-9]*  -> {ID-TYPE ","}*    
+  "Nat-con" [0-9\']* -> NatCon            
+  "Series" [0-9\']*  -> {STATEMENT ";"}+  
+  "Stat" [0-9\']*    -> STATEMENT         
+  "Stat*" [0-9\']*   -> {STATEMENT ";"}*  
+  "Str-con" [0-9\']* -> StrCon            
+  "Tenv" [0-9\']*    -> TENV              
+  "Type" [0-9\']*    -> TYPE              
+  "Program" [0-9\']* -> PROGRAM           
