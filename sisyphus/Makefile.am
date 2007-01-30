@@ -5,7 +5,7 @@ SUBDIRS = src script doc gems
 
 ACLOCAL_AMFLAGS = -I .
 
-gems = activerecord-1.13.2 activesupport-1.2.5 postgres-pr-0.4.0
+gems = activesupport-1.2.5 activerecord-1.13.2 postgres-pr-0.4.0
 
 GEM_DIR = $(top_srcdir)/gems
 
