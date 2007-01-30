@@ -53,6 +53,7 @@ import prefuse.util.force.DragForce;
 import prefuse.util.force.ForceSimulator;
 import prefuse.util.force.NBodyForce;
 import prefuse.util.force.SpringForce;
+import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
@@ -185,8 +186,10 @@ public class GraphPanel extends JPanel {
 		focusGroup.addTupleSetListener(new TupleSetListener() {
 			public void tupleSetChanged(TupleSet ts, Tuple[] add, Tuple[] rem) {
 				for (Tuple t : add) {
-					fireNodeSelected(((VisualItem) t)
-							.getString(GraphConstants.ID));
+					VisualItem item = (VisualItem) t;
+					if (item instanceof NodeItem) {
+						fireNodeSelected(item.getString(GraphConstants.ID));
+					}
 				}
 			}
 		});

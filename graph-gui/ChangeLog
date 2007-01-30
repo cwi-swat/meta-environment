@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jan 30 09:59:10 CET 2007 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Check if selected item is a node before creating a nodeselected event
+
 Mon Jan 29 10:52:40 CET 2007 <kooiker@cwi.nl>
  * src/**/Graph{Adapter,Panel}.java:
    - added tooltip support
