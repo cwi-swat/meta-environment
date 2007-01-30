@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jan 30 07:52:14 CET 2007 <jurgenv@cwi.nl>
+ * src/Sdf2-Normalization.c: forgot to implement renaming for non-transitive
+   priorities.
+
 Fri Jan 26 09:28:10 CET 2007 <jurgenv@cwi.nl>
  * src/parsetablegen.c: adapted to new interface of toasfix function.
  * removevarsyntax/src/removevarssyntax.c: adapted to new interface of toasfix function.
