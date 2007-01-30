@@ -54,6 +54,9 @@ process RemoveSummary(Producer: str, SummaryId: str) is
 process DisplaySummary(Summary: term) is
   snd-msg(ui-show-feedback-summary("Issues", Summary))
 
+process RefreshSummary(Summary: term) is
+  snd-msg(ui-refresh-feedback-summary("Issues", Summary))
+
 process HandleEvent(Type: term, Event: term) is
 let
   Actions: list,
