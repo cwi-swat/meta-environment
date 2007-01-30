@@ -2,6 +2,26 @@
 #define __SDF_MODULE_UTILS__
 
 #include <undefined.h>
+process ModulenameBase(Modulename: str, Name: str?) is
+  snd-msg(io-get-path-filename(Modulename))
+  . rec-msg(io-filename(Modulename, Name?))
+
+process ComputeCanonicalLanguagename(Modulename : str, Languagename : str?) is
+let
+  Directory: str,
+  Prefix: str,
+  Name: str
+in
+  LanguageNameFromModuleName(Modulename, Prefix?)
+  . ModulenameBase(Modulename, Name?)
+  .
+  if not-equal(Prefix, UNDEFINED) then
+    Prefix := concat(Prefix, "/")
+  else
+    tau
+  fi 
+  . Languagename := concat(Prefix,concat("/", Name))
+endlet
 
 process LanguageNameFromModuleName(Modulename: str, Languagename: str?) is
 let
@@ -27,8 +47,7 @@ let
   Name: str
 in
   LanguageNameFromModuleName(Modulename, Prefix?)
-  . snd-msg(io-get-path-filename(Modulename))
-  . rec-msg(io-filename(Modulename, Name?))
+  . ModulenameBase(Modulename, Name?)
   .
   if not-equal(Prefix, UNDEFINED) then
     Prefix := concat(Prefix, "/")
