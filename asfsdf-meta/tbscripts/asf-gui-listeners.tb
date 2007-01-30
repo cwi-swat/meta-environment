@@ -26,11 +26,9 @@ in
       ComputeFeatureModulename(Modulename, Feature, FeatureModulename?)
       .
       if equal(Modulename, FeatureModulename) then
-         snd-msg(io-get-path-filename(Modulename))
-         . rec-msg(io-filename(Modulename, MenuName?))
-	 . LanguageNameFromModuleName(Modulename, Languagename?)
-	 . Languagename := concat(Languagename, MenuName)
-	 . Menu := quote(action([description(language-feature(Languagename),menu([label(MenuName),label(Feature)]))],Action))
+         ModulenameBase(Modulename, MenuName?)
+         . ComputeCanonicalLanguagename(Modulename, Languagename?)
+	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)]))],Action))
 	 . snd-msg(cm-add-system-property(Menu))
       else
         tau
@@ -45,5 +43,8 @@ endlet
 
 toolbus(LanguageFeatureMenuListener("format", "PrettyPrintAction"))
 toolbus(LanguageFeatureMenuListener("run", "RunAction"))
+toolbus(LanguageFeatureMenuListener("debug", "DebugAction"))
+toolbus(LanguageFeatureMenuListener("check", "CheckAction"))
+toolbus(LanguageFeatureMenuListener("extract", "DebugAction"))
 
 #endif

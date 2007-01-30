@@ -25,8 +25,6 @@ configuration([
 
   action([description(equations-editor, menu-shortcut([label("Module"),label("Edit"),label("Term")], shortcut([M_CTRL,M_SHIFT],VK_T)))],
          "EditorEditTermAction"),
-  action([description(term-editor, menu-shortcut([label("Term"),label("Format")], shortcut([M_ALT,M_CTRL],VK_P)))], "PrettyPrintAction"),
-  action([description(term-editor, menu-shortcut([label("Term"),label("Run")], shortcut([M_ALT,M_CTRL],VK_S)))], "RunAction"),
   action([description(syntax-editor, menu-shortcut([label("Module"),label("Format")], shortcut([M_ALT,M_CTRL],VK_P)))],
          "PrettyPrintSdfAction"),
   action([description(equations-editor, menu([label("Module"),label("Equations"), label("Run Tests")]))],

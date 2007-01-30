@@ -56,6 +56,83 @@ in
   fi
 endlet
 
+process DebugAction(EditorId : term) is
+let
+  ModuleId : term,
+  RunModuleId : term,
+  Path: str,
+  ResultTree: term,
+  Sid: term,
+  Pid: int,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "debug", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    File := "debug.out"
+    . GetPath(EditorId, Path?)
+    . AddJob("Debugging while rewriting")
+    . Reduce(RunModuleId, Path, on, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(em-get-session-by-path(File))
+      .
+      (
+        rec-msg(em-session(File, Sid?))
+        . DeleteSession(Sid)
+      +
+        rec-msg(em-no-such-session(File))
+      )
+      . ActivateEditorWithTree(ResultTree, ModuleId, File)
+      . create(AmbiguityHandler(ResultTree, File), Pid?)
+    else
+      tau
+    fi
+    . JobDone("Debugging while rewriting")
+  else
+    tau
+  fi
+endlet
+
+process ExtractAction(EditorId : term) is
+let
+  ModuleId : term,
+  RunModuleId : term,
+  Path: str,
+  ResultTree: term,
+  Sid: term,
+  Pid: int,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "extract", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    File := "extract.rstore"
+    . GetPath(EditorId, Path?)
+    . AddJob("Extracting")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(em-get-session-by-path(File))
+      .
+      (
+        rec-msg(em-session(File, Sid?))
+        . DeleteSession(Sid)
+      +
+        rec-msg(em-no-such-session(File))
+      )
+      . ActivateEditorWithTree(ResultTree, ModuleId, File)
+    else
+      tau
+    fi
+    . JobDone("Extracting")
+  else
+    tau
+  fi
+endlet
+
 process RunAction(EditorId : term) is
 let
   ModuleId : term,
@@ -72,7 +149,7 @@ in
   if not-equal(RunModuleId, UNDEFINED) then
     File := "run.out"
     . GetPath(EditorId, Path?)
-    . AddJob(Path)
+    . AddJob("Running")
     . Reduce(RunModuleId, Path, off, ResultTree?)
     . 
     if not-equal(ResultTree, UNDEFINED) then
@@ -89,7 +166,38 @@ in
     else
       tau
     fi
-    . JobDone(Path)
+    . JobDone("Running")
+  else
+    tau
+  fi
+endlet
+
+process CheckAction(EditorId : term) is
+let
+  ModuleId : term,
+  RunModuleId : term,
+  Path: str,
+  ResultTree: term,
+  Sid: term,
+  Pid: int,
+  Summary: term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "check", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . AddJob("Checking")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(convert-feedback(ResultTree))
+      . rec-msg(converted-feedback(Summary?))
+      . RefreshSummary(Summary)
+    else
+      tau
+    fi
+    . JobDone("Checking")
   else
     tau
   fi
@@ -105,7 +213,7 @@ let
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
-  . AddJob(Path)
+  . AddJob("Rewriting")
   . Reduce(ModuleId, Path, off, ResultTree?)
   . 
   if not-equal(ResultTree, UNDEFINED) then
@@ -122,7 +230,7 @@ in
   else
     tau
   fi
-  . JobDone(Path)
+  . JobDone("Rewriting")
 endlet
 
 process DebugReduceAction(EditorId : term) is
