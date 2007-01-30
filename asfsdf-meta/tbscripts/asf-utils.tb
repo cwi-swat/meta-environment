@@ -294,7 +294,6 @@ in
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
   . Count := size(Modules)
   . Specification := []
-  . TODO("remove computation by using listeners?")
   . 
   if and(not-equal(Modules, []), equal(Error, undefined)) then
     CurModule := first(Modules)
