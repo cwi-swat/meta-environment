@@ -1,14 +1,14 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Oct 27, 2006 6:00:00 PM
+// generation time: Jan 30, 2007 1:18:50 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,11 +16,11 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class EditorPluginTool
-  extends SwingTool
+  extends AbstractTool
   implements EditorPluginTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
   private ATerm PisModified0;
@@ -38,6 +38,7 @@ abstract public class EditorPluginTool
   private ATerm PhighlightSlices0;
   private ATerm PeditorToFront0;
   private ATerm PrereadContents0;
+  private ATerm PsetInfo0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -52,24 +53,24 @@ abstract public class EditorPluginTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>,<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,set-editable(<term>,<bool>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,write-contents(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,reread-contents(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,is-modified(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,set-focus(<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,set-cursor-at-offset(<term>,<int>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,clear-focus(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,register-text-categories(<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,highlight-slices(<term>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,display-message(<term>,<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,editor-to-front(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,kill-editor(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,show-popup(<term>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-ack-event(<editor-plugin>,<term>)"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<editor-plugin>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-info(<term>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-editable(<term>,<bool>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,write-contents(<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,reread-contents(<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,is-modified(<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-focus(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-cursor-at-offset(<term>,<int>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,clear-focus(<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,register-text-categories(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,highlight-slices(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,display-message(<term>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,editor-to-front(<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,kill-editor(<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,show-popup(<term>,<list>))"));
+    sigTable.add(factory.parse("rec-ack-event(<editor-plugin>,<term>)"));
+    sigTable.add(factory.parse("rec-terminate(<editor-plugin>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
@@ -85,11 +86,12 @@ abstract public class EditorPluginTool
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PsetCursorAtOffset0 = factory.parse("rec-do(set-cursor-at-offset(<term>,<int>))");
     PshowPopup0 = factory.parse("rec-do(show-popup(<term>,<term>))");
-    PeditFile0 = factory.parse("rec-do(edit-file(<term>,<str>,<str>))");
+    PeditFile0 = factory.parse("rec-do(edit-file(<term>,<str>))");
     PsetEditable0 = factory.parse("rec-do(set-editable(<term>,<term>))");
     PhighlightSlices0 = factory.parse("rec-do(highlight-slices(<term>,<term>))");
     PeditorToFront0 = factory.parse("rec-do(editor-to-front(<term>))");
     PrereadContents0 = factory.parse("rec-do(reread-contents(<term>))");
+    PsetInfo0 = factory.parse("rec-do(set-info(<term>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -151,7 +153,7 @@ abstract public class EditorPluginTool
     }
     result = term.match(PeditFile0);
     if (result != null) {
-      editFile((ATerm)result.get(0), (String)result.get(1), (String)result.get(2));
+      editFile((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PsetEditable0);
@@ -172,6 +174,11 @@ abstract public class EditorPluginTool
     result = term.match(PrereadContents0);
     if (result != null) {
       rereadContents((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PsetInfo0);
+    if (result != null) {
+      setInfo((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PrecAckEvent0);
@@ -195,7 +202,7 @@ abstract public class EditorPluginTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }

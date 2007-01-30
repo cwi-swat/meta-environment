@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Oct 27, 2006 6:00:00 PM
+// generation time: Jan 30, 2007 1:18:50 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -107,10 +107,10 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `showPopup' not supported.");
     }
   }
-  public void editFile(ATerm t0, String s1, String s2)
+  public void editFile(ATerm t0, String s1)
   {
     if (tool != null) {
-      tool.editFile(t0, s1, s2);
+      tool.editFile(t0, s1);
     }
     else {
       throw new UnsupportedOperationException("method `editFile' not supported.");
@@ -150,6 +150,15 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `rereadContents' not supported.");
+    }
+  }
+  public void setInfo(ATerm t0, String s1)
+  {
+    if (tool != null) {
+      tool.setInfo(t0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `setInfo' not supported.");
     }
   }
   public void recAckEvent(ATerm t0)

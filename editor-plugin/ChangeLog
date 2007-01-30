@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan 30 13:39:08 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Split edit-file into edit-file and set-info
+
 Wed Jan 24 15:57:58 CET 2007 <kooiker@cwi.nl>
  * src/**/EditorKit.java:
    - After ending the undo sequence, update the undo and redo states

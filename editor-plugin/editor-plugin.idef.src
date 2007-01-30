@@ -27,8 +27,11 @@ in
   . rec-connect(T?)
   .
   (
-    rec-msg(te-edit-text(EditorId?, Filename?, Modulename?))
-    . snd-do(T, edit-file(EditorId, Filename, Modulename))
+    rec-msg(te-edit-text(EditorId?, Filename?))
+    . snd-do(T, edit-file(EditorId, Filename))
+  +
+    rec-msg(te-set-info(EditorId?, Message?))
+    . snd-do(T, set-info(EditorId, Message))
   +
     rec-msg(te-set-editable(EditorId?, Editable?))
     . snd-do(T, set-editable(EditorId, Editable))

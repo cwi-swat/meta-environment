@@ -142,6 +142,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				public void mousePressed(MouseEvent e) {
 					int offset = panel.getMouseOffset(e.getX(), e.getY());
 					if (!e.isPopupTrigger()) {
+						System.err.println(editorId + ": " + offset);
 						bridge
 								.postEvent(editorId.getFactory().make(
 										"offset-event(<term>,<int>)", editorId,
@@ -391,17 +392,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		}
 	}
 
-	public void editFile(ATerm editorId, String filename, String modulename) {
+	public void editFile(ATerm editorId, String filename) {
 		try {
 			createPanel(editorId, filename);
-			Map<String, JComponent> statusBar = statusbarsById.get(editorId
-					.toString());
-			JLabel label = (JLabel) statusBar.get("Module");
-			if (modulename.equals("")) {
-				label.setText(" ");
-			} else {
-				label.setText(modulename);
-			}
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(StudioImpl.getFrame(), filename
 					+ " could not be opened:" + e);
@@ -413,6 +406,17 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		}
 	}
 
+	public void setInfo(ATerm editorId, String info) {
+		Map<String, JComponent> statusBar = statusbarsById.get(editorId
+				.toString());
+		JLabel label = (JLabel) statusBar.get("Module");
+		if (info.equals("")) {
+			label.setText(" ");
+		} else {
+			label.setText(info);
+		}
+	}
+	
 	public void highlightSlices(ATerm editorId, ATerm slices) {
 		Editor panel = getEditorPanel(editorId);
 		if (panel != null && !panel.isModified()) {
