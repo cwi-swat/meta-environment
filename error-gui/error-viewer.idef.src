@@ -24,6 +24,9 @@ in
     rec-msg(ui-remove-feedback-summary(Panel?, Path?))
     . snd-do(T, remove-feedback-summary(Panel, Path))
   +
+    rec-msg(ui-refresh-feedback-summary(Panel?, Summary?))
+    . snd-do(T, refresh-feedback-summary(Panel, Summary))
+  +
     rec-event(T, error-selected(Error?))
     . snd-msg(ui-error-selected(Error))
     . snd-ack-event(T, error-selected(Error))

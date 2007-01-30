@@ -103,6 +103,15 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		getPanel(panelId).addError(summary);
 	}
 
+	public void refreshFeedbackSummary(String panelId, ATerm summaryTerm) {
+		Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
+		String producer = summary.getProducer();
+		String id = summary.getId();
+
+		getPanel(panelId).removeAllMatchingErrors(producer, id);
+		getPanel(panelId).addError(summary);
+	}
+
 	public void removeFeedbackSummary(String panelId, String producer, String id) {
 		getPanel(panelId).removeAllMatchingErrors(producer, id);
 	}

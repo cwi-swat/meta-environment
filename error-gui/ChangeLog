@@ -1,5 +1,10 @@
 # $Id$
 
+Tue Jan 30 08:33:06 CET 2007 <jurgenv@cwi.nl>
+ * **/ErrorViewer.java: added refreshFeedbackSummary, which removes the
+   old messages for the producer and identifier of this summary, and 
+   adds the new messages.
+
 Wed Oct 11 14:07:46 CEST 2006 <jurgenv@cwi.nl>
  * **/*.java: this tool now handles multiple tabs of error messages
    using a panelId (String) to identify to which panel which message
