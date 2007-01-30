@@ -29,7 +29,7 @@ in
     rec-msg(cm-add-system-property(Property?))
     . snd-do(CM, add-system-property(Property))
   +
-    rec-msg(cm-remove-system-property(Property))
+    rec-msg(cm-remove-system-property(Property?))
     . snd-do(CM, remove-system-property(Property))
   +
     rec-msg(cm-change-workspace(Path?))
