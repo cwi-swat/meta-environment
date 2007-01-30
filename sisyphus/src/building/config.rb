@@ -92,6 +92,7 @@ module Building
     def tunneled
       if tunnel_needed? then
         ssh_pid = fork do 
+          $stderr << "setting up tunnel: ssh -l #{@tunnel_user} #{@tunnel_host} -L 3690:#{@svn_host}:3690 -N\n"
           exec('ssh', '-l', @tunnel_user, @tunnel_host, 
                '-L',  "3690:#{@svn_host}:3690", '-N')
         end

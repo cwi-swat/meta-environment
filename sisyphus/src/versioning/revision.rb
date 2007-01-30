@@ -1,5 +1,6 @@
 module Versioning
   require 'versioning/boms'
+  require 'ostruct'
 
   class Revision
     attr_reader :deps, :component, :version, :checkout
@@ -157,8 +158,22 @@ module Versioning
       if @externals.include?(component.name)
         return VirtualRevision.new(component)
       end
-      revision = Revision.from_checkout(component, trunk_checkout(component))
+
+      # nieuw:
+      repo = @repo_factory.repository(component.name, @repositories)
+      version  = nil
+      # the horror, the horror....
+      #checkout = OpenStruct.new
+      #checkout.path = File.join(@checkout_dir, component.name)
+      # </dirty-hack>
+      checkout = trunk_checkout(component)
+      revision = Revision.new(component, version, checkout, repo, @vcs_user, @time, @checkout_dir)
+
       return revision
+
+      # oud
+      #revision = Revision.from_checkout(component, trunk_checkout(component))
+      #return revision
     end
 
     def updated_revision(component)
