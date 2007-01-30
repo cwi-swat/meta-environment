@@ -103,6 +103,9 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
 		getPanel(panelId).addError(summary);
 	    } 
+	    catch (aterm.ParseError ex) {
+	      System.err.println("Summary is not a valid ATerm");
+	    }
 	    catch (IllegalArgumentException ex) {
 	      System.err.println("Summary is not valid");
 	    }
@@ -117,6 +120,9 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		getPanel(panelId).removeAllMatchingErrors(producer, id);
 		getPanel(panelId).addError(summary);
 	    } 
+	    catch (aterm.ParseError ex) {
+	      System.err.println("Summary is not a valid ATerm");
+	    }
 	    catch (IllegalArgumentException ex) {
 	      System.err.println("Summary is not valid");
 	    }
