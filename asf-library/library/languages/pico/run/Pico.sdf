@@ -20,6 +20,7 @@ exports
     "eve"(EXP, VENV)              -> VALUE
 
 hiddens
+  imports basic/Comments
   context-free start-symbols
     VALUE-ENV PROGRAM
 

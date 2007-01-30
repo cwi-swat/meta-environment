@@ -8,7 +8,7 @@ exports
     PROGRAM
 
   context-free syntax
-    decls2box(DECLS)                    -> Box {to-box}
+    decls2box(DECLS)                      -> Box {to-box}
     exp2box(EXP)                        -> Box {to-box}
     idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
     picoid2box(PICO-ID)                 -> Box {to-box}
