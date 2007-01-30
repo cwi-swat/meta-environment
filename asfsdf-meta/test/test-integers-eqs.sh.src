@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -x
+
 top_builddir=__TOP_BUILDDIR__
 
 ${top_builddir}/src/eqs-dump -m basic/Integers -o integers.eqs > test.ref 2>&1
@@ -18,6 +20,7 @@ COMPARE="__ATERM__/bin/atdiff"
 EVALUATOR="__ASF__/bin/asfe"
 
 $EVALUATOR -e integers.eqs -i test-integers.eqs > test.ref 2>/dev/null
+ls
 if $COMPARE test.ref integers.org > /dev/null
 then
   echo "Equations test for basic/Integers succeeded"
