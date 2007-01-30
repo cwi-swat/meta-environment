@@ -18,6 +18,17 @@ in
   . Action(ModuleId)
 endlet
 
+process GetModulePopupEvents(Modulename: str, PopupMenu: list?) is
+let
+  Events: list 
+in
+  snd-msg(cm-get-events(module-popup))
+  . rec-msg(cm-events(Events?))
+  . snd-msg(cm-get-events(module-popup(Modulename)))
+  . rec-msg(cm-events(PopupMenu?))
+  . PopupMenu := join(Events, PopupMenu)
+endlet
+
 process HandleModulePopup is
 let
   GraphId: str,
@@ -31,8 +42,7 @@ in
   (
     NAV-RequestPopup(ModuleId?)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . snd-msg(cm-get-events(module-popup(Modulename)))
-    . rec-msg(cm-events(PopupMenu?))
+    . GetModulePopupEvents(Modulename, PopupMenu?)
     . NAV-ShowPopup(ModuleId, PopupMenu)
   +
     NAV-PopupEvent(ModuleId?, Menu?)
@@ -42,8 +52,7 @@ in
     .
     if equal(GraphType, "import-graph") then
       MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-      . snd-msg(cm-get-events(module-popup(Modulename)))
-      . rec-msg(cm-events(PopupMenu?))
+      . GetModulePopupEvents(Modulename, PopupMenu?)
       . GP-ShowPopup("import-graph", SDF_NAMESPACE, ModuleId, PopupMenu)
     else
       tau
