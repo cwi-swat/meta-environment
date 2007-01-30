@@ -1,12 +1,12 @@
 module utilities/ATermAnnotations[X]
 
 imports languages/aterm/syntax/ATerms
-imports basic/Strings
+imports basic/StrCon
 
 exports
   context-free syntax
-    set-term-anno(term:X,label:String,anno:ATerm) -> X {built-in("set-term-anno")}   
-    get-term-anno(term:X,label:String) -> ATerm {built-in("get-term-anno")}
+    set-term-anno(term:X,label:StrCon,anno:ATerm) -> X {built-in("set-term-anno")}   
+    get-term-anno(term:X,label:StrCon) -> ATerm {built-in("get-term-anno")}
 
 hiddens
   context-free start-symbols ATerm
