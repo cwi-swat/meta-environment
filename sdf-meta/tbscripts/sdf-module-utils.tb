@@ -20,7 +20,7 @@ in
   else
     tau
   fi 
-  . Languagename := concat(Prefix,concat("/", Name))
+  . Languagename := concat(Prefix, Name)
 endlet
 
 process LanguageNameFromModuleName(Modulename: str, Languagename: str?) is
