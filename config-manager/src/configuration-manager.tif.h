@@ -10,6 +10,8 @@
 
 /* Prototypes for functions called from the event handler */
 ATerm get_action(int conn, ATerm, ATerm);
+ATerm get_subtype_events(int conn, ATerm, ATerm);
+ATerm get_subtype_action(int conn, ATerm, ATerm, ATerm);
 ATerm get_events(int conn, ATerm);
 ATerm get_extension_modulename(int conn, const char *);
 void change_workspace(int conn, const char *);

@@ -32,6 +32,34 @@ static CFG_PropertyList libraryPaths = NULL;
 static CFG_PropertyList scripts = NULL;
 static CFG_PropertyList scriptPaths = NULL;
 
+static ATerm getSuperType(ATerm type)
+{
+  if (ATgetType(type) == AT_APPL) {
+    AFun fun = ATgetAFun((ATermAppl) type);
+    ATerm super = (ATerm) ATmakeAppl0(ATmakeAFun(ATgetName(fun), 0, ATisQuoted(fun)));
+
+    if (!ATisEqual(super, type)) {
+      return super;
+    }
+  }
+
+  return NULL;
+}
+
+static ATerm makeSubType(ATerm type, ATerm subtype) {
+  if (ATgetType(type) == AT_APPL) {
+    AFun fun = ATgetAFun((ATermAppl) type);
+
+    if (ATgetArity(fun) == 0) {
+      AFun newfun = ATmakeAFun(ATgetName(fun), 1, ATisQuoted(fun));
+      return (ATerm) ATmakeAppl1(newfun, subtype);
+    }
+  }
+
+  ATwarning("configmanager: warning: ignoring subtype %t because supertype %t is already subtyped.\n", subtype, type);
+  return type;
+}
+
 static void add_configuration_properties(ATerm actions);
 
 static void removeDescription(ATermTable table, CFG_ActionDescription desc) {
@@ -345,8 +373,17 @@ void remove_user_properties(int cid) {
 
 ATerm get_events(int cid, ATerm actionType) {
   CFG_ActionDescriptionList result = getDescriptions(actionType);
+  ATerm super = getSuperType(actionType);
+
+  if (super != NULL) {
+    result = CFG_concatActionDescriptionList(result, getDescriptions(super));
+  }
 
   return ATmake("snd-value(events(<term>))", result);
+}
+
+ATerm get_subtype_events(int cid, ATerm type, ATerm subType) {
+  return get_events(cid, makeSubType(type, subType));
 }
 
 static ATerm getEventAction(ATerm type, ATerm event) {
@@ -364,10 +401,22 @@ ATerm get_action(int cid, ATerm type, ATerm event) {
   ATerm action = getEventAction(type, event);
   
   if (action == NULL) {
+    ATerm super = getSuperType(type);
+
+    if (super != NULL) {
+      action = getEventAction(super, event);
+    }
+  }
+
+  if (action == NULL) {
     action = ATparse("\"DefaultAction\"");
   }
 
   return ATmake("snd-value(action(<term>))", action);
+}
+
+ATerm get_subtype_action(int cid, ATerm type, ATerm subtype, ATerm event) {
+  return get_action(cid, makeSubType(type, subtype), event);
 }
 
 static ATermList getExtensions() {

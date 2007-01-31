@@ -1,9 +1,5 @@
 # $Id$
 
-Tue Jan 30 16:44:09 CET 2007 <jurgenv@cwi.nl>
- * src/*: reverted the change of Thu Oct 19. This is not the proper
-   design. It is just too random.
-
 Fri Jan 26 14:58:33 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * src/*: added add-system-property and remove-system-property.
 
