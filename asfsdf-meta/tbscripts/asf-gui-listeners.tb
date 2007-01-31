@@ -13,13 +13,15 @@ let
   Modulename: str,
   FeatureModulename: str,
   Languagename: str,
-  MenuName: str
+  MenuName: str,
+  OldValue: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified) 
+  subscribe(mm-module-created(<term>))
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified) 
   .
   (
-    rec-note(mm-attribute-changed(Event?))
-    . ACE-GetModuleId(Event, ModuleId?)
+    rec-note(mm-module-created(ModuleId?))
+    . rec-note(mm-attribute-changed(attribute-changed-event(ModuleId,SDF_NAMESPACE,"status",OldValue?,identified)))
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     .
     if not-equal(Modulename, UNDEFINED) then
