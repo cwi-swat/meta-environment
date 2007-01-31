@@ -22,11 +22,8 @@ process GetModulePopupEvents(Modulename: str, PopupMenu: list?) is
 let
   Events: list 
 in
-  snd-msg(cm-get-events(module-popup))
-  . rec-msg(cm-events(Events?))
-  . snd-msg(cm-get-events(module-popup(Modulename)))
+  snd-msg(cm-get-events(module-popup(Modulename)))
   . rec-msg(cm-events(PopupMenu?))
-  . PopupMenu := join(Events, PopupMenu)
 endlet
 
 process HandleModulePopup is
