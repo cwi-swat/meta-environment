@@ -14,10 +14,10 @@ let
   FeatureModulename: str,
   Languagename: str,
   MenuName: str,
-  OldValue: term
+  OldValue: term,
+  Pid: int
 in
-  subscribe(mm-module-created(<term>))
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",identified,<term>) 
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",identified,<term>) 
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -32,6 +32,7 @@ in
          . ComputeCanonicalLanguagename(Modulename, Languagename?)
 	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)]))],Action))
 	 . snd-msg(cm-add-system-property(Menu))
+         . create(LanguageFeatureRemoveListener(ModuleId, Menu), Pid?)
       else
         tau
       fi	 
@@ -48,5 +49,15 @@ toolbus(LanguageFeatureMenuListener("run", "RunAction"))
 toolbus(LanguageFeatureMenuListener("debug", "DebugAction"))
 toolbus(LanguageFeatureMenuListener("check", "CheckAction"))
 toolbus(LanguageFeatureMenuListener("extract", "DebugAction"))
+
+process LanguageFeatureRemoveListener(ModuleId: term, Property: term) is
+  subscribe(mm-module-deleted(<term>))
+  .
+  (
+    rec-note(mm-module-deleted(ModuleId))
+    . snd-msg(cm-remove-system-property(Property))
+  )
+  *
+  delta
 
 #endif
