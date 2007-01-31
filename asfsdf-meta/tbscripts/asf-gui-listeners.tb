@@ -17,11 +17,11 @@ let
   OldValue: term
 in
   subscribe(mm-module-created(<term>))
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified) 
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",identified,<term>) 
   .
   (
-    rec-note(mm-module-created(ModuleId?))
-    . rec-note(mm-attribute-changed(attribute-changed-event(ModuleId,SDF_NAMESPACE,"status",OldValue?,identified)))
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     .
     if not-equal(Modulename, UNDEFINED) then
