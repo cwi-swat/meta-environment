@@ -414,7 +414,6 @@ public class StudioImpl implements Studio, GuiTif {
 		StudioMenuBar menuBar = new StudioMenuBar(factory, bridge);
 		menuBar.add(createEmptyFileMenu());
 		menuBar.add(createViewsMenu());
-		menuBar.add(createThemesMenu());
 
 		ActionDescriptionList menus = menuList;
 		menuBar.add(menus);
@@ -467,7 +466,10 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	private JMenu createEmptyFileMenu() {
-		return new JMenu("File");
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.add(createThemesMenu());
+
+		return fileMenu;
 	}
 
 	protected void showView(View view) {
