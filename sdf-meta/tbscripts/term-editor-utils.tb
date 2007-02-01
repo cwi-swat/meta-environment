@@ -11,7 +11,6 @@ let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
-  LanguageType: term,
   Error: str,
   Modulename: str,
   Sid: term,
@@ -45,8 +44,6 @@ in
       .
       (
         MenuSelected(Sid, EditorType)
-      +
-        MenuSelected(Sid, LanguageType)
       +
         MouseClicked(Sid)
       +
