@@ -46,12 +46,12 @@ equations
         productions(Prod*5) := productions(Prod*1) ++ productions(Prod*4),
         productions(Prod*6) := productions(Prod*2) ++ productions(Prod*5),
 
-        Msgs1 := check-priorities(Module, , $ModuleId, productions(Prod*6)),
+ %%       Msgs1 := check-priorities(Module, , $ModuleId, productions(Prod*6)), turned off because of too many false positives
         Msgs2 := check-right-hand-sides(Module, , $ModuleId),
         Msgs3 := check-right-hand-side-lexical-prod(Module, , $ModuleId),
 
         $String1 := moduleid2str($ModuleId),
-        InfoMsgTuple3 := put-messages($ModuleId, Msgs1, Msgs2, Msgs3, InfoMsgTuple1),
+        InfoMsgTuple3 := put-messages($ModuleId, Msgs2, Msgs3, InfoMsgTuple1),
 
         ModuleInfoTable1 := get-module-info(InfoMsgTuple3),
         ModuleInfoTable2 := put-production-info($ModuleId, 

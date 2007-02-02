@@ -41,6 +41,16 @@ equations
 
 equations
 
+[] remove-messages($ModuleId, 
+                          [{ModuleInfoEntry*1
+                           [$ModuleId, Bool, ModuleInfo, Messages]
+                           ModuleInfoEntry*2}]) = [ {ModuleInfoEntry*1
+                           ModuleInfoEntry*2}]
+
+[default]  remove-messages($ModuleId, [ModuleInfoTable]) = [ModuleInfoTable]
+
+equations
+
   [mmau-1'1] mark-modules-as-unchecked({}) = {}
 
   [mmau-1'1] {ModuleInfoEntry*2} := 

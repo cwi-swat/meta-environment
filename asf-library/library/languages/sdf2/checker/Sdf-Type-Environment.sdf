@@ -20,6 +20,7 @@ exports
 
     put-module-info(Module-Info-Table, Info-Msg-Tuple) -> Info-Msg-Tuple
     put-messages(ModuleId, {Error ","}*, Info-Msg-Tuple) -> Info-Msg-Tuple
+    remove-messages(ModuleId, Info-Msg-Tuple) -> Info-Msg-Tuple
 
   context-free syntax
     "[" ImportsSet ","
