@@ -1,10 +1,11 @@
 equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, Main, false),
-        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+        InfoMsgTuple3 := remove-messages(basic/BytesCon, InfoMsgTuple2)
         ====>
         check-asfsdf(definition Definition1) =
-          summary("AsfSdfChecker", "Main", [get-all-messages(InfoMsgTuple2)])
+          summary("AsfSdfChecker", "Main", [get-all-messages(InfoMsgTuple3)])
 
 equations
 
@@ -19,25 +20,28 @@ equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, false),
         InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
-        $StrCon := moduleid2str($ModuleId)
+        $StrCon := moduleid2str($ModuleId),
+        InfoMsgTuple3 := remove-messages(basic/BytesCon, InfoMsgTuple2)
         ====>
         check-asfsdf(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", $StrCon, [get-all-messages(InfoMsgTuple2)])
+          summary("AsfSdfChecker", $StrCon, [get-all-messages(InfoMsgTuple3)])
 
 equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown, true),
-        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+        InfoMsgTuple3 := remove-messages(basic/BytesCon, InfoMsgTuple2)
         ====>
         check-asfsdf-equations(definition Definition1) =
-          summary("AsfSdfChecker", "Main", [get-all-messages(InfoMsgTuple2)])
+          summary("AsfSdfChecker", "Main", [get-all-messages(InfoMsgTuple3)])
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, true),
         InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
-        $StrCon := moduleid2str($ModuleId)
+        $StrCon := moduleid2str($ModuleId),
+        InfoMsgTuple3 := remove-messages(basic/BytesCon, InfoMsgTuple2)
         ====>
         check-asfsdf-equations(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", $StrCon, [get-all-messages(InfoMsgTuple2)])
+          summary("AsfSdfChecker", $StrCon, [get-all-messages(InfoMsgTuple3)])
 
   [cass-1'1] 
         Definition2 := remove-labels(Definition1),
