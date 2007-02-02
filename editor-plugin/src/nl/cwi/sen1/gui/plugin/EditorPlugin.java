@@ -374,11 +374,11 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				e.printStackTrace();
 			}
 		}
+		studio.removeComponent(comp);
 		cleanupEditor(comp, id);
 	}
 
 	private void cleanupEditor(StudioComponent comp, String id) {
-		studio.removeComponent(comp);
 		componentsById.remove(id);
 		statusbarsById.remove(id);
 		editors.remove(id);
@@ -416,7 +416,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			label.setText(info);
 		}
 	}
-	
+
 	public void highlightSlices(ATerm editorId, ATerm slices) {
 		Editor panel = getEditorPanel(editorId);
 		if (panel != null && !panel.isModified()) {
