@@ -2,93 +2,71 @@
 
 #include "options.h"
 #include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 
-static ATermTable optionsTable;
-static ATerm on = NULL;
-static ATerm off = NULL;
+static int* intOptions = NULL;
+static ATbool* flagOptions = NULL;
+static char** stringOptions = NULL;
 
-void OPT_initialize() {
+static int maxOptionId = 0;
+static int lastIntOptionId = 0;
+static int lastFlagOptionId = 0;
+static int lastStringOptionId = 0;
+
+void OPT_initialize(int maxOptions) {
   static ATbool initialized = ATfalse;
 
   if (!initialized) {
-    /* There are 16 options in SGLR and 8 in asc-support. 75% of 32 = 24 */
-    optionsTable = ATtableCreate(32,75);
-    on = ATparse("on");
-    ATprotect(&on);
-    off = ATparse("off");
-    ATprotect(&off);
+    maxOptionId = maxOptions;
+    intOptions = (int*) calloc(maxOptions, sizeof(int));
+    flagOptions = (ATbool*) calloc(maxOptions, sizeof(ATbool));
+    stringOptions = (char**) calloc(maxOptions, sizeof(char*));
     initialized = ATtrue;
   }
 }
 
+int OPT_getIntOptionId() {
+  assert(lastIntOptionId < maxOptionId);
+  return lastIntOptionId++;
+}
+
+int OPT_getFlagOptionId() {
+  assert(lastFlagOptionId < maxOptionId);
+  return lastFlagOptionId++;
+}
+
+int OPT_getStringOptionId() {
+  assert(lastStringOptionId < maxOptionId);
+  return lastStringOptionId++;
+}
+
 void OPT_cleanup() {
-  ATtableDestroy(optionsTable);
-  ATunprotect(&on);
-  on = NULL;
-  ATunprotect(&off);
-  off = NULL;
+  free(intOptions); intOptions = NULL;
+  free(flagOptions); flagOptions = NULL;
+  free(stringOptions); stringOptions = NULL;
 }
 
-/* We use ATerms to index into the hash table. For different types of option 
- * values the names are wrapped with different names, like flag, or string.
- */
-static ATerm stringToATerm(const char *name) {
-  return (ATerm) ATmakeAppl0(ATmakeAFun(name, 0, ATfalse));
+void OPT_setFlag(int flagOptionId, ATbool value)  {
+  flagOptions[flagOptionId] = value;
 }
 
-static char* ATermToString(ATerm term) {
-  assert(ATgetType(term) == AT_APPL);
-
-  return ATgetName(ATgetAFun((ATermAppl) term));
+ATbool OPT_getFlag(int flagOptionId) {
+  return flagOptions[flagOptionId];
 }
 
-static ATerm intName(const char *name) {
-  return ATmake("int(<term>)", stringToATerm(name));
+void   OPT_setStringValue(int stringOptionId, const char *value) {
+  stringOptions[stringOptionId] = strdup(value);
 }
 
-static ATerm flagName(const char *name) {
-  return ATmake("flag(<term>)", stringToATerm(name));
+const char* OPT_getStringValue(int stringOptionId) {
+  return stringOptions[stringOptionId];
 }
 
-static ATerm stringName(const char *name) {
-  return ATmake("string(<term>)", stringToATerm(name));
+void OPT_setIntValue(int intOptionId, int value) {
+  intOptions[intOptionId] = value;
 }
 
-static ATerm stringValue(const char* value) {
-  return stringToATerm(value);
-}
-
-void OPT_setFlag(const char *name, ATbool value)  {
-  ATtablePut(optionsTable, flagName(name), value ? on : off);
-}
-
-ATbool OPT_getFlag(const char *name) {
-  ATerm value = ATtableGet(optionsTable, flagName(name));
-
-  if (ATisEqual(value,on)) {
-    return ATtrue;
-  }
-  else {
-    return ATfalse;
-  }
-}
-
-void   OPT_setStringValue(const char *name, const char *value) {
-  ATtablePut(optionsTable, stringName(name), stringValue(value));
-}
-
-const char* OPT_getStringValue(const char *name) {
-  ATerm value = ATtableGet(optionsTable, stringName(name));
-  assert(value != NULL);
-  return  ATermToString(value);
-}
-
-void OPT_setIntValue(const char *name, int value) {
-  ATtablePut(optionsTable, intName(name), (ATerm)ATmakeInt(value));
-}
-
-int OPT_getIntValue(const char *name) {
-  ATerm value = ATtableGet(optionsTable, intName(name));
-  assert(value != NULL);
-  return ATgetInt((ATermInt)value);
+int OPT_getIntValue(int intOptionId) {
+  return intOptions[intOptionId];
 }

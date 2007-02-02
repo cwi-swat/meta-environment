@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb  2 16:06:02 CET 2007 <{economop,jurgenv}@cwi.nl>
+ * lib/options.h: reimplemented the API without the use of ATerm tables.
+   The old implementation was a bottleneck for sglr.
+
 Tue Oct 31 13:53:21 CET 2006 <jurgenv@cwi.nl>
  * Regenerated API with support for all kinds of mouse button clicks,
    including popups. Popups are hard-wired because different kinds of
