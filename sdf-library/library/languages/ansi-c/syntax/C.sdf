@@ -1,4 +1,4 @@
-module languages/c/syntax/C
+module languages/ansi-c/syntax/C
 
 %% This grammar is a transformed version from the ANSI-C grammar.
 %% It has far less sorts, because more priorities have been used,
@@ -16,8 +16,8 @@ module languages/c/syntax/C
 %%       grammar should be fully unambiguous (Expression).
 
 
-imports languages/c/syntax/Declarations
-imports languages/c/syntax/Statements
+imports languages/ansi-c/syntax/Declarations
+imports languages/ansi-c/syntax/Statements
 
 exports
 

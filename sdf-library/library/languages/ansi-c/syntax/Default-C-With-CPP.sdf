@@ -1,9 +1,9 @@
-module languages/c/syntax/Default-C-With-CPP
+module languages/ansi-c/syntax/Default-C-With-CPP
 
 imports languages/generic-cpp/syntax/Whitespace
 imports languages/generic-cpp/syntax/CommentsAsLayout
 
-imports languages/c/syntax/C
+imports languages/ansi-c/syntax/C
 
 %% This module shows a typical C/CPP combination that may work for your C
 %% files. There is no guarantee however, since one can not predict

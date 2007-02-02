@@ -1,7 +1,7 @@
-module languages/c/syntax/Statements
+module languages/ansi-c/syntax/Statements
 
-imports languages/c/syntax/Expressions
-imports languages/c/syntax/Declarations
+imports languages/ansi-c/syntax/Expressions
+imports languages/ansi-c/syntax/Declarations
 
 exports
 

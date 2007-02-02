@@ -1,4 +1,4 @@
-module languages/c/syntax/Declarators[Declarator Identifier]
+module languages/ansi-c/syntax/Declarators[Declarator Identifier]
 
 exports
 

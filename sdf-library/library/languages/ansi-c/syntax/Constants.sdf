@@ -1,4 +1,4 @@
-module languages/c/syntax/Constants
+module languages/ansi-c/syntax/Constants
 
 exports
 

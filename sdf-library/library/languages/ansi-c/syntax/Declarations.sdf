@@ -1,11 +1,11 @@
-module languages/c/syntax/Declarations
+module languages/ansi-c/syntax/Declarations
 
 %% The syntax of abstract declarators and declarators is so similar, that
 %% we could make a parameterized module for them:
-imports languages/c/syntax/Declarators[Declarator Identifier]
-imports languages/c/syntax/Declarators[AbstractDeclarator AnonymousIdentifier]
-imports languages/c/syntax/Identifiers
-imports languages/c/syntax/Expressions
+imports languages/ansi-c/syntax/Declarators[Declarator Identifier]
+imports languages/ansi-c/syntax/Declarators[AbstractDeclarator AnonymousIdentifier]
+imports languages/ansi-c/syntax/Identifiers
+imports languages/ansi-c/syntax/Expressions
 
 exports
 

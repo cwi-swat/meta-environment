@@ -1,8 +1,8 @@
-module languages/c/syntax/Expressions
+module languages/ansi-c/syntax/Expressions
 
-imports languages/c/syntax/Constants
-imports languages/c/syntax/Identifiers
-imports languages/c/syntax/Declarations
+imports languages/ansi-c/syntax/Constants
+imports languages/ansi-c/syntax/Identifiers
+imports languages/ansi-c/syntax/Declarations
 
 exports 
 

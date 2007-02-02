@@ -1,4 +1,4 @@
-module languages/c/syntax/Identifiers
+module languages/ansi-c/syntax/Identifiers
 
 exports
 
