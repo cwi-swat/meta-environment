@@ -118,7 +118,7 @@ static void displayMessages(ATerm term)
 
 ATerm check_asfsdf(int cid, ATerm term, const char *name)
 {
-  ATerm output = checkAsfSdf(ATBunpack(term), name, ATtrue);
+  ATerm output = checkAsfSdf(ATBunpack(term), name, ATfalse);
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
