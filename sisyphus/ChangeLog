@@ -1,3 +1,9 @@
+2007-02-02    <storm@cwi.nl>
+
+	* generate-installer.sh (default_location): made some changes to
+	let it work on SunOS (smoothing out platform differences on sed
+	and uname).
+
 2007-01-24    <storm@cwi.nl>
 
 	* Feature: (alpha quality) version of a bundle tool "ariadne";

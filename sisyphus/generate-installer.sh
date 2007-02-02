@@ -1,8 +1,32 @@
 #! /bin/sh
 
+# TODO for sun:
+# do not use --in-place with sed
+# do not use uname -mo, but uname -ps
+# GENERAL
+# if external_substs is empty, do cat instead of sed of the empty string.
+
+
 collect_prefixes=1
 prefixes=
 externals=
+
+# Note: this must be the same as in the generated
+# template (below).
+# -mo is not support on Sun (-ps comes closest)
+platform() {
+    uname -mo 2> /dev/null || uname -ps
+}
+
+# Base sed on Sun does not substitute properly in tars
+# Use gsed instead. Is in the template too.
+if [ `uname` = "SunOS" ]; then
+    SED=gsed
+else
+    SED=sed
+fi
+    
+
 
 while [ $# -gt 0 ]; do
   case $1 in
@@ -76,7 +100,11 @@ fi
 archive=/tmp/sisyphus_bin_dister.$$.tar
 rm -f ${archive}
 for prefix in ${prefixes}; do
-    (cd ${prefix};  tar uf ${archive} *)
+    if [ -e ${archive} ]; then
+	(cd ${prefix}; tar uf ${archive} *)
+    else
+	(cd ${prefix}; tar cf ${archive} *)
+    fi
 done
 
 # Find the smallest prefix
@@ -96,8 +124,10 @@ minimum_length=${#smallest}
 # Substitute each prefix for as many slashes and hash terminator.
 for prefix in ${prefixes} ; do  
     space=$((${#prefix} - 1))
-    replacement=`printf "%0${space}s#" "" | tr " " "/"`
-    sed --in-place  -e "s@${prefix}@${replacement}@g" ${archive}
+    replacement=`printf "%-${space}s#" "" | tr " " "/"`
+    #sed --in-place  -e "s@${prefix}@${replacement}@g" ${archive}
+    ${SED} -e "s@${prefix}@${replacement}@g" ${archive} > ${archive}.sed
+    mv ${archive}.sed ${archive}
 done
 
 # check existence of externals in tar
@@ -146,7 +176,7 @@ if [ -x \${location} -a -f \${location} ]; then
   if [ \${space} -lt 0 ]; then
     abort_dialog "binary relocation demands that the target path be shorter than ${#external}, and \${location} is longer than that."
   fi
-  padding=\`printf "%0\${space}s" "" | tr " " "/"\`
+  padding=\`printf "%-\${space}s" "" | tr " " "/"\`
   external_substs="s@${external}@\${padding}\${location}@g;\${external_substs}"
 else
   abort_dialog "\${location} is not an executable." 
@@ -167,6 +197,11 @@ set -e
 
 echo >&2 "Checking installation conditions..."
 
+if [ `uname` = "SunOS" ]; then
+    SED=gsed
+else
+    SED=sed
+fi
 
 java_version() {
   echo "\`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 1\`.\`java -version 2>&1 | head -n 1 | cut -d '"' -f 2 | cut -d '.' -f 2\`"
@@ -205,12 +240,16 @@ checksum() {
 
 relocate() {
   space=\$((\${#target_prefix} - 1))
-  redex=\`printf "%0\${space}s#" "" | tr " " "/"\`
-  sed -e "s@\${redex}@\${target_prefix}@g"
+  redex=\`printf "%-\${space}s#" "" | tr " " "/"\`
+  \${SED} -e "s@\${redex}@\${target_prefix}@g"
 }
 
 rebind_externals() {
-  sed -e "\${external_substs}"
+  if [ "\${external_substs}a" != "a" ] ; then
+    \${SED} -e "\${external_substs}"
+  else
+    cat
+  fi
 }
 
 unpack() {
@@ -242,8 +281,13 @@ if [ "a`libc_version`" != "a\`libc_version\`" ]; then
   continue_dialog "C code was compiled with libc version `libc_version`, but is \`libc_version\` on this system. The resulting installation may be unstable."
 fi
 
-if [ "a`uname -mo`" != "a\`uname -mo\`" ]; then
-  continue_dialog "this binary release was built on a `uname -mo` system, but this system is a \`uname -mo\`. The resulting installation may be unstable."
+platform() {
+    uname -mo 2> /dev/null || uname -ps
+}
+
+
+if [ "a`platform`" != "a\`platform\`" ]; then
+  continue_dialog "this binary release was built on a `platform` system, but this system is a \`platform\`. The resulting installation may be unstable."
 fi
 
 echo >&2 "Installation conditions checked."
@@ -281,5 +325,5 @@ exit 0
 EOF
 
 file_length=$((`wc -l < ${installer_script}` + 1))
-sed -e "s@__LENGTH_OF_SCRIPT__@${file_length}@g" < ${installer_script}
+${SED} -e "s@__LENGTH_OF_SCRIPT__@${file_length}@g" < ${installer_script}
 gzip -c < ${archive} || echo "You need to redirect the output to a file"
