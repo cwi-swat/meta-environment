@@ -1,10 +1,10 @@
 module languages/pico/run/Values
 
-imports basic/Integers basic/Strings
+imports basic/Integers basic/StrCon
 
 exports
   sorts VALUE
   context-free syntax
     Integer     -> VALUE
-    String      -> VALUE
+    StrCon      -> VALUE
     "nil-value" -> VALUE

@@ -34,8 +34,7 @@ hiddens
     "Series"[0-9\']*  -> {STATEMENT ";"}+
     "Stat"[0-9\']*    -> STATEMENT
     "Stat*"[0-9\']*   -> {STATEMENT ";"}*
-    "Str-con"[0-9\']* -> StrCon
-    "Str"[0-9\']*     -> String
+    "Str" "-con"? [0-9\']* -> StrCon
     "Value"[0-9\']*   -> VALUE
     "Venv"[0-9\']*    -> VENV
     "Program"[0-9\']* -> PROGRAM

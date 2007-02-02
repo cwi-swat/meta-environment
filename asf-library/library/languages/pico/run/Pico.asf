@@ -53,8 +53,9 @@ equations
         eve(Exp1 - Exp2, Venv) =  Nat1 -/ Nat2
 
 [Ev6f]  Str1 := eve(Exp1, Venv),
-        Str2 := eve(Exp2, Venv)
+        Str2 := eve(Exp2, Venv),
+        Str3 := Str1 || Str2
         ======================
-        eve(Exp1 || Exp2, Venv) = Str1 || Str2
+        eve(Exp1 || Exp2, Venv) = Str3
 
 [default-Ev6]  eve(Exp,Venv) = nil-value
