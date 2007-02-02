@@ -7,7 +7,7 @@ SUBDIRS = \
 	box \
 	casl \
 	cpp \
-	c \
+	ansi-c \
 	graph \
 	fdl \
 	pico \
