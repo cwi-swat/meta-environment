@@ -36,7 +36,7 @@ in
     snd-msg(io-get-path-directory(Directory)) 
     . rec-msg(io-directory(Directory, Languagename?))
   else
-    Languagename := UNDEFINED 
+    Languagename := "" 
   fi
 endlet
 
@@ -49,7 +49,7 @@ in
   LanguageNameFromModuleName(Modulename, Prefix?)
   . ModulenameBase(Modulename, Name?)
   .
-  if not-equal(Prefix, UNDEFINED) then
+  if not-equal(Prefix, "") then
     Prefix := concat(Prefix, "/")
   else
     tau
