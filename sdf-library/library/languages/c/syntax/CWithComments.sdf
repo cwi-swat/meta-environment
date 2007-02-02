@@ -1,7 +1,7 @@
 module languages/c/syntax/CWithComments
 
-imports languages/c/syntax/Whitespace
-imports languages/c/syntax/Comments
+imports languages/generic-cpp/syntax/CommentsAsLayout
+imports languages/generic-cpp/syntax/Whitespace
 imports languages/c/syntax/C
 
 hiddens
