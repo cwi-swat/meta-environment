@@ -2206,19 +2206,21 @@ CFG_Event CFG_makeEventIcon(const char* title, const char* path) {
 /**
  * Constructs a menu of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
  * \param[in] labels a child of the new menu
+ * \param[in] info a child of the new menu
  * \return A pointer to a menu, either newly constructed or shared
  */
-CFG_Event CFG_makeEventMenu(CFG_ItemLabels labels) {
-  return (CFG_Event)(ATerm)ATmakeAppl1(CFG_afun119, (ATerm) labels);
+CFG_Event CFG_makeEventMenu(CFG_ItemLabels labels, const char* info) {
+  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun119, (ATerm) labels, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(info, 0, ATtrue)));
 }
 /**
  * Constructs a menu-shortcut of type CFG_Event. Like all ATerm types, CFG_Events are maximally shared.
  * \param[in] labels a child of the new menu-shortcut
  * \param[in] shortcut a child of the new menu-shortcut
+ * \param[in] info a child of the new menu-shortcut
  * \return A pointer to a menu-shortcut, either newly constructed or shared
  */
-CFG_Event CFG_makeEventMenuShortcut(CFG_ItemLabels labels, CFG_ShortCut shortcut) {
-  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun120, (ATerm) labels, (ATerm) shortcut);
+CFG_Event CFG_makeEventMenuShortcut(CFG_ItemLabels labels, CFG_ShortCut shortcut, const char* info) {
+  return (CFG_Event)(ATerm)ATmakeAppl3(CFG_afun120, (ATerm) labels, (ATerm) shortcut, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(info, 0, ATtrue)));
 }
 /**
  * Constructs a label of type CFG_Item. Like all ATerm types, CFG_Items are maximally shared.
@@ -6348,7 +6350,7 @@ inline ATbool CFG_isEventMenu(CFG_Event arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventMenu, NULL);
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventMenu, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -6371,7 +6373,7 @@ inline ATbool CFG_isEventMenuShortcut(CFG_Event arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventMenuShortcut, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventMenuShortcut, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -6433,6 +6435,21 @@ ATbool CFG_hasEventPath(CFG_Event arg) {
  * \return ATtrue if the CFG_Event had a labels, or ATfalse otherwise
  */
 ATbool CFG_hasEventLabels(CFG_Event arg) {
+  if (CFG_isEventMenu(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isEventMenuShortcut(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a CFG_Event has a info. 
+ * \param[in] arg input CFG_Event
+ * \return ATtrue if the CFG_Event had a info, or ATfalse otherwise
+ */
+ATbool CFG_hasEventInfo(CFG_Event arg) {
   if (CFG_isEventMenu(arg)) {
     return ATtrue;
   }
@@ -6505,6 +6522,19 @@ CFG_ItemLabels CFG_getEventLabels(CFG_Event arg) {
   }
   else 
     return (CFG_ItemLabels)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/**
+ * Get the info char* of a CFG_Event. Note that the precondition is that this CFG_Event actually has a info
+ * \param[in] arg input CFG_Event
+ * \return the info of #arg, if it exist or an undefined value if it does not
+ */
+char* CFG_getEventInfo(CFG_Event arg) {
+  if (CFG_isEventMenu(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+  }
+  else 
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
 }
 
 /**
@@ -6592,6 +6622,24 @@ CFG_Event CFG_setEventLabels(CFG_Event arg, CFG_ItemLabels labels) {
   }
 
   ATabort("Event has no Labels: %t\n", arg);
+  return (CFG_Event)NULL;
+}
+
+/**
+ * Set the info of a CFG_Event. The precondition being that this CFG_Event actually has a info
+ * \param[in] arg input CFG_Event
+ * \param[in] info new const char* to set in #arg
+ * \return A new CFG_Event with info at the right place, or a core dump if #arg did not have a info
+ */
+CFG_Event CFG_setEventInfo(CFG_Event arg, const char* info) {
+  if (CFG_isEventMenu(arg)) {
+    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(info, 0, ATtrue))), 1);
+  }
+  else if (CFG_isEventMenuShortcut(arg)) {
+    return (CFG_Event)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(info, 0, ATtrue))), 2);
+  }
+
+  ATabort("Event has no Info: %t\n", arg);
   return (CFG_Event)NULL;
 }
 
@@ -8576,7 +8624,7 @@ CFG_ActionDescription CFG_visitActionDescription(CFG_ActionDescription arg, ATer
  * Apply functions to the children of a CFG_Event. 
  * \return A new CFG_Event with new children where the argument functions might have applied
  */
-CFG_Event CFG_visitEvent(CFG_Event arg, CFG_KeyModifierList (*acceptList)(CFG_KeyModifierList), CFG_VirtualButton (*acceptButton)(CFG_VirtualButton), char* (*acceptTitle)(char*), char* (*acceptPath)(char*), CFG_ItemLabels (*acceptLabels)(CFG_ItemLabels), CFG_ShortCut (*acceptShortcut)(CFG_ShortCut)) {
+CFG_Event CFG_visitEvent(CFG_Event arg, CFG_KeyModifierList (*acceptList)(CFG_KeyModifierList), CFG_VirtualButton (*acceptButton)(CFG_VirtualButton), char* (*acceptTitle)(char*), char* (*acceptPath)(char*), CFG_ItemLabels (*acceptLabels)(CFG_ItemLabels), char* (*acceptInfo)(char*), CFG_ShortCut (*acceptShortcut)(CFG_ShortCut)) {
   if (CFG_isEventPopup(arg)) {
     return CFG_makeEventPopup();
   }
@@ -8592,12 +8640,14 @@ CFG_Event CFG_visitEvent(CFG_Event arg, CFG_KeyModifierList (*acceptList)(CFG_Ke
   }
   if (CFG_isEventMenu(arg)) {
     return CFG_makeEventMenu(
-        acceptLabels ? acceptLabels(CFG_getEventLabels(arg)) : CFG_getEventLabels(arg));
+        acceptLabels ? acceptLabels(CFG_getEventLabels(arg)) : CFG_getEventLabels(arg),
+        acceptInfo ? acceptInfo(CFG_getEventInfo(arg)) : CFG_getEventInfo(arg));
   }
   if (CFG_isEventMenuShortcut(arg)) {
     return CFG_makeEventMenuShortcut(
         acceptLabels ? acceptLabels(CFG_getEventLabels(arg)) : CFG_getEventLabels(arg),
-        acceptShortcut ? acceptShortcut(CFG_getEventShortcut(arg)) : CFG_getEventShortcut(arg));
+        acceptShortcut ? acceptShortcut(CFG_getEventShortcut(arg)) : CFG_getEventShortcut(arg),
+        acceptInfo ? acceptInfo(CFG_getEventInfo(arg)) : CFG_getEventInfo(arg));
   }
   ATabort("not a Event: %t\n", arg);
   return (CFG_Event)NULL;

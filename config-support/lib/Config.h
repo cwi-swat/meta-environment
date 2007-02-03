@@ -389,9 +389,9 @@ CFG_Event CFG_makeEventPopup (void);
 CFG_Event CFG_makeEventClick (CFG_KeyModifierList list,
 			      CFG_VirtualButton button);
 CFG_Event CFG_makeEventIcon (const char *title, const char *path);
-CFG_Event CFG_makeEventMenu (CFG_ItemLabels labels);
+CFG_Event CFG_makeEventMenu (CFG_ItemLabels labels, const char *info);
 CFG_Event CFG_makeEventMenuShortcut (CFG_ItemLabels labels,
-				     CFG_ShortCut shortcut);
+				     CFG_ShortCut shortcut, const char *info);
 CFG_Item CFG_makeItemLabel (const char *name);
 CFG_TextCategoryName CFG_makeTextCategoryNameFocus (void);
 CFG_TextCategoryName CFG_makeTextCategoryNameSelection (void);
@@ -649,18 +649,21 @@ ATbool CFG_hasEventButton (CFG_Event arg);
 ATbool CFG_hasEventTitle (CFG_Event arg);
 ATbool CFG_hasEventPath (CFG_Event arg);
 ATbool CFG_hasEventLabels (CFG_Event arg);
+ATbool CFG_hasEventInfo (CFG_Event arg);
 ATbool CFG_hasEventShortcut (CFG_Event arg);
 CFG_KeyModifierList CFG_getEventList (CFG_Event arg);
 CFG_VirtualButton CFG_getEventButton (CFG_Event arg);
 char *CFG_getEventTitle (CFG_Event arg);
 char *CFG_getEventPath (CFG_Event arg);
 CFG_ItemLabels CFG_getEventLabels (CFG_Event arg);
+char *CFG_getEventInfo (CFG_Event arg);
 CFG_ShortCut CFG_getEventShortcut (CFG_Event arg);
 CFG_Event CFG_setEventList (CFG_Event arg, CFG_KeyModifierList list);
 CFG_Event CFG_setEventButton (CFG_Event arg, CFG_VirtualButton button);
 CFG_Event CFG_setEventTitle (CFG_Event arg, const char *title);
 CFG_Event CFG_setEventPath (CFG_Event arg, const char *path);
 CFG_Event CFG_setEventLabels (CFG_Event arg, CFG_ItemLabels labels);
+CFG_Event CFG_setEventInfo (CFG_Event arg, const char *info);
 CFG_Event CFG_setEventShortcut (CFG_Event arg, CFG_ShortCut shortcut);
 ATbool CFG_isValidItem (CFG_Item arg);
 inline ATbool CFG_isItemLabel (CFG_Item arg);
@@ -807,6 +810,7 @@ CFG_Event CFG_visitEvent (CFG_Event arg,
 			  (CFG_VirtualButton), char *(*acceptTitle) (char *),
 			  char *(*acceptPath) (char *),
 			  CFG_ItemLabels (*acceptLabels) (CFG_ItemLabels),
+			  char *(*acceptInfo) (char *),
 			  CFG_ShortCut (*acceptShortcut) (CFG_ShortCut));
 CFG_Item CFG_visitItem (CFG_Item arg, char *(*acceptName) (char *));
 CFG_TextCategoryName CFG_visitTextCategoryName (CFG_TextCategoryName arg,

@@ -1,5 +1,9 @@
 $Id$
 
+Sat Feb  3 16:37:17 CET 2007 <jurgenv@cwi.nl>
+ * Regenerated API with obligatory information field for every menu
+   definition. This is used for documentation and tooltips.
+
 Fri Feb  2 16:06:02 CET 2007 <{economop,jurgenv}@cwi.nl>
  * lib/options.h: reimplemented the API without the use of ATerm tables.
    The old implementation was a bottleneck for sglr.
