@@ -35,8 +35,8 @@ context-free syntax
   "click" "(" "[" list:{KeyModifier ","}* "]" "," button:VirtualButton ")" -> Event {cons("click")}
 
   "icon" "(" title:StrCon "," path:StrCon ")" -> Event {cons("icon")}
-  "menu" "(" "[" labels:{Item ","}* "]" ")" -> Event {cons("menu")}
-  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," shortcut:ShortCut ")" -> Event {cons("menu-shortcut")}
+  "menu" "(" "[" labels:{Item ","}* "]" "," info:StrCon ")" -> Event {cons("menu")}
+  "menu-shortcut" "(" "[" labels:{Item ","}* "]" "," shortcut:ShortCut "," info:StrCon ")" -> Event {cons("menu-shortcut")}
 
 sorts Item
 context-free syntax
