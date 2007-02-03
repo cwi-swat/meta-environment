@@ -1,5 +1,8 @@
 # $Id$
 
+Sat Feb  3 16:39:27 CET 2007 <jurgenv@cwi.nl>
+ * src/**/EditorPlugin.java: added tooltips for menu options.
+
 Tue Jan 30 13:39:08 CET 2007 <kooiker@cwi.nl>
  * editor-plugin.idef.src:
    - Split edit-file into edit-file and set-info

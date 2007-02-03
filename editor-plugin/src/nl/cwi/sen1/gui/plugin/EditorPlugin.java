@@ -182,7 +182,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				factory.makeKeyModifierList(factory
 						.makeKeyModifier_MUnderscoreCTRL()), factory
 						.makeVirtualKey_VKUnderscoreS());
-		Event event = factory.makeEvent_MenuShortcut(items, shortcut);
+		Event event = factory.makeEvent_MenuShortcut(items, shortcut, "Save file");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -207,9 +207,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		});
 
 		items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
-				.makeItem_Label("Save a copy"));
+				.makeItem_Label("Save a copy..."));
 
-		event = factory.makeEvent_Menu(items);
+		event = factory.makeEvent_Menu(items, "Copy the contents of this file to another");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			Editor editor = getEditorPanel(editorId);
@@ -241,7 +241,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						.makeKeyModifier_MUnderscoreSHIFT()), factory
 				.makeVirtualKey_VKUnderscoreA());
 
-		event = factory.makeEvent_MenuShortcut(items, shortcut);
+		event = factory.makeEvent_MenuShortcut(items, shortcut, "Save all files");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -273,7 +273,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
 				.makeItem_Label("Refresh"));
 
-		event = factory.makeEvent_Menu(items);
+		event = factory.makeEvent_Menu(items, "Read in the contents of the file again");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			Editor editor = getEditorPanel(editorId);
@@ -298,7 +298,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				factory.makeKeyModifierList(factory
 						.makeKeyModifier_MUnderscoreCTRL()), factory
 						.makeVirtualKey_VKUnderscoreW());
-		event = factory.makeEvent_MenuShortcut(items, shortcut);
+		event = factory.makeEvent_MenuShortcut(items, shortcut, "Close this file");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -313,7 +313,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				factory.makeKeyModifier_MUnderscoreCTRL(), factory
 						.makeKeyModifier_MUnderscoreSHIFT()), factory
 				.makeVirtualKey_VKUnderscoreW());
-		event = factory.makeEvent_MenuShortcut(items, shortcut);
+		event = factory.makeEvent_MenuShortcut(items, shortcut, "Close all files");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
