@@ -97,6 +97,7 @@ public class MenuBuilder {
 				leaf.setAccelerator(keyStroke);
 			}
 		}
+		leaf.setToolTipText(event.getInfo());
 		menu.add(leaf);
 	}
 
