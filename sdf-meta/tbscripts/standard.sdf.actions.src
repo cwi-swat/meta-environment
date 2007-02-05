@@ -27,7 +27,7 @@ configuration([
          "ShowFullTreeWithoutLayoutAction"),
   action([description(term-editor, menu-shortcut([label("Structure"), label("View"), label("Shared Tree")], shortcut([M_ALT,M_CTRL],VK_S),"Visualize the tree structure for a specific focus as a graph, each tree node is maximally shared in this visualization, but not the information inside the nodes."))],
          "ShowSharedTreeAction"),
-  action([description(term-editor, menu-shortcut([label("Module"),label("Edit"), label("Syntax")], shortcut([M_CTRL,M_SHIFT],VK_S)),"Open an editor for the SDF module  that defines the syntax of this term")],
+  action([description(term-editor, menu-shortcut([label("Module"),label("Edit"), label("Syntax")], shortcut([M_CTRL,M_SHIFT],VK_S),"Open an editor for the SDF module  that defines the syntax of this term"))],
          "EditorEditSyntaxAction"),
   action([description(term-editor, menu-shortcut([label("Module"), label("Edit"),label("Term")], shortcut([M_CTRL,M_SHIFT],VK_T),"Open an new editor for a different term, with the same syntax definition as the current editor"))],
          "EditorEditTermAction"),
