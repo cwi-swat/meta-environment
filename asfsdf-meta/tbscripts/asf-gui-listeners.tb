@@ -4,7 +4,7 @@
 #include <undefined.h>
 #include <sdf-module-utils.tb>
 
-process LanguageFeatureMenuListener(Feature : str, Action : str) is
+process LanguageFeatureMenuListener(Feature : str, Action : str, Info : str) is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -30,7 +30,8 @@ in
       if equal(Modulename, FeatureModulename) then
          ModulenameBase(Modulename, MenuName?)
          . ComputeCanonicalLanguagename(Modulename, Languagename?)
-	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)]))],Action))
+         . Info := concat(Info, concat(" using the equations of ", FeatureModulename))
+	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)],Info))],Action))
 	 . snd-msg(cm-add-system-property(Menu))
          . create(LanguageFeatureRemoveListener(ModuleId, Menu), Pid?)
       else
@@ -44,11 +45,11 @@ in
   delta
 endlet
 
-toolbus(LanguageFeatureMenuListener("format", "PrettyPrintAction"))
-toolbus(LanguageFeatureMenuListener("run", "RunAction"))
-toolbus(LanguageFeatureMenuListener("debug", "DebugAction"))
-toolbus(LanguageFeatureMenuListener("check", "CheckAction"))
-toolbus(LanguageFeatureMenuListener("extract", "DebugAction"))
+toolbus(LanguageFeatureMenuListener("format", "PrettyPrintAction","Format this term"))
+toolbus(LanguageFeatureMenuListener("run", "RunAction","Reduce this term"))
+toolbus(LanguageFeatureMenuListener("debug", "DebugAction","Debug this term"))
+toolbus(LanguageFeatureMenuListener("check", "CheckAction","Check this term"))
+toolbus(LanguageFeatureMenuListener("extract", "RunAction","Extract data from this term"))
 
 process LanguageFeatureRemoveListener(ModuleId: term, Property: term) is
   subscribe(mm-module-deleted(<term>))
