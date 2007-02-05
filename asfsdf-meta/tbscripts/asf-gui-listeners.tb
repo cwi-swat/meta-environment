@@ -15,7 +15,8 @@ let
   Languagename: str,
   MenuName: str,
   OldValue: term,
-  Pid: int
+  Pid: int,
+  Tip: str
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",identified,<term>) 
   .
@@ -30,8 +31,8 @@ in
       if equal(Modulename, FeatureModulename) then
          ModulenameBase(Modulename, MenuName?)
          . ComputeCanonicalLanguagename(Modulename, Languagename?)
-         . Info := concat(Info, concat(" using the equations of ", FeatureModulename))
-	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)],Info))],Action))
+         . Tip := concat(Info, concat(" using the equations of ", FeatureModulename))
+	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)],Tip))],Action))
 	 . snd-msg(cm-add-system-property(Menu))
          . create(LanguageFeatureRemoveListener(ModuleId, Menu), Pid?)
       else
