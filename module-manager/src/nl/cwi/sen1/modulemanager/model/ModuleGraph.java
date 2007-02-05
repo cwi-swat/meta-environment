@@ -71,7 +71,7 @@ public class ModuleGraph extends ModuleDatabase {
                 attrList = attrList.insert(factory.makeAttribute_Shape(shape));
             }
 
-            Node node = factory.makeNode_Default(nodeId, attrList);
+            Node node = factory.makeNode_Node(nodeId, attrList);
             nodeList = nodeList.insert(node);
         }
     }
