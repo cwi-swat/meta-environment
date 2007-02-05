@@ -166,7 +166,7 @@ static Graph printOverFlowNode(Graph graph,
   shapeAttr = makeAttributeShape(makeShapeEllipse());
   attrList = makeAttributeListMany(shapeAttr, attrList);
 
-  node = makeNodeDefault(nodeId, attrList);
+  node = makeNodeNode(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
   nodes = makeNodeListMany(node, nodes);
@@ -229,7 +229,7 @@ static Graph printNode(Graph graph,
     messageAttr = makeAttributeInfo("origin", posInfo);
     attrList = makeAttributeListMany(messageAttr, attrList);
   }
-  node = makeNodeDefault(nodeId, attrList);
+  node = makeNodeNode(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
   nodes = makeNodeListMany(node, nodes);
@@ -294,7 +294,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   styleAttr = makeAttributeStyle(style);
   attrList = makeAttributeListMany(styleAttr, attrList);
  
-  node = makeNodeDefault(nodeId, attrList);
+  node = makeNodeNode(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
   nodes = makeNodeListMany(node, nodes);
