@@ -35,7 +35,8 @@ void rec_terminate(int conn, ATerm arg)
 ATerm layout_graph(int conn, ATerm g)
 {
   Graph graph = GraphFromTerm(g);
-  
+ 
+ ATwarning("%t\n", g); 
   assert(isValidGraph(graph));
 
   graph = layoutGraph(graph);

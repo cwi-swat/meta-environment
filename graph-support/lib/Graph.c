@@ -1147,13 +1147,24 @@ NodeList makeNodeListMany(Node head, NodeList tail) {
   return (NodeList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 /**
- * Constructs a default of type Node. Like all ATerm types, Nodes are maximally shared.
- * \param[in] id a child of the new default
- * \param[in] attributes a child of the new default
- * \return A pointer to a default, either newly constructed or shared
+ * Constructs a node of type Node. Like all ATerm types, Nodes are maximally shared.
+ * \param[in] id a child of the new node
+ * \param[in] attributes a child of the new node
+ * \return A pointer to a node, either newly constructed or shared
  */
-Node makeNodeDefault(NodeId id, AttributeList attributes) {
+Node makeNodeNode(NodeId id, AttributeList attributes) {
   return (Node)(ATerm)ATmakeAppl2(afun1, (ATerm) id, (ATerm) attributes);
+}
+/**
+ * Constructs a subgraph of type Node. Like all ATerm types, Nodes are maximally shared.
+ * \param[in] id a child of the new subgraph
+ * \param[in] nodes a child of the new subgraph
+ * \param[in] edges a child of the new subgraph
+ * \param[in] attributes a child of the new subgraph
+ * \return A pointer to a subgraph, either newly constructed or shared
+ */
+Node makeNodeSubgraph(NodeId id, NodeList nodes, EdgeList edges, AttributeList attributes) {
+  return (Node)(ATerm)ATmakeAppl4(afun2, (ATerm) id, (ATerm) nodes, (ATerm) edges, (ATerm) attributes);
 }
 /**
  * Constructs a default of type NodeId. Like all ATerm types, NodeIds are maximally shared.
@@ -1194,7 +1205,7 @@ AttributeList makeAttributeListMany(Attribute head, AttributeList tail) {
  * \return A pointer to a bounding-box, either newly constructed or shared
  */
 Attribute makeAttributeBoundingBox(Point first, Point second) {
-  return (Attribute)(ATerm)ATmakeAppl2(afun2, (ATerm) first, (ATerm) second);
+  return (Attribute)(ATerm)ATmakeAppl2(afun3, (ATerm) first, (ATerm) second);
 }
 /**
  * Constructs a color of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1202,7 +1213,7 @@ Attribute makeAttributeBoundingBox(Point first, Point second) {
  * \return A pointer to a color, either newly constructed or shared
  */
 Attribute makeAttributeColor(Color color) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun3, (ATerm) color);
+  return (Attribute)(ATerm)ATmakeAppl1(afun4, (ATerm) color);
 }
 /**
  * Constructs a curve-points of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1210,7 +1221,7 @@ Attribute makeAttributeColor(Color color) {
  * \return A pointer to a curve-points, either newly constructed or shared
  */
 Attribute makeAttributeCurvePoints(Polygon points) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun4, (ATerm) points);
+  return (Attribute)(ATerm)ATmakeAppl1(afun5, (ATerm) points);
 }
 /**
  * Constructs a direction of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1218,7 +1229,7 @@ Attribute makeAttributeCurvePoints(Polygon points) {
  * \return A pointer to a direction, either newly constructed or shared
  */
 Attribute makeAttributeDirection(Direction direction) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun5, (ATerm) direction);
+  return (Attribute)(ATerm)ATmakeAppl1(afun6, (ATerm) direction);
 }
 /**
  * Constructs a fill-color of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1226,7 +1237,7 @@ Attribute makeAttributeDirection(Direction direction) {
  * \return A pointer to a fill-color, either newly constructed or shared
  */
 Attribute makeAttributeFillColor(Color color) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun6, (ATerm) color);
+  return (Attribute)(ATerm)ATmakeAppl1(afun7, (ATerm) color);
 }
 /**
  * Constructs a info of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1235,7 +1246,7 @@ Attribute makeAttributeFillColor(Color color) {
  * \return A pointer to a info, either newly constructed or shared
  */
 Attribute makeAttributeInfo(const char* key, ATerm value) {
-  return (Attribute)(ATerm)ATmakeAppl2(afun7, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(key, 0, ATtrue)), (ATerm) value);
+  return (Attribute)(ATerm)ATmakeAppl2(afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(key, 0, ATtrue)), (ATerm) value);
 }
 /**
  * Constructs a label of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1243,7 +1254,7 @@ Attribute makeAttributeInfo(const char* key, ATerm value) {
  * \return A pointer to a label, either newly constructed or shared
  */
 Attribute makeAttributeLabel(const char* label) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)));
+  return (Attribute)(ATerm)ATmakeAppl1(afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)));
 }
 /**
  * Constructs a tooltip of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1251,7 +1262,7 @@ Attribute makeAttributeLabel(const char* label) {
  * \return A pointer to a tooltip, either newly constructed or shared
  */
 Attribute makeAttributeTooltip(const char* tooltip) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(tooltip, 0, ATtrue)));
+  return (Attribute)(ATerm)ATmakeAppl1(afun10, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(tooltip, 0, ATtrue)));
 }
 /**
  * Constructs a location of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1260,7 +1271,7 @@ Attribute makeAttributeTooltip(const char* tooltip) {
  * \return A pointer to a location, either newly constructed or shared
  */
 Attribute makeAttributeLocation(int x, int y) {
-  return (Attribute)(ATerm)ATmakeAppl2(afun10, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
+  return (Attribute)(ATerm)ATmakeAppl2(afun11, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
 }
 /**
  * Constructs a shape of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1268,7 +1279,7 @@ Attribute makeAttributeLocation(int x, int y) {
  * \return A pointer to a shape, either newly constructed or shared
  */
 Attribute makeAttributeShape(Shape shape) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun11, (ATerm) shape);
+  return (Attribute)(ATerm)ATmakeAppl1(afun12, (ATerm) shape);
 }
 /**
  * Constructs a size of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1277,7 +1288,7 @@ Attribute makeAttributeShape(Shape shape) {
  * \return A pointer to a size, either newly constructed or shared
  */
 Attribute makeAttributeSize(int width, int height) {
-  return (Attribute)(ATerm)ATmakeAppl2(afun12, (ATerm) (ATerm) ATmakeInt(width), (ATerm) (ATerm) ATmakeInt(height));
+  return (Attribute)(ATerm)ATmakeAppl2(afun13, (ATerm) (ATerm) ATmakeInt(width), (ATerm) (ATerm) ATmakeInt(height));
 }
 /**
  * Constructs a style of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1285,7 +1296,7 @@ Attribute makeAttributeSize(int width, int height) {
  * \return A pointer to a style, either newly constructed or shared
  */
 Attribute makeAttributeStyle(Style style) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun13, (ATerm) style);
+  return (Attribute)(ATerm)ATmakeAppl1(afun14, (ATerm) style);
 }
 /**
  * Constructs a level of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1293,7 +1304,7 @@ Attribute makeAttributeStyle(Style style) {
  * \return A pointer to a level, either newly constructed or shared
  */
 Attribute makeAttributeLevel(const char* level) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun14, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue)));
+  return (Attribute)(ATerm)ATmakeAppl1(afun15, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue)));
 }
 /**
  * Constructs a file of type Attribute. Like all ATerm types, Attributes are maximally shared.
@@ -1301,7 +1312,7 @@ Attribute makeAttributeLevel(const char* level) {
  * \return A pointer to a file, either newly constructed or shared
  */
 Attribute makeAttributeFile(File file) {
-  return (Attribute)(ATerm)ATmakeAppl1(afun15, (ATerm) file);
+  return (Attribute)(ATerm)ATmakeAppl1(afun16, (ATerm) file);
 }
 /**
  * Constructs a external of type File. Like all ATerm types, Files are maximally shared.
@@ -1319,161 +1330,161 @@ File makeFileExternal(ATerm file) {
  * \return A pointer to a rgb, either newly constructed or shared
  */
 Color makeColorRgb(int red, int green, int blue) {
-  return (Color)(ATerm)ATmakeAppl3(afun16, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
+  return (Color)(ATerm)ATmakeAppl3(afun17, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
 /**
  * Constructs a bold of type Style. Like all ATerm types, Styles are maximally shared.
  * \return A pointer to a bold, either newly constructed or shared
  */
 Style makeStyleBold(void) {
-  return (Style)(ATerm)ATmakeAppl0(afun17);
+  return (Style)(ATerm)ATmakeAppl0(afun18);
 }
 /**
  * Constructs a dashed of type Style. Like all ATerm types, Styles are maximally shared.
  * \return A pointer to a dashed, either newly constructed or shared
  */
 Style makeStyleDashed(void) {
-  return (Style)(ATerm)ATmakeAppl0(afun18);
+  return (Style)(ATerm)ATmakeAppl0(afun19);
 }
 /**
  * Constructs a dotted of type Style. Like all ATerm types, Styles are maximally shared.
  * \return A pointer to a dotted, either newly constructed or shared
  */
 Style makeStyleDotted(void) {
-  return (Style)(ATerm)ATmakeAppl0(afun19);
+  return (Style)(ATerm)ATmakeAppl0(afun20);
 }
 /**
  * Constructs a filled of type Style. Like all ATerm types, Styles are maximally shared.
  * \return A pointer to a filled, either newly constructed or shared
  */
 Style makeStyleFilled(void) {
-  return (Style)(ATerm)ATmakeAppl0(afun20);
+  return (Style)(ATerm)ATmakeAppl0(afun21);
 }
 /**
  * Constructs a invisible of type Style. Like all ATerm types, Styles are maximally shared.
  * \return A pointer to a invisible, either newly constructed or shared
  */
 Style makeStyleInvisible(void) {
-  return (Style)(ATerm)ATmakeAppl0(afun21);
+  return (Style)(ATerm)ATmakeAppl0(afun22);
 }
 /**
  * Constructs a solid of type Style. Like all ATerm types, Styles are maximally shared.
  * \return A pointer to a solid, either newly constructed or shared
  */
 Style makeStyleSolid(void) {
-  return (Style)(ATerm)ATmakeAppl0(afun22);
+  return (Style)(ATerm)ATmakeAppl0(afun23);
 }
 /**
  * Constructs a box of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a box, either newly constructed or shared
  */
 Shape makeShapeBox(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun23);
+  return (Shape)(ATerm)ATmakeAppl0(afun24);
 }
 /**
  * Constructs a circle of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a circle, either newly constructed or shared
  */
 Shape makeShapeCircle(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun24);
+  return (Shape)(ATerm)ATmakeAppl0(afun25);
 }
 /**
  * Constructs a diamond of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a diamond, either newly constructed or shared
  */
 Shape makeShapeDiamond(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun25);
+  return (Shape)(ATerm)ATmakeAppl0(afun26);
 }
 /**
  * Constructs a egg of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a egg, either newly constructed or shared
  */
 Shape makeShapeEgg(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun26);
+  return (Shape)(ATerm)ATmakeAppl0(afun27);
 }
 /**
  * Constructs a ellipse of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a ellipse, either newly constructed or shared
  */
 Shape makeShapeEllipse(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun27);
+  return (Shape)(ATerm)ATmakeAppl0(afun28);
 }
 /**
  * Constructs a hexagon of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a hexagon, either newly constructed or shared
  */
 Shape makeShapeHexagon(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun28);
+  return (Shape)(ATerm)ATmakeAppl0(afun29);
 }
 /**
  * Constructs a house of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a house, either newly constructed or shared
  */
 Shape makeShapeHouse(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun29);
+  return (Shape)(ATerm)ATmakeAppl0(afun30);
 }
 /**
  * Constructs a octagon of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a octagon, either newly constructed or shared
  */
 Shape makeShapeOctagon(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun30);
+  return (Shape)(ATerm)ATmakeAppl0(afun31);
 }
 /**
  * Constructs a parallelogram of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a parallelogram, either newly constructed or shared
  */
 Shape makeShapeParallelogram(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun31);
+  return (Shape)(ATerm)ATmakeAppl0(afun32);
 }
 /**
  * Constructs a plaintext of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a plaintext, either newly constructed or shared
  */
 Shape makeShapePlaintext(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun32);
+  return (Shape)(ATerm)ATmakeAppl0(afun33);
 }
 /**
  * Constructs a trapezium of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a trapezium, either newly constructed or shared
  */
 Shape makeShapeTrapezium(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun33);
+  return (Shape)(ATerm)ATmakeAppl0(afun34);
 }
 /**
  * Constructs a triangle of type Shape. Like all ATerm types, Shapes are maximally shared.
  * \return A pointer to a triangle, either newly constructed or shared
  */
 Shape makeShapeTriangle(void) {
-  return (Shape)(ATerm)ATmakeAppl0(afun34);
+  return (Shape)(ATerm)ATmakeAppl0(afun35);
 }
 /**
  * Constructs a forward of type Direction. Like all ATerm types, Directions are maximally shared.
  * \return A pointer to a forward, either newly constructed or shared
  */
 Direction makeDirectionForward(void) {
-  return (Direction)(ATerm)ATmakeAppl0(afun35);
+  return (Direction)(ATerm)ATmakeAppl0(afun36);
 }
 /**
  * Constructs a back of type Direction. Like all ATerm types, Directions are maximally shared.
  * \return A pointer to a back, either newly constructed or shared
  */
 Direction makeDirectionBack(void) {
-  return (Direction)(ATerm)ATmakeAppl0(afun36);
+  return (Direction)(ATerm)ATmakeAppl0(afun37);
 }
 /**
  * Constructs a both of type Direction. Like all ATerm types, Directions are maximally shared.
  * \return A pointer to a both, either newly constructed or shared
  */
 Direction makeDirectionBoth(void) {
-  return (Direction)(ATerm)ATmakeAppl0(afun37);
+  return (Direction)(ATerm)ATmakeAppl0(afun38);
 }
 /**
  * Constructs a none of type Direction. Like all ATerm types, Directions are maximally shared.
  * \return A pointer to a none, either newly constructed or shared
  */
 Direction makeDirectionNone(void) {
-  return (Direction)(ATerm)ATmakeAppl0(afun38);
+  return (Direction)(ATerm)ATmakeAppl0(afun39);
 }
 /**
  * Constructs a empty of type EdgeList. Like all ATerm types, EdgeLists are maximally shared.
@@ -1507,7 +1518,7 @@ EdgeList makeEdgeListMany(Edge head, EdgeList tail) {
  * \return A pointer to a default, either newly constructed or shared
  */
 Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes) {
-  return (Edge)(ATerm)ATmakeAppl3(afun39, (ATerm) from, (ATerm) to, (ATerm) attributes);
+  return (Edge)(ATerm)ATmakeAppl3(afun40, (ATerm) from, (ATerm) to, (ATerm) attributes);
 }
 /**
  * Constructs a empty of type Polygon. Like all ATerm types, Polygons are maximally shared.
@@ -1540,7 +1551,7 @@ Polygon makePolygonMany(Point head, Polygon tail) {
  * \return A pointer to a default, either newly constructed or shared
  */
 Point makePointDefault(int x, int y) {
-  return (Point)(ATerm)ATmakeAppl2(afun40, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
+  return (Point)(ATerm)ATmakeAppl2(afun41, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
 }
 
 /**
@@ -2004,23 +2015,59 @@ NodeList setNodeListTail(NodeList arg, NodeList tail) {
  * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
  */
 ATbool isValidNode(Node arg) {
-  if (isNodeDefault(arg)) {
+  if (isNodeNode(arg)) {
+    return ATtrue;
+  }
+  else if (isNodeSubgraph(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /**
- * Assert whether a Node is a default. Always returns ATtrue
+ * Assert whether a Node is a node. . May not be used to assert correctness of the Node
  * \param[in] arg input Node
- * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
+ * \return ATtrue if #arg corresponds to the signature of a node, or ATfalse otherwise
  */
-inline ATbool isNodeDefault(Node arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternNodeDefault, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool isNodeNode(Node arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternNodeNode, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/**
+ * Assert whether a Node is a subgraph. . May not be used to assert correctness of the Node
+ * \param[in] arg input Node
+ * \return ATtrue if #arg corresponds to the signature of a subgraph, or ATfalse otherwise
+ */
+inline ATbool isNodeSubgraph(Node arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternNodeSubgraph, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /**
@@ -2029,7 +2076,10 @@ inline ATbool isNodeDefault(Node arg) {
  * \return ATtrue if the Node had a id, or ATfalse otherwise
  */
 ATbool hasNodeId(Node arg) {
-  if (isNodeDefault(arg)) {
+  if (isNodeNode(arg)) {
+    return ATtrue;
+  }
+  else if (isNodeSubgraph(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2041,7 +2091,34 @@ ATbool hasNodeId(Node arg) {
  * \return ATtrue if the Node had a attributes, or ATfalse otherwise
  */
 ATbool hasNodeAttributes(Node arg) {
-  if (isNodeDefault(arg)) {
+  if (isNodeNode(arg)) {
+    return ATtrue;
+  }
+  else if (isNodeSubgraph(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a Node has a nodes. 
+ * \param[in] arg input Node
+ * \return ATtrue if the Node had a nodes, or ATfalse otherwise
+ */
+ATbool hasNodeNodes(Node arg) {
+  if (isNodeSubgraph(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
+ * Assert whether a Node has a edges. 
+ * \param[in] arg input Node
+ * \return ATtrue if the Node had a edges, or ATfalse otherwise
+ */
+ATbool hasNodeEdges(Node arg) {
+  if (isNodeSubgraph(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2053,7 +2130,10 @@ ATbool hasNodeAttributes(Node arg) {
  * \return the id of #arg, if it exist or an undefined value if it does not
  */
 NodeId getNodeId(Node arg) {
-  
+  if (isNodeNode(arg)) {
+    return (NodeId)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
     return (NodeId)ATgetArgument((ATermAppl)arg, 0);
 }
 
@@ -2063,8 +2143,31 @@ NodeId getNodeId(Node arg) {
  * \return the attributes of #arg, if it exist or an undefined value if it does not
  */
 AttributeList getNodeAttributes(Node arg) {
-  
+  if (isNodeNode(arg)) {
     return (AttributeList)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else 
+    return (AttributeList)ATgetArgument((ATermAppl)arg, 3);
+}
+
+/**
+ * Get the nodes NodeList of a Node. Note that the precondition is that this Node actually has a nodes
+ * \param[in] arg input Node
+ * \return the nodes of #arg, if it exist or an undefined value if it does not
+ */
+NodeList getNodeNodes(Node arg) {
+  
+    return (NodeList)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/**
+ * Get the edges EdgeList of a Node. Note that the precondition is that this Node actually has a edges
+ * \param[in] arg input Node
+ * \return the edges of #arg, if it exist or an undefined value if it does not
+ */
+EdgeList getNodeEdges(Node arg) {
+  
+    return (EdgeList)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /**
@@ -2074,7 +2177,10 @@ AttributeList getNodeAttributes(Node arg) {
  * \return A new Node with id at the right place, or a core dump if #arg did not have a id
  */
 Node setNodeId(Node arg, NodeId id) {
-  if (isNodeDefault(arg)) {
+  if (isNodeNode(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) id), 0);
+  }
+  else if (isNodeSubgraph(arg)) {
     return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) id), 0);
   }
 
@@ -2089,11 +2195,44 @@ Node setNodeId(Node arg, NodeId id) {
  * \return A new Node with attributes at the right place, or a core dump if #arg did not have a attributes
  */
 Node setNodeAttributes(Node arg, AttributeList attributes) {
-  if (isNodeDefault(arg)) {
+  if (isNodeNode(arg)) {
     return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) attributes), 1);
+  }
+  else if (isNodeSubgraph(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) attributes), 3);
   }
 
   ATabort("Node has no Attributes: %t\n", arg);
+  return (Node)NULL;
+}
+
+/**
+ * Set the nodes of a Node. The precondition being that this Node actually has a nodes
+ * \param[in] arg input Node
+ * \param[in] nodes new NodeList to set in #arg
+ * \return A new Node with nodes at the right place, or a core dump if #arg did not have a nodes
+ */
+Node setNodeNodes(Node arg, NodeList nodes) {
+  if (isNodeSubgraph(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) nodes), 1);
+  }
+
+  ATabort("Node has no Nodes: %t\n", arg);
+  return (Node)NULL;
+}
+
+/**
+ * Set the edges of a Node. The precondition being that this Node actually has a edges
+ * \param[in] arg input Node
+ * \param[in] edges new EdgeList to set in #arg
+ * \return A new Node with edges at the right place, or a core dump if #arg did not have a edges
+ */
+Node setNodeEdges(Node arg, EdgeList edges) {
+  if (isNodeSubgraph(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) edges), 2);
+  }
+
+  ATabort("Node has no Edges: %t\n", arg);
   return (Node)NULL;
 }
 
@@ -4747,10 +4886,17 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node)) {
  * Apply functions to the children of a Node. 
  * \return A new Node with new children where the argument functions might have applied
  */
-Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList)) {
-  if (isNodeDefault(arg)) {
-    return makeNodeDefault(
+Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList), NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList)) {
+  if (isNodeNode(arg)) {
+    return makeNodeNode(
         acceptId ? acceptId(getNodeId(arg)) : getNodeId(arg),
+        acceptAttributes ? acceptAttributes(getNodeAttributes(arg)) : getNodeAttributes(arg));
+  }
+  if (isNodeSubgraph(arg)) {
+    return makeNodeSubgraph(
+        acceptId ? acceptId(getNodeId(arg)) : getNodeId(arg),
+        acceptNodes ? acceptNodes(getNodeNodes(arg)) : getNodeNodes(arg),
+        acceptEdges ? acceptEdges(getNodeEdges(arg)) : getNodeEdges(arg),
         acceptAttributes ? acceptAttributes(getNodeAttributes(arg)) : getNodeAttributes(arg));
   }
   ATabort("not a Node: %t\n", arg);

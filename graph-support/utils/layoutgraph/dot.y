@@ -34,7 +34,10 @@ static NodeId buildNodeId(char *id);
 %start graph
 %%
 graph:
-	opt_strict graph_or_digraph opt_id CBO stmt_list CBC { }
+	opt_strict graph_or_digraph opt_id CBO stmt_list CBC { 
+    mergeNodeAttributes(makeNodeIdDefault(ATparse("graph")), 
+                        buildAttributeList(GRAPH, $5.attributes));
+  }
 	;
 
 opt_strict:
@@ -48,14 +51,15 @@ graph_or_digraph:
 	;
 
 opt_id:
-	{ }
-	| ID { }
+	{ $$.nodeId = buildNodeId("default"); }
+	| ID { $$.nodeId = buildNodeId($1.string);}
 	;
 
 stmt_list:
-	stmt opt_semi { }
+	stmt opt_semi { $$.attributes = $1.attributes; }
   |				
-	stmt_list stmt opt_semi { }
+	stmt_list stmt opt_semi { $$.attributes = ATconcat($1.attributes,
+                                                     $2.attributes); }
 	;
 
 opt_semi:
@@ -64,18 +68,18 @@ opt_semi:
 	;
 
 stmt:
-	node_stmt { }
-	| edge_stmt { }
-	| attr_stmt { }
-  | CBO stmt_list CBC { }
-	| ID '=' ID { }
+	node_stmt { $$.attributes = ATempty;}
+	| edge_stmt { $$.attributes = ATempty;}
+	| attr_stmt { $$.attributes = $1.attributes; }
+  | subgraph_stmt {$$.attributes = ATempty; }
+  | CBO stmt_list CBC { $$.attributes = $2.attributes; }
+	| ID '=' ID { $$.attributes = ATempty;}
 	;
 
 attr_stmt:
-  GRAPH attr_list  { mergeGraphAttributes(buildAttributeList(GRAPH,
-                                                             $2.attributes)); }
-  | NODE attr_list { }
-  | EDGE attr_list { }
+  GRAPH attr_list  { $$.attributes = $2.attributes; }
+  | NODE attr_list { $$.attributes = ATempty;}
+  | EDGE attr_list { $$.attributes = ATempty;}
   ;
 
 opt_attr_list:
@@ -122,9 +126,13 @@ node_stmt:
 
 edge_stmt:
 	node_id edge_rhs opt_attr_list {
-		addEdge($1.nodeId, $2.nodeId, buildAttributeList(EDGE,$3.attributes));
+		mergeEdgeAttributes($1.nodeId, $2.nodeId, buildAttributeList(EDGE,$3.attributes));
 	}
 	;
+
+subgraph_stmt:
+  SUBGRAPH opt_id CBO stmt_list CBC { mergeNodeAttributes($2.nodeId, 
+                                      buildAttributeList(GRAPH, $4.attributes)); }
 
 node_id:
 	ID opt_port { $$.nodeId = buildNodeId($1.string); }
@@ -355,7 +363,9 @@ appendKeyValue(char *key, char *value, ATermList attrs)
   ATermList result = ATinsert(attrs, (ATerm)ATmakeList2(keyTerm, valueTerm));
 
 	protectTerm((ATerm)result);
+  key = NULL;
   free(key);
+  value = NULL;
   free(value);
 
 	return result;
@@ -363,7 +373,16 @@ appendKeyValue(char *key, char *value, ATermList attrs)
 
 static NodeId buildNodeId(char *id)
 {
-  NodeId nodeId = makeNodeIdDefault(ATparse(id));
+  char *tmp;
+
+  if (!strncmp(id, "cluster", 7)) {
+    tmp = id + 7;
+  }
+  else {
+    tmp = id;
+  }
+    
+  NodeId nodeId = makeNodeIdDefault(ATparse(tmp));
 
   free(id);
 	protectTerm(NodeIdToTerm(nodeId));

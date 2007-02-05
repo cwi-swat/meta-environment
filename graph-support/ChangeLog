@@ -1,5 +1,11 @@
 $Id$
 
+Mon Feb  5 09:18:44 CET 2007 <jurgenv@cwi.nl>
+ * lib/Graph.adt: added support for sub-graphs
+ * utils/*: added support for subgraph layouting
+            refactored a large part of the code to get this working,
+	    including several changes to the dot.y parser.
+
 Mon Jan 29 10:56:50 CET 2007 <kooiker@cwi.nl>
  * lib/Graph.adt:
    - Added tooltip

@@ -2,6 +2,7 @@
 #include "Graph.h"
 
 static ATermTable levels;
+static void printSubgraph(Node node, FILE *file);
 
 /*{{{  static void storeLevel(ATerm id, ATerm level) */
 
@@ -130,9 +131,11 @@ static void printAttributes(ATerm id, AttributeList attrs, FILE *file)
 static void printNode(Node node, FILE *file)
 {
   ATerm id = NodeIdToTerm(getNodeId(node));
-  ATfprintf(file, "\"%t\" [", id);
-  printAttributes(id, getNodeAttributes(node), file);
-  fprintf(file, "]\n");
+  if (hasNodeAttributes(node)) {
+    ATfprintf(file, "\"%t\" [", id);
+    printAttributes(id, getNodeAttributes(node), file);
+    fprintf(file, "]\n");
+  }
 }
 
 /*}}}  */
@@ -141,7 +144,13 @@ static void printNode(Node node, FILE *file)
 static void printNodes(NodeList nodes, FILE *file)
 {
   while (!isNodeListEmpty(nodes)) {
-    printNode(getNodeListHead(nodes), file);
+    Node node = getNodeListHead(nodes);
+    if (isNodeNode(node)) {
+      printNode(node, file);
+    }
+    else if (isNodeSubgraph(node)) {
+      printSubgraph(node, file);
+    }
     nodes = getNodeListTail(nodes);
   }
 }
@@ -175,6 +184,25 @@ static void printEdges(EdgeList edges, FILE *file)
     printEdge(getEdgeListHead(edges), file);
     edges = getEdgeListTail(edges);
   }
+}
+
+/*}}}  */
+/*{{{  static void printSubgraph(Node node, FILE *file) */
+
+static void printSubgraph(Node node, FILE *file)
+{
+  ATerm id = NodeIdToTerm(getNodeId(node));
+
+  ATfprintf(file, "subgraph \"cluster%s\" {\n", ATwriteToString(id));
+
+  ATfprintf(file, " graph ["); 
+  printAttributes(id, getNodeAttributes(node), file); 
+  ATfprintf(file, " ]\n"); 
+  printNodes(getNodeNodes(node), file);
+  printEdges(getNodeEdges(node), file);
+
+  ATfprintf(file, "}\n", node);
+  
 }
 
 /*}}}  */
