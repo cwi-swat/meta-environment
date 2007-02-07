@@ -1,3 +1,0 @@
-process Aap(ModuleId: term)
-is
- printf("ik ben geen aap\n")
