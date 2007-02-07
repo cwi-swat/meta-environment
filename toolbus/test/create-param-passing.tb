@@ -1,0 +1,28 @@
+process Create(Id: term) is
+let 
+  Equal: bool
+in
+  snd-msg(msg(Id))
+endlet
+
+process Function is
+let
+  Id1 : term,
+  Id2 : term,
+  Pid: int
+in
+  Id1 := quote(mid(0))
+  . Id2 := quote(mid(1))
+  . create(Create(Id1), Pid?)
+  . create(Create(Id2), Pid?)
+endlet
+
+process Catch is
+    rec-msg(msg(mid(0)))
+    . rec-msg(msg(mid(1)))
+    . shutdown("SUCCESS")
+
+process TimeOut is
+    shutdown("FAILED") delay(sec(5))
+ 
+toolbus(Function, Catch, TimeOut)

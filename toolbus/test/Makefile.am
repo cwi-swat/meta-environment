@@ -18,7 +18,11 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 TESTS           = TBmatch1 TermIO test-removesocket read test-annos dyncall \
-		  concat rightchoice1 rightchoice2 $(OK_TESTS) $(ERROR_TESTS)
+		  concat rightchoice1 rightchoice2 $(OK_TESTS) $(ERROR_TESTS)\
+	dyncall-param-passing \
+	create-param-passing \
+	boolean \
+	boolean2 
 
 noinst_PROGRAMS = TBmatch1 TermIO
 
@@ -29,7 +33,15 @@ EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
 		  read.tb bug-481.tb bug-481.tb.ref dyncall.tb dyncall.src \
 		  concat.tb concat.src rightchoice1.tb  rightchoice1.src \
 		  rightchoice2.src \
-		  rightchoice2.tb
+		  rightchoice2.tb \ 
+                  dyncall-param-passing.tb \
+                  create-param-passing.tb \
+                  boolean.tb \
+                  boolean2.tb \
+                  dyncall-param-passing.src \
+                  create-param-passing.src \
+                  boolean.src \
+                  boolean2.src 
 
 LDADD           = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
 AM_CPPFLAGS     = -I$(top_srcdir)/libdeprecated-toolbus-adapter
@@ -41,7 +53,7 @@ OK_TESTS = \
 	bind-ok \
 	expr-ok \
 	types-ok \
-	garbage-ok 
+	garbage-ok  
 
 ERROR_TESTS = \
 	      expr-errors-fail \
@@ -58,7 +70,8 @@ GENERATED_BY_TESTS = \
 	ff \
 	fbin \
 	test.ref \
-	blobby
+	blobby  
+	
 
 CLEANFILES = \
 	$(OK_TESTS) \
@@ -70,7 +83,11 @@ CLEANFILES = \
 	dyncall \
 	rightchoice1 \
 	rightchoice2 \
-	read
+	read \
+	dyncall-param-passing \
+	create-param-passing \
+	boolean \
+	boolean2 
 
 
 %-ok : %.tb

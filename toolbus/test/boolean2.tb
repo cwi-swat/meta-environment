@@ -1,0 +1,15 @@
+process CheckBool(Boolean: bool) is
+  if Boolean then
+    printf("SUCCESS")
+  else
+    printf("FAILED")
+  fi
+
+process RunCheck is 
+let
+  Pid: int
+in
+  create(CheckBool(true), Pid?)
+endlet
+
+toolbus(RunCheck)
