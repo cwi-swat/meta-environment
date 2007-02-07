@@ -37,6 +37,8 @@ layout        [ \t\r]
 comment       "%%".*
 linedir       "#".*\n
 ws            {layout}|{comment}
+true          "true"
+false         "false"
 id            [a-z][A-Za-z0-9\-]*
 name          [A-Z_][A-Za-z0-9\-]*
 int           -?[0-9]+
@@ -181,6 +183,8 @@ endlet        { ll_inc_pos(6);return(ENDLET); }
                yylval.u.string = strdup(yytext);
                return(INT);
               }
+{true}        { return TRUE; }
+{false}       { return FALSE; }
 {id}          { 
                ll_inc_pos(strlen(yytext));
                yylval.u.string = strdup(yytext);

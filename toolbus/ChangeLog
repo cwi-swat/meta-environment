@@ -1,5 +1,18 @@
 $Id$
 
+Wed Feb  7 17:20:37 CET 2007 <{paulk,kooiker,jurgenv}@cwi.nl>
+ * toolbus/script.[ly]: added parsing of true and false as booleans
+   instead of function symbols. This fixes issues with the evaluation
+   of equal and if-then-else.
+ * toolbus/interpreter.c,calls.c: create does not propagate subscriptions
+   of notes anymore, nor the note queue.
+ * toolbus/interpreter.c,calls.c: binding of parameters of created processes
+   and dynamic processes used to be implemented by substitution at call time.
+   This is wrong, since it could introduce unquoted terms at positions
+   that would be evaluated (right hand side of assignments, if-then-else).
+   Now we create new processes in the context of an environment that binds
+   actual to formal parameters. 
+
 Tue Jan 16 12:51:48 CET 2007 <jurgenv@cwi.nl>
  * toolbus/typechecker.c: type checking errors are not printed to stderr
    anymore when the ToolBus is running. This is too prevent spamming of the

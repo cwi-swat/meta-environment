@@ -148,15 +148,19 @@ static proc_id *create_process(sym_idx pname, term_list *args,
   Env2 = create_env(pd_formals(pd), get_txt(pd_name(pd)), args, Env1);
 
   body = pd_body(pd);
-  body = replace_formals(body, Env2);
+  /* note that the only effect of replace_formals with an empty
+   * environment is that the whole body is CLONED. This is needed such
+   * that every instance can have its own environment.
+   */
+  body = replace_formals(body, NULL);
   ProcInst = mk_proc_inst((ap_form *)NULL,
-			  Env1, 
-			  list_copy(parent_subs), 
-			  list_copy(parent_notes), 
+			  Env2, 
+			  NULL, 
+			  NULL, 
 			  mk_str(get_txt(pname)), 
 			  pid,
 			  parent_db);
-  AP = expand(pd_name(pd), propagate_env(mk_dot(body, Delta), Env1), Env1);
+  AP = expand(pd_name(pd), propagate_env(mk_dot(body, Delta), Env2), Env2);
   if(!is_list(AP))
     AP = mk_list(AP, NULL);
   pi_alts(ProcInst) = AP;
@@ -392,7 +396,7 @@ static TBbool do_is_enabled(atom *Atom, proc_inst *ProcInst)
 
 static proc *doSum(proc *p1, proc *p2, int rightBiased)
 {
-  /* if leftBiased is false, we throw a coin */
+  /* if rightBiased is false, we throw a coin */
   if(!rightBiased) {
     if (CHOICE) {
       proc *p3 = p1;
@@ -673,7 +677,6 @@ static ap_form *expand(sym_idx procName, proc *P, env *Env)
 	    return expand(procName, mk_dot(left(P1), mk_dot(right(P1), right(P))), Env);
 
 	  case p_call:                 /* exp(Pnm(OptTs) . P2) = dot(expand(Pnm(OptTs)), P2) */
-
 	    err_fatal("expand -- unexpected call: %t", P);
 	    res = dot(expand(procName, P1, Env), right(P));
 	    return res;

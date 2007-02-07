@@ -330,6 +330,8 @@ TBbool is_defined_formal_or_var_string(char *str)
 %token INT    
 %token REAL
 %token STRING
+%token TRUE
+%token FALSE
 %token IDENT
 %token SND_MSG                   
 %token REC_MSG                   
@@ -383,6 +385,7 @@ TBbool is_defined_formal_or_var_string(char *str)
 %start script    /* Start symbol of the grammar */
 
 %left FMERGE
+%right RIGHTCHOICE 
 %left '+'                        
 %right '.'                       
 %left '*'                        
@@ -394,6 +397,8 @@ term : INT                       { $$.u.term =  mk_int(atoi($1.u.string)); free(
      | STRING                    { $$.u.term =  mk_str($1.u.string); free($1.u.string); }
      | var
      | result_var
+     | TRUE                      { $$.u.term = mk_bool(TBtrue); }
+     | FALSE                     { $$.u.term = mk_bool(TBfalse); }
      | IDENT                     { $$.u.term = mk_appl(TBlookup($1.u.string),NULL); free($1.u.string);}
      | IDENT '(' term_list ')'   { $$.u.term = mk_appl(TBlookup($1.u.string), $3.u.term_list);
                                    range($$,$1,$4);
