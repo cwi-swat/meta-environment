@@ -1,5 +1,12 @@
 $Id$
 
+Thu Feb  8 15:28:39 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/{term,sdf}-utils.tb:
+   - Get{Term,SDF}Parsetree calls ReadText instead of ReadFile, so it does 
+     not read the text from file explicitly.
+ * tbscripts/{term,sdf}-editor-utils.tb:
+   - Update text repository after saving
+
 Mon Jan 29 10:58:17 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
    - Add listener for setting tooltips

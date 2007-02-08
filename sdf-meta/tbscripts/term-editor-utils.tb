@@ -52,6 +52,7 @@ in
         . snd-note(term-modified(Path))
       +
         rec-msg(te-contents-saved(Sid))
+	. UpdateTextRepository(Sid)
         . UpdateTermStructure(Sid)
       +
         rec-note(mm-attribute-changed(Event?))

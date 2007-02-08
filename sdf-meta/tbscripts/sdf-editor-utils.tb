@@ -59,6 +59,7 @@ in
     +
       rec-msg(te-contents-saved(Sid))
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+      . UpdateTextRepository(Sid)
       . UpdateSyntaxStructure(Sid)
     +
       rec-note(mm-attribute-changed(Event?))

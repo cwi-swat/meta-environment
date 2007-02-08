@@ -436,7 +436,7 @@ in
   if equal(Tree, UNDEFINED) then
     Type := sdf
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
-    . ReadFile(Path, Text?)
+    . ReadText(Path, Text?)
     .
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)

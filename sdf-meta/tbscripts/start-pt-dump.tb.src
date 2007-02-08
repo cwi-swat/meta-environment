@@ -7,6 +7,7 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
 #include <error-utils.tb>
 #include <error-output.tb>
 #include <transaction-management.tb>
+#include <text-utils.tb>
 
 /* sdf-meta */
 #include <sdf-module-actions.tb>

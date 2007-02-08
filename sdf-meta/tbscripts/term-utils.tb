@@ -45,7 +45,7 @@ in
     . GetTermParseTable(ModuleId, ParseTable?)
     .
     if not-equal(ParseTable, UNDEFINED) then
-      ReadFile(Path, Text?)
+      ReadText(Path, Text?)
       .
       if not-equal(Text, "") then
         create(ParseTreeHandler(ModuleId, Path), Pid?)
