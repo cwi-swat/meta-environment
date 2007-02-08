@@ -6,6 +6,7 @@ Thu Feb  8 15:27:25 CET 2007 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - ReplaceFocus does not write text file anymore, but instead sets the 
      contents of the editor directly
+   - Update text repository before editor action is executed
 
 Tue Jan 30 13:39:53 CET 2007 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
