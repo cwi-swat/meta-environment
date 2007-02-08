@@ -9,6 +9,7 @@
 #include <io-utils.tb>
 #include <config-utils.tb>
 #include <editor-error-display.tb>
+#include <text-utils.tb>
 
 process DisplayMessage(EditorId : term, Message : str) is
   snd-msg(te-display-message(EditorId, Message))
@@ -56,17 +57,9 @@ let
 in
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
-  . GetPath(Sid, Filename?)
-  . snd-msg(io-write-text-list(Filename, [Text]))
-  .
-  (
-    rec-msg(io-file-written)
-    . snd-msg(te-reread-contents(Sid))
-  +
-    rec-msg(io-file-not-written(Error?))
-    . snd-note(ui-status(errorf("%s: %s", [Filename, Error])))
-  )
-  . snd-msg(se-update(Sid, Tree))
+  . snd-msg(te-set-contents(Sid, Text))
+  . UpdateTextRepository(Sid)
+  . SE-UpdateTree(Sid, Tree)
   . snd-msg(te-clear-focus(Sid))
 endlet
 
@@ -208,6 +201,17 @@ process GetFocusSort(Sid: term, Sort: str?) is
     rec-msg(se-no-cursor(Sid))
   )
 
+process UpdateTextRepository(Sid: term) is
+let
+  Contents: str,
+  ModuleId: term,
+  Path: str
+in
+  snd-msg(te-get-contents(Sid))
+  . rec-msg(te-contents(Sid, Contents?))
+  . GetPath(Sid, Path?)
+  . PutCachedValue(TEXT_REPOSITORY, Path, Contents)
+endlet
 
 process MenuSelected(Sid: term, EditorType: term) is
 let
@@ -228,6 +232,7 @@ in
     . GetFocusSort(Sid, Sort?)
     . snd-msg(cm-get-action(EditorType, Sort, Event))
     . rec-msg(cm-action(Action?))
+    . UpdateTextRepository(Sid)
     . 
     (
       printf("Warning: process %s was not found\n", Action)
@@ -567,6 +572,5 @@ in
   . rec-msg(cm-events(MenuList?))
   . snd-msg(te-show-popup(Sid, MenuList)) 
 endlet
-
 
 #endif /* __EDITING__ */

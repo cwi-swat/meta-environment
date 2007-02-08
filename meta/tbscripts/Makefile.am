@@ -24,6 +24,7 @@ TBSCRIPTS = \
 	    parse-utils.tb \
 	    pretty-print-utils.tb \
 	    serialization-utils.tb \
+	    text-utils.tb \
 	    transaction-management.tb \
 	    undefined.h
   

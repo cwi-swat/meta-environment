@@ -8,6 +8,7 @@
 #include <gui-utils.tb>
 #include <module-selection-listener.tb>
 #include <module-utils.tb>
+#include <text-utils.tb>
 #include <tide.tb>
 #include <transaction-management.tb>
 
