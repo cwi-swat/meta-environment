@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 30, 2007 1:18:50 PM
+// generation time: Feb 8, 2007 10:27:53 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import toolbus.AbstractTool;
+import toolbus.SwingTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,7 +16,7 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class EditorPluginTool
-  extends AbstractTool
+  extends SwingTool
   implements EditorPluginTif
 {
   // This table will hold the complete input signature
