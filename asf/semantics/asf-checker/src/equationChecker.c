@@ -435,6 +435,58 @@ static ATbool isLexicalTree(PT_Tree tree)
 }
 
 /*}}}  */
+
+/*{{{  static ATbool isCHARSSymbol(PT_Symbol symbol) */
+
+static ATbool isCHARSSymbol(PT_Symbol symbol)
+{
+  if (PT_isSymbolCf(symbol)) {
+    symbol = PT_getSymbolSymbol(symbol);
+  }
+
+  if (PT_isSymbolParameterizedSort(symbol)) {
+    return !strcmp(PT_getSymbolSort(symbol), "CHARS");
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  static ERR_ErrorList checkNoOrphanCharVar(PT_Tree tree)  */
+
+static ERR_ErrorList checkNoOrphanCharVar(PT_Tree tree) 
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Symbols symbols = PT_getProductionLhs(PT_getTreeProd(tree));
+
+    if (PT_getSymbolsLength(symbols) == 1) {
+      if (isCHARSSymbol(PT_getSymbolsHead(symbols))) {
+	PT_Tree arg = PT_getArgsHead(PT_getTreeArgs(tree));
+
+	if (PT_isTreeAppl(arg)) {
+	  PT_Symbols lhs = PT_getProductionLhs(PT_getTreeProd(arg));
+
+	  if (PT_getSymbolsLength(lhs) == 1) {
+	    PT_Symbol var = PT_getSymbolsHead(lhs);
+
+	    if (PT_isSymbolVarSym(var)) {
+	      if (isCHARSSymbol(PT_getSymbolSymbol(var))) {
+		ERR_Error err = makeMessage("Illegal use of lexical variable used outside of lexical constructor context", (ATerm) tree);
+ATwarning("yes!\n");
+		return ERR_makeErrorListSingle(err);
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  return ERR_makeErrorListEmpty();
+}
+
+/*}}}  */
 /*{{{  static ERR_ErrorList checkIgnoredLayout(PT_Tree tree) */
 
 static ERR_ErrorList checkIgnoredLayout(PT_Tree tree)
@@ -568,6 +620,8 @@ static ERR_ErrorList checkTree(PT_Tree tree, ATbool inLexicalConstructor)
 
   if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
+
+    messages = ERR_concatErrorList(messages, checkNoOrphanCharVar(tree));
 
     while (!PT_isArgsEmpty(args)) {
       PT_Tree arg = PT_getArgsHead(args);

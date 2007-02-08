@@ -1,5 +1,9 @@
 $Id$
 
+Thu Feb  8 15:59:44 CET 2007 <jurgenv@cwi.nl>
+ * **/asfchecker.c: added check for use of lexical variables outside
+   the context of a lexical constructor function.
+
 Fri Jan 26 09:27:09 CET 2007 <jurgenv@cwi.nl>
  * **/*.c: adapted all compiled ASF specifications to new toasfix function.
 
