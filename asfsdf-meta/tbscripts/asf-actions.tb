@@ -18,7 +18,7 @@ let
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
-  . GetSDFParseTree(ModuleId, Tree?)
+  . GetSDFParsetree(ModuleId, Tree?)
   .
   if not-equal(Tree, UNDEFINED) then
     PrettyPrintSdf(Path, Tree, RTree?)
