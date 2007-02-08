@@ -473,7 +473,6 @@ static ERR_ErrorList checkNoOrphanCharVar(PT_Tree tree)
 	    if (PT_isSymbolVarSym(var)) {
 	      if (isCHARSSymbol(PT_getSymbolSymbol(var))) {
 		ERR_Error err = makeMessage("Illegal use of lexical variable used outside of lexical constructor context", (ATerm) tree);
-ATwarning("yes!\n");
 		return ERR_makeErrorListSingle(err);
 	      }
 	    }
