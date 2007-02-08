@@ -36,7 +36,7 @@ typedef enum pkind
 
   /* undefined */
   sym_undefined,
- 
+
   /* system module */
   system_module,
 

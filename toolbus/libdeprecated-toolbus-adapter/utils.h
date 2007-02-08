@@ -54,6 +54,9 @@ extern TBbool  TBverbose;
 extern char this_host[MAXHOSTNAMELEN];
 extern char single_prompt[];
 
+extern sym_idx boolTrueSym; /* for parsing true as a bool */
+extern sym_idx boolFalseSym; /* for parsing false as a bool */
+
 typedef term *(*TBcallbackTerm)(term *);
 typedef term *(*TBcallbackChar)(int);
 typedef term *(*TBsigchk)(term *);

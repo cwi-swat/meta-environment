@@ -1,5 +1,9 @@
 $Id$
 
+Thu Feb  8 09:39:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * libdep...adapter/utils.c: adapter term parser to produce booleans
+   instead of appls for true and false.
+
 Wed Feb  7 17:20:37 CET 2007 <{paulk,kooiker,jurgenv}@cwi.nl>
  * toolbus/script.[ly]: added parsing of true and false as booleans
    instead of function symbols. This fixes issues with the evaluation

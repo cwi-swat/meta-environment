@@ -23,6 +23,7 @@
 #include "terms.h"
 #include "tools.h"
 #include "utils.h"
+#include "procs.h"
 #include <netdb.h>
 #include <errno.h>
 #include <math.h>     /* needed for strtod (on SunOs) */
@@ -488,18 +489,24 @@ list_args_seen:
 	    }
 	  } else
 	    if(islower(lastc) || isupper(lastc)){            /* application */
-
 	      get_char();
 	      while(isalnum(lastc) || (lastc == '-') || (lastc == '_')) {
 		get_char();
 	      }
 	      id_sym = lookupn(begin, buf_ptr-1);
+
 make_args:
 	      skip_layout();
 	      if(lastc == '('){
 		close_char = ')';
 		goto make_list;
 	      } else {
+                if (id_sym == e_true) {
+                   return mk_bool(TBtrue);
+                }
+                else if (id_sym == e_false) {
+                   return mk_bool(TBfalse);
+		}
 		term *t = mk_appl(id_sym, NULL);
 		fun_str_sym(t) = is_str_sym;
 		return t;

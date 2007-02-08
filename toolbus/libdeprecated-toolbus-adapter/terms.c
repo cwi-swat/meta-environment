@@ -1555,6 +1555,9 @@ term *List;          /* PROTECTED */
 term *Term;          /* PROTECTED */
 term *Undefined;     /* PROTECTED */
 
+sym_idx boolTrueSym;
+sym_idx boolFalseSym;
+
 void init_terms(void)
 {
   sym_idx idx;
@@ -1569,7 +1572,6 @@ void init_terms(void)
   SYMDEF("list", type_list);
   SYMDEF("term", type_term);
   SYMDEF("undefined", sym_undefined);
-  
 
   True = mk_bool(TBtrue);       TBprotect(&True);
   False = mk_bool(TBfalse);     TBprotect(&False);
