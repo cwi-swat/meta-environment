@@ -141,7 +141,6 @@ in
   fi
 endlet
 
-
 process CloseModuleAction(ModuleId : term) is
 let
   Answer     : term,

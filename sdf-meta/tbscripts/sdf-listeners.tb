@@ -162,7 +162,7 @@ in
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . GetSDFParseTree(ModuleId, Tree?)
+    . GetSDFParsetree(ModuleId, Tree?)
     .
     if equal(Tree, UNDEFINED) then
        MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
@@ -213,7 +213,7 @@ in
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
-    . GetSDFParseTree(ModuleId, Tree?)
+    . GetSDFParsetree(ModuleId, Tree?)
     . MM-GetModuleDependencies(ModuleId, Imports?)
     . 
     if not-equal(Imports, []) then

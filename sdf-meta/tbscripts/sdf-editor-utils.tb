@@ -45,7 +45,7 @@ in
     . snd-msg(te-set-editable(Sid, Editable))
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetSDFParseTree(ModuleId, Tree?)
+    . GetSDFParsetree(ModuleId, Tree?)
     . SE-UpdateTree(Sid, Tree)
     . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,parsed)
     .
@@ -79,7 +79,7 @@ let
   Tree: term
 in
   GetModuleId(Sid, ModuleId?)
-  . GetSDFParseTree(ModuleId, Tree?)
+  . GetSDFParsetree(ModuleId, Tree?)
   . SE-UpdateTree(Sid, Tree) 
 endlet
 

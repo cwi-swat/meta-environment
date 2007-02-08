@@ -103,7 +103,7 @@ in
   .
   if and(not-equal(Runner, []),not-equal(Incomplete,true)) then
     ModuleId := first(Runner)
-    . GetSDFParseTree(ModuleId, ModuleTree?)
+    . GetSDFParsetree(ModuleId, ModuleTree?)
     . 
     if equal(ModuleTree, UNDEFINED) then
       Incomplete := true
@@ -422,7 +422,7 @@ endlet
 toolbus(InitCache(SDF_TREE_CACHE))
 toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
 
-process GetSDFParseTree(ModuleId: term, Result: term?) is
+process GetSDFParsetree(ModuleId: term, Result: term?) is
 let
   ParseTable: term,
   Path: str,
@@ -472,7 +472,7 @@ let
   Modulename: str,
   File: str
 in
-  GetSDFParseTree(ModuleId, Tree?)
+  GetSDFParsetree(ModuleId, Tree?)
   .
   if not-equal(Tree, UNDEFINED) then
     GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
