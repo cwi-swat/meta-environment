@@ -9,6 +9,7 @@ let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
+  Event: attribute-changed-event,
   HasAttribute: bool,
   Path: str,
   Editable: bool,
@@ -46,8 +47,11 @@ in
     +
       rec-msg(te-contents-saved(Sid))
       . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
+      . UpdateTextRepository(Sid)
+      . UpdateEquationsStructure(Sid)
     +
-      UpdateEquationsStructure(Sid, EditorType)
+      rec-note(mm-attribute-changed(Event?))
+      . UpdateEquationsStructure(Sid)
     )
     *
     EditorDisconnected(Sid)
@@ -57,15 +61,13 @@ in
   fi
 endlet
 
-process UpdateEquationsStructure(Sid: term, EditorType: term) is
+process UpdateEquationsStructure(Sid: term) is
 let
-  Event: attribute-changed-event,
   ModuleId: term,
   Slices: term,
   Tree: term
 in
-  rec-note(mm-attribute-changed(Event?))
-  . GetModuleId(Sid, ModuleId?)
+  GetModuleId(Sid, ModuleId?)
   . GetASFParseTree(ModuleId, Tree?) 
   . SE-UpdateTree(Sid, Tree)
 endlet

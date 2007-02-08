@@ -25,6 +25,7 @@ in
     .
     if not-equal(RTree, UNDEFINED) then
       ReplaceFocus(EditorId, RTree)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
     else 
       tau
     fi

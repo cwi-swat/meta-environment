@@ -129,7 +129,7 @@ in
   if equal(Tree, UNDEFINED) then
     Type := eqs
     . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
-    . ReadFile(Path, Text?)
+    . ReadText(Path, Text?)
     .
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)
