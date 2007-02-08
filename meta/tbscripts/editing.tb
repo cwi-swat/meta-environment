@@ -368,16 +368,25 @@ process GetModuleByPath(Path: str, ModuleId: term?) is
 let
   Sid: term
 in
+  GetEditorByPath(Path, Sid?)
+  .
+  if not-equal(Sid, UNDEFINED) then
+    snd-msg(em-get-moduleid(Sid))
+    . rec-msg(em-moduleid(Sid, ModuleId?))
+  else
+    ModuleId := UNDEFINED
+  fi
+endlet
+
+process GetEditorByPath(Path: str, Sid: term?) is
   snd-msg(em-get-session-by-path(Path))
   .
   (
     rec-msg(em-session(Path, Sid?))
-    . snd-msg(em-get-moduleid(Sid))
-    . rec-msg(em-moduleid(Sid, ModuleId?))
   +
     rec-msg(em-no-such-session(Path))
+    . Sid := UNDEFINED
   )
-endlet
 
 process CheckSanity(Path: str, RequestedModuleId: term, Valid: bool?) is
 let
