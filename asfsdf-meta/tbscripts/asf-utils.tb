@@ -59,10 +59,14 @@ let
   Feedback: term,
   Modulename: str,
   Summary: term,
-  Errors: list
+  Errors: list,
+  Transaction: str
 in
-  AddJob("Checking syntax definition") 
+  Transaction := "Checking syntax"
+  . AddJob("Checking syntax definition") 
+  . snd-msg(tm-request-transaction(Transaction))
   . GetSyntaxDefinition(ModuleId, Syntax?)
+  . snd-msg(tm-end-transaction(Transaction))
   .
   if not-equal(Syntax, UNDEFINED) then
     MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
