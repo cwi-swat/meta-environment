@@ -455,7 +455,7 @@ static ATbool isCHARSSymbol(PT_Symbol symbol)
 
 /*{{{  static ERR_ErrorList checkNoOrphanCharVar(PT_Tree tree)  */
 
-static ERR_ErrorList checkNoOrphanCharVar(PT_Tree tree) 
+ERR_ErrorList checkNoOrphanCharVar(PT_Tree tree) 
 {
   if (PT_isTreeAppl(tree)) {
     PT_Symbols symbols = PT_getProductionLhs(PT_getTreeProd(tree));
@@ -620,7 +620,7 @@ static ERR_ErrorList checkTree(PT_Tree tree, ATbool inLexicalConstructor)
   if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
 
-    messages = ERR_concatErrorList(messages, checkNoOrphanCharVar(tree));
+    /*messages = ERR_concatErrorList(messages, checkNoOrphanCharVar(tree));*/
 
     while (!PT_isArgsEmpty(args)) {
       PT_Tree arg = PT_getArgsHead(args);
