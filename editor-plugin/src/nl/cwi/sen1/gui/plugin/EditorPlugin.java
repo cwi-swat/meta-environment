@@ -386,10 +386,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		if (panel != null && panel.isModified()) {
 			studio.requestFocus(comp);
 			try {
-				showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
+				showSaveConfirmDialog(panel, JOptionPane.YES_NO_CANCEL_OPTION);
 			} catch (CloseAbortedException e) {
-				// this should never happen (no CANCEL button)
-				e.printStackTrace();
+				return;
 			}
 		}
 		studio.removeComponent(comp);

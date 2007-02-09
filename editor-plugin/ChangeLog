@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb  9 13:48:39 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add cancel option to close editor
+
 Fri Feb  9 09:08:21 CET 2007 <kooiker@cwi.nl>
  * editor-plugin.idef.src:
    - Add support for setting and getting contents from editor
