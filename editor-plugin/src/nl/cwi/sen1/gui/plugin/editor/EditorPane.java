@@ -143,7 +143,6 @@ public class EditorPane extends JTextPane {
 				} catch (BadLocationException e1) {
 				}
 			}
-
 		});
 	}
 
@@ -153,6 +152,7 @@ public class EditorPane extends JTextPane {
 			}
 
 			public void insertUpdate(DocumentEvent e) {
+				setCharacterAttributes(defaultStyle, true);
 				modified = true;
 				fireEditorModifiedEvent();
 			}
@@ -161,6 +161,8 @@ public class EditorPane extends JTextPane {
 				modified = true;
 				fireEditorModifiedEvent();
 			}
+			
+			
 		});
 	}
 
