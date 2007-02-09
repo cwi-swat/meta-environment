@@ -200,6 +200,8 @@ public class GraphPanel extends JPanel {
 					VisualItem item = (VisualItem) t;
 					if (item instanceof NodeItem) {
 						fireNodeSelected(item.getString(GraphConstants.ID));
+						vis.run("draw");
+						vis.repaint();
 					}
 				}
 			}
