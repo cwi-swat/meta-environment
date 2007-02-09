@@ -15,4 +15,6 @@
 #include <sdf-editor-listeners.tb>
 #include <sdf-gui-listeners.tb>
 
+toolbus(SynchronizeModuleSelection(SDF_NAMESPACE))
+
 #endif /* __SDF_META__ */

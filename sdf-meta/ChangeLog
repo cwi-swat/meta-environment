@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb  9 11:46:24 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/sdf-meta.tb:
+   - Start SynchronizeModuleSelection process from sdf-meta. 
+
 Thu Feb  8 15:28:39 CET 2007 <kooiker@cwi.nl>
  * tbscripts/{term,sdf}-utils.tb:
    - Get{Term,SDF}Parsetree calls ReadText instead of ReadFile, so it does 
