@@ -50,6 +50,10 @@ public class EditorPane extends JTextPane {
 
 	private BracketHighlightPainter bracketPainter;
 
+	private Object jaggedSelectionTag;
+	
+	private JaggedHighlightPainter jaggedHighlightPainter;
+	
 	private boolean modified;
 
 	private boolean undoableEditListenerAdded = false;
@@ -71,6 +75,7 @@ public class EditorPane extends JTextPane {
 
 		setOpaque(false);
 		focusPainter = new DefaultHighlightPainter(Color.BLACK);
+		jaggedHighlightPainter = new JaggedHighlightPainter(Color.RED);
 		bracketPainter = new BracketHighlightPainter(bracketHighlightColor);
 
 		defaultStyle = StyleContext.getDefaultStyleContext().getStyle(
@@ -268,6 +273,27 @@ public class EditorPane extends JTextPane {
 		return focusTag;
 	}
 
+	public void jag(int offset, int length) {
+		clearJaggedSelection();
+		
+		try {
+			jaggedSelectionTag = getHighlighter().addHighlight(offset, length, jaggedHighlightPainter);
+		} catch (BadLocationException e) {
+			// happens when you give an offset/length outside the editor
+		}
+	}
+
+	public void clearJaggedSelection() {
+		if (jaggedSelectionTag != null) {
+			getHighlighter().removeHighlight(jaggedSelectionTag);
+		}
+		jaggedSelectionTag = null;
+	}
+
+	public Object getJaggedSelectionTag() {
+		return jaggedSelectionTag;
+	}
+	
 	public Color getBackgroundColor() {
 		return super.getBackground();
 	}
@@ -414,5 +440,6 @@ public class EditorPane extends JTextPane {
 		while (iter.hasNext()) {
 			iter.next().editorModified(e);
 		}
+		clearJaggedSelection();
 	}
 }

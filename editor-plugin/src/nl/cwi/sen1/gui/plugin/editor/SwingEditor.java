@@ -1,7 +1,6 @@
 package nl.cwi.sen1.gui.plugin.editor;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.io.BufferedInputStream;
@@ -16,7 +15,6 @@ import java.io.OutputStream;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.text.BadLocationException;
 
 import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.gui.plugin.Editor;
@@ -31,7 +29,7 @@ public class SwingEditor extends JPanel implements Editor {
 	private String filename;
 
 	private EditorPane editorPane;
-
+	
 	public SwingEditor(String id, String filename) throws IOException,
 			FileToBigException {
 		this.id = id;
@@ -107,6 +105,7 @@ public class SwingEditor extends JPanel implements Editor {
 		fos.close();
 
 		editorPane.setModified(false);
+		editorPane.clearJaggedSelection();
 	}
 
 	public void writeCopy(String filename) throws IOException {
@@ -131,14 +130,8 @@ public class SwingEditor extends JPanel implements Editor {
 	}
 
 	public void setSelection(Area area) {
-		JaggedHighlighter rh = new JaggedHighlighter(Color.RED);
-
-		try {
-			editorPane.getHighlighter().addHighlight(area.getOffset(),
-					area.getOffset() + area.getLength(), rh);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
+		editorPane.jag(area.getOffset(), area.getOffset()
+				+ area.getLength());
 	}
 
 	public String getId() {
@@ -152,6 +145,7 @@ public class SwingEditor extends JPanel implements Editor {
 	public void setModified(boolean modified) {
 		editorPane.setModified(modified);
 		editorPane.clearFocus();
+		editorPane.clearJaggedSelection();
 	}
 
 	public boolean isModified() {
