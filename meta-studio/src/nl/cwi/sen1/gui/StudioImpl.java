@@ -244,22 +244,12 @@ public class StudioImpl implements Studio, GuiTif {
 				if (window instanceof View) {
 					StudioComponent component = componentsByView.get(window);
 
-					// StatusBar statusBar = (StatusBar)
-					// componentStatusBar.get(component);
-
-					// statusPanel.remove(statusBar);
 					componentsByView.remove(window);
 					componentMenus.remove(component);
 
 					component.close();
 				}
 			}
-
-			// Is this necessary?
-//			public void windowHidden(DockingWindow arg0) {
-//				updateMenuBar();
-//				updateStatusBar();
-//			}
 		});
 
 		return root;
@@ -284,7 +274,8 @@ public class StudioImpl implements Studio, GuiTif {
 				}
 				statusBar.repaint();
 			} else {
-				System.err.println("Internal error: updateStatusBar no active component found");
+				System.err
+						.println("Internal error: updateStatusBar no active component found");
 				Thread.dumpStack();
 			}
 		}

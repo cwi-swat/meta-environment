@@ -1,5 +1,8 @@
 $Id$
 
+Fri Feb  2 15:23:14 CET 2007 <kooiker@cwi.nl>
+ * Updated to DockingWindows 1.5.0
+
 Fri Jan 12 15:01:57 CET 2007 <kooiker@cwi.nl>
  * studio/**/StudioImpl.java:
    - Commented out overwriting of windowHidden method in the
