@@ -487,11 +487,12 @@ let
   Origin: term
 in
   GetFocusOrigin(EditorId, Origin?)
-  . if equal(Origin, no-origin) then
-      DisplayMessage(EditorId, "No origin information available")
-    else
-      ShowAreaAction("Origin", Origin)
-    fi
+  . 
+  if equal(Origin, no-origin) then
+    DisplayMessage(EditorId, "No origin information available")
+  else
+    ShowAreaAction("Origin", Origin)
+  fi
 endlet
     
 process ShowAreaAction(Message : str, Location : term) is
