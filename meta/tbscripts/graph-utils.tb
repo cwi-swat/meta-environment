@@ -57,7 +57,7 @@ let
 in
   snd-msg(gc-tree-to-graph(Tree, ShowLayout, ShowLeafs, SharingOn))
   . rec-msg(gc-graph(Graph?))
-  . TODO("Pass GraphType and GraphId as parameter\n")
+  . TODO("Change the way GraphType and GraphId are used\n")
   . RenderGraph("parsetree","0",false,true,Graph?)
 endlet
 
