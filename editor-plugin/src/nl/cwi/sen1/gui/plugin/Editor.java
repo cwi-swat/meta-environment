@@ -42,4 +42,8 @@ public interface Editor {
 	public void rereadContents();
     
     public void setEditable(boolean b);
+
+	public String getContents();
+
+	public void setContents(String contents);
 }

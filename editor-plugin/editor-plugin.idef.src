@@ -8,6 +8,7 @@ let
   ActionList : list,
   Area : term,
   Column: int,
+  Contents: str,
   Editable: bool,
   EditorId : term,
   Editor : str,
@@ -38,6 +39,12 @@ in
   +
     rec-msg(te-add-actions(EditorId?, ActionList?))
     . snd-do(T, add-actions(EditorId, ActionList))
+  +
+    rec-msg(te-get-contents(EditorId?))
+    . snd-do(T, get-contents(EditorId))
+  +
+    rec-msg(te-set-contents(EditorId?, Contents?))
+    . snd-do(T, set-contents(EditorId, Contents))
   +
     rec-msg(te-write-contents(EditorId?))
     . snd-do(T, write-contents(EditorId))
@@ -79,8 +86,12 @@ in
     . create(EditorModified(EditorId, Modified), Pid?)
     . snd-ack-event(T, is-modified(EditorId, Modified))
   +
+    rec-event(T, contents(EditorId?, Contents?))
+    . create(Contents(EditorId, Contents), Pid?)
+    . snd-ack-event(T, contents(EditorId, Contents))
+  +
     rec-event(T, contents-written(EditorId?))
-    . create(EditorContentsWritten(EditorId), Pid?)
+    . create(ContentsWritten(EditorId), Pid?)
     . snd-ack-event(T, contents-written(EditorId))
   +
     rec-event(T, contents-changed(EditorId?))
@@ -116,6 +127,9 @@ process ContentsChanged(EditorId: term) is
 process ContentsSaved(EditorId: term) is
   snd-msg(te-contents-saved(EditorId))
 
+process Contents(EditorId: term, Contents: str) is
+  snd-msg(te-contents(EditorId, Contents))
+
 process OffSetEvent(Id: term, Offset: int) is 
   snd-msg(te-mouse-click-at-offset(Id, Offset))
 
@@ -128,7 +142,7 @@ process EditorHasDisconnected(EditorId: term) is
 process EditorModified(EditorId: term, Modified: term) is
     snd-msg(te-is-modified(EditorId, Modified))
 
-process EditorContentsWritten(EditorId: term) is
+process ContentsWritten(EditorId: term) is
     snd-msg(te-contents-written(EditorId))
 
 process StartEditorPanel is

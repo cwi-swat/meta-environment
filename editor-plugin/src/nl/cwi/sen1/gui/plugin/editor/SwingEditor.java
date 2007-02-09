@@ -89,6 +89,14 @@ public class SwingEditor extends JPanel implements Editor {
 		}
 	}
 
+	public String getContents() {
+		return editorPane.getText();
+	}
+	
+	public void setContents(String contents) {
+		editorPane.setText(contents);
+	}
+	
 	public void writeContents(String filename) throws IOException {
 		String text = editorPane.getText();
 

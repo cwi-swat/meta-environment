@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb  9 09:08:21 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin.idef.src:
+   - Add support for setting and getting contents from editor
+
 Sat Feb  3 16:39:27 CET 2007 <jurgenv@cwi.nl>
  * src/**/EditorPlugin.java: added tooltips for menu options.
 

@@ -81,6 +81,25 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		bridge.postEvent(event);
 	}
 
+	public void getContents(ATerm editorId) {
+		Editor panel = getEditorPanel(editorId);
+
+		if (panel != null) {
+			String contents = panel.getContents();
+			ATerm event = studio.getATermFactory().make(
+					"contents(<term>,<str>)", editorId, contents);
+			bridge.postEvent(event);
+		}
+	}
+
+	public void setContents(ATerm editorId, String contents) {
+		Editor panel = getEditorPanel(editorId);
+
+		if (panel != null) {
+			panel.setContents(contents);
+		}
+	}
+
 	public void writeContents(ATerm editorId) {
 		Editor panel = getEditorPanel(editorId);
 
@@ -142,7 +161,6 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				public void mousePressed(MouseEvent e) {
 					int offset = panel.getMouseOffset(e.getX(), e.getY());
 					if (!e.isPopupTrigger()) {
-						System.err.println(editorId + ": " + offset);
 						bridge
 								.postEvent(editorId.getFactory().make(
 										"offset-event(<term>,<int>)", editorId,
@@ -436,6 +454,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		Editor panel = getEditorPanel(editorId);
 		if (panel != null) {
 			panel.rereadContents();
+			ATerm event = studio.getATermFactory().make(
+					"contents-changed(<term>)", editorId);
+			bridge.postEvent(event);
 		}
 	}
 
