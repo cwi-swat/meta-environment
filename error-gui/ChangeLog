@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb  9 13:29:43 CET 2007 <kooiker@cwi.nl>
+ * src/**/ErrorPanel.java:
+   - Add tooltips to toolbar actions (buttons)
+
 Fri Feb  9 10:45:32 CET 2007 <kooiker@cwi.nl>
  * src/**/ErrorPanel.java:
    - Remember expansion state when reloading tree model.

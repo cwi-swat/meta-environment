@@ -7,6 +7,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -133,6 +134,10 @@ public class ErrorPanel extends JPanel {
 				"/toolbarButtonGraphics/general/ZoomIn16.gif");
 		Action expandAction = new AbstractAction("Expand All", new ImageIcon(
 				zoomInUrl)) {
+			{
+				putValue(Action.SHORT_DESCRIPTION, "Expand All");
+			}
+
 			public void actionPerformed(ActionEvent e) {
 				expandAll(tree, true);
 			}
@@ -142,6 +147,9 @@ public class ErrorPanel extends JPanel {
 				"/toolbarButtonGraphics/general/ZoomOut16.gif");
 		Action collapseAction = new AbstractAction("Collapse All",
 				new ImageIcon(zoomOutUrl)) {
+			{
+				putValue(Action.SHORT_DESCRIPTION, "Collapse All");
+			}
 			public void actionPerformed(ActionEvent e) {
 				expandAll(tree, false);
 				tree.expandPath(new TreePath(tree.getModel().getRoot()));
@@ -153,6 +161,9 @@ public class ErrorPanel extends JPanel {
 				"/toolbarButtonGraphics/general/Stop16.gif");
 		Action groupAction = new AbstractAction("Group by error",
 				new ImageIcon(errorGroupUrl)) {
+			{
+				putValue(Action.SHORT_DESCRIPTION, "Group by error");
+			}
 			public void actionPerformed(ActionEvent e) {
 				errorDecorator.groupOnDescription((DefaultMutableTreeNode) tree
 						.getModel().getRoot());
@@ -166,6 +177,9 @@ public class ErrorPanel extends JPanel {
 				"/toolbarButtonGraphics/general/Edit16.gif");
 		Action fileGroupAction = new AbstractAction("Group by file",
 				new ImageIcon(fileGroupUrl)) {
+			{
+				putValue(Action.SHORT_DESCRIPTION, "Group by file");
+			}
 			public void actionPerformed(ActionEvent e) {
 				errorDecorator.groupOnFile((DefaultMutableTreeNode) tree
 						.getModel().getRoot());
@@ -179,6 +193,9 @@ public class ErrorPanel extends JPanel {
 				"/toolbarButtonGraphics/general/Undo16.gif");
 		Action unGroupAction = new AbstractAction("Ungroup", new ImageIcon(
 				unGroupUrl)) {
+			{
+				putValue(Action.SHORT_DESCRIPTION, "Ungroup");
+			}
 			public void actionPerformed(ActionEvent e) {
 				errorDecorator.unGroup((DefaultMutableTreeNode) tree.getModel()
 						.getRoot());
