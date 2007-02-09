@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Feb 8, 2007 1:11:40 PM
+// generation time: Feb 9, 2007 2:45:37 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -78,6 +78,15 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `registerTextCategories' not supported.");
+    }
+  }
+  public void setSelection(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.setSelection(t0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `setSelection' not supported.");
     }
   }
   public void writeContents(ATerm t0)

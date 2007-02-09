@@ -131,6 +131,17 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		}
 	}
 
+	public void setSelection(ATerm editorId, ATerm selection) {
+		errorapi.Factory factory = errorapi.Factory
+				.getInstance((PureFactory) studio.getATermFactory());
+
+		Editor panel = getEditorPanel(editorId);
+
+		if (panel != null) {
+			panel.setSelection(factory.AreaFromTerm(selection));
+		}
+	}
+
 	private Editor getEditorPanel(ATerm editorId) {
 		return editors.get(editorId.toString());
 	}
@@ -200,7 +211,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				factory.makeKeyModifierList(factory
 						.makeKeyModifier_MUnderscoreCTRL()), factory
 						.makeVirtualKey_VKUnderscoreS());
-		Event event = factory.makeEvent_MenuShortcut(items, shortcut, "Save file");
+		Event event = factory.makeEvent_MenuShortcut(items, shortcut,
+				"Save file");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -227,7 +239,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
 				.makeItem_Label("Save a copy..."));
 
-		event = factory.makeEvent_Menu(items, "Copy the contents of this file to another");
+		event = factory.makeEvent_Menu(items,
+				"Copy the contents of this file to another");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			Editor editor = getEditorPanel(editorId);
@@ -259,7 +272,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						.makeKeyModifier_MUnderscoreSHIFT()), factory
 				.makeVirtualKey_VKUnderscoreA());
 
-		event = factory.makeEvent_MenuShortcut(items, shortcut, "Save all files");
+		event = factory.makeEvent_MenuShortcut(items, shortcut,
+				"Save all files");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -291,7 +305,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		items = factory.makeItemLabels(factory.makeItem_Label("File"), factory
 				.makeItem_Label("Refresh"));
 
-		event = factory.makeEvent_Menu(items, "Read in the contents of the file again");
+		event = factory.makeEvent_Menu(items,
+				"Read in the contents of the file again");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			Editor editor = getEditorPanel(editorId);
@@ -316,11 +331,13 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				factory.makeKeyModifierList(factory
 						.makeKeyModifier_MUnderscoreCTRL()), factory
 						.makeVirtualKey_VKUnderscoreW());
-		event = factory.makeEvent_MenuShortcut(items, shortcut, "Close this file");
+		event = factory.makeEvent_MenuShortcut(items, shortcut,
+				"Close this file");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				closeEditor(comp, editorId.toString(), JOptionPane.YES_NO_CANCEL_OPTION);
+				closeEditor(comp, editorId.toString(),
+						JOptionPane.YES_NO_CANCEL_OPTION);
 			}
 		});
 
@@ -331,7 +348,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				factory.makeKeyModifier_MUnderscoreCTRL(), factory
 						.makeKeyModifier_MUnderscoreSHIFT()), factory
 				.makeVirtualKey_VKUnderscoreW());
-		event = factory.makeEvent_MenuShortcut(items, shortcut, "Close all files");
+		event = factory.makeEvent_MenuShortcut(items, shortcut,
+				"Close all files");
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {

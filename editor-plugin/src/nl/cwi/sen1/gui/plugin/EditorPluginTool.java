@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 8, 2007 1:11:40 PM
+// generation time: Feb 9, 2007 2:45:37 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -30,6 +30,7 @@ abstract public class EditorPluginTool
   private ATerm PkillEditor0;
   private ATerm PdisplayMessage0;
   private ATerm PregisterTextCategories0;
+  private ATerm PsetSelection0;
   private ATerm PwriteContents0;
   private ATerm PeditorToFront0;
   private ATerm PsetEditable0;
@@ -65,6 +66,7 @@ abstract public class EditorPluginTool
     sigTable.add(factory.parse("rec-do(<editor-plugin>,reread-contents(<term>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,is-modified(<term>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,set-focus(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-selection(<term>,<term>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,set-cursor-at-offset(<term>,<int>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,clear-focus(<term>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,register-text-categories(<term>,<term>))"));
@@ -87,6 +89,7 @@ abstract public class EditorPluginTool
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PdisplayMessage0 = factory.parse("rec-do(display-message(<term>,<str>))");
     PregisterTextCategories0 = factory.parse("rec-do(register-text-categories(<term>,<term>))");
+    PsetSelection0 = factory.parse("rec-do(set-selection(<term>,<term>))");
     PwriteContents0 = factory.parse("rec-do(write-contents(<term>))");
     PeditorToFront0 = factory.parse("rec-do(editor-to-front(<term>))");
     PsetEditable0 = factory.parse("rec-do(set-editable(<term>,<term>))");
@@ -140,6 +143,11 @@ abstract public class EditorPluginTool
     result = term.match(PregisterTextCategories0);
     if (result != null) {
       registerTextCategories((ATerm)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PsetSelection0);
+    if (result != null) {
+      setSelection((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PwriteContents0);

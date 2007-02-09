@@ -1,6 +1,6 @@
 // Java tool interface EditorPluginTif
 // This file is generated automatically, please do not edit!
-// generation time: Feb 8, 2007 1:11:40 PM
+// generation time: Feb 9, 2007 2:45:37 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -15,6 +15,7 @@ public interface EditorPluginTif
   public void killEditor(ATerm t0);
   public void displayMessage(ATerm t0, String s1);
   public void registerTextCategories(ATerm t0, ATerm t1);
+  public void setSelection(ATerm t0, ATerm t1);
   public void writeContents(ATerm t0);
   public void editorToFront(ATerm t0);
   public void setEditable(ATerm t0, ATerm t1);

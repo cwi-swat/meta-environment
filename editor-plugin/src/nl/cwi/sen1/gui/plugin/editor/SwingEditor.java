@@ -1,6 +1,7 @@
 package nl.cwi.sen1.gui.plugin.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.io.BufferedInputStream;
@@ -15,6 +16,7 @@ import java.io.OutputStream;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.text.BadLocationException;
 
 import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.gui.plugin.Editor;
@@ -45,12 +47,12 @@ public class SwingEditor extends JPanel implements Editor {
 
 		add(scroller, BorderLayout.CENTER);
 	}
-	
+
 	public void rereadContents() {
 		try {
 			readFileContents(filename);
-//			((EditorKit) editorPane.getEditorKit()).getUndoManager()
-//					.discardAllEdits();
+			// ((EditorKit) editorPane.getEditorKit()).getUndoManager()
+			// .discardAllEdits();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (FileToBigException e) {
@@ -66,10 +68,9 @@ public class SwingEditor extends JPanel implements Editor {
 	private String readContents(String filename) throws IOException,
 			FileToBigException {
 		InputStream fis = null;
-		
+
 		try {
-			fis = new BufferedInputStream(new FileInputStream(
-					filename));
+			fis = new BufferedInputStream(new FileInputStream(filename));
 			int x = fis.available();
 
 			if (x > 1024 * 1024 /* 1 Mbyte */) {
@@ -92,11 +93,11 @@ public class SwingEditor extends JPanel implements Editor {
 	public String getContents() {
 		return editorPane.getText();
 	}
-	
+
 	public void setContents(String contents) {
 		editorPane.setText(contents);
 	}
-	
+
 	public void writeContents(String filename) throws IOException {
 		String text = editorPane.getText();
 
@@ -127,6 +128,17 @@ public class SwingEditor extends JPanel implements Editor {
 	public void setFocus(Area focus) {
 		editorPane.focus(focus.getOffset(), focus.getOffset()
 				+ focus.getLength());
+	}
+
+	public void setSelection(Area area) {
+		JaggedHighlighter rh = new JaggedHighlighter(Color.RED);
+
+		try {
+			editorPane.getHighlighter().addHighlight(area.getOffset(),
+					area.getOffset() + area.getLength(), rh);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getId() {

@@ -46,4 +46,6 @@ public interface Editor {
 	public String getContents();
 
 	public void setContents(String contents);
+
+	public void setSelection(Area area);
 }

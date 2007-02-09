@@ -58,6 +58,9 @@ in
     rec-msg(te-set-focus(EditorId?, Area?))
     . snd-do(T, set-focus(EditorId, Area))
   +
+    rec-msg(te-set-selection(EditorId?, Area?))
+    . snd-do(T, set-selection(EditorId, Area))
+  +
     rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(T, set-cursor-at-offset(EditorId, Offset))
   +
