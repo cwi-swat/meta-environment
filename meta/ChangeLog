@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb  9 11:42:36 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/module-selection-listener.tb:
+   - parameterized SynchronizeModuleSelection with GraphId
+
 Thu Feb  8 15:27:25 CET 2007 <kooiker@cwi.nl>
  * tbscripts/text-utils.tb:
    - Generic text repository that stores text by path

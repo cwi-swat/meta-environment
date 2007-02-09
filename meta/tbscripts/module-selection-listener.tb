@@ -6,11 +6,10 @@
 #include <moduledetails.idef>
 #include <undefined.h>
 
-process SynchronizeModuleSelection is
+process SynchronizeModuleSelection(GraphId: term) is
 let
   Event: attribute-changed-event,
   EventModuleId: term,
-  GraphId: term,
   ModuleId: term
 in
   ModuleId := UNDEFINED
@@ -20,12 +19,10 @@ in
   .
   (
     rec-note(nav-module-selected(ModuleId?))
-    . TODO("MODULE_SELECTION_LISTENER: parameterize GraphId")
-    . snd-msg(gp-select-node("import-graph", "0", ModuleId))
+    . snd-msg(gp-select-node("import-graph", GraphId, ModuleId))
     . ShowModuleDetails(ModuleId)
   +
-    rec-note(gp-node-selected("import-graph", GraphId?, ModuleId?))
-    . TODO("MODULE_SELECTION_LISTENER: graph node selected")
+    rec-note(gp-node-selected("import-graph", GraphId, ModuleId?))
     . snd-msg(nav-select-module(ModuleId))
     . ShowModuleDetails(ModuleId)
   +
@@ -48,7 +45,5 @@ in
   MM-GetAllAttributes(ModuleId, Attributes?)
   . snd-msg(md-set-details(Attributes))
 endlet
-
-toolbus(SynchronizeModuleSelection)
 
 #endif /* __MODULE_SELECTION_LISTENER__ */
