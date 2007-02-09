@@ -9,6 +9,11 @@ equations
 	===>
 	string-to-bytes(strcon(\" char char* \")) = bytes(byte byte*) 
 
+tests
+
+[str2b] string-to-bytes("string-to-bytes") ==
+        bytes(byte(s) byte(t) byte(r) byte(i) byte(n) byte(g) byte(\-) byte(t) byte(o) byte(\-) byte(b) byte(y) byte(t) byte(e) byte(s))  
+
 equations
 
 [normal]
@@ -41,6 +46,16 @@ equations
 	===
 	bytes-to-string(bytes(byte byte*)) = strcon(\" char char* \")
 
+tests 
+
+[b2str] 
+        bytes-to-string(
+          bytes(byte(s) byte(t) byte(r) byte(i) byte(n) byte(g) byte(\-) byte(t) byte(o) byte(\-) byte(b) byte(y) byte(t) byte(e) byte(s)
+        ))
+        == "string-to-bytes"
+
+[b2str2]  
+	bytes-to-string(string-to-bytes("a\n\t\\\"b\007")) == "a\n\t\\\"b\007"
 equations
 
 [normal]
@@ -78,6 +93,10 @@ equations
 [nob1]	num-of-bytes(bytes()) = 0
 
 [nob2]	num-of-bytes(bytes(_byte byte*)) = 1 + num-of-bytes(bytes(byte*))
+
+tests
+
+[nob] num-of-bytes(string-to-bytes("1234567890")) == 10
 
 equations
 
@@ -660,13 +679,22 @@ equations
 [] is-xdigit(byte(_xdigit)) = true
 [default] is-xdigit(_byte)= false
 
+tests
+
+[ia] is-alnum(byte(a)) == true
+
 equations
 
 [] to-upper(byte(lower)) = decimal-to-byte(byte-to-decimal(byte(lower)) - 32)
-[default] to-upper(byte) = byte
+[default] to-upper(Byte) = Byte
 
 [] to-lower(byte(upper)) = decimal-to-byte(byte-to-decimal(byte(upper)) + 32)
-[default] to-lower(byte) = byte
+[default]  to-lower(Byte) = Byte
+
+tests
+
+[tou] to-upper(byte(a)) == byte(A)
+[tou] to-upper(byte(\-)) == byte(\-)
 
 equations
 
@@ -682,10 +710,7 @@ equations
 
 tests
 
-[a] to-lower(byte(A)) == byte(a)
-[A] to-upper(byte(a)) == byte(A)
 [c] uncapitalize(bytes(byte(F) byte(o) byte(o))) == bytes(byte(f)byte(o)byte(o))
 [C] capitalize(bytes(byte(f) byte(o) byte(o))) == bytes(byte(F)byte(o)byte(o))
 
-[bytes-test]  
-	bytes-to-string(string-to-bytes("a\n\t\\\"b\007")) == "a\n\t\\\"b\007"
+

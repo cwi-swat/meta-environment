@@ -26,4 +26,4 @@ context-free start-symbols
 imports basic/Comments
 
 variables
-  "Bool" [0-9]* -> Boolean  
+  "Bool" [0-9]* -> Boolean
