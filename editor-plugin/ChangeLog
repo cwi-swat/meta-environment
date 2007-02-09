@@ -2,7 +2,8 @@
 
 Fri Feb  9 13:48:39 CET 2007 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
-   - Add cancel option to close editor
+   - Add cancel option to close editor (except when the system deciceds to
+     kill the editor)
 
 Fri Feb  9 09:08:21 CET 2007 <kooiker@cwi.nl>
  * editor-plugin.idef.src:

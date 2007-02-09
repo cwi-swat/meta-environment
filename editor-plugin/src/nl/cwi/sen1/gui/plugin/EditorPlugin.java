@@ -320,7 +320,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				closeEditor(comp, editorId.toString());
+				closeEditor(comp, editorId.toString(), JOptionPane.YES_NO_CANCEL_OPTION);
 			}
 		});
 
@@ -339,7 +339,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						componentsById);
 				for (String id : editors.keySet()) {
 					StudioComponent component = componentsById.get(id);
-					closeEditor(component, id);
+					closeEditor(component, id, JOptionPane.YES_NO_CANCEL_OPTION);
 				}
 			}
 		});
@@ -376,17 +376,17 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		StudioComponent comp = componentsById.get(editorId.toString());
 
 		if (comp != null) {
-			closeEditor(comp, editorId.toString());
+			closeEditor(comp, editorId.toString(), JOptionPane.YES_NO_OPTION);
 		}
 	}
 
-	private void closeEditor(StudioComponent comp, String id) {
+	private void closeEditor(StudioComponent comp, String id, int optionType) {
 		Editor panel = editors.get(id);
 
 		if (panel != null && panel.isModified()) {
 			studio.requestFocus(comp);
 			try {
-				showSaveConfirmDialog(panel, JOptionPane.YES_NO_CANCEL_OPTION);
+				showSaveConfirmDialog(panel, optionType);
 			} catch (CloseAbortedException e) {
 				return;
 			}
