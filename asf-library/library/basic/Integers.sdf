@@ -13,26 +13,21 @@ context-free syntax
   Integer ">=" Integer        -> Boolean           
   Integer "<" Integer         -> Boolean           
   Integer "<=" Integer        -> Boolean           
-  Integer "==" Integer        -> Boolean
+  Integer "==" Integer        -> Boolean           
   max(Integer, Integer)       -> Integer           
-  min(Integer, Integer)       -> Integer
-  remainder(Integer, Integer) -> Integer
-  ndiv(Integer, Integer)      -> Integer
+  min(Integer, Integer)       -> Integer           
+  remainder(Integer, Integer) -> Integer           
+  ndiv(Integer, Integer)      -> Integer           
   "(" Integer ")"             -> Integer {bracket} 
-	
+
 context-free priorities
-  {non-assoc:
-    "+" integer:Integer -> Integer {non-assoc}
-    "-" integer:Integer -> Integer {non-assoc}
-  } >
-  {non-assoc:
-     Integer "*" Integer -> Integer {left}
-     Integer "/" Integer -> Integer {non-assoc}
-  } >
-  {left: 
-     Integer "+" Integer  -> Integer {left}  
-     Integer "-" Integer  -> Integer {left}
-     Integer "-/" Integer -> Integer {left}}
+  { non-assoc: "+" integer:Integer -> Integer {non-assoc} 
+               "-" integer:Integer -> Integer {non-assoc}  } >
+  { non-assoc: Integer "*" Integer -> Integer {left}      
+               Integer "/" Integer -> Integer {non-assoc}  } >
+  { left: Integer "+" Integer  -> Integer {left} 
+          Integer "-" Integer  -> Integer {left} 
+          Integer "-/" Integer -> Integer {left}  }
 
 hiddens
 imports basic/Comments

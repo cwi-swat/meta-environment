@@ -5,8 +5,7 @@ imports basic/Integers
 imports basic/Bytes
 
 hiddens
-sorts Escaped
-      Normal
+sorts Escaped Normal
 
 context-free start-symbols
   String
@@ -22,7 +21,7 @@ context-free syntax
   String "<=" String -> Boolean               
   String ">" String  -> Boolean               
   String ">=" String -> Boolean               
-  String "==" String -> Boolean
+  String "==" String -> Boolean               
 
 context-free syntax
   length(String)                                       -> Integer        
