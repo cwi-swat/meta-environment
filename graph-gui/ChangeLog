@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb  9 11:41:07 CET 2007 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Fix focus colors abandonned after mouse hover
+
 Tue Jan 30 09:59:10 CET 2007 <kooiker@cwi.nl>
  * src/**/GraphPanel.java:
    - Check if selected item is a node before creating a nodeselected event

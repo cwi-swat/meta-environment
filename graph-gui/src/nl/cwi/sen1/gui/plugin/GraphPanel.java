@@ -166,9 +166,20 @@ public class GraphPanel extends JPanel {
 
 			public void itemExited(VisualItem item, MouseEvent e) {
 				if (item.isInGroup(GraphConstants.NODES)) {
-					item.setFillColor(item.getInt(GraphConstants.FILLCOLOR));
-					item.setStrokeColor(prefs.getColor(
-							GraphConstants.NODE_FOREGROUND).getRGB());
+					if (item.isInGroup(Visualization.FOCUS_ITEMS)) {
+						item.setFillColor(prefs.getColor(
+								GraphConstants.NODE_SELECTED_BACKGROUND)
+								.getRGB());
+						item.setStrokeColor(prefs.getColor(
+								GraphConstants.NODE_SELECTED_FOREGROUND)
+								.getRGB());
+					} else {
+						item
+								.setFillColor(item
+										.getInt(GraphConstants.FILLCOLOR));
+						item.setStrokeColor(prefs.getColor(
+								GraphConstants.NODE_FOREGROUND).getRGB());
+					}
 					item.getVisualization().repaint();
 				}
 			}
@@ -378,6 +389,8 @@ public class GraphPanel extends JPanel {
 		if (node != null) {
 			TupleSet focusGroup = vis.getGroup(Visualization.FOCUS_ITEMS);
 			focusGroup.setTuple(node);
+			vis.run("draw");
+			vis.repaint();
 		}
 	}
 
