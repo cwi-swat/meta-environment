@@ -56,7 +56,7 @@ static ATerm makeSubType(ATerm type, ATerm subtype) {
     }
   }
 
-  ATwarning("configmanager: warning: ignoring subtype %t because supertype %t is already subtyped.\n", subtype, type);
+  /*ATwarning("configmanager: warning: ignoring subtype %t because supertype %t is already subtyped.\n", subtype, type);*/
   return type;
 }
 
