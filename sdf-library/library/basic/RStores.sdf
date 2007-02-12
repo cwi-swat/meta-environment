@@ -7,7 +7,7 @@ imports basic/Locations
 imports basic/IdentifierCon
 
 exports 
-sorts RElem RStore RType RTuple IntCon
+sorts RElem RStore RType RTuple
 
 %% This module defines a syntax for stores of typed relations
 
