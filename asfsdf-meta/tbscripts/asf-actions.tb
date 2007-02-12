@@ -173,6 +173,37 @@ in
   fi
 endlet
 
+process TestAction(EditorId : term) is
+let
+  ModuleId : term,
+  RunModuleId : term,
+  Path: str,
+  ResultTree: term,
+  Sid: term,
+  Pid: int,
+  Summary: term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "test", RunModuleId?)
+  .
+  if not-equal(RunModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . AddJob("Testing")
+    . Reduce(RunModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(convert-feedback(ResultTree))
+      . rec-msg(converted-feedback(Summary?))
+      . RefreshSummary(Summary)
+    else
+      tau
+    fi
+    . JobDone("Testing")
+  else
+    tau
+  fi
+endlet
+
 process CheckAction(EditorId : term) is
 let
   ModuleId : term,
