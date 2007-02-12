@@ -397,7 +397,11 @@ public class EditorPane extends JTextPane {
 		setCaretPosition(0);
 		while (replace(toBeFound, toReplaceWith, caseInsensitive, false, true)) {
 		}
-		setCaretPosition(cursor);
+		if (cursor > getDocument().getLength()) {
+			setCaretPositionAtEnd();
+		} else {
+			setCaretPosition(cursor);
+		}
 	}
 
 	public void gotoLine(int line) {

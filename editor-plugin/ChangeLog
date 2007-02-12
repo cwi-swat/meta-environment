@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Feb 12 15:57:44 CET 2007 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - Fix bug that sets the cursor behind the document lenght when using 
+     find/replace
+
 Fri Feb  9 13:48:39 CET 2007 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Add cancel option to close editor (except when the system deciceds to
