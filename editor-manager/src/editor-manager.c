@@ -100,13 +100,18 @@ ATerm create_session(int cid, const char *path) {
   assert(path != NULL);
 
   session = findSession(path);
-  if (session == NULL) {
-    EM_Sid sid = makeUniqueSessionId();
-    EM_EditorTypeList list = EM_makeEditorTypeListEmpty();
-    EM_SessionStatus status = EM_makeSessionStatusRunning();
-    session = EM_makeSessionDefault(sid, path, status, 0, list);
-    putSession(session);
+  if (session != NULL) {
+    EM_SessionStatus status = EM_getSessionStatus(session);
+    if (!EM_isSessionStatusZombie(status)) {
+      return sndValue(ATmake("session(<term>)", EM_getSessionId(session)));
+    }
   }
+
+  EM_Sid sid = makeUniqueSessionId();
+  EM_EditorTypeList list = EM_makeEditorTypeListEmpty();
+  EM_SessionStatus status = EM_makeSessionStatusRunning();
+  session = EM_makeSessionDefault(sid, path, status, 0, list);
+  putSession(session);
 
   return sndValue(ATmake("session(<term>)", EM_getSessionId(session)));
 }
