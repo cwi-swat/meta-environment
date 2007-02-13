@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 13 10:14:55 CET 2007 <kooiker@cwi.nl>
+ * semantics/asfc/src/c-code.c: fix overflow in implicit constant conversion
+   gcc warning in parsetable
+
 Thu Feb  8 15:59:44 CET 2007 <jurgenv@cwi.nl>
  * **/asfchecker.c: added check for use of lexical variables outside
    the context of a lexical constructor function.

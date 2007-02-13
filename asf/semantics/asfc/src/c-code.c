@@ -84,8 +84,8 @@ static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 	  fprintf(file, "\n\t");
 	}
       }
-
-      fprintf(file, "0x%02X\n};\n", data[i]);
+    
+      fprintf(file, "0x%02X\n};\n", (unsigned char) data[i]);
 
       return size;
     }
