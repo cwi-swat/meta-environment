@@ -491,6 +491,9 @@ public class StudioImpl implements Studio, GuiTif {
 					setTheme(theme);
 				}
 			});
+			if (theme.getName() == currentTheme.getName()) {
+				item.setSelected(true);
+			}
 			group.add(item);
 			themesMenu.add(item);
 		}
