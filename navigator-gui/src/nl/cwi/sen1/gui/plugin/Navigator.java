@@ -103,7 +103,6 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 	}
 
 	public void recAckEvent(ATerm t0) {
-
 	}
 
 	public void recTerminate(ATerm t0) {

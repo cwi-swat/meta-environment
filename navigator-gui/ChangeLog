@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 13 09:20:07 CET 2007 <kooiker@cwi.nl>
+ * src/**/ModuleTreeNode.java:
+   - Fix popup menu only shows on leafs
+
 Tue Jan 23 13:36:29 CET 2007 <kooiker@cwi.nl>
  * src/**/Navigator.java:
    - fix null pointer exception when Navigator is not initialized when updates

@@ -61,7 +61,7 @@ public class ModuleTreeNode {
 			childNode = getChild(childIndex);
 		}
 		if (childNode == null) {
-			childNode = new ModuleTreeNode(id, childName, p, false);
+			childNode = new ModuleTreeNode(null, childName, p, false);
 			children.add(getInsertIndex(childName), childNode);
 		}
 		path = path.getIoapiFactory().makePath_Relative(segments.getTail());
