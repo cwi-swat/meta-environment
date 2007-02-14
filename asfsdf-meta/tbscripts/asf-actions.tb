@@ -306,18 +306,17 @@ in
 endlet
 
 process RunAsfTestsAction(ModuleId : term) is
-  TestAsfSpecification(ModuleId) 
+  TestAsfSpecification(ModuleId, off) 
 
 process DebugRunAsfTestsAction(ModuleId : term) is
-  snd-msg(asfe-debugging(on))
-  . RunAsfTestsAction(ModuleId)
+  TestAsfSpecification(ModuleId, on)
 
 process EditorRunAsfTestsAction(EditorId : term) is
 let
   ModuleId : term
 in
   GetModuleId(EditorId, ModuleId?)
-  . TestAsfSpecification(ModuleId)
+  . TestAsfSpecification(ModuleId, off)
 endlet
 
 process AsfSdfApiGenAction(ModuleId: term) is

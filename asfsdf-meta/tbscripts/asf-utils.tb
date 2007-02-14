@@ -344,7 +344,7 @@ process GetSpecificationTests(Specification: term, Tests: term?) is
   snd-msg(extract-tests(Specification))
   . rec-msg(extract-tests-result(Tests?))
 
-process TestAsfSpecification(ModuleId: term) is
+process TestAsfSpecification(ModuleId: term, Debugging: term) is
 let
   Specification : term,
   Equations : term,
@@ -366,7 +366,7 @@ in
     . GetTermParseTable(ModuleId, ParseTable?)
     . snd-note(ui-status(endstat(Id))) 
     . snd-note(ui-status(stat(Id, "Running tests"))) 
-    . snd-msg(asfe-run-tests(Equations, Tests, ParseTable)) 
+    . snd-msg(asfe-run-tests(Equations, Tests, ParseTable, Debugging)) 
     .
     (
       rec-msg(asfe-test-results(Errors?)) 
