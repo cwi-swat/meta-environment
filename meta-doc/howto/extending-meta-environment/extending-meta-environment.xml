@@ -1804,7 +1804,7 @@ endlet</programlisting>
     <programlisting>process LoadMyPlugin is 
   snd-msg(load-jar("/home/mydir/myplugin.jar","/home/mydir/aterm-java.jar:/usr/local/bla/classes"))</programlisting>
 
-    <para>Make sure that you substiture the correct directories in this
+    <para>Make sure that you substitute the correct directories in this
     ToolBus script at installation time.</para>
 
     <para>Note that the main class that is executed must implement the

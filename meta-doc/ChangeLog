@@ -1,5 +1,9 @@
 
 
+Wed Feb 14 09:46:33 CET 2007 <jurgenv@cwi.nl>
+ * moved 'architecture-meta-environment' from learning about to
+   understanding.
+
 Sun Oct  1 19:42:07 CEST 2006 <jurgenv@cwi.nl>
  * website.sh: png, gif and jpg pictures in every directory are
    also put online by website.sh
