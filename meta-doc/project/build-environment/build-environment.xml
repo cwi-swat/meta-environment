@@ -7,11 +7,9 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title
-    xlink:href="http://homepages.cwi.nl/~daybuild/daily-books/project/build-environment.html">Build
-    environment of The Meta-Environment</title>
+    <title>Build environment of The Meta-Environment</title>
 
-    <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100
     (Wed, 13 Dec 2006)$</pubdate>
 
     <authorgroup>
