@@ -4,6 +4,8 @@ equations
 
   [1]   natcon(0y) = Nat when Nat := natcon(y)
 
+equations
+
 %% -- addition --
    [2]    0 + Nat = Nat
    [3]    Nat + 0 = Nat
@@ -50,6 +52,8 @@ equations
           ===>
           natcon(y1 c1) + natcon(c2) = natcon(y c)
 
+equations
+
    [86]   natcon(c) -// natcon(c) = 0
    [87]   natcon(c) -// 0 = natcon(c)
    [88]   2 -// 1 = 1
@@ -71,6 +75,8 @@ equations
    [127]  10 -// 4 = 6    [128]  10 -// 5 = 5    [129]  10 -// 6 = 4
    [130]  10 -// 7 = 3    [131]  10 -// 8 = 2    [132]  10 -// 9 = 1
 
+equations
+
 %% -- auxiliary function gt
 
    [133]  natcon(c) := natcon(c1) -// natcon(c2),
@@ -83,6 +89,8 @@ equations
    [136]  gt(natcon(y1), natcon(y2)) == true
           ===>
           gt(natcon(y1 c1), natcon(y2 c2)) = true
+
+equations
 
 %% -- auxiliary function >- , partial substraction
 
@@ -102,16 +110,20 @@ equations
           ===>
           natcon(y1 c1) >- natcon(x2 c2) = natcon(y c)
 
+equations
 
 %% -- cut off subtraction -/
    [140]  gt(Nat1, Nat2) == true  === Nat1 -/ Nat2 = Nat1 >- Nat2
    [141]  gt(Nat1, Nat2) != true === Nat1 -/ Nat2 = 0
 
+equations
 %% -- subtraction of naturals
 
    [142]  gt(Nat1, Nat2) == true === Nat1 - Nat2 = Nat1 >- Nat2
 
    [143]  gt(Nat1, Nat2) != true === Nat1 - Nat2 = -(Nat2 >- Nat1)
+
+equations
 
    %% -- multiplication of naturals --
    [144] Nat * 0 = 0
@@ -124,6 +136,8 @@ equations
          ===>
          natcon(y1) * natcon(y2 c) =
                         natcon(y 0) + natcon(y1) * natcon(c)
+
+equations
 
 %% -- addition,  subtraction, and multiplication of integers
    [148]  +Nat = Nat
@@ -140,6 +154,8 @@ equations
    [156]  Nat := Nat1 * Nat2 === -Nat1 * Nat2 = -Nat
    [157]  -Nat1 * -Nat2 = Nat1 * Nat2
 
+equations
+
 %% -- relational operators
    [158]  gt(Nat1, Nat2) == true === Nat1 > Nat2 = true
    [159]  gt(Nat1, Nat2) != true === Nat1 > Nat2 = false
@@ -153,6 +169,7 @@ equations
    [165]  Int1 < Int2 = not(Int1 >= Int2)
    [166]  Int1 <= Int2 = not(Int1 > Int2)
 
+equations
 %% -- no minus zero
    [167] - 0 = 0
 
@@ -162,10 +179,15 @@ equations
    [169] min(Int1, Int2) = Int1 when Int1 < Int2 == true
    [default] min(Int1, Int2) = Int2
 
-   [170] Nat1 > Nat2 == true
+equations
+
+   [170] Nat1 >= Nat2 == true
          ===>
-         remainder(Nat1, Nat2) = remainder(Nat1 -/ Nat2, Nat2)
-   [default] remainder(Nat1, Nat2) = Nat1
+         mod(Nat1, Nat2) = mod(Nat1 -/ Nat2, Nat2)
+
+   [default] mod(Nat1, Nat2) = Nat1
+
+equations
 
    [171] ndiv(Nat, Nat) = 1
    [172] Nat1 > Nat2 == true, 
@@ -173,6 +195,8 @@ equations
          ===>
          ndiv(Nat1, Nat2) = Nat
    [173] Nat1 < Nat2 == true === ndiv(Nat1, Nat2) = 0
+
+equations
 
    [174] (- Nat1) / Nat2 = - ndiv(Nat1, Nat2)
    [175] Nat1 / (- Nat2) = - ndiv(Nat1, Nat2)
@@ -199,5 +223,7 @@ tests
 [priority-minus-star] 2 - 2 * 3 == -4
 [max-test] max(2,3) == 3
 [max-test-2] max(3,2) == 3
+[div-0] 10 / 1 == 10
+[div-2] 10 / 2 == 5
 
 

@@ -9,16 +9,16 @@ context-free start-symbols
 
 exports
 context-free syntax
-  Integer ">" Integer         -> Boolean           
-  Integer ">=" Integer        -> Boolean           
-  Integer "<" Integer         -> Boolean           
-  Integer "<=" Integer        -> Boolean           
-  Integer "==" Integer        -> Boolean           
-  max(Integer, Integer)       -> Integer           
-  min(Integer, Integer)       -> Integer           
-  remainder(Integer, Integer) -> Integer           
-  ndiv(Integer, Integer)      -> Integer           
-  "(" Integer ")"             -> Integer {bracket} 
+  Integer ">" Integer    -> Boolean           
+  Integer ">=" Integer   -> Boolean           
+  Integer "<" Integer    -> Boolean           
+  Integer "<=" Integer   -> Boolean           
+  Integer "==" Integer   -> Boolean           
+  max(Integer, Integer)  -> Integer           
+  min(Integer, Integer)  -> Integer           
+  mod(Integer, Integer)  -> Integer           
+  ndiv(Integer, Integer) -> Integer           
+  "(" Integer ")"        -> Integer {bracket} 
 
 context-free priorities
   { non-assoc: "+" integer:Integer -> Integer {non-assoc} 
