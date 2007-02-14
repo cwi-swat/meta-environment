@@ -10,6 +10,9 @@ exports
     get-module-name(Module)          -> ModuleId
     get-module-id(ModuleName)        -> ModuleId
 
+
+    "ModuleId" -> ModuleId {reject}
+
 hiddens
   variables
     "$ImpSection*"[0-9]* -> ImpSection*

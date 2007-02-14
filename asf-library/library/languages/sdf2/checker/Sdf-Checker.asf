@@ -31,14 +31,14 @@ equations
 
   [cs-1'1] InfoMsgTuple1 := check-labels-definition(Definition1, [{}]),
            Definition2 := remove-labels(Definition1),
-           InfoMsgTuple2 := check-sorts-and-prods(ModuleId, Definition2, InfoMsgTuple1),
+           InfoMsgTuple2 := check-sorts-and-prods($ModuleId, Definition2, InfoMsgTuple1),
            InfoMsgTuple3 := check-sdf-attributes(Definition2, InfoMsgTuple2)
            ====>
            check-sdf(Definition1, $ModuleId, false) =  InfoMsgTuple3
 
   [cs-1'1] InfoMsgTuple1 := check-labels-definition(Definition1, [{}]),
            Definition2 := remove-labels(Definition1),
-           InfoMsgTuple2 := check-sorts-and-prods(ModuleId, Definition2, InfoMsgTuple1),
+           InfoMsgTuple2 := check-sorts-and-prods($ModuleId, Definition2, InfoMsgTuple1),
            InfoMsgTuple3 := check-sdf-attributes(Definition2, InfoMsgTuple2)
            ====>
            check-sdf(Definition1, $ModuleId, true) = InfoMsgTuple3
@@ -117,7 +117,7 @@ equations
             ModuleInfoTable2 := mark-modules-as-unchecked(ModuleInfoTable1),
             InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
             InfoMsgTuple3 := check-modules(Definition, Definition, InfoMsgTuple2),
-            InfoMsgTuple4 := post-check-modules(ModuleId, Definition, imports(), InfoMsgTuple3)
+            InfoMsgTuple4 := post-check-modules($ModuleId, Definition, imports(), InfoMsgTuple3)
             ====>
             check-sorts-and-prods($ModuleId, Definition, InfoMsgTuple) = InfoMsgTuple4
 
@@ -180,7 +180,7 @@ equations
  [pcm-1'1] $ModuleId2 := get-module-name(Module)
            ====>
            post-check-modules($ModuleId, Module Module*, imports(Import*), InfoMsgTuple) = 
-              post-check-modules($ModuleId2, Module*, imports($ModuleId Import*), InfoMsgTuple)
+              post-check-modules($ModuleId, Module*, imports($ModuleId2 Import*), InfoMsgTuple)
 
  [pcm-2'1] DeclaredSymbolPairSet := 
              get-declared-symbols(Import*, get-module-info(InfoMsgTuple1)),
@@ -197,10 +197,10 @@ equations
            SymbolsSet2 := diff(merge(DeclaredSymbolPairSet, 
                                      AliasedSymbolPairSet),
                                SymbolsSet1),
-           $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort"),
+           $Msgs2 := make-symbol-warnings(SymbolsSet2, "symbol is not used anywhere"),
            SymbolsSet3 := diff(diff(diff(SymbolsSet1,
                                DefinedSymbolPairSet), RenamedSymbolPairSet2), RenamedSymbolPairSet),
-           $Msgs3 := make-symbol-errors(SymbolsSet3, "use of undefined symbol"),
+           $Msgs3 := make-symbol-errors(SymbolsSet3, "symbol is not defined by any production"),
 
            InfoMsgTuple2 := put-messages($ModuleId, $Msgs2, $Msgs3, InfoMsgTuple1)
            ====>

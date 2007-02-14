@@ -1,5 +1,10 @@
 $Id$
 
+Wed Feb 14 09:37:32 CET 2007 <jurgenv@cwi.nl>
+ * languages/sdf2/checker/Sdf-Checker.asf: fixed a weird bug (import
+   relation was inverted by an equation at post-check time). Also, I improved
+   a number of error messages, by explaining in the error message why an attribute is 'illegal'.
+
 Mon Jan 29 16:19:00 CET 2007 <kooiker@cwi.nl>
  * basic/Integers.{asf,sdf}: added division, remainder and min
  * basic/{Area,Location}Operations.{asf,sdf}: added access functions

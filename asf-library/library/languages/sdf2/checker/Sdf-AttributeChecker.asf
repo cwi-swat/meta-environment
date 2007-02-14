@@ -14,14 +14,14 @@ equations
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: bracket", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("bracket attribute should be applied to productions of the form '\"...\" X \"...\" -> X'", $String, $Location), InfoMsgTuple)
 
   [ca-2'2] $FuncName( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2} := Production,
            $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) =
-             put-messages($ModuleId, make-warning("illegal attribute: bracket", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("bracket attribute should not be applied to prefix function", $String, $Location), InfoMsgTuple)
 
   [ca-2'3] $Symbol* -> $Symbol {Attr*1, left, Attr*2} := Production,
            $Location := get-location(Production),
@@ -29,14 +29,14 @@ equations
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId,  make-warning("illegal attribute: left", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId,  make-warning("left attribute should be applied to productions of the form 'X ... X -> X'", $String, $Location), InfoMsgTuple)
 
   [ca-2'4] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2} := Production,
            $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: left", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("left attribute has no effect on prefix production", $String, $Location), InfoMsgTuple)
 
   [ca-2'5] $Symbol* -> $Symbol {Attr*1, assoc, Attr*2} := Production,
            $Location := get-location(Production),
@@ -44,14 +44,14 @@ equations
            $String := production2str(Production)
            =================================================
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: assoc", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("assoc attribute should be applied to productions of the form 'X ... X -> X'", $String, $Location), InfoMsgTuple)
 
   [ca-2'6] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2} := Production,
            $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: assoc", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("assoc attribute has no effect on prefix production", $String, $Location), InfoMsgTuple)
 
   [ca-2'7] $Symbol* -> $Symbol {Attr*1, right, Attr*2} := Production,
            $Location := get-location(Production),
@@ -59,7 +59,7 @@ equations
            $String := production2str(Production)
            =================================================
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: right", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("right attribute should be applied to productions of the form 'X ... X -> X'", $String, $Location), InfoMsgTuple)
 
 
   [ca-2'8] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2} := Production,
@@ -67,7 +67,7 @@ equations
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: right", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("right attribute should be applied to productions of the form 'X ... X -> X'", $String, $Location), InfoMsgTuple)
 
   [ca-2'8] $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
            $Location := get-location(Production),
@@ -75,14 +75,14 @@ equations
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: non-assoc", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("non-assoc attribute has no effect on non-recursive production", $String, $Location), InfoMsgTuple)
 
   [ca-2'9] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
            $Location := get-location(Production),
            $String := production2str(Production)
            ====>
            check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
-             put-messages($ModuleId, make-warning("illegal attribute: non-assoc", $String, $Location), InfoMsgTuple)
+             put-messages($ModuleId, make-warning("non-assoc attribute should be applied to productions of the form 'X ... X -> X'", $String, $Location), InfoMsgTuple)
 
 equations
 
