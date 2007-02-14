@@ -1,5 +1,11 @@
 $Id$
 
+Wed Feb 14 08:50:33 CET 2007 <jurgenv@cwi.nl>
+ * sdf-checker/src/Sdf-Checker.c: regenerated after fixing a weird bug (import
+   relation was inverted by an equation at post-check time). Also, I improved
+   a number of error messages, by explaining in the error message why an attribute is 'illegal'.
+
+
 Tue Jan 30 07:52:14 CET 2007 <jurgenv@cwi.nl>
  * src/Sdf2-Normalization.c: forgot to implement renaming for non-transitive
    priorities.
