@@ -30,7 +30,6 @@ in
     . snd-ack-event(T, module-selected(ModuleId))
   +
     rec-event(T, mouse-event(navigator(ModuleId?),popup))
-    . printf("request-popup-event: %t\n", ModuleId)
     . snd-msg(nav-request-popup-event(ModuleId))
     . snd-ack-event(T, mouse-event(navigator(ModuleId),popup))
   +
