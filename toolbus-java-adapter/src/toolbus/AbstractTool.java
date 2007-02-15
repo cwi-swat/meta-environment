@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
@@ -222,7 +221,7 @@ abstract public class AbstractTool implements Tool, Runnable {
     }
 
     public void sendTerm(ATerm term) throws IOException {
-    	synchronized (getLockObject()) {
+        synchronized (getLockObject()) {
             String unparsedTerm = term.toString();
             int size = unparsedTerm.length();
             String lenspec = "000000000000" + (size + LENSPEC) + ":";
@@ -313,7 +312,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 				handleIncomingTerm();
 			}
 		} catch (IOException e) {
-			if (connected && !(e instanceof SocketException)) {
+			if (connected) {
 				e.printStackTrace();
 				throw new RuntimeException("IOException: " + e.getMessage());
 			}

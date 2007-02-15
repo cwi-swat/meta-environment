@@ -1,12 +1,9 @@
 package toolbus;
 
-import java.io.IOException;
-import java.net.SocketException;
+import java.io.*;
+import javax.swing.*;
 
-import javax.swing.SwingUtilities;
-
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 abstract public class SwingTool extends AbstractTool {
 
@@ -20,10 +17,7 @@ abstract public class SwingTool extends AbstractTool {
                 try {
                     handleTerm(t);
                 } catch (IOException e) {
-                	if (e instanceof SocketException) {
-                		System.exit(0);
-                	}
-                	e.printStackTrace();
+                    e.printStackTrace();
                     throw new RuntimeException(e.getMessage());
                 }
             }
