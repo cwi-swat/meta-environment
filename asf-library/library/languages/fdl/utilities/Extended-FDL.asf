@@ -1,0 +1,26 @@
+equations
+
+[xfdl-to-bdd-top]
+	xfdl-to-bdd($featurediagram) = formula-to-bdd(fdl-to-formula($featurediagram, T))
+
+equations
+
+[fdl-to-formula-trv-1]
+	fdl-to-formula($featurename: $featureexpression, $formula) =
+		$formula & ($featurename <-> feature-to-formula($featureexpression))
+
+[fdl-to-formula-trv-2]
+	fdl-to-formula($featurename1 requires $featurename2, $formula) =
+		$formula & ($featurename1 -> $featurename2)
+
+[fdl-to-formula-trv-3]
+	fdl-to-formula($featurename1 and $featurename2 requires $featurename3, $formula) =
+		$formula & (($featurename1 & $featurename2) -> $featurename3)
+
+equations
+
+[feature-to-formula-name]
+	feature-to-formula($featurename) = $featurename
+
+
+

@@ -31,10 +31,10 @@ context-free syntax
 
 context-free priorities
 
-	lhs:Formula "&" rhs:Formula -> Formula {cons("conjunction"),assoc}
+	lhs:Formula "&" rhs:Formula -> Formula {assoc}
 	> {
-	lhs:Formula "^" rhs:Formula -> Formula {cons("exclusive"),assoc}
-	lhs:Formula "|" rhs:Formula -> Formula {cons("disjunction"),assoc} 
+	lhs:Formula "^" rhs:Formula -> Formula {assoc}
+	lhs:Formula "|" rhs:Formula -> Formula {assoc} 
 	}
 	> {
 	ant:Formula "->" cons:Formula -> Formula {cons("implication"),right}
@@ -44,6 +44,5 @@ context-free priorities
 
 hiddens
 variables
-	[xyz][0-9\']* -> Term-Var
 	"psi" -> Formula
 	"phi" -> Formula

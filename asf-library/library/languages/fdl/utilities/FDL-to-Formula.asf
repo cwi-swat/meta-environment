@@ -122,9 +122,14 @@ equations
 		not(atomic-feature-to-atom($atomicfeature))
 
 
-[atomic-feature-to-atom-top]	
-	atomic-feature-to-atom(atomicfeature($char+)) = 
-		logical-var($char+)
+[atomic-feature-to-atom-1]
+	atomic-feature-to-atom(atomicfeature($head)) = logical-var($head)
+
+[atomic-feature-to-atom-1]	
+	logical-var(x $tail') := atomic-feature-to-atom(atomicfeature(x $tail))
+	===
+	atomic-feature-to-atom(atomicfeature($head $tailchar $tail)) = 
+		logical-var($head $tailchar $tail')
 
 
 

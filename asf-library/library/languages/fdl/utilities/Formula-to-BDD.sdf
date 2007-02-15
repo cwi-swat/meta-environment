@@ -48,9 +48,7 @@ variables
 	"go"[0-9\']* -> Guard-Order
 	[pq][0-9\']* -> Logical-Var
 	[pq][\*][0-9\']* -> {Logical-Var ","}*
-	[xyzuv][0-9\']* -> Term-Var	
 	"phi"[0-9\']* -> Formula
 	"psi"[0-9\']* -> Formula
 	"ksi"[0-9\']* -> Formula
 	"g"[0-9\']* -> Formula
-	"s"[0-9\']* -> String

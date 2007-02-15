@@ -18,6 +18,7 @@
 module languages/fdl/utilities/bdd/Disjunction
 
 exports
+sorts Formula
 
 context-free syntax
 	lhs:Formula "|" rhs:Formula -> Formula {cons("disjunction"),assoc}

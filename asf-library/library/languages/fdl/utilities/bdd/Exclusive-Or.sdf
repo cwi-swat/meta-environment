@@ -26,8 +26,8 @@ context-free syntax
 	lhs:Formula "^" rhs:Formula -> Formula {cons("exclusive"),assoc}
 
 context-free priorities
-	lhs:Formula "&" rhs:Formula -> Formula {cons("conjunction"),assoc}
+	lhs:Formula "&" rhs:Formula -> Formula {assoc}
 	> {
 	lhs:Formula "^" rhs:Formula -> Formula {cons("exclusive"),assoc}
-	lhs:Formula "|" rhs:Formula -> Formula {cons("disjunction"),assoc}
+	lhs:Formula "|" rhs:Formula -> Formula {assoc}
 	}

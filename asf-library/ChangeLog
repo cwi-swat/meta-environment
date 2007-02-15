@@ -1,5 +1,10 @@
 $Id$
 
+
+2007-02-15    <storm@cwi.nl>
+ * languages/fdl/utilities/{Extended-FDL,Solution-FDL}.{asf,sdf}: added
+   new fdl utilies and made the BDD stuff to work in the new environment.
+
 Wed Feb 14 09:37:32 CET 2007 <jurgenv@cwi.nl>
  * languages/sdf2/checker/Sdf-Checker.asf: fixed a weird bug (import
    relation was inverted by an equation at post-check time). Also, I improved

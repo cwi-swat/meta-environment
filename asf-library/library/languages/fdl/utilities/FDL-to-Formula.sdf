@@ -12,7 +12,6 @@ context-free syntax
 
 	feature-to-formula(FeatureExpression) -> Formula
 
-hiddens
 context-free syntax
 	constraints-to-formula(Constraint*) -> Formula
 	constraint-to-formula(Constraint) -> Formula
@@ -44,3 +43,7 @@ variables
 	"$featurename"[0-9\']* -> FeatureName
 	"$formula"[0-9\']* -> Formula
 
+lexical variables
+	"$head"[0-9\']* -> [a-z]
+ 	"$tail"[0-9\']* -> [a-zA-Z0-9\-\_]*
+ 	"$tailchar"[0-9\']* -> [a-zA-Z0-9\-\_]
