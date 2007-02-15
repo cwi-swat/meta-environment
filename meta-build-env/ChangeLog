@@ -1,4 +1,7 @@
+$Id$
 
+Thu Feb 15 14:52:40 CET 2007 <kooiker@cwi.nl>
+ * meta-projectSet.psf: Add Eclipse team environment
 
 Mon Sep 25 17:19:34 CEST 2006 <jurgenv@cwi.nl>
  * Makefile.top.meta: if the including Makefile.am defines the

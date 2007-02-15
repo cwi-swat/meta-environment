@@ -11,7 +11,7 @@ pkgdata_DATA 	= \
 		  Doxyfile.meta \
 		  doc-header.html
 
-EXTRA_DIST	= meta-build.src $(pkgdata_DATA)
+EXTRA_DIST	= meta-build.src meta-projectSet.psf $(pkgdata_DATA)
 
 CLEANFILES = meta-build
 
