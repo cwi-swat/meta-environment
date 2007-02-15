@@ -1,5 +1,9 @@
 $Id$
 
+Thu Feb 15 09:47:04 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/{sdf,term}-editor-utils.tb:
+   - Remove summaries after editor is changed (closes #708).
+
 Fri Feb  9 11:46:24 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-meta.tb:
    - Start SynchronizeModuleSelection process from sdf-meta. 

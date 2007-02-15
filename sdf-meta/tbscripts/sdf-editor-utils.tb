@@ -56,6 +56,7 @@ in
     +
       rec-msg(te-contents-changed(Sid))
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
+      . RemoveSummaryFor(Path)
     +
       rec-msg(te-contents-saved(Sid))
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
