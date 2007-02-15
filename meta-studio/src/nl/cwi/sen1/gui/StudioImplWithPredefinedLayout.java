@@ -76,6 +76,7 @@ public class StudioImplWithPredefinedLayout extends StudioImpl implements
                 rootWindow.setWindow(splitWindow);
             }
         }
+
         tabWindow.addTab(view);
         view.requestFocus();
         rootWindow.revalidate();
