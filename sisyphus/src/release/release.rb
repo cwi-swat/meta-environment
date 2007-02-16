@@ -4,6 +4,7 @@ require 'building/config'
 require 'versioning/vcs'
 require 'versioning/revision'
 require 'versioning/component'
+require 'bundle'
 
 require 'tmpdir'
 
@@ -22,6 +23,26 @@ def autobundle(name, version)
   system("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
   return name + "-bundle-" + version
 end
+
+
+  def ariadne_bundle(item, output_dir = Dir.tmpdir)   
+    deps = {}
+    item.edges.each do |i1, i2|
+      pkg1 = BundlePackage.new(i1.name, i1.targz_version)
+      pkg2 = BundlePackage.new(i2.name, i2.targz_version)
+      deps[pkg1] ||= []
+      deps[pkg2] ||= []
+      deps[pkg1] << pkg2
+    end
+
+    # Todo: from -u
+    location = 'http://sisyphus.sen.cwi.nl:8080/downloads'
+    # The list of packages must be in topological sort!
+    bundle = Bundle.new(item.name, item.targz_version, deps.tsort, deps, location)
+    gen = BundleGenerator.new(bundle, output_dir)
+    return gen.generate # returns path of bundle targz
+  end
+
 
 def package_names(builds)
   packages = builds.collect do |build|
@@ -46,7 +67,7 @@ end
 def copy_src_dists(sisyphus_dist_location, packages)
     packages.each do |pkg|
       system("cp #{sisyphus_dist_location}/#{pkg}.tar.gz .")
-      system("cp #{sisyphus_dist_location}/#{pkg}.pkg .")
+      #system("cp #{sisyphus_dist_location}/#{pkg}.pkg .")
       system("tar zxvf #{pkg}.tar.gz")
       system("rm #{pkg}.tar.gz")
     end
@@ -84,15 +105,18 @@ end
 
 
 def create_bundle_for_build(root)    
-  name = root.name
-  version = root.si_revision.informative_version.strip
-  bundle_name = autobundle(name, version)
+  bundle_archive = ariadne_bundle(root)
+  if bundle_archive =~ /^(.*)\.tar\.gz$/ then
+    bundle_name = $1
+  else
+    bundle_name = bundle_archive
+  end
   return bundle_name
 end
 
 def create_bundles_for_packages(packages)
   packages.each do |pkg|
-    autobundle(package_stem(pkg), package_version(pkg))
+    ariadne_bundle(pkg)
   end
 end
 
@@ -205,7 +229,7 @@ if __FILE__ == $0 then
     
     copy_src_dists(src_dist_location, packages)
     packages = rename_packages_and_archives(map, packages)
-    rename_package_definitions_in_archives(map, packages, collect_url)
+    #rename_package_definitions_in_archives(map, packages, collect_url)
 
     bundle_name = create_bundle_for_build(root)
     collect_bundle(bundle_name, 'file://' + workdir, collect_url)
