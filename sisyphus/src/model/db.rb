@@ -201,6 +201,27 @@ module Model
       end
     end
 
+    def edges
+      result = []
+      as_edges do |n1, n2|
+        result << [n1, n2]
+      end
+      return result.uniq
+    end
+  
+    def targz_version
+      return "#{informative_version}pre.#{version}.#{id}"
+    end
+    
+    def targz
+      return "#{name}-#{targz_version}.tar.gz"
+    end
+    
+    def bundle_targz
+      return "#{name}-bundle-#{targz_version}.tar.gz"
+    end
+
+
     def to_s
       return "<#{id}:#{si_revision}:#{success}>"
     end
