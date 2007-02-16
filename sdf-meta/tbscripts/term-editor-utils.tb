@@ -48,7 +48,7 @@ in
         MouseClicked(Sid)
       +
         rec-msg(te-contents-changed(Sid))
-        . TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree.")
+        /*. TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree.")*/
         . snd-note(term-modified(Path))
         . RemoveSummaryFor(Path)
       +
@@ -57,7 +57,7 @@ in
         . UpdateTermStructure(Sid)
       +
         rec-note(mm-attribute-changed(Event?))
-        . printf("SDF changed so must reparse editor\n")
+        /*. printf("SDF changed so must reparse editor\n")*/
         . ClearTermParsetreeCache(Path)
         . UpdateTermStructure(Sid)
       )
