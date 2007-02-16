@@ -322,7 +322,7 @@ vcs_init() {
 init_autotools()
 {
    pkg=$1
-   (  cd ${pkg}; aclocal; autoheader; libtoolize; automake -a; autoconf ) \\
+   (  cd ${pkg}; ./reconf ) \\
       2>/dev/null 1>/dev/null
 }
 
@@ -331,14 +331,9 @@ init_autotools()
 autotools_pkg_version()
 {
    pkg=$1
-   if [ -f ${pkg}/configure.ac ]; then
-      CONFIG_FILE=${pkg}/configure.ac
-   else
-      CONFIG_FILE=${pkg}/configure.in
-   fi
-   pkg_version=`grep 'AC_INIT' ${CONFIG_FILE} \\
-                | cut -d, -f2 \\
-                | tr -d '[( )]'`
+   CONFIG_FILE=${pkg}/${pkg}.pc.in
+   pkg_version=`grep 'Version' ${CONFIG_FILE} \\
+                | cut -d ' ' -f2`
 }
 
 do_collect () {
@@ -354,7 +349,20 @@ do_collect () {
 
          # Obtain sources using svn checkout
          rm -f ${pkg}
-         svn checkout -q ${svnroot}/${pkg}
+         svn checkout -q ${svnroot}/${pkg}/trunk ${pkg}
+        
+         vcs_init ${pkg}
+
+         ;;
+
+      svn+ssh://* )
+         echo "Obtaining \"${pkg}\" from Subversion.">&2
+         #svnroot=`echo ${pkg_url} | sed 's@svn://@@g'`
+         svnroot=${pkg_url}
+
+         # Obtain sources using svn checkout
+         rm -f ${pkg}
+         svn export -q ${svnroot}/${pkg}/trunk ${pkg}
         
          vcs_init ${pkg}
 
@@ -426,7 +434,7 @@ ALL_PKGS="`grep -v '^#' ${PKG_LIST} | cut -d, -f1`"
 
 if [ "a${PKGS}" = "a" ]; then
   PKGS="${ALL_PKGS}"
-  fi
+fi
   
   tmp_PKG_LIST=${tmp}.pkgs
 rm -f  ${tmp_PKG_LIST}
@@ -459,6 +467,9 @@ pkg_name="`grep 'AC_INIT' ${CONFIGURE} \\
             | tr '[a-z]' '[A-Z]'`"
 
 # Generate text file describing all packages in an autobundle package 
+#pkg_version=`grep 'AC_INIT' ${CONFIGURE} \\
+#             | cut -d, -f2 \\
+#             | tr -d '[( )]'`
 pkg_version=`grep 'AC_INIT' ${CONFIGURE} \\
              | cut -d, -f2 \\
              | tr -d '[( )]'`
@@ -482,7 +493,7 @@ echo
 echo "${pkg_name} is bundled on `date '+%c'` with"
 echo "autobundle (http://www.cwi.nl/~mdejonge/autobundle/)."
 
-cp) > SOFTWARE
+) > SOFTWARE
 END_OF_COLLECT_SH
 
 PRE_CHECKS_MAKEFILE_AM =<<END_OF_MAKEFILE_AM

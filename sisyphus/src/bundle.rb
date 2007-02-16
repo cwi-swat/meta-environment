@@ -15,7 +15,6 @@ class Hash
   end
 end
 
-
 class Bundle
   attr_reader :name, :version, :packages, :dependencies, :location
   def initialize(name, version, packages, dependencies, location)
@@ -31,10 +30,6 @@ class BundleGenerator
   include BundleTemplates
   attr_reader :bundle
 
-  # Fix this, please
-  #AUTOCONF = '/ufs/sen1/software/installed/autoconf-2.59/linux/i686/bin/autoconf'
-  #AUTOMAKE = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/automake'
-  #ACLOCAL = '/ufs/sen1/software/installed/automake-1.7.9/linux/i686/bin/aclocal' 
   AUTOCONF = 'autoconf'
   AUTOMAKE = 'automake'
   ACLOCAL = 'aclocal'
@@ -59,6 +54,7 @@ class BundleGenerator
     generate_pkg_list
     run_autotools
     make_tar_gz
+    return File.join(@target_dir, bundle_targz)
   end
 
   def bundle_stem
@@ -137,7 +133,11 @@ class BundleGenerator
   end
 
   def make_tar_gz
-    `cd #{@target_dir} ; tar cvf - #{bundle_stem} | gzip -c > #{bundle_stem}.tar.gz ; cd -`
+    `cd #{@target_dir} ; tar cvf - #{bundle_stem} | gzip -c > #{bundle_targz} ; cd -`
+  end
+
+  def bundle_targz
+    return "#{bundle_stem}.tar.gz"
   end
   
 end
