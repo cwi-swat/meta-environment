@@ -1,9 +1,9 @@
 
-bin_SCRIPTS	= si-cli boot-roll roll release ariadne
+bin_SCRIPTS	= si-cli boot-roll roll release ariadne ophion
 
 EXTRA_DIST	= $(wildcard *.sh.src)
 
-CLEANFILES	= si-cli boot-roll roll release ariadne
+CLEANFILES	= si-cli boot-roll roll release ariadne ophion
 
 % : %.sh.src 
 	sed "s@__PREFIX__@$(prefix)@g;\
