@@ -351,7 +351,10 @@
       We will consider a number of examples, trying to isolate one particular
       ambiguous concept in expression grammars at a time.</para>
 
-      <para><programlisting>module Expressions
+      <section>
+        <title>Associativity of a binary operator</title>
+
+        <para><programlisting>module Expressions
 
 exports
 sorts E
@@ -366,46 +369,47 @@ context-free syntax
   "e"       -&gt; E
   E "*" E   -&gt; E
   "(" E ")" -&gt; E {bracket}</programlisting>This simple grammar is already
-      ambiguous. Let's parse the following string:</para>
+        ambiguous. Let's parse the following string:</para>
 
-      <programlisting>e * e * e</programlisting>
+        <programlisting>e * e * e</programlisting>
 
-      <para>This has two possible derivations:</para>
+        <para>This has two possible derivations:</para>
 
-      <figure>
-        <title>A problem with associativity of an operator</title>
+        <figure>
+          <title>A problem with associativity of an operator</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="assoc.png"></imagedata>
-          </imageobject>
-        </mediaobject>
-      </figure>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="assoc.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
 
-      <para>We recognize the following <emphasis
-      role="bold">symptoms</emphasis> in these trees:</para>
+        <para>We recognize the following <emphasis
+        role="bold">symptoms</emphasis> in these trees:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>The top nodes of both alternatives have the same
-          production</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>The top nodes of both alternatives have the same
+            production</para>
+          </listitem>
 
-        <listitem>
-          <para>This production has itself as one of its direct children in
-          both derivations</para>
-        </listitem>
+          <listitem>
+            <para>This production has itself as one of its direct children in
+            both derivations</para>
+          </listitem>
 
-        <listitem>
-          <para>Which child it is is different for each derivation. For one it
-          is the left child, for the other it is the right child</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>Which child it is, is different for each derivation. For one
+            it is the left-most child, for the other it is the right-most
+            child</para>
+          </listitem>
+        </itemizedlist>
 
-      <para>The problem is easily solved by using SDF's associativity
-      attributes:</para>
+        <para>The problem is easily solved by using SDF's associativity
+        attributes:</para>
 
-      <programlisting>module Expressions
+        <programlisting>module Expressions
 
 exports
 sorts E
@@ -421,25 +425,30 @@ context-free syntax
   E "*" E   -&gt; E {left}
   "(" E ")" -&gt; E {bracket}</programlisting>
 
-      <para>The {left} attribute declares that any right-most child of a "*"
-      which is a "*" itself will be filtered. This solves the problem without
-      changing anything else in the grammar. Similarly, you might have used
-      {right} for the opposite solution, or {non-assoc} for filtering all
-      direct children. With {assoc} you effectively force the user to write
-      brackets around every recursive application of "*".</para>
+        <para>The {left} attribute declares that any right-most child of a "*"
+        which is a "*" itself will be filtered. This solves the problem
+        without changing anything else in the grammar. Similarly, you might
+        have used {right} for the opposite solution, or {non-assoc} for
+        filtering all direct children. With {assoc} you effectively force the
+        user to write brackets around every recursive application of
+        "*".</para>
 
-      <note>
-        <para>The {bracket} attribute is NOT a disambiguation construct. It is
-        used by tree matchers and tree walkers to identify production rules
-        that do not have semantics and may ignored. It is also used by pretty
-        printers to introduce brackets at the appropriate places when
-        necessary.</para>
-      </note>
+        <note>
+          <para>The {bracket} attribute is NOT a disambiguation construct. It
+          is used by tree matchers and tree walkers to identify production
+          rules that do not have semantics and may ignored. It is also used by
+          pretty printers to introduce brackets at the appropriate places when
+          necessary.</para>
+        </note>
+      </section>
 
-      <para>The next expression grammar has a different, but related
-      problem:</para>
+      <section>
+        <title>Priorities between binary operators</title>
 
-      <programlisting>module languages/sdf2/idioms/Expressions
+        <para>The next expression grammar has a different, but related
+        problem:</para>
+
+        <programlisting>module Expressions
 
 exports
 sorts E
@@ -455,48 +464,54 @@ context-free syntax
   E "*" E -&gt; E {left}
   E "+" E -&gt; E {left}</programlisting>
 
-      <para>Now we parse this string, and we obtain two trees:</para>
+        <para>Now we parse this string, and we obtain two trees:</para>
 
-      <programlisting>e * e + e</programlisting>
+        <programlisting>e * e + e</programlisting>
 
-      <figure>
-        <title>A problem with priority between two operators</title>
+        <figure>
+          <title>A problem with priority between two operators</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="prio.png"></imagedata>
-          </imageobject>
-        </mediaobject>
-      </figure>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="prio.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
 
-      <para>We observe the following <emphasis role="bold">symptoms</emphasis>
-      in these trees:</para>
+        <para>We observe the following <emphasis
+        role="bold">symptoms</emphasis> in these trees:</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>The top productions of the two derivations are
-          different</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>The top productions of the two derivations are
+            different</para>
+          </listitem>
 
-        <listitem>
-          <para>These two top productions are related to eachother by direct
-          father-child relation. In the one derivation the first is a child of
-          the second, in the other is the first the father of the
-          second.</para>
-        </listitem>
+          <listitem>
+            <para>These two top productions are related to eachother by direct
+            father-child relation. In the one derivation the first is a child
+            of the second, in the other is the first the father of the
+            second.</para>
+          </listitem>
 
-        <listitem>
-          <para>Also, in the first derivation the designated father-child
-          relation is on the left child, while in the second derivation it is
-          on the right child.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>Also, in the first derivation the designated father-child
+            relation is on the left child, while in the second derivation it
+            is on the right child.</para>
+          </listitem>
 
-      <para>Sometimes, these symptoms are called different "vertical ordering
-      issues". They can be solved easily using SDF's priority
-      mechanism:</para>
+          <listitem>
+            <para>The recursion takes place at the extremities: either the
+            left-most or the right-most child of a production is the recursive
+            non-terminal.</para>
+          </listitem>
+        </itemizedlist>
 
-      <programlisting>module languages/sdf2/idioms/Expressions
+        <para>Sometimes, these symptoms are called different "vertical
+        ordering issues". They can be solved easily using SDF's priority
+        mechanism:</para>
+
+        <programlisting>module Expressions
 
 exports
 sorts E
@@ -514,10 +529,196 @@ context-free priorities
   E "*" E -&gt; E {left} &gt;
   E "+" E -&gt; E {left}</programlisting>
 
-      <para>The '&gt;' sign declares that all "+" productions that are direct
-      children of "*" productions will be filtered. This leaves the
-      interpretation where the "*" has a higher priority ("binds stronger") is
-      left as the only derivation.</para>
+        <para>The '&gt;' sign declares that <emphasis>all</emphasis> "+"
+        productions that are <emphasis>direct children</emphasis> of "*"
+        productions will be filtered. This leaves the interpretation where the
+        "*" has a higher priority ("binds stronger") is left as the only
+        derivation.</para>
+
+        <note>
+          <para>The production rules that are part of a context-free
+          priorities declaration are automatically promoted to context-free
+          syntax sections. This is to prevent duplication of productions.
+          Sometimes it is still necessary to duplicate a production however.
+          In this case it is good to know that the identity of a production is
+          defined by its left-hand side and right hand side, while if only the
+          attributes are different two productions are considered to be the
+          same.</para>
+        </note>
+
+        <para>A different solution to the same issue would be to have both
+        operators have the same priority, but have left or right associativity
+        with respect to eachother:</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"     -&gt; E
+
+context-free priorities
+{ left:
+  E "*" E -&gt; E {left}
+  E "+" E -&gt; E {left}
+}</programlisting>
+
+        <para>Again, "left:" could also be replaced by "right:" and
+        "non-assoc:". It is even possible to have {right} associative
+        productions that are "left:" associative with eachother.</para>
+      </section>
+
+      <section>
+        <title>Prefix expressions applied to binary expressions</title>
+
+        <para>In most programming languages there are prefix expressions like
+        "-e". Consider the following ambiguity.</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"     -&gt; E
+  "-" E   -&gt; E
+  E "+" E -&gt; E {left}</programlisting>
+
+        <para>We parse the following string:</para>
+
+        <programlisting>- e + e</programlisting>
+
+        <para>To get the following two derivations:</para>
+
+        <figure>
+          <title>Prefix production combined with binary production:</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="prefix.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+
+          <para>The symptoms are exactly the same as in the two binary
+          operators case, and therefore the solution is also exactly the same.
+          Use priorities to solve the problem!</para>
+        </figure>
+      </section>
+
+      <section>
+        <title>Postfix expressions with guarded children</title>
+
+        <para>So far, we have seen operator productions where the recursive
+        child was either the left-most or the right-most member of a
+        production. Priorities can be applied without reserve to these kinds
+        of ambiguity. In the following case however we need to be more
+        careful.</para>
+
+        <para>Consider the following grammar and input string:</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"         -&gt; E        
+  E "[" E "]" -&gt; E        
+  E "+" E     -&gt; E {left}</programlisting>
+
+        <programlisting>e + e [ e + e ]</programlisting>
+
+        <para>Even though there are three nested applications of operators,
+        there is still only one ambiguity with two alternatives. The reason is
+        that the "[ ]" brackets guard the second "+". It can only be a child
+        of the "[ ]" operator and nothing else. Still the first element of the
+        "[ ]" production is a left-most child, which has a priority
+        issue:</para>
+
+        <figure>
+          <title>Postfix expression with binary operator</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="postfix.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>Again, these derivations show similar symptoms, but there is
+        something more.<itemizedlist>
+            <listitem>
+              <para>The top productions of the two derivations are
+              different</para>
+            </listitem>
+
+            <listitem>
+              <para>These two top productions are related to eachother by
+              direct father-child relation. In the one derivation the first is
+              a child of the second, in the other is the first the father of
+              the second.</para>
+            </listitem>
+
+            <listitem>
+              <para>Also, in the first derivation the designated father-child
+              relation is on the left child, while in the second derivation it
+              is on the right child.</para>
+            </listitem>
+
+            <listitem>
+              <para>The added symptom is that there is no confusion about the
+              second child of the "[ ]". The recursion only takes place at the
+              left-most extremity, the other recursion is not at an
+              extremity.</para>
+            </listitem>
+          </itemizedlist>A plain priority between the two operators would
+        prevent all children of "[ ]" to be "+". This is obviously wrong. The
+        correct solution is to restrict the priority to the first argument of
+        "[ ]":</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"         -&gt; E 
+
+context-free priorities       
+  E "[" E "]" -&gt; E &lt;0&gt; &gt;   
+  E "+" E     -&gt; E {left}</programlisting>
+
+        <para>The "&lt; &gt;" notation is used to restrict the filtering
+        behavior of priorities to certain arguments. In this case, if a "+" is
+        a direct child of the first "E" in the "[ ]" production, it is
+        filtered. No other direct children are filtered but the ones listed in
+        the comma separated list between the angular brackets.</para>
+      </section>
     </section>
 
     <section>
@@ -638,7 +839,7 @@ context-free syntax
       apply the preference attributes. The following definition takes the else
       branch with the outer if:</para>
 
-      <programlisting>module languages/sdf2/idioms/DanglingElse
+      <programlisting>module DanglingElse
 
 exports
 sorts S E
