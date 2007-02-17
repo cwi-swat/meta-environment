@@ -333,7 +333,191 @@
     <section>
       <title>Order of recursive expression operators</title>
 
-      <para>TODO</para>
+      <para>Expression languages of programming languages usually have dozens
+      of operators. These operators use infix syntax, prefix syntax, or any
+      other kind of funny syntax. The idea of expressions is that you can
+      recursively combine any of the operators with another. This is why they
+      are sometimes referred to as combinator languages). Like in basic
+      arithmetic, each programming language has a fixed set of rules that
+      explain the relative priority of the expression operators. In
+      programming languages, this can become quite a complex situation. Most
+      programming languages define a partial ordering on the operators, such
+      that all ambiguity is resolved by applying this order. In some
+      programming languages, the order is inconsistent (contradictory), or
+      overly restrictive. SDF allows you to express these properties of
+      languages quite efficiently.</para>
+
+      <para>As said before, expression operator come in many sizes and shapes.
+      We will consider a number of examples, trying to isolate one particular
+      ambiguous concept in expression grammars at a time.</para>
+
+      <para><programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"       -&gt; E
+  E "*" E   -&gt; E
+  "(" E ")" -&gt; E {bracket}</programlisting>This simple grammar is already
+      ambiguous. Let's parse the following string:</para>
+
+      <programlisting>e * e * e</programlisting>
+
+      <para>This has two possible derivations:</para>
+
+      <figure>
+        <title>A problem with associativity of an operator</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="assoc.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>We recognize the following <emphasis
+      role="bold">symptoms</emphasis> in these trees:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The top nodes of both alternatives have the same
+          production</para>
+        </listitem>
+
+        <listitem>
+          <para>This production has itself as one of its direct children in
+          both derivations</para>
+        </listitem>
+
+        <listitem>
+          <para>Which child it is is different for each derivation. For one it
+          is the left child, for the other it is the right child</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The problem is easily solved by using SDF's associativity
+      attributes:</para>
+
+      <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"       -&gt; E
+  E "*" E   -&gt; E {left}
+  "(" E ")" -&gt; E {bracket}</programlisting>
+
+      <para>The {left} attribute declares that any right-most child of a "*"
+      which is a "*" itself will be filtered. This solves the problem without
+      changing anything else in the grammar. Similarly, you might have used
+      {right} for the opposite solution, or {non-assoc} for filtering all
+      direct children. With {assoc} you effectively force the user to write
+      brackets around every recursive application of "*".</para>
+
+      <note>
+        <para>The {bracket} attribute is NOT a disambiguation construct. It is
+        used by tree matchers and tree walkers to identify production rules
+        that do not have semantics and may ignored. It is also used by pretty
+        printers to introduce brackets at the appropriate places when
+        necessary.</para>
+      </note>
+
+      <para>The next expression grammar has a different, but related
+      problem:</para>
+
+      <programlisting>module languages/sdf2/idioms/Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"     -&gt; E
+  E "*" E -&gt; E {left}
+  E "+" E -&gt; E {left}</programlisting>
+
+      <para>Now we parse this string, and we obtain two trees:</para>
+
+      <programlisting>e * e + e</programlisting>
+
+      <figure>
+        <title>A problem with priority between two operators</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="prio.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>We observe the following <emphasis role="bold">symptoms</emphasis>
+      in these trees:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The top productions of the two derivations are
+          different</para>
+        </listitem>
+
+        <listitem>
+          <para>These two top productions are related to eachother by direct
+          father-child relation. In the one derivation the first is a child of
+          the second, in the other is the first the father of the
+          second.</para>
+        </listitem>
+
+        <listitem>
+          <para>Also, in the first derivation the designated father-child
+          relation is on the left child, while in the second derivation it is
+          on the right child.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Sometimes, these symptoms are called different "vertical ordering
+      issues". They can be solved easily using SDF's priority
+      mechanism:</para>
+
+      <programlisting>module languages/sdf2/idioms/Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"     -&gt; E
+
+context-free priorities
+  E "*" E -&gt; E {left} &gt;
+  E "+" E -&gt; E {left}</programlisting>
+
+      <para>The '&gt;' sign declares that all "+" productions that are direct
+      children of "*" productions will be filtered. This leaves the
+      interpretation where the "*" has a higher priority ("binds stronger") is
+      left as the only derivation.</para>
     </section>
 
     <section>
@@ -421,7 +605,8 @@ context-free syntax
         </mediaobject>
       </figure>
 
-      <para>We can recognize the following symptoms in these two trees:</para>
+      <para>We can recognize the following <emphasis
+      role="bold">symptoms</emphasis> in these two trees:</para>
 
       <itemizedlist>
         <listitem>
@@ -486,7 +671,7 @@ context-free syntax
       else's, or related issues. If the topmost productions are not different,
       then this construct will not work (we assume here that you have turned
       off the heuristic filters using "-fe" and "-fi"). Solutions to this are
-      to try an change the grammar such that the top nodes will become
+      to try and change the grammar such that the top nodes will become
       different. This is usually done by introducing a "dummy statement
       terminator", like this:</para>
 
