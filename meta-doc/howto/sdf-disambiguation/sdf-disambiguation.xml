@@ -13,7 +13,7 @@
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <title>SDF Disambiguation Cookbook</title>
+  <title>SDF Disambiguation Medkit</title>
 
   <info>
     <author>
@@ -78,7 +78,7 @@
       production rules to parse a string. When we parse a string, we simply
       try to find the derivation tree that produces exactly the string we are
       trying to parse. If there is such a tree, the string is in the language;
-      if not we have a parse error. </para>
+      if not we have a parse error.</para>
 
       <para>In many cases there are more than one derivation trees for the
       same string. This is what we call ambiguity. This may happen for parts
@@ -151,7 +151,7 @@
           <para>Fewer non-terminals (sorts): you may use any form of
           production rules, for example the simplest! With SDF, there is no
           need to avoid left recursion, right recursion, hidden recursion,
-          nullables or any form of production rules. </para>
+          nullables or any form of production rules.</para>
         </listitem>
 
         <listitem>
@@ -159,8 +159,8 @@
           thus the parse trees) becomes almost independent of the
           disambiguation concern. SDF offers disambiguation constructs next to
           the production rules. You may write the production rules, ignoring
-          ambiguity completely, and add disambiguation rules separately.
-          </para>
+          ambiguity completely, and add disambiguation rules
+          separately.</para>
         </listitem>
       </itemizedlist>
 
@@ -251,8 +251,8 @@
 
       <orderedlist>
         <listitem>
-          <para>Acquire an example input string that triggers the ambiguity.
-          </para>
+          <para>Acquire an example input string that triggers the
+          ambiguity.</para>
         </listitem>
 
         <listitem>
@@ -316,7 +316,7 @@
     describes a number of typical ambiguous constructions, and their symptoms.
     If you are able to identify the symptoms, you will be able to designate
     the illness, which gives rise to the appropriate application of the
-    medicin. </para>
+    medicin.</para>
 
     <para>Each of the following sections describes one typical ambiguous
     construct, it's symptoms and optionally prescribes SDF disambiguation
@@ -503,7 +503,7 @@ context-free syntax
       A faster, but more complex, solution is to use follow restrictions. The
       following grammar always attributes the else branch to the inner if.
       This is by the way what most programming languages with a dangling else
-      do: </para>
+      do:</para>
 
       <programlisting>module DanglingElse
 
