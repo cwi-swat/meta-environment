@@ -335,6 +335,12 @@
     </section>
 
     <section>
+      <title>Runnaway whitespace and comments</title>
+
+      <para>TODO</para>
+    </section>
+
+    <section>
       <title>Syntactic overloading between identifiers and keywords</title>
 
       <para>TODO</para>
@@ -343,13 +349,19 @@
     <section>
       <title>Operator prefixes</title>
 
-      <para></para>
+      <para>TODO</para>
     </section>
 
     <section>
       <title>Syntactic overloading of brackets</title>
 
-      <para></para>
+      <para>TODO</para>
+    </section>
+
+    <section>
+      <title>Lists with nullables</title>
+
+      <para>TODO</para>
     </section>
 
     <section>
