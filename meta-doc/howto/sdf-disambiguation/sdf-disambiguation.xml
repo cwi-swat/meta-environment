@@ -554,8 +554,18 @@ context-free restrictions
       this filter is resolved at parsetable generation time. In this example
       however, with four character lookahead the parser will check the
       lookahead at every reduction for T. You are advised to start with more
-      specific (longer) lookaheads, such that you do not filter too
-      much.</para>
+      specific (longer) lookaheads, such that you do not filter too much.
+      Especially if "else" is a reserved keyword in the language, the above
+      disambiguation is safe. If it is not a reserved keyword, you may run
+      into trouble later. This disambiguation filters anything that starts
+      with "else" right after the recognition of T; you have been warned! A
+      safer restriction way would be:<programlisting>context-free restrictions
+  T -/- [e].[l].[s].[e].[\t\n\ ]</programlisting>This at least guarantees that
+      you do not filter identifiers that accidentally start with
+      "else".</para>
+
+      <para>Note that the follow restrictions can not be used to attribute the
+      dangling else part to the outer if.</para>
 
       <para>Some languages solve the dangling construct by the so-called
       'offside rule'. With the offside rule, trees are filtered using the
