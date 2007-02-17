@@ -7,6 +7,6 @@ ACLOCAL_AMFLAGS = -I .
 EXTRA_DOC = books
 
 books: dummy
-	${top_srcdir}/website.sh
+	DOCBOOKXSLPREFIX=${DOCBOOK_XSL_PREFIX} ${top_srcdir}/website.sh
 
 dummy:
