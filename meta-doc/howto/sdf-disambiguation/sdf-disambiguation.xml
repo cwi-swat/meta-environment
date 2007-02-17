@@ -55,7 +55,8 @@
       <listitem>
         <para>SDF disambiguation constructs can be applied in a right manner,
         or in a wrong manner. In some cases, it is important to understand
-        exactly how they work to prevent unexpected behavior.</para>
+        exactly how they work to prevent unexpected behavior
+        (side-effects).</para>
       </listitem>
     </orderedlist>
 
@@ -63,7 +64,14 @@
     ambiguity, why it is an issue in SDF, and what the general method behind
     solving ambiguities is. The rest of this document is a straightforward
     how-to that includes diagnosis of ambiguity and application of
-    disambiguation constructs.</para>
+    disambiguation constructs. </para>
+
+    <para>This document's key idea is that disambiguation is like treating an
+    illness of a person, first you observe the symptoms, then you identify the
+    illness, and finally you prescribe some medicin. That is where the
+    comparison stops, we do not claim ambiguity is an "illness" of a grammar.
+    It is a neutral property of context-free grammars, that may or may not be
+    manipulated using SDF disambiguation constructs. </para>
 
     <section>
       <title>What is syntactical ambiguity again?</title>
@@ -74,7 +82,7 @@
       used to generate all strings of a language (hypothetically speaking of
       course). This nested application of production rules results in a
       derivation tree (parse tree) for each string of the language. The
-      pragmatic application of context-free grammars comes from using the
+      practical application of context-free grammars comes from using the
       production rules to parse a string. When we parse a string, we simply
       try to find the derivation tree that produces exactly the string we are
       trying to parse. If there is such a tree, the string is in the language;
@@ -85,8 +93,8 @@
       of the string too: several sub-derivations for the same sub-string.
       Since we use the derivation trees later for semantical analysis, it is
       important to have only one derivation tree. The goal of SDF is to let
-      the user explicitly (declaratively) express which derivation is the
-      best.</para>
+      the language designer explicitly (declaratively) express which
+      derivation is the best.</para>
 
       <para>Frequently, the choice of derivation trees has significant
       consequences for the semantical interpretation of a string. The most
@@ -113,7 +121,7 @@
       from this complexity. Still the disambiguation concept is there,
       somewhere under the hood.</para>
 
-      <para><emphasis>SDF does not have any implicit,or automatic, lexical or
+      <para><emphasis>SDF does not have any implicit, or hidden, lexical or
       context-free disambiguation mechanisms.</emphasis></para>
 
       <para>What do I get from this?</para>
