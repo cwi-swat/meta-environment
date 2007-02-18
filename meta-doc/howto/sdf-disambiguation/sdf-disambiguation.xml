@@ -20,7 +20,8 @@
       <orgname>Jurgen Vinju</orgname>
     </author>
 
-    <pubdate>$Rev$ by $Author$ at $Date$</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2007-02-17 22:04:14
+    +0100 (Sat, 17 Feb 2007) $</pubdate>
   </info>
 
   <section>
@@ -64,14 +65,14 @@
     ambiguity, why it is an issue in SDF, and what the general method behind
     solving ambiguities is. The rest of this document is a straightforward
     how-to that includes diagnosis of ambiguity and application of
-    disambiguation constructs. </para>
+    disambiguation constructs.</para>
 
     <para>This document's key idea is that disambiguation is like treating an
     illness of a person, first you observe the symptoms, then you identify the
     illness, and finally you prescribe some medicin. That is where the
     comparison stops, we do not claim ambiguity is an "illness" of a grammar.
     It is a neutral property of context-free grammars, that may or may not be
-    manipulated using SDF disambiguation constructs. </para>
+    manipulated using SDF disambiguation constructs.</para>
 
     <section>
       <title>What is syntactical ambiguity again?</title>
@@ -532,7 +533,7 @@ context-free priorities
         <para>The '&gt;' sign declares that <emphasis>all</emphasis> "+"
         productions that are <emphasis>direct children</emphasis> of "*"
         productions will be filtered. This leaves the interpretation where the
-        "*" has a higher priority ("binds stronger") is left as the only
+        "*" has a higher priority ("binds stronger") as the only
         derivation.</para>
 
         <note>
@@ -573,6 +574,74 @@ context-free priorities
         <para>Again, "left:" could also be replaced by "right:" and
         "non-assoc:". It is even possible to have {right} associative
         productions that are "left:" associative with eachother.</para>
+
+        <para>It is important to know that priorities are <emphasis>closed
+        transitively</emphasis> by default. Consider the following
+        example:</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e" -&gt; E  
+
+context-free priorities
+  "-" E   -&gt; E &gt;
+  E "*" E -&gt; E {left}
+
+context-free priorities
+  E "*" E -&gt; E {left} &gt;
+  E "+" E -&gt; E {left}</programlisting>
+
+        <programlisting>- e + e</programlisting>
+
+        <figure>
+          <title>Non-ambiguous application of + to - because of transitive
+          priorities</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="transitive.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>As you can see, there is no ambiguity, and the "-" has a higher
+        priority than the "+", even though a direct priority was not declared.
+        The "&gt;" relation is closed transitively. A shorter notation for the
+        same module is:<programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e" -&gt; E  
+
+context-free priorities
+  "-" E   -&gt; E        &gt;
+  E "*" E -&gt; E {left} &gt;
+  E "+" E -&gt; E {left}</programlisting><note>
+            <para>In some grammars for programming languages, the priority
+            ordering between expression operators is very complex. It is
+            sometimes not handy to have the priority relation transitively
+            closed. There is a notation in the newest releases of SDF to stop
+            the transitive closure. We will see an example of this
+            later.</para>
+          </note></para>
       </section>
 
       <section>
@@ -664,8 +733,8 @@ context-free syntax
           </mediaobject>
         </figure>
 
-        <para>Again, these derivations show similar symptoms, but there is
-        something more.<itemizedlist>
+        <para>Again, these derivations show similar symptoms, but not quite
+        the same:<itemizedlist>
             <listitem>
               <para>The top productions of the two derivations are
               different</para>
@@ -716,8 +785,119 @@ context-free priorities
         <para>The "&lt; &gt;" notation is used to restrict the filtering
         behavior of priorities to certain arguments. In this case, if a "+" is
         a direct child of the first "E" in the "[ ]" production, it is
-        filtered. No other direct children are filtered but the ones listed in
-        the comma separated list between the angular brackets.</para>
+        filtered. No other direct children are filtered but the ones listed
+        between the angular brackets.</para>
+
+        <para>It often occurs that there a groups of operators which are
+        similar. Especially with postfix operators this is the case. SDF
+        provides production grouping in priority sections to accomodate this
+        common language design idiom:</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e" -&gt; E  
+
+context-free priorities
+  { E "[" E "]"        -&gt; E  
+    E "(" {E ","}* ")" -&gt; E
+  } &lt;0&gt; &gt;
+  E "+" E              -&gt; E {left}</programlisting>
+      </section>
+
+      <section>
+        <title>Overloaded comma's in expression languages</title>
+
+        <para>In many programming languages arguments of function applications
+        are separated by comma's, and the comma is a binary operator in the
+        expression language. This causes ambiguity as in the following
+        example:</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"                  -&gt; E        
+  "f" "(" {E ","}+ ")" -&gt; E        
+  E "," E              -&gt; E {left}</programlisting>
+
+        <programlisting>f(e,e)</programlisting>
+
+        <figure>
+          <title>Ambiguous comma's in expression languages</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="commas.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>The symptoms are easy enough to recognize:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The ambiguity cluster ranges over a list type</para>
+          </listitem>
+
+          <listitem>
+            <para>The top two nodes of each alternative are list nodes</para>
+          </listitem>
+
+          <listitem>
+            <para>One of the list nodes has more elements than the
+            other</para>
+          </listitem>
+
+          <listitem>
+            <para>The "," literal is shared by the list and another binary
+            production</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>This kind of ambiguity is solved by removing comma expressions
+        as direct children of argument lists. The priority definition reveals
+        some of the implementation details of SDF, by showing one of the
+        productions that are automatically generated for you. There is no way
+        around this, unless you would like to remove the argument list and use
+        the binary operator in your syntax definition for everything. </para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"                  -&gt; E  
+  "f" "(" {E ","}+ ")" -&gt; E  
+
+context-free priorities
+  { non-assoc: E       -&gt; {E ","}+        
+               E "," E -&gt; E        {left}  
+  }</programlisting>
       </section>
     </section>
 
