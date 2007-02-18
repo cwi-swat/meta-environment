@@ -13,7 +13,7 @@
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <title>SDF Disambiguation Medkit</title>
+  <title>SDF Disambiguation Medkit for Programming Languages</title>
 
   <info>
     <author>
@@ -24,15 +24,17 @@
     +0100 (Sat, 17 Feb 2007) $</pubdate>
   </info>
 
+  <para><emphasis>This document is currently being written.</emphasis></para>
+
   <section>
     <title>Introduction</title>
 
     <para>This document assumes you have a reasonable knowlegde of SDF and
     parser generation concepts. It helps you solve a common issue when
-    developing or maintaining a grammar for a (legacy) programming language:
-    syntactical ambiguity. SDF has a number of so-called disambiguation
-    constructs, which can be applied to solve ambiguities. This document helps
-    you to apply them effectively.</para>
+    developing or maintaining a grammar for a (legacy) <emphasis>programming
+    language</emphasis>: syntactical ambiguity. SDF has a number of so-called
+    disambiguation constructs, which can be applied to solve ambiguities. This
+    document helps you to apply them effectively.</para>
 
     <para>The following concepts play an important role:</para>
 
@@ -73,6 +75,16 @@
     comparison stops, we do not claim ambiguity is an "illness" of a grammar.
     It is a neutral property of context-free grammars, that may or may not be
     manipulated using SDF disambiguation constructs.</para>
+
+    <para>Diagnostics is about recognizing symptoms, and correlating them to
+    the symptoms that are attributed to known illnesses. Although you may
+    discover a new illness, this is pretty unlikely. Therefore, this document
+    describes a number of typical ambiguous constructions, and their symptoms.
+    If you are able to identify the symptoms, you will be able to designate
+    the illness, which gives rise to the appropriate application of the
+    medicin. If you have discovered an ambiguous syntactical construct that is
+    not covered by this document yet, please contact the author at
+    <email>Jurgen.Vinju@cwi.nl</email>.</para>
 
     <section>
       <title>What is syntactical ambiguity again?</title>
@@ -295,9 +307,14 @@
 
         <listitem>
           <para>Test your new SDF definition on a larger set of test
-          stringsp</para>
+          strings</para>
         </listitem>
       </orderedlist>
+
+      <para>In case of multiple ambiguities in the same string, try isolating
+      the lower ambiguities in the tree first. Also, if there are cyclic
+      derivations, remove them first to speed up parsing and making the trees
+      look simpler. </para>
     </section>
   </section>
 
@@ -318,14 +335,6 @@
     <para>Meta-Environment users may click on the ambiguous substring (which
     is highlighted in red), and select one of the view tree options from the
     popup menu.</para>
-
-    <para>Diagnostics is about recognizing symptoms, and correlating them to
-    the symptoms that are attributed to typical illnesses. Although you may
-    discover a new illness, this is pretty unlikely. Therefore, this document
-    describes a number of typical ambiguous constructions, and their symptoms.
-    If you are able to identify the symptoms, you will be able to designate
-    the illness, which gives rise to the appropriate application of the
-    medicin.</para>
 
     <para>Each of the following sections describes one typical ambiguous
     construct, it's symptoms and optionally prescribes SDF disambiguation
@@ -1345,6 +1354,207 @@ context-free syntax
     </section>
 
     <section>
+      <title>Syntactic overloading between several classes of
+      identifiers</title>
+
+      <para>Programming languages usually have several kinds of identifiers.
+      Consider Java for example, it has class names, variable names, package
+      names, etc. Identifiers, or names, are a common source of ambiguity.
+      Especially when syntax definitions are typed from language manuals, you
+      may expect ambiguities of this kind. Some of the ambiguities are
+      introduced artificially into grammars for ease of implementation with a
+      particular parser technology. </para>
+
+      <para>In this class of ambiguities we will identify symptoms that can
+      not be solved by SDF's disambiguation constructs. You will need a
+      name-table for instance. This can be done easily by your favorite tree
+      manipulation library or programming language. ASF+SDF has facilities for
+      manipulating ambiguous parse trees directly.</para>
+
+      <section>
+        <title>Useless cloning of identifier classes</title>
+
+        <para>This is a particularly easy ambiguity to solve. You will not
+        even need disambiguation constructs. Consider the following
+        grammar:</para>
+
+        <programlisting>module Clone
+
+exports
+sorts Identifier ClassName TypeName Declaration
+
+context-free start-symbols
+  Declaration
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT      
+  [a-z]+   -&gt; Identifier  
+  [a-z]+   -&gt; ClassName   
+
+context-free syntax
+  Identifier              -&gt; TypeName     
+  ClassName               -&gt; TypeName     
+  TypeName Identifier ";" -&gt; Declaration</programlisting>
+
+        <programlisting>int foo;</programlisting>
+
+        <figure>
+          <title>A useless clone of an identifier class</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="identifierclone.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>The <emphasis role="bold">symptoms</emphasis> are very
+        clear:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The two top productions of the ambiguity are
+            different</para>
+          </listitem>
+
+          <listitem>
+            <para>The two top productions of the ambiguity are injections
+            (chain rules)</para>
+          </listitem>
+
+          <listitem>
+            <para>Each chain rule introduces a lexical (identifier) that has
+            the same definition, but a different non-terminal name</para>
+          </listitem>
+
+          <listitem>
+            <para>Each alternative recognizes exactly the same characters in
+            exactly the same way, modulo non-terminal names</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Even if these definitions pop up in language standard documents,
+        they are still useless from the perspective of SDF. They are there to
+        prepare a parser for side-effects that SDF does not have. Ergo, they
+        have to be removed:</para>
+
+        <programlisting>module Clone
+
+exports
+sorts Identifier Declaration
+
+context-free start-symbols
+  Declaration
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT      
+  [a-z]+   -&gt; Identifier  
+
+context-free syntax
+  Identifier Identifier ";" -&gt; Declaration</programlisting>
+      </section>
+
+      <section>
+        <title>Dynamic identifier reservation</title>
+
+        <para>In many languages the basic type names are reserved keywords and
+        they allow the programmer to extend the set of type-names using "class
+        definitions", or "type defs", or anything else that extends the set of
+        types. In these languages, like C for example, the newly identified
+        types become "reserved keywords" immediately after their declaration.
+        This may be the language designers' chosen method to disambiguate the
+        syntax of the language.</para>
+
+        <para>Consider the following example:</para>
+
+        <programlisting>module Clone
+
+exports
+sorts I D E S P
+
+context-free start-symbols
+  P
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+  [a-z]+   -&gt; I       
+
+lexical restrictions
+  I -/- [a-z]
+
+context-free syntax
+  "type" I -&gt; D
+  I I ";"  -&gt; D  
+
+context-free syntax
+  I     -&gt; E         
+  E E   -&gt; E {right} 
+  E ";" -&gt; S         
+
+context-free syntax
+  D+ S+ -&gt; P</programlisting>
+
+        <para>This example is strongly inspired by the C language definition.
+        The non-terminals names are kept short to make the parse tree viewable
+        in this document (I=Identifier, D=Declaration, E=Expression,
+        S=Statement, P=Program). The following string is ambiguous:</para>
+
+        <programlisting>type int;
+int i;</programlisting>
+
+        <figure>
+          <title>Dynamically reserved types</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="dynamicreservation.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>The <emphasis role="bold">symptoms</emphasis> are
+        complex:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The top nodes of the two alternatives are equal</para>
+          </listitem>
+
+          <listitem>
+            <para>Several syntactic constructs are reused (overloaded) for
+            different purposes. Here, we see the juxtapositioning of two
+            Identifiers both in declarations (D), and in expressions (E), and
+            the ";" is reused. All ingredients are necessary to trigger the
+            ambiguity. If one of them is not there, SDF does not produce this
+            ambiguity.</para>
+          </listitem>
+
+          <listitem>
+            <para>Large sub-trees change interpretation, move from one side of
+            the tree to another. In this case, we see a declaration becoming a
+            statement in the other alternative, using completely different
+            productions.</para>
+          </listitem>
+        </itemizedlist>
+
+        <note>
+          <para>Dynamically reserved identifiers and useless identifier
+          cloning occur together in syntax definitions because the second is
+          used as a method to deal with the first. Not in SDF. Removing the
+          useless clones is a good idea in SDF. </para>
+        </note>
+
+        <para>Since dynamic reservation of keywords is far removed from the
+        parsing algorithms SDF defines, this ambiguity can not be solved using
+        any of SDF's disambiguation constructs. You are advised to
+        disambiguate during static analysis. This is a tested method, and can
+        be very successful in generating meaningfull error messages. (Consider
+        the difference between "parse error at line x", and "type or variable
+        X was not declared").</para>
+      </section>
+    </section>
+
+    <section>
       <title>Operator prefixes</title>
 
       <para>TODO</para>
@@ -1568,12 +1778,5 @@ context-free restrictions
 
       <programlisting>$ sglr -p MyLanguage.tbl -i myInputString.txt -fe -fi | addPosInfo -p myInputString.txt -o myOutputTreeWithPosInfo.pt</programlisting>
     </section>
-  </section>
-
-  <section>
-    <title>SDF disambiguation constructs revisited</title>
-
-    <para>TODO: write this section on technical details of disambiguation
-    constructs</para>
   </section>
 </article>
