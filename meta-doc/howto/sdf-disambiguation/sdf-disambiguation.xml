@@ -1060,13 +1060,288 @@ lexical restrictions
     <section>
       <title>Runnaway whitespace and comments</title>
 
-      <para>TODO</para>
+      <para>As SDF is implemented using scannerless parsing, whitespace and
+      comments are just as important as any other language construct. In SDF
+      you fully define it. There are some common ambiguities related to
+      whitespace and comments that we will discuss here.</para>
+
+      <section>
+        <title>Layout nodes moving from left to right</title>
+
+        <para>The following simple grammar has a nullable non-terminal in the
+        middle of a production. This triggers already a common ambiguity. Note
+        that star lists like "A*" are nullable non-terminals.</para>
+
+        <programlisting>module Layout
+
+exports
+sorts P S
+
+context-free start-symbols
+  P
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free syntax
+  "[" S* "]" -&gt; P  
+  "s"        -&gt; S</programlisting>
+
+        <programlisting>[ ]</programlisting>
+
+        <para>When we parse the above string (two brackets with a space in
+        between), there is a nice ambiguity:</para>
+
+        <figure>
+          <title>Layout moving acros a nullable non-terminal</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="layoutleftright.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+
+          <para>These trees have typical <emphasis
+          role="bold">symptoms</emphasis>:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>There is a nullable symbol (for example a star list) in
+              play,e which indeed recognizes the empty language</para>
+            </listitem>
+
+            <listitem>
+              <para>The two layout nodes surrounding the nullable non-terminal
+              take turns in accepting the layout.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>SDF introduces the "LAYOUT?" in between every two members in a
+          production that is part of a context-free syntax section. Optional
+          layout is everywhere. The most common solution to this ambiguity is
+          to define that all layout must be recognized with the first
+          "LAYOUT?" node possible:</para>
+
+          <programlisting>module Layout
+
+exports
+sorts P S
+
+context-free start-symbols
+  P
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT 
+
+context-free restrictions
+  LAYOUT? -/- [\ \t\n] 
+
+context-free syntax
+  "[" S* "]" -&gt; P  
+  "s"        -&gt; S</programlisting>
+
+          <para>Notice that the lexical restriction contains every character
+          defined by LAYOUT. Also notice that it is a context-free
+          restriction, not a lexical restriction. The reason is that the
+          LAYOUT? non-terminal is introduced between every non-terminal at the
+          context-free level. </para>
+
+          <para>The matter becomes slightly more complex with the introduction
+          of source code comments. In this case, you can defined another
+          follow restriction:</para>
+
+          <programlisting>module Layout
+
+exports
+sorts P S
+
+context-free start-symbols
+  P
+
+lexical syntax
+  [\ \t\n]       -&gt; LAYOUT 
+  "%" ~[\%]* "%" -&gt; LAYOUT
+
+context-free restrictions
+  LAYOUT? -/- [\ \t\n]
+  LAYOUT? -/- [\%] 
+
+context-free syntax
+  "[" S* "]" -&gt; P  
+  "s"        -&gt; S</programlisting>
+
+          <note>
+            <para>The newly introduced restriction is not always safe. If
+            there are tokens in your grammar that start with a % sign you are
+            in trouble. Be aware of these issues. It could mean that you need
+            more lookahead in the follow restriction.</para>
+          </note>
+        </figure>
+      </section>
     </section>
 
     <section>
       <title>Syntactic overloading between identifiers and keywords</title>
 
-      <para>TODO</para>
+      <para>It is very common to have the keywords of a programming language
+      overlapping with the acceptable characters of identifiers. In some
+      languages, keywords are therefore <emphasis>reserved</emphasis> from the
+      identifier classes. In other languages, they are not reserved at all.
+      SDF can deal with both. Consider the following example:</para>
+
+      <programlisting>module Keywords
+
+exports
+
+sorts S E
+
+context-free start-symbols
+  S 
+
+lexical syntax
+  [A-Za-z][A-Za-z0-9]* -&gt; E
+  [\ \t\n]             -&gt; LAYOUT
+
+context-free syntax
+  "IF" E "THEN" S "ELSE" S  -&gt; S
+  E "=" E ";"               -&gt; S</programlisting>
+
+      <para>When we parse the following string, there are no ambiguities at
+      all, even though "IF", "THEN" and "ELSE" fit in the character ranges
+      defined for the sort "E":</para>
+
+      <programlisting>IF IF THEN THEN = ELSE; ELSE ELSE = THEN;</programlisting>
+
+      <figure>
+        <title>No reserved keywords necessary</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="noreservedkeywords.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>As you can see from the above tree, IF is sometimes recognized as
+      a keyword, and sometimes as an identifier. This depends on the context,
+      which the scannerless parser can figure out automatically.</para>
+
+      <para>However, in some languages there are not enough syntactical hints
+      for the parser to determine a precise context. In such as case,
+      disambiguation may be required. The following example should look
+      familiar to people who know C, C++, Java or C#:</para>
+
+      <programlisting>module Keywords
+
+exports
+
+sorts S E
+
+context-free start-symbols
+  S 
+
+lexical syntax
+  [A-Za-z][A-Za-z0-9]* -&gt; E
+  [\ \t\n]             -&gt; LAYOUT
+
+context-free syntax
+  E "(" {E ","}* ")" ";" -&gt; S
+  "return" E ";"         -&gt; S
+  "(" E ")"              -&gt; E {bracket}</programlisting>
+
+      <programlisting>return (a);</programlisting>
+
+      <para>When you parse the above string, you will get an ambiguity that
+      must be resolved:</para>
+
+      <figure>
+        <title>Keyword overlaps with identifier</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="returnkeyword.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>First, let's identify the <emphasis
+      role="bold">symptoms</emphasis> of this ambiguity:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The top two nodes of the ambiguity differ</para>
+        </listitem>
+
+        <listitem>
+          <para>There is more than one instance of syntactic overloading. Both
+          the "return" keyword, and the bracket syntax "( )" overload with
+          other parts of the syntax, and even the ";" is allocated to a
+          different production.</para>
+        </listitem>
+
+        <listitem>
+          <para>Characters that are grouped under a keyword node ("return") in
+          one alternative, end up under an identifier node in another
+          ("E").</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are choices to be made. For many existing languages, the
+      choice is keyword reservation. This implies that no identifier will ever
+      be allowed to be "return". The following grammar implements this:</para>
+
+      <programlisting>module Keywords
+
+exports
+
+sorts S E
+
+context-free start-symbols
+  S 
+
+lexical syntax
+  [A-Za-z][A-Za-z0-9]* -&gt; E
+  [\ \t\n]             -&gt; LAYOUT
+  "return"             -&gt; E      {reject}
+
+context-free syntax
+  E "(" {E ","}* ")" ";" -&gt; S
+  "return" E ";"         -&gt; S
+  "(" E ")"              -&gt; E {bracket}</programlisting>
+
+      <para>The {reject} attribute declares that all identifiers with
+      non-terminal E that match that production will be filtered. This
+      effectively removes the interpretation of the prefix function
+      application, and leafs the other interpretation standing. </para>
+
+      <para>However, this also filters all other identifiers that look like
+      "return". For some languages, this is the defined behavior. Other
+      languages are more liberal. Since the top two nodes of the ambiguity
+      differ, we may also apply preference attributes:</para>
+
+      <programlisting>module Keywords
+
+exports
+
+sorts S E
+
+context-free start-symbols
+  S 
+
+lexical syntax
+  [A-Za-z][A-Za-z0-9]* -&gt; E
+  [\ \t\n]             -&gt; LAYOUT
+
+context-free syntax
+  E "(" {E ","}* ")" ";" -&gt; S
+  "return" E ";"         -&gt; S {prefer}
+  "(" E ")"              -&gt; E {bracket}</programlisting>
+
+      <para>For our example, this has the same disambiguating effect. Added
+      feature is that all other identifiers can still be "return". However,
+      this solution is a bit slower since the preference filter is a back-end
+      filter. And, this solution requires better testing: does this prefer
+      deal with all problems introduced by the return keyword?</para>
     </section>
 
     <section>
