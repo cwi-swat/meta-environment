@@ -431,9 +431,9 @@ context-free syntax
         which is a "*" itself will be filtered. This solves the problem
         without changing anything else in the grammar. Similarly, you might
         have used {right} for the opposite solution, or {non-assoc} for
-        filtering all direct children. With {assoc} you effectively force the
-        user to write brackets around every recursive application of
-        "*".</para>
+        filtering all direct children. With {non-assoc} you effectively force
+        the user to write brackets around every recursive application of "*".
+        </para>
 
         <note>
           <para>The {bracket} attribute is NOT a disambiguation construct. It
@@ -866,7 +866,7 @@ context-free priorities
         <note>
           <para>Grammars with non-transitive priorities are very hard to get
           correct (where correct means "corresponding to the behavior of some
-          particular compiler or interpreter) . Use a large and thorough test
+          particular compiler or interpreter") . Use a large and thorough test
           set!</para>
         </note>
       </section>
@@ -933,8 +933,9 @@ context-free syntax
         as direct children of argument lists. The priority definition reveals
         some of the implementation details of SDF, by showing one of the
         productions that are automatically generated for you. There is no way
-        around this, unless you would like to remove the argument list and use
-        the binary operator in your syntax definition for everything. </para>
+        around this, unless you would like to remove the comma separated
+        argument list and use the binary comma operator instead for parsing
+        your comma's. </para>
 
         <programlisting>module Expressions
 
