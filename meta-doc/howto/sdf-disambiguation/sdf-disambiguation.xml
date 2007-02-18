@@ -812,6 +812,67 @@ context-free priorities
     E "(" {E ","}* ")" -&gt; E
   } &lt;0&gt; &gt;
   E "+" E              -&gt; E {left}</programlisting>
+
+        <para>Sometimes, expression grammars get extremely complex and the
+        language designers loose the ability/possibility to make a nice
+        partial order between the different operators. In this case, you do
+        not want transitive closure of priorities. These grammars often make
+        frequent use of the priorities for specific arguments. Getting the
+        priorities right for these kind of grammars can be a real challenge.
+        However, it is possible with SDF, and you should be able to express
+        the whole recursive backbone of the expression grammar using
+        <emphasis>a single non-terminal</emphasis>. Here is a weird example
+        that uses non-transitive priorities:</para>
+
+        <programlisting>module Expressions
+
+exports
+sorts E
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT  
+
+context-free start-symbols
+  E
+
+context-free syntax
+  "e"       -&gt; E           
+  "(" E ")" -&gt; E {bracket} 
+
+context-free priorities
+  "-" E   -&gt; E           .&gt;
+  E "*" E -&gt; E {left},
+
+  E "+" E -&gt; E {left}  .&gt;
+  "-" E   -&gt; E,
+
+{non-assoc:
+  E "*" E -&gt; E {left}
+  E "+" E -&gt; E {left}
+}</programlisting>
+
+        <para>In this grammar, the "-" binds stronger than the "*", but weaker
+        than the "+".</para>
+
+        <programlisting>(-e * (e + e)) + (-e + e * e)</programlisting>
+
+        <figure>
+          <title>Weird expression grammar with non-transitive priorities
+          between the operators</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="non-transitive.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <note>
+          <para>Grammars with non-transitive priorities are very hard to get
+          correct (where correct means "corresponding to the behavior of some
+          particular compiler or interpreter) . Use a large and thorough test
+          set!</para>
+        </note>
       </section>
 
       <section>
