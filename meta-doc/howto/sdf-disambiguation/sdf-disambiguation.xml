@@ -346,7 +346,8 @@
       that all ambiguity is resolved by applying this order. In some
       programming languages, the order is inconsistent (contradictory), or
       overly restrictive. SDF allows you to express these properties of
-      languages quite efficiently.</para>
+      languages quite efficiently. You should be able to express all operators
+      using a recursive backbone with a single non-terminal (sort).</para>
 
       <para>As said before, expression operator come in many sizes and shapes.
       We will consider a number of examples, trying to isolate one particular
@@ -813,16 +814,11 @@ context-free priorities
   } &lt;0&gt; &gt;
   E "+" E              -&gt; E {left}</programlisting>
 
-        <para>Sometimes, expression grammars get extremely complex and the
-        language designers loose the ability/possibility to make a nice
-        partial order between the different operators. In this case, you do
-        not want transitive closure of priorities. These grammars often make
-        frequent use of the priorities for specific arguments. Getting the
-        priorities right for these kind of grammars can be a real challenge.
-        However, it is possible with SDF, and you should be able to express
-        the whole recursive backbone of the expression grammar using
-        <emphasis>a single non-terminal</emphasis>. Here is a weird example
-        that uses non-transitive priorities:</para>
+        <para>In very rare cases, expression grammars get extremely complex
+        and there seems to be no clear order between the operators. In this
+        case, you do not want transitive closure of priorities. These grammars
+        often make frequent use of the priorities for specific arguments. Here
+        is a weird example that uses non-transitive priorities:</para>
 
         <programlisting>module Expressions
 
@@ -965,7 +961,99 @@ context-free priorities
     <section>
       <title>Longer and shorter identifier names</title>
 
-      <para>TODO</para>
+      <para>Tokenization is a classical technique for parsing programming
+      languages. In some languages it is not done by separating tokens by
+      whitespace, in many languages it is. SDF does not make any assumption
+      about this aspect of language design. There is no implicit "longest
+      match" in SDF. Instead you, as a language designer, will explicitly
+      define the behavior of the parser.</para>
+
+      <para>The following is a simple language that requires longest
+      match:</para>
+
+      <programlisting>module LongestMatch
+
+exports
+
+sorts A L
+
+context-free start-symbols
+  L
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT
+  [a]+     -&gt; A
+
+context-free syntax
+  A+ -&gt; L</programlisting>
+
+      <para>We parse the following string with it:</para>
+
+      <programlisting>aa</programlisting>
+
+      <figure>
+        <title>A tokenization ambiguity</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="longestmatch.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>We register the following <emphasis
+      role="bold">symptoms</emphasis>:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The topnode of the ambiguity is a list</para>
+        </listitem>
+
+        <listitem>
+          <para>In one case the list has more elements then in the
+          other</para>
+        </listitem>
+
+        <listitem>
+          <para>In both alternatives there is a lexical list (list of
+          characters)</para>
+        </listitem>
+
+        <listitem>
+          <para>Characters that are grouped under one lexical list node in the
+          one alternative, are distributed over several lexical lists in the
+          other alternative</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In other words, the parser has recognized either one long A, or
+      two short A's. A "follow restriction" will solve this problem
+      efficiently:</para>
+
+      <programlisting>module LongestMatch
+
+exports
+
+sorts A L
+
+context-free start-symbols
+  L
+
+lexical syntax
+  [\ \t\n] -&gt; LAYOUT
+  [a]+     -&gt; A
+
+context-free syntax
+  A+ -&gt; L
+
+lexical restrictions
+  A -/- [a]</programlisting>
+
+      <para>Naturally, there are more complex situations where longest match
+      is needed. In these cases, you will find that the topnode's of the
+      ambiguity are not necessarily lists. You will find characters that are
+      grouped under one character list node in one alternative, spread out
+      over several other nodes in the other alternative.</para>
     </section>
 
     <section>
