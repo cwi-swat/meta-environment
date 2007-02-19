@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = implodePT 
+SUBDIRS = implodePT filterPT
 
 EXTRA_DIST = \
 	unparser.idef.src \

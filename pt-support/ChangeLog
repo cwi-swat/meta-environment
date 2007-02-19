@@ -1,5 +1,16 @@
 $Id$
 
+Mon Feb 19 23:13:23 CET 2007 <jurgenv@cwi.nl>
+ * utils/filterPT: added filterPT tool by copying it from the 1.5 branch.
+   Had to regenerate the tests, since the parse tree format had changed
+   since then. Something rather peculiar happened though, the parser
+   generates less ambiguities for the same terms. However, the old filterPT
+   filters the new terms the same as the new filterPT. So, the bug is not
+   in filterPT and therefore I have regenerated the tests for filterPT with
+   some confidence.
+ * TODO: analyze why sglr from 1.5 produces different parse forests than
+   the sglr from the trunk for the grammars in utils/filterPT/sdf
+
 Wed Jan 24 16:10:17 CET 2007 <jurgenv@cwi.nl>
  * libmept/MEPT-yield.c: fixed a bug in the yielder (unparser)
    with cycles. Cycles should not prevent the yielding of 

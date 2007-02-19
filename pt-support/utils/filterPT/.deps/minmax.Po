@@ -1,0 +1,170 @@
+minmax.o minmax.o: minmax.c ../../libmept/MEPT-utils.h \
+  ../../libmept/MEPT-start.h ../../libmept/MEPT.h /usr/include/stdlib.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h \
+  /usr/lib/gcc/i486-linux-gnu/4.0.3/include/stddef.h \
+  /usr/include/sys/types.h /usr/include/bits/types.h \
+  /usr/include/bits/wordsize.h /usr/include/bits/typesizes.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/sched.h /usr/include/alloca.h /usr/include/string.h \
+  /usr/include/bits/string.h /usr/include/bits/string2.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/aterm1.h \
+  /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
+  /usr/include/wchar.h /usr/include/bits/wchar.h /usr/include/gconv.h \
+  /usr/lib/gcc/i486-linux-gnu/4.0.3/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+  /usr/include/bits/stdio.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/encoding.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/abool.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/atypes.h \
+  ../../libmept/MEPT_dict.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/aterm2.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/aterm1.h \
+  /home/jurgenv/glt/svn-installed/aterm/include/afun.h \
+  ../../libmept/MEPT-productions.h ../../libmept/MEPT-args.h \
+  ../../libmept/MEPT-symbols.h ../../libmept/MEPT-yieldprod.h \
+  ../../libmept/MEPT-ambtracker.h ../../libmept/MEPT-flatten.h \
+  ../../libmept/MEPT-implode.h ../../libmept/MEPT-visitors.h \
+  ../../libmept/MEPT-posinfo.h \
+  /home/jurgenv/glt/svn-installed/error-support/include/Location.h \
+  /home/jurgenv/glt/svn-installed/error-support/include/Location_dict.h \
+  ../../libmept/MEPT-annotations.h ../../libmept/MEPT-length.h \
+  ../../libmept/MEPT-renaming.h ../../libmept/MEPT-yield.h \
+  ../../libmept/MEPT-characters.h ../../libmept/MEPT-ordering.h \
+  ../../libmept/MEPT-origins.h ../../libmept/MEPT-apply.h \
+  ../../libmept/MEPT-tree.h ../../libmept/MEPT-layout.h minmax.h
+
+../../libmept/MEPT-utils.h:
+
+../../libmept/MEPT-start.h:
+
+../../libmept/MEPT.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/lib/gcc/i486-linux-gnu/4.0.3/include/stddef.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/time.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/bits/sched.h:
+
+/usr/include/alloca.h:
+
+/usr/include/string.h:
+
+/usr/include/bits/string.h:
+
+/usr/include/bits/string2.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/aterm1.h:
+
+/usr/include/stdio.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/gconv.h:
+
+/usr/lib/gcc/i486-linux-gnu/4.0.3/include/stdarg.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/encoding.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/abool.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/atypes.h:
+
+../../libmept/MEPT_dict.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/aterm2.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/aterm1.h:
+
+/home/jurgenv/glt/svn-installed/aterm/include/afun.h:
+
+../../libmept/MEPT-productions.h:
+
+../../libmept/MEPT-args.h:
+
+../../libmept/MEPT-symbols.h:
+
+../../libmept/MEPT-yieldprod.h:
+
+../../libmept/MEPT-ambtracker.h:
+
+../../libmept/MEPT-flatten.h:
+
+../../libmept/MEPT-implode.h:
+
+../../libmept/MEPT-visitors.h:
+
+../../libmept/MEPT-posinfo.h:
+
+/home/jurgenv/glt/svn-installed/error-support/include/Location.h:
+
+/home/jurgenv/glt/svn-installed/error-support/include/Location_dict.h:
+
+../../libmept/MEPT-annotations.h:
+
+../../libmept/MEPT-length.h:
+
+../../libmept/MEPT-renaming.h:
+
+../../libmept/MEPT-yield.h:
+
+../../libmept/MEPT-characters.h:
+
+../../libmept/MEPT-ordering.h:
+
+../../libmept/MEPT-origins.h:
+
+../../libmept/MEPT-apply.h:
+
+../../libmept/MEPT-tree.h:
+
+../../libmept/MEPT-layout.h:
+
+minmax.h:

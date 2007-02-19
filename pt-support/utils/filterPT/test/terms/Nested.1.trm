@@ -1,0 +1,17 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. nested.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 SOME-VAR				PIC 9 VALUE 1.
+       01 SOME-OTHER-VAR			PIC 9 VALUE 2.
+
+       PROCEDURE DIVISION.
+
+       MAIN.
+          IF SOME-VAR = 1
+             IF SOME-OTHER-VAR = 2
+                DISPLAY '3'
+             END-IF
+          END-IF.
+          STOP RUN.
