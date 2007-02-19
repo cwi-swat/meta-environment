@@ -17,11 +17,15 @@
 
   <info>
     <author>
-      <orgname>Jurgen Vinju</orgname>
+      <orgname>Centrum voor Wiskunde en Informatica, </orgname>
+
+      <contrib>Jurgen Vinju </contrib>
+
+      <email>Jurgen.Vinju@cwi.nl</email>
     </author>
 
-    <pubdate>$Rev$ by $Author$ at $Date: 2007-02-17 22:04:14
-    +0100 (Sat, 17 Feb 2007) $</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2007-02-17 22:04:14 +0100 (Sat, 17
+    Feb 2007) $</pubdate>
   </info>
 
   <para><emphasis>This document is currently being written.</emphasis></para>
