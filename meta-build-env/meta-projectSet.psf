@@ -18,6 +18,7 @@
 		<project reference="0.9.3,svn+ssh://svn.cwi.nl/navigator-gui/trunk,navigator-gui"/>
 		<project reference="0.9.3,svn+ssh://svn.cwi.nl/progress-gui/trunk,progress-gui"/>
 		<project reference="0.9.3,svn+ssh://svn.cwi.nl/shared-objects/trunk,shared-objects"/>
+		<project reference="0.9.3,svn+ssh://svn.cwi.nl/tide/trunk,tide"/>
 		<project reference="0.9.3,svn+ssh://svn.cwi.nl/toolbus-java-adapter/trunk,toolbus-java-adapter"/>
 	</provider>
 </psf>
