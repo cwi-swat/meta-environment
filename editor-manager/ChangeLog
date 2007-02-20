@@ -1,7 +1,8 @@
 $Id$
 
 Tue Feb 13 11:02:09 CET 2007 <kooiker@cwi.nl>
- * src/editor-manager.c: when session status is zombie create a new session
+ * src/editor-manager.c: 
+   - when session status is zombie create a new session (closes #661)
 
 Tue Jun 20 13:34:52 CEST 2006 <jurgenv@cwi.nl>
  * src/editor-manager.*: added session creation without a path
