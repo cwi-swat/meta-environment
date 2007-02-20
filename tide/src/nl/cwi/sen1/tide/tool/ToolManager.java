@@ -21,40 +21,38 @@ import nl.cwi.sen1.tide.tool.support.Rule;
 public class ToolManager {
 	private Studio studio;
 
-	private Map tideTools;
+	private Map<String, TideToolFactory> tideTools;
 
-	private java.util.List processToolList;
+	private java.util.List<String> processToolList;
 
-	private java.util.List processActionList;
+	private java.util.List<ProcessAction> processActionList;
 
-	private Map processTools;
+	private Map<String, ProcessToolFactory> processTools;
 
-	private java.util.List adapterToolList;
+	private java.util.List<String> adapterToolList;
 
-	private java.util.List adapterActionList;
+	private java.util.List<AdapterAction> adapterActionList;
 
-	private Map adapterTools;
+	private Map<String, AdapterToolFactory> adapterTools;
 
-	private Map toolInstances;
+	private Map<String, Map<Object, TideTool>> toolInstances;
 
 	private PreferenceSet preferences;
-
-	// {{{ public ToolManager(JDesktopPane desktop, Properties defaults)
 
 	public ToolManager(Studio studio, Properties defaults) {
 		this.studio = studio;
 
-		tideTools = new HashMap();
+		tideTools = new HashMap<String, TideToolFactory>();
 
-		processToolList = new LinkedList();
-		processActionList = new LinkedList();
-		processTools = new HashMap();
+		processToolList = new LinkedList<String>();
+		processActionList = new LinkedList<ProcessAction>();
+		processTools = new HashMap<String, ProcessToolFactory>();
 
-		adapterToolList = new LinkedList();
-		adapterActionList = new LinkedList();
-		adapterTools = new HashMap();
+		adapterToolList = new LinkedList<String>();
+		adapterActionList = new LinkedList<AdapterAction>();
+		adapterTools = new HashMap<String, AdapterToolFactory>();
 
-		toolInstances = new HashMap();
+		toolInstances = new HashMap<String, Map<Object, TideTool>>();
 
 		preferences = new PreferenceSet(defaults);
 
@@ -71,9 +69,9 @@ public class ToolManager {
 	}
 
 	public TideTool getTool(String toolName, Object target) {
-		Map tools = (Map) toolInstances.get(toolName);
+		Map<Object, TideTool> tools = toolInstances.get(toolName);
 		if (tools != null) {
-			return (TideTool) tools.get(target);
+			return tools.get(target);
 		}
 
 		return null;
@@ -82,9 +80,9 @@ public class ToolManager {
 	public void putTool(String toolName, Object target, TideTool tool) {
 		tool.setName(toolName);
 		tool.setTarget(target);
-		Map tools = (Map) toolInstances.get(toolName);
+		Map<Object, TideTool> tools = toolInstances.get(toolName);
 		if (tools == null) {
-			tools = new HashMap();
+			tools = new HashMap<Object, TideTool>();
 			toolInstances.put(toolName, tools);
 		}
 
@@ -92,7 +90,7 @@ public class ToolManager {
 	}
 
 	public void removeTool(TideTool tool) {
-		Map tools = (Map) toolInstances.get(tool.getName());
+		Map<Object, TideTool> tools = toolInstances.get(tool.getName());
 		studio.removeComponent(tool);
 		tools.remove(tool.getTarget());
 	}
@@ -109,9 +107,6 @@ public class ToolManager {
 		processTools.put(name, factory);
 	}
 
-	// }}}
-	// {{{ public void registerAdapterTool(AdapterToolFactory factory)
-
 	public void registerAdapterTool(AdapterToolFactory factory) {
 		String name = factory.getName();
 
@@ -120,19 +115,19 @@ public class ToolManager {
 		adapterTools.put(name, factory);
 	}
 
-	public Iterator processToolIterator() {
+	public Iterator<String> processToolIterator() {
 		return processToolList.iterator();
 	}
 
-	public Iterator adapterToolIterator() {
+	public Iterator<String> adapterToolIterator() {
 		return adapterToolList.iterator();
 	}
 
-	public Iterator processActionIterator() {
+	public Iterator<ProcessAction> processActionIterator() {
 		return processActionList.iterator();
 	}
 
-	public Iterator adapterActionIterator() {
+	public Iterator<AdapterAction> adapterActionIterator() {
 		return adapterActionList.iterator();
 	}
 
@@ -144,23 +139,22 @@ public class ToolManager {
 	public TideTool launchTool(String toolName) {
 		TideTool tool = getTool(toolName, this);
 		if (tool == null) {
-			TideToolFactory factory = (TideToolFactory) tideTools.get(toolName);
+			TideToolFactory factory = tideTools.get(toolName);
 			tool = factory.createTool();
 			putTool(toolName, this, tool);
-			
+
 			((StudioImplWithPredefinedLayout) studio).addComponent(tool,
 					StudioImplWithPredefinedLayout.TOP_LEFT);
 		}
-		
+
 		return tool;
-		
+
 	}
-	
+
 	public ProcessTool launchProcessTool(String toolName, DebugProcess process) {
 		ProcessTool tool = (ProcessTool) getTool(toolName, process);
 		if (tool == null) {
-			ProcessToolFactory factory = (ProcessToolFactory) processTools
-					.get(toolName);
+			ProcessToolFactory factory = processTools.get(toolName);
 			tool = factory.createTool(process);
 			putTool(toolName, process, tool);
 
@@ -174,28 +168,27 @@ public class ToolManager {
 	public AdapterTool launchAdapterTool(String toolName, DebugAdapter adapter) {
 		AdapterTool tool = (AdapterTool) getTool(toolName, adapter);
 		if (tool == null) {
-			AdapterToolFactory factory = (AdapterToolFactory) adapterTools
-					.get(toolName);
+			AdapterToolFactory factory = adapterTools.get(toolName);
 			tool = factory.createTool(adapter);
 			putTool(toolName, adapter, tool);
-			((StudioImplWithPredefinedLayout) studio).addComponent(tool, 
+			((StudioImplWithPredefinedLayout) studio).addComponent(tool,
 					StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
 		}
 		return tool;
 	}
 
 	public void setCurrentProcess(DebugProcess process) {
-		Iterator iter = processActionIterator();
+		Iterator<ProcessAction> iter = processActionIterator();
 		while (iter.hasNext()) {
-			ProcessAction action = (ProcessAction) iter.next();
+			ProcessAction action = iter.next();
 			action.setProcess(process);
 		}
 	}
 
 	public void setCurrentAdapter(DebugAdapter adapter) {
-		Iterator iter = adapterActionIterator();
+		Iterator<AdapterAction> iter = adapterActionIterator();
 		while (iter.hasNext()) {
-			AdapterAction action = (AdapterAction) iter.next();
+			AdapterAction action = iter.next();
 			action.setAdapter(adapter);
 		}
 	}

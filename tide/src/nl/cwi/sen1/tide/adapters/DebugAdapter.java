@@ -10,7 +10,7 @@ import aterm.ATerm;
 import aterm.ATermFactory;
 
 public class DebugAdapter implements DebugAdapterTif {
-	private Map processes;
+	private Map<Integer, DebugAdapterProcess> processes;
 	private DebugAdapterBridge bridge;
 	private ATermFactory factory;
 
@@ -18,7 +18,7 @@ public class DebugAdapter implements DebugAdapterTif {
 		throws IOException {
 		bridge = new DebugAdapterBridge(factory, this);
 		this.factory = factory;
-		processes = new HashMap();
+		processes = new HashMap<Integer, DebugAdapterProcess>();
 
 		bridge.init(args);
 		bridge.connect("debug-adapter", null, port);
@@ -41,7 +41,7 @@ public class DebugAdapter implements DebugAdapterTif {
 	}
 
 	public DebugAdapterProcess getProcess(int id) {
-		return (DebugAdapterProcess) processes.get(new Integer(id));
+		return processes.get(new Integer(id));
 	}
 
 	public void event(int pid, DebugAdapterRule rule, ATerm value) {
@@ -76,7 +76,7 @@ public class DebugAdapter implements DebugAdapterTif {
 				enabled.equals(factory.parse("true")));
 
 		
-		List args = new LinkedList();
+		List<Integer> args = new LinkedList<Integer>();
 		args.add(new Integer(rule.getId()));
 
 		return factory.make("snd-value(rule-created(<int>))", args);
@@ -124,7 +124,7 @@ public class DebugAdapter implements DebugAdapterTif {
 	public ATerm evaluate(int pid, ATerm act) {
 		DebugAdapterProcess proc = getProcess(pid);
 		ATerm result = proc.evaluate(act);
-		List args = new LinkedList();
+		List<ATerm> args = new LinkedList<ATerm>();
 		args.add(result);
 
 		return factory.make("snd-value(evaluated(<term>))", args);

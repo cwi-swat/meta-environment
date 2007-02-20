@@ -12,6 +12,7 @@ import nl.cwi.sen1.gui.StatusMessageEvent;
 import nl.cwi.sen1.gui.component.NameChangedListener;
 import nl.cwi.sen1.gui.component.StudioComponent;
 import nl.cwi.sen1.gui.component.StudioComponentListener;
+import nl.cwi.sen1.gui.component.TooltipChangedListener;
 import nl.cwi.sen1.tide.tool.support.Expr;
 
 public abstract class TideTool extends JPanel implements StudioComponent {
@@ -22,6 +23,8 @@ public abstract class TideTool extends JPanel implements StudioComponent {
     private ToolManager manager;
 
     private String name;
+    
+    private String tooltip;
 
     private Object target;
 
@@ -40,38 +43,30 @@ public abstract class TideTool extends JPanel implements StudioComponent {
         return manager;
     }
 
-    // }}}
-
-    // {{{ public int getId()
-
     public int getId() {
         return id;
     }
 
-    // }}}
-    // {{{ public String getName()
-
     public String getName() {
         return name;
     }
-
-    // }}}
-    // {{{ public Object getTarget()
+    
+    public String getTooltip() {
+    	return tooltip;
+    }
 
     public Object getTarget() {
         return target;
     }
 
-    // }}}
-    // {{{ public void setName(String name)
-
     public void setName(String name) {
         this.name = name;
     }
 
-    // }}}
-    // {{{ public void setTarget(Object target)
-
+    public void setTooltip(String tooltip) {
+    	this.tooltip = tooltip;
+    }
+    
     public void setTarget(Object target) {
         this.target = target;
     }
@@ -118,6 +113,12 @@ public abstract class TideTool extends JPanel implements StudioComponent {
     }
 
     public void removeNameChangedListener(NameChangedListener l) {
+    }
+
+    public void addTooltipChangedListener(TooltipChangedListener l) {
+    }
+
+    public void removeTooltipChangedListener(TooltipChangedListener l) {
     }
 
     // Take from javax.swing.event.EventListenerList example

@@ -1,10 +1,10 @@
 // Java tool interface DebugAdapterTif
 // This file is generated automatically, please do not edit!
-// generation time: Oct 6, 2004 8:54:49 AM
+// generation time: Feb 20, 2007 2:40:17 PM
 
 package nl.cwi.sen1.tide.adapters;
 
-import aterm.ATerm;
+import aterm.*;
 
 public interface DebugAdapterTif
 {

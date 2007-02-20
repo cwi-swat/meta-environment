@@ -18,8 +18,8 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 	private String file;
 	private int line;
 	private int stackLevel;
-	private Map rulesByBreak;
-	private Map breaksByRule;
+	private Map<Integer, DebugAdapterRule> rulesByBreak;
+	private Map<DebugAdapterRule, Integer> breaksByRule;
 
 	private ATermFactory factory;
 
@@ -29,8 +29,8 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 		this.name = name;
 		this.factory = adapter.getFactory();
 
-		rulesByBreak = new HashMap();
-		breaksByRule = new HashMap();
+		rulesByBreak = new HashMap<Integer, DebugAdapterRule>();
+		breaksByRule = new HashMap<DebugAdapterRule, Integer>();
 	}
 
 	public int getPid() {
@@ -67,7 +67,7 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 
 	public void handleRuleDestruction(DebugAdapterRule rule) {
 		super.handleRuleDestruction(rule);
-		Integer brk = (Integer) breaksByRule.get(rule);
+		Integer brk = breaksByRule.get(rule);
 		if (brk != null) {
 			adapter.writeln("delete " + brk);
 			breaksByRule.remove(rule);
@@ -77,14 +77,14 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 
 	public void handleRuleEnabling(DebugAdapterRule rule) {
 		super.handleRuleEnabling(rule);
-		Integer brk = (Integer) breaksByRule.get(rule);
+		Integer brk = breaksByRule.get(rule);
 		if (brk != null) {
 			adapter.writeln("enable " + brk);
 		}
 	}
 	public void handleRuleDisabling(DebugAdapterRule rule) {
 		super.handleRuleDisabling(rule);
-		Integer brk = (Integer) breaksByRule.get(rule);
+		Integer brk = breaksByRule.get(rule);
 		if (brk != null) {
 			adapter.writeln("disable " + brk);
 		}
@@ -137,7 +137,6 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 	}
 
 	private String getVariableName(ATerm col, ATerm text) {
-		
 		return name;
 	}
 

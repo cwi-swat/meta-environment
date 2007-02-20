@@ -24,13 +24,13 @@ public class RetrieveVarCmd extends Command
 	private String value = "";
 	private String error = "";
 	
-	private static List reservedKeywords;
+	private static List<String> reservedKeywords;
 
 	static {
 		patternVar = Pattern.compile("\\$[0-9]*\\s+=\\s+(.+)");
-		reservedKeywords = new LinkedList();
+		reservedKeywords = new LinkedList<String>();
 		
-		Object[] keywords = { "auto", "break", "case", "char", "const", "continue", "default", "do", "double",
+		String[] keywords = { "auto", "break", "case", "char", "const", "continue", "default", "do", "double",
 				"else", "enum", "extern", "float", "for", "goto", "if", "int", "long", "register", "return", "short",
 				"signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void",
 				"volatile", "while"

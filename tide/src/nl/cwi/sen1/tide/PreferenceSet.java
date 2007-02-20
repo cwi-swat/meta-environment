@@ -12,300 +12,178 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-public class PreferenceSet
-{
-  public static final String PREFS_FILE = ".tiderc";
+public class PreferenceSet {
+	public static final String PREFS_FILE = ".tiderc";
 
-  private List preferenceNames;
-  private Properties preferences;
-  private List listeners;
+	private List<String> preferenceNames;
+	private Properties preferences;
+	private List<PreferenceListener> listeners;
 
-  private boolean is_clean;
+	private boolean is_clean;
 
-  //{{{ public PreferenceSet()
+	public PreferenceSet(Properties defaults) {
+		preferenceNames = new LinkedList<String>();
+		preferences = new Properties(defaults);
+		listeners = new LinkedList<PreferenceListener>();
+	}
 
-  public PreferenceSet(Properties defaults)
-  {
-    preferenceNames = new LinkedList();
-    preferences = new Properties(defaults);
-    listeners   = new LinkedList();
-  }
+	public void registerPreference(String name) {
+		preferenceNames.add(name);
+	}
 
-  //}}}
+	public Iterator<String> preferenceNameIterator(String prefix) {
+		return new PreferenceIterator(prefix, preferenceNames);
+	}
 
-  //{{{ public void registerPreference(String name)
+	public void addPreferenceListener(PreferenceListener listener) {
+		listeners.add(listener);
+	}
 
-  public void registerPreference(String name)
-  {
-    preferenceNames.add(name);
-  }
+	public void removePreferenceListener(PreferenceListener listener) {
+		listeners.remove(listener);
+	}
 
-  //}}}
-  //{{{ public Iterator preferenceNameIterator(String prefix)
+	public void firePreferenceChanged(String name, String oldValue,
+			String newValue) {
+		System.out.println("preference changed: " + name + " from " + oldValue
+				+ " into " + newValue);
 
-  public Iterator preferenceNameIterator(String prefix)
-  {
-    return new PreferenceIterator(prefix, preferenceNames, preferences);
-  }
+		Iterator<PreferenceListener> iter = listeners.iterator();
+		while (iter.hasNext()) {
+			PreferenceListener listener = iter.next();
+			listener.preferenceChanged(this, name, oldValue, newValue);
+		}
+	}
 
-  //}}}
+	public void firePreferencesChanged() {
+		Iterator<PreferenceListener> iter = listeners.iterator();
+		while (iter.hasNext()) {
+			PreferenceListener listener = iter.next();
+			listener.preferencesChanged(this);
+		}
+	}
 
-  //{{{ public void addPreferenceListener(PreferenceListener listener)
+	public void firePreferencesStatusChanged(boolean new_status) {
+		Iterator<PreferenceListener> iter = listeners.iterator();
+		while (iter.hasNext()) {
+			PreferenceListener listener = iter.next();
+			listener.preferencesStatusChanged(this, new_status);
+		}
+	}
 
-  public void addPreferenceListener(PreferenceListener listener)
-  {
-    listeners.add(listener);
-  }
+	public void loadPreferences() throws IOException {
+		String path = System.getProperty("user.home");
+		File file = new File(path, PREFS_FILE);
+		FileInputStream input = new FileInputStream(file);
+		loadPreferences(input);
+	}
 
-  //}}}
-  //{{{ public void removePreferenceListener(PreferenceListener listener)
+	public void loadPreferences(InputStream input) throws IOException {
+		preferences.load(input);
+		firePreferencesChanged();
+	}
 
-  public void removePreferenceListener(PreferenceListener listener)
-  {
-    listeners.remove(listener);
-  }
+	public void savePreferences() throws IOException {
+		FileOutputStream stream = new FileOutputStream(PREFS_FILE);
+		savePreferences(stream);
+	}
 
-  //}}}
-  //{{{ public void firePreferenceChanged(name, oldValue, newValue)
+	public void savePreferences(OutputStream stream) throws IOException {
+		preferences.store(stream, "Tide Preferences");
+		setClean();
+	}
 
-  public void firePreferenceChanged(String name,
-				    String oldValue, String newValue)
-  {
-    System.out.println("preference changed: " + name + " from "
-		       + oldValue + " into " + newValue);
+	public void setClean() {
+		setStatus(true);
+	}
 
-    Iterator iter = listeners.iterator();
-    while (iter.hasNext()) {
-      PreferenceListener listener = (PreferenceListener)iter.next();
-      listener.preferenceChanged(this, name, oldValue, newValue);
-    }
-  }
+	private void setStatus(boolean status) {
+		if (is_clean != status) {
+			is_clean = status;
+			firePreferencesStatusChanged(is_clean);
+		}
+	}
 
-  //}}}
-  //{{{ public void firePreferencesChanged()
+	public void setPreference(String name, String value) {
+		String oldValue = (String) preferences.setProperty(name, value);
+		if (oldValue == null || !oldValue.equals(value)) {
+			firePreferenceChanged(name, oldValue, value);
+			setStatus(false);
+		}
+	}
 
-  public void firePreferencesChanged()
-  {
-    Iterator iter = listeners.iterator();
-    while (iter.hasNext()) {
-      PreferenceListener listener = (PreferenceListener)iter.next();
-      listener.preferencesChanged(this);
-    }
-  }
+	public void setBooleanPreference(String name, boolean value) {
+		setPreference(name, new Boolean(value).toString());
+	}
 
-  //}}}
-  //{{{ public void firePreferencesStatusChanged(boolean new_status)
+	public void setIntegerPreference(String name, int value) {
+		setPreference(name, new Integer(value).toString());
+	}
 
-  public void firePreferencesStatusChanged(boolean new_status)
-  {
-    Iterator iter = listeners.iterator();
-    while (iter.hasNext()) {
-      PreferenceListener listener = (PreferenceListener)iter.next();
-      listener.preferencesStatusChanged(this, new_status);
-    }
-  }
+	public String getPreference(String name) {
+		return preferences.getProperty(name);
+	}
 
-  //}}}
+	public Boolean getBooleanPreference(String name) {
+		String value = getPreference(name);
+		if (value == null) {
+			return null;
+		}
 
-  //{{{ public void loadPreferences()stream
+		return Boolean.valueOf(value);
+	}
 
-  public void loadPreferences()
-    throws IOException
-  {
-    String path = System.getProperty("user.home");
-    File file = new File(path, PREFS_FILE);
-    FileInputStream input = new FileInputStream(file);
-    loadPreferences(input);
-  }
+	public Integer getIntegerPreference(String name) {
+		String value = getPreference(name);
+		if (value == null) {
+			return null;
+		}
 
-  //}}}
-  //{{{ public void loadPreferences(InputStream stream)
+		return Integer.valueOf(value);
+	}
 
-  public void loadPreferences(InputStream input)
-    throws IOException
-  {
-    preferences.load(input);
-    firePreferencesChanged();
-  }
-
-  //}}}
-  //{{{ public void savePreferences()
-
-  public void savePreferences()
-    throws IOException
-  {
-    FileOutputStream stream = new FileOutputStream(PREFS_FILE);
-    savePreferences(stream);
-  }
-
-  //}}}
-  //{{{ public void savePreferences(OutputStream stream)
-
-  public void savePreferences(OutputStream stream)
-    throws IOException
-  {
-    preferences.store(stream, "Tide Preferences");
-    setClean();
-  }
-
-  //}}}
-  //{{{ public void setClean()
-
-  public void setClean()
-  {
-    setStatus(true);
-  }
-
-  //}}}
-  //{{{ private void setStatus(boolean status)
-
-  private void setStatus(boolean status)
-  {
-    if (is_clean != status) {
-      is_clean = status;
-      firePreferencesStatusChanged(is_clean);
-    }
-  }
-
-  //}}}
-
-  //{{{ public void setPreference(String name, String value)
-
-  public void setPreference(String name, String value)
-  {
-    String oldValue = (String)preferences.setProperty(name, value);
-    if (oldValue == null || !oldValue.equals(value)) {
-      firePreferenceChanged(name, oldValue, value);
-      setStatus(false);
-    }
-  }
-
-  //}}}
-  //{{{ public void setBooleanPreference(String name, boolean value)
-
-  public void setBooleanPreference(String name, boolean value)
-  {
-    setPreference(name, new Boolean(value).toString());
-  }
-
-  //}}}
-  //{{{ public void setIntegerPreference(String name, int value)
-
-  public void setIntegerPreference(String name, int value)
-  {
-    setPreference(name, new Integer(value).toString());
-  }
-
-  //}}}
-
-  //{{{ public String getPreference(String name)
-
-  public String getPreference(String name)
-  {
-    return preferences.getProperty(name);
-  }
-
-  //}}}
-  //{{{ public Boolean getBooleanPreference(String name)
-
-  public Boolean getBooleanPreference(String name)
-  {
-    String value = getPreference(name);
-    if (value == null) {
-      return null;
-    }
-
-    return Boolean.valueOf(value);
-  }
-
-  //}}}
-  //{{{ public Integer getIntegerPreference(String name)
-
-  public Integer getIntegerPreference(String name)
-  {
-    String value = getPreference(name);
-    if (value == null) {
-      return null;
-    }
-
-    return Integer.valueOf(value);
-  }
-
-  //}}}
-  //{{{ public Font getFontPreference(String name)
-
-  public Font getFontPreference(String name)
-  {
-    return Font.decode(getPreference(name));
-  }
-
-  //}}}
+	public Font getFontPreference(String name) {
+		return Font.decode(getPreference(name));
+	}
 }
 
-class PreferenceIterator
-  implements Iterator
-{
-  private String prefix;
-  private List names;
-  private Properties preferences;
-  private int index;
-  private String curName;
+class PreferenceIterator implements Iterator<String> {
+	private String prefix;
+	private List<String> names;
+	private int index;
+	private String curName;
 
-  //{{{ public PreferenceIterator(prefix, names, preferences)
+	public PreferenceIterator(String prefix, List<String> names) {
+		this.prefix = prefix;
+		this.names = names;
 
-  public PreferenceIterator(String prefix, List names,
-			    Properties preferences)
-  {
-    this.prefix = prefix;
-    this.names  = names;
-    this.preferences = preferences;
+		index = 0;
 
-    index = 0;
+		forward();
+	}
 
-    forward();
-  }
+	private void forward() {
+		while (index < names.size()) {
+			curName = names.get(index);
+			if (curName.startsWith(prefix)) {
+				break;
+			}
+		}
+	}
 
-  //}}}
+	public boolean hasNext() {
+		return index < names.size();
+	}
 
-  //{{{ private void forward()
+	public String next() {
+		String name = curName;
+		index++;
+		forward();
 
-  private void forward()
-  {
-    while (index < names.size()) {
-      curName = (String)names.get(index);
-      if (curName.startsWith(prefix)) {
-	break;
-      }
-    }
-  }
+		return name;
+	}
 
-  //}}}
-  //{{{ public boolean hasNext()
-
-  public boolean hasNext()
-  {
-    return index < names.size();
-  }
-
-  //}}}
-  //{{{ public Object next()
-
-  public Object next()
-  {
-    String name = curName;
-    index++;
-    forward();
-
-    return name;
-  }
-
-  //}}}
-  //{{{ public void remove()
-
-  public void remove()
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  //}}}
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
 }
