@@ -117,8 +117,7 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
 process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
 let
   Path: str,
-  Categories: term,
-  ModuleId: term
+  Categories: term
 in
   IsTextEditorRegistered(Sid, AlreadyExists?)
   .
@@ -218,7 +217,6 @@ let
   Action: str,
   Event: term,
   ModuleId: term,
-  Modulename: str,
   Sort: str
 in
   rec-msg(te-event(Sid, Event?))
