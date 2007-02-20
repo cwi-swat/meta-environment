@@ -15,7 +15,7 @@ Wed Feb  7 17:20:37 CET 2007 <{paulk,kooiker,jurgenv}@cwi.nl>
    This is wrong, since it could introduce unquoted terms at positions
    that would be evaluated (right hand side of assignments, if-then-else).
    Now we create new processes in the context of an environment that binds
-   actual to formal parameters. 
+   actual to formal parameters (closes #690). 
 
 Tue Jan 16 12:51:48 CET 2007 <jurgenv@cwi.nl>
  * toolbus/typechecker.c: type checking errors are not printed to stderr
