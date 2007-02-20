@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Feb 9, 2007 2:45:37 PM
+// generation time: Feb 20, 2007 9:13:52 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -69,6 +69,15 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `displayMessage' not supported.");
+    }
+  }
+  public void setTooltip(ATerm t0, String s1)
+  {
+    if (tool != null) {
+      tool.setTooltip(t0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `setTooltip' not supported.");
     }
   }
   public void registerTextCategories(ATerm t0, ATerm t1)

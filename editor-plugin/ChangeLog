@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 20 09:28:02 CET 2007 <kooiker@cwi.nl>
+ * editor-plugin-idef.src:
+   - Add support for setting tooltips
+
 Mon Feb 12 15:57:44 CET 2007 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
    - Fix bug that sets the cursor behind the document lenght when using 

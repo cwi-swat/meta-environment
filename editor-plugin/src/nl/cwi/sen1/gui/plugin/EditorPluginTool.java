@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 9, 2007 2:45:37 PM
+// generation time: Feb 20, 2007 9:13:52 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -29,6 +29,7 @@ abstract public class EditorPluginTool
   private ATerm PisModified0;
   private ATerm PkillEditor0;
   private ATerm PdisplayMessage0;
+  private ATerm PsetTooltip0;
   private ATerm PregisterTextCategories0;
   private ATerm PsetSelection0;
   private ATerm PwriteContents0;
@@ -57,6 +58,7 @@ abstract public class EditorPluginTool
   private void initSigTable()
   {
     sigTable.add(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-tooltip(<term>,<str>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,set-info(<term>,<str>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,set-editable(<term>,<bool>))"));
     sigTable.add(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"));
@@ -88,6 +90,7 @@ abstract public class EditorPluginTool
     PisModified0 = factory.parse("rec-do(is-modified(<term>))");
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PdisplayMessage0 = factory.parse("rec-do(display-message(<term>,<str>))");
+    PsetTooltip0 = factory.parse("rec-do(set-tooltip(<term>,<str>))");
     PregisterTextCategories0 = factory.parse("rec-do(register-text-categories(<term>,<term>))");
     PsetSelection0 = factory.parse("rec-do(set-selection(<term>,<term>))");
     PwriteContents0 = factory.parse("rec-do(write-contents(<term>))");
@@ -138,6 +141,11 @@ abstract public class EditorPluginTool
     result = term.match(PdisplayMessage0);
     if (result != null) {
       displayMessage((ATerm)result.get(0), (String)result.get(1));
+      return null;
+    }
+    result = term.match(PsetTooltip0);
+    if (result != null) {
+      setTooltip((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PregisterTextCategories0);

@@ -22,7 +22,8 @@ let
   Pid: int,
   Categories: term,
   Slices: term,
-  MenuList: list
+  MenuList: list,
+  Tooltip: str
 in
   StartEditorPanel()
   . rec-connect(T?)
@@ -30,6 +31,9 @@ in
   (
     rec-msg(te-edit-text(EditorId?, Filename?))
     . snd-do(T, edit-file(EditorId, Filename))
+  +
+    rec-msg(te-set-tooltip(EditorId?, Tooltip?))
+    . snd-do(T, set-tooltip(EditorId, Tooltip))
   +
     rec-msg(te-set-info(EditorId?, Message?))
     . snd-do(T, set-info(EditorId, Message))
