@@ -22,6 +22,18 @@ public interface StudioComponent {
   public void setName(String name);
 
   /**
+   * The tooltip is used to show when hovering the mouse over tabs.
+   * @return the tooltip of a tab.
+   */
+  public String getTooltip();
+
+  /**
+   * The tooltip can be changed.
+   * @param tooltip new tooltip for this component.
+   */
+  public void setTooltip(String tooltip);
+  
+  /**
    * Tabs can be labelled with small icons too.
    * @return an icon to be used by the Studio
    */
@@ -88,4 +100,17 @@ public interface StudioComponent {
    * Unregister a NameChangedListener.
    */
   public void removeNameChangedListener(NameChangedListener l);
+  
+  /**
+   * Register a TooltipChangedListener. If a tab wants to change its tooltip, it
+   * should notify all TooltipChangedListeners. The MetaStudio itself uses it
+   * to update the tooltip off the tab.
+   */
+  public void addTooltipChangedListener(TooltipChangedListener l);
+
+  /**
+   * Unregister a TooltipChangedListener.
+   */
+  public void removeTooltipChangedListener(TooltipChangedListener l);
+  
 }

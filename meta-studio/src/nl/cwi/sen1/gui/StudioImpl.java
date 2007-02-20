@@ -53,6 +53,7 @@ import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.gui.component.NameChangedListener;
 import nl.cwi.sen1.gui.component.StudioComponent;
+import nl.cwi.sen1.gui.component.TooltipChangedListener;
 import nl.cwi.sen1.gui.plugin.PluginLoader;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPluginListener;
@@ -328,6 +329,7 @@ public class StudioImpl implements Studio, GuiTif {
 			}
 		});
 		addStudioComponentNameChangedListener(component);
+		addStudioComponentTooltipChangedListener(component);
 	}
 
 	public void removeComponent(StudioComponent component) {
@@ -670,6 +672,23 @@ public class StudioImpl implements Studio, GuiTif {
 					View view = viewsById.getView(id);
 					if (view != null) {
 						view.getViewProperties().setTitle(component.getName());
+					}
+				}
+			}
+		});
+	}
+
+	protected void addStudioComponentTooltipChangedListener(
+			final StudioComponent component) {
+		component.addTooltipChangedListener(new TooltipChangedListener() {
+			public void componentTooltipChanged() {
+				int id = getComponentId(component);
+				if (id != -1) {
+					View view = viewsById.getView(id);
+					if (view != null) {
+						view.getWindowProperties().getTabProperties()
+						.getTitledTabProperties().getNormalProperties()
+						.setToolTipText(component.getTooltip());
 					}
 				}
 			}

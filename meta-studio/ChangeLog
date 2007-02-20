@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 20 09:27:19 CET 2007 <kooiker@cwi.nl>
+ * src/**/StudioComponent.java:
+   - Add support for Tooltips
+
 Fri Feb  2 15:23:14 CET 2007 <kooiker@cwi.nl>
  * Updated to DockingWindows 1.5.0
 

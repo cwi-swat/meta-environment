@@ -18,6 +18,8 @@ public class StudioComponentImpl implements StudioComponent {
 
     private String name;
 
+    private String tooltip;
+    
     private JComponent viewComponent;
 
     /**
@@ -29,6 +31,12 @@ public class StudioComponentImpl implements StudioComponent {
         this.name = name;
         this.viewComponent = viewComponent;
     }
+    
+    public StudioComponentImpl(String name, JComponent viewComonent, String tooltip) {
+    	this.name = name;
+    	this.viewComponent = viewComonent;
+    	this.tooltip = tooltip;
+    }
 
     public String getName() {
         return name;
@@ -37,6 +45,15 @@ public class StudioComponentImpl implements StudioComponent {
     public void setName(String name) {
         this.name = name;
         fireNameChangedEvent();
+    }
+    
+    public String getTooltip() {
+    	return tooltip;
+    }
+    
+    public void setTooltip(String tooltip) {
+    	this.tooltip = tooltip;
+    	fireTooltipChangedEvent();
     }
 
     public JComponent getViewComponent() {
@@ -119,6 +136,24 @@ public class StudioComponentImpl implements StudioComponent {
             if (listeners[i] == NameChangedListener.class) {
                 ((NameChangedListener) listeners[i + 1])
                         .componentNameChanged();
+            }
+        }
+    }
+
+	public void addTooltipChangedListener(TooltipChangedListener l) {
+        listenerList.add(TooltipChangedListener.class, l);
+	}
+
+	public void removeTooltipChangedListener(TooltipChangedListener l) {
+        listenerList.remove(TooltipChangedListener.class, l);
+	}
+
+	public void fireTooltipChangedEvent() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == TooltipChangedListener.class) {
+                ((TooltipChangedListener) listeners[i + 1])
+                        .componentTooltipChanged();
             }
         }
     }
