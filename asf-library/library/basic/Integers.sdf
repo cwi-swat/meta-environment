@@ -5,20 +5,25 @@ imports basic/Booleans
 
 hiddens
 context-free start-symbols
-  Integer Boolean
+  Integer Boolean  %% NatCon  <NatCon, NatCon> <Digits, NatCon> Digits <Digits, Digits>
 
 exports
+
 context-free syntax
   Integer ">" Integer    -> Boolean           
   Integer ">=" Integer   -> Boolean           
   Integer "<" Integer    -> Boolean           
   Integer "<=" Integer   -> Boolean           
-  Integer "==" Integer   -> Boolean           
-  max(Integer, Integer)  -> Integer           
-  min(Integer, Integer)  -> Integer           
-  mod(Integer, Integer)  -> Integer           
-  ndiv(Integer, Integer) -> Integer           
+  Integer "==" Integer   -> Boolean  
   "(" Integer ")"        -> Integer {bracket} 
+
+  abs(Integer)           -> NatCon   
+  pow(Integer, NatCon)   -> Integer      
+  max(Integer, Integer)  -> Integer           
+  min(Integer, Integer)  -> Integer 
+  ndiv(Integer, Integer) -> Integer %% Obselete, only for compatibility          
+  mod(Integer, Integer)  -> Integer           
+  gcd(Integer, Integer)  -> Integer 
 
 context-free priorities
   { non-assoc: "+" integer:Integer -> Integer {non-assoc} 
@@ -32,18 +37,41 @@ context-free priorities
 hiddens
 imports basic/Comments
 
+sorts Digits
+
 context-free syntax
-  "gt" "(" Integer "," Integer ")" -> Boolean  
-  Integer "-//" Integer            -> Integer  
-  Integer ">-" Integer             -> Integer  
+  add(NatCon, NatCon)                    -> NatCon
+  gt(NatCon, NatCon)                     -> Boolean 
+  ge(NatCon, NatCon)                     -> Boolean
+  NatCon "-//" NatCon                    -> NatCon  
+  NatCon ">-" NatCon                     -> NatCon  
+  split(Digits)                          -> <Digits, Digits>
+  ldiv(Digits, Digits, NatCon, Digits)   -> <Digits, NatCon>
+  xsub(NatCon, NatCon, NatCon)           -> <NatCon, NatCon>
+
+lexical syntax
+  [0-9]*            -> Digits
 
 variables
-  "Nat" [0-9\']*     -> Integer  
-  "Nat-con" [0-9\']* -> NatCon   
+  "Nat" [0-9\']*     -> NatCon 
   "Int" [0-9\']*     -> Integer  
 
 lexical variables
-  "n" [0-9]* -> NatCon  
-  "c" [0-9]* -> [0-9]   
-  "x" [0-9]* -> [0-9]*  
-  "y" [0-9]* -> [0-9]+  
+
+  "D" [0-9]*           -> [0-9]
+  "Ds" [0-9]*          -> [0-9]+
+  "OptDs" [0-9]*       -> [0-9]*
+
+  "Remainder" [0-9\']* -> [0-9]+
+  "Divisor" [0-9\']*   -> [0-9]+
+  "Dividend"           -> [0-9]+
+  "Iterations"         -> [0-9]+
+  "Tail"               -> [0-9]+
+  "Result"             -> [0-9]+
+
+  "Dividend" [12]      -> [0-9]*
+
+ 
+  
+
+

@@ -1,0 +1,45 @@
+module basic/Rationals
+exports
+  imports basic/Integers basic/Booleans
+  sorts RatCon Rational
+ 
+  context-free syntax
+    rat(Integer, Integer)    -> RatCon
+    RatCon                   -> Rational
+
+    mk-rat(Integer, Integer) -> Rational
+
+    int2rat(Integer)         -> Rational
+    rat2int(Rational)        -> Integer
+
+    Rational "==" Rational   -> Boolean
+    Rational ">" Rational    -> Boolean
+    Rational ">=" Rational   -> Boolean
+    Rational "<" Rational    -> Boolean
+    Rational "<=" Rational   -> Boolean
+
+    abs(Rational)            -> Rational
+    pow(Rational, Integer)   -> Rational
+    max(Rational, Rational)  -> Rational
+    min(Rational, Rational)  -> Rational
+ 
+    "(" Rational ")"         -> Rational {bracket}
+
+  context-free priorities
+    { non-assoc: "-" Rational -> Rational {non-assoc}
+                 "+" Rational -> Rational {non-assoc} } >
+
+    { non-assoc: Rational "*" Rational -> Rational {left}
+                 Rational "/" Rational -> Rational {non-assoc}} >
+
+    { left: Rational "+" Rational -> Rational {left}
+            Rational "-" Rational -> Rational {left} }
+ 
+hiddens
+  imports basic/Whitespace
+  context-free start-symbols
+    Rational Boolean Integer
+  variables
+    "N" [0-9]*              -> NatCon
+    [ULIG][0-9]*            -> Integer
+    "R" [0-9]*              -> Rational

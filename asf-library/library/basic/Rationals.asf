@@ -1,0 +1,126 @@
+equations %% Create and convert rational numbers
+
+  [mr0] mk-rat(0,L) = rat(0,1)
+  [mr1] mk-rat(I, I) = rat(1,1)
+
+  [mr1] G := gcd(U, L), G != 1 ===> mk-rat(U, L) = rat(U / G, L / G)
+  [default-mr] mk-rat(U,L) = rat(U, L)
+
+  [i2r] int2rat(I) = mk-rat(I, 1)
+  [r2i] rat2int(rat(U,L)) = U / L
+
+tests
+
+  [rnd-1] rat2int(rat(4,2)) == 2
+  [rnd-2] rat2int(rat(5,2)) == 2
+
+equations %% Addition
+ 
+  [a3] rat(U1,L1) + rat(U2,L2) = mk-rat(U1*L2 + U2*L1, L1*L2)
+
+  [up1] + rat(U,L) = rat(U,L)
+
+tests
+
+  [add-1] int2rat(1) + rat(2, 3) == rat(5, 3)
+  [add-2] rat(2,3) + int2rat(1)  == rat(5,3)
+  [add-3] rat(2,3) + rat(5,7) == rat(29,21)
+  [add-4] rat(29,3600) + rat(2,5) == mk-rat(7345,18000)
+
+equations %% Substraction
+
+  [s1] rat(U1,L1) - rat(U2,L2) = mk-rat(U1*L2 - U2*L1, L1*L2)
+
+  [um] -rat(U, L) = rat(-U, L)
+
+tests
+
+  [sub-1] int2rat(1) - rat(2, 3) == rat(1,3)
+  [sub-2] rat(2,3) - int2rat(1)  == rat(-1, 3)
+  [sub-3] rat(2,3) - rat(5,7) == rat(-1,21)
+  [umin-1] - rat(2, 3) == rat(-2, 3)
+
+
+equations %% Multiplication
+
+  [m1] rat(U1,L1) * rat(U2,L2) = mk-rat(U1*U2, L1 * L2)
+
+tests
+
+  [mul-1] int2rat(2) * rat(3,4) == rat(3, 2)
+  [mul-2] rat(3,4) *int2rat(2) == rat(3,2)
+  [mul-3] rat(2,3) * rat(4,5) == rat(8,15)
+
+equations %% Division
+
+  [m1] rat(U1,L1) / rat(U2,L2) = mk-rat(U1*L2, L1*U2)
+
+tests
+
+  [div-1] int2rat(2) / rat(2,3) == rat(3, 1)
+  [div-2] rat(2,3) / int2rat(2) == rat(1, 3)
+  [div-3] rat(2,3) / rat(4,5) == rat(5,6)
+
+equations %% Relational operators
+
+  [e1] rat(U,L) := R1 - R2
+       ==============================
+       R1 == R2 = U == 0
+
+  [gt1] rat(U1,L1) > rat(U2,L2) = U1 * L2 > U2 * L1
+
+  [ge1] R1 >= R2 = (R1 == R2) | (R1 > R2)
+
+  [le1] R1 <= R2 = not(R1 > R2)
+
+  [lt1] R1 < R2 = not(R1 >= R2)
+
+tests
+
+  [eq-1] int2rat(2) == rat(4,2) == true
+  [eq-2] rat(6,3) == int2rat(2) == true
+  [eq-3] rat(6,4) == rat(3,2) == true
+
+  [gt-1] int2rat(2) > rat(1,3) == true
+  [gt-2] rat(4,3) > int2rat(1)== true
+  [gt-3] rat(2,3) > rat(2,4) == true
+
+  [ge-1] int2rat(2) >= rat(4,2) == true
+  [ge-2] rat(7,2) >= int2rat(2) == true
+  [ge-3] rat(5,3) >= rat(2,4) == true
+
+  [lt-1] int2rat(2) < rat(7,2) == true
+  [lt-2] rat(3,4) < int2rat(2) == true
+  [lt-3] rat(2,3) < rat(5,2) == true
+
+  [le-1] int2rat(2) <= rat(7,2) == true
+  [le-2] int2rat(2) <= rat(8,4) == true
+  [le-3] rat(3,2) <= int2rat(2) == true
+  [le-4] rat(4,2) <= int2rat(2) == true
+  [le-5] rat(3,4) <= rat(7,8) == true
+  [le-6] rat(3,4) <= rat(6,8) == true
+
+equations %% absolute value
+
+  [ab1] abs(rat(U,L)) = rat(abs(U), abs(L))
+
+equations %% Power function (pow)
+
+  [pow1] pow(R, 0) = int2rat(1)
+  [pow2] pow(R, N) = R * pow(R, N - 1)
+  [pow3] pow(R, -N) = int2rat(1) / pow(R, N)
+
+tests
+   [tpw1] pow(int2rat(3), -4) == mk-rat(1, 81)
+   [twp2] pow(rat(2, 3), 3)  == mk-rat(8, 27)
+
+equations %% Maximum and minimum
+
+  [mx1] R1 > R2 == true ====> max(R1, R2) = R1
+  [default-mx]
+     max(R1, R2) = R2
+
+  [mn1]  R1 < R2 == true ===> min(R1, R2) = R1
+  [default-mn]
+     min(R1, R2) = R2 
+
