@@ -5,7 +5,7 @@ imports basic/Booleans
 
 hiddens
 context-free start-symbols
-  Integer Boolean  %% NatCon  <NatCon, NatCon> <Digits, NatCon> Digits <Digits, Digits>
+  Integer Boolean  NatCon  %% <NatCon, NatCon> <Digits, NatCon> Digits <Digits, Digits>
 
 exports
 
