@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 20 15:35:09 CET 2007 <{martin.bravenboer@gmail.com,jurgenv@cwi.nl}>
+ * libmept/MEPT-posinfo.c: added a magic volatile to solve a serious bug
+   with the ATerm garbage collector on Darwin. 
+
 Mon Feb 19 23:13:23 CET 2007 <jurgenv@cwi.nl>
  * utils/filterPT: added filterPT tool by copying it from the 1.5 branch.
    Had to regenerate the tests, since the parse tree format had changed

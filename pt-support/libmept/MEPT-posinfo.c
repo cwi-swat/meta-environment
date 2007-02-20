@@ -173,8 +173,11 @@ static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
   }
 }
 
-
-static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
+/* The volatile attribute fixes a bug (#674) on Darwin; but we do not know 
+ * why. The bug dissappears when instruction scheduling optimizations are
+ * turned off, which inspired us to try volatile.  
+ */ 
+static PT_Tree PT_addTreePosInfo(volatile PT_Tree tree, PT_Position* current)
 {
   PT_Tree input = tree;
   int start_line = current->line;
