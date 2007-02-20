@@ -1,5 +1,8 @@
 $Id$
 
+Tue Feb 20 08:34:29 CET 2007 <economop@cwi.nl>
+ * lib/ptable.c: regenerated code using optimized apigen.
+
 Thu Sep 14 19:37:27 CEST 2006 <economop@cwi.nl>
  * lib/Makefile.am: corrected errors.
 
