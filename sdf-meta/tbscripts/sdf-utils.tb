@@ -431,9 +431,11 @@ let
   Type: term,
   Tree: term
 in
-  GetCachedValue(SDF_TREE_CACHE, ModuleId, Tree?)
+  snd-msg(tm-request-transaction(sdf-parsing))
+  . GetCachedValue(SDF_TREE_CACHE, ModuleId, Tree?)
   .
   if equal(Tree, UNDEFINED) then
+    printf("GetSDFParsetree : %t NOT cached\n", ModuleId).
     Type := sdf
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     . ReadText(Path, Text?)
@@ -460,8 +462,10 @@ in
       Result := UNDEFINED
     fi
   else
+    printf("GetSDFParsetree : %t CACHED\n", ModuleId).
     Result := Tree
   fi
+  . snd-msg(tm-end-transaction(sdf-parsing))
 endlet
 
 process SDFIdentifyModule(ModuleId: term, ResultStatus: term?) is
