@@ -38,7 +38,8 @@ let
   Type: term,
   Tree: term
 in
-  GetCachedValue(TERM_TREE_CACHE, Path, Tree?)
+  snd-msg(tm-request-transaction(term-parsing))
+  . GetCachedValue(TERM_TREE_CACHE, Path, Tree?)
   .
   if equal(Tree, UNDEFINED) then
     Type := trm
@@ -70,6 +71,7 @@ in
   else
     Result := Tree
   fi
+  . snd-msg(tm-end-transaction(term-parsing))
 endlet
 
 #endif /* __TERM__UTILS__ */
