@@ -122,7 +122,8 @@ let
   Type: term,
   Tree: term
 in
-  GetCachedValue(ASF_TREE_CACHE, ModuleId, Tree?)
+  snd-msg(tm-request-transaction(asf-parsing))
+  . GetCachedValue(ASF_TREE_CACHE, ModuleId, Tree?)
   .
   if equal(Tree, UNDEFINED) then
     Type := eqs
@@ -155,6 +156,7 @@ in
   else
     Result := Tree
   fi 
+  . snd-msg(tm-end-transaction(asf-parsing))
 endlet
 
 process RunCompiler(Modulename: str, Table: term, Equations: term, OutputFile: str ) is

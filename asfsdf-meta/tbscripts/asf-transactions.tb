@@ -1,0 +1,6 @@
+#ifndef __ASF_TRANSACTIONS__
+#define __ASF_TRANSACTIONS__
+
+toolbus(TransactionManager(asf-parsing))
+
+#endif /*__ASF_TRANSACTIONS__*/

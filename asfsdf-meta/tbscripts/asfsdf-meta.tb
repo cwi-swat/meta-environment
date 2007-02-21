@@ -9,5 +9,6 @@
 #include <asf-progress-listener.tb>
 #include <asf-editor-listeners.tb>
 #include <asf-gui-listeners.tb>
+#include <asf-transactions.tb>
 
 #endif /* __ASFSDF_META__ */

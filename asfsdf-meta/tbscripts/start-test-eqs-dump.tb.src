@@ -19,6 +19,7 @@
 #include <asf-utils.tb>
 #include <asf-listeners.tb>
 #include <asf-initialize.tb>
+#include <asf-transactions.tb>
 
 process StartTestEqsDumper is
 let
