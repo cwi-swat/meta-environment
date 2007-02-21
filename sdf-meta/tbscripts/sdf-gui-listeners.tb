@@ -55,7 +55,9 @@ in
     . ACE-GetModuleId(Event, ModuleId?)
     . ACE-GetKey(Event, Key?)
     . ACE-GetNewValue(Event, Value?)
+    . snd-msg(tm-request-transaction(module-manager))
     . UpdateGraphAttribute("import-graph", SDF_NAMESPACE, ModuleId, Key, Value)
+    . snd-msg(tm-end-transaction(module-manager))
   )
   *
   delta
