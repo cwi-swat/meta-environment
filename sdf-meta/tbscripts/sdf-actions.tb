@@ -81,11 +81,11 @@ in
       . BuildPath(Prefix, RelativeFilename, Extension, FoundPath?)
       .
       if equal(FoundPath, Path) then
-	snd-msg(tm-request-transaction("OpenModuleAction"))
+	snd-msg(tm-request-transaction(module-manager))
         . OpenModule(RelativeFilename, ModuleId?)
 	. MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
         . rec-note(mm-attribute-changed(Event?))
-	. snd-msg(tm-end-transaction("OpenModuleAction"))
+	. snd-msg(tm-end-transaction(module-manager))
         . SelectModule(ModuleId)
       else
         Error("The chosen Module is shadowed by another module in the search path: %t", [FoundPath])
@@ -135,9 +135,9 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(tm-request-transaction(dumpSdfDefinition))
+    snd-msg(tm-request-transaction(syntax-definition))
     . DumpSdfDefinition(ModuleId, Path)
-    . snd-msg(tm-end-transaction(dumpSdfDefinition))
+    . snd-msg(tm-end-transaction(syntax-definition))
   fi
 endlet
 

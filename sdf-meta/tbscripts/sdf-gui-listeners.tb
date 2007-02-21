@@ -30,10 +30,10 @@ in
     )
     *
     no-note(AllNotes?)
-    . snd-msg(tm-request-transaction("ImportGraphPainter"))
+    . snd-msg(tm-request-transaction(module-manager))
     . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
     . RenderGraph("import-graph", SDF_NAMESPACE, true, false, ImportGraph?)
-    . snd-msg(tm-end-transaction("ImportGraphPainter"))
+    . snd-msg(tm-end-transaction(module-manager))
   )
   *
   delta

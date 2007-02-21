@@ -7,6 +7,7 @@
 /* sdf-meta */
 #include <sdf-meta.tb>
 #include <sdf-initialize.tb>
+#include <sdf-transactions.tb>
 
 process InitializeSDFMetaEnvironment is
 let
@@ -25,11 +26,11 @@ in
   . StartModuledetailsPanel()
   .
   if not-equal(MODULENAME, "") then
-    snd-msg(tm-request-transaction(openSDFModule))
+    snd-msg(tm-request-transaction(module-manager))
     . OpenModule(MODULENAME, ModuleId?)
     . MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
     . rec-note(mm-attribute-changed(Event?))
-    . snd-msg(tm-end-transaction(openSDFModule))
+    . snd-msg(tm-end-transaction(module-manager))
   else
     tau
   fi 

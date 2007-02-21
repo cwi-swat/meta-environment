@@ -13,6 +13,7 @@ TBSCRIPTS = \
 	    sdf-meta.tb \
 	    sdf-namespace.h \
 	    sdf-progress-listener.tb \
+	    sdf-transactions.tb \
 	    sdf-utils.tb \
 	    sdf-module-utils.tb \
 	    term-actions.tb \

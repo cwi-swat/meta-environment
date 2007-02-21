@@ -14,6 +14,7 @@
 #include <sdf2-language.tb>
 #include <sdf-initialize.tb>
 #include <term-parsetable.tb>
+#include <sdf-transactions.tb>
 
 process StartDefinitionDumper is
 let
@@ -22,21 +23,21 @@ let
   Event: attribute-changed-event,
   Value: term
 in
-  snd-msg(tm-request-transaction(openSDFModule))
+  snd-msg(tm-request-transaction(module-manager))
   . OpenModule(MODULENAME, ModuleId?)
   . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,complete)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unavailable)
   . rec-note(mm-attribute-changed(Event?))
-  . snd-msg(tm-end-transaction(openSDFModule))
+  . snd-msg(tm-end-transaction(module-manager))
   . ACE-GetNewValue(Event, Value?)
   .
   if or(equal(Value, error), equal(Value, unavailable)) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
-    snd-msg(tm-request-transaction(dumpSdfDefinition))
+    snd-msg(tm-request-transaction(syntax-definition))
     . DumpSdfDefinition(ModuleId, OUTPUTFILE)
-    . snd-msg(tm-end-transaction(dumpSdfDefinition))
+    . snd-msg(tm-end-transaction(syntax-definition))
   fi
   . shutdown("")
 endlet

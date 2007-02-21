@@ -14,6 +14,7 @@
 #include <sdf-progress-listener.tb>
 #include <sdf-editor-listeners.tb>
 #include <sdf-gui-listeners.tb>
+#include <sdf-transactions.tb>
 
 toolbus(SynchronizeModuleSelection(SDF_NAMESPACE))
 
