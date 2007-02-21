@@ -60,8 +60,8 @@ in
       . RemoveSummaryFor(Path)
     +
       rec-msg(te-contents-saved(Sid))
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
       . UpdateTextRepository(Sid)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
       . UpdateSyntaxStructure(Sid)
     +
       rec-note(mm-attribute-changed(Event?))
