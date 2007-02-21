@@ -12,6 +12,7 @@
 #include <sdf-utils.tb>
 #include <parsetable-utils.tb>
 #include <sdf2-language.tb>
+#include <sdf-transactions.tb>
 
 /* asf-sdf-meta */
 #include <asf-language.tb>
@@ -26,12 +27,12 @@ let
   Event: attribute-changed-event,
   Value: term
 in
-  snd-msg(tm-request-transaction(openSDFModule))
+  snd-msg(tm-request-transaction(module-manager))
   . OpenModule(MODULENAME, ModuleId?)
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
   . MM-Subscribe-Attribute-Changed(ModuleId,<term>,"status",<term>,unavailable)
   . MM-Subscribe-Attribute-Changed(<term>,<term>,"status",<term>,error)
-  . snd-msg(tm-end-transaction(openSDFModule))
+  . snd-msg(tm-end-transaction(module-manager))
   . rec-note(mm-attribute-changed(Event?))
   . ACE-GetNewValue(Event, Value?)
   . 

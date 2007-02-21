@@ -28,11 +28,11 @@ in
   . StartModuledetailsPanel()
   .
   if not-equal(MODULENAME, "") then
-    snd-msg(tm-request-transaction("OpenASFSDFModule"))
+    snd-msg(tm-request-transaction(module-manager))
     . OpenModule(MODULENAME, ModuleId?)
     . MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
     . rec-note(mm-attribute-changed(Event?))
-    . snd-msg(tm-end-transaction("OpenASFSDFModule"))
+    . snd-msg(tm-end-transaction(module-manager))
   else
     tau
   fi 
