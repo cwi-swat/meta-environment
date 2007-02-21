@@ -2,7 +2,7 @@ module basic/Integers
 
 imports basic/IntCon
 imports basic/Booleans
-
+ 
 hiddens
 context-free start-symbols
   Integer Boolean  NatCon  %% <NatCon, NatCon> <Digits, NatCon> Digits <Digits, Digits>

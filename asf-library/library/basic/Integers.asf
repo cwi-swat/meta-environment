@@ -64,6 +64,7 @@ tests
 
 equations %% -- Greater than (gt) and Greater than or equal (ge) for decimal natural numbers
 
+  [g10] gt(1,0)=true
   [g20] gt(2,0)=true [g21] gt(2,1)=true
   [g30] gt(3,0)=true [g31] gt(3,1)=true [g32] gt(3,2)=true
   [g40] gt(4,0)=true [g41] gt(4,1)=true [g42] gt(4,2)=true [g43] gt(4,3)=true
@@ -153,6 +154,7 @@ equations %% -- Cut off subtraction (-/) and (-) on naturals
 tests
   [ts1] 5 -/ 3 == 2
   [ts2] 3 -/ 5 == 0
+  [ts3] 21 -/ 20 == 1
   [ts3] 123 -/ 31 == 92
   [ts4] 31 -/ 123 == 0
 
@@ -251,6 +253,7 @@ tests
   [td18] 5400 / 15 == 360
   [td19] 54000 / 15 == 3600
   [td20] 11578 / 49 == 236
+  [td21] 212 / 204 == 1
 
   [tm1] mod(11578,49) == 14
 
@@ -259,6 +262,7 @@ equations %% Extension of addition, subtraction, multiplication and division to 
   [uz1] - 0 = 0    %% -- no minus zero
 
   [iu1] +Nat = Nat
+  [ium] - (-Nat) = Nat
 
   [ia1] Nat1 + Nat2 = add(Nat1,Nat2)
   [ia2] Nat1 + -Nat2 = Nat1 - Nat2
@@ -291,6 +295,7 @@ tests
   [tmul1] 13 * 17   == 221
   [tmul2] -13 * 17  == -221
   [tmul3] -13 * -17 == 221
+  [tmul4] 100 * - (-2) == 200
 %%  [sanity] 0 != 1
 
   [priority-plus-star] 
@@ -366,7 +371,6 @@ tests
   [tmin1] min(-2, 3) == -2
   [tmin2] min(3,-2)  == -2
 
-
 equations %% Modulo on integers
 
   [mod1] mod(-Nat1, Nat2) = -mod(Nat1, Nat2)
@@ -383,8 +387,10 @@ equations %% Greatest Common Divisor (gcd)
 
   [gcd1] gcd(-Nat1, Nat2) = gcd(Nat1, Nat2)
   [gcd2] gcd(Nat1, -Nat2) = gcd(Nat1, Nat2)
-  [gcd1] gcd(Nat1, 0) = Nat1
-  [gcd2] Nat2 != 0,
+  [gcd3] gcd(0, Nat2) = Nat2
+  [gcd4] gcd(Nat1, 0) = Nat1
+  [gcd5] gcd(Nat, Nat) = Nat
+  [gcd6] Nat2 != 0,
          Nat3 := mod(Nat1, Nat2)
          ===============================
          gcd(Nat1, Nat2) = gcd(Nat2, Nat3)
@@ -392,7 +398,9 @@ equations %% Greatest Common Divisor (gcd)
 tests
   [tgcd1] gcd(4,  6) == 2
   [tgcd2] gcd(12, 8) == 4
-  [tgcd2] gcd(42, 56) == 14
+  [tgcd3] gcd(42, 56) == 14
+  [tgcd4] gcd(513, 513) == 513
+  [tgcd5] gcd(204, 212) == 4
 
 
 
