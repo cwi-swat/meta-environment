@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Feb 21 10:49:23 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * tbscripts/transaction-management.tb:
+   - Changed to allow multiple transactions
+
 Fri Feb  9 11:42:36 CET 2007 <kooiker@cwi.nl>
  * tbscripts/module-selection-listener.tb:
    - parameterized SynchronizeModuleSelection with GraphId
