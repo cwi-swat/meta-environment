@@ -1,5 +1,13 @@
 $Id$
 
+Thu Feb 22 11:13:26 CET 2007 <jurgenv@cwi.nl>
+ * library/basic/Integers.asf: removing leading zeroes only on the Integer
+   level, not the NatCon level.
+ * library/languages/asf/compiler/muasf2muasf/Add-Range-Checks.asf:
+   bugfix (compiler did not generate any checks for character
+   membership in classes if there was an equality condition somewhere
+   that contained a lexical variable that ranged over a single character).
+
 
 2007-02-15    <storm@cwi.nl>
  * languages/fdl/utilities/{Extended-FDL,Solution-FDL}.{asf,sdf}: added

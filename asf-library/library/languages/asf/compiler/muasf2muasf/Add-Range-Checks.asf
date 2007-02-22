@@ -6,7 +6,7 @@ equations
 
 [main]
 	add-range-checks(Module) = Module2
-	when <Module2, > := add-range-checks(Module, )
+	when <Module2, _Cond*> := add-range-checks(Module, )
 
 equations
 
@@ -21,6 +21,9 @@ equations
 	===>
 	add-range-checks(Lhs =: Rhs, ) = 
 	<Lhs =: Rhs & Cond*, >
+
+%% for other types of conditions do nothing
+[default-0] add-range-checks(Cond, ) = <Cond, >
 
 [rule]
 	<Lhs, Cond+> := add-range-checks(Lhs, )

@@ -104,7 +104,6 @@ hiddens
     "Expr"[0-9]*       -> Expression
     "$Expression"[0-9]* -> Expression
     "Cint"[0-9]*       -> Integer-constant
-    "Nat"[0-9]*		-> Natural
     "$Ltest"[0-9]* -> Expression
 
 hiddens

@@ -5,7 +5,7 @@ equations
 [one]
 	nat2identifier(identifier(h t),natcon(d)) = identifier(h t d)
 
-[split]
+[split-0]
 	nat2identifier(identifier(h t),natcon(d+1 d+2)) = 
 	identifier(h t t2 t3)
 	when identifier(h t2) := nat2identifier(identifier(h),natcon(d+1)),

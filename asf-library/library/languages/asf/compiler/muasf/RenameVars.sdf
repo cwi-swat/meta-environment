@@ -12,7 +12,6 @@ hiddens
   context-free start-symbols
 	RuleList
 	IntVVarEnv
-	<Term, IntVVarEnv>
 
 %%%  context-free syntax
 %%
