@@ -1,0 +1,31 @@
+module basic/Math
+exports
+  imports basic/Integers
+          basic/Rationals
+  context-free syntax
+    sin(Integer)   -> Rational
+    cos(Integer)   -> Rational
+    tan(Integer)   -> Rational
+    "PI"           -> Rational
+    "2PI/360"      -> Rational
+    "E"            -> Rational
+
+    root(Integer)  -> Rational
+ 
+hiddens
+  imports basic/Whitespace
+
+  context-free start-symbols
+    RatCon Rational Integer
+
+  context-free syntax
+    sin90(Integer) -> Rational
+    root1(Integer, Rational, Rational) -> Rational
+
+  variables
+    "Angle"      -> Integer
+    "R" [0-9\']* -> Rational
+    "N" [0-9\']* -> Integer
+ 
+    
+
