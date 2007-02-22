@@ -110,23 +110,31 @@ class BuildBundlePackage < BundlePackage
 
   def copy_as_released(destination)
     dest_file = File.join(destination, release_dist)
-    cmd = "cp #{dist_path} #{dest_file}"
-    puts "Transforming #{dist_path} to #{dest_file}."
-    system(cmd)
-    Dir.chdir(destination) do 
-      system("tar zxvf #{dest_file}")
-      system("rm #{dest_file}")
-      new_name = "#{@build.name}-#{version}"
-      system("mv #{@build.name}-#{@build.targz_version} #{new_name}")
-      system("tar zcvf #{dest_file} #{new_name}")
+    if File.exist?(dest_file) then
+      puts "Archive #{release_dist} already created; reusing that one."
+    else
+      cmd = "cp #{dist_path} #{dest_file}"
+      puts "Transforming #{dist_path} to #{dest_file}."
+      system(cmd)
+      Dir.chdir(destination) do 
+        system("tar zxvf #{dest_file}")
+        system("rm #{dest_file}")
+        new_name = "#{@build.name}-#{version}"
+        system("mv #{@build.name}-#{@build.targz_version} #{new_name}")
+        system("tar zcvf #{dest_file} #{new_name}")
+      end
     end
   end
 
   def release
-    puts "Actual release disabled during debuging."
-    return
-    @build.released = true
-    @build.save
+    print "Sure to release: #{name}-#{version}? [Yn]"
+    if gets.chomp != 'n' then
+      Model::SiItem.transaction do
+        @build.released = true
+        @build.save
+      end
+      puts "Done."
+    end
   end
 
 end
@@ -170,26 +178,61 @@ if $0 == __FILE__ then
 
   dest_dir = "."
   gen = BundleGenerator.new(bundle, dest_dir)
-  puts "Generating #{gen.bundle_targz}"
-  gen.generate
-  puts "Done."
-  bundle_dir = File.join(dest_dir, gen.bundle_stem)
-  puts "Running ./collect.sh in #{bundle_dir}."
-  Dir.chdir(bundle_dir) do
-    system("./collect.sh")
+  if File.exist?(gen.bundle_targz) then
+    puts "Bundle #{gen.bundle_targz} already exists; generation skipped."
+  else
+    puts "Generating #{gen.bundle_targz}"
+    gen.generate
+    puts "Done."
   end
 
   collected_bundle = "#{gen.bundle_stem}-precollected.tar.gz"
-  puts "Creating #{File.join(dest_dir, collected_bundle)}."
-  Dir.chdir(dest_dir) do 
-    system("tar zcvf #{collected_bundle} #{gen.bundle_stem}")
+  if File.exist?(collected_bundle) then
+    puts "Collected bundle #{collected_bundle} exists; generation skipped."
+  else 
+    puts "Creating #{File.join(dest_dir, collected_bundle)}."
+    bundle_dir = File.join(dest_dir, gen.bundle_stem)
+    puts "Running ./collect.sh in #{bundle_dir}."
+    Dir.chdir(bundle_dir) do
+      system("./collect.sh")
+    end
+    Dir.chdir(dest_dir) do 
+      system("tar zcvf #{collected_bundle} #{gen.bundle_stem}")
+    end
+    puts "Done."
   end
-  puts "Done."
   
-  # if not options.rc then: release.
-  # TODO
-  # Release in een transactie; binnen die transactie checken of er geen 
-  # nieuwere builds zijn voor elk pakket.
-
+  print "Release? [NO|yes] "
+  answer = gets
+  if answer.chomp == 'yes' then
+    errors = false
+    pkgs.each do |pkg|
+      item = pkg.build
+      query =<<EOQ
+select si_items.* 
+from si_items, si_revisions 
+where 
+  si_items.si_revision_id = si_revisions.id and
+  si_component_id = #{item.si_revision.si_component.id} and 
+  released = true and 
+  informative_version = '#{item.informative_version}'
+EOQ
+      puts "Checking if #{pkg} has not been released earlier as #{item.informative_version}..."
+      released_items_with_same_version = Model::SiItem.find_by_sql(query)
+      if not released_items_with_same_version.empty? then
+        puts "Yes."
+        errors = true
+      else
+        puts "No."
+      end
+    end
+    if errors then
+      exit(1)
+    else
+      pkgs.each do |pkg|
+        pkg.release
+      end
+    end
+  end
 
 end

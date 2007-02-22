@@ -1,3 +1,9 @@
+2007-02-22    <storm@cwi.nl>
+
+	* src/ophion.rb: enabled setting of the release bit and checking
+	for earlier release; bundles etc. are not regenerated if they are
+	found on the filesystem (in the working dir and .).
+
 2007-02-16    <storm@cwi.nl>
 
 	* Feature: added a tool to create readably versioned bundles for
