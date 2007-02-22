@@ -1,5 +1,9 @@
 $Id$
 
+Thu Feb 22 11:15:51 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * semantics/asfc/src/Compiler.c: regenerated after bugfixes in 
+   Add-Range-Checks and basic/Integers.
+
 Tue Feb 13 10:14:55 CET 2007 <kooiker@cwi.nl>
  * semantics/asfc/src/c-code.c: fix overflow in implicit constant conversion
    gcc warning in parsetable
