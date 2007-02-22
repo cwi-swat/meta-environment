@@ -52,6 +52,29 @@ in
   fi
 endlet
 
+process DefaultPrettyPrintAction(EditorId : term) is
+let
+  Tree : term,
+  RTree : term,
+  ModuleId: term,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    PrettyPrint(Path, Tree, RTree?)
+    . 
+    if not-equal(RTree, UNDEFINED) then
+      ReplaceFocus(EditorId, RTree)
+    else 
+      tau
+    fi
+  else tau
+  fi
+endlet
+
 process OpenModuleAction is
 let
   Cancel: bool,
