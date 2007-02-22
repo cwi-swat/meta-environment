@@ -24,6 +24,7 @@ addeqssyntax_LDADD = \
 		     $(ASC_SUPPORT_LIBS)
 
 asfc:
+	which asfc
 	asfc -i Add-Eqs-Syntax.eqs -o Add-Eqs-Syntax.c -v
 
 %.idef: %.idef.src Makefile
