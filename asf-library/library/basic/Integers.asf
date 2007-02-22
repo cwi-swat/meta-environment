@@ -1,8 +1,15 @@
+equations %% mk-natcon
+
+  [nc1] mk-natcon() = 0
+  [nc2] mk-natcon(digits(0 Ds)) = mk-natcon(digits(Ds))
+  [default]
+        mk-natcon(digits(Ds)) = natcon(Ds)
+
 equations %% Remove leading 0's on Integer constants
   [lz1] natcon(0 Ds) = Int when Int := natcon(Ds)
 
 tests
-  [tlz1] 7 == Nat when Nat := 007
+  [tlz1] 7 == Int when Int := 007
 
 equations %% -- Addition (add) for decimal natural numbers
 
@@ -38,19 +45,19 @@ equations %% -- Addition (add) for decimal natural numbers
   [a96] add(9,6)=15 [a97] add(9,7)=16 [a98] add(9,8)=17 [a99] add(9,9)=18
 
   [a1]  natcon(OptDs D) := add(natcon(D1), natcon(D2)),
-        natcon(Ds) := add(natcon (Ds1),  add(natcon(Ds2), natcon(0 OptDs)))
-        ============================================================
-        add(natcon(Ds1 D1), natcon(Ds2 D2)) = natcon(Ds D)
+        natcon(Ds) := add(natcon (Ds1),  add(natcon(Ds2), mk-natcon(digits(OptDs))))
+        ============================================================================
+        add(natcon(Ds1 D1), natcon(Ds2 D2)) = mk-natcon(digits(Ds D))
 
   [a2] natcon(OptDs D) := add(natcon(D1), natcon(D2)),
-       natcon(Ds) := add(natcon(Ds2), natcon(0 OptDs))
-       ============================================
-       add(natcon(D1), natcon(Ds2 D2)) = natcon(Ds D)
+       natcon(Ds) := add(natcon(Ds2), mk-natcon(digits(OptDs)))
+       ========================================================
+       add(natcon(D1), natcon(Ds2 D2)) = mk-natcon(digits(Ds D))
 
   [a3] natcon(OptDs D) := add(natcon(D1), natcon(D2)),
-       natcon(Ds) := add(natcon(Ds1), natcon(0 OptDs))
-       ============================================
-       add(natcon(Ds1 D1), natcon(D2)) = natcon(Ds D)
+       natcon(Ds) := add(natcon(Ds1), mk-natcon(digits(OptDs)))
+       ========================================================
+       add(natcon(Ds1 D1), natcon(D2)) = mk-natcon(digits(Ds D))
 
 tests
   [ta1] add(2, 3)    == 5
@@ -61,6 +68,7 @@ tests
   [ta6] add(8, 123)  == 131
   [ta7] add(123, 45) == 168
   [ta8] add(45, 123) == 168
+  [ta9] add(07, 08)  == 15
 
 equations %% -- Greater than (gt) and Greater than or equal (ge) for decimal natural numbers
 
@@ -132,17 +140,22 @@ equations %% -- Subtraction for decimal natural numbers
 
   [ps2]  natcon(D1) >- natcon(D2) = natcon(D1) -// natcon(D2)
 
-  [ps3]  natcon(D3)    := natcon(D1)  -// natcon(D2),
-         natcon(Ds) := natcon (Ds1) >- natcon(0 OptDs2)
-         =============================================
-         natcon(Ds1 D1) >- natcon(OptDs2 D2) = natcon(Ds D3)
+  [ps3]  natcon(D3) := natcon(D1)  -// natcon(D2),
+         natcon(Ds) := natcon (Ds1) >- mk-natcon(digits(OptDs2))
+         ==============================================================
+         natcon(Ds1 D1) >- natcon(OptDs2 D2) = mk-natcon(digits(Ds D3))
 
   [ps4]  natcon(D3) := natcon(D2)  -// natcon(D1),
          natcon(D) := 10 -// natcon(D3),
-         Nat := natcon (0 OptDs2) + 1,
+         Nat := add(mk-natcon (digits(OptDs2)), 1),
          natcon(Ds) := natcon(Ds1) >- Nat
-         ==============================================
-         natcon(Ds1 D1) >- natcon(OptDs2 D2) = natcon(Ds D)
+         =============================================================
+         natcon(Ds1 D1) >- natcon(OptDs2 D2) = mk-natcon(digits(Ds D))
+
+tests
+  [tps1] 5 >- 2   == 3
+  [tps2] 21 >- 3  == 18
+  [tps3] 21 >- 20 == 1
 
 equations %% -- Cut off subtraction (-/) and (-) on naturals
   [cs1]  gt(Nat1, Nat2) == true   ====> Nat1 -/ Nat2 = Nat1 >- Nat2
@@ -200,20 +213,20 @@ equations %% Division (/) on decimal natural numbers
 %% The main function for long division (ldiv):
 
   [ldiv1] <digits(D), digits()> := split(digits(Dividend2)),
-          <natcon(Iterations), natcon(Remainder)> := xsub(natcon(Dividend1 D), natcon(Divisor), 0)
+          <natcon(Iterations), natcon(Remainder)> := xsub(mk-natcon(digits(Dividend1 D)), natcon(Divisor), 0)
           ==========================================================================================
           ldiv(digits(Dividend1), digits(Dividend2), natcon(Divisor), digits(Result)) = 
-          <digits(Result Iterations), natcon(Remainder)>
+          <digits(Result Iterations), mk-natcon(digits(Remainder))>
 
-  [ldiv4] <digits(D), digits(Tail)> := split(digits(Dividend2)),
-          <natcon(Iterations), natcon(Remainder)> := xsub(natcon(Dividend1 D), natcon(Divisor), 0),
+  [ldiv2] <digits(D), digits(Tail)> := split(digits(Dividend2)),
+          <natcon(Iterations), natcon(Remainder)> := xsub(mk-natcon(digits(Dividend1 D)), natcon(Divisor), 0),
           natcon(Iterations) != 0
           ==========================================================================================
           ldiv(digits(Dividend1), digits(Dividend2),natcon(Divisor), digits(Result)) = 
           ldiv( digits(Remainder), digits(Tail), natcon(Divisor), digits(Result Iterations))
 
-  [ldiv4] <digits(D), digits(Tail)> := split(digits(Dividend2)),
-          <natcon(Iterations), natcon(Remainder)> := xsub(natcon(Dividend1 D), natcon(Divisor), 0),
+  [ldiv3] <digits(D), digits(Tail)> := split(digits(Dividend2)),
+          <natcon(Iterations), natcon(Remainder)> := xsub(mk-natcon(digits(Dividend1 D)), natcon(Divisor), 0),
           natcon(Iterations) == 0
           ==========================================================================================
           ldiv(digits(Dividend1), digits(Dividend2), natcon(Divisor), digits(Result)) = 
@@ -223,7 +236,7 @@ equations %% Division (/) on decimal natural numbers
 
    [div1] <digits(Result), natcon(Remainder)> := ldiv(digits(), digits(Dividend), natcon(Divisor), 0)
           ===========================================================================================
-          natcon(Dividend) / natcon(Divisor) = natcon(Result)
+          natcon(Dividend) / natcon(Divisor) = mk-natcon(digits(Result))
 
    [ndiv1] ndiv(Nat1, Nat2) = Nat1 / Nat2   %% Obsolete, but included for compatibility
 
@@ -231,7 +244,7 @@ equations %% Division (/) on decimal natural numbers
 
   [div1] <digits(Result), natcon(Remainder)> := ldiv(digits(), digits(Dividend), natcon(Divisor), 0)
          ============================================================================================
-         mod(natcon(Dividend), natcon(Divisor)) = natcon(Remainder)
+         mod(natcon(Dividend), natcon(Divisor)) = mk-natcon(digits(Remainder))
 tests
   [td01] 2 / 1 == 2
   [td02] 1 / 2 == 0
@@ -401,6 +414,9 @@ tests
   [tgcd3] gcd(42, 56) == 14
   [tgcd4] gcd(513, 513) == 513
   [tgcd5] gcd(204, 212) == 4
+
+tests
+  [sure]  true != true    %% One failing test, just to make sure ...
 
 
 

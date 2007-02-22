@@ -5,7 +5,7 @@ imports basic/Booleans
  
 hiddens
 context-free start-symbols
-  Integer Boolean  NatCon  %% <NatCon, NatCon> <Digits, NatCon> Digits <Digits, Digits>
+  Integer Boolean  NatCon   <NatCon, NatCon> <Digits, NatCon> Digits <Digits, Digits>
 
 exports
 
@@ -48,13 +48,14 @@ context-free syntax
   split(Digits)                          -> <Digits, Digits>
   ldiv(Digits, Digits, NatCon, Digits)   -> <Digits, NatCon>
   xsub(NatCon, NatCon, NatCon)           -> <NatCon, NatCon>
+  mk-natcon(Digits)                      -> NatCon
 
 lexical syntax
-  [0-9]*            -> Digits
+  [0-9]*                                 -> Digits
 
 variables
-  "Nat" [0-9\']*     -> NatCon 
-  "Int" [0-9\']*     -> Integer  
+  "Nat" [0-9\']*       -> NatCon 
+  "Int" [0-9\']*       -> Integer  
 
 lexical variables
 
