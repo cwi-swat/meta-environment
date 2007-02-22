@@ -9,14 +9,14 @@ import nl.cwi.sen1.gui.component.StudioComponentImpl;
 import nl.cwi.sen1.gui.plugin.console.ConsolePanel;
 import aterm.ATerm;
 
-public class ConsolePlugin extends DefaultStudioPlugin implements ConsoleTif {
+public class Console extends DefaultStudioPlugin implements ConsoleTif {
 	private static final String TOOL_NAME = "console";
 
 	private ConsoleBridge bridge;
 
 	private ConsolePanel panel;
 
-	public ConsolePlugin() {
+	public Console() {
 	}
 
 	public void initStudioPlugin(Studio studio) {

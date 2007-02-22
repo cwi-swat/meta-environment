@@ -16,9 +16,9 @@ public class ConsolePanel extends JPanel {
 	JTextArea textArea = new JTextArea();
 
 	public ConsolePanel() {
+		super(new BorderLayout());
+		
 		textArea.setEditable(false);
-		textArea.setRows(20);
-		textArea.setColumns(50);
 		add(new JScrollPane(textArea), BorderLayout.CENTER);
 		setVisible(true);
 	}
