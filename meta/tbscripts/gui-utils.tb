@@ -3,6 +3,7 @@
 
 #include <gui-actions.tb>
 #include <gui.idef>
+#include <console-gui.idef>
 #include <dialog.idef>
 #include <graph-painter.idef>
 #include <progress.idef>
@@ -11,6 +12,12 @@
 
 process AddJob(Message: str) is
   snd-msg(gui-add-job(Message))
+
+process AddDeterministicJob(Message: str, Steps: int) is
+  snd-msg(gui-add-deterministic-job(Message, Steps))
+
+process JobAtomicStep(Message: str, Step: int) is
+  snd-msg(gui-set-atomic-step(Message, Step))
 
 process JobDone(Message: str) is
   snd-msg(gui-job-done(Message))
