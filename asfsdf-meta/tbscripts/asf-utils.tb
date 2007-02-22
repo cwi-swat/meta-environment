@@ -311,14 +311,16 @@ in
      * possibly including the get-imports tool. 
      */
       MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
-      . SetStatus("Normalizing ...")
+      . AddJob("Normalizing ...")
       . snd-msg(normalize-module(Equations)) 
       . rec-msg(normalize-module-result(Equations?))
-      . SetStatus("Renaming ...")
+      . JobDone("Normalizing ...")
+      . AddJob("Renaming ...")
       . snd-msg(sr-rename-module(Imports, Modulename, Equations))
       . rec-msg(sr-renamed-module(Equations?))
-      . SetStatus("")
+      . JobDone("Renaming ...")
       . Specification := join(Specification, Equations)
+      . MM-SetAttribute(CurModule, ASF_NAMESPACE, "status", complete)
     fi
     . Modules := next(Modules)
     . Done := sub(Count, size(Modules))
@@ -411,7 +413,7 @@ in
   if not-equal(Specification, UNDEFINED) then
     GetSpecificationEquations(Specification, Equations?)
     . GetTermParseTable(ModuleId, ParseTable?)
-    . SetStatus("Rewriting...")
+    . AddJob("Rewriting...")
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     . snd-msg(asfe-rewrite(Modulename, Equations, ParseTable, Tree, Debugging))
     .
@@ -433,7 +435,7 @@ in
       . rec-msg(es-summary(Summary?)) 
       . DisplaySummary(Summary)
     )
-    . SetStatus("")
+    . JobDone("Rewriting...")
   else
     NormalForm := UNDEFINED
   fi
