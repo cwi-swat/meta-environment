@@ -16,7 +16,7 @@ in
   * delta
 endlet
 
-process StartConsolePanel is
+process StartConsole is
   snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__"))
 
 toolbus(Console)
