@@ -1,6 +1,10 @@
 $Id$
 
-Thu Feb 22 11:13:26 CET 2007 <jurgenv@cwi.nl>
+Thu Feb 22 11:21:03 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * library/languages/asf/addeqssyntax/Add-Eqs-Conds.asf: removed generation
+   of old-style positive conditions ('=' syntax).
+
+Thu Feb 22 11:13:26 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * library/basic/Integers.asf: removing leading zeroes only on the Integer
    level, not the NatCon level.
  * library/languages/asf/compiler/muasf2muasf/Add-Range-Checks.asf:
