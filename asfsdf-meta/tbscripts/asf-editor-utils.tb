@@ -50,8 +50,8 @@ in
       . RemoveSummaryFor(Path)
     +
       rec-msg(te-contents-saved(Sid))
-      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
       . UpdateTextRepository(Sid)
+      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
       . UpdateEquationsStructure(Sid)
     +
       rec-note(mm-attribute-changed(Event?))
