@@ -7,12 +7,6 @@
 process AddJob(Message: str) is
   tau
 
-process AddDeterministicJob(Message: str, Steps: int) is
-  tau
-
-process JobSetAtomicStep(Message: str, Step: int) is
-  tau
-
 process JobDone(Message: str) is
   tau
 
