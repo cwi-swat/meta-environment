@@ -1,7 +1,5 @@
 package nl.cwi.sen1.tide.tool.srcviewer;
 
-//{{{ imports
-
 import java.awt.BorderLayout;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -33,12 +31,9 @@ import nl.cwi.sen1.tide.tool.support.ProcessStatusChangeListener;
 import nl.cwi.sen1.tide.tool.support.Rule;
 import nl.cwi.sen1.tide.tool.support.VarFormat;
 
-//}}}
-
 public class SourceViewer
 	extends ProcessTool
 	implements DebugProcessListener, ProcessStatusChangeListener, DebugAdapterListener {
-	//{{{ Constants
 
 	private static final String TAG_STEP_INTO = "sv-step-into";
 	private static final String TAG_STEP_OVER = "sv-step-over";
@@ -47,10 +42,6 @@ public class SourceViewer
 	private static final String TAG_ADD_SOURCE = "sv-add-source";
 
 	private static final String NO_SOURCE = "*no-source*";
-
-	//}}}
-
-	//{{{ Attributes
 
 	private JToolBar tools;
 	private JTabbedPane center;
@@ -78,29 +69,21 @@ public class SourceViewer
 
 	private String currentFile;
 	private SourceFileViewer currentViewer;
-	private Map residentViewers;
+	private Map<String, SourceFileViewer> residentViewers;
 
 	private int prevDepth = -1;
-	//}}}
-
-	//{{{ public SourceViewer(ToolManager manager, final DebugProcess process)
 
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
 
 
-		residentViewers = new HashMap();
-
-		//{{{ Build tags
+		residentViewers = new HashMap<String, SourceFileViewer>();
 
 		tag_step_into = TAG_STEP_INTO + "-" + getId();
 		tag_step_over = TAG_STEP_OVER + "-" + getId();
 		tag_step_up = TAG_STEP_UP + "-" + getId();
 		tag_view_var = TAG_VIEW_VAR + "-" + getId();
 		tag_add_source = TAG_ADD_SOURCE + "-" + getId();
-
-		//}}}
-		//{{{ Build actions
 
 		stepInto = new AbstractAction("Step Into", loadIcon("step-into.gif")) {
 			public void actionPerformed(ActionEvent event) {
@@ -168,9 +151,6 @@ public class SourceViewer
 			}
 		};
 
-		//}}}
-		//{{{ Build UI
-
 		setLayout(new BorderLayout());
 
 		tools = new JToolBar();
@@ -193,19 +173,12 @@ public class SourceViewer
 		add("Center", center);
 		add("South", message);
 
-		//}}}
-
-		//{{{ Listen to process events
-
 		this.process = process;
 		process.addDebugProcessListener(this);
 		process.addProcessStatusChangeListener(this);
 
 		DebugAdapter adapter = process.getAdapter();
 		adapter.addDebugAdapterListener(this);
-
-		//}}}
-		//{{{ Create appropriate debugging events
 
 		process.requestRuleCreation(
 			Port.makeStep(),
@@ -231,13 +204,9 @@ public class SourceViewer
 			Expr.makeBreak(),
 			tag_step_up,
 			false);
-		//}}}
 
 		highlightCpe();
 	}
-
-	//}}}
-	//{{{ private void cleanup()
 
 	private void cleanup() {
 		if (ruleStepInto != null) {
@@ -250,9 +219,9 @@ public class SourceViewer
 			process.requestRuleDeletion(ruleStepUp);
 		}
 
-		Iterator iter = residentViewers.values().iterator();
+		Iterator<SourceFileViewer> iter = residentViewers.values().iterator();
 		while (iter.hasNext()) {
-			SourceFileViewer viewer = (SourceFileViewer) iter.next();
+			SourceFileViewer viewer = iter.next();
 			viewer.cleanup();
 		}
 
@@ -263,18 +232,9 @@ public class SourceViewer
 		getManager().removeTool(this);
 	}
 
-	//}}}
-
-	//{{{ private void requestSourceFiles()
-
 	private void requestSourceFiles() {
 		System.out.println("requesting source files");
 	}
-
-	//}}}
-
-	//{{{ public void processDestroyed(DebugAdapter adapter, DebugProcess
-	// proc)
 
 	public void processDestroyed(DebugAdapter adapter, DebugProcess proc) {
 		if (proc == process) {
@@ -286,15 +246,8 @@ public class SourceViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void processCreated(DebugAdapter adapter, DebugProcess proc)
-
 	public void processCreated(DebugAdapter adapter, DebugProcess proc) {
 	}
-
-	//}}}
-
-	//{{{ public void ruleCreated(DebugProcess process, Rule rule)
 
 	public void ruleCreated(DebugProcess process, Rule rule) {
 		if (rule.getTag().equals(tag_step_into)) {
@@ -305,9 +258,6 @@ public class SourceViewer
 			ruleStepUp = rule;
 		}
 	}
-
-	//}}}
-	//{{{ public void ruleDeleted(DebugProcess process, Rule rule)
 
 	public void ruleDeleted(DebugProcess process, Rule rule) {
 		if (rule == ruleStepInto) {
@@ -321,21 +271,11 @@ public class SourceViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void ruleModified(DebugProcess process, Rule rule)
-
 	public void ruleModified(DebugProcess process, Rule rule) {
 	}
 
-	//}}}
-	//{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr
-	// value)
-
 	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {
 	}
-
-	//}}}
-	//{{{ public void evaluationResult(process, expr, value, tag)
 
 	public void evaluationResult(
 		DebugProcess process,
@@ -399,10 +339,6 @@ public class SourceViewer
 		}
 	}
 
-	//}}}
-
-	//{{{ public void processStatusChanged(DebugProcess process)
-
 	public void processStatusChanged(DebugProcess process) {
 		boolean stopped = process.isStopped();
 
@@ -430,14 +366,10 @@ public class SourceViewer
 		}
 	}
 
-	//}}}
-
-	//{{{ void switchToFile(String file)
-
 	void switchToFile(String file) {
 		unhighlightCpe();
 
-		currentViewer = (SourceFileViewer) residentViewers.get(file);
+		currentViewer = residentViewers.get(file);
 		if (currentViewer == null) {
 			ToolManager manager = getManager();
 			int id = getId();
@@ -454,15 +386,10 @@ public class SourceViewer
 				currentViewer,
 				file,
 				center.getTabCount());
-			System.err.println("inserted tab\n");
 		}
 		
 		center.setSelectedComponent(currentViewer);
 	}
-
-	//}}}
-
-	//{{{ private void highlightCpe()
 
 	private void highlightCpe() {
 		Expr expr = process.getLastLocation();
@@ -487,18 +414,11 @@ public class SourceViewer
 		}
 	}
 
-	//}}}
-	//{{{ private void unhighlightCpe()
-
 	private void unhighlightCpe() {
 		if (currentViewer != null) {
 			currentViewer.unhighlightCpe();
 		}
 	}
-
-	//}}}
-
-	//{{{ public void addSourceFromDisk(String path)
 
 	public void addSourceFromDisk(String path) {
 		JFileChooser chooser = new JFileChooser(path);
@@ -526,16 +446,10 @@ public class SourceViewer
 			switchToFile(selected);
 		}
 	}
-
-	
 }
-
-
 
 class LongLabel extends JLabel {
 	private FontMetrics metrics;
-
-	//{{{ public void paint(Graphics g)
 
 	public void paint(Graphics g) {
 		if (metrics == null) {
@@ -553,6 +467,4 @@ class LongLabel extends JLabel {
 
 		g.drawString(txt, 0, metrics.getMaxAscent());
 	}
-
-	//}}}
 }
