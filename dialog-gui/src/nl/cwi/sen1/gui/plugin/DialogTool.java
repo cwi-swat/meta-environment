@@ -76,7 +76,7 @@ abstract public class DialogTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PshowProgressMessage0);
     if (result != null) {

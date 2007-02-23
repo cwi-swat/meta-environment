@@ -36,7 +36,7 @@ public class DialogFileSystemView extends FileSystemView {
     }
 
     public String getRootLabel(File root) {
-      List rootList = Arrays.asList(roots);
+      List<File> rootList = Arrays.asList(roots);
       return labels[rootList.indexOf(root)];
     }
 
