@@ -324,7 +324,6 @@ in
     fi
     . Modules := next(Modules)
     . Done := sub(Count, size(Modules))
-    . JobDone("Collecting and normalizing specification")
   fi
   *
   (
@@ -336,6 +335,7 @@ in
       Result := Specification
     fi
   )
+  . JobDone("Collecting and normalizing specification")
 endlet
 
 process GetSpecificationEquations(Specification: term, Equations: term?) is

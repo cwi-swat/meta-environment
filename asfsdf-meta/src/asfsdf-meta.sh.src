@@ -60,4 +60,4 @@ __TOOLBUS__/bin/toolbus \
   __TBSCRIPTS__ \
   __PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
   `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.asfsdf.actions` \
-  $*
+  $* 2>&1 | console-grabber
