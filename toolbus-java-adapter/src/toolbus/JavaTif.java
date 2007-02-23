@@ -313,23 +313,23 @@ public class JavaTif {
     private void genPatternAttribs(PrintWriter out) {
         out
                 .println("  // Patterns that are used to match against incoming terms");
-        Enumeration en = doEvents.keys();
+        Enumeration<String> en = doEvents.keys();
         while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+            String key = en.nextElement();
             SpecOrderVector v = doEvents.get(key);
             v.genPatternAttribs(out, capitalize(key, false));
         }
 
         en = evalEvents.keys();
         while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+            String key = en.nextElement();
             SpecOrderVector v = evalEvents.get(key);
             v.genPatternAttribs(out, capitalize(key, false));
         }
 
         en = otherEvents.keys();
         while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+            String key = en.nextElement();
             SpecOrderVector v = otherEvents.get(key);
             v.genPatternAttribs(out, capitalize(key, false));
         }
@@ -369,23 +369,23 @@ public class JavaTif {
                 .println("  // Initialize the patterns that are used to match against incoming terms");
         out.println("  " + decl);
         out.println("  {");
-        Enumeration e = doEvents.keys();
+        Enumeration<String> e = doEvents.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             SpecOrderVector v = doEvents.get(key);
             v.genPatterns(out, capitalize(key, false), "rec-do");
         }
 
         e = evalEvents.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             SpecOrderVector v = evalEvents.get(key);
             v.genPatterns(out, capitalize(key, false), "rec-eval");
         }
 
         e = otherEvents.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             SpecOrderVector v = otherEvents.get(key);
             v.genPatterns(out, capitalize(key, false), null);
         }
@@ -397,26 +397,26 @@ public class JavaTif {
         out.println("  // The generic handler calls the specific handlers");
         out.println("  " + decl);
         out.println("  {");
-        out.println("    List result;");
+        out.println("    List<?> result;");
         out.println();
 
-        Enumeration e = doEvents.keys();
+        Enumeration<String> e = doEvents.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             SpecOrderVector v = doEvents.get(key);
             v.genCalls(out, capitalize(key, false), false);
         }
 
         e = evalEvents.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             SpecOrderVector v = evalEvents.get(key);
             v.genCalls(out, capitalize(key, false), true);
         }
 
         e = otherEvents.keys();
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             SpecOrderVector v = otherEvents.get(key);
             v.genCalls(out, capitalize(key, false), false);
         }
@@ -427,23 +427,23 @@ public class JavaTif {
     }
 
     private void genMethods(PrintWriter out, boolean gen_impl) {
-        Enumeration en = doEvents.keys();
+        Enumeration<String> en = doEvents.keys();
         while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+            String key = en.nextElement();
             SpecOrderVector v = doEvents.get(key);
             v.genMethods(out, capitalize(key, false), false, gen_impl);
         }
 
         en = evalEvents.keys();
         while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+            String key = en.nextElement();
             SpecOrderVector v = evalEvents.get(key);
             v.genMethods(out, capitalize(key, false), true, gen_impl);
         }
 
         en = otherEvents.keys();
         while (en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+            String key = en.nextElement();
             SpecOrderVector v = otherEvents.get(key);
             v.genMethods(out, capitalize(key, false), false, gen_impl);
         }

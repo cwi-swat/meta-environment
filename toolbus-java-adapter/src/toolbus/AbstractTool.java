@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
@@ -188,7 +189,7 @@ abstract public class AbstractTool implements Tool, Runnable {
         }
 
         ATerm term = readTerm();
-        List matches = term.match("rec-do(signature([<list>],[<list>]))");
+        List<?> matches = term.match("rec-do(signature([<list>],[<list>]))");
         if (matches == null) {
             throw new RuntimeException("signature information garbled: " + term);
         }
@@ -221,7 +222,7 @@ abstract public class AbstractTool implements Tool, Runnable {
     }
 
     public void sendTerm(ATerm term) throws IOException {
-        synchronized (getLockObject()) {
+    	synchronized (getLockObject()) {
             String unparsedTerm = term.toString();
             int size = unparsedTerm.length();
             String lenspec = "000000000000" + (size + LENSPEC) + ":";
@@ -312,7 +313,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 				handleIncomingTerm();
 			}
 		} catch (IOException e) {
-			if (connected) {
+			if (connected && !(e instanceof SocketException)) {
 				e.printStackTrace();
 				throw new RuntimeException("IOException: " + e.getMessage());
 			}
@@ -351,7 +352,7 @@ abstract public class AbstractTool implements Tool, Runnable {
                 sendTerm(result);
             }
 
-            List terms = t.match("rec-ack-event(<term>)");
+            List<?> terms = t.match("rec-ack-event(<term>)");
             if (terms != null) {
                 ackEvent((ATerm) terms.get(0));
             }
