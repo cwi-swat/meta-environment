@@ -68,7 +68,7 @@ abstract public class GraphPainterTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PdisplayGraph0);
     if (result != null) {

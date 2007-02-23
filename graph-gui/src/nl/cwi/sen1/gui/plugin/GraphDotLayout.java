@@ -24,7 +24,7 @@ public class GraphDotLayout extends Layout {
     public void run(double frac) {
         Graph g = (Graph) m_vis.getGroup(m_group);
         if (g != null) {
-            Iterator nodeIter = g.nodes();
+            Iterator<?> nodeIter = g.nodes();
             while (nodeIter.hasNext()) {
                 VisualItem node = (VisualItem) nodeIter.next();
                 double x = node.getInt(DOT_X);

@@ -399,7 +399,7 @@ public class GraphPanel extends JPanel {
 	private VisualItem findNode(String nodeId) {
 		Graph g = (Graph) vis.getGroup(GraphConstants.GRAPH);
 		if (g != null) {
-			Iterator nodeIter = g.nodes();
+			Iterator<?> nodeIter = g.nodes();
 			while (nodeIter.hasNext()) {
 				VisualItem node = (VisualItem) nodeIter.next();
 				if (node.getString(GraphConstants.ID).equals(nodeId)) {
