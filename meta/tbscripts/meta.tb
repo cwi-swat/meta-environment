@@ -11,5 +11,6 @@
 #include <text-utils.tb>
 #include <tide.tb>
 #include <transaction-management.tb>
+#include <console-grabber.tb>
 
 #endif /* __META__ */

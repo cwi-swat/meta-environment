@@ -5,6 +5,7 @@ TBSCRIPTS = \
 	    attribute-changed-event.tb \
 	    cache-utils.tb \
 	    config-utils.tb \
+	    console-grabber.tb \
 	    dependencies-changed-event.tb \
 	    editing.tb \
 	    editor-error-display.tb \

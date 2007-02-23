@@ -1,0 +1,22 @@
+#ifndef __CONSOLE_GRABBER__
+#define __CONSOLE_GRABBER__
+
+#include <console-grabber.idef>
+
+process SendConsoleMessage is
+let
+  Message: str
+in
+  subscribe(cg-console-message(<str>))
+  .
+  (
+    rec-note(cg-console-message(Message?))
+    . snd-msg(cg-add-message(Message))
+  )
+  * 
+  delta
+endlet
+
+toolbus(SendConsoleMessage)
+
+#endif /* __CONSOLE_GRABBER__ */

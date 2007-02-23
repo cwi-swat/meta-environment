@@ -3,5 +3,5 @@ Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 Name: meta
 Version: 2.0
 Description:
-Requires: aterm-java,config-manager,console-gui,dialog-gui,editor-manager,editor-plugin,error-gui,error-support,graph-gui,graph-support,io-support,meta-studio,module-details-gui,module-manager,navigator-gui,pandora,progress-gui,pt-support,sglr,structure-editor,term-store,tide,tide-support
+Requires: aterm-java,config-manager,console-gui,dialog-gui,editor-manager,editor-plugin,error-gui,error-support,graph-gui,graph-support,io-support,meta-studio,module-details-gui,module-manager,navigator-gui,pandora,progress-gui,pt-support,sglr,structure-editor,term-store,tide,tide-support,console-grabber
 ToolBusFlags=-I${prefix}/share/meta
