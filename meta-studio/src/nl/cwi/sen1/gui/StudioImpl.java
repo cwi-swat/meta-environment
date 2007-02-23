@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -111,7 +112,7 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private List<StudioPlugin> plugins;
 
-	private List<String> jobQueue;
+	private List<StudioJob> jobQueue;
 
 	protected boolean studioShuttingDown;
 
@@ -178,7 +179,7 @@ public class StudioImpl implements Studio, GuiTif {
 		studioShuttingDown = false;
 		progressBar = new JProgressBar();
 		systemLabel = new JLabel();
-		jobQueue = new LinkedList<String>();
+		jobQueue = Collections.synchronizedList(new LinkedList<StudioJob>());
 	}
 
 	synchronized private static int nextComponentID() {
@@ -413,7 +414,7 @@ public class StudioImpl implements Studio, GuiTif {
 
 		if (activeView != null && activeView.getRootWindow() != null) {
 			StudioComponent activeComponent = getComponent(activeView);
-			List list = getComponentMenus(activeComponent);
+			List<JMenuItem> list = getComponentMenus(activeComponent);
 			if (list != null) {
 				for (Object menu : list) {
 					if (menu instanceof MenuItem) {
@@ -450,7 +451,7 @@ public class StudioImpl implements Studio, GuiTif {
 		return menu;
 	}
 
-	private List getComponentMenus(StudioComponent component) {
+	private List<JMenuItem> getComponentMenus(StudioComponent component) {
 		if (componentMenus == null) {
 			return null;
 		}
@@ -647,20 +648,63 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	public void jobDone(String message) {
-		jobQueue.remove(message);
+		jobQueue.remove(jobQueue.get(0));
 		if (jobQueue.isEmpty()) {
 			progressBar.setIndeterminate(false);
+			progressBar.setStringPainted(false);
+			progressBar.setValue(0);
 			setStatus("Idle");
 		} else {
-			setStatus(jobQueue.get(0));
+			StudioJob job = jobQueue.get(0);
+			if (job.isDeterministic()) {
+				progressBar.setMaximum(job.getSteps());
+				progressBar.setValue(job.getStepCount());
+			} else {
+				if (!progressBar.isIndeterminate()) {
+					progressBar.setIndeterminate(true);
+				}
+			}
+			setStatus(job.getMessage());
 		}
 
 	}
 
 	public void addJob(String message) {
-		jobQueue.add(message);
+		jobQueue.add(new StudioJob(message));
 		setStatus(message);
-		progressBar.setIndeterminate(true);
+		if (!progressBar.isIndeterminate()) {
+			 progressBar.setIndeterminate(true);
+		} 
+	}
+
+	public void addDeterministicJob(String message, int steps) {
+		System.err.println("Add Job " + message + " with " + steps + " steps");
+		jobQueue.add(new StudioJob(message, steps));
+		setStatus(message);
+		progressBar.setMaximum(steps);
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
+	}
+
+	public void setAtomicStep(String message, int step) {
+		StudioJob job = null;
+		
+		for (int i = 0; i < jobQueue.size(); i++) {
+			StudioJob jobIter = jobQueue.get(i);
+			System.err.println("Check job: " + jobIter.getMessage());
+			if (jobIter.getMessage().equals(message)) {
+				job = jobIter;
+			}
+		}
+
+		if (job != null) {
+			System.err.println("+- Step: " + step);
+			job.setAtomicStep(step);
+			progressBar.setValue(step);
+		} else {
+			System.err.println("+- Skip Step: " + step);
+			
+		}
 	}
 
 	protected void addStudioComponentNameChangedListener(
@@ -687,8 +731,8 @@ public class StudioImpl implements Studio, GuiTif {
 					View view = viewsById.getView(id);
 					if (view != null) {
 						view.getWindowProperties().getTabProperties()
-						.getTitledTabProperties().getNormalProperties()
-						.setToolTipText(component.getTooltip());
+								.getTitledTabProperties().getNormalProperties()
+								.setToolTipText(component.getTooltip());
 					}
 				}
 			}

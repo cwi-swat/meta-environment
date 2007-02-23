@@ -1,14 +1,14 @@
 // Java tool interface class GuiTool
 // This file is generated automatically, please do not edit!
-// generation time: Mar 29, 2006 1:02:23 PM
+// generation time: Feb 22, 2007 12:49:51 PM
 
 package nl.cwi.sen1.gui;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,20 +16,22 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class GuiTool
-  extends SwingTool
+  extends AbstractTool
   implements GuiTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
-  private ATerm PloadJarUrls0;
-  private ATerm PloadJar0;
-  private ATerm PaddMenuEvents0;
-  private ATerm PloadJarClasspath0;
-  private ATerm PjobDone0;
   private ATerm PaddJob0;
+  private ATerm PsetAtomicStep0;
+  private ATerm PloadJar0;
+  private ATerm PloadJarUrls0;
+  private ATerm PaddMenuEvents0;
+  private ATerm PjobDone0;
   private ATerm PsetStatus0;
+  private ATerm PaddDeterministicJob0;
+  private ATerm PloadJarClasspath0;
   private ATerm PsetTitle0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -45,29 +47,32 @@ abstract public class GuiTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<gui>,set-title(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,load-jar-classpath(<str>,<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,load-jar-urls(<str>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,set-status(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,add-job(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,job-done(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<gui>,add-menu-events(<list>))"), btrue);
-    sigTable.put(factory.parse("rec-ack-event(<gui>,<term>)"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<gui>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-do(<gui>,set-title(<str>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,load-jar(<str>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,load-jar-classpath(<str>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,load-jar-urls(<str>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,set-status(<str>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,add-job(<str>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,add-deterministic-job(<str>,<int>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,set-atomic-step(<str>,<int>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,job-done(<str>))"));
+    sigTable.add(factory.parse("rec-do(<gui>,add-menu-events(<list>))"));
+    sigTable.add(factory.parse("rec-ack-event(<gui>,<term>)"));
+    sigTable.add(factory.parse("rec-terminate(<gui>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PloadJarUrls0 = factory.parse("rec-do(load-jar-urls(<str>,<term>))");
-    PloadJar0 = factory.parse("rec-do(load-jar(<str>))");
-    PaddMenuEvents0 = factory.parse("rec-do(add-menu-events(<term>))");
-    PloadJarClasspath0 = factory.parse("rec-do(load-jar-classpath(<str>,<str>))");
-    PjobDone0 = factory.parse("rec-do(job-done(<str>))");
     PaddJob0 = factory.parse("rec-do(add-job(<str>))");
+    PsetAtomicStep0 = factory.parse("rec-do(set-atomic-step(<str>,<int>))");
+    PloadJar0 = factory.parse("rec-do(load-jar(<str>))");
+    PloadJarUrls0 = factory.parse("rec-do(load-jar-urls(<str>,<term>))");
+    PaddMenuEvents0 = factory.parse("rec-do(add-menu-events(<term>))");
+    PjobDone0 = factory.parse("rec-do(job-done(<str>))");
     PsetStatus0 = factory.parse("rec-do(set-status(<str>))");
+    PaddDeterministicJob0 = factory.parse("rec-do(add-deterministic-job(<str>,<int>))");
+    PloadJarClasspath0 = factory.parse("rec-do(load-jar-classpath(<str>,<str>))");
     PsetTitle0 = factory.parse("rec-do(set-title(<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -76,11 +81,16 @@ abstract public class GuiTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
-    result = term.match(PloadJarUrls0);
+    result = term.match(PaddJob0);
     if (result != null) {
-      loadJarUrls((String)result.get(0), (ATerm)result.get(1));
+      addJob((String)result.get(0));
+      return null;
+    }
+    result = term.match(PsetAtomicStep0);
+    if (result != null) {
+      setAtomicStep((String)result.get(0), ((Integer)result.get(1)).intValue());
       return null;
     }
     result = term.match(PloadJar0);
@@ -88,14 +98,14 @@ abstract public class GuiTool
       loadJar((String)result.get(0));
       return null;
     }
+    result = term.match(PloadJarUrls0);
+    if (result != null) {
+      loadJarUrls((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
     result = term.match(PaddMenuEvents0);
     if (result != null) {
       addMenuEvents((ATerm)result.get(0));
-      return null;
-    }
-    result = term.match(PloadJarClasspath0);
-    if (result != null) {
-      loadJarClasspath((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PjobDone0);
@@ -103,14 +113,19 @@ abstract public class GuiTool
       jobDone((String)result.get(0));
       return null;
     }
-    result = term.match(PaddJob0);
-    if (result != null) {
-      addJob((String)result.get(0));
-      return null;
-    }
     result = term.match(PsetStatus0);
     if (result != null) {
       setStatus((String)result.get(0));
+      return null;
+    }
+    result = term.match(PaddDeterministicJob0);
+    if (result != null) {
+      addDeterministicJob((String)result.get(0), ((Integer)result.get(1)).intValue());
+      return null;
+    }
+    result = term.match(PloadJarClasspath0);
+    if (result != null) {
+      loadJarClasspath((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PsetTitle0);
@@ -139,7 +154,7 @@ abstract public class GuiTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }

@@ -85,7 +85,7 @@ public class PluginLoader extends URLClassLoader {
 		}
 		StudioPlugin plugin = null;
 		try {
-			Class cl = loadClass(pluginMain);
+			Class<?> cl = loadClass(pluginMain);
 			plugin = (StudioPlugin) cl.newInstance();
 		} catch (Exception e) {
 			System.err.println("Failed to instantiate plugin:" + pluginMain);

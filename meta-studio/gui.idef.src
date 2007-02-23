@@ -5,18 +5,21 @@ tool gui is { command = "__PREFIX__/bin/gui" }
 
 process GUI is
 let
-  ClassPath: str,
-  URLs: list,
-  MenuEvent: term,
-  MenuEventList: list,
-  Message: str,
-  JarName: str,
-  ClassName: str,
-  Title: str,
   GUI: gui,
-  Id : term
+  ClassName: str,
+  ClassPath: str,
+  Id : term,
+  JarName: str,
+  MenuEventList: list,
+  MenuEvent: term,
+  Message: str,
+  Step: int,
+  Steps: int,
+  Title: str,
+  URLs: list
 in
   execute(gui, GUI?)
+  /*rec-connect(GUI?)*/
   .
   (
     rec-msg(set-title(Title?))
@@ -36,6 +39,12 @@ in
   +
     rec-msg(gui-add-job(Message?))
     . snd-do(GUI, add-job(Message))
+  +
+    rec-msg(gui-add-deterministic-job(Message?, Steps?))
+    . snd-do(GUI, add-deterministic-job(Message, Steps))
+  +
+    rec-msg(gui-set-atomic-step(Message?, Step?))
+    . snd-do(GUI, set-atomic-step(Message, Step))
   +
     rec-msg(gui-job-done(Message?))
     . snd-do(GUI, job-done(Message))
