@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
+Name: console-grabber
+Version: 1.0
+Description:
+Requires: aterm-java,meta-studio,toolbus-java-adapter
+JarFile=console-grabber.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
+MainClass=nl.cwi.sen1.gui.plugin.ConsoleGrabber
+TestClass=
+ToolBusFlags=-I${prefix}/share/console-grabber
+
+
