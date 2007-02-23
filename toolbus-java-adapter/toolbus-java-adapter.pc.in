@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 
 Name: toolbus-java-adapter
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm-java
 JarFile=toolbus-java-adapter.jar
