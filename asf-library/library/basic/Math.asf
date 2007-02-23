@@ -126,13 +126,13 @@ equations
 %% root(n) = x_k+1 = 1/2 (x_k + n / x_k), for k>= 0
 
   [rt]  R1 :=  mk-rat(N + 1, 2),
-        R2 := (R1 + int2rat(N) / R1) / int2rat(2)
+        R2 := (R1 + N / R1) / 2
         ==========================================
         root(N) = root1(N, R1, R2)
 
   [rt1] abs(R2 - R1) > int2rat(1) == true
         =====================================================================
-        root1(N, R1, R2) = root1(N, R2,  (R2 + int2rat(N) / R2) / int2rat(2))
+        root1(N, R1, R2) = root1(N, R2,  (R2 + N / R2) / 2)
 
   [default]
         root1(N, R1, R2) = R2

@@ -13,15 +13,32 @@ exports
     rat2int(Rational)        -> Integer
 
     Rational "==" Rational   -> Boolean
+    Integer "==" Rational   -> Boolean
+    Rational "==" Integer   -> Boolean
+
+
     Rational ">" Rational    -> Boolean
+    Integer ">" Rational    -> Boolean
+    Rational ">" Integer    -> Boolean
+
     Rational ">=" Rational   -> Boolean
+    Integer ">=" Rational   -> Boolean
+    Rational ">=" Integer   -> Boolean
+
     Rational "<" Rational    -> Boolean
+    Integer "<" Rational    -> Boolean
+    Rational "<" Integer    -> Boolean
+
     Rational "<=" Rational   -> Boolean
+    Integer "<=" Rational   -> Boolean
+    Rational "<=" Integer   -> Boolean
 
     abs(Rational)            -> Rational
     pow(Rational, Integer)   -> Rational
     max(Rational, Rational)  -> Rational
     min(Rational, Rational)  -> Rational
+    floor(Rational)          -> Integer
+    ceil(Rational)           -> Integer
  
     "(" Rational ")"         -> Rational {bracket}
 
@@ -30,10 +47,20 @@ exports
                  "+" Rational -> Rational {non-assoc} } >
 
     { non-assoc: Rational "*" Rational -> Rational {left}
-                 Rational "/" Rational -> Rational {non-assoc}} >
+                 Integer  "*" Rational -> Rational 
+                 Rational "*" Integer -> Rational 
+                 Rational "/" Rational -> Rational {non-assoc}
+                 Integer  "/" Rational -> Rational {non-assoc}    
+                 Rational "/" Integer -> Rational {non-assoc}
+    } >
 
     { left: Rational "+" Rational -> Rational {left}
-            Rational "-" Rational -> Rational {left} }
+            Integer  "+" Rational -> Rational 
+            Rational "+" Integer -> Rational 
+            Rational "-" Rational -> Rational {left}
+            Integer  "-" Rational -> Rational 
+            Rational "-" Integer -> Rational 
+   }
  
 hiddens
   imports basic/Whitespace
