@@ -2,7 +2,9 @@ include $(top_srcdir)/Makefile.java.meta
 
 ACLOCAL_AMFLAGS = -I .
 
-TOOLNAME = console-gui
+SUBDIRS = script
+
+TOOLNAME = console-grabber
 
 pkgdata_DATA = $(TOOLNAME).idef
 

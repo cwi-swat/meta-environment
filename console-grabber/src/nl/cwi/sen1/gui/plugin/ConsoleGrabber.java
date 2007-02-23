@@ -2,6 +2,7 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.regex.MatchResult;
 
 import aterm.ATerm;
 import aterm.pure.PureFactory;
@@ -39,18 +40,39 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 		ATerm event = pureFactory.make("console-message(<str>)", message);
 		bridge.postEvent(event);
 	}
-	
-	public static void main(String[] args) {
-		ConsoleGrabber grabber = new ConsoleGrabber(args);
-		Scanner in = new Scanner(System.in);
 
-		while (in.hasNext()) {
-			grabber.sendMessage(in.nextLine());
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		MatchResult result = null;
+
+		s.findInLine("The ToolBus server allocated port (\\d+)");
+		try {
+			result = s.match();
+		} catch (IllegalStateException e) {
+			while (s.hasNext()) {
+				System.err.println(s.nextLine());
+			}
 		}
-		
-		in.close();
+
+		if (result != null) {
+			args = new String[6];
+			args[0] = "-TB_HOST_NAME";
+			args[1] = "localhost";
+			args[2] = "-TB_PORT";
+			args[3] = result.group();
+			args[4] = "-TB_TOOL_NAME";
+			args[5] = "console-grabber";
+		}
+
+		ConsoleGrabber grabber = new ConsoleGrabber(args);
+		while (s.hasNext()) {
+			grabber.sendMessage(s.nextLine());
+		}
+
+		s.close();
 	}
 
 	public void recTerminate(ATerm t0) {
+		System.exit(0);
 	}
 }
