@@ -7,7 +7,7 @@ import java.util.List;
 import nl.cwi.sen1.ioapi.types.File;
 import aterm.ATerm;
 
-public class Module implements Comparable {
+public class Module implements Comparable<Module> {
     public static final int STATE_NORMAL = 0;
 
     public static final int STATE_NEW = 1;
@@ -39,9 +39,8 @@ public class Module implements Comparable {
         initChildList();
     }
 
-    public int compareTo(Object o) {
-        Module peer = (Module) o;
-        return _name.compareTo(peer.getName());
+    public int compareTo(Module module) {
+        return _name.compareTo(module.getName());
     }
 
     public ATerm getId() {
@@ -77,11 +76,11 @@ public class Module implements Comparable {
         _parent = new LinkedList<String>();
     }
 
-    public Iterator fetchParentIterator() {
+    public Iterator<String> fetchParentIterator() {
         return _parent.iterator();
     }
 
-    public ListModel fetchParentListModel() {
+    public ListModel<String> fetchParentListModel() {
         return parentListModel;
     }
 
@@ -107,7 +106,7 @@ public class Module implements Comparable {
         return _child.iterator();
     }
 
-    public ListModel fetchChildListModel() {
+    public ListModel<String> fetchChildListModel() {
         return childListModel;
     }
 

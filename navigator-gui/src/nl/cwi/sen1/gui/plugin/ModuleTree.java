@@ -21,7 +21,7 @@ import aterm.ATerm;
 public class ModuleTree extends JPanel {
 	private JTree tree;
 
-	private Enumeration expansionState;
+	private Enumeration<TreePath> expansionState;
 
 	private final ModuleTreeModel manager;
 
@@ -64,7 +64,7 @@ public class ModuleTree extends JPanel {
 	public void loadExpansionState() {
 		if (expansionState != null) {
 			while (expansionState.hasMoreElements()) {
-				TreePath treePath = (TreePath) expansionState.nextElement();
+				TreePath treePath = expansionState.nextElement();
 				tree.expandPath(treePath);
 			}
 		}
