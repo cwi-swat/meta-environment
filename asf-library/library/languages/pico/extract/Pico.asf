@@ -1,0 +1,23 @@
+equations
+
+[main] start(PROGRAM, Program) = 
+       start(RStore, rstore([
+         <ControlFlow, rel[<str,loc>,<str,loc>], controlFlow(Program)>,
+         <StatementHistogram, rel[str, int], statementHistogram(Program)>
+       ]))
+
+equations
+
+[hist] statementHistogram(Program) = countStatements(Program, {<"Assignment",0>, <"Conditional",0>, <"Loop",0>})
+
+equations
+
+%% TODO: make convenience API for constructing RStores
+[] countStatements(Id := Exp, { RElem*1, <"Assignment", Int>, RElem*2 }) = {RElem*1, <"Assignment", Int + 1>, RElem*2}
+[] countStatements(if Exp then Stat*1 else Stat*2 fi, { RElem*1, <"Conditional", Int>, RElem*2 }) = {RElem*1, <"Conditional", Int + 1>, RElem*2}
+[] countStatements(while Exp do Stat* od, { RElem*1, <"Loop", Int>, RElem*2 }) = {RElem*1, <"Loop", Int + 1>, RElem*2}
+
+equations
+
+%% TODO: copy this code from the relation-calculus demos
+[cfg] controlFlow(Program) = control(Program, { })
