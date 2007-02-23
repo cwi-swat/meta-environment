@@ -40,12 +40,6 @@ in
     rec-msg(gui-add-job(Message?))
     . snd-do(GUI, add-job(Message))
   +
-    rec-msg(gui-add-deterministic-job(Message?, Steps?))
-    . snd-do(GUI, add-deterministic-job(Message, Steps))
-  +
-    rec-msg(gui-set-atomic-step(Message?, Step?))
-    . snd-do(GUI, set-atomic-step(Message, Step))
-  +
     rec-msg(gui-job-done(Message?))
     . snd-do(GUI, job-done(Message))
   +

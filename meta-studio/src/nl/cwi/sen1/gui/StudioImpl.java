@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,7 +111,7 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private List<StudioPlugin> plugins;
 
-	private List<StudioJob> jobQueue;
+	private List<String> jobQueue;
 
 	protected boolean studioShuttingDown;
 
@@ -179,7 +178,7 @@ public class StudioImpl implements Studio, GuiTif {
 		studioShuttingDown = false;
 		progressBar = new JProgressBar();
 		systemLabel = new JLabel();
-		jobQueue = Collections.synchronizedList(new LinkedList<StudioJob>());
+		jobQueue = new LinkedList<String>();
 	}
 
 	synchronized private static int nextComponentID() {
@@ -648,63 +647,19 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	public void jobDone(String message) {
-		jobQueue.remove(jobQueue.get(0));
+		jobQueue.remove(message);
 		if (jobQueue.isEmpty()) {
 			progressBar.setIndeterminate(false);
-			progressBar.setStringPainted(false);
-			progressBar.setValue(0);
 			setStatus("Idle");
 		} else {
-			StudioJob job = jobQueue.get(0);
-			if (job.isDeterministic()) {
-				progressBar.setMaximum(job.getSteps());
-				progressBar.setValue(job.getStepCount());
-			} else {
-				if (!progressBar.isIndeterminate()) {
-					progressBar.setIndeterminate(true);
-				}
-			}
-			setStatus(job.getMessage());
+			setStatus(jobQueue.get(0));
 		}
-
 	}
 
 	public void addJob(String message) {
-		jobQueue.add(new StudioJob(message));
+		jobQueue.add(message);
 		setStatus(message);
-		if (!progressBar.isIndeterminate()) {
-			 progressBar.setIndeterminate(true);
-		} 
-	}
-
-	public void addDeterministicJob(String message, int steps) {
-		System.err.println("Add Job " + message + " with " + steps + " steps");
-		jobQueue.add(new StudioJob(message, steps));
-		setStatus(message);
-		progressBar.setMaximum(steps);
-		progressBar.setValue(0);
-		progressBar.setStringPainted(true);
-	}
-
-	public void setAtomicStep(String message, int step) {
-		StudioJob job = null;
-		
-		for (int i = 0; i < jobQueue.size(); i++) {
-			StudioJob jobIter = jobQueue.get(i);
-			System.err.println("Check job: " + jobIter.getMessage());
-			if (jobIter.getMessage().equals(message)) {
-				job = jobIter;
-			}
-		}
-
-		if (job != null) {
-			System.err.println("+- Step: " + step);
-			job.setAtomicStep(step);
-			progressBar.setValue(step);
-		} else {
-			System.err.println("+- Skip Step: " + step);
-			
-		}
+		progressBar.setIndeterminate(true);
 	}
 
 	protected void addStudioComponentNameChangedListener(

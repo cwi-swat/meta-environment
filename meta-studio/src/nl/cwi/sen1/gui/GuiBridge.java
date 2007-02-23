@@ -1,6 +1,6 @@
 // Java tool bridge GuiBridge
 // This file is generated automatically, please do not edit!
-// generation time: Feb 22, 2007 12:49:51 PM
+// generation time: Feb 23, 2007 11:08:43 AM
 
 package nl.cwi.sen1.gui;
 
@@ -17,22 +17,13 @@ public class GuiBridge
     this.tool = tool;
   }
 
-  public void addJob(String s0)
+  public void loadJarUrls(String s0, ATerm t1)
   {
     if (tool != null) {
-      tool.addJob(s0);
+      tool.loadJarUrls(s0, t1);
     }
     else {
-      throw new UnsupportedOperationException("method `addJob' not supported.");
-    }
-  }
-  public void setAtomicStep(String s0, int i1)
-  {
-    if (tool != null) {
-      tool.setAtomicStep(s0, i1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `setAtomicStep' not supported.");
+      throw new UnsupportedOperationException("method `loadJarUrls' not supported.");
     }
   }
   public void loadJar(String s0)
@@ -44,15 +35,6 @@ public class GuiBridge
       throw new UnsupportedOperationException("method `loadJar' not supported.");
     }
   }
-  public void loadJarUrls(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.loadJarUrls(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `loadJarUrls' not supported.");
-    }
-  }
   public void addMenuEvents(ATerm t0)
   {
     if (tool != null) {
@@ -60,6 +42,15 @@ public class GuiBridge
     }
     else {
       throw new UnsupportedOperationException("method `addMenuEvents' not supported.");
+    }
+  }
+  public void loadJarClasspath(String s0, String s1)
+  {
+    if (tool != null) {
+      tool.loadJarClasspath(s0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `loadJarClasspath' not supported.");
     }
   }
   public void jobDone(String s0)
@@ -71,6 +62,15 @@ public class GuiBridge
       throw new UnsupportedOperationException("method `jobDone' not supported.");
     }
   }
+  public void addJob(String s0)
+  {
+    if (tool != null) {
+      tool.addJob(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `addJob' not supported.");
+    }
+  }
   public void setStatus(String s0)
   {
     if (tool != null) {
@@ -78,24 +78,6 @@ public class GuiBridge
     }
     else {
       throw new UnsupportedOperationException("method `setStatus' not supported.");
-    }
-  }
-  public void addDeterministicJob(String s0, int i1)
-  {
-    if (tool != null) {
-      tool.addDeterministicJob(s0, i1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `addDeterministicJob' not supported.");
-    }
-  }
-  public void loadJarClasspath(String s0, String s1)
-  {
-    if (tool != null) {
-      tool.loadJarClasspath(s0, s1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `loadJarClasspath' not supported.");
     }
   }
   public void setTitle(String s0)
