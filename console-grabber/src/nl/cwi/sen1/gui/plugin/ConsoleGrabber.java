@@ -48,25 +48,23 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 		s.findInLine("The ToolBus server allocated port (\\d+)");
 		try {
 			result = s.match();
-		} catch (IllegalStateException e) {
-			while (s.hasNext()) {
-				System.err.println(s.nextLine());
-			}
-		}
-
-		if (result != null) {
 			args = new String[6];
 			args[0] = "-TB_HOST_NAME";
 			args[1] = "localhost";
 			args[2] = "-TB_PORT";
-			args[3] = result.group();
+			args[3] = result.group(1);
 			args[4] = "-TB_TOOL_NAME";
 			args[5] = "console-grabber";
-		}
 
-		ConsoleGrabber grabber = new ConsoleGrabber(args);
-		while (s.hasNext()) {
-			grabber.sendMessage(s.nextLine());
+			ConsoleGrabber grabber = new ConsoleGrabber(args);
+			while (s.hasNext()) {
+				grabber.sendMessage(s.nextLine());
+			}
+		} catch (IllegalStateException e) {
+			System.err.println("No ToolBus started\n");
+			while (s.hasNext()) {
+				System.err.println(s.nextLine());
+			}
 		}
 
 		s.close();
