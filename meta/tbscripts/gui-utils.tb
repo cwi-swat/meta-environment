@@ -16,33 +16,26 @@ process AddJob(Message: str) is
 process JobDone(Message: str) is
   snd-msg(gui-job-done(Message))
 
+process ConsoleMessage(Message: str) is
+  snd-msg(cg-add-message(Message))
+
 process Error(Message: str, SubjectStrings: list) is
 let
-  Error : term,
   SubjectString : str,
-  Subject : term,
-  Subjects: list,
-  Runner : list,
-  Summary : term
+  Runner : list
 in
   Runner := SubjectStrings
-  . Subjects := []
-  . 
+  . snd-msg(cg-add-message(Message))
+  .
   if not-equal(Runner, []) then
     SubjectString := first(Runner)
     . Runner := next(Runner)
-    . snd-msg(es-make-subject(SubjectString))
-    . rec-msg(es-subject(Subject?))
-    . Subjects := join(Subject, Subjects)
+    . snd-msg(cg-add-message(" "))
+    . snd-msg(cg-add-message(SubjectString))
   fi
   *
   if equal(Runner, []) then
-    snd-msg(es-make-error(Message, Subjects))
-    . rec-msg(es-error(Error?))
-    . snd-msg(es-make-summary("alert", "alert", [Error]))
-    . rec-msg(es-summary(Summary?))
-    . snd-msg(ui-remove-feedback-summary("Alerts", "alert", "alert"))
-    . snd-msg(ui-show-feedback-summary("Alerts", Summary))
+    snd-msg(cg-add-message("\n"))
   fi  
 endlet
 

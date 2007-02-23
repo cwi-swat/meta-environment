@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Feb 23 10:39:08 CET 2007 <kooiker@cwi.nl>
+ * tbscripts/gui-utils.tb:
+   - Send errors to console window
+
 Wed Feb 21 10:49:23 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * tbscripts/transaction-management.tb:
    - Changed to allow multiple transactions

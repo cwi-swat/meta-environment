@@ -10,6 +10,9 @@ process AddJob(Message: str) is
 process JobDone(Message: str) is
   tau
 
+process ConsoleMessage(Message: str) is
+  printf("%s\n", Message)
+
 process Error(Message: str, MessageArgs: list) is
   TODO("Use error support utils to print error")
   . printf("%s: %t\n", Message, MessageArgs)
