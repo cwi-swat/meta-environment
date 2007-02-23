@@ -96,44 +96,6 @@ in
   fi
 endlet
 
-process ExtractAction(EditorId : term) is
-let
-  ModuleId : term,
-  RunModuleId : term,
-  Path: str,
-  ResultTree: term,
-  Sid: term,
-  Pid: int,
-  File: str
-in
-  GetModuleId(EditorId, ModuleId?)
-  . LookupFeatureModuleId(ModuleId,  "extract", RunModuleId?)
-  .
-  if not-equal(RunModuleId, UNDEFINED) then
-    File := "extract.rstore"
-    . GetPath(EditorId, Path?)
-    . AddJob("Extracting")
-    . Reduce(RunModuleId, Path, off, ResultTree?)
-    . 
-    if not-equal(ResultTree, UNDEFINED) then
-      snd-msg(em-get-session-by-path(File))
-      .
-      (
-        rec-msg(em-session(File, Sid?))
-        . DeleteSession(Sid)
-      +
-        rec-msg(em-no-such-session(File))
-      )
-      . ActivateEditorWithTree(ResultTree, ModuleId, File)
-    else
-      tau
-    fi
-    . JobDone("Extracting")
-  else
-    tau
-  fi
-endlet
-
 process RunAction(EditorId : term) is
 let
   ModuleId : term,
@@ -168,6 +130,37 @@ in
       tau
     fi
     . JobDone("Running")
+  else
+    tau
+  fi
+endlet
+
+process ExtractAction(EditorId : term) is
+let
+  ModuleId : term,
+  ExtractModuleId : term,
+  Path: str,
+  ResultTree: term,
+  Pid: int,
+  Language: str,
+  ModuleName: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId,  "extract", ExtractModuleId?)
+  .
+  if not-equal(ExtractModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", ModuleName?)
+    . ComputeCanonicalLanguagename(ModuleName, Language?)
+    . AddJob("Extracting")
+    . Reduce(ExtractModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-note(extracted-rstore(Language, Path, ResultTree))
+    else
+      snd-note(extract-rstore-failed(Language, Path))
+    fi
+    . JobDone("Extracting")
   else
     tau
   fi

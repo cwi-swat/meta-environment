@@ -50,7 +50,7 @@ toolbus(LanguageFeatureMenuListener("format", "PrettyPrintAction","Format this t
 toolbus(LanguageFeatureMenuListener("run", "RunAction","Reduce this term"))
 toolbus(LanguageFeatureMenuListener("debug", "DebugAction","Debug this term"))
 toolbus(LanguageFeatureMenuListener("check", "CheckAction","Check this term"))
-toolbus(LanguageFeatureMenuListener("extract", "RunAction","Extract data from this term"))
+toolbus(LanguageFeatureMenuListener("extract", "ExtractAction","Extract data from this term"))
 toolbus(LanguageFeatureMenuListener("test", "TestAction","Run unit tests"))
 
 process LanguageFeatureRemoveListener(ModuleId: term, Property: term) is
