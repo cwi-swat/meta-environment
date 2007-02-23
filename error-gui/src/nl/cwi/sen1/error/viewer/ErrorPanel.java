@@ -33,7 +33,7 @@ public class ErrorPanel extends JPanel {
 
 	private DefaultTreeModel treeModel;
 
-	private Enumeration expansionState;
+	private Enumeration<TreePath> expansionState;
 
 	public ErrorPanel() {
 		super(new BorderLayout());
@@ -74,7 +74,7 @@ public class ErrorPanel extends JPanel {
 	public void loadExpansionState() {
 		if (expansionState != null) {
 			while (expansionState.hasMoreElements()) {
-				TreePath treePath = (TreePath) expansionState.nextElement();
+				TreePath treePath = expansionState.nextElement();
 				tree.expandPath(treePath);
 			}
 		}
@@ -113,7 +113,7 @@ public class ErrorPanel extends JPanel {
 		// Traverse children
 		TreeNode node = (TreeNode) parent.getLastPathComponent();
 		if (node.getChildCount() >= 0) {
-			for (Enumeration e = node.children(); e.hasMoreElements();) {
+			for (Enumeration<?> e = node.children(); e.hasMoreElements();) {
 				TreeNode n = (TreeNode) e.nextElement();
 				TreePath path = parent.pathByAddingChild(n);
 				expandAll(tree, path, expand);
