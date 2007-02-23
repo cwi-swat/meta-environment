@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: asfsdf-meta
-Version: 2.0
+Version: 2.1
 Description:
 Requires: aterm,asf,meta,sdf-meta,toolbus,config-manager,sdf-pretty,console-grabber
 ToolBusFlags=${prefix}/share/asfsdf-meta
