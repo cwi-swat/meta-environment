@@ -326,10 +326,10 @@ public class ModuleDatabase {
 
 		while (!temp.isEmpty()) {
 			ModuleId tempId = temp.getFirst();
-			Set parents = getParents(tempId);
+			Set<ModuleId> parents = getParents(tempId);
 
 			if (!dependencies.containsAll(parents)) {
-				Set children = getAllChildren(tempId);
+				Set<ModuleId> children = getAllChildren(tempId);
 				dependencies.removeAll(children);
 				dependencies.remove(tempId);
 			}
@@ -341,7 +341,7 @@ public class ModuleDatabase {
 	}
 
 	public void deleteDependency(ModuleId moduleFromId, ModuleId moduleToId) {
-		LinkedList deps;
+		LinkedList<ModuleId> deps;
 		Module moduleFrom = modules.get(moduleFromId);
 
 		if (moduleFrom == null) {
@@ -358,17 +358,17 @@ public class ModuleDatabase {
 			return;
 		}
 
-		deps = (LinkedList) descendants.get(moduleFromId);
+		deps = new LinkedList<ModuleId>(descendants.get(moduleFromId));
 		deps.remove(moduleToId);
 
-		deps = (LinkedList) ascendants.get(moduleToId);
+		deps = new LinkedList<ModuleId>(ascendants.get(moduleToId));
 		deps.remove(moduleFromId);
 
 		transDescendants = new HashMap<ModuleId, Set<ModuleId>>();
 	}
 
 	public void deleteDependencies(ModuleId moduleId) {
-		Set dependencies;
+		Set<ModuleId> dependencies;
 
 		Module module = modules.get(moduleId);
 
@@ -396,7 +396,7 @@ public class ModuleDatabase {
 
 		for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
 				.hasNext();) {
-			Set dependencies = getChildren(iter.next());
+			Set<ModuleId> dependencies = getChildren(iter.next());
 			if (dependencies.contains(moduleId)) {
 				dependencies.remove(moduleId);
 			}

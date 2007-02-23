@@ -107,7 +107,7 @@ abstract public class ModuleManagerTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PdeleteDependencies0);
     if (result != null) {
