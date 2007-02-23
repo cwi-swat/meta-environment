@@ -58,7 +58,8 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 
 			ConsoleGrabber grabber = new ConsoleGrabber(args);
 			while (s.hasNext()) {
-				grabber.sendMessage(s.nextLine());
+				String message = s.nextLine();
+				grabber.sendMessage(message);
 			}
 		} catch (IllegalStateException e) {
 			System.err.println("No ToolBus started\n");
@@ -72,5 +73,8 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 
 	public void recTerminate(ATerm t0) {
 		System.exit(0);
+	}
+
+	public void recAckEvent(ATerm t0) {
 	}
 }

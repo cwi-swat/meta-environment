@@ -1,6 +1,6 @@
 // Java tool interface class ConsoleGrabberTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 23, 2007 9:15:05 AM
+// generation time: Feb 23, 2007 1:41:31 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -23,6 +23,7 @@ abstract public class ConsoleGrabberTool
   private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
+  private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
   // Mimic the constructor from the AbstractTool class
@@ -36,12 +37,14 @@ abstract public class ConsoleGrabberTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
+    sigTable.add(factory.parse("rec-ack-event(<console-grabber>,<term>)"));
     sigTable.add(factory.parse("rec-terminate(<console-grabber>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
+    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -50,6 +53,11 @@ abstract public class ConsoleGrabberTool
   {
     List<?> result;
 
+    result = term.match(PrecAckEvent0);
+    if (result != null) {
+      recAckEvent((ATerm)result.get(0));
+      return null;
+    }
     result = term.match(PrecTerminate0);
     if (result != null) {
       recTerminate((ATerm)result.get(0));

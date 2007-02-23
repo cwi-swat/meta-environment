@@ -10,8 +10,9 @@ in
   rec-connect(T?)
   .
   (
-    rec-event(T, message(Message?))
+    rec-event(T, console-message(Message?))
     . snd-note(cg-console-message(Message))
+    . snd-ack-event(T, console-message(Message))
   )
   * rec-disconnect(T)
 endlet
