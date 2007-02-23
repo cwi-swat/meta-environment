@@ -20,13 +20,13 @@ public class StudioImplWithPredefinedLayout extends StudioImpl implements
 	public static final String TOP_LEFT = "Top Left";
 
 	public static void main(String args[]) throws Exception {
-		 args = new String[6];
-		 args[0] = "-TB_HOST_NAME";
-		 args[1] = "localhost";
-		 args[2] = "-TB_PORT";
-		 args[3] = "8999";
-		 args[4] = "-TB_TOOL_NAME";
-		 args[5] = "gui";
+//		 args = new String[6];
+//		 args[0] = "-TB_HOST_NAME";
+//		 args[1] = "localhost";
+//		 args[2] = "-TB_PORT";
+//		 args[3] = "8999";
+//		 args[4] = "-TB_TOOL_NAME";
+//		 args[5] = "gui";
 		
 		new StudioImplWithPredefinedLayout(args);
 	}
