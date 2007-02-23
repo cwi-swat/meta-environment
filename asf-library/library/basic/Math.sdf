@@ -10,6 +10,8 @@ exports
     "2PI/360"      -> Rational
     "E"            -> Rational
 
+%%    exp(Rational)  -> Rational
+
     root(Integer)  -> Rational
  
 hiddens

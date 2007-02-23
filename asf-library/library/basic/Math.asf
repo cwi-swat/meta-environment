@@ -120,6 +120,19 @@ equations
 
   [e1]   E = rat(98641, 36288)
 
+%%equations %% Exponential function
+
+%%%% e^x = 1 + x + x^2/2! + x^3/3! + x^4/4! + ...
+
+%%  [exp1] R2 := R * R,
+%%         R3 := R2 * R,
+%%         R4 := R2 * R2,
+%%         R5 := R2 * R3,
+%%         R6 := R2 * R4,
+%%         R7 := R3 * R4
+%%         ================================================================
+%%         exp(R) = 1 + R + R2/2 + R3/6 + R4/24 + R5/120 + R6/720 + R7/5040
+
 equations 
 
 %% Square root of integer using Newton's method:

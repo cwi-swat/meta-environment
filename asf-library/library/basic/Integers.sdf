@@ -23,7 +23,9 @@ context-free syntax
   min(Integer, Integer)  -> Integer 
   ndiv(Integer, Integer) -> Integer %% Obselete, only for compatibility          
   mod(Integer, Integer)  -> Integer           
-  gcd(Integer, Integer)  -> Integer 
+  gcd(Integer, Integer)  -> Integer
+  even(Integer)          -> Boolean
+  odd(Integer)           -> Boolean 
 
 context-free priorities
   { non-assoc: "+" integer:Integer -> Integer {non-assoc} 

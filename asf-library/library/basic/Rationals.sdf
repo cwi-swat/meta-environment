@@ -62,6 +62,16 @@ exports
             Rational "-" Integer -> Rational 
    }
  
+  context-free priorities
+
+   { Integer  "*" Rational -> Rational
+     Rational "*" Integer -> Rational 
+     Integer  "/" Rational -> Rational {non-assoc} 
+     Rational "/" Integer -> Rational {non-assoc} } >
+
+   { Integer "+" Integer -> Integer {left}
+     Integer "-" Integer -> Integer {left} }
+     
 hiddens
   imports basic/Whitespace
   context-free start-symbols

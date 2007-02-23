@@ -415,6 +415,27 @@ tests
   [tgcd4] gcd(513, 513) == 513
   [tgcd5] gcd(204, 212) == 4
 
+equations %% Even and odd
+
+  [ev1]   even(-Nat) = even(Nat) 
+  [ev2]   even(natcon(OptDs 0)) = true
+  [ev3]   even(natcon(OptDs 2)) = true
+  [ev4]   even(natcon(OptDs 4)) = true
+  [ev5]   even(natcon(OptDs 6)) = true
+  [ev6]   even(natcon(OptDs 8)) = true
+  [default]
+          even(Nat) = false
+
+  [od1]   odd(Int) = not(even(Int))
+
+tests
+  [tev1] even(2) == true
+  [tev2] even(144) == true
+  [tev3] even(-31) == false
+  [tod1] odd(1) == true
+  [tod2] odd(-137) == true
+  [tod3] odd(24) == false
+
 tests
   [sure]  true != true    %% One failing test, just to make sure ...
 
