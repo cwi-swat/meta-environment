@@ -1,10 +1,14 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.io.IOException;
+import java.util.Scanner;
 
+import aterm.ATerm;
 import aterm.pure.PureFactory;
 
-public class ConsoleGrabber {
+public class ConsoleGrabber implements ConsoleGrabberTif {
+	private ConsoleGrabberBridge bridge;
+
 	private PureFactory pureFactory = new PureFactory();
 
 	public ConsoleGrabber(String[] args) {
@@ -31,7 +35,22 @@ public class ConsoleGrabber {
 		thread.start();
 	}
 
+	public void sendMessage(String message) {
+		ATerm event = pureFactory.make("console-message(<str>)", message);
+		bridge.postEvent(event);
+	}
+	
 	public static void main(String[] args) {
-		new ConsoleGrabber(args);
+		ConsoleGrabber grabber = new ConsoleGrabber(args);
+		Scanner in = new Scanner(System.in);
+
+		while (in.hasNext()) {
+			grabber.sendMessage(in.nextLine());
+		}
+		
+		in.close();
+	}
+
+	public void recTerminate(ATerm t0) {
 	}
 }
