@@ -60,4 +60,4 @@ __TOOLBUS__/bin/toolbus \
   __TBSCRIPTS__ \
   __PREFIX__/share/sdf-meta/start-meta-studio.tb \
   `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/sdf-meta/standard.sdf.actions` \
-  $*
+  $* 2>&1 | __CONSOLE_GRABBER__/bin/console-grabber

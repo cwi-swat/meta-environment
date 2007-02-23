@@ -19,6 +19,7 @@ in
   . snd-msg(cm-get-events(studio-menubar))
   . rec-msg(cm-events(MenuEventList?))
   . snd-msg(gui-add-menu-events(MenuEventList))
+  . StartConsole()
   . StartNavigator()
   . StartDialogTool()
   . StartGraphPanel()
