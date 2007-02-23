@@ -51,7 +51,7 @@ abstract public class ConsoleTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PaddMessage0);
     if (result != null) {
