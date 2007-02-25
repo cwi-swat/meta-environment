@@ -44,31 +44,55 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		MatchResult result = null;
+		int maxTries = 100;
 
-		s.findInLine("The ToolBus server allocated port (\\d+)");
-		try {
-			result = s.match();
-			args = new String[6];
-			args[0] = "-TB_HOST_NAME";
-			args[1] = "localhost";
-			args[2] = "-TB_PORT";
-			args[3] = result.group(1);
-			args[4] = "-TB_TOOL_NAME";
-			args[5] = "console-grabber";
+		while (maxTries-- > 0) {
+			try {
+				s.findInLine("The ToolBus server allocated port (\\d+)");
+				result = s.match();
+				String port = result.group(1);
+				args = buildToolArgs(port);
 
-			ConsoleGrabber grabber = new ConsoleGrabber(args);
-			while (s.hasNext()) {
-				String message = s.nextLine();
-				grabber.sendMessage(message);
+				ConsoleGrabber grabber = new ConsoleGrabber(args);
+
+				// eat up all input and send it line by line to the ToolBus
+				while (s.hasNext()) {
+					String message = s.nextLine();
+					grabber.sendMessage(message);
+				}
+
+				break; // end of file
+			} catch (IllegalStateException e) {
+				// ToolBus port not yet found, echo the input to stderr
+				if (s.hasNext()) {
+					System.err.println(s.nextLine());
+				}
+				continue; // try the next line
 			}
-		} catch (IllegalStateException e) {
-			System.err.println("No ToolBus started\n");
+		}
+
+		if (maxTries == 0) {
+			System.err.println("console-grabber: failed to find ToolBus port. Continuing to print on stderr...");
+			
+			// if we have something to print left, simply print it
 			while (s.hasNext()) {
-				System.err.println(s.nextLine());
+				System.err.print(s.nextLine());
 			}
 		}
 
 		s.close();
+	}
+
+	private static String[] buildToolArgs(String port) {
+		String[] args;
+		args = new String[6];
+		args[0] = "-TB_HOST_NAME";
+		args[1] = "localhost";
+		args[2] = "-TB_PORT";
+		args[3] = port;
+		args[4] = "-TB_TOOL_NAME";
+		args[5] = "console-grabber";
+		return args;
 	}
 
 	public void recTerminate(ATerm t0) {
