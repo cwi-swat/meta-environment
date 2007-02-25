@@ -20,7 +20,6 @@ public class ConsolePanel extends JPanel {
 
 	public void addMessage(String message) {
 		textArea.append(message);
-		textArea.append("\n");
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 
 		int idealSize = 10000;
