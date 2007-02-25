@@ -32,7 +32,7 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 				}
 			}
 		});
-		thread.setName("ModuleManager");
+		thread.setName("ConsoleGrabber");
 		thread.start();
 	}
 
