@@ -35,7 +35,7 @@ in
       . create(CleanupEditTerm(Sid, Filename), Pid?)
     +
       rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
-      . Error(ErrorMessage, [])
+      . printf("error: %s\n", ErrorMessage)
     )
   fi
 endlet

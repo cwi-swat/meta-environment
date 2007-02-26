@@ -1,5 +1,10 @@
 $Id$
 
+Mon Feb 26 20:40:48 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/*.tb: simplified error messages using the new console grabber.
+   Changed to printf("error: ...\n"), and printf("warning: ...\n") 
+   coding convention.
+
 Thu Feb 15 09:47:04 CET 2007 <kooiker@cwi.nl>
  * tbscripts/{sdf,term}-editor-utils.tb:
    - Remove summaries after editor is changed (closes #708).

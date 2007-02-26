@@ -116,11 +116,11 @@ in
 	. PutCachedValue(TERM_TREE_CACHE, Filename, Tree)
       +
         rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
-        . Error(ErrorMessage, [])
+        . printf("error: %s\n", ErrorMessage)
       )
     +
       rec-msg(io-file-not-written(Error?))
-      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
+      . printf("error: %s not written, %t\n", Filename, Error)
     )
   fi
 endlet

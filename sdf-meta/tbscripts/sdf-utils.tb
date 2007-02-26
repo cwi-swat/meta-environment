@@ -172,7 +172,7 @@ in
     MM-GetClosableModules(ModuleId, CloseModules?)
     .
     if equal(CloseModules, []) then
-      Error("Unable to close module, it would break some import(s).", [Modulename])
+      printf("warning: Unable to close %s, it would break some import(s).\n", Modulename)
     else
       CloseModules(CloseModules)
     fi
@@ -182,8 +182,8 @@ in
     if equal(Dependencies, []) then
       CloseModules([ModuleId])
     else
-      Error("Unable to close module, it would break the import of: %t",
-            [Modulename, Dependencies])
+      printf("warning: Unable to close %s, it would break the import of: %t\n",
+            Modulename, Dependencies)
     fi
   fi
 endlet
@@ -402,7 +402,7 @@ in
     LocateFile(Modulename, SDF_EXTENSION, Path?)
     .
     if equal(Path, EMPTY_PATH) then
-      Error("Unable to locate module", [Modulename])
+      printf("warning: Unable to locate %s\n", Modulename)
       . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
       . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
@@ -490,7 +490,7 @@ in
       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
       . ResultStatus := identified
     else
-      Error("Module %s should be in a file named %s\n", [Modulename, File])
+      printf("error: Module %s should be in a file named %s\n", Modulename, File)
       . ResultStatus := error
     fi
   else

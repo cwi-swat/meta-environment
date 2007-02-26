@@ -111,7 +111,7 @@ in
 	. snd-msg(tm-end-transaction(module-manager))
         . SelectModule(ModuleId)
       else
-        Error("The chosen Module is shadowed by another module in the search path: %t", [FoundPath])
+        printf("warning: The chosen Module is shadowed by another module in the search path: %s\n", FoundPath)
       fi
     fi
   fi
