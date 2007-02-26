@@ -618,7 +618,7 @@ in
     .
     (
       rec-msg(io-file-exists)
-      . Error("Refusing to overwrite existing file: %s", [DestPath])
+      . printf("warning: refusing to overwrite existing file: %s", DestPath)
     +
       rec-msg(io-file-not-exists)
       . snd-msg(io-copy-file(SrcPath, DestPath))
@@ -627,7 +627,7 @@ in
         rec-msg(io-file-copied(SrcPath, DestPath))
       +
         rec-msg(io-file-not-copied(SrcPath, DestPath, Error?))
-        . Error("Unable to copy: %s", [Error])
+        . printf("error: Unable to copy %s to %s: %s", SrcPath, DestPath, Error)
       )
     )
   +
