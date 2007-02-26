@@ -19,25 +19,11 @@ process JobDone(Message: str) is
 process ConsoleMessage(Message: str) is
   snd-msg(cg-add-message(Message))
 
-process Error(Message: str, SubjectStrings: list) is
-let
-  SubjectString : str,
-  Runner : list
-in
-  Runner := SubjectStrings
-  . snd-msg(cg-add-message(Message))
-  .
-  if not-equal(Runner, []) then
-    SubjectString := first(Runner)
-    . Runner := next(Runner)
-    . snd-msg(cg-add-message(" "))
-    . snd-msg(cg-add-message(SubjectString))
-  fi
-  *
-  if equal(Runner, []) then
-    snd-msg(cg-add-message("\n"))
-  fi  
-endlet
+process Error(Message: str) is
+  printf("error: %s\n", Message)
+
+process Warning(Message: str) is
+  printf("warning: %s\n", Message)
 
 process RemoveSummaryFor(SummaryId: str) is
   snd-msg(ui-remove-feedback-summary("Issues", SummaryId))

@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Feb 26 20:39:27 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/*.tb: changed more complicated error handling to simple
+   printf("error: ...\n"), and printf("warning: ...") coding convention.
+
 Fri Feb 23 10:39:08 CET 2007 <kooiker@cwi.nl>
  * tbscripts/gui-utils.tb:
    - Send errors to console window
