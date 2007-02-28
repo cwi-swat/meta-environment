@@ -1,4 +1,6 @@
 
+Wed Feb 28 17:24:57 CET 2007 <{economop,jurgenv}@cwi.nl>
+ * Added a link to The Goat Book in the build-env documentation.
 
 Sat Feb 17 15:30:15 CET 2007 <jurgenv@cwi.nl>
  * added configure option --with-docbook-xsl which is mandatory, and 

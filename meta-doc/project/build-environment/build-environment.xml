@@ -9,8 +9,8 @@
   <info>
     <title>Build environment of The Meta-Environment</title>
 
-    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100
-    (Wed, 13 Dec 2006)$</pubdate>
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
 
     <authorgroup>
       <author>
@@ -66,7 +66,9 @@
       </listitem>
     </itemizedlist>
 
-    <para>This document is incomplete, please help.</para>
+    <para>This document is incomplete, please help. You may find <link
+    xlink:href="http://sourceware.org/autobook/">The Goat Book</link>
+    documentation useful. </para>
   </section>
 
   <section>
