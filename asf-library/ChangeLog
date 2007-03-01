@@ -1,5 +1,12 @@
 $Id$
 
+Thu Mar  1 18:26:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ * library/languages/asf/compiler/**: fixed some bugs in the compiler. It
+   still did not generate enough character range checks. And, after 
+   bootstrapping, we found out that the lexical transformations in the
+   compiler itself contained bugs in lexical transformations. These were
+   all fixed.
+
 Thu Feb 22 11:21:03 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * library/languages/asf/addeqssyntax/Add-Eqs-Conds.asf: removed generation
    of old-style positive conditions ('=' syntax).
