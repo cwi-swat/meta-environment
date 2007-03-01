@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Mar  1 13:30:19 CET 2007 <kooiker@cwi.nl>
+ * src/**/ErrorPanel.java:
+   - Limit number of displayed errors to 100
+
 Fri Feb  9 13:29:43 CET 2007 <kooiker@cwi.nl>
  * src/**/ErrorPanel.java:
    - Add tooltips to toolbar actions (buttons)

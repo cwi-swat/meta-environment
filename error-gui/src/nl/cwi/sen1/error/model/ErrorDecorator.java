@@ -49,9 +49,10 @@ public class ErrorDecorator {
 		return node;
 	}
 
-	private boolean collectNodes(DefaultMutableTreeNode top, List<ErrorNode> list) {
+	private boolean collectNodes(DefaultMutableTreeNode top,
+			List<ErrorNode> list) {
 		boolean grouped = false;
-		
+
 		for (Enumeration<?> e = top.children(); e.hasMoreElements();) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) e
 					.nextElement();
@@ -63,7 +64,7 @@ public class ErrorDecorator {
 				list.add(0, (ErrorNode) node);
 			}
 		}
-		
+
 		return grouped;
 	}
 
@@ -77,8 +78,7 @@ public class ErrorDecorator {
 			Map<String, GroupNode> groups = new HashMap<String, GroupNode>();
 			groupNodes(list, groups, grouping);
 			newChildren = groups.values().iterator();
-		}
-		else {
+		} else {
 			newChildren = list.iterator();
 		}
 
@@ -88,7 +88,8 @@ public class ErrorDecorator {
 		}
 	}
 
-	private void addToGroup(int grouping, Map<String, GroupNode> groups, String name, ErrorNode node) {
+	private void addToGroup(int grouping, Map<String, GroupNode> groups,
+			String name, ErrorNode node) {
 		GroupNode group = groups.get(name);
 		if (group == null) {
 			group = new GroupNode(name, grouping);
@@ -96,14 +97,15 @@ public class ErrorDecorator {
 		group.insert(node, 0);
 		groups.put(name, group);
 	}
-	
-	private void groupNodes(List<ErrorNode> list, Map<String, GroupNode> groups, int grouping) {
-		for (Iterator<ErrorNode> iter = list.iterator(); iter.hasNext(); ) {
+
+	private void groupNodes(List<ErrorNode> list,
+			Map<String, GroupNode> groups, int grouping) {
+		for (Iterator<ErrorNode> iter = list.iterator(); iter.hasNext();) {
 			ErrorNode node = iter.next();
 			addToGroup(grouping, groups, getErrorGroup(node, grouping), node);
 		}
-	}	
-	
+	}
+
 	public void addErrors(DefaultMutableTreeNode top, Summary summary) {
 		String producer = summary.getProducer();
 		String id = summary.getId();
@@ -112,7 +114,9 @@ public class ErrorDecorator {
 				.getTail()) {
 			Error head = errorList.getHead();
 
-			insert(top, decorateError(head, producer, id));
+			if (!(top.getChildCount() > 100)) {
+				insert(top, decorateError(head, producer, id));
+			}
 		}
 	}
 
@@ -123,17 +127,18 @@ public class ErrorDecorator {
 			return loc != null ? loc.getFilename() : "Unknown file";
 		case GroupNode.DESCRIPTION_GROUP:
 			return node.toString();
-			default:
-				return "";
+		default:
+			return "";
 		}
 	}
-	
+
 	private void insert(DefaultMutableTreeNode top, ErrorNode node) {
 		int grouping = GroupNode.NO_GROUP;
-		
-		for (Enumeration<?> e = top.children(); e.hasMoreElements(); ) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) e.nextElement();
-			
+
+		for (Enumeration<?> e = top.children(); e.hasMoreElements();) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) e
+					.nextElement();
+
 			if (child instanceof GroupNode) {
 				GroupNode group = (GroupNode) child;
 				grouping = group.getGroupType();
@@ -143,27 +148,27 @@ public class ErrorDecorator {
 				}
 			}
 		}
-		
+
 		if (grouping != GroupNode.NO_GROUP) {
-			GroupNode group = new GroupNode(getErrorGroup(node, grouping), grouping);
-			group.insert(node,0);
-			top.insert(group,0);
-		}
-		else {
-			top.insert(node,0);
+			GroupNode group = new GroupNode(getErrorGroup(node, grouping),
+					grouping);
+			group.insert(node, 0);
+			top.insert(group, 0);
+		} else {
+			top.insert(node, 0);
 		}
 	}
 
-
-	private void removeNodes(DefaultMutableTreeNode top, List<ErrorNode> toBeRemoved) {
+	private void removeNodes(DefaultMutableTreeNode top,
+			List<ErrorNode> toBeRemoved) {
 		Iterator<ErrorNode> iter = toBeRemoved.iterator();
 		while (iter.hasNext()) {
 			DefaultMutableTreeNode node = iter.next();
 			if (top.isNodeChild(node))
-			top.remove(node);
+				top.remove(node);
 		}
 	}
-	
+
 	public void removeAllMatchingErrors(DefaultMutableTreeNode top, String path) {
 		List<ErrorNode> allNodes = new LinkedList<ErrorNode>();
 		boolean grouped = collectNodes(top, allNodes);
@@ -179,24 +184,24 @@ public class ErrorDecorator {
 				toBeRemoved.add(error);
 			}
 		}
-		
+
 		if (grouped) {
 			List<GroupNode> groupToBeRemoved = new LinkedList<GroupNode>();
-			
-			for (Enumeration<?> e = top.children(); e.hasMoreElements(); ) {
+
+			for (Enumeration<?> e = top.children(); e.hasMoreElements();) {
 				GroupNode group = (GroupNode) e.nextElement();
 				removeNodes(group, toBeRemoved);
 				if (group.isLeaf()) {
 					groupToBeRemoved.add(group);
 				}
 			}
-		}
-		else {
+		} else {
 			removeNodes(top, toBeRemoved);
 		}
 	}
 
-	public void removeAllMatchingErrors(DefaultMutableTreeNode top, String producer, String id) {
+	public void removeAllMatchingErrors(DefaultMutableTreeNode top,
+			String producer, String id) {
 		List<ErrorNode> allNodes = new LinkedList<ErrorNode>();
 		boolean grouped = collectNodes(top, allNodes);
 		List<ErrorNode> toBeRemoved = new LinkedList<ErrorNode>();
@@ -210,23 +215,23 @@ public class ErrorDecorator {
 				toBeRemoved.add(error);
 			}
 		}
-		
+
 		if (grouped) {
 			List<GroupNode> groupToBeRemoved = new LinkedList<GroupNode>();
-			
-			for (Enumeration<?> e = top.children(); e.hasMoreElements(); ) {
+
+			for (Enumeration<?> e = top.children(); e.hasMoreElements();) {
 				GroupNode group = (GroupNode) e.nextElement();
 				removeNodes(group, toBeRemoved);
 				if (group.isLeaf()) {
 					groupToBeRemoved.add(group);
 				}
 			}
-			
-			for (Iterator<GroupNode> iter = groupToBeRemoved.iterator(); iter.hasNext(); ) {
+
+			for (Iterator<GroupNode> iter = groupToBeRemoved.iterator(); iter
+					.hasNext();) {
 				top.remove(iter.next());
 			}
-		}
-		else {
+		} else {
 			removeNodes(top, toBeRemoved);
 		}
 	}
@@ -234,11 +239,11 @@ public class ErrorDecorator {
 	public void groupOnDescription(DefaultMutableTreeNode top) {
 		setGrouping(top, GroupNode.DESCRIPTION_GROUP);
 	}
-	
+
 	public void groupOnFile(DefaultMutableTreeNode top) {
 		setGrouping(top, GroupNode.FILE_GROUP);
 	}
-	
+
 	public void unGroup(DefaultMutableTreeNode top) {
 		setGrouping(top, GroupNode.NO_GROUP);
 	}
