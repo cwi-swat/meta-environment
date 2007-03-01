@@ -1,4 +1,4 @@
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.consolegrabber;
 
 import java.io.IOException;
 import java.util.Scanner;

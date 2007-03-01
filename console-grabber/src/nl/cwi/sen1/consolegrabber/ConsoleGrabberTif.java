@@ -2,7 +2,7 @@
 // This file is generated automatically, please do not edit!
 // generation time: Feb 23, 2007 1:41:31 PM
 
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.consolegrabber;
 
 import aterm.*;
 

@@ -6,8 +6,8 @@ Description:
 Requires: aterm-java,meta-studio,toolbus-java-adapter
 JarFile=console-grabber.jar
 Jars=${prefix}/share/${JarFile}
-Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
-MainClass=nl.cwi.sen1.gui.plugin.ConsoleGrabber
+Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.consolegrabber
+MainClass=nl.cwi.sen1.consolegrabber.ConsoleGrabber
 TestClass=
 ToolBusFlags=-I${prefix}/share/console-grabber
 
