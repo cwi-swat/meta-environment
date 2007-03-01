@@ -1,0 +1,60 @@
+module languages/rscript/lib/Sets[X]
+
+imports 
+	languages/rscript/lib/SetCon[X]
+	languages/rscript/lib/Equality[X]
+	languages/rscript/lib/Equality[Set[[X]]]
+	basic/Integers
+	basic/Booleans
+
+hiddens
+  context-free start-symbols Set[[X]]
+
+exports
+  sorts Set
+
+  context-free syntax
+	"empty-set" -> Set[[X]]
+
+  context-free syntax
+	SetCon[[X]] -> Set[[X]]
+
+  context-free syntax
+	insert(X, Set[[X]]) -> Set[[X]]
+	delete(X, Set[[X]]) -> Set[[X]]
+
+  context-free syntax
+	element-of(X, Set[[X]]) -> Boolean
+
+  context-free syntax
+	subset(Set[[X]], Set[[X]]) -> Boolean
+	superset(Set[[X]], Set[[X]]) -> Boolean
+
+  context-free syntax
+	strict-subset(Set[[X]], Set[[X]]) -> Boolean
+	strict-superset(Set[[X]], Set[[X]]) -> Boolean
+
+  context-free syntax
+	union(Set[[X]], Set[[X]]) -> Set[[X]]
+	difference(Set[[X]], Set[[X]]) -> Set[[X]]
+	intersection(Set[[X]], Set[[X]]) -> Set[[X]]
+
+  context-free syntax
+	unique(Set[[X]]) -> Set[[X]]
+
+  context-free syntax
+	size(Set[[X]]) -> Integer
+
+
+hiddens
+
+  imports basic/Whitespace
+
+  lexical syntax
+	[0-9] -> X
+
+  variables
+	"set"[0-9\']* -> Set[[X]]
+	"x*"[0-9\']* -> {X ","}*
+	"x"[0-9\']* -> X
+

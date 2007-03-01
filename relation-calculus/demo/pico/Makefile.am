@@ -1,4 +1,4 @@
-include $(top_srcdir)/make_rules
+# $Id$
 
 picodir		= $(pkgdatadir)/demo/pico
 

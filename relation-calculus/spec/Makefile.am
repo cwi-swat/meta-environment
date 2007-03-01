@@ -1,5 +1,6 @@
+EXTRA_DIST=make_rules
 
-SUBDIRS=relation-calculus
+SUBDIRS=languages
 
 #bin_PROGRAMS    = RscriptCalculator Rstore RscriptTestsuites RscriptChecker
 #

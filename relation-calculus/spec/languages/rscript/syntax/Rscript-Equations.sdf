@@ -1,0 +1,26 @@
+module languages/rscript/syntax/Rscript-Equations
+
+imports languages/rscript/syntax/Rscript-Expressions
+        languages/rscript/syntax/Rscript-Types
+
+exports
+sorts DCLIdCon YIELD INITVAR EQU RSTAT
+
+context-free syntax
+  "init"      -> IdCon {reject} 
+  "equations" -> IdCon {reject} 
+  "limit"     -> IdCon {reject} 
+  "initial"   -> IdCon {reject} 
+  "satisfy"   -> IdCon {reject} 
+  "end"       -> IdCon {reject} 
+
+context-free syntax
+  %% FIXME: rexptype contains IdCon too; should not be allowed
+  REXPTYPE IdCon                                                                            -> DCLIdCon  
+  "yield"?                                                                                  -> YIELD     
+  YIELD DCLIdCon "=" REXP                                                                   -> INITVAR   
+  YIELD DCLIdCon "+=" REXP                                                                  -> INITVAR   
+  YIELD DCLIdCon "-=" REXP                                                                  -> INITVAR   
+  DCLIdCon "init" REXP                                                                      -> INITVAR   
+  IdCon "=" REXP                                                                            -> EQU       
+  "equations" ("(" "limit" NatCon ")")? "initial" INITVAR+ "satisfy" EQU+ "end" "equations" -> RSTAT     

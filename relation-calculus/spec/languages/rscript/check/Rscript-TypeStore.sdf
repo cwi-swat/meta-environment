@@ -1,0 +1,15 @@
+module languages/rscript/check/Rscript-TypeStore
+
+imports languages/rscript/check/Rscript-TypeExt
+        containers/Table[IdCon REXPTYPE] [
+                                           Table[[IdCon,REXPTYPE]] => TypeStore
+                                           List[[REXPTYPE]] => TypeList
+                                           List[[IdCon]] => IdConList
+                                         ]
+
+exports
+sorts TypeStore TypeList IdConList
+
+hiddens
+context-free start-symbols
+  TypeStore TypeList IdConList

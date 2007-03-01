@@ -1,0 +1,142 @@
+module languages/rscript/run/RscriptCalculator
+
+imports languages/rscript/run/REnvironment
+        basic/Integers
+        basic/Strings
+        basic/LocationOperations
+
+hiddens
+context-free start-symbols
+  REnvironment RElem
+
+exports
+context-free syntax
+  "yield-environment" -> REnvironment  
+
+context-free syntax
+  eval-rscript(RSCRIPT)                                             -> REnvironment  
+  eval-rscript-and-yield(RSCRIPT, StrCon)                           -> RElem         
+  eval-rscript-and-yield(RSCRIPT, IdCon)                            -> RElem         
+  eval-rscript-with-rstore(RSCRIPT, REnvironment)                   -> REnvironment  
+  eval-rscript-with-rstore-and-yield(RSCRIPT, REnvironment, StrCon) -> RElem         
+  eval-rscript-with-rstore-and-yield(RSCRIPT, REnvironment, IdCon)  -> RElem         
+  REnvironment "[|" RSTAT* "|]"                                     -> REnvironment  
+  "[|" RSTAT* "|]"                                                  -> REnvironment  
+  "[|" RSTAT* "|]" "yield" IdCon                                    -> RElem         
+  "[|" REXP "|]"                                                    -> RElem         
+
+  %% Visible functions for the benefit of Testsuite execution
+  eval-rstat(RSTAT, REnvironment)                                   -> REnvironment  
+  eval-rstats(RSTAT*, REnvironment)                                 -> REnvironment  
+  evale(REXP, REnvironment)                                         -> RElem         
+
+exports
+context-free syntax
+  "{" {GENERATOR ","}+ "::" {REXP ","}+ "}"                   -> REXP                    
+  evalp(REXP, REnvironment)                                   -> Boolean      {complete} 
+  evali(REXP, REnvironment)                                   -> Integer      {complete} 
+  evalt(REXP, REnvironment)                                   -> RElem        {complete} 
+  evalb(REXP, REnvironment)                                   -> RElem        {complete} 
+  evalr(REXP, REnvironment)                                   -> RElem        {complete} 
+  evalx(REXP, REnvironment)                                   -> RElem        {complete} 
+  evall(REXP, REnvironment)                                   -> Location     {complete} 
+  evalc(REXP, REnvironment)                                   -> RElem                   
+  evalc-test(Boolean, REXP, REnvironment)                     -> RElem                   
+  eval-lt(RElem, RElem)                                       -> Boolean                 
+  eval-le(RElem, RElem)                                       -> Boolean                 
+  eval-rim(RElem, RElem)                                      -> RElem                   
+  eval-lim(RElem, RElem)                                      -> RElem                   
+  eval-initvar(INITVAR*, REnvironment)                        -> REnvironment            
+  eval-fields({REXPTYPE ","}*, REnvironment, Integer)         -> REnvironment            
+  select-field(RElem, Integer)                                -> RElem                   
+  select-expression-field(REXP, Integer)                      -> REXP                    
+  add-element(RElem, RElem)                                   -> RElem                   
+  power0(RElem)                                               -> RElem                   
+  power1(RElem)                                               -> RElem                   
+  extract-rvars({REXPTYPE ","}+)                              -> {IdCon ","}+            
+  bind-formals({IdCon ","}+, {REXP ","}+, REnvironment)       -> REnvironment            
+  equal-rval(RElem, RElem)                                    -> Boolean                 
+  simplify(REXP)                                              -> REXP                    
+  simplify1(REXP)                                             -> REXP                    
+  eval-itern({TARGET ","}+, RElem, RElem, REXP, REnvironment) -> RElem                   
+  match-rvars({TARGET ","}*, RElem, REXP, REnvironment)       -> RElem                   
+  append-rval(RElem, RElem)                                   -> RElem                   
+  exists({TARGET ","}+, RElem, REXP, REnvironment)            -> Boolean                 
+  solve1(Integer, IdCon, REXP, REnvironment)                  -> REnvironment            
+  solve2(Integer, IdCon, REXP, IdCon, REXP, REnvironment)     -> REnvironment            
+  sumx(RElem, Integer)                                        -> Integer                 
+  sum-domainx(RElem, Integer)                                 -> Integer                 
+  sum-rangex(RElem, Integer)                                  -> Integer                 
+  max1(RElem)                                                 -> Integer                 
+  max2(RElem, Integer)                                        -> Integer                 
+  min1(RElem)                                                 -> Integer                 
+  min2(RElem, Integer)                                        -> Integer                 
+  str2IdCon(String)                                           -> IdCon                   
+  str2rvar(StrCon)                                            -> IdCon                   
+
+hiddens
+imports basic/Comments
+
+context-free start-symbols
+  IdCon
+
+variables
+  "$REnv" [0-9\']*      -> REnvironment          
+  "$Val" [0-9\']*       -> RElem                 
+  "$VPair*" [0-9\']*    -> {<IdCon,RElem> ","}*  
+  "$Var" [0-9\']*       -> IdCon                 
+  "$Var*" [0-9\']*      -> {IdCon ","}*          
+  "$Var+" [0-9\']*      -> {IdCon ","}+          
+  "$Exp" [0-9\']*       -> REXP                  
+  "$Test" [0-9\']*      -> REXP                  
+  "$Exp*" [0-9\']*      -> {REXP ","}*           
+  "$Exp+" [0-9\']*      -> {REXP ","}+           
+  "$Exps" [0-9\']*      -> {REXP ","}+           
+  "$Rel" [0-9\']*       -> RElem                 
+  "$Set" [0-9\']*       -> RElem                 
+  "$SetIter" [0-9\']*   -> RElem                 
+  "$RElem" [0-9\']*     -> RElem                 
+  "$RElem*" [0-9\']*    -> {RElem ","}*          
+  "$RElem+" [0-9\']*    -> {RElem ","}+          
+  "$RElem" [0-9\']*     -> RElem                 
+  "$RElem*" [0-9\']*    -> {RElem ","}*          
+  "$RElem+" [0-9\']*    -> {RElem ","}+          
+  "$Gen" [0-9\']*       -> GENERATOR             
+  "$Gen*" [0-9\']*      -> {GENERATOR ","}*      
+  "$Gen+" [0-9\']*      -> {GENERATOR ","}+      
+  "$SimpleGen" [0-9\']* -> SIMPLE-GENERATOR      
+  "$Rscript" [0-9\']*   -> RSCRIPT               
+  "$Stat" [0-9\']*      -> RSTAT                 
+  "$Stat*" [0-9\']*     -> RSTAT*                
+  "$Stat+" [0-9\']*     -> RSTAT+                
+  "$BoolCon" [0-9\']*   -> BoolCon               
+  "$Bool" [0-9\']*      -> Boolean               
+  "$NatCon" [0-9\']*    -> NatCon                
+  "$Integer" [0-9\']*   -> Integer               
+  "$String" [0-9\']*    -> String                
+  "$StrCon" [0-9\']*    -> StrCon                
+  "$Etype" [0-9\']*     -> REXPTYPE              
+  "$Etype*" [0-9\']*    -> {REXPTYPE ","}*       
+  "$Etype+" [0-9\']*    -> {REXPTYPE ","}+       
+  "$DclIdCon*" [0-9\']* -> {DCLIdCon ","}*       
+  "$DclIdCon+" [0-9\']* -> {DCLIdCon ","}+       
+  "$Area" [0-9\']*      -> Area                  
+  "$Loc" [0-9\']*       -> Location              
+  "$InitVar" [0-9\']*   -> INITVAR               
+  "$InitVar*" [0-9\']*  -> INITVAR*              
+  "$InitVar+" [0-9\']*  -> INITVAR+              
+  "$Eq" [0-9\']*        -> EQU                   
+  "$Eq*" [0-9\']*       -> EQU*                  
+  "$Eq+" [0-9\']*       -> EQU+                  
+  "$Target" [0-9\']*    -> TARGET                
+  "$Target*" [0-9\']*   -> {TARGET ","}*         
+  "$Target+" [0-9\']*   -> {TARGET ","}+         
+
+lexical variables
+  "$IdConHeadChar" [0-9\']* -> [A-Za-z]        
+  "$IdConChar" [0-9\']*     -> [A-Za-z0-9\-]   
+  "$IdConChar*" [0-9\']*    -> [A-Za-z0-9\-]*  
+  "$IdConChar+" [0-9\']*    -> [A-Za-z0-9\-]+  
+  "$StrChar" [0-9\']*       -> StrChar         
+  "$StrChar*" [0-9\']*      -> StrChar*        
+  "$StrChar+" [0-9\']*      -> StrChar+        

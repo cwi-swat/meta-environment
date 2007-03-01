@@ -1,0 +1,55 @@
+equations
+
+[main] start(RSCRIPT, $Rscript) = start(Summary, eval-rscript-testsuite($Rscript))
+
+[test-environment-top]
+	test-environment = assign-variable(NPASSED,int, 0, 
+				assign-variable(NFAILED,int,0, 
+					assign-variable(FAILED, set[str], [], new-renvironment())))
+
+equations
+
+%% ---- Evaluate test suite
+
+[ETS1]	$Stat* := $Rscript,
+         $REnv := eval-rstats($Stat*, test-environment),
+	$NatCon1 := value(NPASSED, $REnv),
+	$NatCon2 := value(NFAILED, $REnv),
+	[$Error*] := value(FAILED, $REnv)
+	===
+	eval-rscript-testsuite($Rscript) = summary("Rscript test runner", get-filename(get-location($Rscript)), [$Error*])
+
+%% ---- Evaluate test suite with given Env
+
+%%[ETS1]	$REnv' := assign-variable(NPASSED, int, 0, $REnv),
+%%	$REnv'' := assign-variable(NFAILED, int, 0, $REnv'),
+%%	$REnv''' := assign-variable(FAILED, bag[str], {}, $REnv''),
+%%	$REnv'''' := eval-rstats($Stat*, $REnv'''),
+%%	$NatCon1 := value(NPASSED, $REnv''''),
+%%	$NatCon2 := value(NFAILED, $REnv''''),
+%%	$Val := value(FAILED, $REnv'''')
+%%	===
+%%	eval-rscript-testsuite-with-rstore($Stat*, $REnv) = testsuite-report($NatCon1, $NatCon2, $Val)
+
+
+%% ---- Increment a variable
+
+[INC1]	$NatCon := value($Var, $REnv),
+	$Integer :=  $NatCon + 1,
+	$NatCon' := $Integer
+	===
+	increment($Var, $REnv) = assign-variable($Var, $NatCon', $REnv)
+
+%% ---- Evaluate assert
+
+[S10]	evale($Exp,$REnv) == true
+	===
+	eval-rstat(assert $StrCon: $Exp, $REnv)= increment(NPASSED, $REnv)
+
+[S11]	assert $StrCon : $Exp := $Stat,
+         evale($Exp,$REnv) == false, 
+	$Error := error("Failed test", [localized($StrCon, get-location($Stat))]),
+ 	[$Error*] := value(FAILED, $REnv),
+	$REnv' := assign-variable(FAILED, [$Error*, $Error], $REnv)
+	===
+	eval-rstat($Stat, $REnv) = increment(NFAILED, $REnv')

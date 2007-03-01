@@ -547,4 +547,3 @@ type SetType = set[int]
 SetType BT1 = {1,2,3}
 
 assert "type, 22": BT1 == {1,2,3}
-

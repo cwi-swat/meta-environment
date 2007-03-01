@@ -1,0 +1,14 @@
+module languages/rscript/lib/Nested-Sets[Elem]
+
+imports
+	languages/rscript/lib/Power[Elem][ 
+		Set[[Elem]] => Elem
+		Set[[Set[[Elem]]]] => Elem
+		Set[[X]] => Elem
+		Set[[Elem]] => Elem 
+		Set[[Set[[X]]]] => Elem
+		]
+
+hiddens
+context-free start-symbols
+	Elem
