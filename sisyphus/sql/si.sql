@@ -127,6 +127,16 @@ create table si_logs (
 	line text
 );
 
+drop table si_messages cascade;
+create table si_messages (
+	id serial primary key,
+	si_host_id integer references si_hosts,
+	si_session_id integer references si_sessions,
+	created_on timestamp,
+	line text
+);
+
+
 
 drop table si_releases cascade;
 create table si_releases (

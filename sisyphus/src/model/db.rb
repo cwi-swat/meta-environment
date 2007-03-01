@@ -75,7 +75,6 @@ module Model
       end
       raise RuntimeError.new("no hostname found in uname: #{uname}")
     end
-
   end
 
   class SiConfig < ActiveRecord::Base
@@ -86,6 +85,7 @@ module Model
   class SiSession < ActiveRecord::Base
     # fields: time
     has_many :si_items  
+    has_many :si_messages
   end
 
   class SiItem < ActiveRecord::Base
@@ -306,7 +306,7 @@ module Model
 
     def item_for_target(target, dep_items)
       h, c, r = host_config_revision(target.host, target.config, target.revision)
-      s = db_session(target.time)
+      s = target.db_session
 
       item = nil
       SiItem.transaction do

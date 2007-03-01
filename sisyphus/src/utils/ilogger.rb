@@ -1,6 +1,7 @@
 module Utils
 
   require 'logger'
+  require 'model/dbmsg'
 
   class Indentation
     def initialize(num_of_spaces, object)
@@ -45,6 +46,26 @@ module Utils
 
     def format_message(severity, time, progname, message)
       return indent_object(super(severity, time, progname, message))
+    end
+
+  end
+
+
+  class IndentedDBLogger < IndentedLogger
+    def initialize(host, session, output, width = 2)
+      super(output)
+      @host = host
+      @indent = 0
+      @width = width
+      @session = session
+    end
+
+
+    def format_message(severity, time, progname, message)
+      string = super(severity, time, progname, message)
+      msg = Model::SiMessage.new(:line => string, :si_host => @host, :si_session => @session)
+      msg.save
+      return string
     end
 
   end

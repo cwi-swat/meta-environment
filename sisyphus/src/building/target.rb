@@ -28,6 +28,10 @@ module Building
       @item = nil
     end
 
+    def db_session
+      return session.db_session
+    end
+
     def host
       return session.host
     end
@@ -642,6 +646,7 @@ module Building
       @log = log
       @dist_conf = dist_conf
     end
+
 
     def target(revision, dep_items)
       return Target.new(revision, dep_items, @config, @session, @log, @dist_conf)

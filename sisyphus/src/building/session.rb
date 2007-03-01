@@ -2,13 +2,14 @@
 module Building
 
   class Session
-    attr_reader :time, :host
+    attr_reader :time, :host, :db_session
     
-    def initialize(time, host)
+    def initialize(time, host, db_session)
       @time = time
       @host = host
       @built = {}
       @emails = {}
+      @db_session = db_session
     end
 
     def hostname

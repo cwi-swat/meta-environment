@@ -75,16 +75,17 @@ module Building
       @log.info("**************##### Package: #{component}-#{version}")
       if @store.has_release_for_package_version(component, version) then
         @log.warn("Package #{component} has been released already as version #{version}!")      
-        item = @store.item_for_target(target, target.dep_items)
-        item.set_success(false)
-        item.set_progress(false)
-        item.save
-      else
-        item = target.obtain_item(@store)
-        build_target(target, item)
-        target.save(@store)
-        return target.item
+        #item = @store.item_for_target(target, target.dep_items)
+        #item.set_success(false)
+        #item.set_progress(false)
+        #item.save
+        #return item
+        #else
       end
+      item = target.obtain_item(@store)
+      build_target(target, item)
+      target.save(@store)
+      return target.item
     end
 
     def compatible?(deps1, deps2)

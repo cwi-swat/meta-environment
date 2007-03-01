@@ -1,3 +1,14 @@
+2007-03-01    <storm@cwi.nl>
+
+	* Fix: if a to-be-built package had been released, an (type)
+	exception was thrown; it is now legal for released packages to be
+	built with the same version number (releasing them is prohibited
+	though). 
+
+	* src/si-cli.rb (Sisyphus::SisyphusClient::start_iteration): log
+	files are now saved in the database. Let's see how this bogs down
+	postgresql:-).
+
 2007-02-22    <storm@cwi.nl>
 
 	* src/ophion.rb: enabled setting of the release bit and checking

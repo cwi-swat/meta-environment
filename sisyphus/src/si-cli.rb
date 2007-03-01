@@ -80,6 +80,10 @@ module Sisyphus
       Signal.trap(signal, "IGNORE")        
     end
 
+    def db_host
+      @store.db_host(@host)  
+    end
+
     def ensure_log(time)
       if @quiet then
         hostname = `hostname`.chomp
@@ -88,7 +92,7 @@ module Sisyphus
         $stderr << "Logging to #{@log_device}\n"
       end
 
-      @log = Utils::IndentedLogger.new(@log_device)
+      @log = Utils::IndentedDBLogger.new(db_host, @log_device)
       @log.level = Logger::WARN
 
       if @verbose then
@@ -101,13 +105,35 @@ module Sisyphus
     end
 
     def start_iteration(time)
-      ensure_log(time)
+      #if @quiet then
+      #  hostname = `hostname`.chomp
+      #  timestr = time.strftime("%Y%m%dT%H%M")
+      #  @log_device = File.join(Dir.tmpdir, "sisyphus_log_on_#{hostname}_#{timestr}")
+      #  $stderr << "Logging to #{@log_device}\n"
+      #end
+
       @store.connect
+
+      db_session = Model::SiSession.new(:time => time)
+      session = Building::Session.new(time, @host, db_session)
+
+      @log = Utils::IndentedDBLogger.new(db_host, session.db_session, @log_device)
+      @log.level = Logger::WARN
+
+
+      if @verbose then
+        @log.level = Logger::INFO
+      end
+      @log.info("Log initialized: #{time}\n")
+
+      @store.set_log(@log)
+      @config_manager.set_log(@log)
+      return session
     end
 
     def record_failure(e)
       line = e.inspect
-      add_log_line(line)
+      add_log_line(line + "\n" + e.backtrace.join("\n"))
       @log.error(line)
     end
 
@@ -126,8 +152,7 @@ module Sisyphus
       time = Time.now
       if eligible_time?(time) then
         begin 
-          start_iteration(time)
-          session = Building::Session.new(time, @host)
+          session = start_iteration(time)
           @log.info("starting iteration at #{time}")
           do_the_build(session, time)
           mail_session(session)
