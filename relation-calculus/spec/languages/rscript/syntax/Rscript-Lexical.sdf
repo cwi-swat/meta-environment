@@ -1,7 +1,0 @@
-module languages/rscript/syntax/Rscript-Lexical
-
-imports basic/Comments
-
-exports
-lexical syntax
-  "comment" ~[]* "endcomment" -> LAYOUT  

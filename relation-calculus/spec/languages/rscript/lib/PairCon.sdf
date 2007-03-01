@@ -1,7 +1,0 @@
-module languages/rscript/lib/PairCon[X Y]
-
-exports
-  sorts PairCon
-
-  context-free syntax
-	<first:X, second:Y> -> Pair[[X,Y]] {constructor}

@@ -1,3 +1,0 @@
-configuration([
-  import("./relation-calculus.actions")
-])
