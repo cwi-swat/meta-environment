@@ -1,5 +1,12 @@
 $Id$
 
+Thu Mar  1 18:28:30 CET 2007 <{kooiker,jurgenv}@cwi.nl>
+ *  semantics/asfc/src/Compiler.c: regenerated after bigfixes
+    concerning Add-Range-Checks and the implementation of lexical
+    transformations in the compiler. Bootstrapped three times.
+ * semantics/asfc/src/asf2muasf.c: adapted to make sure it generates
+   module id's that correspond to the syntax definition of module id's.
+
 Thu Feb 22 11:15:51 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * semantics/asfc/src/Compiler.c: regenerated after bugfixes in 
    Add-Range-Checks and basic/Integers.
