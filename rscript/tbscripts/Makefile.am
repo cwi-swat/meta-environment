@@ -1,8 +1,9 @@
+# $Id$
+#
+EXTRA_DIST = standard.rscript.actions.src
 
-EXTRA_DIST = standard.relation-calculus.actions.src
-
-pkgdata_DATA = standard.relation-calculus.actions
+pkgdata_DATA = standard.rscript.actions
 CLEANFILES=${pkgdata_DATA}
 
-standard.relation-calculus.actions:  standard.relation-calculus.actions.src Makefile
+standard.rscript.actions:  standard.rscript.actions.src Makefile
 	sed 's@__LIBRARY__@${pkgdatadir}/spec@g' < $< > $@

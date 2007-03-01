@@ -1,6 +1,6 @@
 prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,paulk@cwi.nl,kooiker@cwi.nl,storm@cwi.nl
-Name: relation-calculus
+Name: rscript
 Version: 1.0
 Description:
 Requires: sglr,pt-support
