@@ -5,8 +5,7 @@
 equations
 
 [main]
-	add-range-checks(Module) = Module2
-	when <Module2, _Cond*> := add-range-checks(Module, )
+	add-range-checks(Module) = range-checks(Module)
 
 equations
 
@@ -17,44 +16,33 @@ equations
 %% and immediately spliced in as the next condition after a match.
 
 [matching-cond]
-	<Rhs, Cond*> := add-range-checks(Rhs, )
-	===>
-	add-range-checks(Lhs =: Rhs, ) = 
-	<Lhs =: Rhs & Cond*, >
-
-%% for other types of conditions do nothing
-[default-0] add-range-checks(Cond, ) = <Cond, >
+	range-checks(Lhs =: Rhs) = <Lhs =: Rhs & collect-range-checks(Rhs, )>
 
 [rule]
-	<Lhs, Cond+> := add-range-checks(Lhs, )
+	Cond+ := collect-range-checks(Lhs, )
 	===>
-	add-range-checks(Lhs = Rhs, ) = 
-	<Cond+ ==> Lhs = Rhs,> 
+	range-checks(Lhs = Rhs) = Cond+ ==> Lhs = Rhs 
+
+[defrule]
+	Cond+ := collect-range-checks(Lhs, )
+	===>
+	range-checks(default: Lhs = Rhs) = default: Cond+ ==> Lhs = Rhs 
 
 [cond-rule]
-	<Lhs, Cond+1> := add-range-checks(Lhs, ),
-	<Cond+2, Cond*> := add-range-checks(Cond+, )
-	===>
-	add-range-checks(Cond+ ==> Lhs = Rhs, ) =
-	<Cond+1 & Cond+2 & Cond* ==> Lhs = Rhs, >
-	
-[def-rule]
-	<Cond+ ==> Lhs = Rhs, > := add-range-checks(Lhs = Rhs, )
-	===> 
-	add-range-checks(default: Lhs = Rhs, ) = 
-	<default: Cond+ ==> Lhs = Rhs, >
+	range-checks(Cond+ ==> Lhs = Rhs) =
+         collect-range-checks(Lhs, ) & Cond+ ==> Lhs = Rhs
 
-[def-cond-rule]
-	<Cond+2 ==> Lhs = Rhs, > := add-range-checks(Cond+ ==> Lhs = Rhs, )
-	===> 
-	add-range-checks(default: Cond+ ==> Lhs = Rhs, ) = 
-	<default: Cond+2 ==> Lhs = Rhs, >
+[defcond-rule]
+	range-checks(default: Cond+ ==> Lhs = Rhs) =
+         default: collect-range-checks(Lhs, ) & Cond+ ==> Lhs = Rhs
+
+equations
 
 [collect-char-var-condition]
 	is-char-class(Type) == true
 	===>
-	add-range-checks($ VarId : Type, Cond*) = 
-	<$ VarId : Type, Cond* & is-elem($ VarId , parse-cc(Type)) =: t>
+	collect-range-checks($ VarId : Type, Cond*) = 
+	Cond* & is-elem($ VarId , parse-cc(Type)) =: t
 
 equations
 
