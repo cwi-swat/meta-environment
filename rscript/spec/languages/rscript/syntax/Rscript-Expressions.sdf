@@ -1,0 +1,76 @@
+module languages/rscript/syntax/Rscript-Expressions
+
+exports
+sorts REXP
+
+imports basic/BoolCon
+        basic/StrCon
+        basic/NatCon
+        basic/IdentifierCon
+        basic/Locations
+
+imports languages/rscript/syntax/Rscript-Lexical
+
+context-free syntax
+  "file"         -> IdCon {reject} 
+  "area-in-file" -> IdCon {reject} 
+  "and"          -> IdCon {reject} 
+  "or"           -> IdCon {reject} 
+  "not"          -> IdCon {reject} 
+  "implies"      -> IdCon {reject} 
+  "in"           -> IdCon {reject} 
+  "notin"        -> IdCon {reject} 
+  "union"        -> IdCon {reject} 
+  "inter"        -> IdCon {reject} 
+  "o"            -> IdCon {reject} 
+  "x"            -> IdCon {reject} 
+  "exists"       -> IdCon {reject} 
+  "forall"       -> IdCon {reject} 
+  "true"         -> IdCon {reject} 
+  "false"        -> IdCon {reject} 
+
+context-free syntax
+  IdCon    -> REXP  
+  BoolCon  -> REXP  
+  NatCon   -> REXP  
+  StrCon   -> REXP  
+  Location -> REXP  
+
+context-free syntax
+  "<" REXP "," {REXP ","}+ ">" -> REXP           
+  "{" {REXP ","}* "}"          -> REXP           
+  "(" REXP ")"                 -> REXP {bracket} 
+
+context-free syntax
+  IdCon "(" {REXP ","}* ")" -> REXP  
+
+context-free priorities
+  { "-" REXP -> REXP   } >
+  { REXP "+"                  -> REXP
+    REXP "*"                  -> REXP 
+    REXP "[" REXP "]"         -> REXP        
+    REXP "[" REXP "," "-" "]" -> REXP        
+    REXP "[" "-" "," REXP "]" -> REXP         } >
+  REXP "." REXP -> REXP {left} >
+  REXP "o" REXP -> REXP {left} >
+  REXP "x" REXP -> REXP {left} >
+  REXP "inter" REXP -> REXP {left} >
+  REXP "union" REXP -> REXP {left} >
+  REXP "\\" REXP -> REXP {left} >
+  "#" REXP -> REXP >
+  REXP "*" REXP -> REXP {left} >
+  REXP "/" REXP -> REXP {left} >
+  { REXP "+" REXP -> REXP {left} 
+    REXP "-" REXP -> REXP {left}  } >
+  { REXP "in" REXP    -> REXP {non-assoc} 
+    REXP "notin" REXP -> REXP {non-assoc} 
+    REXP "<=" REXP    -> REXP {non-assoc} 
+    REXP "<" REXP     -> REXP {non-assoc} 
+    REXP ">=" REXP    -> REXP {non-assoc} 
+    REXP ">" REXP     -> REXP {non-assoc} 
+    REXP "!=" REXP    -> REXP {non-assoc} 
+    REXP "==" REXP    -> REXP {non-assoc}  } >
+  REXP "and" REXP -> REXP {left} >
+  REXP "or" REXP -> REXP {left} >
+  "not" REXP -> REXP >
+  REXP "implies" REXP -> REXP {left}

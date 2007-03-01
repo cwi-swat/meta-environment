@@ -1,4 +1,7 @@
+# $Id$
 
+Thu Mar  1 11:28:12 CET 2007 <kooiker@cwi.nl>
+ * Merged rscript-migration branch
 
 Mon Jul 31 13:53:00 CEST 2006 <jurgenv@cwi.nl>
  * utils/Makefile.am: reactivated without testing 
@@ -25,15 +28,11 @@ Tue Oct 11 11:56:00 CEST 2005 <jurgenv@cwi.nl>
    accomodate.
 
 2004-10-27  Paul Klint  <paulk@heelal.lan>
-
  * spec/RscriptCalculator.asf: added += and -= operators
-
-# $Id$
 
 2004-10-27  Paul Klint  <paulk@heelal.lan>
  * Cleanup up definitions of Bags and Relations
  * Removed typos from manual
-	
 
 Thu Oct 14 08:56:14 CEST 2004 <jurgenv@cwi.nl>
  * Added spec/TopologicalSort.{asf,sdf}. 

@@ -1,0 +1,23 @@
+module languages/rscript/syntax/Rscript-Comprehensions
+
+imports languages/rscript/syntax/Rscript-Expressions
+        languages/rscript/syntax/Rscript-Types
+
+exports
+sorts TARGET DESTINATION SIMPLE-GENERATOR GENERATOR
+
+context-free syntax
+  "{" {REXP ","}+ "|" {GENERATOR ","}+ "}"   -> REXP                      
+
+  %% FIXME: rexptype contains IdCon too; should not be allowed
+  %% See Rscript-Equations for the same problem
+  REXPTYPE IdCon                             -> TARGET                    
+  REXP                                       -> TARGET                    
+  TARGET                                     -> DESTINATION               
+  "<" {TARGET ","}+ ">"                      -> DESTINATION               
+  DESTINATION ":" REXP                       -> SIMPLE-GENERATOR          
+  SIMPLE-GENERATOR                           -> GENERATOR                 
+  REXP                                       -> GENERATOR                 
+  DESTINATION "<-" REXP                      -> GENERATOR        {prefer} 
+  "exists" "(" SIMPLE-GENERATOR "|" REXP ")" -> REXP                      
+  "forall" "(" SIMPLE-GENERATOR "|" REXP ")" -> REXP                      

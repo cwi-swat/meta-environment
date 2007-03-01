@@ -1,4 +1,4 @@
-include $(top_srcdir)/make_rules
+# $Id$
 
 rscriptsdir	= $(pkgdatadir)/rscripts
 

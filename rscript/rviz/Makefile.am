@@ -1,7 +1,10 @@
-include $(top_srcdir)/make_rules
+# $Id$
 
-bin_SCRIPTS	= rviz
+EXTRA_DIST = rviz.tcl.src
 
-EXTRA_DIST	= rviz.tcl.src
+bin_SCRIPTS = rviz
 
-CLEANFILES	= rviz
+CLEANFILES = rviz
+
+% : %.tcl.src
+	sed "s#__WISH__#$(WISH)#g;" < $< > $@
