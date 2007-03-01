@@ -46,8 +46,8 @@ exports
     
 exports
   context-free syntax
-    lhs:FunId "++" rhs:FunId -> FunId {left, cons("concat")}
-    lhs:FunId "+-+" rhs:FunId -> FunId {left, cons("concat-dash")}
+    lhs:FunId "++" rhs:FunId -> FunId {left, cons("concat"), complete}
+    lhs:FunId "+-+" rhs:FunId -> FunId {left, cons("concat-dash"), complete}
     
 
 hiddens

@@ -18,8 +18,8 @@ hiddens
   context-free syntax
     funcdefs2cfuncs({FuncDef ";"}+,{NamePair ","}*) -> FTS-tuple
     funcdef2cfuncs(FuncDef,{NamePair ","}*)         -> FTS-tuple
-    modname2iname(ModId)                 -> Identifier
-    modname2rname(ModId)                 -> Identifier
+    modname2iname(ModId)                 -> Identifier {complete}
+    modname2rname(ModId)                 -> Identifier {complete}
     namepairs2rstats({NamePair ","}*)    -> Statement-list-opt
     "namepairs2rstats"	-> Identifier {reject}
     namepair2rstats(NamePair)            -> Statement-list-opt

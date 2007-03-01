@@ -27,7 +27,7 @@ exports
 exports  
 
   context-free syntax
-	funid2identifier(FunId) -> Identifier
+	funid2identifier(FunId) -> Identifier {complete}
         "funid2identifier" -> Identifier {reject}
 	funid2identifier(FunId) -> Expression {reject}
        
@@ -50,27 +50,27 @@ exports
     cecontains(Term,C-env)                   -> Boolean
     make-c-temp(Integer)                      -> Primary-expression
     make-call-id(FunId)                      -> Primary-expression
-    make-id-name(Identifier)                 -> FunId
+    make-id-name(Identifier)                 -> FunId {complete}
     is-char(Term)                           -> Boolean
-    translate-char(Term)                    -> Expression
+    translate-char(Term)                    -> Expression {complete}
 
-    Identifier "+" Identifier -> Identifier {left}
+    Identifier "+" Identifier -> Identifier {left, complete}
 
-    identifier2nat(Identifier) -> NatCon
+    identifier2nat(Identifier) -> NatCon {complete}
     "identifier2nat" -> Identifier {reject}
-    nat2identifier(Identifier, NatCon) -> Identifier
+    nat2identifier(Identifier, NatCon) -> Identifier {complete}
     "nat2identifier" -> Identifier {reject}
-    int2identifier(Identifier, Integer) -> Identifier
+    int2identifier(Identifier, Integer) -> Identifier {complete}
     "int2identifier" -> Identifier {reject}
 
 
-    nat2identifiersep(Identifier, NatCon) -> Identifier
+    nat2identifiersep(Identifier, NatCon) -> Identifier {complete}
     "nat2identifiersep" -> Identifier {reject}
-    int2identifiersep(Identifier, Integer) -> Identifier
+    int2identifiersep(Identifier, Integer) -> Identifier {complete}
     "int2identifiersep" -> Identifier {reject}
     
-    Identifier "++" Identifier -> Identifier {left}
-    Identifier "+_+" Identifier -> Identifier {left}
+    Identifier "++" Identifier -> Identifier {left, complete}
+    Identifier "+_+" Identifier -> Identifier {left, complete}
 
 hiddens
   context-free start-symbols

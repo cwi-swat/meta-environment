@@ -12,16 +12,33 @@ equations
 
 [] id2str(Strcon) 	= Strcon
 [] id2str(idcon(head)) 	= strcon(\" strchar(head) \")
+[] id2str(idcon(head1 \-))  = strcon(\" strchar(head1) strchar(\-) \")
+[] id2str(idcon(head1 digit)) = strcon(\" strchar(head1) strchar(digit) \")
 [] id2str(idcon(head1 head2)) = strcon(\" strchar(head1) strchar(head2) \")
 [] id2str(idcon(head tail+1 tail+2)) = strcon(\" strchar(head) ch*1 ch*2 \")
 	when strcon(\" strchar(head) ch*1 \") := id2str(idcon(head tail+1)),
 	     strcon(\" strchar(head) ch*2 \") := id2str(idcon(head tail+2))
 
+tests
+
+[] id2str(aap) == "aap"
+[] id2str(a-a-p) == "a-a-p"
+[] id2str(a0a0p) == "a0a0p"
+[] id2str(lf-match-0) == "lf-match-0"
+
 equations
 
-[] str2id(strcon(\" strchar(head) \")) = idcon(head)
-[] str2id(strcon(\" strchar(head1) ch+ \")) = idcon(head1 head2 tail)
-	when idcon(head2 tail) := str2id(strcon(\" ch+ \")) 
+[] str2id(strcon(\" strchar(head) \"))                 = idcon(head)
+[] str2id(strcon(\" strchar(head) strchar(\-) \"))     = idcon(head \-)
+[] str2id(strcon(\" strchar(head) strchar(digit) \"))  = idcon(head digit)
+[] str2id(strcon(\" strchar(head1) strchar(head2) \")) = idcon(head1 head2)
+[] str2id(strcon(\" strchar(head1) ch+1 ch+2 \"))      = idcon(head1 tail1 tail2)
+	when idcon(head1 tail1) := str2id(strcon(\" strchar(head1) ch+1 \")),
+              idcon(head1 tail2) := str2id(strcon(\" strchar(head1) ch+2 \"))
+tests
+
+[] str2id("unparse-to-bytes") == unparse-to-bytes
+[] str2id("u0n-abc") == u0n-abc
 
 equations
 

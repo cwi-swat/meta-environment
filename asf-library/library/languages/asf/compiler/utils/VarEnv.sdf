@@ -69,10 +69,10 @@ exports
 
 exports
   context-free syntax
-    nat2id(prefix:FunId,NatCon) -> FunId
-    int2id(prefix:FunId,Integer) -> FunId
-    id2str(FunId) 		-> FunId
-    str2id(FunId) 		-> FunId
+    nat2id(prefix:FunId,NatCon) -> FunId {complete}
+    int2id(prefix:FunId,Integer) -> FunId {complete}
+    id2str(FunId) 		-> FunId {complete}
+    str2id(FunId) 		-> FunId {complete}
 
 exports
 sorts MN-struct

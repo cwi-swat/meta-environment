@@ -32,14 +32,14 @@ context-free syntax
   create(FuncDef,     NameTable) -> NameTable {traversal(accu,top-down,break)}
 
 context-free syntax
-    construct-funid(FunId, Integer) 		-> FunId
-    construct-funid(FunId, Integer,TermList) 	-> FunId
+    construct-funid(FunId, Integer) 		-> FunId {complete}
+    construct-funid(FunId, Integer,TermList) 	-> FunId {complete}
 
 context-free syntax
    strategy(TermList) 		-> TraversalStrategy
    type(TermList)     		-> TraversalType
    continuation(TermList) 	-> TraversalContinuation
-   cons-id(TermList)     	-> FunId
+   cons-id(TermList)     	-> FunId {complete}
 
 lexical variables
   "a" -> [0-2]
