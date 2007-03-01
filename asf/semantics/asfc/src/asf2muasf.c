@@ -825,8 +825,23 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_ASFConditionalEquationList li
 /*{{{  static MA_ModId makeModId(const char *str) */
 static MA_ModId makeModId(const char *str)
 {
-  MA_IdCon id = MA_makeIdCon(str);
-  return MA_makeModIdDefault(id);
+  MA_ModId result = NULL;
+  MA_IdCon id = NULL;
+  char *tmp = strdup(str);
+  int i;
+  int len = strlen(str);
+
+  for (i = 0; i < len; i++) {
+    if (tmp[i] == '_') {
+      tmp[i] = '-';
+    }
+  }
+
+  id = MA_makeIdCon(tmp);
+  result = MA_makeModIdDefault(id);
+  free(tmp);
+  tmp = NULL;
+  return result;
 }
 
 /*}}}  */
