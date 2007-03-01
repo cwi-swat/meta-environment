@@ -58,7 +58,7 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 				// eat up all input and send it line by line to the ToolBus
 				while (s.hasNext()) {
 					String message = s.nextLine();
-					grabber.sendMessage(message);
+					grabber.sendMessage(message + "\n");
 				}
 
 				break; // end of file
@@ -72,8 +72,9 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 		}
 
 		if (maxTries == 0) {
-			System.err.println("console-grabber: failed to find ToolBus port. Continuing to print on stderr...");
-			
+			System.err
+					.println("console-grabber: failed to find ToolBus port. Continuing to print on stderr...");
+
 			// if we have something to print left, simply print it
 			while (s.hasNext()) {
 				System.err.print(s.nextLine());
