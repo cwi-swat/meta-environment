@@ -440,10 +440,12 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			editorDisconnected(editorId);
 		}
 	}
-	
+
 	public void setTooltip(ATerm editorId, String tooltip) {
 		StudioComponent comp = componentsById.get(editorId.toString());
-		comp.setTooltip(tooltip);
+		if (comp != null) {
+			comp.setTooltip(tooltip);
+		}
 	}
 
 	public void setInfo(ATerm editorId, String info) {
