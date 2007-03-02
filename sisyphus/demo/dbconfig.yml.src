@@ -1,0 +1,4 @@
+adapter: sqlite3
+database: __DATABASE__
+username: 
+password: 
