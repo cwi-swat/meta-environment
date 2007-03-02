@@ -3,7 +3,7 @@ EXTRA_DIST	= sisyphus.sql
 
 sql_DATA	= sisyphus.postgresql sisyphus.sqlite3
 
-sqldir		= $(pkdatadir)/sql
+sqldir		= $(pkgdatadir)/sql
 
 CLEANFILES 	= sisyphus.postgresql sisyphus.sqlite3
 
