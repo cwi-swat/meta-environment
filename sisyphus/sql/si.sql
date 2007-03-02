@@ -63,8 +63,8 @@ create table si_hosts (
 	uname varchar(512) not null unique,
 	status text,
 	progress text,
-	active boolean default false
-	dists boolean default false
+	active boolean default false,
+	dists boolean default false,
 	busy boolean default false
 );
 
@@ -145,41 +145,3 @@ create table si_releases (
 	si_item_id integer references si_items,
 	version char(16)
 );
-
-
-create view si_builds 
-	(id, name, version, informative_version, si_host_id, si_config_id,  si_item_id) as
-select 
-	si_items.id, 
-	si_components.name, 
-	si_revisions.version,
-	si_revisions.informative_version,
-	si_items.si_host_id,
-	si_items.si_config_id,
-	si_items.id
-from
-	si_items, 
-	si_components,
-	si_revisions
-where
-	si_revisions.si_component_id = si_components.id and
-	si_items.si_revision_id = si_revisions.id and
-	si_items.success = true
-;
-
-
-create view si_latests (id, si_component_id, si_item_id) as
-select
-	si_items.si_host_id, si_components.id, max(si_items.id)
-from 
-	si_revisions,
-	si_components,
-	si_items
-where 
-	si_items.si_revision_id = si_revisions.id and
-	si_revisions.si_component_id = si_components.id and
-	si_items.si_host_id in (select id from si_hosts)
-group by 
-	si_items.si_host_id,
-	si_components.id
-;
