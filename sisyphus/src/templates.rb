@@ -563,12 +563,7 @@ AC_CONFIG_FILES([
 AC_OUTPUT
 
 <% bundle.packages.each do |package| %>
-AB_CONFIG_PKG([<%=package%>],[
-   --with-bundled-packages='${PKGS}'
-<% bundle.dependencies[package].each do |dep| %>
-   --with-<%=dep.name%>=\\\\\\${prefix}
-<% end %>
-])
+AB_CONFIG_PKG([<%=package%>],[--with-bundled-packages='${PKGS}' <% bundle.dependencies[package].each do |dep| %> --with-<%=dep.name%>=\\\\\\${prefix}<% end %>])
 <% end %>
 END_OF_CONFIGURE_AC
 
