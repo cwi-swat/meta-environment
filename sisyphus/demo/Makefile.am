@@ -33,7 +33,7 @@ backup:
 	tar zcvf \
 			$(CONFIG_REPO_TAR) \
 			$(pkgdatadir)/demo/$(CONFIG_REPO); \
-	rm $(CONFIG_REPO_TAR)
+	rm $(CONFIG_REPO_TAR)-
 
 
 % : %.sh.src 
