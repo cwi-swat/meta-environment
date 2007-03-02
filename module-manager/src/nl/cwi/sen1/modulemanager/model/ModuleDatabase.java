@@ -197,7 +197,7 @@ public class ModuleDatabase {
 
 			if (value.equals(module.getPredicate(namespace, key))) {
 				return moduleId;
-			} else if (module.getAttribute(namespace, key).equals(value)) {
+			} else if (value.equals(module.getAttribute(namespace, key))) {
 				return moduleId;
 			}
 		}
