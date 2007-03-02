@@ -616,7 +616,8 @@ module Building
         script = e.result.script
         result.success = false
       end
-      log_all_output(revision.name, action, output, errors)
+      # Logs become too large; it is in the DB anyway.
+      #log_all_output(revision.name, action, output, errors)
       result.output = output
       result.errors = errors
       result.environment = script
