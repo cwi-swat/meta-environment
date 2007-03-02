@@ -1,5 +1,5 @@
 prefix=@prefix@
-Maintainers=maintainer@cwi.nl
+Maintainers=
 Name: default-studio-plugin
 Version: 1.0
 Description:
