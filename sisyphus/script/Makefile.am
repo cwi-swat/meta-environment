@@ -15,4 +15,3 @@ CLEANFILES	= si-cli boot-roll roll release ariadne ophion
 		s@__VERSION__@$(VERSION)@g;" < $< > $@ && \
         chmod +x $@
 
-

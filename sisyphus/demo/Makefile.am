@@ -7,7 +7,9 @@ CONFIG_REPO	= config-repo.tar.gz
 
 DEMO_DB		= sisyphus-demo.db
 
-demo_DATA 	= dbconfig.yml $(DEMO_DB)
+DEMO_CONFIG	= dbconfig.yml
+
+demo_DATA 	= $(DEMO_CONFIG) $(DEMO_DB)
 
 demodir		= $(pkgdatadir)/demo
 
@@ -16,14 +18,12 @@ EXTRA_DIST	= \
 		$(wildcard *.yml.src) \
 		$(CONFIG_REPO)
 
-CLEANFILES	= sisyphus-demo $(DEMO_DB)
+CLEANFILES	= sisyphus-demo $(DEMO_CONFIG) $(DEMO_DB)
 
+
+# This presumes the sql stuff is installed before the demo...
 $(DEMO_DB) :
-	cat ${top_srcdir}/sql/si.sql \
-	| sed -e 's/serial/integer/' \
-	| sed -e 's/primary key/primary key autoincrement/' \
-	| sed -e 's/^drop.*$$//' \
-	| sqlite3 $@
+	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 > $@
 
 
 % : %.sh.src 
@@ -43,7 +43,7 @@ $(DEMO_DB) :
 install-data-hook: 
 	( \
 		cp $(CONFIG_REPO) $(demodir); \
-		cd $(DEMO_DIR); \
+		cd $(demodir); \
 		gunzip -c $(CONFIG_REPO) | tar xvf - \
 	)
 

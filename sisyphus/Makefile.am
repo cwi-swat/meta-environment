@@ -1,11 +1,17 @@
 
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = src script doc gems
+SUBDIRS = src sql script demo www doc gems
 
 ACLOCAL_AMFLAGS = -I .
 
-gems = activesupport-1.2.5 activerecord-1.13.2 postgres-pr-0.4.0
+gems = \
+	activesupport-1.2.5 \
+	activerecord-1.13.2 \
+	postgres-pr-0.4.0 \
+	fastthread-0.6.4.1 \
+	mongrel-1.0.1 \
+	sqlite3-ruby-1.2.1
 
 GEM_DIR = $(top_srcdir)/gems
 
