@@ -3,7 +3,9 @@ SUBDIRS		= src
 
 bin_SCRIPTS	= sisyphus-demo
 
-CONFIG_REPO	= config-repo.tar.gz
+CONFIG_REPO	= config-repo
+
+CONFIG_REPO_TAR	= $(CONFIG_REPO).tar.gz
 
 DEMO_DB		= sisyphus-demo.db
 
@@ -16,14 +18,22 @@ demodir		= $(pkgdatadir)/demo
 EXTRA_DIST	= \
 		$(wildcard *.sh.src) \
 		$(wildcard *.yml.src) \
-		$(CONFIG_REPO)
+		$(CONFIG_REPO_TAR)
 
 CLEANFILES	= sisyphus-demo $(DEMO_CONFIG) $(DEMO_DB)
 
 
 # This presumes the sql stuff is installed before the demo...
+# So you can't make the DB when doing just make...
 $(DEMO_DB) :
-	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 > $@
+	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 $@
+
+backup:
+	mv $(CONFIG_REPO_TAR) $(CONFIG_REPO_TAR)- ; \
+	tar zcvf \
+			$(CONFIG_REPO_TAR) \
+			$(pkgdatadir)/demo/$(CONFIG_REPO); \
+	rm $(CONFIG_REPO_TAR)
 
 
 % : %.sh.src 
@@ -42,8 +52,9 @@ $(DEMO_DB) :
 
 install-data-hook: 
 	( \
-		cp $(CONFIG_REPO) $(demodir); \
+		rm -rf $(demodir)/$(CONFIG_REPO); \
+		cp $(CONFIG_REPO_TAR) $(demodir); \
 		cd $(demodir); \
-		gunzip -c $(CONFIG_REPO) | tar xvf - \
+		gunzip -c $(CONFIG_REPO_TAR) | tar xvf - \
 	)
 

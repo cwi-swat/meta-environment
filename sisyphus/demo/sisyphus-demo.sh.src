@@ -5,12 +5,11 @@ DATADIR=__DATA_DIR__
 BINDIR=__BIN_DIR__
 SICLI=$BINDIR/si-cli
 CONFIG_SVN=file://$DATADIR/demo/config-repo
-DB_CONFIG=$DATADIR/demo/dbconf.yml
+DB_CONFIG=$DATADIR/demo/dbconfig.yml
 
 $SICLI \
     --root asfsdf-meta \
-    --profile verfrol \
-    --force aterm-java \
+    --profile demo \
     --interval 300 \
     --weekday Mon \
     --weekday Tue \
