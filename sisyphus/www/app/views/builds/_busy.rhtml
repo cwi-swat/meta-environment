@@ -1,0 +1,18 @@
+<em style="font-size: smaller;">
+<% if not busy.nil? then %>
+ <% if busy.progress? then %>
+   <%= busy.item.name %>: 
+<%= if not busy.item.si_results.empty? then
+	busy.item.si_results.last.action
+else
+	"starting..."
+end
+%>
+ <% else %>
+   <%= busy.item.name%>: <%= busy.label %>
+ <% end %>
+
+<% else %>
+  &nbsp;
+<% end %>
+</em>

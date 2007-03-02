@@ -1,0 +1,16 @@
+<% items.each do |item| %>
+<% update_element_function("status_#{item.item.si_host.id}_#{item.item.si_revision.si_component.id}", :binding => binding) do %>
+<%= render_partial 'item', item %>
+<%end%>
+<% update_element_function("busy_#{item.item.si_host.id}", :binding => binding) do %>
+<%= render_partial 'busy', item %>
+<%end%>
+<%= visual_effect(:shake, "busy_#{item.item.si_host.id}") %>
+<% if not item.item.si_host.busy then %>
+ <%= visual_effect(:fade, "indicator_#{item.item.si_host.id}") %>
+<% else %>
+ <%= visual_effect(:appear, "indicator_#{item.item.si_host.id}") %>
+<% end %>
+<%= visual_effect(:pulsate, "status_#{item.item.si_host.id}_#{item.item.si_revision.si_component.id}") %>
+<%end%>
+

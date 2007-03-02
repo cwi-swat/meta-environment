@@ -1,0 +1,13 @@
+<%= error_messages_for 'si_result' %>
+
+<!--[form:si_result]-->
+<p><label for="si_result_command">Command</label><br/>
+<%= text_area 'si_result', 'command'  %></p>
+
+<p><label for="si_result_output">Output</label><br/>
+<%= text_area 'si_result', 'output'  %></p>
+
+<p><label for="si_result_success">Success</label><br/>
+<select id="si_result_success" name="si_result[success]"><option value="false">False</option><option value="true">True</option></select></p>
+<!--[eoform:si_result]-->
+

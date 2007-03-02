@@ -1,0 +1,149 @@
+
+<h2>Build information</h2>
+<table>
+<tr><td>Component</td><td> <%= @si_item.si_revision.si_component.name %></td></tr>
+<tr><td style="vertical-align: top;">Revision</td><td> <%= @si_item.si_revision.version %>
+
+<% if @changes != '' then %>
+<span class="fakelink" style="cursor: pointer;" onClick="new Effect.SlideUpAndDown('changes')">(changes)</span>
+<div id="changes" style="display: none;">
+<pre style="font-size: 11pt;vertical-align: top;"><%= h(@changes.strip) %></pre>
+</div>
+<% end %>
+
+</td></tr>
+<tr><td>Result</td><td>   <% if @si_item.success then %> 
+  <span class="success">success</span>
+  <% else %>
+  <span class="failure">failed</span>
+  <% end %>
+<tr><td>Session</td><td> <%= link_to @si_item.si_session.time.strftime("%H:%M %d/%m/%Y"), :action => 'show', :controller => 'sessions', :id => @si_item.si_session.id %> (<%=link_to 'messages', :controller => 'sessions', :action => 'messages', :id => @si_item.si_session.id %>)</td></tr>
+<tr><td>Host</td><td> <%= @si_item.si_host.uname %> </td></tr>
+<tr><td>Profile</td><td> <%= @si_item.si_config.si_profile.name %> version <%= @si_item.si_config.si_profile.version %>&nbsp;
+<%= link_to 'view', :action => 'show', :controller => 'si_profiles', :id => @si_item.si_config.si_profile.id %>
+ </td></tr>
+<tr><td>Sources version</td><td> <%= link_to @si_item.si_config.sources_version, :action => 'show', :controller => 'sources', :version => @si_item.si_config.sources_version %></td></tr>
+<% if @si_item.si_config.script_version != 0 then %>
+<tr><td>Script version</td><td> <%= link_to @si_item.si_config.script_version, :action => 'show', :controller => 'script', :version => @si_item.si_config.script_version %></td></tr>
+<% end %>
+<tr><td>Earlier builds:</td><td>
+<% @earlier_items.each do |item| %>
+<%= link_to item.id, :controller => 'si_items', :action => 'show', :id => item.id %>&nbsp;
+<% end %>
+</td>
+</tr>
+<% if @may_be_bundled then %>
+<tr><td>Distribution:</td><td><%= link_to @dist_file, :action => 'download', :controller => 'si_items', :id => @si_item.id %></td></tr>
+<tr><td>Bundle</td><td><%= link_to @bundle_file_name, :action => 'bundle', :controller => 'si_items', :id => @si_item.id %></td></tr>
+<% end %>
+<% if @has_binary then %>
+<tr><td>Binary</td><td><a href="<%= @binary_url%>"><%= @binary_file_name %></a></td></tr>
+<% end %>
+</table>
+
+<h2>Actions</h2>
+
+<% if @si_item.si_results == [] then %>
+<p><em>No actions executed; building of one or more dependencies has failed.</em></p>
+<% else %>
+<table>
+<thead>
+</thead>
+<tbody>
+<% @si_item.si_results.each do |result| %>
+<tr>
+<td>
+<%= link_to result.action, :action => 'show', :controller => 'si_results', :id => result.id %>
+</td>
+<td>
+<% if result.success then %> 
+<span class="success">success</span>
+<% else %>
+<span class="failure">failed</span>
+<% end %>
+</td>
+</tr>
+<% end %>
+</tbody>
+</table>
+<% end %>
+
+
+
+<% if @si_item.si_deps != [] then %>
+  <h2>Dependencies</h2>
+
+  <ul>
+  <li><%= link_to "Dependency graph", :action => 'dep_graph', :id => @si_item.id %>
+  <li><%= link_to "Reduced dependency graph", :action => 'reduced_dep_graph', :id => @si_item.id %>
+  </ul>
+
+  <table>
+  <thead>
+  <td><em>Component</em></td><td><em>Revision</em></td><td><em>Status</em><td><em>Session</em></td>
+  </thead>
+  <tbody>
+  <% @si_item.si_deps.each do |dep| %>
+  <tr>
+  <td>
+  <%= dep.si_revision.si_component.name %> 
+  </td>
+  <td>
+  <%= dep.si_revision.version %>
+  </td>
+  <td>
+  <% if dep.success then %> 
+  <span class="success">success</span>
+  <% else %>
+  <span class="failure">failed</span>
+  <% end %>
+  </td>
+  <td>
+  <%= dep.si_session.time.strftime("%H:%M %d/%m/%Y") %>&nbsp;
+  <%= link_to 'Details', :action => 'show', :controller => 'si_items', :id => dep.id %>
+  </td>
+  </tr>
+  <% end %>
+  </tbody>
+  </table>
+
+<% else %>
+  <h2>Dependencies</h2>
+
+  <p>None</p>
+<% end %>
+
+
+<% if @co_deps != [] then %>
+<h2>Used By</h2>
+
+  <table>
+  <thead>
+  <td><em>Component</em></td><td><em>Revision</em></td><td><em>Status</em></td><td><em>Session</em></td>
+  </thead>
+  <tbody>
+  <% @co_deps.each do |dep| %>
+  <tr>
+  <td>
+  <%= dep.si_revision.si_component.name %> 
+  </td>
+  <td>
+  <%= dep.si_revision.version %>
+  </td>
+  <td>
+  <% if dep.success then %> 
+  <span class="success">success</span>
+  <% else %>
+  <span class="failure">failed</span>
+  <% end %>
+  </td>
+  <td>
+  <%= dep.si_session.time.strftime("%H:%M %d/%m/%Y") %>&nbsp;
+  <%= link_to 'Details', :action => 'show', :controller => 'si_items', :id => dep.id %>
+  </td>
+  </tr>
+  <% end %>
+  </tbody>
+  </table>
+
+<% end %>

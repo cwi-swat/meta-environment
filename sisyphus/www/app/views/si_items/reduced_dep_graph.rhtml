@@ -1,0 +1,15 @@
+
+<h1>Reduced dependency graph</h1>
+
+<ul>
+<li><%= link_to "Expand", :action => 'dep_graph', :controller => 'si_items', 
+	:id => @si_item.id %>
+</ul>
+
+<img style="border-style: none" 
+src="<%= url_for :action => 'reduced_graph_img', :controller => 'si_items', :id => @si_item.id %>" 
+usemap="#dependency_graph">  
+ <%= @map %>
+
+
+

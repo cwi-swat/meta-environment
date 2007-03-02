@@ -1,0 +1,16 @@
+
+<h1>Dependency graph</h1>
+
+<ul>
+<li>Host: <%= @si_item.si_host.uname %></li>
+<li><%= link_to "Reduce", :action => 'reduced_dep_graph', :controller => 'si_items', 
+	:id => @si_item.id %>
+</ul>
+
+<img style="border-style: none" 
+src="<%= url_for :action => 'graph_img', :controller => 'si_items', :id => @si_item.id %>" 
+usemap="#dependency_graph">  
+ <%= @map %>
+
+
+

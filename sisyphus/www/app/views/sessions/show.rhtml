@@ -1,0 +1,42 @@
+
+
+<h1>Session</h1>
+
+<h3>Info</h3>
+
+<ul>
+<li>Time: <%= @sess.time %></li>
+<li>Host: <%= @sess.si_items[0].si_host.uname %></li>
+</ul>
+
+<h3>Builds</h3>
+
+  <table>
+  <thead>
+  <td><em>Component</em></td><td><em>Revision</em></td><td><em>Status</em><td><em>Session</em></td>
+  </thead>
+  <tbody>
+  <% @sess.si_items.each do |item| %>
+  <tr>
+  <td>
+  <%= item.si_revision.si_component.name %> 
+  </td>
+  <td>
+  <%= item.si_revision.version %>
+  </td>
+  <td>
+  <% if item.success then %> 
+  <span class="success">success</span>
+  <% else %>
+  <span class="failed">failed</span>
+  <% end %>
+  </td>
+  <td>
+  <%= link_to 'Details', :action => 'show', :controller => 'si_items', :id => item.id %>
+  </td>
+  </tr>
+  <% end %>
+  </tbody>
+  </table>
+
+

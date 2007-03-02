@@ -1,0 +1,16 @@
+<dl>
+<% for si_log in @si_logs %>
+<dt><%= si_log.created_on %>: 
+<% if si_log.si_host.nil? then %>
+FIXME: no host info! Update to newer version of sisyphus.
+<% else %>
+<%= si_log.si_host.name %>
+<% end %>
+</dt>
+<dd style="text-align: left;">
+<%= h(si_log.line) %>
+</dd>
+<% end %>
+</dl>
+
+

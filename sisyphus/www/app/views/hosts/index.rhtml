@@ -1,0 +1,42 @@
+
+
+
+<h1>Host view configuration</h1>
+
+<form action="<%=url_for(:controller => 'hosts', :action => 'update')%>" method="post">
+
+<p>
+Visibility:
+</p>
+
+<table>
+<thead>
+<td>&nbsp; </td>
+<td>Host</td>
+<td>Kernel</td>
+<td>Kernel release</td>
+<td>Platform</td>
+<td>Hardware class</td>
+<td>Processor</td>
+</thead>
+
+<tbody>
+<% @hosts.sort.each do |host|  %>
+<tr>
+
+<td>
+<input type="checkbox" name="visible[<%= host.id %>]" value="true" <%= if @visible.include?(host) then "checked" end %>/>
+</td>
+<td><%= host.uname %> </td>
+<td><%= host.si_platform.kernel_name %></td>
+<td><%= host.si_platform.kernel_release %></td>
+<td><%= host.si_platform.hardware_platform %></td>
+<td><%= host.si_platform.hardware_class %></td>
+<td><%= host.si_platform.processor_type %></td>
+</tr>
+<% end %>
+</tbody>
+</table>
+
+<input type="submit" value="Update visibility"/>
+</form>
