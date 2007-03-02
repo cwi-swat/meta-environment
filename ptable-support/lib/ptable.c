@@ -85,7 +85,7 @@ typedef struct ATerm _PTBL_Priority;
 /**
  * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
  */
-void PTBL_initPtableApi(void) {
+void _PTBL_initPtableApi(void) {
   init_ptable_dict();
 
 }
@@ -94,7 +94,7 @@ void PTBL_initPtableApi(void) {
  * Protect a PTBL_Production from the ATerm garbage collector. Every PTBL_Production that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Production
  */
-void PTBL_protectProduction(PTBL_Production *arg) {
+void _PTBL_protectProduction(PTBL_Production *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -102,7 +102,7 @@ void PTBL_protectProduction(PTBL_Production *arg) {
  * Unprotect a PTBL_Production from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Production
  */
-void PTBL_unprotectProduction(PTBL_Production *arg) {
+void _PTBL_unprotectProduction(PTBL_Production *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -110,7 +110,7 @@ void PTBL_unprotectProduction(PTBL_Production *arg) {
  * Protect a PTBL_CharClass from the ATerm garbage collector. Every PTBL_CharClass that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_CharClass
  */
-void PTBL_protectCharClass(PTBL_CharClass *arg) {
+void _PTBL_protectCharClass(PTBL_CharClass *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -118,7 +118,7 @@ void PTBL_protectCharClass(PTBL_CharClass *arg) {
  * Unprotect a PTBL_CharClass from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_CharClass
  */
-void PTBL_unprotectCharClass(PTBL_CharClass *arg) {
+void _PTBL_unprotectCharClass(PTBL_CharClass *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -126,7 +126,7 @@ void PTBL_unprotectCharClass(PTBL_CharClass *arg) {
  * Protect a PTBL_CharRanges from the ATerm garbage collector. Every PTBL_CharRanges that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_CharRanges
  */
-void PTBL_protectCharRanges(PTBL_CharRanges *arg) {
+void _PTBL_protectCharRanges(PTBL_CharRanges *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -134,7 +134,7 @@ void PTBL_protectCharRanges(PTBL_CharRanges *arg) {
  * Unprotect a PTBL_CharRanges from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_CharRanges
  */
-void PTBL_unprotectCharRanges(PTBL_CharRanges *arg) {
+void _PTBL_unprotectCharRanges(PTBL_CharRanges *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -142,7 +142,7 @@ void PTBL_unprotectCharRanges(PTBL_CharRanges *arg) {
  * Protect a PTBL_Version from the ATerm garbage collector. Every PTBL_Version that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Version
  */
-void PTBL_protectVersion(PTBL_Version *arg) {
+void _PTBL_protectVersion(PTBL_Version *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -150,7 +150,7 @@ void PTBL_protectVersion(PTBL_Version *arg) {
  * Unprotect a PTBL_Version from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Version
  */
-void PTBL_unprotectVersion(PTBL_Version *arg) {
+void _PTBL_unprotectVersion(PTBL_Version *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -158,7 +158,7 @@ void PTBL_unprotectVersion(PTBL_Version *arg) {
  * Protect a PTBL_ParseTable from the ATerm garbage collector. Every PTBL_ParseTable that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_ParseTable
  */
-void PTBL_protectParseTable(PTBL_ParseTable *arg) {
+void _PTBL_protectParseTable(PTBL_ParseTable *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -166,7 +166,7 @@ void PTBL_protectParseTable(PTBL_ParseTable *arg) {
  * Unprotect a PTBL_ParseTable from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_ParseTable
  */
-void PTBL_unprotectParseTable(PTBL_ParseTable *arg) {
+void _PTBL_unprotectParseTable(PTBL_ParseTable *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -174,7 +174,7 @@ void PTBL_unprotectParseTable(PTBL_ParseTable *arg) {
  * Protect a PTBL_Labels from the ATerm garbage collector. Every PTBL_Labels that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Labels
  */
-void PTBL_protectLabels(PTBL_Labels *arg) {
+void _PTBL_protectLabels(PTBL_Labels *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -182,7 +182,7 @@ void PTBL_protectLabels(PTBL_Labels *arg) {
  * Unprotect a PTBL_Labels from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Labels
  */
-void PTBL_unprotectLabels(PTBL_Labels *arg) {
+void _PTBL_unprotectLabels(PTBL_Labels *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -190,7 +190,7 @@ void PTBL_unprotectLabels(PTBL_Labels *arg) {
  * Protect a PTBL_Label from the ATerm garbage collector. Every PTBL_Label that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Label
  */
-void PTBL_protectLabel(PTBL_Label *arg) {
+void _PTBL_protectLabel(PTBL_Label *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -198,7 +198,7 @@ void PTBL_protectLabel(PTBL_Label *arg) {
  * Unprotect a PTBL_Label from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Label
  */
-void PTBL_unprotectLabel(PTBL_Label *arg) {
+void _PTBL_unprotectLabel(PTBL_Label *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -206,7 +206,7 @@ void PTBL_unprotectLabel(PTBL_Label *arg) {
  * Protect a PTBL_States from the ATerm garbage collector. Every PTBL_States that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_States
  */
-void PTBL_protectStates(PTBL_States *arg) {
+void _PTBL_protectStates(PTBL_States *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -214,7 +214,7 @@ void PTBL_protectStates(PTBL_States *arg) {
  * Unprotect a PTBL_States from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_States
  */
-void PTBL_unprotectStates(PTBL_States *arg) {
+void _PTBL_unprotectStates(PTBL_States *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -222,7 +222,7 @@ void PTBL_unprotectStates(PTBL_States *arg) {
  * Protect a PTBL_State from the ATerm garbage collector. Every PTBL_State that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_State
  */
-void PTBL_protectState(PTBL_State *arg) {
+void _PTBL_protectState(PTBL_State *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -230,7 +230,7 @@ void PTBL_protectState(PTBL_State *arg) {
  * Unprotect a PTBL_State from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_State
  */
-void PTBL_unprotectState(PTBL_State *arg) {
+void _PTBL_unprotectState(PTBL_State *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -238,7 +238,7 @@ void PTBL_unprotectState(PTBL_State *arg) {
  * Protect a PTBL_Gotos from the ATerm garbage collector. Every PTBL_Gotos that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Gotos
  */
-void PTBL_protectGotos(PTBL_Gotos *arg) {
+void _PTBL_protectGotos(PTBL_Gotos *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -246,7 +246,7 @@ void PTBL_protectGotos(PTBL_Gotos *arg) {
  * Unprotect a PTBL_Gotos from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Gotos
  */
-void PTBL_unprotectGotos(PTBL_Gotos *arg) {
+void _PTBL_unprotectGotos(PTBL_Gotos *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -254,7 +254,7 @@ void PTBL_unprotectGotos(PTBL_Gotos *arg) {
  * Protect a PTBL_Goto from the ATerm garbage collector. Every PTBL_Goto that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Goto
  */
-void PTBL_protectGoto(PTBL_Goto *arg) {
+void _PTBL_protectGoto(PTBL_Goto *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -262,7 +262,7 @@ void PTBL_protectGoto(PTBL_Goto *arg) {
  * Unprotect a PTBL_Goto from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Goto
  */
-void PTBL_unprotectGoto(PTBL_Goto *arg) {
+void _PTBL_unprotectGoto(PTBL_Goto *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -270,7 +270,7 @@ void PTBL_unprotectGoto(PTBL_Goto *arg) {
  * Protect a PTBL_Choices from the ATerm garbage collector. Every PTBL_Choices that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Choices
  */
-void PTBL_protectChoices(PTBL_Choices *arg) {
+void _PTBL_protectChoices(PTBL_Choices *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -278,7 +278,7 @@ void PTBL_protectChoices(PTBL_Choices *arg) {
  * Unprotect a PTBL_Choices from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Choices
  */
-void PTBL_unprotectChoices(PTBL_Choices *arg) {
+void _PTBL_unprotectChoices(PTBL_Choices *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -286,7 +286,7 @@ void PTBL_unprotectChoices(PTBL_Choices *arg) {
  * Protect a PTBL_Choice from the ATerm garbage collector. Every PTBL_Choice that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Choice
  */
-void PTBL_protectChoice(PTBL_Choice *arg) {
+void _PTBL_protectChoice(PTBL_Choice *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -294,7 +294,7 @@ void PTBL_protectChoice(PTBL_Choice *arg) {
  * Unprotect a PTBL_Choice from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Choice
  */
-void PTBL_unprotectChoice(PTBL_Choice *arg) {
+void _PTBL_unprotectChoice(PTBL_Choice *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -302,7 +302,7 @@ void PTBL_unprotectChoice(PTBL_Choice *arg) {
  * Protect a PTBL_Actions from the ATerm garbage collector. Every PTBL_Actions that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Actions
  */
-void PTBL_protectActions(PTBL_Actions *arg) {
+void _PTBL_protectActions(PTBL_Actions *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -310,7 +310,7 @@ void PTBL_protectActions(PTBL_Actions *arg) {
  * Unprotect a PTBL_Actions from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Actions
  */
-void PTBL_unprotectActions(PTBL_Actions *arg) {
+void _PTBL_unprotectActions(PTBL_Actions *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -318,7 +318,7 @@ void PTBL_unprotectActions(PTBL_Actions *arg) {
  * Protect a PTBL_Action from the ATerm garbage collector. Every PTBL_Action that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Action
  */
-void PTBL_protectAction(PTBL_Action *arg) {
+void _PTBL_protectAction(PTBL_Action *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -326,7 +326,7 @@ void PTBL_protectAction(PTBL_Action *arg) {
  * Unprotect a PTBL_Action from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Action
  */
-void PTBL_unprotectAction(PTBL_Action *arg) {
+void _PTBL_unprotectAction(PTBL_Action *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -334,7 +334,7 @@ void PTBL_unprotectAction(PTBL_Action *arg) {
  * Protect a PTBL_SpecialAttr from the ATerm garbage collector. Every PTBL_SpecialAttr that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_SpecialAttr
  */
-void PTBL_protectSpecialAttr(PTBL_SpecialAttr *arg) {
+void _PTBL_protectSpecialAttr(PTBL_SpecialAttr *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -342,7 +342,7 @@ void PTBL_protectSpecialAttr(PTBL_SpecialAttr *arg) {
  * Unprotect a PTBL_SpecialAttr from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_SpecialAttr
  */
-void PTBL_unprotectSpecialAttr(PTBL_SpecialAttr *arg) {
+void _PTBL_unprotectSpecialAttr(PTBL_SpecialAttr *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -350,7 +350,7 @@ void PTBL_unprotectSpecialAttr(PTBL_SpecialAttr *arg) {
  * Protect a PTBL_Restrictions from the ATerm garbage collector. Every PTBL_Restrictions that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Restrictions
  */
-void PTBL_protectRestrictions(PTBL_Restrictions *arg) {
+void _PTBL_protectRestrictions(PTBL_Restrictions *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -358,7 +358,7 @@ void PTBL_protectRestrictions(PTBL_Restrictions *arg) {
  * Unprotect a PTBL_Restrictions from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Restrictions
  */
-void PTBL_unprotectRestrictions(PTBL_Restrictions *arg) {
+void _PTBL_unprotectRestrictions(PTBL_Restrictions *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -366,7 +366,7 @@ void PTBL_unprotectRestrictions(PTBL_Restrictions *arg) {
  * Protect a PTBL_Restriction from the ATerm garbage collector. Every PTBL_Restriction that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Restriction
  */
-void PTBL_protectRestriction(PTBL_Restriction *arg) {
+void _PTBL_protectRestriction(PTBL_Restriction *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -374,7 +374,7 @@ void PTBL_protectRestriction(PTBL_Restriction *arg) {
  * Unprotect a PTBL_Restriction from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Restriction
  */
-void PTBL_unprotectRestriction(PTBL_Restriction *arg) {
+void _PTBL_unprotectRestriction(PTBL_Restriction *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -382,7 +382,7 @@ void PTBL_unprotectRestriction(PTBL_Restriction *arg) {
  * Protect a PTBL_CharClasses from the ATerm garbage collector. Every PTBL_CharClasses that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_CharClasses
  */
-void PTBL_protectCharClasses(PTBL_CharClasses *arg) {
+void _PTBL_protectCharClasses(PTBL_CharClasses *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -390,7 +390,7 @@ void PTBL_protectCharClasses(PTBL_CharClasses *arg) {
  * Unprotect a PTBL_CharClasses from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_CharClasses
  */
-void PTBL_unprotectCharClasses(PTBL_CharClasses *arg) {
+void _PTBL_unprotectCharClasses(PTBL_CharClasses *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -398,7 +398,7 @@ void PTBL_unprotectCharClasses(PTBL_CharClasses *arg) {
  * Protect a PTBL_Priorities from the ATerm garbage collector. Every PTBL_Priorities that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Priorities
  */
-void PTBL_protectPriorities(PTBL_Priorities *arg) {
+void _PTBL_protectPriorities(PTBL_Priorities *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -406,7 +406,7 @@ void PTBL_protectPriorities(PTBL_Priorities *arg) {
  * Unprotect a PTBL_Priorities from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Priorities
  */
-void PTBL_unprotectPriorities(PTBL_Priorities *arg) {
+void _PTBL_unprotectPriorities(PTBL_Priorities *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -414,7 +414,7 @@ void PTBL_unprotectPriorities(PTBL_Priorities *arg) {
  * Protect a PTBL_Priority from the ATerm garbage collector. Every PTBL_Priority that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PTBL_Priority
  */
-void PTBL_protectPriority(PTBL_Priority *arg) {
+void _PTBL_protectPriority(PTBL_Priority *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -422,7 +422,7 @@ void PTBL_protectPriority(PTBL_Priority *arg) {
  * Unprotect a PTBL_Priority from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PTBL_Priority
  */
-void PTBL_unprotectPriority(PTBL_Priority *arg) {
+void _PTBL_unprotectPriority(PTBL_Priority *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -431,7 +431,7 @@ void PTBL_unprotectPriority(PTBL_Priority *arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Production that was encoded by \arg
  */
-PTBL_Production PTBL_ProductionFromTerm(ATerm t) {
+PTBL_Production _PTBL_ProductionFromTerm(ATerm t) {
   return (PTBL_Production)t;
 }
 
@@ -440,7 +440,7 @@ PTBL_Production PTBL_ProductionFromTerm(ATerm t) {
  * \param[in] arg PTBL_Production to be converted
  * \return ATerm that represents the PTBL_Production
  */
-ATerm PTBL_ProductionToTerm(PTBL_Production arg) {
+ATerm _PTBL_ProductionToTerm(PTBL_Production arg) {
   return (ATerm)arg;
 }
 
@@ -449,7 +449,7 @@ ATerm PTBL_ProductionToTerm(PTBL_Production arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_CharClass that was encoded by \arg
  */
-PTBL_CharClass PTBL_CharClassFromTerm(ATerm t) {
+PTBL_CharClass _PTBL_CharClassFromTerm(ATerm t) {
   return (PTBL_CharClass)t;
 }
 
@@ -458,7 +458,7 @@ PTBL_CharClass PTBL_CharClassFromTerm(ATerm t) {
  * \param[in] arg PTBL_CharClass to be converted
  * \return ATerm that represents the PTBL_CharClass
  */
-ATerm PTBL_CharClassToTerm(PTBL_CharClass arg) {
+ATerm _PTBL_CharClassToTerm(PTBL_CharClass arg) {
   return (ATerm)arg;
 }
 
@@ -467,7 +467,7 @@ ATerm PTBL_CharClassToTerm(PTBL_CharClass arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_CharRanges that was encoded by \arg
  */
-PTBL_CharRanges PTBL_CharRangesFromTerm(ATerm t) {
+PTBL_CharRanges _PTBL_CharRangesFromTerm(ATerm t) {
   return (PTBL_CharRanges)t;
 }
 
@@ -476,7 +476,7 @@ PTBL_CharRanges PTBL_CharRangesFromTerm(ATerm t) {
  * \param[in] arg PTBL_CharRanges to be converted
  * \return ATerm that represents the PTBL_CharRanges
  */
-ATerm PTBL_CharRangesToTerm(PTBL_CharRanges arg) {
+ATerm _PTBL_CharRangesToTerm(PTBL_CharRanges arg) {
   return (ATerm)arg;
 }
 
@@ -485,7 +485,7 @@ ATerm PTBL_CharRangesToTerm(PTBL_CharRanges arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Version that was encoded by \arg
  */
-PTBL_Version PTBL_VersionFromTerm(ATerm t) {
+PTBL_Version _PTBL_VersionFromTerm(ATerm t) {
   return (PTBL_Version)t;
 }
 
@@ -494,7 +494,7 @@ PTBL_Version PTBL_VersionFromTerm(ATerm t) {
  * \param[in] arg PTBL_Version to be converted
  * \return ATerm that represents the PTBL_Version
  */
-ATerm PTBL_VersionToTerm(PTBL_Version arg) {
+ATerm _PTBL_VersionToTerm(PTBL_Version arg) {
   return (ATerm)arg;
 }
 
@@ -503,7 +503,7 @@ ATerm PTBL_VersionToTerm(PTBL_Version arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_ParseTable that was encoded by \arg
  */
-PTBL_ParseTable PTBL_ParseTableFromTerm(ATerm t) {
+PTBL_ParseTable _PTBL_ParseTableFromTerm(ATerm t) {
   return (PTBL_ParseTable)t;
 }
 
@@ -512,7 +512,7 @@ PTBL_ParseTable PTBL_ParseTableFromTerm(ATerm t) {
  * \param[in] arg PTBL_ParseTable to be converted
  * \return ATerm that represents the PTBL_ParseTable
  */
-ATerm PTBL_ParseTableToTerm(PTBL_ParseTable arg) {
+ATerm _PTBL_ParseTableToTerm(PTBL_ParseTable arg) {
   return (ATerm)arg;
 }
 
@@ -521,7 +521,7 @@ ATerm PTBL_ParseTableToTerm(PTBL_ParseTable arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Labels that was encoded by \arg
  */
-PTBL_Labels PTBL_LabelsFromTerm(ATerm t) {
+PTBL_Labels _PTBL_LabelsFromTerm(ATerm t) {
   return (PTBL_Labels)t;
 }
 
@@ -530,7 +530,7 @@ PTBL_Labels PTBL_LabelsFromTerm(ATerm t) {
  * \param[in] arg PTBL_Labels to be converted
  * \return ATerm that represents the PTBL_Labels
  */
-ATerm PTBL_LabelsToTerm(PTBL_Labels arg) {
+ATerm _PTBL_LabelsToTerm(PTBL_Labels arg) {
   return (ATerm)arg;
 }
 
@@ -539,7 +539,7 @@ ATerm PTBL_LabelsToTerm(PTBL_Labels arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Label that was encoded by \arg
  */
-PTBL_Label PTBL_LabelFromTerm(ATerm t) {
+PTBL_Label _PTBL_LabelFromTerm(ATerm t) {
   return (PTBL_Label)t;
 }
 
@@ -548,7 +548,7 @@ PTBL_Label PTBL_LabelFromTerm(ATerm t) {
  * \param[in] arg PTBL_Label to be converted
  * \return ATerm that represents the PTBL_Label
  */
-ATerm PTBL_LabelToTerm(PTBL_Label arg) {
+ATerm _PTBL_LabelToTerm(PTBL_Label arg) {
   return (ATerm)arg;
 }
 
@@ -557,7 +557,7 @@ ATerm PTBL_LabelToTerm(PTBL_Label arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_States that was encoded by \arg
  */
-PTBL_States PTBL_StatesFromTerm(ATerm t) {
+PTBL_States _PTBL_StatesFromTerm(ATerm t) {
   return (PTBL_States)t;
 }
 
@@ -566,7 +566,7 @@ PTBL_States PTBL_StatesFromTerm(ATerm t) {
  * \param[in] arg PTBL_States to be converted
  * \return ATerm that represents the PTBL_States
  */
-ATerm PTBL_StatesToTerm(PTBL_States arg) {
+ATerm _PTBL_StatesToTerm(PTBL_States arg) {
   return (ATerm)arg;
 }
 
@@ -575,7 +575,7 @@ ATerm PTBL_StatesToTerm(PTBL_States arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_State that was encoded by \arg
  */
-PTBL_State PTBL_StateFromTerm(ATerm t) {
+PTBL_State _PTBL_StateFromTerm(ATerm t) {
   return (PTBL_State)t;
 }
 
@@ -584,7 +584,7 @@ PTBL_State PTBL_StateFromTerm(ATerm t) {
  * \param[in] arg PTBL_State to be converted
  * \return ATerm that represents the PTBL_State
  */
-ATerm PTBL_StateToTerm(PTBL_State arg) {
+ATerm _PTBL_StateToTerm(PTBL_State arg) {
   return (ATerm)arg;
 }
 
@@ -593,7 +593,7 @@ ATerm PTBL_StateToTerm(PTBL_State arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Gotos that was encoded by \arg
  */
-PTBL_Gotos PTBL_GotosFromTerm(ATerm t) {
+PTBL_Gotos _PTBL_GotosFromTerm(ATerm t) {
   return (PTBL_Gotos)t;
 }
 
@@ -602,7 +602,7 @@ PTBL_Gotos PTBL_GotosFromTerm(ATerm t) {
  * \param[in] arg PTBL_Gotos to be converted
  * \return ATerm that represents the PTBL_Gotos
  */
-ATerm PTBL_GotosToTerm(PTBL_Gotos arg) {
+ATerm _PTBL_GotosToTerm(PTBL_Gotos arg) {
   return (ATerm)arg;
 }
 
@@ -611,7 +611,7 @@ ATerm PTBL_GotosToTerm(PTBL_Gotos arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Goto that was encoded by \arg
  */
-PTBL_Goto PTBL_GotoFromTerm(ATerm t) {
+PTBL_Goto _PTBL_GotoFromTerm(ATerm t) {
   return (PTBL_Goto)t;
 }
 
@@ -620,7 +620,7 @@ PTBL_Goto PTBL_GotoFromTerm(ATerm t) {
  * \param[in] arg PTBL_Goto to be converted
  * \return ATerm that represents the PTBL_Goto
  */
-ATerm PTBL_GotoToTerm(PTBL_Goto arg) {
+ATerm _PTBL_GotoToTerm(PTBL_Goto arg) {
   return (ATerm)arg;
 }
 
@@ -629,7 +629,7 @@ ATerm PTBL_GotoToTerm(PTBL_Goto arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Choices that was encoded by \arg
  */
-PTBL_Choices PTBL_ChoicesFromTerm(ATerm t) {
+PTBL_Choices _PTBL_ChoicesFromTerm(ATerm t) {
   return (PTBL_Choices)t;
 }
 
@@ -638,7 +638,7 @@ PTBL_Choices PTBL_ChoicesFromTerm(ATerm t) {
  * \param[in] arg PTBL_Choices to be converted
  * \return ATerm that represents the PTBL_Choices
  */
-ATerm PTBL_ChoicesToTerm(PTBL_Choices arg) {
+ATerm _PTBL_ChoicesToTerm(PTBL_Choices arg) {
   return (ATerm)arg;
 }
 
@@ -647,7 +647,7 @@ ATerm PTBL_ChoicesToTerm(PTBL_Choices arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Choice that was encoded by \arg
  */
-PTBL_Choice PTBL_ChoiceFromTerm(ATerm t) {
+PTBL_Choice _PTBL_ChoiceFromTerm(ATerm t) {
   return (PTBL_Choice)t;
 }
 
@@ -656,7 +656,7 @@ PTBL_Choice PTBL_ChoiceFromTerm(ATerm t) {
  * \param[in] arg PTBL_Choice to be converted
  * \return ATerm that represents the PTBL_Choice
  */
-ATerm PTBL_ChoiceToTerm(PTBL_Choice arg) {
+ATerm _PTBL_ChoiceToTerm(PTBL_Choice arg) {
   return (ATerm)arg;
 }
 
@@ -665,7 +665,7 @@ ATerm PTBL_ChoiceToTerm(PTBL_Choice arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Actions that was encoded by \arg
  */
-PTBL_Actions PTBL_ActionsFromTerm(ATerm t) {
+PTBL_Actions _PTBL_ActionsFromTerm(ATerm t) {
   return (PTBL_Actions)t;
 }
 
@@ -674,7 +674,7 @@ PTBL_Actions PTBL_ActionsFromTerm(ATerm t) {
  * \param[in] arg PTBL_Actions to be converted
  * \return ATerm that represents the PTBL_Actions
  */
-ATerm PTBL_ActionsToTerm(PTBL_Actions arg) {
+ATerm _PTBL_ActionsToTerm(PTBL_Actions arg) {
   return (ATerm)arg;
 }
 
@@ -683,7 +683,7 @@ ATerm PTBL_ActionsToTerm(PTBL_Actions arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Action that was encoded by \arg
  */
-PTBL_Action PTBL_ActionFromTerm(ATerm t) {
+PTBL_Action _PTBL_ActionFromTerm(ATerm t) {
   return (PTBL_Action)t;
 }
 
@@ -692,7 +692,7 @@ PTBL_Action PTBL_ActionFromTerm(ATerm t) {
  * \param[in] arg PTBL_Action to be converted
  * \return ATerm that represents the PTBL_Action
  */
-ATerm PTBL_ActionToTerm(PTBL_Action arg) {
+ATerm _PTBL_ActionToTerm(PTBL_Action arg) {
   return (ATerm)arg;
 }
 
@@ -701,7 +701,7 @@ ATerm PTBL_ActionToTerm(PTBL_Action arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_SpecialAttr that was encoded by \arg
  */
-PTBL_SpecialAttr PTBL_SpecialAttrFromTerm(ATerm t) {
+PTBL_SpecialAttr _PTBL_SpecialAttrFromTerm(ATerm t) {
   return (PTBL_SpecialAttr)t;
 }
 
@@ -710,7 +710,7 @@ PTBL_SpecialAttr PTBL_SpecialAttrFromTerm(ATerm t) {
  * \param[in] arg PTBL_SpecialAttr to be converted
  * \return ATerm that represents the PTBL_SpecialAttr
  */
-ATerm PTBL_SpecialAttrToTerm(PTBL_SpecialAttr arg) {
+ATerm _PTBL_SpecialAttrToTerm(PTBL_SpecialAttr arg) {
   return (ATerm)arg;
 }
 
@@ -719,7 +719,7 @@ ATerm PTBL_SpecialAttrToTerm(PTBL_SpecialAttr arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Restrictions that was encoded by \arg
  */
-PTBL_Restrictions PTBL_RestrictionsFromTerm(ATerm t) {
+PTBL_Restrictions _PTBL_RestrictionsFromTerm(ATerm t) {
   return (PTBL_Restrictions)t;
 }
 
@@ -728,7 +728,7 @@ PTBL_Restrictions PTBL_RestrictionsFromTerm(ATerm t) {
  * \param[in] arg PTBL_Restrictions to be converted
  * \return ATerm that represents the PTBL_Restrictions
  */
-ATerm PTBL_RestrictionsToTerm(PTBL_Restrictions arg) {
+ATerm _PTBL_RestrictionsToTerm(PTBL_Restrictions arg) {
   return (ATerm)arg;
 }
 
@@ -737,7 +737,7 @@ ATerm PTBL_RestrictionsToTerm(PTBL_Restrictions arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Restriction that was encoded by \arg
  */
-PTBL_Restriction PTBL_RestrictionFromTerm(ATerm t) {
+PTBL_Restriction _PTBL_RestrictionFromTerm(ATerm t) {
   return (PTBL_Restriction)t;
 }
 
@@ -746,7 +746,7 @@ PTBL_Restriction PTBL_RestrictionFromTerm(ATerm t) {
  * \param[in] arg PTBL_Restriction to be converted
  * \return ATerm that represents the PTBL_Restriction
  */
-ATerm PTBL_RestrictionToTerm(PTBL_Restriction arg) {
+ATerm _PTBL_RestrictionToTerm(PTBL_Restriction arg) {
   return (ATerm)arg;
 }
 
@@ -755,7 +755,7 @@ ATerm PTBL_RestrictionToTerm(PTBL_Restriction arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_CharClasses that was encoded by \arg
  */
-PTBL_CharClasses PTBL_CharClassesFromTerm(ATerm t) {
+PTBL_CharClasses _PTBL_CharClassesFromTerm(ATerm t) {
   return (PTBL_CharClasses)t;
 }
 
@@ -764,7 +764,7 @@ PTBL_CharClasses PTBL_CharClassesFromTerm(ATerm t) {
  * \param[in] arg PTBL_CharClasses to be converted
  * \return ATerm that represents the PTBL_CharClasses
  */
-ATerm PTBL_CharClassesToTerm(PTBL_CharClasses arg) {
+ATerm _PTBL_CharClassesToTerm(PTBL_CharClasses arg) {
   return (ATerm)arg;
 }
 
@@ -773,7 +773,7 @@ ATerm PTBL_CharClassesToTerm(PTBL_CharClasses arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Priorities that was encoded by \arg
  */
-PTBL_Priorities PTBL_PrioritiesFromTerm(ATerm t) {
+PTBL_Priorities _PTBL_PrioritiesFromTerm(ATerm t) {
   return (PTBL_Priorities)t;
 }
 
@@ -782,7 +782,7 @@ PTBL_Priorities PTBL_PrioritiesFromTerm(ATerm t) {
  * \param[in] arg PTBL_Priorities to be converted
  * \return ATerm that represents the PTBL_Priorities
  */
-ATerm PTBL_PrioritiesToTerm(PTBL_Priorities arg) {
+ATerm _PTBL_PrioritiesToTerm(PTBL_Priorities arg) {
   return (ATerm)arg;
 }
 
@@ -791,7 +791,7 @@ ATerm PTBL_PrioritiesToTerm(PTBL_Priorities arg) {
  * \param[in] t ATerm to be converted
  * \return PTBL_Priority that was encoded by \arg
  */
-PTBL_Priority PTBL_PriorityFromTerm(ATerm t) {
+PTBL_Priority _PTBL_PriorityFromTerm(ATerm t) {
   return (PTBL_Priority)t;
 }
 
@@ -800,7 +800,7 @@ PTBL_Priority PTBL_PriorityFromTerm(ATerm t) {
  * \param[in] arg PTBL_Priority to be converted
  * \return ATerm that represents the PTBL_Priority
  */
-ATerm PTBL_PriorityToTerm(PTBL_Priority arg) {
+ATerm _PTBL_PriorityToTerm(PTBL_Priority arg) {
   return (ATerm)arg;
 }
 
@@ -809,7 +809,7 @@ ATerm PTBL_PriorityToTerm(PTBL_Priority arg) {
  * \param[in] arg input PTBL_Labels
  * \return The number of elements in the PTBL_Labels
  */
-int PTBL_getLabelsLength (PTBL_Labels arg) {
+int _PTBL_getLabelsLength(PTBL_Labels arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -818,7 +818,7 @@ int PTBL_getLabelsLength (PTBL_Labels arg) {
  * \param[in] arg PTBL_Labels to be reversed
  * \return a reversed #arg
  */
-PTBL_Labels PTBL_reverseLabels(PTBL_Labels arg) {
+PTBL_Labels _PTBL_reverseLabels(PTBL_Labels arg) {
   return (PTBL_Labels) ATreverse((ATermList) arg);
 }
 
@@ -828,7 +828,7 @@ PTBL_Labels PTBL_reverseLabels(PTBL_Labels arg) {
  * \param[in] elem PTBL_Label to be appended
  * \return new PTBL_Labels with #elem appended
  */
-PTBL_Labels PTBL_appendLabels(PTBL_Labels arg, PTBL_Label elem) {
+PTBL_Labels _PTBL_appendLabels(PTBL_Labels arg, PTBL_Label elem) {
   return (PTBL_Labels) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -838,7 +838,7 @@ PTBL_Labels PTBL_appendLabels(PTBL_Labels arg, PTBL_Label elem) {
  * \param[in] arg1 second PTBL_Labels
  * \return PTBL_Labels with the elements of #arg0 before the elements of #arg1
  */
-PTBL_Labels PTBL_concatLabels(PTBL_Labels arg0, PTBL_Labels arg1) {
+PTBL_Labels _PTBL_concatLabels(PTBL_Labels arg0, PTBL_Labels arg1) {
   return (PTBL_Labels) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -849,7 +849,7 @@ PTBL_Labels PTBL_concatLabels(PTBL_Labels arg0, PTBL_Labels arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_Labels with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_Labels PTBL_sliceLabels(PTBL_Labels arg, int start, int end) {
+PTBL_Labels _PTBL_sliceLabels(PTBL_Labels arg, int start, int end) {
   return (PTBL_Labels) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -859,7 +859,7 @@ PTBL_Labels PTBL_sliceLabels(PTBL_Labels arg, int start, int end) {
  * \param[in] index index to use to point in the PTBL_Labels
  * \return PTBL_Label at position #index in #arg
  */
-PTBL_Label PTBL_getLabelsLabelAt(PTBL_Labels arg, int index) {
+PTBL_Label _PTBL_getLabelsLabelAt(PTBL_Labels arg, int index) {
  return (PTBL_Label)ATelementAt((ATermList) arg,index);
 }
 
@@ -870,7 +870,7 @@ PTBL_Label PTBL_getLabelsLabelAt(PTBL_Labels arg, int index) {
  * \param[in] index index to use to point in the PTBL_Labels
  * \return A new PTBL_Labelswith #elem replaced in #arg at position #index
  */
-PTBL_Labels PTBL_replaceLabelsLabelAt(PTBL_Labels arg, PTBL_Label elem, int index) {
+PTBL_Labels _PTBL_replaceLabelsLabelAt(PTBL_Labels arg, PTBL_Label elem, int index) {
  return (PTBL_Labels) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -880,7 +880,7 @@ PTBL_Labels PTBL_replaceLabelsLabelAt(PTBL_Labels arg, PTBL_Label elem, int inde
  * \param[in] elem2 One PTBL_Label element of the new PTBL_Labels
  * \return A new PTBL_Labels consisting of 2 PTBL_Labels
  */
-PTBL_Labels PTBL_makeLabels2(PTBL_Label elem1, PTBL_Label elem2) {
+PTBL_Labels _PTBL_makeLabels2(PTBL_Label elem1, PTBL_Label elem2) {
   return (PTBL_Labels) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -891,7 +891,7 @@ PTBL_Labels PTBL_makeLabels2(PTBL_Label elem1, PTBL_Label elem2) {
  * \param[in] elem3 One PTBL_Label element of the new PTBL_Labels
  * \return A new PTBL_Labels consisting of 3 PTBL_Labels
  */
-PTBL_Labels PTBL_makeLabels3(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3) {
+PTBL_Labels _PTBL_makeLabels3(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3) {
   return (PTBL_Labels) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -903,7 +903,7 @@ PTBL_Labels PTBL_makeLabels3(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem
  * \param[in] elem4 One PTBL_Label element of the new PTBL_Labels
  * \return A new PTBL_Labels consisting of 4 PTBL_Labels
  */
-PTBL_Labels PTBL_makeLabels4(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3, PTBL_Label elem4) {
+PTBL_Labels _PTBL_makeLabels4(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3, PTBL_Label elem4) {
   return (PTBL_Labels) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -916,7 +916,7 @@ PTBL_Labels PTBL_makeLabels4(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem
  * \param[in] elem5 One PTBL_Label element of the new PTBL_Labels
  * \return A new PTBL_Labels consisting of 5 PTBL_Labels
  */
-PTBL_Labels PTBL_makeLabels5(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3, PTBL_Label elem4, PTBL_Label elem5) {
+PTBL_Labels _PTBL_makeLabels5(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3, PTBL_Label elem4, PTBL_Label elem5) {
   return (PTBL_Labels) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -930,7 +930,7 @@ PTBL_Labels PTBL_makeLabels5(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem
  * \param[in] elem6 One PTBL_Label element of the new PTBL_Labels
  * \return A new PTBL_Labels consisting of 6 PTBL_Labels
  */
-PTBL_Labels PTBL_makeLabels6(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3, PTBL_Label elem4, PTBL_Label elem5, PTBL_Label elem6) {
+PTBL_Labels _PTBL_makeLabels6(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem3, PTBL_Label elem4, PTBL_Label elem5, PTBL_Label elem6) {
   return (PTBL_Labels) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -939,7 +939,7 @@ PTBL_Labels PTBL_makeLabels6(PTBL_Label elem1, PTBL_Label elem2, PTBL_Label elem
  * \param[in] arg input PTBL_States
  * \return The number of elements in the PTBL_States
  */
-int PTBL_getStatesLength (PTBL_States arg) {
+int _PTBL_getStatesLength(PTBL_States arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -948,7 +948,7 @@ int PTBL_getStatesLength (PTBL_States arg) {
  * \param[in] arg PTBL_States to be reversed
  * \return a reversed #arg
  */
-PTBL_States PTBL_reverseStates(PTBL_States arg) {
+PTBL_States _PTBL_reverseStates(PTBL_States arg) {
   return (PTBL_States) ATreverse((ATermList) arg);
 }
 
@@ -958,7 +958,7 @@ PTBL_States PTBL_reverseStates(PTBL_States arg) {
  * \param[in] elem PTBL_State to be appended
  * \return new PTBL_States with #elem appended
  */
-PTBL_States PTBL_appendStates(PTBL_States arg, PTBL_State elem) {
+PTBL_States _PTBL_appendStates(PTBL_States arg, PTBL_State elem) {
   return (PTBL_States) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -968,7 +968,7 @@ PTBL_States PTBL_appendStates(PTBL_States arg, PTBL_State elem) {
  * \param[in] arg1 second PTBL_States
  * \return PTBL_States with the elements of #arg0 before the elements of #arg1
  */
-PTBL_States PTBL_concatStates(PTBL_States arg0, PTBL_States arg1) {
+PTBL_States _PTBL_concatStates(PTBL_States arg0, PTBL_States arg1) {
   return (PTBL_States) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -979,7 +979,7 @@ PTBL_States PTBL_concatStates(PTBL_States arg0, PTBL_States arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_States with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_States PTBL_sliceStates(PTBL_States arg, int start, int end) {
+PTBL_States _PTBL_sliceStates(PTBL_States arg, int start, int end) {
   return (PTBL_States) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -989,7 +989,7 @@ PTBL_States PTBL_sliceStates(PTBL_States arg, int start, int end) {
  * \param[in] index index to use to point in the PTBL_States
  * \return PTBL_State at position #index in #arg
  */
-PTBL_State PTBL_getStatesStateAt(PTBL_States arg, int index) {
+PTBL_State _PTBL_getStatesStateAt(PTBL_States arg, int index) {
  return (PTBL_State)ATelementAt((ATermList) arg,index);
 }
 
@@ -1000,7 +1000,7 @@ PTBL_State PTBL_getStatesStateAt(PTBL_States arg, int index) {
  * \param[in] index index to use to point in the PTBL_States
  * \return A new PTBL_Stateswith #elem replaced in #arg at position #index
  */
-PTBL_States PTBL_replaceStatesStateAt(PTBL_States arg, PTBL_State elem, int index) {
+PTBL_States _PTBL_replaceStatesStateAt(PTBL_States arg, PTBL_State elem, int index) {
  return (PTBL_States) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1010,7 +1010,7 @@ PTBL_States PTBL_replaceStatesStateAt(PTBL_States arg, PTBL_State elem, int inde
  * \param[in] elem2 One PTBL_State element of the new PTBL_States
  * \return A new PTBL_States consisting of 2 PTBL_States
  */
-PTBL_States PTBL_makeStates2(PTBL_State elem1, PTBL_State elem2) {
+PTBL_States _PTBL_makeStates2(PTBL_State elem1, PTBL_State elem2) {
   return (PTBL_States) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1021,7 +1021,7 @@ PTBL_States PTBL_makeStates2(PTBL_State elem1, PTBL_State elem2) {
  * \param[in] elem3 One PTBL_State element of the new PTBL_States
  * \return A new PTBL_States consisting of 3 PTBL_States
  */
-PTBL_States PTBL_makeStates3(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3) {
+PTBL_States _PTBL_makeStates3(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3) {
   return (PTBL_States) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1033,7 +1033,7 @@ PTBL_States PTBL_makeStates3(PTBL_State elem1, PTBL_State elem2, PTBL_State elem
  * \param[in] elem4 One PTBL_State element of the new PTBL_States
  * \return A new PTBL_States consisting of 4 PTBL_States
  */
-PTBL_States PTBL_makeStates4(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3, PTBL_State elem4) {
+PTBL_States _PTBL_makeStates4(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3, PTBL_State elem4) {
   return (PTBL_States) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1046,7 +1046,7 @@ PTBL_States PTBL_makeStates4(PTBL_State elem1, PTBL_State elem2, PTBL_State elem
  * \param[in] elem5 One PTBL_State element of the new PTBL_States
  * \return A new PTBL_States consisting of 5 PTBL_States
  */
-PTBL_States PTBL_makeStates5(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3, PTBL_State elem4, PTBL_State elem5) {
+PTBL_States _PTBL_makeStates5(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3, PTBL_State elem4, PTBL_State elem5) {
   return (PTBL_States) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1060,7 +1060,7 @@ PTBL_States PTBL_makeStates5(PTBL_State elem1, PTBL_State elem2, PTBL_State elem
  * \param[in] elem6 One PTBL_State element of the new PTBL_States
  * \return A new PTBL_States consisting of 6 PTBL_States
  */
-PTBL_States PTBL_makeStates6(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3, PTBL_State elem4, PTBL_State elem5, PTBL_State elem6) {
+PTBL_States _PTBL_makeStates6(PTBL_State elem1, PTBL_State elem2, PTBL_State elem3, PTBL_State elem4, PTBL_State elem5, PTBL_State elem6) {
   return (PTBL_States) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1069,7 +1069,7 @@ PTBL_States PTBL_makeStates6(PTBL_State elem1, PTBL_State elem2, PTBL_State elem
  * \param[in] arg input PTBL_Gotos
  * \return The number of elements in the PTBL_Gotos
  */
-int PTBL_getGotosLength (PTBL_Gotos arg) {
+int _PTBL_getGotosLength(PTBL_Gotos arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1078,7 +1078,7 @@ int PTBL_getGotosLength (PTBL_Gotos arg) {
  * \param[in] arg PTBL_Gotos to be reversed
  * \return a reversed #arg
  */
-PTBL_Gotos PTBL_reverseGotos(PTBL_Gotos arg) {
+PTBL_Gotos _PTBL_reverseGotos(PTBL_Gotos arg) {
   return (PTBL_Gotos) ATreverse((ATermList) arg);
 }
 
@@ -1088,7 +1088,7 @@ PTBL_Gotos PTBL_reverseGotos(PTBL_Gotos arg) {
  * \param[in] elem PTBL_Goto to be appended
  * \return new PTBL_Gotos with #elem appended
  */
-PTBL_Gotos PTBL_appendGotos(PTBL_Gotos arg, PTBL_Goto elem) {
+PTBL_Gotos _PTBL_appendGotos(PTBL_Gotos arg, PTBL_Goto elem) {
   return (PTBL_Gotos) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1098,7 +1098,7 @@ PTBL_Gotos PTBL_appendGotos(PTBL_Gotos arg, PTBL_Goto elem) {
  * \param[in] arg1 second PTBL_Gotos
  * \return PTBL_Gotos with the elements of #arg0 before the elements of #arg1
  */
-PTBL_Gotos PTBL_concatGotos(PTBL_Gotos arg0, PTBL_Gotos arg1) {
+PTBL_Gotos _PTBL_concatGotos(PTBL_Gotos arg0, PTBL_Gotos arg1) {
   return (PTBL_Gotos) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1109,7 +1109,7 @@ PTBL_Gotos PTBL_concatGotos(PTBL_Gotos arg0, PTBL_Gotos arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_Gotos with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_Gotos PTBL_sliceGotos(PTBL_Gotos arg, int start, int end) {
+PTBL_Gotos _PTBL_sliceGotos(PTBL_Gotos arg, int start, int end) {
   return (PTBL_Gotos) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1119,7 +1119,7 @@ PTBL_Gotos PTBL_sliceGotos(PTBL_Gotos arg, int start, int end) {
  * \param[in] index index to use to point in the PTBL_Gotos
  * \return PTBL_Goto at position #index in #arg
  */
-PTBL_Goto PTBL_getGotosGotoAt(PTBL_Gotos arg, int index) {
+PTBL_Goto _PTBL_getGotosGotoAt(PTBL_Gotos arg, int index) {
  return (PTBL_Goto)ATelementAt((ATermList) arg,index);
 }
 
@@ -1130,7 +1130,7 @@ PTBL_Goto PTBL_getGotosGotoAt(PTBL_Gotos arg, int index) {
  * \param[in] index index to use to point in the PTBL_Gotos
  * \return A new PTBL_Gotoswith #elem replaced in #arg at position #index
  */
-PTBL_Gotos PTBL_replaceGotosGotoAt(PTBL_Gotos arg, PTBL_Goto elem, int index) {
+PTBL_Gotos _PTBL_replaceGotosGotoAt(PTBL_Gotos arg, PTBL_Goto elem, int index) {
  return (PTBL_Gotos) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1140,7 +1140,7 @@ PTBL_Gotos PTBL_replaceGotosGotoAt(PTBL_Gotos arg, PTBL_Goto elem, int index) {
  * \param[in] elem2 One PTBL_Goto element of the new PTBL_Gotos
  * \return A new PTBL_Gotos consisting of 2 PTBL_Gotos
  */
-PTBL_Gotos PTBL_makeGotos2(PTBL_Goto elem1, PTBL_Goto elem2) {
+PTBL_Gotos _PTBL_makeGotos2(PTBL_Goto elem1, PTBL_Goto elem2) {
   return (PTBL_Gotos) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1151,7 +1151,7 @@ PTBL_Gotos PTBL_makeGotos2(PTBL_Goto elem1, PTBL_Goto elem2) {
  * \param[in] elem3 One PTBL_Goto element of the new PTBL_Gotos
  * \return A new PTBL_Gotos consisting of 3 PTBL_Gotos
  */
-PTBL_Gotos PTBL_makeGotos3(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3) {
+PTBL_Gotos _PTBL_makeGotos3(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3) {
   return (PTBL_Gotos) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1163,7 +1163,7 @@ PTBL_Gotos PTBL_makeGotos3(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3) {
  * \param[in] elem4 One PTBL_Goto element of the new PTBL_Gotos
  * \return A new PTBL_Gotos consisting of 4 PTBL_Gotos
  */
-PTBL_Gotos PTBL_makeGotos4(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PTBL_Goto elem4) {
+PTBL_Gotos _PTBL_makeGotos4(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PTBL_Goto elem4) {
   return (PTBL_Gotos) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1176,7 +1176,7 @@ PTBL_Gotos PTBL_makeGotos4(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PT
  * \param[in] elem5 One PTBL_Goto element of the new PTBL_Gotos
  * \return A new PTBL_Gotos consisting of 5 PTBL_Gotos
  */
-PTBL_Gotos PTBL_makeGotos5(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PTBL_Goto elem4, PTBL_Goto elem5) {
+PTBL_Gotos _PTBL_makeGotos5(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PTBL_Goto elem4, PTBL_Goto elem5) {
   return (PTBL_Gotos) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1190,7 +1190,7 @@ PTBL_Gotos PTBL_makeGotos5(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PT
  * \param[in] elem6 One PTBL_Goto element of the new PTBL_Gotos
  * \return A new PTBL_Gotos consisting of 6 PTBL_Gotos
  */
-PTBL_Gotos PTBL_makeGotos6(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PTBL_Goto elem4, PTBL_Goto elem5, PTBL_Goto elem6) {
+PTBL_Gotos _PTBL_makeGotos6(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PTBL_Goto elem4, PTBL_Goto elem5, PTBL_Goto elem6) {
   return (PTBL_Gotos) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1199,7 +1199,7 @@ PTBL_Gotos PTBL_makeGotos6(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PT
  * \param[in] arg input PTBL_Choices
  * \return The number of elements in the PTBL_Choices
  */
-int PTBL_getChoicesLength (PTBL_Choices arg) {
+int _PTBL_getChoicesLength(PTBL_Choices arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1208,7 +1208,7 @@ int PTBL_getChoicesLength (PTBL_Choices arg) {
  * \param[in] arg PTBL_Choices to be reversed
  * \return a reversed #arg
  */
-PTBL_Choices PTBL_reverseChoices(PTBL_Choices arg) {
+PTBL_Choices _PTBL_reverseChoices(PTBL_Choices arg) {
   return (PTBL_Choices) ATreverse((ATermList) arg);
 }
 
@@ -1218,7 +1218,7 @@ PTBL_Choices PTBL_reverseChoices(PTBL_Choices arg) {
  * \param[in] elem PTBL_Choice to be appended
  * \return new PTBL_Choices with #elem appended
  */
-PTBL_Choices PTBL_appendChoices(PTBL_Choices arg, PTBL_Choice elem) {
+PTBL_Choices _PTBL_appendChoices(PTBL_Choices arg, PTBL_Choice elem) {
   return (PTBL_Choices) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1228,7 +1228,7 @@ PTBL_Choices PTBL_appendChoices(PTBL_Choices arg, PTBL_Choice elem) {
  * \param[in] arg1 second PTBL_Choices
  * \return PTBL_Choices with the elements of #arg0 before the elements of #arg1
  */
-PTBL_Choices PTBL_concatChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
+PTBL_Choices _PTBL_concatChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
   return (PTBL_Choices) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1239,7 +1239,7 @@ PTBL_Choices PTBL_concatChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_Choices with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_Choices PTBL_sliceChoices(PTBL_Choices arg, int start, int end) {
+PTBL_Choices _PTBL_sliceChoices(PTBL_Choices arg, int start, int end) {
   return (PTBL_Choices) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1249,7 +1249,7 @@ PTBL_Choices PTBL_sliceChoices(PTBL_Choices arg, int start, int end) {
  * \param[in] index index to use to point in the PTBL_Choices
  * \return PTBL_Choice at position #index in #arg
  */
-PTBL_Choice PTBL_getChoicesChoiceAt(PTBL_Choices arg, int index) {
+PTBL_Choice _PTBL_getChoicesChoiceAt(PTBL_Choices arg, int index) {
  return (PTBL_Choice)ATelementAt((ATermList) arg,index);
 }
 
@@ -1260,7 +1260,7 @@ PTBL_Choice PTBL_getChoicesChoiceAt(PTBL_Choices arg, int index) {
  * \param[in] index index to use to point in the PTBL_Choices
  * \return A new PTBL_Choiceswith #elem replaced in #arg at position #index
  */
-PTBL_Choices PTBL_replaceChoicesChoiceAt(PTBL_Choices arg, PTBL_Choice elem, int index) {
+PTBL_Choices _PTBL_replaceChoicesChoiceAt(PTBL_Choices arg, PTBL_Choice elem, int index) {
  return (PTBL_Choices) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1270,7 +1270,7 @@ PTBL_Choices PTBL_replaceChoicesChoiceAt(PTBL_Choices arg, PTBL_Choice elem, int
  * \param[in] elem2 One PTBL_Choice element of the new PTBL_Choices
  * \return A new PTBL_Choices consisting of 2 PTBL_Choices
  */
-PTBL_Choices PTBL_makeChoices2(PTBL_Choice elem1, PTBL_Choice elem2) {
+PTBL_Choices _PTBL_makeChoices2(PTBL_Choice elem1, PTBL_Choice elem2) {
   return (PTBL_Choices) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1281,7 +1281,7 @@ PTBL_Choices PTBL_makeChoices2(PTBL_Choice elem1, PTBL_Choice elem2) {
  * \param[in] elem3 One PTBL_Choice element of the new PTBL_Choices
  * \return A new PTBL_Choices consisting of 3 PTBL_Choices
  */
-PTBL_Choices PTBL_makeChoices3(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3) {
+PTBL_Choices _PTBL_makeChoices3(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3) {
   return (PTBL_Choices) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1293,7 +1293,7 @@ PTBL_Choices PTBL_makeChoices3(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice
  * \param[in] elem4 One PTBL_Choice element of the new PTBL_Choices
  * \return A new PTBL_Choices consisting of 4 PTBL_Choices
  */
-PTBL_Choices PTBL_makeChoices4(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4) {
+PTBL_Choices _PTBL_makeChoices4(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4) {
   return (PTBL_Choices) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1306,7 +1306,7 @@ PTBL_Choices PTBL_makeChoices4(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice
  * \param[in] elem5 One PTBL_Choice element of the new PTBL_Choices
  * \return A new PTBL_Choices consisting of 5 PTBL_Choices
  */
-PTBL_Choices PTBL_makeChoices5(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4, PTBL_Choice elem5) {
+PTBL_Choices _PTBL_makeChoices5(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4, PTBL_Choice elem5) {
   return (PTBL_Choices) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1320,7 +1320,7 @@ PTBL_Choices PTBL_makeChoices5(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice
  * \param[in] elem6 One PTBL_Choice element of the new PTBL_Choices
  * \return A new PTBL_Choices consisting of 6 PTBL_Choices
  */
-PTBL_Choices PTBL_makeChoices6(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4, PTBL_Choice elem5, PTBL_Choice elem6) {
+PTBL_Choices _PTBL_makeChoices6(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4, PTBL_Choice elem5, PTBL_Choice elem6) {
   return (PTBL_Choices) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1329,7 +1329,7 @@ PTBL_Choices PTBL_makeChoices6(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice
  * \param[in] arg input PTBL_Actions
  * \return The number of elements in the PTBL_Actions
  */
-int PTBL_getActionsLength (PTBL_Actions arg) {
+int _PTBL_getActionsLength(PTBL_Actions arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1338,7 +1338,7 @@ int PTBL_getActionsLength (PTBL_Actions arg) {
  * \param[in] arg PTBL_Actions to be reversed
  * \return a reversed #arg
  */
-PTBL_Actions PTBL_reverseActions(PTBL_Actions arg) {
+PTBL_Actions _PTBL_reverseActions(PTBL_Actions arg) {
   return (PTBL_Actions) ATreverse((ATermList) arg);
 }
 
@@ -1348,7 +1348,7 @@ PTBL_Actions PTBL_reverseActions(PTBL_Actions arg) {
  * \param[in] elem PTBL_Action to be appended
  * \return new PTBL_Actions with #elem appended
  */
-PTBL_Actions PTBL_appendActions(PTBL_Actions arg, PTBL_Action elem) {
+PTBL_Actions _PTBL_appendActions(PTBL_Actions arg, PTBL_Action elem) {
   return (PTBL_Actions) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1358,7 +1358,7 @@ PTBL_Actions PTBL_appendActions(PTBL_Actions arg, PTBL_Action elem) {
  * \param[in] arg1 second PTBL_Actions
  * \return PTBL_Actions with the elements of #arg0 before the elements of #arg1
  */
-PTBL_Actions PTBL_concatActions(PTBL_Actions arg0, PTBL_Actions arg1) {
+PTBL_Actions _PTBL_concatActions(PTBL_Actions arg0, PTBL_Actions arg1) {
   return (PTBL_Actions) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1369,7 +1369,7 @@ PTBL_Actions PTBL_concatActions(PTBL_Actions arg0, PTBL_Actions arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_Actions with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_Actions PTBL_sliceActions(PTBL_Actions arg, int start, int end) {
+PTBL_Actions _PTBL_sliceActions(PTBL_Actions arg, int start, int end) {
   return (PTBL_Actions) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1379,7 +1379,7 @@ PTBL_Actions PTBL_sliceActions(PTBL_Actions arg, int start, int end) {
  * \param[in] index index to use to point in the PTBL_Actions
  * \return PTBL_Action at position #index in #arg
  */
-PTBL_Action PTBL_getActionsActionAt(PTBL_Actions arg, int index) {
+PTBL_Action _PTBL_getActionsActionAt(PTBL_Actions arg, int index) {
  return (PTBL_Action)ATelementAt((ATermList) arg,index);
 }
 
@@ -1390,7 +1390,7 @@ PTBL_Action PTBL_getActionsActionAt(PTBL_Actions arg, int index) {
  * \param[in] index index to use to point in the PTBL_Actions
  * \return A new PTBL_Actionswith #elem replaced in #arg at position #index
  */
-PTBL_Actions PTBL_replaceActionsActionAt(PTBL_Actions arg, PTBL_Action elem, int index) {
+PTBL_Actions _PTBL_replaceActionsActionAt(PTBL_Actions arg, PTBL_Action elem, int index) {
  return (PTBL_Actions) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1400,7 +1400,7 @@ PTBL_Actions PTBL_replaceActionsActionAt(PTBL_Actions arg, PTBL_Action elem, int
  * \param[in] elem2 One PTBL_Action element of the new PTBL_Actions
  * \return A new PTBL_Actions consisting of 2 PTBL_Actions
  */
-PTBL_Actions PTBL_makeActions2(PTBL_Action elem1, PTBL_Action elem2) {
+PTBL_Actions _PTBL_makeActions2(PTBL_Action elem1, PTBL_Action elem2) {
   return (PTBL_Actions) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1411,7 +1411,7 @@ PTBL_Actions PTBL_makeActions2(PTBL_Action elem1, PTBL_Action elem2) {
  * \param[in] elem3 One PTBL_Action element of the new PTBL_Actions
  * \return A new PTBL_Actions consisting of 3 PTBL_Actions
  */
-PTBL_Actions PTBL_makeActions3(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3) {
+PTBL_Actions _PTBL_makeActions3(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3) {
   return (PTBL_Actions) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1423,7 +1423,7 @@ PTBL_Actions PTBL_makeActions3(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action
  * \param[in] elem4 One PTBL_Action element of the new PTBL_Actions
  * \return A new PTBL_Actions consisting of 4 PTBL_Actions
  */
-PTBL_Actions PTBL_makeActions4(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4) {
+PTBL_Actions _PTBL_makeActions4(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4) {
   return (PTBL_Actions) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1436,7 +1436,7 @@ PTBL_Actions PTBL_makeActions4(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action
  * \param[in] elem5 One PTBL_Action element of the new PTBL_Actions
  * \return A new PTBL_Actions consisting of 5 PTBL_Actions
  */
-PTBL_Actions PTBL_makeActions5(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5) {
+PTBL_Actions _PTBL_makeActions5(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5) {
   return (PTBL_Actions) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1450,7 +1450,7 @@ PTBL_Actions PTBL_makeActions5(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action
  * \param[in] elem6 One PTBL_Action element of the new PTBL_Actions
  * \return A new PTBL_Actions consisting of 6 PTBL_Actions
  */
-PTBL_Actions PTBL_makeActions6(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5, PTBL_Action elem6) {
+PTBL_Actions _PTBL_makeActions6(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5, PTBL_Action elem6) {
   return (PTBL_Actions) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1459,7 +1459,7 @@ PTBL_Actions PTBL_makeActions6(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action
  * \param[in] arg input PTBL_Restrictions
  * \return The number of elements in the PTBL_Restrictions
  */
-int PTBL_getRestrictionsLength (PTBL_Restrictions arg) {
+int _PTBL_getRestrictionsLength(PTBL_Restrictions arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1468,7 +1468,7 @@ int PTBL_getRestrictionsLength (PTBL_Restrictions arg) {
  * \param[in] arg PTBL_Restrictions to be reversed
  * \return a reversed #arg
  */
-PTBL_Restrictions PTBL_reverseRestrictions(PTBL_Restrictions arg) {
+PTBL_Restrictions _PTBL_reverseRestrictions(PTBL_Restrictions arg) {
   return (PTBL_Restrictions) ATreverse((ATermList) arg);
 }
 
@@ -1478,7 +1478,7 @@ PTBL_Restrictions PTBL_reverseRestrictions(PTBL_Restrictions arg) {
  * \param[in] elem PTBL_Restriction to be appended
  * \return new PTBL_Restrictions with #elem appended
  */
-PTBL_Restrictions PTBL_appendRestrictions(PTBL_Restrictions arg, PTBL_Restriction elem) {
+PTBL_Restrictions _PTBL_appendRestrictions(PTBL_Restrictions arg, PTBL_Restriction elem) {
   return (PTBL_Restrictions) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1488,7 +1488,7 @@ PTBL_Restrictions PTBL_appendRestrictions(PTBL_Restrictions arg, PTBL_Restrictio
  * \param[in] arg1 second PTBL_Restrictions
  * \return PTBL_Restrictions with the elements of #arg0 before the elements of #arg1
  */
-PTBL_Restrictions PTBL_concatRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) {
+PTBL_Restrictions _PTBL_concatRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) {
   return (PTBL_Restrictions) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1499,7 +1499,7 @@ PTBL_Restrictions PTBL_concatRestrictions(PTBL_Restrictions arg0, PTBL_Restricti
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_Restrictions with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_Restrictions PTBL_sliceRestrictions(PTBL_Restrictions arg, int start, int end) {
+PTBL_Restrictions _PTBL_sliceRestrictions(PTBL_Restrictions arg, int start, int end) {
   return (PTBL_Restrictions) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1509,7 +1509,7 @@ PTBL_Restrictions PTBL_sliceRestrictions(PTBL_Restrictions arg, int start, int e
  * \param[in] index index to use to point in the PTBL_Restrictions
  * \return PTBL_Restriction at position #index in #arg
  */
-PTBL_Restriction PTBL_getRestrictionsRestrictionAt(PTBL_Restrictions arg, int index) {
+PTBL_Restriction _PTBL_getRestrictionsRestrictionAt(PTBL_Restrictions arg, int index) {
  return (PTBL_Restriction)ATelementAt((ATermList) arg,index);
 }
 
@@ -1520,7 +1520,7 @@ PTBL_Restriction PTBL_getRestrictionsRestrictionAt(PTBL_Restrictions arg, int in
  * \param[in] index index to use to point in the PTBL_Restrictions
  * \return A new PTBL_Restrictionswith #elem replaced in #arg at position #index
  */
-PTBL_Restrictions PTBL_replaceRestrictionsRestrictionAt(PTBL_Restrictions arg, PTBL_Restriction elem, int index) {
+PTBL_Restrictions _PTBL_replaceRestrictionsRestrictionAt(PTBL_Restrictions arg, PTBL_Restriction elem, int index) {
  return (PTBL_Restrictions) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1530,7 +1530,7 @@ PTBL_Restrictions PTBL_replaceRestrictionsRestrictionAt(PTBL_Restrictions arg, P
  * \param[in] elem2 One PTBL_Restriction element of the new PTBL_Restrictions
  * \return A new PTBL_Restrictions consisting of 2 PTBL_Restrictions
  */
-PTBL_Restrictions PTBL_makeRestrictions2(PTBL_Restriction elem1, PTBL_Restriction elem2) {
+PTBL_Restrictions _PTBL_makeRestrictions2(PTBL_Restriction elem1, PTBL_Restriction elem2) {
   return (PTBL_Restrictions) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1541,7 +1541,7 @@ PTBL_Restrictions PTBL_makeRestrictions2(PTBL_Restriction elem1, PTBL_Restrictio
  * \param[in] elem3 One PTBL_Restriction element of the new PTBL_Restrictions
  * \return A new PTBL_Restrictions consisting of 3 PTBL_Restrictions
  */
-PTBL_Restrictions PTBL_makeRestrictions3(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3) {
+PTBL_Restrictions _PTBL_makeRestrictions3(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3) {
   return (PTBL_Restrictions) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1553,7 +1553,7 @@ PTBL_Restrictions PTBL_makeRestrictions3(PTBL_Restriction elem1, PTBL_Restrictio
  * \param[in] elem4 One PTBL_Restriction element of the new PTBL_Restrictions
  * \return A new PTBL_Restrictions consisting of 4 PTBL_Restrictions
  */
-PTBL_Restrictions PTBL_makeRestrictions4(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4) {
+PTBL_Restrictions _PTBL_makeRestrictions4(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4) {
   return (PTBL_Restrictions) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1566,7 +1566,7 @@ PTBL_Restrictions PTBL_makeRestrictions4(PTBL_Restriction elem1, PTBL_Restrictio
  * \param[in] elem5 One PTBL_Restriction element of the new PTBL_Restrictions
  * \return A new PTBL_Restrictions consisting of 5 PTBL_Restrictions
  */
-PTBL_Restrictions PTBL_makeRestrictions5(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4, PTBL_Restriction elem5) {
+PTBL_Restrictions _PTBL_makeRestrictions5(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4, PTBL_Restriction elem5) {
   return (PTBL_Restrictions) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1580,7 +1580,7 @@ PTBL_Restrictions PTBL_makeRestrictions5(PTBL_Restriction elem1, PTBL_Restrictio
  * \param[in] elem6 One PTBL_Restriction element of the new PTBL_Restrictions
  * \return A new PTBL_Restrictions consisting of 6 PTBL_Restrictions
  */
-PTBL_Restrictions PTBL_makeRestrictions6(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4, PTBL_Restriction elem5, PTBL_Restriction elem6) {
+PTBL_Restrictions _PTBL_makeRestrictions6(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4, PTBL_Restriction elem5, PTBL_Restriction elem6) {
   return (PTBL_Restrictions) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1589,7 +1589,7 @@ PTBL_Restrictions PTBL_makeRestrictions6(PTBL_Restriction elem1, PTBL_Restrictio
  * \param[in] arg input PTBL_CharClasses
  * \return The number of elements in the PTBL_CharClasses
  */
-int PTBL_getCharClassesLength (PTBL_CharClasses arg) {
+int _PTBL_getCharClassesLength(PTBL_CharClasses arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1598,7 +1598,7 @@ int PTBL_getCharClassesLength (PTBL_CharClasses arg) {
  * \param[in] arg PTBL_CharClasses to be reversed
  * \return a reversed #arg
  */
-PTBL_CharClasses PTBL_reverseCharClasses(PTBL_CharClasses arg) {
+PTBL_CharClasses _PTBL_reverseCharClasses(PTBL_CharClasses arg) {
   return (PTBL_CharClasses) ATreverse((ATermList) arg);
 }
 
@@ -1608,7 +1608,7 @@ PTBL_CharClasses PTBL_reverseCharClasses(PTBL_CharClasses arg) {
  * \param[in] elem PTBL_CharClass to be appended
  * \return new PTBL_CharClasses with #elem appended
  */
-PTBL_CharClasses PTBL_appendCharClasses(PTBL_CharClasses arg, PTBL_CharClass elem) {
+PTBL_CharClasses _PTBL_appendCharClasses(PTBL_CharClasses arg, PTBL_CharClass elem) {
   return (PTBL_CharClasses) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1618,7 +1618,7 @@ PTBL_CharClasses PTBL_appendCharClasses(PTBL_CharClasses arg, PTBL_CharClass ele
  * \param[in] arg1 second PTBL_CharClasses
  * \return PTBL_CharClasses with the elements of #arg0 before the elements of #arg1
  */
-PTBL_CharClasses PTBL_concatCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
+PTBL_CharClasses _PTBL_concatCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
   return (PTBL_CharClasses) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1629,7 +1629,7 @@ PTBL_CharClasses PTBL_concatCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses 
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_CharClasses with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_CharClasses PTBL_sliceCharClasses(PTBL_CharClasses arg, int start, int end) {
+PTBL_CharClasses _PTBL_sliceCharClasses(PTBL_CharClasses arg, int start, int end) {
   return (PTBL_CharClasses) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1639,7 +1639,7 @@ PTBL_CharClasses PTBL_sliceCharClasses(PTBL_CharClasses arg, int start, int end)
  * \param[in] index index to use to point in the PTBL_CharClasses
  * \return PTBL_CharClass at position #index in #arg
  */
-PTBL_CharClass PTBL_getCharClassesCharClassAt(PTBL_CharClasses arg, int index) {
+PTBL_CharClass _PTBL_getCharClassesCharClassAt(PTBL_CharClasses arg, int index) {
  return (PTBL_CharClass)ATelementAt((ATermList) arg,index);
 }
 
@@ -1650,7 +1650,7 @@ PTBL_CharClass PTBL_getCharClassesCharClassAt(PTBL_CharClasses arg, int index) {
  * \param[in] index index to use to point in the PTBL_CharClasses
  * \return A new PTBL_CharClasseswith #elem replaced in #arg at position #index
  */
-PTBL_CharClasses PTBL_replaceCharClassesCharClassAt(PTBL_CharClasses arg, PTBL_CharClass elem, int index) {
+PTBL_CharClasses _PTBL_replaceCharClassesCharClassAt(PTBL_CharClasses arg, PTBL_CharClass elem, int index) {
  return (PTBL_CharClasses) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1660,7 +1660,7 @@ PTBL_CharClasses PTBL_replaceCharClassesCharClassAt(PTBL_CharClasses arg, PTBL_C
  * \param[in] elem2 One PTBL_CharClass element of the new PTBL_CharClasses
  * \return A new PTBL_CharClasses consisting of 2 PTBL_CharClasss
  */
-PTBL_CharClasses PTBL_makeCharClasses2(PTBL_CharClass elem1, PTBL_CharClass elem2) {
+PTBL_CharClasses _PTBL_makeCharClasses2(PTBL_CharClass elem1, PTBL_CharClass elem2) {
   return (PTBL_CharClasses) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1671,7 +1671,7 @@ PTBL_CharClasses PTBL_makeCharClasses2(PTBL_CharClass elem1, PTBL_CharClass elem
  * \param[in] elem3 One PTBL_CharClass element of the new PTBL_CharClasses
  * \return A new PTBL_CharClasses consisting of 3 PTBL_CharClasss
  */
-PTBL_CharClasses PTBL_makeCharClasses3(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3) {
+PTBL_CharClasses _PTBL_makeCharClasses3(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3) {
   return (PTBL_CharClasses) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1683,7 +1683,7 @@ PTBL_CharClasses PTBL_makeCharClasses3(PTBL_CharClass elem1, PTBL_CharClass elem
  * \param[in] elem4 One PTBL_CharClass element of the new PTBL_CharClasses
  * \return A new PTBL_CharClasses consisting of 4 PTBL_CharClasss
  */
-PTBL_CharClasses PTBL_makeCharClasses4(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4) {
+PTBL_CharClasses _PTBL_makeCharClasses4(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4) {
   return (PTBL_CharClasses) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1696,7 +1696,7 @@ PTBL_CharClasses PTBL_makeCharClasses4(PTBL_CharClass elem1, PTBL_CharClass elem
  * \param[in] elem5 One PTBL_CharClass element of the new PTBL_CharClasses
  * \return A new PTBL_CharClasses consisting of 5 PTBL_CharClasss
  */
-PTBL_CharClasses PTBL_makeCharClasses5(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4, PTBL_CharClass elem5) {
+PTBL_CharClasses _PTBL_makeCharClasses5(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4, PTBL_CharClass elem5) {
   return (PTBL_CharClasses) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1710,7 +1710,7 @@ PTBL_CharClasses PTBL_makeCharClasses5(PTBL_CharClass elem1, PTBL_CharClass elem
  * \param[in] elem6 One PTBL_CharClass element of the new PTBL_CharClasses
  * \return A new PTBL_CharClasses consisting of 6 PTBL_CharClasss
  */
-PTBL_CharClasses PTBL_makeCharClasses6(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4, PTBL_CharClass elem5, PTBL_CharClass elem6) {
+PTBL_CharClasses _PTBL_makeCharClasses6(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4, PTBL_CharClass elem5, PTBL_CharClass elem6) {
   return (PTBL_CharClasses) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1719,7 +1719,7 @@ PTBL_CharClasses PTBL_makeCharClasses6(PTBL_CharClass elem1, PTBL_CharClass elem
  * \param[in] arg input PTBL_Priorities
  * \return The number of elements in the PTBL_Priorities
  */
-int PTBL_getPrioritiesLength (PTBL_Priorities arg) {
+int _PTBL_getPrioritiesLength(PTBL_Priorities arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1728,7 +1728,7 @@ int PTBL_getPrioritiesLength (PTBL_Priorities arg) {
  * \param[in] arg PTBL_Priorities to be reversed
  * \return a reversed #arg
  */
-PTBL_Priorities PTBL_reversePriorities(PTBL_Priorities arg) {
+PTBL_Priorities _PTBL_reversePriorities(PTBL_Priorities arg) {
   return (PTBL_Priorities) ATreverse((ATermList) arg);
 }
 
@@ -1738,7 +1738,7 @@ PTBL_Priorities PTBL_reversePriorities(PTBL_Priorities arg) {
  * \param[in] elem PTBL_Priority to be appended
  * \return new PTBL_Priorities with #elem appended
  */
-PTBL_Priorities PTBL_appendPriorities(PTBL_Priorities arg, PTBL_Priority elem) {
+PTBL_Priorities _PTBL_appendPriorities(PTBL_Priorities arg, PTBL_Priority elem) {
   return (PTBL_Priorities) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1748,7 +1748,7 @@ PTBL_Priorities PTBL_appendPriorities(PTBL_Priorities arg, PTBL_Priority elem) {
  * \param[in] arg1 second PTBL_Priorities
  * \return PTBL_Priorities with the elements of #arg0 before the elements of #arg1
  */
-PTBL_Priorities PTBL_concatPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1) {
+PTBL_Priorities _PTBL_concatPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1) {
   return (PTBL_Priorities) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1759,7 +1759,7 @@ PTBL_Priorities PTBL_concatPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1
  * \param[in] end exclusive end index of the sublist
  * \return new PTBL_Priorities with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PTBL_Priorities PTBL_slicePriorities(PTBL_Priorities arg, int start, int end) {
+PTBL_Priorities _PTBL_slicePriorities(PTBL_Priorities arg, int start, int end) {
   return (PTBL_Priorities) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1769,7 +1769,7 @@ PTBL_Priorities PTBL_slicePriorities(PTBL_Priorities arg, int start, int end) {
  * \param[in] index index to use to point in the PTBL_Priorities
  * \return PTBL_Priority at position #index in #arg
  */
-PTBL_Priority PTBL_getPrioritiesPriorityAt(PTBL_Priorities arg, int index) {
+PTBL_Priority _PTBL_getPrioritiesPriorityAt(PTBL_Priorities arg, int index) {
  return (PTBL_Priority)ATelementAt((ATermList) arg,index);
 }
 
@@ -1780,7 +1780,7 @@ PTBL_Priority PTBL_getPrioritiesPriorityAt(PTBL_Priorities arg, int index) {
  * \param[in] index index to use to point in the PTBL_Priorities
  * \return A new PTBL_Prioritieswith #elem replaced in #arg at position #index
  */
-PTBL_Priorities PTBL_replacePrioritiesPriorityAt(PTBL_Priorities arg, PTBL_Priority elem, int index) {
+PTBL_Priorities _PTBL_replacePrioritiesPriorityAt(PTBL_Priorities arg, PTBL_Priority elem, int index) {
  return (PTBL_Priorities) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1790,7 +1790,7 @@ PTBL_Priorities PTBL_replacePrioritiesPriorityAt(PTBL_Priorities arg, PTBL_Prior
  * \param[in] elem2 One PTBL_Priority element of the new PTBL_Priorities
  * \return A new PTBL_Priorities consisting of 2 PTBL_Prioritys
  */
-PTBL_Priorities PTBL_makePriorities2(PTBL_Priority elem1, PTBL_Priority elem2) {
+PTBL_Priorities _PTBL_makePriorities2(PTBL_Priority elem1, PTBL_Priority elem2) {
   return (PTBL_Priorities) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1801,7 +1801,7 @@ PTBL_Priorities PTBL_makePriorities2(PTBL_Priority elem1, PTBL_Priority elem2) {
  * \param[in] elem3 One PTBL_Priority element of the new PTBL_Priorities
  * \return A new PTBL_Priorities consisting of 3 PTBL_Prioritys
  */
-PTBL_Priorities PTBL_makePriorities3(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3) {
+PTBL_Priorities _PTBL_makePriorities3(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3) {
   return (PTBL_Priorities) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1813,7 +1813,7 @@ PTBL_Priorities PTBL_makePriorities3(PTBL_Priority elem1, PTBL_Priority elem2, P
  * \param[in] elem4 One PTBL_Priority element of the new PTBL_Priorities
  * \return A new PTBL_Priorities consisting of 4 PTBL_Prioritys
  */
-PTBL_Priorities PTBL_makePriorities4(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4) {
+PTBL_Priorities _PTBL_makePriorities4(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4) {
   return (PTBL_Priorities) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1826,7 +1826,7 @@ PTBL_Priorities PTBL_makePriorities4(PTBL_Priority elem1, PTBL_Priority elem2, P
  * \param[in] elem5 One PTBL_Priority element of the new PTBL_Priorities
  * \return A new PTBL_Priorities consisting of 5 PTBL_Prioritys
  */
-PTBL_Priorities PTBL_makePriorities5(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4, PTBL_Priority elem5) {
+PTBL_Priorities _PTBL_makePriorities5(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4, PTBL_Priority elem5) {
   return (PTBL_Priorities) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1840,7 +1840,7 @@ PTBL_Priorities PTBL_makePriorities5(PTBL_Priority elem1, PTBL_Priority elem2, P
  * \param[in] elem6 One PTBL_Priority element of the new PTBL_Priorities
  * \return A new PTBL_Priorities consisting of 6 PTBL_Prioritys
  */
-PTBL_Priorities PTBL_makePriorities6(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4, PTBL_Priority elem5, PTBL_Priority elem6) {
+PTBL_Priorities _PTBL_makePriorities6(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4, PTBL_Priority elem5, PTBL_Priority elem6) {
   return (PTBL_Priorities) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -2214,7 +2214,7 @@ PTBL_Priority PTBL_makePriorityArgGreater(int label1, int argumentNumber, int la
  * \param[in] arg1 second PTBL_Production to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualProduction(PTBL_Production arg0, PTBL_Production arg1) {
+ATbool _PTBL_isEqualProduction(PTBL_Production arg0, PTBL_Production arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2224,7 +2224,7 @@ ATbool PTBL_isEqualProduction(PTBL_Production arg0, PTBL_Production arg1) {
  * \param[in] arg1 second PTBL_CharClass to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualCharClass(PTBL_CharClass arg0, PTBL_CharClass arg1) {
+ATbool _PTBL_isEqualCharClass(PTBL_CharClass arg0, PTBL_CharClass arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2234,7 +2234,7 @@ ATbool PTBL_isEqualCharClass(PTBL_CharClass arg0, PTBL_CharClass arg1) {
  * \param[in] arg1 second PTBL_CharRanges to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualCharRanges(PTBL_CharRanges arg0, PTBL_CharRanges arg1) {
+ATbool _PTBL_isEqualCharRanges(PTBL_CharRanges arg0, PTBL_CharRanges arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2244,7 +2244,7 @@ ATbool PTBL_isEqualCharRanges(PTBL_CharRanges arg0, PTBL_CharRanges arg1) {
  * \param[in] arg1 second PTBL_Version to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualVersion(PTBL_Version arg0, PTBL_Version arg1) {
+ATbool _PTBL_isEqualVersion(PTBL_Version arg0, PTBL_Version arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2254,7 +2254,7 @@ ATbool PTBL_isEqualVersion(PTBL_Version arg0, PTBL_Version arg1) {
  * \param[in] arg1 second PTBL_ParseTable to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualParseTable(PTBL_ParseTable arg0, PTBL_ParseTable arg1) {
+ATbool _PTBL_isEqualParseTable(PTBL_ParseTable arg0, PTBL_ParseTable arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2264,7 +2264,7 @@ ATbool PTBL_isEqualParseTable(PTBL_ParseTable arg0, PTBL_ParseTable arg1) {
  * \param[in] arg1 second PTBL_Labels to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualLabels(PTBL_Labels arg0, PTBL_Labels arg1) {
+ATbool _PTBL_isEqualLabels(PTBL_Labels arg0, PTBL_Labels arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2274,7 +2274,7 @@ ATbool PTBL_isEqualLabels(PTBL_Labels arg0, PTBL_Labels arg1) {
  * \param[in] arg1 second PTBL_Label to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualLabel(PTBL_Label arg0, PTBL_Label arg1) {
+ATbool _PTBL_isEqualLabel(PTBL_Label arg0, PTBL_Label arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2284,7 +2284,7 @@ ATbool PTBL_isEqualLabel(PTBL_Label arg0, PTBL_Label arg1) {
  * \param[in] arg1 second PTBL_States to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualStates(PTBL_States arg0, PTBL_States arg1) {
+ATbool _PTBL_isEqualStates(PTBL_States arg0, PTBL_States arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2294,7 +2294,7 @@ ATbool PTBL_isEqualStates(PTBL_States arg0, PTBL_States arg1) {
  * \param[in] arg1 second PTBL_State to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualState(PTBL_State arg0, PTBL_State arg1) {
+ATbool _PTBL_isEqualState(PTBL_State arg0, PTBL_State arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2304,7 +2304,7 @@ ATbool PTBL_isEqualState(PTBL_State arg0, PTBL_State arg1) {
  * \param[in] arg1 second PTBL_Gotos to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualGotos(PTBL_Gotos arg0, PTBL_Gotos arg1) {
+ATbool _PTBL_isEqualGotos(PTBL_Gotos arg0, PTBL_Gotos arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2314,7 +2314,7 @@ ATbool PTBL_isEqualGotos(PTBL_Gotos arg0, PTBL_Gotos arg1) {
  * \param[in] arg1 second PTBL_Goto to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualGoto(PTBL_Goto arg0, PTBL_Goto arg1) {
+ATbool _PTBL_isEqualGoto(PTBL_Goto arg0, PTBL_Goto arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2324,7 +2324,7 @@ ATbool PTBL_isEqualGoto(PTBL_Goto arg0, PTBL_Goto arg1) {
  * \param[in] arg1 second PTBL_Choices to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
+ATbool _PTBL_isEqualChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2334,7 +2334,7 @@ ATbool PTBL_isEqualChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
  * \param[in] arg1 second PTBL_Choice to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualChoice(PTBL_Choice arg0, PTBL_Choice arg1) {
+ATbool _PTBL_isEqualChoice(PTBL_Choice arg0, PTBL_Choice arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2344,7 +2344,7 @@ ATbool PTBL_isEqualChoice(PTBL_Choice arg0, PTBL_Choice arg1) {
  * \param[in] arg1 second PTBL_Actions to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualActions(PTBL_Actions arg0, PTBL_Actions arg1) {
+ATbool _PTBL_isEqualActions(PTBL_Actions arg0, PTBL_Actions arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2354,7 +2354,7 @@ ATbool PTBL_isEqualActions(PTBL_Actions arg0, PTBL_Actions arg1) {
  * \param[in] arg1 second PTBL_Action to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualAction(PTBL_Action arg0, PTBL_Action arg1) {
+ATbool _PTBL_isEqualAction(PTBL_Action arg0, PTBL_Action arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2364,7 +2364,7 @@ ATbool PTBL_isEqualAction(PTBL_Action arg0, PTBL_Action arg1) {
  * \param[in] arg1 second PTBL_SpecialAttr to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualSpecialAttr(PTBL_SpecialAttr arg0, PTBL_SpecialAttr arg1) {
+ATbool _PTBL_isEqualSpecialAttr(PTBL_SpecialAttr arg0, PTBL_SpecialAttr arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2374,7 +2374,7 @@ ATbool PTBL_isEqualSpecialAttr(PTBL_SpecialAttr arg0, PTBL_SpecialAttr arg1) {
  * \param[in] arg1 second PTBL_Restrictions to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) {
+ATbool _PTBL_isEqualRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2384,7 +2384,7 @@ ATbool PTBL_isEqualRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) 
  * \param[in] arg1 second PTBL_Restriction to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualRestriction(PTBL_Restriction arg0, PTBL_Restriction arg1) {
+ATbool _PTBL_isEqualRestriction(PTBL_Restriction arg0, PTBL_Restriction arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2394,7 +2394,7 @@ ATbool PTBL_isEqualRestriction(PTBL_Restriction arg0, PTBL_Restriction arg1) {
  * \param[in] arg1 second PTBL_CharClasses to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
+ATbool _PTBL_isEqualCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2404,7 +2404,7 @@ ATbool PTBL_isEqualCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
  * \param[in] arg1 second PTBL_Priorities to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1) {
+ATbool _PTBL_isEqualPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2414,7 +2414,7 @@ ATbool PTBL_isEqualPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1) {
  * \param[in] arg1 second PTBL_Priority to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PTBL_isEqualPriority(PTBL_Priority arg0, PTBL_Priority arg1) {
+ATbool _PTBL_isEqualPriority(PTBL_Priority arg0, PTBL_Priority arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
