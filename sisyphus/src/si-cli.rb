@@ -223,6 +223,9 @@ if __FILE__ == $0 then
   if options.config_url =~ /^svn:\/\/([^\/]*)\/(.*)$/ then
     svn_host = $1
     svn_url = $2
+  else
+    svn_host = nil
+    svn_url = options.config_url
   end
 
   config_manager = Building::ConfigurationManager.new(svn_host, 

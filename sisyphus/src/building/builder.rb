@@ -110,7 +110,7 @@ module Building
         target.fire
       else
         @log.info("dependencies in this session have failed, trying older ones...")
-        older_item = Model::SiItem.find(:first, :conditions => ['id < ? and success = true and si_revision_id = ? and si_host_id = ?',
+        older_item = Model::SiItem.find(:first, :conditions => ["id < ? and success = 'true' and si_revision_id = ? and si_host_id = ?",
                                                                 item.id, item.si_revision.id, item.si_host.id],
                                         :order => 'id desc')
         if older_item then

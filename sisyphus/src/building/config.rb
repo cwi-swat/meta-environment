@@ -76,6 +76,10 @@ module Building
     end
     
     def svn_url
+      if @svn_host.nil? then
+        # File url.
+        return @svn_url
+      end
       url = "svn://"
       if tunnel_needed? then
         url += 'localhost'

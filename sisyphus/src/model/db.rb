@@ -280,7 +280,7 @@ module Model
       #   r.informative_version = ? (version)
 
 
-      rs = SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_items.released = true and si_items.si_revision_id = si_revisions.id and si_revisions.si_component_id = #{c.id} and si_revisions.informative_version = '#{version}'")
+      rs = SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_items.released = 'true' and si_items.si_revision_id = si_revisions.id and si_revisions.si_component_id = #{c.id} and si_revisions.informative_version = '#{version}'")
       
       #SiRelease.find(:all, :conditions => 
       #                    ['si_component_id = ? and version = ?', c.id, version])
