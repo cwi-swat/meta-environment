@@ -8,8 +8,10 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>Documentation Plan for The Meta-Environment</title>
-<pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
-    (Wed, 13 Dec 2006)$</pubdate>
+
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
+
     <authorgroup>
       <author>
         <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
@@ -987,7 +989,7 @@
     <itemizedlist>
       <listitem>
         <para>The <application>xxe</application> editor by XMLMind (<link
-        xlink:href="http://xmlmind.com.xmleditor">www.xmlmind.com/xmleditor</link>).
+        xlink:href="http://xmlmind.com/xmleditor">www.xmlmind.com/xmleditor</link>).
         The standard edition of <application>xxe</application> is freely
         available.</para>
       </listitem>
@@ -1018,7 +1020,8 @@
     <application>xxe</application> for wysiwyg editing and
     <application>emacs</application> for editing of the XML source. Note that
     the DocBook V5.0 addon has to be installed explicitly after installation
-    of xxe itself.</para>
+    of xxe itself (Start xxe, go to the Options-&gt;Install add-ons menu and
+    select DocBook 5 + XInclude configuration). </para>
   </section>
 
   <section>
