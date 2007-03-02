@@ -1,22 +1,20 @@
-/* $Id: editor-plugin.idef.src 21408 2007-02-20 08:29:01Z kooiker $ */
+/* $Id: $ */
 
-tool console is { }
+tool default-studio-plugin is { }
 
-process Console is
+process DefaultStudioPlugin is
 let
-  T : console,
-  Message: str
+  T : default-studio-plugin
 in
   rec-connect(T?)
   .
   (
-    rec-msg(cg-add-message(Message?))
-    . snd-do(T, add-message(Message))
+    <interface>
   )
   * delta
 endlet
 
-process StartConsole is
+process StartDefaultStudioPlugin is
   snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
 
-toolbus(Console)
+toolbus(DefaultStudioPlugin)
