@@ -1,0 +1,22 @@
+/* $Id: editor-plugin.idef.src 21408 2007-02-20 08:29:01Z kooiker $ */
+
+tool console is { }
+
+process Console is
+let
+  T : console,
+  Message: str
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(cg-add-message(Message?))
+    . snd-do(T, add-message(Message))
+  )
+  * delta
+endlet
+
+process StartConsole is
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+
+toolbus(Console)
