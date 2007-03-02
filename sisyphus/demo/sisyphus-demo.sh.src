@@ -4,7 +4,7 @@ PREFIX=__PREFIX__
 DATADIR=__DATA_DIR__
 BINDIR=__BIN_DIR__
 SICLI=$BINDIR/si-cli
-CONFIG_SVN=file://$DATADIR/demo/config-repo
+CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
 DB_CONFIG=$DATADIR/demo/dbconfig.yml
 
 $SICLI \

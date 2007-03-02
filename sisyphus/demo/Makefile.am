@@ -29,12 +29,10 @@ $(DEMO_DB) :
 	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 $@
 
 backup:
-	mv $(CONFIG_REPO_TAR) $(CONFIG_REPO_TAR)- ; \
-	tar zcvf \
-			$(CONFIG_REPO_TAR) \
-			$(pkgdatadir)/demo/$(CONFIG_REPO); \
-	rm $(CONFIG_REPO_TAR)-
-
+	cd $(demodir) ; \
+	tar zcvf $(CONFIG_REPO_TAR) $(CONFIG_REPO); \
+	cd - ; \
+	cp $(demodir)/$(CONFIG_REPO_TAR) . 
 
 % : %.sh.src 
 	sed "s@__PREFIX__@$(prefix)@g;\
