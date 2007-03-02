@@ -1,7 +1,7 @@
 
 include $(top_srcdir)/www/make_rules
 
-SUBDIRS 	= app db lib public test app config doc log script vendor
+SUBDIRS 	= app components db lib public test config doc log script vendor
 
 bin_SCRIPTS	= sisyphus-www
 

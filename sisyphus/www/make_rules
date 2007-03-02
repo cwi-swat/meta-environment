@@ -1,10 +1,10 @@
 
-WWWROOT=${top_srcdir}/www
+WWWROOT		= ${top_srcdir}/www
 
 # What gets installed, distributed, cleaned
-EXTRA_DIST = $(wildcard *.rb) $(wildcard *.rhtml)
+EXTRA_DIST 	= $(wildcard *.rb) $(wildcard *.rhtml)
 
 # Determine installation directory
-wwwdir=${pkgdatadir}/www$(subst ./www,,$(subdir))
+wwwdir		= ${pkgdatadir}/www$(subst ./www,,$(subdir))
 
-www_DATA= $(EXTRA_DIST)
+www_DATA 	= $(EXTRA_DIST)
