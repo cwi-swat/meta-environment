@@ -84,7 +84,7 @@ module Sisyphus
       @store.db_host(@host)  
     end
 
-    def ensure_log(time)
+    def deprecated_ensure_log(time)
       if @quiet then
         hostname = `hostname`.chomp
         timestr = time.strftime("%Y%m%dT%H%M")
@@ -105,12 +105,13 @@ module Sisyphus
     end
 
     def start_iteration(time)
-      #if @quiet then
-      #  hostname = `hostname`.chomp
-      #  timestr = time.strftime("%Y%m%dT%H%M")
-      #  @log_device = File.join(Dir.tmpdir, "sisyphus_log_on_#{hostname}_#{timestr}")
-      #  $stderr << "Logging to #{@log_device}\n"
-      #end
+      if @quiet then
+        #  hostname = `hostname`.chomp
+        #  timestr = time.strftime("%Y%m%dT%H%M")
+        #  @log_device = File.join(Dir.tmpdir, "sisyphus_log_on_#{hostname}_#{timestr}")
+        #  $stderr << "Logging to #{@log_device}\n"
+        @log_device = File.open('/dev/null', 'w')
+      end
 
       @store.connect
 
