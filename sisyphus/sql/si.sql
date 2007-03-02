@@ -110,8 +110,8 @@ drop table si_results cascade;
 create table si_results (
 	id serial primary key,
 	si_item_id integer references si_items,
-	command text
-	environment text,,
+	command text,
+	environment text,
 	output text,
 	error_output text,
 	success boolean,
