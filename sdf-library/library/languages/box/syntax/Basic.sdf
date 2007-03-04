@@ -15,7 +15,7 @@ exports
     SpaceSymbol "=" NatCon  -> SpaceOption     
 
 exports
-  sorts Box
+  sorts Box BoxOperator
 
   context-free syntax
     StrCon                                       -> Box {cons("string")}

@@ -4,7 +4,7 @@ imports languages/box/syntax/Basic
 
 exports
 
-sorts GroupOption
+sorts GroupOption 
 
 context-free syntax
 "gs" "=" NatCon      -> GroupOption {cons("size")}
