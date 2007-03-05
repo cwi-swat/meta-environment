@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: asfsdf-meta
-Version: 2.0RC2
+Version: 2.0.1RC2
 Description:
-Requires: aterm,asf,meta,sdf-meta,toolbus,config-manager,sdf-pretty,console-grabber
+Requires: aterm,asf,meta,sdf-meta,toolbus,config-manager,sdf-pretty,console-grabber,jruby-plugin
 ToolBusFlags=${prefix}/share/asfsdf-meta
