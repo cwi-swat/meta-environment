@@ -1,8 +1,5 @@
 $Id$
 
-Mon Mar  5 16:07:20 CET 2007 <kooiker@cwi.nl>
- * library/containers/*: added Sets and Relations
-
 Thu Mar  1 18:26:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * library/languages/asf/compiler/**: fixed some bugs in the compiler. It
    still did not generate enough character range checks. And, after 
