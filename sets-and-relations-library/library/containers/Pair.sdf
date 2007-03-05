@@ -1,0 +1,26 @@
+module basic/Pair[X Y]
+
+imports basic/PairCon[X Y]
+        basic/Equality[Pair[[X,Y]]]
+        basic/Equality[X]
+        basic/Equality[Y]
+
+hiddens
+context-free start-symbols
+  Pair[[X,Y]]
+
+exports
+sorts Pair
+
+context-free syntax
+  PairCon[[X,Y]]      -> Pair[[X,Y]]  
+  first(Pair[[X,Y]])  -> X            
+  second(Pair[[X,Y]]) -> Y            
+
+hiddens
+imports basic/Whitespace
+
+variables
+  "p" [0-9\']* -> Pair[[X,Y]]  
+  "x" [0-9\']* -> X            
+  "y" [0-9\']* -> Y            

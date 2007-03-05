@@ -1,0 +1,28 @@
+module containers/InvertedRelations[X Y]
+
+imports containers/Relations[X Y]
+        containers/Relations[Y X]
+
+hiddens
+context-free start-symbols
+  Relation[[Y,X]] Set[[X]]
+
+exports
+context-free syntax
+  inverse(Relation[[X,Y]])              -> Relation[[Y,X]]  
+  left-image(Relation[[X,Y]], Set[[Y]]) -> Set[[X]]         
+
+hiddens
+imports basic/Whitespace
+
+lexical syntax
+  [0-9]            -> X  
+  "true" | "false" -> Y  
+
+variables
+  "x" [0-9\']*     -> X                   
+  "y" [0-9\']*     -> Y                   
+  "xy*" [0-9\']*   -> {Pair[[X,Y]] ","}*  
+  "yx*" [0-9\']*   -> {Pair[[Y,X]] ","}*  
+  "yset" [0-9\']*  -> Set[[Y]]            
+  "xyrel" [0-9\']* -> Relation[[X,Y]]     

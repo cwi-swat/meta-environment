@@ -1,0 +1,32 @@
+module containers/ComposedRelations[X Y Z]
+
+imports containers/Relations[X Y]
+        containers/Relations[Y Z]
+        containers/Relations[X Z]
+
+hiddens
+context-free start-symbols
+  Relation[[X,Z]]
+
+exports
+context-free syntax
+  compose(Relation[[X,Y]], Relation[[Y,Z]]) -> Relation[[X,Z]]  
+
+hiddens
+imports basic/Whitespace
+
+lexical syntax
+  [0-9] -> X  
+  [0-9] -> Y  
+  [0-9] -> Z  
+
+variables
+  "x" [0-9\']*     -> X                   
+  "xy*" [0-9\']*   -> {Pair[[X,Y]] ","}*  
+  "xyrel" [0-9\']* -> Relation[[X,Y]]     
+  "y" [0-9\']*     -> Y                   
+  "yz*" [0-9\']*   -> {Pair[[Y,Z]] ","}*  
+  "yzrel" [0-9\']* -> Relation[[Y,Z]]     
+  "z" [0-9\']*     -> Z                   
+  "xz*" [0-9\']*   -> {Pair[[X,Z]] ","}*  
+  "xzrel" [0-9\']* -> Relation[[X,Z]]     

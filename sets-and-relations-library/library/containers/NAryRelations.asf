@@ -1,0 +1,18 @@
+equations
+
+[n-ary-tuple-normalization-1]
+	nary-as-binary(<elem1, elem2, elem3>) = <elem1, <elem2, elem3>>
+
+[n-ary-tuple-normalization-2]
+	<elem, elem'> := nary-as-binary(<elem2, elem3, elem+>)
+	===
+	nary-as-binary(<elem1, elem2, elem3, elem+>) = <elem1, <elem, elem'>>
+
+tests
+
+[normalize-triple]
+	nary-as-binary(<1, 2, 3>) == <1, <2, 3>>
+
+[normalize-quadruple]
+	nary-as-binary(<1, 2, 3, 4>) == <1, <2, <3, 4>>>
+

@@ -1,0 +1,56 @@
+module containers/Relations[X Y]
+
+imports 
+	basic/Pair[X Y]
+	containers/Sets[Pair[[X,Y]]] 
+	containers/Sets[X]
+	containers/Sets[Y] 
+
+hiddens
+  context-free start-symbols Relation[[X,Y]]
+
+exports
+  sorts Relation
+
+  aliases
+	Set[[Pair[[X,Y]]]] -> Relation[[X,Y]]
+
+  context-free syntax
+	product(Set[[X]], Set[[Y]]) -> Relation[[X,Y]]
+
+  context-free syntax
+	domain(Relation[[X,Y]]) -> Set[[X]]
+	range(Relation[[X,Y]]) -> Set[[Y]]
+
+  context-free syntax
+	image(Relation[[X,Y]], Set[[X]]) -> Set[[Y]]
+
+  context-free syntax
+	domain-restriction(Relation[[X,Y]], Set[[X]]) -> Relation[[X,Y]]
+	range-restriction(Relation[[X,Y]], Set[[Y]]) -> Relation[[X,Y]]
+
+  context-free syntax
+	domain-exclusion(Relation[[X,Y]], Set[[X]]) -> Relation[[X,Y]]
+	range-exclusion(Relation[[X,Y]], Set[[Y]]) -> Relation[[X,Y]]
+
+hiddens
+  imports basic/Whitespace
+
+  lexical syntax
+	[0-9] -> X
+	[0-9] -> Y
+
+  variables
+	"x"[0-9\']* -> X
+	"y"[0-9\']* -> Y
+	"x*"[0-9\']* -> {X ","}*
+	"y*"[0-9\']* -> {Y ","}*
+	"x+"[0-9\']* -> {X ","}+
+	"y+"[0-9\']* -> {Y ","}+
+	"xy"[0-9\']* -> Pair[[X, Y]]
+	"xy*"[0-9\']* -> {Pair[[X, Y]] ","}*
+	"rel"[0-9\']* -> Relation[[X, Y]]
+	"xset"[0-9\']* -> Set[[X]]
+	"yset"[0-9\']* -> Set[[Y]]
+
+

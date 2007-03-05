@@ -1,0 +1,30 @@
+module containers/PowerSets[X]
+
+imports containers/Sets[X]
+        containers/Sets[Set[[X]]]
+
+hiddens
+context-free start-symbols
+  Set[[Set[[X]]]]
+
+exports
+context-free syntax
+  power(Set[[X]])                           -> Set[[Set[[X]]]]  
+  generalized-union(Set[[Set[[X]]]])        -> Set[[X]]         
+  generalized-intersection(Set[[Set[[X]]]]) -> Set[[X]]         
+
+hiddens
+imports basic/Whitespace
+
+lexical syntax
+  [0-9] -> X  
+
+context-free syntax
+  add-to-each(X, Set[[Set[[X]]]]) -> Set[[Set[[X]]]]  
+
+variables
+  "x" [0-9\']*       -> X                
+  "x*" [0-9\']*      -> {X ","}*         
+  "xset" [0-9\']*    -> Set[[X]]         
+  "xset*" [0-9\']*   -> {Set[[X]] ","}*  
+  "xsetset" [0-9\']* -> Set[[Set[[X]]]]  
