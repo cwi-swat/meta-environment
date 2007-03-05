@@ -1,8 +1,0 @@
-equations
-
-[term-equal-1]
-	term-equal(x, x) = true
-
-[default-term-equal-2]
-	term-equal(x, x') = false
-
