@@ -1,4 +1,5 @@
 require 'bundle'
+require 'graphviz'
 
 class SiItemsController < ApplicationController
   layout 'application'
@@ -345,11 +346,10 @@ EOQ
   
   def create_graph(fname, lang, reduce = false)
     text = ''
-    path = '/ufs/sen1/software/installed/graphviz-1.12/linux/i386/bin'
     if reduce then
-      text = `#{path}/tred #{fname} | #{path}/dot -T#{lang}`
+      text = `#{GraphViz::PATH}/tred #{fname} | #{GraphViz::PATH}/dot -T#{lang}`
     else
-      text = `#{path}/dot -T#{lang} #{fname}`
+      text = `#{GraphViz::PATH}/dot -T#{lang} #{fname}`
     end
     return text
   end
