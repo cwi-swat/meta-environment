@@ -1,4 +1,4 @@
-module basic/PairCon[X Y]
+module containers/PairCon[X Y]
 
 exports
 sorts PairCon

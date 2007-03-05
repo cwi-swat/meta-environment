@@ -1,9 +1,9 @@
-module basic/Pair[X Y]
+module containers/Pairs[X Y]
 
-imports basic/PairCon[X Y]
-        basic/Equality[Pair[[X,Y]]]
-        basic/Equality[X]
-        basic/Equality[Y]
+imports containers/PairCon[X Y]
+        containers/Equality[Pair[[X,Y]]]
+        containers/Equality[X]
+        containers/Equality[Y]
 
 hiddens
 context-free start-symbols

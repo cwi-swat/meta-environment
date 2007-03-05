@@ -1,8 +1,8 @@
 module containers/Sets[X]
 
-imports basic/SetCon[X]
-        basic/Equality[X]
-        basic/Equality[Set[[X]]]
+imports containers/SetCon[X]
+        containers/Equality[X]
+        containers/Equality[Set[[X]]]
         basic/Integers
         basic/Booleans
 

@@ -1,4 +1,4 @@
-module basic/SetCon[X]
+module containers/SetCon[X]
 
 hiddens
 context-free start-symbols

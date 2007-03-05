@@ -1,4 +1,4 @@
-module basic/Term-Equality[X]
+module containers/Term-Equality[X]
 
 imports basic/Booleans
 

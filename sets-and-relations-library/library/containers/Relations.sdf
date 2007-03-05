@@ -1,7 +1,7 @@
 module containers/Relations[X Y]
 
 imports 
-	basic/Pair[X Y]
+	containers/Pairs[X Y]
 	containers/Sets[Pair[[X,Y]]] 
 	containers/Sets[X]
 	containers/Sets[Y] 

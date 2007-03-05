@@ -1,6 +1,6 @@
-module basic/Equality[X]
+module containers/Equality[X]
 
-imports basic/Term-Equality[X]
+imports containers/Term-Equality[X]
         basic/Booleans
 
 exports
