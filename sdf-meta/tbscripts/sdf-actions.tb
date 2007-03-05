@@ -170,17 +170,21 @@ let
   Recursive  : bool
 in
   AskQuestion("Do you want to recursively close the imported modules?", Answer?)
-  . if equal(Answer, cancel) then
-      tau
+  . 
+  if equal(Answer, cancel) then
+    tau
+  else
+    if equal(Answer, yes) then
+      Recursive := true
     else
-      if equal(Answer, yes) then
-        Recursive := true
-      else
-        Recursive := false
-      fi 
-      . CloseModule(ModuleId, Recursive)
-    fi
+      Recursive := false
+    fi 
+    . CloseModule(ModuleId, Recursive)
+  fi
 endlet
+
+process CloseOtherModulesAction(ModuleId : term) is
+  CloseOtherModules(ModuleId) 
 
 #ifdef DEAD
 process RenameModuleAction(Modulename : str) is

@@ -159,6 +159,19 @@ process GetImportedModulenames(Tree: term, Imports: list?) is
   snd-msg(sm-get-imported-module-names(Tree))
   . rec-msg(sm-imported-module-names(Imports?)) 
 
+process CloseOtherModules(ModuleId: term) is
+let
+  Dependencies: list,
+  CloseModules: list,
+  NewTerm: term
+in
+  MM-GetAllModuleDependencies(ModuleId, Dependencies?)
+  . Dependencies := join(Dependencies, [ModuleId])
+  . MM-GetAllModules(CloseModules?)
+  . CloseModules := diff(CloseModules, Dependencies)
+  . CloseModules(CloseModules)
+endlet
+
 process CloseModule(ModuleId: term, Recursive: bool) is
 let
   Dependencies: list,

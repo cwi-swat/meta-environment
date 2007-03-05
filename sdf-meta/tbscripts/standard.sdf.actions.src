@@ -51,6 +51,8 @@ configuration([
 
   action([description(module-popup, menu([label("Close...")],"Close this module"))],
          "CloseModuleAction"),
+  action([description(module-popup, menu([label("Close others")],"Close all other modules"))],
+         "CloseOtherModulesAction"),
   action([description(module-popup, menu([label("Edit"), label("Syntax")],"Open an editor for the syntax definition of this module"))],
          "EditSyntaxAction"),
   action([description(module-popup, menu([label("Edit"), label("Term...")],"Open an editor for a term over this module"))],
