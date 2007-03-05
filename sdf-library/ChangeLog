@@ -1,8 +1,5 @@
 $Id$
 
-Mon Mar  5 16:05:40 CET 2007 <kooiker@cwi.nl>
- * library/basic/{Pair,Set}Con.sdf: added
-
 Fri Feb  2 11:40:48 CET 2007 <jurgenv@cwi.nl>
  * languages/c: renamed to ansi-c to prevent confusion. The idea is to
    include a iso-c-99 grammar in the near future.
