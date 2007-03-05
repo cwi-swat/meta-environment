@@ -2,7 +2,8 @@
 WWWROOT		= ${top_srcdir}/www
 
 # What gets installed, distributed, cleaned
-EXTRA_DIST 	= $(wildcard *.rb) $(wildcard *.rhtml)
+EXTRA_DIST 	= $(wildcard *.rb) $(wildcard *.rhtml) $(wildcard *.html) $(wildcard *.css) \
+			 $(wildcard *.png) $(wildcard *.jpg) $(wildcard *.js) $(wildcard *.ico)
 
 # Determine installation directory
 wwwdir		= ${pkgdatadir}/www$(subst ./www,,$(subdir))

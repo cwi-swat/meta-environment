@@ -4,9 +4,10 @@ SUBDIRS = tasks
 
 EXTRA_DIST += $(wildcard *.rb.src)
 
-CLEANFILES = graphviz.rb
+CLEANFILES = graphviz.rb subversion.rb
 
-www_DATA += graphviz.rb
+www_DATA += graphviz.rb subversion.rb
 
 %.rb : %.rb.src Makefile
-	sed "s@__GRAPHVIZ__@$(GRAPHVIZ_PREFIX)@g" < $< > $@
+	sed "s@__GRAPHVIZ__@$(GRAPHVIZ_PREFIX)@g;\
+		s@__SUBVERSION__@$(SUBVERSION_PREFIX)@g" < $< > $@

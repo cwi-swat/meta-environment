@@ -1,5 +1,5 @@
 
-require 'settings'
+require 'subversion'
 
 class SiProfilesController < ApplicationController
   layout 'application'
@@ -28,9 +28,9 @@ class SiProfilesController < ApplicationController
   private
 
   def checkout_profile(name, version)
-    command = $svn_executable
-    command += " --username #{$sisyphus_config_username}"
-    command += " --password #{$sisyphus_config_password}"
+    command = Subversion::SVN
+    #command += " --username #{$sisyphus_config_username}"
+    #command += " --password #{$sisyphus_config_password}"
     command += " --revision #{version}"
     command += " cat #{repository_profile_path(name)}"
     IO.popen(command) do |f|     
@@ -43,7 +43,7 @@ class SiProfilesController < ApplicationController
   end
 
   def repository_path
-    return File.join($sisyphus_config_root, 'profiles')
+    return File.join(Sisyphus::CONFIGURATION_REPOSITORY, 'profiles')
   end
 
   def repository_profile_path(name)

@@ -1,5 +1,5 @@
 
-require 'settings'
+require 'subversion'
 
 class SourcesController < ApplicationController
   # seems to be needed?
@@ -24,9 +24,9 @@ class SourcesController < ApplicationController
 
 
   def checkout_sources(version)
-    command = $svn_executable
-    command += " --username #{$sisyphus_config_username}"
-    command += " --password #{$sisyphus_config_password}"
+    command = Subversion::SVN
+    #command += " --username #{$sisyphus_config_username}"
+    #command += " --password #{$sisyphus_config_password}"
     command += " --revision #{version}"
     command += " cat #{repository_sources_path}"
     IO.popen(command) do |f|     
@@ -35,7 +35,7 @@ class SourcesController < ApplicationController
   end
 
   def repository_path
-    return File.join($sisyphus_config_root, 'config')
+    return File.join(Sisyphus::CONFIGURATION_REPOSITORY, 'config')
   end
 
   def repository_sources_path
@@ -43,7 +43,8 @@ class SourcesController < ApplicationController
   end
 
   def obtain_version
-    info = `svn info #{repository_sources_path}`
+    svn = Subversion::SVN
+    info = `#{svn} info #{repository_sources_path}`
     info.split("\n").each do |line|
       if line =~ /Last Changed Rev: ([0-9]+)/ then
         return $1.to_i
