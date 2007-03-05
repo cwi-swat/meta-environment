@@ -1,0 +1,15 @@
+equations
+
+[equality-top]
+	equal(<x, y>, <x', y'>) = equal(x, x') & equal(y, y')
+
+equations
+
+[first-top]
+	first(<x, y>) = x
+
+equations
+
+[second-top]
+	second(<x, y>) = y
+

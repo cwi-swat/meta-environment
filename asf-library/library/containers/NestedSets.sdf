@@ -1,0 +1,13 @@
+module containers/NestedSets[Elem]
+
+imports containers/PowerSets[Elem] [
+                                     Set[[Elem]] => Elem
+                                     Set[[Set[[Elem]]]] => Elem
+                                     Set[[X]] => Elem
+                                     Set[[Elem]] => Elem
+                                     Set[[Set[[X]]]] => Elem
+                                   ]
+
+hiddens
+context-free start-symbols
+  Elem

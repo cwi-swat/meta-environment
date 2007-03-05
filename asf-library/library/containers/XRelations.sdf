@@ -1,0 +1,49 @@
+module containers/XRelations[X]
+
+imports containers/InvertedRelations[X X]
+        containers/ComposedRelations[X X X]
+
+exports
+aliases
+  Relation[[X,X]] -> Graph[[X]]
+
+context-free syntax
+  identity(Set[[X]])          -> Relation[[X,X]]  
+  total(Set[[X]])             -> Relation[[X,X]]  
+  complement(Relation[[X,X]]) -> Relation[[X,X]]  
+
+context-free syntax
+  reflexive-closure(Relation[[X,X]])            -> Relation[[X,X]]  
+  symmetric-closure(Relation[[X,X]])            -> Relation[[X,X]]  
+  transitive-closure(Relation[[X,X]])           -> Relation[[X,X]]  
+  transitive-reflexive-closure(Relation[[X,X]]) -> Relation[[X,X]]  
+
+context-free syntax
+  carrier(Relation[[X,X]]) -> Set[[X]]  
+  top(Relation[[X,X]])     -> Set[[X]]  
+  bottom(Relation[[X,X]])  -> Set[[X]]  
+
+context-free syntax
+  carrier-restriction(Relation[[X,X]], Set[[X]]) -> Relation[[X,X]]  
+  carrier-exclusion(Relation[[X,X]], Set[[X]])   -> Relation[[X,X]]  
+
+context-free syntax
+  reach-restriction(rel:Relation[[X,X]], start:Set[[X]], restrict:Set[[X]]) -> Set[[X]]  
+  reach-exclusion(rel:Relation[[X,X]], start:Set[[X]], exclude:Set[[X]])    -> Set[[X]]  
+
+hiddens
+imports basic/Whitespace
+
+lexical syntax
+  [0-9] -> X  
+
+context-free syntax
+  least-fixpoint-union-compose(relation:Relation[[X,X]], fixed:Relation[[X,X]]) -> Relation[[X,X]]        
+  union-compose(relation:Relation[[X,X]], fixed:Relation[[X,X]])                -> Relation[[X,X]] {memo} 
+
+variables
+  "x" [0-9\']*    -> X                   
+  "x*" [0-9\']*   -> {X ","}*            
+  "xx*" [0-9\']*  -> {Pair[[X,X]] ","}*  
+  "xset" [0-9\']* -> Set[[X]]            
+  "xrel" [0-9\']* -> Relation[[X,X]]     
