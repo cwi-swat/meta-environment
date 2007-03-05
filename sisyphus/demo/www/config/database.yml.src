@@ -1,0 +1,5 @@
+development: 
+  adapter: sqlite3
+  dbfile: __DATABASE__
+production:
+  development

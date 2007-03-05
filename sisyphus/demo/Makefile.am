@@ -7,11 +7,9 @@ CONFIG_REPO	= config-repo
 
 CONFIG_REPO_TAR	= $(CONFIG_REPO).tar.gz
 
-DEMO_DB		= sisyphus-demo.db
-
 DEMO_CONFIG	= dbconfig.yml
 
-demo_DATA 	= $(DEMO_CONFIG) $(DEMO_DB)
+demo_DATA 	= $(DEMO_CONFIG)
 
 demodir		= $(pkgdatadir)/demo
 
@@ -20,16 +18,10 @@ EXTRA_DIST	= \
 		$(wildcard *.yml.src) \
 		$(CONFIG_REPO_TAR)
 
-CLEANFILES	= sisyphus-demo $(DEMO_CONFIG) $(DEMO_DB)
+CLEANFILES	= sisyphus-demo $(DEMO_CONFIG)
 
-# This presumes the sql stuff is installed before the demo...
-# So you can't make the DB when doing just make...
-$(DEMO_DB) :
-	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 $@
-
-%.yml : %.yml.src 
-	sed "s@__DATABASE__@$(pkgdatadir)/demo/$(DEMO_DB)@g" < $< > $@
-
+dbconfig.yml: www/config/database.yml Makefile
+	cat $< | head -n 3 | tail -2 | sed -e 's/  //' > $@
 
 backup:
 	cd $(demodir) ; \
