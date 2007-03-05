@@ -271,7 +271,7 @@ public class EditorKit extends StyledEditorKit {
 
 		public void actionPerformed(ActionEvent e) {
 			EditorPane editor = getEditorPane(e);
-			if (editor != null) {
+			if (editor != null && editor.isEditable()) {
 				getAction(selectLineAction).actionPerformed(e);
 				int selectionStart = editor.getSelectionStart();
 				int selectionEnd = editor.getSelectionEnd();
@@ -320,7 +320,7 @@ public class EditorKit extends StyledEditorKit {
 
 		public void actionPerformed(ActionEvent e) {
 			EditorPane editor = getEditorPane(e);
-			if (editor != null) {
+			if (editor != null && editor.isEditable()) {
 				getAction(selectionPreviousWordAction).actionPerformed(e);
 				int selectionStart = editor.getSelectionStart();
 				int selectionEnd = editor.getSelectionEnd();
@@ -343,7 +343,7 @@ public class EditorKit extends StyledEditorKit {
 
 		public void actionPerformed(ActionEvent e) {
 			EditorPane editor = getEditorPane(e);
-			if (editor != null) {
+			if (editor != null && editor.isEditable()) {
 				getAction(selectionNextWordAction).actionPerformed(e);
 				int selectionStart = editor.getSelectionStart();
 				int selectionEnd = editor.getSelectionEnd();
