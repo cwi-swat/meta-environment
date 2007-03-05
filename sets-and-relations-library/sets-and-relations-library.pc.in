@@ -1,0 +1,13 @@
+prefix=@prefix@
+Maintainers=kooiker@cwi.nl
+Name: sets-and-relations-library
+Version: 1.0
+Description:
+Requires: asf-library
+JarFile=
+LocalJars=
+Jars=
+Packages=
+MainClass=
+TestClass=
+ToolBusFlags=

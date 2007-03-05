@@ -1,0 +1,9 @@
+# $Id: make_rules 20391 2006-10-05 08:45:26Z jurgenv $
+
+# What gets installed, distributed, cleaned
+EXTRA_DIST = $(wildcard *.sdf) $(wildcard *.asf)
+
+# Determine installation directory
+librarydir = ${pkgdatadir}/library$(subst ./library,,$(subdir))
+
+library_DATA = $(EXTRA_DIST)
