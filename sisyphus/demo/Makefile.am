@@ -1,5 +1,5 @@
 
-SUBDIRS		= src
+SUBDIRS		= src www
 
 bin_SCRIPTS	= sisyphus-demo
 
@@ -22,11 +22,14 @@ EXTRA_DIST	= \
 
 CLEANFILES	= sisyphus-demo $(DEMO_CONFIG) $(DEMO_DB)
 
-
 # This presumes the sql stuff is installed before the demo...
 # So you can't make the DB when doing just make...
 $(DEMO_DB) :
 	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 $@
+
+%.yml : %.yml.src 
+	sed "s@__DATABASE__@$(pkgdatadir)/demo/$(DEMO_DB)@g" < $< > $@
+
 
 backup:
 	cd $(demodir) ; \
@@ -43,10 +46,6 @@ backup:
 		s@__RUBYGEMS_PATH__@$(RUBYGEMS_PREFIX)/lib/ruby/site_ruby/1.8@g;\
 		s@__VERSION__@$(VERSION)@g;" < $< > $@ && \
         chmod +x $@
-
-
-%.yml : %.yml.src 
-	sed "s@__DATABASE__@$(pkgdatadir)/demo/$(DEMO_DB)@g" < $< > $@
 
 install-data-hook: 
 	( \
