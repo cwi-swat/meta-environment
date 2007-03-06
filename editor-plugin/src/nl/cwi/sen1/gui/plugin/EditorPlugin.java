@@ -103,7 +103,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 	public void writeContents(ATerm editorId) {
 		Editor panel = getEditorPanel(editorId);
 
-		if (panel != null) {
+		if (panel != null && panel.isEditable()) {
 			try {
 				panel.writeContents(panel.getFilename());
 				panel.setModified(false);
@@ -217,20 +217,22 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		studio.addComponentMenu(comp, event, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				Editor editor = getEditorPanel(editorId);
-				try {
-					editor.writeContents(editor.getFilename());
-					ATerm event = studio.getATermFactory().make(
-							"contents-saved(<term>)", editorId);
-					bridge.postEvent(event);
-					if (comp.getName().endsWith("*")) {
-						comp.setName(comp.getName().substring(0,
-								comp.getName().length() - 1));
-					}
-				} catch (IOException e1) {
+				if (editor != null && editor.isEditable()) {
 					try {
-						showErrorDialog(editor, JOptionPane.OK_OPTION,
-								"\n\nError saving changes.");
-					} catch (CloseAbortedException e2) {
+						editor.writeContents(editor.getFilename());
+						ATerm event = studio.getATermFactory().make(
+								"contents-saved(<term>)", editorId);
+						bridge.postEvent(event);
+						if (comp.getName().endsWith("*")) {
+							comp.setName(comp.getName().substring(0,
+									comp.getName().length() - 1));
+						}
+					} catch (IOException e1) {
+						try {
+							showErrorDialog(editor, JOptionPane.OK_OPTION,
+									"\n\nError saving changes.");
+						} catch (CloseAbortedException e2) {
+						}
 					}
 				}
 			}
@@ -251,13 +253,16 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				if (chooser.showDialog(StudioImpl.getFrame(), "Save Copy") == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
-					try {
-						editor.writeContents(path);
-					} catch (IOException e1) {
+					if (!path.equals(editor.getFilename())
+							|| editor.isEditable()) {
 						try {
-							showErrorDialog(editor, JOptionPane.OK_OPTION,
-									"\n\nError saving copy.");
-						} catch (CloseAbortedException e2) {
+							editor.writeContents(path);
+						} catch (IOException e1) {
+							try {
+								showErrorDialog(editor, JOptionPane.OK_OPTION,
+										"\n\nError saving copy.");
+							} catch (CloseAbortedException e2) {
+							}
 						}
 					}
 				}
@@ -282,20 +287,22 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 					ATerm term = studio.getATermFactory().parse(id);
 					StudioComponent comp = componentsById.get(id);
 
-					try {
-						editor.writeContents(editor.getFilename());
-						ATerm event = studio.getATermFactory().make(
-								"contents-saved(<term>)", term);
-						bridge.postEvent(event);
-						if (comp.getName().endsWith("*")) {
-							comp.setName(comp.getName().substring(0,
-									comp.getName().length() - 1));
-						}
-					} catch (IOException e1) {
+					if (editor.isEditable()) {
 						try {
-							showErrorDialog(editor, JOptionPane.OK_OPTION,
-									"\n\nError saving changes.");
-						} catch (CloseAbortedException e2) {
+							editor.writeContents(editor.getFilename());
+							ATerm event = studio.getATermFactory().make(
+									"contents-saved(<term>)", term);
+							bridge.postEvent(event);
+							if (comp.getName().endsWith("*")) {
+								comp.setName(comp.getName().substring(0,
+										comp.getName().length() - 1));
+							}
+						} catch (IOException e1) {
+							try {
+								showErrorDialog(editor, JOptionPane.OK_OPTION,
+										"\n\nError saving changes.");
+							} catch (CloseAbortedException e2) {
+							}
 						}
 					}
 				}

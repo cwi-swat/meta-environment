@@ -196,4 +196,8 @@ public class SwingEditor extends JPanel implements Editor {
 	public void setEditable(boolean b) {
 		editorPane.setEditable(b);
 	}
+	
+	public boolean isEditable() {
+		return editorPane.isEditable();
+	}
 }
