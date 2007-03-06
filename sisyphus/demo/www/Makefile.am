@@ -1,14 +1,20 @@
 
 SUBDIRS		= config
 
+www_DATA 	=
+
+wwwdir		= $(pkgdatadir)/demo/www
 
 install-data-hook: 
-	ln -s -f ${pkgdatadir}/www/script --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/log --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/components --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/public --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/vendor --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/test --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/doc --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/app --target-directory ${pkgdatadir}/demo/www/ ;\
-	ln -s -f ${pkgdatadir}/www/lib --target-directory ${pkgdatadir}/demo/www/
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/script $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/log $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/components $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/public $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/vendor $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/test $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/doc $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/app $(DESTDIR)$(wwwdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/lib $(DESTDIR)$(wwwdir)/
+
+uninstall-hook:
+	rm -rf $(DESTDIR)$(wwwdir)

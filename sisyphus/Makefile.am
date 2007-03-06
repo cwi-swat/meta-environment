@@ -1,7 +1,7 @@
 
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = src sql script demo www doc gems
+SUBDIRS = src sql script www demo doc gems
 
 ACLOCAL_AMFLAGS = -I .
 

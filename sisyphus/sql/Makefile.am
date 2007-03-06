@@ -1,20 +1,14 @@
 
 EXTRA_DIST	= sisyphus.sql
 
-sql_DATA	= sisyphus.postgresql sisyphus.sqlite3
+sql_DATA	= sisyphus.postgresql
 
 sqldir		= $(pkgdatadir)/sql
 
-CLEANFILES 	= sisyphus.postgresql sisyphus.sqlite3
+CLEANFILES 	= sisyphus.postgresql
 
 %.postgresql : %.sql
 	cat $< > $@
 
-%.sqlite3 : %.sql
-	cat $< \
-	| sed -e 's/serial/integer/' \
-	| sed -e 's/primary key/primary key autoincrement/' \
-	| sed -e 's/^drop.*$$//' \
-	> $@
 
 

@@ -1,0 +1,12 @@
+#! /bin/sh
+
+PREFIX=__PREFIX__
+DATADIR=__DATA_DIR__
+BINDIR=__BIN_DIR__
+CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
+SVN=__SUBVERSION_BINDIR__/svn
+
+mkdir -p DEMO_CONFIG
+cd DEMO_CONFIG
+${SVN} co ${CONFIG_SVN}
+cd - 

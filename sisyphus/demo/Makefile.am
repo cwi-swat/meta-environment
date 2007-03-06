@@ -1,7 +1,7 @@
 
 SUBDIRS		= src www
 
-bin_SCRIPTS	= sisyphus-demo
+bin_SCRIPTS	= sisyphus-demo checkout-demo-config
 
 CONFIG_REPO	= config-repo
 
@@ -18,7 +18,7 @@ EXTRA_DIST	= \
 		$(wildcard *.yml.src) \
 		$(CONFIG_REPO_TAR)
 
-CLEANFILES	= sisyphus-demo $(DEMO_CONFIG)
+CLEANFILES	= sisyphus-demo checkout-demo-config $(DEMO_CONFIG)
 
 dbconfig.yml: www/config/database.yml Makefile
 	cat $< | head -n 3 | tail -2 | sed -e 's/  //' > $@
@@ -29,7 +29,7 @@ backup:
 	cd - ; \
 	cp $(demodir)/$(CONFIG_REPO_TAR) . 
 
-% : %.sh.src 
+% : %.sh.src Makefile
 	sed "s@__PREFIX__@$(prefix)@g;\
 		s@__BIN_DIR__@$(bindir)@g; \
 		s@__DATA_DIR__@$(pkgdatadir)@g;\

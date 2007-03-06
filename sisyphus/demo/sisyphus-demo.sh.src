@@ -8,7 +8,7 @@ CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
 DB_CONFIG=$DATADIR/demo/dbconfig.yml
 
 $SICLI \
-    --root asfsdf-meta \
+    --root app \
     --profile demo \
     --interval 300 \
     --weekday Mon \

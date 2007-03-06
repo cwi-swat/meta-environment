@@ -8,17 +8,20 @@ configdir 	= ${pkgdatadir}/demo/www/config
 
 CLEANFILES 	= database.yml $(DEMO_DB)
 
-# This presumes the sql stuff is installed before the demo...
-# So you can't make the DB when doing just make...
-$(DEMO_DB) : 
-	cat $(pkgdatadir)/sql/sisyphus.sqlite3 | sqlite3 $@
+$(DEMO_DB) : ${top_srcdir}/sql/sisyphus.sql Makefile
+	rm -f $@ ; \
+	cat $< \
+	| sed -e 's/serial/integer/' \
+	| sed -e 's/primary key/primary key autoincrement/' \
+	| sed -e 's/^drop.*$$//' \
+	| sqlite3 $@
 
 %.yml : %.yml.src Makefile
 	sed "s@__DATABASE__@$(configdir)/$(DEMO_DB)@g" < $< > $@
 
 install-data-hook: 
-	ln -s -f ${pkgdatadir}/www/config/*.rb --target-directory ${pkgdatadir}/demo/www/config ;\
-	ln -s -f ${pkgdatadir}/www/environments --target-directory ${pkgdatadir}/demo/www/config 
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/config/*.rb $(DESTDIR)$(configdir)/ ;\
+	ln -s -f $(DESTDIR)${pkgdatadir}/www/config/environments $(DESTDIR)$(configdir)/ 
 
 uninstall-hook:
-	rm -rf ${pkgdatadir}/demo/www/config
+	rm -rf $(DESTDIR)$(configdir)
