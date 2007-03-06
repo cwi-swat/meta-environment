@@ -558,6 +558,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						comp.setName(comp.getName() + "*");
 					}
 				}
+				panel.clearSelections();
 				ATerm event = studio.getATermFactory().make(
 						"contents-changed(<term>)", editorId);
 				bridge.postEvent(event);

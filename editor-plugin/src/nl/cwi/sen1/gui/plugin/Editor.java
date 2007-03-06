@@ -50,4 +50,6 @@ public interface Editor {
 	public void setContents(String contents);
 
 	public void setSelection(Area area);
+	
+	public void clearSelections();
 }

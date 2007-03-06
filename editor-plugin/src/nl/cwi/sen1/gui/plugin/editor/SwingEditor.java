@@ -144,8 +144,7 @@ public class SwingEditor extends JPanel implements Editor {
 
 	public void setModified(boolean modified) {
 		editorPane.setModified(modified);
-		editorPane.clearFocus();
-		editorPane.clearJaggedSelection();
+		clearSelections();
 	}
 
 	public boolean isModified() {
@@ -199,5 +198,10 @@ public class SwingEditor extends JPanel implements Editor {
 	
 	public boolean isEditable() {
 		return editorPane.isEditable();
+	}
+	
+	public void clearSelections() {
+		editorPane.clearFocus();
+		editorPane.clearJaggedSelection();
 	}
 }
