@@ -9,7 +9,10 @@ gems = \
 	activesupport-1.2.5 \
 	activerecord-1.13.2 \
 	postgres-pr-0.4.0 \
+	daemons-1.0.5 \
 	fastthread-0.6.4.1 \
+	cgi_multipart_eof_fix-2.1 \
+	gem_plugin-0.2.2 \
 	mongrel-1.0.1 \
 	sqlite3-ruby-1.2.1
 
