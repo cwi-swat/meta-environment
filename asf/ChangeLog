@@ -1,5 +1,9 @@
 $Id$
 
+Wed Mar  7 16:37:21 CET 2007 <kooiker@cwi.nl>
+ * syntax/asfsdf-checker/src/*:
+   - regenerated after fixing warnings
+
 Thu Mar  1 18:28:30 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  *  semantics/asfc/src/Compiler.c: regenerated after bigfixes
     concerning Add-Range-Checks and the implementation of lexical
