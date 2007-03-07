@@ -5,7 +5,7 @@ imports containers/InvertedRelations[X X]
 
 exports
 aliases
-  Relation[[X,X]] -> Graph[[X]]
+  Relation[[X,X]] -> XRelation[[X]]
 
 context-free syntax
   identity(Set[[X]])          -> Relation[[X,X]]  
