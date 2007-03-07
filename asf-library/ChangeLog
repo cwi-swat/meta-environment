@@ -1,6 +1,6 @@
 $Id$
 
-Wed Mar  7 16:33:54 CET 2007 <kooiker@cwi.nl>
+Wed Mar  7 16:33:54 CET 2007 <{jurgenv,kooiker}@cwi.nl>
  * library/languages/sdf2/checker/SortChecker{sdf,asf}:
    - remove import of PosInfo over Sorts, since the PosInfo functions are only 
      used on Symbols
