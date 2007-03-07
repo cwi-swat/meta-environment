@@ -56,7 +56,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 
 	public ATerm createModule() {
 		ModuleId moduleId = factory
-				.makeModuleId_Mid(moduleDB.getNextModuleId());
+				.makeModuleId_ModuleId(moduleDB.getNextModuleId());
 		moduleDB.addModule(new Module(factory), moduleId);
 		return pureFactory.make("snd-value(module-id(<term>))", moduleId
 				.toTerm());

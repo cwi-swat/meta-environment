@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Oct 20, 2006 11:54:15 AM
+// generation time: Mar 7, 2007 10:19:46 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import toolbus.AbstractTool;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -58,22 +59,22 @@ abstract public class ModuleManagerTool
     sigTable.add(factory.parse("rec-eval(<module-manager>,create-module)"));
     sigTable.add(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"));
     sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-modules)"));
-    sigTable.add(factory.parse("rec-do(<module-manager>,delete-module(<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-module(<module-id>))"));
     sigTable.add(factory.parse("rec-do(<module-manager>,register-attribute-update-rule(<term>,<term>,<term>,<term>))"));
-    sigTable.add(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,add-attribute(<module-id>,<term>,<term>,<term>))"));
     sigTable.add(factory.parse("rec-ack-event(<module-manager>,<term>)"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"));
-    sigTable.add(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"));
-    sigTable.add(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-children-modules(<term>))"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<term>))"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<term>))"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-parent-modules(<term>))"));
-    sigTable.add(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"));
-    sigTable.add(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-attribute(<module-id>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-attributes(<module-id>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-attribute(<module-id>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,add-dependency(<module-id>,<module-id>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-children-modules(<module-id>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<module-id>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<module-id>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-parent-modules(<module-id>))"));
+    sigTable.add(factory.parse("rec-eval(<module-manager>,get-closable-modules(<module-id>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-dependency(<module-id>,<module-id>))"));
     sigTable.add(factory.parse("rec-eval(<module-manager>,get-dependencies)"));
-    sigTable.add(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"));
+    sigTable.add(factory.parse("rec-do(<module-manager>,delete-dependencies(<module-id>))"));
     sigTable.add(factory.parse("rec-eval(<module-manager>,get-module-graph(<term>))"));
     sigTable.add(factory.parse("rec-terminate(<module-manager>,<term>)"));
   }
