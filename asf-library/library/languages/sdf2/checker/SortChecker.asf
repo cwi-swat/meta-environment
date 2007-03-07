@@ -30,12 +30,26 @@ equations
   [gss-1'3] get-start-symbols(start-symbols $Symbol*1, SymbolsMsgs, $ModuleId) =
        	      get-start-symbol($Symbol*1, SymbolsMsgs, $ModuleId)
 
-  [gss-2'1] get-start-symbol($Symbol, SymbolsMsgs, $ModuleId) =
+  [gss-2'1] $Sort[[$Symbol,+]] := $Symbol,
+            $Location := get-posinfo($Symbol),
+            $Symbol2 := set-posinfo($Sort, $Location)
+            ===>
+            get-start-symbol($Symbol, SymbolsMsgs, $ModuleId) =
+              add-start-symbol($Symbol2, SymbolsMsgs, $ModuleId)
+
+  [default-gss-2'2] get-start-symbol($Symbol, SymbolsMsgs, $ModuleId) =
               add-start-symbol($Symbol, SymbolsMsgs, $ModuleId)
 
   [cs-1'1] check-symbol($Sort, SymbolsMsgs, $Location, $ModuleId) = SymbolsMsgs
 
-  [default-cs-1'2] $String1 := moduleid2str($ModuleId),
+  [cs-1'2] $String1 := moduleid2str($ModuleId),
+           $String2 := symbol2str($Sort[[$Symbol,+]]),
+           $String3 := "only name of parameterized sort should be declared"
+           ====>
+           check-symbol($Sort[[$Symbol,+]], [SymbolPairsSet, $Msgs], $Location, $ModuleId) = 
+             [SymbolPairsSet, $Msgs, make-warning($String3, $String2, $Location)]
+
+  [default-cs-1'3] $String1 := moduleid2str($ModuleId),
                    $String2 := symbol2str($Symbol),
                    $String3 := "deprecated declaration of complex symbol"
                    ====>
@@ -122,15 +136,27 @@ equations
   [tc3] $Sort != CHAR
         ====>
         get-used-symbols($Sort, SymbolsSet) = add($Sort, SymbolsSet)
+  
+  [tc4] $Sort[[$Symbol,+]] := $Symbol,
+        $Location := get-posinfo($Symbol),
+        $Symbol2 := set-posinfo($Sort, $Location)
+        ===>
+        get-used-symbols($Symbol, SymbolsSet) = get-used-symbols($Symbol,+, add($Symbol2, SymbolsSet))
 
 equations
 
   [tc4] get-defined-symbols(variables Prod*, SymbolsSet) = SymbolsSet
 
-  [tc5] get-defined-symbols($Symbols -> $Symbol $Attributes, 
+  [tc5] get-defined-symbols($Symbols -> $Sort[[$Symbol,+]] $Attributes, 
+                            SymbolsSet) = add($Sort, SymbolsSet)
+
+  [tc6] get-defined-symbols($FuncName ( $Symbol,* ) -> $Sort[[$Symbol,+]] $Attributes, 
+                            SymbolsSet) = add($Sort, SymbolsSet)
+
+  [default-tc7] get-defined-symbols($Symbols -> $Symbol $Attributes, 
                             SymbolsSet) = add($Symbol, SymbolsSet)
 
-  [tc6] get-defined-symbols($FuncName ( $Symbol,* ) -> $Symbol $Attributes, 
+  [default-tc8] get-defined-symbols($FuncName ( $Symbol,* ) -> $Symbol $Attributes, 
                             SymbolsSet) = add($Symbol, SymbolsSet)
 
 equations

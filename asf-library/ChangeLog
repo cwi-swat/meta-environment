@@ -1,5 +1,13 @@
 $Id$
 
+Wed Mar  7 16:33:54 CET 2007 <kooiker@cwi.nl>
+ * library/languages/sdf2/checker/SortChecker{sdf,asf}:
+   - remove import of PosInfo over Sorts, since the PosInfo functions are only 
+     used on Symbols
+   - exporting parameterized sorts is prohibited
+   - fix checking of parameterized start-symbols 
+   - fix undeclared sort warning when using aliases
+
 Thu Mar  1 18:26:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * library/languages/asf/compiler/**: fixed some bugs in the compiler. It
    still did not generate enough character range checks. And, after 

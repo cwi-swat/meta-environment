@@ -199,7 +199,8 @@ equations
                                SymbolsSet1),
            $Msgs2 := make-symbol-warnings(SymbolsSet2, "symbol is not used anywhere"),
            SymbolsSet3 := diff(diff(diff(SymbolsSet1,
-                               DefinedSymbolPairSet), RenamedSymbolPairSet2), RenamedSymbolPairSet),
+                               merge(DefinedSymbolPairSet, 
+                                     AliasedSymbolPairSet)), RenamedSymbolPairSet2), RenamedSymbolPairSet),
            $Msgs3 := make-symbol-errors(SymbolsSet3, "symbol is not defined by any production"),
 
            InfoMsgTuple2 := put-messages($ModuleId, $Msgs2, $Msgs3, InfoMsgTuple1)
