@@ -1,8 +1,8 @@
 
-RUBY_FILES = $(wildcard *.rb)
+demosrcdir = $(pkgdatadir)/demo
 
-demodir = $(pkgdatadir)/demo
+demosrc_DATA = demo.rb
 
-demo_DATA = $(RUBY_FILES)
+EXTRA_DIST = demo.rb
 
-EXTRA_DIST = $(RUBY_FILES)
+
