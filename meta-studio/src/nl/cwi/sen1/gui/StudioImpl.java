@@ -157,11 +157,14 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	private void startFrameThread() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createFrame();
-			}
-		});
+		// Is it right that createFrame is not called with invokeLater? It does
+		// solve the problem that the tile can be set, before the frame is
+		// initialized.
+		// SwingUtilities.invokeLater(new Runnable() {
+		// public void run() {
+		createFrame();
+		// }
+		// });
 	}
 
 	private void initialize() {
@@ -510,7 +513,9 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	public void setTitle(String title) {
-		frame.setTitle(title);
+		if (frame != null) {
+			frame.setTitle(title);
+		}
 	}
 
 	public void recAckEvent(ATerm t0) {
