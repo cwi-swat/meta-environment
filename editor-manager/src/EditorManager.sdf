@@ -9,7 +9,7 @@ exports
 
   sorts Sid
   context-free syntax
-    "sid" "(" id:NatCon ")" -> Sid
+    "sid" "(" id:NatCon ")" -> Sid {cons("session-id")}
 
   sorts EditorType
   context-free syntax
@@ -17,7 +17,7 @@ exports
 
   sorts ModuleId
   context-free syntax
-    "mid" "(" id:NatCon ")" -> ModuleId 
+    "mid" "(" id:NatCon ")" -> ModuleId {cons("module-id")}
 
   sorts SessionStatus
   context-free syntax

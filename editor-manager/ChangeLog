@@ -1,5 +1,9 @@
 $Id$
 
+Wed Mar  7 11:21:24 CET 2007 <kooiker@cwi.nl>
+ * src/editor-manager.idef.src:
+   - Strongly typed variable declarations
+
 Tue Feb 13 11:02:09 CET 2007 <kooiker@cwi.nl>
  * src/editor-manager.c: 
    - when session status is zombie create a new session (closes #661)

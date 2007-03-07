@@ -4,9 +4,9 @@ process EditorManager is
 let
   EditorType: term,
   EM : editor-manager,
-  ModuleId: term,
+  ModuleId: module-id,
   Path : str,
-  Sid : term,
+  Sid : session-id,
   Sids: list
 in
   execute(editor-manager, EM?)

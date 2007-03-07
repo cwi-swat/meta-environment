@@ -16,7 +16,7 @@ static ATermTable bindings = NULL;
 static EM_Sid makeUniqueSessionId() {
   static int id = 0;
 
-  return EM_makeSidDefault(id++);
+  return EM_makeSidSessionId(id++);
 }
 
 static ATerm sndValue(ATerm result) {
