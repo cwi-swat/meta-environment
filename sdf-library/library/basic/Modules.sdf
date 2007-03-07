@@ -20,7 +20,7 @@ context-free syntax
 sorts ModuleId
 context-free syntax
   %% An module-id is defined by a unique natcon
-  "mid" "(" id:NatCon ")" -> ModuleId {cons("mid")}
+  "mid" "(" id:NatCon ")" -> ModuleId {cons("module-id")}
 
 sorts Attribute
 context-free syntax
