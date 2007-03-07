@@ -1,5 +1,8 @@
 $Id$
 
+Wed Mar  7 16:38:19 CET 2007 <kooiker@cwi.nl>
+ * sdf-checker/src/*: regenerated after fixing warnings and errors
+
 Wed Feb 14 08:50:33 CET 2007 <jurgenv@cwi.nl>
  * sdf-checker/src/Sdf-Checker.c: regenerated after fixing a weird bug (import
    relation was inverted by an equation at post-check time). Also, I improved
