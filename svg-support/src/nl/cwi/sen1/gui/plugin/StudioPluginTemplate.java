@@ -6,26 +6,26 @@ import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.gui.component.StudioComponent;
 import nl.cwi.sen1.gui.component.StudioComponentImpl;
-import nl.cwi.sen1.gui.plugin.subclass.DefaultStudioPluginPanel;
+import nl.cwi.sen1.gui.plugin.subclass.StudioPluginTemplatePanel;
 import aterm.ATerm;
 
-public class DefaultStudioPlugin extends DefaultStudioPlugin implements DefaultStudioPluginTif {
-	private static final String TOOL_NAME = "default-studio-plugin";
+public class StudioPluginTemplate extends StudioPluginTemplate implements StudioPluginTemplateTif {
+	private static final String TOOL_NAME = "studio-plugin-template";
 
-	private DefaultStudioPluginBridge bridge;
+	private StudioPluginTemplateBridge bridge;
 
-	private DefaultStudioPluginPanel panel;
+	private StudioPluginTemplatePanel panel;
 
-	public DefaultStudioPlugin() {
+	public StudioPluginTemplate() {
 	}
 
 	public void initStudioPlugin(Studio studio) {
-		panel = new DefaultStudioPluginPanel();
+		panel = new StudioPluginTemplatePanel();
 
-		bridge = new DefaultStudioPluginBridge(studio.getATermFactory(), this);
+		bridge = new StudioPluginTemplateBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
 
-		StudioComponent comp = new StudioComponentImpl("DefaultStudioPlugin", panel) {
+		StudioComponent comp = new StudioComponentImpl("StudioPluginTemplate", panel) {
 			public void requestClose() throws CloseAbortedException {
 				throw new CloseAbortedException();
 			}

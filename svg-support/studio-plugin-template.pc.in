@@ -1,13 +1,13 @@
 prefix=@prefix@
 Maintainers=
-Name: default-studio-plugin
+Name: studio-plugin-template
 Version: 1.0
 Description:
 Requires: aterm-java,meta-studio,toolbus-java-adapter
-JarFile=default-studio-plugin.jar
+JarFile=studio-plugin-template.jar
 LocalJars=
 Jars=${prefix}/share/${JarFile}
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
-MainClass=nl.cwi.sen1.gui.plugin.DefaultStudioPlugin
+MainClass=nl.cwi.sen1.gui.plugin.StudioPluginTemplate
 TestClass=
-ToolBusFlags=-I${prefix}/share/default-studio-plugin
+ToolBusFlags=-I${prefix}/share/studio-plugin-template

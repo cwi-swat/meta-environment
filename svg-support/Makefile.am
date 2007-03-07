@@ -6,7 +6,7 @@ SUBDIRS=lib
 
 ACLOCAL_AMFLAGS = -I .
 
-TOOLNAME = default-studio-plugin
+TOOLNAME = studio-plugin-template
 
 pkgdata_DATA = $(TOOLNAME).idef
 

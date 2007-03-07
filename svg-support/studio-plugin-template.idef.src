@@ -1,10 +1,10 @@
 /* $Id: $ */
 
-tool default-studio-plugin is { }
+tool studio-plugin-template is { }
 
-process DefaultStudioPlugin is
+process StudioPluginTemplate is
 let
-  T : default-studio-plugin
+  T : studio-plugin-template
 in
   rec-connect(T?)
   .
@@ -14,7 +14,7 @@ in
   * delta
 endlet
 
-process StartDefaultStudioPlugin is
+process StartStudioPluginTemplate is
   snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
 
-toolbus(DefaultStudioPlugin)
+toolbus(StudioPluginTemplate)
