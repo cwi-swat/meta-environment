@@ -6,31 +6,28 @@ process EditorPlugin is
 let
   T : editor-plugin,
   ActionList : list,
-  Area : term,
+  Area : area,
   Column: int,
   Contents: str,
   Editable: bool,
-  EditorId : term,
-  Editor : str,
-  Filename : str,
-  Line: int,
+  EditorId : session-id,
+  File : str,
   Event : term,
   Message : str,
-  Modified : term,
-  Modulename: str,
+  Modified : bool,
   Offset : int,
-  Pid: int,
-  Categories: term,
-  Slices: term,
-  MenuList: list,
-  Tooltip: str
+  Pid : int,
+  Categories : list,
+  Slices : list,
+  MenuList : list,
+  Tooltip : str
 in
   StartEditorPanel()
   . rec-connect(T?)
   .
   (
-    rec-msg(te-edit-text(EditorId?, Filename?))
-    . snd-do(T, edit-file(EditorId, Filename))
+    rec-msg(te-edit-text(EditorId?, File?))
+    . snd-do(T, edit-file(EditorId, File))
   +
     rec-msg(te-set-tooltip(EditorId?, Tooltip?))
     . snd-do(T, set-tooltip(EditorId, Tooltip))
@@ -128,28 +125,28 @@ in
   * delta
 endlet
 
-process ContentsChanged(EditorId: term) is
+process ContentsChanged(EditorId: session-id) is
   snd-msg(te-contents-changed(EditorId))
 
-process ContentsSaved(EditorId: term) is
+process ContentsSaved(EditorId: session-id) is
   snd-msg(te-contents-saved(EditorId))
 
-process Contents(EditorId: term, Contents: str) is
+process Contents(EditorId: session-id, Contents: str) is
   snd-msg(te-contents(EditorId, Contents))
 
-process OffSetEvent(Id: term, Offset: int) is 
-  snd-msg(te-mouse-click-at-offset(Id, Offset))
+process OffSetEvent(EditorId: session-id, Offset: int) is 
+  snd-msg(te-mouse-click-at-offset(EditorId, Offset))
 
-process ActionEvent(EditorId: term, ActionEvent: term) is    
+process ActionEvent(EditorId: session-id, ActionEvent: term) is    
   snd-msg(te-event(EditorId, ActionEvent))
 
-process EditorHasDisconnected(EditorId: term) is
+process EditorHasDisconnected(EditorId: session-id) is
     snd-msg(te-text-editor-disconnected(EditorId))
 
-process EditorModified(EditorId: term, Modified: term) is
+process EditorModified(EditorId: session-id, Modified: bool) is
     snd-msg(te-is-modified(EditorId, Modified))
 
-process ContentsWritten(EditorId: term) is
+process ContentsWritten(EditorId: session-id) is
     snd-msg(te-contents-written(EditorId))
 
 process StartEditorPanel is

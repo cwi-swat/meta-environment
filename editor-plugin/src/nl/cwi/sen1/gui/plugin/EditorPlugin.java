@@ -62,7 +62,6 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		editors = new HashMap<String, Editor>();
 		componentsById = new HashMap<String, StudioComponent>();
 		statusbarsById = new HashMap<String, Map<String, JComponent>>();
-
 	}
 
 	public void isModified(ATerm editorId) {

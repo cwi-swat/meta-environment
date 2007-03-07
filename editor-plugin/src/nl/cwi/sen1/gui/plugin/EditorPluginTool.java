@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 20, 2007 9:13:52 AM
+// generation time: Mar 7, 2007 10:09:37 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,7 +16,7 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class EditorPluginTool
-  extends SwingTool
+  extends AbstractTool
   implements EditorPluginTif
 {
   // This table will hold the complete input signature
@@ -57,26 +57,26 @@ abstract public class EditorPluginTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-tooltip(<term>,<str>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-info(<term>,<str>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-editable(<term>,<bool>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,get-contents(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-contents(<term>,<str>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,write-contents(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,reread-contents(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,is-modified(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-focus(<term>,<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-selection(<term>,<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-cursor-at-offset(<term>,<int>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,clear-focus(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,register-text-categories(<term>,<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,highlight-slices(<term>,<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,display-message(<term>,<str>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,editor-to-front(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,kill-editor(<term>))"));
-    sigTable.add(factory.parse("rec-do(<editor-plugin>,show-popup(<term>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,edit-file(<session-id>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-tooltip(<session-id>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-info(<session-id>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-editable(<session-id>,<bool>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,add-actions(<session-id>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,get-contents(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-contents(<session-id>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,write-contents(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,reread-contents(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,is-modified(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-focus(<session-id>,<area>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-selection(<session-id>,<area>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,set-cursor-at-offset(<session-id>,<int>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,clear-focus(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,register-text-categories(<session-id>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,highlight-slices(<session-id>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,display-message(<session-id>,<str>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,editor-to-front(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,kill-editor(<session-id>))"));
+    sigTable.add(factory.parse("rec-do(<editor-plugin>,show-popup(<session-id>,<list>))"));
     sigTable.add(factory.parse("rec-ack-event(<editor-plugin>,<term>)"));
     sigTable.add(factory.parse("rec-terminate(<editor-plugin>,<term>)"));
   }
