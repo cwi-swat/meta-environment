@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar  8 19:06:02 CET 2007 <jurgenv@cwi.nl>
+ * utils/tree2graph/PT2graph.c: removed illegal use of pattern variable
+   (implementation detail of generated API code).
+
 Mon Feb  5 09:18:44 CET 2007 <jurgenv@cwi.nl>
  * lib/Graph.adt: added support for sub-graphs
  * utils/*: added support for subgraph layouting

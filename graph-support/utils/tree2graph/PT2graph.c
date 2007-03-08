@@ -524,7 +524,7 @@ Graph PT_printAnyToGraph(ATerm term, ATbool characters,
   		         ATbool productions, 
 		         ATbool layout, ATbool literals, ATbool sharing)
 {
-  if (ATmatchTerm(term, PT_patternParseTreeTop, NULL, NULL)){
+  if (PT_isParseTreeTop((PT_ParseTree) term)) {
     return PT_printParseTreeToGraph((PT_ParseTree) term, characters, 
 				    productions, layout,
 				    literals, sharing);
