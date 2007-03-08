@@ -169,7 +169,7 @@ in
     else
        MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
     fi
-    . Tree := help-garbage-collector
+    . Tree := UNDEFINED
   )
   *
   delta
