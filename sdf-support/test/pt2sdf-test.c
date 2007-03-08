@@ -39,6 +39,7 @@ static int testPT2SDF(void)
   /*ATwarning("ptProduction: %t\n", ptProduction);*/
 
   sdfProduction = PTProductionToSDFProduction(ptProduction);
+  ATwarning("%t\n", sdfProduction);
   assert(SDF_isValidProduction(sdfProduction));
   /*ATwarning("sdfProduction: %t\n", sdfProduction);*/
 
