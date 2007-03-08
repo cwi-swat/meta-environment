@@ -58,7 +58,7 @@ let
   Syntax: term,
   Feedback: term,
   Modulename: str,
-  Summary: term,
+  Summary: summary,
   Errors: list
 in
   AddJob("Checking syntax definition") 
@@ -87,7 +87,7 @@ endlet
 
 process CheckASFModule(ModuleId: term) is
 let
-  Summary : term,
+  Summary : summary,
   Errors: list,
   Modulename: str,
   Tree: term
@@ -355,7 +355,7 @@ let
   Id : int,
   Pid : int,
   Errors : list,
-  Summary: term,
+  Summary: summary,
   Modulename: str
 in
   AddJob("Testing ASF Specification")
@@ -396,7 +396,7 @@ endlet
 
 process ReduceTerm(Tree: term, ModuleId: term, Debugging: term, NormalForm: term?) is
 let
-  Summary: term,
+  Summary: summary,
   Equations: term,
   Id: int,
   Modulename: str,

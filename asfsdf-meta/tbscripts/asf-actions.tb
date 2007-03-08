@@ -174,7 +174,7 @@ let
   ResultTree: term,
   Sid: term,
   Pid: int,
-  Summary: term
+  Summary: summary
 in
   GetModuleId(EditorId, ModuleId?)
   . LookupFeatureModuleId(ModuleId,  "test", RunModuleId?)
@@ -205,7 +205,7 @@ let
   ResultTree: term,
   Sid: term,
   Pid: int,
-  Summary: term
+  Summary: summary
 in
   GetModuleId(EditorId, ModuleId?)
   . LookupFeatureModuleId(ModuleId,  "check", RunModuleId?)
