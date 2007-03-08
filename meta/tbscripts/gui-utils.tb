@@ -31,10 +31,10 @@ process RemoveSummaryFor(SummaryId: str) is
 process RemoveSummary(Producer: str, SummaryId: str) is
   snd-msg(ui-remove-feedback-summary("Issues", Producer, SummaryId))
   
-process DisplaySummary(Summary: term) is
+process DisplaySummary(Summary: summary) is
   snd-msg(ui-show-feedback-summary("Issues", Summary))
 
-process RefreshSummary(Summary: term) is
+process RefreshSummary(Summary: summary) is
   snd-msg(ui-refresh-feedback-summary("Issues", Summary))
 
 process HandleEvent(Type: term, Event: term) is
@@ -139,7 +139,7 @@ process StatusDisplay is
 let
   Lst: list,
   Str: str,
-  Summary: term
+  Summary: summary
 in
   subscribe(ui-status(<term>))
   . subscribe(show-feedback-summary(<term>))

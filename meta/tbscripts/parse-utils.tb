@@ -14,7 +14,7 @@ process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
   . JobDone("Adding position information")
 
-process ReportAmbs(Tree: term, File: str, Summary: term?) is
+process ReportAmbs(Tree: term, File: str, Summary: summary?) is
   AddJob("Computing ambiguity report")
   . snd-msg(ar-report-ambiguities(Tree, File))
   . rec-msg(ar-ambiguity-report(Summary?, File))
@@ -51,7 +51,7 @@ endlet
 
 process AmbiguityHandler(ParseResult: term, Path: str) is
 let
-  Summary : term
+  Summary : summary
 in
     RemoveAmbiguitySummary(Path)
     . ReportAmbs(ParseResult, Path, Summary?)
@@ -67,7 +67,7 @@ let
   ParseError: term,
   ParseResult: term,
   Pid: int,
-  Summary: term,
+  Summary: summary,
   P : int
 in
   Pid := process-id
@@ -91,7 +91,7 @@ process UnParseTerm(Tree: term, Text: str?) is
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
 
-process ParseErrorToSummary(ParseError:term, Sid: term, Summary:term?) is
+process ParseErrorToSummary(ParseError:term, Sid: term, Summary:summary?) is
 let 
   Path : str
 in

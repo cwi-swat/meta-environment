@@ -19,7 +19,7 @@ process Error(Message: str) is
 process Warning(Message: str) is
   printf("warning: %s\n", Message)
 
-process DisplaySummary(Summary: term) is
+process DisplaySummary(Summary: summary) is
   snd-msg(display-feedback(Summary))
 
 process RemoveSummary(Producer: str, SummaryId: str) is

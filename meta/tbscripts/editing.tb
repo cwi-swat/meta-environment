@@ -117,7 +117,7 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
 process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
 let
   Path: str,
-  Categories: term
+  Categories: list
 in
   IsTextEditorRegistered(Sid, AlreadyExists?)
   .
@@ -146,7 +146,7 @@ endlet
 process SE-UpdateTree(Sid: term, Tree: term) is
 let
   Registered: bool,
-  Slices: term
+  Slices: list
 in
   if not-equal(Tree, UNDEFINED) then
     IsStructureEditorRegistered(Sid, Registered?)
@@ -543,6 +543,7 @@ in
 endlet
 
 process CleanupEditTerm(Sid: term, ModuleId : term) is
+  TODO("Dit werkt dus niet!\n").
   subscribe(em-session-deleted(Sid))
   . rec-note(em-session-deleted(Sid))
   /*. RemoveSummary("sglr", ModuleId)*/

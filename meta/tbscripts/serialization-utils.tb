@@ -16,7 +16,7 @@ process TermStoreActivation is
 let
   Checking: bool,
   TermStoreContents: term,
-  Error: term,
+  Summary: summary,
   ModuleNames: list,
   ModuleName: str,
   Name: str,
@@ -53,8 +53,8 @@ in
         tau
       fi
     +
-      rec-msg(io-error-reading(Error?))
-      . printf("TODO: fix this error %t\n", Error)
+      rec-msg(io-error-reading(Summary?))
+      . printf("TODO: fix this error %t\n", Summary)
     )
     . snd-note(ui-status(endstat(Id)))
   +

@@ -8,7 +8,7 @@ process PrettyPrint(Path : str,
 		    Result : term?) is
 let
   Id : int,
-  Feedback: term
+  Feedback: summary
 in
   Id := process-id
   . AddJob("Generic pretty printing")

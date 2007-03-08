@@ -40,7 +40,7 @@ endlet
 
 process ShowModuleDetails(ModuleId: term) is
 let
-  Attributes: term
+  Attributes: list
 in
   MM-GetAllAttributes(ModuleId, Attributes?)
   . snd-msg(md-set-details(Attributes))

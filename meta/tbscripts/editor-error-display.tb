@@ -65,7 +65,7 @@ in
   . ShowSubject(Sid, Subject)
 endlet
 
-process ShowSummary(Sid: term, Summary: term) is
+process ShowSummary(Sid: term, Summary: summary) is
 let
   Error: term,
   Errors: list

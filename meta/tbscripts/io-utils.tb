@@ -5,7 +5,7 @@
 
 process RemoveFile(Path: str) is
 let
-  Summary: term
+  Summary: summary
 in
   snd-msg(io-remove-file(Path))
   .
@@ -19,14 +19,14 @@ endlet
 
 process ReadFile(Path: str, Contents: str?) is
 let
-  Error: term
+  Summary: summary
 in
   snd-msg(io-read-file(Path))
   .
   (
     rec-msg(io-file-contents(Contents?))
   +
-    rec-msg(io-error-reading(Error?))
+    rec-msg(io-error-reading(Summary?))
     . Contents := ""
   )
 endlet

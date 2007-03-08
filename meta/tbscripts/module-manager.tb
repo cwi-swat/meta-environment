@@ -105,7 +105,7 @@ in
   . snd-note(mm-dependencies-changed(Event))
 endlet
 
-process MM-GetDependencies(Dependencies: term?) is
+process MM-GetDependencies(Dependencies: list?) is
   snd-msg(mm-get-dependencies)
   . rec-msg(mm-dependencies(Dependencies?))
 
