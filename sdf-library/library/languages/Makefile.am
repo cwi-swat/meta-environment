@@ -13,4 +13,5 @@ SUBDIRS = \
 	pico \
 	sdf2  \
 	generic-cpp \
-	java
+	java \
+        xml
