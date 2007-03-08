@@ -8,4 +8,5 @@ SUBDIRS = \
 	fdl \
 	pico \
 	sdf2   \
-	tex
+	tex \
+        xml

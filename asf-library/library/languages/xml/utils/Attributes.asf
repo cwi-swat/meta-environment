@@ -1,0 +1,13 @@
+equations
+  
+[n2a1] intcon2attvalue(natcon(&D)) = [[ attvalue(\" av-chard(&D) \") ]]
+
+[n2a2] [[ attvalue(\" &AVchars \") ]] := intcon2attvalue(natcon(&Ds))
+       ========================================================================================
+       intcon2attvalue(natcon(&Ds &D)) = [[ attvalue(\" &AVchars av-chard(&D) \") ]]
+
+[n2a3] [[ attvalue(\" &AVchars \") ]] := intcon2attvalue(&N)
+       =========================================================================================
+       intcon2attvalue(- &N) =  [[ attvalue(\" av-chard(\-) &AVchars \") ]]
+
+[n2a4] intcon2attvalue(+ &N) =  intcon2attvalue(&N)
