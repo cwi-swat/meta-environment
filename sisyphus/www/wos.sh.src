@@ -26,10 +26,10 @@ fi
 
 CONFIG_REPO=$2
 
-CONFIG_MODULE=/tmp/$0.$$.rb
+CONFIG_MODULE=/tmp/`basename $0`.$$.rb
 
 echo "module Sisyphus" > ${CONFIG_MODULE}
 echo "CONFIGURATION_REPOSITORY = '${CONFIG_REPO}'" >> ${CONFIG_MODULE}
 echo "end" >> ${CONFIG_MODULE} 
 
-${RUBY_INTERPRETER} -r ${CONFIG_MODULE} ${MONGREL} $3 $4 $5 $6 $7 $8 $9 --chdir ${DATA_DIR}/www
+${RUBY_INTERPRETER} -r ${CONFIG_MODULE} ${MONGREL} $3 $4 $5 $6 $7 $8 $9 

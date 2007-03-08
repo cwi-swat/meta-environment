@@ -3,11 +3,11 @@ include $(top_srcdir)/www/make_rules
 
 SUBDIRS 	= app components db lib public test config doc log script vendor
 
-bin_SCRIPTS	= wos
+bin_SCRIPTS	= wos web-of-sisyphus
 
 EXTRA_DIST	+= $(wildcard *.sh.src) Rakefile
 
-CLEANFILES	= wos
+CLEANFILES	= wos web-of-sisyphus
 
 % : %.sh.src 
 	sed "s@__PREFIX__@$(prefix)@g;\

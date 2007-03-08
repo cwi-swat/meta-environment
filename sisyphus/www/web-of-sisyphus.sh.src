@@ -1,0 +1,17 @@
+#! /bin/sh
+# -*- shell -*-
+
+BINDIR=__BIN_DIR__
+DATA_DIR=__DATA_DIR__
+WOS=${BINDIR}/wos
+WWW_DIR=${DATA_DIR}/www
+
+if [ "$1" != "-u" ] ; then
+    echo "Usage $0 -u <url of sisyphus config svn repo> <mongrel options>"
+    exit 1
+fi
+
+CONFIG_REPO=$2 
+
+${WOS} -u ${CONFIG_REPO} --chdir ${WWW_DIR} $3 $4 $5 $6 $7 $8 $9 
+
