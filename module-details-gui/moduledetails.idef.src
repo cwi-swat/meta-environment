@@ -5,7 +5,7 @@ tool moduledetails is { }
 
 process Moduledetails is
 let
-  Details : term,
+  Details : list,
   T: moduledetails
 in
   rec-connect(T?)
