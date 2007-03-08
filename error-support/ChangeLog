@@ -1,5 +1,10 @@
 $Id$
 
+Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
+ * **: regenerated all API's in this package with a new version of 
+   ApiGen that generates more efficient code for the is-alternative 
+   predicates.
+
 Fri Jan 19 12:52:19 CET 2007 <kooiker@cwi.nl>
  * utils/error-support.idef: add function to set id of summary
 

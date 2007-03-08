@@ -51,35 +51,6 @@ extern AFun PLOC_afun46;
 extern AFun PLOC_afun1;
 extern AFun PLOC_afun6;
 
-extern ATerm PLOC_patternAreaAreasMany;
-extern ATerm PLOC_patternAreaAreasSingle;
-extern ATerm PLOC_patternAreaAreasEmpty;
-extern ATerm PLOC_patternSliceSlice;
-extern ATerm PLOC_patternAreaArea;
-extern ATerm PLOC_patternLocationAreaInFile;
-extern ATerm PLOC_patternLocationArea;
-extern ATerm PLOC_patternLocationFile;
-extern ATerm PLOC_patternLexLayoutWhitespace;
-extern ATerm PLOC_patternNatConLexToCf;
-extern ATerm PLOC_patternLexNatConDigits;
-extern ATerm PLOC_patternLexStrCharCharsMany;
-extern ATerm PLOC_patternLexStrCharCharsSingle;
-extern ATerm PLOC_patternLexStrCharCharsEmpty;
-extern ATerm PLOC_patternStrConLexToCf;
-extern ATerm PLOC_patternLexStrConDefault;
-extern ATerm PLOC_patternStrCharLexToCf;
-extern ATerm PLOC_patternLexStrCharNormal;
-extern ATerm PLOC_patternLexStrCharDecimal;
-extern ATerm PLOC_patternLexStrCharBackslash;
-extern ATerm PLOC_patternLexStrCharQuote;
-extern ATerm PLOC_patternLexStrCharTab;
-extern ATerm PLOC_patternLexStrCharNewline;
-extern ATerm PLOC_patternLexLayoutListMany;
-extern ATerm PLOC_patternLexLayoutListSingle;
-extern ATerm PLOC_patternLexLayoutListEmpty;
-extern ATerm PLOC_patternLayoutLexToCf;
-extern ATerm PLOC_patternOptLayoutPresent;
-extern ATerm PLOC_patternOptLayoutAbsent;
 
 extern void init_ParsedLocation_dict();
 
