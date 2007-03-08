@@ -59,6 +59,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 		status.setPreferredSize(new Dimension(100, 18));
 
 		statusBarComponents.put("Status", status);
+		createModel();
 	}
 
 	public void deleteModule(ATerm moduleId) {
@@ -129,7 +130,6 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 
-		createModel();
 		addNavigatorComponent();
 	}
 
