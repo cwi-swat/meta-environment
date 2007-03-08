@@ -1,4 +1,4 @@
-module basic/Sets-and-Relations
+module containers/Sets-and-Relations
 
 imports basic/Integers
         basic/Booleans
