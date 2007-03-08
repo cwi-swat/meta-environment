@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar  8 15:09:56 CET 2007 <kooiker@cwi.nl>
+ * src/**/TableSorter.java:
+   - Table Decorator for sorting table columns on mouse click
+
 Fri Jan  5 14:32:55 CET 2007 <kooiker@cwi.nl>
  * progress.idef.src:
    - Split status message into message en value parts

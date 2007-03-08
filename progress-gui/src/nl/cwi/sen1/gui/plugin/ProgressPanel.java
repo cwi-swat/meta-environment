@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import aterm.ATerm;
-
 import nl.cwi.sen1.gui.plugin.data.ProgressTableModel;
+import nl.cwi.sen1.gui.plugin.data.TableSorter;
+import aterm.ATerm;
 
 public class ProgressPanel extends JPanel {
     private JTable table;
@@ -20,8 +20,10 @@ public class ProgressPanel extends JPanel {
 
         model = new ProgressTableModel();
         model.addColumn("Module");
-        table = new JTable(model);
-
+        TableSorter sorter = new TableSorter(model);
+        table = new JTable(sorter);
+        sorter.setTableHeader(table.getTableHeader());
+        
         // JToolBar toolBar = new JToolBar("Error ToolBar",
         // SwingConstants.VERTICAL);
         // addButtons(toolBar);
