@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Mar  8 14:13:38 CET 2007 <kooiker@cwi.nl>
+ * spec/languages/rscript/run/Sets-and-Relations.{asf,sdf}:
+   - promoted to asf-library/containers module
+
 Thu Mar  1 11:28:12 CET 2007 <kooiker@cwi.nl>
  * Merged rscript-migration branch
 

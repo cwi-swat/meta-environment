@@ -4,7 +4,7 @@ imports basic/RStores
         languages/rscript/check/Rscript-TypeStore
 imports containers/Table[IdCon Lambda] [Table[[IdCon,Lambda]] => FunctionStore]
         containers/Set[IdCon] [Set[[IdCon]] => YieldStore]
-imports languages/rscript/run/Sets-and-Relations
+imports containers/Sets-and-Relations
         languages/rscript/syntax/Rscript
 
 exports
