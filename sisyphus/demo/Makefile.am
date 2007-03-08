@@ -1,7 +1,11 @@
 
 SUBDIRS		= src www
 
-bin_SCRIPTS	= sisyphus-demo-client sisyphus-demo-console sisyphus-demo-web checkout-demo-config
+bin_SCRIPTS	= sisyphus-demo-client \
+			sisyphus-demo-console \
+			sisyphus-demo-web \
+			checkout-demo-config \
+			checkout-demo-sources
 
 SOURCE_REPO	= source-repo
 
@@ -21,7 +25,11 @@ EXTRA_DIST	= \
 		$(CONFIG_REPO_TAR) \
 		$(SOURCE_REPO_TAR)
 
-CLEANFILES	= sisyphus-demo-client sisyphus-demo-console sisyphus-demo-web checkout-demo-config
+CLEANFILES	= sisyphus-demo-client \
+			sisyphus-demo-console \
+			sisyphus-demo-web \
+			checkout-demo-config \
+			checkout-demo-sources
 
 dbconfig.yml: www/config/database.yml Makefile
 	cat $< | head -n 3 | tail -2 | sed -e 's/  //' > $@
@@ -30,7 +38,11 @@ backup:
 	cd $(demodir) ; \
 	tar zcvf $(CONFIG_REPO_TAR) $(CONFIG_REPO); \
 	cd - ; \
-	cp $(demodir)/$(CONFIG_REPO_TAR) . 
+	cp $(demodir)/$(CONFIG_REPO_TAR) . ; \
+	cd $(demodir) ; \
+	tar zcvf $(SOURCE_REPO_TAR) $(SOURCE_REPO); \
+	cd - ; \
+	cp $(demodir)/$(SOURCE_REPO_TAR) . 
 
 % : %.sh.src Makefile
 	sed "s@__PREFIX__@$(prefix)@g;\

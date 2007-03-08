@@ -1,0 +1,17 @@
+#! /bin/sh
+
+PREFIX=__PREFIX__
+DATADIR=__DATA_DIR__
+BINDIR=__BIN_DIR__
+SOURCE_SVN=file://$DATADIR/demo/source-repo
+SVN=__SUBVERSION_BINDIR__/svn
+
+mkdir -p DEMO_SOURCES
+cd DEMO_SOURCES
+${SVN} co ${SOURCE_SVN}/meta-autotools/trunk meta-autotools
+${SVN} co ${SOURCE_SVN}/meta-build-env/trunk meta-build-env
+${SVN} co ${SOURCE_SVN}/aterm/trunk aterm
+${SVN} co ${SOURCE_SVN}/balanced-binary-aterms/trunk balanced-binary-aterms
+${SVN} co ${SOURCE_SVN}/relational-aterms/trunk relational-aterms
+cd - 
+
