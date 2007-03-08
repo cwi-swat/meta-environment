@@ -11,6 +11,7 @@ libPTMEPT_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libPTMEPT_la_LIBADD   = ../libmept/libmept.la $(ERROR_SUPPORT_LIBS) $(ATERM_LIBS)
 libPTMEPT_la_SOURCES = PTMEPT.c PTMEPT_dict.c $(UTILSRCS)
 
+
 UTILSRCS = lift.c lower.c
 EXTRA_DIST = AsFix.def
 

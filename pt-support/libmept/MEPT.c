@@ -72,18 +72,20 @@ typedef struct ATerm _PT_Symbols;
 typedef struct ATerm _PT_CharRange;
 typedef struct ATerm _PT_CharRanges;
 
+
 /**
  * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
  */
-void PT_initMEPTApi(void) {
+void _PT_initMEPTApi(void) {
   init_MEPT_dict();
+
 }
 
 /**
  * Protect a PT_ParseTree from the ATerm garbage collector. Every PT_ParseTree that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_ParseTree
  */
-void PT_protectParseTree(PT_ParseTree *arg) {
+void _PT_protectParseTree(PT_ParseTree *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -91,7 +93,7 @@ void PT_protectParseTree(PT_ParseTree *arg) {
  * Unprotect a PT_ParseTree from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_ParseTree
  */
-void PT_unprotectParseTree(PT_ParseTree *arg) {
+void _PT_unprotectParseTree(PT_ParseTree *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -99,7 +101,7 @@ void PT_unprotectParseTree(PT_ParseTree *arg) {
  * Protect a PT_Tree from the ATerm garbage collector. Every PT_Tree that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Tree
  */
-void PT_protectTree(PT_Tree *arg) {
+void _PT_protectTree(PT_Tree *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -107,7 +109,7 @@ void PT_protectTree(PT_Tree *arg) {
  * Unprotect a PT_Tree from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Tree
  */
-void PT_unprotectTree(PT_Tree *arg) {
+void _PT_unprotectTree(PT_Tree *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -115,7 +117,7 @@ void PT_unprotectTree(PT_Tree *arg) {
  * Protect a PT_Args from the ATerm garbage collector. Every PT_Args that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Args
  */
-void PT_protectArgs(PT_Args *arg) {
+void _PT_protectArgs(PT_Args *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -123,7 +125,7 @@ void PT_protectArgs(PT_Args *arg) {
  * Unprotect a PT_Args from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Args
  */
-void PT_unprotectArgs(PT_Args *arg) {
+void _PT_unprotectArgs(PT_Args *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -131,7 +133,7 @@ void PT_unprotectArgs(PT_Args *arg) {
  * Protect a PT_Production from the ATerm garbage collector. Every PT_Production that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Production
  */
-void PT_protectProduction(PT_Production *arg) {
+void _PT_protectProduction(PT_Production *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -139,7 +141,7 @@ void PT_protectProduction(PT_Production *arg) {
  * Unprotect a PT_Production from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Production
  */
-void PT_unprotectProduction(PT_Production *arg) {
+void _PT_unprotectProduction(PT_Production *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -147,7 +149,7 @@ void PT_unprotectProduction(PT_Production *arg) {
  * Protect a PT_Attributes from the ATerm garbage collector. Every PT_Attributes that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Attributes
  */
-void PT_protectAttributes(PT_Attributes *arg) {
+void _PT_protectAttributes(PT_Attributes *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -155,7 +157,7 @@ void PT_protectAttributes(PT_Attributes *arg) {
  * Unprotect a PT_Attributes from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Attributes
  */
-void PT_unprotectAttributes(PT_Attributes *arg) {
+void _PT_unprotectAttributes(PT_Attributes *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -163,7 +165,7 @@ void PT_unprotectAttributes(PT_Attributes *arg) {
  * Protect a PT_Attrs from the ATerm garbage collector. Every PT_Attrs that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Attrs
  */
-void PT_protectAttrs(PT_Attrs *arg) {
+void _PT_protectAttrs(PT_Attrs *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -171,7 +173,7 @@ void PT_protectAttrs(PT_Attrs *arg) {
  * Unprotect a PT_Attrs from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Attrs
  */
-void PT_unprotectAttrs(PT_Attrs *arg) {
+void _PT_unprotectAttrs(PT_Attrs *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -179,7 +181,7 @@ void PT_unprotectAttrs(PT_Attrs *arg) {
  * Protect a PT_Attr from the ATerm garbage collector. Every PT_Attr that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Attr
  */
-void PT_protectAttr(PT_Attr *arg) {
+void _PT_protectAttr(PT_Attr *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -187,7 +189,7 @@ void PT_protectAttr(PT_Attr *arg) {
  * Unprotect a PT_Attr from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Attr
  */
-void PT_unprotectAttr(PT_Attr *arg) {
+void _PT_unprotectAttr(PT_Attr *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -195,7 +197,7 @@ void PT_unprotectAttr(PT_Attr *arg) {
  * Protect a PT_Associativity from the ATerm garbage collector. Every PT_Associativity that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Associativity
  */
-void PT_protectAssociativity(PT_Associativity *arg) {
+void _PT_protectAssociativity(PT_Associativity *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -203,7 +205,7 @@ void PT_protectAssociativity(PT_Associativity *arg) {
  * Unprotect a PT_Associativity from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Associativity
  */
-void PT_unprotectAssociativity(PT_Associativity *arg) {
+void _PT_unprotectAssociativity(PT_Associativity *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -211,7 +213,7 @@ void PT_unprotectAssociativity(PT_Associativity *arg) {
  * Protect a PT_Symbol from the ATerm garbage collector. Every PT_Symbol that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Symbol
  */
-void PT_protectSymbol(PT_Symbol *arg) {
+void _PT_protectSymbol(PT_Symbol *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -219,7 +221,7 @@ void PT_protectSymbol(PT_Symbol *arg) {
  * Unprotect a PT_Symbol from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Symbol
  */
-void PT_unprotectSymbol(PT_Symbol *arg) {
+void _PT_unprotectSymbol(PT_Symbol *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -227,7 +229,7 @@ void PT_unprotectSymbol(PT_Symbol *arg) {
  * Protect a PT_Symbols from the ATerm garbage collector. Every PT_Symbols that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_Symbols
  */
-void PT_protectSymbols(PT_Symbols *arg) {
+void _PT_protectSymbols(PT_Symbols *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -235,7 +237,7 @@ void PT_protectSymbols(PT_Symbols *arg) {
  * Unprotect a PT_Symbols from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_Symbols
  */
-void PT_unprotectSymbols(PT_Symbols *arg) {
+void _PT_unprotectSymbols(PT_Symbols *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -243,7 +245,7 @@ void PT_unprotectSymbols(PT_Symbols *arg) {
  * Protect a PT_CharRange from the ATerm garbage collector. Every PT_CharRange that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_CharRange
  */
-void PT_protectCharRange(PT_CharRange *arg) {
+void _PT_protectCharRange(PT_CharRange *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -251,7 +253,7 @@ void PT_protectCharRange(PT_CharRange *arg) {
  * Unprotect a PT_CharRange from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_CharRange
  */
-void PT_unprotectCharRange(PT_CharRange *arg) {
+void _PT_unprotectCharRange(PT_CharRange *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -259,7 +261,7 @@ void PT_unprotectCharRange(PT_CharRange *arg) {
  * Protect a PT_CharRanges from the ATerm garbage collector. Every PT_CharRanges that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a PT_CharRanges
  */
-void PT_protectCharRanges(PT_CharRanges *arg) {
+void _PT_protectCharRanges(PT_CharRanges *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -267,7 +269,7 @@ void PT_protectCharRanges(PT_CharRanges *arg) {
  * Unprotect a PT_CharRanges from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a PT_CharRanges
  */
-void PT_unprotectCharRanges(PT_CharRanges *arg) {
+void _PT_unprotectCharRanges(PT_CharRanges *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -276,7 +278,7 @@ void PT_unprotectCharRanges(PT_CharRanges *arg) {
  * \param[in] t ATerm to be converted
  * \return PT_ParseTree that was encoded by \arg
  */
-PT_ParseTree PT_ParseTreeFromTerm(ATerm t) {
+PT_ParseTree _PT_ParseTreeFromTerm(ATerm t) {
   return (PT_ParseTree)t;
 }
 
@@ -285,7 +287,7 @@ PT_ParseTree PT_ParseTreeFromTerm(ATerm t) {
  * \param[in] arg PT_ParseTree to be converted
  * \return ATerm that represents the PT_ParseTree
  */
-ATerm PT_ParseTreeToTerm(PT_ParseTree arg) {
+ATerm _PT_ParseTreeToTerm(PT_ParseTree arg) {
   return (ATerm)arg;
 }
 
@@ -294,7 +296,7 @@ ATerm PT_ParseTreeToTerm(PT_ParseTree arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Tree that was encoded by \arg
  */
-PT_Tree PT_TreeFromTerm(ATerm t) {
+PT_Tree _PT_TreeFromTerm(ATerm t) {
   return (PT_Tree)t;
 }
 
@@ -303,7 +305,7 @@ PT_Tree PT_TreeFromTerm(ATerm t) {
  * \param[in] arg PT_Tree to be converted
  * \return ATerm that represents the PT_Tree
  */
-ATerm PT_TreeToTerm(PT_Tree arg) {
+ATerm _PT_TreeToTerm(PT_Tree arg) {
   return (ATerm)arg;
 }
 
@@ -312,7 +314,7 @@ ATerm PT_TreeToTerm(PT_Tree arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Args that was encoded by \arg
  */
-PT_Args PT_ArgsFromTerm(ATerm t) {
+PT_Args _PT_ArgsFromTerm(ATerm t) {
   return (PT_Args)t;
 }
 
@@ -321,7 +323,7 @@ PT_Args PT_ArgsFromTerm(ATerm t) {
  * \param[in] arg PT_Args to be converted
  * \return ATerm that represents the PT_Args
  */
-ATerm PT_ArgsToTerm(PT_Args arg) {
+ATerm _PT_ArgsToTerm(PT_Args arg) {
   return (ATerm)arg;
 }
 
@@ -330,7 +332,7 @@ ATerm PT_ArgsToTerm(PT_Args arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Production that was encoded by \arg
  */
-PT_Production PT_ProductionFromTerm(ATerm t) {
+PT_Production _PT_ProductionFromTerm(ATerm t) {
   return (PT_Production)t;
 }
 
@@ -339,7 +341,7 @@ PT_Production PT_ProductionFromTerm(ATerm t) {
  * \param[in] arg PT_Production to be converted
  * \return ATerm that represents the PT_Production
  */
-ATerm PT_ProductionToTerm(PT_Production arg) {
+ATerm _PT_ProductionToTerm(PT_Production arg) {
   return (ATerm)arg;
 }
 
@@ -348,7 +350,7 @@ ATerm PT_ProductionToTerm(PT_Production arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Attributes that was encoded by \arg
  */
-PT_Attributes PT_AttributesFromTerm(ATerm t) {
+PT_Attributes _PT_AttributesFromTerm(ATerm t) {
   return (PT_Attributes)t;
 }
 
@@ -357,7 +359,7 @@ PT_Attributes PT_AttributesFromTerm(ATerm t) {
  * \param[in] arg PT_Attributes to be converted
  * \return ATerm that represents the PT_Attributes
  */
-ATerm PT_AttributesToTerm(PT_Attributes arg) {
+ATerm _PT_AttributesToTerm(PT_Attributes arg) {
   return (ATerm)arg;
 }
 
@@ -366,7 +368,7 @@ ATerm PT_AttributesToTerm(PT_Attributes arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Attrs that was encoded by \arg
  */
-PT_Attrs PT_AttrsFromTerm(ATerm t) {
+PT_Attrs _PT_AttrsFromTerm(ATerm t) {
   return (PT_Attrs)t;
 }
 
@@ -375,7 +377,7 @@ PT_Attrs PT_AttrsFromTerm(ATerm t) {
  * \param[in] arg PT_Attrs to be converted
  * \return ATerm that represents the PT_Attrs
  */
-ATerm PT_AttrsToTerm(PT_Attrs arg) {
+ATerm _PT_AttrsToTerm(PT_Attrs arg) {
   return (ATerm)arg;
 }
 
@@ -384,7 +386,7 @@ ATerm PT_AttrsToTerm(PT_Attrs arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Attr that was encoded by \arg
  */
-PT_Attr PT_AttrFromTerm(ATerm t) {
+PT_Attr _PT_AttrFromTerm(ATerm t) {
   return (PT_Attr)t;
 }
 
@@ -393,7 +395,7 @@ PT_Attr PT_AttrFromTerm(ATerm t) {
  * \param[in] arg PT_Attr to be converted
  * \return ATerm that represents the PT_Attr
  */
-ATerm PT_AttrToTerm(PT_Attr arg) {
+ATerm _PT_AttrToTerm(PT_Attr arg) {
   return (ATerm)arg;
 }
 
@@ -402,7 +404,7 @@ ATerm PT_AttrToTerm(PT_Attr arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Associativity that was encoded by \arg
  */
-PT_Associativity PT_AssociativityFromTerm(ATerm t) {
+PT_Associativity _PT_AssociativityFromTerm(ATerm t) {
   return (PT_Associativity)t;
 }
 
@@ -411,7 +413,7 @@ PT_Associativity PT_AssociativityFromTerm(ATerm t) {
  * \param[in] arg PT_Associativity to be converted
  * \return ATerm that represents the PT_Associativity
  */
-ATerm PT_AssociativityToTerm(PT_Associativity arg) {
+ATerm _PT_AssociativityToTerm(PT_Associativity arg) {
   return (ATerm)arg;
 }
 
@@ -420,7 +422,7 @@ ATerm PT_AssociativityToTerm(PT_Associativity arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Symbol that was encoded by \arg
  */
-PT_Symbol PT_SymbolFromTerm(ATerm t) {
+PT_Symbol _PT_SymbolFromTerm(ATerm t) {
   return (PT_Symbol)t;
 }
 
@@ -429,7 +431,7 @@ PT_Symbol PT_SymbolFromTerm(ATerm t) {
  * \param[in] arg PT_Symbol to be converted
  * \return ATerm that represents the PT_Symbol
  */
-ATerm PT_SymbolToTerm(PT_Symbol arg) {
+ATerm _PT_SymbolToTerm(PT_Symbol arg) {
   return (ATerm)arg;
 }
 
@@ -438,7 +440,7 @@ ATerm PT_SymbolToTerm(PT_Symbol arg) {
  * \param[in] t ATerm to be converted
  * \return PT_Symbols that was encoded by \arg
  */
-PT_Symbols PT_SymbolsFromTerm(ATerm t) {
+PT_Symbols _PT_SymbolsFromTerm(ATerm t) {
   return (PT_Symbols)t;
 }
 
@@ -447,7 +449,7 @@ PT_Symbols PT_SymbolsFromTerm(ATerm t) {
  * \param[in] arg PT_Symbols to be converted
  * \return ATerm that represents the PT_Symbols
  */
-ATerm PT_SymbolsToTerm(PT_Symbols arg) {
+ATerm _PT_SymbolsToTerm(PT_Symbols arg) {
   return (ATerm)arg;
 }
 
@@ -456,7 +458,7 @@ ATerm PT_SymbolsToTerm(PT_Symbols arg) {
  * \param[in] t ATerm to be converted
  * \return PT_CharRange that was encoded by \arg
  */
-PT_CharRange PT_CharRangeFromTerm(ATerm t) {
+PT_CharRange _PT_CharRangeFromTerm(ATerm t) {
   return (PT_CharRange)t;
 }
 
@@ -465,7 +467,7 @@ PT_CharRange PT_CharRangeFromTerm(ATerm t) {
  * \param[in] arg PT_CharRange to be converted
  * \return ATerm that represents the PT_CharRange
  */
-ATerm PT_CharRangeToTerm(PT_CharRange arg) {
+ATerm _PT_CharRangeToTerm(PT_CharRange arg) {
   return (ATerm)arg;
 }
 
@@ -474,7 +476,7 @@ ATerm PT_CharRangeToTerm(PT_CharRange arg) {
  * \param[in] t ATerm to be converted
  * \return PT_CharRanges that was encoded by \arg
  */
-PT_CharRanges PT_CharRangesFromTerm(ATerm t) {
+PT_CharRanges _PT_CharRangesFromTerm(ATerm t) {
   return (PT_CharRanges)t;
 }
 
@@ -483,7 +485,7 @@ PT_CharRanges PT_CharRangesFromTerm(ATerm t) {
  * \param[in] arg PT_CharRanges to be converted
  * \return ATerm that represents the PT_CharRanges
  */
-ATerm PT_CharRangesToTerm(PT_CharRanges arg) {
+ATerm _PT_CharRangesToTerm(PT_CharRanges arg) {
   return (ATerm)arg;
 }
 
@@ -492,7 +494,7 @@ ATerm PT_CharRangesToTerm(PT_CharRanges arg) {
  * \param[in] arg input PT_Args
  * \return The number of elements in the PT_Args
  */
-int PT_getArgsLength (PT_Args arg) {
+int _PT_getArgsLength(PT_Args arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -501,7 +503,7 @@ int PT_getArgsLength (PT_Args arg) {
  * \param[in] arg PT_Args to be reversed
  * \return a reversed #arg
  */
-PT_Args PT_reverseArgs(PT_Args arg) {
+PT_Args _PT_reverseArgs(PT_Args arg) {
   return (PT_Args) ATreverse((ATermList) arg);
 }
 
@@ -511,7 +513,7 @@ PT_Args PT_reverseArgs(PT_Args arg) {
  * \param[in] elem PT_Tree to be appended
  * \return new PT_Args with #elem appended
  */
-PT_Args PT_appendArgs(PT_Args arg, PT_Tree elem) {
+PT_Args _PT_appendArgs(PT_Args arg, PT_Tree elem) {
   return (PT_Args) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -521,7 +523,7 @@ PT_Args PT_appendArgs(PT_Args arg, PT_Tree elem) {
  * \param[in] arg1 second PT_Args
  * \return PT_Args with the elements of #arg0 before the elements of #arg1
  */
-PT_Args PT_concatArgs(PT_Args arg0, PT_Args arg1) {
+PT_Args _PT_concatArgs(PT_Args arg0, PT_Args arg1) {
   return (PT_Args) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -532,7 +534,7 @@ PT_Args PT_concatArgs(PT_Args arg0, PT_Args arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PT_Args with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PT_Args PT_sliceArgs(PT_Args arg, int start, int end) {
+PT_Args _PT_sliceArgs(PT_Args arg, int start, int end) {
   return (PT_Args) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -542,7 +544,7 @@ PT_Args PT_sliceArgs(PT_Args arg, int start, int end) {
  * \param[in] index index to use to point in the PT_Args
  * \return PT_Tree at position #index in #arg
  */
-PT_Tree PT_getArgsTreeAt(PT_Args arg, int index) {
+PT_Tree _PT_getArgsTreeAt(PT_Args arg, int index) {
  return (PT_Tree)ATelementAt((ATermList) arg,index);
 }
 
@@ -553,7 +555,7 @@ PT_Tree PT_getArgsTreeAt(PT_Args arg, int index) {
  * \param[in] index index to use to point in the PT_Args
  * \return A new PT_Argswith #elem replaced in #arg at position #index
  */
-PT_Args PT_replaceArgsTreeAt(PT_Args arg, PT_Tree elem, int index) {
+PT_Args _PT_replaceArgsTreeAt(PT_Args arg, PT_Tree elem, int index) {
  return (PT_Args) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -563,7 +565,7 @@ PT_Args PT_replaceArgsTreeAt(PT_Args arg, PT_Tree elem, int index) {
  * \param[in] elem2 One PT_Tree element of the new PT_Args
  * \return A new PT_Args consisting of 2 PT_Trees
  */
-PT_Args PT_makeArgs2(PT_Tree elem1, PT_Tree elem2) {
+PT_Args _PT_makeArgs2(PT_Tree elem1, PT_Tree elem2) {
   return (PT_Args) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -574,7 +576,7 @@ PT_Args PT_makeArgs2(PT_Tree elem1, PT_Tree elem2) {
  * \param[in] elem3 One PT_Tree element of the new PT_Args
  * \return A new PT_Args consisting of 3 PT_Trees
  */
-PT_Args PT_makeArgs3(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3) {
+PT_Args _PT_makeArgs3(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3) {
   return (PT_Args) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -586,7 +588,7 @@ PT_Args PT_makeArgs3(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3) {
  * \param[in] elem4 One PT_Tree element of the new PT_Args
  * \return A new PT_Args consisting of 4 PT_Trees
  */
-PT_Args PT_makeArgs4(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4) {
+PT_Args _PT_makeArgs4(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4) {
   return (PT_Args) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -599,7 +601,7 @@ PT_Args PT_makeArgs4(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4)
  * \param[in] elem5 One PT_Tree element of the new PT_Args
  * \return A new PT_Args consisting of 5 PT_Trees
  */
-PT_Args PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5) {
+PT_Args _PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5) {
   return (PT_Args) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -613,7 +615,7 @@ PT_Args PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4,
  * \param[in] elem6 One PT_Tree element of the new PT_Args
  * \return A new PT_Args consisting of 6 PT_Trees
  */
-PT_Args PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5, PT_Tree elem6) {
+PT_Args _PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5, PT_Tree elem6) {
   return (PT_Args) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -622,7 +624,7 @@ PT_Args PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4,
  * \param[in] arg input PT_Attrs
  * \return The number of elements in the PT_Attrs
  */
-int PT_getAttrsLength (PT_Attrs arg) {
+int _PT_getAttrsLength(PT_Attrs arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -631,7 +633,7 @@ int PT_getAttrsLength (PT_Attrs arg) {
  * \param[in] arg PT_Attrs to be reversed
  * \return a reversed #arg
  */
-PT_Attrs PT_reverseAttrs(PT_Attrs arg) {
+PT_Attrs _PT_reverseAttrs(PT_Attrs arg) {
   return (PT_Attrs) ATreverse((ATermList) arg);
 }
 
@@ -641,7 +643,7 @@ PT_Attrs PT_reverseAttrs(PT_Attrs arg) {
  * \param[in] elem PT_Attr to be appended
  * \return new PT_Attrs with #elem appended
  */
-PT_Attrs PT_appendAttrs(PT_Attrs arg, PT_Attr elem) {
+PT_Attrs _PT_appendAttrs(PT_Attrs arg, PT_Attr elem) {
   return (PT_Attrs) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -651,7 +653,7 @@ PT_Attrs PT_appendAttrs(PT_Attrs arg, PT_Attr elem) {
  * \param[in] arg1 second PT_Attrs
  * \return PT_Attrs with the elements of #arg0 before the elements of #arg1
  */
-PT_Attrs PT_concatAttrs(PT_Attrs arg0, PT_Attrs arg1) {
+PT_Attrs _PT_concatAttrs(PT_Attrs arg0, PT_Attrs arg1) {
   return (PT_Attrs) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -662,7 +664,7 @@ PT_Attrs PT_concatAttrs(PT_Attrs arg0, PT_Attrs arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PT_Attrs with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PT_Attrs PT_sliceAttrs(PT_Attrs arg, int start, int end) {
+PT_Attrs _PT_sliceAttrs(PT_Attrs arg, int start, int end) {
   return (PT_Attrs) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -672,7 +674,7 @@ PT_Attrs PT_sliceAttrs(PT_Attrs arg, int start, int end) {
  * \param[in] index index to use to point in the PT_Attrs
  * \return PT_Attr at position #index in #arg
  */
-PT_Attr PT_getAttrsAttrAt(PT_Attrs arg, int index) {
+PT_Attr _PT_getAttrsAttrAt(PT_Attrs arg, int index) {
  return (PT_Attr)ATelementAt((ATermList) arg,index);
 }
 
@@ -683,7 +685,7 @@ PT_Attr PT_getAttrsAttrAt(PT_Attrs arg, int index) {
  * \param[in] index index to use to point in the PT_Attrs
  * \return A new PT_Attrswith #elem replaced in #arg at position #index
  */
-PT_Attrs PT_replaceAttrsAttrAt(PT_Attrs arg, PT_Attr elem, int index) {
+PT_Attrs _PT_replaceAttrsAttrAt(PT_Attrs arg, PT_Attr elem, int index) {
  return (PT_Attrs) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -693,7 +695,7 @@ PT_Attrs PT_replaceAttrsAttrAt(PT_Attrs arg, PT_Attr elem, int index) {
  * \param[in] elem2 One PT_Attr element of the new PT_Attrs
  * \return A new PT_Attrs consisting of 2 PT_Attrs
  */
-PT_Attrs PT_makeAttrs2(PT_Attr elem1, PT_Attr elem2) {
+PT_Attrs _PT_makeAttrs2(PT_Attr elem1, PT_Attr elem2) {
   return (PT_Attrs) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -704,7 +706,7 @@ PT_Attrs PT_makeAttrs2(PT_Attr elem1, PT_Attr elem2) {
  * \param[in] elem3 One PT_Attr element of the new PT_Attrs
  * \return A new PT_Attrs consisting of 3 PT_Attrs
  */
-PT_Attrs PT_makeAttrs3(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3) {
+PT_Attrs _PT_makeAttrs3(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3) {
   return (PT_Attrs) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -716,7 +718,7 @@ PT_Attrs PT_makeAttrs3(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3) {
  * \param[in] elem4 One PT_Attr element of the new PT_Attrs
  * \return A new PT_Attrs consisting of 4 PT_Attrs
  */
-PT_Attrs PT_makeAttrs4(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4) {
+PT_Attrs _PT_makeAttrs4(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4) {
   return (PT_Attrs) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -729,7 +731,7 @@ PT_Attrs PT_makeAttrs4(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem
  * \param[in] elem5 One PT_Attr element of the new PT_Attrs
  * \return A new PT_Attrs consisting of 5 PT_Attrs
  */
-PT_Attrs PT_makeAttrs5(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5) {
+PT_Attrs _PT_makeAttrs5(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5) {
   return (PT_Attrs) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -743,7 +745,7 @@ PT_Attrs PT_makeAttrs5(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem
  * \param[in] elem6 One PT_Attr element of the new PT_Attrs
  * \return A new PT_Attrs consisting of 6 PT_Attrs
  */
-PT_Attrs PT_makeAttrs6(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5, PT_Attr elem6) {
+PT_Attrs _PT_makeAttrs6(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5, PT_Attr elem6) {
   return (PT_Attrs) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -752,7 +754,7 @@ PT_Attrs PT_makeAttrs6(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem
  * \param[in] arg input PT_Symbols
  * \return The number of elements in the PT_Symbols
  */
-int PT_getSymbolsLength (PT_Symbols arg) {
+int _PT_getSymbolsLength(PT_Symbols arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -761,7 +763,7 @@ int PT_getSymbolsLength (PT_Symbols arg) {
  * \param[in] arg PT_Symbols to be reversed
  * \return a reversed #arg
  */
-PT_Symbols PT_reverseSymbols(PT_Symbols arg) {
+PT_Symbols _PT_reverseSymbols(PT_Symbols arg) {
   return (PT_Symbols) ATreverse((ATermList) arg);
 }
 
@@ -771,7 +773,7 @@ PT_Symbols PT_reverseSymbols(PT_Symbols arg) {
  * \param[in] elem PT_Symbol to be appended
  * \return new PT_Symbols with #elem appended
  */
-PT_Symbols PT_appendSymbols(PT_Symbols arg, PT_Symbol elem) {
+PT_Symbols _PT_appendSymbols(PT_Symbols arg, PT_Symbol elem) {
   return (PT_Symbols) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -781,7 +783,7 @@ PT_Symbols PT_appendSymbols(PT_Symbols arg, PT_Symbol elem) {
  * \param[in] arg1 second PT_Symbols
  * \return PT_Symbols with the elements of #arg0 before the elements of #arg1
  */
-PT_Symbols PT_concatSymbols(PT_Symbols arg0, PT_Symbols arg1) {
+PT_Symbols _PT_concatSymbols(PT_Symbols arg0, PT_Symbols arg1) {
   return (PT_Symbols) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -792,7 +794,7 @@ PT_Symbols PT_concatSymbols(PT_Symbols arg0, PT_Symbols arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PT_Symbols with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PT_Symbols PT_sliceSymbols(PT_Symbols arg, int start, int end) {
+PT_Symbols _PT_sliceSymbols(PT_Symbols arg, int start, int end) {
   return (PT_Symbols) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -802,7 +804,7 @@ PT_Symbols PT_sliceSymbols(PT_Symbols arg, int start, int end) {
  * \param[in] index index to use to point in the PT_Symbols
  * \return PT_Symbol at position #index in #arg
  */
-PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols arg, int index) {
+PT_Symbol _PT_getSymbolsSymbolAt(PT_Symbols arg, int index) {
  return (PT_Symbol)ATelementAt((ATermList) arg,index);
 }
 
@@ -813,7 +815,7 @@ PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols arg, int index) {
  * \param[in] index index to use to point in the PT_Symbols
  * \return A new PT_Symbolswith #elem replaced in #arg at position #index
  */
-PT_Symbols PT_replaceSymbolsSymbolAt(PT_Symbols arg, PT_Symbol elem, int index) {
+PT_Symbols _PT_replaceSymbolsSymbolAt(PT_Symbols arg, PT_Symbol elem, int index) {
  return (PT_Symbols) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -823,7 +825,7 @@ PT_Symbols PT_replaceSymbolsSymbolAt(PT_Symbols arg, PT_Symbol elem, int index) 
  * \param[in] elem2 One PT_Symbol element of the new PT_Symbols
  * \return A new PT_Symbols consisting of 2 PT_Symbols
  */
-PT_Symbols PT_makeSymbols2(PT_Symbol elem1, PT_Symbol elem2) {
+PT_Symbols _PT_makeSymbols2(PT_Symbol elem1, PT_Symbol elem2) {
   return (PT_Symbols) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -834,7 +836,7 @@ PT_Symbols PT_makeSymbols2(PT_Symbol elem1, PT_Symbol elem2) {
  * \param[in] elem3 One PT_Symbol element of the new PT_Symbols
  * \return A new PT_Symbols consisting of 3 PT_Symbols
  */
-PT_Symbols PT_makeSymbols3(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3) {
+PT_Symbols _PT_makeSymbols3(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3) {
   return (PT_Symbols) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -846,7 +848,7 @@ PT_Symbols PT_makeSymbols3(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3) {
  * \param[in] elem4 One PT_Symbol element of the new PT_Symbols
  * \return A new PT_Symbols consisting of 4 PT_Symbols
  */
-PT_Symbols PT_makeSymbols4(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4) {
+PT_Symbols _PT_makeSymbols4(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4) {
   return (PT_Symbols) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -859,7 +861,7 @@ PT_Symbols PT_makeSymbols4(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT
  * \param[in] elem5 One PT_Symbol element of the new PT_Symbols
  * \return A new PT_Symbols consisting of 5 PT_Symbols
  */
-PT_Symbols PT_makeSymbols5(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5) {
+PT_Symbols _PT_makeSymbols5(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5) {
   return (PT_Symbols) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -873,7 +875,7 @@ PT_Symbols PT_makeSymbols5(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT
  * \param[in] elem6 One PT_Symbol element of the new PT_Symbols
  * \return A new PT_Symbols consisting of 6 PT_Symbols
  */
-PT_Symbols PT_makeSymbols6(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5, PT_Symbol elem6) {
+PT_Symbols _PT_makeSymbols6(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5, PT_Symbol elem6) {
   return (PT_Symbols) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -882,7 +884,7 @@ PT_Symbols PT_makeSymbols6(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT
  * \param[in] arg input PT_CharRanges
  * \return The number of elements in the PT_CharRanges
  */
-int PT_getCharRangesLength (PT_CharRanges arg) {
+int _PT_getCharRangesLength(PT_CharRanges arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -891,7 +893,7 @@ int PT_getCharRangesLength (PT_CharRanges arg) {
  * \param[in] arg PT_CharRanges to be reversed
  * \return a reversed #arg
  */
-PT_CharRanges PT_reverseCharRanges(PT_CharRanges arg) {
+PT_CharRanges _PT_reverseCharRanges(PT_CharRanges arg) {
   return (PT_CharRanges) ATreverse((ATermList) arg);
 }
 
@@ -901,7 +903,7 @@ PT_CharRanges PT_reverseCharRanges(PT_CharRanges arg) {
  * \param[in] elem PT_CharRange to be appended
  * \return new PT_CharRanges with #elem appended
  */
-PT_CharRanges PT_appendCharRanges(PT_CharRanges arg, PT_CharRange elem) {
+PT_CharRanges _PT_appendCharRanges(PT_CharRanges arg, PT_CharRange elem) {
   return (PT_CharRanges) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -911,7 +913,7 @@ PT_CharRanges PT_appendCharRanges(PT_CharRanges arg, PT_CharRange elem) {
  * \param[in] arg1 second PT_CharRanges
  * \return PT_CharRanges with the elements of #arg0 before the elements of #arg1
  */
-PT_CharRanges PT_concatCharRanges(PT_CharRanges arg0, PT_CharRanges arg1) {
+PT_CharRanges _PT_concatCharRanges(PT_CharRanges arg0, PT_CharRanges arg1) {
   return (PT_CharRanges) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -922,7 +924,7 @@ PT_CharRanges PT_concatCharRanges(PT_CharRanges arg0, PT_CharRanges arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new PT_CharRanges with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-PT_CharRanges PT_sliceCharRanges(PT_CharRanges arg, int start, int end) {
+PT_CharRanges _PT_sliceCharRanges(PT_CharRanges arg, int start, int end) {
   return (PT_CharRanges) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -932,7 +934,7 @@ PT_CharRanges PT_sliceCharRanges(PT_CharRanges arg, int start, int end) {
  * \param[in] index index to use to point in the PT_CharRanges
  * \return PT_CharRange at position #index in #arg
  */
-PT_CharRange PT_getCharRangesCharRangeAt(PT_CharRanges arg, int index) {
+PT_CharRange _PT_getCharRangesCharRangeAt(PT_CharRanges arg, int index) {
  return (PT_CharRange)ATelementAt((ATermList) arg,index);
 }
 
@@ -943,7 +945,7 @@ PT_CharRange PT_getCharRangesCharRangeAt(PT_CharRanges arg, int index) {
  * \param[in] index index to use to point in the PT_CharRanges
  * \return A new PT_CharRangeswith #elem replaced in #arg at position #index
  */
-PT_CharRanges PT_replaceCharRangesCharRangeAt(PT_CharRanges arg, PT_CharRange elem, int index) {
+PT_CharRanges _PT_replaceCharRangesCharRangeAt(PT_CharRanges arg, PT_CharRange elem, int index) {
  return (PT_CharRanges) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -953,7 +955,7 @@ PT_CharRanges PT_replaceCharRangesCharRangeAt(PT_CharRanges arg, PT_CharRange el
  * \param[in] elem2 One PT_CharRange element of the new PT_CharRanges
  * \return A new PT_CharRanges consisting of 2 PT_CharRanges
  */
-PT_CharRanges PT_makeCharRanges2(PT_CharRange elem1, PT_CharRange elem2) {
+PT_CharRanges _PT_makeCharRanges2(PT_CharRange elem1, PT_CharRange elem2) {
   return (PT_CharRanges) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -964,7 +966,7 @@ PT_CharRanges PT_makeCharRanges2(PT_CharRange elem1, PT_CharRange elem2) {
  * \param[in] elem3 One PT_CharRange element of the new PT_CharRanges
  * \return A new PT_CharRanges consisting of 3 PT_CharRanges
  */
-PT_CharRanges PT_makeCharRanges3(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3) {
+PT_CharRanges _PT_makeCharRanges3(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3) {
   return (PT_CharRanges) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -976,7 +978,7 @@ PT_CharRanges PT_makeCharRanges3(PT_CharRange elem1, PT_CharRange elem2, PT_Char
  * \param[in] elem4 One PT_CharRange element of the new PT_CharRanges
  * \return A new PT_CharRanges consisting of 4 PT_CharRanges
  */
-PT_CharRanges PT_makeCharRanges4(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4) {
+PT_CharRanges _PT_makeCharRanges4(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4) {
   return (PT_CharRanges) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -989,7 +991,7 @@ PT_CharRanges PT_makeCharRanges4(PT_CharRange elem1, PT_CharRange elem2, PT_Char
  * \param[in] elem5 One PT_CharRange element of the new PT_CharRanges
  * \return A new PT_CharRanges consisting of 5 PT_CharRanges
  */
-PT_CharRanges PT_makeCharRanges5(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5) {
+PT_CharRanges _PT_makeCharRanges5(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5) {
   return (PT_CharRanges) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1003,7 +1005,7 @@ PT_CharRanges PT_makeCharRanges5(PT_CharRange elem1, PT_CharRange elem2, PT_Char
  * \param[in] elem6 One PT_CharRange element of the new PT_CharRanges
  * \return A new PT_CharRanges consisting of 6 PT_CharRanges
  */
-PT_CharRanges PT_makeCharRanges6(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5, PT_CharRange elem6) {
+PT_CharRanges _PT_makeCharRanges6(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5, PT_CharRange elem6) {
   return (PT_CharRanges) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1467,7 +1469,7 @@ PT_CharRanges PT_makeCharRangesMany(PT_CharRange head, PT_CharRanges tail) {
  * \param[in] arg1 second PT_ParseTree to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualParseTree(PT_ParseTree arg0, PT_ParseTree arg1) {
+ATbool _PT_isEqualParseTree(PT_ParseTree arg0, PT_ParseTree arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1477,7 +1479,7 @@ ATbool PT_isEqualParseTree(PT_ParseTree arg0, PT_ParseTree arg1) {
  * \param[in] arg1 second PT_Tree to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualTree(PT_Tree arg0, PT_Tree arg1) {
+ATbool _PT_isEqualTree(PT_Tree arg0, PT_Tree arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1487,7 +1489,7 @@ ATbool PT_isEqualTree(PT_Tree arg0, PT_Tree arg1) {
  * \param[in] arg1 second PT_Args to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1) {
+ATbool _PT_isEqualArgs(PT_Args arg0, PT_Args arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1497,7 +1499,7 @@ ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1) {
  * \param[in] arg1 second PT_Production to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualProduction(PT_Production arg0, PT_Production arg1) {
+ATbool _PT_isEqualProduction(PT_Production arg0, PT_Production arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1507,7 +1509,7 @@ ATbool PT_isEqualProduction(PT_Production arg0, PT_Production arg1) {
  * \param[in] arg1 second PT_Attributes to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualAttributes(PT_Attributes arg0, PT_Attributes arg1) {
+ATbool _PT_isEqualAttributes(PT_Attributes arg0, PT_Attributes arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1517,7 +1519,7 @@ ATbool PT_isEqualAttributes(PT_Attributes arg0, PT_Attributes arg1) {
  * \param[in] arg1 second PT_Attrs to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1) {
+ATbool _PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1527,7 +1529,7 @@ ATbool PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1) {
  * \param[in] arg1 second PT_Attr to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1) {
+ATbool _PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1537,7 +1539,7 @@ ATbool PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1) {
  * \param[in] arg1 second PT_Associativity to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualAssociativity(PT_Associativity arg0, PT_Associativity arg1) {
+ATbool _PT_isEqualAssociativity(PT_Associativity arg0, PT_Associativity arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1547,7 +1549,7 @@ ATbool PT_isEqualAssociativity(PT_Associativity arg0, PT_Associativity arg1) {
  * \param[in] arg1 second PT_Symbol to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1) {
+ATbool _PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1557,7 +1559,7 @@ ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1) {
  * \param[in] arg1 second PT_Symbols to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1) {
+ATbool _PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1567,7 +1569,7 @@ ATbool PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1) {
  * \param[in] arg1 second PT_CharRange to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualCharRange(PT_CharRange arg0, PT_CharRange arg1) {
+ATbool _PT_isEqualCharRange(PT_CharRange arg0, PT_CharRange arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1577,7 +1579,7 @@ ATbool PT_isEqualCharRange(PT_CharRange arg0, PT_CharRange arg1) {
  * \param[in] arg1 second PT_CharRanges to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool PT_isEqualCharRanges(PT_CharRanges arg0, PT_CharRanges arg1) {
+ATbool _PT_isEqualCharRanges(PT_CharRanges arg0, PT_CharRanges arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1594,16 +1596,19 @@ ATbool PT_isValidParseTree(PT_ParseTree arg) {
 }
 
 /**
- * Assert whether a PT_ParseTree is a top. Always returns ATtrue
+ * Assert whether a PT_ParseTree is a top by checking against the following ATerm pattern: parsetree(<top(Tree)>,<amb-cnt(int)>). Always returns ATtrue
  * \param[in] arg input PT_ParseTree
  * \return ATtrue if #arg corresponds to the signature of a top, or ATfalse otherwise
  */
-inline ATbool PT_isParseTreeTop(PT_ParseTree arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternParseTreeTop, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool PT_isParseTreeTop(PT_ParseTree arg){
+  /* checking for: parsetree */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun0) {
+    ATerm arg_arg1 = ATgetArgument(arg, 1);
+    if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -1702,97 +1707,57 @@ ATbool PT_isValidTree(PT_Tree arg) {
 }
 
 /**
- * Assert whether a PT_Tree is a appl. . May not be used to assert correctness of the PT_Tree
+ * Assert whether a PT_Tree is a appl by checking against the following ATerm pattern: appl(<prod(Production)>,<args(Args)>). May not be used to assert correctness of the PT_Tree
  * \param[in] arg input PT_Tree
  * \return ATtrue if #arg corresponds to the signature of a appl, or ATfalse otherwise
  */
-inline ATbool PT_isTreeAppl(PT_Tree arg) {
-  if (ATgetType((ATerm)arg) != AT_APPL) {
-    return ATfalse;
+inline ATbool PT_isTreeAppl(PT_Tree arg){
+  /* checking for: appl */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun1) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeAppl, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Tree is a cycle. . May not be used to assert correctness of the PT_Tree
+ * Assert whether a PT_Tree is a cycle by checking against the following ATerm pattern: cycle(<symbol(Symbol)>,<cycle-length(int)>). May not be used to assert correctness of the PT_Tree
  * \param[in] arg input PT_Tree
  * \return ATtrue if #arg corresponds to the signature of a cycle, or ATfalse otherwise
  */
-inline ATbool PT_isTreeCycle(PT_Tree arg) {
-  if (ATgetType((ATerm)arg) != AT_APPL) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeCycle, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isTreeCycle(PT_Tree arg){
+  /* checking for: cycle */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun2) {
+    ATerm arg_arg1 = ATgetArgument(arg, 1);
+    if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Tree is a amb. . May not be used to assert correctness of the PT_Tree
+ * Assert whether a PT_Tree is a amb by checking against the following ATerm pattern: amb(<args(Args)>). May not be used to assert correctness of the PT_Tree
  * \param[in] arg input PT_Tree
  * \return ATtrue if #arg corresponds to the signature of a amb, or ATfalse otherwise
  */
-inline ATbool PT_isTreeAmb(PT_Tree arg) {
-  if (ATgetType((ATerm)arg) != AT_APPL) {
-    return ATfalse;
+inline ATbool PT_isTreeAmb(PT_Tree arg){
+  /* checking for: amb */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun3) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeAmb, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Tree is a char. . May not be used to assert correctness of the PT_Tree
+ * Assert whether a PT_Tree is a char by checking against the following ATerm pattern: <character(int)>. May not be used to assert correctness of the PT_Tree
  * \param[in] arg input PT_Tree
  * \return ATtrue if #arg corresponds to the signature of a char, or ATfalse otherwise
  */
-inline ATbool PT_isTreeChar(PT_Tree arg) {
-  if (ATgetType((ATerm)arg) != AT_INT) {
-    return ATfalse;
+inline ATbool PT_isTreeChar(PT_Tree arg){
+  if (ATgetType((ATerm)arg) == AT_INT) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternTreeChar, NULL));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
@@ -2008,71 +1973,43 @@ ATbool PT_isValidArgs(PT_Args arg) {
 }
 
 /**
- * Assert whether a PT_Args is a empty. . May not be used to assert correctness of the PT_Args
+ * Assert whether a PT_Args is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the PT_Args
  * \param[in] arg input PT_Args
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool PT_isArgsEmpty(PT_Args arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isArgsEmpty(PT_Args arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternArgsEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Args is a single. . May not be used to assert correctness of the PT_Args
+ * Assert whether a PT_Args is a single by checking against the following ATerm pattern: [<head(Tree)>]. May not be used to assert correctness of the PT_Args
  * \param[in] arg input PT_Args
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool PT_isArgsSingle(PT_Args arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternArgsSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isArgsSingle(PT_Args arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Args is a many. . May not be used to assert correctness of the PT_Args
+ * Assert whether a PT_Args is a many by checking against the following ATerm pattern: [<head(Tree)>,<[tail(Args)]>]. May not be used to assert correctness of the PT_Args
  * \param[in] arg input PT_Args
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool PT_isArgsMany(PT_Args arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isArgsMany(PT_Args arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternArgsMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -2174,49 +2111,29 @@ ATbool PT_isValidProduction(PT_Production arg) {
 }
 
 /**
- * Assert whether a PT_Production is a Default. . May not be used to assert correctness of the PT_Production
+ * Assert whether a PT_Production is a Default by checking against the following ATerm pattern: prod(<lhs(Symbols)>,<rhs(Symbol)>,<attributes(Attributes)>). May not be used to assert correctness of the PT_Production
  * \param[in] arg input PT_Production
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
-inline ATbool PT_isProductionDefault(PT_Production arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternProductionDefault, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isProductionDefault(PT_Production arg){
+  /* checking for: prod */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun4) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Production is a List. . May not be used to assert correctness of the PT_Production
+ * Assert whether a PT_Production is a List by checking against the following ATerm pattern: list(<rhs(Symbol)>). May not be used to assert correctness of the PT_Production
  * \param[in] arg input PT_Production
  * \return ATtrue if #arg corresponds to the signature of a List, or ATfalse otherwise
  */
-inline ATbool PT_isProductionList(PT_Production arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternProductionList, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isProductionList(PT_Production arg){
+  /* checking for: list */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun5) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -2355,49 +2272,29 @@ ATbool PT_isValidAttributes(PT_Attributes arg) {
 }
 
 /**
- * Assert whether a PT_Attributes is a no-attrs. . May not be used to assert correctness of the PT_Attributes
+ * Assert whether a PT_Attributes is a no-attrs by checking against the following ATerm pattern: no-attrs. May not be used to assert correctness of the PT_Attributes
  * \param[in] arg input PT_Attributes
  * \return ATtrue if #arg corresponds to the signature of a no-attrs, or ATfalse otherwise
  */
-inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttributesNoAttrs);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg){
+  /* checking for: no-attrs */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun6) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attributes is a attrs. . May not be used to assert correctness of the PT_Attributes
+ * Assert whether a PT_Attributes is a attrs by checking against the following ATerm pattern: attrs(<attrs(Attrs)>). May not be used to assert correctness of the PT_Attributes
  * \param[in] arg input PT_Attributes
  * \return ATtrue if #arg corresponds to the signature of a attrs, or ATfalse otherwise
  */
-inline ATbool PT_isAttributesAttrs(PT_Attributes arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttributesAttrs, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttributesAttrs(PT_Attributes arg){
+  /* checking for: attrs */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun7) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -2456,71 +2353,43 @@ ATbool PT_isValidAttrs(PT_Attrs arg) {
 }
 
 /**
- * Assert whether a PT_Attrs is a empty. . May not be used to assert correctness of the PT_Attrs
+ * Assert whether a PT_Attrs is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the PT_Attrs
  * \param[in] arg input PT_Attrs
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool PT_isAttrsEmpty(PT_Attrs arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isAttrsEmpty(PT_Attrs arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrsEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attrs is a single. . May not be used to assert correctness of the PT_Attrs
+ * Assert whether a PT_Attrs is a single by checking against the following ATerm pattern: [<head(Attr)>]. May not be used to assert correctness of the PT_Attrs
  * \param[in] arg input PT_Attrs
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool PT_isAttrsSingle(PT_Attrs arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrsSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isAttrsSingle(PT_Attrs arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attrs is a many. . May not be used to assert correctness of the PT_Attrs
+ * Assert whether a PT_Attrs is a many by checking against the following ATerm pattern: [<head(Attr)>,<[tail(Attrs)]>]. May not be used to assert correctness of the PT_Attrs
  * \param[in] arg input PT_Attrs
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool PT_isAttrsMany(PT_Attrs arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isAttrsMany(PT_Attrs arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrsMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -2637,164 +2506,100 @@ ATbool PT_isValidAttr(PT_Attr arg) {
 }
 
 /**
- * Assert whether a PT_Attr is a assoc. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a assoc by checking against the following ATerm pattern: assoc(<assoc(Associativity)>). May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a assoc, or ATfalse otherwise
  */
-inline ATbool PT_isAttrAssoc(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrAssoc, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttrAssoc(PT_Attr arg){
+  /* checking for: assoc */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun8) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attr is a term. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a term by checking against the following ATerm pattern: term(<term(term)>). May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a term, or ATfalse otherwise
  */
-inline ATbool PT_isAttrTerm(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrTerm, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isAttrTerm(PT_Attr arg){
+  /* checking for: term */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun9) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (arg_arg0 != NULL) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attr is a id. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a id by checking against the following ATerm pattern: id(<module-name(str)>). May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a id, or ATfalse otherwise
  */
-inline ATbool PT_isAttrId(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrId, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isAttrId(PT_Attr arg){
+  /* checking for: id */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun10) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attr is a bracket. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a bracket by checking against the following ATerm pattern: bracket. May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a bracket, or ATfalse otherwise
  */
-inline ATbool PT_isAttrBracket(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrBracket);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttrBracket(PT_Attr arg){
+  /* checking for: bracket */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun11) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attr is a reject. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a reject by checking against the following ATerm pattern: reject. May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a reject, or ATfalse otherwise
  */
-inline ATbool PT_isAttrReject(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrReject);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttrReject(PT_Attr arg){
+  /* checking for: reject */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun12) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attr is a prefer. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a prefer by checking against the following ATerm pattern: prefer. May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a prefer, or ATfalse otherwise
  */
-inline ATbool PT_isAttrPrefer(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrPrefer);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttrPrefer(PT_Attr arg){
+  /* checking for: prefer */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun13) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Attr is a avoid. . May not be used to assert correctness of the PT_Attr
+ * Assert whether a PT_Attr is a avoid by checking against the following ATerm pattern: avoid. May not be used to assert correctness of the PT_Attr
  * \param[in] arg input PT_Attr
  * \return ATtrue if #arg corresponds to the signature of a avoid, or ATfalse otherwise
  */
-inline ATbool PT_isAttrAvoid(PT_Attr arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrAvoid);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAttrAvoid(PT_Attr arg){
+  /* checking for: avoid */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun14) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -2930,95 +2735,55 @@ ATbool PT_isValidAssociativity(PT_Associativity arg) {
 }
 
 /**
- * Assert whether a PT_Associativity is a left. . May not be used to assert correctness of the PT_Associativity
+ * Assert whether a PT_Associativity is a left by checking against the following ATerm pattern: left. May not be used to assert correctness of the PT_Associativity
  * \param[in] arg input PT_Associativity
  * \return ATtrue if #arg corresponds to the signature of a left, or ATfalse otherwise
  */
-inline ATbool PT_isAssociativityLeft(PT_Associativity arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityLeft);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAssociativityLeft(PT_Associativity arg){
+  /* checking for: left */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun15) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Associativity is a right. . May not be used to assert correctness of the PT_Associativity
+ * Assert whether a PT_Associativity is a right by checking against the following ATerm pattern: right. May not be used to assert correctness of the PT_Associativity
  * \param[in] arg input PT_Associativity
  * \return ATtrue if #arg corresponds to the signature of a right, or ATfalse otherwise
  */
-inline ATbool PT_isAssociativityRight(PT_Associativity arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityRight);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAssociativityRight(PT_Associativity arg){
+  /* checking for: right */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun16) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Associativity is a assoc. . May not be used to assert correctness of the PT_Associativity
+ * Assert whether a PT_Associativity is a assoc by checking against the following ATerm pattern: assoc. May not be used to assert correctness of the PT_Associativity
  * \param[in] arg input PT_Associativity
  * \return ATtrue if #arg corresponds to the signature of a assoc, or ATfalse otherwise
  */
-inline ATbool PT_isAssociativityAssoc(PT_Associativity arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityAssoc);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAssociativityAssoc(PT_Associativity arg){
+  /* checking for: assoc */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun17) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Associativity is a non-assoc. . May not be used to assert correctness of the PT_Associativity
+ * Assert whether a PT_Associativity is a non-assoc by checking against the following ATerm pattern: non-assoc. May not be used to assert correctness of the PT_Associativity
  * \param[in] arg input PT_Associativity
  * \return ATtrue if #arg corresponds to the signature of a non-assoc, or ATfalse otherwise
  */
-inline ATbool PT_isAssociativityNonAssoc(PT_Associativity arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityNonAssoc);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isAssociativityNonAssoc(PT_Associativity arg){
+  /* checking for: non-assoc */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun18) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -3097,509 +2862,307 @@ ATbool PT_isValidSymbol(PT_Symbol arg) {
 }
 
 /**
- * Assert whether a PT_Symbol is a lit. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a lit by checking against the following ATerm pattern: lit(<string(str)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a lit, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolLit(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolLit, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolLit(PT_Symbol arg){
+  /* checking for: lit */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun19) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a cilit. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a cilit by checking against the following ATerm pattern: cilit(<string(str)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a cilit, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolCilit(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolCilit, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolCilit(PT_Symbol arg){
+  /* checking for: cilit */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun20) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a cf. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a cf by checking against the following ATerm pattern: cf(<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a cf, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolCf(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolCf, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolCf(PT_Symbol arg){
+  /* checking for: cf */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun21) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a lex. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a lex by checking against the following ATerm pattern: lex(<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a lex, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolLex(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolLex, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolLex(PT_Symbol arg){
+  /* checking for: lex */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun22) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a empty. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a empty by checking against the following ATerm pattern: empty. May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolEmpty(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolEmpty);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolEmpty(PT_Symbol arg){
+  /* checking for: empty */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun23) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a seq. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a seq by checking against the following ATerm pattern: seq(<symbols(Symbols)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a seq, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolSeq(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolSeq, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolSeq(PT_Symbol arg){
+  /* checking for: seq */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun24) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a opt. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a opt by checking against the following ATerm pattern: opt(<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a opt, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolOpt(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolOpt, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolOpt(PT_Symbol arg){
+  /* checking for: opt */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun25) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a alt. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a alt by checking against the following ATerm pattern: alt(<lhs(Symbol)>,<rhs(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a alt, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolAlt(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolAlt, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolAlt(PT_Symbol arg){
+  /* checking for: alt */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun26) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a tuple. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a tuple by checking against the following ATerm pattern: tuple(<head(Symbol)>,<rest(Symbols)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a tuple, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolTuple(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolTuple, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolTuple(PT_Symbol arg){
+  /* checking for: tuple */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun27) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a sort. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a sort by checking against the following ATerm pattern: sort(<string(str)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a sort, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolSort(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolSort, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolSort(PT_Symbol arg){
+  /* checking for: sort */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun28) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a iter-plus. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a iter-plus by checking against the following ATerm pattern: iter(<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a iter-plus, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolIterPlus(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlus, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolIterPlus(PT_Symbol arg){
+  /* checking for: iter */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun29) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a iter-star. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a iter-star by checking against the following ATerm pattern: iter-star(<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a iter-star, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolIterStar(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterStar, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolIterStar(PT_Symbol arg){
+  /* checking for: iter-star */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun30) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a iter-plus-sep. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a iter-plus-sep by checking against the following ATerm pattern: iter-sep(<symbol(Symbol)>,<separator(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a iter-plus-sep, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolIterPlusSep(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlusSep, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolIterPlusSep(PT_Symbol arg){
+  /* checking for: iter-sep */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun31) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a iter-star-sep. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a iter-star-sep by checking against the following ATerm pattern: iter-star-sep(<symbol(Symbol)>,<separator(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a iter-star-sep, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolIterStarSep(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterStarSep, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolIterStarSep(PT_Symbol arg){
+  /* checking for: iter-star-sep */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun32) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a iter-n. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a iter-n by checking against the following ATerm pattern: iter-n(<symbol(Symbol)>,<number(int)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a iter-n, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolIterN(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterN, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolIterN(PT_Symbol arg){
+  /* checking for: iter-n */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun33) {
+    ATerm arg_arg1 = ATgetArgument(arg, 1);
+    if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a iter-sep-n. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a iter-sep-n by checking against the following ATerm pattern: iter-sep-n(<symbol(Symbol)>,<separator(Symbol)>,<number(int)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a iter-sep-n, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolIterSepN(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterSepN, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolIterSepN(PT_Symbol arg){
+  /* checking for: iter-sep-n */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun34) {
+    ATerm arg_arg2 = ATgetArgument(arg, 2);
+    if (ATgetType((ATerm)arg_arg2) == AT_INT) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a func. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a func by checking against the following ATerm pattern: func(<symbols(Symbols)>,<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a func, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolFunc(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolFunc, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolFunc(PT_Symbol arg){
+  /* checking for: func */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun35) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a parameterized-sort. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a parameterized-sort by checking against the following ATerm pattern: parameterized-sort(<sort(str)>,<parameters(Symbols)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a parameterized-sort, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolParameterizedSort(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolParameterizedSort, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolParameterizedSort(PT_Symbol arg){
+  /* checking for: parameterized-sort */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun36) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a strategy. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a strategy by checking against the following ATerm pattern: strategy(<lhs(Symbol)>,<rhs(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a strategy, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolStrategy(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolStrategy, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolStrategy(PT_Symbol arg){
+  /* checking for: strategy */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun37) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a var-sym. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a var-sym by checking against the following ATerm pattern: varsym(<symbol(Symbol)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a var-sym, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolVarSym(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolVarSym, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolVarSym(PT_Symbol arg){
+  /* checking for: varsym */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun38) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a layout. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a layout by checking against the following ATerm pattern: layout. May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a layout, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolLayout(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolLayout);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolLayout(PT_Symbol arg){
+  /* checking for: layout */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun39) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbol is a char-class. . May not be used to assert correctness of the PT_Symbol
+ * Assert whether a PT_Symbol is a char-class by checking against the following ATerm pattern: char-class(<ranges(CharRanges)>). May not be used to assert correctness of the PT_Symbol
  * \param[in] arg input PT_Symbol
  * \return ATtrue if #arg corresponds to the signature of a char-class, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolCharClass(PT_Symbol arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolCharClass, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool PT_isSymbolCharClass(PT_Symbol arg){
+  /* checking for: char-class */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun40) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -4227,71 +3790,43 @@ ATbool PT_isValidSymbols(PT_Symbols arg) {
 }
 
 /**
- * Assert whether a PT_Symbols is a empty. . May not be used to assert correctness of the PT_Symbols
+ * Assert whether a PT_Symbols is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the PT_Symbols
  * \param[in] arg input PT_Symbols
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolsEmpty(PT_Symbols arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isSymbolsEmpty(PT_Symbols arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolsEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbols is a single. . May not be used to assert correctness of the PT_Symbols
+ * Assert whether a PT_Symbols is a single by checking against the following ATerm pattern: [<head(Symbol)>]. May not be used to assert correctness of the PT_Symbols
  * \param[in] arg input PT_Symbols
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolsSingle(PT_Symbols arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolsSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isSymbolsSingle(PT_Symbols arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_Symbols is a many. . May not be used to assert correctness of the PT_Symbols
+ * Assert whether a PT_Symbols is a many by checking against the following ATerm pattern: [<head(Symbol)>,<[tail(Symbols)]>]. May not be used to assert correctness of the PT_Symbols
  * \param[in] arg input PT_Symbols
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool PT_isSymbolsMany(PT_Symbols arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isSymbolsMany(PT_Symbols arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolsMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -4393,35 +3928,34 @@ ATbool PT_isValidCharRange(PT_CharRange arg) {
 }
 
 /**
- * Assert whether a PT_CharRange is a character. . May not be used to assert correctness of the PT_CharRange
+ * Assert whether a PT_CharRange is a character by checking against the following ATerm pattern: <start(int)>. May not be used to assert correctness of the PT_CharRange
  * \param[in] arg input PT_CharRange
  * \return ATtrue if #arg corresponds to the signature of a character, or ATfalse otherwise
  */
-inline ATbool PT_isCharRangeCharacter(PT_CharRange arg) {
-  if (ATgetType((ATerm)arg) != AT_INT) {
-    return ATfalse;
+inline ATbool PT_isCharRangeCharacter(PT_CharRange arg){
+  if (ATgetType((ATerm)arg) == AT_INT) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternCharRangeCharacter, NULL));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_CharRange is a range. . May not be used to assert correctness of the PT_CharRange
+ * Assert whether a PT_CharRange is a range by checking against the following ATerm pattern: range(<start(int)>,<end(int)>). May not be used to assert correctness of the PT_CharRange
  * \param[in] arg input PT_CharRange
  * \return ATtrue if #arg corresponds to the signature of a range, or ATfalse otherwise
  */
-inline ATbool PT_isCharRangeRange(PT_CharRange arg) {
-  if (ATgetType((ATerm)arg) != AT_APPL) {
-    return ATfalse;
+inline ATbool PT_isCharRangeRange(PT_CharRange arg){
+  /* checking for: range */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PT_afun41) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+        return ATtrue;
+      }
+    }
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternCharRangeRange, NULL, NULL));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
@@ -4526,71 +4060,43 @@ ATbool PT_isValidCharRanges(PT_CharRanges arg) {
 }
 
 /**
- * Assert whether a PT_CharRanges is a empty. . May not be used to assert correctness of the PT_CharRanges
+ * Assert whether a PT_CharRanges is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the PT_CharRanges
  * \param[in] arg input PT_CharRanges
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool PT_isCharRangesEmpty(PT_CharRanges arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isCharRangesEmpty(PT_CharRanges arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternCharRangesEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_CharRanges is a single. . May not be used to assert correctness of the PT_CharRanges
+ * Assert whether a PT_CharRanges is a single by checking against the following ATerm pattern: [<head(CharRange)>]. May not be used to assert correctness of the PT_CharRanges
  * \param[in] arg input PT_CharRanges
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool PT_isCharRangesSingle(PT_CharRanges arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternCharRangesSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool PT_isCharRangesSingle(PT_CharRanges arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a PT_CharRanges is a many. . May not be used to assert correctness of the PT_CharRanges
+ * Assert whether a PT_CharRanges is a many by checking against the following ATerm pattern: [<head(CharRange)>,<[tail(CharRanges)]>]. May not be used to assert correctness of the PT_CharRanges
  * \param[in] arg input PT_CharRanges
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool PT_isCharRangesMany(PT_CharRanges arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool PT_isCharRangesMany(PT_CharRanges arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternCharRangesMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**

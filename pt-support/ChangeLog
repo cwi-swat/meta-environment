@@ -1,5 +1,10 @@
 $Id$
 
+Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
+ * **: regenerated all API's in this package with a new version of 
+   ApiGen that generates more efficient code for the is-alternative 
+   predicates.
+
 Tue Feb 20 15:35:09 CET 2007 <{martin.bravenboer@gmail.com,jurgenv@cwi.nl}>
  * libmept/MEPT-posinfo.c: added a magic volatile to solve a serious bug
    with the ATerm garbage collector on Darwin. 
