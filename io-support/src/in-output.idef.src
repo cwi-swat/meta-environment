@@ -7,7 +7,7 @@ let
   DestinationPath: str,
   Directories: list,
   Directory: str,
-  Error: term,
+  Summary: summary,
   Extension: str,
   Filename: str,
   Filename1: str,
@@ -47,8 +47,8 @@ in
       rec-value(IO, success)
       . snd-msg(io-file-removed(Path))
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-file-not-removed(Path, Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-file-not-removed(Path, Summary))
     )
   +
     rec-msg(io-copy-file(SourcePath?, DestinationPath?))
@@ -58,8 +58,8 @@ in
       rec-value(IO, success)
       . snd-msg(io-file-copied(SourcePath, DestinationPath))
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-file-not-copied(SourcePath, DestinationPath, Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-file-not-copied(SourcePath, DestinationPath, Summary))
     )
   +
     rec-msg(io-exists-file(Filename?))
@@ -69,7 +69,7 @@ in
       rec-value(IO, success)
       . snd-msg(io-file-exists)
     +
-      rec-value(IO, failure(Error?))
+      rec-value(IO, failure(Summary?))
       . snd-msg(io-file-not-exists)
     )
   +
@@ -95,8 +95,8 @@ in
       rec-value(IO, success)
       . snd-msg(io-file-written)
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-file-not-written(Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-file-not-written(Summary))
     )
   +
     rec-msg(io-write-term-in-baf(Filename?, Term?))
@@ -106,8 +106,8 @@ in
       rec-value(IO, success)
       . snd-msg(io-file-written)
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-file-not-written(Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-file-not-written(Summary))
     )
     . Term := help-the-garbage-collector
   +
@@ -118,8 +118,8 @@ in
       rec-value(IO, success)
       . snd-msg(io-file-written)
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-file-not-written(Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-file-not-written(Summary))
     )
     . Term := help-the-garbage-collector
   +
@@ -130,8 +130,8 @@ in
       rec-value(IO, file-contents(Contents?))
       . snd-msg(io-file-contents(Contents))
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-error-reading(Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-error-reading(Summary))
     )
   +
     rec-msg(io-read-and-pack-term(Filename?))
@@ -142,8 +142,8 @@ in
       . snd-msg(io-packed-term(Contents))
       . Contents := help-the-garbage-collector
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-error-reading(Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-error-reading(Summary))
     )
   +
     rec-msg(io-read-term(Filename?))
@@ -154,8 +154,8 @@ in
       . snd-msg(io-term(Contents))
       . Contents := help-the-garbage-collector
     +
-      rec-value(IO, failure(Error?))
-      . snd-msg(io-error-reading(Error))
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-error-reading(Summary))
     )
   +
     rec-msg(io-compare-files(Filename1?, Filename2?))
@@ -168,8 +168,8 @@ in
       rec-value(IO, different)
       . snd-msg(io-files-differ)
     +
-      rec-value(IO, failure(Error?))
-      . printf("io-compare-files: %t\n", Error)
+      rec-value(IO, failure(Summary?))
+      . printf("io-compare-files: %t\n", Summary)
     )
   +
     rec-msg(io-get-filename(Directory?, Name?, Extension?))
