@@ -1,8 +1,8 @@
 
-demosrcdir = $(pkgdatadir)/demo
+demo_DATA = $(wildcard *.rb)
 
-demosrc_DATA = demo.rb
+demodir = $(pkgdatadir)/demo
 
-EXTRA_DIST = demo.rb
+EXTRA_DIST = $(wildcard *.rb)
 
 

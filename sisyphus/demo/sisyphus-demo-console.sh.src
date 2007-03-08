@@ -1,11 +1,34 @@
 #! /bin/sh
 
-PREFIX=__PREFIX__
-DATADIR=__DATA_DIR__
-BINDIR=__BIN_DIR__
-SICLI=$BINDIR/si-cli
-CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
-DB_CONFIG=$DATADIR/demo/dbconfig.yml
+RUBY_INTERPRETER=__RUBY__
 
-echo "To be done: run demo.rb with proper options."
+DATA_DIR=__DATA_DIR__
+
+CONSOLE=${DATA_DIR}/demo/demo.rb
+
+PREFIX=__PREFIX__
+BINDIR=__BIN_DIR__
+CONFIG_REPO=${DATA_DIR}/demo/config-repo/demo
+SOURCE_REPO=${DATA_DIR}/demo/source-repo
+DB_CONFIG=${DATA_DIR}/demo/dbconfig.yml
+
+
+GEM_DIRS=`ls -d ${DATA_DIR}/gems/*`
+
+INCLUDE_FLAGS=
+for dir in ${GEM_DIRS}; do
+    INCLUDE_FLAGS="${INCLUDE_FLAGS} -I ${dir}/lib";
+done
+
+${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -I ${DATA_DIR} -I ${DATA_DIR}/demo ${CONSOLE} \
+    -c ${CONFIG_REPO} \
+    -s ${SOURCE_REPO} \
+    -d ${DB_CONFIG} \
+    $@
+
+
+
+
+
+
 

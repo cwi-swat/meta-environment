@@ -4,23 +4,33 @@ require 'optparse'
 require 'ostruct'
 require 'yaml'
 require 'time'
+require 'irb'
+
+require 'scenarios'
+
 
 module SisyphusDemo
-
+  
   class DemoOptions
     def self.parse(args)
       options = OpenStruct.new
-      options.config_url = nil
+      options.config = nil
+      options.sources = nil
       options.dbconf = nil
       
       opts = OptionParser.new do |opts|
-        opts.banner = "Usage: #{sisyphus-demo} [options]"
+        opts.banner = "Usage: sisyphus-demo-console [options]"
         opts.separator ""
         opts.separator "Options:"
 
         opts.on("-c Config", "--config Config",
                 "Subversion URL pointing to Sisyphus config files") do |config|
-          options.config_url = config
+          options.config = config
+        end
+
+        opts.on("-s Sources", "--sources Sources",
+                "Subversion URL pointing to source repository") do |sources|
+          options.sources = sources
         end
         
         opts.on("-d Dbconf", "--dbconf Dbconf", "Database config file.") do |d|
@@ -36,7 +46,8 @@ module SisyphusDemo
           exit(1)
         end
         
-        if options.config_url.nil? or 
+        if options.config.nil? or 
+            options.sources.nil? or
             options.dbconf.nil? then
           puts opts
           exit(1)
@@ -49,10 +60,14 @@ module SisyphusDemo
 
   def self.main(args)
     options = DemoOptions.parse(args)
-    p options
+    repo = options.sources
+    s = Scenarios.new(repo)
+    IRB.start
   end
-
+ 
 end
+
+
 
 
 

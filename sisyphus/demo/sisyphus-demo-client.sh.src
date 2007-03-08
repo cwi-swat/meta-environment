@@ -8,9 +8,9 @@ CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
 DB_CONFIG=$DATADIR/demo/dbconfig.yml
 
 $SICLI \
-    --root app \
+    --root relational-aterms \
     --profile demo \
-    --interval 300 \
+    --interval 60 \
     --weekday Mon \
     --weekday Tue \
     --weekday Wed \
