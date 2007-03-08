@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Out of the box experience: Formatting and prettyprinting with
+    Pandora</title>
+
+    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
+    +0100 (Sat, 16 Dec 2006) $</pubdate>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Taeke</firstname><surname>Kooiker</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <warning>
+    <para>This document is work in progress. It is in transition between The
+    Meta-Enviroment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link>
+    section.</para>
+  </warning>
+
+  <section xml:id="Introduction">
+    <title>An introduction to Formatting </title>
+
+    <para>If you want to present your</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>source code of programs in existing language like C, C++, Java,
+        or Cobol, or</para>
+      </listitem>
+
+      <listitem>
+        <para>source code in programs in domain-specific languages, or</para>
+      </listitem>
+
+      <listitem>
+        <para>data files in formats like XML, comma-separated lists, BibTex,
+        or others</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>in a uniform style then you need a <firstterm>formatter</firstterm>
+    (also known as <firstterm>pretty printer</firstterm> or
+    <firstterm>unparser</firstterm>). In that case <emphasis
+    role="bold">Box</emphasis> and <emphasis role="bold">Pandora</emphasis>
+    may be the right technology for you.</para>
+
+    <section>
+      <title xml:id="YetAnotherFormalism">Why Formatting?</title>
+
+      <para>It is well-known that readability of source code has a major
+      impact on the productivity of software development and on the quality of
+      the resulting software. This is particularly true when software is being
+      developed in teams; it is then mandatory to adhere to a common coding
+      and presentation style of the source code. Automatic formatting is a
+      technology for achieving this uniformity.</para>
+    </section>
+
+    <section>
+      <title>What are Box and Pandora?</title>
+
+      <para>Box is a language-independent intermediate language for describing
+      various formatting aspects of source text like horizontal or vertical
+      positioning of text fragments and their indentation, font, and color.
+      Box can be easily converted to various textual formats like ASCII, HTML,
+      LaTex and others. </para>
+
+      <para>Pandora is a system that bridges the gap between source text and
+      its representation in Box. Given the grammar of a programming language
+      it can fully automatically produce a formatter for that language using
+      default rules. This default formatter can be adapted to specific
+      formatting requirements by giving user-defined formatting rules that
+      describe those requirements.</para>
+    </section>
+
+    <section>
+      <title>How to use Box and Pandora?</title>
+
+      <para>There are three ways to use Box and Pandora:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By far the simplest way is to use the ASF+SDF Meta-Environment
+          which provides a default formatter for every grammar.</para>
+        </listitem>
+
+        <listitem>
+          <para>Another, equally simple way, is to write dedicated formatting
+          rules in your language definition. For each language
+          <replaceable>L</replaceable>, its grammar is placed in
+          <replaceable>L</replaceable><filename>/syntax </filename>while the
+          formatting rules are placed in
+          <replaceable>L</replaceable><filename>/format</filename>. Those
+          rules are activated automatically.</para>
+        </listitem>
+
+        <listitem>
+          <para>At the command line .... <remark>Add links to relevant
+          documents.</remark></para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Learning more</title>
+
+      <para>We will now describe ...</para>
+
+      <itemizedlist>
+        <listitem>
+          <para></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In <link linkend="HistoricalNotes">Historical Notes</link>, we
+      give background and key references.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>The Box Language</title>
+
+    <para></para>
+
+    <table>
+      <title>Box operators</title>
+
+      <tgroup cols="3">
+        <colspec align="center" />
+
+        <tbody>
+          <row>
+            <entry><emphasis role="bold">Operator</emphasis></entry>
+
+            <entry><emphasis role="bold">Options</emphasis></entry>
+
+            <entry><emphasis role="bold">Description</emphasis></entry>
+          </row>
+
+          <row>
+            <entry>H</entry>
+
+            <entry>hs</entry>
+
+            <entry>Horizontal formatting of sub-boxes</entry>
+          </row>
+
+          <row>
+            <entry>V</entry>
+
+            <entry>vs, is</entry>
+
+            <entry>Vertical formatting of sub-boxes</entry>
+          </row>
+
+          <row>
+            <entry>HV</entry>
+
+            <entry>hs, vs, is</entry>
+
+            <entry>Horizontal and vertical formatting of sub-boxes</entry>
+          </row>
+
+          <row>
+            <entry>HOV</entry>
+
+            <entry>hs, vs</entry>
+
+            <entry>Formatting of sub-boxes in a table</entry>
+          </row>
+
+          <row>
+            <entry>I</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>WD</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <table>
+      <title>Spacing Options</title>
+
+      <tgroup cols="2">
+        <colspec align="center" />
+
+        <tbody>
+          <row>
+            <entry><emphasis role="bold">Operator</emphasis></entry>
+
+            <entry><emphasis role="bold">Description</emphasis></entry>
+          </row>
+
+          <row>
+            <entry>hs</entry>
+
+            <entry>Horizontal spacing</entry>
+          </row>
+
+          <row>
+            <entry>vs</entry>
+
+            <entry>vertical spacing</entry>
+          </row>
+
+          <row>
+            <entry>is</entry>
+
+            <entry>Indentation spacing</entry>
+          </row>
+
+          <row>
+            <entry>ts</entry>
+
+            <entry>Tabstop spacing</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Pandora</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Examples</title>
+
+    <para></para>
+  </section>
+
+  <section xml:id="HistoricalNotes">
+    <title>Historical Notes</title>
+
+    <para></para>
+  </section>
+
+  <section xml:id="ToDo">
+    <title>To Do</title>
+
+    <para></para>
+  </section>
+</article>
