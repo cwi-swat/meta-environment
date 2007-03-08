@@ -60,7 +60,9 @@ install-data-hook:
 			's@location: .*$$@location: $(demodir)/$(SOURCE_REPO)@' \
 			sources.yml ; \
 		$(SUBVERSION_PREFIX)/bin/svn commit \
-			 -m "Updated demo source repository location" \
+			 -m "Updated demo source repository location" ; \
+		cd ../../ ; \
+		rm -rf DEMO_CONFIG \
 	) ; \
 	( \
 		rm -rf $(demodir)/$(SOURCE_REPO); \
