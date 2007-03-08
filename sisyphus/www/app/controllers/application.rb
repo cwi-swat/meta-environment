@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
   private
 
   def side_bar
-    @recent = SiItem.find(:all, :conditions => ['progress = \'false\' and id in (select si_item_id from si_results)'], :limit => 10, :order => "id desc")   
+    @recent = SiItem.find(:all, :conditions => ['progress = \'f\' and id in (select si_item_id from si_results)'], :limit => 10, :order => "id desc")   
     if session[:visible].nil? then
-      @hosts = SiHost.find(:all, :conditions => ['active = \'true\''], :order => 'uname asc')
+      @hosts = SiHost.find(:all, :conditions => ['active = \'t\''], :order => 'uname asc')
     else
       @hosts = session[:visible].collect do |host|
         SiHost.find(host.id)

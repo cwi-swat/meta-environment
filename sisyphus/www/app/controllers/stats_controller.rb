@@ -64,7 +64,7 @@ class StatsController < ApplicationController
 
 
   def build_partitioning
-    fails = SiItem.count :id, :group => :si_host_id, :conditions => ['success = false']
+    fails = SiItem.count :id, :group => :si_host_id, :conditions => ['success = \'f\'']
     g = Gruff::Pie.new
     fails.each do |tuple|
       begin

@@ -5,7 +5,7 @@ class HostsController  < ApplicationController
   def index
     @hosts = SiHost.find(:all, :order => 'id asc')   
     if session[:visible].nil? then
-      session[:visible] = SiHost.find(:all, :conditions => ['active = \'true\''], :order => 'id asc')
+      session[:visible] = SiHost.find(:all, :conditions => ['active = \'t\''], :order => 'id asc')
     end
     @visible = session[:visible]
   end

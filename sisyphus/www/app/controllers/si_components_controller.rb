@@ -11,8 +11,8 @@ class SiComponentsController < ApplicationController
 
   def success_failure_ratio_graph
     component = SiComponent.find(params[:id])
-    failed = SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_revision_id = si_revisions.id and si_component_id = #{component.id} and success = false").length
-    success = SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_revision_id = si_revisions.id and si_component_id = #{component.id} and success = true").length
+    failed = SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_revision_id = si_revisions.id and si_component_id = #{component.id} and success = 'f'").length
+    success = SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_revision_id = si_revisions.id and si_component_id = #{component.id} and success = 't'").length
 
     g = Gruff::Pie.new('400x400')
     g.data("Failed", [failed], 'red')

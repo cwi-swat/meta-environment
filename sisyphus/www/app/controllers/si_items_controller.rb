@@ -119,9 +119,9 @@ select si_items.*
 from si_items, si_revisions, si_components, si_hosts
 where
 si_items.progress = false and
-si_items.success = true and
+si_items.success = 't' and
 si_host_id = si_hosts.id and
-si_hosts.dists = true and
+si_hosts.dists = 't' and
 si_revision_id = si_revisions.id and
 si_component_id = si_components.id and
 si_components.name = '#{name}'

@@ -96,11 +96,11 @@ class BuildsController < ApplicationController
     @items = @recent
 
     if params[:pkg] then
-      @items = SiItem.find(:all, :conditions => ['progress = \'false\' and si_items.id in (select si_item_id from si_results) and si_revision_id in (select si_revisions.id from si_revisions, si_components where si_component_id = si_components.id and name = ?)', params[:pkg]], :limit => 10, :order => "id desc")         
+      @items = SiItem.find(:all, :conditions => ['progress = \'f\' and si_items.id in (select si_item_id from si_results) and si_revision_id in (select si_revisions.id from si_revisions, si_components where si_component_id = si_components.id and name = ?)', params[:pkg]], :limit => 10, :order => "id desc")         
     end
 
     if params[:host] then
-      @items = SiItem.find(:all, :conditions => ['progress = \'false\' and si_items.id in (select si_item_id from si_results) and si_host_id in (select id from si_hosts where uname like ?)', "%#{params[:host]}%"], :limit => 10, :order => "id desc")         
+      @items = SiItem.find(:all, :conditions => ['progress = \'f\' and si_items.id in (select si_item_id from si_results) and si_host_id in (select id from si_hosts where uname like ?)', "%#{params[:host]}%"], :limit => 10, :order => "id desc")         
     end
     
     @items.each do |item|
