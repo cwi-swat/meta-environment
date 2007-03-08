@@ -10,7 +10,7 @@ DB_CONFIG=$DATADIR/demo/dbconfig.yml
 $SICLI \
     --root relational-aterms \
     --profile demo \
-    --interval 60 \
+    --interval 3600 \
     --weekday Mon \
     --weekday Tue \
     --weekday Wed \
@@ -20,5 +20,5 @@ $SICLI \
     --before 23:59 \
     --config ${CONFIG_SVN} \
     --dbconf ${DB_CONFIG} \
-    --no-quiet \
+    --quiet \
     --verbose

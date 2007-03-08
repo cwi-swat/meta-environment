@@ -4,7 +4,9 @@ require 'optparse'
 require 'ostruct'
 require 'yaml'
 require 'time'
-require 'irb'
+require 'tk'
+
+
 
 require 'scenarios'
 
@@ -62,9 +64,37 @@ module SisyphusDemo
     options = DemoOptions.parse(args)
     repo = options.sources
     s = Scenarios.new(repo)
-    IRB.start
+    root = TkRoot.new() { title "Sisyphus Demo" }
+    button1 = TkButton.new(root) {
+      text "Cleanslate+"
+      command proc { s.clean_slate_scenario(true).commit  }
+    }
+    button2 = TkButton.new(root) {
+      text "Cleanslate"
+      command proc { s.clean_slate_scenario.commit  }
+    }
+    button3 = TkButton.new(root) {
+      text "Build Sharing"
+      command proc { s.build_reuse_scenario.commit }
+    }
+    button4 = TkButton.new(root) {
+      text "Change Propagation"
+      command proc { s.change_propagation_scenario.commit  }
+    }
+    button5 = TkButton.new(root) {
+      text "Backtracking"
+      command proc { s.backtracking_scenario.commit  }
+    }
+    button1.pack
+    button2.pack
+    button3.pack
+    button4.pack
+    button5.pack
+    Tk.mainloop
   end
  
+  
+
 end
 
 

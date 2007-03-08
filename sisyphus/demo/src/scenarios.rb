@@ -13,6 +13,9 @@ class Scenarios
     ALL_PKGS.each do |pkg|
       @checkouts[pkg] = Checkout.new(repository, pkg)
     end
+  end
+
+  def init
     clean_slate_scenario(true).commit
   end
 
@@ -25,7 +28,7 @@ class Scenarios
   end
 
   def middle
-    return checkout('binary-balanced-aterms')
+    return checkout('balanced-binary-aterms')
   end
 
   def bottom
@@ -46,7 +49,7 @@ class Scenarios
 
   def change_propagation_scenario
     ch = HarmlessChange.new(bottom)
-    return Transaction.new(ch)
+    return Transaction.new([ch])
   end
 
   def build_reuse_scenario
