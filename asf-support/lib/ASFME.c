@@ -2791,7 +2791,7 @@ inline ATbool ASF_isOptLayoutPresent(ASF_OptLayout arg){
           ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
           /* checking for: layout */
           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun4) {
-            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
               /* checking for: cf */
               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -2899,7 +2899,7 @@ inline ATbool ASF_isLayoutLexToCf(ASF_Layout arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: layout */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun4) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -2929,7 +2929,7 @@ inline ATbool ASF_isLayoutLexToCf(ASF_Layout arg){
                                 ATerm arg_arg1_head_arg0_arg0_arg0_arg0 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0, 0);
                                 /* checking for: layout */
                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg0_arg0_arg0) == ASF_afun4) {
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                     return ATtrue;
                                   }
                                 }
@@ -3263,7 +3263,7 @@ inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg){
                                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
                                   if (arg_arg0_arg0_head != NULL) {
-                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                       /* checking for: cf */
                                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -3290,7 +3290,7 @@ inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg){
                                                     ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                     /* checking for: negative */
                                                     if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun16) {
-                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                      if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                         ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                         if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                           ATerm arg_arg1_head;
@@ -3322,7 +3322,7 @@ inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg){
                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 33) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -3336,8 +3336,8 @@ inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg){
                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                         ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                         /* checking for: lit */
                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -3360,7 +3360,7 @@ inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg){
                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 61) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                         if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                           arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                           if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -3476,7 +3476,7 @@ inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg){
                                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
                                   if (arg_arg0_arg0_head != NULL) {
-                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                       /* checking for: cf */
                                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -3503,7 +3503,7 @@ inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg){
                                                     ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                     /* checking for: equality */
                                                     if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun19) {
-                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                      if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                         ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                         if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                           ATerm arg_arg1_head;
@@ -3535,7 +3535,7 @@ inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg){
                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -3549,8 +3549,8 @@ inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg){
                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                         ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                         /* checking for: lit */
                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -3573,7 +3573,7 @@ inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg){
                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 61) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                         if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                           arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                           if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -3689,7 +3689,7 @@ inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg){
                                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
                                   if (arg_arg0_arg0_head != NULL) {
-                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                       /* checking for: cf */
                                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -3716,7 +3716,7 @@ inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg){
                                                     ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                     /* checking for: match */
                                                     if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun21) {
-                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                      if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                         ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                         if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                           ATerm arg_arg1_head;
@@ -3748,7 +3748,7 @@ inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg){
                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 58) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -3762,8 +3762,8 @@ inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg){
                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                         ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                         /* checking for: lit */
                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -3786,7 +3786,7 @@ inline ATbool ASF_isASFConditionMatch(ASF_ASFCondition arg){
                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 61) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                         if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                           arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                           if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -3902,7 +3902,7 @@ inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg){
                                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
                                   if (arg_arg0_arg0_head != NULL) {
-                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                       /* checking for: cf */
                                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -3929,7 +3929,7 @@ inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg){
                                                     ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                     /* checking for: no-match */
                                                     if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun23) {
-                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                      if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                         ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                         if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                           ATerm arg_arg1_head;
@@ -3961,7 +3961,7 @@ inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg){
                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 33) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -3975,7 +3975,7 @@ inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg){
                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 58) {
 
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                       if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                         arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                         arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -3989,8 +3989,8 @@ inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg){
                                                                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                   ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                   /* checking for: lit */
                                                                                                   if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -4018,7 +4018,7 @@ inline ATbool ASF_isASFConditionNoMatch(ASF_ASFCondition arg){
                                                                                                                   arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 61) {
 
-                                                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                                       if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                         arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                                         if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -4575,7 +4575,7 @@ inline ATbool ASF_isASFConditionsDefault(ASF_ASFConditions arg){
                   ATerm arg_arg0_arg0_head_arg0_arg1_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0_arg1, 0);
                   /* checking for: , */
                   if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg1_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg1_arg0) == ASF_afun25) {
-                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                       /* checking for: cf */
                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -4617,7 +4617,7 @@ inline ATbool ASF_isASFConditionsDefault(ASF_ASFConditions arg){
                                               ATerm arg_arg1_head_arg0_arg0_arg0_arg1_arg0 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0_arg1, 0);
                                               /* checking for: , */
                                               if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg1_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg0_arg0_arg1_arg0) == ASF_afun25) {
-                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                   return ATtrue;
                                                 }
                                               }
@@ -4765,8 +4765,8 @@ inline ATbool ASF_isASFConditionListMany(ASF_ASFConditionList arg){
                   arg_head_arg0_arg0_head_arg0_list = ATgetNext(arg_head_arg0_arg0_head_arg0_list);
                   if (ATgetInt((ATermInt)arg_head_arg0_arg0_head_arg0_head) == 44) {
 
-                    /* DIT HIER */ if (ATgetType((ATerm)arg_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                      /* DIT HIER */ if (ATgetType((ATerm)arg_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_head_arg0_arg0_list) == ATtrue) {
+                    if (ATgetType((ATerm)arg_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                      if (ATgetType((ATerm)arg_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_head_arg0_arg0_list) == ATtrue) {
                         ATerm arg_head_arg0_arg1 = ATgetArgument(arg_head_arg0, 1);
                         /* checking for: lit */
                         if (ATgetType((ATerm)arg_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_head_arg0_arg1) == ASF_afun9) {
@@ -4784,7 +4784,7 @@ inline ATbool ASF_isASFConditionListMany(ASF_ASFConditionList arg){
                                 arg_head_arg1_list = ATgetNext(arg_head_arg1_list);
                                 if (ATgetInt((ATermInt)arg_head_arg1_head) == 44) {
 
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_head_arg1_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_head_arg1_list) == ATtrue) {
                                     if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATfalse) {
                                       return ATtrue;
                                     }
@@ -5025,7 +5025,7 @@ inline ATbool ASF_isLexASFBarEndAbsent(ASF_LexASFBarEnd arg){
                       ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                       /* checking for: Absent */
                       if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun28) {
-                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                        if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                           ATerm arg_arg1 = ATgetArgument(arg, 1);
                           if (ATisEmpty((ATermList)arg_arg1)) {
                             return ATtrue;
@@ -5072,8 +5072,8 @@ inline ATbool ASF_isLexASFBarEndPresent(ASF_LexASFBarEnd arg){
             arg_arg0_arg0_head_arg0_list = ATgetNext(arg_arg0_arg0_head_arg0_list);
             if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head) == 62) {
 
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
-                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                   ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                   /* checking for: lex */
                   if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -5100,7 +5100,7 @@ inline ATbool ASF_isLexASFBarEndPresent(ASF_LexASFBarEnd arg){
                                 ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                 /* checking for: Present */
                                 if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun29) {
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                     ATerm arg_arg1 = ATgetArgument(arg, 1);
                                     if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                       ATerm arg_arg1_head;
@@ -5109,7 +5109,7 @@ inline ATbool ASF_isLexASFBarEndPresent(ASF_LexASFBarEnd arg){
                                       arg_arg1_list = ATgetNext(arg_arg1_list);
                                       if (ATgetInt((ATermInt)arg_arg1_head) == 62) {
 
-                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                           return ATtrue;
                                         }
                                       }
@@ -5171,7 +5171,7 @@ inline ATbool ASF_isASFBarEndLexToCf(ASF_ASFBarEnd arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: ASF-BarEnd */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun27) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -5296,7 +5296,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                       arg_arg0_arg0_head_arg0_arg0_arg0_list = ATgetNext(arg_arg0_arg0_head_arg0_arg0_arg0_list);
                       if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_arg0_arg0_head) == 61) {
 
-                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_arg0_arg0_list) == ATtrue) {
+                        if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_arg0_arg0_list) == ATtrue) {
                           if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATfalse) {
                             arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                             arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
@@ -5308,7 +5308,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                 ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                                 /* checking for: ASF-BarEnd */
                                 if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun27) {
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                     ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                     /* checking for: lex */
                                     if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -5335,7 +5335,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                                   ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                   /* checking for: default */
                                                   if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun33) {
-                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                    if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                       ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                       if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                         ATerm arg_arg1_head;
@@ -5363,7 +5363,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                       if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                         arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                         arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -5377,7 +5377,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -5391,8 +5391,8 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                             ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                             /* checking for: lit */
                                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -5420,7 +5420,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                                                                                             arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 61) {
 
-                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                                 if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                   arg_arg1_head = ATgetFirst(arg_arg1_list);
                                                                                                                   arg_arg1_list = ATgetNext(arg_arg1_list);
@@ -5446,7 +5446,7 @@ inline ATbool ASF_isLexASFImpliesDefault(ASF_LexASFImplies arg){
                                                                                                                               arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list);
                                                                                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head) == 61) {
 
-                                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == ATtrue) {
+                                                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == ATtrue) {
                                                                                                                                   ATerm arg_arg1_head_arg1 = ATgetArgument(arg_arg1_head, 1);
                                                                                                                                   if (ATgetType((ATerm)arg_arg1_head_arg1) == AT_LIST) {
                                                                                                                                     if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -5634,7 +5634,7 @@ inline ATbool ASF_isASFImpliesLexToCf(ASF_ASFImplies arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: ASF-Implies */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun32) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -5771,7 +5771,7 @@ inline ATbool ASF_isASFConditionalEquationSimple(ASF_ASFConditionalEquation arg)
                             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                             /* checking for: ASF-Equation */
                             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun34) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                 /* checking for: cf */
                                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -5798,7 +5798,7 @@ inline ATbool ASF_isASFConditionalEquationSimple(ASF_ASFConditionalEquation arg)
                                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                               /* checking for: simple */
                                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun37) {
-                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                     ATermList arg_arg1_list = (ATermList)arg_arg1;
@@ -5931,7 +5931,7 @@ inline ATbool ASF_isASFConditionalEquationImplies(ASF_ASFConditionalEquation arg
                                                             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                                                             /* checking for: ASF-Equation */
                                                             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun34) {
-                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                                              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                                                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                                                 /* checking for: cf */
                                                                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -5958,7 +5958,7 @@ inline ATbool ASF_isASFConditionalEquationImplies(ASF_ASFConditionalEquation arg
                                                                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                               /* checking for: implies */
                                                                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun38) {
-                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                                     ATermList arg_arg1_list = (ATermList)arg_arg1;
@@ -6116,7 +6116,7 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                           ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                                                           /* checking for: ASF-Conditions */
                                                           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun26) {
-                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                                            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                                               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                                               /* checking for: cf */
                                                               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -6143,7 +6143,7 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                                             ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                             /* checking for: when */
                                                                             if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun39) {
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                                 if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                                   ATerm arg_arg1_head;
@@ -6179,7 +6179,7 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                                                                     arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 119) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                           arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                           arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -6193,7 +6193,7 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 104) {
 
-                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                   if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                     arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                     arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -6207,7 +6207,7 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 101) {
 
-                                                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -6221,8 +6221,8 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 110) {
 
-                                                                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                                                         ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                                                         /* checking for: lit */
                                                                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -6255,7 +6255,7 @@ inline ATbool ASF_isASFConditionalEquationWhen(ASF_ASFConditionalEquation arg){
                                                                                                                                                             arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 110) {
 
-                                                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                                                                                 if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                                                                   arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                                                                                   if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -6807,7 +6807,7 @@ inline ATbool ASF_isASFEquationDefault(ASF_ASFEquation arg){
                                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
                                   if (arg_arg0_arg0_head != NULL) {
-                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                       /* checking for: cf */
                                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -6851,8 +6851,8 @@ inline ATbool ASF_isASFEquationDefault(ASF_ASFEquation arg){
                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 61) {
 
-                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                     ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                     /* checking for: lit */
                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -6870,7 +6870,7 @@ inline ATbool ASF_isASFEquationDefault(ASF_ASFEquation arg){
                                                                             arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 61) {
 
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                 if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                   arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                   if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -7209,7 +7209,7 @@ inline ATbool ASF_isStartASFModule(ASF_Start arg){
                               ATerm arg_arg0_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_arg0_head_arg0, 0);
                               /* checking for: layout */
                               if (ATgetType((ATerm)arg_arg0_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_arg0_head_arg0_arg0) == ASF_afun4) {
-                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_arg0_list) == ATtrue) {
+                                if (ATgetType((ATerm)arg_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_arg0_list) == ATtrue) {
                                   ATerm arg_arg0_arg0_arg1 = ATgetArgument(arg_arg0_arg0, 1);
                                   /* checking for: sort */
                                   if (ATgetType((ATerm)arg_arg0_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_arg1) == ASF_afun11) {
@@ -7308,7 +7308,7 @@ inline ATbool ASF_isStartASFSection(ASF_Start arg){
                               ATerm arg_arg0_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_arg0_head_arg0, 0);
                               /* checking for: layout */
                               if (ATgetType((ATerm)arg_arg0_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_arg0_head_arg0_arg0) == ASF_afun4) {
-                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_arg0_list) == ATtrue) {
+                                if (ATgetType((ATerm)arg_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_arg0_list) == ATtrue) {
                                   ATerm arg_arg0_arg0_arg1 = ATgetArgument(arg_arg0_arg0, 1);
                                   /* checking for: sort */
                                   if (ATgetType((ATerm)arg_arg0_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_arg1) == ASF_afun11) {
@@ -7609,7 +7609,7 @@ inline ATbool ASF_isASFModuleDefault(ASF_ASFModule arg){
               ATerm arg_arg0_arg0_head_arg0_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0_arg0, 0);
               /* checking for: ASF-Section */
               if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0_arg0) == ASF_afun44) {
-                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                   ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                   /* checking for: cf */
                   if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -7636,7 +7636,7 @@ inline ATbool ASF_isASFModuleDefault(ASF_ASFModule arg){
                                 ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                 /* checking for: default */
                                 if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun33) {
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                     ATerm arg_arg1 = ATgetArgument(arg, 1);
                                     if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                       ATerm arg_arg1_head;
@@ -7660,7 +7660,7 @@ inline ATbool ASF_isASFModuleDefault(ASF_ASFModule arg){
                                                 ATerm arg_arg1_head_arg0_arg0_arg0_arg0_arg0 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0_arg0, 0);
                                                 /* checking for: ASF-Section */
                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg0_arg0_arg0_arg0) == ASF_afun44) {
-                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                  if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                     return ATtrue;
                                                   }
                                                 }
@@ -7789,7 +7789,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                             ATerm arg_arg0_arg0_head_arg0_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0_arg0, 0);
                             /* checking for: ASF-ConditionalEquation */
                             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0_arg0) == ASF_afun36) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                 /* checking for: cf */
                                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -7816,7 +7816,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                               /* checking for: equations */
                                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun45) {
-                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                     ATerm arg_arg1_head;
@@ -7844,7 +7844,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 101) {
 
-                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                   if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                     arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                     arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7858,7 +7858,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 113) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7872,7 +7872,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 117) {
 
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                       if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                         arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                         arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7886,7 +7886,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 97) {
 
-                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7900,7 +7900,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 116) {
 
-                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                           if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                             arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                             arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7914,7 +7914,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                                 arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                 if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 105) {
 
-                                                                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                       arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                       arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7928,7 +7928,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 111) {
 
-                                                                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                               if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                                 arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                                 arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7942,7 +7942,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                                                     arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 110) {
 
-                                                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                                           arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                                           arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -7956,8 +7956,8 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 115) {
 
-                                                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                                                                     ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                                                                     /* checking for: lit */
                                                                                                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -8015,7 +8015,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                                                                                                             arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 115) {
 
-                                                                                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                                                                                                                 if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                                                                                                   arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                                                                                                                   if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -8038,7 +8038,7 @@ inline ATbool ASF_isASFSectionEquations(ASF_ASFSection arg){
                                                                                                                                                                                                               ATerm arg_arg1_head_arg0_arg0_arg0_arg0_arg0 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0_arg0, 0);
                                                                                                                                                                                                               /* checking for: ASF-ConditionalEquation */
                                                                                                                                                                                                               if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg0_arg0_arg0_arg0) == ASF_afun36) {
-                                                                                                                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                                                                                                                                if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                                                                                                                                   return ATtrue;
                                                                                                                                                                                                                 }
                                                                                                                                                                                                               }
@@ -8194,7 +8194,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                             ATerm arg_arg0_arg0_head_arg0_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0_arg0, 0);
                             /* checking for: ASF-TestEquation */
                             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0_arg0) == ASF_afun46) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                 /* checking for: cf */
                                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -8221,7 +8221,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                               /* checking for: tests */
                                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun47) {
-                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                     ATerm arg_arg1_head;
@@ -8249,7 +8249,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 116) {
 
-                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                   if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                     arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                     arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -8263,7 +8263,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 101) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -8277,7 +8277,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 115) {
 
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                       if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                         arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                         arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -8291,7 +8291,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 116) {
 
-                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -8305,8 +8305,8 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 115) {
 
-                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                             ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                             /* checking for: lit */
                                                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -8344,7 +8344,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 115) {
 
-                                                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                                                         if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                                           arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                                                           if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -8367,7 +8367,7 @@ inline ATbool ASF_isASFSectionTests(ASF_ASFSection arg){
                                                                                                                                                       ATerm arg_arg1_head_arg0_arg0_arg0_arg0_arg0 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0_arg0, 0);
                                                                                                                                                       /* checking for: ASF-TestEquation */
                                                                                                                                                       if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg0_arg0_arg0_arg0) == ASF_afun46) {
-                                                                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                                                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                                                                           return ATtrue;
                                                                                                                                                         }
                                                                                                                                                       }
@@ -9240,8 +9240,8 @@ inline ATbool ASF_isLexASFTagIdOneChar(ASF_LexASFTagId arg){
                                         ATerm arg_arg0_arg0_head_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_head, 1);
                                         if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head_arg1) == 122) {
 
-                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
-                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                          if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                                            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                               /* checking for: lex */
                                               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -9273,7 +9273,7 @@ inline ATbool ASF_isLexASFTagIdOneChar(ASF_LexASFTagId arg){
                                                                 ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                 /* checking for: one-char */
                                                                 if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun50) {
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                     ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                     if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                       ATerm arg_arg1_head;
@@ -9281,7 +9281,7 @@ inline ATbool ASF_isLexASFTagIdOneChar(ASF_LexASFTagId arg){
                                                                       arg_arg1_head = ATgetFirst(arg_arg1_list);
                                                                       arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                       if (ATgetType((ATerm)arg_arg1_head) == AT_INT) {
-                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                           return ATtrue;
                                                                         }
                                                                       }
@@ -9387,7 +9387,7 @@ inline ATbool ASF_isLexASFTagIdManyChars(ASF_LexASFTagId arg){
                                         ATerm arg_arg0_arg0_head_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_head, 1);
                                         if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head_arg1) == 122) {
 
-                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                                          if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
                                             if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATfalse) {
                                               arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                               arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
@@ -9450,7 +9450,7 @@ inline ATbool ASF_isLexASFTagIdManyChars(ASF_LexASFTagId arg){
                                                                                       ATerm arg_arg0_arg0_head_arg0_arg0_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_arg0_arg0_head, 1);
                                                                                       if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_arg0_arg0_head_arg1) == 122) {
 
-                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_arg0_arg0_list) == ATtrue) {
+                                                                                        if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_arg0_arg0_list) == ATtrue) {
                                                                                           if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATfalse) {
                                                                                             arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                                                                                             arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
@@ -9502,8 +9502,8 @@ inline ATbool ASF_isLexASFTagIdManyChars(ASF_LexASFTagId arg){
                                                                                                                             ATerm arg_arg0_arg0_head_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_head, 1);
                                                                                                                             if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head_arg1) == 122) {
 
-                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                                                                                                              if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                                                                                                                   ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                                                                                                                   /* checking for: lex */
                                                                                                                                   if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -9535,7 +9535,7 @@ inline ATbool ASF_isLexASFTagIdManyChars(ASF_LexASFTagId arg){
                                                                                                                                                     ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                                                                                                     /* checking for: many-chars */
                                                                                                                                                     if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun52) {
-                                                                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                                                                                                      if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                                                                                                         ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                                                                                                         if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                                                                                                           ATerm arg_arg1_head;
@@ -9611,14 +9611,14 @@ inline ATbool ASF_isLexASFTagIdManyChars(ASF_LexASFTagId arg){
                                                                                                                                                                                                           ATerm arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head_arg1 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head, 1);
                                                                                                                                                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head_arg1) == 122) {
 
-                                                                                                                                                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == ATtrue) {
+                                                                                                                                                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == ATtrue) {
                                                                                                                                                                                                               ATerm arg_arg1_head_arg1 = ATgetArgument(arg_arg1_head, 1);
                                                                                                                                                                                                               if (ATgetType((ATerm)arg_arg1_head_arg1) == AT_LIST) {
                                                                                                                                                                                                                 if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                                                                                                                   arg_arg1_head = ATgetFirst(arg_arg1_list);
                                                                                                                                                                                                                   arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                                                                                                                                   if (ATgetType((ATerm)arg_arg1_head) == AT_INT) {
-                                                                                                                                                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                                                                                                                                    if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                                                                                                                                       return ATtrue;
                                                                                                                                                                                                                     }
                                                                                                                                                                                                                   }
@@ -9886,7 +9886,7 @@ inline ATbool ASF_isASFTagIdLexToCf(ASF_ASFTagId arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: ASF-TagId */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun49) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -10014,7 +10014,7 @@ inline ATbool ASF_isASFTagEmpty(ASF_ASFTag arg){
                         ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
                         /* checking for: ] */
                         if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun53) {
-                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                          if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                             ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                             /* checking for: cf */
                             if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -10041,7 +10041,7 @@ inline ATbool ASF_isASFTagEmpty(ASF_ASFTag arg){
                                           ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                           /* checking for: empty */
                                           if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun55) {
-                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                            if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                               ATerm arg_arg1 = ATgetArgument(arg, 1);
                                               if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                 ATerm arg_arg1_head;
@@ -10069,8 +10069,8 @@ inline ATbool ASF_isASFTagEmpty(ASF_ASFTag arg){
                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 91) {
 
-                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                 /* checking for: lit */
                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -10088,7 +10088,7 @@ inline ATbool ASF_isASFTagEmpty(ASF_ASFTag arg){
                                                                         arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 91) {
 
-                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                          if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                             if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                               arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                               if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -10115,8 +10115,8 @@ inline ATbool ASF_isASFTagEmpty(ASF_ASFTag arg){
                                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 93) {
 
-                                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                 /* checking for: lit */
                                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -10134,8 +10134,8 @@ inline ATbool ASF_isASFTagEmpty(ASF_ASFTag arg){
                                                                                                         arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 93) {
 
-                                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
-                                                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                            if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                               return ATtrue;
                                                                                                             }
                                                                                                           }
@@ -10257,7 +10257,7 @@ inline ATbool ASF_isASFTagNotEmpty(ASF_ASFTag arg){
                                         ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
                                         /* checking for: ] */
                                         if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun53) {
-                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                          if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                             ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                             /* checking for: cf */
                                             if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -10284,7 +10284,7 @@ inline ATbool ASF_isASFTagNotEmpty(ASF_ASFTag arg){
                                                           ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                           /* checking for: not-empty */
                                                           if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun56) {
-                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                            if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                               ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                               if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                 ATerm arg_arg1_head;
@@ -10312,8 +10312,8 @@ inline ATbool ASF_isASFTagNotEmpty(ASF_ASFTag arg){
                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 91) {
 
-                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                 /* checking for: lit */
                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -10331,7 +10331,7 @@ inline ATbool ASF_isASFTagNotEmpty(ASF_ASFTag arg){
                                                                                         arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 91) {
 
-                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                             if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                               arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                               if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -10362,8 +10362,8 @@ inline ATbool ASF_isASFTagNotEmpty(ASF_ASFTag arg){
                                                                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 93) {
 
-                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                                     ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                                     /* checking for: lit */
                                                                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -10381,8 +10381,8 @@ inline ATbool ASF_isASFTagNotEmpty(ASF_ASFTag arg){
                                                                                                                             arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 93) {
 
-                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
-                                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                                if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                                                   return ATtrue;
                                                                                                                                 }
                                                                                                                               }
@@ -10636,7 +10636,7 @@ inline ATbool ASF_isASFTestEquationSimple(ASF_ASFTestEquation arg){
                             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                             /* checking for: ASF-Condition */
                             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun12) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                 /* checking for: cf */
                                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -10663,7 +10663,7 @@ inline ATbool ASF_isASFTestEquationSimple(ASF_ASFTestEquation arg){
                                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                               /* checking for: simple */
                                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun37) {
-                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                     ATermList arg_arg1_list = (ATermList)arg_arg1;
@@ -10796,7 +10796,7 @@ inline ATbool ASF_isASFTestEquationImplies(ASF_ASFTestEquation arg){
                                                             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                                                             /* checking for: ASF-Condition */
                                                             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun12) {
-                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                                              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                                                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                                                 /* checking for: cf */
                                                                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -10823,7 +10823,7 @@ inline ATbool ASF_isASFTestEquationImplies(ASF_ASFTestEquation arg){
                                                                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                               /* checking for: implies */
                                                                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun38) {
-                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                                     ATermList arg_arg1_list = (ATermList)arg_arg1;
@@ -10981,7 +10981,7 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                           ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
                                                           /* checking for: ASF-Conditions */
                                                           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun26) {
-                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                                            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                                               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                                               /* checking for: cf */
                                                               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -11008,7 +11008,7 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                                             ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                             /* checking for: when */
                                                                             if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun39) {
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                                 if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                                   ATerm arg_arg1_head;
@@ -11044,7 +11044,7 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                                                                     arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 119) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                           arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                           arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -11058,7 +11058,7 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 104) {
 
-                                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                   if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                     arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                     arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -11072,7 +11072,7 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 101) {
 
-                                                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -11086,8 +11086,8 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 110) {
 
-                                                                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                                                         ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                                                         /* checking for: lit */
                                                                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -11120,7 +11120,7 @@ inline ATbool ASF_isASFTestEquationWhen(ASF_ASFTestEquation arg){
                                                                                                                                                             arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 110) {
 
-                                                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
                                                                                                                                                                 if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
                                                                                                                                                                   arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                                                                                                   if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATfalse) {
@@ -11663,8 +11663,8 @@ inline ATbool ASF_isLexLayoutWhitespace(ASF_LexLayout arg){
                         arg_arg0_arg0_head_arg0_list = ATgetNext(arg_arg0_arg0_head_arg0_list);
                         if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head) == 32) {
 
-                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
-                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                          if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                               /* checking for: lex */
                               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -11688,7 +11688,7 @@ inline ATbool ASF_isLexLayoutWhitespace(ASF_LexLayout arg){
                                           ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                           /* checking for: whitespace */
                                           if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun57) {
-                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                            if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                               ATerm arg_arg1 = ATgetArgument(arg, 1);
                                               if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                 ATerm arg_arg1_head;
@@ -11696,7 +11696,7 @@ inline ATbool ASF_isLexLayoutWhitespace(ASF_LexLayout arg){
                                                 arg_arg1_head = ATgetFirst(arg_arg1_list);
                                                 arg_arg1_list = ATgetNext(arg_arg1_list);
                                                 if (ATgetType((ATerm)arg_arg1_head) == AT_INT) {
-                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                  if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                     return ATtrue;
                                                   }
                                                 }
@@ -11802,7 +11802,7 @@ inline ATbool ASF_isLexNumCharDigits(ASF_LexNumChar arg){
             arg_arg0_arg0_head_arg0_list = ATgetNext(arg_arg0_arg0_head_arg0_list);
             if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head) == 92) {
 
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
                 if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATfalse) {
                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
@@ -11828,8 +11828,8 @@ inline ATbool ASF_isLexNumCharDigits(ASF_LexNumChar arg){
                               ATerm arg_arg0_arg0_head_arg0_arg0_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_arg0_arg0_head, 1);
                               if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_arg0_arg0_head_arg1) == 57) {
 
-                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_arg0_arg0_list) == ATtrue) {
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_arg0_arg0_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                     ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                     /* checking for: lex */
                                     if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -11856,7 +11856,7 @@ inline ATbool ASF_isLexNumCharDigits(ASF_LexNumChar arg){
                                                   ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                   /* checking for: digits */
                                                   if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun59) {
-                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                    if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                       ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                       if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                         ATerm arg_arg1_head;
@@ -11896,10 +11896,10 @@ inline ATbool ASF_isLexNumCharDigits(ASF_LexNumChar arg){
                                                                             ATerm arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head_arg1 = ATgetArgument(arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head, 1);
                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_head_arg1) == 57) {
 
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_arg0_arg0_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1_head_arg1 = ATgetArgument(arg_arg1_head, 1);
                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg1) == AT_LIST) {
-                                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                  if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                     return ATtrue;
                                                                                   }
                                                                                 }
@@ -12019,7 +12019,7 @@ inline ATbool ASF_isNumCharLexToCf(ASF_NumChar arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: NumChar */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun58) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -12161,8 +12161,8 @@ inline ATbool ASF_isLexShortCharRegular(ASF_LexShortChar arg){
                                 ATerm arg_arg0_arg0_head_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_head, 1);
                                 if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head_arg1) == 122) {
 
-                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
-                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                  if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                                    if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                       ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                       /* checking for: lex */
                                       if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -12189,7 +12189,7 @@ inline ATbool ASF_isLexShortCharRegular(ASF_LexShortChar arg){
                                                     ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                     /* checking for: regular */
                                                     if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun61) {
-                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                      if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                         ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                         if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                           ATerm arg_arg1_head;
@@ -12197,7 +12197,7 @@ inline ATbool ASF_isLexShortCharRegular(ASF_LexShortChar arg){
                                                           arg_arg1_head = ATgetFirst(arg_arg1_list);
                                                           arg_arg1_list = ATgetNext(arg_arg1_list);
                                                           if (ATgetType((ATerm)arg_arg1_head) == AT_INT) {
-                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                            if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                               return ATtrue;
                                                             }
                                                           }
@@ -12259,7 +12259,7 @@ inline ATbool ASF_isLexShortCharEscaped(ASF_LexShortChar arg){
             arg_arg0_arg0_head_arg0_list = ATgetNext(arg_arg0_arg0_head_arg0_list);
             if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head) == 92) {
 
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
                 if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATfalse) {
                   arg_arg0_arg0_head = ATgetFirst(arg_arg0_arg0_list);
                   arg_arg0_arg0_list = ATgetNext(arg_arg0_arg0_list);
@@ -12327,8 +12327,8 @@ inline ATbool ASF_isLexShortCharEscaped(ASF_LexShortChar arg){
                                                               ATerm arg_arg0_arg0_head_arg0_head_arg1 = ATgetArgument(arg_arg0_arg0_head_arg0_head, 1);
                                                               if (ATgetInt((ATermInt)arg_arg0_arg0_head_arg0_head_arg1) == 255) {
 
-                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+                                                                if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                                                                     ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                                                                     /* checking for: lex */
                                                                     if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun6) {
@@ -12355,7 +12355,7 @@ inline ATbool ASF_isLexShortCharEscaped(ASF_LexShortChar arg){
                                                                                   ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                                                                                   /* checking for: escaped */
                                                                                   if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun62) {
-                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                                                                    if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                                                                       ATerm arg_arg1 = ATgetArgument(arg, 1);
                                                                                       if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                                                                         ATerm arg_arg1_head;
@@ -12368,7 +12368,7 @@ inline ATbool ASF_isLexShortCharEscaped(ASF_LexShortChar arg){
                                                                                             arg_arg1_head = ATgetFirst(arg_arg1_list);
                                                                                             arg_arg1_list = ATgetNext(arg_arg1_list);
                                                                                             if (ATgetType((ATerm)arg_arg1_head) == AT_INT) {
-                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                              if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                 return ATtrue;
                                                                                               }
                                                                                             }
@@ -12531,7 +12531,7 @@ inline ATbool ASF_isShortCharLexToCf(ASF_ShortChar arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: ShortChar */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun60) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -12655,7 +12655,7 @@ inline ATbool ASF_isCharacterNumeric(ASF_Character arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: NumChar */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun58) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -12682,7 +12682,7 @@ inline ATbool ASF_isCharacterNumeric(ASF_Character arg){
                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                               /* checking for: numeric */
                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun64) {
-                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                     ATermList arg_arg1_list = (ATermList)arg_arg1;
@@ -12735,7 +12735,7 @@ inline ATbool ASF_isCharacterShort(ASF_Character arg){
             ATerm arg_arg0_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg0_head_arg0, 0);
             /* checking for: ShortChar */
             if (ATgetType((ATerm)arg_arg0_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0_arg0) == ASF_afun60) {
-              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+              if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
                 ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
                 /* checking for: cf */
                 if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -12762,7 +12762,7 @@ inline ATbool ASF_isCharacterShort(ASF_Character arg){
                               ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                               /* checking for: short */
                               if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun65) {
-                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                                if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                   ATerm arg_arg1 = ATgetArgument(arg, 1);
                                   if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                     ATermList arg_arg1_list = (ATermList)arg_arg1;
@@ -12812,7 +12812,7 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
           ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
           /* checking for: \TOP */
           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun66) {
-            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
               /* checking for: cf */
               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -12839,7 +12839,7 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
                             ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                             /* checking for: top */
                             if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun67) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                 ATerm arg_arg1 = ATgetArgument(arg, 1);
                                 if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                   ATerm arg_arg1_head;
@@ -12867,7 +12867,7 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 92) {
 
-                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -12881,7 +12881,7 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 84) {
 
-                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                           if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                             arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                             arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -12895,7 +12895,7 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
                                                                 arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                 if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 79) {
 
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                       arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                       arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -12909,8 +12909,8 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 80) {
 
-                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                 /* checking for: lit */
                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -12943,8 +12943,8 @@ inline ATbool ASF_isCharacterTop(ASF_Character arg){
                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 80) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
-                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                           return ATtrue;
                                                                                                         }
                                                                                                       }
@@ -13023,7 +13023,7 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
           ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
           /* checking for: \EOF */
           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun68) {
-            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
               /* checking for: cf */
               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -13050,7 +13050,7 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
                             ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                             /* checking for: eof */
                             if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun69) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                 ATerm arg_arg1 = ATgetArgument(arg, 1);
                                 if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                   ATerm arg_arg1_head;
@@ -13078,7 +13078,7 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 92) {
 
-                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13092,7 +13092,7 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 69) {
 
-                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                           if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                             arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                             arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13106,7 +13106,7 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
                                                                 arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                 if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 79) {
 
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                       arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                       arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13120,8 +13120,8 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 70) {
 
-                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                 /* checking for: lit */
                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -13154,8 +13154,8 @@ inline ATbool ASF_isCharacterEof(ASF_Character arg){
                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 70) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
-                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                           return ATtrue;
                                                                                                         }
                                                                                                       }
@@ -13234,7 +13234,7 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
           ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
           /* checking for: \BOT */
           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun70) {
-            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
               /* checking for: cf */
               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -13261,7 +13261,7 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
                             ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                             /* checking for: bot */
                             if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun71) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                 ATerm arg_arg1 = ATgetArgument(arg, 1);
                                 if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                   ATerm arg_arg1_head;
@@ -13289,7 +13289,7 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 92) {
 
-                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13303,7 +13303,7 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 66) {
 
-                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                           if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                             arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                             arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13317,7 +13317,7 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
                                                                 arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                 if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 79) {
 
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                       arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                       arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13331,8 +13331,8 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 84) {
 
-                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                 /* checking for: lit */
                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -13365,8 +13365,8 @@ inline ATbool ASF_isCharacterBot(ASF_Character arg){
                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 84) {
 
-                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
-                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                           return ATtrue;
                                                                                                         }
                                                                                                       }
@@ -13445,7 +13445,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
           ATerm arg_arg0_arg0_head_arg0 = ATgetArgument(arg_arg0_arg0_head, 0);
           /* checking for: \LABEL_START */
           if (ATgetType((ATerm)arg_arg0_arg0_head_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg0_head_arg0) == ASF_afun72) {
-            /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
+            if (ATgetType((ATerm)arg_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg0_list) == ATtrue) {
               ATerm arg_arg0_arg1 = ATgetArgument(arg_arg0, 1);
               /* checking for: cf */
               if (ATgetType((ATerm)arg_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg1) == ASF_afun2) {
@@ -13472,7 +13472,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                             ATerm arg_arg0_arg2_arg0_head_arg0_arg0 = ATgetArgument(arg_arg0_arg2_arg0_head_arg0, 0);
                             /* checking for: label_start */
                             if (ATgetType((ATerm)arg_arg0_arg2_arg0_head_arg0_arg0) == AT_APPL && ATgetAFun((ATermAppl)arg_arg0_arg2_arg0_head_arg0_arg0) == ASF_afun73) {
-                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
+                              if (ATgetType((ATerm)arg_arg0_arg2_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg0_arg2_arg0_list) == ATtrue) {
                                 ATerm arg_arg1 = ATgetArgument(arg, 1);
                                 if (ATgetType((ATerm)arg_arg1) == AT_LIST && ATisEmpty((ATermList)arg_arg1) == ATfalse) {
                                   ATerm arg_arg1_head;
@@ -13500,7 +13500,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 92) {
 
-                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13514,7 +13514,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 76) {
 
-                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                           if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                             arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                             arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13528,7 +13528,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                 arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                 if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 65) {
 
-                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                       arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                       arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13542,7 +13542,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 66) {
 
-                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                               if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                 arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                 arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13556,7 +13556,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                     arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 69) {
 
-                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                         if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                           arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                           arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13570,7 +13570,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                               arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                               if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 76) {
 
-                                                                                                /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                   if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                     arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                     arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13584,7 +13584,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                         arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                         if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 95) {
 
-                                                                                                          /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                          if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                             if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                               arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                               arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13598,7 +13598,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                                   arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                   if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 83) {
 
-                                                                                                                    /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                    if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                       if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                         arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                         arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13612,7 +13612,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                                             arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                             if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 84) {
 
-                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                                   arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                                   arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13626,7 +13626,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                                                       arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                       if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 65) {
 
-                                                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                        if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                                           if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                                             arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                                             arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13640,7 +13640,7 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                                                                 arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                                 if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 82) {
 
-                                                                                                                                                  /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                                  if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
                                                                                                                                                     if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATfalse) {
                                                                                                                                                       arg_arg1_head_arg0_arg0_head = ATgetFirst(arg_arg1_head_arg0_arg0_list);
                                                                                                                                                       arg_arg1_head_arg0_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_list);
@@ -13654,8 +13654,8 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                                                                           arg_arg1_head_arg0_arg0_head_arg0_list = ATgetNext(arg_arg1_head_arg0_arg0_head_arg0_list);
                                                                                                                                                           if (ATgetInt((ATermInt)arg_arg1_head_arg0_arg0_head_arg0_head) == 84) {
 
-                                                                                                                                                            /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
-                                                                                                                                                              /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
+                                                                                                                                                            if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_head_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_head_arg0_list) == ATtrue) {
+                                                                                                                                                              if (ATgetType((ATerm)arg_arg1_head_arg0_arg0_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg0_arg0_list) == ATtrue) {
                                                                                                                                                                 ATerm arg_arg1_head_arg0_arg1 = ATgetArgument(arg_arg1_head_arg0, 1);
                                                                                                                                                                 /* checking for: lit */
                                                                                                                                                                 if (ATgetType((ATerm)arg_arg1_head_arg0_arg1) == AT_APPL && ATgetAFun((ATermAppl)arg_arg1_head_arg0_arg1) == ASF_afun9) {
@@ -13728,8 +13728,8 @@ inline ATbool ASF_isCharacterLabelUnderscoreStart(ASF_Character arg){
                                                                                                                                                                                                                     arg_arg1_head_arg1_list = ATgetNext(arg_arg1_head_arg1_list);
                                                                                                                                                                                                                     if (ATgetInt((ATermInt)arg_arg1_head_arg1_head) == 84) {
 
-                                                                                                                                                                                                                      /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
-                                                                                                                                                                                                                        /* DIT HIER */ if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
+                                                                                                                                                                                                                      if (ATgetType((ATerm)arg_arg1_head_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_head_arg1_list) == ATtrue) {
+                                                                                                                                                                                                                        if (ATgetType((ATerm)arg_arg1_list) == AT_LIST && ATisEmpty((ATermList)arg_arg1_list) == ATtrue) {
                                                                                                                                                                                                                           return ATtrue;
                                                                                                                                                                                                                         }
                                                                                                                                                                                                                       }
