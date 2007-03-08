@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar  8 19:09:31 CET 2007 <jurgenv@cwi.nl>
+ * semantics/utils/lift-asf.c: added -t option for output of shared
+   text instead of shared binary.
+
 Wed Mar  7 16:37:21 CET 2007 <kooiker@cwi.nl>
  * syntax/asfsdf-checker/src/*:
    - regenerated after fixing warnings

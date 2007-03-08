@@ -13,7 +13,7 @@
 
 static char myname[]    = "lift-asf";
 static char myversion[] = "2.0";
-static char myarguments[] = "hli:o:V";
+static char myarguments[] = "hli:o:tV";
 
 void usage(void)
 {
@@ -37,6 +37,7 @@ int main (int argc, char **argv)
   int c; /* option character */
   ATerm bottomOfStack;
   ATbool lower = ATfalse;
+  ATbool text = ATfalse;
   char *input = "-";
   char *output = "-";
   ATerm in, out;
@@ -59,6 +60,9 @@ int main (int argc, char **argv)
       break;
     case 'o':  
       output = strdup(optarg);    
+      break;
+    case 't':
+      text = ATtrue;
       break;
     case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
       exit(0);
@@ -106,7 +110,12 @@ int main (int argc, char **argv)
     ATwarning("lift-asf: unexpected input\n");
   }
 
-  ATwriteToNamedBinaryFile(out, output);
+  if (!text) {
+    ATwriteToNamedBinaryFile(out, output);
+  }
+  else {
+    ATwriteToNamedSharedTextFile(out, output);
+  }
   
   return 0;
 }
