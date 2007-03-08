@@ -80,9 +80,11 @@ module Versioning
     end
     
     def svn_url(path, user = nil)
-      if @protocol == 'svn+ssh' or
-          @protocol == 'svn' or
-          @protocol == 'file' then 
+      if @protocol == 'file' then 
+        return File.join("#{@protocol}://#{@location}", path)
+      end
+
+      if @protocol == 'svn+ssh' or @protocol == 'svn' then
         if user then
           return File.join("#{@protocol}://#{user}@#{@location}", path)
         else
