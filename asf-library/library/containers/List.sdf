@@ -1,32 +1,29 @@
 module containers/List[X]
 
-imports 
-  basic/Booleans
-  basic/Integers
+imports basic/Booleans
+        basic/Integers
 
 exports
-  context-free syntax
-    "[" {X ","}* "]"	-> List[[X]]  
+sorts List
 
-  context-free syntax
-    length( List[[X]] )	 -> Integer
+context-free syntax
+  "[" {X ","}* "]" -> List[[X]]  
 
-    head( List[[X]] )    -> X
-    tail( List[[X]] )    -> List[[X]]
-    elem( X, List[[X]] ) -> Boolean
-
-    empty(List[[X]])     -> Boolean
-
-    cons( X, List[[X]] ) -> List[[X]]
-    X ":" List[[X]]      -> List[[X]]
-
-    concat(List[[X]], List[[X]]) 	-> List[[X]]
+context-free syntax
+  length(List[[X]])            -> Integer    
+  head(List[[X]])              -> X          
+  tail(List[[X]])              -> List[[X]]  
+  elem(X, List[[X]])           -> Boolean    
+  empty(List[[X]])             -> Boolean    
+  cons(X, List[[X]])           -> List[[X]]  
+  X ":" List[[X]]              -> List[[X]]  
+  concat(List[[X]], List[[X]]) -> List[[X]]  
 
 hiddens
-  imports
-    basic/Comments
-    basic/Whitespace
-  variables
-    "X"[0-9\']*		-> X
-    "X*"[0-9\']*	-> X*
-    "X,*"[0-9\']*	-> {X ","}*
+imports basic/Comments
+        basic/Whitespace
+
+variables
+  "X" [0-9\']*   -> X         
+  "X*" [0-9\']*  -> X*        
+  "X,*" [0-9\']* -> {X ","}*  
