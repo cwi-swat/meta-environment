@@ -5,6 +5,7 @@ www_DATA	=
 
 wwwdir		= $(pkgdatadir)/demo/www
 
+install-data-hook:
 	ln -s -f $(DESTDIR)${pkgdatadir}/www/script $(DESTDIR)$(wwwdir)/ ;\
 	ln -s -f $(DESTDIR)${pkgdatadir}/www/log $(DESTDIR)$(wwwdir)/ ;\
 	ln -s -f $(DESTDIR)${pkgdatadir}/www/components $(DESTDIR)$(wwwdir)/ ;\

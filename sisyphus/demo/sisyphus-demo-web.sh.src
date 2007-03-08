@@ -1,0 +1,18 @@
+#! /bin/sh
+
+PREFIX=__PREFIX__
+DATADIR=__DATA_DIR__
+BINDIR=__BIN_DIR__
+WOS=$BINDIR/wos
+CONFIG_REPO=file://${DATADIR}/demo/config-repo/demo
+WWW_DIR=${DATADIR}/demo/www
+
+${WOS} -u ${CONFIG_REPO} start \
+    --chdir ${WWW_DIR} \
+    --log /tmp/demo.$$.log \
+    --pid /tmp/demo.$$.pid \
+    $@
+
+
+
+
