@@ -5,10 +5,10 @@
 
 process StartSDFEditor is
 let
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str,
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   (
     rec-msg(start-editor(SDF_EXTENSION, Path?))

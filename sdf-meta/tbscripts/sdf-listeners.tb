@@ -46,12 +46,12 @@ let
   Event: attribute-changed-event,
   Extension: str,
   File: file,
-  ModuleId: term,
+  ModuleId: module-id,
   Modulename: str,
   Name: str,
   Prefix: str
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"name",<term>,<term>)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -72,10 +72,10 @@ toolbus(SDFModuleLabelSetter)
 process SDFModuleTooltipSetter is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Modulename: str
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"name",<term>,<term>)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -92,15 +92,15 @@ toolbus(SDFModuleTooltipSetter)
 process SDFModuleColorChanger is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   NewPath: term,
   Tree: term,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,child-error)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",error,<term>)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",child-error,<term>)  
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,child-error)  
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",error,<term>)  
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",child-error,<term>)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -126,13 +126,13 @@ toolbus(SDFModuleColorChanger)
 process SDFModuleVisualizeEditable is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   NewPath: term,
   Tree: term,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,true)  
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,false)  
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"editable",<term>,true)  
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"editable",<term>,false)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -154,10 +154,10 @@ toolbus(SDFModuleVisualizeEditable)
 process SDFModuleParser is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,available)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -180,11 +180,11 @@ toolbus(SDFModuleParser)
 process SDFModuleIdentifier is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Tree: term,
   Result: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,parsed)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -202,12 +202,12 @@ process SDFSetModuleImports is
 let
   Event: attribute-changed-event,
   Import: str,
-  ImportId: term,
+  ImportId: module-id,
   Imports: list,
-  ModuleId: term,
+  ModuleId: module-id,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,identified)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -247,10 +247,10 @@ toolbus(SDFSetModuleImports)
 process SDFRemoveDependencies is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,unknown)
   .
   (
     rec-note(mm-attribute-changed(Event?))

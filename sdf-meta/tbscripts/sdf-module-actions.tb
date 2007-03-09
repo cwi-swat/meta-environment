@@ -4,11 +4,11 @@
 #include <sdf-namespace.h>
 #include <configuration-manager.idef>
 
-process SelectModule(ModuleId: term) is
+process SelectModule(ModuleId: module-id) is
   snd-msg(nav-select-module(ModuleId))
   . snd-msg(gp-select-node("import-graph", SDF_NAMESPACE, ModuleId))
 
-process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is
+process HandleModuleEvent(Type: term, Event: term, ModuleId: module-id) is
 let
   Action: str,
   Modulename: str
@@ -30,7 +30,7 @@ process HandleModulePopup is
 let
   GraphId: str,
   GraphType: str,
-  ModuleId: term,
+  ModuleId: module-id,
   Modulename: str,
   Menu: term,
   PopupMenu: list,

@@ -4,7 +4,7 @@
 #include <editing.tb>
 #include <config-utils.tb>
 
-process EditSyntax(ModuleId: term) is
+process EditSyntax(ModuleId: module-id) is
 let
   AlreadyExists: bool,
   Available: bool,
@@ -15,7 +15,7 @@ let
   Modulename: str,
   Path: str,
   Editable: bool,
-  Sid: term,
+  Sid: session-id,
   Event: attribute-changed-event,
   Tree: term
 in
@@ -75,10 +75,10 @@ in
   fi
 endlet
 
-process UpdateSyntaxStructure(Sid: term) is
+process UpdateSyntaxStructure(Sid: session-id) is
 let
-  ModuleId: term,
-  Slices: term,
+  ModuleId: module-id,
+  Slices: list,
   Tree: term
 in
   GetModuleId(Sid, ModuleId?)

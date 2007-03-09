@@ -3,22 +3,22 @@
 
 #include <sdf-editor-utils.tb>
 
-process EditorEditSyntaxAction(EditorId : term) is
+process EditorEditSyntaxAction(EditorId : session-id) is
 let 
-  ModuleId : term
+  ModuleId : module-id
 in
   GetModuleId(EditorId, ModuleId?)
   . EditSyntaxAction(ModuleId)
 endlet
 
-process EditSyntaxAction(ModuleId : term) is
+process EditSyntaxAction(ModuleId : module-id) is
 let
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   create(EditSyntax(ModuleId), Pid?)
   . rec-msg(syntax-editor-started(ModuleId, Sid?))
-  . create(CleanupEditTerm(Sid, ModuleId), Pid?)
+  . create(CleanupEditTerm(Sid), Pid?)
 endlet
 
 #endif /* __SDF_EDITOR_ACTIONS__ */

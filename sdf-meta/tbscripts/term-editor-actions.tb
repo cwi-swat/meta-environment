@@ -5,22 +5,22 @@
 #include <term-editor-utils.tb>
 #include <sdf-namespace.h>
 
-process EditorEditTermAction(EditorId : term) is
+process EditorEditTermAction(EditorId : session-id) is
 let
-  ModuleId : term
+  ModuleId : module-id
 in
   GetModuleId(EditorId, ModuleId?)
   . EditTermAction(ModuleId)
 endlet
 
-process EditTermAction(ModuleId : term) is
+process EditTermAction(ModuleId : module-id) is
 let
   Cancel: bool,
   ErrorMessage: str,
   Filename: str,
   Modulename: str,
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
   . PromptForFile("Edit Term", [], Modulename, Cancel?, Filename?)
@@ -32,7 +32,7 @@ in
     .
     (
       rec-msg(term-editor-started(Filename, ModuleId, Sid?))
-      . create(CleanupEditTerm(Sid, Filename), Pid?)
+      . create(CleanupEditTerm(Sid), Pid?)
     +
       rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
       . printf("error: %s\n", ErrorMessage)

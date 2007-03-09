@@ -5,7 +5,7 @@
 #include <term-utils.tb>
 #include <sdf-module-utils.tb>
 
-process EditTerm(Path: str, ModuleId: term, GetTree: bool) is
+process EditTerm(Path: str, ModuleId: module-id, GetTree: bool) is
 let
   Event: attribute-changed-event,
   AlreadyExists: bool,
@@ -13,7 +13,7 @@ let
   EditorType: term,
   Error: str,
   Modulename: str,
-  Sid: term,
+  Sid: session-id,
   Tree: term,
   Valid: bool,
   Languagename: str,
@@ -74,10 +74,10 @@ in
   fi
 endlet
 
-process UpdateTermStructure(Sid: term) is
+process UpdateTermStructure(Sid: session-id) is
 let
-  ModuleId: term,
-  Slices: term,
+  ModuleId: module-id,
+  Slices: list,
   Tree: term,
   Path: str
 in
@@ -93,11 +93,11 @@ in
   fi
 endlet
 
-process ActivateEditorWithTree(Tree: term, ModuleId: term, Filename: str) is
+process ActivateEditorWithTree(Tree: term, ModuleId: module-id, Filename: str) is
 let
   Error: term,
   Pid: int,
-  Sid: term,
+  Sid: session-id,
   Text: str,
   ErrorMessage: str
 in

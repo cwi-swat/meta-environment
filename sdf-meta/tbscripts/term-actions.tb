@@ -20,7 +20,7 @@ in
   fi
 endlet
 
-process ActionAddPosInfo(EditorId : term, Tree : term, ResultTree : term?) is
+process ActionAddPosInfo(EditorId : session-id, Tree : term, ResultTree : term?) is
 let
   Filename : str
 in
@@ -45,11 +45,11 @@ process ApplyFunction(FuncName : str, SortName : str, Arguments : list, Tree : t
   snd-msg(apply-function(FuncName, SortName, Arguments))
   . rec-msg(tree(Tree?))
 
-process AddBracketsAction(EditorId : term) is
+process AddBracketsAction(EditorId : session-id) is
 let
   Tree : term,
   RTree : term,
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str,
   Table: term
 in

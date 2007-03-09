@@ -4,7 +4,7 @@
 #include <cache-utils.tb>
 #include <parsetablegen.idef>
 
-process GetParseTable(ModuleId: term, Type: term, Table: term?) is
+process GetParseTable(ModuleId: module-id, Type: term, Table: term?) is
 let
   Error: term
 in
@@ -23,7 +23,7 @@ endlet
  */
 process BuildParsetable(TableName: str, Namespace: term, Type: term, PreprocessSyntaxHandler: str) is
 let
-  ModuleId: term,
+  ModuleId: module-id,
   Syntax: term,
   Table: term,
   Modulename: str,

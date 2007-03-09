@@ -22,7 +22,7 @@ endlet
 process CloseAllAction is
 let
   Id: term,
-  ModuleId: term,
+  ModuleId: module-id,
   Modules: list
 in
   Id := process-id
@@ -52,11 +52,11 @@ in
   fi
 endlet
 
-process DefaultPrettyPrintAction(EditorId : term) is
+process DefaultPrettyPrintAction(EditorId : session-id) is
 let
   Tree : term,
   RTree : term,
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str
 in
   GetModuleId(EditorId, ModuleId?)
@@ -84,7 +84,7 @@ let
   Path : str,
   Filename : str,
   RelativeFilename : str,
-  ModuleId : term,
+  ModuleId : module-id,
   Paths: list,
   FoundPath: str,
   Prefix: str
@@ -118,7 +118,7 @@ in
 endlet
 
 
-process DumpParseTableAction(ModuleId : term) is
+process DumpParseTableAction(ModuleId : module-id) is
 let
   Cancel: bool,
   Path : str
@@ -132,11 +132,11 @@ in
   fi
 endlet
 
-process EditorDumpParseTableAction(EditorId : term) is
+process EditorDumpParseTableAction(EditorId : session-id) is
 let
   Cancel: bool,
   Path : str,
-  ModuleId : term
+  ModuleId : module-id
 in
   GetModuleId(EditorId, ModuleId?)
   . PromptForFileWithExtension("Export Term ParseTable", [], ".trm.tbl", Cancel?, Path?)
@@ -148,7 +148,7 @@ in
   fi
 endlet
 
-process DumpSdfDefinitionAction(ModuleId : term) is
+process DumpSdfDefinitionAction(ModuleId : module-id) is
 let
   Cancel: bool,
   Path : str
@@ -164,7 +164,7 @@ in
   fi
 endlet
 
-process CloseModuleAction(ModuleId : term) is
+process CloseModuleAction(ModuleId : module-id) is
 let
   Answer     : term,
   Recursive  : bool
@@ -183,7 +183,7 @@ in
   fi
 endlet
 
-process CloseOtherModulesAction(ModuleId : term) is
+process CloseOtherModulesAction(ModuleId : module-id) is
   CloseOtherModules(ModuleId) 
 
 #ifdef DEAD

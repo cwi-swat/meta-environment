@@ -5,7 +5,7 @@
 #define NO_NONTERMINAL ""
 #define TERM_TREE_CACHE "term-annotated-tree"
 
-process GetTermParseTable(ModuleId: term, Table: term?) is
+process GetTermParseTable(ModuleId: module-id, Table: term?) is
   GetParseTable(ModuleId, trm, Table?)
 
 toolbus(InitCache(TERM_TREE_CACHE))
@@ -29,7 +29,7 @@ process ClearTermParsetreeCache(Path : str) is
 
 toolbus(ClearTermParsetreeCacheListener)
 
-process GetTermParsetree(ModuleId: term, Path: str, Result: term?) is
+process GetTermParsetree(ModuleId: module-id, Path: str, Result: term?) is
 let
   AmbPid: int,
   ParseTable: term,

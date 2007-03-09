@@ -5,13 +5,13 @@ process SDFStatusToProgress is
 let
   Event: attribute-changed-event,
   Key: term,
-  ModuleId: term,
+  ModuleId: module-id,
   Name: str,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
-  . subscribe(mm-module-deleted(<term>))
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,<term>)
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"name",<term>,<term>)
+  . subscribe(mm-module-deleted(<module-id>))
   .
   (
     rec-note(mm-attribute-changed(Event?))

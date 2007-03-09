@@ -62,7 +62,7 @@ endlet
  * module name twice, then add the feature string, and then adding the
  * basename again to construct a new file name.
  */
-process LookupFeatureModuleId(ModuleId: term, Feature : str, NewModuleId : term?) is
+process LookupFeatureModuleId(ModuleId: module-id, Feature : str, NewModuleId : module-id?) is
 let
   Modulename: str,
   Directory: str,

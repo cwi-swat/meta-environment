@@ -25,7 +25,7 @@ in
 endlet
 
 
-process DumpParseTable(ModuleId : term, Filename : str, Type : term) is
+process DumpParseTable(ModuleId : module-id, Filename : str, Type : term) is
 let
   Directory: str,
   Error: term,
@@ -62,7 +62,7 @@ in
   . JobDone(Filename)
 endlet
 
-process DumpSdfDefinition(ModuleId: term, Filename: str) is
+process DumpSdfDefinition(ModuleId: module-id, Filename: str) is
 let
   Syntax: term,
   Path: str,
@@ -95,7 +95,7 @@ let
   Runner: list,
   Result: list,
   ModuleTree: term,
-  ModuleId: term,
+  ModuleId: module-id,
   Incomplete: bool
 in
   Runner := ModuleIds
@@ -125,7 +125,7 @@ in
   fi
 endlet
 
-process GetSyntaxDefinition(ModuleId: term, Syntax: term?) is
+process GetSyntaxDefinition(ModuleId: module-id, Syntax: term?) is
 let
   ModuleIds: list,
   Modules: list,
@@ -159,7 +159,7 @@ process GetImportedModulenames(Tree: term, Imports: list?) is
   snd-msg(sm-get-imported-module-names(Tree))
   . rec-msg(sm-imported-module-names(Imports?)) 
 
-process CloseOtherModules(ModuleId: term) is
+process CloseOtherModules(ModuleId: module-id) is
 let
   Dependencies: list,
   CloseModules: list,
@@ -172,7 +172,7 @@ in
   . CloseModules(CloseModules)
 endlet
 
-process CloseModule(ModuleId: term, Recursive: bool) is
+process CloseModule(ModuleId: module-id, Recursive: bool) is
 let
   Dependencies: list,
   Modulename: str,
@@ -203,7 +203,7 @@ endlet
 
 process CloseModules(CloseModules: list) is
 let
-  ModuleId: term,
+  ModuleId: module-id,
   Modules: list
 in
   Modules := quote(CloseModules)
@@ -229,7 +229,7 @@ let
   Contents: list,
   Error: term,
   Extension: str,
-  ModuleId: term,
+  ModuleId: module-id,
   Modulename: str,
   Path: str,
   SearchPaths: list
@@ -369,7 +369,7 @@ endlet
 
 /* end of dead code */
 
-process IsLibraryModule(ModuleId: term, LibraryModule: bool?) is
+process IsLibraryModule(ModuleId: module-id, LibraryModule: bool?) is
 let
   Directories: list,
   Extension: str,
@@ -391,7 +391,7 @@ in
   fi
 endlet
 
-process CreateModule(Modulename: str, ModuleId: term?) is
+process CreateModule(Modulename: str, ModuleId: module-id?) is
   MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", Modulename, ModuleId?)
   .
   if equal(ModuleId, UNDEFINED) then
@@ -402,7 +402,7 @@ process CreateModule(Modulename: str, ModuleId: term?) is
     tau
   fi
 
-process OpenModule(Modulename: str, ModuleId: term?) is
+process OpenModule(Modulename: str, ModuleId: module-id?) is
 let
   Editable: bool,
   LibraryModule: bool,
@@ -435,7 +435,7 @@ endlet
 toolbus(InitCache(SDF_TREE_CACHE))
 toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
 
-process GetSDFParsetree(ModuleId: term, Result: term?) is
+process GetSDFParsetree(ModuleId: module-id, Result: term?) is
 let
   ParseTable: term,
   Path: str,
@@ -479,7 +479,7 @@ in
   . snd-msg(tm-end-transaction(sdf-parsing))
 endlet
 
-process SDFIdentifyModule(ModuleId: term, ResultStatus: term?) is
+process SDFIdentifyModule(ModuleId: module-id, ResultStatus: term?) is
 let
   Tree: term,
   Path: str,
@@ -512,7 +512,7 @@ in
 endlet
 
 
-process GetImportsForRenaming(ModuleId: term, ModuleIds: list, Imports: term?) is
+process GetImportsForRenaming(ModuleId: module-id, ModuleIds: list, Imports: term?) is
 let
   Modulename: str,
   Modules: list
