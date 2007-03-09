@@ -95,8 +95,8 @@ create table si_items (
 	si_session_id integer references si_sessions,
 	progress boolean,
 	success boolean,
-	released boolean default false, 
-	unique (si_host_id, si_revision_id, si_config_id)
+	released boolean default false /*,  */
+/*	unique (si_host_id, si_revision_id, si_config_id) */
 );
 
 drop table si_item_deps cascade;
