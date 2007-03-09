@@ -9,11 +9,11 @@
 #include <sdf-utils.tb>
 #include <sdf-module-utils.tb>
 
-process PrettyPrintSdfAction(EditorId : term) is
+process PrettyPrintSdfAction(EditorId : session-id) is
 let
   Tree : term,
   RTree : term,
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str
 in
   GetModuleId(EditorId, ModuleId?)
@@ -34,11 +34,11 @@ in
   fi
 endlet
 
-process PrettyPrintAction(EditorId : term, EditorType : term, Sort: str) is
+process PrettyPrintAction(EditorId : session-id, EditorType : term, Sort: str) is
 let
   Tree : term,
   RTree : term,
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str
 in
   GetModuleId(EditorId, ModuleId?)
@@ -57,13 +57,13 @@ in
   fi
 endlet
 
-process DebugAction(EditorId : term) is
+process DebugAction(EditorId : session-id) is
 let
-  ModuleId : term,
-  RunModuleId : term,
+  ModuleId : module-id,
+  RunModuleId : module-id,
   Path: str,
   ResultTree: term,
-  Sid: term,
+  Sid: session-id,
   Pid: int,
   File: str
 in
@@ -96,13 +96,13 @@ in
   fi
 endlet
 
-process RunAction(EditorId : term) is
+process RunAction(EditorId : session-id) is
 let
-  ModuleId : term,
-  RunModuleId : term,
+  ModuleId : module-id,
+  RunModuleId : module-id,
   Path: str,
   ResultTree: term,
-  Sid: term,
+  Sid: session-id,
   Pid: int,
   File: str
 in
@@ -135,10 +135,10 @@ in
   fi
 endlet
 
-process ExtractAction(EditorId : term) is
+process ExtractAction(EditorId : session-id) is
 let
-  ModuleId : term,
-  ExtractModuleId : term,
+  ModuleId : module-id,
+  ExtractModuleId : module-id,
   Path: str,
   ResultTree: term,
   Pid: int,
@@ -166,14 +166,12 @@ in
   fi
 endlet
 
-process TestAction(EditorId : term) is
+process TestAction(EditorId : session-id) is
 let
-  ModuleId : term,
-  RunModuleId : term,
+  ModuleId : module-id,
+  RunModuleId : module-id,
   Path: str,
   ResultTree: term,
-  Sid: term,
-  Pid: int,
   Summary: summary
 in
   GetModuleId(EditorId, ModuleId?)
@@ -197,14 +195,12 @@ in
   fi
 endlet
 
-process CheckAction(EditorId : term) is
+process CheckAction(EditorId : session-id) is
 let
-  ModuleId : term,
-  RunModuleId : term,
+  ModuleId : module-id,
+  RunModuleId : module-id,
   Path: str,
   ResultTree: term,
-  Sid: term,
-  Pid: int,
   Summary: summary
 in
   GetModuleId(EditorId, ModuleId?)
@@ -228,12 +224,12 @@ in
   fi
 endlet
 
-process ReduceAction(EditorId : term) is
+process ReduceAction(EditorId : session-id) is
 let
-  ModuleId : term,
+  ModuleId : module-id,
   Path: str,
   ResultTree: term,
-  Sid: term,
+  Sid: session-id,
   Pid: int
 in
   GetModuleId(EditorId, ModuleId?)
@@ -258,9 +254,9 @@ in
   . JobDone("Rewriting")
 endlet
 
-process DebugReduceAction(EditorId : term) is
+process DebugReduceAction(EditorId : session-id) is
 let
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str,
   ResultTree: term
 in
@@ -270,7 +266,7 @@ in
   . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
 endlet
 
-process DumpEquationsAction(ModuleId : term) is
+process DumpEquationsAction(ModuleId : module-id) is
 let
   Cancel: bool,
   Path : str
@@ -284,7 +280,7 @@ in
   fi
 endlet
 
-process CompileModuleAction(ModuleId : term) is
+process CompileModuleAction(ModuleId : module-id) is
 let
   Cancel: bool,
   Path : str
@@ -298,21 +294,21 @@ in
   fi
 endlet
 
-process RunAsfTestsAction(ModuleId : term) is
+process RunAsfTestsAction(ModuleId : module-id) is
   TestAsfSpecification(ModuleId, off) 
 
-process DebugRunAsfTestsAction(ModuleId : term) is
+process DebugRunAsfTestsAction(ModuleId : module-id) is
   TestAsfSpecification(ModuleId, on)
 
-process EditorRunAsfTestsAction(EditorId : term) is
+process EditorRunAsfTestsAction(EditorId : session-id) is
 let
-  ModuleId : term
+  ModuleId : module-id
 in
   GetModuleId(EditorId, ModuleId?)
   . TestAsfSpecification(ModuleId, off)
 endlet
 
-process AsfSdfApiGenAction(ModuleId: term) is
+process AsfSdfApiGenAction(ModuleId: module-id) is
 let
   Cancel: bool,
   Path: str,
@@ -328,7 +324,7 @@ in
   fi
 endlet
 
-process PrintModuleAction(ModuleId : term) is
+process PrintModuleAction(ModuleId : module-id) is
 let
   Cancel: bool,
   Path : str
@@ -343,7 +339,7 @@ in
   fi
 endlet
 
-process DumpEquationsParseTableAction(ModuleId : term) is
+process DumpEquationsParseTableAction(ModuleId : module-id) is
 let
   Cancel: bool,
   Path : str
@@ -357,11 +353,11 @@ in
   fi
 endlet
 
-process EditorDumpEquationsParseTableAction(EditorId : term) is
+process EditorDumpEquationsParseTableAction(EditorId : session-id) is
 let
   Cancel: bool,
   Path : str,
-  ModuleId : term
+  ModuleId : module-id
 in
   GetModuleId(EditorId, ModuleId?)
   . PromptForFileWithExtension("Export Equations ParseTable", [], ".asf.tbl", Cancel?, Path?)

@@ -4,7 +4,7 @@
 #include <editing.tb>
 #include <asf-namespace.h>
 
-process EditEquations(ModuleId: term) is
+process EditEquations(ModuleId: module-id) is
 let
   AlreadyExists: bool,
   Available: bool,
@@ -13,7 +13,7 @@ let
   HasAttribute: bool,
   Path: str,
   Editable: bool,
-  Sid: term,
+  Sid: session-id,
   Tree: term,
   Modulename: str
 in
@@ -65,10 +65,10 @@ in
   fi
 endlet
 
-process UpdateEquationsStructure(Sid: term) is
+process UpdateEquationsStructure(Sid: session-id) is
 let
-  ModuleId: term,
-  Slices: term,
+  ModuleId: module-id,
+  Slices: list,
   Tree: term
 in
   GetModuleId(Sid, ModuleId?)

@@ -4,10 +4,10 @@
 process ASFStatusToProgress is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,<term>)
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",<term>,<term>)
   .
   (
     rec-note(mm-attribute-changed(Event?))

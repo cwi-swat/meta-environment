@@ -18,7 +18,7 @@
  * It reuses the same module Id, and constructs an ASF path from
  * a SDF path.
  */
-process RegisterASFModule(ModuleId: term) is
+process RegisterASFModule(ModuleId: module-id) is
 let
   AsfPath: str,
   Modulename: str,
@@ -32,7 +32,7 @@ in
   . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
 endlet
 
-process OpenASFModule(ModuleId: term) is
+process OpenASFModule(ModuleId: module-id) is
 let
   AsfPath: str,
   Editable: bool,
@@ -53,7 +53,7 @@ in
   )
 endlet
 
-process CheckASFSDFSyntax(ModuleId : term) is
+process CheckASFSDFSyntax(ModuleId : module-id) is
 let
   Syntax: term,
   Feedback: term,
@@ -85,7 +85,7 @@ in
   . JobDone("Checking syntax definition") 
 endlet
 
-process CheckASFModule(ModuleId: term) is
+process CheckASFModule(ModuleId: module-id) is
 let
   Summary : summary,
   Errors: list,
@@ -112,7 +112,7 @@ toolbus(InitCache(ASF_TREE_CACHE))
 toolbus(ClearCacheHandler(ASF_TREE_CACHE, ASF_NAMESPACE, "status", <term>,edited))
 toolbus(ClearCacheHandler(ASF_TREE_CACHE, SDF_NAMESPACE, "status", <term>,complete))
 
-process GetASFParseTree(ModuleId: term, Result: term?) is
+process GetASFParseTree(ModuleId: module-id, Result: term?) is
 let
   AmbPid: int,
   ParseTable: term,
@@ -176,7 +176,7 @@ in
   rec-msg(compilation-done(Modulename))
 endlet
 
-process CompileModule(ModuleId : term, OutputFile: str) is
+process CompileModule(ModuleId : module-id, OutputFile: str) is
 let
   Equations: term,
   Error: str,
@@ -206,7 +206,7 @@ in
    . JobDone("Compiling")
 endlet
 
-process DumpEquations(ModuleId: term) is
+process DumpEquations(ModuleId: module-id) is
 let
   SdfPath: str,
   Path : str
@@ -216,7 +216,7 @@ in
   . DumpEquationsGivenFile(ModuleId, Path)
 endlet
 
-process DumpTestEquationsGivenFile(ModuleId : term, Path: str) is
+process DumpTestEquationsGivenFile(ModuleId : module-id, Path: str) is
 let
   Equations: term,
   Error: term,
@@ -246,7 +246,7 @@ in
 endlet
 
 
-process DumpEquationsGivenFile(ModuleId : term, Path: str) is
+process DumpEquationsGivenFile(ModuleId : module-id, Path: str) is
 let
   Equations: term,
   Error: term,
@@ -275,10 +275,10 @@ in
   . JobDone("Dumping equations...")
 endlet
 
-process GetSpecification(ModuleId: term, Result: term?) is
+process GetSpecification(ModuleId: module-id, Result: term?) is
 let
   Error: term,
-  CurModule: term,
+  CurModule: module-id,
   Equations: term,
   Imports: list,
   Modulename: str,
@@ -346,7 +346,7 @@ process GetSpecificationTests(Specification: term, Tests: term?) is
   snd-msg(extract-tests(Specification))
   . rec-msg(extract-tests-result(Tests?))
 
-process TestAsfSpecification(ModuleId: term, Debugging: term) is
+process TestAsfSpecification(ModuleId: module-id, Debugging: term) is
 let
   Specification : term,
   Equations : term,
@@ -394,7 +394,7 @@ in
   . JobDone("Testing ASF Specification")
 endlet
 
-process ReduceTerm(Tree: term, ModuleId: term, Debugging: term, NormalForm: term?) is
+process ReduceTerm(Tree: term, ModuleId: module-id, Debugging: term, NormalForm: term?) is
 let
   Summary: summary,
   Equations: term,
@@ -441,7 +441,7 @@ in
   fi
 endlet
 
-process Reduce(ModuleId : term, Path : str, Debugging: term, Tree: term?) is
+process Reduce(ModuleId : module-id, Path : str, Debugging: term, Tree: term?) is
 let
   Parsetree: term,
   ResultTree: term
@@ -469,7 +469,7 @@ endlet
  TODO fix!
  */
 
-process GenerateASFSDFApi(ModuleId: term, Path: str) is
+process GenerateASFSDFApi(ModuleId: module-id, Path: str) is
 let
   /* TODO: split up this process into smaller pieces if possible */
   Directory : str,
@@ -479,7 +479,7 @@ let
   FullPath : str,
   NewEquationsText : str ,
   NewEquationsTree : term,
-  NewModuleId: term,
+  NewModuleId: module-id,
   NewSyntaxText : str,
   NewSyntaxTree : term,
   Rewriter : str,
@@ -726,7 +726,7 @@ let
   SdfText: str,
   AsfText: str,
   AsfTree: term,
-  ModuleId: term,
+  ModuleId: module-id,
   Modulename: str,
   Path: str,
   Filename: str,

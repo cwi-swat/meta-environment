@@ -5,10 +5,10 @@
 
 process StartASFEditor is
 let
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str,
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   (
     rec-msg(start-editor(ASF_EXTENSION, Path?))

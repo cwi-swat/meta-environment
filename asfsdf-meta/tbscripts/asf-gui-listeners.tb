@@ -7,7 +7,7 @@
 process LanguageFeatureMenuListener(Feature : str, Action : str, Info : str) is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Path: term,
   Menu: term,
   Modulename: str,
@@ -18,7 +18,7 @@ let
   Pid: int,
   Tip: str
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",identified,<term>) 
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",identified,<term>) 
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -53,7 +53,7 @@ toolbus(LanguageFeatureMenuListener("check", "CheckAction","Check this term"))
 toolbus(LanguageFeatureMenuListener("extract", "ExtractAction","Extract data from this term"))
 toolbus(LanguageFeatureMenuListener("test", "TestAction","Run unit tests"))
 
-process LanguageFeatureRemoveListener(ModuleId: term, Property: term) is
+process LanguageFeatureRemoveListener(ModuleId: module-id, Property: term) is
   subscribe(mm-module-deleted(ModuleId))
   .
   (

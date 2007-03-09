@@ -4,20 +4,20 @@
 #include <asf-namespace.h>
 #include <asf-editor-utils.tb>
 
-process EditorEditEquationsAction(EditorId : term) is
+process EditorEditEquationsAction(EditorId : session-id) is
 let 
-  ModuleId : term
+  ModuleId : module-id
 in
   GetModuleId(EditorId, ModuleId?)
   . EditEquationsAction(ModuleId)
 endlet
 
 
-process EditEquationsAction(ModuleId : term) is
+process EditEquationsAction(ModuleId : module-id) is
 let
   Path: str,
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   .
@@ -26,7 +26,7 @@ in
   else
     create(EditEquations(ModuleId), Pid?)
     . rec-msg(equations-editor-started(ModuleId, Sid?))
-    . create(CleanupEditTerm(Sid, ModuleId), Pid?)
+    . create(CleanupEditTerm(Sid), Pid?)
   fi
 endlet
 

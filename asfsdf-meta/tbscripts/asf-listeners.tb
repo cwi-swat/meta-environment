@@ -7,12 +7,12 @@
 process ASFModuleRegistrar is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   NewPath: term,
   Idle: term
 in
   Idle := no
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available) 
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,available) 
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -28,12 +28,12 @@ toolbus(ASFModuleRegistrar)
 process ASFModuleOpener is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   NewPath: term,
   Idle: term
 in
   Idle := no
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,complete) 
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,complete) 
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -49,12 +49,12 @@ toolbus(ASFModuleOpener)
 process ASFSDFSyntaxChecker is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Tree: term,
   Result: term,
   Parents: list
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,complete)
+  MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,complete)
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -76,11 +76,11 @@ toolbus(ASFSDFSyntaxChecker)
 process ASFModuleChecker is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   NewPath: term,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",available,parsed)  
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",available,parsed)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -96,11 +96,11 @@ toolbus(ASFModuleChecker)
 process ASFModuleShapeChanger is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   NewPath: term,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,available)  
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",<term>,available)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
@@ -116,10 +116,10 @@ toolbus(ASFModuleShapeChanger)
 process ASFModuleParser is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,available)
+  MM-Subscribe-Attribute-Changed(<module-id>,ASF_NAMESPACE,"status",<term>,available)
   .
   (
     rec-note(mm-attribute-changed(Event?))
