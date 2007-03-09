@@ -14,6 +14,6 @@ done
 
 CMD="${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -I ${DATA_DIR} ${DATA_DIR}/${CLIENT} $@"
 
-${CMD} --COMMAND_LINE "${CMD}"
+exec ${CMD} --COMMAND_LINE "${CMD}"
 
 
