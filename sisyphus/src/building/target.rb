@@ -84,6 +84,7 @@ module Building
 
     def save(store)
       @log.info("Saving item: #{@item}")
+      @log.info("**************#####")
       store.save(@item)
     end
 
@@ -143,7 +144,7 @@ module Building
         env += "PATH=#{path}:$PATH\n"
         env += "export PATH\n";
       end
-      @log.info("the environment is:\n #{env}")
+      # @log.info("the environment is:\n #{env}")
       return env
     end
 
