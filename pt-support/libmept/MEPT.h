@@ -27,577 +27,577 @@ void _PT_initMEPTApi(void);
 #endif
 
 #ifdef FAST_API
-#define PT_protectParseTree(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectParseTree(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectParseTree(PT_ParseTree *arg);
 #define PT_protectParseTree(arg) (_PT_protectParseTree(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectParseTree(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectParseTree(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectParseTree(PT_ParseTree *arg);
 #define PT_unprotectParseTree(arg) (_PT_unprotectParseTree(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectTree(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectTree(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectTree(PT_Tree *arg);
 #define PT_protectTree(arg) (_PT_protectTree(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectTree(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectTree(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectTree(PT_Tree *arg);
 #define PT_unprotectTree(arg) (_PT_unprotectTree(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectArgs(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectArgs(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectArgs(PT_Args *arg);
 #define PT_protectArgs(arg) (_PT_protectArgs(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectArgs(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectArgs(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectArgs(PT_Args *arg);
 #define PT_unprotectArgs(arg) (_PT_unprotectArgs(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectProduction(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectProduction(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectProduction(PT_Production *arg);
 #define PT_protectProduction(arg) (_PT_protectProduction(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectProduction(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectProduction(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectProduction(PT_Production *arg);
 #define PT_unprotectProduction(arg) (_PT_unprotectProduction(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectAttributes(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectAttributes(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectAttributes(PT_Attributes *arg);
 #define PT_protectAttributes(arg) (_PT_protectAttributes(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectAttributes(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectAttributes(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectAttributes(PT_Attributes *arg);
 #define PT_unprotectAttributes(arg) (_PT_unprotectAttributes(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectAttrs(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectAttrs(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectAttrs(PT_Attrs *arg);
 #define PT_protectAttrs(arg) (_PT_protectAttrs(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectAttrs(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectAttrs(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectAttrs(PT_Attrs *arg);
 #define PT_unprotectAttrs(arg) (_PT_unprotectAttrs(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectAttr(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectAttr(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectAttr(PT_Attr *arg);
 #define PT_protectAttr(arg) (_PT_protectAttr(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectAttr(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectAttr(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectAttr(PT_Attr *arg);
 #define PT_unprotectAttr(arg) (_PT_unprotectAttr(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectAssociativity(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectAssociativity(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectAssociativity(PT_Associativity *arg);
 #define PT_protectAssociativity(arg) (_PT_protectAssociativity(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectAssociativity(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectAssociativity(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectAssociativity(PT_Associativity *arg);
 #define PT_unprotectAssociativity(arg) (_PT_unprotectAssociativity(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectSymbol(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectSymbol(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectSymbol(PT_Symbol *arg);
 #define PT_protectSymbol(arg) (_PT_protectSymbol(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectSymbol(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectSymbol(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectSymbol(PT_Symbol *arg);
 #define PT_unprotectSymbol(arg) (_PT_unprotectSymbol(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectSymbols(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectSymbols(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectSymbols(PT_Symbols *arg);
 #define PT_protectSymbols(arg) (_PT_protectSymbols(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectSymbols(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectSymbols(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectSymbols(PT_Symbols *arg);
 #define PT_unprotectSymbols(arg) (_PT_unprotectSymbols(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectCharRange(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectCharRange(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectCharRange(PT_CharRange *arg);
 #define PT_protectCharRange(arg) (_PT_protectCharRange(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectCharRange(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectCharRange(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectCharRange(PT_CharRange *arg);
 #define PT_unprotectCharRange(arg) (_PT_unprotectCharRange(arg))
 #endif
 #ifdef FAST_API
-#define PT_protectCharRanges(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PT_protectCharRanges(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_protectCharRanges(PT_CharRanges *arg);
 #define PT_protectCharRanges(arg) (_PT_protectCharRanges(arg))
 #endif
 #ifdef FAST_API
-#define PT_unprotectCharRanges(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PT_unprotectCharRanges(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PT_unprotectCharRanges(PT_CharRanges *arg);
 #define PT_unprotectCharRanges(arg) (_PT_unprotectCharRanges(arg))
 #endif
 #ifdef FAST_API
-#define PT_ParseTreeFromTerm(t) ((PT_ParseTree)t)
+#define PT_ParseTreeFromTerm(t) ((PT_ParseTree)(t))
 #else
 PT_ParseTree _PT_ParseTreeFromTerm(ATerm t);
 #define PT_ParseTreeFromTerm(t) (_PT_ParseTreeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_ParseTreeToTerm(arg) ((ATerm)arg)
+#define PT_ParseTreeToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_ParseTreeToTerm(PT_ParseTree arg);
 #define PT_ParseTreeToTerm(arg) (_PT_ParseTreeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_TreeFromTerm(t) ((PT_Tree)t)
+#define PT_TreeFromTerm(t) ((PT_Tree)(t))
 #else
 PT_Tree _PT_TreeFromTerm(ATerm t);
 #define PT_TreeFromTerm(t) (_PT_TreeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_TreeToTerm(arg) ((ATerm)arg)
+#define PT_TreeToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_TreeToTerm(PT_Tree arg);
 #define PT_TreeToTerm(arg) (_PT_TreeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_ArgsFromTerm(t) ((PT_Args)t)
+#define PT_ArgsFromTerm(t) ((PT_Args)(t))
 #else
 PT_Args _PT_ArgsFromTerm(ATerm t);
 #define PT_ArgsFromTerm(t) (_PT_ArgsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_ArgsToTerm(arg) ((ATerm)arg)
+#define PT_ArgsToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_ArgsToTerm(PT_Args arg);
 #define PT_ArgsToTerm(arg) (_PT_ArgsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_ProductionFromTerm(t) ((PT_Production)t)
+#define PT_ProductionFromTerm(t) ((PT_Production)(t))
 #else
 PT_Production _PT_ProductionFromTerm(ATerm t);
 #define PT_ProductionFromTerm(t) (_PT_ProductionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_ProductionToTerm(arg) ((ATerm)arg)
+#define PT_ProductionToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_ProductionToTerm(PT_Production arg);
 #define PT_ProductionToTerm(arg) (_PT_ProductionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AttributesFromTerm(t) ((PT_Attributes)t)
+#define PT_AttributesFromTerm(t) ((PT_Attributes)(t))
 #else
 PT_Attributes _PT_AttributesFromTerm(ATerm t);
 #define PT_AttributesFromTerm(t) (_PT_AttributesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AttributesToTerm(arg) ((ATerm)arg)
+#define PT_AttributesToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_AttributesToTerm(PT_Attributes arg);
 #define PT_AttributesToTerm(arg) (_PT_AttributesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AttrsFromTerm(t) ((PT_Attrs)t)
+#define PT_AttrsFromTerm(t) ((PT_Attrs)(t))
 #else
 PT_Attrs _PT_AttrsFromTerm(ATerm t);
 #define PT_AttrsFromTerm(t) (_PT_AttrsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AttrsToTerm(arg) ((ATerm)arg)
+#define PT_AttrsToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_AttrsToTerm(PT_Attrs arg);
 #define PT_AttrsToTerm(arg) (_PT_AttrsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AttrFromTerm(t) ((PT_Attr)t)
+#define PT_AttrFromTerm(t) ((PT_Attr)(t))
 #else
 PT_Attr _PT_AttrFromTerm(ATerm t);
 #define PT_AttrFromTerm(t) (_PT_AttrFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AttrToTerm(arg) ((ATerm)arg)
+#define PT_AttrToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_AttrToTerm(PT_Attr arg);
 #define PT_AttrToTerm(arg) (_PT_AttrToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_AssociativityFromTerm(t) ((PT_Associativity)t)
+#define PT_AssociativityFromTerm(t) ((PT_Associativity)(t))
 #else
 PT_Associativity _PT_AssociativityFromTerm(ATerm t);
 #define PT_AssociativityFromTerm(t) (_PT_AssociativityFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_AssociativityToTerm(arg) ((ATerm)arg)
+#define PT_AssociativityToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_AssociativityToTerm(PT_Associativity arg);
 #define PT_AssociativityToTerm(arg) (_PT_AssociativityToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_SymbolFromTerm(t) ((PT_Symbol)t)
+#define PT_SymbolFromTerm(t) ((PT_Symbol)(t))
 #else
 PT_Symbol _PT_SymbolFromTerm(ATerm t);
 #define PT_SymbolFromTerm(t) (_PT_SymbolFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_SymbolToTerm(arg) ((ATerm)arg)
+#define PT_SymbolToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_SymbolToTerm(PT_Symbol arg);
 #define PT_SymbolToTerm(arg) (_PT_SymbolToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_SymbolsFromTerm(t) ((PT_Symbols)t)
+#define PT_SymbolsFromTerm(t) ((PT_Symbols)(t))
 #else
 PT_Symbols _PT_SymbolsFromTerm(ATerm t);
 #define PT_SymbolsFromTerm(t) (_PT_SymbolsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_SymbolsToTerm(arg) ((ATerm)arg)
+#define PT_SymbolsToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_SymbolsToTerm(PT_Symbols arg);
 #define PT_SymbolsToTerm(arg) (_PT_SymbolsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_CharRangeFromTerm(t) ((PT_CharRange)t)
+#define PT_CharRangeFromTerm(t) ((PT_CharRange)(t))
 #else
 PT_CharRange _PT_CharRangeFromTerm(ATerm t);
 #define PT_CharRangeFromTerm(t) (_PT_CharRangeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_CharRangeToTerm(arg) ((ATerm)arg)
+#define PT_CharRangeToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_CharRangeToTerm(PT_CharRange arg);
 #define PT_CharRangeToTerm(arg) (_PT_CharRangeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_CharRangesFromTerm(t) ((PT_CharRanges)t)
+#define PT_CharRangesFromTerm(t) ((PT_CharRanges)(t))
 #else
 PT_CharRanges _PT_CharRangesFromTerm(ATerm t);
 #define PT_CharRangesFromTerm(t) (_PT_CharRangesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PT_CharRangesToTerm(arg) ((ATerm)arg)
+#define PT_CharRangesToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PT_CharRangesToTerm(PT_CharRanges arg);
 #define PT_CharRangesToTerm(arg) (_PT_CharRangesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PT_getArgsLength(arg) (ATgetLength((ATermList) arg))
+#define PT_getArgsLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _PT_getArgsLength(PT_Args arg);
 #define PT_getArgsLength(arg) (_PT_getArgsLength(arg))
 #endif
 #ifdef FAST_API
-#define PT_reverseArgs(arg) ((PT_Args) ATreverse((ATermList) arg))
+#define PT_reverseArgs(arg) ((PT_Args) ATreverse((ATermList) (arg)))
 #else
 PT_Args _PT_reverseArgs(PT_Args arg);
 #define PT_reverseArgs(arg) (_PT_reverseArgs(arg))
 #endif
 #ifdef FAST_API
-#define PT_appendArgs(arg, elem) ((PT_Args) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define PT_appendArgs(arg, elem) ((PT_Args) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 PT_Args _PT_appendArgs(PT_Args arg, PT_Tree elem);
 #define PT_appendArgs(arg, elem) (_PT_appendArgs(arg, elem))
 #endif
 #ifdef FAST_API
-#define PT_concatArgs(arg0, arg1) ((PT_Args) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define PT_concatArgs(arg0, arg1) ((PT_Args) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 PT_Args _PT_concatArgs(PT_Args arg0, PT_Args arg1);
 #define PT_concatArgs(arg0, arg1) (_PT_concatArgs(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_sliceArgs(arg, start, end) ((PT_Args) ATgetSlice((ATermList) arg, start, end))
+#define PT_sliceArgs(arg, start, end) ((PT_Args) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 PT_Args _PT_sliceArgs(PT_Args arg, int start, int end);
 #define PT_sliceArgs(arg, start, end) (_PT_sliceArgs(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PT_getArgsTreeAt(arg, index) ((PT_Tree)ATelementAt((ATermList) arg,index))
+#define PT_getArgsTreeAt(arg, index) ((PT_Tree) (ATelementAt((ATermList) arg,index)))
 #else
 PT_Tree _PT_getArgsTreeAt(PT_Args arg, int index);
 #define PT_getArgsTreeAt(arg, index) (_PT_getArgsTreeAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PT_replaceArgsTreeAt(arg, elem, index) ((PT_Args) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define PT_replaceArgsTreeAt(arg, elem, index) ((PT_Args) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 PT_Args _PT_replaceArgsTreeAt(PT_Args arg, PT_Tree elem, int index);
 #define PT_replaceArgsTreeAt(arg, elem, index) (_PT_replaceArgsTreeAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define PT_makeArgs2(elem1,  elem2) ((PT_Args) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define PT_makeArgs2(elem1,  elem2) ((PT_Args) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 PT_Args _PT_makeArgs2(PT_Tree elem1, PT_Tree elem2);
 #define PT_makeArgs2(elem1,  elem2) (_PT_makeArgs2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define PT_makeArgs3(elem1, elem2,  elem3) ((PT_Args) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define PT_makeArgs3(elem1, elem2,  elem3) ((PT_Args) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 PT_Args _PT_makeArgs3(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3);
 #define PT_makeArgs3(elem1, elem2,  elem3) (_PT_makeArgs3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define PT_makeArgs4(elem1, elem2, elem3,  elem4) ((PT_Args) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define PT_makeArgs4(elem1, elem2, elem3,  elem4) ((PT_Args) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 PT_Args _PT_makeArgs4(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4);
 #define PT_makeArgs4(elem1, elem2, elem3,  elem4) (_PT_makeArgs4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define PT_makeArgs5(elem1, elem2, elem3, elem4,  elem5) ((PT_Args) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define PT_makeArgs5(elem1, elem2, elem3, elem4,  elem5) ((PT_Args) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 PT_Args _PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5);
 #define PT_makeArgs5(elem1, elem2, elem3, elem4,  elem5) (_PT_makeArgs5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define PT_makeArgs6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_Args) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define PT_makeArgs6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_Args) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 PT_Args _PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5, PT_Tree elem6);
 #define PT_makeArgs6(elem1, elem2, elem3, elem4, elem5,  elem6) (_PT_makeArgs6(elem1, elem2, elem3, elem4, elem5,  elem6))
 #endif
 #ifdef FAST_API
-#define PT_getAttrsLength(arg) (ATgetLength((ATermList) arg))
+#define PT_getAttrsLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _PT_getAttrsLength(PT_Attrs arg);
 #define PT_getAttrsLength(arg) (_PT_getAttrsLength(arg))
 #endif
 #ifdef FAST_API
-#define PT_reverseAttrs(arg) ((PT_Attrs) ATreverse((ATermList) arg))
+#define PT_reverseAttrs(arg) ((PT_Attrs) ATreverse((ATermList) (arg)))
 #else
 PT_Attrs _PT_reverseAttrs(PT_Attrs arg);
 #define PT_reverseAttrs(arg) (_PT_reverseAttrs(arg))
 #endif
 #ifdef FAST_API
-#define PT_appendAttrs(arg, elem) ((PT_Attrs) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define PT_appendAttrs(arg, elem) ((PT_Attrs) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 PT_Attrs _PT_appendAttrs(PT_Attrs arg, PT_Attr elem);
 #define PT_appendAttrs(arg, elem) (_PT_appendAttrs(arg, elem))
 #endif
 #ifdef FAST_API
-#define PT_concatAttrs(arg0, arg1) ((PT_Attrs) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define PT_concatAttrs(arg0, arg1) ((PT_Attrs) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 PT_Attrs _PT_concatAttrs(PT_Attrs arg0, PT_Attrs arg1);
 #define PT_concatAttrs(arg0, arg1) (_PT_concatAttrs(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_sliceAttrs(arg, start, end) ((PT_Attrs) ATgetSlice((ATermList) arg, start, end))
+#define PT_sliceAttrs(arg, start, end) ((PT_Attrs) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 PT_Attrs _PT_sliceAttrs(PT_Attrs arg, int start, int end);
 #define PT_sliceAttrs(arg, start, end) (_PT_sliceAttrs(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PT_getAttrsAttrAt(arg, index) ((PT_Attr)ATelementAt((ATermList) arg,index))
+#define PT_getAttrsAttrAt(arg, index) ((PT_Attr) (ATelementAt((ATermList) arg,index)))
 #else
 PT_Attr _PT_getAttrsAttrAt(PT_Attrs arg, int index);
 #define PT_getAttrsAttrAt(arg, index) (_PT_getAttrsAttrAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PT_replaceAttrsAttrAt(arg, elem, index) ((PT_Attrs) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define PT_replaceAttrsAttrAt(arg, elem, index) ((PT_Attrs) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 PT_Attrs _PT_replaceAttrsAttrAt(PT_Attrs arg, PT_Attr elem, int index);
 #define PT_replaceAttrsAttrAt(arg, elem, index) (_PT_replaceAttrsAttrAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define PT_makeAttrs2(elem1,  elem2) ((PT_Attrs) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define PT_makeAttrs2(elem1,  elem2) ((PT_Attrs) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 PT_Attrs _PT_makeAttrs2(PT_Attr elem1, PT_Attr elem2);
 #define PT_makeAttrs2(elem1,  elem2) (_PT_makeAttrs2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define PT_makeAttrs3(elem1, elem2,  elem3) ((PT_Attrs) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define PT_makeAttrs3(elem1, elem2,  elem3) ((PT_Attrs) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 PT_Attrs _PT_makeAttrs3(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3);
 #define PT_makeAttrs3(elem1, elem2,  elem3) (_PT_makeAttrs3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define PT_makeAttrs4(elem1, elem2, elem3,  elem4) ((PT_Attrs) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define PT_makeAttrs4(elem1, elem2, elem3,  elem4) ((PT_Attrs) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 PT_Attrs _PT_makeAttrs4(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4);
 #define PT_makeAttrs4(elem1, elem2, elem3,  elem4) (_PT_makeAttrs4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define PT_makeAttrs5(elem1, elem2, elem3, elem4,  elem5) ((PT_Attrs) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define PT_makeAttrs5(elem1, elem2, elem3, elem4,  elem5) ((PT_Attrs) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 PT_Attrs _PT_makeAttrs5(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5);
 #define PT_makeAttrs5(elem1, elem2, elem3, elem4,  elem5) (_PT_makeAttrs5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define PT_makeAttrs6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_Attrs) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define PT_makeAttrs6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_Attrs) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 PT_Attrs _PT_makeAttrs6(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5, PT_Attr elem6);
 #define PT_makeAttrs6(elem1, elem2, elem3, elem4, elem5,  elem6) (_PT_makeAttrs6(elem1, elem2, elem3, elem4, elem5,  elem6))
 #endif
 #ifdef FAST_API
-#define PT_getSymbolsLength(arg) (ATgetLength((ATermList) arg))
+#define PT_getSymbolsLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _PT_getSymbolsLength(PT_Symbols arg);
 #define PT_getSymbolsLength(arg) (_PT_getSymbolsLength(arg))
 #endif
 #ifdef FAST_API
-#define PT_reverseSymbols(arg) ((PT_Symbols) ATreverse((ATermList) arg))
+#define PT_reverseSymbols(arg) ((PT_Symbols) ATreverse((ATermList) (arg)))
 #else
 PT_Symbols _PT_reverseSymbols(PT_Symbols arg);
 #define PT_reverseSymbols(arg) (_PT_reverseSymbols(arg))
 #endif
 #ifdef FAST_API
-#define PT_appendSymbols(arg, elem) ((PT_Symbols) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define PT_appendSymbols(arg, elem) ((PT_Symbols) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 PT_Symbols _PT_appendSymbols(PT_Symbols arg, PT_Symbol elem);
 #define PT_appendSymbols(arg, elem) (_PT_appendSymbols(arg, elem))
 #endif
 #ifdef FAST_API
-#define PT_concatSymbols(arg0, arg1) ((PT_Symbols) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define PT_concatSymbols(arg0, arg1) ((PT_Symbols) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 PT_Symbols _PT_concatSymbols(PT_Symbols arg0, PT_Symbols arg1);
 #define PT_concatSymbols(arg0, arg1) (_PT_concatSymbols(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_sliceSymbols(arg, start, end) ((PT_Symbols) ATgetSlice((ATermList) arg, start, end))
+#define PT_sliceSymbols(arg, start, end) ((PT_Symbols) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 PT_Symbols _PT_sliceSymbols(PT_Symbols arg, int start, int end);
 #define PT_sliceSymbols(arg, start, end) (_PT_sliceSymbols(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PT_getSymbolsSymbolAt(arg, index) ((PT_Symbol)ATelementAt((ATermList) arg,index))
+#define PT_getSymbolsSymbolAt(arg, index) ((PT_Symbol) (ATelementAt((ATermList) arg,index)))
 #else
 PT_Symbol _PT_getSymbolsSymbolAt(PT_Symbols arg, int index);
 #define PT_getSymbolsSymbolAt(arg, index) (_PT_getSymbolsSymbolAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PT_replaceSymbolsSymbolAt(arg, elem, index) ((PT_Symbols) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define PT_replaceSymbolsSymbolAt(arg, elem, index) ((PT_Symbols) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 PT_Symbols _PT_replaceSymbolsSymbolAt(PT_Symbols arg, PT_Symbol elem, int index);
 #define PT_replaceSymbolsSymbolAt(arg, elem, index) (_PT_replaceSymbolsSymbolAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define PT_makeSymbols2(elem1,  elem2) ((PT_Symbols) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define PT_makeSymbols2(elem1,  elem2) ((PT_Symbols) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 PT_Symbols _PT_makeSymbols2(PT_Symbol elem1, PT_Symbol elem2);
 #define PT_makeSymbols2(elem1,  elem2) (_PT_makeSymbols2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define PT_makeSymbols3(elem1, elem2,  elem3) ((PT_Symbols) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define PT_makeSymbols3(elem1, elem2,  elem3) ((PT_Symbols) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 PT_Symbols _PT_makeSymbols3(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3);
 #define PT_makeSymbols3(elem1, elem2,  elem3) (_PT_makeSymbols3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define PT_makeSymbols4(elem1, elem2, elem3,  elem4) ((PT_Symbols) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define PT_makeSymbols4(elem1, elem2, elem3,  elem4) ((PT_Symbols) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 PT_Symbols _PT_makeSymbols4(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4);
 #define PT_makeSymbols4(elem1, elem2, elem3,  elem4) (_PT_makeSymbols4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define PT_makeSymbols5(elem1, elem2, elem3, elem4,  elem5) ((PT_Symbols) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define PT_makeSymbols5(elem1, elem2, elem3, elem4,  elem5) ((PT_Symbols) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 PT_Symbols _PT_makeSymbols5(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5);
 #define PT_makeSymbols5(elem1, elem2, elem3, elem4,  elem5) (_PT_makeSymbols5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define PT_makeSymbols6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_Symbols) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define PT_makeSymbols6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_Symbols) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 PT_Symbols _PT_makeSymbols6(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5, PT_Symbol elem6);
 #define PT_makeSymbols6(elem1, elem2, elem3, elem4, elem5,  elem6) (_PT_makeSymbols6(elem1, elem2, elem3, elem4, elem5,  elem6))
 #endif
 #ifdef FAST_API
-#define PT_getCharRangesLength(arg) (ATgetLength((ATermList) arg))
+#define PT_getCharRangesLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _PT_getCharRangesLength(PT_CharRanges arg);
 #define PT_getCharRangesLength(arg) (_PT_getCharRangesLength(arg))
 #endif
 #ifdef FAST_API
-#define PT_reverseCharRanges(arg) ((PT_CharRanges) ATreverse((ATermList) arg))
+#define PT_reverseCharRanges(arg) ((PT_CharRanges) ATreverse((ATermList) (arg)))
 #else
 PT_CharRanges _PT_reverseCharRanges(PT_CharRanges arg);
 #define PT_reverseCharRanges(arg) (_PT_reverseCharRanges(arg))
 #endif
 #ifdef FAST_API
-#define PT_appendCharRanges(arg, elem) ((PT_CharRanges) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define PT_appendCharRanges(arg, elem) ((PT_CharRanges) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 PT_CharRanges _PT_appendCharRanges(PT_CharRanges arg, PT_CharRange elem);
 #define PT_appendCharRanges(arg, elem) (_PT_appendCharRanges(arg, elem))
 #endif
 #ifdef FAST_API
-#define PT_concatCharRanges(arg0, arg1) ((PT_CharRanges) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define PT_concatCharRanges(arg0, arg1) ((PT_CharRanges) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 PT_CharRanges _PT_concatCharRanges(PT_CharRanges arg0, PT_CharRanges arg1);
 #define PT_concatCharRanges(arg0, arg1) (_PT_concatCharRanges(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_sliceCharRanges(arg, start, end) ((PT_CharRanges) ATgetSlice((ATermList) arg, start, end))
+#define PT_sliceCharRanges(arg, start, end) ((PT_CharRanges) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 PT_CharRanges _PT_sliceCharRanges(PT_CharRanges arg, int start, int end);
 #define PT_sliceCharRanges(arg, start, end) (_PT_sliceCharRanges(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PT_getCharRangesCharRangeAt(arg, index) ((PT_CharRange)ATelementAt((ATermList) arg,index))
+#define PT_getCharRangesCharRangeAt(arg, index) ((PT_CharRange) (ATelementAt((ATermList) arg,index)))
 #else
 PT_CharRange _PT_getCharRangesCharRangeAt(PT_CharRanges arg, int index);
 #define PT_getCharRangesCharRangeAt(arg, index) (_PT_getCharRangesCharRangeAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PT_replaceCharRangesCharRangeAt(arg, elem, index) ((PT_CharRanges) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define PT_replaceCharRangesCharRangeAt(arg, elem, index) ((PT_CharRanges) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 PT_CharRanges _PT_replaceCharRangesCharRangeAt(PT_CharRanges arg, PT_CharRange elem, int index);
 #define PT_replaceCharRangesCharRangeAt(arg, elem, index) (_PT_replaceCharRangesCharRangeAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define PT_makeCharRanges2(elem1,  elem2) ((PT_CharRanges) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define PT_makeCharRanges2(elem1,  elem2) ((PT_CharRanges) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 PT_CharRanges _PT_makeCharRanges2(PT_CharRange elem1, PT_CharRange elem2);
 #define PT_makeCharRanges2(elem1,  elem2) (_PT_makeCharRanges2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define PT_makeCharRanges3(elem1, elem2,  elem3) ((PT_CharRanges) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define PT_makeCharRanges3(elem1, elem2,  elem3) ((PT_CharRanges) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 PT_CharRanges _PT_makeCharRanges3(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3);
 #define PT_makeCharRanges3(elem1, elem2,  elem3) (_PT_makeCharRanges3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define PT_makeCharRanges4(elem1, elem2, elem3,  elem4) ((PT_CharRanges) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define PT_makeCharRanges4(elem1, elem2, elem3,  elem4) ((PT_CharRanges) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 PT_CharRanges _PT_makeCharRanges4(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4);
 #define PT_makeCharRanges4(elem1, elem2, elem3,  elem4) (_PT_makeCharRanges4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define PT_makeCharRanges5(elem1, elem2, elem3, elem4,  elem5) ((PT_CharRanges) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define PT_makeCharRanges5(elem1, elem2, elem3, elem4,  elem5) ((PT_CharRanges) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 PT_CharRanges _PT_makeCharRanges5(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5);
 #define PT_makeCharRanges5(elem1, elem2, elem3, elem4,  elem5) (_PT_makeCharRanges5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define PT_makeCharRanges6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_CharRanges) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define PT_makeCharRanges6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PT_CharRanges) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 PT_CharRanges _PT_makeCharRanges6(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5, PT_CharRange elem6);
 #define PT_makeCharRanges6(elem1, elem2, elem3, elem4, elem5,  elem6) (_PT_makeCharRanges6(elem1, elem2, elem3, elem4, elem5,  elem6))
@@ -659,73 +659,73 @@ PT_CharRanges PT_makeCharRangesEmpty(void);
 PT_CharRanges PT_makeCharRangesSingle(PT_CharRange head);
 PT_CharRanges PT_makeCharRangesMany(PT_CharRange head, PT_CharRanges tail);
 #ifdef FAST_API
-#define PT_isEqualParseTree(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualParseTree(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualParseTree(PT_ParseTree arg0, PT_ParseTree arg1);
 #define PT_isEqualParseTree(arg0, arg1) (_PT_isEqualParseTree(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualTree(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualTree(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualTree(PT_Tree arg0, PT_Tree arg1);
 #define PT_isEqualTree(arg0, arg1) (_PT_isEqualTree(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualArgs(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualArgs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualArgs(PT_Args arg0, PT_Args arg1);
 #define PT_isEqualArgs(arg0, arg1) (_PT_isEqualArgs(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualProduction(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualProduction(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualProduction(PT_Production arg0, PT_Production arg1);
 #define PT_isEqualProduction(arg0, arg1) (_PT_isEqualProduction(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualAttributes(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualAttributes(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualAttributes(PT_Attributes arg0, PT_Attributes arg1);
 #define PT_isEqualAttributes(arg0, arg1) (_PT_isEqualAttributes(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualAttrs(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualAttrs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1);
 #define PT_isEqualAttrs(arg0, arg1) (_PT_isEqualAttrs(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualAttr(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualAttr(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1);
 #define PT_isEqualAttr(arg0, arg1) (_PT_isEqualAttr(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualAssociativity(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualAssociativity(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualAssociativity(PT_Associativity arg0, PT_Associativity arg1);
 #define PT_isEqualAssociativity(arg0, arg1) (_PT_isEqualAssociativity(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualSymbol(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualSymbol(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1);
 #define PT_isEqualSymbol(arg0, arg1) (_PT_isEqualSymbol(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualSymbols(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualSymbols(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1);
 #define PT_isEqualSymbols(arg0, arg1) (_PT_isEqualSymbols(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualCharRange(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualCharRange(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualCharRange(PT_CharRange arg0, PT_CharRange arg1);
 #define PT_isEqualCharRange(arg0, arg1) (_PT_isEqualCharRange(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PT_isEqualCharRanges(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PT_isEqualCharRanges(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PT_isEqualCharRanges(PT_CharRanges arg0, PT_CharRanges arg1);
 #define PT_isEqualCharRanges(arg0, arg1) (_PT_isEqualCharRanges(arg0, arg1))
