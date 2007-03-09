@@ -37,17 +37,6 @@ UTILSRCS = \
 	import-operations.c \
 	sort.c 
 
-noinst_PROGRAMS = testis
-
-testis_SOURCES = testis.c
-testis_LDADD = ./libSDFME.la   $(ERROR_SUPPORT_LIBS) $(PT_SUPPORT_LIBS) $(ATERM_LIBS)
-
-INCLUDES = \
-	   $(PT_SUPPORT_CFLAGS) \
-	$(ATERM_CFLAGS) \
-	$(ERROR_SUPPORT_CFLAGS) \
-	$(TOOLBUSLIB_CFLAGS)
-
 LIBRARY = ../../sdf-library/library
 ATERM_SDF = $(shell ls $(LIBRARY)/languages/aterm/syntax/*.sdf)
 SDF2_SDF = $(shell ls $(LIBRARY)/languages/sdf2/syntax/*.sdf)
