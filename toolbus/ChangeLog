@@ -1,5 +1,10 @@
 $Id$
 
+Fri Mar  9 09:14:58 CET 2007 <kooiker@cwi.nl>
+ * libdep...adapter/terms.c: allow assignment of undefined to any term
+   variable, even if it does not match the term pattern used for declaration.
+   This allows to use undefined as NULL in ToolBus scripts.
+
 Thu Feb  8 09:39:35 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * libdep...adapter/utils.c: adapter term parser to produce booleans
    instead of appls for true and false.

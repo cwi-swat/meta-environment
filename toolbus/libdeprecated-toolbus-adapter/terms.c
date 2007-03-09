@@ -25,6 +25,9 @@
 #include "symbol.h"
 #include "procs.h"
 
+#include "tools.h"
+#include "utils.h"
+
 #define TERMDB(x)
 
 static void mark_terms(void);
@@ -966,8 +969,11 @@ TBbool require_type(register type *tp, register term *T)
     default:
     case_appl:
       
-      if(!is_appl(T) ||(fun_sym(tp) != fun_sym(T)))
-	return TBfalse;
+      if(!is_appl(T) || (fun_sym(tp) != fun_sym(T))) {
+        if (fun_sym(T) == sym_undefined) 
+          return TBtrue;
+        return TBfalse;
+      }
       if(!fun_args(tp))
 	return TBtrue;
       targs = fun_args(T);
