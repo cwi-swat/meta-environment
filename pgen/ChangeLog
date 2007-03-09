@@ -19,6 +19,12 @@ Fri Jan 26 09:28:10 CET 2007 <jurgenv@cwi.nl>
  * sdf-checker/src/sdfchecker.c: adapted to new interface of toasfix function.
 
 Thu Jan 25 19:07:17 CET 2007 <jurgenv@cwi.nl>
+ * approximately around this time: added semantics of non-transitive
+   priorities. Associativity is translated to non-transitieve priorities
+   in specific arguments. The priority closure computation is only done
+   using transitive priorities after that.
+
+Thu Jan 25 19:07:17 CET 2007 <jurgenv@cwi.nl>
  * tests/grammars: added Backquote test grammar
 
 Tue 2007-01-23    <storm@cwi.nl>
