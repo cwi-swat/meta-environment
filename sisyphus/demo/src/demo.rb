@@ -17,6 +17,7 @@ class DemoOptions
     options.config = nil
     options.sources = nil
     options.dbconf = nil
+    options.workdir = Dir.tmpdir
     
     opts = OptionParser.new do |opts|
       opts.banner = "Usage: sisyphus-demo-console [options]"
@@ -26,6 +27,11 @@ class DemoOptions
       opts.on("-c Config", "--config Config",
               "Subversion URL pointing to Sisyphus config files") do |config|
         options.config = config
+      end
+
+      opts.on("-w Workdir", "--workdir Workdir",
+              "Directory for checkouts (default: /tmp)") do |workdir|
+        options.workdir = workdir
       end
 
       opts.on("-s Sources", "--sources Sources",
@@ -63,7 +69,7 @@ class SisyphusDemo
 
   def initialize(args)
     @options = DemoOptions.parse(args)
-    @scenarios = Scenarios.new(@options.sources)
+    @scenarios = Scenarios.new(@options.sources, @options.workdir)
     @server_pid = nil
     @client_pid = nil
     @transactions = []

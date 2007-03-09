@@ -7,11 +7,11 @@ class Scenarios
   ALL_PKGS = PKGS + BUILD_ENV
 
 
-  def initialize(repository)
+  def initialize(repository, workdir)
     @repository = repository
     @checkouts = {}
     ALL_PKGS.each do |pkg|
-      @checkouts[pkg] = Checkout.new(repository, pkg)
+      @checkouts[pkg] = Checkout.new(repository, pkg, workdir)
     end
   end
 
