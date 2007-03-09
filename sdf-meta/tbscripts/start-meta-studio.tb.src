@@ -13,7 +13,7 @@ process InitializeSDFMetaEnvironment is
 let
   Event: attribute-changed-event,
   MenuEventList: list,
-  ModuleId: term
+  ModuleId: module-id
 in
   snd-msg(set-title("SDF Meta-Environment"))
   . snd-msg(cm-get-events(studio-menubar))
