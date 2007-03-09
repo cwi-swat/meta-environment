@@ -1,5 +1,11 @@
 $Id$
 
+Fri Mar  9 19:11:43 CET 2007 <jurgenv@cwi.nl>
+ * lib/asc-support.c: rewrote a part of the run-time for traversal functions.
+   This saves about 20% time in very traversal function intensive
+   applications. The trick was to use more stack space, and no more ATinsert
+   for managing argument lists of traversal functions.
+
 Fri Jan 26 09:17:01 CET 2007 <jurgenv@cwi.nl>
  * lib/*.h: API CHANGE! toasfix() will return a PT_Tree instead of 
    a PT_ParseTree from now on. To create a PT_ParseTree with default

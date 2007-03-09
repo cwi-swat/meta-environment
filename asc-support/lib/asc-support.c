@@ -720,6 +720,15 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
 {
   ATermList result = ATempty;
   int length = ATgetLength(args);
+  ATermList list = extra_args;
+  int extra = ATgetLength(extra_args);
+  ATerm arg[55];
+  int idx = 1;
+
+  while(!ATisEmpty(list)) {
+    arg[idx++] = ATgetFirst(list);
+    list = ATgetNext(list);
+  }
 
   if (length > 0) {
     int i = 0;
@@ -728,9 +737,9 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
 
     TERM_STORE_FRAME(length,
     for ( ; !ATisEmpty(args); args = ATgetNext(args)) {
-      ATerm arg = ATgetFirst(args);
-      ATerm tmp = call_using_list(trav, ATinsert(extra_args, arg));
-      if (tmp != arg) {
+      arg[0] = ATgetFirst(args);
+      ATerm tmp = call_using_array(trav, arg, extra+1);
+      if (tmp != arg[0]) {
         changed = ATtrue;
       }
       TERM_STORE[i++] = tmp;
@@ -766,10 +775,19 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
 static ATerm call_kids_accu_list(funcptr trav, ATermList args, 
 	  	                 ATerm accu, ATermList extra_args)
 {
+  int extra = ATgetLength(extra_args);
+  ATerm arg[55];
+  int idx = 2;
+
+  while(!ATisEmpty(extra_args)) {
+    arg[idx++] = ATgetFirst(extra_args);
+    extra_args = ATgetNext(extra_args);
+  }
+
   for(;!ATisEmpty(args); args = ATgetNext(args)) {
-    accu = call_using_list(trav,ATinsert(
-				  ATinsert(extra_args, accu),
-				    ATgetFirst(args)));
+    arg[0] = ATgetFirst(args);
+    arg[1] = accu;
+    accu = call_using_array(trav,arg, extra + 2);
   }
 
   return accu;
@@ -784,6 +802,14 @@ static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, ATerm accu,
   ATerm tuple;
   ATermList result = ATempty;
   int length = ATgetLength(args);
+  int extra = ATgetLength(extra_args);
+  ATerm arg[55];
+  int idx = 2;
+
+  while(!ATisEmpty(extra_args)) {
+    arg[idx++] = ATgetFirst(extra_args);
+    extra_args = ATgetNext(extra_args);
+  }
 
   if (length > 0) {
     TERM_STORE_FRAME(length,
@@ -792,16 +818,15 @@ static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, ATerm accu,
     ATermList origArgs = args;
 
     for(;!ATisEmpty(args); args = ATgetNext(args)) {
-      ATerm arg = ATgetFirst(args);
       ATerm tmp;
-      tuple = call_using_list(trav,ATinsert(
-					    ATinsert(extra_args, accu),
-					    arg));
+      arg[0] = ATgetFirst(args);
+      arg[1] = accu;
+      tuple = call_using_array(trav,arg, extra + 2);
 
       tmp = ATgetArgument((ATermAppl) tuple, 0);
       TERM_STORE[i++] = tmp;
 
-      if (tmp != arg) {
+      if (tmp != arg[0]) {
         changed = ATtrue;
       }
       accu = ATgetArgument((ATermAppl) tuple, 1);
@@ -843,6 +868,15 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
     int idx;
     ATermList args;
     ATermList list;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    ATermList list2 = extra_args;
+    int idx2 = 1;
+
+    while(!ATisEmpty(list2)) {
+      arg2[idx2++] = ATgetFirst(list2);
+      list2 = ATgetNext(list2);
+    }
 
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
@@ -852,14 +886,10 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
 
       switch(ATgetType(arg[idx])) {
 	case AT_APPL:
-	  arg[idx] = call_using_list(trav, ATinsert(extra_args,arg[idx]));
-
-	  if (ATgetType(arg[idx]) == AT_LIST) {
-	    ATwarning("Zie je wel!\n"); 
-	  }
+	  arg2[0] = arg[idx];
+	  arg[idx] = call_using_array(trav, arg2, extra + 1);
 	  break;
 	case AT_LIST:
-	  assert(idx == 0 && "a list production has only 1 child (a list)");
 	  arg[idx] = (ATerm) call_kids_trafo_list(trav, (ATermList) arg[idx],
 					  extra_args);
 	  break;
@@ -903,6 +933,15 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
     int idx;
     ATermList args;
     ATermList list;
+    ATermList list2 = extra_args;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 2;
+
+    while(!ATisEmpty(list2)) {
+      arg2[idx2++] = ATgetFirst(list2);
+      list2 = ATgetNext(list2);
+    }
 
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
@@ -912,8 +951,9 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
 
       switch(ATgetType(head)) {
 	case AT_APPL:
-	  arg1 = call_using_list(trav, 
-				 ATinsert(ATinsert(extra_args, arg1),head));
+	  arg2[0] = head;
+	  arg2[1] = arg1;
+	  arg1 = call_using_array(trav, arg2, extra + 2); 
 	  break;
 	case AT_LIST:
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
@@ -950,7 +990,16 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
     funcptr func;
     ATerm arg[33];
     ATermList list;
+    ATermList list2 = extra_args;
     ATerm tuple;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 2;
+
+    while(!ATisEmpty(list2)) {
+      arg2[idx2++] = ATgetFirst(list2);
+      list2 = ATgetNext(list2);
+    }
 
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
@@ -960,8 +1009,9 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
 
       switch(ATgetType(arg[idx])) {
 	case AT_APPL:
-	  tuple = call_using_list(trav, ATinsert(
-				 ATinsert(extra_args, arg1),arg[idx]));
+	  arg2[0] = arg[idx];
+	  arg2[1] = arg1;
+	  tuple = call_using_array(trav, arg2, extra + 2);
 	  break;
 	case AT_LIST:
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
@@ -1019,18 +1069,27 @@ static ATermList call_kids_trafo_list_with_fail(funcptr trav, ATermList args,
   if (length > 0) {
     int i = 0;
     ATermList origArgs = args;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 1;
+
+    while(!ATisEmpty(extra_args)) {
+      arg2[idx2++] = ATgetFirst(extra_args);
+      extra_args = ATgetNext(extra_args);
+    }
 
     TERM_STORE_FRAME(length,
     for (; !ATisEmpty(args); args = ATgetNext(args)) {
-      ATerm head = ATgetFirst(args);
-      ATerm tmp = call_using_list(trav,ATinsert(extra_args,head));
+      ATerm tmp;
+      arg2[0] = ATgetFirst(args);
+      tmp = call_using_array(trav,arg2,extra + 1);
 
       if (tmp) {
 	fail = ATfalse;
 	TERM_STORE[i++] = tmp;
       }
       else {
-	TERM_STORE[i++] = head;
+	TERM_STORE[i++] = arg2[0];
       }
     }
 
@@ -1062,11 +1121,20 @@ static ATerm call_kids_accu_list_with_fail(funcptr trav, ATermList args,
 					   ATerm accu, ATermList extra_args)
 {
   ATbool fail = ATtrue;
+  int extra = ATgetLength(extra_args);
+  ATerm arg2[55];
+  int idx2 = 2;
+
+  while(!ATisEmpty(extra_args)) {
+    arg2[idx2++] = ATgetFirst(extra_args);
+    extra_args = ATgetNext(extra_args);
+  }
 
   for(;!ATisEmpty(args); args = ATgetNext(args)) {
     ATerm saved = accu;
-    accu = call_using_list(trav,ATinsert(ATinsert(extra_args, accu),
-					 ATgetFirst(args)));
+    arg2[0] = ATgetFirst(args);
+    arg2[1] = accu;
+    accu = call_using_array(trav,arg2, extra + 2);
 
     if (accu != NULL) {
       fail = ATfalse;
@@ -1098,12 +1166,21 @@ static ATerm call_kids_accutrafo_list_with_fail(funcptr trav, ATermList args,
   if (length > 0) {
     int i = 0;
     ATermList origArgs = args;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 2;
+
+    while(!ATisEmpty(extra_args)) {
+      arg2[idx2++] = ATgetFirst(extra_args);
+      extra_args = ATgetNext(extra_args);
+    }
+
 
     TERM_STORE_FRAME(length,
     for(;!ATisEmpty(args); args = ATgetNext(args)) {
-      ATerm head = ATgetFirst(args);
-      tuple = call_using_list(trav,ATinsert(
-					    ATinsert(extra_args, accu), head));
+      arg2[0] = ATgetFirst(args);
+      arg2[1] = accu;
+      tuple = call_using_array(trav, arg2, extra + 2);
 
       if (tuple) {
 	fail = ATfalse;
@@ -1111,7 +1188,7 @@ static ATerm call_kids_accutrafo_list_with_fail(funcptr trav, ATermList args,
 	accu = ATgetArgument((ATermAppl) tuple, 1);
       }
       else {
-	TERM_STORE[i++] = head;
+	TERM_STORE[i++] = arg2[0];
       }
     }
 
@@ -1151,7 +1228,16 @@ ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg0, ATermList extra_args)
     int idx;
     ATermList args;
     ATermList list;
+    ATermList list2 = extra_args;
     ATerm save;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 1;
+
+    while(!ATisEmpty(list2)) {
+      arg2[idx2++] = ATgetFirst(list2);
+      list2 = ATgetNext(list2);
+    }
 
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
@@ -1162,7 +1248,8 @@ ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg0, ATermList extra_args)
 
       switch(ATgetType(arg[idx])) {
 	case AT_APPL:
-	  arg[idx] = call_using_list(trav, ATinsert(extra_args,arg[idx]));
+	  arg2[0] = arg[idx];
+	  arg[idx] = call_using_array(trav, arg2, extra + 1);
 	  break;
 	case AT_LIST:
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
@@ -1231,6 +1318,16 @@ ATerm call_kids_accu_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
     int idx;
     ATermList args;
     ATermList list;
+    ATermList list2 = extra_args;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 2;
+
+    while(!ATisEmpty(list2)) {
+      arg2[idx2++] = ATgetFirst(list2);
+      list2 = ATgetNext(list2);
+    }
+
 
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
@@ -1241,8 +1338,9 @@ ATerm call_kids_accu_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
 
       switch(ATgetType(head)) {
 	case AT_APPL:
-	  arg1 = call_using_list(trav, 
-				 ATinsert(ATinsert(extra_args, arg1),head));
+	  arg2[0] = head;
+	  arg2[1] = arg1;
+	  arg1 = call_using_array(trav, arg2, extra + 2);
 	  break;
 	case AT_LIST:
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
@@ -1295,7 +1393,16 @@ ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
     funcptr func;
     ATerm arg[33];
     ATermList list;
+    ATermList list2 = extra_args;
     ATerm tuple;
+    int extra = ATgetLength(extra_args);
+    ATerm arg2[55];
+    int idx2 = 2;
+
+    while(!ATisEmpty(list2)) {
+      arg2[idx2++] = ATgetFirst(list2);
+      list2 = ATgetNext(list2);
+    }
 
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
@@ -1305,8 +1412,9 @@ ATerm call_kids_accutrafo_with_fail(funcptr trav, ATerm arg0, ATerm arg1,
 
       switch(ATgetType(arg[idx])) {
 	case AT_APPL:
-	  tuple = call_using_list(trav, ATinsert(
-				 ATinsert(extra_args, arg1),arg[idx]));
+	  arg2[0] = arg[idx];
+	  arg2[1] = arg1;
+	  tuple = call_using_array(trav, arg2, extra + 2);
 	  break;
 	case AT_LIST:
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
