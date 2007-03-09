@@ -44,775 +44,775 @@ void _ASF_initASFMEApi(void);
 #endif
 
 #ifdef FAST_API
-#define ASF_protectOptLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectOptLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectOptLayout(ASF_OptLayout *arg);
 #define ASF_protectOptLayout(arg) (_ASF_protectOptLayout(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectOptLayout(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectOptLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectOptLayout(ASF_OptLayout *arg);
 #define ASF_unprotectOptLayout(arg) (_ASF_unprotectOptLayout(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLayout(ASF_Layout *arg);
 #define ASF_protectLayout(arg) (_ASF_protectLayout(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLayout(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLayout(ASF_Layout *arg);
 #define ASF_unprotectLayout(arg) (_ASF_unprotectLayout(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexLayoutList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexLayoutList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexLayoutList(ASF_LexLayoutList *arg);
 #define ASF_protectLexLayoutList(arg) (_ASF_protectLexLayoutList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexLayoutList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexLayoutList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexLayoutList(ASF_LexLayoutList *arg);
 #define ASF_unprotectLexLayoutList(arg) (_ASF_unprotectLexLayoutList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectTree(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectTree(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectTree(ASF_Tree *arg);
 #define ASF_protectTree(arg) (_ASF_protectTree(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectTree(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectTree(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectTree(ASF_Tree *arg);
 #define ASF_unprotectTree(arg) (_ASF_unprotectTree(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFCondition(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFCondition(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFCondition(ASF_ASFCondition *arg);
 #define ASF_protectASFCondition(arg) (_ASF_protectASFCondition(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFCondition(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFCondition(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFCondition(ASF_ASFCondition *arg);
 #define ASF_unprotectASFCondition(arg) (_ASF_unprotectASFCondition(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFConditions(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFConditions(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFConditions(ASF_ASFConditions *arg);
 #define ASF_protectASFConditions(arg) (_ASF_protectASFConditions(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFConditions(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFConditions(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFConditions(ASF_ASFConditions *arg);
 #define ASF_unprotectASFConditions(arg) (_ASF_unprotectASFConditions(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFConditionList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFConditionList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFConditionList(ASF_ASFConditionList *arg);
 #define ASF_protectASFConditionList(arg) (_ASF_protectASFConditionList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFConditionList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFConditionList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFConditionList(ASF_ASFConditionList *arg);
 #define ASF_unprotectASFConditionList(arg) (_ASF_unprotectASFConditionList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexASFBarEnd(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexASFBarEnd(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexASFBarEnd(ASF_LexASFBarEnd *arg);
 #define ASF_protectLexASFBarEnd(arg) (_ASF_protectLexASFBarEnd(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexASFBarEnd(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexASFBarEnd(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexASFBarEnd(ASF_LexASFBarEnd *arg);
 #define ASF_unprotectLexASFBarEnd(arg) (_ASF_unprotectLexASFBarEnd(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFBarEnd(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFBarEnd(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFBarEnd(ASF_ASFBarEnd *arg);
 #define ASF_protectASFBarEnd(arg) (_ASF_protectASFBarEnd(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFBarEnd(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFBarEnd(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFBarEnd(ASF_ASFBarEnd *arg);
 #define ASF_unprotectASFBarEnd(arg) (_ASF_unprotectASFBarEnd(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexASFImplies(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexASFImplies(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexASFImplies(ASF_LexASFImplies *arg);
 #define ASF_protectLexASFImplies(arg) (_ASF_protectLexASFImplies(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexASFImplies(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexASFImplies(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexASFImplies(ASF_LexASFImplies *arg);
 #define ASF_unprotectLexASFImplies(arg) (_ASF_unprotectLexASFImplies(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFImplies(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFImplies(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFImplies(ASF_ASFImplies *arg);
 #define ASF_protectASFImplies(arg) (_ASF_protectASFImplies(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFImplies(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFImplies(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFImplies(ASF_ASFImplies *arg);
 #define ASF_unprotectASFImplies(arg) (_ASF_unprotectASFImplies(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFConditionalEquation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFConditionalEquation(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFConditionalEquation(ASF_ASFConditionalEquation *arg);
 #define ASF_protectASFConditionalEquation(arg) (_ASF_protectASFConditionalEquation(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFConditionalEquation(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFConditionalEquation(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFConditionalEquation(ASF_ASFConditionalEquation *arg);
 #define ASF_unprotectASFConditionalEquation(arg) (_ASF_unprotectASFConditionalEquation(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFEquation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFEquation(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFEquation(ASF_ASFEquation *arg);
 #define ASF_protectASFEquation(arg) (_ASF_protectASFEquation(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFEquation(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFEquation(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFEquation(ASF_ASFEquation *arg);
 #define ASF_unprotectASFEquation(arg) (_ASF_unprotectASFEquation(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectStart(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectStart(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectStart(ASF_Start *arg);
 #define ASF_protectStart(arg) (_ASF_protectStart(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectStart(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectStart(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectStart(ASF_Start *arg);
 #define ASF_unprotectStart(arg) (_ASF_unprotectStart(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFModule(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFModule(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFModule(ASF_ASFModule *arg);
 #define ASF_protectASFModule(arg) (_ASF_protectASFModule(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFModule(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFModule(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFModule(ASF_ASFModule *arg);
 #define ASF_unprotectASFModule(arg) (_ASF_unprotectASFModule(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFSection(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFSection(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFSection(ASF_ASFSection *arg);
 #define ASF_protectASFSection(arg) (_ASF_protectASFSection(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFSection(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFSection(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFSection(ASF_ASFSection *arg);
 #define ASF_unprotectASFSection(arg) (_ASF_unprotectASFSection(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFSectionList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFSectionList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFSectionList(ASF_ASFSectionList *arg);
 #define ASF_protectASFSectionList(arg) (_ASF_protectASFSectionList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFSectionList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFSectionList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFSectionList(ASF_ASFSectionList *arg);
 #define ASF_unprotectASFSectionList(arg) (_ASF_unprotectASFSectionList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFConditionalEquationList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFConditionalEquationList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFConditionalEquationList(ASF_ASFConditionalEquationList *arg);
 #define ASF_protectASFConditionalEquationList(arg) (_ASF_protectASFConditionalEquationList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFConditionalEquationList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFConditionalEquationList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFConditionalEquationList(ASF_ASFConditionalEquationList *arg);
 #define ASF_unprotectASFConditionalEquationList(arg) (_ASF_unprotectASFConditionalEquationList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFTestEquationTestList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFTestEquationTestList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFTestEquationTestList(ASF_ASFTestEquationTestList *arg);
 #define ASF_protectASFTestEquationTestList(arg) (_ASF_protectASFTestEquationTestList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFTestEquationTestList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFTestEquationTestList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFTestEquationTestList(ASF_ASFTestEquationTestList *arg);
 #define ASF_unprotectASFTestEquationTestList(arg) (_ASF_unprotectASFTestEquationTestList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexASFTagId(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexASFTagId(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexASFTagId(ASF_LexASFTagId *arg);
 #define ASF_protectLexASFTagId(arg) (_ASF_protectLexASFTagId(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexASFTagId(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexASFTagId(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexASFTagId(ASF_LexASFTagId *arg);
 #define ASF_unprotectLexASFTagId(arg) (_ASF_unprotectLexASFTagId(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFTagId(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFTagId(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFTagId(ASF_ASFTagId *arg);
 #define ASF_protectASFTagId(arg) (_ASF_protectASFTagId(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFTagId(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFTagId(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFTagId(ASF_ASFTagId *arg);
 #define ASF_unprotectASFTagId(arg) (_ASF_unprotectASFTagId(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFTag(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFTag(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFTag(ASF_ASFTag *arg);
 #define ASF_protectASFTag(arg) (_ASF_protectASFTag(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFTag(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFTag(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFTag(ASF_ASFTag *arg);
 #define ASF_unprotectASFTag(arg) (_ASF_unprotectASFTag(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectASFTestEquation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectASFTestEquation(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFTestEquation(ASF_ASFTestEquation *arg);
 #define ASF_protectASFTestEquation(arg) (_ASF_protectASFTestEquation(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectASFTestEquation(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectASFTestEquation(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectASFTestEquation(ASF_ASFTestEquation *arg);
 #define ASF_unprotectASFTestEquation(arg) (_ASF_unprotectASFTestEquation(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexLayout(ASF_LexLayout *arg);
 #define ASF_protectLexLayout(arg) (_ASF_protectLexLayout(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexLayout(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexLayout(ASF_LexLayout *arg);
 #define ASF_unprotectLexLayout(arg) (_ASF_unprotectLexLayout(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexNumChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexNumChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexNumChar(ASF_LexNumChar *arg);
 #define ASF_protectLexNumChar(arg) (_ASF_protectLexNumChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexNumChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexNumChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexNumChar(ASF_LexNumChar *arg);
 #define ASF_unprotectLexNumChar(arg) (_ASF_unprotectLexNumChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectNumChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectNumChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectNumChar(ASF_NumChar *arg);
 #define ASF_protectNumChar(arg) (_ASF_protectNumChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectNumChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectNumChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectNumChar(ASF_NumChar *arg);
 #define ASF_unprotectNumChar(arg) (_ASF_unprotectNumChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectLexShortChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectLexShortChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectLexShortChar(ASF_LexShortChar *arg);
 #define ASF_protectLexShortChar(arg) (_ASF_protectLexShortChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectLexShortChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectLexShortChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectLexShortChar(ASF_LexShortChar *arg);
 #define ASF_unprotectLexShortChar(arg) (_ASF_unprotectLexShortChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectShortChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectShortChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectShortChar(ASF_ShortChar *arg);
 #define ASF_protectShortChar(arg) (_ASF_protectShortChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectShortChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectShortChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectShortChar(ASF_ShortChar *arg);
 #define ASF_unprotectShortChar(arg) (_ASF_unprotectShortChar(arg))
 #endif
 #ifdef FAST_API
-#define ASF_protectCharacter(arg) (ATprotect((ATerm*)((void*) arg)))
+#define ASF_protectCharacter(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectCharacter(ASF_Character *arg);
 #define ASF_protectCharacter(arg) (_ASF_protectCharacter(arg))
 #endif
 #ifdef FAST_API
-#define ASF_unprotectCharacter(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define ASF_unprotectCharacter(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_unprotectCharacter(ASF_Character *arg);
 #define ASF_unprotectCharacter(arg) (_ASF_unprotectCharacter(arg))
 #endif
 #ifdef FAST_API
-#define ASF_OptLayoutFromTerm(t) ((ASF_OptLayout)t)
+#define ASF_OptLayoutFromTerm(t) ((ASF_OptLayout)(t))
 #else
 ASF_OptLayout _ASF_OptLayoutFromTerm(ATerm t);
 #define ASF_OptLayoutFromTerm(t) (_ASF_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_OptLayoutToTerm(arg) ((ATerm)arg)
+#define ASF_OptLayoutToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_OptLayoutToTerm(ASF_OptLayout arg);
 #define ASF_OptLayoutToTerm(arg) (_ASF_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LayoutFromTerm(t) ((ASF_Layout)t)
+#define ASF_LayoutFromTerm(t) ((ASF_Layout)(t))
 #else
 ASF_Layout _ASF_LayoutFromTerm(ATerm t);
 #define ASF_LayoutFromTerm(t) (_ASF_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LayoutToTerm(arg) ((ATerm)arg)
+#define ASF_LayoutToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LayoutToTerm(ASF_Layout arg);
 #define ASF_LayoutToTerm(arg) (_ASF_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutListFromTerm(t) ((ASF_LexLayoutList)t)
+#define ASF_LexLayoutListFromTerm(t) ((ASF_LexLayoutList)(t))
 #else
 ASF_LexLayoutList _ASF_LexLayoutListFromTerm(ATerm t);
 #define ASF_LexLayoutListFromTerm(t) (_ASF_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutListToTerm(arg) ((ATerm)arg)
+#define ASF_LexLayoutListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexLayoutListToTerm(ASF_LexLayoutList arg);
 #define ASF_LexLayoutListToTerm(arg) (_ASF_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_TreeFromTerm(t) ((ASF_Tree)t)
+#define ASF_TreeFromTerm(t) ((ASF_Tree)(t))
 #else
 ASF_Tree _ASF_TreeFromTerm(ATerm t);
 #define ASF_TreeFromTerm(t) (_ASF_TreeFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_TreeToTerm(arg) ((ATerm)arg)
+#define ASF_TreeToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_TreeToTerm(ASF_Tree arg);
 #define ASF_TreeToTerm(arg) (_ASF_TreeToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionFromTerm(t) ((ASF_ASFCondition)t)
+#define ASF_ASFConditionFromTerm(t) ((ASF_ASFCondition)(t))
 #else
 ASF_ASFCondition _ASF_ASFConditionFromTerm(ATerm t);
 #define ASF_ASFConditionFromTerm(t) (_ASF_ASFConditionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionToTerm(arg) ((ATerm)arg)
+#define ASF_ASFConditionToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFConditionToTerm(ASF_ASFCondition arg);
 #define ASF_ASFConditionToTerm(arg) (_ASF_ASFConditionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionsFromTerm(t) ((ASF_ASFConditions)t)
+#define ASF_ASFConditionsFromTerm(t) ((ASF_ASFConditions)(t))
 #else
 ASF_ASFConditions _ASF_ASFConditionsFromTerm(ATerm t);
 #define ASF_ASFConditionsFromTerm(t) (_ASF_ASFConditionsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionsToTerm(arg) ((ATerm)arg)
+#define ASF_ASFConditionsToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFConditionsToTerm(ASF_ASFConditions arg);
 #define ASF_ASFConditionsToTerm(arg) (_ASF_ASFConditionsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionListFromTerm(t) ((ASF_ASFConditionList)t)
+#define ASF_ASFConditionListFromTerm(t) ((ASF_ASFConditionList)(t))
 #else
 ASF_ASFConditionList _ASF_ASFConditionListFromTerm(ATerm t);
 #define ASF_ASFConditionListFromTerm(t) (_ASF_ASFConditionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionListToTerm(arg) ((ATerm)arg)
+#define ASF_ASFConditionListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFConditionListToTerm(ASF_ASFConditionList arg);
 #define ASF_ASFConditionListToTerm(arg) (_ASF_ASFConditionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFBarEndFromTerm(t) ((ASF_LexASFBarEnd)t)
+#define ASF_LexASFBarEndFromTerm(t) ((ASF_LexASFBarEnd)(t))
 #else
 ASF_LexASFBarEnd _ASF_LexASFBarEndFromTerm(ATerm t);
 #define ASF_LexASFBarEndFromTerm(t) (_ASF_LexASFBarEndFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFBarEndToTerm(arg) ((ATerm)arg)
+#define ASF_LexASFBarEndToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexASFBarEndToTerm(ASF_LexASFBarEnd arg);
 #define ASF_LexASFBarEndToTerm(arg) (_ASF_LexASFBarEndToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFBarEndFromTerm(t) ((ASF_ASFBarEnd)t)
+#define ASF_ASFBarEndFromTerm(t) ((ASF_ASFBarEnd)(t))
 #else
 ASF_ASFBarEnd _ASF_ASFBarEndFromTerm(ATerm t);
 #define ASF_ASFBarEndFromTerm(t) (_ASF_ASFBarEndFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFBarEndToTerm(arg) ((ATerm)arg)
+#define ASF_ASFBarEndToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFBarEndToTerm(ASF_ASFBarEnd arg);
 #define ASF_ASFBarEndToTerm(arg) (_ASF_ASFBarEndToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFImpliesFromTerm(t) ((ASF_LexASFImplies)t)
+#define ASF_LexASFImpliesFromTerm(t) ((ASF_LexASFImplies)(t))
 #else
 ASF_LexASFImplies _ASF_LexASFImpliesFromTerm(ATerm t);
 #define ASF_LexASFImpliesFromTerm(t) (_ASF_LexASFImpliesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFImpliesToTerm(arg) ((ATerm)arg)
+#define ASF_LexASFImpliesToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexASFImpliesToTerm(ASF_LexASFImplies arg);
 #define ASF_LexASFImpliesToTerm(arg) (_ASF_LexASFImpliesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFImpliesFromTerm(t) ((ASF_ASFImplies)t)
+#define ASF_ASFImpliesFromTerm(t) ((ASF_ASFImplies)(t))
 #else
 ASF_ASFImplies _ASF_ASFImpliesFromTerm(ATerm t);
 #define ASF_ASFImpliesFromTerm(t) (_ASF_ASFImpliesFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFImpliesToTerm(arg) ((ATerm)arg)
+#define ASF_ASFImpliesToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFImpliesToTerm(ASF_ASFImplies arg);
 #define ASF_ASFImpliesToTerm(arg) (_ASF_ASFImpliesToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationFromTerm(t) ((ASF_ASFConditionalEquation)t)
+#define ASF_ASFConditionalEquationFromTerm(t) ((ASF_ASFConditionalEquation)(t))
 #else
 ASF_ASFConditionalEquation _ASF_ASFConditionalEquationFromTerm(ATerm t);
 #define ASF_ASFConditionalEquationFromTerm(t) (_ASF_ASFConditionalEquationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationToTerm(arg) ((ATerm)arg)
+#define ASF_ASFConditionalEquationToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFConditionalEquationToTerm(ASF_ASFConditionalEquation arg);
 #define ASF_ASFConditionalEquationToTerm(arg) (_ASF_ASFConditionalEquationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFEquationFromTerm(t) ((ASF_ASFEquation)t)
+#define ASF_ASFEquationFromTerm(t) ((ASF_ASFEquation)(t))
 #else
 ASF_ASFEquation _ASF_ASFEquationFromTerm(ATerm t);
 #define ASF_ASFEquationFromTerm(t) (_ASF_ASFEquationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFEquationToTerm(arg) ((ATerm)arg)
+#define ASF_ASFEquationToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFEquationToTerm(ASF_ASFEquation arg);
 #define ASF_ASFEquationToTerm(arg) (_ASF_ASFEquationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_StartFromTerm(t) ((ASF_Start)t)
+#define ASF_StartFromTerm(t) ((ASF_Start)(t))
 #else
 ASF_Start _ASF_StartFromTerm(ATerm t);
 #define ASF_StartFromTerm(t) (_ASF_StartFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_StartToTerm(arg) ((ATerm)arg)
+#define ASF_StartToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_StartToTerm(ASF_Start arg);
 #define ASF_StartToTerm(arg) (_ASF_StartToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFModuleFromTerm(t) ((ASF_ASFModule)t)
+#define ASF_ASFModuleFromTerm(t) ((ASF_ASFModule)(t))
 #else
 ASF_ASFModule _ASF_ASFModuleFromTerm(ATerm t);
 #define ASF_ASFModuleFromTerm(t) (_ASF_ASFModuleFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFModuleToTerm(arg) ((ATerm)arg)
+#define ASF_ASFModuleToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFModuleToTerm(ASF_ASFModule arg);
 #define ASF_ASFModuleToTerm(arg) (_ASF_ASFModuleToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionFromTerm(t) ((ASF_ASFSection)t)
+#define ASF_ASFSectionFromTerm(t) ((ASF_ASFSection)(t))
 #else
 ASF_ASFSection _ASF_ASFSectionFromTerm(ATerm t);
 #define ASF_ASFSectionFromTerm(t) (_ASF_ASFSectionFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionToTerm(arg) ((ATerm)arg)
+#define ASF_ASFSectionToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFSectionToTerm(ASF_ASFSection arg);
 #define ASF_ASFSectionToTerm(arg) (_ASF_ASFSectionToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionListFromTerm(t) ((ASF_ASFSectionList)t)
+#define ASF_ASFSectionListFromTerm(t) ((ASF_ASFSectionList)(t))
 #else
 ASF_ASFSectionList _ASF_ASFSectionListFromTerm(ATerm t);
 #define ASF_ASFSectionListFromTerm(t) (_ASF_ASFSectionListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFSectionListToTerm(arg) ((ATerm)arg)
+#define ASF_ASFSectionListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFSectionListToTerm(ASF_ASFSectionList arg);
 #define ASF_ASFSectionListToTerm(arg) (_ASF_ASFSectionListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationListFromTerm(t) ((ASF_ASFConditionalEquationList)t)
+#define ASF_ASFConditionalEquationListFromTerm(t) ((ASF_ASFConditionalEquationList)(t))
 #else
 ASF_ASFConditionalEquationList _ASF_ASFConditionalEquationListFromTerm(ATerm t);
 #define ASF_ASFConditionalEquationListFromTerm(t) (_ASF_ASFConditionalEquationListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFConditionalEquationListToTerm(arg) ((ATerm)arg)
+#define ASF_ASFConditionalEquationListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFConditionalEquationListToTerm(ASF_ASFConditionalEquationList arg);
 #define ASF_ASFConditionalEquationListToTerm(arg) (_ASF_ASFConditionalEquationListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationTestListFromTerm(t) ((ASF_ASFTestEquationTestList)t)
+#define ASF_ASFTestEquationTestListFromTerm(t) ((ASF_ASFTestEquationTestList)(t))
 #else
 ASF_ASFTestEquationTestList _ASF_ASFTestEquationTestListFromTerm(ATerm t);
 #define ASF_ASFTestEquationTestListFromTerm(t) (_ASF_ASFTestEquationTestListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationTestListToTerm(arg) ((ATerm)arg)
+#define ASF_ASFTestEquationTestListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFTestEquationTestListToTerm(ASF_ASFTestEquationTestList arg);
 #define ASF_ASFTestEquationTestListToTerm(arg) (_ASF_ASFTestEquationTestListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFTagIdFromTerm(t) ((ASF_LexASFTagId)t)
+#define ASF_LexASFTagIdFromTerm(t) ((ASF_LexASFTagId)(t))
 #else
 ASF_LexASFTagId _ASF_LexASFTagIdFromTerm(ATerm t);
 #define ASF_LexASFTagIdFromTerm(t) (_ASF_LexASFTagIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexASFTagIdToTerm(arg) ((ATerm)arg)
+#define ASF_LexASFTagIdToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexASFTagIdToTerm(ASF_LexASFTagId arg);
 #define ASF_LexASFTagIdToTerm(arg) (_ASF_LexASFTagIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagIdFromTerm(t) ((ASF_ASFTagId)t)
+#define ASF_ASFTagIdFromTerm(t) ((ASF_ASFTagId)(t))
 #else
 ASF_ASFTagId _ASF_ASFTagIdFromTerm(ATerm t);
 #define ASF_ASFTagIdFromTerm(t) (_ASF_ASFTagIdFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagIdToTerm(arg) ((ATerm)arg)
+#define ASF_ASFTagIdToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFTagIdToTerm(ASF_ASFTagId arg);
 #define ASF_ASFTagIdToTerm(arg) (_ASF_ASFTagIdToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagFromTerm(t) ((ASF_ASFTag)t)
+#define ASF_ASFTagFromTerm(t) ((ASF_ASFTag)(t))
 #else
 ASF_ASFTag _ASF_ASFTagFromTerm(ATerm t);
 #define ASF_ASFTagFromTerm(t) (_ASF_ASFTagFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTagToTerm(arg) ((ATerm)arg)
+#define ASF_ASFTagToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFTagToTerm(ASF_ASFTag arg);
 #define ASF_ASFTagToTerm(arg) (_ASF_ASFTagToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationFromTerm(t) ((ASF_ASFTestEquation)t)
+#define ASF_ASFTestEquationFromTerm(t) ((ASF_ASFTestEquation)(t))
 #else
 ASF_ASFTestEquation _ASF_ASFTestEquationFromTerm(ATerm t);
 #define ASF_ASFTestEquationFromTerm(t) (_ASF_ASFTestEquationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ASFTestEquationToTerm(arg) ((ATerm)arg)
+#define ASF_ASFTestEquationToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ASFTestEquationToTerm(ASF_ASFTestEquation arg);
 #define ASF_ASFTestEquationToTerm(arg) (_ASF_ASFTestEquationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutFromTerm(t) ((ASF_LexLayout)t)
+#define ASF_LexLayoutFromTerm(t) ((ASF_LexLayout)(t))
 #else
 ASF_LexLayout _ASF_LexLayoutFromTerm(ATerm t);
 #define ASF_LexLayoutFromTerm(t) (_ASF_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexLayoutToTerm(arg) ((ATerm)arg)
+#define ASF_LexLayoutToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexLayoutToTerm(ASF_LexLayout arg);
 #define ASF_LexLayoutToTerm(arg) (_ASF_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexNumCharFromTerm(t) ((ASF_LexNumChar)t)
+#define ASF_LexNumCharFromTerm(t) ((ASF_LexNumChar)(t))
 #else
 ASF_LexNumChar _ASF_LexNumCharFromTerm(ATerm t);
 #define ASF_LexNumCharFromTerm(t) (_ASF_LexNumCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexNumCharToTerm(arg) ((ATerm)arg)
+#define ASF_LexNumCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexNumCharToTerm(ASF_LexNumChar arg);
 #define ASF_LexNumCharToTerm(arg) (_ASF_LexNumCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_NumCharFromTerm(t) ((ASF_NumChar)t)
+#define ASF_NumCharFromTerm(t) ((ASF_NumChar)(t))
 #else
 ASF_NumChar _ASF_NumCharFromTerm(ATerm t);
 #define ASF_NumCharFromTerm(t) (_ASF_NumCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_NumCharToTerm(arg) ((ATerm)arg)
+#define ASF_NumCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_NumCharToTerm(ASF_NumChar arg);
 #define ASF_NumCharToTerm(arg) (_ASF_NumCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_LexShortCharFromTerm(t) ((ASF_LexShortChar)t)
+#define ASF_LexShortCharFromTerm(t) ((ASF_LexShortChar)(t))
 #else
 ASF_LexShortChar _ASF_LexShortCharFromTerm(ATerm t);
 #define ASF_LexShortCharFromTerm(t) (_ASF_LexShortCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_LexShortCharToTerm(arg) ((ATerm)arg)
+#define ASF_LexShortCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_LexShortCharToTerm(ASF_LexShortChar arg);
 #define ASF_LexShortCharToTerm(arg) (_ASF_LexShortCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_ShortCharFromTerm(t) ((ASF_ShortChar)t)
+#define ASF_ShortCharFromTerm(t) ((ASF_ShortChar)(t))
 #else
 ASF_ShortChar _ASF_ShortCharFromTerm(ATerm t);
 #define ASF_ShortCharFromTerm(t) (_ASF_ShortCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_ShortCharToTerm(arg) ((ATerm)arg)
+#define ASF_ShortCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_ShortCharToTerm(ASF_ShortChar arg);
 #define ASF_ShortCharToTerm(arg) (_ASF_ShortCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_CharacterFromTerm(t) ((ASF_Character)t)
+#define ASF_CharacterFromTerm(t) ((ASF_Character)(t))
 #else
 ASF_Character _ASF_CharacterFromTerm(ATerm t);
 #define ASF_CharacterFromTerm(t) (_ASF_CharacterFromTerm(t))
 #endif
 #ifdef FAST_API
-#define ASF_CharacterToTerm(arg) ((ATerm)arg)
+#define ASF_CharacterToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _ASF_CharacterToTerm(ASF_Character arg);
 #define ASF_CharacterToTerm(arg) (_ASF_CharacterToTerm(arg))
 #endif
 #ifdef FAST_API
-#define ASF_getLexLayoutListLength(arg) (ATgetLength((ATermList) arg))
+#define ASF_getLexLayoutListLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _ASF_getLexLayoutListLength(ASF_LexLayoutList arg);
 #define ASF_getLexLayoutListLength(arg) (_ASF_getLexLayoutListLength(arg))
 #endif
 #ifdef FAST_API
-#define ASF_reverseLexLayoutList(arg) ((ASF_LexLayoutList) ATreverse((ATermList) arg))
+#define ASF_reverseLexLayoutList(arg) ((ASF_LexLayoutList) ATreverse((ATermList) (arg)))
 #else
 ASF_LexLayoutList _ASF_reverseLexLayoutList(ASF_LexLayoutList arg);
 #define ASF_reverseLexLayoutList(arg) (_ASF_reverseLexLayoutList(arg))
 #endif
 #ifdef FAST_API
-#define ASF_appendLexLayoutList(arg, elem) ((ASF_LexLayoutList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define ASF_appendLexLayoutList(arg, elem) ((ASF_LexLayoutList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 ASF_LexLayoutList _ASF_appendLexLayoutList(ASF_LexLayoutList arg, ASF_LexLayout elem);
 #define ASF_appendLexLayoutList(arg, elem) (_ASF_appendLexLayoutList(arg, elem))
 #endif
 #ifdef FAST_API
-#define ASF_concatLexLayoutList(arg0, arg1) ((ASF_LexLayoutList) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define ASF_concatLexLayoutList(arg0, arg1) ((ASF_LexLayoutList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 ASF_LexLayoutList _ASF_concatLexLayoutList(ASF_LexLayoutList arg0, ASF_LexLayoutList arg1);
 #define ASF_concatLexLayoutList(arg0, arg1) (_ASF_concatLexLayoutList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_sliceLexLayoutList(arg, start, end) ((ASF_LexLayoutList) ATgetSlice((ATermList) arg, start, end))
+#define ASF_sliceLexLayoutList(arg, start, end) ((ASF_LexLayoutList) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 ASF_LexLayoutList _ASF_sliceLexLayoutList(ASF_LexLayoutList arg, int start, int end);
 #define ASF_sliceLexLayoutList(arg, start, end) (_ASF_sliceLexLayoutList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define ASF_getLexLayoutListLexLayoutAt(arg, index) ((ASF_LexLayout)ATelementAt((ATermList) arg,index))
+#define ASF_getLexLayoutListLexLayoutAt(arg, index) ((ASF_LexLayout) (ATelementAt((ATermList) arg,index)))
 #else
 ASF_LexLayout _ASF_getLexLayoutListLexLayoutAt(ASF_LexLayoutList arg, int index);
 #define ASF_getLexLayoutListLexLayoutAt(arg, index) (_ASF_getLexLayoutListLexLayoutAt(arg, index))
 #endif
 #ifdef FAST_API
-#define ASF_replaceLexLayoutListLexLayoutAt(arg, elem, index) ((ASF_LexLayoutList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define ASF_replaceLexLayoutListLexLayoutAt(arg, elem, index) ((ASF_LexLayoutList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 ASF_LexLayoutList _ASF_replaceLexLayoutListLexLayoutAt(ASF_LexLayoutList arg, ASF_LexLayout elem, int index);
 #define ASF_replaceLexLayoutListLexLayoutAt(arg, elem, index) (_ASF_replaceLexLayoutListLexLayoutAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define ASF_makeLexLayoutList2(elem1,  elem2) ((ASF_LexLayoutList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define ASF_makeLexLayoutList2(elem1,  elem2) ((ASF_LexLayoutList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 ASF_LexLayoutList _ASF_makeLexLayoutList2(ASF_LexLayout elem1, ASF_LexLayout elem2);
 #define ASF_makeLexLayoutList2(elem1,  elem2) (_ASF_makeLexLayoutList2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define ASF_makeLexLayoutList3(elem1, elem2,  elem3) ((ASF_LexLayoutList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define ASF_makeLexLayoutList3(elem1, elem2,  elem3) ((ASF_LexLayoutList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 ASF_LexLayoutList _ASF_makeLexLayoutList3(ASF_LexLayout elem1, ASF_LexLayout elem2, ASF_LexLayout elem3);
 #define ASF_makeLexLayoutList3(elem1, elem2,  elem3) (_ASF_makeLexLayoutList3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define ASF_makeLexLayoutList4(elem1, elem2, elem3,  elem4) ((ASF_LexLayoutList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define ASF_makeLexLayoutList4(elem1, elem2, elem3,  elem4) ((ASF_LexLayoutList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 ASF_LexLayoutList _ASF_makeLexLayoutList4(ASF_LexLayout elem1, ASF_LexLayout elem2, ASF_LexLayout elem3, ASF_LexLayout elem4);
 #define ASF_makeLexLayoutList4(elem1, elem2, elem3,  elem4) (_ASF_makeLexLayoutList4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define ASF_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) ((ASF_LexLayoutList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define ASF_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) ((ASF_LexLayoutList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 ASF_LexLayoutList _ASF_makeLexLayoutList5(ASF_LexLayout elem1, ASF_LexLayout elem2, ASF_LexLayout elem3, ASF_LexLayout elem4, ASF_LexLayout elem5);
 #define ASF_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) (_ASF_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define ASF_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((ASF_LexLayoutList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define ASF_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((ASF_LexLayoutList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 ASF_LexLayoutList _ASF_makeLexLayoutList6(ASF_LexLayout elem1, ASF_LexLayout elem2, ASF_LexLayout elem3, ASF_LexLayout elem4, ASF_LexLayout elem5, ASF_LexLayout elem6);
 #define ASF_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_ASF_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6))
 #endif
 #ifdef FAST_API
-#define ASF_getASFConditionListLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 4) + 1))
+#define ASF_getASFConditionListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
 #else
 int _ASF_getASFConditionListLength(ASF_ASFConditionList arg);
 #define ASF_getASFConditionListLength(arg) (_ASF_getASFConditionListLength(arg))
@@ -821,19 +821,19 @@ ASF_ASFConditionList ASF_reverseASFConditionList(ASF_ASFConditionList arg);
 ASF_ASFConditionList ASF_appendASFConditionList(ASF_ASFConditionList arg0, ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFCondition arg1);
 ASF_ASFConditionList ASF_concatASFConditionList(ASF_ASFConditionList arg0, ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFConditionList arg1);
 #ifdef FAST_API
-#define ASF_sliceASFConditionList(arg, start, end) ((ASF_ASFConditionList) ATgetSlice((ATermList) arg, start * 4, end * 4))
+#define ASF_sliceASFConditionList(arg, start, end) ((ASF_ASFConditionList) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
 #else
 ASF_ASFConditionList _ASF_sliceASFConditionList(ASF_ASFConditionList arg, int start, int end);
 #define ASF_sliceASFConditionList(arg, start, end) (_ASF_sliceASFConditionList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define ASF_getASFConditionListASFConditionAt(arg, index) ((ASF_ASFCondition)ATelementAt((ATermList) arg,index * 4))
+#define ASF_getASFConditionListASFConditionAt(arg, index) ((ASF_ASFCondition) (ATelementAt((ATermList) arg,index * 4)))
 #else
 ASF_ASFCondition _ASF_getASFConditionListASFConditionAt(ASF_ASFConditionList arg, int index);
 #define ASF_getASFConditionListASFConditionAt(arg, index) (_ASF_getASFConditionListASFConditionAt(arg, index))
 #endif
 #ifdef FAST_API
-#define ASF_replaceASFConditionListASFConditionAt(arg, elem, index) ((ASF_ASFConditionList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 4))
+#define ASF_replaceASFConditionListASFConditionAt(arg, elem, index) ((ASF_ASFConditionList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
 #else
 ASF_ASFConditionList _ASF_replaceASFConditionListASFConditionAt(ASF_ASFConditionList arg, ASF_ASFCondition elem, int index);
 #define ASF_replaceASFConditionListASFConditionAt(arg, elem, index) (_ASF_replaceASFConditionListASFConditionAt(arg, elem, index))
@@ -844,7 +844,7 @@ ASF_ASFConditionList ASF_makeASFConditionList4(ASF_OptLayout wsAfterHead, ASF_Op
 ASF_ASFConditionList ASF_makeASFConditionList5(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFCondition elem1, ASF_ASFCondition elem2, ASF_ASFCondition elem3, ASF_ASFCondition elem4, ASF_ASFCondition elem5);
 ASF_ASFConditionList ASF_makeASFConditionList6(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFCondition elem1, ASF_ASFCondition elem2, ASF_ASFCondition elem3, ASF_ASFCondition elem4, ASF_ASFCondition elem5, ASF_ASFCondition elem6);
 #ifdef FAST_API
-#define ASF_getASFSectionListLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 2) + 1))
+#define ASF_getASFSectionListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 2) + 1))
 #else
 int _ASF_getASFSectionListLength(ASF_ASFSectionList arg);
 #define ASF_getASFSectionListLength(arg) (_ASF_getASFSectionListLength(arg))
@@ -853,19 +853,19 @@ ASF_ASFSectionList ASF_reverseASFSectionList(ASF_ASFSectionList arg);
 ASF_ASFSectionList ASF_appendASFSectionList(ASF_ASFSectionList arg0, ASF_OptLayout wsAfterHead, ASF_ASFSection arg1);
 ASF_ASFSectionList ASF_concatASFSectionList(ASF_ASFSectionList arg0, ASF_OptLayout wsAfterHead, ASF_ASFSectionList arg1);
 #ifdef FAST_API
-#define ASF_sliceASFSectionList(arg, start, end) ((ASF_ASFSectionList) ATgetSlice((ATermList) arg, start * 2, end * 2))
+#define ASF_sliceASFSectionList(arg, start, end) ((ASF_ASFSectionList) ATgetSlice((ATermList) (arg), (start * 2), (end * 2)))
 #else
 ASF_ASFSectionList _ASF_sliceASFSectionList(ASF_ASFSectionList arg, int start, int end);
 #define ASF_sliceASFSectionList(arg, start, end) (_ASF_sliceASFSectionList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define ASF_getASFSectionListASFSectionAt(arg, index) ((ASF_ASFSection)ATelementAt((ATermList) arg,index * 2))
+#define ASF_getASFSectionListASFSectionAt(arg, index) ((ASF_ASFSection) (ATelementAt((ATermList) arg,index * 2)))
 #else
 ASF_ASFSection _ASF_getASFSectionListASFSectionAt(ASF_ASFSectionList arg, int index);
 #define ASF_getASFSectionListASFSectionAt(arg, index) (_ASF_getASFSectionListASFSectionAt(arg, index))
 #endif
 #ifdef FAST_API
-#define ASF_replaceASFSectionListASFSectionAt(arg, elem, index) ((ASF_ASFSectionList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 2))
+#define ASF_replaceASFSectionListASFSectionAt(arg, elem, index) ((ASF_ASFSectionList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 2)))
 #else
 ASF_ASFSectionList _ASF_replaceASFSectionListASFSectionAt(ASF_ASFSectionList arg, ASF_ASFSection elem, int index);
 #define ASF_replaceASFSectionListASFSectionAt(arg, elem, index) (_ASF_replaceASFSectionListASFSectionAt(arg, elem, index))
@@ -876,7 +876,7 @@ ASF_ASFSectionList ASF_makeASFSectionList4(ASF_OptLayout wsAfterHead, ASF_ASFSec
 ASF_ASFSectionList ASF_makeASFSectionList5(ASF_OptLayout wsAfterHead, ASF_ASFSection elem1, ASF_ASFSection elem2, ASF_ASFSection elem3, ASF_ASFSection elem4, ASF_ASFSection elem5);
 ASF_ASFSectionList ASF_makeASFSectionList6(ASF_OptLayout wsAfterHead, ASF_ASFSection elem1, ASF_ASFSection elem2, ASF_ASFSection elem3, ASF_ASFSection elem4, ASF_ASFSection elem5, ASF_ASFSection elem6);
 #ifdef FAST_API
-#define ASF_getASFConditionalEquationListLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 2) + 1))
+#define ASF_getASFConditionalEquationListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 2) + 1))
 #else
 int _ASF_getASFConditionalEquationListLength(ASF_ASFConditionalEquationList arg);
 #define ASF_getASFConditionalEquationListLength(arg) (_ASF_getASFConditionalEquationListLength(arg))
@@ -885,19 +885,19 @@ ASF_ASFConditionalEquationList ASF_reverseASFConditionalEquationList(ASF_ASFCond
 ASF_ASFConditionalEquationList ASF_appendASFConditionalEquationList(ASF_ASFConditionalEquationList arg0, ASF_OptLayout wsAfterHead, ASF_ASFConditionalEquation arg1);
 ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList arg0, ASF_OptLayout wsAfterHead, ASF_ASFConditionalEquationList arg1);
 #ifdef FAST_API
-#define ASF_sliceASFConditionalEquationList(arg, start, end) ((ASF_ASFConditionalEquationList) ATgetSlice((ATermList) arg, start * 2, end * 2))
+#define ASF_sliceASFConditionalEquationList(arg, start, end) ((ASF_ASFConditionalEquationList) ATgetSlice((ATermList) (arg), (start * 2), (end * 2)))
 #else
 ASF_ASFConditionalEquationList _ASF_sliceASFConditionalEquationList(ASF_ASFConditionalEquationList arg, int start, int end);
 #define ASF_sliceASFConditionalEquationList(arg, start, end) (_ASF_sliceASFConditionalEquationList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define ASF_getASFConditionalEquationListASFConditionalEquationAt(arg, index) ((ASF_ASFConditionalEquation)ATelementAt((ATermList) arg,index * 2))
+#define ASF_getASFConditionalEquationListASFConditionalEquationAt(arg, index) ((ASF_ASFConditionalEquation) (ATelementAt((ATermList) arg,index * 2)))
 #else
 ASF_ASFConditionalEquation _ASF_getASFConditionalEquationListASFConditionalEquationAt(ASF_ASFConditionalEquationList arg, int index);
 #define ASF_getASFConditionalEquationListASFConditionalEquationAt(arg, index) (_ASF_getASFConditionalEquationListASFConditionalEquationAt(arg, index))
 #endif
 #ifdef FAST_API
-#define ASF_replaceASFConditionalEquationListASFConditionalEquationAt(arg, elem, index) ((ASF_ASFConditionalEquationList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 2))
+#define ASF_replaceASFConditionalEquationListASFConditionalEquationAt(arg, elem, index) ((ASF_ASFConditionalEquationList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 2)))
 #else
 ASF_ASFConditionalEquationList _ASF_replaceASFConditionalEquationListASFConditionalEquationAt(ASF_ASFConditionalEquationList arg, ASF_ASFConditionalEquation elem, int index);
 #define ASF_replaceASFConditionalEquationListASFConditionalEquationAt(arg, elem, index) (_ASF_replaceASFConditionalEquationListASFConditionalEquationAt(arg, elem, index))
@@ -908,7 +908,7 @@ ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationList4(ASF_OptLayout
 ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationList5(ASF_OptLayout wsAfterHead, ASF_ASFConditionalEquation elem1, ASF_ASFConditionalEquation elem2, ASF_ASFConditionalEquation elem3, ASF_ASFConditionalEquation elem4, ASF_ASFConditionalEquation elem5);
 ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationList6(ASF_OptLayout wsAfterHead, ASF_ASFConditionalEquation elem1, ASF_ASFConditionalEquation elem2, ASF_ASFConditionalEquation elem3, ASF_ASFConditionalEquation elem4, ASF_ASFConditionalEquation elem5, ASF_ASFConditionalEquation elem6);
 #ifdef FAST_API
-#define ASF_getASFTestEquationTestListLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 2) + 1))
+#define ASF_getASFTestEquationTestListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 2) + 1))
 #else
 int _ASF_getASFTestEquationTestListLength(ASF_ASFTestEquationTestList arg);
 #define ASF_getASFTestEquationTestListLength(arg) (_ASF_getASFTestEquationTestListLength(arg))
@@ -917,19 +917,19 @@ ASF_ASFTestEquationTestList ASF_reverseASFTestEquationTestList(ASF_ASFTestEquati
 ASF_ASFTestEquationTestList ASF_appendASFTestEquationTestList(ASF_ASFTestEquationTestList arg0, ASF_OptLayout wsAfterHead, ASF_ASFTestEquation arg1);
 ASF_ASFTestEquationTestList ASF_concatASFTestEquationTestList(ASF_ASFTestEquationTestList arg0, ASF_OptLayout wsAfterHead, ASF_ASFTestEquationTestList arg1);
 #ifdef FAST_API
-#define ASF_sliceASFTestEquationTestList(arg, start, end) ((ASF_ASFTestEquationTestList) ATgetSlice((ATermList) arg, start * 2, end * 2))
+#define ASF_sliceASFTestEquationTestList(arg, start, end) ((ASF_ASFTestEquationTestList) ATgetSlice((ATermList) (arg), (start * 2), (end * 2)))
 #else
 ASF_ASFTestEquationTestList _ASF_sliceASFTestEquationTestList(ASF_ASFTestEquationTestList arg, int start, int end);
 #define ASF_sliceASFTestEquationTestList(arg, start, end) (_ASF_sliceASFTestEquationTestList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define ASF_getASFTestEquationTestListASFTestEquationAt(arg, index) ((ASF_ASFTestEquation)ATelementAt((ATermList) arg,index * 2))
+#define ASF_getASFTestEquationTestListASFTestEquationAt(arg, index) ((ASF_ASFTestEquation) (ATelementAt((ATermList) arg,index * 2)))
 #else
 ASF_ASFTestEquation _ASF_getASFTestEquationTestListASFTestEquationAt(ASF_ASFTestEquationTestList arg, int index);
 #define ASF_getASFTestEquationTestListASFTestEquationAt(arg, index) (_ASF_getASFTestEquationTestListASFTestEquationAt(arg, index))
 #endif
 #ifdef FAST_API
-#define ASF_replaceASFTestEquationTestListASFTestEquationAt(arg, elem, index) ((ASF_ASFTestEquationTestList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 2))
+#define ASF_replaceASFTestEquationTestListASFTestEquationAt(arg, elem, index) ((ASF_ASFTestEquationTestList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 2)))
 #else
 ASF_ASFTestEquationTestList _ASF_replaceASFTestEquationTestListASFTestEquationAt(ASF_ASFTestEquationTestList arg, ASF_ASFTestEquation elem, int index);
 #define ASF_replaceASFTestEquationTestListASFTestEquationAt(arg, elem, index) (_ASF_replaceASFTestEquationTestListASFTestEquationAt(arg, elem, index))
@@ -998,175 +998,175 @@ ASF_Character ASF_makeCharacterEof(void);
 ASF_Character ASF_makeCharacterBot(void);
 ASF_Character ASF_makeCharacterLabelUnderscoreStart(void);
 #ifdef FAST_API
-#define ASF_isEqualOptLayout(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualOptLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualOptLayout(ASF_OptLayout arg0, ASF_OptLayout arg1);
 #define ASF_isEqualOptLayout(arg0, arg1) (_ASF_isEqualOptLayout(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLayout(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLayout(ASF_Layout arg0, ASF_Layout arg1);
 #define ASF_isEqualLayout(arg0, arg1) (_ASF_isEqualLayout(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexLayoutList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexLayoutList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexLayoutList(ASF_LexLayoutList arg0, ASF_LexLayoutList arg1);
 #define ASF_isEqualLexLayoutList(arg0, arg1) (_ASF_isEqualLexLayoutList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualTree(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualTree(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualTree(ASF_Tree arg0, ASF_Tree arg1);
 #define ASF_isEqualTree(arg0, arg1) (_ASF_isEqualTree(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFCondition(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFCondition(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFCondition(ASF_ASFCondition arg0, ASF_ASFCondition arg1);
 #define ASF_isEqualASFCondition(arg0, arg1) (_ASF_isEqualASFCondition(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFConditions(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFConditions(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFConditions(ASF_ASFConditions arg0, ASF_ASFConditions arg1);
 #define ASF_isEqualASFConditions(arg0, arg1) (_ASF_isEqualASFConditions(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFConditionList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFConditionList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFConditionList(ASF_ASFConditionList arg0, ASF_ASFConditionList arg1);
 #define ASF_isEqualASFConditionList(arg0, arg1) (_ASF_isEqualASFConditionList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexASFBarEnd(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexASFBarEnd(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexASFBarEnd(ASF_LexASFBarEnd arg0, ASF_LexASFBarEnd arg1);
 #define ASF_isEqualLexASFBarEnd(arg0, arg1) (_ASF_isEqualLexASFBarEnd(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFBarEnd(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFBarEnd(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFBarEnd(ASF_ASFBarEnd arg0, ASF_ASFBarEnd arg1);
 #define ASF_isEqualASFBarEnd(arg0, arg1) (_ASF_isEqualASFBarEnd(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexASFImplies(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexASFImplies(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexASFImplies(ASF_LexASFImplies arg0, ASF_LexASFImplies arg1);
 #define ASF_isEqualLexASFImplies(arg0, arg1) (_ASF_isEqualLexASFImplies(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFImplies(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFImplies(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFImplies(ASF_ASFImplies arg0, ASF_ASFImplies arg1);
 #define ASF_isEqualASFImplies(arg0, arg1) (_ASF_isEqualASFImplies(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFConditionalEquation(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFConditionalEquation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFConditionalEquation(ASF_ASFConditionalEquation arg0, ASF_ASFConditionalEquation arg1);
 #define ASF_isEqualASFConditionalEquation(arg0, arg1) (_ASF_isEqualASFConditionalEquation(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFEquation(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFEquation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFEquation(ASF_ASFEquation arg0, ASF_ASFEquation arg1);
 #define ASF_isEqualASFEquation(arg0, arg1) (_ASF_isEqualASFEquation(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualStart(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualStart(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualStart(ASF_Start arg0, ASF_Start arg1);
 #define ASF_isEqualStart(arg0, arg1) (_ASF_isEqualStart(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFModule(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFModule(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFModule(ASF_ASFModule arg0, ASF_ASFModule arg1);
 #define ASF_isEqualASFModule(arg0, arg1) (_ASF_isEqualASFModule(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFSection(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFSection(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFSection(ASF_ASFSection arg0, ASF_ASFSection arg1);
 #define ASF_isEqualASFSection(arg0, arg1) (_ASF_isEqualASFSection(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFSectionList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFSectionList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFSectionList(ASF_ASFSectionList arg0, ASF_ASFSectionList arg1);
 #define ASF_isEqualASFSectionList(arg0, arg1) (_ASF_isEqualASFSectionList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFConditionalEquationList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFConditionalEquationList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFConditionalEquationList(ASF_ASFConditionalEquationList arg0, ASF_ASFConditionalEquationList arg1);
 #define ASF_isEqualASFConditionalEquationList(arg0, arg1) (_ASF_isEqualASFConditionalEquationList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFTestEquationTestList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFTestEquationTestList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFTestEquationTestList(ASF_ASFTestEquationTestList arg0, ASF_ASFTestEquationTestList arg1);
 #define ASF_isEqualASFTestEquationTestList(arg0, arg1) (_ASF_isEqualASFTestEquationTestList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexASFTagId(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexASFTagId(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexASFTagId(ASF_LexASFTagId arg0, ASF_LexASFTagId arg1);
 #define ASF_isEqualLexASFTagId(arg0, arg1) (_ASF_isEqualLexASFTagId(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFTagId(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFTagId(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFTagId(ASF_ASFTagId arg0, ASF_ASFTagId arg1);
 #define ASF_isEqualASFTagId(arg0, arg1) (_ASF_isEqualASFTagId(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFTag(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFTag(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFTag(ASF_ASFTag arg0, ASF_ASFTag arg1);
 #define ASF_isEqualASFTag(arg0, arg1) (_ASF_isEqualASFTag(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualASFTestEquation(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualASFTestEquation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFTestEquation(ASF_ASFTestEquation arg0, ASF_ASFTestEquation arg1);
 #define ASF_isEqualASFTestEquation(arg0, arg1) (_ASF_isEqualASFTestEquation(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexLayout(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexLayout(ASF_LexLayout arg0, ASF_LexLayout arg1);
 #define ASF_isEqualLexLayout(arg0, arg1) (_ASF_isEqualLexLayout(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexNumChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexNumChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexNumChar(ASF_LexNumChar arg0, ASF_LexNumChar arg1);
 #define ASF_isEqualLexNumChar(arg0, arg1) (_ASF_isEqualLexNumChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualNumChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualNumChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualNumChar(ASF_NumChar arg0, ASF_NumChar arg1);
 #define ASF_isEqualNumChar(arg0, arg1) (_ASF_isEqualNumChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualLexShortChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualLexShortChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualLexShortChar(ASF_LexShortChar arg0, ASF_LexShortChar arg1);
 #define ASF_isEqualLexShortChar(arg0, arg1) (_ASF_isEqualLexShortChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualShortChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualShortChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualShortChar(ASF_ShortChar arg0, ASF_ShortChar arg1);
 #define ASF_isEqualShortChar(arg0, arg1) (_ASF_isEqualShortChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define ASF_isEqualCharacter(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define ASF_isEqualCharacter(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualCharacter(ASF_Character arg0, ASF_Character arg1);
 #define ASF_isEqualCharacter(arg0, arg1) (_ASF_isEqualCharacter(arg0, arg1))

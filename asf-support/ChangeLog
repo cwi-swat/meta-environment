@@ -1,5 +1,11 @@
 # $Id$
 
+Fri Mar  9 19:15:50 CET 2007 <jurgenv@cwi.nl>
+ * lib/ASFME.[ch]: regenerated with more brackets around macro arguments
+ * lib/{lift,lower}.c: added functionality for sharing the results of lifting
+   while lowering. In case nothing happened in between lifting and lowering,
+   lowering is the exact inverse operation of lifting.
+
 Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
  * **: regenerated all API's in this package with a new version of 
    ApiGen that generates more efficient code for the is-alternative 

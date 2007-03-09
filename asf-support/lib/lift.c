@@ -37,12 +37,12 @@ static void initLayout()
 
 /*{{{  static ASF_ASFEquation ASF_liftEquation(ASF_ASFEquation equation) */
 
-static ASF_ASFEquation ASF_liftEquation(ASF_ASFEquation equation)
+static ASF_ASFEquation ASF_liftEquation(ASF_ASFEquation equation, ATermTable lower)
 {
   ASF_Tree lhs = (ASF_Tree) 
-    PTPT_liftTree((PT_Tree) ASF_getASFEquationLhs(equation));
+    PTPT_liftTreeCache((PT_Tree) ASF_getASFEquationLhs(equation), lower);
   ASF_Tree rhs = (ASF_Tree) 
-    PTPT_liftTree((PT_Tree) ASF_getASFEquationRhs(equation));
+    PTPT_liftTreeCache((PT_Tree) ASF_getASFEquationRhs(equation), lower);
   ATerm type = PT_SymbolToTerm(PT_makeSymbolCf(PT_makeSymbolSort("Tree")));
 
   initLayout();
@@ -56,12 +56,12 @@ static ASF_ASFEquation ASF_liftEquation(ASF_ASFEquation equation)
 
 /*{{{  static ASF_ASFCondition ASF_liftCondition(ASF_ASFCondition condition) */
 
-static ASF_ASFCondition ASF_liftCondition(ASF_ASFCondition condition)
+static ASF_ASFCondition ASF_liftCondition(ASF_ASFCondition condition, ATermTable lower)
 {
   ASF_Tree lhs = (ASF_Tree) 
-    PTPT_liftTree((PT_Tree) ASF_getASFConditionLhs(condition));
+    PTPT_liftTreeCache((PT_Tree) ASF_getASFConditionLhs(condition), lower);
   ASF_Tree rhs = (ASF_Tree) 
-    PTPT_liftTree((PT_Tree) ASF_getASFConditionRhs(condition));
+    PTPT_liftTreeCache((PT_Tree) ASF_getASFConditionRhs(condition), lower);
   ATerm type = PT_SymbolToTerm(PT_makeSymbolCf(PT_makeSymbolSort("Tree")));
 
   initLayout();
@@ -78,7 +78,7 @@ static ASF_ASFCondition ASF_liftCondition(ASF_ASFCondition condition)
 /*}}}  */
 /*{{{  static ASF_ASFConditions ASF_liftConditions(ASF_ASFConditions conditions) */
 
-static ASF_ASFConditions ASF_liftConditions(ASF_ASFConditions conditions)
+static ASF_ASFConditions ASF_liftConditions(ASF_ASFConditions conditions, ATermTable lower)
 {
   ASF_ASFConditionList list = ASF_getASFConditionsList(conditions);
   ASF_ASFConditionList result = ASF_makeASFConditionListEmpty();
@@ -87,7 +87,7 @@ static ASF_ASFConditions ASF_liftConditions(ASF_ASFConditions conditions)
 	list = ASF_getASFConditionListTail(list)) {
     ASF_ASFCondition condition = ASF_getASFConditionListHead(list);
 
-    condition = ASF_liftCondition(condition);
+    condition = ASF_liftCondition(condition, lower);
 
     result = ASF_makeASFConditionListMany(condition,space,newline,result);
   }
@@ -99,13 +99,13 @@ static ASF_ASFConditions ASF_liftConditions(ASF_ASFConditions conditions)
 
 /*{{{  static ASF_ASFTestEquation ASF_liftTestEquation(ASF_ASFTestEquation test) */
 
-static ASF_ASFTestEquation ASF_liftTestEquation(ASF_ASFTestEquation test)
+static ASF_ASFTestEquation ASF_liftTestEquation(ASF_ASFTestEquation test, ATermTable lower)
 {
   if (ASF_hasASFTestEquationASFConditions(test)) {
-    test = ASF_setASFTestEquationASFConditions(test, ASF_liftConditions(ASF_getASFTestEquationASFConditions(test)));
+    test = ASF_setASFTestEquationASFConditions(test, ASF_liftConditions(ASF_getASFTestEquationASFConditions(test), lower));
   }
 
-  test = ASF_setASFTestEquationASFCondition(test, ASF_liftCondition(ASF_getASFTestEquationASFCondition(test)));
+  test = ASF_setASFTestEquationASFCondition(test, ASF_liftCondition(ASF_getASFTestEquationASFCondition(test), lower));
 
   return test;
 }
@@ -113,13 +113,13 @@ static ASF_ASFTestEquation ASF_liftTestEquation(ASF_ASFTestEquation test)
 /*}}}  */
 /*{{{  static ASF_ASFConditionalEquation ASF_liftConditionalEquation(ASF_ASFConditionalEquation equation) */
 
-static ASF_ASFConditionalEquation ASF_liftConditionalEquation(ASF_ASFConditionalEquation equation)
+static ASF_ASFConditionalEquation ASF_liftConditionalEquation(ASF_ASFConditionalEquation equation, ATermTable lower)
 {
   if (ASF_hasASFConditionalEquationASFConditions(equation)) {
-    equation = ASF_setASFConditionalEquationASFConditions(equation, ASF_liftConditions(ASF_getASFConditionalEquationASFConditions(equation)));
+    equation = ASF_setASFConditionalEquationASFConditions(equation, ASF_liftConditions(ASF_getASFConditionalEquationASFConditions(equation), lower));
   }
 
-  equation = ASF_setASFConditionalEquationASFEquation(equation, ASF_liftEquation(ASF_getASFConditionalEquationASFEquation(equation)));
+  equation = ASF_setASFConditionalEquationASFEquation(equation, ASF_liftEquation(ASF_getASFConditionalEquationASFEquation(equation), lower));
 
   return equation;
 }
@@ -127,7 +127,7 @@ static ASF_ASFConditionalEquation ASF_liftConditionalEquation(ASF_ASFConditional
 /*}}}  */
 /*{{{  static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList list) */
 
-static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList list)
+static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList list, ATermTable lower)
 {
   ASF_ASFTestEquationTestList result = ASF_makeASFTestEquationTestListEmpty();
 
@@ -135,7 +135,7 @@ static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList lis
 	list = ASF_getASFTestEquationTestListTail(list)) {
     ASF_ASFTestEquation eq = ASF_getASFTestEquationTestListHead(list);
 
-    eq = ASF_liftTestEquation(eq);
+    eq = ASF_liftTestEquation(eq, lower);
 
     result = ASF_makeASFTestEquationTestListMany(eq, newline, result);
   }
@@ -146,7 +146,7 @@ static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList lis
 /*}}}  */
 /*{{{  static ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list) */
 
-ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list)
+ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list, ATermTable lower)
 {
   ASF_ASFConditionalEquationList result = ASF_makeASFConditionalEquationListEmpty();
 
@@ -154,7 +154,7 @@ ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList 
 	list = ASF_getASFConditionalEquationListTail(list)) {
     ASF_ASFConditionalEquation eq = ASF_getASFConditionalEquationListHead(list);
 
-    eq = ASF_liftConditionalEquation(eq);
+    eq = ASF_liftConditionalEquation(eq, lower);
 
     result = ASF_makeASFConditionalEquationListMany(eq, newline, result);
   }
@@ -165,19 +165,19 @@ ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList 
 /*}}}  */
 /*{{{  static ASF_ASFSection ASF_liftSection(ASF_ASFSection section) */
 
-static ASF_ASFSection ASF_liftSection(ASF_ASFSection section)
+static ASF_ASFSection ASF_liftSection(ASF_ASFSection section, ATermTable lower)
 {
   if (ASF_isASFSectionEquations(section)) {
     ASF_ASFConditionalEquationList list = ASF_getASFSectionList(section);
 
-    list = ASF_liftEquations(list);
+    list = ASF_liftEquations(list, lower);
 
     return ASF_setASFSectionList(section, list);
   }
   else if (ASF_isASFSectionTests(section)) {
     ASF_ASFTestEquationTestList list = ASF_getASFSectionTestList(section);
 
-    list = ASF_liftTests(list);
+    list = ASF_liftTests(list, lower);
 
     return ASF_setASFSectionTestList(section, list);
   }
@@ -190,7 +190,7 @@ static ASF_ASFSection ASF_liftSection(ASF_ASFSection section)
 
 /*{{{  ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections) */
 
-ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections)
+ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections, ATermTable lower)
 {
   ASF_ASFSectionList result = ASF_makeASFSectionListEmpty();
 
@@ -200,7 +200,7 @@ ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections)
 	sections = ASF_getASFSectionListTail(sections)) {
     ASF_ASFSection head = ASF_getASFSectionListHead(sections);
 
-    head = ASF_liftSection(head);
+    head = ASF_liftSection(head, lower);
 
     result = ASF_makeASFSectionListMany(head, newline, result);
   }
@@ -212,11 +212,11 @@ ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections)
 
 /*{{{  ASF_ASFModule ASF_liftModule(ASF_ASFModule module) */
 
-ASF_ASFModule ASF_liftModule(ASF_ASFModule module)
+ASF_ASFModule ASF_liftModule(ASF_ASFModule module, ATermTable lowerCache)
 {
   ASF_ASFSectionList sections = ASF_getASFModuleList(module);
 
-  sections = ASF_liftSections(sections);
+  sections = ASF_liftSections(sections, lowerCache);
 
   return ASF_setASFModuleList(module, sections);
 }

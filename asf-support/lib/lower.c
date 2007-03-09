@@ -155,7 +155,7 @@ static ASF_ASFTestEquationTestList ASF_lowerTests(ASF_ASFTestEquationTestList li
 /*}}}  */
 /*{{{  static ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list) */
 
-ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list)
+ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list, ATermTable lower)
 {
   ASF_ASFConditionalEquationList result = ASF_makeASFConditionalEquationListEmpty();
 
@@ -176,12 +176,12 @@ ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList
 /*}}}  */
 /*{{{  static ASF_ASFSection ASF_lowerSection(ASF_ASFSection section) */
 
-static ASF_ASFSection ASF_lowerSection(ASF_ASFSection section)
+static ASF_ASFSection ASF_lowerSection(ASF_ASFSection section, ATermTable lower)
 {
   if (ASF_isASFSectionEquations(section)) {
     ASF_ASFConditionalEquationList list = ASF_getASFSectionList(section);
 
-    list = ASF_lowerEquations(list);
+    list = ASF_lowerEquations(list, lower);
 
     return ASF_setASFSectionList(section, list);
   }
@@ -201,7 +201,7 @@ static ASF_ASFSection ASF_lowerSection(ASF_ASFSection section)
 
 /*{{{  ASF_ASFSections ASF_lowerSections(ASF_ASFSection sections) */
 
-ASF_ASFSectionList ASF_lowerSections(ASF_ASFSectionList sections)
+ASF_ASFSectionList ASF_lowerSections(ASF_ASFSectionList sections, ATermTable lower)
 {
   ASF_ASFSectionList result = ASF_makeASFSectionListEmpty();
 
@@ -211,7 +211,7 @@ ASF_ASFSectionList ASF_lowerSections(ASF_ASFSectionList sections)
 	sections = ASF_getASFSectionListTail(sections)) {
     ASF_ASFSection head = ASF_getASFSectionListHead(sections);
 
-    head = ASF_lowerSection(head);
+    head = ASF_lowerSection(head, lower);
 
     result = ASF_makeASFSectionListMany(head, newline, result);
   }
@@ -223,11 +223,11 @@ ASF_ASFSectionList ASF_lowerSections(ASF_ASFSectionList sections)
 /*}}}  */
 /*{{{  ASF_ASFModule ASF_lowerModule(ASF_ASFModule module) */
 
-ASF_ASFModule ASF_lowerModule(ASF_ASFModule module)
+ASF_ASFModule ASF_lowerModule(ASF_ASFModule module, ATermTable lower)
 {
   ASF_ASFSectionList sections = ASF_getASFModuleList(module);
 
-  sections = ASF_lowerSections(sections);
+  sections = ASF_lowerSections(sections, lower);
 
   return ASF_setASFModuleList(module, sections);
 }
