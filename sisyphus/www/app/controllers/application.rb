@@ -13,8 +13,12 @@ class ApplicationController < ActionController::Base
       @hosts = SiHost.find(:all, :conditions => ['active = \'t\''], :order => 'uname asc')
     else
       @hosts = session[:visible].collect do |host|
-        SiHost.find(host.id)
-      end
+        begin
+          SiHost.find(host.id)
+        rescue ActiveRecord::RecordNotFound => e
+          nil
+        end
+      end.compact
     end
     @main_url = url_for(:controller => 'builds', :action => 'index', :trailing_slash => false)
     @main_url = @main_url[0..@main_url.length-2]
