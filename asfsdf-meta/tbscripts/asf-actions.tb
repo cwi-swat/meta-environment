@@ -146,7 +146,7 @@ let
   ModuleName: str
 in
   GetModuleId(EditorId, ModuleId?)
-  . LookupFeatureModuleId(ModuleId,  "extract", ExtractModuleId?)
+  . LookupFeatureModuleId(ModuleId, "extract", ExtractModuleId?)
   .
   if not-equal(ExtractModuleId, UNDEFINED) then
     GetPath(EditorId, Path?)

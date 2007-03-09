@@ -24,7 +24,7 @@
 process StartTestEqsDumper is
 let
   MenuEventList: list,
-  ModuleId: term,
+  ModuleId: module-id,
   Event: attribute-changed-event,
   Value: term
 in
@@ -33,7 +33,7 @@ in
   . snd-msg(tm-end-transaction(module-manager))
   . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
   . MM-Subscribe-Attribute-Changed(ModuleId,<term>,"status",<term>,unavailable)
-  . MM-Subscribe-Attribute-Changed(<term>,<term>,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<module-id>,<term>,"status",<term>,error)
   . rec-note(mm-attribute-changed(Event?))
   . ACE-GetNewValue(Event, Value?)
   . 
