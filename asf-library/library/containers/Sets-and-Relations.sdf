@@ -3,7 +3,7 @@ module containers/Sets-and-Relations
 imports basic/Integers
         basic/Booleans
         basic/Locations
-        basic/StrCon
+        basic/Strings
 
 exports
 sorts RElem
@@ -11,7 +11,7 @@ sorts RElem
 context-free syntax
   Integer  -> RElem  
   Boolean  -> RElem  
-  StrCon   -> RElem  
+  String   -> RElem  
   Location -> RElem  
 
 context-free syntax

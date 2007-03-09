@@ -1,8 +1,14 @@
 module languages/pico/extract/Pico
 
 imports basic/RStores
+imports containers/Sets-and-Relations
 imports languages/pico/syntax/Pico
 imports basic/Integers
+imports utilities/Parsing[PICO-ID]
+imports utilities/Parsing[STATEMENT]
+imports utilities/Parsing[EXP]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
 
 hiddens
 context-free syntax
@@ -10,19 +16,25 @@ context-free syntax
   statementHistogram(PROGRAM) -> RElem  
 
 context-free syntax
-  countStatements(PROGRAM, RElem)   -> RElem {traversal(accu, bottom-up, continue)} 
-  countStatements(STATEMENT, RElem) -> RElem {traversal(accu, bottom-up, continue)} 
-  control(PROGRAM, RElem)           -> RElem {traversal(accu, bottom-up, continue)} 
+  countStatements(PROGRAM, RElem)   -> RElem               {traversal(accu, bottom-up, continue)} 
+  countStatements(STATEMENT, RElem) -> RElem               {traversal(accu, bottom-up, continue)} 
+  cflow({STATEMENT ";"}*)           -> <RElem,RElem,RElem>                                        
 
 context-free start-symbols
-  PROGRAM RStore
+  PROGRAM RStore RElem
 
 variables
   "Program" [0-9]* -> PROGRAM           
-  "Decl*" [0-9]*   -> {ID-TYPE ","}*    
+  "Decls" [0-9]*   -> DECLS             
+  "Stat" [0-9]*    -> STATEMENT         
   "Stat*" [0-9]*   -> {STATEMENT ";"}*  
+  "Stat+" [0-9]*   -> {STATEMENT ";"}+  
   "Exp" [0-9]*     -> EXP               
   "Id" [0-9]*      -> PICO-ID           
+  "Entry" [0-9]*   -> RElem             
+  "Exit" [0-9]*    -> RElem             
+  "Rel" [0-9]*     -> RElem             
+  "Control" [0-9]* -> RElem             
 
 variables
   "RElem*" [0-9]* -> {RElem ","}* {strict} 

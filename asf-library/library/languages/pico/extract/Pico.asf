@@ -19,5 +19,51 @@ equations
 
 equations
 
-%% TODO: copy this code from the relation-calculus demos
-[cfg] controlFlow(Program) = control(Program, { })
+[cfg] <Entry, Rel, Exit> := cflow(Stat*)
+      ===>
+      controlFlow(begin Decls Stat* end) = Rel
+
+equations
+
+[cfg-1] 
+  <Entry1, Rel1, Exit1> := cflow(Stat), 
+  <Entry2, Rel2, Exit2> := cflow(Stat+)
+  ===>
+  cflow(Stat ; Stat+) = 
+  < 
+    Entry1, 
+    union(Rel1, union(Rel2, product(Exit1, Entry2))), 
+    Exit2
+  >
+
+[cfg-2] cflow() = <{}, {}, {}>
+
+equations
+
+[cfg-3]  
+  <Entry, Rel, Exit> := cflow(Stat*),
+  Control := <unparse-to-string(Exp), get-location(Exp)>
+  ===>
+  cflow(while Exp do Stat* od) = 
+  < 
+    {Control},
+    union(product({Control}, Entry), union(Rel, product(Exit, {Control}))),
+    {Control}
+  >
+
+[cfg-4]  
+  <Entry1, Rel1, Exit1> := cflow(Stat*1), 
+  <Entry2, Rel2, Exit2> := cflow(Stat*2),
+  Control := <unparse-to-string(Exp), get-location(Exp)>
+  ===>
+  cflow(if Exp then Stat*1 else Stat*2 fi) =
+  < 
+    {Control},
+    union(product({Control}, Entry1), union(product({Control}, Entry2), union(Rel1, Rel2))),
+    union(Exit1, Exit2)
+  > 
+
+[default-cfg]
+  Control := <unparse-to-string(Stat), get-location(Stat)>
+  ===>
+  cflow(Stat) = <{Control}, {}, {Control}>

@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar  9 15:42:34 CET 2007 <kooiker@cwi.nl>
+ * library/languages/pico/extract/Pico.{asf,sdf}:
+   - Add statement controlflow extraction
+
 Thu Mar  8 14:10:58 CET 2007 <kooiker@cwi.nl>
  * library/containers/Sets-and-Relations:
    - add basic Sets and Relations support
