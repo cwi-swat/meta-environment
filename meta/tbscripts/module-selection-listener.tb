@@ -9,13 +9,13 @@
 process SynchronizeModuleSelection(GraphId: term) is
 let
   Event: attribute-changed-event,
-  EventModuleId: term,
-  ModuleId: term
+  EventModuleId: module-id,
+  ModuleId: module-id
 in
   ModuleId := UNDEFINED
   . subscribe(nav-module-selected(<term>))
   . subscribe(gp-node-selected(<str>,<term>,<term>))
-  . MM-Subscribe-Attribute-Changed(<term>,<term>,<term>,<term>,<term>)
+  . MM-Subscribe-Attribute-Changed(<module-id>,<term>,<term>,<term>,<term>)
   .
   (
     rec-note(nav-module-selected(ModuleId?))
@@ -38,7 +38,7 @@ in
   * delta
 endlet
 
-process ShowModuleDetails(ModuleId: term) is
+process ShowModuleDetails(ModuleId: module-id) is
 let
   Attributes: list
 in

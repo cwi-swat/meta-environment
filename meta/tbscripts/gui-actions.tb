@@ -69,7 +69,7 @@ process PromptForFileWithExtension(String : str,
 process ExitAction is
   shutdown("")
 
-process ShowTreeAction(EditorId : term) is
+process ShowTreeAction(EditorId : session-id) is
 let
   Tree : term
 in
@@ -82,7 +82,7 @@ in
   fi
 endlet
 
-process ShowFullTreeWithoutLayoutAction(EditorId : term) is
+process ShowFullTreeWithoutLayoutAction(EditorId : session-id) is
 let
   Tree : term
 in
@@ -95,7 +95,7 @@ in
   fi
 endlet
 
-process ShowFullTreeAction(EditorId : term) is
+process ShowFullTreeAction(EditorId : session-id) is
 let
   Tree : term
 in
@@ -108,7 +108,7 @@ in
   fi
 endlet
 
-process ShowSharedTreeAction(EditorId : term) is
+process ShowSharedTreeAction(EditorId : session-id) is
 let
   Tree : term
 in

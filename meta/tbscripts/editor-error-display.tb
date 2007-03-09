@@ -3,7 +3,7 @@
 
 #include <error-support.idef>
 
-process GoToEditorArea(Sid: term, Area: term) is
+process GoToEditorArea(Sid: session-id, Area: area) is
 let
   Offset: int
 in
@@ -13,12 +13,12 @@ in
   . snd-msg(te-set-selection(Sid, Area))
 endlet
 
-process ShowDescription(Sid: term, Description: str) is
+process ShowDescription(Sid: session-id, Description: str) is
   snd-msg(te-display-message(Sid, Description))
 
-process ShowLocation(Sid: term, Location: term) is
+process ShowLocation(Sid: session-id, Location: term) is
 let
-  Area: term
+  Area: area
 in
   snd-msg(has-location-area(Location))
   .
@@ -33,7 +33,7 @@ in
   )
 endlet
 
-process ShowSubject(Sid: term, Subject: term) is
+process ShowSubject(Sid: session-id, Subject: term) is
 let
   Location: term,
   Description: str
@@ -54,7 +54,7 @@ in
   )
 endlet
 
-process ShowError(Sid: term, Error: term) is
+process ShowError(Sid: session-id, Error: term) is
 let
   Subject: term,
   Subjects: list
@@ -65,7 +65,7 @@ in
   . ShowSubject(Sid, Subject)
 endlet
 
-process ShowSummary(Sid: term, Summary: summary) is
+process ShowSummary(Sid: session-id, Summary: summary) is
 let
   Error: term,
   Errors: list

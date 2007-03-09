@@ -11,10 +11,10 @@
 #include <editor-error-display.tb>
 #include <text-utils.tb>
 
-process DisplayMessage(EditorId : term, Message : str) is
+process DisplayMessage(EditorId : session-id, Message : str) is
   snd-msg(te-display-message(EditorId, Message))
 
-process GetModuleId(Sid: term, ModuleId: term?) is
+process GetModuleId(Sid: session-id, ModuleId: module-id?) is
   snd-msg(em-get-moduleid(Sid))
   .
   (
@@ -29,7 +29,7 @@ process GetModuleId(Sid: term, ModuleId: term?) is
     . ModuleId := UNDEFINED
   )
  
-process GetFocus(Sid: term, Tree: term?) is
+process GetFocus(Sid: session-id, Tree: term?) is
 let
   Registered: bool
 in
@@ -49,7 +49,7 @@ in
   fi
 endlet
 
-process ReplaceFocus(Sid: term, Tree: term) is
+process ReplaceFocus(Sid: session-id, Tree: term) is
 let
   Text: str,
   Filename: str,
@@ -84,15 +84,15 @@ in
   . RTree := Tree
 endlet
 
-process GetPath(Sid: term, Path: str?) is
+process GetPath(Sid: session-id, Path: str?) is
   snd-msg(em-get-path(Sid))
   . rec-msg(em-path(Sid, Path?))
 
-process Edit(Path: str, Sid: term?) is
+process Edit(Path: str, Sid: session-id?) is
   snd-msg(em-create-session(Path))
   . rec-msg(em-session(Path, Sid?))
 
-process IsStructureEditorRegistered(Sid: term, Registered: bool?) is
+process IsStructureEditorRegistered(Sid: session-id, Registered: bool?) is
   snd-msg(em-is-editor-registered(Sid, structure))
   .
   (
@@ -103,7 +103,7 @@ process IsStructureEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-process IsTextEditorRegistered(Sid: term, Registered: bool?) is
+process IsTextEditorRegistered(Sid: session-id, Registered: bool?) is
   snd-msg(em-is-editor-registered(Sid, text))
   .
   (
@@ -114,7 +114,7 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
+process EditText(Sid: session-id, Type: term, AlreadyExists: bool?) is
 let
   Path: str,
   Categories: list
@@ -134,7 +134,7 @@ in
   fi
 endlet
 
-process SetEditActions(Sid: term, Type: term) is
+process SetEditActions(Sid: session-id, Type: term) is
 let
   Events: list
 in
@@ -143,7 +143,7 @@ in
   . snd-msg(te-add-actions(Sid, Events))
 endlet
 
-process SE-UpdateTree(Sid: term, Tree: term) is
+process SE-UpdateTree(Sid: session-id, Tree: term) is
 let
   Registered: bool,
   Slices: list
@@ -172,7 +172,7 @@ in
   fi
 endlet
 
-process SynchronizeFocus(Sid: term) is
+process SynchronizeFocus(Sid: session-id) is
 let
   Focus: term,
   Sortname: str
@@ -190,7 +190,7 @@ in
   )
 endlet
 
-process GetFocusSort(Sid: term, Sort: str?) is
+process GetFocusSort(Sid: session-id, Sort: str?) is
   Sort := ""
   . snd-msg(se-get-sort-at-cursor(Sid))
   .
@@ -200,10 +200,10 @@ process GetFocusSort(Sid: term, Sort: str?) is
     rec-msg(se-no-cursor(Sid))
   )
 
-process UpdateTextRepository(Sid: term) is
+process UpdateTextRepository(Sid: session-id) is
 let
   Contents: str,
-  ModuleId: term,
+  ModuleId: module-id,
   Path: str
 in
   snd-msg(te-get-contents(Sid))
@@ -212,11 +212,11 @@ in
   . PutCachedValue(TEXT_REPOSITORY, Path, Contents)
 endlet
 
-process MenuSelected(Sid: term, EditorType: term) is
+process MenuSelected(Sid: session-id, EditorType: term) is
 let
   Action: str,
   Event: term,
-  ModuleId: term,
+  ModuleId: module-id,
   Sort: str
 in
   rec-msg(te-event(Sid, Event?))
@@ -243,7 +243,7 @@ in
   )
 endlet
 
-process MouseClicked(Sid: term) is
+process MouseClicked(Sid: session-id) is
 let
   Column: int,
   Line: int,
@@ -276,7 +276,7 @@ in
   )
 endlet
 
-process OffsetHandler(Sid: term, Offset: int) is
+process OffsetHandler(Sid: session-id, Offset: int) is
 let
   Pid: int
 in
@@ -285,7 +285,7 @@ in
   . snd-msg(se-set-cursor-at-offset(Sid, Offset))
 endlet
 
-process LineColumnHandler(Sid: term, Line: int, Column: int) is
+process LineColumnHandler(Sid: session-id, Line: int, Column: int) is
 let
   Pid: int
 in
@@ -294,25 +294,25 @@ in
   . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
 endlet
 
-process EditorDisconnected(Sid: term) is
+process EditorDisconnected(Sid: session-id) is
   (
     rec-msg(te-text-editor-disconnected(Sid))
   +
     rec-msg(kill-editor(Sid))
   )
 
-process DeleteTextEditor(Sid: term) is
+process DeleteTextEditor(Sid: session-id) is
   snd-msg(te-kill-text-editor(Sid))
   . snd-msg(em-unregister-editor(Sid, text))
 
-process DeleteStructureEditor(Sid: term) is
+process DeleteStructureEditor(Sid: session-id) is
 let
   Registered: bool
 in
   snd-msg(se-delete(Sid))
 endlet
 
-process DeleteSession(Sid: term) is
+process DeleteSession(Sid: session-id) is
 let
   Registered: bool
 in
@@ -341,9 +341,9 @@ in
   )
 endlet
 
-process DeleteSessions(ModuleId: term) is
+process DeleteSessions(ModuleId: module-id) is
 let
-  Sid: term,
+  Sid: session-id,
   Sids: list
 in
   snd-msg(em-get-sessions-by-moduleid(ModuleId))
@@ -367,9 +367,9 @@ in
   )
 endlet
 
-process GetModuleByPath(Path: str, ModuleId: term?) is
+process GetModuleByPath(Path: str, ModuleId: module-id?) is
 let
-  Sid: term
+  Sid: session-id
 in
   GetEditorByPath(Path, Sid?)
   .
@@ -381,7 +381,7 @@ in
   fi
 endlet
 
-process GetEditorByPath(Path: str, Sid: term?) is
+process GetEditorByPath(Path: str, Sid: session-id?) is
   snd-msg(em-get-session-by-path(Path))
   .
   (
@@ -391,10 +391,10 @@ process GetEditorByPath(Path: str, Sid: term?) is
     . Sid := UNDEFINED
   )
 
-process CheckSanity(Path: str, RequestedModuleId: term, Valid: bool?) is
+process CheckSanity(Path: str, RequestedModuleId: module-id, Valid: bool?) is
 let
   Available: bool,
-  CurrentModuleId: term
+  CurrentModuleId: module-id
 in
   GetModuleByPath(Path, CurrentModuleId?)
   . 
@@ -405,7 +405,7 @@ in
   fi
 endlet
 
-process GetModuleByExtension(Path: str, ModuleId: term?) is
+process GetModuleByExtension(Path: str, ModuleId: module-id?) is
 let
   Extension: str
 in
@@ -421,19 +421,19 @@ in
   )
 endlet
 
-process MoveCursorLeftAction(EditorId : term) is
+process MoveCursorLeftAction(EditorId : session-id) is
   MoveCursor(EditorId, left)
 
-process MoveCursorRightAction(EditorId : term) is
+process MoveCursorRightAction(EditorId : session-id) is
   MoveCursor(EditorId, right)
 
-process MoveCursorUpAction(EditorId : term) is
+process MoveCursorUpAction(EditorId : session-id) is
   MoveCursor(EditorId, up)
 
-process MoveCursorDownAction(EditorId : term) is
+process MoveCursorDownAction(EditorId : session-id) is
   MoveCursor(EditorId, down)
 
-process MoveCursor(Sid: term, Direction: term) is
+process MoveCursor(Sid: session-id, Direction: term) is
 let
   Registered: bool
 in
@@ -453,7 +453,7 @@ let
   Filename: str,
   Path: str,
   Prefix: str,
-  Sid: term
+  Sid: session-id
 in
   snd-msg(get-location-filename(Location))
   . rec-msg(location-filename(Path?))
@@ -480,7 +480,7 @@ in
   )
 endlet
 
-process ShowOriginAction(EditorId : term) is
+process ShowOriginAction(EditorId : session-id) is
 let
   Origin: term
 in
@@ -515,7 +515,7 @@ endlet
 process ShowSubjectHandler(Subject: term) is
 let
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   Pid := process-id
   .
@@ -530,7 +530,7 @@ endlet
 process ShowErrorHandler(Location: term) is
 let
   Pid: int,
-  Sid: term
+  Sid: session-id
 in
   Pid := process-id
   .
@@ -542,13 +542,13 @@ in
   )
 endlet
 
-process CleanupEditTerm(Sid: term, ModuleId : term) is
+process CleanupEditTerm(Sid: session-id) is
   TODO("Dit werkt dus niet!\n").
   subscribe(em-session-deleted(Sid))
   . rec-note(em-session-deleted(Sid))
   /*. RemoveSummary("sglr", ModuleId)*/
 
-process GetFocusOrigin(EditorId : term, Origin: term?) is
+process GetFocusOrigin(EditorId : session-id, Origin: term?) is
 let
   Cursor : term
 in
@@ -564,7 +564,7 @@ in
   )
 endlet
 
-process EditorPopup(Sid : term, EditorType: term, FocusSort: term) is
+process EditorPopup(Sid : session-id, EditorType: term, FocusSort: term) is
 let
   MenuList : list
 in

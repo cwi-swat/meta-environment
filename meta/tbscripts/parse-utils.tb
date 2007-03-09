@@ -20,7 +20,7 @@ process ReportAmbs(Tree: term, File: str, Summary: summary?) is
   . rec-msg(ar-ambiguity-report(Summary?, File))
   . JobDone("Computing ambiguity report")
 
-process HasTextChanged(Sid: term, TextChanged: bool?) is
+process HasTextChanged(Sid: session-id, TextChanged: bool?) is
   snd-msg(te-is-modified(Sid))
   . rec-msg(te-is-modified(Sid, TextChanged?))
 
@@ -61,7 +61,7 @@ endlet
 process RemoveAmbiguitySummary(Path: str) is
   RemoveSummary("ambtracker", Path)
 
-process ParseTreeHandler(ModuleId: term, Path: str) is
+process ParseTreeHandler(ModuleId: module-id, Path: str) is
 let
   ErrorMessage: term,
   ParseError: term,
@@ -91,7 +91,7 @@ process UnParseTerm(Tree: term, Text: str?) is
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
 
-process ParseErrorToSummary(ParseError:term, Sid: term, Summary:summary?) is
+process ParseErrorToSummary(ParseError:term, Sid: session-id, Summary:summary?) is
 let 
   Path : str
 in
@@ -106,7 +106,7 @@ in
   )
 endlet
 
-process RestoreTermBrackets(ModuleId: term, Tree: term, Result: term?) is
+process RestoreTermBrackets(ModuleId: module-id, Tree: term, Result: term?) is
 let
   Table: term
 in
@@ -120,7 +120,7 @@ in
   fi
 endlet
 
-process AddTermBrackets(ModuleId: term, Tree: term, Result: term?) is
+process AddTermBrackets(ModuleId: module-id, Tree: term, Result: term?) is
 let
   Table: term
 in

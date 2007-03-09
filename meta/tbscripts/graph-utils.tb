@@ -6,7 +6,7 @@
 #include <graph-converter.idef>
 #include <graph-painter.idef>
 
-process GraphCleanup(GraphType: str, GraphId: term, Sid: term) is
+process GraphCleanup(GraphType: str, GraphId: term, Sid: session-id) is
   GP-AddCloseListener(GraphType, GraphId)
   . rec-note(gp-panel-closed(GraphType, GraphId)) 
   . snd-msg(em-delete-session(Sid)) 
@@ -14,7 +14,7 @@ process GraphCleanup(GraphType: str, GraphId: term, Sid: term) is
 process RenderGraph(GraphType: str, GraphId: term, Shared: bool, 
                    Closable: bool, Graph: term?) is
 let
-  Sid: term,
+  Sid: session-id,
   PanelId: term,
   Id: int
 in

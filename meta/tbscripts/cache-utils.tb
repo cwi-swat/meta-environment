@@ -11,10 +11,10 @@ process ClearCacheHandler(TableName: str,
                           NewValue: term) is
 let
   AttributeEvent: attribute-changed-event,
-  ModuleId: term,
+  ModuleId: module-id,
   Value: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,Namespace,AttributeName,OldValue,NewValue)
+  MM-Subscribe-Attribute-Changed(<module-id>,Namespace,AttributeName,OldValue,NewValue)
   .
   (
     rec-note(mm-attribute-changed(AttributeEvent?))

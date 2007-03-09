@@ -5,10 +5,10 @@
 
 #include <assert.tb>
 
-process DCE-MakeEvent(ModuleId: term, Event: dependencies-changed-event?) is
+process DCE-MakeEvent(ModuleId: module-id, Event: dependencies-changed-event?) is
   Event := quote(dependencies-changed-event(ModuleId))
 
-process DCE-GetModuleId(Event: dependencies-changed-event, ModuleId: term?) is
+process DCE-GetModuleId(Event: dependencies-changed-event, ModuleId: module-id?) is
   ModuleId := first(args(Event)) 
 
 #endif /*__DEPENDENCIES_CHANGED_EVENT__*/

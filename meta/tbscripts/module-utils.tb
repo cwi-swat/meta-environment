@@ -5,7 +5,7 @@
 
 #define EMPTY_PATH ""
 
-process GetModulePath(ModuleId: term, Namespace: term, Path: str?) is
+process GetModulePath(ModuleId: module-id, Namespace: term, Path: str?) is
 let
   Term: path,
   HasAttribute: bool
@@ -20,7 +20,7 @@ in
   fi
 endlet
 
-process SetModulePath(ModuleId: term, Namespace: term, Path: str) is
+process SetModulePath(ModuleId: module-id, Namespace: term, Path: str) is
 let
   Term: path
 in

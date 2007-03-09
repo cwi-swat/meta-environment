@@ -5,10 +5,10 @@
 
 #include <assert.tb>
 
-process ACE-MakeEvent(ModuleId: term, Namespace: term, Key: term, OldValue: term, NewValue: term, Event: attribute-changed-event?) is
+process ACE-MakeEvent(ModuleId: module-id, Namespace: term, Key: term, OldValue: term, NewValue: term, Event: attribute-changed-event?) is
   Event := quote(attribute-changed-event(ModuleId, Namespace, Key, OldValue, NewValue))
 
-process ACE-GetModuleId(Event: attribute-changed-event, ModuleId: term?) is
+process ACE-GetModuleId(Event: attribute-changed-event, ModuleId: module-id?) is
   ModuleId := first(args(Event)) 
 
 process ACE-GetNamespace(Event: attribute-changed-event, Namespace: term?) is
@@ -31,7 +31,7 @@ process ACE-UnitTest is
 let
   ACE: attribute-changed-event,
   Key: term,
-  ModuleId: term,
+  ModuleId: module-id,
   Namespace: term,
   NewValue: term,
   OldValue: term
