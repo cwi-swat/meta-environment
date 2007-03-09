@@ -11,7 +11,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Out of the box experience: Formatting and prettyprinting with
+    <title>An Out of the Box Experience: Formatting and Prettyprinting with
     Pandora</title>
 
     <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
@@ -33,15 +33,14 @@
   </info>
 
   <warning>
-    <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link>
-    section.</para>
+    <para>This document is work in progress. See <link
+    linkend="ToDo">ToDo</link> section.</para>
   </warning>
 
   <section xml:id="Introduction">
-    <title>An introduction to Formatting </title>
+    <title>An introduction to Formatting</title>
 
-    <para>If you want to present your</para>
+    <para>If you want to have a uniform style to present your</para>
 
     <itemizedlist>
       <listitem>
@@ -50,7 +49,7 @@
       </listitem>
 
       <listitem>
-        <para>source code in programs in domain-specific languages, or</para>
+        <para>source code of programs in domain-specific languages, or</para>
       </listitem>
 
       <listitem>
@@ -59,11 +58,12 @@
       </listitem>
     </itemizedlist>
 
-    <para>in a uniform style then you need a <firstterm>formatter</firstterm>
-    (also known as <firstterm>pretty printer</firstterm> or
-    <firstterm>unparser</firstterm>). In that case <emphasis
-    role="bold">Box</emphasis> and <emphasis role="bold">Pandora</emphasis>
-    may be the right technology for you.</para>
+    <para>then you need a <firstterm>formatter</firstterm> (also known as
+    <firstterm>pretty printer</firstterm> or <firstterm>unparser</firstterm>)
+    that takes the original source text and applies uniform formatting rules
+    to it. In that case <emphasis role="bold">Box</emphasis> and <emphasis
+    role="bold">Pandora</emphasis> may be the right technologies for
+    you.</para>
 
     <section>
       <title xml:id="YetAnotherFormalism">Why Formatting?</title>
@@ -82,15 +82,15 @@
       <para>Box is a language-independent intermediate language for describing
       various formatting aspects of source text like horizontal or vertical
       positioning of text fragments and their indentation, font, and color.
-      Box can be easily converted to various textual formats like ASCII, HTML,
-      LaTex and others. </para>
+      Box can easily be converted to various textual formats like ASCII, HTML,
+      PDF, LaTex and others.</para>
 
       <para>Pandora is a system that bridges the gap between source text and
       its representation in Box. Given the grammar of a programming language
       it can fully automatically produce a formatter for that language using
       default rules. This default formatter can be adapted to specific
       formatting requirements by giving user-defined formatting rules that
-      describe those requirements.</para>
+      describe those requirements and overrule the default behaviour.</para>
     </section>
 
     <section>
@@ -101,7 +101,8 @@
       <itemizedlist>
         <listitem>
           <para>By far the simplest way is to use the ASF+SDF Meta-Environment
-          which provides a default formatter for every grammar.</para>
+          which provides a default formatter for every grammar. This default
+          formatter may, however, not satisfy your requirements.</para>
         </listitem>
 
         <listitem>
@@ -111,7 +112,8 @@
           <replaceable>L</replaceable><filename>/syntax </filename>while the
           formatting rules are placed in
           <replaceable>L</replaceable><filename>/format</filename>. Those
-          rules are activated automatically.</para>
+          rules are activated automatically whenever an
+          <replaceable>L</replaceable> source text is formatted.</para>
         </listitem>
 
         <listitem>
@@ -140,113 +142,564 @@
   <section>
     <title>The Box Language</title>
 
-    <para></para>
+    <section>
+      <title>Box Expressions</title>
 
-    <table>
-      <title>Box operators</title>
+      <para>The general format of a Box expression is either a literal
+      string:</para>
 
-      <tgroup cols="3">
-        <colspec align="center" />
+      <programlisting>"some text"</programlisting>
 
-        <tbody>
-          <row>
-            <entry><emphasis role="bold">Operator</emphasis></entry>
+      <para>or a composite expression of the form:</para>
 
-            <entry><emphasis role="bold">Options</emphasis></entry>
+      <programlisting>BoxOperator SpaceOptions [ Box1 Box2 ... ]</programlisting>
 
-            <entry><emphasis role="bold">Description</emphasis></entry>
-          </row>
+      <para>Here BoxOperator is one of the operators listed in the Table <link
+      linkend="Table-BoxOperators">Box Operators</link>. This operator
+      controls the formatting of the boxes Box1, Box2, ... The SpaceOptions
+      are one of the options listed in the Table <link
+      linkend="Table-SpacingAndAlignmnentOptions">Spacing and Alignment
+      Options</link> below and control the amount of horizontal, vertical, or
+      indentation space between the boxes. Some operators may have additional
+      options. Box operators never loose operands or change the order of
+      appearance of their operands on a page read left-to-right and
+      top-to-bottom.</para>
 
-          <row>
-            <entry>H</entry>
+      <table xml:id="Table-BoxOperators">
+        <title>Box Operators</title>
 
-            <entry>hs</entry>
+        <tgroup cols="3">
+          <colspec align="center" />
 
-            <entry>Horizontal formatting of sub-boxes</entry>
-          </row>
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Operator</emphasis></entry>
 
-          <row>
-            <entry>V</entry>
+              <entry><emphasis role="bold">Options</emphasis></entry>
 
-            <entry>vs, is</entry>
+              <entry><emphasis role="bold">Description</emphasis></entry>
+            </row>
 
-            <entry>Vertical formatting of sub-boxes</entry>
-          </row>
+            <row>
+              <entry><literal>H</literal></entry>
 
-          <row>
-            <entry>HV</entry>
+              <entry><literal>hs</literal></entry>
 
-            <entry>hs, vs, is</entry>
+              <entry>Horizontal formatting of sub-boxes</entry>
+            </row>
 
-            <entry>Horizontal and vertical formatting of sub-boxes</entry>
-          </row>
+            <row>
+              <entry><literal>V</literal></entry>
 
-          <row>
-            <entry>HOV</entry>
+              <entry><literal>vs</literal></entry>
 
-            <entry>hs, vs</entry>
+              <entry>Vertical formatting of sub-boxes</entry>
+            </row>
 
-            <entry>Formatting of sub-boxes in a table</entry>
-          </row>
+            <row>
+              <entry><literal>HV</literal></entry>
 
-          <row>
-            <entry>I</entry>
+              <entry><literal>hs</literal>, <literal>vs</literal></entry>
 
-            <entry></entry>
+              <entry>Horizontal and vertical formatting of sub-boxes</entry>
+            </row>
 
-            <entry></entry>
-          </row>
+            <row>
+              <entry><literal>HOV</literal></entry>
 
-          <row>
-            <entry>WD</entry>
+              <entry><literal>hs</literal>, <literal>vs</literal></entry>
 
-            <entry></entry>
+              <entry>Horizontal or vertical formatting of sub-boxes</entry>
+            </row>
 
-            <entry></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+            <row>
+              <entry><literal>I</literal></entry>
 
-    <table>
-      <title>Spacing Options</title>
+              <entry><literal>is</literal></entry>
 
-      <tgroup cols="2">
-        <colspec align="center" />
+              <entry>Indented box</entry>
+            </row>
 
-        <tbody>
-          <row>
-            <entry><emphasis role="bold">Operator</emphasis></entry>
+            <row>
+              <entry><literal>WD</literal></entry>
 
-            <entry><emphasis role="bold">Description</emphasis></entry>
-          </row>
+              <entry>-</entry>
 
-          <row>
-            <entry>hs</entry>
+              <entry>Horizontal width</entry>
+            </row>
 
-            <entry>Horizontal spacing</entry>
-          </row>
+            <row>
+              <entry><literal>O</literal></entry>
 
-          <row>
-            <entry>vs</entry>
+              <entry>-</entry>
 
-            <entry>vertical spacing</entry>
-          </row>
+              <entry>Fraction-like vertical formatting</entry>
+            </row>
 
-          <row>
-            <entry>is</entry>
+            <row>
+              <entry><literal>COMM</literal></entry>
 
-            <entry>Indentation spacing</entry>
-          </row>
+              <entry>-</entry>
 
-          <row>
-            <entry>ts</entry>
+              <entry>Comment</entry>
+            </row>
 
-            <entry>Tabstop spacing</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+            <row>
+              <entry><literal>A</literal></entry>
+
+              <entry><literal>l</literal>, <literal>c</literal>,
+              <literal>r</literal>, <literal>hs</literal>,
+              <literal>vs</literal>, <literal>is</literal></entry>
+
+              <entry>Alignment of rows in a table</entry>
+            </row>
+
+            <row>
+              <entry><literal>R</literal></entry>
+
+              <entry><literal>l</literal>, <literal>c</literal>,
+              <literal>r</literal>, <literal>hs</literal>,
+              <literal>vs</literal>, <literal>is</literal></entry>
+
+              <entry>Row in a table</entry>
+            </row>
+
+            <row>
+              <entry><literal>G</literal></entry>
+
+              <entry><literal>gs</literal>, <literal>op</literal></entry>
+
+              <entry>Grouping</entry>
+            </row>
+
+            <row>
+              <entry><literal>SL</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Separated list</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table xml:id="Table-SpacingAndAlignmnentOptions">
+        <title>Spacing and Alignment Options</title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Operator</emphasis></entry>
+
+              <entry><emphasis role="bold">Description</emphasis></entry>
+            </row>
+
+            <row>
+              <entry><literal>hs</literal></entry>
+
+              <entry>Horizontal spacing</entry>
+            </row>
+
+            <row>
+              <entry><literal>vs</literal></entry>
+
+              <entry>Vertical spacing</entry>
+            </row>
+
+            <row>
+              <entry><literal>is</literal></entry>
+
+              <entry>Indentation spacing</entry>
+            </row>
+
+            <row>
+              <entry><literal>ts</literal></entry>
+
+              <entry>Tabstop spacing</entry>
+            </row>
+
+            <row>
+              <entry><literal>gs</literal></entry>
+
+              <entry>Group spacing</entry>
+            </row>
+
+            <row>
+              <entry><literal>l</literal></entry>
+
+              <entry>Left-aligned</entry>
+            </row>
+
+            <row>
+              <entry><literal>c</literal></entry>
+
+              <entry>Center-aligned</entry>
+            </row>
+
+            <row>
+              <entry><literal>r</literal></entry>
+
+              <entry>Right-aligned</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Box Operators and Spacing Options</title>
+
+      <section>
+        <title>H Box</title>
+
+        <para>The <literal>H</literal> box operator places sub-boxes
+        horizontally as shown in Figure <link linkend="Fig_hbox">Horizontal
+        Box Operator (H)</link>. Optionally, an horizontal spacing option
+        (<literal>hs</literal>) can be given to indicate the desired
+        separation between the sub-boxes.</para>
+
+        <figure xml:id="Fig_hbox">
+          <title>Horizontal Box Operator (H)</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="hbox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>V Box</title>
+
+        <para>The <literal>V</literal> box operator places sub-boxes
+        vertically as shown in Figure <link linkend="Fig_vbox">Vertical Box
+        Operator (V)</link>. Optionally, a vertical spacing option
+        (<literal>vs</literal>) can be given to indicate the desired vertical
+        separation between the sub-boxes.</para>
+
+        <figure xml:id="Fig_vbox">
+          <title>Vertical Box Operator (V)</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="vbox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>HV Box</title>
+
+        <para>The <literal>HV</literal> box operator places as much of its
+        sub-boxes horizontally as possible as shown in Figure <link
+        linkend="Fig_hvbox">Horizontal/Vertical Box Operator (HV)</link>.
+        Optionally, a horizontal (<literal>hs</literal>) or vertical
+        (<literal>vs</literal>) spacing option can be given.</para>
+
+        <figure xml:id="Fig_hvbox">
+          <title>Horizontal/Vertical Box Operator (HV)</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="hvbox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>HOV Box</title>
+
+        <para>The <literal>HOV</literal> box operator places its sub-boxes
+        either horizontally or vertically, depending on available horizontal
+        space. This is shown in Figure <link linkend="Fig_hovbox">Horizontal
+        or Vertical Box Operator (HOV)</link>. Optionally, a horizontal
+        (<literal>hs</literal>) or vertical (<literal>vs</literal>) spacing
+        option can be given.</para>
+
+        <figure xml:id="Fig_hovbox">
+          <title>Horizontal or Vertical Box Operator (HOV)</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="hovbox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>I Box</title>
+
+        <para>The <literal>I</literal> box operator indents its single sub-box
+        horizontally. The effect is best illustrated in combination with a
+        vertical box operator as shown in Figure <link
+        linkend="Fig_ibox">Indentation Box Operator (I)</link>. Optionally, an
+        indentation (<literal>is</literal>) spacing option can be
+        given.</para>
+
+        <figure xml:id="Fig_ibox">
+          <title>Indentation Box Operator (I)</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="ibox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>WD Box</title>
+
+        <para>The <literal>I</literal> box operator defines a static amount of
+        indentation. In some cases it is desirable to determine the
+        indentation dynamically based on the horizontal dimensions of a given,
+        already formatted, box. This can be achieved with the
+        <literal>WD</literal> box operator that creates a box with the width
+        of its single sub-box. The effect is shown in an example in Figure
+        <link linkend="Fig_wdbox">Width Box Operator (WD)</link>.</para>
+
+        <figure xml:id="Fig_wdbox">
+          <title>Width Box Operator (WD)</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="wdbox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>O Box</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>COMM Box</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>A and R Box</title>
+
+        <para>An <literal>A</literal> box operator declares an alignment
+        environment in which <literal>R</literal> boxes are aligned in columns
+        as shown in Figure <link linkend="Fig_arbox">Alignment (A) and Row (R)
+        Box Operators</link>.</para>
+
+        <figure xml:id="Fig_arbox">
+          <title>Alignment (A) and Row (R) Box Operators</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="arbox.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>G Box</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>SL Box</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Fonts</title>
+
+      <para>The font operators determine the font to be used for the text in
+      their sub-boxes. The general font operator <literal>F</literal> allows
+      fully general font selection. The operators <literal>KW</literal>,
+      <literal>VAR</literal>, <literal>NUM</literal>, <literal>MATH</literal>,
+      <literal>ESC</literal>, <literal>COMM</literal>, and
+      <literal>STRING</literal> define fonts for some common cases as found in
+      programming languages.</para>
+
+      <table>
+        <title>Font Operators</title>
+
+        <tgroup cols="3">
+          <colspec align="center" />
+
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Font Operators</emphasis></entry>
+
+              <entry><emphasis role="bold">Font Parameters</emphasis></entry>
+
+              <entry><emphasis role="bold">Description</emphasis></entry>
+            </row>
+
+            <row>
+              <entry><literal>F</literal></entry>
+
+              <entry><literal>fn</literal>, <literal>fm</literal>,
+              <literal>se</literal>, <literal>sh</literal>,
+              <literal>sz</literal>, <literal>cl</literal></entry>
+
+              <entry>General Font operator</entry>
+            </row>
+
+            <row>
+              <entry><literal>KW</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Keyword Font</entry>
+            </row>
+
+            <row>
+              <entry><literal>VAR</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Variables Font</entry>
+            </row>
+
+            <row>
+              <entry><literal>NUM</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Numbers Font</entry>
+            </row>
+
+            <row>
+              <entry><literal>MATH</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Mathematics Font</entry>
+            </row>
+
+            <row>
+              <entry><literal>ESC</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Escape Font</entry>
+            </row>
+
+            <row>
+              <entry><literal>COMM</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>Comment Font</entry>
+            </row>
+
+            <row>
+              <entry><literal>STRING</literal></entry>
+
+              <entry>-</entry>
+
+              <entry>String Font</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Font Parameters</title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Font Parameter</emphasis></entry>
+
+              <entry><emphasis role="bold">Description</emphasis></entry>
+            </row>
+
+            <row>
+              <entry><literal>fn</literal></entry>
+
+              <entry>Font name</entry>
+            </row>
+
+            <row>
+              <entry><literal>fm</literal></entry>
+
+              <entry>Font family</entry>
+            </row>
+
+            <row>
+              <entry><literal>se</literal></entry>
+
+              <entry>Font series</entry>
+            </row>
+
+            <row>
+              <entry><literal>sh</literal></entry>
+
+              <entry>Font shape</entry>
+            </row>
+
+            <row>
+              <entry><literal>sz</literal></entry>
+
+              <entry>Font size</entry>
+            </row>
+
+            <row>
+              <entry><literal>cl</literal></entry>
+
+              <entry>Font color</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Cross references</title>
+
+      <para></para>
+
+      <table>
+        <title></title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <tbody>
+            <row>
+              <entry>LBL</entry>
+
+              <entry>Associate a label with a box</entry>
+            </row>
+
+            <row>
+              <entry>REF</entry>
+
+              <entry>Refer to a labelled box</entry>
+            </row>
+
+            <row>
+              <entry>CNT</entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
   </section>
 
   <section>
