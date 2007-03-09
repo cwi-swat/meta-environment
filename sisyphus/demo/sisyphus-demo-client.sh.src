@@ -7,7 +7,7 @@ SICLI=$BINDIR/si-cli
 CONFIG_SVN=file://$DATADIR/demo/config-repo/demo
 DB_CONFIG=$DATADIR/demo/dbconfig.yml
 
-$SICLI \
+exec $SICLI \
     --root relational-aterms \
     --profile demo \
     --interval 3600 \
@@ -20,5 +20,5 @@ $SICLI \
     --before 23:59 \
     --config ${CONFIG_SVN} \
     --dbconf ${DB_CONFIG} \
-    --quiet \
+    --no-quiet \
     --verbose

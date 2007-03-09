@@ -2,7 +2,7 @@
 require 'changes'
 
 class Scenarios
-  PKGS = ['aterm', 'balanced-binary-aterms', 'relational-aterms']
+  PKGS = ['aterm', 'balanced-binary-aterms', 'dummy', 'relational-aterms']
   BUILD_ENV = ['meta-autotools', 'meta-build-env']
   ALL_PKGS = PKGS + BUILD_ENV
 
@@ -59,9 +59,9 @@ class Scenarios
   def backtracking_scenario
     # Only with available earlier builds
     # e.g. after a clean slate run
-    ch1 = HarmlessChange.new(top)
-    ch2 = BreakingChange.new(middle)
-    return Transaction.new([ch1, ch2])
+    #ch1 = HarmlessChange.new(middle)
+    ch2 = BreakingChange.new(bottom)
+    return Transaction.new([ch2])
   end
 
   def breaking_change_transaction(pkg)

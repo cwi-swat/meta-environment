@@ -30,9 +30,21 @@ class Transaction
       change.apply
     end
     files.each do |file|
+      puts("svn commit -m \"Changes applied\" #{file}")
       system("svn commit -m \"Changes applied\" #{file}")
     end
   end 
+
+  def rollback
+    files = @changes.reverse.collect do |change|
+      change.undo
+    end
+    files.each do |file|
+      puts("svn commit -m \"Changes undone\" #{file}")
+      system("svn commit -m \"Changes undone\" #{file}")
+    end
+  end
+
 end
 
 
@@ -62,36 +74,44 @@ class Change
     return file2
   end  
 
+
+end
+
+class BreakingChange < Change
+  FILE = 'Makefile.am'
+
+  def apply
+    file = File.join(path, FILE)
+    system("sed --in-place -e 's/ /<*>/g' #{file}")
+    return file
+  end
+
+
+  def undo
+    file = File.join(path, FILE)
+    system("sed --in-place -e 's/<\\*>/ /g' #{file}")
+    return file
+  end
+end
+
+
+
+class HarmlessChange < Change
+  FILE = 'reconf'
+
   def append_new_line(file)
     file = File.join(path, file)
     system("echo >> #{file}")
     return file
   end
 
-end
-
-class BreakingChange < Change
-  FILE1 = 'configure.ac'
-  FILE2 = 'configure.ac-moved'
-
   def apply
-    return move_file(FILE1, FILE2)
-  end
-
-  def undo
-    return move_file(FILE2, FILE1)
-  end
-end
-
-class HarmlessChange < Change
-  def apply
-    file = 'reconf'
-    return append_new_line(file)
+    return append_new_line(FILE)
   end
 
   def undo
     # nop
-    return nil
+    return File.join(path, FILE)
   end
   
 end

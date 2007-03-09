@@ -20,7 +20,7 @@ for dir in ${GEM_DIRS}; do
     INCLUDE_FLAGS="${INCLUDE_FLAGS} -I ${dir}/lib";
 done
 
-${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -I ${DATA_DIR} -I ${DATA_DIR}/demo ${CONSOLE} \
+exec ${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -I ${DATA_DIR} -I ${DATA_DIR}/demo ${CONSOLE} \
     -c ${CONFIG_REPO} \
     -s ${SOURCE_REPO} \
     -d ${DB_CONFIG} \
