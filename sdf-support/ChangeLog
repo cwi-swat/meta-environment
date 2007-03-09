@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar  9 19:14:56 CET 2007 <jurgenv@cwi.nl>
+ * regenerated with more brackets around macro arguments, and less debugging
+   stuff.
+
 Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
  * **: regenerated all API's in this package with a new version of 
    ApiGen that generates more efficient code for the is-alternative 
