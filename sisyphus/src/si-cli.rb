@@ -84,10 +84,17 @@ module Sisyphus
       @store.db_host(@host)  
     end
 
+    def iso_time(time)
+      #2007-03-09T15:51:07+0100
+      time.strftime("%Y-%m-%dT%H:%M:%S")
+    end
+
     def deprecated_ensure_log(time)
       if @quiet then
         hostname = `hostname`.chomp
-        timestr = time.strftime("%Y%m%dT%H%M")
+
+
+        timestr = iso_time(time)
         @log_device = File.join(Dir.tmpdir, "sisyphus_log_on_#{hostname}_#{timestr}")
         $stderr << "Logging to #{@log_device}\n"
       end

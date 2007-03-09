@@ -94,8 +94,14 @@ module Versioning
       raise RuntimeError.new("unsupported SVN protocol: #{@protocol}")
     end
 
+    def iso_time(time)
+      #2007-03-09T15:51:07+0100
+      time.strftime("%Y-%m-%dT%H:%M:%S")
+    end
+
     def svn_time(time)
-      t = time.strftime("%Y%m%dT%H%M")
+      #t = time.strftime("%Y%m%dT%H%M%S")
+      t = iso_time(time)
       return t
     end
 

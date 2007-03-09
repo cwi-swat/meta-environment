@@ -110,9 +110,10 @@ module Building
         target.fire
       else
         @log.info("dependencies in this session have failed, trying older ones...")
-        older_item = Model::SiItem.find(:first, :conditions => ["id < ? and success = 'true' and si_revision_id = ? and si_host_id = ?",
-                                                                item.id, item.si_revision.id, item.si_host.id],
-                                        :order => 'id desc')
+        puts "current id: #{item.id}"
+        puts "current revision: #{item.si_revision.version}"
+        older_item = Model::SiItem.find(:first, :conditions => ["id < ? and success = 't' and si_revision_id = ? and si_host_id = ?", item.id, item.si_revision.id, item.si_host.id], :order => 'id desc')
+
         if older_item then
           if compatible?(older_item.dep_items, item.dep_items) then
             @log.info("found older build with compatible dependencies #{older_item.dep_items.join(', ')}")
@@ -127,11 +128,15 @@ module Building
               #target.obtain_new_item(@store, older_item.dep_items)
               target.fire
               return
+            else
+              @log.warn("But not all prefixes are still there...")
             end
-            @log.warn("But not all prefixes are still there...")
+          else
+            @log.warn("no suitable dependencies were found; no build performed.")
           end
+        else
+          @log.warn("no earlier build of the same revision exists.")
         end
-        @log.warn("no suitable dependencies were found; no build performed.")
         target.not_tried
       end
     end

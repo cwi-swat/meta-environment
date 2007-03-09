@@ -71,8 +71,13 @@ module Building
       end
     end
     
+    def iso_time(time)
+      #2007-03-09T15:51:07+0100
+      time.strftime("%Y-%m-%dT%H:%M:%S")
+    end
+
     def svn_time(time)
-      return time.strftime("%Y%m%dT%H%M")
+      return iso_time(time)
     end
     
     def svn_url
