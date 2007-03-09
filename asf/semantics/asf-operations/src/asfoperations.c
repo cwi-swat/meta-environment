@@ -195,12 +195,12 @@ int main(int argc, char *argv[])
 	result = normalize(mod);
       }
       else {
-	result = ASF_liftModule(mod);
+	result = ASF_liftModule(mod, NULL);
       }
 
       start = (ASF_Start) PT_setParseTreeTree((PT_ParseTree) start, (PT_Tree) result);
       output = ASF_StartToTerm(start);
-      ATwriteToNamedBinaryFile(output, outputFile);
+      ATwriteToNamedSharedTextFile(output, outputFile);
     }
     else {
       ATerror("could not read input file\n");

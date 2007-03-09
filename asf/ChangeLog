@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar  9 19:17:37 CET 2007 <jurgenv@cwi.nl>
+ * semantics/**: made sure to use new lift/lower combo for speeding up
+   normalization.
+
 Thu Mar  8 19:09:31 CET 2007 <jurgenv@cwi.nl>
  * semantics/utils/lift-asf.c: added -t option for output of shared
    text instead of shared binary.

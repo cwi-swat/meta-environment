@@ -85,10 +85,10 @@ int main (int argc, char **argv)
     ASF_ASFModule module = ASF_ASFModuleFromTerm((ATerm) PT_getParseTreeTree((PT_ParseTree) in));
 
     if (lower) {
-      module = ASF_lowerModule(module);
+      module = ASF_lowerModule(module, NULL);
     }
     else {
-      module = ASF_liftModule(module);
+      module = ASF_liftModule(module, NULL);
     }
 
     out = (ATerm) PT_setParseTreeTree((PT_ParseTree) in, (PT_Tree) module);
@@ -97,10 +97,10 @@ int main (int argc, char **argv)
     ASF_ASFConditionalEquationList list = ASF_ASFConditionalEquationListFromTerm(in);
 
     if (lower) {
-      list = ASF_lowerEquations(list);
+      list = ASF_lowerEquations(list, NULL);
     }
     else {
-      list = ASF_liftEquations(list);
+      list = ASF_liftEquations(list, NULL);
     }
 
     out = ASF_ASFConditionalEquationListToTerm(list);
