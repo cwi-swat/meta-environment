@@ -18,7 +18,7 @@ noinst_HEADERS 	= \
 asfoperations_CPPFLAGS = $(ASC_SUPPORT_CFLAGS)
 asfoperations_LDADD = \
      -L${top_builddir}/semantics/asf-operations/src -lasfnormalization \
-     $(ASC_SUPPORT_LIBS) -L/opt/perftools/lib -lprofiler
+     $(ASC_SUPPORT_LIBS) 
 asfoperations_SOURCES = \
 	asfoperations.c \
 	asfoperations.tif.c \
