@@ -1,5 +1,8 @@
 # $Id$
 
+Sun Mar 11 17:52:23 CET 2007 <jurgenv@cwi.nl>
+ * meta.pc.in: added dependency on svg-gui package
+
 Mon Feb 26 20:39:27 CET 2007 <jurgenv@cwi.nl>
  * tbscripts/*.tb: changed more complicated error handling to simple
    printf("error: ...\n"), and printf("warning: ...") coding convention.
