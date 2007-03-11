@@ -1,6 +1,6 @@
 // Java tool bridge ModuledetailsBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:59:03 AM
+// generation time: Mar 11, 2007 3:34:17 PM
 
 package nl.cwi.sen1.gui.plugin;
 

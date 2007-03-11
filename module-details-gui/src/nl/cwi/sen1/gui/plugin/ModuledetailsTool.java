@@ -1,12 +1,12 @@
 // Java tool interface class ModuledetailsTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:59:03 AM
+// generation time: Mar 11, 2007 3:34:17 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import toolbus.SwingTool;
 
@@ -20,7 +20,7 @@ abstract public class ModuledetailsTool
   implements ModuledetailsTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
   private ATerm PsetDetails0;
@@ -37,9 +37,8 @@ abstract public class ModuledetailsTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<moduledetails>,set-details(<term>))"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<moduledetails>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-do(<moduledetails>,set-details(<list>))"));
+    sigTable.add(factory.parse("rec-terminate(<moduledetails>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
@@ -52,7 +51,7 @@ abstract public class ModuledetailsTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PsetDetails0);
     if (result != null) {
@@ -75,7 +74,7 @@ abstract public class ModuledetailsTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }
