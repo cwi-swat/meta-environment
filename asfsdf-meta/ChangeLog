@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Sun Mar 11 19:10:34 CET 2007 <jurgenv@cwi.nl>
+ * tbscripts/asf-actions.tb: added implementation of draw action, which
+   uses the svg-gui to draw anything that is reduced to an SVG xml file.
+
 Fri Feb 23 08:32:47 CET 2007 <jurgenv@cwi.nl>
  * tbscripts/asf-actions.tb: added implementation of extract action, which
    sends a note after every successfull or failed extraction of an RStore.

@@ -51,6 +51,7 @@ toolbus(LanguageFeatureMenuListener("run", "RunAction","Reduce this term"))
 toolbus(LanguageFeatureMenuListener("debug", "DebugAction","Debug this term"))
 toolbus(LanguageFeatureMenuListener("check", "CheckAction","Check this term"))
 toolbus(LanguageFeatureMenuListener("extract", "ExtractAction","Extract data from this term"))
+toolbus(LanguageFeatureMenuListener("draw", "DrawAction","Display using Scalable Vestor Graphics"))
 toolbus(LanguageFeatureMenuListener("test", "TestAction","Run unit tests"))
 
 process LanguageFeatureRemoveListener(ModuleId: module-id, Property: term) is

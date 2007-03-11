@@ -166,6 +166,43 @@ in
   fi
 endlet
 
+process DrawAction(EditorId : session-id) is
+let
+  ModuleId : module-id,
+  DrawModuleId : module-id,
+  Path: str,
+  ResultTree: term,
+  Pid: int,
+  Language: str,
+  ModuleName: str,
+  CWD: str,
+  File: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . LookupFeatureModuleId(ModuleId, "draw", DrawModuleId?)
+  .
+  if not-equal(DrawModuleId, UNDEFINED) then
+    GetPath(EditorId, Path?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", ModuleName?)
+    . ComputeCanonicalLanguagename(ModuleName, Language?)
+    . AddJob("Translating to SVG")
+    . Reduce(DrawModuleId, Path, off, ResultTree?)
+    . 
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(io-relative-to-absolute([library-path("CWD",".")]))
+      . rec-msg(io-absolute-directories([library-path("CWD",CWD?)]))
+      . WriteTreeToFile(ResultTree, "./result.svg")
+      . File := concat(CWD, "/result.svg")
+      . snd-msg(svg-display(Path, File))
+    else
+      printf("error: could not generate SVG picture")
+    fi
+    . JobDone("Translating to SVG")
+  else
+    tau
+  fi
+endlet
+
 process TestAction(EditorId : session-id) is
 let
   ModuleId : module-id,

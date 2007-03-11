@@ -27,6 +27,7 @@ in
   . StartGraphPanel()
   . StartProgressPanel()
   . StartModuledetailsPanel()
+  . StartSVG()
   .
   if not-equal(MODULENAME, "") then
     snd-msg(tm-request-transaction(module-manager))
