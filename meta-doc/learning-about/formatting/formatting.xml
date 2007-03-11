@@ -11,8 +11,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>An Out of the Box Experience: Formatting and Prettyprinting with
-    Pandora</title>
+    <title>Formatting with Box and Pandora</title>
 
     <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
     +0100 (Sat, 16 Dec 2006) $</pubdate>
@@ -58,10 +57,9 @@
       </listitem>
     </itemizedlist>
 
-    <para>then you need a <firstterm>formatter</firstterm> (also known as
-    <firstterm>pretty printer</firstterm> or <firstterm>unparser</firstterm>)
-    that takes the original source text and applies uniform formatting rules
-    to it. In that case <emphasis role="bold">Box</emphasis> and <emphasis
+    <para>then you need a <firstterm>formatter</firstterm> that takes the
+    original source text and applies uniform formatting rules to it. In that
+    case <emphasis role="bold">Box</emphasis> and <emphasis
     role="bold">Pandora</emphasis> may be the right technologies for
     you.</para>
 
@@ -74,6 +72,35 @@
       developed in teams; it is then mandatory to adhere to a common coding
       and presentation style of the source code. Automatic formatting is a
       technology for achieving this uniformity.</para>
+    </section>
+
+    <section>
+      <title>What is the Global Picture?</title>
+
+      <para>Our global formatting architecture is shown in Figure <link
+      linkend="Fig_formatting-architecture">Formatting Architecture</link>. A
+      source code program ("Input term") is parsed and converted into a parse
+      tree. Next, the parse tree is converted into a box expression ("box
+      tree") and that box expression can finally be converted into various
+      output formats. The crucial step is from parse tree to box expression
+      where both default formatting rules and user-defined formatting rules
+      play a role.</para>
+
+      <figure xml:id="Fig_formatting-architecture">
+        <title>Formatting Architecture</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="formatting-architecture.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>This architecture also explains the two alternative names for
+      formatting: <firstterm>pretty printing</firstterm> (produce a new
+      version of the source text that is prettier than the original one\) and
+      <firstterm>unparsing</firstterm> (parsing converts from text to parse
+      tree, unparsing converts from parse tree to text).</para>
     </section>
 
     <section>
@@ -117,8 +144,8 @@
         </listitem>
 
         <listitem>
-          <para>At the command line .... <remark>Add links to relevant
-          documents.</remark></para>
+          <para>At the command line the command <command>pandora</command> can
+          be used to convert a parse tree to a box term.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -126,11 +153,19 @@
     <section>
       <title>Learning more</title>
 
-      <para>We will now describe ...</para>
+      <para>We will now describe:</para>
 
       <itemizedlist>
         <listitem>
-          <para></para>
+          <para><link linkend="TheBoxLanguage">The Box Language</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Pandora">Pandora</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Examples">Examples</link>.</para>
         </listitem>
       </itemizedlist>
 
@@ -139,7 +174,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="TheBoxLanguage">
     <title>The Box Language</title>
 
     <section>
@@ -229,14 +264,6 @@
             </row>
 
             <row>
-              <entry><literal>O</literal></entry>
-
-              <entry>-</entry>
-
-              <entry>Fraction-like vertical formatting</entry>
-            </row>
-
-            <row>
               <entry><literal>COMM</literal></entry>
 
               <entry>-</entry>
@@ -269,7 +296,7 @@
 
               <entry><literal>gs</literal>, <literal>op</literal></entry>
 
-              <entry>Grouping</entry>
+              <entry>Grouping of arbitrary list elements</entry>
             </row>
 
             <row>
@@ -277,7 +304,7 @@
 
               <entry>-</entry>
 
-              <entry>Separated list</entry>
+              <entry>Grouping of separated list</entry>
             </row>
           </tbody>
         </tgroup>
@@ -323,7 +350,7 @@
             <row>
               <entry><literal>gs</literal></entry>
 
-              <entry>Group spacing</entry>
+              <entry>Group size</entry>
             </row>
 
             <row>
@@ -476,15 +503,10 @@
       </section>
 
       <section>
-        <title>O Box</title>
-
-        <para></para>
-      </section>
-
-      <section>
         <title>COMM Box</title>
 
-        <para></para>
+        <para>The box operator <literal>COMM</literal> marks its sub-boxes as
+        comment. It has no other effect on formatting.</para>
       </section>
 
       <section>
@@ -509,13 +531,24 @@
       <section>
         <title>G Box</title>
 
-        <para></para>
+        <para>The box operator <literal>G</literal> operator wraps another
+        operator around every <replaceable>N</replaceable>th element of a list
+        of boxes:</para>
+
+        <programlisting>G gs=<replaceable>N</replaceable> op=OP [ Box1 Box2 ... ]</programlisting>
+
+        <para>This can be used for ...</para>
       </section>
 
       <section>
         <title>SL Box</title>
 
-        <para></para>
+        <para>The SL box operator is an abbreviation for</para>
+
+        <programlisting>G gs=<replaceable>4</replaceable> op=OP [ Box1 Box2 ... ]</programlisting>
+
+        <para>and is typically used for the formatting of separated
+        lists.</para>
       </section>
     </section>
 
@@ -528,9 +561,12 @@
       <literal>VAR</literal>, <literal>NUM</literal>, <literal>MATH</literal>,
       <literal>ESC</literal>, <literal>COMM</literal>, and
       <literal>STRING</literal> define fonts for some common cases as found in
-      programming languages.</para>
+      programming languages. These operators are summarized in the Table <link
+      linkend="Table-FontOperators">Font Operators</link>. Font parameters are
+      listed in Table<link linkend="Table-FontParameters"> Parameters of Font
+      Operator F</link>.</para>
 
-      <table>
+      <table xml:id="Table-FontOperators">
         <title>Font Operators</title>
 
         <tgroup cols="3">
@@ -614,8 +650,8 @@
         </tgroup>
       </table>
 
-      <table>
-        <title>Font Parameters</title>
+      <table xml:id="Table-FontParameters">
+        <title>Parameters of Font Operator F</title>
 
         <tgroup cols="2">
           <colspec align="center" />
@@ -673,7 +709,7 @@
       <para></para>
 
       <table>
-        <title></title>
+        <title>Cross-reference Operators (LBL and REF)</title>
 
         <tgroup cols="2">
           <colspec align="center" />
@@ -690,39 +726,151 @@
 
               <entry>Refer to a labelled box</entry>
             </row>
-
-            <row>
-              <entry>CNT</entry>
-
-              <entry></entry>
-            </row>
           </tbody>
         </tgroup>
       </table>
     </section>
   </section>
 
-  <section>
+  <section xml:id="Pandora">
     <title>Pandora</title>
 
-    <para></para>
+    <para>Recall our general architecture from Figure<link
+    linkend="Fig_formatting-architecture"> Formatting Architecture</link>. To
+    better understand the formatting process, consider the more detailed
+    architecture in Figure <link
+    linkend="Fig_Pandora-formatting-architecture">Pandora Formatting
+    Architecture</link>. </para>
+
+    <figure xml:id="Fig_Pandora-formatting-architecture">
+      <title>Pandora Formatting Architecture</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="pandora-architecture.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The conversion from parse tree to box tree is split in two
+    phases:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>First, user-defined formatting rules are applied to the parse
+        tree. The result is a hybrid box/parse tree that contains contains box
+        operator wherever user-defined formatting rules have been applied and
+        parse tree operators everywhere else. The transitions between the two
+        are marked with the guards <literal>from-box </literal>(embedding of a
+        box tree in a parse tree) and <literal>to-box</literal> (embedding of
+        a parse tree in a box tree). An example of such a hybrid tree is shown
+        in Figure <link linkend="Fig_hybrid-tree">A Hybrid Box/Parse
+        Tree</link>. The parse tree of a Cobol program contains a box tree
+        that in its turn contains a Cobol parse tree.</para>
+      </listitem>
+
+      <listitem>
+        <para>Next, the remaining parse tree parts in the hybrid tree are also
+        converted to box expressions according to default rules.</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure xml:id="Fig_hybrid-tree">
+      <title>A Hybrid Box/Parse Tree</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="hybrid-tree.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The use of hybrid box/parse trees is a unique feature of Pandora
+    that greatly enhances flexibility and generality of formatting.</para>
   </section>
 
-  <section>
+  <section xml:id="Examples">
     <title>Examples</title>
 
-    <para></para>
+    <remark>To be written</remark>
   </section>
 
   <section xml:id="HistoricalNotes">
     <title>Historical Notes</title>
 
-    <para></para>
+    <para>The main publications on the Box language and its predecessors are
+    (in historical order):</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J. Coutaz, The box, a layout abstraction for user interface
+        toolkits, Technical report CMU-CS-84-167, Carnegie Mellon University,
+        1984.</para>
+      </listitem>
+
+      <listitem>
+        <para>E. Morcos-Chounet and A. Conchon, PPML: a general formalism to
+        specify prettyprinting. In H.-J Kugler, editor, <emphasis>Information
+        Processing 86</emphasis>, 583-590, Elsevier, 1986.</para>
+      </listitem>
+
+      <listitem>
+        <para>K. Vos, Pretty for an easy touch of beaty, Master's thesis,
+        University of Amsterdam, 1990.</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand and E. Visser, Generation of formatters for
+        context-free languages, <emphasis>ACM Transactions on Software
+        Engineering Methodology</emphasis>, 5 (1): 1-41, 1996.</para>
+      </listitem>
+
+      <listitem>
+        <para>M. de Jonge, A pretty-printer for every occasion, in I.
+        Ferguson, J, Gray and L. Scott, editors, <emphasis>Proceedings of the
+        2nd International Symposium on Constructing Software Engineering
+        Tools</emphasis> (CoSET2000), 68-77, University of Wollongong,
+        Australia, June 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>M. de Jonge, Pretty-printing for software engineering. In
+        <emphasis>Proceedings International Conference on Software
+        Maintenance</emphasis> (ICSM 2002), 550-559, IEEE, October
+        2002.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The main publications on Pandora are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>M.G.J. van den Brand, A.T. Kooiker, J.J. Vinju and N.P. Veerman,
+        An architecture for context-sensitive formatting,
+        <emphasis>International Conference on Software Maintenance</emphasis>
+        (ICSM 2005), 631-634, 2005.</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, A.T. Kooiker, J.J. Vinju and N.P. Veerman,
+        A language independent framework for context-sentitive formatting,
+        <emphasis>Proceedings Conference on Software Maintenance and
+        Reengineering</emphasis> (CSMR06), 103-112, 2006.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section xml:id="ToDo">
     <title>To Do</title>
 
-    <para></para>
+    <itemizedlist>
+      <listitem>
+        <para>Examples section</para>
+      </listitem>
+
+      <listitem>
+        <para>Add links to Historical notes section</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
