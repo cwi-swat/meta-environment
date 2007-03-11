@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>svg-gui</name>
+	<comment></comment>
+	<projects>
+		<project>aterm-java</project>
+		<project>JJTraveler</project>
+		<project>meta-studio</project>
+		<project>shared-objects</project>
+		<project>toolbus-java-adapter</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>
