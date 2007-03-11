@@ -7,6 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/meta-studio"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/toolbus-java-adapter"/>
-	<classpathentry kind="lib" path="lib/batik-swing.jar" sourcepath="/home/jurgenv/glt/svn-roll/svg-gui/lib/xml-batik/sources"/>
+	<classpathentry kind="lib" path="lib/batik-all.jar" sourcepath="/home/jurgenv/glt/svn-roll/svg-gui/lib/xml-batik/sources"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

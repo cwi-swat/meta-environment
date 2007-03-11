@@ -9,14 +9,13 @@ process SVG is
 let
   T : svg,
   Title: str,
-  XML: str
+  File: str
 in
   rec-connect(T?)
-  . snd-do(T, display("Hallo",""))
   .
   (
-    rec-msg(svg-display(Title?,XML?))
-    . snd-do(T, display(Title,XML))
+    rec-msg(svg-display(Title?, File?))
+    . snd-do(T, display(Title, File))
   )
   * delta
 endlet

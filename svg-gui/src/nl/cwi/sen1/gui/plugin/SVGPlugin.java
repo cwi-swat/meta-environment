@@ -8,8 +8,10 @@ public class SVGPlugin extends DefaultStudioPlugin implements SvgTif {
 	private Studio studio;
 	private SvgBridge bridge;
 
-	public void display(String title, String svgXMLstring) {
-		((StudioImplWithPredefinedLayout) studio).addComponent(new SVGCanvas(title), StudioImplWithPredefinedLayout.TOP_RIGHT);
+	public void display(String title, String svgFileName) {
+		SVGCanvas canvas = new SVGCanvas(title, svgFileName);
+		((StudioImplWithPredefinedLayout) studio).addComponent(canvas, 
+				StudioImplWithPredefinedLayout.TOP_RIGHT);
 	}
 
 	public void recTerminate(ATerm t0) {

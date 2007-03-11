@@ -7,7 +7,7 @@ Requires: aterm-java,meta-studio,toolbus-java-adapter
 JarFile=svg-gui.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/svg-gui/batik-all.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
-LocalJars=./lib/batik-swing.jar
+LocalJars=./lib/batik-all.jar
 MainClass=nl.cwi.sen1.gui.plugin.SVGPlugin
 TestClass=
 ToolBusFlags=-I${prefix}/share/svg-gui
