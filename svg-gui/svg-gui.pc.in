@@ -1,0 +1,14 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl,paulk@cwi.nl
+Name: svg-gui
+Version: 1.0
+Description:
+Requires: aterm-java,meta-studio,toolbus-java-adapter
+JarFile=svg-gui.jar
+Jars=${prefix}/share/${JarFile}
+Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
+MainClass=nl.cwi.sen1.gui.plugin.SVGPlugin
+TestClass=
+ToolBusFlags=-I${prefix}/share/svg-gui
+
+

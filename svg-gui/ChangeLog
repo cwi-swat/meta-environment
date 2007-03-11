@@ -1,0 +1,5 @@
+# $Id: ChangeLog 21408 2007-02-20 08:29:01Z kooiker $
+
+Sun Mar 11 13:49:15 CET 2007 <jurgenv@cwi.nl>
+ * *: this is an initial version of a Meta-Environment plugin for displaying
+   SVG pictures. The plugin will be based on Apache Batik.
