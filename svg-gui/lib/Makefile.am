@@ -1,2 +1,2 @@
 
-pkgdata_DATA = batik.jar
+pkgdata_DATA = batik-all.jar

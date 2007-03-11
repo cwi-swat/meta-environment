@@ -1,23 +1,30 @@
 /* $Id: editor-plugin.idef.src 21408 2007-02-20 08:29:01Z kooiker $ */
 
+#ifndef SVG_GUI
+#define SVG_GUI
+
 tool svg is { }
 
 process SVG is
 let
   T : svg,
   Title: str,
-  SVG: str
+  XML: str
 in
   rec-connect(T?)
+  . snd-do(T, display("Hallo",""))
   .
   (
-    rec-msg(svg-display(Title?,SVG?))
-    . snd-do(T, display(Title,SVG))
+    rec-msg(svg-display(Title?,XML?))
+    . snd-do(T, display(Title,XML))
   )
   * delta
 endlet
 
-process StartSVG is
-  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__"))
-
 toolbus(SVG)
+
+process StartSVG is
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__:__PKGDATA__/svg-gui/batik-all.jar"))
+
+
+#endif
