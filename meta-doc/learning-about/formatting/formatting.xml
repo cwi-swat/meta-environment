@@ -98,7 +98,7 @@
 
       <para>This architecture also explains the two alternative names for
       formatting: <firstterm>pretty printing</firstterm> (produce a new
-      version of the source text that is prettier than the original one\) and
+      version of the source text that is prettier than the original one) and
       <firstterm>unparsing</firstterm> (parsing converts from text to parse
       tree, unparsing converts from parse tree to text).</para>
     </section>
@@ -344,7 +344,7 @@
             <row>
               <entry><literal>ts</literal></entry>
 
-              <entry>Tabstop spacing</entry>
+              <entry>Tab stop spacing</entry>
             </row>
 
             <row>
@@ -758,12 +758,12 @@
     <itemizedlist>
       <listitem>
         <para>First, user-defined formatting rules are applied to the parse
-        tree. The result is a hybrid box/parse tree that contains contains box
-        operator wherever user-defined formatting rules have been applied and
-        parse tree operators everywhere else. The transitions between the two
-        are marked with the guards <literal>from-box </literal>(embedding of a
-        box tree in a parse tree) and <literal>to-box</literal> (embedding of
-        a parse tree in a box tree). An example of such a hybrid tree is shown
+        tree. The result is a hybrid box/parse tree that contains box operator
+        wherever user-defined formatting rules have been applied and parse
+        tree operators everywhere else. The transitions between the two are
+        marked with the guards <literal>from-box </literal>(embedding of a box
+        tree in a parse tree) and <literal>to-box</literal> (embedding of a
+        parse tree in a box tree). An example of such a hybrid tree is shown
         in Figure <link linkend="Fig_hybrid-tree">A Hybrid Box/Parse
         Tree</link>. The parse tree of a Cobol program contains a box tree
         that in its turn contains a Cobol parse tree.</para>
@@ -815,7 +815,7 @@
       </listitem>
 
       <listitem>
-        <para>K. Vos, Pretty for an easy touch of beaty, Master's thesis,
+        <para>K. Vos, Pretty for an easy touch of beauty, Master's thesis,
         University of Amsterdam, 1990.</para>
       </listitem>
 
@@ -853,7 +853,7 @@
 
       <listitem>
         <para>M.G.J. van den Brand, A.T. Kooiker, J.J. Vinju and N.P. Veerman,
-        A language independent framework for context-sentitive formatting,
+        A language independent framework for context-sensitive formatting,
         <emphasis>Proceedings Conference on Software Maintenance and
         Reengineering</emphasis> (CSMR06), 103-112, 2006.</para>
       </listitem>
