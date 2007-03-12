@@ -8,7 +8,6 @@ import javax.swing.JComponent;
 import nl.cwi.sen1.gui.component.StudioComponentImpl;
 
 import org.apache.batik.swing.JSVGCanvas;
-import org.apache.xerces.parsers.SAXParser;
 
 public class SVGCanvas extends StudioComponentImpl {
 	private JSVGCanvas svgCanvas = new JSVGCanvas();
