@@ -1,4 +1,6 @@
 
-EXTRA_DIST = batik-all.jar
+SUBDIRS=lib
 
-pkgdata_DATA = batik-all.jar
+EXTRA_DIST = batik.jar
+
+pkgdata_DATA = batik.jar

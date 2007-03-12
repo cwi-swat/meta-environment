@@ -1,7 +1,5 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.io.File;
-
 import javax.swing.JComponent;
 
 import nl.cwi.sen1.gui.component.StudioComponentImpl;
