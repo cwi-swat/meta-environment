@@ -1,0 +1,18 @@
+module languages/logo/run/Logo
+exports
+  imports
+    languages/logo/syntax/Logo
+    languages/logo/run/LogoState
+    languages/logo/run/EvalRun
+    languages/logo/run/GenSVG
+    languages/xml/syntax/XML
+
+hiddens
+ %% imports basic/Comments
+  context-free start-symbols Document LogoState Lines%% removing this line causes syntax error in equations
+  variables
+    "LS" [0-9\']*       -> LogoState
+    "Commands"          -> Commands
+    "Lines"             -> Lines
+ 
+  

@@ -6,6 +6,7 @@ SUBDIRS = \
 	box \
 	casl \
 	fdl \
+        logo \
 	pico \
 	sdf2   \
 	tex \

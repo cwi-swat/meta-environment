@@ -1,0 +1,79 @@
+equations
+
+%% Evaluation of expressions
+
+[e1] eval(N, LS) = N
+%%[e2] eval(:Id, LS) = LS[Id]
+[e3] eval(xcor, LS) = LS.xcor
+[e4] eval(ycor, LS) = LS.ycor
+[e5] eval(heading, LS) = LS.heading
+[e6] eval(towards N1 N2, LS) = N1 %% fix
+[e7] LS.penup == 1   ===> eval(pendown?, LS) =  0
+[e7] LS.penup == 0   ===> eval(pendown?, LS) = 1
+[e8] eval(sum N1 N2, LS) = N1 + N2
+[e9] eval(difference N1 N2, LS) = N1 - N2
+[e10] eval(product N1 N2, LS) = N1 * N2
+[e11] eval(quotient N1 N2, LS) = ndiv(N1, N2)
+[e11] eval(remainder N1 N2, LS) = mod(N1, N2)
+[e12] eval(minus N, LS) = - N
+[e13] N1 < N2  == true  ===> eval(less? N1 N2, LS) = 1
+[e14] N1 < N2  == false ===> eval(less? N1 N2, LS) = 0
+[e15] N1 > N2  == true  ===> eval(greater? N1 N2, LS) = 1
+[e16] N1 > N2  == false ===> eval(greater? N1 N2, LS) = 0
+[e17] N1 == N2          ===> eval(equal? N1 N2, LS) = 1
+[e12] N1 != N2          ===> eval(equal? N1 N2, LS) = 0
+[e12] N1 == N2          ===> eval(notequal? N1 N2, LS) = 0
+[e12] N1 != N2          ===> eval(notequal? N1 N2, LS) = 1
+
+%% Execution of commands
+
+[c1] eval(E, LS) == 1
+     =========================================
+     run(if E [ Cmds ], LS) =  runall(Cmds, LS)
+[default]
+     run(if E [ Cmds ], LS) = LS
+
+[c1] eval(E, LS) == 1
+     =========================================================
+     run(ifelse E [ Cmds1 ] [Cmds2 ], LS) =  runall(Cmds1, LS)
+
+[c1] eval(E, LS) == 0
+     =========================================================
+     run(ifelse E [ Cmds1 ] [Cmds2 ], LS) = runall(Cmds2, LS)
+
+[c1] N1 := eval(E, LS),
+     N1 >= 1 == true,
+     N2 := N1 - 1,
+     LS' := runall(Cmds, LS)
+     ==========================================================
+     run(repeat E [ Cmds ], LS) = run(repeat N2 [ Cmds ], LS')
+
+[default] run(repeat E [Cmds ], LS) = LS
+
+[c1] N := eval(E, LS),  X := LS.xcor, Y := LS.ycor,
+     <DX, DY> := moveby(N, LS.heading)
+     ===================================================
+     run(forward E, LS) = LS[xycor := X + DX, Y + DY]
+
+[c2] N := eval(E, LS),  X := LS.xcor, Y := LS.ycor,
+     <DX, DY> := moveby(N, LS.heading)
+     ===================================================
+     run(back E, LS) = LS[xycor := X - DX, Y - DY]
+
+[c3] run(left E, LS) = LS[heading := mod(LS.heading - eval(E, LS), 360)]
+[c4] run(right E, LS) = LS[heading := mod(LS.heading + eval(E, LS), 360)]
+
+[c5] run(setx E, LS) = LS[xcor := eval(E, LS)]
+[c6] run(sety E, LS) = LS[ycor := eval(E, LS)]
+[c7] run(setxy E1 E2, LS) = LS[xycor := eval(E1, LS), eval(E2, LS)]
+[c8] run(home, LS) = LS[xycor := 0, 0][heading := 0][penup :=0]
+ 
+[ra1] runall( , LS) = LS
+[ra2] runall(Cmd Cmds, LS) = runall(Cmds, run(Cmd, LS))
+
+[moveby1]
+       moveby(N, Angle) =  <rat2int(N * sin(Angle)),  rat2int(N * cos(Angle))>
+
+
+
+

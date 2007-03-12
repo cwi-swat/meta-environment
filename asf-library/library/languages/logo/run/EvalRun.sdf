@@ -1,0 +1,33 @@
+module languages/logo/run/EvalRun
+
+exports
+  imports
+    languages/logo/syntax/Logo
+    languages/logo/run/LogoState
+    basic/Math
+    basic/Integers 
+  context-free syntax
+    eval(Exp, LogoState)           -> Integer
+    run(Command, LogoState)        -> LogoState
+    runall(Commands, LogoState)    -> LogoState
+    moveby(Integer, Integer)       -> <Integer, Integer>
+
+hiddens
+  imports basic/Comments
+  context-free start-symbols
+    <Integer, Integer> LogoState
+  variables
+    "LS" [0-9\']*       -> LogoState
+    "Id" [0-9]*         -> Id
+    "F" [0-9]*          -> Formal
+    "N" [0-9]*          -> Integer
+    "B" [0-9]*          -> Boolean
+    "E" [0-9]*          -> Exp
+    [XY] [0-9]*         -> Integer
+    "DX"                -> Integer
+    "Angle"             -> Integer
+
+    "Cmd"               -> Command
+    "Cmds" [0-9\']*     -> Command*
+    "Commands"          -> Commands
+    "DY"                -> Integer

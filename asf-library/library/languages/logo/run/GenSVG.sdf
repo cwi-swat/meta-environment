@@ -1,0 +1,30 @@
+module languages/logo/run/GenSVG
+
+exports
+  imports languages/xml/syntax/XML
+  imports languages/xml/utils/Attributes
+  imports languages/logo/run/LogoState
+  imports basic/IntCon
+
+  context-free syntax
+    toSVG(Lines)        -> Document
+
+hiddens
+  sorts X-Element
+
+  context-free start-symbols 
+    Document X-Element
+
+  context-free syntax
+    "<|" Element "|>"                  -> X-Element
+     gen(Lines, X-Element)             -> X-Element
+
+  variables
+    "&I" [0-9\']*         -> Integer
+    "&Lines"              -> Lines
+    "&Line*"              -> Line*
+    "&Element"            -> Element
+    "&Element*"           -> Element*
+    "&X-Element" [0-9\']* -> X-Element
+    "&Content*"           -> Content*
+    "&AV" [0-9\']*        -> AttValue

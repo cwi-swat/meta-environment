@@ -1,0 +1,38 @@
+module languages/logo/run/LogoState
+exports
+  imports basic/Integers
+
+  sorts LogoState Update Lines Line
+  
+  context-free syntax
+    state(Integer, Integer, Integer, Integer, Integer, Lines)  -> LogoState
+    LogoState "." "xcor"                                       -> Integer
+    LogoState "." "ycor"                                       -> Integer
+    LogoState "." "heading"                                    -> Integer
+    LogoState "." "penup"                                      -> Integer
+    LogoState "." "turtle"                                     -> Integer
+    LogoState "." "lines"                                      -> Lines
+
+    "xcor"  ":=" Integer                                       -> Update
+    "ycor"  ":=" Integer                                       -> Update
+    "xycor" ":=" Integer "," Integer                           -> Update
+    "heading"  ":=" Integer                                    -> Update
+    "penup"  ":=" Integer                                      -> Update
+    "turtle"  ":=" Integer                                     -> Update
+
+    LogoState "[" {Update ";"}* "]"                            -> LogoState
+    "newLogoState"                                             -> LogoState
+    line(Integer,Integer,Integer,Integer)                      -> Line
+    Line*                                                      -> Lines
+
+ hiddens
+  imports basic/Comments
+  context-free start-symbols
+    LogoState
+  variables
+    "Xcor" [0-9\']*                                       -> Integer
+    "Ycor" [0-9\']*                                       -> Integer
+    "Heading" [0-9\']*                                    -> Integer
+    "Penup" [0-9\']*                                      -> Integer
+    "Turtle" [0-9\']*                                     -> Integer
+    "Lines" [0-9\']*                                      -> Line*
