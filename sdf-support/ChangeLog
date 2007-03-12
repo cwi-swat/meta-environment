@@ -1,5 +1,8 @@
 $Id$
 
+Mon Mar 12 19:03:46 CET 2007 <economop@cwi.nl>
+ * test/pt2sdf-test.c: commented out an ATwarning.
+
 Fri Mar  9 19:14:56 CET 2007 <jurgenv@cwi.nl>
  * regenerated with more brackets around macro arguments, and less debugging
    stuff.
