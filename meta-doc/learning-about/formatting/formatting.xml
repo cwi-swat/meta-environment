@@ -189,16 +189,17 @@
 
       <programlisting>BoxOperator SpaceOptions [ Box1 Box2 ... ]</programlisting>
 
-      <para>Here BoxOperator is one of the operators listed in the Table <link
-      linkend="Table-BoxOperators">Box Operators</link>. This operator
-      controls the formatting of the boxes Box1, Box2, ... The SpaceOptions
-      are one of the options listed in the Table <link
-      linkend="Table-SpacingAndAlignmnentOptions">Spacing and Alignment
-      Options</link> below and control the amount of horizontal, vertical, or
-      indentation space between the boxes. Some operators may have additional
-      options. Box operators never loose operands or change the order of
-      appearance of their operands on a page read left-to-right and
-      top-to-bottom.</para>
+      <para>Here <literal>BoxOperator</literal> is one of the operators listed
+      in the Table <link linkend="Table-BoxOperators">Box Operators</link>.
+      This operator controls the formatting of the boxes
+      <literal>Box1</literal>, <literal>Box2</literal>, ... The
+      <literal>SpaceOptions</literal> are one of the options listed in the
+      Table <link linkend="Table-SpacingAndAlignmnentOptions">Spacing and
+      Alignment Options</link> below and control the amount of horizontal,
+      vertical, or indentation space between the boxes. Some operators may
+      have additional options. Box operators never loose operands or change
+      the order of appearance of their operands on a page read left-to-right
+      and top-to-bottom.</para>
 
       <table xml:id="Table-BoxOperators">
         <title>Box Operators</title>
@@ -543,7 +544,8 @@
       <section>
         <title>SL Box</title>
 
-        <para>The SL box operator is an abbreviation for</para>
+        <para>The <literal>SL</literal> box operator is an abbreviation
+        for</para>
 
         <programlisting>G gs=<replaceable>4</replaceable> op=OP [ Box1 Box2 ... ]</programlisting>
 
@@ -716,13 +718,13 @@
 
           <tbody>
             <row>
-              <entry>LBL</entry>
+              <entry><literal>LBL</literal></entry>
 
               <entry>Associate a label with a box</entry>
             </row>
 
             <row>
-              <entry>REF</entry>
+              <entry><literal>REF</literal></entry>
 
               <entry>Refer to a labelled box</entry>
             </row>
@@ -740,7 +742,7 @@
     better understand the formatting process, consider the more detailed
     architecture in Figure <link
     linkend="Fig_Pandora-formatting-architecture">Pandora Formatting
-    Architecture</link>. </para>
+    Architecture</link>.</para>
 
     <figure xml:id="Fig_Pandora-formatting-architecture">
       <title>Pandora Formatting Architecture</title>
