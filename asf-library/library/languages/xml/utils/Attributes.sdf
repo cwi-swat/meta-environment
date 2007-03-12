@@ -9,8 +9,8 @@ exports
     Document X-AttValue
 
   context-free syntax
-    "[[" | "]]"                        -> CharData {reject}
-    "[[" AttValue "]]"                 -> X-AttValue
+    "<|" | "|>"                        -> CharData {reject}
+    "<|" AttValue "|>"                 -> X-AttValue
      intcon2attvalue(Integer)          -> X-AttValue
 
 hiddens
