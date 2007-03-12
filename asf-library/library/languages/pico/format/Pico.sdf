@@ -8,17 +8,18 @@ exports
     PROGRAM
 
   context-free syntax
-    decls2box(DECLS)                      -> Box {to-box}
-    exp2box(EXP)                        -> Box {to-box}
-    idtypelist2box({ID-TYPE ","}*)      -> Box {to-box}
-    picoid2box(PICO-ID)                 -> Box {to-box}
-    statementlist2box({STATEMENT ";"}*) -> Box {to-box}
-    type2box(TYPE)                      -> Box {to-box}
-    box2decls(Box)                      -> DECLS {from-box}
-    box2idtype(Box)                     -> ID-TYPE {from-box}
-    box2program(Box)                    -> PROGRAM {from-box}
-    box2statement(Box)                  -> STATEMENT {from-box}
-    "_" "_"                             -> Box {layout-to-box}
+    "[" DECLS "]"            -> Box {to-box}    "<" Box ">"   -> DECLS     {from-box}
+    "[" EXP "]"              -> Box {to-box}
+    "[" {ID-TYPE ","}* "]"   -> Box {to-box}
+    "[" PICO-ID "]"          -> Box {to-box}
+    "[" {STATEMENT ";"}* "]" -> Box {to-box}
+    "[" TYPE "]"             -> Box {to-box}
+
+                                                "<" Box ">"   -> ID-TYPE   {from-box}
+                                                "<" Box ">"   -> PROGRAM   {from-box}
+                                                "<" Box ">"   -> STATEMENT {from-box}
+
+    "_" "_"                  -> Box {layout-to-box}
 
 hiddens
   variables

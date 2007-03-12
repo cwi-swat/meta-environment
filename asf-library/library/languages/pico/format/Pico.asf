@@ -2,29 +2,33 @@ equations
 
 [program2box-0]
   begin C1 Decls C2 Statement* C3 end = 
-    box2program(V ["begin" _C1_
-                      V vs=2 [I [ decls2box(Decls)] I [ _C2_ ]
-                              I [statementlist2box(Statement*)]]
+    < V ["begin" _C1_
+                      V vs=2 [I [ [Decls] ] I [ _C2_ ]
+                              I [ [Statement*] ]]
                    
-                   _C3_ "end"])
+                   _C3_ "end"]
+     >
 
 [decls2box-0] 
   declare C1 IdType* C2 ; = 
-    box2decls(V ["declare" I [ _C1_ ] I [H hs=0 [idtypelist2box(IdType*) _C2_ ";"]]])
+    < V ["declare" I [ _C1_ ] I [H hs=0 [ [IdType*] _C2_ ";"]]]
+    >
 
 [idtype2box-0]
-  PicoId : Type = box2idtype(H [H hs=0 [picoid2box(PicoId) ":"] type2box(Type)])
+  PicoId : Type = < H [H hs=0 [ [PicoId] ":"] [Type]] >
 
 [if2box-0]
   if Exp then C1 Statement*1 C2 else C3 Statement*2 C4 fi =
-    box2statement(V [HV ["if" exp2box(Exp) "then"]
-                    V [I [_C1_] I [ statementlist2box(Statement*1)] I [_C2_] ]
+    < V [HV ["if" [Exp] "then"]
+                    V [I [_C1_] I [ [Statement*1] ] I [_C2_] ]
                   "else" 
-                    V [I [_C3_] I [ statementlist2box(Statement*2)] I [_C4_] ] 
-                  "fi"])
+                    V [I [_C3_] I [ [Statement*2] ] I [_C4_] ] 
+                  "fi"]
+    >
 
 [while2box-0]
   while Exp do C1 Statement* C2 od = 
-    box2statement(V [HV ["while" exp2box(Exp) "do"] 
-                    V [ I [_C1_] I [ statementlist2box(Statement*) ] I [ _C2_ ] ] 
-                  "od"])
+    < V [HV ["while" [Exp] "do"] 
+              V [ I [_C1_] I [ [Statement*] ] I [ _C2_ ] ] 
+              "od"]
+    >
