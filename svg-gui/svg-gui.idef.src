@@ -12,8 +12,8 @@ let
   File: str
 in
   rec-connect(T?)
-  . snd-do(T, display("test", "/home/jurgenv/example.svg"))
-  . (
+  . 
+  (
     rec-msg(svg-display(Title?, File?))
     . snd-do(T, display(Title, File))
   )
