@@ -28,7 +28,7 @@ exports
  lexical syntax  
    %[ 2]%   ~[]                                                       -> Char
    %[ 3]%  [\ \t\n\r]+                                                -> S      {cons("xml-s")}
-   %[ 3]%  [\ \t\n\r]                                                 -> LAYOUT {cons("xml-layout")}
+   %[ 3]%  [\ \t\n\r]+                                                -> LAYOUT {cons("xml-layout")}
            [a-zA-Z]                                                   -> Letter
            [0-9]                                                      -> Digit
    %[ 4]%  Letter | Digit | [\.\-\_\:]                                -> NameChar

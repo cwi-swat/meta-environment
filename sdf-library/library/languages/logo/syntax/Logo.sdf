@@ -1,4 +1,4 @@
-module logo/syntax/Logo
+module languages/logo/syntax/Logo
 
   imports basic/Whitespace
   imports basic/IntCon
