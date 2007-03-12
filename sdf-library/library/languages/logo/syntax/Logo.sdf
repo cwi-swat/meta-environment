@@ -1,0 +1,75 @@
+module logo/syntax/Logo
+
+  imports basic/Whitespace
+  imports basic/IntCon
+
+  exports
+
+    context-free start-symbols Commands
+
+    sorts Id QuotedId Formal Exp Command Commands FunctionDef Block
+
+    lexical syntax
+       [a-z][a-z0-9]*                 -> Id
+       ":" Id                         -> Formal
+       "\"" Id                        -> QuotedId
+%%       ";" ~[\n]*         -> LAYOUT
+
+    context-free restrictions
+       Id -/- [a-z0-9]
+       
+    context-free syntax
+       Integer                        -> Exp
+       Formal                         -> Exp
+
+       "xcor"                         -> Exp
+       "ycor"                         -> Exp
+       "heading"                      -> Exp
+       "towards" Exp Exp              -> Exp
+       "pendown?"                     -> Exp
+       "sum" Exp Exp                  -> Exp
+       "difference" Exp Exp           -> Exp
+       "product" Exp Exp              -> Exp
+       "quotient" Exp Exp             -> Exp
+       "remainder" Exp Exp            -> Exp
+       "minus" Exp                    -> Exp
+       "less?" Exp Exp                -> Exp
+       "greater?" Exp Exp             -> Exp
+       "equal?" Exp Exp               -> Exp
+       "notequal?" Exp Exp            -> Exp
+
+       "to" Id Formal* Block          -> FunctionDef
+
+       "[" Command* "]"               -> Block
+
+       "if" Exp Block                 -> Command
+       "ifelse" Exp Block Block       -> Command
+       "repeat" Exp Block             -> Command
+
+       "forward" Exp                  -> Command
+       "back" Exp                     -> Command
+       "left" Exp                     -> Command
+       "right" Exp                    -> Command
+       "setxy" Exp Exp                -> Command
+       "setx" Exp                     -> Command
+       "sety" Exp                     -> Command
+       "home"                         -> Command
+
+       ("showturtle" | "st")          -> Command
+       ("hideturtle" | "ht")          -> Command
+       "clean"                        -> Command
+       ("clearscreen" | "cs")         -> Command
+       ("pendown"  | "pd")            -> Command
+       ("penup" | "pu")               -> Command
+
+       "local" QuotedId               -> Command
+       "make" QuotedId Exp            -> Command
+
+       Id  Exp*                       -> Command {avoid}
+
+       Command*                       -> Commands
+
+ %%      (Command | FunctionDef)*       -> Program
+
+       
+

@@ -10,6 +10,7 @@ SUBDIRS = \
 	ansi-c \
 	graph \
 	fdl \
+        logo \
 	pico \
 	sdf2  \
 	generic-cpp \
