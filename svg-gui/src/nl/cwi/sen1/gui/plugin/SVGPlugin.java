@@ -9,9 +9,12 @@ import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import aterm.ATerm;
 
 public class SVGPlugin extends DefaultStudioPlugin implements SvgTif {
-	private Studio studio;
+	private static final String TOOL_NAME = "svg";
+
 	private SvgBridge bridge;
 
+	private Studio studio;
+	
 	public void display(String title, String svgFileName) {
 		SVGCanvas canvas = new SVGCanvas(title, svgFileName);
 		((StudioImplWithPredefinedLayout) studio).addComponent(canvas, 
@@ -23,7 +26,7 @@ public class SVGPlugin extends DefaultStudioPlugin implements SvgTif {
 	}
 
 	public String getName() {
-		return "svg";
+		return TOOL_NAME;
 	}
 
 	public void initStudioPlugin(Studio studio) {
