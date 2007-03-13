@@ -10,7 +10,7 @@ TOOLNAME = studio-plugin-template
 
 pkgdata_DATA = $(TOOLNAME).idef
 
-EXTRA_DIST += $(TOOLNAME).idef.src
+EXTRA_DIST += $(TOOLNAME).idef.src 
 
 CLEANFILES += $(TOOLNAME).idef
 
