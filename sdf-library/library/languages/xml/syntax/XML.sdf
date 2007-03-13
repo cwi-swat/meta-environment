@@ -28,11 +28,11 @@ exports
  lexical syntax  
    %[ 2]%   ~[]                                                       -> Char
    %[ 3]%  [\ \t\n\r]+                                                -> S      {cons("xml-s")}
-   %[ 3]%  [\ \t\n\r]+                                                -> LAYOUT {cons("xml-layout")}
+   %[ 3]%  [\ \t\n\r]                                                -> LAYOUT {cons("xml-layout")}
            [a-zA-Z]                                                   -> Letter
            [0-9]                                                      -> Digit
    %[ 4]%  Letter | Digit | [\.\-\_\:]                                -> NameChar
-   %[ 5]%  (Letter | "_" | ":") NameChar*                             -> Name
+   %[ 5]%  (Letter | "_" | ":") NameChar*                             -> Name {category("MetaKeyword")}
  context-free syntax
    %[ 6]%  Name*                                                      -> Names
  lexical syntax
@@ -104,7 +104,7 @@ exports
 
  context-free syntax
    %[39]%  EmptyElementTag | NonEmptyElementTag                       -> Element {prefer}
-           STag Content* ETag                                         -> NonEmptyElementTag
+           STag Content* ETag                                         -> NonEmptyElementTag 
    %[40]%  "<" Name Attribute* ">"                                    -> STag
    %[41]%  Name Eq AttValue                                           -> Attribute
    %[42]%  "</" Name ">"                                              -> ETag
@@ -185,8 +185,3 @@ exports
 
  context-free restrictions %% Enforce longest match
     LAYOUT? -/- [\ \t\n\r]
-    LAYOUT -/- [\ \t\n\r]
-
-
-
- 
