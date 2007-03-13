@@ -112,12 +112,13 @@
       Box can easily be converted to various textual formats like ASCII, HTML,
       PDF, LaTex and others.</para>
 
-      <para>Pandora is a system that bridges the gap between source text and
-      its representation in Box. Given the grammar of a programming language
-      it can fully automatically produce a formatter for that language using
-      default rules. This default formatter can be adapted to specific
-      formatting requirements by giving user-defined formatting rules that
-      describe those requirements and overrule the default behaviour.</para>
+      <para>Pandora is a complete formatting system that takes care of
+      converting source text to its representation in Box and producing final
+      output. Given the grammar of a programming language it can fully
+      automatically produce a formatter for that language using default rules.
+      This default formatter can be adapted to specific formatting
+      requirements by giving user-defined formatting rules that describe those
+      requirements and overrule the default behaviour.</para>
     </section>
 
     <section>
@@ -532,13 +533,20 @@
       <section>
         <title>G Box</title>
 
-        <para>The box operator <literal>G</literal> operator wraps another
-        operator around every <replaceable>N</replaceable>th element of a list
-        of boxes:</para>
+        <para>The box operator <literal>G</literal> operator is a
+        generalization of the <literal>A</literal> and <literal>R</literal>
+        operators: it wraps another operator around every
+        <replaceable>N</replaceable>th element of a list of boxes:</para>
 
         <programlisting>G gs=<replaceable>N</replaceable> op=OP [ Box1 Box2 ... ]</programlisting>
 
-        <para>This can be used for ...</para>
+        <para>While a table has a fixed number of rows and columns, the G
+        operators can be used to generate, for instance, <literal>R</literal>
+        operators dynamically. This is usefull while formatting list of
+        arbitrary length. In such a case, the <literal>G</literal> operator
+        takes care of chopping the list in <literal>gs</literal> elements and
+        processing those elements. Typically, but not exclusively, they are
+        placed in a row.</para>
       </section>
 
       <section>
@@ -549,8 +557,26 @@
 
         <programlisting>G gs=<replaceable>4</replaceable> op=OP [ Box1 Box2 ... ]</programlisting>
 
-        <para>and is typically used for the formatting of separated
-        lists.</para>
+        <para>and is typically used for the formatting of separated lists. The
+        four elements corresponding to <literal>gs=4</literal> are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the white space before the list element;</para>
+          </listitem>
+
+          <listitem>
+            <para>the list element itself;</para>
+          </listitem>
+
+          <listitem>
+            <para>the white space following the list element;</para>
+          </listitem>
+
+          <listitem>
+            <para>the list separator following the list element.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
 
