@@ -7,11 +7,12 @@ tool svg is { }
 
 process SVG is
 let
-  T : svg,
+  T: svg,
   Title: str,
   File: str
 in
   rec-connect(T?)
+  . snd-do(T, display("test", "/home/jurgenv/example.svg"))
   . 
   (
     rec-msg(svg-display(Title?, File?))

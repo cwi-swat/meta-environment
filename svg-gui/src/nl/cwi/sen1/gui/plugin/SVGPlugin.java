@@ -2,6 +2,7 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import nl.cwi.sen1.gui.Studio;
@@ -41,6 +42,7 @@ public class SVGPlugin extends DefaultStudioPlugin implements SvgTif {
 		JFrame f = new JFrame();
 		f.setLayout(new BorderLayout());
 		f.add(canvas.getViewComponent(), BorderLayout.CENTER);
+		f.setSize(200,200);
 		f.setVisible(true);
 	}
 }
