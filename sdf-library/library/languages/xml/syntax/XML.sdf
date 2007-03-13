@@ -60,7 +60,7 @@ exports
 
    %[14]%  ~[\<\&]+                                                   -> CharData {avoid}
            ~[\<\&]* "]]>" ~[\<\&]*                                    -> CharData {reject}
-   %[15]%  "<!--" (~[\-] | Dash)* "-->"                               -> Comment 
+   %[15]%  "<!--" (~[\-] | Dash)* "-->"                               -> Comment  {category("Comment")}
            "-"                                                        -> Dash
 
    %[16]%  "<?" PITarget (S Char*)? "?>"                              -> PI 
