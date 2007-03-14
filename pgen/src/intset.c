@@ -1,4 +1,4 @@
-/*{{{  includes */
+/* $Id$ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,19 +6,10 @@
 
 #include "intset.h"
 
-/*}}}  */
-
-/*{{{  defines */
-
 #define BITS_PER_LONG (sizeof(unsigned long)*8)
 #define NR_LONGS(max) ((((max)-1)/BITS_PER_LONG)+1)
 
-/*}}}  */
-
-/*{{{  IS_IntSet IS_create(int max_int) */
-
-IS_IntSet IS_create(int max_int)
-{
+IS_IntSet IS_create(int max_int) {
   IS_IntSet set;
 
   set = calloc(NR_LONGS(max_int), sizeof(unsigned long));
@@ -30,27 +21,15 @@ IS_IntSet IS_create(int max_int)
   return set;
 }
 
-/*}}}  */
-/*{{{  void IS_destroy(IS_IntSet set) */
-
-void IS_destroy(IS_IntSet set)
-{
+void IS_destroy(IS_IntSet set) {
   free(set);
 }
 
-/*}}}  */
-/*{{{  void IS_flush(IS_IntSet set, int max_int) */
-
-void IS_flush(IS_IntSet set, int max_int)
-{
+void IS_flush(IS_IntSet set, int max_int) {
   memset(set, 0, NR_LONGS(max_int)*sizeof(unsigned long));
 }
 
-/*}}}  */
-/*{{{  void IS_add(IS_IntSet set, int i) */
-
-int IS_add(IS_IntSet set, int i)
-{
+int IS_add(IS_IntSet set, int i) {
   int index;
   unsigned long mask;
 
@@ -65,11 +44,7 @@ int IS_add(IS_IntSet set, int i)
   return 1;
 }
 
-/*}}}  */
-/*{{{  void IS_remove(IS_IntSet set, int i) */
-
-void IS_remove(IS_IntSet set, int i)
-{
+void IS_remove(IS_IntSet set, int i) {
   int index;
   unsigned long mask;
 
@@ -79,11 +54,7 @@ void IS_remove(IS_IntSet set, int i)
   set[index] &= ~mask;
 }
 
-/*}}}  */
-/*{{{  int  IS_contains(IS_IntSet set, int i) */
-
-int  IS_contains(IS_IntSet set, int i)
-{
+int  IS_contains(IS_IntSet set, int i) {
   int index;
   unsigned long mask;
 
@@ -93,5 +64,4 @@ int  IS_contains(IS_IntSet set, int i)
   return (set[index] & mask) == 0 ? 0 : 1;
 }
 
-/*}}}  */
 

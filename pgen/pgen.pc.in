@@ -3,5 +3,5 @@ Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: pgen
 Version: 2.4
 Description:
-Requires: asc-support,aterm,error-support,pt-support,sdf-support,sglr,toolbuslib
+Requires: asc-support,aterm,error-support,pt-support,sdf-support,sglr,toolbuslib,ptable-support,config-support,c-library
 ToolBusFlags=-I${prefix}/share/pgen

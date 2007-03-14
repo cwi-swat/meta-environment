@@ -1,8 +1,11 @@
+/* $Id$ */
+
 #ifndef FLATTEN_H
 #define FLATTEN_H 
 
-#include "ksdf2table.h"
+#include <ptable.h>
+#include <SDFME.h>
 
-ATerm SDFflattenLookAhead(SDF_Lookahead lookAhead, ATbool nested); 
+PTBL_Restriction implodeLookahead(SDF_Lookahead lookAhead); 
 
 #endif

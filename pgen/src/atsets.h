@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /*
 
     PGEN - the SDF2 parse table generator.
@@ -23,28 +25,15 @@
 
 #include <aterm2.h>
 
-typedef struct
-{
-  int size;
-	int nr_sets;
+typedef struct _ATermSOS *ATermSOS;
 
-	ATermList *table;
-} ATermSOS;
-
-extern ATermList ATunionSetList(ATermList sets);
-extern ATermList ATaddElement(ATermList l, ATerm elem);
-extern ATermList ATunion(ATermList l1, ATermList l2);
-extern ATermList ATunion1(ATermList l1, ATermList l2);
-extern ATermList ATunion2(ATermList l1, ATermList l2);
-extern ATermList ATunion3(ATermList l1, ATermList l2);
-extern ATermList ATunion4(ATermList l1, ATermList l2);
-extern ATermList ATunion5(ATermList l1, ATermList l2);
-extern ATermList ATunion6(ATermList l1, ATermList l2);
-extern ATermList ATunion7(ATermList l1, ATermList l2);
-extern ATbool ATsetEqual(ATermList l1, ATermList l2);
-extern ATermSOS *ATsosCreate(int initial_size);
-extern void ATsosResize(ATermSOS *sos, int newsize);
-extern ATermList ATsosInsert(ATermSOS *sos, ATermList set);
-extern void ATsosDestroy(ATermSOS *sos);
+ATermList ATunion(ATermList l1, ATermList l2);
+ATermList ATunionSetList(ATermList sets);
+ATermList ATaddElement(ATermList l, ATerm elem);
+ATbool ATsetEqual(ATermList l1, ATermList l2);
+ATermSOS ATsosCreate(int initial_size);
+void ATsosResize(ATermSOS sos, int newsize);
+ATermList ATsosInsert(ATermSOS sos, ATermList set);
+void ATsosDestroy(ATermSOS sos);
 
 #endif

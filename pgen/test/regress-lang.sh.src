@@ -8,7 +8,8 @@ Revision='$Revision$'
 ###
 
 update=0
-verbose=0
+verbose=1
+#set -x
 
 mydir=__TOP_SRCDIR__/test
 MV=mv
@@ -120,14 +121,15 @@ Notify () {
 
 
 RegressGenTable () {
+    tmpdir=/var/tmp
 	ptbl=`basename $1 .sdf`.tbl
 	if [ ! -f $reference/$ptbl ] ; then
 		Notify "No reference table for $ptbl"
 		continue
 	fi
-	if ${SDF2TABLE} $VERBOSE -i $1 -o $ptbl ; then
+	if ${SDF2TABLE} $VERBOSE -i $1 -o $tmpdir/$ptbl ; then
 	        Notify Comparing $ptbl...
-	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
+	        if $COMPARE $VERBOSE $tmpdir/$ptbl $reference/$ptbl	>/dev/null
 	        then
 		        Notify "Regress test for $1 succeeded"
 	        else
@@ -135,10 +137,10 @@ RegressGenTable () {
 	        fi
 	        if [ $update -eq 0 ] ; then
 			if [ $error -eq 0 ] ; then
-				${RM} -f $ptbl
+				${RM} -f $tmpdir/$ptbl
 			fi
 		else
-			${MV} $ptbl $reference/$ptbl
+			${MV} $tmpdir/$ptbl $reference/$ptbl
 		fi
 	else
 		Abort "Failed to generate parse table for $1"

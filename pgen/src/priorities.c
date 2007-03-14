@@ -1,64 +1,23 @@
-#include <aterm2.h>
+/* $Id$ */ 
 
 #include "priorities.h"
-#include "ksdf2table.h"
+#include <aterm2.h>
+#include <ptable.h>
 
-#define PRIORITY_EXISTS(prio) (ATindexedSetGetIndex(priority_table,(prio)) >= 0)
-
-ATbool isPrioArgument(ATerm prioentry)
-{
-  AFun symbol = ATgetAFun((ATermAppl)prioentry);
-  return ATisEqual(symbol, afun_arg_gtr_prio);
-}
-
-ATerm getPrioRight(ATerm prioentry)
-{
-  if (isPrioArgument(prioentry)) {
-    return ATgetArgument((ATermAppl)prioentry, 2);
-  }
-  else {
-    return ATgetArgument((ATermAppl)prioentry, 1);
-  }
-}
-
-ATerm setPrioRight(ATerm prioentry, ATerm prodNr)
-{
-  if (isPrioArgument(prioentry)) {
-    return (ATerm)ATsetArgument((ATermAppl)prioentry, prodNr, 2);
-  }
-  else {
-    return (ATerm)ATsetArgument((ATermAppl)prioentry, prodNr, 1);
-  }
-}
-
-ATerm getPrioLeft(ATerm prioentry)
-{
-  return ATgetArgument((ATermAppl)prioentry, 0);
-}
-
-ATerm setPrioLeft(ATerm prioentry, ATerm prodNr)
-{
-  return (ATerm)ATsetArgument((ATermAppl)prioentry, prodNr, 0);
-}
-
-/*{{{  ATbool conflicts(Item item, ATerm label) */
-
-ATbool conflicts(Item item, ATerm label)
-{
-  ATbool result;
-  ATerm prodnr = (ATerm)ATmakeInt(IT_getProdNr(item));
+/* Check if the prodNumber has a priority conflict with the production of the 
+ * item. */
+ATbool PGEN_isPriorityConflict(Item item, int prodNumber) {
+  int itemProdNumber = IT_getProdNr(item);
   int iptr = IT_getDotPosition(item);
-  ATerm priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
+  PTBL_Priority priorel = PTBL_makePriorityGreater(itemProdNumber, prodNumber);
+  ATbool result;
 
-  if (PRIORITY_EXISTS(priorel)) {
+  if (PGEN_getPriorityIndex(priorel) >= 0) {
     result = ATtrue;
   }
   else {
-    priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
-				 prodnr, 
-				 (ATerm)ATmakeInt(iptr),
-				 label);
-    if (PRIORITY_EXISTS(priorel)) {
+    priorel = PTBL_makePriorityArgGreater(itemProdNumber, iptr, prodNumber);
+    if (PGEN_getPriorityIndex(priorel) >= 0) {
       result = ATtrue;
     }
     else {
@@ -68,6 +27,4 @@ ATbool conflicts(Item item, ATerm label)
 
   return result;
 }
-
-/*}}}  */
 

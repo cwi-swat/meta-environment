@@ -1,34 +1,31 @@
+/* $Id$ */
+#ifndef __PROCESSGRAMMAR_H__
+#define __PROCESSGRAMMAR_H__
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <aterm2.h>
 #include <MEPT-utils.h>
+#include <ptable.h>
 #include <SDFME-utils.h>
 #include <SDF2PT.h>
 
 #include "atsets.h"
-#include "statistics.h"
-
-#ifdef WIN32
-     #include <string.h>
-     #include <fcntl.h>
-     #include <io.h>
-     #define streq(a,b) (!strcmp((a),(b)))
-#else
-     #include <atb-tool.h>
-     #include "parsetablegen.tif.h"
-#endif
+#include <atb-tool.h>
+#include "parsetablegen.tif.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
 #endif
 
-#define SDF_EOF  256
-#define MIN_PROD (SDF_EOF+1)
-#define MAX_STATES  130000
 
-/*{{{  external functions */
+void PGEN_processGrammar(PT_Tree ptTree);
+PTBL_Labels PGEN_getLabelSection();
+PTBL_Priorities PGEN_getPrioSection();
 
+#endif /* __PROCESSGRAMMAR_H__ */
+#if 0
 extern char *unquote_str(char *s);
 
 /*}}}  */
@@ -71,3 +68,5 @@ ATerm generate_parse_table(int version_nr, SDF_Grammar g);
 void init_table_gen();
 void destroy_table_gen();
 AFun get_afun_char_class();
+
+#endif

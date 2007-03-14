@@ -1,8 +1,10 @@
+/* $Id$ */
+
 #ifndef ITEMSET_H
 #define ITEMSET_H
 
 #include <aterm1.h>
-
+#include <MEPT.h>
 #include "item.h"
 
 typedef struct _ItemSet *ItemSet;
@@ -12,10 +14,10 @@ ItemSet ITS_create();
 void    ITS_destroy(ItemSet set);
 void    ITS_add(ItemSet set, Item item);
 ATbool  ITS_contains(ItemSet set, Item item);
-int ITS_size(ItemSet set);
+int     ITS_size(ItemSet set);
 
 void ITS_iterator(ItemSet set, ItemSetIterator *iterator);
-void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator);
+void ITS_iteratorPerDotSym(ItemSet set, PT_Symbol dotsym, ItemSetIterator *iterator);
 
 /*
 Item ITS_next(ItemSetIterator *iterator);

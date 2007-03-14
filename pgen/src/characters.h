@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <aterm1.h>
+#include <MEPT.h> 
 
 #define BITS_PER_LONG (sizeof(unsigned long)*8)
 #define CC_BITS	      258
@@ -19,20 +20,23 @@ typedef struct
   CC_Class **classes;
 } CC_Set;
 
-extern ATerm empty_set;
-
 void	 CC_init();
 void     CC_cleanup();
+
+void printCC_Class(CC_Class *c);
 
 CC_Class *CC_alloc();
 void     CC_free(CC_Class *c);
 CC_Class *CC_makeClassEmpty();
 CC_Class *CC_makeClassAllChars();
-CC_Class *CC_ClassFromInt(ATermInt i);
-CC_Class *CC_ClassFromTerm(ATerm t);
+CC_Class *CC_ClassFromInt(int i);
+CC_Class *CC_ClassFromPTSymbol(PT_Symbol t);
+CC_Class *CC_ClassFromTerm(ATerm t); 
 CC_Class *CC_ClassFromTermList(ATermList l);
-ATerm	 CC_ClassToTerm(CC_Class *cc);
-void     CC_addATermClass(CC_Class *cc, ATerm t);
+ATerm CC_ClassToTerm(CC_Class *cc);
+void CC_addATermClass(CC_Class *cc, ATerm t);
+PT_CharRanges CC_ClassToPTCharRanges(CC_Class *cc);
+void     CC_addPTSymbolToClass(CC_Class *cc, PT_Symbol t);
 
 void CC_addChar(CC_Class *cc, int c);
 void CC_addRange(CC_Class *cc, int start, int end);
@@ -45,9 +49,7 @@ ATbool CC_intersection(CC_Class *cc1, CC_Class *cc2, CC_Class *result);
 ATbool CC_difference(CC_Class *cc, CC_Class *to_remove, CC_Class *result);
 ATbool CC_complement(CC_Class *cc, CC_Class *result);
 
-/*
-ATbool	 CC_containsChar(CC_Class *cc, int c);
-*/
+/* ATbool	 CC_containsChar(CC_Class *cc, int c); */
 #define CC_containsChar(cc, c) \
   (((*(cc))[(c)/BITS_PER_LONG] & (1 << ((c) % BITS_PER_LONG))) == 0 ? ATfalse : ATtrue)
 
@@ -71,7 +73,7 @@ void      CC_writeSetToFile(FILE *f, CC_Set *set);
 void      CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result);
 void      CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result);
 
-CC_Class *CC_getCharClass(ATerm symbol);
+CC_Class *CC_getCharClass(PT_Symbol symbol);
 CC_Class *CC_getFirstSet(ATerm symbol);
 
 #endif

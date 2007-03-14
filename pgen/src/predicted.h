@@ -7,6 +7,6 @@
 #include "itemset.h"
 
 void outgoing(ItemSet itemset, ATermList *prods, CC_Set *chars);
-void closure(ATermList items, ItemSet itemset);
+ItemSet closure(ATermList items);
 
 #endif

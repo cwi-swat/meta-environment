@@ -4,10 +4,7 @@
 
 #include "characters.h"
 
-/*{{{  static void test_chars() */
-
-static void test_chars()
-{
+static void test_chars() {
   CC_Class *cc[CC_BITS], *cc_input, *temp, *all;
   ATerm input, output;
   int i;
@@ -23,7 +20,7 @@ static void test_chars()
   temp = CC_makeClassEmpty();
   assert(CC_isEmpty(temp));
   for (i=0; i<CC_BITS; i++) {
-    cc[i] = CC_ClassFromInt(ATmakeInt(i));
+    cc[i] = CC_ClassFromInt(i);
     if (i == CC_EOF) {
       assert(CC_isEOF(cc[i]));
     } else {
@@ -63,11 +60,7 @@ static void test_chars()
   */
 }
 
-/*}}}  */
-/*{{{  static void test_sets() */
-
-static void test_sets()
-{
+static void test_sets() {
   CC_Set set;
   CC_Class *cc[10];
 
@@ -125,10 +118,7 @@ static void test_sets()
   */
 }
 
-/*}}}  */
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ATerm bottomOfStack;
 
   ATinit(argc, argv, &bottomOfStack);

@@ -1,5 +1,4 @@
-
-/*{{{  includes */
+/* $Id$ */
 
 #include <stdio.h>
 #include <assert.h>
@@ -8,48 +7,26 @@
 
 #include "characters.h"
 #include "first.h"
-#include "ksdf2table.h"
 #include "pgen-symbol.h"
 
-/*}}}  */
-/*{{{  defines */
 
 #define CC_BLOCK_SIZE 1024
 #define SET_BLOCK_SIZE  32
 
-/*}}}  */
-/*{{{  types */
 
-struct CC_Node
-{
+struct CC_Node {
   struct CC_Node *next;
 };
 
-/*}}}  */
-/*{{{  variables */
 
 static struct CC_Node *free_nodes = NULL;
-static AFun afun_range	    = -1;
-static AFun afun_char_class = -1;
 static unsigned long last_mask = 0;
 
 static CC_Class **char_classes     = NULL;
 static int        max_char_classes = 0;
 
-ATerm empty_set = NULL;
-
-/*}}}  */
-
-/*{{{  void CC_init() */
-
-void CC_init()
-{
+void CC_init() {
   int last_bits;
-
-  afun_range = ATmakeAFun("range", 2, ATfalse);
-  ATprotectAFun(afun_range);
-  afun_char_class = ATmakeAFun("char-class", 1, ATfalse);
-  ATprotectAFun(afun_char_class);
 
   last_bits = CC_BITS-((CC_LONGS-1)*BITS_PER_LONG);
   last_mask = (1<<last_bits) - 1;
@@ -59,17 +36,9 @@ void CC_init()
   if (!char_classes) {
     ATerror("out of memory in CC_init %d\n", max_char_classes);
   }
-
-  empty_set = ATparse("epsilon");
-  ATprotect(&empty_set);
-
 }
 
-/*}}}  */
-/*{{{  void CC_cleanup() */
-
-void CC_cleanup()
-{
+void CC_cleanup() {
   int i;
 
   for (i=0; i<max_char_classes; i++) {
@@ -82,12 +51,7 @@ void CC_cleanup()
   max_char_classes = 0;
 }
 
-/*}}}  */
-
-/*{{{  CC_Class *CC_alloc() */
-
-CC_Class *CC_alloc()
-{
+CC_Class *CC_alloc() {
 #ifdef DEBUG_ALLOC
   return (CC_Class *)calloc(1, sizeof(CC_Class));
 #else
@@ -121,20 +85,20 @@ CC_Class *CC_alloc()
 #endif
 }
 
-/*}}}  */
+void printCC_Class(CC_Class *c) {
+  int i;
+  ATwarning("CC_Class: ");
+  for (i = 0; i < CC_LONGS; i++) {
+    ATwarning("%d", (*c)[i]);
+  }
+  ATwarning("\n");
+}
 
-/*{{{  CC_Class *CC_makeClassEmpty() */
-
-CC_Class *CC_makeClassEmpty()
-{
+CC_Class *CC_makeClassEmpty() {
   return CC_alloc();
 }
 
-/*}}}  */
-/*{{{  CC_Class *CC_makeClassAllChars() */
-
-CC_Class *CC_makeClassAllChars()
-{
+CC_Class *CC_makeClassAllChars() {
   CC_Class *c = CC_alloc();
   int i;
 
@@ -147,11 +111,7 @@ CC_Class *CC_makeClassAllChars()
   return c;
 }
 
-/*}}}  */
-/*{{{  void CC_clear(CC_Class *cc) */
-
-void CC_clear(CC_Class *cc)
-{
+void CC_clear(CC_Class *cc) {
   int i;
 
   for (i=0; i<CC_LONGS; i++) {
@@ -159,12 +119,7 @@ void CC_clear(CC_Class *cc)
   }
 }
 
-/*}}}  */
-/*{{{  void CC_free(CC_Class *cc) */
-
-
-void CC_free(CC_Class *cc)
-{
+void CC_free(CC_Class *cc) {
 #ifdef DEBUG_ALLOC
   free(cc);
 #else
@@ -174,12 +129,7 @@ void CC_free(CC_Class *cc)
 #endif
 }
 
-/*}}}  */
-
-/*{{{  void CC_addChar(CC_Class *cc, int c) */
-
-void CC_addChar(CC_Class *cc, int c)
-{
+void CC_addChar(CC_Class *cc, int c) {
   int index;
   unsigned long mask;
  
@@ -190,11 +140,7 @@ void CC_addChar(CC_Class *cc, int c)
   (*cc)[index] |= mask;
 }
 
-/*}}}  */
-/*{{{  void CC_addRange(CC_Class *cc, int start, int end) */
-
-void CC_addRange(CC_Class *cc, int start, int end)
-{
+void CC_addRange(CC_Class *cc, int start, int end) {
   int c;
 
   assert(0 <= start && start <= end);
@@ -212,11 +158,7 @@ void CC_addRange(CC_Class *cc, int start, int end)
   }
 }
 
-/*}}}  */
-/*{{{  void CC_removeChar(CC_Class *cc, int c) */
-
-void CC_removeChar(CC_Class *cc, int c)
-{
+void CC_removeChar(CC_Class *cc, int c) {
   int index;
   unsigned long mask;
 
@@ -227,26 +169,26 @@ void CC_removeChar(CC_Class *cc, int c)
   (*cc)[index] &= mask;
 }
 
-/*}}}  */
-
-/*{{{  CC_Class *CC_ClassFromInt(ATermInt i) */
-
-CC_Class *CC_ClassFromInt(ATermInt i)
-{
+CC_Class *CC_ClassFromInt(int i) {
   CC_Class *c;
 
   c = CC_makeClassEmpty();
 
-  CC_addChar(c, ATgetInt(i));
+  CC_addChar(c, i);
 
   return c;
 }
 
-/*}}}  */
-/*{{{  CC_Class *CC_ClassFromTerm(ATerm t) */
+CC_Class *CC_ClassFromPTSymbol(PT_Symbol t) {
+  CC_Class *c;
 
-CC_Class *CC_ClassFromTerm(ATerm t)
-{
+  c = CC_makeClassEmpty();
+  CC_addPTSymbolToClass(c, t);
+
+  return c;
+}
+
+CC_Class *CC_ClassFromTerm(ATerm t) {
   CC_Class *c;
 
   c = CC_makeClassEmpty();
@@ -255,11 +197,7 @@ CC_Class *CC_ClassFromTerm(ATerm t)
   return c;
 }
 
-/*}}}  */
-/*{{{  CC_Class *CC_ClassFromTermList(ATermList l) */
-
-CC_Class *CC_ClassFromTermList(ATermList l)
-{
+CC_Class *CC_ClassFromTermList(ATermList l) {
   CC_Class *c;
 
   c = CC_makeClassEmpty();
@@ -272,22 +210,16 @@ CC_Class *CC_ClassFromTermList(ATermList l)
   return c;
 }
 
-/*}}}  */
-/*{{{  ATerm CC_ClassToTerm(CC_Class *cc) */
-
-ATerm CC_ClassToTerm(CC_Class *cc)
-{
+ATerm CC_ClassToTerm(CC_Class *cc) {
   ATermList range_set = ATempty;
   ATerm elem;
   int i, start, end;
-
-  assert(afun_range >= 0);
 
   for (i=CC_BITS-1; i>=0; i--) {
     while (i % 32 == 31 && cc[i/32] == 0) {
       i -= 32;
       if (i == -1) {
-	return (ATerm)range_set;
+        return (ATerm)range_set;
       }
     }
 
@@ -296,15 +228,14 @@ ATerm CC_ClassToTerm(CC_Class *cc)
       start = end-1;
 
       while (start>=0 && CC_containsChar(cc, start)) {
-	start--;
+        start--;
       }
 
       if (start < (end-1)) {
-	/* Add a range */
-	elem = (ATerm)ATmakeAppl2(afun_range, (ATerm)ATmakeInt(start+1),
-				  (ATerm)ATmakeInt(end));
+        /* Add a range */
+        elem = (ATerm)PT_makeCharRangeRange(start+1,end);
       } else {
-	elem = (ATerm)ATmakeInt(end);
+        elem = (ATerm)PT_makeCharRangeCharacter(end);
       }
 
       range_set = ATinsert(range_set, elem);
@@ -316,17 +247,98 @@ ATerm CC_ClassToTerm(CC_Class *cc)
   return (ATerm)range_set;
 }
 
-/*}}}  */
 
-/*{{{  void CC_addATermClass(CC_Class *cc, ATerm t) */
+/*CC_Class *CC_ClassFromTermList(PT_CharRanges l) {
+  CC_Class *c;
 
-void CC_addATermClass(CC_Class *cc, ATerm t)
-{
+  c = CC_makeClassEmpty();
+
+  while (!PT_isCharRangesEmpty(l)) {
+    CC_addATermClass(c, PT_getCharRangesHead(l));
+    l = PT_getCharRangesTail(l);
+  }
+
+  return c;
+}
+*/
+
+PT_CharRanges CC_ClassToPTCharRanges(CC_Class *cc) {
+  PT_CharRanges range_set = PT_makeCharRangesEmpty();
+  PT_CharRange elem;
+  int i, start, end;
+
+  /* TODO: Ensure API is initialised. */
+
+  for (i=CC_BITS-1; i>=0; i--) {
+    while (i % 32 == 31 && cc[i/32] == 0) {
+      i -= 32;
+      if (i == -1) {
+        return range_set;
+      }
+    }
+
+    if (CC_containsChar(cc, i)) {
+      end   = i;
+      start = end-1;
+
+      while (start>=0 && CC_containsChar(cc, start)) {
+        start--;
+      }
+
+      if (start < (end-1)) {
+        /* Add a range */
+        elem = PT_makeCharRangeRange(start+1,end);
+      } else {
+        elem = PT_makeCharRangeCharacter(end);
+      }
+
+      range_set = PT_makeCharRangesMany(elem, range_set);
+
+      i = start;
+    }
+  }
+
+  return range_set;
+}
+
+/* Add a PT_CharRange to a character class. */
+void CC_addPTSymbolToClass(CC_Class *cc, PT_Symbol t) {
+  PT_CharRanges range_set;
+  int start;
+  
+  /* TODO: Ensure API is initialised. */
+  if (PT_isSymbolEmpty(t)) {
+    CC_addChar(cc, CC_EPSILON);
+    return;
+  }
+
+  if (!PT_isSymbolCharClass(t)) {
+    return;
+  }
+
+  range_set = PT_getSymbolRanges(t);
+  
+  while (!PT_isCharRangesEmpty(range_set)) {
+    PT_CharRange range_or_char = PT_getCharRangesHead(range_set);
+    range_set = PT_getCharRangesTail(range_set);
+
+    start = PT_getCharRangeStart(range_or_char);
+    if (PT_isCharRangeRange(range_or_char)) {
+	  int end = PT_getCharRangeEnd(range_or_char);
+      CC_addRange(cc, start, end);
+	}
+    else {
+      CC_addChar(cc, start);
+    }
+  }
+}
+
+void CC_addATermClass(CC_Class *cc, ATerm t) {
   ATermList range_set;
 
-  assert(afun_range >= 0);
+/*  assert(afun_range >= 0);*/
 
-  if (ATisEqual(t, empty_set)) {
+  if (ATisEqual(t, (ATerm)NULL)) {
     CC_addChar(cc, CC_EPSILON);
     return;
   }
@@ -341,29 +353,25 @@ void CC_addATermClass(CC_Class *cc, ATerm t)
 
     switch (ATgetType(range_or_char)) {
       case AT_APPL:
-	/* Must be a range */
-	{
-	  ATermAppl appl = (ATermAppl)range_or_char;
-	  ATermInt start = (ATermInt)ATgetArgument(appl, 0);
-	  ATermInt end   = (ATermInt)ATgetArgument(appl, 1);
-	  CC_addRange(cc, ATgetInt(start), ATgetInt(end));
-	}
-	
-	break;
+        /* Must be a range */
+        {
+          ATermAppl appl = (ATermAppl)range_or_char;
+          ATermInt start = (ATermInt)ATgetArgument(appl, 0);
+          ATermInt end   = (ATermInt)ATgetArgument(appl, 1);
+          CC_addRange(cc, ATgetInt(start), ATgetInt(end));
+        }
+
+        break;
       case AT_INT:
-	/* Must be a single character */
-	CC_addChar(cc, ATgetInt((ATermInt)range_or_char));
-	break;
+        /* Must be a single character */
+        CC_addChar(cc, ATgetInt((ATermInt)range_or_char));
+        break;
     }
   }
 }
 
-/*}}}  */
 
-/*{{{  void CC_union(CC_Class *cc1, CC_Class *cc2) */
-
-ATbool CC_union(CC_Class *cc1, CC_Class *cc2, CC_Class *result)
-{
+ATbool CC_union(CC_Class *cc1, CC_Class *cc2, CC_Class *result) {
   int i;
   unsigned long mask = 0;
 
@@ -374,11 +382,7 @@ ATbool CC_union(CC_Class *cc1, CC_Class *cc2, CC_Class *result)
   return mask == 0 ? ATfalse : ATtrue;
 }
 
-/*}}}  */
-/*{{{  void CC_intersection(CC_Class *cc1, CC_Class *cc2) */
-
-ATbool CC_intersection(CC_Class *cc1, CC_Class *cc2, CC_Class *result)
-{
+ATbool CC_intersection(CC_Class *cc1, CC_Class *cc2, CC_Class *result) {
   int i;
   unsigned long mask = 0;
 
@@ -389,11 +393,7 @@ ATbool CC_intersection(CC_Class *cc1, CC_Class *cc2, CC_Class *result)
   return mask == 0 ? ATfalse : ATtrue;
 }
 
-/*}}}  */
-/*{{{  void CC_difference(CC_Class *set, CC_Class *to_remove) */
-
-ATbool CC_difference(CC_Class *set, CC_Class *to_remove, CC_Class *result)
-{
+ATbool CC_difference(CC_Class *set, CC_Class *to_remove, CC_Class *result) {
   int i;
   unsigned long mask = 0;
 
@@ -404,11 +404,7 @@ ATbool CC_difference(CC_Class *set, CC_Class *to_remove, CC_Class *result)
   return mask == 0 ? ATfalse : ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool CC_copy(CC_Class *source, CC_Class *dest) */
-
-ATbool CC_copy(CC_Class *source, CC_Class *dest)
-{
+ATbool CC_copy(CC_Class *source, CC_Class *dest) {
   int i;
   unsigned long mask = 0;
 
@@ -419,11 +415,7 @@ ATbool CC_copy(CC_Class *source, CC_Class *dest)
   return mask == 0 ? ATfalse : ATtrue;
 }
 
-/*}}}  */
-/*{{{  void CC_complement(CC_Class cc) */
-
-ATbool CC_complement(CC_Class *cc, CC_Class *result)
-{
+ATbool CC_complement(CC_Class *cc, CC_Class *result) {
   int i;
   unsigned long mask = 0;
 
@@ -436,30 +428,7 @@ ATbool CC_complement(CC_Class *cc, CC_Class *result)
   return mask == 0 ? ATfalse : ATtrue;
 }
 
-/*}}}  */
-
-#if 0
-/*{{{  ATbool CC_containsChar(CC_Class *cc, int c) */
-
-ATbool CC_containsChar(CC_Class *cc, int c)
-{
-  int index;
-  unsigned long mask;
- 
-  assert(c >= 0 && c < CC_BITS);
-  index = c/BITS_PER_LONG;
-  mask  = 1 << (c % BITS_PER_LONG);
-  
-  return ((*cc)[index] & mask) == 0 ? ATfalse : ATtrue;
-}
-
-/*}}}  */
-#endif
-
-/*{{{  ATbool CC_isEmpty(CC_Class *cc) */
-
-ATbool CC_isEmpty(CC_Class *cc)
-{
+ATbool CC_isEmpty(CC_Class *cc) {
   int i;
 
   for (i=0; i<CC_LONGS; i++) {
@@ -471,11 +440,7 @@ ATbool CC_isEmpty(CC_Class *cc)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool CC_isEOF(CC_Class *cc) */
-
-ATbool CC_isEOF(CC_Class *cc)
-{
+ATbool CC_isEOF(CC_Class *cc) {
   ATbool result;
 
   if (!CC_containsChar(cc, CC_EOF)) {
@@ -491,11 +456,7 @@ ATbool CC_isEOF(CC_Class *cc)
   return result;
 }
 
-/*}}}  */
-/*{{{  ATbool CC_isSubset(CC_Class *needle, CC_Class *haystack) */
-
-ATbool CC_isSubset(CC_Class *needle, CC_Class *haystack)
-{
+ATbool CC_isSubset(CC_Class *needle, CC_Class *haystack) {
   int i;
   unsigned long mask, result;
 
@@ -510,11 +471,7 @@ ATbool CC_isSubset(CC_Class *needle, CC_Class *haystack)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  ATbool CC_isEqual(CC_Class *cc1, CC_Class *cc2) */
-
-ATbool CC_isEqual(CC_Class *cc1, CC_Class *cc2)
-{
+ATbool CC_isEqual(CC_Class *cc1, CC_Class *cc2) {
   int i;
 
   for (i=0; i<CC_LONGS-1; i++) {
@@ -530,41 +487,23 @@ ATbool CC_isEqual(CC_Class *cc1, CC_Class *cc2)
   return ATtrue;
 }
 
-/*}}}  */
-
-/*{{{  void CC_writeToFile(FILE *f, CC_Class *cc) */
-
-void CC_writeToFile(FILE *f, CC_Class *cc)
-{
-  ATfprintf(f, "%t\n", CC_ClassToTerm(cc));
+void CC_writeToFile(FILE *f, CC_Class *cc) {
+  ATfprintf(f, "%t\n", CC_ClassToPTCharRanges(cc));
 }
 
-/*}}}  */
-
-/*{{{  void CC_initSet(CC_Set *set) */
-
-void CC_initSet(CC_Set *set)
-{
+void CC_initSet(CC_Set *set) {
   set->max_size = 0;
   set->size = 0;
   set->classes = NULL;
 }
 
-/*}}}  */
-/*{{{  void CC_initSetWithSize(CC_Set *set, int size) */
-
-void CC_initSetWithSize(CC_Set *set, int size)
-{
+void CC_initSetWithSize(CC_Set *set, int size) {
   set->max_size = size;
   set->size = size;
   set->classes = (CC_Class **)calloc(size, sizeof(CC_Class *));
 }
 
-/*}}}  */
-/*{{{  void CC_flushSet(CC_Set *set) */
-
-void CC_flushSet(CC_Set *set)
-{
+void CC_flushSet(CC_Set *set) {
   if (set->classes) {
     CC_clearSet(set);
 
@@ -576,11 +515,7 @@ void CC_flushSet(CC_Set *set)
   set->max_size = 0;
 }
 
-/*}}}  */
-/*{{{  void CC_clearSet(CC_Set *set) */
-
-void CC_clearSet(CC_Set *set)
-{
+void CC_clearSet(CC_Set *set) {
   int i;
 
   if (set->classes) {
@@ -595,11 +530,7 @@ void CC_clearSet(CC_Set *set)
   }
 }
 
-/*}}}  */
-/*{{{  CC_Class *CC_addToSet(CC_Set *set) */
-
-CC_Class *CC_addToSet(CC_Set *set)
-{
+CC_Class *CC_addToSet(CC_Set *set) {
   CC_Class *result;
 
   if (set->size >= set->max_size) {
@@ -619,20 +550,12 @@ CC_Class *CC_addToSet(CC_Set *set)
   return result;
 }
 
-/*}}}  */
-/*{{{  CC_Class *CC_getFromSet(CC_Set *set, int elem) */
-
-CC_Class *CC_getFromSet(CC_Set *set, int elem)
-{
+CC_Class *CC_getFromSet(CC_Set *set, int elem) {
   assert(elem >= 0 && elem < set->size);
   return set->classes[elem];
 }
 
-/*}}}  */
-/*{{{  void CC_copySet(CC_Set *dest, CC_Set *source) */
-
-void CC_copySet(CC_Set *source, CC_Set *dest)
-{
+void CC_copySet(CC_Set *source, CC_Set *dest) {
   int i;
 
   CC_flushSet(dest);
@@ -643,12 +566,7 @@ void CC_copySet(CC_Set *source, CC_Set *dest)
   }
 }
 
-/*}}}  */
-
-/*{{{  void CC_addBoundaries(CC_Class *elems, CC_Class *bounds) */
-
-void CC_addBoundaries(CC_Class *elems, CC_Class *bounds)
-{
+void CC_addBoundaries(CC_Class *elems, CC_Class *bounds) {
   int i;
   ATbool cur = ATfalse, contains;
 
@@ -661,12 +579,7 @@ void CC_addBoundaries(CC_Class *elems, CC_Class *bounds)
   }
 }
 
-/*}}}  */
-
-/*{{{  void CC_partitionSet(CC_Set *set) */
-
-void CC_partitionSet(CC_Set *set)
-{
+void CC_partitionSet(CC_Set *set) {
   CC_Set result;
   CC_Class cur, *peer, *next, intersection, difference;
   int i, j;
@@ -703,15 +616,8 @@ void CC_partitionSet(CC_Set *set)
   CC_flushSet(&result);
 }
 
-/*}}}  */
-/*{{{  void CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result) */
-
-/**
- * This function can be called with result == set!
- */
-
-void CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result)
-{
+/* This function can be called with result == set! */
+void CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result) {
   int i;
   CC_Class *next;
 
@@ -730,15 +636,8 @@ void CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result)
   result->classes[result->size] = NULL;
 }
 
-/*}}}  */
-/*{{{  void CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result) */
-
-/**
- * This function can be called with result == set!
- */
-
-void CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result)
-{
+/* This function can be called with result == set! */
+void CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result) {
   int i, size;
   CC_Class *next;
 
@@ -758,20 +657,11 @@ void CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result)
   result->classes[result->size] = NULL;
 }
 
-/*}}}  */
-
-/*{{{  int CC_getSetSize(CC_Set *set) */
-
-int CC_getSetSize(CC_Set *set)
-{
+int CC_getSetSize(CC_Set *set) {
   return set->size;
 }
 
-/*}}}  */
-/*{{{  void CC_writeSetToFile(FILE *f, CC_Set *set) */
-
-void CC_writeSetToFile(FILE *f, CC_Set *set)
-{
+void CC_writeSetToFile(FILE *f, CC_Set *set) {
   int i;
 
   fputc('{', f);
@@ -784,12 +674,7 @@ void CC_writeSetToFile(FILE *f, CC_Set *set)
   fputc('}', f);
 }
 
-/*}}}  */
-
-/*{{{  CC_Class *CC_getCharClass(ATerm symbol) */
-
-CC_Class *CC_getCharClass(ATerm symbol)
-{
+CC_Class *CC_getCharClass(PT_Symbol symbol) {
   long index;
   int old_size;
 
@@ -806,11 +691,10 @@ CC_Class *CC_getCharClass(ATerm symbol)
   }
 
   if (char_classes[index] == NULL) {
-    char_classes[index] = CC_ClassFromTerm(symbol);
+    char_classes[index] = CC_ClassFromPTSymbol(symbol);
   }
 
   return char_classes[index];
 }
 
-/*}}}  */
 

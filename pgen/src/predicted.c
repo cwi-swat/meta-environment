@@ -1,36 +1,39 @@
+/* $Id$ */
+
 #include <assert.h>
-
 #include <aterm2.h>
+#include <ptable.h>
 
-#include "ksdf2table.h"
 #include "characters.h"
 #include "item.h"
 #include "itemset.h"
 #include "goto.h"
 #include "priorities.h"
+#include "parseTable-data.h"
 
-/*{{{  static ATermList pred(Item item, ATermList items) */
-
-static ATermList predict(Item item, ATermList items)
-{
-  ATerm prodnr;
-  ATerm dotsymbol;
+/* For all non-terminals which are to the right of the dot in |item|, add 
+ * that non-terminal's items to the set of |items| if they do not already 
+ * exist. Note that only items that do not cause a priority conflict are 
+ * added to the predicted items. */
+static ATermList predict(Item item, ATermList items) {
+  int prodnr;
+  PT_Symbol dotsymbol;
   ATermList prods;
 
   if (IT_isValidItem(item)) {
-    dotsymbol = IT_getDotSymbol(item);
-    if (!ATisEqual(dotsymbol, empty_set)) {
-      prods = (ATermList)ATtableGet(rhs_prods_pairs, dotsymbol);
+    dotsymbol = (PT_Symbol)IT_getDotSymbol(item);
+    if (!PT_isSymbolEmpty(dotsymbol)) {
+      prods = PGEN_getProductionNumbersOfRhsNonTerminal(dotsymbol);
       if (prods) {
-	while (!ATisEmpty(prods)) {
-	  /*ATwarning("prods = %t\n", prods);*/
-	  prodnr = ATgetFirst(prods);
-	  prods = ATgetNext(prods);
-	  if (!conflicts(item, prodnr)) {
-	    Item newitem = IT_createItem(ATgetInt((ATermInt)prodnr));
-	    items = ATinsert(items, IT_ItemToTerm(newitem));
-	  }
-	}
+        while (!ATisEmpty(prods)) {
+          /*ATwarning("prods = %t\n", prods);*/
+          prodnr = ATgetInt((ATermInt)ATgetFirst(prods));
+          prods = ATgetNext(prods);
+          if (!PGEN_isPriorityConflict(item, prodnr)) {
+            Item newitem = IT_createItem(prodnr);
+            items = ATinsert(items, IT_ItemToTerm(newitem));
+          }
+        }
       }
     }
   }
@@ -38,13 +41,15 @@ static ATermList predict(Item item, ATermList items)
   return items;
 }
 
-/*}}}  */
-/*{{{  void closure(ATermList items, ItemSet processed) */
-
-void closure(ATermList items, ItemSet processed)
-{
+/* Perform the epsilon closure on a set of |items| to construct a DFA state. 
+ * The set of |items| passed in are the kernel items of the state and the item
+ * set returned includes the kernel items.  
+ * The item set |processed| contains the items that have been processed during 
+ * the epsilon closure.*/ 
+ItemSet closure(ATermList items) {
   ATerm it;
   Item item;
+  ItemSet processed = ITS_create();
 
   while (!ATisEmpty(items)) {
     it = ATgetFirst(items);
@@ -55,15 +60,19 @@ void closure(ATermList items, ItemSet processed)
       ITS_add(processed, item);
     }
   }
+
+  return processed;
 }
 
-/*}}}  */
-/*{{{  void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars) */
-
-void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars)
-{
+/* Given an itemset find the productions or symbols that will label the edges 
+ * leaving the state containing the given itemset. Specifically: 
+ * - For items of the form (\cdot \alpha -> X) add that item's production 
+ *   number to predprods.
+ * - For items of the form (\alpha \cdot A \beta -> X) add A to predchars, 
+ *   where can be a terminal or a non-terminal encoded as a char-class. */
+void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars) {
   Item item;
-  ATerm symbol;
+  PT_Symbol symbol;
   ItemSetIterator iter;
 
   *predprods = ATempty;
@@ -71,19 +80,17 @@ void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars)
   ITS_iterator(itemset, &iter);
   while (ITS_hasNext(&iter)) {
     item = ITS_next(&iter);
- 
+    
     if (IT_getDotPosition(item) == 0) {
       ATerm prod = (ATerm)ATmakeInt(IT_getProdNr(item));
       /*assert(ATindexOf(*predprods, prod, 0) == -1);*/
       *predprods = ATinsert(*predprods, prod);
     }
 
-    symbol = IT_getDotSymbol(item);
-    /*ATwarning("item = %t, symbol = %t (%d)\n", item, symbol, IS_CHARCLASS(symbol));*/
-    if (IS_CHARCLASS(symbol)) {
-      CC_addATermClass(CC_addToSet(predchars), symbol);
+    symbol = (PT_Symbol)IT_getDotSymbol(item);
+    
+    if (PT_isSymbolCharClass(symbol)) {
+      CC_addPTSymbolToClass(CC_addToSet(predchars), symbol);
     }
   }
 }
-
-/*}}}  */

@@ -1,129 +1,98 @@
+/* $Id$ */
+
+/* Calculates and stores the follow sets of all productions in a grammar. 
+ * The original implementation is based on the desription given in Eelco 
+ * Visser's thesis. */
+
 #include <assert.h>
 
-#include "ksdf2table.h"
 #include "characters.h"
 #include "follow.h"
 #include "priorities.h"
 #include "first.h"
 #include "intset.h"
+#include "parseTable-data.h"
+#include "atsets.h"
 
-extern int MAX_PROD;
-
-CC_Class  **follow_table = NULL;
+static CC_Class  **follow_table = NULL;
+/* For each production x, |dependencies| contains the production numbers of the
+ * non-terminals that the follow set of x depends on. */
 static ATermList *dependencies = NULL;
+/* The dependency_closure is an array of length maxProductionNumber of IntSets. 
+ * IntSets are an efficient implementation of integer sets. They represent 
+ * an integer by setting the appropriate bit in an array. Each element in that 
+ * array represents the number of bits in an unsigned long. Therefore, on a 
+ * 32-bit machine, each element in the IntSet represents 32 production 
+ * numbers. To check if a production number is in an IntSet we find the correct
+ * element in the array by dividing the production number by 32. Then by 
+ * finding modding the production number by 32 we find the bit for that 
+ * production.*/
 static IS_IntSet *depend_closure = NULL;
 static CC_Class **initial_follow_sets = NULL;
 
-extern ATermTable first_table;
-extern ATermTable priority_table;
-
-/*{{{  ATermList charclassExtraction(ATermList followset) */
-
-/* This calculation should be performed once and not each time */
-CC_Class *charclassExtraction(ATermList followset)
-{
-  ATerm felem;
-  CC_Class *newClass = CC_makeClassEmpty();
-
-  while (!ATisEmpty(followset)) {
-    CC_Class *fcc;
-    felem = ATgetFirst(followset);
-    followset = ATgetNext(followset);
-
-    fcc = CC_ClassFromTerm(felem);
-
-    if (IS_CHARCLASS(felem)) {
-      CC_union(newClass, fcc, newClass);
+#if 0
+static void printFollowTable() {
+  int prodid;
+  ATerm follow; 
+  for (prodid = MIN_PROD_NUM; prodid<PGEN_getMaxProductionNumber(); prodid++) {
+    if (follow_table[prodid]) {
+      follow = (ATerm)CC_ClassToPTCharRanges(follow_table[prodid]);
     }
-
-    CC_free(fcc);
+    else {
+      follow = (ATerm)ATempty;
+    }
+    
+    ATwarning("follow_table[%d] = %t\n", prodid, follow);
   }
-  if (CC_isEmpty(newClass)) {
-    CC_free(newClass);
-    return NULL;
-  }
+}
+#endif
 
-  return newClass;
+CC_Class *PGEN_getFollowSet(int prodNumber) {
+  return follow_table[prodNumber];
 }
 
-/*}}}  */
-
-/*{{{  ATermList followset_filtering(ATermList followset) */
-
-ATermList followset_filtering(ATermList followset)
-{
-  ATerm felem;
-  ATermList newfollowset = ATempty;
-
-  while (!ATisEmpty(followset)) {
-    felem = ATgetFirst(followset);
-    followset = ATgetNext(followset);
-
-    if (IS_CHARCLASS(felem))
-      newfollowset = ATinsert(newfollowset, felem);
-  }
-  return newfollowset;
-}
-
-/*}}}  */
-
-/*{{{  static ATermList init_dependency(int prod) */
-
-/**
- * Initialize the dependency of a single production.
- */
-
-static ATermList init_dependency(int prodid)
-{
-  static ATerm *elems = NULL;
-  static int max_elems = 0;
-
-  ATerm prodnr, prod, dep;
-  ATermList depends, symbols, orgdep;
-  int idx, nr_elems;
+/* Find the production numbers that the given production depends on. 
+ * A production (\alpha \beta -> A) depends on the rightmost non-terminals 
+ * \beta that derive epsilon and don't have a priority conflict with the given 
+ * production. */
+static ATermList init_dependency(int prodid) {
+  ATerm prodnr; 
+  ATerm dep;
+  PT_Production prod;
+  PT_Symbols symbols;
+  ATermList depends; 
+  ATermList orgdep;
 
   prodnr = (ATerm)ATmakeInt(prodid);
-  prod = nr_prod_table[prodid];
+  prod = PGEN_getProductionOfProductionNumber(prodid);
   assert(prod);
-  symbols = GET_LIST_ARG(prod, 0);
-
-  nr_elems = ATgetLength(symbols);
-  if (nr_elems > max_elems) {
-    elems = (ATerm *)realloc(elems, sizeof(ATerm)*nr_elems);
-    if (!elems)
-      ATerror("out of memory!\n");
-    max_elems = nr_elems;
-  }
-
-  idx = 0;
-  while (!ATisEmpty(symbols)) {
-    elems[idx++] = ATgetFirst(symbols);
-    symbols = ATgetNext(symbols);
-  }
-
+  symbols = PT_getProductionLhs(prod);
+  
   depends = ATempty;
-  for(--idx; idx>=0; idx--) {
-    ATerm elem = elems[idx];
-
-    orgdep = (ATermList)ATtableGet(rhs_prods_pairs, elem);
-    if (!orgdep)
-      break; /* Declared sort with no productions, this should not happen! */
-
+  symbols = PT_reverseSymbols(symbols);
+  
+  while (!PT_isSymbolsEmpty(symbols)) {
+    PT_Symbol elem = PT_getSymbolsHead(symbols);
+    symbols = PT_getSymbolsTail(symbols);
+    
+    orgdep = PGEN_getProductionNumbersOfRhsNonTerminal(elem);
+    if (!orgdep) {
+      break; /* Symbol is a terminal. */
+    }
+    
     while (!ATisEmpty(orgdep)) {
       dep = ATgetFirst(orgdep);
       orgdep = ATgetNext(orgdep);
-      if (!conflicts(IT_createItemDot(prodid, idx), dep)) {
-	depends = ATaddElement(depends, dep);
+      if (!PGEN_isPriorityConflict(IT_createItemDot(prodid, PT_getSymbolsLength(symbols)), ATgetInt((ATermInt)dep))) {
+        depends = ATaddElement(depends, dep);
       }
     }
 
+    /* If the first set of elem does not contain an epsilon then do not 
+     * continue finding the dependencies. */
     if (!CC_containsChar(get_first_set(elem, ATtrue), CC_EPSILON)) {
-      break;
+      break; 
     }
-    /*
-    if (!contains_epsilon((ATermList)ATtableGet(first_table, elem)))
-      break;
-      */
   }
 
   /* Remove yourself if present */
@@ -132,128 +101,78 @@ static ATermList init_dependency(int prodid)
   return depends;
 }
 
-/*}}}  */
-/*{{{  static void init_dependencies() */
-
-/**
- * Calculate dependencies (which prods followset depends on which prods followset)
- */
-
-static void init_dependencies()
-{
+/* Calculate dependencies (which prod's followset depends on which prod's 
+ * followset). */
+static void init_dependencies() {
   int i;
-
-  dependencies = (ATermList *)calloc(MAX_PROD, sizeof(ATermList));
+  int maxProductionNumber = PGEN_getMaxProductionNumber();
+  
+  dependencies = (ATermList *)calloc(maxProductionNumber, sizeof(ATermList));
   if (!dependencies) {
     ATerror("out of memory!\n");
   }
-  ATprotectArray((ATerm *)(dependencies+MIN_PROD), MAX_PROD-MIN_PROD);
+  ATprotectArray((ATerm *)(dependencies+MIN_PROD_NUM),maxProductionNumber-MIN_PROD_NUM);
 
-  for(i=MIN_PROD; i<MAX_PROD; i++) {
+  for(i = MIN_PROD_NUM; i < maxProductionNumber; i++) {
     dependencies[i] = init_dependency(i);
   }
 }
 
-/*}}}  */
+/* Find all productions that are dependant on another production. */
+static void find_closure(int prodid, ATermList *forward_depends, IS_IntSet set) {
+  ATermList productionsDepenantOnProdId = forward_depends[prodid];
 
-/*{{{  static void find_closure(int prodid, ATermList *deps, IS_IntSet set) */
-
-static void find_closure(int prodid, ATermList *dependencies, IS_IntSet set)
-{
-  ATermList deps = dependencies[prodid];
-
-  if (deps) {
-    while (!ATisEmpty(deps)) {
-      int dep = ATgetInt((ATermInt)ATgetFirst(deps));
-      if (IS_add(set, dep)) {
-	find_closure(dep, dependencies, set);
+  if (productionsDepenantOnProdId) {
+    while (!ATisEmpty(productionsDepenantOnProdId)) {
+      int productionDependantOnProdId = ATgetInt((ATermInt)ATgetFirst(productionsDepenantOnProdId));
+      if (IS_add(set, productionDependantOnProdId)) {
+        find_closure(productionDependantOnProdId, forward_depends, set);
       }
-      deps = ATgetNext(deps);
+      productionsDepenantOnProdId = ATgetNext(productionsDepenantOnProdId);
     }
   }
 }
 
-/*}}}  */
-
-#if 0
-/*{{{  static ATermList extract_prods(IS_IntSet set) */
-
-static ATermList extract_prods(IS_IntSet set)
-{
-  ATermList result = ATempty;
-  int i;
-
-  for (i=MAX_PROD-1; i>=0; i--) {
-    while (i % 32 == 31 && set[i/32] == 0) {
-      i -= 32;
-      if (i == -1) {
-	return result;
-      }
-    }
-    if (IS_contains(set, i)) {
-      result = ATinsert(result, (ATerm)ATmakeInt(i));
-    }
-  }
-
-  return result;
-}
-
-/*}}}  */
-/*{{{  static void add_prods(IS_IntSet set, ATermList prods) */
-
-static void add_prods(IS_IntSet set, ATermList prods)
-{
-  ATwarning("adding prods: %t\n", prods);
-  while (!ATisEmpty(prods)) {
-    int prodid = ATgetInt((ATermInt)ATgetFirst(prods));
-    IS_add(set, prodid);
-    prods = ATgetNext(prods);
-  }
-}
-
-/*}}}  */
-#endif
-
-/*{{{  static void closure_dependencies() */
-
-static void closure_dependencies()
-{
+/* Calculate the forward dependencies - the productions that are depended on
+ * by another production - and then calculate the dependency closure. */
+static void closure_dependencies() {
+  int maxProductionNumber = PGEN_getMaxProductionNumber();
   int prodid;
   ATermList depends;
   ATermList *forward_depends;
   IS_IntSet set;
 
-  /*{{{  Initialize depend_closure elements */
-
-  depend_closure = (IS_IntSet *)calloc(MAX_PROD, sizeof(IS_IntSet));
+  depend_closure = (IS_IntSet *)calloc(maxProductionNumber, sizeof(IS_IntSet));
   if (!depend_closure) {
     ATerror("out of memory!\n");
   }
 
-  forward_depends = (ATermList *)calloc(MAX_PROD, sizeof(ATermList));
+  forward_depends = (ATermList *)calloc(maxProductionNumber, sizeof(ATermList));
   if (!forward_depends) {
     ATerror("out of memory in closure_dependencies (1)\n");
   }
-  ATprotectArray((ATerm *)forward_depends, MAX_PROD);
+  ATprotectArray((ATerm *)forward_depends, maxProductionNumber);
 
-  /*}}}  */
-
-  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+  /* For each production (prod), and for each of the productions that it 
+   * depends on (fwd_prod) add prod to the fwd_prod. In other words, find the 
+   * productions that are depended on by another production. */
+  for(prodid = MIN_PROD_NUM; prodid < maxProductionNumber; prodid++) {
     ATerm prod = (ATerm)ATmakeInt(prodid);
     depends = dependencies[prodid];
     while (!ATisEmpty(depends)) {
       int fwd_prod = ATgetInt((ATermInt)ATgetFirst(depends));
       if (forward_depends[fwd_prod] == NULL) {
-	forward_depends[fwd_prod] = ATmakeList1(prod);
+        forward_depends[fwd_prod] = ATmakeList1(prod);
       } else {
-	forward_depends[fwd_prod] = ATinsert(forward_depends[fwd_prod], prod);
+        forward_depends[fwd_prod] = ATinsert(forward_depends[fwd_prod], prod);
       }
       depends = ATgetNext(depends);
     }
   }
 
-  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-    set = IS_create(MAX_PROD);
+  /* For each production */
+  for(prodid = MIN_PROD_NUM; prodid < maxProductionNumber; prodid++) {
+    set = IS_create(maxProductionNumber);
     IS_add(set, prodid);
     find_closure(prodid, forward_depends, set);
     depend_closure[prodid] = set;
@@ -263,103 +182,92 @@ static void closure_dependencies()
   free(forward_depends);
 }
 
-/*}}}  */
-
-/*{{{  static void init_follow_set(int prodid) */
-
-static void init_follow_set(int prodid)
-{
-  ATerm prod, symbol;
-  ATermList symbols, prods;
+/* For a production of the form (B /alpha -> A) calculate the follow set of B, 
+ * by getting the first set of /alpha, minus the epsilon. However, if there is 
+ * an epsilon in the first set of /alpha then the follow set of A should be 
+ * added to the follow set of B. It does not appear to do this here! Is this
+ * case handled by the dependencies? */
+static void init_follow_set(int prodid) {
+  PT_Production prod;
+  ATermList prods;
+  PT_Symbol symbol;
+  PT_Symbols symbols; 
   CC_Class *follow;
   CC_Class *set;
-  int iptr, len;
+  int iptr = 0;
 
-  prod = nr_prod_table[prodid];
+  prod = PGEN_getProductionOfProductionNumber(prodid);
   assert(prod);
-  symbols = GET_LIST_ARG(prod, 0);
+  symbols = PT_getProductionLhs(prod);
 
-  iptr = 0;
-  len  = ATgetLength(symbols);
-  while (!ATisEmpty(symbols)) {
-    symbol = ATgetFirst(symbols);
-    symbols = ATgetNext(symbols);
+  /* Iterate over the left hand side symbols and for each non-terminal add 
+   * the first set, minus the epsilon, of the remaining symbols to its follow 
+   * set. */
+  while (!PT_isSymbolsEmpty(symbols)) {
+    symbol = PT_getSymbolsHead(symbols);
+    symbols = PT_getSymbolsTail(symbols);
 
     if (!ATisEmpty(symbols)) {
-	prods = (ATermList)ATtableGet(rhs_prods_pairs, symbol);
-	if (prods) {
-	  follow = first_no_epsilon(symbols);
-	  while (!ATisEmpty(prods)) {
-	    ATerm lhs_prodnr = ATgetFirst(prods);
-	    prods = ATgetNext(prods);
-	    if (!conflicts(IT_createItemDot(prodid, iptr), lhs_prodnr)) {
-	      int lhs_prodid = ATgetInt((ATermInt)lhs_prodnr);
-	      set = initial_follow_sets[lhs_prodid];
-	      CC_union(set, follow, set);
-	    }
-	  }
-	  CC_free(follow);
-	}
+      prods = PGEN_getProductionNumbersOfRhsNonTerminal(symbol);
+      /* If symbol is a non-terminal... */
+      if (prods) {
+        follow = first_no_epsilon(symbols);
+        while (!ATisEmpty(prods)) {
+          int lhs_prodnr = ATgetInt((ATermInt)ATgetFirst(prods));
+          prods = ATgetNext(prods);
+          if (!PGEN_isPriorityConflict(IT_createItemDot(prodid, iptr), lhs_prodnr)) {
+            set = initial_follow_sets[lhs_prodnr];
+            CC_union(set, follow, set);
+          }
+        }
+        CC_free(follow);
       }
+    }
 
     iptr++;
   }
 }
 
-/*}}}  */
-/*{{{  static void init_follow_sets() */
-
-static void init_follow_sets()
-{
+static void init_follow_sets() {
+  int maxProductionNumber = PGEN_getMaxProductionNumber();
   int prodid;
 
-  initial_follow_sets = (CC_Class **)calloc(MAX_PROD, sizeof(CC_Class *));
+  initial_follow_sets = (CC_Class **)calloc(maxProductionNumber, sizeof(CC_Class *));
   if (!initial_follow_sets) {
     ATerror("out of memory!\n");
   }
 
-  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+  for(prodid = MIN_PROD_NUM; prodid < maxProductionNumber; prodid++) {
     initial_follow_sets[prodid] = CC_makeClassEmpty();
   }
 
-  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+  for(prodid = MIN_PROD_NUM; prodid < maxProductionNumber; prodid++) {
     init_follow_set(prodid);
   }
 }
 
-/*}}}  */
-
-/*{{{  static void union_follow_sets() */
-
-/**
- * Union all follow sets found in the dependency closure
- */
-
-static void union_follow_sets()
-{
+/* For each production, get the rules that are needed to calculate the follow 
+ * set of that production (the dependencies) and add the initial follow set of 
+ * the dependencies to the follow set of the rule. */
+static void union_follow_sets() {
+  int maxProductionNumber = PGEN_getMaxProductionNumber();
   int prodid, i;
-  ATbool done;
   IS_IntSet deps;
 
-  follow_table = (CC_Class **)calloc(MAX_PROD, sizeof(CC_Class *));
+  /* TODO: This should probably be a malloc since follow_table is initialized 
+   * below. */
+  follow_table = (CC_Class **)calloc(maxProductionNumber, sizeof(CC_Class *));
   if (!follow_table) {
     ATerror("out of memory!\n");
   }
 
-  for (prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+  for (prodid = MIN_PROD_NUM; prodid < maxProductionNumber; prodid++) {
     follow_table[prodid] = CC_makeClassEmpty();
     deps = depend_closure[prodid];
-    done = ATfalse;
-    for (i=MAX_PROD-1; !done && i>=MIN_PROD; i--) {
-      while (i % 32 == 31 && deps[i/32] == 0) {
-	i -= 32;
-	if (i == -1) {
-	  done = ATtrue;
-	  break;
-	}
-      }
-      if (!done && IS_contains(deps, i)) {
-	CC_union(follow_table[prodid], initial_follow_sets[i], follow_table[prodid]);
+   
+    for (i = maxProductionNumber-1; i >= MIN_PROD_NUM; i--) {
+      if (IS_contains(deps, i)) {
+        CC_union(follow_table[prodid], initial_follow_sets[i], follow_table[prodid]);
       }
     }
     IS_destroy(deps);
@@ -369,45 +277,23 @@ static void union_follow_sets()
     }
   }
   free(depend_closure);
-
-  /*
-  for (prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-    ATwarning("follow_table[%d] = %t\n", prodid,
-	      follow_table[prodid] ? CC_ClassToTerm(follow_table[prodid]) : ATempty);
-  }
-  */
 }
 
-/*}}}  */
-
-/*{{{  void calc_follow_table() */
-
-void calc_follow_table()
-{
-  /*
-     int i;
-     */
+void calc_follow_table() {
 
   init_dependencies();	
-
   closure_dependencies();
-
   init_follow_sets();
-
   union_follow_sets();
 
-  ATunprotectArray((ATerm *)(dependencies+MIN_PROD));
+  ATunprotectArray((ATerm *)(dependencies+MIN_PROD_NUM));
   free(dependencies);
 }
 
-/*}}}  */
-/*{{{  void destroy_follow_table() */
-
-void destroy_follow_table()
-{
+void destroy_follow_table() {
   int i;
 
-  for (i=0; i<MAX_PROD; i++) {
+  for (i = 0; i < PGEN_getMaxProductionNumber(); i++) {
     if (follow_table[i] != NULL) {
       CC_free(follow_table[i]);
     }
@@ -421,4 +307,3 @@ void destroy_follow_table()
   initial_follow_sets = NULL;
 }
 
-/*}}}  */

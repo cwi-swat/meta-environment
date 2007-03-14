@@ -1,46 +1,35 @@
+/* $Id$ */
+
 #include "flatten.h"
+#include <SDF2PT.h>
 
-/*{{{ ATerm SDFflattenLookAhead(ATerm la) */
-
-/**
- * Converts the term representation of a lookahead.
- **/
-
-ATerm SDFflattenLookAhead(SDF_Lookahead lookAhead, ATbool nested)
-{
-  ATerm atLookAhead;
-  ATerm atCharClass;
+PTBL_CharClasses implodeLookaheadRecursive(SDF_Lookahead lookahead) {
+  PTBL_CharClass ptblCharClass;
+  PTBL_CharClasses ptblCharClasses = PTBL_makeCharClassesEmpty();
+  PTBL_CharClasses recPTBLCharClasses;
   SDF_CharClass charClass;
   SDF_Lookaheads lookAheads;
   SDF_Lookahead localLookAhead;
   SDF_LookaheadList lookAheadList;
-  ATermList newLookAheads;
 
-  if (SDF_isLookaheadCharClass(lookAhead) && !nested) {
-    charClass = SDF_getLookaheadCharClass(lookAhead);
-
-    return PT_SymbolToTerm(SDFCharClassToPtSymbol(charClass));
+  if (SDF_isLookaheadCharClass(lookahead)) {
+    charClass = SDF_getLookaheadCharClass(lookahead);
+    ptblCharClass = (PTBL_CharClass)SDFCharClassToPtSymbol(charClass);
+ 
+    return PTBL_makeCharClassesSingle(ptblCharClass); 
   }
-  else if (SDF_isLookaheadCharClass(lookAhead) && nested) {
-    charClass = SDF_getLookaheadCharClass(lookAhead);
-    atCharClass = PT_SymbolToTerm(SDFCharClassToPtSymbol(charClass));
+  else if (SDF_isLookaheadSeq(lookahead)) {
+    charClass = SDF_getLookaheadHead(lookahead);
+    lookAheads = SDF_getLookaheadTail(lookahead);
 
-    return ATmake("look(<term>,[<list>])", atCharClass, ATempty);
-  }
-  else if (SDF_isLookaheadSeq(lookAhead)) {
-    charClass = SDF_getLookaheadHead(lookAhead);
-    lookAheads = SDF_getLookaheadTail(lookAhead);
-
-    atCharClass = PT_SymbolToTerm(SDFCharClassToPtSymbol(charClass));
-
+    ptblCharClass = (PTBL_CharClass)SDFCharClassToPtSymbol(charClass);
     lookAheadList = SDF_getLookaheadsList(lookAheads);
 
-    newLookAheads = ATempty;
     while (SDF_hasLookaheadListHead(lookAheadList)) {
       localLookAhead = SDF_getLookaheadListHead(lookAheadList);
 
-      atLookAhead = SDFflattenLookAhead(localLookAhead, ATtrue);
-      newLookAheads = ATappend(newLookAheads, atLookAhead);
+      recPTBLCharClasses = implodeLookaheadRecursive(localLookAhead);
+      ptblCharClasses = PTBL_concatCharClasses(ptblCharClasses, recPTBLCharClasses);
       
       if (SDF_hasLookaheadListTail(lookAheadList)) {
         lookAheadList = SDF_getLookaheadListTail(lookAheadList);
@@ -49,12 +38,17 @@ ATerm SDFflattenLookAhead(SDF_Lookahead lookAhead, ATbool nested)
         break;
       }
     }
-    return ATmake("look(<term>,[<list>])", atCharClass, newLookAheads);
+    return PTBL_makeCharClassesMany(ptblCharClass, ptblCharClasses);
   }
   else {
-    ATerror("expected lookahead, got %t\n", lookAhead);
+    ATerror("expected lookahead, got %t\n", lookahead);
     return NULL;
   }
 }
 
-/*}}} */
+/* Converts the term representation of a lookahead. */
+PTBL_Restriction implodeLookahead(SDF_Lookahead lookahead) {
+  PTBL_CharClasses charClasses = implodeLookaheadRecursive(lookahead);
+
+  return PTBL_makeRestrictionFollow(charClasses);
+}

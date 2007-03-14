@@ -1,40 +1,27 @@
-
-/*{{{  includes */
+/* $Id$ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
 #include <aterm2.h>
 
 #include "itemset.h"
 
-/*}}}  */
-/*{{{  defines */
+#define MAGIC_K	   17
+#define HASH(item) ((unsigned)(((unsigned int)item)*MAGIC_K))
+
+static const int INITIAL_SET_SIZE = 16;
+static const int MAGIC_JUMP = 5;
+static const int THRESHOLD_PCT = 70;
 
 
-#define INITIAL_TABLE_SIZE 16
-#define MAGIC_K		   17
-#define MAGIC_JUMP	   5
-#define HASH(item)	   ((unsigned)(((unsigned int)item)*MAGIC_K))
-#define THRESHOLD_PCT	   70
-
-
-/*}}}  */
-/*{{{  typedef struct ItemBucket */
-
-typedef struct
-{
-  ATerm symbol;
+typedef struct {
+  PT_Symbol symbol;
   int   size;
   Item *items;
 } ItemBucket;
 
-/*}}}  */
-/*{{{  struct _ItemSet */
-
-struct _ItemSet
-{
+struct _ItemSet {
   int   size;
   int   count;
   Item *table;
@@ -42,12 +29,7 @@ struct _ItemSet
   ItemBucket **items_per_dotsym;
 };
 
-/*}}}  */
-
-/*{{{  static void ITS_init(ItemSet set, int size) */
-
-static void ITS_init(ItemSet set, int size)
-{
+static void ITS_init(ItemSet set, int size) {
   int i;
 
   set->count = 0;
@@ -70,31 +52,23 @@ static void ITS_init(ItemSet set, int size)
   for (i=0; i<set->size; i++) {
     set->table[i] = NO_ITEM;
     set->list[i]  = NO_ITEM;
-    set->items_per_dotsym[i] = NULL;
+    set->items_per_dotsym[i] = NULL; /* TODO: This can be removed since calloc 
+                                        initialises the allocated memory to 0.*/
   }
 }
 
-/*}}}  */
-/*{{{  ItemSet ITS_create() */
-
-ItemSet ITS_create()
-{
+ItemSet ITS_create() {
   ItemSet set = malloc(sizeof(struct _ItemSet));
   if (set == NULL) {
     ATerror("ITS_create: out of memory.\n");
   }
 
-  ITS_init(set, INITIAL_TABLE_SIZE);
+  ITS_init(set, INITIAL_SET_SIZE);
 
   return set;
 }
 
-/*}}}  */
-
-/*{{{  static void ITS_flush(ItemSet set) */
-
-static void ITS_flush(ItemSet set)
-{
+static void ITS_flush(ItemSet set) {
   int i;
 
   assert(set->list);
@@ -116,21 +90,12 @@ static void ITS_flush(ItemSet set)
   free(set->items_per_dotsym);
 }
 
-/*}}}  */
-/*{{{  void ITS_destroy(ItemSet set) */
-
-void ITS_destroy(ItemSet set)
-{
+void ITS_destroy(ItemSet set) {
   ITS_flush(set);
   free(set);
 }
 
-/*}}}  */
-
-/*{{{  static void resize_table(ItemSet set) */
-
-static void resize_table(ItemSet set)
-{
+static void resize_table(ItemSet set) {
   struct _ItemSet newset;
   ItemSetIterator iter;
 
@@ -149,14 +114,9 @@ static void resize_table(ItemSet set)
   assert(set->count == newset.count);
 }
 
-/*}}}  */
-
-/*{{{  void ITS_add(ItemSet set, Item item) */
-
-void ITS_add(ItemSet set, Item item)
-{
+void ITS_add(ItemSet set, Item item) {
   unsigned int hnr;
-  ATerm dotsym;
+  PT_Symbol dotsym;
   ItemBucket *bucket;
  
   assert(item != NO_ITEM);
@@ -177,6 +137,7 @@ void ITS_add(ItemSet set, Item item)
 
   dotsym = IT_getDotSymbol(item);
   hnr = HASH(dotsym) % set->size;
+  
   while (set->items_per_dotsym[hnr] != NULL
 	 && set->items_per_dotsym[hnr]->symbol != dotsym) {
     hnr = (hnr + MAGIC_JUMP) % set->size;
@@ -207,11 +168,7 @@ void ITS_add(ItemSet set, Item item)
   }
 }
 
-/*}}}  */
-/*{{{  ATbool  ITS_contains(ItemSet set, Item item) */
-
-ATbool  ITS_contains(ItemSet set, Item item)
-{
+ATbool  ITS_contains(ItemSet set, Item item) {
   unsigned int hnr;
  
   assert(item != NO_ITEM);
@@ -224,28 +181,15 @@ ATbool  ITS_contains(ItemSet set, Item item)
   return set->table[hnr] == item;
 }
 
-/*}}}  */
-/*{{{  int ITS_size(ItemSet set) */
-
-int ITS_size(ItemSet set)
-{
+int ITS_size(ItemSet set) {
   return set->count;
 }
 
-/*}}}  */
-
-/*{{{  void ITS_iterator(ItemSet set, ItemSetIterator *iterator) */
-
-void ITS_iterator(ItemSet set, ItemSetIterator *iterator)
-{
+void ITS_iterator(ItemSet set, ItemSetIterator *iterator) {
   *iterator = &set->list[0];
 }
 
-/*}}}  */
-/*{{{  void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator) */
-
-void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator)
-{
+void ITS_iteratorPerDotSym(ItemSet set, PT_Symbol dotsym, ItemSetIterator *iterator) {
   unsigned int hnr;
   static Item empty[1] = { NO_ITEM };
 
@@ -262,25 +206,20 @@ void ITS_iteratorPerDotSym(ItemSet set, ATerm dotsym, ItemSetIterator *iterator)
   }
 }
 
-/*}}}  */
 
 #if 0
-/*{{{  Item ITS_next(ItemSetIterator iterator) */
 
 Item ITS_next(ItemSetIterator *iterator)
 {
   return *((*iterator)++);
 }
 
-/*}}}  */
-/*{{{  ATbool ITS_hasNext(ItemSetIterator *iterator) */
 
 ATbool ITS_hasNext(ItemSetIterator *iterator)
 {
   return **iterator != NO_ITEM;
 }
 
-/*}}}  */
 #endif
 
 

@@ -1,232 +1,84 @@
-/*{{{  includes */
+/* $Id$ */
 
-#include <unistd.h>
 #include <assert.h>
-
 #include <aterm2.h>
-
+#include <logging.h>
 #include "ksdf2table.h" 
 #include "priorities.h" 
 #include "flatten.h"
-#include "statistics.h"
+#include "first.h"
+#include "pgenOptions.h"
+#include "parseTable-data.h"
+
+/*#include <unistd.h>
+#include <ptable.h>
+#include <rsrc-usage.h>
 #include "characters.h"
 #include "intset.h"
-#include "first.h"
 #include "pgen-symbol.h"
-#include "follow.h"
+#include "follow.h"*/
 
-/*}}}  */
-
-/*{{{  types */
-
-typedef struct _GotoBucket
-{
+typedef struct _GotoBucket {
   int nr_entries;
   int *entries;
 } GotoBucket;
 
-/*}}}  */
-/*{{{  global variables */
+static int nr_of_lhs_members = 0;
+static int max_nr_lhs_members = 0;
 
-int MAX_PROD;
-int nr_of_states;
-int nr_of_actions;
-int max_nr_actions;
-int nr_of_gotos;
-int max_nr_gotos;
-int nr_of_lhs_members;
-int max_nr_lhs_members;
-extern int nr_of_items;
-extern int max_nr_items;
-ATerm eof_token;
-ATerm all_chars;   
-extern ATbool run_verbose;
-extern ATbool statisticsMode;
+static PTBL_Labels labelsection;
+static PTBL_Priorities priosection;
 
-/*}}}  */
-/*{{{  function declarations */
-
-void calc_goto_graph();
-
-/*}}}  */
-/*{{{  AFuns */
-
-AFun afun_action = 0;
-AFun afun_char_class = 0;
-AFun afun_goto = 0;
-AFun afun_prod = 0;
-AFun afun_range = 0;
-AFun afun_shift = 0;
-AFun afun_gtr_prio = 0;
-AFun afun_arg_gtr_prio = 0;
-AFun afun_state_rec = 0;
-AFun afun_label = 0;
-AFun afun_lit = 0;
-
-/*}}}  */
-/*{{{  Declaration of tables used during generation process */
-
-static ATermTable prod_nr_pairs;
-ATermTable nr_flatprod_pairs;
-ATermTable nr_spec_attr_pairs;
-ATermTable symbol_lookaheads_table;
-ATermIndexedSet priority_table;
-ATermTable rhs_prods_pairs;
-ATerm *nr_prod_table;
-ATerm **symbol_table;
-
-/* Datastructures to store the generated "parse table". 
- * The parse table is generated based on a LR automaton.
- * The LR automaton is a set of states.
- * A state is consists of a number, the corresponding itemset,
- * goto-set, action-set.
- */
-ATerm initial_state;
-ATermTable state_nr_pairs;
-ATermTable nr_state_pairs;
-ATermTable state_gotos_pairs;
-ATermTable state_actions_pairs;
-ATermSOS *state_sos;
-
-/*}}}  */
-
-/*{{{  void init_table_gen() */
-
-void init_table_gen()
-{
-  prod_nr_pairs = ATtableCreate(1024,75);
-  nr_spec_attr_pairs = ATtableCreate(1024,75);
-  priority_table = ATindexedSetCreate(1024,75);
-  symbol_lookaheads_table = ATtableCreate(1024,75);
-  rhs_prods_pairs = ATtableCreate(1024,75);
-  state_nr_pairs = ATtableCreate(1024,75);
-  nr_state_pairs = ATtableCreate(1024,75);
-  state_gotos_pairs = ATtableCreate(1024,75);
-  state_actions_pairs = ATtableCreate(1024,75);
-  state_sos = ATsosCreate(8501);
-  
-  eof_token = ATmake("[<list>]",ATmakeList1((ATerm)ATmakeInt(SDF_EOF)));
-  ATprotect(&eof_token);
-
-  all_chars = ATmake("char-class([range(<term>,<term>)])",
-                     (ATerm)ATmakeInt(0),(ATerm)ATmakeInt(255));
-  ATprotect(&all_chars);   
-
-  afun_action = ATmakeAFun("action", 2, ATfalse);
-  ATprotectAFun(afun_action);
-  afun_char_class = ATmakeAFun("char-class", 1, ATfalse);
-  ATprotectAFun(afun_char_class);
-  afun_goto = ATmakeAFun("goto", 2, ATfalse);
-  ATprotectAFun(afun_goto);
-  afun_prod = ATmakeAFun("prod", 3, ATfalse);
-  ATprotectAFun(afun_prod);
-  afun_range = ATmakeAFun("range", 2, ATfalse);
-  ATprotectAFun(afun_range);
-  afun_shift = ATmakeAFun("shift", 1, ATfalse);
-  ATprotectAFun(afun_shift);
-  afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
-  ATprotectAFun(afun_gtr_prio);
-  afun_arg_gtr_prio = ATmakeAFun("arg-gtr-prio", 3, ATfalse);
-  ATprotectAFun(afun_arg_gtr_prio);
-  afun_state_rec = ATmakeAFun("state-rec", 3, ATfalse);
-  ATprotectAFun(afun_state_rec);
-  afun_label = ATmakeAFun("label", 2, ATfalse);
-  ATprotectAFun(afun_label);
-  afun_lit = ATmakeAFun("lit", 1, ATfalse);
-  ATprotectAFun(afun_lit);
-
-  initSymbols();
-  CC_init();
-  init_first();
+PTBL_Labels PGEN_getLabelSection() {
+  return labelsection;
 }
 
-/*}}}  */
-/*{{{  void destroy_table_gen() */
+PTBL_Priorities PGEN_getPrioSection() {
+  return priosection;
+}
 
-void destroy_table_gen()
-{
-  int i;
+/* Group the production rule numbers with the same rhs symbol together. */
+static void sort_on_rhs_symbol(PT_Production prod, int prodnr) {
+  PT_Symbols args;
+  PT_Symbol symbol;
+  PT_Attributes attrs;
 
-  destroy_first();
-  destroy_follow_table();
-  CC_cleanup();
-  destroySymbols();
+  if (PT_isValidProduction(prod)) {
+    args   = PT_getProductionLhs(prod);
+    symbol = PT_getProductionRhs(prod);
+    attrs  = PT_getProductionAttributes(prod);
 
-  ATunprotectArray((ATerm *)nr_prod_table+MIN_PROD);
-  free(nr_prod_table);
-
-  for (i=0; i<MAX_PROD; i++) {
-    if (symbol_table[i]) {
-      free(symbol_table[i]);
-    }
-  }
-  free(symbol_table);
-
-  ATtableDestroy(prod_nr_pairs);
-  ATtableDestroy(nr_spec_attr_pairs);
-  ATindexedSetDestroy(priority_table);
-  ATtableDestroy(symbol_lookaheads_table);
-  ATtableDestroy(rhs_prods_pairs);
-  ATtableDestroy(state_nr_pairs);
-  ATtableDestroy(nr_state_pairs);
-  ATtableDestroy(state_gotos_pairs);
-  ATtableDestroy(state_actions_pairs);
-  ATsosDestroy(state_sos);
-}      
-
-/*}}}  */
-/*{{{  void sort_on_rhs_symbol(ATerm prod,ATerm prodnr) */
-
-/**
- * Group the production rules with the same rhs together.
- */
-
-void sort_on_rhs_symbol(ATerm prod, ATerm prodnr)
-{
-  ATermList args;
-  ATerm symbol, attrs, entry;
-
-  if (IS_PROD(prod)) {
-    args   = GET_LIST_ARG(prod,0);
-    symbol = GET_ARG(prod, 1);
-    attrs  = GET_ARG(prod, 2);
-
-    entry = ATtableGet(rhs_prods_pairs,symbol);
-    if (entry)
-      entry = (ATerm)ATinsert((ATermList)entry,prodnr);
-    else
-      entry = (ATerm)ATmakeList1(prodnr);
-    ATtablePut(rhs_prods_pairs,symbol,entry);
+    PGEN_addProductionNumberOfRhsNonTerminal(symbol, prodnr);
   }
 }
 
-/*}}}  */
-/*{{{  ATerm process_productions(ATermList prods) */
-
-ATerm process_productions(SDF_ProductionList prods)
-{
-  ATerm flatprod, aint, labelentry;
-  ATermList labelentries = ATempty;
-  int cnt, nr_of_members, nr_of_kernel_prods;
-  SDF_Production prod, newProd;
-  PT_Production ptProd;
-  ATbool isnew;
-  int idx, max_idx;
-  ATermIndexedSet unique_prods;
-  int arg, nr_args;
-  ATermList args;
-
+/* Assign production numberrs, greoup productions on rhs symbol, save 
+ * attributes and initialize first set attributes. */
+static PTBL_Labels process_productions(SDF_ProductionList prods) {
+  ATermIndexedSet unique_prods = ATindexedSetCreate(1024, 75);
   SDF_ProductionList localProds = prods;
-  unique_prods = ATindexedSetCreate(1024, 75);
-  cnt = 0;
-  max_idx = 0;
+  SDF_Production prod; 
+  SDF_Production newProd;
+  PTBL_Label labelentry;
+  PTBL_Labels labelentries = PTBL_makeLabelsEmpty();
+  PT_Production ptProd;
+  PT_Symbols args;
+  ATbool isnew;
+  int cnt = 0;
+  int nr_of_members;
+  int nr_of_kernel_prods;
+  int idx; 
+  int max_idx = 0;
+  int arg; 
+  int nr_args;
+  int maxProdNumber;
+
   while (SDF_hasProductionListHead(localProds)) {
     prod = SDF_getProductionListHead(localProds);
-    flatprod = SDF_ProductionToTerm(prod);
-    idx = ATindexedSetPut(unique_prods, flatprod, &isnew);
+    idx = ATindexedSetPut(unique_prods, (ATerm)prod, &isnew);
     if (isnew) {
       if (idx > max_idx) {
-	max_idx = idx;
+        max_idx = idx;
       }
       assert(cnt == max_idx);
       cnt++;
@@ -237,27 +89,18 @@ ATerm process_productions(SDF_ProductionList prods)
     }
     localProds = SDF_getProductionListTail(localProds);
   }
-  cnt += MIN_PROD;
-  MAX_PROD = cnt;
-  assert(cnt-MIN_PROD == (max_idx+1));
 
-  nr_prod_table = (ATerm *)calloc(MAX_PROD, sizeof(ATerm));
-  symbol_table  = (ATerm **)calloc(MAX_PROD, sizeof(ATerm *));
-
-  if (!nr_prod_table || !symbol_table) {
-    ATerror("out of memory!\n");
-  }
-
-  ATprotectArray((ATerm *)nr_prod_table+MIN_PROD, MAX_PROD-MIN_PROD);
+  maxProdNumber = cnt + MIN_PROD_NUM;
+  PGEN_setMaxProductionNumber(maxProdNumber);
+  PGEN_initProductionTables(maxProdNumber, MIN_PROD_NUM);
 
   for (idx=0; idx<=max_idx; idx++) {
     ATerm sdfflatprod = ATindexedSetGetElem(unique_prods, idx);
     assert(sdfflatprod);
     prod   = SDF_ProductionFromTerm(sdfflatprod);
     ptProd = SDFProductionToPtProduction(prod);
-    flatprod = PT_ProductionToTerm(ptProd);
-                 
-    if (statisticsMode) {
+
+    if (PGEN_getStatsFlag()) {
       nr_of_members = PT_getSymbolsLength(PT_getProductionLhs(ptProd));
       if (nr_of_members > max_nr_lhs_members) {
         max_nr_lhs_members = nr_of_members;
@@ -266,126 +109,82 @@ ATerm process_productions(SDF_ProductionList prods)
     }
     newProd = SDF_removeAttributes(prod);
 
-    cnt = idx + MIN_PROD;
-    aint = (ATerm)ATmakeInt(cnt);
-    ATtablePut(prod_nr_pairs, SDF_ProductionToTerm(newProd), aint);
-    nr_prod_table[cnt] = flatprod;
-    args = (ATermList)ATgetArgument((ATermAppl)flatprod, 0);
-    nr_args = ATgetLength(args)+1;
-    symbol_table[cnt] = (ATerm *)malloc(nr_args*sizeof(ATerm));
-    if (symbol_table[cnt] == NULL) {
-      ATerror("cannot allocate symboltable (%d)\n", nr_args);
-    }
+    cnt = idx + MIN_PROD_NUM;
+    PGEN_setProductionNumberOfProduction(cnt, newProd);
+    PGEN_setProductionOfProductionNumber(ptProd, cnt);
+    args = PT_getProductionLhs(ptProd);
+    nr_args = PT_getSymbolsLength(args)+1;
+
+    PGEN_allocateSymbolTable(cnt, nr_args);
+
     arg = 0;
-    while (!ATisEmpty(args)) {
-      symbol_table[cnt][arg++] = ATgetFirst(args);
-      args = ATgetNext(args);
+    while (!PT_isSymbolsEmpty(args)) {
+      PGEN_setLhsSymbolAtPositionXOfProductionNumber(PT_getSymbolsHead(args), arg++, cnt);
+      args = PT_getSymbolsTail(args);
     }
-    symbol_table[cnt][arg++] = empty_set;
+    PGEN_setLhsSymbolAtPositionXOfProductionNumber(PT_makeSymbolEmpty(), arg++, cnt);
 
     if (SDF_hasRejectAttribute(prod)) {
-      ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(1));
+      PGEN_setAttributeOfProductionNumber(1, cnt);
     }
     else if (SDF_hasPreferAttribute(prod)) {
-      ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(2));
+      PGEN_setAttributeOfProductionNumber(2, cnt);
     }
     else if (SDF_hasAvoidAttribute(prod)) {
-      ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(4));
+      PGEN_setAttributeOfProductionNumber(4, cnt);
     }
     else {
-      ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(0));
+      PGEN_setAttributeOfProductionNumber(0, cnt);
     }
 
-    sort_on_rhs_symbol(flatprod, aint);
-    init_prod_first(flatprod);
+    sort_on_rhs_symbol(ptProd, cnt);
+    init_prod_first(ptProd);
 
-    labelentry = (ATerm)ATmakeAppl2(afun_label, flatprod, aint);
-    labelentries = ATinsert(labelentries,labelentry);
+    labelentry = PTBL_makeLabelDefault((PTBL_Production)ptProd, cnt);
+    labelentries = PTBL_makeLabelsMany(labelentry,labelentries);
   }
   nr_of_kernel_prods = max_idx;
 
-  IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of kernel productions is %d\n", max_idx));
-  IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members));
-  IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods)));
+  if (PGEN_getStatsFlag()) {
+    fprintf(LOG_log(), "Number of kernel productions is %d\n", max_idx);
+    fprintf(LOG_log(), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members);
+    fprintf(LOG_log(), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods));
+  }
 
   ATindexedSetDestroy(unique_prods);
 
-  return ATmake("[<list>]", labelentries);
+  return labelentries;
 }
 
-/*}}}  */
-
-/*{{{  AFun get_afun_char_class()  */
-
-AFun get_afun_char_class() 
-{
-  return afun_char_class;
-}
-
-/*}}}  */
-
-/*{{{  static ATerm getProductionNumberForProduction(SDF_Production prod) */
-
-static ATerm getProductionNumberForProduction(SDF_Production prod)
-{
-  ATerm nr = NULL;
-  ATerm zero = (ATerm)ATmakeInt(0);
-  ATerm newProd;
-
-  SDF_Production stripProd = SDF_removeAttributes(prod);
-  nr = ATtableGet(prod_nr_pairs,
-                  SDF_ProductionToTerm(stripProd));
-  if (!nr) {
-    newProd = PT_ProductionToTerm(SDFProductionToPtProduction(prod));
-    if (run_verbose) {
-      ATwarning("No rule found for %t\n", newProd);
-    }
-    nr = zero;
-  }
-  return nr;
-}
-
-/*}}}  */
-/*{{{  static ATerm getProductionNumberForGroup(SDF_Group group) */
-
-static ATerm getProductionNumberForGroup(SDF_Group group)
-{
-  ATerm nr = NULL;
+static int getProductionNumberForGroup(SDF_Group group) {
+  int nr = 0;
 
   if (SDF_isGroupSimpleGroup(group)) {
     SDF_Production prod = SDF_getGroupProduction(group);
-    nr = getProductionNumberForProduction(prod);
+    nr = PGEN_getProductionNumberOfProduction(prod);
   }
   return nr;
 }
 
-/*}}}  */
-/*{{{  static ATerm getGroupArgument(SDF_Group group) */
-
-static ATerm getGroupArgument(SDF_Group group)
-{
+static int getGroupArgument(SDF_Group group) {
+  SDF_NatCon arg;
+  char* value;
   SDF_ArgumentIndicator ai = SDF_getGroupArgumentIndicator(group);
   SDF_NatConArguments nats = SDF_getArgumentIndicatorArguments(ai);
-  
-  if (SDF_isNatConArgumentsSingle(nats)) {
-    SDF_NatCon arg = SDF_getNatConArgumentsHead(nats);
-    char *value = PT_yieldTree((PT_Tree) arg);
-    ATerm result = (ATerm)ATmakeInt(atoi(value));
 
-    return result;
+  if (!SDF_isNatConArgumentsSingle(nats)) {
+    ATerror("group argument had too many elements: %t\n", group);
   }
-  ATerror("group argument had too many elements: %t\n", group);
-  return NULL;
+
+  arg = SDF_getNatConArgumentsHead(nats);
+  value = PT_yieldTree((PT_Tree) arg);
+
+  return atoi(value);
 }
 
-/*}}}  */
-/*{{{  static ATerm processChainPriority(SDF_Priority prio) */
-
-static ATerm processChainPriority(SDF_Priority prio, ATbool *nonTransitive)
-{
-  ATerm leftnr = NULL, rightnr = NULL;
-  ATerm prioentry = NULL;
-  ATerm zero = (ATerm)ATmakeInt(0);
+static PTBL_Priority processChainPriority(SDF_Priority prio, ATbool *nonTransitive) {
+  int leftnr = 0, rightnr = 0;
+  PTBL_Priority prioentry = NULL;
 
   SDF_GroupList groupList = SDF_getPriorityList(prio);
   SDF_Group leftGroup, rightGroup;
@@ -398,45 +197,41 @@ static ATerm processChainPriority(SDF_Priority prio, ATbool *nonTransitive)
       rightGroup = SDF_getGroupListHead(groupList);
 
       if (SDF_isGroupNonTransitive(leftGroup)) {
-	*nonTransitive = ATtrue;
-	leftGroup = SDF_getGroupGroup(leftGroup);
+        *nonTransitive = ATtrue;
+        leftGroup = SDF_getGroupGroup(leftGroup);
       }
       else {
-	*nonTransitive = ATfalse;
+        *nonTransitive = ATfalse;
       }
 
       if (SDF_isGroupSimpleGroup(leftGroup)) {
-	leftnr = getProductionNumberForGroup(leftGroup);
+        leftnr = getProductionNumberForGroup(leftGroup);
       }
       else if (SDF_isGroupWithArguments(leftGroup)) {
-	leftnr = getProductionNumberForGroup(SDF_getGroupGroup(leftGroup));
+        leftnr = getProductionNumberForGroup(SDF_getGroupGroup(leftGroup));
       }
       else {
-	ATerror("illegal priority  group: %t\n", leftGroup);
+        ATerror("illegal priority  group: %t\n", leftGroup);
       }
 
       if (SDF_isGroupSimpleGroup(rightGroup)) {
-	rightnr = getProductionNumberForGroup(rightGroup);
+        rightnr = getProductionNumberForGroup(rightGroup);
       }
       else if (SDF_isGroupWithArguments(rightGroup)) {
-	rightnr = getProductionNumberForGroup(SDF_getGroupGroup(rightGroup));
+        rightnr = getProductionNumberForGroup(SDF_getGroupGroup(rightGroup));
       }
       else {
-	ATerror("illegal priority  group: %t\n", rightGroup);
+        ATerror("illegal priority  group: %t\n", rightGroup);
       }
 
-      if (!ATisEqual(leftnr, zero) && !ATisEqual(rightnr, zero)) {
-	if (SDF_isGroupWithArguments(leftGroup)) {
-	  ATerm argNumber = getGroupArgument(leftGroup);
-	  prioentry = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
-					 leftnr, 
-					 argNumber,
-					 rightnr);
-	}
-	else {
-	  prioentry = (ATerm)ATmakeAppl2(afun_gtr_prio, 
-					 leftnr, rightnr);
-	}
+      if (leftnr != 0 && rightnr != 0) {
+        if (SDF_isGroupWithArguments(leftGroup)) {
+          int argNumber = getGroupArgument(leftGroup);
+          prioentry = PTBL_makePriorityArgGreater(leftnr, argNumber, rightnr);
+        }
+        else {
+          prioentry = PTBL_makePriorityGreater(leftnr, rightnr);
+        }
       }
       else {
         prioentry = NULL;
@@ -452,27 +247,25 @@ static ATerm processChainPriority(SDF_Priority prio, ATbool *nonTransitive)
   return prioentry;
 }
 
-/*}}}  */
-
-/*{{{  static ATerm process_priorities(SDF_PriorityList prios) */
-
-static ATerm process_priorities(SDF_PriorityList prios)
-{
-  ATerm prioentry = NULL;
-  ATermList prioentries = ATempty;
-  ATermList nonTransitivePrioEntries = ATempty;
-  ATermList loop = NULL;
-  int cnt = 0;
-  ATbool isnew;
-  int idx, localIdx1, localIdx2, max_idx; 
+static PTBL_Priorities process_priorities(SDF_PriorityList prios) {
+  PTBL_Priority prioentry = NULL;
+  PTBL_Priorities prioentries = PTBL_makePrioritiesEmpty();
+  PTBL_Priorities nonTransitivePrioEntries = PTBL_makePrioritiesEmpty();
   SDF_PriorityList localPrios = prios;
+  PTBL_Priorities loop = NULL;
+  ATbool isnew;
+  int cnt = 0;
+  int idx;
+  int localIdx1; 
+  int localIdx2;
+  int max_idx; 
 
   /* Store the chain priorities */
   max_idx = -1;
   while (SDF_hasPriorityListHead(localPrios)) {
     ATbool nonTransitive;
     SDF_Priority prio = SDF_getPriorityListHead(localPrios);
-  
+
     assert(!SDF_isPriorityAssoc(prio) && "assoc should be normalized to prio");
 
     if (SDF_isPriorityChain(prio)) {
@@ -486,22 +279,21 @@ static ATerm process_priorities(SDF_PriorityList prios)
 
     if (prioentry) {
       if (nonTransitive) {
-	nonTransitivePrioEntries = ATinsert(nonTransitivePrioEntries, 
-					    prioentry);
+        nonTransitivePrioEntries = PTBL_makePrioritiesMany(prioentry, nonTransitivePrioEntries);
       }
       else {
-	idx = ATindexedSetPut(priority_table, prioentry, &isnew);
-	if (isnew) {
-	  if (idx > max_idx) {
-	    max_idx = idx;
-	  } 
+        idx = PGEN_putPriority(prioentry, &isnew);
+        if (isnew) {
+          if (idx > max_idx) {
+            max_idx = idx;
+          } 
 
-	  prioentries = ATinsert(prioentries, prioentry);
-	}
+          prioentries = PTBL_makePrioritiesMany(prioentry, prioentries);
+        }
       }
       cnt++;
     }
-  
+
     if (SDF_isPriorityListSingle(localPrios)) {
       break;
     }
@@ -510,52 +302,78 @@ static ATerm process_priorities(SDF_PriorityList prios)
 
   /* Calculate the transitive closure of the priorities */
   for (localIdx1=0; localIdx1<=max_idx; localIdx1++) {    
-    ATerm prioentry1 = ATindexedSetGetElem(priority_table, localIdx1);
-    ATerm rightnr1 = getPrioRight(prioentry1);
+    PTBL_Priority prioentry1 = PGEN_getPriority(localIdx1);
+    int rightnr1 = PTBL_getPriorityLabel2(prioentry1);
 
     for (localIdx2=0; localIdx2<=max_idx; localIdx2++) {    
-      ATerm prioentry2 = ATindexedSetGetElem(priority_table, localIdx2);
-      ATerm leftnr2 = getPrioLeft(prioentry2);
+      PTBL_Priority prioentry2 = PGEN_getPriority(localIdx2);
+      int leftnr2 = PTBL_getPriorityLabel1(prioentry2);
 
-      if (ATisEqual(rightnr1, leftnr2)) {
-	ATerm rightnr2 = getPrioRight(prioentry2);
+      if (rightnr1 == leftnr2) {
+        int rightnr2 = PTBL_getPriorityLabel2(prioentry2);
 
-	prioentry = setPrioRight(prioentry1, rightnr2);
-	idx = ATindexedSetPut(priority_table, prioentry, &isnew);
-	if (isnew) {
-	  if (idx > max_idx) {
-	    max_idx = idx;
-	  } 
-	  prioentries = ATinsert(prioentries, prioentry);
-	  cnt++;
-	}
+        prioentry = PTBL_setPriorityLabel2(prioentry1, rightnr2);
+        idx = PGEN_putPriority(prioentry, &isnew);
+        if (isnew) {
+          if (idx > max_idx) {
+            max_idx = idx;
+          } 
+          prioentries = PTBL_makePrioritiesMany(prioentry, prioentries);
+          cnt++;
+        }
       }
     }
   }
 
+  /* Removed in merge.
+     while (SDF_hasPriorityListHead(prios)) {
+     SDF_Priority prio = SDF_getPriorityListHead(prios);
+     
+     if (SDF_isPriorityAssoc(prio)) {
+     ATabort("Assoc priorities may not occur after normalization %t\n", prio);
+     prioentry = NULL;
+     }
+
+     if (prioentry) {
+     PGEN_putPriority(prioentry, &isnew);
+     if (isnew) {
+     prioentries = PTBL_makePrioritiesMany(prioentry, prioentries);
+     cnt++;
+     }
+     }
+
+     if (SDF_isPriorityListSingle(prios)) {
+     break;
+     }
+     prios = SDF_getPriorityListTail(prios);
+     }
+  */
+  
   loop = nonTransitivePrioEntries;
-  while(!ATisEmpty(loop)) {
-    ATerm next = ATgetFirst(loop);
-    idx = ATindexedSetPut(priority_table, next, &isnew);
+  while(!PTBL_isPrioritiesEmpty(loop)) {
+    PTBL_Priority next = PTBL_getPrioritiesHead(loop);
+    idx = PGEN_putPriority(next, &isnew);
     if (isnew) {
       cnt++;
     }
-    loop = ATgetNext(loop);
+    loop = PTBL_getPrioritiesTail(loop);
   }
 
-  IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of priorities is %d\n", cnt));
 
-  return (ATerm) ATconcat(prioentries, nonTransitivePrioEntries);
+  if (PGEN_getStatsFlag()) {
+    fprintf(LOG_log (), "Number of priorities is %d\n", cnt);
+  }
+
+  /** \todo make sure that this concatenation is correct. */
+  return PTBL_concatPriorities(prioentries, nonTransitivePrioEntries);
 }
 
-/*}}}  */
-
-/*{{{ void process_restrictions(SDF_RestrictionList restricts) */
-
-void process_restrictions(SDF_RestrictionList restricts)
-{
+/* Process the grammar's follow restrictions and associate all defined 
+ * lookaheads to the approapriate non-terminals. */
+static void process_restrictions(SDF_RestrictionList restricts) {
   int cnt = 0;
 
+  /* For each follow restriction defined... */
   while (SDF_hasRestrictionListHead(restricts)) {
     SDF_Restriction restrict = SDF_getRestrictionListHead(restricts);
 
@@ -565,34 +383,39 @@ void process_restrictions(SDF_RestrictionList restricts)
       SDF_SymbolList symbolList = SDF_getSymbolsList(symbols);
       SDF_Lookaheads lookaheads = SDF_getRestrictionLookaheads(restrict);
 
+      /* The lookaheads have already been normalized to LookaheadsList. */
       if (SDF_isLookaheadsList(lookaheads)) {
         SDF_LookaheadList lookaheadList = SDF_getLookaheadsList(lookaheads);
-        ATermList newLookaheads = ATempty;
+        PTBL_Restrictions restrictions = PTBL_makeRestrictionsEmpty();
 
+        /* Process the new lookaheads defined in the current follow 
+         * restriction. */
         while (SDF_hasLookaheadListHead(lookaheadList)) {
           SDF_Lookahead lookahead = SDF_getLookaheadListHead(lookaheadList);
 
-          ATerm newLookahead = SDFflattenLookAhead(lookahead, ATfalse);
-          newLookaheads = ATappend(newLookaheads, newLookahead);
-          
+          PTBL_Restriction restriction = implodeLookahead(lookahead);
+          restrictions = PTBL_appendRestrictions(restrictions, restriction);
+
           if (SDF_isLookaheadListSingle(lookaheadList)) {
             break;
           }
           lookaheadList = SDF_getLookaheadListTail(lookaheadList);
         }
- 
+
+        /* Get any existing lookaheads for the symbols in the current follow 
+         * restriction (other lookaheads may have been defined in previous 
+         * follow restrictions) and add the new lookaheads to the symbol's 
+         * follow restrictions. */
         while (SDF_hasSymbolListHead(symbolList)) {
           SDF_Symbol symbol = SDF_getSymbolListHead(symbolList);
-          ATerm newsymbol = PT_SymbolToTerm(SDFSymbolToPtSymbol(symbol));
-  
-          ATermList oldLookaheads = 
-                      (ATermList)ATtableGet(symbol_lookaheads_table, newsymbol);
-          if (oldLookaheads) {
-            newLookaheads = ATconcat(oldLookaheads, newLookaheads);
+          PT_Symbol symbolPT = SDFSymbolToPtSymbol(symbol);
+
+          PTBL_Restrictions oldRestrictions = PGEN_getLookaheadsOfSymbol(symbolPT);
+          if (oldRestrictions) {
+            restrictions = PTBL_concatRestrictions(oldRestrictions, restrictions);
           }
-          ATtablePut(symbol_lookaheads_table, newsymbol, 
-                     (ATerm)newLookaheads);
-  
+          PGEN_setLookaheadsOfSymbol(restrictions, symbolPT);
+
           if (SDF_isSymbolListSingle(symbolList)) {
             break;
           }
@@ -602,7 +425,6 @@ void process_restrictions(SDF_RestrictionList restricts)
       else {
         ATerror("expected lookaheads, got %t\n", lookaheads);
       }
-
     }
 
     if (SDF_isRestrictionListSingle(restricts)) {
@@ -727,77 +549,24 @@ static ATermList compress_gotos(ATermList goto_list)
 /*}}}  */
 #endif
 
-/*{{{  ATerm generate_parse_table(int version_nr, ATerm t) */
-
-ATerm generate_parse_table(int version_nr, SDF_Grammar grammarTerm)
-{
-  int i, nr_actions = 0, nr_gotos = 0;
-  ATerm labelsection, priosection, vnr, vertex, state;
-  ATermList statelist = ATempty, gotos, actions;
+/* Process a grammar and extract the productions, follow restrictions and 
+ * priorities. */
+void PGEN_processGrammar(PT_Tree ptTree) {
+  SDF_Grammar grammarTerm = SDF_GrammarFromTerm(PT_TreeToTerm(ptTree));
 
   if (SDF_isValidGrammar(grammarTerm)) {
     SDF_ProductionList  prods = SDF_getGrammarKernelProductions(grammarTerm);
     SDF_PriorityList    prios = SDF_getGrammarKernelPriorities(grammarTerm);
-    SDF_RestrictionList restricts =
-                          SDF_getGrammarKernelRestrictions(grammarTerm);
+    SDF_RestrictionList restricts = SDF_getGrammarKernelRestrictions(grammarTerm);
+
     labelsection = process_productions(prods);
     priosection = process_priorities(prios);
     process_restrictions(restricts);
-    calc_first_table();
-    calc_follow_table();
-    calc_goto_graph();
-
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Number of states is %d\n", nr_of_states));
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of items per state is %d\n", max_nr_items));
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of items per state is %d\n", (nr_of_items/nr_of_states)));
-
-    for (i=nr_of_states-1; i >= 0; i--) {
-      vnr = (ATerm)ATmakeInt(i);
-      vertex = ATtableGet(nr_state_pairs,vnr);
-
-      gotos = (ATermList)ATtableGet(state_gotos_pairs,vertex);
-      if (!gotos) {
-        gotos = ATempty;
-      } 
-      else {
-        IF_PGEN_STATISTICS(nr_gotos = ATgetLength(gotos));
-        IF_PGEN_STATISTICS(nr_of_gotos += nr_gotos);
-        IF_PGEN_STATISTICS(if (nr_gotos > max_nr_gotos) { max_nr_gotos = nr_gotos;});
-      }
-
-      actions = (ATermList)ATtableGet(state_actions_pairs,vertex);
-      if (!actions) {
-        actions = ATempty;
-      }
-      else {
-        IF_PGEN_STATISTICS(nr_actions = ATgetLength(actions));
-        IF_PGEN_STATISTICS(nr_of_actions += nr_actions);
-        IF_PGEN_STATISTICS(if (nr_actions > max_nr_actions) { max_nr_actions = nr_actions;});
-      }
-
-      /*ATwarning("actions before compression (vnr=%t) = %t\n", vnr, actions);*/
-      /*gotos   = compress_gotos(gotos);*/
-
-      state = (ATerm)ATmakeAppl3(afun_state_rec, vnr, (ATerm)gotos, (ATerm)actions);
-
-      statelist = ATinsert(statelist,state);
-    }
- 
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of gotos per state is %d\n", max_nr_gotos));
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of gotos per state is %d\n", (nr_of_gotos/nr_of_states)));
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Maximum number of actions per state is %d\n", max_nr_actions));
-    IF_PGEN_STATISTICS(fprintf(PT_log (), "Average number of actions per state is %d\n", (nr_of_actions/nr_of_states)));
-
-    return ATmake("parse-table(<term>,<term>,<term>,states([<list>]),priorities(<term>))",
-                  ATmakeInt(version_nr),
-                  initial_state,labelsection,statelist,priosection);
   }
   else {
     ATwarning("parsetablegen: unexpected error in syntax definition!\n");
     ATwarning("\tdumped grammar to ./parsetablegen.bug\n");
     ATwriteToNamedTextFile((ATerm) grammarTerm, "./parsetablegen.bug");
-    return ATmake("parse-table(0,0,[],states([]),priorities([]))");
   }
 }
 
-/*}}}  */

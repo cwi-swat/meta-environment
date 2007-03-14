@@ -1,141 +1,74 @@
+/* $Id$ */
+
 #include <assert.h>
-
 #include <aterm2.h>
+#include <MEPT.h>
+#include <ptable.h>
 
-#include "ksdf2table.h"
+#include "characters.h"
 #include "predicted.h"
-#include "statistics.h"
 #include "goto.h"
 #include "item.h"
 #include "priorities.h"
 #include "follow.h"
+#include "parseTable-data.h"
+#include "pgenOptions.h"
+#include "parseTable-stats.h"
+#include "atsets.h"
 
-#define MAX_GOTOS     32000
+#define MAX_STATES 130000
 
-int nr_of_items;
-int max_nr_items;
+static int goto_states[MAX_STATES] = { -1 };
+static PT_CharRanges goto_classes[MAX_STATES] = { NULL };
 
-extern int nr_of_states;
+static CC_Class    *action_classes[MAX_STATES] = { NULL };
+static PTBL_Actions action_actions[MAX_STATES] = { NULL };
+/* I think this is the number of actions added during the creation of one 
+ * state. */
+static int NR_ACTIONS = 0;
 
-extern ATermTable rhs_prods_pairs;
-extern ATerm *nr_prod_table;
-extern ATermTable nr_state_pairs;
 
-extern ATermTable state_gotos_pairs;
-extern ATermTable state_actions_pairs;
-extern ATermTable item_memo_table;
+ATermList initialize_items(PT_Symbol symbol) {
+  ATerm prodnr;
+  ATermList itemset = ATempty;
+  ATermList prodNumbers;
+  Item item;
 
-extern ATermTable symbol_lookaheads_table;
-extern ATermTable nr_spec_attr_pairs;
-
-int max_gotos;
-
-extern ATerm initial_state;
-
-extern ATerm update_states(ATermList vertex);
-
-static ATerm goto_states[MAX_STATES] = { NULL };
-static ATerm goto_classes[MAX_STATES] = { NULL };
-
-static CC_Class  *action_classes[MAX_STATES] = { NULL };
-static ATermList  action_actions[MAX_STATES] = { NULL };
-static int nr_actions = 0;
-
-/*{{{  static void restrict(CC_Class *cc, restrictions, len, ATermInt prodnr) */
-
-static void restrict(CC_Class *cc, ATermList restrictions,
-		     ATermInt len, ATermInt prodnr)
-{
-  ATerm reduce, restriction, look_cc, las;
-  ATermList reducelist;
-  ATermInt special_attr;
-
-  if (ATisEmpty(restrictions)) {
-    special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs, (ATerm)prodnr);
-    reduce = ATmake("reduce(<term>,<term>,<term>)", len, prodnr, special_attr);
-    reducelist = ATmakeList1(reduce);
-    action_insert(cc, reducelist);
-  }
-  else {
-    restriction = ATgetFirst(restrictions);
-    restrictions = ATgetNext(restrictions);
-    if(IS_CHARCLASS(restriction)) {
-      CC_Class result_cc, *restrict_cc = CC_ClassFromTerm(restriction);
-      if (CC_difference(cc, restrict_cc, &result_cc)) {
-	restrict(&result_cc, restrictions, len, prodnr);
-      }
-      CC_free(restrict_cc);
+  prodNumbers = PGEN_getProductionNumbersOfRhsNonTerminal(symbol);
+  if (prodNumbers) {
+    while(!ATisEmpty(prodNumbers)) {
+      prodnr = ATgetFirst(prodNumbers);
+      item = IT_createItem(ATgetInt((ATermInt)prodnr));
+      itemset = ATinsert(itemset, IT_ItemToTerm(item));
+      prodNumbers = ATgetNext(prodNumbers);
     }
-    else if(ATmatch(restriction, "look(<term>,<term>)", &look_cc, &las)) {
-      if (IS_CHARCLASS(look_cc)) {
-        CC_Class intersection, *restrict_cc = CC_ClassFromTerm(look_cc);
-        special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs, (ATerm)prodnr);
-        reduce = ATmake("reduce(<term>,<term>,<term>,<term>)",
-                        len, prodnr, special_attr, las);
-        reducelist = ATmakeList1(reduce);
-
-	if (CC_intersection(cc, restrict_cc, &intersection)) {
-	  action_insert(&intersection, reducelist);
-	}
-
-	if (CC_difference(cc, restrict_cc, restrict_cc)) {
-	  restrict(restrict_cc, restrictions, len, prodnr);
-	}
-
-	CC_free(restrict_cc);
-      }
-    }
-  }
+  };
+  return itemset;
 }
 
-/*}}}  */
-/*{{{  static void reductions(ItemSet vertex) */
+int update_states(ATermList state) {
+  int nr;
+  ATermList orig;
 
-static void reductions(ItemSet vertex)
-{
-  int len, iptr, prodnr;
-  ATerm prod, symbol;
-  ATermList symbols, las;
-  CC_Class *charClass;
-  CC_Set set;
-  ItemSetIterator iter;
-
-  CC_initSet(&set);
-  ITS_iterator(vertex, &iter);
-  while (ITS_hasNext(&iter)) {
-    Item item = ITS_next(&iter);
-
-    assert(IT_isValidItem(item));
-
-    prod = IT_getProd(item);
-    prodnr = IT_getProdNr(item);
-    iptr = IT_getDotPosition(item);
-
-    symbols = GET_LIST_ARG(prod, 0);
-    symbol = GET_ARG(prod, 1);
-    len = ATgetLength(symbols);
-
-    if(iptr == len) {
-      las = (ATermList)ATtableGet(symbol_lookaheads_table, symbol);
-      if(!las) {
-	las = ATempty;
-      }
-
-      charClass = follow_table[prodnr];
-      if (charClass) {
-	restrict(charClass, las, ATmakeInt(len), ATmakeInt(prodnr));
-      }
-    }
+  orig = PGEN_addStateToParseTable(state);
+  nr = PGEN_getStateNumberOfState(orig);
+ 
+  if (nr == -1) {
+    nr = PGEN_getNumberOfStates();
+    PGEN_setStateNumberOfState(nr, orig);
+    PGEN_setStateOfStateNumber(orig, nr);
+    PGEN_increaseNumberOfStates();
+    assert(PGEN_getNumberOfStates() < MAX_STATES);
   }
+  
+  return nr;
 }
 
-/*}}}  */
-
-/*{{{  void action_insert(CC_Class *cc, ATermList actions)  */
-
-void action_insert(CC_Class *origcc, ATermList actions) 
-{
-  CC_Class intersection, cc;
+/* For a given character class lookahead and a list of parse table actions, 
+ *  */
+void action_insert(CC_Class *origcc, PTBL_Actions actions) {
+  CC_Class intersection;
+  CC_Class cc;
   static CC_Class *diff = NULL;
   int i;
 
@@ -147,100 +80,194 @@ void action_insert(CC_Class *origcc, ATermList actions)
     diff = CC_alloc();
   }
 
-  for (i=nr_actions-1; i>=0; i--) {
+  /* For the actions that have already been added to this state, find the 
+   * intersection of the actions' char classes and the lookahead's char class.
+   * For the char classes that do not appear in the existing actions of this 
+   * state */
+  for (i=NR_ACTIONS-1; i>=0; i--) {
     if (CC_intersection(action_classes[i], &cc, &intersection)) {
       if (CC_difference(action_classes[i], &cc, diff)) {
-	action_actions[nr_actions] = action_actions[i];
-	action_classes[nr_actions] = diff;
-	diff = CC_alloc();
-	nr_actions++;
+        action_actions[NR_ACTIONS] = action_actions[i];
+        action_classes[NR_ACTIONS] = diff;
+        diff = CC_alloc();
+        NR_ACTIONS++;
       }
-      action_actions[i] = ATunion2(action_actions[i], actions);
+      /* TODO: Write a wrapper function in a new file actionSets to make this 
+       * type safe. */
+      action_actions[i] = (PTBL_Actions)ATunion((ATermList)action_actions[i], 
+          (ATermList)actions);
       CC_copy(&intersection, action_classes[i]);
       if (!CC_difference(&cc, action_classes[i], &cc)) {
-	return;
+        return;
       }
     }
   }
 
-  action_classes[nr_actions] = CC_alloc();
-  CC_copy(&cc, action_classes[nr_actions]);
-  action_actions[nr_actions] = actions;
-  nr_actions++;
+  action_classes[NR_ACTIONS] = CC_alloc();
+  CC_copy(&cc, action_classes[NR_ACTIONS]);
+  action_actions[NR_ACTIONS] = actions;
+  NR_ACTIONS++;
 }
 
-/*}}}  */
-/*{{{  void initialize_items(ATerm symbol) */
+/* For a given reduction (whose length and production number are passed in as 
+ * arguments) add a normal reduce action to the parse table if: 
+ * 1) the production's non-terminal follow restrictions are empty.
+ * 2) the restriction only contains one char-class and the reduction's (single)
+ * lookahead symbol does not match the follow restriction.
+ *
+ * Add a lookaheadReduce action if the restriction contains a list of 
+ * char-classes and the reduction's (single) lookahead symbol does not match 
+ * the first char-class. */
+static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions, int len, int prodnr) {
+  PTBL_Action reduce;
+  PTBL_Actions reducelist;
+  PTBL_SpecialAttr special_attr;
 
-ATermList initialize_items(ATerm symbol)
-{
-  ATerm prodnr;
-  ATermList itemset = ATempty, prods;
-  Item item;
+  if (PTBL_isRestrictionsEmpty(restrictions)) {
+    /* If there are no restrictions add a normal reduction for the lookahead. */
+    special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
+    reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
+    reducelist = PTBL_makeActionsSingle(reduce);
+    action_insert(lookahead, reducelist);
+  }
+  else {
+    /* Go through all restrictions... */
+    while (!PTBL_isRestrictionsEmpty(restrictions)) {
+      CC_Class result_cc;
+      PTBL_Restriction restriction = PTBL_getRestrictionsHead(restrictions);
+      PTBL_CharClasses restrictionSymbols = PTBL_getRestrictionCharClasses(restriction);
+      CC_Class *restrictionCC = CC_ClassFromTerm((ATerm)PTBL_getCharClassesHead(restrictionSymbols));
+     
+      if (PTBL_getCharClassesLength(restrictionSymbols) == 1) {
+        /* If there is only one symbol in the restriction then for each 
+         * lookahead that does not match the symbols in the restriction
+         * add a normal reduction. */
+        
+        /* Calculate the difference between the parse table lookahead and the 
+         * restriction.*/
+        if (CC_difference(lookahead, restrictionCC, &result_cc)) {
+          special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
+          reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
+          reducelist = PTBL_makeActionsSingle(reduce);
+          action_insert(&result_cc, reducelist);
+          
+          CC_clear(&result_cc);
+        }
+      }
+      else {
+        /* If there is more than one symbol in the restriction add normal 
+         * reductions in the position where the lookahead differs from the 
+         * first restriction symbol and add lookahead reduces in the 
+         * position that the lookahead is the same. */
 
-  prods = (ATermList)ATtableGet(rhs_prods_pairs,symbol);
-  if (prods) {
-    while(!ATisEmpty(prods)) {
-      prodnr = ATgetFirst(prods);
-      item = IT_createItem(ATgetInt((ATermInt)prodnr));
-      itemset = ATinsert(itemset, IT_ItemToTerm(item));
-      prods = ATgetNext(prods);
+        CC_Class intersection;
+        
+        if (CC_difference(lookahead, restrictionCC, &result_cc)) {
+          special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
+          reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
+          reducelist = PTBL_makeActionsSingle(reduce);
+          action_insert(&result_cc, reducelist);
+
+          CC_clear(&result_cc);
+        }
+        
+        if (CC_intersection(lookahead, restrictionCC, &intersection)) {
+          PTBL_Restrictions remainingRestrictions = PTBL_makeRestrictionsSingle(PTBL_makeRestrictionFollow(PTBL_getCharClassesTail(restrictionSymbols)));
+        
+          special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
+          reduce = PTBL_makeActionLookaheadReduce(len, prodnr, special_attr, remainingRestrictions);
+          reducelist = PTBL_makeActionsSingle(reduce);
+        
+          action_insert(&intersection, reducelist);
+          CC_clear(&intersection);
+        }
+      }
+      restrictions = PTBL_getRestrictionsTail(restrictions); /*Check!*/
     }
-  };
-  return itemset;
+    /*CC_free(result_cc); TODO: Does this need to be done? */
+  }
 }
 
-/*}}}  */
-/*{{{  static void init_goto() */
-
-static void init_goto()
-{
-  ATprotectArray(goto_states, MAX_STATES);
-  ATprotectArray(goto_classes, MAX_STATES);
-  ATprotectArray((ATerm *)(void *)action_actions, MAX_STATES);
-}
-
-/*}}}  */
-
-/*{{{  static void free_goto() */
-
-static void free_goto()
-{
-  ATunprotectArray((ATerm *)(void *)action_actions);
-  memset(action_actions, 0, MAX_STATES*sizeof(ATerm));
-  ATunprotectArray(goto_classes);
-  memset(goto_classes, 0, MAX_STATES*sizeof(ATerm));
-  ATunprotectArray(goto_states);
-  memset(goto_states, 0, MAX_STATES*sizeof(ATerm));
-
-}
-/*}}}  */
-
-/*{{{  static ATermList init()  */
-
-static ATermList init() 
-{
-  return initialize_items(ATparse("sort(\"<Start>\")"));
-}
-
-/*}}}  */
-/*{{{  ATermList shift_prod(ItemSet items, ATerm label) */
-
-ATermList shift_prod(ItemSet items, ATerm label)
-{
-  Item item, newitem;
-  ATerm symbol;
-  ATermList newvertex = ATempty;
+/* Iterate over the items in a state and if an item is a reduction then get the 
+ * reduction's lookahead and check that the follow restrictions allow the 
+ * reduction. */
+static void reductions(ItemSet state) {
+  int len, iptr, prodnr;
+  PT_Production prod;
+  PT_Symbol symbol;
+  PT_Symbols symbols;
+  PTBL_Restrictions followRestLookahead;
+  CC_Class *lookahead;
+  CC_Set set;
   ItemSetIterator iter;
 
-  symbol = GET_ARG(nr_prod_table[ATgetInt((ATermInt)label)], 1);
+  CC_initSet(&set);
+  ITS_iterator(state, &iter);
+  while (ITS_hasNext(&iter)) {
+    Item item = ITS_next(&iter);
+
+    assert(IT_isValidItem(item));
+
+    prod = IT_getProd(item);
+    prodnr = IT_getProdNr(item);
+    iptr = IT_getDotPosition(item);
+
+    symbols = PT_getProductionLhs(prod);
+    symbol = PT_getProductionRhs(prod);
+    len = PT_getSymbolsLength(symbols);
+
+    /* If the item is a reduction. */
+    if(iptr == len) {
+      followRestLookahead = (PTBL_Restrictions)PGEN_getLookaheadsOfSymbol(symbol);
+      if(!followRestLookahead) {
+        followRestLookahead = PTBL_makeRestrictionsEmpty();
+      }
+
+      lookahead = PGEN_getFollowSet(prodnr);
+      if (lookahead) { /* TODO: should this be an assert? */
+        filterReductions(lookahead, followRestLookahead, len, prodnr);
+      }
+    }
+  }
+}
+
+static void shifts(CC_Set *chars) {
+  PTBL_Action shift;
+  PTBL_Actions shiftlist;
+  PTBL_Action accept;
+  int idx;
+
+  for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
+    CC_Class *cc = CC_getFromSet(chars, idx);
+
+    if (CC_isEOF(cc)) {
+      accept = PTBL_makeActionAccept();
+      action_insert(cc, PTBL_makeActionsSingle(accept));  
+    } else {
+      shift = PTBL_makeActionShift(goto_states[idx]);
+      shiftlist = PTBL_makeActionsSingle(shift);
+      action_insert(cc, shiftlist);  
+    }
+  }
+}
+
+/* Create a new state by moving the dot past the production number's RHS symbol
+ * for the items given in the item set. */
+ATermList shift_prod(ItemSet items, int prodNumber) {
+  Item item, newitem;
+  PT_Symbol symbol;
+  ATermList newvertex = ATempty;
+  ItemSetIterator iter;
+  PT_Production prod = PGEN_getProductionOfProductionNumber(prodNumber);
+    
+  symbol = PT_getProductionRhs(prod);
 
   ITS_iteratorPerDotSym(items, symbol, &iter);
   while (ITS_hasNext(&iter)) {
     item = ITS_next(&iter);
-    assert(ATisEqual(symbol, IT_getDotSymbol(item)));
+    assert(PT_isEqualSymbol(symbol, IT_getDotSymbol(item)));
     newitem = IT_shiftDot(item);
-    if (newitem != NO_ITEM && !conflicts(item, label)) {
+    if (newitem != NO_ITEM && !PGEN_isPriorityConflict(item, prodNumber)) {
       newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
     }
   }
@@ -248,13 +275,11 @@ ATermList shift_prod(ItemSet items, ATerm label)
   return newvertex;
 }
 
-/*}}}  */
-/*{{{  static ATermList shift_charclass(ItemSet items, CC_Class *cc) */
-
-static ATermList shift_charclass(ItemSet items, CC_Class *cc)
-{
+/* Create a new state by moving the dot past the terminal symbols defined in 
+ * the given character class for the items given in the item set. */
+static ATermList shift_charclass(ItemSet items, CC_Class *cc) {
   Item newitem, item;
-  ATerm symbol;
+  PT_Symbol symbol;
   ATermList newvertex = ATempty;
   CC_Class *symbol_class;
   ItemSetIterator iter;
@@ -262,179 +287,142 @@ static ATermList shift_charclass(ItemSet items, CC_Class *cc)
   ITS_iterator(items, &iter);
 
   while ((item = ITS_next(&iter)) != NO_ITEM) {
-    symbol = IT_getDotSymbol(item);
-    if (IS_CHARCLASS(symbol)) {
+    symbol = (PT_Symbol)IT_getDotSymbol(item);
+    if (PT_isSymbolCharClass(symbol)) {
       symbol_class = CC_getCharClass(symbol);
 
       if (CC_isSubset(cc, symbol_class)) {
-	newitem = IT_shiftDot(item);
-	newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
+        newitem = IT_shiftDot(item);
+        newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
       }
     }
   }
   return newvertex;
 }
 
-/*}}}  */
-/*{{{  ATermList gotos(ItemSet vertex, ATermList prods, CC_Set *chars) */
-
-ATermList gotos(ItemSet vertex, ATermList prods, CC_Set *chars)
-{
-  ATerm label, newstate, gotoelem; 
-  ATermList newvertex, gotoElems;
+/* For a state and a list of productions and symbols that can label the out 
+ * edges of the state, create the new states and edges. This means that the 
+ * goto actions are added to the parse table. */
+void gotos(ATermList kernelState, ItemSet closedItems, ATermList prods, CC_Set *chars) {
+  int prodNumber;
+  ATerm gotoElem; 
+  ATermList newState; 
+  ATermList gotoElems = ATempty;
+  PTBL_CharRanges charRanges;
   int idx;
+  int newStateNumber;
 
-  gotoElems = ATempty;
-
-  IF_PGEN_STATISTICS(nr_of_items += ITS_size(vertex));
-  IF_PGEN_STATISTICS(if (ITS_size(vertex) > max_nr_items)
-		{max_nr_items = ITS_size(vertex);});
+  if (PGEN_getStatsFlag()) {
+    PGEN_increaseNumberOfItems(ITS_size(closedItems));
+  }   
 
   while(!ATisEmpty(prods)) {
-    label = ATgetFirst(prods);
+    prodNumber = ATgetInt((ATermInt)ATgetFirst(prods));
     prods = ATgetNext(prods);
+    newState = shift_prod(closedItems, prodNumber);
+    newStateNumber = update_states(newState);
 
-    assert(ATgetType(label) == AT_INT);
-    newvertex = shift_prod(vertex, label);
-    newstate = update_states(newvertex);
-
-    gotoelem = (ATerm)ATmakeAppl2(afun_goto, (ATerm)ATmakeList1(label), newstate);
-
-    gotoElems = ATinsert(gotoElems, gotoelem);
+    charRanges = (PTBL_CharRanges)PT_makeCharRangesSingle(PT_makeCharRangeCharacter(prodNumber));
+    gotoElem = (ATerm)PTBL_makeGotoDefault(charRanges, newStateNumber);
+    gotoElems = ATinsert(gotoElems, gotoElem);
   }
-
-  /*ATwarning("traversing set: %t\n", CC_ClassToTerm(chars));*/
-  for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
-    CC_Class *cc = CC_getFromSet(chars, idx);
-    newvertex = shift_charclass(vertex, cc);
-    newstate = update_states(newvertex);
-    goto_states[idx] = newstate;
-    goto_classes[idx] = CC_ClassToTerm(cc);
-  }
-
-  return gotoElems;
-}
-
-/*}}}  */
-/*{{{  static void shifts(CC_Set *chars)  */
-
-static void shifts(CC_Set *chars) 
-{
-  ATerm shift;
-  ATermList accept, shiftlist;
-  int idx;
 
   for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
     CC_Class *cc = CC_getFromSet(chars, idx);
+    newState = shift_charclass(closedItems, cc);
+    newStateNumber = update_states(newState);
+    goto_states[idx] = newStateNumber;
+    goto_classes[idx] = CC_ClassToPTCharRanges(cc);
 
-    if (CC_isEOF(cc)) {
-      accept = ATmakeList1(ATparse("accept"));
-      action_insert(cc, accept);  
-    } else {
-      shift = (ATerm)ATmakeAppl1(afun_shift, (ATerm)goto_states[idx]);
-      shiftlist = ATmakeList1(shift);
-      action_insert(cc, shiftlist);  
-    }
+    gotoElem = (ATerm)PTBL_makeGotoDefault((PTBL_CharRanges)goto_classes[idx], goto_states[idx]);
+    gotoElems = ATinsert(gotoElems, gotoElem);
   }
+
+  PGEN_setGotosOfState((PTBL_Gotos)gotoElems, kernelState);
 }
 
-/*}}}  */
-
-/*{{{  void actions(ATermList kernel, ItemSet vertex, CC_Set *chars, ATermList gotos)  */
-
-void actions(ATermList kernel, ItemSet vertex, CC_Set *chars, ATermList gotos) 
-{
-  ATermList actionset = ATempty;
+/* Given the kernelState and the closedItems (the set of items that can be 
+ * reached by performing the epsilon closure on the kernel state), add the 
+ * shift and reduce actions to the parse table. */ 
+void actions(ATermList kernelState, ItemSet closedItems, CC_Set *chars) {
+  PTBL_Choices actionset = PTBL_makeChoicesEmpty();
   int idx;
 
+  /* I think that the NR_ACTIONS gets modified here. */
   shifts(chars);
-
-  reductions(vertex);
-
-  for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
-    gotos = ATinsert(gotos, (ATerm)ATmakeAppl2(afun_goto,
-					       goto_classes[idx], goto_states[idx]));
+  reductions(closedItems);
+  
+  for (idx=0; idx<NR_ACTIONS; idx++) {
+    PT_CharRanges charRanges = CC_ClassToPTCharRanges(action_classes[idx]);
+    PTBL_Choice choice = PTBL_makeChoiceDefault((PTBL_CharRanges)charRanges,action_actions[idx]);
+    actionset = PTBL_makeChoicesMany(choice, actionset);
   }
 
-  for (idx=0; idx<nr_actions; idx++) {
-    actionset = ATinsert(actionset,
-			 (ATerm)ATmakeAppl2(afun_action,
-					    CC_ClassToTerm(action_classes[idx]),
-					    (ATerm)action_actions[idx]));
-  }
+  PGEN_setActionsOfState(actionset, kernelState);
 
-
-  ATtablePut(state_gotos_pairs, (ATerm)kernel, (ATerm)gotos);
-  ATtablePut(state_actions_pairs, (ATerm)kernel, (ATerm)actionset);
-
-  for (idx=0; idx<nr_actions; idx++) {
+  for (idx=0; idx<NR_ACTIONS; idx++) {
     if (action_classes[idx] != NULL) {
       CC_free(action_classes[idx]);
       action_classes[idx] = NULL;
     }
   }
 
-  nr_actions = 0;
+  NR_ACTIONS = 0;
 }
 
-/*}}}  */
-/*{{{  void vertex(int statenr) */
-
-void vertex(int statenr)
-{
-  ATermList vertex_kernel;
-  ItemSet vertex_closure;
-  ATermList gotoset;
+/* A state is created by first constructing the set of kernel items, and then
+ * a separate set of items that is the result of performing the epsilon 
+ * closure on the kernel items. It is only necessary to store the kernel items
+ * of the state since the non-kernel items result from the closure of the 
+ * kernel items. This reduces the number of items that need to be compared to 
+ * see if an item already exists in a state.
+ *
+ * A kernel state is a state that only contains items of the form 
+ * (\alpha \cdot \beta -> X) or if X is the start symbol then 
+ * (\cdot \alpha -> X). */
+void createState(int statenr) {
+  ATermList kernelState; /* A state containing only kernel items. */
+  ItemSet closedItems;
   ATermList prods;
   CC_Set chars;
 
-  vertex_kernel = (ATermList)ATtableGet(nr_state_pairs, (ATerm)ATmakeInt(statenr));
-  if (vertex_kernel) {
-    vertex_closure = ITS_create();
-    closure(vertex_kernel, vertex_closure);
-    /*ATwarning("closure = %t\n", vertex_closure);*/
+  kernelState = PGEN_getStateOfStateNumber(statenr);
+  if (kernelState) {
+    closedItems = closure(kernelState);
 
     CC_initSet(&chars);
-    outgoing(vertex_closure, &prods, &chars);
-    /*
-    fprintf(stderr, "\nchars = ");
-    CC_writeSetToFile(stderr, &chars);
-    */
+    /* Find the productions and symbols that will label the outgoing edges of 
+     * the closed state. */
+    outgoing(closedItems, &prods, &chars);
+    
     CC_partitionSet(&chars);
-
-    gotoset = gotos(vertex_closure, prods, &chars);
-    if (ATgetLength(gotoset) + CC_getSetSize(&chars) > max_gotos) {
-      max_gotos = ATgetLength(gotoset) + CC_getSetSize(&chars);
-    }
-
-    actions(vertex_kernel, vertex_closure, &chars, gotoset);
-    ITS_destroy(vertex_closure);
+    
+    gotos(kernelState, closedItems, prods, &chars);
+    actions(kernelState, closedItems, &chars);
+    
+    ITS_destroy(closedItems);
     CC_flushSet(&chars);
   }
 }
 
-/*}}}  */
-/*{{{  void goto_graph(int statenr) */
-
-void goto_graph(int statenr)
-{
-  while(statenr <= nr_of_states) {
-    vertex(statenr);
-    statenr++;
-  }
-}
-
-/*}}}  */
-/*{{{  void calc_goto_graph() */
-
-void calc_goto_graph()
-{
-  init_goto();
-
-  initial_state = update_states(init());
-  goto_graph(ATgetInt((ATermInt)initial_state));
+void createDFA() {
+  int stateNumber;
+  PT_Symbol startSymbol = (PT_Symbol)ATparse("sort(\"<Start>\")");
   
-  free_goto();
+  ATprotectArray((ATerm *)(void *)goto_classes, MAX_STATES);
+  ATprotectArray((ATerm *)(void *)action_actions, MAX_STATES);
+  
+  stateNumber = update_states(initialize_items(startSymbol));
+  PGEN_setInitialStateNumber(stateNumber);
+
+  while(stateNumber <= PGEN_getNumberOfStates()) {
+    createState(stateNumber);
+    stateNumber++;
+  }
+  
+  ATunprotectArray((ATerm *)(void *)action_actions);
+  memset(action_actions, 0, MAX_STATES*sizeof(ATerm));
+  ATunprotectArray((ATerm *)(void *)goto_classes);
+  memset(goto_classes, 0, MAX_STATES*sizeof(PT_CharRanges));
 }
 
-/*}}}  */

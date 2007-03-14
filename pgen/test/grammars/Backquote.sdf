@@ -11,7 +11,7 @@ module Backquote
 imports Layout
 
 exports
-  sorts S
+  sorts S SSS Ssss S1 S2 Instr Label
   context-free start-symbols S
 
   context-free syntax

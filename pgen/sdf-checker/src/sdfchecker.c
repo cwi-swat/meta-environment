@@ -1,8 +1,7 @@
-#ifndef WIN32
-        /* These files can not be included in Windows NT*/
-        #include <atb-tool.h>
-        #include "sdfchecker.tif.h"
-#endif
+/* $Id$ */ 
+
+#include <atb-tool.h>
+#include "sdfchecker.tif.h"
 
 #include <stdio.h>
 #include <stdlib.h>     /* used for exit(0) */
@@ -22,12 +21,8 @@ ATbool run_verbose;
 static char myname[] = "sdfchecker";
 static char myversion[] = "1.0";
 
-/*
- *     The argument vector: list of option letters, colons denote option
- *         arguments.  See Usage function, immediately below, for option
- *             explanation.
- *              */
-
+/* The argument vector: list of option letters, colons denote option
+ * arguments. See Usage function, immediately below, for option explanation. */
 static char myarguments[] = "hi:vV";
 
 void init_patterns();
@@ -130,13 +125,9 @@ int main(int argc, char *argv[]) {
   init_Sdf_Checker();
 
   if (toolbus_mode) {
-    #ifndef WIN32 /* Code with Toolbus calls, non Windows */
-      ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
-      cid = ATBconnect(NULL, NULL, -1, sdfchecker_handler);
-      ATBeventloop();
-    #else
-      ATwarning("sdfchecker: Toolbus cannot be used in Windows.\n");
-    #endif
+    ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
+    cid = ATBconnect(NULL, NULL, -1, sdfchecker_handler);
+    ATBeventloop();
   }
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
