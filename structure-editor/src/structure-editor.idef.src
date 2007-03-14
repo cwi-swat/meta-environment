@@ -12,7 +12,7 @@ let
   ParseTree: term,
   Sort: str,
   Tree: term,
-  Slices : term
+  Slices : list
 in
   execute(structure-editor, SE?)
   .
