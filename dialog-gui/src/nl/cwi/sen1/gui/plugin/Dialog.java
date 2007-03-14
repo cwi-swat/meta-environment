@@ -94,7 +94,6 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         chooser.setSelectedFile(new File(""));
         chooser.addChoosableFileFilter(sharedFilter);
         
-        
         if (chooser.showDialog(StudioImpl.getFrame(), title) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             
