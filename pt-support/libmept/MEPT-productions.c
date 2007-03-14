@@ -4,6 +4,24 @@
 
 /*@{ predicates */
 
+ATbool PT_isGeneratedKernelProduction(PT_Production arg) {
+  PT_Symbol rhs = PT_getProductionRhs(arg);
+
+  if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+    rhs = PT_getSymbolSymbol(rhs);
+  }
+
+  /* We assume that all generated productions have more complex
+   * sort names, and all non generated productions have simple
+   * sort names.
+   */
+  if (PT_isSymbolSort(rhs)) {
+    return ATfalse;
+  }
+  else {
+    return ATtrue;
+  }
+}
 
 ATbool PT_prodHasLitAsRhs(PT_Production prod)
 {
@@ -283,5 +301,18 @@ ATbool PT_hasProductionConstructorAttr(PT_Production prod)
 				     PT_makeAttrTerm(ATparse("constructor")));
 }
 
+ATbool PT_isProductionReject(PT_Production prod) {
+    return PT_hasProductionCertainAttr(prod, PT_makeAttrReject());
+}
+
+
+ATbool PT_isProductionAvoid(PT_Production prod) {
+    return PT_hasProductionCertainAttr(prod, PT_makeAttrAvoid());
+}
+
+
+ATbool PT_isProductionPrefer(PT_Production prod) {
+    return PT_hasProductionCertainAttr(prod, PT_makeAttrPrefer());
+}
 
 /*@}*/

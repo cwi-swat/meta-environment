@@ -28,7 +28,7 @@ include_HEADERS = \
 	MEPT-yield.h \
 	MEPT-yieldprod.h
 
-libmept_la_CPPFLAGS = $(ERROR_SUPPORT_CFLAGS) $(ATERM_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
+libmept_la_CPPFLAGS = $(ERROR_SUPPORT_CFLAGS) $(ATERM_CFLAGS) -DDISABLE_DYNAMIC_CHECKING -DFAST_API
 libmept_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libmept_la_LIBADD   = $(ERROR_SUPPORT_LIBS) $(ATERM_LIBS)
 libmept_la_SOURCES = \

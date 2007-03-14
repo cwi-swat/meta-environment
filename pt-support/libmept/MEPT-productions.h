@@ -3,6 +3,7 @@
 #include <MEPT.h>
 #include <aterm2.h>
 
+ATbool PT_isGeneratedKernelProduction(PT_Production arg);
 ATbool PT_prodHasLitAsRhs(PT_Production arg);
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod);
 ATbool PT_isLexicalProd(PT_Production arg);
@@ -22,5 +23,8 @@ ATbool PT_hasProductionMemoAttr(PT_Production prod);
 ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod);
 ATbool PT_hasProductionConstructorAttr(PT_Production prod);
 ATbool PT_hasProductionTraversalAttribute(PT_Production prod);
+ATbool PT_isProductionReject(PT_Production prod);
+ATbool PT_isProductionAvoid(PT_Production prod);
+ATbool PT_isProductionPrefer(PT_Production prod);
 
 #endif
