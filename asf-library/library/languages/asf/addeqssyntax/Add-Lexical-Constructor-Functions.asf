@@ -30,6 +30,7 @@ equations
          Production*2 := inject(Grammar1, )
 	===>
 	shadow(lexical variables Production*) = 
+         lexical variables Production*
 	Grammar1 
 	context-free syntax Production*2
 

@@ -1,5 +1,11 @@
 $Id$
 
+Wed Mar 14 09:01:52 CET 2007 <jurgenv@cwi.nl>
+ * utilities/Parsing: does not import Strings anymore, all functions
+   use and produce StrCon. This will break existing specifications
+   that use this functionality!
+ * languages/logo: removed extra space at beginning of generated SVG file.
+
 Fri Mar  9 15:42:34 CET 2007 <kooiker@cwi.nl>
  * library/languages/pico/extract/Pico.{asf,sdf}:
    - Add statement controlflow extraction
