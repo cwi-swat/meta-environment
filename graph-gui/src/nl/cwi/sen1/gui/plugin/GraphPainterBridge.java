@@ -1,6 +1,6 @@
 // Java tool bridge GraphPainterBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 8, 2007 10:36:07 AM
+// generation time: Mar 14, 2007 10:38:27 AM
 
 package nl.cwi.sen1.gui.plugin;
 

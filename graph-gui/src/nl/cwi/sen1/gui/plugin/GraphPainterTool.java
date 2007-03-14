@@ -1,6 +1,6 @@
 // Java tool interface class GraphPainterTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 8, 2007 10:36:07 AM
+// generation time: Mar 14, 2007 10:38:27 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,14 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class GraphPainterTool
-  extends SwingTool
+  extends AbstractTool
   implements GraphPainterTif
 {
   // This table will hold the complete input signature
@@ -42,10 +43,10 @@ abstract public class GraphPainterTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.add(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<graph>))"));
     sigTable.add(factory.parse("rec-do(<graph-painter>,update-graph(<str>,<term>,<term>,<term>,<term>))"));
     sigTable.add(factory.parse("rec-eval(<graph-painter>,create-panel(<str>,<term>,<bool>,<bool>))"));
-    sigTable.add(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>,<term>))"));
+    sigTable.add(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>,<graph>))"));
     sigTable.add(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>,<term>))"));
     sigTable.add(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<term>,<list>))"));
     sigTable.add(factory.parse("rec-ack-event(<graph-painter>,<term>)"));

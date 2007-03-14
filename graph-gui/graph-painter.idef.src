@@ -10,7 +10,7 @@ let
   Closable: bool,
   Event: term,
   GraphId: term,
-  Graph: term,
+  Graph: graph,
   GraphType: str,
   Key: term,
   Menu: term,
