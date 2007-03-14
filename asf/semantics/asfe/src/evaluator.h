@@ -1,6 +1,7 @@
-/*
-  $Id$
- */
+/* $Id$ */
+
+#ifndef __EVALUATOR_H__
+#define __EVALUATOR_H__
 
 #include <ASFME.h>
 #include <MEPT.h>
@@ -23,3 +24,5 @@ extern MemoTable memo_table;
 extern unsigned int asfe_rewrite_steps;
 
 #define MAX_DEPTH 5000
+
+#endif /* __EVALUATOR_H__ */

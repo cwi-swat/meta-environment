@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,10 +14,8 @@
  * of AsFix lists
  */
 
-/*{{{  ATbool isListSeparator(PT_Tree elem, PT_Production listProd) */
 
-ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
-{
+ATbool isListSeparator(PT_Tree elem, PT_Production listProd) {
   PT_Symbol symbol, listSymbol;
   PT_Symbol separator;
   PT_Production prod;
@@ -42,32 +42,20 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
   return ATfalse;
 }
 
-/*}}}  */
 
-/*{{{   PT_Args getSliceFirst(Slice slice) */
 
- PT_Args getSliceFirst(Slice slice)
-{
+PT_Args getSliceFirst(Slice slice) {
   return PT_ArgsFromTerm(ATgetArgument((ATermAppl) slice, 1));
 }
 
-/*}}}  */
-/*{{{   PT_Args getSliceLast(Slice slice) */
 
- PT_Args getSliceLast(Slice slice)
-{
+PT_Args getSliceLast(Slice slice) {
   return PT_ArgsFromTerm(ATgetArgument((ATermAppl) slice, 2));
 }
 
-/*}}}  */
-/*{{{   PT_Args prepend(PT_Args first, PT_Args last, PT_Args list) */
 
-/*
- * Prepend a slice to the front of a list
- */
-
- PT_Args prepend(PT_Args first, PT_Args last, PT_Args list)
-{
+/* Prepend a slice to the front of a list. */
+PT_Args prepend(PT_Args first, PT_Args last, PT_Args list) {
   PT_Args temp;
   PT_Tree elem;
 
@@ -85,38 +73,23 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
   return PT_makeArgsMany(elem, temp);
 }
 
-/*}}}  */
-/*{{{   PT_Args prependSlice(Slice slice, PT_Args list) */
 
-PT_Args prependSlice(Slice slice, PT_Args list)
-{
+PT_Args prependSlice(Slice slice, PT_Args list) {
   PT_Args first = getSliceFirst(slice);
   PT_Args last = getSliceLast(slice);
 
   return prepend(first, last, list);
 }
 
-/*}}}  */
-/*{{{  PT_Args appendSlice(PT_Args list, Slice slice) */
 
-/*
- * Append a slice to a list
- */
-
-PT_Args appendSlice(PT_Args list, Slice slice)
-{
+/* Append a slice to a list. */
+PT_Args appendSlice(PT_Args list, Slice slice) {
   return PT_concatArgs(list, prependSlice(slice, PT_makeArgsEmpty()));
 }
 
-/*}}}  */
-/*{{{   PT_Args concatElems(listProd, PT_Args elems, PT_Args newElems) */
 
-/* The list of elements is rewritten and a new elementlist
-   is constructed. */
-
-
-PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
-{
+/* The list of elements is rewritten and a new elementlist is constructed. */
+PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems) {
   PT_Args newList;
   PT_Symbol sym = PT_getProductionRhs(listProd);
   int seplen = 0;
@@ -159,11 +132,8 @@ PT_Args concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
   return newList;
 }
 
-/*}}}  */
-/*{{{   PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem) */
 
-PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
-{
+PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem) {
   if (PT_isArgsEmpty(elems)) {
     if (PT_isTreeLayout(elem)) {
       return elems;
@@ -175,20 +145,14 @@ PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
   return PT_appendArgs(elems, elem);
 }
 
-/*}}}  */
-/*{{{   PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args)  */
 
-PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args) 
-{
+PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args) {
   PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
   return PT_makeArgsMany(listArg, args);
 }
 
-/*}}}  */
-/*{{{   ATerm getFirstArgument(PT_Tree trm) */
 
-PT_Tree getFirstArgument(PT_Tree trm)
-{
+PT_Tree getFirstArgument(PT_Tree trm) {
   PT_Args args;
 
   if (!PT_hasTreeArgs(trm)) {
@@ -210,20 +174,13 @@ PT_Tree getFirstArgument(PT_Tree trm)
   return NULL;
 }
 
-/*}}}  */
-/*{{{  ATbool isSliceEmpty(Slice slice) */
 
-ATbool isSliceEmpty(Slice slice)
-{
+ATbool isSliceEmpty(Slice slice) {
   return PT_isEqualArgs(getSliceFirst(slice),getSliceLast(slice));
 }
 
-/*}}}  */
 
-/*{{{  ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2) */
-
-ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
-{
+ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2) {
   asfix1 = PT_TreeFromTerm(ATremoveAnnotations(PT_TreeToTerm(asfix1)));
   asfix2 = PT_TreeFromTerm(ATremoveAnnotations(PT_TreeToTerm(asfix2)));
 
@@ -274,12 +231,9 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
   return ATtrue;
 }
 
-/*}}}  */
 
-/*{{{  PT_Args skipWhitespace(PT_Args list) */
 
-PT_Args skipWhitespace(PT_Args list)
-{
+PT_Args skipWhitespace(PT_Args list) {
   PT_Tree elem;
 
   if (PT_hasArgsHead(list)) {
@@ -292,11 +246,8 @@ PT_Args skipWhitespace(PT_Args list)
   return list;
 }
 
-/*}}}  */
-/*{{{  PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd) */
 
-PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd)
-{
+PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd) {
   list = skipWhitespace(list);
 
   if (PT_hasArgsHead(list) &&
@@ -308,11 +259,8 @@ PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd)
   return list;
 }
 
-/*}}}  */
-/*{{{  PT_Args skipToEndOfWhitespace(PT_Args list) */
 
-PT_Args skipToEndOfWhitespace(PT_Args list)
-{
+PT_Args skipToEndOfWhitespace(PT_Args list) {
   PT_Tree elem;
   PT_Args prev = list;
 
@@ -325,17 +273,13 @@ PT_Args skipToEndOfWhitespace(PT_Args list)
   return prev;
 }
 
-/*}}}  */
 
 
 /* isValidList checks:
  *    - if no consecutive whitespaces nodes occur
  *    - if it doesn't begin or end with whitespace
  */
-/*{{{  ATbool isValidList(PT_Args list) */
-
-ATbool isValidList(PT_Args list)
-{
+ATbool isValidList(PT_Args list) {
   PT_Tree elem1, elem2;
   PT_Args orig = list, next;
 
@@ -376,13 +320,9 @@ ATbool isValidList(PT_Args list)
   return ATtrue;
 }
 
-/*}}}  */
 
 /* isValidSlice does the same as isValidList but for a slice */
-/*{{{  ATbool isValidSlice(PT_Args begin, PT_Args end) */
-
-ATbool isValidSlice(PT_Args begin, PT_Args end)
-{
+ATbool isValidSlice(PT_Args begin, PT_Args end) {
   PT_Tree elem1, elem2;
   PT_Args orig = begin, next;
 
@@ -432,13 +372,9 @@ ATbool isValidSlice(PT_Args begin, PT_Args end)
   return ATtrue;
 }
 
-/*}}}  */
 
 /* Printing a term for verbose messages */
-/*{{{  char* term_prefix(PT_Tree trm) */
-
-char* term_prefix(PT_Tree trm)
-{
+char* term_prefix(PT_Tree trm) {
   static const char abbreviated[] = " ... (etc.)";
   char *tmp;
 
@@ -451,4 +387,3 @@ char* term_prefix(PT_Tree trm)
   return tmp;
 }
 
-/*}}}  */

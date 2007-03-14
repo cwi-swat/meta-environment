@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #include <assert.h>
 
 #include <MEPT-utils.h>
@@ -19,7 +21,6 @@
 
 #define FAIL NULL
 
-/*{{{  local function declarations */
 
 static ATerm try(PT_Tree trm, equation_entry *entry, int depth);
 static PT_Tree reduce(PT_Tree trm, int depth);
@@ -47,14 +48,11 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
 static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, 
 				  int depth, void* extra);
-/*}}}  */
 
 
 /* Reduction functionality */
-/*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
 
-static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
-{
+static ATerm try(PT_Tree trm, equation_entry *entry, int depth) {
   ATerm env = fail_env;
   ASF_ASFTag savedTag = tagCurrentRule;
 
@@ -84,19 +82,13 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
   return env;
 }
 
-/*}}}  */
-/*{{{  static ATbool hasProductionCompleteAttribute(PT_Production prod) */
 
-static ATbool hasProductionCompleteAttribute(PT_Production prod)
-{
+static ATbool hasProductionCompleteAttribute(PT_Production prod) {
   return PT_hasProductionCertainAttr(prod, PT_makeAttrTerm(ATparse("complete")));;
 }
 
-/*}}}  */
-/*{{{  static ATermList reduce(PT_Tree trm, int depth) */
 
-static PT_Tree reduce(PT_Tree trm, int depth)
-{
+static PT_Tree reduce(PT_Tree trm, int depth) {
   PT_Tree first_arg;
   PT_Production top_ofs = NULL;
   PT_Production first_ofs = NULL;
@@ -146,14 +138,10 @@ static PT_Tree reduce(PT_Tree trm, int depth)
   return trm;
 }
 
-/*}}}  */
 
 /* Rewriting strategies  */
 
-/*{{{  static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra) */
-
-static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
-{
+static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra) {
   PT_Tree reduct = FAIL;
   ATerm builtin = NULL;
 
@@ -203,11 +191,8 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra) */
 
-static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
-{
+static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra) {
   PT_Args args;
   PT_Production prod;
   PT_Tree arg, newarg, reduct = FAIL;
@@ -266,13 +251,8 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Args rewriteElems(listProd, elems, env, depth, traversal) */
 
-static PT_Args
-rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth, 
-             void *extra)
-{
+static PT_Args rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth, void *extra) {
   PT_Tree elem;
   PT_Args newelems = PT_makeArgsEmpty();
 
@@ -300,12 +280,7 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
 }
 
 
-/*}}}  */
-
-/*{{{  static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra) */
-
-static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra)
-{
+static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra) {
   PT_Tree trm = NULL;
   PT_Tree reduct = FAIL;
   PT_Tree memo = MemoTableLookup(memo_table, amb);
@@ -346,11 +321,8 @@ static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra)
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra)  */
 
-static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra) 
-{
+static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra) {
   PT_Tree value = getVariableValue(env, var);
 
   if (value == NULL) {
@@ -360,11 +332,8 @@ static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra
   return value;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra) */
 
-static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra)
-{
+static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra) {
   PT_Args elems;
   PT_Args newelems;
   PT_Production prod = PT_getTreeProd(list);
@@ -386,12 +355,8 @@ static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra)
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,  */
 
-static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, 
-				 void *extra)
-{
+static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, void *extra) {
   PT_Production prod = PT_getTreeProd(appl);
   PT_Tree reduct;
   ATbool isMemoFunction = ATfalse;
@@ -428,12 +393,8 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,  */
 
-static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, 
-				    void *extra)
-{
+static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth, void *extra) {
   PT_Tree reduct = FAIL;
   Traversal traversal;
 
@@ -459,35 +420,22 @@ static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,
   return reduct; 
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth,  */
 
-static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth, 
-				  void* extra)
-{
+static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth, void* extra) {
   PT_Args args = PT_getTreeArgs(trm);
 
   /* just remove the brackets */
   return PT_getArgsHead(skipWhitespace(PT_getArgsTail(args)));
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteBuiltinAppl(PT_Tree trm, ATerm env, int depth,  */
 
-static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, 
-				  int depth, void* extra)
-{
+static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, int depth, void* extra) {
   return rewriteInnermost(forwardBuiltin(builtin, trm), env, depth+1, 
 			  NO_TRAVERSAL);
 }
 
-/*}}}  */
 
-/*{{{  static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, */
-
-static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
-				Traversal* traversal)
-{
+static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal* traversal) {
   PT_Tree reduct = FAIL;
 
   if (PT_isTreeVar(trm)) {
@@ -506,12 +454,8 @@ static PT_Tree rewriteTraversal(PT_Tree trm, ATerm env, int depth,
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth, */
 
-static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
-					Traversal* traversal)
-{
+static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth, Traversal* traversal) {
   PT_Tree reduct = FAIL;
 
   if (PT_hasTreeArgs(trm)) {
@@ -544,12 +488,8 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,  */
 
-static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, 
-				       Traversal* traversal)
-{
+static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, Traversal* traversal) {
   PT_Tree reduct = FAIL;
 
   if (PT_hasTreeArgs(trm)) {
@@ -582,12 +522,8 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
   return reduct;
 }
 
-/*}}}  */
 
-/*{{{  PT_Tree rewrite(PT_Tree trm) */
-
-PT_Tree rewrite(PT_Tree trm)
-{
+PT_Tree rewrite(PT_Tree trm) {
   PT_Tree reduct;
  
   reduct = rewriteRecursive(trm,(ATerm) ATempty, 0, NO_TRAVERSAL);
@@ -595,11 +531,8 @@ PT_Tree rewrite(PT_Tree trm)
   return reduct;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra) */
 
-static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
-{
+static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra) {
   PT_Tree reduct;
   equation_entry *entry = currentRule;
 
@@ -627,11 +560,8 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
   return reduct;
 }
 
-/*}}}  */
-/*{{{  PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra) */
 
-PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
-{
+PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra) {
   PT_Tree reduct = FAIL;
   PT_Tree save = trm;
   ASF_ASFTag tag = tagCurrentRule;
@@ -701,4 +631,3 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
   return reduct;
 }
 
-/*}}}  */

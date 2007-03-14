@@ -1,4 +1,4 @@
-/*{{{  includes */
+/* $Id$ */
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -16,33 +16,21 @@
 #include <ASFME-utils.h>
 #include <asc-ambiguity.h>
 
-/*}}}  */
-/*{{{  defines */
 
 /* These constants are dependent on Asfix2ME!!! */
 #define DEPTH_OF_CONDITIONS_AND_EQUATION       2
 #define DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS 4
 #define DEPTH_OF_EQUATION_SIDES_IN_EQUATION    2
 
-/*}}}  */
-/*{{{  variables */
 
 equation_entry *currentRule = NULL;
 
 equation_table *equations = NULL;
 
 ATerm posinfo;
-/*}}}  */
-
-/*{{{  local function declarations */
 
 
-/*}}}  */
-
-/*{{{  void print_short_equation(int stack, const char *msg, equation_entry *entry) */
-
-void print_short_equation(int stack, const char *msg, equation_entry *entry)
-{
+void print_short_equation(int stack, const char *msg, equation_entry *entry) {
   if (runVerbose) {
     int i;
     for (i = 0; i < stack % 20; i++) {
@@ -55,14 +43,9 @@ void print_short_equation(int stack, const char *msg, equation_entry *entry)
   }
 }
 
-/*}}}  */
-/*{{{  equation_table *create_equation_table(int size) */
 
-/* Allocate memory for an equation table.
-*/
-
-equation_table *create_equation_table(int size)
-{
+/* Allocate memory for an equation table. */
+equation_table *create_equation_table(int size) {
   int i;
   equation_table *table = (equation_table *) malloc(sizeof(equation_table));
 
@@ -82,11 +65,8 @@ equation_table *create_equation_table(int size)
   return table;
 }
 
-/*}}}  */
-/*{{{  static void flush_equations(equation_table * table) */
 
-static void flush_equations(equation_table * table)
-{
+static void flush_equations(equation_table * table) {
   int i;
   equation_entry *old, *entry;
 
@@ -108,41 +88,28 @@ static void flush_equations(equation_table * table)
   }
 }
 
-/*}}}  */
-/*{{{  static unsigned hash_function(table, top_ofs, first_ofs) */
 
-static unsigned hash_function(equation_table *table, PT_Production top_ofs,
-			      PT_Production first_ofs)
-{
+static unsigned hash_function(equation_table *table, PT_Production top_ofs, PT_Production first_ofs) {
   return (((int) top_ofs >> 2) * 3007 + ((int) first_ofs >> 2)) % table->size;
 }
 
-/*}}}  */
 
-/*{{{  ATerm getPosInfoEquals(ASF_ASFEquation equ) */
-
-ATerm getPosInfoEquals(ASF_ASFEquation equ)
-{
+ATerm getPosInfoEquals(ASF_ASFEquation equ) {
   PT_Tree tree = PT_TreeFromTerm(ASF_ASFEquationToTerm(equ));
   PT_Tree equals = PT_getArgsTreeAt(PT_getTreeArgs(tree), 2);
   return ATgetAnnotation(PT_TreeToTerm(equals), posinfo);
 }
 
-/*}}}  */
-
-/*{{{  static int moreSpecificArg(PT_Tree tree1, PT_Tree tree2) */
 
 static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args);
-static int compareSpecificityListArgs(PT_Args lhs1args, 
-				      PT_Args lhs2args);
+static int compareSpecificityListArgs(PT_Args lhs1args, PT_Args lhs2args);
 
 /* The specificity is expressed in an integer value:
  * -1: tree1 is less specific than tree2
  *  0: tree1 is or as specific as tree2, e.g. tree1 == tree2
  *  1: tree1 is more specific than tree2
  */
-static int compareSpecificityArg(PT_Tree tree1, PT_Tree tree2)
-{
+static int compareSpecificityArg(PT_Tree tree1, PT_Tree tree2) {
   if (PT_isEqualTree(tree1, tree2) ||
       (PT_isTreeVar(tree1) && PT_isTreeVar(tree2))) {
     return 0;
@@ -176,11 +143,8 @@ static int compareSpecificityArg(PT_Tree tree1, PT_Tree tree2)
   }
 }
 
-/*}}}  */
-/*{{{  static int compareSpecificityArgs(PT_Args lhs1args, ...) */
 
-static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args)
-{
+static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args) {
   int specificity;
 
   if (PT_hasArgsHead(lhs1args) && PT_hasArgsHead(lhs2args)) {
@@ -218,12 +182,8 @@ static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args)
   return 0;
 }
 
-/*}}}  */
-/*{{{  static int compareSpecificityListArgs(PT_Args lhs1args, ...) */
 
-static int compareSpecificityListArgs(PT_Args lhs1args, 
-				      PT_Args lhs2args)
-{
+static int compareSpecificityListArgs(PT_Args lhs1args, PT_Args lhs2args) {
   int specificity;
 
   if (PT_getArgsLength(lhs1args) == 1 &&
@@ -282,24 +242,16 @@ static int compareSpecificityListArgs(PT_Args lhs1args,
   return 0;
 }
 
-/*}}}  */
-/*{{{  static int compareSpecificityLhs(PT_Tree lhs1, PT_Tree lhs2) */
 
-static int compareSpecificityLhs(PT_Tree lhs1, PT_Tree lhs2)
-{
+static int compareSpecificityLhs(PT_Tree lhs1, PT_Tree lhs2) {
   PT_Args lhs1args = PT_getTreeArgs(lhs1);
   PT_Args lhs2args = PT_getTreeArgs(lhs2);
   return compareSpecificityArgs(lhs1args, lhs2args);
 }
 
-/*}}}  */
-/*{{{  void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation) */
 
-/* Enter an equation in an equation table.
-*/
-
-void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
-{
+/* Enter an equation in an equation table. */
+void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation) {
   equation_entry *entry;
 
   ASF_ASFEquation equ;
@@ -463,12 +415,8 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
   print_short_equation(0, "registered", entry);
 }
 
-/*}}}  */
-/*{{{  equation_entry *find_equation(from, top_ofs, first_ofs) */
 
-equation_entry *find_equation(equation_entry * from, PT_Production top_ofs, 
-			      PT_Production first_ofs)
-{
+equation_entry *find_equation(equation_entry * from, PT_Production top_ofs, PT_Production first_ofs) {
 
   if (equations->size == 0) {
     return NULL;
@@ -496,21 +444,15 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs,
   return from;
 }
 
-/*}}}  */
-/*{{{  void enter_equations(ASF_ASFConditionalEquationList eqsList) */
 
-/*
-  The equations are ``sorted'' by outermost function symbols.
-  This is performed by the function ``sort_and_filter_on_ofs''.
-  This function adds the equations with the same ofs in the
-  left hand side of an equation to the database, and returns
-  the original list of equations minus the equations which
-  where stored.
+/* The equations are ``sorted'' by outermost function symbols.
+ * This is performed by the function ``sort_and_filter_on_ofs''.
+ * This function adds the equations with the same ofs in the
+ * left hand side of an equation to the database, and returns
+ * the original list of equations minus the equations which
+ * where stored.
 */
-
-
-void enter_equations(ASF_ASFConditionalEquationList eqsList)
-{
+void enter_equations(ASF_ASFConditionalEquationList eqsList) {
   equations = create_equation_table(ATgetLength((ATermList) eqsList)* 2);
 
   if (runVerbose) {
@@ -529,20 +471,11 @@ void enter_equations(ASF_ASFConditionalEquationList eqsList)
   }
 }
 
-/*}}}  */
-/*{{{  void destroy_equation_table(equation_table * table) */
 
-
-/*
- * Free all memory associated with an equation table.
- * */
-
-
-void destroy_equation_table()
-{
+/* Free all memory associated with an equation table. */
+void destroy_equation_table() {
   flush_equations(equations);
   free(equations->table);
   free(equations);
 }
 
-/*}}}  */

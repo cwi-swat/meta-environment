@@ -1,4 +1,4 @@
-/*{{{  includes */
+/* $Id$ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +11,6 @@
 #include "errors.h"
 
 #include <MEPT-utils.h>
-/*}}}  */
 
 
 typedef struct PositionSymbolTuple_tag {
@@ -24,10 +23,8 @@ typedef struct PositionTreeTuple_tag {
   PT_Tree tree;
 } PositionTreeTuple;
 
-/*{{{  PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) */
 
-PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
-{
+PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) {
   if (((PositionSymbolTuple*)data)->pos == 0) {
     ((PositionSymbolTuple*)data)->symbol = symbol;
   }
@@ -37,12 +34,9 @@ PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
   return symbol;
 }
 
-/*}}}  */
 
-/*{{{  PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) */
 
-PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
-{
+PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) {
   if (((PositionSymbolTuple*)data)->pos == 0) {
     symbol = ((PositionSymbolTuple*)data)->symbol;
   }
@@ -51,11 +45,8 @@ PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
   return symbol;
 }
 
-/*}}}  */
-/*{{{  PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data) */
 
-PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data)
-{
+PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data) {
   if (((PositionSymbolTuple*)data)->pos == 0) {
     ((PositionTreeTuple*)data)->tree = tree;
   }
@@ -65,11 +56,8 @@ PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data)
   return tree;
 }
 
-/*}}}  */
-/*{{{  PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data) */
 
-PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data)
-{
+PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data) {
   if (((PositionTreeTuple*)data)->pos == 0) {
     tree = ((PositionTreeTuple*)data)->tree;
   }
@@ -78,18 +66,11 @@ PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data)
   return tree;
 }
 
-/*}}}  */
-/*{{{  PT_Tree selectTree(PT_Args args, int pos) */
 
-/* selectTree
- *
- * input: a traversal appl
+/* input: a traversal appl
  * output: The argument term at pos of this appl. 
- *
  */
-
-PT_Tree selectTree(PT_Args args, int pos)
-{
+PT_Tree selectTree(PT_Args args, int pos) {
   PositionTreeTuple data;
 
   data.pos = pos;
@@ -102,12 +83,9 @@ PT_Tree selectTree(PT_Args args, int pos)
   return data.tree;
 }
 
-/*}}}  */
 
-/*{{{  static ATbool checkTraversalType(Traversal trav) */
 
-static ATbool checkTraversalType(Traversal trav)
-{
+static ATbool checkTraversalType(Traversal trav) {
   PT_Symbol symbol = PT_getProductionRhs(trav.prod);
   PT_Symbol cleanSymbol = PT_getSymbolSymbol(symbol);
 
@@ -154,11 +132,8 @@ static ATbool checkTraversalType(Traversal trav)
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) */
 
-static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
-{
+static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) {
   ATbool* bool;
 
   bool = (ATbool*) data;
@@ -179,11 +154,8 @@ static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
   return attr;
 }       
 
-/*}}}  */
-/*{{{  static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data) */
 
-static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data)
-{ 
+static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data) { 
   ATbool bool = ATfalse;
   PT_Attr* thisattr;
   
@@ -198,11 +170,8 @@ static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data)
   return attr;
 }
 
-/*}}}  */
 
-/*{{{  static Traversal setTraversalTypeAndStrategy(PT_Production prod) */
-static Traversal setTraversalTypeAndStrategy(Traversal trav)
-{
+static Traversal setTraversalTypeAndStrategy(Traversal trav) {
   PT_Attributes attributes = PT_getProductionAttributes(trav.prod);
 
   trav.type = UNDEFINED_TYPE;
@@ -309,20 +278,12 @@ static Traversal setTraversalTypeAndStrategy(Traversal trav)
   return trav;
 }
 
-/*}}}  */
 
-/*{{{  Traversal createTraversalPattern(PT_Tree term) */
-
-/* create_traversal_pattern
- *
- * input: a PT_TreeAppl
+/* input: a PT_TreeAppl
  * output: a Traversal struct, containing the original traversal term
  *         and an indication if it is a transformer or an analyzer.
- * 
  */
-
-Traversal createTraversalPattern(PT_Tree term)
-{
+Traversal createTraversalPattern(PT_Tree term) {
   PositionSymbolTuple symbolVisitorData;
   Traversal trav;
 
@@ -361,12 +322,9 @@ Traversal createTraversalPattern(PT_Tree term)
   return trav;
 }
 
-/*}}}  */
 
-/*{{{  static PT_Symbol getTreeType(PT_Tree tree) */
 
-static PT_Symbol getTreeType(PT_Tree tree)
-{
+static PT_Symbol getTreeType(PT_Tree tree) {
   if (PT_hasTreeProd(tree)) {
     return PT_getProductionRhs(PT_getTreeProd(tree));
   }
@@ -380,19 +338,13 @@ static PT_Symbol getTreeType(PT_Tree tree)
   return NULL;
 }
 
-/*}}}  */
 
-/*{{{  PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal) */
 
-/* make_traversal_appl
- *
- * input: an appl and a traversal pattern (made by create_traversal_patten)
+/* input: an appl and a traversal pattern (made by create_traversal_patten)
  * output: the traversal pattern instantiated by the symbol and the term 
  *         of the first argument.
  */
-
-PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
-{
+PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal) {
   PT_Production prod;
   PT_Args args;
   PT_Symbol symbol;
@@ -438,17 +390,11 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
   return newappl;
 }
 
-/*}}}  */
-/*{{{  Traversal updateAccumulator(Traversal traversal, PT_Tree newarg) */
 
-/* update_accumulator
- *
- * Changes the second argument of the traversal pattern. This is used
+/* Changes the second argument of the traversal pattern. This is used
  * as a value environment for traversals.
  */
-
-Traversal updateAccumulator(Traversal traversal, PT_Tree newarg)
-{
+Traversal updateAccumulator(Traversal traversal, PT_Tree newarg) {
   PositionTreeTuple data;
 
   data.pos = ACCUMULATED_ARG_POS;
@@ -462,32 +408,23 @@ Traversal updateAccumulator(Traversal traversal, PT_Tree newarg)
   return traversal;
 }
 
-/*}}}  */
-/*{{{  PT_Tree getTupleFirst(PT_Tree tuple) */
 
-PT_Tree getTupleFirst(PT_Tree tuple)
-{
+PT_Tree getTupleFirst(PT_Tree tuple) {
    PT_Args args = PT_getTreeArgs(tuple);
 
    return PT_getArgsTreeAt(args, TUPLE_FIRST_POS);
 }
 
-/*}}}  */
-/*{{{  PT_Tree getTupleSecond(PT_Tree tuple) */
 
-PT_Tree getTupleSecond(PT_Tree tuple)
-{
+PT_Tree getTupleSecond(PT_Tree tuple) {
    PT_Args args = PT_getTreeArgs(tuple);
 
    return PT_getArgsTreeAt(args, TUPLE_SECOND_POS);
 }
 
-/*}}}  */
 
-/*{{{  static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu) */
 
-static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu)
-{
+static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu) {
    PT_Symbol treeSymbolCf = PT_getProductionRhs(PT_getTreeProd(tree));
    PT_Symbol accuSymbolCf = PT_getProductionRhs(PT_getTreeProd(accu));
    PT_Symbol treeSymbol = treeSymbolCf;
@@ -556,17 +493,11 @@ static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu)
    return PT_makeTreeAppl(prod,args);
 }
 
-/*}}}  */
-/*{{{  PT_Tree chooseNormalform(PT_Tree term, Traversal traversal) */
 
-/* chooseNormalform
- *
- * depending on the type of traversal, constructs a normal form.
+/* Depending on the type of traversal, constructs a normal form.
  * This function is used after the toplevel traversal prod returns.
  */
-
-PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
-{
+PT_Tree chooseNormalform(PT_Tree term, Traversal traversal) {
   switch (traversal.type) {
   case TRANSFORMER:
     /* we just return the term */
@@ -587,12 +518,9 @@ PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
   return term;
 }
 
-/*}}}  */
 
-/*{{{  PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal) */
 
-PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal)
-{
+PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal) {
   PT_Tree reduct;
 
   if (traversal->type == ACCUMULATOR) {
@@ -610,6 +538,5 @@ PT_Tree makeTraversalReduct(PT_Tree orig, PT_Tree rhs, Traversal* traversal)
   return reduct;
 }
 
-/*}}}  */
 
 

@@ -10,12 +10,6 @@
 #include <ASFME-utils.h>
 
 
-/*{{{  defines */
-
-
-
-/*}}}  */
-
 /* global variables */
 ASF_ASFTag tagCurrentRule = NULL;
 PT_Tree innermostSubject = NULL;
@@ -28,12 +22,8 @@ ATbool useTide = ATfalse;
 MemoTable memo_table = NULL;
 unsigned asfe_rewrite_steps = 0;
 
-/*{{{  ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs, */
 
-ATerm evaluator(const char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs,
-                ATbool debug, ATbool remove_layout, ATbool mark_new_layout,
-		ATbool allow_ambs)
-{
+ATerm evaluator(const char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs, ATbool debug, ATbool remove_layout, ATbool mark_new_layout, ATbool allow_ambs) {
   ASF_OptLayout e = ASF_makeOptLayoutAbsent();
   PT_Tree result;
   PT_Tree tree;
@@ -83,4 +73,3 @@ ATerm evaluator(const char *name, PT_ParseTree parseTree, ASF_ASFConditionalEqua
   return PT_ParseTreeToTerm(parseTree);
 }
 
-/*}}}  */

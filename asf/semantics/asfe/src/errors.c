@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -10,10 +12,8 @@
 
 ERR_ErrorList errors = NULL;
 
-/*{{{  void RWclearError() */
 
-void RWclearErrors()
-{
+void RWclearErrors() {
   static ATbool is_protected = ATfalse;
 
   if (!is_protected) {
@@ -25,20 +25,13 @@ void RWclearErrors()
   errors = NULL;
 }
 
-/*}}}  */
-/*{{{  ERR_ErrorList RWgetErrors() */
 
-ERR_ErrorList RWgetErrors()
-{
+ERR_ErrorList RWgetErrors() {
   return errors;
 }
 
-/*}}}  */
-     
-/*{{{  void RWaddError(ERR_Feedback error)  */
 
-void RWaddError(char *msg, char *subject)
-{
+void RWaddError(char *msg, char *subject) {
   ERR_Subject sub = ERR_makeSubjectSubject(subject); 
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectListSingle(sub));
 
@@ -51,11 +44,8 @@ void RWaddError(char *msg, char *subject)
   }
 }
 
-/*}}}  */
-/*{{{  void RWaddError(ERR_Feedback error)  */
 
-void RWaddLocatedError(char *msg, char *subject, LOC_Location loc)
-{
+void RWaddLocatedError(char *msg, char *subject, LOC_Location loc) {
   ERR_Subject sub = ERR_makeSubjectLocalized(subject, (ERR_Location) loc); 
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectListSingle(sub));
 
@@ -68,12 +58,8 @@ void RWaddLocatedError(char *msg, char *subject, LOC_Location loc)
   }
 }
 
-/*}}}  */
-/*{{{  void RWaddError(ERR_Feedback error)  */
 
-void RWaddDoubleLocatedError(char *msg, char *subject1, LOC_Location loc1,
-			     char *subject2, LOC_Location loc2)
-{
+void RWaddDoubleLocatedError(char *msg, char *subject1, LOC_Location loc1, char *subject2, LOC_Location loc2) {
   ERR_Subject sub1 = ERR_makeSubjectLocalized(subject1, (ERR_Location) loc1); 
   ERR_Subject sub2 = ERR_makeSubjectLocalized(subject2, (ERR_Location) loc2); 
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectList2(sub1,sub2));
@@ -87,16 +73,11 @@ void RWaddDoubleLocatedError(char *msg, char *subject1, LOC_Location loc1,
   }
 }
 
-/*}}}  */
 
-/*{{{  void printErrors(void) */
-
-void printErrors(void)
-{
+void printErrors(void) {
   ERR_ErrorList runner = errors;
   ERR_Summary summary = ERR_makeSummarySummary("asfe","cmdline", runner);
 
   ERR_fdisplaySummary(stderr, summary);
 }
 
-/*}}}  */

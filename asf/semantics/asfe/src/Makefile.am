@@ -40,9 +40,15 @@ asfe_SOURCES =\
 
 
 asfe_DEPENDENCIES =
-asfe_LDADD = $(ERROR_SUPPORT_LIBS) $(ASC_SUPPORT_LIBS)
+asfe_LDADD = \
+	$(PTABLE_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(ASC_SUPPORT_LIBS)
 
-asfe_CPPFLAGS = $(ASC_SUPPORT_CFLAGS) $(ERROR_SUPPORT_CFLAGS) 
+asfe_CPPFLAGS = \
+	$(PTABLE_SUPPORT_CFLAGS) \
+	$(ASC_SUPPORT_CFLAGS) \
+	$(ERROR_SUPPORT_CFLAGS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

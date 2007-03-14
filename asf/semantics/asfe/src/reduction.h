@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #ifndef REDUCTION_H
 #define REDUCTION_H
 #include <MEPT.h>

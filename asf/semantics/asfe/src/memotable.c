@@ -11,16 +11,14 @@
 #define MemoTableInitialSize 1000
 #define MemoTableMaxLoadPercentage 70
 
-MemoTable MemoTableCreate(void)
-{
+MemoTable MemoTableCreate(void) {
   ATermTable table =
     ATtableCreate(MemoTableInitialSize, MemoTableMaxLoadPercentage);
 
   return (MemoTable) table;
 }
 
-MemoTable MemoTableClear(MemoTable table)
-{
+MemoTable MemoTableClear(MemoTable table) {
   ATermTable t = (ATermTable) table;
   ATermList keys = ATtableKeys(t);
 
@@ -31,16 +29,13 @@ MemoTable MemoTableClear(MemoTable table)
   return (MemoTable) t;
 }
 
-void
-MemoTableDestroy(MemoTable table)
-{
+void MemoTableDestroy(MemoTable table) {
   ATtableDestroy((ATermTable) table);
 
   return;
 }
 
-MemoTable MemoTableAdd(MemoTable table, PT_Tree term, PT_Tree normalform)
-{
+MemoTable MemoTableAdd(MemoTable table, PT_Tree term, PT_Tree normalform) {
   ATermTable t = (ATermTable) table;
 
   ATtablePut(t, (ATerm) term, (ATerm) normalform);
@@ -48,8 +43,7 @@ MemoTable MemoTableAdd(MemoTable table, PT_Tree term, PT_Tree normalform)
   return (MemoTable) t;
 }
 
-PT_Tree MemoTableLookup(MemoTable table, PT_Tree term)
-{
+PT_Tree MemoTableLookup(MemoTable table, PT_Tree term) {
   ATermTable t = (ATermTable) table;
   ATerm normalform = ATtableGet(t, (ATerm) term);
 

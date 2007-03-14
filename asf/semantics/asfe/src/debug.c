@@ -1,14 +1,6 @@
-/*{{{  eval-tide.c */
+/* $Id$ */
 
-/*
- *
- * This file contains support for the tide debugging system.
- *
- */
-
-/*}}}  */
-
-/*{{{  includes */
+/* This file contains support for the tide debugging system. */
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -26,9 +18,6 @@
 #include <asc-support-me.h>
 #include <Location.h>
 
-/*}}}  */
-
-/*{{{  variables */
 
 ATerm pos_info;
 
@@ -36,18 +25,14 @@ static int pid;
 static ATerm env = NULL;
 
 static int             stack_level = -1;
-static ASF_ASFTag         tag_stack[MAX_DEPTH];
+static ASF_ASFTag      tag_stack[MAX_DEPTH];
 static equation_entry *rule_stack[MAX_DEPTH];
 static ATerm           env_stack[MAX_DEPTH];
 static ATerm	       position_stack[MAX_DEPTH];
 
-/*}}}  */
 
-/*{{{  static PT_Tree find_variable(tree, line, col, target_line, target_col) */
 
-static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
-			     int target_line, int target_col)
-{
+static PT_Tree find_variable(PT_Tree tree, int *line, int *col, int target_line, int target_col) {
   /* if a variable contains the pointer (according to the pos-info attribute)
    * , we return it, * otherwise just keep on searching
    */
@@ -85,11 +70,8 @@ static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
   return NULL;
 }
 
-/*}}}  */
-/*{{{  static ATermList varlist_from_env(ATerm env) */
 
-static ATermList varlist_from_env(ATerm environment)
-{
+static ATermList varlist_from_env(ATerm environment) {
   ATermList list = ATempty;
   ATermList env = (ATermList)environment;
   char *value;
@@ -115,33 +97,22 @@ static ATermList varlist_from_env(ATerm environment)
   return list;
 }
 
-/*}}}  */
 
-/*{{{  static TA_Expr eval_resume(int pid, AFun fun, TA_ExprList args) */
-
-static TA_Expr eval_resume(int pid, AFun fun, TA_ExprList args)
-{
+static TA_Expr eval_resume(int pid, AFun fun, TA_ExprList args) {
   TA_setProcessState(pid, STATE_RUNNING);
   
   return ATparse("true");
 }
 
-/*}}}  */
-/*{{{  static TA_Expr eval_break(int pid, AFun fun, TA_ExprList args) */
 
-static TA_Expr eval_break(int pid, AFun fun, TA_ExprList args)
-{
+static TA_Expr eval_break(int pid, AFun fun, TA_ExprList args) {
   TA_setProcessState(pid, STATE_STOPPED);
 
   return ATparse("true");
 }
 
-/*}}}  */
-/*{{{  static TA_Expr eval_var(int pid, AFun fun, TA_Values args) */
 
-
-static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
-{
+static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args) {
   char *var = ATgetName(ATgetAFun((ATermAppl)ATgetFirst(args)));
   char result[BUFSIZ];
   ATermList list = (ATermList) env;
@@ -161,13 +132,10 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
   return ATmake(result, "error(\"unknown variable\",<str>)", var);
 }
 
-/*}}}  */
-/*{{{  static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args) */
 
 #define MAX_VAR_LENGTH 256
 
-static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
-{
+static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args) {
   char *req_file, *name, *yield;
   int req_pos, req_line, req_col, diff_start;
   int line, col;
@@ -211,11 +179,8 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   return TA_makeExprVar(name, val, req_pos + diff_start, line, col, strlen(name));
 }
 
-/*}}}  */
-/*{{{  static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args) */
 
-static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args)
-{
+static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args) {
   equation_entry *entry;
   ATermList files = ATempty;
   int hnr, start_line, start_col, end_line, end_col;
@@ -236,12 +201,8 @@ static TA_Expr eval_list_sources(int pid, AFun fun, TA_ExprList args)
   return ATmake("source-list(<term>)", files);
 }
 
-/*}}}  */
-/*{{{  static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args) */
 
-
-static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args)
-{
+static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args) {
   ATermList frames = ATempty;
   ATerm frame;
   ATermList var_list;
@@ -265,12 +226,8 @@ static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args)
   return ATmake("stack(<term>)", frames);
 }
 
-/*}}}  */
 
-/*{{{  void Tide_connect() */
-
-void Tide_connect(int port)
-{
+void Tide_connect(int port) {
   int cid;
   char *name = "ASF+SDF";
 
@@ -290,11 +247,8 @@ void Tide_connect(int port)
   TA_registerFunction(pid, ATmakeAFun("stack-trace",0, ATfalse), eval_stack_trace);
 }
 
-/*}}}  */
-/*{{{  void Tide_disconnect() */
 
-void Tide_disconnect()
-{
+void Tide_disconnect() {
   /* Switch off debugging */
   if (TA_isConnected()) {
     TA_disconnect(ATtrue, pid);
@@ -302,15 +256,10 @@ void Tide_disconnect()
   ATunprotect(&pos_info);
 }
 
-/*}}}  */
-/*{{{  void Tide_step(ATerm position, ATerm env, int level) */
 
-/*
- * An atomic step is about to be executed
- */
+/* An atomic step is about to be executed. */
 
-void Tide_step(ATerm position, ATerm newenv, int level)
-{
+void Tide_step(ATerm position, ATerm newenv, int level) {
   stack_level       = level;
   tag_stack[level]  = tagCurrentRule;
   rule_stack[level] = currentRule;
@@ -351,16 +300,11 @@ void Tide_step(ATerm position, ATerm newenv, int level)
   }
 }
 
-/*}}}  */
 
-/*{{{  void signal_handler(int sig) */
-
-void signal_handler(int sig)
-{
+void signal_handler(int sig) {
   fprintf(stderr, "signal handler called: %d\n", sig);
   TA_disconnect(ATtrue, pid);
   exit(1);
 }
 
-/*}}}  */
 

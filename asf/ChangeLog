@@ -1,5 +1,11 @@
 $Id$
 
+Wed Mar 14 16:03:42 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merged using-refactored-asc-support branch into trunk.
+
+Wed Mar 14 15:59:07 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merged r20984-21815 via svnmerge from trunk.
+
 Fri Mar  9 19:17:37 CET 2007 <jurgenv@cwi.nl>
  * semantics/**: made sure to use new lift/lower combo for speeding up
    normalization.
@@ -51,6 +57,19 @@ Thu Jan 25 15:16:33 CET 2007 <jurgenv@cwi.nl>
    make the use of apply-function unnecessary.
  * TODO: add normalization of start contructors.
 
+Mon Jan 22 14:11:25 CET 2007 <economop@cwi.nl>
+ * The last changes committed were a result of a merge with the trunk. 
+   Merged revisions 20899-20974 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/asf/trunk
+
+Mon Jan 22 14:04:55 CET 2007 <economop@cwi.nl>
+ * semantics/asfe/src/equations.c: Changed ATprotect to ATprotectTerm to avoid 
+ 'dereferencing type punned pointer' warning.
+ * semantics/asfc/src/c-code.c: Added cast. 
+
+Wed Jan 10 16:43:45 CET 2007 <economop@cwi.nl>
+ * Merged r20257-20898 via svnmerge from trunk.
+
 Mon Dec 18 12:59:02 CET 2006 <jurgenv@cwi.nl>
  * semantics/asfc/src/c-compiler.c,Makefile.am: gcc uses
    CFLAGS variable (bound at compile-time of asfc) for compiling
@@ -59,6 +78,16 @@ Mon Dec 18 12:59:02 CET 2006 <jurgenv@cwi.nl>
    more efficient constant caching.
  * semantics/asf-operations/src/ASF-Normalizations.c: regenerated code
    with smarter and more efficient constant caching.
+
+Tue Sep 19 17:16:33 CEST 2006 <economop@cwi.nl>
+ * asf.pc.in: Added forgotten dependency.
+
+Tue Sep 19 11:23:49 CEST 2006 <economop@cwi.nl>
+ * Created branch to use refactored asc-support which is more typesafe. This 
+   introduces a new dependency on ptable-support.
+ * Removed vi folding marks.
+ * Added svn keyword anchor ID to all files.
+ * Added #ifndefs to header files.
 
 Mon Jul 31 22:37:31 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfc/src/c-compiler.c,Makefile.am: the ASF compiler now

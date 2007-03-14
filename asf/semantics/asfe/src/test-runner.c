@@ -1,4 +1,4 @@
-/*{{{  includes */
+/* $Id$ */
 
 #include "evaluator.h"
 #include "reduction.h"
@@ -14,22 +14,17 @@
 #include "values.h"
 #include "debug.h"
 
-/*}}}  */
 
-/*{{{  defines */
 
 #define BUFFER_SIZE 10240
 
-/*}}}  */
 
 static PT_Tree leftSubject;
 static PT_Tree rightSubject;
 
 
-/*{{{  static ERR_Subject makeSubject(PT_Tree trm) */
 
-static ERR_Subject makeSubject(PT_Tree trm, LOC_Location loc)
-{
+static ERR_Subject makeSubject(PT_Tree trm, LOC_Location loc) {
   if (loc != NULL) {
     return ERR_makeSubjectLocalized(term_prefix(trm), (ERR_Location) loc);
   }
@@ -38,12 +33,8 @@ static ERR_Subject makeSubject(PT_Tree trm, LOC_Location loc)
   }
 }
 
-/*}}}  */
 
-/*{{{  static ATbool testOne(ASF_ASFTestEquation test) */
-
-static ERR_Error testOne(ASF_ASFTestEquation test)
-{
+static ERR_Error testOne(ASF_ASFTestEquation test) {
   ASF_ASFTag tag = ASF_getASFTestEquationASFTag(test);
   ASF_ASFCondition tobetested = ASF_getASFTestEquationASFCondition(test);
   ATerm environment = (ATerm) ATempty;
@@ -129,12 +120,8 @@ static ERR_Error testOne(ASF_ASFTestEquation test)
   }
 }
 
-/*}}}  */
-/*{{{  static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests,  */
 
-static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests, 
-			     ERR_ErrorList failed)
-{
+static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests, ERR_ErrorList failed) {
   while (!ASF_isASFTestEquationTestListEmpty(tests)) {
     ASF_ASFTestEquation test = ASF_getASFTestEquationTestListHead(tests);
     ERR_Error result = testOne(test);
@@ -152,12 +139,8 @@ static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests,
   return failed;
 }
 
-/*}}}  */
-/*{{{  ATermList runTests(ASF_ASFConditionalEquationList eqs, */
 
-ATerm runTests(ASF_ASFConditionalEquationList eqs,
-	       ASF_ASFTestEquationTestList tests, ATbool debug)
-{
+ATerm runTests(ASF_ASFConditionalEquationList eqs, ASF_ASFTestEquationTestList tests, ATbool debug) {
    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
    ERR_ErrorList failed = ERR_makeErrorListEmpty();
 
@@ -201,4 +184,3 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    return ATmake("test-results(<term>)", failed);
 }
 
-/*}}}  */

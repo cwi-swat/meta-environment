@@ -1,4 +1,4 @@
-/*{{{  includes */
+/* $Id$ */
 
 #include <time.h>
 
@@ -16,6 +16,7 @@
 #include <Location.h>
 #include <asc-support-me.h>
 #include <MEPT-utils.h>
+#include <ptable.h>
 
 #include "asfe.tif.h"
 #include "evaluator.h"
@@ -23,15 +24,11 @@
 #include "test-runner.h"
 #include "debug.h"
 
-/*}}}  */
-/*{{{  defines */
 
 #define TICK2SEC(t)             (((double)(t))/CLK_TCK)
 #include "asc-support-me.h"
 #include "debug.h"
 
-/*}}}  */
-/*{{{  variables */
 
 static char myarguments[] = "abd:e:hi:lmo:p:tvV";
 static char myname[] = "asfe";
@@ -40,15 +37,10 @@ static char myversion[] = "0.8";
 int toolbus_id = -1;
 ATerm acknowledgement = NULL;
 static int tide_port;
-/*}}}  */
 
-/*{{{  void usage(char *prg, ATbool is_err) */
 
-/*     Usage: displays helpful usage information
- */
-
-void usage(char *prg, ATbool is_err)
-{
+/* Usage: displays helpful usage information.  */
+void usage(char *prg, ATbool is_err) {
   ATwarning("Rewrites a parse tree according to a parsed ASF+SDF "
 	    "specification.\n"
 	    "Usage: %s [options]\n"
@@ -71,41 +63,28 @@ void usage(char *prg, ATbool is_err)
   exit(is_err ? 1 : 0);
 }
 
-/*}}}  */
-/*{{{  void version(char *prg) */
 
-void version(char *prg)
-{
+void version(char *prg) {
   ATwarning("%s v%s\n", prg, myversion);
   exit(1);
 }
 
-/*}}}  */
-/*{{{  void abort_handler(int signal) */
 
-void abort_handler(int signal)
-{
+void abort_handler(int signal) {
   RWaddError("aborted by user", "");
 }
 
-/*}}}  */
 
 /* ToolBus interfacing */
-/*{{{  void rec_terminate(int cid, ATerm t) */
-
-void rec_terminate(int cid, ATerm t)
-{
+void rec_terminate(int cid, ATerm t) {
   if (useTide) {
     Tide_disconnect();
   }
   exit(0);
 }
 
-/*}}}  */
-/*{{{  void rec_ack_event(int cid, ATerm t) */
 
-void rec_ack_event(int cid, ATerm t)
-{
+void rec_ack_event(int cid, ATerm t) {
   /* Post acknowlegdment in global variable such that builtin can
    * take it
    */
@@ -113,19 +92,15 @@ void rec_ack_event(int cid, ATerm t)
   acknowledgement = t;
 }
 
-/*}}}  */
-/*{{{  ATerm interpret(int cid, char *modname, ATerm trm, ATerm tide) */
 
-ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable, 
-		ATerm trm, ATerm tide)
-{
+ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable, ATerm trm, ATerm tide) {
   PT_ParseTree parseTree;
   ASF_ASFConditionalEquationList eqsList;
   ATerm result;
   ATbool debug;
 
   if (!ATmatch(parseTable, "none")) {
-    setParseTable(ATBunpack(parseTable)); 
+    setParseTable((PTBL_ParseTable)ATBunpack(parseTable)); 
   }
 
   setCid(cid);		// render cid accessible from the outside
@@ -157,8 +132,6 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable,
   }
 }
 
-/*}}}  */
-/*{{{  ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm tide) */
 
 ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm parseTable, ATerm tide)
 {
@@ -168,7 +141,7 @@ ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm parseTable, ATerm tide)
   ATbool debug;
 
   if (!ATmatch(parseTable, "none")) {
-    setParseTable(ATBunpack(parseTable)); 
+    setParseTable((PTBL_ParseTable)ATBunpack(parseTable)); 
   }
 
   /* connect to TIDE debugger in case TIDE support is currently active */
@@ -206,12 +179,9 @@ ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm parseTable, ATerm tide)
   }
 }
 
-/*}}}  */
 
-/*{{{  int main(int argc, char *argv[]) */
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ATerm bottomOfStack;
 
   FILE *iofile;
@@ -290,7 +260,7 @@ int main(int argc, char *argv[])
     }
 
     if (parsetable != NULL) {
-      ATerm pt = ATreadFromNamedFile(parsetable);
+      PTBL_ParseTable pt = (PTBL_ParseTable)ATreadFromNamedFile(parsetable);
       if (pt != NULL) {
 	setParseTable(pt);
       }
@@ -387,4 +357,3 @@ int main(int argc, char *argv[])
   return returncode;
 }
 
-/*}}}  */

@@ -1,10 +1,10 @@
+/* $Id$ */
+
 #include <MEPT-utils.h>
 #include "builtins.h"
 
-/*{{{  ATerm getTreeBuiltin(PT_Tree tree) */
 
-ATerm getTreeBuiltin(PT_Tree tree)
-{
+ATerm getTreeBuiltin(PT_Tree tree) {
   ATerm pattern = ATparse("built-in(<term>)");
 
   if (PT_isTreeAppl(tree)) {
@@ -41,4 +41,3 @@ ATerm getTreeBuiltin(PT_Tree tree)
   return NULL;
 }
 
-/*}}}  */
