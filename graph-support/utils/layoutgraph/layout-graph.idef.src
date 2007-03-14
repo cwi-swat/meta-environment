@@ -4,7 +4,7 @@ tool layoutgraph is { command = "__PREFIX__/bin/layoutgraph" }
 process GraphLayouter is
 let
   GL : layoutgraph,
-  Graph : term
+  Graph : graph
 in
   (
     rec-msg(gl-layout-graph(Graph?))

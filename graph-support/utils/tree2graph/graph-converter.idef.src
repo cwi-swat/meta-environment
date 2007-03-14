@@ -4,9 +4,9 @@ tool graph-converter is { command = "__PREFIX__/bin/tree2graph" }
 process GraphConverter is
 let
   GC: graph-converter,
-  Graph: term,
-  LayoutOn: term,
-  LeafsOn: term,
+  Graph: graph,
+  LayoutOn: bool,
+  LeafsOn: bool,
   Location: term,
   Node: term,
   SharingOn: term,

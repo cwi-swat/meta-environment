@@ -8,7 +8,7 @@
 #define NR_SIG_ENTRIES	3
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<graph-converter>,tree2graph(<term>,<term>,<term>,<term>))",
+  "rec-eval(<graph-converter>,tree2graph(<term>,<bool>,<bool>,<term>))",
   "rec-eval(<graph-converter>,get-node-origin(<term>))",
   "rec-terminate(<graph-converter>,<term>)",
 };
