@@ -10,4 +10,4 @@ CLASSPATH=$CLASSPATH:__JARDIR__/__JARFILE__
 
 # The java.endorsed.dirs is necessary, since svg needs to be loaded at
 # JVM bootstrap time. It overwrites a system library.
-__JAVA__ -Djava.endorsed.dirs="__SVG_SUPPORT__/share/svg-support/lib" -classpath $CLASSPATH __MAINCLASS__ $@
+__JAVA__ -Djava.endorsed.dirs="__SVG_SUPPORT__/share/svg-support/lib" -XX:+HeapDumpOnOutOfMemoryError -classpath $CLASSPATH __MAINCLASS__ $@

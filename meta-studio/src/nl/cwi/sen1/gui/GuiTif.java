@@ -1,6 +1,6 @@
 // Java tool interface GuiTif
 // This file is generated automatically, please do not edit!
-// generation time: Feb 23, 2007 11:08:43 AM
+// generation time: Mar 14, 2007 10:20:35 AM
 
 package nl.cwi.sen1.gui;
 

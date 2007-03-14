@@ -60,9 +60,6 @@ import nl.cwi.sen1.gui.plugin.StudioPluginListener;
 import nl.cwi.sen1.util.StudioMenuBar;
 import nl.cwi.sen1.util.StudioStatusBar;
 import nl.cwi.sen1.util.StudioStatusBarConstraints;
-
-import org.apache.batik.swing.JSVGCanvas;
-
 import toolbus.AbstractTool;
 import aterm.ATerm;
 import aterm.ATermFactory;

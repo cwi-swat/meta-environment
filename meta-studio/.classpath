@@ -8,25 +8,5 @@
 	<classpathentry kind="lib" path="/config-support/lib/configapi.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry kind="lib" path="lib/idw-gpl-1.5.0.jar" sourcepath="lib/idw-gpl-1.5.0/src"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-awt-util.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-bridge.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-css.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-dom.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-ext.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-extension.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-gui-util.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-gvt.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-parser.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-script.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-svg-dom.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-svggen.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-swing.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-transcoder.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-util.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/batik-xml.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/js.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/pdf-transcoder.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/xerces_2_5_0.jar"/>
-	<classpathentry kind="lib" path="/svg-support/lib/lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
