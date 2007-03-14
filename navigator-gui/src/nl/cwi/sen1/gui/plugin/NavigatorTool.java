@@ -1,6 +1,6 @@
 // Java tool interface class NavigatorTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 9, 2007 11:51:32 AM
+// generation time: Mar 14, 2007 10:39:54 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,14 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import toolbus.SwingTool;
+import toolbus.AbstractTool;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class NavigatorTool
-  extends SwingTool
+  extends AbstractTool
   implements NavigatorTif
 {
   // This table will hold the complete input signature

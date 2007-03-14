@@ -6,7 +6,7 @@ tool navigator is { }
 process Navigator is
 let
   T: navigator,
-  Graph: term,
+  Graph: graph,
   Menu: term,
   ModuleId: term,
   File: file,
