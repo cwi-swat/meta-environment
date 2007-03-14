@@ -3,7 +3,7 @@
 
 #include <aterm2.h> 
 #include <atb-tool.h>
-#include <sglr.h>
+#include <sglrInterface.h>
 #include <MEPT-utils.h>
 #include <asc-muasf2pt.h>
 
@@ -360,8 +360,10 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 void setKeepLayout(ATbool on) ;
 ATerm callLiteralConstructor(PT_Symbol symbol);
 ATerm innermost(PT_Tree tree);
-ATerm getParseTable();
-void setParseTable(ATerm tbl);
+PTBL_ParseTable getParseTable();
+void setParseTable(PTBL_ParseTable tbl);
+const char *getParseTableID();
+ATbool loadParseTable(); 
 void initParser(const char *toolname, const char *filename);
 void setKeepAnnotations(ATbool on);
 void setCid(int cur_cid);

@@ -1,10 +1,58 @@
 $Id$
 
-Fri Mar  9 19:11:43 CET 2007 <jurgenv@cwi.nl>
- * lib/asc-support.c: rewrote a part of the run-time for traversal functions.
-   This saves about 20% time in very traversal function intensive
-   applications. The trick was to use more stack space, and no more ATinsert
-   for managing argument lists of traversal functions.
+Wed Mar 14 15:19:59 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merge using-sglr-refactored branch into trunk.
+
+Mon Mar 12 18:32:51 CET 2007 <economop@cwi.nl>
+ * lib/asc-main.c: corrected some errors left over from the merge.
+
+Fri Mar  9 14:33:21 CET 2007 <economop@cwi.nl>
+ * Merged revisions 20836-21786 via svnmerge from 
+   svn+ssh://svn.cwi.nl/asc-support/trunk
+
+Fri Mar  2 10:21:56 CET 2007 <economop@cwi.nl>
+ * lib/asc-options.c: using new config-support API.
+
+Mon Jan 22 14:26:34 CET 2007 <economop@cwi.nl>
+ * lib/builtin-io.c: Added casts to solve warnings; should use different type
+   really.
+
+Wed Jan 10 16:17:17 CET 2007 <economop@cwi.nl>
+ * lib/builtin-io.c: Fixed missed compiler errors.
+
+Wed Jan 10 15:54:44 CET 2007 <economop@cwi.nl>
+ * Merged r19778-20894 from trunk.
+ * lib/builtin-io.c: Improved the error reporting done in parse_result.
+
+Tue Sep 19 11:07:01 CEST 2006 <economop@cwi.nl>
+ * Merged r17384-18222 from trunk.
+
+Tue Sep 19 10:54:44 CEST 2006 <economop@cwi.nl>
+ * We gave svnmerge init an incorrect revision range when the branch was 
+   created. This is the correction:
+   Initialized merge tracking via "svnmerge" with revisions 
+   "0-17383,18223-20254" from svn+ssh://svn.cwi.nl/asc-support/trunk
+
+Mon Sep 18 11:16:23 CEST 2006 <economop@cwi.nl>
+ * Merged r18626-20254 from trunk and updated build environment.
+
+Tue Jun 27 14:43:54 CEST 2006 <economop@cwi.nl>
+ * package: removed version information from dependencies.
+
+Fri Mar 17 15:53:57 CET 2006 <economop@cwi.nl>
+ * Added the |c-library| dependecies for SGLR. 
+
+Fri Feb 10 14:10:10 CET 2006 <{economop,kooiker}@cwi.nl>
+ * Fixed loading of parse table in |asc-main| and |builtin-io|.
+ * Output error if the parse table is not loaded.
+ * Corrected errors in |configure.in| and makefiles.
+
+Thu Feb  9 11:39:33 CET 2006 <economop@cwi.nl>
+ * Removed some casting.
+
+Thu Feb  9 11:03:26 CET 2006 <economop@cwi.nl>
+ * Include and use the new interface to SGLR |sglrInterface.h| instead of 
+   |sglr.h|.
 
 Fri Jan 26 09:17:01 CET 2007 <jurgenv@cwi.nl>
  * lib/*.h: API CHANGE! toasfix() will return a PT_Tree instead of 
@@ -66,7 +114,6 @@ Fri Apr 21 16:44:01 CEST 2006 <jurgenv@cwi.nl>
 Thu Apr 20 06:05:35 CEST 2006 <jurgenv@cwi.nl>
  * lib/asc-ambiguity.c: added functionality to make ambiguity
    clusters explicit to the runtime environment
-
 
 Fri Mar 10 11:53:37 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:

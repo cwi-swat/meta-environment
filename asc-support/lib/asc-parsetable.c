@@ -2,46 +2,32 @@
 #include <aterm2.h>
 
 #include "asc-support-me.h"
+#include <sglrInterface.h>
+#include <ptable.h>
 
-static ATerm parseTable = NULL;
+static PTBL_ParseTable parseTable = NULL;
+static const char PARSETABLE_ID[] = "ascParseTable";
 
-/*{{{  void setParseTable(ATerm pt)  */
-
-void setParseTable(ATerm pt) 
-{
+void setParseTable(PTBL_ParseTable pt) {
   ATprotect((ATerm *)((void *)&parseTable));
   parseTable = pt;
 }
 
-/*}}}  */
-/*{{{  ATerm getParseTable()  */
+const char *getParseTableID() {
+  return PARSETABLE_ID;
+}
 
-ATerm getParseTable() 
-{
+PTBL_ParseTable getParseTable() {
   return parseTable;
 }
 
-/*}}}  */
-/*{{{  void initParser(const char *toolname, const char *filename) */
-
-void initParser(const char *toolname, const char *filename)
-{
-  static ATbool initialized = ATfalse;
-  ATerm language = ATparse(toolname);
-
-  if (!initialized && parseTable != NULL) {
-    SGinitParser(ATfalse);
-    SG_ASFIX2ME_ON();
-    SG_OUTPUT_ON();
-    SG_TOOLBUS_OFF();
-
-    initialized = ATtrue;
-    
-    SG_FILTER_INJECTIONCOUNT_OFF(); 
-    SG_FILTER_EAGERNESS_OFF();
-
-    SGopenLanguageFromTerm(language, parseTable, filename);
+ATbool loadParseTable() {
+  if (!SGLR_isParseTableLoaded(PARSETABLE_ID)) { 
+    if (parseTable != NULL) {
+      SGLR_loadParseTable(PARSETABLE_ID, parseTable);
+      return ATtrue;
+    }
+    return ATfalse;
   }
+  return ATtrue;
 }
-
-/*}}}  */

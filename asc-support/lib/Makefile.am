@@ -87,9 +87,10 @@ libasc_support_me_la_SOURCES = \
 	asc-prod2str.h  \
 	asc-muasf2pt.c \
 	asc-muasf2pt.h \
-	asc-parsetable.c\
 	asc-client.c\
 	asc-tide.c\
+	asc-options.c\
+	asc-parsetable.c\
 	asc-ambiguity.c\
 	asc-termstore.c\
 	builtin-forward.c\
@@ -107,7 +108,9 @@ AM_CPPFLAGS += \
 	$(TOOLBUSLIB_CFLAGS) \
 	$(SGLR_CFLAGS) \
 	$(TIDE_SUPPORT_CFLAGS) \
-	$(ATERM_CFLAGS) 
+	$(ATERM_CFLAGS) \
+	$(CONFIG_SUPPORT_CFLAGS) \
+	$(PTABLE_SUPPORT_CFLAGS)
 
 TESTS = $(check_PROGRAMS)
 
@@ -120,6 +123,12 @@ EXTRA_DIST = Library.def
 # it:
 check_PROGRAMS = builtin-link-test
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 builtin_link_test_SOURCES=builtin-link-test.c
 builtin_link_test_LDADD = \
 	-L. -lasc-support-me \
@@ -129,7 +138,9 @@ builtin_link_test_LDADD = \
 	$(PT_SUPPORT_LIBS) \
 	$(TOOLBUSLIB_LIBS) \
 	$(ERROR_SUPPORT_LIBS) \
-	$(ATERM_LIBS) 
+	$(ATERM_LIBS) \
+	${CONFIG_SUPPORT_LIBS} \
+	${PTABLE_SUPPORT_LIBS} 
 
 UTILS=$(top_srcdir)/utils
 GENFWD=$(UTILS)/gen-forward.sh
