@@ -225,7 +225,7 @@ exports
     Formula Sort-Item Op-Item Pred-Item Op-Type Op-Attr Op-Head
     Term Some-Sorts  Op-Symb Arg-Decl Pred-Type Pred-Head
     Alternative Components Quantifier Formula-1 Formula-2 Formula-3
-    Qual-Pred Simple-Term Pred-Symb Qual-Pred-Name Qual-Op
+    Simple-Term Pred-Symb Qual-Pred-Name 
     Qual-Op-Name Atom Op-Name Pred-Name Var-Or-Const Formula-2-or
     Formula-2-and
 
@@ -444,9 +444,9 @@ module ZCasl-Lexical
 exports
   sorts
     Sort Id Word
-    Words-Id Mixfix-Id Simple-Id Token-Place Token-and-Place
+    Mixfix-Id Simple-Id Token-Place Token-and-Place
     Token-or-Place Var Token Signs Words Opt-Semi Token-Id
-
+    WHITESPACE COMMENT 
 
  lexical syntax
     [\ \n\t]+        -> WHITESPACE

@@ -1,12 +1,12 @@
 # $Id$
 
-include $(top_srcdir)/Makefile.meta
-include $(srcdir)/man_make_rules
+EXTRA_DIST = Doxyfile
 
-POD_SRCS   = sglr.pod sglr-api.pod
+if MAINTAINER_MODE
 
-man_MANS   = sglr.1 sglr-api.3
+.PHONY: doc
 
-EXTRA_DIST = $(POD_SRCS) $(man_MANS)
+doc:
+	doxygen
 
-CLEANFILES += $(MAN_MANS)
+endif

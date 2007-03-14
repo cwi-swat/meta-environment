@@ -8,7 +8,7 @@ void DumpOnePriority(FILE *out, parse_table *pt, int l)
 {
   ATermList pr;
 
-  if((pr = SG_LookupGtrPriority(pt, ATmakeInt(l)))) {
+  if((pr = SGLR_PTBL_LookupGtrPriority(pt, ATmakeInt(l)))) {
     ATfprintf(out,"%d\t%t\n", l, pr);
   }
 }

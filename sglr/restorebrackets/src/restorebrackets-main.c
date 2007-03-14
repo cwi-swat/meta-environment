@@ -1,30 +1,36 @@
+/* $Id$ */
+
+/** \file
+ *
+ */ 
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <aterm2.h>
-
-#include <parse-table.h>
-#include <sglr.h>
+#include <ptable.h>
+#include <sglrInterface.h>
 #include <atb-tool.h>
-#include "restorebrackets.tif.h"
 #include <MEPT-utils.h>
+
+#include "parseTable.h"
+#include "parseTableDB.h"
+#include "restorebrackets.tif.h"
 
 static char myname[] = "restorebrackets";
 static char myversion[] = "0.1";
-
-static char myarguments[] = "bhi:o:p:atvV";
+static char myarguments[] = "bhi:o:p:tvV";
+static const char PARSETABLE_ID[] = "RestoreBracketsParseTable";
 
 ATbool run_verbose;
-ATbool add_all;
 
 void rec_terminate(int cid, ATerm t) {
   exit(0);
 }
 
-static PT_Tree RestoreBracketsInTree(PT_Tree tree, parse_table *pt);
-static PT_Args RestoreBracketsInArgs(PT_Args args, parse_table *pt)
-{
+static PT_Tree RestoreBracketsInTree(PT_Tree tree, ParseTable *pt);
+static PT_Args RestoreBracketsInArgs(PT_Args args, ParseTable *pt) {
   PT_Tree head, newHead;
   PT_Args tail, newTail;
 
@@ -46,15 +52,8 @@ static PT_Args RestoreBracketsInArgs(PT_Args args, parse_table *pt)
   }
 }
 
-static PT_Tree AddBracketsToTreeIfNeeded(int label, 
-                                         PT_Tree tree, 
-                                         int argNr,
-                                         parse_table *pt);
-static PT_Args AddBracketsToArgsIfNeeded(int label, 
-                                         PT_Args args, 
-                                         int argNr,
-                                         parse_table *pt) 
-{
+static PT_Tree AddBracketsToTreeIfNeeded(PT_Production prod, PT_Tree tree, int argNr, ParseTable *pt);
+static PT_Args AddBracketsToArgsIfNeeded(PT_Production prod, PT_Args args, int argNr, ParseTable *pt) {
   PT_Tree head, newHead;
   PT_Args tail, newTail;
 
@@ -64,8 +63,8 @@ static PT_Args AddBracketsToArgsIfNeeded(int label,
 
   head = PT_getArgsHead(args);
   tail = PT_getArgsTail(args);
-  newHead = AddBracketsToTreeIfNeeded(label, head, argNr, pt);
-  newTail = AddBracketsToArgsIfNeeded(label, tail, ++argNr, pt);
+  newHead = AddBracketsToTreeIfNeeded(prod, head, argNr, pt);
+  newTail = AddBracketsToArgsIfNeeded(prod, tail, ++argNr, pt);
 
   if (!PT_isEqualTree(head, newHead) ||
       !PT_isEqualArgs(tail, newTail)) {
@@ -76,23 +75,17 @@ static PT_Args AddBracketsToArgsIfNeeded(int label,
   }
 }
 
-static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
-{
+static PT_Tree AddBrackets(PT_Tree tree, ParseTable *pt) {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Production bracketProd;
-  ATerm atBracketProd;
-
-  bracketProd = (PT_Production) SG_LookupBracketProd(pt, rhs);
-  atBracketProd = PT_ProductionToTerm(bracketProd);
-
-  if (atBracketProd && !PT_isEqualProduction(prod, bracketProd)) {
-    PT_Production bracketProd = PT_ProductionFromTerm(atBracketProd);
+  PT_Production bracketProd = SGLR_PTBL_lookupBracketProd(pt, rhs);
+  
+  if (bracketProd) {
     PT_Symbols bracketSymbols = PT_getProductionLhs(bracketProd);
     PT_Symbol openBracketSym = PT_getSymbolsHead(bracketSymbols);
     PT_Symbol closeBracketSym = PT_getSymbolsSymbolAt(bracketSymbols, 4);
-    PT_Tree openBracket = PT_makeTreeLit(PT_getSymbolString(openBracketSym));
-    PT_Tree closeBracket = PT_makeTreeLit(PT_getSymbolString(closeBracketSym));
+    PT_Tree openBracket = PT_TreeFromTerm(PT_SymbolToTerm(openBracketSym));
+    PT_Tree closeBracket = PT_TreeFromTerm(PT_SymbolToTerm(closeBracketSym));
     PT_Args newArgs = PT_makeArgsSingle(closeBracket);
     newArgs = PT_makeArgsMany(PT_makeTreeLayoutEmpty(), newArgs);
     newArgs = PT_makeArgsMany(tree, newArgs);
@@ -101,23 +94,16 @@ static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
     return PT_makeTreeAppl(bracketProd, newArgs);
   }
   else {
-    if (!add_all) {
-	    ATwarning("No brackets defined for symbol %s\n", PT_yieldSymbol(rhs)); 
-    }
+    ATwarning("No brackets defined for symbol %s\n", PT_yieldSymbol(rhs));
     return tree;
   }
 }
 
-static PT_Tree AddBracketsToTreeIfNeeded(int fatherLabel, 
-                                         PT_Tree tree, 
-                                         int argNr,
-                                         parse_table *pt) 
-{
+static PT_Tree AddBracketsToTreeIfNeeded(PT_Production fatherProd, PT_Tree tree, int argNr, ParseTable *pt) {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     if (PT_isProductionDefault(prod)) {
-      int sonLabel = SG_LookupLabel(pt, (ATermAppl)PT_ProductionToTerm(prod));
-      if (add_all || SGGtrPriority(pt, argNr, fatherLabel, sonLabel)) {
+      if (SGLR_PTBL_isPriorityGreater(pt, argNr, fatherProd, prod)) {
         return AddBrackets(tree, pt);
       }
     }
@@ -125,15 +111,13 @@ static PT_Tree AddBracketsToTreeIfNeeded(int fatherLabel,
   return tree;
 }
 
-static PT_Tree RestoreBracketsInTree(PT_Tree tree, parse_table *pt)
-{
+static PT_Tree RestoreBracketsInTree(PT_Tree tree, ParseTable *pt) {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     PT_Args args = PT_getTreeArgs(tree);
     PT_Args newArgs = RestoreBracketsInArgs(args, pt);
     if (PT_isProductionDefault(prod)) {
-      int label = SG_LookupLabel(pt, (ATermAppl)PT_ProductionToTerm(prod));
-      newArgs = AddBracketsToArgsIfNeeded(label, newArgs, 0, pt);
+      newArgs = AddBracketsToArgsIfNeeded(prod, newArgs, 0, pt);
     }
     if (!PT_isEqualArgs(args, newArgs)) {
       return PT_setTreeArgs(tree, newArgs);
@@ -142,8 +126,7 @@ static PT_Tree RestoreBracketsInTree(PT_Tree tree, parse_table *pt)
   return tree;
 }
 
-static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, parse_table *pt)
-{
+static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, ParseTable *pt) {
   PT_Tree tree = PT_getParseTreeTop(pttree);
 
   PT_Tree newTree = RestoreBracketsInTree(tree, pt);
@@ -151,35 +134,35 @@ static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, parse_table *pt)
   return PT_setParseTreeTop(pttree, newTree);
 }
 
-ATerm add_brackets(int cid, ATerm packedTerm, ATerm packedTable)
-{
-	add_all = ATtrue;
-	return restore_brackets(cid, packedTerm, packedTable);
-}
-
-ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable)
-{
-  parse_table *pt = NULL;
+/* Interface to toolbus. */
+ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable) {
+  ParseTable *pt = NULL;
   ATerm restoredTerm;
+  PTBL_ParseTable parseTable;
+  PT_ParseTree parseTree;
+  
+  ATwarning("Start\n");
+  parseTable = PTBL_ParseTableFromTerm(ATBunpack(packedTable));
+  if (!SGLR_loadParseTable(PARSETABLE_ID, parseTable)) {
+    ATerror("could not open language!\n");
+  }
 
-  ATerm table = ATBunpack(packedTable);
-  ATerm term = ATBunpack(packedTerm);
+  pt = SG_LookupParseTable(PARSETABLE_ID);
+  if (!pt) {
+    ATerror("failed to find parse table for language %s\n", PARSETABLE_ID);
+  }
 
-  pt = SG_BuildParseTable((ATermAppl) table, NULL);
+  parseTree = PT_ParseTreeFromTerm(ATBunpack(packedTerm));
+  restoredTerm = PT_ParseTreeToTerm(RestoreBracketsInPT(parseTree, pt));
 
-  restoredTerm
-    = PT_ParseTreeToTerm(RestoreBracketsInPT(PT_ParseTreeFromTerm(term), pt));
-
-  SG_DiscardParseTable(pt);
-
+  SGLR_PTBL_discardParseTable(pt);
+  ATwarning("End\n");
   return ATmake("snd-value(brackets-restored(<term>))", ATBpack(restoredTerm));
 }
 
-static void usage(void)
-{
+static void usage(void) {
   ATwarning("Usage: %s [options]\n"
             "Options:\n"
-	    "\t-a              put all possible brackets (one level)\n"
             "\t-b              output terms in BAF format (default)\n"
             "\t-i filename     input from file (default stdin)\n"
             "\t-o filename     output to file (default stdout)\n"
@@ -190,14 +173,11 @@ static void usage(void)
             myname, myversion);
 }
 
-static void version(void)
-{
+static void version(void) {
   ATwarning("%s v%s\n", myname, myversion);
 }
-  
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   FILE *iofile;
 
   int cid;
@@ -206,10 +186,10 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   char *parse_table_file = NULL;
-  language lang_name;
-  parse_table *pt;
+  PTBL_ParseTable parseTable;
+  ATerm packedParseTable;
+  ParseTable *pt;
   int bafMode = 1;
-  int proceed = 1;
   
   ATbool need_closing;
 
@@ -223,39 +203,28 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi(); 
   initErrorApi();
+  SGLR_initialize();
 
   if (toolbus_mode) {
     ATBinit(argc, argv, &bottomOfStack);
     cid = ATBconnect(NULL, NULL, -1, restorebrackets_handler);
     ATBeventloop();
   }
-
-  while ((c = getopt(argc, argv, myarguments)) != -1) {
-    switch (c) {
-      case 'a': add_all = ATtrue;	 break;	    	
-      case 'b': bafMode =1;              break;
-      case 'i': input=optarg;            break;
-      case 'o': output=optarg;           break;
-      case 'p': parse_table_file=optarg; break;
-      case 't': bafMode = 0;             break;
-      case 'v': run_verbose = ATtrue;    break;
-      case 'V': version(); proceed = 0;  break;
-    
-      case 'h':
-      default:  usage(); proceed = 0;   break;
+  else {
+    while ((c = getopt(argc, argv, myarguments)) != -1) {
+      switch (c) {
+        case 'b': bafMode =1;              break;
+        case 'i': input=optarg;            break;
+        case 'o': output=optarg;           break;
+        case 'p': parse_table_file=optarg; break;
+        case 't': bafMode = 0;             break;
+        case 'v': run_verbose = ATtrue;    break;
+        case 'V': version(); exit(0);      break;
+        case 'h':
+        default:  usage(); exit(0);        break;
+      }
     }
-  }
 
-  argc -= optind;
-  argv += optind;
-
-  if (parse_table_file == NULL) {
-	  ATwarning("Please provide a parse table using the -p option\n");
-	  usage();
-	  return 1;
-  }
-
-  if (proceed) {
     if (!strcmp(input, "") || !strcmp(input, "-")) {
       iofile = stdin;
     }
@@ -268,22 +237,24 @@ int main(int argc, char *argv[])
     if (run_verbose) {
       ATwarning("restoring brackets for %s\n", input);
     }
- 
+
     tree = PT_ParseTreeFromTerm(ATreadFromFile(iofile));
     assert(tree);
-    
-    lang_name = ATmake("<str>", parse_table_file);
-    if (!SGopenLanguage(lang_name, parse_table_file, input)) {
+
+    packedParseTable = ATreadFromNamedFile(parse_table_file); 
+    parseTable = PTBL_ParseTableFromTerm(ATBunpack(packedParseTable));
+
+    if (!SGLR_loadParseTable(PARSETABLE_ID, parseTable)) {
       ATerror("could not open language!\n");
       return 1;
     }
-    
-    pt = SG_LookupParseTable(lang_name, input);
+
+    pt = SG_LookupParseTable(PARSETABLE_ID);
     if (!pt) {
       ATerror("failed to find parse table for language %s\n", parse_table_file);
       return 1;
     }
-   
+
     restoredTree = RestoreBracketsInPT(tree, pt);
 
     if (!strcmp(output, "") || !strcmp(output, "-")) {

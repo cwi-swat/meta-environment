@@ -236,7 +236,10 @@ exports
     {ID ","}*   -> IDS
 
 module Layout
+
+
 exports
+  sorts WHITESPACE COMMENT
   lexical syntax
      [\ \t\n]+         -> WHITESPACE
      WHITESPACE        -> LAYOUT
@@ -250,7 +253,9 @@ imports
 
 exports
   sorts
-    RPOS RZERO RNEG RIS-NAT-CON RIS-INT-CON
+    RPOS RZERO 
+%%  RNEG 
+    RIS-NAT-CON RIS-INT-CON
 
   lexical syntax
     [1-9][0-9]*   -> RPOS
@@ -311,6 +316,7 @@ exports
 
 module Risla-disambi
 exports
+  sorts WHITESPACE ID ID-TYPE
   context-free syntax
     "applicable"   -> ID-TYPE {reject}
     "contract"     -> ID-TYPE {reject}

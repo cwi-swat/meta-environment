@@ -1,6 +1,5 @@
-dnl $Id$
+dnl $Id: configure.ac 19513 2006-07-25 14:09:19Z jurgenv $
 
-dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 META_SETUP
 META_C_SETUP

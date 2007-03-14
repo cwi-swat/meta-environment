@@ -1,0 +1,48 @@
+%% This grammar triggers the post parse priority filtering that is required
+%% when a node with a priority conflict is separated from the ambiguity
+%% it can resolve by more than one injection chain that is separated by more
+%% than one nested ambiguity. 
+%%
+%% The string to parse is "a*a+a". This test should confirm the following:
+%% 1) the filtering is done completely for injection chains,
+%% 2) the filtering does not remove the tree for Y "+" Y -> B which does not
+%%    have a priority relation.
+%%
+%% This test should be parsed with injection filtering switched off.
+
+definition 
+module Main
+
+exports
+  sorts S A B C D1 D2 E1 E2 F1 F2 G1 G2 X Y 
+  
+  context-free start-symbols S
+
+  context-free syntax
+	A       -> S
+	A "*" A -> A
+	C       -> A
+	"a"     -> A
+	D1      -> C
+	D2      -> C
+	E1      -> D1
+	E2      -> D2
+	F1      -> E1
+	F2      -> E1
+	G1      -> E2
+	G2      -> E2
+	B       -> F1
+	B       -> F2
+	B       -> G1
+	B       -> G2
+	X "+" X -> B
+	A       -> X
+	"a"     -> X
+
+    Y "+" Y -> B
+    A       -> Y
+    "a"     -> Y
+
+  context-free priorities
+	A "*" A -> A >
+	X "+" X -> B

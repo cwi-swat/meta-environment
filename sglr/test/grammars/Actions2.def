@@ -10,7 +10,7 @@ imports Layout
 exports 
 
 context-free start-symbols Action
-sorts Action
+sorts Action ActionConst ActionInfix ActionPrefix Yielder 
 
 context-free syntax
 

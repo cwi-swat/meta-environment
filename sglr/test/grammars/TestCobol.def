@@ -8,7 +8,10 @@ imports Layout
 
 exports
   context-free start-symbols Paragraph
-  sorts Paragraph
+
+  sorts Paragraph Identifier Identifier-filename Statement Sentence
+        Alphabetic-user-defined-word
+
   lexical syntax
     [0-9\-]* [A-Za-z] [A-Za-z0-9\-]* -> Alphabetic-user-defined-word 
 

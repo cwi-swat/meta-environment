@@ -1,111 +1,567 @@
 $Id$
 
-Tue Jan 16 13:30:20 CET 2007 <jong@metamud.org,kooiker@cwi.nl>
- * libsglr/{parser,stack}.c:
-   - Fixed warning: dereferencing type-punned pointer will break strict-aliasing
-   rules by using the convenience macros in aterm1.h that circumvent this
-   warning
+Wed Mar 14 15:17:46 CET 2007 <{economop,kooiker}@cwi.nl>
+ * Merged sglr-refactored branch into the trunk.
 
-Mon Nov 13 14:30:44 CET 2006 <economop@cwi.nl>
- * libsglr/sglr.h, libsglr/sglr-interface.c: Applied Martin Bravenboer's patch
-   that allows clients to set the log FILE* of libsglr; resolves bug 658.
+Wed Mar 14 14:14:34 CET 2007 <economop@cwi.nl>
+ * Removed the java directory.
 
-Mon Nov 13 14:13:02 CET 2006 <economop@cwi.nl>
- * libsglr/forest.c: Applied Martin Bravenboer's patch that allows a lexical 
-   sort to be defined as start symbol; resolves bug 657.
+Tue Mar 13 13:27:01 CET 2007 <economop@cwi.nl>
+ * Changed the TODO c-comments to doxygen \todo comments.
 
-Tue Oct 10 10:46:48 CEST 2006 <{economop,jurgenv}@cwi.nl>
- * libsglr/sglr-interface.c: introduced a workaround function
-   to be able to call sglr from another C binary. This is
-   much better in Rob's branches which will be merged sometime
-   this year.
+Mon Mar  5 13:56:05 CET 2007 <economop@cwi.nl>
+ * src/gss/shiftQueue.c: the shift queue was implemented as a stack and not a
+   queue. This resulted in the GSS state nodes being processed in a different
+   order to what was done on the trunk version of sglr. This caused the 
+   parse-time reject filtering to break, which in turn caused the post-parse 
+   filtering to do more work. We implemented the shift queue as a queue and
+   noticed a ~1% speed-up for the SDF grammar example. Unfortunately this 
+   "worst case" behaviour cannot be prevented in the general case, but at 
+   least the behaviour of this branch is now consistent with the trunk.
+ * src/gss/reductionPath.{c,h}: added a print function to aid debugging. 
 
-Wed May  3 14:02:25 CEST 2006 <jurgenv@cwi.nl>
- * Bumped to 3.16
+Fri Mar  2 11:14:49 CET 2007 <economop@cwi.nl>
+ * src/sglr-termstore.{c,h}: added forgotten term-store code.
 
-Thu Apr 13 16:35:17 CEST 2006 <jurgenv@cwi.nl>
- * libsglr/parser.c: removed ambiguity tracking from sglr. This
-   is very expensive, and makes the whole error handling thing
-   more complex. With the -a flag I now return a simple error message
-   about the fact that more than zero ambiguities occur in the term.:
+Thu Mar  1 19:57:55 CET 2007 <economop@cwi.nl>
+ * src/Makefile.am: added CPPFLAGS option to use the fast (macro) api's.
+ * src/gss/gssNodeList.{c,h}, src/gss/gssEdgeList.{c,h}: rewrote getHead() and
+   getTail using macros which results in an ~4% speedup. Including the small
+   (~1%) saving that we made by introducing macros into apigen we are now 
+   slightly faster than the trunk version of sglr that still uses PIC! 
+   Unfortunately, we are still ~14% slower than the trunk without-pic, but this 
+   will hopefully disappear if we introduce more macros into apigen.
 
-Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
- * test/terms/bi.cycle: replaced test by previous version
- * test/terms/bi.asfix2.org: replaced by newer test, due to sharing
-   the number of ambiguities has gone down from 9 to 3. Not really of
-   course, but that was the ambiguity counting mechanism thinks. Which
-   has never been trustworthy.
+Mon Feb 26 15:37:59 CET 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: introduced a term store from asc-support to 
+   avoid reversing the children of a tree during the priority filter. This 
+   results in a 3% speedup. (I forgot to add the term-store code in this
+   check-in. I did it later...)
 
-Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
- * libsglr/forest.c: YieldTree was exponential in the number of ambiguities.
-   <sigh>. Added memoization.
+Mon Feb  5 17:38:25 CET 2007 <{economop,jurgenv}@cwi.nl>
+ * Merged revisions 21189-21203 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
+   This was the refactored filtering done in the srnglr branch.
+ * src/*.c: after profiling we reimplement the OPT_ options library,
+   and removed ambtracker. We also reimplemented the way we analyze
+   injections, and removed all uses of lookupLabel. Altogether this
+   accounts for 70% time savings. We are still optimizing though...
+ * Reimplemented the code and data structures that are used to determine if a 
+   production is an injection or not. Removed lookupLabel(), which was only 
+   used in the injection filtering, and reimplemented the production lookups. 
+   This resulted in a significant speedup.
+ * src/utils/list.{c,h}: introduced macros for expensive functions found in
+   the profiling.
+ * src/utils/memoryManagerGenerator.h: changed so that 2 pools are used:
+   - new_pool, where the memory is freshly allocated;
+   - reuse_pool, where the memory is freed and then reused.
+   The reuse pool allows the optimisation of not protecting the address of
+   reused ATerms. This made a huge saving in memory consumption ~200MBs!
+   Also, malloc now uses a reference parameter to returns 0 if the memory was
+   re-used and 1 if not.
+ * src/sglrInterface.c: changed the initial ATerm table size and Afun class
+   size. We need to allow the user to do this on the command line. This may
+   now not be necessary because of the improvements made during profiling.
+ * src/gss/gssEdge.{c,h}: introduced counting of the edges created in the GSS.
+   This is debug code, and should be hidden. However, initial experiments show
+   that the number of edges created differ in this branch from the trunk --
+   slightly worrying...but it could just be an error in the counting.
 
-Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
- * Added -a option to restore brackets (adds all possible brackets,
-   not just the necessary ones).
+Fri Feb  2 11:34:40 CET 2007 <economop@cwi.nl>
+ * src/sglr.c: added code to increase heap size etc of ATerms.
 
-Thu Mar 30 17:53:58 CEST 2006 <economop@cwi.nl>
- * Updated parse tables. Pgen now treats priorities slightly differently which
-   causes SGLR to create different parse trees. It still accepts the same
-   strings, but may produce different derivations, as is the case for 
-   |booleans.lst|.
+Wed Jan 31 13:16:08 CET 2007 <economop@cwi.nl>
+ * Merged revisions 21126-21188 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
 
-Fri Mar 10 11:27:36 CET 2006 <kooiker@cwi.nl>
- * **/Makefile.am:
-   - Maintainers use ATerm-dbg library
+Mon Jan 29 13:17:50 CET 2007 <economop@cwi.nl>
+ * Merged revisions 21120-21125 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
 
-Thu Feb 16 18:15:40 CET 2006 <jurgenv@cwi.nl>
- * sglr/{sglr.idef,sglr-main.c}: added quick workaround to be able to
-   toggle the heuristics filters from the ToolBus interface.
+Mon Jan 29 12:58:37 CET 2007 <economop@cwi.nl>
+ * Merged revisions 21036-21119 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
 
-Wed Dec 21 09:08:56 CET 2005 <kooiker@cwi.nl>
- * test/erroneous/bi.{cycle,asfix2.org}:
-   - removed because these are no errors anymore
+Wed Jan 24 18:14:57 CET 2007 <economop@cwi.nl> 
+ * Merged revisions 21030-21035 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
 
-Tue Dec 20 11:02:55 CET 2005 <kooiker@cwi.nl>
- * test/erroneous/bi.{cycle,asfix2.org}:
-   - Readded: distcheck complained about missing tests
+Wed Jan 24 17:11:17 CET 2007 <economop@cwi.nl>
+ * test/erroneous/r.asfix2.org: Regenerate test to produce a slightly better 
+   error message.
 
-Mon Dec 19 09:35:54 CET 2005 <jurgenv@cwi.nl>
- * Brought regress-terms.sh up-to-date with error-diff tool.
+Wed Jan 24 16:59:29 CET 2007 <economop@cwi.nl>
+ * Removed the regression tests that trigger the bug in the parse time
+   filtering of the reject filter.
 
-Thu Nov 10 14:40:28 CET 2005 <jurgenv@cwi.nl>
- * The 'maximum ambiguities reached' upperbound has dissappeared now,
-   since the flattening was the bottleneck here. It used to behave
-   exponentially, but with the memoization we are back at a feasible
-   algorithm. The maximum is not needed anymore. 
-   (note that tree2graph is still an exponential algorithm if you
-    do not turn sharing on).
+Wed Jan 24 16:53:45 CET 2007 <economop@cwi.nl>
+ * Merged r21022-21029 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
 
-Tue Jun  7 12:00:29 CEST 2005 <jurgenv@cwi.nl>
- * Flattening to AsFix2ME significantly optimized by applying memoization
-   (actual optimization is located in the pt-support package)
+Wed Jan 24 16:51:51 CET 2007 <economop@cwi.nl>
+ * src/parser/parser.c: Added the reject filtering that is done at parse time 
+ back into the algorithm.
 
-Sun Jun  5 10:51:38 CEST 2005 <jurgenv@cwi.nl>
- * Added new filter: 'Remove cycles' under the '-fc' option.
-   If the filter is active, all cycles are removed from all
-   ambiguity clusters. The filter is set default to off  by default. 
+Wed Jan 24 15:53:11 CET 2007 <economop@cwi.nl>
+ * Changelog-sglr-refactored: Added file to repository.
+ * Adding forgotten message from previous commit: 
+   Merged revisions 20982-21021 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
 
-Mon May 30 14:11:44 CEST 2005 <jurgenv@cwi.nl>
- * Adapted SGLR to produce cyclic parse trees using a new constructor
- * Merged separate cycle detection phase into filtering phase
+Wed Jan 24 15:50:38 CET 2007 <economop@cwi.nl>
+ * Created this Changelog and added the message below.
 
-Fri Nov 18 12:42:11 CET 2005 <jurgenv@cwi.nl>
- * Bumped to 3.14
+Wed Jan 24 15:47:54 CET 2007 <economop@cwi.nl>
+ * Initialized merge tracking via "svnmerge" with revisions "1-20981" from
+ svn+ssh://economop@svn.cwi.nl/sglr/branches/sglr-reject-postparse
+ 
+Wed Jan 24 15:32:45 CET 2007 <economop@cwi.nl>
+ * test/Makefile.am: Removed single quotes.
 
-Mon Sep 12 11:15:21 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
- * restorebrackets.c: generate structured literal representation
-   of brackets instead of casting a symbol to a tree. This
-   fixes a bug.
+Mon Jan 22 14:30:27 CET 2007 <economop@cwi.nl>
+ * src/toolbusInterface.c, 
+   src/gss/gssEdge.c,
+   src/parseForest/filters.c,
+   src/inputStringBuilder.c: fixd some warnings reported by GCC4.
 
-Fri Aug 19 14:48:33 CEST 2005 <jurgenv@cwi.nl>
- * restorebrackets/Makefile.am: removed superfluous linking flag
-   that triggered a build error.
+Thu Sep 21 16:27:52 CEST 2006 <economop@cwi.nl>
+ * src/commandLineInterface.c: fixed run-through in switch of handleFilterOpt.
 
-Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
- * configure.in:
-   - add libtool support
+Thu Sep 21 11:39:22 CEST 2006 <economop@cwi.nl>
+ * restorebrackets/src/restorebrackets.idef: Removed
+ * restorebrackets/src/restorebrackets.idef.src: Added
 
+Thu Sep 21 10:58:29 CEST 2006 <economop@cwi.nl>
+ * src/toolbusInterface.c: fixed bug that prevented sglr being called without
+   a topsort symbol filter defined.
+ * src/parseForest/filterOptions.{c,h}: added filter options print
+   functionality.
+ * restorebrackets/src/restorebrackets-main.c: fixed bug -- initialised SGLR.
+
+Tue Sep 19 17:13:05 CEST 2006 <economop@cwi.nl>
+ * src/sglr.idef.src: Removed forgotten print statements.
+
+Tue Sep 19 16:48:53 CEST 2006 <economop@cwi.nl>
+ * src/sglr.idef: Removed generated idef.
+ * src/sglr.idef.src: Added src.
+
+Fri Sep 15 16:24:56 CEST 2006 <economop@cwi.nl>
+ * Using the new build environment.
+ * parseForest/filters.c: changed includes to match refactored pt-support.
+
+Tue Sep  5 14:25:25 CEST 2006 <economop@cwi.nl>
+ * Re-wrote the regression test scripts to enable the setting of filtering 
+   options.
+ * Removed old regression test script.
+ * Regenerated PostParsePriorityFilter regression test with injection
+   filtering switched off.
+
+Mon Sep  4 10:42:54 CEST 2006 <economop@cwi.nl>
+ * Added a few more comments.
+ * Modified the PostParsePriorityFilter regression test.
+
+Fri Sep  1 16:51:54 CEST 2006 <economop@cwi.nl>
+ * Moved documentation around.
+
+Thu Aug 31 17:33:09 CEST 2006 <economop@cwi.nl>
+ * Added even more comments and documentation.
+
+Wed Aug 30 16:47:14 CEST 2006 <economop@cwi.nl>
+ * Added comments.
+
+Tue Aug 29 16:57:52 CEST 2006 <economop@cwi.nl>
+ * Added a new filter flag, -t, that only performs direct preference filtering.    Only one of the (in)direct preference filters can be performed, not both.
+ * Added comments.
+ * Added a regression test (PostParsePriorityFilter) that triggers the bug in 
+   the post parse filtering of priorities. I corrected the term used in
+   the regression tests manually.
+ * Re-wrote the post-parse priority filtering as the previous implementation
+   did not work correctly in certain circumstances (see previous message).
+ 
+Tue Aug 22 14:01:28 CEST 2006 <economop@cwi.nl>
+ * Located bug in |priorityFilter| which prevents the post parse filtering of 
+   priority conflicts separated by injection chains with more than one nested 
+   ambiguity cluster. Still needs to be refactored.
+ * Corrected behaviour of main filter flag.
+ * Updated the filtering names in the usage information.
+ * Corrected handling of filter on start symbol option.
+ * Removed #inAmbs parameter from filterTreeRecursive as is not used.
+
+Wed Jun 28 17:39:37 CEST 2006 <economop@cwi.nl>
+ * Corrected the sglr handling of options in the commandLineInterface and 
+   toolbusInterface.
+ * Added comments to |filters.c|.
+
+Tue Jun 27 15:18:41 CEST 2006 <economop@cwi.nl>
+ * configure.in: added AM_MAINTAINER_MODE.
+ * Makefile.am, doc/Makefile.am: corrected the doc generation.
+
+Fri Jun 23 16:49:19 CEST 2006 <economop@cwi.nl>
+ * Refactored names in |filters.c|.
+ * Added comments.
+ * Changed eagerness flags in |filterOptions| to preference.
+
+Fri Jun 23 09:46:50 CEST 2006 <economop@cwi.nl>
+ * Changed restoreBrackets to use the newly refactored sglr.
+
+Thu Jun 22 17:48:14 CEST 2006 <economop@cwi.nl>
+ * Moved functions from |filters.c| to |MEPT-utils.c| and |parseTable.c|.
+
+Thu Jun 22 16:10:52 CEST 2006 <economop@cwi.nl>
+ * Added files |filterStats.{c,h}| that were forgotten in previous commit.
+ * Corrected errors in |filters.c|, which were introduced during the previous 
+   revision's refactoring, that caused the TestCobol regression test
+   to fail.
+ * Added check for NULL tree before trying to create and return a parse tree 
+   in FLT_filterTree(). This caused an assert to be triggerred for the Reject 
+   regression test.
+ * Reviewed comments and made function names consistent in |filters.c|.
+
+Wed Jun 21 18:18:13 CEST 2006 <{jurgen,economop}@cwi.nl>
+ * We refactored all of |filters.c| which caused changes in |parser.c| and 
+   |ambi-tables.c|, among other files. The TestCobol regression test fails. It
+   appears to not filter an avoided tree. Probably an error in 
+   SG_FilterArgsRecursive(). We'll comment further tomorrow ;-)
+
+Tue Jun 20 18:24:36 CEST 2006 <economop@cwi.nl>
+ * Added doxygen comments.
+ * Partly refactored function names in |filters.c|, specifically renaming all
+   instances of eagerness to preference.
+
+Tue Jun 20 16:30:40 CEST 2006 <economop@cwi.nl>
+ * Refactored all counting from |filters.c| to the new file |filterStats.c|.
+ * Renamed the 'eagerness' counts to 'preference' counts.
+ * As a result of the separation of counting from |filters.c| the dependency
+   from |ambi-tables.c| was removed.
+
+Tue Jun 20 14:41:06 CEST 2006 <economop@cwi.nl>
+ * Refactored the ambiguity count counter and accessor functions.
+
+Tue Jun 20 13:32:41 CEST 2006 <economop@cwi.nl>
+ * Replaced SG_A_PROD() with api function.
+
+Tue Jun 20 13:27:32 CEST 2006 <economop@cwi.nl>
+ * Replaced SG_A_NR_ARGS() with api function.
+
+Tue Jun 20 13:18:52 CEST 2006 <economop@cwi.nl>
+ * Removed the |state| typedef and refactored all code that used it to use an 
+   int instead.
+ * Replaced SG_A_STATE() with api function.
+
+Tue Jun 20 10:47:17 CEST 2006 <economop@cwi.nl>
+ * Added Doxygen comments to |inputString.c| and |inputStringBuilder.c|.
+ * Refactored |inputStringBuilder.c| by moving the allocationn and
+   deallocation of the input string to |inputString.c|.
+ * Removed charInCharClass() from |inputString.c| and used function in
+   MEPT-utils.
+ * Refactored recursive definition of checkLookahead() to an iterative
+   definition.
+ * Use PTBL api for the checking of lookahead reductions.
+ * Regenerated Follower.tbl in the regression tests to use the new style 
+   lookahead reductions.
+
+Fri Jun  9 14:45:16 CEST 2006 <economop@cwi.nl>
+ * Added Doxygen comments to files in the src directory. Not everything is 
+   documented yet, but it's a start!
+ * Added the new docs directory to svn. It contains the configuration and
+   mainPage files of Doxygen. I set the svn:ignore property so that the
+   generated html and latex directories are ignored.
+
+Thu May 18 14:02:39 CEST 2006 <economop@cwi.nl>
+ * Updated parse tables in regression tests to use the apified version of
+   pgen:
+   - Action2.def: declared undeclared sorts
+   - AmbiRules.def: declared undeclared sorts
+   - Casl.def: removed unused sorts and declared undeclared sorts. However,
+   there are still some unresolved problems: Qual-Pred-Name is used, but
+   undefined; and there is an "inconsistent right-hand side in priorities" on
+   line 398 col 4: "(" Term ")" -> Simple-Term. This grammar is probably not
+   correct Casl, but I have not changed it since it caused a lot of errors in 
+   earlier versions of SGLR.
+   from the 'real world' I didn't fix these two issues.
+   - Expression.def: uses an "illegal attribute: non-assoc" on line 85, col 1
+   and line 29. This also was not changed since it may cause unexpected
+   behaviour.
+   - Prefer.def: declared undeclared sorts, but ImportSet is still undefined.
+   I left this so as not to change the behaviour of the regression tests.
+   - Risla.def: removed unused sort and declared undeclared sorts.
+   - RobsReject.def: Added Main module.
+   - SimpleCobol.def: removed unused sort. There is a bug in sdf-checker that
+   causes the final module in this grammar to be missed. This results in the
+   error 'undefined symbol used on line 220, col 4: Str'
+   - TestCobol.def: declared undeclared sorts.
+   - Added the new SDF2 grammar and replaced the old table the parse table.
+
+Tue Mar 28 16:46:16 CEST 2006 <economop@cwi.nl>
+ * Changed makefile to easier debugging of ATerms.
+ * Initialised the parse table error list.
+
+Fri Mar 17 15:47:37 CET 2006 <economop@cwi.nl>
+ * Fixed makefile dependecies in restore brackets.
+
+Fri Mar 17 15:08:18 CET 2006 <economop@cwi.nl>
+ * Using the statistics logging in the |c-library|.
+ * Removed |files.{c,h}| and |rsrc-usage.{c,h}| from utils.
+
+Fri Feb 17 16:05:54 CET 2006 <economop@cwi.nl>
+ * |parseTable.c| and |parseTableBuilder.c| now use the new api in 
+   |ptable-support|.
+
+Tue Feb 14 13:03:27 CET 2006 <economop@cwi.nl>
+ * Continuing apification of |parseTable.c|. This is the commit before 
+   changing the api of ptable-support.
+
+Mon Feb 13 14:28:47 CET 2006 <economop@cwi.nl>
+ * Intermediate commit during apification of |parseTable.c|.
+ 
+Fri Feb 10 17:45:51 CET 2006 <economop@cwi.nl>
+ * Apified most of |parseTableBuilder.c|.
+
+Fri Feb 10 14:05:23 CET 2006 <{economop,kooiker}@cwi.nl>
+ * Fixed bug in |parser.c| which incorrectly caused an "eof unexpected" 
+   parse error.
+ * Corrected ptable-support substitution variables in |configure.in|.
+
+Thu Feb  9 15:24:20 CET 2006 <economop@cwi.nl>
+ * Added macros to prevent |mainOptions.h| from being included multiple
+   times.
+ * Created |initializeSGLR()| in |sglrInterface.c|.
+ * Added check to see if SGLR has already been initialized.
+ * Added an assert to |SGLR_parse()| to check whether the aterm library has 
+   been initialized.
+ * Moved the flattenning of the parse tree from the |commandLineInterface.c| 
+   and |toolbusInterface.c| into the |sglrInterface.c|.
+ * Refactored restorebrackets to use the new version of SGLR.
+ * Added missing dits tests to the makefiles in |test|.
+
+Mon Feb  6 11:41:25 CET 2006 <economop@cwi.nl>
+ * Separated |inputString.{c,h}| into |inputStringBuilder.{c,h}|, 
+   |inputString-data.h|, |inputString-api.h| and |inputString.c| to
+   encapsulate the implementation in a nicer way.
+ * Installed the |inputStringBuilder.h| and |inputString-data.h|.
+ * Moved utils/options.{c,h} to config-support so that it can be used by other 
+   tools.
+ 
+Wed Feb  1 14:36:59 CET 2006 <economop@cwi.nl>
+ * Extracted the parse table database and building from |parseTable.c|. 
+   Created new files |parseTableDB.{c,h}| and |parseTableBuilder.{c,h}|
+ * Have begun using the ptable-support library.
+
+Thu Jan 26 15:55:20 CET 2006 <economop@cwi.nl>
+ * Refactoring implementation of internal parse table structure:
+   - changed names of files |parse-table.{c,h}| -> |parseTable.{c,h}|
+   - rewrote most macros to functions
+   - removed dead code
+ * Removed macros.h
+ 
+Tue Jan 24 17:53:40 CET 2006 <economop@cwi.nl>
+ * Reformatted parse-table.c.
+
+Tue Jan 24 14:51:03 CET 2006 <{economop,kooiker}@cwi.nl>
+ * Modified |restorebrackets-main.c| to work with SGLR.
+
+Tue Jan 24 13:05:38 CET 2006 <{economop,kooiker}@cwi.nl>
+ * SGLR now uses the shared ATerm library.
+ 
+Mon Jan 23 15:15:09 CET 2006 <economop@cwi.nl>
+ * Changed the toolbus interface in |sglr.idef|.
+
+Mon Jan 23 12:03:39 CET 2006 <economop@cwi.nl>
+ * Incorporated handling of cyclic parse forests in the filtering.
+ * Added new filter: 'Remove cycles' under the '-fc' option. If the filter is 
+   active, all cycles are removed from all ambiguity clusters. The default 
+   setting is off.
+ * Moved regression tests |bi.cycle| and |mdj.cycle2| from test/erroneous to 
+   test/terms as cycles in the parse forest no longer cause errors.
+
+Mon Jan 16 17:07:35 CET 2006 <economop@cwi.nl>
+ * Intermediate commit for handling of cycles in the filtering. 
+   Still need to add PT_makeTreeCycle(). 
+   New files created:
+   - parseForest/levels.{c,h}
+ * If the input string is created with IS_createInputStringFromString then the
+   path is set to |_noPath_|.
+
+Thu Dec 22 15:14:09 CET 2005 <economop@cwi.nl>
+ * Errors are now created with the use of ErrorManager. A summary is 
+   created that contains a list of errors so regression tests have been updated.
+ * Updated true.nss regression test.
+ * Changed regress-terms.sh.src to notify if atdiff fails and error-diff 
+   succeeds.
+ * Added |slgr.c| and refactored the main function into it with support for
+   toolbus invocation of parser.
+ * Changed messages passed back to the toolbus to |parse-succeeded| and 
+   |parse-failed|. A successful parse contains a parse tree or forest and
+   possibly an error summary if the ErrorOnAmbiguity flag is set. A failed
+   parse only contains an error summary.
+
+Fri Jul 22 17:06:44 CEST 2005 <{economop,kooiker}@cwi.nl>
+ * Added |reverseList| function to |list.c|, |GSSNodeList| and |GSSEdgeList| 
+   to aid debugging.
+ * Refactored function and variable names to be consistent.
+ * Renamed the following files:
+   - sglr-interface.c  -> sglrInterface.c
+   - sglr.h            -> sglrInterface.h
+   - sglr-main.c       -> commandLineInterface.c
+   - tool.c            -> toolbusInterface.c
+   - tool.h            -> toolbusInterface.h
+ * Added commandLineInterface.h
+ * Renamed the type |parse_table| -> |ParseTable|.
+ * Renamed |sglrInterface.c| functions:
+   - SGopenLanguageFromTerm() -> SGLR_setParseTable()
+   - SGopenLanguage()         -> SGLR_loadParseTable()
+ * Added ptable-support to configure.in
+ * Changed the type of the parse table that is passed into SGLR: 
+   |ATerm| -> |PTBL_ParseTable|.
+ * Created inputString.{c,h}. 
+    - No longer append '\n' to input string. This was an error that caused the 
+      Reject regression test to fail with an incorrect error ('\n' unexpected
+      instead of eof unexpected).
+    - Hid implementation of inputString.
+    - Moved |SG_CharInCharClass| |SG_checkLookAhead| (used by the reducer 
+      with lookahead) from parser to input string.
+    - '\0' is only considered as a valid token if the input string is 
+      created via the public functions |createInputStringFromBytes| or 
+      |createInputStringFromFile|.
+    - Moved positional info from parser to inputString.
+ * Added more details of success and failure of individual regression tests 
+   to |regress-terms.src.sh|.
+ * Updated Reject regression test after above InputString fix.
+ * Removed the '\n' printed at the end of the result.
+ * Changed format of error messages.
+ * Extracted filtering, yielding and cycledetection from SG_parse and added it
+   to sglrInterface.
+ * Added path to internal parsetable datastructure to help creating error 
+   messages. 
+ * r.rjct test fails because of the rejections done at parse time. They  killed
+   the tree and caused an eof parse error. By doing the postparse filtering we
+   get a NULL tree instead.
+ 
+Thu Jun 30 14:28:11 CEST 2005 <economop@cwi.nl, jurgenv@cwi.nl, kooiker@cwi.nl>
+ * Moved all |#define| definitions from src into temporary 'macros.h'.
+ * Removed getopt.h, getopt.c getopt1.c and addded #include <unistd.h> instead.
+ * Removed the #ifdef and #indef WIN32 uses.
+ * Removed the long options from regress-terms.sh.src.
+ * Removed -m flag which was the inverse of the -2 flag
+ * Moved default values of options to topical initializeDefaultOptions functions.* Removed -b flag, which was the inverse of the -t flag
+ * Usage information prints the real default values, instead of the current
+   values.
+ * Renamed forest.[ch] to filters.[ch]
+ * Added forest.h which contains the definitions of tree and forest
+ * Put printStatusBar in utils/statusBar.[ch]
+ * Took include of parse-table.h from sglr.h
+ * Moved definitions of parse-table and forest types to parse-table.h
+   and forest.h respectively
+
+
+Thu Jun 30 14:16:27 CEST 2005 <economop@cwi.nl, kooiker@cwi.nl>
+ * Changed configure.in to represent new directory structure.
+
+Thu Jun 30 13:13:42 CEST 2005 <economop@cwi.nl>
+ * Moved sglr.h in src/Makefile.am to include_HEADERS.
+ * Modified other Makefiles to find the headers of new files listed below.
+ * Refactored configuration options out of sglr.h and created the following 
+   files:
+   - utils/options.c 		  utils/options.h
+   - mainOptions.c      	  mainOptions.h
+   - parseForest/filterOptions.c  parseForest/filterOptions.h
+   - parser/parserOptions.c  	  parser/parserOptions.h
+
+
+Wed Jun 29 09:47:12 CEST 2005 <economop@cwi.nl>
+ * Made the naming convention of variables and functions consistent.
+ * Added ATerror messages when no more memory can be allocated.
+ * Updated comments.
+
+Tue Jun 28 15:24:51 CEST 2005 <economop@cwi.nl>
+ * Refactored sglr directory structure:
+   - created src directory to store all source files used in sglr. The src 
+     directory contains the sglr interface files, the sglr library (libsglr.a)
+     and five sub-directories listed below:
+     1) gss 
+	 Extracted entire GSS data structure (stack.c) and all searching and 
+	 accessing functions (parser.c). All memory management and garbage 
+	 collection was also separated (stack.c & parser.c).
+
+	 The files included are listed below:
+	  gss.c,                  gss.h
+	  gssNode.c,              gssNode-api.h, gssNode-data.h 
+	  gssEdge.c,              gssEdge-api.h, gssEdge-data.h 
+	  gssNodeList.c,          gssNodeList.h
+	  gssEdgeList.c,          gssEdgeList.h
+	  gssGarbageCollector.c,  gssGarbageCollector.h 
+	  reductionPath.c,        reductionPath.h
+	  shiftQueue.c,           shiftQueue.h
+
+     2) parseForest
+	 ambi-tables.c,           ambi-tables.h
+	 forest.c,                forest.h
+	 
+     3) parseTable
+	 parseTable.c,            parseTable.h
+     4) parser
+	 parser.c,                parser.c
+     5) utils
+	 bitmap.c,                bitmap.h
+	 getopt.c,                getopt.h
+	 list.c,                  list.h
+	 marking.c,               marking.h
+	 - 			  memalloc.h
+	 -                        memoryManagerGenerator.h, 
+	 posmap.c, 		  posmap.h
+	 rsrc-usage.c,		  rsrc-usage.h
+
+     Each sub-directory contains its own makefile and non-installed libraries 
+     to allow compilation.
+
+ * Moved libsglr.a (the installed library for sglr) and sglr (the binary 
+   executable) into the src directory.
+
+ * Removed libsglr directory.
+
+ * Removed sglr directory.
+
+ * Created this changeLog file to allow easier merging of branches when the 
+   refactoring is complete.
+
+Tue Jun 21 09:29:17 CEST 2005 <{economop,kooiker,jurgenv}@cwi.nl>
+ * Commit before restructuring directory structure.
+	
+Fri Jun 17 16:02:55 CEST 2005 <{economop,kooiker,jurgenv}@cwi.nl>
+ * Factored out GSSNode and GSSEdge from GSS
+ * Standardized functionnames in GSSList 
+ * libsglr/{GGSList.c,GSSEdge.c,GSSNode.c}: Factored out all memory management
+   code that contained smart tricks for preallocation and reuse of memory.
+   Four instances changed to one local implementation.
+   Deobfuscated the implementation, and then wrapped it in a macro such
+   that type safe instantiations can be generated for each new struct.
+   The macro is called GenerateMemoryManager and has a number of type
+   arguments.
+
+Wed Jun 15 17:45:37 CEST 2005 <{economop,kooiker,jurgenv}@cwi.nl>
+ * Refactored stack.c into GSS, GSSMemoryManagement and GSSList
+ * Refactor variable names into descriptive names
+ * Added comments in memory management
+ * Corrected memory leak 
+ * Removed GENERIC_POOL_ALLOC
+
+Tue Jun 14 18:30:33 CEST 2005 <{economop,kooiker}@cwi.nl>
+ * libsglr/stack.c: 
+   - refactored stack data type to GSSNode
+   - refactored link data type to GSSEdge
+
+Tue Jun 14 12:56:44 CEST 2005 <{economop,kooiker}@cwi.nl>
+ * libsglr: 
+   - extracted ReductionPath and ShiftQueue data structures from parser.c
+	
+Wed Jun  8 15:45:15 CEST 2005 <economop@cwi.nl>
+ * libsglr/parser.c:
+   - commented out application of reject productions in the parser.
+ * test/Robs*:
+   - created regression tests for RobsReject.def grammar.
+ * test/grammars/Flat.def:
+   - Removed Layout module, it isn't used
+	
 Tue Mar 15 13:57:38 CET 2005 <jurgenv@cwi.nl>
  * Bumped version to 3.13 since sglr links to a much changed
    version of libmept (no more flattening of lexicals and layout).

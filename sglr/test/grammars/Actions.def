@@ -28,7 +28,7 @@ context-free syntax
 
   	"it"			-> DataOp
 
-  	Action			-> Yielder {avoid}
+  	Action 		        -> Yielder {avoid}
 	DataOp			-> Yielder {avoid}
 	Yielder "then" Yielder	-> Yielder {left}
 

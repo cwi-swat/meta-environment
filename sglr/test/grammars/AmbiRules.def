@@ -9,13 +9,14 @@ imports basic/Whitespace
 
 exports
   context-free start-symbols Eq
-  sorts Eq
+  sorts Eq Symbol
+
   lexical syntax
     [A-Z]+ -> Symbol
+
   context-free syntax
     Symbol "=" Symbol -> Eq
     Symbol+ "=" Symbol+ -> Eq
-
 
 module basic/Whitespace
 
