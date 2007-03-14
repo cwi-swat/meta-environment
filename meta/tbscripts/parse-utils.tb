@@ -30,21 +30,19 @@ process AddFilenameToParseError(Error: term, Filename: str, Result: term?) is
 
 process ParseText(Pid: int, Text: str, Table: term, Nonterminal: term, Heuristics: term) is
 let
-  Error: term,
+  ErrorSummary: term,
   ParseResult: term
 in
-  snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
+  /*snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))*/
+  snd-msg(sglr-parse(Text, Table, Nonterminal))
   . AddJob("Parsing")
   .
   (
-    rec-msg(sglr-parse-tree(ParseResult?))
-    . snd-msg(parse-tree(Pid, ParseResult))
+    rec-msg(sglr-parse-tree(ParseResult?, ErrorSummary?))
+    . snd-msg(sglr-parse-tree(Pid, ParseResult, ErrorSummary))
   +
-    rec-msg(sglr-parse-forest(ParseResult?, Error?))
-    . snd-msg(parse-forest(Pid, ParseResult, Error))
-  +
-    rec-msg(sglr-parse-error(Error?))
-    . snd-msg(parse-error(Pid, Error))
+    rec-msg(sglr-parse-error(ErrorSummary?))
+    . snd-msg(sglr-parse-error(Pid, ErrorSummary))
   )
   . JobDone("Parsing")
 endlet
@@ -63,8 +61,7 @@ process RemoveAmbiguitySummary(Path: str) is
 
 process ParseTreeHandler(ModuleId: module-id, Path: str) is
 let
-  ErrorMessage: term,
-  ParseError: term,
+  ParseSummary: term,
   ParseResult: term,
   Pid: int,
   Summary: summary,
@@ -73,15 +70,24 @@ in
   Pid := process-id
   .
   (
-    rec-msg(parse-tree(Pid, ParseResult?))
-    . RemoveSummary("sglr", Path)
+    (
+      rec-msg(sglr-parse-tree(Pid, ParseResult?, ParseSummary?))
+      . RemoveSummary("parser", Path)
+      .
+      if not-equal(ParseSummary, UNDEFINED) then
+        snd-msg(es-make-summary(ParseSummary, Path))
+        . rec-msg(es-summary(Summary?))
+        . DisplaySummary(Summary)
+      else
+        tau
+      fi
+    )
     . snd-msg(parse-handler-done(Pid, ModuleId, ParseResult))
   +
-    rec-msg(parse-error(Pid, ErrorMessage?))
-    . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
-    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+    rec-msg(sglr-parse-error(Pid, ParseSummary?))
+    . snd-msg(es-set-summary-id(ParseSummary, Path))
     . rec-msg(es-summary(Summary?))
-    . RemoveSummary("sglr", Path)
+    . RemoveSummary("parser", Path)
     . DisplaySummary(Summary)
     . snd-msg(parse-handler-done(Pid))
   )
@@ -99,7 +105,7 @@ in
   .
   (
     rec-msg(em-path(Sid, Path?))
-    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+    . snd-msg(es-make-summary("parser", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
   +
     rec-msg(no-such-session(Sid))
