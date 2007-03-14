@@ -2,7 +2,6 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import nl.cwi.sen1.gui.Studio;
