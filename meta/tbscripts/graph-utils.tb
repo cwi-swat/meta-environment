@@ -50,8 +50,8 @@ endlet
 process UpdateGraphAttribute(GraphType: str, GraphId: term, NodeId: term, Key: term, Value: term) is
   snd-msg(gp-update-graph(GraphType, GraphId, NodeId, Key, Value))
 
-process ShowTree(Tree: term, ShowLayout: term, ShowLeafs: term, 
-                 SharingOn: term) is
+process ShowTree(Tree: term, ShowLayout: bool, ShowLeafs: bool, 
+                 SharingOn: bool) is
 let
   Graph: term
 in
