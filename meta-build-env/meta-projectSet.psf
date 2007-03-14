@@ -8,6 +8,8 @@
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/io-support/trunk,io-support"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/JJTraveler/trunk,JJTraveler"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/apigen/trunk,apigen"/>
+<project reference="0.9.3,svn+ssh://kooiker@svn.cwi.nl/svg-gui/trunk,svg-gui"/>
+<project reference="0.9.3,svn+ssh://kooiker@svn.cwi.nl/svg-support/trunk,svg-support"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/console-gui/trunk,console-gui"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/editor-plugin/trunk,editor-plugin"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/module-support/trunk,module-support"/>
