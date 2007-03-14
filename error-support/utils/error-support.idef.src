@@ -5,7 +5,7 @@ tool error-support is { command = "__PREFIX__/bin/error-support" }
 
 process ErrorSupport is
 let
-  Area : term,
+  Area : area,
   Column : int,
   Description : str,
   ES : error-support,
@@ -20,7 +20,8 @@ let
   Producer : str,
   Subject : term,
   Subjects : list,
-  Summary : term
+  Summary : summary,
+  Tree: term
 in
   execute(error-support, ES?) .
   (
@@ -123,8 +124,8 @@ in
     snd-msg(summary-errors(Errors))
 
   +
-    rec-msg(convert-feedback(Summary?)) .
-    snd-eval(ES, lower-summary(Summary)) .
+    rec-msg(convert-feedback(Tree?)) .
+    snd-eval(ES, lower-summary(Tree)) .
     rec-value(ES, lowered-summary(Summary?)) .
     snd-msg(converted-feedback(Summary))
   +
