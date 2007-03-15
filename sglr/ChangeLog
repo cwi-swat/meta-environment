@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 15 16:06:44 CET 2007 <{economop,kooiker}@cwi.nl>
+ * restorebrackets/src/restorebrackets-main.c: fixed incorrect merge
+
 Wed Mar 14 15:17:46 CET 2007 <{economop,kooiker}@cwi.nl>
  * Merged sglr-refactored branch into the trunk.
 

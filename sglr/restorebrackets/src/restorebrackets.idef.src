@@ -8,24 +8,27 @@ let
   Table   : term
 in
   (
-    rec-msg(restore-brackets(Term?, Table?)) .
-    execute(restorebrackets, RESTORE?) .
-    snd-eval(RESTORE, restore-brackets(Term, Table)) .
+    rec-msg(restore-brackets(Term?, Table?)) 
+    . execute(restorebrackets, RESTORE?) 
+    . snd-eval(RESTORE, restore-brackets(Term, Table)) 
+    .
     (
-      rec-value(RESTORE, brackets-restored(NewTerm?)) .
-      snd-terminate(RESTORE, "done") .
-      snd-msg(brackets-restored(NewTerm))
+      rec-value(RESTORE, brackets-restored(NewTerm?)) 
+      . snd-terminate(RESTORE, "done") 
+      . snd-msg(brackets-restored(NewTerm))
     )
   +
-    rec-msg(add-brackets(Term?, Table?)) .
-    execute(restorebrackets, RESTORE?) .
-    snd-eval(RESTORE, add-brackets(Term, Table)) .
+    rec-msg(add-brackets(Term?, Table?)) 
+    . execute(restorebrackets, RESTORE?) 
+    . snd-eval(RESTORE, add-brackets(Term, Table)) 
+    . 
     (
-      rec-value(RESTORE, brackets-restored(NewTerm?)) .
-      snd-terminate(RESTORE, "done") .
-      snd-msg(brackets-added(NewTerm))
+      rec-value(RESTORE, brackets-restored(NewTerm?)) 
+      . snd-terminate(RESTORE, "done") 
+      . snd-msg(brackets-added(NewTerm))
     )
-  ) * delta
+  ) 
+  * delta
 endlet
 
 toolbus(RestoreBrackets)

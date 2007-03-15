@@ -20,10 +20,11 @@
 
 static char myname[] = "restorebrackets";
 static char myversion[] = "0.1";
-static char myarguments[] = "bhi:o:p:tvV";
+static char myarguments[] = "abhi:o:p:tvV";
 static const char PARSETABLE_ID[] = "RestoreBracketsParseTable";
 
 ATbool run_verbose;
+ATbool add_all;
 
 void rec_terminate(int cid, ATerm t) {
   exit(0);
@@ -79,8 +80,10 @@ static PT_Tree AddBrackets(PT_Tree tree, ParseTable *pt) {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Symbol rhs = PT_getProductionRhs(prod);
   PT_Production bracketProd = SGLR_PTBL_lookupBracketProd(pt, rhs);
+  ATerm atBracketProd = PT_ProductionToTerm(bracketProd);
   
-  if (bracketProd) {
+  if (atBracketProd && !PT_isEqualProduction(prod, bracketProd)) {
+    PT_Production bracketProd = PT_ProductionFromTerm(atBracketProd);
     PT_Symbols bracketSymbols = PT_getProductionLhs(bracketProd);
     PT_Symbol openBracketSym = PT_getSymbolsHead(bracketSymbols);
     PT_Symbol closeBracketSym = PT_getSymbolsSymbolAt(bracketSymbols, 4);
@@ -94,7 +97,9 @@ static PT_Tree AddBrackets(PT_Tree tree, ParseTable *pt) {
     return PT_makeTreeAppl(bracketProd, newArgs);
   }
   else {
-    ATwarning("No brackets defined for symbol %s\n", PT_yieldSymbol(rhs));
+    if (!add_all) {
+      ATwarning("No brackets defined for symbol %s\n", PT_yieldSymbol(rhs));
+    }
     return tree;
   }
 }
@@ -103,7 +108,7 @@ static PT_Tree AddBracketsToTreeIfNeeded(PT_Production fatherProd, PT_Tree tree,
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     if (PT_isProductionDefault(prod)) {
-      if (SGLR_PTBL_isPriorityGreater(pt, argNr, fatherProd, prod)) {
+      if (add_all || SGLR_PTBL_isPriorityGreater(pt, argNr, fatherProd, prod)) {
         return AddBrackets(tree, pt);
       }
     }
@@ -135,13 +140,17 @@ static PT_ParseTree RestoreBracketsInPT(PT_ParseTree pttree, ParseTable *pt) {
 }
 
 /* Interface to toolbus. */
+ATerm add_brackets(int cid, ATerm packedTerm, ATerm packedTable) {
+  add_all = ATtrue;
+  return restore_brackets(cid, packedTerm, packedTable);
+}
+
 ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable) {
   ParseTable *pt = NULL;
   ATerm restoredTerm;
   PTBL_ParseTable parseTable;
   PT_ParseTree parseTree;
   
-  ATwarning("Start\n");
   parseTable = PTBL_ParseTableFromTerm(ATBunpack(packedTable));
   if (!SGLR_loadParseTable(PARSETABLE_ID, parseTable)) {
     ATerror("could not open language!\n");
@@ -156,13 +165,13 @@ ATerm restore_brackets(int cid, ATerm packedTerm, ATerm packedTable) {
   restoredTerm = PT_ParseTreeToTerm(RestoreBracketsInPT(parseTree, pt));
 
   SGLR_PTBL_discardParseTable(pt);
-  ATwarning("End\n");
   return ATmake("snd-value(brackets-restored(<term>))", ATBpack(restoredTerm));
 }
 
 static void usage(void) {
   ATwarning("Usage: %s [options]\n"
             "Options:\n"
+            "\t-a              put all possible brackets (one level)\n"
             "\t-b              output terms in BAF format (default)\n"
             "\t-i filename     input from file (default stdin)\n"
             "\t-o filename     output to file (default stdout)\n"
@@ -213,6 +222,7 @@ int main(int argc, char *argv[]) {
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+        case 'a': add_all = ATtrue;        break;
         case 'b': bafMode =1;              break;
         case 'i': input=optarg;            break;
         case 'o': output=optarg;           break;
@@ -223,6 +233,12 @@ int main(int argc, char *argv[]) {
         case 'h':
         default:  usage(); exit(0);        break;
       }
+    }
+
+    if (parse_table_file == NULL) {
+      ATwarning("Please provide a parse table using the -p option\n");
+      usage();
+      return 1;
     }
 
     if (!strcmp(input, "") || !strcmp(input, "-")) {
