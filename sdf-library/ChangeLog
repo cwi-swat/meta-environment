@@ -3,6 +3,8 @@ $Id$
 Thu Mar 15 12:40:47 CET 2007 <{economop,jurgenv,kooiker}@cwi.nl>
  * library/languages/asfix/syntax/Symbol.sdf:
    - Added definition of cilit
+ * library/languages/asfix/syntax/Tree.sdf:
+   - Changed tree cycle production arguments
 
 Wed Mar  7 16:32:49 CET 2007 <kooiker@cwi.nl>
  * library/basic/ParsetreeCon.sdf:

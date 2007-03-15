@@ -11,7 +11,7 @@ sorts Tree Args Production
 context-free syntax
 
 appl(prod:Production,args:Args) -> Tree {cons("appl")}
-cycle(prod:Production)          -> Tree {cons("cycle")}
+cycle(symbol:Symbol,length:NatCon)          -> Tree {cons("cycle")}
 amb(args:Args)                  -> Tree {cons("amb")}
 character:NatCon                -> Tree {cons("char")}
 
