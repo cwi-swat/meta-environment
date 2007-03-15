@@ -28,11 +28,11 @@ si_sessions.id and si_sessions.time < '2006-08-01' group by
 si_revision_id order by si_revision_id;
 
 
-select name, count(count) from si_components, si_revisions,
+select name, sum(count) from si_components, si_revisions,
 revision_not_tried_count_pre_backtracking where
 si_revisions.si_component_id = si_components.id and si_revisions.id =
 revision_not_tried_count_pre_backtracking.si_revision_id group by
-name;
+name order by name;
 
 /* After */
 
@@ -43,124 +43,141 @@ si_sessions.id and si_sessions.time >= '2006-08-01' group by
 si_revision_id order by si_revision_id;
 
 
-select name, count(count) from si_components, si_revisions,
+select name, sum(count) from si_components, si_revisions,
 revision_not_tried_count_post_backtracking where
 si_revisions.si_component_id = si_components.id and si_revisions.id =
 revision_not_tried_count_post_backtracking.si_revision_id group by
-name;
+name order by name;
 
-/* Results at 15-3-2007 16:05
+/* Results at 15-3-2007 16:17
+
+
+Stats
+
+Pre backtracking (< 1-8-2006)
+4499 total nottrieds
+17137 total builds
+11565 success
+5572 failure
+
+Post backtracking
+1163 total nottrieds
+11060 total builds
+9391 success
+1670 failure
 
 Pre
 
-          name          | count
-------------------------+-------
- apigen                 |    15
- asc-support            |    22
- asf                    |    45
- asf-library            |     7
- asfsdf-meta            |    78
- asf-support            |     9
- aterm                  |     3
- aterm-java             |    15
- balanced-binary-aterms |     3
- config-manager         |    14
- config-support         |     9
- dialog-gui             |    21
- editor-manager         |    10
- editor-plugin          |    32
- error-gui              |    25
- error-support          |    15
- graph-gui              |    23
- graph-support          |    19
- io-support             |    12
- JJTraveler             |     3
- JRelCal                |     2
- meta                   |   101
- meta-build-env         |     2
- meta-doc               |     2
- meta-studio            |    31
- module-details-gui     |    17
- module-manager         |    40
- module-support         |     2
- navigator-gui          |    21
- pandora                |    18
- pgen                   |    28
- progress-gui           |    19
- pt-support             |    27
- relational-aterms      |     3
- sdf-apigen             |    17
- sdf-library            |     2
- sdf-meta               |    54
- sdf-support            |    20
- sglr                   |    27
- shared-objects         |     4
- sisyphus               |     4
- structure-editor       |    14
- term-store             |     8
- tide                   |    20
- tide-support           |     9
- toolbus                |    13
- toolbus-java-adapter   |    10
- toolbuslib             |     7
+          name          | sum
+------------------------+-----
+ apigen                 |  45
+ asc-support            | 134
+ asf                    | 190
+ asf-library            |  16
+ asfsdf-meta            | 399
+ asf-support            | 107
+ aterm                  |   3
+ aterm-java             |  75
+ balanced-binary-aterms |  12
+ config-manager         |  81
+ config-support         |  46
+ dialog-gui             | 113
+ editor-manager         |  40
+ editor-plugin          | 158
+ error-gui              | 159
+ error-support          |  74
+ graph-gui              | 135
+ graph-support          | 120
+ io-support             |  44
+ JJTraveler             |  17
+ JRelCal                |   3
+ meta                   | 376
+ meta-build-env         |   2
+ meta-doc               |   3
+ meta-studio            | 139
+ module-details-gui     | 101
+ module-manager         | 168
+ module-support         |   3
+ navigator-gui          | 141
+ pandora                | 121
+ pgen                   | 151
+ progress-gui           | 104
+ pt-support             |  92
+ relational-aterms      |  21
+ sdf-apigen             | 122
+ sdf-library            |   3
+ sdf-meta               | 207
+ sdf-support            | 123
+ sglr                   | 121
+ shared-objects         |  19
+ sisyphus               |   4
+ structure-editor       |  70
+ term-store             |  32
+ tide                   | 150
+ tide-support           |  61
+ toolbus                |  76
+ toolbus-java-adapter   |  62
+ toolbuslib             |  56
+(48 rows)
 
 
 Post
 
-         name         | count
-----------------------+-------
- apigen               |     7
- asc-support          |     9
- asf                  |    12
- asf-library          |    17
- asfsdf-meta          |    26
- asf-support          |     5
- aterm                |     9
- aterm-java           |     2
- config-manager       |     3
- config-support       |     2
- console-grabber      |     5
- console-gui          |     3
- dialog-gui           |     3
- editor-manager       |     3
- editor-plugin        |    12
- error-gui            |     5
- error-support        |     4
- graph-gui            |     6
- graph-support        |     4
- io-support           |     5
- JJTraveler           |     2
- meta                 |    18
- meta-autotools       |     1
- meta-build-env       |     6
- meta-doc             |    20
- meta-studio          |     7
- module-details-gui   |     2
- module-manager       |    10
- module-support       |     3
- navigator-gui        |     4
- pandora              |     4
- pgen                 |     7
- progress-gui         |     4
- pt-support           |     6
- relational-aterms    |     1
- rscript              |     2
- sdf                  |     1
- sdf-apigen           |     1
- sdf-library          |    13
- sdf-meta             |    23
- sdf-pretty           |     1
- sdf-support          |     6
- sglr                 |     3
- shared-objects       |     3
- sisyphus             |     1
- structure-editor     |     2
- term-store           |     1
- tide                 |     3
- tide-support         |     3
- toolbus              |     8
- toolbus-java-adapter |     2
- toolbuslib           |     3
+        name         | sum
+----------------------+-----
+ apigen               |  16
+ asc-support          |  37
+ asf                  |  61
+ asf-library          |  26
+ asfsdf-meta          | 135
+ asf-support          |  20
+ aterm                |  19
+ aterm-java           |  11
+ config-manager       |  11
+ config-support       |  11
+ console-grabber      |   8
+ console-gui          |   6
+ dialog-gui           |  23
+ editor-manager       |  12
+ editor-plugin        |  31
+ error-gui            |  25
+ error-support        |  17
+ graph-gui            |  31
+ graph-support        |  14
+ io-support           |  16
+ JJTraveler           |  10
+ meta                 |  63
+ meta-autotools       |   3
+ meta-build-env       |  14
+ meta-doc             |  25
+ meta-studio          |  27
+ module-details-gui   |  22
+ module-manager       |  33
+ module-support       |   9
+ navigator-gui        |  27
+ pandora              |  17
+ pgen                 |  28
+ progress-gui         |  23
+ pt-support           |  18
+ relational-aterms    |   3
+ rscript              |   2
+ sdf                  |   8
+ sdf-apigen           |  20
+ sdf-library          |  20
+ sdf-meta             |  87
+ sdf-pretty           |   1
+ sdf-support          |  23
+ sglr                 |  18
+ shared-objects       |  11
+ sisyphus             |   1
+ structure-editor     |  12
+ term-store           |  11
+ tide                 |  24
+ tide-support         |  17
+ toolbus              |  21
+ toolbus-java-adapter |  10
+ toolbuslib           |  25
+(52 rows)
 
 
 */
