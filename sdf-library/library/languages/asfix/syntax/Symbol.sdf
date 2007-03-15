@@ -11,6 +11,7 @@ context-free syntax
 
 "empty"                                                  -> Symbol   {cons("empty")}
 lit(string:StrCon)                                     -> Symbol   {cons("lit")}
+cilit(string:StrCon)                                     -> Symbol   {cons("cilit")}
 cf(symbol:Symbol)                                        -> Symbol   {cons("cf")}
 lex(symbol:Symbol)                                       -> Symbol   {cons("lex")}
 opt(symbol:Symbol)                                       -> Symbol   {cons("opt")}
