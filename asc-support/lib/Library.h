@@ -37,183 +37,1008 @@ typedef struct _CO_ParsetreeX *CO_ParsetreeX;
 typedef struct _CO_X *CO_X;
 typedef struct _CO_Boolean *CO_Boolean;
 
-void CO_initLibraryApi(void);
+#ifdef FAST_API
+#define CO_initLibraryApi() (init_Library_dict())
+#else
+void _CO_initLibraryApi(void);
+#define CO_initLibraryApi() (_CO_initLibraryApi())
+#endif
 
-void CO_protectOptLayout(CO_OptLayout *arg);
-void CO_unprotectOptLayout(CO_OptLayout *arg);
-void CO_protectLayout(CO_Layout *arg);
-void CO_unprotectLayout(CO_Layout *arg);
-void CO_protectLexLayoutList(CO_LexLayoutList *arg);
-void CO_unprotectLexLayoutList(CO_LexLayoutList *arg);
-void CO_protectLexLayout(CO_LexLayout *arg);
-void CO_unprotectLexLayout(CO_LexLayout *arg);
-void CO_protectStart(CO_Start *arg);
-void CO_unprotectStart(CO_Start *arg);
-void CO_protectLexStrChar(CO_LexStrChar *arg);
-void CO_unprotectLexStrChar(CO_LexStrChar *arg);
-void CO_protectStrChar(CO_StrChar *arg);
-void CO_unprotectStrChar(CO_StrChar *arg);
-void CO_protectLexStrCon(CO_LexStrCon *arg);
-void CO_unprotectLexStrCon(CO_LexStrCon *arg);
-void CO_protectStrCon(CO_StrCon *arg);
-void CO_unprotectStrCon(CO_StrCon *arg);
-void CO_protectLexStrCharChars(CO_LexStrCharChars *arg);
-void CO_unprotectLexStrCharChars(CO_LexStrCharChars *arg);
-void CO_protectBoolCon(CO_BoolCon *arg);
-void CO_unprotectBoolCon(CO_BoolCon *arg);
-void CO_protectLexNatCon(CO_LexNatCon *arg);
-void CO_unprotectLexNatCon(CO_LexNatCon *arg);
-void CO_protectNatCon(CO_NatCon *arg);
-void CO_unprotectNatCon(CO_NatCon *arg);
-void CO_protectLexByte(CO_LexByte *arg);
-void CO_unprotectLexByte(CO_LexByte *arg);
-void CO_protectByte(CO_Byte *arg);
-void CO_unprotectByte(CO_Byte *arg);
-void CO_protectLexBytes(CO_LexBytes *arg);
-void CO_unprotectLexBytes(CO_LexBytes *arg);
-void CO_protectBytes(CO_Bytes *arg);
-void CO_unprotectBytes(CO_Bytes *arg);
-void CO_protectLexByteList(CO_LexByteList *arg);
-void CO_unprotectLexByteList(CO_LexByteList *arg);
-void CO_protectSubject(CO_Subject *arg);
-void CO_unprotectSubject(CO_Subject *arg);
-void CO_protectError(CO_Error *arg);
-void CO_unprotectError(CO_Error *arg);
-void CO_protectSummary(CO_Summary *arg);
-void CO_unprotectSummary(CO_Summary *arg);
-void CO_protectSubjectList(CO_SubjectList *arg);
-void CO_unprotectSubjectList(CO_SubjectList *arg);
-void CO_protectErrorList(CO_ErrorList *arg);
-void CO_unprotectErrorList(CO_ErrorList *arg);
-void CO_protectLocation(CO_Location *arg);
-void CO_unprotectLocation(CO_Location *arg);
-void CO_protectArea(CO_Area *arg);
-void CO_unprotectArea(CO_Area *arg);
-void CO_protectRead(CO_Read *arg);
-void CO_unprotectRead(CO_Read *arg);
-void CO_protectWrite(CO_Write *arg);
-void CO_unprotectWrite(CO_Write *arg);
-void CO_protectParsetreeX(CO_ParsetreeX *arg);
-void CO_unprotectParsetreeX(CO_ParsetreeX *arg);
-void CO_protectX(CO_X *arg);
-void CO_unprotectX(CO_X *arg);
-void CO_protectBoolean(CO_Boolean *arg);
-void CO_unprotectBoolean(CO_Boolean *arg);
-CO_OptLayout CO_OptLayoutFromTerm(ATerm t);
-ATerm CO_OptLayoutToTerm(CO_OptLayout arg);
-CO_Layout CO_LayoutFromTerm(ATerm t);
-ATerm CO_LayoutToTerm(CO_Layout arg);
-CO_LexLayoutList CO_LexLayoutListFromTerm(ATerm t);
-ATerm CO_LexLayoutListToTerm(CO_LexLayoutList arg);
-CO_LexLayout CO_LexLayoutFromTerm(ATerm t);
-ATerm CO_LexLayoutToTerm(CO_LexLayout arg);
-CO_Start CO_StartFromTerm(ATerm t);
-ATerm CO_StartToTerm(CO_Start arg);
-CO_LexStrChar CO_LexStrCharFromTerm(ATerm t);
-ATerm CO_LexStrCharToTerm(CO_LexStrChar arg);
-CO_StrChar CO_StrCharFromTerm(ATerm t);
-ATerm CO_StrCharToTerm(CO_StrChar arg);
-CO_LexStrCon CO_LexStrConFromTerm(ATerm t);
-ATerm CO_LexStrConToTerm(CO_LexStrCon arg);
-CO_StrCon CO_StrConFromTerm(ATerm t);
-ATerm CO_StrConToTerm(CO_StrCon arg);
-CO_LexStrCharChars CO_LexStrCharCharsFromTerm(ATerm t);
-ATerm CO_LexStrCharCharsToTerm(CO_LexStrCharChars arg);
-CO_BoolCon CO_BoolConFromTerm(ATerm t);
-ATerm CO_BoolConToTerm(CO_BoolCon arg);
-CO_LexNatCon CO_LexNatConFromTerm(ATerm t);
-ATerm CO_LexNatConToTerm(CO_LexNatCon arg);
-CO_NatCon CO_NatConFromTerm(ATerm t);
-ATerm CO_NatConToTerm(CO_NatCon arg);
-CO_LexByte CO_LexByteFromTerm(ATerm t);
-ATerm CO_LexByteToTerm(CO_LexByte arg);
-CO_Byte CO_ByteFromTerm(ATerm t);
-ATerm CO_ByteToTerm(CO_Byte arg);
-CO_LexBytes CO_LexBytesFromTerm(ATerm t);
-ATerm CO_LexBytesToTerm(CO_LexBytes arg);
-CO_Bytes CO_BytesFromTerm(ATerm t);
-ATerm CO_BytesToTerm(CO_Bytes arg);
-CO_LexByteList CO_LexByteListFromTerm(ATerm t);
-ATerm CO_LexByteListToTerm(CO_LexByteList arg);
-CO_Subject CO_SubjectFromTerm(ATerm t);
-ATerm CO_SubjectToTerm(CO_Subject arg);
-CO_Error CO_ErrorFromTerm(ATerm t);
-ATerm CO_ErrorToTerm(CO_Error arg);
-CO_Summary CO_SummaryFromTerm(ATerm t);
-ATerm CO_SummaryToTerm(CO_Summary arg);
-CO_SubjectList CO_SubjectListFromTerm(ATerm t);
-ATerm CO_SubjectListToTerm(CO_SubjectList arg);
-CO_ErrorList CO_ErrorListFromTerm(ATerm t);
-ATerm CO_ErrorListToTerm(CO_ErrorList arg);
-CO_Location CO_LocationFromTerm(ATerm t);
-ATerm CO_LocationToTerm(CO_Location arg);
-CO_Area CO_AreaFromTerm(ATerm t);
-ATerm CO_AreaToTerm(CO_Area arg);
-CO_Read CO_ReadFromTerm(ATerm t);
-ATerm CO_ReadToTerm(CO_Read arg);
-CO_Write CO_WriteFromTerm(ATerm t);
-ATerm CO_WriteToTerm(CO_Write arg);
-CO_ParsetreeX CO_ParsetreeXFromTerm(ATerm t);
-ATerm CO_ParsetreeXToTerm(CO_ParsetreeX arg);
-CO_X CO_XFromTerm(ATerm t);
-ATerm CO_XToTerm(CO_X arg);
-CO_Boolean CO_BooleanFromTerm(ATerm t);
-ATerm CO_BooleanToTerm(CO_Boolean arg);
-int CO_getLexLayoutListLength (CO_LexLayoutList arg);
-CO_LexLayoutList CO_reverseLexLayoutList(CO_LexLayoutList arg);
-CO_LexLayoutList CO_appendLexLayoutList(CO_LexLayoutList arg, CO_LexLayout elem);
-CO_LexLayoutList CO_concatLexLayoutList(CO_LexLayoutList arg0, CO_LexLayoutList arg1);
-CO_LexLayoutList CO_sliceLexLayoutList(CO_LexLayoutList arg, int start, int end);
-CO_LexLayout CO_getLexLayoutListLexLayoutAt(CO_LexLayoutList arg, int index);
-CO_LexLayoutList CO_replaceLexLayoutListLexLayoutAt(CO_LexLayoutList arg, CO_LexLayout elem, int index);
-CO_LexLayoutList CO_makeLexLayoutList2(CO_LexLayout elem1, CO_LexLayout elem2);
-CO_LexLayoutList CO_makeLexLayoutList3(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3);
-CO_LexLayoutList CO_makeLexLayoutList4(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4);
-CO_LexLayoutList CO_makeLexLayoutList5(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4, CO_LexLayout elem5);
-CO_LexLayoutList CO_makeLexLayoutList6(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4, CO_LexLayout elem5, CO_LexLayout elem6);
-int CO_getLexStrCharCharsLength (CO_LexStrCharChars arg);
-CO_LexStrCharChars CO_reverseLexStrCharChars(CO_LexStrCharChars arg);
-CO_LexStrCharChars CO_appendLexStrCharChars(CO_LexStrCharChars arg, CO_LexStrChar elem);
-CO_LexStrCharChars CO_concatLexStrCharChars(CO_LexStrCharChars arg0, CO_LexStrCharChars arg1);
-CO_LexStrCharChars CO_sliceLexStrCharChars(CO_LexStrCharChars arg, int start, int end);
-CO_LexStrChar CO_getLexStrCharCharsLexStrCharAt(CO_LexStrCharChars arg, int index);
-CO_LexStrCharChars CO_replaceLexStrCharCharsLexStrCharAt(CO_LexStrCharChars arg, CO_LexStrChar elem, int index);
-CO_LexStrCharChars CO_makeLexStrCharChars2(CO_LexStrChar elem1, CO_LexStrChar elem2);
-CO_LexStrCharChars CO_makeLexStrCharChars3(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3);
-CO_LexStrCharChars CO_makeLexStrCharChars4(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4);
-CO_LexStrCharChars CO_makeLexStrCharChars5(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5);
-CO_LexStrCharChars CO_makeLexStrCharChars6(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5, CO_LexStrChar elem6);
-int CO_getLexByteListLength (CO_LexByteList arg);
-CO_LexByteList CO_reverseLexByteList(CO_LexByteList arg);
-CO_LexByteList CO_appendLexByteList(CO_LexByteList arg, CO_LexByte elem);
-CO_LexByteList CO_concatLexByteList(CO_LexByteList arg0, CO_LexByteList arg1);
-CO_LexByteList CO_sliceLexByteList(CO_LexByteList arg, int start, int end);
-CO_LexByte CO_getLexByteListLexByteAt(CO_LexByteList arg, int index);
-CO_LexByteList CO_replaceLexByteListLexByteAt(CO_LexByteList arg, CO_LexByte elem, int index);
-CO_LexByteList CO_makeLexByteList2(CO_LexByte elem1, CO_LexByte elem2);
-CO_LexByteList CO_makeLexByteList3(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3);
-CO_LexByteList CO_makeLexByteList4(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3, CO_LexByte elem4);
-CO_LexByteList CO_makeLexByteList5(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3, CO_LexByte elem4, CO_LexByte elem5);
-CO_LexByteList CO_makeLexByteList6(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3, CO_LexByte elem4, CO_LexByte elem5, CO_LexByte elem6);
-int CO_getSubjectListLength (CO_SubjectList arg);
+#ifdef FAST_API
+#define CO_protectOptLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectOptLayout(CO_OptLayout *arg);
+#define CO_protectOptLayout(arg) (_CO_protectOptLayout(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectOptLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectOptLayout(CO_OptLayout *arg);
+#define CO_unprotectOptLayout(arg) (_CO_unprotectOptLayout(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLayout(CO_Layout *arg);
+#define CO_protectLayout(arg) (_CO_protectLayout(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLayout(CO_Layout *arg);
+#define CO_unprotectLayout(arg) (_CO_unprotectLayout(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexLayoutList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexLayoutList(CO_LexLayoutList *arg);
+#define CO_protectLexLayoutList(arg) (_CO_protectLexLayoutList(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexLayoutList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexLayoutList(CO_LexLayoutList *arg);
+#define CO_unprotectLexLayoutList(arg) (_CO_unprotectLexLayoutList(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexLayout(CO_LexLayout *arg);
+#define CO_protectLexLayout(arg) (_CO_protectLexLayout(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexLayout(CO_LexLayout *arg);
+#define CO_unprotectLexLayout(arg) (_CO_unprotectLexLayout(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectStart(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectStart(CO_Start *arg);
+#define CO_protectStart(arg) (_CO_protectStart(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectStart(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectStart(CO_Start *arg);
+#define CO_unprotectStart(arg) (_CO_unprotectStart(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexStrChar(CO_LexStrChar *arg);
+#define CO_protectLexStrChar(arg) (_CO_protectLexStrChar(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexStrChar(CO_LexStrChar *arg);
+#define CO_unprotectLexStrChar(arg) (_CO_unprotectLexStrChar(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectStrChar(CO_StrChar *arg);
+#define CO_protectStrChar(arg) (_CO_protectStrChar(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectStrChar(CO_StrChar *arg);
+#define CO_unprotectStrChar(arg) (_CO_unprotectStrChar(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexStrCon(CO_LexStrCon *arg);
+#define CO_protectLexStrCon(arg) (_CO_protectLexStrCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexStrCon(CO_LexStrCon *arg);
+#define CO_unprotectLexStrCon(arg) (_CO_unprotectLexStrCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectStrCon(CO_StrCon *arg);
+#define CO_protectStrCon(arg) (_CO_protectStrCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectStrCon(CO_StrCon *arg);
+#define CO_unprotectStrCon(arg) (_CO_unprotectStrCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexStrCharChars(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexStrCharChars(CO_LexStrCharChars *arg);
+#define CO_protectLexStrCharChars(arg) (_CO_protectLexStrCharChars(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexStrCharChars(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexStrCharChars(CO_LexStrCharChars *arg);
+#define CO_unprotectLexStrCharChars(arg) (_CO_unprotectLexStrCharChars(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectBoolCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectBoolCon(CO_BoolCon *arg);
+#define CO_protectBoolCon(arg) (_CO_protectBoolCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectBoolCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectBoolCon(CO_BoolCon *arg);
+#define CO_unprotectBoolCon(arg) (_CO_unprotectBoolCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexNatCon(CO_LexNatCon *arg);
+#define CO_protectLexNatCon(arg) (_CO_protectLexNatCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexNatCon(CO_LexNatCon *arg);
+#define CO_unprotectLexNatCon(arg) (_CO_unprotectLexNatCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectNatCon(CO_NatCon *arg);
+#define CO_protectNatCon(arg) (_CO_protectNatCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectNatCon(CO_NatCon *arg);
+#define CO_unprotectNatCon(arg) (_CO_unprotectNatCon(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexByte(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexByte(CO_LexByte *arg);
+#define CO_protectLexByte(arg) (_CO_protectLexByte(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexByte(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexByte(CO_LexByte *arg);
+#define CO_unprotectLexByte(arg) (_CO_unprotectLexByte(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectByte(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectByte(CO_Byte *arg);
+#define CO_protectByte(arg) (_CO_protectByte(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectByte(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectByte(CO_Byte *arg);
+#define CO_unprotectByte(arg) (_CO_unprotectByte(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexBytes(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexBytes(CO_LexBytes *arg);
+#define CO_protectLexBytes(arg) (_CO_protectLexBytes(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexBytes(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexBytes(CO_LexBytes *arg);
+#define CO_unprotectLexBytes(arg) (_CO_unprotectLexBytes(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectBytes(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectBytes(CO_Bytes *arg);
+#define CO_protectBytes(arg) (_CO_protectBytes(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectBytes(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectBytes(CO_Bytes *arg);
+#define CO_unprotectBytes(arg) (_CO_unprotectBytes(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLexByteList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLexByteList(CO_LexByteList *arg);
+#define CO_protectLexByteList(arg) (_CO_protectLexByteList(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLexByteList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLexByteList(CO_LexByteList *arg);
+#define CO_unprotectLexByteList(arg) (_CO_unprotectLexByteList(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectSubject(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectSubject(CO_Subject *arg);
+#define CO_protectSubject(arg) (_CO_protectSubject(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectSubject(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectSubject(CO_Subject *arg);
+#define CO_unprotectSubject(arg) (_CO_unprotectSubject(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectError(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectError(CO_Error *arg);
+#define CO_protectError(arg) (_CO_protectError(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectError(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectError(CO_Error *arg);
+#define CO_unprotectError(arg) (_CO_unprotectError(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectSummary(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectSummary(CO_Summary *arg);
+#define CO_protectSummary(arg) (_CO_protectSummary(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectSummary(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectSummary(CO_Summary *arg);
+#define CO_unprotectSummary(arg) (_CO_unprotectSummary(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectSubjectList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectSubjectList(CO_SubjectList *arg);
+#define CO_protectSubjectList(arg) (_CO_protectSubjectList(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectSubjectList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectSubjectList(CO_SubjectList *arg);
+#define CO_unprotectSubjectList(arg) (_CO_unprotectSubjectList(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectErrorList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectErrorList(CO_ErrorList *arg);
+#define CO_protectErrorList(arg) (_CO_protectErrorList(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectErrorList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectErrorList(CO_ErrorList *arg);
+#define CO_unprotectErrorList(arg) (_CO_unprotectErrorList(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectLocation(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectLocation(CO_Location *arg);
+#define CO_protectLocation(arg) (_CO_protectLocation(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectLocation(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectLocation(CO_Location *arg);
+#define CO_unprotectLocation(arg) (_CO_unprotectLocation(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectArea(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectArea(CO_Area *arg);
+#define CO_protectArea(arg) (_CO_protectArea(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectArea(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectArea(CO_Area *arg);
+#define CO_unprotectArea(arg) (_CO_unprotectArea(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectRead(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectRead(CO_Read *arg);
+#define CO_protectRead(arg) (_CO_protectRead(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectRead(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectRead(CO_Read *arg);
+#define CO_unprotectRead(arg) (_CO_unprotectRead(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectWrite(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectWrite(CO_Write *arg);
+#define CO_protectWrite(arg) (_CO_protectWrite(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectWrite(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectWrite(CO_Write *arg);
+#define CO_unprotectWrite(arg) (_CO_unprotectWrite(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectParsetreeX(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectParsetreeX(CO_ParsetreeX *arg);
+#define CO_protectParsetreeX(arg) (_CO_protectParsetreeX(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectParsetreeX(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectParsetreeX(CO_ParsetreeX *arg);
+#define CO_unprotectParsetreeX(arg) (_CO_unprotectParsetreeX(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectX(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectX(CO_X *arg);
+#define CO_protectX(arg) (_CO_protectX(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectX(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectX(CO_X *arg);
+#define CO_unprotectX(arg) (_CO_unprotectX(arg))
+#endif
+#ifdef FAST_API
+#define CO_protectBoolean(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_protectBoolean(CO_Boolean *arg);
+#define CO_protectBoolean(arg) (_CO_protectBoolean(arg))
+#endif
+#ifdef FAST_API
+#define CO_unprotectBoolean(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CO_unprotectBoolean(CO_Boolean *arg);
+#define CO_unprotectBoolean(arg) (_CO_unprotectBoolean(arg))
+#endif
+#ifdef FAST_API
+#define CO_OptLayoutFromTerm(t) ((CO_OptLayout)(t))
+#else
+CO_OptLayout _CO_OptLayoutFromTerm(ATerm t);
+#define CO_OptLayoutFromTerm(t) (_CO_OptLayoutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_OptLayoutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_OptLayoutToTerm(CO_OptLayout arg);
+#define CO_OptLayoutToTerm(arg) (_CO_OptLayoutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LayoutFromTerm(t) ((CO_Layout)(t))
+#else
+CO_Layout _CO_LayoutFromTerm(ATerm t);
+#define CO_LayoutFromTerm(t) (_CO_LayoutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LayoutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LayoutToTerm(CO_Layout arg);
+#define CO_LayoutToTerm(arg) (_CO_LayoutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexLayoutListFromTerm(t) ((CO_LexLayoutList)(t))
+#else
+CO_LexLayoutList _CO_LexLayoutListFromTerm(ATerm t);
+#define CO_LexLayoutListFromTerm(t) (_CO_LexLayoutListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexLayoutListToTerm(CO_LexLayoutList arg);
+#define CO_LexLayoutListToTerm(arg) (_CO_LexLayoutListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexLayoutFromTerm(t) ((CO_LexLayout)(t))
+#else
+CO_LexLayout _CO_LexLayoutFromTerm(ATerm t);
+#define CO_LexLayoutFromTerm(t) (_CO_LexLayoutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexLayoutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexLayoutToTerm(CO_LexLayout arg);
+#define CO_LexLayoutToTerm(arg) (_CO_LexLayoutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_StartFromTerm(t) ((CO_Start)(t))
+#else
+CO_Start _CO_StartFromTerm(ATerm t);
+#define CO_StartFromTerm(t) (_CO_StartFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_StartToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_StartToTerm(CO_Start arg);
+#define CO_StartToTerm(arg) (_CO_StartToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexStrCharFromTerm(t) ((CO_LexStrChar)(t))
+#else
+CO_LexStrChar _CO_LexStrCharFromTerm(ATerm t);
+#define CO_LexStrCharFromTerm(t) (_CO_LexStrCharFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexStrCharToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexStrCharToTerm(CO_LexStrChar arg);
+#define CO_LexStrCharToTerm(arg) (_CO_LexStrCharToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_StrCharFromTerm(t) ((CO_StrChar)(t))
+#else
+CO_StrChar _CO_StrCharFromTerm(ATerm t);
+#define CO_StrCharFromTerm(t) (_CO_StrCharFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_StrCharToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_StrCharToTerm(CO_StrChar arg);
+#define CO_StrCharToTerm(arg) (_CO_StrCharToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexStrConFromTerm(t) ((CO_LexStrCon)(t))
+#else
+CO_LexStrCon _CO_LexStrConFromTerm(ATerm t);
+#define CO_LexStrConFromTerm(t) (_CO_LexStrConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexStrConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexStrConToTerm(CO_LexStrCon arg);
+#define CO_LexStrConToTerm(arg) (_CO_LexStrConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_StrConFromTerm(t) ((CO_StrCon)(t))
+#else
+CO_StrCon _CO_StrConFromTerm(ATerm t);
+#define CO_StrConFromTerm(t) (_CO_StrConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_StrConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_StrConToTerm(CO_StrCon arg);
+#define CO_StrConToTerm(arg) (_CO_StrConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexStrCharCharsFromTerm(t) ((CO_LexStrCharChars)(t))
+#else
+CO_LexStrCharChars _CO_LexStrCharCharsFromTerm(ATerm t);
+#define CO_LexStrCharCharsFromTerm(t) (_CO_LexStrCharCharsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexStrCharCharsToTerm(CO_LexStrCharChars arg);
+#define CO_LexStrCharCharsToTerm(arg) (_CO_LexStrCharCharsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_BoolConFromTerm(t) ((CO_BoolCon)(t))
+#else
+CO_BoolCon _CO_BoolConFromTerm(ATerm t);
+#define CO_BoolConFromTerm(t) (_CO_BoolConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_BoolConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_BoolConToTerm(CO_BoolCon arg);
+#define CO_BoolConToTerm(arg) (_CO_BoolConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexNatConFromTerm(t) ((CO_LexNatCon)(t))
+#else
+CO_LexNatCon _CO_LexNatConFromTerm(ATerm t);
+#define CO_LexNatConFromTerm(t) (_CO_LexNatConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexNatConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexNatConToTerm(CO_LexNatCon arg);
+#define CO_LexNatConToTerm(arg) (_CO_LexNatConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_NatConFromTerm(t) ((CO_NatCon)(t))
+#else
+CO_NatCon _CO_NatConFromTerm(ATerm t);
+#define CO_NatConFromTerm(t) (_CO_NatConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_NatConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_NatConToTerm(CO_NatCon arg);
+#define CO_NatConToTerm(arg) (_CO_NatConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexByteFromTerm(t) ((CO_LexByte)(t))
+#else
+CO_LexByte _CO_LexByteFromTerm(ATerm t);
+#define CO_LexByteFromTerm(t) (_CO_LexByteFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexByteToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexByteToTerm(CO_LexByte arg);
+#define CO_LexByteToTerm(arg) (_CO_LexByteToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_ByteFromTerm(t) ((CO_Byte)(t))
+#else
+CO_Byte _CO_ByteFromTerm(ATerm t);
+#define CO_ByteFromTerm(t) (_CO_ByteFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_ByteToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_ByteToTerm(CO_Byte arg);
+#define CO_ByteToTerm(arg) (_CO_ByteToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexBytesFromTerm(t) ((CO_LexBytes)(t))
+#else
+CO_LexBytes _CO_LexBytesFromTerm(ATerm t);
+#define CO_LexBytesFromTerm(t) (_CO_LexBytesFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexBytesToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexBytesToTerm(CO_LexBytes arg);
+#define CO_LexBytesToTerm(arg) (_CO_LexBytesToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_BytesFromTerm(t) ((CO_Bytes)(t))
+#else
+CO_Bytes _CO_BytesFromTerm(ATerm t);
+#define CO_BytesFromTerm(t) (_CO_BytesFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_BytesToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_BytesToTerm(CO_Bytes arg);
+#define CO_BytesToTerm(arg) (_CO_BytesToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LexByteListFromTerm(t) ((CO_LexByteList)(t))
+#else
+CO_LexByteList _CO_LexByteListFromTerm(ATerm t);
+#define CO_LexByteListFromTerm(t) (_CO_LexByteListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LexByteListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LexByteListToTerm(CO_LexByteList arg);
+#define CO_LexByteListToTerm(arg) (_CO_LexByteListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_SubjectFromTerm(t) ((CO_Subject)(t))
+#else
+CO_Subject _CO_SubjectFromTerm(ATerm t);
+#define CO_SubjectFromTerm(t) (_CO_SubjectFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_SubjectToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_SubjectToTerm(CO_Subject arg);
+#define CO_SubjectToTerm(arg) (_CO_SubjectToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_ErrorFromTerm(t) ((CO_Error)(t))
+#else
+CO_Error _CO_ErrorFromTerm(ATerm t);
+#define CO_ErrorFromTerm(t) (_CO_ErrorFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_ErrorToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_ErrorToTerm(CO_Error arg);
+#define CO_ErrorToTerm(arg) (_CO_ErrorToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_SummaryFromTerm(t) ((CO_Summary)(t))
+#else
+CO_Summary _CO_SummaryFromTerm(ATerm t);
+#define CO_SummaryFromTerm(t) (_CO_SummaryFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_SummaryToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_SummaryToTerm(CO_Summary arg);
+#define CO_SummaryToTerm(arg) (_CO_SummaryToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_SubjectListFromTerm(t) ((CO_SubjectList)(t))
+#else
+CO_SubjectList _CO_SubjectListFromTerm(ATerm t);
+#define CO_SubjectListFromTerm(t) (_CO_SubjectListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_SubjectListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_SubjectListToTerm(CO_SubjectList arg);
+#define CO_SubjectListToTerm(arg) (_CO_SubjectListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_ErrorListFromTerm(t) ((CO_ErrorList)(t))
+#else
+CO_ErrorList _CO_ErrorListFromTerm(ATerm t);
+#define CO_ErrorListFromTerm(t) (_CO_ErrorListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_ErrorListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_ErrorListToTerm(CO_ErrorList arg);
+#define CO_ErrorListToTerm(arg) (_CO_ErrorListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_LocationFromTerm(t) ((CO_Location)(t))
+#else
+CO_Location _CO_LocationFromTerm(ATerm t);
+#define CO_LocationFromTerm(t) (_CO_LocationFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_LocationToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_LocationToTerm(CO_Location arg);
+#define CO_LocationToTerm(arg) (_CO_LocationToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_AreaFromTerm(t) ((CO_Area)(t))
+#else
+CO_Area _CO_AreaFromTerm(ATerm t);
+#define CO_AreaFromTerm(t) (_CO_AreaFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_AreaToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_AreaToTerm(CO_Area arg);
+#define CO_AreaToTerm(arg) (_CO_AreaToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_ReadFromTerm(t) ((CO_Read)(t))
+#else
+CO_Read _CO_ReadFromTerm(ATerm t);
+#define CO_ReadFromTerm(t) (_CO_ReadFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_ReadToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_ReadToTerm(CO_Read arg);
+#define CO_ReadToTerm(arg) (_CO_ReadToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_WriteFromTerm(t) ((CO_Write)(t))
+#else
+CO_Write _CO_WriteFromTerm(ATerm t);
+#define CO_WriteFromTerm(t) (_CO_WriteFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_WriteToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_WriteToTerm(CO_Write arg);
+#define CO_WriteToTerm(arg) (_CO_WriteToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_ParsetreeXFromTerm(t) ((CO_ParsetreeX)(t))
+#else
+CO_ParsetreeX _CO_ParsetreeXFromTerm(ATerm t);
+#define CO_ParsetreeXFromTerm(t) (_CO_ParsetreeXFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_ParsetreeXToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_ParsetreeXToTerm(CO_ParsetreeX arg);
+#define CO_ParsetreeXToTerm(arg) (_CO_ParsetreeXToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_XFromTerm(t) ((CO_X)(t))
+#else
+CO_X _CO_XFromTerm(ATerm t);
+#define CO_XFromTerm(t) (_CO_XFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_XToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_XToTerm(CO_X arg);
+#define CO_XToTerm(arg) (_CO_XToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_BooleanFromTerm(t) ((CO_Boolean)(t))
+#else
+CO_Boolean _CO_BooleanFromTerm(ATerm t);
+#define CO_BooleanFromTerm(t) (_CO_BooleanFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CO_BooleanToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CO_BooleanToTerm(CO_Boolean arg);
+#define CO_BooleanToTerm(arg) (_CO_BooleanToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CO_getLexLayoutListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CO_getLexLayoutListLength(CO_LexLayoutList arg);
+#define CO_getLexLayoutListLength(arg) (_CO_getLexLayoutListLength(arg))
+#endif
+#ifdef FAST_API
+#define CO_reverseLexLayoutList(arg) ((CO_LexLayoutList) ATreverse((ATermList) (arg)))
+#else
+CO_LexLayoutList _CO_reverseLexLayoutList(CO_LexLayoutList arg);
+#define CO_reverseLexLayoutList(arg) (_CO_reverseLexLayoutList(arg))
+#endif
+#ifdef FAST_API
+#define CO_appendLexLayoutList(arg, elem) ((CO_LexLayoutList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CO_LexLayoutList _CO_appendLexLayoutList(CO_LexLayoutList arg, CO_LexLayout elem);
+#define CO_appendLexLayoutList(arg, elem) (_CO_appendLexLayoutList(arg, elem))
+#endif
+#ifdef FAST_API
+#define CO_concatLexLayoutList(arg0, arg1) ((CO_LexLayoutList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CO_LexLayoutList _CO_concatLexLayoutList(CO_LexLayoutList arg0, CO_LexLayoutList arg1);
+#define CO_concatLexLayoutList(arg0, arg1) (_CO_concatLexLayoutList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_sliceLexLayoutList(arg, start, end) ((CO_LexLayoutList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CO_LexLayoutList _CO_sliceLexLayoutList(CO_LexLayoutList arg, int start, int end);
+#define CO_sliceLexLayoutList(arg, start, end) (_CO_sliceLexLayoutList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CO_getLexLayoutListLexLayoutAt(arg, index) ((CO_LexLayout) (ATelementAt((ATermList) arg,index)))
+#else
+CO_LexLayout _CO_getLexLayoutListLexLayoutAt(CO_LexLayoutList arg, int index);
+#define CO_getLexLayoutListLexLayoutAt(arg, index) (_CO_getLexLayoutListLexLayoutAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CO_replaceLexLayoutListLexLayoutAt(arg, elem, index) ((CO_LexLayoutList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CO_LexLayoutList _CO_replaceLexLayoutListLexLayoutAt(CO_LexLayoutList arg, CO_LexLayout elem, int index);
+#define CO_replaceLexLayoutListLexLayoutAt(arg, elem, index) (_CO_replaceLexLayoutListLexLayoutAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CO_makeLexLayoutList2(elem1,  elem2) ((CO_LexLayoutList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CO_LexLayoutList _CO_makeLexLayoutList2(CO_LexLayout elem1, CO_LexLayout elem2);
+#define CO_makeLexLayoutList2(elem1,  elem2) (_CO_makeLexLayoutList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CO_makeLexLayoutList3(elem1, elem2,  elem3) ((CO_LexLayoutList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CO_LexLayoutList _CO_makeLexLayoutList3(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3);
+#define CO_makeLexLayoutList3(elem1, elem2,  elem3) (_CO_makeLexLayoutList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CO_makeLexLayoutList4(elem1, elem2, elem3,  elem4) ((CO_LexLayoutList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CO_LexLayoutList _CO_makeLexLayoutList4(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4);
+#define CO_makeLexLayoutList4(elem1, elem2, elem3,  elem4) (_CO_makeLexLayoutList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CO_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) ((CO_LexLayoutList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CO_LexLayoutList _CO_makeLexLayoutList5(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4, CO_LexLayout elem5);
+#define CO_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) (_CO_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CO_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CO_LexLayoutList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CO_LexLayoutList _CO_makeLexLayoutList6(CO_LexLayout elem1, CO_LexLayout elem2, CO_LexLayout elem3, CO_LexLayout elem4, CO_LexLayout elem5, CO_LexLayout elem6);
+#define CO_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CO_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CO_getLexStrCharCharsLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CO_getLexStrCharCharsLength(CO_LexStrCharChars arg);
+#define CO_getLexStrCharCharsLength(arg) (_CO_getLexStrCharCharsLength(arg))
+#endif
+#ifdef FAST_API
+#define CO_reverseLexStrCharChars(arg) ((CO_LexStrCharChars) ATreverse((ATermList) (arg)))
+#else
+CO_LexStrCharChars _CO_reverseLexStrCharChars(CO_LexStrCharChars arg);
+#define CO_reverseLexStrCharChars(arg) (_CO_reverseLexStrCharChars(arg))
+#endif
+#ifdef FAST_API
+#define CO_appendLexStrCharChars(arg, elem) ((CO_LexStrCharChars) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CO_LexStrCharChars _CO_appendLexStrCharChars(CO_LexStrCharChars arg, CO_LexStrChar elem);
+#define CO_appendLexStrCharChars(arg, elem) (_CO_appendLexStrCharChars(arg, elem))
+#endif
+#ifdef FAST_API
+#define CO_concatLexStrCharChars(arg0, arg1) ((CO_LexStrCharChars) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CO_LexStrCharChars _CO_concatLexStrCharChars(CO_LexStrCharChars arg0, CO_LexStrCharChars arg1);
+#define CO_concatLexStrCharChars(arg0, arg1) (_CO_concatLexStrCharChars(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_sliceLexStrCharChars(arg, start, end) ((CO_LexStrCharChars) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CO_LexStrCharChars _CO_sliceLexStrCharChars(CO_LexStrCharChars arg, int start, int end);
+#define CO_sliceLexStrCharChars(arg, start, end) (_CO_sliceLexStrCharChars(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CO_getLexStrCharCharsLexStrCharAt(arg, index) ((CO_LexStrChar) (ATelementAt((ATermList) arg,index)))
+#else
+CO_LexStrChar _CO_getLexStrCharCharsLexStrCharAt(CO_LexStrCharChars arg, int index);
+#define CO_getLexStrCharCharsLexStrCharAt(arg, index) (_CO_getLexStrCharCharsLexStrCharAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CO_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) ((CO_LexStrCharChars) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CO_LexStrCharChars _CO_replaceLexStrCharCharsLexStrCharAt(CO_LexStrCharChars arg, CO_LexStrChar elem, int index);
+#define CO_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) (_CO_replaceLexStrCharCharsLexStrCharAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CO_makeLexStrCharChars2(elem1,  elem2) ((CO_LexStrCharChars) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CO_LexStrCharChars _CO_makeLexStrCharChars2(CO_LexStrChar elem1, CO_LexStrChar elem2);
+#define CO_makeLexStrCharChars2(elem1,  elem2) (_CO_makeLexStrCharChars2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CO_makeLexStrCharChars3(elem1, elem2,  elem3) ((CO_LexStrCharChars) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CO_LexStrCharChars _CO_makeLexStrCharChars3(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3);
+#define CO_makeLexStrCharChars3(elem1, elem2,  elem3) (_CO_makeLexStrCharChars3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CO_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) ((CO_LexStrCharChars) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CO_LexStrCharChars _CO_makeLexStrCharChars4(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4);
+#define CO_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) (_CO_makeLexStrCharChars4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CO_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) ((CO_LexStrCharChars) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CO_LexStrCharChars _CO_makeLexStrCharChars5(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5);
+#define CO_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) (_CO_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CO_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CO_LexStrCharChars) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CO_LexStrCharChars _CO_makeLexStrCharChars6(CO_LexStrChar elem1, CO_LexStrChar elem2, CO_LexStrChar elem3, CO_LexStrChar elem4, CO_LexStrChar elem5, CO_LexStrChar elem6);
+#define CO_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CO_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CO_getLexByteListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CO_getLexByteListLength(CO_LexByteList arg);
+#define CO_getLexByteListLength(arg) (_CO_getLexByteListLength(arg))
+#endif
+#ifdef FAST_API
+#define CO_reverseLexByteList(arg) ((CO_LexByteList) ATreverse((ATermList) (arg)))
+#else
+CO_LexByteList _CO_reverseLexByteList(CO_LexByteList arg);
+#define CO_reverseLexByteList(arg) (_CO_reverseLexByteList(arg))
+#endif
+#ifdef FAST_API
+#define CO_appendLexByteList(arg, elem) ((CO_LexByteList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CO_LexByteList _CO_appendLexByteList(CO_LexByteList arg, CO_LexByte elem);
+#define CO_appendLexByteList(arg, elem) (_CO_appendLexByteList(arg, elem))
+#endif
+#ifdef FAST_API
+#define CO_concatLexByteList(arg0, arg1) ((CO_LexByteList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CO_LexByteList _CO_concatLexByteList(CO_LexByteList arg0, CO_LexByteList arg1);
+#define CO_concatLexByteList(arg0, arg1) (_CO_concatLexByteList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_sliceLexByteList(arg, start, end) ((CO_LexByteList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CO_LexByteList _CO_sliceLexByteList(CO_LexByteList arg, int start, int end);
+#define CO_sliceLexByteList(arg, start, end) (_CO_sliceLexByteList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CO_getLexByteListLexByteAt(arg, index) ((CO_LexByte) (ATelementAt((ATermList) arg,index)))
+#else
+CO_LexByte _CO_getLexByteListLexByteAt(CO_LexByteList arg, int index);
+#define CO_getLexByteListLexByteAt(arg, index) (_CO_getLexByteListLexByteAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CO_replaceLexByteListLexByteAt(arg, elem, index) ((CO_LexByteList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CO_LexByteList _CO_replaceLexByteListLexByteAt(CO_LexByteList arg, CO_LexByte elem, int index);
+#define CO_replaceLexByteListLexByteAt(arg, elem, index) (_CO_replaceLexByteListLexByteAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CO_makeLexByteList2(elem1,  elem2) ((CO_LexByteList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CO_LexByteList _CO_makeLexByteList2(CO_LexByte elem1, CO_LexByte elem2);
+#define CO_makeLexByteList2(elem1,  elem2) (_CO_makeLexByteList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CO_makeLexByteList3(elem1, elem2,  elem3) ((CO_LexByteList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CO_LexByteList _CO_makeLexByteList3(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3);
+#define CO_makeLexByteList3(elem1, elem2,  elem3) (_CO_makeLexByteList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CO_makeLexByteList4(elem1, elem2, elem3,  elem4) ((CO_LexByteList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CO_LexByteList _CO_makeLexByteList4(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3, CO_LexByte elem4);
+#define CO_makeLexByteList4(elem1, elem2, elem3,  elem4) (_CO_makeLexByteList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CO_makeLexByteList5(elem1, elem2, elem3, elem4,  elem5) ((CO_LexByteList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CO_LexByteList _CO_makeLexByteList5(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3, CO_LexByte elem4, CO_LexByte elem5);
+#define CO_makeLexByteList5(elem1, elem2, elem3, elem4,  elem5) (_CO_makeLexByteList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CO_makeLexByteList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CO_LexByteList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CO_LexByteList _CO_makeLexByteList6(CO_LexByte elem1, CO_LexByte elem2, CO_LexByte elem3, CO_LexByte elem4, CO_LexByte elem5, CO_LexByte elem6);
+#define CO_makeLexByteList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CO_makeLexByteList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CO_getSubjectListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _CO_getSubjectListLength(CO_SubjectList arg);
+#define CO_getSubjectListLength(arg) (_CO_getSubjectListLength(arg))
+#endif
 CO_SubjectList CO_reverseSubjectList(CO_SubjectList arg);
 CO_SubjectList CO_appendSubjectList(CO_SubjectList arg0, CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Subject arg1);
 CO_SubjectList CO_concatSubjectList(CO_SubjectList arg0, CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_SubjectList arg1);
-CO_SubjectList CO_sliceSubjectList(CO_SubjectList arg, int start, int end);
-CO_Subject CO_getSubjectListSubjectAt(CO_SubjectList arg, int index);
-CO_SubjectList CO_replaceSubjectListSubjectAt(CO_SubjectList arg, CO_Subject elem, int index);
+#ifdef FAST_API
+#define CO_sliceSubjectList(arg, start, end) ((CO_SubjectList) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+CO_SubjectList _CO_sliceSubjectList(CO_SubjectList arg, int start, int end);
+#define CO_sliceSubjectList(arg, start, end) (_CO_sliceSubjectList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CO_getSubjectListSubjectAt(arg, index) ((CO_Subject) (ATelementAt((ATermList) arg,index * 4)))
+#else
+CO_Subject _CO_getSubjectListSubjectAt(CO_SubjectList arg, int index);
+#define CO_getSubjectListSubjectAt(arg, index) (_CO_getSubjectListSubjectAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CO_replaceSubjectListSubjectAt(arg, elem, index) ((CO_SubjectList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+CO_SubjectList _CO_replaceSubjectListSubjectAt(CO_SubjectList arg, CO_Subject elem, int index);
+#define CO_replaceSubjectListSubjectAt(arg, elem, index) (_CO_replaceSubjectListSubjectAt(arg, elem, index))
+#endif
 CO_SubjectList CO_makeSubjectList2(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Subject elem1, CO_Subject elem2);
 CO_SubjectList CO_makeSubjectList3(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Subject elem1, CO_Subject elem2, CO_Subject elem3);
 CO_SubjectList CO_makeSubjectList4(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Subject elem1, CO_Subject elem2, CO_Subject elem3, CO_Subject elem4);
 CO_SubjectList CO_makeSubjectList5(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Subject elem1, CO_Subject elem2, CO_Subject elem3, CO_Subject elem4, CO_Subject elem5);
 CO_SubjectList CO_makeSubjectList6(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Subject elem1, CO_Subject elem2, CO_Subject elem3, CO_Subject elem4, CO_Subject elem5, CO_Subject elem6);
-int CO_getErrorListLength (CO_ErrorList arg);
+#ifdef FAST_API
+#define CO_getErrorListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _CO_getErrorListLength(CO_ErrorList arg);
+#define CO_getErrorListLength(arg) (_CO_getErrorListLength(arg))
+#endif
 CO_ErrorList CO_reverseErrorList(CO_ErrorList arg);
 CO_ErrorList CO_appendErrorList(CO_ErrorList arg0, CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error arg1);
 CO_ErrorList CO_concatErrorList(CO_ErrorList arg0, CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_ErrorList arg1);
-CO_ErrorList CO_sliceErrorList(CO_ErrorList arg, int start, int end);
-CO_Error CO_getErrorListErrorAt(CO_ErrorList arg, int index);
-CO_ErrorList CO_replaceErrorListErrorAt(CO_ErrorList arg, CO_Error elem, int index);
+#ifdef FAST_API
+#define CO_sliceErrorList(arg, start, end) ((CO_ErrorList) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+CO_ErrorList _CO_sliceErrorList(CO_ErrorList arg, int start, int end);
+#define CO_sliceErrorList(arg, start, end) (_CO_sliceErrorList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CO_getErrorListErrorAt(arg, index) ((CO_Error) (ATelementAt((ATermList) arg,index * 4)))
+#else
+CO_Error _CO_getErrorListErrorAt(CO_ErrorList arg, int index);
+#define CO_getErrorListErrorAt(arg, index) (_CO_getErrorListErrorAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CO_replaceErrorListErrorAt(arg, elem, index) ((CO_ErrorList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+CO_ErrorList _CO_replaceErrorListErrorAt(CO_ErrorList arg, CO_Error elem, int index);
+#define CO_replaceErrorListErrorAt(arg, elem, index) (_CO_replaceErrorListErrorAt(arg, elem, index))
+#endif
 CO_ErrorList CO_makeErrorList2(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error elem1, CO_Error elem2);
 CO_ErrorList CO_makeErrorList3(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error elem1, CO_Error elem2, CO_Error elem3);
 CO_ErrorList CO_makeErrorList4(CO_OptLayout wsAfterHead, CO_OptLayout wsAfterSep, CO_Error elem1, CO_Error elem2, CO_Error elem3, CO_Error elem4);
@@ -283,36 +1108,186 @@ CO_Boolean CO_makeBooleanOr(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayou
 CO_Boolean CO_makeBooleanAnd(CO_Boolean lhs, CO_OptLayout wsAfterLhs, CO_OptLayout wsAfterAmp, CO_Boolean rhs);
 CO_Boolean CO_makeBooleanNot(CO_OptLayout wsAfterNot, CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
 CO_Boolean CO_makeBooleanBracket(CO_OptLayout wsAfterParenOpen, CO_Boolean Boolean, CO_OptLayout wsAfterBoolean);
-ATbool CO_isEqualOptLayout(CO_OptLayout arg0, CO_OptLayout arg1);
-ATbool CO_isEqualLayout(CO_Layout arg0, CO_Layout arg1);
-ATbool CO_isEqualLexLayoutList(CO_LexLayoutList arg0, CO_LexLayoutList arg1);
-ATbool CO_isEqualLexLayout(CO_LexLayout arg0, CO_LexLayout arg1);
-ATbool CO_isEqualStart(CO_Start arg0, CO_Start arg1);
-ATbool CO_isEqualLexStrChar(CO_LexStrChar arg0, CO_LexStrChar arg1);
-ATbool CO_isEqualStrChar(CO_StrChar arg0, CO_StrChar arg1);
-ATbool CO_isEqualLexStrCon(CO_LexStrCon arg0, CO_LexStrCon arg1);
-ATbool CO_isEqualStrCon(CO_StrCon arg0, CO_StrCon arg1);
-ATbool CO_isEqualLexStrCharChars(CO_LexStrCharChars arg0, CO_LexStrCharChars arg1);
-ATbool CO_isEqualBoolCon(CO_BoolCon arg0, CO_BoolCon arg1);
-ATbool CO_isEqualLexNatCon(CO_LexNatCon arg0, CO_LexNatCon arg1);
-ATbool CO_isEqualNatCon(CO_NatCon arg0, CO_NatCon arg1);
-ATbool CO_isEqualLexByte(CO_LexByte arg0, CO_LexByte arg1);
-ATbool CO_isEqualByte(CO_Byte arg0, CO_Byte arg1);
-ATbool CO_isEqualLexBytes(CO_LexBytes arg0, CO_LexBytes arg1);
-ATbool CO_isEqualBytes(CO_Bytes arg0, CO_Bytes arg1);
-ATbool CO_isEqualLexByteList(CO_LexByteList arg0, CO_LexByteList arg1);
-ATbool CO_isEqualSubject(CO_Subject arg0, CO_Subject arg1);
-ATbool CO_isEqualError(CO_Error arg0, CO_Error arg1);
-ATbool CO_isEqualSummary(CO_Summary arg0, CO_Summary arg1);
-ATbool CO_isEqualSubjectList(CO_SubjectList arg0, CO_SubjectList arg1);
-ATbool CO_isEqualErrorList(CO_ErrorList arg0, CO_ErrorList arg1);
-ATbool CO_isEqualLocation(CO_Location arg0, CO_Location arg1);
-ATbool CO_isEqualArea(CO_Area arg0, CO_Area arg1);
-ATbool CO_isEqualRead(CO_Read arg0, CO_Read arg1);
-ATbool CO_isEqualWrite(CO_Write arg0, CO_Write arg1);
-ATbool CO_isEqualParsetreeX(CO_ParsetreeX arg0, CO_ParsetreeX arg1);
-ATbool CO_isEqualX(CO_X arg0, CO_X arg1);
-ATbool CO_isEqualBoolean(CO_Boolean arg0, CO_Boolean arg1);
+#ifdef FAST_API
+#define CO_isEqualOptLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualOptLayout(CO_OptLayout arg0, CO_OptLayout arg1);
+#define CO_isEqualOptLayout(arg0, arg1) (_CO_isEqualOptLayout(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLayout(CO_Layout arg0, CO_Layout arg1);
+#define CO_isEqualLayout(arg0, arg1) (_CO_isEqualLayout(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexLayoutList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexLayoutList(CO_LexLayoutList arg0, CO_LexLayoutList arg1);
+#define CO_isEqualLexLayoutList(arg0, arg1) (_CO_isEqualLexLayoutList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexLayout(CO_LexLayout arg0, CO_LexLayout arg1);
+#define CO_isEqualLexLayout(arg0, arg1) (_CO_isEqualLexLayout(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualStart(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualStart(CO_Start arg0, CO_Start arg1);
+#define CO_isEqualStart(arg0, arg1) (_CO_isEqualStart(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexStrChar(CO_LexStrChar arg0, CO_LexStrChar arg1);
+#define CO_isEqualLexStrChar(arg0, arg1) (_CO_isEqualLexStrChar(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualStrChar(CO_StrChar arg0, CO_StrChar arg1);
+#define CO_isEqualStrChar(arg0, arg1) (_CO_isEqualStrChar(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexStrCon(CO_LexStrCon arg0, CO_LexStrCon arg1);
+#define CO_isEqualLexStrCon(arg0, arg1) (_CO_isEqualLexStrCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualStrCon(CO_StrCon arg0, CO_StrCon arg1);
+#define CO_isEqualStrCon(arg0, arg1) (_CO_isEqualStrCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexStrCharChars(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexStrCharChars(CO_LexStrCharChars arg0, CO_LexStrCharChars arg1);
+#define CO_isEqualLexStrCharChars(arg0, arg1) (_CO_isEqualLexStrCharChars(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualBoolCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualBoolCon(CO_BoolCon arg0, CO_BoolCon arg1);
+#define CO_isEqualBoolCon(arg0, arg1) (_CO_isEqualBoolCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexNatCon(CO_LexNatCon arg0, CO_LexNatCon arg1);
+#define CO_isEqualLexNatCon(arg0, arg1) (_CO_isEqualLexNatCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualNatCon(CO_NatCon arg0, CO_NatCon arg1);
+#define CO_isEqualNatCon(arg0, arg1) (_CO_isEqualNatCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexByte(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexByte(CO_LexByte arg0, CO_LexByte arg1);
+#define CO_isEqualLexByte(arg0, arg1) (_CO_isEqualLexByte(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualByte(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualByte(CO_Byte arg0, CO_Byte arg1);
+#define CO_isEqualByte(arg0, arg1) (_CO_isEqualByte(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexBytes(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexBytes(CO_LexBytes arg0, CO_LexBytes arg1);
+#define CO_isEqualLexBytes(arg0, arg1) (_CO_isEqualLexBytes(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualBytes(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualBytes(CO_Bytes arg0, CO_Bytes arg1);
+#define CO_isEqualBytes(arg0, arg1) (_CO_isEqualBytes(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLexByteList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLexByteList(CO_LexByteList arg0, CO_LexByteList arg1);
+#define CO_isEqualLexByteList(arg0, arg1) (_CO_isEqualLexByteList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualSubject(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualSubject(CO_Subject arg0, CO_Subject arg1);
+#define CO_isEqualSubject(arg0, arg1) (_CO_isEqualSubject(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualError(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualError(CO_Error arg0, CO_Error arg1);
+#define CO_isEqualError(arg0, arg1) (_CO_isEqualError(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualSummary(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualSummary(CO_Summary arg0, CO_Summary arg1);
+#define CO_isEqualSummary(arg0, arg1) (_CO_isEqualSummary(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualSubjectList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualSubjectList(CO_SubjectList arg0, CO_SubjectList arg1);
+#define CO_isEqualSubjectList(arg0, arg1) (_CO_isEqualSubjectList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualErrorList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualErrorList(CO_ErrorList arg0, CO_ErrorList arg1);
+#define CO_isEqualErrorList(arg0, arg1) (_CO_isEqualErrorList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualLocation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualLocation(CO_Location arg0, CO_Location arg1);
+#define CO_isEqualLocation(arg0, arg1) (_CO_isEqualLocation(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualArea(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualArea(CO_Area arg0, CO_Area arg1);
+#define CO_isEqualArea(arg0, arg1) (_CO_isEqualArea(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualRead(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualRead(CO_Read arg0, CO_Read arg1);
+#define CO_isEqualRead(arg0, arg1) (_CO_isEqualRead(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualWrite(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualWrite(CO_Write arg0, CO_Write arg1);
+#define CO_isEqualWrite(arg0, arg1) (_CO_isEqualWrite(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualParsetreeX(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualParsetreeX(CO_ParsetreeX arg0, CO_ParsetreeX arg1);
+#define CO_isEqualParsetreeX(arg0, arg1) (_CO_isEqualParsetreeX(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualX(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualX(CO_X arg0, CO_X arg1);
+#define CO_isEqualX(arg0, arg1) (_CO_isEqualX(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CO_isEqualBoolean(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CO_isEqualBoolean(CO_Boolean arg0, CO_Boolean arg1);
+#define CO_isEqualBoolean(arg0, arg1) (_CO_isEqualBoolean(arg0, arg1))
+#endif
 ATbool CO_isValidOptLayout(CO_OptLayout arg);
 inline ATbool CO_isOptLayoutAbsent(CO_OptLayout arg);
 inline ATbool CO_isOptLayoutPresent(CO_OptLayout arg);

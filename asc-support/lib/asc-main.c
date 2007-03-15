@@ -236,68 +236,68 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[], void (*regist
   }
   else {    
     handleOptions(argc, argv, parseInput);
-  }
 
-  numberOfInputs = ASC_getNumberOfParseTrees();
-  outputFilename = ASC_getOutputFilename();
+    numberOfInputs = ASC_getNumberOfParseTrees();
+    outputFilename = ASC_getOutputFilename();
 
-  if (!streq(ASC_getPrefixFunction(),"")) {
-    pt = applyFunction((const char*) ASC_getPrefixFunction(), 
-        (const char*) ASC_getResultNonTermName(), numberOfInputs, inputs);
-  } 
-  else {
-    if (numberOfInputs == 0) {
-      pt = parsetreeFromFile("-", parseInput);
-    }
-    else if (numberOfInputs == 1) {
-      pt = inputs[0];
-    }
-    else if (numberOfInputs != 1) {
-      ATerror("Can only process one argument if no -f and -r option "
-          "are supplied.\n"
-          "Did a -s argument eat up your -f or -r option?\n");
-      return 1;
-    }
-  }
-
-  if (PT_isValidParseTree(pt)) {
-    trm = PT_getParseTreeTop(pt);
-
-    if (ASC_getVerboseFlag()) { ATfprintf(stderr,"Reducing ...\n"); }
-
-    reduct = innermost(trm);
-
-    if (ASC_getVerboseFlag()) { ATfprintf(stderr,"Reducing finished.\n"); }
-    if (ASC_getStatsFlag())  { printStats(); }
-
-    if (ASC_getOutputFlag()) {
-      asfix = toasfix(reduct);
-      rpt = PT_makeParseTreeTop(asfix, 0);
-
-      if (parseInput) {
-        FILE *fp = NULL;
-
-        if (!strcmp(outputFilename, "-")) {
-          fp = stdout;
-        }
-        else {
-          fp = fopen(outputFilename, "wb");
-        }
-
-        if (fp != NULL) {
-          PT_yieldParseTreeToFile(rpt, fp, ATfalse);
-        }
-        else {
-          ATerror("asc-main: unable to open %s for writing\n", outputFilename);
-        }
+    if (!streq(ASC_getPrefixFunction(),"")) {
+      pt = applyFunction((const char*) ASC_getPrefixFunction(), 
+			 (const char*) ASC_getResultNonTermName(), numberOfInputs, inputs);
+    } 
+    else {
+      if (numberOfInputs == 0) {
+	pt = parsetreeFromFile("-", parseInput);
       }
-      else {
-        if (ASC_getBafmodeFlag()) {
-          ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(rpt),outputFilename);
-        }
-        else {
-          ATwriteToNamedTextFile(PT_ParseTreeToTerm(rpt),outputFilename);
-        }
+      else if (numberOfInputs == 1) {
+	pt = inputs[0];
+      }
+      else if (numberOfInputs != 1) {
+	ATerror("Can only process one argument if no -f and -r option "
+		"are supplied.\n"
+		"Did a -s argument eat up your -f or -r option?\n");
+	return 1;
+      }
+    }
+
+    if (PT_isValidParseTree(pt)) {
+      trm = PT_getParseTreeTop(pt);
+
+      if (ASC_getVerboseFlag()) { ATfprintf(stderr,"Reducing ...\n"); }
+
+      reduct = innermost(trm);
+
+      if (ASC_getVerboseFlag()) { ATfprintf(stderr,"Reducing finished.\n"); }
+      if (ASC_getStatsFlag())  { printStats(); }
+
+      if (ASC_getOutputFlag()) {
+	asfix = toasfix(reduct);
+	rpt = PT_makeParseTreeTop(asfix, 0);
+
+	if (parseInput) {
+	  FILE *fp = NULL;
+
+	  if (!strcmp(outputFilename, "-")) {
+	    fp = stdout;
+	  }
+	  else {
+	    fp = fopen(outputFilename, "wb");
+	  }
+
+	  if (fp != NULL) {
+	    PT_yieldParseTreeToFile(rpt, fp, ATfalse);
+	  }
+	  else {
+	    ATerror("asc-main: unable to open %s for writing\n", outputFilename);
+	  }
+	}
+	else {
+	  if (ASC_getBafmodeFlag()) {
+	    ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(rpt),outputFilename);
+	  }
+	  else {
+	    ATwriteToNamedTextFile(PT_ParseTreeToTerm(rpt),outputFilename);
+	  }
+	}
       }
     }
   }

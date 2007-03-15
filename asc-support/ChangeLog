@@ -1,5 +1,10 @@
 $Id$
 
+Thu Mar 15 15:18:32 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/Library.def: reverted to old BytesCon definition without CHARS, because
+ sdf2-to-adt cannot handle CHARS
+ * lib/*: regenerated api
+
 Thu Mar 15 11:56:01 CET 2007 <{economop,kooiker}@cwi.nl>
  * lib/asc-main.c: corrected bug introduced by merging
 
