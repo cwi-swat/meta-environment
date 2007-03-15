@@ -19,7 +19,7 @@ libASFME_la_CFLAGS   = -DDISABLE_DYNAMIC_CHECKING
 libASFME_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libASFME_la_LIBADD   = $(PT_SUPPORT_LIBS) $(ERROR_SUPPORT_LIBS) $(ATERM_LIBS)
 
-LIBRARY=../../asf-library/library
+LIBRARY=../../sdf-library/library
 
 Asf.label.def:
 	(echo "definition";\
