@@ -675,7 +675,7 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
     int length;
 
     symbol = PTPT_lowerSymbol(PTPT_getTreeSymbol(pt));
-    length = PTPT_lowerNatCon(PTPT_getTreeCycleLength(pt));
+    length = PTPT_lowerNatCon(PTPT_getTreeLength(pt));
 
     result = PT_makeTreeCycle(symbol,length);
   }
