@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 15 15:13:08 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib*: regenerated libraries
+
 Wed Mar 14 15:09:19 CET 2007 <{economop,kooiker}@cwi.nl>
  * Merged using-sglr-refactored branch into trunk.
 

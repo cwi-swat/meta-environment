@@ -62,7 +62,7 @@ sorts Symbol Symbols CharRange CharRanges
 context-free syntax
 
 "empty"                                                  -> Symbol   {cons("empty")}
-lit(string:StrCon)                                       -> Symbol   {cons("lit")}
+lit(string:StrCon)                                     -> Symbol   {cons("lit")}
 cilit(string:StrCon)                                     -> Symbol   {cons("cilit")}
 cf(symbol:Symbol)                                        -> Symbol   {cons("cf")}
 lex(symbol:Symbol)                                       -> Symbol   {cons("lex")}
@@ -106,8 +106,8 @@ sorts Tree Args Production
 
 context-free syntax
 
-appl(prod:Production,args:Args)          -> Tree {cons("appl")}
-cycle(symbol:Symbol,cycle-length:NatCon) -> Tree {cons("cycle")}
+appl(prod:Production,args:Args) -> Tree {cons("appl")}
+cycle(symbol:Symbol, length:NatCon)          -> Tree {cons("cycle")}
 amb(args:Args)                  -> Tree {cons("amb")}
 character:NatCon                -> Tree {cons("char")}
 
