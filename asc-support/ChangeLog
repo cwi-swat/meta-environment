@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 15 11:56:01 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/asc-main.c: corrected bug introduced by merging
+
 Wed Mar 14 15:19:59 CET 2007 <{economop,kooiker}@cwi.nl>
  * Merge using-sglr-refactored branch into trunk.
 

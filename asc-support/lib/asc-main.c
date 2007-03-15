@@ -272,10 +272,10 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[], void (*regist
 
     if (ASC_getOutputFlag()) {
       asfix = toasfix(reduct);
+      rpt = PT_makeParseTreeTop(asfix, 0);
 
       if (parseInput) {
         FILE *fp = NULL;
-        rpt = PT_makeParseTreeTop(asfix, 0);
 
         if (!strcmp(outputFilename, "-")) {
           fp = stdout;
