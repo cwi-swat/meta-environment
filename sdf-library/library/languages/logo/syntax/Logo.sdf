@@ -5,18 +5,30 @@ module languages/logo/syntax/Logo
 
   exports
 
-    context-free start-symbols Commands
+    context-free start-symbols Program
 
-    sorts Id QuotedId Formal Exp Command Commands FunctionDef Block
+    sorts Id QuotedId Formal Exp  BasicCommand Call 
+          FunctionDef Command Commands  Block Program
 
     lexical syntax
        [a-z][a-z0-9]*                 -> Id
        ":" Id                         -> Formal
        "\"" Id                        -> QuotedId
-%%       ";" ~[\n]*         -> LAYOUT
+       ";" ~[\n]*                     -> LAYOUT
 
     context-free restrictions
        Id -/- [a-z0-9]
+       Formal -/- [a-z0-9]
+
+    context-free syntax %% Define reserved words
+
+     "xcor" | "ycor" | "heading" | "towards" | "pendown?" |
+     "sum" | "difference" | "product" | "quotient" |
+     "remainder" | "minus" | "less?" | "greater?" | "equal?" |
+     "notequal?" | "to" | "if" | "ifelse" | "repeat" | "forward" |
+     "back" | "left" | "right" | "setxy" | "setx" | "sety" |
+     "home" | "showturtle" | "hideturtle" | "clean" | 
+     "clearscreen" | "pendown" | "penup" | "local" | "make"  -> Id {reject}
        
     context-free syntax
        Integer                        -> Exp
@@ -42,34 +54,42 @@ module languages/logo/syntax/Logo
 
        "[" Command* "]"               -> Block
 
-       "if" Exp Block                 -> Command
-       "ifelse" Exp Block Block       -> Command
-       "repeat" Exp Block             -> Command
+       "if" Exp Block                 -> BasicCommand
+       "ifelse" Exp Block Block       -> BasicCommand
+       "repeat" Exp Block             -> BasicCommand
 
-       "forward" Exp                  -> Command
-       "back" Exp                     -> Command
-       "left" Exp                     -> Command
-       "right" Exp                    -> Command
-       "setxy" Exp Exp                -> Command
-       "setx" Exp                     -> Command
-       "sety" Exp                     -> Command
-       "home"                         -> Command
+       "forward" Exp                  -> BasicCommand
+       "back" Exp                     -> BasicCommand
+       "left" Exp                     -> BasicCommand
+       "right" Exp                    -> BasicCommand
+       "setxy" Exp Exp                -> BasicCommand
+       "setx" Exp                     -> BasicCommand
+       "sety" Exp                     -> BasicCommand
+       "home"                         -> BasicCommand
 
-       ("showturtle" | "st")          -> Command
-       ("hideturtle" | "ht")          -> Command
-       "clean"                        -> Command
-       ("clearscreen" | "cs")         -> Command
-       ("pendown"  | "pd")            -> Command
-       ("penup" | "pu")               -> Command
+       "showturtle"                   -> BasicCommand
+       "hideturtle"                   -> BasicCommand
+       "clean"                        -> BasicCommand
+       "clearscreen"                  -> BasicCommand
+       "pendown"                      -> BasicCommand
+       "penup"                        -> BasicCommand
 
-       "local" QuotedId               -> Command
-       "make" QuotedId Exp            -> Command
+       "local" QuotedId               -> BasicCommand
+       "make" QuotedId Exp            -> BasicCommand
 
-       Id  Exp*                       -> Command {avoid}
+       Id  Exp*                       -> Call
+       BasicCommand                   -> Command
+       FunctionDef                    -> Command
+       Call                           -> Command 
 
        Command*                       -> Commands
 
- %%      (Command | FunctionDef)*       -> Program
+       Commands                       -> Program
+
+  context-free priorities
+       { BasicCommand  -> Command
+         FunctionDef   -> Command } >
+         Call -> Command
 
        
 
