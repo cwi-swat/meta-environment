@@ -10,9 +10,13 @@ typedef struct _ASF_OptLayout *ASF_OptLayout;
 typedef struct _ASF_Layout *ASF_Layout;
 typedef struct _ASF_LexLayoutList *ASF_LexLayoutList;
 typedef struct _ASF_Tree *ASF_Tree;
+typedef struct _ASF_LexCHAR *ASF_LexCHAR;
+typedef struct _ASF_CHAR *ASF_CHAR;
 typedef struct _ASF_ASFCondition *ASF_ASFCondition;
 typedef struct _ASF_ASFConditions *ASF_ASFConditions;
 typedef struct _ASF_ASFConditionList *ASF_ASFConditionList;
+typedef struct _ASF_TreeAmbs *ASF_TreeAmbs;
+typedef struct _ASF_CHARList *ASF_CHARList;
 typedef struct _ASF_LexASFBarEnd *ASF_LexASFBarEnd;
 typedef struct _ASF_ASFBarEnd *ASF_ASFBarEnd;
 typedef struct _ASF_LexASFImplies *ASF_LexASFImplies;
@@ -92,6 +96,30 @@ void _ASF_unprotectTree(ASF_Tree *arg);
 #define ASF_unprotectTree(arg) (_ASF_unprotectTree(arg))
 #endif
 #ifdef FAST_API
+#define ASF_protectLexCHAR(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_protectLexCHAR(ASF_LexCHAR *arg);
+#define ASF_protectLexCHAR(arg) (_ASF_protectLexCHAR(arg))
+#endif
+#ifdef FAST_API
+#define ASF_unprotectLexCHAR(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_unprotectLexCHAR(ASF_LexCHAR *arg);
+#define ASF_unprotectLexCHAR(arg) (_ASF_unprotectLexCHAR(arg))
+#endif
+#ifdef FAST_API
+#define ASF_protectCHAR(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_protectCHAR(ASF_CHAR *arg);
+#define ASF_protectCHAR(arg) (_ASF_protectCHAR(arg))
+#endif
+#ifdef FAST_API
+#define ASF_unprotectCHAR(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_unprotectCHAR(ASF_CHAR *arg);
+#define ASF_unprotectCHAR(arg) (_ASF_unprotectCHAR(arg))
+#endif
+#ifdef FAST_API
 #define ASF_protectASFCondition(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _ASF_protectASFCondition(ASF_ASFCondition *arg);
@@ -126,6 +154,30 @@ void _ASF_protectASFConditionList(ASF_ASFConditionList *arg);
 #else
 void _ASF_unprotectASFConditionList(ASF_ASFConditionList *arg);
 #define ASF_unprotectASFConditionList(arg) (_ASF_unprotectASFConditionList(arg))
+#endif
+#ifdef FAST_API
+#define ASF_protectTreeAmbs(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_protectTreeAmbs(ASF_TreeAmbs *arg);
+#define ASF_protectTreeAmbs(arg) (_ASF_protectTreeAmbs(arg))
+#endif
+#ifdef FAST_API
+#define ASF_unprotectTreeAmbs(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_unprotectTreeAmbs(ASF_TreeAmbs *arg);
+#define ASF_unprotectTreeAmbs(arg) (_ASF_unprotectTreeAmbs(arg))
+#endif
+#ifdef FAST_API
+#define ASF_protectCHARList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_protectCHARList(ASF_CHARList *arg);
+#define ASF_protectCHARList(arg) (_ASF_protectCHARList(arg))
+#endif
+#ifdef FAST_API
+#define ASF_unprotectCHARList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _ASF_unprotectCHARList(ASF_CHARList *arg);
+#define ASF_unprotectCHARList(arg) (_ASF_unprotectCHARList(arg))
 #endif
 #ifdef FAST_API
 #define ASF_protectLexASFBarEnd(arg) (ATprotect((ATerm*)((void*) (arg))))
@@ -440,6 +492,30 @@ ATerm _ASF_TreeToTerm(ASF_Tree arg);
 #define ASF_TreeToTerm(arg) (_ASF_TreeToTerm(arg))
 #endif
 #ifdef FAST_API
+#define ASF_LexCHARFromTerm(t) ((ASF_LexCHAR)(t))
+#else
+ASF_LexCHAR _ASF_LexCHARFromTerm(ATerm t);
+#define ASF_LexCHARFromTerm(t) (_ASF_LexCHARFromTerm(t))
+#endif
+#ifdef FAST_API
+#define ASF_LexCHARToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _ASF_LexCHARToTerm(ASF_LexCHAR arg);
+#define ASF_LexCHARToTerm(arg) (_ASF_LexCHARToTerm(arg))
+#endif
+#ifdef FAST_API
+#define ASF_CHARFromTerm(t) ((ASF_CHAR)(t))
+#else
+ASF_CHAR _ASF_CHARFromTerm(ATerm t);
+#define ASF_CHARFromTerm(t) (_ASF_CHARFromTerm(t))
+#endif
+#ifdef FAST_API
+#define ASF_CHARToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _ASF_CHARToTerm(ASF_CHAR arg);
+#define ASF_CHARToTerm(arg) (_ASF_CHARToTerm(arg))
+#endif
+#ifdef FAST_API
 #define ASF_ASFConditionFromTerm(t) ((ASF_ASFCondition)(t))
 #else
 ASF_ASFCondition _ASF_ASFConditionFromTerm(ATerm t);
@@ -474,6 +550,30 @@ ASF_ASFConditionList _ASF_ASFConditionListFromTerm(ATerm t);
 #else
 ATerm _ASF_ASFConditionListToTerm(ASF_ASFConditionList arg);
 #define ASF_ASFConditionListToTerm(arg) (_ASF_ASFConditionListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define ASF_TreeAmbsFromTerm(t) ((ASF_TreeAmbs)(t))
+#else
+ASF_TreeAmbs _ASF_TreeAmbsFromTerm(ATerm t);
+#define ASF_TreeAmbsFromTerm(t) (_ASF_TreeAmbsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define ASF_TreeAmbsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _ASF_TreeAmbsToTerm(ASF_TreeAmbs arg);
+#define ASF_TreeAmbsToTerm(arg) (_ASF_TreeAmbsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define ASF_CHARListFromTerm(t) ((ASF_CHARList)(t))
+#else
+ASF_CHARList _ASF_CHARListFromTerm(ATerm t);
+#define ASF_CHARListFromTerm(t) (_ASF_CHARListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define ASF_CHARListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _ASF_CHARListToTerm(ASF_CHARList arg);
+#define ASF_CHARListToTerm(arg) (_ASF_CHARListToTerm(arg))
 #endif
 #ifdef FAST_API
 #define ASF_LexASFBarEndFromTerm(t) ((ASF_LexASFBarEnd)(t))
@@ -844,6 +944,70 @@ ASF_ASFConditionList ASF_makeASFConditionList4(ASF_OptLayout wsAfterHead, ASF_Op
 ASF_ASFConditionList ASF_makeASFConditionList5(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFCondition elem1, ASF_ASFCondition elem2, ASF_ASFCondition elem3, ASF_ASFCondition elem4, ASF_ASFCondition elem5);
 ASF_ASFConditionList ASF_makeASFConditionList6(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFCondition elem1, ASF_ASFCondition elem2, ASF_ASFCondition elem3, ASF_ASFCondition elem4, ASF_ASFCondition elem5, ASF_ASFCondition elem6);
 #ifdef FAST_API
+#define ASF_getTreeAmbsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _ASF_getTreeAmbsLength(ASF_TreeAmbs arg);
+#define ASF_getTreeAmbsLength(arg) (_ASF_getTreeAmbsLength(arg))
+#endif
+ASF_TreeAmbs ASF_reverseTreeAmbs(ASF_TreeAmbs arg);
+ASF_TreeAmbs ASF_appendTreeAmbs(ASF_TreeAmbs arg0, ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_Tree arg1);
+ASF_TreeAmbs ASF_concatTreeAmbs(ASF_TreeAmbs arg0, ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_TreeAmbs arg1);
+#ifdef FAST_API
+#define ASF_sliceTreeAmbs(arg, start, end) ((ASF_TreeAmbs) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+ASF_TreeAmbs _ASF_sliceTreeAmbs(ASF_TreeAmbs arg, int start, int end);
+#define ASF_sliceTreeAmbs(arg, start, end) (_ASF_sliceTreeAmbs(arg, start, end))
+#endif
+#ifdef FAST_API
+#define ASF_getTreeAmbsTreeAt(arg, index) ((ASF_Tree) (ATelementAt((ATermList) arg,index * 4)))
+#else
+ASF_Tree _ASF_getTreeAmbsTreeAt(ASF_TreeAmbs arg, int index);
+#define ASF_getTreeAmbsTreeAt(arg, index) (_ASF_getTreeAmbsTreeAt(arg, index))
+#endif
+#ifdef FAST_API
+#define ASF_replaceTreeAmbsTreeAt(arg, elem, index) ((ASF_TreeAmbs) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+ASF_TreeAmbs _ASF_replaceTreeAmbsTreeAt(ASF_TreeAmbs arg, ASF_Tree elem, int index);
+#define ASF_replaceTreeAmbsTreeAt(arg, elem, index) (_ASF_replaceTreeAmbsTreeAt(arg, elem, index))
+#endif
+ASF_TreeAmbs ASF_makeTreeAmbs2(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_Tree elem1, ASF_Tree elem2);
+ASF_TreeAmbs ASF_makeTreeAmbs3(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_Tree elem1, ASF_Tree elem2, ASF_Tree elem3);
+ASF_TreeAmbs ASF_makeTreeAmbs4(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_Tree elem1, ASF_Tree elem2, ASF_Tree elem3, ASF_Tree elem4);
+ASF_TreeAmbs ASF_makeTreeAmbs5(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_Tree elem1, ASF_Tree elem2, ASF_Tree elem3, ASF_Tree elem4, ASF_Tree elem5);
+ASF_TreeAmbs ASF_makeTreeAmbs6(ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_Tree elem1, ASF_Tree elem2, ASF_Tree elem3, ASF_Tree elem4, ASF_Tree elem5, ASF_Tree elem6);
+#ifdef FAST_API
+#define ASF_getCHARListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 2) + 1))
+#else
+int _ASF_getCHARListLength(ASF_CHARList arg);
+#define ASF_getCHARListLength(arg) (_ASF_getCHARListLength(arg))
+#endif
+ASF_CHARList ASF_reverseCHARList(ASF_CHARList arg);
+ASF_CHARList ASF_appendCHARList(ASF_CHARList arg0, ASF_OptLayout wsAfterHead, ASF_CHAR arg1);
+ASF_CHARList ASF_concatCHARList(ASF_CHARList arg0, ASF_OptLayout wsAfterHead, ASF_CHARList arg1);
+#ifdef FAST_API
+#define ASF_sliceCHARList(arg, start, end) ((ASF_CHARList) ATgetSlice((ATermList) (arg), (start * 2), (end * 2)))
+#else
+ASF_CHARList _ASF_sliceCHARList(ASF_CHARList arg, int start, int end);
+#define ASF_sliceCHARList(arg, start, end) (_ASF_sliceCHARList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define ASF_getCHARListCHARAt(arg, index) ((ASF_CHAR) (ATelementAt((ATermList) arg,index * 2)))
+#else
+ASF_CHAR _ASF_getCHARListCHARAt(ASF_CHARList arg, int index);
+#define ASF_getCHARListCHARAt(arg, index) (_ASF_getCHARListCHARAt(arg, index))
+#endif
+#ifdef FAST_API
+#define ASF_replaceCHARListCHARAt(arg, elem, index) ((ASF_CHARList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 2)))
+#else
+ASF_CHARList _ASF_replaceCHARListCHARAt(ASF_CHARList arg, ASF_CHAR elem, int index);
+#define ASF_replaceCHARListCHARAt(arg, elem, index) (_ASF_replaceCHARListCHARAt(arg, elem, index))
+#endif
+ASF_CHARList ASF_makeCHARList2(ASF_OptLayout wsAfterHead, ASF_CHAR elem1, ASF_CHAR elem2);
+ASF_CHARList ASF_makeCHARList3(ASF_OptLayout wsAfterHead, ASF_CHAR elem1, ASF_CHAR elem2, ASF_CHAR elem3);
+ASF_CHARList ASF_makeCHARList4(ASF_OptLayout wsAfterHead, ASF_CHAR elem1, ASF_CHAR elem2, ASF_CHAR elem3, ASF_CHAR elem4);
+ASF_CHARList ASF_makeCHARList5(ASF_OptLayout wsAfterHead, ASF_CHAR elem1, ASF_CHAR elem2, ASF_CHAR elem3, ASF_CHAR elem4, ASF_CHAR elem5);
+ASF_CHARList ASF_makeCHARList6(ASF_OptLayout wsAfterHead, ASF_CHAR elem1, ASF_CHAR elem2, ASF_CHAR elem3, ASF_CHAR elem4, ASF_CHAR elem5, ASF_CHAR elem6);
+#ifdef FAST_API
 #define ASF_getASFSectionListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 2) + 1))
 #else
 int _ASF_getASFSectionListLength(ASF_ASFSectionList arg);
@@ -946,6 +1110,10 @@ ASF_LexLayoutList ASF_makeLexLayoutListEmpty(void);
 ASF_LexLayoutList ASF_makeLexLayoutListSingle(ASF_LexLayout head);
 ASF_LexLayoutList ASF_makeLexLayoutListMany(ASF_LexLayout head, ASF_LexLayoutList tail);
 ASF_Tree ASF_makeTreeCast(ATerm Tree);
+ASF_Tree ASF_makeTreeAmbiguityConstructor(ASF_OptLayout wsAfterAmb, ASF_OptLayout wsAfterParenOpen, ASF_TreeAmbs ambs, ASF_OptLayout wsAfterAmbs);
+ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Tree name, ASF_OptLayout wsAfterName, ASF_OptLayout wsAfterParenOpen, ASF_CHARList list, ASF_OptLayout wsAfterList);
+ASF_LexCHAR ASF_makeLexCHARDefault(char value);
+ASF_CHAR ASF_makeCHARLexToCf(ASF_LexCHAR CHAR);
 ASF_ASFCondition ASF_makeASFConditionNegative(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterUnequal, ASF_Tree rhs);
 ASF_ASFCondition ASF_makeASFConditionEquality(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterEquality, ASF_Tree rhs);
 ASF_ASFCondition ASF_makeASFConditionMatch(ATerm typeOfLhs, ATerm typeOfRhs, ASF_Tree lhs, ASF_OptLayout wsAfterLhs, ASF_OptLayout wsAfterMatch, ASF_Tree rhs);
@@ -954,6 +1122,12 @@ ASF_ASFConditions ASF_makeASFConditionsDefault(ASF_ASFConditionList list);
 ASF_ASFConditionList ASF_makeASFConditionListEmpty(void);
 ASF_ASFConditionList ASF_makeASFConditionListSingle(ASF_ASFCondition head);
 ASF_ASFConditionList ASF_makeASFConditionListMany(ASF_ASFCondition head, ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_ASFConditionList tail);
+ASF_TreeAmbs ASF_makeTreeAmbsEmpty(void);
+ASF_TreeAmbs ASF_makeTreeAmbsSingle(ASF_Tree head);
+ASF_TreeAmbs ASF_makeTreeAmbsMany(ASF_Tree head, ASF_OptLayout wsAfterHead, ASF_OptLayout wsAfterSep, ASF_TreeAmbs tail);
+ASF_CHARList ASF_makeCHARListEmpty(void);
+ASF_CHARList ASF_makeCHARListSingle(ASF_CHAR head);
+ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, ASF_OptLayout wsAfterHead, ASF_CHARList tail);
 ASF_LexASFBarEnd ASF_makeLexASFBarEndAbsent(void);
 ASF_LexASFBarEnd ASF_makeLexASFBarEndPresent(void);
 ASF_ASFBarEnd ASF_makeASFBarEndLexToCf(ASF_LexASFBarEnd ASFBarEnd);
@@ -1022,6 +1196,18 @@ ATbool _ASF_isEqualTree(ASF_Tree arg0, ASF_Tree arg1);
 #define ASF_isEqualTree(arg0, arg1) (_ASF_isEqualTree(arg0, arg1))
 #endif
 #ifdef FAST_API
+#define ASF_isEqualLexCHAR(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _ASF_isEqualLexCHAR(ASF_LexCHAR arg0, ASF_LexCHAR arg1);
+#define ASF_isEqualLexCHAR(arg0, arg1) (_ASF_isEqualLexCHAR(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define ASF_isEqualCHAR(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1);
+#define ASF_isEqualCHAR(arg0, arg1) (_ASF_isEqualCHAR(arg0, arg1))
+#endif
+#ifdef FAST_API
 #define ASF_isEqualASFCondition(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _ASF_isEqualASFCondition(ASF_ASFCondition arg0, ASF_ASFCondition arg1);
@@ -1038,6 +1224,18 @@ ATbool _ASF_isEqualASFConditions(ASF_ASFConditions arg0, ASF_ASFConditions arg1)
 #else
 ATbool _ASF_isEqualASFConditionList(ASF_ASFConditionList arg0, ASF_ASFConditionList arg1);
 #define ASF_isEqualASFConditionList(arg0, arg1) (_ASF_isEqualASFConditionList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define ASF_isEqualTreeAmbs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _ASF_isEqualTreeAmbs(ASF_TreeAmbs arg0, ASF_TreeAmbs arg1);
+#define ASF_isEqualTreeAmbs(arg0, arg1) (_ASF_isEqualTreeAmbs(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define ASF_isEqualCHARList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _ASF_isEqualCHARList(ASF_CHARList arg0, ASF_CHARList arg1);
+#define ASF_isEqualCHARList(arg0, arg1) (_ASF_isEqualCHARList(arg0, arg1))
 #endif
 #ifdef FAST_API
 #define ASF_isEqualLexASFBarEnd(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
@@ -1194,9 +1392,45 @@ ASF_LexLayoutList ASF_setLexLayoutListHead(ASF_LexLayoutList arg, ASF_LexLayout 
 ASF_LexLayoutList ASF_setLexLayoutListTail(ASF_LexLayoutList arg, ASF_LexLayoutList tail);
 ATbool ASF_isValidTree(ASF_Tree arg);
 inline ATbool ASF_isTreeCast(ASF_Tree arg);
+inline ATbool ASF_isTreeAmbiguityConstructor(ASF_Tree arg);
+inline ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg);
 ATbool ASF_hasTreeTree(ASF_Tree arg);
+ATbool ASF_hasTreeWsAfterAmb(ASF_Tree arg);
+ATbool ASF_hasTreeWsAfterParenOpen(ASF_Tree arg);
+ATbool ASF_hasTreeAmbs(ASF_Tree arg);
+ATbool ASF_hasTreeWsAfterAmbs(ASF_Tree arg);
+ATbool ASF_hasTreeName(ASF_Tree arg);
+ATbool ASF_hasTreeWsAfterName(ASF_Tree arg);
+ATbool ASF_hasTreeList(ASF_Tree arg);
+ATbool ASF_hasTreeWsAfterList(ASF_Tree arg);
 ATerm ASF_getTreeTree(ASF_Tree arg);
+ASF_OptLayout ASF_getTreeWsAfterAmb(ASF_Tree arg);
+ASF_OptLayout ASF_getTreeWsAfterParenOpen(ASF_Tree arg);
+ASF_TreeAmbs ASF_getTreeAmbs(ASF_Tree arg);
+ASF_OptLayout ASF_getTreeWsAfterAmbs(ASF_Tree arg);
+ASF_Tree ASF_getTreeName(ASF_Tree arg);
+ASF_OptLayout ASF_getTreeWsAfterName(ASF_Tree arg);
+ASF_CHARList ASF_getTreeList(ASF_Tree arg);
+ASF_OptLayout ASF_getTreeWsAfterList(ASF_Tree arg);
 ASF_Tree ASF_setTreeTree(ASF_Tree arg, ATerm Tree);
+ASF_Tree ASF_setTreeWsAfterAmb(ASF_Tree arg, ASF_OptLayout wsAfterAmb);
+ASF_Tree ASF_setTreeWsAfterParenOpen(ASF_Tree arg, ASF_OptLayout wsAfterParenOpen);
+ASF_Tree ASF_setTreeAmbs(ASF_Tree arg, ASF_TreeAmbs ambs);
+ASF_Tree ASF_setTreeWsAfterAmbs(ASF_Tree arg, ASF_OptLayout wsAfterAmbs);
+ASF_Tree ASF_setTreeName(ASF_Tree arg, ASF_Tree name);
+ASF_Tree ASF_setTreeWsAfterName(ASF_Tree arg, ASF_OptLayout wsAfterName);
+ASF_Tree ASF_setTreeList(ASF_Tree arg, ASF_CHARList list);
+ASF_Tree ASF_setTreeWsAfterList(ASF_Tree arg, ASF_OptLayout wsAfterList);
+ATbool ASF_isValidLexCHAR(ASF_LexCHAR arg);
+inline ATbool ASF_isLexCHARDefault(ASF_LexCHAR arg);
+ATbool ASF_hasLexCHARValue(ASF_LexCHAR arg);
+char ASF_getLexCHARValue(ASF_LexCHAR arg);
+ASF_LexCHAR ASF_setLexCHARValue(ASF_LexCHAR arg, char value);
+ATbool ASF_isValidCHAR(ASF_CHAR arg);
+inline ATbool ASF_isCHARLexToCf(ASF_CHAR arg);
+ATbool ASF_hasCHARCHAR(ASF_CHAR arg);
+ASF_LexCHAR ASF_getCHARCHAR(ASF_CHAR arg);
+ASF_CHAR ASF_setCHARCHAR(ASF_CHAR arg, ASF_LexCHAR CHAR);
 ATbool ASF_isValidASFCondition(ASF_ASFCondition arg);
 inline ATbool ASF_isASFConditionNegative(ASF_ASFCondition arg);
 inline ATbool ASF_isASFConditionEquality(ASF_ASFCondition arg);
@@ -1247,6 +1481,35 @@ ASF_ASFConditionList ASF_setASFConditionListHead(ASF_ASFConditionList arg, ASF_A
 ASF_ASFConditionList ASF_setASFConditionListWsAfterHead(ASF_ASFConditionList arg, ASF_OptLayout wsAfterHead);
 ASF_ASFConditionList ASF_setASFConditionListWsAfterSep(ASF_ASFConditionList arg, ASF_OptLayout wsAfterSep);
 ASF_ASFConditionList ASF_setASFConditionListTail(ASF_ASFConditionList arg, ASF_ASFConditionList tail);
+ATbool ASF_isValidTreeAmbs(ASF_TreeAmbs arg);
+inline ATbool ASF_isTreeAmbsEmpty(ASF_TreeAmbs arg);
+inline ATbool ASF_isTreeAmbsSingle(ASF_TreeAmbs arg);
+inline ATbool ASF_isTreeAmbsMany(ASF_TreeAmbs arg);
+ATbool ASF_hasTreeAmbsHead(ASF_TreeAmbs arg);
+ATbool ASF_hasTreeAmbsWsAfterHead(ASF_TreeAmbs arg);
+ATbool ASF_hasTreeAmbsWsAfterSep(ASF_TreeAmbs arg);
+ATbool ASF_hasTreeAmbsTail(ASF_TreeAmbs arg);
+ASF_TreeAmbs ASF_getTreeAmbsTail(ASF_TreeAmbs arg);
+ASF_Tree ASF_getTreeAmbsHead(ASF_TreeAmbs arg);
+ASF_OptLayout ASF_getTreeAmbsWsAfterHead(ASF_TreeAmbs arg);
+ASF_OptLayout ASF_getTreeAmbsWsAfterSep(ASF_TreeAmbs arg);
+ASF_TreeAmbs ASF_setTreeAmbsHead(ASF_TreeAmbs arg, ASF_Tree head);
+ASF_TreeAmbs ASF_setTreeAmbsWsAfterHead(ASF_TreeAmbs arg, ASF_OptLayout wsAfterHead);
+ASF_TreeAmbs ASF_setTreeAmbsWsAfterSep(ASF_TreeAmbs arg, ASF_OptLayout wsAfterSep);
+ASF_TreeAmbs ASF_setTreeAmbsTail(ASF_TreeAmbs arg, ASF_TreeAmbs tail);
+ATbool ASF_isValidCHARList(ASF_CHARList arg);
+inline ATbool ASF_isCHARListEmpty(ASF_CHARList arg);
+inline ATbool ASF_isCHARListSingle(ASF_CHARList arg);
+inline ATbool ASF_isCHARListMany(ASF_CHARList arg);
+ATbool ASF_hasCHARListHead(ASF_CHARList arg);
+ATbool ASF_hasCHARListWsAfterHead(ASF_CHARList arg);
+ATbool ASF_hasCHARListTail(ASF_CHARList arg);
+ASF_CHARList ASF_getCHARListTail(ASF_CHARList arg);
+ASF_CHAR ASF_getCHARListHead(ASF_CHARList arg);
+ASF_OptLayout ASF_getCHARListWsAfterHead(ASF_CHARList arg);
+ASF_CHARList ASF_setCHARListHead(ASF_CHARList arg, ASF_CHAR head);
+ASF_CHARList ASF_setCHARListWsAfterHead(ASF_CHARList arg, ASF_OptLayout wsAfterHead);
+ASF_CHARList ASF_setCHARListTail(ASF_CHARList arg, ASF_CHARList tail);
 ATbool ASF_isValidLexASFBarEnd(ASF_LexASFBarEnd arg);
 inline ATbool ASF_isLexASFBarEndAbsent(ASF_LexASFBarEnd arg);
 inline ATbool ASF_isLexASFBarEndPresent(ASF_LexASFBarEnd arg);
@@ -1501,10 +1764,14 @@ ASF_Character ASF_setCharacterShortChar(ASF_Character arg, ASF_ShortChar ShortCh
 ASF_OptLayout ASF_visitOptLayout(ASF_OptLayout arg, ASF_Layout (*acceptLayout)(ASF_Layout));
 ASF_Layout ASF_visitLayout(ASF_Layout arg, ASF_LexLayoutList (*acceptList)(ASF_LexLayoutList));
 ASF_LexLayoutList ASF_visitLexLayoutList(ASF_LexLayoutList arg, ASF_LexLayout (*acceptHead)(ASF_LexLayout));
-ASF_Tree ASF_visitTree(ASF_Tree arg, ATerm (*acceptTree)(ATerm));
+ASF_Tree ASF_visitTree(ASF_Tree arg, ATerm (*acceptTree)(ATerm), ASF_OptLayout (*acceptWsAfterAmb)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterParenOpen)(ASF_OptLayout), ASF_TreeAmbs (*acceptAmbs)(ASF_TreeAmbs), ASF_OptLayout (*acceptWsAfterAmbs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterName)(ASF_OptLayout), ASF_CHARList (*acceptList)(ASF_CHARList), ASF_OptLayout (*acceptWsAfterList)(ASF_OptLayout));
+ASF_LexCHAR ASF_visitLexCHAR(ASF_LexCHAR arg, char (*acceptValue)(char));
+ASF_CHAR ASF_visitCHAR(ASF_CHAR arg, ASF_LexCHAR (*acceptCHAR)(ASF_LexCHAR));
 ASF_ASFCondition ASF_visitASFCondition(ASF_ASFCondition arg, ATerm (*acceptTypeOfLhs)(ATerm), ATerm (*acceptTypeOfRhs)(ATerm), ASF_Tree (*acceptLhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterLhs)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterUnequal)(ASF_OptLayout), ASF_Tree (*acceptRhs)(ASF_Tree), ASF_OptLayout (*acceptWsAfterEquality)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterMatch)(ASF_OptLayout));
 ASF_ASFConditions ASF_visitASFConditions(ASF_ASFConditions arg, ASF_ASFConditionList (*acceptList)(ASF_ASFConditionList));
 ASF_ASFConditionList ASF_visitASFConditionList(ASF_ASFConditionList arg, ASF_ASFCondition (*acceptHead)(ASF_ASFCondition), ASF_OptLayout (*acceptWsAfterHead)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterSep)(ASF_OptLayout));
+ASF_TreeAmbs ASF_visitTreeAmbs(ASF_TreeAmbs arg, ASF_Tree (*acceptHead)(ASF_Tree), ASF_OptLayout (*acceptWsAfterHead)(ASF_OptLayout), ASF_OptLayout (*acceptWsAfterSep)(ASF_OptLayout));
+ASF_CHARList ASF_visitCHARList(ASF_CHARList arg, ASF_CHAR (*acceptHead)(ASF_CHAR), ASF_OptLayout (*acceptWsAfterHead)(ASF_OptLayout));
 ASF_LexASFBarEnd ASF_visitLexASFBarEnd(ASF_LexASFBarEnd arg);
 ASF_ASFBarEnd ASF_visitASFBarEnd(ASF_ASFBarEnd arg, ASF_LexASFBarEnd (*acceptASFBarEnd)(ASF_LexASFBarEnd));
 ASF_LexASFImplies ASF_visitLexASFImplies(ASF_LexASFImplies arg, char* (*acceptBar)(char*), ASF_LexASFBarEnd (*acceptEnd)(ASF_LexASFBarEnd));

@@ -2,6 +2,14 @@ definition
 module languages/asf/syntax/Asf[Tree]
 
 imports languages/asf/syntax/Module[Tree]
+module languages/asf/syntax/Characters
+hiddens
+  sorts CHAR
+exports
+  lexical syntax
+    [\"] value:~[\257] [\"] -> CHAR {cons("default")}
+
+
 module languages/asf/syntax/Conditions[Tree]
 
 exports
@@ -17,6 +25,18 @@ exports
   context-free syntax
 
        list:{ASF-Condition ","}+ -> ASF-Conditions
+
+module languages/asf/syntax/Constructors
+
+imports languages/asf/syntax/Characters
+exports
+sorts Tree
+
+context-free syntax
+
+       "amb" "(" ambs:{Tree ","}* ")" -> Tree {cons("ambiguity-constructor")}
+       name:Tree "(" list:CHAR* ")"   -> Tree {cons("lexical-constructor")}
+
 
 module languages/asf/syntax/Equations[Tree]
 
@@ -62,7 +82,7 @@ hiddens
     ASF-Module ASF-Section
 
 exports
-  sorts ASF-Module ASF-Section
+  sorts ASF-Module ASF-Section ASF-NumChar ASF-ShortChar
 
 context-free syntax
 
