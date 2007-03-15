@@ -1,11 +1,15 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 lib_LTLIBRARIES = libsglr.la
 
 bin_PROGRAMS= \
 	sglr 
 
 EXTRA_DIST = sglr.idef.src
+
+CLEANFILES += sglr.idef
 
 INCLUDES= \
 	$(ATERM_CFLAGS) \

@@ -17,8 +17,6 @@ EXTRA_DIST = 	all-chars.asfix2.org all-chars.flt \
 		Point.asfix2.org Point.casl \
 		program.asfix2.org program.jcb \
 		rec.acts2 rec.asfix2.org \
-		robs-reject.asfix2.org robs-reject.rrjct \
-		robs-reject-2.asfix2.org robs-reject-2.rrjct \
 		Sdf2.asfix2.org Sdf2.sdf \
 		sin.exp sin.asfix2.org \
 		skips.acts skips.asfix2.org \
