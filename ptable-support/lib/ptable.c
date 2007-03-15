@@ -2436,7 +2436,9 @@ ATbool PTBL_isValidProduction(PTBL_Production arg) {
  * \return ATtrue if #arg corresponds to the signature of a external, or ATfalse otherwise
  */
 inline ATbool PTBL_isProductionExternal(PTBL_Production arg){
-  return ATtrue;
+  if (arg != NULL) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2495,7 +2497,9 @@ ATbool PTBL_isValidCharClass(PTBL_CharClass arg) {
  * \return ATtrue if #arg corresponds to the signature of a external, or ATfalse otherwise
  */
 inline ATbool PTBL_isCharClassExternal(PTBL_CharClass arg){
-  return ATtrue;
+  if (arg != NULL) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2554,7 +2558,9 @@ ATbool PTBL_isValidCharRanges(PTBL_CharRanges arg) {
  * \return ATtrue if #arg corresponds to the signature of a external, or ATfalse otherwise
  */
 inline ATbool PTBL_isCharRangesExternal(PTBL_CharRanges arg){
-  return ATtrue;
+  if (arg != NULL) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2638,15 +2644,15 @@ ATbool PTBL_isValidParseTable(PTBL_ParseTable arg) {
  * \return ATtrue if #arg corresponds to the signature of a parse-table, or ATfalse otherwise
  */
 inline ATbool PTBL_isParseTableParseTable(PTBL_ParseTable arg){
-  /* parse-table_afun */
+  /* checking for: parse-table */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun0) {
     ATerm arg_arg1 = ATgetArgument(arg, 1);
     if (ATgetType((ATerm)arg_arg1) == AT_INT) {
       ATerm arg_arg3 = ATgetArgument(arg, 3);
-      /* states_afun */
+      /* checking for: states */
       if (ATgetType((ATerm)arg_arg3) == AT_APPL && ATgetAFun((ATermAppl)arg_arg3) == PTBL_afun1) {
         ATerm arg_arg4 = ATgetArgument(arg, 4);
-        /* priorities_afun */
+        /* checking for: priorities */
         if (ATgetType((ATerm)arg_arg4) == AT_APPL && ATgetAFun((ATermAppl)arg_arg4) == PTBL_afun2) {
           return ATtrue;
         }
@@ -2865,7 +2871,7 @@ ATbool PTBL_isValidLabels(PTBL_Labels arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isLabelsEmpty(PTBL_Labels arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3000,7 +3006,7 @@ ATbool PTBL_isValidLabel(PTBL_Label arg) {
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
 inline ATbool PTBL_isLabelDefault(PTBL_Label arg){
-  /* label_afun */
+  /* checking for: label */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun3) {
     ATerm arg_arg1 = ATgetArgument(arg, 1);
     if (ATgetType((ATerm)arg_arg1) == AT_INT) {
@@ -3108,7 +3114,7 @@ ATbool PTBL_isValidStates(PTBL_States arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isStatesEmpty(PTBL_States arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3243,7 +3249,7 @@ ATbool PTBL_isValidState(PTBL_State arg) {
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
 inline ATbool PTBL_isStateDefault(PTBL_State arg){
-  /* state-rec_afun */
+  /* checking for: state-rec */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun4) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_INT) {
@@ -3388,7 +3394,7 @@ ATbool PTBL_isValidGotos(PTBL_Gotos arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isGotosEmpty(PTBL_Gotos arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3523,7 +3529,7 @@ ATbool PTBL_isValidGoto(PTBL_Goto arg) {
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
 inline ATbool PTBL_isGotoDefault(PTBL_Goto arg){
-  /* goto_afun */
+  /* checking for: goto */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun5) {
     ATerm arg_arg1 = ATgetArgument(arg, 1);
     if (ATgetType((ATerm)arg_arg1) == AT_INT) {
@@ -3631,7 +3637,7 @@ ATbool PTBL_isValidChoices(PTBL_Choices arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isChoicesEmpty(PTBL_Choices arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3766,7 +3772,7 @@ ATbool PTBL_isValidChoice(PTBL_Choice arg) {
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
 inline ATbool PTBL_isChoiceDefault(PTBL_Choice arg){
-  /* action_afun */
+  /* checking for: action */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun6) {
     return ATtrue;
   }
@@ -3871,7 +3877,7 @@ ATbool PTBL_isValidActions(PTBL_Actions arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isActionsEmpty(PTBL_Actions arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4015,7 +4021,7 @@ ATbool PTBL_isValidAction(PTBL_Action arg) {
  * \return ATtrue if #arg corresponds to the signature of a reduce, or ATfalse otherwise
  */
 inline ATbool PTBL_isActionReduce(PTBL_Action arg){
-  /* reduce_afun */
+  /* checking for: reduce */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun7) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_INT) {
@@ -4034,7 +4040,7 @@ inline ATbool PTBL_isActionReduce(PTBL_Action arg){
  * \return ATtrue if #arg corresponds to the signature of a lookahead-reduce, or ATfalse otherwise
  */
 inline ATbool PTBL_isActionLookaheadReduce(PTBL_Action arg){
-  /* reduce_afun */
+  /* checking for: reduce */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun8) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_INT) {
@@ -4053,7 +4059,7 @@ inline ATbool PTBL_isActionLookaheadReduce(PTBL_Action arg){
  * \return ATtrue if #arg corresponds to the signature of a shift, or ATfalse otherwise
  */
 inline ATbool PTBL_isActionShift(PTBL_Action arg){
-  /* shift_afun */
+  /* checking for: shift */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun9) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_INT) {
@@ -4069,7 +4075,7 @@ inline ATbool PTBL_isActionShift(PTBL_Action arg){
  * \return ATtrue if #arg corresponds to the signature of a accept, or ATfalse otherwise
  */
 inline ATbool PTBL_isActionAccept(PTBL_Action arg){
-  /* accept_afun */
+  /* checking for: accept */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun10) {
     return ATtrue;
   }
@@ -4385,7 +4391,7 @@ ATbool PTBL_isValidRestrictions(PTBL_Restrictions arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isRestrictionsEmpty(PTBL_Restrictions arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4520,7 +4526,7 @@ ATbool PTBL_isValidRestriction(PTBL_Restriction arg) {
  * \return ATtrue if #arg corresponds to the signature of a follow, or ATfalse otherwise
  */
 inline ATbool PTBL_isRestrictionFollow(PTBL_Restriction arg){
-  /* follow-restriction_afun */
+  /* checking for: follow-restriction */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun11) {
     return ATtrue;
   }
@@ -4588,7 +4594,7 @@ ATbool PTBL_isValidCharClasses(PTBL_CharClasses arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isCharClassesEmpty(PTBL_CharClasses arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4729,7 +4735,7 @@ ATbool PTBL_isValidPriorities(PTBL_Priorities arg) {
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
 inline ATbool PTBL_isPrioritiesEmpty(PTBL_Priorities arg){
-  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATtrue) {
+  if (ATisEmpty((ATermList)arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4867,7 +4873,7 @@ ATbool PTBL_isValidPriority(PTBL_Priority arg) {
  * \return ATtrue if #arg corresponds to the signature of a greater, or ATfalse otherwise
  */
 inline ATbool PTBL_isPriorityGreater(PTBL_Priority arg){
-  /* gtr-prio_afun */
+  /* checking for: gtr-prio */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun12) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_INT) {
@@ -4886,7 +4892,7 @@ inline ATbool PTBL_isPriorityGreater(PTBL_Priority arg){
  * \return ATtrue if #arg corresponds to the signature of a arg-greater, or ATfalse otherwise
  */
 inline ATbool PTBL_isPriorityArgGreater(PTBL_Priority arg){
-  /* arg-gtr-prio_afun */
+  /* checking for: arg-gtr-prio */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == PTBL_afun13) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_INT) {

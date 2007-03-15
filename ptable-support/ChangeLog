@@ -1,5 +1,8 @@
 $Id$
 
+Thu Mar 15 15:14:23 CET 2007 <{economop,kooiker}@cwi.nl>
+ * lib/*: regenerated api fixing macro bug
+
 Fri Mar  2 10:34:21 CET 2007 <economop@cwi.nl>
  * lib/ptable.{h,c}: regenerated api to use the optimisation macros.
 
