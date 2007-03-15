@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar 15 11:21:37 CET 2007 <kooiker@cwi.nl>
+ * library/basic/{Area,Location}Operations.asf:
+   - Add missing greater (and equal) then comparisons
+
 Wed Mar 14 21:05:03 CET 2007 <jurgenv@cwi.nl>
  * added constructor names to work around a bug in the SDF2 normalizer
   (order of attributes is different sometimes due to merging).

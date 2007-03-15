@@ -22,6 +22,12 @@ equations
 [default-lleq]
   Loc1 <= Loc2 = false
 
+[lgt]
+  Loc1 > Loc2 = Loc2 <= Loc1
+
+[lgeq]
+  Loc1 >= Loc2 = Loc2 < Loc1
+
 [gbl] get-begin-line(Loc) = get-begin-line(get-area(Loc))
 [gbc] get-begin-column(Loc) = get-begin-column(get-area(Loc))
 [gel] get-end-line(Loc) = get-end-line(get-area(Loc))

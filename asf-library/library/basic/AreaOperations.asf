@@ -35,3 +35,9 @@ equations
 
 [alt]	
   Area1 < Area2 = Area1 <= Area2 & not(Area1 == Area2)
+
+[ageq]
+  Area1 >= Area2 = Area2 < Area1
+
+[agt]
+  Area1 > Area2 = Area2 <= Area1
