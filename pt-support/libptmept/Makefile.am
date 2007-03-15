@@ -16,7 +16,7 @@ UTILSRCS = lift.c lower.c
 EXTRA_DIST = AsFix.def
 
 # Developers only:
-LIBRARY=../../asf-library/library
+LIBRARY=../../sdf-library/library
 
 AsFix.def:
 	(echo "definition"; \
