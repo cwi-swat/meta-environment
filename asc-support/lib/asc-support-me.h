@@ -348,7 +348,7 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
                      void (*register_all)(void),
                      void (*resolve_all)(void),
                      void (*init_all)(void),
-		     char *tableBaf,
+		     unsigned const char *tableBaf,
 		     size_t tableSize, 
 		     ATbool parseInput,
 		     ATBhandler handler

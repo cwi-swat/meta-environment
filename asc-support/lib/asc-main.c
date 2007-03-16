@@ -79,9 +79,9 @@ static ATbool toolbusMode(int argc, char* argv[]) {
   return ATfalse;
 }
 
-static void initParsetable(const char* tableBaf, size_t tableSize) {
+static void initParsetable(unsigned const char* tableBaf, size_t tableSize) {
   if (tableBaf != NULL) {
-    ATerm parseTable = ATreadFromBinaryString((char*) tableBaf, tableSize);
+    ATerm parseTable = ATreadFromBinaryString((unsigned const char*) tableBaf, tableSize);
     if (parseTable != NULL) {
       setParseTable(PTBL_ParseTableFromTerm(parseTable));
     }
@@ -205,7 +205,7 @@ void handleOptions(int argc, char *argv[], ATbool parseInput) {
   ASC_setNumberOfParseTrees(nInputs);
 }
 
-int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[], void (*register_all)(), void (*resolve_all)(), void (*init_all)(), char* tableBaf, size_t tableSize, ATbool parseInput, ATBhandler handler) {
+int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[], void (*register_all)(), void (*resolve_all)(), void (*init_all)(), unsigned const char* tableBaf, size_t tableSize, ATbool parseInput, ATBhandler handler) {
 
   PT_ParseTree pt = NULL;
   PT_Tree asfix;
