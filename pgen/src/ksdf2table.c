@@ -561,6 +561,10 @@ void PGEN_processGrammar(PT_Tree ptTree) {
 
     labelsection = process_productions(prods);
     priosection = process_priorities(prios);
+
+    PTBL_protectLabels(&labelsection);
+    PTBL_protectPriorities(&priosection); 
+
     process_restrictions(restricts);
   }
   else {

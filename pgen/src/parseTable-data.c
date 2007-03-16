@@ -117,7 +117,8 @@ void PGEN_initProductionTables(int maxProdNumber, int minProdNumber) {
   if (!nr_prod_table || !symbol_table) {
     ATerror("Cannot allocate memory for |nr_prod_table| or |symbol_table| during parse table generation.\n");
   }
-
+ 
+  /* Why don't we protect symbol_table? Maybe because all symbols also occur in the productions */
   ATprotectArray((ATerm *)nr_prod_table+minProdNumber, maxProdNumber-minProdNumber);
 
 }

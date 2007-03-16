@@ -1,5 +1,8 @@
 $Id$
 
+Fri Mar 16 10:37:56 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * src/parseTable-data.c: protect to static variable
+
 Wed Mar 14 15:25:02 CET 2007 <{economop,kooiker}@cwi.nl>
  * Merged apified-pgen branch into trunk.
 
