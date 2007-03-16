@@ -1,6 +1,6 @@
 # $Id$
 
-EXTRA_DIST		= restorebrackets.idef
+EXTRA_DIST		= restorebrackets.idef.src
 
 restorebrackets_CPPFLAGS = \
 			-I$(top_srcdir)/src \

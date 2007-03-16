@@ -101,7 +101,7 @@ libsglr_la_SOURCES= \
 
 libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
 
-libsglr_la_CPPFLAGS = -DFAST_API
+#libsglr_la_CPPFLAGS = -DFAST_API
 
 sglr_SOURCES= \
 	sglr.tif.c \
