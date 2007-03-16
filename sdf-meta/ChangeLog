@@ -2,8 +2,7 @@ $Id$
 
 Fri Mar 16 15:31:22 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
-   - Add SDFCloseEditors process that takes care of closing all editors
-   directly related to this module
+   - Add SDFCloseEditors process that takes care of closing all related editors
 
 Mon Mar  5 16:32:07 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-{actions,utils},standard.sdf.actions.src:
