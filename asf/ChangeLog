@@ -1,5 +1,10 @@
 $Id$
 
+Fri Mar 16 09:00:42 CET 2007 <{jurgenv,kooiker}@cwi.nl>
+ * semantics/asfc/src/*.c: manually adapted generated code of MuASF_dict.c to
+ accomodate new interface of ATreadFromBinaryString. Regenerating produced
+ error messages.
+
 Wed Mar 14 16:03:42 CET 2007 <{economop,kooiker}@cwi.nl>
  * Merged using-refactored-asc-support branch into trunk.
 

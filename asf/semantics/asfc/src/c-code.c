@@ -66,7 +66,7 @@ static void make_main(ATbool parse_io, ATbool keep_annos,
 static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 {
   int size;
-  char *data;
+  unsigned const char *data;
   int rowlength = 8;
   int i;
 
@@ -75,7 +75,7 @@ static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 
     if (size > 1) {
       fprintf(file, "static size_t %s_parsetable_size = %d;\n", name, size);
-      fprintf(file, "static char %s_parsetable_baf[%d] = {\n\t", name, size); 
+      fprintf(file, "static unsigned const char %s_parsetable_baf[%d] = {\n\t", name, size); 
 
       for (i = 0; i < size - 1; i++) {
 	fprintf(file,"0x%02X, ", (unsigned char) data[i]);
