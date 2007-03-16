@@ -5,6 +5,7 @@ imports basic/Errors
 imports languages/pico/syntax/Pico
 imports languages/pico/check/Type-environments
 imports utilities/PosInfo[EXP]
+imports utilities/PosInfo[PICO-ID]
 imports utilities/PosInfo[PROGRAM]
 
 exports
@@ -21,7 +22,7 @@ context-free syntax
   "tce"(EXP, TYPE, TENV)        -> {Error ","}*  
 
 context-free start-symbols
-  Summary PROGRAM
+  Summary PROGRAM {Error ","}*
 
 variables
   "Message"          -> StrCon            

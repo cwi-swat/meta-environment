@@ -33,7 +33,12 @@ equations
 
 equations
 
-[Tc6a] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) 
+[Tc6a]
+    not-in-table == lookup(Tenv, Id)
+    ===>
+    tcst(Id := Exp, Tenv) = error("Variable not declared", [localized("Id", get-location(Id))])
+
+[default] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) 
 
 [Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =
         tce(Exp, natural, Tenv), tcs(Series1, Tenv), tcs(Series2, Tenv)
