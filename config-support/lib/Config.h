@@ -25,244 +25,907 @@ typedef struct _CFG_TextAttributeMap *CFG_TextAttributeMap;
 typedef struct _CFG_KeyModifierList *CFG_KeyModifierList;
 typedef struct _CFG_ItemLabels *CFG_ItemLabels;
 
-void CFG_initConfigApi (void);
+#ifdef FAST_API
+#define CFG_initConfigApi() (init_Config_dict())
+#else
+void _CFG_initConfigApi (void);
+#define CFG_initConfigApi() (_CFG_initConfigApi())
+#endif
 
-void CFG_protectVirtualButton (CFG_VirtualButton * arg);
-void CFG_unprotectVirtualButton (CFG_VirtualButton * arg);
-void CFG_protectKeyModifier (CFG_KeyModifier * arg);
-void CFG_unprotectKeyModifier (CFG_KeyModifier * arg);
-void CFG_protectVirtualKey (CFG_VirtualKey * arg);
-void CFG_unprotectVirtualKey (CFG_VirtualKey * arg);
-void CFG_protectColor (CFG_Color * arg);
-void CFG_unprotectColor (CFG_Color * arg);
-void CFG_protectConfiguration (CFG_Configuration * arg);
-void CFG_unprotectConfiguration (CFG_Configuration * arg);
-void CFG_protectProperty (CFG_Property * arg);
-void CFG_unprotectProperty (CFG_Property * arg);
-void CFG_protectActionDescription (CFG_ActionDescription * arg);
-void CFG_unprotectActionDescription (CFG_ActionDescription * arg);
-void CFG_protectEvent (CFG_Event * arg);
-void CFG_unprotectEvent (CFG_Event * arg);
-void CFG_protectItem (CFG_Item * arg);
-void CFG_unprotectItem (CFG_Item * arg);
-void CFG_protectTextCategoryName (CFG_TextCategoryName * arg);
-void CFG_unprotectTextCategoryName (CFG_TextCategoryName * arg);
-void CFG_protectTextAttribute (CFG_TextAttribute * arg);
-void CFG_unprotectTextAttribute (CFG_TextAttribute * arg);
-void CFG_protectShortCut (CFG_ShortCut * arg);
-void CFG_unprotectShortCut (CFG_ShortCut * arg);
-void CFG_protectTextStyle (CFG_TextStyle * arg);
-void CFG_unprotectTextStyle (CFG_TextStyle * arg);
-void CFG_protectPropertyList (CFG_PropertyList * arg);
-void CFG_unprotectPropertyList (CFG_PropertyList * arg);
-void CFG_protectActionDescriptionList (CFG_ActionDescriptionList * arg);
-void CFG_unprotectActionDescriptionList (CFG_ActionDescriptionList * arg);
-void CFG_protectTextAttributeMap (CFG_TextAttributeMap * arg);
-void CFG_unprotectTextAttributeMap (CFG_TextAttributeMap * arg);
-void CFG_protectKeyModifierList (CFG_KeyModifierList * arg);
-void CFG_unprotectKeyModifierList (CFG_KeyModifierList * arg);
-void CFG_protectItemLabels (CFG_ItemLabels * arg);
-void CFG_unprotectItemLabels (CFG_ItemLabels * arg);
-CFG_VirtualButton CFG_VirtualButtonFromTerm (ATerm t);
-ATerm CFG_VirtualButtonToTerm (CFG_VirtualButton arg);
-CFG_KeyModifier CFG_KeyModifierFromTerm (ATerm t);
-ATerm CFG_KeyModifierToTerm (CFG_KeyModifier arg);
-CFG_VirtualKey CFG_VirtualKeyFromTerm (ATerm t);
-ATerm CFG_VirtualKeyToTerm (CFG_VirtualKey arg);
-CFG_Color CFG_ColorFromTerm (ATerm t);
-ATerm CFG_ColorToTerm (CFG_Color arg);
-CFG_Configuration CFG_ConfigurationFromTerm (ATerm t);
-ATerm CFG_ConfigurationToTerm (CFG_Configuration arg);
-CFG_Property CFG_PropertyFromTerm (ATerm t);
-ATerm CFG_PropertyToTerm (CFG_Property arg);
-CFG_ActionDescription CFG_ActionDescriptionFromTerm (ATerm t);
-ATerm CFG_ActionDescriptionToTerm (CFG_ActionDescription arg);
-CFG_Event CFG_EventFromTerm (ATerm t);
-ATerm CFG_EventToTerm (CFG_Event arg);
-CFG_Item CFG_ItemFromTerm (ATerm t);
-ATerm CFG_ItemToTerm (CFG_Item arg);
-CFG_TextCategoryName CFG_TextCategoryNameFromTerm (ATerm t);
-ATerm CFG_TextCategoryNameToTerm (CFG_TextCategoryName arg);
-CFG_TextAttribute CFG_TextAttributeFromTerm (ATerm t);
-ATerm CFG_TextAttributeToTerm (CFG_TextAttribute arg);
-CFG_ShortCut CFG_ShortCutFromTerm (ATerm t);
-ATerm CFG_ShortCutToTerm (CFG_ShortCut arg);
-CFG_TextStyle CFG_TextStyleFromTerm (ATerm t);
-ATerm CFG_TextStyleToTerm (CFG_TextStyle arg);
-CFG_PropertyList CFG_PropertyListFromTerm (ATerm t);
-ATerm CFG_PropertyListToTerm (CFG_PropertyList arg);
-CFG_ActionDescriptionList CFG_ActionDescriptionListFromTerm (ATerm t);
-ATerm CFG_ActionDescriptionListToTerm (CFG_ActionDescriptionList arg);
-CFG_TextAttributeMap CFG_TextAttributeMapFromTerm (ATerm t);
-ATerm CFG_TextAttributeMapToTerm (CFG_TextAttributeMap arg);
-CFG_KeyModifierList CFG_KeyModifierListFromTerm (ATerm t);
-ATerm CFG_KeyModifierListToTerm (CFG_KeyModifierList arg);
-CFG_ItemLabels CFG_ItemLabelsFromTerm (ATerm t);
-ATerm CFG_ItemLabelsToTerm (CFG_ItemLabels arg);
-int CFG_getPropertyListLength (CFG_PropertyList arg);
-CFG_PropertyList CFG_reversePropertyList (CFG_PropertyList arg);
-CFG_PropertyList CFG_appendPropertyList (CFG_PropertyList arg,
-					 CFG_Property elem);
-CFG_PropertyList CFG_concatPropertyList (CFG_PropertyList arg0,
-					 CFG_PropertyList arg1);
-CFG_PropertyList CFG_slicePropertyList (CFG_PropertyList arg, int start,
-					int end);
-CFG_Property CFG_getPropertyListPropertyAt (CFG_PropertyList arg, int index);
-CFG_PropertyList CFG_replacePropertyListPropertyAt (CFG_PropertyList arg,
-						    CFG_Property elem,
-						    int index);
-CFG_PropertyList CFG_makePropertyList2 (CFG_Property elem1,
-					CFG_Property elem2);
-CFG_PropertyList CFG_makePropertyList3 (CFG_Property elem1,
-					CFG_Property elem2,
-					CFG_Property elem3);
-CFG_PropertyList CFG_makePropertyList4 (CFG_Property elem1,
-					CFG_Property elem2,
-					CFG_Property elem3,
-					CFG_Property elem4);
-CFG_PropertyList CFG_makePropertyList5 (CFG_Property elem1,
-					CFG_Property elem2,
-					CFG_Property elem3,
-					CFG_Property elem4,
-					CFG_Property elem5);
-CFG_PropertyList CFG_makePropertyList6 (CFG_Property elem1,
-					CFG_Property elem2,
-					CFG_Property elem3,
-					CFG_Property elem4,
-					CFG_Property elem5,
-					CFG_Property elem6);
-int CFG_getActionDescriptionListLength (CFG_ActionDescriptionList arg);
-CFG_ActionDescriptionList
-CFG_reverseActionDescriptionList (CFG_ActionDescriptionList arg);
-CFG_ActionDescriptionList
-CFG_appendActionDescriptionList (CFG_ActionDescriptionList arg,
-				 CFG_ActionDescription elem);
-CFG_ActionDescriptionList
-CFG_concatActionDescriptionList (CFG_ActionDescriptionList arg0,
-				 CFG_ActionDescriptionList arg1);
-CFG_ActionDescriptionList
-CFG_sliceActionDescriptionList (CFG_ActionDescriptionList arg, int start,
-				int end);
-CFG_ActionDescription
-CFG_getActionDescriptionListActionDescriptionAt (CFG_ActionDescriptionList
-						 arg, int index);
-CFG_ActionDescriptionList
-CFG_replaceActionDescriptionListActionDescriptionAt (CFG_ActionDescriptionList
-						     arg,
-						     CFG_ActionDescription
-						     elem, int index);
-CFG_ActionDescriptionList
-CFG_makeActionDescriptionList2 (CFG_ActionDescription elem1,
-				CFG_ActionDescription elem2);
-CFG_ActionDescriptionList
-CFG_makeActionDescriptionList3 (CFG_ActionDescription elem1,
-				CFG_ActionDescription elem2,
-				CFG_ActionDescription elem3);
-CFG_ActionDescriptionList
-CFG_makeActionDescriptionList4 (CFG_ActionDescription elem1,
-				CFG_ActionDescription elem2,
-				CFG_ActionDescription elem3,
-				CFG_ActionDescription elem4);
-CFG_ActionDescriptionList
-CFG_makeActionDescriptionList5 (CFG_ActionDescription elem1,
-				CFG_ActionDescription elem2,
-				CFG_ActionDescription elem3,
-				CFG_ActionDescription elem4,
-				CFG_ActionDescription elem5);
-CFG_ActionDescriptionList
-CFG_makeActionDescriptionList6 (CFG_ActionDescription elem1,
-				CFG_ActionDescription elem2,
-				CFG_ActionDescription elem3,
-				CFG_ActionDescription elem4,
-				CFG_ActionDescription elem5,
-				CFG_ActionDescription elem6);
-int CFG_getTextAttributeMapLength (CFG_TextAttributeMap arg);
-CFG_TextAttributeMap CFG_reverseTextAttributeMap (CFG_TextAttributeMap arg);
-CFG_TextAttributeMap CFG_appendTextAttributeMap (CFG_TextAttributeMap arg,
-						 CFG_TextAttribute elem);
-CFG_TextAttributeMap CFG_concatTextAttributeMap (CFG_TextAttributeMap arg0,
-						 CFG_TextAttributeMap arg1);
-CFG_TextAttributeMap CFG_sliceTextAttributeMap (CFG_TextAttributeMap arg,
-						int start, int end);
-CFG_TextAttribute CFG_getTextAttributeMapTextAttributeAt (CFG_TextAttributeMap
-							  arg, int index);
-CFG_TextAttributeMap
-CFG_replaceTextAttributeMapTextAttributeAt (CFG_TextAttributeMap arg,
-					    CFG_TextAttribute elem,
-					    int index);
-CFG_TextAttributeMap CFG_makeTextAttributeMap2 (CFG_TextAttribute elem1,
-						CFG_TextAttribute elem2);
-CFG_TextAttributeMap CFG_makeTextAttributeMap3 (CFG_TextAttribute elem1,
-						CFG_TextAttribute elem2,
-						CFG_TextAttribute elem3);
-CFG_TextAttributeMap CFG_makeTextAttributeMap4 (CFG_TextAttribute elem1,
-						CFG_TextAttribute elem2,
-						CFG_TextAttribute elem3,
-						CFG_TextAttribute elem4);
-CFG_TextAttributeMap CFG_makeTextAttributeMap5 (CFG_TextAttribute elem1,
-						CFG_TextAttribute elem2,
-						CFG_TextAttribute elem3,
-						CFG_TextAttribute elem4,
-						CFG_TextAttribute elem5);
-CFG_TextAttributeMap CFG_makeTextAttributeMap6 (CFG_TextAttribute elem1,
-						CFG_TextAttribute elem2,
-						CFG_TextAttribute elem3,
-						CFG_TextAttribute elem4,
-						CFG_TextAttribute elem5,
-						CFG_TextAttribute elem6);
-int CFG_getKeyModifierListLength (CFG_KeyModifierList arg);
-CFG_KeyModifierList CFG_reverseKeyModifierList (CFG_KeyModifierList arg);
-CFG_KeyModifierList CFG_appendKeyModifierList (CFG_KeyModifierList arg,
-					       CFG_KeyModifier elem);
-CFG_KeyModifierList CFG_concatKeyModifierList (CFG_KeyModifierList arg0,
-					       CFG_KeyModifierList arg1);
-CFG_KeyModifierList CFG_sliceKeyModifierList (CFG_KeyModifierList arg,
-					      int start, int end);
-CFG_KeyModifier CFG_getKeyModifierListKeyModifierAt (CFG_KeyModifierList arg,
+#ifdef FAST_API
+#define CFG_protectVirtualButton(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectVirtualButton (CFG_VirtualButton * arg);
+#define CFG_protectVirtualButton(arg) (_CFG_protectVirtualButton(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectVirtualButton(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectVirtualButton (CFG_VirtualButton * arg);
+#define CFG_unprotectVirtualButton(arg) (_CFG_unprotectVirtualButton(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectKeyModifier(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectKeyModifier (CFG_KeyModifier * arg);
+#define CFG_protectKeyModifier(arg) (_CFG_protectKeyModifier(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectKeyModifier(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectKeyModifier (CFG_KeyModifier * arg);
+#define CFG_unprotectKeyModifier(arg) (_CFG_unprotectKeyModifier(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectVirtualKey(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectVirtualKey (CFG_VirtualKey * arg);
+#define CFG_protectVirtualKey(arg) (_CFG_protectVirtualKey(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectVirtualKey(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectVirtualKey (CFG_VirtualKey * arg);
+#define CFG_unprotectVirtualKey(arg) (_CFG_unprotectVirtualKey(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectColor(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectColor (CFG_Color * arg);
+#define CFG_protectColor(arg) (_CFG_protectColor(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectColor(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectColor (CFG_Color * arg);
+#define CFG_unprotectColor(arg) (_CFG_unprotectColor(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectConfiguration(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectConfiguration (CFG_Configuration * arg);
+#define CFG_protectConfiguration(arg) (_CFG_protectConfiguration(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectConfiguration(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectConfiguration (CFG_Configuration * arg);
+#define CFG_unprotectConfiguration(arg) (_CFG_unprotectConfiguration(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectProperty(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectProperty (CFG_Property * arg);
+#define CFG_protectProperty(arg) (_CFG_protectProperty(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectProperty(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectProperty (CFG_Property * arg);
+#define CFG_unprotectProperty(arg) (_CFG_unprotectProperty(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectActionDescription(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectActionDescription (CFG_ActionDescription * arg);
+#define CFG_protectActionDescription(arg) (_CFG_protectActionDescription(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectActionDescription(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectActionDescription (CFG_ActionDescription * arg);
+#define CFG_unprotectActionDescription(arg) (_CFG_unprotectActionDescription(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectEvent(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectEvent (CFG_Event * arg);
+#define CFG_protectEvent(arg) (_CFG_protectEvent(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectEvent(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectEvent (CFG_Event * arg);
+#define CFG_unprotectEvent(arg) (_CFG_unprotectEvent(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectItem(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectItem (CFG_Item * arg);
+#define CFG_protectItem(arg) (_CFG_protectItem(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectItem(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectItem (CFG_Item * arg);
+#define CFG_unprotectItem(arg) (_CFG_unprotectItem(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectTextCategoryName(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectTextCategoryName (CFG_TextCategoryName * arg);
+#define CFG_protectTextCategoryName(arg) (_CFG_protectTextCategoryName(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectTextCategoryName(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectTextCategoryName (CFG_TextCategoryName * arg);
+#define CFG_unprotectTextCategoryName(arg) (_CFG_unprotectTextCategoryName(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectTextAttribute(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectTextAttribute (CFG_TextAttribute * arg);
+#define CFG_protectTextAttribute(arg) (_CFG_protectTextAttribute(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectTextAttribute(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectTextAttribute (CFG_TextAttribute * arg);
+#define CFG_unprotectTextAttribute(arg) (_CFG_unprotectTextAttribute(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectShortCut(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectShortCut (CFG_ShortCut * arg);
+#define CFG_protectShortCut(arg) (_CFG_protectShortCut(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectShortCut(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectShortCut (CFG_ShortCut * arg);
+#define CFG_unprotectShortCut(arg) (_CFG_unprotectShortCut(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectTextStyle(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectTextStyle (CFG_TextStyle * arg);
+#define CFG_protectTextStyle(arg) (_CFG_protectTextStyle(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectTextStyle(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectTextStyle (CFG_TextStyle * arg);
+#define CFG_unprotectTextStyle(arg) (_CFG_unprotectTextStyle(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectPropertyList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectPropertyList (CFG_PropertyList * arg);
+#define CFG_protectPropertyList(arg) (_CFG_protectPropertyList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectPropertyList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectPropertyList (CFG_PropertyList * arg);
+#define CFG_unprotectPropertyList(arg) (_CFG_unprotectPropertyList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectActionDescriptionList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectActionDescriptionList (CFG_ActionDescriptionList * arg);
+#define CFG_protectActionDescriptionList(arg) (_CFG_protectActionDescriptionList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectActionDescriptionList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectActionDescriptionList (CFG_ActionDescriptionList * arg);
+#define CFG_unprotectActionDescriptionList(arg) (_CFG_unprotectActionDescriptionList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectTextAttributeMap(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectTextAttributeMap (CFG_TextAttributeMap * arg);
+#define CFG_protectTextAttributeMap(arg) (_CFG_protectTextAttributeMap(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectTextAttributeMap(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectTextAttributeMap (CFG_TextAttributeMap * arg);
+#define CFG_unprotectTextAttributeMap(arg) (_CFG_unprotectTextAttributeMap(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectKeyModifierList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectKeyModifierList (CFG_KeyModifierList * arg);
+#define CFG_protectKeyModifierList(arg) (_CFG_protectKeyModifierList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectKeyModifierList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectKeyModifierList (CFG_KeyModifierList * arg);
+#define CFG_unprotectKeyModifierList(arg) (_CFG_unprotectKeyModifierList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_protectItemLabels(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_protectItemLabels (CFG_ItemLabels * arg);
+#define CFG_protectItemLabels(arg) (_CFG_protectItemLabels(arg))
+#endif
+#ifdef FAST_API
+#define CFG_unprotectItemLabels(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _CFG_unprotectItemLabels (CFG_ItemLabels * arg);
+#define CFG_unprotectItemLabels(arg) (_CFG_unprotectItemLabels(arg))
+#endif
+#ifdef FAST_API
+#define CFG_VirtualButtonFromTerm(t) ((CFG_VirtualButton)(t))
+#else
+CFG_VirtualButton _CFG_VirtualButtonFromTerm (ATerm t);
+#define CFG_VirtualButtonFromTerm(t) (_CFG_VirtualButtonFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_VirtualButtonToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_VirtualButtonToTerm (CFG_VirtualButton arg);
+#define CFG_VirtualButtonToTerm(arg) (_CFG_VirtualButtonToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_KeyModifierFromTerm(t) ((CFG_KeyModifier)(t))
+#else
+CFG_KeyModifier _CFG_KeyModifierFromTerm (ATerm t);
+#define CFG_KeyModifierFromTerm(t) (_CFG_KeyModifierFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_KeyModifierToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_KeyModifierToTerm (CFG_KeyModifier arg);
+#define CFG_KeyModifierToTerm(arg) (_CFG_KeyModifierToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_VirtualKeyFromTerm(t) ((CFG_VirtualKey)(t))
+#else
+CFG_VirtualKey _CFG_VirtualKeyFromTerm (ATerm t);
+#define CFG_VirtualKeyFromTerm(t) (_CFG_VirtualKeyFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_VirtualKeyToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_VirtualKeyToTerm (CFG_VirtualKey arg);
+#define CFG_VirtualKeyToTerm(arg) (_CFG_VirtualKeyToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ColorFromTerm(t) ((CFG_Color)(t))
+#else
+CFG_Color _CFG_ColorFromTerm (ATerm t);
+#define CFG_ColorFromTerm(t) (_CFG_ColorFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ColorToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ColorToTerm (CFG_Color arg);
+#define CFG_ColorToTerm(arg) (_CFG_ColorToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ConfigurationFromTerm(t) ((CFG_Configuration)(t))
+#else
+CFG_Configuration _CFG_ConfigurationFromTerm (ATerm t);
+#define CFG_ConfigurationFromTerm(t) (_CFG_ConfigurationFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ConfigurationToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ConfigurationToTerm (CFG_Configuration arg);
+#define CFG_ConfigurationToTerm(arg) (_CFG_ConfigurationToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_PropertyFromTerm(t) ((CFG_Property)(t))
+#else
+CFG_Property _CFG_PropertyFromTerm (ATerm t);
+#define CFG_PropertyFromTerm(t) (_CFG_PropertyFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_PropertyToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_PropertyToTerm (CFG_Property arg);
+#define CFG_PropertyToTerm(arg) (_CFG_PropertyToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ActionDescriptionFromTerm(t) ((CFG_ActionDescription)(t))
+#else
+CFG_ActionDescription _CFG_ActionDescriptionFromTerm (ATerm t);
+#define CFG_ActionDescriptionFromTerm(t) (_CFG_ActionDescriptionFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ActionDescriptionToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ActionDescriptionToTerm (CFG_ActionDescription arg);
+#define CFG_ActionDescriptionToTerm(arg) (_CFG_ActionDescriptionToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_EventFromTerm(t) ((CFG_Event)(t))
+#else
+CFG_Event _CFG_EventFromTerm (ATerm t);
+#define CFG_EventFromTerm(t) (_CFG_EventFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_EventToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_EventToTerm (CFG_Event arg);
+#define CFG_EventToTerm(arg) (_CFG_EventToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ItemFromTerm(t) ((CFG_Item)(t))
+#else
+CFG_Item _CFG_ItemFromTerm (ATerm t);
+#define CFG_ItemFromTerm(t) (_CFG_ItemFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ItemToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ItemToTerm (CFG_Item arg);
+#define CFG_ItemToTerm(arg) (_CFG_ItemToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_TextCategoryNameFromTerm(t) ((CFG_TextCategoryName)(t))
+#else
+CFG_TextCategoryName _CFG_TextCategoryNameFromTerm (ATerm t);
+#define CFG_TextCategoryNameFromTerm(t) (_CFG_TextCategoryNameFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_TextCategoryNameToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_TextCategoryNameToTerm (CFG_TextCategoryName arg);
+#define CFG_TextCategoryNameToTerm(arg) (_CFG_TextCategoryNameToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_TextAttributeFromTerm(t) ((CFG_TextAttribute)(t))
+#else
+CFG_TextAttribute _CFG_TextAttributeFromTerm (ATerm t);
+#define CFG_TextAttributeFromTerm(t) (_CFG_TextAttributeFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_TextAttributeToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_TextAttributeToTerm (CFG_TextAttribute arg);
+#define CFG_TextAttributeToTerm(arg) (_CFG_TextAttributeToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ShortCutFromTerm(t) ((CFG_ShortCut)(t))
+#else
+CFG_ShortCut _CFG_ShortCutFromTerm (ATerm t);
+#define CFG_ShortCutFromTerm(t) (_CFG_ShortCutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ShortCutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ShortCutToTerm (CFG_ShortCut arg);
+#define CFG_ShortCutToTerm(arg) (_CFG_ShortCutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_TextStyleFromTerm(t) ((CFG_TextStyle)(t))
+#else
+CFG_TextStyle _CFG_TextStyleFromTerm (ATerm t);
+#define CFG_TextStyleFromTerm(t) (_CFG_TextStyleFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_TextStyleToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_TextStyleToTerm (CFG_TextStyle arg);
+#define CFG_TextStyleToTerm(arg) (_CFG_TextStyleToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_PropertyListFromTerm(t) ((CFG_PropertyList)(t))
+#else
+CFG_PropertyList _CFG_PropertyListFromTerm (ATerm t);
+#define CFG_PropertyListFromTerm(t) (_CFG_PropertyListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_PropertyListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_PropertyListToTerm (CFG_PropertyList arg);
+#define CFG_PropertyListToTerm(arg) (_CFG_PropertyListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ActionDescriptionListFromTerm(t) ((CFG_ActionDescriptionList)(t))
+#else
+CFG_ActionDescriptionList _CFG_ActionDescriptionListFromTerm (ATerm t);
+#define CFG_ActionDescriptionListFromTerm(t) (_CFG_ActionDescriptionListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ActionDescriptionListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ActionDescriptionListToTerm (CFG_ActionDescriptionList arg);
+#define CFG_ActionDescriptionListToTerm(arg) (_CFG_ActionDescriptionListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_TextAttributeMapFromTerm(t) ((CFG_TextAttributeMap)(t))
+#else
+CFG_TextAttributeMap _CFG_TextAttributeMapFromTerm (ATerm t);
+#define CFG_TextAttributeMapFromTerm(t) (_CFG_TextAttributeMapFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_TextAttributeMapToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_TextAttributeMapToTerm (CFG_TextAttributeMap arg);
+#define CFG_TextAttributeMapToTerm(arg) (_CFG_TextAttributeMapToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_KeyModifierListFromTerm(t) ((CFG_KeyModifierList)(t))
+#else
+CFG_KeyModifierList _CFG_KeyModifierListFromTerm (ATerm t);
+#define CFG_KeyModifierListFromTerm(t) (_CFG_KeyModifierListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_KeyModifierListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_KeyModifierListToTerm (CFG_KeyModifierList arg);
+#define CFG_KeyModifierListToTerm(arg) (_CFG_KeyModifierListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_ItemLabelsFromTerm(t) ((CFG_ItemLabels)(t))
+#else
+CFG_ItemLabels _CFG_ItemLabelsFromTerm (ATerm t);
+#define CFG_ItemLabelsFromTerm(t) (_CFG_ItemLabelsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define CFG_ItemLabelsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _CFG_ItemLabelsToTerm (CFG_ItemLabels arg);
+#define CFG_ItemLabelsToTerm(arg) (_CFG_ItemLabelsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define CFG_getPropertyListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CFG_getPropertyListLength (CFG_PropertyList arg);
+#define CFG_getPropertyListLength(arg) (_CFG_getPropertyListLength(arg))
+#endif
+#ifdef FAST_API
+#define CFG_reversePropertyList(arg) ((CFG_PropertyList) ATreverse((ATermList) (arg)))
+#else
+CFG_PropertyList _CFG_reversePropertyList (CFG_PropertyList arg);
+#define CFG_reversePropertyList(arg) (_CFG_reversePropertyList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_appendPropertyList(arg, elem) ((CFG_PropertyList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CFG_PropertyList _CFG_appendPropertyList (CFG_PropertyList arg,
+					  CFG_Property elem);
+#define CFG_appendPropertyList(arg, elem) (_CFG_appendPropertyList(arg, elem))
+#endif
+#ifdef FAST_API
+#define CFG_concatPropertyList(arg0, arg1) ((CFG_PropertyList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CFG_PropertyList _CFG_concatPropertyList (CFG_PropertyList arg0,
+					  CFG_PropertyList arg1);
+#define CFG_concatPropertyList(arg0, arg1) (_CFG_concatPropertyList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_slicePropertyList(arg, start, end) ((CFG_PropertyList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CFG_PropertyList _CFG_slicePropertyList (CFG_PropertyList arg, int start,
+					 int end);
+#define CFG_slicePropertyList(arg, start, end) (_CFG_slicePropertyList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CFG_getPropertyListPropertyAt(arg, index) ((CFG_Property) (ATelementAt((ATermList) arg,index)))
+#else
+CFG_Property _CFG_getPropertyListPropertyAt (CFG_PropertyList arg, int index);
+#define CFG_getPropertyListPropertyAt(arg, index) (_CFG_getPropertyListPropertyAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CFG_replacePropertyListPropertyAt(arg, elem, index) ((CFG_PropertyList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CFG_PropertyList _CFG_replacePropertyListPropertyAt (CFG_PropertyList arg,
+						     CFG_Property elem,
 						     int index);
+#define CFG_replacePropertyListPropertyAt(arg, elem, index) (_CFG_replacePropertyListPropertyAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CFG_makePropertyList2(elem1,  elem2) ((CFG_PropertyList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CFG_PropertyList _CFG_makePropertyList2 (CFG_Property elem1,
+					 CFG_Property elem2);
+#define CFG_makePropertyList2(elem1,  elem2) (_CFG_makePropertyList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CFG_makePropertyList3(elem1, elem2,  elem3) ((CFG_PropertyList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CFG_PropertyList _CFG_makePropertyList3 (CFG_Property elem1,
+					 CFG_Property elem2,
+					 CFG_Property elem3);
+#define CFG_makePropertyList3(elem1, elem2,  elem3) (_CFG_makePropertyList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CFG_makePropertyList4(elem1, elem2, elem3,  elem4) ((CFG_PropertyList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CFG_PropertyList _CFG_makePropertyList4 (CFG_Property elem1,
+					 CFG_Property elem2,
+					 CFG_Property elem3,
+					 CFG_Property elem4);
+#define CFG_makePropertyList4(elem1, elem2, elem3,  elem4) (_CFG_makePropertyList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CFG_makePropertyList5(elem1, elem2, elem3, elem4,  elem5) ((CFG_PropertyList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CFG_PropertyList _CFG_makePropertyList5 (CFG_Property elem1,
+					 CFG_Property elem2,
+					 CFG_Property elem3,
+					 CFG_Property elem4,
+					 CFG_Property elem5);
+#define CFG_makePropertyList5(elem1, elem2, elem3, elem4,  elem5) (_CFG_makePropertyList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CFG_makePropertyList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CFG_PropertyList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CFG_PropertyList _CFG_makePropertyList6 (CFG_Property elem1,
+					 CFG_Property elem2,
+					 CFG_Property elem3,
+					 CFG_Property elem4,
+					 CFG_Property elem5,
+					 CFG_Property elem6);
+#define CFG_makePropertyList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CFG_makePropertyList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CFG_getActionDescriptionListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CFG_getActionDescriptionListLength (CFG_ActionDescriptionList arg);
+#define CFG_getActionDescriptionListLength(arg) (_CFG_getActionDescriptionListLength(arg))
+#endif
+#ifdef FAST_API
+#define CFG_reverseActionDescriptionList(arg) ((CFG_ActionDescriptionList) ATreverse((ATermList) (arg)))
+#else
+CFG_ActionDescriptionList
+_CFG_reverseActionDescriptionList (CFG_ActionDescriptionList arg);
+#define CFG_reverseActionDescriptionList(arg) (_CFG_reverseActionDescriptionList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_appendActionDescriptionList(arg, elem) ((CFG_ActionDescriptionList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CFG_ActionDescriptionList
+_CFG_appendActionDescriptionList (CFG_ActionDescriptionList arg,
+				  CFG_ActionDescription elem);
+#define CFG_appendActionDescriptionList(arg, elem) (_CFG_appendActionDescriptionList(arg, elem))
+#endif
+#ifdef FAST_API
+#define CFG_concatActionDescriptionList(arg0, arg1) ((CFG_ActionDescriptionList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CFG_ActionDescriptionList
+_CFG_concatActionDescriptionList (CFG_ActionDescriptionList arg0,
+				  CFG_ActionDescriptionList arg1);
+#define CFG_concatActionDescriptionList(arg0, arg1) (_CFG_concatActionDescriptionList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_sliceActionDescriptionList(arg, start, end) ((CFG_ActionDescriptionList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CFG_ActionDescriptionList
+_CFG_sliceActionDescriptionList (CFG_ActionDescriptionList arg, int start,
+				 int end);
+#define CFG_sliceActionDescriptionList(arg, start, end) (_CFG_sliceActionDescriptionList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CFG_getActionDescriptionListActionDescriptionAt(arg, index) ((CFG_ActionDescription) (ATelementAt((ATermList) arg,index)))
+#else
+CFG_ActionDescription
+_CFG_getActionDescriptionListActionDescriptionAt (CFG_ActionDescriptionList
+						  arg, int index);
+#define CFG_getActionDescriptionListActionDescriptionAt(arg, index) (_CFG_getActionDescriptionListActionDescriptionAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CFG_replaceActionDescriptionListActionDescriptionAt(arg, elem, index) ((CFG_ActionDescriptionList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CFG_ActionDescriptionList
+_CFG_replaceActionDescriptionListActionDescriptionAt
+(CFG_ActionDescriptionList arg, CFG_ActionDescription elem, int index);
+#define CFG_replaceActionDescriptionListActionDescriptionAt(arg, elem, index) (_CFG_replaceActionDescriptionListActionDescriptionAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CFG_makeActionDescriptionList2(elem1,  elem2) ((CFG_ActionDescriptionList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CFG_ActionDescriptionList
+_CFG_makeActionDescriptionList2 (CFG_ActionDescription elem1,
+				 CFG_ActionDescription elem2);
+#define CFG_makeActionDescriptionList2(elem1,  elem2) (_CFG_makeActionDescriptionList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CFG_makeActionDescriptionList3(elem1, elem2,  elem3) ((CFG_ActionDescriptionList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CFG_ActionDescriptionList
+_CFG_makeActionDescriptionList3 (CFG_ActionDescription elem1,
+				 CFG_ActionDescription elem2,
+				 CFG_ActionDescription elem3);
+#define CFG_makeActionDescriptionList3(elem1, elem2,  elem3) (_CFG_makeActionDescriptionList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CFG_makeActionDescriptionList4(elem1, elem2, elem3,  elem4) ((CFG_ActionDescriptionList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CFG_ActionDescriptionList
+_CFG_makeActionDescriptionList4 (CFG_ActionDescription elem1,
+				 CFG_ActionDescription elem2,
+				 CFG_ActionDescription elem3,
+				 CFG_ActionDescription elem4);
+#define CFG_makeActionDescriptionList4(elem1, elem2, elem3,  elem4) (_CFG_makeActionDescriptionList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CFG_makeActionDescriptionList5(elem1, elem2, elem3, elem4,  elem5) ((CFG_ActionDescriptionList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CFG_ActionDescriptionList
+_CFG_makeActionDescriptionList5 (CFG_ActionDescription elem1,
+				 CFG_ActionDescription elem2,
+				 CFG_ActionDescription elem3,
+				 CFG_ActionDescription elem4,
+				 CFG_ActionDescription elem5);
+#define CFG_makeActionDescriptionList5(elem1, elem2, elem3, elem4,  elem5) (_CFG_makeActionDescriptionList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CFG_makeActionDescriptionList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CFG_ActionDescriptionList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CFG_ActionDescriptionList
+_CFG_makeActionDescriptionList6 (CFG_ActionDescription elem1,
+				 CFG_ActionDescription elem2,
+				 CFG_ActionDescription elem3,
+				 CFG_ActionDescription elem4,
+				 CFG_ActionDescription elem5,
+				 CFG_ActionDescription elem6);
+#define CFG_makeActionDescriptionList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CFG_makeActionDescriptionList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CFG_getTextAttributeMapLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CFG_getTextAttributeMapLength (CFG_TextAttributeMap arg);
+#define CFG_getTextAttributeMapLength(arg) (_CFG_getTextAttributeMapLength(arg))
+#endif
+#ifdef FAST_API
+#define CFG_reverseTextAttributeMap(arg) ((CFG_TextAttributeMap) ATreverse((ATermList) (arg)))
+#else
+CFG_TextAttributeMap _CFG_reverseTextAttributeMap (CFG_TextAttributeMap arg);
+#define CFG_reverseTextAttributeMap(arg) (_CFG_reverseTextAttributeMap(arg))
+#endif
+#ifdef FAST_API
+#define CFG_appendTextAttributeMap(arg, elem) ((CFG_TextAttributeMap) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CFG_TextAttributeMap _CFG_appendTextAttributeMap (CFG_TextAttributeMap arg,
+						  CFG_TextAttribute elem);
+#define CFG_appendTextAttributeMap(arg, elem) (_CFG_appendTextAttributeMap(arg, elem))
+#endif
+#ifdef FAST_API
+#define CFG_concatTextAttributeMap(arg0, arg1) ((CFG_TextAttributeMap) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CFG_TextAttributeMap _CFG_concatTextAttributeMap (CFG_TextAttributeMap arg0,
+						  CFG_TextAttributeMap arg1);
+#define CFG_concatTextAttributeMap(arg0, arg1) (_CFG_concatTextAttributeMap(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_sliceTextAttributeMap(arg, start, end) ((CFG_TextAttributeMap) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CFG_TextAttributeMap _CFG_sliceTextAttributeMap (CFG_TextAttributeMap arg,
+						 int start, int end);
+#define CFG_sliceTextAttributeMap(arg, start, end) (_CFG_sliceTextAttributeMap(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CFG_getTextAttributeMapTextAttributeAt(arg, index) ((CFG_TextAttribute) (ATelementAt((ATermList) arg,index)))
+#else
+CFG_TextAttribute
+_CFG_getTextAttributeMapTextAttributeAt (CFG_TextAttributeMap arg, int index);
+#define CFG_getTextAttributeMapTextAttributeAt(arg, index) (_CFG_getTextAttributeMapTextAttributeAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CFG_replaceTextAttributeMapTextAttributeAt(arg, elem, index) ((CFG_TextAttributeMap) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CFG_TextAttributeMap
+_CFG_replaceTextAttributeMapTextAttributeAt (CFG_TextAttributeMap arg,
+					     CFG_TextAttribute elem,
+					     int index);
+#define CFG_replaceTextAttributeMapTextAttributeAt(arg, elem, index) (_CFG_replaceTextAttributeMapTextAttributeAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CFG_makeTextAttributeMap2(elem1,  elem2) ((CFG_TextAttributeMap) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CFG_TextAttributeMap _CFG_makeTextAttributeMap2 (CFG_TextAttribute elem1,
+						 CFG_TextAttribute elem2);
+#define CFG_makeTextAttributeMap2(elem1,  elem2) (_CFG_makeTextAttributeMap2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CFG_makeTextAttributeMap3(elem1, elem2,  elem3) ((CFG_TextAttributeMap) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CFG_TextAttributeMap _CFG_makeTextAttributeMap3 (CFG_TextAttribute elem1,
+						 CFG_TextAttribute elem2,
+						 CFG_TextAttribute elem3);
+#define CFG_makeTextAttributeMap3(elem1, elem2,  elem3) (_CFG_makeTextAttributeMap3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CFG_makeTextAttributeMap4(elem1, elem2, elem3,  elem4) ((CFG_TextAttributeMap) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CFG_TextAttributeMap _CFG_makeTextAttributeMap4 (CFG_TextAttribute elem1,
+						 CFG_TextAttribute elem2,
+						 CFG_TextAttribute elem3,
+						 CFG_TextAttribute elem4);
+#define CFG_makeTextAttributeMap4(elem1, elem2, elem3,  elem4) (_CFG_makeTextAttributeMap4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CFG_makeTextAttributeMap5(elem1, elem2, elem3, elem4,  elem5) ((CFG_TextAttributeMap) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CFG_TextAttributeMap _CFG_makeTextAttributeMap5 (CFG_TextAttribute elem1,
+						 CFG_TextAttribute elem2,
+						 CFG_TextAttribute elem3,
+						 CFG_TextAttribute elem4,
+						 CFG_TextAttribute elem5);
+#define CFG_makeTextAttributeMap5(elem1, elem2, elem3, elem4,  elem5) (_CFG_makeTextAttributeMap5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CFG_makeTextAttributeMap6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CFG_TextAttributeMap) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CFG_TextAttributeMap _CFG_makeTextAttributeMap6 (CFG_TextAttribute elem1,
+						 CFG_TextAttribute elem2,
+						 CFG_TextAttribute elem3,
+						 CFG_TextAttribute elem4,
+						 CFG_TextAttribute elem5,
+						 CFG_TextAttribute elem6);
+#define CFG_makeTextAttributeMap6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CFG_makeTextAttributeMap6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CFG_getKeyModifierListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CFG_getKeyModifierListLength (CFG_KeyModifierList arg);
+#define CFG_getKeyModifierListLength(arg) (_CFG_getKeyModifierListLength(arg))
+#endif
+#ifdef FAST_API
+#define CFG_reverseKeyModifierList(arg) ((CFG_KeyModifierList) ATreverse((ATermList) (arg)))
+#else
+CFG_KeyModifierList _CFG_reverseKeyModifierList (CFG_KeyModifierList arg);
+#define CFG_reverseKeyModifierList(arg) (_CFG_reverseKeyModifierList(arg))
+#endif
+#ifdef FAST_API
+#define CFG_appendKeyModifierList(arg, elem) ((CFG_KeyModifierList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CFG_KeyModifierList _CFG_appendKeyModifierList (CFG_KeyModifierList arg,
+						CFG_KeyModifier elem);
+#define CFG_appendKeyModifierList(arg, elem) (_CFG_appendKeyModifierList(arg, elem))
+#endif
+#ifdef FAST_API
+#define CFG_concatKeyModifierList(arg0, arg1) ((CFG_KeyModifierList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CFG_KeyModifierList _CFG_concatKeyModifierList (CFG_KeyModifierList arg0,
+						CFG_KeyModifierList arg1);
+#define CFG_concatKeyModifierList(arg0, arg1) (_CFG_concatKeyModifierList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_sliceKeyModifierList(arg, start, end) ((CFG_KeyModifierList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CFG_KeyModifierList _CFG_sliceKeyModifierList (CFG_KeyModifierList arg,
+					       int start, int end);
+#define CFG_sliceKeyModifierList(arg, start, end) (_CFG_sliceKeyModifierList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CFG_getKeyModifierListKeyModifierAt(arg, index) ((CFG_KeyModifier) (ATelementAt((ATermList) arg,index)))
+#else
+CFG_KeyModifier _CFG_getKeyModifierListKeyModifierAt (CFG_KeyModifierList arg,
+						      int index);
+#define CFG_getKeyModifierListKeyModifierAt(arg, index) (_CFG_getKeyModifierListKeyModifierAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CFG_replaceKeyModifierListKeyModifierAt(arg, elem, index) ((CFG_KeyModifierList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
 CFG_KeyModifierList
-CFG_replaceKeyModifierListKeyModifierAt (CFG_KeyModifierList arg,
-					 CFG_KeyModifier elem, int index);
-CFG_KeyModifierList CFG_makeKeyModifierList2 (CFG_KeyModifier elem1,
-					      CFG_KeyModifier elem2);
-CFG_KeyModifierList CFG_makeKeyModifierList3 (CFG_KeyModifier elem1,
-					      CFG_KeyModifier elem2,
-					      CFG_KeyModifier elem3);
-CFG_KeyModifierList CFG_makeKeyModifierList4 (CFG_KeyModifier elem1,
-					      CFG_KeyModifier elem2,
-					      CFG_KeyModifier elem3,
-					      CFG_KeyModifier elem4);
-CFG_KeyModifierList CFG_makeKeyModifierList5 (CFG_KeyModifier elem1,
-					      CFG_KeyModifier elem2,
-					      CFG_KeyModifier elem3,
-					      CFG_KeyModifier elem4,
-					      CFG_KeyModifier elem5);
-CFG_KeyModifierList CFG_makeKeyModifierList6 (CFG_KeyModifier elem1,
-					      CFG_KeyModifier elem2,
-					      CFG_KeyModifier elem3,
-					      CFG_KeyModifier elem4,
-					      CFG_KeyModifier elem5,
-					      CFG_KeyModifier elem6);
-int CFG_getItemLabelsLength (CFG_ItemLabels arg);
-CFG_ItemLabels CFG_reverseItemLabels (CFG_ItemLabels arg);
-CFG_ItemLabels CFG_appendItemLabels (CFG_ItemLabels arg, CFG_Item elem);
-CFG_ItemLabels CFG_concatItemLabels (CFG_ItemLabels arg0,
-				     CFG_ItemLabels arg1);
-CFG_ItemLabels CFG_sliceItemLabels (CFG_ItemLabels arg, int start, int end);
-CFG_Item CFG_getItemLabelsItemAt (CFG_ItemLabels arg, int index);
-CFG_ItemLabels CFG_replaceItemLabelsItemAt (CFG_ItemLabels arg, CFG_Item elem,
-					    int index);
-CFG_ItemLabels CFG_makeItemLabels2 (CFG_Item elem1, CFG_Item elem2);
-CFG_ItemLabels CFG_makeItemLabels3 (CFG_Item elem1, CFG_Item elem2,
-				    CFG_Item elem3);
-CFG_ItemLabels CFG_makeItemLabels4 (CFG_Item elem1, CFG_Item elem2,
-				    CFG_Item elem3, CFG_Item elem4);
-CFG_ItemLabels CFG_makeItemLabels5 (CFG_Item elem1, CFG_Item elem2,
-				    CFG_Item elem3, CFG_Item elem4,
-				    CFG_Item elem5);
-CFG_ItemLabels CFG_makeItemLabels6 (CFG_Item elem1, CFG_Item elem2,
-				    CFG_Item elem3, CFG_Item elem4,
-				    CFG_Item elem5, CFG_Item elem6);
+_CFG_replaceKeyModifierListKeyModifierAt (CFG_KeyModifierList arg,
+					  CFG_KeyModifier elem, int index);
+#define CFG_replaceKeyModifierListKeyModifierAt(arg, elem, index) (_CFG_replaceKeyModifierListKeyModifierAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CFG_makeKeyModifierList2(elem1,  elem2) ((CFG_KeyModifierList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CFG_KeyModifierList _CFG_makeKeyModifierList2 (CFG_KeyModifier elem1,
+					       CFG_KeyModifier elem2);
+#define CFG_makeKeyModifierList2(elem1,  elem2) (_CFG_makeKeyModifierList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CFG_makeKeyModifierList3(elem1, elem2,  elem3) ((CFG_KeyModifierList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CFG_KeyModifierList _CFG_makeKeyModifierList3 (CFG_KeyModifier elem1,
+					       CFG_KeyModifier elem2,
+					       CFG_KeyModifier elem3);
+#define CFG_makeKeyModifierList3(elem1, elem2,  elem3) (_CFG_makeKeyModifierList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CFG_makeKeyModifierList4(elem1, elem2, elem3,  elem4) ((CFG_KeyModifierList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CFG_KeyModifierList _CFG_makeKeyModifierList4 (CFG_KeyModifier elem1,
+					       CFG_KeyModifier elem2,
+					       CFG_KeyModifier elem3,
+					       CFG_KeyModifier elem4);
+#define CFG_makeKeyModifierList4(elem1, elem2, elem3,  elem4) (_CFG_makeKeyModifierList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CFG_makeKeyModifierList5(elem1, elem2, elem3, elem4,  elem5) ((CFG_KeyModifierList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CFG_KeyModifierList _CFG_makeKeyModifierList5 (CFG_KeyModifier elem1,
+					       CFG_KeyModifier elem2,
+					       CFG_KeyModifier elem3,
+					       CFG_KeyModifier elem4,
+					       CFG_KeyModifier elem5);
+#define CFG_makeKeyModifierList5(elem1, elem2, elem3, elem4,  elem5) (_CFG_makeKeyModifierList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CFG_makeKeyModifierList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CFG_KeyModifierList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CFG_KeyModifierList _CFG_makeKeyModifierList6 (CFG_KeyModifier elem1,
+					       CFG_KeyModifier elem2,
+					       CFG_KeyModifier elem3,
+					       CFG_KeyModifier elem4,
+					       CFG_KeyModifier elem5,
+					       CFG_KeyModifier elem6);
+#define CFG_makeKeyModifierList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CFG_makeKeyModifierList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define CFG_getItemLabelsLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _CFG_getItemLabelsLength (CFG_ItemLabels arg);
+#define CFG_getItemLabelsLength(arg) (_CFG_getItemLabelsLength(arg))
+#endif
+#ifdef FAST_API
+#define CFG_reverseItemLabels(arg) ((CFG_ItemLabels) ATreverse((ATermList) (arg)))
+#else
+CFG_ItemLabels _CFG_reverseItemLabels (CFG_ItemLabels arg);
+#define CFG_reverseItemLabels(arg) (_CFG_reverseItemLabels(arg))
+#endif
+#ifdef FAST_API
+#define CFG_appendItemLabels(arg, elem) ((CFG_ItemLabels) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+CFG_ItemLabels _CFG_appendItemLabels (CFG_ItemLabels arg, CFG_Item elem);
+#define CFG_appendItemLabels(arg, elem) (_CFG_appendItemLabels(arg, elem))
+#endif
+#ifdef FAST_API
+#define CFG_concatItemLabels(arg0, arg1) ((CFG_ItemLabels) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+CFG_ItemLabels _CFG_concatItemLabels (CFG_ItemLabels arg0,
+				      CFG_ItemLabels arg1);
+#define CFG_concatItemLabels(arg0, arg1) (_CFG_concatItemLabels(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_sliceItemLabels(arg, start, end) ((CFG_ItemLabels) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+CFG_ItemLabels _CFG_sliceItemLabels (CFG_ItemLabels arg, int start, int end);
+#define CFG_sliceItemLabels(arg, start, end) (_CFG_sliceItemLabels(arg, start, end))
+#endif
+#ifdef FAST_API
+#define CFG_getItemLabelsItemAt(arg, index) ((CFG_Item) (ATelementAt((ATermList) arg,index)))
+#else
+CFG_Item _CFG_getItemLabelsItemAt (CFG_ItemLabels arg, int index);
+#define CFG_getItemLabelsItemAt(arg, index) (_CFG_getItemLabelsItemAt(arg, index))
+#endif
+#ifdef FAST_API
+#define CFG_replaceItemLabelsItemAt(arg, elem, index) ((CFG_ItemLabels) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+CFG_ItemLabels _CFG_replaceItemLabelsItemAt (CFG_ItemLabels arg,
+					     CFG_Item elem, int index);
+#define CFG_replaceItemLabelsItemAt(arg, elem, index) (_CFG_replaceItemLabelsItemAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define CFG_makeItemLabels2(elem1,  elem2) ((CFG_ItemLabels) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+CFG_ItemLabels _CFG_makeItemLabels2 (CFG_Item elem1, CFG_Item elem2);
+#define CFG_makeItemLabels2(elem1,  elem2) (_CFG_makeItemLabels2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define CFG_makeItemLabels3(elem1, elem2,  elem3) ((CFG_ItemLabels) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+CFG_ItemLabels _CFG_makeItemLabels3 (CFG_Item elem1, CFG_Item elem2,
+				     CFG_Item elem3);
+#define CFG_makeItemLabels3(elem1, elem2,  elem3) (_CFG_makeItemLabels3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define CFG_makeItemLabels4(elem1, elem2, elem3,  elem4) ((CFG_ItemLabels) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+CFG_ItemLabels _CFG_makeItemLabels4 (CFG_Item elem1, CFG_Item elem2,
+				     CFG_Item elem3, CFG_Item elem4);
+#define CFG_makeItemLabels4(elem1, elem2, elem3,  elem4) (_CFG_makeItemLabels4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define CFG_makeItemLabels5(elem1, elem2, elem3, elem4,  elem5) ((CFG_ItemLabels) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+CFG_ItemLabels _CFG_makeItemLabels5 (CFG_Item elem1, CFG_Item elem2,
+				     CFG_Item elem3, CFG_Item elem4,
+				     CFG_Item elem5);
+#define CFG_makeItemLabels5(elem1, elem2, elem3, elem4,  elem5) (_CFG_makeItemLabels5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define CFG_makeItemLabels6(elem1, elem2, elem3, elem4, elem5,  elem6) ((CFG_ItemLabels) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+CFG_ItemLabels _CFG_makeItemLabels6 (CFG_Item elem1, CFG_Item elem2,
+				     CFG_Item elem3, CFG_Item elem4,
+				     CFG_Item elem5, CFG_Item elem6);
+#define CFG_makeItemLabels6(elem1, elem2, elem3, elem4, elem5,  elem6) (_CFG_makeItemLabels6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
 CFG_VirtualButton CFG_makeVirtualButtonNOBUTTON (void);
 CFG_VirtualButton CFG_makeVirtualButtonBUTTON1 (void);
 CFG_VirtualButton CFG_makeVirtualButtonBUTTON2 (void);
@@ -428,32 +1091,123 @@ CFG_KeyModifierList CFG_makeKeyModifierListMany (CFG_KeyModifier head,
 CFG_ItemLabels CFG_makeItemLabelsEmpty (void);
 CFG_ItemLabels CFG_makeItemLabelsSingle (CFG_Item head);
 CFG_ItemLabels CFG_makeItemLabelsMany (CFG_Item head, CFG_ItemLabels tail);
-ATbool CFG_isEqualVirtualButton (CFG_VirtualButton arg0,
-				 CFG_VirtualButton arg1);
-ATbool CFG_isEqualKeyModifier (CFG_KeyModifier arg0, CFG_KeyModifier arg1);
-ATbool CFG_isEqualVirtualKey (CFG_VirtualKey arg0, CFG_VirtualKey arg1);
-ATbool CFG_isEqualColor (CFG_Color arg0, CFG_Color arg1);
-ATbool CFG_isEqualConfiguration (CFG_Configuration arg0,
-				 CFG_Configuration arg1);
-ATbool CFG_isEqualProperty (CFG_Property arg0, CFG_Property arg1);
-ATbool CFG_isEqualActionDescription (CFG_ActionDescription arg0,
-				     CFG_ActionDescription arg1);
-ATbool CFG_isEqualEvent (CFG_Event arg0, CFG_Event arg1);
-ATbool CFG_isEqualItem (CFG_Item arg0, CFG_Item arg1);
-ATbool CFG_isEqualTextCategoryName (CFG_TextCategoryName arg0,
-				    CFG_TextCategoryName arg1);
-ATbool CFG_isEqualTextAttribute (CFG_TextAttribute arg0,
-				 CFG_TextAttribute arg1);
-ATbool CFG_isEqualShortCut (CFG_ShortCut arg0, CFG_ShortCut arg1);
-ATbool CFG_isEqualTextStyle (CFG_TextStyle arg0, CFG_TextStyle arg1);
-ATbool CFG_isEqualPropertyList (CFG_PropertyList arg0, CFG_PropertyList arg1);
-ATbool CFG_isEqualActionDescriptionList (CFG_ActionDescriptionList arg0,
-					 CFG_ActionDescriptionList arg1);
-ATbool CFG_isEqualTextAttributeMap (CFG_TextAttributeMap arg0,
-				    CFG_TextAttributeMap arg1);
-ATbool CFG_isEqualKeyModifierList (CFG_KeyModifierList arg0,
-				   CFG_KeyModifierList arg1);
-ATbool CFG_isEqualItemLabels (CFG_ItemLabels arg0, CFG_ItemLabels arg1);
+#ifdef FAST_API
+#define CFG_isEqualVirtualButton(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualVirtualButton (CFG_VirtualButton arg0,
+				  CFG_VirtualButton arg1);
+#define CFG_isEqualVirtualButton(arg0, arg1) (_CFG_isEqualVirtualButton(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualKeyModifier(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualKeyModifier (CFG_KeyModifier arg0, CFG_KeyModifier arg1);
+#define CFG_isEqualKeyModifier(arg0, arg1) (_CFG_isEqualKeyModifier(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualVirtualKey(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualVirtualKey (CFG_VirtualKey arg0, CFG_VirtualKey arg1);
+#define CFG_isEqualVirtualKey(arg0, arg1) (_CFG_isEqualVirtualKey(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualColor(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualColor (CFG_Color arg0, CFG_Color arg1);
+#define CFG_isEqualColor(arg0, arg1) (_CFG_isEqualColor(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualConfiguration(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualConfiguration (CFG_Configuration arg0,
+				  CFG_Configuration arg1);
+#define CFG_isEqualConfiguration(arg0, arg1) (_CFG_isEqualConfiguration(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualProperty(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualProperty (CFG_Property arg0, CFG_Property arg1);
+#define CFG_isEqualProperty(arg0, arg1) (_CFG_isEqualProperty(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualActionDescription(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualActionDescription (CFG_ActionDescription arg0,
+				      CFG_ActionDescription arg1);
+#define CFG_isEqualActionDescription(arg0, arg1) (_CFG_isEqualActionDescription(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualEvent(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualEvent (CFG_Event arg0, CFG_Event arg1);
+#define CFG_isEqualEvent(arg0, arg1) (_CFG_isEqualEvent(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualItem(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualItem (CFG_Item arg0, CFG_Item arg1);
+#define CFG_isEqualItem(arg0, arg1) (_CFG_isEqualItem(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualTextCategoryName(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualTextCategoryName (CFG_TextCategoryName arg0,
+				     CFG_TextCategoryName arg1);
+#define CFG_isEqualTextCategoryName(arg0, arg1) (_CFG_isEqualTextCategoryName(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualTextAttribute(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualTextAttribute (CFG_TextAttribute arg0,
+				  CFG_TextAttribute arg1);
+#define CFG_isEqualTextAttribute(arg0, arg1) (_CFG_isEqualTextAttribute(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualShortCut(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualShortCut (CFG_ShortCut arg0, CFG_ShortCut arg1);
+#define CFG_isEqualShortCut(arg0, arg1) (_CFG_isEqualShortCut(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualTextStyle(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualTextStyle (CFG_TextStyle arg0, CFG_TextStyle arg1);
+#define CFG_isEqualTextStyle(arg0, arg1) (_CFG_isEqualTextStyle(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualPropertyList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualPropertyList (CFG_PropertyList arg0,
+				 CFG_PropertyList arg1);
+#define CFG_isEqualPropertyList(arg0, arg1) (_CFG_isEqualPropertyList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualActionDescriptionList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualActionDescriptionList (CFG_ActionDescriptionList arg0,
+					  CFG_ActionDescriptionList arg1);
+#define CFG_isEqualActionDescriptionList(arg0, arg1) (_CFG_isEqualActionDescriptionList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualTextAttributeMap(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualTextAttributeMap (CFG_TextAttributeMap arg0,
+				     CFG_TextAttributeMap arg1);
+#define CFG_isEqualTextAttributeMap(arg0, arg1) (_CFG_isEqualTextAttributeMap(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualKeyModifierList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualKeyModifierList (CFG_KeyModifierList arg0,
+				    CFG_KeyModifierList arg1);
+#define CFG_isEqualKeyModifierList(arg0, arg1) (_CFG_isEqualKeyModifierList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define CFG_isEqualItemLabels(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _CFG_isEqualItemLabels (CFG_ItemLabels arg0, CFG_ItemLabels arg1);
+#define CFG_isEqualItemLabels(arg0, arg1) (_CFG_isEqualItemLabels(arg0, arg1))
+#endif
 ATbool CFG_isValidVirtualButton (CFG_VirtualButton arg);
 inline ATbool CFG_isVirtualButtonNOBUTTON (CFG_VirtualButton arg);
 inline ATbool CFG_isVirtualButtonBUTTON1 (CFG_VirtualButton arg);

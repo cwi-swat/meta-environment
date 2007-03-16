@@ -78,18 +78,20 @@ typedef struct ATerm _CFG_TextAttributeMap;
 typedef struct ATerm _CFG_KeyModifierList;
 typedef struct ATerm _CFG_ItemLabels;
 
+
 /**
  * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
  */
-void CFG_initConfigApi(void) {
+void _CFG_initConfigApi(void) {
   init_Config_dict();
+
 }
 
 /**
  * Protect a CFG_VirtualButton from the ATerm garbage collector. Every CFG_VirtualButton that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_VirtualButton
  */
-void CFG_protectVirtualButton(CFG_VirtualButton *arg) {
+void _CFG_protectVirtualButton(CFG_VirtualButton *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -97,7 +99,7 @@ void CFG_protectVirtualButton(CFG_VirtualButton *arg) {
  * Unprotect a CFG_VirtualButton from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_VirtualButton
  */
-void CFG_unprotectVirtualButton(CFG_VirtualButton *arg) {
+void _CFG_unprotectVirtualButton(CFG_VirtualButton *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -105,7 +107,7 @@ void CFG_unprotectVirtualButton(CFG_VirtualButton *arg) {
  * Protect a CFG_KeyModifier from the ATerm garbage collector. Every CFG_KeyModifier that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_KeyModifier
  */
-void CFG_protectKeyModifier(CFG_KeyModifier *arg) {
+void _CFG_protectKeyModifier(CFG_KeyModifier *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -113,7 +115,7 @@ void CFG_protectKeyModifier(CFG_KeyModifier *arg) {
  * Unprotect a CFG_KeyModifier from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_KeyModifier
  */
-void CFG_unprotectKeyModifier(CFG_KeyModifier *arg) {
+void _CFG_unprotectKeyModifier(CFG_KeyModifier *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -121,7 +123,7 @@ void CFG_unprotectKeyModifier(CFG_KeyModifier *arg) {
  * Protect a CFG_VirtualKey from the ATerm garbage collector. Every CFG_VirtualKey that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_VirtualKey
  */
-void CFG_protectVirtualKey(CFG_VirtualKey *arg) {
+void _CFG_protectVirtualKey(CFG_VirtualKey *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -129,7 +131,7 @@ void CFG_protectVirtualKey(CFG_VirtualKey *arg) {
  * Unprotect a CFG_VirtualKey from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_VirtualKey
  */
-void CFG_unprotectVirtualKey(CFG_VirtualKey *arg) {
+void _CFG_unprotectVirtualKey(CFG_VirtualKey *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -137,7 +139,7 @@ void CFG_unprotectVirtualKey(CFG_VirtualKey *arg) {
  * Protect a CFG_Color from the ATerm garbage collector. Every CFG_Color that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_Color
  */
-void CFG_protectColor(CFG_Color *arg) {
+void _CFG_protectColor(CFG_Color *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -145,7 +147,7 @@ void CFG_protectColor(CFG_Color *arg) {
  * Unprotect a CFG_Color from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_Color
  */
-void CFG_unprotectColor(CFG_Color *arg) {
+void _CFG_unprotectColor(CFG_Color *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -153,7 +155,7 @@ void CFG_unprotectColor(CFG_Color *arg) {
  * Protect a CFG_Configuration from the ATerm garbage collector. Every CFG_Configuration that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_Configuration
  */
-void CFG_protectConfiguration(CFG_Configuration *arg) {
+void _CFG_protectConfiguration(CFG_Configuration *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -161,7 +163,7 @@ void CFG_protectConfiguration(CFG_Configuration *arg) {
  * Unprotect a CFG_Configuration from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_Configuration
  */
-void CFG_unprotectConfiguration(CFG_Configuration *arg) {
+void _CFG_unprotectConfiguration(CFG_Configuration *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -169,7 +171,7 @@ void CFG_unprotectConfiguration(CFG_Configuration *arg) {
  * Protect a CFG_Property from the ATerm garbage collector. Every CFG_Property that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_Property
  */
-void CFG_protectProperty(CFG_Property *arg) {
+void _CFG_protectProperty(CFG_Property *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -177,7 +179,7 @@ void CFG_protectProperty(CFG_Property *arg) {
  * Unprotect a CFG_Property from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_Property
  */
-void CFG_unprotectProperty(CFG_Property *arg) {
+void _CFG_unprotectProperty(CFG_Property *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -185,7 +187,7 @@ void CFG_unprotectProperty(CFG_Property *arg) {
  * Protect a CFG_ActionDescription from the ATerm garbage collector. Every CFG_ActionDescription that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_ActionDescription
  */
-void CFG_protectActionDescription(CFG_ActionDescription *arg) {
+void _CFG_protectActionDescription(CFG_ActionDescription *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -193,7 +195,7 @@ void CFG_protectActionDescription(CFG_ActionDescription *arg) {
  * Unprotect a CFG_ActionDescription from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_ActionDescription
  */
-void CFG_unprotectActionDescription(CFG_ActionDescription *arg) {
+void _CFG_unprotectActionDescription(CFG_ActionDescription *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -201,7 +203,7 @@ void CFG_unprotectActionDescription(CFG_ActionDescription *arg) {
  * Protect a CFG_Event from the ATerm garbage collector. Every CFG_Event that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_Event
  */
-void CFG_protectEvent(CFG_Event *arg) {
+void _CFG_protectEvent(CFG_Event *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -209,7 +211,7 @@ void CFG_protectEvent(CFG_Event *arg) {
  * Unprotect a CFG_Event from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_Event
  */
-void CFG_unprotectEvent(CFG_Event *arg) {
+void _CFG_unprotectEvent(CFG_Event *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -217,7 +219,7 @@ void CFG_unprotectEvent(CFG_Event *arg) {
  * Protect a CFG_Item from the ATerm garbage collector. Every CFG_Item that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_Item
  */
-void CFG_protectItem(CFG_Item *arg) {
+void _CFG_protectItem(CFG_Item *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -225,7 +227,7 @@ void CFG_protectItem(CFG_Item *arg) {
  * Unprotect a CFG_Item from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_Item
  */
-void CFG_unprotectItem(CFG_Item *arg) {
+void _CFG_unprotectItem(CFG_Item *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -233,7 +235,7 @@ void CFG_unprotectItem(CFG_Item *arg) {
  * Protect a CFG_TextCategoryName from the ATerm garbage collector. Every CFG_TextCategoryName that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_TextCategoryName
  */
-void CFG_protectTextCategoryName(CFG_TextCategoryName *arg) {
+void _CFG_protectTextCategoryName(CFG_TextCategoryName *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -241,7 +243,7 @@ void CFG_protectTextCategoryName(CFG_TextCategoryName *arg) {
  * Unprotect a CFG_TextCategoryName from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_TextCategoryName
  */
-void CFG_unprotectTextCategoryName(CFG_TextCategoryName *arg) {
+void _CFG_unprotectTextCategoryName(CFG_TextCategoryName *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -249,7 +251,7 @@ void CFG_unprotectTextCategoryName(CFG_TextCategoryName *arg) {
  * Protect a CFG_TextAttribute from the ATerm garbage collector. Every CFG_TextAttribute that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_TextAttribute
  */
-void CFG_protectTextAttribute(CFG_TextAttribute *arg) {
+void _CFG_protectTextAttribute(CFG_TextAttribute *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -257,7 +259,7 @@ void CFG_protectTextAttribute(CFG_TextAttribute *arg) {
  * Unprotect a CFG_TextAttribute from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_TextAttribute
  */
-void CFG_unprotectTextAttribute(CFG_TextAttribute *arg) {
+void _CFG_unprotectTextAttribute(CFG_TextAttribute *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -265,7 +267,7 @@ void CFG_unprotectTextAttribute(CFG_TextAttribute *arg) {
  * Protect a CFG_ShortCut from the ATerm garbage collector. Every CFG_ShortCut that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_ShortCut
  */
-void CFG_protectShortCut(CFG_ShortCut *arg) {
+void _CFG_protectShortCut(CFG_ShortCut *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -273,7 +275,7 @@ void CFG_protectShortCut(CFG_ShortCut *arg) {
  * Unprotect a CFG_ShortCut from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_ShortCut
  */
-void CFG_unprotectShortCut(CFG_ShortCut *arg) {
+void _CFG_unprotectShortCut(CFG_ShortCut *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -281,7 +283,7 @@ void CFG_unprotectShortCut(CFG_ShortCut *arg) {
  * Protect a CFG_TextStyle from the ATerm garbage collector. Every CFG_TextStyle that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_TextStyle
  */
-void CFG_protectTextStyle(CFG_TextStyle *arg) {
+void _CFG_protectTextStyle(CFG_TextStyle *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -289,7 +291,7 @@ void CFG_protectTextStyle(CFG_TextStyle *arg) {
  * Unprotect a CFG_TextStyle from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_TextStyle
  */
-void CFG_unprotectTextStyle(CFG_TextStyle *arg) {
+void _CFG_unprotectTextStyle(CFG_TextStyle *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -297,7 +299,7 @@ void CFG_unprotectTextStyle(CFG_TextStyle *arg) {
  * Protect a CFG_PropertyList from the ATerm garbage collector. Every CFG_PropertyList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_PropertyList
  */
-void CFG_protectPropertyList(CFG_PropertyList *arg) {
+void _CFG_protectPropertyList(CFG_PropertyList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -305,7 +307,7 @@ void CFG_protectPropertyList(CFG_PropertyList *arg) {
  * Unprotect a CFG_PropertyList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_PropertyList
  */
-void CFG_unprotectPropertyList(CFG_PropertyList *arg) {
+void _CFG_unprotectPropertyList(CFG_PropertyList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -313,7 +315,7 @@ void CFG_unprotectPropertyList(CFG_PropertyList *arg) {
  * Protect a CFG_ActionDescriptionList from the ATerm garbage collector. Every CFG_ActionDescriptionList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_ActionDescriptionList
  */
-void CFG_protectActionDescriptionList(CFG_ActionDescriptionList *arg) {
+void _CFG_protectActionDescriptionList(CFG_ActionDescriptionList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -321,7 +323,7 @@ void CFG_protectActionDescriptionList(CFG_ActionDescriptionList *arg) {
  * Unprotect a CFG_ActionDescriptionList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_ActionDescriptionList
  */
-void CFG_unprotectActionDescriptionList(CFG_ActionDescriptionList *arg) {
+void _CFG_unprotectActionDescriptionList(CFG_ActionDescriptionList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -329,7 +331,7 @@ void CFG_unprotectActionDescriptionList(CFG_ActionDescriptionList *arg) {
  * Protect a CFG_TextAttributeMap from the ATerm garbage collector. Every CFG_TextAttributeMap that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_TextAttributeMap
  */
-void CFG_protectTextAttributeMap(CFG_TextAttributeMap *arg) {
+void _CFG_protectTextAttributeMap(CFG_TextAttributeMap *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -337,7 +339,7 @@ void CFG_protectTextAttributeMap(CFG_TextAttributeMap *arg) {
  * Unprotect a CFG_TextAttributeMap from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_TextAttributeMap
  */
-void CFG_unprotectTextAttributeMap(CFG_TextAttributeMap *arg) {
+void _CFG_unprotectTextAttributeMap(CFG_TextAttributeMap *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -345,7 +347,7 @@ void CFG_unprotectTextAttributeMap(CFG_TextAttributeMap *arg) {
  * Protect a CFG_KeyModifierList from the ATerm garbage collector. Every CFG_KeyModifierList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_KeyModifierList
  */
-void CFG_protectKeyModifierList(CFG_KeyModifierList *arg) {
+void _CFG_protectKeyModifierList(CFG_KeyModifierList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -353,7 +355,7 @@ void CFG_protectKeyModifierList(CFG_KeyModifierList *arg) {
  * Unprotect a CFG_KeyModifierList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_KeyModifierList
  */
-void CFG_unprotectKeyModifierList(CFG_KeyModifierList *arg) {
+void _CFG_unprotectKeyModifierList(CFG_KeyModifierList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -361,7 +363,7 @@ void CFG_unprotectKeyModifierList(CFG_KeyModifierList *arg) {
  * Protect a CFG_ItemLabels from the ATerm garbage collector. Every CFG_ItemLabels that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a CFG_ItemLabels
  */
-void CFG_protectItemLabels(CFG_ItemLabels *arg) {
+void _CFG_protectItemLabels(CFG_ItemLabels *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -369,7 +371,7 @@ void CFG_protectItemLabels(CFG_ItemLabels *arg) {
  * Unprotect a CFG_ItemLabels from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a CFG_ItemLabels
  */
-void CFG_unprotectItemLabels(CFG_ItemLabels *arg) {
+void _CFG_unprotectItemLabels(CFG_ItemLabels *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -378,7 +380,7 @@ void CFG_unprotectItemLabels(CFG_ItemLabels *arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_VirtualButton that was encoded by \arg
  */
-CFG_VirtualButton CFG_VirtualButtonFromTerm(ATerm t) {
+CFG_VirtualButton _CFG_VirtualButtonFromTerm(ATerm t) {
   return (CFG_VirtualButton)t;
 }
 
@@ -387,7 +389,7 @@ CFG_VirtualButton CFG_VirtualButtonFromTerm(ATerm t) {
  * \param[in] arg CFG_VirtualButton to be converted
  * \return ATerm that represents the CFG_VirtualButton
  */
-ATerm CFG_VirtualButtonToTerm(CFG_VirtualButton arg) {
+ATerm _CFG_VirtualButtonToTerm(CFG_VirtualButton arg) {
   return (ATerm)arg;
 }
 
@@ -396,7 +398,7 @@ ATerm CFG_VirtualButtonToTerm(CFG_VirtualButton arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_KeyModifier that was encoded by \arg
  */
-CFG_KeyModifier CFG_KeyModifierFromTerm(ATerm t) {
+CFG_KeyModifier _CFG_KeyModifierFromTerm(ATerm t) {
   return (CFG_KeyModifier)t;
 }
 
@@ -405,7 +407,7 @@ CFG_KeyModifier CFG_KeyModifierFromTerm(ATerm t) {
  * \param[in] arg CFG_KeyModifier to be converted
  * \return ATerm that represents the CFG_KeyModifier
  */
-ATerm CFG_KeyModifierToTerm(CFG_KeyModifier arg) {
+ATerm _CFG_KeyModifierToTerm(CFG_KeyModifier arg) {
   return (ATerm)arg;
 }
 
@@ -414,7 +416,7 @@ ATerm CFG_KeyModifierToTerm(CFG_KeyModifier arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_VirtualKey that was encoded by \arg
  */
-CFG_VirtualKey CFG_VirtualKeyFromTerm(ATerm t) {
+CFG_VirtualKey _CFG_VirtualKeyFromTerm(ATerm t) {
   return (CFG_VirtualKey)t;
 }
 
@@ -423,7 +425,7 @@ CFG_VirtualKey CFG_VirtualKeyFromTerm(ATerm t) {
  * \param[in] arg CFG_VirtualKey to be converted
  * \return ATerm that represents the CFG_VirtualKey
  */
-ATerm CFG_VirtualKeyToTerm(CFG_VirtualKey arg) {
+ATerm _CFG_VirtualKeyToTerm(CFG_VirtualKey arg) {
   return (ATerm)arg;
 }
 
@@ -432,7 +434,7 @@ ATerm CFG_VirtualKeyToTerm(CFG_VirtualKey arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_Color that was encoded by \arg
  */
-CFG_Color CFG_ColorFromTerm(ATerm t) {
+CFG_Color _CFG_ColorFromTerm(ATerm t) {
   return (CFG_Color)t;
 }
 
@@ -441,7 +443,7 @@ CFG_Color CFG_ColorFromTerm(ATerm t) {
  * \param[in] arg CFG_Color to be converted
  * \return ATerm that represents the CFG_Color
  */
-ATerm CFG_ColorToTerm(CFG_Color arg) {
+ATerm _CFG_ColorToTerm(CFG_Color arg) {
   return (ATerm)arg;
 }
 
@@ -450,7 +452,7 @@ ATerm CFG_ColorToTerm(CFG_Color arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_Configuration that was encoded by \arg
  */
-CFG_Configuration CFG_ConfigurationFromTerm(ATerm t) {
+CFG_Configuration _CFG_ConfigurationFromTerm(ATerm t) {
   return (CFG_Configuration)t;
 }
 
@@ -459,7 +461,7 @@ CFG_Configuration CFG_ConfigurationFromTerm(ATerm t) {
  * \param[in] arg CFG_Configuration to be converted
  * \return ATerm that represents the CFG_Configuration
  */
-ATerm CFG_ConfigurationToTerm(CFG_Configuration arg) {
+ATerm _CFG_ConfigurationToTerm(CFG_Configuration arg) {
   return (ATerm)arg;
 }
 
@@ -468,7 +470,7 @@ ATerm CFG_ConfigurationToTerm(CFG_Configuration arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_Property that was encoded by \arg
  */
-CFG_Property CFG_PropertyFromTerm(ATerm t) {
+CFG_Property _CFG_PropertyFromTerm(ATerm t) {
   return (CFG_Property)t;
 }
 
@@ -477,7 +479,7 @@ CFG_Property CFG_PropertyFromTerm(ATerm t) {
  * \param[in] arg CFG_Property to be converted
  * \return ATerm that represents the CFG_Property
  */
-ATerm CFG_PropertyToTerm(CFG_Property arg) {
+ATerm _CFG_PropertyToTerm(CFG_Property arg) {
   return (ATerm)arg;
 }
 
@@ -486,7 +488,7 @@ ATerm CFG_PropertyToTerm(CFG_Property arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_ActionDescription that was encoded by \arg
  */
-CFG_ActionDescription CFG_ActionDescriptionFromTerm(ATerm t) {
+CFG_ActionDescription _CFG_ActionDescriptionFromTerm(ATerm t) {
   return (CFG_ActionDescription)t;
 }
 
@@ -495,7 +497,7 @@ CFG_ActionDescription CFG_ActionDescriptionFromTerm(ATerm t) {
  * \param[in] arg CFG_ActionDescription to be converted
  * \return ATerm that represents the CFG_ActionDescription
  */
-ATerm CFG_ActionDescriptionToTerm(CFG_ActionDescription arg) {
+ATerm _CFG_ActionDescriptionToTerm(CFG_ActionDescription arg) {
   return (ATerm)arg;
 }
 
@@ -504,7 +506,7 @@ ATerm CFG_ActionDescriptionToTerm(CFG_ActionDescription arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_Event that was encoded by \arg
  */
-CFG_Event CFG_EventFromTerm(ATerm t) {
+CFG_Event _CFG_EventFromTerm(ATerm t) {
   return (CFG_Event)t;
 }
 
@@ -513,7 +515,7 @@ CFG_Event CFG_EventFromTerm(ATerm t) {
  * \param[in] arg CFG_Event to be converted
  * \return ATerm that represents the CFG_Event
  */
-ATerm CFG_EventToTerm(CFG_Event arg) {
+ATerm _CFG_EventToTerm(CFG_Event arg) {
   return (ATerm)arg;
 }
 
@@ -522,7 +524,7 @@ ATerm CFG_EventToTerm(CFG_Event arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_Item that was encoded by \arg
  */
-CFG_Item CFG_ItemFromTerm(ATerm t) {
+CFG_Item _CFG_ItemFromTerm(ATerm t) {
   return (CFG_Item)t;
 }
 
@@ -531,7 +533,7 @@ CFG_Item CFG_ItemFromTerm(ATerm t) {
  * \param[in] arg CFG_Item to be converted
  * \return ATerm that represents the CFG_Item
  */
-ATerm CFG_ItemToTerm(CFG_Item arg) {
+ATerm _CFG_ItemToTerm(CFG_Item arg) {
   return (ATerm)arg;
 }
 
@@ -540,7 +542,7 @@ ATerm CFG_ItemToTerm(CFG_Item arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_TextCategoryName that was encoded by \arg
  */
-CFG_TextCategoryName CFG_TextCategoryNameFromTerm(ATerm t) {
+CFG_TextCategoryName _CFG_TextCategoryNameFromTerm(ATerm t) {
   return (CFG_TextCategoryName)t;
 }
 
@@ -549,7 +551,7 @@ CFG_TextCategoryName CFG_TextCategoryNameFromTerm(ATerm t) {
  * \param[in] arg CFG_TextCategoryName to be converted
  * \return ATerm that represents the CFG_TextCategoryName
  */
-ATerm CFG_TextCategoryNameToTerm(CFG_TextCategoryName arg) {
+ATerm _CFG_TextCategoryNameToTerm(CFG_TextCategoryName arg) {
   return (ATerm)arg;
 }
 
@@ -558,7 +560,7 @@ ATerm CFG_TextCategoryNameToTerm(CFG_TextCategoryName arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_TextAttribute that was encoded by \arg
  */
-CFG_TextAttribute CFG_TextAttributeFromTerm(ATerm t) {
+CFG_TextAttribute _CFG_TextAttributeFromTerm(ATerm t) {
   return (CFG_TextAttribute)t;
 }
 
@@ -567,7 +569,7 @@ CFG_TextAttribute CFG_TextAttributeFromTerm(ATerm t) {
  * \param[in] arg CFG_TextAttribute to be converted
  * \return ATerm that represents the CFG_TextAttribute
  */
-ATerm CFG_TextAttributeToTerm(CFG_TextAttribute arg) {
+ATerm _CFG_TextAttributeToTerm(CFG_TextAttribute arg) {
   return (ATerm)arg;
 }
 
@@ -576,7 +578,7 @@ ATerm CFG_TextAttributeToTerm(CFG_TextAttribute arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_ShortCut that was encoded by \arg
  */
-CFG_ShortCut CFG_ShortCutFromTerm(ATerm t) {
+CFG_ShortCut _CFG_ShortCutFromTerm(ATerm t) {
   return (CFG_ShortCut)t;
 }
 
@@ -585,7 +587,7 @@ CFG_ShortCut CFG_ShortCutFromTerm(ATerm t) {
  * \param[in] arg CFG_ShortCut to be converted
  * \return ATerm that represents the CFG_ShortCut
  */
-ATerm CFG_ShortCutToTerm(CFG_ShortCut arg) {
+ATerm _CFG_ShortCutToTerm(CFG_ShortCut arg) {
   return (ATerm)arg;
 }
 
@@ -594,7 +596,7 @@ ATerm CFG_ShortCutToTerm(CFG_ShortCut arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_TextStyle that was encoded by \arg
  */
-CFG_TextStyle CFG_TextStyleFromTerm(ATerm t) {
+CFG_TextStyle _CFG_TextStyleFromTerm(ATerm t) {
   return (CFG_TextStyle)t;
 }
 
@@ -603,7 +605,7 @@ CFG_TextStyle CFG_TextStyleFromTerm(ATerm t) {
  * \param[in] arg CFG_TextStyle to be converted
  * \return ATerm that represents the CFG_TextStyle
  */
-ATerm CFG_TextStyleToTerm(CFG_TextStyle arg) {
+ATerm _CFG_TextStyleToTerm(CFG_TextStyle arg) {
   return (ATerm)arg;
 }
 
@@ -612,7 +614,7 @@ ATerm CFG_TextStyleToTerm(CFG_TextStyle arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_PropertyList that was encoded by \arg
  */
-CFG_PropertyList CFG_PropertyListFromTerm(ATerm t) {
+CFG_PropertyList _CFG_PropertyListFromTerm(ATerm t) {
   return (CFG_PropertyList)t;
 }
 
@@ -621,7 +623,7 @@ CFG_PropertyList CFG_PropertyListFromTerm(ATerm t) {
  * \param[in] arg CFG_PropertyList to be converted
  * \return ATerm that represents the CFG_PropertyList
  */
-ATerm CFG_PropertyListToTerm(CFG_PropertyList arg) {
+ATerm _CFG_PropertyListToTerm(CFG_PropertyList arg) {
   return (ATerm)arg;
 }
 
@@ -630,7 +632,7 @@ ATerm CFG_PropertyListToTerm(CFG_PropertyList arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_ActionDescriptionList that was encoded by \arg
  */
-CFG_ActionDescriptionList CFG_ActionDescriptionListFromTerm(ATerm t) {
+CFG_ActionDescriptionList _CFG_ActionDescriptionListFromTerm(ATerm t) {
   return (CFG_ActionDescriptionList)t;
 }
 
@@ -639,7 +641,7 @@ CFG_ActionDescriptionList CFG_ActionDescriptionListFromTerm(ATerm t) {
  * \param[in] arg CFG_ActionDescriptionList to be converted
  * \return ATerm that represents the CFG_ActionDescriptionList
  */
-ATerm CFG_ActionDescriptionListToTerm(CFG_ActionDescriptionList arg) {
+ATerm _CFG_ActionDescriptionListToTerm(CFG_ActionDescriptionList arg) {
   return (ATerm)arg;
 }
 
@@ -648,7 +650,7 @@ ATerm CFG_ActionDescriptionListToTerm(CFG_ActionDescriptionList arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_TextAttributeMap that was encoded by \arg
  */
-CFG_TextAttributeMap CFG_TextAttributeMapFromTerm(ATerm t) {
+CFG_TextAttributeMap _CFG_TextAttributeMapFromTerm(ATerm t) {
   return (CFG_TextAttributeMap)t;
 }
 
@@ -657,7 +659,7 @@ CFG_TextAttributeMap CFG_TextAttributeMapFromTerm(ATerm t) {
  * \param[in] arg CFG_TextAttributeMap to be converted
  * \return ATerm that represents the CFG_TextAttributeMap
  */
-ATerm CFG_TextAttributeMapToTerm(CFG_TextAttributeMap arg) {
+ATerm _CFG_TextAttributeMapToTerm(CFG_TextAttributeMap arg) {
   return (ATerm)arg;
 }
 
@@ -666,7 +668,7 @@ ATerm CFG_TextAttributeMapToTerm(CFG_TextAttributeMap arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_KeyModifierList that was encoded by \arg
  */
-CFG_KeyModifierList CFG_KeyModifierListFromTerm(ATerm t) {
+CFG_KeyModifierList _CFG_KeyModifierListFromTerm(ATerm t) {
   return (CFG_KeyModifierList)t;
 }
 
@@ -675,7 +677,7 @@ CFG_KeyModifierList CFG_KeyModifierListFromTerm(ATerm t) {
  * \param[in] arg CFG_KeyModifierList to be converted
  * \return ATerm that represents the CFG_KeyModifierList
  */
-ATerm CFG_KeyModifierListToTerm(CFG_KeyModifierList arg) {
+ATerm _CFG_KeyModifierListToTerm(CFG_KeyModifierList arg) {
   return (ATerm)arg;
 }
 
@@ -684,7 +686,7 @@ ATerm CFG_KeyModifierListToTerm(CFG_KeyModifierList arg) {
  * \param[in] t ATerm to be converted
  * \return CFG_ItemLabels that was encoded by \arg
  */
-CFG_ItemLabels CFG_ItemLabelsFromTerm(ATerm t) {
+CFG_ItemLabels _CFG_ItemLabelsFromTerm(ATerm t) {
   return (CFG_ItemLabels)t;
 }
 
@@ -693,7 +695,7 @@ CFG_ItemLabels CFG_ItemLabelsFromTerm(ATerm t) {
  * \param[in] arg CFG_ItemLabels to be converted
  * \return ATerm that represents the CFG_ItemLabels
  */
-ATerm CFG_ItemLabelsToTerm(CFG_ItemLabels arg) {
+ATerm _CFG_ItemLabelsToTerm(CFG_ItemLabels arg) {
   return (ATerm)arg;
 }
 
@@ -702,7 +704,7 @@ ATerm CFG_ItemLabelsToTerm(CFG_ItemLabels arg) {
  * \param[in] arg input CFG_PropertyList
  * \return The number of elements in the CFG_PropertyList
  */
-int CFG_getPropertyListLength (CFG_PropertyList arg) {
+int _CFG_getPropertyListLength(CFG_PropertyList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -711,7 +713,7 @@ int CFG_getPropertyListLength (CFG_PropertyList arg) {
  * \param[in] arg CFG_PropertyList to be reversed
  * \return a reversed #arg
  */
-CFG_PropertyList CFG_reversePropertyList(CFG_PropertyList arg) {
+CFG_PropertyList _CFG_reversePropertyList(CFG_PropertyList arg) {
   return (CFG_PropertyList) ATreverse((ATermList) arg);
 }
 
@@ -721,7 +723,7 @@ CFG_PropertyList CFG_reversePropertyList(CFG_PropertyList arg) {
  * \param[in] elem CFG_Property to be appended
  * \return new CFG_PropertyList with #elem appended
  */
-CFG_PropertyList CFG_appendPropertyList(CFG_PropertyList arg, CFG_Property elem) {
+CFG_PropertyList _CFG_appendPropertyList(CFG_PropertyList arg, CFG_Property elem) {
   return (CFG_PropertyList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -731,7 +733,7 @@ CFG_PropertyList CFG_appendPropertyList(CFG_PropertyList arg, CFG_Property elem)
  * \param[in] arg1 second CFG_PropertyList
  * \return CFG_PropertyList with the elements of #arg0 before the elements of #arg1
  */
-CFG_PropertyList CFG_concatPropertyList(CFG_PropertyList arg0, CFG_PropertyList arg1) {
+CFG_PropertyList _CFG_concatPropertyList(CFG_PropertyList arg0, CFG_PropertyList arg1) {
   return (CFG_PropertyList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -742,7 +744,7 @@ CFG_PropertyList CFG_concatPropertyList(CFG_PropertyList arg0, CFG_PropertyList 
  * \param[in] end exclusive end index of the sublist
  * \return new CFG_PropertyList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-CFG_PropertyList CFG_slicePropertyList(CFG_PropertyList arg, int start, int end) {
+CFG_PropertyList _CFG_slicePropertyList(CFG_PropertyList arg, int start, int end) {
   return (CFG_PropertyList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -752,7 +754,7 @@ CFG_PropertyList CFG_slicePropertyList(CFG_PropertyList arg, int start, int end)
  * \param[in] index index to use to point in the CFG_PropertyList
  * \return CFG_Property at position #index in #arg
  */
-CFG_Property CFG_getPropertyListPropertyAt(CFG_PropertyList arg, int index) {
+CFG_Property _CFG_getPropertyListPropertyAt(CFG_PropertyList arg, int index) {
  return (CFG_Property)ATelementAt((ATermList) arg,index);
 }
 
@@ -763,7 +765,7 @@ CFG_Property CFG_getPropertyListPropertyAt(CFG_PropertyList arg, int index) {
  * \param[in] index index to use to point in the CFG_PropertyList
  * \return A new CFG_PropertyListwith #elem replaced in #arg at position #index
  */
-CFG_PropertyList CFG_replacePropertyListPropertyAt(CFG_PropertyList arg, CFG_Property elem, int index) {
+CFG_PropertyList _CFG_replacePropertyListPropertyAt(CFG_PropertyList arg, CFG_Property elem, int index) {
  return (CFG_PropertyList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -773,7 +775,7 @@ CFG_PropertyList CFG_replacePropertyListPropertyAt(CFG_PropertyList arg, CFG_Pro
  * \param[in] elem2 One CFG_Property element of the new CFG_PropertyList
  * \return A new CFG_PropertyList consisting of 2 CFG_Propertys
  */
-CFG_PropertyList CFG_makePropertyList2(CFG_Property elem1, CFG_Property elem2) {
+CFG_PropertyList _CFG_makePropertyList2(CFG_Property elem1, CFG_Property elem2) {
   return (CFG_PropertyList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -784,7 +786,7 @@ CFG_PropertyList CFG_makePropertyList2(CFG_Property elem1, CFG_Property elem2) {
  * \param[in] elem3 One CFG_Property element of the new CFG_PropertyList
  * \return A new CFG_PropertyList consisting of 3 CFG_Propertys
  */
-CFG_PropertyList CFG_makePropertyList3(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3) {
+CFG_PropertyList _CFG_makePropertyList3(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3) {
   return (CFG_PropertyList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -796,7 +798,7 @@ CFG_PropertyList CFG_makePropertyList3(CFG_Property elem1, CFG_Property elem2, C
  * \param[in] elem4 One CFG_Property element of the new CFG_PropertyList
  * \return A new CFG_PropertyList consisting of 4 CFG_Propertys
  */
-CFG_PropertyList CFG_makePropertyList4(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3, CFG_Property elem4) {
+CFG_PropertyList _CFG_makePropertyList4(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3, CFG_Property elem4) {
   return (CFG_PropertyList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -809,7 +811,7 @@ CFG_PropertyList CFG_makePropertyList4(CFG_Property elem1, CFG_Property elem2, C
  * \param[in] elem5 One CFG_Property element of the new CFG_PropertyList
  * \return A new CFG_PropertyList consisting of 5 CFG_Propertys
  */
-CFG_PropertyList CFG_makePropertyList5(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3, CFG_Property elem4, CFG_Property elem5) {
+CFG_PropertyList _CFG_makePropertyList5(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3, CFG_Property elem4, CFG_Property elem5) {
   return (CFG_PropertyList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -823,7 +825,7 @@ CFG_PropertyList CFG_makePropertyList5(CFG_Property elem1, CFG_Property elem2, C
  * \param[in] elem6 One CFG_Property element of the new CFG_PropertyList
  * \return A new CFG_PropertyList consisting of 6 CFG_Propertys
  */
-CFG_PropertyList CFG_makePropertyList6(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3, CFG_Property elem4, CFG_Property elem5, CFG_Property elem6) {
+CFG_PropertyList _CFG_makePropertyList6(CFG_Property elem1, CFG_Property elem2, CFG_Property elem3, CFG_Property elem4, CFG_Property elem5, CFG_Property elem6) {
   return (CFG_PropertyList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -832,7 +834,7 @@ CFG_PropertyList CFG_makePropertyList6(CFG_Property elem1, CFG_Property elem2, C
  * \param[in] arg input CFG_ActionDescriptionList
  * \return The number of elements in the CFG_ActionDescriptionList
  */
-int CFG_getActionDescriptionListLength (CFG_ActionDescriptionList arg) {
+int _CFG_getActionDescriptionListLength(CFG_ActionDescriptionList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -841,7 +843,7 @@ int CFG_getActionDescriptionListLength (CFG_ActionDescriptionList arg) {
  * \param[in] arg CFG_ActionDescriptionList to be reversed
  * \return a reversed #arg
  */
-CFG_ActionDescriptionList CFG_reverseActionDescriptionList(CFG_ActionDescriptionList arg) {
+CFG_ActionDescriptionList _CFG_reverseActionDescriptionList(CFG_ActionDescriptionList arg) {
   return (CFG_ActionDescriptionList) ATreverse((ATermList) arg);
 }
 
@@ -851,7 +853,7 @@ CFG_ActionDescriptionList CFG_reverseActionDescriptionList(CFG_ActionDescription
  * \param[in] elem CFG_ActionDescription to be appended
  * \return new CFG_ActionDescriptionList with #elem appended
  */
-CFG_ActionDescriptionList CFG_appendActionDescriptionList(CFG_ActionDescriptionList arg, CFG_ActionDescription elem) {
+CFG_ActionDescriptionList _CFG_appendActionDescriptionList(CFG_ActionDescriptionList arg, CFG_ActionDescription elem) {
   return (CFG_ActionDescriptionList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -861,7 +863,7 @@ CFG_ActionDescriptionList CFG_appendActionDescriptionList(CFG_ActionDescriptionL
  * \param[in] arg1 second CFG_ActionDescriptionList
  * \return CFG_ActionDescriptionList with the elements of #arg0 before the elements of #arg1
  */
-CFG_ActionDescriptionList CFG_concatActionDescriptionList(CFG_ActionDescriptionList arg0, CFG_ActionDescriptionList arg1) {
+CFG_ActionDescriptionList _CFG_concatActionDescriptionList(CFG_ActionDescriptionList arg0, CFG_ActionDescriptionList arg1) {
   return (CFG_ActionDescriptionList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -872,7 +874,7 @@ CFG_ActionDescriptionList CFG_concatActionDescriptionList(CFG_ActionDescriptionL
  * \param[in] end exclusive end index of the sublist
  * \return new CFG_ActionDescriptionList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-CFG_ActionDescriptionList CFG_sliceActionDescriptionList(CFG_ActionDescriptionList arg, int start, int end) {
+CFG_ActionDescriptionList _CFG_sliceActionDescriptionList(CFG_ActionDescriptionList arg, int start, int end) {
   return (CFG_ActionDescriptionList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -882,7 +884,7 @@ CFG_ActionDescriptionList CFG_sliceActionDescriptionList(CFG_ActionDescriptionLi
  * \param[in] index index to use to point in the CFG_ActionDescriptionList
  * \return CFG_ActionDescription at position #index in #arg
  */
-CFG_ActionDescription CFG_getActionDescriptionListActionDescriptionAt(CFG_ActionDescriptionList arg, int index) {
+CFG_ActionDescription _CFG_getActionDescriptionListActionDescriptionAt(CFG_ActionDescriptionList arg, int index) {
  return (CFG_ActionDescription)ATelementAt((ATermList) arg,index);
 }
 
@@ -893,7 +895,7 @@ CFG_ActionDescription CFG_getActionDescriptionListActionDescriptionAt(CFG_Action
  * \param[in] index index to use to point in the CFG_ActionDescriptionList
  * \return A new CFG_ActionDescriptionListwith #elem replaced in #arg at position #index
  */
-CFG_ActionDescriptionList CFG_replaceActionDescriptionListActionDescriptionAt(CFG_ActionDescriptionList arg, CFG_ActionDescription elem, int index) {
+CFG_ActionDescriptionList _CFG_replaceActionDescriptionListActionDescriptionAt(CFG_ActionDescriptionList arg, CFG_ActionDescription elem, int index) {
  return (CFG_ActionDescriptionList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -903,7 +905,7 @@ CFG_ActionDescriptionList CFG_replaceActionDescriptionListActionDescriptionAt(CF
  * \param[in] elem2 One CFG_ActionDescription element of the new CFG_ActionDescriptionList
  * \return A new CFG_ActionDescriptionList consisting of 2 CFG_ActionDescriptions
  */
-CFG_ActionDescriptionList CFG_makeActionDescriptionList2(CFG_ActionDescription elem1, CFG_ActionDescription elem2) {
+CFG_ActionDescriptionList _CFG_makeActionDescriptionList2(CFG_ActionDescription elem1, CFG_ActionDescription elem2) {
   return (CFG_ActionDescriptionList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -914,7 +916,7 @@ CFG_ActionDescriptionList CFG_makeActionDescriptionList2(CFG_ActionDescription e
  * \param[in] elem3 One CFG_ActionDescription element of the new CFG_ActionDescriptionList
  * \return A new CFG_ActionDescriptionList consisting of 3 CFG_ActionDescriptions
  */
-CFG_ActionDescriptionList CFG_makeActionDescriptionList3(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3) {
+CFG_ActionDescriptionList _CFG_makeActionDescriptionList3(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3) {
   return (CFG_ActionDescriptionList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -926,7 +928,7 @@ CFG_ActionDescriptionList CFG_makeActionDescriptionList3(CFG_ActionDescription e
  * \param[in] elem4 One CFG_ActionDescription element of the new CFG_ActionDescriptionList
  * \return A new CFG_ActionDescriptionList consisting of 4 CFG_ActionDescriptions
  */
-CFG_ActionDescriptionList CFG_makeActionDescriptionList4(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3, CFG_ActionDescription elem4) {
+CFG_ActionDescriptionList _CFG_makeActionDescriptionList4(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3, CFG_ActionDescription elem4) {
   return (CFG_ActionDescriptionList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -939,7 +941,7 @@ CFG_ActionDescriptionList CFG_makeActionDescriptionList4(CFG_ActionDescription e
  * \param[in] elem5 One CFG_ActionDescription element of the new CFG_ActionDescriptionList
  * \return A new CFG_ActionDescriptionList consisting of 5 CFG_ActionDescriptions
  */
-CFG_ActionDescriptionList CFG_makeActionDescriptionList5(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3, CFG_ActionDescription elem4, CFG_ActionDescription elem5) {
+CFG_ActionDescriptionList _CFG_makeActionDescriptionList5(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3, CFG_ActionDescription elem4, CFG_ActionDescription elem5) {
   return (CFG_ActionDescriptionList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -953,7 +955,7 @@ CFG_ActionDescriptionList CFG_makeActionDescriptionList5(CFG_ActionDescription e
  * \param[in] elem6 One CFG_ActionDescription element of the new CFG_ActionDescriptionList
  * \return A new CFG_ActionDescriptionList consisting of 6 CFG_ActionDescriptions
  */
-CFG_ActionDescriptionList CFG_makeActionDescriptionList6(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3, CFG_ActionDescription elem4, CFG_ActionDescription elem5, CFG_ActionDescription elem6) {
+CFG_ActionDescriptionList _CFG_makeActionDescriptionList6(CFG_ActionDescription elem1, CFG_ActionDescription elem2, CFG_ActionDescription elem3, CFG_ActionDescription elem4, CFG_ActionDescription elem5, CFG_ActionDescription elem6) {
   return (CFG_ActionDescriptionList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -962,7 +964,7 @@ CFG_ActionDescriptionList CFG_makeActionDescriptionList6(CFG_ActionDescription e
  * \param[in] arg input CFG_TextAttributeMap
  * \return The number of elements in the CFG_TextAttributeMap
  */
-int CFG_getTextAttributeMapLength (CFG_TextAttributeMap arg) {
+int _CFG_getTextAttributeMapLength(CFG_TextAttributeMap arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -971,7 +973,7 @@ int CFG_getTextAttributeMapLength (CFG_TextAttributeMap arg) {
  * \param[in] arg CFG_TextAttributeMap to be reversed
  * \return a reversed #arg
  */
-CFG_TextAttributeMap CFG_reverseTextAttributeMap(CFG_TextAttributeMap arg) {
+CFG_TextAttributeMap _CFG_reverseTextAttributeMap(CFG_TextAttributeMap arg) {
   return (CFG_TextAttributeMap) ATreverse((ATermList) arg);
 }
 
@@ -981,7 +983,7 @@ CFG_TextAttributeMap CFG_reverseTextAttributeMap(CFG_TextAttributeMap arg) {
  * \param[in] elem CFG_TextAttribute to be appended
  * \return new CFG_TextAttributeMap with #elem appended
  */
-CFG_TextAttributeMap CFG_appendTextAttributeMap(CFG_TextAttributeMap arg, CFG_TextAttribute elem) {
+CFG_TextAttributeMap _CFG_appendTextAttributeMap(CFG_TextAttributeMap arg, CFG_TextAttribute elem) {
   return (CFG_TextAttributeMap) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -991,7 +993,7 @@ CFG_TextAttributeMap CFG_appendTextAttributeMap(CFG_TextAttributeMap arg, CFG_Te
  * \param[in] arg1 second CFG_TextAttributeMap
  * \return CFG_TextAttributeMap with the elements of #arg0 before the elements of #arg1
  */
-CFG_TextAttributeMap CFG_concatTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeMap arg1) {
+CFG_TextAttributeMap _CFG_concatTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeMap arg1) {
   return (CFG_TextAttributeMap) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1002,7 +1004,7 @@ CFG_TextAttributeMap CFG_concatTextAttributeMap(CFG_TextAttributeMap arg0, CFG_T
  * \param[in] end exclusive end index of the sublist
  * \return new CFG_TextAttributeMap with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-CFG_TextAttributeMap CFG_sliceTextAttributeMap(CFG_TextAttributeMap arg, int start, int end) {
+CFG_TextAttributeMap _CFG_sliceTextAttributeMap(CFG_TextAttributeMap arg, int start, int end) {
   return (CFG_TextAttributeMap) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1012,7 +1014,7 @@ CFG_TextAttributeMap CFG_sliceTextAttributeMap(CFG_TextAttributeMap arg, int sta
  * \param[in] index index to use to point in the CFG_TextAttributeMap
  * \return CFG_TextAttribute at position #index in #arg
  */
-CFG_TextAttribute CFG_getTextAttributeMapTextAttributeAt(CFG_TextAttributeMap arg, int index) {
+CFG_TextAttribute _CFG_getTextAttributeMapTextAttributeAt(CFG_TextAttributeMap arg, int index) {
  return (CFG_TextAttribute)ATelementAt((ATermList) arg,index);
 }
 
@@ -1023,7 +1025,7 @@ CFG_TextAttribute CFG_getTextAttributeMapTextAttributeAt(CFG_TextAttributeMap ar
  * \param[in] index index to use to point in the CFG_TextAttributeMap
  * \return A new CFG_TextAttributeMapwith #elem replaced in #arg at position #index
  */
-CFG_TextAttributeMap CFG_replaceTextAttributeMapTextAttributeAt(CFG_TextAttributeMap arg, CFG_TextAttribute elem, int index) {
+CFG_TextAttributeMap _CFG_replaceTextAttributeMapTextAttributeAt(CFG_TextAttributeMap arg, CFG_TextAttribute elem, int index) {
  return (CFG_TextAttributeMap) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1033,7 +1035,7 @@ CFG_TextAttributeMap CFG_replaceTextAttributeMapTextAttributeAt(CFG_TextAttribut
  * \param[in] elem2 One CFG_TextAttribute element of the new CFG_TextAttributeMap
  * \return A new CFG_TextAttributeMap consisting of 2 CFG_TextAttributes
  */
-CFG_TextAttributeMap CFG_makeTextAttributeMap2(CFG_TextAttribute elem1, CFG_TextAttribute elem2) {
+CFG_TextAttributeMap _CFG_makeTextAttributeMap2(CFG_TextAttribute elem1, CFG_TextAttribute elem2) {
   return (CFG_TextAttributeMap) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1044,7 +1046,7 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap2(CFG_TextAttribute elem1, CFG_Text
  * \param[in] elem3 One CFG_TextAttribute element of the new CFG_TextAttributeMap
  * \return A new CFG_TextAttributeMap consisting of 3 CFG_TextAttributes
  */
-CFG_TextAttributeMap CFG_makeTextAttributeMap3(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3) {
+CFG_TextAttributeMap _CFG_makeTextAttributeMap3(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3) {
   return (CFG_TextAttributeMap) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1056,7 +1058,7 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap3(CFG_TextAttribute elem1, CFG_Text
  * \param[in] elem4 One CFG_TextAttribute element of the new CFG_TextAttributeMap
  * \return A new CFG_TextAttributeMap consisting of 4 CFG_TextAttributes
  */
-CFG_TextAttributeMap CFG_makeTextAttributeMap4(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3, CFG_TextAttribute elem4) {
+CFG_TextAttributeMap _CFG_makeTextAttributeMap4(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3, CFG_TextAttribute elem4) {
   return (CFG_TextAttributeMap) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1069,7 +1071,7 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap4(CFG_TextAttribute elem1, CFG_Text
  * \param[in] elem5 One CFG_TextAttribute element of the new CFG_TextAttributeMap
  * \return A new CFG_TextAttributeMap consisting of 5 CFG_TextAttributes
  */
-CFG_TextAttributeMap CFG_makeTextAttributeMap5(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3, CFG_TextAttribute elem4, CFG_TextAttribute elem5) {
+CFG_TextAttributeMap _CFG_makeTextAttributeMap5(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3, CFG_TextAttribute elem4, CFG_TextAttribute elem5) {
   return (CFG_TextAttributeMap) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1083,7 +1085,7 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap5(CFG_TextAttribute elem1, CFG_Text
  * \param[in] elem6 One CFG_TextAttribute element of the new CFG_TextAttributeMap
  * \return A new CFG_TextAttributeMap consisting of 6 CFG_TextAttributes
  */
-CFG_TextAttributeMap CFG_makeTextAttributeMap6(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3, CFG_TextAttribute elem4, CFG_TextAttribute elem5, CFG_TextAttribute elem6) {
+CFG_TextAttributeMap _CFG_makeTextAttributeMap6(CFG_TextAttribute elem1, CFG_TextAttribute elem2, CFG_TextAttribute elem3, CFG_TextAttribute elem4, CFG_TextAttribute elem5, CFG_TextAttribute elem6) {
   return (CFG_TextAttributeMap) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1092,7 +1094,7 @@ CFG_TextAttributeMap CFG_makeTextAttributeMap6(CFG_TextAttribute elem1, CFG_Text
  * \param[in] arg input CFG_KeyModifierList
  * \return The number of elements in the CFG_KeyModifierList
  */
-int CFG_getKeyModifierListLength (CFG_KeyModifierList arg) {
+int _CFG_getKeyModifierListLength(CFG_KeyModifierList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1101,7 +1103,7 @@ int CFG_getKeyModifierListLength (CFG_KeyModifierList arg) {
  * \param[in] arg CFG_KeyModifierList to be reversed
  * \return a reversed #arg
  */
-CFG_KeyModifierList CFG_reverseKeyModifierList(CFG_KeyModifierList arg) {
+CFG_KeyModifierList _CFG_reverseKeyModifierList(CFG_KeyModifierList arg) {
   return (CFG_KeyModifierList) ATreverse((ATermList) arg);
 }
 
@@ -1111,7 +1113,7 @@ CFG_KeyModifierList CFG_reverseKeyModifierList(CFG_KeyModifierList arg) {
  * \param[in] elem CFG_KeyModifier to be appended
  * \return new CFG_KeyModifierList with #elem appended
  */
-CFG_KeyModifierList CFG_appendKeyModifierList(CFG_KeyModifierList arg, CFG_KeyModifier elem) {
+CFG_KeyModifierList _CFG_appendKeyModifierList(CFG_KeyModifierList arg, CFG_KeyModifier elem) {
   return (CFG_KeyModifierList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1121,7 +1123,7 @@ CFG_KeyModifierList CFG_appendKeyModifierList(CFG_KeyModifierList arg, CFG_KeyMo
  * \param[in] arg1 second CFG_KeyModifierList
  * \return CFG_KeyModifierList with the elements of #arg0 before the elements of #arg1
  */
-CFG_KeyModifierList CFG_concatKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
+CFG_KeyModifierList _CFG_concatKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
   return (CFG_KeyModifierList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1132,7 +1134,7 @@ CFG_KeyModifierList CFG_concatKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyM
  * \param[in] end exclusive end index of the sublist
  * \return new CFG_KeyModifierList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-CFG_KeyModifierList CFG_sliceKeyModifierList(CFG_KeyModifierList arg, int start, int end) {
+CFG_KeyModifierList _CFG_sliceKeyModifierList(CFG_KeyModifierList arg, int start, int end) {
   return (CFG_KeyModifierList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1142,7 +1144,7 @@ CFG_KeyModifierList CFG_sliceKeyModifierList(CFG_KeyModifierList arg, int start,
  * \param[in] index index to use to point in the CFG_KeyModifierList
  * \return CFG_KeyModifier at position #index in #arg
  */
-CFG_KeyModifier CFG_getKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, int index) {
+CFG_KeyModifier _CFG_getKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, int index) {
  return (CFG_KeyModifier)ATelementAt((ATermList) arg,index);
 }
 
@@ -1153,7 +1155,7 @@ CFG_KeyModifier CFG_getKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, int
  * \param[in] index index to use to point in the CFG_KeyModifierList
  * \return A new CFG_KeyModifierListwith #elem replaced in #arg at position #index
  */
-CFG_KeyModifierList CFG_replaceKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, CFG_KeyModifier elem, int index) {
+CFG_KeyModifierList _CFG_replaceKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, CFG_KeyModifier elem, int index) {
  return (CFG_KeyModifierList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1163,7 +1165,7 @@ CFG_KeyModifierList CFG_replaceKeyModifierListKeyModifierAt(CFG_KeyModifierList 
  * \param[in] elem2 One CFG_KeyModifier element of the new CFG_KeyModifierList
  * \return A new CFG_KeyModifierList consisting of 2 CFG_KeyModifiers
  */
-CFG_KeyModifierList CFG_makeKeyModifierList2(CFG_KeyModifier elem1, CFG_KeyModifier elem2) {
+CFG_KeyModifierList _CFG_makeKeyModifierList2(CFG_KeyModifier elem1, CFG_KeyModifier elem2) {
   return (CFG_KeyModifierList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1174,7 +1176,7 @@ CFG_KeyModifierList CFG_makeKeyModifierList2(CFG_KeyModifier elem1, CFG_KeyModif
  * \param[in] elem3 One CFG_KeyModifier element of the new CFG_KeyModifierList
  * \return A new CFG_KeyModifierList consisting of 3 CFG_KeyModifiers
  */
-CFG_KeyModifierList CFG_makeKeyModifierList3(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3) {
+CFG_KeyModifierList _CFG_makeKeyModifierList3(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3) {
   return (CFG_KeyModifierList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1186,7 +1188,7 @@ CFG_KeyModifierList CFG_makeKeyModifierList3(CFG_KeyModifier elem1, CFG_KeyModif
  * \param[in] elem4 One CFG_KeyModifier element of the new CFG_KeyModifierList
  * \return A new CFG_KeyModifierList consisting of 4 CFG_KeyModifiers
  */
-CFG_KeyModifierList CFG_makeKeyModifierList4(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4) {
+CFG_KeyModifierList _CFG_makeKeyModifierList4(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4) {
   return (CFG_KeyModifierList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1199,7 +1201,7 @@ CFG_KeyModifierList CFG_makeKeyModifierList4(CFG_KeyModifier elem1, CFG_KeyModif
  * \param[in] elem5 One CFG_KeyModifier element of the new CFG_KeyModifierList
  * \return A new CFG_KeyModifierList consisting of 5 CFG_KeyModifiers
  */
-CFG_KeyModifierList CFG_makeKeyModifierList5(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4, CFG_KeyModifier elem5) {
+CFG_KeyModifierList _CFG_makeKeyModifierList5(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4, CFG_KeyModifier elem5) {
   return (CFG_KeyModifierList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1213,7 +1215,7 @@ CFG_KeyModifierList CFG_makeKeyModifierList5(CFG_KeyModifier elem1, CFG_KeyModif
  * \param[in] elem6 One CFG_KeyModifier element of the new CFG_KeyModifierList
  * \return A new CFG_KeyModifierList consisting of 6 CFG_KeyModifiers
  */
-CFG_KeyModifierList CFG_makeKeyModifierList6(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4, CFG_KeyModifier elem5, CFG_KeyModifier elem6) {
+CFG_KeyModifierList _CFG_makeKeyModifierList6(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4, CFG_KeyModifier elem5, CFG_KeyModifier elem6) {
   return (CFG_KeyModifierList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1222,7 +1224,7 @@ CFG_KeyModifierList CFG_makeKeyModifierList6(CFG_KeyModifier elem1, CFG_KeyModif
  * \param[in] arg input CFG_ItemLabels
  * \return The number of elements in the CFG_ItemLabels
  */
-int CFG_getItemLabelsLength (CFG_ItemLabels arg) {
+int _CFG_getItemLabelsLength(CFG_ItemLabels arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -1231,7 +1233,7 @@ int CFG_getItemLabelsLength (CFG_ItemLabels arg) {
  * \param[in] arg CFG_ItemLabels to be reversed
  * \return a reversed #arg
  */
-CFG_ItemLabels CFG_reverseItemLabels(CFG_ItemLabels arg) {
+CFG_ItemLabels _CFG_reverseItemLabels(CFG_ItemLabels arg) {
   return (CFG_ItemLabels) ATreverse((ATermList) arg);
 }
 
@@ -1241,7 +1243,7 @@ CFG_ItemLabels CFG_reverseItemLabels(CFG_ItemLabels arg) {
  * \param[in] elem CFG_Item to be appended
  * \return new CFG_ItemLabels with #elem appended
  */
-CFG_ItemLabels CFG_appendItemLabels(CFG_ItemLabels arg, CFG_Item elem) {
+CFG_ItemLabels _CFG_appendItemLabels(CFG_ItemLabels arg, CFG_Item elem) {
   return (CFG_ItemLabels) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1251,7 +1253,7 @@ CFG_ItemLabels CFG_appendItemLabels(CFG_ItemLabels arg, CFG_Item elem) {
  * \param[in] arg1 second CFG_ItemLabels
  * \return CFG_ItemLabels with the elements of #arg0 before the elements of #arg1
  */
-CFG_ItemLabels CFG_concatItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
+CFG_ItemLabels _CFG_concatItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
   return (CFG_ItemLabels) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1262,7 +1264,7 @@ CFG_ItemLabels CFG_concatItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new CFG_ItemLabels with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-CFG_ItemLabels CFG_sliceItemLabels(CFG_ItemLabels arg, int start, int end) {
+CFG_ItemLabels _CFG_sliceItemLabels(CFG_ItemLabels arg, int start, int end) {
   return (CFG_ItemLabels) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1272,7 +1274,7 @@ CFG_ItemLabels CFG_sliceItemLabels(CFG_ItemLabels arg, int start, int end) {
  * \param[in] index index to use to point in the CFG_ItemLabels
  * \return CFG_Item at position #index in #arg
  */
-CFG_Item CFG_getItemLabelsItemAt(CFG_ItemLabels arg, int index) {
+CFG_Item _CFG_getItemLabelsItemAt(CFG_ItemLabels arg, int index) {
  return (CFG_Item)ATelementAt((ATermList) arg,index);
 }
 
@@ -1283,7 +1285,7 @@ CFG_Item CFG_getItemLabelsItemAt(CFG_ItemLabels arg, int index) {
  * \param[in] index index to use to point in the CFG_ItemLabels
  * \return A new CFG_ItemLabelswith #elem replaced in #arg at position #index
  */
-CFG_ItemLabels CFG_replaceItemLabelsItemAt(CFG_ItemLabels arg, CFG_Item elem, int index) {
+CFG_ItemLabels _CFG_replaceItemLabelsItemAt(CFG_ItemLabels arg, CFG_Item elem, int index) {
  return (CFG_ItemLabels) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1293,7 +1295,7 @@ CFG_ItemLabels CFG_replaceItemLabelsItemAt(CFG_ItemLabels arg, CFG_Item elem, in
  * \param[in] elem2 One CFG_Item element of the new CFG_ItemLabels
  * \return A new CFG_ItemLabels consisting of 2 CFG_Items
  */
-CFG_ItemLabels CFG_makeItemLabels2(CFG_Item elem1, CFG_Item elem2) {
+CFG_ItemLabels _CFG_makeItemLabels2(CFG_Item elem1, CFG_Item elem2) {
   return (CFG_ItemLabels) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1304,7 +1306,7 @@ CFG_ItemLabels CFG_makeItemLabels2(CFG_Item elem1, CFG_Item elem2) {
  * \param[in] elem3 One CFG_Item element of the new CFG_ItemLabels
  * \return A new CFG_ItemLabels consisting of 3 CFG_Items
  */
-CFG_ItemLabels CFG_makeItemLabels3(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3) {
+CFG_ItemLabels _CFG_makeItemLabels3(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3) {
   return (CFG_ItemLabels) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1316,7 +1318,7 @@ CFG_ItemLabels CFG_makeItemLabels3(CFG_Item elem1, CFG_Item elem2, CFG_Item elem
  * \param[in] elem4 One CFG_Item element of the new CFG_ItemLabels
  * \return A new CFG_ItemLabels consisting of 4 CFG_Items
  */
-CFG_ItemLabels CFG_makeItemLabels4(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4) {
+CFG_ItemLabels _CFG_makeItemLabels4(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4) {
   return (CFG_ItemLabels) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1329,7 +1331,7 @@ CFG_ItemLabels CFG_makeItemLabels4(CFG_Item elem1, CFG_Item elem2, CFG_Item elem
  * \param[in] elem5 One CFG_Item element of the new CFG_ItemLabels
  * \return A new CFG_ItemLabels consisting of 5 CFG_Items
  */
-CFG_ItemLabels CFG_makeItemLabels5(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5) {
+CFG_ItemLabels _CFG_makeItemLabels5(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5) {
   return (CFG_ItemLabels) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1343,7 +1345,7 @@ CFG_ItemLabels CFG_makeItemLabels5(CFG_Item elem1, CFG_Item elem2, CFG_Item elem
  * \param[in] elem6 One CFG_Item element of the new CFG_ItemLabels
  * \return A new CFG_ItemLabels consisting of 6 CFG_Items
  */
-CFG_ItemLabels CFG_makeItemLabels6(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5, CFG_Item elem6) {
+CFG_ItemLabels _CFG_makeItemLabels6(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5, CFG_Item elem6) {
   return (CFG_ItemLabels) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -2456,7 +2458,7 @@ CFG_ItemLabels CFG_makeItemLabelsMany(CFG_Item head, CFG_ItemLabels tail) {
  * \param[in] arg1 second CFG_VirtualButton to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualVirtualButton(CFG_VirtualButton arg0, CFG_VirtualButton arg1) {
+ATbool _CFG_isEqualVirtualButton(CFG_VirtualButton arg0, CFG_VirtualButton arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2466,7 +2468,7 @@ ATbool CFG_isEqualVirtualButton(CFG_VirtualButton arg0, CFG_VirtualButton arg1) 
  * \param[in] arg1 second CFG_KeyModifier to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualKeyModifier(CFG_KeyModifier arg0, CFG_KeyModifier arg1) {
+ATbool _CFG_isEqualKeyModifier(CFG_KeyModifier arg0, CFG_KeyModifier arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2476,7 +2478,7 @@ ATbool CFG_isEqualKeyModifier(CFG_KeyModifier arg0, CFG_KeyModifier arg1) {
  * \param[in] arg1 second CFG_VirtualKey to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualVirtualKey(CFG_VirtualKey arg0, CFG_VirtualKey arg1) {
+ATbool _CFG_isEqualVirtualKey(CFG_VirtualKey arg0, CFG_VirtualKey arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2486,7 +2488,7 @@ ATbool CFG_isEqualVirtualKey(CFG_VirtualKey arg0, CFG_VirtualKey arg1) {
  * \param[in] arg1 second CFG_Color to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1) {
+ATbool _CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2496,7 +2498,7 @@ ATbool CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1) {
  * \param[in] arg1 second CFG_Configuration to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualConfiguration(CFG_Configuration arg0, CFG_Configuration arg1) {
+ATbool _CFG_isEqualConfiguration(CFG_Configuration arg0, CFG_Configuration arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2506,7 +2508,7 @@ ATbool CFG_isEqualConfiguration(CFG_Configuration arg0, CFG_Configuration arg1) 
  * \param[in] arg1 second CFG_Property to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualProperty(CFG_Property arg0, CFG_Property arg1) {
+ATbool _CFG_isEqualProperty(CFG_Property arg0, CFG_Property arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2516,7 +2518,7 @@ ATbool CFG_isEqualProperty(CFG_Property arg0, CFG_Property arg1) {
  * \param[in] arg1 second CFG_ActionDescription to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualActionDescription(CFG_ActionDescription arg0, CFG_ActionDescription arg1) {
+ATbool _CFG_isEqualActionDescription(CFG_ActionDescription arg0, CFG_ActionDescription arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2526,7 +2528,7 @@ ATbool CFG_isEqualActionDescription(CFG_ActionDescription arg0, CFG_ActionDescri
  * \param[in] arg1 second CFG_Event to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualEvent(CFG_Event arg0, CFG_Event arg1) {
+ATbool _CFG_isEqualEvent(CFG_Event arg0, CFG_Event arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2536,7 +2538,7 @@ ATbool CFG_isEqualEvent(CFG_Event arg0, CFG_Event arg1) {
  * \param[in] arg1 second CFG_Item to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualItem(CFG_Item arg0, CFG_Item arg1) {
+ATbool _CFG_isEqualItem(CFG_Item arg0, CFG_Item arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2546,7 +2548,7 @@ ATbool CFG_isEqualItem(CFG_Item arg0, CFG_Item arg1) {
  * \param[in] arg1 second CFG_TextCategoryName to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualTextCategoryName(CFG_TextCategoryName arg0, CFG_TextCategoryName arg1) {
+ATbool _CFG_isEqualTextCategoryName(CFG_TextCategoryName arg0, CFG_TextCategoryName arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2556,7 +2558,7 @@ ATbool CFG_isEqualTextCategoryName(CFG_TextCategoryName arg0, CFG_TextCategoryNa
  * \param[in] arg1 second CFG_TextAttribute to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualTextAttribute(CFG_TextAttribute arg0, CFG_TextAttribute arg1) {
+ATbool _CFG_isEqualTextAttribute(CFG_TextAttribute arg0, CFG_TextAttribute arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2566,7 +2568,7 @@ ATbool CFG_isEqualTextAttribute(CFG_TextAttribute arg0, CFG_TextAttribute arg1) 
  * \param[in] arg1 second CFG_ShortCut to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualShortCut(CFG_ShortCut arg0, CFG_ShortCut arg1) {
+ATbool _CFG_isEqualShortCut(CFG_ShortCut arg0, CFG_ShortCut arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2576,7 +2578,7 @@ ATbool CFG_isEqualShortCut(CFG_ShortCut arg0, CFG_ShortCut arg1) {
  * \param[in] arg1 second CFG_TextStyle to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualTextStyle(CFG_TextStyle arg0, CFG_TextStyle arg1) {
+ATbool _CFG_isEqualTextStyle(CFG_TextStyle arg0, CFG_TextStyle arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2586,7 +2588,7 @@ ATbool CFG_isEqualTextStyle(CFG_TextStyle arg0, CFG_TextStyle arg1) {
  * \param[in] arg1 second CFG_PropertyList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualPropertyList(CFG_PropertyList arg0, CFG_PropertyList arg1) {
+ATbool _CFG_isEqualPropertyList(CFG_PropertyList arg0, CFG_PropertyList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2596,7 +2598,7 @@ ATbool CFG_isEqualPropertyList(CFG_PropertyList arg0, CFG_PropertyList arg1) {
  * \param[in] arg1 second CFG_ActionDescriptionList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualActionDescriptionList(CFG_ActionDescriptionList arg0, CFG_ActionDescriptionList arg1) {
+ATbool _CFG_isEqualActionDescriptionList(CFG_ActionDescriptionList arg0, CFG_ActionDescriptionList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2606,7 +2608,7 @@ ATbool CFG_isEqualActionDescriptionList(CFG_ActionDescriptionList arg0, CFG_Acti
  * \param[in] arg1 second CFG_TextAttributeMap to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeMap arg1) {
+ATbool _CFG_isEqualTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeMap arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2616,7 +2618,7 @@ ATbool CFG_isEqualTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeM
  * \param[in] arg1 second CFG_KeyModifierList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
+ATbool _CFG_isEqualKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2626,7 +2628,7 @@ ATbool CFG_isEqualKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList 
  * \param[in] arg1 second CFG_ItemLabels to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool CFG_isEqualItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
+ATbool _CFG_isEqualItemLabels(CFG_ItemLabels arg0, CFG_ItemLabels arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -2652,95 +2654,55 @@ ATbool CFG_isValidVirtualButton(CFG_VirtualButton arg) {
 }
 
 /**
- * Assert whether a CFG_VirtualButton is a NOBUTTON. . May not be used to assert correctness of the CFG_VirtualButton
+ * Assert whether a CFG_VirtualButton is a NOBUTTON by checking against the following ATerm pattern: NOBUTTON. May not be used to assert correctness of the CFG_VirtualButton
  * \param[in] arg input CFG_VirtualButton
  * \return ATtrue if #arg corresponds to the signature of a NOBUTTON, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualButtonNOBUTTON(CFG_VirtualButton arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonNOBUTTON);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualButtonNOBUTTON(CFG_VirtualButton arg){
+  /* checking for: NOBUTTON */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun0) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualButton is a BUTTON1. . May not be used to assert correctness of the CFG_VirtualButton
+ * Assert whether a CFG_VirtualButton is a BUTTON1 by checking against the following ATerm pattern: BUTTON1. May not be used to assert correctness of the CFG_VirtualButton
  * \param[in] arg input CFG_VirtualButton
  * \return ATtrue if #arg corresponds to the signature of a BUTTON1, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualButtonBUTTON1(CFG_VirtualButton arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonBUTTON1);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualButtonBUTTON1(CFG_VirtualButton arg){
+  /* checking for: BUTTON1 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun1) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualButton is a BUTTON2. . May not be used to assert correctness of the CFG_VirtualButton
+ * Assert whether a CFG_VirtualButton is a BUTTON2 by checking against the following ATerm pattern: BUTTON2. May not be used to assert correctness of the CFG_VirtualButton
  * \param[in] arg input CFG_VirtualButton
  * \return ATtrue if #arg corresponds to the signature of a BUTTON2, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualButtonBUTTON2(CFG_VirtualButton arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonBUTTON2);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualButtonBUTTON2(CFG_VirtualButton arg){
+  /* checking for: BUTTON2 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun2) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualButton is a BUTTON3. . May not be used to assert correctness of the CFG_VirtualButton
+ * Assert whether a CFG_VirtualButton is a BUTTON3 by checking against the following ATerm pattern: BUTTON3. May not be used to assert correctness of the CFG_VirtualButton
  * \param[in] arg input CFG_VirtualButton
  * \return ATtrue if #arg corresponds to the signature of a BUTTON3, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualButtonBUTTON3(CFG_VirtualButton arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualButtonBUTTON3);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualButtonBUTTON3(CFG_VirtualButton arg){
+  /* checking for: BUTTON3 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun3) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -2762,72 +2724,42 @@ ATbool CFG_isValidKeyModifier(CFG_KeyModifier arg) {
 }
 
 /**
- * Assert whether a CFG_KeyModifier is a M_ALT. . May not be used to assert correctness of the CFG_KeyModifier
+ * Assert whether a CFG_KeyModifier is a M_ALT by checking against the following ATerm pattern: M_ALT. May not be used to assert correctness of the CFG_KeyModifier
  * \param[in] arg input CFG_KeyModifier
  * \return ATtrue if #arg corresponds to the signature of a M_ALT, or ATfalse otherwise
  */
-inline ATbool CFG_isKeyModifierMUnderscoreALT(CFG_KeyModifier arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierMUnderscoreALT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isKeyModifierMUnderscoreALT(CFG_KeyModifier arg){
+  /* checking for: M_ALT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun4) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_KeyModifier is a M_CTRL. . May not be used to assert correctness of the CFG_KeyModifier
+ * Assert whether a CFG_KeyModifier is a M_CTRL by checking against the following ATerm pattern: M_CTRL. May not be used to assert correctness of the CFG_KeyModifier
  * \param[in] arg input CFG_KeyModifier
  * \return ATtrue if #arg corresponds to the signature of a M_CTRL, or ATfalse otherwise
  */
-inline ATbool CFG_isKeyModifierMUnderscoreCTRL(CFG_KeyModifier arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierMUnderscoreCTRL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isKeyModifierMUnderscoreCTRL(CFG_KeyModifier arg){
+  /* checking for: M_CTRL */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun5) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_KeyModifier is a M_SHIFT. . May not be used to assert correctness of the CFG_KeyModifier
+ * Assert whether a CFG_KeyModifier is a M_SHIFT by checking against the following ATerm pattern: M_SHIFT. May not be used to assert correctness of the CFG_KeyModifier
  * \param[in] arg input CFG_KeyModifier
  * \return ATtrue if #arg corresponds to the signature of a M_SHIFT, or ATfalse otherwise
  */
-inline ATbool CFG_isKeyModifierMUnderscoreSHIFT(CFG_KeyModifier arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierMUnderscoreSHIFT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isKeyModifierMUnderscoreSHIFT(CFG_KeyModifier arg){
+  /* checking for: M_SHIFT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun6) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -3134,2257 +3066,1277 @@ ATbool CFG_isValidVirtualKey(CFG_VirtualKey arg) {
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_0. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_0 by checking against the following ATerm pattern: VK_0. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_0, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore0(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore0);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore0(CFG_VirtualKey arg){
+  /* checking for: VK_0 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun7) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_1. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_1 by checking against the following ATerm pattern: VK_1. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_1, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore1(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore1);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore1(CFG_VirtualKey arg){
+  /* checking for: VK_1 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun8) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_2. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_2 by checking against the following ATerm pattern: VK_2. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_2, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore2(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore2);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore2(CFG_VirtualKey arg){
+  /* checking for: VK_2 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun9) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_3. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_3 by checking against the following ATerm pattern: VK_3. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_3, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore3(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore3);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore3(CFG_VirtualKey arg){
+  /* checking for: VK_3 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun10) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_4. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_4 by checking against the following ATerm pattern: VK_4. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_4, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore4(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore4);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore4(CFG_VirtualKey arg){
+  /* checking for: VK_4 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun11) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_5. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_5 by checking against the following ATerm pattern: VK_5. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_5, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore5(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore5);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore5(CFG_VirtualKey arg){
+  /* checking for: VK_5 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun12) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_6. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_6 by checking against the following ATerm pattern: VK_6. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_6, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore6(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore6);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore6(CFG_VirtualKey arg){
+  /* checking for: VK_6 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun13) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_7. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_7 by checking against the following ATerm pattern: VK_7. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_7, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore7(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore7);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore7(CFG_VirtualKey arg){
+  /* checking for: VK_7 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun14) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_8. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_8 by checking against the following ATerm pattern: VK_8. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_8, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore8(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore8);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore8(CFG_VirtualKey arg){
+  /* checking for: VK_8 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun15) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_9. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_9 by checking against the following ATerm pattern: VK_9. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_9, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscore9(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscore9);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscore9(CFG_VirtualKey arg){
+  /* checking for: VK_9 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun16) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_A. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_A by checking against the following ATerm pattern: VK_A. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_A, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreA(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreA);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreA(CFG_VirtualKey arg){
+  /* checking for: VK_A */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun17) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_B. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_B by checking against the following ATerm pattern: VK_B. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_B, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreB(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreB);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreB(CFG_VirtualKey arg){
+  /* checking for: VK_B */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun18) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_C. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_C by checking against the following ATerm pattern: VK_C. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_C, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreC(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreC);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreC(CFG_VirtualKey arg){
+  /* checking for: VK_C */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun19) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_D. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_D by checking against the following ATerm pattern: VK_D. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_D, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreD(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreD);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreD(CFG_VirtualKey arg){
+  /* checking for: VK_D */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun20) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_E. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_E by checking against the following ATerm pattern: VK_E. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_E, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreE(CFG_VirtualKey arg){
+  /* checking for: VK_E */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun21) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F by checking against the following ATerm pattern: VK_F. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF(CFG_VirtualKey arg){
+  /* checking for: VK_F */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun22) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_G. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_G by checking against the following ATerm pattern: VK_G. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_G, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreG(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreG);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreG(CFG_VirtualKey arg){
+  /* checking for: VK_G */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun23) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_H. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_H by checking against the following ATerm pattern: VK_H. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_H, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreH(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreH);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreH(CFG_VirtualKey arg){
+  /* checking for: VK_H */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun24) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_I. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_I by checking against the following ATerm pattern: VK_I. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_I, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreI(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreI);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreI(CFG_VirtualKey arg){
+  /* checking for: VK_I */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun25) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_J. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_J by checking against the following ATerm pattern: VK_J. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_J, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreJ(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreJ);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreJ(CFG_VirtualKey arg){
+  /* checking for: VK_J */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun26) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_K. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_K by checking against the following ATerm pattern: VK_K. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_K, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreK(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreK);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreK(CFG_VirtualKey arg){
+  /* checking for: VK_K */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun27) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_L. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_L by checking against the following ATerm pattern: VK_L. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_L, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreL(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreL(CFG_VirtualKey arg){
+  /* checking for: VK_L */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun28) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_M. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_M by checking against the following ATerm pattern: VK_M. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_M, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreM(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreM);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreM(CFG_VirtualKey arg){
+  /* checking for: VK_M */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun29) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_N. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_N by checking against the following ATerm pattern: VK_N. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_N, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreN(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreN);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreN(CFG_VirtualKey arg){
+  /* checking for: VK_N */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun30) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_O. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_O by checking against the following ATerm pattern: VK_O. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_O, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreO(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreO);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreO(CFG_VirtualKey arg){
+  /* checking for: VK_O */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun31) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_P. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_P by checking against the following ATerm pattern: VK_P. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_P, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreP(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreP);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreP(CFG_VirtualKey arg){
+  /* checking for: VK_P */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun32) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_Q. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_Q by checking against the following ATerm pattern: VK_Q. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_Q, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreQ(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreQ);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreQ(CFG_VirtualKey arg){
+  /* checking for: VK_Q */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun33) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_R. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_R by checking against the following ATerm pattern: VK_R. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_R, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreR(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreR);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreR(CFG_VirtualKey arg){
+  /* checking for: VK_R */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun34) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_S. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_S by checking against the following ATerm pattern: VK_S. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_S, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreS(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreS);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreS(CFG_VirtualKey arg){
+  /* checking for: VK_S */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun35) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_T. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_T by checking against the following ATerm pattern: VK_T. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_T, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreT(CFG_VirtualKey arg){
+  /* checking for: VK_T */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun36) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_U. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_U by checking against the following ATerm pattern: VK_U. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_U, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreU(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreU);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreU(CFG_VirtualKey arg){
+  /* checking for: VK_U */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun37) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_V. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_V by checking against the following ATerm pattern: VK_V. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_V, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreV(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreV);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreV(CFG_VirtualKey arg){
+  /* checking for: VK_V */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun38) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_W. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_W by checking against the following ATerm pattern: VK_W. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_W, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreW(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreW);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreW(CFG_VirtualKey arg){
+  /* checking for: VK_W */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun39) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_X. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_X by checking against the following ATerm pattern: VK_X. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_X, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreX(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreX);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreX(CFG_VirtualKey arg){
+  /* checking for: VK_X */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun40) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_Y. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_Y by checking against the following ATerm pattern: VK_Y. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_Y, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreY(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreY);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreY(CFG_VirtualKey arg){
+  /* checking for: VK_Y */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun41) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_Z. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_Z by checking against the following ATerm pattern: VK_Z. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_Z, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreZ(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreZ);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreZ(CFG_VirtualKey arg){
+  /* checking for: VK_Z */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun42) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_AMPERSAND. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_AMPERSAND by checking against the following ATerm pattern: VK_AMPERSAND. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_AMPERSAND, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreAMPERSAND(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreAMPERSAND);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreAMPERSAND(CFG_VirtualKey arg){
+  /* checking for: VK_AMPERSAND */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun43) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_ASTERISK. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_ASTERISK by checking against the following ATerm pattern: VK_ASTERISK. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_ASTERISK, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreASTERISK(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreASTERISK);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreASTERISK(CFG_VirtualKey arg){
+  /* checking for: VK_ASTERISK */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun44) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_AT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_AT by checking against the following ATerm pattern: VK_AT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_AT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreAT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreAT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreAT(CFG_VirtualKey arg){
+  /* checking for: VK_AT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun45) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_BACK_QUOTE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_BACK_QUOTE by checking against the following ATerm pattern: VK_BACK_QUOTE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_BACK_QUOTE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreBACKUnderscoreQUOTE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreBACKUnderscoreQUOTE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreBACKUnderscoreQUOTE(CFG_VirtualKey arg){
+  /* checking for: VK_BACK_QUOTE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun46) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_BACK_SLASH. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_BACK_SLASH by checking against the following ATerm pattern: VK_BACK_SLASH. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_BACK_SLASH, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreBACKUnderscoreSLASH(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreBACKUnderscoreSLASH);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreBACKUnderscoreSLASH(CFG_VirtualKey arg){
+  /* checking for: VK_BACK_SLASH */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun47) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_BACK_SPACE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_BACK_SPACE by checking against the following ATerm pattern: VK_BACK_SPACE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_BACK_SPACE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreBACKUnderscoreSPACE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreBACKUnderscoreSPACE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreBACKUnderscoreSPACE(CFG_VirtualKey arg){
+  /* checking for: VK_BACK_SPACE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun48) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_BEGIN. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_BEGIN by checking against the following ATerm pattern: VK_BEGIN. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_BEGIN, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreBEGIN(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreBEGIN);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreBEGIN(CFG_VirtualKey arg){
+  /* checking for: VK_BEGIN */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun49) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_BRACE_LEFT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_BRACE_LEFT by checking against the following ATerm pattern: VK_BRACE_LEFT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_BRACE_LEFT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreBRACEUnderscoreLEFT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreBRACEUnderscoreLEFT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreBRACEUnderscoreLEFT(CFG_VirtualKey arg){
+  /* checking for: VK_BRACE_LEFT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun50) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_BRACE_RIGHT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_BRACE_RIGHT by checking against the following ATerm pattern: VK_BRACE_RIGHT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_BRACE_RIGHT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreBRACEUnderscoreRIGHT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreBRACEUnderscoreRIGHT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreBRACEUnderscoreRIGHT(CFG_VirtualKey arg){
+  /* checking for: VK_BRACE_RIGHT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun51) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_CIRCUMFLEX. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_CIRCUMFLEX by checking against the following ATerm pattern: VK_CIRCUMFLEX. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_CIRCUMFLEX, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreCIRCUMFLEX(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreCIRCUMFLEX);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreCIRCUMFLEX(CFG_VirtualKey arg){
+  /* checking for: VK_CIRCUMFLEX */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun52) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_CLEAR. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_CLEAR by checking against the following ATerm pattern: VK_CLEAR. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_CLEAR, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreCLEAR(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreCLEAR);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreCLEAR(CFG_VirtualKey arg){
+  /* checking for: VK_CLEAR */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun53) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_CLOSE_BRACKET. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_CLOSE_BRACKET by checking against the following ATerm pattern: VK_CLOSE_BRACKET. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_CLOSE_BRACKET, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreCLOSEUnderscoreBRACKET(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreCLOSEUnderscoreBRACKET);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreCLOSEUnderscoreBRACKET(CFG_VirtualKey arg){
+  /* checking for: VK_CLOSE_BRACKET */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun54) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_COLON. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_COLON by checking against the following ATerm pattern: VK_COLON. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_COLON, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreCOLON(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreCOLON);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreCOLON(CFG_VirtualKey arg){
+  /* checking for: VK_COLON */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun55) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_COMMA. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_COMMA by checking against the following ATerm pattern: VK_COMMA. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_COMMA, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreCOMMA(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreCOMMA);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreCOMMA(CFG_VirtualKey arg){
+  /* checking for: VK_COMMA */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun56) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_DECIMAL. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_DECIMAL by checking against the following ATerm pattern: VK_DECIMAL. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_DECIMAL, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreDECIMAL(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreDECIMAL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreDECIMAL(CFG_VirtualKey arg){
+  /* checking for: VK_DECIMAL */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun57) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_DELETE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_DELETE by checking against the following ATerm pattern: VK_DELETE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_DELETE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreDELETE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreDELETE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreDELETE(CFG_VirtualKey arg){
+  /* checking for: VK_DELETE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun58) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_DIVIDE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_DIVIDE by checking against the following ATerm pattern: VK_DIVIDE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_DIVIDE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreDIVIDE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreDIVIDE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreDIVIDE(CFG_VirtualKey arg){
+  /* checking for: VK_DIVIDE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun59) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_DOLLAR. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_DOLLAR by checking against the following ATerm pattern: VK_DOLLAR. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_DOLLAR, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreDOLLAR(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreDOLLAR);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreDOLLAR(CFG_VirtualKey arg){
+  /* checking for: VK_DOLLAR */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun60) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_DOWN. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_DOWN by checking against the following ATerm pattern: VK_DOWN. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_DOWN, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreDOWN(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreDOWN);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreDOWN(CFG_VirtualKey arg){
+  /* checking for: VK_DOWN */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun61) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_END. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_END by checking against the following ATerm pattern: VK_END. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_END, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreEND(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreEND);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreEND(CFG_VirtualKey arg){
+  /* checking for: VK_END */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun62) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_ENTER. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_ENTER by checking against the following ATerm pattern: VK_ENTER. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_ENTER, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreENTER(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreENTER);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreENTER(CFG_VirtualKey arg){
+  /* checking for: VK_ENTER */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun63) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_EQUALS. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_EQUALS by checking against the following ATerm pattern: VK_EQUALS. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_EQUALS, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreEQUALS(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreEQUALS);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreEQUALS(CFG_VirtualKey arg){
+  /* checking for: VK_EQUALS */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun64) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_ESCAPE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_ESCAPE by checking against the following ATerm pattern: VK_ESCAPE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_ESCAPE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreESCAPE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreESCAPE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreESCAPE(CFG_VirtualKey arg){
+  /* checking for: VK_ESCAPE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun65) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_EXCLAMATION_MARK. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_EXCLAMATION_MARK by checking against the following ATerm pattern: VK_EXCLAMATION_MARK. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_EXCLAMATION_MARK, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreEXCLAMATIONUnderscoreMARK(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreEXCLAMATIONUnderscoreMARK);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreEXCLAMATIONUnderscoreMARK(CFG_VirtualKey arg){
+  /* checking for: VK_EXCLAMATION_MARK */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun66) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F1. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F1 by checking against the following ATerm pattern: VK_F1. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F1, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF1(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF1);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF1(CFG_VirtualKey arg){
+  /* checking for: VK_F1 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun67) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F2. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F2 by checking against the following ATerm pattern: VK_F2. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F2, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF2(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF2);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF2(CFG_VirtualKey arg){
+  /* checking for: VK_F2 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun68) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F3. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F3 by checking against the following ATerm pattern: VK_F3. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F3, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF3(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF3);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF3(CFG_VirtualKey arg){
+  /* checking for: VK_F3 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun69) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F4. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F4 by checking against the following ATerm pattern: VK_F4. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F4, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF4(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF4);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF4(CFG_VirtualKey arg){
+  /* checking for: VK_F4 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun70) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F5. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F5 by checking against the following ATerm pattern: VK_F5. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F5, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF5(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF5);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF5(CFG_VirtualKey arg){
+  /* checking for: VK_F5 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun71) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F6. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F6 by checking against the following ATerm pattern: VK_F6. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F6, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF6(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF6);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF6(CFG_VirtualKey arg){
+  /* checking for: VK_F6 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun72) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F7. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F7 by checking against the following ATerm pattern: VK_F7. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F7, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF7(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF7);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF7(CFG_VirtualKey arg){
+  /* checking for: VK_F7 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun73) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F8. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F8 by checking against the following ATerm pattern: VK_F8. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F8, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF8(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF8);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF8(CFG_VirtualKey arg){
+  /* checking for: VK_F8 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun74) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F9. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F9 by checking against the following ATerm pattern: VK_F9. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F9, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF9(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF9);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF9(CFG_VirtualKey arg){
+  /* checking for: VK_F9 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun75) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F10. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F10 by checking against the following ATerm pattern: VK_F10. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F10, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF10(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF10);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF10(CFG_VirtualKey arg){
+  /* checking for: VK_F10 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun76) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F11. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F11 by checking against the following ATerm pattern: VK_F11. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F11, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF11(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF11);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF11(CFG_VirtualKey arg){
+  /* checking for: VK_F11 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun77) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_F12. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_F12 by checking against the following ATerm pattern: VK_F12. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_F12, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreF12(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreF12);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreF12(CFG_VirtualKey arg){
+  /* checking for: VK_F12 */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun78) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_GREATER. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_GREATER by checking against the following ATerm pattern: VK_GREATER. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_GREATER, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreGREATER(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreGREATER);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreGREATER(CFG_VirtualKey arg){
+  /* checking for: VK_GREATER */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun79) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_HOME. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_HOME by checking against the following ATerm pattern: VK_HOME. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_HOME, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreHOME(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreHOME);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreHOME(CFG_VirtualKey arg){
+  /* checking for: VK_HOME */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun80) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_INSERT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_INSERT by checking against the following ATerm pattern: VK_INSERT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_INSERT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreINSERT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreINSERT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreINSERT(CFG_VirtualKey arg){
+  /* checking for: VK_INSERT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun81) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_LEFT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_LEFT by checking against the following ATerm pattern: VK_LEFT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_LEFT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreLEFT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreLEFT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreLEFT(CFG_VirtualKey arg){
+  /* checking for: VK_LEFT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun82) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_LEFT_PARENTHESIS. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_LEFT_PARENTHESIS by checking against the following ATerm pattern: VK_LEFT_PARENTHESIS. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_LEFT_PARENTHESIS, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreLEFTUnderscorePARENTHESIS(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreLEFTUnderscorePARENTHESIS);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreLEFTUnderscorePARENTHESIS(CFG_VirtualKey arg){
+  /* checking for: VK_LEFT_PARENTHESIS */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun83) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_MINUS. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_MINUS by checking against the following ATerm pattern: VK_MINUS. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_MINUS, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreMINUS(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreMINUS);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreMINUS(CFG_VirtualKey arg){
+  /* checking for: VK_MINUS */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun84) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_MULTIPLY. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_MULTIPLY by checking against the following ATerm pattern: VK_MULTIPLY. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_MULTIPLY, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreMULTIPLY(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreMULTIPLY);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreMULTIPLY(CFG_VirtualKey arg){
+  /* checking for: VK_MULTIPLY */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun85) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_NUMBER_SIGN. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_NUMBER_SIGN by checking against the following ATerm pattern: VK_NUMBER_SIGN. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_NUMBER_SIGN, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreNUMBERUnderscoreSIGN(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreNUMBERUnderscoreSIGN);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreNUMBERUnderscoreSIGN(CFG_VirtualKey arg){
+  /* checking for: VK_NUMBER_SIGN */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun86) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_OPEN_BRACKET. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_OPEN_BRACKET by checking against the following ATerm pattern: VK_OPEN_BRACKET. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_OPEN_BRACKET, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreOPENUnderscoreBRACKET(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreOPENUnderscoreBRACKET);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreOPENUnderscoreBRACKET(CFG_VirtualKey arg){
+  /* checking for: VK_OPEN_BRACKET */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun87) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_PAGE_DOWN. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_PAGE_DOWN by checking against the following ATerm pattern: VK_PAGE_DOWN. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_PAGE_DOWN, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscorePAGEUnderscoreDOWN(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscorePAGEUnderscoreDOWN);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscorePAGEUnderscoreDOWN(CFG_VirtualKey arg){
+  /* checking for: VK_PAGE_DOWN */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun88) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_PAGE_UP. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_PAGE_UP by checking against the following ATerm pattern: VK_PAGE_UP. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_PAGE_UP, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscorePAGEUnderscoreUP(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscorePAGEUnderscoreUP);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscorePAGEUnderscoreUP(CFG_VirtualKey arg){
+  /* checking for: VK_PAGE_UP */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun89) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_PAUSE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_PAUSE by checking against the following ATerm pattern: VK_PAUSE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_PAUSE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscorePAUSE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscorePAUSE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscorePAUSE(CFG_VirtualKey arg){
+  /* checking for: VK_PAUSE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun90) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_PERIOD. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_PERIOD by checking against the following ATerm pattern: VK_PERIOD. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_PERIOD, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscorePERIOD(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscorePERIOD);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscorePERIOD(CFG_VirtualKey arg){
+  /* checking for: VK_PERIOD */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun91) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_PLUS. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_PLUS by checking against the following ATerm pattern: VK_PLUS. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_PLUS, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscorePLUS(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscorePLUS);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscorePLUS(CFG_VirtualKey arg){
+  /* checking for: VK_PLUS */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun92) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_PRINTSCREEN. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_PRINTSCREEN by checking against the following ATerm pattern: VK_PRINTSCREEN. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_PRINTSCREEN, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscorePRINTSCREEN(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscorePRINTSCREEN);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscorePRINTSCREEN(CFG_VirtualKey arg){
+  /* checking for: VK_PRINTSCREEN */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun93) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_QUOTE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_QUOTE by checking against the following ATerm pattern: VK_QUOTE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_QUOTE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreQUOTE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreQUOTE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreQUOTE(CFG_VirtualKey arg){
+  /* checking for: VK_QUOTE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun94) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_QUOTEDBL. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_QUOTEDBL by checking against the following ATerm pattern: VK_QUOTEDBL. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_QUOTEDBL, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreQUOTEDBL(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreQUOTEDBL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreQUOTEDBL(CFG_VirtualKey arg){
+  /* checking for: VK_QUOTEDBL */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun95) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_RIGHT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_RIGHT by checking against the following ATerm pattern: VK_RIGHT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_RIGHT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreRIGHT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreRIGHT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreRIGHT(CFG_VirtualKey arg){
+  /* checking for: VK_RIGHT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun96) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_RIGHT_PARENTHESIS. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_RIGHT_PARENTHESIS by checking against the following ATerm pattern: VK_RIGHT_PARENTHESIS. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_RIGHT_PARENTHESIS, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreRIGHTUnderscorePARENTHESIS(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreRIGHTUnderscorePARENTHESIS);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreRIGHTUnderscorePARENTHESIS(CFG_VirtualKey arg){
+  /* checking for: VK_RIGHT_PARENTHESIS */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun97) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_SEMICOLON. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_SEMICOLON by checking against the following ATerm pattern: VK_SEMICOLON. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_SEMICOLON, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreSEMICOLON(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreSEMICOLON);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreSEMICOLON(CFG_VirtualKey arg){
+  /* checking for: VK_SEMICOLON */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun98) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_SLASH. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_SLASH by checking against the following ATerm pattern: VK_SLASH. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_SLASH, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreSLASH(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreSLASH);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreSLASH(CFG_VirtualKey arg){
+  /* checking for: VK_SLASH */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun99) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_SPACE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_SPACE by checking against the following ATerm pattern: VK_SPACE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_SPACE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreSPACE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreSPACE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreSPACE(CFG_VirtualKey arg){
+  /* checking for: VK_SPACE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun100) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_SUBTRACT. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_SUBTRACT by checking against the following ATerm pattern: VK_SUBTRACT. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_SUBTRACT, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreSUBTRACT(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreSUBTRACT);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreSUBTRACT(CFG_VirtualKey arg){
+  /* checking for: VK_SUBTRACT */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun101) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_TAB. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_TAB by checking against the following ATerm pattern: VK_TAB. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_TAB, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreTAB(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreTAB);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreTAB(CFG_VirtualKey arg){
+  /* checking for: VK_TAB */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun102) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_UNDERSCORE. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_UNDERSCORE by checking against the following ATerm pattern: VK_UNDERSCORE. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_UNDERSCORE, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreUNDERSCORE(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreUNDERSCORE);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreUNDERSCORE(CFG_VirtualKey arg){
+  /* checking for: VK_UNDERSCORE */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun103) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_VirtualKey is a VK_UP. . May not be used to assert correctness of the CFG_VirtualKey
+ * Assert whether a CFG_VirtualKey is a VK_UP by checking against the following ATerm pattern: VK_UP. May not be used to assert correctness of the CFG_VirtualKey
  * \param[in] arg input CFG_VirtualKey
  * \return ATtrue if #arg corresponds to the signature of a VK_UP, or ATfalse otherwise
  */
-inline ATbool CFG_isVirtualKeyVKUnderscoreUP(CFG_VirtualKey arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternVirtualKeyVKUnderscoreUP);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isVirtualKeyVKUnderscoreUP(CFG_VirtualKey arg){
+  /* checking for: VK_UP */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun104) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -5400,16 +4352,25 @@ ATbool CFG_isValidColor(CFG_Color arg) {
 }
 
 /**
- * Assert whether a CFG_Color is a rgb. Always returns ATtrue
+ * Assert whether a CFG_Color is a rgb by checking against the following ATerm pattern: rgb(<"red"(int)>,<"green"(int)>,<"blue"(int)>). Always returns ATtrue
  * \param[in] arg input CFG_Color
  * \return ATtrue if #arg corresponds to the signature of a rgb, or ATfalse otherwise
  */
-inline ATbool CFG_isColorRgb(CFG_Color arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternColorRgb, NULL, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool CFG_isColorRgb(CFG_Color arg){
+  /* checking for: rgb */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun105) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+        ATerm arg_arg2 = ATgetArgument(arg, 2);
+        if (ATgetType((ATerm)arg_arg2) == AT_INT) {
+          return ATtrue;
+        }
+      }
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -5536,16 +4497,16 @@ ATbool CFG_isValidConfiguration(CFG_Configuration arg) {
 }
 
 /**
- * Assert whether a CFG_Configuration is a configuration. Always returns ATtrue
+ * Assert whether a CFG_Configuration is a configuration by checking against the following ATerm pattern: configuration(<"list"("Property-list")>). Always returns ATtrue
  * \param[in] arg input CFG_Configuration
  * \return ATtrue if #arg corresponds to the signature of a configuration, or ATfalse otherwise
  */
-inline ATbool CFG_isConfigurationConfiguration(CFG_Configuration arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternConfigurationConfiguration, NULL));
-#endif
-  return ATtrue;
+inline ATbool CFG_isConfigurationConfiguration(CFG_Configuration arg){
+  /* checking for: configuration */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun106) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /**
@@ -5619,187 +4580,137 @@ ATbool CFG_isValidProperty(CFG_Property arg) {
 }
 
 /**
- * Assert whether a CFG_Property is a import. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a import by checking against the following ATerm pattern: import(<"path"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a import, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyImport(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyImport, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyImport(CFG_Property arg){
+  /* checking for: import */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun107) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a script. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a script by checking against the following ATerm pattern: script(<"path"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a script, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyScript(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyScript, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyScript(CFG_Property arg){
+  /* checking for: script */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun108) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a script-path. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a script-path by checking against the following ATerm pattern: script-path(<"path"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a script-path, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyScriptPath(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyScriptPath, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyScriptPath(CFG_Property arg){
+  /* checking for: script-path */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun109) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a action. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a action by checking against the following ATerm pattern: action(<"list"("ActionDescription-list")>,<"action"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a action, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyAction(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyAction, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyAction(CFG_Property arg){
+  /* checking for: action */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun110) {
+    ATerm arg_arg1 = ATgetArgument(arg, 1);
+    if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a extension. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a extension by checking against the following ATerm pattern: extension(<"language"(str)>,<"extension"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a extension, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyExtension(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyExtension, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyExtension(CFG_Property arg){
+  /* checking for: extension */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun111) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a library-path. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a library-path by checking against the following ATerm pattern: library-path(<"label"(str)>,<"path"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a library-path, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyLibraryPath(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyLibraryPath, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyLibraryPath(CFG_Property arg){
+  /* checking for: library-path */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun112) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a module-path. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a module-path by checking against the following ATerm pattern: module-path(<"label"(str)>,<"path"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a module-path, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyModulePath(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyModulePath, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyModulePath(CFG_Property arg){
+  /* checking for: module-path */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun113) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Property is a text-category. . May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a text-category by checking against the following ATerm pattern: text-category(<"category"("TextCategoryName")>,<"map"("TextAttribute-map")>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
  * \return ATtrue if #arg corresponds to the signature of a text-category, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyTextCategory(CFG_Property arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyTextCategory, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isPropertyTextCategory(CFG_Property arg){
+  /* checking for: text-category */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun114) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -6156,16 +5067,19 @@ ATbool CFG_isValidActionDescription(CFG_ActionDescription arg) {
 }
 
 /**
- * Assert whether a CFG_ActionDescription is a description. Always returns ATtrue
+ * Assert whether a CFG_ActionDescription is a description by checking against the following ATerm pattern: description(<"context"(term)>,<"event"("Event")>). Always returns ATtrue
  * \param[in] arg input CFG_ActionDescription
  * \return ATtrue if #arg corresponds to the signature of a description, or ATfalse otherwise
  */
-inline ATbool CFG_isActionDescriptionDescription(CFG_ActionDescription arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternActionDescriptionDescription, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool CFG_isActionDescriptionDescription(CFG_ActionDescription arg){
+  /* checking for: description */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun115) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (arg_arg0 != NULL) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -6267,118 +5181,80 @@ ATbool CFG_isValidEvent(CFG_Event arg) {
 }
 
 /**
- * Assert whether a CFG_Event is a popup. . May not be used to assert correctness of the CFG_Event
+ * Assert whether a CFG_Event is a popup by checking against the following ATerm pattern: popup. May not be used to assert correctness of the CFG_Event
  * \param[in] arg input CFG_Event
  * \return ATtrue if #arg corresponds to the signature of a popup, or ATfalse otherwise
  */
-inline ATbool CFG_isEventPopup(CFG_Event arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventPopup);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isEventPopup(CFG_Event arg){
+  /* checking for: popup */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun116) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Event is a click. . May not be used to assert correctness of the CFG_Event
+ * Assert whether a CFG_Event is a click by checking against the following ATerm pattern: click(<"list"("KeyModifier-list")>,<"button"("VirtualButton")>). May not be used to assert correctness of the CFG_Event
  * \param[in] arg input CFG_Event
  * \return ATtrue if #arg corresponds to the signature of a click, or ATfalse otherwise
  */
-inline ATbool CFG_isEventClick(CFG_Event arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventClick, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isEventClick(CFG_Event arg){
+  /* checking for: click */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun117) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Event is a icon. . May not be used to assert correctness of the CFG_Event
+ * Assert whether a CFG_Event is a icon by checking against the following ATerm pattern: icon(<"title"(str)>,<"path"(str)>). May not be used to assert correctness of the CFG_Event
  * \param[in] arg input CFG_Event
  * \return ATtrue if #arg corresponds to the signature of a icon, or ATfalse otherwise
  */
-inline ATbool CFG_isEventIcon(CFG_Event arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventIcon, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isEventIcon(CFG_Event arg){
+  /* checking for: icon */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun118) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Event is a menu. . May not be used to assert correctness of the CFG_Event
+ * Assert whether a CFG_Event is a menu by checking against the following ATerm pattern: menu(<"labels"("Item-labels")>,<"info"(str)>). May not be used to assert correctness of the CFG_Event
  * \param[in] arg input CFG_Event
  * \return ATtrue if #arg corresponds to the signature of a menu, or ATfalse otherwise
  */
-inline ATbool CFG_isEventMenu(CFG_Event arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventMenu, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isEventMenu(CFG_Event arg){
+  /* checking for: menu */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun119) {
+    ATerm arg_arg1 = ATgetArgument(arg, 1);
+    if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_Event is a menu-shortcut. . May not be used to assert correctness of the CFG_Event
+ * Assert whether a CFG_Event is a menu-shortcut by checking against the following ATerm pattern: menu-shortcut(<"labels"("Item-labels")>,<"shortcut"("ShortCut")>,<"info"(str)>). May not be used to assert correctness of the CFG_Event
  * \param[in] arg input CFG_Event
  * \return ATtrue if #arg corresponds to the signature of a menu-shortcut, or ATfalse otherwise
  */
-inline ATbool CFG_isEventMenuShortcut(CFG_Event arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternEventMenuShortcut, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isEventMenuShortcut(CFG_Event arg){
+  /* checking for: menu-shortcut */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun120) {
+    ATerm arg_arg2 = ATgetArgument(arg, 2);
+    if (ATgetType((ATerm)arg_arg2) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg2)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg2)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
@@ -6671,16 +5547,19 @@ ATbool CFG_isValidItem(CFG_Item arg) {
 }
 
 /**
- * Assert whether a CFG_Item is a label. Always returns ATtrue
+ * Assert whether a CFG_Item is a label by checking against the following ATerm pattern: label(<"name"(str)>). Always returns ATtrue
  * \param[in] arg input CFG_Item
  * \return ATtrue if #arg corresponds to the signature of a label, or ATfalse otherwise
  */
-inline ATbool CFG_isItemLabel(CFG_Item arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternItemLabel, NULL));
-#endif
-  return ATtrue;
+inline ATbool CFG_isItemLabel(CFG_Item arg){
+  /* checking for: label */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun121) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -6742,95 +5621,58 @@ ATbool CFG_isValidTextCategoryName(CFG_TextCategoryName arg) {
 }
 
 /**
- * Assert whether a CFG_TextCategoryName is a focus. . May not be used to assert correctness of the CFG_TextCategoryName
+ * Assert whether a CFG_TextCategoryName is a focus by checking against the following ATerm pattern: focus. May not be used to assert correctness of the CFG_TextCategoryName
  * \param[in] arg input CFG_TextCategoryName
  * \return ATtrue if #arg corresponds to the signature of a focus, or ATfalse otherwise
  */
-inline ATbool CFG_isTextCategoryNameFocus(CFG_TextCategoryName arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextCategoryNameFocus);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextCategoryNameFocus(CFG_TextCategoryName arg){
+  /* checking for: focus */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun122) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextCategoryName is a selection. . May not be used to assert correctness of the CFG_TextCategoryName
+ * Assert whether a CFG_TextCategoryName is a selection by checking against the following ATerm pattern: selection. May not be used to assert correctness of the CFG_TextCategoryName
  * \param[in] arg input CFG_TextCategoryName
  * \return ATtrue if #arg corresponds to the signature of a selection, or ATfalse otherwise
  */
-inline ATbool CFG_isTextCategoryNameSelection(CFG_TextCategoryName arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextCategoryNameSelection);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextCategoryNameSelection(CFG_TextCategoryName arg){
+  /* checking for: selection */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun123) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextCategoryName is a normal. . May not be used to assert correctness of the CFG_TextCategoryName
+ * Assert whether a CFG_TextCategoryName is a normal by checking against the following ATerm pattern: normal. May not be used to assert correctness of the CFG_TextCategoryName
  * \param[in] arg input CFG_TextCategoryName
  * \return ATtrue if #arg corresponds to the signature of a normal, or ATfalse otherwise
  */
-inline ATbool CFG_isTextCategoryNameNormal(CFG_TextCategoryName arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextCategoryNameNormal);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextCategoryNameNormal(CFG_TextCategoryName arg){
+  /* checking for: normal */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun124) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextCategoryName is a extern. . May not be used to assert correctness of the CFG_TextCategoryName
+ * Assert whether a CFG_TextCategoryName is a extern by checking against the following ATerm pattern: extern(<"name"(str)>). May not be used to assert correctness of the CFG_TextCategoryName
  * \param[in] arg input CFG_TextCategoryName
  * \return ATtrue if #arg corresponds to the signature of a extern, or ATfalse otherwise
  */
-inline ATbool CFG_isTextCategoryNameExtern(CFG_TextCategoryName arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextCategoryNameExtern, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isTextCategoryNameExtern(CFG_TextCategoryName arg){
+  /* checking for: extern */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun125) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
@@ -6895,118 +5737,74 @@ ATbool CFG_isValidTextAttribute(CFG_TextAttribute arg) {
 }
 
 /**
- * Assert whether a CFG_TextAttribute is a foreground-color. . May not be used to assert correctness of the CFG_TextAttribute
+ * Assert whether a CFG_TextAttribute is a foreground-color by checking against the following ATerm pattern: foreground-color(<"color"("Color")>). May not be used to assert correctness of the CFG_TextAttribute
  * \param[in] arg input CFG_TextAttribute
  * \return ATtrue if #arg corresponds to the signature of a foreground-color, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeForegroundColor(CFG_TextAttribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeForegroundColor, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextAttributeForegroundColor(CFG_TextAttribute arg){
+  /* checking for: foreground-color */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun126) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextAttribute is a background-color. . May not be used to assert correctness of the CFG_TextAttribute
+ * Assert whether a CFG_TextAttribute is a background-color by checking against the following ATerm pattern: background-color(<"color"("Color")>). May not be used to assert correctness of the CFG_TextAttribute
  * \param[in] arg input CFG_TextAttribute
  * \return ATtrue if #arg corresponds to the signature of a background-color, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeBackgroundColor(CFG_TextAttribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeBackgroundColor, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextAttributeBackgroundColor(CFG_TextAttribute arg){
+  /* checking for: background-color */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun127) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextAttribute is a style. . May not be used to assert correctness of the CFG_TextAttribute
+ * Assert whether a CFG_TextAttribute is a style by checking against the following ATerm pattern: style(<"style"("TextStyle")>). May not be used to assert correctness of the CFG_TextAttribute
  * \param[in] arg input CFG_TextAttribute
  * \return ATtrue if #arg corresponds to the signature of a style, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeStyle(CFG_TextAttribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeStyle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextAttributeStyle(CFG_TextAttribute arg){
+  /* checking for: style */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun128) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextAttribute is a font. . May not be used to assert correctness of the CFG_TextAttribute
+ * Assert whether a CFG_TextAttribute is a font by checking against the following ATerm pattern: font(<"name"(str)>). May not be used to assert correctness of the CFG_TextAttribute
  * \param[in] arg input CFG_TextAttribute
  * \return ATtrue if #arg corresponds to the signature of a font, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeFont(CFG_TextAttribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeFont, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isTextAttributeFont(CFG_TextAttribute arg){
+  /* checking for: font */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun129) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextAttribute is a size. . May not be used to assert correctness of the CFG_TextAttribute
+ * Assert whether a CFG_TextAttribute is a size by checking against the following ATerm pattern: size(<"point"(int)>). May not be used to assert correctness of the CFG_TextAttribute
  * \param[in] arg input CFG_TextAttribute
  * \return ATtrue if #arg corresponds to the signature of a size, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeSize(CFG_TextAttribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeSize, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isTextAttributeSize(CFG_TextAttribute arg){
+  /* checking for: size */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun130) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
@@ -7179,16 +5977,16 @@ ATbool CFG_isValidShortCut(CFG_ShortCut arg) {
 }
 
 /**
- * Assert whether a CFG_ShortCut is a shortcut. Always returns ATtrue
+ * Assert whether a CFG_ShortCut is a shortcut by checking against the following ATerm pattern: shortcut(<"list"("KeyModifier-list")>,<"key"("VirtualKey")>). Always returns ATtrue
  * \param[in] arg input CFG_ShortCut
  * \return ATtrue if #arg corresponds to the signature of a shortcut, or ATfalse otherwise
  */
-inline ATbool CFG_isShortCutShortcut(CFG_ShortCut arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternShortCutShortcut, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool CFG_isShortCutShortcut(CFG_ShortCut arg){
+  /* checking for: shortcut */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun131) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /**
@@ -7284,72 +6082,42 @@ ATbool CFG_isValidTextStyle(CFG_TextStyle arg) {
 }
 
 /**
- * Assert whether a CFG_TextStyle is a bold. . May not be used to assert correctness of the CFG_TextStyle
+ * Assert whether a CFG_TextStyle is a bold by checking against the following ATerm pattern: bold. May not be used to assert correctness of the CFG_TextStyle
  * \param[in] arg input CFG_TextStyle
  * \return ATtrue if #arg corresponds to the signature of a bold, or ATfalse otherwise
  */
-inline ATbool CFG_isTextStyleBold(CFG_TextStyle arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextStyleBold);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextStyleBold(CFG_TextStyle arg){
+  /* checking for: bold */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun132) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextStyle is a italics. . May not be used to assert correctness of the CFG_TextStyle
+ * Assert whether a CFG_TextStyle is a italics by checking against the following ATerm pattern: italics. May not be used to assert correctness of the CFG_TextStyle
  * \param[in] arg input CFG_TextStyle
  * \return ATtrue if #arg corresponds to the signature of a italics, or ATfalse otherwise
  */
-inline ATbool CFG_isTextStyleItalics(CFG_TextStyle arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextStyleItalics);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextStyleItalics(CFG_TextStyle arg){
+  /* checking for: italics */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun133) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextStyle is a underlined. . May not be used to assert correctness of the CFG_TextStyle
+ * Assert whether a CFG_TextStyle is a underlined by checking against the following ATerm pattern: underlined. May not be used to assert correctness of the CFG_TextStyle
  * \param[in] arg input CFG_TextStyle
  * \return ATtrue if #arg corresponds to the signature of a underlined, or ATfalse otherwise
  */
-inline ATbool CFG_isTextStyleUnderlined(CFG_TextStyle arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextStyleUnderlined);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool CFG_isTextStyleUnderlined(CFG_TextStyle arg){
+  /* checking for: underlined */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun134) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -7371,71 +6139,43 @@ ATbool CFG_isValidPropertyList(CFG_PropertyList arg) {
 }
 
 /**
- * Assert whether a CFG_PropertyList is a empty. . May not be used to assert correctness of the CFG_PropertyList
+ * Assert whether a CFG_PropertyList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the CFG_PropertyList
  * \param[in] arg input CFG_PropertyList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyListEmpty(CFG_PropertyList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isPropertyListEmpty(CFG_PropertyList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternPropertyListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_PropertyList is a single. . May not be used to assert correctness of the CFG_PropertyList
+ * Assert whether a CFG_PropertyList is a single by checking against the following ATerm pattern: [<head(Property)>]. May not be used to assert correctness of the CFG_PropertyList
  * \param[in] arg input CFG_PropertyList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyListSingle(CFG_PropertyList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isPropertyListSingle(CFG_PropertyList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_PropertyList is a many. . May not be used to assert correctness of the CFG_PropertyList
+ * Assert whether a CFG_PropertyList is a many by checking against the following ATerm pattern: [<head(Property)>,<[tail(Property-list)]>]. May not be used to assert correctness of the CFG_PropertyList
  * \param[in] arg input CFG_PropertyList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyListMany(CFG_PropertyList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isPropertyListMany(CFG_PropertyList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -7540,71 +6280,43 @@ ATbool CFG_isValidActionDescriptionList(CFG_ActionDescriptionList arg) {
 }
 
 /**
- * Assert whether a CFG_ActionDescriptionList is a empty. . May not be used to assert correctness of the CFG_ActionDescriptionList
+ * Assert whether a CFG_ActionDescriptionList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the CFG_ActionDescriptionList
  * \param[in] arg input CFG_ActionDescriptionList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool CFG_isActionDescriptionListEmpty(CFG_ActionDescriptionList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isActionDescriptionListEmpty(CFG_ActionDescriptionList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternActionDescriptionListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_ActionDescriptionList is a single. . May not be used to assert correctness of the CFG_ActionDescriptionList
+ * Assert whether a CFG_ActionDescriptionList is a single by checking against the following ATerm pattern: [<head(ActionDescription)>]. May not be used to assert correctness of the CFG_ActionDescriptionList
  * \param[in] arg input CFG_ActionDescriptionList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool CFG_isActionDescriptionListSingle(CFG_ActionDescriptionList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternActionDescriptionListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isActionDescriptionListSingle(CFG_ActionDescriptionList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_ActionDescriptionList is a many. . May not be used to assert correctness of the CFG_ActionDescriptionList
+ * Assert whether a CFG_ActionDescriptionList is a many by checking against the following ATerm pattern: [<head(ActionDescription)>,<[tail(ActionDescription-list)]>]. May not be used to assert correctness of the CFG_ActionDescriptionList
  * \param[in] arg input CFG_ActionDescriptionList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool CFG_isActionDescriptionListMany(CFG_ActionDescriptionList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isActionDescriptionListMany(CFG_ActionDescriptionList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternActionDescriptionListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -7709,71 +6421,43 @@ ATbool CFG_isValidTextAttributeMap(CFG_TextAttributeMap arg) {
 }
 
 /**
- * Assert whether a CFG_TextAttributeMap is a empty. . May not be used to assert correctness of the CFG_TextAttributeMap
+ * Assert whether a CFG_TextAttributeMap is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the CFG_TextAttributeMap
  * \param[in] arg input CFG_TextAttributeMap
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeMapEmpty(CFG_TextAttributeMap arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isTextAttributeMapEmpty(CFG_TextAttributeMap arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternTextAttributeMapEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextAttributeMap is a single. . May not be used to assert correctness of the CFG_TextAttributeMap
+ * Assert whether a CFG_TextAttributeMap is a single by checking against the following ATerm pattern: [<head(TextAttribute)>]. May not be used to assert correctness of the CFG_TextAttributeMap
  * \param[in] arg input CFG_TextAttributeMap
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeMapSingle(CFG_TextAttributeMap arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeMapSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isTextAttributeMapSingle(CFG_TextAttributeMap arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_TextAttributeMap is a many. . May not be used to assert correctness of the CFG_TextAttributeMap
+ * Assert whether a CFG_TextAttributeMap is a many by checking against the following ATerm pattern: [<head(TextAttribute)>,<[tail(TextAttribute-map)]>]. May not be used to assert correctness of the CFG_TextAttributeMap
  * \param[in] arg input CFG_TextAttributeMap
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool CFG_isTextAttributeMapMany(CFG_TextAttributeMap arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isTextAttributeMapMany(CFG_TextAttributeMap arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternTextAttributeMapMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -7878,71 +6562,43 @@ ATbool CFG_isValidKeyModifierList(CFG_KeyModifierList arg) {
 }
 
 /**
- * Assert whether a CFG_KeyModifierList is a empty. . May not be used to assert correctness of the CFG_KeyModifierList
+ * Assert whether a CFG_KeyModifierList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the CFG_KeyModifierList
  * \param[in] arg input CFG_KeyModifierList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool CFG_isKeyModifierListEmpty(CFG_KeyModifierList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isKeyModifierListEmpty(CFG_KeyModifierList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternKeyModifierListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_KeyModifierList is a single. . May not be used to assert correctness of the CFG_KeyModifierList
+ * Assert whether a CFG_KeyModifierList is a single by checking against the following ATerm pattern: [<head(KeyModifier)>]. May not be used to assert correctness of the CFG_KeyModifierList
  * \param[in] arg input CFG_KeyModifierList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool CFG_isKeyModifierListSingle(CFG_KeyModifierList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isKeyModifierListSingle(CFG_KeyModifierList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_KeyModifierList is a many. . May not be used to assert correctness of the CFG_KeyModifierList
+ * Assert whether a CFG_KeyModifierList is a many by checking against the following ATerm pattern: [<head(KeyModifier)>,<[tail(KeyModifier-list)]>]. May not be used to assert correctness of the CFG_KeyModifierList
  * \param[in] arg input CFG_KeyModifierList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool CFG_isKeyModifierListMany(CFG_KeyModifierList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isKeyModifierListMany(CFG_KeyModifierList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -8047,71 +6703,43 @@ ATbool CFG_isValidItemLabels(CFG_ItemLabels arg) {
 }
 
 /**
- * Assert whether a CFG_ItemLabels is a empty. . May not be used to assert correctness of the CFG_ItemLabels
+ * Assert whether a CFG_ItemLabels is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the CFG_ItemLabels
  * \param[in] arg input CFG_ItemLabels
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool CFG_isItemLabelsEmpty(CFG_ItemLabels arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isItemLabelsEmpty(CFG_ItemLabels arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternItemLabelsEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_ItemLabels is a single. . May not be used to assert correctness of the CFG_ItemLabels
+ * Assert whether a CFG_ItemLabels is a single by checking against the following ATerm pattern: [<head(Item)>]. May not be used to assert correctness of the CFG_ItemLabels
  * \param[in] arg input CFG_ItemLabels
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool CFG_isItemLabelsSingle(CFG_ItemLabels arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternItemLabelsSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool CFG_isItemLabelsSingle(CFG_ItemLabels arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a CFG_ItemLabels is a many. . May not be used to assert correctness of the CFG_ItemLabels
+ * Assert whether a CFG_ItemLabels is a many by checking against the following ATerm pattern: [<head(Item)>,<[tail(Item-labels)]>]. May not be used to assert correctness of the CFG_ItemLabels
  * \param[in] arg input CFG_ItemLabels
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool CFG_isItemLabelsMany(CFG_ItemLabels arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool CFG_isItemLabelsMany(CFG_ItemLabels arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternItemLabelsMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
