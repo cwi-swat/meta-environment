@@ -22,116 +22,661 @@ typedef struct _Edge *Edge;
 typedef struct _Polygon *Polygon;
 typedef struct _Point *Point;
 
-void initGraphApi(void);
+#ifdef FAST_API
+#define initGraphApi() (init_Graph_dict())
+#else
+void _initGraphApi(void);
+#define initGraphApi() (_initGraphApi())
+#endif
 
-void protectGraph(Graph *arg);
-void unprotectGraph(Graph *arg);
-void protectNodeList(NodeList *arg);
-void unprotectNodeList(NodeList *arg);
-void protectNode(Node *arg);
-void unprotectNode(Node *arg);
-void protectNodeId(NodeId *arg);
-void unprotectNodeId(NodeId *arg);
-void protectAttributeList(AttributeList *arg);
-void unprotectAttributeList(AttributeList *arg);
-void protectAttribute(Attribute *arg);
-void unprotectAttribute(Attribute *arg);
-void protectFile(File *arg);
-void unprotectFile(File *arg);
-void protectColor(Color *arg);
-void unprotectColor(Color *arg);
-void protectStyle(Style *arg);
-void unprotectStyle(Style *arg);
-void protectShape(Shape *arg);
-void unprotectShape(Shape *arg);
-void protectDirection(Direction *arg);
-void unprotectDirection(Direction *arg);
-void protectEdgeList(EdgeList *arg);
-void unprotectEdgeList(EdgeList *arg);
-void protectEdge(Edge *arg);
-void unprotectEdge(Edge *arg);
-void protectPolygon(Polygon *arg);
-void unprotectPolygon(Polygon *arg);
-void protectPoint(Point *arg);
-void unprotectPoint(Point *arg);
-Graph GraphFromTerm(ATerm t);
-ATerm GraphToTerm(Graph arg);
-NodeList NodeListFromTerm(ATerm t);
-ATerm NodeListToTerm(NodeList arg);
-Node NodeFromTerm(ATerm t);
-ATerm NodeToTerm(Node arg);
-NodeId NodeIdFromTerm(ATerm t);
-ATerm NodeIdToTerm(NodeId arg);
-AttributeList AttributeListFromTerm(ATerm t);
-ATerm AttributeListToTerm(AttributeList arg);
-Attribute AttributeFromTerm(ATerm t);
-ATerm AttributeToTerm(Attribute arg);
-File FileFromTerm(ATerm t);
-ATerm FileToTerm(File arg);
-Color ColorFromTerm(ATerm t);
-ATerm ColorToTerm(Color arg);
-Style StyleFromTerm(ATerm t);
-ATerm StyleToTerm(Style arg);
-Shape ShapeFromTerm(ATerm t);
-ATerm ShapeToTerm(Shape arg);
-Direction DirectionFromTerm(ATerm t);
-ATerm DirectionToTerm(Direction arg);
-EdgeList EdgeListFromTerm(ATerm t);
-ATerm EdgeListToTerm(EdgeList arg);
-Edge EdgeFromTerm(ATerm t);
-ATerm EdgeToTerm(Edge arg);
-Polygon PolygonFromTerm(ATerm t);
-ATerm PolygonToTerm(Polygon arg);
-Point PointFromTerm(ATerm t);
-ATerm PointToTerm(Point arg);
-int getNodeListLength (NodeList arg);
-NodeList reverseNodeList(NodeList arg);
-NodeList appendNodeList(NodeList arg, Node elem);
-NodeList concatNodeList(NodeList arg0, NodeList arg1);
-NodeList sliceNodeList(NodeList arg, int start, int end);
-Node getNodeListNodeAt(NodeList arg, int index);
-NodeList replaceNodeListNodeAt(NodeList arg, Node elem, int index);
-NodeList makeNodeList2(Node elem1, Node elem2);
-NodeList makeNodeList3(Node elem1, Node elem2, Node elem3);
-NodeList makeNodeList4(Node elem1, Node elem2, Node elem3, Node elem4);
-NodeList makeNodeList5(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5);
-NodeList makeNodeList6(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5, Node elem6);
-int getAttributeListLength (AttributeList arg);
-AttributeList reverseAttributeList(AttributeList arg);
-AttributeList appendAttributeList(AttributeList arg, Attribute elem);
-AttributeList concatAttributeList(AttributeList arg0, AttributeList arg1);
-AttributeList sliceAttributeList(AttributeList arg, int start, int end);
-Attribute getAttributeListAttributeAt(AttributeList arg, int index);
-AttributeList replaceAttributeListAttributeAt(AttributeList arg, Attribute elem, int index);
-AttributeList makeAttributeList2(Attribute elem1, Attribute elem2);
-AttributeList makeAttributeList3(Attribute elem1, Attribute elem2, Attribute elem3);
-AttributeList makeAttributeList4(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4);
-AttributeList makeAttributeList5(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5);
-AttributeList makeAttributeList6(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5, Attribute elem6);
-int getEdgeListLength (EdgeList arg);
-EdgeList reverseEdgeList(EdgeList arg);
-EdgeList appendEdgeList(EdgeList arg, Edge elem);
-EdgeList concatEdgeList(EdgeList arg0, EdgeList arg1);
-EdgeList sliceEdgeList(EdgeList arg, int start, int end);
-Edge getEdgeListEdgeAt(EdgeList arg, int index);
-EdgeList replaceEdgeListEdgeAt(EdgeList arg, Edge elem, int index);
-EdgeList makeEdgeList2(Edge elem1, Edge elem2);
-EdgeList makeEdgeList3(Edge elem1, Edge elem2, Edge elem3);
-EdgeList makeEdgeList4(Edge elem1, Edge elem2, Edge elem3, Edge elem4);
-EdgeList makeEdgeList5(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5);
-EdgeList makeEdgeList6(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5, Edge elem6);
-int getPolygonLength (Polygon arg);
-Polygon reversePolygon(Polygon arg);
-Polygon appendPolygon(Polygon arg, Point elem);
-Polygon concatPolygon(Polygon arg0, Polygon arg1);
-Polygon slicePolygon(Polygon arg, int start, int end);
-Point getPolygonPointAt(Polygon arg, int index);
-Polygon replacePolygonPointAt(Polygon arg, Point elem, int index);
-Polygon makePolygon2(Point elem1, Point elem2);
-Polygon makePolygon3(Point elem1, Point elem2, Point elem3);
-Polygon makePolygon4(Point elem1, Point elem2, Point elem3, Point elem4);
-Polygon makePolygon5(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5);
-Polygon makePolygon6(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5, Point elem6);
+#ifdef FAST_API
+#define protectGraph(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectGraph(Graph *arg);
+#define protectGraph(arg) (_protectGraph(arg))
+#endif
+#ifdef FAST_API
+#define unprotectGraph(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectGraph(Graph *arg);
+#define unprotectGraph(arg) (_unprotectGraph(arg))
+#endif
+#ifdef FAST_API
+#define protectNodeList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectNodeList(NodeList *arg);
+#define protectNodeList(arg) (_protectNodeList(arg))
+#endif
+#ifdef FAST_API
+#define unprotectNodeList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectNodeList(NodeList *arg);
+#define unprotectNodeList(arg) (_unprotectNodeList(arg))
+#endif
+#ifdef FAST_API
+#define protectNode(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectNode(Node *arg);
+#define protectNode(arg) (_protectNode(arg))
+#endif
+#ifdef FAST_API
+#define unprotectNode(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectNode(Node *arg);
+#define unprotectNode(arg) (_unprotectNode(arg))
+#endif
+#ifdef FAST_API
+#define protectNodeId(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectNodeId(NodeId *arg);
+#define protectNodeId(arg) (_protectNodeId(arg))
+#endif
+#ifdef FAST_API
+#define unprotectNodeId(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectNodeId(NodeId *arg);
+#define unprotectNodeId(arg) (_unprotectNodeId(arg))
+#endif
+#ifdef FAST_API
+#define protectAttributeList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectAttributeList(AttributeList *arg);
+#define protectAttributeList(arg) (_protectAttributeList(arg))
+#endif
+#ifdef FAST_API
+#define unprotectAttributeList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectAttributeList(AttributeList *arg);
+#define unprotectAttributeList(arg) (_unprotectAttributeList(arg))
+#endif
+#ifdef FAST_API
+#define protectAttribute(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectAttribute(Attribute *arg);
+#define protectAttribute(arg) (_protectAttribute(arg))
+#endif
+#ifdef FAST_API
+#define unprotectAttribute(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectAttribute(Attribute *arg);
+#define unprotectAttribute(arg) (_unprotectAttribute(arg))
+#endif
+#ifdef FAST_API
+#define protectFile(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectFile(File *arg);
+#define protectFile(arg) (_protectFile(arg))
+#endif
+#ifdef FAST_API
+#define unprotectFile(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectFile(File *arg);
+#define unprotectFile(arg) (_unprotectFile(arg))
+#endif
+#ifdef FAST_API
+#define protectColor(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectColor(Color *arg);
+#define protectColor(arg) (_protectColor(arg))
+#endif
+#ifdef FAST_API
+#define unprotectColor(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectColor(Color *arg);
+#define unprotectColor(arg) (_unprotectColor(arg))
+#endif
+#ifdef FAST_API
+#define protectStyle(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectStyle(Style *arg);
+#define protectStyle(arg) (_protectStyle(arg))
+#endif
+#ifdef FAST_API
+#define unprotectStyle(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectStyle(Style *arg);
+#define unprotectStyle(arg) (_unprotectStyle(arg))
+#endif
+#ifdef FAST_API
+#define protectShape(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectShape(Shape *arg);
+#define protectShape(arg) (_protectShape(arg))
+#endif
+#ifdef FAST_API
+#define unprotectShape(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectShape(Shape *arg);
+#define unprotectShape(arg) (_unprotectShape(arg))
+#endif
+#ifdef FAST_API
+#define protectDirection(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectDirection(Direction *arg);
+#define protectDirection(arg) (_protectDirection(arg))
+#endif
+#ifdef FAST_API
+#define unprotectDirection(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectDirection(Direction *arg);
+#define unprotectDirection(arg) (_unprotectDirection(arg))
+#endif
+#ifdef FAST_API
+#define protectEdgeList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectEdgeList(EdgeList *arg);
+#define protectEdgeList(arg) (_protectEdgeList(arg))
+#endif
+#ifdef FAST_API
+#define unprotectEdgeList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectEdgeList(EdgeList *arg);
+#define unprotectEdgeList(arg) (_unprotectEdgeList(arg))
+#endif
+#ifdef FAST_API
+#define protectEdge(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectEdge(Edge *arg);
+#define protectEdge(arg) (_protectEdge(arg))
+#endif
+#ifdef FAST_API
+#define unprotectEdge(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectEdge(Edge *arg);
+#define unprotectEdge(arg) (_unprotectEdge(arg))
+#endif
+#ifdef FAST_API
+#define protectPolygon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectPolygon(Polygon *arg);
+#define protectPolygon(arg) (_protectPolygon(arg))
+#endif
+#ifdef FAST_API
+#define unprotectPolygon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectPolygon(Polygon *arg);
+#define unprotectPolygon(arg) (_unprotectPolygon(arg))
+#endif
+#ifdef FAST_API
+#define protectPoint(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _protectPoint(Point *arg);
+#define protectPoint(arg) (_protectPoint(arg))
+#endif
+#ifdef FAST_API
+#define unprotectPoint(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _unprotectPoint(Point *arg);
+#define unprotectPoint(arg) (_unprotectPoint(arg))
+#endif
+#ifdef FAST_API
+#define GraphFromTerm(t) ((Graph)(t))
+#else
+Graph _GraphFromTerm(ATerm t);
+#define GraphFromTerm(t) (_GraphFromTerm(t))
+#endif
+#ifdef FAST_API
+#define GraphToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _GraphToTerm(Graph arg);
+#define GraphToTerm(arg) (_GraphToTerm(arg))
+#endif
+#ifdef FAST_API
+#define NodeListFromTerm(t) ((NodeList)(t))
+#else
+NodeList _NodeListFromTerm(ATerm t);
+#define NodeListFromTerm(t) (_NodeListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define NodeListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _NodeListToTerm(NodeList arg);
+#define NodeListToTerm(arg) (_NodeListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define NodeFromTerm(t) ((Node)(t))
+#else
+Node _NodeFromTerm(ATerm t);
+#define NodeFromTerm(t) (_NodeFromTerm(t))
+#endif
+#ifdef FAST_API
+#define NodeToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _NodeToTerm(Node arg);
+#define NodeToTerm(arg) (_NodeToTerm(arg))
+#endif
+#ifdef FAST_API
+#define NodeIdFromTerm(t) ((NodeId)(t))
+#else
+NodeId _NodeIdFromTerm(ATerm t);
+#define NodeIdFromTerm(t) (_NodeIdFromTerm(t))
+#endif
+#ifdef FAST_API
+#define NodeIdToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _NodeIdToTerm(NodeId arg);
+#define NodeIdToTerm(arg) (_NodeIdToTerm(arg))
+#endif
+#ifdef FAST_API
+#define AttributeListFromTerm(t) ((AttributeList)(t))
+#else
+AttributeList _AttributeListFromTerm(ATerm t);
+#define AttributeListFromTerm(t) (_AttributeListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define AttributeListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _AttributeListToTerm(AttributeList arg);
+#define AttributeListToTerm(arg) (_AttributeListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define AttributeFromTerm(t) ((Attribute)(t))
+#else
+Attribute _AttributeFromTerm(ATerm t);
+#define AttributeFromTerm(t) (_AttributeFromTerm(t))
+#endif
+#ifdef FAST_API
+#define AttributeToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _AttributeToTerm(Attribute arg);
+#define AttributeToTerm(arg) (_AttributeToTerm(arg))
+#endif
+#ifdef FAST_API
+#define FileFromTerm(t) ((File)(t))
+#else
+File _FileFromTerm(ATerm t);
+#define FileFromTerm(t) (_FileFromTerm(t))
+#endif
+#ifdef FAST_API
+#define FileToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _FileToTerm(File arg);
+#define FileToTerm(arg) (_FileToTerm(arg))
+#endif
+#ifdef FAST_API
+#define ColorFromTerm(t) ((Color)(t))
+#else
+Color _ColorFromTerm(ATerm t);
+#define ColorFromTerm(t) (_ColorFromTerm(t))
+#endif
+#ifdef FAST_API
+#define ColorToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _ColorToTerm(Color arg);
+#define ColorToTerm(arg) (_ColorToTerm(arg))
+#endif
+#ifdef FAST_API
+#define StyleFromTerm(t) ((Style)(t))
+#else
+Style _StyleFromTerm(ATerm t);
+#define StyleFromTerm(t) (_StyleFromTerm(t))
+#endif
+#ifdef FAST_API
+#define StyleToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _StyleToTerm(Style arg);
+#define StyleToTerm(arg) (_StyleToTerm(arg))
+#endif
+#ifdef FAST_API
+#define ShapeFromTerm(t) ((Shape)(t))
+#else
+Shape _ShapeFromTerm(ATerm t);
+#define ShapeFromTerm(t) (_ShapeFromTerm(t))
+#endif
+#ifdef FAST_API
+#define ShapeToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _ShapeToTerm(Shape arg);
+#define ShapeToTerm(arg) (_ShapeToTerm(arg))
+#endif
+#ifdef FAST_API
+#define DirectionFromTerm(t) ((Direction)(t))
+#else
+Direction _DirectionFromTerm(ATerm t);
+#define DirectionFromTerm(t) (_DirectionFromTerm(t))
+#endif
+#ifdef FAST_API
+#define DirectionToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _DirectionToTerm(Direction arg);
+#define DirectionToTerm(arg) (_DirectionToTerm(arg))
+#endif
+#ifdef FAST_API
+#define EdgeListFromTerm(t) ((EdgeList)(t))
+#else
+EdgeList _EdgeListFromTerm(ATerm t);
+#define EdgeListFromTerm(t) (_EdgeListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define EdgeListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _EdgeListToTerm(EdgeList arg);
+#define EdgeListToTerm(arg) (_EdgeListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define EdgeFromTerm(t) ((Edge)(t))
+#else
+Edge _EdgeFromTerm(ATerm t);
+#define EdgeFromTerm(t) (_EdgeFromTerm(t))
+#endif
+#ifdef FAST_API
+#define EdgeToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _EdgeToTerm(Edge arg);
+#define EdgeToTerm(arg) (_EdgeToTerm(arg))
+#endif
+#ifdef FAST_API
+#define PolygonFromTerm(t) ((Polygon)(t))
+#else
+Polygon _PolygonFromTerm(ATerm t);
+#define PolygonFromTerm(t) (_PolygonFromTerm(t))
+#endif
+#ifdef FAST_API
+#define PolygonToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _PolygonToTerm(Polygon arg);
+#define PolygonToTerm(arg) (_PolygonToTerm(arg))
+#endif
+#ifdef FAST_API
+#define PointFromTerm(t) ((Point)(t))
+#else
+Point _PointFromTerm(ATerm t);
+#define PointFromTerm(t) (_PointFromTerm(t))
+#endif
+#ifdef FAST_API
+#define PointToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _PointToTerm(Point arg);
+#define PointToTerm(arg) (_PointToTerm(arg))
+#endif
+#ifdef FAST_API
+#define getNodeListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _getNodeListLength(NodeList arg);
+#define getNodeListLength(arg) (_getNodeListLength(arg))
+#endif
+#ifdef FAST_API
+#define reverseNodeList(arg) ((NodeList) ATreverse((ATermList) (arg)))
+#else
+NodeList _reverseNodeList(NodeList arg);
+#define reverseNodeList(arg) (_reverseNodeList(arg))
+#endif
+#ifdef FAST_API
+#define appendNodeList(arg, elem) ((NodeList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+NodeList _appendNodeList(NodeList arg, Node elem);
+#define appendNodeList(arg, elem) (_appendNodeList(arg, elem))
+#endif
+#ifdef FAST_API
+#define concatNodeList(arg0, arg1) ((NodeList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+NodeList _concatNodeList(NodeList arg0, NodeList arg1);
+#define concatNodeList(arg0, arg1) (_concatNodeList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define sliceNodeList(arg, start, end) ((NodeList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+NodeList _sliceNodeList(NodeList arg, int start, int end);
+#define sliceNodeList(arg, start, end) (_sliceNodeList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define getNodeListNodeAt(arg, index) ((Node) (ATelementAt((ATermList) arg,index)))
+#else
+Node _getNodeListNodeAt(NodeList arg, int index);
+#define getNodeListNodeAt(arg, index) (_getNodeListNodeAt(arg, index))
+#endif
+#ifdef FAST_API
+#define replaceNodeListNodeAt(arg, elem, index) ((NodeList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+NodeList _replaceNodeListNodeAt(NodeList arg, Node elem, int index);
+#define replaceNodeListNodeAt(arg, elem, index) (_replaceNodeListNodeAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define makeNodeList2(elem1,  elem2) ((NodeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+NodeList _makeNodeList2(Node elem1, Node elem2);
+#define makeNodeList2(elem1,  elem2) (_makeNodeList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define makeNodeList3(elem1, elem2,  elem3) ((NodeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+NodeList _makeNodeList3(Node elem1, Node elem2, Node elem3);
+#define makeNodeList3(elem1, elem2,  elem3) (_makeNodeList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define makeNodeList4(elem1, elem2, elem3,  elem4) ((NodeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+NodeList _makeNodeList4(Node elem1, Node elem2, Node elem3, Node elem4);
+#define makeNodeList4(elem1, elem2, elem3,  elem4) (_makeNodeList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define makeNodeList5(elem1, elem2, elem3, elem4,  elem5) ((NodeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+NodeList _makeNodeList5(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5);
+#define makeNodeList5(elem1, elem2, elem3, elem4,  elem5) (_makeNodeList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define makeNodeList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((NodeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+NodeList _makeNodeList6(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5, Node elem6);
+#define makeNodeList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_makeNodeList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define getAttributeListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _getAttributeListLength(AttributeList arg);
+#define getAttributeListLength(arg) (_getAttributeListLength(arg))
+#endif
+#ifdef FAST_API
+#define reverseAttributeList(arg) ((AttributeList) ATreverse((ATermList) (arg)))
+#else
+AttributeList _reverseAttributeList(AttributeList arg);
+#define reverseAttributeList(arg) (_reverseAttributeList(arg))
+#endif
+#ifdef FAST_API
+#define appendAttributeList(arg, elem) ((AttributeList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+AttributeList _appendAttributeList(AttributeList arg, Attribute elem);
+#define appendAttributeList(arg, elem) (_appendAttributeList(arg, elem))
+#endif
+#ifdef FAST_API
+#define concatAttributeList(arg0, arg1) ((AttributeList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+AttributeList _concatAttributeList(AttributeList arg0, AttributeList arg1);
+#define concatAttributeList(arg0, arg1) (_concatAttributeList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define sliceAttributeList(arg, start, end) ((AttributeList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+AttributeList _sliceAttributeList(AttributeList arg, int start, int end);
+#define sliceAttributeList(arg, start, end) (_sliceAttributeList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define getAttributeListAttributeAt(arg, index) ((Attribute) (ATelementAt((ATermList) arg,index)))
+#else
+Attribute _getAttributeListAttributeAt(AttributeList arg, int index);
+#define getAttributeListAttributeAt(arg, index) (_getAttributeListAttributeAt(arg, index))
+#endif
+#ifdef FAST_API
+#define replaceAttributeListAttributeAt(arg, elem, index) ((AttributeList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+AttributeList _replaceAttributeListAttributeAt(AttributeList arg, Attribute elem, int index);
+#define replaceAttributeListAttributeAt(arg, elem, index) (_replaceAttributeListAttributeAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define makeAttributeList2(elem1,  elem2) ((AttributeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+AttributeList _makeAttributeList2(Attribute elem1, Attribute elem2);
+#define makeAttributeList2(elem1,  elem2) (_makeAttributeList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define makeAttributeList3(elem1, elem2,  elem3) ((AttributeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+AttributeList _makeAttributeList3(Attribute elem1, Attribute elem2, Attribute elem3);
+#define makeAttributeList3(elem1, elem2,  elem3) (_makeAttributeList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define makeAttributeList4(elem1, elem2, elem3,  elem4) ((AttributeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+AttributeList _makeAttributeList4(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4);
+#define makeAttributeList4(elem1, elem2, elem3,  elem4) (_makeAttributeList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define makeAttributeList5(elem1, elem2, elem3, elem4,  elem5) ((AttributeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+AttributeList _makeAttributeList5(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5);
+#define makeAttributeList5(elem1, elem2, elem3, elem4,  elem5) (_makeAttributeList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define makeAttributeList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((AttributeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+AttributeList _makeAttributeList6(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5, Attribute elem6);
+#define makeAttributeList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_makeAttributeList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define getEdgeListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _getEdgeListLength(EdgeList arg);
+#define getEdgeListLength(arg) (_getEdgeListLength(arg))
+#endif
+#ifdef FAST_API
+#define reverseEdgeList(arg) ((EdgeList) ATreverse((ATermList) (arg)))
+#else
+EdgeList _reverseEdgeList(EdgeList arg);
+#define reverseEdgeList(arg) (_reverseEdgeList(arg))
+#endif
+#ifdef FAST_API
+#define appendEdgeList(arg, elem) ((EdgeList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+EdgeList _appendEdgeList(EdgeList arg, Edge elem);
+#define appendEdgeList(arg, elem) (_appendEdgeList(arg, elem))
+#endif
+#ifdef FAST_API
+#define concatEdgeList(arg0, arg1) ((EdgeList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+EdgeList _concatEdgeList(EdgeList arg0, EdgeList arg1);
+#define concatEdgeList(arg0, arg1) (_concatEdgeList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define sliceEdgeList(arg, start, end) ((EdgeList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+EdgeList _sliceEdgeList(EdgeList arg, int start, int end);
+#define sliceEdgeList(arg, start, end) (_sliceEdgeList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define getEdgeListEdgeAt(arg, index) ((Edge) (ATelementAt((ATermList) arg,index)))
+#else
+Edge _getEdgeListEdgeAt(EdgeList arg, int index);
+#define getEdgeListEdgeAt(arg, index) (_getEdgeListEdgeAt(arg, index))
+#endif
+#ifdef FAST_API
+#define replaceEdgeListEdgeAt(arg, elem, index) ((EdgeList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+EdgeList _replaceEdgeListEdgeAt(EdgeList arg, Edge elem, int index);
+#define replaceEdgeListEdgeAt(arg, elem, index) (_replaceEdgeListEdgeAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define makeEdgeList2(elem1,  elem2) ((EdgeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+EdgeList _makeEdgeList2(Edge elem1, Edge elem2);
+#define makeEdgeList2(elem1,  elem2) (_makeEdgeList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define makeEdgeList3(elem1, elem2,  elem3) ((EdgeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+EdgeList _makeEdgeList3(Edge elem1, Edge elem2, Edge elem3);
+#define makeEdgeList3(elem1, elem2,  elem3) (_makeEdgeList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define makeEdgeList4(elem1, elem2, elem3,  elem4) ((EdgeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+EdgeList _makeEdgeList4(Edge elem1, Edge elem2, Edge elem3, Edge elem4);
+#define makeEdgeList4(elem1, elem2, elem3,  elem4) (_makeEdgeList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define makeEdgeList5(elem1, elem2, elem3, elem4,  elem5) ((EdgeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+EdgeList _makeEdgeList5(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5);
+#define makeEdgeList5(elem1, elem2, elem3, elem4,  elem5) (_makeEdgeList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define makeEdgeList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((EdgeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+EdgeList _makeEdgeList6(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5, Edge elem6);
+#define makeEdgeList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_makeEdgeList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define getPolygonLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _getPolygonLength(Polygon arg);
+#define getPolygonLength(arg) (_getPolygonLength(arg))
+#endif
+#ifdef FAST_API
+#define reversePolygon(arg) ((Polygon) ATreverse((ATermList) (arg)))
+#else
+Polygon _reversePolygon(Polygon arg);
+#define reversePolygon(arg) (_reversePolygon(arg))
+#endif
+#ifdef FAST_API
+#define appendPolygon(arg, elem) ((Polygon) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+Polygon _appendPolygon(Polygon arg, Point elem);
+#define appendPolygon(arg, elem) (_appendPolygon(arg, elem))
+#endif
+#ifdef FAST_API
+#define concatPolygon(arg0, arg1) ((Polygon) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+Polygon _concatPolygon(Polygon arg0, Polygon arg1);
+#define concatPolygon(arg0, arg1) (_concatPolygon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define slicePolygon(arg, start, end) ((Polygon) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+Polygon _slicePolygon(Polygon arg, int start, int end);
+#define slicePolygon(arg, start, end) (_slicePolygon(arg, start, end))
+#endif
+#ifdef FAST_API
+#define getPolygonPointAt(arg, index) ((Point) (ATelementAt((ATermList) arg,index)))
+#else
+Point _getPolygonPointAt(Polygon arg, int index);
+#define getPolygonPointAt(arg, index) (_getPolygonPointAt(arg, index))
+#endif
+#ifdef FAST_API
+#define replacePolygonPointAt(arg, elem, index) ((Polygon) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+Polygon _replacePolygonPointAt(Polygon arg, Point elem, int index);
+#define replacePolygonPointAt(arg, elem, index) (_replacePolygonPointAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define makePolygon2(elem1,  elem2) ((Polygon) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+Polygon _makePolygon2(Point elem1, Point elem2);
+#define makePolygon2(elem1,  elem2) (_makePolygon2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define makePolygon3(elem1, elem2,  elem3) ((Polygon) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+Polygon _makePolygon3(Point elem1, Point elem2, Point elem3);
+#define makePolygon3(elem1, elem2,  elem3) (_makePolygon3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define makePolygon4(elem1, elem2, elem3,  elem4) ((Polygon) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+Polygon _makePolygon4(Point elem1, Point elem2, Point elem3, Point elem4);
+#define makePolygon4(elem1, elem2, elem3,  elem4) (_makePolygon4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define makePolygon5(elem1, elem2, elem3, elem4,  elem5) ((Polygon) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+Polygon _makePolygon5(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5);
+#define makePolygon5(elem1, elem2, elem3, elem4,  elem5) (_makePolygon5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define makePolygon6(elem1, elem2, elem3, elem4, elem5,  elem6) ((Polygon) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+Polygon _makePolygon6(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5, Point elem6);
+#define makePolygon6(elem1, elem2, elem3, elem4, elem5,  elem6) (_makePolygon6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
 Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes);
 NodeList makeNodeListEmpty(void);
 NodeList makeNodeListSingle(Node head);
@@ -188,21 +733,96 @@ Polygon makePolygonEmpty(void);
 Polygon makePolygonSingle(Point head);
 Polygon makePolygonMany(Point head, Polygon tail);
 Point makePointDefault(int x, int y);
-ATbool isEqualGraph(Graph arg0, Graph arg1);
-ATbool isEqualNodeList(NodeList arg0, NodeList arg1);
-ATbool isEqualNode(Node arg0, Node arg1);
-ATbool isEqualNodeId(NodeId arg0, NodeId arg1);
-ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1);
-ATbool isEqualAttribute(Attribute arg0, Attribute arg1);
-ATbool isEqualFile(File arg0, File arg1);
-ATbool isEqualColor(Color arg0, Color arg1);
-ATbool isEqualStyle(Style arg0, Style arg1);
-ATbool isEqualShape(Shape arg0, Shape arg1);
-ATbool isEqualDirection(Direction arg0, Direction arg1);
-ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1);
-ATbool isEqualEdge(Edge arg0, Edge arg1);
-ATbool isEqualPolygon(Polygon arg0, Polygon arg1);
-ATbool isEqualPoint(Point arg0, Point arg1);
+#ifdef FAST_API
+#define isEqualGraph(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualGraph(Graph arg0, Graph arg1);
+#define isEqualGraph(arg0, arg1) (_isEqualGraph(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualNodeList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualNodeList(NodeList arg0, NodeList arg1);
+#define isEqualNodeList(arg0, arg1) (_isEqualNodeList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualNode(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualNode(Node arg0, Node arg1);
+#define isEqualNode(arg0, arg1) (_isEqualNode(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualNodeId(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualNodeId(NodeId arg0, NodeId arg1);
+#define isEqualNodeId(arg0, arg1) (_isEqualNodeId(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualAttributeList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualAttributeList(AttributeList arg0, AttributeList arg1);
+#define isEqualAttributeList(arg0, arg1) (_isEqualAttributeList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualAttribute(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualAttribute(Attribute arg0, Attribute arg1);
+#define isEqualAttribute(arg0, arg1) (_isEqualAttribute(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualFile(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualFile(File arg0, File arg1);
+#define isEqualFile(arg0, arg1) (_isEqualFile(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualColor(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualColor(Color arg0, Color arg1);
+#define isEqualColor(arg0, arg1) (_isEqualColor(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualStyle(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualStyle(Style arg0, Style arg1);
+#define isEqualStyle(arg0, arg1) (_isEqualStyle(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualShape(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualShape(Shape arg0, Shape arg1);
+#define isEqualShape(arg0, arg1) (_isEqualShape(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualDirection(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualDirection(Direction arg0, Direction arg1);
+#define isEqualDirection(arg0, arg1) (_isEqualDirection(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualEdgeList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualEdgeList(EdgeList arg0, EdgeList arg1);
+#define isEqualEdgeList(arg0, arg1) (_isEqualEdgeList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualEdge(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualEdge(Edge arg0, Edge arg1);
+#define isEqualEdge(arg0, arg1) (_isEqualEdge(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualPolygon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualPolygon(Polygon arg0, Polygon arg1);
+#define isEqualPolygon(arg0, arg1) (_isEqualPolygon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define isEqualPoint(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _isEqualPoint(Point arg0, Point arg1);
+#define isEqualPoint(arg0, arg1) (_isEqualPoint(arg0, arg1))
+#endif
 ATbool isValidGraph(Graph arg);
 inline ATbool isGraphDefault(Graph arg);
 ATbool hasGraphNodes(Graph arg);

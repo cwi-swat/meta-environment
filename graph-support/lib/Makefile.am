@@ -13,6 +13,8 @@ libGraph_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libGraph_la_LIBADD = $(ATERM_LIBS)
 
 if MAINTAINER_MODE
+api: c-api java-api
+
 c-api: Graph.adt
 	adt-to-c --input $< --name Graph
 

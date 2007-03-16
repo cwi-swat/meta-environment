@@ -75,18 +75,20 @@ typedef struct ATerm _Edge;
 typedef struct ATerm _Polygon;
 typedef struct ATerm _Point;
 
+
 /**
  * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
  */
-void initGraphApi(void) {
+void _initGraphApi(void) {
   init_Graph_dict();
+
 }
 
 /**
  * Protect a Graph from the ATerm garbage collector. Every Graph that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Graph
  */
-void protectGraph(Graph *arg) {
+void _protectGraph(Graph *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -94,7 +96,7 @@ void protectGraph(Graph *arg) {
  * Unprotect a Graph from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Graph
  */
-void unprotectGraph(Graph *arg) {
+void _unprotectGraph(Graph *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -102,7 +104,7 @@ void unprotectGraph(Graph *arg) {
  * Protect a NodeList from the ATerm garbage collector. Every NodeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a NodeList
  */
-void protectNodeList(NodeList *arg) {
+void _protectNodeList(NodeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -110,7 +112,7 @@ void protectNodeList(NodeList *arg) {
  * Unprotect a NodeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a NodeList
  */
-void unprotectNodeList(NodeList *arg) {
+void _unprotectNodeList(NodeList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -118,7 +120,7 @@ void unprotectNodeList(NodeList *arg) {
  * Protect a Node from the ATerm garbage collector. Every Node that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Node
  */
-void protectNode(Node *arg) {
+void _protectNode(Node *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -126,7 +128,7 @@ void protectNode(Node *arg) {
  * Unprotect a Node from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Node
  */
-void unprotectNode(Node *arg) {
+void _unprotectNode(Node *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -134,7 +136,7 @@ void unprotectNode(Node *arg) {
  * Protect a NodeId from the ATerm garbage collector. Every NodeId that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a NodeId
  */
-void protectNodeId(NodeId *arg) {
+void _protectNodeId(NodeId *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -142,7 +144,7 @@ void protectNodeId(NodeId *arg) {
  * Unprotect a NodeId from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a NodeId
  */
-void unprotectNodeId(NodeId *arg) {
+void _unprotectNodeId(NodeId *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -150,7 +152,7 @@ void unprotectNodeId(NodeId *arg) {
  * Protect a AttributeList from the ATerm garbage collector. Every AttributeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a AttributeList
  */
-void protectAttributeList(AttributeList *arg) {
+void _protectAttributeList(AttributeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -158,7 +160,7 @@ void protectAttributeList(AttributeList *arg) {
  * Unprotect a AttributeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a AttributeList
  */
-void unprotectAttributeList(AttributeList *arg) {
+void _unprotectAttributeList(AttributeList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -166,7 +168,7 @@ void unprotectAttributeList(AttributeList *arg) {
  * Protect a Attribute from the ATerm garbage collector. Every Attribute that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Attribute
  */
-void protectAttribute(Attribute *arg) {
+void _protectAttribute(Attribute *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -174,7 +176,7 @@ void protectAttribute(Attribute *arg) {
  * Unprotect a Attribute from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Attribute
  */
-void unprotectAttribute(Attribute *arg) {
+void _unprotectAttribute(Attribute *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -182,7 +184,7 @@ void unprotectAttribute(Attribute *arg) {
  * Protect a File from the ATerm garbage collector. Every File that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a File
  */
-void protectFile(File *arg) {
+void _protectFile(File *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -190,7 +192,7 @@ void protectFile(File *arg) {
  * Unprotect a File from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a File
  */
-void unprotectFile(File *arg) {
+void _unprotectFile(File *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -198,7 +200,7 @@ void unprotectFile(File *arg) {
  * Protect a Color from the ATerm garbage collector. Every Color that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Color
  */
-void protectColor(Color *arg) {
+void _protectColor(Color *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -206,7 +208,7 @@ void protectColor(Color *arg) {
  * Unprotect a Color from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Color
  */
-void unprotectColor(Color *arg) {
+void _unprotectColor(Color *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -214,7 +216,7 @@ void unprotectColor(Color *arg) {
  * Protect a Style from the ATerm garbage collector. Every Style that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Style
  */
-void protectStyle(Style *arg) {
+void _protectStyle(Style *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -222,7 +224,7 @@ void protectStyle(Style *arg) {
  * Unprotect a Style from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Style
  */
-void unprotectStyle(Style *arg) {
+void _unprotectStyle(Style *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -230,7 +232,7 @@ void unprotectStyle(Style *arg) {
  * Protect a Shape from the ATerm garbage collector. Every Shape that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Shape
  */
-void protectShape(Shape *arg) {
+void _protectShape(Shape *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -238,7 +240,7 @@ void protectShape(Shape *arg) {
  * Unprotect a Shape from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Shape
  */
-void unprotectShape(Shape *arg) {
+void _unprotectShape(Shape *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -246,7 +248,7 @@ void unprotectShape(Shape *arg) {
  * Protect a Direction from the ATerm garbage collector. Every Direction that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Direction
  */
-void protectDirection(Direction *arg) {
+void _protectDirection(Direction *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -254,7 +256,7 @@ void protectDirection(Direction *arg) {
  * Unprotect a Direction from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Direction
  */
-void unprotectDirection(Direction *arg) {
+void _unprotectDirection(Direction *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -262,7 +264,7 @@ void unprotectDirection(Direction *arg) {
  * Protect a EdgeList from the ATerm garbage collector. Every EdgeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EdgeList
  */
-void protectEdgeList(EdgeList *arg) {
+void _protectEdgeList(EdgeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -270,7 +272,7 @@ void protectEdgeList(EdgeList *arg) {
  * Unprotect a EdgeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EdgeList
  */
-void unprotectEdgeList(EdgeList *arg) {
+void _unprotectEdgeList(EdgeList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -278,7 +280,7 @@ void unprotectEdgeList(EdgeList *arg) {
  * Protect a Edge from the ATerm garbage collector. Every Edge that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Edge
  */
-void protectEdge(Edge *arg) {
+void _protectEdge(Edge *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -286,7 +288,7 @@ void protectEdge(Edge *arg) {
  * Unprotect a Edge from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Edge
  */
-void unprotectEdge(Edge *arg) {
+void _unprotectEdge(Edge *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -294,7 +296,7 @@ void unprotectEdge(Edge *arg) {
  * Protect a Polygon from the ATerm garbage collector. Every Polygon that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Polygon
  */
-void protectPolygon(Polygon *arg) {
+void _protectPolygon(Polygon *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -302,7 +304,7 @@ void protectPolygon(Polygon *arg) {
  * Unprotect a Polygon from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Polygon
  */
-void unprotectPolygon(Polygon *arg) {
+void _unprotectPolygon(Polygon *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -310,7 +312,7 @@ void unprotectPolygon(Polygon *arg) {
  * Protect a Point from the ATerm garbage collector. Every Point that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a Point
  */
-void protectPoint(Point *arg) {
+void _protectPoint(Point *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -318,7 +320,7 @@ void protectPoint(Point *arg) {
  * Unprotect a Point from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a Point
  */
-void unprotectPoint(Point *arg) {
+void _unprotectPoint(Point *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -327,7 +329,7 @@ void unprotectPoint(Point *arg) {
  * \param[in] t ATerm to be converted
  * \return Graph that was encoded by \arg
  */
-Graph GraphFromTerm(ATerm t) {
+Graph _GraphFromTerm(ATerm t) {
   return (Graph)t;
 }
 
@@ -336,7 +338,7 @@ Graph GraphFromTerm(ATerm t) {
  * \param[in] arg Graph to be converted
  * \return ATerm that represents the Graph
  */
-ATerm GraphToTerm(Graph arg) {
+ATerm _GraphToTerm(Graph arg) {
   return (ATerm)arg;
 }
 
@@ -345,7 +347,7 @@ ATerm GraphToTerm(Graph arg) {
  * \param[in] t ATerm to be converted
  * \return NodeList that was encoded by \arg
  */
-NodeList NodeListFromTerm(ATerm t) {
+NodeList _NodeListFromTerm(ATerm t) {
   return (NodeList)t;
 }
 
@@ -354,7 +356,7 @@ NodeList NodeListFromTerm(ATerm t) {
  * \param[in] arg NodeList to be converted
  * \return ATerm that represents the NodeList
  */
-ATerm NodeListToTerm(NodeList arg) {
+ATerm _NodeListToTerm(NodeList arg) {
   return (ATerm)arg;
 }
 
@@ -363,7 +365,7 @@ ATerm NodeListToTerm(NodeList arg) {
  * \param[in] t ATerm to be converted
  * \return Node that was encoded by \arg
  */
-Node NodeFromTerm(ATerm t) {
+Node _NodeFromTerm(ATerm t) {
   return (Node)t;
 }
 
@@ -372,7 +374,7 @@ Node NodeFromTerm(ATerm t) {
  * \param[in] arg Node to be converted
  * \return ATerm that represents the Node
  */
-ATerm NodeToTerm(Node arg) {
+ATerm _NodeToTerm(Node arg) {
   return (ATerm)arg;
 }
 
@@ -381,7 +383,7 @@ ATerm NodeToTerm(Node arg) {
  * \param[in] t ATerm to be converted
  * \return NodeId that was encoded by \arg
  */
-NodeId NodeIdFromTerm(ATerm t) {
+NodeId _NodeIdFromTerm(ATerm t) {
   return (NodeId)t;
 }
 
@@ -390,7 +392,7 @@ NodeId NodeIdFromTerm(ATerm t) {
  * \param[in] arg NodeId to be converted
  * \return ATerm that represents the NodeId
  */
-ATerm NodeIdToTerm(NodeId arg) {
+ATerm _NodeIdToTerm(NodeId arg) {
   return (ATerm)arg;
 }
 
@@ -399,7 +401,7 @@ ATerm NodeIdToTerm(NodeId arg) {
  * \param[in] t ATerm to be converted
  * \return AttributeList that was encoded by \arg
  */
-AttributeList AttributeListFromTerm(ATerm t) {
+AttributeList _AttributeListFromTerm(ATerm t) {
   return (AttributeList)t;
 }
 
@@ -408,7 +410,7 @@ AttributeList AttributeListFromTerm(ATerm t) {
  * \param[in] arg AttributeList to be converted
  * \return ATerm that represents the AttributeList
  */
-ATerm AttributeListToTerm(AttributeList arg) {
+ATerm _AttributeListToTerm(AttributeList arg) {
   return (ATerm)arg;
 }
 
@@ -417,7 +419,7 @@ ATerm AttributeListToTerm(AttributeList arg) {
  * \param[in] t ATerm to be converted
  * \return Attribute that was encoded by \arg
  */
-Attribute AttributeFromTerm(ATerm t) {
+Attribute _AttributeFromTerm(ATerm t) {
   return (Attribute)t;
 }
 
@@ -426,7 +428,7 @@ Attribute AttributeFromTerm(ATerm t) {
  * \param[in] arg Attribute to be converted
  * \return ATerm that represents the Attribute
  */
-ATerm AttributeToTerm(Attribute arg) {
+ATerm _AttributeToTerm(Attribute arg) {
   return (ATerm)arg;
 }
 
@@ -435,7 +437,7 @@ ATerm AttributeToTerm(Attribute arg) {
  * \param[in] t ATerm to be converted
  * \return File that was encoded by \arg
  */
-File FileFromTerm(ATerm t) {
+File _FileFromTerm(ATerm t) {
   return (File)t;
 }
 
@@ -444,7 +446,7 @@ File FileFromTerm(ATerm t) {
  * \param[in] arg File to be converted
  * \return ATerm that represents the File
  */
-ATerm FileToTerm(File arg) {
+ATerm _FileToTerm(File arg) {
   return (ATerm)arg;
 }
 
@@ -453,7 +455,7 @@ ATerm FileToTerm(File arg) {
  * \param[in] t ATerm to be converted
  * \return Color that was encoded by \arg
  */
-Color ColorFromTerm(ATerm t) {
+Color _ColorFromTerm(ATerm t) {
   return (Color)t;
 }
 
@@ -462,7 +464,7 @@ Color ColorFromTerm(ATerm t) {
  * \param[in] arg Color to be converted
  * \return ATerm that represents the Color
  */
-ATerm ColorToTerm(Color arg) {
+ATerm _ColorToTerm(Color arg) {
   return (ATerm)arg;
 }
 
@@ -471,7 +473,7 @@ ATerm ColorToTerm(Color arg) {
  * \param[in] t ATerm to be converted
  * \return Style that was encoded by \arg
  */
-Style StyleFromTerm(ATerm t) {
+Style _StyleFromTerm(ATerm t) {
   return (Style)t;
 }
 
@@ -480,7 +482,7 @@ Style StyleFromTerm(ATerm t) {
  * \param[in] arg Style to be converted
  * \return ATerm that represents the Style
  */
-ATerm StyleToTerm(Style arg) {
+ATerm _StyleToTerm(Style arg) {
   return (ATerm)arg;
 }
 
@@ -489,7 +491,7 @@ ATerm StyleToTerm(Style arg) {
  * \param[in] t ATerm to be converted
  * \return Shape that was encoded by \arg
  */
-Shape ShapeFromTerm(ATerm t) {
+Shape _ShapeFromTerm(ATerm t) {
   return (Shape)t;
 }
 
@@ -498,7 +500,7 @@ Shape ShapeFromTerm(ATerm t) {
  * \param[in] arg Shape to be converted
  * \return ATerm that represents the Shape
  */
-ATerm ShapeToTerm(Shape arg) {
+ATerm _ShapeToTerm(Shape arg) {
   return (ATerm)arg;
 }
 
@@ -507,7 +509,7 @@ ATerm ShapeToTerm(Shape arg) {
  * \param[in] t ATerm to be converted
  * \return Direction that was encoded by \arg
  */
-Direction DirectionFromTerm(ATerm t) {
+Direction _DirectionFromTerm(ATerm t) {
   return (Direction)t;
 }
 
@@ -516,7 +518,7 @@ Direction DirectionFromTerm(ATerm t) {
  * \param[in] arg Direction to be converted
  * \return ATerm that represents the Direction
  */
-ATerm DirectionToTerm(Direction arg) {
+ATerm _DirectionToTerm(Direction arg) {
   return (ATerm)arg;
 }
 
@@ -525,7 +527,7 @@ ATerm DirectionToTerm(Direction arg) {
  * \param[in] t ATerm to be converted
  * \return EdgeList that was encoded by \arg
  */
-EdgeList EdgeListFromTerm(ATerm t) {
+EdgeList _EdgeListFromTerm(ATerm t) {
   return (EdgeList)t;
 }
 
@@ -534,7 +536,7 @@ EdgeList EdgeListFromTerm(ATerm t) {
  * \param[in] arg EdgeList to be converted
  * \return ATerm that represents the EdgeList
  */
-ATerm EdgeListToTerm(EdgeList arg) {
+ATerm _EdgeListToTerm(EdgeList arg) {
   return (ATerm)arg;
 }
 
@@ -543,7 +545,7 @@ ATerm EdgeListToTerm(EdgeList arg) {
  * \param[in] t ATerm to be converted
  * \return Edge that was encoded by \arg
  */
-Edge EdgeFromTerm(ATerm t) {
+Edge _EdgeFromTerm(ATerm t) {
   return (Edge)t;
 }
 
@@ -552,7 +554,7 @@ Edge EdgeFromTerm(ATerm t) {
  * \param[in] arg Edge to be converted
  * \return ATerm that represents the Edge
  */
-ATerm EdgeToTerm(Edge arg) {
+ATerm _EdgeToTerm(Edge arg) {
   return (ATerm)arg;
 }
 
@@ -561,7 +563,7 @@ ATerm EdgeToTerm(Edge arg) {
  * \param[in] t ATerm to be converted
  * \return Polygon that was encoded by \arg
  */
-Polygon PolygonFromTerm(ATerm t) {
+Polygon _PolygonFromTerm(ATerm t) {
   return (Polygon)t;
 }
 
@@ -570,7 +572,7 @@ Polygon PolygonFromTerm(ATerm t) {
  * \param[in] arg Polygon to be converted
  * \return ATerm that represents the Polygon
  */
-ATerm PolygonToTerm(Polygon arg) {
+ATerm _PolygonToTerm(Polygon arg) {
   return (ATerm)arg;
 }
 
@@ -579,7 +581,7 @@ ATerm PolygonToTerm(Polygon arg) {
  * \param[in] t ATerm to be converted
  * \return Point that was encoded by \arg
  */
-Point PointFromTerm(ATerm t) {
+Point _PointFromTerm(ATerm t) {
   return (Point)t;
 }
 
@@ -588,7 +590,7 @@ Point PointFromTerm(ATerm t) {
  * \param[in] arg Point to be converted
  * \return ATerm that represents the Point
  */
-ATerm PointToTerm(Point arg) {
+ATerm _PointToTerm(Point arg) {
   return (ATerm)arg;
 }
 
@@ -597,7 +599,7 @@ ATerm PointToTerm(Point arg) {
  * \param[in] arg input NodeList
  * \return The number of elements in the NodeList
  */
-int getNodeListLength (NodeList arg) {
+int _getNodeListLength(NodeList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -606,7 +608,7 @@ int getNodeListLength (NodeList arg) {
  * \param[in] arg NodeList to be reversed
  * \return a reversed #arg
  */
-NodeList reverseNodeList(NodeList arg) {
+NodeList _reverseNodeList(NodeList arg) {
   return (NodeList) ATreverse((ATermList) arg);
 }
 
@@ -616,7 +618,7 @@ NodeList reverseNodeList(NodeList arg) {
  * \param[in] elem Node to be appended
  * \return new NodeList with #elem appended
  */
-NodeList appendNodeList(NodeList arg, Node elem) {
+NodeList _appendNodeList(NodeList arg, Node elem) {
   return (NodeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -626,7 +628,7 @@ NodeList appendNodeList(NodeList arg, Node elem) {
  * \param[in] arg1 second NodeList
  * \return NodeList with the elements of #arg0 before the elements of #arg1
  */
-NodeList concatNodeList(NodeList arg0, NodeList arg1) {
+NodeList _concatNodeList(NodeList arg0, NodeList arg1) {
   return (NodeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -637,7 +639,7 @@ NodeList concatNodeList(NodeList arg0, NodeList arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new NodeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-NodeList sliceNodeList(NodeList arg, int start, int end) {
+NodeList _sliceNodeList(NodeList arg, int start, int end) {
   return (NodeList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -647,7 +649,7 @@ NodeList sliceNodeList(NodeList arg, int start, int end) {
  * \param[in] index index to use to point in the NodeList
  * \return Node at position #index in #arg
  */
-Node getNodeListNodeAt(NodeList arg, int index) {
+Node _getNodeListNodeAt(NodeList arg, int index) {
  return (Node)ATelementAt((ATermList) arg,index);
 }
 
@@ -658,7 +660,7 @@ Node getNodeListNodeAt(NodeList arg, int index) {
  * \param[in] index index to use to point in the NodeList
  * \return A new NodeListwith #elem replaced in #arg at position #index
  */
-NodeList replaceNodeListNodeAt(NodeList arg, Node elem, int index) {
+NodeList _replaceNodeListNodeAt(NodeList arg, Node elem, int index) {
  return (NodeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -668,7 +670,7 @@ NodeList replaceNodeListNodeAt(NodeList arg, Node elem, int index) {
  * \param[in] elem2 One Node element of the new NodeList
  * \return A new NodeList consisting of 2 Nodes
  */
-NodeList makeNodeList2(Node elem1, Node elem2) {
+NodeList _makeNodeList2(Node elem1, Node elem2) {
   return (NodeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -679,7 +681,7 @@ NodeList makeNodeList2(Node elem1, Node elem2) {
  * \param[in] elem3 One Node element of the new NodeList
  * \return A new NodeList consisting of 3 Nodes
  */
-NodeList makeNodeList3(Node elem1, Node elem2, Node elem3) {
+NodeList _makeNodeList3(Node elem1, Node elem2, Node elem3) {
   return (NodeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -691,7 +693,7 @@ NodeList makeNodeList3(Node elem1, Node elem2, Node elem3) {
  * \param[in] elem4 One Node element of the new NodeList
  * \return A new NodeList consisting of 4 Nodes
  */
-NodeList makeNodeList4(Node elem1, Node elem2, Node elem3, Node elem4) {
+NodeList _makeNodeList4(Node elem1, Node elem2, Node elem3, Node elem4) {
   return (NodeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -704,7 +706,7 @@ NodeList makeNodeList4(Node elem1, Node elem2, Node elem3, Node elem4) {
  * \param[in] elem5 One Node element of the new NodeList
  * \return A new NodeList consisting of 5 Nodes
  */
-NodeList makeNodeList5(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5) {
+NodeList _makeNodeList5(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5) {
   return (NodeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -718,7 +720,7 @@ NodeList makeNodeList5(Node elem1, Node elem2, Node elem3, Node elem4, Node elem
  * \param[in] elem6 One Node element of the new NodeList
  * \return A new NodeList consisting of 6 Nodes
  */
-NodeList makeNodeList6(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5, Node elem6) {
+NodeList _makeNodeList6(Node elem1, Node elem2, Node elem3, Node elem4, Node elem5, Node elem6) {
   return (NodeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -727,7 +729,7 @@ NodeList makeNodeList6(Node elem1, Node elem2, Node elem3, Node elem4, Node elem
  * \param[in] arg input AttributeList
  * \return The number of elements in the AttributeList
  */
-int getAttributeListLength (AttributeList arg) {
+int _getAttributeListLength(AttributeList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -736,7 +738,7 @@ int getAttributeListLength (AttributeList arg) {
  * \param[in] arg AttributeList to be reversed
  * \return a reversed #arg
  */
-AttributeList reverseAttributeList(AttributeList arg) {
+AttributeList _reverseAttributeList(AttributeList arg) {
   return (AttributeList) ATreverse((ATermList) arg);
 }
 
@@ -746,7 +748,7 @@ AttributeList reverseAttributeList(AttributeList arg) {
  * \param[in] elem Attribute to be appended
  * \return new AttributeList with #elem appended
  */
-AttributeList appendAttributeList(AttributeList arg, Attribute elem) {
+AttributeList _appendAttributeList(AttributeList arg, Attribute elem) {
   return (AttributeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -756,7 +758,7 @@ AttributeList appendAttributeList(AttributeList arg, Attribute elem) {
  * \param[in] arg1 second AttributeList
  * \return AttributeList with the elements of #arg0 before the elements of #arg1
  */
-AttributeList concatAttributeList(AttributeList arg0, AttributeList arg1) {
+AttributeList _concatAttributeList(AttributeList arg0, AttributeList arg1) {
   return (AttributeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -767,7 +769,7 @@ AttributeList concatAttributeList(AttributeList arg0, AttributeList arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new AttributeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-AttributeList sliceAttributeList(AttributeList arg, int start, int end) {
+AttributeList _sliceAttributeList(AttributeList arg, int start, int end) {
   return (AttributeList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -777,7 +779,7 @@ AttributeList sliceAttributeList(AttributeList arg, int start, int end) {
  * \param[in] index index to use to point in the AttributeList
  * \return Attribute at position #index in #arg
  */
-Attribute getAttributeListAttributeAt(AttributeList arg, int index) {
+Attribute _getAttributeListAttributeAt(AttributeList arg, int index) {
  return (Attribute)ATelementAt((ATermList) arg,index);
 }
 
@@ -788,7 +790,7 @@ Attribute getAttributeListAttributeAt(AttributeList arg, int index) {
  * \param[in] index index to use to point in the AttributeList
  * \return A new AttributeListwith #elem replaced in #arg at position #index
  */
-AttributeList replaceAttributeListAttributeAt(AttributeList arg, Attribute elem, int index) {
+AttributeList _replaceAttributeListAttributeAt(AttributeList arg, Attribute elem, int index) {
  return (AttributeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -798,7 +800,7 @@ AttributeList replaceAttributeListAttributeAt(AttributeList arg, Attribute elem,
  * \param[in] elem2 One Attribute element of the new AttributeList
  * \return A new AttributeList consisting of 2 Attributes
  */
-AttributeList makeAttributeList2(Attribute elem1, Attribute elem2) {
+AttributeList _makeAttributeList2(Attribute elem1, Attribute elem2) {
   return (AttributeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -809,7 +811,7 @@ AttributeList makeAttributeList2(Attribute elem1, Attribute elem2) {
  * \param[in] elem3 One Attribute element of the new AttributeList
  * \return A new AttributeList consisting of 3 Attributes
  */
-AttributeList makeAttributeList3(Attribute elem1, Attribute elem2, Attribute elem3) {
+AttributeList _makeAttributeList3(Attribute elem1, Attribute elem2, Attribute elem3) {
   return (AttributeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -821,7 +823,7 @@ AttributeList makeAttributeList3(Attribute elem1, Attribute elem2, Attribute ele
  * \param[in] elem4 One Attribute element of the new AttributeList
  * \return A new AttributeList consisting of 4 Attributes
  */
-AttributeList makeAttributeList4(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4) {
+AttributeList _makeAttributeList4(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4) {
   return (AttributeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -834,7 +836,7 @@ AttributeList makeAttributeList4(Attribute elem1, Attribute elem2, Attribute ele
  * \param[in] elem5 One Attribute element of the new AttributeList
  * \return A new AttributeList consisting of 5 Attributes
  */
-AttributeList makeAttributeList5(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5) {
+AttributeList _makeAttributeList5(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5) {
   return (AttributeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -848,7 +850,7 @@ AttributeList makeAttributeList5(Attribute elem1, Attribute elem2, Attribute ele
  * \param[in] elem6 One Attribute element of the new AttributeList
  * \return A new AttributeList consisting of 6 Attributes
  */
-AttributeList makeAttributeList6(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5, Attribute elem6) {
+AttributeList _makeAttributeList6(Attribute elem1, Attribute elem2, Attribute elem3, Attribute elem4, Attribute elem5, Attribute elem6) {
   return (AttributeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -857,7 +859,7 @@ AttributeList makeAttributeList6(Attribute elem1, Attribute elem2, Attribute ele
  * \param[in] arg input EdgeList
  * \return The number of elements in the EdgeList
  */
-int getEdgeListLength (EdgeList arg) {
+int _getEdgeListLength(EdgeList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -866,7 +868,7 @@ int getEdgeListLength (EdgeList arg) {
  * \param[in] arg EdgeList to be reversed
  * \return a reversed #arg
  */
-EdgeList reverseEdgeList(EdgeList arg) {
+EdgeList _reverseEdgeList(EdgeList arg) {
   return (EdgeList) ATreverse((ATermList) arg);
 }
 
@@ -876,7 +878,7 @@ EdgeList reverseEdgeList(EdgeList arg) {
  * \param[in] elem Edge to be appended
  * \return new EdgeList with #elem appended
  */
-EdgeList appendEdgeList(EdgeList arg, Edge elem) {
+EdgeList _appendEdgeList(EdgeList arg, Edge elem) {
   return (EdgeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -886,7 +888,7 @@ EdgeList appendEdgeList(EdgeList arg, Edge elem) {
  * \param[in] arg1 second EdgeList
  * \return EdgeList with the elements of #arg0 before the elements of #arg1
  */
-EdgeList concatEdgeList(EdgeList arg0, EdgeList arg1) {
+EdgeList _concatEdgeList(EdgeList arg0, EdgeList arg1) {
   return (EdgeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -897,7 +899,7 @@ EdgeList concatEdgeList(EdgeList arg0, EdgeList arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new EdgeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-EdgeList sliceEdgeList(EdgeList arg, int start, int end) {
+EdgeList _sliceEdgeList(EdgeList arg, int start, int end) {
   return (EdgeList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -907,7 +909,7 @@ EdgeList sliceEdgeList(EdgeList arg, int start, int end) {
  * \param[in] index index to use to point in the EdgeList
  * \return Edge at position #index in #arg
  */
-Edge getEdgeListEdgeAt(EdgeList arg, int index) {
+Edge _getEdgeListEdgeAt(EdgeList arg, int index) {
  return (Edge)ATelementAt((ATermList) arg,index);
 }
 
@@ -918,7 +920,7 @@ Edge getEdgeListEdgeAt(EdgeList arg, int index) {
  * \param[in] index index to use to point in the EdgeList
  * \return A new EdgeListwith #elem replaced in #arg at position #index
  */
-EdgeList replaceEdgeListEdgeAt(EdgeList arg, Edge elem, int index) {
+EdgeList _replaceEdgeListEdgeAt(EdgeList arg, Edge elem, int index) {
  return (EdgeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -928,7 +930,7 @@ EdgeList replaceEdgeListEdgeAt(EdgeList arg, Edge elem, int index) {
  * \param[in] elem2 One Edge element of the new EdgeList
  * \return A new EdgeList consisting of 2 Edges
  */
-EdgeList makeEdgeList2(Edge elem1, Edge elem2) {
+EdgeList _makeEdgeList2(Edge elem1, Edge elem2) {
   return (EdgeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -939,7 +941,7 @@ EdgeList makeEdgeList2(Edge elem1, Edge elem2) {
  * \param[in] elem3 One Edge element of the new EdgeList
  * \return A new EdgeList consisting of 3 Edges
  */
-EdgeList makeEdgeList3(Edge elem1, Edge elem2, Edge elem3) {
+EdgeList _makeEdgeList3(Edge elem1, Edge elem2, Edge elem3) {
   return (EdgeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -951,7 +953,7 @@ EdgeList makeEdgeList3(Edge elem1, Edge elem2, Edge elem3) {
  * \param[in] elem4 One Edge element of the new EdgeList
  * \return A new EdgeList consisting of 4 Edges
  */
-EdgeList makeEdgeList4(Edge elem1, Edge elem2, Edge elem3, Edge elem4) {
+EdgeList _makeEdgeList4(Edge elem1, Edge elem2, Edge elem3, Edge elem4) {
   return (EdgeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -964,7 +966,7 @@ EdgeList makeEdgeList4(Edge elem1, Edge elem2, Edge elem3, Edge elem4) {
  * \param[in] elem5 One Edge element of the new EdgeList
  * \return A new EdgeList consisting of 5 Edges
  */
-EdgeList makeEdgeList5(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5) {
+EdgeList _makeEdgeList5(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5) {
   return (EdgeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -978,7 +980,7 @@ EdgeList makeEdgeList5(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem
  * \param[in] elem6 One Edge element of the new EdgeList
  * \return A new EdgeList consisting of 6 Edges
  */
-EdgeList makeEdgeList6(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5, Edge elem6) {
+EdgeList _makeEdgeList6(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem5, Edge elem6) {
   return (EdgeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -987,7 +989,7 @@ EdgeList makeEdgeList6(Edge elem1, Edge elem2, Edge elem3, Edge elem4, Edge elem
  * \param[in] arg input Polygon
  * \return The number of elements in the Polygon
  */
-int getPolygonLength (Polygon arg) {
+int _getPolygonLength(Polygon arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -996,7 +998,7 @@ int getPolygonLength (Polygon arg) {
  * \param[in] arg Polygon to be reversed
  * \return a reversed #arg
  */
-Polygon reversePolygon(Polygon arg) {
+Polygon _reversePolygon(Polygon arg) {
   return (Polygon) ATreverse((ATermList) arg);
 }
 
@@ -1006,7 +1008,7 @@ Polygon reversePolygon(Polygon arg) {
  * \param[in] elem Point to be appended
  * \return new Polygon with #elem appended
  */
-Polygon appendPolygon(Polygon arg, Point elem) {
+Polygon _appendPolygon(Polygon arg, Point elem) {
   return (Polygon) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -1016,7 +1018,7 @@ Polygon appendPolygon(Polygon arg, Point elem) {
  * \param[in] arg1 second Polygon
  * \return Polygon with the elements of #arg0 before the elements of #arg1
  */
-Polygon concatPolygon(Polygon arg0, Polygon arg1) {
+Polygon _concatPolygon(Polygon arg0, Polygon arg1) {
   return (Polygon) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -1027,7 +1029,7 @@ Polygon concatPolygon(Polygon arg0, Polygon arg1) {
  * \param[in] end exclusive end index of the sublist
  * \return new Polygon with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-Polygon slicePolygon(Polygon arg, int start, int end) {
+Polygon _slicePolygon(Polygon arg, int start, int end) {
   return (Polygon) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -1037,7 +1039,7 @@ Polygon slicePolygon(Polygon arg, int start, int end) {
  * \param[in] index index to use to point in the Polygon
  * \return Point at position #index in #arg
  */
-Point getPolygonPointAt(Polygon arg, int index) {
+Point _getPolygonPointAt(Polygon arg, int index) {
  return (Point)ATelementAt((ATermList) arg,index);
 }
 
@@ -1048,7 +1050,7 @@ Point getPolygonPointAt(Polygon arg, int index) {
  * \param[in] index index to use to point in the Polygon
  * \return A new Polygonwith #elem replaced in #arg at position #index
  */
-Polygon replacePolygonPointAt(Polygon arg, Point elem, int index) {
+Polygon _replacePolygonPointAt(Polygon arg, Point elem, int index) {
  return (Polygon) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -1058,7 +1060,7 @@ Polygon replacePolygonPointAt(Polygon arg, Point elem, int index) {
  * \param[in] elem2 One Point element of the new Polygon
  * \return A new Polygon consisting of 2 Points
  */
-Polygon makePolygon2(Point elem1, Point elem2) {
+Polygon _makePolygon2(Point elem1, Point elem2) {
   return (Polygon) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -1069,7 +1071,7 @@ Polygon makePolygon2(Point elem1, Point elem2) {
  * \param[in] elem3 One Point element of the new Polygon
  * \return A new Polygon consisting of 3 Points
  */
-Polygon makePolygon3(Point elem1, Point elem2, Point elem3) {
+Polygon _makePolygon3(Point elem1, Point elem2, Point elem3) {
   return (Polygon) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -1081,7 +1083,7 @@ Polygon makePolygon3(Point elem1, Point elem2, Point elem3) {
  * \param[in] elem4 One Point element of the new Polygon
  * \return A new Polygon consisting of 4 Points
  */
-Polygon makePolygon4(Point elem1, Point elem2, Point elem3, Point elem4) {
+Polygon _makePolygon4(Point elem1, Point elem2, Point elem3, Point elem4) {
   return (Polygon) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -1094,7 +1096,7 @@ Polygon makePolygon4(Point elem1, Point elem2, Point elem3, Point elem4) {
  * \param[in] elem5 One Point element of the new Polygon
  * \return A new Polygon consisting of 5 Points
  */
-Polygon makePolygon5(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5) {
+Polygon _makePolygon5(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5) {
   return (Polygon) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -1108,7 +1110,7 @@ Polygon makePolygon5(Point elem1, Point elem2, Point elem3, Point elem4, Point e
  * \param[in] elem6 One Point element of the new Polygon
  * \return A new Polygon consisting of 6 Points
  */
-Polygon makePolygon6(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5, Point elem6) {
+Polygon _makePolygon6(Point elem1, Point elem2, Point elem3, Point elem4, Point elem5, Point elem6) {
   return (Polygon) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -1560,7 +1562,7 @@ Point makePointDefault(int x, int y) {
  * \param[in] arg1 second Graph to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualGraph(Graph arg0, Graph arg1) {
+ATbool _isEqualGraph(Graph arg0, Graph arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1570,7 +1572,7 @@ ATbool isEqualGraph(Graph arg0, Graph arg1) {
  * \param[in] arg1 second NodeList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualNodeList(NodeList arg0, NodeList arg1) {
+ATbool _isEqualNodeList(NodeList arg0, NodeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1580,7 +1582,7 @@ ATbool isEqualNodeList(NodeList arg0, NodeList arg1) {
  * \param[in] arg1 second Node to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualNode(Node arg0, Node arg1) {
+ATbool _isEqualNode(Node arg0, Node arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1590,7 +1592,7 @@ ATbool isEqualNode(Node arg0, Node arg1) {
  * \param[in] arg1 second NodeId to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualNodeId(NodeId arg0, NodeId arg1) {
+ATbool _isEqualNodeId(NodeId arg0, NodeId arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1600,7 +1602,7 @@ ATbool isEqualNodeId(NodeId arg0, NodeId arg1) {
  * \param[in] arg1 second AttributeList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1) {
+ATbool _isEqualAttributeList(AttributeList arg0, AttributeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1610,7 +1612,7 @@ ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1) {
  * \param[in] arg1 second Attribute to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualAttribute(Attribute arg0, Attribute arg1) {
+ATbool _isEqualAttribute(Attribute arg0, Attribute arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1620,7 +1622,7 @@ ATbool isEqualAttribute(Attribute arg0, Attribute arg1) {
  * \param[in] arg1 second File to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualFile(File arg0, File arg1) {
+ATbool _isEqualFile(File arg0, File arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1630,7 +1632,7 @@ ATbool isEqualFile(File arg0, File arg1) {
  * \param[in] arg1 second Color to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualColor(Color arg0, Color arg1) {
+ATbool _isEqualColor(Color arg0, Color arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1640,7 +1642,7 @@ ATbool isEqualColor(Color arg0, Color arg1) {
  * \param[in] arg1 second Style to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualStyle(Style arg0, Style arg1) {
+ATbool _isEqualStyle(Style arg0, Style arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1650,7 +1652,7 @@ ATbool isEqualStyle(Style arg0, Style arg1) {
  * \param[in] arg1 second Shape to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualShape(Shape arg0, Shape arg1) {
+ATbool _isEqualShape(Shape arg0, Shape arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1660,7 +1662,7 @@ ATbool isEqualShape(Shape arg0, Shape arg1) {
  * \param[in] arg1 second Direction to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualDirection(Direction arg0, Direction arg1) {
+ATbool _isEqualDirection(Direction arg0, Direction arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1670,7 +1672,7 @@ ATbool isEqualDirection(Direction arg0, Direction arg1) {
  * \param[in] arg1 second EdgeList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1) {
+ATbool _isEqualEdgeList(EdgeList arg0, EdgeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1680,7 +1682,7 @@ ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1) {
  * \param[in] arg1 second Edge to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualEdge(Edge arg0, Edge arg1) {
+ATbool _isEqualEdge(Edge arg0, Edge arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1690,7 +1692,7 @@ ATbool isEqualEdge(Edge arg0, Edge arg1) {
  * \param[in] arg1 second Polygon to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualPolygon(Polygon arg0, Polygon arg1) {
+ATbool _isEqualPolygon(Polygon arg0, Polygon arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1700,7 +1702,7 @@ ATbool isEqualPolygon(Polygon arg0, Polygon arg1) {
  * \param[in] arg1 second Point to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool isEqualPoint(Point arg0, Point arg1) {
+ATbool _isEqualPoint(Point arg0, Point arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1717,16 +1719,16 @@ ATbool isValidGraph(Graph arg) {
 }
 
 /**
- * Assert whether a Graph is a default. Always returns ATtrue
+ * Assert whether a Graph is a default by checking against the following ATerm pattern: graph(<nodes(NodeList)>,<edges(EdgeList)>,<attributes(AttributeList)>). Always returns ATtrue
  * \param[in] arg input Graph
  * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
  */
-inline ATbool isGraphDefault(Graph arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternGraphDefault, NULL, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool isGraphDefault(Graph arg){
+  /* checking for: graph */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun0) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /**
@@ -1859,71 +1861,43 @@ ATbool isValidNodeList(NodeList arg) {
 }
 
 /**
- * Assert whether a NodeList is a empty. . May not be used to assert correctness of the NodeList
+ * Assert whether a NodeList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the NodeList
  * \param[in] arg input NodeList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool isNodeListEmpty(NodeList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isNodeListEmpty(NodeList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternNodeListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a NodeList is a single. . May not be used to assert correctness of the NodeList
+ * Assert whether a NodeList is a single by checking against the following ATerm pattern: [<head(Node)>]. May not be used to assert correctness of the NodeList
  * \param[in] arg input NodeList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool isNodeListSingle(NodeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternNodeListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isNodeListSingle(NodeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a NodeList is a many. . May not be used to assert correctness of the NodeList
+ * Assert whether a NodeList is a many by checking against the following ATerm pattern: [<head(Node)>,<[tail(NodeList)]>]. May not be used to assert correctness of the NodeList
  * \param[in] arg input NodeList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool isNodeListMany(NodeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isNodeListMany(NodeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternNodeListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -2025,49 +1999,29 @@ ATbool isValidNode(Node arg) {
 }
 
 /**
- * Assert whether a Node is a node. . May not be used to assert correctness of the Node
+ * Assert whether a Node is a node by checking against the following ATerm pattern: node(<id(NodeId)>,<attributes(AttributeList)>). May not be used to assert correctness of the Node
  * \param[in] arg input Node
  * \return ATtrue if #arg corresponds to the signature of a node, or ATfalse otherwise
  */
-inline ATbool isNodeNode(Node arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternNodeNode, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isNodeNode(Node arg){
+  /* checking for: node */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun1) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Node is a subgraph. . May not be used to assert correctness of the Node
+ * Assert whether a Node is a subgraph by checking against the following ATerm pattern: subgraph(<id(NodeId)>,<nodes(NodeList)>,<edges(EdgeList)>,<attributes(AttributeList)>). May not be used to assert correctness of the Node
  * \param[in] arg input Node
  * \return ATtrue if #arg corresponds to the signature of a subgraph, or ATfalse otherwise
  */
-inline ATbool isNodeSubgraph(Node arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternNodeSubgraph, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isNodeSubgraph(Node arg){
+  /* checking for: subgraph */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun2) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -2249,16 +2203,15 @@ ATbool isValidNodeId(NodeId arg) {
 }
 
 /**
- * Assert whether a NodeId is a default. Always returns ATtrue
+ * Assert whether a NodeId is a default by checking against the following ATerm pattern: <id(term)>. Always returns ATtrue
  * \param[in] arg input NodeId
  * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
  */
-inline ATbool isNodeIdDefault(NodeId arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternNodeIdDefault, NULL));
-#endif
-  return ATtrue;
+inline ATbool isNodeIdDefault(NodeId arg){
+  if (arg != NULL) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /**
@@ -2317,71 +2270,43 @@ ATbool isValidAttributeList(AttributeList arg) {
 }
 
 /**
- * Assert whether a AttributeList is a empty. . May not be used to assert correctness of the AttributeList
+ * Assert whether a AttributeList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the AttributeList
  * \param[in] arg input AttributeList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool isAttributeListEmpty(AttributeList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isAttributeListEmpty(AttributeList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternAttributeListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a AttributeList is a single. . May not be used to assert correctness of the AttributeList
+ * Assert whether a AttributeList is a single by checking against the following ATerm pattern: [<head(Attribute)>]. May not be used to assert correctness of the AttributeList
  * \param[in] arg input AttributeList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool isAttributeListSingle(AttributeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeListSingle(AttributeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a AttributeList is a many. . May not be used to assert correctness of the AttributeList
+ * Assert whether a AttributeList is a many by checking against the following ATerm pattern: [<head(Attribute)>,<[tail(AttributeList)]>]. May not be used to assert correctness of the AttributeList
  * \param[in] arg input AttributeList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool isAttributeListMany(AttributeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isAttributeListMany(AttributeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -2519,325 +2444,212 @@ ATbool isValidAttribute(Attribute arg) {
 }
 
 /**
- * Assert whether a Attribute is a bounding-box. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a bounding-box by checking against the following ATerm pattern: bounding-box(<first(Point)>,<second(Point)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a bounding-box, or ATfalse otherwise
  */
-inline ATbool isAttributeBoundingBox(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeBoundingBox, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeBoundingBox(Attribute arg){
+  /* checking for: bounding-box */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun3) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a color. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a color by checking against the following ATerm pattern: color(<color(Color)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a color, or ATfalse otherwise
  */
-inline ATbool isAttributeColor(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeColor, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeColor(Attribute arg){
+  /* checking for: color */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun4) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a curve-points. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a curve-points by checking against the following ATerm pattern: curve-points(<points(Polygon)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a curve-points, or ATfalse otherwise
  */
-inline ATbool isAttributeCurvePoints(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeCurvePoints, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeCurvePoints(Attribute arg){
+  /* checking for: curve-points */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun5) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a direction. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a direction by checking against the following ATerm pattern: direction(<direction(Direction)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a direction, or ATfalse otherwise
  */
-inline ATbool isAttributeDirection(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeDirection, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeDirection(Attribute arg){
+  /* checking for: direction */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun6) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a fill-color. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a fill-color by checking against the following ATerm pattern: fill-color(<color(Color)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a fill-color, or ATfalse otherwise
  */
-inline ATbool isAttributeFillColor(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeFillColor, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeFillColor(Attribute arg){
+  /* checking for: fill-color */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun7) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a info. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a info by checking against the following ATerm pattern: info(<key(str)>,<value(term)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a info, or ATfalse otherwise
  */
-inline ATbool isAttributeInfo(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeInfo, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeInfo(Attribute arg){
+  /* checking for: info */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun8) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (arg_arg1 != NULL) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a label. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a label by checking against the following ATerm pattern: label(<label(str)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a label, or ATfalse otherwise
  */
-inline ATbool isAttributeLabel(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeLabel, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeLabel(Attribute arg){
+  /* checking for: label */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun9) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a tooltip. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a tooltip by checking against the following ATerm pattern: tooltip(<tooltip(str)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a tooltip, or ATfalse otherwise
  */
-inline ATbool isAttributeTooltip(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeTooltip, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeTooltip(Attribute arg){
+  /* checking for: tooltip */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun10) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a location. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a location by checking against the following ATerm pattern: location(<x(int)>,<y(int)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a location, or ATfalse otherwise
  */
-inline ATbool isAttributeLocation(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeLocation, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeLocation(Attribute arg){
+  /* checking for: location */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun11) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a shape. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a shape by checking against the following ATerm pattern: shape(<shape(Shape)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a shape, or ATfalse otherwise
  */
-inline ATbool isAttributeShape(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeShape, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeShape(Attribute arg){
+  /* checking for: shape */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun12) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a size. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a size by checking against the following ATerm pattern: size(<width(int)>,<height(int)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a size, or ATfalse otherwise
  */
-inline ATbool isAttributeSize(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeSize, NULL, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeSize(Attribute arg){
+  /* checking for: size */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun13) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+        return ATtrue;
+      }
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a style. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a style by checking against the following ATerm pattern: style(<style(Style)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a style, or ATfalse otherwise
  */
-inline ATbool isAttributeStyle(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeStyle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeStyle(Attribute arg){
+  /* checking for: style */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun14) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a level. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a level by checking against the following ATerm pattern: level(<level(str)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a level, or ATfalse otherwise
  */
-inline ATbool isAttributeLevel(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeLevel, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isAttributeLevel(Attribute arg){
+  /* checking for: level */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun15) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Attribute is a file. . May not be used to assert correctness of the Attribute
+ * Assert whether a Attribute is a file by checking against the following ATerm pattern: file(<file(File)>). May not be used to assert correctness of the Attribute
  * \param[in] arg input Attribute
  * \return ATtrue if #arg corresponds to the signature of a file, or ATfalse otherwise
  */
-inline ATbool isAttributeFile(Attribute arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternAttributeFile, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isAttributeFile(Attribute arg){
+  /* checking for: file */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun16) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -3491,16 +3303,15 @@ ATbool isValidFile(File arg) {
 }
 
 /**
- * Assert whether a File is a external. Always returns ATtrue
+ * Assert whether a File is a external by checking against the following ATerm pattern: <file(term)>. Always returns ATtrue
  * \param[in] arg input File
  * \return ATtrue if #arg corresponds to the signature of a external, or ATfalse otherwise
  */
-inline ATbool isFileExternal(File arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternFileExternal, NULL));
-#endif
-  return ATtrue;
+inline ATbool isFileExternal(File arg){
+  if (arg != NULL) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /**
@@ -3553,16 +3364,25 @@ ATbool isValidColor(Color arg) {
 }
 
 /**
- * Assert whether a Color is a rgb. Always returns ATtrue
+ * Assert whether a Color is a rgb by checking against the following ATerm pattern: rgb(<red(int)>,<green(int)>,<blue(int)>). Always returns ATtrue
  * \param[in] arg input Color
  * \return ATtrue if #arg corresponds to the signature of a rgb, or ATfalse otherwise
  */
-inline ATbool isColorRgb(Color arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternColorRgb, NULL, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool isColorRgb(Color arg){
+  /* checking for: rgb */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun17) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+        ATerm arg_arg2 = ATgetArgument(arg, 2);
+        if (ATgetType((ATerm)arg_arg2) == AT_INT) {
+          return ATtrue;
+        }
+      }
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -3704,141 +3524,81 @@ ATbool isValidStyle(Style arg) {
 }
 
 /**
- * Assert whether a Style is a bold. . May not be used to assert correctness of the Style
+ * Assert whether a Style is a bold by checking against the following ATerm pattern: bold. May not be used to assert correctness of the Style
  * \param[in] arg input Style
  * \return ATtrue if #arg corresponds to the signature of a bold, or ATfalse otherwise
  */
-inline ATbool isStyleBold(Style arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternStyleBold);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isStyleBold(Style arg){
+  /* checking for: bold */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun18) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Style is a dashed. . May not be used to assert correctness of the Style
+ * Assert whether a Style is a dashed by checking against the following ATerm pattern: dashed. May not be used to assert correctness of the Style
  * \param[in] arg input Style
  * \return ATtrue if #arg corresponds to the signature of a dashed, or ATfalse otherwise
  */
-inline ATbool isStyleDashed(Style arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternStyleDashed);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isStyleDashed(Style arg){
+  /* checking for: dashed */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun19) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Style is a dotted. . May not be used to assert correctness of the Style
+ * Assert whether a Style is a dotted by checking against the following ATerm pattern: dotted. May not be used to assert correctness of the Style
  * \param[in] arg input Style
  * \return ATtrue if #arg corresponds to the signature of a dotted, or ATfalse otherwise
  */
-inline ATbool isStyleDotted(Style arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternStyleDotted);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isStyleDotted(Style arg){
+  /* checking for: dotted */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun20) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Style is a filled. . May not be used to assert correctness of the Style
+ * Assert whether a Style is a filled by checking against the following ATerm pattern: filled. May not be used to assert correctness of the Style
  * \param[in] arg input Style
  * \return ATtrue if #arg corresponds to the signature of a filled, or ATfalse otherwise
  */
-inline ATbool isStyleFilled(Style arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternStyleFilled);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isStyleFilled(Style arg){
+  /* checking for: filled */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun21) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Style is a invisible. . May not be used to assert correctness of the Style
+ * Assert whether a Style is a invisible by checking against the following ATerm pattern: invisible. May not be used to assert correctness of the Style
  * \param[in] arg input Style
  * \return ATtrue if #arg corresponds to the signature of a invisible, or ATfalse otherwise
  */
-inline ATbool isStyleInvisible(Style arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternStyleInvisible);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isStyleInvisible(Style arg){
+  /* checking for: invisible */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun22) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Style is a solid. . May not be used to assert correctness of the Style
+ * Assert whether a Style is a solid by checking against the following ATerm pattern: solid. May not be used to assert correctness of the Style
  * \param[in] arg input Style
  * \return ATtrue if #arg corresponds to the signature of a solid, or ATfalse otherwise
  */
-inline ATbool isStyleSolid(Style arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternStyleSolid);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isStyleSolid(Style arg){
+  /* checking for: solid */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun23) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -3887,279 +3647,159 @@ ATbool isValidShape(Shape arg) {
 }
 
 /**
- * Assert whether a Shape is a box. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a box by checking against the following ATerm pattern: box. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a box, or ATfalse otherwise
  */
-inline ATbool isShapeBox(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeBox);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeBox(Shape arg){
+  /* checking for: box */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun24) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a circle. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a circle by checking against the following ATerm pattern: circle. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a circle, or ATfalse otherwise
  */
-inline ATbool isShapeCircle(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeCircle);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeCircle(Shape arg){
+  /* checking for: circle */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun25) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a diamond. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a diamond by checking against the following ATerm pattern: diamond. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a diamond, or ATfalse otherwise
  */
-inline ATbool isShapeDiamond(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeDiamond);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeDiamond(Shape arg){
+  /* checking for: diamond */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun26) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a egg. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a egg by checking against the following ATerm pattern: egg. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a egg, or ATfalse otherwise
  */
-inline ATbool isShapeEgg(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeEgg);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeEgg(Shape arg){
+  /* checking for: egg */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun27) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a ellipse. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a ellipse by checking against the following ATerm pattern: ellipse. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a ellipse, or ATfalse otherwise
  */
-inline ATbool isShapeEllipse(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeEllipse);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeEllipse(Shape arg){
+  /* checking for: ellipse */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun28) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a hexagon. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a hexagon by checking against the following ATerm pattern: hexagon. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a hexagon, or ATfalse otherwise
  */
-inline ATbool isShapeHexagon(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeHexagon);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeHexagon(Shape arg){
+  /* checking for: hexagon */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun29) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a house. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a house by checking against the following ATerm pattern: house. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a house, or ATfalse otherwise
  */
-inline ATbool isShapeHouse(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeHouse);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeHouse(Shape arg){
+  /* checking for: house */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun30) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a octagon. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a octagon by checking against the following ATerm pattern: octagon. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a octagon, or ATfalse otherwise
  */
-inline ATbool isShapeOctagon(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeOctagon);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeOctagon(Shape arg){
+  /* checking for: octagon */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun31) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a parallelogram. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a parallelogram by checking against the following ATerm pattern: parallelogram. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a parallelogram, or ATfalse otherwise
  */
-inline ATbool isShapeParallelogram(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeParallelogram);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeParallelogram(Shape arg){
+  /* checking for: parallelogram */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun32) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a plaintext. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a plaintext by checking against the following ATerm pattern: plaintext. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a plaintext, or ATfalse otherwise
  */
-inline ATbool isShapePlaintext(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapePlaintext);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapePlaintext(Shape arg){
+  /* checking for: plaintext */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun33) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a trapezium. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a trapezium by checking against the following ATerm pattern: trapezium. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a trapezium, or ATfalse otherwise
  */
-inline ATbool isShapeTrapezium(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeTrapezium);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeTrapezium(Shape arg){
+  /* checking for: trapezium */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun34) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Shape is a triangle. . May not be used to assert correctness of the Shape
+ * Assert whether a Shape is a triangle by checking against the following ATerm pattern: triangle. May not be used to assert correctness of the Shape
  * \param[in] arg input Shape
  * \return ATtrue if #arg corresponds to the signature of a triangle, or ATfalse otherwise
  */
-inline ATbool isShapeTriangle(Shape arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternShapeTriangle);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isShapeTriangle(Shape arg){
+  /* checking for: triangle */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun35) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -4184,95 +3824,55 @@ ATbool isValidDirection(Direction arg) {
 }
 
 /**
- * Assert whether a Direction is a forward. . May not be used to assert correctness of the Direction
+ * Assert whether a Direction is a forward by checking against the following ATerm pattern: forward. May not be used to assert correctness of the Direction
  * \param[in] arg input Direction
  * \return ATtrue if #arg corresponds to the signature of a forward, or ATfalse otherwise
  */
-inline ATbool isDirectionForward(Direction arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternDirectionForward);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isDirectionForward(Direction arg){
+  /* checking for: forward */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun36) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Direction is a back. . May not be used to assert correctness of the Direction
+ * Assert whether a Direction is a back by checking against the following ATerm pattern: back. May not be used to assert correctness of the Direction
  * \param[in] arg input Direction
  * \return ATtrue if #arg corresponds to the signature of a back, or ATfalse otherwise
  */
-inline ATbool isDirectionBack(Direction arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternDirectionBack);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isDirectionBack(Direction arg){
+  /* checking for: back */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun37) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Direction is a both. . May not be used to assert correctness of the Direction
+ * Assert whether a Direction is a both by checking against the following ATerm pattern: both. May not be used to assert correctness of the Direction
  * \param[in] arg input Direction
  * \return ATtrue if #arg corresponds to the signature of a both, or ATfalse otherwise
  */
-inline ATbool isDirectionBoth(Direction arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternDirectionBoth);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isDirectionBoth(Direction arg){
+  /* checking for: both */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun38) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Direction is a none. . May not be used to assert correctness of the Direction
+ * Assert whether a Direction is a none by checking against the following ATerm pattern: none. May not be used to assert correctness of the Direction
  * \param[in] arg input Direction
  * \return ATtrue if #arg corresponds to the signature of a none, or ATfalse otherwise
  */
-inline ATbool isDirectionNone(Direction arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternDirectionNone);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool isDirectionNone(Direction arg){
+  /* checking for: none */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun39) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -4294,71 +3894,43 @@ ATbool isValidEdgeList(EdgeList arg) {
 }
 
 /**
- * Assert whether a EdgeList is a empty. . May not be used to assert correctness of the EdgeList
+ * Assert whether a EdgeList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the EdgeList
  * \param[in] arg input EdgeList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool isEdgeListEmpty(EdgeList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isEdgeListEmpty(EdgeList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternEdgeListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a EdgeList is a single. . May not be used to assert correctness of the EdgeList
+ * Assert whether a EdgeList is a single by checking against the following ATerm pattern: [<head(Edge)>]. May not be used to assert correctness of the EdgeList
  * \param[in] arg input EdgeList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool isEdgeListSingle(EdgeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternEdgeListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isEdgeListSingle(EdgeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a EdgeList is a many. . May not be used to assert correctness of the EdgeList
+ * Assert whether a EdgeList is a many by checking against the following ATerm pattern: [<head(Edge)>,<[tail(EdgeList)]>]. May not be used to assert correctness of the EdgeList
  * \param[in] arg input EdgeList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool isEdgeListMany(EdgeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isEdgeListMany(EdgeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternEdgeListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -4457,16 +4029,16 @@ ATbool isValidEdge(Edge arg) {
 }
 
 /**
- * Assert whether a Edge is a default. Always returns ATtrue
+ * Assert whether a Edge is a default by checking against the following ATerm pattern: edge(<from(NodeId)>,<to(NodeId)>,<attributes(AttributeList)>). Always returns ATtrue
  * \param[in] arg input Edge
  * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
  */
-inline ATbool isEdgeDefault(Edge arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternEdgeDefault, NULL, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool isEdgeDefault(Edge arg){
+  /* checking for: edge */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun40) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /**
@@ -4599,71 +4171,43 @@ ATbool isValidPolygon(Polygon arg) {
 }
 
 /**
- * Assert whether a Polygon is a empty. . May not be used to assert correctness of the Polygon
+ * Assert whether a Polygon is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the Polygon
  * \param[in] arg input Polygon
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool isPolygonEmpty(Polygon arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isPolygonEmpty(Polygon arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternPolygonEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a Polygon is a single. . May not be used to assert correctness of the Polygon
+ * Assert whether a Polygon is a single by checking against the following ATerm pattern: [<head(Point)>]. May not be used to assert correctness of the Polygon
  * \param[in] arg input Polygon
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool isPolygonSingle(Polygon arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternPolygonSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool isPolygonSingle(Polygon arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a Polygon is a many. . May not be used to assert correctness of the Polygon
+ * Assert whether a Polygon is a many by checking against the following ATerm pattern: [<head(Point)>,<[tail(Polygon)]>]. May not be used to assert correctness of the Polygon
  * \param[in] arg input Polygon
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool isPolygonMany(Polygon arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool isPolygonMany(Polygon arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternPolygonMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**
@@ -4762,16 +4306,22 @@ ATbool isValidPoint(Point arg) {
 }
 
 /**
- * Assert whether a Point is a default. Always returns ATtrue
+ * Assert whether a Point is a default by checking against the following ATerm pattern: point(<x(int)>,<y(int)>). Always returns ATtrue
  * \param[in] arg input Point
  * \return ATtrue if #arg corresponds to the signature of a default, or ATfalse otherwise
  */
-inline ATbool isPointDefault(Point arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternPointDefault, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool isPointDefault(Point arg){
+  /* checking for: point */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == afun41) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      ATerm arg_arg1 = ATgetArgument(arg, 1);
+      if (ATgetType((ATerm)arg_arg1) == AT_INT) {
+        return ATtrue;
+      }
+    }
+  }
+  return ATfalse;
 }
 
 /**
