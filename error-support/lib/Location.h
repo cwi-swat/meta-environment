@@ -22,238 +22,238 @@ void _LOC_initLocationApi (void);
 #endif
 
 #ifdef FAST_API
-#define LOC_protectStrChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectStrChar (LOC_StrChar * arg);
 #define LOC_protectStrChar(arg) (_LOC_protectStrChar(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectStrChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectStrChar (LOC_StrChar * arg);
 #define LOC_unprotectStrChar(arg) (_LOC_unprotectStrChar(arg))
 #endif
 #ifdef FAST_API
-#define LOC_protectStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectStrCon (LOC_StrCon * arg);
 #define LOC_protectStrCon(arg) (_LOC_protectStrCon(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectStrCon(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectStrCon (LOC_StrCon * arg);
 #define LOC_unprotectStrCon(arg) (_LOC_unprotectStrCon(arg))
 #endif
 #ifdef FAST_API
-#define LOC_protectNatCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectNatCon (LOC_NatCon * arg);
 #define LOC_protectNatCon(arg) (_LOC_protectNatCon(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectNatCon(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectNatCon (LOC_NatCon * arg);
 #define LOC_unprotectNatCon(arg) (_LOC_unprotectNatCon(arg))
 #endif
 #ifdef FAST_API
-#define LOC_protectLocation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectLocation(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectLocation (LOC_Location * arg);
 #define LOC_protectLocation(arg) (_LOC_protectLocation(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectLocation(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectLocation(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectLocation (LOC_Location * arg);
 #define LOC_unprotectLocation(arg) (_LOC_unprotectLocation(arg))
 #endif
 #ifdef FAST_API
-#define LOC_protectArea(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectArea(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectArea (LOC_Area * arg);
 #define LOC_protectArea(arg) (_LOC_protectArea(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectArea(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectArea(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectArea (LOC_Area * arg);
 #define LOC_unprotectArea(arg) (_LOC_unprotectArea(arg))
 #endif
 #ifdef FAST_API
-#define LOC_protectSlice(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectSlice(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectSlice (LOC_Slice * arg);
 #define LOC_protectSlice(arg) (_LOC_protectSlice(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectSlice(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectSlice(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectSlice (LOC_Slice * arg);
 #define LOC_unprotectSlice(arg) (_LOC_unprotectSlice(arg))
 #endif
 #ifdef FAST_API
-#define LOC_protectAreaAreas(arg) (ATprotect((ATerm*)((void*) arg)))
+#define LOC_protectAreaAreas(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_protectAreaAreas (LOC_AreaAreas * arg);
 #define LOC_protectAreaAreas(arg) (_LOC_protectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define LOC_unprotectAreaAreas(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define LOC_unprotectAreaAreas(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _LOC_unprotectAreaAreas (LOC_AreaAreas * arg);
 #define LOC_unprotectAreaAreas(arg) (_LOC_unprotectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define LOC_StrCharFromTerm(t) ((LOC_StrChar)t)
+#define LOC_StrCharFromTerm(t) ((LOC_StrChar)(t))
 #else
 LOC_StrChar _LOC_StrCharFromTerm (ATerm t);
 #define LOC_StrCharFromTerm(t) (_LOC_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_StrCharToTerm(arg) ((ATerm)arg)
+#define LOC_StrCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_StrCharToTerm (LOC_StrChar arg);
 #define LOC_StrCharToTerm(arg) (_LOC_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_StrConFromTerm(t) ((LOC_StrCon)t)
+#define LOC_StrConFromTerm(t) ((LOC_StrCon)(t))
 #else
 LOC_StrCon _LOC_StrConFromTerm (ATerm t);
 #define LOC_StrConFromTerm(t) (_LOC_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_StrConToTerm(arg) ((ATerm)arg)
+#define LOC_StrConToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_StrConToTerm (LOC_StrCon arg);
 #define LOC_StrConToTerm(arg) (_LOC_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_NatConFromTerm(t) ((LOC_NatCon)t)
+#define LOC_NatConFromTerm(t) ((LOC_NatCon)(t))
 #else
 LOC_NatCon _LOC_NatConFromTerm (ATerm t);
 #define LOC_NatConFromTerm(t) (_LOC_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_NatConToTerm(arg) ((ATerm)arg)
+#define LOC_NatConToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_NatConToTerm (LOC_NatCon arg);
 #define LOC_NatConToTerm(arg) (_LOC_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_LocationFromTerm(t) ((LOC_Location)t)
+#define LOC_LocationFromTerm(t) ((LOC_Location)(t))
 #else
 LOC_Location _LOC_LocationFromTerm (ATerm t);
 #define LOC_LocationFromTerm(t) (_LOC_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_LocationToTerm(arg) ((ATerm)arg)
+#define LOC_LocationToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_LocationToTerm (LOC_Location arg);
 #define LOC_LocationToTerm(arg) (_LOC_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_AreaFromTerm(t) ((LOC_Area)t)
+#define LOC_AreaFromTerm(t) ((LOC_Area)(t))
 #else
 LOC_Area _LOC_AreaFromTerm (ATerm t);
 #define LOC_AreaFromTerm(t) (_LOC_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_AreaToTerm(arg) ((ATerm)arg)
+#define LOC_AreaToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_AreaToTerm (LOC_Area arg);
 #define LOC_AreaToTerm(arg) (_LOC_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_SliceFromTerm(t) ((LOC_Slice)t)
+#define LOC_SliceFromTerm(t) ((LOC_Slice)(t))
 #else
 LOC_Slice _LOC_SliceFromTerm (ATerm t);
 #define LOC_SliceFromTerm(t) (_LOC_SliceFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_SliceToTerm(arg) ((ATerm)arg)
+#define LOC_SliceToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_SliceToTerm (LOC_Slice arg);
 #define LOC_SliceToTerm(arg) (_LOC_SliceToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_AreaAreasFromTerm(t) ((LOC_AreaAreas)t)
+#define LOC_AreaAreasFromTerm(t) ((LOC_AreaAreas)(t))
 #else
 LOC_AreaAreas _LOC_AreaAreasFromTerm (ATerm t);
 #define LOC_AreaAreasFromTerm(t) (_LOC_AreaAreasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define LOC_AreaAreasToTerm(arg) ((ATerm)arg)
+#define LOC_AreaAreasToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _LOC_AreaAreasToTerm (LOC_AreaAreas arg);
 #define LOC_AreaAreasToTerm(arg) (_LOC_AreaAreasToTerm(arg))
 #endif
 #ifdef FAST_API
-#define LOC_getAreaAreasLength(arg) (ATgetLength((ATermList) arg))
+#define LOC_getAreaAreasLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _LOC_getAreaAreasLength (LOC_AreaAreas arg);
 #define LOC_getAreaAreasLength(arg) (_LOC_getAreaAreasLength(arg))
 #endif
 #ifdef FAST_API
-#define LOC_reverseAreaAreas(arg) ((LOC_AreaAreas) ATreverse((ATermList) arg))
+#define LOC_reverseAreaAreas(arg) ((LOC_AreaAreas) ATreverse((ATermList) (arg)))
 #else
 LOC_AreaAreas _LOC_reverseAreaAreas (LOC_AreaAreas arg);
 #define LOC_reverseAreaAreas(arg) (_LOC_reverseAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define LOC_appendAreaAreas(arg, elem) ((LOC_AreaAreas) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define LOC_appendAreaAreas(arg, elem) ((LOC_AreaAreas) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 LOC_AreaAreas _LOC_appendAreaAreas (LOC_AreaAreas arg, LOC_Area elem);
 #define LOC_appendAreaAreas(arg, elem) (_LOC_appendAreaAreas(arg, elem))
 #endif
 #ifdef FAST_API
-#define LOC_concatAreaAreas(arg0, arg1) ((LOC_AreaAreas) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define LOC_concatAreaAreas(arg0, arg1) ((LOC_AreaAreas) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 LOC_AreaAreas _LOC_concatAreaAreas (LOC_AreaAreas arg0, LOC_AreaAreas arg1);
 #define LOC_concatAreaAreas(arg0, arg1) (_LOC_concatAreaAreas(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_sliceAreaAreas(arg, start, end) ((LOC_AreaAreas) ATgetSlice((ATermList) arg, start, end))
+#define LOC_sliceAreaAreas(arg, start, end) ((LOC_AreaAreas) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 LOC_AreaAreas _LOC_sliceAreaAreas (LOC_AreaAreas arg, int start, int end);
 #define LOC_sliceAreaAreas(arg, start, end) (_LOC_sliceAreaAreas(arg, start, end))
 #endif
 #ifdef FAST_API
-#define LOC_getAreaAreasAreaAt(arg, index) ((LOC_Area)ATelementAt((ATermList) arg,index))
+#define LOC_getAreaAreasAreaAt(arg, index) ((LOC_Area) (ATelementAt((ATermList) arg,index)))
 #else
 LOC_Area _LOC_getAreaAreasAreaAt (LOC_AreaAreas arg, int index);
 #define LOC_getAreaAreasAreaAt(arg, index) (_LOC_getAreaAreasAreaAt(arg, index))
 #endif
 #ifdef FAST_API
-#define LOC_replaceAreaAreasAreaAt(arg, elem, index) ((LOC_AreaAreas) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define LOC_replaceAreaAreasAreaAt(arg, elem, index) ((LOC_AreaAreas) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 LOC_AreaAreas _LOC_replaceAreaAreasAreaAt (LOC_AreaAreas arg, LOC_Area elem,
 					   int index);
 #define LOC_replaceAreaAreasAreaAt(arg, elem, index) (_LOC_replaceAreaAreasAreaAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define LOC_makeAreaAreas2(elem1,  elem2) ((LOC_AreaAreas) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define LOC_makeAreaAreas2(elem1,  elem2) ((LOC_AreaAreas) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 LOC_AreaAreas _LOC_makeAreaAreas2 (LOC_Area elem1, LOC_Area elem2);
 #define LOC_makeAreaAreas2(elem1,  elem2) (_LOC_makeAreaAreas2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define LOC_makeAreaAreas3(elem1, elem2,  elem3) ((LOC_AreaAreas) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define LOC_makeAreaAreas3(elem1, elem2,  elem3) ((LOC_AreaAreas) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 LOC_AreaAreas _LOC_makeAreaAreas3 (LOC_Area elem1, LOC_Area elem2,
 				   LOC_Area elem3);
 #define LOC_makeAreaAreas3(elem1, elem2,  elem3) (_LOC_makeAreaAreas3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define LOC_makeAreaAreas4(elem1, elem2, elem3,  elem4) ((LOC_AreaAreas) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define LOC_makeAreaAreas4(elem1, elem2, elem3,  elem4) ((LOC_AreaAreas) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 LOC_AreaAreas _LOC_makeAreaAreas4 (LOC_Area elem1, LOC_Area elem2,
 				   LOC_Area elem3, LOC_Area elem4);
 #define LOC_makeAreaAreas4(elem1, elem2, elem3,  elem4) (_LOC_makeAreaAreas4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define LOC_makeAreaAreas5(elem1, elem2, elem3, elem4,  elem5) ((LOC_AreaAreas) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define LOC_makeAreaAreas5(elem1, elem2, elem3, elem4,  elem5) ((LOC_AreaAreas) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 LOC_AreaAreas _LOC_makeAreaAreas5 (LOC_Area elem1, LOC_Area elem2,
 				   LOC_Area elem3, LOC_Area elem4,
@@ -261,7 +261,7 @@ LOC_AreaAreas _LOC_makeAreaAreas5 (LOC_Area elem1, LOC_Area elem2,
 #define LOC_makeAreaAreas5(elem1, elem2, elem3, elem4,  elem5) (_LOC_makeAreaAreas5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define LOC_makeAreaAreas6(elem1, elem2, elem3, elem4, elem5,  elem6) ((LOC_AreaAreas) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define LOC_makeAreaAreas6(elem1, elem2, elem3, elem4, elem5,  elem6) ((LOC_AreaAreas) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 LOC_AreaAreas _LOC_makeAreaAreas6 (LOC_Area elem1, LOC_Area elem2,
 				   LOC_Area elem3, LOC_Area elem4,
@@ -281,43 +281,43 @@ LOC_AreaAreas LOC_makeAreaAreasEmpty (void);
 LOC_AreaAreas LOC_makeAreaAreasSingle (LOC_Area head);
 LOC_AreaAreas LOC_makeAreaAreasMany (LOC_Area head, LOC_AreaAreas tail);
 #ifdef FAST_API
-#define LOC_isEqualStrChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualStrChar (LOC_StrChar arg0, LOC_StrChar arg1);
 #define LOC_isEqualStrChar(arg0, arg1) (_LOC_isEqualStrChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_isEqualStrCon(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualStrCon (LOC_StrCon arg0, LOC_StrCon arg1);
 #define LOC_isEqualStrCon(arg0, arg1) (_LOC_isEqualStrCon(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_isEqualNatCon(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualNatCon (LOC_NatCon arg0, LOC_NatCon arg1);
 #define LOC_isEqualNatCon(arg0, arg1) (_LOC_isEqualNatCon(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_isEqualLocation(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualLocation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualLocation (LOC_Location arg0, LOC_Location arg1);
 #define LOC_isEqualLocation(arg0, arg1) (_LOC_isEqualLocation(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_isEqualArea(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualArea(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualArea (LOC_Area arg0, LOC_Area arg1);
 #define LOC_isEqualArea(arg0, arg1) (_LOC_isEqualArea(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_isEqualSlice(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualSlice(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualSlice (LOC_Slice arg0, LOC_Slice arg1);
 #define LOC_isEqualSlice(arg0, arg1) (_LOC_isEqualSlice(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define LOC_isEqualAreaAreas(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define LOC_isEqualAreaAreas(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _LOC_isEqualAreaAreas (LOC_AreaAreas arg0, LOC_AreaAreas arg1);
 #define LOC_isEqualAreaAreas(arg0, arg1) (_LOC_isEqualAreaAreas(arg0, arg1))

@@ -36,551 +36,551 @@ void _PERR_initParsedErrorApi (void);
 #endif
 
 #ifdef FAST_API
-#define PERR_protectOptLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectOptLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectOptLayout (PERR_OptLayout * arg);
 #define PERR_protectOptLayout(arg) (_PERR_protectOptLayout(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectOptLayout(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectOptLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectOptLayout (PERR_OptLayout * arg);
 #define PERR_unprotectOptLayout(arg) (_PERR_unprotectOptLayout(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLayout (PERR_Layout * arg);
 #define PERR_protectLayout(arg) (_PERR_protectLayout(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLayout(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLayout (PERR_Layout * arg);
 #define PERR_unprotectLayout(arg) (_PERR_unprotectLayout(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLexLayoutList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLexLayoutList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLexLayoutList (PERR_LexLayoutList * arg);
 #define PERR_protectLexLayoutList(arg) (_PERR_protectLexLayoutList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLexLayoutList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLexLayoutList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLexLayoutList (PERR_LexLayoutList * arg);
 #define PERR_unprotectLexLayoutList(arg) (_PERR_unprotectLexLayoutList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLexStrChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLexStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLexStrChar (PERR_LexStrChar * arg);
 #define PERR_protectLexStrChar(arg) (_PERR_protectLexStrChar(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLexStrChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLexStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLexStrChar (PERR_LexStrChar * arg);
 #define PERR_unprotectLexStrChar(arg) (_PERR_unprotectLexStrChar(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectStrChar(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectStrChar (PERR_StrChar * arg);
 #define PERR_protectStrChar(arg) (_PERR_protectStrChar(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectStrChar(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectStrChar (PERR_StrChar * arg);
 #define PERR_unprotectStrChar(arg) (_PERR_unprotectStrChar(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLexStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLexStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLexStrCon (PERR_LexStrCon * arg);
 #define PERR_protectLexStrCon(arg) (_PERR_protectLexStrCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLexStrCon(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLexStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLexStrCon (PERR_LexStrCon * arg);
 #define PERR_unprotectLexStrCon(arg) (_PERR_unprotectLexStrCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectStrCon (PERR_StrCon * arg);
 #define PERR_protectStrCon(arg) (_PERR_protectStrCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectStrCon(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectStrCon (PERR_StrCon * arg);
 #define PERR_unprotectStrCon(arg) (_PERR_unprotectStrCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLexStrCharChars(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLexStrCharChars(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLexStrCharChars (PERR_LexStrCharChars * arg);
 #define PERR_protectLexStrCharChars(arg) (_PERR_protectLexStrCharChars(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLexStrCharChars(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLexStrCharChars(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLexStrCharChars (PERR_LexStrCharChars * arg);
 #define PERR_unprotectLexStrCharChars(arg) (_PERR_unprotectLexStrCharChars(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLexNatCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLexNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLexNatCon (PERR_LexNatCon * arg);
 #define PERR_protectLexNatCon(arg) (_PERR_protectLexNatCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLexNatCon(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLexNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLexNatCon (PERR_LexNatCon * arg);
 #define PERR_unprotectLexNatCon(arg) (_PERR_unprotectLexNatCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectNatCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectNatCon (PERR_NatCon * arg);
 #define PERR_protectNatCon(arg) (_PERR_protectNatCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectNatCon(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectNatCon (PERR_NatCon * arg);
 #define PERR_unprotectNatCon(arg) (_PERR_unprotectNatCon(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLexLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLexLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLexLayout (PERR_LexLayout * arg);
 #define PERR_protectLexLayout(arg) (_PERR_protectLexLayout(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLexLayout(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLexLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLexLayout (PERR_LexLayout * arg);
 #define PERR_unprotectLexLayout(arg) (_PERR_unprotectLexLayout(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectStart(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectStart(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectStart (PERR_Start * arg);
 #define PERR_protectStart(arg) (_PERR_protectStart(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectStart(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectStart(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectStart (PERR_Start * arg);
 #define PERR_unprotectStart(arg) (_PERR_unprotectStart(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectSubject(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectSubject(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectSubject (PERR_Subject * arg);
 #define PERR_protectSubject(arg) (_PERR_protectSubject(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectSubject(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectSubject(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectSubject (PERR_Subject * arg);
 #define PERR_unprotectSubject(arg) (_PERR_unprotectSubject(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectError(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectError(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectError (PERR_Error * arg);
 #define PERR_protectError(arg) (_PERR_protectError(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectError(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectError(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectError (PERR_Error * arg);
 #define PERR_unprotectError(arg) (_PERR_unprotectError(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectSummary(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectSummary(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectSummary (PERR_Summary * arg);
 #define PERR_protectSummary(arg) (_PERR_protectSummary(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectSummary(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectSummary(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectSummary (PERR_Summary * arg);
 #define PERR_unprotectSummary(arg) (_PERR_unprotectSummary(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectSubjectList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectSubjectList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectSubjectList (PERR_SubjectList * arg);
 #define PERR_protectSubjectList(arg) (_PERR_protectSubjectList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectSubjectList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectSubjectList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectSubjectList (PERR_SubjectList * arg);
 #define PERR_unprotectSubjectList(arg) (_PERR_unprotectSubjectList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectErrorList(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectErrorList(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectErrorList (PERR_ErrorList * arg);
 #define PERR_protectErrorList(arg) (_PERR_protectErrorList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectErrorList(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectErrorList(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectErrorList (PERR_ErrorList * arg);
 #define PERR_unprotectErrorList(arg) (_PERR_unprotectErrorList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectLocation(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectLocation(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectLocation (PERR_Location * arg);
 #define PERR_protectLocation(arg) (_PERR_protectLocation(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectLocation(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectLocation(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectLocation (PERR_Location * arg);
 #define PERR_unprotectLocation(arg) (_PERR_unprotectLocation(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectArea(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectArea(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectArea (PERR_Area * arg);
 #define PERR_protectArea(arg) (_PERR_protectArea(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectArea(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectArea(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectArea (PERR_Area * arg);
 #define PERR_unprotectArea(arg) (_PERR_unprotectArea(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectSlice(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectSlice(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectSlice (PERR_Slice * arg);
 #define PERR_protectSlice(arg) (_PERR_protectSlice(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectSlice(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectSlice(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectSlice (PERR_Slice * arg);
 #define PERR_unprotectSlice(arg) (_PERR_unprotectSlice(arg))
 #endif
 #ifdef FAST_API
-#define PERR_protectAreaAreas(arg) (ATprotect((ATerm*)((void*) arg)))
+#define PERR_protectAreaAreas(arg) (ATprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_protectAreaAreas (PERR_AreaAreas * arg);
 #define PERR_protectAreaAreas(arg) (_PERR_protectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define PERR_unprotectAreaAreas(arg) (ATunprotect((ATerm*)((void*) arg)))
+#define PERR_unprotectAreaAreas(arg) (ATunprotect((ATerm*)((void*) (arg))))
 #else
 void _PERR_unprotectAreaAreas (PERR_AreaAreas * arg);
 #define PERR_unprotectAreaAreas(arg) (_PERR_unprotectAreaAreas(arg))
 #endif
 #ifdef FAST_API
-#define PERR_OptLayoutFromTerm(t) ((PERR_OptLayout)t)
+#define PERR_OptLayoutFromTerm(t) ((PERR_OptLayout)(t))
 #else
 PERR_OptLayout _PERR_OptLayoutFromTerm (ATerm t);
 #define PERR_OptLayoutFromTerm(t) (_PERR_OptLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_OptLayoutToTerm(arg) ((ATerm)arg)
+#define PERR_OptLayoutToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_OptLayoutToTerm (PERR_OptLayout arg);
 #define PERR_OptLayoutToTerm(arg) (_PERR_OptLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LayoutFromTerm(t) ((PERR_Layout)t)
+#define PERR_LayoutFromTerm(t) ((PERR_Layout)(t))
 #else
 PERR_Layout _PERR_LayoutFromTerm (ATerm t);
 #define PERR_LayoutFromTerm(t) (_PERR_LayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LayoutToTerm(arg) ((ATerm)arg)
+#define PERR_LayoutToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LayoutToTerm (PERR_Layout arg);
 #define PERR_LayoutToTerm(arg) (_PERR_LayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutListFromTerm(t) ((PERR_LexLayoutList)t)
+#define PERR_LexLayoutListFromTerm(t) ((PERR_LexLayoutList)(t))
 #else
 PERR_LexLayoutList _PERR_LexLayoutListFromTerm (ATerm t);
 #define PERR_LexLayoutListFromTerm(t) (_PERR_LexLayoutListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutListToTerm(arg) ((ATerm)arg)
+#define PERR_LexLayoutListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LexLayoutListToTerm (PERR_LexLayoutList arg);
 #define PERR_LexLayoutListToTerm(arg) (_PERR_LexLayoutListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharFromTerm(t) ((PERR_LexStrChar)t)
+#define PERR_LexStrCharFromTerm(t) ((PERR_LexStrChar)(t))
 #else
 PERR_LexStrChar _PERR_LexStrCharFromTerm (ATerm t);
 #define PERR_LexStrCharFromTerm(t) (_PERR_LexStrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharToTerm(arg) ((ATerm)arg)
+#define PERR_LexStrCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LexStrCharToTerm (PERR_LexStrChar arg);
 #define PERR_LexStrCharToTerm(arg) (_PERR_LexStrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_StrCharFromTerm(t) ((PERR_StrChar)t)
+#define PERR_StrCharFromTerm(t) ((PERR_StrChar)(t))
 #else
 PERR_StrChar _PERR_StrCharFromTerm (ATerm t);
 #define PERR_StrCharFromTerm(t) (_PERR_StrCharFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_StrCharToTerm(arg) ((ATerm)arg)
+#define PERR_StrCharToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_StrCharToTerm (PERR_StrChar arg);
 #define PERR_StrCharToTerm(arg) (_PERR_StrCharToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrConFromTerm(t) ((PERR_LexStrCon)t)
+#define PERR_LexStrConFromTerm(t) ((PERR_LexStrCon)(t))
 #else
 PERR_LexStrCon _PERR_LexStrConFromTerm (ATerm t);
 #define PERR_LexStrConFromTerm(t) (_PERR_LexStrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrConToTerm(arg) ((ATerm)arg)
+#define PERR_LexStrConToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LexStrConToTerm (PERR_LexStrCon arg);
 #define PERR_LexStrConToTerm(arg) (_PERR_LexStrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_StrConFromTerm(t) ((PERR_StrCon)t)
+#define PERR_StrConFromTerm(t) ((PERR_StrCon)(t))
 #else
 PERR_StrCon _PERR_StrConFromTerm (ATerm t);
 #define PERR_StrConFromTerm(t) (_PERR_StrConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_StrConToTerm(arg) ((ATerm)arg)
+#define PERR_StrConToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_StrConToTerm (PERR_StrCon arg);
 #define PERR_StrConToTerm(arg) (_PERR_StrConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharCharsFromTerm(t) ((PERR_LexStrCharChars)t)
+#define PERR_LexStrCharCharsFromTerm(t) ((PERR_LexStrCharChars)(t))
 #else
 PERR_LexStrCharChars _PERR_LexStrCharCharsFromTerm (ATerm t);
 #define PERR_LexStrCharCharsFromTerm(t) (_PERR_LexStrCharCharsFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexStrCharCharsToTerm(arg) ((ATerm)arg)
+#define PERR_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LexStrCharCharsToTerm (PERR_LexStrCharChars arg);
 #define PERR_LexStrCharCharsToTerm(arg) (_PERR_LexStrCharCharsToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexNatConFromTerm(t) ((PERR_LexNatCon)t)
+#define PERR_LexNatConFromTerm(t) ((PERR_LexNatCon)(t))
 #else
 PERR_LexNatCon _PERR_LexNatConFromTerm (ATerm t);
 #define PERR_LexNatConFromTerm(t) (_PERR_LexNatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexNatConToTerm(arg) ((ATerm)arg)
+#define PERR_LexNatConToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LexNatConToTerm (PERR_LexNatCon arg);
 #define PERR_LexNatConToTerm(arg) (_PERR_LexNatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_NatConFromTerm(t) ((PERR_NatCon)t)
+#define PERR_NatConFromTerm(t) ((PERR_NatCon)(t))
 #else
 PERR_NatCon _PERR_NatConFromTerm (ATerm t);
 #define PERR_NatConFromTerm(t) (_PERR_NatConFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_NatConToTerm(arg) ((ATerm)arg)
+#define PERR_NatConToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_NatConToTerm (PERR_NatCon arg);
 #define PERR_NatConToTerm(arg) (_PERR_NatConToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutFromTerm(t) ((PERR_LexLayout)t)
+#define PERR_LexLayoutFromTerm(t) ((PERR_LexLayout)(t))
 #else
 PERR_LexLayout _PERR_LexLayoutFromTerm (ATerm t);
 #define PERR_LexLayoutFromTerm(t) (_PERR_LexLayoutFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LexLayoutToTerm(arg) ((ATerm)arg)
+#define PERR_LexLayoutToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LexLayoutToTerm (PERR_LexLayout arg);
 #define PERR_LexLayoutToTerm(arg) (_PERR_LexLayoutToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_StartFromTerm(t) ((PERR_Start)t)
+#define PERR_StartFromTerm(t) ((PERR_Start)(t))
 #else
 PERR_Start _PERR_StartFromTerm (ATerm t);
 #define PERR_StartFromTerm(t) (_PERR_StartFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_StartToTerm(arg) ((ATerm)arg)
+#define PERR_StartToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_StartToTerm (PERR_Start arg);
 #define PERR_StartToTerm(arg) (_PERR_StartToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectFromTerm(t) ((PERR_Subject)t)
+#define PERR_SubjectFromTerm(t) ((PERR_Subject)(t))
 #else
 PERR_Subject _PERR_SubjectFromTerm (ATerm t);
 #define PERR_SubjectFromTerm(t) (_PERR_SubjectFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectToTerm(arg) ((ATerm)arg)
+#define PERR_SubjectToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_SubjectToTerm (PERR_Subject arg);
 #define PERR_SubjectToTerm(arg) (_PERR_SubjectToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorFromTerm(t) ((PERR_Error)t)
+#define PERR_ErrorFromTerm(t) ((PERR_Error)(t))
 #else
 PERR_Error _PERR_ErrorFromTerm (ATerm t);
 #define PERR_ErrorFromTerm(t) (_PERR_ErrorFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorToTerm(arg) ((ATerm)arg)
+#define PERR_ErrorToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_ErrorToTerm (PERR_Error arg);
 #define PERR_ErrorToTerm(arg) (_PERR_ErrorToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SummaryFromTerm(t) ((PERR_Summary)t)
+#define PERR_SummaryFromTerm(t) ((PERR_Summary)(t))
 #else
 PERR_Summary _PERR_SummaryFromTerm (ATerm t);
 #define PERR_SummaryFromTerm(t) (_PERR_SummaryFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SummaryToTerm(arg) ((ATerm)arg)
+#define PERR_SummaryToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_SummaryToTerm (PERR_Summary arg);
 #define PERR_SummaryToTerm(arg) (_PERR_SummaryToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectListFromTerm(t) ((PERR_SubjectList)t)
+#define PERR_SubjectListFromTerm(t) ((PERR_SubjectList)(t))
 #else
 PERR_SubjectList _PERR_SubjectListFromTerm (ATerm t);
 #define PERR_SubjectListFromTerm(t) (_PERR_SubjectListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SubjectListToTerm(arg) ((ATerm)arg)
+#define PERR_SubjectListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_SubjectListToTerm (PERR_SubjectList arg);
 #define PERR_SubjectListToTerm(arg) (_PERR_SubjectListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorListFromTerm(t) ((PERR_ErrorList)t)
+#define PERR_ErrorListFromTerm(t) ((PERR_ErrorList)(t))
 #else
 PERR_ErrorList _PERR_ErrorListFromTerm (ATerm t);
 #define PERR_ErrorListFromTerm(t) (_PERR_ErrorListFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_ErrorListToTerm(arg) ((ATerm)arg)
+#define PERR_ErrorListToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_ErrorListToTerm (PERR_ErrorList arg);
 #define PERR_ErrorListToTerm(arg) (_PERR_ErrorListToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_LocationFromTerm(t) ((PERR_Location)t)
+#define PERR_LocationFromTerm(t) ((PERR_Location)(t))
 #else
 PERR_Location _PERR_LocationFromTerm (ATerm t);
 #define PERR_LocationFromTerm(t) (_PERR_LocationFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_LocationToTerm(arg) ((ATerm)arg)
+#define PERR_LocationToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_LocationToTerm (PERR_Location arg);
 #define PERR_LocationToTerm(arg) (_PERR_LocationToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_AreaFromTerm(t) ((PERR_Area)t)
+#define PERR_AreaFromTerm(t) ((PERR_Area)(t))
 #else
 PERR_Area _PERR_AreaFromTerm (ATerm t);
 #define PERR_AreaFromTerm(t) (_PERR_AreaFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_AreaToTerm(arg) ((ATerm)arg)
+#define PERR_AreaToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_AreaToTerm (PERR_Area arg);
 #define PERR_AreaToTerm(arg) (_PERR_AreaToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_SliceFromTerm(t) ((PERR_Slice)t)
+#define PERR_SliceFromTerm(t) ((PERR_Slice)(t))
 #else
 PERR_Slice _PERR_SliceFromTerm (ATerm t);
 #define PERR_SliceFromTerm(t) (_PERR_SliceFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_SliceToTerm(arg) ((ATerm)arg)
+#define PERR_SliceToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_SliceToTerm (PERR_Slice arg);
 #define PERR_SliceToTerm(arg) (_PERR_SliceToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_AreaAreasFromTerm(t) ((PERR_AreaAreas)t)
+#define PERR_AreaAreasFromTerm(t) ((PERR_AreaAreas)(t))
 #else
 PERR_AreaAreas _PERR_AreaAreasFromTerm (ATerm t);
 #define PERR_AreaAreasFromTerm(t) (_PERR_AreaAreasFromTerm(t))
 #endif
 #ifdef FAST_API
-#define PERR_AreaAreasToTerm(arg) ((ATerm)arg)
+#define PERR_AreaAreasToTerm(arg) ((ATerm)(arg))
 #else
 ATerm _PERR_AreaAreasToTerm (PERR_AreaAreas arg);
 #define PERR_AreaAreasToTerm(arg) (_PERR_AreaAreasToTerm(arg))
 #endif
 #ifdef FAST_API
-#define PERR_getLexLayoutListLength(arg) (ATgetLength((ATermList) arg))
+#define PERR_getLexLayoutListLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _PERR_getLexLayoutListLength (PERR_LexLayoutList arg);
 #define PERR_getLexLayoutListLength(arg) (_PERR_getLexLayoutListLength(arg))
 #endif
 #ifdef FAST_API
-#define PERR_reverseLexLayoutList(arg) ((PERR_LexLayoutList) ATreverse((ATermList) arg))
+#define PERR_reverseLexLayoutList(arg) ((PERR_LexLayoutList) ATreverse((ATermList) (arg)))
 #else
 PERR_LexLayoutList _PERR_reverseLexLayoutList (PERR_LexLayoutList arg);
 #define PERR_reverseLexLayoutList(arg) (_PERR_reverseLexLayoutList(arg))
 #endif
 #ifdef FAST_API
-#define PERR_appendLexLayoutList(arg, elem) ((PERR_LexLayoutList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define PERR_appendLexLayoutList(arg, elem) ((PERR_LexLayoutList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 PERR_LexLayoutList _PERR_appendLexLayoutList (PERR_LexLayoutList arg,
 					      PERR_LexLayout elem);
 #define PERR_appendLexLayoutList(arg, elem) (_PERR_appendLexLayoutList(arg, elem))
 #endif
 #ifdef FAST_API
-#define PERR_concatLexLayoutList(arg0, arg1) ((PERR_LexLayoutList) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define PERR_concatLexLayoutList(arg0, arg1) ((PERR_LexLayoutList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 PERR_LexLayoutList _PERR_concatLexLayoutList (PERR_LexLayoutList arg0,
 					      PERR_LexLayoutList arg1);
 #define PERR_concatLexLayoutList(arg0, arg1) (_PERR_concatLexLayoutList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_sliceLexLayoutList(arg, start, end) ((PERR_LexLayoutList) ATgetSlice((ATermList) arg, start, end))
+#define PERR_sliceLexLayoutList(arg, start, end) ((PERR_LexLayoutList) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 PERR_LexLayoutList _PERR_sliceLexLayoutList (PERR_LexLayoutList arg,
 					     int start, int end);
 #define PERR_sliceLexLayoutList(arg, start, end) (_PERR_sliceLexLayoutList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PERR_getLexLayoutListLexLayoutAt(arg, index) ((PERR_LexLayout)ATelementAt((ATermList) arg,index))
+#define PERR_getLexLayoutListLexLayoutAt(arg, index) ((PERR_LexLayout) (ATelementAt((ATermList) arg,index)))
 #else
 PERR_LexLayout _PERR_getLexLayoutListLexLayoutAt (PERR_LexLayoutList arg,
 						  int index);
 #define PERR_getLexLayoutListLexLayoutAt(arg, index) (_PERR_getLexLayoutListLexLayoutAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PERR_replaceLexLayoutListLexLayoutAt(arg, elem, index) ((PERR_LexLayoutList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define PERR_replaceLexLayoutListLexLayoutAt(arg, elem, index) ((PERR_LexLayoutList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 PERR_LexLayoutList _PERR_replaceLexLayoutListLexLayoutAt (PERR_LexLayoutList
 							  arg,
@@ -589,14 +589,14 @@ PERR_LexLayoutList _PERR_replaceLexLayoutListLexLayoutAt (PERR_LexLayoutList
 #define PERR_replaceLexLayoutListLexLayoutAt(arg, elem, index) (_PERR_replaceLexLayoutListLexLayoutAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexLayoutList2(elem1,  elem2) ((PERR_LexLayoutList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define PERR_makeLexLayoutList2(elem1,  elem2) ((PERR_LexLayoutList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 PERR_LexLayoutList _PERR_makeLexLayoutList2 (PERR_LexLayout elem1,
 					     PERR_LexLayout elem2);
 #define PERR_makeLexLayoutList2(elem1,  elem2) (_PERR_makeLexLayoutList2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexLayoutList3(elem1, elem2,  elem3) ((PERR_LexLayoutList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define PERR_makeLexLayoutList3(elem1, elem2,  elem3) ((PERR_LexLayoutList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 PERR_LexLayoutList _PERR_makeLexLayoutList3 (PERR_LexLayout elem1,
 					     PERR_LexLayout elem2,
@@ -604,7 +604,7 @@ PERR_LexLayoutList _PERR_makeLexLayoutList3 (PERR_LexLayout elem1,
 #define PERR_makeLexLayoutList3(elem1, elem2,  elem3) (_PERR_makeLexLayoutList3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexLayoutList4(elem1, elem2, elem3,  elem4) ((PERR_LexLayoutList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define PERR_makeLexLayoutList4(elem1, elem2, elem3,  elem4) ((PERR_LexLayoutList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 PERR_LexLayoutList _PERR_makeLexLayoutList4 (PERR_LexLayout elem1,
 					     PERR_LexLayout elem2,
@@ -613,7 +613,7 @@ PERR_LexLayoutList _PERR_makeLexLayoutList4 (PERR_LexLayout elem1,
 #define PERR_makeLexLayoutList4(elem1, elem2, elem3,  elem4) (_PERR_makeLexLayoutList4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) ((PERR_LexLayoutList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define PERR_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) ((PERR_LexLayoutList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 PERR_LexLayoutList _PERR_makeLexLayoutList5 (PERR_LexLayout elem1,
 					     PERR_LexLayout elem2,
@@ -623,7 +623,7 @@ PERR_LexLayoutList _PERR_makeLexLayoutList5 (PERR_LexLayout elem1,
 #define PERR_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) (_PERR_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PERR_LexLayoutList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define PERR_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PERR_LexLayoutList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 PERR_LexLayoutList _PERR_makeLexLayoutList6 (PERR_LexLayout elem1,
 					     PERR_LexLayout elem2,
@@ -634,47 +634,47 @@ PERR_LexLayoutList _PERR_makeLexLayoutList6 (PERR_LexLayout elem1,
 #define PERR_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_PERR_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6))
 #endif
 #ifdef FAST_API
-#define PERR_getLexStrCharCharsLength(arg) (ATgetLength((ATermList) arg))
+#define PERR_getLexStrCharCharsLength(arg) (ATgetLength((ATermList) (arg)))
 #else
 int _PERR_getLexStrCharCharsLength (PERR_LexStrCharChars arg);
 #define PERR_getLexStrCharCharsLength(arg) (_PERR_getLexStrCharCharsLength(arg))
 #endif
 #ifdef FAST_API
-#define PERR_reverseLexStrCharChars(arg) ((PERR_LexStrCharChars) ATreverse((ATermList) arg))
+#define PERR_reverseLexStrCharChars(arg) ((PERR_LexStrCharChars) ATreverse((ATermList) (arg)))
 #else
 PERR_LexStrCharChars _PERR_reverseLexStrCharChars (PERR_LexStrCharChars arg);
 #define PERR_reverseLexStrCharChars(arg) (_PERR_reverseLexStrCharChars(arg))
 #endif
 #ifdef FAST_API
-#define PERR_appendLexStrCharChars(arg, elem) ((PERR_LexStrCharChars) ATappend((ATermList) arg, (ATerm) ((ATerm) elem)))
+#define PERR_appendLexStrCharChars(arg, elem) ((PERR_LexStrCharChars) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
 #else
 PERR_LexStrCharChars _PERR_appendLexStrCharChars (PERR_LexStrCharChars arg,
 						  PERR_LexStrChar elem);
 #define PERR_appendLexStrCharChars(arg, elem) (_PERR_appendLexStrCharChars(arg, elem))
 #endif
 #ifdef FAST_API
-#define PERR_concatLexStrCharChars(arg0, arg1) ((PERR_LexStrCharChars) ATconcat((ATermList) arg0, (ATermList) arg1))
+#define PERR_concatLexStrCharChars(arg0, arg1) ((PERR_LexStrCharChars) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
 #else
 PERR_LexStrCharChars _PERR_concatLexStrCharChars (PERR_LexStrCharChars arg0,
 						  PERR_LexStrCharChars arg1);
 #define PERR_concatLexStrCharChars(arg0, arg1) (_PERR_concatLexStrCharChars(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_sliceLexStrCharChars(arg, start, end) ((PERR_LexStrCharChars) ATgetSlice((ATermList) arg, start, end))
+#define PERR_sliceLexStrCharChars(arg, start, end) ((PERR_LexStrCharChars) ATgetSlice((ATermList) (arg), (start), (end)))
 #else
 PERR_LexStrCharChars _PERR_sliceLexStrCharChars (PERR_LexStrCharChars arg,
 						 int start, int end);
 #define PERR_sliceLexStrCharChars(arg, start, end) (_PERR_sliceLexStrCharChars(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PERR_getLexStrCharCharsLexStrCharAt(arg, index) ((PERR_LexStrChar)ATelementAt((ATermList) arg,index))
+#define PERR_getLexStrCharCharsLexStrCharAt(arg, index) ((PERR_LexStrChar) (ATelementAt((ATermList) arg,index)))
 #else
 PERR_LexStrChar _PERR_getLexStrCharCharsLexStrCharAt (PERR_LexStrCharChars
 						      arg, int index);
 #define PERR_getLexStrCharCharsLexStrCharAt(arg, index) (_PERR_getLexStrCharCharsLexStrCharAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PERR_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) ((PERR_LexStrCharChars) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index))
+#define PERR_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) ((PERR_LexStrCharChars) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
 #else
 PERR_LexStrCharChars
 _PERR_replaceLexStrCharCharsLexStrCharAt (PERR_LexStrCharChars arg,
@@ -682,14 +682,14 @@ _PERR_replaceLexStrCharCharsLexStrCharAt (PERR_LexStrCharChars arg,
 #define PERR_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) (_PERR_replaceLexStrCharCharsLexStrCharAt(arg, elem, index))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexStrCharChars2(elem1,  elem2) ((PERR_LexStrCharChars) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2)))
+#define PERR_makeLexStrCharChars2(elem1,  elem2) ((PERR_LexStrCharChars) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
 #else
 PERR_LexStrCharChars _PERR_makeLexStrCharChars2 (PERR_LexStrChar elem1,
 						 PERR_LexStrChar elem2);
 #define PERR_makeLexStrCharChars2(elem1,  elem2) (_PERR_makeLexStrCharChars2(elem1,  elem2))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexStrCharChars3(elem1, elem2,  elem3) ((PERR_LexStrCharChars) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3)))
+#define PERR_makeLexStrCharChars3(elem1, elem2,  elem3) ((PERR_LexStrCharChars) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
 #else
 PERR_LexStrCharChars _PERR_makeLexStrCharChars3 (PERR_LexStrChar elem1,
 						 PERR_LexStrChar elem2,
@@ -697,7 +697,7 @@ PERR_LexStrCharChars _PERR_makeLexStrCharChars3 (PERR_LexStrChar elem1,
 #define PERR_makeLexStrCharChars3(elem1, elem2,  elem3) (_PERR_makeLexStrCharChars3(elem1, elem2,  elem3))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) ((PERR_LexStrCharChars) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4)))
+#define PERR_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) ((PERR_LexStrCharChars) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
 #else
 PERR_LexStrCharChars _PERR_makeLexStrCharChars4 (PERR_LexStrChar elem1,
 						 PERR_LexStrChar elem2,
@@ -706,7 +706,7 @@ PERR_LexStrCharChars _PERR_makeLexStrCharChars4 (PERR_LexStrChar elem1,
 #define PERR_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) (_PERR_makeLexStrCharChars4(elem1, elem2, elem3,  elem4))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) ((PERR_LexStrCharChars) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5)))
+#define PERR_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) ((PERR_LexStrCharChars) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
 #else
 PERR_LexStrCharChars _PERR_makeLexStrCharChars5 (PERR_LexStrChar elem1,
 						 PERR_LexStrChar elem2,
@@ -716,7 +716,7 @@ PERR_LexStrCharChars _PERR_makeLexStrCharChars5 (PERR_LexStrChar elem1,
 #define PERR_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) (_PERR_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5))
 #endif
 #ifdef FAST_API
-#define PERR_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PERR_LexStrCharChars) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6)))
+#define PERR_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) ((PERR_LexStrCharChars) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
 #else
 PERR_LexStrCharChars _PERR_makeLexStrCharChars6 (PERR_LexStrChar elem1,
 						 PERR_LexStrChar elem2,
@@ -727,7 +727,7 @@ PERR_LexStrCharChars _PERR_makeLexStrCharChars6 (PERR_LexStrChar elem1,
 #define PERR_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) (_PERR_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6))
 #endif
 #ifdef FAST_API
-#define PERR_getSubjectListLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 4) + 1))
+#define PERR_getSubjectListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
 #else
 int _PERR_getSubjectListLength (PERR_SubjectList arg);
 #define PERR_getSubjectListLength(arg) (_PERR_getSubjectListLength(arg))
@@ -742,20 +742,20 @@ PERR_SubjectList PERR_concatSubjectList (PERR_SubjectList arg0,
 					 PERR_OptLayout wsAfterSep,
 					 PERR_SubjectList arg1);
 #ifdef FAST_API
-#define PERR_sliceSubjectList(arg, start, end) ((PERR_SubjectList) ATgetSlice((ATermList) arg, start * 4, end * 4))
+#define PERR_sliceSubjectList(arg, start, end) ((PERR_SubjectList) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
 #else
 PERR_SubjectList _PERR_sliceSubjectList (PERR_SubjectList arg, int start,
 					 int end);
 #define PERR_sliceSubjectList(arg, start, end) (_PERR_sliceSubjectList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PERR_getSubjectListSubjectAt(arg, index) ((PERR_Subject)ATelementAt((ATermList) arg,index * 4))
+#define PERR_getSubjectListSubjectAt(arg, index) ((PERR_Subject) (ATelementAt((ATermList) arg,index * 4)))
 #else
 PERR_Subject _PERR_getSubjectListSubjectAt (PERR_SubjectList arg, int index);
 #define PERR_getSubjectListSubjectAt(arg, index) (_PERR_getSubjectListSubjectAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PERR_replaceSubjectListSubjectAt(arg, elem, index) ((PERR_SubjectList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 4))
+#define PERR_replaceSubjectListSubjectAt(arg, elem, index) ((PERR_SubjectList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
 #else
 PERR_SubjectList _PERR_replaceSubjectListSubjectAt (PERR_SubjectList arg,
 						    PERR_Subject elem,
@@ -793,7 +793,7 @@ PERR_SubjectList PERR_makeSubjectList6 (PERR_OptLayout wsAfterHead,
 					PERR_Subject elem5,
 					PERR_Subject elem6);
 #ifdef FAST_API
-#define PERR_getErrorListLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 4) + 1))
+#define PERR_getErrorListLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
 #else
 int _PERR_getErrorListLength (PERR_ErrorList arg);
 #define PERR_getErrorListLength(arg) (_PERR_getErrorListLength(arg))
@@ -808,19 +808,19 @@ PERR_ErrorList PERR_concatErrorList (PERR_ErrorList arg0,
 				     PERR_OptLayout wsAfterSep,
 				     PERR_ErrorList arg1);
 #ifdef FAST_API
-#define PERR_sliceErrorList(arg, start, end) ((PERR_ErrorList) ATgetSlice((ATermList) arg, start * 4, end * 4))
+#define PERR_sliceErrorList(arg, start, end) ((PERR_ErrorList) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
 #else
 PERR_ErrorList _PERR_sliceErrorList (PERR_ErrorList arg, int start, int end);
 #define PERR_sliceErrorList(arg, start, end) (_PERR_sliceErrorList(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PERR_getErrorListErrorAt(arg, index) ((PERR_Error)ATelementAt((ATermList) arg,index * 4))
+#define PERR_getErrorListErrorAt(arg, index) ((PERR_Error) (ATelementAt((ATermList) arg,index * 4)))
 #else
 PERR_Error _PERR_getErrorListErrorAt (PERR_ErrorList arg, int index);
 #define PERR_getErrorListErrorAt(arg, index) (_PERR_getErrorListErrorAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PERR_replaceErrorListErrorAt(arg, elem, index) ((PERR_ErrorList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 4))
+#define PERR_replaceErrorListErrorAt(arg, elem, index) ((PERR_ErrorList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
 #else
 PERR_ErrorList _PERR_replaceErrorListErrorAt (PERR_ErrorList arg,
 					      PERR_Error elem, int index);
@@ -848,7 +848,7 @@ PERR_ErrorList PERR_makeErrorList6 (PERR_OptLayout wsAfterHead,
 				    PERR_Error elem3, PERR_Error elem4,
 				    PERR_Error elem5, PERR_Error elem6);
 #ifdef FAST_API
-#define PERR_getAreaAreasLength(arg) ((ATisEmpty((ATermList) arg) ? 0 : (ATgetLength((ATermList) arg) / 4) + 1))
+#define PERR_getAreaAreasLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
 #else
 int _PERR_getAreaAreasLength (PERR_AreaAreas arg);
 #define PERR_getAreaAreasLength(arg) (_PERR_getAreaAreasLength(arg))
@@ -863,19 +863,19 @@ PERR_AreaAreas PERR_concatAreaAreas (PERR_AreaAreas arg0,
 				     PERR_OptLayout wsAfterSep,
 				     PERR_AreaAreas arg1);
 #ifdef FAST_API
-#define PERR_sliceAreaAreas(arg, start, end) ((PERR_AreaAreas) ATgetSlice((ATermList) arg, start * 4, end * 4))
+#define PERR_sliceAreaAreas(arg, start, end) ((PERR_AreaAreas) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
 #else
 PERR_AreaAreas _PERR_sliceAreaAreas (PERR_AreaAreas arg, int start, int end);
 #define PERR_sliceAreaAreas(arg, start, end) (_PERR_sliceAreaAreas(arg, start, end))
 #endif
 #ifdef FAST_API
-#define PERR_getAreaAreasAreaAt(arg, index) ((PERR_Area)ATelementAt((ATermList) arg,index * 4))
+#define PERR_getAreaAreasAreaAt(arg, index) ((PERR_Area) (ATelementAt((ATermList) arg,index * 4)))
 #else
 PERR_Area _PERR_getAreaAreasAreaAt (PERR_AreaAreas arg, int index);
 #define PERR_getAreaAreasAreaAt(arg, index) (_PERR_getAreaAreasAreaAt(arg, index))
 #endif
 #ifdef FAST_API
-#define PERR_replaceAreaAreasAreaAt(arg, elem, index) ((PERR_AreaAreas) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 4))
+#define PERR_replaceAreaAreasAreaAt(arg, elem, index) ((PERR_AreaAreas) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
 #else
 PERR_AreaAreas _PERR_replaceAreaAreasAreaAt (PERR_AreaAreas arg,
 					     PERR_Area elem, int index);
@@ -1048,130 +1048,130 @@ PERR_AreaAreas PERR_makeAreaAreasMany (PERR_Area head,
 				       PERR_OptLayout wsAfterSep,
 				       PERR_AreaAreas tail);
 #ifdef FAST_API
-#define PERR_isEqualOptLayout(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualOptLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualOptLayout (PERR_OptLayout arg0, PERR_OptLayout arg1);
 #define PERR_isEqualOptLayout(arg0, arg1) (_PERR_isEqualOptLayout(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLayout(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLayout (PERR_Layout arg0, PERR_Layout arg1);
 #define PERR_isEqualLayout(arg0, arg1) (_PERR_isEqualLayout(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLexLayoutList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLexLayoutList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLexLayoutList (PERR_LexLayoutList arg0,
 				   PERR_LexLayoutList arg1);
 #define PERR_isEqualLexLayoutList(arg0, arg1) (_PERR_isEqualLexLayoutList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLexStrChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLexStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLexStrChar (PERR_LexStrChar arg0, PERR_LexStrChar arg1);
 #define PERR_isEqualLexStrChar(arg0, arg1) (_PERR_isEqualLexStrChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualStrChar(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualStrChar (PERR_StrChar arg0, PERR_StrChar arg1);
 #define PERR_isEqualStrChar(arg0, arg1) (_PERR_isEqualStrChar(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLexStrCon(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLexStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLexStrCon (PERR_LexStrCon arg0, PERR_LexStrCon arg1);
 #define PERR_isEqualLexStrCon(arg0, arg1) (_PERR_isEqualLexStrCon(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualStrCon(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualStrCon (PERR_StrCon arg0, PERR_StrCon arg1);
 #define PERR_isEqualStrCon(arg0, arg1) (_PERR_isEqualStrCon(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLexStrCharChars(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLexStrCharChars(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLexStrCharChars (PERR_LexStrCharChars arg0,
 				     PERR_LexStrCharChars arg1);
 #define PERR_isEqualLexStrCharChars(arg0, arg1) (_PERR_isEqualLexStrCharChars(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLexNatCon(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLexNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLexNatCon (PERR_LexNatCon arg0, PERR_LexNatCon arg1);
 #define PERR_isEqualLexNatCon(arg0, arg1) (_PERR_isEqualLexNatCon(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualNatCon(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualNatCon (PERR_NatCon arg0, PERR_NatCon arg1);
 #define PERR_isEqualNatCon(arg0, arg1) (_PERR_isEqualNatCon(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLexLayout(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLexLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLexLayout (PERR_LexLayout arg0, PERR_LexLayout arg1);
 #define PERR_isEqualLexLayout(arg0, arg1) (_PERR_isEqualLexLayout(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualStart(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualStart(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualStart (PERR_Start arg0, PERR_Start arg1);
 #define PERR_isEqualStart(arg0, arg1) (_PERR_isEqualStart(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualSubject(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualSubject(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualSubject (PERR_Subject arg0, PERR_Subject arg1);
 #define PERR_isEqualSubject(arg0, arg1) (_PERR_isEqualSubject(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualError(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualError(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualError (PERR_Error arg0, PERR_Error arg1);
 #define PERR_isEqualError(arg0, arg1) (_PERR_isEqualError(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualSummary(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualSummary(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualSummary (PERR_Summary arg0, PERR_Summary arg1);
 #define PERR_isEqualSummary(arg0, arg1) (_PERR_isEqualSummary(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualSubjectList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualSubjectList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualSubjectList (PERR_SubjectList arg0,
 				 PERR_SubjectList arg1);
 #define PERR_isEqualSubjectList(arg0, arg1) (_PERR_isEqualSubjectList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualErrorList(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualErrorList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualErrorList (PERR_ErrorList arg0, PERR_ErrorList arg1);
 #define PERR_isEqualErrorList(arg0, arg1) (_PERR_isEqualErrorList(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualLocation(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualLocation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualLocation (PERR_Location arg0, PERR_Location arg1);
 #define PERR_isEqualLocation(arg0, arg1) (_PERR_isEqualLocation(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualArea(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualArea(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualArea (PERR_Area arg0, PERR_Area arg1);
 #define PERR_isEqualArea(arg0, arg1) (_PERR_isEqualArea(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualSlice(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualSlice(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualSlice (PERR_Slice arg0, PERR_Slice arg1);
 #define PERR_isEqualSlice(arg0, arg1) (_PERR_isEqualSlice(arg0, arg1))
 #endif
 #ifdef FAST_API
-#define PERR_isEqualAreaAreas(arg0, arg1) (ATisEqual((ATerm)arg0, (ATerm)arg1))
+#define PERR_isEqualAreaAreas(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
 #else
 ATbool _PERR_isEqualAreaAreas (PERR_AreaAreas arg0, PERR_AreaAreas arg1);
 #define PERR_isEqualAreaAreas(arg0, arg1) (_PERR_isEqualAreaAreas(arg0, arg1))
