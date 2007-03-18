@@ -1,17 +1,17 @@
 equations
 
-%% Evaluation of expressions
+%% eval -- Evaluation of expressions
 
-[e1] eval(N, LS) = N
-%%[e2] eval(:Id, LS) = LS[Id]
-[e3] eval(xcor, LS) = LS.xcor
-[e4] eval(ycor, LS) = LS.ycor
-[e5] eval(heading, LS) = LS.heading
-[e6] eval(towards N1 N2, LS) = N1 %% fix
-[e7] LS.penup == 1   ===> eval(pendown?, LS) =  0
-[e7] LS.penup == 0   ===> eval(pendown?, LS) = 1
-[e8] eval(sum N1 N2, LS) = N1 + N2
-[e9] eval(difference N1 N2, LS) = N1 - N2
+[e1]  eval(N, LS) = N
+[e2]  eval(F, LS) = LS[F]
+[e3]  eval(xcor, LS) = LS[:xcor]
+[e4]  eval(ycor, LS) = LS[:ycor]
+[e5]  eval(heading, LS) = LS[:heading]
+[e6]  eval(towards N1 N2, LS) = N1       %% --- fix
+[e7]  LS[:penup] == 1   ===> eval(pendown?, LS) =  0
+[e7]  LS[:penup] == 0   ===> eval(pendown?, LS) = 1
+[e8]  eval(sum N1 N2, LS) = N1 + N2
+[e9]  eval(difference N1 N2, LS) = N1 - N2
 [e10] eval(product N1 N2, LS) = N1 * N2
 [e11] eval(quotient N1 N2, LS) = ndiv(N1, N2)
 [e11] eval(remainder N1 N2, LS) = mod(N1, N2)
@@ -25,7 +25,15 @@ equations
 [e12] N1 == N2          ===> eval(notequal? N1 N2, LS) = 0
 [e12] N1 != N2          ===> eval(notequal? N1 N2, LS) = 1
 
-%% Execution of commands
+%% run -- Execution of commands
+
+[cc] run(FunctionDef, LS) = LS.add(FunctionDef)
+
+[cc] < Cmds, LS' > := LS.enter(Id, E*),
+     LS'' := runall(Cmds, LS'),
+     LS''' := LS''.leave(Id, E*)
+     ============================================
+     run(Id E*, LS) = LS'''
 
 [c1] eval(E, LS) == 1
      =========================================
@@ -50,26 +58,34 @@ equations
 
 [default] run(repeat E [Cmds ], LS) = LS
 
-[c1] N := eval(E, LS),  X := LS.xcor, Y := LS.ycor,
-     <DX, DY> := moveby(N, LS.heading)
+[c1] N := eval(E, LS),  X := LS[:xcor], Y := LS[:ycor],
+     <DX, DY> := moveby(N, LS[:heading])
      ===================================================
-     run(forward E, LS) = LS[xycor := X + DX, Y + DY]
+     run(forward E, LS) = LS.goto(X + DX, Y + DY)
 
-[c2] N := eval(E, LS),  X := LS.xcor, Y := LS.ycor,
-     <DX, DY> := moveby(N, LS.heading)
+[c2] N := eval(E, LS),  X := LS[:xcor], Y := LS[:ycor],
+     <DX, DY> := moveby(N, LS[:heading])
      ===================================================
-     run(back E, LS) = LS[xycor := X - DX, Y - DY]
+     run(back E, LS) = LS.goto(X - DX, Y - DY)
 
-[c3] run(left E, LS) = LS[heading := mod(LS.heading - eval(E, LS), 360)]
-[c4] run(right E, LS) = LS[heading := mod(LS.heading + eval(E, LS), 360)]
+[c3] run(left E, LS) = LS[:heading] := mod(LS[:heading] - eval(E, LS), 360)
+[c4] run(right E, LS) = LS[:heading] := mod(LS[:heading] + eval(E, LS), 360)
 
-[c5] run(setx E, LS) = LS[xcor := eval(E, LS)]
-[c6] run(sety E, LS) = LS[ycor := eval(E, LS)]
-[c7] run(setxy E1 E2, LS) = LS[xycor := eval(E1, LS), eval(E2, LS)]
-[c8] run(home, LS) = LS[xycor := 0, 0][heading := 0][penup :=0]
+[c5] run(setx E, LS) = LS.goto(eval(E, LS), LS[:ycor])
+[c6] run(sety E, LS) = LS.goto(LS[:xcor], eval(E, LS))
+[c7] run(setxy E1 E2, LS) = LS.goto(eval(E1, LS), eval(E2, LS))
+[c8] LS' := LS.goto(0,0),
+     LS'' := LS'[:heading] := 0,
+     LS''' := LS''[:penup] := 0
+     ==============================================================
+     run(home, LS) = LS'''
+
+%% runall -- Execute all commands
  
 [ra1] runall( , LS) = LS
-[ra2] runall(Cmd Cmds, LS) = runall(Cmds, run(Cmd, LS))
+[ra3] runall(Cmd Cmds, LS) = runall(Cmds, run(Cmd, LS))
+
+%% moveby -- Move the turtle
 
 [moveby1]
        moveby(N, Angle) =  <rat2int(N * sin(Angle)),  rat2int(N * cos(Angle))>

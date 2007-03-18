@@ -8,8 +8,9 @@ exports
     languages/xml/syntax/XML
 
 hiddens
- %% imports basic/Comments
-  context-free start-symbols Document LogoState Lines%% removing this line causes syntax error in equations
+ imports basic/Comments
+  context-free start-symbols 
+    Document LogoState Lines Commands  %% removing this line causes syntax error in equations
   variables
     "LS" [0-9\']*       -> LogoState
     "Commands"          -> Commands

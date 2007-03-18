@@ -1,33 +1,82 @@
 equations
 
-[01] state(Xcor,  Ycor,  Heading,  Penup,  Turtle, Lines).xcor                   = Xcor
-[02] state(Xcor,  Ycor,  Heading,  Penup,  Turtle, Lines).ycor                   = Ycor
-[03] state(Xcor,  Ycor,  Heading,  Penup,  Turtle, Lines).heading                = Heading
-[04] state(Xcor,  Ycor,  Heading,  Penup,  Turtle, Lines).penup                  = Penup
-[05] state(Xcor,  Ycor,  Heading,  Penup,  Turtle, Lines).turtle                 = Turtle
-[05] state(Xcor,  Ycor,  Heading,  Penup,  Turtle, Lines).lines                 = Lines
+[lines-1] 
+      state(Venv, FunctionDef*, Lines).lines       = Lines
 
-[06] state(Xcor1, Ycor,  Heading,  Penup,  Turtle, Lines)[xcor := Xcor2]         = 
-     state(Xcor2, Ycor,  Heading,  Penup,  Turtle, Lines)[xycor := Xcor2, Ycor]
+[add-1]  
+      state(Venv, FunctionDef*, Lines).add(FunctionDef) =
+      state(Venv, FunctionDef* FunctionDef, Lines)
 
-[07] state(Xcor,  Ycor1, Heading,  Penup,  Turtle, Lines)[ycor := Ycor2]         = 
-     state(Xcor,  Ycor2, Heading,  Penup,  Turtle, Lines)[xycor := Xcor, Ycor2]
+[default-lookup] 
+     state(Venv, FunctionDef*, Lines)[Formal] = lookup(Venv, Formal)
+
+[assign-1] 
+     Venv' := store(Venv, Formal, Integer)
+     =====================================================
+     state(Venv, FunctionDef*, Lines)[Formal] := Integer =
+     state(Venv', FunctionDef*, Lines)
+
+[goto-1]
+     lookup(Venv, :penup) == 0,
+     Xcor1 := lookup(Venv, :xcor),
+     Ycor1 := lookup(Venv, :ycor),
+     Lines' := Lines line(Xcor1, Ycor1, Xcor2, Ycor2),
+     Venv' := store(store(Venv, :xcor, Xcor2), :ycor, Ycor2)
+     ========================================================================================
+     state(Venv, FunctionDef*, Lines).goto(Xcor2, Ycor2) = state(Venv', FunctionDef*, Lines')
+
+[goto-2]
+     lookup(Venv, :penup) == 1,
+     Xcor1 := lookup(Venv, :xcor),
+     Ycor1 := lookup(Venv, :ycor),
+     Venv' := store(store(Venv, :xcor, Xcor2), :ycor, Ycor2)
+     =======================================================================================
+     state(Venv, FunctionDef*, Lines).goto(Xcor2, Ycor2) = state(Venv', FunctionDef*, Lines)
  
-[08] Lines' := Lines line(Xcor1, Ycor1, Xcor2, Ycor2)
-     ============================================================================= 
-     state(Xcor1, Ycor1, Heading,  0,  Turtle, Lines)[xycor := Xcor2, Ycor2] = 
-     state(Xcor2, Ycor2, Heading,  0,  Turtle, Lines')
 
-[09] state(Xcor1, Ycor1, Heading,  1,  Turtle, Lines)[xycor := Xcor2, Ycor2] = 
-     state(Xcor2, Ycor2, Heading,  1,  Turtle, Lines)
+[new-state-1]
+     Venv := store(new-table, :xcor, 0),
+     Venv' := store(Venv, :ycor, 0),
+     Venv'' := store(Venv', :heading, 0),
+     Venv''' := store(Venv'', :penup, 0)
+     ======================================
+     newLogoState = state(Venv''', , )
 
-[10] state(Xcor,  Ycor,  Heading1, Penup,  Turtle, Lines)[heading := Heading2]   = 
-     state(Xcor,  Ycor,  Heading2, Penup,  Turtle, Lines)
-[11] state(Xcor,  Ycor,  Heading,  Penup1, Turtle, Lines)[penup := Penup2]       = 
-     state(Xcor,  Ycor,  Heading,  Penup2, Turtle, Lines)
-[12] state(Xcor,  Ycor,  Heading,  Penup,  Turtle1, Lines)[turtle := Turtle2]    =  
-     state(Xcor,  Ycor,  Heading,  Penup,  Turtle2, Lines)
+%% enter/leave a procedure
+[enter-1]
+     state(Venv, FunctionDef*, Lines) := LS,
+     FunctionDef*1 to Id Formal* [ Cmds ] FunctionDef*2 := FunctionDef*,
+     LS' := bind(Formal*, E*, LS)
+     =============================================================================================
+     LS.enter(Id, E*) = < Cmds, LS' >
 
- 
-[13] newLogoState = state(0,0,0,0,0,)
+[leave-1] 
+     state(Venv, FunctionDef*, Lines) := LS,
+     FunctionDef*1 to Id Formal* [ Cmds ] FunctionDef*2 := FunctionDef*,
+     LS' := unbind(Formal*, LS)
+     =============================================================================================
+     LS.leave(Id, E*) = LS'
+
+%% bind/unbind formals
+[bind-1]
+     bind( , , LS) = LS
+[bind-2]
+     state(Venv, FunctionDef*,Lines) := LS,
+     Venv' := store(Venv, Formal, eval(E, LS)),
+     LS' := state(Venv', FunctionDef*, Lines)
+     =======================================================
+     bind(Formal Formal*, E E*, LS) = bind(Formal*, E*, LS')
+
+[unbind-1]
+     unbind( , LS) = LS
+[unbind-2]
+     state(Venv, FunctionDef*,Lines) := LS,
+     Venv' := delete(Venv, Formal),
+     LS' := state(Venv', FunctionDef*, Lines)
+     =================================================
+     unbind(Formal Formal*, LS) = unbind(Formal*, LS')
+
+
+     
+
 
