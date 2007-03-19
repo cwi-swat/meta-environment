@@ -10,12 +10,6 @@ extern AFun SE_afun5;
 extern AFun SE_afun3;
 extern AFun SE_afun1;
 
-extern ATerm SE_patternStructureEditorUnedited;
-extern ATerm SE_patternStructureEditorDefault;
-extern ATerm SE_patternDirectionRight;
-extern ATerm SE_patternDirectionDown;
-extern ATerm SE_patternDirectionLeft;
-extern ATerm SE_patternDirectionUp;
 
 extern void init_StructureEditor_dict();
 

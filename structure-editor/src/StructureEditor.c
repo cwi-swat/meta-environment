@@ -4,10 +4,12 @@
 #include <deprecated.h>
 #include "StructureEditor.h"
 
-/*{{{  conversion functions */
-
-ATerm SE_stringToChars(const char *str)
-{
+/**
+ * Converts a string to an ATermList of integers (ASCII values). 
+ * \param[in] str An ASCII string
+ * \return An ATermList containing the ASCII values of #arg as ATermInts
+ */
+ATerm SE_stringToChars(const char *str) {
   int len = strlen(str);
   int i;
   ATermList result = ATempty;
@@ -19,8 +21,21 @@ ATerm SE_stringToChars(const char *str)
   return (ATerm) result;
 }
 
-char *SE_charsToString(ATerm arg)
-{
+/**
+ * Converts an ASCII char to an ATermInt. 
+ * \param[in] ch an ASCII character
+ * \return An ATerm representing the ASCII value of #arg
+ */
+ATerm SE_byteToChar(char ch) {
+    return (ATerm) ATmakeInt(ch);
+}
+
+/**
+ * Converts a list of integers (ASCII values) to a C string. 
+ * \param[in] arg An ATermList with ATermInts, such as [32,32,10]
+ * \return String containing the characters from #arg as characters
+ */
+char *SE_charsToString(ATerm arg) {
   ATermList list = (ATermList) arg;
   int len = ATgetLength(list);
   int i;
@@ -39,150 +54,163 @@ char *SE_charsToString(ATerm arg)
   return str;
 }
 
+char SE_charToByte(ATerm arg) {
+    return (char) ATgetInt((ATermInt) arg);
+}
 
-/*}}}  */
-
-/*{{{  typedefs */
 
 typedef struct ATerm _SE_Direction;
 typedef struct ATerm _SE_StructureEditor;
 
-/*}}}  */
 
-/*{{{  void SE_initStructureEditorApi(void) */
-
-void SE_initStructureEditorApi(void)
-{
+/**
+ * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
+ */
+void _SE_initStructureEditorApi(void) {
   init_StructureEditor_dict();
+
 }
 
-/*}}}  */
-
-/*{{{  protect functions */
-
-void SE_protectDirection(SE_Direction *arg)
-{
+/**
+ * Protect a SE_Direction from the ATerm garbage collector. Every SE_Direction that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a SE_Direction
+ */
+void _SE_protectDirection(SE_Direction *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void SE_protectStructureEditor(SE_StructureEditor *arg)
-{
+/**
+ * Unprotect a SE_Direction from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a SE_Direction
+ */
+void _SE_unprotectDirection(SE_Direction *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+/**
+ * Protect a SE_StructureEditor from the ATerm garbage collector. Every SE_StructureEditor that is not rooted somewhere on the C call stack must be protected. Examples are global variables
+ * \param[in] arg pointer to a SE_StructureEditor
+ */
+void _SE_protectStructureEditor(SE_StructureEditor *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
+/**
+ * Unprotect a SE_StructureEditor from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
+ * \param[in] arg pointer to a SE_StructureEditor
+ */
+void _SE_unprotectStructureEditor(SE_StructureEditor *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
 
-/*}}}  */
-/*{{{  term conversion functions */
-
-/*{{{  SE_Direction SE_DirectionFromTerm(ATerm t) */
-
-SE_Direction SE_DirectionFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a SE_Direction. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return SE_Direction that was encoded by \arg
+ */
+SE_Direction _SE_DirectionFromTerm(ATerm t) {
   return (SE_Direction)t;
 }
 
-/*}}}  */
-/*{{{  ATerm SE_DirectionToTerm(SE_Direction arg) */
-
-ATerm SE_DirectionToTerm(SE_Direction arg)
-{
+/**
+ * Transforms a SE_Directionto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg SE_Direction to be converted
+ * \return ATerm that represents the SE_Direction
+ */
+ATerm _SE_DirectionToTerm(SE_Direction arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-/*{{{  SE_StructureEditor SE_StructureEditorFromTerm(ATerm t) */
-
-SE_StructureEditor SE_StructureEditorFromTerm(ATerm t)
-{
+/**
+ * Transforms an ATerm to a SE_StructureEditor. This is just a wrapper for a cast, so no structural validation is done!
+ * \param[in] t ATerm to be converted
+ * \return SE_StructureEditor that was encoded by \arg
+ */
+SE_StructureEditor _SE_StructureEditorFromTerm(ATerm t) {
   return (SE_StructureEditor)t;
 }
 
-/*}}}  */
-/*{{{  ATerm SE_StructureEditorToTerm(SE_StructureEditor arg) */
-
-ATerm SE_StructureEditorToTerm(SE_StructureEditor arg)
-{
+/**
+ * Transforms a SE_StructureEditorto an ATerm. This is just a wrapper for a cast.
+ * \param[in] arg SE_StructureEditor to be converted
+ * \return ATerm that represents the SE_StructureEditor
+ */
+ATerm _SE_StructureEditorToTerm(SE_StructureEditor arg) {
   return (ATerm)arg;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  list functions */
-
-
-/*}}}  */
-/*{{{  constructors */
-
-/*{{{  SE_Direction SE_makeDirectionUp(void) */
-
-SE_Direction SE_makeDirectionUp(void)
-{
+/**
+ * Constructs a up of type SE_Direction. Like all ATerm types, SE_Directions are maximally shared.
+ * \return A pointer to a up, either newly constructed or shared
+ */
+SE_Direction SE_makeDirectionUp(void) {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun0);
 }
-
-/*}}}  */
-/*{{{  SE_Direction SE_makeDirectionLeft(void) */
-
-SE_Direction SE_makeDirectionLeft(void)
-{
+/**
+ * Constructs a left of type SE_Direction. Like all ATerm types, SE_Directions are maximally shared.
+ * \return A pointer to a left, either newly constructed or shared
+ */
+SE_Direction SE_makeDirectionLeft(void) {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun1);
 }
-
-/*}}}  */
-/*{{{  SE_Direction SE_makeDirectionDown(void) */
-
-SE_Direction SE_makeDirectionDown(void)
-{
+/**
+ * Constructs a down of type SE_Direction. Like all ATerm types, SE_Directions are maximally shared.
+ * \return A pointer to a down, either newly constructed or shared
+ */
+SE_Direction SE_makeDirectionDown(void) {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun2);
 }
-
-/*}}}  */
-/*{{{  SE_Direction SE_makeDirectionRight(void) */
-
-SE_Direction SE_makeDirectionRight(void)
-{
+/**
+ * Constructs a right of type SE_Direction. Like all ATerm types, SE_Directions are maximally shared.
+ * \return A pointer to a right, either newly constructed or shared
+ */
+SE_Direction SE_makeDirectionRight(void) {
   return (SE_Direction)(ATerm)ATmakeAppl0(SE_afun3);
 }
-
-/*}}}  */
-/*{{{  SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor) */
-
-SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor)
-{
+/**
+ * Constructs a Default of type SE_StructureEditor. Like all ATerm types, SE_StructureEditors are maximally shared.
+ * \param[in] parseTree a child of the new Default
+ * \param[in] cursor a child of the new Default
+ * \return A pointer to a Default, either newly constructed or shared
+ */
+SE_StructureEditor SE_makeStructureEditorDefault(SE_ParseTree parseTree, SE_Tree cursor) {
   return (SE_StructureEditor)(ATerm)ATmakeAppl2(SE_afun4, (ATerm) parseTree, (ATerm) cursor);
 }
-
-/*}}}  */
-/*{{{  SE_StructureEditor SE_makeStructureEditorUnedited(SE_ParseTree parseTree) */
-
-SE_StructureEditor SE_makeStructureEditorUnedited(SE_ParseTree parseTree)
-{
+/**
+ * Constructs a unedited of type SE_StructureEditor. Like all ATerm types, SE_StructureEditors are maximally shared.
+ * \param[in] parseTree a child of the new unedited
+ * \return A pointer to a unedited, either newly constructed or shared
+ */
+SE_StructureEditor SE_makeStructureEditorUnedited(SE_ParseTree parseTree) {
   return (SE_StructureEditor)(ATerm)ATmakeAppl1(SE_afun5, (ATerm) parseTree);
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  equality functions */
-
-ATbool SE_isEqualDirection(SE_Direction arg0, SE_Direction arg1)
-{
+/**
+ * Tests equality of two SE_Directions. A constant time operation.
+ * \param[in] arg0 first SE_Direction to be compared
+ * \param[in] arg1 second SE_Direction to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool _SE_isEqualDirection(SE_Direction arg0, SE_Direction arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SE_isEqualStructureEditor(SE_StructureEditor arg0, SE_StructureEditor arg1)
-{
+/**
+ * Tests equality of two SE_StructureEditors. A constant time operation.
+ * \param[in] arg0 first SE_StructureEditor to be compared
+ * \param[in] arg1 second SE_StructureEditor to be compared
+ * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
+ */
+ATbool _SE_isEqualStructureEditor(SE_StructureEditor arg0, SE_StructureEditor arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-/*}}}  */
-/*{{{  SE_Direction accessors */
-
-/*{{{  ATbool SE_isValidDirection(SE_Direction arg) */
-
-ATbool SE_isValidDirection(SE_Direction arg)
-{
+/**
+ * Assert whether a SE_Direction is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input SE_Direction
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool SE_isValidDirection(SE_Direction arg) {
   if (SE_isDirectionUp(arg)) {
     return ATtrue;
   }
@@ -198,103 +226,64 @@ ATbool SE_isValidDirection(SE_Direction arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool SE_isDirectionUp(SE_Direction arg) */
-
-inline ATbool SE_isDirectionUp(SE_Direction arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternDirectionUp);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+/**
+ * Assert whether a SE_Direction is a up by checking against the following ATerm pattern: up. May not be used to assert correctness of the SE_Direction
+ * \param[in] arg input SE_Direction
+ * \return ATtrue if #arg corresponds to the signature of a up, or ATfalse otherwise
+ */
+inline ATbool SE_isDirectionUp(SE_Direction arg){
+  /* checking for: up */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == SE_afun0) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool SE_isDirectionLeft(SE_Direction arg) */
-
-inline ATbool SE_isDirectionLeft(SE_Direction arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternDirectionLeft);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+/**
+ * Assert whether a SE_Direction is a left by checking against the following ATerm pattern: left. May not be used to assert correctness of the SE_Direction
+ * \param[in] arg input SE_Direction
+ * \return ATtrue if #arg corresponds to the signature of a left, or ATfalse otherwise
+ */
+inline ATbool SE_isDirectionLeft(SE_Direction arg){
+  /* checking for: left */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == SE_afun1) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool SE_isDirectionDown(SE_Direction arg) */
-
-inline ATbool SE_isDirectionDown(SE_Direction arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternDirectionDown);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+/**
+ * Assert whether a SE_Direction is a down by checking against the following ATerm pattern: down. May not be used to assert correctness of the SE_Direction
+ * \param[in] arg input SE_Direction
+ * \return ATtrue if #arg corresponds to the signature of a down, or ATfalse otherwise
+ */
+inline ATbool SE_isDirectionDown(SE_Direction arg){
+  /* checking for: down */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == SE_afun2) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool SE_isDirectionRight(SE_Direction arg) */
-
-inline ATbool SE_isDirectionRight(SE_Direction arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternDirectionRight);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+/**
+ * Assert whether a SE_Direction is a right by checking against the following ATerm pattern: right. May not be used to assert correctness of the SE_Direction
+ * \param[in] arg input SE_Direction
+ * \return ATtrue if #arg corresponds to the signature of a right, or ATfalse otherwise
+ */
+inline ATbool SE_isDirectionRight(SE_Direction arg){
+  /* checking for: right */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == SE_afun3) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  SE_StructureEditor accessors */
-
-/*{{{  ATbool SE_isValidStructureEditor(SE_StructureEditor arg) */
-
-ATbool SE_isValidStructureEditor(SE_StructureEditor arg)
-{
+/**
+ * Assert whether a SE_StructureEditor is any of the valid alternatives, or not. This analysis does not go any deeper than the top level
+ * \param[in] arg input SE_StructureEditor
+ * \return ATtrue if #arg corresponds to the expected signature, or ATfalse otherwise
+ */
+ATbool SE_isValidStructureEditor(SE_StructureEditor arg) {
   if (SE_isStructureEditorDefault(arg)) {
     return ATtrue;
   }
@@ -304,55 +293,38 @@ ATbool SE_isValidStructureEditor(SE_StructureEditor arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool SE_isStructureEditorDefault(SE_StructureEditor arg) */
-
-inline ATbool SE_isStructureEditorDefault(SE_StructureEditor arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternStructureEditorDefault, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+/**
+ * Assert whether a SE_StructureEditor is a Default by checking against the following ATerm pattern: Default(<"parse-tree"("ParseTree")>,<"cursor"("Tree")>). May not be used to assert correctness of the SE_StructureEditor
+ * \param[in] arg input SE_StructureEditor
+ * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
+ */
+inline ATbool SE_isStructureEditorDefault(SE_StructureEditor arg){
+  /* checking for: Default */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == SE_afun4) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
-/*}}}  */
-/*{{{  inline ATbool SE_isStructureEditorUnedited(SE_StructureEditor arg) */
-
-inline ATbool SE_isStructureEditorUnedited(SE_StructureEditor arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SE_patternStructureEditorUnedited, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+/**
+ * Assert whether a SE_StructureEditor is a unedited by checking against the following ATerm pattern: unedited(<"parse-tree"("ParseTree")>). May not be used to assert correctness of the SE_StructureEditor
+ * \param[in] arg input SE_StructureEditor
+ * \return ATtrue if #arg corresponds to the signature of a unedited, or ATfalse otherwise
+ */
+inline ATbool SE_isStructureEditorUnedited(SE_StructureEditor arg){
+  /* checking for: unedited */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == SE_afun5) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg) */
-
-ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg)
-{
+/**
+ * Assert whether a SE_StructureEditor has a parse-tree. 
+ * \param[in] arg input SE_StructureEditor
+ * \return ATtrue if the SE_StructureEditor had a parse-tree, or ATfalse otherwise
+ */
+ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg) {
   if (SE_isStructureEditorDefault(arg)) {
     return ATtrue;
   }
@@ -362,22 +334,24 @@ ATbool SE_hasStructureEditorParseTree(SE_StructureEditor arg)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg) */
-
-ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg)
-{
+/**
+ * Assert whether a SE_StructureEditor has a cursor. 
+ * \param[in] arg input SE_StructureEditor
+ * \return ATtrue if the SE_StructureEditor had a cursor, or ATfalse otherwise
+ */
+ATbool SE_hasStructureEditorCursor(SE_StructureEditor arg) {
   if (SE_isStructureEditorDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg) */
-
-SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg)
-{
+/**
+ * Get the parse-tree SE_ParseTree of a SE_StructureEditor. Note that the precondition is that this SE_StructureEditor actually has a parse-tree
+ * \param[in] arg input SE_StructureEditor
+ * \return the parse-tree of #arg, if it exist or an undefined value if it does not
+ */
+SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg) {
   if (SE_isStructureEditorDefault(arg)) {
     return (SE_ParseTree)ATgetArgument((ATermAppl)arg, 0);
   }
@@ -385,20 +359,23 @@ SE_ParseTree SE_getStructureEditorParseTree(SE_StructureEditor arg)
     return (SE_ParseTree)ATgetArgument((ATermAppl)arg, 0);
 }
 
-/*}}}  */
-/*{{{  SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg) */
-
-SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg)
-{
+/**
+ * Get the cursor SE_Tree of a SE_StructureEditor. Note that the precondition is that this SE_StructureEditor actually has a cursor
+ * \param[in] arg input SE_StructureEditor
+ * \return the cursor of #arg, if it exist or an undefined value if it does not
+ */
+SE_Tree SE_getStructureEditorCursor(SE_StructureEditor arg) {
   
     return (SE_Tree)ATgetArgument((ATermAppl)arg, 1);
 }
 
-/*}}}  */
-/*{{{  SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_ParseTree parseTree) */
-
-SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_ParseTree parseTree)
-{
+/**
+ * Set the parse-tree of a SE_StructureEditor. The precondition being that this SE_StructureEditor actually has a parse-tree
+ * \param[in] arg input SE_StructureEditor
+ * \param[in] parseTree new SE_ParseTree to set in #arg
+ * \return A new SE_StructureEditor with parseTree at the right place, or a core dump if #arg did not have a parseTree
+ */
+SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_ParseTree parseTree) {
   if (SE_isStructureEditorDefault(arg)) {
     return (SE_StructureEditor)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) parseTree), 0);
   }
@@ -410,11 +387,13 @@ SE_StructureEditor SE_setStructureEditorParseTree(SE_StructureEditor arg, SE_Par
   return (SE_StructureEditor)NULL;
 }
 
-/*}}}  */
-/*{{{  SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor) */
-
-SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor)
-{
+/**
+ * Set the cursor of a SE_StructureEditor. The precondition being that this SE_StructureEditor actually has a cursor
+ * \param[in] arg input SE_StructureEditor
+ * \param[in] cursor new SE_Tree to set in #arg
+ * \return A new SE_StructureEditor with cursor at the right place, or a core dump if #arg did not have a cursor
+ */
+SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree cursor) {
   if (SE_isStructureEditorDefault(arg)) {
     return (SE_StructureEditor)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) cursor), 1);
   }
@@ -423,15 +402,11 @@ SE_StructureEditor SE_setStructureEditorCursor(SE_StructureEditor arg, SE_Tree c
   return (SE_StructureEditor)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  sort visitors */
-
-/*{{{  SE_Direction SE_visitDirection(SE_Direction arg) */
-
-SE_Direction SE_visitDirection(SE_Direction arg)
-{
+/**
+ * Apply functions to the children of a SE_Direction. 
+ * \return A new SE_Direction with new children where the argument functions might have applied
+ */
+SE_Direction SE_visitDirection(SE_Direction arg) {
   if (SE_isDirectionUp(arg)) {
     return SE_makeDirectionUp();
   }
@@ -447,12 +422,11 @@ SE_Direction SE_visitDirection(SE_Direction arg)
   ATabort("not a Direction: %t\n", arg);
   return (SE_Direction)NULL;
 }
-
-/*}}}  */
-/*{{{  SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Tree (*acceptCursor)(SE_Tree)) */
-
-SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Tree (*acceptCursor)(SE_Tree))
-{
+/**
+ * Apply functions to the children of a SE_StructureEditor. 
+ * \return A new SE_StructureEditor with new children where the argument functions might have applied
+ */
+SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree (*acceptParseTree)(SE_ParseTree), SE_Tree (*acceptCursor)(SE_Tree)) {
   if (SE_isStructureEditorDefault(arg)) {
     return SE_makeStructureEditorDefault(
         acceptParseTree ? acceptParseTree(SE_getStructureEditorParseTree(arg)) : SE_getStructureEditorParseTree(arg),
@@ -466,6 +440,3 @@ SE_StructureEditor SE_visitStructureEditor(SE_StructureEditor arg, SE_ParseTree 
   return (SE_StructureEditor)NULL;
 }
 
-/*}}}  */
-
-/*}}}  */
