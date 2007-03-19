@@ -1,5 +1,8 @@
 $Id$
 
+Mon Mar 19 16:38:07 CET 2007 <economop@cwi.nl>
+ * Manually applied Martin's second 64-bit fix from bug 720.
+
 Mon Mar 19 13:48:06 CET 2007 <economop@cwi.nl>
  * Manually applied Martin's 64-bit fix from bug 607. 
 

@@ -13,13 +13,12 @@
 #define CC_BLOCK_SIZE 1024
 #define SET_BLOCK_SIZE  32
 
-
-struct CC_Node {
-  struct CC_Node *next;
+union CC_Node {
+  CC_Class *cc;
+  CC_Class **next;
 };
 
-
-static struct CC_Node *free_nodes = NULL;
+static union CC_Node free_node = {NULL};
 static unsigned long last_mask = 0;
 
 static CC_Class **char_classes     = NULL;
@@ -58,9 +57,9 @@ CC_Class *CC_alloc() {
   int i;
   CC_Class *block;
   CC_Class *c;
-  struct CC_Node *node;
+  union CC_Node node;
 
-  if (free_nodes == NULL) {
+  if (free_node.cc == NULL) {
     block = (CC_Class *)calloc(CC_BLOCK_SIZE, sizeof(CC_Class));
     if (block == NULL) {
       ATerror("error allocating charclass block\n");
@@ -68,14 +67,14 @@ CC_Class *CC_alloc() {
 
     for (i=CC_BLOCK_SIZE-1; i>=0; i--) {
       c = &block[i];
-      node = (struct CC_Node *)c;
-      node->next = free_nodes;
-      free_nodes = node;
+      node.cc = c;
+      *(node.next) = free_node.cc;
+      free_node.cc = node.cc;
     }
   }
 
-  c = (CC_Class *)free_nodes;
-  free_nodes = free_nodes->next;
+  c = free_node.cc;
+  free_node.cc = *(free_node.next);
 
   for (i=0; i<CC_LONGS; i++) {
     (*c)[i] = 0L;
@@ -123,9 +122,10 @@ void CC_free(CC_Class *cc) {
 #ifdef DEBUG_ALLOC
   free(cc);
 #else
-  struct CC_Node *node = (struct CC_Node *)cc;
-  node->next = free_nodes;
-  free_nodes = node;
+  union CC_Node node;
+  node.cc = cc;
+  *(node.next) = free_node.cc;
+  free_node = node;
 #endif
 }
 
