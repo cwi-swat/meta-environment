@@ -68,15 +68,16 @@ let
   P : int
 in
   Pid := process-id
+  . RemoveSummary("parser", Path)
   .
   (
     (
       rec-msg(sglr-parse-tree(Pid, ParseResult?, ParseSummary?))
-      . RemoveSummary("parser", Path)
       .
       if not-equal(ParseSummary, UNDEFINED) then
-        snd-msg(es-make-summary(ParseSummary, Path))
+        snd-msg(es-set-summary-id(ParseSummary, Path))
         . rec-msg(es-summary(Summary?))
+        . AddFilenameToSummary(Summary, Path, Summary?)
         . DisplaySummary(Summary)
       else
         tau
@@ -87,7 +88,7 @@ in
     rec-msg(sglr-parse-error(Pid, ParseSummary?))
     . snd-msg(es-set-summary-id(ParseSummary, Path))
     . rec-msg(es-summary(Summary?))
-    . RemoveSummary("parser", Path)
+    . AddFilenameToSummary(Summary, Path, Summary?)
     . DisplaySummary(Summary)
     . snd-msg(parse-handler-done(Pid))
   )
@@ -97,19 +98,34 @@ process UnParseTerm(Tree: term, Text: str?) is
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
 
-process ParseErrorToSummary(ParseError:term, Sid: session-id, Summary:summary?) is
-let 
-  Path : str
+process AddFilenameToSummary(ParseSummary: summary, Path: str, Summary: summary?) is
+let
+  Error: term,
+  Errors: list,
+  Id: str,
+  NewErrors: list,
+  Producer: str
 in
-  snd-msg(em-get-path(Sid)) 
+  snd-msg(get-summary-errors(ParseSummary))
+  . rec-msg(summary-errors(Errors?))
+  . NewErrors := []
   .
-  (
-    rec-msg(em-path(Sid, Path?))
-    . snd-msg(es-make-summary("parser", Path, [ParseError]))
+  if not-equal(Errors, []) then
+    Error := first(Errors)
+    . Errors := next(Errors)
+    . snd-msg(es-add-filename-in-error(Path, Error))
+    . rec-msg(es-filename-in-error(Path, Error?))
+    . NewErrors := join(NewErrors, [Error])
+  fi
+  *
+  if equal(Errors, []) then
+    snd-msg(get-feedback-producer(ParseSummary))
+    . rec-msg(producer(Producer?))
+    . snd-msg(get-feedback-identification(ParseSummary))
+    . rec-msg(identification(Id?))
+    . snd-msg(es-make-summary(Producer, Id, NewErrors))
     . rec-msg(es-summary(Summary?))
-  +
-    rec-msg(no-such-session(Sid))
-  )
+  fi
 endlet
 
 process RestoreTermBrackets(ModuleId: module-id, Tree: term, Result: term?) is

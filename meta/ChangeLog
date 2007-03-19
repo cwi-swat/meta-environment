@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Mar 19 10:50:36 CET 2007 <{economop,kooiker}@cwi.nl>
+ * tbscripts/parse-utils.tb:
+   - Removed unused process ParseErrorToSummary
+   - Add process that adds the filename to the errorlist of a summary
+
 Wed Mar 14 15:51:36 CET 2007 <{economop,kooiker}@cwi.nl>
  * Merged sglr-reject-postparse branch into trunk.
 
