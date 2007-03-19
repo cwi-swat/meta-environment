@@ -6,8 +6,13 @@ SUBDIRS = src sql script www demo doc gems
 ACLOCAL_AMFLAGS = -I .
 
 gems = \
-	activesupport-1.2.5 \
-	activerecord-1.13.2 \
+	activesupport-1.4.2 \
+	activerecord-1.15.3 \
+	actionpack-1.13.3 \
+	actionmailer-1.3.3 \
+	actionwebservice-1.2.3 \
+	rake-0.7.2 \
+	rails-1.2.3 \
 	postgres-pr-0.4.0 \
 	daemons-1.0.5 \
 	fastthread-0.6.4.1 \
@@ -15,6 +20,8 @@ gems = \
 	gem_plugin-0.2.2 \
 	mongrel-1.0.1 \
 	sqlite3-ruby-1.2.1
+
+
 
 GEM_DIR = $(top_srcdir)/gems
 
