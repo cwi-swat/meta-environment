@@ -1,16 +1,10 @@
 #ifndef _MUASF_H
 #define _MUASF_H
 
-/*{{{  includes */
-
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
 #include "MuASF_dict.h"
-
-/*}}}  */
-
-/*{{{  typedefs */
 
 typedef struct _MA_OptLayout *MA_OptLayout;
 typedef struct _MA_Layout *MA_Layout;
@@ -53,252 +47,1341 @@ typedef struct _MA_NatCon *MA_NatCon;
 typedef struct _MA_LexIdCon *MA_LexIdCon;
 typedef struct _MA_IdCon *MA_IdCon;
 
-/*}}}  */
+#ifdef FAST_API
+#define MA_initMuASFApi() (init_MuASF_dict())
+#else
+void _MA_initMuASFApi(void);
+#define MA_initMuASFApi() (_MA_initMuASFApi())
+#endif
 
-void MA_initMuASFApi(void);
-
-/*{{{  protect functions */
-
-void MA_protectOptLayout(MA_OptLayout *arg);
-void MA_protectLayout(MA_Layout *arg);
-void MA_protectLexLayoutList(MA_LexLayoutList *arg);
-void MA_protectTraversalStrategy(MA_TraversalStrategy *arg);
-void MA_protectTraversalType(MA_TraversalType *arg);
-void MA_protectTraversalContinuation(MA_TraversalContinuation *arg);
-void MA_protectFunId(MA_FunId *arg);
-void MA_protectVarId(MA_VarId *arg);
-void MA_protectModId(MA_ModId *arg);
-void MA_protectTerm(MA_Term *arg);
-void MA_protectTermList(MA_TermList *arg);
-void MA_protectSigArg(MA_SigArg *arg);
-void MA_protectFuncDef(MA_FuncDef *arg);
-void MA_protectAnnotations(MA_Annotations *arg);
-void MA_protectSigArgList(MA_SigArgList *arg);
-void MA_protectFuncDefList(MA_FuncDefList *arg);
-void MA_protectRule(MA_Rule *arg);
-void MA_protectRuleList(MA_RuleList *arg);
-void MA_protectCondList(MA_CondList *arg);
-void MA_protectCond(MA_Cond *arg);
-void MA_protectSignatureOpt(MA_SignatureOpt *arg);
-void MA_protectRulesOpt(MA_RulesOpt *arg);
-void MA_protectModule(MA_Module *arg);
-void MA_protectTermArgs(MA_TermArgs *arg);
-void MA_protectTermElems(MA_TermElems *arg);
-void MA_protectSigArgArgs(MA_SigArgArgs *arg);
-void MA_protectTermAttrs(MA_TermAttrs *arg);
-void MA_protectFuncDefDefs(MA_FuncDefDefs *arg);
-void MA_protectRuleRules(MA_RuleRules *arg);
-void MA_protectCondConds(MA_CondConds *arg);
-void MA_protectLexLayout(MA_LexLayout *arg);
-void MA_protectLexStrChar(MA_LexStrChar *arg);
-void MA_protectStrChar(MA_StrChar *arg);
-void MA_protectLexStrCon(MA_LexStrCon *arg);
-void MA_protectStrCon(MA_StrCon *arg);
-void MA_protectLexStrCharChars(MA_LexStrCharChars *arg);
-void MA_protectLexNatCon(MA_LexNatCon *arg);
-void MA_protectNatCon(MA_NatCon *arg);
-void MA_protectLexIdCon(MA_LexIdCon *arg);
-void MA_protectIdCon(MA_IdCon *arg);
-
-/*}}}  */
-/*{{{  term conversion functions */
-
-MA_OptLayout MA_OptLayoutFromTerm(ATerm t);
-ATerm MA_OptLayoutToTerm(MA_OptLayout arg);
-MA_Layout MA_LayoutFromTerm(ATerm t);
-ATerm MA_LayoutToTerm(MA_Layout arg);
-MA_LexLayoutList MA_LexLayoutListFromTerm(ATerm t);
-ATerm MA_LexLayoutListToTerm(MA_LexLayoutList arg);
-MA_TraversalStrategy MA_TraversalStrategyFromTerm(ATerm t);
-ATerm MA_TraversalStrategyToTerm(MA_TraversalStrategy arg);
-MA_TraversalType MA_TraversalTypeFromTerm(ATerm t);
-ATerm MA_TraversalTypeToTerm(MA_TraversalType arg);
-MA_TraversalContinuation MA_TraversalContinuationFromTerm(ATerm t);
-ATerm MA_TraversalContinuationToTerm(MA_TraversalContinuation arg);
-MA_FunId MA_FunIdFromTerm(ATerm t);
-ATerm MA_FunIdToTerm(MA_FunId arg);
-MA_VarId MA_VarIdFromTerm(ATerm t);
-ATerm MA_VarIdToTerm(MA_VarId arg);
-MA_ModId MA_ModIdFromTerm(ATerm t);
-ATerm MA_ModIdToTerm(MA_ModId arg);
-MA_Term MA_TermFromTerm(ATerm t);
-ATerm MA_TermToTerm(MA_Term arg);
-MA_TermList MA_TermListFromTerm(ATerm t);
-ATerm MA_TermListToTerm(MA_TermList arg);
-MA_SigArg MA_SigArgFromTerm(ATerm t);
-ATerm MA_SigArgToTerm(MA_SigArg arg);
-MA_FuncDef MA_FuncDefFromTerm(ATerm t);
-ATerm MA_FuncDefToTerm(MA_FuncDef arg);
-MA_Annotations MA_AnnotationsFromTerm(ATerm t);
-ATerm MA_AnnotationsToTerm(MA_Annotations arg);
-MA_SigArgList MA_SigArgListFromTerm(ATerm t);
-ATerm MA_SigArgListToTerm(MA_SigArgList arg);
-MA_FuncDefList MA_FuncDefListFromTerm(ATerm t);
-ATerm MA_FuncDefListToTerm(MA_FuncDefList arg);
-MA_Rule MA_RuleFromTerm(ATerm t);
-ATerm MA_RuleToTerm(MA_Rule arg);
-MA_RuleList MA_RuleListFromTerm(ATerm t);
-ATerm MA_RuleListToTerm(MA_RuleList arg);
-MA_CondList MA_CondListFromTerm(ATerm t);
-ATerm MA_CondListToTerm(MA_CondList arg);
-MA_Cond MA_CondFromTerm(ATerm t);
-ATerm MA_CondToTerm(MA_Cond arg);
-MA_SignatureOpt MA_SignatureOptFromTerm(ATerm t);
-ATerm MA_SignatureOptToTerm(MA_SignatureOpt arg);
-MA_RulesOpt MA_RulesOptFromTerm(ATerm t);
-ATerm MA_RulesOptToTerm(MA_RulesOpt arg);
-MA_Module MA_ModuleFromTerm(ATerm t);
-ATerm MA_ModuleToTerm(MA_Module arg);
-MA_TermArgs MA_TermArgsFromTerm(ATerm t);
-ATerm MA_TermArgsToTerm(MA_TermArgs arg);
-MA_TermElems MA_TermElemsFromTerm(ATerm t);
-ATerm MA_TermElemsToTerm(MA_TermElems arg);
-MA_SigArgArgs MA_SigArgArgsFromTerm(ATerm t);
-ATerm MA_SigArgArgsToTerm(MA_SigArgArgs arg);
-MA_TermAttrs MA_TermAttrsFromTerm(ATerm t);
-ATerm MA_TermAttrsToTerm(MA_TermAttrs arg);
-MA_FuncDefDefs MA_FuncDefDefsFromTerm(ATerm t);
-ATerm MA_FuncDefDefsToTerm(MA_FuncDefDefs arg);
-MA_RuleRules MA_RuleRulesFromTerm(ATerm t);
-ATerm MA_RuleRulesToTerm(MA_RuleRules arg);
-MA_CondConds MA_CondCondsFromTerm(ATerm t);
-ATerm MA_CondCondsToTerm(MA_CondConds arg);
-MA_LexLayout MA_LexLayoutFromTerm(ATerm t);
-ATerm MA_LexLayoutToTerm(MA_LexLayout arg);
-MA_LexStrChar MA_LexStrCharFromTerm(ATerm t);
-ATerm MA_LexStrCharToTerm(MA_LexStrChar arg);
-MA_StrChar MA_StrCharFromTerm(ATerm t);
-ATerm MA_StrCharToTerm(MA_StrChar arg);
-MA_LexStrCon MA_LexStrConFromTerm(ATerm t);
-ATerm MA_LexStrConToTerm(MA_LexStrCon arg);
-MA_StrCon MA_StrConFromTerm(ATerm t);
-ATerm MA_StrConToTerm(MA_StrCon arg);
-MA_LexStrCharChars MA_LexStrCharCharsFromTerm(ATerm t);
-ATerm MA_LexStrCharCharsToTerm(MA_LexStrCharChars arg);
-MA_LexNatCon MA_LexNatConFromTerm(ATerm t);
-ATerm MA_LexNatConToTerm(MA_LexNatCon arg);
-MA_NatCon MA_NatConFromTerm(ATerm t);
-ATerm MA_NatConToTerm(MA_NatCon arg);
-MA_LexIdCon MA_LexIdConFromTerm(ATerm t);
-ATerm MA_LexIdConToTerm(MA_LexIdCon arg);
-MA_IdCon MA_IdConFromTerm(ATerm t);
-ATerm MA_IdConToTerm(MA_IdCon arg);
-
-/*}}}  */
-/*{{{  list functions */
-
-int MA_getLexLayoutListLength (MA_LexLayoutList arg);
-MA_LexLayoutList MA_reverseLexLayoutList(MA_LexLayoutList arg);
-MA_LexLayoutList MA_appendLexLayoutList(MA_LexLayoutList arg, MA_LexLayout elem);
-MA_LexLayoutList MA_concatLexLayoutList(MA_LexLayoutList arg0, MA_LexLayoutList arg1);
-MA_LexLayoutList MA_sliceLexLayoutList(MA_LexLayoutList arg, int start, int end);
-MA_LexLayout MA_getLexLayoutListLexLayoutAt(MA_LexLayoutList arg, int index);
-MA_LexLayoutList MA_replaceLexLayoutListLexLayoutAt(MA_LexLayoutList arg, MA_LexLayout elem, int index);
-MA_LexLayoutList MA_makeLexLayoutList2(MA_LexLayout elem1, MA_LexLayout elem2);
-MA_LexLayoutList MA_makeLexLayoutList3(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3);
-MA_LexLayoutList MA_makeLexLayoutList4(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3, MA_LexLayout elem4);
-MA_LexLayoutList MA_makeLexLayoutList5(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3, MA_LexLayout elem4, MA_LexLayout elem5);
-MA_LexLayoutList MA_makeLexLayoutList6(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3, MA_LexLayout elem4, MA_LexLayout elem5, MA_LexLayout elem6);
-int MA_getTermArgsLength (MA_TermArgs arg);
+#ifdef FAST_API
+#define MA_protectOptLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectOptLayout(MA_OptLayout *arg);
+#define MA_protectOptLayout(arg) (_MA_protectOptLayout(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectOptLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectOptLayout(MA_OptLayout *arg);
+#define MA_unprotectOptLayout(arg) (_MA_unprotectOptLayout(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLayout(MA_Layout *arg);
+#define MA_protectLayout(arg) (_MA_protectLayout(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLayout(MA_Layout *arg);
+#define MA_unprotectLayout(arg) (_MA_unprotectLayout(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexLayoutList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexLayoutList(MA_LexLayoutList *arg);
+#define MA_protectLexLayoutList(arg) (_MA_protectLexLayoutList(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexLayoutList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexLayoutList(MA_LexLayoutList *arg);
+#define MA_unprotectLexLayoutList(arg) (_MA_unprotectLexLayoutList(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTraversalStrategy(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTraversalStrategy(MA_TraversalStrategy *arg);
+#define MA_protectTraversalStrategy(arg) (_MA_protectTraversalStrategy(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTraversalStrategy(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTraversalStrategy(MA_TraversalStrategy *arg);
+#define MA_unprotectTraversalStrategy(arg) (_MA_unprotectTraversalStrategy(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTraversalType(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTraversalType(MA_TraversalType *arg);
+#define MA_protectTraversalType(arg) (_MA_protectTraversalType(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTraversalType(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTraversalType(MA_TraversalType *arg);
+#define MA_unprotectTraversalType(arg) (_MA_unprotectTraversalType(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTraversalContinuation(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTraversalContinuation(MA_TraversalContinuation *arg);
+#define MA_protectTraversalContinuation(arg) (_MA_protectTraversalContinuation(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTraversalContinuation(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTraversalContinuation(MA_TraversalContinuation *arg);
+#define MA_unprotectTraversalContinuation(arg) (_MA_unprotectTraversalContinuation(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectFunId(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectFunId(MA_FunId *arg);
+#define MA_protectFunId(arg) (_MA_protectFunId(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectFunId(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectFunId(MA_FunId *arg);
+#define MA_unprotectFunId(arg) (_MA_unprotectFunId(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectVarId(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectVarId(MA_VarId *arg);
+#define MA_protectVarId(arg) (_MA_protectVarId(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectVarId(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectVarId(MA_VarId *arg);
+#define MA_unprotectVarId(arg) (_MA_unprotectVarId(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectModId(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectModId(MA_ModId *arg);
+#define MA_protectModId(arg) (_MA_protectModId(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectModId(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectModId(MA_ModId *arg);
+#define MA_unprotectModId(arg) (_MA_unprotectModId(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTerm(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTerm(MA_Term *arg);
+#define MA_protectTerm(arg) (_MA_protectTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTerm(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTerm(MA_Term *arg);
+#define MA_unprotectTerm(arg) (_MA_unprotectTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTermList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTermList(MA_TermList *arg);
+#define MA_protectTermList(arg) (_MA_protectTermList(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTermList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTermList(MA_TermList *arg);
+#define MA_unprotectTermList(arg) (_MA_unprotectTermList(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectSigArg(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectSigArg(MA_SigArg *arg);
+#define MA_protectSigArg(arg) (_MA_protectSigArg(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectSigArg(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectSigArg(MA_SigArg *arg);
+#define MA_unprotectSigArg(arg) (_MA_unprotectSigArg(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectFuncDef(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectFuncDef(MA_FuncDef *arg);
+#define MA_protectFuncDef(arg) (_MA_protectFuncDef(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectFuncDef(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectFuncDef(MA_FuncDef *arg);
+#define MA_unprotectFuncDef(arg) (_MA_unprotectFuncDef(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectAnnotations(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectAnnotations(MA_Annotations *arg);
+#define MA_protectAnnotations(arg) (_MA_protectAnnotations(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectAnnotations(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectAnnotations(MA_Annotations *arg);
+#define MA_unprotectAnnotations(arg) (_MA_unprotectAnnotations(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectSigArgList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectSigArgList(MA_SigArgList *arg);
+#define MA_protectSigArgList(arg) (_MA_protectSigArgList(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectSigArgList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectSigArgList(MA_SigArgList *arg);
+#define MA_unprotectSigArgList(arg) (_MA_unprotectSigArgList(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectFuncDefList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectFuncDefList(MA_FuncDefList *arg);
+#define MA_protectFuncDefList(arg) (_MA_protectFuncDefList(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectFuncDefList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectFuncDefList(MA_FuncDefList *arg);
+#define MA_unprotectFuncDefList(arg) (_MA_unprotectFuncDefList(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectRule(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectRule(MA_Rule *arg);
+#define MA_protectRule(arg) (_MA_protectRule(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectRule(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectRule(MA_Rule *arg);
+#define MA_unprotectRule(arg) (_MA_unprotectRule(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectRuleList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectRuleList(MA_RuleList *arg);
+#define MA_protectRuleList(arg) (_MA_protectRuleList(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectRuleList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectRuleList(MA_RuleList *arg);
+#define MA_unprotectRuleList(arg) (_MA_unprotectRuleList(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectCondList(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectCondList(MA_CondList *arg);
+#define MA_protectCondList(arg) (_MA_protectCondList(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectCondList(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectCondList(MA_CondList *arg);
+#define MA_unprotectCondList(arg) (_MA_unprotectCondList(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectCond(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectCond(MA_Cond *arg);
+#define MA_protectCond(arg) (_MA_protectCond(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectCond(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectCond(MA_Cond *arg);
+#define MA_unprotectCond(arg) (_MA_unprotectCond(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectSignatureOpt(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectSignatureOpt(MA_SignatureOpt *arg);
+#define MA_protectSignatureOpt(arg) (_MA_protectSignatureOpt(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectSignatureOpt(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectSignatureOpt(MA_SignatureOpt *arg);
+#define MA_unprotectSignatureOpt(arg) (_MA_unprotectSignatureOpt(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectRulesOpt(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectRulesOpt(MA_RulesOpt *arg);
+#define MA_protectRulesOpt(arg) (_MA_protectRulesOpt(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectRulesOpt(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectRulesOpt(MA_RulesOpt *arg);
+#define MA_unprotectRulesOpt(arg) (_MA_unprotectRulesOpt(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectModule(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectModule(MA_Module *arg);
+#define MA_protectModule(arg) (_MA_protectModule(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectModule(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectModule(MA_Module *arg);
+#define MA_unprotectModule(arg) (_MA_unprotectModule(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTermArgs(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTermArgs(MA_TermArgs *arg);
+#define MA_protectTermArgs(arg) (_MA_protectTermArgs(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTermArgs(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTermArgs(MA_TermArgs *arg);
+#define MA_unprotectTermArgs(arg) (_MA_unprotectTermArgs(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTermElems(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTermElems(MA_TermElems *arg);
+#define MA_protectTermElems(arg) (_MA_protectTermElems(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTermElems(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTermElems(MA_TermElems *arg);
+#define MA_unprotectTermElems(arg) (_MA_unprotectTermElems(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectSigArgArgs(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectSigArgArgs(MA_SigArgArgs *arg);
+#define MA_protectSigArgArgs(arg) (_MA_protectSigArgArgs(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectSigArgArgs(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectSigArgArgs(MA_SigArgArgs *arg);
+#define MA_unprotectSigArgArgs(arg) (_MA_unprotectSigArgArgs(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectTermAttrs(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectTermAttrs(MA_TermAttrs *arg);
+#define MA_protectTermAttrs(arg) (_MA_protectTermAttrs(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectTermAttrs(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectTermAttrs(MA_TermAttrs *arg);
+#define MA_unprotectTermAttrs(arg) (_MA_unprotectTermAttrs(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectFuncDefDefs(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectFuncDefDefs(MA_FuncDefDefs *arg);
+#define MA_protectFuncDefDefs(arg) (_MA_protectFuncDefDefs(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectFuncDefDefs(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectFuncDefDefs(MA_FuncDefDefs *arg);
+#define MA_unprotectFuncDefDefs(arg) (_MA_unprotectFuncDefDefs(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectRuleRules(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectRuleRules(MA_RuleRules *arg);
+#define MA_protectRuleRules(arg) (_MA_protectRuleRules(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectRuleRules(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectRuleRules(MA_RuleRules *arg);
+#define MA_unprotectRuleRules(arg) (_MA_unprotectRuleRules(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectCondConds(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectCondConds(MA_CondConds *arg);
+#define MA_protectCondConds(arg) (_MA_protectCondConds(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectCondConds(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectCondConds(MA_CondConds *arg);
+#define MA_unprotectCondConds(arg) (_MA_unprotectCondConds(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexLayout(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexLayout(MA_LexLayout *arg);
+#define MA_protectLexLayout(arg) (_MA_protectLexLayout(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexLayout(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexLayout(MA_LexLayout *arg);
+#define MA_unprotectLexLayout(arg) (_MA_unprotectLexLayout(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexStrChar(MA_LexStrChar *arg);
+#define MA_protectLexStrChar(arg) (_MA_protectLexStrChar(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexStrChar(MA_LexStrChar *arg);
+#define MA_unprotectLexStrChar(arg) (_MA_unprotectLexStrChar(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectStrChar(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectStrChar(MA_StrChar *arg);
+#define MA_protectStrChar(arg) (_MA_protectStrChar(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectStrChar(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectStrChar(MA_StrChar *arg);
+#define MA_unprotectStrChar(arg) (_MA_unprotectStrChar(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexStrCon(MA_LexStrCon *arg);
+#define MA_protectLexStrCon(arg) (_MA_protectLexStrCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexStrCon(MA_LexStrCon *arg);
+#define MA_unprotectLexStrCon(arg) (_MA_unprotectLexStrCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectStrCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectStrCon(MA_StrCon *arg);
+#define MA_protectStrCon(arg) (_MA_protectStrCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectStrCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectStrCon(MA_StrCon *arg);
+#define MA_unprotectStrCon(arg) (_MA_unprotectStrCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexStrCharChars(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexStrCharChars(MA_LexStrCharChars *arg);
+#define MA_protectLexStrCharChars(arg) (_MA_protectLexStrCharChars(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexStrCharChars(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexStrCharChars(MA_LexStrCharChars *arg);
+#define MA_unprotectLexStrCharChars(arg) (_MA_unprotectLexStrCharChars(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexNatCon(MA_LexNatCon *arg);
+#define MA_protectLexNatCon(arg) (_MA_protectLexNatCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexNatCon(MA_LexNatCon *arg);
+#define MA_unprotectLexNatCon(arg) (_MA_unprotectLexNatCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectNatCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectNatCon(MA_NatCon *arg);
+#define MA_protectNatCon(arg) (_MA_protectNatCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectNatCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectNatCon(MA_NatCon *arg);
+#define MA_unprotectNatCon(arg) (_MA_unprotectNatCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectLexIdCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectLexIdCon(MA_LexIdCon *arg);
+#define MA_protectLexIdCon(arg) (_MA_protectLexIdCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectLexIdCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectLexIdCon(MA_LexIdCon *arg);
+#define MA_unprotectLexIdCon(arg) (_MA_unprotectLexIdCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_protectIdCon(arg) (ATprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_protectIdCon(MA_IdCon *arg);
+#define MA_protectIdCon(arg) (_MA_protectIdCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_unprotectIdCon(arg) (ATunprotect((ATerm*)((void*) (arg))))
+#else
+void _MA_unprotectIdCon(MA_IdCon *arg);
+#define MA_unprotectIdCon(arg) (_MA_unprotectIdCon(arg))
+#endif
+#ifdef FAST_API
+#define MA_OptLayoutFromTerm(t) ((MA_OptLayout)(t))
+#else
+MA_OptLayout _MA_OptLayoutFromTerm(ATerm t);
+#define MA_OptLayoutFromTerm(t) (_MA_OptLayoutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_OptLayoutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_OptLayoutToTerm(MA_OptLayout arg);
+#define MA_OptLayoutToTerm(arg) (_MA_OptLayoutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LayoutFromTerm(t) ((MA_Layout)(t))
+#else
+MA_Layout _MA_LayoutFromTerm(ATerm t);
+#define MA_LayoutFromTerm(t) (_MA_LayoutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LayoutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LayoutToTerm(MA_Layout arg);
+#define MA_LayoutToTerm(arg) (_MA_LayoutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexLayoutListFromTerm(t) ((MA_LexLayoutList)(t))
+#else
+MA_LexLayoutList _MA_LexLayoutListFromTerm(ATerm t);
+#define MA_LexLayoutListFromTerm(t) (_MA_LexLayoutListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexLayoutListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexLayoutListToTerm(MA_LexLayoutList arg);
+#define MA_LexLayoutListToTerm(arg) (_MA_LexLayoutListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TraversalStrategyFromTerm(t) ((MA_TraversalStrategy)(t))
+#else
+MA_TraversalStrategy _MA_TraversalStrategyFromTerm(ATerm t);
+#define MA_TraversalStrategyFromTerm(t) (_MA_TraversalStrategyFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TraversalStrategyToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TraversalStrategyToTerm(MA_TraversalStrategy arg);
+#define MA_TraversalStrategyToTerm(arg) (_MA_TraversalStrategyToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TraversalTypeFromTerm(t) ((MA_TraversalType)(t))
+#else
+MA_TraversalType _MA_TraversalTypeFromTerm(ATerm t);
+#define MA_TraversalTypeFromTerm(t) (_MA_TraversalTypeFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TraversalTypeToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TraversalTypeToTerm(MA_TraversalType arg);
+#define MA_TraversalTypeToTerm(arg) (_MA_TraversalTypeToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TraversalContinuationFromTerm(t) ((MA_TraversalContinuation)(t))
+#else
+MA_TraversalContinuation _MA_TraversalContinuationFromTerm(ATerm t);
+#define MA_TraversalContinuationFromTerm(t) (_MA_TraversalContinuationFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TraversalContinuationToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TraversalContinuationToTerm(MA_TraversalContinuation arg);
+#define MA_TraversalContinuationToTerm(arg) (_MA_TraversalContinuationToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_FunIdFromTerm(t) ((MA_FunId)(t))
+#else
+MA_FunId _MA_FunIdFromTerm(ATerm t);
+#define MA_FunIdFromTerm(t) (_MA_FunIdFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_FunIdToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_FunIdToTerm(MA_FunId arg);
+#define MA_FunIdToTerm(arg) (_MA_FunIdToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_VarIdFromTerm(t) ((MA_VarId)(t))
+#else
+MA_VarId _MA_VarIdFromTerm(ATerm t);
+#define MA_VarIdFromTerm(t) (_MA_VarIdFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_VarIdToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_VarIdToTerm(MA_VarId arg);
+#define MA_VarIdToTerm(arg) (_MA_VarIdToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_ModIdFromTerm(t) ((MA_ModId)(t))
+#else
+MA_ModId _MA_ModIdFromTerm(ATerm t);
+#define MA_ModIdFromTerm(t) (_MA_ModIdFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_ModIdToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_ModIdToTerm(MA_ModId arg);
+#define MA_ModIdToTerm(arg) (_MA_ModIdToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TermFromTerm(t) ((MA_Term)(t))
+#else
+MA_Term _MA_TermFromTerm(ATerm t);
+#define MA_TermFromTerm(t) (_MA_TermFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TermToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TermToTerm(MA_Term arg);
+#define MA_TermToTerm(arg) (_MA_TermToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TermListFromTerm(t) ((MA_TermList)(t))
+#else
+MA_TermList _MA_TermListFromTerm(ATerm t);
+#define MA_TermListFromTerm(t) (_MA_TermListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TermListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TermListToTerm(MA_TermList arg);
+#define MA_TermListToTerm(arg) (_MA_TermListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_SigArgFromTerm(t) ((MA_SigArg)(t))
+#else
+MA_SigArg _MA_SigArgFromTerm(ATerm t);
+#define MA_SigArgFromTerm(t) (_MA_SigArgFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_SigArgToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_SigArgToTerm(MA_SigArg arg);
+#define MA_SigArgToTerm(arg) (_MA_SigArgToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_FuncDefFromTerm(t) ((MA_FuncDef)(t))
+#else
+MA_FuncDef _MA_FuncDefFromTerm(ATerm t);
+#define MA_FuncDefFromTerm(t) (_MA_FuncDefFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_FuncDefToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_FuncDefToTerm(MA_FuncDef arg);
+#define MA_FuncDefToTerm(arg) (_MA_FuncDefToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_AnnotationsFromTerm(t) ((MA_Annotations)(t))
+#else
+MA_Annotations _MA_AnnotationsFromTerm(ATerm t);
+#define MA_AnnotationsFromTerm(t) (_MA_AnnotationsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_AnnotationsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_AnnotationsToTerm(MA_Annotations arg);
+#define MA_AnnotationsToTerm(arg) (_MA_AnnotationsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_SigArgListFromTerm(t) ((MA_SigArgList)(t))
+#else
+MA_SigArgList _MA_SigArgListFromTerm(ATerm t);
+#define MA_SigArgListFromTerm(t) (_MA_SigArgListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_SigArgListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_SigArgListToTerm(MA_SigArgList arg);
+#define MA_SigArgListToTerm(arg) (_MA_SigArgListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_FuncDefListFromTerm(t) ((MA_FuncDefList)(t))
+#else
+MA_FuncDefList _MA_FuncDefListFromTerm(ATerm t);
+#define MA_FuncDefListFromTerm(t) (_MA_FuncDefListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_FuncDefListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_FuncDefListToTerm(MA_FuncDefList arg);
+#define MA_FuncDefListToTerm(arg) (_MA_FuncDefListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_RuleFromTerm(t) ((MA_Rule)(t))
+#else
+MA_Rule _MA_RuleFromTerm(ATerm t);
+#define MA_RuleFromTerm(t) (_MA_RuleFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_RuleToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_RuleToTerm(MA_Rule arg);
+#define MA_RuleToTerm(arg) (_MA_RuleToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_RuleListFromTerm(t) ((MA_RuleList)(t))
+#else
+MA_RuleList _MA_RuleListFromTerm(ATerm t);
+#define MA_RuleListFromTerm(t) (_MA_RuleListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_RuleListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_RuleListToTerm(MA_RuleList arg);
+#define MA_RuleListToTerm(arg) (_MA_RuleListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_CondListFromTerm(t) ((MA_CondList)(t))
+#else
+MA_CondList _MA_CondListFromTerm(ATerm t);
+#define MA_CondListFromTerm(t) (_MA_CondListFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_CondListToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_CondListToTerm(MA_CondList arg);
+#define MA_CondListToTerm(arg) (_MA_CondListToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_CondFromTerm(t) ((MA_Cond)(t))
+#else
+MA_Cond _MA_CondFromTerm(ATerm t);
+#define MA_CondFromTerm(t) (_MA_CondFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_CondToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_CondToTerm(MA_Cond arg);
+#define MA_CondToTerm(arg) (_MA_CondToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_SignatureOptFromTerm(t) ((MA_SignatureOpt)(t))
+#else
+MA_SignatureOpt _MA_SignatureOptFromTerm(ATerm t);
+#define MA_SignatureOptFromTerm(t) (_MA_SignatureOptFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_SignatureOptToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_SignatureOptToTerm(MA_SignatureOpt arg);
+#define MA_SignatureOptToTerm(arg) (_MA_SignatureOptToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_RulesOptFromTerm(t) ((MA_RulesOpt)(t))
+#else
+MA_RulesOpt _MA_RulesOptFromTerm(ATerm t);
+#define MA_RulesOptFromTerm(t) (_MA_RulesOptFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_RulesOptToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_RulesOptToTerm(MA_RulesOpt arg);
+#define MA_RulesOptToTerm(arg) (_MA_RulesOptToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_ModuleFromTerm(t) ((MA_Module)(t))
+#else
+MA_Module _MA_ModuleFromTerm(ATerm t);
+#define MA_ModuleFromTerm(t) (_MA_ModuleFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_ModuleToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_ModuleToTerm(MA_Module arg);
+#define MA_ModuleToTerm(arg) (_MA_ModuleToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TermArgsFromTerm(t) ((MA_TermArgs)(t))
+#else
+MA_TermArgs _MA_TermArgsFromTerm(ATerm t);
+#define MA_TermArgsFromTerm(t) (_MA_TermArgsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TermArgsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TermArgsToTerm(MA_TermArgs arg);
+#define MA_TermArgsToTerm(arg) (_MA_TermArgsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TermElemsFromTerm(t) ((MA_TermElems)(t))
+#else
+MA_TermElems _MA_TermElemsFromTerm(ATerm t);
+#define MA_TermElemsFromTerm(t) (_MA_TermElemsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TermElemsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TermElemsToTerm(MA_TermElems arg);
+#define MA_TermElemsToTerm(arg) (_MA_TermElemsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_SigArgArgsFromTerm(t) ((MA_SigArgArgs)(t))
+#else
+MA_SigArgArgs _MA_SigArgArgsFromTerm(ATerm t);
+#define MA_SigArgArgsFromTerm(t) (_MA_SigArgArgsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_SigArgArgsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_SigArgArgsToTerm(MA_SigArgArgs arg);
+#define MA_SigArgArgsToTerm(arg) (_MA_SigArgArgsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_TermAttrsFromTerm(t) ((MA_TermAttrs)(t))
+#else
+MA_TermAttrs _MA_TermAttrsFromTerm(ATerm t);
+#define MA_TermAttrsFromTerm(t) (_MA_TermAttrsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_TermAttrsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_TermAttrsToTerm(MA_TermAttrs arg);
+#define MA_TermAttrsToTerm(arg) (_MA_TermAttrsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_FuncDefDefsFromTerm(t) ((MA_FuncDefDefs)(t))
+#else
+MA_FuncDefDefs _MA_FuncDefDefsFromTerm(ATerm t);
+#define MA_FuncDefDefsFromTerm(t) (_MA_FuncDefDefsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_FuncDefDefsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_FuncDefDefsToTerm(MA_FuncDefDefs arg);
+#define MA_FuncDefDefsToTerm(arg) (_MA_FuncDefDefsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_RuleRulesFromTerm(t) ((MA_RuleRules)(t))
+#else
+MA_RuleRules _MA_RuleRulesFromTerm(ATerm t);
+#define MA_RuleRulesFromTerm(t) (_MA_RuleRulesFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_RuleRulesToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_RuleRulesToTerm(MA_RuleRules arg);
+#define MA_RuleRulesToTerm(arg) (_MA_RuleRulesToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_CondCondsFromTerm(t) ((MA_CondConds)(t))
+#else
+MA_CondConds _MA_CondCondsFromTerm(ATerm t);
+#define MA_CondCondsFromTerm(t) (_MA_CondCondsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_CondCondsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_CondCondsToTerm(MA_CondConds arg);
+#define MA_CondCondsToTerm(arg) (_MA_CondCondsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexLayoutFromTerm(t) ((MA_LexLayout)(t))
+#else
+MA_LexLayout _MA_LexLayoutFromTerm(ATerm t);
+#define MA_LexLayoutFromTerm(t) (_MA_LexLayoutFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexLayoutToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexLayoutToTerm(MA_LexLayout arg);
+#define MA_LexLayoutToTerm(arg) (_MA_LexLayoutToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexStrCharFromTerm(t) ((MA_LexStrChar)(t))
+#else
+MA_LexStrChar _MA_LexStrCharFromTerm(ATerm t);
+#define MA_LexStrCharFromTerm(t) (_MA_LexStrCharFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexStrCharToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexStrCharToTerm(MA_LexStrChar arg);
+#define MA_LexStrCharToTerm(arg) (_MA_LexStrCharToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_StrCharFromTerm(t) ((MA_StrChar)(t))
+#else
+MA_StrChar _MA_StrCharFromTerm(ATerm t);
+#define MA_StrCharFromTerm(t) (_MA_StrCharFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_StrCharToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_StrCharToTerm(MA_StrChar arg);
+#define MA_StrCharToTerm(arg) (_MA_StrCharToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexStrConFromTerm(t) ((MA_LexStrCon)(t))
+#else
+MA_LexStrCon _MA_LexStrConFromTerm(ATerm t);
+#define MA_LexStrConFromTerm(t) (_MA_LexStrConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexStrConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexStrConToTerm(MA_LexStrCon arg);
+#define MA_LexStrConToTerm(arg) (_MA_LexStrConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_StrConFromTerm(t) ((MA_StrCon)(t))
+#else
+MA_StrCon _MA_StrConFromTerm(ATerm t);
+#define MA_StrConFromTerm(t) (_MA_StrConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_StrConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_StrConToTerm(MA_StrCon arg);
+#define MA_StrConToTerm(arg) (_MA_StrConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexStrCharCharsFromTerm(t) ((MA_LexStrCharChars)(t))
+#else
+MA_LexStrCharChars _MA_LexStrCharCharsFromTerm(ATerm t);
+#define MA_LexStrCharCharsFromTerm(t) (_MA_LexStrCharCharsFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexStrCharCharsToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexStrCharCharsToTerm(MA_LexStrCharChars arg);
+#define MA_LexStrCharCharsToTerm(arg) (_MA_LexStrCharCharsToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexNatConFromTerm(t) ((MA_LexNatCon)(t))
+#else
+MA_LexNatCon _MA_LexNatConFromTerm(ATerm t);
+#define MA_LexNatConFromTerm(t) (_MA_LexNatConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexNatConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexNatConToTerm(MA_LexNatCon arg);
+#define MA_LexNatConToTerm(arg) (_MA_LexNatConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_NatConFromTerm(t) ((MA_NatCon)(t))
+#else
+MA_NatCon _MA_NatConFromTerm(ATerm t);
+#define MA_NatConFromTerm(t) (_MA_NatConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_NatConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_NatConToTerm(MA_NatCon arg);
+#define MA_NatConToTerm(arg) (_MA_NatConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_LexIdConFromTerm(t) ((MA_LexIdCon)(t))
+#else
+MA_LexIdCon _MA_LexIdConFromTerm(ATerm t);
+#define MA_LexIdConFromTerm(t) (_MA_LexIdConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_LexIdConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_LexIdConToTerm(MA_LexIdCon arg);
+#define MA_LexIdConToTerm(arg) (_MA_LexIdConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_IdConFromTerm(t) ((MA_IdCon)(t))
+#else
+MA_IdCon _MA_IdConFromTerm(ATerm t);
+#define MA_IdConFromTerm(t) (_MA_IdConFromTerm(t))
+#endif
+#ifdef FAST_API
+#define MA_IdConToTerm(arg) ((ATerm)(arg))
+#else
+ATerm _MA_IdConToTerm(MA_IdCon arg);
+#define MA_IdConToTerm(arg) (_MA_IdConToTerm(arg))
+#endif
+#ifdef FAST_API
+#define MA_getLexLayoutListLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _MA_getLexLayoutListLength(MA_LexLayoutList arg);
+#define MA_getLexLayoutListLength(arg) (_MA_getLexLayoutListLength(arg))
+#endif
+#ifdef FAST_API
+#define MA_reverseLexLayoutList(arg) ((MA_LexLayoutList) ATreverse((ATermList) (arg)))
+#else
+MA_LexLayoutList _MA_reverseLexLayoutList(MA_LexLayoutList arg);
+#define MA_reverseLexLayoutList(arg) (_MA_reverseLexLayoutList(arg))
+#endif
+#ifdef FAST_API
+#define MA_appendLexLayoutList(arg, elem) ((MA_LexLayoutList) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+MA_LexLayoutList _MA_appendLexLayoutList(MA_LexLayoutList arg, MA_LexLayout elem);
+#define MA_appendLexLayoutList(arg, elem) (_MA_appendLexLayoutList(arg, elem))
+#endif
+#ifdef FAST_API
+#define MA_concatLexLayoutList(arg0, arg1) ((MA_LexLayoutList) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+MA_LexLayoutList _MA_concatLexLayoutList(MA_LexLayoutList arg0, MA_LexLayoutList arg1);
+#define MA_concatLexLayoutList(arg0, arg1) (_MA_concatLexLayoutList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_sliceLexLayoutList(arg, start, end) ((MA_LexLayoutList) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+MA_LexLayoutList _MA_sliceLexLayoutList(MA_LexLayoutList arg, int start, int end);
+#define MA_sliceLexLayoutList(arg, start, end) (_MA_sliceLexLayoutList(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getLexLayoutListLexLayoutAt(arg, index) ((MA_LexLayout) (ATelementAt((ATermList) arg,index)))
+#else
+MA_LexLayout _MA_getLexLayoutListLexLayoutAt(MA_LexLayoutList arg, int index);
+#define MA_getLexLayoutListLexLayoutAt(arg, index) (_MA_getLexLayoutListLexLayoutAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceLexLayoutListLexLayoutAt(arg, elem, index) ((MA_LexLayoutList) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+MA_LexLayoutList _MA_replaceLexLayoutListLexLayoutAt(MA_LexLayoutList arg, MA_LexLayout elem, int index);
+#define MA_replaceLexLayoutListLexLayoutAt(arg, elem, index) (_MA_replaceLexLayoutListLexLayoutAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define MA_makeLexLayoutList2(elem1,  elem2) ((MA_LexLayoutList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+MA_LexLayoutList _MA_makeLexLayoutList2(MA_LexLayout elem1, MA_LexLayout elem2);
+#define MA_makeLexLayoutList2(elem1,  elem2) (_MA_makeLexLayoutList2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define MA_makeLexLayoutList3(elem1, elem2,  elem3) ((MA_LexLayoutList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+MA_LexLayoutList _MA_makeLexLayoutList3(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3);
+#define MA_makeLexLayoutList3(elem1, elem2,  elem3) (_MA_makeLexLayoutList3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define MA_makeLexLayoutList4(elem1, elem2, elem3,  elem4) ((MA_LexLayoutList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+MA_LexLayoutList _MA_makeLexLayoutList4(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3, MA_LexLayout elem4);
+#define MA_makeLexLayoutList4(elem1, elem2, elem3,  elem4) (_MA_makeLexLayoutList4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define MA_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) ((MA_LexLayoutList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+MA_LexLayoutList _MA_makeLexLayoutList5(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3, MA_LexLayout elem4, MA_LexLayout elem5);
+#define MA_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5) (_MA_makeLexLayoutList5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define MA_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) ((MA_LexLayoutList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+MA_LexLayoutList _MA_makeLexLayoutList6(MA_LexLayout elem1, MA_LexLayout elem2, MA_LexLayout elem3, MA_LexLayout elem4, MA_LexLayout elem5, MA_LexLayout elem6);
+#define MA_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6) (_MA_makeLexLayoutList6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
+#ifdef FAST_API
+#define MA_getTermArgsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getTermArgsLength(MA_TermArgs arg);
+#define MA_getTermArgsLength(arg) (_MA_getTermArgsLength(arg))
+#endif
 MA_TermArgs MA_reverseTermArgs(MA_TermArgs arg);
 MA_TermArgs MA_appendTermArgs(MA_TermArgs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term arg1);
 MA_TermArgs MA_concatTermArgs(MA_TermArgs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermArgs arg1);
-MA_TermArgs MA_sliceTermArgs(MA_TermArgs arg, int start, int end);
-MA_Term MA_getTermArgsTermAt(MA_TermArgs arg, int index);
-MA_TermArgs MA_replaceTermArgsTermAt(MA_TermArgs arg, MA_Term elem, int index);
+#ifdef FAST_API
+#define MA_sliceTermArgs(arg, start, end) ((MA_TermArgs) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_TermArgs _MA_sliceTermArgs(MA_TermArgs arg, int start, int end);
+#define MA_sliceTermArgs(arg, start, end) (_MA_sliceTermArgs(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getTermArgsTermAt(arg, index) ((MA_Term) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_Term _MA_getTermArgsTermAt(MA_TermArgs arg, int index);
+#define MA_getTermArgsTermAt(arg, index) (_MA_getTermArgsTermAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceTermArgsTermAt(arg, elem, index) ((MA_TermArgs) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_TermArgs _MA_replaceTermArgsTermAt(MA_TermArgs arg, MA_Term elem, int index);
+#define MA_replaceTermArgsTermAt(arg, elem, index) (_MA_replaceTermArgsTermAt(arg, elem, index))
+#endif
 MA_TermArgs MA_makeTermArgs2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2);
 MA_TermArgs MA_makeTermArgs3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3);
 MA_TermArgs MA_makeTermArgs4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4);
 MA_TermArgs MA_makeTermArgs5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5);
 MA_TermArgs MA_makeTermArgs6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5, MA_Term elem6);
-int MA_getTermElemsLength (MA_TermElems arg);
+#ifdef FAST_API
+#define MA_getTermElemsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getTermElemsLength(MA_TermElems arg);
+#define MA_getTermElemsLength(arg) (_MA_getTermElemsLength(arg))
+#endif
 MA_TermElems MA_reverseTermElems(MA_TermElems arg);
 MA_TermElems MA_appendTermElems(MA_TermElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term arg1);
 MA_TermElems MA_concatTermElems(MA_TermElems arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermElems arg1);
-MA_TermElems MA_sliceTermElems(MA_TermElems arg, int start, int end);
-MA_Term MA_getTermElemsTermAt(MA_TermElems arg, int index);
-MA_TermElems MA_replaceTermElemsTermAt(MA_TermElems arg, MA_Term elem, int index);
+#ifdef FAST_API
+#define MA_sliceTermElems(arg, start, end) ((MA_TermElems) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_TermElems _MA_sliceTermElems(MA_TermElems arg, int start, int end);
+#define MA_sliceTermElems(arg, start, end) (_MA_sliceTermElems(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getTermElemsTermAt(arg, index) ((MA_Term) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_Term _MA_getTermElemsTermAt(MA_TermElems arg, int index);
+#define MA_getTermElemsTermAt(arg, index) (_MA_getTermElemsTermAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceTermElemsTermAt(arg, elem, index) ((MA_TermElems) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_TermElems _MA_replaceTermElemsTermAt(MA_TermElems arg, MA_Term elem, int index);
+#define MA_replaceTermElemsTermAt(arg, elem, index) (_MA_replaceTermElemsTermAt(arg, elem, index))
+#endif
 MA_TermElems MA_makeTermElems2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2);
 MA_TermElems MA_makeTermElems3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3);
 MA_TermElems MA_makeTermElems4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4);
 MA_TermElems MA_makeTermElems5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5);
 MA_TermElems MA_makeTermElems6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5, MA_Term elem6);
-int MA_getSigArgArgsLength (MA_SigArgArgs arg);
+#ifdef FAST_API
+#define MA_getSigArgArgsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getSigArgArgsLength(MA_SigArgArgs arg);
+#define MA_getSigArgArgsLength(arg) (_MA_getSigArgArgsLength(arg))
+#endif
 MA_SigArgArgs MA_reverseSigArgArgs(MA_SigArgArgs arg);
 MA_SigArgArgs MA_appendSigArgArgs(MA_SigArgArgs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg arg1);
 MA_SigArgArgs MA_concatSigArgArgs(MA_SigArgArgs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArgArgs arg1);
-MA_SigArgArgs MA_sliceSigArgArgs(MA_SigArgArgs arg, int start, int end);
-MA_SigArg MA_getSigArgArgsSigArgAt(MA_SigArgArgs arg, int index);
-MA_SigArgArgs MA_replaceSigArgArgsSigArgAt(MA_SigArgArgs arg, MA_SigArg elem, int index);
+#ifdef FAST_API
+#define MA_sliceSigArgArgs(arg, start, end) ((MA_SigArgArgs) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_SigArgArgs _MA_sliceSigArgArgs(MA_SigArgArgs arg, int start, int end);
+#define MA_sliceSigArgArgs(arg, start, end) (_MA_sliceSigArgArgs(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getSigArgArgsSigArgAt(arg, index) ((MA_SigArg) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_SigArg _MA_getSigArgArgsSigArgAt(MA_SigArgArgs arg, int index);
+#define MA_getSigArgArgsSigArgAt(arg, index) (_MA_getSigArgArgsSigArgAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceSigArgArgsSigArgAt(arg, elem, index) ((MA_SigArgArgs) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_SigArgArgs _MA_replaceSigArgArgsSigArgAt(MA_SigArgArgs arg, MA_SigArg elem, int index);
+#define MA_replaceSigArgArgsSigArgAt(arg, elem, index) (_MA_replaceSigArgArgsSigArgAt(arg, elem, index))
+#endif
 MA_SigArgArgs MA_makeSigArgArgs2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2);
 MA_SigArgArgs MA_makeSigArgArgs3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3);
 MA_SigArgArgs MA_makeSigArgArgs4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3, MA_SigArg elem4);
 MA_SigArgArgs MA_makeSigArgArgs5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3, MA_SigArg elem4, MA_SigArg elem5);
 MA_SigArgArgs MA_makeSigArgArgs6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_SigArg elem1, MA_SigArg elem2, MA_SigArg elem3, MA_SigArg elem4, MA_SigArg elem5, MA_SigArg elem6);
-int MA_getTermAttrsLength (MA_TermAttrs arg);
+#ifdef FAST_API
+#define MA_getTermAttrsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getTermAttrsLength(MA_TermAttrs arg);
+#define MA_getTermAttrsLength(arg) (_MA_getTermAttrsLength(arg))
+#endif
 MA_TermAttrs MA_reverseTermAttrs(MA_TermAttrs arg);
 MA_TermAttrs MA_appendTermAttrs(MA_TermAttrs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term arg1);
 MA_TermAttrs MA_concatTermAttrs(MA_TermAttrs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_TermAttrs arg1);
-MA_TermAttrs MA_sliceTermAttrs(MA_TermAttrs arg, int start, int end);
-MA_Term MA_getTermAttrsTermAt(MA_TermAttrs arg, int index);
-MA_TermAttrs MA_replaceTermAttrsTermAt(MA_TermAttrs arg, MA_Term elem, int index);
+#ifdef FAST_API
+#define MA_sliceTermAttrs(arg, start, end) ((MA_TermAttrs) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_TermAttrs _MA_sliceTermAttrs(MA_TermAttrs arg, int start, int end);
+#define MA_sliceTermAttrs(arg, start, end) (_MA_sliceTermAttrs(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getTermAttrsTermAt(arg, index) ((MA_Term) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_Term _MA_getTermAttrsTermAt(MA_TermAttrs arg, int index);
+#define MA_getTermAttrsTermAt(arg, index) (_MA_getTermAttrsTermAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceTermAttrsTermAt(arg, elem, index) ((MA_TermAttrs) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_TermAttrs _MA_replaceTermAttrsTermAt(MA_TermAttrs arg, MA_Term elem, int index);
+#define MA_replaceTermAttrsTermAt(arg, elem, index) (_MA_replaceTermAttrsTermAt(arg, elem, index))
+#endif
 MA_TermAttrs MA_makeTermAttrs2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2);
 MA_TermAttrs MA_makeTermAttrs3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3);
 MA_TermAttrs MA_makeTermAttrs4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4);
 MA_TermAttrs MA_makeTermAttrs5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5);
 MA_TermAttrs MA_makeTermAttrs6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Term elem1, MA_Term elem2, MA_Term elem3, MA_Term elem4, MA_Term elem5, MA_Term elem6);
-int MA_getFuncDefDefsLength (MA_FuncDefDefs arg);
+#ifdef FAST_API
+#define MA_getFuncDefDefsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getFuncDefDefsLength(MA_FuncDefDefs arg);
+#define MA_getFuncDefDefsLength(arg) (_MA_getFuncDefDefsLength(arg))
+#endif
 MA_FuncDefDefs MA_reverseFuncDefDefs(MA_FuncDefDefs arg);
 MA_FuncDefDefs MA_appendFuncDefDefs(MA_FuncDefDefs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef arg1);
 MA_FuncDefDefs MA_concatFuncDefDefs(MA_FuncDefDefs arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDefDefs arg1);
-MA_FuncDefDefs MA_sliceFuncDefDefs(MA_FuncDefDefs arg, int start, int end);
-MA_FuncDef MA_getFuncDefDefsFuncDefAt(MA_FuncDefDefs arg, int index);
-MA_FuncDefDefs MA_replaceFuncDefDefsFuncDefAt(MA_FuncDefDefs arg, MA_FuncDef elem, int index);
+#ifdef FAST_API
+#define MA_sliceFuncDefDefs(arg, start, end) ((MA_FuncDefDefs) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_FuncDefDefs _MA_sliceFuncDefDefs(MA_FuncDefDefs arg, int start, int end);
+#define MA_sliceFuncDefDefs(arg, start, end) (_MA_sliceFuncDefDefs(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getFuncDefDefsFuncDefAt(arg, index) ((MA_FuncDef) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_FuncDef _MA_getFuncDefDefsFuncDefAt(MA_FuncDefDefs arg, int index);
+#define MA_getFuncDefDefsFuncDefAt(arg, index) (_MA_getFuncDefDefsFuncDefAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceFuncDefDefsFuncDefAt(arg, elem, index) ((MA_FuncDefDefs) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_FuncDefDefs _MA_replaceFuncDefDefsFuncDefAt(MA_FuncDefDefs arg, MA_FuncDef elem, int index);
+#define MA_replaceFuncDefDefsFuncDefAt(arg, elem, index) (_MA_replaceFuncDefDefsFuncDefAt(arg, elem, index))
+#endif
 MA_FuncDefDefs MA_makeFuncDefDefs2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2);
 MA_FuncDefDefs MA_makeFuncDefDefs3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3);
 MA_FuncDefDefs MA_makeFuncDefDefs4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3, MA_FuncDef elem4);
 MA_FuncDefDefs MA_makeFuncDefDefs5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3, MA_FuncDef elem4, MA_FuncDef elem5);
 MA_FuncDefDefs MA_makeFuncDefDefs6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_FuncDef elem1, MA_FuncDef elem2, MA_FuncDef elem3, MA_FuncDef elem4, MA_FuncDef elem5, MA_FuncDef elem6);
-int MA_getRuleRulesLength (MA_RuleRules arg);
+#ifdef FAST_API
+#define MA_getRuleRulesLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getRuleRulesLength(MA_RuleRules arg);
+#define MA_getRuleRulesLength(arg) (_MA_getRuleRulesLength(arg))
+#endif
 MA_RuleRules MA_reverseRuleRules(MA_RuleRules arg);
 MA_RuleRules MA_appendRuleRules(MA_RuleRules arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule arg1);
 MA_RuleRules MA_concatRuleRules(MA_RuleRules arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_RuleRules arg1);
-MA_RuleRules MA_sliceRuleRules(MA_RuleRules arg, int start, int end);
-MA_Rule MA_getRuleRulesRuleAt(MA_RuleRules arg, int index);
-MA_RuleRules MA_replaceRuleRulesRuleAt(MA_RuleRules arg, MA_Rule elem, int index);
+#ifdef FAST_API
+#define MA_sliceRuleRules(arg, start, end) ((MA_RuleRules) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_RuleRules _MA_sliceRuleRules(MA_RuleRules arg, int start, int end);
+#define MA_sliceRuleRules(arg, start, end) (_MA_sliceRuleRules(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getRuleRulesRuleAt(arg, index) ((MA_Rule) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_Rule _MA_getRuleRulesRuleAt(MA_RuleRules arg, int index);
+#define MA_getRuleRulesRuleAt(arg, index) (_MA_getRuleRulesRuleAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceRuleRulesRuleAt(arg, elem, index) ((MA_RuleRules) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_RuleRules _MA_replaceRuleRulesRuleAt(MA_RuleRules arg, MA_Rule elem, int index);
+#define MA_replaceRuleRulesRuleAt(arg, elem, index) (_MA_replaceRuleRulesRuleAt(arg, elem, index))
+#endif
 MA_RuleRules MA_makeRuleRules2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2);
 MA_RuleRules MA_makeRuleRules3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3);
 MA_RuleRules MA_makeRuleRules4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3, MA_Rule elem4);
 MA_RuleRules MA_makeRuleRules5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3, MA_Rule elem4, MA_Rule elem5);
 MA_RuleRules MA_makeRuleRules6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Rule elem1, MA_Rule elem2, MA_Rule elem3, MA_Rule elem4, MA_Rule elem5, MA_Rule elem6);
-int MA_getCondCondsLength (MA_CondConds arg);
+#ifdef FAST_API
+#define MA_getCondCondsLength(arg) ((ATisEmpty((ATermList) (arg)) ? 0 : (ATgetLength((ATermList) (arg)) / 4) + 1))
+#else
+int _MA_getCondCondsLength(MA_CondConds arg);
+#define MA_getCondCondsLength(arg) (_MA_getCondCondsLength(arg))
+#endif
 MA_CondConds MA_reverseCondConds(MA_CondConds arg);
 MA_CondConds MA_appendCondConds(MA_CondConds arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond arg1);
 MA_CondConds MA_concatCondConds(MA_CondConds arg0, MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_CondConds arg1);
-MA_CondConds MA_sliceCondConds(MA_CondConds arg, int start, int end);
-MA_Cond MA_getCondCondsCondAt(MA_CondConds arg, int index);
-MA_CondConds MA_replaceCondCondsCondAt(MA_CondConds arg, MA_Cond elem, int index);
+#ifdef FAST_API
+#define MA_sliceCondConds(arg, start, end) ((MA_CondConds) ATgetSlice((ATermList) (arg), (start * 4), (end * 4)))
+#else
+MA_CondConds _MA_sliceCondConds(MA_CondConds arg, int start, int end);
+#define MA_sliceCondConds(arg, start, end) (_MA_sliceCondConds(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getCondCondsCondAt(arg, index) ((MA_Cond) (ATelementAt((ATermList) arg,index * 4)))
+#else
+MA_Cond _MA_getCondCondsCondAt(MA_CondConds arg, int index);
+#define MA_getCondCondsCondAt(arg, index) (_MA_getCondCondsCondAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceCondCondsCondAt(arg, elem, index) ((MA_CondConds) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index * 4)))
+#else
+MA_CondConds _MA_replaceCondCondsCondAt(MA_CondConds arg, MA_Cond elem, int index);
+#define MA_replaceCondCondsCondAt(arg, elem, index) (_MA_replaceCondCondsCondAt(arg, elem, index))
+#endif
 MA_CondConds MA_makeCondConds2(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2);
 MA_CondConds MA_makeCondConds3(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3);
 MA_CondConds MA_makeCondConds4(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3, MA_Cond elem4);
 MA_CondConds MA_makeCondConds5(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3, MA_Cond elem4, MA_Cond elem5);
 MA_CondConds MA_makeCondConds6(MA_OptLayout wsAfterHead, MA_OptLayout wsAfterSep, MA_Cond elem1, MA_Cond elem2, MA_Cond elem3, MA_Cond elem4, MA_Cond elem5, MA_Cond elem6);
-int MA_getLexStrCharCharsLength (MA_LexStrCharChars arg);
-MA_LexStrCharChars MA_reverseLexStrCharChars(MA_LexStrCharChars arg);
-MA_LexStrCharChars MA_appendLexStrCharChars(MA_LexStrCharChars arg, MA_LexStrChar elem);
-MA_LexStrCharChars MA_concatLexStrCharChars(MA_LexStrCharChars arg0, MA_LexStrCharChars arg1);
-MA_LexStrCharChars MA_sliceLexStrCharChars(MA_LexStrCharChars arg, int start, int end);
-MA_LexStrChar MA_getLexStrCharCharsLexStrCharAt(MA_LexStrCharChars arg, int index);
-MA_LexStrCharChars MA_replaceLexStrCharCharsLexStrCharAt(MA_LexStrCharChars arg, MA_LexStrChar elem, int index);
-MA_LexStrCharChars MA_makeLexStrCharChars2(MA_LexStrChar elem1, MA_LexStrChar elem2);
-MA_LexStrCharChars MA_makeLexStrCharChars3(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3);
-MA_LexStrCharChars MA_makeLexStrCharChars4(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3, MA_LexStrChar elem4);
-MA_LexStrCharChars MA_makeLexStrCharChars5(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3, MA_LexStrChar elem4, MA_LexStrChar elem5);
-MA_LexStrCharChars MA_makeLexStrCharChars6(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3, MA_LexStrChar elem4, MA_LexStrChar elem5, MA_LexStrChar elem6);
-
-/*}}}  */
-/*{{{  constructors */
-
+#ifdef FAST_API
+#define MA_getLexStrCharCharsLength(arg) (ATgetLength((ATermList) (arg)))
+#else
+int _MA_getLexStrCharCharsLength(MA_LexStrCharChars arg);
+#define MA_getLexStrCharCharsLength(arg) (_MA_getLexStrCharCharsLength(arg))
+#endif
+#ifdef FAST_API
+#define MA_reverseLexStrCharChars(arg) ((MA_LexStrCharChars) ATreverse((ATermList) (arg)))
+#else
+MA_LexStrCharChars _MA_reverseLexStrCharChars(MA_LexStrCharChars arg);
+#define MA_reverseLexStrCharChars(arg) (_MA_reverseLexStrCharChars(arg))
+#endif
+#ifdef FAST_API
+#define MA_appendLexStrCharChars(arg, elem) ((MA_LexStrCharChars) ATappend((ATermList) (arg), (ATerm) (((ATerm) elem))))
+#else
+MA_LexStrCharChars _MA_appendLexStrCharChars(MA_LexStrCharChars arg, MA_LexStrChar elem);
+#define MA_appendLexStrCharChars(arg, elem) (_MA_appendLexStrCharChars(arg, elem))
+#endif
+#ifdef FAST_API
+#define MA_concatLexStrCharChars(arg0, arg1) ((MA_LexStrCharChars) ATconcat((ATermList) (arg0), (ATermList) (arg1)))
+#else
+MA_LexStrCharChars _MA_concatLexStrCharChars(MA_LexStrCharChars arg0, MA_LexStrCharChars arg1);
+#define MA_concatLexStrCharChars(arg0, arg1) (_MA_concatLexStrCharChars(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_sliceLexStrCharChars(arg, start, end) ((MA_LexStrCharChars) ATgetSlice((ATermList) (arg), (start), (end)))
+#else
+MA_LexStrCharChars _MA_sliceLexStrCharChars(MA_LexStrCharChars arg, int start, int end);
+#define MA_sliceLexStrCharChars(arg, start, end) (_MA_sliceLexStrCharChars(arg, start, end))
+#endif
+#ifdef FAST_API
+#define MA_getLexStrCharCharsLexStrCharAt(arg, index) ((MA_LexStrChar) (ATelementAt((ATermList) arg,index)))
+#else
+MA_LexStrChar _MA_getLexStrCharCharsLexStrCharAt(MA_LexStrCharChars arg, int index);
+#define MA_getLexStrCharCharsLexStrCharAt(arg, index) (_MA_getLexStrCharCharsLexStrCharAt(arg, index))
+#endif
+#ifdef FAST_API
+#define MA_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) ((MA_LexStrCharChars) ATreplace((ATermList) (arg), (ATerm) (((ATerm) elem)), (index)))
+#else
+MA_LexStrCharChars _MA_replaceLexStrCharCharsLexStrCharAt(MA_LexStrCharChars arg, MA_LexStrChar elem, int index);
+#define MA_replaceLexStrCharCharsLexStrCharAt(arg, elem, index) (_MA_replaceLexStrCharCharsLexStrCharAt(arg, elem, index))
+#endif
+#ifdef FAST_API
+#define MA_makeLexStrCharChars2(elem1,  elem2) ((MA_LexStrCharChars) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) (((ATerm) elem2))))
+#else
+MA_LexStrCharChars _MA_makeLexStrCharChars2(MA_LexStrChar elem1, MA_LexStrChar elem2);
+#define MA_makeLexStrCharChars2(elem1,  elem2) (_MA_makeLexStrCharChars2(elem1,  elem2))
+#endif
+#ifdef FAST_API
+#define MA_makeLexStrCharChars3(elem1, elem2,  elem3) ((MA_LexStrCharChars) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) (((ATerm) elem3))))
+#else
+MA_LexStrCharChars _MA_makeLexStrCharChars3(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3);
+#define MA_makeLexStrCharChars3(elem1, elem2,  elem3) (_MA_makeLexStrCharChars3(elem1, elem2,  elem3))
+#endif
+#ifdef FAST_API
+#define MA_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) ((MA_LexStrCharChars) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) (((ATerm) elem4))))
+#else
+MA_LexStrCharChars _MA_makeLexStrCharChars4(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3, MA_LexStrChar elem4);
+#define MA_makeLexStrCharChars4(elem1, elem2, elem3,  elem4) (_MA_makeLexStrCharChars4(elem1, elem2, elem3,  elem4))
+#endif
+#ifdef FAST_API
+#define MA_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) ((MA_LexStrCharChars) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) (((ATerm) elem5))))
+#else
+MA_LexStrCharChars _MA_makeLexStrCharChars5(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3, MA_LexStrChar elem4, MA_LexStrChar elem5);
+#define MA_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5) (_MA_makeLexStrCharChars5(elem1, elem2, elem3, elem4,  elem5))
+#endif
+#ifdef FAST_API
+#define MA_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) ((MA_LexStrCharChars) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) (((ATerm) elem6))))
+#else
+MA_LexStrCharChars _MA_makeLexStrCharChars6(MA_LexStrChar elem1, MA_LexStrChar elem2, MA_LexStrChar elem3, MA_LexStrChar elem4, MA_LexStrChar elem5, MA_LexStrChar elem6);
+#define MA_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6) (_MA_makeLexStrCharChars6(elem1, elem2, elem3, elem4, elem5,  elem6))
+#endif
 MA_OptLayout MA_makeOptLayoutAbsent(void);
 MA_OptLayout MA_makeOptLayoutPresent(MA_Layout layout);
 MA_Layout MA_makeLayoutLexToCf(MA_LexLayoutList list);
@@ -321,6 +1404,7 @@ MA_FunId MA_makeFunIdIgnored(MA_OptLayout wsAfterIGNORE, MA_OptLayout wsAfterBra
 MA_FunId MA_makeFunIdTranslate(MA_OptLayout wsAfterTRANSLATE, MA_OptLayout wsAfterBracketOpen, MA_FunId FunId, MA_OptLayout wsAfterFunId);
 MA_FunId MA_makeFunIdTraversal(MA_OptLayout wsAfterBar, MA_FunId FunId, MA_OptLayout wsAfterFunId, MA_TraversalType TraversalType, MA_OptLayout wsAfterTraversalType, MA_TraversalStrategy TraversalStrategy, MA_OptLayout wsAfterTraversalStrategy, MA_TraversalContinuation TraversalContinuation, MA_OptLayout wsAfterTraversalContinuation);
 MA_FunId MA_makeFunIdConcat(MA_FunId lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterPlusPlus, MA_FunId rhs);
+MA_FunId MA_makeFunIdConcatDash(MA_FunId lhs, MA_OptLayout wsAfterLhs, MA_OptLayout wsAfterPlusPlus, MA_FunId rhs);
 MA_VarId MA_makeVarIdNormal(MA_OptLayout wsAfterDollar, MA_FunId FunId);
 MA_VarId MA_makeVarIdPlus(MA_OptLayout wsAfterDollarPlus, MA_FunId FunId);
 MA_VarId MA_makeVarIdStar(MA_OptLayout wsAfterDollarStar, MA_FunId FunId);
@@ -394,73 +1478,257 @@ MA_LexNatCon MA_makeLexNatConDigits(const char* list);
 MA_NatCon MA_makeNatConLexToCf(MA_LexNatCon NatCon);
 MA_LexIdCon MA_makeLexIdConDefault(char head, const char* tail);
 MA_IdCon MA_makeIdConLexToCf(MA_LexIdCon IdCon);
-
-/*}}}  */
-/*{{{  equality functions */
-
-ATbool MA_isEqualOptLayout(MA_OptLayout arg0, MA_OptLayout arg1);
-ATbool MA_isEqualLayout(MA_Layout arg0, MA_Layout arg1);
-ATbool MA_isEqualLexLayoutList(MA_LexLayoutList arg0, MA_LexLayoutList arg1);
-ATbool MA_isEqualTraversalStrategy(MA_TraversalStrategy arg0, MA_TraversalStrategy arg1);
-ATbool MA_isEqualTraversalType(MA_TraversalType arg0, MA_TraversalType arg1);
-ATbool MA_isEqualTraversalContinuation(MA_TraversalContinuation arg0, MA_TraversalContinuation arg1);
-ATbool MA_isEqualFunId(MA_FunId arg0, MA_FunId arg1);
-ATbool MA_isEqualVarId(MA_VarId arg0, MA_VarId arg1);
-ATbool MA_isEqualModId(MA_ModId arg0, MA_ModId arg1);
-ATbool MA_isEqualTerm(MA_Term arg0, MA_Term arg1);
-ATbool MA_isEqualTermList(MA_TermList arg0, MA_TermList arg1);
-ATbool MA_isEqualSigArg(MA_SigArg arg0, MA_SigArg arg1);
-ATbool MA_isEqualFuncDef(MA_FuncDef arg0, MA_FuncDef arg1);
-ATbool MA_isEqualAnnotations(MA_Annotations arg0, MA_Annotations arg1);
-ATbool MA_isEqualSigArgList(MA_SigArgList arg0, MA_SigArgList arg1);
-ATbool MA_isEqualFuncDefList(MA_FuncDefList arg0, MA_FuncDefList arg1);
-ATbool MA_isEqualRule(MA_Rule arg0, MA_Rule arg1);
-ATbool MA_isEqualRuleList(MA_RuleList arg0, MA_RuleList arg1);
-ATbool MA_isEqualCondList(MA_CondList arg0, MA_CondList arg1);
-ATbool MA_isEqualCond(MA_Cond arg0, MA_Cond arg1);
-ATbool MA_isEqualSignatureOpt(MA_SignatureOpt arg0, MA_SignatureOpt arg1);
-ATbool MA_isEqualRulesOpt(MA_RulesOpt arg0, MA_RulesOpt arg1);
-ATbool MA_isEqualModule(MA_Module arg0, MA_Module arg1);
-ATbool MA_isEqualTermArgs(MA_TermArgs arg0, MA_TermArgs arg1);
-ATbool MA_isEqualTermElems(MA_TermElems arg0, MA_TermElems arg1);
-ATbool MA_isEqualSigArgArgs(MA_SigArgArgs arg0, MA_SigArgArgs arg1);
-ATbool MA_isEqualTermAttrs(MA_TermAttrs arg0, MA_TermAttrs arg1);
-ATbool MA_isEqualFuncDefDefs(MA_FuncDefDefs arg0, MA_FuncDefDefs arg1);
-ATbool MA_isEqualRuleRules(MA_RuleRules arg0, MA_RuleRules arg1);
-ATbool MA_isEqualCondConds(MA_CondConds arg0, MA_CondConds arg1);
-ATbool MA_isEqualLexLayout(MA_LexLayout arg0, MA_LexLayout arg1);
-ATbool MA_isEqualLexStrChar(MA_LexStrChar arg0, MA_LexStrChar arg1);
-ATbool MA_isEqualStrChar(MA_StrChar arg0, MA_StrChar arg1);
-ATbool MA_isEqualLexStrCon(MA_LexStrCon arg0, MA_LexStrCon arg1);
-ATbool MA_isEqualStrCon(MA_StrCon arg0, MA_StrCon arg1);
-ATbool MA_isEqualLexStrCharChars(MA_LexStrCharChars arg0, MA_LexStrCharChars arg1);
-ATbool MA_isEqualLexNatCon(MA_LexNatCon arg0, MA_LexNatCon arg1);
-ATbool MA_isEqualNatCon(MA_NatCon arg0, MA_NatCon arg1);
-ATbool MA_isEqualLexIdCon(MA_LexIdCon arg0, MA_LexIdCon arg1);
-ATbool MA_isEqualIdCon(MA_IdCon arg0, MA_IdCon arg1);
-
-/*}}}  */
-/*{{{  MA_OptLayout accessors */
-
+#ifdef FAST_API
+#define MA_isEqualOptLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualOptLayout(MA_OptLayout arg0, MA_OptLayout arg1);
+#define MA_isEqualOptLayout(arg0, arg1) (_MA_isEqualOptLayout(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLayout(MA_Layout arg0, MA_Layout arg1);
+#define MA_isEqualLayout(arg0, arg1) (_MA_isEqualLayout(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexLayoutList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexLayoutList(MA_LexLayoutList arg0, MA_LexLayoutList arg1);
+#define MA_isEqualLexLayoutList(arg0, arg1) (_MA_isEqualLexLayoutList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTraversalStrategy(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTraversalStrategy(MA_TraversalStrategy arg0, MA_TraversalStrategy arg1);
+#define MA_isEqualTraversalStrategy(arg0, arg1) (_MA_isEqualTraversalStrategy(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTraversalType(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTraversalType(MA_TraversalType arg0, MA_TraversalType arg1);
+#define MA_isEqualTraversalType(arg0, arg1) (_MA_isEqualTraversalType(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTraversalContinuation(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTraversalContinuation(MA_TraversalContinuation arg0, MA_TraversalContinuation arg1);
+#define MA_isEqualTraversalContinuation(arg0, arg1) (_MA_isEqualTraversalContinuation(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualFunId(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualFunId(MA_FunId arg0, MA_FunId arg1);
+#define MA_isEqualFunId(arg0, arg1) (_MA_isEqualFunId(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualVarId(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualVarId(MA_VarId arg0, MA_VarId arg1);
+#define MA_isEqualVarId(arg0, arg1) (_MA_isEqualVarId(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualModId(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualModId(MA_ModId arg0, MA_ModId arg1);
+#define MA_isEqualModId(arg0, arg1) (_MA_isEqualModId(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTerm(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTerm(MA_Term arg0, MA_Term arg1);
+#define MA_isEqualTerm(arg0, arg1) (_MA_isEqualTerm(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTermList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTermList(MA_TermList arg0, MA_TermList arg1);
+#define MA_isEqualTermList(arg0, arg1) (_MA_isEqualTermList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualSigArg(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualSigArg(MA_SigArg arg0, MA_SigArg arg1);
+#define MA_isEqualSigArg(arg0, arg1) (_MA_isEqualSigArg(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualFuncDef(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualFuncDef(MA_FuncDef arg0, MA_FuncDef arg1);
+#define MA_isEqualFuncDef(arg0, arg1) (_MA_isEqualFuncDef(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualAnnotations(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualAnnotations(MA_Annotations arg0, MA_Annotations arg1);
+#define MA_isEqualAnnotations(arg0, arg1) (_MA_isEqualAnnotations(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualSigArgList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualSigArgList(MA_SigArgList arg0, MA_SigArgList arg1);
+#define MA_isEqualSigArgList(arg0, arg1) (_MA_isEqualSigArgList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualFuncDefList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualFuncDefList(MA_FuncDefList arg0, MA_FuncDefList arg1);
+#define MA_isEqualFuncDefList(arg0, arg1) (_MA_isEqualFuncDefList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualRule(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualRule(MA_Rule arg0, MA_Rule arg1);
+#define MA_isEqualRule(arg0, arg1) (_MA_isEqualRule(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualRuleList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualRuleList(MA_RuleList arg0, MA_RuleList arg1);
+#define MA_isEqualRuleList(arg0, arg1) (_MA_isEqualRuleList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualCondList(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualCondList(MA_CondList arg0, MA_CondList arg1);
+#define MA_isEqualCondList(arg0, arg1) (_MA_isEqualCondList(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualCond(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualCond(MA_Cond arg0, MA_Cond arg1);
+#define MA_isEqualCond(arg0, arg1) (_MA_isEqualCond(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualSignatureOpt(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualSignatureOpt(MA_SignatureOpt arg0, MA_SignatureOpt arg1);
+#define MA_isEqualSignatureOpt(arg0, arg1) (_MA_isEqualSignatureOpt(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualRulesOpt(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualRulesOpt(MA_RulesOpt arg0, MA_RulesOpt arg1);
+#define MA_isEqualRulesOpt(arg0, arg1) (_MA_isEqualRulesOpt(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualModule(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualModule(MA_Module arg0, MA_Module arg1);
+#define MA_isEqualModule(arg0, arg1) (_MA_isEqualModule(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTermArgs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTermArgs(MA_TermArgs arg0, MA_TermArgs arg1);
+#define MA_isEqualTermArgs(arg0, arg1) (_MA_isEqualTermArgs(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTermElems(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTermElems(MA_TermElems arg0, MA_TermElems arg1);
+#define MA_isEqualTermElems(arg0, arg1) (_MA_isEqualTermElems(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualSigArgArgs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualSigArgArgs(MA_SigArgArgs arg0, MA_SigArgArgs arg1);
+#define MA_isEqualSigArgArgs(arg0, arg1) (_MA_isEqualSigArgArgs(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualTermAttrs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualTermAttrs(MA_TermAttrs arg0, MA_TermAttrs arg1);
+#define MA_isEqualTermAttrs(arg0, arg1) (_MA_isEqualTermAttrs(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualFuncDefDefs(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualFuncDefDefs(MA_FuncDefDefs arg0, MA_FuncDefDefs arg1);
+#define MA_isEqualFuncDefDefs(arg0, arg1) (_MA_isEqualFuncDefDefs(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualRuleRules(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualRuleRules(MA_RuleRules arg0, MA_RuleRules arg1);
+#define MA_isEqualRuleRules(arg0, arg1) (_MA_isEqualRuleRules(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualCondConds(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualCondConds(MA_CondConds arg0, MA_CondConds arg1);
+#define MA_isEqualCondConds(arg0, arg1) (_MA_isEqualCondConds(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexLayout(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexLayout(MA_LexLayout arg0, MA_LexLayout arg1);
+#define MA_isEqualLexLayout(arg0, arg1) (_MA_isEqualLexLayout(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexStrChar(MA_LexStrChar arg0, MA_LexStrChar arg1);
+#define MA_isEqualLexStrChar(arg0, arg1) (_MA_isEqualLexStrChar(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualStrChar(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualStrChar(MA_StrChar arg0, MA_StrChar arg1);
+#define MA_isEqualStrChar(arg0, arg1) (_MA_isEqualStrChar(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexStrCon(MA_LexStrCon arg0, MA_LexStrCon arg1);
+#define MA_isEqualLexStrCon(arg0, arg1) (_MA_isEqualLexStrCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualStrCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualStrCon(MA_StrCon arg0, MA_StrCon arg1);
+#define MA_isEqualStrCon(arg0, arg1) (_MA_isEqualStrCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexStrCharChars(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexStrCharChars(MA_LexStrCharChars arg0, MA_LexStrCharChars arg1);
+#define MA_isEqualLexStrCharChars(arg0, arg1) (_MA_isEqualLexStrCharChars(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexNatCon(MA_LexNatCon arg0, MA_LexNatCon arg1);
+#define MA_isEqualLexNatCon(arg0, arg1) (_MA_isEqualLexNatCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualNatCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualNatCon(MA_NatCon arg0, MA_NatCon arg1);
+#define MA_isEqualNatCon(arg0, arg1) (_MA_isEqualNatCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualLexIdCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualLexIdCon(MA_LexIdCon arg0, MA_LexIdCon arg1);
+#define MA_isEqualLexIdCon(arg0, arg1) (_MA_isEqualLexIdCon(arg0, arg1))
+#endif
+#ifdef FAST_API
+#define MA_isEqualIdCon(arg0, arg1) (ATisEqual((ATerm)(arg0), (ATerm)(arg1)))
+#else
+ATbool _MA_isEqualIdCon(MA_IdCon arg0, MA_IdCon arg1);
+#define MA_isEqualIdCon(arg0, arg1) (_MA_isEqualIdCon(arg0, arg1))
+#endif
 ATbool MA_isValidOptLayout(MA_OptLayout arg);
 inline ATbool MA_isOptLayoutAbsent(MA_OptLayout arg);
 inline ATbool MA_isOptLayoutPresent(MA_OptLayout arg);
 ATbool MA_hasOptLayoutLayout(MA_OptLayout arg);
 MA_Layout MA_getOptLayoutLayout(MA_OptLayout arg);
 MA_OptLayout MA_setOptLayoutLayout(MA_OptLayout arg, MA_Layout layout);
-
-/*}}}  */
-/*{{{  MA_Layout accessors */
-
 ATbool MA_isValidLayout(MA_Layout arg);
 inline ATbool MA_isLayoutLexToCf(MA_Layout arg);
 ATbool MA_hasLayoutList(MA_Layout arg);
 MA_LexLayoutList MA_getLayoutList(MA_Layout arg);
 MA_Layout MA_setLayoutList(MA_Layout arg, MA_LexLayoutList list);
-
-/*}}}  */
-/*{{{  MA_LexLayoutList accessors */
-
 ATbool MA_isValidLexLayoutList(MA_LexLayoutList arg);
 inline ATbool MA_isLexLayoutListEmpty(MA_LexLayoutList arg);
 inline ATbool MA_isLexLayoutListSingle(MA_LexLayoutList arg);
@@ -471,32 +1739,16 @@ MA_LexLayout MA_getLexLayoutListHead(MA_LexLayoutList arg);
 MA_LexLayoutList MA_getLexLayoutListTail(MA_LexLayoutList arg);
 MA_LexLayoutList MA_setLexLayoutListHead(MA_LexLayoutList arg, MA_LexLayout head);
 MA_LexLayoutList MA_setLexLayoutListTail(MA_LexLayoutList arg, MA_LexLayoutList tail);
-
-/*}}}  */
-/*{{{  MA_TraversalStrategy accessors */
-
 ATbool MA_isValidTraversalStrategy(MA_TraversalStrategy arg);
 inline ATbool MA_isTraversalStrategyBottomUp(MA_TraversalStrategy arg);
 inline ATbool MA_isTraversalStrategyTopDown(MA_TraversalStrategy arg);
-
-/*}}}  */
-/*{{{  MA_TraversalType accessors */
-
 ATbool MA_isValidTraversalType(MA_TraversalType arg);
 inline ATbool MA_isTraversalTypeTrafo(MA_TraversalType arg);
 inline ATbool MA_isTraversalTypeAccu(MA_TraversalType arg);
 inline ATbool MA_isTraversalTypeAccutrafo(MA_TraversalType arg);
-
-/*}}}  */
-/*{{{  MA_TraversalContinuation accessors */
-
 ATbool MA_isValidTraversalContinuation(MA_TraversalContinuation arg);
 inline ATbool MA_isTraversalContinuationBreak(MA_TraversalContinuation arg);
 inline ATbool MA_isTraversalContinuationContinue(MA_TraversalContinuation arg);
-
-/*}}}  */
-/*{{{  MA_FunId accessors */
-
 ATbool MA_isValidFunId(MA_FunId arg);
 inline ATbool MA_isFunIdCharacter(MA_FunId arg);
 inline ATbool MA_isFunIdUnquoted(MA_FunId arg);
@@ -507,6 +1759,7 @@ inline ATbool MA_isFunIdIgnored(MA_FunId arg);
 inline ATbool MA_isFunIdTranslate(MA_FunId arg);
 inline ATbool MA_isFunIdTraversal(MA_FunId arg);
 inline ATbool MA_isFunIdConcat(MA_FunId arg);
+inline ATbool MA_isFunIdConcatDash(MA_FunId arg);
 ATbool MA_hasFunIdNatCon(MA_FunId arg);
 ATbool MA_hasFunIdIdCon(MA_FunId arg);
 ATbool MA_hasFunIdStrCon(MA_FunId arg);
@@ -527,6 +1780,7 @@ ATbool MA_hasFunIdLhs(MA_FunId arg);
 ATbool MA_hasFunIdWsAfterLhs(MA_FunId arg);
 ATbool MA_hasFunIdWsAfterPlusPlus(MA_FunId arg);
 ATbool MA_hasFunIdRhs(MA_FunId arg);
+ATbool MA_hasFunIdWsAfterPlusPlus(MA_FunId arg);
 MA_NatCon MA_getFunIdNatCon(MA_FunId arg);
 MA_IdCon MA_getFunIdIdCon(MA_FunId arg);
 MA_StrCon MA_getFunIdStrCon(MA_FunId arg);
@@ -547,6 +1801,7 @@ MA_FunId MA_getFunIdLhs(MA_FunId arg);
 MA_OptLayout MA_getFunIdWsAfterLhs(MA_FunId arg);
 MA_OptLayout MA_getFunIdWsAfterPlusPlus(MA_FunId arg);
 MA_FunId MA_getFunIdRhs(MA_FunId arg);
+MA_OptLayout MA_getFunIdWsAfterPlusPlus(MA_FunId arg);
 MA_FunId MA_setFunIdNatCon(MA_FunId arg, MA_NatCon NatCon);
 MA_FunId MA_setFunIdIdCon(MA_FunId arg, MA_IdCon IdCon);
 MA_FunId MA_setFunIdStrCon(MA_FunId arg, MA_StrCon StrCon);
@@ -567,10 +1822,7 @@ MA_FunId MA_setFunIdLhs(MA_FunId arg, MA_FunId lhs);
 MA_FunId MA_setFunIdWsAfterLhs(MA_FunId arg, MA_OptLayout wsAfterLhs);
 MA_FunId MA_setFunIdWsAfterPlusPlus(MA_FunId arg, MA_OptLayout wsAfterPlusPlus);
 MA_FunId MA_setFunIdRhs(MA_FunId arg, MA_FunId rhs);
-
-/*}}}  */
-/*{{{  MA_VarId accessors */
-
+MA_FunId MA_setFunIdWsAfterPlusPlus(MA_FunId arg, MA_OptLayout wsAfterPlusPlus);
 ATbool MA_isValidVarId(MA_VarId arg);
 inline ATbool MA_isVarIdNormal(MA_VarId arg);
 inline ATbool MA_isVarIdPlus(MA_VarId arg);
@@ -587,19 +1839,11 @@ MA_VarId MA_setVarIdWsAfterDollar(MA_VarId arg, MA_OptLayout wsAfterDollar);
 MA_VarId MA_setVarIdFunId(MA_VarId arg, MA_FunId FunId);
 MA_VarId MA_setVarIdWsAfterDollarPlus(MA_VarId arg, MA_OptLayout wsAfterDollarPlus);
 MA_VarId MA_setVarIdWsAfterDollarStar(MA_VarId arg, MA_OptLayout wsAfterDollarStar);
-
-/*}}}  */
-/*{{{  MA_ModId accessors */
-
 ATbool MA_isValidModId(MA_ModId arg);
 inline ATbool MA_isModIdDefault(MA_ModId arg);
 ATbool MA_hasModIdIdCon(MA_ModId arg);
 MA_IdCon MA_getModIdIdCon(MA_ModId arg);
 MA_ModId MA_setModIdIdCon(MA_ModId arg, MA_IdCon IdCon);
-
-/*}}}  */
-/*{{{  MA_Term accessors */
-
 ATbool MA_isValidTerm(MA_Term arg);
 inline ATbool MA_isTermVar(MA_Term arg);
 inline ATbool MA_isTermConstant(MA_Term arg);
@@ -645,19 +1889,11 @@ MA_Term MA_setTermTerm(MA_Term arg, MA_Term Term);
 MA_Term MA_setTermWsAfterTerm(MA_Term arg, MA_OptLayout wsAfterTerm);
 MA_Term MA_setTermWsAfterColon(MA_Term arg, MA_OptLayout wsAfterColon);
 MA_Term MA_setTermType(MA_Term arg, MA_Term type);
-
-/*}}}  */
-/*{{{  MA_TermList accessors */
-
 ATbool MA_isValidTermList(MA_TermList arg);
 inline ATbool MA_isTermListDefault(MA_TermList arg);
 ATbool MA_hasTermListElems(MA_TermList arg);
 MA_TermElems MA_getTermListElems(MA_TermList arg);
 MA_TermList MA_setTermListElems(MA_TermList arg, MA_TermElems elems);
-
-/*}}}  */
-/*{{{  MA_SigArg accessors */
-
 ATbool MA_isValidSigArg(MA_SigArg arg);
 inline ATbool MA_isSigArgNormal(MA_SigArg arg);
 inline ATbool MA_isSigArgStar(MA_SigArg arg);
@@ -665,10 +1901,6 @@ inline ATbool MA_isSigArgPlus(MA_SigArg arg);
 ATbool MA_hasSigArgWsAfterUnderscore(MA_SigArg arg);
 MA_OptLayout MA_getSigArgWsAfterUnderscore(MA_SigArg arg);
 MA_SigArg MA_setSigArgWsAfterUnderscore(MA_SigArg arg, MA_OptLayout wsAfterUnderscore);
-
-/*}}}  */
-/*{{{  MA_FuncDef accessors */
-
 ATbool MA_isValidFuncDef(MA_FuncDef arg);
 inline ATbool MA_isFuncDefConstantNoAnnos(MA_FuncDef arg);
 inline ATbool MA_isFuncDefConstantWithAnnos(MA_FuncDef arg);
@@ -695,10 +1927,6 @@ MA_FuncDef MA_setFuncDefWsAfterParenOpen(MA_FuncDef arg, MA_OptLayout wsAfterPar
 MA_FuncDef MA_setFuncDefArgs(MA_FuncDef arg, MA_SigArgArgs args);
 MA_FuncDef MA_setFuncDefWsAfterArgs(MA_FuncDef arg, MA_OptLayout wsAfterArgs);
 MA_FuncDef MA_setFuncDefWsAfterParenClose(MA_FuncDef arg, MA_OptLayout wsAfterParenClose);
-
-/*}}}  */
-/*{{{  MA_Annotations accessors */
-
 ATbool MA_isValidAnnotations(MA_Annotations arg);
 inline ATbool MA_isAnnotationsDefault(MA_Annotations arg);
 ATbool MA_hasAnnotationsWsAfterBraceOpen(MA_Annotations arg);
@@ -710,28 +1938,16 @@ MA_OptLayout MA_getAnnotationsWsAfterAttrs(MA_Annotations arg);
 MA_Annotations MA_setAnnotationsWsAfterBraceOpen(MA_Annotations arg, MA_OptLayout wsAfterBraceOpen);
 MA_Annotations MA_setAnnotationsAttrs(MA_Annotations arg, MA_TermAttrs attrs);
 MA_Annotations MA_setAnnotationsWsAfterAttrs(MA_Annotations arg, MA_OptLayout wsAfterAttrs);
-
-/*}}}  */
-/*{{{  MA_SigArgList accessors */
-
 ATbool MA_isValidSigArgList(MA_SigArgList arg);
 inline ATbool MA_isSigArgListDefault(MA_SigArgList arg);
 ATbool MA_hasSigArgListArgs(MA_SigArgList arg);
 MA_SigArgArgs MA_getSigArgListArgs(MA_SigArgList arg);
 MA_SigArgList MA_setSigArgListArgs(MA_SigArgList arg, MA_SigArgArgs args);
-
-/*}}}  */
-/*{{{  MA_FuncDefList accessors */
-
 ATbool MA_isValidFuncDefList(MA_FuncDefList arg);
 inline ATbool MA_isFuncDefListDefault(MA_FuncDefList arg);
 ATbool MA_hasFuncDefListDefs(MA_FuncDefList arg);
 MA_FuncDefDefs MA_getFuncDefListDefs(MA_FuncDefList arg);
 MA_FuncDefList MA_setFuncDefListDefs(MA_FuncDefList arg, MA_FuncDefDefs defs);
-
-/*}}}  */
-/*{{{  MA_Rule accessors */
-
 ATbool MA_isValidRule(MA_Rule arg);
 inline ATbool MA_isRuleNoConds(MA_Rule arg);
 inline ATbool MA_isRuleDefaultNoConds(MA_Rule arg);
@@ -761,28 +1977,16 @@ MA_Rule MA_setRuleWsAfterDefaultColon(MA_Rule arg, MA_OptLayout wsAfterDefaultCo
 MA_Rule MA_setRuleConds(MA_Rule arg, MA_CondList conds);
 MA_Rule MA_setRuleWsAfterConds(MA_Rule arg, MA_OptLayout wsAfterConds);
 MA_Rule MA_setRuleWsAfterEqualsEqualsGreaterThan(MA_Rule arg, MA_OptLayout wsAfterEqualsEqualsGreaterThan);
-
-/*}}}  */
-/*{{{  MA_RuleList accessors */
-
 ATbool MA_isValidRuleList(MA_RuleList arg);
 inline ATbool MA_isRuleListDefault(MA_RuleList arg);
 ATbool MA_hasRuleListRules(MA_RuleList arg);
 MA_RuleRules MA_getRuleListRules(MA_RuleList arg);
 MA_RuleList MA_setRuleListRules(MA_RuleList arg, MA_RuleRules rules);
-
-/*}}}  */
-/*{{{  MA_CondList accessors */
-
 ATbool MA_isValidCondList(MA_CondList arg);
 inline ATbool MA_isCondListDefault(MA_CondList arg);
 ATbool MA_hasCondListConds(MA_CondList arg);
 MA_CondConds MA_getCondListConds(MA_CondList arg);
 MA_CondList MA_setCondListConds(MA_CondList arg, MA_CondConds conds);
-
-/*}}}  */
-/*{{{  MA_Cond accessors */
-
 ATbool MA_isValidCond(MA_Cond arg);
 inline ATbool MA_isCondAssign(MA_Cond arg);
 inline ATbool MA_isCondNoAssign(MA_Cond arg);
@@ -809,10 +2013,6 @@ MA_Cond MA_setCondRhs(MA_Cond arg, MA_Term rhs);
 MA_Cond MA_setCondWsAfterNotBecomes(MA_Cond arg, MA_OptLayout wsAfterNotBecomes);
 MA_Cond MA_setCondWsAfterEquals(MA_Cond arg, MA_OptLayout wsAfterEquals);
 MA_Cond MA_setCondWsAfterNotEquals(MA_Cond arg, MA_OptLayout wsAfterNotEquals);
-
-/*}}}  */
-/*{{{  MA_SignatureOpt accessors */
-
 ATbool MA_isValidSignatureOpt(MA_SignatureOpt arg);
 inline ATbool MA_isSignatureOptAbsent(MA_SignatureOpt arg);
 inline ATbool MA_isSignatureOptPresent(MA_SignatureOpt arg);
@@ -822,10 +2022,6 @@ MA_OptLayout MA_getSignatureOptWsAfterSignature(MA_SignatureOpt arg);
 MA_FuncDefList MA_getSignatureOptFuncDefList(MA_SignatureOpt arg);
 MA_SignatureOpt MA_setSignatureOptWsAfterSignature(MA_SignatureOpt arg, MA_OptLayout wsAfterSignature);
 MA_SignatureOpt MA_setSignatureOptFuncDefList(MA_SignatureOpt arg, MA_FuncDefList FuncDefList);
-
-/*}}}  */
-/*{{{  MA_RulesOpt accessors */
-
 ATbool MA_isValidRulesOpt(MA_RulesOpt arg);
 inline ATbool MA_isRulesOptAbsent(MA_RulesOpt arg);
 inline ATbool MA_isRulesOptPresent(MA_RulesOpt arg);
@@ -835,10 +2031,6 @@ MA_OptLayout MA_getRulesOptWsAfterRules(MA_RulesOpt arg);
 MA_RuleList MA_getRulesOptRuleList(MA_RulesOpt arg);
 MA_RulesOpt MA_setRulesOptWsAfterRules(MA_RulesOpt arg, MA_OptLayout wsAfterRules);
 MA_RulesOpt MA_setRulesOptRuleList(MA_RulesOpt arg, MA_RuleList RuleList);
-
-/*}}}  */
-/*{{{  MA_Module accessors */
-
 ATbool MA_isValidModule(MA_Module arg);
 inline ATbool MA_isModuleModule(MA_Module arg);
 ATbool MA_hasModuleWsAfterModule(MA_Module arg);
@@ -859,10 +2051,6 @@ MA_Module MA_setModuleWsAfterModId(MA_Module arg, MA_OptLayout wsAfterModId);
 MA_Module MA_setModuleSignatureOpt(MA_Module arg, MA_SignatureOpt SignatureOpt);
 MA_Module MA_setModuleWsAfterSignatureOpt(MA_Module arg, MA_OptLayout wsAfterSignatureOpt);
 MA_Module MA_setModuleRulesOpt(MA_Module arg, MA_RulesOpt RulesOpt);
-
-/*}}}  */
-/*{{{  MA_TermArgs accessors */
-
 ATbool MA_isValidTermArgs(MA_TermArgs arg);
 inline ATbool MA_isTermArgsEmpty(MA_TermArgs arg);
 inline ATbool MA_isTermArgsSingle(MA_TermArgs arg);
@@ -879,10 +2067,6 @@ MA_TermArgs MA_setTermArgsHead(MA_TermArgs arg, MA_Term head);
 MA_TermArgs MA_setTermArgsWsAfterHead(MA_TermArgs arg, MA_OptLayout wsAfterHead);
 MA_TermArgs MA_setTermArgsWsAfterSep(MA_TermArgs arg, MA_OptLayout wsAfterSep);
 MA_TermArgs MA_setTermArgsTail(MA_TermArgs arg, MA_TermArgs tail);
-
-/*}}}  */
-/*{{{  MA_TermElems accessors */
-
 ATbool MA_isValidTermElems(MA_TermElems arg);
 inline ATbool MA_isTermElemsEmpty(MA_TermElems arg);
 inline ATbool MA_isTermElemsSingle(MA_TermElems arg);
@@ -899,10 +2083,6 @@ MA_TermElems MA_setTermElemsHead(MA_TermElems arg, MA_Term head);
 MA_TermElems MA_setTermElemsWsAfterHead(MA_TermElems arg, MA_OptLayout wsAfterHead);
 MA_TermElems MA_setTermElemsWsAfterSep(MA_TermElems arg, MA_OptLayout wsAfterSep);
 MA_TermElems MA_setTermElemsTail(MA_TermElems arg, MA_TermElems tail);
-
-/*}}}  */
-/*{{{  MA_SigArgArgs accessors */
-
 ATbool MA_isValidSigArgArgs(MA_SigArgArgs arg);
 inline ATbool MA_isSigArgArgsEmpty(MA_SigArgArgs arg);
 inline ATbool MA_isSigArgArgsSingle(MA_SigArgArgs arg);
@@ -919,10 +2099,6 @@ MA_SigArgArgs MA_setSigArgArgsHead(MA_SigArgArgs arg, MA_SigArg head);
 MA_SigArgArgs MA_setSigArgArgsWsAfterHead(MA_SigArgArgs arg, MA_OptLayout wsAfterHead);
 MA_SigArgArgs MA_setSigArgArgsWsAfterSep(MA_SigArgArgs arg, MA_OptLayout wsAfterSep);
 MA_SigArgArgs MA_setSigArgArgsTail(MA_SigArgArgs arg, MA_SigArgArgs tail);
-
-/*}}}  */
-/*{{{  MA_TermAttrs accessors */
-
 ATbool MA_isValidTermAttrs(MA_TermAttrs arg);
 inline ATbool MA_isTermAttrsEmpty(MA_TermAttrs arg);
 inline ATbool MA_isTermAttrsSingle(MA_TermAttrs arg);
@@ -939,10 +2115,6 @@ MA_TermAttrs MA_setTermAttrsHead(MA_TermAttrs arg, MA_Term head);
 MA_TermAttrs MA_setTermAttrsWsAfterHead(MA_TermAttrs arg, MA_OptLayout wsAfterHead);
 MA_TermAttrs MA_setTermAttrsWsAfterSep(MA_TermAttrs arg, MA_OptLayout wsAfterSep);
 MA_TermAttrs MA_setTermAttrsTail(MA_TermAttrs arg, MA_TermAttrs tail);
-
-/*}}}  */
-/*{{{  MA_FuncDefDefs accessors */
-
 ATbool MA_isValidFuncDefDefs(MA_FuncDefDefs arg);
 inline ATbool MA_isFuncDefDefsEmpty(MA_FuncDefDefs arg);
 inline ATbool MA_isFuncDefDefsSingle(MA_FuncDefDefs arg);
@@ -959,10 +2131,6 @@ MA_FuncDefDefs MA_setFuncDefDefsHead(MA_FuncDefDefs arg, MA_FuncDef head);
 MA_FuncDefDefs MA_setFuncDefDefsWsAfterHead(MA_FuncDefDefs arg, MA_OptLayout wsAfterHead);
 MA_FuncDefDefs MA_setFuncDefDefsWsAfterSep(MA_FuncDefDefs arg, MA_OptLayout wsAfterSep);
 MA_FuncDefDefs MA_setFuncDefDefsTail(MA_FuncDefDefs arg, MA_FuncDefDefs tail);
-
-/*}}}  */
-/*{{{  MA_RuleRules accessors */
-
 ATbool MA_isValidRuleRules(MA_RuleRules arg);
 inline ATbool MA_isRuleRulesEmpty(MA_RuleRules arg);
 inline ATbool MA_isRuleRulesSingle(MA_RuleRules arg);
@@ -979,10 +2147,6 @@ MA_RuleRules MA_setRuleRulesHead(MA_RuleRules arg, MA_Rule head);
 MA_RuleRules MA_setRuleRulesWsAfterHead(MA_RuleRules arg, MA_OptLayout wsAfterHead);
 MA_RuleRules MA_setRuleRulesWsAfterSep(MA_RuleRules arg, MA_OptLayout wsAfterSep);
 MA_RuleRules MA_setRuleRulesTail(MA_RuleRules arg, MA_RuleRules tail);
-
-/*}}}  */
-/*{{{  MA_CondConds accessors */
-
 ATbool MA_isValidCondConds(MA_CondConds arg);
 inline ATbool MA_isCondCondsEmpty(MA_CondConds arg);
 inline ATbool MA_isCondCondsSingle(MA_CondConds arg);
@@ -999,19 +2163,11 @@ MA_CondConds MA_setCondCondsHead(MA_CondConds arg, MA_Cond head);
 MA_CondConds MA_setCondCondsWsAfterHead(MA_CondConds arg, MA_OptLayout wsAfterHead);
 MA_CondConds MA_setCondCondsWsAfterSep(MA_CondConds arg, MA_OptLayout wsAfterSep);
 MA_CondConds MA_setCondCondsTail(MA_CondConds arg, MA_CondConds tail);
-
-/*}}}  */
-/*{{{  MA_LexLayout accessors */
-
 ATbool MA_isValidLexLayout(MA_LexLayout arg);
 inline ATbool MA_isLexLayoutWhitespace(MA_LexLayout arg);
 ATbool MA_hasLexLayoutCh(MA_LexLayout arg);
 char MA_getLexLayoutCh(MA_LexLayout arg);
 MA_LexLayout MA_setLexLayoutCh(MA_LexLayout arg, char ch);
-
-/*}}}  */
-/*{{{  MA_LexStrChar accessors */
-
 ATbool MA_isValidLexStrChar(MA_LexStrChar arg);
 inline ATbool MA_isLexStrCharNewline(MA_LexStrChar arg);
 inline ATbool MA_isLexStrCharTab(MA_LexStrChar arg);
@@ -1031,37 +2187,21 @@ MA_LexStrChar MA_setLexStrCharA(MA_LexStrChar arg, char a);
 MA_LexStrChar MA_setLexStrCharB(MA_LexStrChar arg, char b);
 MA_LexStrChar MA_setLexStrCharC(MA_LexStrChar arg, char c);
 MA_LexStrChar MA_setLexStrCharCh(MA_LexStrChar arg, char ch);
-
-/*}}}  */
-/*{{{  MA_StrChar accessors */
-
 ATbool MA_isValidStrChar(MA_StrChar arg);
 inline ATbool MA_isStrCharLexToCf(MA_StrChar arg);
 ATbool MA_hasStrCharStrChar(MA_StrChar arg);
 MA_LexStrChar MA_getStrCharStrChar(MA_StrChar arg);
 MA_StrChar MA_setStrCharStrChar(MA_StrChar arg, MA_LexStrChar StrChar);
-
-/*}}}  */
-/*{{{  MA_LexStrCon accessors */
-
 ATbool MA_isValidLexStrCon(MA_LexStrCon arg);
 inline ATbool MA_isLexStrConDefault(MA_LexStrCon arg);
 ATbool MA_hasLexStrConChars(MA_LexStrCon arg);
 MA_LexStrCharChars MA_getLexStrConChars(MA_LexStrCon arg);
 MA_LexStrCon MA_setLexStrConChars(MA_LexStrCon arg, MA_LexStrCharChars chars);
-
-/*}}}  */
-/*{{{  MA_StrCon accessors */
-
 ATbool MA_isValidStrCon(MA_StrCon arg);
 inline ATbool MA_isStrConLexToCf(MA_StrCon arg);
 ATbool MA_hasStrConStrCon(MA_StrCon arg);
 MA_LexStrCon MA_getStrConStrCon(MA_StrCon arg);
 MA_StrCon MA_setStrConStrCon(MA_StrCon arg, MA_LexStrCon StrCon);
-
-/*}}}  */
-/*{{{  MA_LexStrCharChars accessors */
-
 ATbool MA_isValidLexStrCharChars(MA_LexStrCharChars arg);
 inline ATbool MA_isLexStrCharCharsEmpty(MA_LexStrCharChars arg);
 inline ATbool MA_isLexStrCharCharsSingle(MA_LexStrCharChars arg);
@@ -1072,28 +2212,16 @@ MA_LexStrChar MA_getLexStrCharCharsHead(MA_LexStrCharChars arg);
 MA_LexStrCharChars MA_getLexStrCharCharsTail(MA_LexStrCharChars arg);
 MA_LexStrCharChars MA_setLexStrCharCharsHead(MA_LexStrCharChars arg, MA_LexStrChar head);
 MA_LexStrCharChars MA_setLexStrCharCharsTail(MA_LexStrCharChars arg, MA_LexStrCharChars tail);
-
-/*}}}  */
-/*{{{  MA_LexNatCon accessors */
-
 ATbool MA_isValidLexNatCon(MA_LexNatCon arg);
 inline ATbool MA_isLexNatConDigits(MA_LexNatCon arg);
 ATbool MA_hasLexNatConList(MA_LexNatCon arg);
 char* MA_getLexNatConList(MA_LexNatCon arg);
 MA_LexNatCon MA_setLexNatConList(MA_LexNatCon arg, const char* list);
-
-/*}}}  */
-/*{{{  MA_NatCon accessors */
-
 ATbool MA_isValidNatCon(MA_NatCon arg);
 inline ATbool MA_isNatConLexToCf(MA_NatCon arg);
 ATbool MA_hasNatConNatCon(MA_NatCon arg);
 MA_LexNatCon MA_getNatConNatCon(MA_NatCon arg);
 MA_NatCon MA_setNatConNatCon(MA_NatCon arg, MA_LexNatCon NatCon);
-
-/*}}}  */
-/*{{{  MA_LexIdCon accessors */
-
 ATbool MA_isValidLexIdCon(MA_LexIdCon arg);
 inline ATbool MA_isLexIdConDefault(MA_LexIdCon arg);
 ATbool MA_hasLexIdConHead(MA_LexIdCon arg);
@@ -1102,26 +2230,18 @@ char MA_getLexIdConHead(MA_LexIdCon arg);
 char* MA_getLexIdConTail(MA_LexIdCon arg);
 MA_LexIdCon MA_setLexIdConHead(MA_LexIdCon arg, char head);
 MA_LexIdCon MA_setLexIdConTail(MA_LexIdCon arg, const char* tail);
-
-/*}}}  */
-/*{{{  MA_IdCon accessors */
-
 ATbool MA_isValidIdCon(MA_IdCon arg);
 inline ATbool MA_isIdConLexToCf(MA_IdCon arg);
 ATbool MA_hasIdConIdCon(MA_IdCon arg);
 MA_LexIdCon MA_getIdConIdCon(MA_IdCon arg);
 MA_IdCon MA_setIdConIdCon(MA_IdCon arg, MA_LexIdCon IdCon);
-
-/*}}}  */
-/*{{{  sort visitors */
-
 MA_OptLayout MA_visitOptLayout(MA_OptLayout arg, MA_Layout (*acceptLayout)(MA_Layout));
 MA_Layout MA_visitLayout(MA_Layout arg, MA_LexLayoutList (*acceptList)(MA_LexLayoutList));
 MA_LexLayoutList MA_visitLexLayoutList(MA_LexLayoutList arg, MA_LexLayout (*acceptHead)(MA_LexLayout));
 MA_TraversalStrategy MA_visitTraversalStrategy(MA_TraversalStrategy arg);
 MA_TraversalType MA_visitTraversalType(MA_TraversalType arg);
 MA_TraversalContinuation MA_visitTraversalContinuation(MA_TraversalContinuation arg);
-MA_FunId MA_visitFunId(MA_FunId arg, MA_NatCon (*acceptNatCon)(MA_NatCon), MA_IdCon (*acceptIdCon)(MA_IdCon), MA_StrCon (*acceptStrCon)(MA_StrCon), MA_OptLayout (*acceptWsAfterBracketOpen)(MA_OptLayout), MA_OptLayout (*acceptWsAfterFunId)(MA_OptLayout), MA_OptLayout (*acceptWsAfterBraceOpen)(MA_OptLayout), MA_OptLayout (*acceptWsAfterIGNORE)(MA_OptLayout), MA_OptLayout (*acceptWsAfterTRANSLATE)(MA_OptLayout), MA_OptLayout (*acceptWsAfterBar)(MA_OptLayout), MA_TraversalType (*acceptTraversalType)(MA_TraversalType), MA_OptLayout (*acceptWsAfterTraversalType)(MA_OptLayout), MA_TraversalStrategy (*acceptTraversalStrategy)(MA_TraversalStrategy), MA_OptLayout (*acceptWsAfterTraversalStrategy)(MA_OptLayout), MA_TraversalContinuation (*acceptTraversalContinuation)(MA_TraversalContinuation), MA_OptLayout (*acceptWsAfterTraversalContinuation)(MA_OptLayout), MA_OptLayout (*acceptWsAfterLhs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterPlusPlus)(MA_OptLayout));
+MA_FunId MA_visitFunId(MA_FunId arg, MA_NatCon (*acceptNatCon)(MA_NatCon), MA_IdCon (*acceptIdCon)(MA_IdCon), MA_StrCon (*acceptStrCon)(MA_StrCon), MA_OptLayout (*acceptWsAfterBracketOpen)(MA_OptLayout), MA_OptLayout (*acceptWsAfterFunId)(MA_OptLayout), MA_OptLayout (*acceptWsAfterBraceOpen)(MA_OptLayout), MA_OptLayout (*acceptWsAfterIGNORE)(MA_OptLayout), MA_OptLayout (*acceptWsAfterTRANSLATE)(MA_OptLayout), MA_OptLayout (*acceptWsAfterBar)(MA_OptLayout), MA_TraversalType (*acceptTraversalType)(MA_TraversalType), MA_OptLayout (*acceptWsAfterTraversalType)(MA_OptLayout), MA_TraversalStrategy (*acceptTraversalStrategy)(MA_TraversalStrategy), MA_OptLayout (*acceptWsAfterTraversalStrategy)(MA_OptLayout), MA_TraversalContinuation (*acceptTraversalContinuation)(MA_TraversalContinuation), MA_OptLayout (*acceptWsAfterTraversalContinuation)(MA_OptLayout), MA_OptLayout (*acceptWsAfterLhs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterPlusPlus)(MA_OptLayout), MA_OptLayout (*acceptWsAfterPlusPlus)(MA_OptLayout));
 MA_VarId MA_visitVarId(MA_VarId arg, MA_OptLayout (*acceptWsAfterDollar)(MA_OptLayout), MA_FunId (*acceptFunId)(MA_FunId), MA_OptLayout (*acceptWsAfterDollarPlus)(MA_OptLayout), MA_OptLayout (*acceptWsAfterDollarStar)(MA_OptLayout));
 MA_ModId MA_visitModId(MA_ModId arg, MA_IdCon (*acceptIdCon)(MA_IdCon));
 MA_Term MA_visitTerm(MA_Term arg, MA_VarId (*acceptVarId)(MA_VarId), MA_FunId (*acceptFunId)(MA_FunId), MA_OptLayout (*acceptWsAfterFunId)(MA_OptLayout), MA_OptLayout (*acceptWsAfterParenOpen)(MA_OptLayout), MA_TermArgs (*acceptArgs)(MA_TermArgs), MA_OptLayout (*acceptWsAfterArgs)(MA_OptLayout), MA_OptLayout (*acceptWsAfterBracketOpen)(MA_OptLayout), MA_TermList (*acceptTermList)(MA_TermList), MA_OptLayout (*acceptWsAfterTermList)(MA_OptLayout), MA_OptLayout (*acceptWsAfterTerm)(MA_OptLayout), MA_OptLayout (*acceptWsAfterColon)(MA_OptLayout));
@@ -1155,7 +2275,5 @@ MA_LexNatCon MA_visitLexNatCon(MA_LexNatCon arg, char* (*acceptList)(char*));
 MA_NatCon MA_visitNatCon(MA_NatCon arg, MA_LexNatCon (*acceptNatCon)(MA_LexNatCon));
 MA_LexIdCon MA_visitLexIdCon(MA_LexIdCon arg, char (*acceptHead)(char), char* (*acceptTail)(char*));
 MA_IdCon MA_visitIdCon(MA_IdCon arg, MA_LexIdCon (*acceptIdCon)(MA_LexIdCon));
-
-/*}}}  */
 
 #endif /* _MUASF_H */
