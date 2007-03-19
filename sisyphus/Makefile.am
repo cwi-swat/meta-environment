@@ -25,7 +25,7 @@ gems = \
 
 GEM_DIR = $(top_srcdir)/gems
 
-install-data-hook: 
+install-gems:
 	(RUBYLIB=${RUBYGEMS_PREFIX}/lib/ruby/site_ruby/1.8:${RUBY_PREFIX}/lib/ruby/site_ruby/1.8 ;\
 	export RUBYLIB ; \
 	PATH=${RUBYGEMS_PREFIX}/bin:${RUBY_PREFIX}/bin:/bin:/usr/bin ; \
