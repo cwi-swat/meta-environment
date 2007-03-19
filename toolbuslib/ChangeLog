@@ -1,5 +1,8 @@
 $Id$
 
+Mon Mar 19 09:41:46 CET 2007 <jurgenv@cwi.nl>
+ * src/*: adapted to new ATwriteToBinaryString interface
+
 Tue Dec 12 13:19:17 CET 2006 <jurgenv@cwi.nl>
  * src/atb-tool.c: wrapped call to select in ATBhandleAny with a while
    loop. As long as the select was interupted by a non-blocked signal

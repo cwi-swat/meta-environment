@@ -892,12 +892,12 @@ static void handshake(Connection *conn)
 ATerm ATBpack(ATerm t)
 {
   int len;
-  char *ptr, *data;
+  unsigned char *ptr, *data;
   ATermBlob blob;
 
   ptr = ATwriteToBinaryString(t, &len);
   assert(ptr != NULL);
-  data = (char *)malloc(len);
+  data = (unsigned char *)malloc(len);
   if (!data) {
     ATerror("out of memory in ATBpack\n");
   }
@@ -949,7 +949,7 @@ ATerm ATBunpack(ATerm t)
 	if (fun == symbol_baf) {
 	  ATerm unpacked_term, arg;
 	  ATermBlob blob;
-	  char *data;
+	  unsigned const char *data;
 	  int size;
 
 	  arg = ATgetArgument(appl, 0);
