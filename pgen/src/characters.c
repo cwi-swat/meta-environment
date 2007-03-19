@@ -29,7 +29,7 @@ void CC_init() {
   int last_bits;
 
   last_bits = CC_BITS-((CC_LONGS-1)*BITS_PER_LONG);
-  last_mask = (1<<last_bits) - 1;
+  last_mask = (1UL<<last_bits) - 1;
 
   max_char_classes = 512;
   char_classes = (CC_Class **)calloc(max_char_classes, sizeof(CC_Class *));
@@ -135,7 +135,7 @@ void CC_addChar(CC_Class *cc, int c) {
  
   assert(c >= 0 && c < CC_BITS);
   index = c/BITS_PER_LONG;
-  mask  = 1 << (c % BITS_PER_LONG);
+  mask  = 1UL << (c % BITS_PER_LONG);
   
   (*cc)[index] |= mask;
 }
@@ -152,7 +152,7 @@ void CC_addRange(CC_Class *cc, int start, int end) {
 
   for (c=start; c<=end; c++) {
     int index = c/BITS_PER_LONG;
-    int mask  = 1 << (c % BITS_PER_LONG);
+    unsigned long mask  = 1UL << (c % BITS_PER_LONG);
 
     (*cc)[index] |= mask;
   }
@@ -164,7 +164,7 @@ void CC_removeChar(CC_Class *cc, int c) {
 
   assert(c >= 0 && c < CC_BITS);
   index = c/BITS_PER_LONG;
-  mask  = ~(1 << (c % BITS_PER_LONG));
+  mask  = ~(1UL << (c % BITS_PER_LONG));
   
   (*cc)[index] &= mask;
 }
@@ -216,8 +216,8 @@ ATerm CC_ClassToTerm(CC_Class *cc) {
   int i, start, end;
 
   for (i=CC_BITS-1; i>=0; i--) {
-    while (i % 32 == 31 && cc[i/32] == 0) {
-      i -= 32;
+    while (i % BITS_PER_LONG == (BITS_PER_LONG -1) && cc[i/BITS_PER_LONG] == 0) {
+      i -= BITS_PER_LONG;
       if (i == -1) {
         return (ATerm)range_set;
       }

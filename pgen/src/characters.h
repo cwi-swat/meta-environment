@@ -51,7 +51,7 @@ ATbool CC_complement(CC_Class *cc, CC_Class *result);
 
 /* ATbool	 CC_containsChar(CC_Class *cc, int c); */
 #define CC_containsChar(cc, c) \
-  (((*(cc))[(c)/BITS_PER_LONG] & (1 << ((c) % BITS_PER_LONG))) == 0 ? ATfalse : ATtrue)
+  (((*(cc))[(c)/BITS_PER_LONG] & (1UL << ((c) % BITS_PER_LONG))) == 0 ? ATfalse : ATtrue)
 
 ATbool   CC_isEmpty(CC_Class *cc);
 ATbool	 CC_isEOF(CC_Class *cc);

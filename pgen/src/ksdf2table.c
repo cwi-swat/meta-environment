@@ -448,8 +448,8 @@ static ATerm intset_to_term(IS_IntSet set)
   assert(afun_range >= 0);
 
   for (i=MAX_PROD; i>=0; i--) {
-    while (i % 32 == 31 && set[i/32] == 0) {
-      i -= 32;
+    while (i % BITS_PER_LONG == (BITS_PER_LONG - 1) && set[i/BITS_PER_LONG] == 0) {
+      i -= BITS_PER_LONG;
       if (i == -1) {
 	return (ATerm)range_set;
       }

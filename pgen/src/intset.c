@@ -34,7 +34,7 @@ int IS_add(IS_IntSet set, int i) {
   unsigned long mask;
 
   index = i/BITS_PER_LONG;
-  mask  = 1 << (i % BITS_PER_LONG);
+  mask  = 1UL << (i % BITS_PER_LONG);
 
   if (set[index] & mask) {
     return 0;
@@ -49,7 +49,7 @@ void IS_remove(IS_IntSet set, int i) {
   unsigned long mask;
 
   index = i/BITS_PER_LONG;
-  mask  = 1 << (i % BITS_PER_LONG);
+  mask  = 1UL << (i % BITS_PER_LONG);
 
   set[index] &= ~mask;
 }
@@ -59,7 +59,7 @@ int  IS_contains(IS_IntSet set, int i) {
   unsigned long mask;
 
   index = i/BITS_PER_LONG;
-  mask  = 1 << (i % BITS_PER_LONG);
+  mask  = 1UL << (i % BITS_PER_LONG);
 
   return (set[index] & mask) == 0 ? 0 : 1;
 }
