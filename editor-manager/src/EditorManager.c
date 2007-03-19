@@ -66,18 +66,20 @@ typedef struct ATerm _EM_SessionStatus;
 typedef struct ATerm _EM_Session;
 typedef struct ATerm _EM_EditorTypeList;
 
+
 /**
  * Initializes the full API. Forgetting to call this function before using the API will lead to strange behaviour. ATinit() needs to be called before this function.
  */
-void EM_initEditorManagerApi(void) {
+void _EM_initEditorManagerApi(void) {
   init_EditorManager_dict();
+
 }
 
 /**
  * Protect a EM_Sid from the ATerm garbage collector. Every EM_Sid that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EM_Sid
  */
-void EM_protectSid(EM_Sid *arg) {
+void _EM_protectSid(EM_Sid *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -85,7 +87,7 @@ void EM_protectSid(EM_Sid *arg) {
  * Unprotect a EM_Sid from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EM_Sid
  */
-void EM_unprotectSid(EM_Sid *arg) {
+void _EM_unprotectSid(EM_Sid *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -93,7 +95,7 @@ void EM_unprotectSid(EM_Sid *arg) {
  * Protect a EM_EditorType from the ATerm garbage collector. Every EM_EditorType that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EM_EditorType
  */
-void EM_protectEditorType(EM_EditorType *arg) {
+void _EM_protectEditorType(EM_EditorType *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -101,7 +103,7 @@ void EM_protectEditorType(EM_EditorType *arg) {
  * Unprotect a EM_EditorType from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EM_EditorType
  */
-void EM_unprotectEditorType(EM_EditorType *arg) {
+void _EM_unprotectEditorType(EM_EditorType *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -109,7 +111,7 @@ void EM_unprotectEditorType(EM_EditorType *arg) {
  * Protect a EM_ModuleId from the ATerm garbage collector. Every EM_ModuleId that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EM_ModuleId
  */
-void EM_protectModuleId(EM_ModuleId *arg) {
+void _EM_protectModuleId(EM_ModuleId *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -117,7 +119,7 @@ void EM_protectModuleId(EM_ModuleId *arg) {
  * Unprotect a EM_ModuleId from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EM_ModuleId
  */
-void EM_unprotectModuleId(EM_ModuleId *arg) {
+void _EM_unprotectModuleId(EM_ModuleId *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -125,7 +127,7 @@ void EM_unprotectModuleId(EM_ModuleId *arg) {
  * Protect a EM_SessionStatus from the ATerm garbage collector. Every EM_SessionStatus that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EM_SessionStatus
  */
-void EM_protectSessionStatus(EM_SessionStatus *arg) {
+void _EM_protectSessionStatus(EM_SessionStatus *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -133,7 +135,7 @@ void EM_protectSessionStatus(EM_SessionStatus *arg) {
  * Unprotect a EM_SessionStatus from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EM_SessionStatus
  */
-void EM_unprotectSessionStatus(EM_SessionStatus *arg) {
+void _EM_unprotectSessionStatus(EM_SessionStatus *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -141,7 +143,7 @@ void EM_unprotectSessionStatus(EM_SessionStatus *arg) {
  * Protect a EM_Session from the ATerm garbage collector. Every EM_Session that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EM_Session
  */
-void EM_protectSession(EM_Session *arg) {
+void _EM_protectSession(EM_Session *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -149,7 +151,7 @@ void EM_protectSession(EM_Session *arg) {
  * Unprotect a EM_Session from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EM_Session
  */
-void EM_unprotectSession(EM_Session *arg) {
+void _EM_unprotectSession(EM_Session *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -157,7 +159,7 @@ void EM_unprotectSession(EM_Session *arg) {
  * Protect a EM_EditorTypeList from the ATerm garbage collector. Every EM_EditorTypeList that is not rooted somewhere on the C call stack must be protected. Examples are global variables
  * \param[in] arg pointer to a EM_EditorTypeList
  */
-void EM_protectEditorTypeList(EM_EditorTypeList *arg) {
+void _EM_protectEditorTypeList(EM_EditorTypeList *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
@@ -165,7 +167,7 @@ void EM_protectEditorTypeList(EM_EditorTypeList *arg) {
  * Unprotect a EM_EditorTypeList from the ATerm garbage collector. This improves the efficiency of the garbage collector, as well as provide opportunity for reclaiming space
  * \param[in] arg pointer to a EM_EditorTypeList
  */
-void EM_unprotectEditorTypeList(EM_EditorTypeList *arg) {
+void _EM_unprotectEditorTypeList(EM_EditorTypeList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -174,7 +176,7 @@ void EM_unprotectEditorTypeList(EM_EditorTypeList *arg) {
  * \param[in] t ATerm to be converted
  * \return EM_Sid that was encoded by \arg
  */
-EM_Sid EM_SidFromTerm(ATerm t) {
+EM_Sid _EM_SidFromTerm(ATerm t) {
   return (EM_Sid)t;
 }
 
@@ -183,7 +185,7 @@ EM_Sid EM_SidFromTerm(ATerm t) {
  * \param[in] arg EM_Sid to be converted
  * \return ATerm that represents the EM_Sid
  */
-ATerm EM_SidToTerm(EM_Sid arg) {
+ATerm _EM_SidToTerm(EM_Sid arg) {
   return (ATerm)arg;
 }
 
@@ -192,7 +194,7 @@ ATerm EM_SidToTerm(EM_Sid arg) {
  * \param[in] t ATerm to be converted
  * \return EM_EditorType that was encoded by \arg
  */
-EM_EditorType EM_EditorTypeFromTerm(ATerm t) {
+EM_EditorType _EM_EditorTypeFromTerm(ATerm t) {
   return (EM_EditorType)t;
 }
 
@@ -201,7 +203,7 @@ EM_EditorType EM_EditorTypeFromTerm(ATerm t) {
  * \param[in] arg EM_EditorType to be converted
  * \return ATerm that represents the EM_EditorType
  */
-ATerm EM_EditorTypeToTerm(EM_EditorType arg) {
+ATerm _EM_EditorTypeToTerm(EM_EditorType arg) {
   return (ATerm)arg;
 }
 
@@ -210,7 +212,7 @@ ATerm EM_EditorTypeToTerm(EM_EditorType arg) {
  * \param[in] t ATerm to be converted
  * \return EM_ModuleId that was encoded by \arg
  */
-EM_ModuleId EM_ModuleIdFromTerm(ATerm t) {
+EM_ModuleId _EM_ModuleIdFromTerm(ATerm t) {
   return (EM_ModuleId)t;
 }
 
@@ -219,7 +221,7 @@ EM_ModuleId EM_ModuleIdFromTerm(ATerm t) {
  * \param[in] arg EM_ModuleId to be converted
  * \return ATerm that represents the EM_ModuleId
  */
-ATerm EM_ModuleIdToTerm(EM_ModuleId arg) {
+ATerm _EM_ModuleIdToTerm(EM_ModuleId arg) {
   return (ATerm)arg;
 }
 
@@ -228,7 +230,7 @@ ATerm EM_ModuleIdToTerm(EM_ModuleId arg) {
  * \param[in] t ATerm to be converted
  * \return EM_SessionStatus that was encoded by \arg
  */
-EM_SessionStatus EM_SessionStatusFromTerm(ATerm t) {
+EM_SessionStatus _EM_SessionStatusFromTerm(ATerm t) {
   return (EM_SessionStatus)t;
 }
 
@@ -237,7 +239,7 @@ EM_SessionStatus EM_SessionStatusFromTerm(ATerm t) {
  * \param[in] arg EM_SessionStatus to be converted
  * \return ATerm that represents the EM_SessionStatus
  */
-ATerm EM_SessionStatusToTerm(EM_SessionStatus arg) {
+ATerm _EM_SessionStatusToTerm(EM_SessionStatus arg) {
   return (ATerm)arg;
 }
 
@@ -246,7 +248,7 @@ ATerm EM_SessionStatusToTerm(EM_SessionStatus arg) {
  * \param[in] t ATerm to be converted
  * \return EM_Session that was encoded by \arg
  */
-EM_Session EM_SessionFromTerm(ATerm t) {
+EM_Session _EM_SessionFromTerm(ATerm t) {
   return (EM_Session)t;
 }
 
@@ -255,7 +257,7 @@ EM_Session EM_SessionFromTerm(ATerm t) {
  * \param[in] arg EM_Session to be converted
  * \return ATerm that represents the EM_Session
  */
-ATerm EM_SessionToTerm(EM_Session arg) {
+ATerm _EM_SessionToTerm(EM_Session arg) {
   return (ATerm)arg;
 }
 
@@ -264,7 +266,7 @@ ATerm EM_SessionToTerm(EM_Session arg) {
  * \param[in] t ATerm to be converted
  * \return EM_EditorTypeList that was encoded by \arg
  */
-EM_EditorTypeList EM_EditorTypeListFromTerm(ATerm t) {
+EM_EditorTypeList _EM_EditorTypeListFromTerm(ATerm t) {
   return (EM_EditorTypeList)t;
 }
 
@@ -273,7 +275,7 @@ EM_EditorTypeList EM_EditorTypeListFromTerm(ATerm t) {
  * \param[in] arg EM_EditorTypeList to be converted
  * \return ATerm that represents the EM_EditorTypeList
  */
-ATerm EM_EditorTypeListToTerm(EM_EditorTypeList arg) {
+ATerm _EM_EditorTypeListToTerm(EM_EditorTypeList arg) {
   return (ATerm)arg;
 }
 
@@ -282,7 +284,7 @@ ATerm EM_EditorTypeListToTerm(EM_EditorTypeList arg) {
  * \param[in] arg input EM_EditorTypeList
  * \return The number of elements in the EM_EditorTypeList
  */
-int EM_getEditorTypeListLength (EM_EditorTypeList arg) {
+int _EM_getEditorTypeListLength(EM_EditorTypeList arg) {
   return ATgetLength((ATermList) arg);
 }
 
@@ -291,7 +293,7 @@ int EM_getEditorTypeListLength (EM_EditorTypeList arg) {
  * \param[in] arg EM_EditorTypeList to be reversed
  * \return a reversed #arg
  */
-EM_EditorTypeList EM_reverseEditorTypeList(EM_EditorTypeList arg) {
+EM_EditorTypeList _EM_reverseEditorTypeList(EM_EditorTypeList arg) {
   return (EM_EditorTypeList) ATreverse((ATermList) arg);
 }
 
@@ -301,7 +303,7 @@ EM_EditorTypeList EM_reverseEditorTypeList(EM_EditorTypeList arg) {
  * \param[in] elem EM_EditorType to be appended
  * \return new EM_EditorTypeList with #elem appended
  */
-EM_EditorTypeList EM_appendEditorTypeList(EM_EditorTypeList arg, EM_EditorType elem) {
+EM_EditorTypeList _EM_appendEditorTypeList(EM_EditorTypeList arg, EM_EditorType elem) {
   return (EM_EditorTypeList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
@@ -311,7 +313,7 @@ EM_EditorTypeList EM_appendEditorTypeList(EM_EditorTypeList arg, EM_EditorType e
  * \param[in] arg1 second EM_EditorTypeList
  * \return EM_EditorTypeList with the elements of #arg0 before the elements of #arg1
  */
-EM_EditorTypeList EM_concatEditorTypeList(EM_EditorTypeList arg0, EM_EditorTypeList arg1) {
+EM_EditorTypeList _EM_concatEditorTypeList(EM_EditorTypeList arg0, EM_EditorTypeList arg1) {
   return (EM_EditorTypeList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
@@ -322,7 +324,7 @@ EM_EditorTypeList EM_concatEditorTypeList(EM_EditorTypeList arg0, EM_EditorTypeL
  * \param[in] end exclusive end index of the sublist
  * \return new EM_EditorTypeList with a first element the element at index #start from #arg, and as last element the element at index (#end - 1).
  */
-EM_EditorTypeList EM_sliceEditorTypeList(EM_EditorTypeList arg, int start, int end) {
+EM_EditorTypeList _EM_sliceEditorTypeList(EM_EditorTypeList arg, int start, int end) {
   return (EM_EditorTypeList) ATgetSlice((ATermList) arg, start, end);
 }
 
@@ -332,7 +334,7 @@ EM_EditorTypeList EM_sliceEditorTypeList(EM_EditorTypeList arg, int start, int e
  * \param[in] index index to use to point in the EM_EditorTypeList
  * \return EM_EditorType at position #index in #arg
  */
-EM_EditorType EM_getEditorTypeListEditorTypeAt(EM_EditorTypeList arg, int index) {
+EM_EditorType _EM_getEditorTypeListEditorTypeAt(EM_EditorTypeList arg, int index) {
  return (EM_EditorType)ATelementAt((ATermList) arg,index);
 }
 
@@ -343,7 +345,7 @@ EM_EditorType EM_getEditorTypeListEditorTypeAt(EM_EditorTypeList arg, int index)
  * \param[in] index index to use to point in the EM_EditorTypeList
  * \return A new EM_EditorTypeListwith #elem replaced in #arg at position #index
  */
-EM_EditorTypeList EM_replaceEditorTypeListEditorTypeAt(EM_EditorTypeList arg, EM_EditorType elem, int index) {
+EM_EditorTypeList _EM_replaceEditorTypeListEditorTypeAt(EM_EditorTypeList arg, EM_EditorType elem, int index) {
  return (EM_EditorTypeList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
@@ -353,7 +355,7 @@ EM_EditorTypeList EM_replaceEditorTypeListEditorTypeAt(EM_EditorTypeList arg, EM
  * \param[in] elem2 One EM_EditorType element of the new EM_EditorTypeList
  * \return A new EM_EditorTypeList consisting of 2 EM_EditorTypes
  */
-EM_EditorTypeList EM_makeEditorTypeList2(EM_EditorType elem1, EM_EditorType elem2) {
+EM_EditorTypeList _EM_makeEditorTypeList2(EM_EditorType elem1, EM_EditorType elem2) {
   return (EM_EditorTypeList) ATmakeList2((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2));
 }
 
@@ -364,7 +366,7 @@ EM_EditorTypeList EM_makeEditorTypeList2(EM_EditorType elem1, EM_EditorType elem
  * \param[in] elem3 One EM_EditorType element of the new EM_EditorTypeList
  * \return A new EM_EditorTypeList consisting of 3 EM_EditorTypes
  */
-EM_EditorTypeList EM_makeEditorTypeList3(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3) {
+EM_EditorTypeList _EM_makeEditorTypeList3(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3) {
   return (EM_EditorTypeList) ATmakeList3((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3));
 }
 
@@ -376,7 +378,7 @@ EM_EditorTypeList EM_makeEditorTypeList3(EM_EditorType elem1, EM_EditorType elem
  * \param[in] elem4 One EM_EditorType element of the new EM_EditorTypeList
  * \return A new EM_EditorTypeList consisting of 4 EM_EditorTypes
  */
-EM_EditorTypeList EM_makeEditorTypeList4(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3, EM_EditorType elem4) {
+EM_EditorTypeList _EM_makeEditorTypeList4(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3, EM_EditorType elem4) {
   return (EM_EditorTypeList) ATmakeList4((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4));
 }
 
@@ -389,7 +391,7 @@ EM_EditorTypeList EM_makeEditorTypeList4(EM_EditorType elem1, EM_EditorType elem
  * \param[in] elem5 One EM_EditorType element of the new EM_EditorTypeList
  * \return A new EM_EditorTypeList consisting of 5 EM_EditorTypes
  */
-EM_EditorTypeList EM_makeEditorTypeList5(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3, EM_EditorType elem4, EM_EditorType elem5) {
+EM_EditorTypeList _EM_makeEditorTypeList5(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3, EM_EditorType elem4, EM_EditorType elem5) {
   return (EM_EditorTypeList) ATmakeList5((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5));
 }
 
@@ -403,7 +405,7 @@ EM_EditorTypeList EM_makeEditorTypeList5(EM_EditorType elem1, EM_EditorType elem
  * \param[in] elem6 One EM_EditorType element of the new EM_EditorTypeList
  * \return A new EM_EditorTypeList consisting of 6 EM_EditorTypes
  */
-EM_EditorTypeList EM_makeEditorTypeList6(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3, EM_EditorType elem4, EM_EditorType elem5, EM_EditorType elem6) {
+EM_EditorTypeList _EM_makeEditorTypeList6(EM_EditorType elem1, EM_EditorType elem2, EM_EditorType elem3, EM_EditorType elem4, EM_EditorType elem5, EM_EditorType elem6) {
   return (EM_EditorTypeList) ATmakeList6((ATerm) ((ATerm) elem1), (ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem6));
 }
 
@@ -488,7 +490,7 @@ EM_EditorTypeList EM_makeEditorTypeListMany(EM_EditorType head, EM_EditorTypeLis
  * \param[in] arg1 second EM_Sid to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool EM_isEqualSid(EM_Sid arg0, EM_Sid arg1) {
+ATbool _EM_isEqualSid(EM_Sid arg0, EM_Sid arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -498,7 +500,7 @@ ATbool EM_isEqualSid(EM_Sid arg0, EM_Sid arg1) {
  * \param[in] arg1 second EM_EditorType to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool EM_isEqualEditorType(EM_EditorType arg0, EM_EditorType arg1) {
+ATbool _EM_isEqualEditorType(EM_EditorType arg0, EM_EditorType arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -508,7 +510,7 @@ ATbool EM_isEqualEditorType(EM_EditorType arg0, EM_EditorType arg1) {
  * \param[in] arg1 second EM_ModuleId to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool EM_isEqualModuleId(EM_ModuleId arg0, EM_ModuleId arg1) {
+ATbool _EM_isEqualModuleId(EM_ModuleId arg0, EM_ModuleId arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -518,7 +520,7 @@ ATbool EM_isEqualModuleId(EM_ModuleId arg0, EM_ModuleId arg1) {
  * \param[in] arg1 second EM_SessionStatus to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool EM_isEqualSessionStatus(EM_SessionStatus arg0, EM_SessionStatus arg1) {
+ATbool _EM_isEqualSessionStatus(EM_SessionStatus arg0, EM_SessionStatus arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -528,7 +530,7 @@ ATbool EM_isEqualSessionStatus(EM_SessionStatus arg0, EM_SessionStatus arg1) {
  * \param[in] arg1 second EM_Session to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool EM_isEqualSession(EM_Session arg0, EM_Session arg1) {
+ATbool _EM_isEqualSession(EM_Session arg0, EM_Session arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -538,7 +540,7 @@ ATbool EM_isEqualSession(EM_Session arg0, EM_Session arg1) {
  * \param[in] arg1 second EM_EditorTypeList to be compared
  * \return ATtrue if #arg0 was equal to #arg1, ATfalse otherwise
  */
-ATbool EM_isEqualEditorTypeList(EM_EditorTypeList arg0, EM_EditorTypeList arg1) {
+ATbool _EM_isEqualEditorTypeList(EM_EditorTypeList arg0, EM_EditorTypeList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -555,16 +557,19 @@ ATbool EM_isValidSid(EM_Sid arg) {
 }
 
 /**
- * Assert whether a EM_Sid is a session-id. Always returns ATtrue
+ * Assert whether a EM_Sid is a session-id by checking against the following ATerm pattern: session-id(<"id"(int)>). Always returns ATtrue
  * \param[in] arg input EM_Sid
  * \return ATtrue if #arg corresponds to the signature of a session-id, or ATfalse otherwise
  */
-inline ATbool EM_isSidSessionId(EM_Sid arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, EM_patternSidSessionId, NULL));
-#endif
-  return ATtrue;
+inline ATbool EM_isSidSessionId(EM_Sid arg){
+  /* checking for: session-id */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == EM_afun0) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -617,16 +622,19 @@ ATbool EM_isValidEditorType(EM_EditorType arg) {
 }
 
 /**
- * Assert whether a EM_EditorType is a Default. Always returns ATtrue
+ * Assert whether a EM_EditorType is a Default by checking against the following ATerm pattern: Default(<"name"(str)>). Always returns ATtrue
  * \param[in] arg input EM_EditorType
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
-inline ATbool EM_isEditorTypeDefault(EM_EditorType arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, EM_patternEditorTypeDefault, NULL));
-#endif
-  return ATtrue;
+inline ATbool EM_isEditorTypeDefault(EM_EditorType arg){
+  /* checking for: Default */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == EM_afun1) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -679,16 +687,19 @@ ATbool EM_isValidModuleId(EM_ModuleId arg) {
 }
 
 /**
- * Assert whether a EM_ModuleId is a module-id. Always returns ATtrue
+ * Assert whether a EM_ModuleId is a module-id by checking against the following ATerm pattern: module-id(<"id"(int)>). Always returns ATtrue
  * \param[in] arg input EM_ModuleId
  * \return ATtrue if #arg corresponds to the signature of a module-id, or ATfalse otherwise
  */
-inline ATbool EM_isModuleIdModuleId(EM_ModuleId arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, EM_patternModuleIdModuleId, NULL));
-#endif
-  return ATtrue;
+inline ATbool EM_isModuleIdModuleId(EM_ModuleId arg){
+  /* checking for: module-id */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == EM_afun2) {
+    ATerm arg_arg0 = ATgetArgument(arg, 0);
+    if (ATgetType((ATerm)arg_arg0) == AT_INT) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -744,49 +755,29 @@ ATbool EM_isValidSessionStatus(EM_SessionStatus arg) {
 }
 
 /**
- * Assert whether a EM_SessionStatus is a running. . May not be used to assert correctness of the EM_SessionStatus
+ * Assert whether a EM_SessionStatus is a running by checking against the following ATerm pattern: running. May not be used to assert correctness of the EM_SessionStatus
  * \param[in] arg input EM_SessionStatus
  * \return ATtrue if #arg corresponds to the signature of a running, or ATfalse otherwise
  */
-inline ATbool EM_isSessionStatusRunning(EM_SessionStatus arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, EM_patternSessionStatusRunning);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool EM_isSessionStatusRunning(EM_SessionStatus arg){
+  /* checking for: running */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == EM_afun3) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a EM_SessionStatus is a zombie. . May not be used to assert correctness of the EM_SessionStatus
+ * Assert whether a EM_SessionStatus is a zombie by checking against the following ATerm pattern: zombie. May not be used to assert correctness of the EM_SessionStatus
  * \param[in] arg input EM_SessionStatus
  * \return ATtrue if #arg corresponds to the signature of a zombie, or ATfalse otherwise
  */
-inline ATbool EM_isSessionStatusZombie(EM_SessionStatus arg) {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, EM_patternSessionStatusZombie);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
+inline ATbool EM_isSessionStatusZombie(EM_SessionStatus arg){
+  /* checking for: zombie */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == EM_afun4) {
+    return ATtrue;
   }
+  return ATfalse;
 }
 
 /**
@@ -802,16 +793,22 @@ ATbool EM_isValidSession(EM_Session arg) {
 }
 
 /**
- * Assert whether a EM_Session is a Default. Always returns ATtrue
+ * Assert whether a EM_Session is a Default by checking against the following ATerm pattern: Default(<"id"("Sid")>,<"path"(str)>,<"status"("SessionStatus")>,<"reference-count"(int)>,<"list"("EditorType-list")>). Always returns ATtrue
  * \param[in] arg input EM_Session
  * \return ATtrue if #arg corresponds to the signature of a Default, or ATfalse otherwise
  */
-inline ATbool EM_isSessionDefault(EM_Session arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, EM_patternSessionDefault, NULL, NULL, NULL, NULL, NULL));
-#endif
-  return ATtrue;
+inline ATbool EM_isSessionDefault(EM_Session arg){
+  /* checking for: Default */
+  if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == EM_afun5) {
+    ATerm arg_arg1 = ATgetArgument(arg, 1);
+    if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
+      ATerm arg_arg3 = ATgetArgument(arg, 3);
+      if (ATgetType((ATerm)arg_arg3) == AT_INT) {
+        return ATtrue;
+      }
+    }
+  }
+  return ATfalse;
 }
 
 /**
@@ -1018,71 +1015,43 @@ ATbool EM_isValidEditorTypeList(EM_EditorTypeList arg) {
 }
 
 /**
- * Assert whether a EM_EditorTypeList is a empty. . May not be used to assert correctness of the EM_EditorTypeList
+ * Assert whether a EM_EditorTypeList is a empty by checking against the following ATerm pattern: []. May not be used to assert correctness of the EM_EditorTypeList
  * \param[in] arg input EM_EditorTypeList
  * \return ATtrue if #arg corresponds to the signature of a empty, or ATfalse otherwise
  */
-inline ATbool EM_isEditorTypeListEmpty(EM_EditorTypeList arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool EM_isEditorTypeListEmpty(EM_EditorTypeList arg){
+  if (ATisEmpty((ATermList)arg)) {
+    return ATtrue;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, EM_patternEditorTypeListEmpty));
-#endif
-  return ATtrue;
+  return ATfalse;
 }
 
 /**
- * Assert whether a EM_EditorTypeList is a single. . May not be used to assert correctness of the EM_EditorTypeList
+ * Assert whether a EM_EditorTypeList is a single by checking against the following ATerm pattern: [<head(EditorType)>]. May not be used to assert correctness of the EM_EditorTypeList
  * \param[in] arg input EM_EditorTypeList
  * \return ATtrue if #arg corresponds to the signature of a single, or ATfalse otherwise
  */
-inline ATbool EM_isEditorTypeListSingle(EM_EditorTypeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, EM_patternEditorTypeListSingle, NULL);
-      last_gc = ATgetGCCount();
+inline ATbool EM_isEditorTypeListSingle(EM_EditorTypeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    ATermList arg_list = (ATermList)arg;
+    arg_list = ATgetNext(arg_list);
+    if (ATgetType((ATerm)arg_list) == AT_LIST && ATisEmpty((ATermList)arg_list) == ATtrue) {
+      return ATtrue;
     }
-
-    return last_result;
   }
+  return ATfalse;
 }
 
 /**
- * Assert whether a EM_EditorTypeList is a many. . May not be used to assert correctness of the EM_EditorTypeList
+ * Assert whether a EM_EditorTypeList is a many by checking against the following ATerm pattern: [<head(EditorType)>,<[tail(EditorType-list)]>]. May not be used to assert correctness of the EM_EditorTypeList
  * \param[in] arg input EM_EditorTypeList
  * \return ATtrue if #arg corresponds to the signature of a many, or ATfalse otherwise
  */
-inline ATbool EM_isEditorTypeListMany(EM_EditorTypeList arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
+inline ATbool EM_isEditorTypeListMany(EM_EditorTypeList arg){
+  if (ATgetType((ATerm)arg) == AT_LIST && ATisEmpty((ATermList)arg) == ATfalse) {
+    return ATtrue;
   }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, EM_patternEditorTypeListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+  return ATfalse;
 }
 
 /**

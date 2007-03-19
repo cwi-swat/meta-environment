@@ -10,15 +10,6 @@ extern AFun EM_afun3;
 extern AFun EM_afun0;
 extern AFun EM_afun1;
 
-extern ATerm EM_patternEditorTypeListMany;
-extern ATerm EM_patternEditorTypeListSingle;
-extern ATerm EM_patternEditorTypeListEmpty;
-extern ATerm EM_patternSessionDefault;
-extern ATerm EM_patternSessionStatusZombie;
-extern ATerm EM_patternSessionStatusRunning;
-extern ATerm EM_patternModuleIdModuleId;
-extern ATerm EM_patternEditorTypeDefault;
-extern ATerm EM_patternSidSessionId;
 
 extern void init_EditorManager_dict();
 
