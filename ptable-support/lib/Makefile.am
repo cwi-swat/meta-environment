@@ -17,7 +17,7 @@ libptable_la_SOURCES = \
 	ptable-utils.c \
 	ptable_dict.c
 
-# Developers only, put location of ADT-support here:
+if MAINTAINER_MODE 
 ADT      = ${prefix}
 NAME     = ptable
 PREFIX   = PTBL_
@@ -30,3 +30,5 @@ api: ${NAME}.adt
 
 api-clean:
 	$(RM) ${NAME}.[ch] ${NAME}_dict.[ch] ${NAME}.dict
+
+endif
