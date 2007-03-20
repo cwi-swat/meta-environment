@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar 20 13:35:28 CET 2007 <economop@cwi.nl>
+ * test/regressionTests.sh.src: tidied up script.
+
 Thu Mar 15 16:06:44 CET 2007 <{economop,kooiker}@cwi.nl>
  * restorebrackets/src/restorebrackets-main.c: fixed incorrect merge
 
