@@ -1,5 +1,10 @@
 $Id$
 
+Tue Mar 20 16:22:51 CET 2007 <kooiker@cwi.nl>
+ * lib/lower.c: lowerError checks if an error is valid. If not it tries to
+ create an error from the origin information, otherwise it creates an error
+ with the error to be lowered as subject.
+
 Thu Mar  8 19:03:58 CET 2007 <{economop,kooiker,jurgenv}@cwi.nl>
  * **: regenerated all API's in this package with a new version of 
    ApiGen that generates more efficient code for the is-alternative 

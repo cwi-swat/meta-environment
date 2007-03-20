@@ -160,25 +160,40 @@ ERR_Error PERR_lowerError(PERR_Error pError)
 {
   PERR_StrCon pDescription = PERR_getErrorDescription(pError);
   PERR_SubjectList pSubjects = PERR_getErrorList(pError);
-  char *description = strdup(PERR_lowerStrCon(pDescription));
-  ERR_SubjectList subjects = PERR_lowerSubjects(pSubjects);
-  ERR_Error error;
+  char *description = NULL;
+  ERR_Error error = NULL;
+  ERR_SubjectList subjects;
 
-  if (PERR_isErrorInfo(pError)) {
-    error = ERR_makeErrorInfo(description, subjects);
-  }
-  else if (PERR_isErrorWarning(pError)) {
-    error = ERR_makeErrorWarning(description, subjects);
-  }
-  else if (PERR_isErrorError(pError)) {
-    error = ERR_makeErrorError(description, subjects);
-  }
-  else if (PERR_isErrorFatal(pError)) {
-    error = ERR_makeErrorFatal(description, subjects);
+  if (PERR_isValidError(pError)) {
+    description = strdup(PERR_lowerStrCon(pDescription));
+    subjects = PERR_lowerSubjects(pSubjects);
+
+    if (PERR_isErrorInfo(pError)) {
+      error = ERR_makeErrorInfo(description, subjects);
+    }
+    else if (PERR_isErrorWarning(pError)) {
+      error = ERR_makeErrorWarning(description, subjects);
+    }
+    else if (PERR_isErrorError(pError)) {
+      error = ERR_makeErrorError(description, subjects);
+    }
+    else if (PERR_isErrorFatal(pError)) {
+      error = ERR_makeErrorFatal(description, subjects);
+    }
   }
   else {
-    ATerror("unknown error type: %t\n", pError);
-    error = NULL;
+    ERR_Subject subject;
+    /* Get origin information is clone of PT_getTreeOrigin */
+    ATerm origin = ATgetAnnotation((ATerm)pError, ATparse("origin"));
+    if (origin != NULL) {
+      ERR_Location location = ERR_LocationFromTerm(origin);
+      subject = ERR_makeSubjectLocalized("origin", location);
+    }
+    else {
+      subject = ERR_makeSubjectSubject(ATwriteToString((ATerm)pError));
+    }
+    subjects = ERR_makeSubjectListSingle(subject);
+    error = ERR_makeErrorError("unknown error type", subjects); 
   }
   free(description);
   return error;
