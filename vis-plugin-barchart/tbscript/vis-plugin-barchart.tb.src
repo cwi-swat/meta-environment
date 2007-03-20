@@ -1,0 +1,7 @@
+/**
+ * @name Visualization Bar Chart Plugin Starter
+ * @author Arjen van Schie
+ */
+process StartVisPluginBarChart is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-barchart.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+  
