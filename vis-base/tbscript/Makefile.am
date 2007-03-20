@@ -3,7 +3,9 @@ GENERATED_TBSCRIPTS = \
 	fbmp.tb
 
 EXTRA_DIST = \
-	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) 
+	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) \
+	start-vis.tb \
+	fbmp-open-location.tb 
 
 CLEANFILES = \
 	$(GENERATED_TBSCRIPTS) 
