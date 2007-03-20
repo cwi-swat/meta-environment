@@ -232,7 +232,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
      * @date 20-02-2007
      */
     private void initFactBrowserLayout() {
-        JMenu rstoreFileMenu = new JMenu("FactBrowser");
+        JMenu rstoreFileMenu = new JMenu("Facts");
 
         JMenuItem rstoreOpen = new JMenuItem("Load Rstore");
         rstoreOpen.addActionListener(new ActionListener() {
@@ -242,7 +242,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
         });
         rstoreFileMenu.add(rstoreOpen);
 
-        connectPanelWithMenu(rstoreFileMenu, factBrowserWindow, "FactBrowser",
+        connectPanelWithMenu(rstoreFileMenu, factBrowserWindow, "Facts",
                 StudioImplWithPredefinedLayout.TOP_LEFT);
 
         factBrowserWindow.setMouseListener(this);
