@@ -17,7 +17,7 @@ if [ "a${BIN_DIRS}" != "a" ]; then
     export PATH=${BIN_DIRS}:${PATH}
 fi
 
-MONGREL=`which mongrel_rails`
+MONGREL=${DATA_DIR}/gems/mongrel-1.0.1/bin/mongrel_rails
 
 if [ "$1" != "-u" ] ; then
     echo "Usage $0 -u <url of sisyphus config svn repo> <mongrel options>"
@@ -32,4 +32,4 @@ echo "module Sisyphus" > ${CONFIG_MODULE}
 echo "CONFIGURATION_REPOSITORY = '${CONFIG_REPO}'" >> ${CONFIG_MODULE}
 echo "end" >> ${CONFIG_MODULE} 
 
-exec ${RUBY_INTERPRETER} -r ${CONFIG_MODULE} ${MONGREL} $3 $4 $5 $6 $7 $8 $9 
+exec ${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -r ${CONFIG_MODULE} ${MONGREL} $3 $4 $5 $6 $7 $8 $9 
