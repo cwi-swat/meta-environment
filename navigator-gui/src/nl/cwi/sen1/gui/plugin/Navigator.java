@@ -163,7 +163,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 			}
 		});
 
-		navigatorComponent = new StudioComponentImpl("Navigator", tree) {
+		navigatorComponent = new StudioComponentImpl("Modules", tree) {
 			public void requestClose() throws CloseAbortedException {
 				throw new CloseAbortedException();
 			}

@@ -1,5 +1,9 @@
 $Id$
 
+Tue Mar 20 22:00:04 CET 2007 <jurgenv@cwi.nl>
+ * src/**/Navigator.java: changed name of tab to a noun that describes
+   the contents, such that it is consistent with Processes & Facts.
+
 Tue Feb 13 09:20:07 CET 2007 <kooiker@cwi.nl>
  * src/**/ModuleTreeNode.java:
    - Fix popup menu only shows on leafs
