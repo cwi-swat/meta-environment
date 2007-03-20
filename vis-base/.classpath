@@ -5,10 +5,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/toolbus-java-adapter"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tunit"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/meta-studio"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/relation-stores"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/toolbus-java-adapter"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/tunit"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/meta-studio"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/relation-stores"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/rstore-container"/>
 	<classpathentry kind="lib" path="lib/clover.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
