@@ -1,0 +1,14 @@
+prefix=@prefix@
+
+Name: vis-plugin
+Version: 1.0
+Description: 
+Requires: aterm-java,config-support,toolbus,toolbus-java-adapter,shared-objects,JJTraveler,meta-studio,tunit
+Maintainers=dancingbear
+JarFile=vis-plugin.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/relationstores.jar:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/jfreechart-1.0.4.jar:${prefix}/share/junit-4.1.jar:${prefix}/share/prefuse.jar
+LocalJars=lib/relationstores.jar:lib/jcommon-1.0.8.jar:lib/jfreechart-1.0.4.jar:lib/junit-4.1.jar:lib/prefuse.jar
+MainClass=nl.dancingbear.visplugin.ExampleVisualizationController
+Packages=nl,nl.dancingbear,nl.dancingbear.visplugin,nl.dancingbear.visplugin.table,nl.dancingbear.visplugin.piechartplugin,nl.dancingbear.visplugin.graphplugin
+TestClass=
+ToolBusFlags=-I${prefix}/share/vis-plugin

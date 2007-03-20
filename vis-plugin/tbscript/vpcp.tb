@@ -1,0 +1,131 @@
+tool visualizationPlugin is {}
+
+/**
+ * @name Visualization Plugin Connection Process
+ *
+ * @author Aldert Boerhoop
+ * @author Anton Gerdessen
+ */
+process VPCP is
+let
+  Pid: int,
+  Tid: visualizationPlugin
+in
+  printf("[VPCP] started \n").
+  
+  if true then
+    rec-connect(Tid?).
+    create(VPI(Tid), Pid?)
+  fi *
+  
+  delta
+endlet
+
+
+/**
+ * @name Visualization Plugin Interface
+ *
+ * @author Aldert Boerhoop
+ * @author Arend van Beelen
+ * @author Arjen van Schie
+ * @author Anton Gerdessen
+ */
+process VPI(Tid: visualizationPlugin) is
+let
+  Type : term,
+  Supported : bool,
+  ToolName : str,
+  RstoreId : int,
+  FactId : int,
+  Fact : term,
+  Link : term,
+  ProcessNumber: int,
+  FileName : str,
+  FileId : int,
+  DialogTitle : str,
+  Paths : str,
+  Path : str,
+  Extensions : str
+in
+  printf("[VPI] New tool connected \n").
+  
+  subscribe(vp-get-available-visualization-plugins(<term>)).
+  subscribe(rc-fact-updated(<int>,<int>)).
+  subscribe(rc-rstore-unloaded(<int>)).
+
+  snd-eval(Tid, vp-get-name).
+  rec-value(Tid, vp-name(ToolName?)).
+  ProcessNumber:=process-id.   
+
+  if true then
+    (
+      rec-note(vp-get-available-visualization-plugins(Type?)).
+      printf("[VPI] vp-get-available-visualization-plugins request received\n").
+
+      snd-eval(Tid, vp-is-type-supported(Type)).
+      rec-value(Tid, vp-type-supported(Supported?)).
+      printf("[VPI] vp-type-supported request received(%t)\n",Supported).
+      
+      if equal(Supported, quote(true)) then
+        snd-note(vp-get-available-visualization-plugins(Type, ProcessNumber, ToolName)).
+        printf("[VPI] supported\n")
+      else
+        printf("[VPI] not supported\n").
+        tau
+      fi
+    )
+    +
+    (
+      rec-msg(vp-visualize-fact(ProcessNumber, RstoreId?, FactId?, Fact?)).
+      printf("[VPI] vp-visualize-fact request received\n").
+      snd-do(Tid, vp-visualize-fact(RstoreId, FactId, Fact))
+    )
+    +
+    (
+      rec-note(rc-fact-updated(RstoreId?, FactId?)).
+      printf("[VPI] rc-fact-updated request received(%t)\n",Supported).
+      snd-do(Tid, vp-fact-out-of-date(RstoreId, FactId))
+    )
+    +
+    (
+      rec-event(Tid, vp-link-clicked(Link?)).
+      snd-msg(vp-link-clicked(Link)).      
+      snd-ack-event(Tid, vp-link-clicked(Link))
+    )
+    +
+    (  
+      rec-event(Tid, vp-open-file-dialog(FileId?, DialogTitle?, Paths?, Extensions?)).
+      snd-ack-event(Tid, vp-open-file-dialog(FileId, DialogTitle, Paths, Extensions)).
+     
+      snd-msg(ask-for-file(DialogTitle, [], Extensions)).
+      (
+        (
+          rec-msg(ask-for-file-result(FileName?)).
+          snd-do(Tid, vp-file-dialog-result(FileId, FileName))
+        )
+        +
+        (
+      	  rec-msg(ask-for-file-cancel).
+      	  snd-do(Tid, vp-file-dialog-cancel(FileId))
+        )          
+      )
+    )
+    +
+    (
+      rec-event(Tid, vp-rstore-exported(Path?)).
+      snd-msg(vp-rstore-exported(Path)).
+      snd-ack-event(Tid, vp-rstore-exported(Path))
+    )
+    +
+    (
+      %% Added by: Bas Basten & Anton Lycklama a Nijeholt
+      rec-note(rc-rstore-unloaded(RstoreId?)).
+      printf("[VPI %s] rc-rstore-unloaded received\n", ToolName).
+      snd-do(Tid, vp-rstore-unloaded(RstoreId))
+    )
+  fi *
+  
+  delta
+endlet
+
+toolbus(VPCP)
