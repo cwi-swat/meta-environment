@@ -1,7 +1,0 @@
-/**
- * @name Visualization CSV Plugin Starter
- * @author Arjen van Schie
- */
-process StartVisPluginCsvExport is
-  snd-msg(load-jar("file:///root/meta-environment/installed/share/vis-plugin-csv.jar", "::/root/meta-environment/installed/share/aterm-java.jar:/root/meta-environment/installed/share/shared-objects.jar:/root/meta-environment/installed/share/jjtraveler.jar:/root/meta-environment/installed/share/configapi.jar:/root/meta-environment/installed/share/toolbus-java-adapter.jar:/root/meta-environment/installed/share/meta-studio.jar:/root/meta-environment/installed/share/idw-gpl-1.5.0.jar:/root/meta-environment/installed/share/vis-plugin.jar:/root/meta-environment/installed/share/relationstores.jar:/root/meta-environment/installed/share/jcommon-1.0.8.jar:/root/meta-environment/installed/share/jfreechart-1.0.4.jar:/root/meta-environment/installed/share/junit-4.1.jar:/root/meta-environment/installed/share/prefuse.jar:/root/meta-environment/installed/share/tunit.jar:/root/meta-environment/installed/share/tunit/junit.jar"))
-  
