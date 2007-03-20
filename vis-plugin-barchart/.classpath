@@ -5,5 +5,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/vis-plugin"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
