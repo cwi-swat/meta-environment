@@ -1,0 +1,118 @@
+#ifndef _FBI_
+#define _FBI_
+
+tool factbrowser is { }
+
+/**
+ * @desc FactBrowser Connection Process
+ *
+ * @author Renze de Vries & Arjen van Schie & Michel Rijnders
+ * @date 16-07-2007
+ *
+ * Reviewed & Comments written by Raymond Bergen
+ * Date: 07-03-2007
+ */
+
+process StartFBI is
+  snd-msg(load-jar("file://__PKGDATA__/vis-base.jar", "__PKGDATA__/relationstores.jar:__PKGDATA__/log4j-1.2.14.jar:__PKGDATA__/commons-logging-1.1.jar:__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
+process FBI is
+let 
+  Tid: factbrowser,
+  FactType: term,
+  PluginId: int,
+  PluginName: str,
+  RstorePath: str,
+  RstoreName: str,
+  RstoreId: int,
+  RstoreFacts: list,
+  FactId: int,
+  FileName: str
+in
+  printf("[FBI] FactBrowser Interface creation\n")
+
+    . rec-connect(Tid?)
+    . printf("[FBI] FactBrowser connected\n")
+    %% Added by: Bas Basten & Anton Lycklama a Nijeholt
+    . subscribe(rc-rstore-unloaded(<int>))
+    .
+    if true then
+    (
+      /* Recieve the available visualisation plugins and their supported fact types */
+      rec-msg(fb-visualization-plugin-available(FactType?, PluginId?, PluginName?))
+      . printf("[FBI] VisualizationPlugin registration message received\n")
+       . snd-do(Tid, fb-add-visualization-plugin(FactType, PluginId, PluginName))
+    )
+    +
+    (
+      /* Recieve a load rstore request and initialize the open file dialog */
+      rec-event(Tid, fb-load-rstore)
+      . snd-ack-event(Tid, fb-load-rstore)
+      . snd-msg(ask-for-file("Select the RStore", [], ".rstore"))
+      . 
+      (   
+         (
+            /* Recieve the path of the selected file and initialize the loading of the rstore */
+            rec-msg(ask-for-file-result(FileName?))
+            . snd-msg(fb-load-rstore(FileName))
+         )
+         + 
+         (
+            rec-msg(ask-for-file-cancel)
+         )
+      )	
+    )
+    +
+    (
+      /* Recieve the selected facttype and initialize the gathering of the available visiualizations */
+      rec-event(Tid, fb-type-selected(FactType?))
+     
+       %%Added By: Raymond Bergen & Srinivasan Tharmarajah
+      . snd-ack-event(Tid, fb-type-selected(FactType))
+     
+      . printf("[FBI] A FactType event was received\n")
+      . snd-msg(fb-type-selected(FactType))
+    )
+    +
+    (
+      /* Recieve the rstore facts and initialize the displaying of the facts in the factbrowser */
+      rec-msg(fb-show-rstore-facts(RstoreName?, RstoreId?, RstoreFacts?))
+      . printf("[FBI] Receiving Rstore with Facts\n")
+      . snd-do(Tid, fb-show-rstore-facts(RstoreName, RstoreId, RstoreFacts))
+    )
+    +
+    (
+      /* Recieve the selected visualization type and initialize the display of the visualization */
+      rec-event(Tid, fb-visualization-selected(RstoreId?, FactId?, PluginId?))
+    
+      %%Added By: Raymond Bergen & Srinivasan Tharmarajah
+      . snd-ack-event(Tid, fb-visualization-selected(RstoreId, FactId, PluginId))
+      . printf("[FBI] fb-visualization-selected request received\n")
+      . snd-msg(fb-visualization-selected(RstoreId, FactId, PluginId))
+    )    
+    +
+    (
+      %% Added by: Bas Basten & Anton Lycklama a Nijeholt
+      rec-event(Tid, fb-unload-rstore(RstoreId?))
+      . printf("[FBI] fb-unload-rstore event recieved\n")
+      . snd-ack-event(Tid, fb-unload-rstore(RstoreId))
+      . snd-msg(fb-unload-rstore(RstoreId))
+    )
+    +
+    (
+      %% Added by: Bas Basten & Anton Lycklama a Nijeholt    
+      rec-note(rc-rstore-unloaded(RstoreId?))
+      . printf("[FBI] rc-rstore-unloaded note recieved\n")
+      . snd-do(Tid, fb-rstore-unloaded(RstoreId))
+    )
+    .
+    printf("[FBI] FactBrowser process closed\n")
+  fi *
+    delta
+endlet
+
+
+toolbus(FBI)
+toolbus(StartFBI)
+
+#endif /*_FBI_*/

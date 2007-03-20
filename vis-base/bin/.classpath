@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/|build/|dist/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/aterm-java.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/configapi.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/dialog-gui.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/editor-plugin.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/error-gui.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/example-plugin.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/graph.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/graph-painter.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/idw-gpl-1.4.0.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/ioapi.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/jcommon-1.0.8.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/jfreechart-1.0.4.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/jjtraveler.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/jlfgr-1_0.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/junit-4.1.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/meta-studio.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/module-manager.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/moduleapi.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/moduledetails.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/navigator.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/prefuse.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/progress.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/relationstores.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/rstore-container.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/shared-objects.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/tide.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/toolbus-java-adapter.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/tunit.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/vis-plugin.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/vis-plugin-graph.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/vis-plugin-piechart.jar"/>
+	<classpathentry kind="lib" path="/root/meta-old/installed/share/vis-plugin-table.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="lib/relationstores.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

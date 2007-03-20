@@ -1,0 +1,191 @@
+
+
+
+#define TRY(a) if not-equal(true, Error) then \
+                 ( a ) \
+                 + \
+                 Error := true delay(5000) \
+               else \
+                 tau \
+               fi \
+
+/**
+ * Scenario 1: The user asks to load an RStore
+ * in msg:fb-load-rstore(filename)
+ * out msg:rc-load-rstore(filename)
+ * in msg:rc-rstore-loaded(filename, rstoreId)
+ * out msg:rc-get-rstore-facts(rstoreId)
+ * in msg:rc-get-rstore-facts(rstoreId, facts[] <factId, factName, rtype>)
+ * out msg:fb-show-rstore-facts(filename, rstoreId, facts[])
+ * 
+ * @author Bas Basten & Anton Lycklama a Nijeholt
+ * @date 07-03-2007
+ */ 
+process SCENARIO-1 is
+let
+  RStoreFile : str,
+  RStoreId : int,
+  Facts : term,
+  Error : bool
+in
+  (
+    rec-msg(start-scenario(1)) .
+
+    Error := false .
+    
+    RStoreFile := "something.rstore" .    
+    TRY(snd-msg(fb-load-rstore(RStoreFile))) .        
+    TRY(rec-msg(rc-load-rstore(RStoreFile))) .
+    
+    RStoreId := 123 .    
+    TRY(snd-msg(rc-rstore-loaded(RStoreFile, RStoreId))) .
+    TRY(rec-msg(rc-get-rstore-facts(RStoreId))) .
+    
+    Facts := [[1, "fact1", "rtype1" ], [2, "fact2", "rtype2"]] .        
+    TRY(snd-msg(rc-get-rstore-facts(RStoreId, Facts))) .
+    TRY(rec-msg(fb-show-rstore-facts(RStoreFile, RStoreId, Facts))) .
+
+    if not-equal(true, Error) then
+      snd-msg(scenario-successful(1))
+    else
+      snd-msg(scenario-failed(1))
+    fi
+  )
+  *
+  delta
+endlet
+
+
+/**
+ * Scenario 2: The user selects a fact in the FactBrowser
+ * in msg:fb-type-selected(rtype)
+ * out note:vp-get-available-visualization-plugins(rtype)
+ * in note:vp-get-available-visualization-plugins(rtype, pluginId, pluginName)
+ * out msg:fb-visualization-plugin-available(rtype, pluginId, pluginName)
+ *
+ * @author Bas Basten & Anton Lycklama a Nijeholt
+ * @date 07-03-2007 
+ */
+process SCENARIO-2 is
+let
+  RType : term,
+  PluginId1 : int,
+  PluginName1 : str,
+  PluginId2 : int,
+  PluginName2 : str,
+  Error : bool
+in
+  subscribe(vp-get-available-visualization-plugins(<term>)) .
+  (
+    rec-msg(start-scenario(2)) .
+  
+    Error := false .
+    
+    RType := "rtype1" .        
+    TRY(snd-msg(fb-type-selected(RType))) .
+    TRY(rec-note(vp-get-available-visualization-plugins(RType))) .
+
+    %% Simulate Plugin 1
+    PluginId1 := 456 .
+    PluginName1 := "SomeCoolMetaStudioVisualizationPlugin" .    
+    TRY(snd-note(vp-get-available-visualization-plugins(RType, PluginId1, PluginName1))) .    
+    TRY(rec-msg(fb-visualization-plugin-available(RType, PluginId1, PluginName1))) .        
+    
+    %% Simulate Plugin 2
+    PluginId2 := 133 .
+    PluginName2 := "MetaStudioVisualizationPlugin" .
+    TRY(snd-note(vp-get-available-visualization-plugins(RType, PluginId2, PluginName2))) .                
+    TRY(rec-msg(fb-visualization-plugin-available(RType, PluginId2, PluginName2))) .
+
+    if not-equal(true, Error) then
+      snd-msg(scenario-successful(2))
+    else
+      snd-msg(scenario-failed(2))
+    fi
+  )
+  *
+  delta
+endlet
+
+
+/**
+ * Scenario 3: The user starts a visualization
+ * in msg:fb-visualization-selected(rstoreId, factId, pluginId)
+ * out msg:rc-get-fact-data(rstoreId, factId)
+ * in msg:rc-get-fact-data(rstoreId, factId, rtuple)
+ * out msg: vp-visualize-fact(pluginId, rstoreId, factId, rtuple)
+ *
+ * @author Bas Basten & Anton Lycklama a Nijeholt
+ * @date 07-03-2007
+ */
+process SCENARIO-3 is
+let
+  RStoreId : int,
+  FactId : int,
+  PluginId : int,
+  RTuple : term,
+  Error : bool
+in
+  (
+    rec-msg(start-scenario(3)) .
+
+    Error := false .
+
+    RStoreId := 123 .
+    FactId := 456 .
+    PluginId := 789 .
+    TRY(snd-msg(fb-visualization-selected(RStoreId, FactId, PluginId))) .
+    TRY(rec-msg(rc-get-fact-data(RStoreId, FactId))) .
+
+    RTuple := ["SomeTuple", "rtype1", [["a", 1], ["b", 2], ["c", 3]]] .
+    TRY(snd-msg(rc-get-fact-data(RStoreId, FactId, RTuple))) .
+    TRY(rec-msg(vp-visualize-fact(PluginId, RStoreId, FactId, RTuple))) .
+
+    if not-equal(true, Error) then
+      snd-msg(scenario-successful(3))
+    else
+      snd-msg(scenario-failed(3))
+    fi
+  )
+  *
+  delta
+endlet
+
+tool fbmp-test-tool is {}
+
+/**
+ * FactBrowser Management Process Test Stub.
+ * This test process creates 3 scenario processes.
+ * each scenario can be remotely started from the
+ * Java ToolStub. If the scenario succeeds the tool
+ * will receive a snd-do(scenario-successful<int>)
+ * with the corresponding started scenario number.
+ *
+ * @author Bas Basten & Anton Lycklama a Nijeholt
+ * @date 07-03-2007
+ */
+process FBMP-TEST is
+let
+  Tid : fbmp-test-tool,
+  ScenarioId : int,
+  Pid : int
+in
+  create(SCENARIO-1, Pid?) .
+  create(SCENARIO-2, Pid?) .
+  create(SCENARIO-3, Pid?) .
+  rec-connect(Tid?) .
+  (
+    rec-event(Tid, start-scenario(ScenarioId?)) .
+    snd-ack-event(Tid, start-scenario(ScenarioId)) .
+    snd-msg(start-scenario(ScenarioId)) .
+    (
+      rec-msg(scenario-successful(ScenarioId)) .
+      snd-do(Tid, scenario-successful(ScenarioId))
+    )
+    +
+    (
+      rec-msg(scenario-failed(ScenarioId)) .
+      snd-do(Tid, scenario-failed(ScenarioId))
+    )
+  ) * delta
+endlet

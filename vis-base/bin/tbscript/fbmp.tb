@@ -1,0 +1,74 @@
+/**
+ * @desc FactBrowser Management Process
+ *
+ * @author Arjen van Schie & Michel Rijnders
+ * @date 19-02-2007
+ *
+ * Reviewed by Bas Basten & Anton Lycklama a Nijeholt
+ * Date: 07-03-2007
+ */
+
+process FBMP is
+let    
+  VpiPid: int,
+  RciPid: int,
+  Path: str,
+  RstoreId: int,
+  RstoreFacts: list,
+  RstoreName: str,
+  Type: term, /*rtype*/
+  FactId: int,
+  FactData: term,
+  PluginName: str,
+  PluginId: int
+in
+  printf("[FBMP] FactBrowser Management Proces creation\n")
+
+  . subscribe( vp-get-available-visualization-plugins( <term>, <int>, <str> ) )
+  . if true then
+    (   
+      /* request for loading rstore) */
+      rec-msg( fb-load-rstore( Path? ) )
+      . printf("[FBMP] fb-load-rstore request received\n")
+      . snd-msg( rc-load-rstore( Path ) )
+    )
+    +
+    (    
+      /* Rstore loaded, get facts */
+      rec-msg( rc-rstore-loaded( Path?, RstoreId? ) )
+      . printf("[FBMP] rc-rstore-loaded received\n")
+      . snd-msg( rc-get-rstore-facts( RstoreId) )
+      . rec-msg( rc-get-rstore-facts( RstoreId?, RstoreFacts? ) )
+      . printf("[FBMP] rc-get-rstore-facts received\n")
+      . snd-msg( fb-show-rstore-facts( Path, RstoreId, RstoreFacts ) ) 
+    )
+    +
+    (    
+      /* Type selected, get available plugins */                    
+      rec-msg( fb-type-selected( Type? ) )
+      . printf("[FBMP] fb-type-selected received\n")
+      . snd-note( vp-get-available-visualization-plugins( Type ) )
+      . printf ("[FBMP] request sent\n")
+    )
+    +
+    (
+      /* Available plugin announcement */
+      rec-note( vp-get-available-visualization-plugins( Type?, PluginId?, PluginName? ) )
+      . printf("[FBMP] vp-get-available-visualization-plugins received from %s\n", PluginName)
+      . snd-msg( fb-visualization-plugin-available( Type, PluginId, PluginName ) )
+    )
+    +
+    (    
+      /* Visualize fact */
+      rec-msg( fb-visualization-selected( RstoreId?, FactId?, PluginId? ) )
+      . printf("[FBMP] fb-visualization-selected received\n")
+      . snd-msg( rc-get-fact-data( RstoreId, FactId ) )
+      . rec-msg( rc-get-fact-data( RstoreId?, FactId?, FactData? ) )
+      . printf("[FBMP] rc-get-fact-data received\n")
+      . snd-msg( vp-visualize-fact( PluginId, RstoreId, FactId, FactData ) )
+    )
+  fi *
+    delta
+endlet
+
+toolbus(FBMP)
