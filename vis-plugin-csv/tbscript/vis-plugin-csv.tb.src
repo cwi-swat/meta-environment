@@ -1,0 +1,7 @@
+/**
+ * @name Visualization CSV Plugin Starter
+ * @author Arjen van Schie
+ */
+process StartVisPluginCsvExport is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-csv.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+  
