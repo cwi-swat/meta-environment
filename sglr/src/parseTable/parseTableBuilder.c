@@ -32,7 +32,9 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   SGLR_PTBL_initErrorList(); 
 
   if (!PTBL_isValidParseTable(extParseTable)) { 
-    ATwarning("Parse table format error\n");
+    if (PARSER_getVerboseFlag() == ATtrue) {
+      ATwarning("Parse table format error\n");
+    }
     SGLR_PTBL_addErrorError(path, "Parse table format error");
     extParseTable = NULL;
     return NULL;
@@ -41,7 +43,9 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   version = PTBL_getParseTableVersion(extParseTable);
 
   if (!PTBL_isValidVersion(version)) {
-    ATwarning("Invalid parse table version\n");
+    if (PARSER_getVerboseFlag() == ATtrue) {
+      ATwarning("Invalid parse table version\n");
+    }
     SGLR_PTBL_addErrorError(path, "Invalid parse table version");
     extParseTable = NULL;
     return NULL;
@@ -58,7 +62,9 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   if (nrOfStates == 2 &&
       PTBL_isChoicesEmpty(PTBL_getStateChoices(PTBL_getStatesHead(states))) &&
       PTBL_isChoicesEmpty(PTBL_getStateChoices(PTBL_getStatesHead(PTBL_getStatesTail(states))))) {
-    ATwarning("No start state defined\n");
+    if (PARSER_getVerboseFlag() == ATtrue) {
+      ATwarning("No start state defined\n");
+    }
     SGLR_PTBL_addErrorError(path, "No start state defined");
     return NULL;
   }

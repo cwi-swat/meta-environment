@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar 20 13:44:26 CET 2007 <economop@cwi.nl>
+ * src/parseTable/parseTable.c,parseTableBuilder.c: tidied up ATwarnings.
+
 Tue Mar 20 13:35:28 CET 2007 <economop@cwi.nl>
  * test/regressionTests.sh.src: tidied up script.
 

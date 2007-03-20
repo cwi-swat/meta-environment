@@ -450,7 +450,6 @@ ATbool SGLR_PTBL_isErrorListEmpty() {
 }
 
 void SGLR_PTBL_addErrorError(const char *path, const char *contentDescription) {
-  ATwarning("Path: %s, Description: %s\n", path, contentDescription);
   if (ERR_isErrorListEmpty(ptErrorList)) {
     ERR_Subject subject;
     ERR_Error error;
