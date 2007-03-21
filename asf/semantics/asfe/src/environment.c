@@ -10,7 +10,24 @@ ATerm fail_env = NULL;
 #define LISTVAR "*list-variable*"
 #define PLAINVAR "*variable*"
 
-/* (List)variable functions and slicing functions */
+static ATerm varName(PT_Tree var) 
+{
+  static ATermTable cache = NULL;
+  ATerm result = NULL;
+
+  if (cache == NULL) {
+    cache = ATtableCreate(1024, 75);
+  }
+
+  result = ATtableGet(cache, (ATerm) var);
+
+  if (result == NULL) {
+    result = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
+    ATtablePut(cache, (ATerm) var, result);
+  }
+
+  return result;
+}
 
 /* Retrieve the value of a variable. */
 PT_Tree getVariableValue(ATerm env, PT_Tree var) {
@@ -30,7 +47,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var) {
   }
   else {
     ATermList list = (ATermList) env;
-    ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
+    ATerm atVar = varName(var);
 
     while (!ATisEmpty(list)) {
       ATermAppl tuple = (ATermAppl) ATgetFirst(list);
@@ -49,7 +66,7 @@ PT_Tree getVariableValue(ATerm env, PT_Tree var) {
 /* Retrieve the value of a list variable. */
 Slice getListVariableValue(ATerm env, PT_Tree var) {
   ATermList list = (ATermList) env;
-  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
+  ATerm atVar = varName(var);
 
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
@@ -66,7 +83,7 @@ Slice getListVariableValue(ATerm env, PT_Tree var) {
 
 /* Store the value of a variable in the value environment. */
 ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value) {
-  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
+  ATerm atVar = varName(var);
   ATerm atValue = PT_TreeToTerm(value);
 
   return (ATerm) ATinsert((ATermList) env,
@@ -76,7 +93,7 @@ ATerm putVariableValue(ATerm env, PT_Tree var, PT_Tree value) {
 
 
 ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end) {
-  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
+  ATerm atVar = varName(var);
   ATerm atStart = PT_ArgsToTerm(start);
   ATerm atEnd = PT_ArgsToTerm(end);
 
@@ -89,7 +106,7 @@ ATerm putListVariableValue(ATerm env, PT_Tree var, PT_Args start, PT_Args end) {
 /* See if a variable is bound. */
 ATbool isBoundVariable(ATerm env, PT_Tree var) {
   ATermList list = (ATermList) env;
-  ATerm atVar = ATmake("<str>", PT_yieldTreeToString(var, ATfalse));
+  ATerm atVar = varName(var);
 
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
