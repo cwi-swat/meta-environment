@@ -8,6 +8,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import sun.rmi.runtime.GetThreadPoolAction;
+
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
@@ -63,7 +65,7 @@ public abstract class VisualizationPluginWindow {
         m_factId = factId;
         m_fact = fact;
         m_factory = factory;
-        m_title = pluginName + "=>" + fact.getRtype().toString();
+        m_title = fact.getVariable().getString();
         m_controller = controller;
         m_windowId = windowId;
     }
