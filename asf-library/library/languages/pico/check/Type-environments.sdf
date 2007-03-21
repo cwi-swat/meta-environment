@@ -4,7 +4,7 @@ imports languages/pico/syntax/Identifiers
 imports containers/Table[PICO-ID TYPE]
 
 exports 
-  sorts TENV
+  sorts TENV TYPE 
 
   aliases
     Table[[PICO-ID,TYPE]] -> TENV
