@@ -360,6 +360,12 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, void *extra
   PT_Production prod = PT_getTreeProd(appl);
   PT_Tree reduct;
   ATbool isMemoFunction = ATfalse;
+  static PT_Attr ambAttr = NULL;
+
+  if (ambAttr == NULL) {
+     ambAttr = PT_makeAttrTerm(ATparse("cons(\"ambiguity-constructor\")"));
+     PT_protectAttr(&ambAttr);
+  }
 
   /* retrieve possible memoized reduct, ambiguity constructors are
    * memoized by default to try and prevent exponential behavior
@@ -367,8 +373,7 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth, void *extra
    * also has to memoize its output.
   */
   if (PT_hasProductionMemoAttr(prod) ||
-      PT_hasProductionCertainAttr(prod, 
-				  PT_makeAttrTerm(ATparse("cons(\"ambiguity-constructor\")")))) {
+      PT_hasProductionCertainAttr(prod, ambAttr)) {
     PT_Tree memo = MemoTableLookup(memo_table, appl);
     isMemoFunction = ATtrue;
 
