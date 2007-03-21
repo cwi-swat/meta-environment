@@ -3,6 +3,8 @@
 
 #define AMB_CONSTRUCTOR_ATTR "cons(\"ambiguity-constructor\")"
 
+static PT_Attr AmbConstructor = NULL;
+
 PT_Tree ASC_ambToConstructor(PT_Tree amb) 
 {
   PT_Args ambs;
@@ -51,7 +53,12 @@ PT_Tree ASC_ambToConstructor(PT_Tree amb)
     /* TODO: support kernel and lexical ambiguities */
     return amb;
   }
- 
+
+  if (AmbConstructor == NULL) {
+    AmbConstructor = PT_makeAttrTerm(ATparse(AMB_CONSTRUCTOR_ATTR));
+    PT_protectAttr(&AmbConstructor);
+  }
+
   attributes = PT_makeAttributesAttrs(PT_makeAttrsSingle(
 			 PT_makeAttrTerm(ATparse(AMB_CONSTRUCTOR_ATTR))));
 
@@ -67,10 +74,14 @@ PT_Tree ASC_ambToConstructor(PT_Tree amb)
 
 ATbool ASC_isAmbiguityConstructor(PT_Tree tree) 
 {
+  if (AmbConstructor == NULL) {
+    AmbConstructor = PT_makeAttrTerm(ATparse(AMB_CONSTRUCTOR_ATTR));
+    PT_protectAttr(&AmbConstructor);
+  }
+
   if (PT_hasTreeProd(tree)) {
     return PT_hasProductionCertainAttr(PT_getTreeProd(tree),
-				       PT_makeAttrTerm(
-				       ATparse(AMB_CONSTRUCTOR_ATTR)));
+				       AmbConstructor);
   }
   return ATfalse;
 }
