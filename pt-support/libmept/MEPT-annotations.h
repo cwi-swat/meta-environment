@@ -11,5 +11,6 @@ PT_ParseTree PT_setParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key, ATerm
 ATerm PT_getTreeAnnotation(PT_Tree tree, ATerm key);
 PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
+PT_Tree PT_removeTreeAnnotationsMemo(PT_Tree arg) ;
 
 #endif

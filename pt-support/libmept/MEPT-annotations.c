@@ -17,7 +17,6 @@ PT_Tree PT_setTreeAnnotations(PT_Tree tree, ATerm annos)
   return (PT_Tree)AT_setAnnotations((ATerm) tree, annos);
 }
 
-
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 {
   ATerm atArg = PT_TreeToTerm(arg);
@@ -28,6 +27,26 @@ PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 
   return PT_TreeFromTerm(atArg);
 }
+
+PT_Tree PT_removeTreeAnnotationsMemo(PT_Tree arg) 
+{
+  static ATermTable cache = NULL;
+  PT_Tree result = NULL;
+
+  if (cache == NULL) {
+    cache = ATtableCreate(1024, 75);
+  }
+
+  result = (PT_Tree) ATtableGet(cache, (ATerm) arg);
+
+  if (result == NULL) {
+    result = PT_removeTreeAnnotations(arg);
+    ATtablePut(cache, (ATerm) arg, (ATerm) result);
+  }
+
+  return result;
+}
+
 
 
 ATerm PT_getTreeAnnotation(PT_Tree tree, ATerm key)
