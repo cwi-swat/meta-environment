@@ -55,8 +55,8 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public ATerm createModule() {
-		ModuleId moduleId = factory
-				.makeModuleId_ModuleId(moduleDB.getNextModuleId());
+		ModuleId moduleId = factory.makeModuleId_ModuleId(moduleDB
+				.getNextModuleId());
 		moduleDB.addModule(new Module(factory), moduleId);
 		return pureFactory.make("snd-value(module-id(<term>))", moduleId
 				.toTerm());
@@ -82,108 +82,159 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public ATerm getAllAttributes(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
-		AttributeStore attributes = moduleDB.getAllAttributes(moduleId);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
+			AttributeStore attributes = moduleDB.getAllAttributes(moduleId);
 
-		return pureFactory.make("snd-value(attributes(<term>))", attributes
-				.toTerm());
+			return pureFactory.make("snd-value(attributes(<term>))", attributes
+					.toTerm());
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+			return pureFactory.make("snd-value(attributes([]))");
+		}
 	}
 
 	public void deleteModule(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
-		moduleDB.removeModule(moduleId);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
+			moduleDB.removeModule(moduleId);
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+		}
 	}
 
 	public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
-		moduleDB.setAttribute(moduleId, namespace, key, value);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
+			moduleDB.setAttribute(moduleId, namespace, key, value);
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+		}
 	}
 
 	public ATerm getAttribute(ATerm id, ATerm namespace, ATerm key) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
-		ATerm value = moduleDB.getModuleAttribute(moduleId, namespace, key);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
+			ATerm value = moduleDB.getModuleAttribute(moduleId, namespace, key);
 
-		if (value == null) {
+			if (value == null) {
+				return pureFactory.parse("snd-value(no-such-key)");
+			}
+
+			return pureFactory.make("snd-value(attribute(<term>))", value);
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
 			return pureFactory.parse("snd-value(no-such-key)");
 		}
-
-		return pureFactory.make("snd-value(attribute(<term>))", value);
 	}
 
 	public void deleteAttribute(ATerm id, ATerm namespace, ATerm key) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		moduleDB.deleteModuleAttribute(moduleId, namespace, key);
+			moduleDB.deleteModuleAttribute(moduleId, namespace, key);
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+		}
 	}
 
 	public void addDependency(ATerm from, ATerm to) {
-		ModuleId moduleFromId = factory.ModuleIdFromTerm(from);
-		ModuleId moduleToId = factory.ModuleIdFromTerm(to);
+		try {
+			ModuleId moduleFromId = factory.ModuleIdFromTerm(from);
+			ModuleId moduleToId = factory.ModuleIdFromTerm(to);
 
-		moduleDB.addDependency(moduleFromId, moduleToId);
+			moduleDB.addDependency(moduleFromId, moduleToId);
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+		}
 	}
 
 	public ATerm getChildrenModules(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set<ModuleId> dependencies = moduleDB.getChildren(moduleId);
+			Set<ModuleId> dependencies = moduleDB.getChildren(moduleId);
 
-		if (dependencies == null) {
-			return pureFactory.parse("snd-value(no-such-module)");
+			if (dependencies == null) {
+				return pureFactory.parse("snd-value(no-such-module)");
+			}
+
+			return pureFactory.make("snd-value(children-modules(<list>))",
+					extractATermList(dependencies));
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+			return pureFactory.make("snd-value(children-modules([]))");
 		}
-
-		return pureFactory.make("snd-value(children-modules(<list>))",
-				extractATermList(dependencies));
 	}
 
 	public ATerm getAllParentModules(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set<ModuleId> dependencies = moduleDB.getAllParents(moduleId);
+			Set<ModuleId> dependencies = moduleDB.getAllParents(moduleId);
 
-		if (dependencies == null) {
-			return pureFactory.parse("snd-value(no-such-module)");
+			if (dependencies == null) {
+				return pureFactory.parse("snd-value(no-such-module)");
+			}
+
+			return pureFactory.make("snd-value(all-parent-modules(<list>))",
+					extractATermList(dependencies));
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+
+			return pureFactory.make("snd-value(all-parent-modules([]))");
 		}
-
-		return pureFactory.make("snd-value(all-parent-modules(<list>))",
-				extractATermList(dependencies));
-
 	}
 
 	public ATerm getParentModules(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set<ModuleId> dependencies = moduleDB.getParents(moduleId);
+			Set<ModuleId> dependencies = moduleDB.getParents(moduleId);
 
-		if (dependencies == null) {
+			if (dependencies == null) {
+				return pureFactory.parse("snd-value(no-such-module)");
+			}
+
+			return pureFactory.make("snd-value(parent-modules(<list>))",
+					extractATermList(dependencies));
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
 			return pureFactory.parse("snd-value(no-such-module)");
 		}
-
-		return pureFactory.make("snd-value(parent-modules(<list>))",
-				extractATermList(dependencies));
-
 	}
 
 	public ATerm getAllChildrenModules(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set<ModuleId> dependencies = moduleDB.getAllChildren(moduleId);
+			Set<ModuleId> dependencies = moduleDB.getAllChildren(moduleId);
 
-		if (dependencies == null) {
+			if (dependencies == null) {
+				return pureFactory.parse("snd-value(no-such-module)");
+			}
+
+			return pureFactory.make("snd-value(all-children-modules(<list>))",
+					extractATermList(dependencies));
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
 			return pureFactory.parse("snd-value(no-such-module)");
 		}
-
-		return pureFactory.make("snd-value(all-children-modules(<list>))",
-				extractATermList(dependencies));
 	}
 
 	public ATerm getClosableModules(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set<ModuleId> closableModules = moduleDB.getClosableModules(moduleId);
+			Set<ModuleId> closableModules = moduleDB
+					.getClosableModules(moduleId);
 
-		return pureFactory.make("snd-value(closable-modules(<list>))",
-				extractATermList(closableModules));
+			return pureFactory.make("snd-value(closable-modules(<list>))",
+					extractATermList(closableModules));
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+			return pureFactory.make("snd-value(closable-modules([]))");
+		}
 	}
 
 	public ATerm getDependencies() {
@@ -225,8 +276,12 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public void deleteDependencies(ATerm id) {
-		ModuleId moduleId = factory.ModuleIdFromTerm(id);
-		moduleDB.deleteDependencies(moduleId);
+		try {
+			ModuleId moduleId = factory.ModuleIdFromTerm(id);
+			moduleDB.deleteDependencies(moduleId);
+		} catch (IllegalArgumentException e) {
+			System.err.println("warning:" + e);
+		}
 	}
 
 	public ATerm getModuleGraph(ATerm namespace) {
