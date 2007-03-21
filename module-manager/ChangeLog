@@ -1,5 +1,8 @@
 $Id$
 
+Wed Mar 21 15:10:16 CET 2007 <jurgenv@cwi.nl>
+ * ModuleDatabase.java: made robust against undefined module id's.
+
 Wed Mar  7 11:22:52 CET 2007 <kooiker@cwi.nl>
  * module-manager.idef.src:
    - Strongly typed variable declarations
