@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Mar 21 11:06:42 CET 2007 <jurgenv@cwi.nl>
+ * tbscript/parse-utils.tb: reactivated support for parsing with
+   heuristic disambiguation filters. Otherwise all specifications break.
+
 Mon Mar 19 10:50:36 CET 2007 <{economop,kooiker}@cwi.nl>
  * tbscripts/parse-utils.tb:
    - Removed unused process ParseErrorToSummary
