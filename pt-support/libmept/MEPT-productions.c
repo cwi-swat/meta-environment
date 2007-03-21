@@ -226,29 +226,10 @@ ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
 
 /*@{ attributes */
 
-
-typedef struct PT_BoolAttrTuple_Tag {
-  ATbool bool;
-  PT_Attr attr;
-} PT_BoolAttrTuple;
-
-
-
-static PT_Attr PT_matchAttr(PT_Attr attr, PT_AttrVisitorData data)
-{
-  if (PT_isEqualAttr(((PT_BoolAttrTuple*)data)->attr,attr)) {
-    ((PT_BoolAttrTuple*)data)->bool = ATtrue;
-  }
-
-  return attr;
-}           
-
-
 ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
 {
   PT_Attributes attributes = PT_getProductionAttributes(prod);
   PT_Attrs attrs;
-  PT_BoolAttrTuple data;
 
   if (PT_isProductionDefault(prod)) {
     if (PT_isAttributesNoAttrs(attributes)) {
@@ -257,12 +238,13 @@ ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
 
     attrs = PT_getAttributesAttrs(attributes);
 
-    data.bool = ATfalse;
-    data.attr = attr;
+    for (; !PT_isAttrsEmpty(attrs); attrs = PT_getAttrsTail(attrs)) {
+      PT_Attr head = PT_getAttrsHead(attrs);
 
-    PT_foreachAttrInAttrs(attrs, PT_matchAttr, (PT_AttrVisitorData)&data);    
-
-    return data.bool;
+      if (PT_isEqualAttr(head, attr)) {
+	return ATtrue;
+      }
+    }
   }
 
   return ATfalse;
@@ -271,48 +253,97 @@ ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
 
 ATbool PT_hasProductionBracketAttr(PT_Production prod)
 {
-  return PT_hasProductionCertainAttr(prod, PT_makeAttrBracket());
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrBracket();
+    PT_protectAttr(&attr);
+  }
+  return PT_hasProductionCertainAttr(prod, attr);
 }
 
 
 ATbool PT_hasProductionMemoAttr(PT_Production prod)
 {
-  return PT_hasProductionCertainAttr(prod, PT_makeAttrTerm(ATparse("memo")));
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrTerm(ATparse("memo"));
+    PT_protectAttr(&attr);
+  }
+
+  return PT_hasProductionCertainAttr(prod, attr);
 }
 
 
 ATbool PT_hasProductionTraversalAttribute(PT_Production prod)
 {
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrTerm(ATparse("traversal"));
+    PT_protectAttr(&attr);
+  }
   return PT_hasProductionCertainAttr(prod, 
-				     PT_makeAttrTerm(ATparse("traversal")));
+				     attr);
 }
 
 
 ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod)
 {
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrTerm(ATparse("lexical-constructor"));
+    PT_protectAttr(&attr);
+  }
   return PT_hasProductionCertainAttr(prod, 
-				     PT_makeAttrTerm(ATparse("lexical-constructor")));
+				     attr);
 }
 
 
 ATbool PT_hasProductionConstructorAttr(PT_Production prod)
-{
+{  
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrTerm(ATparse("constructor"));
+    PT_protectAttr(&attr);
+  }
   return PT_hasProductionCertainAttr(prod, 
-				     PT_makeAttrTerm(ATparse("constructor")));
+				     attr);
 }
 
 ATbool PT_isProductionReject(PT_Production prod) {
-    return PT_hasProductionCertainAttr(prod, PT_makeAttrReject());
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrReject();
+    PT_protectAttr(&attr);
+  }
+    return PT_hasProductionCertainAttr(prod, attr);
 }
 
 
 ATbool PT_isProductionAvoid(PT_Production prod) {
-    return PT_hasProductionCertainAttr(prod, PT_makeAttrAvoid());
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrAvoid();
+    PT_protectAttr(&attr);
+  }
+    return PT_hasProductionCertainAttr(prod, attr);
 }
 
 
 ATbool PT_isProductionPrefer(PT_Production prod) {
-    return PT_hasProductionCertainAttr(prod, PT_makeAttrPrefer());
+  static PT_Attr attr = NULL;
+
+  if (attr == NULL) {
+    attr = PT_makeAttrPrefer();
+    PT_protectAttr(&attr);
+  }
+  return PT_hasProductionCertainAttr(prod, attr);
 }
 
 /*@}*/
