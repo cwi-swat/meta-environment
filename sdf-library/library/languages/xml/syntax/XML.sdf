@@ -13,8 +13,8 @@ exports
       Children Choice Comment ConditionalSect Content ContentSpec Dash DefaultDecl Digit Document
       DocTypeDecl Element ETag ElementDecl EmptyElementTag EncName
       EncodingDecl EntityDecl EntityDef EntityRef EntityValue EnumeratedType
-      Enumeration Eq ExtParsedEnt ExtPe ExtSubset ExtSubsetDecl ExternalId GEDecl
-      ISO639Code IanaCode Ignore IgnoreSect IgnoreSectContents IncludeSect LangCode
+      Enumeration Eq %ExtParsedEnt ExtPe% ExtSubset ExtSubsetDecl ExternalId GEDecl
+      ISO639Code IanaCode %Ignore IgnoreSect IgnoreSectContents% IncludeSect LangCode
       LanguageId Letter MarkUpDecl Misc Mixed NDataDecl Name NameChar Names Nmtoken
       Nmtokens NonEmptyElementTag NotationDecl NotationType PEDecl PEDef PEReference PI PITarget Prolog
       PubidChar PubidLiteral PublicID Reference S SDDecl STag Seq StringType SubCode
