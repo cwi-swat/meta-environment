@@ -11,6 +11,55 @@
 #include <editor-error-display.tb>
 #include <text-utils.tb>
 
+process EditAnonymousLocation(Location: term) is
+let
+  Pid : int,
+  Sid : session-id,
+  Path : str
+in
+  snd-msg(get-location-filename(Location))
+  . rec-msg(location-filename(Path?))
+  . create(EditAnonymous(Path), Pid?)
+  . rec-msg(anonymous-editor-started(Path, Sid?))
+  . ShowLocation(Sid, Location)
+endlet
+
+process EditAnonymous(Path: str) is
+let
+  AlreadyExists: bool,
+  EditorType: term,
+  Offset: int,
+  Line: int,
+  Column: int,
+  Sid: session-id
+in
+  Edit(Path, Sid?)
+  . EditorType := quote(anonymous-editor)
+  . EditText(Sid, EditorType, AlreadyExists?)
+  . snd-msg(anonymous-editor-started(Path, Sid))
+  .
+  if equal(AlreadyExists, false) then
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+      . TODO("something useful maybe done here")
+    +
+      rec-msg(te-mouse-click-at-line-column(Sid, Line?, Column?))
+      . TODO("something useful maybe done here")
+    +
+      rec-msg(te-contents-changed(Sid))
+      . TODO("Kweetniet wat hier moet")
+    )
+    *
+    EditorDisconnected(Sid)
+    . DeleteSession(Sid)
+  else
+    tau
+  fi
+endlet
+
+
 process DisplayMessage(EditorId : session-id, Message : str) is
   snd-msg(te-display-message(EditorId, Message))
 
@@ -543,10 +592,7 @@ in
 endlet
 
 process CleanupEditTerm(Sid: session-id) is
-  TODO("Dit werkt dus niet!\n").
-  subscribe(em-session-deleted(Sid))
-  . rec-note(em-session-deleted(Sid))
-  /*. RemoveSummary("sglr", ModuleId)*/
+  TODO("Dit werkt dus niet!\n")
 
 process GetFocusOrigin(EditorId : session-id, Origin: term?) is
 let
