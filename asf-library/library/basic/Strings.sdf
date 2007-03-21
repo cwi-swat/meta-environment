@@ -14,14 +14,15 @@ exports
 sorts String
 
 context-free syntax
-  StrCon             -> String  {constructor} 
-  String "||" String -> String  {left}        
-  "(" String ")"     -> String  {bracket}     
-  String "<" String  -> Boolean               
-  String "<=" String -> Boolean               
-  String ">" String  -> Boolean               
-  String ">=" String -> Boolean               
-  String "==" String -> Boolean               
+  StrCon                 -> String  {constructor} 
+  String "||" String     -> String  {left}        
+  concat(String, String) -> String                
+  "(" String ")"         -> String  {bracket}     
+  String "<" String      -> Boolean               
+  String "<=" String     -> Boolean               
+  String ">" String      -> Boolean               
+  String ">=" String     -> Boolean               
+  String "==" String     -> Boolean               
 
 context-free syntax
   length(String)                                       -> Integer        

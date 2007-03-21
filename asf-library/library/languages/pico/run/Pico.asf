@@ -54,7 +54,7 @@ equations
 
 [Ev6f]  Str1 := eve(Exp1, Venv),
         Str2 := eve(Exp2, Venv),
-        Str3 := Str1 || Str2
+        Str3 := concat(Str1, Str2)
         ======================
         eve(Exp1 || Exp2, Venv) = Str3
 

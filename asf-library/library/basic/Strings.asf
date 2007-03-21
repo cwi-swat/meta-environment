@@ -1,7 +1,10 @@
 equations
      
-[concat]   
-strcon(\" char*1 \") || strcon(\" char*2 \") = strcon(\" char*1 char*2 \")
+[infix-concat]   
+Str1 || Str2 = concat(Str1, Str2)
+
+[prefix-concat]
+concat(strcon(\" char*1 \"),strcon(\" char*2 \")) = strcon(\" char*1 char*2 \")
 
 equations
 

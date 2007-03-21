@@ -2,6 +2,7 @@ module languages/pico/run/Pico
 
 imports languages/pico/syntax/Pico
 imports languages/pico/run/Value-environments
+imports basic/Strings
 
 exports
   sorts VALUE-ENV
