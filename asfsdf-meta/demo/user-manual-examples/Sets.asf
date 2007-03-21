@@ -1,3 +1,0 @@
-equations
-  
-  [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 

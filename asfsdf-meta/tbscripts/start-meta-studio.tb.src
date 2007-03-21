@@ -11,6 +11,9 @@
 #include <asfsdf-meta.tb>
 #include <asf-initialize.tb>
 
+/* visualizations */
+#include <start-vis.tb> 
+
 process InitializeASFSDFMetaEnvironment is
 let
   Event: attribute-changed-event,

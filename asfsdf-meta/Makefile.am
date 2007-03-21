@@ -1,5 +1,5 @@
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = tbscripts src demo # test
+SUBDIRS = tbscripts src # test
 
 ACLOCAL_AMFLAGS = -I .

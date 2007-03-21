@@ -1,3 +1,0 @@
-not(not(true) | false) | not(not(true) | false) | true 
-
-

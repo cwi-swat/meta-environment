@@ -1,8 +1,0 @@
-equations
-
-  [add-s] add(s(x), y) = s(add(x, y))
-  [add-z] add(0, y) = y
-
-  [fib-z] fib(0) = s(0)
-  [fib-o] fib(s(0)) = s(0)
-  [fib-x] fib(s(s(x))) = add(fib(s(x)), fib(x))

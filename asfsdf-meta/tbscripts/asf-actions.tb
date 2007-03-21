@@ -8,6 +8,7 @@
 #include <sdf-pretty.tb>
 #include <sdf-utils.tb>
 #include <sdf-module-utils.tb>
+#include <lower-rstore.idef>
 
 process PrettyPrintSdfAction(EditorId : session-id) is
 let
@@ -74,7 +75,7 @@ in
     File := "debug.out"
     . GetPath(EditorId, Path?)
     . AddJob("Debugging while rewriting")
-    . Reduce(RunModuleId, Path, on, ResultTree?)
+    . Reduce(RunModuleId, Path, off, ResultTree?)
     . 
     if not-equal(ResultTree, UNDEFINED) then
       snd-msg(em-get-session-by-path(File))
@@ -143,7 +144,8 @@ let
   ResultTree: term,
   Pid: int,
   Language: str,
-  ModuleName: str
+  ModuleName: str,
+  RSId: int
 in
   GetModuleId(EditorId, ModuleId?)
   . LookupFeatureModuleId(ModuleId, "extract", ExtractModuleId?)
@@ -156,7 +158,9 @@ in
     . Reduce(ExtractModuleId, Path, off, ResultTree?)
     . 
     if not-equal(ResultTree, UNDEFINED) then
-      snd-note(extracted-rstore(Language, Path, ResultTree))
+      snd-msg(rs-lower-rstore(ResultTree))
+      . rec-msg(rs-lowered-rstore(ResultTree?))
+      . snd-msg(rc-load-rstore(Path, ResultTree))
     else
       snd-note(extract-rstore-failed(Language, Path))
     fi
