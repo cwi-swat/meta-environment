@@ -22,7 +22,7 @@ int runTool(ATerm *bottomOfStack, int argc, char *argv[]){
   return 0;
 }
 
-ATerm parse(int conn, const char *input, ATerm packedParseTable, const char *topSort) {
+ATerm parse(int conn, const char *input, ATerm packedParseTable, const char *topSort, ATerm heuristics) {
   PT_ParseTree forest;
   ATerm message;
 
@@ -32,6 +32,15 @@ ATerm parse(int conn, const char *input, ATerm packedParseTable, const char *top
     /** \todo Bring these fixed options to the ToolBus interface level */
     PARSER_setAmbiguityErrorFlag(ATtrue);
     MAIN_setParseTableName(PARSETABLE_ID);
+
+    if (ATisEqual(heuristics, ATparse("on"))) {
+      FLT_setPreferenceCountFlag(ATtrue);
+      FLT_setInjectionCountFlag(ATtrue);
+    }
+    else {
+      FLT_setPreferenceCountFlag(ATfalse);
+      FLT_setInjectionCountFlag(ATfalse);
+    }
 
     if (topSort) {
       if (*topSort == '\0') {

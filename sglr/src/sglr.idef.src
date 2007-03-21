@@ -10,12 +10,13 @@ let
   ParseTable: term,
   ParseForest: term,
   ParseTree: term,
-  ErrorSummary: term
+  ErrorSummary: term,
+  Heuristics: term
 in
   (
-    rec-msg(sglr-parse(Input?, ParseTable?, TopSort?))
+    rec-msg(sglr-parse(Input?, ParseTable?, TopSort?, Heuristics?))
     . execute(sglr, SGLR?)
-    . snd-eval(SGLR, parse(Input, ParseTable, TopSort))
+    . snd-eval(SGLR, parse(Input, ParseTable, TopSort, Heuristics))
     .
     (
       rec-value(SGLR, parse-succeeded(ParseTree?, ErrorSummary?))
