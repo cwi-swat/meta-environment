@@ -5,7 +5,7 @@ exports
           languages/logo/run/EvalRun
           containers/Table[Formal Integer]
 
-  sorts LogoState Update Lines Line VENV
+  sorts LogoState Lines Line VENV
 
   aliases
     Table[[Formal, Integer]] -> VENV
@@ -27,8 +27,8 @@ exports
 
  hiddens
   imports basic/Comments
-  context-free start-symbols
-    FunctionDef*
+  sorts FunctionDef*
+
   context-free syntax
     bind(Formal*, Exp*, LogoState)                        -> LogoState
     unbind(Formal*, LogoState)                            -> LogoState

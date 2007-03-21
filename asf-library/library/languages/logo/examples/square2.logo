@@ -1,9 +1,4 @@
 to square
     [ repeat 4 [forward 100 right 90] ]
 
-repeat 5  [square  right 10]
-
-to squareany :size
-     [ repeat 4 [forward :size right 90] ]
-
-squareany 100
+repeat 36  [square  right 10]
