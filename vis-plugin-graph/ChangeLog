@@ -1,3 +1,9 @@
 
+
+Wed Mar 21 15:03:47 CET 2007 <jurgenv@cwi.nl>
+ * *: added some try catch blocks to make the graph visualizer more robust
+   against RTuples that have contents that does not correspond to the declared
+   types.
+
 Tue Mar 20 08:06:11 CET 2007 <jurgenv@cwi.nl>
  * *: initial import from Dancing Bear project
