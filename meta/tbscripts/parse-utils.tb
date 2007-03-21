@@ -33,8 +33,7 @@ let
   ErrorSummary: term,
   ParseResult: term
 in
-  /*snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))*/
-  snd-msg(sglr-parse(Text, Table, Nonterminal))
+  snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
   . AddJob("Parsing")
   .
   (
