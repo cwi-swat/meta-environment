@@ -418,25 +418,12 @@ static ATerm matchArgument(ATerm env, PT_Tree arg1, PT_Tree arg2,  ASF_ASFCondit
   }
 
   /* equality check is cheap, so try this first */
-  if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
-		     PT_removeTreeAnnotations(arg2))) {
+  if (arg1 == arg2) {
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
   else if (PT_isTreeLit(arg1) || PT_isTreeCilit(arg1)) {
     /* Literals always match */
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
-  }
-  else if (PT_isTreeCycle(arg1)) {
-    /* we assume here cycles are always the same, which does
-     * not influence anything since a cycle never has any
-     * characters as child
-     */
-    if (PT_isTreeCycle(arg2)) {
-      return newenv;
-    }
-    else {
-      return fail_env;
-    }
   }
   else if (PT_isTreeApplList(arg1) &&
 	   PT_isTreeApplList(arg2)) {
@@ -461,6 +448,18 @@ static ATerm matchArgument(ATerm env, PT_Tree arg1, PT_Tree arg2,  ASF_ASFCondit
 
     newenv = matchAppl(env, arg1, arg2, conds, orgargs1, orgargs2,
 		       lhs_posinfo, depth);
+  }
+  else if (PT_isTreeCycle(arg1)) {
+    /* we assume here cycles are always the same, which does
+     * not influence anything since a cycle never has any
+     * characters as child
+     */
+    if (PT_isTreeCycle(arg2)) {
+      return newenv;
+    }
+    else {
+      return fail_env;
+    }
   }
 
   return newenv;

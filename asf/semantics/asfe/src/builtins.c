@@ -5,7 +5,12 @@
 
 
 ATerm getTreeBuiltin(PT_Tree tree) {
-  ATerm pattern = ATparse("built-in(<term>)");
+  AFun builtin = -1;
+    
+  if (builtin == -1) {
+    builtin = ATmakeAFun("built-in", 1, ATfalse);
+    ATprotectAFun(builtin);
+  }
 
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
@@ -19,10 +24,10 @@ ATerm getTreeBuiltin(PT_Tree tree) {
 
 	if (PT_isAttrTerm(head)) {
 	  ATerm term = PT_getAttrTerm(head);
-	  ATerm name;
 
-	  if (ATmatchTerm(term, pattern, &name)) {
-	    return name;
+	  if (ATgetType(term) == AT_APPL &&
+	      ATgetAFun((ATermAppl) term) == builtin) {
+	    return ATgetArgument((ATermAppl) term, 0);
 	  }
 	}
 
