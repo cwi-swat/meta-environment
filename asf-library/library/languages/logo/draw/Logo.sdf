@@ -10,7 +10,8 @@ imports
 hiddens
   %% imports basic/Comments
   context-free start-symbols 
-     Document LogoState Lines Commands %% removing this line causes syntax error in equations
+     Program Document 
+
   variables
     "LS" [0-9\']*       -> LogoState
     "Commands"          -> Commands

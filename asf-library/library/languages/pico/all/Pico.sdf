@@ -4,5 +4,6 @@ imports languages/pico/syntax/Pico
 imports languages/pico/format/Pico
 imports languages/pico/extract/Pico
 imports languages/pico/run/Pico
+imports languages/pico/debug/Pico
 imports languages/pico/check/Pico
 

@@ -15,5 +15,6 @@ begin
       repnr := repnr - 1
     od;
     input := input - 1
-  od
+  od ;
+  output := output
 end

@@ -3,4 +3,4 @@ equations
 [Main] LS := runall(Commands, newLogoState),
        Lines := LS.lines
        ==========================================================
-       start(Commands, Commands)=start(Document,toSVG(Lines))
+       start(Program, Commands) = start(Document,toSVG(Lines))
