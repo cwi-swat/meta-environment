@@ -22,10 +22,12 @@ void call_c_compiler(ATbool keep_annos,
   sprintf(commandline,
          COMPILE " " 
 	 "-c %s \\\n"
+	 "-o %s \\\n"
 	 "\t" CFLAGS "\\\n"
 	 "\t" ASC_SUPPORT_CFLAGS "\\\n"
 	 "\t-DASF_MAIN %s\n",
 	 sourcefiles,
+	 objectfiles,
 	 keep_annos ? "-DASF_WITH_ANNOS" : ""
 	 );
 
