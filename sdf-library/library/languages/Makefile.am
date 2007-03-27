@@ -8,6 +8,7 @@ SUBDIRS = \
 	casl \
 	cpp \
 	ansi-c \
+        ebnf \
 	graph \
 	fdl \
         logo \
