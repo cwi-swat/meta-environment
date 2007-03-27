@@ -7,21 +7,16 @@ noinst_LTLIBRARIES = libasfnormalization.la
 
 pkgdata_DATA    = asfoperations.idef
 
-EXTRA_DIST   = asfoperations.idef.src 
-
-CLEANFILES += asfoperations.idef
-
 noinst_HEADERS 	= \
-	asfoperations.tif.h \
 	asfnormalization.h 
 
-asfoperations_CPPFLAGS = $(ASC_SUPPORT_CFLAGS)
+AM_CPPFLAGS += $(ASC_SUPPORT_CFLAGS)
 asfoperations_LDADD = \
      -L${top_builddir}/semantics/asf-operations/src -lasfnormalization \
      $(ASC_SUPPORT_LIBS) 
 asfoperations_SOURCES = \
-	asfoperations.c \
-	asfoperations.tif.c \
+	asfoperations.idef \
+	main.c \
 	asfnormalization.c \
 	ASF-Normalization.c
 
@@ -35,7 +30,4 @@ libasfnormalization_la_SOURCES = \
 #       which is essential here.
 asfc:
 	asfc -i ASF-Normalization.eqs -o ASF-Normalization.c -v -a	
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 

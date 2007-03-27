@@ -2,7 +2,7 @@
 
 #ifndef WIN32
 #include <atb-tool.h>
-#include "asfchecker.tif.h"
+#include "asfchecker.h"
 #endif
 
 #include <stdio.h>

@@ -18,7 +18,7 @@
 #include <MEPT-utils.h>
 #include <ptable.h>
 
-#include "asfe.tif.h"
+#include "asfe.h"
 #include "evaluator.h"
 #include "errors.h"
 #include "test-runner.h"

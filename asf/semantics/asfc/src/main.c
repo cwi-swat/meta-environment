@@ -26,7 +26,7 @@
 /*}}}  */
 /*{{{  local includes */
 
-#include "asfc.tif.h"
+#include "asfc.h"
 #include "asf2muasf.h"
 #include "muasf2c.h"
 #include "c-code.h"
@@ -299,9 +299,11 @@ int main(int argc, char *argv[])
   MA_initMuASFApi();
 
   if (toolbus_mode) {
+#ifndef NO_TOOLBUS
     ATBinit(argc, argv, &bottom);  
     ATBconnect(NULL, NULL, -1, asfc_handler);
     ATBeventloop();
+#endif
   } 
   else {
     

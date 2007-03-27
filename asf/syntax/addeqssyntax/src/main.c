@@ -1,7 +1,7 @@
 #ifndef WIN32
 	/* These files can not be included in Windows NT*/
 	#include <atb-tool.h>
-	#include "addeqssyntax.tif.h"
+	#include "addeqssyntax.h"
 #endif
 
 #include <stdio.h>
@@ -47,7 +47,7 @@ ATerm get_name(int cid)
 
 /*}}}  */
 
-static PT_Tree addEqsSyntaxFunction(char *name, PT_ParseTree parseTree)
+static PT_Tree addEqsSyntaxFunction(const char *name, PT_ParseTree parseTree)
 {
   SDF_ModuleName sdfModuleName = SDF_makeModuleName(name);
   PT_Tree ptModuleName = PT_TreeFromTerm(SDF_ModuleNameToTerm(sdfModuleName));
@@ -71,7 +71,7 @@ static PT_Tree addEqsSyntaxFunction(char *name, PT_ParseTree parseTree)
   return newTree;
 }
 
-static ATerm addEqsSyntax(char *name, ATerm term)
+static ATerm addEqsSyntax(const char *name, ATerm term)
 {
   PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
   PT_Tree ptApplied = addEqsSyntaxFunction(name, parseTree);
@@ -83,7 +83,7 @@ static ATerm addEqsSyntax(char *name, ATerm term)
 
 /*{{{  ATerm add_eqs_syntax(int cid, char *name, ATerm t) */
 
-ATerm add_eqs_syntax(int cid, char *name, ATerm term)
+ATerm add_eqs_syntax(int cid, const char *name, ATerm term)
 {
   ATerm  output = addEqsSyntax(name, ATBunpack(term));
 

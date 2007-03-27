@@ -4,22 +4,13 @@ bin_PROGRAMS     = asfc
 noinst_PROGRAMS  = test-asfc
 pkgdata_DATA     = asfc.idef
 
-EXTRA_DIST       = asfc.idef.src
-
-CLEANFILES += asfc.idef
-
-
-noinst_HEADERS = asfc.tif.h \
-		 chars.h \
+noinst_HEADERS = chars.h \
                  c-code.h \
                  asf2muasf.h \
-                 asfc.tif.h \
                  muasf2c.h \
                  c-compiler.h \
 		 MuASF.h \
 		 MuASF_dict.h
-
-
 
 ASFC_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${libexecdir}/libtool@g;s@-o.*@@')
 abs_topbuilddir=$(shell cd ${top_builddir}; pwd)
@@ -27,7 +18,7 @@ ASFC_TEST_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${abs_t
 
 asfc_DEPENDENCIES =
 asfc_LDADD   = $(ASC_SUPPORT_LIBS)
-asfc_CPPFLAGS =  \
+AM_CPPFLAGS +=  \
 		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
 		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
 		-DCFLAGS="\"$(CFLAGS)\""   \
@@ -36,35 +27,33 @@ asfc_CPPFLAGS =  \
 		$(ASC_SUPPORT_CFLAGS) \
 		-Wno-sequence-point
 
-asfc_SOURCES = asfc.tif.c \
-               asfc.c \
-               chars.c \
-               c-code.c \
-               asf2muasf.c \
-               muasf2c.c \
-               c-compiler.c \
-               Compiler.c \
-	       MuASF.c \
-	       MuASF_dict.c
+SOURCES = main.c \
+	  chars.c \
+	  c-code.c \
+	  asf2muasf.c \
+	  muasf2c.c \
+	  c-compiler.c \
+	  Compiler.c \
+	  MuASF.c \
+	  MuASF_dict.c
+
+asfc_SOURCES = asfc.idef ${SOURCES}
 
 test_asfc_DEPENDENCIES=
 test_asfc_LDADD = $(asfc_LDADD)
 test_asfc_CPPFLAGS =  \
+		-DNO_TOOLBUS \
 		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
 		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
 		-DCOMPILE="\"$(CC)\"" \
 		-DCFLAGS="\"$(CFLAGS)\""   \
 		-DLINK="\"$(ASFC_TEST_C_LINKER)\"" \
 		$(ASC_SUPPORT_CFLAGS)
-test_asfc_SOURCES = $(asfc_SOURCES)
+
+test_asfc_SOURCES = $(SOURCES)
 
 bootstrap: 
 	asfc -i Compiler.eqs -o Compiler.c -v
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
-
-
 
 if MAINTAINER_MODE
 

@@ -7,26 +7,19 @@ bin_PROGRAMS = asfchecker
 
 pkgdata_DATA = asfchecker.idef
 
-EXTRA_DIST = asfchecker.idef.src asfchecker.tif.c asfchecker.tif.h
+noinst_HEADERS 	= equationChecker.h statistics.h
 
-CLEANFILES += asfchecker.idef
-
-noinst_HEADERS 	= equationChecker.h asfchecker.tif.h statistics.h
-
-asfchecker_CPPFLAGS = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir)/semantics/asf-operations/src \
 	$(ASC_SUPPORT_CFLAGS)
 
 asfchecker_SOURCES = \
-	asfchecker.c \
+	asfchecker.idef \
+	main.c \
 	equationChecker.c \
-	asfchecker.tif.c \
 	statistics.c
 
 asfchecker_LDADD   = \
 	-L$(top_builddir)/semantics/asf-operations/src -lasfnormalization \
 	$(ASC_SUPPORT_LIBS) \
 	$(ERROR_SUPPORT_LIBS) 
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@

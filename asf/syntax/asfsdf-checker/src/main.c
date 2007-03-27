@@ -1,7 +1,7 @@
 #ifndef WIN32
         /* These files can not be included in Windows NT*/
         #include <atb-tool.h>
-        #include "asfsdfchecker.tif.h"
+        #include "asfsdfchecker.h"
 #endif
 
 #include <stdio.h>
