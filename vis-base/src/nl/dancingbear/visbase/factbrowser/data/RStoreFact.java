@@ -181,4 +181,8 @@ public class RStoreFact extends DefaultMutableTreeNode implements Observer {
             this.add(visTreeNode);
         }
     }
+
+	public String getType() {
+		return getRType().toTerm().toString();
+	}
 }

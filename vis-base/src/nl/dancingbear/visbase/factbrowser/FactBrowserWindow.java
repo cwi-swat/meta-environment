@@ -137,7 +137,7 @@ public class FactBrowserWindow extends JPanel {
 
         // if doesn't exists then create a new
         if (rstoreTreeNode == null) {
-            rstoreTreeNode = new DefaultMutableTreeNode(rstoreNode);
+            rstoreTreeNode = new DefaultMutableTreeNode(rstoreNode); 
             rootNode.add(rstoreTreeNode);
         } else {
             rstoreTreeNode.removeAllChildren();
@@ -235,8 +235,6 @@ public class FactBrowserWindow extends JPanel {
         treeRstores.setCellRenderer(new TreeIconCellRenderer(factIcon, visIcon,
                 novisIcon, rstoreIcon));
 
-        setBorder(new EmptyBorder(5, 5, 5, 5));
-
         setLayout(new GridBagLayout());
         ((GridBagLayout) getLayout()).columnWidths = new int[] { 200, 0 };
         ((GridBagLayout) getLayout()).rowHeights = new int[] { 0, 0 };
@@ -288,6 +286,8 @@ public class FactBrowserWindow extends JPanel {
 
             if (value instanceof RStoreFact) {
                 setIcon(factIcon);
+                setText(((RStoreFact) value).getFactName());
+                setToolTipText(((RStoreFact) value).getType());
             } else if (userObject instanceof RStore) {
                 setIcon(rstoreIcon);
             } else if (userObject instanceof VisualisationPlugin) {
