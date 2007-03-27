@@ -1,29 +1,22 @@
 include $(top_srcdir)/Makefile.meta
 
-EXTRA_DIST = pandora.idef.src
-
 bin_PROGRAMS = pandora 
 
-noinst_HEADERS = pandora.h Box.h Box-utils.h Box_dict.h pandora.tif.h
+noinst_HEADERS = pandora.h Box.h Box-utils.h Box_dict.h 
 
 pkgdata_DATA = pandora.idef
 
 pandora_SOURCES = \
 	main.c \
-	pandora.c \
+	mapping.c \
 	Box.c \
 	Box-utils.c \
 	Box_dict.c \
 	Box-to-Text.c \
-	pandora.tif.c
+	pandora.idef
 
-pandora_CPPFLAGS = ${ASC_SUPPORT_CFLAGS}
+AM_CPPFLAGS += ${ASC_SUPPORT_CFLAGS}
 pandora_LDADD = ${ASC_SUPPORT_LIBS}
-
-CLEANFILES += pandora.idef
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 asfc:
 	asfc \
@@ -32,11 +25,3 @@ asfc:
 api:
 	sdf2-to-c -i Box.def --prefix BOX_ -v
 
-tif:
-	for i in `ls *.idef`; do \
-          idef2tif $$i; \
-          tifstoc -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
-        done
-
-tif-clean:
-	rm -f *.tifs *.tif.[ch]

@@ -5,7 +5,7 @@
 #include <MEPT-utils.h>
 #include <PTMEPT-utils.h>
 
-#include "pandora.h"
+#include "mapping.h"
 
 /*{{{ Defines */
 #define SEPLISTELEMLENGTH 4

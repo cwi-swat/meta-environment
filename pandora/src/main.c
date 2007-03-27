@@ -13,8 +13,8 @@
 #include <aterm2.h>
 #include <Error-manager.h>
 
+#include "mapping.h"
 #include "pandora.h"
-#include "pandora.tif.h"
 
 /*}}}  */
 /*{{{  variables */
