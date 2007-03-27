@@ -16,4 +16,5 @@ SUBDIRS = \
 	sdf2  \
 	generic-cpp \
 	java \
-        xml
+        xml \
+        yacc
