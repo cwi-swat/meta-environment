@@ -186,6 +186,22 @@ endlet
 process CloseOtherModulesAction(ModuleId : module-id) is
   CloseOtherModules(ModuleId) 
 
+process ExtractSDFAction(ModuleId : module-id) is
+let
+  Syntax : term,
+  Store : term,
+  RStore : term,
+  Modulename : str
+in
+  GetSyntaxDefinition(ModuleId, Syntax?)
+  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . snd-msg(es-extract-sdf(Syntax))
+  . rec-msg(es-sdf-store(Store?))
+  . snd-msg(rs-lower-rstore(Store))
+  . rec-msg(rs-lowered-rstore(RStore?))
+  . snd-msg(rc-load-rstore(Modulename, RStore))
+endlet
+
 #ifdef DEAD
 process RenameModuleAction(Modulename : str) is
 let

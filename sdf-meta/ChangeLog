@@ -1,5 +1,10 @@
 $Id$
 
+Tue Mar 27 16:04:05 CEST 2007 <jurgenv@cwi.nl>
+ * sdf-meta.pc.in: added dependency on sdf-metrics
+ * tbscripts/*: added actions for triggering sdf metric computation on
+   any module.
+
 Fri Mar 16 15:31:22 CET 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-listeners.tb:
    - Add SDFCloseEditors process that takes care of closing all related editors

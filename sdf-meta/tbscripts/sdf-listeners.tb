@@ -10,6 +10,7 @@
 #include <navigator.idef>
 #include <navigator.tb>
 #include <graph-namespace.h>
+#include <extract-sdf.idef>
 
 #define BG_ERROR_COLOR rgb(224,64,60)
 #define BG_CHILD_ERROR_COLOR rgb(255,128,114)
