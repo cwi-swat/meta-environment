@@ -1,0 +1,52 @@
+module languages/sdf2/extract/Sdf2
+
+imports languages/sdf2/syntax/Sdf2
+imports utilities/RStores
+imports utilities/PosInfo[ModuleName]
+imports utilities/PosInfo[Production]
+imports utilities/PosInfo[Symbol]
+imports utilities/Parsing[ModuleName]
+imports utilities/Parsing[Production]
+imports utilities/Parsing[Symbol]
+
+hiddens
+context-free start-symbols
+  SDF RStore
+
+context-free syntax
+  summarize(Module*, RStore) -> RStore  
+
+context-free syntax
+  collect(Module*, RStore, ModuleName?)    -> RStore {traversal(accu, top-down, break)} 
+  collect(Production, RStore, ModuleName?) -> RStore {traversal(accu, top-down, break)} 
+  collect(Symbol, RStore, ModuleName?)     -> RStore {traversal(accu, top-down, break)} 
+  collect(Module, RStore, ModuleName?)     -> RStore {traversal(accu, top-down, break)} 
+  collect(Sections, RStore, ModuleName?)   -> RStore {traversal(accu, top-down, break)} 
+  collect(Grammar, RStore, ModuleName?)    -> RStore {traversal(accu, top-down, break)}
+
+context-free syntax
+  link(Symbol*, RStore, Symbol) -> RStore {traversal(accu, top-down, break)} 
+  link(Symbol, RStore, Symbol)  -> RStore {traversal(accu, top-down, break)} 
+
+variables
+  "Store" [0-9]* -> RStore      {strict} 
+  "ModuleName?"  -> ModuleName?          
+
+variables 
+  "CC"[0-9]*           -> CharClass
+  "Literal"[0-9]*      -> StrCon
+  "Sort"[0-9]*         -> Sort
+  "Sections" [0-9]*    -> Sections       
+  "ImpSection*" [0-9]* -> ImpSection*    
+  "Def" [0-9]*         -> Definition     
+  "Module" [0-9]*      -> Module         
+  "Module*" [0-9]*     -> Module*        
+  "Symbol" [0-9]*      -> Symbol         
+  "Symbol*" [0-9]*     -> Symbol*        
+  "Symbol,*" [0-9]*    -> {Symbol ","}*  
+  "Production" [0-9]*  -> Production     
+  "Attributes" [0-9]*  -> Attributes     
+  "ModuleName" [0-9]*  -> ModuleName     
+
+lexical variables
+  "c*" [0-9]* -> StrChar*  

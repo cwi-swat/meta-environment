@@ -1,0 +1,46 @@
+equations
+
+[main] Store := create-store(),
+       Store2 := declare(Store, Declarations, rel[str, loc]),
+       Store3 := declare(Store2, Productions, rel[str, loc]),
+       Store4 := declare(Store3, Symbols, rel[str, loc]),
+       Store5 := declare(Store4, Dependencies, rel[<str,loc>,<str,loc>]),
+       Store6 := declare(Store5, ModuleProductions, rel[str,int]),
+       Store7 := declare(Store6, SymbolProductions, rel[str,int])
+       ===>
+       start(SDF, definition Module*) = start(RStore, summarize(Module*, Store7))
+
+equations
+
+[sum] summarize(Module*, Store) = collect(Module*, Store, )
+
+equations
+
+[] collect(module ModuleName ImpSection* Sections, Store, ModuleName?) =
+   collect(Sections, Store, ModuleName)
+
+[] collect(Production, Store, ModuleName) = Store6
+     when
+     Symbol* -> Symbol Attributes := Production,
+     Store2 := insert(Store, Productions, unparse-to-string(Symbol* -> Symbol), get-location(Production)),
+     Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
+     Store4 := link(Symbol*, Store3, Symbol),
+     Store5 := inc(Store4, ModuleProductions, unparse-to-string(ModuleName)),
+     Store6 := inc(Store5, SymbolProductions, unparse-to-string(Symbol))
+
+[] Store2 := collect(sorts Symbol*, Store, ModuleName)
+   ===>
+   collect(sorts Symbol Symbol*, Store, ModuleName) =
+   insert(Store2, Declarations, unparse-to-string(Symbol), get-location(Symbol))
+
+equations
+
+[] link(Symbol1, Store, Symbol2) = 
+   insert(Store, Dependencies, <unparse-to-string(Symbol2), get-location(Symbol2)>,
+                               <unparse-to-string(Symbol1), get-location(Symbol2)>)
+   when Sort := Symbol1
+
+equations
+
+[] strcon(\" c*1 strchar(\ ) strchar(\ ) c*2 \") = strcon(\" c*1 strchar(\ ) c*2 \")
+[] strcon(\" c*1 strchar(\n) c*2 \") = strcon(\" c*1 strchar(\ ) c*2 \")
