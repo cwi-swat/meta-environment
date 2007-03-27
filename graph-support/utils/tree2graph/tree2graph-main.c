@@ -12,7 +12,7 @@
 #include "PT2graph.h"
 
 #ifndef WITHOUT_TOOLBUS
-#include "graph-converter.tif.h"
+#include "graph-converter.h"
 #endif
 
 /*}}}  */

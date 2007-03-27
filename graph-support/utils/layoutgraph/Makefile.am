@@ -2,11 +2,11 @@
 include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = layoutgraph graph2dot
-pkgdata_DATA = layout-graph.idef 
+pkgdata_DATA = layoutgraph.idef 
 
-EXTRA_DIST = layout-graph.idef.src dot.l dot.y
+EXTRA_DIST += dot.l dot.y
 
-CLEANFILES += lex.yy.c y.tab.c y.tab.h y.output layout-graph.idef
+CLEANFILES += lex.yy.c y.tab.c y.tab.h y.output
 
 YFLAGS = -d
 
@@ -19,9 +19,8 @@ INCLUDES = \
 noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
 
 layoutgraph_SOURCES = \
-	layoutgraph.c \
-	layoutgraph.tif.c \
-	layoutgraph.tif.h \
+	layout.c \
+	layoutgraph.idef \
 	graph2dot.c \
 	layoutgraph-main.c
 
@@ -45,5 +44,3 @@ y.tab.c y.tab.h: dot.y
 lex.yy.c : dot.l y.tab.h
 	$(LEX) $(AM_LFLAGS) $(LFLAGS) $<
 
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@

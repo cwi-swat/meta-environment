@@ -2,10 +2,6 @@
 
 include $(top_srcdir)/Makefile.meta
 
-EXTRA_DIST = graph-converter.idef.src
-
-CLEANFILES += graph-converter.idef
-
 bin_PROGRAMS = tree2graph
 
 INCLUDES = \
@@ -18,12 +14,11 @@ INCLUDES = \
 pkgdata_DATA = graph-converter.idef
 
 noinst_HEADERS = \
-	graph-converter.tif.h \
 	PT2graph.h
 
 tree2graph_SOURCES = \
 	PT2graph.c \
-	graph-converter.tif.c \
+	graph-converter.idef \
 	tree2graph-main.c
 
 tree2graph_LDADD = \
@@ -35,5 +30,3 @@ tree2graph_LDADD = \
    $(ATERM_LIBS) \
    ${SOCKLIBS}
 
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@

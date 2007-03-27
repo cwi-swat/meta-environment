@@ -9,7 +9,7 @@
 
 #include "Graph.h"
 #include "dot.h"
-#include "layoutgraph.h"
+#include "layout.h"
 
 #define YYERROR_VERBOSE
 

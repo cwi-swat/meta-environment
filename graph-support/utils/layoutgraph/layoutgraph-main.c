@@ -7,8 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 #include "layoutgraph.h"
-#include "layoutgraph.h"
-#include "layoutgraph.tif.h"
+#include "layout.h"
 #include <Graph.h>
 
 /*}}}  */
