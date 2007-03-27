@@ -5,28 +5,18 @@ include $(top_srcdir)/Makefile.meta
 bin_PROGRAMS = editor-manager
 pkgdata_DATA = editor-manager.idef
 noinst_HEADERS = \
-	editor-manager.tif.h \
 	EditorManager_dict.h \
 	EditorManager.h
 
 editor_manager_SOURCES = \
-	editor-manager.tif.c \
-	editor-manager.c \
+	editor-manager.idef \
+	main.c \
 	EditorManager.c \
 	EditorManager_dict.c
 
-editor_manager_CPPFLAGS = $(TOOLBUSLIB_CFLAGS)
+AM_CPPFLAGS += $(TOOLBUSLIB_CFLAGS)
 
 editor_manager_LDADD = $(TOOLBUSLIB_LIBS) 
-
-EXTRA_DIST = editor-manager.idef.src
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
-
-CLEANFILES += \
-	     editor-manager.tifs \
-	     editor-manager.idef
 
 if MAINTAINER_MODE
 

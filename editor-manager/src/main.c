@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include "EditorManager.h"
-#include "editor-manager.tif.h"
+#include "editor-manager.h"
 
 #define INITIAL_TABLE_SIZE 100
 #define TABLE_RESIZE_PERCENTAGE 75
