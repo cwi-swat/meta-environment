@@ -11,7 +11,7 @@
 #include "StructureEditor.h"
 #include "slice-tree.h"
 
-#include "structure-editor.tif.h"
+#include "structure-editor.h"
 
 #define SORT_AMBIGUOUS "<ambiguous>"
 #define SORT_CYCLE "<cycle>"

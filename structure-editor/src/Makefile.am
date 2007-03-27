@@ -2,39 +2,33 @@
 
 include $(top_srcdir)/Makefile.meta
 
-bin_PROGRAMS = structure-editor
 pkgdata_DATA = structure-editor.idef
+
+bin_PROGRAMS = structure-editor
+
 noinst_HEADERS = \
 	StructureEditor.h \
 	StructureEditor_dict.h \
-	structure-editor.tif.h \
 	slice-tree.h
 
-structure_editor_CPPFLAGS = \
+AM_CPPFLAGS += \
 	$(ERROR_SUPPORT_CFLAGS) \
 	$(PT_SUPPORT_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \
 	$(ATERM_CFLAGS) 
 
 structure_editor_SOURCES = \
-	structure-editor.c \
-	structure-editor.tif.c \
+	main.c \
 	slice-tree.c \
 	StructureEditor.c \
-	StructureEditor_dict.c
+	StructureEditor_dict.c \
+	structure-editor.idef 
 
 structure_editor_LDADD = \
 	$(PT_SUPPORT_LIBS) \
 	$(ERROR_SUPPORT_LIBS) \
 	$(TOOLBUSLIB_LIBS) \
 	$(ATERM_LIBS) 
-
-EXTRA_DIST = structure-editor.idef.src
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
-
-CLEANFILES += structure-editor.tifs structure-editor.idef
 
 if MAINTAINER_MODE
 
