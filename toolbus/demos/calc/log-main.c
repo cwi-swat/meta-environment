@@ -21,7 +21,7 @@
 */
 
 #include <stdlib.h>
-#include "log.tif.h"
+#include "log.h"
 
 ATerm history = NULL;
 

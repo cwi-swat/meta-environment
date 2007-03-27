@@ -21,7 +21,7 @@
 */
 #include <stdlib.h>
 #include <unistd.h>    
-#include "batch.tif.h"
+#include "batch.h"
 
 FILE *bout;
 

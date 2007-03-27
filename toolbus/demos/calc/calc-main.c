@@ -20,7 +20,7 @@
 
 */
 #include <stdlib.h>
-#include "calc.tif.h"
+#include "calc.h"
 
 int calculate(ATerm t)
 { int n;

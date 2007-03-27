@@ -12,7 +12,7 @@
 
 #include "sockets.h"
 
-#include "toolbus-adapter.tif.h"
+#include "toolbus-adapter.h"
 
 /*}}}  */
 /*{{{  defines */

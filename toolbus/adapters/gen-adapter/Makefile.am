@@ -1,6 +1,8 @@
-EXTRA_DIST = generic-adapter.idef.src gen-adapter.guide.tex
+include $(top_srcdir)/Makefile.meta
 
-CLEANFILES = generic-adapter.idef
+EXTRA_DIST += generic-adapter.idef.src gen-adapter.guide.tex
+
+CLEANFILES += generic-adapter.idef
 
 bin_PROGRAMS = gen-adapter bc-adapter
 pkgdata_DATA = generic-adapter.idef
@@ -12,9 +14,4 @@ bc_adapter_SOURCES = bc-adapter.c
 bc_adapter_LDADD = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
 
 INCLUDES = -I$(top_srcdir)/libdeprecated-toolbus-adapter
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
-
-
 
