@@ -7,4 +7,4 @@
 #include <time.h>
 #include <ctype.h>
 
-#include "configmanager.tif.h" 
+#include "configuration-manager.h" 

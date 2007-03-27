@@ -1,6 +1,6 @@
 /* $Id$ */   
 
-#include "configuration-manager.tif.h"
+#include "configuration-manager.h"
 #include <ctype.h>
 #include "Config.h"
 #include <unistd.h> 
