@@ -54,24 +54,25 @@ EXTRA_DIST += $(wildcard *.isrc)
 if MAINTAINER_MODE 
 
 EXTRA_DIST += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
-
 CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h $i.tifs)
 
 .tifs.c:
-	tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS)
+	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
 
 .tifs.h:
-	tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS)
+	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
 
 .idef.tifs: 
-	toolbus -output $*.tifs -gentifs $<
+	$(call check_available,toolbus,toolbus -output $*.tifs -gentifs $<)
 
 else
 .idef.c: 
-	touch $*.[ch]
+	touch $*.h
+	touch $*.c
 
 .idef.h: 
-	touch $*.[ch]
+	touch $*.h
+	touch $*.c
 endif
 
 #ApiGen
