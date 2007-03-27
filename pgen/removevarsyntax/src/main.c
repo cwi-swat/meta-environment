@@ -1,7 +1,7 @@
 #ifndef WIN32
 	/* These files can not be included in Windows NT*/
 	#include <atb-tool.h>
-	#include "removevarsyntax.tif.h"
+	#include "removevarsyntax.h"
 #endif
 
 #include <stdio.h>
@@ -39,7 +39,7 @@ ATerm get_name(int cid) {
   return ATmake("snd-value(name(<str>))", name);
 }
 
-static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree) {
+static PT_Tree addRemoveVarsFunction(const char *name, PT_ParseTree parseTree) {
   SDF_ModuleName sdfModuleName = SDF_makeModuleName(name);
   PT_Tree ptModuleName = PT_TreeFromTerm(SDF_ModuleNameToTerm(sdfModuleName));
   PT_Tree newTree = NULL;
@@ -63,7 +63,7 @@ static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree) {
   return newTree;
 }
 
-static ATerm removeVarSyntax(char *name, ATerm term) {
+static ATerm removeVarSyntax(const char *name, ATerm term) {
   PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
   PT_Tree ptApplied = addRemoveVarsFunction(name, parseTree);
   ATerm reduct = innermost(ptApplied);
@@ -72,7 +72,7 @@ static ATerm removeVarSyntax(char *name, ATerm term) {
   return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(asfix));
 }
 
-ATerm remove_var_syntax(int cid, char *name, ATerm term) {
+ATerm remove_var_syntax(int cid, const char *name, ATerm term) {
   ATerm  output = removeVarSyntax(name, ATBunpack(term));
 
   return ATmake("snd-value(changed-syntax(<term>))", ATBpack(output));

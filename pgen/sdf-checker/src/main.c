@@ -1,7 +1,7 @@
 /* $Id$ */ 
 
 #include <atb-tool.h>
-#include "sdfchecker.tif.h"
+#include "sdfchecker.h"
 
 #include <stdio.h>
 #include <stdlib.h>     /* used for exit(0) */

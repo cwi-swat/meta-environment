@@ -1,5 +1,4 @@
 include $(top_srcdir)/Makefile.meta
-include $(top_srcdir)/man_make_rules
 
 AM_CPPFLAGS += \
 	$(ASC_SUPPORT_CFLAGS) \
@@ -21,14 +20,10 @@ noinst_SCRIPTS	= sdf2table.test
 pkgdata_DATA	= parsetablegen.idef
 man_MANS	= sdf2table.1
 
-EXTRA_DIST	= parsetablegen.idef.src \
-                  sdf2table.src \
-                  parse-sdf2.src \
-                  sdf2table.pod \
-                  sdf2table.1
+EXTRA_DIST	= sdf2table.src \
+                  parse-sdf2.src 
 
 noinst_HEADERS = \
-	parsetablegen.tif.h \
 	atsets.h \
 	ksdf2table.h \
 	flatten.h \
@@ -47,8 +42,8 @@ noinst_HEADERS = \
 	parseTable-stats.h
 
 parsetablegen_SOURCES = \
-	parsetablegen.tif.c \
-	parsetablegen.c \
+	parsetablegen.idef \
+	main.c \
 	ksdf2table.c \
 	atsets.c \
 	flatten.c \
@@ -87,12 +82,7 @@ parsetablegen_LDADD = \
 CLEANFILES += \
 	parse-sdf2 \
 	sdf2table \
-	sdf2table.1 \
-	sdf2table.test \
-	parsetablegen.idef
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+	sdf2table.test 
 
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing

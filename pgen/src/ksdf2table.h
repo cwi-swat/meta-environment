@@ -13,7 +13,7 @@
 
 #include "atsets.h"
 #include <atb-tool.h>
-#include "parsetablegen.tif.h"
+#include "parsetablegen.h"
 
 #ifdef DMALLOC
 #include <dmalloc.h>
