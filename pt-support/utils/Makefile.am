@@ -1,18 +1,8 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 SUBDIRS = implodePT filterPT
-
-EXTRA_DIST = \
-	unparser.idef.src \
-	position-annotator.idef.src \
-	apply-function.idef.src \
-	ambiguity-reporter.idef.src
-
-CLEANFILES = \
-	unparser.idef \
-	position-annotator.idef \
-	apply-function.idef \
-	ambiguity-reporter.idef
 
 bin_PROGRAMS = \
 	flattenPT \
@@ -39,22 +29,16 @@ pkgdata_DATA = \
 	apply-function.idef \
 	ambiguity-reporter.idef 
 
-noinst_HEADERS = \
-	unparser.tif.h \
-	apply-function.tif.h \
-	position-annotator.tif.h  \
-	ambiguity-reporter.tif.h 
-
 apply_function_SOURCES = \
-	apply-function.tif.c \
-	apply-function.c
+	apply-function.idef \
+	apply-function-main.c
 
 apply_function_LDADD = \
 	-L../libmept -lmept \
 	$(TOOLBUSLIB_LIBS)
 
 addPosInfo_SOURCES = \
-	position-annotator.tif.c \
+	position-annotator.idef \
 	addPosInfo.c
 
 addPosInfo_LDADD = \
@@ -76,7 +60,7 @@ liftPT_LDADD = \
 	$(ATERM_LIBS)
 
 unparsePT_SOURCES = \
-	unparser.tif.c \
+	unparser.idef \
 	unparsePT-main.c
 
 unparsePT_LDADD = \
@@ -98,24 +82,9 @@ unparseProd_LDADD = \
 
 ambtracker_SOURCES = \
 	ambtracker-main.c \
-	ambiguity-reporter.tif.c
+	ambiguity-reporter.idef
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
 	$(TOOLBUSLIB_LIBS) \
 	$(ERROR_SUPPORT_LIBS)
-
-IDEF = idef2tif
-TIFS = tifstoc
-
-tif:
-	for i in `ls *.idef`; do \
-	  $(IDEF) $$i; \
-	  $(TIFS) -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
-	done
-
-tif-clean:
-	rm -f *.tifs *.tif.[ch]
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
