@@ -1,5 +1,10 @@
 $Id$
 
+Tue Mar 27 19:11:49 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: added checking for ToolBus bootstrapping utils, and using 
+  touch if not available. This requires that all generated files are 
+  stored in the version repository. 
+
 Tue Mar 27 10:46:40 CEST 2007 <jurgenv@cwi.nl>
  * Makefile.meta: added automatic rules for ToolBus interface generation,
    starting from a .isrc file, which is transformed to a .idef file by
