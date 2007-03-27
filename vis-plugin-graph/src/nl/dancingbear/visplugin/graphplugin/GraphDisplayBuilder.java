@@ -4,21 +4,22 @@ package nl.dancingbear.visplugin.graphplugin;
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
-import prefuse.render.DefaultRendererFactory;
-import prefuse.render.EdgeRenderer;
-import prefuse.render.LabelRenderer;
-import prefuse.render.RendererFactory;
 import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.FontAction;
 import prefuse.action.layout.graph.NodeLinkTreeLayout;
+import prefuse.controls.AnchorUpdateControl;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
 import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
 import prefuse.data.Graph;
+import prefuse.render.DefaultRendererFactory;
+import prefuse.render.EdgeRenderer;
+import prefuse.render.LabelRenderer;
+import prefuse.render.RendererFactory;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
 
@@ -33,6 +34,7 @@ public class GraphDisplayBuilder {
     
     private final static int BREADTHSPACING = 30;
     private final static int DEFAULTPADDING = 10;
+	private NodeLinkTreeLayout treeLayout;
 
     /**
      * Main method for the graph creation.
@@ -147,9 +149,8 @@ public class GraphDisplayBuilder {
      * @date 07-3-2007  
      */
     private ActionList createLayoutActions() {
-        // Set the layout for the graph.
-        NodeLinkTreeLayout  treeLayout = new NodeLinkTreeLayout(GraphConstants.GRAPH);
-        treeLayout.setOrientation(Constants.ORIENT_TOP_BOTTOM);
+        treeLayout = new NodeLinkTreeLayout(GraphConstants.GRAPH);
+		treeLayout.setOrientation(Constants.ORIENT_TOP_BOTTOM);
         treeLayout.setBreadthSpacing(BREADTHSPACING);
 
         // Create an actions avaible for the graph.
@@ -181,6 +182,7 @@ public class GraphDisplayBuilder {
         d.addControlListener(new FocusControl());
         d.addControlListener(new DragControl());
         d.addControlListener(new PanControl());
+        d.addControlListener(new AnchorUpdateControl(treeLayout));
         
         // Allowing zooming in the panel.
         d.addControlListener(new ZoomControl());

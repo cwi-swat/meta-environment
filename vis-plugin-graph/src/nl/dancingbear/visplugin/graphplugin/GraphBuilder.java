@@ -149,6 +149,9 @@ public class GraphBuilder {
 
 				// Create edges between nodes.
 				graph.addEdge(nodeId1, nodeId2);
+				
+				
+				
 			}
 		} catch (UnsupportedOperationException e) {
 			System.err.println("warning: " + e);
