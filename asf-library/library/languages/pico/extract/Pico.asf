@@ -1,27 +1,27 @@
 equations
 
-[main] start(PROGRAM, Program) = 
-       start(RStore, rstore([
-         <ControlFlow, rel[<str,loc>,<str,loc>], controlFlow(Program)>,
-         <StatementHistogram, rel[str, int], statementHistogram(Program)>
-       ]))
+[main] Store1 := create-store(),
+       Store2 := statementHistogram(Program, Store1),
+       Store3 := controlFlow(Program, Store2)
+       ===>
+       start(PROGRAM, Program) = start(RStore, Store3)
 
 equations
 
-[hist] statementHistogram(Program) = countStatements(Program, {<"Assignment",0>, <"Conditional",0>, <"Loop",0>})
+[hist] statementHistogram(Program, Store) = countStatements(Program, declare(Store, StatementHistogram, rel[str,int]))
 
 equations
 
-%% TODO: make convenience API for constructing RStores
-[] countStatements(Id := Exp, { RElem*1, <"Assignment", Int>, RElem*2 }) = {RElem*1, <"Assignment", Int + 1>, RElem*2}
-[] countStatements(if Exp then Stat*1 else Stat*2 fi, { RElem*1, <"Conditional", Int>, RElem*2 }) = {RElem*1, <"Conditional", Int + 1>, RElem*2}
-[] countStatements(while Exp do Stat* od, { RElem*1, <"Loop", Int>, RElem*2 }) = {RElem*1, <"Loop", Int + 1>, RElem*2}
+[] countStatements(Id := Exp, Store)                         = inc(Store, StatementHistogram, "Assignment")
+[] countStatements(if Exp then Stat*1 else Stat*2 fi, Store) = inc(Store, StatementHistogram, "Conditional")
+[] countStatements(while Exp do Stat* od, Store)             = inc(Store, StatementHistogram, "Loop")
 
 equations
 
-[cfg] <Entry, Rel, Exit> := cflow(Stat*)
+[cfg] Store1 := declare(Store, ControlFlow, rel[<str,loc>,<str,loc>]),
+      <Entry, Rel, Exit> := cflow(Stat*)
       ===>
-      controlFlow(begin Decls Stat* end) = Rel
+      controlFlow(begin Decls Stat* end, Store) = set(Store1, ControlFlow, Rel)
 
 equations
 
