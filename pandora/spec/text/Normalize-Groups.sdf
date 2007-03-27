@@ -1,0 +1,24 @@
+module Normalize-Groups
+
+imports languages/box/syntax/Groups
+imports basic/Integers
+
+hiddens
+
+context-free start-symbols 
+  Box
+
+context-free syntax
+
+distribute(BoxOperator, Integer, Box*) -> Box*
+head(Box*, Integer) -> Box*
+tail(Box*, Integer) -> Box*
+
+variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "Int"[0-9]*    -> Integer
+    "Nat"[0-9]*    -> NatCon
+    "Op"[0-9]*     -> BoxOperator
+    "go*"[0-9]*    -> GroupOption*

@@ -1,0 +1,46 @@
+equations
+
+%% SL is a convenience box for separate lists that groups elements with
+%% their following separator.
+[] SL go* [ B* ] = G gs=4 go* [B*]
+
+equations
+
+%% order the options and remove superfluous options
+[] G go*1 op=Op go*2 gs=Nat = G go*1 gs=Nat go*2 op=Op 
+[] G go*1 op=Op1 op=Op2 = G go*1 op=Op1
+[] G gs=Nat1 gs=Nat2 go*1 = G gs=Nat1 go*1
+
+equations
+
+%% normalized G groups are spliced into their surrounding operator
+[splice] Op [ B*1 G [ B*2 ] B*3 ] = Op [B*1 B*2 B*3]
+
+equations
+
+[norm] G gs=Nat op=Op [ B* ] = G [ distribute(Op,Nat,B*) ]
+
+equations
+
+[0] distribute(Op, 0, B*) =
+[1] distribute(Op, Nat, ) = 
+[dist] distribute(Op,Nat, B+) = Op [ head(B+, Nat) ] distribute(Op, Nat, tail(B+, Nat)) when Nat != 0
+
+equations
+
+[0] head(B*, 0) = 
+[2] head(B B*, Nat) = B head(B*, Nat-1) when Nat != 0
+
+%% Groups are filled with empty H[] such that each group contains the same amount
+%% of elements. This is useful for tabular material.
+[3] head(  , Nat) = H [ ] head( , Nat - 1) when Nat != 0
+
+equations
+
+[0] tail(B*, 0) = B*
+[1] tail(B B*, Nat) = tail(B*, Nat-1) when Nat != 0 
+[2] tail(  , Nat) = 
+
+tests
+
+[] H [ head("1" "2" "3" "4", 2) tail("1" "2" "3" "4", 2) ] == H [ "1" "2" "3" "4" ]
