@@ -15,7 +15,7 @@
 #include <Config.h>
 #include <IO.h>
 
-#include "in-output.tif.h"
+#include "in-output.h"
 
 #define EOS '\0'
 #define PATH_LEN (_POSIX_PATH_MAX)
