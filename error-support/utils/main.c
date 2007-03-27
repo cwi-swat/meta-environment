@@ -7,7 +7,7 @@
 
 #include <Error-utils.h>
 
-#include "error-support.tif.h"
+#include "error-support.h"
 
 static char myname[] = "error-support";
 static char myversion[] = "1.0";

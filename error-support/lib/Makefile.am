@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.meta
 
 pkgdata_DATA = errorapi.jar locationapi.jar
 
-EXTRA_DIST = errorapi.jar locationapi.jar
+EXTRA_DIST += errorapi.jar locationapi.jar
 
 lib_LTLIBRARIES = libErrorAPI.la libLocationAPI.la
 
