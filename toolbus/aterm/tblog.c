@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "atb-tool.h"
-#include "logger.tif.h"
+#include "logger.h"
 #include "tblog_dict.h"
 
 /*}}}  */

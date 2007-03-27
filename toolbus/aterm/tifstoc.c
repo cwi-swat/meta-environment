@@ -570,8 +570,8 @@ int main(int argc, char *argv[])
     *p = '\0';
 
   strcpy(buf[1], buf[0]);
-  strcat(buf[0], ".tif.c");
-  strcat(buf[1], ".tif.h");
+  strcat(buf[0], ".c");
+  strcat(buf[1], ".h");
   codename = buf[0];
   headername = buf[1];
 
