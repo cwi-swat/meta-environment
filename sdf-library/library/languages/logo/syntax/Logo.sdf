@@ -2,6 +2,7 @@ module languages/logo/syntax/Logo
 
   imports basic/Whitespace
   imports basic/IntCon
+  imports basic/ColorOperations
 
   exports
 
@@ -73,6 +74,7 @@ module languages/logo/syntax/Logo
        "clearscreen"                  -> BasicCommand
        "pendown"                      -> BasicCommand
        "penup"                        -> BasicCommand
+       "pencolor" Color               -> BasicCommand
 
        "local" QuotedId               -> BasicCommand
        "make" QuotedId Exp            -> BasicCommand
