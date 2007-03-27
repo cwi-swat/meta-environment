@@ -1,5 +1,5 @@
 
-#include "debug-adapter.tif.h"
+#include "adapter.h"
 #include "tide-adapter.h"
 
 /*{{{  ATerm ta_create_rule(int conn, int pid, ATerm port, cond, act, tag) */
