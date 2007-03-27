@@ -1,7 +1,7 @@
 
 include $(top_srcdir)/Makefile.meta
 
-EXTRA_DIST = $(wildcard *.m4) \
+EXTRA_DIST += $(wildcard *.m4) \
              reconf \
              Makefile.meta \
              Makefile.java.meta \
