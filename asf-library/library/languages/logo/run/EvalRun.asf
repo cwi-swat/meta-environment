@@ -80,6 +80,8 @@ equations
      ==============================================================
      run(home, LS) = LS'''
 
+[c9] run(pencolor Color, LS) = LS.setcolor(Color)
+
 %% runall -- Execute all commands
  
 [ra1] runall( , LS) = LS

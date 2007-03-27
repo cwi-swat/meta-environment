@@ -34,3 +34,4 @@ hiddens
     "Cmds+" [0-9\']*    -> Command+
     "Commands"          -> Commands
     "DY"                -> Integer
+    "Color"             -> Color

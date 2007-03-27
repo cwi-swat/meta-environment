@@ -5,6 +5,8 @@ exports
   imports languages/xml/utils/Attributes
   imports languages/logo/run/LogoState
   imports basic/IntCon
+  imports basic/Strings
+  imports utilities/Parsing[Color]
 
   context-free syntax
     toSVG(Lines)        -> Document
@@ -28,3 +30,5 @@ hiddens
     "&X-Element" [0-9\']* -> X-Element
     "&Content*"           -> Content*
     "&AV" [0-9\']*        -> AttValue
+    "&Color"              -> Color
+    "&StrCon"             -> StrCon

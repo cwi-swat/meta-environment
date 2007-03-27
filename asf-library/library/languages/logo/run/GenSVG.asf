@@ -5,11 +5,13 @@ equations
 [gen2] <| &AV1 |> := intcon2attvalue(&I1),
        <| &AV2 |> := intcon2attvalue(&I2),
        <| &AV3 |> := intcon2attvalue(&I3),
-       <| &AV4 |> := intcon2attvalue(&I4)
+       <| &AV4 |> := intcon2attvalue(&I4),
+       &StrCon := "stroke: " || unparse-to-string(&Color),
+       <| &AV5 |> := strcon2attvalue(&StrCon)
        =============================================================
-       gen(line(&I1,&I2,&I3,&I4) &Line*, <| <g>&Content*</g> |>) =
+       gen(line(&I1,&I2,&I3,&I4,&Color) &Line*, <| <g>&Content*</g> |>) =
        gen(&Line*, <| <g>&Content*
-                               <line x1=&AV1 y1=&AV2 x2=&AV3 y2=&AV4/>
+                               <line x1=&AV1 y1=&AV2 x2=&AV3 y2=&AV4 style=&AV5/>
                       </g>
                    |>)
 

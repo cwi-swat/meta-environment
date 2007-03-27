@@ -11,7 +11,7 @@ exports
     Table[[Formal, Integer]] -> VENV
   
   context-free syntax
-    state(VENV, FunctionDef*, Lines)                      -> LogoState
+    state(VENV, FunctionDef*, Color, Lines)               -> LogoState
     LogoState "[" Formal "]"                              -> Integer
     LogoState "[" Formal "]" ":=" Integer                 -> LogoState
     LogoState "." "lines"                                 -> Lines
@@ -19,10 +19,12 @@ exports
     LogoState "." "add" "(" FunctionDef ")"               -> LogoState
     LogoState "." "enter" "(" Id "," Exp* ")"             -> < Commands, LogoState >
     LogoState "." "leave" "(" Id "," Exp* ")"             -> LogoState
+    LogoState "." "color"                                 -> Color
+    LogoState "." "setcolor" "(" Color ")"                -> LogoState
     "newLogoState"                                        -> LogoState
     "(" LogoState ")"                                     -> LogoState {bracket}
 
-    line(Integer,Integer,Integer,Integer)                 -> Line
+    line(Integer,Integer,Integer,Integer,Color)           -> Line
     Line*                                                 -> Lines
 
  hiddens
@@ -47,3 +49,4 @@ exports
     "Lines" [0-9\']*                                      -> Line*
     "Xcor" [0-9\']*                                       -> Integer
     "Ycor" [0-9\']*                                       -> Integer
+    "Color" [0-9\']*                                      -> Color
