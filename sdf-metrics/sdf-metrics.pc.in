@@ -1,0 +1,8 @@
+prefix=@prefix@
+Maintainers=jurgenv@cwi.nl
+Name: sdf-metrics
+Requires: asc-support
+Version: 0.1
+Description: SDF fact extraction tools
+Cflags: -I${prefix}/include
+ToolBusFlags=-I${prefix}/share/sdf-metrics
