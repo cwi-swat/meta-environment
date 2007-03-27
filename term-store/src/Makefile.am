@@ -2,7 +2,6 @@
 
 include $(top_srcdir)/Makefile.meta
 
-EXTRA_DIST = term-store.idef.src
 pkgdata_DATA = term-store.idef
 
 bin_PROGRAMS = term-store
@@ -10,8 +9,8 @@ bin_PROGRAMS = term-store
 AM_CPPFLAGS += -DDISABLE_DYNAMIC_CHECKING
 
 term_store_SOURCES = \
+	term-store.idef \
 	main.c \
-	term-store.tif.c \
 	table.c \
 	table-store.c \
 	Snapshot.c \
@@ -24,18 +23,12 @@ term_store_LDADD = \
 noinst_HEADERS=\
 	table.h \
 	table-store.h \
-	term-store.tif.h \
 	Snapshot.h \
 	Snapshot_dict.h
 
 INCLUDES	        = $(ATERM_CFLAGS) \
                           $(TOOLBUSLIB_CFLAGS) \
 			  -I$(srcdir)/snapshot
-
-CLEANFILES += term-store.idef
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 if MAINTAINER_MODE 
                           

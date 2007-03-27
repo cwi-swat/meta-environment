@@ -7,7 +7,7 @@
 #include <atb-tool.h>
 
 #include "table-store.h"
-#include "term-store.tif.h"
+#include "term-store.h"
 
 static char myversion[] = "1.0";
 
