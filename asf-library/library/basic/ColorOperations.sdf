@@ -1,5 +1,6 @@
 module basic/ColorOperations
 
+imports basic/Colors
 exports
 
 context-free syntax
@@ -763,6 +764,7 @@ context-free syntax
 "LightGreen" -> Color
 
 hiddens
+  imports basic/Comments
 
 context-free start-symbols
   Color

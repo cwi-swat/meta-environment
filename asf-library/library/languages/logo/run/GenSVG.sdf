@@ -13,7 +13,7 @@ hiddens
   sorts X-Element
 
   context-free start-symbols 
-    Document X-Element
+    Document X-Element X-AttValue
 
   context-free syntax
     "<|" Element "|>"                  -> X-Element

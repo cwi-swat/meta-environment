@@ -1,5 +1,5 @@
 equations
- 
+  
 [gen1] gen( ,&X-Element) = &X-Element
 
 [gen2] <| &AV1 |> := intcon2attvalue(&I1),
@@ -10,7 +10,7 @@ equations
        gen(line(&I1,&I2,&I3,&I4) &Line*, <| <g>&Content*</g> |>) =
        gen(&Line*, <| <g>&Content*
                                <line x1=&AV1 y1=&AV2 x2=&AV3 y2=&AV4/>
-                           </g>
+                      </g>
                    |>)
 
 [gen3] <| &Element |> := gen(&Lines, <| <g></g> |>)
