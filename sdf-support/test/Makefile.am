@@ -9,7 +9,7 @@ include $(top_srcdir)/Makefile.meta
 TESTS = $(check_PROGRAMS)
 check_PROGRAMS = pt2sdf grammars sorts 
 
-EXTRA_DIST = Booleans.pt Layout.pt BoolTerm.pt
+EXTRA_DIST += Booleans.pt Layout.pt BoolTerm.pt
 
 AM_CPPFLAGS += \
 	-I$(top_srcdir)/lib \
