@@ -1,6 +1,6 @@
 /*$Id$*/
 
-#include "sglr.tif.h"
+#include "sglr.h"
 #include "sglrInterface.h"
 #include "inputStringBuilder.h"
 #include "inputString-api.h"

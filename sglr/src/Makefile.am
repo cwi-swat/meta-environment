@@ -7,10 +7,6 @@ lib_LTLIBRARIES = libsglr.la
 bin_PROGRAMS= \
 	sglr 
 
-EXTRA_DIST = sglr.idef.src
-
-CLEANFILES += sglr.idef
-
 INCLUDES= \
 	$(ATERM_CFLAGS) \
 	$(CONFIG_SUPPORT_CFLAGS) \
@@ -30,7 +26,6 @@ pkgdata_DATA= \
 
 include_HEADERS= \
 	sglrInterface.h \
-	sglr.tif.h \
 	inputStringBuilder.h \
 	inputString-data.h \
 	mainOptions.h \
@@ -104,8 +99,8 @@ libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
 libsglr_la_CPPFLAGS = -DFAST_API
 
 sglr_SOURCES= \
-	sglr.tif.c \
-	sglr.c \
+	sglr.idef \
+	main.c \
 	toolbusInterface.c \
 	commandLineInterface.c 
 
@@ -119,18 +114,3 @@ sglr_LDADD = \
 	$(TOOLBUSLIB_LIBS) \
 	$(ATERM_LIBS) \
 	$(C_LIBRARY_LIBS)
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
-
-IDEF=idef2tif
-TIFS=tifstoc
-
-tif:
-	for i in `ls *.idef`; do \
-	  ${IDEF} $$i; \
-	  ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs ;\
-	done
-
-tif-clean:
-	rm -f *.tifs *.tif.[ch]
