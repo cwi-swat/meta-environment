@@ -11,8 +11,9 @@
 AM_CPPFLAGS = 
 LDADD = 
 
-SUFFIXES =
+SUFFIXES   =
 CLEANFILES = 
+EXTRA_DIST =
 
 pkgconfigdir  = $(libdir)/pkgconfig
 docdatadir    = $(datadir)/doc/$(PACKAGE)
@@ -39,7 +40,43 @@ check_available = \
 
 stemvar = $($(shell echo "$*" | tr '-' '_')$1)
 
-SUFFIXES += .eqs .adt .idef .tifs
-
 endif
+
+# ToolBus rules
+SUFFIXES += .idef .isrc
+.isrc.idef:
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
+CLEANFILES += $(wildcard *.idef)
+
+EXTRA_DIST += $(wildcard *.isrc) 
+
+if MAINTAINER_MODE 
+
+EXTRA_DIST += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
+
+CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h $i.tifs)
+
+.tifs.c:
+	tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS)
+
+.tifs.h:
+	tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS)
+
+.idef.tifs: 
+	toolbus -output $*.tifs -gentifs $<
+
+else
+.idef.c: 
+	touch $*.[ch]
+
+.idef.h: 
+	touch $*.[ch]
+endif
+
+#ApiGen
+
+SUFFIXES += .adt
+
+EXTRA_DIST += $(wildcard *.adt) $(foreach i,$(basename $(wildcard *.adt)),$i.c $i.h $i_dict.c $i_dict.h)
 

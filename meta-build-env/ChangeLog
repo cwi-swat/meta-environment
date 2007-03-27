@@ -1,5 +1,16 @@
 $Id$
 
+Tue Mar 27 10:46:40 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: added automatic rules for ToolBus interface generation,
+   starting from a .isrc file, which is transformed to a .idef file by
+   substituying __PREFIX__, and ending with a .c and .h file that implement
+   the bridge for C. Add blabla.idef to your _SOURCES variable to use it.
+   Example:
+   bin_PROGRAMS=foo
+   foo_SOURCES=main.c foo.idef
+   Make sure not the let foo.idef have the same basename as another source
+   file, since the rules compute foo.o and link it into the program.
+
 Thu Feb 15 14:52:40 CET 2007 <kooiker@cwi.nl>
  * meta-projectSet.psf: Add Eclipse team environment
 
