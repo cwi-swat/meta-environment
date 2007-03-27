@@ -9,16 +9,16 @@ exports
   context-free start-symbols
       Document 
     sorts
-      AttDef AttType AttValue AttlistDecl Attribute CDSect CP Char CharData CharRef
+      AttDef AttType AttValue AttValueD AttValueS AttlistDecl Attribute CDSect CP Char CharData CharRef
       Children Choice Comment ConditionalSect Content ContentSpec Dash DefaultDecl Digit Document
       DocTypeDecl Element ETag ElementDecl EmptyElementTag EncName
-      EncodingDecl EntityDecl EntityDef EntityRef EntityValue EnumeratedType
+      EncodingDecl EntityDecl EntityDef EntityRef EntityValue EntityValueD EntityValueS EnumeratedType
       Enumeration Eq %ExtParsedEnt ExtPe% ExtSubset ExtSubsetDecl ExternalId GEDecl
       ISO639Code IanaCode %Ignore IgnoreSect IgnoreSectContents% IncludeSect LangCode
       LanguageId Letter MarkUpDecl Misc Mixed NDataDecl Name NameChar Names Nmtoken
       Nmtokens NonEmptyElementTag NotationDecl NotationType PEDecl PEDef PEReference PI PITarget Prolog
-      PubidChar PubidLiteral PublicID Reference S SDDecl STag Seq StringType SubCode
-      SystemLiteral TextDecl TokenizedType UserCode VersionInfo VersionNum XMLDecl
+      PubidChar PubidLiteral PubidLiteralD PubidLiteralS PublicID Reference S SDDecl STag Seq StringType SubCode
+      SystemLiteral SystemLiteralD SystemLiteralS TextDecl TokenizedType UserCode VersionInfo VersionNum XMLDecl
 
     sorts %% Auxiliary sorts for the benefit of lexical equations
       EV-CharD EV-CharS AV-CharD AV-CharS SL-CharD SL-CharS
@@ -28,11 +28,11 @@ exports
  lexical syntax  
    %[ 2]%   ~[]                                                       -> Char
    %[ 3]%  [\ \t\n\r]+                                                -> S      {cons("xml-s")}
-   %[ 3]%  [\ \t\n\r]                                                -> LAYOUT {cons("xml-layout")}
+   %[ 3]%  [\ \t\n\r]                                                 -> LAYOUT {cons("xml-layout")}
            [a-zA-Z]                                                   -> Letter
            [0-9]                                                      -> Digit
    %[ 4]%  Letter | Digit | [\.\-\_\:]                                -> NameChar
-   %[ 5]%  (Letter | "_" | ":") NameChar*                             -> Name {category("MetaKeyword")}
+   %[ 5]%   (Letter | "_" | ":")  NameChar*                           -> Name {category("MetaKeyword")}
  context-free syntax
    %[ 6]%  Name*                                                      -> Names
  lexical syntax
@@ -42,19 +42,25 @@ exports
  lexical syntax
           ~[\%\&\"]                                                   -> EV-CharD
           ~[\%\&\']                                                   -> EV-CharS
-   %[ 9]%  [\"] ( EV-CharD | PEReference | Reference)* [\"]           -> EntityValue
-   %[ 9]%  [\'] ( EV-CharS | PEReference | Reference)* [\']           -> EntityValue
+   %[ 9]%  [\"] ( EV-CharD | PEReference | Reference)* [\"]           -> EntityValueD
+   %[ 9]%  [\'] ( EV-CharS | PEReference | Reference)* [\']           -> EntityValueS
+           EntityValueS | EntityValueD                                -> EntityValue
 
            ~[\<\&\"]                                                  -> AV-CharD
            ~[\<\&\']                                                  -> AV-CharS
-   %[10]%  [\"] (AV-CharD | Reference)* [\"]                          -> AttValue
-   %[10]%  [\'] (AV-CharS | Reference)* [\']                          -> AttValue 
+   %[10]%  [\"] (AV-CharD | Reference)* [\"]                          -> AttValueD
+   %[10]%  [\'] (AV-CharS | Reference)* [\']                          -> AttValueS
+           AttValueS | AttValueD                                      -> AttValue
  
            ~[\"]                                                      -> SL-CharD
            ~[\']                                                      -> SL-CharS
-   %[11]%  ([\"] SL-CharD* [\"]) |  ([\'] SL-CharS* [\'])             -> SystemLiteral
+   %[11]%  [\"] SL-CharD* [\"]                                        -> SystemLiteralD
+           [\'] SL-CharS* [\']                                        -> SystemLiteralS
+           SystemLiteralS | SystemLiteralD                            -> SystemLiteral
 
-   %[12]%  ([\"] PubidChar* [\"]) | ([\'] PubidChar* [\'])            -> PubidLiteral
+   %[12]%  [\"] PubidChar* [\"]                                       -> PubidLiteralD
+           [\'] PubidChar* [\']                                       -> PubidLiteralS
+           PubidLiteralS | PubidLiteralD                              -> PubidLiteral
    %[13]%  [\ \n\t] | [ a-zA-Z0-9] | 
            [\-\'\(\)\+\,\.\/\:\=\?\;\!\*\#\@\$\_\%]                   -> PubidChar
 
