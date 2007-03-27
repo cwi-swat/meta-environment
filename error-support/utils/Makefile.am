@@ -13,8 +13,9 @@ AM_CPPFLAGS += \
 	$(TOOLBUSLIB_CFLAGS)
 
 error_support_SOURCES = \
-	main.c \
-	error-support.idef
+	error-support.idef \
+	main.c 
+
 
 error_support_LDADD = \
 	-L../lib -lErrorAPI \
