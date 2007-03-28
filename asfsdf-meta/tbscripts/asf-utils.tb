@@ -374,9 +374,14 @@ in
       rec-msg(asfe-test-results(Errors?)) 
       . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
       . RemoveSummary("asf-tests",Modulename)
-      . snd-msg(es-make-summary("asf-tests", Modulename, Errors))
-      . rec-msg(es-summary(Summary?))
-      . DisplaySummary(Summary)
+      .
+      if equal(Errors, []) then
+        snd-msg(show-message-dialog("All tests succeeded"))
+      else
+        snd-msg(es-make-summary("asf-tests", Modulename, Errors))
+        . rec-msg(es-summary(Summary?))
+        . DisplaySummary(Summary)
+      fi
     +
       rec-msg(asfe-rewrite-errors(Errors?))
       . RemoveSummary("asfe", "all")

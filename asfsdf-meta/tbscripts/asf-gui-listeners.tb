@@ -53,6 +53,7 @@ toolbus(LanguageFeatureMenuListener("check", "CheckAction","Check this term"))
 toolbus(LanguageFeatureMenuListener("extract", "ExtractAction","Extract data from this term"))
 toolbus(LanguageFeatureMenuListener("draw", "DrawAction","Display using Scalable Vestor Graphics"))
 toolbus(LanguageFeatureMenuListener("test", "TestAction","Run unit tests"))
+toolbus(LanguageFeatureMenuListener("display", "DisplayAction","Display a Swing GUI"))
 
 process LanguageFeatureRemoveListener(ModuleId: module-id, Property: term) is
   subscribe(mm-module-deleted(ModuleId))
