@@ -1,8 +1,8 @@
 module languages/yacc/syntax/YACC
 imports basic/Integers
 imports basic/Strings
-imports basic/Whitespace
 imports languages/generic-cpp/syntax/CommentsAsLayout
+imports languages/generic-cpp/syntax/Whitespace
 
 exports
   sorts Grammar Grammar-rules Rule Terminal NonTerminal Literal Expression 
@@ -38,7 +38,9 @@ exports
     Extra-C-code                                    -> Grammar
 
     ("%token" | "%left" | "%right" | "%nonassoc") 
-      (Terminal | Literal)+ Integer?  String?       -> Yacc-declaration
+      (Terminal | Literal)+  String?                -> Yacc-declaration
+%%    ("%token" | "%left" | "%right" | "%nonassoc") 
+%%      Terminal Integer                              -> Yacc-declaration
      "%start" Terminal                              -> Yacc-declaration
 
     Yacc-declaration*                               -> Yacc-declarations
