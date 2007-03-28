@@ -6,6 +6,7 @@ BUILTIN_NAMES_ARITY=\
 	set-anno_3\
 	get-anno_2\
 	get-term-anno_2 \
+	get-lex-term-anno_2 \
 	set-term-anno_3 \
 	execute-command_1 \
 	read-from-command_1 \

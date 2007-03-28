@@ -8,6 +8,7 @@
 #include "builtin-common.h"
 
 static ATerm apply(ATerm input);
+static ATerm convert(const char* name, PT_Tree tree);
 
 ATerm asf_toolbus_handler(int conn, ATerm term)
 {
@@ -21,12 +22,29 @@ ATerm asf_toolbus_handler(int conn, ATerm term)
   else if (ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
     return NULL; 
   }
+  else if(ATmatch(term, "rec-eval(normalize(<term>))", &t0)) {
+    /* simple normalization, no conversions */
+    PT_ParseTree tree = (PT_ParseTree) ATBunpack(t0);
+
+    if (PT_isValidParseTree(tree)) {
+      PT_Tree trm = PT_getParseTreeTop(tree);
+      ATerm reduct = innermost(trm);
+      PT_Tree result = toasfix(reduct);
+      ATwriteToNamedTextFile((ATerm) result, "debug.metrics");
+      return ATmake("snd-value(normalform(<term>))", 
+		    ATBpack((ATerm) PT_makeParseTreeTop(result, 0)));
+    }
+
+    ATwarning("asc-client: not a valid parse tree!\n");
+    return NULL;
+  }
   else if(ATmatch(term, "rec-eval(<term>)", &t0)) {
-    return apply(t0);
+    /* smart normalization, with function application and lowering */
+    return apply(ATBunpack(t0));
   }
   else if(ATmatch(term, "rec-do(<term>)", &t0)) {
     /* an ASF specification with side-effects might use this. */
-    (void) apply(t0);
+    (void) apply(ATBunpack(t0));
     return NULL;
   }
 
@@ -65,7 +83,7 @@ static ATerm convert(const char* name, PT_Tree tree)
     }
     else {
       /* a possible very big parse tree should be packed */
-      result = ATBpack((ATerm) tree);
+      result = ATBpack((ATerm) PT_makeParseTreeTop(tree, 0));
     }
 
     return (ATerm) ATmakeAppl(ATmakeAFun(name, 1, ATfalse), result);

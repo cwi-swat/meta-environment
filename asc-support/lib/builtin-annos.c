@@ -226,3 +226,64 @@ PT_Tree ASC_set_term_anno(ATerm type, ATerm aTerm, ATerm aKey, ATerm aAnno)
 }
 
 /*}}}  */
+
+/*{{{  static PT_Tree get_lex_term_anno(PT_Tree term, PT_Tree key) */
+
+static PT_Tree get_lex_term_anno(PT_Tree term, PT_Tree key)
+{
+  ATerm label;
+  ATerm anno = NULL;
+
+  label = unquoteAppl(ATparse(PT_yieldTreeToString(key, ATfalse)));
+
+  if (label == NULL) {
+    return NULL;
+  }
+
+  if (PT_isTreeLexicalInjection(term)) {
+    PT_Tree lex = PT_getArgsHead(PT_getTreeArgs(term));
+    anno = PT_getTreeAnnotation(lex, label);
+  }
+
+  if (anno != NULL) {
+    return (PT_Tree) PTPT_liftATerm(anno);
+  }
+
+  return noAnno();
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASFE_get_lex_term_anno(PT_Tree input)  */
+
+PT_Tree ASFE_get_lex_term_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
+{
+  PT_Tree value = NULL;
+
+  value = get_lex_term_anno(term, key);
+
+  if (value != NULL) {
+    return value;
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASC_get_lex_term_anno(ATerm type, ATerm aterm, ATerm akey) */
+
+PT_Tree ASC_get_lex_term_anno(ATerm type, ATerm aterm, ATerm akey)
+{
+  PT_Tree term = muASFToTree(aterm);
+  PT_Tree key = muASFToTree(akey);
+  PT_Tree value = NULL;
+  
+  value = get_lex_term_anno(term, key);
+  
+  if (value != NULL) {
+    return value;
+  }
+
+  return PT_makeTreeLit("TODO: return a proper normal form");
+}
+
+/*}}}  */
