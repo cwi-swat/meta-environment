@@ -18,11 +18,11 @@ AM_CPPFLAGS += \
 	$(ATERM_CFLAGS) 
 
 structure_editor_SOURCES = \
+	structure-editor.idef \
 	main.c \
 	slice-tree.c \
 	StructureEditor.c \
-	StructureEditor_dict.c \
-	structure-editor.idef 
+	StructureEditor_dict.c
 
 structure_editor_LDADD = \
 	$(PT_SUPPORT_LIBS) \
