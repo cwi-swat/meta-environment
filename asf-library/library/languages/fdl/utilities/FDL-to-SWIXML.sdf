@@ -1,0 +1,55 @@
+module languages/fdl/utilties/FDL-to-SWIXML
+
+imports 
+	languages/fdl/syntax/Value-FDL
+	languages/xml/syntax/XML 
+
+
+hiddens
+context-free start-symbols Document
+
+exports
+
+context-free syntax
+	featurediagram-to-swixml(FeatureDiagram) -> Document
+	features-to-swixml(FeatureDiagram, Element) -> Element {traversal(top-down, accu, continue)}
+	features-to-swixml(FeatureDefinition, Element) -> Element {traversal(top-down, accu, continue)}
+
+context-free syntax
+	feature-to-checkbox(FeatureExpression, Element) -> Element
+	features-to-checkboxes({FeatureExpression ","}*, Element) -> Element
+	feature-to-radiobutton(FeatureExpression, Element) -> Element
+	features-to-radiobuttons({FeatureExpression ","}*, Element) -> Element
+	features-to-radio-buttongroup({FeatureExpression ","}*, Element) -> Element
+	features-to-panel({FeatureExpression ","}*, Element) -> Element
+	featurename-to-label(FeatureName) -> Element
+	featureexpression-to-widgets(FeatureExpression, Element) -> Element
+	featurename-to-attvalue(FeatureName) -> AttValue
+	atomicfeature-to-attvalue(AtomicFeature) -> AttValue
+
+hiddens
+variables
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featurename"[0-9\']* -> FeatureName
+	"$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+	"$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$element"[0-9\']* -> Element
+	"$content*"[0-9\']* -> Content*
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+
+	"$attvalue"[0-9\']* -> AttValue
+	"$stag"[0-9\']* -> STag
+	"$etag"[0-9\']* -> ETag
+
+lexical variables
+	"$av-chard"[0-9\']* -> ~[\<\&\"]
+	"$rest"[0-9\']* -> (AV-CharD | Reference)*
+	"$atomic-head"[0-9\']* -> [a-z]
+	"$tail-char"[0-9\']* -> [a-zA-Z0-9\-\_]
+	"$tail-char+"[0-9\']* -> [a-zA-Z0-9\-\_]+
+	"$tail-char*"[0-9\']* -> [a-zA-Z0-9\-\_]*
+	"$featurename-head"[0-9\']* -> [A-Z]
+	
+
+
