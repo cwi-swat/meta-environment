@@ -1,12 +1,12 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:54:56 AM
+// generation time: Mar 28, 2007 3:57:36 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import toolbus.SwingTool;
 
@@ -20,11 +20,12 @@ abstract public class DialogTool
   implements DialogTif
 {
   // This table will hold the complete input signature
-  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
+  private Set<ATerm> sigTable = new HashSet<ATerm>();
 
   // Patterns that are used to match against incoming terms
   private ATerm PshowProgressMessage0;
   private ATerm PshowErrorDialogWithArguments0;
+  private ATerm PshowMessageDialog0;
   private ATerm PshowProgressList0;
   private ATerm PshowProgressMessageWithArguments0;
   private ATerm PshowErrorDialog0;
@@ -45,17 +46,17 @@ abstract public class DialogTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog-with-arguments(<str>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<dialog>,show-directory-dialog(<str>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<list>,<str>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message-with-arguments(<str>,<list>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<dialog>,close-progress-list)"), btrue);
-    sigTable.put(factory.parse("rec-terminate(<dialog>,<term>)"), btrue);
+    sigTable.add(factory.parse("rec-do(<dialog>,show-error-dialog(<str>))"));
+    sigTable.add(factory.parse("rec-do(<dialog>,show-message-dialog(<str>))"));
+    sigTable.add(factory.parse("rec-do(<dialog>,show-error-dialog-with-arguments(<str>,<list>))"));
+    sigTable.add(factory.parse("rec-eval(<dialog>,show-directory-dialog(<str>,<list>))"));
+    sigTable.add(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<list>,<str>))"));
+    sigTable.add(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"));
+    sigTable.add(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"));
+    sigTable.add(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"));
+    sigTable.add(factory.parse("rec-do(<dialog>,show-progress-message-with-arguments(<str>,<list>))"));
+    sigTable.add(factory.parse("rec-do(<dialog>,close-progress-list)"));
+    sigTable.add(factory.parse("rec-terminate(<dialog>,<term>)"));
   }
 
   // Initialize the patterns that are used to match against incoming terms
@@ -63,6 +64,7 @@ abstract public class DialogTool
   {
     PshowProgressMessage0 = factory.parse("rec-do(show-progress-message(<str>))");
     PshowErrorDialogWithArguments0 = factory.parse("rec-do(show-error-dialog-with-arguments(<str>,<term>))");
+    PshowMessageDialog0 = factory.parse("rec-do(show-message-dialog(<str>))");
     PshowProgressList0 = factory.parse("rec-do(show-progress-list(<str>))");
     PshowProgressMessageWithArguments0 = factory.parse("rec-do(show-progress-message-with-arguments(<str>,<term>))");
     PshowErrorDialog0 = factory.parse("rec-do(show-error-dialog(<str>))");
@@ -86,6 +88,11 @@ abstract public class DialogTool
     result = term.match(PshowErrorDialogWithArguments0);
     if (result != null) {
       showErrorDialogWithArguments((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PshowMessageDialog0);
+    if (result != null) {
+      showMessageDialog((String)result.get(0));
       return null;
     }
     result = term.match(PshowProgressList0);
@@ -136,7 +143,7 @@ abstract public class DialogTool
     while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
-      if (!sigTable.containsKey(sig)) {
+      if (!sigTable.contains(sig)) {
         // Sorry, but the term is not in the input signature!
         notInInputSignature(sig);
       }

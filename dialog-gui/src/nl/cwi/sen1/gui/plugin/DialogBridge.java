@@ -1,6 +1,6 @@
 // Java tool bridge DialogBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:54:56 AM
+// generation time: Mar 28, 2007 3:57:36 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -33,6 +33,15 @@ public class DialogBridge
     }
     else {
       throw new UnsupportedOperationException("method `showErrorDialogWithArguments' not supported.");
+    }
+  }
+  public void showMessageDialog(String s0)
+  {
+    if (tool != null) {
+      tool.showMessageDialog(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showMessageDialog' not supported.");
     }
   }
   public void showProgressList(String s0)

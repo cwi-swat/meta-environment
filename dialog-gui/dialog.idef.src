@@ -9,6 +9,7 @@ let
   Arguments: list,
   DialogTitle: str,
   ErrorMessage: str,
+  Message: str,
   Paths: list,
   Question: str,
   Extension: str
@@ -27,6 +28,9 @@ in
   +
     rec-msg(show-error-dialog(ErrorMessage?))
     . snd-do(T, show-error-dialog(ErrorMessage)) 
+  +
+    rec-msg(show-message-dialog(Message?))
+    . snd-do(T, show-message-dialog(Message)) 
   +
     rec-msg(show-error-dialog-with-arguments(ErrorMessage?, Arguments?))
     . snd-do(T, show-error-dialog-with-arguments(ErrorMessage, Arguments))

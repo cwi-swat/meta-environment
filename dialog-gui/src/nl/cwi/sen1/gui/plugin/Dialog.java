@@ -165,6 +165,11 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         return studio.getATermFactory().make("snd-value(answer(cancel))");
     }
 
+    public void showMessageDialog(String message) {
+        JOptionPane.showMessageDialog(StudioImpl.getFrame(), message, "Info",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void showErrorDialog(String errorMessage) {
         if (progressList != null) {
             progressList.dispose();

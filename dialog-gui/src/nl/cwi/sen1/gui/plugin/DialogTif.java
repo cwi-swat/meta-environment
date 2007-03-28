@@ -1,6 +1,6 @@
 // Java tool interface DialogTif
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 9:54:56 AM
+// generation time: Mar 28, 2007 3:57:36 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -10,6 +10,7 @@ public interface DialogTif
 {
   public void showProgressMessage(String s0);
   public void showErrorDialogWithArguments(String s0, ATerm t1);
+  public void showMessageDialog(String s0);
   public void showProgressList(String s0);
   public void showProgressMessageWithArguments(String s0, ATerm t1);
   public void showErrorDialog(String s0);
