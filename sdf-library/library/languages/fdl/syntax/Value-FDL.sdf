@@ -1,0 +1,27 @@
+module languages/fdl/syntax/Value-FDL
+
+imports languages/fdl/syntax/Fdl
+
+exports
+
+sorts ValueType ValueDeclaration Section
+
+context-free syntax
+	AtomicFeature ":" ValueType -> ValueDeclaration
+
+
+	"features" FeatureDefinition* -> Section
+	"types" ValueDeclaration* -> Section
+	"constraints" Constraint* -> Section
+	Section+ -> FeatureDiagram
+	
+	"integer" -> ValueType
+	"string" -> ValueType
+	"color" -> ValueType
+	"path" -> ValueType
+	"date" -> ValueType
+	"font" -> ValueType
+	"url" -> ValueType
+	"event" -> ValueType
+	
+
