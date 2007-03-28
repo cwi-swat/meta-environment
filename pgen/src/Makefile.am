@@ -20,7 +20,7 @@ noinst_SCRIPTS	= sdf2table.test
 pkgdata_DATA	= parsetablegen.idef
 man_MANS	= sdf2table.1
 
-EXTRA_DIST	= sdf2table.src \
+EXTRA_DIST	+= sdf2table.src \
                   parse-sdf2.src 
 
 noinst_HEADERS = \
