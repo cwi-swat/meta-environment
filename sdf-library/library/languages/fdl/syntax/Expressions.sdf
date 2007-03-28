@@ -5,7 +5,7 @@ imports languages/fdl/syntax/Layout
 
 exports
 
-sorts FeatureName AtomicFeature FeatureExpression
+sorts FeatureName AtomicFeature FeatureExpression FeatureExpressionList
 
 context-free syntax
 	"all" "(" {FeatureExpression ","}+ ")" -> FeatureExpression {cons("all")}
