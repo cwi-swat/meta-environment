@@ -5,6 +5,7 @@ SUBDIRS = \
 	asfix \
 	aterm \
 	box \
+	bnf \
 	casl \
 	cpp \
 	ansi-c \
