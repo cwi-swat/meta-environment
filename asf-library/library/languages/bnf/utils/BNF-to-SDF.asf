@@ -14,6 +14,11 @@ equations
 		$nonterminal ::= $element
 		$rule*'
 
+[default-normalize-rules-rule-2]
+	normalize-rules($rule, $rule*) =
+		$rule*
+		$rule
+
 equations
 
 [rules-to-productions-rule]
@@ -55,7 +60,7 @@ equations
 
 [elements-to-symbols-element-group-multi]
 	$symbol1 := elements-to-symbols($element, ),
-	$symbol2 ? := elements-to-symbols({ $element+ }, )
+	$symbol2 := elements-to-symbols({ $element+ }, )
 	===
 	elements-to-symbols({ $element | $element+ }, $symbol*) =
 		$symbol* $symbol1 | $symbol2 
@@ -131,8 +136,8 @@ equations
 [to-camel-case-head-2]
 	is-digit($byte) == true
 	===
-	to-camel-case(bytes(byte(S) byte(o) byte(r) byte(t) byte(\-) $byte $byte*)) = 
-		to-camel-case(bytes($byte $byte*))
+	to-camel-case(bytes($byte $byte*)) = 
+		to-camel-case(bytes(byte(S) byte(o) byte(r) byte(t) byte(\-) $byte $byte*))
 
 [to-camel-case-after-space]
 	is-alpha($byte) == true,
@@ -188,6 +193,9 @@ tests
 
 [bytes-to-sort-single]
 	bytes-to-sort(bytes(byte(A))) == A
+
+[bytes-to-sort-number]
+	bytes-to-sort(bytes(byte(0) byte(A))) == Sort-0A
 
 equations
 

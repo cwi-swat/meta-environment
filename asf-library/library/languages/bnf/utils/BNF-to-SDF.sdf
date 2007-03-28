@@ -16,8 +16,8 @@ context-free syntax
 	rules-to-productions(Rules, Productions) -> Productions {traversal(top-down, accu, continue)}
 	rules-to-productions(Rule, Productions) -> Productions {traversal(top-down, accu, continue)}
 	terminal-to-literal(Terminal) -> StrCon
-	elements-to-symbols(Elements, Symbols) -> Symbols {traversal(top-down, accu, continue)}
-	elements-to-symbols(Element, Symbols) -> Symbols {traversal(top-down, accu, continue)}
+	elements-to-symbols(Elements, Symbols) -> Symbols {traversal(top-down, accu, break)}
+	elements-to-symbols(Element, Symbols) -> Symbols {traversal(top-down, accu, break)}
 
 	nonterminal-to-sort(NonTerminal) -> Sort
 	non-alpha-numeric-to-space(Bytes) -> Bytes

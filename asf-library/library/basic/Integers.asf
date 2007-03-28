@@ -435,10 +435,3 @@ tests
   [tod1] odd(1) == true
   [tod2] odd(-137) == true
   [tod3] odd(24) == false
-
-tests
-  [sure]  true != true    %% One failing test, just to make sure ...
-
-
-
-
