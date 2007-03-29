@@ -1,5 +1,13 @@
 
 
+Thu Mar 29 13:11:37 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.java: added a new bridge for dot. This works directly on the
+   prefuse data model by wrapping the Graph class, and providing specialized
+   Renderers for Nodes and Edges. The current form is taken mainly from
+   the graph-gui package, but abstracts now from the graph data-structure
+   completely. Extensions to be added are node shapes and colors, etc.
+ * **/*.java: the treeLayout is replaced by dotlayout now.
+
 Wed Mar 21 15:03:47 CET 2007 <jurgenv@cwi.nl>
  * *: added some try catch blocks to make the graph visualizer more robust
    against RTuples that have contents that does not correspond to the declared

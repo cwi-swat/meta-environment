@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import nl.cwi.sen1.gui.plugin.prefusedot.DotAdapter;
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.Location;
 import nl.cwi.sen1.relationstores.types.RTuple;
@@ -85,7 +86,7 @@ public class GraphVisualizationWindow extends VisualizationPluginWindow {
             @Override
             public void itemClicked(VisualItem item, MouseEvent e) {
                 if (e.getClickCount() == DOUBLE_CLICK) {
-                    String nodeId = item.getString(GraphConstants.ID);
+                    String nodeId = item.getString(DotAdapter.DOT_ID);
 
                     doLocationClick(nodeId);
                 }

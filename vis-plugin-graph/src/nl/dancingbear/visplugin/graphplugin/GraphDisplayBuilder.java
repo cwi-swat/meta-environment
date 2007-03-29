@@ -1,6 +1,10 @@
 
 package nl.dancingbear.visplugin.graphplugin;
 
+import nl.cwi.sen1.gui.plugin.prefusedot.DotAdapter;
+import nl.cwi.sen1.gui.plugin.prefusedot.DotEdgeRenderer;
+import nl.cwi.sen1.gui.plugin.prefusedot.DotLayout;
+import nl.cwi.sen1.gui.plugin.prefusedot.DotNodeRenderer;
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -9,7 +13,6 @@ import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.FontAction;
 import prefuse.action.layout.graph.NodeLinkTreeLayout;
-import prefuse.controls.AnchorUpdateControl;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
@@ -33,8 +36,7 @@ import prefuse.visual.VisualItem;
 public class GraphDisplayBuilder {
     
     private final static int BREADTHSPACING = 30;
-    private final static int DEFAULTPADDING = 10;
-	private NodeLinkTreeLayout treeLayout;
+	private DotLayout dotLayout;
 
     /**
      * Main method for the graph creation.
@@ -83,14 +85,9 @@ public class GraphDisplayBuilder {
     private RendererFactory createRenderers() {
         // The the name labels for NodeItems have to be rendered using
         // a labelrenderer. The column to show is conveniently called "label"
-        LabelRenderer lr = new LabelRenderer(GraphConstants.LABEL);
-        lr.setRoundedCorner(DEFAULTPADDING, DEFAULTPADDING);
-        lr.setHorizontalPadding(DEFAULTPADDING);
-        lr.setVerticalPadding(DEFAULTPADDING);
-
-        // Edges need to be rendered to, using curved edges
-        EdgeRenderer er = new EdgeRenderer(Constants.EDGE_TYPE_LINE, Constants.EDGE_ARROW_FORWARD);
-
+        LabelRenderer lr = new DotNodeRenderer(DotAdapter.DOT_LABEL);
+        EdgeRenderer er = new DotEdgeRenderer(Constants.EDGE_TYPE_LINE, Constants.EDGE_ARROW_FORWARD);
+        
         // Create a new default renderer factory
         DefaultRendererFactory drf = new DefaultRendererFactory(lr, er);
         
@@ -149,13 +146,11 @@ public class GraphDisplayBuilder {
      * @date 07-3-2007  
      */
     private ActionList createLayoutActions() {
-        treeLayout = new NodeLinkTreeLayout(GraphConstants.GRAPH);
-		treeLayout.setOrientation(Constants.ORIENT_TOP_BOTTOM);
-        treeLayout.setBreadthSpacing(BREADTHSPACING);
+        dotLayout = new DotLayout(GraphConstants.GRAPH);
 
         // Create an actions avaible for the graph.
         ActionList layout = new ActionList();
-        layout.add(treeLayout);
+        layout.add(dotLayout);
 
         // Repaint the screen to activate the changes.
         layout.add(new RepaintAction());
@@ -182,7 +177,6 @@ public class GraphDisplayBuilder {
         d.addControlListener(new FocusControl());
         d.addControlListener(new DragControl());
         d.addControlListener(new PanControl());
-        d.addControlListener(new AnchorUpdateControl(treeLayout));
         
         // Allowing zooming in the panel.
         d.addControlListener(new ZoomControl());

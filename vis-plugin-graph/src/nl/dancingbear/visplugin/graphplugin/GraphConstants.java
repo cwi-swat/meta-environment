@@ -8,17 +8,17 @@ import prefuse.util.ColorLib;
  *
  * @author A. Belgraver
  * @author Anton Gerdessen (reviewer)
+ * @author Jurgen Vinju
  * @date 07-3-2007
  */
 public class GraphConstants {
 
-    public static final String ID = "id";
-    public static final String LABEL = "label";
     public static final String GRAPH = "graph";
     public static final String NODES = "graph.nodes";
     public static final String EDGES = "graph.edges";
     public static final String COLOR = "color";
     public static final String LAYOUT = "layout";
+  
 
     /**
      * Node background color.

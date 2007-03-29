@@ -2,6 +2,7 @@ package nl.dancingbear.visplugin.graphplugin;
 
 import java.util.HashMap;
 
+import nl.cwi.sen1.gui.plugin.prefusedot.DotAdapter;
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.Location;
 import nl.cwi.sen1.relationstores.types.RElem;
@@ -112,13 +113,11 @@ public class GraphBuilder {
 	private Graph convertRelTupleTupleToDataset(RElemElements elements) {
 		// Setup the new graph.
 		m_nodeCache.clear();
-		boolean directedGraph = true;
-		Graph graph = new Graph(directedGraph);
+//		boolean directedGraph = true;
+//		Graph graph = new Graph(directedGraph);
 
-		// Create the node layout <Id,Label>
-		graph.addColumn(GraphConstants.ID, String.class);
-		graph.addColumn(GraphConstants.LABEL, String.class);
-
+		DotAdapter graph = new DotAdapter();
+		
 		try {
 			while (elements.hasTail()) {
 				RElem headElement = elements.getHead();
@@ -149,14 +148,12 @@ public class GraphBuilder {
 
 				// Create edges between nodes.
 				graph.addEdge(nodeId1, nodeId2);
-				
-				
-				
 			}
 		} catch (UnsupportedOperationException e) {
 			System.err.println("warning: " + e);
 		}
 
+		graph.doDotLayout();
 		return graph;
 	}
 
@@ -175,10 +172,6 @@ public class GraphBuilder {
 		m_nodeCache.clear();
 		boolean directedGraph = true;
 		Graph graph = new Graph(directedGraph);
-
-		// Create the node layout <Id,Label>
-		graph.addColumn(GraphConstants.ID, String.class);
-		graph.addColumn(GraphConstants.LABEL, String.class);
 
 		while (elements.hasTail()) {
 			RElem headElement = elements.getHead();
@@ -225,8 +218,8 @@ public class GraphBuilder {
 		} else {
 			// Create a new node since it didnt exist.
 			node = graph.addNode();
-			node.setString(GraphConstants.ID, nodeName);
-			node.setString(GraphConstants.LABEL, nodeName);
+			node.setString(DotAdapter.DOT_ID, nodeName);
+			node.setString(DotAdapter.DOT_LABEL, nodeName);
 			m_nodeCache.put(nodeName, node);
 		}
 
