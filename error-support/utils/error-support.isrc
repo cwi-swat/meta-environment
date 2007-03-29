@@ -1,7 +1,7 @@
 #ifndef __ERROR_SUPPORT__
 #define __ERROR_SUPPORT__
 
-tool error-support is { command = "/home/jurgenv/glt/svn-installed/error-support/bin/error-support" }
+tool error-support is { command = "__PREFIX__/bin/error-support" }
 
 process ErrorSupport is
 let
