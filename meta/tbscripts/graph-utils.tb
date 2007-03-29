@@ -2,7 +2,7 @@
 #define __GRAPH_UTILS__
 
 #include <graph-namespace.h>
-#include <layout-graph.idef>
+#include <layoutgraph.idef>
 #include <graph-converter.idef>
 #include <graph-painter.idef>
 
