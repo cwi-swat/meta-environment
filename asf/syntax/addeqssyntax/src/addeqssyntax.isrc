@@ -10,7 +10,6 @@ in
   (
     rec-msg(add-eqs-syntax(ModuleName?, Syntax?)).
     execute(addeqssyntax,AES?).
-    printf("aes: %t @ %d\n", AES, __LINE__).
     snd-eval(AES,add-eqs-syntax(ModuleName, Syntax)).
     rec-value(AES,extended-syntax(NewSyntax?)). 
     snd-msg(extended-syntax(NewSyntax)).
