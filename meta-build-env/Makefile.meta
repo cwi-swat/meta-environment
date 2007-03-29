@@ -56,14 +56,13 @@ if MAINTAINER_MODE
 EXTRA_DIST += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
 CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h $i.tifs)
 
-.tifs.c:
-	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
-
-.tifs.h:
-	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
-
-.idef.tifs: 
+.idef.c:
 	$(call check_available,toolbus,toolbus -output $*.tifs -gentifs $<)
+	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
+
+.idef.h:
+	$(call check_available,toolbus,toolbus -output $*.tifs -gentifs $<)
+	$(call check_available,tifstoc,tifstoc -output $*.c $*.tifs $(call stemvar,_TIF_OPTIONS))
 
 else
 .idef.c: 
