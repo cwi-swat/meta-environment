@@ -59,7 +59,9 @@ public class GraphBuilder {
 	private final String m_relationGraph = "relation([str,str])";
 
 	private final String m_relationGraphTuple = "relation([tuple([str,loc]),tuple([str,loc])])";
-
+	
+	private final String m_attributedGraphTuple = "relation([tuple([str,relation([str,str])]),str])";
+	                                               
 	/**
 	 * @param factory
 	 * @author A. Belgraver
@@ -84,19 +86,81 @@ public class GraphBuilder {
 		RElem set = fact.getValue();
 		RElemElements elements = set.getElements();
 
-		System.out.println("[GRAPH] building graph");
-
 		// If the type is supported, create the dataset
 		if (isRelStrStr(fact)) {
 			return convertRelStrStrToDataset(elements);
 		}
 
 		if (isRelTupleTuple(fact)) {
-			System.out.println("[GRAPH] it was a tuple,tuple");
 			return convertRelTupleTupleToDataset(elements);
+		}
+		
+		System.err.println("hello");
+		if (isAttributedGraphRelation(fact)) {
+			System.err.println("isAttr");
+			return convertAttributedGraphDataset(elements);
 		}
 
 		return new Graph();
+	}
+
+	
+	private Graph convertAttributedGraphDataset(RElemElements elements) {
+		// Setup the new graph.
+		m_nodeCache.clear();
+
+		DotAdapter graph = new DotAdapter();
+		
+		try {
+			while (elements.hasTail()) {
+				RElem headElement = elements.getHead();
+				// Replace the current looping set with: ( set - head ).
+				elements = elements.getTail();
+				System.err.println("elem:" + headElement);
+				
+				RElemElements tupleRelation = headElement.getElements();
+				RElem tuple1 = tupleRelation.getRElemAt(0);
+		
+				// Disassemble the tuple into its parts.
+				String from = tuple1.getElements().getRElemAt(0).getStrCon();
+				Node fromNode = getOrCreateNode(graph, from);
+
+				String to = tupleRelation.getRElemAt(1).getStrCon();
+				Node toNode = getOrCreateNode(graph, to);
+
+				RElem attributes = tuple1.getElements().getRElemAt(1);
+				if (attributes.isSet()) {
+					RElemElements elems = attributes.getElements();
+					for ( ; !elems.isEmpty(); elems = elems.getTail()) {
+						RElem tuple = elems.getHead();
+						if (!tuple.isTuple() && tuple.getElements().getLength() == 2) {
+							System.err.println("warning: attribute is not a tuple:" + tuple);
+							break;
+						}
+						else {
+							RElem key = tuple.getElements().getRElemAt(0);
+							RElem value = tuple.getElements().getRElemAt(1);
+							if (value.isStr()) {
+							  graph.setNodeAttribute(fromNode, key.getStrCon(), value.getStrCon());
+							}
+							else {
+								System.err.println("warning: attribute value not supported:" + value);
+							}
+						}
+					}
+				}
+				else {
+					System.err.println("warning: ignoring graph attributes:" + attributes);
+				}
+
+				graph.addEdge(fromNode, toNode);
+			}
+		} catch (UnsupportedOperationException e) {
+			System.err.println("warning: " + e);
+		}
+
+		graph.doDotLayout();
+		return graph;
 	}
 
 	/**
@@ -113,8 +177,6 @@ public class GraphBuilder {
 	private Graph convertRelTupleTupleToDataset(RElemElements elements) {
 		// Setup the new graph.
 		m_nodeCache.clear();
-//		boolean directedGraph = true;
-//		Graph graph = new Graph(directedGraph);
 
 		DotAdapter graph = new DotAdapter();
 		
@@ -255,6 +317,16 @@ public class GraphBuilder {
 		}
 
 		return loc;
+	}
+
+	/**
+	 * @author Jurgen Vinju
+	 * @param fact
+	 * @return true if the RTuple contains a fact of the expected type
+	 */
+	private boolean isAttributedGraphRelation(RTuple fact) {
+		RType rType = m_factory.RTypeFromString(m_attributedGraphTuple);
+		return rType.equals(fact.getRtype());
 	}
 
 	/**

@@ -23,6 +23,7 @@ public class GraphVisualizationController extends
      */
     private final String m_relationGraph = "relation([str,str])";
     private final String m_relationGraphTuple = "relation([tuple([str,loc]),tuple([str,loc])])";
+    private final String m_attributedGraphTuple = "relation([tuple([str,relation([str,str])]),str])";
 
     /**
      * Constructor.
@@ -67,7 +68,7 @@ public class GraphVisualizationController extends
      * @date 07-3-2007 
      */
     public ATerm[] getSupportedTypes() {
-        ATerm[] atermList = { makeATerm(m_relationGraph), makeATerm(m_relationGraphTuple) };
+        ATerm[] atermList = { makeATerm(m_relationGraph), makeATerm(m_relationGraphTuple), makeATerm(m_attributedGraphTuple) };
         System.out.println("[GRAPH] atermlist: " + atermList.toString());
         return atermList;
     }

@@ -42,6 +42,7 @@ public class DotAdapter extends Graph {
 	public static final String DOT_HEIGHT = "dotHeight";
 	public static final String DOT_LABEL = "label";
 	public static final String DOT_ID = "id";
+	public static final String DOT_SHAPE = "shape";
 	
 	private int height;
 	private double scale;
@@ -57,6 +58,7 @@ public class DotAdapter extends Graph {
 		addColumn(DOT_CURVE_POINTS, Point2D[].class);
 		addColumn(DOT_WIDTH, int.class);
 		addColumn(DOT_HEIGHT, int.class);
+		addColumn(DOT_SHAPE, String.class);
 	}
 
 	public void doDotLayout() {
@@ -65,7 +67,7 @@ public class DotAdapter extends Graph {
 
 	private void executeDot() {
 		try {
-			String command = "dot -Tplain";
+			String command = "dot -y -Tplain";
 			Process child = Runtime.getRuntime().exec(command);
 
 			OutputStream out = child.getOutputStream();
@@ -93,6 +95,12 @@ public class DotAdapter extends Graph {
 	 * the dot -Tplain output format.
 	 */
 	private static class Patterns {
+		/*
+		 *   graph scale width height
+         *   node name x y width height label style shape color fillcolor
+         *   edge tail head n x1 y1 .. xn yn [label xl yl] style color
+         *   stop
+		 */
 		static final String id = "(\\w+|(?:\"(?:[^\\\"]|(?:\\\")|(?:\\\\))*\"))";
 		static final String w = "(\\S+)";
 		static final String d = "([0-9]+)";
@@ -117,7 +125,7 @@ public class DotAdapter extends Graph {
 			do {
 				String line = i.readLine();
 
-				// System.err.println("line: " + line);
+//				System.err.println("line: " + line);
 				if (line != null) {
 					Matcher m;
 
@@ -129,7 +137,7 @@ public class DotAdapter extends Graph {
 
 					m = Patterns.node.matcher(line);
 					if (m.matches()) {
-						parseNode(m.group(1), m.group(2), m.group(3));
+						parseNode(m.group(1), m.group(2), m.group(3), m.group(4), m.group(5));
 						continue;
 					}
 
@@ -210,7 +218,6 @@ public class DotAdapter extends Graph {
 			if (n.matches()) {
 				int x = (int) (Double.parseDouble(n.group(1)) * dpi);
 				int y = (int) (Double.parseDouble(n.group(2)) * dpi);
-				y = -1 * y + height;
 				points.add(new Point2D.Float(x, y));
 				rest = n.group(3);
 			} else {
@@ -227,17 +234,20 @@ public class DotAdapter extends Graph {
 
 		return result;
 	}
-
-	private void parseNode(String id, String xstr, String ystr) {
+ 
+	private void parseNode(String id, String xstr, String ystr, String widthStr, String heightStr) {
 		id = idFromDot(id);
 		int x = (int) (Double.parseDouble(xstr) * scale * dpi);
 		int y = (int) (Double.parseDouble(ystr) * scale * dpi);
-		y = -1 * y + height;
+		int width = (int) (Double.parseDouble(widthStr) * scale * 0.5 * dpi);
+		int height = (int) (Double.parseDouble(heightStr) * scale * 0.5 * dpi);
 		Node node = getNode(id);
 
 		if (node != null) {
-			node.setInt(DOT_X, x);
-			node.setInt(DOT_Y, y);
+			node.setInt(DOT_X, (int) x);
+			node.setInt(DOT_Y, (int) y);
+			node.setInt(DOT_WIDTH, (int) width);
+			node.setInt(DOT_HEIGHT, (int) height);
 		} else {
 			System.err.println("Node not found: " + id);
 		}
@@ -276,10 +286,17 @@ public class DotAdapter extends Graph {
 			String id = idToDot(t.getString(DOT_ID));
 			storeNode(id, t);
 			b.append(id + " [");
-			String label = t.getString(DOT_LABEL);
-			b.append("label=");
-			b.append(idToDot(label));
-			b.append(" shape=box]\n");
+			
+			for (int i = t.getColumnCount() - 1; i >= 0; i--) {
+				String key = t.getColumnName(i);
+				if (t.canGetString(key)) {
+				  String value = t.getString(i);
+				  if (value != null) {
+  				    b.append(" " + key + "=\"" + escape(value) + "\" ");
+				  }
+				}
+			}
+			b.append(" ]\n");
 		}
 	}
 
@@ -328,6 +345,14 @@ public class DotAdapter extends Graph {
 
 		return result.toString();
 	}
+	
+	public void setNodeAttribute(Node node, String key, Object value) {
+		if (node.getColumnIndex(key) == -1) {
+			addColumn(key, value.getClass());
+		}
+		
+		node.set(key, value);
+	}
 
 	private String idToDot(String string) {
 		String result = escape(string);
@@ -348,10 +373,14 @@ public class DotAdapter extends Graph {
 		Node n = a.addNode();
 		n.set(DotAdapter.DOT_ID, "{ aap }");
 		n.set(DotAdapter.DOT_LABEL, "{ aap }");
+		a.setNodeAttribute(n, "height", "1.5");
+		a.setNodeAttribute(n, "width", "2.5");
 
 		Node m = a.addNode();
-		m.set(DotAdapter.DOT_ID, "[A-Z a-z \n]");
-		m.set(DotAdapter.DOT_LABEL, "[A-Z a-z \n]");
+		m.set(DotAdapter.DOT_ID, "[A-Z a-z]");
+		m.set(DotAdapter.DOT_LABEL, "[A-Z a-z]");
+		a.setNodeAttribute(n, "height", "2.5");
+		a.setNodeAttribute(n, "width", "1.25");
 
 		a.addEdge(m, n);
 
@@ -369,4 +398,6 @@ public class DotAdapter extends Graph {
 		a.doDotLayout();
 		return;
 	}
+
+	
 }

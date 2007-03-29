@@ -38,6 +38,8 @@ public class GraphVisualizationWindow extends VisualizationPluginWindow {
 
     private final String m_relationGraphTuple = "relation([tuple([str,loc]),tuple([str,loc])])";
 
+	private final String m_attributedGraphTuple = "relation([tuple([str,relation([str,str])]),str])";
+
     /**
      * This method is the respondant for a double click on an graph node and
      * then signals to open the location
@@ -148,6 +150,11 @@ public class GraphVisualizationWindow extends VisualizationPluginWindow {
         return rType.equals(fact.getRtype());
     }
 
+    public boolean isAttributedGraphType(RTuple fact) {
+        RType rType = m_factory.RTypeFromString(m_attributedGraphTuple);
+        return rType.equals(fact.getRtype());
+    }
+
     /**
      * Check if a given RType is supported by this visualisation.
      * 
@@ -159,7 +166,7 @@ public class GraphVisualizationWindow extends VisualizationPluginWindow {
      * @date 07-3-2007
      */
     public boolean isTypeSupported(RTuple fact) {
-        return isRelStrStr(fact) || isRelTupleTuple(fact);
+        return isRelStrStr(fact) || isRelTupleTuple(fact) || isAttributedGraphType(fact);
     }
 
     /**
