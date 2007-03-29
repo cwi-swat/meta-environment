@@ -1,5 +1,13 @@
 
 
+Thu Mar 29 19:45:03 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.java: added support for varying the width and the height of nodes 
+  from an RStore, also you may select shapes (ellipse, circle, box).
+  The type of the relation that is supported by this viz is:
+   rel[<str,rel[str,str]>,str], where the first element is an attributed
+   "from" node, and the second is the id of the "to node"
+
+
 Thu Mar 29 13:11:37 CEST 2007 <jurgenv@cwi.nl>
  * **/*.java: added a new bridge for dot. This works directly on the
    prefuse data model by wrapping the Graph class, and providing specialized
