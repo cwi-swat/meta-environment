@@ -1,5 +1,6 @@
 include $(top_srcdir)/Makefile.meta
 
+pkgdata_DATA = asfsdfchecker.idef
 
 bin_PROGRAMS = asfsdfchecker
 

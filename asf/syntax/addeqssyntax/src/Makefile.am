@@ -1,5 +1,6 @@
 include $(top_srcdir)/Makefile.meta
 
+pkgdata_DATA = addeqssyntax.idef
 
 bin_PROGRAMS = addeqssyntax
 
