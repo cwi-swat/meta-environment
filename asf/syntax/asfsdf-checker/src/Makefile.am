@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = asfsdfchecker
 
-AM_CPPFLAGS = \
+AM_CPPFLAGS += \
 	   $(ASC_SUPPORT_CFLAGS)  \
 	   $(SDF_SUPPORT_CFLAGS) \
 	   -DASF_WITH_ANNOS

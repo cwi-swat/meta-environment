@@ -2,14 +2,13 @@
 
 include $(top_srcdir)/Makefile.meta
 
-
 bin_PROGRAMS = asfchecker
 
 pkgdata_DATA = asfchecker.idef
 
 noinst_HEADERS 	= equationChecker.h statistics.h
 
-AM_CPPFLAGS = \
+AM_CPPFLAGS += \
 	-I$(top_srcdir)/semantics/asf-operations/src \
 	$(ASC_SUPPORT_CFLAGS)
 
