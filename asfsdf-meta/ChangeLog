@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Fri Mar 30 13:33:55 CEST 2007 <economop@cwi.nl>
+ * asfsdf-meta.pc.in: added forgotten dependency to swixml-gui package.
+
 Sun Mar 11 19:10:34 CET 2007 <jurgenv@cwi.nl>
  * tbscripts/asf-actions.tb: added implementation of draw action, which
    uses the svg-gui to draw anything that is reduced to an SVG xml file.
