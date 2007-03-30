@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Fri Mar 30 14:33:11 CEST 2007 <economop@cwi.nl>
+ * tbscripts/start-meta-studio.tb.src: added forgotten import.
+
 Fri Mar 30 13:33:55 CEST 2007 <economop@cwi.nl>
  * asfsdf-meta.pc.in: added forgotten dependency to swixml-gui package.
 
