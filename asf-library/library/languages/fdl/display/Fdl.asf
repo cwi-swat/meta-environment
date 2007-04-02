@@ -7,7 +7,7 @@ equations
 
 [feature-diagram-to-swixml-top]
         featurediagram-to-swixml($featurediagram) =
-		features-to-swixml($featurediagram, <internalframe Layout="borderlayout"></internalframe>)
+		features-to-swixml($featurediagram, <panel></panel>)
 
 equations
 
@@ -15,7 +15,8 @@ equations
         $attvalue := featurename-to-attvalue($featurename),
         $attvalue' := concat-attvalues("TitledBorder(", $attvalue),
         $attvalue'' := concat-attvalues($attvalue', ")"),
-        $element' := <hbox constraints="BorderLayout.WEST" border=$attvalue''></hbox>
+%%        $element' := <hbox constraints="BorderLayout.WEST" border=$attvalue''></hbox>
+        $element' := <hbox border=$attvalue''></hbox>
         ===
         features-to-swixml($featurename : $featureexpression, $stag $content* $etag) =
 		$stag
