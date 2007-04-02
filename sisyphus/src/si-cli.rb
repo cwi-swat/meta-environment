@@ -99,7 +99,7 @@ module Sisyphus
         $stderr << "Logging to #{@log_device}\n"
       end
 
-      @log = Utils::IndentedDBLogger.new(db_host, @log_device)
+      @log = Utils::IndentedLogger.new(@log_device)
       @log.level = Logger::WARN
 
       if @verbose then
