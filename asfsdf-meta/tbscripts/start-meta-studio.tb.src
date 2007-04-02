@@ -31,7 +31,6 @@ in
   . StartProgressPanel()
   . StartModuledetailsPanel()
   . StartSVG()
-  . StartSWIXML()
   .
   if not-equal(MODULENAME, "") then
     snd-msg(tm-request-transaction(module-manager))
