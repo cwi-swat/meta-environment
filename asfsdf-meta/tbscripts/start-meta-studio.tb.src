@@ -13,7 +13,6 @@
 
 /* visualizations */
 #include <start-vis.tb> 
-#include <swixml-gui.idef> 
 
 process InitializeASFSDFMetaEnvironment is
 let
