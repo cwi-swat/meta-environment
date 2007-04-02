@@ -3,7 +3,7 @@
  * Generated from tifs for tool 'batch' (prefix='')
  */
 
-#include "batch.tif.h"
+#include "batch.h"
 
 #define NR_SIG_ENTRIES	3
 
