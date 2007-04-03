@@ -69,10 +69,14 @@ static ATermTable resolvedtable = NULL;
 static ATermTable postable = NULL;
 
 /** 
- * Counts the avoided productions in the given tree.
- * It counts all \c avoid productions encountered on a top down traversal from 
- * the given tree node and stops the traversal if it encounters a \c prefer 
- * production.
+ * Counts the (non-nested) avoided productions in the given tree.
+ * It counts the number of \c avoid productions encountered on a top down 
+ * traversal from the given tree node. The traversal stops when a \c prefer or 
+ * an \c avoid production is encountered. If an ambiguous node is encountered 
+ * only one of its subtrees is traversed.
+ *
+ * Note that although a top down traversal is performed here, the filtering is
+ * done from the bottom-up.
  *
  * \param t0 the tree to begin the traversal from 
  * 
@@ -83,6 +87,7 @@ static size_t countAvoidsInTree(PT_Tree t0) {
 
   if (PT_isTreeAppl(t0)) {
     PT_Production prod = PT_getTreeProd(t0);
+    PT_Args args = PT_getTreeArgs(t0);
 
     if (PT_isProductionAvoid(prod)) {
       return 1;
@@ -90,24 +95,30 @@ static size_t countAvoidsInTree(PT_Tree t0) {
     else if (PT_isProductionPrefer(prod)) {
       return 0;
     }
-  }
-
-  if (PT_hasTreeArgs(t0)) {
-    PT_Args args = PT_getTreeArgs(t0);
 
     for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       avoids += countAvoidsInTree(PT_getArgsHead(args));
     }
+  }
+  else if (PT_isTreeAmb(t0)) {
+    avoids += countAvoidsInTree(PT_getArgsHead(PT_getTreeArgs(t0)));
+  }
+  else if (PT_isTreeCycle(t0)) {
+    return 0;
   }
 
   return avoids;
 }
 
 /** 
- * Counts the preferred productions in the given tree.
- * It counts all \c prefer productions encountered on a top down traversal from 
- * the given tree node and stops the traversal if it encounters an \c avoid 
- * production.
+ * Counts the (non-nested) preferred productions in the given tree.
+ * It counts the number of \c prefer productions encountered on a top down 
+ * traversal from the given tree node. The traversal stops when a \c prefer or 
+ * an \c avoid production is encountered. If an ambiguous node is encountered 
+ * only one of its subtrees is traversed.
+ *
+ * Note that although a top down traversal is performed here, the filtering is
+ * done from the bottom-up.
  *
  * \param t0 the tree to begin the travesal from
  * 
@@ -118,6 +129,7 @@ static size_t countPrefersInTree(PT_Tree t0) {
 
   if (PT_isTreeAppl(t0)) {
     PT_Production prod = PT_getTreeProd(t0);
+    PT_Args args = PT_getTreeArgs(t0);
 
     if (PT_isProductionAvoid(prod)) {
       return 0;
@@ -125,14 +137,16 @@ static size_t countPrefersInTree(PT_Tree t0) {
     else if (PT_isProductionPrefer(prod)) {
       return 1;
     }
-  }
-
-  if (PT_hasTreeArgs(t0)) {
-    PT_Args args = PT_getTreeArgs(t0);
 
     for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       prefers += countPrefersInTree(PT_getArgsHead(args));
     }
+  }
+  else if (PT_isTreeAmb(t0)) {
+    prefers += countPrefersInTree(PT_getArgsHead(PT_getTreeArgs(t0)));
+  }
+  else if (PT_isTreeCycle(t0)) {
+    return 0;
   }
 
   return prefers;

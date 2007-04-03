@@ -1,5 +1,11 @@
 $Id$
 
+Tue Apr  3 11:51:40 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: corrected preference count filter. It's
+   behaviour was changed during the refactoring which resulted in some 
+   ambiguities (the asf equations of the Sdf2-Normalization) not being
+   filtered correctly.
+
 Wed Mar 21 11:07:34 CET 2007 <jurgenv@cwi.nl>
  * src/{toolbusInterface.c,sglr.idef.src}: reintroduced possibility to
    acticate preference counting and injection counting filters with an

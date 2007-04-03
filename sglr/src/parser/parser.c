@@ -128,6 +128,8 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
   do {    
     IS_readNextToken(inputString);
     parseToken();
+    /* If the shift queue is empty and the current level does not contain 
+     * an accepting state then an error has occured.*/
     shifter();
 
     if (PARSER_getVerboseFlag()) {
@@ -145,6 +147,8 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
 
   postParse();
 
+  /** \todo verify that the parser will not report success if the accept state 
+   * is reached and all the string is not parsed. */
   if (acceptingStack && PARSER_getOutputFlag()) {
     result = GSSEdge_getTree(GSS_getEdgeListHead(GSSNode_getEdgeList(acceptingStack)));
   }
