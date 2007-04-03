@@ -125,7 +125,7 @@ module Sisyphus
       db_session = Model::SiSession.new(:time => time)
       session = Building::Session.new(time, @host, db_session)
 
-      @log = Utils::IndentedDBLogger.new(db_host, session.db_session, @log_device)
+      @log = Utils::IndentedLogger.new(@log_device)
       @log.level = Logger::WARN
 
 
