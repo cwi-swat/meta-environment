@@ -41,7 +41,7 @@ noinst_HEADERS = \
 	parseTable-stats.h
 
 parsetablegen_SOURCES = \
-	parsetablegen.idef \
+	parsetablegen.isrc \
 	main.c \
 	ksdf2table.c \
 	atsets.c \
