@@ -18,7 +18,7 @@ AM_CPPFLAGS += \
 	$(ATERM_CFLAGS) 
 
 structure_editor_SOURCES = \
-	structure-editor.idef \
+	structure-editor.isrc \
 	main.c \
 	slice-tree.c \
 	StructureEditor.c \
