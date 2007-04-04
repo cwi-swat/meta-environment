@@ -9,7 +9,7 @@ AM_CPPFLAGS += \
 	   $(SDF_SUPPORT_CFLAGS)
 
 addeqssyntax_SOURCES = \
-	addeqssyntax.idef \
+	addeqssyntax.isrc \
 	main.c \
 	Add-Eqs-Syntax.c 
 
