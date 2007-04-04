@@ -18,7 +18,7 @@ noinst_HEADERS = \
 
 tree2graph_SOURCES = \
 	PT2graph.c \
-	graph-converter.idef \
+	graph-converter.isrc \
 	tree2graph-main.c
 
 tree2graph_LDADD = \
