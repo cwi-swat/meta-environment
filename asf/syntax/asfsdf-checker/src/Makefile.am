@@ -9,7 +9,7 @@ AM_CPPFLAGS += \
 	   $(SDF_SUPPORT_CFLAGS) \
 	   -DASF_WITH_ANNOS
 
-asfsdfchecker_SOURCES = AsfSdf-Checker.c asfsdfchecker.idef main.c
+asfsdfchecker_SOURCES = AsfSdf-Checker.c asfsdfchecker.isrc main.c
 
 asfsdfchecker_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
