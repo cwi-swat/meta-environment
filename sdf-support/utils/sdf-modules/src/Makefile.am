@@ -10,7 +10,8 @@ sdf_modules_SOURCES = \
 		      main.c \
 		      sdf-modules.c \
 		      module-table.c \
-		      sdf-imports.c
+		      sdf-imports.c \
+		      sdf-modules.isrc
 
 sdf_modules_LDADD = \
 	-L$(top_builddir)/lib -lSDFME  \
