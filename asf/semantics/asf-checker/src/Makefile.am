@@ -13,7 +13,7 @@ AM_CPPFLAGS += \
 	$(ASC_SUPPORT_CFLAGS)
 
 asfchecker_SOURCES = \
-	asfchecker.idef \
+	asfchecker.isrc \
 	main.c \
 	equationChecker.c \
 	statistics.c
