@@ -99,7 +99,7 @@ libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
 libsglr_la_CPPFLAGS = -DFAST_API
 
 sglr_SOURCES= \
-	sglr.idef \
+	sglr.isrc \
 	main.c \
 	toolbusInterface.c \
 	commandLineInterface.c 
