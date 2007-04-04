@@ -49,8 +49,6 @@ SUFFIXES += .idef .isrc
 
 CLEANFILES += $(wildcard *.idef)
 
-EXTRA_DIST += $(wildcard *.isrc) 
-
 if MAINTAINER_MODE 
 
 EXTRA_DIST += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
