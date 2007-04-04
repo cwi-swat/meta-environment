@@ -12,7 +12,7 @@ INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
 			-I${top_srcdir}/libdeprecated-toolbus-adapter \
 			$(ATERM_CFLAGS) 
 
-toolbus_adapter_SOURCES = toolbus-adapter.idef \
+toolbus_adapter_SOURCES = toolbus-adapter.isrc \
 			main.c
 
 toolbus_adapter_LDADD   = -L${top_builddir}/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter \
