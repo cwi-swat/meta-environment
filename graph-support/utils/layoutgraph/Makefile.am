@@ -20,7 +20,7 @@ noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
 
 layoutgraph_SOURCES = \
 	layout.c \
-	layoutgraph.idef \
+	layoutgraph.isrc \
 	graph2dot.c \
 	layoutgraph-main.c
 
