@@ -30,7 +30,7 @@ pkgdata_DATA = \
 	ambiguity-reporter.idef 
 
 apply_function_SOURCES = \
-	apply-function.idef \
+	apply-function.isrc \
 	apply-function-main.c
 
 apply_function_LDADD = \
@@ -38,7 +38,7 @@ apply_function_LDADD = \
 	$(TOOLBUSLIB_LIBS)
 
 addPosInfo_SOURCES = \
-	position-annotator.idef \
+	position-annotator.isrc \
 	addPosInfo.c
 
 addPosInfo_LDADD = \
@@ -60,7 +60,7 @@ liftPT_LDADD = \
 	$(ATERM_LIBS)
 
 unparsePT_SOURCES = \
-	unparser.idef \
+	unparser.isrc \
 	unparsePT-main.c
 
 unparsePT_LDADD = \
@@ -82,7 +82,7 @@ unparseProd_LDADD = \
 
 ambtracker_SOURCES = \
 	ambtracker-main.c \
-	ambiguity-reporter.idef
+	ambiguity-reporter.isrc
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
