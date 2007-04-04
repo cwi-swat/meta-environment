@@ -11,4 +11,5 @@ SUBDIRS = \
 	pico \
 	sdf2   \
 	tex \
-        xml
+        xml \
+	yacc
