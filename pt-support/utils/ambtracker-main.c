@@ -14,7 +14,7 @@
 #include <aterm2.h>
 #include "MEPT-utils.h"
 #include <Error-utils.h>
-#include <ambiguity-reporter.tif.h>
+#include <ambiguity-reporter.h>
 
 /*}}}  */
 /*{{{  globals */

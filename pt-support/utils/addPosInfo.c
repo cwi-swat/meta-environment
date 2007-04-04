@@ -10,7 +10,7 @@
 #include <MEPT-utils.h>
 #include <Error-utils.h>
 
-#include "position-annotator.tif.h"
+#include "position-annotator.h"
 
 /*}}}  */
 

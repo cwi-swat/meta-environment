@@ -12,7 +12,7 @@
 #include <MEPT-utils.h> 
  
 #ifndef WITHOUT_TOOLBUS
-#include "apply-function.tif.h"
+#include "apply-function.h"
 #endif
 
 static char myname[]    = "apply-function";
