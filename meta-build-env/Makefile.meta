@@ -54,7 +54,7 @@ EXTRA_DIST += $(wildcard *.isrc)
 if MAINTAINER_MODE 
 
 EXTRA_DIST += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
-CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h $i.tifs)
+CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
 
 .idef.c:
 	$(call check_available,toolbus,toolbus -output $*.tifs -gentifs $<)
