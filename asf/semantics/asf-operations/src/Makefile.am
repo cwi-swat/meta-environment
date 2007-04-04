@@ -15,7 +15,7 @@ asfoperations_LDADD = \
      -L${top_builddir}/semantics/asf-operations/src -lasfnormalization \
      $(ASC_SUPPORT_LIBS) 
 asfoperations_SOURCES = \
-	asfoperations.idef \
+	asfoperations.isrc \
 	main.c \
 	asfnormalization.c \
 	ASF-Normalization.c
