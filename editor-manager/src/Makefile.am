@@ -9,7 +9,7 @@ noinst_HEADERS = \
 	EditorManager.h
 
 editor_manager_SOURCES = \
-	editor-manager.idef \
+	editor-manager.isrc \
 	main.c \
 	EditorManager.c \
 	EditorManager_dict.c
