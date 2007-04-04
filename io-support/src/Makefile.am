@@ -5,8 +5,6 @@ include $(top_srcdir)/Makefile.meta
 bin_PROGRAMS = in-output
 pkgdata_DATA = in-output.idef
 
-EXTRA_DIST = in-output.idef.src
-
 INCLUDES = \
 	-I$(top_srcdir)/lib \
 	$(ERROR_SUPPORT_CFLAGS) \
@@ -15,7 +13,7 @@ INCLUDES = \
 	$(ATERM_CFLAGS) 
 
 in_output_SOURCES = \
-	in-output.idef \
+	in-output.isrc \
 	main.c
 
 in_output_LDADD = \
