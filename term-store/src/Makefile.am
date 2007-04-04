@@ -9,7 +9,7 @@ bin_PROGRAMS = term-store
 AM_CPPFLAGS += -DDISABLE_DYNAMIC_CHECKING
 
 term_store_SOURCES = \
-	term-store.idef \
+	term-store.isrc \
 	main.c \
 	table.c \
 	table-store.c \
