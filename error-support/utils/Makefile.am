@@ -13,7 +13,7 @@ AM_CPPFLAGS += \
 	$(TOOLBUSLIB_CFLAGS)
 
 error_support_SOURCES = \
-	error-support.idef \
+	error-support.isrc \
 	main.c 
 
 
