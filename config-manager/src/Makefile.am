@@ -27,7 +27,7 @@ CLEANFILES += \
 	${bin_SCRIPTS}
 
 configmanager_SOURCES = \
-	configuration-manager.idef \
+	configuration-manager.isrc \
 	configmanager.c 
 
 configmanager_LDADD = \
