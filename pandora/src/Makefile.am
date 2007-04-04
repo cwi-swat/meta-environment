@@ -13,7 +13,7 @@ pandora_SOURCES = \
 	Box-utils.c \
 	Box_dict.c \
 	Box-to-Text.c \
-	pandora.idef
+	pandora.isrc
 
 AM_CPPFLAGS += ${ASC_SUPPORT_CFLAGS}
 pandora_LDADD = ${ASC_SUPPORT_LIBS}
