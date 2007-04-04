@@ -19,7 +19,7 @@ noinst_HEADERS = \
 	builtins.h
 
 asfe_SOURCES =\
-	asfe.idef \
+	asfe.isrc \
 	main.c\
 	evaluator.c\
 	equations.c\
