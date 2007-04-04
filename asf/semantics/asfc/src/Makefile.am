@@ -37,7 +37,7 @@ SOURCES = main.c \
 	  MuASF.c \
 	  MuASF_dict.c
 
-asfc_SOURCES = asfc.idef ${SOURCES}
+asfc_SOURCES = asfc.isrc ${SOURCES}
 
 test_asfc_DEPENDENCIES=
 test_asfc_LDADD = $(asfc_LDADD)
