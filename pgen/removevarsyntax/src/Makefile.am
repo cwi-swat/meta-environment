@@ -4,7 +4,7 @@ pkgdata_DATA = removevarsyntax.idef
 bin_PROGRAMS = removevarsyntax
 
 removevarsyntax_SOURCES = \
-	removevarsyntax.idef \
+	removevarsyntax.isrc \
 	main.c \
 	Remove-Var-Syntax.c 
 
