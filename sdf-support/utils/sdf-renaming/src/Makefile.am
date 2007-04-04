@@ -6,7 +6,7 @@ pkgdata_DATA = sdf-renaming.idef
 
 bin_PROGRAMS = sdf-renaming
 
-sdf_renaming_SOURCES = main.c sdf-renaming.c
+sdf_renaming_SOURCES = main.c sdf-renaming.c sdf-renaming.isrc
 sdf_renaming_LDADD = -L$(top_builddir)/lib -lSDFME -lSDF2PT \
 		 $(PT_SUPPORT_LIBS) \
 		 $(ERROR_SUPPORT_LIBS) \
