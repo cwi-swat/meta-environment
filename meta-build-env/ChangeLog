@@ -1,5 +1,11 @@
 $Id$
 
+Thu Apr  5 14:11:50 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.java.meta: removed inclusion of Makefile.meta in
+   Makefile.java.meta. This is essential for separating automatic make rules
+   for generation of ToolBus interfaces for different programming languages.
+
+
 Tue Mar 27 19:11:49 CEST 2007 <jurgenv@cwi.nl>
  * Makefile.meta: added checking for ToolBus bootstrapping utils, and using 
   touch if not available. This requires that all generated files are 

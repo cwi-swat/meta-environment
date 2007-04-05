@@ -1,5 +1,10 @@
 
-include $(top_srcdir)/Makefile.meta
+SUFFIXES   =
+CLEANFILES = 
+EXTRA_DIST =
+
+pkgconfigdir  = $(libdir)/pkgconfig
+docdatadir    = $(datadir)/doc/$(PACKAGE)
 
 EXTRA_DIST += $(wildcard *.m4) \
              reconf \
