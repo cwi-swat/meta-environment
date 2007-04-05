@@ -65,7 +65,8 @@ include_HEADERS = \
 	asc-muasf2pt.h \
 	asc-ambiguity.h \
 	asc-termstore.h \
-	builtin-common.h
+	builtin-common.h \
+	asc-options.h
 
 libasc_support_me_la_CPPFLAGS = $(AM_CPPFLAGS)
 libasc_support_me_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
@@ -117,7 +118,7 @@ TESTS = $(check_PROGRAMS)
 
 #Below here should not be changed when adding a builtin:
 
-EXTRA_DIST = Library.def 
+EXTRA_DIST += Library.def 
 
 # To check whether we implemented all the builtins mentioned we
 # generate a program that calls all builtins and try to compile and link 
