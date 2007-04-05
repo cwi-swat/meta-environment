@@ -1,0 +1,24 @@
+/* $Id: editor-plugin.idef.src 21408 2007-02-20 08:29:01Z kooiker $ */
+
+tool swixml is { }
+
+process SWIXML is
+let
+  T : swixml,
+  Message: str,
+  Path: str,
+  File: str
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(swixml-display(Path?, File?))
+    . snd-do(T, swixml-display(Path, File))
+  )
+  * delta
+endlet
+
+process StartSWIXML is
+  snd-msg(load-jar("file:///export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/swixml-gui.jar", ":/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/aterm-java/share/aterm-java.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/shared-objects/share/shared-objects.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/JJTraveler/share/jjtraveler.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/meta-studio/share/meta-studio.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/meta-studio/share/idw-gpl-1.5.0.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/config-support/share/configapi.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/toolbus-java-adapter/share/toolbus-java-adapter.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/svg-support/share/svg-support/batik.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/j2h.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/jdom.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/junit.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/swixml-gui.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/swixml.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/swixml-gui/share/ui.jar"))
+
+toolbus(SWIXML)
