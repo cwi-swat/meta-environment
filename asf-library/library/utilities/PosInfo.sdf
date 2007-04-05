@@ -17,9 +17,11 @@ context-free syntax
 
 context-free syntax
   get-location(X) -> Location
+  get-lex-location(X) -> Location
 
 context-free syntax
   get-posinfo(X) -> Location
+  get-lex-posinfo(X) -> Location
 
 context-free syntax
   get-begin-line(X) -> NatCon
