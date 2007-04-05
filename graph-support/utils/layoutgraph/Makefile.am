@@ -16,7 +16,7 @@ INCLUDES = \
 	${ATERM_CFLAGS} \
 	${TOOLBUSLIB_CFLAGS}
 
-noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
+noinst_HEADERS = dot.h graph2dot.h layoutgraph.h layout.h
 
 layoutgraph_SOURCES = \
 	layout.c \
