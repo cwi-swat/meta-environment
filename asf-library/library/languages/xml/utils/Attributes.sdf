@@ -24,10 +24,10 @@ hiddens
   lexical variables
      "&D"                        -> [0-9]
      "&Ds"                       -> [0-9]+
-     "&AVchars"                  -> (AV-CharD | Reference)*
+     "&AVchars"  [0-9\']*        -> (AV-CharD | Reference)*
      "&AVcharsS"                 -> (AV-CharS | Reference)*
 
      "&StrChar"                  ->  StrChar
-     "&StrChars"                 -> StrChar*
+     "&StrChars"                 -> StrChar+
  
-     "&StrCharRestricted"        -> ~[\&\<\"]
+     "&StrCharRestricted"        -> ~[\&\<\"] /\ ~[\0-\31\n\t\"\\]
