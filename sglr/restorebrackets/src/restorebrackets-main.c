@@ -16,7 +16,7 @@
 
 #include "parseTable.h"
 #include "parseTableDB.h"
-#include "restorebrackets.tif.h"
+#include "restorebrackets.h"
 
 static char myname[] = "restorebrackets";
 static char myversion[] = "0.1";

@@ -1,8 +1,8 @@
 # $Id$
 
-EXTRA_DIST		= restorebrackets.idef.src
+include $(top_srcdir)/Makefile.meta
 
-restorebrackets_CPPFLAGS = \
+AM_CPPFLAGS += \
 			-I$(top_srcdir)/src \
 			-I$(top_srcdir)/src/utils \
 			-I$(top_srcdir)/src/parseForest \
@@ -20,7 +20,7 @@ pkgdata_DATA		= restorebrackets.idef
 
 bin_PROGRAMS		= restorebrackets 
 
-restorebrackets_SOURCES	= restorebrackets.tif.c restorebrackets.tif.h restorebrackets-main.c
+restorebrackets_SOURCES	= restorebrackets.isrc restorebrackets-main.c
 restorebrackets_LDADD	= -L$(top_builddir)/src -lsglr \
 			$(PT_SUPPORT_LIBS) \
 			$(PTABLE_SUPPORT_LIBS) \
@@ -29,7 +29,4 @@ restorebrackets_LDADD	= -L$(top_builddir)/src -lsglr \
 			$(ERROR_SUPPORT_LIBS) \
 			$(TOOLBUSLIB_LIBS) \
 			$(ATERM_LIBS)
-
-%.idef: %.idef.src Makefile
-	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
