@@ -1,6 +1,6 @@
 #    ToolBus -- The ToolBus Application Architecture
 
-include $(top_srcdir)/Makefile.meta
+include $(top_srcdir)/Makefile.toolbus
 
 EXTRA_DIST      	+= calc.tb ui-calc.tcl
 CLEANFILES      	+= *.tif.[ch] calc.tifs

@@ -1,8 +1,7 @@
-include $(top_srcdir)/Makefile.meta
 
-EXTRA_DIST += generic-adapter.idef.src gen-adapter.guide.tex
+EXTRA_DIST = generic-adapter.isrc gen-adapter.guide.tex
 
-CLEANFILES += generic-adapter.idef
+CLEANFILES = generic-adapter.idef
 
 bin_PROGRAMS = gen-adapter bc-adapter
 pkgdata_DATA = generic-adapter.idef
@@ -15,3 +14,5 @@ bc_adapter_LDADD = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-
 
 INCLUDES = -I$(top_srcdir)/libdeprecated-toolbus-adapter
 
+%.idef: %.isrc
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

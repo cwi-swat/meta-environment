@@ -1,5 +1,11 @@
 $Id$
 
+Thu Apr  5 18:09:08 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.toolbus: added make rules for generating C toolbus interfaces
+   using the local toolbus as build in ./toolbus. This fixes the
+   distcheck
+ * Bumped to version 1.6
+
 Fri Mar  9 09:14:58 CET 2007 <kooiker@cwi.nl>
  * libdep...adapter/terms.c: allow assignment of undefined to any term
    variable, even if it does not match the term pattern used for declaration.

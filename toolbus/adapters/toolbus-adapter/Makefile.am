@@ -1,7 +1,8 @@
-include $(top_srcdir)/Makefile.meta
+include $(top_srcdir)/Makefile.toolbus
 
 EXTRA_DIST		+= hello.tb spawn-hello.tb
 CLEANFILES		+= toolbus-adapter.[ch]
+
 
 bin_PROGRAMS        	= toolbus-adapter
 include_HEADERS		= toolbus-adapter.idef

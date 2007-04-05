@@ -2,6 +2,6 @@ prefix=@prefix@
 Maintainers=paulk@cwi.nl,jurgenv@cwi.nl
 
 Name: toolbus
-Version: 1.5
+Version: 1.6
 Description:
 Requires: aterm,toolbuslib
