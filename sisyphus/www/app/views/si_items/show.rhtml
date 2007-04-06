@@ -50,7 +50,7 @@
 <thead>
 </thead>
 <tbody>
-<% @si_item.si_results.each do |result| %>
+<% @si_item.si_results.sort { |x, y| x.id <=> y.id }.each do |result| %>
 <tr>
 <td>
 <%= link_to result.action, :action => 'show', :controller => 'si_results', :id => result.id %>
