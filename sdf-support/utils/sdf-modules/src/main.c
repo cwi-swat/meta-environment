@@ -11,7 +11,7 @@
 
 #include <SDFME-utils.h>
 #include <MEPT-utils.h>
-#include "sdf-modules.tif.h"
+#include "sdf-modules.h"
 #include "sdf-imports.h"
 
 /*}}}  */
