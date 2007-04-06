@@ -8,7 +8,7 @@
 #include <SDFME-utils.h>
 #include <MEPT-utils.h>
 #include <SDF2PT.h>
-#include "sdf-renaming.tif.h"
+#include "sdf-renaming.h"
 
 static char myversion[] = "1.0";
 

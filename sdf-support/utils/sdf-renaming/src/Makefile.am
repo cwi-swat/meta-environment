@@ -2,26 +2,25 @@
 
 include $(top_srcdir)/Makefile.meta
 
+bin_PROGRAMS = sdf-renaming
 pkgdata_DATA = sdf-renaming.idef
 
-bin_PROGRAMS = sdf-renaming
+INCLUDES = \
+  -I$(top_srcdir)/lib \
+  $(SDF_SUPPORT_CFLAGS) \
+  $(ERROR_SUPPORT_CFLAGS) \
+  $(PT_SUPPORT_CFLAGS) \
+  $(TOOLBUSLIB_CFLAGS) \
+  $(ATERM_CFLAGS)
 
 sdf_renaming_SOURCES = \
 		       main.c \
-		       sdf-renaming.c \
 		       sdf-renaming.isrc
 
 sdf_renaming_LDADD = \
 		 -L$(top_builddir)/lib -lSDFME -lSDF2PT \
-                 $(TOOLBUSLIB_LIBS) \
 		 $(ERROR_SUPPORT_LIBS) \
 		 $(PT_SUPPORT_LIBS) \
+                 $(TOOLBUSLIB_LIBS) \
                  $(ATERM_LIBS) 
 
-AM_CPPFLAGS += \
-  -I$(top_srcdir)/lib \
-  $(ATERM_CFLAGS) \
-  $(TOOLBUSLIB_CFLAGS) \
-  $(PT_SUPPORT_CFLAGS) \
-  $(ERROR_SUPPORT_CFLAGS) \
-  $(SDF_SUPPORT_CFLAGS)
