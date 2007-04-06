@@ -2,7 +2,7 @@ include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = pandora 
 
-noinst_HEADERS = pandora.h Box.h Box-utils.h Box_dict.h 
+noinst_HEADERS = mapping.h pandora.h Box.h Box-utils.h Box_dict.h 
 
 pkgdata_DATA = pandora.idef
 
