@@ -6,7 +6,6 @@ bin_PROGRAMS=ASFSDFApigen
 
 ASFSDFApigen_SOURCES = \
 	main.c \
-	ASFSDFApigen.c \
 	ASFSDFApigen.isrc
 
 AM_CPPFLAGS += -DASF_MAIN -DTOOLBUS $(ASC_SUPPORT_CFLAGS)

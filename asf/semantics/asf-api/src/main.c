@@ -10345,7 +10345,7 @@ CONS_EXIT ( make_nf0 ( lf_matchfailedsym ) ) ;
 }
 #ifdef ASF_MAIN
 #include <asc-client.h>
-#include <toolASFSDFApigen.tif.h>
+#include <toolASFSDFApigen.h>
 int main(int argc, char *argv[])                         
 {                                                        
   ATerm bottom;
