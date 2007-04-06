@@ -5,6 +5,8 @@ include $(top_srcdir)/Makefile.meta
 bin_PROGRAMS = sdf-modules
 pkgdata_DATA = sdf-modules.idef
 
+noinst_HEADERS = sdf-imports.h module-table.h
+
 INCLUDES = \
 	-I$(top_srcdir)/lib  \
 	$(SDF_SUPPORT_CFLAGS) \
