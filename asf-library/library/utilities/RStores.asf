@@ -1,0 +1,109 @@
+%% This module contains convenience functions for filling rstores.
+%% Most functions do a little type checking for you, such that you
+%% will not be able to store an int where a set is declared for example.
+
+equations
+
+[] create-store()  = rstore([])
+
+equations
+
+%% Use declare to initialize an RStore before filling it.
+%% It will fill in default value based on the type of data you store.
+
+[] declare(rstore([Tuple*]), Var, int) =
+   rstore([<Var, int, 0>, Tuple*])
+
+[] declare(rstore([Tuple*]), Var, str) =
+   rstore([<Var, str, "">, Tuple*])
+
+[] declare(rstore([Tuple*]), Var, bool) =
+   rstore([<Var, bool, false>, Tuple*])
+
+[] declare(rstore([Tuple*]), Var, loc) =
+   rstore([<Var, loc, file("/dev/null")>, Tuple*])
+
+[] declare(rstore([Tuple*]), Var, set[Type]) =
+   rstore([<Var, set[Type], {}>, Tuple*])
+
+[] declare(rstore([Tuple*]), Var, bag[Type]) =
+   rstore([<Var, bag[Type], {| |}>, Tuple*])
+
+[] declare(rstore([Tuple*]), Var, rel[Type+]) =
+   rstore([<Var, rel[Type+], { }>, Tuple*])
+
+equations
+
+%% set and get operate on complete RStore variables (high level)
+
+[] set(rstore([Tuple*1, <Var,Type,_Value>, Tuple*2]), Var, Value') =
+   rstore([<Var,Type,Value'>, Tuple*1, Tuple*2])
+
+[] get(rstore([_Tuple*1, <Var,_Type,Value>, _Tuple*2]), Var) = Value
+
+equations
+
+%% insertion and deletion on sets and bags and relations
+
+[] insert(rstore([Tuple*1, <Var,set[Type], Set>, Tuple*2]), Var, Value) =
+   rstore([<Var,set[Type], insert(Value, Set)>, Tuple*1, Tuple*2])
+
+[] delete(rstore([Tuple*1, <Var,set[Type], Set>, Tuple*2]), Var, Value) =
+   rstore([<Var,set[Type], delete(Value, Set)>, Tuple*1, Tuple*2])
+
+[] insert(rstore([Tuple*1, <Var,bag[Type], Set>, Tuple*2]), Var, Value) =
+   rstore([<Var,bag[Type], insert(Value, Set)>, Tuple*1, Tuple*2])
+
+[] delete(rstore([Tuple*1, <Var,bag[Type], Set>, Tuple*2]), Var, Value) =
+   rstore([<Var,bag[Type], delete(Value, Set)>, Tuple*1, Tuple*2])
+
+[] insert(rstore([Tuple*1, <Var,rel[Type+], Set>, Tuple*2]), Var, <Value+>) =
+   rstore([<Var,rel[Type+], insert(<Value+>, Set)>, Tuple*1, Tuple*2])
+
+[] delete(rstore([Tuple*1, <Var,rel[Type+], Set>, Tuple*2]), Var, <Value+>) =
+   rstore([<Var,rel[Type+], delete(<Value+>, Set)>, Tuple*1, Tuple*2])
+
+equations
+
+%% convenience functions for insertion and deletion on binary relations 
+
+[] insert(rstore([Tuple*1, <Var,rel[Type1,Type2], Rel>, Tuple*2]), Var, Key, Value) =
+   rstore([<Var,rel[Type1,Type2], insert(<Key,Value>, Rel)>, Tuple*1, Tuple*2])
+
+[] delete(rstore([Tuple*1, <Var,rel[Type1,Type2], Rel>, Tuple*2]), Var, Key) =
+   rstore([<Var,rel[Type1,Type2], domain-exclusion(Rel,{Key})>, Tuple*1, Tuple*2])
+
+[] replace(rstore([Tuple*1, <Var,rel[Type1,Type2], Rel>, Tuple*2]), Var, Key, Value) =
+   rstore([<Var,rel[Type1,Type2], insert(<Key, Value>, domain-exclusion(Rel,{Key}))>, Tuple*1, Tuple*2])
+
+equations
+
+%% convenience functions for counting stuff
+
+%% the current value is incremented by 1
+[] inc(rstore([Tuple*1, <Var,rel[Type,int], {Value*1, <Key,Int>, Value*2}>, Tuple*2]), Var, Key) =
+   rstore([<Var,rel[Type,int], {<Key, Int'>, Value*1, Value*2}>, Tuple*1, Tuple*2])
+   when Int' := Int + 1
+
+%% the first inc, sets the value to 1
+[default]
+   inc(rstore([Tuple*1, <Var,rel[Type,int], Rel>, Tuple*2]), Var, Key) =
+   rstore([<Var,rel[Type,int], insert(<Key,1>, Rel)>, Tuple*1, Tuple*2])
+
+%% the current value is decremented by 1
+[] dec(rstore([Tuple*1, <Var,rel[Type,int], {Value*1, <Key,Int>, Value*2}>, Tuple*2]), Var, Key) =
+   rstore([<Var,rel[Type,int], {<Key, Int'>, Value*1, Value*2}>, Tuple*1, Tuple*2])
+   when Int' := Int - 1
+
+%% the first dec, sets the value to -1
+[default]
+   dec(rstore([Tuple*1, <Var,rel[Type,int], Rel>, Tuple*2]), Var, Key) =
+   rstore([<Var,rel[Type,int], insert(<Key,-1>, Rel)>, Tuple*1, Tuple*2])
+
+equations
+
+%% A convenience function for retrieving the image of a binary relation 
+
+[] lookup(rstore([_Tuple*1, <Var,rel[_Type1,_Type2], Rel>, _Tuple*2]), Var, Key) =
+   image(Rel, {Key})
+

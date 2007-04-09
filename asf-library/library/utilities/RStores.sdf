@@ -1,0 +1,54 @@
+module utilities/RStores
+
+imports basic/RStores
+imports basic/Integers
+imports containers/Sets-and-Relations
+
+exports
+context-free syntax
+  create-store()                     -> RStore  
+  declare(RStore, var:IdCon, RType)  -> RStore  
+  set(RStore, var:IdCon, data:RElem) -> RStore  
+  get(RStore, var:IdCon)             -> RElem   
+
+context-free syntax
+  insert(RStore, var:IdCon, value:RElem) -> RStore  
+  delete(RStore, var:IdCon, value:RElem) -> RStore  
+
+context-free syntax
+  insert(RStore, var:IdCon, key:RElem, value:RElem) -> RStore
+  replace(RStore, var:IdCon, key:RElem, value:RElem)-> RStore  
+  delete(RStore, var:IdCon, key:RElem)              -> RStore  
+  lookup(RStore, var:IdCon, key:RElem)              -> RElem   
+
+context-free syntax
+  inc(RStore, var:IdCon, key:RElem) -> RStore
+  dec(RStore, var:IdCon, key:RElem) -> RStore
+
+hiddens
+imports basic/Comments
+
+variables
+  "Store" [0-9\']*  -> RStore        {strict} 
+  "Key" [0-9\']*    -> RElem         {strict} 
+  "Value" [0-9\']*  -> RElem         {strict} 
+  "Set" [0-9\']*    -> RElem         {strict} 
+  "Bag" [0-9\']*    -> RElem         {strict} 
+  "Rel" [0-9\']*    -> RElem         {strict}
+  "Value*" [0-9\']* -> {RElem ","}*  {strict} 
+  "Var" [0-9\']*    -> IdCon         {strict} 
+  "Value+" [0-9\']* -> {RElem ","}+  {strict} 
+  "Type" [0-9\']*   -> RType         {strict} 
+  "Tuple*" [0-9\']* -> {RTuple ","}* {strict} 
+  "Type+" [0-9\']*  -> {RType ","}+  {strict} 
+  "Int"[0-9\']*     -> Integer       {strict}
+  "Bool"[0-9\']*    -> Boolean       {strict}
+
+variables
+  "_Store" [0-9\']*  -> RStore        {wild} 
+  "_Key" [0-9\']*    -> RElem         {wild} 
+  "_Value" [0-9\']*  -> RElem         {wild} 
+  "_Var" [0-9\']*    -> IdCon         {wild} 
+  "_Type" [0-9\']*   -> RType         {wild} 
+  "_Tuple*" [0-9\']* -> {RTuple ","}* {wild} 
+  "_Type+" [0-9\']*  -> {RType ","}+  {wild} 
