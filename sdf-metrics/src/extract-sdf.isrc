@@ -1,7 +1,7 @@
 
 #ifndef EXTRACT_SDF
 #define EXTRACT_SDF
-tool extract-sdf is { command="__PREFIX__/bin/extract-sdf" }
+tool extract-sdf is { command="__PREFIX__/bin/extractsdf" }
 
 process ExtractSDF is
 let
