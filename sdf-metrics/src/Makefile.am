@@ -1,5 +1,6 @@
 include $(top_srcdir)/Makefile.meta
 
+EXTRA_DIST=extract-sdf.isrc
 bin_PROGRAMS=extractsdf
 pkgdata_DATA=extract-sdf.idef
 
