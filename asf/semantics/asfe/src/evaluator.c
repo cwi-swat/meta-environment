@@ -1,7 +1,7 @@
 /* $Id$ */
 
 #include "equations.h"
-#include "asfe.tif.h"
+#include "asfe.h"
 #include "evaluator.h"
 #include "reduction.h"
 #include "errors.h"
