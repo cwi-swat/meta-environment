@@ -1,9 +1,11 @@
 
 package nl.dancingbear.visplugin.graphplugin;
 
-import nl.cwi.sen1.gui.plugin.prefusedot.DotAdapter;
+import java.awt.event.MouseEvent;
+
 import nl.cwi.sen1.gui.plugin.prefusedot.DotEdgeRenderer;
-import nl.cwi.sen1.gui.plugin.prefusedot.DotLayout;
+import nl.cwi.sen1.gui.plugin.prefusedot.DotLabelLayout;
+import nl.cwi.sen1.gui.plugin.prefusedot.DotNodeLayout;
 import nl.cwi.sen1.gui.plugin.prefusedot.DotNodeRenderer;
 import prefuse.Constants;
 import prefuse.Display;
@@ -12,31 +14,41 @@ import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.FontAction;
-import prefuse.action.layout.graph.NodeLinkTreeLayout;
+import prefuse.action.layout.Layout;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
 import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
 import prefuse.data.Graph;
+import prefuse.data.Schema;
+import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
-import prefuse.render.RendererFactory;
 import prefuse.util.ColorLib;
+import prefuse.util.FontLib;
+import prefuse.util.PrefuseLib;
 import prefuse.visual.VisualItem;
+import prefuse.visual.expression.InGroupPredicate;
 
 /**
  * Builder to create a display (formatting, colors and layout) for a graph.
  * 
  * @author A. Belgraver
  * @author Anton Gerdessen (reviewer)
+ * @author Jurgen Vinju
  * @date 07-3-2007  
  */
 public class GraphDisplayBuilder {
-    
-    private final static int BREADTHSPACING = 30;
-	private DotLayout dotLayout;
+	private DotNodeLayout dotLayout;
+	
+	private static final Schema LABEL_SCHEMA = PrefuseLib.getVisualItemSchema(); 
+	{ 
+	LABEL_SCHEMA.setDefault(VisualItem.INTERACTIVE, false); 
+	LABEL_SCHEMA.setDefault(VisualItem.TEXTCOLOR, ColorLib.gray(100)); 
+	LABEL_SCHEMA.setDefault(VisualItem.FONT, FontLib.getFont("Tahoma", 16)); 
+	} 
 
     /**
      * Main method for the graph creation.
@@ -52,17 +64,41 @@ public class GraphDisplayBuilder {
         // Setup the visualization type and renderer
         Visualization vis = new Visualization();
         vis.addGraph(GraphConstants.GRAPH, graph);
-        RendererFactory drf = createRenderers();
-        vis.setRendererFactory(drf);
+        vis.addDecorators(GraphConstants.LABELS, GraphConstants.NODES);
+    
+    	DefaultRendererFactory drf = new DefaultRendererFactory();
+    	
+		LabelRenderer lr = new LabelRenderer(GraphConstants.LABEL);
+		lr.setHorizontalTextAlignment(Constants.CENTER);
+		lr.setVerticalTextAlignment(Constants.CENTER);
+		lr.setRenderType(LabelRenderer.RENDER_TYPE_NONE);
+		drf.add(new InGroupPredicate(GraphConstants.LABELS), lr);
+		
+        DotNodeRenderer nr = new DotNodeRenderer();
+        nr.setRenderType(AbstractShapeRenderer.RENDER_TYPE_DRAW_AND_FILL);
+		drf.add(new InGroupPredicate(GraphConstants.NODES), nr);
 
-        // Add the nodes and give them a color
-        ActionList colors = createColorActions();
-        ActionList layout = createLayoutActions();
+		EdgeRenderer er = new DotEdgeRenderer(Constants.EDGE_TYPE_LINE, Constants.EDGE_ARROW_FORWARD);
+		drf.add(new InGroupPredicate(GraphConstants.EDGES), er);
+
+		vis.setRendererFactory(drf);
+		
+		// Create an actions avaible for the graph.
+		ActionList layout = new ActionList();
+        dotLayout = new DotNodeLayout(GraphConstants.GRAPH);
+		layout.add(dotLayout);
+		Layout labelLayout = new DotLabelLayout(GraphConstants.LABELS);
+	    layout.add(labelLayout);
+		layout.add(new RepaintAction());
+		vis.putAction(GraphConstants.LAYOUT, layout);
+		vis.putAction(GraphConstants.LABELLAYOUT, labelLayout);
+		
+		vis.setInteractive(GraphConstants.LABELS, null, false);
 
         // Add the actions available for this graph.
-        vis.putAction(GraphConstants.COLOR, colors);
-        vis.putAction(GraphConstants.LAYOUT, layout);
-
+		ActionList colors = createColorActions();
+		vis.putAction(GraphConstants.COLOR, colors);
+       
         // Setup the display in which to display the graph
         Display display = createDisplay(vis);
 
@@ -71,27 +107,6 @@ public class GraphDisplayBuilder {
         vis.run(GraphConstants.LAYOUT);
 
         return display;
-    }
-
-    /**
-     * Construct a renderer factory that contains renderers that will
-     * render all components of a graph on the screen.
-     * 
-     * @return a rendererfactory that will render the graph's components
-     * @author A. Belgraver
-     * @author Anton Gerdessen (reviewer)
-     * @date 07-3-2007  
-     */
-    private RendererFactory createRenderers() {
-        // The the name labels for NodeItems have to be rendered using
-        // a labelrenderer. The column to show is conveniently called "label"
-        LabelRenderer lr = new DotNodeRenderer(DotAdapter.DOT_LABEL);
-        EdgeRenderer er = new DotEdgeRenderer(Constants.EDGE_TYPE_LINE, Constants.EDGE_ARROW_FORWARD);
-        
-        // Create a new default renderer factory
-        DefaultRendererFactory drf = new DefaultRendererFactory(lr, er);
-        
-        return drf;
     }
 
     /**
@@ -104,11 +119,11 @@ public class GraphDisplayBuilder {
      */
     private ActionList createColorActions() {
         // Text options.
-        ColorAction text = new ColorAction(GraphConstants.NODES, VisualItem.TEXTCOLOR,
+        ColorAction text = new ColorAction(GraphConstants.LABELS, VisualItem.TEXTCOLOR,
                 ColorLib.gray(0));
         text.setDefaultColor(GraphConstants.TEXTCOLOR);
-        FontAction nFont = new FontAction(GraphConstants.NODES, GraphConstants.NODE_FONT);
-
+        FontAction nFont = new FontAction(GraphConstants.LABELS, GraphConstants.NODE_FONT);
+        
         // Outer line color.
         ColorAction nStroke = new ColorAction(GraphConstants.NODES,
                 VisualItem.STROKECOLOR);
@@ -126,36 +141,15 @@ public class GraphDisplayBuilder {
 
         // Bundle the color actions in an actionlist.
         ActionList colors = new ActionList();
-        colors.add(text);
         colors.add(nFont);
         colors.add(nStroke);
         colors.add(nFill);
         colors.add(nEdges);
         colors.add(nHeads);
+        colors.add(text);
         colors.add(new RepaintAction());
         
         return colors;
-    }
-
-    /**
-     * Create the layout and actions for the graph.
-     * 
-     * @return ActionList used to place the graph on the screen
-     * @author A. Belgraver
-     * @author Anton Gerdessen (reviewer)
-     * @date 07-3-2007  
-     */
-    private ActionList createLayoutActions() {
-        dotLayout = new DotLayout(GraphConstants.GRAPH);
-
-        // Create an actions avaible for the graph.
-        ActionList layout = new ActionList();
-        layout.add(dotLayout);
-
-        // Repaint the screen to activate the changes.
-        layout.add(new RepaintAction());
-        return layout;
-
     }
 
     /**
@@ -175,7 +169,14 @@ public class GraphDisplayBuilder {
 
         // Allow manipulation of those nodes while visible in the panel
         d.addControlListener(new FocusControl());
-        d.addControlListener(new DragControl());
+        d.addControlListener(new DragControl() {
+        	public void itemDragged(VisualItem item, MouseEvent e) {
+        		super.itemDragged(item, e);
+        		// This is a bit sluggish, because it relayouts all labels instead of just
+        		// the one that has moved
+        		item.getVisualization().run(GraphConstants.LABELLAYOUT);
+        	}
+        });
         d.addControlListener(new PanControl());
         
         // Allowing zooming in the panel.
@@ -184,6 +185,4 @@ public class GraphDisplayBuilder {
         
         return d;
     }
-
-
 }

@@ -18,7 +18,9 @@ public class GraphConstants {
     public static final String EDGES = "graph.edges";
     public static final String COLOR = "color";
     public static final String LAYOUT = "layout";
-  
+    public static final String LABELLAYOUT = "label-layout";
+    public static final String LABELS = "labels";
+    public static final String LABEL  = "label";
 
     /**
      * Node background color.
@@ -44,5 +46,6 @@ public class GraphConstants {
      * Edge arrow color.
      */
     public static final int ARROWCOLOR = ColorLib.rgb(0, 0, 0);
+	
 
 }

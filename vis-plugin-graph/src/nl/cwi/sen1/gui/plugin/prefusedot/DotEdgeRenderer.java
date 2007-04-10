@@ -2,11 +2,9 @@ package nl.cwi.sen1.gui.plugin.prefusedot;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-
 
 import prefuse.Constants;
 import prefuse.render.EdgeRenderer;
@@ -16,7 +14,6 @@ import prefuse.visual.VisualItem;
 
 public class DotEdgeRenderer extends EdgeRenderer {
     private static Point2D start = new Point2D.Float();
-
     private static Point2D end = new Point2D.Float();
 
     public DotEdgeRenderer(int edgeType, int arrowType) {
@@ -70,8 +67,24 @@ public class DotEdgeRenderer extends EdgeRenderer {
         if (i > 0) {
             end = m_isctPoints[0];
         }
+        
         AffineTransform at = getArrowTrans(start, end, 1);
         return at.createTransformedShape(m_arrowHead);
+    }
+
+    protected static void getAlignedPoint(Point2D p, Rectangle2D r, int xAlign, int yAlign) {
+        double x = r.getX(), y = r.getY(), w = r.getWidth(), h = r.getHeight();
+        if ( xAlign == Constants.CENTER ) {
+            x = x+(w/2);
+        } else if ( xAlign == Constants.RIGHT ) {
+            x = x+w;
+        }
+        if ( yAlign == Constants.CENTER ) {
+            y = y+(h/2);
+        } else if ( yAlign == Constants.BOTTOM ) {
+            y = y+h;
+        }
+        p.setLocation(x,y);
     }
 
     protected Shape getRawShape(VisualItem item) {
@@ -102,6 +115,7 @@ public class DotEdgeRenderer extends EdgeRenderer {
         AffineTransform at = getTransform(item);
         shape = (at == null) ? shape : at.createTransformedShape(shape);
 
+        
         // create the arrow head, if needed
         Shape arrow = getArrowShape(start, end, item2);
         setRenderType(RENDER_TYPE_DRAW_AND_FILL);

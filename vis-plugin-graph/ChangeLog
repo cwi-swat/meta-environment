@@ -1,5 +1,9 @@
 
 
+Tue Apr 10 09:42:26 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.java: debugged generic bridge to dot, and debugged labels
+   in shaped nodes. Now using the Decorator interface of prefuse.
+
 Thu Mar 29 19:45:03 CEST 2007 <jurgenv@cwi.nl>
  * **/*.java: added support for varying the width and the height of nodes 
   from an RStore, also you may select shapes (ellipse, circle, box).

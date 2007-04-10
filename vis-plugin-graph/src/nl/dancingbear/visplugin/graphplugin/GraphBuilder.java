@@ -59,9 +59,9 @@ public class GraphBuilder {
 	private final String m_relationGraph = "relation([str,str])";
 
 	private final String m_relationGraphTuple = "relation([tuple([str,loc]),tuple([str,loc])])";
-	
+
 	private final String m_attributedGraphTuple = "relation([tuple([str,relation([str,str])]),str])";
-	                                               
+
 	/**
 	 * @param factory
 	 * @author A. Belgraver
@@ -94,33 +94,29 @@ public class GraphBuilder {
 		if (isRelTupleTuple(fact)) {
 			return convertRelTupleTupleToDataset(elements);
 		}
-		
-		System.err.println("hello");
+
 		if (isAttributedGraphRelation(fact)) {
-			System.err.println("isAttr");
 			return convertAttributedGraphDataset(elements);
 		}
 
 		return new Graph();
 	}
 
-	
 	private Graph convertAttributedGraphDataset(RElemElements elements) {
 		// Setup the new graph.
 		m_nodeCache.clear();
 
 		DotAdapter graph = new DotAdapter();
-		
+
 		try {
 			while (elements.hasTail()) {
 				RElem headElement = elements.getHead();
 				// Replace the current looping set with: ( set - head ).
 				elements = elements.getTail();
-				System.err.println("elem:" + headElement);
-				
+
 				RElemElements tupleRelation = headElement.getElements();
 				RElem tuple1 = tupleRelation.getRElemAt(0);
-		
+
 				// Disassemble the tuple into its parts.
 				String from = tuple1.getElements().getRElemAt(0).getStrCon();
 				Node fromNode = getOrCreateNode(graph, from);
@@ -131,29 +127,47 @@ public class GraphBuilder {
 				RElem attributes = tuple1.getElements().getRElemAt(1);
 				if (attributes.isSet()) {
 					RElemElements elems = attributes.getElements();
-					for ( ; !elems.isEmpty(); elems = elems.getTail()) {
+					boolean labelFound = false;
+
+					for (; !elems.isEmpty(); elems = elems.getTail()) {
 						RElem tuple = elems.getHead();
-						if (!tuple.isTuple() && tuple.getElements().getLength() == 2) {
-							System.err.println("warning: attribute is not a tuple:" + tuple);
+						if (!tuple.isTuple()
+								&& tuple.getElements().getLength() == 2) {
+							System.err
+									.println("warning: attribute is not a tuple:"
+											+ tuple);
 							break;
-						}
-						else {
+						} else {
 							RElem key = tuple.getElements().getRElemAt(0);
 							RElem value = tuple.getElements().getRElemAt(1);
 							if (value.isStr()) {
-							  graph.setNodeAttribute(fromNode, key.getStrCon(), value.getStrCon());
-							}
-							else {
-								System.err.println("warning: attribute value not supported:" + value);
+								graph.setNodeAttribute(fromNode, key
+										.getStrCon(), value.getStrCon());
+
+								if (key.getStrCon()
+										.equals(GraphConstants.LABEL)) {
+									labelFound = true;
+								}
+							} else {
+								System.err
+										.println("warning: attribute value not supported:"
+												+ value);
 							}
 						}
 					}
-				}
-				else {
-					System.err.println("warning: ignoring graph attributes:" + attributes);
+
+					if (!labelFound) {
+						graph.setNodeAttribute(fromNode, GraphConstants.LABEL,
+								from);
+					}
+				} else {
+					System.err.println("warning: ignoring graph attributes:"
+							+ attributes);
 				}
 
-				graph.addEdge(fromNode, toNode);
+				if (toNode != null) {
+					graph.addEdge(fromNode, toNode);
+				}
 			}
 		} catch (UnsupportedOperationException e) {
 			System.err.println("warning: " + e);
@@ -179,7 +193,7 @@ public class GraphBuilder {
 		m_nodeCache.clear();
 
 		DotAdapter graph = new DotAdapter();
-		
+
 		try {
 			while (elements.hasTail()) {
 				RElem headElement = elements.getHead();
@@ -206,10 +220,11 @@ public class GraphBuilder {
 
 				// register the locations in the cache
 				getOrCreateLocation(nameId1, loc1);
-				getOrCreateLocation(nameId2, loc2);
 
-				// Create edges between nodes.
-				graph.addEdge(nodeId1, nodeId2);
+				if (nodeId2 != null) {
+					getOrCreateLocation(nameId2, loc2);
+					graph.addEdge(nodeId1, nodeId2);
+				}
 			}
 		} catch (UnsupportedOperationException e) {
 			System.err.println("warning: " + e);
@@ -251,8 +266,9 @@ public class GraphBuilder {
 			Node nodeId = getOrCreateNode(graph, nameId);
 			Node nodeLabel = getOrCreateNode(graph, nameLabel);
 
-			// Create edges between nodes.
-			graph.addEdge(nodeId, nodeLabel);
+			if (nodeLabel != null) {
+			  graph.addEdge(nodeId, nodeLabel);
+			}
 		}
 
 		return graph;
@@ -272,6 +288,10 @@ public class GraphBuilder {
 	 */
 	public Node getOrCreateNode(Graph graph, String nodeName) {
 		Node node;
+
+		if (nodeName.length() == 0) {
+			return null;
+		}
 
 		// Check to see if node already exists.
 		if (m_nodeCache.containsKey(nodeName)) {

@@ -83,6 +83,7 @@ public class GraphVisualizationWindow extends VisualizationPluginWindow {
         Graph graph = graphBuilder.buildGraphFromRTuple(fact);
         GraphDisplayBuilder gvizBuilder = new GraphDisplayBuilder();
         Display d = gvizBuilder.createDisplayFromGraph(graph);
+       
 
         d.addControlListener(new ControlAdapter() {
             @Override

@@ -2,6 +2,7 @@ package nl.cwi.sen1.gui.plugin.prefusedot;
 
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +18,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import nl.dancingbear.visplugin.graphplugin.GraphConstants;
+
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
@@ -29,7 +32,7 @@ import prefuse.data.Node;
  * doDotLayout() method after constructing the graph in memory. This will start
  * a session with the external dot tool via pipes, and annotate the graph with
  * x,y position information, and store the locations for the curved edges also.
- * @see DotLayout.java for how this information will later be used to actually
+ * @see DotNodeLayout.java for how this information will later be used to actually
  *      layout the graph.
  */
 public class DotAdapter extends Graph {
@@ -44,7 +47,6 @@ public class DotAdapter extends Graph {
 	public static final String DOT_ID = "id";
 	public static final String DOT_SHAPE = "shape";
 	
-	private int height;
 	private double scale;
 
 	private Map<String, Node> nodeIds = new HashMap<String, Node>();
@@ -61,6 +63,13 @@ public class DotAdapter extends Graph {
 		addColumn(DOT_SHAPE, String.class);
 	}
 
+	/**
+	 * Run the Dot layout algorithm and store the results as attributes in the graph
+	 * table. These attributes can later be used by a prefuse layout algorithm.
+	 * @see DotNodeLayout and @see DotLabelLayout for details. This method assumes
+	 * you have added nodes and edges using the @method addNode() and @method addEdge() methods.
+	 *
+	 */
 	public void doDotLayout() {
 		executeDot();
 	}
@@ -125,7 +134,6 @@ public class DotAdapter extends Graph {
 			do {
 				String line = i.readLine();
 
-//				System.err.println("line: " + line);
 				if (line != null) {
 					Matcher m;
 
@@ -216,8 +224,8 @@ public class DotAdapter extends Graph {
 			Matcher n = Patterns.point.matcher(rest);
 
 			if (n.matches()) {
-				int x = (int) (Double.parseDouble(n.group(1)) * dpi);
-				int y = (int) (Double.parseDouble(n.group(2)) * dpi);
+				int x = (int) (Double.parseDouble(n.group(1)) * scale * dpi);
+				int y = (int) (Double.parseDouble(n.group(2)) * scale * dpi);
 				points.add(new Point2D.Float(x, y));
 				rest = n.group(3);
 			} else {
@@ -239,8 +247,11 @@ public class DotAdapter extends Graph {
 		id = idFromDot(id);
 		int x = (int) (Double.parseDouble(xstr) * scale * dpi);
 		int y = (int) (Double.parseDouble(ystr) * scale * dpi);
-		int width = (int) (Double.parseDouble(widthStr) * scale * 0.5 * dpi);
-		int height = (int) (Double.parseDouble(heightStr) * scale * 0.5 * dpi);
+		int width = (int) (Double.parseDouble(widthStr) * scale * dpi);
+		int height = (int) (Double.parseDouble(heightStr) * scale * dpi);
+		
+		x = x - width / 2;
+		y = y - height / 2;
 		Node node = getNode(id);
 
 		if (node != null) {
@@ -255,10 +266,13 @@ public class DotAdapter extends Graph {
 
 	private void parseStart(String scaleStr, String heightStr) {
 		scale = Double.parseDouble(scaleStr);
-		height = (int) (Double.parseDouble(heightStr) * scale * dpi);
 	}
 
-	private void printDot(PrintStream b) {
+	/**
+	 * Prints out the prefuse graph to Graphviz Dot format
+	 * @param b PrintStream to output the graph to
+	 */
+	public void printDot(PrintStream b) {
 		b.append("digraph prefuseGraph {\n");
 		printNodes(b);
 		printEdges(b);
@@ -346,6 +360,13 @@ public class DotAdapter extends Graph {
 		return result.toString();
 	}
 	
+	/**
+	 * A safe method to set an attribute of a node. If the attribute's column
+	 * was not declared yet, it will be declared by this method first.
+	 * @param node 
+	 * @param key
+	 * @param value
+	 */
 	public void setNodeAttribute(Node node, String key, Object value) {
 		if (node.getColumnIndex(key) == -1) {
 			addColumn(key, value.getClass());
