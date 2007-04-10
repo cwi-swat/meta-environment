@@ -1,3 +1,0 @@
-equations
-
-[] Tag String1 = String2 = Tag string-to-bytes(String1) = string-to-bytes(String2)

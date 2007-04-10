@@ -6,5 +6,4 @@ SUBDIRS = \
 	utils \
 	test \
 	asf-operations \
-	asf-checker \
-	asf-api
+	asf-checker 
