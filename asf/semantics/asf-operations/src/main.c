@@ -1,5 +1,5 @@
 #include <atb-tool.h>
-#include "asfoperations.tif.h"
+#include "asfoperations.h"
 
 #include <stdio.h>
 #include <stdlib.h>  
