@@ -51,7 +51,7 @@
 #include "statusBar.h"
 #include "levels.h"
 #include "sglr-termstore.h"
-/*#include "inputString-api.h"*/
+#include "inputString-api.h"
 
 /** 
  * Contains all sub-trees that have been filtered. It is used to prevent
@@ -68,6 +68,7 @@ static ATermTable resolvedtable = NULL;
  */
 static ATermTable postable = NULL;
 
+static InputString inputString;
 /** 
  * Counts the (non-nested) avoided productions in the given tree.
  * It counts the number of \c avoid productions encountered on a top down 
@@ -1075,7 +1076,6 @@ static PT_Args filterChildren(ParseTable *pt, PT_Args args, size_t *pos, ATbool 
     }
   }
 
-  /* Will this not result in all trees having an extra, empty child? */
   return PT_makeArgsEmpty();
 }
 
@@ -1205,10 +1205,10 @@ static PT_Tree filterAmbiguityWithMemoization(ParseTable *pt, PT_Args ambiguousT
   ATerm key = SG_CreateAmbiArgsKey(ambiguousTrees, *pos);
   PT_Tree newTreeNode = (PT_Tree)ATtableGet(resolvedtable, key);
 
-  if (PARSER_getVerboseFlag() == ATtrue) {
+  /*if (PARSER_getVerboseFlag() == ATtrue) {
     SG_printStatusBar("sglr: filtering", 
         FLT_incrementClustersVisitedCount(), FLT_getAmbCount());
-  }
+  }*/
 
   if (!newTreeNode) {
     SG_setLevel(clusterIndex, level);
@@ -1315,6 +1315,9 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
     /*ATwarning("t: %t\n", t);*/
     assert(PT_isTreeChar(t) && "we only expect appls and chars here");
     (*pos)++;
+    if (PARSER_getVerboseFlag() == ATtrue) {
+      SG_printStatusBar("sglr: filtering", *pos, IS_getLength(inputString));
+    }
   }
 
   if (FLT_getFilterFlag() && t != NULL) {
@@ -1323,6 +1326,22 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
   else {
     return t;
   }
+}
+
+static int countAmbiguitiesInTree(PT_Tree t, int ambs) {
+  if (PT_isTreeAppl(t) || PT_isTreeAmb(t)) {
+    PT_Args args = PT_getTreeArgs(t);
+
+    if (PT_isTreeAmb(t)) {
+      ambs++;
+    }   
+
+    for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+      ambs = countAmbiguitiesInTree(PT_getArgsHead(args), ambs);
+    }
+  }
+
+  return ambs; 
 }
 
 /** 
@@ -1344,9 +1363,11 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
  * \return a filtered forest, with ambiguity nodes instead of references
  *         to ambiguity clusters, and cycle nodes instead of actual cycles.
  */
-PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t) {
+PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    PT_Tree newT;
    size_t pos = 0;
+
+   inputString = input;
 
    resolvedtable = ATtableCreate(2048, 75);
    postable = ATtableCreate(2048, 75);
@@ -1370,10 +1391,10 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t) {
    SG_initLevels();
    newT = filterRecursive(pt, t, &pos, ATfalse, ATfalse, 0);
    SG_cleanupLevels();
-   
+
    if (PARSER_getVerboseFlag() == ATtrue) {
      /* print 100% bar, the rest was solved by caching ambclusters */
-     SG_printStatusBar("sglr: filtering", FLT_getAmbCount(), FLT_getAmbCount());
+     SG_printStatusBar("sglr: filtering", pos, IS_getLength(inputString));
      SG_printDotAndNewLine();
    }
 
@@ -1384,5 +1405,5 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t) {
      return (PT_ParseTree) NULL;
    }
        
-   return PT_makeParseTreeTop(newT, FLT_getAmbCount()); 
+   return PT_makeParseTreeTop(newT, countAmbiguitiesInTree(newT,0)); 
 }

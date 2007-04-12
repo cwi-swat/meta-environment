@@ -20,6 +20,6 @@
 #include "inputString-data.h"
 #include <MEPT.h>
 
-PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t);
+PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input);
 
 #endif  /* _FILTERS_H_ */

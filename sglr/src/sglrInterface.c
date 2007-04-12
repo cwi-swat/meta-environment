@@ -101,7 +101,7 @@ ATbool SGLR_isParseTableLoaded(const char *parseTableName) {
 }
 
 
-static PT_ParseTree filterTree(PT_Tree t, ParseTable *parseTable) {
+static PT_ParseTree filterTree(PT_Tree t, ParseTable *parseTable, InputString inputString) {
   PT_ParseTree result = NULL;
 
   if (t != NULL) { 
@@ -109,7 +109,7 @@ static PT_ParseTree filterTree(PT_Tree t, ParseTable *parseTable) {
       STATS_Timer(); 
     }
     
-    result = FLT_filter(parseTable, t);
+    result = FLT_filter(parseTable, t, inputString);
     
     if (PARSER_getStatsFlag() == ATtrue) { 
       fprintf(LOG_log(), "Filtering took %.6fs\n", STATS_Timer());
@@ -171,7 +171,7 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
 
   t = SG_parse(parseTable, inputString);
 
-  parseTree = filterTree(t, parseTable);
+  parseTree = filterTree(t, parseTable, inputString);
 
   SG_DestroyInputAmbiMap();
   SG_AmbiTablesDestroy();
