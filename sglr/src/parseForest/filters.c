@@ -69,6 +69,9 @@ static ATermTable resolvedtable = NULL;
 static ATermTable postable = NULL;
 
 static InputString inputString;
+
+static ATermTable seenAmbiguities = NULL;
+
 /** 
  * Counts the (non-nested) avoided productions in the given tree.
  * It counts the number of \c avoid productions encountered on a top down 
@@ -1328,15 +1331,30 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
   }
 }
 
+/** 
+* Counts the number of ambiguities in the (maximally shared) tree given. 
+* Note the memoization. Without it, this search becomes too expensive. 
+* 
+* \param t the root node to begin counting from.
+* \param ambs the number of ambiguities counted.
+* 
+* \return the number of ambiguities found in the maximally shared 
+* representation of the given tree.
+*/
 static int countAmbiguitiesInTree(PT_Tree t, int ambs) {
   if (PT_isTreeAppl(t) || PT_isTreeAmb(t)) {
+    PT_Tree seenAmbiguity = NULL;
     PT_Args args = PT_getTreeArgs(t);
 
     if (PT_isTreeAmb(t)) {
-      ambs++;
+      seenAmbiguity = (PT_Tree)ATtableGet(seenAmbiguities, (ATerm)t);
+      if (!seenAmbiguity) {
+        ATtablePut(seenAmbiguities, (ATerm) t, (ATerm) t);
+        ambs++;
+      }
     }   
 
-    for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    for (; !PT_isArgsEmpty(args) && !seenAmbiguity; args = PT_getArgsTail(args)) {
       ambs = countAmbiguitiesInTree(PT_getArgsHead(args), ambs);
     }
   }
@@ -1366,11 +1384,13 @@ static int countAmbiguitiesInTree(PT_Tree t, int ambs) {
 PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    PT_Tree newT;
    size_t pos = 0;
+   int numberOfAmbiguitiesInTree = 0;
 
    inputString = input;
 
    resolvedtable = ATtableCreate(2048, 75);
    postable = ATtableCreate(2048, 75);
+   seenAmbiguities = ATtableCreate(2048, 75);
 
    if (PARSER_getVerboseFlag() == ATtrue) {
      FLT_resetClustersVisitedCount();
@@ -1397,13 +1417,16 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
      SG_printStatusBar("sglr: filtering", pos, IS_getLength(inputString));
      SG_printDotAndNewLine();
    }
+  
+   numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
 
    ATtableDestroy(resolvedtable);
    ATtableDestroy(postable);
+   ATtableDestroy(seenAmbiguities);
 
    if (!newT) {
      return (PT_ParseTree) NULL;
    }
        
-   return PT_makeParseTreeTop(newT, countAmbiguitiesInTree(newT,0)); 
+   return PT_makeParseTreeTop(newT, numberOfAmbiguitiesInTree); 
 }

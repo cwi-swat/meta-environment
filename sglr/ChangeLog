@@ -1,5 +1,10 @@
 $Id$
 
+Fri Apr 13 12:01:53 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: added memoization to the ambiguity count
+   traversal. The count now gives the number of ambiguities in the maximally
+   shared representation of the parse tree.
+
 Thu Apr 12 15:36:17 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: added an extra traversal of the final parse tree 
    to count the number of ambiguous nodes. This is a temporary fix to get 
