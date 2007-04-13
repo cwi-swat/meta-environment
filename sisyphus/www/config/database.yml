@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   database: sisyphusdev
-  host: sjofar.sen.cwi.nl
+  host: verfrol.sen.cwi.nl
   username: sisyphusdev
   password: tantalu5
   port: 
@@ -16,7 +16,7 @@ development:
 production:
   adapter: postgresql
   database: sisyphusdev
-  host: sjofar.sen.cwi.nl
+  host: verfrol.sen.cwi.nl
   username: sisyphusdev
   password: tantalu5
   port: 
