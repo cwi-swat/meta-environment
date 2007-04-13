@@ -150,6 +150,7 @@ module Building
 
     def build_revision_with_deps(revision, dep_items)
       target = @target_factory.target(revision, dep_items)
+      @log.info("dep_items in build_revision_with_deps: [#{dep_items.join(', ')}]")
       item = @builder.build(target)
       return item
     end

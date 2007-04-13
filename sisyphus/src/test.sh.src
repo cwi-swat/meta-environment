@@ -10,7 +10,6 @@ SICLI=$PREFIX/bin/si-cli
 $SICLI \
     --root asfsdf-meta \
     --profile verfrol \
-    --force aterm-java \
     --interval 300 \
     --weekday Mon \
     --weekday Tue \
@@ -20,6 +19,7 @@ $SICLI \
     --after 00:01 \
     --before 23:59 \
     --mail \
+    --trackingback \
     --from daybuild@cwi.nl \
     --smtp smtp.cwi.nl:25 \
     --config svn://sjofar.sen.cwi.nl/sisyphus-configuration \

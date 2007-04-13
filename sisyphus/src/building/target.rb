@@ -15,8 +15,8 @@ module Building
   class Target
     include Utils::UnameDir
     include FileUtils
-    attr_reader :revision, :config, :session, :item
-    attr_accessor :dep_items
+    attr_reader :revision, :config, :session
+    attr_accessor :dep_items, :item
 
     def initialize(revision, dep_items, config, session, log, dist_conf)
       @revision = revision
@@ -26,6 +26,12 @@ module Building
       @log = log
       @dist_conf = dist_conf
       @item = nil
+    end
+
+    def requires
+      dep_items.collect do |dep|
+        dep.si_revision.si_component
+      end
     end
 
     def db_session
@@ -90,6 +96,7 @@ module Building
 
     def set_progress(bool)
       @item.set_progress(bool)
+      @item.save
     end
 
     def fire
@@ -157,8 +164,9 @@ module Building
           return
         end
       end
-      # @log.info("Making #{@item} successful.")
+      @log.info("Making #{@item} successful.")
       @item.set_success(true)
+      @item.save
       make_dists(context)
     end
 

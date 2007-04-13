@@ -89,6 +89,7 @@ module Model
   end
 
   class SiItem < ActiveRecord::Base
+    include Comparable
     # fields: success
     belongs_to :si_revision
 
@@ -163,6 +164,37 @@ module Model
       return File.join(si_revision.prefix(root), subdir)
     end
 
+    def trans_closure
+      return closure - [self]
+    end
+
+    def closure
+      todo = [self]
+      closure = [self]
+      while !todo.empty? do
+        item = todo.shift
+        deps = item.dep_items
+        todo |= deps
+        closure |= deps
+      end
+      return closure
+    end
+
+    def revision_closure(closure = closure)
+      closure.collect do |item|
+        item.si_revision
+      end.uniq
+    end
+
+    def component_closure(revision_closure = revision_closure)
+      revision_closure.collect do |revision|
+        revision.si_component
+      end.uniq
+    end
+
+    def <=>(o)
+      self.id <=> o.id
+    end
 
     def tr_deps
       return extent
@@ -451,6 +483,7 @@ module Model
                                                  profile.name, profile.version])
       if p.nil? then
         p = SiProfile.new(:name => profile.name, :version => profile.version)
+        p.save
       end
       return p
     end
@@ -464,6 +497,7 @@ module Model
                          p.id, sov, scv])
       if c.nil? then
         c = SiConfig.new(:si_profile => p, :sources_version => sov,:script_version => scv)
+        c.save
       end
       return c
     end    

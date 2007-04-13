@@ -28,6 +28,7 @@ module Utils
         options.days = []
         options.before = nil
         options.after = nil
+        options.backtracking = false
         options.command_line
         options.forced = []
         
@@ -58,6 +59,10 @@ module Utils
           opts.on("-i Interval", "--interval Interval",
                   "Interval (in s) waited after build session (3600)") do |interval|
             options.interval = interval.to_i
+          end
+
+          opts.on("-t", "--[no-]trackingback", "Apply backtracking (default: false)") do |b|
+            options.backtracking = b
           end
 
           opts.on("-d Dbconf", "--dbconf Dbconf", "Database config file.") do |d|
@@ -132,6 +137,7 @@ module Utils
               config = YAML.load(f)
               options.profile_name = config['options']['profile']
               options.interval = config['options']['interval']
+              options.backtracking = config['options']['trackingback']
               options.roots = config['options']['roots']
               options.verbose = config['options']['verbose']
               options.quiet = config['options']['quiet']

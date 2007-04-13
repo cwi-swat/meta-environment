@@ -18,7 +18,7 @@ module Sisyphus
   require 'time'
 
   class SisyphusClient 
-    def initialize(host, config_manager, profile_name, interval, roots, store, verbose, quiet, days, after, before, mailer, forced, command_line)
+    def initialize(host, config_manager, profile_name, interval, roots, store, verbose, quiet, days, after, before, mailer, forced, backtracking, command_line)
       @host = host
       @config_manager = config_manager
       @profile_name = profile_name
@@ -34,6 +34,7 @@ module Sisyphus
       @mailer = mailer
       @log_device = STDERR
       @forced = forced
+      @backtracking = backtracking
       @command_line = command_line
       @last_updated = latest_module_time
     end
@@ -113,11 +114,10 @@ module Sisyphus
 
     def start_iteration(time)
       if @quiet then
-        #  hostname = `hostname`.chomp
-        #  timestr = time.strftime("%Y%m%dT%H%M")
-        #  @log_device = File.join(Dir.tmpdir, "sisyphus_log_on_#{hostname}_#{timestr}")
-        #  $stderr << "Logging to #{@log_device}\n"
-        @log_device = File.open('/dev/null', 'w')
+        hostname = `hostname`.chomp
+        timestr = time.strftime("%Y%m%dT%H%M")
+        @log_device = File.join(Dir.tmpdir, "sisyphus_log_on_#{hostname}_#{timestr}")
+        $stderr << "Logging to #{@log_device}\n"
       end
 
       @store.connect
@@ -205,7 +205,7 @@ module Sisyphus
                                                          config.sources.properties['externals'],
                                                          @repo_factory, config.user, config.build_dir, time)  
       target_factory = Building::TargetFactory.new(session, config, @log)
-      @builder = Building::Builder.new(@store, @forced, config, @log)
+      @builder = Building::Builder.new(@store, @forced, config, @backtracking, @log)
       visitor = Building::Visitor.new(target_factory, revision_factory, @roots, @builder, @log, config, @store)
       visitor.build_roots
     end
@@ -262,6 +262,7 @@ if __FILE__ == $0 then
                                         options.before,
                                         mailer, 
                                         options.forced,
+                                        options.backtracking,
                                         options.command_line)
   client.run
 end
