@@ -192,7 +192,7 @@ static void handleOptions (int argc, char **argv) {
       case 'o':   outputFileName     = optarg;              break;
       case 'p':   parseTableName     = optarg;              break;
       case 's':   
-          startSymbolFlag = ! startSymbolFlag;
+          startSymbolFlag = !startSymbolFlag;
           startSymbol = optarg;              
           break;
       case 't':   textualflag        = !textualflag;         break;
@@ -228,7 +228,7 @@ static void handleOptions (int argc, char **argv) {
   MAIN_setInputFileName(inputFileName);
   MAIN_setParseTableName(parseTableName);
   FLT_setSelectTopNonterminalFlag(startSymbolFlag);
-  if (startSymbol) {
+  if (startSymbolFlag) {
     FLT_setTopNonterminal(startSymbol);
   }
   PARSER_setAmbiguityErrorFlag(ambiguityerrorflag);
@@ -266,7 +266,7 @@ int runCommandLineTool (int argc, char **argv) {
    * is blank or - is used. */
   inputString = IS_createInputStringFromFile(MAIN_getInputFileName());
   if (SG_AddParseTable(MAIN_getParseTableName()) == NULL) {
-    outputResult(ERR_SummaryToTerm(SGLR_PTBL_makeErrorSummary("parse table")), MAIN_getOutputFileName());
+    outputResult(ERR_SummaryToTerm(ERR_getManagerSummary()), MAIN_getOutputFileName());
     return 1;
   }
 

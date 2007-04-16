@@ -1,5 +1,10 @@
 $Id$
 
+Mon Apr 16 14:11:23 CEST 2007 <economop@cwi.nl>
+ * Fixed parse table error handling for toolbus invocations.
+ * test/erroneous/true.asfix2.org: regenerated because the error message 
+   changed slightly due to the above fix.
+
 Mon Apr 16 11:21:42 CEST 2007 <economop@cwi.nl>
  * test/regressionTests.sh.src: added -x option to the command line arguments.
 

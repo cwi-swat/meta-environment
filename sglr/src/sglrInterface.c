@@ -43,6 +43,9 @@ void SGLR_initialize() {
   if (!initialized) {
     initErrorApi();
     SGLR_PTBL_initErrorList();
+    ERR_cleanupErrorManager();  
+    ERR_initErrorManager("parser", "sglr");
+
     PT_initMEPTApi();
     PT_initAsFix2Api();
     PTBL_initPtableApi();
@@ -63,7 +66,7 @@ ATbool SGLR_isInitialized() {
 /* Convert an ATerm parse table to the internal format and cache it using the 
  * |parseTableName|.
  */
-ATerm SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable parseTable) {
+int SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable parseTable) {
   ParseTable *internalParseTable = NULL;
 
   if (PARSER_getStatsFlag() == ATtrue) {
@@ -82,7 +85,7 @@ ATerm SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable parseTable
     SG_CacheParseTable(parseTableName, internalParseTable);
   }
 
-  return (ATerm) (internalParseTable ? ATempty : NULL);
+  return internalParseTable ? 1 : 0;
 }
 
 /** \todo: write unloadParseTable */
@@ -161,9 +164,6 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
 
   assert(ATisInitialized() && 
       "ATerm library has not been initialized to be used by SGLR");
-
-  ERR_cleanupErrorManager();  
-  ERR_initErrorManager("parser", "sglr");
 
   ParseTable *parseTable = SG_LookupParseTable(parseTableName);  
 

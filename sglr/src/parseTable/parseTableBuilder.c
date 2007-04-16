@@ -10,6 +10,7 @@
 
 #include <rsrc-usage.h>
 #include <logging.h>
+#include <Error-manager.h>
 
 /** 
  * Translate ATerm representation of parse table into internal parse table 
@@ -28,14 +29,25 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   long               maxrss = 0;
   long               allocated;
   int                nrOfStates;
-
-  SGLR_PTBL_initErrorList(); 
+  ERR_Subject subject;
+  static char subjectDescription[1024];
+  static char errorDescription[1024];
 
   if (!PTBL_isValidParseTable(extParseTable)) { 
     if (PARSER_getVerboseFlag() == ATtrue) {
       ATwarning("Parse table format error\n");
     }
-    SGLR_PTBL_addErrorError(path, "Parse table format error");
+
+    sprintf(errorDescription, "Parse table format error");
+    sprintf(subjectDescription, "parse table");
+    if (!strcmp(path, "ToolBusParseTable")) {
+      subject = ERR_makeSubjectSubject(subjectDescription);
+    }
+    else {
+      subject = ERR_makeSubjectLocalized(subjectDescription, ERR_makeLocationFile(path));
+    }
+    ERR_managerStoreError(errorDescription, ERR_makeSubjectListSingle(subject));
+
     extParseTable = NULL;
     return NULL;
   }
@@ -46,7 +58,17 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
     if (PARSER_getVerboseFlag() == ATtrue) {
       ATwarning("Invalid parse table version\n");
     }
-    SGLR_PTBL_addErrorError(path, "Invalid parse table version");
+
+    sprintf(errorDescription, "Invalid parse table version");
+    sprintf(subjectDescription, "parse table");
+    if (!strcmp(path, "ToolBusParseTable")) {
+      subject = ERR_makeSubjectSubject(subjectDescription);
+    }
+    else {
+      subject = ERR_makeSubjectLocalized(subjectDescription, ERR_makeLocationFile(path));
+    }
+    ERR_managerStoreError(errorDescription, ERR_makeSubjectListSingle(subject));
+
     extParseTable = NULL;
     return NULL;
   }
@@ -65,7 +87,16 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
     if (PARSER_getVerboseFlag() == ATtrue) {
       ATwarning("No start state defined\n");
     }
-    SGLR_PTBL_addErrorError(path, "No start state defined");
+
+    sprintf(errorDescription, "No start state defined");
+    sprintf(subjectDescription, "parse table");
+    if (!strcmp(path, "ToolBusParseTable")) {
+      subject = ERR_makeSubjectSubject(subjectDescription);
+    }
+    else {
+      subject = ERR_makeSubjectLocalized(subjectDescription, ERR_makeLocationFile(path));
+    }
+    ERR_managerStoreError(errorDescription, ERR_makeSubjectListSingle(subject));
     return NULL;
   }
   else {

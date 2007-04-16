@@ -21,7 +21,7 @@ typedef struct _apigen_prepared *SGLR_ParseTable;
 void SGLR_initialize();
 ATbool SGLR_isInitialized();
 
-ATerm SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable tbl);
+int SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable tbl);
 ATbool SGLR_isParseTableLoaded(const char *parseTableName);
 
 ERR_Summary SGLR_getErrorSummary();

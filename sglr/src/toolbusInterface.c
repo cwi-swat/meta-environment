@@ -23,7 +23,7 @@ int runTool(ATerm *bottomOfStack, int argc, char *argv[]){
 }
 
 ATerm parse(int conn, const char *input, ATerm packedParseTable, const char *topSort, ATerm heuristics) {
-  PT_ParseTree forest;
+  PT_ParseTree forest = NULL;
   ATerm message;
 
   PTBL_ParseTable parseTable = PTBL_ParseTableFromTerm(ATBunpack(packedParseTable));
@@ -55,9 +55,11 @@ ATerm parse(int conn, const char *input, ATerm packedParseTable, const char *top
       FLT_setSelectTopNonterminalFlag(ATfalse);
     }
 
-    SGLR_loadParseTable(PARSETABLE_ID, parseTable);
-    InputString inputString = IS_createInputStringFromString((const unsigned char *)input);
-    forest = SGLR_parse(inputString, PARSETABLE_ID);
+    if (SGLR_loadParseTable(PARSETABLE_ID, parseTable)) {
+      InputString inputString = IS_createInputStringFromString((const unsigned char *)input);
+      forest = SGLR_parse(inputString, PARSETABLE_ID);
+      IS_destroyInputString(inputString);
+    }
 
     if (forest != NULL) {
       if (ERR_getManagerCount() > 0) {
@@ -74,8 +76,6 @@ ATerm parse(int conn, const char *input, ATerm packedParseTable, const char *top
       message = ATmake("parse-failed(<term>)", 
           ERR_SummaryToTerm(ERR_getManagerSummary()));
     }
-
-    IS_destroyInputString(inputString);
   }
   else {
     message = ATmake("parse-failed(<term>)", 
