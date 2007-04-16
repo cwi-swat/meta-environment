@@ -1,5 +1,19 @@
 $Id$
 
+Mon Apr 16 15:06:26 CEST 2007 <economop@cwi.nl>
+ * Tidied up the regression tests:
+   - there were redundant terms in the test directory that the script wasn't 
+     testing. I removed them. 
+   - test/regressionTest: Created one script that performs the parse table 
+     generation tests and the parsing of terms and erroneous input.
+   - test/termsCommandLines, test/erroneousCommandLines: added. These files 
+     allow us to set the options for sdf2table and sglr.
+   - test/lang-types: removed.
+   - test/tables/Sdf2.tbl: copied the parse table from the sglr test directory.
+   - test/grammars/Sdf2.sdf: copied the grammar from the sglr test directory.
+   - test/terms/mdj.{asfix2.org,cycle2}: added.
+   - test/true.asfix2.org: copied from sglr as old copy wasn't a summary.
+
 Mon Mar 19 16:38:07 CET 2007 <economop@cwi.nl>
  * Manually applied Martin's second 64-bit fix from bug 720.
 
