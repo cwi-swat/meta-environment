@@ -157,7 +157,10 @@ class BuildsController < ApplicationController
   end
 
   def latest_item2(component, host)
-    return SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_items.si_revision_id = si_revisions.id and si_revisions.si_component_id = #{component.id} and si_items.si_host_id = #{host.id} order by si_items.id desc limit 1").first
+    if host.id.nil? then #????
+      return nil
+    end
+    return  SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_items.si_revision_id = si_revisions.id and si_revisions.si_component_id = #{component.id} and si_items.si_host_id = #{host.id} order by si_items.id desc limit 1").first
   end
 
   def latest_item3(c, h)
