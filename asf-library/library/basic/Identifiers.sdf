@@ -7,12 +7,12 @@ imports basic/NatCon
 exports
 
 context-free syntax
-	idcon2strcon(IdCon) -> StrCon
-	strcon2idcon(StrCon) -> IdCon
+	idcon2strcon(IdCon) -> StrCon {complete}
+	strcon2idcon(StrCon) -> IdCon {complete}
 
 context-free syntax
-	natcon2strcon(NatCon) -> StrCon
-	strcon2natcon(StrCon) -> NatCon
+	natcon2strcon(NatCon) -> StrCon {complete}
+	strcon2natcon(StrCon) -> NatCon {complete}
 
 hiddens
 
