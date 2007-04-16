@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr 16 16:50:33 CEST 2007 <economop@cwi.nl>
+ * Added forgotten files.
+
 Mon Apr 16 15:06:26 CEST 2007 <economop@cwi.nl>
  * Tidied up the regression tests:
    - there were redundant terms in the test directory that the script wasn't 
