@@ -1,6 +1,8 @@
 #ifndef __SDF_GUI_LISTENERS__
 #define __SDF_GUI_LISTENERS__
 
+#include <navigator.tb>
+
 process ImportGraphPainter is
 let
   AllNotes: term,

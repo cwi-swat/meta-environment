@@ -8,7 +8,6 @@
 #include <text-utils.tb>
 
 /* sdf-meta */
-#include <sdf-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>
 #include <sdf2-language.tb>

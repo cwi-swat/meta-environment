@@ -4,11 +4,6 @@
 #include <meta-namespace.h>
 #include <module-manager.tb>
 #include <sdf-namespace.h>
-#include <progress.idef>
-#include <graph-utils.tb>
-#include <graph-painter.idef>
-#include <navigator.idef>
-#include <navigator.tb>
 #include <graph-namespace.h>
 #include <extract-sdf.idef>
 #include <editing.tb>

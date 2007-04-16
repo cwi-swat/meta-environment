@@ -1,5 +1,10 @@
 $Id$
 
+Mon Apr 16 15:58:11 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * tbscripts/{start-def-dump,sdf-listerers,sdf-gui-listeners}.tb: removed gui
+   specific includes from def-dump scenarion, added navigator gui to
+   sdf-gui-listeners
+
 Fri Mar 30 12:01:06 CEST 2007 <economop@cwi.nl>
  * tbscripts/sdf-listeners.tb: added missing include needed for DeleteSessions 
    process.
