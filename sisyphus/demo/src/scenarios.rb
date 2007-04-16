@@ -31,6 +31,10 @@ class Scenarios
     return checkout('balanced-binary-aterms')
   end
 
+  def dummy
+    return checkout('dummy')
+  end
+
   def bottom
     return checkout('aterm')
   end
@@ -59,9 +63,9 @@ class Scenarios
   def backtracking_scenario
     # Only with available earlier builds
     # e.g. after a clean slate run
-    #ch1 = HarmlessChange.new(middle)
+    ch1 = HarmlessChange.new(dummy)
     ch2 = BreakingChange.new(bottom)
-    return Transaction.new([ch2])
+    return Transaction.new([ch2, ch1])
   end
 
   def breaking_change_transaction(pkg)

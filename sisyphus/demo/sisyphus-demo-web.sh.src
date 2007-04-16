@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -x
+
 PREFIX=__PREFIX__
 DATADIR=__DATA_DIR__
 BINDIR=__BIN_DIR__
@@ -8,6 +10,7 @@ CONFIG_REPO=file://${DATADIR}/demo/config-repo/demo
 WWW_DIR=${DATADIR}/demo/www
 
 exec ${WOS} -u ${CONFIG_REPO} start \
+    --port 3001 \
     --chdir ${WWW_DIR} \
     --log /tmp/demo.$$.log \
     --pid /tmp/demo.$$.pid \

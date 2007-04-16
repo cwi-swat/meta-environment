@@ -11,6 +11,7 @@ exec $SICLI \
     --root relational-aterms \
     --profile demo \
     --interval 3600 \
+    --trackingback \
     --weekday Mon \
     --weekday Tue \
     --weekday Wed \
