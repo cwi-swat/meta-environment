@@ -38,6 +38,7 @@ usage () {
       -v              verbose mode
       -U              update outdated ".org" files
       -V              reveal program version (i.e. $version)
+      -x              display commands and arguments as they're executed
 E_O_USAGE
 }
 
@@ -47,7 +48,7 @@ version() {
 
 # Script's argument interpretation
 handleScriptOptions () {
-  while getopts ":hvUV" option
+  while getopts ":hvUVx" option
   do
     case $option in
       h ) usage; exit 0;;
@@ -55,6 +56,7 @@ handleScriptOptions () {
           VERBOSE="-v";;
       U ) update=1;;
       V ) version;;
+      x ) set -x;;
       * ) usage; exit 0;;
     esac
   done

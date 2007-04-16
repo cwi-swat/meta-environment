@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr 16 11:21:42 CEST 2007 <economop@cwi.nl>
+ * test/regressionTests.sh.src: added -x option to the command line arguments.
+
 Fri Apr 13 12:01:53 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: added memoization to the ambiguity count
    traversal. The count now gives the number of ambiguities in the maximally
