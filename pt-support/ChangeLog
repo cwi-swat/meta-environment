@@ -1,5 +1,18 @@
 $Id$
 
+Tue Apr 17 16:47:20 CEST 2007 <jurgenv@cwi.nl>
+ * libmept/MEPT-flatten.c: major bug in flattener solved. This makes
+   the trunk quite unstable. There may be unforseen side-effects of this
+   fix. Flattening of lexical lists did not happen at all if the list
+   was separated. Obviously, seperated lexical lists are not often used,
+   which is why the bug was not detected earlier. Two fixes have been
+   done in the flattener: 
+     1. patterns which had no-attrs in the production have been added
+     a <term> hole, such that flattening also works on hidden productions.
+     2. patterns for separated lexical lists have been added.
+   All this was triggered by a bug report from Albert Hofkamp on the
+   meta-users-list. The bug is solved by the above fixes.
+
 Thu Mar 15 15:13:08 CET 2007 <{economop,kooiker}@cwi.nl>
  * lib*: regenerated libraries
 
