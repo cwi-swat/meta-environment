@@ -6,7 +6,9 @@ CATEGORIES="learning-about howto understanding courses project"
 WEB="./doc/html"
 #DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
 #DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
-DOCBOOKXSL=${DOCBOOKXSLPREFIX}/html/docbook.xsl
+FOP="/home/paulk/software/source/fop-0.93/fop"
+DOCBOOKXSLHTML=${DOCBOOKXSLPREFIX}/html/docbook.xsl
+DOCBOOKXSLFO=${DOCBOOKXSLPREFIX}/fo/docbook.xsl
 STYLESHEET="meta-doc-style.css"
 
 mkdir -p ${WEB} || true
@@ -42,21 +44,32 @@ for cat in ${CATEGORIES}; do
       if [ -f $cat/$book/$book.xml ]; then
 	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
                    --output ${WEB}/$cat/$book/$book.html \
-                   ${DOCBOOKXSL} $cat/$book/$book.xml)	
+                   ${DOCBOOKXSLHTML} $cat/$book/$book.xml)
+	(xsltproc  --output ${WEB}/$cat/$book/$book.fo \
+                   --stringparam paper.type A4 \
+                   ${DOCBOOKXSLFO} $cat/$book/$book.xml)
+        ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
+        rm ${WEB}/$cat/$book/$book.fo
+        
 	title=`getTitle $cat/$book/$book.xml`
-	echo "<li><a href=\"./$cat/$book/$book.html\">${title} (html)</a></li>" >> ${INDEX}
+
+	echo "<li> ${title}" >> ${INDEX}
+        echo "(<a href=\"./$cat/$book/$book.html\">html</a>,"  >> ${INDEX}
+	echo "<a href=\"./$cat/$book/$book.pdf\">pdf</a>)" >> ${INDEX}
+        echo "</li>" >> ${INDEX}
+
         cp ${STYLESHEET} ${WEB}/$cat/$book/${STYLESHEET}
       elif [ -f $cat/$book/$book.pdf ]; then
 	  mkdir -p ${WEB}/$cat/$book
 	  cp $cat/$book/$book.pdf ${WEB}/$cat/$book/$book.pdf
 	  title=`cat $cat/$book/TITLE`
-	  echo "<li><a href=\"./$cat/$book/$book.pdf\">${title} (pdf)</a></li>" >> ${INDEX}
+	  echo "<li>${title} (<a href=\"./$cat/$book/$book.pdf\">pdf</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$book/$book.swf ]; then
           mkdir -p ${WEB}/$cat/$book
           cp $cat/$book/$book.swf ${WEB}/$cat/$book/$book.swf
           cp $cat/$book/$book.htm ${WEB}/$cat/$book/$book.htm
           title=`cat $cat/$book/TITLE`
-          echo "<li><a href=\"./$cat/$book/$book.htm\">${title} (flash)</a></li>" >> ${INDEX}
+          echo "<li>${title} (<a href=\"./$cat/$book/$book.htm\">flash</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$book/$book.url ]; then
 	  title=`cat $cat/$book/TITLE`
 	  url=`cat $cat/$book/$book.url`
