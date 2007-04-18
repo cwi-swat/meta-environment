@@ -4,9 +4,7 @@ set -e
 
 CATEGORIES="learning-about howto understanding courses project"
 WEB="./doc/html"
-#DOCBOOKXSL="/ufs/sen1/software/installed/docbook-xsl-1.71.0/html/docbook.xsl"
-#DOCBOOKXSL="/home/paulk/software/source/docbook-xsl-1.71.0/html/docbook.xsl"
-FOP="/home/paulk/software/source/fop-0.93/fop"
+FOP="${FOPPREFIX}/fop"
 DOCBOOKXSLHTML=${DOCBOOKXSLPREFIX}/html/docbook.xsl
 DOCBOOKXSLFO=${DOCBOOKXSLPREFIX}/fo/docbook.xsl
 STYLESHEET="meta-doc-style.css"
