@@ -42,8 +42,10 @@ for cat in ${CATEGORIES}; do
       if [ -f $cat/$book/$book.xml ]; then
 	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
                    --output ${WEB}/$cat/$book/$book.html \
+                   --param xref.with.number.and.title 0 \
                    ${DOCBOOKXSLHTML} $cat/$book/$book.xml)
 	(xsltproc  --output ${WEB}/$cat/$book/$book.fo \
+                   --param xref.with.number.and.title 0 \
                    --stringparam paper.type A4 \
                    ${DOCBOOKXSLFO} $cat/$book/$book.xml)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
