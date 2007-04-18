@@ -23,4 +23,19 @@ endlet
 
 toolbus(StartSDFEditor)
 
+process SDFCloseEditors is
+let
+  ModuleId: module-id
+in
+  subscribe(mm-module-deleted(<module-id>))
+  .
+  (
+    rec-note(mm-module-deleted(ModuleId?))
+    . DeleteSessions(ModuleId)
+  )
+  * delta
+endlet
+
+toolbus(SDFCloseEditors)
+
 #endif /* __SDF_EDITOR_LISTENERS__ */
