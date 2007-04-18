@@ -1,4 +1,9 @@
 
+
+Wed Apr 18 09:14:49 CEST 2007 <jurgenv@cwi.nl>
+ * configure.ac: added explicit dependency on FOP, using the
+   --with-fop configure flag.
+
 Wed Feb 28 17:24:57 CET 2007 <{economop,jurgenv}@cwi.nl>
  * Added a link to The Goat Book in the build-env documentation.
 
