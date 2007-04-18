@@ -1418,7 +1418,9 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
      SG_printDotAndNewLine();
    }
   
-   numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
+   if (newT) {
+     numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
+   }
 
    ATtableDestroy(resolvedtable);
    ATtableDestroy(postable);
