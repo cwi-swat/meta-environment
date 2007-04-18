@@ -1,0 +1,23 @@
+module languages/fdl/syntax/Extended-FDL
+
+imports languages/fdl/syntax/Fdl
+        basic/StrCon
+
+hiddens
+context-free start-symbols
+  FeatureDiagram FeatureName FeatureExpression AtomicFeature
+
+exports
+sorts Section Description
+
+context-free syntax
+  Section+                            -> FeatureDiagram  
+  "features" FeatureDefinition*       -> Section         
+  "constraints" Constraint*           -> Section         
+  "specialization" FeatureDefinition* -> Section         
+
+  FeatureName StrCon                  -> Description     
+  AtomicFeature StrCon                -> Description     
+  "short description" Description*    -> Section
+  "long description" Description*     -> Section
+  "tooltip" Description*              -> Section
