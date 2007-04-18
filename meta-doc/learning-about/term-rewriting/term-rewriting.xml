@@ -64,17 +64,15 @@
     <literal>v</literal>); they are called <emphasis>variables</emphasis> and
     are used during the simplification.</para>
 
-    <para>A simple view on term rewriting is shown in the figure <link
-    linkend="fig_simple_rewriting_algorithm">The rewriting process</link>.
+    <para>A simple view on term rewriting is shown in <xref linkend="fig_simple_rewriting_algorithm"/>.
     Given a set of rewrite rules and an initial term T, the rewriting
     algorithm is applied and will yield a simplified (or normalized) term T'
     as answer. T' is called the <emphasis>normal form</emphasis> of T. Later
-    (in <link linkend="term_rewriting_algorithm">The term rewriting
-    algorithm</link> below ) we will further explain the internals of the term
+    (in <xref linkend="term_rewriting_algorithm"/>) we will further explain the internals of the term
     rewriting algorithm.</para>
 
-    <figure>
-      <title xml:id="fig_simple_rewriting_algorithm">The rewriting
+    <figure xml:id="fig_simple_rewriting_algorithm" >
+      <title>The rewriting
       process</title>
 
       <mediaobject>
@@ -190,8 +188,7 @@
     <title>The term rewriting algorithm</title>
 
     <para>We can now assemble the ingredients we have described so far into a
-    comprehensive description of the rewriting algorithm (Figure <link
-    linkend="fig_rewriting_algorithm">The rewriting algorithm</link>).This
+    comprehensive description of the rewriting algorithm (<xref linkend="fig_rewriting_algorithm"/>).This
     algorithm still leaves some aspects unspecified:</para>
 
     <itemizedlist>
@@ -284,8 +281,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>See the <link linkend="further_reading">Further Reading</link>
-    section for pointers to such examples.</para>
+    <para>See <xref linkend="further_reading"/> for pointers to such
+    examples.</para>
 
     <section>
       <title>Numerals</title>
@@ -324,8 +321,7 @@
 
 [mul2'] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let's follow the
       simplification of <literal>add(succ(succ(0)), succ(succ(0)))</literal>
-      as shown in Figure <link linkend="fig_arithmetic">Rewriting an
-      arithmetic term</link>. Each redex is shown as a yellow box with a thick
+      as shown in <xref linkend="fig_arithmetic"/>. Each redex is shown as a yellow box with a thick
       border. An arrow connects the redex with its replacement that is
       surround by a rectangle with a thin border.</para>
 
@@ -370,8 +366,7 @@
 
       <para>Consider the simplification of the Boolean expression
       <literal>not(or(false, and(true,not(false))))</literal> as shown in
-      Figure <link linkend="fig_boolean">Rewriting a Boolean
-      term</link>.</para>
+      <xref linkend="fig_boolean"/>.</para>
 
       <figure dir="lro" xml:id="fig_boolean">
         <title>Rewriting as Boolean term</title>
