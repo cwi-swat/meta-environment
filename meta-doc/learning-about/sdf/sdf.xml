@@ -34,7 +34,7 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link>
+    Meta-Enviroment V1.5 and V2.0. See <link linkend="sdf_ToDo">ToDo</link>
     section.</para>
   </warning>
 
@@ -185,7 +185,7 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="Examples">Examples</link>: numerous examples
+          <para><link linkend="sdf_Examples">Examples</link>: numerous examples
           how to define common syntactic constructs.</para>
         </listitem>
 
@@ -215,7 +215,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>In <link linkend="HistoricalNotes">Historical Notes</link>, we
+      <para>In <link linkend="sdf_HistoricalNotes">Historical Notes</link>, we
       give background and key references.</para>
     </section>
   </section>
@@ -330,7 +330,7 @@
     <para>Starting with these elementary symbols, more complex symbols can be
     constructed by way of the following operators. Examples of the use of the
     various operators will be given in the section <link
-    linkend="Examples">Examples</link>.</para>
+    linkend="sdf_Examples">Examples</link>.</para>
 
     <section xml:id="Literal">
       <title>Literal</title>
@@ -665,7 +665,7 @@
     </itemizedlist>
 
     <para>We will now describe all these elements in turn. Also see the
-    Section <link linkend="Examples">Examples</link>.</para>
+    Section <link linkend="sdf_Examples">Examples</link>.</para>
 
     <section xml:id="Imports">
       <title>Imports</title>
@@ -989,7 +989,7 @@ index{avoid attribute@avoid attribute}
     </section>
   </section>
 
-  <section xml:id="Examples">
+  <section xml:id="sdf_Examples">
     <title>Examples</title>
 
     <para>We will now give a sequence of small examples that illustrate the
@@ -2956,7 +2956,7 @@ hiddens
     </section>
   </section>
 
-  <section xml:id="HistoricalNotes">
+  <section xml:id="sdf_HistoricalNotes">
     <title>Historical Notes</title>
 
     <para>The main publications on SDF are (in historical order):</para>
@@ -3032,7 +3032,7 @@ hiddens
     </itemizedlist>
   </section>
 
-  <section xml:id="ToDo">
+  <section xml:id="sdf_ToDo">
     <title>To Do</title>
 
     <para>Needed:</para>

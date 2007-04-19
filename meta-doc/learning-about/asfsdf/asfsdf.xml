@@ -34,7 +34,7 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Environment V1.5 and V2.0. See <link linkend="ToDo">ToDo</link> list
+    Meta-Environment V1.5 and V2.0. See <link linkend="asfsdf_ToDo">ToDo</link> list
     at the end of the document.</para>
   </warning>
 
@@ -214,7 +214,7 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="HistoricalNotes">Historical notes</link>:
+          <para><link linkend="asfsdf_HistoricalNotes">Historical notes</link>:
           historical and bibliographic background on ASF+SDF.</para>
         </listitem>
       </itemizedlist>
@@ -3056,7 +3056,7 @@ hiddens
     </section>
   </section>
 
-  <section xml:id="HistoricalNotes">
+  <section xml:id="asfsdf_HistoricalNotes">
     <title>Historical Notes</title>
 
     <para>The main publications on ASF+SDF are (in chronological
@@ -3141,7 +3141,7 @@ hiddens
     Syntax Definition Formalism SDF.</para>
   </section>
 
-  <section xml:id="ToDo">
+  <section xml:id="asfsdf_ToDo">
     <title>To Do</title>
 
     <para>Needed:</para>

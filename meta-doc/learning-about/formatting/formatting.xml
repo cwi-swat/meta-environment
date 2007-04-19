@@ -33,10 +33,10 @@
 
   <warning>
     <para>This document is work in progress. See <link
-    linkend="ToDo">ToDo</link> section.</para>
+    linkend="fm_ToDo">ToDo</link> section.</para>
   </warning>
 
-  <section xml:id="Introduction">
+  <section xml:id="fm_Introduction">
     <title>An introduction to Formatting</title>
 
     <para>If you want to have a uniform style to present your</para>
@@ -166,11 +166,11 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="Examples">Examples</link>.</para>
+          <para><link linkend="fm_Examples">Examples</link>.</para>
         </listitem>
       </itemizedlist>
 
-      <para>In <link linkend="HistoricalNotes">Historical Notes</link>, we
+      <para>In <link linkend="fm_HistoricalNotes">Historical Notes</link>, we
       give background and key references.</para>
     </section>
   </section>
@@ -817,13 +817,13 @@
     that greatly enhances flexibility and generality of formatting.</para>
   </section>
 
-  <section xml:id="Examples">
+  <section xml:id="fm_Examples">
     <title>Examples</title>
 
     <remark>To be written</remark>
   </section>
 
-  <section xml:id="HistoricalNotes">
+  <section xml:id="fm_HistoricalNotes">
     <title>Historical Notes</title>
 
     <para>The main publications on the Box language and its predecessors are
@@ -888,7 +888,7 @@
     </itemizedlist>
   </section>
 
-  <section xml:id="ToDo">
+  <section xml:id="fm_ToDo">
     <title>To Do</title>
 
     <itemizedlist>

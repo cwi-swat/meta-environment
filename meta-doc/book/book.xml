@@ -15,7 +15,19 @@
       xmlns:db="http://docbook.org/ns/docbook">
   <title>The Meta-Environment: a generic language workbench</title>
 
+<part title="Syntax">
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/syntax-analysis/syntax-analysis.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/sdf/sdf.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../howto/sdf-disambiguation/sdf-disambiguation.xml"/>
+</part>
+
+<part title="Formatting">
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/formatting/formatting.xml"/>
+</part>
+
+<part title="Analysis and Transformation">
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/term-rewriting/term-rewriting.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/asfsdf/asfsdf.xml"/>
+</part>
 
 </book>
