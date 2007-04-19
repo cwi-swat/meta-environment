@@ -15,19 +15,47 @@
       xmlns:db="http://docbook.org/ns/docbook">
   <title>The Meta-Environment: a generic language workbench</title>
 
-<part title="Syntax">
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/syntax-analysis/syntax-analysis.xml"/>
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/sdf/sdf.xml"/>
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../howto/sdf-disambiguation/sdf-disambiguation.xml"/>
-</part>
+  <part>
+    <title>Syntax</title>
 
-<part title="Formatting">
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/formatting/formatting.xml"/>
-</part>
+    <xi:include href="../learning-about/syntax-analysis/syntax-analysis.xml"></xi:include>
 
-<part title="Analysis and Transformation">
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/term-rewriting/term-rewriting.xml"/>
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../learning-about/asfsdf/asfsdf.xml"/>
-</part>
+    <xi:include href="../learning-about/sdf/sdf.xml"></xi:include>
 
+    <xi:include href="../howto/sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
+ </part>
+
+  <part>
+    <title>Formatting</title>
+
+    <xi:include href="../learning-about/formatting/formatting.xml"></xi:include>
+  </part>
+
+  <part>
+    <title>Analysis and Transformation</title>
+
+    <xi:include href="../learning-about/term-rewriting/term-rewriting.xml"></xi:include>
+
+    <xi:include href="../learning-about/asfsdf/asfsdf.xml"></xi:include>
+
+    <xi:include href="../howto/asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
+  </part>
+
+  <part>
+    <title>The Meta-Environment</title>
+
+    <xi:include href="../understanding/architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
+
+    <xi:include href="../understanding/extending-meta-environment/extending-meta-environment.xml"></xi:include>
+  </part>
+
+  <part>
+    <title>Implementation</title>
+
+    <xi:include href="../project/build-environment/build-environment.xml"></xi:include>
+
+    <xi:include href="../project/version-management/version-management.xml"></xi:include>
+
+    <xi:include href="../project/coding-standards/coding-standards.xml"></xi:include>
+  </part>
 </book>
