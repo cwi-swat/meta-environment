@@ -11,20 +11,16 @@ context-free start-symbols
   FeatureDiagram FeatureName FeatureExpression AtomicFeature
 
 exports
-sorts ValueType ValueDeclaration Assignment
+sorts ValueType ValueDeclaration
 
 context-free syntax
   "types" ValueDeclaration*           -> Section           
 
-  AtomicFeature "(" NatCon ")"        -> AtomicFeature     
-  AtomicFeature "(" StrCon ")"        -> AtomicFeature     
-  AtomicFeature "(" Color ")"         -> AtomicFeature     
-  AtomicFeature "(" BoolCon ")"       -> AtomicFeature     
+  AtomicFeature "(" NatCon ")"        -> AtomicFeature {non-assoc}
+  AtomicFeature "(" StrCon ")"        -> AtomicFeature {non-assoc}    
+  AtomicFeature "(" Color ")"         -> AtomicFeature {non-assoc}    
+  AtomicFeature "(" BoolCon ")"       -> AtomicFeature {non-assoc}    
 
-  AtomicFeature "=" NatCon            -> Assignment        
-  AtomicFeature "=" StrCon            -> Assignment        
-  AtomicFeature "=" Color             -> Assignment        
-  AtomicFeature "=" BoolCon           -> Assignment        
   AtomicFeature ":" ValueType         -> ValueDeclaration  
 
   "integer"                           -> ValueType         
