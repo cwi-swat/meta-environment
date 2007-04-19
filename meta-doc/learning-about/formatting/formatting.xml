@@ -198,9 +198,9 @@
       Table <link linkend="Table-SpacingAndAlignmnentOptions">Spacing and
       Alignment Options</link> below and control the amount of horizontal,
       vertical, or indentation space between the boxes. Some operators may
-      have additional options. Box operators never loose operands or change
-      the order of appearance of their operands on a page read left-to-right
-      and top-to-bottom.</para>
+      have additional options. Box operators never lose operands or change the
+      order of appearance of their operands on a page read left-to-right and
+      top-to-bottom.</para>
 
       <table xml:id="Table-BoxOperators">
         <title>Box Operators</title>
