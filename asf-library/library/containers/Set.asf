@@ -5,12 +5,12 @@ equations
   [un] Set1 \/ Set2 = union(Set1, Set2)
   [un-0] union({X*1}, {X*2}) = {X*1,X*2}
 
-  [el] X in Set = elem(X, Set)
+  [el] X in Set = in(X, Set)
+  [el] elem(X, Set ) = in(X, Set)
  
   [el-0] in(X, {X*1, X, X*2}) = true
   [default-el-1] in(X, Set) = false
 
-  
   [is] Set1 /\ Set2 = intersection(Set1, Set2)
  
   [is-1] elem(X, Set) == true

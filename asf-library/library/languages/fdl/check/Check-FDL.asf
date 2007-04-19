@@ -183,10 +183,10 @@ equations
 equations
 
 [feature-to-string-1]
-	feature-to-string(atomicfeature($char+)) = strcon("""$char+""")
+	feature-to-string($atomicfeature) = unparse-to-string($atomicfeature)
 
 [feature-to-string-2]
-	feature-to-string(featurename($char+)) = strcon("""$char+""")
+	feature-to-string($featurename) = unparse-to-string($featurename)
 
 [default-feature-to-string]
 	feature-to-string($featureexpression) = "<expression>"

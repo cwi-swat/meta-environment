@@ -1,5 +1,9 @@
 $Id$
 
+Thu Apr 19 09:05:41 CEST 2007 <kooiker@cwi.nl>
+ * containers/Set.asf:
+   - Add missing elem equations for the 4th time again!!!
+
 Fri Mar 16 12:06:58 CET 2007 <{economop,kooiker}@cwi.nl>
  * library/languages/pico/check/Pico.asf:
    - Add error for not declared variables
