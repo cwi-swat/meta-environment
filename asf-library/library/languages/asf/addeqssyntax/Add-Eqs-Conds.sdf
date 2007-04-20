@@ -43,3 +43,4 @@ hiddens
     "$"?"Literal"[0-9]*      -> StrCon
     "Sort"[0-9]*         -> Sort
     "SymbolsSet"[0-9]*   -> SymbolsSet
+    "CC"[0-9]*           -> CharClass
