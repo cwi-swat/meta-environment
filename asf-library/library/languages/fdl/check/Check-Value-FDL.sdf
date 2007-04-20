@@ -5,19 +5,29 @@ imports languages/fdl/check/Check-FDL
 
 hiddens
 context-free start-symbols
-  Summary List[[FDL-Error]]
+  Summary List[[FDL-Error]] FeatureDiagram
 
 exports
 context-free syntax
-  check-value-fdl-summary(FeatureDiagram)                -> Summary                                                 
-  check-value-fdl(FeatureDiagram)                        -> List[[FDL-Error]]     
-  normalize-atomic-features(FeatureDiagram)              -> FeatureDiagram {traversal(trafo, top-down, break)}
-  normalize-atomic-features(AtomicFeature)               -> AtomicFeature {traversal(trafo, top-down, break)}                                 
+  check-value-fdl-summary(FeatureDiagram)            -> Summary                                               
+  check-value-fdl(FeatureDiagram)                    -> List[[FDL-Error]]                                     
+
+  normalize-sections(FeatureDiagram)                 -> FeatureDiagram                                        
+  normalize-features-section(FeatureDiagram)         -> FeatureDiagram                                        
+  normalize-constraints-section(FeatureDiagram)      -> FeatureDiagram                                        
+  normalize-types-section(FeatureDiagram)            -> FeatureDiagram                                        
+  normalize-specialization-section(FeatureDiagram)   -> FeatureDiagram                                        
+
+  normalize-atomic-features(FeatureDiagram)          -> FeatureDiagram    {traversal(trafo, top-down, break)} 
+  normalize-atomic-features(AtomicFeature)           -> AtomicFeature     {traversal(trafo, top-down, break)} 
 
 hiddens
 variables
-  "$atomicfeature" [0-9\']*      -> AtomicFeature             
-  "$featuredefinition*" [0-9\']* -> FeatureDefinition*        
-  "$fdl-errorlist" [0-9\']*      -> List[[FDL-Error]]         
-  "$section*" [0-9\']*           -> Section*                  
-  "$featuretype" [0-9\']*        -> FeatureType           
+  "$atomicfeature" [0-9\']*      -> AtomicFeature       
+  "$constraint*" [0-9\']*        -> Constraint*
+  "$fdl-errorlist" [0-9\']*      -> List[[FDL-Error]]   
+  "$featuredefinition*" [0-9\']* -> FeatureDefinition*  
+  "$featurediagram" [0-9\']*     -> FeatureDiagram      
+  "$featuretype" [0-9\']*        -> FeatureType         
+  "$section*" [0-9\']*           -> Section*    
+  "$valuedeclaration*" [0-9\']*  -> ValueDeclaration*        

@@ -1,10 +1,48 @@
 equations
 
 [check-value-fdl-top]
-  $featuredefinition*2 := normalize-atomic-features($featuredefinition*1),
-  $fdl-errorlist := check-fdl($featuredefinition*2)
+  $featurediagram2 := normalize-sections($featurediagram1),
+  $featurediagram3 := normalize-atomic-features($featurediagram2),
+  $section*1 features $featuredefinition*1 $section*2 := $featurediagram3,
+  $fdl-errorlist := check-fdl($featuredefinition*1)
   ===
-  check-value-fdl($section*1 features $featuredefinition*1 $section*2) = $fdl-errorlist
+  check-value-fdl($featurediagram1) = $fdl-errorlist
+
+[normalize-sections-top]
+  $featurediagram2 := normalize-features-section($featurediagram1),
+  $featurediagram3 := normalize-constraints-section($featurediagram2),
+  $featurediagram4 := normalize-types-section($featurediagram3),
+  $featurediagram5 := normalize-specialization-section($featurediagram4)
+  ===
+  normalize-sections($featurediagram1) = $featurediagram4
+
+[normalize-features-section-top]
+  normalize-features-section($section*1 features $featuredefinition*1 $section*2 features $featuredefinition*2 $section*3) =
+    normalize-features-section($section*1 features $featuredefinition*1 $featuredefinition*2 $section*2 $section*3)
+
+[default-normalize-features-section]
+  normalize-features-section($featurediagram) = $featurediagram
+
+[normalize-constraints-section-top]
+  normalize-constraints-section($section*1 constraints $constraint*1 $section*2 constraints $constraint*2 $section*3) =
+    normalize-constraints-section($section*1 constraints $constraint*1 $constraint*2 $section*2 $section*3)
+
+[default-normalize-constraints-section]
+  normalize-constraints-section($featurediagram) = $featurediagram
+
+[normalize-types-section-top]
+  normalize-types-section($section*1 types $valuedeclaration*1 $section*2 types $valuedeclaration*2 $section*3) =
+    normalize-types-section($section*1 types $valuedeclaration*1 $valuedeclaration*2 $section*2 $section*3)
+
+[default-normalize-types-section]
+  normalize-types-section($featurediagram) = $featurediagram
+
+[normalize-specialization-section-top]
+  normalize-specialization-section($section*1 specialization $featuredefinition*1 $section*2 specialization $featuredefinition*2 $section*3) =
+    normalize-specialization-section($section*1 specialization $featuredefinition*1 $featuredefinition*2 $section*2 $section*3)
+
+[default-normalize-specialization-section]
+  normalize-specialization-section($featurediagram) = $featurediagram
 
 [normalize-atomic-features-top]
   $atomicfeature2($featuretype) := $atomicfeature1
