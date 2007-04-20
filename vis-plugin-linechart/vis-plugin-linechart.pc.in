@@ -1,6 +1,6 @@
 prefix=@prefix@
 
-Name: vis-plugin-piechart
+Name: vis-plugin-linechart
 Version: 1.0
 Description: 
 Requires: aterm-java,config-support,toolbus,toolbus-java-adapter,shared-objects,JJTraveler,meta-studio,vis-plugin,tunit
@@ -8,7 +8,7 @@ Maintainers=dancingbear
 JarFile=vis-plugin-piechart.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/relationstores.jar:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/jfreechart-1.0.4.jar:${prefix}/share/junit-4.1.jar
 LocalJars=lib/relationstores.jar:lib/jcommon-1.0.8.jar:lib/jfreechart-1.0.4.jar:lib/junit-4.1.jar
-MainClass=nl.dancingbear.visplugin.piechartplugin.PieChartVisualizationController
-Packages=nl,nl.dancingbear,nl.dancingbear.visplugin,nl.dancingbear.visplugin.piechartplugin
+MainClass=nl.dancingbear.visplugin.linechartplugin.LineChartVisualizationController
+Packages=nl,nl.dancingbear,nl.dancingbear.visplugin,nl.dancingbear.visplugin.linechartplugin
 TestClass=
-ToolBusFlags=-I${prefix}/share/vis-plugin-piechart
+ToolBusFlags=-I${prefix}/share/vis-plugin-linechart
