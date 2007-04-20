@@ -4,6 +4,7 @@ imports languages/fdl/check/Check-FDL
         languages/fdl/syntax/Value-FDL
         languages/fdl/check/Value-FDL-Error-API
         containers/Table[AtomicFeature ValueType]
+        containers/Set[FeatureExpression]
 
 hiddens
 context-free start-symbols
@@ -38,6 +39,8 @@ context-free syntax
   check-for-type-mismatch(FeatureDiagram, ErrorInfo) -> ErrorInfo         {traversal(top-down, accu, break)}  
   check-for-type-mismatch(AtomicFeature, ErrorInfo)  -> ErrorInfo         {traversal(top-down, accu, break)}  
 
+  is-subset(FeatureExpression, FeatureExpression)    -> Boolean
+
 hiddens
 variables
   "$atomicfeature" [0-9\']*      -> AtomicFeature       
@@ -47,10 +50,13 @@ variables
   "$fdl-error" [0-9\']*          -> FDL-Error           
   "$fdl-errorlist" [0-9\']*      -> List[[FDL-Error]]   
   "$featuredefinition*" [0-9\']* -> FeatureDefinition*  
-  "$featurediagram" [0-9\']*     -> FeatureDiagram      
+  "$featurediagram" [0-9\']*     -> FeatureDiagram   
+  "$featureexpression" [0-9\']*  -> FeatureExpression   
+  "$featureexpression+" [0-9\']* -> {FeatureExpression ","}+
   "$featuretype" [0-9\']*        -> FeatureType    
   "$natcon" [0-9\']*             -> NatCon     
   "$section*" [0-9\']*           -> Section*            
+  "$set" [0-9\']*                -> Set[[FeatureExpression]]
   "$strcon" [0-9\']*             -> StrCon     
   "$typeenv" [0-9\']*            -> TypeEnv             
   "$valuedeclaration*" [0-9\']*  -> ValueDeclaration*   

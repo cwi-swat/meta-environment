@@ -94,6 +94,7 @@ equations
 
 [check-for-type-mismatch-1]
   $valuetype := lookup($typeenv, $atomicfeature),
+  $valuetype != not-in-table,
   check-type($valuetype, $featuretype) == false,
   $fdl-error := make-type-error($atomicfeature)
   ===
@@ -108,5 +109,18 @@ equations
 [] check-type(string, $strcon) = true
 [] check-type(color, $color) = true
 [default-check-type] check-type($valuetype, $featuretype) = false
+
+
+equations
+
+[is-subset-0]
+  is-subset(one-of($featureexpression+1), one-of($featureexpression+2)) = not(is-empty({$featureexpression+1} \ {$featureexpression+2}))
+
+
+[default-is-subset]
+  is-subset($featureexpression1, $featureexpression2) = false
+
+
+
 
 

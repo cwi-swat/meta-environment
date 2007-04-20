@@ -32,3 +32,6 @@ equations
  
   [eq-0] equal(Set,Set) = true
   [default-eq] equal(Set1,Set2) = false
+
+  [empty-0] is-empty({}) = true
+  [default-empty] is-empty(Set) = false

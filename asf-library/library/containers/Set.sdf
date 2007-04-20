@@ -15,7 +15,8 @@ context-free syntax
   Set[[X]] "\\" Set[[X]]           -> Set[[X]] {non-assoc} 
   difference(Set[[X]], Set[[X]])   -> Set[[X]]             
   "(" Set[[X]] ")"                 -> Set[[X]] {bracket}   
-  equal(Set[[X]], Set[[X]])        -> Boolean              
+  equal(Set[[X]], Set[[X]])        -> Boolean       
+  is-empty(Set[[X]])               -> Boolean       
 
 context-free priorities
   Set[[X]] "\\" Set[[X]] -> Set[[X]] >
