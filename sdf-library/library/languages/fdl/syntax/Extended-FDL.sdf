@@ -11,13 +11,15 @@ exports
 sorts Section Description
 
 context-free syntax
-  Section+                            -> FeatureDiagram  
-  "features" FeatureDefinition*       -> Section         
-  "constraints" Constraint*           -> Section         
-  "specialization" FeatureDefinition* -> Section         
+  "list-of" "(" {FeatureExpression ","}+ ")" -> FeatureExpression {cons("list-of")} 
 
-  FeatureName StrCon                  -> Description     
-  AtomicFeature StrCon                -> Description     
-  "short description" Description*    -> Section
-  "long description" Description*     -> Section
-  "tooltip" Description*              -> Section
+  Section+                                   -> FeatureDiagram                      
+  "features" FeatureDefinition*              -> Section                             
+  "constraints" Constraint*                  -> Section                             
+  "specialization" FeatureDefinition*        -> Section                             
+
+  FeatureName StrCon                         -> Description                         
+  AtomicFeature StrCon                       -> Description                         
+  "short description" Description*           -> Section                             
+  "long description" Description*            -> Section                             
+  "tooltip" Description*                     -> Section                             
