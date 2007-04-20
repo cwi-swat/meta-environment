@@ -1,5 +1,10 @@
 $Id$
 
+Fri Apr 20 14:47:55 CEST 2007 <jurgenv@cwi.nl>
+ * syntax/addeqssyntax/Add-Eqs-Syntax.c: regenerated because we now
+   generate condition and equation syntax for the right-hand side symbols
+   of context-free variable productions too.
+
 Wed Mar 21 16:32:58 CET 2007 <jurgenv@cwi.nl>
  * semantics/asfe/src/*.c: little optimizations make interpreter twice
    as fast.
