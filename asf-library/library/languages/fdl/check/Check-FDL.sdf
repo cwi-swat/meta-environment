@@ -19,8 +19,10 @@ sorts ErrorInfo Set
 
 context-free syntax
   check-fdl-summary(FeatureDiagram)                            -> Summary                                                 
-  check-fdl(FeatureDiagram)                                    -> List[[FDL-Error]]                                       
+  check-fdl(FeatureDiagram)                                    -> List[[FDL-Error]]  
+                                     
   <Set[[FeatureExpression]],List[[FDL-Error]]>                 -> ErrorInfo                                               
+
   check-for-multiple-definitions(FeatureDiagram, ErrorInfo)    -> ErrorInfo         {traversal(top-down, accu, continue)} 
   check-for-multiple-definitions(FeatureDefinition, ErrorInfo) -> ErrorInfo         {traversal(top-down, accu, continue)} 
   check-for-multiple-uses(FeatureDiagram, ErrorInfo)           -> ErrorInfo         {traversal(top-down, accu, continue)} 
@@ -31,7 +33,9 @@ context-free syntax
   check-for-unused-features(FeatureDefinition, ErrorInfo)      -> ErrorInfo         {traversal(top-down, accu, continue)} 
   check-constraints(Constraint*, ErrorInfo)                    -> ErrorInfo         {traversal(top-down, accu, continue)} 
   check-constraints(AtomicFeature, ErrorInfo)                  -> ErrorInfo         {traversal(top-down, accu, continue)} 
+
   feature-to-string(FeatureExpression)                         -> StrCon                                                  
+
   fdl-error-list-to-summary(List[[FDL-Error]])                 -> Summary                                                 
   fdl-error-list-to-errors(List[[FDL-Error]])                  -> {Error ","}*                                            
   fdl-error-to-error(FDL-Error)                                -> Error                                                   
