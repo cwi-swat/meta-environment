@@ -110,14 +110,14 @@ equations
 [fdl-error-list-to-summary-nil]
 	fdl-error-list-to-summary([]) = 
 		summary("Check-FDL", 
-			"fdl/Fdl", 
+			"languages/fdl/syntax/Fdl", 
 			[info("Feature Description is well-formed!", [])]
 		)
 
 [default-fdl-error-list-to-summary-cons]
 	fdl-error-list-to-summary($fdl-errorlist) =
 		summary("Check-FDL",
-			"fdl/Fdl",
+			"langauges/fdl/syntax/Fdl",
 			[fdl-error-list-to-errors($fdl-errorlist)]
 		)
 
@@ -190,5 +190,3 @@ equations
 
 [default-feature-to-string]
 	feature-to-string($featureexpression) = "<expression>"
-
-

@@ -1,0 +1,23 @@
+module languages/fdl/check/Check-Value-FDL
+
+imports languages/fdl/check/Check-FDL
+        languages/fdl/syntax/Value-FDL
+
+hiddens
+context-free start-symbols
+  Summary List[[FDL-Error]]
+
+exports
+context-free syntax
+  check-value-fdl-summary(FeatureDiagram)                -> Summary                                                 
+  check-value-fdl(FeatureDiagram)                        -> List[[FDL-Error]]     
+  normalize-atomic-features(FeatureDiagram)              -> FeatureDiagram {traversal(trafo, top-down, break)}
+  normalize-atomic-features(AtomicFeature)               -> AtomicFeature {traversal(trafo, top-down, break)}                                 
+
+hiddens
+variables
+  "$atomicfeature" [0-9\']*      -> AtomicFeature             
+  "$featuredefinition*" [0-9\']* -> FeatureDefinition*        
+  "$fdl-errorlist" [0-9\']*      -> List[[FDL-Error]]         
+  "$section*" [0-9\']*           -> Section*                  
+  "$featuretype" [0-9\']*        -> FeatureType           

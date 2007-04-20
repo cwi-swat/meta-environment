@@ -1,0 +1,15 @@
+equations
+
+[check-value-fdl-top]
+  $featuredefinition*2 := normalize-atomic-features($featuredefinition*1),
+  $fdl-errorlist := check-fdl($featuredefinition*2)
+  ===
+  check-value-fdl($section*1 features $featuredefinition*1 $section*2) = $fdl-errorlist
+
+[normalize-atomic-features-top]
+  $atomicfeature2($featuretype) := $atomicfeature1
+  ===
+  normalize-atomic-features($atomicfeature1) = $atomicfeature2
+
+[default-normalize-atomic-features]
+  normalize-atomic-features($atomicfeature) = $atomicfeature

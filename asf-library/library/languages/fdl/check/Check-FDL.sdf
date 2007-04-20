@@ -15,7 +15,7 @@ context-free start-symbols
   Summary List[[FDL-Error]]
 
 exports
-sorts ErrorInfo
+sorts ErrorInfo Set
 
 context-free syntax
   check-fdl-summary(FeatureDiagram)                            -> Summary                                                 
@@ -35,7 +35,6 @@ context-free syntax
   fdl-error-list-to-summary(List[[FDL-Error]])                 -> Summary                                                 
   fdl-error-list-to-errors(List[[FDL-Error]])                  -> {Error ","}*                                            
   fdl-error-to-error(FDL-Error)                                -> Error                                                   
-  is-featurename(FeatureExpression)                            -> Boolean                                                 
 
 hiddens
 variables
@@ -47,11 +46,9 @@ variables
   "$constraint*" [0-9\']*        -> Constraint*               
   "$use" [0-9\']*                -> Set[[FeatureExpression]]  
   "$def" [0-9\']*                -> Set[[FeatureExpression]]  
-  "$set" [0-9\']*                -> Set[[FeatureExpression]]  
   "$fdl-errorlist" [0-9\']*      -> List[[FDL-Error]]         
   "$fdl-error" [0-9\']*          -> FDL-Error                 
   "$fdl-error*" [0-9\']*         -> {FDL-Error ","}*          
   "$error*" [0-9\']*             -> {Error ","}*              
   "$error" [0-9\']*              -> Error                     
-  "$string" [0-9\']*             -> StrCon                    
   "$strcon" [0-9\']*             -> StrCon                    
