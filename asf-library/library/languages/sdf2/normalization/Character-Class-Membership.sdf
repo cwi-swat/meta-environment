@@ -11,6 +11,7 @@ exports
 
 hiddens
   sorts CharRanges OptCharRanges CharRange
+  imports basic/Comments
 
   variables
     "_c"[0-9\']*    -> Character

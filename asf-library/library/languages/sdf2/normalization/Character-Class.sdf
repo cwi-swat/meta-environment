@@ -35,6 +35,7 @@ exports
     CharClass "<=" CharClass -> Boolean
 
 hiddens
+  imports basic/Comments
   variables
     "_c"[0-9\']*    -> Character
     "cc"[0-9\']*    -> CharClass
