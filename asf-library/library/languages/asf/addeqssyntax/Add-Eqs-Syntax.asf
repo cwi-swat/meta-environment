@@ -20,8 +20,6 @@ Module*5
 %% TODO import graph!      
 module languages/sdf2/syntax/Character
 
-imports basic/Comments
-
 exports
   sorts Character NumChar ShortChar
   lexical syntax
