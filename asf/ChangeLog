@@ -1,5 +1,13 @@
 $Id$
 
+Tue Apr 24 16:59:01 CEST 2007 <jurgenv@cwi.nl>
+  * syntax/addeqssyntax/src/*: regenerated Add-Eqs-Syntax to fix a major bug. 
+    By accident the add-eqs-syntax tool generated a spurious 
+    "imports basic/Comments" into
+    every syntax definition. This made sure that if another module imported
+    basic/Comments in a hidden section, the whole basic/Comments syntax
+    would eventually popup exported too.
+
 Fri Apr 20 14:47:55 CEST 2007 <jurgenv@cwi.nl>
  * syntax/addeqssyntax/Add-Eqs-Syntax.c: regenerated because we now
    generate condition and equation syntax for the right-hand side symbols
