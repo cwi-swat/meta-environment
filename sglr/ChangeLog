@@ -1,5 +1,11 @@
 $Id$
 
+Tue Apr 24 13:39:35 CEST 2007 <{economop,jurgenv}@cwi.nl>
+ * src/parseForest/filters.c: fixed the indirect preference filter. An
+   assert was added checking a precondition (both tree being appl's before
+   we get a prod from them). This assertion indeed failed. Added a test
+   for the case when one of the trees is a character.
+
 Tue Apr 24 11:25:02 CEST 2007 <{kooiker,jurgenv}@cwi.nl>
  * restorebrackets: fixed a major bug, restore brackets generated
    illegal asfix for the brackets trees! 

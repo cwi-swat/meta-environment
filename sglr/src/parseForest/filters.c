@@ -343,7 +343,8 @@ static PT_Tree indirectPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
   /*ATwarning("indirectFilter:\n%t\n\n%t\n\n",t0,t1);*/
   
   if (PT_isTreeAmb(t0) || PT_isTreeAmb(t1) 
-      || PT_isTreeCycle(t0) || PT_isTreeCycle(t1)) {
+      || PT_isTreeCycle(t0) || PT_isTreeCycle(t1) ||
+      PT_isTreeChar(t0) || PT_isTreeChar(t1)) {
     return (PT_Tree) NULL;
   }
 
@@ -364,7 +365,25 @@ static PT_Tree indirectPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
     PT_Args args1 = PT_getTreeArgs(t1);
     int diffs = countDistinctArguments(args0, args1);
    
-    /* What does this achieve? */ 
+    /* We find out whether or not there is exactly one argument
+     * that is different for each two trees, then we locate this
+     * exact child by looping all children until we've found it.
+     * When we find it, we apply this function recursively. We
+     * do this recursion to traverse a unique path that is differnt
+     * between the two trees. When we can't find that path anymore,
+     * we apply the normal direct preference filter at that point.
+     */
+
+    /* NOTE: this filter sounds logical (since we find only one different
+     * child what can it do wrong?) but... there are several issues with it.
+     * Firsly, it is incomprehensible to the user. Secondly, I can't see
+     * why only one argument of a tree can be different without the 
+     * ambiguity cluster being lower. It must have something to do
+     * with follow restrictions. On the other hand, when there is just
+     * one tree to compare (in case of a chain rule), then it makes more
+     * sense. The problem with this filter is then that it works for
+     * more trees than just the ones with chain rules.
+     */
     if (diffs == 1) {
       while (!PT_isArgsEmpty(args0)) {
         PT_Tree arg0 = PT_getArgsHead(args0);
