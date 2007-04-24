@@ -1,5 +1,10 @@
 $Id$
 
+Tue Apr 24 11:25:02 CEST 2007 <{kooiker,jurgenv}@cwi.nl>
+ * restorebrackets: fixed a major bug, restore brackets generated
+   illegal asfix for the brackets trees! 
+ * Version of SGLR is 4.0 since the last merge.
+
 Wed Apr 18 15:07:06 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: fixed null pointer exception.
 
