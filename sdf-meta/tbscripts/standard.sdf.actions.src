@@ -19,7 +19,6 @@ configuration([
          "CloseAllAction"),
   action([description(term-editor, menu-shortcut([label("Term"),label("Add Brackets")], shortcut([M_ALT,M_CTRL],VK_B),"Add brackets to all tree nodes that have a bracket production rule defined"))], "AddBracketsAction"),
   action([description(term-editor, menu-shortcut([label("Term"),label("Default Formatter")], shortcut([M_ALT,M_CTRL],VK_F),"Format the term using a default formatter that interprets the shape of the tree to come up with a reasonable layout"))], "DefaultPrettyPrintAction"),
-  action([description(term-editor, menu-shortcut([label("Term"),label("Default Formatter")], shortcut([M_ALT,M_CTRL],VK_F),"Format the term using a default formatter that interprets the shape of the tree to come up with a reasonable layout"))], "DefaultPrettyPrintAction"),
   action([description(term-editor, menu-shortcut([label("Structure"), label("View"),label("Tree")], shortcut([M_ALT,M_CTRL],VK_V),"Visualize the tree structure of a specific focus as a graph, leaving out LAYOUT and lexical syntax"))],
          "ShowTreeAction"),
   action([description(term-editor, menu-shortcut([label("Structure"), label("View"), label("Full Tree")], shortcut([M_ALT,M_CTRL],VK_T),"Visualize the tree structure of a specific focus as a graph, including all LAYOUT and lexical syntax"))],
