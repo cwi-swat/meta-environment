@@ -30,6 +30,8 @@ context-free syntax
 		{FeatureExpression ","}*) -> Formula
 
 hiddens
+context-free start-symbols Formula
+
 variables
 	"$atomicfeature"[0-9\']* -> AtomicFeature
 	"$featureexpression"[0-9\']* -> FeatureExpression
