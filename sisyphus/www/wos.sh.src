@@ -6,10 +6,10 @@ DATA_DIR=__DATA_DIR__
 
 GEM_DIRS=`ls -d ${DATA_DIR}/gems/*`
 
-INCLUDE_FLAGS=
+INCLUDE_DIRS=
 BIN_DIRS=
 for dir in ${GEM_DIRS}; do
-    INCLUDE_FLAGS="${INCLUDE_FLAGS} -I ${dir}/lib";
+    INCLUDE_DIRS="${INCLUDE_DIRS}:${dir}/lib";
     BIN_DIRS="${dir}/bin:${BIN_DIRS}"
 done
 
@@ -17,7 +17,12 @@ if [ "a${BIN_DIRS}" != "a" ]; then
     export PATH=${BIN_DIRS}:${PATH}
 fi
 
+if [ "a${INCLUDE_DIRS}" != "a" ]; then
+    export RUBYLIB=${INCLUDE_DIRS}:${RUBYLIB}
+fi
+
 MONGREL=${DATA_DIR}/gems/mongrel-1.0.1/bin/mongrel_rails
+
 
 if [ "$1" != "-u" ] ; then
     echo "Usage $0 -u <url of sisyphus config svn repo> <mongrel options>"
@@ -32,4 +37,4 @@ echo "module Sisyphus" > ${CONFIG_MODULE}
 echo "CONFIGURATION_REPOSITORY = '${CONFIG_REPO}'" >> ${CONFIG_MODULE}
 echo "end" >> ${CONFIG_MODULE} 
 
-exec ${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -r ${CONFIG_MODULE} ${MONGREL} $3 $4 $5 $6 $7 $8 $9 
+${MONGREL} -S ${CONFIG_MODULE} --daemonize $3 $4 $5 $6 $7 $8 $9 
