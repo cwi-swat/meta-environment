@@ -403,7 +403,7 @@ AC_DEFUN([META_IF_NOT_CONTAINS],[
 dnl A shell function for getting the recursive requirements of a package
 AC_DEFUN([META_RECURSIVE_REQUIRES],[
 # args: $[]1 : top module
-function meta_requires() {
+meta_requires() {
   meta_require_closure=""
   meta_pkg_config_path="$(echo "$[]PKG_CONFIG_PATH" | tr ':' ' ')"
   if test -z  "${meta_pkg_config_path}"; then
@@ -414,7 +414,7 @@ function meta_requires() {
   echo ${meta_require_closure}
 }
 
-function meta_recursive_requires() {
+meta_recursive_requires() {
   meta_require_pcfile=""
   meta_require_kids=""
 
@@ -430,7 +430,7 @@ function meta_recursive_requires() {
 }
 
 dnl This is really something that should be supported by pkg-config
-function meta_find_pkg_config_file() {
+meta_find_pkg_config_file() {
   meta_find_pkg_config_result=""
 
   dnl First examine the path for uninstalled pkg-config files.
