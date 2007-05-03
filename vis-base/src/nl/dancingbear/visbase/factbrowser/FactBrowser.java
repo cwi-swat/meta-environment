@@ -372,13 +372,8 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
             // VisualisationPlugin
             if (dataManager.checkValidVisualisationPlugin(selectedNode)) {
                 int visPluginID = dataManager.getVisPluginID(selectedNode);
-                log.info("Visualisation Plugin ID: " + visPluginID);
-
                 int factID = dataManager.getFactID(selectedNode);
-                log.info("Fact id: " + factID);
-
                 int rstoreID = dataManager.getRStoreID(selectedNode);
-                log.info("Rstore id: " + rstoreID);
 
                 //build the Aterm with the given identifiers and send it
                 ATerm term = metaStudio.getATermFactory().make(
@@ -389,10 +384,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
             else if (dataManager.checkValidRStoreFact(selectedNode)) {
                 RType rtype = dataManager.getFactRType(selectedNode);
                 
-                log.info("FactNode was selected: "
-                                + selectedNode.toString());
-                
-                //build the Aterm with RStore FactType
                 ATerm term = metaStudio.getATermFactory().make(
                         "fb-type-selected(<term>)",
                         rtype.toTerm());
@@ -430,7 +421,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
             	int offsetX = factBrowserWindow.getHorizontalBarOffset();
                 mouseEvent.translatePoint(-offsetX, -offsetY);
                 m_popupMenu.show(factBrowserWindow, mouseEvent.getX(), mouseEvent.getY());
-                //m_popupMenu.setLocation(mouseEvent.getX(), mouseEvent.getY());
                 m_popupMenu.setVisible(true);
             }
         }

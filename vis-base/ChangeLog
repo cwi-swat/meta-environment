@@ -1,5 +1,9 @@
 
 
+Thu May  3 16:06:34 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/*.tb.src: removed all debug printf's, and superfluous
+   brackets and superfluous comments.
+
 Tue Mar 20 21:48:38 CET 2007 <jurgenv@cwi.nl>
  * added dep on relation-stores
  * removed local relation-stores.jar
