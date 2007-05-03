@@ -1,5 +1,12 @@
 $Id$
 
+Thu May  3 11:09:27 CEST 2007 <jurgenv@cwi.nl>
+ * semantics/asf-operations/src/ASF-Normalization.c: regenerated after
+   adding a new equation to the normalizer. If an equation rewrites
+   a lexical sort directly, the outer lex-to-cf function is removed
+   such that nested occurrences of the same lexical non-terminal will
+   be rewritten too. This fixes #749
+
 Tue Apr 24 17:00:03 CEST 2007 <jurgenv@cwi.nl>
  * Bumped to version 2.3
 
