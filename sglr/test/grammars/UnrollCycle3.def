@@ -1,0 +1,12 @@
+definition
+
+module Main
+exports
+  context-free start-symbols S
+  sorts S A 
+
+  lexical syntax
+   A "x" -> S
+   A A A -> A
+   A A   -> A
+         -> A

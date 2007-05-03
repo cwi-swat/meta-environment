@@ -51,3 +51,8 @@ $SGLR -2 -p $TABLES/SimpleCobol.tbl -i $TERMS/exp.simcob
 
 $SGLR -2 -p $TABLES/TestCobol.tbl -i $TERMS/st.tcbl
 
+$SGLR -2 -fu -p $TABLES/UnrollCycle1.tbl -i $TERMS/unrollCycle1.trm 
+
+$SGLR -2 -fu -p $TABLES/UnrollCycle2.tbl -i $TERMS/unrollCycle2.trm 
+
+$SGLR -2 -fu -p $TABLES/UnrollCycle3.tbl -i $TERMS/unrollCycle3.trm 

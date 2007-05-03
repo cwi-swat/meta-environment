@@ -1,5 +1,11 @@
 $Id$
 
+Thu May  3 13:54:28 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: implemented unrolling of cyclic parse forests.
+ * src/parseForest/filterOptions.{c,h}: added unrolling of cycles as a 
+   filtering option. It is turned off by default.
+ * test/*: added new regression test.
+
 Tue Apr 24 13:39:35 CEST 2007 <{economop,jurgenv}@cwi.nl>
  * src/parseForest/filters.c: fixed the indirect preference filter. An
    assert was added checking a precondition (both tree being appl's before
