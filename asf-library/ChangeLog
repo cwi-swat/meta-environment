@@ -1,5 +1,12 @@
 $Id$
 
+Thu May  3 11:11:33 CEST 2007 <jurgenv@cwi.nl>
+ * library/languages/asf/normalization: 
+   added a new equation to the normalizer. If an equation rewrites
+   a lexical sort directly, the outer lex-to-cf function is removed
+   such that nested occurrences of the same lexical non-terminal will
+   be rewritten too. This fixes #749
+
 Thu Apr 19 09:05:41 CEST 2007 <kooiker@cwi.nl>
  * containers/Set.asf:
    - Add missing elem equations for the 4th time again!!!
