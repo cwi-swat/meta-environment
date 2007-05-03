@@ -108,9 +108,9 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
      */
     public void fbAddVisualizationPlugin(ATerm pluginType,
             int pluginIdentifier, String pluginName) {
-        log.info("Incoming Visualisation plugin with name: " + pluginName
+        log.debug("Incoming Visualisation plugin with name: " + pluginName
                 + " and identifier: " + pluginIdentifier);
-        log.info("Incoming Visualisation plugin with type: "
+        log.debug("Incoming Visualisation plugin with type: "
                 + pluginType.toString());
 
         VisualisationPlugin visPlugin = new VisualisationPlugin(pluginName,
@@ -396,7 +396,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
                 log.warn("A node was selected which was an invalid type");
             }
         } else {
-            log.info("Double clicked but there was no node selected");
+            log.warn("Double clicked but there was no node selected");
         }
     }
 

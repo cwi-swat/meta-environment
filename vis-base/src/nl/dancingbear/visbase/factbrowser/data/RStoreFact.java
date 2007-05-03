@@ -156,7 +156,7 @@ public class RStoreFact extends DefaultMutableTreeNode implements Observer {
      * @date 14-02-2007
      */
     public void update(Observable arg0, Object arg1) {
-        log.info("New visualisation plugin for this fact: "
+        log.debug("New visualisation plugin for this fact: "
                 + factName);
 
         //Cast the update from the model to a RStoreFactType
@@ -175,7 +175,7 @@ public class RStoreFact extends DefaultMutableTreeNode implements Observer {
             DefaultMutableTreeNode visTreeNode = new DefaultMutableTreeNode(
                     visPlugin);
 
-            log.info("Adding the visualisation to FactNode");
+            log.debug("Adding the visualisation to FactNode");
 
             //add the visualisatoinPlugin to the Tree
             this.add(visTreeNode);
