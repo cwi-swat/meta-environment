@@ -20,6 +20,7 @@ context-free start-symbols
 
 context-free syntax
   deconstruct(Module) -> Module {traversal(bottom-up, trafo, continue)}
+  deconstruct(Equation) -> Equation {traversal(bottom-up, trafo, continue)}
   deconstruct(P-Tree)   -> P-Tree   {traversal(bottom-up, trafo, continue)}
 
   reconstruct(P-Args)   -> P-Args {traversal(bottom-up, trafo, continue)}

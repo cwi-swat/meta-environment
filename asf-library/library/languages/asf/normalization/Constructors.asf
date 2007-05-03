@@ -7,6 +7,15 @@ equations
 	constructors(Module) = deconstruct(Module)
 
 equations
+
+%% Equations that rewrite lexicals directly should be stripped of the lex-to-cf injection
+%% such that nested lexicals also get rewritten
+ 
+[deconstruct-lex-to-cf-equation] 
+  deconstruct(appl(prod([lex(Symbol)],cf(Symbol),Attributes),[Tree1]) _Ann1 = 
+              appl(prod([lex(Symbol)],cf(Symbol),Attributes),[Tree2]) _Ann2) = Tree1 = Tree2
+
+equations
 %% This function maps constructor syntax back to normal syntax.
 %% The resulting tree are ``as if the parser produced them''.
 
