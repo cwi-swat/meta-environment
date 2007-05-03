@@ -95,7 +95,7 @@ public class ToolDefinition {
 				System.err.println("Malformed URL " + url + " ignored");
 			}
 		}
-		return (URL[]) urls.toArray(new URL[urls.size()]);
+		return urls.toArray(new URL[urls.size()]);
 	}
 	
 	private boolean usesJavaAdapter(){

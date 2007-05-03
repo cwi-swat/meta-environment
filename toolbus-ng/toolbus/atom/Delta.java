@@ -3,6 +3,7 @@ package toolbus.atom;
 import aterm.ATerm;
 import toolbus.State;
 import toolbus.TBTermFactory;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 
 /**
@@ -23,6 +24,10 @@ public class Delta extends Atom {
   
   public State getFirst() {
     return new State(); // replace by single copy
+  }
+  
+  public boolean isTerminated() throws ToolBusException {
+	  return true;
   }
   
   public boolean execute(){

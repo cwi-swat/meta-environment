@@ -15,7 +15,7 @@ process Auction is
 
 tool master is { host = "aarde"
 				 kind = "classic"
-				 command = "/home/paulk/software/installed/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/auction/master.tcl" 
+				 command = "/home/paulk/software/installed/toolbus/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/auction/master.tcl" 
 				 }
 
 %% The auxiliary process \script{ConnectBidder} handles

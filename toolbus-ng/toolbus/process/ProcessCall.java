@@ -13,6 +13,7 @@ import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusInternalError;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -38,11 +39,11 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 	private State firstState;
 
-	private boolean executing = false;
-
 	private boolean isStaticCall = true;
 	
-	private boolean activated = false;
+	private enum CallStatus {INACTIVE, ACTIVATED, ENTERING, EXECUTING, FOLLOWING, FOLLOWING2}
+	
+	private CallStatus status = CallStatus.INACTIVE;
 	
 	private Stack<String> calls;
 	
@@ -51,6 +52,8 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	private ATerm test;
 	
 	private Environment testEnv;
+
+	//private boolean outsidePE = false;
 
 	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, ATerm posInfo) {
 		super(tbfactory, posInfo);
@@ -159,7 +162,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 	
 	public AtomSet getAtoms() {
-		return isStaticCall || activated ? PE.getAtoms() : new AtomSet(); //TODO ?
+		return isStaticCall || status != CallStatus.INACTIVE ? PE.getAtoms() : new AtomSet(); //TODO ?
 	}
 
 	public String getName() {
@@ -173,7 +176,14 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	// Implementation of the StateElement interface
 
 	public boolean contains(StateElement a) {
-		return isStaticCall || activated ? PE.getFirst().contains(a) : false ; // TODO?
+		//return isStaticCall || status != CallStatus.INACTIVE ? PE.getFirst().contains(a) : false ; // TODO?
+		//System.err.println(this + " contains: " + a);
+		//System.err.println("PE.getf = " + PE.getFirst());
+		switch(status){
+		case ACTIVATED:
+			return PE.getFirst().contains(a);
+		}
+		return false;
 	}
 
 	public ProcessInstance getProcess() {
@@ -191,75 +201,137 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public boolean isEnabled() {
-		System.err.println("ProcessCall.isEnabled");
+		//System.err.println("ProcessCall.isEnabled");
 		return PE.getFirst().isEnabled();
 	}
 
-	public State gotoNextStateAndActivate() {
-		if(!(activated || executing)){
-			follows.activate();
-			return follows;
-		} 
-		executing = true;
-		return PE.getFirst().gotoNextStateAndActivate();
+	public boolean isTerminated() throws ToolBusException{
+		if(status == CallStatus.FOLLOWING && follows.isTerminated()){
+			return true;
+		}
+		return false;
 	}
-
+	
+	public State gotoNextStateAndActivate() {
+		return gotoNextStateAndActivate(null);
+	}
+	
 	public State gotoNextStateAndActivate(StateElement se) {
-		if(!(activated || executing)){
+		//System.err.println("gotoNextStateAndActivate: [" + getProcess() + "] = " + " status = " + status);
+		
+		switch(status){
+//		case INACTIVE:
+//			return firstState;
+			
+		case ACTIVATED:
+		case ENTERING:
+			//System.err.println("gotoNextStateAndActivate: start executing next state of PE:" + PE);
+			State s;
+			if(se == null){
+				s = PE.getFirst().gotoNextStateAndActivate();
+			} else {
+				s = PE.getFirst().gotoNextStateAndActivate(se);
+			}
+			//System.err.println("gotoNextStateAndActivate: new state = " + s);
+			if(s == firstState) {
+				//System.err.println("WE ARE BACK");
+				status = CallStatus.FOLLOWING;
+				return s;
+			}
+			status = CallStatus.EXECUTING;
+			return s;
+			
+		case EXECUTING:
+			//	We are back at this node; whole PE has been executed
+			//System.err.println("gotoNextStateAndActivate: activate follows");
+			status = CallStatus.FOLLOWING;
+			return firstState;
+			
+		case FOLLOWING:
+			return firstState;
+			
+		case FOLLOWING2:
+			status = CallStatus.INACTIVE;
+			//System.err.println("gotoNextStateAndActivate, FOLLOWING2, follows = " + follows);
 			follows.activate();
 			return follows;
-		} 
-		executing = true;
-		return PE.getFirst().gotoNextStateAndActivate(se);
+		}
+		System.err.println("gotoNextStateAndActivate, fall through case " + status);
+		return firstState;
 	}
 
 	public void activate() {
-		//System.err.println("ProcessCall.activate: [" + getProcess().getProcessId() + "]" + this);
-		//System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated + "; executing = " + executing);
-		if(activated && !executing){
+		//System.err.println("ProcessCall.activate: " + // [" + getProcess() + "]" + 
+		//					this + 
+		//			        "; isStaticCall = " + isStaticCall + "; status = " + status);
+		
+		switch(status){
+		
+		case INACTIVE: 		// Call is inactive and will be activated
+			
+		case ACTIVATED:		// Call was already activated but not executed, redo activation
+			
+			if(!isStaticCall){
+				try {
+					initDynamicCall();
+					ProcessInstance P = getProcess();
+					P.addToAtomSignature(PE.getAtoms());
+					//System.err.println("ProcessCall.activate: addPartners" + PE.getAtoms());
+					P.addPartnersToAllProcesses(PE.getAtoms()); //TODO: delete partners at end of call
+				} catch (ToolBusException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			status = CallStatus.ACTIVATED;
+			//System.err.println("first = " + PE.getFirst());
+			PE.getFirst().activate();	
 			return;
-		}
-		if(activated && executing){
-			// execution of the PE is completed
-			//System.err.println("activated && executing, current call is completed! Follows = " + follows);
+			
+		case ENTERING:
+			return;
+			
+		case EXECUTING:
+			//System.err.println("activate: ENTERING/EXECUTING, Current call is completed! Follows = " + follows);
+			status = CallStatus.FOLLOWING;
+			return;
+			
+		case FOLLOWING:
+			//System.err.println("activate: FOLLOWING");
+			return;
+			
+		case FOLLOWING2:
+			//System.err.println("activate: FOLLOWING2, follows = " + follows);
 			follows.activate();
 			return;
 		}
-		//System.err.println("ProcessCall.activate: [" + getProcess().getProcessId() + "]" + this);
-		//System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated);
-		if(!isStaticCall){
-			try {
-				initDynamicCall();
-				ProcessInstance P = getProcess();
-				P.addToAtomSignature(PE.getAtoms());
-				//System.err.println("ProcessCall.activate: addPartners" + PE.getAtoms());
-				P.addPartnersToAllProcesses(PE.getAtoms());
-			} catch (ToolBusException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		PE.getFirst().activate();	
-		activated = true;
-		executing = false;
+		
+		System.err.println("activate: fall through case " + status);
+		System.err.println("ProcessCall.activate: " + // [" + getProcess() + "]" + 
+							this + 
+					        "; isStaticCall = " + isStaticCall + "; status = " + status);
+		
 	}
 
 	public boolean execute() throws ToolBusException {
-		//System.err.println("ProcessCall.execute: [" + getProcess().getProcessId() + "]"  + this);
-		//System.err.println("activated = " + activated + "; executing = " + executing + "; first = " + PE.getFirst());
-		if(activated && !executing){
-			if(PE.getFirst().size() == 0){
-				//System.err.println("case size = 0");
-				executing = true;
-				return true;
+		//System.err.println("ProcessCall.execute: " + //[" + getProcess() + "]"  + 
+		//					this + 
+		//			       "; status = " + status + "; first = " + PE.getFirst() ); //+ "; follow = " + follows);
+		boolean executed = false;
+		
+		switch(status){
+		case ACTIVATED:
+//		case EXECUTING:
+			executed = PE.getFirst().execute();
+			//System.err.println(this + "executed => " + executed);
+			if(executed){
+				status = CallStatus.ENTERING;
 			}
-			//System.err.println("case size != 0");
-			executing = PE.getFirst().execute();
-			//System.err.println("executing => " + executing);
-			return executing;
+			return executed;
+		case FOLLOWING:
+			status = CallStatus.FOLLOWING2;
+			return true;
 		}
-		//System.err.println("execute: moving on to: " + follows);
-		activated = executing = false;
-		return true;
+		throw new ToolBusInternalError("ProcessCall.execute");
 	}
 }

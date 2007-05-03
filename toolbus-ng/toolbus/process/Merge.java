@@ -95,6 +95,10 @@ public class Merge extends ProcessExpression implements StateElement {
 	public boolean isEnabled() {
 		return state[LEFT].isEnabled() || state[RIGHT].isEnabled();
 	}
+	
+	public boolean isTerminated() throws ToolBusException{
+		return state[LEFT].isTerminated() && state[RIGHT].isTerminated();
+	}
 
 	private void initState() {
 		state[LEFT] = initialState[LEFT];

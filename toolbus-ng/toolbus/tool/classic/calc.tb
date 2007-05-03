@@ -26,13 +26,13 @@ process UI is
             (
                 (
                     (
-                        CALC-BUTTON(Tid) +
-                        LOG-BUTTON(Tid) 
+                        CALC-BUTTON(Tid) . tau +
+                        LOG-BUTTON(Tid) . tau
                     )*
                     delta 
                 )||
                 (
-                    TIME-BUTTON(Tid) *
+                    (TIME-BUTTON(Tid) .tau) *
                     delta 
                 )||
                 QUIT-BUTTON(Tid) 
@@ -180,7 +180,7 @@ tool calc is
 tool ui is 
 { host = "aarde" 
   kind = "classic" 
-  command = "wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/ui-calc.tcl"}
+  command = "/home/paulk/software/installed/toolbus/bin/wish-adapter -script /home/paulk/software/source/roll/toolbus/demos/calc/ui-calc.tcl"}
 
 tool batch is 
 { host = "aarde" 

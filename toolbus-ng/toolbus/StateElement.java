@@ -68,6 +68,14 @@ public interface StateElement {
 	 */
 	public boolean isEnabled() throws ToolBusException;
 	
+	/**
+	 * Is the execution of this StateElelement terminated?,
+	 * 
+	 * @return true (terminated) or false (not terminated).
+	 * @throws ToolBusException
+	 */
+	
+	public boolean isTerminated() throws ToolBusException;
 
 	/**
 	 * 
@@ -98,6 +106,8 @@ public interface StateElement {
 	 * Get the successor of the StateElement for a given other StateElement
 	 * elem. This typically used for a composite StateElement to get a specific
 	 * successor.
+	 * 
+	 * TODO: Probably this method should be combined with the previous one.
 	 * 
 	 * @param elem
 	 * @return

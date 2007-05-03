@@ -277,8 +277,8 @@ public class ProcessInstance {
 		return false;
 	}
 
-	public boolean isTerminated() {
-		if (!running || currentState.size() == 0) {
+	public boolean isTerminated() throws ToolBusException {
+		if (!running || currentState.isTerminated()) {
 			return true;
 		}
 		return false;

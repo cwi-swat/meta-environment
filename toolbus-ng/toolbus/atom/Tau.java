@@ -23,6 +23,7 @@ public class Tau extends Atom {
   
   public boolean execute() throws ToolBusException{
   	if(isEnabled()){
+  		//System.err.printf("TAU !!!!!!");
   		return true;
   	}
   	return false;
