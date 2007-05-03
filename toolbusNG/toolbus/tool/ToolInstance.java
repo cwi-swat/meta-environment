@@ -160,10 +160,9 @@ public class ToolInstance {
   		//System.err.println("sndEvalToTool: true case");
   		toolShield.sndRequestToTool(EVAL, call);
   		return true;
-  	} else {
-  		//System.err.println("sndEvalToTool: false case");
-  		return false;
   	}
+  	//System.err.println("sndEvalToTool: false case");
+  	return false;
   }
   
   /**
