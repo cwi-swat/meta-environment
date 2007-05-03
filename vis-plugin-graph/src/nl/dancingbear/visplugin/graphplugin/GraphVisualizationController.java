@@ -69,7 +69,6 @@ public class GraphVisualizationController extends
      */
     public ATerm[] getSupportedTypes() {
         ATerm[] atermList = { makeATerm(m_relationGraph), makeATerm(m_relationGraphTuple), makeATerm(m_attributedGraphTuple) };
-        System.out.println("[GRAPH] atermlist: " + atermList.toString());
         return atermList;
     }
 
