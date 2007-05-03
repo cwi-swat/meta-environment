@@ -216,7 +216,6 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      */
     public void recTerminate(ATerm event) {
         fireStudioPluginClosed();
-        System.out.println("Terminate (" + event + ")");
     }
 
     public void recAckEvent(ATerm t0) {
