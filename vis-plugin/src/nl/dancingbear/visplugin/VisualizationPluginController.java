@@ -35,16 +35,6 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
     protected Factory m_factory;
 
     /**
-     * Default constructor
-     *
-     * @author Aldert Boerhoop
-     * @date 20-2-2007
-     */
-    public VisualizationPluginController() {
-        System.out.println("Class:" + this.getClass().toString() + " initiated");
-    }
-
-    /**
      * Returns the bridge of the visualization plugin controller.
      *
      * @return The bridge object.
