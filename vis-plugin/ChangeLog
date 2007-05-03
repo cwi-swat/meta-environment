@@ -1,5 +1,8 @@
 
 
+Thu May  3 17:01:05 CEST 2007 <jurgenv@cwi.nl>
+ * **/*.tb.src: removed superfluous brackets, printfs and comments.
+
 Wed Mar 21 11:21:52 CET 2007 <jurgenv@cwi.nl>
  * src/**/VisualizationPluginWindow.java: changed the title of the 
    tabs to the name of the RTuple variable that is displayed.
