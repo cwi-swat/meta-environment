@@ -571,6 +571,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		ATerm event = studio.getATermFactory().make(
 				"editor-disconnected(<term>)", editorId);
 		bridge.postEvent(event);
+		
+		// Is this supposed to be here? Shouldn't meta-studio handle this after closing a component?
+		studio.removeComponent(comp);
 	}
 
 	private void addStudioComponentListener(final ATerm editorId,

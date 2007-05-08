@@ -1,5 +1,9 @@
 # $Id$
 
+Tue May  8 11:21:13 CEST 2007 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Remove component from studio after closing editor (closes #747)
+
 Wed Mar  7 11:22:14 CET 2007 <kooiker@cwi.nl>
  * editor-plugin.idef.src:
    - Strongly typed variable declarations
