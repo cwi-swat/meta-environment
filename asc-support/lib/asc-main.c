@@ -81,7 +81,7 @@ static ATbool toolbusMode(int argc, char* argv[]) {
 
 static void initParsetable(unsigned const char* tableBaf, size_t tableSize) {
   if (tableBaf != NULL) {
-    ATerm parseTable = ATreadFromBinaryString((char *)tableBaf, tableSize);
+    ATerm parseTable = ATreadFromBinaryString(tableBaf, tableSize);
     if (parseTable != NULL) {
       setParseTable(PTBL_ParseTableFromTerm(parseTable));
     }
