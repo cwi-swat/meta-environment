@@ -129,12 +129,28 @@ static PT_Tree reduce(PT_Tree trm, int depth) {
   }
 
   if (hasProductionCompleteAttribute(top_ofs)) {
-    RWaddLocatedError("complete function not reduced:", 
-		      term_prefix(trm),
-		      PT_getTreeLocation(trm)
+    int errors = RWgetErrorCount();
+    char filename[100];
+
+    sprintf(filename, "./incomplete.%d.trm", errors);
+    FILE *fp = fopen(filename, "wb");
+
+    if (fp != NULL) {
+      PT_yieldTreeToFile(trm, fp, ATfalse);
+      RWaddDoubleLocatedError("complete function not reduced:", 
+			      term_prefix(trm),
+			      PT_getTreeLocation(trm),
+			      "term dump",
+			      LOC_makeLocationFile(filename)
 		      );
-    return FAIL;
+    }
+    else {
+      RWaddLocatedError("complete function not reduced:", 
+			term_prefix(trm),
+			PT_getTreeLocation(trm));
+    }
   }
+
   return trm;
 }
 

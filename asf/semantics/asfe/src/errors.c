@@ -30,6 +30,15 @@ ERR_ErrorList RWgetErrors() {
   return errors;
 }
 
+int RWgetErrorCount() {
+  if (errors != NULL) {
+    return ERR_getErrorListLength(errors);
+  }
+  else {
+    return 0;
+  }
+}
+
 
 void RWaddError(char *msg, char *subject) {
   ERR_Subject sub = ERR_makeSubjectSubject(subject); 

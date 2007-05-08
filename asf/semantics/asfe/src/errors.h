@@ -8,6 +8,7 @@
 #include <Error.h>
 #include <Location.h>
 
+int  RWgetErrorCount();
 void RWaddError(char *message, char *subject);
 void RWaddLocatedError(char *message, char *subject, LOC_Location loc);
 void RWaddDoubleLocatedError(char *msg, char *subject1, LOC_Location loc1,
