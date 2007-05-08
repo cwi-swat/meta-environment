@@ -37,7 +37,6 @@
 #include <logging.h>
 #include <MEPT-productions.h>
 #include <MEPT-args.h>
-/*#include <ptable-utils.h>*/
 
 #include "posmap.h"
 #include "mem-alloc.h"
@@ -176,7 +175,8 @@ static PT_Tree jumpOverInjectionsModuloPreferences(ParseTable *pt, PT_Tree t) {
       return t;
     }
 
-    while (SGLR_PTBL_prodIsUserDefinedInjection(pt, prod)) {
+    /*while (SGLR_PTBL_prodIsUserDefinedInjection(pt, prod)) {*/
+    while (SGLR_PTBL_prodIsInjection(pt, prod)) {
       /* only one child */
       t = PT_getArgsHead(PT_getTreeArgs(t));
       prod = PT_getTreeProd(t);
@@ -206,6 +206,11 @@ static ATbool isFirstPreferredToSecond(PT_Production prod1, PT_Production prod2)
   ATbool prod2Avoid = PT_isProductionAvoid(prod2);
   ATbool prod1Prefer = PT_isProductionPrefer(prod1);
   ATbool prod2Prefer = PT_isProductionPrefer(prod2);
+
+  /* this works best if a production is not both prefer and avoid,
+   * which the grammar writer must take care of. Do not put an 
+   * assert though, because such a user error should not crash the parser.
+   */
 
   if (prod1Avoid && prod2Avoid) {
     return ATfalse;
@@ -305,15 +310,16 @@ static PT_Tree directPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
 static int countDistinctArguments(PT_Args args0, PT_Args args1) {
   int diffs = 0;
 
-  /* It's only necessary to check if one arg is empty because of the 
-   * prerequiste that both args have the same production. */
+  /* Both args are children of the same production. */
+  assert(PT_getArgsLength(args0) == PT_getArgsLength(args1));
+
   while (!PT_isArgsEmpty(args0)) {
     if (!PT_isEqualTree(PT_getArgsHead(args0), PT_getArgsHead(args1))) {
       diffs++;
     }
 
-    args1 =  PT_getArgsTail(args1);
     args0 =  PT_getArgsTail(args0);
+    args1 =  PT_getArgsTail(args1);
   }
   
   return diffs;
@@ -344,23 +350,16 @@ static PT_Tree indirectPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
 
   /*ATwarning("indirectFilter:\n%t\n\n%t\n\n",t0,t1);*/
   
-  if (PT_isTreeAmb(t0) || PT_isTreeAmb(t1) 
-      || PT_isTreeCycle(t0) || PT_isTreeCycle(t1) ||
-      PT_isTreeChar(t0) || PT_isTreeChar(t1)) {
+  if (!PT_isTreeAppl(t0) ||
+      !PT_isTreeAppl(t1)) {
     return (PT_Tree) NULL;
   }
-
-  /* Can any of these nodes be leaves? */
-  assert(PT_isTreeAppl(t0) && PT_isTreeAppl(t1));
 
   p0 = PT_getTreeProd(t0);
   p1 = PT_getTreeProd(t1);
 
   if (!PT_isEqualProduction(p0,p1)) {
-    PT_Tree temp = directPreferenceFilter(pt, t0, t1);
-    /*if (temp) ATwarning("DirF returned:\n%t\n\n",temp);
-    else ATwarning("DirF returned:\nNULL\n\n");*/
-    return temp;
+    return directPreferenceFilter(pt, t0, t1);
   }
   else {
     PT_Args args0 = PT_getTreeArgs(t0);

@@ -1,5 +1,13 @@
 $Id$
 
+Tue May  8 10:13:32 CEST 2007 <jurgenv@cwi.nl>
+ * src/parseForest/filters.c: fixed an incompatibility with previous
+   versions. The indirect preference filter checked for user defined
+   injections only, while previous versions checked for all injections.
+   Since this version is to be fully backward compatible, I've have 
+   changed it back. Also added some comments and optimized one
+   test by taking the more easily computed inverse.
+
 Thu May  3 13:54:28 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: implemented unrolling of cyclic parse forests.
  * src/parseForest/filterOptions.{c,h}: added unrolling of cycles as a 
@@ -46,7 +54,7 @@ Tue Apr  3 11:51:40 CEST 2007 <economop@cwi.nl>
 
 Wed Mar 21 11:07:34 CET 2007 <jurgenv@cwi.nl>
  * src/{toolbusInterface.c,sglr.idef.src}: reintroduced possibility to
-   acticate preference counting and injection counting filters with an
+   activate preference counting and injection counting filters with an
    option in the ToolBus interface script to SGLR. This is needed for
    backward compatibility when parsing equations.
 
