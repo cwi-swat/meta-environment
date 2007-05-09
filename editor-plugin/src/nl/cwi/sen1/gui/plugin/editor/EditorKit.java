@@ -19,9 +19,9 @@ import javax.swing.undo.UndoManager;
 import nl.cwi.sen1.gui.StudioImpl;
 
 public class EditorKit extends StyledEditorKit {
-	private static final int UNDO_LIMIT = 1000;
+	private final int UNDO_LIMIT = 1000;
 
-	private static UndoManager undoManager = new EditorUndoManager();
+	private UndoManager undoManager = new EditorUndoManager();
 
 	private UndoAction undo;
 

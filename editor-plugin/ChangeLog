@@ -1,5 +1,10 @@
 # $Id$
 
+Wed May  9 11:53:51 CEST 2007 <kooiker@cwi.nl>
+ * src/**/EditorKit.java:
+   - remove static from undoManager. This caused undo's and redo's in other
+     editors than the active one (using a single undostack).
+
 Tue May  8 11:21:13 CEST 2007 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Remove component from studio after closing editor (closes #747)
