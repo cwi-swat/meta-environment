@@ -23,8 +23,7 @@ let
   Column: int,
   Sid: session-id
 in
-  printf("Editing anonymous location: %s\n", Path)
-  . Edit(Path, Sid?)
+  Edit(Path, Sid?)
   . EditorType := quote(anonymous-editor)
   . EditText(Sid, EditorType, AlreadyExists?)
   .
@@ -518,7 +517,6 @@ in
       )
     +
       rec-msg(cm-no-extension-editor(Extension))
-      . printf("warning: using anonymous editor for %s\n", Path)
       . EditAnonymousLocation(Path, Area)
     )
   )
