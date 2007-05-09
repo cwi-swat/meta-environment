@@ -3,24 +3,16 @@
 
 #include <asf-namespace.h>
 
-process StartASFEditor is
+process StartASFEditor(Path: str, Area: term) is
 let
   ModuleId: module-id,
-  Path: str,
   Pid: int,
   Sid: session-id
 in
-  (
-    rec-msg(start-editor(ASF_EXTENSION, Path?))
-    . MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", path(Path), ModuleId?)
-    . create(EditEquations(ModuleId), Pid?)
-    . rec-msg(equations-editor-started(ModuleId, Sid?))
-    . snd-msg(editor-started(ASF_EXTENSION, Path))
-  )
-  *
-  delta
+  MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", path(Path), ModuleId?)
+  . create(EditEquations(ModuleId), Pid?)
+  . rec-msg(equations-editor-started(ModuleId, Sid?))
+  . snd-msg(te-set-focus(Sid, Area))
 endlet
-
-toolbus(StartASFEditor)
 
 #endif /* __ASF_EDITOR_LISTENERS__ */

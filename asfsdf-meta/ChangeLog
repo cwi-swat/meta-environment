@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Wed May  9 08:45:28 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/asf-editor-listeners.tb: changed to new editing interface.
+
 Fri Mar 30 16:41:37 CEST 2007 <economop@cwi.nl>
  * asfsdf-meta.pc.in,tbscripts/start-meta-studio.tb.src: removed dependency to 
    swixml-gui.
