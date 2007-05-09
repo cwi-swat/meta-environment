@@ -1,5 +1,9 @@
 $Id$
 
+Wed May  9 16:08:51 CEST 2007 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Center on node when node is selected from outside prefuse (closes #127)
+
 Fri Feb  9 11:41:07 CET 2007 <kooiker@cwi.nl>
  * src/**/GraphPanel.java:
    - Fix focus colors abandonned after mouse hover

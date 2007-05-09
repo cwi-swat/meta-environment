@@ -2,6 +2,7 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -393,7 +394,10 @@ public class GraphPanel extends JPanel {
 			focusGroup.setTuple(node);
 			vis.run("draw");
 			vis.repaint();
+			Point p = new Point((int)node.getX(), (int)node.getY());
+			display.animatePanToAbs(p, 2000);
 		}
+
 	}
 
 	private VisualItem findNode(String nodeId) {
