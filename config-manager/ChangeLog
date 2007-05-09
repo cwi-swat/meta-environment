@@ -1,5 +1,9 @@
 # $Id$
 
+Wed May  9 08:38:05 CEST 2007 <jurgenv@cwi.nl>
+ * src/configmanager.c,configuration-manager.isrc: added support for the
+   new editor configuration option.
+
 Fri Jan 26 14:58:33 CET 2007 <{kooiker,jurgenv}@cwi.nl>
  * src/*: added add-system-property and remove-system-property.
 

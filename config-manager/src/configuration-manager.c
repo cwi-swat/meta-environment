@@ -16,8 +16,8 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<configuration-manager>,get-subtype-events(<term>,<term>))",
   "rec-eval(<configuration-manager>,get-action(<term>,<term>))",
   "rec-eval(<configuration-manager>,get-subtype-action(<term>,<term>,<term>))",
-  "rec-eval(<configuration-manager>,get-extension-modulename(<str>))",
-  "rec-eval(<configuration-manager>,get-modulename-extension(<term>))",
+  "rec-eval(<configuration-manager>,get-extension-editor(<str>))",
+  "rec-eval(<configuration-manager>,get-language-extension(<str>))",
   "rec-eval(<configuration-manager>,get-module-paths)",
   "rec-eval(<configuration-manager>,get-library-paths)",
   "rec-eval(<configuration-manager>,get-text-categories)",
@@ -44,15 +44,15 @@ ATerm configuration_manager_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-eval(get-events(<term>))", &t0)) {
     return get_events(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
-    return get_extension_modulename(conn, s0);
+  if(ATmatch(term, "rec-eval(get-extension-editor(<str>))", &s0)) {
+    return get_extension_editor(conn, s0);
   }
   if(ATmatch(term, "rec-do(change-workspace(<str>))", &s0)) {
     change_workspace(conn, s0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(get-modulename-extension(<term>))", &t0)) {
-    return get_modulename_extension(conn, t0);
+  if(ATmatch(term, "rec-eval(get-language-extension(<str>))", &s0)) {
+    return get_language_extension(conn, s0);
   }
   if(ATmatch(term, "rec-do(remove-system-property(<term>))", &t0)) {
     remove_system_property(conn, t0);

@@ -18,7 +18,9 @@ let
   Path: str,
   Type: term,
   SubType: term,
-  Property: term
+  Property: term,
+  Editor: str,
+  Language: str
 in
   execute(configuration-manager, CM?)
   .
@@ -55,26 +57,26 @@ in
     . rec-value(CM, action(Action?))
     . snd-msg(cm-action(Action))
   +
-    rec-msg(get-extension-modulename(Extension?))
-    . snd-eval(CM, get-extension-modulename(Extension))
+    rec-msg(cm-get-extension-editor(Extension?))
+    . snd-eval(CM, get-extension-editor(Extension))
     .
     (
-      rec-value(CM, extension-modulename(ModuleId?))
-      . snd-msg(extension-modulename(Extension, ModuleId))
+      rec-value(CM, extension-editor(Editor?))
+      . snd-msg(cm-extension-editor(Extension, Editor))
     +
-      rec-value(CM, no-modulename)
-      . snd-msg(no-extension-modulename(Extension))
+      rec-value(CM, no-editor)
+      . snd-msg(cm-no-extension-editor(Extension))
     )
   +
-    rec-msg(get-modulename-extension(ModuleId?))
-    . snd-eval(CM, get-modulename-extension(ModuleId))
+    rec-msg(cm-get-language-extension(Language?))
+    . snd-eval(CM, get-language-extension(Language))
     .
     (
-      rec-value(CM, modulename-extension(Extension?))
-      . snd-msg(modulename-extension(ModuleId, Extension))
+      rec-value(CM, extension(Extension?))
+      . snd-msg(cm-language-extension(Language, Extension))
     +
       rec-value(CM, no-extension)
-      . snd-msg(no-modulename-extension(ModuleId))
+      . snd-msg(cm-no-language-extension(Language))
     )
   +
     rec-msg(cm-get-module-paths)

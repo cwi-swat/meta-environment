@@ -20,8 +20,8 @@ static ATermTable systemDescriptionsByType = NULL;
 static ATermTable userActionsByDescription = NULL;
 static ATermTable systemActionsByDescription = NULL;
 
-static ATermList userExtensions = NULL;
-static ATermList systemExtensions = NULL;
+static ATermList userEditors = NULL;
+static ATermList systemEditors = NULL;
 
 static ATermList userTextCategories = NULL;
 static ATermList systemTextCategories = NULL;
@@ -56,7 +56,6 @@ static ATerm makeSubType(ATerm type, ATerm subtype) {
     }
   }
 
-  /*ATwarning("configmanager: warning: ignoring subtype %t because supertype %t is already subtyped.\n", subtype, type);*/
   return type;
 }
 
@@ -185,8 +184,8 @@ void register_user_directories(int cid, ATerm paths) {
   modulePaths = CFG_makePropertyListEmpty();
 }
 
-static ATermList addExtension(ATermList extensions, CFG_Property property) {
-  return ATinsert(extensions, CFG_PropertyToTerm(property));
+static ATermList addEditor(ATermList editors, CFG_Property property) {
+  return ATinsert(editors, CFG_PropertyToTerm(property));
 }
 
 static ATermList addTextCategory(ATermList categories, CFG_Property property) {
@@ -220,8 +219,8 @@ static void addSystemProperty(CFG_Property property) {
       ATwarning("Configuration file %s not used.\n", path);
     }
   }
-  else if (CFG_isPropertyExtension(property)) {
-    systemExtensions = addExtension(systemExtensions, property);
+  else if (CFG_isPropertyEditor(property)) {
+    systemEditors = addEditor(systemEditors, property);
   }
   else if (CFG_isPropertyScript(property)) {
     scripts = CFG_makePropertyListMany(property, scripts);
@@ -292,8 +291,8 @@ void add_system_properties(int cid, const char *contents) {
 }
 
 static void addUserProperty(CFG_Property property) {
-  if (CFG_isPropertyExtension(property)) {
-    userExtensions = addExtension(userExtensions, property);
+  if (CFG_isPropertyEditor(property)) {
+    userEditors = addEditor(userEditors, property);
   }
   else if (CFG_isPropertyImport(property)) {
     char *path = CFG_getPropertyPath(property);
@@ -419,52 +418,51 @@ ATerm get_subtype_action(int cid, ATerm type, ATerm subtype, ATerm event) {
   return get_action(cid, makeSubType(type, subtype), event);
 }
 
-static ATermList getExtensions() {
-  return ATconcat(userExtensions, systemExtensions);
+static ATermList getEditors() {
+  return ATconcat(userEditors, systemEditors);
 }
 
-ATerm get_extension_modulename(int cid, const char *extension) {
-  ATermList extensions = getExtensions();
+ATerm get_extension_editor(int cid, const char *extension) {
+  ATermList editors = getEditors();
   
-  while (!ATisEmpty(extensions)) {
-    CFG_Property property = CFG_PropertyFromTerm((ATgetFirst(extensions)));
+  while (!ATisEmpty(editors)) {
+    CFG_Property property = CFG_PropertyFromTerm((ATgetFirst(editors)));
 
-    if (CFG_isPropertyExtension(property)) {
-      const char *language = CFG_getPropertyLanguage(property);
+    if (CFG_isPropertyEditor(property)) {
+      const char *editor = CFG_getPropertyEditor(property);
       const char *stored = CFG_getPropertyExtension(property);
 
       if (strcmp(extension, stored) == 0) {
-	return ATmake("snd-value(extension-modulename(<str>))", language);
+	return ATmake("snd-value(extension-editor(<str>))", editor);
       }
     }
 
-    extensions = ATgetNext(extensions);
+    editors = ATgetNext(editors);
   }
 
-  return ATmake("snd-value(no-modulename)");
+  return ATmake("snd-value(no-editor)");
 }
 
-ATerm get_modulename_extension(int cid, ATerm moduleId) {
-  ATermList extensions = getExtensions();
+ATerm get_language_extension(int cid, const char *language) {
+  ATermList editors = getEditors();
+  
+  while (!ATisEmpty(editors)) {
+    CFG_Property property = CFG_PropertyFromTerm((ATgetFirst(editors)));
 
-  while (!ATisEmpty(extensions)) {
-    CFG_Property property = CFG_PropertyFromTerm((ATgetFirst(extensions)));
+    if (CFG_isPropertyEditor(property)) {
+      const char *extension = CFG_getPropertyExtension(property);
+      const char *stored = CFG_getPropertyLanguage(property);
 
-    if (CFG_isPropertyExtension(property)) {
-      char *language = CFG_getPropertyLanguage(property);
-      char *extension = CFG_getPropertyExtension(property);
-
-      if (strcmp(language, ATwriteToString(moduleId)) == 0) {
-	return ATmake("snd-value(modulename-extension(<str>))", extension);
+      if (strcmp(language, stored) == 0) {
+	return ATmake("snd-value(extension(<str>))", extension);
       }
     }
 
-    extensions = ATgetNext(extensions);
+    editors = ATgetNext(editors);
   }
 
   return ATmake("snd-value(no-extension)");
 }
-
 void change_workspace(int cid, const char *path) {
   CFG_Property current = getWorkspace();
   CFG_PropertyList updated = CFG_makePropertyListEmpty();
@@ -521,11 +519,11 @@ static void initConfigurationManager(void) {
   ATprotectList(&libraryPaths);
   libraryPaths = CFG_makePropertyListEmpty();
 
-  ATprotectList(&userExtensions);
-  userExtensions = ATempty;
+  ATprotectList(&userEditors);
+  userEditors = ATempty;
 
-  ATprotectList(&systemExtensions);
-  systemExtensions = ATempty;
+  ATprotectList(&systemEditors);
+  systemEditors = ATempty;
 
   ATprotectList(&userTextCategories);
   userTextCategories = ATempty;
