@@ -1,5 +1,9 @@
 $Id$
 
+Wed May  9 08:36:05 CEST 2007 <jurgenv@cwi.nl>
+ * library/basic/Configuration.sdf: removed old language-extension
+   configuration options and replaced by editor(process,language,extension)
+
 Thu May  3 10:26:31 CEST 2007 <jurgenv@cwi.nl>
  * library/basic/RStores.sdf: fixed ambiguity reported in #748
 

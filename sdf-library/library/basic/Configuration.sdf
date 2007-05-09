@@ -20,7 +20,7 @@ context-free syntax
   "script-path" "(" path:StrCon ")" -> Property {cons("script-path")}
 
   "action" "(" "[" list:{ActionDescription ","}* "]" "," action:StrCon ")" -> Property {cons("action")}
-  "extension" "(" language:StrCon "," extension:StrCon ")" -> Property {cons("extension")}
+  "editor" "(" editor:StrCon "," language:StrCon "," extension:StrCon ")" -> Property {cons("editor")}
   "library-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("library-path")}
   "module-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("module-path")}
   "text-category" "(" category:TextCategoryName "," "[" map:{TextAttribute ","}* "]" ")" -> Property {cons("text-category")}
