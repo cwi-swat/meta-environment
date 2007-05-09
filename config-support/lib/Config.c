@@ -2136,13 +2136,14 @@ CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList list, const char* 
   return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun110, (ATerm) list, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue)));
 }
 /**
- * Constructs a extension of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
- * \param[in] language a child of the new extension
- * \param[in] extension a child of the new extension
- * \return A pointer to a extension, either newly constructed or shared
+ * Constructs a editor of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
+ * \param[in] editor a child of the new editor
+ * \param[in] language a child of the new editor
+ * \param[in] extension a child of the new editor
+ * \return A pointer to a editor, either newly constructed or shared
  */
-CFG_Property CFG_makePropertyExtension(const char* language, const char* extension) {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun111, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue)));
+CFG_Property CFG_makePropertyEditor(const char* editor, const char* language, const char* extension) {
+  return (CFG_Property)(ATerm)ATmakeAppl3(CFG_afun111, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(editor, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue)));
 }
 /**
  * Constructs a library-path of type CFG_Property. Like all ATerm types, CFG_Propertys are maximally shared.
@@ -4564,7 +4565,7 @@ ATbool CFG_isValidProperty(CFG_Property arg) {
   else if (CFG_isPropertyAction(arg)) {
     return ATtrue;
   }
-  else if (CFG_isPropertyExtension(arg)) {
+  else if (CFG_isPropertyEditor(arg)) {
     return ATtrue;
   }
   else if (CFG_isPropertyLibraryPath(arg)) {
@@ -4644,18 +4645,21 @@ inline ATbool CFG_isPropertyAction(CFG_Property arg){
 }
 
 /**
- * Assert whether a CFG_Property is a extension by checking against the following ATerm pattern: extension(<"language"(str)>,<"extension"(str)>). May not be used to assert correctness of the CFG_Property
+ * Assert whether a CFG_Property is a editor by checking against the following ATerm pattern: editor(<"editor"(str)>,<"language"(str)>,<"extension"(str)>). May not be used to assert correctness of the CFG_Property
  * \param[in] arg input CFG_Property
- * \return ATtrue if #arg corresponds to the signature of a extension, or ATfalse otherwise
+ * \return ATtrue if #arg corresponds to the signature of a editor, or ATfalse otherwise
  */
-inline ATbool CFG_isPropertyExtension(CFG_Property arg){
-  /* checking for: extension */
+inline ATbool CFG_isPropertyEditor(CFG_Property arg){
+  /* checking for: editor */
   if (ATgetType((ATerm)arg) == AT_APPL && ATgetAFun((ATermAppl)arg) == CFG_afun111) {
     ATerm arg_arg0 = ATgetArgument(arg, 0);
     if (ATgetType((ATerm)arg_arg0) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg0)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg0)) == ATtrue) {
       ATerm arg_arg1 = ATgetArgument(arg, 1);
       if (ATgetType((ATerm)arg_arg1) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg1)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg1)) == ATtrue) {
-        return ATtrue;
+        ATerm arg_arg2 = ATgetArgument(arg, 2);
+        if (ATgetType((ATerm)arg_arg2) == AT_APPL && ATgetArity(ATgetAFun((ATermAppl)arg_arg2)) == 0 && ATisQuoted(ATgetAFun((ATermAppl)arg_arg2)) == ATtrue) {
+          return ATtrue;
+        }
       }
     }
   }
@@ -4762,12 +4766,24 @@ ATbool CFG_hasPropertyAction(CFG_Property arg) {
 }
 
 /**
+ * Assert whether a CFG_Property has a editor. 
+ * \param[in] arg input CFG_Property
+ * \return ATtrue if the CFG_Property had a editor, or ATfalse otherwise
+ */
+ATbool CFG_hasPropertyEditor(CFG_Property arg) {
+  if (CFG_isPropertyEditor(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/**
  * Assert whether a CFG_Property has a language. 
  * \param[in] arg input CFG_Property
  * \return ATtrue if the CFG_Property had a language, or ATfalse otherwise
  */
 ATbool CFG_hasPropertyLanguage(CFG_Property arg) {
-  if (CFG_isPropertyExtension(arg)) {
+  if (CFG_isPropertyEditor(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4779,7 +4795,7 @@ ATbool CFG_hasPropertyLanguage(CFG_Property arg) {
  * \return ATtrue if the CFG_Property had a extension, or ATfalse otherwise
  */
 ATbool CFG_hasPropertyExtension(CFG_Property arg) {
-  if (CFG_isPropertyExtension(arg)) {
+  if (CFG_isPropertyEditor(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -4867,13 +4883,23 @@ char* CFG_getPropertyAction(CFG_Property arg) {
 }
 
 /**
+ * Get the editor char* of a CFG_Property. Note that the precondition is that this CFG_Property actually has a editor
+ * \param[in] arg input CFG_Property
+ * \return the editor of #arg, if it exist or an undefined value if it does not
+ */
+char* CFG_getPropertyEditor(CFG_Property arg) {
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/**
  * Get the language char* of a CFG_Property. Note that the precondition is that this CFG_Property actually has a language
  * \param[in] arg input CFG_Property
  * \return the language of #arg, if it exist or an undefined value if it does not
  */
 char* CFG_getPropertyLanguage(CFG_Property arg) {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /**
@@ -4883,7 +4909,7 @@ char* CFG_getPropertyLanguage(CFG_Property arg) {
  */
 char* CFG_getPropertyExtension(CFG_Property arg) {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 2)));
 }
 
 /**
@@ -4977,14 +5003,29 @@ CFG_Property CFG_setPropertyAction(CFG_Property arg, const char* action) {
 }
 
 /**
+ * Set the editor of a CFG_Property. The precondition being that this CFG_Property actually has a editor
+ * \param[in] arg input CFG_Property
+ * \param[in] editor new const char* to set in #arg
+ * \return A new CFG_Property with editor at the right place, or a core dump if #arg did not have a editor
+ */
+CFG_Property CFG_setPropertyEditor(CFG_Property arg, const char* editor) {
+  if (CFG_isPropertyEditor(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(editor, 0, ATtrue))), 0);
+  }
+
+  ATabort("Property has no Editor: %t\n", arg);
+  return (CFG_Property)NULL;
+}
+
+/**
  * Set the language of a CFG_Property. The precondition being that this CFG_Property actually has a language
  * \param[in] arg input CFG_Property
  * \param[in] language new const char* to set in #arg
  * \return A new CFG_Property with language at the right place, or a core dump if #arg did not have a language
  */
 CFG_Property CFG_setPropertyLanguage(CFG_Property arg, const char* language) {
-  if (CFG_isPropertyExtension(arg)) {
-    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue))), 0);
+  if (CFG_isPropertyEditor(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue))), 1);
   }
 
   ATabort("Property has no Language: %t\n", arg);
@@ -4998,8 +5039,8 @@ CFG_Property CFG_setPropertyLanguage(CFG_Property arg, const char* language) {
  * \return A new CFG_Property with extension at the right place, or a core dump if #arg did not have a extension
  */
 CFG_Property CFG_setPropertyExtension(CFG_Property arg, const char* extension) {
-  if (CFG_isPropertyExtension(arg)) {
-    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue))), 1);
+  if (CFG_isPropertyEditor(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue))), 2);
   }
 
   ATabort("Property has no Extension: %t\n", arg);
@@ -7194,7 +7235,7 @@ CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_PropertyList
  * Apply functions to the children of a CFG_Property. 
  * \return A new CFG_Property with new children where the argument functions might have applied
  */
-CFG_Property CFG_visitProperty(CFG_Property arg, char* (*acceptPath)(char*), CFG_ActionDescriptionList (*acceptList)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributeMap (*acceptMap)(CFG_TextAttributeMap)) {
+CFG_Property CFG_visitProperty(CFG_Property arg, char* (*acceptPath)(char*), CFG_ActionDescriptionList (*acceptList)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptEditor)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributeMap (*acceptMap)(CFG_TextAttributeMap)) {
   if (CFG_isPropertyImport(arg)) {
     return CFG_makePropertyImport(
         acceptPath ? acceptPath(CFG_getPropertyPath(arg)) : CFG_getPropertyPath(arg));
@@ -7212,8 +7253,9 @@ CFG_Property CFG_visitProperty(CFG_Property arg, char* (*acceptPath)(char*), CFG
         acceptList ? acceptList(CFG_getPropertyList(arg)) : CFG_getPropertyList(arg),
         acceptAction ? acceptAction(CFG_getPropertyAction(arg)) : CFG_getPropertyAction(arg));
   }
-  if (CFG_isPropertyExtension(arg)) {
-    return CFG_makePropertyExtension(
+  if (CFG_isPropertyEditor(arg)) {
+    return CFG_makePropertyEditor(
+        acceptEditor ? acceptEditor(CFG_getPropertyEditor(arg)) : CFG_getPropertyEditor(arg),
         acceptLanguage ? acceptLanguage(CFG_getPropertyLanguage(arg)) : CFG_getPropertyLanguage(arg),
         acceptExtension ? acceptExtension(CFG_getPropertyExtension(arg)) : CFG_getPropertyExtension(arg));
   }

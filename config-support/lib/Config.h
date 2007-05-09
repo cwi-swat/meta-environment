@@ -1039,8 +1039,8 @@ CFG_Property CFG_makePropertyScript (const char *path);
 CFG_Property CFG_makePropertyScriptPath (const char *path);
 CFG_Property CFG_makePropertyAction (CFG_ActionDescriptionList list,
 				     const char *action);
-CFG_Property CFG_makePropertyExtension (const char *language,
-					const char *extension);
+CFG_Property CFG_makePropertyEditor (const char *editor, const char *language,
+				     const char *extension);
 CFG_Property CFG_makePropertyLibraryPath (const char *label,
 					  const char *path);
 CFG_Property CFG_makePropertyModulePath (const char *label, const char *path);
@@ -1351,13 +1351,14 @@ inline ATbool CFG_isPropertyImport (CFG_Property arg);
 inline ATbool CFG_isPropertyScript (CFG_Property arg);
 inline ATbool CFG_isPropertyScriptPath (CFG_Property arg);
 inline ATbool CFG_isPropertyAction (CFG_Property arg);
-inline ATbool CFG_isPropertyExtension (CFG_Property arg);
+inline ATbool CFG_isPropertyEditor (CFG_Property arg);
 inline ATbool CFG_isPropertyLibraryPath (CFG_Property arg);
 inline ATbool CFG_isPropertyModulePath (CFG_Property arg);
 inline ATbool CFG_isPropertyTextCategory (CFG_Property arg);
 ATbool CFG_hasPropertyPath (CFG_Property arg);
 ATbool CFG_hasPropertyList (CFG_Property arg);
 ATbool CFG_hasPropertyAction (CFG_Property arg);
+ATbool CFG_hasPropertyEditor (CFG_Property arg);
 ATbool CFG_hasPropertyLanguage (CFG_Property arg);
 ATbool CFG_hasPropertyExtension (CFG_Property arg);
 ATbool CFG_hasPropertyLabel (CFG_Property arg);
@@ -1366,6 +1367,7 @@ ATbool CFG_hasPropertyMap (CFG_Property arg);
 char *CFG_getPropertyPath (CFG_Property arg);
 CFG_ActionDescriptionList CFG_getPropertyList (CFG_Property arg);
 char *CFG_getPropertyAction (CFG_Property arg);
+char *CFG_getPropertyEditor (CFG_Property arg);
 char *CFG_getPropertyLanguage (CFG_Property arg);
 char *CFG_getPropertyExtension (CFG_Property arg);
 char *CFG_getPropertyLabel (CFG_Property arg);
@@ -1375,6 +1377,7 @@ CFG_Property CFG_setPropertyPath (CFG_Property arg, const char *path);
 CFG_Property CFG_setPropertyList (CFG_Property arg,
 				  CFG_ActionDescriptionList list);
 CFG_Property CFG_setPropertyAction (CFG_Property arg, const char *action);
+CFG_Property CFG_setPropertyEditor (CFG_Property arg, const char *editor);
 CFG_Property CFG_setPropertyLanguage (CFG_Property arg, const char *language);
 CFG_Property CFG_setPropertyExtension (CFG_Property arg,
 				       const char *extension);
@@ -1545,6 +1548,7 @@ CFG_Property CFG_visitProperty (CFG_Property arg,
 				CFG_ActionDescriptionList (*acceptList)
 				(CFG_ActionDescriptionList),
 				char *(*acceptAction) (char *),
+				char *(*acceptEditor) (char *),
 				char *(*acceptLanguage) (char *),
 				char *(*acceptExtension) (char *),
 				char *(*acceptLabel) (char *),
