@@ -1,5 +1,10 @@
 
 
+Wed May  9 08:42:01 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/fbmp-edit-location.tb: will now start an editor with
+   parsing/structure editing capabilities if one is registered
+   via the configuration manager.
+
 Thu May  3 16:06:34 CEST 2007 <jurgenv@cwi.nl>
  * tbscripts/*.tb.src: removed all debug printf's, and superfluous
    brackets and superfluous comments.

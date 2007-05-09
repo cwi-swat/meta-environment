@@ -6,7 +6,7 @@ let
 in
   (
     rec-msg(fbmp-open-location(Location?))
-    . EditAnonymousLocation(Location)
+    . EditLocation(Location)
   )
   *
   delta
