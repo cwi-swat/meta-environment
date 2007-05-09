@@ -1,4 +1,5 @@
 configuration([
+  editor("StartSDFEditor","languages/sdf2/syntax/Sdf2",".sdf"),
   library-path("SDF Grammar Library","__SDF_LIBRARY__"),
   library-path("ASF+SDF Library","__ASF_LIBRARY__"),
   action([description(tree-panel, click)],

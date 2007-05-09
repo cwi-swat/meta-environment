@@ -1,5 +1,9 @@
 $Id$
 
+Wed May  9 08:43:08 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/sdf-editor-listeners.tb: changed to new editing interface.
+   and removed some dead code.
+
 Mon Apr 16 15:58:11 CEST 2007 <{kooiker,lankamp}@cwi.nl>
  * tbscripts/{start-def-dump,sdf-listerers,sdf-gui-listeners}.tb: removed gui
    specific includes from def-dump scenarion, added navigator gui to

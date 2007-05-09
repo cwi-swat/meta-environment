@@ -28,19 +28,6 @@ in
   . AnnotateTree(Tree, Filename, ResultTree?)
 endlet
 
-process CheckSort(Tree : term, SortName : str, Result : term?) is
-let
-  ResultTree : term
-in
-  CheckTreeSort(Tree, SortName, ResultTree?)
-  .
-  if not-equal(ResultTree, UNDEFINED) then
-    Result := true
-  else
-    Result := false
-  fi
-endlet
-
 process ApplyFunction(FuncName : str, SortName : str, Arguments : list, Tree : term?) is
   snd-msg(apply-function(FuncName, SortName, Arguments))
   . rec-msg(tree(Tree?))
