@@ -1,5 +1,15 @@
 # $Id$
 
+Wed May  9 08:39:03 CEST 2007 <jurgenv@cwi.nl>
+ * tbscript/editing.tb: some radical changes in the editing interface.
+   Starting up editors from an anonymous location is now supported via
+   the EditLocation(Location: term) process. This process uses the
+   configuration manager to ask for a specific edit process for this
+   extension. For example, for ".sdf" files a process may be registered
+   called "StartSDFEditor(Path,Area)". This process is required to 
+   spawn/create an editor. If no registered editor exists, for now an
+   editor without parsing or structured editing capabilities is started.
+
 Wed Mar 21 11:06:42 CET 2007 <jurgenv@cwi.nl>
  * tbscript/parse-utils.tb: reactivated support for parsing with
    heuristic disambiguation filters. Otherwise all specifications break.

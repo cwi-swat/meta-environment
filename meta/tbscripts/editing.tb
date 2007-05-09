@@ -11,20 +11,10 @@
 #include <editor-error-display.tb>
 #include <text-utils.tb>
 
-process EditAnonymousLocation(Location: term) is
-let
-  Pid : int,
-  Sid : session-id,
-  Path : str
-in
-  snd-msg(get-location-filename(Location))
-  . rec-msg(location-filename(Path?))
-  . create(EditAnonymous(Path), Pid?)
-  . rec-msg(anonymous-editor-started(Path, Sid?))
-  . ShowLocation(Sid, Location)
-endlet
-
-process EditAnonymous(Path: str) is
+/**
+ * Starts an editor without a language for structure editing.
+ */
+process EditAnonymousLocation(Path: str, Area: term) is
 let
   AlreadyExists: bool,
   EditorType: term,
@@ -33,32 +23,30 @@ let
   Column: int,
   Sid: session-id
 in
-  Edit(Path, Sid?)
+  printf("Editing anonymous location: %s\n", Path)
+  . Edit(Path, Sid?)
   . EditorType := quote(anonymous-editor)
   . EditText(Sid, EditorType, AlreadyExists?)
-  . snd-msg(anonymous-editor-started(Path, Sid))
   .
   if equal(AlreadyExists, false) then
+    snd-msg(te-set-focus(Sid, Area))
+    .
     (
       MenuSelected(Sid, EditorType)
     +
       rec-msg(te-mouse-click-at-offset(Sid, Offset?))
-      . TODO("something useful maybe done here")
     +
       rec-msg(te-mouse-click-at-line-column(Sid, Line?, Column?))
-      . TODO("something useful maybe done here")
     +
       rec-msg(te-contents-changed(Sid))
-      . TODO("Kweetniet wat hier moet")
     )
     *
     EditorDisconnected(Sid)
     . DeleteSession(Sid)
   else
-    tau
+    snd-msg(te-set-focus(Sid, Area))
   fi
 endlet
-
 
 process DisplayMessage(EditorId : session-id, Message : str) is
   snd-msg(te-display-message(EditorId, Message))
@@ -112,27 +100,6 @@ in
   . snd-msg(te-clear-focus(Sid))
 endlet
 
-process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
-let
-  TreeSort: str
-in
-/*
-  snd-msg(se-check-tree-sort(Sort, Tree))
-  .
-  (
-    rec-msg(se-wrong-sort(TreeSort?))
-    . snd-note(ui-status(errorf("Top sort %s of tree does not match %s",
-                                [TreeSort, Sort])))
-    . RTree := UNDEFINED
-  +
-    rec-msg(se-sort-ok)
-    . RTree := Tree
-  )
-*/
-  TODO("NYI: checkTreeSort\n")
-  . RTree := Tree
-endlet
-
 process GetPath(Sid: session-id, Path: str?) is
   snd-msg(em-get-path(Sid))
   . rec-msg(em-path(Sid, Path?))
@@ -163,6 +130,11 @@ process IsTextEditorRegistered(Sid: session-id, Registered: bool?) is
     . Registered := false
   )
 
+/**
+ * This is the basic utility for constructing a new editor. Call it
+ * to start an fresh editor process, or to bring an existing editor
+ * to the front.
+ */
 process EditText(Sid: session-id, Type: term, AlreadyExists: bool?) is
 let
   Path: str,
@@ -261,6 +233,10 @@ in
   . PutCachedValue(TEXT_REPOSITORY, Path, Contents)
 endlet
 
+/**
+ * Default handler that an editor may use in its event loop
+ * for dealing with menu's
+ */
 process MenuSelected(Sid: session-id, EditorType: term) is
 let
   Action: str,
@@ -292,6 +268,10 @@ in
   )
 endlet
 
+/**
+ * Default handler that an editor may use in its event loop
+ * for dealing with mouse clicks
+ */
 process MouseClicked(Sid: session-id) is
 let
   Column: int,
@@ -325,6 +305,10 @@ in
   )
 endlet
 
+/**
+ * Default handler that an editor may use for synchronizing
+ * with the structure editor
+ */
 process OffsetHandler(Sid: session-id, Offset: int) is
 let
   Pid: int
@@ -454,22 +438,6 @@ in
   fi
 endlet
 
-process GetModuleByExtension(Path: str, ModuleId: module-id?) is
-let
-  Extension: str
-in
-  snd-msg(io-get-path-extension(Path))
-  . rec-msg(io-extension(Path, Extension?))
-  . snd-msg(get-extension-modulename(Extension))
-  .
-  (
-    rec-msg(extension-modulename(Extension, ModuleId?))
-  +
-    rec-msg(no-extension-modulename(Extension))
-    . ModuleId := UNDEFINED
-  )
-endlet
-
 process MoveCursorLeftAction(EditorId : session-id) is
   MoveCursor(EditorId, left)
 
@@ -496,35 +464,62 @@ in
   fi
 endlet
 
-process EditLocation(Pid: int, Location: term) is
+/**
+ * This process is the default function to call when you
+ * want to start an editor for a location. It uses the
+ * configuration manager to find out if for certain files
+ * (based on the extension) a specialized editor process
+ * has been registered. If not it starts an editor without
+ * parsing/structure editing capabilities. If an editor
+ * is already open for that file, it will not create a
+ * new editor.
+ */
+process EditLocation(Location: term) is
 let
   Extension: str,
+  EditorAction: str,
   Filename: str,
   Path: str,
   Prefix: str,
-  Sid: session-id
+  Sid: session-id,
+  Area: term
 in
   snd-msg(get-location-filename(Location))
   . rec-msg(location-filename(Path?))
+  . snd-msg(has-location-area(Location))
+  . 
+  (
+    rec-msg(location-has-area(Location))
+    . snd-msg(get-location-area(Location))
+    . rec-msg(location-area(Area?))
+  +
+    rec-msg(location-has-no-area(Location))
+    . Area := quote(area(0,0,0,0,0,0))
+  )
   . snd-msg(em-get-session-by-path(Path))
   .
   (
     rec-msg(em-session(Path, Sid?))
     . snd-msg(te-editor-to-front(Sid))
-    . snd-msg(session(Pid, Sid))
+    . snd-msg(te-set-focus(Sid, Area))
   +
     rec-msg(em-no-such-session(Path))
     . SplitFilename(Path, Filename?, Prefix?, Extension?)
-    . snd-msg(start-editor(Extension, Path))
-    . rec-msg(editor-started(Extension, Path))
-    . snd-msg(em-get-session-by-path(Path))
+    . snd-msg(cm-get-extension-editor(Extension))
     .
     (
-      rec-msg(em-session(Path, Sid?))
-      . snd-msg(session(Pid, Sid))
+      rec-msg(cm-extension-editor(Extension, EditorAction?))
+      . 
+      (
+        printf("warning: process %s not found, so using anonymous editor for %s\n", EditorAction, Path)
+        . EditAnonymousLocation(Path, Area)
+        +>
+        EditorAction(Path, Area)
+      )
     +
-      rec-msg(em-no-such-session(Path))
-      . snd-msg(no-such-session(Pid))
+      rec-msg(cm-no-extension-editor(Extension))
+      . printf("warning: using anonymous editor for %s\n", Path)
+      . EditAnonymousLocation(Path, Area)
     )
   )
 endlet
@@ -543,23 +538,10 @@ in
 endlet
     
 process ShowAreaAction(Message : str, Location : term) is
-let
-  Pid: int,
-  Subject : term
-in
-  snd-msg(es-make-subject(Message, Location))
-  . rec-msg(es-subject(Subject?))
-  . create(ShowSubjectHandler(Subject), Pid?)
-  . EditLocation(Pid, Location)
-endlet
+  EditLocation(Location)
 
 process ShowFeedbackLocation(Location : term) is
-let
-  Pid: int
-in
-  create(ShowErrorHandler(Location), Pid?)
-  . EditLocation(Pid, Location)
-endlet
+  EditLocation(Location)
 
 process ShowSubjectHandler(Subject: term) is
 let

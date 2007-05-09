@@ -31,12 +31,12 @@ process PromptForFile(Title : str,
 let
   Extension : str
 in
-  snd-msg(get-modulename-extension(Modulename))
+  snd-msg(cm-get-language-extension(Modulename))
   .
   (
-    rec-msg(modulename-extension(Modulename, Extension?))
+    rec-msg(cm-language-extension(Modulename, Extension?))
   +
-    rec-msg(no-modulename-extension(Modulename))
+    rec-msg(cm-no-language-extension(Modulename))
     . Extension := ".trm"
   )
   . snd-msg(ask-for-file(Title, Paths, Extension))
