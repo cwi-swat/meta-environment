@@ -45,7 +45,6 @@ static void usage() {
   int filterPriorityFlag        = FLT_getPriorityFlag();
   int filterRejectFlag          = FLT_getRejectFlag();
   int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
-  int filterUnrollCyclesFlag    = FLT_getUnrollCyclesFlag();
   int filterTopSort             = FLT_getSelectTopNonterminalFlag();
   int verboseFlag               = PARSER_getVerboseFlag();
   int debugFlag                 = PARSER_getDebugFlag;
@@ -60,9 +59,8 @@ static void usage() {
 	  "\t-2          : flatten to AsFix2ME                  [%s]\n"
 	  "\t-A          : ambiguities are treated as errors    [%s]\n"
 	  "\t-d          : toggle debug mode                    [%s]\n"
-	  "\t-f[cdeipru] : toggle filtering, or specific filter [%s]\n"
+	  "\t-f[cdeipr]  : toggle filtering, or specific filter [%s]\n"
 	  "\t  c         : remove cycles                        [%s]\n"
-	  "\t  u         : unroll cycles once                   [%s]\n"
       "\t  t         : direct preference                    [%s]\n"
       "\t  d         : indirect preference                  [%s]\n"
 	  "\t  e         : preference count                     [%s]\n"
@@ -86,7 +84,6 @@ static void usage() {
 	  flag(debugFlag), 
 	  flag(filterFlag),
       flag(filterRemoveCyclesFlag),
-      flag(filterUnrollCyclesFlag),
 	  flag(filterDirectPreferenceFlag),
 	  flag(filterIndirectPreferenceFlag),
 	  flag(filterPreferenceCountFlag),
@@ -110,7 +107,6 @@ static void handleFilterOptions(const char *arg) {
   int filterPriorityFlag        = FLT_getPriorityFlag();
   int filterRejectFlag          = FLT_getRejectFlag();
   int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
-  int filterUnrollCyclesFlag    = FLT_getUnrollCyclesFlag();
 
   if (arg == NULL) {
     filterFlag = !filterFlag;
@@ -139,9 +135,6 @@ static void handleFilterOptions(const char *arg) {
        case 't':
           filterDirectPreferenceFlag = !filterDirectPreferenceFlag;
           break;
-        case 'u': 
-          filterUnrollCyclesFlag = !filterUnrollCyclesFlag;
-          break;
         default:
           usage(); 
           exit(1);
@@ -163,7 +156,6 @@ static void handleFilterOptions(const char *arg) {
   FLT_setPriorityFlag(filterPriorityFlag);
   FLT_setRejectFlag(filterRejectFlag);
   FLT_setRemoveCyclesFlag(filterRemoveCyclesFlag);
-  FLT_setUnrollCyclesFlag(filterUnrollCyclesFlag);
 }
 
 static void handleOptions (int argc, char **argv) {

@@ -1,5 +1,17 @@
 $Id$
 
+Wed May  9 19:04:14 CEST 2007 <jurgenv@cwi.nl>
+ * src/parseForest/filters.c: reverted the code on unrolling cycles,
+   which was experimental. Next time, we'll do it on a branch :-)
+ * src/parseForest/filters.c: fixed a bug in the representation of cycles.
+   Maximal innermost sharing does not work when you have cycles. The reason
+   is of course that the identity of a tree containing a cycle is not
+   defined by its children alone anymore. The bugfix turns off sharing
+   for all levels that have a cycle in them. 
+   WARNING: this may slow down the parser again, since we used a naive
+   way of storing/retrieving which levels have cycles. To be improved
+   probably by using a more efficient data-structure.
+
 Tue May  8 10:13:32 CEST 2007 <jurgenv@cwi.nl>
  * src/parseForest/filters.c: fixed an incompatibility with previous
    versions. The indirect preference filter checked for user defined

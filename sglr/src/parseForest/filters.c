@@ -67,11 +67,11 @@ static ATermTable resolvedtable = NULL;
  */
 static ATermTable postable = NULL;
 
-static ATermTable unrolledCycleTable = NULL;
-
 static InputString inputString;
 
 static ATermTable seenAmbiguities = NULL;
+
+static ATermIndexedSet cyclicLevels = NULL;
 
 /** 
  * Counts the (non-nested) avoided productions in the given tree.
@@ -1166,85 +1166,6 @@ static PT_Args detectAmbiguity(PT_Tree t, const size_t *pos, ATbool inAmbs) {
   return (PT_Args)NULL;
 }
 
-static PT_Tree unrollCycle(PT_Args children, const int cycleLength, const size_t *pos);
-
-/** 
-* Unrolls the given tree, by duplicating the nodes in a bottom-up traversal. 
-* 
-* \param children the children of a non-ambiguous tree node.
-* \param cycleLength the depth from the root node of the forest to the last node in 
-*  the cyclic tree.
-* \param pos the position in the string of the last character encountered 
-*  during filtering.
-* 
-* \return the new, unrolled, children.
-*/
-static PT_Args unrollBranch(PT_Args children, const int cycleLength, const size_t *pos) {
-  /* for each node, check for ambiguity */
-  PT_Args newChildren = PT_makeArgsEmpty();
-
-  for (; !PT_isArgsEmpty(children); children = PT_getArgsTail(children)) {
-    PT_Tree t = PT_getArgsHead(children);
-    PT_Args ambiguity = detectAmbiguity(t, pos, ATfalse);
-    if (ambiguity) {
-      t = unrollCycle(ambiguity, cycleLength, pos);
-    }
-    else {
-      if (PT_isTreeAppl(t)) {
-        PT_Args tempChildren = unrollBranch(PT_getTreeArgs(t), cycleLength, pos);
-        t = PT_setTreeArgs(t, tempChildren);
-      }
-    }
-    newChildren = PT_makeArgsMany(t, newChildren);
-  }
-
-  return newChildren;
-}
-
-/** 
-* Unrolls a cycle in the given ambiguous tree once. The unrolling is done by 
-* using a bottom-up traversal to create duplicate nodes for the given tree. 
-* If the cycle was already unrolled then the cyclic node is returned.
-*
-* The idea is to unroll the cycle by duplicating nodes and then let the 
-* filtering filter the unrolled tree.
-* 
-* \param children the children of an ambiguity node.
-* \param cycleLength the depth from the root node of the forest to the last node in 
-*  the cyclic tree.
-* \param pos the position in the string of the last character encountered 
-*  during filtering.
-* 
-* \return the new ambiguity node at the top of the unrolled parse tree if the 
-*  tree passed in was not already unrolled, or the cycle node.
-*/
-static PT_Tree unrollCycle(PT_Args children, const int cycleLength, const size_t *pos) {
-  ATerm key = SG_CreateAmbiArgsKey(children, *pos);
-  PT_Args unrolledAmbiChildren = (PT_Args)ATtableGet(unrolledCycleTable, key);
-  PT_Args newChildren = NULL;
-  PT_Args newAmbiguousChildren = PT_makeArgsEmpty();
- 
-  if (!unrolledAmbiChildren) {
-    /* if the ambiguity has not already been unrolled once... */
-    ATtablePut(unrolledCycleTable, key, (ATerm) children);
-
-    /* for each ambiguous branch... */
-    for (; !PT_isArgsEmpty(children); children = PT_getArgsTail(children)) {
-      PT_Tree t = PT_getArgsHead(children);
-
-      newChildren = unrollBranch(PT_getTreeArgs(t), cycleLength, pos);
-      t = PT_makeTreeAppl(PT_getTreeProd(t), newChildren);
-      newAmbiguousChildren = PT_makeArgsMany(t, newAmbiguousChildren);
-    }
-    return PT_makeTreeAmb(newAmbiguousChildren);
-  }
-  else {
-    /* if the ambiguity was already unrolled once, return the cycle node... */
-    /*ATerm clusterIndex = SG_AmbiTablesGetIndex(PT_getArgsHead(unrolledAmbiChildren), *pos);
-*/
-    return createCycle(unrolledAmbiChildren, cycleLength);
-  }
-}
 
 /** 
  * 
@@ -1306,7 +1227,7 @@ static PT_Tree filterAmbiguityWithMemoization(ParseTable *pt, PT_Args ambiguousT
   ATerm key = SG_CreateAmbiArgsKey(ambiguousTrees, *pos);
   PT_Tree newTreeNode = (PT_Tree)ATtableGet(resolvedtable, key);
 
-  if (!newTreeNode) {
+  if ((ATindexedSetGetIndex(cyclicLevels, (ATerm) ATmakeInt(*pos)) != -1) || !newTreeNode) {
     SG_setLevel(clusterIndex, level);
     newTreeNode = filterAmbiguity(pt, ambiguousTrees, pos, cycle, level);
     SG_unsetLevel(clusterIndex);
@@ -1383,20 +1304,12 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
     if (ambiguity) {
       ATerm clusterIndex = SG_AmbiTablesGetIndex(t, *pos);
       if (detectCycle(clusterIndex)) {
-        if (FLT_getUnrollCyclesFlag()) {
-          PT_Tree unrolledTree = unrollCycle(ambiguity, level-SG_getLevel(clusterIndex), pos);
-          if (!PT_isTreeCycle(unrolledTree)) {
-            ambiguity = PT_getTreeArgs(unrolledTree);
-          } 
-          else {
-            return unrolledTree;
-          }
-        }
-        else {
-          return createCycle(ambiguity, level-SG_getLevel(clusterIndex));
-        }
+	ATindexedSetPut(cyclicLevels, (ATerm) ATmakeInt(*pos), NULL);
+	return createCycle(ambiguity, level-SG_getLevel(clusterIndex));
       }
-      t = filterAmbiguityWithMemoization(pt, ambiguity, pos, cycle, clusterIndex, level);
+
+      t = filterAmbiguityWithMemoization(pt, ambiguity, pos, cycle, 
+					 clusterIndex, level);
     }
     else {
       t = filterTree(pt, t, pos, cycle, level);
@@ -1494,7 +1407,7 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    resolvedtable = ATtableCreate(2048, 75);
    postable = ATtableCreate(2048, 75);
    seenAmbiguities = ATtableCreate(2048, 75);
-   unrolledCycleTable = ATtableCreate(2048, 75);
+   cyclicLevels = ATindexedSetCreate(2048, 75);
 
    if (PARSER_getVerboseFlag() == ATtrue) {
      FLT_resetClustersVisitedCount();
@@ -1529,7 +1442,7 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    ATtableDestroy(resolvedtable);
    ATtableDestroy(postable);
    ATtableDestroy(seenAmbiguities);
-   ATtableDestroy(unrolledCycleTable);
+   ATindexedSetDestroy(cyclicLevels);
 
    if (!newT) {
      return (PT_ParseTree) NULL;
