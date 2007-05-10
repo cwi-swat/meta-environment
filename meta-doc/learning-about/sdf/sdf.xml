@@ -482,6 +482,71 @@
     </section>
   </section>
 
+  <section>
+    <title>Overview</title>
+
+    <para>Every SDF grammar has a life-cycle, just like any other software
+    has. This is the life-cycle of an SDF grammar:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>A user types in the modules of an SDF grammar, production rules
+        and disambiguation constructs.</para>
+      </listitem>
+
+      <listitem>
+        <para>The modules are concatenated into one single definition</para>
+      </listitem>
+
+      <listitem>
+        <para>The syntax definition is checked for trivial errors by the
+        <command>sdf-checker</command>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The syntax and the disambiguation constructs in the definition
+        are "normalized" to "kernel SDF", by removing all syntactic sugar
+        (expanding macros) and some other stuff.</para>
+      </listitem>
+
+      <listitem>
+        <para>The syntax is used to generate an SLR(1) parse table, and the
+        disambiguation constructs are used to filter some reductions from the
+        parse table</para>
+      </listitem>
+
+      <listitem>
+        <para>The resulting parse table can be used by the SGLR tool to parse
+        strings. SGLR uses some of the disambiguation constructs to filter at
+        parse time, and just after it</para>
+      </listitem>
+
+      <listitem>
+        <para>SGLR outputs a parse forest (or possibly a single parse tree, or
+        a parse error)</para>
+      </listitem>
+
+      <listitem>
+        <para>Other (back-end) tools take the parse forest and do
+        stuff.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>At any point in this process something may be erroneous and the
+    process starts from step 1. Step 3, 4, and 5 are done by the
+    <command>sdf2table</command> commandline tool, or by the ASF+SDF
+    Meta-Environment. The 6 and 7 are done by the <command>sglr</command>
+    commandline tool, or by the ASF+SDF Meta-Environment. Step 8 is open to
+    any other tool that can read ATerms (the output format of
+    <command>sglr</command>).</para>
+
+    <para>One more thing, SDF definitions are not only used as input to parser
+    generators. There are tools that generate libraries for syntax tree
+    manipulation, and tools that analyze syntax definitions for example.
+    Recall that the primary goal of SDF is syntax definition, parser
+    generation is the most important secondary.goal of SDF.</para>
+  </section>
+
   <section xml:id="Modules">
     <title xml:id="modules">Modules and Modular Structure</title>
 
