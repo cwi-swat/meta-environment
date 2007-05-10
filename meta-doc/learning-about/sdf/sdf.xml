@@ -626,7 +626,7 @@
     parts of SDF.</para>
 
     <section xml:id="Literal">
-      <title>Literal</title>
+      <title>Literal symbols</title>
 
       <para>A <emphasis>literal</emphasis> symbol defines a fixed length word.
       This usually corresponds to a terminal symbol in ordinary BNF grammars,
@@ -669,7 +669,7 @@
     </section>
 
     <section xml:id="Sort">
-      <title xml:id="sort">Sort</title>
+      <title xml:id="sort">Sort symbols</title>
 
       <para>A sort corresponds to a non-terminal, e.g.,
       <literal>Bool</literal>. Sort names always start with a capital letter
@@ -694,7 +694,7 @@
     </section>
 
     <section xml:id="CharacterClass">
-      <title> Character Class</title>
+      <title> Character class symbols</title>
 
       <para>Enumerations of characters occur frequently mostly in lexical
       definitions. They can be abbreviated by using <emphasis>character
@@ -807,7 +807,7 @@
     </section>
 
     <section xml:id="OptionOperator">
-      <title>Option</title>
+      <title>Optional symbols</title>
 
       <para>The postfix option operator <literal>?</literal> describes an
       optional part in a syntax rule. For instance,
@@ -839,7 +839,7 @@
     </section>
 
     <section xml:id="RepetitionOperator">
-      <title>Repetition</title>
+      <title>Repetition or list symbols</title>
 
       <para>Repetition operators express that a symbol should occur several
       times. In this way it is possible to construct flat lists and therefore
@@ -886,7 +886,7 @@
     </section>
 
     <section xml:id="AlternativeOperator">
-      <title>Alternative</title>
+      <title>Alternative symbols</title>
 
       <para>The alternative operator <literal>|</literal> expresses the choice
       between two symbols, e.g., <literal>"true" | "false"</literal>
@@ -905,7 +905,7 @@
     </section>
 
     <section xml:id="Labels">
-      <title>Labels</title>
+      <title>Labelled symbols</title>
 
       <para>It is possible to decorate the symbols with labels. The labels
       have no semantics in SDF, and will be removed before parsetable
@@ -921,7 +921,7 @@ is replaced by
     </section>
 
     <section xml:id="TupleOperator">
-      <title>Tuple</title>
+      <title>Tuple symbols</title>
 
       <para>The tuple operator describes the grouping of a sequence of symbols
       of a fixed length into a tuple. The notation for tuples is <literal>&lt;
@@ -943,7 +943,7 @@ is replaced by
     </section>
 
     <section xml:id="FunctionOperator">
-      <title>Function</title>
+      <title>Function symbols</title>
 
       <para>The function operator <literal>(...=&gt;...)</literal> allows the
       definition of function types. Left of <literal>=&gt;</literal> zero or
@@ -988,6 +988,27 @@ is replaced by
       <programlisting>`"foo"` is replaced by "\"foo\""
 `A ?"` is replaced by ("A" "?")
 `{A ","}+` is replaced by ("{" "A" "\",\"" "}" "+") </programlisting>
+    </section>
+
+    <section>
+      <title>LAYOUT symbol</title>
+
+      <para>The <literal>LAYOUT</literal> symbol is a reserved sort name. SDF
+      does not generate any productions for it. Instead for all
+      <literal>context-free syntax</literal> grammars it will distribute
+      <literal>LAYOUT?</literal> between all members of the left-hand sides of
+      all productions. Note that the "?" in <literal>LAYOUT?</literal> will
+      take care of some production generation. The user must define all
+      alternatives for <literal>LAYOUT</literal> herself. Example:</para>
+
+      <programlisting>[\ \t\n] -&gt; <emphasis role="bold">LAYOUT</emphasis></programlisting>
+
+      <para>Note that LAYOUT may only be defined in <literal>lexical
+      syntax</literal> grammars. The LAYOUT non-terminal is used by back-ends
+      (independent of SDF) to find out what is irrelevant about a parse tree
+      and what is relevant. Still, SDF does not attribute any additional
+      semantics to it. It is just a non-terminal that is distributed over
+      context-free productions.</para>
     </section>
   </section>
 
@@ -1047,24 +1068,20 @@ is replaced by
     <section xml:id="Imports">
       <title xml:id="imports">Imports</title>
 
-      <!--\index{imports@{\tt imports}} \index{{\tt <ImportSection>}@{\tt <ImportSection>} -->
-
-      <para>Each <literal>&lt;ImportSection&gt;</literal> starts with the
+      <para>Apart from the import sections at the beginnig of each module,
+      there may be an arbitrary number of import grammar spread through a
+      module. Each <literal>&lt;ImportSection&gt;</literal> starts with the
       keyword <literal>imports</literal> followed by zero or more module
       names: <programlisting><emphasis role="bold">imports</emphasis>
-  &lt;ModuleName&gt;*</programlisting>Modules can be combined by importing one
-      module in another. Imports can occur as
-      <literal>&lt;ImportSection&gt;</literal> at the topmost level of a
-      module or they can occur within an exports or hiddens section. When
-      importing modules at the topmost level of a module or when the import
-      section occurs within the scope of an exports keyword, all exported
-      entities of the imported module (and of all modules that are imported
-      indirectly by it) become available in the importing module. In addition,
-      they are also exported by the importing module. However, if the import
-      section occurs within the scope of a hiddens keyword, the exported
-      entities are only visible in the importing module but they are not
-      exported by the importing module. An imported module can be
-      parameterized or decorated with <link
+  &lt;ModuleName&gt;*</programlisting>When importing modules at the topmost
+      level of a module or when the import section occurs within the scope of
+      an exports keyword, all exported entities of the imported module (and of
+      all modules that are imported indirectly by it) become available in the
+      importing module. In addition, they are also exported by the importing
+      module. However, if the import section occurs within the scope of a
+      hiddens keyword, the exported entities are only visible in the importing
+      module but they are not exported by the importing module. An imported
+      module can be parameterized or decorated with <link
       linkend="SymbolRenaming">renamings</link>. The name of the imported
       module can also be a compound module name. In <link
       linkend="CODE_sdfcomment">the definition of the SDF comments</link> the
@@ -1075,56 +1092,64 @@ is replaced by
     <section xml:id="Aliases">
       <title>Aliases</title>
 
-      <para>In ordinary programming it is good practice to use named constants
-      to represent literals or constant values. In SDF it is good practice to
-      give a name (alias') to complicated symbols that occur repeatedly in the
-      specification. An alias is thus a named abbreviation for a complicated
-      symbol and has the following form:</para>
+      <para>Aliases are similar to productions but not quite. An alias is used
+      to define a short hand for a complex or otherwise cumbersome
+      symbol.</para>
 
       <programlisting><emphasis role="bold">aliases</emphasis>
   &lt;Sort<subscript>1</subscript>&gt; -&gt; &lt;Sort<subscript>2</subscript>&gt;</programlisting>
 
       <para>where the alias Sort<subscript>2</subscript> is given to
-      Sort<subscript>1</subscript>.</para>
+      Sort<subscript>1</subscript>. An example is ("{" | "&lt;:") from the C
+      programming language. Instead of having to repeat that everywhere you
+      may write:</para>
 
-      <para>For example,<programlisting>aliases
-  &lt;Bool, Int, Id&gt; -&gt; Tuple3</programlisting>introduces the alias
-      Tuple3 for the symbol <literal>&lt;Bool, Int, Id&gt;</literal> and
-      instead of using <literal>&lt;Bool, Int, Id&gt;</literal> one can use
-      the alias <literal>Tuple3</literal>. During parse table generation the
-      alias is replaced by the actual symbol. It is not allowed to give an
-      alias for an alias or to redefine aliases. For example, the following
-      definitions are illegal:<programlisting>aliases
-  Tuple3          -&gt; SuperTuple
-  &lt;Bool, Int, Id&gt; -&gt; Tuple3</programlisting>(Illegal, since an alias
-      is defined for the alias {\tt Tuple3}.)<programlisting>aliases
-  &lt;Bool, Int, Id&gt; -&gt; Tuple3
-  &lt;Bool, Int&gt;     -&gt; Tuple3</programlisting>(Illegal, since the alias
-      <literal>Tuple3</literal> is redefined.) Note, the aliases are a
-      convenient short hand for more complex symbols, but a drawback is that
-      during parse table generation the aliases completely disappear. They are
-      replaced by the actual symbols. This can have some unexpected behaviour
-      when parsing or reducing terms.</para>
+      <programlisting><emphasis role="bold">aliases</emphasis>
+  ("{" | "&lt;:") -&gt; BracketOpen</programlisting>
+
+      <para>Aliases are tricky. There are a number of rules you should adhere
+      to:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Aliases may not define eachother</para>
+        </listitem>
+
+        <listitem>
+          <para>Aliased symbols may not be redefined by another alias</para>
+        </listitem>
+
+        <listitem>
+          <para>Don't forget that aliases are replaced everywhere, even on the
+          right-hand sides of productions</para>
+        </listitem>
+
+        <listitem>
+          <para>Several known other back-ends of SDF deal badly with aliases
+          (see the next point).</para>
+        </listitem>
+
+        <listitem>
+          <para>Be aware of the non-traceability of aliases, because they are
+          substituted before parse table generation time, you will not find
+          them in your parse trees or abstract syntax trees.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="Sorts">
-      <title>Sorts</title>
+      <title>Sort declarations</title>
 
       <para>Sorts are declared by listing their name in a sorts section of the
       form:<programlisting><emphasis role="bold">sorts</emphasis>
   &lt;Symbol&gt;*</programlisting>Only plain <literal>Sort</literal>s and
-      parameterized <literal>Sort</literal>s can be declared in the
-      <literal>sorts</literal> section, but more complex
-      <literal>Symbol</literal>s will be syntactically recognized, but the
-      <link linkend="WellformednessSDF">sdf-checker</link> will generate a
-      warning. It is required that all sorts that occur in some symbol in the
-      specification are declared. Recall that a sort name should start with a
-      capital letter and may be followed by letters and/or digits. Hyphens
-      (<literal>-</literal>) may be embedded in sort names. There is one
-      predefined sort name <literal>LAYOUT</literal>. It is described in <link
-      linkend="LexicalSyntax">Lexical Syntax</link>. It is not allowed (or
-      necessary) to define the sorts <literal>LAYOUT</literal> and
-      <literal>CHAR</literal>. These two sorts are always available.</para>
+      parameterized <literal>Sort</literal>s should declared in the
+      <literal>sorts</literal> section. The <link
+      linkend="WellformednessSDF">sdf-checker</link> will generate a warnings.
+      The checker requires that all sorts that occur in some symbol in the
+      specification are declared. Note however that the sorts declaration does
+      not carry any semantics other than simply declaring a name. The checker
+      uses this to warn the SDF user for possible typos. </para>
     </section>
 
     <section xml:id="Productions">
@@ -1138,6 +1163,11 @@ is replaced by
 
       <programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt;</programlisting>
 
+      <para>A production is read as the <emphasis>definition</emphasis> of a
+      symbol. The symbol on the right-hand side is
+      <emphasis>defined</emphasis> by the left-hand side of the production.
+      </para>
+
       <para>The symbols in a production can be arbitrarily complex but the
       implementation may impose some limitations on this. Productions are used
       to describe lexical as well as context-free syntax, variables and
@@ -1150,7 +1180,27 @@ is replaced by
       writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
       in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
       the left- and right-hand side of the production rules are swapped.
-      </para>
+      Otherwise the meaning of an SDF production is the same as a BNF
+      production. Notice however that there is a difference with the |
+      operator. When we write the following in BNF:</para>
+
+      <programlisting>A ::= C | D | E</programlisting>
+
+      <para>We would write this in SDF:</para>
+
+      <programlisting>C -&gt; A
+D -&gt; A
+E -&gt; A</programlisting>
+
+      <para>Or, we could use the alternative symbol, but that does generate a
+      different grammar:</para>
+
+      <programlisting>C | D | E -&gt; A
+will generate the following grammar:
+C | D | E -&gt; A
+C         -&gt; C | D | E
+D         -&gt; C | D | E
+E         -&gt; C | D | E</programlisting>
 
       <section xml:id="Attributes">
         <title>Attributes</title>
@@ -1247,55 +1297,40 @@ is replaced by
 
       <para>Lexical syntax describes the low-level structure of text while
       context-free syntax describes the higher-level structure. In SDF, these
-      two aspects of syntax are defined in a very uniform manner. In fact, the
-      same production rules are used to describe lexical and concrete syntax.
-      The only difference between the two is that lexical productions (i.e.,
-      productions appearing in a lexical syntax section) accept only input
-      text as described exactly by the elements in the production, while
-      context-free productions accept input text in which layout may appear
-      between the elements as described by the production.</para>
+      two aspects of syntax are defined in a very uniform manner. In fact,
+      <emphasis>production rules</emphasis> are used to describe both lexical
+      and concrete syntax.</para>
 
-      <para>At the implementation level, both lexical and context-free syntax
-      are implemented using a single parsing technique. Technically, there
-      exist only <emphasis>syntax</emphasis> sections. Both lexical syntax
-      sections and context-free syntax sections are transformed into such
-      syntax sections after appropriate insertion of optional layout between
-      the elements of context-free productions. In rare cases, the
-      specification writer may want to control this process explicitly and
-      write syntax sections directly.</para>
+      <para>The only difference between the two is that context-free
+      productions are pre-processed somewhat extensively by SDF before parser
+      generation, while lexical productions are not. And, it is important to
+      note that symbols defined in lexical syntax and symbols defined in
+      context-free syntax are in separate name-spaces. Example:</para>
+
+      <programlisting><emphasis role="bold">lexical syntax</emphasis>
+  "a" -&gt; A
+<emphasis role="bold">context-free syntax</emphasis>
+  "b" -&gt; A</programlisting>
+
+      <para>Here we are defining two different A's: one lexical and one
+      context-free. The two definitions are automatically linked by SDF by the
+      following transformation:</para>
+
+      <programlisting> "a"     -&gt; &lt;A-LEX&gt;
+ &lt;A-LEX&gt; -&gt; &lt;A-CF&gt;
+ "b"     -&gt; &lt;A-CF&gt;</programlisting>
 
       <section>
         <title xml:id="LexicalSyntax">Lexical Syntax</title>
 
-        <para>The lexical syntax describes the low level structure of text by
-        means of <emphasis>lexical tokens</emphasis>. The lexical syntax also
-        defines which substrings of the text are layout symbols or comments
-        and are to be skipped. A lexical syntax consists of a list of
-        <emphasis>productions</emphasis>.</para>
-
-        <para>The sort name <literal>LAYOUT</literal> is predefined and may
-        not be redeclared. <literal>LAYOUT</literal> defines which parts of
-        the text are <emphasis>layout symbols</emphasis> (also known as
-        <emphasis>white space</emphasis>) between lexical tokens and are to be
-        skipped during lexical analysis. It may only be used as result sort of
-        productions in a lexical syntax section. When a string is matched by
-        both a <literal>LAYOUT</literal> function and by other
-        non-<literal>LAYOUT</literal> productions, then the interpretation as
-        layout symbol is ignored. <literal>LAYOUT</literal> is typically used
-        for defining layout and comment conventions.</para>
-
-        <para>For each production in a lexical syntax section, a
-        <emphasis>lexical constructor function is automatically
-        added</emphasis>. Lexical constructor productions are used to
-        construct and deconstruct lexical syntax using patterns. For each
-        production <literal>A B C -&gt; D</literal> in a lexical syntax
-        section, the generated constructor function is of the form: <literal>d
-        "(" A B C ")" -&gt; D</literal>. Here, <literal>d</literal> is the
-        name of the sort <literal>D</literal> written in lowercase letters
-        only. The lexical constructor functions are considerably different
-        from previous versions, when SDF had <emphasis>flat lexical
-        constructors</emphasis>. Since version 2.0 <emphasis>fully structured
-        lexical constructors</emphasis> are supported.</para>
+        <para>The lexical syntax usually describes the low level structure of
+        programs (often referred to as <emphasis>lexical tokens</emphasis>.)
+        However, in SDF the token concept is not really relevant, since only
+        character classes are terminals. The lexical syntax grammars in SDF
+        are simply a convenient notation for the low level syntax of a
+        language. The <literal>LAYOUT</literal> symbol should also be
+        definined in a lexical syntax grammar. A lexical syntax consists of a
+        list of <emphasis>productions</emphasis>.</para>
 
         <para>Lexical syntax is described as follows:</para>
 
@@ -1306,22 +1341,42 @@ is replaced by
       <section xml:id="ContextFreeSyntax">
         <title>Context-free syntax</title>
 
-        <para>The context-free syntax describes the concrete and abstract
-        syntactic structure of sentences in a language. A context-free syntax
-        contains a set of declarations for <emphasis>productions</emphasis>.
-        Elements of the left-hand side of a context-free function are
-        separated by an invisible non-terminal <literal>LAYOUT?</literal>
-        (optional <literal>LAYOUT</literal>) in order to permit layout between
-        these members. This optional layout non-terminal is automatically
-        inserted. Context-free syntax has the form:</para>
+        <para>The context-free syntax describes the more high-level syntactic
+        structure of sentences in a language. A context-free syntax contains a
+        list of <emphasis>productions</emphasis>. Elements of the left-hand
+        side of a context-free function pre-processed before parser generation
+        by adding the LAYOUT? symbol everywhere.Context-free syntax has the
+        form:</para>
 
         <programlisting><emphasis role="bold">context-free syntax</emphasis>
    &lt;Production&gt;*</programlisting>
+
+        <para>As an example, consider the way SDF pre-processes the following
+        grammar:</para>
+
+        <programlisting>context-free syntax
+  "{" Stat* "}" -&gt; Block
+
+is pre-processed to:
+
+"{" LAYOUT? Stat* LAYOUT? "}" -&gt; Block
+
+which will be then wrapped as in:
+
+"{" &lt;LAYOUT?-CF&gt; &lt;Stat*-CF&gt; &lt;LAYOUT?-CF&gt; "}" -&gt; &lt;Block-CF&gt;</programlisting>
+
+        <para>The resulting definitions may look complex, but in fact there
+        are only non-terminals and production rules. The complexity stems from
+        the names of the non-terminals.</para>
+
+        <warning>
+          <para>Jurgen: continue here.</para>
+        </warning>
       </section>
     </section>
 
     <section xml:id="ContextFreeStartSymbols">
-      <title>Lexical and Context-free start-symbols</title>
+      <title>Lexical and context-free start-symbols</title>
 
       <para>Via the lexical or context-free start symbols section the symbols
       are explicitly defined which will serve as start symbols when parsing
