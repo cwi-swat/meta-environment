@@ -621,6 +621,10 @@
     provides additional semantics to SDF's symbols (but only after
     parsing).</para>
 
+    <para>Symbols are an orthogonal feature of SDF. All symbols of SDF are
+    allowed in both lexical and context-free syntax, priorities and other
+    parts of SDF.</para>
+
     <section xml:id="Literal">
       <title>Literal</title>
 
@@ -900,6 +904,22 @@
 ";" -&gt; "," | ";"</programlisting>
     </section>
 
+    <section xml:id="Labels">
+      <title>Labels</title>
+
+      <para>It is possible to decorate the symbols with labels. The labels
+      have no semantics in SDF, and will be removed before parsetable
+      generation. Other tools that take SDF definitions as input, such as API
+      generators make use of the labels.</para>
+
+      <para>So, labels are removed by replacing the labelled symbol with the
+      symbol, as in:</para>
+
+      <programlisting>mylist:{elem:Stat sep:";"}+
+is replaced by
+{Stat ";"}+</programlisting>
+    </section>
+
     <section xml:id="TupleOperator">
       <title>Tuple</title>
 
@@ -1120,67 +1140,52 @@
 
       <para>The symbols in a production can be arbitrarily complex but the
       implementation may impose some limitations on this. Productions are used
-      to describe lexical as well as context-free syntax. All productions with
-      the same result sort together define the alternatives for that symbol.
-      Spaces are only significant inside strings and character classes.</para>
+      to describe lexical as well as context-free syntax, variables and
+      lexical variables. Productions also occur in priority grammars. All
+      productions with the same result sort together define the alternatives
+      for that symbol. </para>
 
       <para>The most striking (but also most trivial) difference between SDF
       and EBNF is the way the production rules are written in SDF. In EBNF one
       writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
       in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
-      the left- and right-hand side of the production rules are swapped. The
-      reason is that SDF takes a more syntax tree oriented view and considers
-      a such a rule as the definition of a function with arguments
-      <literal>D</literal> and <literal>S</literal> and result type
-      <literal>P</literal>.</para>
+      the left- and right-hand side of the production rules are swapped.
+      </para>
 
       <section xml:id="Attributes">
         <title>Attributes</title>
 
-        <!--\index{attribute@attribute}-->
-
-        <para>The definition of a lexical or context-free productions may be
-        followed by <emphasis>attributes</emphasis> that define additional
-        (syntactic or semantic) properties of that function. The attributes
-        are written between curly brackets after the non-terminal in the right
-        hand side. If a production rule has more than one attribute they are
-        separated by commas. Productions with attributes have thus the
-        following form:<programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt; <emphasis
+        <para>The definition of a lexical, context-free productions and
+        variables may be followed by <emphasis>attributes</emphasis> that
+        define additional (syntactic or semantic) properties of that function.
+        The attributes are written between curly brackets after the
+        non-terminal in the right hand side. If a production rule has more
+        than one attribute they are separated by commas. Productions with
+        attributes have thus the following form:<programlisting>&lt;Symbol&gt;* <emphasis
+              role="bold">-&gt;</emphasis> &lt;Symbol&gt; <emphasis
               role="bold">{</emphasis> &lt;Attribute1&gt;<emphasis role="bold">,</emphasis> &lt;Attribute2&gt;<emphasis
               role="bold">,</emphasis> ...<emphasis role="bold">}</emphasis></programlisting>
         The following syntax-related attributes exist:</para>
 
-        <!--\index{bracket attribute@bracket attribute}
-
-\index{left attribute@left attribute} \index{right attribute@right attribute} \index{non-assoc attribute@non-assoc attribute}
-
-\index{assoc attribute@assoc attribute}
-
-\index{prefer attribute@prefer attribute}
-
-index{avoid attribute@avoid attribute}
-
-\index{reject attribute@reject attribute}
-
--->
-
         <itemizedlist>
           <listitem>
-            <para><literal>bracket</literal> allows the definitions of
-            parenthesis and other kinds of brackets that are mostly used for
-            overruling the priorities of operators in expressions (see <link
-            linkend="BracketFunctions">Bracket Productions</link>).</para>
+            <para><literal>{bracket}</literal> is an attribute without a
+            meaning. It is not used by SDF, but some back-ends use it. For
+            example, the <command>restore-brackets</command> tool uses the
+            bracket attribute to find productions to add to a parse tree
+            before pretty printing (when the tree violates priority
+            constraints).</para>
           </listitem>
 
           <listitem>
-            <para><literal>left</literal>, <literal>right</literal>,
-            <literal>non-assoc</literal>, and <literal>assoc</literal> are
-            used to define the associativity of productions (see <link
+            <para><literal>{left</literal>, <literal>right</literal>,
+            <literal>non-assoc</literal>, <literal>assoc}</literal> are used
+            to define the associativity of productions (see <link
             linkend="Priorities">Priorities</link>).</para>
           </listitem>
 
           <listitem>
-            <para><literal>prefer</literal> is used to indicate that the
+            <para><literal>{prefer}</literal> is used to indicate that the
             attributed function should always be preferred over other
             productions (without this attribute) in certain cases of syntactic
             ambiguity (see <link linkend="PreferAvoidReject">Preferring,
@@ -1188,14 +1193,15 @@ index{avoid attribute@avoid attribute}
           </listitem>
 
           <listitem>
-            <para><literal>avoid</literal> is used to indicate that a function
-            should only be used as a last resort in certain cases of syntactic
-            ambiguity (see <link linkend="PreferAvoidReject">Preferring,
-            Avoiding or Rejecting Parses}</link>).</para>
+            <para><literal>{avoid}</literal> is used to indicate that a
+            function should only be used as a last resort in certain cases of
+            syntactic ambiguity (see <link
+            linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+            Parses}</link>).</para>
           </listitem>
 
           <listitem>
-            <para><literal>reject</literal> can be used to explicitly forbid
+            <para><literal>{reject}</literal> can be used to explicitly forbid
             certain syntactic construct (see <link
             linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
             Parses</link>).</para>
@@ -1204,20 +1210,20 @@ index{avoid attribute@avoid attribute}
 
         <itemizedlist>
           <listitem>
-            <para>Arbitrary ATerms may also be used as attributes. The
-            <literal>cons</literal> attribute is used by other tools, such as
-            <productname>ApiGen</productname>.</para>
+            <para>Arbitrary ATerms may also be used as attributes. Actually
+            {bracket} is one example. Another frequently occuring non-SDF
+            attribute is {cons("&lt;name&gt;")}. There are tools that use this
+            cons attribute to construct abstract syntax trees or to generated
+            API's in C or Java to manipulate syntax trees.</para>
           </listitem>
         </itemizedlist>
 
         <para>Not all combinations of attributes make sense. If one uses the
         attribute <literal>left</literal> in combination with
-        <literal>bracket</literal>, <literal>right</literal>,
-        <literal>assoc</literal> or <literal>non-assoc</literal>, this will
-        result in an error message. The combination of
-        <literal>avoid</literal> and <literal>prefer</literal> does not make
-        sense either. Furthermore, the combination of the traversal attributes
-        is also very strict.</para>
+        <literal>right</literal>, <literal>assoc</literal> or
+        <literal>non-assoc</literal>, this will result in an error message.
+        The combination of <literal>avoid</literal> and
+        <literal>prefer</literal> does not make sense either. </para>
       </section>
 
       <section xml:id="PrefixFunctions">
@@ -1226,18 +1232,13 @@ index{avoid attribute@avoid attribute}
         <para><emphasis>Prefix functions</emphasis> are a special kind of
         productions. They have a prefix syntax and are an abbreviation
         mechanism for productions written as expected. For instance the
-        function <literal>f(X,Y) -&gt; Z</literal> is a prefix function. This
-        function can also be defined as an ordinary context-free function
-        <literal>"f" "(" X "," Y ")" -&gt; Z</literal>.</para>
-      </section>
+        function <literal>f(X,Y) -&gt; Z</literal> is a prefix function. SDF
+        automatically replaces all prefix productions by a normal productions.
+        Example:</para>
 
-      <section xml:id="Labels">
-        <title>Labels</title>
-
-        <para>It is possible to decorate the symbols in the left-hand side of
-        a production rule with labels. These labels have no effect when
-        parsing input terms. However, when an SDF module is used as input for
-        generating APIs these labels will be used.</para>
+        <programlisting>f(X,Y) -&gt; Z {cons("f")} 
+is replaced by
+"f" "(" X "," Y ")" -&gt; Z {cons("f")}</programlisting>
       </section>
     </section>
 
