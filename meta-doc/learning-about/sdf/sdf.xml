@@ -60,7 +60,7 @@
       </listitem>
 
       <listitem>
-        <para>prepare yourself for the semantic analysis of programming or
+        <para>get a front-end for the semantic analysis of programming or
         application languages,</para>
       </listitem>
     </itemizedlist>
@@ -68,49 +68,121 @@
     <para>then SDF may be the right technology to use.</para>
 
     <section>
-      <title xml:id="YetAnotherFormalism">Why using SDF?</title>
+      <title xml:id="YetAnotherFormalism">Why use SDF?</title>
 
-      <para>The Syntax Definition Formalism SDF is intended for the
-      high-level, modular, description of grammars for programming languages,
-      application languages, domain-specific languages, data formats and other
-      computer-based formal languages.</para>
+      <para>The Syntax Definition Formalism SDF is intended for the high-level
+      description of grammars for programming languages, application
+      languages, domain-specific languages, data formats and other
+      computer-based formal languages. The primary goal of any SDF definition
+      is the description of syntax. The secondary goal is to generate a
+      working parser from this definition. A parser is a tool that takes a
+      string that represents a program as input and outputs a tree that
+      represents the same program in a more structured form. SDF is based
+      mainly on context-free grammars, like EBNF is. It has a number of
+      additions that make it more apt to describe the syntax of really complex
+      programming languages. Especially the languages that were not originally
+      designed to be formally defined, or to have parsers generated for, are
+      the ones that SDF is meant to be applicable to.</para>
 
-      <para>SDF allows the simultaneous definition of concrete (i.e., lexical
-      and context-free) and abstract syntax and implicitly defines a
-      translation from text strings to syntax trees. The main idea is to
-      define a standard mapping from text to syntax tree.</para>
-
-      <para>EBNF-like and Lex+Yacc-like grammar formalisms are well-known and
-      have been used to describe the grammar of many programming languages.
-      SDF has, however, a number of advantages over Lex+Yacc-like
-      formalisms:</para>
+      <para>These are the unique selling points of SDF, from the language
+      definition point of view:</para>
 
       <itemizedlist>
         <listitem>
           <para>SDF allows modular grammar definitions. This enables the
           combination and re-use of grammars and makes it easy to handle
-          embedded languages or different dialects of a common base
-          language.</para>
+          embedded languages or different dialects of a common base language.
+          It means that you are allowed to write any grammar in SDF, not just
+          LALR(1) or LL(1) grammars.</para>
         </listitem>
 
         <listitem>
           <para>SDF allows more declarative grammars definitions and this
           results in simpler and more "natural" grammars that are not polluted
-          by idiosyncrasies of particular parsing techniques.</para>
+          by idiosyncrasies of particular parsing techniques. This allows an
+          SDF definition to be independent of the implementation of
+          SDF.</para>
         </listitem>
 
         <listitem>
           <para>SDF allows the integrated definition of lexical and
           context-free syntax.</para>
         </listitem>
+
+        <listitem>
+          <para>SDF allows declarative disambiguation. For typical ambiguous
+          constructs in programming languages SDF allows you to define a
+          disambiguation with mathematical precision. Note however that SDF
+          does not have a disambiguation construct for every possible
+          ambiguity.</para>
+        </listitem>
       </itemizedlist>
 
-      <para>In order to support modular grammars, grammars need to be
-      composed. This is, unfortunately, not possible for well-known subclasses
-      of the context-free grammars such as LL(1) and LALR(1) that are used by
-      many parser generator tools. SDF is therefore based on the assumption
-      that all context-free grammars can be recognized and uses Scannerless
-      Generalized LR (SGLR) as parsing technique.</para>
+      <para>The implementation of SDF is the combination of an SLR(1) parse
+      table generator and a scannerless generalized LR parser.The goal of this
+      implementation is to fully implement all expressiveness that is
+      available in SDF, and avoiding any hidden implementation details.
+      </para>
+
+      <para>These are the unique selling points of the implementation of SDF,
+      from the parser generation point of view:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>There is no seperate scanner. This prevents all kinds of
+          "lexical ambiguity" to occur at all, simply because the parser has
+          more context information. </para>
+        </listitem>
+
+        <listitem>
+          <para>It accepts all context-free grammars, including the ambiguous
+          ones. Many programming languages do not only have LR(1) conflicts,
+          they truly have ambiguous syntaxes (like C for example).</para>
+        </listitem>
+
+        <listitem>
+          <para>It generates all ambiguous derivations, so no implicit choices
+          are made. This is done without backtracking, and without the
+          possibility for exponential behavior.</para>
+        </listitem>
+
+        <listitem>
+          <para>It constructs parse trees automatically, and the optional
+          mapping from parse trees to abstract syntax trees is also
+          provided.</para>
+        </listitem>
+
+        <listitem>
+          <para>It implements the SDF disambiguation constructs as parse tree
+          filters in an efficient manner.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that the language definition point of view, and the parser
+      generation point of view are closely related. Because of SDF's focus on
+      the definition of languages and explicitly declaring disambiguations it
+      is particulary well suited for situations that have "language
+      multiplicity":</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Having to deal with many language dialects (such as in reverse
+          engineering COBOL programs)</para>
+        </listitem>
+
+        <listitem>
+          <para>Dealing with embedded languages (SQL in COBOL/C)</para>
+        </listitem>
+
+        <listitem>
+          <para>Dealing with language extensions (Java with AspectJ)</para>
+        </listitem>
+
+        <listitem>
+          <para>Dealing with domain specific languages (many small languages,
+          and DSL evolution)</para>
+        </listitem>
+      </itemizedlist>
 
       <para>The basic assumption of SDF is that <emphasis>all</emphasis>
       derivations of an input string will be produced. This guarantees that
@@ -118,16 +190,10 @@
       disambiguate, the user has to give explicit (declarative) disambiguation
       rules. Examples of disambiguation rules are
       <emphasis>longest-match</emphasis> and <emphasis>priorities</emphasis>.
-      Separating grammar rules from disambiguation rules leads to more natural
-      syntax definitions. This is also due to the automatic way of
-      constructing syntax trees. In Lex+Yacc the specification writer has to
-      explicitly program how syntax trees are constructed while in SDF this is
-      done implicitly.</para>
-
-      <para>SDF provides an integrated definition of lexical and context-free
-      syntax. EBNF does not provide, or only very restrictive, support for
-      defining lexical syntax rules. In Lex+Yacc the lexical syntax and
-      concrete syntax are defined in two separate formalisms.</para>
+      By making all these <emphasis>language design choices</emphasis>
+      explicit in a concise manner, SDF allows you to deal with language
+      multiplicity in a more visible (controlled) fashion. In that way high
+      level syntax definition in SDF is like high level programming.</para>
     </section>
 
     <section>
@@ -141,12 +207,13 @@
           <para>By far the simplest way is to use the ASF+SDF Meta-Environment
           which provides interactive editing of SDF modules and completely
           automates the parser generation phase. After editing an SDF
-          specification you can directly use it to parse input text.</para>
+          specification you can directly use it to parse input text, visualize
+          parse trees and see syntax highlighting.</para>
         </listitem>
 
         <listitem>
           <para>At the command line you can use the programs
-          <command>pgen</command> to generate a parse table and
+          <command>sdf2table</command> to generate a parse table and
           <command>sglr</command> to parse text using the generated parse
           table. <remark>Add links to relevant documents.</remark></para>
         </listitem>
@@ -163,8 +230,35 @@
         <para>Add cross link.</para>
       </warning>
 
-      <para>We will now describe the ingredients of an SDF
-      specification:</para>
+      <para>There is a special "How To" on disambiguation with SDF: "SDF
+      Disambiguation Medkit for programming languages".</para>
+
+      <warning>
+        <para>Add cross link</para>
+      </warning>
+
+      <para>If you learn more easily by example, please refer to the SDF
+      library and the ASF+SDF library for examples of syntax definitions of
+      programming languages.</para>
+
+      <warning>
+        <para>Add reference</para>
+      </warning>
+
+      <para>The full syntax definition of SDF in SDF is the final reference on
+      the syntax of SDF. </para>
+
+      <warning>
+        <para>Add reference to SDF's definition</para>
+      </warning>
+    </section>
+
+    <section>
+      <title>This document</title>
+
+      <para>In this document we describe the syntax of SDF and its basic
+      semantics. It provides the basic knowledge for writing syntax
+      definitions in SDF using small examples. </para>
 
       <itemizedlist>
         <listitem>
@@ -185,8 +279,8 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="sdf_Examples">Examples</link>: numerous examples
-          how to define common syntactic constructs.</para>
+          <para><link linkend="sdf_Examples">Examples</link>: numerous
+          examples how to define common syntactic constructs.</para>
         </listitem>
 
         <listitem>
@@ -217,41 +311,216 @@
 
       <para>In <link linkend="sdf_HistoricalNotes">Historical Notes</link>, we
       give background and key references.</para>
+
+      <para>As an index to this document, the following example exhibits
+      allmost all features of SDF with references to the appropriate sections.
+      SDF keywords are highlighted in boldface.</para>
+
+      <table>
+        <title>Arbitrary SDF example definition, showing many of its features,
+        with references to sections</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]
+  <emphasis role="bold">imports</emphasis> basic/Whitespace
+  <emphasis role="bold">imports</emphasis> utilities/Parsing[Expr]
+  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions[Expression =&gt; Expr]
+
+<emphasis role="bold">exports</emphasis>
+ <emphasis role="bold">sorts</emphasis> Identifier Expr List Stat
+ <emphasis role="bold">lexical syntax</emphasis>
+   [A-Z][a-z]+ -&gt; Identifier
+ <emphasis role="bold">lexical restrictions</emphasis>
+   Identifier -/- [a-z]
+ <emphasis role="bold">context-free syntax</emphasis>
+   Identifier    -&gt; Expr {<emphasis role="bold">cons</emphasis>("name")}
+   Expr*         -&gt; List[[Param1]]
+   "if" Expr "then" {Param2 ";"}+ "else" {Param2 ";"}+ "fi" -&gt; Param2
+   "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
+                    role="bold">prefer</emphasis>}
+ <emphasis role="bold">context-free syntax</emphasis>
+   "if" | "then" | "fi"  -&gt; Identifier {<emphasis role="bold">reject</emphasis>}
+ <emphasis role="bold">context-free priorities</emphasis>
+   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold">left</emphasis>}  &gt;
+   Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}
+<emphasis role="bold">hiddens</emphasis>
+ <emphasis role="bold">variables</emphasis>
+   "Id"[0-9\']* -&gt; Identifier
+ <emphasis role="bold">lexical variables</emphasis>
+   "Head" -&gt; [A-Z]
+   "Tail" -&gt; [a-z]+</programlisting></entry>
+
+              <entry><itemizedlist>
+                  <listitem>
+                    <para><link linkend="Modules">Module keyword, compound
+                    module name and module parameters</link></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><link linkend="Modules">Importing a
+                    module</link>.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Importing a module and binding its parameter</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Importing a module and renaming on of its
+                    sorts</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>...</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Export section</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Declaring sortnames (non-terminals).</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Lexical syntax grammar</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Character classes and list symbols</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Follow restrictioons (a disambiguation
+                    construct)</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>...</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Context-free syntax grammar</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>A production with a cons attribute for defining
+                    abstract syntax</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Use of a nullable list symbol, and a parameterized
+                    sort name</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Use of separated list symbols, and use of the module
+                    parameters</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>The prefer/avoid disambiguation construct</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>...</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Reserving keyword using the reject disambiguation
+                    construct</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Priorities, a disambiguation construct for
+                    expression grammars</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Left associativity, another disambiguation
+                    construct</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Right associativity</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Hiddens section</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Declaration of meta variables for context-free
+                    sorts/non-terminals</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>...</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Use of character classes in productions for meta
+                    variables</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Declaration of meta variables for lexical
+                    sorts/non-terminals</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Definition of variables that range over character
+                    classes</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
   </section>
 
   <section xml:id="Modules">
-    <title>Modules and Modular Structure</title>
+    <title xml:id="modules">Modules and Modular Structure</title>
 
-    <para>An SDF specification consists of a sequence of module declarations.
-    Each module may define syntax rules. The entities declared in a module may
-    be visible or invisible to other modules. A module can use another module
-    from the specification by importing it. As a result, all visible names of
-    the imported module become available in the importing module. The overall
-    structure of a module is:<programlisting><emphasis role="bold">module</emphasis> &lt;ModuleName&gt;
+    <para>An SDF specification consists of a number of module declarations.
+    The <command>sdf2table</command> commandline tool takes a file with all
+    modules concatenated and the word "definition" in front of them as input.
+    The ASF+SDF Meta-Environment accepts the modules in separate files, each
+    with the extension ".sdf". In that case, an SDF module must be in a file
+    named exactly as the name of the module. </para>
+
+    <para>Each module may define lexical syntax, context-free syntax and
+    disambiguations. Modules may import other modules for reuse or seperation
+    of concerns. A module may extend the definition of a non-terminal in
+    another module. A module may compose the definition of a language by
+    importing the parts of the language. <note>
+        <para>SDF modules not hide names in principle, there is no
+        "private/public" mechanism. So beware of name clashes. Later we will
+        see how the renaming facility can be used to solve name clashes
+        declaratively. There is an "hiddens/exports" mechanism however, but it
+        does not only hide names, it also hides the complete definitions from
+        importing modules. More on that mechanism later too.</para>
+      </note>The basic structure of a module is this. The module keyword is
+    followed by the module name, then a series of imports can be made,
+    followed by the actual definition of the syntax:<programlisting><emphasis
+          role="bold">module</emphasis> &lt;ModuleName&gt;
   &lt;ImportSection&gt;*
-  &lt;ExportOrHiddenSection&gt;*</programlisting> A module consists of a
-    module header, followed by a list of zero or more import sections,
-    followed by zero or more hidden or export sections. <link
-    linkend="ParametersRenamings">Later</link> we will see that modules can
-    also be <emphasis>parameterized</emphasis> and that they can be
-    <emphasis>renamed on import</emphasis>. Each module
-    <literal><replaceable>M</replaceable></literal> in an SDF specification is
-    stored in a file named
-    <literal><replaceable>M</replaceable>.sdf</literal>.</para>
-
-    <!--\index{compound module name@compound module name}-->
+  &lt;ExportOrHiddenSection&gt;*</programlisting> </para>
 
     <para>A <literal>&lt;ModuleName&gt;</literal> is either a simple
     <literal>&lt;ModuleId&gt;</literal> or a
     <literal>&lt;ModuleId&gt;</literal> followed by zero or more parameter
     symbols, e.g., <literal>&lt;Module&gt;[&lt;Symbol&gt;*]</literal>, the
     symbols will be explained <link linkend="Symbols">later</link>. The
-    <literal>&lt;ModuleId&gt;</literal> may be a compound module name, the
+    <literal>&lt;ModuleId&gt;</literal> may be a compound module name (i.e.
+    &lt;ModuleId&gt; separated by forward slashes), the
     <literal>ModuleId</literal> reflects the directory structure. For example
     <literal>basic/Booleans</literal> means that the module
     <literal>Booleans</literal> is found in the subdirectory
-    <literal>basic</literal>.<!--\index{exports section@{\tt exports} section} \index{hiddens section@{\tt hiddens} section}--></para>
+    <literal>basic</literal>.</para>
 
     <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
     <emphasis>export section</emphasis> or a <emphasis>hidden
@@ -259,8 +528,13 @@
     <literal>exports</literal> and makes all entities in the section visible
     to other modules. The latter starts with the keyword
     <literal>hiddens</literal> and makes all entities in the section local to
-    the module. An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus
-    one of the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
+    the module. So, hidden means that when another module imports that module,
+    none of the hiddens sections will be present in the composition. The
+    effect for parser generation is that only the hiddens sections of top
+    module of an SDF specification contribute to the parser generation.</para>
+
+    <para> An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one of
+    the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
   &lt;Grammar&gt;+</programlisting>or<programlisting><emphasis role="bold">hiddens</emphasis>
   &lt;Grammar&gt;+
 </programlisting> A <literal>&lt;Grammar&gt;</literal> can be a definition of
@@ -306,14 +580,12 @@
     linkend="Grammars">Grammars</link>.</para>
 
     <para>Note that it is possible to have hidden imports as well, this means
-    that the contents of a hidden imported module in some module
-    <replaceable>M</replaceable> is visible in <replaceable>M</replaceable>
-    but is not exported to modules which import
-    <replaceable>M</replaceable>.</para>
+    that the full definition of the import definition is copied in the hiddens
+    section of the importing module. </para>
 
     <para>Modules can also be parameterized and the symbols they defined may
     be renamed, see <link linkend="ParametersRenamings">Parameterization and
-    Renamings</link>.</para>
+    Renamings</link>. </para>
 
     <para>We will now first focus on <link linkend="Symbols">Symbols</link>,
     the basic building block of grammars.</para>
@@ -325,33 +597,100 @@
     <para>The elementary building block of SDF syntax rules is the symbol. It
     is comparable to terminals and non-terminals in other grammar definition
     formalisms. The elementary symbols are: <emphasis>literal</emphasis>,
-    <emphasis>sort</emphasis> and <emphasis>character class</emphasis>.</para>
+    <emphasis>sort</emphasis> and <emphasis>character class</emphasis>.
+    </para>
 
-    <para>Starting with these elementary symbols, more complex symbols can be
-    constructed by way of the following operators. Examples of the use of the
-    various operators will be given in the section <link
+    <para>Since there is no real separation between lexical syntax and
+    context-free syntax in SDF, only character classes are real
+    <emphasis>terminal</emphasis> symbols. Sorts are user-defined
+    non-terminals. All other symbols are short-hands for non-terminals for
+    which the productions are generated for you by SDF (i.e. not user-defined
+    non-terminals). You may view these automatic symbols as macros that
+    generate frequently used grammatical design patterns for you. </para>
+
+    <para>Starting with the elementary symbols, more complex symbols can be
+    constructed by way of recursive symbol application. Examples of the use of
+    the various operators will be given in the section <link
     linkend="sdf_Examples">Examples</link>.</para>
+
+    <para>Remember that complex symbols such as, parameterized sorts, lists
+    and optionals are nothing but non-terminals. They carry no additional
+    semantics from the SDF point of view. However, there are back-ends (tools
+    applied after parsing) which attribute special semantics to these kinds of
+    symbols. ASF+SDF as a rewriting language is an example of a back-end that
+    provides additional semantics to SDF's symbols (but only after
+    parsing).</para>
 
     <section xml:id="Literal">
       <title>Literal</title>
 
-      <para>A <emphasis>literal</emphasis> corresponds to a terminal symbol in
-      ordinary BNF grammars, e.g., <literal>"true"</literal> or
-      <literal>"&amp;"</literal>. Literals must always be quoted, also the
-      literals consisting of letters only.</para>
+      <para>A <emphasis>literal</emphasis> symbol defines a fixed length word.
+      This usually corresponds to a terminal symbol in ordinary BNF grammars,
+      e.g., <literal>"true"</literal> or <literal>"&amp;"</literal>. Literals
+      must always be quoted, also the literals consisting of letters only. SDF
+      generates automatically one production for each literal in order to
+      define it in terms of terminal symbols.</para>
+
+      <programlisting>lexical syntax
+  "definition" -&gt; Definition</programlisting>
+
+      <para>will generate:</para>
+
+      <programlisting>[d][e][f][i][n][i][t][i][o][n] -&gt; "definition"</programlisting>
+
+      <para>The above obviously generates a case-sensitive implementation of
+      the defined literal. There are also case-insensitive literals. They are
+      defined using single quotes as in 'true' and 'def-word'. SDF generates a
+      different production to implement case insensitivity:</para>
+
+      <programlisting>[dD][eE][fF][\-][wW][oO][rR][dD] -&gt; 'def-word'</programlisting>
+
+      <para>In literals, the following characters are special and should be
+      escaped:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>"</literal>: double quote (\")</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>\</literal>: escape character (\\).</para>
+        </listitem>
+      </itemizedlist>
+
+      <warning>
+        <para>TODO, lookup escaping conventions of literals and ci
+        literals.</para>
+      </warning>
     </section>
 
     <section xml:id="Sort">
-      <title>Sort</title>
+      <title xml:id="sort">Sort</title>
 
       <para>A sort corresponds to a non-terminal, e.g.,
       <literal>Bool</literal>. Sort names always start with a capital letter
       and may be followed by letters and/or digits. Hyphens
-      (<literal>-</literal>) may be embedded in a sort name.</para>
+      (<literal>-</literal>) may be embedded in a sort name. Sort names should
+      be declared in a<link linkend="sorts"> <emphasis
+      role="bold">sorts</emphasis> section</link> to allow some static
+      consistency checking.</para>
+
+      <para>Sort names can have parameters. Parameterized sorts can be used to
+      implement grammar polymorphism, and to facilitate grammar reuse without
+      clashing sort names. It provides a way of distinguishing a
+      <literal>List</literal> of integers from a List of booleans, e.g.
+      <literal>List[[Int]]</literal>, versus <literal>List[[Bool]]</literal>.
+      The sort parameters are usually instantiated via the parameters of a
+      module or via renaming. A parameterized sort may have several
+      parameters, like <literal>List[[X,Y]]</literal>. See <link
+      linkend="ParametersRenamings">Parameterization and Renamings</link> for
+      more details. Parameterized sorts have the following
+      form:<programlisting> &lt;Sort&gt;<emphasis role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
+            role="bold">]]</emphasis></programlisting></para>
     </section>
 
     <section xml:id="CharacterClass">
-      <title>Character Class</title>
+      <title> Character Class</title>
 
       <para>Enumerations of characters occur frequently mostly in lexical
       definitions. They can be abbreviated by using <emphasis>character
@@ -406,18 +745,7 @@
       special character <replaceable>c</replaceable> as ordinary character in
       a definition. All individual characters in character classes, except
       digits and letters, are <emphasis>always</emphasis> escaped with a
-      backslash. In literal strings, the following characters are special and
-      should be escaped:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>"</literal>: double quote</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>\</literal>: escape character.</para>
-        </listitem>
-      </itemizedlist>
+      backslash.</para>
 
       <para>You may use the following abbreviations in literals and in
       character classes:</para>
@@ -470,38 +798,44 @@
       </itemizedlist>
 
       <para>The first operator is a unary operator, whereas the other three
-      are left-associative binary operators.</para>
+      are left-associative binary operators. Note that the character class
+      operators are not applicable to symbols in general.</para>
     </section>
 
     <section xml:id="OptionOperator">
       <title>Option</title>
 
-      <!--\index{option operator@option operator} \index{{\tt ?}@{\tt ?}}-->
-
       <para>The postfix option operator <literal>?</literal> describes an
       optional part in a syntax rule. For instance,
       <literal>ElsePart?</literal> defines zero or exactly one occurrence of
-      <literal>ElsePart</literal>.</para>
+      <literal>ElsePart</literal>. SDF generates the following syntax:</para>
+
+      <programlisting>          -&gt; ElsePart?
+ ElsePart -&gt; ElsePart?</programlisting>
     </section>
 
     <section xml:id="SequenceOperator">
       <title>Sequence</title>
 
-      <!--\index{sequence operator@sequence operator} \index{{\tt (...)}@{\tt (...)}}-->
-
       <para>The sequence operator <literal>(...)</literal> describes the
       grouping of two or more symbols, e.g., <literal>(Bool
-      "\&amp;")</literal>. Sequences are mostly used to group symbols together
+      "&amp;")</literal>. Sequences are mostly used to group symbols together
       to form a more complex symbol using one of the available operators,
-      e.g., <literal>(Bool "\&amp;")*</literal>. It has no effect to construct
-      a sequence consisting of a single symbol. The empty sequence is
-      represented as <literal>()</literal>.</para>
+      e.g., <literal>(Bool "&amp;")*</literal>. It has no effect to construct
+      a sequence consisting of a single symbol, because then the (...)
+      brackets are simply brackets. The empty sequence is a special symbol.
+      SDF generates the following syntax for the <literal>(Bool
+      "&amp;")</literal> symbol:</para>
+
+      <programlisting>Bool "&amp;" -&gt; (Bool "&amp;")</programlisting>
+
+      <para>For <literal>()</literal> it simply generates:</para>
+
+      <programlisting> -&gt; ()</programlisting>
     </section>
 
     <section xml:id="RepetitionOperator">
       <title>Repetition</title>
-
-      <!--\index{repetition operator@repetition operator} \index{list@list} \index{{\tt *}@{\tt *}} \index{{\tt +}@{\tt +}}-->
 
       <para>Repetition operators express that a symbol should occur several
       times. In this way it is possible to construct flat lists and therefore
@@ -523,20 +857,32 @@
         </listitem>
       </itemizedlist>
 
-      <para>In case of a separated list the element can be an arbitrary
-      symbol, but the separator can only be a plain literal. It is possible to
-      write, for instance <literal>{Int Bool}*</literal> or <literal>{Int
-      (","|";")}*</literal>, but the <link
-      linkend="WellformednessSDF">sdf-checker</link> will produce a warning
-      indicating that this type of symbol is not supported. Neither the
-      interpreter nor the compiler support this type of separated
-      lists.</para>
+      <para>Note that the separator may be an arbitrary symbol, but that some
+      back-ends do not support parse trees that contain them. The sdf-checker
+      of the ASF+SDF Meta-Environment will warn you if you use anything but a
+      literal as a separator.</para>
+
+      <para>Again, to implement lists SDF simply generates a few production
+      for you, i.e.:</para>
+
+      <programlisting>             -&gt; Bool*
+ Bool+       -&gt; Bool*
+ Bool        -&gt; Bool+
+ Bool+ Bool+ -&gt; Bool+ {left}
+
+                             -&gt; {Bool ","}*
+ {Bool ","}+                 -&gt; {Bool ","}+
+ Bool                        -&gt; {Bool ","}+
+ {Bool ","}+ "," {Bool ","}+ -&gt; {Bool ","}+ {left}</programlisting>
+
+      <para>Note that there are some more productions generated, but they are
+      not shown here. SDF generates more productions to allow arbitrary
+      compositions of * and + lists, and also adds disambiguation filters to
+      deal with the ambiguity this introduces.</para>
     </section>
 
     <section xml:id="AlternativeOperator">
       <title>Alternative</title>
-
-      <!--\index{alternative operator@alternative operator} \index{{\tt |}@{\tt |}-->
 
       <para>The alternative operator <literal>|</literal> expresses the choice
       between two symbols, e.g., <literal>"true" | "false"</literal>
@@ -546,13 +892,16 @@
       on symbols. This is important because <literal>Bool "," | Bool ";"
       </literal>expresses <literal>Bool ("," | Bool) ";"</literal> instead of
       <literal>(Bool ",") | (Bool ";").</literal> So, in case of doubt use the
-      sequence operator in combination with the alternative operator.</para>
+      sequence operator in combination with the alternative operator. </para>
+
+      <para>For "," | ";" SDF generates:</para>
+
+      <programlisting>"," -&gt; "," | ";"
+";" -&gt; "," | ";"</programlisting>
     </section>
 
     <section xml:id="TupleOperator">
       <title>Tuple</title>
-
-      <!--\index{tuple operator@tuple operator}-->
 
       <para>The tuple operator describes the grouping of a sequence of symbols
       of a fixed length into a tuple. The notation for tuples is <literal>&lt;
@@ -561,13 +910,20 @@
       describes a tuple with three elements consisting of a
       <literal>Bool</literal>, an <literal>Int</literal> and an
       <literal>Id</literal> (in that order). For instance, <literal>&lt;true,
-      3, x&gt;</literal> is a valid example of such a tuple.</para>
+      3, x&gt;</literal> is a valid example of such a tuple. </para>
+
+      <para>Tuple is one of the few symbols that actually introduce a fixed
+      syntax, i.e. the angular brackets. You may consider them as an arbitrary
+      shorthand. To define your own short hand, consider the use of
+      parameterized sorts and module paramaters.</para>
+
+      <para>For <literal>&lt;A,B&gt;</literal> SDF generates:</para>
+
+      <programlisting>"&lt;" A "," B "&gt;" -&gt; &lt;A,B&gt;</programlisting>
     </section>
 
     <section xml:id="FunctionOperator">
       <title>Function</title>
-
-      <!--\index{function operator@function operator} \index{{\tt (...=>...)}@{\tt (...=>...)}}-->
 
       <para>The function operator <literal>(...=&gt;...)</literal> allows the
       definition of function types. Left of <literal>=&gt;</literal> zero or
@@ -575,35 +931,26 @@
       symbol may occur. For example, <literal>(Bool Int) =&gt; Int</literal>
       represents a function with two argument (of types
       <literal>Bool</literal> and <literal>Int</literal>, respectively) and a
-      result type <literal>Int</literal>.</para>
-    </section>
+      result type <literal>Int</literal>. The function symbol may be used to
+      mimick a higher order type system. The function symbol also introduces
+      some arbitrary syntax (the ( ) brackets).</para>
 
-    <section xml:id="ParameterizedSorts">
-      <title>Parameterized Sorts</title>
+      <para>SDF generates the following syntax for (<literal>A B =&gt;
+      C</literal>):</para>
 
-      <!--\index{parameterized sort@parameterized sort} \index{{\tt ...[[...]]}@{\tt ...[[...]]}}-->
+      <programlisting>(A B =&gt; C) "(" A B ")" -&gt; C</programlisting>
 
-      <para>Sort names can have parameters. This provides a way of
-      distinguishing a generic sort <literal>List</literal> from a list for
-      integers, e.g. <literal>List[[Int]]</literal>, or one for booleans, e.g.
-      <literal>List[[Bool]]</literal>. These sort parameters can be
-      instantiated via the parameters of the module name. A parameterized sort
-      may have the form <literal>List[[X,Y]]</literal> where
-      <literal>X</literal> and <literal>Y</literal> are generic sorts which
-      will be provided via the parameters of the module name. See <link
-      linkend="ParametersRenamings">Parameterization and Renamings</link> for
-      more details. Parameterized sorts have the following
-      form:<programlisting> &lt;Sort&gt;<emphasis role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
-            role="bold">]]</emphasis></programlisting></para>
+      <para>Read this as "something of type (A B =&gt; C) may be applied to A
+      and B to become a C". Note that this is the only symbol that is not
+      defined by generating productions with the defined symbol on the
+      right-hand side. The user must still define the syntax for (A B =&gt; C)
+      manually like:</para>
 
-      <para>In other words, a sort followed by a list of one or more sorts
-      enclosed by <literal>[[</literal> and <literal>]]</literal>.</para>
+      <programlisting>"myfunction" -&gt; (A B =&gt; C)</programlisting>
     </section>
 
     <section xml:id="LiftingOperator">
-      <title>Lifted Sorts</title>
-
-      <!--\index{lifting operator@lifting operator} \index{{\tt `...`}@{\tt `...`}}-->
+      <title>Lifted Symbols</title>
 
       <para>The lifting operator <literal>`...`</literal> translates the name
       of an arbitrary complex symbol to a literal syntax definition of that
@@ -611,7 +958,16 @@
       <literal>`X?`</literal> defines the syntax <literal>("X" "?")</literal>.
       The lifting operator is typically used in combination with parameterized
       modules, and specifically for applications of SDF that implement
-      concrete syntax.</para>
+      concrete syntax. The lifting symbol is a reflexive operator, it
+      generates different syntax for different operators. </para>
+
+      <para>Note that the lifting operator is not implemented by defining it
+      using production symbols. This operator is implemented by replacing it
+      with another symbol. Examples:</para>
+
+      <programlisting>`"foo"` is replaced by "\"foo\""
+`A ?"` is replaced by ("A" "?")
+`{A ","}+` is replaced by ("{" "A" "\",\"" "}" "+") </programlisting>
     </section>
   </section>
 
@@ -664,11 +1020,12 @@
       </listitem>
     </itemizedlist>
 
-    <para>We will now describe all these elements in turn. Also see the
-    Section <link linkend="sdf_Examples">Examples</link>.</para>
+    <para>An SDF module may contain as many grammars of any time as you need.
+    We will now describe all these elements in turn. Also see the Section
+    <link linkend="sdf_Examples">Examples</link>.</para>
 
     <section xml:id="Imports">
-      <title>Imports</title>
+      <title xml:id="imports">Imports</title>
 
       <!--\index{imports@{\tt imports}} \index{{\tt <ImportSection>}@{\tt <ImportSection>} -->
 
