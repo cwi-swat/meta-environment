@@ -121,8 +121,7 @@
       <para>The implementation of SDF is the combination of an SLR(1) parse
       table generator and a scannerless generalized LR parser.The goal of this
       implementation is to fully implement all expressiveness that is
-      available in SDF, and avoiding any hidden implementation details.
-      </para>
+      available in SDF, and avoiding any hidden implementation details.</para>
 
       <para>These are the unique selling points of the implementation of SDF,
       from the parser generation point of view:</para>
@@ -131,7 +130,7 @@
         <listitem>
           <para>There is no seperate scanner. This prevents all kinds of
           "lexical ambiguity" to occur at all, simply because the parser has
-          more context information. </para>
+          more context information.</para>
         </listitem>
 
         <listitem>
@@ -223,42 +222,43 @@
     <section>
       <title>Learning more</title>
 
-      <para>You may want to refresh you knowledge of grammars and parsing by
-      reading Syntax Analysis.</para>
+      <para>The following references on SDF may be interesting for you:</para>
 
       <warning>
-        <para>Add cross link.</para>
+        <para>TODO Add links!</para>
       </warning>
 
-      <para>There is a special "How To" on disambiguation with SDF: "SDF
-      Disambiguation Medkit for programming languages".</para>
+      <itemizedlist>
+        <listitem>
+          <para>Syntax Analysis, this documents refreshes your knowledge of
+          grammars and parsing in general</para>
+        </listitem>
 
-      <warning>
-        <para>Add cross link</para>
-      </warning>
+        <listitem>
+          <para>SDF Disambiguation Medkit for Programming Languages, this
+          document focusses on SDF disambiguation constructs and how to solve
+          common issues when developing SDF grammars</para>
+        </listitem>
 
-      <para>If you learn more easily by example, please refer to the SDF
-      library and the ASF+SDF library for examples of syntax definitions of
-      programming languages.</para>
+        <listitem>
+          <para>Guided Tour: Playing with the Booleans, This interactive
+          demonstrations shows some of the features of SDF in the context of
+          The Meta-Environment</para>
+        </listitem>
 
-      <warning>
-        <para>Add reference</para>
-      </warning>
-
-      <para>The full syntax definition of SDF in SDF is the final reference on
-      the syntax of SDF. </para>
-
-      <warning>
-        <para>Add reference to SDF's definition</para>
-      </warning>
+        <listitem>
+          <para>SDF definition of SDF, this is the final reference (and
+          implementation) of the syntax of SDF</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
       <title>This document</title>
 
       <para>In this document we describe the syntax of SDF and its basic
-      semantics. It provides the basic knowledge for writing syntax
-      definitions in SDF using small examples. </para>
+      semantics. It is a basic but complete reference manual for SDF based on
+      small examples.</para>
 
       <itemizedlist>
         <listitem>
@@ -555,7 +555,7 @@
     modules concatenated and the word "definition" in front of them as input.
     The ASF+SDF Meta-Environment accepts the modules in separate files, each
     with the extension ".sdf". In that case, an SDF module must be in a file
-    named exactly as the name of the module. </para>
+    named exactly as the name of the module.</para>
 
     <para>Each module may define lexical syntax, context-free syntax and
     disambiguations. Modules may import other modules for reuse or seperation
@@ -573,7 +573,7 @@
     followed by the actual definition of the syntax:<programlisting><emphasis
           role="bold">module</emphasis> &lt;ModuleName&gt;
   &lt;ImportSection&gt;*
-  &lt;ExportOrHiddenSection&gt;*</programlisting> </para>
+  &lt;ExportOrHiddenSection&gt;*</programlisting></para>
 
     <para>A <literal>&lt;ModuleName&gt;</literal> is either a simple
     <literal>&lt;ModuleId&gt;</literal> or a
@@ -598,7 +598,7 @@
     effect for parser generation is that only the hiddens sections of top
     module of an SDF specification contribute to the parser generation.</para>
 
-    <para> An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one of
+    <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one of
     the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
   &lt;Grammar&gt;+</programlisting>or<programlisting><emphasis role="bold">hiddens</emphasis>
   &lt;Grammar&gt;+
@@ -646,11 +646,11 @@
 
     <para>Note that it is possible to have hidden imports as well, this means
     that the full definition of the import definition is copied in the hiddens
-    section of the importing module. </para>
+    section of the importing module.</para>
 
     <para>Modules can also be parameterized and the symbols they defined may
     be renamed, see <link linkend="ParametersRenamings">Parameterization and
-    Renamings</link>. </para>
+    Renamings</link>.</para>
 
     <para>We will now first focus on <link linkend="Symbols">Symbols</link>,
     the basic building block of grammars.</para>
@@ -662,8 +662,7 @@
     <para>The elementary building block of SDF syntax rules is the symbol. It
     is comparable to terminals and non-terminals in other grammar definition
     formalisms. The elementary symbols are: <emphasis>literal</emphasis>,
-    <emphasis>sort</emphasis> and <emphasis>character class</emphasis>.
-    </para>
+    <emphasis>sort</emphasis> and <emphasis>character class</emphasis>.</para>
 
     <para>Since there is no real separation between lexical syntax and
     context-free syntax in SDF, only character classes are real
@@ -671,7 +670,7 @@
     non-terminals. All other symbols are short-hands for non-terminals for
     which the productions are generated for you by SDF (i.e. not user-defined
     non-terminals). You may view these automatic symbols as macros that
-    generate frequently used grammatical design patterns for you. </para>
+    generate frequently used grammatical design patterns for you.</para>
 
     <para>Starting with the elementary symbols, more complex symbols can be
     constructed by way of recursive symbol application. Examples of the use of
@@ -759,7 +758,7 @@
     </section>
 
     <section xml:id="CharacterClass">
-      <title> Character class symbols</title>
+      <title>Character class symbols</title>
 
       <para>Enumerations of characters occur frequently mostly in lexical
       definitions. They can be abbreviated by using <emphasis>character
@@ -961,7 +960,7 @@
       on symbols. This is important because <literal>Bool "," | Bool ";"
       </literal>expresses <literal>Bool ("," | Bool) ";"</literal> instead of
       <literal>(Bool ",") | (Bool ";").</literal> So, in case of doubt use the
-      sequence operator in combination with the alternative operator. </para>
+      sequence operator in combination with the alternative operator.</para>
 
       <para>For "," | ";" SDF generates:</para>
 
@@ -995,7 +994,7 @@ is replaced by
       describes a tuple with three elements consisting of a
       <literal>Bool</literal>, an <literal>Int</literal> and an
       <literal>Id</literal> (in that order). For instance, <literal>&lt;true,
-      3, x&gt;</literal> is a valid example of such a tuple. </para>
+      3, x&gt;</literal> is a valid example of such a tuple.</para>
 
       <para>Tuple is one of the few symbols that actually introduce a fixed
       syntax, i.e. the angular brackets. You may consider them as an arbitrary
@@ -1044,7 +1043,7 @@ is replaced by
       The lifting operator is typically used in combination with parameterized
       modules, and specifically for applications of SDF that implement
       concrete syntax. The lifting symbol is a reflexive operator, it
-      generates different syntax for different operators. </para>
+      generates different syntax for different operators.</para>
 
       <para>Note that the lifting operator is not implemented by defining it
       using production symbols. This operator is implemented by replacing it
@@ -1214,7 +1213,7 @@ is replaced by
       The checker requires that all sorts that occur in some symbol in the
       specification are declared. Note however that the sorts declaration does
       not carry any semantics other than simply declaring a name. The checker
-      uses this to warn the SDF user for possible typos. </para>
+      uses this to warn the SDF user for possible typos.</para>
     </section>
 
     <section xml:id="Productions">
@@ -1230,15 +1229,15 @@ is replaced by
 
       <para>A production is read as the <emphasis>definition</emphasis> of a
       symbol. The symbol on the right-hand side is
-      <emphasis>defined</emphasis> by the left-hand side of the production.
-      </para>
+      <emphasis>defined</emphasis> by the left-hand side of the
+      production.</para>
 
       <para>The symbols in a production can be arbitrarily complex but the
       implementation may impose some limitations on this. Productions are used
       to describe lexical as well as context-free syntax, variables and
       lexical variables. Productions also occur in priority grammars. All
       productions with the same result sort together define the alternatives
-      for that symbol. </para>
+      for that symbol.</para>
 
       <para>The most striking (but also most trivial) difference between SDF
       and EBNF is the way the production rules are written in SDF. In EBNF one
@@ -1338,7 +1337,7 @@ E         -&gt; C | D | E</programlisting>
         <literal>right</literal>, <literal>assoc</literal> or
         <literal>non-assoc</literal>, this will result in an error message.
         The combination of <literal>avoid</literal> and
-        <literal>prefer</literal> does not make sense either. </para>
+        <literal>prefer</literal> does not make sense either.</para>
       </section>
 
       <section xml:id="PrefixFunctions">
