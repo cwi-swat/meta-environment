@@ -236,30 +236,6 @@
       </section>
     </section>
 
-    <section xml:id="howto">
-      <title>How to use SDF?</title>
-
-      <para>There are two ways to write an SDF specification, generate a
-      parser for it, and use that parser:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>By far the simplest way is to use the ASF+SDF Meta-Environment
-          which provides interactive editing of SDF modules and completely
-          automates the parser generation phase. After editing an SDF
-          specification you can directly use it to parse input text, visualize
-          parse trees and see syntax highlighting.</para>
-        </listitem>
-
-        <listitem>
-          <para>At the command line you can use the programs
-          <command>sdf2table</command> to generate a parse table and
-          <command>sglr</command> to parse text using the generated parse
-          table.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
     <section xml:id="learningmore">
       <title>Learning more</title>
 
