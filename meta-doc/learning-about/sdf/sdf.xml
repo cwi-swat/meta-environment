@@ -258,11 +258,13 @@
 
       <para>In this document we describe the syntax of SDF and its basic
       semantics. It is a basic but complete reference manual for SDF based on
-      small examples. This document is <link
-      linkend="sdfgraph">structured</link> to the syntactic structure of SDF,
-      in a top-down fashion. After we have described all of it, we continue
-      with a set of examples. The document ends with special sections on
-      well-formedness, disambiguation and the history of SDF.</para>
+      small examples. This document is loosely <link
+      linkend="sdfgraph">structured</link> according to the syntactic
+      structure of SDF. After we have described all of it, we continue with a
+      set of <link linkend="examples">examples</link>. The document ends with
+      special sections on <link linkend="???">well-formedness</link>, <link
+      linkend="???">disambiguation</link> and the <link linkend="???">history
+      of SDF</link>.</para>
 
       <para><figure xml:id="sdfgraph">
           <title>The hierarchical structure of the SDF syntax, extracted from
@@ -338,40 +340,48 @@
 
     <orderedlist>
       <listitem>
-        <para>A user types in the modules of an SDF grammar, production rules
-        and disambiguation constructs.</para>
+        <para>A user types in the modules of an SDF grammar, including the
+        production rules and disambiguation constructs.</para>
       </listitem>
 
       <listitem>
-        <para>The modules are concatenated into one single definition</para>
+        <para>The modules are concatenated into one single definition.</para>
       </listitem>
 
       <listitem>
-        <para>The syntax definition is checked for trivial errors by the
-        <command>sdf-checker</command>.</para>
+        <para>The syntax definition is given as input to the
+        <accel>sdf2table</accel> tool:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>The syntax definition is checked for trivial errors by the
+            <command>sdf-checker</command>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The syntax and the disambiguation constructs in the
+            definition are "normalized" to "kernel SDF", by removing all
+            syntactic sugar (expanding macros) and some other stuff.</para>
+          </listitem>
+
+          <listitem>
+            <para>The syntax is used to generate an SLR(1) parse table, and
+            the disambiguation constructs are used to filter some reductions
+            from the parse table</para>
+          </listitem>
+        </orderedlist>
       </listitem>
 
       <listitem>
-        <para>The syntax and the disambiguation constructs in the definition
-        are "normalized" to "kernel SDF", by removing all syntactic sugar
-        (expanding macros) and some other stuff.</para>
+        <para>The resulting parse table can be used by the
+        <command>sglr</command> tool to parse strings. <command>sglr</command>
+        uses some of the disambiguation constructs to filter at parse time,
+        and just after it</para>
       </listitem>
 
       <listitem>
-        <para>The syntax is used to generate an SLR(1) parse table, and the
-        disambiguation constructs are used to filter some reductions from the
-        parse table</para>
-      </listitem>
-
-      <listitem>
-        <para>The resulting parse table can be used by the SGLR tool to parse
-        strings. SGLR uses some of the disambiguation constructs to filter at
-        parse time, and just after it</para>
-      </listitem>
-
-      <listitem>
-        <para>SGLR outputs a parse forest (or possibly a single parse tree, or
-        a parse error)</para>
+        <para><command>sglr</command> outputs a parse forest (or possibly a
+        single parse tree, or a parse error)</para>
       </listitem>
 
       <listitem>
@@ -381,12 +391,13 @@
     </orderedlist>
 
     <para>At any point in this process something may be erroneous and the
-    process starts from step 1. Step 3, 4, and 5 are done by the
-    <command>sdf2table</command> commandline tool, or by the ASF+SDF
-    Meta-Environment. The 6 and 7 are done by the <command>sglr</command>
-    commandline tool, or by the ASF+SDF Meta-Environment. Step 8 is open to
-    any other tool that can read ATerms (the output format of
-    <command>sglr</command>).</para>
+    process starts from step 1. Step 2 can be done manually by the user, or
+    taken care of by The Meta-Environment. Step 3 and its contributing parts
+    (3.1-3.3) are done by the <command>sdf2table</command> commandline tool,
+    or by the ASF+SDF Meta-Environment. The steps 4 and 5 are done by the
+    <command>sglr</command> commandline tool, or by the ASF+SDF
+    Meta-Environment. Step 6 is open to any other tool that can read ATerms
+    (the output format of <command>sglr</command>).</para>
 
     <para>One more thing, SDF definitions are not only used as input to parser
     generators. There are tools that generate libraries for syntax tree
@@ -410,7 +421,7 @@
     of concerns. A module may extend the definition of a non-terminal in
     another module. A module may compose the definition of a language by
     importing the parts of the language. <note>
-        <para>SDF modules not hide names in principle, there is no
+        <para>SDF modules do not hide names in principle, there is no
         "private/public" mechanism. So beware of name clashes. Later we will
         see how the renaming facility can be used to solve name clashes
         declaratively. There is an "hiddens/exports" mechanism however, but it
@@ -496,11 +507,48 @@
     section of the importing module.</para>
 
     <para>Modules can also be parameterized and the symbols they defined may
-    be renamed, see <link linkend="ParametersRenamings">Parameterization and
+    be renamed. see <link linkend="ParametersRenamings">Parameterization and
     Renamings</link>.</para>
 
-    <para>We will now first focus on <link linkend="Symbols">Symbols</link>,
-    the basic building block of grammars.</para>
+    <para>After we explain the SDF comment convention, we will now focus on
+    <link linkend="Symbols">Symbols</link>, the basic building block of most
+    <link linkend="grammars">grammars</link>.</para>
+  </section>
+
+  <section xml:id="SdfComment">
+    <title xml:id="comments">SDF comment convention</title>
+
+    <para>The comment convention within an SDF specification is that
+    characters between <literal>%%</literal> and the end of line is comment as
+    well as every character between two <literal>%</literal> characters
+    including the newline character. An example of the use of comments is
+    given <link linkend="CODE_sdfcomment">below</link>. This definition also
+    defines the comment convention in SDF itself. More details on defining
+    layout can be found in the section <link
+    linkend="Restrictions">Restrictions</link>.</para>
+
+    <example xml:id="CODE_sdfcomments">
+      <title>SDF comments</title>
+
+      <para><programlisting xml:id="CODE_sdfcomment">module basic/Comments
+
+imports basic/Whitespace
+
+%% In this module we define the 
+%% comment convention for SDF.
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n" -&gt; LAYOUT
+    "%" ~[\%]+ "%" -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\%]</programlisting></para>
+
+      <para>Note that every line that has a <literal>%%</literal> must be
+      ended with a newline (even the last line in your SDF module
+      file).</para>
+    </example>
   </section>
 
   <section xml:id="Symbols">
@@ -972,8 +1020,8 @@ is replaced by
       </listitem>
     </itemizedlist>
 
-    <para>An SDF module may contain as many grammars of any time as you need.
-    We will now describe all these elements in turn. Also see the Section
+    <para>An SDF module may contain as many grammars of any kind as you need.
+    We will now describe all these kinds of grammars. Also see the Section
     <link linkend="sdf_Examples">Examples</link>.</para>
 
     <section xml:id="Imports">
@@ -1063,153 +1111,6 @@ is replaced by
       uses this to warn the SDF user for possible typos.</para>
     </section>
 
-    <section xml:id="Productions">
-      <title xml:id="productions">Productions</title>
-
-      <para>The basic building block of a grammar is the
-      <emphasis>production</emphasis>. It consists of a left-hand side of zero
-      or more symbols, an arrow symbol -&gt; and a right-hand side that
-      contains a symbol and an optional list of attributes. This is summarized
-      as follows:</para>
-
-      <programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt;</programlisting>
-
-      <para>A production is read as the <emphasis>definition</emphasis> of a
-      symbol. The symbol on the right-hand side is
-      <emphasis>defined</emphasis> by the left-hand side of the
-      production.</para>
-
-      <para>The symbols in a production can be arbitrarily complex but the
-      implementation may impose some limitations on this. Productions are used
-      to describe lexical as well as context-free syntax, variables and
-      lexical variables. Productions also occur in priority grammars. All
-      productions with the same result sort together define the alternatives
-      for that symbol.</para>
-
-      <para>The most striking (but also most trivial) difference between SDF
-      and EBNF is the way the production rules are written in SDF. In EBNF one
-      writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
-      in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
-      the left- and right-hand side of the production rules are swapped.
-      Otherwise the meaning of an SDF production is the same as a BNF
-      production. Notice however that there is a difference with the |
-      operator. When we write the following in BNF:</para>
-
-      <programlisting>A ::= C | D | E</programlisting>
-
-      <para>We would write this in SDF:</para>
-
-      <programlisting>C -&gt; A
-D -&gt; A
-E -&gt; A</programlisting>
-
-      <para>Or, we could use the alternative symbol, but that does generate a
-      different grammar:</para>
-
-      <programlisting>C | D | E -&gt; A
-will generate the following grammar:
-C | D | E -&gt; A
-C         -&gt; C | D | E
-D         -&gt; C | D | E
-E         -&gt; C | D | E</programlisting>
-
-      <section xml:id="Attributes">
-        <title xml:id="attributes">Attributes</title>
-
-        <para>The definition of a lexical, context-free productions and
-        variables may be followed by <emphasis>attributes</emphasis> that
-        define additional (syntactic or semantic) properties of that function.
-        The attributes are written between curly brackets after the
-        non-terminal in the right hand side. If a production rule has more
-        than one attribute they are separated by commas. Productions with
-        attributes have thus the following form:<programlisting>&lt;Symbol&gt;* <emphasis
-              role="bold">-&gt;</emphasis> &lt;Symbol&gt; <emphasis
-              role="bold">{</emphasis> &lt;Attribute1&gt;<emphasis role="bold">,</emphasis> &lt;Attribute2&gt;<emphasis
-              role="bold">,</emphasis> ...<emphasis role="bold">}</emphasis></programlisting>
-        The following syntax-related attributes exist:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>{bracket}</literal> is an attribute without a
-            meaning. It is not used by SDF, but some back-ends use it. For
-            example, the <command>restore-brackets</command> tool uses the
-            bracket attribute to find productions to add to a parse tree
-            before pretty printing (when the tree violates priority
-            constraints). Note that most of these tools demand the production
-            with a {bracket} attribute to have the shape: <literal>"(" X ")"
-            -&gt; X {bracket}</literal> with any kind of bracket syntax but
-            the <literal>X</literal> being the same symbol on the left-hand
-            side and the right-hand side.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{left</literal>, <literal>right</literal>,
-            <literal>non-assoc</literal>, <literal>assoc}</literal> are used
-            to define the associativity of productions (see also <link
-            linkend="Priorities">Priorities</link>). Instead of using extra
-            non-terminals, these attributes offer declarative disambiguation
-            constructs. SDF implements these attributes by filtering
-            reductions from the parse table.</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{prefer}</literal> is used to indicate that the
-            attributed function should always be preferred over other
-            productions (without this attribute) in certain cases of syntactic
-            ambiguity (see <link linkend="PreferAvoidReject">Preferring,
-            Avoiding or Rejecting Parses</link>).</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{avoid}</literal> is used to indicate that a
-            function should only be used as a last resort in certain cases of
-            syntactic ambiguity (see <link
-            linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
-            Parses}</link>).</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>{reject}</literal> can be used to explicitly forbid
-            certain syntactic construct (see <link
-            linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
-            Parses</link>).</para>
-          </listitem>
-        </itemizedlist>
-
-        <itemizedlist>
-          <listitem>
-            <para>Arbitrary ATerms may also be used as attributes. Actually
-            {bracket} is one example. Another frequently occuring non-SDF
-            attribute is {cons("&lt;name&gt;")}. There are tools that use this
-            cons attribute to construct abstract syntax trees or to generated
-            API's in C or Java to manipulate syntax trees.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>Not all combinations of attributes make sense. If one uses the
-        attribute <literal>left</literal> in combination with
-        <literal>right</literal>, <literal>assoc</literal> or
-        <literal>non-assoc</literal>, this will result in an error message.
-        The combination of <literal>avoid</literal> and
-        <literal>prefer</literal> does not make sense either.</para>
-      </section>
-
-      <section xml:id="PrefixFunctions">
-        <title xml:id="prefix">Prefix Functions</title>
-
-        <para><emphasis>Prefix functions</emphasis> are a special kind of
-        productions. They have a prefix syntax and are an abbreviation
-        mechanism for productions written as expected. For instance the
-        function <literal>f(X,Y) -&gt; Z</literal> is a prefix function. SDF
-        automatically replaces all prefix productions by a normal productions.
-        Example:</para>
-
-        <programlisting>f(X,Y) -&gt; Z {cons("f")} 
-is replaced by
-"f" "(" X "," Y ")" -&gt; Z {cons("f")}</programlisting>
-      </section>
-    </section>
-
     <section xml:id="LexicalAndContextFreeSyntax">
       <title xml:id="lexicalcontextfree">Lexical and context-free
       syntax</title>
@@ -1217,8 +1118,8 @@ is replaced by
       <para>Lexical syntax describes the low-level structure of text while
       context-free syntax describes the higher-level structure. In SDF, these
       two aspects of syntax are defined in a very uniform manner. In fact,
-      <emphasis>production rules</emphasis> are used to describe both lexical
-      and concrete syntax.</para>
+      <link linkend="productions">production rules</link> are used to describe
+      both lexical and concrete syntax.</para>
 
       <para>The only difference between the two is that context-free
       productions are pre-processed somewhat extensively by SDF before parser
@@ -1291,6 +1192,172 @@ which will be then wrapped as in:
         <warning>
           <para>Jurgen: continue here.</para>
         </warning>
+      </section>
+
+      <section xml:id="Productions">
+        <title xml:id="productions">Productions</title>
+
+        <para>The basic building block of a context-free syntax, lexical
+        syntax or variables grammar is the <emphasis>production</emphasis>. It
+        consists of a left-hand side of zero or more symbols, an arrow symbol
+        -&gt; and a right-hand side that contains a symbol and an optional
+        list of attributes. This is summarized as follows:</para>
+
+        <programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt;</programlisting>
+
+        <para>A production is read as the <emphasis>definition</emphasis> of a
+        symbol. The symbol on the right-hand side is
+        <emphasis>defined</emphasis> by the left-hand side of the
+        production.</para>
+
+        <para>The symbols in a production can be arbitrarily complex but the
+        implementation may impose some limitations on this. Productions are
+        used to describe lexical as well as context-free syntax, variables and
+        lexical variables. Productions also occur in priority grammars. All
+        productions with the same result sort together define the alternatives
+        for that symbol.</para>
+
+        <para>The most striking (but also most trivial) difference between SDF
+        and EBNF is the way the production rules are written in SDF. In EBNF
+        one writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
+        in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
+        the left- and right-hand side of the production rules are swapped.
+        Otherwise the meaning of an SDF production is the same as a BNF
+        production. Notice however that there is a difference with the |
+        operator. When we write the following in BNF:</para>
+
+        <programlisting>A ::= C | D | E</programlisting>
+
+        <para>We would write this in SDF:</para>
+
+        <programlisting>C -&gt; A
+D -&gt; A
+E -&gt; A</programlisting>
+
+        <para>Or, we could use the alternative symbol, but that does generate
+        a different grammar:</para>
+
+        <programlisting>C | D | E -&gt; A
+will generate the following grammar:
+C | D | E -&gt; A
+C         -&gt; C | D | E
+D         -&gt; C | D | E
+E         -&gt; C | D | E</programlisting>
+
+        <section xml:id="Attributes">
+          <title xml:id="attributes">Attributes</title>
+
+          <para>The definition of a lexical, context-free productions and
+          variables may be followed by <emphasis>attributes</emphasis> that
+          define additional (syntactic or semantic) properties of that
+          function. The attributes are written between curly brackets after
+          the non-terminal in the right hand side. If a production rule has
+          more than one attribute they are separated by commas. Productions
+          with attributes have thus the following form:<programlisting>&lt;Symbol&gt;* <emphasis
+                role="bold">-&gt;</emphasis> &lt;Symbol&gt; <emphasis
+                role="bold">{</emphasis> &lt;Attribute1&gt;<emphasis
+                role="bold">,</emphasis> &lt;Attribute2&gt;<emphasis
+                role="bold">,</emphasis> ...<emphasis role="bold">}</emphasis></programlisting>
+          The following syntax-related attributes exist:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>{bracket}</literal> is an attribute without a
+              meaning. It is not used by SDF, but some back-ends use it. For
+              example, the <command>restore-brackets</command> tool uses the
+              bracket attribute to find productions to add to a parse tree
+              before pretty printing (when the tree violates priority
+              constraints). Note that most of these tools demand the
+              production with a {bracket} attribute to have the shape:
+              <literal>"(" X ")" -&gt; X {bracket}</literal> with any kind of
+              bracket syntax but the <literal>X</literal> being the same
+              symbol on the left-hand side and the right-hand side.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{left</literal>, <literal>right</literal>,
+              <literal>non-assoc</literal>, <literal>assoc}</literal> are used
+              to define the associativity of productions (see also <link
+              linkend="Priorities">Priorities</link>). Instead of using extra
+              non-terminals, these attributes offer declarative disambiguation
+              constructs. SDF implements these attributes by filtering
+              reductions from the parse table.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{prefer}</literal> is used to indicate that the
+              attributed function should always be preferred over other
+              productions (without this attribute) in certain cases of
+              syntactic ambiguity (see <link
+              linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+              Parses</link>).</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{avoid}</literal> is used to indicate that a
+              function should only be used as a last resort in certain cases
+              of syntactic ambiguity (see <link
+              linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+              Parses}</link>).</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{reject}</literal> can be used to explicitly
+              forbid certain syntactic construct (see <link
+              linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+              Parses</link>).</para>
+            </listitem>
+          </itemizedlist>
+
+          <itemizedlist>
+            <listitem>
+              <para>Arbitrary ATerms may also be used as attributes. Actually
+              {bracket} is one example. Another frequently occuring non-SDF
+              attribute is {cons("&lt;name&gt;")}. There are tools that use
+              this cons attribute to construct abstract syntax trees or to
+              generated API's in C or Java to manipulate syntax trees.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Not all combinations of attributes make sense. If one uses the
+          attribute <literal>left</literal> in combination with
+          <literal>right</literal>, <literal>assoc</literal> or
+          <literal>non-assoc</literal>, this will result in an error message.
+          The combination of <literal>avoid</literal> and
+          <literal>prefer</literal> does not make sense either.</para>
+        </section>
+
+        <section>
+          <title>Merging productions</title>
+
+          <para>An important detail of SDF is that if two productions are
+          equal, they will not lead to ambiguity. Instead only one of the
+          productions is used to generate the parse table. In other words, the
+          collection of productions that is used to generate a parse table is
+          a <emphasis>set</emphasis>. The identity of a production is computed
+          from its left-hand side and its right-hand side. If the attributes
+          are different, the set of attributes will be merged. Example:</para>
+
+          <programlisting>"if" E "then" S -&gt; S {cons("if")}
+"if" E "then" S -&gt; S {prefer}
+<emphasis>will be merged to</emphasis>:
+"if" E "then" S -&gt; S {cons("if"), prefer}</programlisting>
+        </section>
+
+        <section xml:id="PrefixFunctions">
+          <title xml:id="prefix">Prefix Functions</title>
+
+          <para><emphasis>Prefix functions</emphasis> are a special kind of
+          productions. They have a prefix syntax and are an abbreviation
+          mechanism for productions written as expected. For instance the
+          function <literal>f(X,Y) -&gt; Z</literal> is a prefix function. SDF
+          automatically replaces all prefix productions by a normal
+          productions. Example:</para>
+
+          <programlisting>f(X,Y) -&gt; Z {cons("f")} 
+is replaced by
+"f" "(" X "," Y ")" -&gt; Z {cons("f")}</programlisting>
+        </section>
       </section>
     </section>
 
@@ -1411,6 +1478,246 @@ which will be then wrapped as in:
 
       <para>The ".", or full stop, makes sure that this relation does not
       contribute to any transitive closure.</para>
+    </section>
+
+    <section xml:id="Variables">
+      <title xml:id="variables">Variables</title>
+
+      <para>Variables are declared in the <literal>variables</literal> section
+      of a module. Like all other entities in a module, except equations,
+      variables may be exported (see section <link
+      linkend="Modules">Modules</link>). A variables section consists of a
+      list of variable names followed by a symbol. In fact, a variable
+      declaration can define an infinite collection of variables by using a
+      <emphasis>naming scheme</emphasis> instead of a simple variable name. A
+      naming scheme is a regular expression like the ones allowed in the <link
+      linkend="LexicalSyntax">lexical syntax</link> except that sorts are not
+      allowed. A variable may represent any symbol. In the specification <link
+      linkend="CODE_variables">below</link>, <literal>Id</literal>,
+      <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
+      variables declared by the naming schemes in the
+      <literal>variables</literal> section. Strings that occur in the
+      left-hand side of variable declarations should
+      <emphasis>always</emphasis> be quoted.</para>
+
+      <example xml:id="CODE_variables">
+        <title>Variable declarations using naming schemes</title>
+
+        <para><programlisting>module VarDecls
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Decl
+  sorts Id Decl Type 
+
+  lexical syntax
+    [a-z]+ -&gt; Id
+ 
+  context-free syntax
+    "decl" {Id ","}+ ":" Type -&gt; Decl 
+    "integer"                 -&gt; Type 
+    "real"                    -&gt; Type 
+
+hiddens
+  variables
+    "Id"           -&gt; Id 
+    "Type"[0-9]*   -&gt; Type 
+    "Id-list"[\']* -&gt; {Id ","}* 
+    "Id-ne-list"   -&gt; {Id ","}+</programlisting></para>
+      </example>
+
+      <para>Declared variables can only be used when defining equations. It is
+      not allowed to use them in terms. Ambiguities due to variables are
+      resolved by the <emphasis>Prefer Variables</emphasis> strategy that was
+      discussed in <link linkend="lex-ambiguity">Lexical
+      Ambiguities</link>.</para>
+    </section>
+
+    <section xml:id="Restrictions">
+      <title>Restrictions</title>
+
+      <para>Lexical syntax can be highly ambiguous. Consider a simple lexical
+      definition for identifiers like the one given <link
+      linkend="CODE_repetition">earlier</link>. When recognizing the text
+      <literal>abc</literal>, what should we return: <literal>a</literal>,
+      <literal>ab</literal> or, <literal>abc</literal>? We discuss the
+      strategy <emphasis>Prefer Longest Match</emphasis> for resolving this
+      kind of ambiguity in <link linkend="lex-ambiguity">Lexical
+      Ambiguities</link>}. Here, we describe the notion of
+      <emphasis>restrictions</emphasis> that enable the formulation of this
+      and other lexical disambiguation strategies. A restriction limits the
+      <emphasis>lookahead</emphasis> for a given symbol; it indicates that a
+      symbol may not be followed by a character from a given character class.
+      A lookahead may consist of more than one character class. Restrictions
+      come in two flavors:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>lexical restrictions;</para>
+        </listitem>
+
+        <listitem>
+          <para>context-free restrictions.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The general form of a restriction is:<programlisting>&lt;Symbol&gt;+ <emphasis
+            role="bold">-/-</emphasis> &lt;Lookaheads&gt;</programlisting>In
+      case of lexical restrictions <literal>&lt;Symbol&gt;</literal> may be
+      either a literal or sort. In case of context-free restrictions only a
+      sort or symbol is allowed. The restriction operator
+      <literal>-/-</literal> should be read as <emphasis>may not be followed
+      by</emphasis>. Before the restriction operator <literal>-/-</literal> a
+      list of symbols is given for which the restriction holds.</para>
+
+      <para>In the example <link linkend="CODE_functional">below</link> both
+      <literal>let</literal> and <literal>in</literal> may not be followed by
+      a letter. This example shows how lexical restrictions can be used to
+      prevent the recognition of erroneous expressions in a small functional
+      language. The lexical restriction deals with the possible confusion
+      between the reserved words <literal>let</literal> and
+      <literal>in</literal> and variables (of sort <literal>Var</literal>). It
+      forbids the recognition of, for instance, <literal>let</literal> as part
+      of <literal>letter</literal>. Without this restriction
+      <literal>letter</literal> would be recognized as the keyword
+      <literal>let</literal> followed by the variable <literal>ter</literal>.
+      The context-free restriction forbids that a variable is directly
+      followed by a letter. It does not forbid layout characters between the
+      letters, e.g. <literal>a b</literal> is a legal recognizable
+      string.</para>
+
+      <para></para>
+
+      <example xml:id="CODE_functional">
+        <title>Using restrictions in the definition of a simple functional
+        language</title>
+
+        <para><programlisting>module Functional
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Term 
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -&gt; Var
+  context-free syntax
+    Var                          -&gt; Term
+    Term Term                    -&gt; Term {left}
+    "let" Var "=" Term "in" Term -&gt; Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]  </programlisting></para>
+      </example>
+
+      <para><literal>&lt;Lookaheads&gt;</literal> are slightly more complex.
+      The most compact way is to give the SDF definition of the
+      <literal>&lt;Lookaheads&gt;</literal> and illustrate their use by means
+      of some examples:</para>
+
+      <para><programlisting>context-free syntax
+  CharClass                    -&gt; Lookahead
+  CharClass "." Lookaheads     -&gt; Lookahead
+  Lookahead                    -&gt; Lookaheads
+  Lookaheads "|" Lookaheads    -&gt; Lookaheads {right}
+  "(" Lookaheads ")"           -&gt; Lookaheads {bracket}
+  "[[" {Lookahead ","}* "]]"   -&gt; Lookaheads 
+</programlisting>The next example illustrates the use of restrictions to
+      define a <emphasis>safe</emphasis> way of layout. <link
+      linkend="LexicalSyntax">Recall</link> that optional layout, represented
+      by the symbol<literal> LAYOUT?</literal>, may be recognized between the
+      members of the left-hand side of a context-free syntax rule. However, if
+      a such a member recognizes the empty string, this gives rise to a <link
+      linkend="lex-ambiguity">lexical ambiguity</link>. This problem is
+      avoided by the definition given <link
+      linkend="CODE_safe-layout">below</link>: it simply forbids that optional
+      layout is followed by layout characters.</para>
+
+      <para><example xml:id="CODE_safe-layout">
+          <title>Safe way of defining <literal>LAYOUT</literal></title>
+
+          <para><programlisting>module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n] -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]</programlisting></para>
+        </example></para>
+
+      <para>The example shown <link linkend="CODE_c-comment">below</link>
+      illustrates the use of restrictions to extend the previous layout
+      definition with C-style comments. For readability we give here
+      <emphasis>two</emphasis> restrictions whereas the first one is already
+      imported from <link linkend="CODE_safe-layout">module
+      basic/Whitespace</link>. The repetition of this first restriction is
+      redundant and could be eliminated.<example xml:id="CODE_c-comment">
+          <title>Definition of C comments</title>
+
+          <para><programlisting>module Comment
+
+imports basic/Whitespace
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    ~[\ \n\t\/]+ -&gt; ComWord
+
+  context-free syntax
+    "/*" ComWord* "*/" -&gt; Comment
+    Comment            -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+    LAYOUT? -/- [\/].[\*]</programlisting></para>
+        </example></para>
+
+      <para>A frequently asked question is when to use
+      <emphasis>lexical</emphasis> restrictions and when to use
+      <emphasis>context-free</emphasis> restrictions. In one of the <link
+      linkend="CODE_functional">previous examples</link> the lexical
+      restrictions on <filename>let</filename> and <literal>in</literal>
+      cannot be defined using context-free restrictions because these keywords
+      do not "live" at the context-free level. Is it possible to put a lexical
+      restriction on <literal>Var</literal>? Yes, but it will have no effect,
+      because internally the lexical <literal>Var</literal> is injected in the
+      context-free <literal>Var</literal>. The general rule is to define the
+      restrictions always on the context-free level and not on the lexical
+      level unless a situation as will be discussed in the next paragraph
+      occurs. The specification <link
+      linkend="CODE_restrictedexpressions">below</link> is an example of an
+      erroneous use of context-free expressions, because it prevents the
+      recognition of <literal>(abc)def</literal>. If we want to enforce the
+      correct restriction, it is necessary to transform this context-free
+      restriction into a lexical restriction.</para>
+
+      <para><example xml:id="CODE_restrictedexpressions">
+          <title>Erroneous use of restrictions in the definition of simple
+          expressions</title>
+
+          <para><programlisting>module RestrictedExpressions
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Expr
+  sorts Expr
+
+  lexical syntax
+    [a-z]+ -&gt; Expr
+
+  context-free syntax
+    Expr Expr    -&gt; Expr {left}
+    "(" Expr ")" -&gt; Expr {bracket}
+
+  context-free restrictions
+    Expr -/- [a-z]</programlisting></para>
+        </example></para>
     </section>
   </section>
 
@@ -1626,27 +1933,18 @@ exports
 &lt;CMND&gt;  ::= "line" "to" &lt;COORD&gt; | "move" "to" &lt;COORD&gt;
 </programlisting></para>
       </example>
-
-      <para>When a literal in a context-free function consists only of
-      lower-case letters and digits and is not a keyword of ASF+SDF, it need
-      not be surrounded by quotes. You may therefore write <literal>move to
-      COORD -&gt; CMND</literal> instead of the <link
-      linkend="CODE_simple-cf">previous definition</link>. But it is better to
-      always write the quotes explicitly.</para>
     </section>
 
     <section xml:id="EX_Identifiers">
       <title>Identifiers</title>
 
-      <!--\index{repetition operator@repetition operator}-->
-
       <para>Lexical tokens are often described by patterns that exhibit a
-      certain repetition. The operator described in <link
-      linkend="RepetitionOperator">Repetition</link> can be used to express
-      repetitions. The example <link linkend="CODE_repetition">below</link>
-      demonstrates the use of the repetition operator <literal>*</literal> for
-      defining identifiers consisting of a letter followed by zero or more
-      letters or digits.</para>
+      certain repetition. The list symbols described in <link
+      linkend="lists">List Symbols</link> can be used to express repetitions.
+      The example <link linkend="CODE_repetition">below</link> demonstrates
+      the use of the repetition symbol <literal>*</literal> for defining
+      identifiers consisting of a letter followed by zero or more letters or
+      digits.</para>
 
       <example xml:id="CODE_repetition">
         <title>Defining identifiers using the repetition operator
@@ -1666,16 +1964,13 @@ exports
     Letter DigitLetter* -&gt; Id</programlisting></para>
       </example>
 
-      <!--\index{option operator@option operator}-->
-
       <para>If zero or exactly one occurrence of a lexical token is desired
-      the option operator described in <link
-      linkend="OptionOperator">Option</link> can be used. The use of the
-      option operator is illustrated <link linkend="CODE_option">below</link>.
-      Identifiers are defined consisting of one letter followed by one,
-      optional, digit. This definition accepts <literal>a</literal> and
-      <literal>z8</literal>, but rejects <literal>ab</literal> or
-      <literal>z789</literal>.</para>
+      the option operator described in <link linkend="optional">Optional
+      symbols</link> can be used. The use of the option operator is
+      illustrated <link linkend="CODE_option">below</link>. Identifiers are
+      defined consisting of one letter followed by one, optional, digit. This
+      definition accepts <literal>a</literal> and <literal>z8</literal>, but
+      rejects <literal>ab</literal> or <literal>z789</literal>.</para>
 
       <example xml:id="CODE_option">
         <title>Defining a letter followed by an optional number using the
@@ -1694,8 +1989,6 @@ exports
 
     Letter Digit? -&gt; Id </programlisting></para>
       </example>
-
-      <!--\index{alternative operator@alternative operator}-->
 
       <para>Productions with the same result sort together define the lexical
       syntax of tokens for that sort. The left-hand sides of these function
@@ -1858,10 +2151,10 @@ exports
       <para>Context-free syntax often requires the description of the
       repetition of a syntactic notion or of list structures (with or without
       separators) containing a syntactic notion. The <link
-      linkend="RepetitionOperator">repetition operator</link> can be used for
-      this purpose. Lists may be used in both the left-hand side and
-      right-hand side of a context-free function as well as in the right-hand
-      side of a <link linkend="Variables">variable declaration</link>.</para>
+      linkend="lists">list symbols</link> can be used for this purpose. Lists
+      may be used in both the left-hand side and right-hand side of a
+      context-free function as well as in the right-hand side of a <link
+      linkend="Variables">variable declaration</link>.</para>
 
       <para><link linkend="CODE_pascal-ids">Here</link> is an example of how
       lists can be used to define the syntax of a list of identifiers
@@ -1924,13 +2217,12 @@ exports
         </listitem>
       </itemizedlist>
 
-      <para>Chain productions are not represented in the syntax tree but
-      correspond to a <emphasis>subsort relation</emphasis> between
-      <literal>SMALL</literal> and <literal>BIG</literal>. If
-      <literal>SORT-A</literal> is a subsort of <literal>SORT-B</literal> then
-      in the abstract syntax tree a tree of sort <literal>SORT-A</literal> can
-      be put wherever a tree of sort <literal>SORT-B</literal> is required. In
-      the example <link linkend="CODE_inj-exp">below</link> the symbols
+      <para>It is a common misconception that chain rules will not be
+      represented in the parse tree that <command>sglr</command> outputs. An
+      injection production is a production like any other, and will lead to a
+      node in the parse tree. However, some back-ends are known to interpret
+      chain rules as <emphasis>sub-sort</emphasis> relations. In the example
+      <link linkend="CODE_inj-exp">below</link> the symbols
       <literal>Nat</literal> and <literal>Var</literal> are injected in
       <literal>Exp</literal>.</para>
 
@@ -1960,7 +2252,8 @@ exports
       <title>Using Labels in Productions</title>
 
       <para>See <link linkend="CODE_labels">below</link> for an example of an
-      SDF specification containing labels.</para>
+      SDF specification containing labels.Remember that labels do not have
+      semantics in SDF.</para>
 
       <example xml:id="CODE_labels">
         <title>The module <literal>basic/Booleans</literal> decorated with
@@ -1978,6 +2271,271 @@ exports
     lhs:Boolean "|" rhs:Boolean -&gt; Boolean
     lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean</programlisting></para>
       </example>
+    </section>
+
+    <section xml:id="GroupAssoc">
+      <title>Groups of Associative Productions</title>
+
+      <para>Groups of associative productions define how to accept or reject
+      trees containing related occurrences of different productions with the
+      same priority. They are defined by prefixing a list of context-free
+      productions in a priority declaration with one of the following
+      attributes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>left</literal>: related occurrences of
+          <replaceable>F</replaceable> and <replaceable>G</replaceable>
+          associate from left to right.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>right</literal>: related occurrences of
+          <replaceable>F</replaceable> and <replaceable>G</replaceable>
+          associate from right to left.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>non-assoc</literal>: related occurrences of
+          <replaceable>F</replaceable> and <replaceable>G</replaceable> are
+          not allowed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>where <replaceable>F</replaceable> and
+      <replaceable>G</replaceable> are productions appearing in the list.
+      <link linkend="CODE_complex-prio">Below</link> is an example of the use
+      of grouped associativity.</para>
+
+      <example xml:id="CODE_complex-prio">
+        <title>More complex associativity and priority definitions</title>
+
+        <para><programlisting>module ComplexExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E 
+
+  sorts E 
+
+  context-free syntax
+    NatCon    -&gt; E
+    E "+" E   -&gt; E {left}
+    E "-" E   -&gt; E {non-assoc}
+    E "*" E   -&gt; E {left}
+    E "/" E   -&gt; E {non-assoc}
+    E "^" E   -&gt; E {right}
+    "(" E ")" -&gt; E {bracket}
+
+  context-free priorities
+    E "^" E -&gt; E &gt; 
+    {non-assoc: E "*" E -&gt; E
+                E "/" E -&gt; E} &gt;
+    {left: E "+" E -&gt; E
+           E "-" E -&gt; E} </programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="AssociativeFunctions">
+      <title>Associative Productions</title>
+
+      <para>Associativity attributes can be attached to binary productions of
+      the form <replaceable>S</replaceable>
+      <literal><replaceable>op</replaceable></literal>
+      <replaceable>S</replaceable> <literal>-&gt;</literal>
+      <replaceable>S</replaceable>, where
+      <literal><replaceable>op</replaceable></literal> is a symbol or empty.
+      Without associativity attributes, nested occurrences of such productions
+      immediately lead to ambiguities, as is shown by the sentence
+      <replaceable>S-string</replaceable>
+      <literal><replaceable>op</replaceable></literal>
+      <replaceable>S-string</replaceable>
+      <literal><replaceable>op</replaceable></literal>
+      <replaceable>S-string</replaceable> where
+      <replaceable>S-string</replaceable> is a string produced by symbol
+      <replaceable>S</replaceable>. The particular associativity associated
+      with <replaceable>op</replaceable> determines the intended
+      interpretation of such sentences. We call two occurrences of productions
+      <replaceable>F</replaceable> and <replaceable>G</replaceable>
+      <emphasis>related</emphasis>, when the node corresponding to
+      <replaceable>F</replaceable> has a node corresponding to
+      <replaceable>G</replaceable> as first or last child. The associativity
+      attributes define how to accept or reject trees containing related
+      occurrences of the same function, <replaceable>F</replaceable>:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>left</literal>: related occurrences of
+          <replaceable>F</replaceable> associate from left to right.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>right</literal>: related occurrences of
+          <replaceable>F</replaceable> associate from right to left.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>assoc</literal>: related occurrences of
+          <replaceable>F</replaceable> associate from left to right.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>non-assoc</literal>: related occurrences of
+          <replaceable>F</replaceable> are not allowed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Currently, there is no syntactic or semantic difference between
+      <literal>left</literal> and <literal>assoc</literal>, but &#160;we may
+      change the semantics of the assoc attribute in the future. <remark>Is
+      this really true?</remark></para>
+
+      <para><link linkend="CODE_simple-prio">Below</link> we give an example
+      of a definition of simple arithmetic expressions with the usual
+      priorities and associativities.</para>
+
+      <example xml:id="CODE_simple-prio">
+        <title>Simple context-free priority definition</title>
+
+        <para><programlisting>module SimpleExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E 
+  sorts E 
+
+  context-free syntax
+    NatCon    -&gt; E
+    E "+" E   -&gt; E {left}
+    E "*" E   -&gt; E {left}
+    "(" E ")" -&gt; E {bracket}
+
+  context-free priorities
+    E "*" E -&gt; E &gt; 
+    E "+" E -&gt; E
+</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="Parameterization">
+      <title xml:id="parameters">Parameterization</title>
+
+      <para>Module parameterization allows the definition of generic modules
+      for lists, pairs, sets, etc. The operations defined in these modules are
+      independent of a specific type. When importing a parameterized module
+      and instantiating the formal by actual parameters the operations become
+      sort specific. Modules can have formal parameters when defining them.
+      The module name is then followed by a list of symbols, representing the
+      formal parameters of this module. The specification <link
+      linkend="CODE_generic-pairs">below</link> shows an example of a
+      parameterized module. In this example the formal parameters are used in
+      the parameterized sorts as well, in order to increase readability and to
+      avoid name clashes between different instances of the same
+      module.</para>
+
+      <example xml:id="CODE_generic-pairs">
+        <title>Definition of generic pairs</title>
+
+        <para><programlisting>module Pair[X Y]
+
+imports basic/Whitespace
+imports basic/Booleans
+
+hiddens
+  sorts X Y
+
+exports
+  context-free start-symbols Pair[[X,Y]]
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
+
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
+      </example>
+
+      <para>When importing a parameterized module the formal parameters have
+      to be replaced by actual parameters. The specification <link
+      linkend="CODE_importing-pairs">below</link> shows an example of a rather
+      complicated import of a parameterized module. The symbols
+      <literal>Pair[[Boolean,Boolean]] </literal>and
+      <literal>Pair[[Integer,Integer]]</literal> are the actual parameters of
+      the module <literal>Pair[X Y]</literal> in the last import.</para>
+
+      <example xml:id="CODE_importing-pairs">
+        <title>Use of generic pair module</title>
+
+        <para><programlisting>module TestPair
+
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[Boolean Boolean]
+imports Pair[Integer Integer]
+imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="SymbolRenaming">
+      <title xml:id="renaming">Symbol Renaming</title>
+
+      <para>Symbol renaming is in fact very similar to parameterization except
+      that it is not necessary to add formal parameters to a module. The
+      mechanism of symbol renaming allows the overriding of one symbol or a
+      set of symbols by another symbol or symbols, respectively. It allows a
+      flexible and concise way of adapting specifications. The specification
+      <link linkend="CODE_pairs">below</link> shows an example of the
+      <literal>Pair</literal> module without parameters. The idea is to
+      achieve the same effect as parameterization by explicitly renaming
+      <literal>X</literal> and <literal>Y</literal> to the desired names when
+      <literal>Pair</literal> is imported.<example xml:id="CODE_pairs">
+          <title>Definition of generic pairs</title>
+
+          <para><programlisting>module Pair
+
+imports basic/Whitespace
+imports basic/Booleans
+
+hiddens
+  sorts X Y
+
+exports
+  context-free start-symbols Pair[[X,Y]]
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
+
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
+        </example></para>
+
+      <para>During import such module symbols can be renamed via symbol
+      renaming. The specification <link
+      linkend="CODE_renaming-pairs">below</link> shows an example of a rather
+      complicated import of the module <literal>Pair</literal> using
+      renamings. Renaming <literal>X</literal> to <literal>Boolean</literal>
+      is, for instance, written as <literal>X =&gt; Boolean.</literal></para>
+
+      <para><example xml:id="CODE_renaming-pairs">
+          <title>Use of generic pair module</title>
+
+          <para><programlisting>module TestPair
+
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[X =&gt; Boolean Y =&gt; Boolean]
+imports Pair[X =&gt; Integer  Y =&gt; Integer]
+imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</programlisting></para>
+        </example></para>
     </section>
 
     <section xml:id="EX_Tricky">
@@ -2087,417 +2645,6 @@ exports
           then produce unexpected cycles.</para>
         </example>
       </section>
-    </section>
-  </section>
-
-  <section xml:id="Priorities">
-    <title>Priorities</title>
-
-    <!--\index{priorities@priorities}-->
-
-    <para>The context-free syntax defined in an SDF specification may be
-    ambiguous: there are sentences which have more than one associated tree.
-    The common example is the arithmetic expression in which definitions of
-    the priority or associativity of operators are missing. There are three
-    mechanisms for defining associativity and priority:</para>
-
-    <!--\index{associativity@associativity}-->
-
-    <itemizedlist>
-      <listitem>
-        <para><link linkend="RelativePriorities">Relative priorities of
-        productions </link>defined in the <literal>context-free
-        priorities</literal> section.</para>
-      </listitem>
-
-      <listitem>
-        <para><link linkend="AssociativeFunctions">Associativity of
-        productions</link> defined as attributes following the function
-        declaration.</para>
-      </listitem>
-
-      <listitem>
-        <para><link linkend="GroupAssoc">Associativity of groups of
-        productions</link> defined in the <literal>context-free
-        priorities</literal> section.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Closely related with priorities are brackets that can be used to
-    overrule priorities. We will first describe bracket productions, and then
-    the various methods for defining priorities.</para>
-
-    <section xml:id="AssociativeFunctions">
-      <title>Associative Productions</title>
-
-      <!--\index{associativity productions@associativity productions}-->
-
-      <para>Associativity attributes can be attached to binary productions of
-      the form <replaceable>S</replaceable>
-      <literal><replaceable>op</replaceable></literal>
-      <replaceable>S</replaceable> <literal>-&gt;</literal>
-      <replaceable>S</replaceable>, where
-      <literal><replaceable>op</replaceable></literal> is a symbol or empty.
-      Without associativity attributes, nested occurrences of such productions
-      immediately lead to ambiguities, as is shown by the sentence
-      <replaceable>S-string</replaceable>
-      <literal><replaceable>op</replaceable></literal>
-      <replaceable>S-string</replaceable>
-      <literal><replaceable>op</replaceable></literal>
-      <replaceable>S-string</replaceable> where
-      <replaceable>S-string</replaceable> is a string produced by symbol
-      <replaceable>S</replaceable>. The particular associativity associated
-      with <replaceable>op</replaceable> determines the intended
-      interpretation of such sentences. We call two occurrences of productions
-      <replaceable>F</replaceable> and <replaceable>G</replaceable>
-      <emphasis>related</emphasis>, when the node corresponding to
-      <replaceable>F</replaceable> has a node corresponding to
-      <replaceable>G</replaceable> as first or last child. The associativity
-      attributes define how to accept or reject trees containing related
-      occurrences of the same function, <replaceable>F</replaceable>:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>left</literal>: related occurrences of
-          <replaceable>F</replaceable> associate from left to right.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>right</literal>: related occurrences of
-          <replaceable>F</replaceable> associate from right to left.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>assoc</literal>: related occurrences of
-          <replaceable>F</replaceable> associate from left to right.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>non-assoc</literal>: related occurrences of
-          <replaceable>F</replaceable> are not allowed.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Currently, there is no syntactic or semantic difference between
-      <literal>left</literal> and <literal>assoc</literal>, but &#160;we may
-      change the semantics of the assoc attribute in the future. <remark>Is
-      this really true?</remark></para>
-
-      <para><link linkend="CODE_simple-prio">Below</link> we give an example
-      of a definition of simple arithmetic expressions with the usual
-      priorities and associativities.</para>
-
-      <example xml:id="CODE_simple-prio">
-        <title>Simple context-free priority definition</title>
-
-        <para><programlisting>module SimpleExpr
-
-imports basic/Whitespace
-imports basic/NatCon
-
-exports
-  context-free start-symbols E 
-  sorts E 
-
-  context-free syntax
-    NatCon    -&gt; E
-    E "+" E   -&gt; E {left}
-    E "*" E   -&gt; E {left}
-    "(" E ")" -&gt; E {bracket}
-
-  context-free priorities
-    E "*" E -&gt; E &gt; 
-    E "+" E -&gt; E
-</programlisting></para>
-      </example>
-    </section>
-
-    <section xml:id="GroupAssoc">
-      <title>Groups of Associative Productions</title>
-
-      <para><!--\index{associativity groups@associativity groups}-->Groups of
-      associative productions define how to accept or reject trees containing
-      related occurrences of different productions with the same priority.
-      They are defined by prefixing a list of context-free productions in a
-      priority declaration with one of the following attributes:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>left</literal>: related occurrences of
-          <replaceable>F</replaceable> and <replaceable>G</replaceable>
-          associate from left to right.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>right</literal>: related occurrences of
-          <replaceable>F</replaceable> and <replaceable>G</replaceable>
-          associate from right to left.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>non-assoc</literal>: related occurrences of
-          <replaceable>F</replaceable> and <replaceable>G</replaceable> are
-          not allowed.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>where <replaceable>F</replaceable> and
-      <replaceable>G</replaceable> are productions appearing in the list.
-      <link linkend="CODE_complex-prio">Below</link> is an example of the use
-      of grouped associativity.</para>
-
-      <example xml:id="CODE_complex-prio">
-        <title>More complex associativity and priority definitions</title>
-
-        <para><programlisting>module ComplexExpr
-
-imports basic/Whitespace
-imports basic/NatCon
-
-exports
-  context-free start-symbols E 
-
-  sorts E 
-
-  context-free syntax
-    NatCon    -&gt; E
-    E "+" E   -&gt; E {left}
-    E "-" E   -&gt; E {non-assoc}
-    E "*" E   -&gt; E {left}
-    E "/" E   -&gt; E {non-assoc}
-    E "^" E   -&gt; E {right}
-    "(" E ")" -&gt; E {bracket}
-
-  context-free priorities
-    E "^" E -&gt; E &gt; 
-    {non-assoc: E "*" E -&gt; E
-                E "/" E -&gt; E} &gt;
-    {left: E "+" E -&gt; E
-           E "-" E -&gt; E} </programlisting></para>
-      </example>
-    </section>
-
-    <section xml:id="Restrictions">
-      <title>Restrictions</title>
-
-      <!--\index{restrictions@restrictions} \index{lexical restrictions@lexical restrictions} \index{context-free restrictions@context-free restrictions} \index{{\tt -/-}@{\tt -/-}} \index{{\tt <Lookaheads>}@{\tt <Lookaheads>}}-->
-
-      <para>Lexical syntax can be highly ambiguous. Consider a simple lexical
-      definition for identifiers like the one given <link
-      linkend="CODE_repetition">earlier</link>. When recognizing the text
-      <literal>abc</literal>, what should we return: <literal>a</literal>,
-      <literal>ab</literal> or, <literal>abc</literal>? We discuss the
-      strategy <emphasis>Prefer Longest Match</emphasis> for resolving this
-      kind of ambiguity in <link linkend="lex-ambiguity">Lexical
-      Ambiguities</link>}. Here, we describe the notion of
-      <emphasis>restrictions</emphasis> that enable the formulation of this
-      and other lexical disambiguation strategies. A restriction limits the
-      <emphasis>lookahead</emphasis> for a given symbol; it indicates that a
-      symbol may not be followed by a character from a given character class.
-      A lookahead may consist of more than one character class. Restrictions
-      come in two flavors:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>lexical restrictions;</para>
-        </listitem>
-
-        <listitem>
-          <para>context-free restrictions.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The general form of a restriction is:<programlisting>&lt;Symbol&gt;+ <emphasis
-            role="bold">-/-</emphasis> &lt;Lookaheads&gt;</programlisting>In
-      case of lexical restrictions <literal>&lt;Symbol&gt;</literal> may be
-      either a literal or sort. In case of context-free restrictions only a
-      sort or symbol is allowed. The restriction operator
-      <literal>-/-</literal> should be read as <emphasis>may not be followed
-      by</emphasis>. Before the restriction operator <literal>-/-</literal> a
-      list of symbols is given for which the restriction holds.</para>
-
-      <para>In the example <link linkend="CODE_functional">below</link> both
-      <literal>let</literal> and <literal>in</literal> may not be followed by
-      a letter. This example shows how lexical restrictions can be used to
-      prevent the recognition of erroneous expressions in a small functional
-      language. The lexical restriction deals with the possible confusion
-      between the reserved words <literal>let</literal> and
-      <literal>in</literal> and variables (of sort <literal>Var</literal>). It
-      forbids the recognition of, for instance, <literal>let</literal> as part
-      of <literal>letter</literal>. Without this restriction
-      <literal>letter</literal> would be recognized as the keyword
-      <literal>let</literal> followed by the variable <literal>ter</literal>.
-      The context-free restriction forbids that a variable is directly
-      followed by a letter. It does not forbid layout characters between the
-      letters, e.g. <literal>a b</literal> is a legal recognizable
-      string.</para>
-
-      <para></para>
-
-      <example xml:id="CODE_functional">
-        <title>Using restrictions in the definition of a simple functional
-        language</title>
-
-        <para><programlisting>module Functional
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Term 
-  sorts Var Term
-  lexical syntax
-    [a-z]+ -&gt; Var
-  context-free syntax
-    Var                          -&gt; Term
-    Term Term                    -&gt; Term {left}
-    "let" Var "=" Term "in" Term -&gt; Term
-
-  lexical restrictions
-    "let" "in" -/- [a-z]
-
-  context-free restrictions
-    Var -/- [a-z]  </programlisting></para>
-      </example>
-
-      <para><literal>&lt;Lookaheads&gt;</literal> are slightly more complex.
-      The most compact way is to give the SDF definition of the
-      <literal>&lt;Lookaheads&gt;</literal> and illustrate their use by means
-      of some examples:</para>
-
-      <para><programlisting>context-free syntax
-  CharClass                    -&gt; Lookahead
-  CharClass "." Lookaheads     -&gt; Lookahead
-  Lookahead                    -&gt; Lookaheads
-  Lookaheads "|" Lookaheads    -&gt; Lookaheads {right}
-  "(" Lookaheads ")"           -&gt; Lookaheads {bracket}
-  "[[" {Lookahead ","}* "]]"   -&gt; Lookaheads 
-</programlisting>The next example illustrates the use of restrictions to
-      define a <emphasis>safe</emphasis> way of layout. <link
-      linkend="LexicalSyntax">Recall</link> that optional layout, represented
-      by the symbol<literal> LAYOUT?</literal>, may be recognized between the
-      members of the left-hand side of a context-free syntax rule. However, if
-      a such a member recognizes the empty string, this gives rise to a <link
-      linkend="lex-ambiguity">lexical ambiguity</link>. This problem is
-      avoided by the definition given <link
-      linkend="CODE_safe-layout">below</link>: it simply forbids that optional
-      layout is followed by layout characters.</para>
-
-      <para><example xml:id="CODE_safe-layout">
-          <title>Safe way of defining <literal>LAYOUT</literal></title>
-
-          <para><programlisting>module basic/Whitespace
-
-exports
-  lexical syntax
-    [\ \t\n] -&gt; LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n]</programlisting></para>
-        </example></para>
-
-      <para>The example shown <link linkend="CODE_c-comment">below</link>
-      illustrates the use of restrictions to extend the previous layout
-      definition with C-style comments. For readability we give here
-      <emphasis>two</emphasis> restrictions whereas the first one is already
-      imported from <link linkend="CODE_safe-layout">module
-      basic/Whitespace</link>. The repetition of this first restriction is
-      redundant and could be eliminated.<example xml:id="CODE_c-comment">
-          <title>Definition of C comments</title>
-
-          <para><programlisting>module Comment
-
-imports basic/Whitespace
-
-exports
-  sorts ComWord Comment
-  lexical syntax
-    ~[\ \n\t\/]+ -&gt; ComWord
-
-  context-free syntax
-    "/*" ComWord* "*/" -&gt; Comment
-    Comment            -&gt; LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n]
-    LAYOUT? -/- [\/].[\*]</programlisting></para>
-        </example></para>
-
-      <para>A frequently asked question is when to use
-      <emphasis>lexical</emphasis> restrictions and when to use
-      <emphasis>context-free</emphasis> restrictions. In one of the <link
-      linkend="CODE_functional">previous examples</link> the lexical
-      restrictions on <filename>let</filename> and <literal>in</literal>
-      cannot be defined using context-free restrictions because these keywords
-      do not "live" at the context-free level. Is it possible to put a lexical
-      restriction on <literal>Var</literal>? Yes, but it will have no effect,
-      because internally the lexical <literal>Var</literal> is injected in the
-      context-free <literal>Var</literal>. The general rule is to define the
-      restrictions always on the context-free level and not on the lexical
-      level unless a situation as will be discussed in the next paragraph
-      occurs. The specification <link
-      linkend="CODE_restrictedexpressions">below</link> is an example of an
-      erroneous use of context-free expressions, because it prevents the
-      recognition of <literal>(abc)def</literal>. If we want to enforce the
-      correct restriction, it is necessary to transform this context-free
-      restriction into a lexical restriction.</para>
-
-      <para><example xml:id="CODE_restrictedexpressions">
-          <title>Erroneous use of restrictions in the definition of simple
-          expressions</title>
-
-          <para><programlisting>module RestrictedExpressions
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Expr
-  sorts Expr
-
-  lexical syntax
-    [a-z]+ -&gt; Expr
-
-  context-free syntax
-    Expr Expr    -&gt; Expr {left}
-    "(" Expr ")" -&gt; Expr {bracket}
-
-  context-free restrictions
-    Expr -/- [a-z]</programlisting></para>
-        </example></para>
-    </section>
-
-    <section xml:id="PreferAvoidReject">
-      <title>Preferring, Avoiding or Rejecting Parses</title>
-
-      <para>Priorities can be used to define a priority between two
-      productions or between two groups of productions. In both cases the
-      productions involved have to be listed explicitly in the priority
-      declaration. In certain cases, however, it is desirable to define that a
-      single rule has higher or lower priority than all other productions or
-      to explicitly reject certain syntactic constructs. The former is
-      achieved by the attributes <literal>prefer</literal> and
-      <literal>avoid</literal>. The latter by the attribute
-      <literal>reject</literal>. The use of the <literal>reject</literal>
-      attribute leads also to improvements in the performance of the parser.
-      If a function <replaceable>F</replaceable> is attributed with
-      <literal>prefer</literal> and there is a syntactic ambiguity in which it
-      is involved, only the parse using <replaceable>F</replaceable> will
-      remain. If a function <replaceable>F</replaceable> is attributed with
-      <literal>avoid</literal> and there is no ambiguity, then
-      <replaceable>F</replaceable> will be used. If there is an ambiguity,
-      then <replaceable>F</replaceable> will be immediately removed from the
-      set of ambiguities. If a function <replaceable>F</replaceable> is
-      attributed with <literal>reject</literal>, then independently of the
-      number of ambiguities, the parse using <replaceable>F</replaceable> will
-      be removed. While <link linkend="Restrictions">restrictions</link> only
-      impose limitations on the immediate lookahead that follows a symbol, the
-      reject mechanism can be used to eliminate complicated syntactic
-      structures. Examples of the use of <literal>prefer</literal>,
-      <literal>avoid</literal> and <literal>reject</literal> in order to solve
-      lexical ambiguities are discussed in <link
-      linkend="lex-ambiguity">Lexical Ambiguities</link>. In <link
-      linkend="cf-ambiguity">Context-free Ambiguities</link> we will give
-      examples of how to use these attributes to solve context-free
-      ambiguities, such as the famous dangling else problem.</para>
     </section>
   </section>
 
@@ -2873,219 +3020,79 @@ exports
     "s"                      -&gt; S</programlisting></para>
       </example>
     </section>
-  </section>
 
-  <section xml:id="ParametersRenamings">
-    <title xml:id="parametersrenaming">Parameterization and Renaming</title>
+    <section xml:id="Priorities">
+      <title>Priorities</title>
 
-    <section xml:id="Parameterization">
-      <title xml:id="parameters">Parameterization</title>
+      <!--\index{priorities@priorities}-->
 
-      <para>Module parameterization allows the definition of generic modules
-      for lists, pairs, sets, etc. The operations defined in these modules are
-      independent of a specific type. When importing a parameterized module
-      and instantiating the formal by actual parameters the operations become
-      sort specific. Modules can have formal parameters when defining them.
-      The module name is then followed by a list of symbols, representing the
-      formal parameters of this module. The specification <link
-      linkend="CODE_generic-pairs">below</link> shows an example of a
-      parameterized module. In this example the formal parameters are used in
-      the parameterized sorts as well, in order to increase readability and to
-      avoid name clashes between different instances of the same
-      module.</para>
+      <para>The context-free syntax defined in an SDF specification may be
+      ambiguous: there are sentences which have more than one associated tree.
+      The common example is the arithmetic expression in which definitions of
+      the priority or associativity of operators are missing. There are three
+      mechanisms for defining associativity and priority:</para>
 
-      <example xml:id="CODE_generic-pairs">
-        <title>Definition of generic pairs</title>
+      <!--\index{associativity@associativity}-->
 
-        <para><programlisting>module Pair[X Y]
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="RelativePriorities">Relative priorities of
+          productions </link>defined in the <literal>context-free
+          priorities</literal> section.</para>
+        </listitem>
 
-imports basic/Whitespace
-imports basic/Booleans
+        <listitem>
+          <para><link linkend="AssociativeFunctions">Associativity of
+          productions</link> defined as attributes following the function
+          declaration.</para>
+        </listitem>
 
-hiddens
-  sorts X Y
+        <listitem>
+          <para><link linkend="GroupAssoc">Associativity of groups of
+          productions</link> defined in the <literal>context-free
+          priorities</literal> section.</para>
+        </listitem>
+      </itemizedlist>
 
-exports
-  context-free start-symbols Pair[[X,Y]]
-  sorts Pair[[X,Y]]
-
-  context-free syntax
-    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
-
-    make-pair(X, Y)      -&gt; Pair[[X,Y]]
-    first(Pair[[X,Y]])   -&gt; X
-    second(Pair[[X,Y]])  -&gt; Y
-    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
-      </example>
-
-      <para>When importing a parameterized module the formal parameters have
-      to be replaced by actual parameters. The specification <link
-      linkend="CODE_importing-pairs">below</link> shows an example of a rather
-      complicated import of a parameterized module. The symbols
-      <literal>Pair[[Boolean,Boolean]] </literal>and
-      <literal>Pair[[Integer,Integer]]</literal> are the actual parameters of
-      the module <literal>Pair[X Y]</literal> in the last import.</para>
-
-      <example xml:id="CODE_importing-pairs">
-        <title>Use of generic pair module</title>
-
-        <para><programlisting>module TestPair
-
-imports basic/Booleans 
-imports basic/Integers 
-imports Pair[Boolean Boolean]
-imports Pair[Integer Integer]
-imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></para>
-      </example>
+      <para>Closely related with priorities are brackets that can be used to
+      overrule priorities. We will first describe bracket productions, and
+      then the various methods for defining priorities.</para>
     </section>
 
-    <section xml:id="SymbolRenaming">
-      <title xml:id="renaming">Symbol Renaming</title>
+    <section xml:id="PreferAvoidReject">
+      <title>Preferring, Avoiding or Rejecting Parses</title>
 
-      <para>Symbol renaming is in fact very similar to parameterization except
-      that it is not necessary to add formal parameters to a module. The
-      mechanism of symbol renaming allows the overriding of one symbol or a
-      set of symbols by another symbol or symbols, respectively. It allows a
-      flexible and concise way of adapting specifications. The specification
-      <link linkend="CODE_pairs">below</link> shows an example of the
-      <literal>Pair</literal> module without parameters. The idea is to
-      achieve the same effect as parameterization by explicitly renaming
-      <literal>X</literal> and <literal>Y</literal> to the desired names when
-      <literal>Pair</literal> is imported.<example xml:id="CODE_pairs">
-          <title>Definition of generic pairs</title>
-
-          <para><programlisting>module Pair
-
-imports basic/Whitespace
-imports basic/Booleans
-
-hiddens
-  sorts X Y
-
-exports
-  context-free start-symbols Pair[[X,Y]]
-  sorts Pair[[X,Y]]
-
-  context-free syntax
-    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
-
-    make-pair(X, Y)      -&gt; Pair[[X,Y]]
-    first(Pair[[X,Y]])   -&gt; X
-    second(Pair[[X,Y]])  -&gt; Y
-    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
-        </example></para>
-
-      <para>During import such module symbols can be renamed via symbol
-      renaming. The specification <link
-      linkend="CODE_renaming-pairs">below</link> shows an example of a rather
-      complicated import of the module <literal>Pair</literal> using
-      renamings. Renaming <literal>X</literal> to <literal>Boolean</literal>
-      is, for instance, written as <literal>X =&gt; Boolean.</literal></para>
-
-      <para><example xml:id="CODE_renaming-pairs">
-          <title>Use of generic pair module</title>
-
-          <para><programlisting>module TestPair
-
-imports basic/Booleans 
-imports basic/Integers 
-imports Pair[X =&gt; Boolean Y =&gt; Boolean]
-imports Pair[X =&gt; Integer  Y =&gt; Integer]
-imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</programlisting></para>
-        </example></para>
+      <para>Priorities can be used to define a priority between two
+      productions or between two groups of productions. In both cases the
+      productions involved have to be listed explicitly in the priority
+      declaration. In certain cases, however, it is desirable to define that a
+      single rule has higher or lower priority than all other productions or
+      to explicitly reject certain syntactic constructs. The former is
+      achieved by the attributes <literal>prefer</literal> and
+      <literal>avoid</literal>. The latter by the attribute
+      <literal>reject</literal>. The use of the <literal>reject</literal>
+      attribute leads also to improvements in the performance of the parser.
+      If a function <replaceable>F</replaceable> is attributed with
+      <literal>prefer</literal> and there is a syntactic ambiguity in which it
+      is involved, only the parse using <replaceable>F</replaceable> will
+      remain. If a function <replaceable>F</replaceable> is attributed with
+      <literal>avoid</literal> and there is no ambiguity, then
+      <replaceable>F</replaceable> will be used. If there is an ambiguity,
+      then <replaceable>F</replaceable> will be immediately removed from the
+      set of ambiguities. If a function <replaceable>F</replaceable> is
+      attributed with <literal>reject</literal>, then independently of the
+      number of ambiguities, the parse using <replaceable>F</replaceable> will
+      be removed. While <link linkend="Restrictions">restrictions</link> only
+      impose limitations on the immediate lookahead that follows a symbol, the
+      reject mechanism can be used to eliminate complicated syntactic
+      structures. Examples of the use of <literal>prefer</literal>,
+      <literal>avoid</literal> and <literal>reject</literal> in order to solve
+      lexical ambiguities are discussed in <link
+      linkend="lex-ambiguity">Lexical Ambiguities</link>. In <link
+      linkend="cf-ambiguity">Context-free Ambiguities</link> we will give
+      examples of how to use these attributes to solve context-free
+      ambiguities, such as the famous dangling else problem.</para>
     </section>
-  </section>
-
-  <section xml:id="SdfComment">
-    <title xml:id="comments">SDF comment convention</title>
-
-    <para><remark>This has a too prominent place; move it.</remark></para>
-
-    <!--\index{Sdf comment@\sdf\ comment}-->
-
-    <para>The comment convention within an SDF specification is that
-    characters between <literal>%%</literal> and the end of line is comment as
-    well as every character between two <literal>%</literal> characters
-    including the newline character. An example of the use of comments is
-    given <link linkend="CODE_sdfcomment">below</link>. This definition also
-    defines the comment convention in SDF itself. More details on defining
-    layout can be found in the section <link
-    linkend="Restrictions">Restrictions</link>.</para>
-
-    <example xml:id="CODE_sdfcomments">
-      <title>SDF comments</title>
-
-      <para><programlisting xml:id="CODE_sdfcomment">module basic/Comments
-
-imports basic/Whitespace
-
-%% In this module we define the 
-%% comment convention for SDF.
-
-exports
-  lexical syntax
-    "%%" ~[\n]* "\n" -&gt; LAYOUT
-    "%" ~[\%]+ "%" -&gt; LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\%]</programlisting></para>
-    </example>
-  </section>
-
-  <section xml:id="Variables">
-    <title>Variables</title>
-
-    <!--\index{variables@variables}-->
-
-    <para>Variables are declared in the <literal>variables</literal> section
-    of a module. Like all other entities in a module, except equations,
-    variables may be exported (see section <link
-    linkend="Modules">Modules</link>). A variables section consists of a list
-    of variable names followed by a symbol. In fact, a variable declaration
-    can define an infinite collection of variables by using a <emphasis>naming
-    scheme</emphasis> instead of a simple variable name. A naming scheme is a
-    regular expression like the ones allowed in the <link
-    linkend="LexicalSyntax">lexical syntax</link> except that sorts are not
-    allowed. A variable may represent any symbol. In the specification <link
-    linkend="CODE_variables">below</link>, <literal>Id</literal>,
-    <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
-    variables declared by the naming schemes in the
-    <literal>variables</literal> section. Strings that occur in the left-hand
-    side of variable declarations should <emphasis>always</emphasis> be
-    quoted.</para>
-
-    <example xml:id="CODE_variables">
-      <title>Variable declarations using naming schemes</title>
-
-      <para><programlisting>module VarDecls
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Decl
-  sorts Id Decl Type 
-
-  lexical syntax
-    [a-z]+ -&gt; Id
- 
-  context-free syntax
-    "decl" {Id ","}+ ":" Type -&gt; Decl 
-    "integer"                 -&gt; Type 
-    "real"                    -&gt; Type 
-
-hiddens
-  variables
-    "Id"           -&gt; Id 
-    "Type"[0-9]*   -&gt; Type 
-    "Id-list"[\']* -&gt; {Id ","}* 
-    "Id-ne-list"   -&gt; {Id ","}+</programlisting></para>
-    </example>
-
-    <para>Declared variables can only be used when defining equations. It is
-    not allowed to use them in terms. Ambiguities due to variables are
-    resolved by the <emphasis>Prefer Variables</emphasis> strategy that was
-    discussed in <link linkend="lex-ambiguity">Lexical
-    Ambiguities</link>.</para>
   </section>
 
   <section xml:id="WellformednessSDF">
