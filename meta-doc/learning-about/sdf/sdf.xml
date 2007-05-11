@@ -265,9 +265,9 @@
       linkend="symbols">symbols</link>. After we have described all of it, we
       continue with a set of <link linkend="examples">examples</link>. The
       document ends with special sections on <link
-      linkend="???">well-formedness</link>, <link
-      linkend="???">disambiguation</link> and the <link linkend="???">history
-      of SDF</link>.</para>
+      linkend="wellformedness">well-formedness</link>, <link
+      linkend="disambiguation">disambiguation</link> and the <link
+      linkend="history">history of SDF</link>.</para>
 
       <para><figure xml:id="sdfgraph">
           <title>The hierarchical structure of the SDF syntax, extracted from
@@ -515,12 +515,12 @@
       </itemizedlist>
 
       <para>Each of these entities is described and illustrated in <link
-      linkend="Grammars">Grammars</link>. Most grammars have <link
-      linkend="???">Symbols</link> as their basic building blocks. Symbols are
-      the SDF term for terminals and non-terminals. Note that it is possible
-      to have hidden imports as well, this means that the full definition of
-      the import definition is copied in the hiddens section of the importing
-      module.</para>
+      linkend="grammars">Grammars</link>. Most grammars have <link
+      linkend="symbols">Symbols</link> as their basic building blocks. Symbols
+      are the SDF term for terminals and non-terminals. Note that it is
+      possible to have hidden imports as well, this means that the full
+      definition of the import definition is copied in the hiddens section of
+      the importing module.</para>
     </section>
 
     <section>
@@ -1054,28 +1054,46 @@ is replaced by
     We will now describe all these kinds of grammars. Also see the Section
     <link linkend="sdf_Examples">Examples</link>.</para>
 
-    <section xml:id="Imports">
+    <section>
       <title xml:id="imports">Imports</title>
 
-      <para>Apart from the import sections at the beginnig of each module,
-      there may be an arbitrary number of import grammar spread through a
-      module. Each <literal>&lt;ImportSection&gt;</literal> starts with the
-      keyword <literal>imports</literal> followed by zero or more module
-      names: <programlisting><emphasis role="bold">imports</emphasis>
+      <section xml:id="plainimports">
+        <title>Plain imports</title>
+
+        <para>Apart from the import sections at the beginnig of each module,
+        there may be an arbitrary number of import grammar spread through a
+        module. Each <literal>&lt;ImportSection&gt;</literal> starts with the
+        keyword <literal>imports</literal> followed by zero or more module
+        names: <programlisting><emphasis role="bold">imports</emphasis>
   &lt;ModuleName&gt;*</programlisting>When importing modules at the topmost
-      level of a module or when the import section occurs within the scope of
-      an exports keyword, all exported entities of the imported module (and of
-      all modules that are imported indirectly by it) become available in the
-      importing module. In addition, they are also exported by the importing
-      module. However, if the import section occurs within the scope of a
-      hiddens keyword, the exported entities are only visible in the importing
-      module but they are not exported by the importing module. An imported
-      module can be parameterized or decorated with <link
-      linkend="SymbolRenaming">renamings</link>. The name of the imported
-      module can also be a compound module name. In <link
-      linkend="CODE_sdfcomment">the definition of the SDF comments</link> the
-      imported module <literal>basic/Whitespace</literal> is an example of
-      such a compound module name.</para>
+        level of a module or when the import section occurs within the scope
+        of an exports keyword, all exported entities of the imported module
+        (and of all modules that are imported indirectly by it) become
+        available in the importing module. In addition, they are also exported
+        by the importing module. However, if the import section occurs within
+        the scope of a hiddens keyword, the exported entities are only visible
+        in the importing module but they are not exported by the importing
+        module. An imported module can be parameterized or decorated with
+        <link linkend="renamings">renamings</link>. The name of the imported
+        module can also be a compound module name. In <link
+        linkend="comments">the definition of the SDF comments</link> the
+        imported module <literal>basic/Whitespace</literal> is an example of
+        such a compound module name.</para>
+      </section>
+
+      <section>
+        <title>Renamings</title>
+
+        <para> Symbol renaming is in fact very similar to parameterization
+        except that it is not necessary to add formal parameters to a module.
+        The mechanism of symbol renaming allows the overriding of one symbol
+        or a set of symbols by another symbol or symbols, respectively. It
+        allows a flexible and concise way of adapting specifications. </para>
+
+        <warning>
+          <para>TODO finish this section</para>
+        </warning>
+      </section>
     </section>
 
     <section xml:id="Aliases">
@@ -1218,10 +1236,6 @@ which will be then wrapped as in:
         <para>The resulting definitions may look complex, but in fact there
         are only non-terminals and production rules. The complexity stems from
         the names of the non-terminals.</para>
-
-        <warning>
-          <para>Jurgen: continue here.</para>
-        </warning>
       </section>
 
       <section xml:id="Productions">
@@ -1318,23 +1332,22 @@ E         -&gt; C | D | E</programlisting>
               <para><literal>{prefer}</literal> is used to indicate that the
               attributed function should always be preferred over other
               productions (without this attribute) in certain cases of
-              syntactic ambiguity (see <link
-              linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
-              Parses</link>).</para>
+              syntactic ambiguity (see <link linkend="preferences">Preferring,
+              Avoiding or Rejecting Parses</link>).</para>
             </listitem>
 
             <listitem>
               <para><literal>{avoid}</literal> is used to indicate that a
               function should only be used as a last resort in certain cases
               of syntactic ambiguity (see <link
-              linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+              linkend="preferences">Preferring, Avoiding or Rejecting
               Parses}</link>).</para>
             </listitem>
 
             <listitem>
               <para><literal>{reject}</literal> can be used to explicitly
               forbid certain syntactic construct (see <link
-              linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
+              linkend="rejects">Preferring, Avoiding or Rejecting
               Parses</link>).</para>
             </listitem>
           </itemizedlist>
@@ -1516,7 +1529,7 @@ is replaced by
       <para>Variables are declared in the <literal>variables</literal> section
       of a module. Like all other entities in a module, except equations,
       variables may be exported (see section <link
-      linkend="Modules">Modules</link>). A variables section consists of a
+      linkend="modules">Modules</link>). A variables section consists of a
       list of variable names followed by a symbol. In fact, a variable
       declaration can define an infinite collection of variables by using a
       <emphasis>naming scheme</emphasis> instead of a simple variable name. A
@@ -1556,39 +1569,38 @@ hiddens
     "Id-list"[\']* -&gt; {Id ","}* 
     "Id-ne-list"   -&gt; {Id ","}+</programlisting></para>
       </example>
+    </section>
 
-      <para>Declared variables can only be used when defining equations. It is
-      not allowed to use them in terms. Ambiguities due to variables are
-      resolved by the <emphasis>Prefer Variables</emphasis> strategy that was
-      discussed in <link linkend="lex-ambiguity">Lexical
-      Ambiguities</link>.</para>
+    <section>
+      <title xml:id="lexicalvariables">Lexical variables</title>
+
+      <warning>
+        <para>write section</para>
+      </warning>
     </section>
 
     <section xml:id="restrictions">
       <title>Restrictions</title>
 
-      <para>Lexical syntax can be highly ambiguous. Consider a simple lexical
-      definition for identifiers like the one given <link
-      linkend="CODE_repetition">earlier</link>. When recognizing the text
-      <literal>abc</literal>, what should we return: <literal>a</literal>,
-      <literal>ab</literal> or, <literal>abc</literal>? We discuss the
-      strategy <emphasis>Prefer Longest Match</emphasis> for resolving this
-      kind of ambiguity in <link linkend="lex-ambiguity">Lexical
-      Ambiguities</link>}. Here, we describe the notion of
-      <emphasis>restrictions</emphasis> that enable the formulation of this
-      and other lexical disambiguation strategies. A restriction limits the
-      <emphasis>lookahead</emphasis> for a given symbol; it indicates that a
-      symbol may not be followed by a character from a given character class.
-      A lookahead may consist of more than one character class. Restrictions
-      come in two flavors:</para>
+      <para>The notion of <emphasis>restrictions</emphasis> enables the
+      formulation of lexical disambiguation strategies that occur in the
+      design of programming languages. Examples are "shift before reduce" and
+      "longest match". A restriction filters applications of productions for
+      certain non-terminals if the following character (lookahead) is in a
+      certain class. The result is that specific symbols may not be followed
+      by a character from a given character class. A lookahead may consist of
+      more than one character class (multiple lookahead). Restrictions come in
+      two flavors:</para>
 
       <itemizedlist>
         <listitem>
-          <para>lexical restrictions;</para>
+          <para>lexical restrictions that apply to lexical
+          non-terminals</para>
         </listitem>
 
         <listitem>
-          <para>context-free restrictions.</para>
+          <para>context-free restrictions that apply to context-free
+          non-terminals.</para>
         </listitem>
       </itemizedlist>
 
@@ -1599,155 +1611,14 @@ hiddens
       sort or symbol is allowed. The restriction operator
       <literal>-/-</literal> should be read as <emphasis>may not be followed
       by</emphasis>. Before the restriction operator <literal>-/-</literal> a
-      list of symbols is given for which the restriction holds.</para>
+      list of symbols is given for which the restriction holds. </para>
 
-      <para>In the example <link linkend="CODE_functional">below</link> both
-      <literal>let</literal> and <literal>in</literal> may not be followed by
-      a letter. This example shows how lexical restrictions can be used to
-      prevent the recognition of erroneous expressions in a small functional
-      language. The lexical restriction deals with the possible confusion
-      between the reserved words <literal>let</literal> and
-      <literal>in</literal> and variables (of sort <literal>Var</literal>). It
-      forbids the recognition of, for instance, <literal>let</literal> as part
-      of <literal>letter</literal>. Without this restriction
-      <literal>letter</literal> would be recognized as the keyword
-      <literal>let</literal> followed by the variable <literal>ter</literal>.
-      The context-free restriction forbids that a variable is directly
-      followed by a letter. It does not forbid layout characters between the
-      letters, e.g. <literal>a b</literal> is a legal recognizable
-      string.</para>
+      <para>Lookaheads are lists of character classes separated by ".". Note
+      that single character restrictions are implemented faster then multiple
+      character restrictions. Example:</para>
 
-      <para></para>
-
-      <example xml:id="CODE_functional">
-        <title>Using restrictions in the definition of a simple functional
-        language</title>
-
-        <para><programlisting>module Functional
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Term 
-  sorts Var Term
-  lexical syntax
-    [a-z]+ -&gt; Var
-  context-free syntax
-    Var                          -&gt; Term
-    Term Term                    -&gt; Term {left}
-    "let" Var "=" Term "in" Term -&gt; Term
-
-  lexical restrictions
-    "let" "in" -/- [a-z]
-
-  context-free restrictions
-    Var -/- [a-z]  </programlisting></para>
-      </example>
-
-      <para><literal>&lt;Lookaheads&gt;</literal> are slightly more complex.
-      The most compact way is to give the SDF definition of the
-      <literal>&lt;Lookaheads&gt;</literal> and illustrate their use by means
-      of some examples:</para>
-
-      <para><programlisting>context-free syntax
-  CharClass                    -&gt; Lookahead
-  CharClass "." Lookaheads     -&gt; Lookahead
-  Lookahead                    -&gt; Lookaheads
-  Lookaheads "|" Lookaheads    -&gt; Lookaheads {right}
-  "(" Lookaheads ")"           -&gt; Lookaheads {bracket}
-  "[[" {Lookahead ","}* "]]"   -&gt; Lookaheads 
-</programlisting>The next example illustrates the use of restrictions to
-      define a <emphasis>safe</emphasis> way of layout. <link
-      linkend="LexicalSyntax">Recall</link> that optional layout, represented
-      by the symbol<literal> LAYOUT?</literal>, may be recognized between the
-      members of the left-hand side of a context-free syntax rule. However, if
-      a such a member recognizes the empty string, this gives rise to a <link
-      linkend="lex-ambiguity">lexical ambiguity</link>. This problem is
-      avoided by the definition given <link
-      linkend="CODE_safe-layout">below</link>: it simply forbids that optional
-      layout is followed by layout characters.</para>
-
-      <para><example xml:id="CODE_safe-layout">
-          <title>Safe way of defining <literal>LAYOUT</literal></title>
-
-          <para><programlisting>module basic/Whitespace
-
-exports
-  lexical syntax
-    [\ \t\n] -&gt; LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n]</programlisting></para>
-        </example></para>
-
-      <para>The example shown <link linkend="CODE_c-comment">below</link>
-      illustrates the use of restrictions to extend the previous layout
-      definition with C-style comments. For readability we give here
-      <emphasis>two</emphasis> restrictions whereas the first one is already
-      imported from <link linkend="CODE_safe-layout">module
-      basic/Whitespace</link>. The repetition of this first restriction is
-      redundant and could be eliminated.<example xml:id="CODE_c-comment">
-          <title>Definition of C comments</title>
-
-          <para><programlisting>module Comment
-
-imports basic/Whitespace
-
-exports
-  sorts ComWord Comment
-  lexical syntax
-    ~[\ \n\t\/]+ -&gt; ComWord
-
-  context-free syntax
-    "/*" ComWord* "*/" -&gt; Comment
-    Comment            -&gt; LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n]
-    LAYOUT? -/- [\/].[\*]</programlisting></para>
-        </example></para>
-
-      <para>A frequently asked question is when to use
-      <emphasis>lexical</emphasis> restrictions and when to use
-      <emphasis>context-free</emphasis> restrictions. In one of the <link
-      linkend="CODE_functional">previous examples</link> the lexical
-      restrictions on <filename>let</filename> and <literal>in</literal>
-      cannot be defined using context-free restrictions because these keywords
-      do not "live" at the context-free level. Is it possible to put a lexical
-      restriction on <literal>Var</literal>? Yes, but it will have no effect,
-      because internally the lexical <literal>Var</literal> is injected in the
-      context-free <literal>Var</literal>. The general rule is to define the
-      restrictions always on the context-free level and not on the lexical
-      level unless a situation as will be discussed in the next paragraph
-      occurs. The specification <link
-      linkend="CODE_restrictedexpressions">below</link> is an example of an
-      erroneous use of context-free expressions, because it prevents the
-      recognition of <literal>(abc)def</literal>. If we want to enforce the
-      correct restriction, it is necessary to transform this context-free
-      restriction into a lexical restriction.</para>
-
-      <para><example xml:id="CODE_restrictedexpressions">
-          <title>Erroneous use of restrictions in the definition of simple
-          expressions</title>
-
-          <para><programlisting>module RestrictedExpressions
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Expr
-  sorts Expr
-
-  lexical syntax
-    [a-z]+ -&gt; Expr
-
-  context-free syntax
-    Expr Expr    -&gt; Expr {left}
-    "(" Expr ")" -&gt; Expr {bracket}
-
-  context-free restrictions
-    Expr -/- [a-z]</programlisting></para>
-        </example></para>
+      <programlisting>Identifier -/- [i].[f]
+Identifier -/- [e].[l].[s].[e]</programlisting>
     </section>
   </section>
 
@@ -1995,7 +1866,7 @@ exports
       </example>
 
       <para>If zero or exactly one occurrence of a lexical token is desired
-      the option operator described in <link linkend="optional">Optional
+      the option operator described in <link linkend="options">Optional
       symbols</link> can be used. The use of the option operator is
       illustrated <link linkend="CODE_option">below</link>. Identifiers are
       defined consisting of one letter followed by one, optional, digit. This
@@ -2515,16 +2386,12 @@ imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></
     <section xml:id="SymbolRenaming">
       <title xml:id="renaming">Symbol Renaming</title>
 
-      <para>Symbol renaming is in fact very similar to parameterization except
-      that it is not necessary to add formal parameters to a module. The
-      mechanism of symbol renaming allows the overriding of one symbol or a
-      set of symbols by another symbol or symbols, respectively. It allows a
-      flexible and concise way of adapting specifications. The specification
-      <link linkend="CODE_pairs">below</link> shows an example of the
-      <literal>Pair</literal> module without parameters. The idea is to
-      achieve the same effect as parameterization by explicitly renaming
-      <literal>X</literal> and <literal>Y</literal> to the desired names when
-      <literal>Pair</literal> is imported.<example xml:id="CODE_pairs">
+      <para>The specification <link linkend="CODE_pairs">below</link> shows an
+      example of the <literal>Pair</literal> module without parameters. The
+      idea is to achieve the same effect as parameterization by explicitly
+      renaming <literal>X</literal> and <literal>Y</literal> to the desired
+      names when <literal>Pair</literal> is imported.<example
+          xml:id="CODE_pairs">
           <title>Definition of generic pairs</title>
 
           <para><programlisting>module Pair
@@ -2565,6 +2432,144 @@ imports basic/Integers
 imports Pair[X =&gt; Boolean Y =&gt; Boolean]
 imports Pair[X =&gt; Integer  Y =&gt; Integer]
 imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</programlisting></para>
+        </example></para>
+    </section>
+
+    <section>
+      <title>Examples on dealing with lexical ambiguity using
+      restrictions</title>
+
+      <para>In the example <link linkend="CODE_functional">below</link> both
+      <literal>let</literal> and <literal>in</literal> may not be followed by
+      a letter. This example shows how lexical restrictions can be used to
+      prevent the recognition of erroneous expressions in a small functional
+      language. The lexical restriction deals with the possible confusion
+      between the reserved words <literal>let</literal> and
+      <literal>in</literal> and variables (of sort <literal>Var</literal>). It
+      forbids the recognition of, for instance, <literal>let</literal> as part
+      of <literal>letter</literal>. Without this restriction
+      <literal>letter</literal> would be recognized as the keyword
+      <literal>let</literal> followed by the variable <literal>ter</literal>.
+      The context-free restriction forbids that a variable is directly
+      followed by a letter. It does not forbid layout characters between the
+      letters, e.g. <literal>a b</literal> is a legal recognizable
+      string.</para>
+
+      <example xml:id="CODE_functional">
+        <title>Using restrictions in the definition of a simple functional
+        language</title>
+
+        <para><programlisting>module Functional
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Term 
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -&gt; Var
+  context-free syntax
+    Var                          -&gt; Term
+    Term Term                    -&gt; Term {left}
+    "let" Var "=" Term "in" Term -&gt; Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]  </programlisting></para>
+      </example>
+
+      <para>The next example illustrates the use of restrictions to define a
+      <emphasis>safe</emphasis> way of layout. <link
+      linkend="LexicalSyntax">Recall</link> that optional layout, represented
+      by the symbol<literal> LAYOUT?</literal>, may be recognized between the
+      members of the left-hand side of a context-free syntax rule. However, if
+      a such a member recognizes the empty string, this gives rise to a an
+      ambiguity. This problem is avoided by the definition given <link
+      linkend="CODE_safe-layout">below</link>: it simply forbids that optional
+      layout is followed by layout characters.</para>
+
+      <para><example xml:id="CODE_safe-layout">
+          <title>Safe way of defining <literal>LAYOUT</literal></title>
+
+          <para><programlisting>module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n] -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]</programlisting></para>
+        </example></para>
+
+      <para>The example shown <link linkend="CODE_c-comment">below</link>
+      illustrates the use of restrictions to extend the previous layout
+      definition with C-style comments. For readability we give here
+      <emphasis>two</emphasis> restrictions whereas the first one is already
+      imported from <link linkend="CODE_safe-layout">module
+      basic/Whitespace</link>. The repetition of this first restriction is
+      redundant and could be eliminated.<example xml:id="CODE_c-comment">
+          <title>Definition of C comments</title>
+
+          <para><programlisting>module Comment
+
+imports basic/Whitespace
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    ~[\ \n\t\/]+ -&gt; ComWord
+
+  context-free syntax
+    "/*" ComWord* "*/" -&gt; Comment
+    Comment            -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+    LAYOUT? -/- [\/].[\*]</programlisting></para>
+        </example></para>
+
+      <para>A frequently asked question is when to use
+      <emphasis>lexical</emphasis> restrictions and when to use
+      <emphasis>context-free</emphasis> restrictions. In one of the <link
+      linkend="CODE_functional">previous examples</link> the lexical
+      restrictions on <filename>let</filename> and <literal>in</literal>
+      cannot be defined using context-free restrictions because these keywords
+      do not "live" at the context-free level. Is it possible to put a lexical
+      restriction on <literal>Var</literal>? Yes, but it will have no effect,
+      because internally the lexical <literal>Var</literal> is injected in the
+      context-free <literal>Var</literal>. The general rule is to define the
+      restrictions always on the context-free level and not on the lexical
+      level unless a situation as will be discussed in the next paragraph
+      occurs. The specification <link
+      linkend="CODE_restrictedexpressions">below</link> is an example of an
+      erroneous use of context-free expressions, because it prevents the
+      recognition of <literal>(abc)def</literal>. If we want to enforce the
+      correct restriction, it is necessary to transform this context-free
+      restriction into a lexical restriction.</para>
+
+      <para><example xml:id="CODE_restrictedexpressions">
+          <title>Erroneous use of restrictions in the definition of simple
+          expressions</title>
+
+          <para><programlisting>module RestrictedExpressions
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Expr
+  sorts Expr
+
+  lexical syntax
+    [a-z]+ -&gt; Expr
+
+  context-free syntax
+    Expr Expr    -&gt; Expr {left}
+    "(" Expr ")" -&gt; Expr {bracket}
+
+  context-free restrictions
+    Expr -/- [a-z]</programlisting></para>
         </example></para>
     </section>
 
@@ -2711,9 +2716,8 @@ exports
     filter. Each filter is implemented either at parse table generation time,
     or during parsing, or just after parsing.</para>
 
-    <para>An extensive How To on disambiguation can be found in the <link
-    linkend="???">SDF Disambiguation Medkit for Programming
-    Languages</link>.</para>
+    <para>An extensive How To on disambiguation can be found in the SDF
+    Disambiguation Medkit for Programming Languages.</para>
 
     <warning>
       <para>Fix link</para>
@@ -2721,7 +2725,7 @@ exports
   </section>
 
   <section xml:id="WellformednessSDF">
-    <title>Well-formedness</title>
+    <title xml:id="wellformedness">Well-formedness</title>
 
     <para>In order to improve the quality of the written specifications, a
     number of checks are performed before an SDF specification is transformed
@@ -3034,6 +3038,10 @@ exports
 
       <listitem>
         <para>Fix all external links</para>
+      </listitem>
+
+      <listitem>
+        <para>Fix all internal links</para>
       </listitem>
 
       <listitem>
