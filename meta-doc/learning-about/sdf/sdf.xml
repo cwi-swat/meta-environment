@@ -344,7 +344,8 @@
     <title>The life-cycle of an SDF definition</title>
 
     <para>Every SDF grammar has a life-cycle, just like any other software
-    has. This is the life-cycle of an SDF grammar:</para>
+    has. This is the life-cycle of an SDF grammar (see also this <link
+    linkend="architecture">overview</link> figure):</para>
 
     <orderedlist>
       <listitem>
@@ -412,6 +413,16 @@
     manipulation, and tools that analyze syntax definitions for example.
     Recall that the primary goal of SDF is syntax definition, parser
     generation is the most important secondary.goal of SDF.</para>
+
+    <figure>
+      <title>Overview of the data flow of an SDF definition</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="parse-architecture.png" width="50%"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
   </section>
 
   <section xml:id="modules">
