@@ -214,7 +214,7 @@
           <para>At the command line you can use the programs
           <command>sdf2table</command> to generate a parse table and
           <command>sglr</command> to parse text using the generated parse
-          table. <remark>Add links to relevant documents.</remark></para>
+          table. </para>
         </listitem>
       </itemizedlist>
     </section>
@@ -258,227 +258,75 @@
 
       <para>In this document we describe the syntax of SDF and its basic
       semantics. It is a basic but complete reference manual for SDF based on
-      small examples.</para>
+      small examples. This document is <link
+      linkend="sdfgraph">structured</link> to the syntactic structure of SDF,
+      in a top-down fashion. After we have described all of it, we continue
+      with a set of examples. The document ends with special sections on
+      well-formedness, disambiguation and the history of SDF.</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><link linkend="Modules">Modules and Modular Structure</link>:
-          a key aspect of SDF is that syntax specifications can be divided in
-          modules.</para>
-        </listitem>
+      <para><figure xml:id="sdfgraph">
+          <title>The hierarchical structure of the SDF syntax, extracted from
+          the SDF definition of SDF</title>
 
-        <listitem>
-          <para><link linkend="Symbols">Symbols</link>: the building blocks
-          for writing grammar rules.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="Grammars">Grammars</link>: a catch-all concept
-          that covers production rules, import sections, priority declarations
-          and more.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="sdf_Examples">Examples</link>: numerous
-          examples how to define common syntactic constructs.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="Priorities">Priorities</link>: the mechanisms
-          needed to resolve ambiguities in grammars.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="Disambiguation">Disambiguation</link>: applying
-          priorities.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="Parameterization">Parameterization and
-          Renaming</link>: increase the re-usability of modules.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="Variables">Variables</link>: add variables to
-          grammars for the benefit of semantic formalisms.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="WellformednessSDF">Well-formedness</link>:
-          well-formedness checks applied to SDF specifications.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>In <link linkend="sdf_HistoricalNotes">Historical Notes</link>, we
-      give background and key references.</para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="sdfgraph.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
 
       <para>As an index to this document, the following example exhibits
       allmost all features of SDF with references to the appropriate sections.
       SDF keywords are highlighted in boldface.</para>
 
-      <table>
-        <title>Arbitrary SDF example definition, showing many of its features,
-        with references to sections</title>
+      <programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]             %% See <xref
+          linkend="modules" /> for the module keyword, compound module names and module parameters
+  <emphasis role="bold">imports</emphasis> basic/Whitespace                                            %% See <xref
+          linkend="imports" /> for importing other modules
+  <emphasis role="bold">imports</emphasis> utilities/Parsing[Expr]                                     %% See <xref
+          linkend="parameters" /> for binding module parameters
+  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions[Expression =&gt; Expr]      %% See <xref
+          linkend="renamings" /> for symbol renamings
 
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry><programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]
-  <emphasis role="bold">imports</emphasis> basic/Whitespace
-  <emphasis role="bold">imports</emphasis> utilities/Parsing[Expr]
-  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions[Expression =&gt; Expr]
-
-<emphasis role="bold">exports</emphasis>
- <emphasis role="bold">sorts</emphasis> Identifier Expr List Stat
- <emphasis role="bold">lexical syntax</emphasis>
-   [A-Z][a-z]+ -&gt; Identifier
- <emphasis role="bold">lexical restrictions</emphasis>
-   Identifier -/- [a-z]
- <emphasis role="bold">context-free syntax</emphasis>
-   Identifier    -&gt; Expr {<emphasis role="bold">cons</emphasis>("name")}
-   Expr*         -&gt; List[[Param1]]
-   "if" Expr "then" {Param2 ";"}+ "else" {Param2 ";"}+ "fi" -&gt; Param2
+<emphasis role="bold">exports</emphasis>                                                               %% See <xref
+          linkend="modules" /> for hiddens and export features
+ <emphasis role="bold">sorts</emphasis> Identifier Expr List Stat                                      %% See <xref
+          linkend="sorts" /> for sort/non-terminal declarations
+ <emphasis role="bold">lexical syntax</emphasis>                                                       %% See <xref
+          linkend="lexicalsyntax" />
+   [A-Z][a-z]+ -&gt; Identifier                                          %% See <xref
+          linkend="characters" /> and see <xref linkend="sort" />
+ <emphasis role="bold">lexical restrictions</emphasis>                                                 %% See <xref
+          linkend="restrictions" /> and see <xref linkend="disambiguation" />
+   Identifier -/- [a-z]                                              
+ <emphasis role="bold">context-free syntax</emphasis>                                                  %% See <xref
+          linkend="contextfreesyntax" />
+   Identifier    -&gt; Expr {<emphasis role="bold">cons</emphasis>("name")}                               %% See <xref
+          linkend="attributes" /> for attributes like the cons attribute
+   Expr*         -&gt; List[[Param1]]                                              %% See <xref
+          linkend="sort" /> for parameterized sort and <xref linkend="symbols" /> on symbols in general
+   "if" Expr "then" {Param2 ";"}+ "else" {Param2 ";"}+ "fi" -&gt; Param2           %% See <xref
+          linkend="literals" /> and see <xref linkend="lists" />
    "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
-                    role="bold">prefer</emphasis>}
- <emphasis role="bold">context-free syntax</emphasis>
-   "if" | "then" | "fi"  -&gt; Identifier {<emphasis role="bold">reject</emphasis>}
- <emphasis role="bold">context-free priorities</emphasis>
-   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold">left</emphasis>}  &gt;
-   Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}
-<emphasis role="bold">hiddens</emphasis>
- <emphasis role="bold">variables</emphasis>
-   "Id"[0-9\']* -&gt; Identifier
- <emphasis role="bold">lexical variables</emphasis>
+          role="bold">prefer</emphasis>}  %% See <xref linkend="attributes" /> and see <xref
+          linkend="disambiguation" />
+ <emphasis role="bold">context-free syntax</emphasis>      
+   "if" | "then" | "fi"  -&gt; Identifier {<emphasis role="bold">reject</emphasis>}                                 %% See <xref
+          linkend="attributes" /> and see <xref linkend="disambiguation" /> for reject disambiguation
+ <emphasis role="bold">context-free priorities</emphasis>                                                        %% See <xref
+          linkend="priorities" /> and see <xref linkend="disambiguation" /> for priority disambiguation
+   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold">left</emphasis>}  &gt;                                              %% See <xref
+          linkend="attributes" /> and see <xref linkend="disambiguation" /> for associativity disambiguation
+   Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}                                                 
+<emphasis role="bold">hiddens</emphasis>                                                               %% See <xref
+          linkend="modules" /> for hiddens and exports features
+ <emphasis role="bold">variables</emphasis>                                                            %% See <xref
+          linkend="variables" /> for constructing meta variables
+   "Id"[0-9\']* -&gt; Identifier                                     
+ <emphasis role="bold">lexical variables</emphasis>                                                    %% See <xref
+          linkend="lexicalvariables" /> for constructing lexical meta variables
    "Head" -&gt; [A-Z]
-   "Tail" -&gt; [a-z]+</programlisting></entry>
-
-              <entry><itemizedlist>
-                  <listitem>
-                    <para><link linkend="Modules">Module keyword, compound
-                    module name and module parameters</link></para>
-                  </listitem>
-
-                  <listitem>
-                    <para><link linkend="Modules">Importing a
-                    module</link>.</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Importing a module and binding its parameter</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Importing a module and renaming on of its
-                    sorts</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>...</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Export section</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Declaring sortnames (non-terminals).</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Lexical syntax grammar</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Character classes and list symbols</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Follow restrictioons (a disambiguation
-                    construct)</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>...</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Context-free syntax grammar</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>A production with a cons attribute for defining
-                    abstract syntax</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Use of a nullable list symbol, and a parameterized
-                    sort name</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Use of separated list symbols, and use of the module
-                    parameters</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>The prefer/avoid disambiguation construct</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>...</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Reserving keyword using the reject disambiguation
-                    construct</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Priorities, a disambiguation construct for
-                    expression grammars</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Left associativity, another disambiguation
-                    construct</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Right associativity</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Hiddens section</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Declaration of meta variables for context-free
-                    sorts/non-terminals</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>...</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Use of character classes in productions for meta
-                    variables</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Declaration of meta variables for lexical
-                    sorts/non-terminals</para>
-                  </listitem>
-
-                  <listitem>
-                    <para>Definition of variables that range over character
-                    classes</para>
-                  </listitem>
-                </itemizedlist></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+   "Tail" -&gt; [a-z]+</programlisting>
     </section>
   </section>
 
@@ -601,9 +449,8 @@
     <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one of
     the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
   &lt;Grammar&gt;+</programlisting>or<programlisting><emphasis role="bold">hiddens</emphasis>
-  &lt;Grammar&gt;+
-</programlisting> A <literal>&lt;Grammar&gt;</literal> can be a definition of
-    one of the following:</para>
+  &lt;Grammar&gt;+</programlisting> A <literal>&lt;Grammar&gt;</literal> can
+    be a definition of one of the following:</para>
 
     <itemizedlist>
       <listitem>
@@ -657,7 +504,7 @@
   </section>
 
   <section xml:id="Symbols">
-    <title>Symbols</title>
+    <title xml:id="symbols">Symbols</title>
 
     <para>The elementary building block of SDF syntax rules is the symbol. It
     is comparable to terminals and non-terminals in other grammar definition
@@ -690,7 +537,7 @@
     parts of SDF.</para>
 
     <section xml:id="Literal">
-      <title>Literal symbols</title>
+      <title xml:id="literals">Literal symbols</title>
 
       <para>A <emphasis>literal</emphasis> symbol defines a fixed length word.
       This usually corresponds to a terminal symbol in ordinary BNF grammars,
@@ -758,7 +605,7 @@
     </section>
 
     <section xml:id="CharacterClass">
-      <title>Character class symbols</title>
+      <title xml:id="characters">Character class symbols</title>
 
       <para>Enumerations of characters occur frequently mostly in lexical
       definitions. They can be abbreviated by using <emphasis>character
@@ -871,7 +718,7 @@
     </section>
 
     <section xml:id="OptionOperator">
-      <title>Optional symbols</title>
+      <title xml:id="optionals">Optional symbols</title>
 
       <para>The postfix option operator <literal>?</literal> describes an
       optional part in a syntax rule. For instance,
@@ -903,7 +750,7 @@
     </section>
 
     <section xml:id="RepetitionOperator">
-      <title>Repetition or list symbols</title>
+      <title xml:id="lists">Repetition or list symbols</title>
 
       <para>Repetition operators express that a symbol should occur several
       times. In this way it is possible to construct flat lists and therefore
@@ -950,7 +797,7 @@
     </section>
 
     <section xml:id="AlternativeOperator">
-      <title>Alternative symbols</title>
+      <title xml:id="alternatives">Alternative symbols</title>
 
       <para>The alternative operator <literal>|</literal> expresses the choice
       between two symbols, e.g., <literal>"true" | "false"</literal>
@@ -969,7 +816,7 @@
     </section>
 
     <section xml:id="Labels">
-      <title>Labelled symbols</title>
+      <title xml:id="labels">Labelled symbols</title>
 
       <para>It is possible to decorate the symbols with labels. The labels
       have no semantics in SDF, and will be removed before parsetable
@@ -985,7 +832,7 @@ is replaced by
     </section>
 
     <section xml:id="TupleOperator">
-      <title>Tuple symbols</title>
+      <title xml:id="tuples">Tuple symbols</title>
 
       <para>The tuple operator describes the grouping of a sequence of symbols
       of a fixed length into a tuple. The notation for tuples is <literal>&lt;
@@ -1007,7 +854,7 @@ is replaced by
     </section>
 
     <section xml:id="FunctionOperator">
-      <title>Function symbols</title>
+      <title xml:id="functionsymbols">Function symbols</title>
 
       <para>The function operator <literal>(...=&gt;...)</literal> allows the
       definition of function types. Left of <literal>=&gt;</literal> zero or
@@ -1034,7 +881,7 @@ is replaced by
     </section>
 
     <section xml:id="LiftingOperator">
-      <title>Lifted Symbols</title>
+      <title xml:id="lifting">Lifted Symbols</title>
 
       <para>The lifting operator <literal>`...`</literal> translates the name
       of an arbitrary complex symbol to a literal syntax definition of that
@@ -1055,7 +902,7 @@ is replaced by
     </section>
 
     <section>
-      <title>LAYOUT symbol</title>
+      <title xml:id="LAYOUT">LAYOUT symbol</title>
 
       <para>The <literal>LAYOUT</literal> symbol is a reserved sort name. SDF
       does not generate any productions for it. Instead for all
@@ -1077,7 +924,7 @@ is replaced by
   </section>
 
   <section xml:id="Grammars">
-    <title>Grammars</title>
+    <title xml:id="grammars">Grammars</title>
 
     <para>A grammar is the entity that can be defined in an export section or
     hidden section of a module. It is a catch-all notion that covers more than
@@ -1154,7 +1001,7 @@ is replaced by
     </section>
 
     <section xml:id="Aliases">
-      <title>Aliases</title>
+      <title xml:id="aliases">Aliases</title>
 
       <para>Aliases are similar to productions but not quite. An alias is used
       to define a short hand for a complex or otherwise cumbersome
@@ -1202,7 +1049,7 @@ is replaced by
     </section>
 
     <section xml:id="Sorts">
-      <title>Sort declarations</title>
+      <title xml:id="sorts">Sort declarations</title>
 
       <para>Sorts are declared by listing their name in a sorts section of the
       form:<programlisting><emphasis role="bold">sorts</emphasis>
@@ -1217,7 +1064,7 @@ is replaced by
     </section>
 
     <section xml:id="Productions">
-      <title>Productions</title>
+      <title xml:id="productions">Productions</title>
 
       <para>The basic building block of a grammar is the
       <emphasis>production</emphasis>. It consists of a left-hand side of zero
@@ -1267,7 +1114,7 @@ D         -&gt; C | D | E
 E         -&gt; C | D | E</programlisting>
 
       <section xml:id="Attributes">
-        <title>Attributes</title>
+        <title xml:id="attributes">Attributes</title>
 
         <para>The definition of a lexical, context-free productions and
         variables may be followed by <emphasis>attributes</emphasis> that
@@ -1288,14 +1135,21 @@ E         -&gt; C | D | E</programlisting>
             example, the <command>restore-brackets</command> tool uses the
             bracket attribute to find productions to add to a parse tree
             before pretty printing (when the tree violates priority
-            constraints).</para>
+            constraints). Note that most of these tools demand the production
+            with a {bracket} attribute to have the shape: <literal>"(" X ")"
+            -&gt; X {bracket}</literal> with any kind of bracket syntax but
+            the <literal>X</literal> being the same symbol on the left-hand
+            side and the right-hand side.</para>
           </listitem>
 
           <listitem>
             <para><literal>{left</literal>, <literal>right</literal>,
             <literal>non-assoc</literal>, <literal>assoc}</literal> are used
-            to define the associativity of productions (see <link
-            linkend="Priorities">Priorities</link>).</para>
+            to define the associativity of productions (see also <link
+            linkend="Priorities">Priorities</link>). Instead of using extra
+            non-terminals, these attributes offer declarative disambiguation
+            constructs. SDF implements these attributes by filtering
+            reductions from the parse table.</para>
           </listitem>
 
           <listitem>
@@ -1341,7 +1195,7 @@ E         -&gt; C | D | E</programlisting>
       </section>
 
       <section xml:id="PrefixFunctions">
-        <title>Prefix Functions</title>
+        <title xml:id="prefix">Prefix Functions</title>
 
         <para><emphasis>Prefix functions</emphasis> are a special kind of
         productions. They have a prefix syntax and are an abbreviation
@@ -1357,7 +1211,8 @@ is replaced by
     </section>
 
     <section xml:id="LexicalAndContextFreeSyntax">
-      <title>Lexical and Context-free syntax</title>
+      <title xml:id="lexicalcontextfree">Lexical and context-free
+      syntax</title>
 
       <para>Lexical syntax describes the low-level structure of text while
       context-free syntax describes the higher-level structure. In SDF, these
@@ -1385,7 +1240,7 @@ is replaced by
  "b"     -&gt; &lt;A-CF&gt;</programlisting>
 
       <section>
-        <title xml:id="LexicalSyntax">Lexical Syntax</title>
+        <title xml:id="lexicalsyntax">Lexical Syntax</title>
 
         <para>The lexical syntax usually describes the low level structure of
         programs (often referred to as <emphasis>lexical tokens</emphasis>.)
@@ -1403,7 +1258,7 @@ is replaced by
       </section>
 
       <section xml:id="ContextFreeSyntax">
-        <title>Context-free syntax</title>
+        <title xml:id="contextfreesyntax">Context-free syntax</title>
 
         <para>The context-free syntax describes the more high-level syntactic
         structure of sentences in a language. A context-free syntax contains a
@@ -1440,7 +1295,8 @@ which will be then wrapped as in:
     </section>
 
     <section xml:id="ContextFreeStartSymbols">
-      <title>Lexical and context-free start-symbols</title>
+      <title xml:id="startsymbols">Lexical and context-free
+      start-symbols</title>
 
       <para>Via the lexical or context-free start symbols section the symbols
       are explicitly defined which will serve as start symbols when parsing
@@ -1456,18 +1312,110 @@ which will be then wrapped as in:
       <para>while context-free start symbols are defined as</para>
 
       <para><programlisting><emphasis role="bold">context-free start-symbols</emphasis>
-  &lt;Symbol&gt;*</programlisting>Lexical or context-free start-symbol
-      sections can either be hidden or exported. The effect of defined symbols
-      as start symbols for the grammar may lead to an explosion of start
-      states for the parser and thus lead to performance loss. To prevent this
-      it can be advisable to hide start-symbol sections. The symbols defined
-      are only visible in the module containing this hidden start-symbols
-      section, but not in modules importing this module.</para>
+  &lt;Symbol&gt;*</programlisting>Start symbols are short-hand notation, for
+      which SDF generates productions as in:</para>
+
+      <programlisting><emphasis role="bold">lexical start-symbols</emphasis>
+   Identifier
+<emphasis>generates</emphasis>
+   &lt;Identifier-LEX&gt; -&gt; &lt;START&gt;
+<emphasis>and</emphasis>
+<emphasis role="bold">context-free start-symbols</emphasis>
+   Program
+<emphasis>generates</emphasis>
+   &lt;LAYOUT?-CF&gt; &lt;Program-CF&gt; &lt;LAYOUT?-CF&gt; -&gt; &lt;START&gt;</programlisting>
+    </section>
+
+    <section xml:id="RelativePriorities">
+      <title>Lexical and context-free priorities</title>
+
+      <para>Priorities are one of SDF's most often used disambiguation
+      constructs. A priority 'grammar' defines the relative priorities between
+      productions. There is a lot of short-hand notation for doing this
+      concisely. Priorities are a powerful disambiguation construct. The basic
+      priority looks like this:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+&lt;Production&gt;   &gt;   &lt;Production&gt;</programlisting>
+
+      <para>Context-free priorities work on context-free productions, while
+      lexical priorities work on lexical productions. The idea behind the
+      semantics of priorities is that productions with a higher priority "bind
+      stronger" than productions with a lower priority. However, strictly
+      speaking the semantics of SDF's priorities are that they give rise to
+      parse forest filters that remove certain trees. If <literal>A &gt;
+      B</literal>, then all trees are removed that have a <literal>B</literal>
+      node as a direct child of an <literal>A</literal> node.</para>
+
+      <para>Several priorities in a priority grammar are separated by comma's.
+      Productions may be grouped between curly braces on each side of the &gt;
+      sign. Groups may have relative associativity labels. Examples:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+  { <emphasis role="bold">left</emphasis>: E "*" E -&gt; E {left}
+          E "/" E -&gt; E {right}
+  } &gt;
+  { <emphasis role="bold">right</emphasis>: E "+" E -&gt; E {left}
+           E "-" E -&gt; E {left}
+  ,
+  "-" E -&gt; E &gt; E "+" E -&gt; E {left}
+ </programlisting>
+
+      <para> Please note the following details on priorities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By default, the priority relation is automatically
+          transitively closed (i.e. if <literal>A &gt; B</literal> and
+          <literal>B &gt; C</literal> then <literal>A &gt; C</literal>)</para>
+        </listitem>
+
+        <listitem>
+          <para>By default, the priority relation applies to all arguments of
+          the first production (i.e. the second production can not be a child
+          of any member of the first production)</para>
+        </listitem>
+
+        <listitem>
+          <para>Priorities filter regardlessly, and assume you apply them only
+          when there is actually an ambiguity. Priorities may be used to
+          filter the last remaining tree from a forest, resulting in a parse
+          error.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are two recent additions to priorities which make them more
+      flexible. Firstly, priorities can now be targeted at specific members of
+      the first production: "priorities in specific arguments".
+      Example:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+  E "[" E "]" -&gt; E
+  <emphasis>&lt;0&gt;</emphasis> &gt; 
+  E "+" E -&gt; E {left}</programlisting>
+
+      <para>Between the angular brackets a comma separated list of argument
+      indexes indicates to which arguments the disambiguation should be
+      applied (and implicitly in which not). In fact, in this example applying
+      the filter to all arguments would result in parse errors for terms such
+      as <literal>"1 [ 2 + 3 ]"</literal>.</para>
+
+      <para>The second addition is non-transitive priorities. In rare cases
+      the automatic transitive closure may be incorrect. Note however that by
+      not transitively closing the priority relation you may have to write
+      down a high amount of priorities. Example:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+  "-" E -&gt; E &gt;.
+  E "+" E -&gt; E</programlisting>
+
+      <para>The ".", or full stop, makes sure that this relation does not
+      contribute to any transitive closure.</para>
     </section>
   </section>
 
   <section xml:id="sdf_Examples">
-    <title>Examples</title>
+    <title xml:id="examples">Examples</title>
 
     <para>We will now give a sequence of small examples that illustrate the
     various constructs in SDF:</para>
@@ -2178,83 +2126,6 @@ exports
     <para>Closely related with priorities are brackets that can be used to
     overrule priorities. We will first describe bracket productions, and then
     the various methods for defining priorities.</para>
-
-    <section xml:id="BracketFunctions">
-      <title>Bracket Productions</title>
-
-      <!--\index{bracket Productions@bracket Productions}-->
-
-      <para>A bracket function has the form:<programlisting>&lt;Open&gt; &lt;Sort&gt; &lt;Close&gt; <emphasis
-            role="bold"><emphasis role="bold">-&gt;</emphasis></emphasis> <replaceable>&lt;</replaceable>Sort&gt;</programlisting></para>
-
-      <para>where &lt;Open&gt; and &lt;Close&gt; are literals acting as
-      opening and closing parenthesis for sort &lt;Sort&gt;. Examples are
-      <literal>(</literal> and <literal>)</literal> in arithmetic expressions.
-      In most cases, such brackets are only introduced for grouping and
-      disambiguation, but have no further meaning. By adding the attribute
-      <literal>bracket</literal> to the function declaration, it will not be
-      included in the abstract syntax. The definition of a bracket function
-      for the sort <literal>Expr</literal> is given <link
-      linkend="CODE_bracket-expr">below</link>.</para>
-
-      <example xml:id="CODE_bracket-expr">
-        <title>Syntax definition with a bracket function</title>
-
-        <para><programlisting>module BracketExpr
-
-imports basic/Whitespace
-imports basic/NatCon
-
-exports
-  context-free start-symbols E
-  sorts E
-
-  context-free syntax
-    NatCon    -&gt; E
-    "(" E ")" -&gt; E {bracket}</programlisting></para>
-      </example>
-
-      <para>Since brackets are necessary for overruling the priority and
-      associativity of productions, it is required that bracket productions
-      are declared for the argument and result sorts of</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>all productions appearing in priority declarations, and</para>
-        </listitem>
-
-        <listitem>
-          <para>all productions having one of the attributes
-          <literal>left</literal>, <literal>right</literal>,
-          <literal>assoc</literal>, or <literal>non-assoc</literal>.</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section xml:id="RelativePriorities">
-      <title>Relative Priorities</title>
-
-      <!--\index{relative priorities@relative priorities}-->
-
-      <para>The relative priority of two productions is defined in the
-      <literal>context-free priorities</literal> section by
-      including<replaceable> F</replaceable> <literal>&gt;</literal>
-      <replaceable>G</replaceable>, where <replaceable>F</replaceable> and
-      <replaceable>G</replaceable> are as written in the context-free grammar.
-      Productions with a higher priority bind more strongly than productions
-      with lower priorities and the nodes corresponding to them should thus
-      appear at lower levels in the tree than nodes corresponding to
-      productions with lower priorities. Lists of productions may be used in a
-      priority declaration: <replaceable>F</replaceable> <literal>&gt;
-      {</literal><replaceable>G</replaceable><literal>,</literal>
-      <replaceable>H</replaceable><literal>}</literal> is an abbreviation for
-      <replaceable>F</replaceable> <literal>&gt;
-      </literal><replaceable>G</replaceable><literal>,</literal>
-      <replaceable>F</replaceable> <literal>&gt;</literal>
-      <replaceable>H</replaceable>. Note that this tells us nothing about the
-      priority relation between <replaceable>G</replaceable> and
-      <replaceable>H</replaceable>.</para>
-    </section>
 
     <section xml:id="AssociativeFunctions">
       <title>Associative Productions</title>
@@ -3005,10 +2876,10 @@ exports
   </section>
 
   <section xml:id="ParametersRenamings">
-    <title>Parameterization and Renaming</title>
+    <title xml:id="parametersrenaming">Parameterization and Renaming</title>
 
     <section xml:id="Parameterization">
-      <title>Parameterization</title>
+      <title xml:id="parameters">Parameterization</title>
 
       <para>Module parameterization allows the definition of generic modules
       for lists, pairs, sets, etc. The operations defined in these modules are
@@ -3069,7 +2940,7 @@ imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></
     </section>
 
     <section xml:id="SymbolRenaming">
-      <title>Symbol Renaming</title>
+      <title xml:id="renaming">Symbol Renaming</title>
 
       <para>Symbol renaming is in fact very similar to parameterization except
       that it is not necessary to add formal parameters to a module. The
@@ -3126,7 +2997,7 @@ imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</p
   </section>
 
   <section xml:id="SdfComment">
-    <title>SDF comment convention</title>
+    <title xml:id="comments">SDF comment convention</title>
 
     <para><remark>This has a too prominent place; move it.</remark></para>
 
