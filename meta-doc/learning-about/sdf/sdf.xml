@@ -276,8 +276,8 @@
         </listitem>
 
         <listitem>
-          <para>SDF Disambiguation Medkit for Programming Languages, this
-          document focusses on SDF disambiguation constructs and how to solve
+          <para>SDF Disambiguation Med kit for Programming Languages, this
+          document focuses on SDF disambiguation constructs and how to solve
           common issues when developing SDF grammars</para>
         </listitem>
 
@@ -325,7 +325,7 @@
         </figure></para>
 
       <para>As an index to this document, the following example exhibits
-      allmost all features of SDF with references to the appropriate sections.
+      almost all features of SDF with references to the appropriate sections.
       SDF keywords are highlighted in boldface.</para>
 
       <programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]             
@@ -452,7 +452,7 @@
     generators. There are tools that generate libraries for syntax tree
     manipulation, and tools that analyze syntax definitions for example.
     Recall that the primary goal of SDF is syntax definition, parser
-    generation is the most important secondary.goal of SDF.</para>
+    generation is the most important secondary goal of SDF.</para>
 
     <figure>
       <title>Overview of the data flow of an SDF definition</title>
@@ -480,7 +480,7 @@
 
       <para>Each module may define lexical syntax, context-free syntax and
       disambiguations. Modules may import other modules for reuse or
-      seperation of concerns. A module may extend the definition of a
+      separation of concerns. A module may extend the definition of a
       non-terminal in another module. A module may compose the definition of a
       language by importing the parts of the language.</para>
 
@@ -948,7 +948,7 @@ exports
       <title>Labelled symbols</title>
 
       <para>It is possible to decorate the symbols with labels. The labels
-      have no semantics in SDF, and will be removed before parsetable
+      have no semantics in SDF, and will be removed before parse table
       generation. Other tools that take SDF definitions as input, such as API
       generators make use of the labels.</para>
 
@@ -975,7 +975,7 @@ is replaced by
       <para>Tuple is one of the few symbols that actually introduce a fixed
       syntax, i.e. the angular brackets. You may consider them as an arbitrary
       shorthand. To define your own short hand, consider the use of
-      parameterized sorts and module paramaters.</para>
+      parameterized sorts and module parameters.</para>
 
       <para>For <literal>&lt;A,B&gt;</literal> SDF generates:</para>
 
@@ -1115,7 +1115,7 @@ is replaced by
       <section xml:id="plainimports">
         <title>Plain imports</title>
 
-        <para>Apart from the import sections at the beginnig of each module,
+        <para>Apart from the import sections at the beginning of each module,
         there may be an arbitrary number of import grammar spread through a
         module. Each <literal>&lt;ImportSection&gt;</literal> starts with the
         keyword <literal>imports</literal> followed by zero or more module
@@ -1174,7 +1174,7 @@ is replaced by
 
       <itemizedlist>
         <listitem>
-          <para>Aliases may not define eachother</para>
+          <para>Aliases may not define each other</para>
         </listitem>
 
         <listitem>
@@ -1250,9 +1250,9 @@ is replaced by
         However, in SDF the token concept is not really relevant, since only
         character classes are terminals. The lexical syntax grammars in SDF
         are simply a convenient notation for the low level syntax of a
-        language. The <literal>LAYOUT</literal> symbol should also be
-        definined in a lexical syntax grammar. A lexical syntax consists of a
-        list of <emphasis>productions</emphasis>.</para>
+        language. The <literal>LAYOUT</literal> symbol should also be defined
+        in a lexical syntax grammar. A lexical syntax consists of a list of
+        <emphasis>productions</emphasis>.</para>
 
         <para>Lexical syntax is described as follows:</para>
 
@@ -1267,7 +1267,7 @@ is replaced by
         structure of sentences in a language. A context-free syntax contains a
         list of <emphasis>productions</emphasis>. Elements of the left-hand
         side of a context-free function pre-processed before parser generation
-        by adding the LAYOUT? symbol everywhere.Context-free syntax has the
+        by adding the LAYOUT? symbol everywhere. Context-free syntax has the
         form:</para>
 
         <programlisting><emphasis role="bold">context-free syntax</emphasis>
@@ -1409,7 +1409,7 @@ E         -&gt; C | D | E</programlisting>
           <itemizedlist>
             <listitem>
               <para>Arbitrary ATerms may also be used as attributes. Actually
-              {bracket} is one example. Another frequently occuring non-SDF
+              {bracket} is one example. Another frequently occurring non-SDF
               attribute is {cons("&lt;name&gt;")}. There are tools that use
               this cons attribute to construct abstract syntax trees or to
               generated API's in C or Java to manipulate syntax trees.</para>
@@ -2206,7 +2206,7 @@ exports
       <title>Using Labels in Productions</title>
 
       <para>See <link linkend="CODE_labels">below</link> for an example of an
-      SDF specification containing labels.Remember that labels do not have
+      SDF specification containing labels. Remember that labels do not have
       semantics in SDF.</para>
 
       <example xml:id="CODE_labels">
@@ -2770,7 +2770,7 @@ exports
     or during parsing, or just after parsing.</para>
 
     <para>An extensive How To on disambiguation can be found in the SDF
-    Disambiguation Medkit for Programming Languages.</para>
+    Disambiguation Med kit for Programming Languages.</para>
 
     <warning>
       <para>Fix link</para>
