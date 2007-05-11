@@ -42,6 +42,8 @@ for cat in ${CATEGORIES}; do
       if [ -f $cat/$book/$book.xml ]; then
 	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
                    --output ${WEB}/$cat/$book/$book.html \
+		   --param chapter.autolabel 1 \
+		   --param section.autolabel 1 \
                    --param xref.with.number.and.title 0 \
                    ${DOCBOOKXSLHTML} $cat/$book/$book.xml)
 	(xsltproc  --output ${WEB}/$cat/$book/$book.fo \
