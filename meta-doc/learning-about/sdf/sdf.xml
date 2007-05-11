@@ -38,7 +38,7 @@
     section.</para>
   </warning>
 
-  <section xml:id="Introduction">
+  <section xml:id="introduction">
     <title>An Introduction to SDF</title>
 
     <para>If you want to:</para>
@@ -67,7 +67,7 @@
 
     <para>then SDF may be the right technology to use.</para>
 
-    <section>
+    <section xml:id="why">
       <title xml:id="YetAnotherFormalism">Why use SDF?</title>
 
       <para>The Syntax Definition Formalism SDF is intended for the high-level
@@ -195,7 +195,7 @@
       level syntax definition in SDF is like high level programming.</para>
     </section>
 
-    <section>
+    <section xml:id="howto">
       <title>How to use SDF?</title>
 
       <para>There are two ways to write an SDF specification, generate a
@@ -219,7 +219,7 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="learningmore">
       <title>Learning more</title>
 
       <para>The following references on SDF may be interesting for you:</para>
@@ -253,7 +253,7 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="overview">
       <title>This document</title>
 
       <para>In this document we describe the syntax of SDF and its basic
@@ -335,7 +335,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="lifecycle">
     <title>The life-cycle of an SDF definition</title>
 
     <para>Every SDF grammar has a life-cycle, just like any other software
@@ -409,10 +409,10 @@
     generation is the most important secondary.goal of SDF.</para>
   </section>
 
-  <section>
-    <title xml:id="modules">Modules</title>
+  <section xml:id="modules">
+    <title>Modules</title>
 
-    <section>
+    <section xml:id="basicmodules">
       <title>Basic module structure</title>
 
       <para>An SDF specification consists of a number of module declarations.
@@ -448,7 +448,7 @@
       <literal>&lt;ModuleId&gt;</literal> or a
       <literal>&lt;ModuleId&gt;</literal> followed by zero or more parameter
       symbols, e.g., <literal>&lt;Module&gt;[&lt;Symbol&gt;*]</literal>, the
-      symbols will be explained <link linkend="Symbols">later</link>. The
+      symbols will be explained <link linkend="symbols">later</link>. The
       <literal>&lt;ModuleId&gt;</literal> may be a compound module name (i.e.
       &lt;ModuleId&gt; separated by forward slashes), the
       <literal>ModuleId</literal> reflects the directory structure. For
@@ -457,7 +457,7 @@
       <literal>basic</literal>.</para>
     </section>
 
-    <section>
+    <section xml:id="hiddensandexports">
       <title>Hiddens and exports sections</title>
 
       <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
@@ -484,16 +484,15 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="Aliases">Aliases</link>.</para>
+          <para><link linkend="aliases">Aliases</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="Sorts">Sorts</link>.</para>
+          <para><link linkend="sorts">Sorts</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link
-          linkend="ContextFreeStartSymbols">Start-symbols</link>.</para>
+          <para><link linkend="startsymbols">Start-symbols</link>.</para>
         </listitem>
 
         <listitem>
@@ -510,7 +509,7 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="Variables">Variables</link>.</para>
+          <para><link linkend="variables">Variables</link>.</para>
         </listitem>
       </itemizedlist>
 
@@ -523,13 +522,13 @@
       the importing module.</para>
     </section>
 
-    <section>
+    <section xml:id="parameters">
       <title>Module parameters</title>
 
       <para>TODO</para>
     </section>
 
-    <section>
+    <section xml:id="definitions">
       <title>Definitions</title>
 
       <para>SDF modules may be collected in a single definition file, for
@@ -541,8 +540,8 @@
     </section>
   </section>
 
-  <section xml:id="SdfComment">
-    <title xml:id="comments">Comments</title>
+  <section xml:id="comments">
+    <title>Comments</title>
 
     <para>The comment convention within an SDF specification is that
     characters between <literal>%%</literal> and the end of line is comment as
@@ -577,8 +576,8 @@ exports
     </example>
   </section>
 
-  <section xml:id="Symbols">
-    <title xml:id="symbols">Symbols</title>
+  <section xml:id="symbols">
+    <title>Symbols</title>
 
     <para>The elementary building block of SDF syntax rules is the symbol. It
     is comparable to terminals and non-terminals in other grammar definition
@@ -596,7 +595,7 @@ exports
     <para>Starting with the elementary symbols, more complex symbols can be
     constructed by way of recursive symbol application. Examples of the use of
     the various operators will be given in the section <link
-    linkend="sdf_Examples">Examples</link>.</para>
+    linkend="examples">Examples</link>.</para>
 
     <para>Remember that complex symbols such as, parameterized sorts, lists
     and optionals are nothing but non-terminals. They carry no additional
@@ -610,8 +609,8 @@ exports
     allowed in both lexical and context-free syntax, priorities and other
     parts of SDF.</para>
 
-    <section xml:id="Literal">
-      <title xml:id="literals">Literal symbols</title>
+    <section xml:id="literals">
+      <title>Literal symbols</title>
 
       <para>A <emphasis>literal</emphasis> symbol defines a fixed length word.
       This usually corresponds to a terminal symbol in ordinary BNF grammars,
@@ -653,8 +652,8 @@ exports
       </warning>
     </section>
 
-    <section xml:id="Sort">
-      <title xml:id="sort">Sort symbols</title>
+    <section xml:id="sort">
+      <title>Sort symbols</title>
 
       <para>A sort corresponds to a non-terminal, e.g.,
       <literal>Bool</literal>. Sort names always start with a capital letter
@@ -678,8 +677,8 @@ exports
             role="bold">]]</emphasis></programlisting></para>
     </section>
 
-    <section xml:id="CharacterClass">
-      <title xml:id="characters">Character class symbols</title>
+    <section xml:id="characters">
+      <title>Character class symbols</title>
 
       <para>Enumerations of characters occur frequently mostly in lexical
       definitions. They can be abbreviated by using <emphasis>character
@@ -791,8 +790,8 @@ exports
       operators are not applicable to symbols in general.</para>
     </section>
 
-    <section xml:id="OptionOperator">
-      <title xml:id="optionals">Optional symbols</title>
+    <section xml:id="optionals">
+      <title>Optional symbols</title>
 
       <para>The postfix option operator <literal>?</literal> describes an
       optional part in a syntax rule. For instance,
@@ -803,7 +802,7 @@ exports
  ElsePart -&gt; ElsePart?</programlisting>
     </section>
 
-    <section xml:id="SequenceOperator">
+    <section xml:id="sequence">
       <title>Sequence</title>
 
       <para>The sequence operator <literal>(...)</literal> describes the
@@ -823,8 +822,8 @@ exports
       <programlisting> -&gt; ()</programlisting>
     </section>
 
-    <section xml:id="RepetitionOperator">
-      <title xml:id="lists">Repetition or list symbols</title>
+    <section xml:id="lists">
+      <title>Repetition or list symbols</title>
 
       <para>Repetition operators express that a symbol should occur several
       times. In this way it is possible to construct flat lists and therefore
@@ -870,8 +869,8 @@ exports
       deal with the ambiguity this introduces.</para>
     </section>
 
-    <section xml:id="AlternativeOperator">
-      <title xml:id="alternatives">Alternative symbols</title>
+    <section xml:id="alternatives">
+      <title>Alternative symbols</title>
 
       <para>The alternative operator <literal>|</literal> expresses the choice
       between two symbols, e.g., <literal>"true" | "false"</literal>
@@ -889,8 +888,8 @@ exports
 ";" -&gt; "," | ";"</programlisting>
     </section>
 
-    <section xml:id="Labels">
-      <title xml:id="labels">Labelled symbols</title>
+    <section xml:id="labels">
+      <title>Labelled symbols</title>
 
       <para>It is possible to decorate the symbols with labels. The labels
       have no semantics in SDF, and will be removed before parsetable
@@ -905,8 +904,8 @@ is replaced by
 {Stat ";"}+</programlisting>
     </section>
 
-    <section xml:id="TupleOperator">
-      <title xml:id="tuples">Tuple symbols</title>
+    <section xml:id="tuples">
+      <title>Tuple symbols</title>
 
       <para>The tuple operator describes the grouping of a sequence of symbols
       of a fixed length into a tuple. The notation for tuples is <literal>&lt;
@@ -927,8 +926,8 @@ is replaced by
       <programlisting>"&lt;" A "," B "&gt;" -&gt; &lt;A,B&gt;</programlisting>
     </section>
 
-    <section xml:id="FunctionOperator">
-      <title xml:id="functionsymbols">Function symbols</title>
+    <section xml:id="functionsymbols">
+      <title>Function symbols</title>
 
       <para>The function operator <literal>(...=&gt;...)</literal> allows the
       definition of function types. Left of <literal>=&gt;</literal> zero or
@@ -954,8 +953,8 @@ is replaced by
       <programlisting>"myfunction" -&gt; (A B =&gt; C)</programlisting>
     </section>
 
-    <section xml:id="LiftingOperator">
-      <title xml:id="lifting">Lifted Symbols</title>
+    <section xml:id="lifting">
+      <title>Lifted Symbols</title>
 
       <para>The lifting operator <literal>`...`</literal> translates the name
       of an arbitrary complex symbol to a literal syntax definition of that
@@ -975,8 +974,8 @@ is replaced by
 `{A ","}+` is replaced by ("{" "A" "\",\"" "}" "+") </programlisting>
     </section>
 
-    <section>
-      <title xml:id="LAYOUT">LAYOUT symbol</title>
+    <section xml:id="layout">
+      <title>LAYOUT symbol</title>
 
       <para>The <literal>LAYOUT</literal> symbol is a reserved sort name. SDF
       does not generate any productions for it. Instead for all
@@ -997,8 +996,8 @@ is replaced by
     </section>
   </section>
 
-  <section xml:id="Grammars">
-    <title xml:id="grammars">Grammars</title>
+  <section xml:id="grammars">
+    <title>Grammars</title>
 
     <para>A grammar is the entity that can be defined in an export section or
     hidden section of a module. It is a catch-all notion that covers more than
@@ -1011,18 +1010,18 @@ is replaced by
       </listitem>
 
       <listitem>
-        <para><link linkend="Aliases">Aliases</link>: abbreviations for
+        <para><link linkend="aliases">Aliases</link>: abbreviations for
         complex symbols.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="Sorts">Sorts</link>: the non-terminals of the
+        <para><link linkend="sorts">Sorts</link>: the non-terminals of the
         grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="ContextFreeStartSymbols">Start-symbols</link>:
-        the start symbols of the grammar.</para>
+        <para><link linkend="startsymbols">Start-symbols</link>: the start
+        symbols of the grammar.</para>
       </listitem>
 
       <listitem>
@@ -1052,10 +1051,10 @@ is replaced by
 
     <para>An SDF module may contain as many grammars of any kind as you need.
     We will now describe all these kinds of grammars. Also see the Section
-    <link linkend="sdf_Examples">Examples</link>.</para>
+    <link linkend="examples">Examples</link>.</para>
 
-    <section>
-      <title xml:id="imports">Imports</title>
+    <section xml:id="imports">
+      <title>Imports</title>
 
       <section xml:id="plainimports">
         <title>Plain imports</title>
@@ -1096,8 +1095,8 @@ is replaced by
       </section>
     </section>
 
-    <section xml:id="Aliases">
-      <title xml:id="aliases">Aliases</title>
+    <section xml:id="aliases">
+      <title>Aliases</title>
 
       <para>Aliases are similar to productions but not quite. An alias is used
       to define a short hand for a complex or otherwise cumbersome
@@ -1144,24 +1143,23 @@ is replaced by
       </itemizedlist>
     </section>
 
-    <section xml:id="Sorts">
-      <title xml:id="sorts">Sort declarations</title>
+    <section xml:id="sorts">
+      <title>Sort declarations</title>
 
       <para>Sorts are declared by listing their name in a sorts section of the
       form:<programlisting><emphasis role="bold">sorts</emphasis>
   &lt;Symbol&gt;*</programlisting>Only plain <literal>Sort</literal>s and
       parameterized <literal>Sort</literal>s should declared in the
       <literal>sorts</literal> section. The <link
-      linkend="WellformednessSDF">sdf-checker</link> will generate a warnings.
+      linkend="wellformedness">sdf-checker</link> will generate a warnings.
       The checker requires that all sorts that occur in some symbol in the
       specification are declared. Note however that the sorts declaration does
       not carry any semantics other than simply declaring a name. The checker
       uses this to warn the SDF user for possible typos.</para>
     </section>
 
-    <section xml:id="LexicalAndContextFreeSyntax">
-      <title xml:id="lexicalcontextfree">Lexical and context-free
-      syntax</title>
+    <section xml:id="lexicalandcontextfreesyntax">
+      <title>Lexical and context-free syntax</title>
 
       <para>Lexical syntax describes the low-level structure of text while
       context-free syntax describes the higher-level structure. In SDF, these
@@ -1188,8 +1186,8 @@ is replaced by
  &lt;A-LEX&gt; -&gt; &lt;A-CF&gt;
  "b"     -&gt; &lt;A-CF&gt;</programlisting>
 
-      <section>
-        <title xml:id="lexicalsyntax">Lexical Syntax</title>
+      <section xml:id="lexicalsyntax">
+        <title>Lexical Syntax</title>
 
         <para>The lexical syntax usually describes the low level structure of
         programs (often referred to as <emphasis>lexical tokens</emphasis>.)
@@ -1206,8 +1204,8 @@ is replaced by
   &lt;Production&gt;*</programlisting>
       </section>
 
-      <section xml:id="ContextFreeSyntax">
-        <title xml:id="contextfreesyntax">Context-free syntax</title>
+      <section xml:id="contextfreesyntax">
+        <title>Context-free syntax</title>
 
         <para>The context-free syntax describes the more high-level syntactic
         structure of sentences in a language. A context-free syntax contains a
@@ -1238,8 +1236,8 @@ which will be then wrapped as in:
         the names of the non-terminals.</para>
       </section>
 
-      <section xml:id="Productions">
-        <title xml:id="productions">Productions</title>
+      <section xml:id="productions">
+        <title>Productions</title>
 
         <para>The basic building block of a context-free syntax, lexical
         syntax or variables grammar is the <emphasis>production</emphasis>. It
@@ -1288,8 +1286,8 @@ C         -&gt; C | D | E
 D         -&gt; C | D | E
 E         -&gt; C | D | E</programlisting>
 
-        <section xml:id="Attributes">
-          <title xml:id="attributes">Attributes</title>
+        <section xml:id="attributes">
+          <title>Attributes</title>
 
           <para>The definition of a lexical, context-free productions and
           variables may be followed by <emphasis>attributes</emphasis> that
@@ -1370,7 +1368,7 @@ E         -&gt; C | D | E</programlisting>
           <literal>prefer</literal> does not make sense either.</para>
         </section>
 
-        <section>
+        <section xml:id="merging">
           <title>Merging productions</title>
 
           <para>An important detail of SDF is that if two productions are
@@ -1387,8 +1385,8 @@ E         -&gt; C | D | E</programlisting>
 "if" E "then" S -&gt; S {cons("if"), prefer}</programlisting>
         </section>
 
-        <section xml:id="PrefixFunctions">
-          <title xml:id="prefix">Prefix Functions</title>
+        <section xml:id="prefixfunctions">
+          <title>Prefix Functions</title>
 
           <para><emphasis>Prefix functions</emphasis> are a special kind of
           productions. They have a prefix syntax and are an abbreviation
@@ -1404,9 +1402,8 @@ is replaced by
       </section>
     </section>
 
-    <section xml:id="ContextFreeStartSymbols">
-      <title xml:id="startsymbols">Lexical and context-free
-      start-symbols</title>
+    <section xml:id="startsymbols">
+      <title>Lexical and context-free start-symbols</title>
 
       <para>Via the lexical or context-free start symbols section the symbols
       are explicitly defined which will serve as start symbols when parsing
@@ -1523,8 +1520,8 @@ is replaced by
       contribute to any transitive closure.</para>
     </section>
 
-    <section xml:id="Variables">
-      <title xml:id="variables">Variables</title>
+    <section xml:id="variables">
+      <title>Variables</title>
 
       <para>Variables are declared in the <literal>variables</literal> section
       of a module. Like all other entities in a module, except equations,
@@ -1571,8 +1568,8 @@ hiddens
       </example>
     </section>
 
-    <section>
-      <title xml:id="lexicalvariables">Lexical variables</title>
+    <section xml:id="lexicalvariables">
+      <title>Lexical variables</title>
 
       <warning>
         <para>write section</para>
@@ -1622,8 +1619,8 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
     </section>
   </section>
 
-  <section xml:id="sdf_Examples">
-    <title xml:id="examples">Examples</title>
+  <section xml:id="examples">
+    <title>Examples</title>
 
     <para>We will now give a sequence of small examples that illustrate the
     various constructs in SDF:</para>
@@ -1897,9 +1894,9 @@ exports
       more convenient to list these alternatives explicitly in a single
       left-hand side or to list alternative parts inside a left-hand side.
       This is precisely the role of the <link
-      linkend="AlternativeOperator">alternative operator</link>. The example
-      <link linkend="CODE_alternative1">below</link> shows how this operator
-      can be used. It describes identifiers starting with an upper-case letter
+      linkend="alternatives">alternative operator</link>. The example <link
+      linkend="CODE_alternative1">below</link> shows how this operator can be
+      used. It describes identifiers starting with an upper-case letter
       followed by one of the following:</para>
 
       <itemizedlist>
@@ -2055,7 +2052,7 @@ exports
       linkend="lists">list symbols</link> can be used for this purpose. Lists
       may be used in both the left-hand side and right-hand side of a
       context-free function as well as in the right-hand side of a <link
-      linkend="Variables">variable declaration</link>.</para>
+      linkend="variables">variable declaration</link>.</para>
 
       <para><link linkend="CODE_pascal-ids">Here</link> is an example of how
       lists can be used to define the syntax of a list of identifiers
@@ -2322,8 +2319,8 @@ exports
       </example>
     </section>
 
-    <section xml:id="Parameterization">
-      <title xml:id="parameters">Parameterization</title>
+    <section xml:id="parametersexample">
+      <title>Parameterization</title>
 
       <para>Module parameterization allows the definition of generic modules
       for lists, pairs, sets, etc. The operations defined in these modules are
@@ -2576,7 +2573,7 @@ exports
     <section xml:id="EX_Tricky">
       <title>Some Tricky Cases</title>
 
-      <para>In <link linkend="Symbols">Symbols</link> a number of
+      <para>In <link linkend="symbols">Symbols</link> a number of
       sophisticated operators, like alternative, option, function, sequence,
       and tuple are discussed. These operators allow a concise manner of
       defining grammars. There are, however, a number of issues to be taken
@@ -2724,8 +2721,8 @@ exports
     </warning>
   </section>
 
-  <section xml:id="WellformednessSDF">
-    <title xml:id="wellformedness">Well-formedness</title>
+  <section xml:id="wellformedness">
+    <title>Well-formedness</title>
 
     <para>In order to improve the quality of the written specifications, a
     number of checks are performed before an SDF specification is transformed
@@ -2940,7 +2937,7 @@ exports
     </section>
   </section>
 
-  <section>
+  <section xml:id="parseforests">
     <title>Parse forests</title>
 
     <para>TODO: write section of output of sglr</para>
