@@ -33,9 +33,12 @@
   </info>
 
   <warning>
-    <para>This document is work in progress. It is in transition between The
-    Meta-Enviroment V1.5 and V2.0. See <link linkend="sdf_ToDo">ToDo</link>
-    section.</para>
+    <para>This document was recently rewritten (May 11th 2007). It is
+    up-to-date with the latest version of SDF. References to ASF+SDF syntax
+    and semantics have been removed and descriptions of syntax and semantics
+    of SDF have been brought up-to-date with the current state. Please contact
+    <email>meta-devel-list@cwi.nl</email> if you would like to contribute to
+    this document.</para>
   </warning>
 
   <section xml:id="introduction">
@@ -214,7 +217,7 @@
           <para>At the command line you can use the programs
           <command>sdf2table</command> to generate a parse table and
           <command>sglr</command> to parse text using the generated parse
-          table. </para>
+          table.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -428,7 +431,7 @@
       disambiguations. Modules may import other modules for reuse or
       seperation of concerns. A module may extend the definition of a
       non-terminal in another module. A module may compose the definition of a
-      language by importing the parts of the language. </para>
+      language by importing the parts of the language.</para>
 
       <note>
         <para>SDF modules do not hide names in principle, there is no
@@ -1085,11 +1088,11 @@ is replaced by
       <section xml:id="renamings">
         <title>Renamings</title>
 
-        <para> Symbol renaming is in fact very similar to parameterization
+        <para>Symbol renaming is in fact very similar to parameterization
         except that it is not necessary to add formal parameters to a module.
         The mechanism of symbol renaming allows the overriding of one symbol
         or a set of symbols by another symbol or symbols, respectively. It
-        allows a flexible and concise way of adapting specifications. </para>
+        allows a flexible and concise way of adapting specifications.</para>
 
         <warning>
           <para>TODO finish this section</para>
@@ -1470,7 +1473,7 @@ is replaced by
   "-" E -&gt; E &gt; E "+" E -&gt; E {left}
  </programlisting>
 
-      <para> Please note the following details on priorities:</para>
+      <para>Please note the following details on priorities:</para>
 
       <itemizedlist>
         <listitem>
@@ -1610,7 +1613,7 @@ hiddens
       sort or symbol is allowed. The restriction operator
       <literal>-/-</literal> should be read as <emphasis>may not be followed
       by</emphasis>. Before the restriction operator <literal>-/-</literal> a
-      list of symbols is given for which the restriction holds. </para>
+      list of symbols is given for which the restriction holds.</para>
 
       <para>Lookaheads are lists of character classes separated by ".". Note
       that single character restrictions are implemented faster then multiple
