@@ -46,6 +46,8 @@ for cat in ${CATEGORIES}; do
                    ${DOCBOOKXSLHTML} $cat/$book/$book.xml)
 	(xsltproc  --output ${WEB}/$cat/$book/$book.fo \
                    --param xref.with.number.and.title 0 \
+		   --param chapter.autolabel 1 \
+		   --param section.autolabel 1 \
                    --stringparam paper.type A4 \
                    ${DOCBOOKXSLFO} $cat/$book/$book.xml)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf

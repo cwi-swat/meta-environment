@@ -275,7 +275,8 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="sdfgraph.png"></imagedata>
+              <imagedata align="center" fileref="sdfgraph.png" scalefit="1"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -284,52 +285,53 @@
       allmost all features of SDF with references to the appropriate sections.
       SDF keywords are highlighted in boldface.</para>
 
-      <programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]             %% See <xref
-          linkend="modules" /> for the module keyword, compound module names and module parameters
-  <emphasis role="bold">imports</emphasis> basic/Whitespace                                            %% See <xref
-          linkend="imports" /> for importing other modules
-  <emphasis role="bold">imports</emphasis> utilities/Parsing[Expr]                                     %% See <xref
-          linkend="parameters" /> for binding module parameters
-  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions[Expression =&gt; Expr]      %% See <xref
-          linkend="renamings" /> for symbol renamings
+      <programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]             
+%% See <xref linkend="modules" /> for the module keyword, compound module names and module parameters
+  <emphasis role="bold">imports</emphasis> basic/Whitespace                                           
+%% See <xref linkend="imports" /> for importing other modules
+  <emphasis role="bold">imports</emphasis> utilities/Parsing[Expr]                                     
+%% See <xref linkend="parameters" /> for binding module parameters
+  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions[Expression =&gt; Expr]      
+%% See <xref linkend="renamings" /> for symbol renamings
 
-<emphasis role="bold">exports</emphasis>                                                               %% See <xref
-          linkend="modules" /> for hiddens and export features
- <emphasis role="bold">sorts</emphasis> Identifier Expr List Stat                                      %% See <xref
-          linkend="sorts" /> for sort/non-terminal declarations
- <emphasis role="bold">lexical syntax</emphasis>                                                       %% See <xref
-          linkend="lexicalsyntax" />
-   [A-Z][a-z]+ -&gt; Identifier                                          %% See <xref
-          linkend="characters" /> and see <xref linkend="sort" />
- <emphasis role="bold">lexical restrictions</emphasis>                                                 %% See <xref
-          linkend="restrictions" /> and see <xref linkend="disambiguation" />
+<emphasis role="bold">exports</emphasis>                                                               
+%% See <xref linkend="modules" /> for hiddens and export features
+ <emphasis role="bold">sorts</emphasis> Identifier Expr List Stat                                      
+%% See <xref linkend="sorts" /> for sort/non-terminal declarations
+ <emphasis role="bold">lexical syntax</emphasis>                                                       
+%% See <xref linkend="lexicalsyntax" />
+   [A-Z][a-z]+ -&gt; Identifier                                          
+%% See <xref linkend="characters" /> and see <xref linkend="sort" />
+ <emphasis role="bold">lexical restrictions</emphasis>                                                 
+%% See <xref linkend="restrictions" /> and see <xref linkend="disambiguation" />
    Identifier -/- [a-z]                                              
- <emphasis role="bold">context-free syntax</emphasis>                                                  %% See <xref
-          linkend="contextfreesyntax" />
-   Identifier    -&gt; Expr {<emphasis role="bold">cons</emphasis>("name")}                               %% See <xref
-          linkend="attributes" /> for attributes like the cons attribute
-   Expr*         -&gt; List[[Param1]]                                              %% See <xref
-          linkend="sort" /> for parameterized sort and <xref linkend="symbols" /> on symbols in general
-   "if" Expr "then" {Param2 ";"}+ "else" {Param2 ";"}+ "fi" -&gt; Param2           %% See <xref
-          linkend="literals" /> and see <xref linkend="lists" />
+ <emphasis role="bold">context-free syntax</emphasis>                                                  
+%% See <xref linkend="contextfreesyntax" />
+   Identifier    -&gt; Expr {<emphasis role="bold">cons</emphasis>("name")}                               
+%% See <xref linkend="attributes" /> for attributes like the cons attribute
+   Expr*         -&gt; List[[Param1]]                                              
+%% See <xref linkend="sort" /> for parameterized sort and <xref
+          linkend="symbols" /> on symbols in general
+   "if" Expr "then" {Param2 ";"}+ "else" {Param2 ";"}+ "fi" -&gt; Param2           
+%% See <xref linkend="literals" /> and see <xref linkend="lists" />
    "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
-          role="bold">prefer</emphasis>}  %% See <xref linkend="attributes" /> and see <xref
-          linkend="disambiguation" />
+          role="bold">prefer</emphasis>}  
+%% See <xref linkend="attributes" /> and see <xref linkend="disambiguation" />
  <emphasis role="bold">context-free syntax</emphasis>      
-   "if" | "then" | "fi"  -&gt; Identifier {<emphasis role="bold">reject</emphasis>}                                 %% See <xref
-          linkend="attributes" /> and see <xref linkend="disambiguation" /> for reject disambiguation
- <emphasis role="bold">context-free priorities</emphasis>                                                        %% See <xref
-          linkend="priorities" /> and see <xref linkend="disambiguation" /> for priority disambiguation
-   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold">left</emphasis>}  &gt;                                              %% See <xref
-          linkend="attributes" /> and see <xref linkend="disambiguation" /> for associativity disambiguation
+   "if" | "then" | "fi"  -&gt; Identifier {<emphasis role="bold">reject</emphasis>}                                 
+%% See <xref linkend="attributes" /> and see <xref linkend="disambiguation" /> for reject disambiguation
+ <emphasis role="bold">context-free priorities</emphasis>                                                        
+%% See <xref linkend="priorities" /> and see <xref linkend="disambiguation" /> for priority disambiguation
+   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold">left</emphasis>}  &gt;                                              
+%% See <xref linkend="attributes" /> and see <xref linkend="disambiguation" /> for associativity disambiguation
    Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}                                                 
-<emphasis role="bold">hiddens</emphasis>                                                               %% See <xref
-          linkend="modules" /> for hiddens and exports features
- <emphasis role="bold">variables</emphasis>                                                            %% See <xref
-          linkend="variables" /> for constructing meta variables
+<emphasis role="bold">hiddens</emphasis>                                                               
+%% See <xref linkend="modules" /> for hiddens and exports features
+ <emphasis role="bold">variables</emphasis>                                                            
+%% See <xref linkend="variables" /> for constructing meta variables
    "Id"[0-9\']* -&gt; Identifier                                     
- <emphasis role="bold">lexical variables</emphasis>                                                    %% See <xref
-          linkend="lexicalvariables" /> for constructing lexical meta variables
+ <emphasis role="bold">lexical variables</emphasis>                                                    
+%% See <xref linkend="lexicalvariables" /> for constructing lexical meta variables
    "Head" -&gt; [A-Z]
    "Tail" -&gt; [a-z]+</programlisting>
     </section>
