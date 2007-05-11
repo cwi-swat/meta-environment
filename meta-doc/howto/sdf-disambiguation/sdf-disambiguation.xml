@@ -17,15 +17,15 @@
 
   <info>
     <author>
-      <orgname>Centrum voor Wiskunde en Informatica, </orgname>
+      <orgname>Centrum voor Wiskunde en Informatica,</orgname>
 
-      <contrib>Jurgen Vinju </contrib>
+      <contrib>Jurgen Vinju</contrib>
 
       <email>Jurgen.Vinju@cwi.nl</email>
     </author>
 
-    <pubdate>$Rev$ by $Author$ at $Date: 2007-02-17 22:04:14 +0100 (Sat, 17
-    Feb 2007) $</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2007-02-17 22:04:14
+    +0100 (Sat, 17 Feb 2007) $</pubdate>
   </info>
 
   <para><emphasis>This document is currently being written.</emphasis></para>
@@ -257,7 +257,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="sdf.gif"></imagedata>
+            <imagedata fileref="sdf.gif" scalefit="1" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -318,7 +318,7 @@
       <para>In case of multiple ambiguities in the same string, try isolating
       the lower ambiguities in the tree first. Also, if there are cyclic
       derivations, remove them first to speed up parsing and making the trees
-      look simpler. </para>
+      look simpler.</para>
     </section>
   </section>
 
@@ -395,7 +395,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="assoc.png"></imagedata>
+              <imagedata fileref="assoc.png" scalefit="1" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -445,8 +445,8 @@ context-free syntax
         without changing anything else in the grammar. Similarly, you might
         have used {right} for the opposite solution, or {non-assoc} for
         filtering all direct children. With {non-assoc} you effectively force
-        the user to write brackets around every recursive application of "*".
-        </para>
+        the user to write brackets around every recursive application of
+        "*".</para>
 
         <note>
           <para>The {bracket} attribute is NOT a disambiguation construct. It
@@ -488,7 +488,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="prio.png"></imagedata>
+              <imagedata fileref="prio.png" scalefit="1" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -623,7 +623,7 @@ context-free priorities
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="transitive.png"></imagedata>
+              <imagedata fileref="transitive.png" scalefit="1" width="50%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -691,7 +691,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="prefix.png"></imagedata>
+              <imagedata fileref="prefix.png" scalefit="1" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
 
@@ -742,7 +742,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="postfix.png"></imagedata>
+              <imagedata fileref="postfix.png" scalefit="1" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -871,7 +871,8 @@ context-free priorities
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="non-transitive.png"></imagedata>
+              <imagedata fileref="non-transitive.png" scalefit="1"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -915,7 +916,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="commas.png"></imagedata>
+              <imagedata fileref="commas.png" scalefit="1" width="50%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -948,7 +949,7 @@ context-free syntax
         productions that are automatically generated for you. There is no way
         around this, unless you would like to remove the comma separated
         argument list and use the binary comma operator instead for parsing
-        your comma's. </para>
+        your comma's.</para>
 
         <programlisting>module Expressions
 
@@ -1010,7 +1011,7 @@ context-free syntax
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="longestmatch.png"></imagedata>
+            <imagedata fileref="longestmatch.png" scalefit="1" width="75%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1110,7 +1111,8 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="layoutleftright.png"></imagedata>
+              <imagedata fileref="layoutleftright.png" scalefit="1"
+                         width="100%"></imagedata>
             </imageobject>
           </mediaobject>
 
@@ -1157,7 +1159,7 @@ context-free syntax
           defined by LAYOUT. Also notice that it is a context-free
           restriction, not a lexical restriction. The reason is that the
           LAYOUT? non-terminal is introduced between every non-terminal at the
-          context-free level. </para>
+          context-free level.</para>
 
           <para>The matter becomes slightly more complex with the introduction
           of source code comments. In this case, you can defined another
@@ -1230,7 +1232,8 @@ context-free syntax
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="noreservedkeywords.png"></imagedata>
+            <imagedata fileref="noreservedkeywords.png" scalefit="1"
+                       width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1272,7 +1275,7 @@ context-free syntax
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="returnkeyword.png"></imagedata>
+            <imagedata fileref="returnkeyword.png" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1325,7 +1328,7 @@ context-free syntax
       <para>The {reject} attribute declares that all identifiers with
       non-terminal E that match that production will be filtered. This
       effectively removes the interpretation of the prefix function
-      application, and leafs the other interpretation standing. </para>
+      application, and leafs the other interpretation standing.</para>
 
       <para>However, this also filters all other identifiers that look like
       "return". For some languages, this is the defined behavior. Other
@@ -1367,7 +1370,7 @@ context-free syntax
       Especially when syntax definitions are typed from language manuals, you
       may expect ambiguities of this kind. Some of the ambiguities are
       introduced artificially into grammars for ease of implementation with a
-      particular parser technology. </para>
+      particular parser technology.</para>
 
       <para>In this class of ambiguities we will identify symptoms that can
       not be solved by SDF's disambiguation constructs. You will need a
@@ -1407,7 +1410,7 @@ context-free syntax
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="identifierclone.png"></imagedata>
+              <imagedata fileref="identifierclone.png" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1511,7 +1514,7 @@ int i;</programlisting>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="dynamicreservation.png"></imagedata>
+              <imagedata fileref="dynamicreservation.png" width="100%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1545,7 +1548,7 @@ int i;</programlisting>
           <para>Dynamically reserved identifiers and useless identifier
           cloning occur together in syntax definitions because the second is
           used as a method to deal with the first. Not in SDF. Removing the
-          useless clones is a good idea in SDF. </para>
+          useless clones is a good idea in SDF.</para>
         </note>
 
         <para>Since dynamic reservation of keywords is far removed from the
@@ -1620,7 +1623,7 @@ context-free syntax
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="dangle1.png"></imagedata>
+            <imagedata fileref="dangle1.png" width="100%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
