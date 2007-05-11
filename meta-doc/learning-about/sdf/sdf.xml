@@ -198,6 +198,44 @@
       level syntax definition in SDF is like high level programming.</para>
     </section>
 
+    <section>
+      <title>How to use SDF</title>
+
+      <para>On the one hand, SDF can be used to simply define a language, in
+      order to communicate it as documentation. There are tools that support
+      this use case; checking the definition for inconsistencies and other
+      basic editing support. On the other hand, SDF is often used to obtain a
+      parser for the defined language. Sometimes, SDF is used for other kinds
+      of processing.</para>
+
+      <section>
+        <title>How to define a language</title>
+
+        <para>Of course you can define an SDF specification in any editor.
+        There is an IDE for SDF called the SDF Meta-Environment, of which the
+        ASF+SDF Meta-Environment is an extension. This IDE supports SDF
+        definition with all kinds of user-interface features (syntax
+        highlighting, static checking, parse forest visualization, metrics and
+        refactoring).</para>
+      </section>
+
+      <section>
+        <title>How to generate a parser</title>
+
+        <para>To generate a parser from an SDF definition you may use the
+        implementation of SDF. You can use The SDF Meta-Environment, The
+        ASF+SDF Meta-Environment or the commandline tools
+        <command>sdf2table</command> and <command>sglr</command>. </para>
+      </section>
+
+      <section>
+        <title>How to obtain other artefacts</title>
+
+        <para>There are other uses of SDF, for which tools exist. Examples are
+        grammar metrics, source code generators.</para>
+      </section>
+    </section>
+
     <section xml:id="howto">
       <title>How to use SDF?</title>
 
@@ -210,7 +248,7 @@
           which provides interactive editing of SDF modules and completely
           automates the parser generation phase. After editing an SDF
           specification you can directly use it to parse input text, visualize
-          parse trees and see syntax highlighting.</para>
+          parse trees and see syntax highlighting. </para>
         </listitem>
 
         <listitem>
@@ -270,7 +308,9 @@
       document ends with special sections on <link
       linkend="wellformedness">well-formedness</link>, <link
       linkend="disambiguation">disambiguation</link> and the <link
-      linkend="history">history of SDF</link>.</para>
+      linkend="history">history of SDF</link>. This document does not detail
+      the usage of the implementations of SDF (<command>sdf2table</command>
+      and <command>sglr</command>).</para>
 
       <para><figure xml:id="sdfgraph">
           <title>The hierarchical structure of the SDF syntax, extracted from
@@ -2699,7 +2739,7 @@ exports
   <section xml:id="disambiguation">
     <title>Disambiguation</title>
 
-    <para>As mentioned before SDF is based on two formal notions. The first is
+    <para>As mentioned before SDF is based on two notions. The first is
     context-free grammars, and the second is disambiguation filters. The
     disambiguation constructs of SDF are:</para>
 
@@ -2954,9 +2994,23 @@ exports
   </section>
 
   <section xml:id="parseforests">
-    <title>Parse forests</title>
+    <title>Derivations</title>
 
-    <para>TODO: write section of output of sglr</para>
+    <para>Any parser generated from an SDF definition should output a
+    representation of <emphasis>all</emphasis> derivations. For example, a
+    <emphasis>parse forest</emphasis> containing all parse trees, or any other
+    representation which encodes/serializes all derivations. A derivation
+    should include all characters of the input and also a trace of all
+    productions that are recursively applied to obtain the derivations. A
+    common representation that is used is parse forest with ambiguity packing
+    nodes serialized as ATerms. </para>
+
+    <para>Note that cyclic derivations should also be represented.</para>
+
+    <para>The essence of this requirement for SDF derivations is that no
+    information should be thrown away. A derivation represents exactly the
+    grammar that was used to generate it, and the input sentence that was
+    parsed.</para>
   </section>
 
   <section xml:id="history">
