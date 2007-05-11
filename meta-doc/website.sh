@@ -48,6 +48,7 @@ for cat in ${CATEGORIES}; do
                    --param xref.with.number.and.title 0 \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
+		   --param shade.verbatim 1 \
                    --stringparam paper.type A4 \
                    ${DOCBOOKXSLFO} $cat/$book/$book.xml)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
