@@ -260,9 +260,12 @@
       semantics. It is a basic but complete reference manual for SDF based on
       small examples. This document is loosely <link
       linkend="sdfgraph">structured</link> according to the syntactic
-      structure of SDF. After we have described all of it, we continue with a
-      set of <link linkend="examples">examples</link>. The document ends with
-      special sections on <link linkend="???">well-formedness</link>, <link
+      structure of SDF: <link linkend="modules">modules</link>, <link
+      linkend="grammars">grammars</link> and <link
+      linkend="symbols">symbols</link>. After we have described all of it, we
+      continue with a set of <link linkend="examples">examples</link>. The
+      document ends with special sections on <link
+      linkend="???">well-formedness</link>, <link
       linkend="???">disambiguation</link> and the <link linkend="???">history
       of SDF</link>.</para>
 
@@ -406,117 +409,140 @@
     generation is the most important secondary.goal of SDF.</para>
   </section>
 
-  <section xml:id="Modules">
-    <title xml:id="modules">Modules and Modular Structure</title>
+  <section>
+    <title xml:id="modules">Modules</title>
 
-    <para>An SDF specification consists of a number of module declarations.
-    The <command>sdf2table</command> commandline tool takes a file with all
-    modules concatenated and the word "definition" in front of them as input.
-    The ASF+SDF Meta-Environment accepts the modules in separate files, each
-    with the extension ".sdf". In that case, an SDF module must be in a file
-    named exactly as the name of the module.</para>
+    <section>
+      <title>Basic module structure</title>
 
-    <para>Each module may define lexical syntax, context-free syntax and
-    disambiguations. Modules may import other modules for reuse or seperation
-    of concerns. A module may extend the definition of a non-terminal in
-    another module. A module may compose the definition of a language by
-    importing the parts of the language. <note>
+      <para>An SDF specification consists of a number of module declarations.
+      The <command>sdf2table</command> commandline tool takes a file with all
+      modules concatenated and the word "definition" in front of them as
+      input. The ASF+SDF Meta-Environment accepts the modules in separate
+      files, each with the extension ".sdf". In that case, an SDF module must
+      be in a file named exactly as the name of the module.</para>
+
+      <para>Each module may define lexical syntax, context-free syntax and
+      disambiguations. Modules may import other modules for reuse or
+      seperation of concerns. A module may extend the definition of a
+      non-terminal in another module. A module may compose the definition of a
+      language by importing the parts of the language. </para>
+
+      <note>
         <para>SDF modules do not hide names in principle, there is no
         "private/public" mechanism. So beware of name clashes. Later we will
         see how the renaming facility can be used to solve name clashes
         declaratively. There is an "hiddens/exports" mechanism however, but it
         does not only hide names, it also hides the complete definitions from
         importing modules. More on that mechanism later too.</para>
-      </note>The basic structure of a module is this. The module keyword is
-    followed by the module name, then a series of imports can be made,
-    followed by the actual definition of the syntax:<programlisting><emphasis
-          role="bold">module</emphasis> &lt;ModuleName&gt;
+      </note>
+
+      <para>The basic structure of a module is this. The module keyword is
+      followed by the module name, then a series of imports can be made,
+      followed by the actual definition of the syntax:<programlisting><emphasis
+            role="bold">module</emphasis> &lt;ModuleName&gt;
   &lt;ImportSection&gt;*
   &lt;ExportOrHiddenSection&gt;*</programlisting></para>
 
-    <para>A <literal>&lt;ModuleName&gt;</literal> is either a simple
-    <literal>&lt;ModuleId&gt;</literal> or a
-    <literal>&lt;ModuleId&gt;</literal> followed by zero or more parameter
-    symbols, e.g., <literal>&lt;Module&gt;[&lt;Symbol&gt;*]</literal>, the
-    symbols will be explained <link linkend="Symbols">later</link>. The
-    <literal>&lt;ModuleId&gt;</literal> may be a compound module name (i.e.
-    &lt;ModuleId&gt; separated by forward slashes), the
-    <literal>ModuleId</literal> reflects the directory structure. For example
-    <literal>basic/Booleans</literal> means that the module
-    <literal>Booleans</literal> is found in the subdirectory
-    <literal>basic</literal>.</para>
+      <para>A <literal>&lt;ModuleName&gt;</literal> is either a simple
+      <literal>&lt;ModuleId&gt;</literal> or a
+      <literal>&lt;ModuleId&gt;</literal> followed by zero or more parameter
+      symbols, e.g., <literal>&lt;Module&gt;[&lt;Symbol&gt;*]</literal>, the
+      symbols will be explained <link linkend="Symbols">later</link>. The
+      <literal>&lt;ModuleId&gt;</literal> may be a compound module name (i.e.
+      &lt;ModuleId&gt; separated by forward slashes), the
+      <literal>ModuleId</literal> reflects the directory structure. For
+      example <literal>basic/Booleans</literal> means that the module
+      <literal>Booleans</literal> is found in the subdirectory
+      <literal>basic</literal>.</para>
+    </section>
 
-    <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
-    <emphasis>export section</emphasis> or a <emphasis>hidden
-    section</emphasis>. The former starts with the keyword
-    <literal>exports</literal> and makes all entities in the section visible
-    to other modules. The latter starts with the keyword
-    <literal>hiddens</literal> and makes all entities in the section local to
-    the module. So, hidden means that when another module imports that module,
-    none of the hiddens sections will be present in the composition. The
-    effect for parser generation is that only the hiddens sections of top
-    module of an SDF specification contribute to the parser generation.</para>
+    <section>
+      <title>Hiddens and exports sections</title>
 
-    <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one of
-    the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
+      <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
+      <emphasis>export section</emphasis> or a <emphasis>hidden
+      section</emphasis>. The former starts with the keyword
+      <literal>exports</literal> and makes all entities in the section visible
+      to other modules. The latter starts with the keyword
+      <literal>hiddens</literal> and makes all entities in the section local
+      to the module. So, hidden means that when another module imports that
+      module, none of the hiddens sections will be present in the composition.
+      The effect for parser generation is that only the hiddens sections of
+      top module of an SDF specification contribute to the parser
+      generation.</para>
+
+      <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one
+      of the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
   &lt;Grammar&gt;+</programlisting>or<programlisting><emphasis role="bold">hiddens</emphasis>
   &lt;Grammar&gt;+</programlisting> A <literal>&lt;Grammar&gt;</literal> can
-    be a definition of one of the following:</para>
+      be a definition of one of the following:</para>
 
-    <itemizedlist>
-      <listitem>
-        <para><link linkend="Imports">Imports</link>.</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="Imports">Imports</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="Aliases">Aliases</link>.</para>
-      </listitem>
+        <listitem>
+          <para><link linkend="Aliases">Aliases</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="Sorts">Sorts</link>.</para>
-      </listitem>
+        <listitem>
+          <para><link linkend="Sorts">Sorts</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link
-        linkend="ContextFreeStartSymbols">Start-symbols</link>.</para>
-      </listitem>
+        <listitem>
+          <para><link
+          linkend="ContextFreeStartSymbols">Start-symbols</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="LexicalSyntax">Lexical syntax</link>.</para>
-      </listitem>
+        <listitem>
+          <para><link linkend="LexicalSyntax">Lexical syntax</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="ContextFreeSyntax">Context-free
-        syntax</link>.</para>
-      </listitem>
+        <listitem>
+          <para><link linkend="ContextFreeSyntax">Context-free
+          syntax</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="Priorities">Priorities</link>.</para>
-      </listitem>
+        <listitem>
+          <para><link linkend="Priorities">Priorities</link>.</para>
+        </listitem>
 
-      <listitem>
-        <para><link linkend="Variables">Variables</link>.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para><link linkend="Variables">Variables</link>.</para>
+        </listitem>
+      </itemizedlist>
 
-    <para>Each of these entities is described and illustrated in <link
-    linkend="Grammars">Grammars</link>.</para>
+      <para>Each of these entities is described and illustrated in <link
+      linkend="Grammars">Grammars</link>. Most grammars have <link
+      linkend="???">Symbols</link> as their basic building blocks. Symbols are
+      the SDF term for terminals and non-terminals. Note that it is possible
+      to have hidden imports as well, this means that the full definition of
+      the import definition is copied in the hiddens section of the importing
+      module.</para>
+    </section>
 
-    <para>Note that it is possible to have hidden imports as well, this means
-    that the full definition of the import definition is copied in the hiddens
-    section of the importing module.</para>
+    <section>
+      <title>Module parameters</title>
 
-    <para>Modules can also be parameterized and the symbols they defined may
-    be renamed. see <link linkend="ParametersRenamings">Parameterization and
-    Renamings</link>.</para>
+      <para>TODO</para>
+    </section>
 
-    <para>After we explain the SDF comment convention, we will now focus on
-    <link linkend="Symbols">Symbols</link>, the basic building block of most
-    <link linkend="grammars">grammars</link>.</para>
+    <section>
+      <title>Definitions</title>
+
+      <para>SDF modules may be collected in a single definition file, for
+      input to the <command>sdf2table</command> tool. The structure of the
+      definition file is as follows:</para>
+
+      <programlisting><emphasis role="bold">definition</emphasis>
+  &lt;Module&gt;+</programlisting>
+    </section>
   </section>
 
   <section xml:id="SdfComment">
-    <title xml:id="comments">SDF comment convention</title>
+    <title xml:id="comments">Comments</title>
 
     <para>The comment convention within an SDF specification is that
     characters between <literal>%%</literal> and the end of line is comment as
@@ -1015,8 +1041,12 @@ is replaced by
       </listitem>
 
       <listitem>
-        <para><link linkend="Variables">Variables</link>: definitions of
+        <para><link linkend="variables">Variables</link>: definitions of
         variables.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="restrictions">Restrictions</link></para>
       </listitem>
     </itemizedlist>
 
@@ -1534,7 +1564,7 @@ hiddens
       Ambiguities</link>.</para>
     </section>
 
-    <section xml:id="Restrictions">
+    <section xml:id="restrictions">
       <title>Restrictions</title>
 
       <para>Lexical syntax can be highly ambiguous. Consider a simple lexical
@@ -2651,452 +2681,47 @@ exports
   <section xml:id="Disambiguation">
     <title>Disambiguation</title>
 
-    <section xml:id="lex-ambiguity">
-      <title>Lexical Ambiguities</title>
-
-      <para>SDF provides a number of elementary lexical disambiguation
-      features but does not offer <emphasis>fully automated</emphasis> lexical
-      disambiguation. As a result, the specification writer has to be aware of
-      lexical ambiguities and has to specify disambiguation rules explicitly.
-      We will discuss various approaches to lexical disambiguation and
-      illustrate them by means of examples.</para>
-
-      <formalpara>
-        <title>Prefer Longest Match per Sort</title>
-
-        <para>Reject all interpretations of the input text that are included
-        in a longer interpretation of the same sort. Given a standard
-        definition of identifiers, the input <literal>xyz</literal> will thus
-        lead to recognition of the identifier <literal>xyz</literal> and not
-        to either <literal>x</literal> or <literal>xy</literal>. This is
-        achieved by defining a restriction on this lexical sort. This can be
-        done using either lexical or context-free <link
-        linkend="Restrictions">restrictions</link>. The specification <link
-        linkend="CODE_restrict-id">below</link> shows how to enforce the
-        longest match for the sort <literal>Id</literal>.</para>
-      </formalpara>
-
-      <example xml:id="CODE_restrict-id">
-        <title>Using context-free restrictions to define a longest match for
-        identifiers</title>
-
-        <para><programlisting>module Identifiers-restrict
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Id
-  sorts Id
-  lexical syntax
-    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
-
-  context-free restrictions
-    Id -/- [a-zA-Z0-9]</programlisting></para>
-      </example>
-
-      <formalpara>
-        <title>Prefer Literals</title>
-
-        <para>In the left-hand side of a context-free syntax rule literals
-        (keywords and/or operators) may be used. If these literals overlap
-        with more general lexical tokens (such as identifier) this causes
-        ambiguities. The strategy <emphasis>Prefer Literals</emphasis> gives
-        preference to interpretation as a literal, over interpretation as a
-        more general lexical token. For instance, the keyword
-        <literal>begin</literal> may be recognized as an identifier given the
-        lexical definition <link linkend="CODE_restrict-id">below</link>.
-        There are two approaches to implement Prefer Literals. In the first
-        approach, we can explicitly forbid the recognition of literals as
-        tokens of a specific sort using the <link
-        linkend="PreferAvoidReject">reject mechanism</link>. The idea is to
-        define context-free grammar rules for all literals with the undesired
-        lexical sort (e.g., <literal>Id</literal>) in the right-hand side
-        followed by the attribute <literal>reject</literal>. This is
-        illustrated <link linkend="CODE_restrict-id">below</link>. The
-        <literal>reject</literal> attribute indicates here that the
-        recognition of a keyword as a literal of the sort
-        <literal>Id</literal> should be rejected. This approach has the major
-        disadvantage that the addition of a literal in any context-free rule
-        also requires the addition of a new reject rule for that
-        literal.</para>
-      </formalpara>
-
-      <example xml:id="CODE_reject-id">
-        <title>Using <literal>reject</literal> to implement Prefer
-        Literals</title>
-
-        <para><programlisting>module Identifiers-reject
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Id
-  sorts Id
-
-  lexical syntax
-    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
-
-  context-free restrictions
-    Id -/- [a-zA-Z0-9]  
-
-  context-free syntax
-    "begin" -&gt; Id {reject}   </programlisting></para>
-      </example>
-
-      <para>The second approach is more attractive. The lexical definition of
-      the general notion that interferes with our literals is written in such
-      a way that it is only used as a last resort. In other words, it is
-      avoided as much as possible and is only used when no alternative exists.
-      The attribute avoid defines precisely this behaviour <link
-      linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
-      Parses</link>. The <link linkend="CODE_avoid-id">next example</link>
-      shows how the lexical definition of <literal>Id</literal> is attributed
-      with <literal>avoid</literal>. Although the first approach is more
-      tedious, it allows more flexibility than the second one.</para>
-
-      <example xml:id="CODE_avoid-id">
-        <title>Using <literal>avoid</literal> to implement Prefer
-        Literals</title>
-
-        <para><programlisting>module Identifiers-avoid
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols Id
-  sorts Id
-
-  lexical syntax
-    [a-zA-Z][a-zA-Z0-9]* -&gt; Id {avoid}
-
-  context-free restrictions
-    Id -/- [a-zA-Z0-9]</programlisting></para>
-      </example>
-
-      <formalpara>
-        <title>Prefer Non-Layout</title>
-
-        <para>If there are interpretations of the text as layout symbol and as
-        non-layout symbol, eliminate all interpretations as layout symbol.
-        This is built-in behaviour of ASF+SDF.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Prefer Variables</title>
-
-        <para>Give preference to interpretation as a variable (as defined in a
-        variables section) over interpretation as a lexical token. Thus
-        built-in behaviour of ASF+SDF. It is achieved by automatically
-        extending each variable declaration with the attribute
-        <literal>prefer</literal> (see <link
-        linkend="PreferAvoidReject">Preferring, Avoiding or Rejecting
-        Parses</link>.</para>
-      </formalpara>
-    </section>
-
-    <section xml:id="cf-ambiguity">
-      <title>Context-free Ambiguities</title>
-
-      <para>Context-free grammars may be ambiguous and, as a result, the
-      parser may yield different parses of a text. More precisely, the result
-      of a parse is a single tree in which the ambiguities are explicitly
-      marked. Each marked ambiguity consists of a set of different parse trees
-      for that ambiguity. Many, but not all, of these different parses can be
-      eliminated by the following strategies that are built-in in The
-      Meta-Environment. These strategies use the priorities and
-      associativities as defined in the specification. In addition, some
-      standard heuristics are used.</para>
-
-      <formalpara>
-        <title>Associativity filtering</title>
-
-        <para>The associativity filtering is performed during the generation
-        of the parse table. Based on the associativity relations certain
-        entries in the parse table are removed.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Removing Trees containing Conflicts</title>
-
-        <para>The simplest application of priority and associativity
-        declarations is the elimination of trees that contain
-        conflicts:</para>
-      </formalpara>
-
-      <itemizedlist>
-        <listitem>
-          <para>A parent node has a child with a lower priority than the
-          parent itself.</para>
-        </listitem>
-
-        <listitem>
-          <para>A parent has a first or last child that is in conflict wit an
-          associativity relation between this parent and child.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Reconsidering the example of complex priorities shown <link
-      linkend="CODE_complex-prio">earlier</link> we will give a number of
-      example sentences and the interpretation given to them by that language
-      definition.</para>
-
-      <table border="1">
-        <caption>Arithmetic expressions and their interpretation</caption>
-
-        <tr>
-          <td>Sentence</td>
-
-          <td>Interpretation</td>
-        </tr>
-
-        <tr>
-          <td><literal>1^2^3</literal></td>
-
-          <td><literal>1^(2^3)</literal></td>
-        </tr>
-
-        <tr>
-          <td><literal>1^2*3</literal></td>
-
-          <td><literal>(1^2)*3</literal></td>
-        </tr>
-
-        <tr>
-          <td><literal>1*2*3</literal></td>
-
-          <td><literal>(1*2)*3</literal></td>
-        </tr>
-
-        <tr>
-          <td><literal>1/2/3</literal></td>
-
-          <td><emphasis>error</emphasis></td>
-        </tr>
-
-        <tr>
-          <td><literal>1*2/3</literal></td>
-
-          <td><emphasis>error</emphasis></td>
-        </tr>
-
-        <tr>
-          <td><literal>1-2-3</literal></td>
-
-          <td><emphasis>error</emphasis></td>
-        </tr>
-
-        <tr>
-          <td><literal>1+2+3</literal></td>
-
-          <td><literal>(1+2)+3</literal></td>
-        </tr>
-
-        <tr>
-          <td><literal>1-2+3</literal></td>
-
-          <td><literal>(1-2)+3</literal></td>
-        </tr>
-
-        <tr>
-          <td><literal>1+2-3</literal></td>
-
-          <td><literal>(1+2)-3</literal></td>
-        </tr>
-      </table>
-
-      <formalpara>
-        <title>Removing Trees using
-        <literal>prefer</literal>/<literal>avoid</literal> Attributes at the
-        Root</title>
-
-        <para>The priority declarations are used to eliminate trees in three
-        phases:</para>
-      </formalpara>
-
-      <itemizedlist>
-        <listitem>
-          <para>If there are trees of which the syntax rule at the top node
-          has a <literal>prefer</literal> attribute, all other trees are
-          removed.</para>
-        </listitem>
-
-        <listitem>
-          <para>If there are trees of which the syntax rule at the top node
-          has an <literal>avoid</literal> attribute and there are other trees
-          without an <literal>avoid</literal> attribute at the root node, then
-          all trees with <literal>avoid</literal> attribute are
-          removed.</para>
-        </listitem>
-      </itemizedlist>
-
-      <formalpara>
-        <title>Removing Trees containing
-        <literal>prefer</literal>/<literal>avoid</literal> Attributes</title>
-
-        <para>After removing all trees containing conflicts, more than one
-        tree may still remain. To further reduce this set of remaining trees,
-        the number of context-free productions with
-        <literal>prefer</literal>/<literal>avoid</literal> attributes is
-        calculated and compared. A tree in the set is then rejected if there
-        is another tree in the set with more {\tt prefer}s and less or equal
-        <literal>avoid</literal>s, or with equal <literal>prefer</literal>s
-        and more <literal>avoid</literal>s.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Injection count</title>
-
-        <para>Finally, the number of injections in each of the resulting trees
-        is calculated, the tree with the smallest number of injections is
-        preferred.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Examples</title>
-
-        <para>The following examples show how the interaction (and resulting
-        ambiguities) between general context-free productions and special case
-        productions can be described using <literal>prefer</literal>
-        attribute.</para>
-      </formalpara>
-
-      <para>The <link linkend="CODE_eqn-exprs">first example</link> concerns
-      expressions for describing subscripts and superscripts in the
-      typesetting language EQN. The crucial point is that, for typesetting
-      reasons, we want to treat a subscript followed by a superscript in a
-      special way. Therefore, the special case <literal>E sub E sup E -&gt;
-      E</literal> is introduced, which is preferred over a combination of the
-      two productions <literal>E sub E -&gt; E </literal>and <literal>E sup E
-      -&gt; E</literal>.</para>
-
-      <example xml:id="CODE_eqn-exprs">
-        <title>Syntax definition of EQN expressions</title>
-
-        <para><programlisting>module Eqn
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols E
-  sorts E 
-
-  context-free syntax
-    E "sub" E         -&gt; E {left}
-    E "sup" E         -&gt; E {left}
-    E "sub" E "sup" E -&gt; E {prefer}
-    "{" E "}"         -&gt; E {bracket}
-    "a"               -&gt; E</programlisting></para>
-      </example>
-
-      <para>In the <link linkend="CODE_dangling-else">second example</link>
-      the <literal>prefer</literal> attribute is used to solve the dangling
-      else problem in a nice way. The input sentence <literal>if 0 then if 1
-      then hi else ho</literal> can be parsed in two ways: <literal>if 0 then
-      (if 1 then hi) else ho</literal> and <literal>if 0 then (if 1 then hi
-      else ho)</literal>. We can select the latter derivation by adding the
-      {\tt prefer} attribute to the production without the {\tt else} part.
-      The parser will still construct an ambiguity node containing both
-      derivations, namely, if 0 then (if 1 then hi {prefer}) else ho} and
-      <literal>if 0 then (if 1 then hi else ho) {prefer}</literal>. But given
-      the fact that the <emphasis>top</emphasis> node of the latter derivation
-      tree has the prefer attribute this derivation is selected and the other
-      tree is removed from the ambiguity node.</para>
-
-      <example xml:id="CODE_dangling-else">
-        <title>Syntax definition of conditionals</title>
-
-        <para><programlisting>module DanglingElse
-
-imports basic/Whitespace
-
-exports
-  context-free start-symbols S
-  sorts E S
-
-  context-free syntax
-    "a"                      -&gt; E 
-    "if" E "then" S          -&gt; S {prefer}
-    "if" E "then" S "else" S -&gt; S
-    "s"                      -&gt; S</programlisting></para>
-      </example>
-    </section>
-
-    <section xml:id="Priorities">
-      <title>Priorities</title>
-
-      <!--\index{priorities@priorities}-->
-
-      <para>The context-free syntax defined in an SDF specification may be
-      ambiguous: there are sentences which have more than one associated tree.
-      The common example is the arithmetic expression in which definitions of
-      the priority or associativity of operators are missing. There are three
-      mechanisms for defining associativity and priority:</para>
-
-      <!--\index{associativity@associativity}-->
-
-      <itemizedlist>
-        <listitem>
-          <para><link linkend="RelativePriorities">Relative priorities of
-          productions </link>defined in the <literal>context-free
-          priorities</literal> section.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="AssociativeFunctions">Associativity of
-          productions</link> defined as attributes following the function
-          declaration.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="GroupAssoc">Associativity of groups of
-          productions</link> defined in the <literal>context-free
-          priorities</literal> section.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Closely related with priorities are brackets that can be used to
-      overrule priorities. We will first describe bracket productions, and
-      then the various methods for defining priorities.</para>
-    </section>
-
-    <section xml:id="PreferAvoidReject">
-      <title>Preferring, Avoiding or Rejecting Parses</title>
-
-      <para>Priorities can be used to define a priority between two
-      productions or between two groups of productions. In both cases the
-      productions involved have to be listed explicitly in the priority
-      declaration. In certain cases, however, it is desirable to define that a
-      single rule has higher or lower priority than all other productions or
-      to explicitly reject certain syntactic constructs. The former is
-      achieved by the attributes <literal>prefer</literal> and
-      <literal>avoid</literal>. The latter by the attribute
-      <literal>reject</literal>. The use of the <literal>reject</literal>
-      attribute leads also to improvements in the performance of the parser.
-      If a function <replaceable>F</replaceable> is attributed with
-      <literal>prefer</literal> and there is a syntactic ambiguity in which it
-      is involved, only the parse using <replaceable>F</replaceable> will
-      remain. If a function <replaceable>F</replaceable> is attributed with
-      <literal>avoid</literal> and there is no ambiguity, then
-      <replaceable>F</replaceable> will be used. If there is an ambiguity,
-      then <replaceable>F</replaceable> will be immediately removed from the
-      set of ambiguities. If a function <replaceable>F</replaceable> is
-      attributed with <literal>reject</literal>, then independently of the
-      number of ambiguities, the parse using <replaceable>F</replaceable> will
-      be removed. While <link linkend="Restrictions">restrictions</link> only
-      impose limitations on the immediate lookahead that follows a symbol, the
-      reject mechanism can be used to eliminate complicated syntactic
-      structures. Examples of the use of <literal>prefer</literal>,
-      <literal>avoid</literal> and <literal>reject</literal> in order to solve
-      lexical ambiguities are discussed in <link
-      linkend="lex-ambiguity">Lexical Ambiguities</link>. In <link
-      linkend="cf-ambiguity">Context-free Ambiguities</link> we will give
-      examples of how to use these attributes to solve context-free
-      ambiguities, such as the famous dangling else problem.</para>
-    </section>
+    <para>As mentioned before SDF is based on two formal notions. The first is
+    context-free grammars, and the second is disambiguation filters. The
+    disambiguation constructs of SDF are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="priorities">Priorities</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="rejects">The reject mechanism</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="associativity">Associativity</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="preferences">Preference attributes</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="restrictions">Restrictions</link></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Each disambiguation construct gives rise to a specific parse tree
+    filter. Each filter is implemented either at parse table generation time,
+    or during parsing, or just after parsing.</para>
+
+    <para>An extensive How To on disambiguation can be found in the <link
+    linkend="???">SDF Disambiguation Medkit for Programming
+    Languages</link>.</para>
+
+    <warning>
+      <para>Fix link</para>
+    </warning>
   </section>
 
   <section xml:id="WellformednessSDF">
-    <title>Well-formedness of SDF</title>
+    <title>Well-formedness</title>
 
     <para>In order to improve the quality of the written specifications, a
     number of checks are performed before an SDF specification is transformed
@@ -3311,6 +2936,12 @@ exports
     </section>
   </section>
 
+  <section>
+    <title>Parse forests</title>
+
+    <para>TODO: write section of output of sglr</para>
+  </section>
+
   <section xml:id="sdf_HistoricalNotes">
     <title>Historical Notes</title>
 
@@ -3394,28 +3025,20 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para>Improve Disambiguation section</para>
-      </listitem>
-
-      <listitem>
         <para>Add explanatory text to error messages.</para>
       </listitem>
 
       <listitem>
-        <para>Refer to the visualization of module structure, parse trees and
-        ambiguities (may be in a separate MetaEnv sidebar).</para>
+        <para>write parse forests section</para>
       </listitem>
 
       <listitem>
-        <para>Remove all <remark>remarks</remark> from the text.</para>
+        <para>Fix all external links</para>
       </listitem>
-    </itemizedlist>
 
-    <para>Optional:</para>
-
-    <itemizedlist>
       <listitem>
-        <para>Restructure sections on errors and add xamples.</para>
+        <para>Rewrite sections on priorities and restrictions in Grammar
+        section</para>
       </listitem>
     </itemizedlist>
   </section>
