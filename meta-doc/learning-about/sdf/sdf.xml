@@ -225,7 +225,7 @@
         <para>To generate a parser from an SDF definition you may use the
         implementation of SDF. You can use The SDF Meta-Environment, The
         ASF+SDF Meta-Environment or the commandline tools
-        <command>sdf2table</command> and <command>sglr</command>. </para>
+        <command>sdf2table</command> and <command>sglr</command>.</para>
       </section>
 
       <section>
@@ -248,7 +248,7 @@
           which provides interactive editing of SDF modules and completely
           automates the parser generation phase. After editing an SDF
           specification you can directly use it to parse input text, visualize
-          parse trees and see syntax highlighting. </para>
+          parse trees and see syntax highlighting.</para>
         </listitem>
 
         <listitem>
@@ -429,8 +429,9 @@
       </listitem>
 
       <listitem>
-        <para><command>sglr</command> outputs a parse forest (or possibly a
-        single parse tree, or a parse error)</para>
+        <para><command>sglr</command> reads in a file containing a program and
+        outputs a parse forest (or possibly a single parse tree, or a parse
+        error)</para>
       </listitem>
 
       <listitem>
@@ -463,6 +464,12 @@
         </imageobject>
       </mediaobject>
     </figure>
+
+    <para>Although this document is on SDF's syntax and semantics, and not its
+    implementation, the above overview is important. Especially point 3.2 is
+    an essential step for understanding the semantics of SDF. This document
+    describes in several places what certain SDF constructs mean by mapping
+    them to kernel SDF.</para>
   </section>
 
   <section xml:id="modules">
@@ -3003,7 +3010,7 @@ exports
     should include all characters of the input and also a trace of all
     productions that are recursively applied to obtain the derivations. A
     common representation that is used is parse forest with ambiguity packing
-    nodes serialized as ATerms. </para>
+    nodes serialized as ATerms.</para>
 
     <para>Note that cyclic derivations should also be represented.</para>
 
