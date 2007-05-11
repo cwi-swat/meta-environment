@@ -480,7 +480,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><link linkend="Imports">Imports</link>.</para>
+          <para><link linkend="imports">Imports</link>.</para>
         </listitem>
 
         <listitem>
@@ -497,16 +497,16 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="LexicalSyntax">Lexical syntax</link>.</para>
+          <para><link linkend="lexicalsyntax">Lexical syntax</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="ContextFreeSyntax">Context-free
+          <para><link linkend="contextfreesyntax">Context-free
           syntax</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="Priorities">Priorities</link>.</para>
+          <para><link linkend="priorities">Priorities</link>.</para>
         </listitem>
 
         <listitem>
@@ -551,7 +551,7 @@
     given <link linkend="CODE_sdfcomment">below</link>. This definition also
     defines the comment convention in SDF itself. More details on defining
     layout can be found in the section <link
-    linkend="Restrictions">Restrictions</link>.</para>
+    linkend="restrictions">Restrictions</link>.</para>
 
     <example xml:id="CODE_sdfcomments">
       <title>SDF comments</title>
@@ -672,9 +672,9 @@ exports
       The sort parameters are usually instantiated via the parameters of a
       module or via renaming. A parameterized sort may have several
       parameters, like <literal>List[[X,Y]]</literal>. See <link
-      linkend="ParametersRenamings">Parameterization and Renamings</link> for
-      more details. Parameterized sorts have the following
-      form:<programlisting> &lt;Sort&gt;<emphasis role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
+      linkend="parameters">parameters</link> for more details. Parameterized
+      sorts have the following form:<programlisting> &lt;Sort&gt;<emphasis
+            role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
             role="bold">]]</emphasis></programlisting></para>
     </section>
 
@@ -1006,7 +1006,7 @@ is replaced by
 
     <itemizedlist>
       <listitem>
-        <para><link linkend="Imports">Imports</link>: include one module in
+        <para><link linkend="imports">Imports</link>: include one module in
         another one.</para>
       </listitem>
 
@@ -1026,17 +1026,17 @@ is replaced by
       </listitem>
 
       <listitem>
-        <para><link linkend="LexicalSyntax">Lexical syntax</link>: the lexical
+        <para><link linkend="lexicalsyntax">Lexical syntax</link>: the lexical
         productions of the grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="ContextFreeSyntax">Context-free syntax</link>:
+        <para><link linkend="contextfreesyntax">Context-free syntax</link>:
         the context-free productions of the grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="Priorities">Priorities</link>: the disambiguation
+        <para><link linkend="priorities">Priorities</link>: the disambiguation
         rules.</para>
       </listitem>
 
@@ -1081,7 +1081,7 @@ is replaced by
         such a compound module name.</para>
       </section>
 
-      <section>
+      <section xml:id="renamings">
         <title>Renamings</title>
 
         <para> Symbol renaming is in fact very similar to parameterization
@@ -1322,7 +1322,7 @@ E         -&gt; C | D | E</programlisting>
               <para><literal>{left</literal>, <literal>right</literal>,
               <literal>non-assoc</literal>, <literal>assoc}</literal> are used
               to define the associativity of productions (see also <link
-              linkend="Priorities">Priorities</link>). Instead of using extra
+              linkend="priorities">Priorities</link>). Instead of using extra
               non-terminals, these attributes offer declarative disambiguation
               constructs. SDF implements these attributes by filtering
               reductions from the parse table.</para>
@@ -1332,7 +1332,7 @@ E         -&gt; C | D | E</programlisting>
               <para><literal>{prefer}</literal> is used to indicate that the
               attributed function should always be preferred over other
               productions (without this attribute) in certain cases of
-              syntactic ambiguity (see <link linkend="preferences">Preferring,
+              syntactic ambiguity (see <link linkend="attributes">Preferring,
               Avoiding or Rejecting Parses</link>).</para>
             </listitem>
 
@@ -1340,14 +1340,14 @@ E         -&gt; C | D | E</programlisting>
               <para><literal>{avoid}</literal> is used to indicate that a
               function should only be used as a last resort in certain cases
               of syntactic ambiguity (see <link
-              linkend="preferences">Preferring, Avoiding or Rejecting
+              linkend="attributes">Preferring, Avoiding or Rejecting
               Parses}</link>).</para>
             </listitem>
 
             <listitem>
               <para><literal>{reject}</literal> can be used to explicitly
               forbid certain syntactic construct (see <link
-              linkend="rejects">Preferring, Avoiding or Rejecting
+              linkend="attributes">Preferring, Avoiding or Rejecting
               Parses</link>).</para>
             </listitem>
           </itemizedlist>
@@ -1436,7 +1436,7 @@ is replaced by
    &lt;LAYOUT?-CF&gt; &lt;Program-CF&gt; &lt;LAYOUT?-CF&gt; -&gt; &lt;START&gt;</programlisting>
     </section>
 
-    <section xml:id="RelativePriorities">
+    <section xml:id="priorities">
       <title>Lexical and context-free priorities</title>
 
       <para>Priorities are one of SDF's most often used disambiguation
@@ -1534,7 +1534,7 @@ is replaced by
       declaration can define an infinite collection of variables by using a
       <emphasis>naming scheme</emphasis> instead of a simple variable name. A
       naming scheme is a regular expression like the ones allowed in the <link
-      linkend="LexicalSyntax">lexical syntax</link> except that sorts are not
+      linkend="lexicalsyntax">lexical syntax</link> except that sorts are not
       allowed. A variable may represent any symbol. In the specification <link
       linkend="CODE_variables">below</link>, <literal>Id</literal>,
       <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
@@ -1866,7 +1866,7 @@ exports
       </example>
 
       <para>If zero or exactly one occurrence of a lexical token is desired
-      the option operator described in <link linkend="options">Optional
+      the option operator described in <link linkend="optionals">Optional
       symbols</link> can be used. The use of the option operator is
       illustrated <link linkend="CODE_option">below</link>. Identifiers are
       defined consisting of one letter followed by one, optional, digit. This
@@ -2482,11 +2482,11 @@ exports
 
       <para>The next example illustrates the use of restrictions to define a
       <emphasis>safe</emphasis> way of layout. <link
-      linkend="LexicalSyntax">Recall</link> that optional layout, represented
-      by the symbol<literal> LAYOUT?</literal>, may be recognized between the
-      members of the left-hand side of a context-free syntax rule. However, if
-      a such a member recognizes the empty string, this gives rise to a an
-      ambiguity. This problem is avoided by the definition given <link
+      linkend="contextfreesyntax">Recall</link> that optional layout,
+      represented by the symbol<literal> LAYOUT?</literal>, may be recognized
+      between the members of the left-hand side of a context-free syntax rule.
+      However, if a such a member recognizes the empty string, this gives rise
+      to a an ambiguity. This problem is avoided by the definition given <link
       linkend="CODE_safe-layout">below</link>: it simply forbids that optional
       layout is followed by layout characters.</para>
 
@@ -2622,7 +2622,7 @@ exports
         <literal>&amp;</literal> can be made more concise as shown by
         <literal>Bool2</literal>, however, it is now impossible to express
         that <literal>&amp;</literal> has a higher priority than
-        <literal>|</literal>, see <link linkend="Priorities">Priorities</link>
+        <literal>|</literal>, see <link linkend="priorities">Priorities</link>
         for more details on priority definitions.</para>
 
         <example xml:id="CODE_alternative-alternatives">
@@ -2683,7 +2683,7 @@ exports
     </section>
   </section>
 
-  <section xml:id="Disambiguation">
+  <section xml:id="disambiguation">
     <title>Disambiguation</title>
 
     <para>As mentioned before SDF is based on two formal notions. The first is
@@ -2696,15 +2696,15 @@ exports
       </listitem>
 
       <listitem>
-        <para><link linkend="rejects">The reject mechanism</link></para>
+        <para><link linkend="attributes">The reject mechanism</link></para>
       </listitem>
 
       <listitem>
-        <para><link linkend="associativity">Associativity</link></para>
+        <para><link linkend="attributes">Associativity</link></para>
       </listitem>
 
       <listitem>
-        <para><link linkend="preferences">Preference attributes</link></para>
+        <para><link linkend="attributes">Preference attributes</link></para>
       </listitem>
 
       <listitem>
@@ -2946,7 +2946,7 @@ exports
     <para>TODO: write section of output of sglr</para>
   </section>
 
-  <section xml:id="sdf_HistoricalNotes">
+  <section xml:id="history">
     <title>Historical Notes</title>
 
     <para>The main publications on SDF are (in historical order):</para>
