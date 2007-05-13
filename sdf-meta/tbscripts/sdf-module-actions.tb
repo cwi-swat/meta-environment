@@ -3,6 +3,7 @@
 
 #include <sdf-namespace.h>
 #include <configuration-manager.idef>
+#include <graph-painter.idef> 
 
 process SelectModule(ModuleId: module-id) is
   snd-msg(nav-select-module(ModuleId))
