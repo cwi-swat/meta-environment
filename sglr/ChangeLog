@@ -1,5 +1,18 @@
 $Id$
 
+Mon May 14 16:59:44 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: removed some redundant checks on filtering
+   options and fixed some places that filtering was done without correctly 
+   checking the filtering options first. This should result in
+   less trees being incorrectly filtered (removed) when certain filtering
+   options are turned off (I think the reject filter continued removing trees
+   even if the reject option was turned off). Presumably this will also improve 
+   the performance of the filtering slightly.
+   I'm planning of introducing some regression tests with different filtering
+   options set. I'll use those tests to ensure that the filtering is correct. 
+ * src/parseForest/filterOptions.c: when the -f flag is set all other filters
+   are turned off. This makes the check during parsing more straight forward.
+
 Wed May  9 19:04:14 CEST 2007 <jurgenv@cwi.nl>
  * src/parseForest/filters.c: reverted the code on unrolling cycles,
    which was experimental. Next time, we'll do it on a branch :-)

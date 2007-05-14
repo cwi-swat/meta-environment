@@ -751,7 +751,7 @@ static PT_Tree priorityFilter(ParseTable *pt, PT_Tree t) {
   if (PT_isTreeAppl(t)) {
     PT_Production prod = PT_getTreeProd(t);
 
-    if (FLT_getPriorityFlag() && SGLR_PTBL_hasProductionPriority(pt, prod)) {
+    if (SGLR_PTBL_hasProductionPriority(pt, prod)) {
       PT_Args children = PT_getTreeArgs(t);
 
       SGLR_TERM_STORE_FRAME(PT_getArgsLength(children),
@@ -913,10 +913,7 @@ static PT_Args filterOneAlternativeAgainstEachSibling(ParseTable *pt, PT_Args am
 static ATbool isTreeRejected(ParseTable *pt, PT_Tree t) {
   assert(PT_isTreeAppl(t) && "Only PT_TreeAppl nodes can be rejected!");
 
-  if (FLT_getFilterFlag() && 
-      FLT_getRejectFlag() && 
-      SGLR_PTBL_hasRejects(pt) && 
-      PT_isProductionReject(PT_getTreeProd(t))) {
+  if (FLT_getRejectFlag() && SGLR_PTBL_hasRejects(pt) && PT_isProductionReject(PT_getTreeProd(t))) {
     return ATtrue;
   }
 
@@ -943,7 +940,7 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos,
  */
 static ATbool isAmbiguityRejected(ParseTable *pt, PT_Args ambiguousChildren, size_t *pos, ATbool cycle, int level) {
 
-  if (FLT_getFilterFlag() && FLT_getRejectFlag() && SGLR_PTBL_hasRejects(pt)) {
+  if (FLT_getRejectFlag() && SGLR_PTBL_hasRejects(pt)) {
     
     while (!PT_isArgsEmpty(ambiguousChildren)) {
       PT_Tree amb = PT_getArgsHead(ambiguousChildren);
@@ -1003,6 +1000,8 @@ static PT_Args filterAmbiguousTreesRecursive(ParseTable *pt, PT_Args ambTrees, s
 /** 
  * For every child node x of the newly created ambiguity node, call 
  * filterOneAlternativeAgainstEachSibling() with the ambiguity node minus x. 
+ * The function checks if any of the filters that can be applied in this code 
+ * are acitvated before continuing.
  * 
  * \param pt 
  * \param alternativeTrees 
@@ -1012,7 +1011,8 @@ static PT_Args filterAmbiguousTreesRecursive(ParseTable *pt, PT_Args ambTrees, s
 static PT_Args filterAmbiguousAlternatives(ParseTable *pt, PT_Args alternativeTrees) {
   PT_Args filteredAlternativeTrees = alternativeTrees;
   
-  if (FLT_getFilterFlag()) {
+  if (FLT_getDirectPreferenceFlag() || FLT_getIndirectPreferenceFlag() ||
+      FLT_getPreferenceCountFlag() || FLT_getInjectionCountFlag()) {
     if (PARSER_getDebugFlag) {
       ATfprintf(LOG_log(), "Ambiguity cluster: %d nodes originally.\n", 
           PT_getArgsLength(alternativeTrees));
@@ -1127,8 +1127,6 @@ static ATbool detectCycle(ATerm clusterIndex) {
  * the tree.
  */
 static PT_Tree createCycle(PT_Args ambs, int cycleLength) {
-  /** \todo Check that the default behaviour is consistent with previous 
-   * versions. */
   if (!FLT_getRemoveCyclesFlag()) {
     PT_Tree first = PT_getArgsHead(ambs);
     PT_Production prod = PT_getTreeProd(first);
@@ -1138,7 +1136,6 @@ static PT_Tree createCycle(PT_Args ambs, int cycleLength) {
     return PT_makeTreeCycle(rhs, cycleLength);
   }
   else {
-    /** \todo should I check to see if the filtering flag is on? */
     /* filter cycles out of tree */
     return (PT_Tree) NULL;
   }
@@ -1181,7 +1178,7 @@ static PT_Args detectAmbiguity(PT_Tree t, const size_t *pos, ATbool inAmbs) {
 static PT_Tree filterAmbiguity(ParseTable *pt, PT_Args ambiguousTrees, size_t *pos, ATbool cycle, int level) {
   PT_Tree newTreeNode;
 
-  if (isAmbiguityRejected(pt, ambiguousTrees, pos, cycle, level)) {
+  if (FLT_getRejectFlag() && isAmbiguityRejected(pt, ambiguousTrees, pos, cycle, level)) {
     return (PT_Tree)NULL;
   }
 
@@ -1264,7 +1261,7 @@ static PT_Tree filterTree(ParseTable *pt, PT_Tree t, size_t *pos, ATbool cycle, 
   PT_Args args = PT_getTreeArgs(t);
   PT_Args newargs = filterChildren(pt, args, pos, cycle, level);
 
-  if (isTreeRejected(pt, t) || !newargs) {
+  if ((FLT_getRejectFlag() && isTreeRejected(pt, t)) || !newargs) {
     return (PT_Tree) NULL;
   }
 
@@ -1304,8 +1301,8 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
     if (ambiguity) {
       ATerm clusterIndex = SG_AmbiTablesGetIndex(t, *pos);
       if (detectCycle(clusterIndex)) {
-	ATindexedSetPut(cyclicLevels, (ATerm) ATmakeInt(*pos), NULL);
-	return createCycle(ambiguity, level-SG_getLevel(clusterIndex));
+        ATindexedSetPut(cyclicLevels, (ATerm) ATmakeInt(*pos), NULL);
+        return createCycle(ambiguity, level-SG_getLevel(clusterIndex));
       }
 
       t = filterAmbiguityWithMemoization(pt, ambiguity, pos, cycle, 
@@ -1339,7 +1336,7 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
     }
   }
 
-  if (FLT_getFilterFlag() && t != NULL) {
+  if (FLT_getPriorityFlag() && t != NULL) {
     return priorityFilter(pt, t);
   }
   else {
@@ -1413,7 +1410,7 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
      FLT_resetClustersVisitedCount();
    }
 
-   if (FLT_getFilterFlag() && FLT_getSelectTopNonterminalFlag()) {
+   if (FLT_getSelectTopNonterminalFlag()) {
      const char *topNonterminal = FLT_getTopNonterminal();
 
      t = filterOnTopSort(pt, t, topNonterminal); 

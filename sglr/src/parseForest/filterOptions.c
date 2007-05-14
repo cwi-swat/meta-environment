@@ -42,6 +42,17 @@ void FLT_initializeDefaultOptions() {
 
 void FLT_setFilterFlag(ATbool value) {
   OPT_setFlag(FILTER_FLAG, value);
+
+  if (value == ATfalse) {
+    OPT_setFlag(DIRECT_PREFERENCE_FLAG, ATfalse);
+    OPT_setFlag(INDIRECT_PREFERENCE_FLAG, ATfalse);
+    OPT_setFlag(PREFERENCE_COUNT_FLAG, ATfalse);
+    OPT_setFlag(INJECTION_COUNT_FLAG, ATfalse);
+    OPT_setFlag(PRIORITY_FLAG, ATfalse);
+    OPT_setFlag(REJECT_FLAG, ATfalse);
+    OPT_setFlag(SELECTTOPNONTERMINAL_FLAG, ATfalse);
+    OPT_setFlag(REMOVECYCLES_FLAG, ATfalse);
+  }
 }
 
 ATbool FLT_getFilterFlag() {
