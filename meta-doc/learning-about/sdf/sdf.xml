@@ -304,53 +304,37 @@
       almost all features of SDF with references to the appropriate sections.
       SDF keywords are highlighted in boldface.</para>
 
-      <programlisting><emphasis role="bold">module</emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]             
-%% See <xref linkend="modules" /> for the module keyword, compound module names and module parameters
-  <emphasis role="bold">imports</emphasis> basic/Whitespace                                           
-%% See <xref linkend="imports" /> for importing other modules
-  <emphasis role="bold">imports</emphasis> utilities/Parsing[Expr]                                     
-%% See <xref linkend="parameters" /> for binding module parameters
-  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions[Expression =&gt; Expr]      
-%% See <xref linkend="renamings" /> for symbol renamings
-
-<emphasis role="bold">exports</emphasis>                                                               
-%% See <xref linkend="modules" /> for hiddens and export features
- <emphasis role="bold">sorts</emphasis> Identifier Expr List Stat                                      
-%% See <xref linkend="sorts" /> for sort/non-terminal declarations
- <emphasis role="bold">lexical syntax</emphasis>                                                       
-%% See <xref linkend="lexicalsyntax" />
-   [A-Z][a-z]+ -&gt; Identifier                                          
-%% See <xref linkend="characters" /> and see <xref linkend="sort" />
- <emphasis role="bold">lexical restrictions</emphasis>                                                 
-%% See <xref linkend="restrictions" /> and see <xref linkend="disambiguation" />
+      <programlisting><emphasis role="bold"><link linkend="modules">module</link></emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]           
+  <emphasis role="bold"><link linkend="imports">imports</link></emphasis> basic/Whitespace                                           
+  <emphasis role="bold">imports</emphasis> utilities/Parsing<link
+          linkend="parameters">[Expr]</link>                                     
+  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions<link
+          linkend="renamings">[Expression =&gt; Expr]</link>   
+<emphasis role="bold"><link linkend="modules">exports</link></emphasis>                                                               
+ <emphasis role="bold"><link linkend="sorts">sorts</link></emphasis> Identifier Expr List Stat                                      
+ <emphasis role="bold"><link linkend="lexicalsyntax">lexical syntax</link></emphasis>                                                       
+   <link linkend="characters">[A-Z]</link>[a-z]<link linkend="lists">+</link> -&gt; <link
+          linkend="sort">Identifier</link>                                           
+ <emphasis role="bold">lexical <link linkend="restrictions">restrictions</link></emphasis>                                                 
    Identifier -/- [a-z]                                              
- <emphasis role="bold">context-free syntax</emphasis>                                                  
-%% See <xref linkend="contextfreesyntax" />
-   Identifier    -&gt; Expr {<emphasis role="bold">cons</emphasis>("name")}                               
-%% See <xref linkend="attributes" /> for attributes like the cons attribute
-   Expr*         -&gt; List[[Param1]]                                              
-%% See <xref linkend="sort" /> for parameterized sort and <xref
-          linkend="symbols" /> on symbols in general
-   "if" Expr "then" {Param2 ";"}+ "else" {Param2 ";"}+ "fi" -&gt; Param2           
-%% See <xref linkend="literals" /> and see <xref linkend="lists" />
+ <emphasis role="bold"><link linkend="contextfreesyntax">context-free syntax</link></emphasis>                                                  
+   Identifier    -&gt; Expr {<emphasis role="bold"><link linkend="attributes">cons</link></emphasis>("name")}                               
+   <link linkend="lists">Expr*</link>         -&gt; <link linkend="sort">List[[Param1]]</link>                                              
+   <link linkend="literals">"if"</link> Expr "then" <link linkend="lists">{Param2 ";"}+</link> "else" {Param2 ";"}+ "fi" -&gt; Param2           
    "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
-          role="bold">prefer</emphasis>}  
-%% See <xref linkend="attributes" /> and see <xref linkend="disambiguation" />
+          role="bold"><link linkend="attributes">prefer</link></emphasis>}   
  <emphasis role="bold">context-free syntax</emphasis>      
-   "if" | "then" | "fi"  -&gt; Identifier {<emphasis role="bold">reject</emphasis>}                                 
-%% See <xref linkend="attributes" /> and see <xref linkend="disambiguation" /> for reject disambiguation
- <emphasis role="bold">context-free priorities</emphasis>                                                        
-%% See <xref linkend="priorities" /> and see <xref linkend="disambiguation" /> for priority disambiguation
-   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold">left</emphasis>}  &gt;                                              
-%% See <xref linkend="attributes" /> and see <xref linkend="disambiguation" /> for associativity disambiguation
+   "if" <link linkend="alternatives">|</link> "then" <link
+          linkend="alternatives">|</link> "fi"  -&gt; Identifier {<emphasis
+          role="bold"><link linkend="attributes">reject</link></emphasis>}                                 
+ <emphasis role="bold">context-free <link linkend="priorities">priorities</link></emphasis>                                                        
+   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold"><link
+            linkend="attributes">left</link></emphasis>}  &gt;                                              
    Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}                                                 
-<emphasis role="bold">hiddens</emphasis>                                                               
-%% See <xref linkend="modules" /> for hiddens and exports features
- <emphasis role="bold">variables</emphasis>                                                            
-%% See <xref linkend="variables" /> for constructing meta variables
+<emphasis role="bold"><link linkend="modules">hiddens</link></emphasis>                                                               
+ <emphasis role="bold"><link linkend="variables">variables</link></emphasis>                                                            
    "Id"[0-9\']* -&gt; Identifier                                     
- <emphasis role="bold">lexical variables</emphasis>                                                    
-%% See <xref linkend="lexicalvariables" /> for constructing lexical meta variables
+ <emphasis role="bold"><link linkend="lexicalvariables">lexical variables</link></emphasis>                                                    
    "Head" -&gt; [A-Z]
    "Tail" -&gt; [a-z]+</programlisting>
     </section>
@@ -436,7 +420,8 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="parse-architecture.png" width="50%"></imagedata>
+          <imagedata fileref="parse-architecture.png" width="50%"
+                     xml:id="architecture"></imagedata>
         </imageobject>
       </mediaobject>
     </figure>
