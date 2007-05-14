@@ -13,9 +13,6 @@
   <info>
     <title>The Syntax Definition Formalism SDF</title>
 
-    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
-    +0100 (Sat, 16 Dec 2006) $</pubdate>
-
     <authorgroup>
       <author>
         <personname><firstname>Mark</firstname><surname>van den
@@ -3084,5 +3081,12 @@ exports
         section</para>
       </listitem>
     </itemizedlist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <para>These are the log entries made in the version management system for
+    this document:<literallayout><ns3:include href="sdf.log" parse="text"></ns3:include></literallayout></para>
   </section>
 </article>

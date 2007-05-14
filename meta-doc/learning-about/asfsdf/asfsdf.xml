@@ -13,9 +13,6 @@
   <info>
     <title>The Language Specification Formalism ASF+SDF</title>
 
-    <pubdate>$Rev: 20719$ by $Author: paulk$ at $Date: 2006-12-13 22:16:02
-    +0100 (Wed, 13 Dec 2006)$</pubdate>
-
     <authorgroup>
       <author>
         <personname><firstname>Mark</firstname><surname>van den
@@ -34,8 +31,8 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Environment V1.5 and V2.0. See <link linkend="asfsdf_ToDo">ToDo</link> list
-    at the end of the document.</para>
+    Meta-Environment V1.5 and V2.0. See <link
+    linkend="asfsdf_ToDo">ToDo</link> list at the end of the document.</para>
   </warning>
 
   <section>
@@ -214,8 +211,9 @@
         </listitem>
 
         <listitem>
-          <para><link linkend="asfsdf_HistoricalNotes">Historical notes</link>:
-          historical and bibliographic background on ASF+SDF.</para>
+          <para><link linkend="asfsdf_HistoricalNotes">Historical
+          notes</link>: historical and bibliographic background on
+          ASF+SDF.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1113,7 +1111,7 @@ hiddens
         or when the actual/formal correspondence of procedure parameters has
         to be checked. Potentially, <literal>Type</literal> may contain a lot
         of different type values and comparing them all is a combinatorial
-        problem. </para>
+        problem.</para>
 
         <para>The modules <link linkend="Types.sdf">Types.sdf</link> and <link
         linkend="Types.asf">Types.asf</link> show how to solve this problem

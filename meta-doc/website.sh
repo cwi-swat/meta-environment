@@ -40,8 +40,11 @@ for cat in ${CATEGORIES}; do
       mkdir -p ${WEB}/$cat/$book
       cp $cat/$book/*.{png,jpg,gif} ${WEB}/$cat/$book >& /dev/null || true
       if [ -f $cat/$book/$book.xml ]; then
+	svn log --xml ${cat}/${book}/${book}.xml  | \
+	xsltproc  --output ${WEB}/$cat/$book/$book.log.html ./svnlog2html.xsl -
 	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
                    --output ${WEB}/$cat/$book/$book.html \
+		   --xinclude \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
                    --param xref.with.number.and.title 0 \
@@ -51,6 +54,7 @@ for cat in ${CATEGORIES}; do
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
 		   --param shade.verbatim 1 \
+		   --xinclude \
                    --stringparam paper.type A4 \
                    ${DOCBOOKXSLFO} $cat/$book/$book.xml)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
@@ -61,6 +65,7 @@ for cat in ${CATEGORIES}; do
 	echo "<li> ${title}" >> ${INDEX}
         echo "(<a href=\"./$cat/$book/$book.html\">html</a>,"  >> ${INDEX}
 	echo "<a href=\"./$cat/$book/$book.pdf\">pdf</a>)" >> ${INDEX}
+	echo ",<a href=\"./$cat/$book/$book.log.html\">log</a>)" >> ${INDEX}
         echo "</li>" >> ${INDEX}
 
         cp ${STYLESHEET} ${WEB}/$cat/$book/${STYLESHEET}

@@ -16,16 +16,11 @@
   <title>SDF Disambiguation Medkit for Programming Languages</title>
 
   <info>
-    <author>
-      <orgname>Centrum voor Wiskunde en Informatica,</orgname>
-
-      <contrib>Jurgen Vinju</contrib>
-
-      <email>Jurgen.Vinju@cwi.nl</email>
-    </author>
-
-    <pubdate>$Rev$ by $Author$ at $Date: 2007-02-17 22:04:14
-    +0100 (Sat, 17 Feb 2007) $</pubdate>
+    <authorgroup>
+      <author>
+        <personname>Jurgen Vinju</personname>
+      </author>
+    </authorgroup>
   </info>
 
   <para><emphasis>This document was recently written.</emphasis></para>
@@ -1785,5 +1780,14 @@ context-free restrictions
 
       <programlisting>$ sglr -p MyLanguage.tbl -i myInputString.txt -fe -fi | addPosInfo -p myInputString.txt -o myOutputTreeWithPosInfo.pt</programlisting>
     </section>
+  </section>
+
+  <section xml:id="changes">
+    <title>Changes</title>
+
+    <para>The following version management log entries were made for this
+    document:</para>
+
+    <literallayout><xi:include href="sdf-disambiguation.log" parse="text"></xi:include></literallayout>
   </section>
 </article>
