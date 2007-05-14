@@ -1,5 +1,8 @@
 
 
+Mon May 14 15:31:54 CEST 2007 <jurgenv@cwi.nl>
+ * sdf.xml: wrote and moved disambiguation section.
+
 Mon May 14 13:34:54 CEST 2007 <jurgenv@cwi.nl>
  * website.sh: added generation of log htmls from svn log
  * svnlog2html.xsl: translation from svn log xml to html
