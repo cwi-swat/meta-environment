@@ -3269,24 +3269,12 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para>Add explanatory text to error messages.</para>
+        <para>Check error messages for correctness and add explanatory text to
+        error messages.</para>
       </listitem>
 
       <listitem>
-        <para>write parse forests section</para>
-      </listitem>
-
-      <listitem>
-        <para>Fix all external links</para>
-      </listitem>
-
-      <listitem>
-        <para>Fix all internal links</para>
-      </listitem>
-
-      <listitem>
-        <para>Rewrite sections on priorities and restrictions in Grammar
-        section</para>
+        <para>Check all examples.</para>
       </listitem>
     </itemizedlist>
   </section>
