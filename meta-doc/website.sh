@@ -65,7 +65,7 @@ for cat in ${CATEGORIES}; do
 	echo "<li> ${title}" >> ${INDEX}
         echo "(<a href=\"./$cat/$book/$book.html\">html</a>,"  >> ${INDEX}
 	echo "<a href=\"./$cat/$book/$book.pdf\">pdf</a>" >> ${INDEX}
-	echo ",<a href=\"./$cat/$book/$book.log.html\">log</a>)" >> ${INDEX}
+	echo ",<a href=\"./$cat/$book/$book.log.html\">changes</a>)" >> ${INDEX}
         echo "</li>" >> ${INDEX}
 
         cp ${STYLESHEET} ${WEB}/$cat/$book/${STYLESHEET}

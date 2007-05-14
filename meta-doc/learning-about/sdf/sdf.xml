@@ -1093,7 +1093,7 @@ is replaced by
         by the importing module. However, if the import section occurs within
         the scope of a hiddens keyword, the exported entities are only visible
         in the importing module but they are not exported by the importing
-        module. </para>
+        module.</para>
       </section>
 
       <section>
@@ -3277,12 +3277,5 @@ exports
         <para>Check all examples.</para>
       </listitem>
     </itemizedlist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <para>These are the log entries made in the version management system for
-    this document:<literallayout><ns3:include href="sdf.log" parse="text"></ns3:include></literallayout></para>
   </section>
 </article>
