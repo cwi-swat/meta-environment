@@ -1,5 +1,10 @@
 $Id$
 
+Tue May 15 15:51:37 CEST 2007 <economop@cwi.nl>
+ * src/commandLineInterface.c: fixed bug that prevented the -f flag from
+   switching all filters off.
+ * src/parseForest/filterOptions.c: tidied up code.
+
 Mon May 14 16:59:44 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: removed some redundant checks on filtering
    options and fixed some places that filtering was done without correctly 

@@ -99,41 +99,32 @@ static void usage() {
 }
 
 static void handleFilterOptions(const char *arg) {
-  int filterFlag                = FLT_getFilterFlag();
-  int filterDirectPreferenceFlag= FLT_getDirectPreferenceFlag();
-  int filterIndirectPreferenceFlag = FLT_getIndirectPreferenceFlag();
-  int filterPreferenceCountFlag = FLT_getPreferenceCountFlag();
-  int filterInjectionCountFlag  = FLT_getInjectionCountFlag();
-  int filterPriorityFlag        = FLT_getPriorityFlag();
-  int filterRejectFlag          = FLT_getRejectFlag();
-  int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
-
   if (arg == NULL) {
-    filterFlag = !filterFlag;
+    FLT_setFilterFlag(!FLT_getFilterFlag());
   }
   else {
     if (strlen(arg) == 1) {
       switch(arg[0]) {
         case 'c': 
-          filterRemoveCyclesFlag = !filterRemoveCyclesFlag;
+          FLT_setRemoveCyclesFlag(!FLT_getRemoveCyclesFlag());
           break;
         case 'd':
-          filterIndirectPreferenceFlag = !filterIndirectPreferenceFlag;
+          FLT_setIndirectPreferenceFlag(!FLT_getIndirectPreferenceFlag());
           break;
         case 'e':
-          filterPreferenceCountFlag = !filterPreferenceCountFlag;
+          FLT_setPreferenceCountFlag(!FLT_getPreferenceCountFlag());
           break;
         case 'i':
-          filterInjectionCountFlag = !filterInjectionCountFlag;
+          FLT_setInjectionCountFlag(!FLT_getInjectionCountFlag());
           break;
         case 'p':
-          filterPriorityFlag = !filterPriorityFlag;
+          FLT_setPriorityFlag(!FLT_getPriorityFlag());
 	      break;
         case 'r':
-          filterRejectFlag = !filterRejectFlag;
+          FLT_setRejectFlag(!FLT_getRejectFlag());
           break;
        case 't':
-          filterDirectPreferenceFlag = !filterDirectPreferenceFlag;
+          FLT_setDirectPreferenceFlag(!FLT_getDirectPreferenceFlag());
           break;
         default:
           usage(); 
@@ -147,15 +138,6 @@ static void handleFilterOptions(const char *arg) {
       exit(1);
     }
   }
-
-  FLT_setFilterFlag(filterFlag);
-  FLT_setDirectPreferenceFlag(filterDirectPreferenceFlag);
-  FLT_setIndirectPreferenceFlag(filterIndirectPreferenceFlag);
-  FLT_setPreferenceCountFlag(filterPreferenceCountFlag);
-  FLT_setInjectionCountFlag(filterInjectionCountFlag);
-  FLT_setPriorityFlag(filterPriorityFlag);
-  FLT_setRejectFlag(filterRejectFlag);
-  FLT_setRemoveCyclesFlag(filterRemoveCyclesFlag);
 }
 
 static void handleOptions (int argc, char **argv) {
