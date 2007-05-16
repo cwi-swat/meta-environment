@@ -13,7 +13,6 @@ in
     rec-msg(es-extract-sdf(Definition?))
     . execute(extract-sdf, T?)
     . snd-eval(T, normalize(Definition))
-    . printf("debug: %t @ %d\n", T, __LINE__)
     . rec-value(T, normalform(Store?))
     . snd-msg(es-sdf-store(Store))
     . snd-terminate(T, "done")
