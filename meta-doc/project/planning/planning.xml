@@ -8,8 +8,10 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>Planning Releases of The Meta-Environment</title>
-<pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
+
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100
     (Wed, 13 Dec 2006)$</pubdate>
+
     <authorgroup>
       <author>
         <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
@@ -240,7 +242,7 @@
     <table>
       <title>Planning the work of the Meta-Environment</title>
 
-      <tgroup cols="5">
+      <tgroup cols="6">
         <colspec align="center" />
 
         <thead>
@@ -254,6 +256,8 @@
             <entry>Team</entry>
 
             <entry>Deadline</entry>
+
+            <entry>Remark</entry>
           </row>
         </thead>
 
@@ -268,6 +272,8 @@
             <entry>Paul,Jurgen</entry>
 
             <entry>feb 1, 2007</entry>
+
+            <entry>A lot done, but still in progress</entry>
           </row>
 
           <row>
@@ -281,6 +287,8 @@
             <entry>Paul,Jurgen</entry>
 
             <entry>jan 1, 2007</entry>
+
+            <entry>In progress</entry>
           </row>
 
           <row>
@@ -294,6 +302,8 @@
             <entry>Martin,Paul,Jurgen</entry>
 
             <entry>feb 1, 2007</entry>
+
+            <entry>Not done</entry>
           </row>
 
           <row>
@@ -306,6 +316,8 @@
             <entry>Jurgen</entry>
 
             <entry>feb 1, 2007</entry>
+
+            <entry>3 times faster now</entry>
           </row>
 
           <row>
@@ -319,6 +331,8 @@
             <entry>Taeke</entry>
 
             <entry>march 1, 2007</entry>
+
+            <entry>Done, but undocumented</entry>
           </row>
 
           <row>
@@ -333,6 +347,8 @@
             <entry>Taeke,Jurgen</entry>
 
             <entry>jan 1, 2007</entry>
+
+            <entry>Done</entry>
           </row>
 
           <row>
@@ -345,6 +361,8 @@
             <entry>Taeke</entry>
 
             <entry>feb 1, 2007</entry>
+
+            <entry>Done, but still undocumented</entry>
           </row>
 
           <row>
@@ -359,19 +377,8 @@
             <entry>Erik, Jurgen,Taeke</entry>
 
             <entry>feb 1, 2007</entry>
-          </row>
 
-          <row>
-            <entry></entry>
-
-            <entry>Bringing up more Sisyphus builders in the CWI build farm:
-            linux, MacOsX, cygwin</entry>
-
-            <entry>Building</entry>
-
-            <entry>Taeke,Tijs,Alex</entry>
-
-            <entry>feb 1, 2007</entry>
+            <entry>Done</entry>
           </row>
 
           <row>
@@ -384,6 +391,8 @@
             <entry>Jurgen</entry>
 
             <entry>march 1, 2007</entry>
+
+            <entry>Postponed</entry>
           </row>
 
           <row>
@@ -396,6 +405,8 @@
             <entry>Arnold</entry>
 
             <entry>feb 1, 2007</entry>
+
+            <entry>done</entry>
           </row>
 
           <row>
@@ -407,19 +418,37 @@
 
             <entry>Paul,Arnold,Tijs,Taeke,Jurgen,Rob</entry>
 
-            <entry>march 1, 2007</entry>
+            <entry>june 15, 2007</entry>
+
+            <entry>in progress</entry>
           </row>
 
           <row>
             <entry></entry>
 
-            <entry>Conservative pretty printing</entry>
+            <entry>SDF manual rewrite</entry>
 
-            <entry>Programming</entry>
+            <entry>Documenting</entry>
 
-            <entry>Taeke, Jurgen</entry>
+            <entry>Jurgen</entry>
 
-            <entry>april 1, 2007</entry>
+            <entry>june 15, 2007</entry>
+
+            <entry>done</entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>ASF manual rewrite</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Jurgen,Paul</entry>
+
+            <entry>june 15, 2007</entry>
+
+            <entry></entry>
           </row>
 
           <row>
@@ -434,6 +463,8 @@
             <entry>Rob,Jurgen</entry>
 
             <entry>feb 1, 2007</entry>
+
+            <entry>done</entry>
           </row>
 
           <row>
@@ -446,18 +477,23 @@
             <entry>Jurgen</entry>
 
             <entry>may, 2007</entry>
+
+            <entry>in progress</entry>
           </row>
 
           <row>
             <entry></entry>
 
-            <entry>Cross-compilation to native Windows iin Sisyphus</entry>
+            <entry>Bringing up more Sisyphus builders in the CWI build farm:
+            linux, MacOsX, cygwin</entry>
 
             <entry>Building</entry>
 
-            <entry>Tijs,Jurgen</entry>
+            <entry>Taeke,Tijs</entry>
 
-            <entry>june, 2007</entry>
+            <entry>june 30, 2007</entry>
+
+            <entry></entry>
           </row>
 
           <row>
@@ -469,7 +505,9 @@
 
             <entry>Rob</entry>
 
-            <entry>may, 2007</entry>
+            <entry>july, 2007</entry>
+
+            <entry></entry>
           </row>
 
           <row>
@@ -483,7 +521,9 @@
 
             <entry>Taeke</entry>
 
-            <entry>july 1, 2007</entry>
+            <entry>july, 2007</entry>
+
+            <entry></entry>
           </row>
 
           <row>
@@ -495,19 +535,37 @@
 
             <entry>Paul,Arnold</entry>
 
-            <entry>may 1, 2007</entry>
+            <entry>june 1, 2007</entry>
+
+            <entry></entry>
           </row>
 
           <row>
-            <entry>TODO: merge Roadmap from old website into here</entry>
+            <entry></entry>
+
+            <entry>Cross-compilation to native Windows iin Sisyphus</entry>
+
+            <entry>Building</entry>
+
+            <entry>Tijs,Jurgen</entry>
+
+            <entry>june, 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry>Sometime in the future</entry>
+
+            <entry>Conservative pretty printing</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Taeke, Jurgen</entry>
 
             <entry></entry>
 
             <entry></entry>
-
-            <entry>Jurgen</entry>
-
-            <entry>feb 1, 2007</entry>
           </row>
         </tbody>
       </tgroup>
