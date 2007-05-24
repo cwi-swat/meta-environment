@@ -2,6 +2,16 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <article lang="en-US">
+  <articleinfo>
+    <title>ATerm SAF: A High Performance Streamable Format</title>
+
+    <author>
+      <surname>Arnold Lankamp</surname>
+    </author>
+
+    <date>24-05-2007</date>
+  </articleinfo>
+
   <sect1>
     <title>Introduction</title>
 
@@ -711,8 +721,8 @@
             </row>
 
             <row>
-              <entry><para><emphasis role="bold">Size (bytes)
-              </emphasis></para></entry>
+              <entry><para><emphasis role="bold">Size
+              (bytes)</emphasis></para></entry>
 
               <entry><para>3387103</para></entry>
 
@@ -761,8 +771,8 @@
               </row>
 
               <row>
-                <entry><para><emphasis role="bold">Size (bytes)
-                </emphasis></para></entry>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
 
                 <entry><para>61488</para></entry>
 
@@ -812,8 +822,8 @@
               </row>
 
               <row>
-                <entry><para><emphasis role="bold">Size (bytes)
-                </emphasis></para></entry>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
 
                 <entry><para>4</para></entry>
 
@@ -891,7 +901,7 @@
 
               <entry><para><emphasis>C SAF</emphasis></para></entry>
 
-              <entry><para><emphasis>Java ASCII </emphasis></para></entry>
+              <entry><para><emphasis>Java ASCII</emphasis></para></entry>
 
               <entry><para><emphasis>Java TAF</emphasis></para></entry>
 
@@ -963,7 +973,7 @@
 
               <entry><para><emphasis>C SAF</emphasis></para></entry>
 
-              <entry><para><emphasis>Java ASCII</emphasis> </para></entry>
+              <entry><para><emphasis>Java ASCII</emphasis></para></entry>
 
               <entry><para><emphasis>Java TAF</emphasis></para></entry>
 
@@ -1032,7 +1042,7 @@
 
               <entry><para><emphasis>C SAF</emphasis></para></entry>
 
-              <entry><para><emphasis>Java ASCII</emphasis> </para></entry>
+              <entry><para><emphasis>Java ASCII</emphasis></para></entry>
 
               <entry><para><emphasis>Java TAF</emphasis></para></entry>
 
