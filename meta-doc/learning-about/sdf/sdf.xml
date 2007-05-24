@@ -1767,7 +1767,7 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
 
       <para>Note that associativity does not work transitively. Another way of
       defining associativity is to translate associativity attributes to <link
-      linkend="???">non-transitive priorities in specific
+      linkend="priorities">non-transitive priorities in specific
       arguments</link>.</para>
     </section>
 

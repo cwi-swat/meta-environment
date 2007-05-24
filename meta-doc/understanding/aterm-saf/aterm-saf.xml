@@ -1,0 +1,1208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="en-US">
+  <sect1>
+    <title>Introduction</title>
+
+    <para>This document contains the technical documentation of the (Semi-)
+    Streamable ATerm Format, otherwise known as SAF. This document is mainly
+    intended for the developers and users of the ATerm library. If you do not
+    understand what ATerms are you’d better stop reading now ;).</para>
+  </sect1>
+
+  <sect1>
+    <title>Goals</title>
+
+    <para>SAF is intended to be a high performance format, capable of
+    exchanging ATerms in an fast, efficient and platform independent way. The
+    main reason for its development emerged from the wish to transmit terms
+    across network connections in a ‘streamable’ way with the option to
+    suspend this process at any point in time to enable multiplexing, while
+    keeping (de-)serialization memory usage constant. The currently available
+    ATerm formats (BAF, TAF and the ASCII ATerm format) do not supply any of
+    these functionalities.</para>
+  </sect1>
+
+  <sect1>
+    <title>Requirements</title>
+
+    <para>The most important requirements for this format and its
+    implementation(s) are:</para>
+
+    <sect2>
+      <title>Format requirements</title>
+
+      <sect3>
+        <title>Portabilty</title>
+
+        <para>The format is intended to be fully portable, so it should not
+        contain any platform of language specific elements.</para>
+      </sect3>
+
+      <sect3>
+        <title>Streamability</title>
+
+        <para>Meaning the ability to send a term in blocks of a by the user
+        specified size, so the (de-)serialization process can be suspended at
+        regular intervals, if required.</para>
+      </sect3>
+
+      <sect3>
+        <title>Compactness</title>
+
+        <para>Network connection speed is generally the bottleneck when
+        sending data, thus we want the serial representation to be as compact
+        as possible to conserve bandwidth.</para>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Implementation requirements</title>
+
+      <sect3>
+        <title>Transformation / parsing speed</title>
+
+        <para>We want to be able to read and write terms to and from SAF as
+        fast as possible. Current network connections have a throughput of
+        tens or even hundreds of Megabits per second; we want to be able to
+        utilize those to their full effect and do not want the transformation
+        / parsing speed to limit the maximal throughput.</para>
+      </sect3>
+
+      <sect3>
+        <title>Low memory usage</title>
+
+        <para>Memory usage during the (de-)serialization process should be as
+        low as possible and predictable; this is inline of what is expected of
+        an implementation for use in a high performance / soft real-time
+        environment. For implementations in a language that use a garbage
+        collector it is highly recommended that the amount of temporarily
+        allocated object remains as limited as possible and no 'mid-lived'
+        objects are created; this way there are no (or just very minor)
+        performance penalties for applications that use the
+        implementation.</para>
+      </sect3>
+
+      <sect3>
+        <title>No recursive calls</title>
+
+        <para>We do not want to be limited by the size of the stack; the
+        implementation should in no way impair the maximal depth of a
+        tree.</para>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Conclusion</title>
+
+      <para>The above requirements are somewhat conflicting. The streamability
+      and portability requirements limit the sorts of compression techniques
+      that can be used. Additionally compression, generally speaking, incurs
+      computational overhead, so there is a trade-off between compression and
+      transformation / parsing speed as well. Low memory usage and performance
+      do not always go hand-in-hand either. Although all of these requirements
+      are important, transformation / parsing speed should be favored as long
+      as it does not cancel any of the other requirements out entirely.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Representation</title>
+
+    <para>The serial representation of the format is fairly simple. Every term
+    has a header containing general information about the term. After this
+    header the serial representation of the term itself is present; the way
+    this serial representation is layed out is <link
+    linkend="TypeEncoding">type specific</link>.</para>
+
+    <sect2>
+      <title>Serialization order</title>
+
+      <para>The terms and annotations will be serialized in the order in which
+      they are present in the tree (prefix order). Which is:
+      |term|children|annotations|.</para>
+
+      <para>So if we have a term with two children of which the first child
+      has three children, the order will look like this:
+      |term|child1|child1.1|child1.2|child1.3|child2|.</para>
+
+      <para>This is similar to the structure of the ASCII and TAF ATerm
+      formats. A more <link linkend="Example">extensive example</link> will be
+      presented later on in this document.</para>
+    </sect2>
+
+    <sect2>
+      <title>Term header</title>
+
+      <para>The header contains general information about a term and can
+      optionally contain type specific data in the two free fields.</para>
+
+      <para></para>
+
+      <para>This is what the fields in the header represent:</para>
+
+      <informaltable frame="all">
+        <tgroup cols="5">
+          <tbody>
+            <row>
+              <entry><para><emphasis role="bold">Bit
+              number</emphasis></para></entry>
+
+              <entry><para>1</para></entry>
+
+              <entry><para>2 + 3</para></entry>
+
+              <entry><para>4</para></entry>
+
+              <entry><para>5 + 6 + 7 + 8</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Bit
+              mask</emphasis></para></entry>
+
+              <entry><para>0x80</para></entry>
+
+              <entry><para>0x40 + 0x20</para></entry>
+
+              <entry><para>0x10</para></entry>
+
+              <entry><para>0x0f</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis
+              role="bold">Meaning</emphasis></para></entry>
+
+              <entry><para>IsShared?</para></entry>
+
+              <entry><para>Free / Type specific</para></entry>
+
+              <entry><para>HasAnnos?</para></entry>
+
+              <entry><para>Type field</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para>The reason the type field is on the right side of the byte is for
+      performance reasons; this way we do not have to perform any shifts
+      before adding it to the header. There are no specific reasons for the
+      locations of the other fields, since they are only one bit flags, it
+      does not matter were they are located.</para>
+    </sect2>
+
+    <sect2>
+      <title>IsShared?</title>
+
+      <para>This is a boolean value that indicates if this term is shared. We
+      will explain how this <link linkend="Sharing">sharing</link> works later
+      on. Note that if this bit is set all the other data in the header is not
+      required and can be safely ignored if present.</para>
+    </sect2>
+
+    <sect2>
+      <title>Bit 2 + 3</title>
+
+      <para>Bit 2 and 3 are free and may be used for type specific
+      data.</para>
+    </sect2>
+
+    <sect2>
+      <title>HasAnnos?</title>
+
+      <para>This is a boolean value that indicates if the term has annotations
+      or not.</para>
+    </sect2>
+
+    <sect2>
+      <title>Type</title>
+
+      <para>The type field contains a four bit value that represents the type
+      id of the term. Note that bit 5 (0x08) isn't being used at the moment,
+      since we only have seven different term types; this leaves plenty of
+      room for extension.</para>
+    </sect2>
+
+    <sect2>
+      <title id="TypeEncoding">Encoding of types</title>
+
+      <para>Every term type has a different encoding.</para>
+
+      <para>These are the binary representations of the content of the
+      different term types:</para>
+
+      <sect3>
+        <title>ATermInt</title>
+
+        <informaltable frame="all">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header</para></entry>
+
+                <entry><para>Value</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>For more information on the encoding of integers see <link
+        linkend="IntegerCompression">the compression chapter</link>.</para>
+      </sect3>
+
+      <sect3>
+        <title>ATermReal</title>
+
+        <informaltable frame="all">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header</para></entry>
+
+                <entry><para>Value</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>8</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>Reals are encoded as 64 bit IEEE 754 floating point
+        numbers.</para>
+
+        <para>Note that we always use 8 bytes to encode a real. This is
+        because IEEE 754 encoded floating point numbers always occupy a couple
+        of bits in the highest order byte, restricting us from using the same
+        trick as with the <link linkend="IntegerCompression">encoding of
+        integers</link>.</para>
+      </sect3>
+
+      <sect3>
+        <title>ATermBlob</title>
+
+        <informaltable frame="all">
+          <tgroup cols="4">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header</para></entry>
+
+                <entry><para>Length</para></entry>
+
+                <entry><para>Data</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+
+                <entry><para>0 to 2^32-1 (depends on length)</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect3>
+
+      <sect3>
+        <title>ATermAppl + AFun</title>
+
+        <informaltable frame="all">
+          <tgroup cols="5">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header</para></entry>
+
+                <entry><para>Arity</para></entry>
+
+                <entry><para>Name length</para></entry>
+
+                <entry><para>Name bytes</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+
+                <entry><para>0 to 2^32-1 (depends on name
+                length)</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>An ATermAppl always has a function symbol associated with it.
+        For that reason we decided to combine them.</para>
+
+        <sect4>
+          <title>ATermAppl + AFun header</title>
+
+          <para>Bit 2 (0x40) represents IsFunShared? and bit 3 (0x20)
+          IsQuoted?.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>IsFunShared? is a boolean value that indicates if the
+              function symbol of this appl is shared. If this flag is set the
+              isQuoted? flag is not required and can be safely ignored if
+              present. We will discuss sharing in more detail in the
+              compression chapter.</para>
+            </listitem>
+
+            <listitem>
+              <para>IsQuoted? is a boolean value that indicates if the
+              function symbol associated with this ATermAppl is quoted or
+              not.</para>
+            </listitem>
+          </itemizedlist>
+        </sect4>
+      </sect3>
+
+      <sect3>
+        <title>ATermList</title>
+
+        <informaltable frame="all">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header</para></entry>
+
+                <entry><para>Size</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect3>
+
+      <sect3>
+        <title>ATermPlaceholder</title>
+
+        <informaltable frame="all">
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Encoding of shared elements</title>
+
+      <sect3>
+        <title>A shared ATerm</title>
+
+        <informaltable frame="all">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header (with isShared? Flag set)</para></entry>
+
+                <entry><para>Term identifier</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect3>
+
+      <sect3>
+        <title>A shared AFun</title>
+
+        <informaltable frame="all">
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry><para><emphasis
+                role="bold">Field</emphasis></para></entry>
+
+                <entry><para>Header (with isFunShared? Flag
+                set)</para></entry>
+
+                <entry><para>Function symbol identifier</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size
+                (bytes)</emphasis></para></entry>
+
+                <entry><para>1</para></entry>
+
+                <entry><para>1 to 5</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect3>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Reading and writing</title>
+
+    <para>SAF is a (semi-)streamable format, so reading and writing it goes a
+    little different then usual. It works in a block-wise way. A SAF writer
+    can be requested for the following X bytes of the serial representation of
+    a term, which can contain partially serialized elements. When reading SAF
+    you will need information about how large those blocks were to be able to
+    reconstruct the term. For this purpose we propose to emit a two byte
+    unsigned integer value before every block, which specifies its size. This
+    is, for example, the case for SAF file I/O; thus you will always need a
+    buffer of 2^16-1 (65535) bytes when reading from a 'standard' SAF file.
+    Custom ‘shielded’ I/O implementations for SAF are allowed to use their own
+    values and / or protocol (by shielded we mean implementations that are not
+    intended to interface with any implementations other then themselfs, since
+    compatibility can not be guaranteed in these cases).</para>
+
+    <para></para>
+
+    <para>This block-wise writing and reading method enables us to suspend the
+    (de-)serialization process at fixed intervals, without the need to assign
+    a different thread to each process. This enables us to construct multiple
+    trees of terms concurrently in a single threaded environment.</para>
+
+    <sect2>
+      <title>Splitting elements</title>
+
+      <para>To reduce the complexity of implementations we decided that only
+      function symbols and BLOBs should be (de-)serializable in pieces. These
+      are currently the only two types of terms who's serial representation
+      can occupy more then nine bytes in this format and consequently are the
+      only types for which it is interesting to split them. All other types of
+      terms are undividable and must occur sequentially in the same block. For
+      this reason a write buffer must be at least nine bytes in size (although
+      using such a small buffer is strongly discouraged, because of the
+      relatively large overhead this would yield in both time and space). All
+      SAF writer implementations have to adhere to this rule to guarantee the
+      generation of a stream that is compatible with all SAF reader
+      implementations.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title id="Compression">Compression</title>
+
+    <para>As noted before compression, generally speaking, incurs
+    computational overhead. In this particular case computational overhead is
+    something we want to avoid or at least restrict as much as possible. Also
+    the streamability and portability requirements limit our options in terms
+    of compression techniques. For this reason we decided to stick the to
+    sharing of 'elements'. With elements we mean terms / sub trees and
+    function symbols. We can achieve fairly good compression rates with this,
+    because it is a type of compression that is specifically meant for ATerms;
+    we know what the data and composition look like and can use that knowledge
+    to our advantage.</para>
+
+    <para id="Sharing"></para>
+
+    <para>We use a LZW like compression technique to handle the sharing. What
+    we do is, every time we encounter an element we have not seen before we
+    add it to a table and assign it the next 'identifier' (which is an
+    unsigned integer; the first identifier is 0, which represents the root of
+    the tree). If we encounter an element that is already present in the
+    table, we set the with the element’s type corresponding 'shared?' flag in
+    the header and emit the associated identifier. During the deserialization
+    process we do the exact opposite, every unique element that is encountered
+    is added to an array in the order in which we find them in the SAF stream;
+    when we run into a shared element, we read the associated id and replace
+    it by the value that is present at that index in the array. We use
+    separate tables and arrays for both shared terms / sub trees and shared
+    function symbols.</para>
+
+    <sect2>
+      <title id="IntegerCompression">Integer encoding / compression</title>
+
+      <para>We also make use of the fact that small unsigned integers are most
+      common. We are saving some space by only using the minimal amount of
+      bytes to represent an integer value. The last bit of every byte is used
+      as a flag to indicate if there are more bytes coming (1) or not (0). In
+      most cases this means we only need one or two bytes to represent an
+      integer value. On the other hand, to represent large and negative
+      integer values we need five instead of the regular four bytes, since we
+      'lose' on bit per byte. However we expect those cases to be fairly rare.
+      Additionally, all the identifiers that are used for sharing are small
+      unsigned integers, which occupy a large part of the serial
+      representation of any term, especially in those with heavy sharing; this
+      was the deciding factor for using this type of integer encoding. The
+      encoding of the value of the integers is two's complement, because this
+      is the standard on most (if not all) of todays personal computers. If
+      the underlaying integer representation of the system you are writing an
+      implementation for is different, keep in mind that you will need to
+      encode them as two's complement yourself. The byte order is
+      little-endian.</para>
+
+      <sect3>
+        <title>Integer encoding examples</title>
+
+        <para>Here are some examples of what certain integers would look like
+        in the above described encoding:</para>
+
+        <informaltable>
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><emphasis>Value</emphasis></entry>
+
+                <entry><emphasis>Encoded representation</emphasis></entry>
+              </row>
+
+              <row>
+                <entry>0</entry>
+
+                <entry><emphasis role="bold">0</emphasis>0000000</entry>
+              </row>
+
+              <row>
+                <entry>1</entry>
+
+                <entry><emphasis role="bold">0</emphasis>0000001</entry>
+              </row>
+
+              <row>
+                <entry>100</entry>
+
+                <entry><emphasis role="bold">0</emphasis>1100100</entry>
+              </row>
+
+              <row>
+                <entry>128</entry>
+
+                <entry><emphasis role="bold">1</emphasis>0000000 <emphasis
+                role="bold">0</emphasis>0000001</entry>
+              </row>
+
+              <row>
+                <entry>1000</entry>
+
+                <entry><emphasis role="bold">1</emphasis>1101000 <emphasis
+                role="bold">0</emphasis>0000111</entry>
+              </row>
+
+              <row>
+                <entry>1000000</entry>
+
+                <entry><emphasis role="bold">1</emphasis>1000000 <emphasis
+                role="bold">1</emphasis>0000100 <emphasis
+                role="bold">0</emphasis>0111101</entry>
+              </row>
+
+              <row>
+                <entry>2000000000</entry>
+
+                <entry><emphasis role="bold">1</emphasis>0000000 <emphasis
+                role="bold">1</emphasis>0101000 <emphasis
+                role="bold">1</emphasis>1010110 <emphasis
+                role="bold">1</emphasis>0111001 <emphasis
+                role="bold">0</emphasis>0000111</entry>
+              </row>
+
+              <row>
+                <entry>-256</entry>
+
+                <entry><emphasis role="bold">1</emphasis>0000000 <emphasis
+                role="bold">1</emphasis>1111110 <firstterm><emphasis
+                role="bold">1</emphasis></firstterm>1111111 <emphasis
+                role="bold">1</emphasis>1111111 <emphasis
+                role="bold">0</emphasis>0001111</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Compression rates</title>
+
+      <para>Here is an overview of the amount of compression that is achieved
+      by the different formats:</para>
+
+      <informaltable frame="all">
+        <tgroup cols="6">
+          <tbody>
+            <row>
+              <entry><para>SDF syntax (a relatively large term with lots of
+              sharing)</para></entry>
+
+              <entry><para><emphasis>ASCII</emphasis></para></entry>
+
+              <entry><para><emphasis>TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>BAF</emphasis></para></entry>
+
+              <entry><para><emphasis>SAF</emphasis></para></entry>
+
+              <entry><para><emphasis>GZIP</emphasis></para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Size (bytes)
+              </emphasis></para></entry>
+
+              <entry><para>3387103</para></entry>
+
+              <entry><para>73082</para></entry>
+
+              <entry><para>35308</para></entry>
+
+              <entry><para>45097</para></entry>
+
+              <entry><para>65279</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Compression
+              (%)</emphasis></para></entry>
+
+              <entry><para>0</para></entry>
+
+              <entry><para>97.842</para></entry>
+
+              <entry><para>98.958</para></entry>
+
+              <entry><para>98.669</para></entry>
+
+              <entry><para>98.073</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para><informaltable frame="all">
+          <tgroup cols="6">
+            <tbody>
+              <row>
+                <entry><para>Pico syntax (a medium size term)</para></entry>
+
+                <entry><para><emphasis>ASCII</emphasis></para></entry>
+
+                <entry><para><emphasis>TAF</emphasis></para></entry>
+
+                <entry><para><emphasis>BAF</emphasis></para></entry>
+
+                <entry><para><emphasis>SAF</emphasis></para></entry>
+
+                <entry><para><emphasis>GZIP</emphasis></para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size (bytes)
+                </emphasis></para></entry>
+
+                <entry><para>61488</para></entry>
+
+                <entry><para>28131</para></entry>
+
+                <entry><para>13653</para></entry>
+
+                <entry><para>15903</para></entry>
+
+                <entry><para>6351</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Compression
+                (%)</emphasis></para></entry>
+
+                <entry><para>0</para></entry>
+
+                <entry><para>54.25</para></entry>
+
+                <entry><para>77.796</para></entry>
+
+                <entry><para>74.136</para></entry>
+
+                <entry><para>89.671</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable></para>
+
+      <para><informaltable frame="all">
+          <tgroup cols="6">
+            <tbody>
+              <row>
+                <entry><para>a(1) (a very small term, illustrating worst case
+                overhead)</para></entry>
+
+                <entry><para><emphasis>ASCII</emphasis></para></entry>
+
+                <entry><para><emphasis>TAF</emphasis></para></entry>
+
+                <entry><para><emphasis>BAF</emphasis></para></entry>
+
+                <entry><para><emphasis>SAF</emphasis></para></entry>
+
+                <entry><para><emphasis>GZIP</emphasis></para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Size (bytes)
+                </emphasis></para></entry>
+
+                <entry><para>4</para></entry>
+
+                <entry><para>5</para></entry>
+
+                <entry><para>28</para></entry>
+
+                <entry><para>6</para></entry>
+
+                <entry><para>31</para></entry>
+              </row>
+
+              <row>
+                <entry><para><emphasis role="bold">Compression
+                (%)</emphasis></para></entry>
+
+                <entry><para>0</para></entry>
+
+                <entry><para>-25</para></entry>
+
+                <entry><para>-600</para></entry>
+
+                <entry><para>-50</para></entry>
+
+                <entry><para>-775</para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable></para>
+
+      <para>As you can see the compression rates SAF achieves are fairly close
+      to those of BAF, which was designed with compression as its main goal. A
+      comparison with GZIP is a bit harder, since it uses an entirely
+      different algorithm. Whether or not it achieves better compression rates
+      depends on the amount of sharing in the tree. Percentage wise larger
+      terms will have more sharing then smaller terms. The results above
+      illustrate this behavior.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Performance</title>
+
+    <para>The current SAF (de-)serialization implementation in both C and Java
+    is multiple times faster then that of any of the other ATerm formats (BAF,
+    TAF and the ASCII ATerm format).</para>
+
+    <para></para>
+
+    <para>Here are some benchmarks that illustrate the performance difference
+    between the current C and Java implementations of the different
+    formats:</para>
+
+    <para>(The benchmarks were performed on a AMD 64 3500+ with 1 GB DDR-400
+    dual-channel RAM. It shows the 'best of five runs' execution time,
+    measured inside the code (user time spend). Keep in mind that these
+    measurements are subject to change and are merely an indication).</para>
+
+    <sect2>
+      <title>SDF syntax</title>
+
+      <para>This is a relatively large term with lots of sharing.</para>
+
+      <informaltable frame="all">
+        <tgroup cols="8">
+          <tbody>
+            <row>
+              <entry></entry>
+
+              <entry><para><emphasis>C ASCII</emphasis></para></entry>
+
+              <entry><para><emphasis>C TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>C BAF</emphasis></para></entry>
+
+              <entry><para><emphasis>C SAF</emphasis></para></entry>
+
+              <entry><para><emphasis>Java ASCII </emphasis></para></entry>
+
+              <entry><para><emphasis>Java TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>Java SAF</emphasis></para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Serialization x10000
+              (ms)</emphasis></para></entry>
+
+              <entry><para>1744500</para></entry>
+
+              <entry><para>38376</para></entry>
+
+              <entry><para>100749</para></entry>
+
+              <entry><para>25620</para></entry>
+
+              <entry><para>2810000</para></entry>
+
+              <entry><para>91700</para></entry>
+
+              <entry><para>65300</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Deserialization x10000
+              (ms)</emphasis></para></entry>
+
+              <entry><para>2623500</para></entry>
+
+              <entry><para>91494</para></entry>
+
+              <entry><para>52544</para></entry>
+
+              <entry><para>22777</para></entry>
+
+              <entry><para>8150000</para></entry>
+
+              <entry><para>166500</para></entry>
+
+              <entry><para>83300</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para><emphasis>Note: in this specific benchmark the ASCII ATerm format
+      measurements are extrapolated from a run with a hundred iterations,
+      otherwise the test would take too long.</emphasis></para>
+    </sect2>
+
+    <sect2>
+      <title>Pico syntax</title>
+
+      <para>This is a medium size term.</para>
+
+      <informaltable frame="all">
+        <tgroup cols="8">
+          <tbody>
+            <row>
+              <entry><para></para></entry>
+
+              <entry><para><emphasis>C ASCII</emphasis></para></entry>
+
+              <entry><para><emphasis>C TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>C BAF</emphasis></para></entry>
+
+              <entry><para><emphasis>C SAF</emphasis></para></entry>
+
+              <entry><para><emphasis>Java ASCII</emphasis> </para></entry>
+
+              <entry><para><emphasis>Java TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>Java SAF</emphasis></para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Serialization x10000
+              (ms)</emphasis></para></entry>
+
+              <entry><para>49756</para></entry>
+
+              <entry><para>16742</para></entry>
+
+              <entry><para>34024</para></entry>
+
+              <entry><para>7678</para></entry>
+
+              <entry><para>49100</para></entry>
+
+              <entry><para>31300</para></entry>
+
+              <entry><para>18830</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Deserialization x10000
+              (ms)</emphasis></para></entry>
+
+              <entry><para>46269</para></entry>
+
+              <entry><para>34234</para></entry>
+
+              <entry><para>17114</para></entry>
+
+              <entry><para>5661</para></entry>
+
+              <entry><para>144600</para></entry>
+
+              <entry><para>58700</para></entry>
+
+              <entry><para>26200</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2>
+      <title>a(1)</title>
+
+      <para>This is a very small term. This test illustrates the worst case
+      overhead for (de-)serializing a term.</para>
+
+      <informaltable frame="all">
+        <tgroup cols="8">
+          <tbody>
+            <row>
+              <entry></entry>
+
+              <entry><para><emphasis>C ASCII</emphasis></para></entry>
+
+              <entry><para><emphasis>C TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>C BAF</emphasis></para></entry>
+
+              <entry><para><emphasis>C SAF</emphasis></para></entry>
+
+              <entry><para><emphasis>Java ASCII</emphasis> </para></entry>
+
+              <entry><para><emphasis>Java TAF</emphasis></para></entry>
+
+              <entry><para><emphasis>Java SAF</emphasis></para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Serialization x1000000
+              (ms)</emphasis></para></entry>
+
+              <entry><para>697</para></entry>
+
+              <entry><para>5468</para></entry>
+
+              <entry><para>87218</para></entry>
+
+              <entry><para>2050</para></entry>
+
+              <entry><para>18850</para></entry>
+
+              <entry><para>18630</para></entry>
+
+              <entry><para>2000</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="bold">Deserialization x1000000
+              (ms)</emphasis></para></entry>
+
+              <entry><para>539</para></entry>
+
+              <entry><para>5786</para></entry>
+
+              <entry><para>1790</para></entry>
+
+              <entry><para>2030</para></entry>
+
+              <entry><para>21530</para></entry>
+
+              <entry><para>27300</para></entry>
+
+              <entry><para>5500</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2>
+      <title>Conclusion</title>
+
+      <para>In every benchmark the SAF (de-)serialization implementation
+      clearly has the upper hand by a very large margin. Only the C ASCII
+      implementation performs better then the C SAF implementation in the
+      overhead test, since it does not have to allocate any memory. However
+      the overhead of the SAF implementation in both C and Java is still
+      relatively low compared to the other implementations.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Memory usage</title>
+
+    <para>Memory usage of the current SAF (de-)serialization implementations
+    scale linearly with the amount of unique elements in the tree. This is
+    because a reference to every unique element in the tree is stored in a
+    hashtable or array during both the serialization as the deserialization
+    process. Also the depth of the tree influences the memory usage, since
+    that determains the size of the stack that keeps track of the parent to
+    child relations of the terms in the tree; the size of this stack scales
+    linearly with the depth of the tree.</para>
+
+    <para></para>
+
+    <para>The worst case memory usage can be calculated in the following
+    way:</para>
+
+    <para>Serialization memory usage: (the number of unique terms in the tree
+    * 5 * 4) + (the number of unique function symbols in the tree * 4 * 4) +
+    (the depth of the tree * 4 * 4).</para>
+
+    <para>Deserialization memory usage: (the number of unique terms in the
+    tree * 2 * 4) + (the number of unique function symbols in the tree * 4) +
+    (the depth of the tree * 8 * 4).</para>
+
+    <para>Calculating the exact amount of memory usage is possible, but
+    largely depends on the layout of the tree. The above calculations serve as
+    a guideline to indicate the maximal memory usage for the
+    (de-)serialization of a certain term.</para>
+  </sect1>
+
+  <sect1>
+    <title id="Example">Example</title>
+
+    <para>The following term:</para>
+
+    <para>line(box(rect(2), rect(5), square(4, 3)), circle(10),
+    circle(10))</para>
+
+    <para>Will look like this in the binary format:</para>
+
+    <para>0x01 0x03 0x04 line 0x01 0x03 0x03 box 0x01 0x01 0x04 rect 0x02 0x02
+    0x41 0x03 0x02 0x05 0x01 0x02 0x06 square 0x02 0x04 0x02 0x03 0x01 0x01
+    0x06 circle 0x02 0x0a 0x80 0x06</para>
+
+    <para>Which in bits looks like this (the indent and lines were added to
+    show the child-parent relationship):</para>
+
+    <para><programlisting>|00000001  appl
+|00000011  arity = 3
+|00000100  fun-length = 4
+|01101100  fun-bytes = line
+|01101001
+|01101110
+|01100101
+|---|
+    |00000001  appl
+    |00000011  arity = 3
+    |00000011  fun-length = 3
+    |01100010  fun-bytes = box
+    |01101111
+    |01111000
+    |---|
+    |   |00000001  appl
+    |   |00000001  arity = 1
+    |   |00000100  fun-length = 4
+    |   |01110010  fun-bytes = rect
+    |   |01100101
+    |   |01100011
+    |   |01110100
+    |   |---|
+    |   |   |00000010  int
+    |   |   |00000010  value = 2
+    |   |
+    |   |01000001  appl with shared function symbol
+    |   |00000011  shared function symbol identifier = 3
+    |   |---|
+    |   |   |00000010  int
+    |   |   |00000101  value = 5
+    |   |
+    |   |00000001  appl
+    |   |00000010  arity = 2
+    |   |00000110  fun-length = 6
+    |   |01110011  fun-bytes = square
+    |   |01110001
+    |   |01110101
+    |   |01100001
+    |   |01110010
+    |   |01100101
+    |   |---|
+    |       |00000010  int
+    |       |00000100  value = 4
+    |       |
+    |       |00000010  int
+    |       |00000011  value = 3
+    |
+    |00000001  appl
+    |00000001  arity = 1
+    |00000110  fun-length = 6
+    |01100011  fun-bytes = circle
+    |01101001
+    |01110010
+    |01100011
+    |01101100
+    |01100101
+    |---|
+    |   |00000010  int
+    |   |00001010  value = 10
+    |
+    |10000000  shared term
+    |00000110  shared term identifier = 6</programlisting></para>
+  </sect1>
+</article>
