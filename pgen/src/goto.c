@@ -131,13 +131,16 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
     action_insert(lookahead, reducelist);
   }
   else {
+    CC_Class *currentla = CC_alloc();
+    CC_copy(lookahead, currentla);
+
     /* Go through all restrictions... */
     while (!PTBL_isRestrictionsEmpty(restrictions)) {
-      CC_Class result_cc;
+      CC_Class difference;
       PTBL_Restriction restriction = PTBL_getRestrictionsHead(restrictions);
       PTBL_CharClasses restrictionSymbols = PTBL_getRestrictionCharClasses(restriction);
       CC_Class *restrictionCC = CC_ClassFromTerm((ATerm)PTBL_getCharClassesHead(restrictionSymbols));
-     
+
       if (PTBL_getCharClassesLength(restrictionSymbols) == 1) {
         /* If there is only one symbol in the restriction then for each 
          * lookahead that does not match the symbols in the restriction
@@ -145,13 +148,11 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
         
         /* Calculate the difference between the parse table lookahead and the 
          * restriction.*/
-        if (CC_difference(lookahead, restrictionCC, &result_cc)) {
+        if (CC_difference(currentla, restrictionCC, &difference)) {
           special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
           reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
           reducelist = PTBL_makeActionsSingle(reduce);
-          action_insert(&result_cc, reducelist);
-          
-          CC_clear(&result_cc);
+          action_insert(&difference, reducelist);
         }
       }
       else {
@@ -162,16 +163,14 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
 
         CC_Class intersection;
         
-        if (CC_difference(lookahead, restrictionCC, &result_cc)) {
+        if (CC_difference(currentla, restrictionCC, &difference)) {
           special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
           reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
           reducelist = PTBL_makeActionsSingle(reduce);
-          action_insert(&result_cc, reducelist);
-
-          CC_clear(&result_cc);
+          action_insert(&difference, reducelist);
         }
         
-        if (CC_intersection(lookahead, restrictionCC, &intersection)) {
+        if (CC_intersection(currentla, restrictionCC, &intersection)) {
           PTBL_Restrictions remainingRestrictions = PTBL_makeRestrictionsSingle(PTBL_makeRestrictionFollow(PTBL_getCharClassesTail(restrictionSymbols)));
         
           special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
@@ -182,9 +181,15 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
           CC_clear(&intersection);
         }
       }
-      restrictions = PTBL_getRestrictionsTail(restrictions); /*Check!*/
+
+      /* Continue applying the next restrictions with the lookahead that
+       * is not filtered yet.
+       */
+      CC_copy(&difference, currentla);
+      restrictions = PTBL_getRestrictionsTail(restrictions); 
     }
-    /*CC_free(result_cc); TODO: Does this need to be done? */
+
+    CC_free(currentla);
   }
 }
 

@@ -1,5 +1,18 @@
 $Id$
 
+Sat May 26 10:05:26 CEST 2007 <jurgenv@cwi.nl>
+ * src/goto.c: fixed bug #752. The filterReductions function applies follow
+   restrictions by removing and splitting reductions on certain lookaheads.
+   It was rewritten from a recursive function to an iterative loop earlier.
+   The error occurred in situations where there were more multiple character
+   lookahead restrictions for the same symbol, and also reductions possible 
+   for a different symbol with the same lookahead (i.e. a reduce/reduce 
+   conflict). In the old recursive code each restriction would limit the
+   possible reductions for certain lookaheads more, while in the new code
+   each restriction was applied to the original set of lookahead characters.
+   Note: I'm having trouble producing a small regression test for this
+   bug.
+
 Mon Apr 16 16:50:33 CEST 2007 <economop@cwi.nl>
  * Added forgotten files.
 
