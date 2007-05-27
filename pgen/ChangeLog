@@ -1,5 +1,13 @@
 $Id$
 
+Sun May 27 12:14:01 CEST 2007 <jurgenv@cwi.nl>
+ * test/tables/Sdf2.tbl: regenerated this regression table. The bugfix in
+   goto.c filters more reductions in Sdf2.tbl. The regression parse forest
+   does not change with this different table. The speed of the parser does
+   improve slightly. My analysis is that the follow restrictions on LAYOUT?
+   in Sdf2.sdf are meant for speed; they filter conflicts and not actual
+   ambiguity.
+
 Sat May 26 10:05:26 CEST 2007 <jurgenv@cwi.nl>
  * src/goto.c: fixed bug #752. The filterReductions function applies follow
    restrictions by removing and splitting reductions on certain lookaheads.
