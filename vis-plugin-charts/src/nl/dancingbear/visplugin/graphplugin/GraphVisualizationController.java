@@ -12,8 +12,7 @@ import nl.dancingbear.visplugin.VisualizationPluginWindow;
  * @author Anton Gerdessen (reviewer)
  * @date 07-3-2007 
  */
-public class GraphVisualizationController extends
-        VisualizationPluginController {
+public class GraphVisualizationController extends VisualizationPluginController {
 
     private final String m_pluginName = "Graph Visualisation Plugin";
     
