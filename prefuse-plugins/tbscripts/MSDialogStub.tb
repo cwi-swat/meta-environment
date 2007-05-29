@@ -1,0 +1,31 @@
+tool msdialogstub is {}
+
+/**
+ * @desc Meta Studio Dialog Process Stub
+ *       FOR TESTING PURPOSE ONLY
+ *
+ * @author Raymond Bergen & Srinivasan Tharmarajah
+ * @date 06-03-2007
+ */
+ 
+process MSDialogStubStart is
+let 
+   Tid: msdialogstub,
+   RstorePath: str,
+   DialogTitle: str,
+   Paths: list,
+   Extension: str
+in
+	rec-connect(Tid?).
+	RstorePath:= "teststore" .
+	printf("Het pad: %s\n", RstorePath) .
+
+	if true then 
+		(
+			rec-msg(ask-for-file(DialogTitle?, Paths?, Extension?)) .
+			snd-do(Tid, ask-for-file-recieved) .
+			snd-msg(ask-for-file-result(RstorePath))
+		)
+
+	fi * delta
+endlet

@@ -1,0 +1,7 @@
+/**
+ * @name Visualization Pie Chart Plugin Starter
+ * @author Arjen van Schie
+ */
+process StartVisPluginPieChart is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-piechart.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
+  
