@@ -4,6 +4,9 @@ Tue May 29 15:37:02 CEST 2007 <jurgenv@cwi.nl>
  * semantics/asfc/src/*.c: preparing compiler for rewriting with layout.
    Added constructors for separated lists to muASF, and some other small
    tweaks that prepare for bootstrapping a new compiler.
+ * semantics/asf-operations/src/ASF-Normalization.c: regenerated after
+   adding automatic abstraction for literals. The code for ignoring literals
+   can be removed from asc-support and asfe in the near future.
 
 Thu May  3 11:09:27 CEST 2007 <jurgenv@cwi.nl>
  * semantics/asf-operations/src/ASF-Normalization.c: regenerated after
