@@ -10,7 +10,6 @@ import aterm.pure.PureFactory;
  * @date 20-2-2007
  */
 public class VisualizationFactorySingleton {
-
     private static Factory m_factory = null;
     private static PureFactory m_pureFactory = null;
 
@@ -48,16 +47,15 @@ public class VisualizationFactorySingleton {
      * @author Arend van Beelen
      * @date 13-03-2007
      */
-    public static void initInstances(PureFactory pureFactory, Factory factory) {
+    public synchronized static void initInstances(PureFactory pureFactory, Factory factory) {
         m_pureFactory = pureFactory;
         m_factory = factory;
     }
 
-    private static void createInstances() {
+    private synchronized static void createInstances() {
         if (m_factory == null) {
             m_pureFactory = new PureFactory();
             m_factory = Factory.getInstance(m_pureFactory);
         }
     }
-
 }
