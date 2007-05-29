@@ -1,0 +1,9 @@
+#include "MSDialogStub.tb"
+#include "FBMPStub.tb"
+#include "fbi.tb"
+
+toolbus(MSDialogStubStart, FBMPStubStart, StartFBI, NOTIFY-START)
+
+process NOTIFY-START is
+	%% Let the TestCase know when the Toolbus is initialized and started.
+	printf("Toolbus started...\n")

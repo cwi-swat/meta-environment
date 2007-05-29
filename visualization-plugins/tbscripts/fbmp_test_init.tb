@@ -1,0 +1,10 @@
+#include "fbmp.tb"
+#include "fbmp_test.tb"
+
+toolbus(FBMP-TEST, NOTIFY-START)
+
+process NOTIFY-START is
+  %% Let the TestCase know when the Toolbus is initialized and started.
+  %% This message should always be used when working with TUnit.
+  %% DO NOT CHANGE THIS MESSAGE
+  printf("Toolbus started...\n")
