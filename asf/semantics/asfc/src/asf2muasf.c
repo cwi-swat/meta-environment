@@ -147,7 +147,17 @@ MA_IdCon MA_makeIdCon(const char *str)
 }
 
 /*}}}  */
+/*{{{  MA_NatCon MA_makeNatCon(int n) */
 
+MA_NatCon MA_makeNatCon(int n)
+{
+  char digits[100];
+
+  sprintf(digits, "%d", n);
+  return MA_makeNatConLexToCf(MA_makeLexNatConDigits(digits));
+}
+
+/*}}}  */
 /*{{{  static MA_Layout stringToLayout(const char *str) */
 
 static MA_OptLayout stringToLayout(const char *str)
@@ -203,7 +213,7 @@ static int getProdArity(PT_Production prod, LayoutOption layout)
     for (; PT_hasSymbolsHead(symbols); symbols = PT_getSymbolsTail(symbols)) {
       PT_Symbol symbol = PT_getSymbolsHead(symbols);
 
-      if (!PT_isSymbolLit(symbol) && !PT_isSymbolCilit(symbol)
+      if ((layout == WITH_LAYOUT || (!PT_isSymbolLit(symbol) && !PT_isSymbolCilit(symbol)))
 	  && (layout == WITH_LAYOUT || !PT_isOptLayoutSymbol(symbol))) {
 	arity++;
       }
@@ -337,6 +347,57 @@ static MA_TermElems attrsToTermList(PT_Attrs attrs)
 }
 
 /*}}}  */
+/*{{{  static int getSepCount(PT_Production prod) */
+
+static int getSepCount(PT_Production prod)
+{
+  PT_Symbol sym = PT_getProductionRhs(prod);
+  int sepCount = 0;
+
+  if (PT_isSymbolCf(sym)) {
+    sym = PT_getSymbolSymbol(sym);
+    if (PT_isSymbolIterStar(sym) || PT_isSymbolIterPlus(sym)) {
+      sepCount = 1;
+    }
+    else if (PT_isSymbolIterStarSep(sym) || PT_isSymbolIterPlus(sym)) {
+      sepCount = 3;
+    }
+    else {
+      ATwarning("asfc: unexpected list type %t\n", sym);
+      sepCount = 0;
+    }
+  }
+  else if (PT_isSymbolLex(sym)) {
+    sym = PT_getSymbolSymbol(sym);
+    if (PT_isSymbolIterStar(sym) || PT_isSymbolIterPlus(sym)) {
+      sepCount = 0;
+    }
+    else if (PT_isSymbolIterStarSep(sym) || PT_isSymbolIterPlusSep(sym)) {
+      sepCount = 1;
+    }
+    else {
+      ATwarning("asfc: unexpected list type %t\n", sym);
+      sepCount = 0;
+    }
+  }
+  else { /* kernel syntax */
+    if (PT_isSymbolIterStar(sym) || PT_isSymbolIterPlus(sym)) {
+      sepCount = 0;
+    }
+    else if (PT_isSymbolIterStarSep(sym) || PT_isSymbolIterPlusSep(sym)) {
+      sepCount = 1;
+    }
+    else {
+      ATwarning("asfc: unexpected list type %t\n", sym);
+      sepCount = 0;
+    }
+  }
+
+  return sepCount;
+}
+
+/*}}}  */
+
 /*{{{  static MA_FunId prodToFunId(PT_Production prod) */
 
 static MA_FunId prodToFunId(PT_Production prod, ATbool returnsList)
@@ -354,7 +415,18 @@ static MA_FunId prodToFunId(PT_Production prod, ATbool returnsList)
   result = MA_makeFunIdQuoted(MA_makeStrCon(strProd));
 
   if (PT_isProductionList(prod)) {
-    result = MA_makeFunIdList(em, result, em);
+    if (layout == WITHOUT_LAYOUT) {
+      result = MA_makeFunIdList(em, result, em);
+    }
+    else {
+      int seps = getSepCount(prod);
+      if (seps == 0) {
+	result = MA_makeFunIdList(em, result, em);
+      }
+      else {
+	result = MA_makeFunIdSepList(em, result, em, MA_makeNatCon(seps), em);
+      }
+    }
   }
   else if (returnsList) {
     result = MA_makeFunIdReturnsList(em,result,em);
@@ -620,16 +692,16 @@ static MA_Term treeToTerm(PT_Tree tree)
     result = MA_makeTermTyped(applTreeToTerm(converted, returnsList),
 			      em,em,type);
   }
+  else if (layout == WITHOUT_LAYOUT && PT_isTreeLit(tree)) {
+    result = NULL; 
+  }
   else if (PT_isTreeVar(tree)) {
     result = variableToTerm(tree);
   }
   else if (PT_isTreeBracket(tree)) {
     result = treeToTerm(PT_getTreeBracketTree(tree));
   } 
-  else if (PT_isTreeLit(tree)) {
-    result = NULL; 
-  }
-  else if (PT_isTreeCilit(tree)) {
+  else if (layout == WITHOUT_LAYOUT && PT_isTreeCilit(tree)) {
     result = NULL;
   }
   else if (PT_isTreeAppl(tree)) {

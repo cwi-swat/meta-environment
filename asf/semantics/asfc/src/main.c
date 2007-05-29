@@ -42,7 +42,7 @@ ATbool output_muasf;
 ATbool input_muasf;
 ATbool use_c_compiler;
 ATbool keep_annos;
-ATbool keep_layout;
+ATbool keep_asfc_layout;
 ATbool parse_io;
 
 int toolbus_id;
@@ -92,7 +92,7 @@ static void usage(void)
 	    myname, 
 	    keep_annos ? "on" : "off",
 	    use_c_compiler ? "on" : "off",
-	    keep_layout ? "on" : "off",
+	    keep_asfc_layout ? "on" : "off",
 	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
 	    parse_io ? "on" : "off",
@@ -168,7 +168,7 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
   } else {
     VERBOSE("transforming ASF to MuASF");
 
-    muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs), keep_layout);
+    muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs), keep_asfc_layout);
   }
 
   if (muasf == NULL) {
@@ -206,7 +206,7 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
     }
 
     VERBOSE("pretty printing C code");
-    ToC_code(parse_io, keep_annos, keep_layout, 
+    ToC_code(parse_io, keep_annos, keep_asfc_layout, 
 		    saveName, c_code, parseTable, fp , 
 	     myversion);
     fclose(fp);
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
   ATerm parseTable = NULL;
 
   keep_annos = ATfalse;
-  keep_layout = ATfalse;
+  keep_asfc_layout = ATfalse;
   run_verbose = ATfalse;
   input_muasf = ATfalse;
   output_muasf = ATfalse;
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
       case 'v':  run_verbose = ATtrue;  break;
       case 'i':  equations=optarg;      break;
       case 'l':  input_muasf=ATtrue;    break;
-      case 'L':  keep_layout=ATtrue;    break;
+      case 'L':  keep_asfc_layout=ATtrue;    break;
       case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;

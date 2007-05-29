@@ -3,6 +3,7 @@
 
 #include <aterm2.h>
 
+extern AFun MA_afun130;
 extern AFun MA_afun121;
 extern AFun MA_afun3;
 extern AFun MA_afun78;
@@ -19,6 +20,7 @@ extern AFun MA_afun15;
 extern AFun MA_afun86;
 extern AFun MA_afun31;
 extern AFun MA_afun43;
+extern AFun MA_afun128;
 extern AFun MA_afun103;
 extern AFun MA_afun0;
 extern AFun MA_afun84;
@@ -58,6 +60,7 @@ extern AFun MA_afun88;
 extern AFun MA_afun51;
 extern AFun MA_afun56;
 extern AFun MA_afun85;
+extern AFun MA_afun127;
 extern AFun MA_afun12;
 extern AFun MA_afun91;
 extern AFun MA_afun64;
@@ -107,8 +110,11 @@ extern AFun MA_afun117;
 extern AFun MA_afun22;
 extern AFun MA_afun118;
 extern AFun MA_afun66;
+extern AFun MA_afun124;
+extern AFun MA_afun129;
 extern AFun MA_afun94;
 extern AFun MA_afun41;
+extern AFun MA_afun126;
 extern AFun MA_afun53;
 extern AFun MA_afun70;
 extern AFun MA_afun20;
@@ -125,6 +131,7 @@ extern AFun MA_afun23;
 extern AFun MA_afun71;
 extern AFun MA_afun45;
 extern AFun MA_afun68;
+extern AFun MA_afun125;
 extern AFun MA_afun24;
 extern AFun MA_afun46;
 
