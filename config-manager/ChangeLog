@@ -1,5 +1,8 @@
 # $Id$
 
+Tue May 29 16:19:22 CEST 2007 <jurgenv@cwi.nl>
+ * src/configmanager.c: menu entries can not added twice anymore.
+
 Wed May  9 08:38:05 CEST 2007 <jurgenv@cwi.nl>
  * src/configmanager.c,configuration-manager.isrc: added support for the
    new editor configuration option.

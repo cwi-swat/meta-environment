@@ -88,7 +88,9 @@ static void addDescription(ATermTable table, CFG_ActionDescription desc) {
     list = ATempty;
   }
 
-  list = ATinsert(list, CFG_ActionDescriptionToTerm(desc));
+  if (ATindexOf(list,  CFG_ActionDescriptionToTerm(desc), 0) == -1) {
+    list = ATinsert(list, CFG_ActionDescriptionToTerm(desc));
+  }
   ATtablePut(table, type, (ATerm) list);
 }
 
