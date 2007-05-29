@@ -1,0 +1,9 @@
+module languages/asf/compiler/format/Compiler
+
+imports languages/asf/compiler/format/MuASF
+
+hiddens
+
+context-free start-symbols
+  Module
+
