@@ -1,6 +1,14 @@
 GENERATED_TBSCRIPTS = \
 	fbi.tb \
-	fbmp.tb
+	fbmp.tb \
+	vis-plugin-table.tb \
+	vis-plugin-scatterchart.tb \
+	vis-plugin-piechart.tb \
+	vis-plugin-graph.tb \
+	vis-plugin-csv.tb \
+	vis-plugin-barchart.tb \
+	vpcp.tb \
+	vpcp-config.tb
 
 EXTRA_DIST = \
 	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) \
