@@ -19,9 +19,7 @@ import aterm.pure.PureFactory;
 public abstract class VisualizationPluginController extends DefaultStudioPlugin
         implements VisualizationPluginTif {
 
-    public enum requestType {
-        image, csv, rStore
-    }
+    public enum requestType {image, csv, rStore}
 
     private static final String TOOL_NAME = "visualizationPlugin";
 

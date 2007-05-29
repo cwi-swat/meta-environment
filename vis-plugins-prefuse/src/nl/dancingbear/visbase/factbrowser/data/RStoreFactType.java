@@ -72,7 +72,6 @@ public class RStoreFactType extends Observable {
      * @author Renze de Vries
      * @date 14-02-2007
      */
-    @SuppressWarnings("unchecked")
     public void addVisualisationPlugin(VisualisationPlugin visPlugin) {
         
         //check if the visualisationPlugin is not already present

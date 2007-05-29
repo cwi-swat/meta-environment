@@ -11,8 +11,7 @@ import nl.dancingbear.visplugin.VisualizationPluginWindow;
  * @author Srinivasan Tharmarajah
  * @date 14-03-2007
  */
-public class BarChartVisualizationController extends
-        VisualizationPluginController {
+public class BarChartVisualizationController extends VisualizationPluginController {
 
     /**
      * Constructor.
@@ -53,8 +52,7 @@ public class BarChartVisualizationController extends
      * @date 07-3-2007
      */
     public ATerm[] getSupportedTypes() {
-        ATerm[] atermList = { makeATerm("relation([int,str])"), 
-                makeATerm("relation([str,int])") };
+        ATerm[] atermList = { makeATerm("relation([int,str])"), makeATerm("relation([str,int])") };
         return atermList;
     }
 

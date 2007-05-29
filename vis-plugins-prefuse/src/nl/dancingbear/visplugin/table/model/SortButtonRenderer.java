@@ -93,7 +93,6 @@ public class SortButtonRenderer extends JButton implements TableCellRenderer {
      * @author Anton Gerdessen
      * @date 12-03-2007
      */
-    @SuppressWarnings("unchecked")
     public void setSelectedColumn(int column) {
 
         if (column < 0)
