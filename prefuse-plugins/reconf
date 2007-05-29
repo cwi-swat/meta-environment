@@ -1,0 +1,3 @@
+#! /bin/sh
+
+meta-build || ("Please make sure meta-build is in your PATH" && false)
