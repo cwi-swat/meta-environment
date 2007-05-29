@@ -208,9 +208,9 @@
       <title>IsShared?</title>
 
       <para>This is a boolean value that indicates if this term is shared. We
-      will explain how this <link linkend="Sharing">sharing</link> works later
-      on. Note that if this bit is set all the other data in the header is not
-      required and can be safely ignored if present.</para>
+      will explain how this <link linkend="Compression">sharing</link> works
+      later on. Note that if this bit is set all the other data in the header
+      is not required and can be safely ignored if present.</para>
     </sect2>
 
     <sect2>
@@ -236,8 +236,8 @@
       room for extension.</para>
     </sect2>
 
-    <sect2>
-      <title id="TypeEncoding">Encoding of types</title>
+    <sect2 id="TypeEncoding">
+      <title>Encoding of types</title>
 
       <para>Every term type has a different encoding.</para>
 
@@ -564,8 +564,8 @@
     </sect2>
   </sect1>
 
-  <sect1>
-    <title id="Compression">Compression</title>
+  <sect1 id="Compression">
+    <title>Compression</title>
 
     <para>As noted before compression, generally speaking, incurs
     computational overhead. In this particular case computational overhead is
@@ -594,8 +594,8 @@
     separate tables and arrays for both shared terms / sub trees and shared
     function symbols.</para>
 
-    <sect2>
-      <title id="IntegerCompression">Integer encoding / compression</title>
+    <sect2 id="IntegerCompression">
+      <title>Integer encoding / compression</title>
 
       <para>We also make use of the fact that small unsigned integers are most
       common. We are saving some space by only using the minimal amount of
@@ -1134,8 +1134,8 @@
     (de-)serialization of a certain term.</para>
   </sect1>
 
-  <sect1>
-    <title id="Example">Example</title>
+  <sect1 id="Example">
+    <title>Example</title>
 
     <para>The following term:</para>
 
