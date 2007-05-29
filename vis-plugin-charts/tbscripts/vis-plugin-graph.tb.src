@@ -1,0 +1,6 @@
+/**
+ * @name Visualization Graph Plugin Starter
+ * @author Arjen van Schie
+ */
+process StartVisPluginGraph is
+  snd-msg(load-jar("file://__PKGDATA__/vis-plugin-graph.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
