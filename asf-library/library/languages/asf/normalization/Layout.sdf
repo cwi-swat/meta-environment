@@ -8,7 +8,7 @@ imports basic/Strings
 imports basic/Integers
 imports basic/Identifiers
 
-%% This module deals with ``Rewriting with Layout''
+%% This module deals with Rewriting with Layout
 %% 
 %% It introduces variables where abstraction from layout is
 %% necessary, and lifts explicit matches and construction from 
@@ -48,11 +48,15 @@ context-free syntax
 find-layout(P-Tree,P-Args) -> P-Args {traversal(accu,top-down,break)}
 is-lexical-constructor(P-Tree) -> Boolean
 is-layout(P-Tree) -> Boolean
+is-literal(P-Tree) -> Boolean
 is-layout-variable(P-Tree) -> Boolean
+is-variable(P-Tree) -> Boolean
 layout-to-list-variable(P-Tree) -> P-Tree
 space() -> P-Tree
 make-layout(P-Args) -> P-Tree
 variable-layout(Integer) -> P-Tree
+variable-literal(Integer,  P-Symbol) -> P-Tree
+get-literal-symbol(P-Tree) -> P-Symbol
 
 variables
 
@@ -74,6 +78,7 @@ variables
 "$"?"Var"[0-9]* -> StrCon		{strict}
 "Int"[0-9]* -> Integer              {strict}
 "Nat"[0-9]* -> NatCon               {strict}
+"Lit"[0-9]* -> StrCon               {strict}
 
 variables
 
@@ -87,3 +92,4 @@ variables
 "_Attrs"[0-9]* -> P-Attributes 	{wild}
 "_Tree"[0-9]* -> P-Tree		{wild}
 "_Ann"[0-9]* -> P-Annotation 	{wild}
+"_Lit"[0-9]* -> StrCon              {wild}

@@ -1,8 +1,7 @@
 equations
 
 %% This function will:
-%%	* replace all layout on matching positions by a variable
-%%	(* replace all layout on building positions by a space not anymore)
+%%	* replace all layout and literals on matching positions by a variable
 %%
 %% Except when the layout contains any lexical constructor functions:
 %%	* they are lifted to top level such that they can either be
@@ -71,6 +70,17 @@ equations
 	[] == find-layout(Tree, [])
 	===>
 	match-layout(Tree, Int) = <variable-layout(Int), Int + 1>
+
+%% Since variables may contain literals, but we do not want to modify the parse trees of variables, we stop here
+[ignore-variables]
+	is-variable(Tree) == true
+	===>
+	match-layout(Tree, Int) = <Tree, Int>
+
+[replace-literals]
+	is-literal(Tree) == true
+	===>
+	match-layout(Tree, Int) = <variable-literal(Int, get-literal-symbol(Tree)), Int + 1>
 
 equations
 
@@ -171,19 +181,73 @@ equations
 	
 equations
 
+[yes]
+	is-literal(appl(prod(_Symbols,lit(_Lit),_Attrs),_Args)) = true
+
+[yes]
+	is-literal(appl(prod(_Symbols,cilit(_Lit),_Attrs),_Args)) = true
+
+[annotated]
+	is-literal(Tree _Ann) = is-literal(Tree)
+
+[default-no]
+	is-literal(_Tree) = false
+
+equations
+
+[yes]	is-variable(appl(prod([varsym(_Symbol1)], _Symbol2, _Attrs), _Args)) = true
+
+[annotated]
+	is-variable(Tree _Ann) = is-variable(Tree)
+
+[default-no]
+	is-variable(_Tree) = false
+
+equations
+
+[get]
+	get-literal-symbol(appl(prod(_Symbols,lit(Lit),_Attrs),_Args)) = lit(Lit)
+
+[get]
+	get-literal-symbol(appl(prod(_Symbols,cilit(Lit),_Attrs),_Args)) = cilit(Lit)
+
+[annotated]
+	get-literal-symbol(Tree _Ann) = get-literal-symbol(Tree)
+
+equations
+
 [define-space]
 	space() =
 	appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[appl(prod([lex(iter(layout))],cf(layout),no-attrs),[appl(list(lex(iter(layout))),[appl(prod([char-class([range(9,10),13,32])],lex(layout),attrs([term(cons("whitespace"))])),[32])])])])
+
+equations
 
 [define-layout]
 	make-layout(Args) = 
 	appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[appl(prod([lex(iter(layout))],cf(layout),no-attrs),[appl(list(lex(iter(layout))),Args)])])
 
+equations
 
 [define-variable-layout]
-	$Var := "$L" || natcon2strcon(Nat),
+	$Var := "_W" || natcon2strcon(Nat) || "_",
 	Tree := lift-to-tree($Var)
 	===>
 	variable-layout(Nat) = 
 	appl(prod([varsym(opt(layout))],cf(opt(layout)),attrs([term(layout-abstraction)])),[appl(prod([cf(sort("StrCon"))],varsym(opt(layout)),no-attrs),[Tree])])
+
+[define-variable-literal]
+         lit(Lit) := Symbol,
+         $Var := Lit || natcon2strcon(Nat),
+	Tree := lift-to-tree($Var)
+	===>
+	variable-literal(Nat,Symbol) = 
+	appl(prod([varsym(Symbol)],Symbol,attrs([term(literal-abstraction)])),[appl(prod([cf(sort("StrCon"))],varsym(Symbol),no-attrs),[Tree])])
+
+[define-variable-literal]
+         cilit(Lit) := Symbol,
+         $Var := Lit || natcon2strcon(Nat),
+	Tree := lift-to-tree($Var)
+	===>
+	variable-literal(Nat,Symbol) = 
+	appl(prod([varsym(Symbol)],Symbol,attrs([term(literal-abstraction)])),[appl(prod([cf(sort("StrCon"))],varsym(Symbol),no-attrs),[Tree])])
 
