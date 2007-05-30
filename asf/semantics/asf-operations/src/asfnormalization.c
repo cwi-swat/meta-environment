@@ -65,9 +65,10 @@ ASF_ASFModule normalize(ASF_ASFModule input)
   ATerm reduct;
   PT_Tree asfix;
   ASF_ASFModule lowered;
+  ATermTable liftCache = ATtableCreate(2000, 75);
   ATermTable lowerCache = ATtableCreate(2000, 75);
 
-  lifted = ASF_liftModule(input, lowerCache);
+  lifted = ASF_liftModule(input, liftCache, lowerCache);
 
   applied = PT_applyFunctionToTree("normalize", 
 					"ASF-Module",
@@ -80,6 +81,7 @@ ASF_ASFModule normalize(ASF_ASFModule input)
 
   lowered = ASF_lowerModule((ASF_ASFModule) asfix, lowerCache);
 
+  ATtableDestroy(liftCache);
   ATtableDestroy(lowerCache);
 
   return lowered;

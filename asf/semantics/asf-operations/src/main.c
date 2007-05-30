@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 	result = normalize(mod);
       }
       else {
-	result = ASF_liftModule(mod, NULL);
+	result = ASF_liftModule(mod, NULL, NULL);
       }
 
       start = (ASF_Start) PT_setParseTreeTree((PT_ParseTree) start, (PT_Tree) result);
