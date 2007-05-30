@@ -1,8 +1,5 @@
 GENERATED_TBSCRIPTS = \
-	vis-plugin-scatterchart.tb \
-	vis-plugin-piechart.tb \
-	vis-plugin-graph.tb \
-	vis-plugin-barchart.tb
+	vis-plugin-charts.tb \
 
 EXTRA_DIST = \
 	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) 
