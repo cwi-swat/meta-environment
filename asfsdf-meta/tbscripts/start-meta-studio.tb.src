@@ -13,6 +13,27 @@
 
 /* visualizations */
 #include <start-vis.tb> 
+#include <vis-plugin-table.tb>
+#include <vis-plugin-charts.tb>
+#include <vis-plugin-graph.tb>
+#include <vis-plugin-csv.tb>
+
+/**
+ * This process is used to configure which plugins to load
+ * The vis-plugins are loaded by their starter function
+ * and initiated, afterward they connect back to the VPCP(rec-connect)
+ * and represent themselves.
+ *
+ * @name Visualization Plugin Connection Process Starter
+ * @author Arjen van Schie
+ */
+process StartVisPlugin is
+   StartVisPluginTable()
+ . StartVisPluginCsvExport()   
+ . StartVisPluginCharts()
+ . StartVisPluginGraph()
+
+toolbus(StartVisPlugin)
 
 process InitializeASFSDFMetaEnvironment is
 let
