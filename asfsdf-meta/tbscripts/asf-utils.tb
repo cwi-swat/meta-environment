@@ -345,7 +345,7 @@ in
      * possibly including the get-imports tool. 
      */
       MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
-      . NormalizeEquations(ModuleId, Equations, NormalizedEquations?)
+      . NormalizeEquations(CurModule, Equations, NormalizedEquations?)
       . RenameEquations(Modulename, Imports, NormalizedEquations, RenamedEquations?)
       . Specification := join(Specification, RenamedEquations)
       . MM-SetAttribute(CurModule, ASF_NAMESPACE, "status", complete)
