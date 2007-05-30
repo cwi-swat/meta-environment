@@ -48,7 +48,7 @@ public class CsvExportVisualizationWindow extends VisualizationPluginWindow {
 	
 	/**
 	 * Exports the loaded RTuple to a CSV file
-	 * @param name of the the CSV output will be written to
+	 * @param fileName The name of the the CSV output will be written to
 	 * @author Antoine Savelkoul
 	 * @author Chris Woolderink
 	 * @date   16-03-2007    

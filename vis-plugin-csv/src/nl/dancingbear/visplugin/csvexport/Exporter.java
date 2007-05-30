@@ -100,7 +100,7 @@ public class Exporter {
     /**
  	 * Writes the data types as headers to the CvsWriter
      * @param columnTypes column types information that will be used as headers
-	 * @param csvWriter the CSV writer to produce the output
+	 * @param writer The CSV writer to produce the output
 	 * @author Antoine Savelkoul
  	 * @author Chris Woolderink
  	 * @date 13-03-2007

@@ -28,7 +28,7 @@ public class CsvExportControllerTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 			
-		m_factory = (PureFactory)VisualizationFactorySingleton.getPureFactoryInstance();
+		m_factory = VisualizationFactorySingleton.getPureFactoryInstance();
         m_tableVisualizationController = new CsvExportController();
         m_tableVisualizationController.initPluginController(m_factory);
 	}
@@ -88,8 +88,8 @@ public class CsvExportControllerTest extends TestCase {
      * @date    9-3-2007
      */
     public void testIsTypeSupported() {
-        ATerm resultTrue = m_factory.make("snd-value(vp-type-supported(<bool>))", true);
-        ATerm resultFalse = m_factory.make("snd-value(vp-type-supported(<bool>))", false);
+        ATerm resultTrue = m_factory.make("snd-value(vp-type-supported(<bool>))", new Boolean(true));
+        ATerm resultFalse = m_factory.make("snd-value(vp-type-supported(<bool>))", new Boolean(false));
         
         // Should succeed
         assertEquals(m_tableVisualizationController.vpIsTypeSupported(makeATerm("relation([str])")), resultTrue);               

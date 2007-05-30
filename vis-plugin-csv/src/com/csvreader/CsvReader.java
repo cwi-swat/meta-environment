@@ -484,27 +484,27 @@ public class CsvReader {
 
 		if (headersHolder.Headers == null) {
 			return null;
-		} else {
-			// use clone here to prevent the outside code from
-			// setting values on the array directly, which would
-			// throw off the index lookup based on header name
-			String[] clone = new String[headersHolder.Length];
-			System.arraycopy(headersHolder.Headers, 0, clone, 0,
-					headersHolder.Length);
-			return clone;
 		}
+		
+		// use clone here to prevent the outside code from
+		// setting values on the array directly, which would
+		// throw off the index lookup based on header name
+		String[] clone = new String[headersHolder.Length];
+		System.arraycopy(headersHolder.Headers, 0, clone, 0, headersHolder.Length);
+		
+		return clone;
 	}
 
 	public void setHeaders(String[] headers) {
 		headersHolder.Headers = headers;
 
 		headersHolder.IndexByName.clear();
-
-		if (headers != null) {
-			headersHolder.Length = headers.length;
-		} else {
-			headersHolder.Length = 0;
+		
+		if(headers == null){
+			return;
 		}
+		
+		headersHolder.Length = headers.length;
 
 		// use headersHolder.Length here in case headers is null
 		for (int i = 0; i < headersHolder.Length; i++) {
@@ -533,12 +533,12 @@ public class CsvReader {
 	 */
 	public String get(int columnIndex) throws IOException {
 		checkClosed();
-
-		if (columnIndex > -1 && columnIndex < columnsCount) {
-			return values[columnIndex];
-		} else {
+		
+		if(columnIndex < 0 || columnIndex >= columnsCount){
 			return "";
 		}
+
+		return values[columnIndex];
 	}
 
 	/**
@@ -1263,28 +1263,21 @@ public class CsvReader {
 	public String getHeader(int columnIndex) throws IOException {
 		checkClosed();
 
-		// check to see if we have read the header record yet
-
-		// check to see if the column index is within the bounds
-		// of our header array
-
-		if (columnIndex > -1 && columnIndex < headersHolder.Length) {
-			// return the processed header data for this column
-
-			return headersHolder.Headers[columnIndex];
-		} else {
+		if(columnIndex < 0 || columnIndex >= headersHolder.Length){
 			return "";
 		}
+		
+		return headersHolder.Headers[columnIndex];
 	}
 
 	public boolean isQualified(int columnIndex) throws IOException {
 		checkClosed();
-
-		if (columnIndex < columnsCount && columnIndex > -1) {
-			return isQualified[columnIndex];
-		} else {
+		
+		if (columnIndex < 0 || columnIndex >= columnsCount) {
 			return false;
 		}
+		
+		return isQualified[columnIndex];
 	}
 
 	/**
@@ -1418,13 +1411,8 @@ public class CsvReader {
 
 		dataBuffer.ColumnStart = dataBuffer.Position + 1;
 	}
-
-	/**
-	 * @exception IOException
-	 *                Thrown if an error occurs while reading data from the
-	 *                source stream.
-	 */
-	private void endRecord() throws IOException {
+	
+	private void endRecord() {
 		// this flag is used as a loop exit condition
 		// during parsing
 
@@ -1447,12 +1435,12 @@ public class CsvReader {
 		checkClosed();
 
 		Object indexValue = headersHolder.IndexByName.get(headerName);
-
-		if (indexValue != null) {
-			return ((Integer) indexValue).intValue();
-		} else {
+		
+		if(indexValue == null){
 			return -1;
 		}
+		
+		return ((Integer) indexValue).intValue();
 	}
 
 	/**
@@ -1751,12 +1739,12 @@ public class CsvReader {
 
 		public int Length;
 
-		public HashMap IndexByName;
+		public HashMap<String, Integer> IndexByName;
 
 		public HeadersHolder() {
 			Headers = null;
 			Length = 0;
-			IndexByName = new HashMap();
+			IndexByName = new HashMap<String, Integer>();
 		}
 	}
 
