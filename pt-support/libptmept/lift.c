@@ -80,7 +80,9 @@ static PTPT_Symbol lookupSymbol(PT_Symbol symbol)
 
 static void storeATerm(ATerm trm, PTPT_ATerm lifted) 
 {
-  ATtablePut(liftCache, trm, PTPT_ATermToTerm(lifted));
+  if (liftCache) {
+    ATtablePut(liftCache, trm, PTPT_ATermToTerm(lifted));
+  }
 
   if (lowerCache) {
     ATtablePut(lowerCache, PTPT_ATermToTerm(lifted), trm);
