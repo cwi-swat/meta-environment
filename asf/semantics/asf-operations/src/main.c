@@ -19,11 +19,8 @@ static char *name;
 ATbool run_verbose;
 
 static char myname[] = "asfoperations";
-static char myversion[] = "1.0";
+static char myversion[] = "1.1";
 static char myarguments[] = "hVi:lo:";
-
-/* TODO: see if another solution can be found to optimize this */
-static ATermTable cache = NULL;
 
 /*}}}  */
 /*{{{  ATerm extract_equations(int cid, ATerm modules) */
@@ -82,16 +79,7 @@ ATerm normalize_module(int cid, ATerm module)
   ASF_ASFModule mod = ASF_getStartTopASFModule(start);
   ASF_ASFModule result;
 
-  if (cache == NULL) {
-    cache = ATtableCreate(1024, 75);
-  }
-
-  result = ASF_ASFModuleFromTerm(ATtableGet(cache, (ATerm) mod));
-
-  if (result == NULL) {
-    result = normalize(mod);
-    ATtablePut(cache, (ATerm) mod, (ATerm) result);
-  }
+  result = normalize(mod);
 
   assert(result != NULL);
 
