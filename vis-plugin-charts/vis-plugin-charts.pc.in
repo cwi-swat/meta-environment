@@ -1,14 +1,14 @@
 prefix=@prefix@
 
-Name: vis-plugins-prefuse
+Name: vis-plugin-charts
 Version: 1.0
 Description: 
 Requires: vis-base,vis-plugin,aterm-java,config-support,toolbus,toolbus-java-adapter,meta-studio,rstore-container,tunit,relation-stores,shared-objects,JJTraveler
 Maintainers=dancingbear
-JarFile=vis-plugins-prefuse.jar
+JarFile=vis-plugin-charts.jar
 Jars=${prefix}/share/${JarFile}
 LocalJars=lib/jcommon-1.0.8.jar:lib/log4j-1.2.14.jar:lib/jfreechart-1.0.4.jar:lib/prefuse.jar
 MainClass=nl.dancingbear.visplugin.PluginLoader
-Packages=nl,nl.dancingbear,nl.dancingbear.visplugin,nl.dancingbear.visplugin.scatterchartplugin,nl.dancingbear.visplugin.piechartplugin,nl.dancingbear.visplugin.linechartplugin,nl.dancingbear.visplugin.graphplugin,nl.dancingbear.visplugin.barchartplugin
+Packages=nl,nl.dancingbear,nl.dancingbear.visplugin,nl.dancingbear.visplugin.scatterchartplugin,nl.dancingbear.visplugin.piechartplugin,nl.dancingbear.visplugin.linechartplugin,nl.dancingbear.visplugin.barchartplugin
 TestClass=
-ToolBusFlags=-I${prefix}/share/vis-plugins-prefuse
+ToolBusFlags=-I${prefix}/share/vis-plugin-charts

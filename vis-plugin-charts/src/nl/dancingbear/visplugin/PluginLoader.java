@@ -4,7 +4,6 @@ import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
 import nl.dancingbear.visplugin.barchartplugin.BarChartVisualizationController;
-import nl.dancingbear.visplugin.graphplugin.GraphVisualizationController;
 import nl.dancingbear.visplugin.linechartplugin.LineChartVisualizationController;
 import nl.dancingbear.visplugin.piechartplugin.PieChartVisualizationController;
 import nl.dancingbear.visplugin.scatterchartplugin.ScatterChartVisualizationController;
@@ -41,10 +40,6 @@ public class PluginLoader extends DefaultStudioPlugin{
 		BarChartVisualizationController barChartVisualizationController = new BarChartVisualizationController();
 		barChartVisualizationController.initStudioPlugin(studio);
 		barChartVisualizationController.initPluginController(pureFactory);
-		
-		GraphVisualizationController graphVisualizationController = new GraphVisualizationController();
-		graphVisualizationController.initStudioPlugin(studio);
-		graphVisualizationController.initPluginController(pureFactory);
 		
 		LineChartVisualizationController lineChartVisualizationController = new LineChartVisualizationController();
 		lineChartVisualizationController.initStudioPlugin(studio);
