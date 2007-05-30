@@ -13,6 +13,7 @@
 #include <asfsdfchecker.idef>
 
 #define ASF_TREE_CACHE "asf-annotated-tree"
+#define ASF_NORMALIZED_TREE_CACHE "asf-normalized-tree"
 
 /* RegisterASFModule forges the link between an ASF and an SDF module.
  * It reuses the same module Id, and constructs an ASF path from
@@ -275,11 +276,44 @@ in
   . JobDone("Dumping equations...")
 endlet
 
+toolbus(InitCache(ASF_NORMALIZED_TREE_CACHE))
+toolbus(ClearCacheHandler(ASF_NORMALIZED_TREE_CACHE, ASF_NAMESPACE, "status", <term>,edited))
+toolbus(ClearCacheHandler(ASF_NORMALIZED_TREE_CACHE, SDF_NAMESPACE, "status", <term>,complete))
+
+process NormalizeEquations(ModuleId : term, Equations: term, Result : term?) is
+let
+  Tree : term
+in
+  Tree := UNDEFINED
+  . GetCachedValue(ASF_NORMALIZED_TREE_CACHE, ModuleId, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    Result := Tree
+  else
+    AddJob("Normalizing ...")
+    . snd-msg(normalize-module(Equations)) 
+    . rec-msg(normalize-module-result(Tree?))
+    . PutCachedValue(ASF_NORMALIZED_TREE_CACHE, ModuleId, Tree)
+    . Result := Tree
+    . JobDone("Normalizing ...")
+  fi 
+endlet
+
+process RenameEquations(Modulename: str, Imports : list, Equations : term,
+                        Result : term?)
+is
+  AddJob("Renaming ...")
+  . snd-msg(sr-rename-module(Imports, Modulename, Equations))
+  . rec-msg(sr-renamed-module(Result?))
+  . JobDone("Renaming ...")
+
 process GetSpecification(ModuleId: module-id, Result: term?) is
 let
   Error: term,
   CurModule: module-id,
   Equations: term,
+  NormalizedEquations: term,
+  RenamedEquations: term,
   Imports: list,
   Modulename: str,
   Modules: list,
@@ -311,15 +345,9 @@ in
      * possibly including the get-imports tool. 
      */
       MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
-      . AddJob("Normalizing ...")
-      . snd-msg(normalize-module(Equations)) 
-      . rec-msg(normalize-module-result(Equations?))
-      . JobDone("Normalizing ...")
-      . AddJob("Renaming ...")
-      . snd-msg(sr-rename-module(Imports, Modulename, Equations))
-      . rec-msg(sr-renamed-module(Equations?))
-      . JobDone("Renaming ...")
-      . Specification := join(Specification, Equations)
+      . NormalizeEquations(ModuleId, Equations, NormalizedEquations?)
+      . RenameEquations(Modulename, Imports, NormalizedEquations, RenamedEquations?)
+      . Specification := join(Specification, RenamedEquations)
       . MM-SetAttribute(CurModule, ASF_NAMESPACE, "status", complete)
     fi
     . Modules := next(Modules)
