@@ -93,7 +93,12 @@ static void storeATerm(ATerm trm, PTPT_ATerm lifted)
 
 static PTPT_ATerm lookupATerm(ATerm trm)
 {
-  return PTPT_ATermFromTerm(ATtableGet(liftCache, trm));
+  if (liftCache != NULL) {
+    return PTPT_ATermFromTerm(ATtableGet(liftCache, trm));
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
