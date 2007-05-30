@@ -510,8 +510,7 @@ in
       rec-msg(cm-extension-editor(Extension, EditorAction?))
       . 
       (
-        printf("warning: process %s not found, so using anonymous editor for %s\n", EditorAction, Path)
-        . EditAnonymousLocation(Path, Area)
+        EditAnonymousLocation(Path, Area)
         +>
         EditorAction(Path, Area)
       )
