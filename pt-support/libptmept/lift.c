@@ -26,7 +26,9 @@ static void initGlobals(ATermTable myliftCache, ATermTable myLowerCache)
 
 static void storeTree(PT_Tree tree, PTPT_Tree lifted) 
 {
-  ATtablePut(liftCache, PT_TreeToTerm(tree), PTPT_TreeToTerm(lifted));
+  if (liftCache) {
+    ATtablePut(liftCache, PT_TreeToTerm(tree), PTPT_TreeToTerm(lifted));
+  }
 
   if (lowerCache) {
     ATtablePut(lowerCache, PTPT_TreeToTerm(lifted), PT_TreeToTerm(tree));
