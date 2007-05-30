@@ -1,5 +1,9 @@
 # $Id$
 
+Wed May 30 11:31:57 CEST 2007 <jurgenv@cwi.nl>
+ * lib/lift.c: added parameter for lifting cache, such that the user can
+   provide her own cache for memoization. This is to prevent memory leaks.
+
 Thu Mar 15 15:15:16 CET 2007 <{economop,kooiker}@cwi.nl>
  * lib/*: regenerated api fixing macro bug
  * lib/{lift,lower}.c: fix errors introduced by missing cilit definition and
