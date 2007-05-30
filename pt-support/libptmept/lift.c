@@ -38,7 +38,12 @@ static void storeTree(PT_Tree tree, PTPT_Tree lifted)
 
 static PTPT_Tree lookupTree(PT_Tree tree)
 {
-  return PTPT_TreeFromTerm(ATtableGet(liftCache, PT_TreeToTerm(tree)));
+  if (liftCache != NULL) {
+    return PTPT_TreeFromTerm(ATtableGet(liftCache, PT_TreeToTerm(tree)));
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
@@ -58,7 +63,12 @@ static void storeSymbol(PT_Symbol symbol, PTPT_Symbol lifted)
 
 static PTPT_Symbol lookupSymbol(PT_Symbol symbol)
 {
-  return PTPT_SymbolFromTerm(ATtableGet(liftCache, PT_SymbolToTerm(symbol)));
+  if (liftCache != NULL) {
+    return PTPT_SymbolFromTerm(ATtableGet(liftCache, PT_SymbolToTerm(symbol)));
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
