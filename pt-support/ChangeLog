@@ -1,5 +1,9 @@
 $Id$
 
+Wed May 30 11:23:43 CEST 2007 <jurgenv@cwi.nl>
+ * libptmept/lift.c: to prevent memory leaks, the user of the lift function
+   has to provide her own ATermTable for memoization.
+
 Tue Apr 17 16:47:20 CEST 2007 <jurgenv@cwi.nl>
  * libmept/MEPT-flatten.c: major bug in flattener solved. This makes
    the trunk quite unstable. There may be unforseen side-effects of this

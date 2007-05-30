@@ -9,7 +9,7 @@ PTPT_Tree PTPT_liftTree(PT_Tree pt);
 PTPT_ATerm PTPT_liftATerm(ATerm trm);
 
 /* liftTreeCache fills a cache that lowerTreeCache can reuse */
-PTPT_Tree PTPT_liftTreeCache(PT_Tree pt, ATermTable lowerCache);
+PTPT_Tree PTPT_liftTreeCache(PT_Tree pt, ATermTable liftCache, ATermTable lowerCache);
 
 PT_ParseTree PTPT_lowerParseTree(PTPT_ParseTree pt);
 PT_Tree PTPT_lowerTree(PTPT_Tree pt);

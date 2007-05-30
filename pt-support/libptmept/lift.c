@@ -10,14 +10,14 @@ static ATermTable lowerCache = NULL;
 
 /*{{{  static void initGlobals()  */
 
-static void initGlobals(ATermTable myLowerCache) 
+static void initGlobals(ATermTable myliftCache, ATermTable myLowerCache) 
 {
   lowerCache = myLowerCache;
+  liftCache = myliftCache;
 
   if (e == NULL) {
     PTPT_protectOptLayout(&e);
     e = PTPT_makeOptLayoutAbsent();
-    liftCache = ATtableCreate(1024, 75);
   }
 }
 
@@ -278,7 +278,7 @@ PTPT_ATerm PTPT_liftATerm(ATerm term)
   ATerm annos = AT_getAnnotations(term);
   PTPT_Annotation ann = NULL;
 
-  initGlobals(NULL);
+  initGlobals(NULL, NULL);
 
   if (ATgetType(term) != AT_INT) {
     result = lookupATerm(term);
@@ -674,14 +674,15 @@ static PTPT_Args PTPT_liftArgs(PT_Args args)
 
 /*{{{  PTPT_Tree PTPT_liftTreeCache(PT_Tree pt, ATermTable myLowerCache) */
 
-PTPT_Tree PTPT_liftTreeCache(PT_Tree pt, ATermTable myLowerCache)
+PTPT_Tree PTPT_liftTreeCache(PT_Tree pt, ATermTable myLiftCache, ATermTable myLowerCache)
 {
   PTPT_Tree result;
 
-  initGlobals(myLowerCache);
+  initGlobals(myLiftCache, myLowerCache);
 
   result = PTPT_liftTreeRec(pt);
 
+  liftCache = NULL;
   lowerCache = NULL;
 
   return result;
@@ -694,7 +695,7 @@ PTPT_Tree PTPT_liftTree(PT_Tree pt)
 {
   PTPT_Tree result;
 
-  initGlobals(NULL);
+  initGlobals(NULL, NULL);
 
   result = PTPT_liftTreeRec(pt);
 
@@ -763,7 +764,7 @@ PTPT_ParseTree PTPT_liftParseTree(PT_ParseTree pt)
   PTPT_ParseTree result;
   int ambCnt = PT_getParseTreeAmbCnt(pt);
 
-  initGlobals(NULL);
+  initGlobals(NULL, NULL);
 
   result = PTPT_makeParseTreeTop(e,e,
 				 (PTPT_Tree) PTPT_liftTreeRec(tree),
