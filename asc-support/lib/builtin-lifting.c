@@ -2,6 +2,7 @@
 #include "builtin-common.h"
 
 static ATermTable lowerCache = NULL;
+static ATermTable liftCache = NULL;
 
 /*{{{  static PT_Tree liftToTree(PT_Tree input)  */
 
@@ -10,8 +11,11 @@ static PT_Tree liftToTree(PT_Tree input)
   if (lowerCache == NULL) {
     lowerCache = ATtableCreate(1024,75);
   }
+  if (liftCache == NULL) {
+    liftCache = ATtableCreate(1024,75);
+  }
 
-  return (PT_Tree) PTPT_liftTreeCache(input, lowerCache);
+  return (PT_Tree) PTPT_liftTreeCache(input, liftCache, lowerCache);
 }
 
 /*}}}  */
