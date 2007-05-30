@@ -1,27 +1,17 @@
 GENERATED_TBSCRIPTS = \
-	fbi.tb \
-	fbmp.tb \
-	vis-plugin-table.tb \
 	vis-plugin-scatterchart.tb \
 	vis-plugin-piechart.tb \
 	vis-plugin-graph.tb \
-	vis-plugin-csv.tb \
-	vis-plugin-barchart.tb \
-	vpcp.tb \
-	vpcp-config.tb
+	vis-plugin-barchart.tb
 
 EXTRA_DIST = \
-	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) \
-	start-vis.tb \
-	fbmp-open-location.tb 
+	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) 
 
 CLEANFILES = \
 	$(GENERATED_TBSCRIPTS) 
 
 pkgdata_DATA = \
-	$(GENERATED_TBSCRIPTS) \
-        start-vis.tb \
-        fbmp-open-location.tb
+	$(GENERATED_TBSCRIPTS)
 
 %.tb : %.tb.src Makefile
 	sed "s@__PKGDATA__@${datadir}@g; \

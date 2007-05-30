@@ -4,12 +4,10 @@ import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
 import nl.dancingbear.visplugin.barchartplugin.BarChartVisualizationController;
-import nl.dancingbear.visplugin.csvexport.CsvExportController;
 import nl.dancingbear.visplugin.graphplugin.GraphVisualizationController;
 import nl.dancingbear.visplugin.linechartplugin.LineChartVisualizationController;
 import nl.dancingbear.visplugin.piechartplugin.PieChartVisualizationController;
 import nl.dancingbear.visplugin.scatterchartplugin.ScatterChartVisualizationController;
-import nl.dancingbear.visplugin.table.TableVisualizationController;
 import aterm.pure.PureFactory;
 
 /**
@@ -59,13 +57,5 @@ public class PluginLoader extends DefaultStudioPlugin{
 		ScatterChartVisualizationController scatterChartVisualizationController = new ScatterChartVisualizationController();
 		scatterChartVisualizationController.initStudioPlugin(studio);
 		scatterChartVisualizationController.initPluginController(pureFactory);
-		
-		TableVisualizationController tableVisualizationController = new TableVisualizationController();
-		tableVisualizationController.initStudioPlugin(studio);
-		tableVisualizationController.initPluginController(pureFactory);
-		
-		CsvExportController csvExportController = new CsvExportController();
-		csvExportController.initStudioPlugin(studio);
-		csvExportController.initPluginController(pureFactory);
 	}
 }
