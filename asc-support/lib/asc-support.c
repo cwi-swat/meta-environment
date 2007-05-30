@@ -149,10 +149,10 @@ ATerm innermost(PT_Tree tree)
   if (!keep_layout && PT_isTreeLayout(tree)) {
     result = NULL;
   }
-  else if (PT_isTreeLit(tree)) {
+  else if (!keep_layout && PT_isTreeLit(tree)) {
     result = NULL;
   }
-  else if (PT_isTreeCilit(tree)) {
+  else if (!keep_layout && PT_isTreeCilit(tree)) {
     result = NULL;
   }
   else if (PT_isTreeAppl(tree)) {

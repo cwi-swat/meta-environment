@@ -1,5 +1,9 @@
 $Id$
 
+Wed May 30 10:31:30 CEST 2007 <jurgenv@cwi.nl>
+ * lib/asc-support.c: prepared with small modifications for rewriting
+   with layout.
+
 Thu Apr  5 18:18:05 CEST 2007 <jurgenv@cwi.nl>
  * lib/Makefile.am: added asc-options.h to include_HEADERS to
    fix distcheck.

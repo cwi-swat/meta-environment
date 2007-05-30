@@ -154,14 +154,13 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     PT_Symbol symbol = PT_getSymbolsSymbolAt(args,i);
     PT_Tree tree = NULL;
 
-
     if (!keep_layout && PT_isOptLayoutSymbol(symbol)) {
       tree = defaultLayout;
     }
-    else if (PT_isSymbolLit(symbol)) {
+    else if (!keep_layout && PT_isSymbolLit(symbol)) {
       tree = restoreLiteral(symbol);
     }
-    else if (PT_isSymbolCilit(symbol)) {
+    else if (!keep_layout && PT_isSymbolCilit(symbol)) {
       tree = restoreCiliteral(symbol);
     }
     else { 
