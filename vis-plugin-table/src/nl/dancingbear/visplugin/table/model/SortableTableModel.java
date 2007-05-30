@@ -234,7 +234,7 @@ public class SortableTableModel extends DefaultTableModel {
         if (element.isStr()) {
             value = element.getStrCon();
         } else if (element.isInt()) {
-            value = element.getInteger().getNatCon();
+            value = new Integer(element.getInteger().getNatCon());
         } else if (element.isBool()) {
             value = element.getBoolCon();
         } else if (element.isLoc()) {

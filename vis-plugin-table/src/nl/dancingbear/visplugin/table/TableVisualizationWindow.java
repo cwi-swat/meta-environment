@@ -73,11 +73,11 @@ public class TableVisualizationWindow extends VisualizationPluginWindow {
             // create the buttons for location columns
             for (int columnNum = 0; columnNum < m_model.getColumnCount(); columnNum++) {
                 TableColumn modelColumn = columnModel.getColumn(columnNum);
-                modelColumn.setIdentifier(columnNum);
+                modelColumn.setIdentifier(new Integer(columnNum));
 
                 if (m_model.getValueAt(0, columnNum) instanceof Location) {
                     LocationButtonRenderer locRenderer = new LocationButtonRenderer();
-                    TableColumn tableColumn = m_table.getColumn(columnNum);
+                    TableColumn tableColumn = m_table.getColumn(new Integer(columnNum));
                     tableColumn.setCellRenderer(locRenderer);
                 }
             }

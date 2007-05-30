@@ -82,8 +82,8 @@ public class TableVisualizationControllerTest extends TestCase {
      */
     public void testIsTypeSupported() {
         PureFactory pureFactory = VisualizationFactorySingleton.getPureFactoryInstance();
-        ATerm resultTrue = pureFactory.make("snd-value(vp-type-supported(<bool>))", true);
-        ATerm resultFalse = pureFactory.make("snd-value(vp-type-supported(<bool>))", false);
+        ATerm resultTrue = pureFactory.make("snd-value(vp-type-supported(<bool>))", new Boolean(true));
+        ATerm resultFalse = pureFactory.make("snd-value(vp-type-supported(<bool>))", new Boolean(false));
 
         // Should succeed
         assertEquals(m_tableVisualizationController.vpIsTypeSupported(makeATerm("relation([str])")), resultTrue);

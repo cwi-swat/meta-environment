@@ -60,8 +60,8 @@ public class TableSorter {
      * at (column, row1) and (column, row2).
      *
      * @param column the column to sort on
-     * @param num1 The numbers to compare
-     * @param num2 The numbers to compare
+     * @param row1 The numbers to compare
+     * @param row2 The numbers to compare
      * @author Anton Gerdessen
      * @date 12-03-2007
      */
@@ -81,7 +81,7 @@ public class TableSorter {
 
         // Determine the data type used in the column and call the compare for that type.
         // Default is the string compareTo.
-        Class type = model.getColumnClass(column);
+        Class<?> type = model.getColumnClass(column);
         if (type.getSuperclass() == Number.class) {
             return compare((Number) o1, (Number) o2);
         } else if (type == String.class) {
