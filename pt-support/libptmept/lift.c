@@ -53,7 +53,9 @@ static PTPT_Tree lookupTree(PT_Tree tree)
 
 static void storeSymbol(PT_Symbol symbol, PTPT_Symbol lifted) 
 {
-  ATtablePut(liftCache, PT_SymbolToTerm(symbol), PTPT_SymbolToTerm(lifted));
+  if (liftCache) {
+    ATtablePut(liftCache, PT_SymbolToTerm(symbol), PTPT_SymbolToTerm(lifted));
+  }
 
   if (lowerCache) {
     ATtablePut(lowerCache, PTPT_SymbolToTerm(lifted), PT_SymbolToTerm(symbol));
