@@ -1,21 +1,22 @@
 #include <PTMEPT-utils.h>
 #include "builtin-common.h"
 
-static ATermTable lowerCache = NULL;
-static ATermTable liftCache = NULL;
+static ATermTable BuiltinLowerCache = NULL;
+static ATermTable BuiltinLiftCache = NULL;
 
 /*{{{  static PT_Tree liftToTree(PT_Tree input)  */
 
 static PT_Tree liftToTree(PT_Tree input) 
 {
-  if (lowerCache == NULL) {
-    lowerCache = ATtableCreate(1024,75);
+  if (BuiltinLowerCache == NULL) {
+    BuiltinLowerCache = ATtableCreate(1024,75);
   }
-  if (liftCache == NULL) {
-    liftCache = ATtableCreate(1024,75);
+  if (BuiltinLiftCache == NULL) {
+    BuiltinLiftCache = ATtableCreate(1024,75);
   }
 
-  return (PT_Tree) PTPT_liftTreeCache(input, liftCache, lowerCache);
+  return (PT_Tree) PTPT_liftTreeCache(input, 
+				      BuiltinLiftCache, BuiltinLowerCache);
 }
 
 /*}}}  */
@@ -43,7 +44,10 @@ PT_Tree ASC_lift_to_tree(ATerm type, ATerm input)
 
 static PT_Tree lowerFromTree(PT_Tree input)
 {
-  return PTPT_lowerTreeCache((PTPT_Tree) input, lowerCache);
+  if (BuiltinLowerCache == NULL) {
+    BuiltinLowerCache = ATtableCreate(1024,75);
+  }
+  return PTPT_lowerTreeCache((PTPT_Tree) input, BuiltinLowerCache);
 }
 
 /*}}}  */
