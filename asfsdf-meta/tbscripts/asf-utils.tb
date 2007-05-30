@@ -291,8 +291,8 @@ in
     Result := Tree
   else
     AddJob("Normalizing ...")
-    . snd-msg(normalize-module(Equations)) 
-    . rec-msg(normalize-module-result(Tree?))
+    . snd-msg(ao-normalize-module(Equations)) 
+    . rec-msg(ao-normalize-module-result(Tree?))
     . PutCachedValue(ASF_NORMALIZED_TREE_CACHE, ModuleId, Tree)
     . Result := Tree
     . JobDone("Normalizing ...")
@@ -363,16 +363,17 @@ in
       Result := Specification
     fi
   )
+  . snd-msg(ao-restart)
   . JobDone("Collecting and normalizing specification")
 endlet
 
 process GetSpecificationEquations(Specification: term, Equations: term?) is
-  snd-msg(extract-equations(Specification))
-  . rec-msg(extract-equations-result(Equations?))
+  snd-msg(ao-extract-equations(Specification))
+  . rec-msg(ao-extract-equations-result(Equations?))
 
 process GetSpecificationTests(Specification: term, Tests: term?) is
-  snd-msg(extract-tests(Specification))
-  . rec-msg(extract-tests-result(Tests?))
+  snd-msg(ao-extract-tests(Specification))
+  . rec-msg(ao-extract-tests-result(Tests?))
 
 process TestAsfSpecification(ModuleId: module-id, Debugging: term) is
 let

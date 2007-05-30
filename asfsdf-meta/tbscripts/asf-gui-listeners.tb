@@ -33,6 +33,7 @@ in
          . ComputeCanonicalLanguagename(Modulename, Languagename?)
          . Tip := concat(Info, concat(" using the equations of ", FeatureModulename))
 	 . Menu := quote(action([description(term-editor(Languagename),menu([label(MenuName),label(Feature)],Tip))],Action))
+         . snd-msg(cm-remove-system-property(Menu))
 	 . snd-msg(cm-add-system-property(Menu))
          . create(LanguageFeatureRemoveListener(ModuleId, Menu), Pid?)
       else

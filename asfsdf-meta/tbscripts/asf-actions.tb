@@ -9,6 +9,7 @@
 #include <sdf-utils.tb>
 #include <sdf-module-utils.tb>
 #include <lower-rstore.idef>
+#include <io-utils.tb>
 
 process PrettyPrintSdfAction(EditorId : session-id) is
 let
@@ -361,15 +362,12 @@ endlet
 process CompileModuleAction(ModuleId : module-id) is
 let
   Cancel: bool,
-  Path : str
+  Path : str,
+  NewPath : str
 in
-  PromptForFileWithExtension("Target C file", [], ".c", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    CompileModule(ModuleId, Path)
-  fi
+  GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . ReplaceExtension(Path, ".c", NewPath?) 
+  . CompileModule(ModuleId, NewPath)
 endlet
 
 process RunAsfTestsAction(ModuleId : module-id) is
