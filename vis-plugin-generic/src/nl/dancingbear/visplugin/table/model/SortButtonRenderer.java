@@ -25,7 +25,7 @@ public class SortButtonRenderer extends JButton implements TableCellRenderer {
     public static final int ASC = 1;
     public static final int DEC = 2;
 
-    private Hashtable state;
+    private Hashtable<Integer, Integer> state;
     private JButton ascButton;
     private JButton decButton;
 
@@ -36,7 +36,7 @@ public class SortButtonRenderer extends JButton implements TableCellRenderer {
      * @date 12-03-2007
      */
     public SortButtonRenderer() {
-        state = new Hashtable();
+        state = new Hashtable<Integer, Integer>();
 
         // Create the ascending button with icon.
         ascButton = new JButton();
@@ -123,7 +123,7 @@ public class SortButtonRenderer extends JButton implements TableCellRenderer {
     /**
      * Retrieve the current state for a given column.
      *
-     * @param column The column for which to retrieve the sort order.
+     * @param col The column for which to retrieve the sort order.
      * @author Anton Gerdessen
      * @date 12-03-2007
      */

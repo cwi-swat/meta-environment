@@ -109,14 +109,24 @@ public class SortableTableModelExporterTest extends TestCase {
      */
     private String readFile(String filename) {
         StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader in = null;
         try {
-            BufferedReader in = new BufferedReader(new FileReader(filename));
+            in = new BufferedReader(new FileReader(filename));
             String line;
             while ((line = in.readLine()) != null) {
                 stringBuilder.append(line);
             }
             in.close();
         } catch (IOException exception) {
+        	System.err.println("Unable to read from file with name: "+filename);
+        }finally{
+        	if(in != null){
+        		try{
+        			in.close();
+        		}catch(IOException ioex){
+        			System.err.println("A fatal error occured: Unable to close stream.");
+        		}
+        	}
         }
         return stringBuilder.toString();
     }
