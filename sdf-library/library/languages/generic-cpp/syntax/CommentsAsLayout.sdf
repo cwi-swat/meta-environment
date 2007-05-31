@@ -6,5 +6,5 @@ exports
 lexical syntax
   Comment -> LAYOUT
 
-lexical restrictions
+context-free restrictions
 LAYOUT? -/- [\/].[\*]

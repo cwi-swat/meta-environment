@@ -17,7 +17,7 @@ CharacterConstant 			-> Expression {category("Constant")}
 FloatingPointConstant 			-> Expression {category("Constant")}
 StringConstant 				-> Expression {category("Constant")}
 "(" Expression ")" 			-> Expression {bracket}
-"sizeof" "(" TypeName ")"               -> Expression 
+"sizeof" "(" TypeName ")"                    -> Expression 
 
 context-free restrictions
 "&" -/- [\&]
