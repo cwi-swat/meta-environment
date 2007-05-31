@@ -508,6 +508,7 @@ in
     .
     (
       rec-msg(cm-extension-editor(Extension, EditorAction?))
+      . printf("Editor for %s is %s\n", Extension, EditorAction)
       . 
       (
         EditAnonymousLocation(Path, Area)
