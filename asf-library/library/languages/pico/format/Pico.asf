@@ -1,34 +1,73 @@
+%% This example formatter uses allmost all features of Box.
+%% The notation used for all to- and from- box quoting is:
+%%    "[" X "]"   -> Box {to-box}
+%%    "<" Box ">" -> X   {from-box}
+%%
+%% For lists, this specification uses the following quoting:
+%%    "[" {X ";"}+ "]" -> Box* {to-box}
+%% Such that the element of such a list are spliced into the
+%% surrounding Box for further processing.
+%%
+%% The layout quotation is defined as:
+%% "_" "_" -> Box {layout-to-box}
+%% Which is used to conserve comments at selected locations.
+%%
 equations
 
+%% A Pico program is formatted vertically, with indented blocks
+%% of declarations and statements. Statement lists are first
+%% grouped using the SL operator (each element is grouped with
+%% its following separator, by wrapping it with an H hs=0 [...]
+%% box. These H boxes are then spliced as children of a V box,
+%% so statement lists are layouted vertically.
+%% This rule preserves comments in three places.
 [program2box-0]
   begin C1 Decls C2 Statement* C3 end = 
     < V ["begin" _C1_
-                      V vs=2 [I [ [Decls] ] I [ _C2_ ]
-                              I [ [Statement*] ]]
+                      V vs=2 [I [[Decls]] I [ _C2_ ]
+                              I [ V [ SL op=H hs=0 [[Statement*]]] ]]
                    
                    _C3_ "end"]
      >
 
+%% Declarations use some advanced features of Box. The list of declarations
+%% is aligned using an A array box. The children of an A must be R row boxes,
+%% directly. Again, the SL operator is used to group elements of a separated
+%% list with their separators. Each element with their separator accounts for
+%% 4 elements: element,layout,separator,layout. So that accounts for 4 columns
+%% in the array. To be able to align the ":", we also need the variable name,
+%% the ":" and the variable type to be columns, the equation [idtype2box-0]
+%% replaces the element column with its three participants, making the total
+%% column count 6.
 [decls2box-0] 
   declare C1 IdType* C2 ; = 
-    < V ["declare" I [ _C1_ ] I [H hs=0 [ [IdType*] _C2_ ";"]]]
+    < V ["declare" I [ _C1_ ] I [H hs=0 [ A (r,l,l,l,l,l) [ SL op=R [[IdType*]]] _C2_ ";"]]]
     >
 
+%% The G group-by operator is used here with default group size 1, and no operator applied.
+%% The effect of a G operator is that its children are spliced into the surrounding Box.
+%% In this case, the surrounding box is the R row of [decls2box-0], so the children of the G
+%% will become a column each.
 [idtype2box-0]
-  PicoId : Type = < H [H hs=0 [ [PicoId] ":"] [Type]] >
+  PicoId : Type = < G [[PicoId] ":" [Type]] >
 
+%% Conditional statements are formatted vertically, and use indentation a lot. Notice the
+%% use of indentation on the comments too.
 [if2box-0]
   if Exp then C1 Statement*1 C2 else C3 Statement*2 C4 fi =
     < V [HV ["if" [Exp] "then"]
-                    V [I [_C1_] I [ [Statement*1] ] I [_C2_] ]
+                    V [I [_C1_] I [ V [ SL op=H hs=0 [[Statement*1]]] ] I [_C2_] ]
                   "else" 
-                    V [I [_C3_] I [ [Statement*2] ] I [_C4_] ] 
+                    V [I [_C3_] I [ V [ SL op=H hs=0 [[Statement*2]]] ] I [_C4_] ] 
                   "fi"]
     >
 
+%% The formatting of statements lists is repeated a number of times in this specification
+%% for simplicity's sake. However, for larger languages a little function would be
+%% adviced to prevent unnecessary cloning.
 [while2box-0]
   while Exp do C1 Statement* C2 od = 
     < V [HV ["while" [Exp] "do"] 
-              V [ I [_C1_] I [ [Statement*] ] I [ _C2_ ] ] 
+              V [ I [_C1_] I [ V [ SL op=H hs=0 [[Statement*]]] ] I [ _C2_ ] ] 
               "od"]
     >
