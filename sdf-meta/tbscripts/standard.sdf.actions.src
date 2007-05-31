@@ -58,7 +58,7 @@ configuration([
          "EditSyntaxAction"),
   action([description(module-popup, menu([label("Edit"), label("Term...")],"Open an editor for a term over this module"))],
          "EditTermAction"),
-  action([description(module-popup, menu([label("Analyze"),label("Metrics")],"Get metrics data from this definition and forward it to the fact browser"))],
+  action([description(module-popup, menu([label("Tools"),label("Browse SDF Facts")],"Get metrics data from this SDF definition and forward it to the fact browser"))],
          "ExtractSDFAction"),
   action([description(module-popup, menu([label("Export"),label("SDF Definition...")],"Export the full syntax definition of this module including all its imports"))],
          "DumpSdfDefinitionAction"),
