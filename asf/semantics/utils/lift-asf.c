@@ -88,7 +88,7 @@ int main (int argc, char **argv)
       module = ASF_lowerModule(module, NULL);
     }
     else {
-      module = ASF_liftModule(module, NULL);
+      module = ASF_liftModule(module, NULL, NULL);
     }
 
     out = (ATerm) PT_setParseTreeTree((PT_ParseTree) in, (PT_Tree) module);
@@ -100,7 +100,7 @@ int main (int argc, char **argv)
       list = ASF_lowerEquations(list, NULL);
     }
     else {
-      list = ASF_liftEquations(list, NULL);
+      list = ASF_liftEquations(list, NULL, NULL);
     }
 
     out = ASF_ASFConditionalEquationListToTerm(list);
