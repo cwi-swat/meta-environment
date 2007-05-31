@@ -23,11 +23,19 @@ equations
 %% This rule preserves comments in three places.
 [program2box-0]
   begin C1 Decls C2 Statement* C3 end = 
-    < V ["begin" _C1_
-                      V vs=2 [I [[Decls]] I [ _C2_ ]
-                              I [ V [ SL op=H hs=0 [[Statement*]]] ]]
-                   
-                   _C3_ "end"]
+    < V [
+        "begin"
+        _C1_
+        V vs=2 [
+               I [[Decls]]
+               I [_C2_]
+               I [ V [ 
+                     SL op=H hs=0 [[Statement*]]
+                     ]
+                 ]
+               ]
+        _C3_
+        "end"]
      >
 
 %% Declarations use some advanced features of Box. The list of declarations
@@ -41,7 +49,11 @@ equations
 %% column count 6.
 [decls2box-0] 
   declare C1 IdType* C2 ; = 
-    < V ["declare" I [ _C1_ ] I [H hs=0 [ A (r,l,l,l,l,l) [ SL op=R [[IdType*]]] _C2_ ";"]]]
+    < V [
+        "declare"
+        I [ _C1_ ]
+        I [H hs=0 [ A (r,l,l,l,l,l) [ SL op=R [[IdType*]]] _C2_ ";"]]
+        ]
     >
 
 %% The G group-by operator is used here with default group size 1, and no operator applied.
@@ -55,11 +67,27 @@ equations
 %% use of indentation on the comments too.
 [if2box-0]
   if Exp then C1 Statement*1 C2 else C3 Statement*2 C4 fi =
-    < V [HV ["if" [Exp] "then"]
-                    V [I [_C1_] I [ V [ SL op=H hs=0 [[Statement*1]]] ] I [_C2_] ]
-                  "else" 
-                    V [I [_C3_] I [ V [ SL op=H hs=0 [[Statement*2]]] ] I [_C4_] ] 
-                  "fi"]
+    < V [
+        HV ["if" [Exp] "then"]
+        V [
+          I [_C1_] 
+          I [ V [
+                SL op=H hs=0 [[Statement*1]]
+                ]
+            ] 
+          I [_C2_] 
+          ]
+        "else" 
+        V [ 
+          I [_C3_]
+          I [ V [
+                SL op=H hs=0 [[Statement*2]]
+                ]
+            ]
+          I [_C4_]
+          ] 
+        "fi"
+        ]
     >
 
 %% The formatting of statements lists is repeated a number of times in this specification
@@ -67,7 +95,16 @@ equations
 %% adviced to prevent unnecessary cloning.
 [while2box-0]
   while Exp do C1 Statement* C2 od = 
-    < V [HV ["while" [Exp] "do"] 
-              V [ I [_C1_] I [ V [ SL op=H hs=0 [[Statement*]]] ] I [ _C2_ ] ] 
-              "od"]
+    < V [
+        HV ["while" [Exp] "do"] 
+        V [
+          I [_C1_]
+          I [ V [ 
+                SL op=H hs=0 [[Statement*]]
+                ]
+            ] 
+          I [_C2_]
+          ] 
+        "od"
+        ]
     >
