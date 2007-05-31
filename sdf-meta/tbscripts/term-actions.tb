@@ -56,4 +56,22 @@ in
   fi
 endlet
 
+process DumpParsetreeAction(EditorId : session-id) is
+let
+  Cancel: bool,
+  Filename : str,
+  ModuleId : module-id,
+  Path : str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Filename?)
+  . PromptForFileWithExtension("Export Term Parsetree", [], ".pt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpTermParsetree(ModuleId, Filename, Path)
+  fi
+endlet
+
 #endif /*__TERM_ACTIONS__*/

@@ -1,5 +1,9 @@
 $Id$
 
+Thu May 31 15:55:36 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/term-{editor-,}actions.tb: added action for exporting the term
+   parsetree
+
 Wed May  9 08:43:08 CEST 2007 <jurgenv@cwi.nl>
  * tbscripts/sdf-editor-listeners.tb: changed to new editing interface.
    and removed some dead code.
