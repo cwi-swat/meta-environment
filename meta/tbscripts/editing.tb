@@ -28,7 +28,7 @@ in
   . EditText(Sid, EditorType, AlreadyExists?)
   .
   if equal(AlreadyExists, false) then
-    snd-msg(te-set-focus(Sid, Area))
+    snd-msg(te-set-selection(Sid, Area))
     .
     (
       MenuSelected(Sid, EditorType)
@@ -43,7 +43,7 @@ in
     EditorDisconnected(Sid)
     . DeleteSession(Sid)
   else
-    snd-msg(te-set-focus(Sid, Area))
+    snd-msg(te-set-selection(Sid, Area))
   fi
 endlet
 
@@ -500,7 +500,7 @@ in
   (
     rec-msg(em-session(Path, Sid?))
     . snd-msg(te-editor-to-front(Sid))
-    . snd-msg(te-set-focus(Sid, Area))
+    . snd-msg(te-set-selection(Sid, Area))
   +
     rec-msg(em-no-such-session(Path))
     . SplitFilename(Path, Filename?, Prefix?, Extension?)
