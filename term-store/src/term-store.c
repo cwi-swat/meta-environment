@@ -23,8 +23,8 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<term-store>,get-all-values(<str>))",
   "rec-eval(<term-store>,get-values(<str>,<list>))",
   "rec-eval(<term-store>,remove-value-from-all-tables(<term>))",
-  "rec-eval(<term-store>,get-snapshot)",
-  "rec-eval(<term-store>,load-snapshot(<term>))",
+  "rec-eval(<term-store>,save-snapshot(<str>))",
+  "rec-eval(<term-store>,load-snapshot(<str>))",
   "rec-terminate(<term-store>,<term>)",
 };
 
@@ -83,15 +83,15 @@ ATerm term_store_handler(int conn, ATerm term)
     remove_table(conn, s0);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(get-snapshot)")) {
-    return get_snapshot(conn);
+  if(ATmatch(term, "rec-eval(save-snapshot(<str>))", &s0)) {
+    return save_snapshot(conn, s0);
   }
   if(ATmatch(term, "rec-do(add-table(<str>,<str>))", &s0, &s1)) {
     add_table(conn, s0, s1);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(load-snapshot(<term>))", &t0)) {
-    return load_snapshot(conn, t0);
+  if(ATmatch(term, "rec-eval(load-snapshot(<str>))", &s0)) {
+    return load_snapshot(conn, s0);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);

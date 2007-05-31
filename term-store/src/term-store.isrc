@@ -13,7 +13,7 @@ let
   Values: list,
   ValueType: str,
   Pairs: list,
-  Snapshot: term
+  File: str
 in
   execute(term-store, TS?)
   .
@@ -113,15 +113,15 @@ in
     . snd-eval(TS, remove-value-from-all-tables(Key))
     . rec-value(TS, removed-from-tables(TableNames?))
   +
-    rec-msg(ts-get-snapshot)
-    . snd-eval(TS, get-snapshot)
-    . rec-value(TS, result(Snapshot?))
-    . snd-msg(ts-snapshot(Snapshot))
+    rec-msg(ts-save-snapshot(File))
+    . snd-eval(TS, save-snapshot(File))
+    . rec-value(TS, snapshot-saved)
+    . snd-msg(ts-snapshot-saved(File))
   +
-    rec-msg(ts-load-snapshot(Snapshot?))
-    . snd-eval(TS, load-snapshot(Snapshot))
-    . rec-value(TS, tables-loaded(TableNames?))
-    . snd-msg(ts-snapshot-loaded)
+    rec-msg(ts-load-snapshot(File?))
+    . snd-eval(TS, load-snapshot(File))
+    . rec-value(TS, snapshot-loaded)
+    . snd-msg(ts-snapshot-loaded(File))
   )
   *
   delta

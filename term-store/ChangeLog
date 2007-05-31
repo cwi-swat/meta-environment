@@ -1,5 +1,10 @@
 $Id$
 
+Thu May 31 06:03:45 CEST 2007 <jurgenv@cwi.nl>
+ * src/table-store.c,term-store.isrc: prepared term-store for saving
+   a snapshot directly to file, instead of sending the entire snapshot
+   over the bus.
+
 Fri Mar 10 11:56:38 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library

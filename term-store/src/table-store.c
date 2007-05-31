@@ -358,7 +358,7 @@ SS_Table getTableSnapshot(TableEntry table)
 /*}}}  */
 /*{{{  SS_Snapshot TS_getSnapshot() */
 
-ATerm TS_getSnapshot()
+ATbool TS_saveSnapshot(const char *file)
 {
   int i;
   SS_Tables tables = SS_makeTablesEmpty(); 
@@ -373,7 +373,10 @@ ATerm TS_getSnapshot()
     }
   }
 
-  return SS_SnapshotToTerm(SS_makeSnapshotMain(tables));
+  ATwriteToNamedBinaryFile(SS_SnapshotToTerm(SS_makeSnapshotMain(tables)),
+			   file);
+
+  return ATtrue;
 }
 
 /*}}}  */
@@ -413,16 +416,19 @@ void loadTables(SS_Tables tables)
 /*}}}  */
 /*{{{  void TS_loadSnapshot(ATerm s) */
 
-void TS_loadSnapshot(ATerm s)
+ATbool TS_loadSnapshot(const char* file)
 {
-  SS_Snapshot snapshot = SS_SnapshotFromTerm(s);
+  ATerm s = ATreadFromNamedFile(file);
 
-  if (SS_isValidSnapshot(snapshot)) {
-    loadTables(SS_getSnapshotTables(snapshot));
+  if (s != NULL) {
+    SS_Snapshot snapshot = SS_SnapshotFromTerm(s);
+
+    if (SS_isValidSnapshot(snapshot)) {
+      loadTables(SS_getSnapshotTables(snapshot));
+      return ATtrue;
+    }
   }
-  else {
-    ATwarning("TS_loadSnapshot: Invalid snapshot ignored\n");
-  }
+  return ATfalse;
 }
 
 /*}}}  */

@@ -27,7 +27,7 @@ ATermList TS_getValues(const char* table, ATermList keys);
 ATermList TS_getAllKeyValuePairs(const char *table);
 ATermList TS_getTableNames(void);
 ATermList TS_filterKeys(const char* table, ATermList keys);
-ATerm     TS_getSnapshot();
-void      TS_loadSnapshot(ATerm snapshot);
+ATbool    TS_saveSnapshot(const char* file);
+ATbool    TS_loadSnapshot(const char* file);
 
 #endif

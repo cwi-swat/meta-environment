@@ -207,19 +207,27 @@ ATerm filter_keys(int conn, const char *table, ATerm keys)
 /*}}}  */
 /*{{{  ATerm get_snapshot(int conn) */
 
-ATerm get_snapshot(int conn)
+ATerm save_snapshot(int conn, const char *file)
 {
-  return RESULT(TS_getSnapshot());
+  if (TS_saveSnapshot(file)) {
+    return ATmake("snd-value(snapshot-saved)");
+  }
+  else {
+    return ATmake("snd-value(snapshot-not-saved)");
+  }
 }
 
 /*}}}  */
 /*{{{  ATerm load_snapshot(int conn, ATerm snapshot) */
 
-ATerm load_snapshot(int conn, ATerm snapshot)
+ATerm load_snapshot(int conn, const char* file)
 {
-  TS_loadSnapshot(snapshot);
-
-  return ATmake("snd-value(tables-loaded([<list>]))", TS_getTableNames());
+  if (TS_loadSnapshot(file)) {
+    return ATmake("snd-value(snapshot-loaded)");
+  }
+  else {
+    return ATmake("snd-value(snapshot-not-loaded)");
+  }
 }
 
 /*}}}  */
