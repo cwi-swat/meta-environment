@@ -23,9 +23,8 @@ static PT_CharRanges goto_classes[MAX_STATES] = { NULL };
 
 static CC_Class    *action_classes[MAX_STATES] = { NULL };
 static PTBL_Actions action_actions[MAX_STATES] = { NULL };
-/* I think this is the number of actions added during the creation of one 
- * state. */
-static int NR_ACTIONS = 0;
+static int NR_ACTIONS = 0; /**< I think this is the number of actions added 
+                             * during the creation of one state. */
 
 
 ATermList initialize_items(PT_Symbol symbol) {
@@ -64,8 +63,12 @@ int update_states(ATermList state) {
   return nr;
 }
 
-/* For a given character class lookahead and a list of parse table actions, 
- *  */
+/** 
+ * For a given character class lookahead and a list of parse table actions, 
+ * 
+ * \param origcc 
+ * \param actions 
+ */
 void action_insert(CC_Class *origcc, PTBL_Actions actions) {
   CC_Class intersection;
   CC_Class cc;
@@ -109,15 +112,22 @@ void action_insert(CC_Class *origcc, PTBL_Actions actions) {
   NR_ACTIONS++;
 }
 
-/* For a given reduction (whose length and production number are passed in as 
- * arguments) add a normal reduce action to the parse table if: 
- * 1) the production's non-terminal follow restrictions are empty.
- * 2) the restriction only contains one char-class and the reduction's (single)
- * lookahead symbol does not match the follow restriction.
+/** 
+ * For a given reduction (whose length and production number are passed in as 
+ * arguments) add a <em>normal</em> reduce action to the parse table if: 
+ * \li the production's non-terminal follow restrictions are empty.
+ * \li the restriction only contains <b>one char-class</b> and the reduction's 
+ * (single) lookahead symbol does not match the follow restriction.
  *
- * Add a lookaheadReduce action if the restriction contains a list of 
- * char-classes and the reduction's (single) lookahead symbol does not match 
- * the first char-class. */
+ * If the restriction contains a <b>list of char-classes</b> and the 
+ * reduction's (single) lookahead symbol does not match the first char-class, 
+ * then a <em>lookaheadReduce</em> action is added.
+ * 
+ * \param lookahead follow set of production to be reduced.
+ * \param restrictions the production's rhs symbol follow restrictions.
+ * \param len the number of symbols to be reduced.
+ * \param prodnr the production number to be reduced.
+ */
 static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions, int len, int prodnr) {
   PTBL_Action reduce;
   PTBL_Actions reducelist;
@@ -193,9 +203,13 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
   }
 }
 
-/* Iterate over the items in a state and if an item is a reduction then get the 
+/** 
+ * Iterate over the items in a state and if an item is a reduction then get the 
  * reduction's lookahead and check that the follow restrictions allow the 
- * reduction. */
+ * reduction. 
+ *
+ * \param state 
+ */
 static void reductions(ItemSet state) {
   int len, iptr, prodnr;
   PT_Production prod;
@@ -229,7 +243,7 @@ static void reductions(ItemSet state) {
       }
 
       lookahead = PGEN_getFollowSet(prodnr);
-      if (lookahead) { /* TODO: should this be an assert? */
+      if (lookahead) { /** \todo: should this be an assert? */
         filterReductions(lookahead, followRestLookahead, len, prodnr);
       }
     }
@@ -256,8 +270,15 @@ static void shifts(CC_Set *chars) {
   }
 }
 
-/* Create a new state by moving the dot past the production number's RHS symbol
- * for the items given in the item set. */
+/** 
+ * Create a new state by moving the dot past the production number's RHS symbol
+ * for the items given in the item set. 
+ * 
+ * \param items 
+ * \param prodNumber 
+ * 
+ * \return 
+ */
 ATermList shift_prod(ItemSet items, int prodNumber) {
   Item item, newitem;
   PT_Symbol symbol;
@@ -280,8 +301,15 @@ ATermList shift_prod(ItemSet items, int prodNumber) {
   return newvertex;
 }
 
-/* Create a new state by moving the dot past the terminal symbols defined in 
- * the given character class for the items given in the item set. */
+/** 
+ * Create a new state by moving the dot past the terminal symbols defined in 
+ * the given character class for the items given in the item set. 
+ * 
+ * \param items 
+ * \param cc 
+ * 
+ * \return 
+ */
 static ATermList shift_charclass(ItemSet items, CC_Class *cc) {
   Item newitem, item;
   PT_Symbol symbol;
@@ -305,9 +333,16 @@ static ATermList shift_charclass(ItemSet items, CC_Class *cc) {
   return newvertex;
 }
 
-/* For a state and a list of productions and symbols that can label the out 
+/** 
+ * For a state and a list of productions and symbols that can label the out 
  * edges of the state, create the new states and edges. This means that the 
- * goto actions are added to the parse table. */
+ * goto actions are added to the parse table. 
+ * 
+ * \param kernelState 
+ * \param closedItems 
+ * \param prods 
+ * \param chars 
+ */
 void gotos(ATermList kernelState, ItemSet closedItems, ATermList prods, CC_Set *chars) {
   int prodNumber;
   ATerm gotoElem; 
@@ -346,9 +381,15 @@ void gotos(ATermList kernelState, ItemSet closedItems, ATermList prods, CC_Set *
   PGEN_setGotosOfState((PTBL_Gotos)gotoElems, kernelState);
 }
 
-/* Given the kernelState and the closedItems (the set of items that can be 
+/** 
+ * Given the kernelState and the closedItems (the set of items that can be 
  * reached by performing the epsilon closure on the kernel state), add the 
- * shift and reduce actions to the parse table. */ 
+ * shift and reduce actions to the parse table. 
+ * 
+ * \param kernelState 
+ * \param closedItems 
+ * \param chars 
+ */
 void actions(ATermList kernelState, ItemSet closedItems, CC_Set *chars) {
   PTBL_Choices actionset = PTBL_makeChoicesEmpty();
   int idx;
@@ -375,7 +416,8 @@ void actions(ATermList kernelState, ItemSet closedItems, CC_Set *chars) {
   NR_ACTIONS = 0;
 }
 
-/* A state is created by first constructing the set of kernel items, and then
+/** 
+ * A state is created by first constructing the set of kernel items, and then
  * a separate set of items that is the result of performing the epsilon 
  * closure on the kernel items. It is only necessary to store the kernel items
  * of the state since the non-kernel items result from the closure of the 
@@ -383,8 +425,11 @@ void actions(ATermList kernelState, ItemSet closedItems, CC_Set *chars) {
  * see if an item already exists in a state.
  *
  * A kernel state is a state that only contains items of the form 
- * (\alpha \cdot \beta -> X) or if X is the start symbol then 
- * (\cdot \alpha -> X). */
+ * \f$(\alpha \cdot \beta -> X)\f$ or if \f$X\f$ is the start symbol then 
+ * \f$(\cdot \alpha -> X)\f$. 
+ * 
+ * \param statenr the state number.
+ */
 void createState(int statenr) {
   ATermList kernelState; /* A state containing only kernel items. */
   ItemSet closedItems;

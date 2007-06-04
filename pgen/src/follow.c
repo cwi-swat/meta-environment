@@ -1,8 +1,12 @@
 /* $Id$ */
 
-/* Calculates and stores the follow sets of all productions in a grammar. 
- * The original implementation is based on the desription given in Eelco 
- * Visser's thesis. */
+/**
+ * \file
+ *
+ * Calculates and stores the follow sets of all productions in a grammar. 
+ * The original implementation is based on the description given in Eelco 
+ * Visser's thesis. 
+ */
 
 #include <assert.h>
 
@@ -15,19 +19,14 @@
 #include "atsets.h"
 
 static CC_Class  **follow_table = NULL;
-/* For each production x, |dependencies| contains the production numbers of the
- * non-terminals that the follow set of x depends on. */
-static ATermList *dependencies = NULL;
-/* The dependency_closure is an array of length maxProductionNumber of IntSets. 
- * IntSets are an efficient implementation of integer sets. They represent 
- * an integer by setting the appropriate bit in an array. Each element in that 
- * array represents the number of bits in an unsigned long. Therefore, on a 
- * 32-bit machine, each element in the IntSet represents 32 production 
- * numbers. To check if a production number is in an IntSet we find the correct
- * element in the array by dividing the production number by 32. Then by 
- * finding modding the production number by 32 we find the bit for that 
- * production.*/
-static IS_IntSet *depend_closure = NULL;
+static ATermList *dependencies = NULL; /**< For each production x, it contains 
+                                         * the production numbers of the 
+                                         * non-terminals that the follow set of 
+                                         * x depends on. */
+static IS_IntSet *depend_closure = NULL; /**< The dependency_closure is an 
+                                           * array of length maxProductionNumber
+                                           * of IntSets. 
+                                           */
 static CC_Class **initial_follow_sets = NULL;
 
 #if 0
@@ -51,10 +50,16 @@ CC_Class *PGEN_getFollowSet(int prodNumber) {
   return follow_table[prodNumber];
 }
 
-/* Find the production numbers that the given production depends on. 
+/** 
+ * Find the production numbers that the given production depends on. 
  * A production (\alpha \beta -> A) depends on the rightmost non-terminals 
  * \beta that derive epsilon and don't have a priority conflict with the given 
- * production. */
+ * production. 
+ * 
+ * \param prodid 
+ * 
+ * \return 
+ */
 static ATermList init_dependency(int prodid) {
   ATerm prodnr; 
   ATerm dep;
@@ -101,8 +106,10 @@ static ATermList init_dependency(int prodid) {
   return depends;
 }
 
-/* Calculate dependencies (which prod's followset depends on which prod's 
- * followset). */
+/** 
+ * Calculate dependencies (which prod's followset depends on which prod's 
+ * followset). 
+ */
 static void init_dependencies() {
   int i;
   int maxProductionNumber = PGEN_getMaxProductionNumber();
@@ -118,7 +125,13 @@ static void init_dependencies() {
   }
 }
 
-/* Find all productions that are dependant on another production. */
+/** 
+ * Find all productions that are dependant on another production. 
+ * 
+ * \param prodid 
+ * \param forward_depends 
+ * \param set 
+ */
 static void find_closure(int prodid, ATermList *forward_depends, IS_IntSet set) {
   ATermList productionsDepenantOnProdId = forward_depends[prodid];
 
@@ -133,8 +146,10 @@ static void find_closure(int prodid, ATermList *forward_depends, IS_IntSet set) 
   }
 }
 
-/* Calculate the forward dependencies - the productions that are depended on
- * by another production - and then calculate the dependency closure. */
+/** 
+ * Calculate the forward dependencies - the productions that are depended on
+ * by another production - and then calculate the dependency closure. 
+ */
 static void closure_dependencies() {
   int maxProductionNumber = PGEN_getMaxProductionNumber();
   int prodid;
@@ -182,11 +197,15 @@ static void closure_dependencies() {
   free(forward_depends);
 }
 
-/* For a production of the form (B /alpha -> A) calculate the follow set of B, 
+/** 
+ * For a production of the form (B /alpha -> A) calculate the follow set of B, 
  * by getting the first set of /alpha, minus the epsilon. However, if there is 
  * an epsilon in the first set of /alpha then the follow set of A should be 
  * added to the follow set of B. It does not appear to do this here! Is this
- * case handled by the dependencies? */
+ * case handled by the dependencies? 
+ * 
+ * \param prodid 
+ */
 static void init_follow_set(int prodid) {
   PT_Production prod;
   ATermList prods;
@@ -246,9 +265,11 @@ static void init_follow_sets() {
   }
 }
 
-/* For each production, get the rules that are needed to calculate the follow 
+/** 
+ * For each production, get the rules that are needed to calculate the follow 
  * set of that production (the dependencies) and add the initial follow set of 
- * the dependencies to the follow set of the rule. */
+ * the dependencies to the follow set of the rule. 
+ */
 static void union_follow_sets() {
   int maxProductionNumber = PGEN_getMaxProductionNumber();
   int prodid, i;

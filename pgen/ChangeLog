@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jun  4 10:43:30 CEST 2007 <economop@cwi.nl>
+ * Documentation added.
+
 Sun May 27 12:14:01 CEST 2007 <jurgenv@cwi.nl>
  * test/tables/Sdf2.tbl: regenerated this regression table. The bugfix in
    goto.c filters more reductions in Sdf2.tbl. The regression parse forest

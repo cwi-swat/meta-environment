@@ -1,5 +1,17 @@
 /* $Id$ */
 
+/**
+ * \file
+ *
+ * IntSets are an efficient implementation of integer sets. They represent an 
+ * integer by setting the appropriate bit in an array. Each element in that 
+ * array represents the number of bits in an unsigned long. Therefore, on a 
+ * 32-bit machine, each element in the IntSet represents 32 production 
+ * numbers. To check if a production number is in an IntSet we find the correct
+ * element in the array by dividing the production number by 32. Then by 
+ * modding the production number by 32 we find the bit for that production.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
