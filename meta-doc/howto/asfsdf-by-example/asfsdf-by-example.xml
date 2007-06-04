@@ -404,12 +404,12 @@ exports
     "nextlabel" "(" Label ")" -&gt; Label 
 
 hiddens
-  variables
-    "Char*"[0-9]* -&gt; CHAR*
+  lexical variables
+    "Char*"[0-9]* -&gt; [a-z0-9]+
 
 equations
 
- [1] nextlabel(label(Char*)) = label(Char* "x")</programlisting></para>
+ [1] nextlabel(label(Char*)) = label(Char* x)</programlisting></para>
 
       <formalpara>
         <title>Codegenerator</title>
