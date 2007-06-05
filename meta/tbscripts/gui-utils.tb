@@ -10,7 +10,6 @@
 #include <moduledetails.idef>
 #include <error-viewer.idef>
 #include <svg-gui.idef>
-#include <swixml-gui.idef>
 
 process AddJob(Message: str) is
   snd-msg(gui-add-job(Message))
