@@ -86,15 +86,11 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 			ModuleId moduleId = factory.ModuleIdFromTerm(id);
 			AttributeStore attributes = moduleDB.getAllAttributes(moduleId);
 
-			if (moduleId == null) {
-				return pureFactory.make("snd-value(no-such-module)");
-			}
-			
 			return pureFactory.make("snd-value(attributes(<term>))", attributes
 					.toTerm());
 		} catch (IllegalArgumentException e) {
 			System.err.println("warning:" + e);
-			return pureFactory.make("snd-value(attributes([]))");
+			return pureFactory.make("snd-value(no-such-module)");
 		}
 	}
 

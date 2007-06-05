@@ -233,9 +233,9 @@ public class ModuleDatabase {
 		Module module = modules.get(moduleId);
 
 		if (module == null) {
-			System.err.println("MM - getAllAttributes: module [" + moduleId
-					+ "] doesn't exist");
-			return null;
+			throw new IllegalArgumentException(
+					"MM - getAllAttributes: module [" + moduleId
+							+ "] doesn't exist");
 		}
 
 		return module.getAttributes();
