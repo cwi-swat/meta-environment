@@ -122,6 +122,10 @@ void action_insert(CC_Class *origcc, PTBL_Actions actions) {
  * If the restriction contains a <b>list of char-classes</b> and the 
  * reduction's (single) lookahead symbol does not match the first char-class, 
  * then a <em>lookaheadReduce</em> action is added.
+ *
+ * \warning This code relies on the order of the follow restrictions. For any 
+ * given non-terminal the single symbol restrictions must appear before the
+ * multi symbol restrictions in the list.
  * 
  * \param lookahead follow set of production to be reduced.
  * \param restrictions the production's rhs symbol follow restrictions.
@@ -144,8 +148,8 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
     CC_Class *currentla = CC_alloc();
     CC_copy(lookahead, currentla);
 
-    /* Go through all restrictions... */
-    while (!PTBL_isRestrictionsEmpty(restrictions)) {
+    /* Go through all restrictions while there is still a valid lookahead... */
+    while (!PTBL_isRestrictionsEmpty(restrictions) && !CC_isEmpty(currentla)) {
       CC_Class difference;
       PTBL_Restriction restriction = PTBL_getRestrictionsHead(restrictions);
       PTBL_CharClasses restrictionSymbols = PTBL_getRestrictionCharClasses(restriction);
@@ -158,27 +162,16 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
         
         /* Calculate the difference between the parse table lookahead and the 
          * restriction.*/
-        if (CC_difference(currentla, restrictionCC, &difference)) {
-          special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
-          reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
-          reducelist = PTBL_makeActionsSingle(reduce);
-          action_insert(&difference, reducelist);
-        }
+        CC_difference(currentla, restrictionCC, &difference);
       }
       else {
         /* If there is more than one symbol in the restriction add normal 
          * reductions in the position where the lookahead differs from the 
          * first restriction symbol and add lookahead reduces in the 
          * position that the lookahead is the same. */
-
         CC_Class intersection;
         
-        if (CC_difference(currentla, restrictionCC, &difference)) {
-          special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
-          reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
-          reducelist = PTBL_makeActionsSingle(reduce);
-          action_insert(&difference, reducelist);
-        }
+        CC_difference(currentla, restrictionCC, &difference);
         
         if (CC_intersection(currentla, restrictionCC, &intersection)) {
           PTBL_Restrictions remainingRestrictions = PTBL_makeRestrictionsSingle(PTBL_makeRestrictionFollow(PTBL_getCharClassesTail(restrictionSymbols)));
@@ -197,6 +190,13 @@ static void filterReductions(CC_Class *lookahead, PTBL_Restrictions restrictions
        */
       CC_copy(&difference, currentla);
       restrictions = PTBL_getRestrictionsTail(restrictions); 
+    }
+
+    if (!CC_isEmpty(currentla)) {
+      special_attr = PGEN_getAttributeOfProductionNumber(prodnr);
+      reduce = PTBL_makeActionReduce(len, prodnr, special_attr);
+      reducelist = PTBL_makeActionsSingle(reduce);
+      action_insert(currentla, reducelist);
     }
 
     CC_free(currentla);

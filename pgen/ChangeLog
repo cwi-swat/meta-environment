@@ -1,5 +1,13 @@
 $Id$
 
+Tue Jun  5 12:33:05 CEST 2007 <economop@cwi.nl>
+ * src/goto.c: fixed bug #752. We were adding reductions after each follow
+   restriction was processed instead of only after all restrictions were
+   processed. This led to some reductions being added for lookahead symbols
+   that later became invalid. I also optimised the iteration over the lookahead 
+   list.
+ * test/tables/Follower.tbl: regenerated as the parse table changed.
+
 Mon Jun  4 10:43:30 CEST 2007 <economop@cwi.nl>
  * Documentation added.
 
