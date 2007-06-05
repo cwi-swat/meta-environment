@@ -94,7 +94,13 @@ process MM-GetAttribute(ModuleId: module-id, Namespace: term, Key: term, Value: 
 
 process MM-GetAllAttributes(ModuleId: module-id, Attributes: term?) is
   snd-msg(mm-get-all-attributes(ModuleId))
-  . rec-msg(mm-attributes(ModuleId, Attributes?))
+  .
+  (
+    rec-msg(mm-attributes(ModuleId, Attributes?))
+  +
+    rec-msg(mm-no-such-module(ModuleId))
+    . Attributes := UNDEFINED
+  )
 
 process MM-AddModuleDependency(ModuleId: module-id, Dependency: term) is
 let

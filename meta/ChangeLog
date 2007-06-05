@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jun  5 11:00:53 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * tbscripts/module-manager.tb: Catch no-such-module when getting all
+   attributes for module
+
 Wed May  9 08:39:03 CEST 2007 <jurgenv@cwi.nl>
  * tbscript/editing.tb: some radical changes in the editing interface.
    Starting up editors from an anonymous location is now supported via
