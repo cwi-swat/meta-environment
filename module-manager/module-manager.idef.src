@@ -73,8 +73,14 @@ in
   +
     rec-msg(mm-get-all-attributes(ModuleId?))
     . snd-eval(MM, get-all-attributes(ModuleId))
-    . rec-value(MM, attributes(AttributeList?))
-    . snd-msg(mm-attributes(ModuleId, AttributeList))
+    .
+    (
+      rec-value(MM, attributes(AttributeList?))
+      . snd-msg(mm-attributes(ModuleId, AttributeList))
+    +
+      rec-value(MM, no-such-module)
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
   +
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
     . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
