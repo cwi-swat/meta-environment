@@ -3,7 +3,7 @@
 
 #include <sdf-namespace.h>
 
-process StartSDFEditor(Path: str, Area: term) is
+process StartSDFEditor(Path: str, Area: area) is
 let
   ModuleId: module-id,
   Pid: int,
@@ -12,7 +12,8 @@ in
   MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", path(Path), ModuleId?)
   . create(EditSyntax(ModuleId), Pid?)
   . rec-msg(syntax-editor-started(ModuleId, Sid?))
-  . snd-msg(te-set-focus(Sid, Area))
+  . snd-msg(te-set-selection(Sid, Area))
+  . GoToEditorArea(Sid, Area)
 endlet
 
 process SDFCloseEditors is
