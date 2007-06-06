@@ -1,5 +1,11 @@
 $Id$
 
+Wed Jun  6 18:09:33 CEST 2007 <economop@cwi.nl>
+ * library/languages/asf/addeqssyntax/Add-Eqs-Conds.asf: removed equation
+   added in r22498 because the dumped equations appear to trigger a bug in the 
+   generated normalizer -- restrictions in a normalized grammar do not get
+   rewritten correctly.
+
 Thu May  3 11:11:33 CEST 2007 <jurgenv@cwi.nl>
  * library/languages/asf/normalization: 
    added a new equation to the normalizer. If an equation rewrites
