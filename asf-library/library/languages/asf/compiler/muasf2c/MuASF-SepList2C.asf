@@ -837,7 +837,8 @@ equations
 	$Expression2   := make-atmp(Aint+2),
          Decl*2         := make-decl(Aint+2),
 	C-rule+2 := add-env(C-rule+,(($Funid,$Expression2))),
-         (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
+         C-rule+3 := add-env(C-rule+2,(($*Funid2, $Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+3, Namepair*,Aint) %% were done, continue with next conditions
 	===>
 	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),($*Funid2,Aint+4)), C-rule+,
                                $Expression,
