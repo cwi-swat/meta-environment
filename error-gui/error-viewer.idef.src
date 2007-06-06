@@ -27,10 +27,6 @@ in
     rec-msg(ui-refresh-feedback-summary(Panel?, Summary?))
     . snd-do(T, refresh-feedback-summary(Panel, Summary))
   +
-    rec-event(T, error-selected(Error?))
-    . snd-msg(ui-error-selected(Error))
-    . snd-ack-event(T, error-selected(Error))
-  +
     rec-event(T, location-selected(Location?))
     . snd-msg(ui-location-selected(Location))
     . snd-ack-event(T, location-selected(Location))
