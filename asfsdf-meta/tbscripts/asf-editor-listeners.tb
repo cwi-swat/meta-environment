@@ -3,7 +3,7 @@
 
 #include <asf-namespace.h>
 
-process StartASFEditor(Path: str, Area: term) is
+process StartASFEditor(Path: str, Area: area) is
 let
   ModuleId: module-id,
   Pid: int,
@@ -12,7 +12,8 @@ in
   MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", path(Path), ModuleId?)
   . create(EditEquations(ModuleId), Pid?)
   . rec-msg(equations-editor-started(ModuleId, Sid?))
-  . snd-msg(te-set-focus(Sid, Area))
+  . snd-msg(te-set-selection(Sid, Area))
+  . GoToEditorArea(Sid, Area)
 endlet
 
 #endif /* __ASF_EDITOR_LISTENERS__ */
