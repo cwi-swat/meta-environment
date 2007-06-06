@@ -299,10 +299,9 @@ ATerm lookup_prod(AFun sym);
 #define null() (ATerm)(ATempty)
 #define list_head(l) (ATgetFirst((ATermList)l))
 #define list_tail(l) (ATerm)(ATgetNext((ATermList)l))
-/*#define conc(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))*/
 #define cons(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))
-#define cons_sep_1(l1,l2,l3) (ATerm)(ATconcat((ATermList)l1, ATisEmpty(l2) ? ATempty : ATinsert((ATermList)l3,l2)))
-#define cons_sep_3(l1,l2,l3,l4,l5) (ATerm)(ATisEmpty(l5) ? l1 : ATconcat((ATermList)l1, ATinsert(ATinsert(ATinsert((ATermList)l5,l4),l3),l2)))
+#define cons_sep_1(l1,l2,l3) (ATerm)(ATconcat((ATermList)l1, (ATisEmpty((ATermList)l2) ? (ATempty) : (ATinsert((ATermList)l3,l2)))))
+#define cons_sep_3(l1,l2,l3,l4,l5) (ATerm)(ATisEmpty((ATermList)l5) ? ((ATerm) l1) : ((ATerm) ATconcat((ATermList)l1, ATinsert(ATinsert(ATinsert((ATermList)l5,l4),l3),l2))))
 #define append(l,t) (ATerm)(ATappend((ATermList)l,t))
 #define insert(t,l) (ATerm)(ATinsert((ATermList)l,t))
 #define list_last(l) (ATgetLast((ATermList)l))
