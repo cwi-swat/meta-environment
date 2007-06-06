@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun  6 18:03:05 CEST 2007 <economop@cwi.nl>
+ * syntax/addeqssyntax/src/Add-Eqs-Syntax.c: regenerated as change committed
+   in r22497 stopped the normalizer working correctly.
+
 Tue May 29 15:37:02 CEST 2007 <jurgenv@cwi.nl>
  * semantics/asfc/src/*.c: preparing compiler for rewriting with layout.
    Added constructors for separated lists to muASF, and some other small
