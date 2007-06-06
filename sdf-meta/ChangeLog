@@ -1,7 +1,7 @@
 $Id$
 
 Wed Jun  6 11:59:10 CEST 2007 <kooiker@cwi.nl>
- * tbscripts/sdf-editor-actions.tb: 
+ * tbscripts/sdf-editor-listeners.tb: 
    - Strong typing of Area
    - set selection in stead of focus shows errors correctly
    - Add GoToEditorArea to let the cursor jump to the selection
