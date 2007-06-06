@@ -9,6 +9,9 @@ exports
     normalize-list-in-rule(Rule)  -> Rule
 
 hiddens
+  context-free start-symbols
+    Rule
+
   context-free syntax
 	normalize(Module) -> Module {traversal(trafo,top-down,break)}
 	normalize(Rule) -> Rule {traversal(trafo,top-down,break)}
@@ -22,6 +25,8 @@ hiddens
     normalize-cond(Cond,Integer)                  -> TC-tuple
     normalize-list-in-conds({Cond "&"}+,Integer)  -> TC-tuple
     normalize-list-in-cond(Cond,Integer)          -> TC-tuple
+    normalize-seplist-in-conds({Cond "&"}+,Integer)  -> TC-tuple
+    normalize-seplist-in-cond(Cond,Integer)          -> TC-tuple
   context-free syntax
     normalize-terms({Term ","}+,Integer)         -> TC-tuple
     normalize-term(Term,Integer)                 -> TC-tuple
@@ -29,6 +34,9 @@ hiddens
     normalize-list-in-terms({Term ","}+,Integer) -> TC-tuple
     normalize-list-arg(Term,Integer)             -> TC-tuple
     normalize-list-args({Term ","}+,Integer)     -> TC-tuple
+    normalize-seplist-arg(Term,Integer)             -> TC-tuple
+    normalize-seplist-args({Term ","}+,Integer)     -> TC-tuple
+    normalize-seplist-seps({Term ","}+,Integer)     -> TC-tuple
 
 hiddens
 variables
@@ -37,4 +45,7 @@ variables
 	"Cond"[0-9]* -> Cond
 	"Funid"[0-9]* -> FunId
 	"Aint"[0-9]* -> Integer
+	"Term*"[0-9]* -> {Term ","}*
+	"Term+"[0-9]* -> {Term ","}+
+	"Term"[0-9]* -> Term
 

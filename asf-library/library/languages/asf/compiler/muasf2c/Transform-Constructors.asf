@@ -74,6 +74,7 @@ equations
 
   [mc-4'1] is-constructor(Funid,Namepair*) == true,
            Funid(Term+) != cons(Term+),
+           Funid(Term+) != scons(Term+),
            are-constructor-terms(Term+,Namepair*) == true
            =============================================
            is-constructor-term(Funid(Term+),Namepair*) = true
@@ -82,6 +83,11 @@ equations
            is-constructor-term(Term2,Namepair*) == true
            =============================================
            is-constructor-term(cons(Term1, Term2),Namepair*) = true
+
+[mc-4'1]   is-constructor-term(Term1,Namepair*) == true,
+           are-constructor-terms(Term+,Namepair*) == true
+           =============================================
+           is-constructor-term(scons(Term1, Term+),Namepair*) = true
 
   [mc-4'2] is-constructor(Funid,Namepair*) == true
            ======================================

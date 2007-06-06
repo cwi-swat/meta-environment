@@ -49,6 +49,9 @@ equations
 [list]
 construct-funid({Funid},Nat) = { nat2id(lf-list-, Nat) }
 
+[seplist]
+construct-funid({Funid Nat1}, Nat) = { nat2id(lf-sep-list-, Nat) Nat1 }
+
 [returns-list]
 construct-funid([Funid],Nat) = [nat2id(lf-returns-list, Nat)]
 

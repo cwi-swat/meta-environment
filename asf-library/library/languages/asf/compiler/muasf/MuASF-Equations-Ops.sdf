@@ -47,6 +47,7 @@ exports
 
   context-free syntax
     is-list-funid(FunId)              -> Boolean
+    is-seplist-funid(FunId)           -> Boolean
     is-trans-list-funid(FunId)        -> Boolean
     is-returns-list-funid(FunId)      -> Boolean {prefer}
     remove-returns-list(FunId)        -> FunId
@@ -57,6 +58,7 @@ exports
     is-boolean-term(Term)             -> Boolean
     is-default-rule(Rule)             -> Boolean
     is-cons(Term)                     -> Boolean
+    is-scons(Term)                    -> Boolean
     term-contains-var(Term)           -> Boolean
     args-contain-var({Term ","}*)     -> Boolean
     make-trans-list-id(FunId)         -> FunId {prefer}

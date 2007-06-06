@@ -11,6 +11,9 @@ add-list-cons(Module) -> Module
 
 hiddens
 
+context-free start-symbols
+  Term
+
 context-free syntax
 
 alc(Module) -> Module {traversal(trafo,bottom-up,continue)}
@@ -18,9 +21,16 @@ alc(Term)   -> Term   {traversal(trafo,bottom-up,continue)}
 
 context-free syntax
 
-to-cons(TermList) -> Term
+to-cons(TermList) -> Term {complete}
+to-sep-cons(TermList,NatCon) -> Term {complete}
+
+context-free syntax
+take(Integer, {Term ","}*) -> {Term ","}* {complete}
+drop(Integer, {Term ","}*) -> {Term ","}* {complete}
 
 variables
 
+"SepCount"[0-9]* -> NatCon
+"Term*"[0-9]* -> {Term ","}*
 "Term"[0-9]* -> Term
 "Funid"[0-9]* -> FunId

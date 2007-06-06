@@ -19,7 +19,7 @@ imports languages/asf/compiler/muasf2muasf/ReturnsList
 
 exports
   context-free syntax
-    muasf2muasf(Module, NameTable) -> MN-struct
+    muasf2muasf(Module, NameTable) -> MN-struct {complete}
 
 
 hiddens

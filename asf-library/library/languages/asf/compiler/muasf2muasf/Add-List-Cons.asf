@@ -31,3 +31,46 @@ to-cons(Term) = Term
 %% instead of just insert(elem, list)! This might be a cause for the huge
 %% amounts of ATinserts when profiling the average ASF specification...
 
+equations
+
+%% Here we deal with separated lists, a new feature that we will implement 
+%% next to the normal lists. Although normal lists are a special case of
+%% separated lists, we will implement them separately to make the transition
+%% smoother.
+
+[not-empty]
+alc({Funid SepCount}(Term+)) = {Funid SepCount}(to-sep-cons(Term+, SepCount))
+
+[empty]
+alc({Funid SepCount}) = {Funid SepCount}(null)
+
+equations
+
+[] to-sep-cons(Term, SepCount) = Term
+[] to-sep-cons(Term, Term+, SepCount) = scons(Term, take(SepCount, Term+), to-sep-cons(drop(SepCount, Term+), SepCount))
+
+tests
+
+[] to-sep-cons(a,s1,s2,s3,b,s1,s2,s3,c, 3) == scons(a,s1,s2,s3, scons(b,s1,s2,s3, c))
+ 
+equations
+
+[] take(0, Term*) =
+[] take(SepCount, ) =
+[] take(SepCount, Term, Term*) = Term, take(SepCount - 1, Term*) when SepCount != 0
+
+tests
+
+[] take(0, a,b,c) ==
+[] take(2, a,b,c,d) == a,b
+
+equations
+
+[] drop(0, Term*) = Term*
+[] drop(SepCount, ) =
+[] drop(SepCount, Term, Term*) = drop(SepCount - 1, Term*) when SepCount != 0
+ 
+tests
+
+[] drop(0, a,b,c) == a,b,c
+[] drop(2, a,b,c,d) == c,d

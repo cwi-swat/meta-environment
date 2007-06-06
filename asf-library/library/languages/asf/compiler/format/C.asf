@@ -1,0 +1,9 @@
+equations
+
+[] { Decl+ } = <V [ "{" I [ V [[Decl+]]] "}" ] >
+[] { Stat+ } = <V [ "{" I [ V [[Stat+]]] "}" ] >
+[] { Decl+ Stat+ } = <V [ "{" V vs=2 [ I [ V[[Decl+]]] I [ V [[Stat+]] ] ] "}" ]>
+
+equations
+
+[] Id ( Expr* ) = <HOV hs=0 [ H hs=0 [[Id] "("] I [ HV [ SL op=H hs=0 [[Expr*]]]] ")" ] >

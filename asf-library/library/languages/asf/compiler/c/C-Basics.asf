@@ -71,6 +71,9 @@ equations
 [list]
 	funid2identifier({Funid}) = funid2identifier(Funid)
 
+[sep-list]
+	funid2identifier({Funid Nat}) = funid2identifier(Funid)
+
 equations
 
 [concat]
@@ -82,15 +85,22 @@ equations
 
   [ctu-1'2] Decl* ++ = Decl*
 
-  [ctu-1'4] Decl+1 ++ Decl+2 = Decl+1 Decl+2
+  [ctu-1'4] Decl+1 ++ Decl+2 =
+Decl+1
+Decl+2
 
 equations
 
-  [cslo-1'1] ++ Stat* = Stat*
+[cslo-1'1]
+	++ Stat* = Stat*
 
-  [cslo-1'2] Stat* ++ = Stat*
+[cslo-1'2]
+	Stat* ++ = Stat*
 
-  [cslo-1'4] Stat+1 ++ Stat+2  = Stat+1 Stat+2
+[cslo-1'4]
+	Stat+1 ++ Stat+2  =
+Stat+1
+Stat+2
 
 equations
 
@@ -99,15 +109,33 @@ equations
 
   [cslr-1'2] return $Exp; ++r Stat* = return $Exp;
 
-  [cslr-1'3] Stat+ return $Exp; ++r Stat* = Stat+ return $Exp;
+  [cslr-1'3] Stat+ return $Exp; ++r Stat* =
+Stat+
+return $Exp;
 
-  [cslr-1'4] {return $Exp;} ++r Stat* = {return $Exp;}
+  [cslr-1'4] {return $Exp;} ++r Stat* =
+{
+  return $Exp;
+}
 
-  [cslr-1'5] {Stat+ return $Exp;} ++r Stat* = {Stat+ return $Exp;}
+  [cslr-1'5] {Stat+ return $Exp;} ++r Stat* =
+{
+  Stat+
+  return $Exp;
+}
 
-  [cslr-1'6] Stat+ {return $Exp;} ++r Stat* = Stat+ {return $Exp;}
+  [cslr-1'6] Stat+ {return $Exp;} ++r Stat* =
+Stat+
+{
+  return $Exp;
+}
 
-  [cslr-1'7] Stat+1 {Stat+2 return $Exp;} ++r Stat* = Stat+1 {Stat+2 return $Exp;}
+  [cslr-1'7] Stat+1 {Stat+2 return $Exp;} ++r Stat* =
+Stat+1
+{
+  Stat+2
+  return $Exp;
+}
 
   [default-cslr-1'8] Stat+ ++r Stat* = Stat+ ++ Stat*
 
@@ -123,15 +151,28 @@ equations
 
   [default-cdlo-1'2] ++d Stat+ = Stat+
 
-  [cdlo-1'3] Decl+ ++d {Stat+} = {Decl+ Stat+}
+  [cdlo-1'3] Decl+ ++d {Stat+} =
+{
+  Decl+
+  Stat+
+}
 
-  [default-cdlo-1'4] Decl+ ++d Stat+ = {Decl+ Stat+}
+  [default-cdlo-1'4] Decl+ ++d Stat+ =
+{
+  Decl+
+  Stat+
+}
 
 equations
 
   [fac-1'1] FormalArg ++ FormalArg+ = FormalArg , FormalArg+
 
-  [cec-1'1] (Tepair*1) ++ (Tepair*2) = (Tepair*1,Tepair*2)
+  [cec-1'1] (Tepair*1) ++ (Tepair*2) = 
+(
+  Tepair*1
+,
+  Tepair*2
+)
 
 equations
 

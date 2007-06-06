@@ -36,6 +36,7 @@ exports
 
     "[" FunId "]" 		-> FunId  {cons("returns-list")}
     "{" FunId "}"		-> FunId  {cons("list")}
+    "{" FunId seps:NatCon "}"   -> FunId  {cons("sep-list")}
     "IGNORE" "[" FunId "]" 	-> FunId  {cons("ignored")}
     "TRANSLATE" "[" FunId "]"   -> FunId  {cons("translate")}
     "|" FunId TraversalType TraversalStrategy TraversalContinuation "|"
@@ -46,8 +47,8 @@ exports
     
 exports
   context-free syntax
-    lhs:FunId "++" rhs:FunId -> FunId {left, cons("concat"), complete}
-    lhs:FunId "+-+" rhs:FunId -> FunId {left, cons("concat-dash"), complete}
+    lhs:FunId conc:"++" rhs:FunId -> FunId {left, cons("concat"), complete}
+    lhs:FunId conc2:"+-+" rhs:FunId -> FunId {left, cons("concat-dash"), complete}
     
 
 hiddens

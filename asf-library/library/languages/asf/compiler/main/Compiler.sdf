@@ -1,4 +1,4 @@
-module languages/asf/compiler/Compiler
+module languages/asf/compiler/main/Compiler
 
 imports languages/asf/compiler/muasf2nametable/MuASF2NameTable
 imports languages/asf/compiler/muasf2muasf/MuASF2MuASF

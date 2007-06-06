@@ -160,19 +160,28 @@ equations
   [ilfi-1'1] is-list-funid({Funid}) = true
   [default-ilfi-1'1] is-list-funid(Funid) = false
 
+equations
+
   [ilfi-1'1] is-trans-list-funid({Funid}) = true
-  [ilfi-1'1] is-trans-list-funid(TRANSLATE[{Funid}]) = true
+  [ilfi-1'2] is-trans-list-funid({Funid Natcon}) = true
   [default-ilfi-1'1] is-trans-list-funid(Funid) = false
+
+equations
 
   [mtli-1'1] make-trans-list-id({Funid}) =
                TRANSLATE[{Funid}]
 
-
+equations
   %% JURGEN: LETOP {} added to rhs
   [rtli-1'1] remove-trans-from-list-id({Funid}) = {Funid}
 
   [trli-1'2] remove-trans-from-list-id(TRANSLATE[{Funid}]) =
                {Funid}
+
+equations
+
+  [] is-seplist-funid({Funid Natcon}) = true
+  [default-bla] is-seplist-funid(Funid) = false
 
 equations
 [it]
@@ -199,6 +208,10 @@ equations
 
   [ic-1'1] is-cons(cons) = true
   [default-ic-1'2] is-cons(Funid) = false
+
+equations
+  [] is-scons(scons) = true
+  [default-bla] is-scons(Funid) = false
 
 equations
 

@@ -7,7 +7,7 @@ exports
 
 context-free syntax
 
-muasf2nametable(Module) -> MN-struct
+muasf2nametable(Module) -> MN-struct {complete}
 
 hiddens
 
@@ -38,7 +38,7 @@ context-free syntax
 context-free syntax
    strategy(TermList) 		-> TraversalStrategy
    type(TermList)     		-> TraversalType
-   continuation(TermList) 	-> TraversalContinuation
+   continuation(TermList) 	-> TraversalContinuation 
    cons-id(TermList)     	-> FunId {complete}
 
 lexical variables

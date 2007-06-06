@@ -1,3 +1,6 @@
+%% As I recall, this module recognizes common list patterns and replaces them by implementations
+%% using less loops and some specialized functions from the run-time.
+
 equations
 
   [rlm-1'1] (Funcdef*,Rule*) := rem-lists-from-ruleopt(Rulesopt1),
@@ -43,7 +46,7 @@ equations
 equations
 
 %% Before the simple list patterns are removed, it is first checked
-%% whether more complex patterns like ``lookup-patterns'' can be
+%% whether more complex patterns like lookup-patterns can be
 %% removed.
   [rlr-1'1] rule-contains-lists(Rule) == false
             =================================
@@ -163,7 +166,7 @@ equations
 %% can take place. The left-hand side is first processed, followed by
 %% the conditions, if any, and finally the right-hand side is processed.
 %% All list variables are stored in a variable environment, to make
-%% sure that a list is only ``transformed'' once. After the
+%% sure that a list is only transformed once. After the
 %% transformation of the entire rule, a new rule is constructed.
   [rlr-1'1] (Term+3,Cond*1,Ivarenv1) := rem-lists-from-lhs-terms(Term+,[1,]),
             (Term4,Cond*2,Ivarenv2) := rem-lists-from-rhs-term(Term2,Ivarenv1),
@@ -259,7 +262,7 @@ equations
 
 
 
-%% The ``default'' case the original term is returned.
+%% The default case the original term is returned.
   [default-rllt-1'4] rem-lists-from-lhs-term(Term,Ivarenv) =
                       (Term,,Ivarenv)
 
@@ -291,7 +294,7 @@ equations
              =========================
              rem-lists-from-rhs-term(Term1,Ivarenv) = ($Varid,,Ivarenv)
 
-%% The ``default'' case the original term is returned.
+%% The default case the original term is returned.
   [default-rlrt-1'4] rem-lists-from-rhs-term(Term,Ivarenv) =
                       (Term,,Ivarenv)
 
@@ -340,7 +343,7 @@ equations
 
 equations
 
-%% When processing the arguments of a ``list''-function with
+%% When processing the arguments of a list-function with
 %% the function {\tt transform-list-terms} it is known that
 %% this list contains at most one list variable.
 %% Thus, a single argument is either a list variable or
@@ -389,9 +392,9 @@ equations
 %% it can be considered as the stop condition of the recurion.
 %% There are three alternatives:
 %% \begin{enumerate}
-%% \item Both elements do not represent a list variable: ``head-tail''.
-%% \item The first element is a list variable: ``prefix-last''.
-%% \item The last element is a list variable: ``head-tail''.
+%% \item Both elements do not represent a list variable: head-tail.
+%% \item The first element is a list variable: prefix-last.
+%% \item The last element is a list variable: head-tail.
 %% \end{enumerate}
 %% In all three cases a new variable is introduced to represent
 %% the list and via access functions the first or the last element
@@ -450,7 +453,7 @@ equations
 %% first element is inspected and depending on whether this is
 %% a list variable or not the rest of the list is processed.
 %% If the first element is not a list variable we can process
-%% this first element via the ``head-tail'' mechanism.
+%% this first element via the head-tail mechanism.
 %% So, a new variable is created and conditions to
 %% obtain the head and the tail of the list are created.
 %% The rest of the list is recursively processed.
@@ -471,7 +474,7 @@ equations
                       list-tail($Varid) =: $Varid2 & Cond*2,Ivarenv4)
 
 %% If the first element is  list variable we must process the
-%% list with a ``prefix-last'' mechanism. This is performed
+%% list with a prefix-last mechanism. This is performed
 %% via the function {\tt transform-no-list-terms}.
   [tlmt-1'2] is-list-var-term(Term1) == true,
              Natcon := get-int(Ivarenv1),
@@ -526,7 +529,7 @@ equations
 equations
 
 %% This function processes the list from tail to head because
-%% it knows its head will be a list variable. The ``prefix-last''
+%% it knows its head will be a list variable. The prefix-last
 %% construction is generated via conditions and new variables.
 %% If the list consists of only two elements: first is the list variable
 %% the recursion stops.
@@ -563,7 +566,6 @@ equations
 
 equations
 
-%% Equations to deal with list variables, if a list variable represents zero or
 %% elements the name is only changed. If a list variable represents one or
 %% elements, the name is changed and a condition is generated to check
 %% for non-emptyness.

@@ -179,7 +179,7 @@ equations
               Term+ := get-funargs(Term),
               $Expression := make-c-temp(Aint1),
               Funid3 := get-funid(Term),
-              Bool2 := is-trans-list-funid(Funid3) | is-cons(Funid3),
+              Bool2 := is-trans-list-funid(Funid3) | is-cons(Funid3) | is-scons(Funid3),
               ($ActualArg+1,Stat*1,Aint2) :=
                 terms2cargs(Bool2,
                           Term+,Cenv1,Cenv2,Aint1,$Expression,Funid1,Namepair*),
@@ -196,7 +196,7 @@ equations
               Term+ := get-funargs(Term),
               $Expression := make-c-temp(Aint1),
               Funid3 := get-funid(Term),
-              Bool2 := is-trans-list-funid(Funid3) | is-cons(Funid3),
+              Bool2 := is-trans-list-funid(Funid3) | is-cons(Funid3) | is-scons(Funid3),
               ($ActualArg+1,Stat*1,Aint2) :=
                 terms2cargs(Bool2,
                           Term+,Cenv1,Cenv2,Aint1,$Expression,Funid1,Namepair*),
@@ -212,6 +212,7 @@ equations
               is-var-term(Term1) == false,
               Funid2 := get-funid(Term1),
               is-cons(Funid2) == false,
+              is-scons(Funid2) == false,
               ($ActualArg+,Stat*,Aint2) :=
                 term2carg2(false,Term1,Cenv1,Cenv2,
                          Aint1,$Expression1,Funid1,Namepair*),
@@ -235,13 +236,41 @@ equations
               term2carg2(true,Term1,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*) =
                 ($Expression2,Stat*,Aint2)
 
+  [t2ca-2'13] $Expression1 != result,
+              is-var-term(Term1) == false,
+              Funid2 := get-funid(Term1),
+              is-scons(Funid2) == true,
+              Term4,Term5,Term6 := get-funargs(Term1),
+              Post := make-call-id(cons-sep-1),
+              ($ActualArg+,Stat*,Aint2) :=
+                terms2cargs(true,
+                          Term4, Term5, Term6,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*),
+              $Expression2 := transform-call(Post,Funid2,Namepair*,$ActualArg+)
+              ==============================================================
+              term2carg2(true,Term1,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*) =
+                ($Expression2,Stat*,Aint2)
+
+[t2ca-2'13] $Expression1 != result,
+              is-var-term(Term1) == false,
+              Funid2 := get-funid(Term1),
+              is-scons(Funid2) == true,
+              Term4,Term5,Term6,Term7,Term8 := get-funargs(Term1),
+              Post := make-call-id(cons-sep-3),
+              ($ActualArg+,Stat*,Aint2) :=
+                terms2cargs(true,
+                          Term4,Term5,Term6,Term7,Term8,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*),
+              $Expression2 := transform-call(Post,Funid2,Namepair*,$ActualArg+)
+              ==============================================================
+              term2carg2(true,Term1,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*) =
+                ($Expression2,Stat*,Aint2)
+
   [t2ca-2'14] $Expression1 != result,
               is-var-term(Term) == false,
               Funid2 := get-funid(Term),
               Funid3 := get-funid(Term,Namepair*),
               Post := make-call-id(Funid3),
               Term+ := get-funargs(Term),
-              Bool2 := is-trans-list-funid(Funid2) | is-cons(Funid2),
+              Bool2 := is-trans-list-funid(Funid2) | is-cons(Funid2) | is-scons(Funid2),
               ($ActualArg+,Stat*,Aint2) :=
                 terms2cargs(Bool2,
                           Term+,Cenv1,Cenv2,Aint1,$Expression1,Funid1,Namepair*),

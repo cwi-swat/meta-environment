@@ -158,10 +158,10 @@ equations
 
   [taie-2'4] transform-arg-in-exp(!$Expression) = !transform-arg-in-exp($Expression)
 
-  [taie-2'5] transform-arg-in-exp(($Expression1 ? $Expression2 : $Expression3)) =
-               (transform-arg-in-exp($Expression1) ?
+  [taie-2'5] transform-arg-in-exp(($Expression1 ? $Expression2 : $Expression3)) = $Expression4
+             when $Expression4 := transform-arg-in-exp($Expression1) ?
                 transform-arg-in-exp($Expression2) :
-                transform-arg-in-exp($Expression3))
+                transform-arg-in-exp($Expression3)
 
   [default-taie-2'6] transform-arg-in-exp($Expression) = $Expression
 

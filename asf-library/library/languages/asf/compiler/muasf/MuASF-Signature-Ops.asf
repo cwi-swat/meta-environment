@@ -28,7 +28,9 @@ equations
              Funcdef*3 := remove-funcdef(Funcdef2,Funcdef*2),
              Funcdef*4 := Funcdef*1 ++ Funcdef*3
              ==================================
-             Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef1;Funcdef*4
+             Funcdef1;Funcdef*1 ++ Funcdef*2 =
+Funcdef1;
+Funcdef*4
 
   [fdlc-2'6] is-external-funcdef(Funcdef1) == true,
              Funcdef1 in Funcdef*2 == false,
@@ -36,7 +38,9 @@ equations
              Funcdef2 in Funcdef*2 == false,
              Funcdef*3 := Funcdef*1 ++ Funcdef*2
              ==================================
-             Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef1;Funcdef*3
+             Funcdef1;Funcdef*1 ++ Funcdef*2 = 
+Funcdef1;
+Funcdef*3
 
   [fdlc-3'7] is-external-funcdef(Funcdef1) == false,
              Funcdef1 in Funcdef*2 == false,
@@ -44,7 +48,9 @@ equations
              Funcdef2 in Funcdef*2 == false,
              Funcdef*3 := Funcdef*1 ++ Funcdef*2
              ==================================
-             Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef1;Funcdef*3
+             Funcdef1;Funcdef*1 ++ Funcdef*2 = 
+Funcdef1;
+Funcdef*3
 
 equations
 
@@ -56,7 +62,8 @@ equations
             Funcdef*2 := remove-funcdef(Funcdef1,Funcdef*1)
             ==============================================
             remove-funcdef(Funcdef1,Funcdef2;Funcdef*1) =
-              Funcdef2;Funcdef*2
+Funcdef2;
+Funcdef*2
 
   [default-rdl-2'4]
 	remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid, Funcdef*)
@@ -77,25 +84,29 @@ equations
             Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2;Funcdef*1) =
-              Funid2;Funcdef*2
+Funid2;
+Funcdef*2
 
   [rfd-2'7] Funid1 != Funid2,
             Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2 Attrs;Funcdef*1) =
-              Funid2 Attrs;Funcdef*2
+              Funid2 Attrs;
+Funcdef*2
 
   [rfd-2'8] Funid1 != Funid2,
             Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2(Sigarg+);Funcdef*1) =
-              Funid2(Sigarg+);Funcdef*2
+              Funid2(Sigarg+);
+Funcdef*2
 
   [rfd-2'9] Funid1 != Funid2,
             Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2(Sigarg+) Attrs;Funcdef*1) =
-              Funid2(Sigarg+) Attrs;Funcdef*2
+              Funid2(Sigarg+) Attrs;
+Funcdef*2
 
 equations
 

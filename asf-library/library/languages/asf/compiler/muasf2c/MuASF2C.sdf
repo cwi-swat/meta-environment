@@ -7,7 +7,7 @@ imports languages/asf/compiler/muasf2c/MuASF-Rules2C
 
 exports
   context-free syntax
-     muasf2c(Module,NameTable) -> CProgram
+     muasf2c(Module,NameTable) -> CProgram {complete}
 
 
 hiddens
@@ -18,8 +18,8 @@ hiddens
 	FT-tuple
 
   context-free syntax
-    funcdefs2cfuncs({FuncDef ";"}*) -> Declaration-list-opt
-    funcdef2cfuncs({FuncDef ";"}*)  -> Declaration-list-opt
+    funcdefs2cfuncs({FuncDef ";"}*) -> Declaration-list-opt {complete}
+    funcdef2cfuncs({FuncDef ";"}*)  -> Declaration-list-opt {complete}
 
     "funcdefs2cfuncs" -> Identifier {reject}
 

@@ -5,14 +5,12 @@ imports languages/asf/compiler/muasf/MuASF
 
 hiddens
 
-context-free syntax
+context-free start-symbols
+  Module
 
+context-free syntax
 "[" Rule "]" -> Box   {to-box}
 "<" Box ">" -> Rule   {from-box}
-
-context-free syntax
-"[" Term "]" -> Box   {to-box}
-"<" Box ">" -> Term   {from-box}
 
 context-free syntax
 "[" Cond "]" -> Box   {to-box}
@@ -35,26 +33,29 @@ context-free syntax
 "<" Box ">" -> RulesOpt   {from-box}
 
 context-free syntax
+"[" SigArg "]" -> Box   {to-box}
+"<" Box ">" -> SigArg   {from-box}
+
+context-free syntax
 "[" Module "]" -> Box   {to-box}
 "<" Box ">" -> Module   {from-box}
 
 context-free syntax
-"[" {Rule ";"}* "]" -> Box   {to-box}
+"[" {Rule ";"}* "]" -> Box*   {to-box}
 
 context-free syntax
-"[" {FuncDef ";"}* "]" -> Box   {to-box}
+"[" {FuncDef ";"}* "]" -> Box*   {to-box}
 
 context-free syntax
-"[" {Term ","}+ "]" -> Box   {to-box}
+"[" {Term ","}+ "]" -> Box*   {to-box}
 
 context-free syntax
-"[" {SigArg ","}+ "]" -> Box   {to-box}
+"[" {SigArg ","}+ "]" -> Box*   {to-box}
 
 context-free syntax
 "[" NatCon "]" -> Box {to-box}
 
 variables
-
  "NatCon" -> NatCon {strict}
  "FunId" -> FunId {strict}
  "ModId" -> ModId {strict}

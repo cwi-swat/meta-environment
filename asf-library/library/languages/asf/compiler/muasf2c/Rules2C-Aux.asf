@@ -1,3 +1,9 @@
+%% This module contains utility functions for generating parts of the C code,
+%% However, it also contains an important part of the bridge between muASF and C.
+%% The muASF rules are translated to an intermediate representation called "C-Rules",
+%% that allow the construction of a matching automaton with alternatives. This module
+%% merges equations into single C-Rules by sharing common prefixes.
+
 equations
 
   [mcr-1'1] make-c-rules() =
