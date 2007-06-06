@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jun  6 11:55:49 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/editing.tb: Add ShowLocation after selection has been set lets
+   the cursor jump to the selection
+
 Tue Jun  5 11:00:53 CEST 2007 <{kooiker,lankamp}@cwi.nl>
  * tbscripts/module-manager.tb: Catch no-such-module when getting all
    attributes for module

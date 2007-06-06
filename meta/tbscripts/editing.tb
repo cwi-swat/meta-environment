@@ -481,7 +481,7 @@ let
   Path: str,
   Prefix: str,
   Sid: session-id,
-  Area: term
+  Area: area
 in
   snd-msg(get-location-filename(Location))
   . rec-msg(location-filename(Path?))
@@ -501,6 +501,7 @@ in
     rec-msg(em-session(Path, Sid?))
     . snd-msg(te-editor-to-front(Sid))
     . snd-msg(te-set-selection(Sid, Area))
+    . GoToEditorArea(Sid, Area)
   +
     rec-msg(em-no-such-session(Path))
     . SplitFilename(Path, Filename?, Prefix?, Extension?)
@@ -508,7 +509,6 @@ in
     .
     (
       rec-msg(cm-extension-editor(Extension, EditorAction?))
-      . printf("Editor for %s is %s\n", Extension, EditorAction)
       . 
       (
         EditAnonymousLocation(Path, Area)
