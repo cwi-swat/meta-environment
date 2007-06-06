@@ -40,4 +40,36 @@ in
   fi
 endlet
 
+process DumpTermParsetreeAction(EditorId : session-id) is
+let
+  Cancel: bool,
+  Filename : str,
+  ModuleId : module-id,
+  Path : str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Filename?)
+  . PromptForFileWithExtension("Export Term Parsetree", [], ".pt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpTermParsetree(ModuleId, Filename, Path)
+  fi
+endlet
+
+process DumpTermFocusAction(EditorId : session-id) is
+let
+  Cancel: bool,
+  Path: str
+in
+  PromptForFileWithExtension("Export Focus Parsetree", [], ".pt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpTermFocusParsetree(EditorId, Path)
+  fi
+endlet
+
 #endif /* __TERM_EDITOR_ACTIONS__ */

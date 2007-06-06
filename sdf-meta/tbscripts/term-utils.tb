@@ -74,28 +74,4 @@ in
   . snd-msg(tm-end-transaction(term-parsing))
 endlet
 
-process DumpTermParsetree(ModuleId: module-id, Path: str, Filename: str) is
-let
-  Error: term,
-  Id: term,
-  Parsetree: term
-in
-  AddJob(Filename)
-  . Id := process-id
-  . GetTermParsetree(ModuleId, Path, Parsetree?)
-  . 
-  if not-equal(Parsetree, UNDEFINED) then
-    snd-msg(io-unpack-and-write-term-in-baf(Filename, Parsetree))
-    .
-    (
-      rec-msg(io-file-written)
-    +
-      rec-msg(io-file-not-written(Error?))
-    )
-  else
-    tau
-  fi
-  . JobDone(Filename)
-endlet
-
 #endif /* __TERM__UTILS__ */

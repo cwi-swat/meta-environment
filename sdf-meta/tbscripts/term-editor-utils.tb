@@ -125,4 +125,48 @@ in
   fi
 endlet
 
+process DumpTermParsetree(ModuleId: module-id, Path: str, Filename: str) is
+let
+  Error: term,
+  Parsetree: term
+in
+  AddJob(Filename)
+  . GetTermParsetree(ModuleId, Path, Parsetree?)
+  . 
+  if not-equal(Parsetree, UNDEFINED) then
+    snd-msg(io-unpack-and-write-term-in-baf(Filename, Parsetree))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+    )
+  else
+    tau
+  fi
+  . JobDone(Filename)
+endlet
+
+process DumpTermFocusParsetree(EditorId: session-id, Filename: str) is
+let
+  Error: term,
+  Parsetree: term
+in
+  AddJob(Filename)
+  . GetFocus(EditorId, Parsetree?)
+  . 
+  if not-equal(Parsetree, UNDEFINED) then
+    snd-msg(io-unpack-and-write-term-in-baf(Filename, Parsetree))
+    .
+    (
+      rec-msg(io-file-written)
+    +
+      rec-msg(io-file-not-written(Error?))
+    )
+  else
+    tau
+  fi
+  . JobDone(Filename)
+endlet
+
 #endif /* __TERM_EDITOR_UTILS__ */
