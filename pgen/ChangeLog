@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jun  7 17:10:49 CEST 2007 <economop@cwi.nl>
+ * sdf-checker/src/main.c: Added the module name as a command line option. 
+   I'm working towards fixing bug 656, but this fix stops sdfchecker from 
+   reporting when a module name is not defined. I'll fix this later...
+
 Tue Jun  5 12:33:05 CEST 2007 <economop@cwi.nl>
  * src/goto.c: fixed bug #752. We were adding reductions after each follow
    restriction was processed instead of only after all restrictions were

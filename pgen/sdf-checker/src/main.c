@@ -12,7 +12,7 @@
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
 #include <Error-utils.h>
-
+#include <SDFME-utils.h>
 
 static char *name;
 
@@ -23,7 +23,7 @@ static char myversion[] = "1.0";
 
 /* The argument vector: list of option letters, colons denote option
  * arguments. See Usage function, immediately below, for option explanation. */
-static char myarguments[] = "hi:vV";
+static char myarguments[] = "m:hi:vV";
 
 void init_patterns();
 void c_rehash(int newsize);
@@ -33,13 +33,15 @@ extern void resolve_Sdf_Checker();
 extern void init_Sdf_Checker();
 
 
-static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) {
+static PT_Tree addSdfCheckerFunction(const char *name, PT_ParseTree parseTree) {
+  SDF_ModuleId sdfModuleId = SDF_makeModuleId(name);
+  PT_Tree ptModuleId = PT_TreeFromTerm(SDF_ModuleIdToTerm(sdfModuleId));
   PT_Tree newTree = NULL;
 
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("check-sdf", "Summary", 1, ptSyntax);
+    newTree = PT_applyFunctionToTree("check-sdf", "Summary", 2, ptSyntax, ptModuleId);
   }
   else {
     ATerror("addSdfCheckerFunction: not a proper parse tree: %t\n",
@@ -49,7 +51,7 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) {
   return newTree;
 }
 
-static ATerm checkSdf(ATerm term) {
+static ATerm checkSdf(const char *name, ATerm term) {
   PT_ParseTree parseTree;
   PT_Tree ptApplied;
   ATerm reduct;
@@ -57,7 +59,7 @@ static ATerm checkSdf(ATerm term) {
 
   setKeepAnnotations(ATtrue);
   parseTree = PT_ParseTreeFromTerm(term);
-  ptApplied = addSdfCheckerFunction(parseTree);
+  ptApplied = addSdfCheckerFunction(name, parseTree);
   reduct    = innermost(ptApplied);
   asfix     = toasfix(reduct);
 
@@ -75,8 +77,8 @@ static void displayMessages(ATerm term) {
   ERR_displaySummary(summary);
 }
 
-ATerm check_sdf(int cid, ATerm term) {
-  ATerm  output = checkSdf(ATBunpack(term));
+ATerm check_sdf(int cid, const char *name, ATerm term) {
+  ATerm  output = checkSdf(name, ATBunpack(term));
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
@@ -87,9 +89,10 @@ void rec_terminate(int cid, ATerm arg) {
 
 static void usage(void) {
   ATwarning(
-    "Usage: %s -h -i file -vV . . .\n"
+    "Usage: %s -m file -h -i file -vV . . .\n"
     "Options:\n"
     "\t-h              display help information (usage)\n"
+    "\t-m module       topmodule of specification (default: Main)\n"
     "\t-i filename     input from file (default stdin)\n"
     "\t-v              verbose mode\n"
     "\t-V              reveal program version (i.e. %s)\n",
@@ -102,6 +105,7 @@ static void version(void) {
 
 int main(int argc, char *argv[]) {
   ATerm syntax = NULL, msgs = NULL;
+  char *moduleName = "Main";
   char *input = "-";
   int cid;
   int c, toolbus_mode = 0;
@@ -117,6 +121,7 @@ int main(int argc, char *argv[]) {
   initErrorApi();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
+  SDF_initSDFMEApi();
   ERR_initErrorApi();
   PERR_initParsedErrorApi();
 
@@ -132,6 +137,7 @@ int main(int argc, char *argv[]) {
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+        case 'm':  moduleName=optarg;                      break;
         case 'v':  run_verbose = ATtrue;                   break;
         case 'i':  input=optarg;                           break;
         case 'V':  version(); exit(0);                     break;
@@ -145,8 +151,8 @@ int main(int argc, char *argv[]) {
 
     syntax = ATreadFromNamedFile(input);
 
-    msgs = checkSdf(syntax);
-
+    msgs = checkSdf(moduleName, syntax);
+    
     displayMessages(msgs);
   }
   return 0;

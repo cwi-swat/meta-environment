@@ -9,7 +9,7 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm check_sdf(int conn, ATerm);
+ATerm check_sdf(int conn, const char *, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm sdfchecker_handler(int conn, ATerm term);
 extern ATerm sdfchecker_checker(int conn, ATerm sigs);

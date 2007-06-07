@@ -4,12 +4,13 @@ process SdfChecker is
 let
   Msgs   : list,
   Syntax : term,
-  SC     : sdfchecker
+  SC     : sdfchecker,
+  ModuleName : str
 in
   execute(sdfchecker, SC?) .
   (
-    rec-msg(check-sdf(Syntax?)) .
-    snd-eval(SC, check-sdf(Syntax)) .
+    rec-msg(check-sdf(ModuleName?, Syntax?)) .
+    snd-eval(SC, check-sdf(ModuleName, Syntax)) .
     rec-value(SC, messages(Msgs?)) .
     snd-msg(messages(Msgs)) .
     Syntax := none
