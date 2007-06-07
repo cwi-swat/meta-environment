@@ -122,7 +122,7 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
 	    args = PT_makeArgsMany(layout, args);
 	  }
 
-	  if (!keep_layout || (sepLength != 0 && (i % sepLength == 1))) {
+	  if (!keep_layout) {
 	    args = PT_makeArgsMany(sepTree, args);
 	  }
         }
