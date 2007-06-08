@@ -108,15 +108,16 @@ equations
 
 %% The base cases for singleton patterns are rather simple
 [star] 
-         (Stat*1,Aint2) := asfrules2cstats2(C-rule+, Namepair*,Aint) %% were done, continue with next conditions
+         C-rule+2 := add-env(C-rule+,(($*Funid,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
 	===>
-	seplistpattern2cstats(Bool,(($*Funid,Aint+2)), C-rule+, $Expression, Namepair*,Aint) =
+	seplistpattern2cstats(Bool,($*Funid,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
 ( , Stat*1 ,Aint2 )
 
-[plus] 
-         (Stat*1,Aint2) := asfrules2cstats2(C-rule+, Namepair*,Aint) %% were done, continue with next conditions
+[plus]   C-rule+2 := add-env(C-rule+,(($+Funid,$Expression))),
+         (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
 	===>
-	seplistpattern2cstats(Bool,(($+Funid,Aint+2)), C-rule+, $Expression, Namepair*,Aint) =
+	seplistpattern2cstats(Bool,($+Funid,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
 ( , 
 if (not_empty_list($Expression)) {
   Stat*1
@@ -131,7 +132,7 @@ Aint2
 	C-rule+2 := add-env(C-rule+,(($Funid,$Expression2))),
          (Stat*1,Aint2) := asfrules2cstats2(C-rule+2, Namepair*,Aint) %% were done, continue with next conditions
 	===>
-	seplistpattern2cstats(Bool,(($*Funid,Aint+2)), C-rule+, $Expression, Namepair*,Aint) =
+	seplistpattern2cstats(Bool,($*Funid,Aint+2), C-rule+, $Expression, Namepair*,Aint) =
 (Decl*2 , 
 if (is_singleton($Expression)) {
   $Expression2 = list_head($Expression);
@@ -146,7 +147,8 @@ equations
 %% the cases for the end of a list pattern first (all combinations of {var,star-var,plus-var}), and then the cases
 %% for the middle and beginning of a list pattern (again all combinations). All of these rules are duplicated: once
 %% for a single separator (lexical sep lists and context-free normal lists), and once for three separators (context-free
-%% separated lists).
+%% separated lists). Each rule prepares for the next nesting level by appropiately skipping over separators whenever possible.
+%% Separators are skipped, or bound depending on whether the surrounding variables are nullable lists or not.
 
 %% first the three end patterns that start with a star var:
 [star-star-end] 
@@ -434,7 +436,7 @@ equations
 	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
 	CConstant      := make-atmp(Aint+2),
 	Decl*3         := make-array-decl(Aint+2),
-	C-rule+3       := add-env(C-rule+2,((Term,slice(CConstant[0],CConstant[1])))),
+	C-rule+3       := add-env(C-rule+2,(($*Funid,slice(CConstant[0],CConstant[1])))),
          (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),Fv-path+),C-rule+3,$Expression,Namepair*,Aint)
 	===>
 	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),((scons,Aint+5),Fv-path+)), 
@@ -935,33 +937,57 @@ equations
 
 equations
 
-%% The following nine equations deal with combinations of {var,star,plus} patterns in the beginning or middle of list patterns
+%% todo [star-star]
+%% todo [star-plus]
 
-%% any star variable followed by something else is the same pattern:
-[star-any] 
-	$Expression2   := make-atmp(Aint+3),
-         Decl*2         := make-decl(Aint+3),
-	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
+[star-var] 
 	CConstant      := make-atmp(Aint+2),
-	Decl*3         := make-array-decl(Aint+2),
-	C-rule+3       := add-env(C-rule+2,((Term,slice(CConstant[0],CConstant[1])))),
-         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),Fv-path+),C-rule+3,$Expression,Namepair*,Aint)
+	Decl*2         := make-array-decl(Aint+2),
+	C-rule+2       := add-env(C-rule+,(($*Funid,slice(CConstant[0],CConstant[1])))),
+         (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($Funid2,Aint+6),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
 	===>
-	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),(Term2,Aint+7),(Term3,Aint+8),((scons,Aint+5),Fv-path+)), 
+	seplistpattern2cstats(Bool,((scons,Aint+1),($*Funid,Aint+2),(Term,Aint+3),(Term2,Aint+7),(Term3,Aint+8),
+                                    ((scons,Aint+5),($Funid2,Aint+6),Fv-path+)), 
                                C-rule+,
                                $Expression,
                                Namepair*,Aint) =
 (
-  Decl*1 ++  Decl*2 ++ Decl*3,
+  Decl*1 ++  Decl*2,
   CConstant[0] = $Expression;
   CConstant[1] = $Expression;
-  while (not_empty_list($Expression)) {
+  while (1) {
     Stat*1 ++
-    CConstant[1] = list_tail(CConstant[1]);
-    $Expression = CConstant[1];
-    if (not_empty_list(CConstant[1])) { 
-       CConstant[1] = list_tail(list_tail(list_tail(CConstant[1])));
-       $Expression = CConstant[1];
+    if (empty_slice(CConstant[0],CConstant[1])) {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(CConstant[1]);
+
+        if (not_empty_list(CConstant[1])) {
+          $Expression = list_tail(list_tail(list_tail(CConstant[1])));
+        }
+        else {
+          $Expression = CConstant[1];
+        }
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      if (not_empty_list(CConstant[1])) {
+        CConstant[1] = list_tail(list_tail(list_tail(list_tail(CConstant[1]))));
+        if (not_empty_list(CConstant[1])) {
+          $Expression  = list_tail(list_tail(list_tail(CConstant[1])));
+        }
+        else {
+           $Expression = CConstant[1];
+        }
+      }
+      else {
+        $Expression = CConstant[1];
+      }
+    }
+    if (empty_list(CConstant[1])) {
+      break;
     }
   }
   
@@ -1076,7 +1102,7 @@ equations
 [var-star]
 	$Expression2   := make-atmp(Aint+2),
          Decl*2         := make-decl(Aint+2),
-	C-rule+2       := add-env(C-rule+,((Term,$Expression2))),
+	C-rule+2       := add-env(C-rule+,(($Funid,$Expression2))),
          (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($*Funid2,Aint+4),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
 	===>
 	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),((scons,Aint+5),($*Funid2,Aint+4), Fv-path+)), C-rule+,
