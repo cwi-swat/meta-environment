@@ -33,6 +33,7 @@ context-free syntax
   "if" "(" Expression ")" Statement                  -> Statement  
   "if" "(" Expression ")" Statement "else" Statement -> Statement  
   "while" "(" Expression ")" Statement               -> Statement  
+  "do" Statement "while" "(" Expression ")" ";"      -> Statement  
   "return" Expression ";"                            -> Statement  
   "goto" Identifier ";"                              -> Statement  
 
