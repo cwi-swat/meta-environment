@@ -8,9 +8,9 @@ This package contains the "build environment" for Meta-Environment packages.
 The goals are:
   - each package should have the same build interface
   - no duplication/cloning of m4 macros and make rules
-  - hiding autoconf/automake ideosyncrasies as much as possible
+  - hiding autoconf/automake idiosyncrasies as much as possible
   - having a single 'bill-of-material' file for each package that
-    can be used by other tools (like sisyphys, pkg-config, autobundle, etc.)
+    can be used by other tools (like sisyphus, pkg-config, autobundle, etc.)
 
 Usage:
 The script 'meta-build' must be run from the root of a package. This copies

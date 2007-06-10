@@ -1,5 +1,8 @@
 $Id$
 
+Sun Jun 10 09:12:25 CEST 2007 <jong@metamud.org>
+ * README: corrected some typos
+
 Wed May  2 12:35:58 CEST 2007 <jurgenv@cwi.nl>
  * meta-build.m4: removed "function" keyword from shell function
    definitions to see if we can get meta-build.m4 more 'sh'-compliant.
