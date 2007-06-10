@@ -6,7 +6,8 @@
 
 extern ATbool run_verbose;
 
-void call_c_compiler(ATbool keep_annos,
+void call_c_compiler(const char* cflags,
+		     ATbool keep_annos,
 		     const char* binary, 
 		     const char* name, 
 		     const char *stem,
@@ -23,18 +24,19 @@ void call_c_compiler(ATbool keep_annos,
          COMPILE " " 
 	 "-c %s \\\n"
 	 "-o %s \\\n"
-	 "\t" CFLAGS "\\\n"
+	 "\t %s \\\n"
 	 "\t" ASC_SUPPORT_CFLAGS "\\\n"
 	 "\t-DASF_MAIN %s\n",
 	 sourcefiles,
 	 objectfiles,
+	 cflags != NULL ? cflags : CFLAGS,
 	 keep_annos ? "-DASF_WITH_ANNOS" : ""
 	 );
 
   if (run_verbose) {
     ATwarning("%s\n",commandline);
   }
-  
+
   system(commandline);
 
   sprintf(commandline,
@@ -51,6 +53,6 @@ void call_c_compiler(ATbool keep_annos,
   if (run_verbose) {
     ATwarning("%s\n",commandline);
   }
-  
+
   system(commandline);
 }

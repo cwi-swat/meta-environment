@@ -44,13 +44,15 @@ ATbool use_c_compiler;
 ATbool keep_annos;
 ATbool keep_asfc_layout;
 ATbool parse_io;
+ATbool recompile;
+ATbool indent;
 
 int toolbus_id;
 
 char myname[] = "asfc";
 char myversion[] = "3.0";
 
-static char myarguments[] = "achi:lLmn:o:p:stvV";
+static char myarguments[] = "acC:hi:IlLmn:o:p:rstvV";
 
 
 /*}}}  */
@@ -78,14 +80,17 @@ static void usage(void)
 	    "Options:\n"
 	    "\t-a              rewriting with annotations    (%s)\n"
 	    "\t-c              toggle compilation to a binary(%s)   \n"
+	    "\t-C              provide alternative CFLAGS\n"
 	    "\t-h              display this message                           \n"
 	    "\t-i filename     input equations from file     (default stdin) \n"
+	    "\t-I              use 'indent' before gcc       (default off)\n"
 	    "\t-L              rewriting with layout         (%s)\n"
 	    "\t-l              input muasf code              (%s)    \n"
 	    "\t-m              output muasf code             (%s)    \n"
 	    "\t-n name         name of the tool              (default <basename>)\n"
 	    "\t-o filename     output c code to file         (default stdout)\n"
 	    "\t-p filename     include parse table           (default none)\n"
+	    "\t-r              re-compile an existing C file \n"
 	    "\t-s              parse input and output, requires -p option (%s)\n"
 	    "\t-v              verbose mode                                   \n"
 	    "\t-V              reveal program version         (i.e. %s)       \n",
@@ -150,7 +155,7 @@ static char *remove_extension(const char *source)
 /*}}}  */
 /*{{{  static PT_ParseTree compile(char *name, ATerm equations, char *output) */
 
-static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable, 
+static PT_ParseTree compile(const char *name, const char *cflags, ATerm eqs, ATerm parseTable, 
 			    const char *output)
 {
   MA_Module muasf;
@@ -161,69 +166,85 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
 
   saveName = dashesToUnderscores(name);
 
-  if (input_muasf) {
-    PT_ParseTree parse_tree = PT_ParseTreeFromTerm(eqs);
-    ATerm tree = PT_TreeToTerm(PT_getParseTreeTree(parse_tree));
-    muasf = MA_ModuleFromTerm(tree);
-  } else {
-    VERBOSE("transforming ASF to MuASF");
+  if (!recompile) {
+    if (input_muasf) {
+      PT_ParseTree parse_tree = PT_ParseTreeFromTerm(eqs);
+      ATerm tree = PT_TreeToTerm(PT_getParseTreeTree(parse_tree));
+      muasf = MA_ModuleFromTerm(tree);
+    } else {
+      VERBOSE("transforming ASF to MuASF");
 
-    muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs), keep_asfc_layout);
-  }
-
-  if (muasf == NULL) {
-    return NULL;
-  }
-
-  if (output_muasf) {
-    PT_ParseTree pt =
-      PT_makeParseTreeTree(
-        PT_makeSymbolsMany(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()),
-        PT_makeTreeLayoutEmpty(),
-        (PT_Tree) muasf,
-        PT_makeTreeLayoutEmpty(),
-        0);
-
-    ATwriteToNamedTextFile((ATerm) pt, output);
-
-    return pt;
-  }
-  else {
-    
-    VERBOSE("transforming MuASF to C");
-
-    c_code = muasfToC(muasf); 
-
-    if (!strcmp(output, "-")) {
-      fp = stdout;
+      muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs), keep_asfc_layout);
     }
-    else {
-      fp = fopen(output, "wb");
-    }
-    if (fp == NULL) {
-      ATwarning("Error: unable to open %s for writing\n", output);
+
+    if (muasf == NULL) {
       return NULL;
     }
 
-    VERBOSE("pretty printing C code");
-    ToC_code(parse_io, keep_annos, keep_asfc_layout, 
-		    saveName, c_code, parseTable, fp , 
-	     myversion);
-    fclose(fp);
+    if (output_muasf) {
+      PT_ParseTree pt =
+	PT_makeParseTreeTree(
+			     PT_makeSymbolsMany(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()),
+			     PT_makeTreeLayoutEmpty(),
+			     (PT_Tree) muasf,
+			     PT_makeTreeLayoutEmpty(),
+			     0);
 
-    if (use_c_compiler) {
-      
-      VERBOSE("invoking C compiler");
+      ATwriteToNamedTextFile((ATerm) pt, output);
 
-      call_c_compiler(keep_annos, prefix, saveName, prefix, output);
+      return pt;
     }
+    else {
 
+      VERBOSE("transforming MuASF to C");
+
+      c_code = muasfToC(muasf); 
+
+      if (!strcmp(output, "-")) {
+	fp = stdout;
+      }
+      else {
+	fp = fopen(output, "wb");
+      }
+      if (fp == NULL) {
+	ATwarning("Error: unable to open %s for writing\n", output);
+	return NULL;
+      }
+
+      VERBOSE("pretty printing C code");
+      ToC_code(parse_io, keep_annos, keep_asfc_layout, 
+	       saveName, c_code, parseTable, fp , 
+	       myversion);
+      fclose(fp);
+
+      if (indent) {
+	char command[1024];
+	sprintf(command,"indent %s\n", output);
+	VERBOSE("invoking indent");
+	system(command);
+      }
+
+      if (use_c_compiler) {
+
+	VERBOSE("invoking C compiler");
+
+	call_c_compiler(cflags, keep_annos, prefix, saveName, prefix, output);
+      }
+
+    }
+    free(saveName);
+    free(prefix);
+
+    return c_code;
+  }
+  else {
+    VERBOSE("invoking C compiler");
+    call_c_compiler(cflags, keep_annos, prefix, saveName, prefix, output);
+    free(saveName);
+    free(prefix);
   }
 
-  free(saveName);
-  free(prefix);
-
-  return c_code;
+  return NULL;
 }
 
 /*}}}  */
@@ -254,7 +275,7 @@ ATerm compile_module(int cid, const char *moduleName, const char *output,
   toolbus_id = cid;
 
   parse_io = ATtrue;
-  result = compile(moduleName, ATBunpack(equations), ATBunpack(parsetable),
+  result = compile(moduleName, NULL, ATBunpack(equations), ATBunpack(parsetable),
 		   output);
 
   return ATmake("snd-value(compilation-done)");
@@ -272,6 +293,7 @@ int main(int argc, char *argv[])
   char *output = "-";
   char *name = "";
   char *table = NULL;
+  char *cflags = NULL;
 
   ATerm eqs;
   ATerm parseTable = NULL;
@@ -284,6 +306,8 @@ int main(int argc, char *argv[])
   use_c_compiler = ATfalse;
   toolbus_mode = ATfalse;
   parse_io = ATfalse;
+  recompile = ATfalse;
+  indent = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
@@ -312,14 +336,17 @@ int main(int argc, char *argv[])
       switch (c) {
       case 'a':  keep_annos = ATtrue; break;	
       case 'c':  use_c_compiler = !use_c_compiler; break;	
+      case 'C':  cflags=optarg; break;
       case 'v':  run_verbose = ATtrue;  break;
       case 'i':  equations=optarg;      break;
+      case 'I':  indent=ATtrue;         break;
       case 'l':  input_muasf=ATtrue;    break;
       case 'L':  keep_asfc_layout=ATtrue;    break;
       case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
       case 'p':  table=optarg;          break;
+      case 'r':  recompile=ATtrue;      break;
       case 's':  parse_io=ATtrue;       break;
       case 'V':  version();             break;
       case 'h':  /* drop intended */
@@ -349,7 +376,8 @@ int main(int argc, char *argv[])
       ATerror("-p option with parse table required\n");
     }
 
-    if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
+    if ((use_c_compiler || recompile) 
+	&& !output_muasf && strcmp(output, "-") == 0) {
       char tmp[_POSIX_PATH_MAX];
       sprintf(tmp, "%s.c", name);
       output = strdup(tmp);
@@ -364,7 +392,7 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    compile(name, eqs, parseTable, output);
+    compile(name, cflags, eqs, parseTable, output);
   }
 
   return 0;
