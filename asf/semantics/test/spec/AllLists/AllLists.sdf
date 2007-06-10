@@ -1,0 +1,92 @@
+module AllLists
+
+imports basic/Whitespace
+imports basic/NatCon
+imports basic/Booleans
+
+exports
+sorts List SepList
+
+context-free start-symbols
+  List SepList NatCon <List,List> <SepList,SepList>
+
+context-free syntax
+  "[" NatCon* "]"       -> List     
+  "{" {NatCon ","}* "}" -> SepList  
+  succ(NatCon)          -> NatCon   
+
+context-free syntax
+  head(List)         -> NatCon       
+  tail(List)         -> List         
+  concat(List, List) -> List         
+  last(List)         -> NatCon       
+  dup(List)          -> List         
+  sort(List)         -> List         
+  split(List)        -> <List,List>  
+  length(List)       -> NatCon       
+
+context-free syntax
+  head(SepList)            -> NatCon             
+  tail(SepList)            -> SepList            
+  concat(SepList, SepList) -> SepList            
+  last(SepList)            -> NatCon             
+  dup(SepList)             -> SepList            
+  sort(SepList)            -> SepList            
+  split(SepList)           -> <SepList,SepList>  
+  length(SepList)          -> NatCon             
+
+context-free syntax
+  star(List)          -> Boolean  
+  plus(List)          -> Boolean  
+  var(List)           -> Boolean  
+  star-star-end(List) -> Boolean  
+  star-plus-end(List) -> Boolean  
+  star-var-end(List)  -> Boolean  
+  plus-star-end(List) -> Boolean  
+  plus-plus-end(List) -> Boolean  
+  plus-var-end(List)  -> Boolean  
+  var-star-end(List)  -> Boolean  
+  var-plus-end(List)  -> Boolean  
+  var-var-end(List)   -> Boolean  
+  star-star(List)     -> Boolean  
+  star-plus(List)     -> Boolean  
+  star-var(List)      -> Boolean  
+  plus-star(List)     -> Boolean  
+  plus-plus(List)     -> Boolean  
+  plus-var(List)      -> Boolean  
+  var-star(List)      -> Boolean  
+  var-plus(List)      -> Boolean  
+  var-var(List)       -> Boolean  
+
+context-free syntax
+  star(SepList)          -> Boolean  
+  plus(SepList)          -> Boolean  
+  var(SepList)           -> Boolean  
+  star-star-end(SepList) -> Boolean  
+  star-plus-end(SepList) -> Boolean  
+  star-var-end(SepList)  -> Boolean  
+  plus-star-end(SepList) -> Boolean  
+  plus-plus-end(SepList) -> Boolean  
+  plus-var-end(SepList)  -> Boolean  
+  var-star-end(SepList)  -> Boolean  
+  var-plus-end(SepList)  -> Boolean  
+  var-var-end(SepList)   -> Boolean  
+  star-star(SepList)     -> Boolean  
+  star-plus(SepList)     -> Boolean  
+  star-var(SepList)      -> Boolean  
+  plus-star(SepList)     -> Boolean  
+  plus-plus(SepList)     -> Boolean  
+  plus-var(SepList)      -> Boolean  
+  var-star(SepList)      -> Boolean  
+  var-plus(SepList)      -> Boolean  
+  var-var(SepList)       -> Boolean  
+
+hiddens
+variables
+  "N*" [0-9]*  -> NatCon*        
+  "N,*" [0-9]* -> {NatCon ","}*  
+  "N+" [0-9]*  -> NatCon+        
+  "N,+" [0-9]* -> {NatCon ","}+  
+  "N" [0-9]*   -> NatCon         
+  "L" [0-9]*   -> List           
+  "S" [0-9]*   -> SepList        
