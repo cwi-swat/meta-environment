@@ -4,10 +4,10 @@ equations
 %% generic asc-support call_kids... functions. Because their number is
 %% unknown they are wrapped by an ATermList:
 
-[] extra() = ATempty
-[] extra($Expression) = ATmakeList1($Expression)
-[] extra($Expression1, $Expression2) = ATmakeList2($Expression1, $Expression2)
-[] extra(Expr*) = ATmakeList(count-args(Expr*), Expr*)
+[] extra() = (ATerm) ATempty
+[] extra($Expression) = (ATerm) ATmakeList1($Expression)
+[] extra($Expression1, $Expression2) = (ATerm) ATmakeList2($Expression1, $Expression2)
+[] extra(Expr*) = (ATerm) ATmakeList(count-args(Expr*), Expr*)
 
 [] count-args() = 0
 [] count-args($Expression, Expr*) = integer-constant(d+2)
