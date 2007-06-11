@@ -1115,7 +1115,8 @@ equations
 	C-rule+2       := add-env(C-rule+,(($+Funid,slice(CConstant[0],CConstant[1])))),
          (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($*Funid2,Aint+4),Fv-path+),C-rule+2,$Expression,Namepair*,Aint)
 	===>
-	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),((scons,Aint+5),($*Funid2,Aint+4), Fv-path+)), C-rule+,
+	seplistpattern2cstats(Bool,((scons,Aint+1),($+Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($*Funid2,Aint+4), Fv-path+)), C-rule+,
                                $Expression,
                                Namepair*,Aint) =
 (
@@ -1340,7 +1341,8 @@ equations
 	C-rule+5       := add-env(C-rule+4,((Term3,$Expression5))),
          (Decl*1,Stat*1,Aint2) := seplistpattern2cstats(Bool,((scons,Aint+5),($Funid2,Aint+4),Fv-path+),C-rule+5,$Expression,Namepair*,Aint)
 	===>
-	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),((scons,Aint+5),($Funid2,Aint+4), Fv-path+)), C-rule+,
+	seplistpattern2cstats(Bool,((scons,Aint+1),($Funid,Aint+2),(Term,Aint+3),(Term2,Aint+5),(Term3,Aint+6),
+                                    ((scons,Aint+11),($Funid2,Aint+4), Fv-path+)), C-rule+,
                                $Expression,
                                Namepair*,Aint) =
 (
