@@ -1,5 +1,13 @@
 $Id$
 
+Mon Jun 11 16:20:26 CEST 2007 <jurgenv@cwi.nl>
+ * semantics/tests/**: added AllLists specification including a few dozen
+   list patterns and almost 300 test terms. This specification tests
+   all kinds of different list patterns, including the more obscure ones.
+   The tests show a number of differences between the compiler and the
+   interpreter concerning list matching. If the pattern starts with 
+   a plus variable, the compiler does not generate the correct code.
+
 Wed Jun  6 18:03:05 CEST 2007 <economop@cwi.nl>
  * syntax/addeqssyntax/src/Add-Eqs-Syntax.c: regenerated as change committed
    in r22497 stopped the normalizer working correctly.
