@@ -8,7 +8,7 @@ exports
 sorts List SepList
 
 context-free start-symbols
-  List SepList NatCon <List,List> <SepList,SepList>
+  List SepList NatCon <List,List> <SepList,SepList> Boolean
 
 context-free syntax
   "[" NatCon* "]"       -> List     
