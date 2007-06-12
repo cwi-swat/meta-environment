@@ -27,7 +27,7 @@ exports
 exports  
 
   context-free syntax
-	funid2identifier(FunId) -> Identifier {complete}
+	funid2identifier(FunId) -> Identifier 
         "funid2identifier" -> Identifier {reject}
 	funid2identifier(FunId) -> Expression {reject}
        
