@@ -197,8 +197,8 @@ equations
              locate-constants-in-expression(Prime($ActualArg*1),(ce-pair*1,Aint1)) =
                (ce-pair*2,Prime($ActualArg*2), Stat*, Aint2)
 
-  [lcie-1'4] locate-constants-in-expression(ATmakeList(0),(ce-pair*1,Aint1)) = 
-               (ce-pair*1,ATempty, ,Aint1)
+  [lcie-1'4] locate-constants-in-expression((ATerm) ATmakeList(0),(ce-pair*1,Aint1)) = 
+               (ce-pair*1, (ATerm) ATempty, ,Aint1)
 
   [lcie-1'3] (ce-pair*2,$Expression3, Stat*, Aint2) :=
                locate-constants-in-expression($Expression2,(ce-pair*1,Aint1))
@@ -221,7 +221,7 @@ equations
 
 equations
 
-  [ecv-1'1] expression-contains-variables((ATerm) ATmakeList($ActualArg+)) = false
+  [ecv-1'1] expression-contains-variables((Ident) Primary) = expression-contains-variables(Primary)
 
   [ecv-1'2] Bool := expressions-contain-variables($ActualArg*1)
             =================================================
