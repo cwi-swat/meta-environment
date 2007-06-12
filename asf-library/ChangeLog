@@ -1,5 +1,37 @@
 $Id$
 
+Tue Jun 12 17:37:30 CEST 2007 <jurgenv@cwi.nl>
+ * NOTE: I've been making and committing changes in languages/asf/** that 
+   correspond to the "layout" branches of asc-support and asf. The 
+   asf-library package is not branched.
+ * library/languages/asf/compiler/**: the compiler now generates fully
+   functional matching and construction code for seperated lists. Alas,
+   the tests I created for testing this do not succeed not non-separated
+   lists. Apparently the old compiler did not fully implement list 
+   matching and construction correctly.
+ * library/languages/asf/normalization/**: added a Predicates module
+   that contains reusable predicates on AsFix trees. Added a phase to
+   the traversal functions module. This phase removes all layout and
+   literals from applications of traversal function productions. The idea
+   is to make the implementation of traversal functions in the ASF compiler 
+   and the interpreter independent from the rewriting with layout
+   functionality.
+
+Wed Jun  6 22:47:30 CEST 2007 <jurgenv@cwi.nl>
+ * library/languages/asf/compiler/**: adapted the source code of the ASF 
+  compiler for pattern matching
+  and construction on separated lists with 1 or 3 separators. 
+  The generated code is still somewhat buggy. The compiler is still fully
+  backward compatible for rewriting without separated lists, and
+  by keeping the code for normal lists separate from separated lists I
+  have limited the destabilizing effect of these huge adaptations to a 
+  minimum.
+ * library/languages/asf/compiler/format/**: added pretty printers 
+   for muASF and C code for debugging purposes
+ * library/languages/asf/asfsdfchecker: fixed priority constructor 
+   checker in AsfSdfChecker
+
+
 Wed Jun  6 18:09:33 CEST 2007 <economop@cwi.nl>
  * library/languages/asf/addeqssyntax/Add-Eqs-Conds.asf: removed equation
    added in r22498 because the dumped equations appear to trigger a bug in the 
