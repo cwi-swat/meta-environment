@@ -3,6 +3,7 @@ module languages/asf/normalization/Layout
 imports languages/asf/normalization/RenamedTree
 imports languages/asf/normalization/RenamedASF
 imports languages/asf/normalization/RenamedLifting[StrCon]
+imports languages/asf/normalization/Predicates
 imports basic/Booleans
 imports basic/Strings
 imports basic/Integers
@@ -46,11 +47,7 @@ build-layout(P-Tree) -> P-Tree {traversal(trafo,top-down,break)}
 context-free syntax
 
 find-layout(P-Tree,P-Args) -> P-Args {traversal(accu,top-down,break)}
-is-lexical-constructor(P-Tree) -> Boolean
-is-layout(P-Tree) -> Boolean
-is-literal(P-Tree) -> Boolean
-is-layout-variable(P-Tree) -> Boolean
-is-variable(P-Tree) -> Boolean
+
 layout-to-list-variable(P-Tree) -> P-Tree
 space() -> P-Tree
 make-layout(P-Args) -> P-Tree

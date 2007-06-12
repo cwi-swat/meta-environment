@@ -94,51 +94,7 @@ equations
 	===>
 	find-layout(Tree, [Tree*]) = [Tree*, layout-to-list-variable(Tree)]
 
-equations
 
-[yes]
-	is-lexical-constructor(
-	appl(prod(_Symbols,
-		cf(parameterized-sort("CHARS",[layout])),
-		attrs([_Attr*1,term(lexical-constructor),_Attr*2])),_Args))
-	= true
-
-[yes]
-	is-lexical-constructor(
-	appl(prod(_Symbols,
-		cf(parameterized-sort("CHARS",[layout])),
-		attrs([_Attr*1,term(lexical-constructor),_Attr*2])),_Args) _Ann)
-	= true
-
-[default-no]
-	is-lexical-constructor(_Tree) = false
-
-equations
-
-[annotated]
-	is-layout-variable(Tree _Ann) =
-	is-layout-variable(Tree)
-
-[yes-lexical-without-inner-annotation]
-	is-layout-variable(
-	appl(prod([varsym(cf(parameterized-sort("CHARS",[layout])))],cf(parameterized-sort("CHARS",[layout])),_Attrs1),[appl(prod(_Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),_Attrs2),_Args)])) = true
-
-[yes-lexical-with-inner-annotation]
-	is-layout-variable(
-	appl(prod([varsym(cf(parameterized-sort("CHARS",[layout])))],cf(parameterized-sort("CHARS",[layout])),_Attrs1),[appl(prod(_Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),_Attrs2),_Args)_Ann])) = true
-
-[yes-context-free-without-inner-annotation]
-	is-layout-variable(
-	appl(prod([varsym(cf(layout))],cf(layout),_Attrs1),[appl(prod(_Symbols,varsym(cf(layout)),_Attrs2),_Args)]))
-	 = true
-
-[yes-context-free-with-inner-annotation]
-	is-layout-variable(
-	appl(prod([varsym(cf(layout))],cf(layout),_Attrs1),[appl(prod(_Symbols,varsym(cf(layout)),_Attrs2),_Args) _Ann]))
-	 = true
-
-[default-no]
-	is-layout-variable(_Tree) = false
 
 equations
 
@@ -168,40 +124,6 @@ equations
 	=
 	appl(prod([varsym(iter-star(layout))],lex(iter-star(layout)),Attributes1),[appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes2),Args)Ann])
 
-equations
-
-[yes]
-	is-layout(appl(prod(_Symbols,cf(opt(layout)),_Attrs),_Args)) = true
-
-[annotated]
-	is-layout(Tree _Ann) = is-layout(Tree)
-
-[default-no]
-	is-layout(_Tree) = false
-	
-equations
-
-[yes]
-	is-literal(appl(prod(_Symbols,lit(_Lit),_Attrs),_Args)) = true
-
-[yes]
-	is-literal(appl(prod(_Symbols,cilit(_Lit),_Attrs),_Args)) = true
-
-[annotated]
-	is-literal(Tree _Ann) = is-literal(Tree)
-
-[default-no]
-	is-literal(_Tree) = false
-
-equations
-
-[yes]	is-variable(appl(prod([varsym(_Symbol1)], _Symbol2, _Attrs), _Args)) = true
-
-[annotated]
-	is-variable(Tree _Ann) = is-variable(Tree)
-
-[default-no]
-	is-variable(_Tree) = false
 
 equations
 

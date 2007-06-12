@@ -2,12 +2,13 @@ module languages/asf/normalization/TraversalFunctions
 
 imports languages/asf/normalization/RenamedASF
 imports languages/asf/normalization/Length
+imports languages/asf/normalization/Predicates
 
 exports
 
 context-free syntax
-
-  lexical-traversals(Module) -> Module
+  traversals(Module) -> Module
+ 
 
 hiddens
 
@@ -16,9 +17,19 @@ context-free start-symbols
 	Module
 
 context-free syntax
+  abstract-traversals(Module) -> Module
+  lexical-traversals(Module)  -> Module
+
+context-free syntax
 
   remove-lex-to-cf(Module) -> Module {traversal(trafo,top-down,break)}
   remove-lex-to-cf(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+context-free syntax
+  remove-lits-and-layout(Module) -> Module {traversal(trafo,bottom-up, continue)}
+  remove-lits-and-layout(P-Tree) -> P-Tree {traversal(trafo,bottom-up, continue)}
+  get-traversal-arguments({P-Tree ","}+) -> {P-Tree ","}+
+  get-traversal-types({P-Symbol ","}+)   -> {P-Symbol ","}+
 
 variables
 	"Equation" -> Equation {strict}
@@ -46,3 +57,8 @@ variables
 variables
 	"_Ann"[0-9]* -> P-Annotation {wild}
 	"_Attrs"[0-9]* -> P-Attributes {wild}
+	"_Tree"[0-9]* -> P-Tree {wild}
+	"_Lit"[0-9]* -> P-Tree {wild}
+	"_Symbol"[0-9]* -> P-Symbol  {wild}
+         "_Layout"[0-9]* -> P-Symbol {wild}
+	"_LayoutTree"[0-9]* -> P-Tree {wild}
