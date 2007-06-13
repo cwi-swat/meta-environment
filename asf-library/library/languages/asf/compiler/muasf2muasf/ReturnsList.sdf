@@ -44,6 +44,8 @@ variables
 "Continuation"[0-9]* -> TraversalContinuation {strict}
 
 "List"[0-9]* -> FunId {strict}
- 
+"Sep"[0-9]* -> NatCon {strict}
+
 variables
 "_List"[0-9]* -> FunId {wild} 
+"_Seps"[0-9]* -> NatCon {wild}

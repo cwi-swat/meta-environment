@@ -62,32 +62,64 @@ equations
 	unwrap-rhs([Func] = {_List}(Term)) = 
 	[Func] = make-list(Term)
 
+[constant-sep]
+	unwrap-rhs([Func] = {_List _Seps}(Term)) = 
+	[Func] = make-list(Term)
+
 [func]
 	unwrap-rhs([Func](Term+) = {_List}(Term)) = 
 	[Func](Term+) = make-list(Term)
 
-[constant]
+[func-sep]
+	unwrap-rhs([Func](Term+) = {_List _Seps}(Term)) = 
+	[Func](Term+) = make-list(Term)
+
+[def-constant]
 	unwrap-rhs(default: [Func] = {_List}(Term)) = 
 	default:[Func] = make-list(Term)
 
-[func]
+[def-constant-sep]
+	unwrap-rhs(default: [Func] = {_List _Seps}(Term)) = 
+	default:[Func] = make-list(Term)
+
+[def-func]
 	unwrap-rhs(default: [Func](Term+) = {_List}(Term)) = 
 	default:[Func](Term+) = make-list(Term)
 
-[constant]
+[def-func-sep]
+	unwrap-rhs(default: [Func](Term+) = {_List _Seps}(Term)) = 
+	default:[Func](Term+) = make-list(Term)
+
+[cond-constant]
 	unwrap-rhs(Cond+ ==> [Func] = {_List}(Term)) = 
 	Cond+ ==> [Func] = make-list(Term)
 
-[func]
+[cond-constant-sep]
+	unwrap-rhs(Cond+ ==> [Func] = {_List _Seps}(Term)) = 
+	Cond+ ==> [Func] = make-list(Term)
+
+[cond-func]
 	unwrap-rhs(Cond+ ==> [Func](Term+) = {_List}(Term)) = 
 	Cond+ ==> [Func](Term+) = make-list(Term)
 
-[constant]
+[cond-func-sep]
+	unwrap-rhs(Cond+ ==> [Func](Term+) = {_List _Seps}(Term)) = 
+	Cond+ ==> [Func](Term+) = make-list(Term)
+
+[def-cond-constant]
 	unwrap-rhs(default: Cond+ ==> [Func] = {_List}(Term)) = 
 	default:Cond+ ==>  [Func] = make-list(Term)
 
-[func]
+[def-cond-constant-sep]
+	unwrap-rhs(default: Cond+ ==> [Func] = {_List _Seps}(Term)) = 
+	default:Cond+ ==>  [Func] = make-list(Term)
+
+[def-cond-func]
 	unwrap-rhs(default: Cond+ ==> [Func](Term+) = {_List}(Term)) = 
+	default:Cond+ ==> [Func](Term+) = make-list(Term)
+
+[def-cond-func-sep]
+	unwrap-rhs(default: Cond+ ==> [Func](Term+) = {_List _Seps}(Term)) = 
 	default:Cond+ ==> [Func](Term+) = make-list(Term)
 
 equations
@@ -104,6 +136,8 @@ equations
 		{List}(Term)) = 
 	fix-trafo(|Func trafo Strategy Continuation|(Term+) 
 		= {List}(Term))
+
+
 
 [keep-wrapper-funcdefault]
 	fix-trafo(default: [|Func trafo Strategy Continuation|](Term+) = 
@@ -124,6 +158,32 @@ equations
 	fix-trafo(default:Cond+ ==> 
 		|Func trafo Strategy Continuation|(Term+) 
 		= {List}(Term))
+
+[keep-wrapper-funcdefault-sep]
+	fix-trafo(default: [|Func trafo Strategy Continuation|](Term+) = 
+		{List Sep}(Term)) = 
+	fix-trafo(default:|Func trafo Strategy Continuation|(Term+) = 
+		{List Sep}(Term))
+
+[keep-wrapper-func-cond-sep]
+	fix-trafo(Cond+ ==> [|Func trafo Strategy Continuation|](Term+) = 
+		{List Sep}(Term)) = 
+	fix-trafo(Cond+ ==> |Func trafo Strategy Continuation|(Term+) 
+		= {List Sep}(Term))
+
+[keep-wrapper-func-cond-default-sep]
+	fix-trafo(default:Cond+ ==> 
+		[|Func trafo Strategy Continuation|](Term+) = 
+		{List Sep}(Term)) = 
+	fix-trafo(default:Cond+ ==> 
+		|Func trafo Strategy Continuation|(Term+) 
+		= {List Sep}(Term))
+
+[keep-wrapper-func-sep]
+	fix-trafo([|Func trafo Strategy Continuation|](Term+) = 
+		{List Sep}(Term)) = 
+	fix-trafo(|Func trafo Strategy Continuation|(Term+) 
+		= {List Sep}(Term))
 
 %% NOTE: this assumes that a traversal function is never on the
 %% matching side of a condition. Which wouldn't make any sense anyhow.
@@ -147,3 +207,7 @@ equations
 unwrap-accu([|Func accu Strategy Continuation|](Term, {_List}(Term2), Term*)) =
 	[|Func accu Strategy Continuation|](Term, Term2, Term*)
 
+[unwrap-accumulated-sep]
+
+unwrap-accu([|Func accu Strategy Continuation|](Term, {_List _Seps}(Term2), Term*)) =
+	[|Func accu Strategy Continuation|](Term, Term2, Term*)
