@@ -86,11 +86,13 @@ equations
 
 equations
 
-[] remove-lits-and-layout(appl(prod([_Symbol1,_Layout3,lit("("),_Layout1,Symbol+,_Layout2,lit(")")],Symbol2,
+%% We remove all literals, layout, comma's and brackets. To retain the identity of the production, the function
+%% name is stored in a production attribute tagged "traversal-function":
+[] remove-lits-and-layout(appl(prod([lit(Name),_Layout3,lit("("),_Layout1,Symbol+,_Layout2,lit(")")],Symbol2,
           attrs([Attr*1,term(traversal(Term+)),Attr*2]))
           , [ _Lit1, _LayoutTree1, _Lit2, _LayoutTree2, Tree+2, _LayoutTree3, _Lit3]
      )) = appl(prod([get-traversal-types(Symbol+)],Symbol2,
-          attrs([Attr*1,term(traversal(Term+)),Attr*2])),[get-traversal-arguments(Tree+2)])
+          attrs([term(traversal-function(Name)),Attr*1,term(traversal(Term+)),Attr*2])),[get-traversal-arguments(Tree+2)])
 
 equations
 

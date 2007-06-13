@@ -53,6 +53,7 @@ variables
 	"Term+"[0-9]* -> {ATerm ","}+ {strict}
 	"LitTree"[0-9]* -> P-Tree {strict}
          "LayoutTree"[0-9]* -> P-Tree {strict}
+	"Name"[0-9]* -> StrCon {strict}
 
 variables
 	"_Ann"[0-9]* -> P-Annotation {wild}
