@@ -82,12 +82,14 @@ let
   Extension : str,
   Directory : str,
   Path : str,
+  Idle: term,
   Filename : str,
   RelativeFilename : str,
   ModuleId : module-id,
   Paths: list,
   FoundPath: str,
-  Prefix: str
+  Prefix: str,
+  HasAttribute: bool
 in
   GetSearchPaths(Paths?)
   . PromptForFileWithExtension("Open Module", Paths, SDF_EXTENSION, Cancel?, Path?)
@@ -107,7 +109,19 @@ in
 	snd-msg(tm-request-transaction(module-manager))
         . OpenModule(RelativeFilename, ModuleId?)
 	. MM-Subscribe-Attribute-Changed(ModuleId,META_NAMESPACE,"idle",<term>,yes)
-        . rec-note(mm-attribute-changed(Event?))
+	. MM-HasAttribute(ModuleId, META_NAMESPACE, "idle", HasAttribute?) 
+	.
+	if equal(HasAttribute, true) then
+	  MM-GetAttribute(ModuleId, META_NAMESPACE, "idle", Idle?)
+	else
+	  tau
+	fi
+        .
+	if or(not-equal(Idle, yes), equal(HasAttribute, false)) then
+          rec-note(mm-attribute-changed(Event?))
+	else
+	  tau
+	fi
 	. snd-msg(tm-end-transaction(module-manager))
         . SelectModule(ModuleId)
       else

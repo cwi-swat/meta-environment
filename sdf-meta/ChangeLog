@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jun 14 16:29:00 CEST 2007 <{kooiker,lankamp}@cwi.nl>
+ * tbscripts/sdf-actions.tb: Add ugly hack to fix OpenModuleAction scenario
+   not receiving notes for already opened modules.
+
 Wed Jun  6 14:42:46 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/term-{actions,utils}.tb:
    - Remove dump parsetree action
