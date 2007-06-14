@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jun 14 09:57:40 CEST 2007 <kooiker@cwi.nl>
+ * navigator.idef.src:
+   - Fixed nav-show-popup missing ? in receiving variable
+   - Create process handling the event solves deadlock situations
+
 Tue Mar 20 22:00:04 CET 2007 <jurgenv@cwi.nl>
  * src/**/Navigator.java: changed name of tab to a noun that describes
    the contents, such that it is consistent with Processes & Facts.

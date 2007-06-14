@@ -10,6 +10,7 @@ let
   Menu: term,
   ModuleId: term,
   File: file,
+  Pid: int,
   PopupMenu: list,
   Str : str
 in
@@ -30,19 +31,25 @@ in
     . snd-ack-event(T, module-selected(ModuleId))
   +
     rec-event(T, mouse-event(navigator(ModuleId?),popup))
-    . snd-msg(nav-request-popup-event(ModuleId))
+    . create(NAV-RequestPopupEvent(ModuleId), Pid?)
     . snd-ack-event(T, mouse-event(navigator(ModuleId),popup))
   +
-    rec-msg(nav-show-popup(ModuleId, PopupMenu?))
+    rec-msg(nav-show-popup(ModuleId?, PopupMenu?))
     . snd-do(T, show-popup(ModuleId, PopupMenu))
   +
     rec-event(T, menu-event(ModuleId?, Menu?))
-    . snd-msg(nav-menu-selected(ModuleId, Menu))
+    . create(NAV-MenuEvent(ModuleId, Menu), Pid?)
     . snd-ack-event(T, menu-event(ModuleId, Menu))
   )
   *
   rec-disconnect(T)
 endlet
+
+process NAV-RequestPopupEvent(ModuleId: term) is
+  snd-msg(nav-request-popup-event(ModuleId))
+
+process NAV-MenuEvent(ModuleId: term, Menu: term) is
+  snd-msg(nav-menu-selected(ModuleId, Menu))
 
 process NAV-AddListener is
   subscribe(nav-module-selected(<term>))
