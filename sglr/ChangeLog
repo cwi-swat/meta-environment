@@ -1,5 +1,17 @@
 $Id$
 
+Thu Jun 21 14:16:52 CEST 2007 <economop@cwi.nl>
+ * src/parser/parser.c: changed the use of the forActorDelayed to match the 
+   algorithmic description in Eelco's thesis. State nodes that are created by 
+   rejected reductions now get added to the forActorDelayed and are only 
+   processed once all nodes in the forActor have been processed. This fixes 
+   the bug that resulted in some valid parse trees being incorrectly rejected. 
+   However, this approach still results in some invalid parse trees not being
+   filtered during parsing that get filtered in the post parse traversal.
+ * test/grammars/TooManyTreesRejected.def: added regression test to ensure
+   the reject bug that resulted in too many trees being filtered is not
+   re-produced.
+
 Tue May 15 15:51:37 CEST 2007 <economop@cwi.nl>
  * src/commandLineInterface.c: fixed bug that prevented the -f flag from
    switching all filters off.

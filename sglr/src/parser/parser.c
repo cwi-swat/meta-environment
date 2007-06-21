@@ -185,13 +185,15 @@ static void parseToken(void) {
       forActor = s;
     }
 
-    if (!GSSNode_isRejected(st)) {
+    if (!FLT_getRejectFlag() || !GSSNode_isRejected(st)) {
       actor(st);
     }
     
-    if (actives == NULL && forActor == NULL) {
-      forActor        = forActorDelayed;
-      forActorDelayed = NULL;
+    if (actives == NULL && forActor == NULL && forActorDelayed != NULL) {
+      /*forActor        = forActorDelayed;
+      forActorDelayed = NULL;*/
+      forActor = GSS_addNodeListElement(GSS_getNodeListHead(forActorDelayed), forActor);
+      forActorDelayed = GSS_getNodeListTail(forActorDelayed);
     }
   }
 }
@@ -228,7 +230,7 @@ static void actor(GSSNode st) {
         }
         break;
       case ACCEPT:
-        if (!GSSNode_isRejected(st)) {
+        if (!FLT_getRejectFlag() || !GSSNode_isRejected(st)) {
           acceptingStack = st;
         }
         break;
@@ -319,10 +321,14 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
     nl  = GSSNode_addEdge(st1, st0, t, length);
     GSS_addToCurrentLevel(st1);
 
-    forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);
+    /*forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);*/
     
     if (PTBL_isSpecialAttrReject(attribute)) {
       GSSEdge_setRejected(nl);
+      forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);
+    }
+    else {
+      forActor= GSS_addNodeListElement(st1, forActor);
     }
   }
   else {
@@ -332,7 +338,7 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
       /* The edge already exists. */
       if (PTBL_isSpecialAttrReject(attribute)) {
         GSSEdge_setRejected(nl); //A non-rejected edge is changed to rejected 
-	                         //(if not already rejected)!
+                                 //(if not already rejected)!
       }
 
       SG_CreateAmbCluster(GSSEdge_getTree(nl), t,
@@ -349,21 +355,17 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
         GSSEdge_setRejected(nl);
       }
 
-      for (sts = GSS_getCurrentLevel(); 
-	   sts != NULL; 
-	   sts = GSS_getNodeListTail(sts)) {
-        
-	GSSNode st2 = GSS_getNodeListHead(sts);
+      for (sts = GSS_getCurrentLevel(); sts != NULL; sts = GSS_getNodeListTail(sts)) {
+        GSSNode st2 = GSS_getNodeListHead(sts);
 	
-        if (!GSSNode_isRejected(st2) &&
+        if ((!FLT_getRejectFlag() || !GSSNode_isRejected(st2)) &&
         GSS_findElementInNodeList(st2, forActor) == NULL && 
 	    GSS_findElementInNodeList(st2, forActorDelayed) == NULL) {
           register PTBL_Actions as;
 
-          for (as = SGLR_PTBL_lookupAction(parseTable, GSSNode_getStateNumber(st2), 
-				    IS_getCurrentToken(inputString));
+          for (as = SGLR_PTBL_lookupAction(parseTable, GSSNode_getStateNumber(st2), IS_getCurrentToken(inputString));
                as != NULL && !PTBL_isActionsEmpty(as); 
-	       as = PTBL_getActionsTail(as)) {
+    	       as = PTBL_getActionsTail(as)) {
 
             PTBL_Action a = PTBL_getActionsHead(as);
 
@@ -427,7 +429,7 @@ static void shifter(void) {
     s   = GSS_getShiftQueueStateNumber();
     st0 = GSS_getShiftQueueGSSNode();  
    
-    if (/*PTBL_hasRejects(table) ||*/ !GSSNode_isRejected(st0)) { 
+    if (!FLT_getRejectFlag() || !GSSNode_isRejected(st0)) { 
       st1 = GSS_findStateInNodeList(s, newActiveStacks);
 
       if(st1 == NULL) {
