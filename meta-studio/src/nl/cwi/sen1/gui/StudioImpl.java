@@ -113,8 +113,6 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private List<String> jobQueue;
 
-	protected boolean studioShuttingDown;
-
 	public static void main(String args[]) throws Exception {
 		new StudioImpl(args);
 	}
@@ -178,7 +176,6 @@ public class StudioImpl implements Studio, GuiTif {
 		componentMenus = new HashMap<StudioComponent, List<JMenuItem>>();
 		viewsById = new ViewMap();
 		plugins = new LinkedList<StudioPlugin>();
-		studioShuttingDown = false;
 		progressBar = new JProgressBar();
 		systemLabel = new JLabel();
 		jobQueue = new LinkedList<String>();
@@ -373,7 +370,7 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private void createFrame() {
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		// frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
 		frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 		frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
@@ -518,13 +515,9 @@ public class StudioImpl implements Studio, GuiTif {
 		}
 	}
 
-	public void recAckEvent(ATerm t0) {
-	}
+	public void recAckEvent(ATerm t0){}
 
-	public void recTerminate(ATerm t) {
-		studioShuttingDown = true;
-		tryShutDown();
-	}
+	public void recTerminate(ATerm t){}
 
 	public void connect(String toolName, final AbstractTool tool) {
 		try {
@@ -566,8 +559,6 @@ public class StudioImpl implements Studio, GuiTif {
 		plugin.addStudioPluginListener(new StudioPluginListener() {
 			public void studioPluginClosed(StudioPlugin plugin) {
 				plugins.remove(plugin);
-
-				tryShutDown();
 			}
 		});
 	}
@@ -638,12 +629,6 @@ public class StudioImpl implements Studio, GuiTif {
 		} else {
 			System.err.println("This component does not have a view: "
 					+ component.getName());
-		}
-	}
-
-	private void tryShutDown() {
-		if (studioShuttingDown && plugins.isEmpty()) {
-			System.exit(0);
 		}
 	}
 
