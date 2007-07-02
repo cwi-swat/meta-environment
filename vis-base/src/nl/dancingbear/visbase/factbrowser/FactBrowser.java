@@ -193,7 +193,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
      * Method will be called when the connection with the toolbus is terminated
      */
     public void recTerminate(ATerm t0) {
-        System.exit(0);
+    	fireStudioPluginClosed();
     }
 
     /**
