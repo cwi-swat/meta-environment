@@ -52,5 +52,7 @@ public class PluginLoader extends DefaultStudioPlugin{
 		ScatterChartVisualizationController scatterChartVisualizationController = new ScatterChartVisualizationController();
 		scatterChartVisualizationController.initStudioPlugin(studio);
 		scatterChartVisualizationController.initPluginController(pureFactory);
+		
+		fireStudioPluginClosed();
 	}
 }
