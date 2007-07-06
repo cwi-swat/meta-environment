@@ -165,7 +165,8 @@ int IS_getLength(InputString inputString) {
  * \return \c true if all the input string has been read; \c false otherwise.
  */
 ATbool IS_isEndOfString(InputString inputString) {
-  return inputString->length == inputString->index ? ATtrue : ATfalse;
+  return (inputString->length == inputString->index ||
+          inputString->length == 0)  ? ATtrue : ATfalse;
 }
 
 /** 

@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jul  6 13:35:58 CEST 2007 <economop@cwi.nl>
+ * src/inputString.c: if an input string is empty and IS_isEndOfString() is 
+   called then ATtrue is returned.
+
 Thu Jun 21 14:16:52 CEST 2007 <economop@cwi.nl>
  * src/parser/parser.c: changed the use of the forActorDelayed to match the 
    algorithmic description in Eelco's thesis. State nodes that are created by 
