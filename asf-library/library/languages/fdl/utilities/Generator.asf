@@ -1,0 +1,72 @@
+equations 
+
+[] TypeEnv := construct-type-environment(FeatureModule),
+   ValueEnv := construct-value-environment(FeatureModule),
+   C-Program1 := generateFunction(FeatureModule, TypeEnv, ValueEnv),
+   C-Program2 := addIncludeSection(C-Program1)
+   ===
+   generate(FeatureModule) = C-Program2
+
+[] Keys := keys(TypeEnv),
+   Declaration* := generateFunctionDeclarations(Keys, TypeEnv, ValueEnv),
+   Statement* := generateFunctionStatements(FeatureModule, )
+   ===
+   generateFunction(FeatureModule, TypeEnv, ValueEnv) = 
+
+void handleOptions(int argc, char **argv) {
+  int c;
+ 
+  Declaration* 
+
+  while ((c = getopt(argc, argv, myArguments)) != -1) {
+    switch(c) {
+      Statement*
+    }
+  }
+}
+
+
+equations
+
+[] addIncludeSection(C-Program) = 
+     
+#include <stdio.h> 
+#include <stdlib.h> 
+     
+#include "options.h" 
+     
+C-Program
+
+
+equations
+
+[] generateFunctionDeclarations([], TypeEnv, ValueEnv) = 
+
+[] lookup(TypeEnv, AtomicFeature) == boolean,
+   Declaration := int af2id(AtomicFeature);
+   ===
+   generateFunctionDeclarations([AtomicFeature, AtomicFeature*], TypeEnv, ValueEnv) =
+    Declaration generateFunctionDeclarations([AtomicFeature*], TypeEnv, ValueEnv)
+
+[] lookup(TypeEnv, AtomicFeature) == string,
+   Declaration := char* af2id(AtomicFeature);
+   ===
+   generateFunctionDeclarations([AtomicFeature, AtomicFeature*], TypeEnv, ValueEnv) =
+    Declaration generateFunctionDeclarations([AtomicFeature*], TypeEnv, ValueEnv)
+
+[default-generateFunctionDeclarations] 
+   Declaration := char* af2id(AtomicFeature) = "Value";
+   ===
+   generateFunctionDeclarations([AtomicFeature, AtomicFeature*], TypeEnv, ValueEnv) =
+    Declaration generateFunctionDeclarations([AtomicFeature*], TypeEnv, ValueEnv)
+
+
+equations
+
+[] generateFunctionStatements(AtomicFeature, Statement*) = Statement* a = b;
+
+
+equations
+
+[] af2id(atomicfeature(head)) = identifier(head)
+[] af2id(atomicfeature(head tail)) = identifier(head tail)
