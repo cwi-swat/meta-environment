@@ -1,0 +1,23 @@
+equations
+
+[] Section*1 types ValueDeclaration* Section*2 := Section*,
+   TypeEnv1 := get-types(ValueDeclaration*, new-table),
+   Section*1 features FeatureDefinition* Section*2 := Section*,
+   TypeEnv2 := get-features(FeatureDefinition*, TypeEnv1)
+   ===
+   construct-type-environment(module Modulename Section*) = TypeEnv2
+
+
+equations
+
+[] get-types(AtomicFeature : ValueType, TypeEnv) = store(TypeEnv, AtomicFeature, ValueType)
+
+
+equations
+
+[] lookup(TypeEnv, AtomicFeature) == not-in-table
+   ===
+   get-features(AtomicFeature, TypeEnv) = store(TypeEnv, AtomicFeature, boolean)
+
+[default-get-features]
+  get-features(AtomicFeature, TypeEnv) = TypeEnv

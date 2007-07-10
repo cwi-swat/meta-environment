@@ -1,0 +1,24 @@
+module languages/fdl/run/ValueEnvironment
+
+imports languages/fdl/syntax/Modular-FDL
+imports containers/Table[AtomicFeature Value]
+
+exports
+aliases
+  Table[[AtomicFeature,Value]] -> ValueEnv
+
+sorts ValueEnv
+
+context-free syntax
+  construct-value-environment(FeatureModule) -> ValueEnv                                    
+  get-values(FeatureDefinition*, ValueEnv)   -> ValueEnv {traversal(accu, top-down, break)} 
+  get-values(AtomicFeature, ValueEnv)        -> ValueEnv {traversal(accu, top-down, break)} 
+
+hiddens
+variables
+  "AtomicFeature" [0-9]*      -> AtomicFeature       
+  "FeatureDefinition*" [0-9]* -> FeatureDefinition*  
+  "Modulename" [0-9]*         -> Modulename          
+  "Section*" [0-9]*           -> Section             
+  "Value" [0-9]*              -> Value               
+  "ValueEnv" [0-9]*           -> ValueEnv            
