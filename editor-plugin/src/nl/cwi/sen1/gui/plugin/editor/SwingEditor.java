@@ -3,8 +3,10 @@ package nl.cwi.sen1.gui.plugin.editor;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.MouseListener;
+import java.awt.geom.Area;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,12 +18,10 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.gui.plugin.Editor;
 import nl.cwi.sen1.gui.plugin.EditorModifiedListener;
 import aterm.ATerm;
 import aterm.ATermList;
-import errorapi.types.Area;
 
 public class SwingEditor extends JPanel implements Editor {
 	private String id;
@@ -38,7 +38,7 @@ public class SwingEditor extends JPanel implements Editor {
 		setLayout(new BorderLayout());
 		editorPane = new EditorPane();
 
-		readFileContents(filename);
+		readFileContents();
 		editorPane.setCaretPosition(0);
 
 		JScrollPane scroller = new JScrollPane(editorPane);
@@ -48,7 +48,7 @@ public class SwingEditor extends JPanel implements Editor {
 
 	public void rereadContents() {
 		try {
-			readFileContents(filename);
+			readFileContents();
 			// ((EditorKit) editorPane.getEditorKit()).getUndoManager()
 			// .discardAllEdits();
 		} catch (IOException e) {
@@ -58,24 +58,25 @@ public class SwingEditor extends JPanel implements Editor {
 		}
 	}
 
-	private void readFileContents(String filename) throws IOException,
+	private void readFileContents() throws IOException,
 			FileToBigException {
-		editorPane.setText(readContents(filename));
+		editorPane.setText(readContents());
 	}
 
-	private String readContents(String filename) throws IOException,
+	private String readContents() throws IOException,
 			FileToBigException {
 		InputStream fis = null;
 
 		try {
+			File file = new File(filename);
 			fis = new BufferedInputStream(new FileInputStream(filename));
-			int x = fis.available();
+			long x = file.length();
 
 			if (x > 1024 * 1024 /* 1 Mbyte */) {
 				throw new FileToBigException(filename);
 			}
 
-			byte b[] = new byte[x];
+			byte b[] = new byte[(int) x];
 			fis.read(b);
 			String content = new String(b);
 			return content;
@@ -99,10 +100,15 @@ public class SwingEditor extends JPanel implements Editor {
 	public void writeContents(String filename) throws IOException {
 		String text = editorPane.getText();
 
-		OutputStream fos = new BufferedOutputStream(new FileOutputStream(
-				filename));
-		fos.write(text.getBytes());
-		fos.close();
+		OutputStream fos = null;
+		try{
+			fos = new BufferedOutputStream(new FileOutputStream(filename));
+			fos.write(text.getBytes());
+		}finally{
+			if(fos != null){
+				fos.close();
+			}
+		}
 
 		editorPane.setModified(false);
 		editorPane.clearJaggedSelection();
@@ -111,9 +117,15 @@ public class SwingEditor extends JPanel implements Editor {
 	public void writeCopy(String filename) throws IOException {
 		String text = editorPane.getText();
 
-		FileOutputStream fos;
-		fos = new FileOutputStream(filename);
-		fos.write(text.getBytes());
+		FileOutputStream fos = null;
+		try{
+			fos = new FileOutputStream(filename);
+			fos.write(text.getBytes());
+		}finally{
+			if(fos != null){
+				fos.close();
+			}
+		}
 	}
 
 	public void setCursorAtOffset(int offset) {
