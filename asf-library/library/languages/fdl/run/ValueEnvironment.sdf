@@ -18,7 +18,9 @@ hiddens
 variables
   "AtomicFeature" [0-9]*      -> AtomicFeature       
   "FeatureDefinition*" [0-9]* -> FeatureDefinition*  
+  "FeatureDiagram" [0-9]*     -> FeatureDiagram
+  "ImportSection*" [0-9]*     -> ImportSection*
   "Modulename" [0-9]*         -> Modulename          
-  "Section*" [0-9]*           -> Section             
+  "Section*" [0-9]*           -> Section*             
   "Value" [0-9]*              -> Value               
   "ValueEnv" [0-9]*           -> ValueEnv            
