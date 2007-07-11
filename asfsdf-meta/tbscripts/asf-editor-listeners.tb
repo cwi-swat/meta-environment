@@ -11,6 +11,7 @@ let
 in
   MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", path(Path), ModuleId?)
   . create(EditEquations(ModuleId), Pid?)
+  . TODO("And what if it didn't start? See term-editor-utils.tb")
   . rec-msg(equations-editor-started(ModuleId, Sid?))
   . snd-msg(te-set-selection(Sid, Area))
   . GoToEditorArea(Sid, Area)

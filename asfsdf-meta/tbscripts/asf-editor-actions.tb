@@ -25,6 +25,7 @@ in
     tau
   else
     create(EditEquations(ModuleId), Pid?)
+    . TODO("And what if it didn't start? See term-editor-utils.tb")
     . rec-msg(equations-editor-started(ModuleId, Sid?))
     . create(CleanupEditTerm(Sid), Pid?)
   fi
