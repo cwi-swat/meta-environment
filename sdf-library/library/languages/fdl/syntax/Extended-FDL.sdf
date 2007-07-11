@@ -8,7 +8,10 @@ context-free start-symbols
   FeatureDiagram FeatureName FeatureExpression AtomicFeature
 
 exports
-sorts Section Description
+sorts Section Description Argument Sort ArgumentChar
+
+lexical syntax
+  [a-zA-Z0-9]                                -> ArgumentChar
 
 context-free syntax
   "list-of" "(" {FeatureExpression ","}+ ")" -> FeatureExpression {cons("list-of")} 
@@ -16,10 +19,17 @@ context-free syntax
   Section+                                   -> FeatureDiagram                      
   "features" FeatureDefinition*              -> Section                             
   "constraints" Constraint*                  -> Section                             
-  "specialization" FeatureDefinition*        -> Section                             
+  "specialization" FeatureDefinition*        -> Section  
 
   FeatureName StrCon                         -> Description                         
   AtomicFeature StrCon                       -> Description                         
-  "short description" Description*           -> Section                             
-  "long description" Description*            -> Section                             
+  "short-description" Description*           -> Section                             
+  "long-description" Description*            -> Section                             
   "tooltip" Description*                     -> Section                             
+  
+  AtomicFeature ArgumentChar                 -> Argument
+  "arguments" Argument*                      -> Section
+
+  FeatureName                                -> Sort
+  AtomicFeature                              -> Sort
+  "public" Sort*                             -> Section                           

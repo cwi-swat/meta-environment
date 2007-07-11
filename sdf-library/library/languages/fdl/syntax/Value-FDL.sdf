@@ -11,26 +11,24 @@ context-free start-symbols
   FeatureDiagram FeatureName FeatureExpression AtomicFeature
 
 exports
-sorts ValueType ValueDeclaration FeatureType
+sorts ValueType ValueDeclaration Value
 
 context-free syntax
-  "types" ValueDeclaration*         -> Section                      
+  "types" ValueDeclaration*   -> Section                      
 
-  AtomicFeature "(" FeatureType ")" -> AtomicFeature    {non-assoc} 
+  AtomicFeature "(" Value ")" -> AtomicFeature    {non-assoc} 
+  NatCon                      -> Value                        
+  StrCon                      -> Value                        
+  Color                       -> Value                        
+  BoolCon                     -> Value                        
 
-  NatCon                            -> FeatureType                  
-  StrCon                            -> FeatureType                  
-  Color                             -> FeatureType                  
-  BoolCon                           -> FeatureType                  
-
-  AtomicFeature ":" ValueType       -> ValueDeclaration             
-
-  "integer"                         -> ValueType                    
-  "string"                          -> ValueType                    
-  "color"                           -> ValueType                    
-  "path"                            -> ValueType                    
-  "date"                            -> ValueType                    
-  "font"                            -> ValueType                    
-  "uri"                             -> ValueType                    
-  "event"                           -> ValueType                    
-  "boolean"                         -> ValueType                    
+  AtomicFeature ":" ValueType -> ValueDeclaration             
+  "integer"                   -> ValueType                    
+  "string"                    -> ValueType                    
+  "color"                     -> ValueType                    
+  "path"                      -> ValueType                    
+  "date"                      -> ValueType                    
+  "font"                      -> ValueType                    
+  "uri"                       -> ValueType                    
+  "event"                     -> ValueType                    
+  "boolean"                   -> ValueType                    

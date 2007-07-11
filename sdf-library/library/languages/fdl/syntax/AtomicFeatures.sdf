@@ -5,9 +5,9 @@ exports
 sorts AtomicFeature
 
 lexical syntax
-	[a-z] [a-zA-Z0-9\-\_]* -> AtomicFeature
+	[a-z] [a-zA-Z0-9\_]* -> AtomicFeature
 
 
 
 lexical restrictions
-	AtomicFeature -/- [a-zA-Z0-9\-\_]
+	AtomicFeature -/- [a-zA-Z0-9\_]

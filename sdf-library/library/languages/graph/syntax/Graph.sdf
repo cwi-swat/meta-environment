@@ -24,23 +24,23 @@ exports
 	direction(Direction)				-> Attribute
 	info(String, ATerm)				-> Attribute
 	
-	plaintext					-> Shape
-	ellipse						-> Shape
-	circle						-> Shape
-	egg						-> Shape
-	triangle					-> Shape
-	box						-> Shape
-	diamond						-> Shape
-	trapezium					-> Shape
-	parallelogram					-> Shape
-	house						-> Shape
-	hexagon						-> Shape
-	octagon						-> Shape
+	"plaintext"					-> Shape
+	"ellipse"					-> Shape
+	"circle"					-> Shape
+	"egg"						-> Shape
+	"triangle"					-> Shape
+	"box"						-> Shape
+	"diamond"					-> Shape
+	"trapezium"					-> Shape
+	"parallelogram"					-> Shape
+	"house"						-> Shape
+	"hexagon"					-> Shape
+	"octagon"					-> Shape
 
-	forward						-> Direction
-	back						-> Direction
-	both						-> Direction
-	none						-> Direction
+	"forward"					-> Direction
+	"back"						-> Direction
+	"both"						-> Direction
+	"none"						-> Direction
 
 	"[" {Edge ","}*	"]"				-> EdgeList
 	edge(NodeId, NodeId, AttributeList)		-> Edge
