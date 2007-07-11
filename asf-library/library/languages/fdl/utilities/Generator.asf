@@ -2,10 +2,12 @@ equations
 
 [] TypeEnv := construct-type-environment(FeatureModule),
    ValueEnv := construct-value-environment(FeatureModule),
+   ParameterEnv := construct-parameter-environment(FeatureModule),
    C-Program1 := generateFunction(FeatureModule, TypeEnv, ValueEnv),
-   C-Program2 := addIncludeSection(C-Program1)
+   C-Program2 := generateGlobals(C-Program1, ParameterEnv),
+   C-Program3 := addIncludeSection(C-Program2)
    ===
-   generate(FeatureModule) = C-Program2
+   generate(FeatureModule) = C-Program3
 
 [] Keys := keys(TypeEnv),
    Declaration* := generateFunctionDeclarations(Keys, TypeEnv, ValueEnv),
@@ -24,6 +26,16 @@ void handleOptions(int argc, char **argv) {
     }
   }
 }
+
+
+equations
+
+[] generateGlobals(C-Program1, ParameterEnv) = 
+
+static const char programname[] = "Programname";
+static const char myArguments[] = "";
+static const char myVersion[] = VERSION;
+C-Program1
 
 
 equations
@@ -49,7 +61,7 @@ equations
     Declaration generateFunctionDeclarations([AtomicFeature*], TypeEnv, ValueEnv)
 
 [] lookup(TypeEnv, AtomicFeature) == string,
-   Declaration := char* af2id(AtomicFeature);
+   Declaration := char* af2id(AtomicFeature) = NULL;
    ===
    generateFunctionDeclarations([AtomicFeature, AtomicFeature*], TypeEnv, ValueEnv) =
     Declaration generateFunctionDeclarations([AtomicFeature*], TypeEnv, ValueEnv)

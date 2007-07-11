@@ -4,39 +4,44 @@ imports languages/fdl/syntax/Modular-FDL
 imports languages/ansi-c/syntax/Default-C-With-CPP
 imports languages/fdl/check/TypeEnvironment
 imports languages/fdl/run/ValueEnvironment
+imports languages/fdl/utilities/ParameterEnvironment
 
 exports
+sorts Keys
+
 context-free start-symbols
   TranslationUnit
 
+context-free syntax
+  generate(FeatureModule)                               -> TranslationUnit                                            
+
+hiddens
 aliases
   List[[AtomicFeature]] -> Keys
-
-sorts Keys
 
 context-free syntax
   af2id(AtomicFeature) -> Identifier  
 
 context-free syntax
-  generate(FeatureModule)                               -> TranslationUnit                                            
   generateFunction(FeatureModule, TypeEnv, ValueEnv)    -> FunctionDefinition                                         
   generateFunctionDeclarations(Keys, TypeEnv, ValueEnv) -> Declaration*                                               
   generateFunctionStatements(FeatureModule, Statement*) -> Statement*           {traversal(accu, top-down, continue)} 
   generateFunctionStatements(AtomicFeature, Statement*) -> Statement*           {traversal(accu, top-down, continue)} 
+  generateGlobals(ExternalDeclaration+, ParameterEnv)   -> ExternalDeclaration+
   addIncludeSection(ExternalDeclaration+)               -> ExternalDeclaration+                                       
 
-hiddens
 variables
   "AtomicFeature" [0-9]*  -> AtomicFeature         
   "AtomicFeature*" [0-9]* -> {AtomicFeature ","}*  
-  "FeatureModule"         -> FeatureModule         
   "C-Program" [0-9]*      -> ExternalDeclaration+  
-  "Statement*" [0-9]*     -> Statement*            
   "Declaration" [0-9]*    -> Declaration           
   "Declaration*" [0-9]*   -> Declaration*          
-  "TypeEnv" [0-9]*        -> TypeEnv               
+  "FeatureModule" [0-9]*  -> FeatureModule         
   "Keys" [0-9]*           -> Keys                  
-  "ValueEnv" [0-9]*       -> ValueEnv              
+  "ParameterEnv" [0-9]*   -> ParameterEnv
+  "Statement*" [0-9]*     -> Statement*            
+  "TypeEnv" [0-9]*        -> TypeEnv               
+  "ValueEnv" [0-9]*       -> ValueEnv   
 
 lexical variables
   "head" [0-9]* -> [a-z]           
