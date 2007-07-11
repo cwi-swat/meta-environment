@@ -637,6 +637,12 @@ ATerm get_file_extension(int cid, ATerm file) {
   return ATmake("snd-value(<term>)", result);
 }
 
+ATerm get_file_size(int cid, const char* filename) {
+  ATerm result = ATmake("file-size(<int>)", getFileSize(filename));
+
+  return ATmake("snd-value(<term>)", result);  
+}
+
 void rec_terminate(int cid, ATerm arg) {
   exit(0);
 }

@@ -18,6 +18,7 @@ let
   Name: str,
   Path: str,
   Prefix: str,
+  Size: int,
   SourcePath: str,
   Term: term
 in
@@ -196,6 +197,11 @@ in
     . snd-eval(IO, get-path-extension(Path))
     . rec-value(IO, extension(Extension?))
     . snd-msg(io-extension(Path, Extension))
+  +
+    rec-msg(io-get-file-size(Path?))
+    . snd-eval(IO, get-file-size(Path))
+    . rec-value(IO, file-size(Size?))
+    . snd-msg(io-file-size(Path, Size))
   +
     rec-msg(io-make-file(Path?))
     . snd-eval(IO, make-file(Path))

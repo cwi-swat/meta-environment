@@ -5,7 +5,7 @@
 
 #include "in-output.h"
 
-#define NR_SIG_ENTRIES	25
+#define NR_SIG_ENTRIES	26
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<in-output>,relative-to-absolute(<list>))",
@@ -28,6 +28,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<in-output>,get-path-directory(<str>))",
   "rec-eval(<in-output>,get-path-filename(<str>))",
   "rec-eval(<in-output>,get-path-extension(<str>))",
+  "rec-eval(<in-output>,get-file-size(<str>))",
   "rec-eval(<in-output>,make-file(<str>))",
   "rec-eval(<in-output>,get-file-path(<file>))",
   "rec-eval(<in-output>,get-file-name(<file>))",
@@ -43,53 +44,56 @@ ATerm in_output_handler(int conn, ATerm term)
   char *s0, *s1, *s2;
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(read-text-file(<str>))", &s0)) {
-    return read_text_file(conn, s0);
-  }
   if(ATmatch(term, "rec-eval(read-and-pack-term(<str>))", &s0)) {
     return read_and_pack_term(conn, s0);
   }
-  if(ATmatch(term, "rec-eval(unpack-and-write-in-baf(<str>,<term>))", &s0, &t0)) {
-    return unpack_and_write_in_baf(conn, s0, t0);
+  if(ATmatch(term, "rec-eval(read-text-file(<str>))", &s0)) {
+    return read_text_file(conn, s0);
   }
   if(ATmatch(term, "rec-eval(read-term-file(<str>))", &s0)) {
     return read_term_file(conn, s0);
   }
-  if(ATmatch(term, "rec-eval(write-in-baf(<str>,<term>))", &s0, &t0)) {
-    return write_in_baf(conn, s0, t0);
+  if(ATmatch(term, "rec-eval(unpack-and-write-in-baf(<str>,<term>))", &s0, &t0)) {
+    return unpack_and_write_in_baf(conn, s0, t0);
   }
   if(ATmatch(term, "rec-eval(compare-files(<str>,<str>))", &s0, &s1)) {
     return compare_files(conn, s0, s1);
   }
-  if(ATmatch(term, "rec-eval(write-text-list(<str>,<term>))", &s0, &t0)) {
-    return write_text_list(conn, s0, t0);
+  if(ATmatch(term, "rec-eval(write-in-baf(<str>,<term>))", &s0, &t0)) {
+    return write_in_baf(conn, s0, t0);
   }
   if(ATmatch(term, "rec-eval(get-filename(<str>,<str>,<str>))", &s0, &s1, &s2)) {
     return get_filename(conn, s0, s1, s2);
   }
-  if(ATmatch(term, "rec-eval(unpack-term(<term>))", &t0)) {
-    return unpack_term(conn, t0);
+  if(ATmatch(term, "rec-eval(write-text-list(<str>,<term>))", &s0, &t0)) {
+    return write_text_list(conn, s0, t0);
   }
   if(ATmatch(term, "rec-eval(get-relative-filename(<term>,<str>,<str>))", &t0, &s0, &s1)) {
     return get_relative_filename(conn, t0, s0, s1);
   }
-  if(ATmatch(term, "rec-eval(pack-term(<term>))", &t0)) {
-    return pack_term(conn, t0);
+  if(ATmatch(term, "rec-eval(unpack-term(<term>))", &t0)) {
+    return unpack_term(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-path-directory(<str>))", &s0)) {
     return get_path_directory(conn, s0);
   }
-  if(ATmatch(term, "rec-eval(list-files(<str>,<str>))", &s0, &s1)) {
-    return list_files(conn, s0, s1);
+  if(ATmatch(term, "rec-eval(pack-term(<term>))", &t0)) {
+    return pack_term(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-path-filename(<str>))", &s0)) {
     return get_path_filename(conn, s0);
   }
-  if(ATmatch(term, "rec-eval(exists-file(<str>))", &s0)) {
-    return exists_file(conn, s0);
+  if(ATmatch(term, "rec-eval(list-files(<str>,<str>))", &s0, &s1)) {
+    return list_files(conn, s0, s1);
   }
   if(ATmatch(term, "rec-eval(get-path-extension(<str>))", &s0)) {
     return get_path_extension(conn, s0);
+  }
+  if(ATmatch(term, "rec-eval(exists-file(<str>))", &s0)) {
+    return exists_file(conn, s0);
+  }
+  if(ATmatch(term, "rec-eval(get-file-size(<str>))", &s0)) {
+    return get_file_size(conn, s0);
   }
   if(ATmatch(term, "rec-eval(copy-file(<str>,<str>))", &s0, &s1)) {
     return copy_file(conn, s0, s1);
