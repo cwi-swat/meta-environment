@@ -31,9 +31,8 @@ import nl.cwi.sen1.tide.tool.support.ProcessStatusChangeListener;
 import nl.cwi.sen1.tide.tool.support.Rule;
 import nl.cwi.sen1.tide.tool.support.VarFormat;
 
-public class SourceViewer
-	extends ProcessTool
-	implements DebugProcessListener, ProcessStatusChangeListener, DebugAdapterListener {
+public class SourceViewer extends ProcessTool implements DebugProcessListener,
+		ProcessStatusChangeListener, DebugAdapterListener {
 
 	private static final String TAG_STEP_INTO = "sv-step-into";
 	private static final String TAG_STEP_OVER = "sv-step-over";
@@ -75,7 +74,6 @@ public class SourceViewer
 
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
-
 
 		residentViewers = new HashMap<String, SourceFileViewer>();
 
@@ -131,17 +129,16 @@ public class SourceViewer
 		run.setEnabled(stopped);
 		stop.setEnabled(!stopped);
 
-		addSourceFile =
-			new AbstractAction("Add File", loadIcon("add-source.gif")) {
+		addSourceFile = new AbstractAction("Add File",
+				loadIcon("add-source.gif")) {
 			public void actionPerformed(ActionEvent event) {
-				process.requestEvaluation(
-					Expr.makeListSources(),
-					tag_add_source);
+				process.requestEvaluation(Expr.makeListSources(),
+						tag_add_source);
 			}
 		};
 
-		delSourceFile =
-			new AbstractAction("Remove File", loadIcon("del-source.gif")) {
+		delSourceFile = new AbstractAction("Remove File",
+				loadIcon("del-source.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				unhighlightCpe();
 				if (currentViewer != null) {
@@ -180,30 +177,17 @@ public class SourceViewer
 		DebugAdapter adapter = process.getAdapter();
 		adapter.addDebugAdapterListener(this);
 
-		process.requestRuleCreation(
-			Port.makeStep(),
-			Expr.makeTrue(),
-			Expr.makeBreak(),
-			tag_step_into,
-			false);
+		process.requestRuleCreation(Port.makeStep(), Expr.makeTrue(), Expr
+				.makeBreak(), tag_step_into, false);
 
-		Expr stepOverCondition =
-			Expr.make("higher-equal(start-level,stack-level)");
-		process.requestRuleCreation(
-			Port.makeStep(),
-			stepOverCondition,
-			Expr.makeBreak(),
-			tag_step_over,
-			false);
+		Expr stepOverCondition = Expr
+				.make("higher-equal(start-level,stack-level)");
+		process.requestRuleCreation(Port.makeStep(), stepOverCondition, Expr
+				.makeBreak(), tag_step_over, false);
 
-		Expr stepUpCondition =
-			Expr.make("less(stack-level,start-level)");
-		process.requestRuleCreation(
-			Port.makeStep(),
-			stepUpCondition,
-			Expr.makeBreak(),
-			tag_step_up,
-			false);
+		Expr stepUpCondition = Expr.make("less(stack-level,start-level)");
+		process.requestRuleCreation(Port.makeStep(), stepUpCondition, Expr
+				.makeBreak(), tag_step_up, false);
 
 		highlightCpe();
 	}
@@ -228,7 +212,7 @@ public class SourceViewer
 		process.removeDebugProcessListener(this);
 		process.removeProcessStatusChangeListener(this);
 		process.getAdapter().removeDebugAdapterListener(this);
-		
+
 		getManager().removeTool(this);
 	}
 
@@ -277,17 +261,14 @@ public class SourceViewer
 	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {
 	}
 
-	public void evaluationResult(
-		DebugProcess process,
-		Expr expr,
-		Expr value,
-		String tag) {
+	public void evaluationResult(DebugProcess process, Expr expr, Expr value,
+			String tag) {
 		if (tag.equals(tag_view_var)) {
 			if (value.isError()) {
 				displayError(value);
 			} else if (value.isVarUnknown()) {
-				message.setText(
-					"Unknown variable: " + value.getVarUnknownMessage());
+				message.setText("Unknown variable: "
+						+ value.getVarUnknownMessage());
 			} else if (value.isVar()) {
 				String var = value.getVarName();
 				Expr val = value.getVarValue();
@@ -299,38 +280,23 @@ public class SourceViewer
 				int column = value.getVarSourceStartColumn();
 				int length = value.getVarSourceLength();
 
-				message.setText(
-					"Value of "
-						+ var
-						+ " at "
-						+ linenr
-						+ ","
-						+ column
-						+ " = "
-						+ strval);
+				message.setText("Value of " + var + " at " + linenr + ","
+						+ column + " = " + strval);
 
-				ValuePopup popup =
-					new ValuePopup(
-						getManager(),
-						currentViewer,
-						process,
-						expr,
-						var,
-						value,
-						new VarFormat());
+				ValuePopup popup = new ValuePopup(getManager(), currentViewer,
+						process, expr, var, value, new VarFormat());
 				currentViewer.highlightVariable(start, length, popup);
 			} else {
 				displayError("Strange variable result: ", value);
 			}
 		} else if (tag.equals(tag_add_source)) {
 			if (value.isError()) {
-				displayError(
-					"Can't retrieve source files",
-					value.getErrorData());
+				displayError("Can't retrieve source files", value
+						.getErrorData());
 			} else if (value.isSourcePath()) {
 				addSourceFromDisk(value.getSourcePath());
 			} else if (value.isSourceList()) {
-				//addSourceFromDisk(System.getProperty("user.dir"));
+				// addSourceFromDisk(System.getProperty("user.dir"));
 				addSourceFromList(value.sourceIterator());
 			} else {
 				// Not reduced
@@ -373,21 +339,17 @@ public class SourceViewer
 		if (currentViewer == null) {
 			ToolManager manager = getManager();
 			int id = getId();
-			currentViewer =
-				new SourceFileViewer(manager, process, file, id, tag_view_var);
+			currentViewer = new SourceFileViewer(manager, process, file, id,
+					tag_view_var);
 			residentViewers.put(file, currentViewer);
 			synchronized (process) {
 				currentViewer.highlightRules(process.ruleIterator());
 			}
 			File f = new File(file);
-			center.insertTab(
-				f.getName(),
-				null,
-				currentViewer,
-				file,
-				center.getTabCount());
+			center.insertTab(f.getName(), null, currentViewer, file, center
+					.getTabCount());
 		}
-		
+
 		center.setSelectedComponent(currentViewer);
 	}
 
@@ -400,15 +362,15 @@ public class SourceViewer
 
 		if (expr != null && expr.isLocation()) {
 			if (expr.isLocationUnknown()) {
-				message.setText(
-					"Current location is unknown: " + expr.toString());
+				message.setText("Current location is unknown: "
+						+ expr.toString());
 			} else {
 				String file = expr.getLocationFileName();
 
 				if (!file.equals(currentFile)) {
 					switchToFile(file);
 				}
-				
+
 				currentViewer.highlightCpe();
 			}
 		}
@@ -433,17 +395,16 @@ public class SourceViewer
 		while (iter.hasNext()) {
 			list.add(iter.next());
 		}
-		
+
 		if (list.size() > 0) {
-			String selected = (String) JOptionPane.showInputDialog(this, 
-				null, 
-				"Please pick one of the registered files",
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				list.toArray(), 
-				list.get(0));
-		
-			switchToFile(selected);
+			String selected = (String) JOptionPane.showInputDialog(this, null,
+					"Please pick one of the registered files",
+					JOptionPane.QUESTION_MESSAGE, null, list.toArray(), list
+							.get(0));
+
+			if (selected != null) {
+				switchToFile(selected);
+			}
 		}
 	}
 }
