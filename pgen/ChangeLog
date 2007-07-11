@@ -1,5 +1,13 @@
 $Id$
 
+Wed Jul 11 13:27:33 CEST 2007 <economop@cwi.nl>
+ * sdf-checker/src/sdfchecker.isrc: reverted changes. 
+ * sdf-checker/src/main.c: kept the -m command line option but removed the 
+   ModuleID argument from the toolbus invocation. "Main" is used for the
+   toolbus invocation, so that the behaviour is the same as before. The
+   sdf-checker will eventually be re-implemented, but until then I'll leave it
+   as is.
+
 Thu Jun  7 17:10:49 CEST 2007 <economop@cwi.nl>
  * sdf-checker/src/main.c: Added the module name as a command line option. 
    I'm working towards fixing bug 656, but this fix stops sdfchecker from 

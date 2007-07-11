@@ -144,8 +144,10 @@ GetBaseName () {
 
 if [ "$modulename" = "-" ] ; then
         GENERATOR="$GENERATOR"
+        CHECKER="$CHECKER"
 else
         GENERATOR="$GENERATOR -m $modulename"
+        CHECKER="$CHECKER -m $modulename"
 fi 
 
 if [ -z "$Files" ] ; then

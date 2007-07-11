@@ -77,8 +77,8 @@ static void displayMessages(ATerm term) {
   ERR_displaySummary(summary);
 }
 
-ATerm check_sdf(int cid, const char *name, ATerm term) {
-  ATerm  output = checkSdf(name, ATBunpack(term));
+ATerm check_sdf(int cid, ATerm term) {
+  ATerm  output = checkSdf("Main", ATBunpack(term));
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
