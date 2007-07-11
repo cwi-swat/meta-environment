@@ -23,50 +23,56 @@ in
   .
   if equal(Valid, true) then
     Edit(Path, Sid?)
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . ComputeCanonicalLanguagename(Modulename, Languagename?)
-    . EditorType := quote(term-editor(Languagename))
-    . EditText(Sid, EditorType, AlreadyExists?)
-    . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .
-    if equal(AlreadyExists, false) then
-      snd-msg(te-set-info(Sid, Modulename))
-      . snd-msg(em-bind-session(Sid, ModuleId))
-      . rec-msg(em-session-bound(Sid, ModuleId))
-      . 
-      if equal(GetTree, true) then
-        GetTermParsetree(ModuleId, Path, Tree?)
-        . SE-UpdateTree(Sid, Tree)
+    if not-equal(Sid, UNDEFINED) then
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+      . ComputeCanonicalLanguagename(Modulename, Languagename?)
+      . EditorType := quote(term-editor(Languagename))
+      . EditText(Sid, EditorType, AlreadyExists?)
+      . snd-msg(term-editor-started(Path, ModuleId, Sid))
+      .
+      if equal(AlreadyExists, false) then
+        snd-msg(te-set-info(Sid, Modulename))
+        . snd-msg(em-bind-session(Sid, ModuleId))
+        . rec-msg(em-session-bound(Sid, ModuleId))
+        . 
+        if equal(GetTree, true) then
+          GetTermParsetree(ModuleId, Path, Tree?)
+          . SE-UpdateTree(Sid, Tree)
+        else
+          tau
+        fi
+        . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",<term>,complete)
+        .
+        (
+          MenuSelected(Sid, EditorType)
+        +
+          MouseClicked(Sid)
+        +
+          rec-msg(te-contents-changed(Sid))
+          /*. TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree.")*/
+          . snd-note(term-modified(Path))
+          . RemoveSummaryFor(Path)
+        +
+          rec-msg(te-contents-saved(Sid))
+          . UpdateTextRepository(Sid)
+          . UpdateTermStructure(Sid)
+        +
+          rec-note(mm-attribute-changed(Event?))
+          /*. printf("SDF changed so must reparse editor\n")*/
+          . ClearTermParsetreeCache(Path)
+          . UpdateTermStructure(Sid)
+        )
+        *
+        EditorDisconnected(Sid)
+        . DeleteSession(Sid)
+        . RemoveSummaryFor(Path)
       else
         tau
       fi
-      . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",<term>,complete)
-      .
-      (
-        MenuSelected(Sid, EditorType)
-      +
-        MouseClicked(Sid)
-      +
-        rec-msg(te-contents-changed(Sid))
-        /*. TODO("Add status of term to module manager, so it can be used to clear the cached term parsetree.")*/
-        . snd-note(term-modified(Path))
-        . RemoveSummaryFor(Path)
-      +
-        rec-msg(te-contents-saved(Sid))
-	. UpdateTextRepository(Sid)
-        . UpdateTermStructure(Sid)
-      +
-        rec-note(mm-attribute-changed(Event?))
-        /*. printf("SDF changed so must reparse editor\n")*/
-        . ClearTermParsetreeCache(Path)
-        . UpdateTermStructure(Sid)
-      )
-      *
-      EditorDisconnected(Sid)
-      . DeleteSession(Sid)
-      . RemoveSummaryFor(Path)
     else
-      tau
+      Error := "Term is too big."
+      . snd-msg(term-editor-not-started(Path, ModuleId, Error))
     fi
   else
     Error := "Term is already being edited over a different module."
