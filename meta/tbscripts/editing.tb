@@ -104,8 +104,18 @@ process GetPath(Sid: session-id, Path: str?) is
   . rec-msg(em-path(Sid, Path?))
 
 process Edit(Path: str, Sid: session-id?) is
-  snd-msg(em-create-session(Path))
-  . rec-msg(em-session(Path, Sid?))
+let
+  TooBig: bool
+in
+  CheckFileSize(Path, TooBig?)
+  .
+  if equal(TooBig, true) then
+    Sid := UNDEFINED
+  else
+    snd-msg(em-create-session(Path))
+    . rec-msg(em-session(Path, Sid?))
+  fi
+endlet
 
 process IsStructureEditorRegistered(Sid: session-id, Registered: bool?) is
   snd-msg(em-is-editor-registered(Sid, structure))
@@ -422,6 +432,20 @@ process GetEditorByPath(Path: str, Sid: session-id?) is
     rec-msg(em-no-such-session(Path))
     . Sid := UNDEFINED
   )
+
+process CheckFileSize(Path: str, TooBig: bool?) is
+let
+  Size: int
+in
+  snd-msg(io-get-file-size(Path))
+  . rec-msg(io-file-size(Path, Size?))
+  . 
+  if less(Size, 1048576) then
+    TooBig := false
+  else
+    TooBig := true
+  fi
+endlet
 
 process CheckSanity(Path: str, RequestedModuleId: module-id, Valid: bool?) is
 let

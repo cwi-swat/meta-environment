@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jul 11 14:27:37 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/editing.tb: Process Edit returns UNDEFINED for Sid when term
+   is too big (> 1 Mb) (closes #763)
+
 Wed Jun  6 11:55:49 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/editing.tb: Add ShowLocation after selection has been set lets
    the cursor jump to the selection
