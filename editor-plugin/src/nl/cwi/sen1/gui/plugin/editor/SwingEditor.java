@@ -3,7 +3,6 @@ package nl.cwi.sen1.gui.plugin.editor;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.MouseListener;
-import java.awt.geom.Area;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,10 +17,12 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.gui.plugin.Editor;
 import nl.cwi.sen1.gui.plugin.EditorModifiedListener;
 import aterm.ATerm;
 import aterm.ATermList;
+import errorapi.types.Area;
 
 public class SwingEditor extends JPanel implements Editor {
 	private String id;
