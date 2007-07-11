@@ -31,45 +31,50 @@ in
     tau
   fi
   . Edit(Path, Sid?)
-  . EditText(Sid, EditorType, AlreadyExists?)
-  . snd-msg(te-set-tooltip(Sid, Modulename))
-  . snd-msg(syntax-editor-started(ModuleId, Sid))
   .
-  if equal(AlreadyExists, false) then
-    MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+  if not-equal(Sid, UNDEFINED) then
+    EditText(Sid, EditorType, AlreadyExists?)
+    . snd-msg(te-set-tooltip(Sid, Modulename))
+    . snd-msg(syntax-editor-started(ModuleId, Sid))
     .
-    if equal(HasAttribute, true) then
-      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    if equal(AlreadyExists, false) then
+      MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+      .
+      if equal(HasAttribute, true) then
+        MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+      else
+        Editable := true
+      fi
+      . snd-msg(te-set-editable(Sid, Editable))
+      . snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetSDFParsetree(ModuleId, Tree?)
+      . SE-UpdateTree(Sid, Tree)
+      . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,parsed)
+      .
+      (
+        MenuSelected(Sid, EditorType)
+      +
+        MouseClicked(Sid)
+      +
+        rec-msg(te-contents-changed(Sid))
+        . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
+        . RemoveSummaryFor(Path)
+      +
+        rec-msg(te-contents-saved(Sid))
+        . UpdateTextRepository(Sid)
+        . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+        . UpdateSyntaxStructure(Sid)
+      +
+        rec-note(mm-attribute-changed(Event?))
+        . UpdateSyntaxStructure(Sid)
+      )
+      *
+      EditorDisconnected(Sid)
+      . DeleteSession(Sid)
     else
-      Editable := true
+      tau
     fi
-    . snd-msg(te-set-editable(Sid, Editable))
-    . snd-msg(em-bind-session(Sid, ModuleId))
-    . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetSDFParsetree(ModuleId, Tree?)
-    . SE-UpdateTree(Sid, Tree)
-    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,parsed)
-    .
-    (
-      MenuSelected(Sid, EditorType)
-    +
-      MouseClicked(Sid)
-    +
-      rec-msg(te-contents-changed(Sid))
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
-      . RemoveSummaryFor(Path)
-    +
-      rec-msg(te-contents-saved(Sid))
-      . UpdateTextRepository(Sid)
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
-      . UpdateSyntaxStructure(Sid)
-    +
-      rec-note(mm-attribute-changed(Event?))
-      . UpdateSyntaxStructure(Sid)
-    )
-    *
-    EditorDisconnected(Sid)
-    . DeleteSession(Sid)
   else
     tau
   fi

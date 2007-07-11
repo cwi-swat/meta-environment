@@ -18,6 +18,7 @@ let
 in
   create(EditSyntax(ModuleId), Pid?)
   . rec-msg(syntax-editor-started(ModuleId, Sid?))
+  . TODO("And what if it didn't start? See term-editor-utils.tb")
   . create(CleanupEditTerm(Sid), Pid?)
 endlet
 

@@ -11,6 +11,7 @@ let
 in
   MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", path(Path), ModuleId?)
   . create(EditSyntax(ModuleId), Pid?)
+  . TODO("And what if it does not start? See editing Terms")
   . rec-msg(syntax-editor-started(ModuleId, Sid?))
   . snd-msg(te-set-selection(Sid, Area))
   . GoToEditorArea(Sid, Area)
