@@ -20,8 +20,8 @@ aliases
   List[[AtomicFeature]] -> Keys
 
 context-free syntax
-  af2id(AtomicFeature) -> Identifier         
-  ac2cc(ArgumentChar)  -> CharacterConstant  
+  af2id(AtomicFeature) -> Identifier        {complete} 
+  ac2cc(ArgumentChar)  -> CharacterConstant {complete}
 
 context-free syntax
   generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)    -> FunctionDefinition                                         
