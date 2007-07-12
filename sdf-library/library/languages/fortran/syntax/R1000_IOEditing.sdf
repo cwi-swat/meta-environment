@@ -11,8 +11,8 @@ imports
 exports
 
 sorts
-  BlankInterpEditDescr CharStringEditDescr CharStringEditDescr  ControlEditDescr ControlEditDescr   
-  DataEditDescr DataEditDescr   FormatItem FormatItemList FormatStmt
+  BlankInterpEditDescr CharStringEditDescr ControlEditDescr   
+  DataEditDescr FormatItem FormatItemList FormatStmt
   PositionEditDescr SignEditDescr   
 
 context-free syntax
