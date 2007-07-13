@@ -44,6 +44,7 @@ static void usage() {
   int filterInjectionCountFlag  = FLT_getInjectionCountFlag();
   int filterPriorityFlag        = FLT_getPriorityFlag();
   int filterRejectFlag          = FLT_getRejectFlag();
+  int filterCountPosIndependentAmbsFlag = FLT_getCountPosIndependentAmbsFlag();
   int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
   int filterTopSort             = FLT_getSelectTopNonterminalFlag();
   int verboseFlag               = PARSER_getVerboseFlag();
@@ -67,6 +68,7 @@ static void usage() {
 	  "\t  i         : injection count                      [%s]\n"
 	  "\t  p         : priority                             [%s]\n"
 	  "\t  r         : reject                               [%s]\n"
+	  "\t  a         : count position independent ambs      [%s]\n"
 	  "\t-h          : display usage information\n"
 	  "\t-i file     : input from |file|                    [stdin]\n"
 	  "\t-l          : toggle statistics logging            [%s]\n"
@@ -90,6 +92,7 @@ static void usage() {
 	  flag(filterInjectionCountFlag),
 	  flag(filterPriorityFlag),
 	  flag(filterRejectFlag),
+          flag(filterCountPosIndependentAmbsFlag),
 	  flag(statisticsFlag),
 	  flag(outputFlag),
       flag(filterTopSort),
@@ -105,6 +108,9 @@ static void handleFilterOptions(const char *arg) {
   else {
     if (strlen(arg) == 1) {
       switch(arg[0]) {
+        case 'a':
+          FLT_setCountPosIndependentAmbsFlag(!FLT_getCountPosIndependentAmbsFlag());
+          break;
         case 'c': 
           FLT_setRemoveCyclesFlag(!FLT_getRemoveCyclesFlag());
           break;

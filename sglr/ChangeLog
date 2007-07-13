@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jul 13 11:10:05 CEST 2007 <{economop,kooiker,oktener}@cwi.nl>
+ * src/parseForest/filters.c: Add function to count ambiguities independent
+   of position in tree.
+
 Fri Jul  6 13:35:58 CEST 2007 <economop@cwi.nl>
  * src/inputString.c: if an input string is empty and IS_isEndOfString() is 
    called then ATtrue is returned.

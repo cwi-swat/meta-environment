@@ -1330,7 +1330,7 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
   }
   else {
     assert(PT_isTreeChar(t) && "we only expect appls and chars here");
-    (*pos)++;
+    *pos = *pos + 1;
     if (PARSER_getVerboseFlag() == ATtrue) {
       SG_printStatusBar("sglr: filtering", *pos, IS_getLength(inputString));
     }
@@ -1360,7 +1360,7 @@ static int countAmbiguitiesInTree(PT_Tree t, int ambs) {
     PT_Args args = PT_getTreeArgs(t);
 
     if (PT_isTreeAmb(t)) {
-      seenAmbiguity = (PT_Tree)ATtableGet(seenAmbiguities, (ATerm)t);
+      seenAmbiguity = (PT_Tree)ATtableGet(seenAmbiguities, (ATerm) t);
       if (!seenAmbiguity) {
         ATtablePut(seenAmbiguities, (ATerm) t, (ATerm) t);
         ambs++;
@@ -1371,6 +1371,44 @@ static int countAmbiguitiesInTree(PT_Tree t, int ambs) {
       ambs = countAmbiguitiesInTree(PT_getArgsHead(args), ambs);
     }
   }
+
+
+  return ambs; 
+}
+
+/** 
+* Counts the number of ambiguities in the (maximally shared) tree given. 
+* Note the memoization. Without it, this search becomes too expensive. 
+* 
+* \param t the root node to begin counting from.
+* \param ambs the number of ambiguities counted.
+* 
+* \return the number of ambiguities found in the given tree, taken position
+* information into account.
+*/
+static int countPosIndependentAmbsInTree(PT_Tree t, int ambs, int *pos) {
+  if (PT_isTreeAppl(t) || PT_isTreeAmb(t)) {
+    PT_Tree seenAmbiguity = NULL;
+    PT_Args args = PT_getTreeArgs(t);
+
+    if (PT_isTreeAmb(t)) {
+      ATerm key = (ATerm) ATmakeList2((ATerm) t, (ATerm) ATmakeInt(*pos));
+      seenAmbiguity = (PT_Tree)ATtableGet(seenAmbiguities, key);
+      if (!seenAmbiguity) {
+        ATtablePut(seenAmbiguities, key, (ATerm) t);
+        ambs++;
+      }
+    }   
+
+    for (; !PT_isArgsEmpty(args) && !seenAmbiguity; args = PT_getArgsTail(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
+      if (PT_isTreeChar(arg)) {
+	(*pos)++;
+      }
+      ambs = countPosIndependentAmbsInTree(arg, ambs, pos);
+    }
+  }
+
 
   return ambs; 
 }
@@ -1433,7 +1471,12 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    }
   
    if (newT) {
-     numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
+     if (FLT_getCountPosIndependentAmbsFlag()) {
+       int pos = 0;
+       numberOfAmbiguitiesInTree = countPosIndependentAmbsInTree(newT,0,&pos);
+     } else {
+       numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
+     }
    }
 
    ATtableDestroy(resolvedtable);
