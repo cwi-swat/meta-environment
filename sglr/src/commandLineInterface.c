@@ -24,7 +24,7 @@
 
 
 static const char programName[] = "sglr";
-static const char myArguments[] = "2Abdf::hi:lno:p:s:tvV";
+static const char myArguments[] = "2Acdf::hi:lno:p:s:tvV";
 static const char myVersion[]   = VERSION;
 
 static const char *flag(ATbool value) {
@@ -37,6 +37,7 @@ static const char *flag(ATbool value) {
 static void usage() {
   int outputFlag                = PARSER_getOutputFlag();
   int textualOutputFlag         = MAIN_getTextualOutputFlag();
+  int countPosIndAmbsFlag       = MAIN_getCountPosIndependentAmbsFlag();
   int filterFlag                = FLT_getFilterFlag();
   int filterDirectPreferenceFlag = FLT_getDirectPreferenceFlag();
   int filterIndirectPreferenceFlag = FLT_getIndirectPreferenceFlag();
@@ -44,7 +45,6 @@ static void usage() {
   int filterInjectionCountFlag  = FLT_getInjectionCountFlag();
   int filterPriorityFlag        = FLT_getPriorityFlag();
   int filterRejectFlag          = FLT_getRejectFlag();
-  int filterCountPosIndependentAmbsFlag = FLT_getCountPosIndependentAmbsFlag();
   int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
   int filterTopSort             = FLT_getSelectTopNonterminalFlag();
   int verboseFlag               = PARSER_getVerboseFlag();
@@ -56,33 +56,34 @@ static void usage() {
   fprintf(stderr,
 	  "%s: parses a file using a parse table and outputs a parse forest.\n"
 	  "\n"
-	  "Options:\t                                          [default]\n"
-	  "\t-2          : flatten to AsFix2ME                  [%s]\n"
-	  "\t-A          : ambiguities are treated as errors    [%s]\n"
-	  "\t-d          : toggle debug mode                    [%s]\n"
-	  "\t-f[cdeipr]  : toggle filtering, or specific filter [%s]\n"
-	  "\t  c         : remove cycles                        [%s]\n"
-      "\t  t         : direct preference                    [%s]\n"
-      "\t  d         : indirect preference                  [%s]\n"
-	  "\t  e         : preference count                     [%s]\n"
-	  "\t  i         : injection count                      [%s]\n"
-	  "\t  p         : priority                             [%s]\n"
-	  "\t  r         : reject                               [%s]\n"
-	  "\t  a         : count position independent ambs      [%s]\n"
+	  "Options:\t                                            [default]\n"
+	  "\t-2          : flatten to AsFix2ME                    [%s]\n"
+	  "\t-A          : ambiguities are treated as errors      [%s]\n"
+	  "\t c          : count position independent ambiguities [%s]\n"
+	  "\t-d          : toggle debug mode                      [%s]\n"
+	  "\t-f[cdeipr]  : toggle filtering, or specific filter   [%s]\n"
+	  "\t  c         : remove cycles                          [%s]\n"
+      "\t  t         : direct preference                      [%s]\n"
+      "\t  d         : indirect preference                    [%s]\n"
+	  "\t  e         : preference count                       [%s]\n"
+	  "\t  i         : injection count                        [%s]\n"
+	  "\t  p         : priority                               [%s]\n"
+	  "\t  r         : reject                                 [%s]\n"
 	  "\t-h          : display usage information\n"
-	  "\t-i file     : input from |file|                    [stdin]\n"
-	  "\t-l          : toggle statistics logging            [%s]\n"
-	  "\t-n          : toggle parse tree creation           [%s]\n"
-	  "\t-o file     : output to |file|                     [stdout]\n"
+	  "\t-i file     : input from |file|                      [stdin]\n"
+	  "\t-l          : toggle statistics logging              [%s]\n"
+	  "\t-n          : toggle parse tree creation             [%s]\n"
+	  "\t-o file     : output to |file|                       [stdout]\n"
 	  "\t-p file     : use parse table |file| (required)\n"
-	  "\t-s symbol   : select tree with start symbol        [%s]\n"
-	  "\t-t          : output AsFix in textual format       [%s]\n"
-	  "\t-v          : toggle verbose mode                  [%s]\n"
+	  "\t-s symbol   : select tree with start symbol          [%s]\n"
+	  "\t-t          : output AsFix in textual format         [%s]\n"
+	  "\t-v          : toggle verbose mode                    [%s]\n"
 	  "\t-V          : reveal program version\n"
 	  ,
           programName,
 	  flag(flattenFlag),
 	  flag(ambiguityErrorFlag),
+      flag(countPosIndAmbsFlag),
 	  flag(debugFlag), 
 	  flag(filterFlag),
       flag(filterRemoveCyclesFlag),
@@ -92,7 +93,6 @@ static void usage() {
 	  flag(filterInjectionCountFlag),
 	  flag(filterPriorityFlag),
 	  flag(filterRejectFlag),
-          flag(filterCountPosIndependentAmbsFlag),
 	  flag(statisticsFlag),
 	  flag(outputFlag),
       flag(filterTopSort),
@@ -108,9 +108,6 @@ static void handleFilterOptions(const char *arg) {
   else {
     if (strlen(arg) == 1) {
       switch(arg[0]) {
-        case 'a':
-          FLT_setCountPosIndependentAmbsFlag(!FLT_getCountPosIndependentAmbsFlag());
-          break;
         case 'c': 
           FLT_setRemoveCyclesFlag(!FLT_getRemoveCyclesFlag());
           break;
@@ -149,15 +146,16 @@ static void handleFilterOptions(const char *arg) {
 static void handleOptions (int argc, char **argv) {
   int c;
 
-  int outputflag         = PARSER_getOutputFlag();
-  int textualflag        = MAIN_getTextualOutputFlag();
-  int verboseflag        = PARSER_getVerboseFlag();
-  int debugflag          = PARSER_getDebugFlag;
-  int statisticsflag     = PARSER_getStatsFlag();
-  int ambiguityerrorflag = PARSER_getAmbiguityErrorFlag();
-  int flattenFlag        = MAIN_getFlattenTreeFlag();
-  int startSymbolFlag    = FLT_getSelectTopNonterminalFlag();
-  
+  int outputflag                 = PARSER_getOutputFlag();
+  int textualflag                = MAIN_getTextualOutputFlag();
+  int verboseflag                = PARSER_getVerboseFlag();
+  int debugflag                  = PARSER_getDebugFlag;
+  int statisticsflag             = PARSER_getStatsFlag();
+  int ambiguityerrorflag         = PARSER_getAmbiguityErrorFlag();
+  int flattenFlag                = MAIN_getFlattenTreeFlag();
+  int countPosIndependentAmbFlag = MAIN_getCountPosIndependentAmbsFlag();
+  int startSymbolFlag            = FLT_getSelectTopNonterminalFlag();
+
   char *startSymbol     = NULL;
   char *inputFileName   = "-";
   char *outputFileName  = "-";
@@ -171,6 +169,8 @@ static void handleOptions (int argc, char **argv) {
       case 0:   break;
       case '2':   flattenFlag        = !flattenFlag;        break;
       case 'A':   ambiguityerrorflag = !ambiguityerrorflag; break;
+      case 'c':   
+          countPosIndependentAmbFlag = !countPosIndependentAmbFlag; break;
       case 'd':   debugflag          = !debugflag;          break;
       case 'f':   handleFilterOptions(optarg);              break;     
       case 'h':   showHelp           = !showHelp;           break;
@@ -215,6 +215,7 @@ static void handleOptions (int argc, char **argv) {
   MAIN_setOutputFileName(outputFileName);
   MAIN_setInputFileName(inputFileName);
   MAIN_setParseTableName(parseTableName);
+  MAIN_setCountPosIndependentAmbsFlag(countPosIndependentAmbFlag);
   FLT_setSelectTopNonterminalFlag(startSymbolFlag);
   if (startSymbolFlag) {
     FLT_setTopNonterminal(startSymbol);

@@ -13,6 +13,7 @@ static int TEXTUALOUTPUT_FLAG;
 static int OUTPUTFILENAME_VALUE;
 static int INPUTFILENAME_VALUE;
 static int PARSETABLENAME_VALUE;
+static int COUNTPOSINDEPENDENTAMBS_FLAG;
 
 
 void MAIN_initializeDefaultOptions()  {
@@ -22,10 +23,12 @@ void MAIN_initializeDefaultOptions()  {
   OUTPUTFILENAME_VALUE = OPT_getStringOptionId();
   INPUTFILENAME_VALUE = OPT_getStringOptionId();
   PARSETABLENAME_VALUE = OPT_getStringOptionId();
+  COUNTPOSINDEPENDENTAMBS_FLAG = OPT_getFlagOptionId();
 
   MAIN_setFlattenTreeFlag(ATtrue);
   MAIN_setTextualOutputFlag(ATfalse);
   MAIN_setOutputFileName("-");
+  MAIN_setCountPosIndependentAmbsFlag(ATfalse);
 }
 
 void MAIN_setFlattenTreeFlag(ATbool value) {
@@ -66,5 +69,13 @@ void MAIN_setParseTableName(const char* parseTableName) {
 
 const char *MAIN_getParseTableName() {
   return OPT_getStringValue(PARSETABLENAME_VALUE);
+}
+
+void MAIN_setCountPosIndependentAmbsFlag(ATbool value) {
+  OPT_setFlag(COUNTPOSINDEPENDENTAMBS_FLAG, value);
+}
+
+ATbool MAIN_getCountPosIndependentAmbsFlag() {
+  return OPT_getFlag(COUNTPOSINDEPENDENTAMBS_FLAG);
 }
 

@@ -25,8 +25,6 @@ void   FLT_setSelectTopNonterminalFlag(ATbool value);
 ATbool FLT_getSelectTopNonterminalFlag();
 void   FLT_setRemoveCyclesFlag(ATbool value);
 ATbool FLT_getRemoveCyclesFlag();
-void   FLT_setCountPosIndependentAmbsFlag(ATbool value);
-ATbool FLT_getCountPosIndependentAmbsFlag();
 
 void   FLT_setTopNonterminal(const char* nonterminal);
 const char* FLT_getTopNonterminal();

@@ -37,6 +37,7 @@
 #include <logging.h>
 #include <MEPT-productions.h>
 #include <MEPT-args.h>
+#include <mainOptions.h>
 
 #include "posmap.h"
 #include "mem-alloc.h"
@@ -1471,7 +1472,7 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    }
   
    if (newT) {
-     if (FLT_getCountPosIndependentAmbsFlag()) {
+     if (MAIN_getCountPosIndependentAmbsFlag()) {
        int pos = 0;
        numberOfAmbiguitiesInTree = countPosIndependentAmbsInTree(newT,0,&pos);
      } else {

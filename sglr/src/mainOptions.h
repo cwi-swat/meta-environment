@@ -17,5 +17,7 @@ void         MAIN_setInputFileName(const char* inputFileName);
 const char  *MAIN_getInputFileName();
 void         MAIN_setParseTableName(const char* parseTableName);
 const char  *MAIN_getParseTableName();
+void         MAIN_setCountPosIndependentAmbsFlag(ATbool flag);
+ATbool       MAIN_getCountPosIndependentAmbsFlag();
 
 #endif /* __MAIN_OPTIONS_H__ */

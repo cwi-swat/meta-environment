@@ -17,7 +17,6 @@ static int REJECT_FLAG;
 static int SELECTTOPNONTERMINAL_FLAG;
 static int SELECTTOPNONTERMINAL_VALUE;
 static int REMOVECYCLES_FLAG;
-static int COUNTPOSINDEPENDENTAMBS_FLAG;
 
 
 void FLT_initializeDefaultOptions() {
@@ -31,7 +30,6 @@ void FLT_initializeDefaultOptions() {
   SELECTTOPNONTERMINAL_FLAG = OPT_getFlagOptionId();
   SELECTTOPNONTERMINAL_VALUE = OPT_getStringOptionId();
   REMOVECYCLES_FLAG = OPT_getFlagOptionId();
-  COUNTPOSINDEPENDENTAMBS_FLAG = OPT_getFlagOptionId();
   FLT_setFilterFlag(ATtrue);
   FLT_setIndirectPreferenceFlag(ATtrue);
   FLT_setPreferenceCountFlag(ATtrue);
@@ -40,7 +38,6 @@ void FLT_initializeDefaultOptions() {
   FLT_setRejectFlag(ATtrue);
   FLT_setSelectTopNonterminalFlag(ATfalse);
   FLT_setTopNonterminal("***NOT SET***");
-  FLT_setCountPosIndependentAmbsFlag(ATfalse);
 }
 
 void FLT_setFilterFlag(ATbool value) {
@@ -55,7 +52,6 @@ void FLT_setFilterFlag(ATbool value) {
     FLT_setRejectFlag(ATfalse); 
     FLT_setSelectTopNonterminalFlag(ATfalse); 
     FLT_setRemoveCyclesFlag(ATfalse); 
-    FLT_setCountPosIndependentAmbsFlag(ATfalse);
   }
 }
 
@@ -135,14 +131,6 @@ ATbool FLT_getRemoveCyclesFlag() {
   return OPT_getFlag(REMOVECYCLES_FLAG);
 }
 
-void FLT_setCountPosIndependentAmbsFlag(ATbool value) {
-  OPT_setFlag(COUNTPOSINDEPENDENTAMBS_FLAG, value);
-}
-
-ATbool FLT_getCountPosIndependentAmbsFlag() {
-  return OPT_getFlag(COUNTPOSINDEPENDENTAMBS_FLAG);
-}
-
 void FLT_printOptions() {
   ATwarning("%s = %d\n", FILTER_FLAG, FLT_getFilterFlag());
   ATwarning("%s = %d\n", DIRECT_PREFERENCE_FLAG, FLT_getDirectPreferenceFlag());
@@ -154,6 +142,5 @@ void FLT_printOptions() {
   ATwarning("%s = %d\n", SELECTTOPNONTERMINAL_FLAG, FLT_getSelectTopNonterminalFlag());
   ATwarning("%s = %s\n", SELECTTOPNONTERMINAL_VALUE, FLT_getTopNonterminal());
   ATwarning("%s = %d\n", REMOVECYCLES_FLAG, FLT_getRemoveCyclesFlag());
-  ATwarning("%s = %d\n", COUNTPOSINDEPENDENTAMBS_FLAG, FLT_getCountPosIndependentAmbsFlag());
 }
 
