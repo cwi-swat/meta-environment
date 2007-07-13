@@ -1,6 +1,6 @@
 module languages/ansi-c/syntax/Default-C-With-CPP
 
-imports languages/generic-cpp/syntax/Whitespace
+imports basic/Whitespace
 imports languages/generic-cpp/syntax/CommentsAsLayout
 
 imports languages/ansi-c/syntax/C

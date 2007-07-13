@@ -11,6 +11,7 @@ SUBDIRS = \
 	ansi-c \
         ebnf \
 	graph \
+	fortran \
 	fdl \
         logo \
 	pico \
