@@ -392,7 +392,7 @@ static void doLimitedReductions(GSSNode st, PTBL_Action a, GSSEdge edge) {
 
   prod = PTBL_getActionLabel(a);
 
-  ps = GSS_findLimitedPaths(st, PTBL_getActionStateNumber(a), edge);
+  ps = GSS_findLimitedPaths(st, PTBL_getActionLength(a), edge);
 
   while(ps) {
     reducer(GSS_getReductionPathTargetGSSNode(ps),

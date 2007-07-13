@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jul 13 15:58:49 CEST 2007 <economop@cwi.nl>
+ * src/parser/parser.c: the wrong api function was being called. Fortunately 
+   it was accessing the correct argument in the ATerm!
+
 Fri Jul 13 11:59:23 CEST 2007 <economop@cwi.nl>
  * Made the "count number of ambiguities independent of position information"
    option a MAIN option. I'll probably make this the default behaviour and
