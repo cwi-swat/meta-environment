@@ -29,6 +29,7 @@ context-free syntax
   CharStringEditDescr                   -> FormatItem
   Icon? DataEditDescr                   -> FormatItem
   Icon? '(' FormatItemList ')'          -> FormatItem
+  FormatItem ":" FormatItem	    -> FormatItem
 
 %%R1005-R1009
   'I'  Icon ('.' Icon)?                 -> DataEditDescr
