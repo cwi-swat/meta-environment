@@ -62,8 +62,9 @@ static char myarguments[] = "acC:hi:IlLmn:o:p:rstvV";
 static void VERBOSE(const char* msg)
 {
   if (toolbus_mode) {
-    ATBwriteTerm(toolbus_id, ATmake("snd-event(asfc-progress(<str>))", msg));
-    ATBhandleOne(toolbus_id);
+  	/* Disabled, because this is not the right way to send events during an eval. */
+    /*ATBwriteTerm(toolbus_id, ATmake("snd-event(asfc-progress(<str>))", msg));
+    ATBhandleOne(toolbus_id);*/
   }
   else if (run_verbose) {
     ATwarning("%s\n", msg);
