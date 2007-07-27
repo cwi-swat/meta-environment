@@ -113,7 +113,12 @@ module Utils
       errors_name = temp_file_name('errors')
       output_name = temp_file_name('output')
       save_script_to_temp_file(todo_name, script)
-      `/bin/sh -s < #{todo_name} 2> #{errors_name} > #{output_name}`
+      # This does not work as expected on Mac OS X
+      #`/bin/sh -s < #{todo_name} 2> #{errors_name} > #{output_name}`
+      # "sh" on solaris 10 invokes sh
+      # "sh" on mac os x invokes bash (but -s on "/bin/sh" is buggy)
+      # so we use sh from the path...
+      `sh -s < #{todo_name} 2> #{errors_name} > #{output_name}`
       output = read_file(output_name)
       errors = read_file(errors_name)
       File.unlink(todo_name, errors_name, output_name)
