@@ -1,6 +1,8 @@
 module Utils
 
   require 'yaml'
+  require 'open3'
+
 
   class EmptyShellFailure < Exception
     attr_reader :result
@@ -113,14 +115,13 @@ module Utils
       errors_name = temp_file_name('errors')
       output_name = temp_file_name('output')
       save_script_to_temp_file(todo_name, script)
-      # This does not work as expected on Mac OS X
-      #`/bin/sh -s < #{todo_name} 2> #{errors_name} > #{output_name}`
-      # "sh" on solaris 10 invokes sh
-      # "sh" on mac os x invokes bash (but -s on "/bin/sh" is buggy)
-      # so we use sh from the path...
-      `sh -s < #{todo_name} 2> #{errors_name} > #{output_name}`
+
+      system("/bin/sh -s < #{todo_name} 2> #{errors_name} > #{output_name}")
       output = read_file(output_name)
-      errors = read_file(errors_name)
+
+      # The null chars seem to be unavoidable on Mac OSX
+      # My only solution is to zap them here...
+      errors = read_file(errors_name).gsub(/\0/,'')
       File.unlink(todo_name, errors_name, output_name)
       return ShellResult.new(output, errors, $?.exitstatus, script)
     end
