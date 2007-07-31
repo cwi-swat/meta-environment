@@ -10,6 +10,21 @@ equations
 	========================================================
 	t2s(< $Etype+ >)		= $StrCon
 
+[t2s-6-formals] 
+	$StrCon :=  "<" || formals2str($Formal+) || ">"
+	========================================================
+	t2s(< $Formal+ >)		= $StrCon
+
+[f2s-1]
+	$StrCon := t2s($Etype) || " " || idcon2str($Var)
+	===
+	formals2str($Etype $Var) = $StrCon
+
+[f2s-2]
+	$StrCon := formals2str($Formal) || ", " || formals2str($Formal+)
+	===
+	formals2str($Formal, $Formal+) = $StrCon
+
 [t2s-6] $StrCon :=  "[" || tl2sl($Etype+) || "]"
 	========================================================
 	t2s([ $Etype+ ])		= $StrCon

@@ -9,7 +9,7 @@ hiddens
 imports basic/Whitespace
 
 context-free start-symbols
-  REXPTYPE
+  REXPTYPE Formal
 
 exports
 context-free syntax
@@ -24,12 +24,15 @@ context-free syntax
 context-free syntax
   "bool" | "int" | "str" | "loc" -> ElemType  
   ElemType                       -> REXPTYPE  
+  "<" {Formal ","}+ ">"        -> REXPTYPE  
   "<" {REXPTYPE ","}+ ">"        -> REXPTYPE  
+  REXPTYPE IdCon -> Formal
+
+
   IdCon                          -> REXPTYPE  
   "&" IdCon                      -> REXPTYPE  
 
-context-free priorities
-  { "bag" "[" REXPTYPE "]"        -> REXPTYPE  
+context-free syntax
+    "bag" "[" REXPTYPE "]"        -> REXPTYPE  
     "set" "[" REXPTYPE "]"        -> REXPTYPE  
-    "rel" "[" {REXPTYPE ","}+ "]" -> REXPTYPE   } >
-  REXPTYPE IdCon -> REXPTYPE
+    "rel" "[" {REXPTYPE ","}+ "]" -> REXPTYPE

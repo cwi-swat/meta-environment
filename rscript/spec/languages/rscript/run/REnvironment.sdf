@@ -13,25 +13,27 @@ sorts REnvironment Lambda Formals
 context-free syntax
   <TypeStore,FunctionStore,YieldStore,RStore> -> REnvironment  
 
+aliases
+  {Formal ","}+   -> Formals  
+
 context-free syntax
-  {IdCon ","}*   -> Formals  
   <Formals,REXP> -> Lambda   
 
 context-free syntax
-  new-renvironment()                                    -> REnvironment  
-  define-type(IdCon, REXPTYPE, REnvironment)            -> REnvironment  
-  bind-function(IdCon, Formals, REXP, REnvironment)     -> REnvironment  
-  assign-variable(IdCon, REXPTYPE, RElem, REnvironment) -> REnvironment  
-  assign-variable(IdCon, RElem, REnvironment)           -> REnvironment  
-  union-with-variable(IdCon, RElem, REnvironment)       -> REnvironment  
-  yield(IdCon, REnvironment)                            -> REnvironment  
-  formals(IdCon, REnvironment)                          -> Formals       
-  body(IdCon, REnvironment)                             -> REXP          
-  type(IdCon, REnvironment)                             -> REXPTYPE      
-  value(IdCon, REnvironment)                            -> RElem         
-  yielded(REnvironment)                                 -> {IdCon ","}*  
-  filter(REnvironment, {IdCon ","}*)                    -> REnvironment  
-  rstore(REnvironment)                                  -> RStore        
+  new-renvironment()                                    -> REnvironment {complete} 
+  define-type(IdCon, REXPTYPE, REnvironment)            -> REnvironment {complete} 
+  bind-function(IdCon, Formals, REXP, REnvironment)     -> REnvironment {complete} 
+  assign-variable(IdCon, REXPTYPE, RElem, REnvironment) -> REnvironment {complete} 
+  assign-variable(IdCon, RElem, REnvironment)           -> REnvironment {complete} 
+  union-with-variable(IdCon, RElem, REnvironment)       -> REnvironment {complete} 
+  yield(IdCon, REnvironment)                            -> REnvironment {complete} 
+  formals(IdCon, REnvironment)                          -> Formals      {complete} 
+  body(IdCon, REnvironment)                             -> REXP         {complete} 
+  type(IdCon, REnvironment)                             -> REXPTYPE     {complete} 
+  value(IdCon, REnvironment)                            -> RElem        {complete} 
+  yielded(REnvironment)                                 -> {IdCon ","}* {complete} 
+  filter(REnvironment, {IdCon ","}*)                    -> REnvironment {complete} 
+  rstore(REnvironment)                                  -> RStore       {complete} 
 
 context-free syntax
   "*undefined*" -> RElem  
@@ -41,15 +43,15 @@ context-free start-symbols
   RType REnvironment
 
 context-free syntax
-  rexp-type-to-rtype(REXPTYPE, REnvironment) -> RType          
-  type-store(REnvironment)                   -> TypeStore      
-  function-store(REnvironment)               -> FunctionStore  
-  yield-store(REnvironment)                  -> YieldStore     
-  update(TypeStore, REnvironment)            -> REnvironment   
-  update(RStore, REnvironment)               -> REnvironment   
-  update(FunctionStore, REnvironment)        -> REnvironment   
-  update(YieldStore, REnvironment)           -> REnvironment   
-  delete(RStore, IdCon)                      -> RStore         
+  rexp-type-to-rtype(REXPTYPE, REnvironment) -> RType         {complete} 
+  type-store(REnvironment)                   -> TypeStore     {complete} 
+  function-store(REnvironment)               -> FunctionStore {complete} 
+  yield-store(REnvironment)                  -> YieldStore    {complete} 
+  update(TypeStore, REnvironment)            -> REnvironment  {complete} 
+  update(RStore, REnvironment)               -> REnvironment  {complete} 
+  update(FunctionStore, REnvironment)        -> REnvironment  {complete} 
+  update(YieldStore, REnvironment)           -> REnvironment  {complete} 
+  delete(RStore, IdCon)                      -> RStore        {complete} 
 
 variables
   "$IdCon" [0-9\']*         -> IdCon            
@@ -58,6 +60,7 @@ variables
   "$RExp" [0-9\']*          -> REXP             
   "$REnv" [0-9\']*          -> REnvironment     
   "$Formals" [0-9\']*       -> Formals          
+  "$Formal" [0-9\']*        -> Formal          
   "$Lambda" [0-9\']*        -> Lambda           
   "$RExpType" [0-9\']*      -> REXPTYPE         
   "$RExpType*" [0-9\']*     -> {REXPTYPE ","}*  

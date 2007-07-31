@@ -1,6 +1,7 @@
 module languages/rscript/run/RscriptCalculator
 
 imports languages/rscript/run/REnvironment
+        languages/rscript/syntax/Rscript-Types
         basic/Integers
         basic/Strings
         basic/LocationOperations
@@ -47,14 +48,14 @@ context-free syntax
   eval-rim(RElem, RElem)                                      -> RElem                   
   eval-lim(RElem, RElem)                                      -> RElem                   
   eval-initvar(INITVAR*, REnvironment)                        -> REnvironment            
-  eval-fields({REXPTYPE ","}*, REnvironment, Integer)         -> REnvironment            
+  eval-fields({Formal ","}*, REnvironment, Integer)         -> REnvironment            
   select-field(RElem, Integer)                                -> RElem                   
   select-expression-field(REXP, Integer)                      -> REXP                    
   add-element(RElem, RElem)                                   -> RElem                   
   power0(RElem)                                               -> RElem                   
   power1(RElem)                                               -> RElem                   
-  extract-rvars({REXPTYPE ","}+)                              -> {IdCon ","}+            
-  bind-formals({IdCon ","}+, {REXP ","}+, REnvironment)       -> REnvironment            
+  extract-rvars({Formal ","}+)                              -> {IdCon ","}+            
+  bind-formals({Formal ","}+, {REXP ","}+, REnvironment)       -> REnvironment            
   equal-rval(RElem, RElem)                                    -> Boolean                 
   simplify(REXP)                                              -> REXP                    
   simplify1(REXP)                                             -> REXP                    
@@ -130,7 +131,10 @@ variables
   "$Eq+" [0-9\']*       -> EQU+                  
   "$Target" [0-9\']*    -> TARGET                
   "$Target*" [0-9\']*   -> {TARGET ","}*         
-  "$Target+" [0-9\']*   -> {TARGET ","}+         
+  "$Target+" [0-9\']*   -> {TARGET ","}+   
+  "$Formal"[0-9\']*     -> Formal      
+  "$Formal*"[0-9\']*     -> {Formal ","}*
+  "$Formal+"[0-9\']*     -> {Formal ","}+     
 
 lexical variables
   "$IdConHeadChar" [0-9\']* -> [A-Za-z]        

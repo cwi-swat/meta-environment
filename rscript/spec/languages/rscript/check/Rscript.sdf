@@ -163,7 +163,10 @@ hiddens
 	"$Pair"[0-9\']* -> <IdCon, REXPTYPE>
 	"$Pair*"[0-9\']* -> {<IdCon, REXPTYPE> ","}*
 	"$Pair+"[0-9\']* -> {<IdCon, REXPTYPE> ","}+
-	
+	"$Formal"[0-9\']* -> Formal
+	"$Formal*"[0-9\']* -> {Formal ","}*
+	"$Formal+"[0-9\']* -> {Formal ","}+
+
 
 lexical variables
 	"$IdConChar*"[0-9\']*    -> [A-Za-z0-9\_\-]*

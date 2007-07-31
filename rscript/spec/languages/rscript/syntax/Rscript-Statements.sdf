@@ -25,7 +25,7 @@ context-free syntax
   YIELD REXPTYPE IdCon           -> RSTAT  
 
 context-free syntax
-  REXPTYPE IdCon "(" {REXPTYPE ","}* ")" "=" REXP -> RSTAT  
+  REXPTYPE IdCon "(" {Formal ","}* ")" "=" REXP -> RSTAT  
 
 hiddens
 context-free start-symbols

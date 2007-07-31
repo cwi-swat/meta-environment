@@ -15,6 +15,7 @@ context-free syntax
 context-free syntax
   idcon2str(IdCon)       -> StrCon  
   t2s(REXPTYPE)          -> StrCon  
+  formals2str({Formal ","}+) -> StrCon
   tl2sl({REXPTYPE ","}*) -> StrCon  
 
 hiddens
@@ -25,7 +26,9 @@ variables
   "$Etype*" [0-9\']* -> {REXPTYPE ","}*  
   "$Etype+" [0-9\']* -> {REXPTYPE ","}+  
   "$StrCon" [0-9\']* -> StrCon           
-  "$Var" [0-9\']*    -> IdCon            
+  "$Var" [0-9\']*    -> IdCon   
+  "$Formal+"[0-9\']* -> {Formal ","}+
+  "$Formal"[0-9\']* -> Formal
 
 lexical variables
   "$IdConChar" [0-9\']*     -> [A-Za-z0-9\-]   

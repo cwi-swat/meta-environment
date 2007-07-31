@@ -22,6 +22,7 @@ equations
 [et1]	element-type(set[$Etype], $Tenv)  = $Etype
 [et2]	element-type(rel[$Etype+], $Tenv) = <$Etype+>
 [et3]	element-type(<$Etype+>, $Tenv)    = <$Etype+>
+[et3]	element-type(<$Formal+>, $Tenv)    = <$Formal+>
 [et4]	element-type($Var, $Tenv)         = element-type(lookup($Tenv, $Var), $Tenv)
 [default-et]
 	element-type($Etype, $Tenv)       = undefined-type
@@ -44,7 +45,7 @@ equations
 
 [ft1]	first(<$Etype1, $Etype*>, $Tenv) = $Etype1
 
-[ft2]	first(<$Etype1 $Var, $Etype*>, $Tenv) = $Etype1
+[ft2]	first(<$Etype1 $Var, $Formal*>, $Tenv) = $Etype1
 
 [ft3]	first($Var, $Tenv) = first(lookup($Tenv, $Var), $Tenv)
 
@@ -54,6 +55,7 @@ equations
 %% ---- Second of type
 
 [st1]	second(<$Etype1, $Etype+>, $Tenv) = <$Etype+>
+[st1]	second(<$Etype1 $Var, $Formal+>, $Tenv) = <$Formal+>
 [st3]	second($Var, $Tenv) = second(lookup($Tenv, $Var), $Tenv)
 [default-st]
 	second($Etype, $Tenv) = undefined-type
@@ -74,14 +76,17 @@ equations
 	===
 	norm(<$Etype1, $Etype2>, $Tenv) = <$Etype1', $Etype2'>
 
-%% TVDS
-%%[nm5]	norm(<$Etype1 $Var, $Etype*>, $Tenv) = norm(get-tuple-type(<$Etype+>), $Tenv)
-
 [nm6]	norm($Var, $Tenv) = norm(lookup($Tenv, $Var), $Tenv)
 
-%% TVDS
+[nm6]	norm(<$Etype>, $Tenv) = <norm($Etype, $Tenv)>
 
-[nm6]	norm($Etype $Var, $Tenv) = norm($Etype, $Tenv)
+
+[nm6]	norm(<$Etype $Var>, $Tenv) = norm(<$Etype>, $Tenv)
+
+[nm6]	$Etype' := norm($Etype, $Tenv),
+	<$Etype+> := norm(<$Formal+>, $Tenv)
+	===
+	norm(<$Etype $Var, $Formal+>, $Tenv) = <$Etype', $Etype+>
 
 
 [default-nm]
@@ -130,9 +135,9 @@ equations
 [gtt1]	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2>) = 
 		<get-tuple-type($Etype1), get-tuple-type($Etype2)>
 
-[gtt2]	<$Etype2, $Etype+'> := get-tuple-type(<$Etype2 $Var2, $Etype+>)
+[gtt2]	<$Etype2, $Etype+'> := get-tuple-type(<$Etype2 $Var2, $Formal+>)
 	===
-	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2, $Etype+>) = 
+	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2, $Formal+>) = 
 		<get-tuple-type($Etype1), $Etype2, $Etype+'>
 
 [default-get-tuple-type]
@@ -171,7 +176,7 @@ equations
 		fi
 
 [type-has-field-1]
-	type-has-field($Var, <$Etype*1',$Etype $Var, $Etype*2'>) = true
+	type-has-field($Var, <$Formal*1',$Etype $Var, $Formal*2'>) = true
 
 [default-type-has-field-2]
 	type-has-field($Var, $Etype) = false
@@ -199,32 +204,40 @@ equations
 equations
 
 [get-field-index-1]
-	get-field-index($Var, <$Etype $Var, $Etype*>) = 1
+	get-field-index($Var, <$Etype $Var, $Formal*>) = 1
 
 [get-field-index-2]
 	$Var != $Var'
 	===
-	get-field-index($Var, <$Etype $Var', $Etype+>) =
-		1 + get-field-index($Var, <$Etype+>)
+	get-field-index($Var, <$Etype $Var', $Formal+>) =
+		1 + get-field-index($Var, <$Formal+>)
 
 [get-field-index-3]
-	$Etype' $Var' !:= $Etype
+	$Etype' $Var' !:= $Formal
 	===
-	get-field-index($Var, <$Etype, $Etype+>) =
-		get-field-index($Var, <$Etype+>)
+	get-field-index($Var, <$Formal, $Formal+>) =
+		get-field-index($Var, <$Formal+>)
 
 
 %% ---- check-duplicate-fields
 
 [cdf1-1]	get-field-index($Var, $Tenv) == 0
 	===
-	check-duplicate-fields($Etype $Var, $Etype*, $Integer, $Tenv) =
-		check-duplicate-fields($Etype*, $Integer + 1, $Tenv)
+	check-duplicate-fields(<$Etype $Var>, $Integer, $Tenv) = $Tenv
+
+[cdf1-1]	get-field-index($Var, $Tenv) == 0
+	===
+	check-duplicate-fields(<$Etype $Var, $Formal+>, $Integer, $Tenv) =
+		check-duplicate-fields(<$Formal+>, $Integer + 1, $Tenv)
 
 [cdf1-2]	get-field-index($Var, $Tenv) == $Integer
 	===
-	check-duplicate-fields($Etype $Var, $Etype*, $Integer, $Tenv) =
-		check-duplicate-fields($Etype*, $Integer + 1, $Tenv)
+	check-duplicate-fields(<$Etype $Var>, $Integer, $Tenv) = $Tenv
+
+[cdf1-2]	get-field-index($Var, $Tenv) == $Integer
+	===
+	check-duplicate-fields(<$Etype $Var, $Formal+>, $Integer, $Tenv) =
+		check-duplicate-fields(<$Formal+>, $Integer + 1, $Tenv)
 
 
 [cdf1]	$Integer' := get-field-index($Var, $Tenv),
@@ -232,15 +245,22 @@ equations
 	$Integer' != $Integer,
 	$Tenv' := $Tenv + Field name $Var used at different record positions
 	===
-	check-duplicate-fields($Etype $Var, $Etype*, $Integer, $Tenv) =
-		check-duplicate-fields($Etype*, $Integer + 1, $Tenv')
+	check-duplicate-fields(<$Etype $Var>, $Integer, $Tenv) = $Tenv'
 
-[cdf2]	check-duplicate-fields(, $Integer, $Tenv) = $Tenv
+[cdf1]	$Integer' := get-field-index($Var, $Tenv),
+	$Integer' != 0,
+	$Integer' != $Integer,
+	$Tenv' := $Tenv + Field name $Var used at different record positions
+	===
+	check-duplicate-fields(<$Etype $Var, $Formal+>, $Integer, $Tenv) =
+		check-duplicate-fields(<$Formal+>, $Integer + 1, $Tenv')
+
+%%[cdf2]	check-duplicate-fields(, $Integer, $Tenv) = $Tenv
 
 %% Skip non-labeled positions
-[default-cdf]
-	check-duplicate-fields($Etype, $Etype*, $Integer, $Tenv) =
-		check-duplicate-fields($Etype*, $Integer + 1, $Tenv)
+%%[default-cdf]
+%%	check-duplicate-fields($Etype, $Etype*, $Integer, $Tenv) =
+%%		check-duplicate-fields($Etype*, $Integer + 1, $Tenv)
 		
 
 equations
@@ -250,7 +270,9 @@ equations
 	===
 	get-field-type($Var1, $Var2, $Tenv) = get-field-type($Etype, $Var2, $Tenv)
 
-[gft1]	get-field-type(<$Etype $Var, $Etype*>, $Var, $Tenv) = <$Etype, $Tenv>
+[gft1]	get-field-type(<$Etype $Var>, $Var, $Tenv) = <$Etype, $Tenv>
+
+[gft1]	get-field-type(<$Etype $Var, $Formal+>, $Var, $Tenv) = <$Etype, $Tenv>
 
 [gft2]	$Var1 != $Var2
 	===
@@ -258,8 +280,8 @@ equations
 
 [gft2]	$Var1 != $Var2
 	===
-	get-field-type(<$Etype $Var1, $Etype+>, $Var2, $Tenv) = 
-	get-field-type(<$Etype+>, $Var2, $Tenv)
+	get-field-type(<$Etype $Var1, $Formal+>, $Var2, $Tenv) = 
+	get-field-type(<$Formal+>, $Var2, $Tenv)
 
 
 
@@ -840,28 +862,35 @@ equations
 
 [af1]	$Tenv' := check-not-defined($Var, $Tenv),
 	$Tenv'' := store($Tenv', $Var, $Etype),
-	$Tenv''' := add-formals($Etype*, $Tenv'')
+	$Tenv''' := add-formals(<$Formal+>, $Tenv'')
 	===
-	add-formals($Etype $Var, $Etype*, $Tenv) = $Tenv'''
+	add-formals(<$Etype $Var, $Formal+>, $Tenv) = $Tenv'''
 
-[af2] 	add-formals(, $Tenv) = $Tenv
+[af2] 	$Tenv' := check-not-defined($Var, $Tenv),
+	$Tenv'' := store($Tenv', $Var, $Etype)
+	===
+	add-formals(<$Etype $Var>, $Tenv) = $Tenv''
 
 equations
 %% ---- del-formals
 
 [df1]	$Tenv' := delete($Tenv, $Var),
-	$Tenv'' := del-formals($Etype*, $Tenv')
+	$Tenv'' := del-formals(<$Formal+>, $Tenv')
 	===
-	del-formals($Etype $Var, $Etype*, $Tenv) = $Tenv''
+	del-formals(<$Etype $Var, $Formal+>, $Tenv) = $Tenv''
 
-[df2]	del-formals(, $Tenv) = $Tenv
+[df2]	$Tenv' := delete($Tenv, $Var)
+	===
+	del-formals(<$Etype $Var>, $Tenv) = $Tenv'
 
 equations
 %% Extract the types from a list of formal parameters
 
-[et1]	[$Etype*'] := extract-types($Etype*)
+[et1]	[$Etype*'] := extract-types(<$Formal+>)
 	===
-	extract-types($Etype $Var, $Etype*) = [$Etype, $Etype*']
+	extract-types(<$Etype $Var, $Formal+>) = [$Etype, $Etype*']
+
+[et1]	extract-types(<$Etype $Var>) = [$Etype]
 
 [et2] extract-types([]) = []
 
@@ -888,12 +917,19 @@ equations
 
 [check-fundef] 
 	$Tenv1 := check-not-defined($Var, $Tenv),
-	$Tenv2 := add-formals($Etype*, $Tenv1),
+	$Tenv2 := add-formals(<$Formal+>, $Tenv1),
 	$Tenv3 := require-type($Exp, $Etype, $Tenv2),      
-	$Tenv4 := del-formals($Etype*, $Tenv3), 
-	$Tenv5 := store($Tenv4, $Var, fun extract-types([$Etype*]) to $Etype) 
+	$Tenv4 := del-formals(<$Formal+>, $Tenv3), 
+	$Tenv5 := store($Tenv4, $Var, fun extract-types(<$Formal+>) to $Etype) 
 	===
-	check-stat($Etype $Var ($Etype*) = $Exp, $Tenv) = $Tenv5
+	check-stat($Etype $Var ($Formal+) = $Exp, $Tenv) = $Tenv5
+
+[check-fundef-2]
+	$Tenv1 := check-not-defined($Var, $Tenv),
+	$Tenv2 := require-type($Exp, $Etype, $Tenv1),
+	$Tenv3 := store($Tenv2, $Var, fun [] to $Etype) 
+	===
+	check-stat($Etype $Var () = $Exp, $Tenv) = $Tenv3
 
 %% ---- Check type declarations
 
@@ -1022,14 +1058,21 @@ equations
 
 [mt12]	match-types(<$Etype>, <$Etype' $Var'>, $Table, $Tenv) = match-types($Etype, $Etype', $Table, $Tenv)
 
-[mt13]	match-types($Etype $Var, $Etype', $Table, $Tenv) = match-types($Etype, $Etype', $Table, $Tenv)
+[mt13]	match-types(<$Etype $Var>, $Etype', $Table, $Tenv) = match-types($Etype, $Etype', $Table, $Tenv)
 
-[mt13]	match-types($Etype, $Etype' $Var, $Table, $Tenv) = match-types($Etype, $Etype', $Table, $Tenv)
+[mt13]	match-types($Etype, <$Etype' $Var>, $Table, $Tenv) = match-types($Etype, $Etype', $Table, $Tenv)
 
 %%[mt12]	match-types(<$Etype+>, $Etype, $Table, $Tenv) = 
 %%	match-types(get-tuple-type(<$Etype+>), $Etype, $Table, $Tenv)
+
 %%[mt13]	match-types($Etype, <$Etype+>, $Table, $Tenv) = 
 %%	match-types($Etype, get-tuple-type(<$Etype+>), $Table, $Tenv)
+
+[mt12]	match-types(<$Formal+>, $Etype, $Table, $Tenv) = 
+	match-types(get-tuple-type(<$Formal+>), $Etype, $Table, $Tenv)
+
+[mt13]	match-types($Etype, <$Formal+>, $Table, $Tenv) = 
+	match-types($Etype, get-tuple-type(<$Formal+>), $Table, $Tenv)
 
 [mt14]	<true, $Table'> := match-types($Etype1, $Etype1', $Table, $Tenv),
 	<true, $Table''> := match-types([$Etype*], [$Etype*'], $Table', $Tenv)

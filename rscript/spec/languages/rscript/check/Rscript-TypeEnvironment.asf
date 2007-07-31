@@ -19,10 +19,13 @@ equations
 
 [wft4]	well-formed-type(<$Etype>, $Tenv) = well-formed-type($Etype, $Tenv)
 
-%%[wft5]	well-formed-type(<$Formal+>, $Tenv) = well-formed-type(get-tuple-type(<$Formal+>), $Tenv)
-%% TVDS
+[wft3-1]	$Tenv' := well-formed-type($Etype, $Tenv),
+	$Tenv'' := well-formed-type(<$Formal+>, $Tenv')
+	========================================================
+	well-formed-type(<$Etype $Var, $Formal+>, $Tenv) = $Tenv''
 
-[wft5-1]	well-formed-type($Etype $Var, $Tenv) = well-formed-type($Etype, $Tenv)
+[wft4-2]	well-formed-type(<$Etype $Var>, $Tenv) = well-formed-type($Etype, $Tenv)
+
 
 [wft5]	$Etype := lookup($Tenv, $Var),
          $Etype == undefined-type

@@ -8,11 +8,11 @@ equations
 
 %% ---- Extract a list of variables from a declaration list
 
-[erv1]	$Var+ := extract-rvars($Etype+)
+[erv1]	$Var+ := extract-rvars($Formal+)
 	===================================================
-	extract-rvars($Etype $Var, $Etype+) = $Var, $Var+
+	extract-rvars($Etype $Var, $Formal+) = $Var, $Var+
 
-[erv2]	extract-rvars($Etype $Var ) = $Var
+[erv2]	extract-rvars($Etype $Var) = $Var
 
 %% ---- Eval a complete Rscript
 
@@ -113,17 +113,16 @@ equations
 %% What is this?
 %%[S9]	eval-rstat($Etype $Var init $Exp, $REnv) = assign-variable($Var, $Etype, evalx($Exp, $REnv), $REnv)
 
-[S10]	$Var* := extract-rvars($Etype+),
-	$REnv' := bind-function($Var1, $Var*, $Exp, $REnv)
+[S10]	$REnv' := bind-function($Var1, $Formal+, $Exp, $REnv)
 	===
-	eval-rstat($Etype1 $Var1($Etype+) = $Exp, $REnv) = $REnv' 
+	eval-rstat($Etype1 $Var1($Formal+) = $Exp, $REnv) = $REnv' 
 
 %%						= assign-variable($Var1, $Etype1,
 %%						<extract-rvars($Etype+),
 %%						$Exp>, $REnv)
 
-[S11]  eval-rstat(type $Var = < $Etype+ >, $REnv) = eval-fields($Etype+, $REnv, 1)
-[S12]  eval-rstat(type $Var = $Etype, $REnv) = $REnv
+[S11]  eval-rstat(type $Var = < $Formal+ >, $REnv) = define-type($Var, <$Formal+>, eval-fields($Formal+, $REnv, 1))
+[default-S12]  eval-rstat(type $Var = $Etype, $REnv) = define-type($Var, $Etype, $REnv)
 
 %% implementation of assert 
 
@@ -136,8 +135,8 @@ equations
 
 [ef1]	$REnv' := assign-variable($Var, int, $NatCon, $REnv)
 	======================================================
-	eval-fields($Etype $Var, $Etype*, $REnv, $NatCon) =
-		eval-fields($Etype*, $REnv', $NatCon + 1)
+	eval-fields($Etype $Var, $Formal*, $REnv, $NatCon) =
+		eval-fields($Formal*, $REnv', $NatCon + 1)
 
 [ef2]	eval-fields( , $REnv, $Integer) = $REnv
 
@@ -497,26 +496,26 @@ equations
 
 %% ---- Assign to list of variables
 
-[mv0] 	$REnv' := assign-variable($Var, $RElem, $REnv) 
+[mv0] 	$REnv' := assign-variable($Var, $Etype, $RElem, $REnv) 
 	=====================================================
 	match-rvars($Etype $Var, $RElem, $Exp, $REnv) = evalc($Exp, $REnv')
 
 
-[mv1]	$REnv' := assign-variable($Var1, $RElem1, $REnv),
-	$REnv'' := assign-variable($Var2, $RElem2, $REnv')
+[mv1]	$REnv' := assign-variable($Var1, $Etype1, $RElem1, $REnv),
+	$REnv'' := assign-variable($Var2, $Etype2, $RElem2, $REnv')
 	=====================================================
 	match-rvars($Etype1 $Var1, $Etype2 $Var2, <$RElem1, $RElem2>, $Exp, $REnv) = evalc($Exp, $REnv'')
 
-[mv2]	$REnv' := assign-variable($Var1, $RElem1, $REnv),
-	$REnv'' := assign-variable($Var2, $RElem2, $REnv'),
-	$REnv''' := assign-variable($Var3, $RElem3, $REnv'')
+[mv2]	$REnv' := assign-variable($Var1, $Etype1, $RElem1, $REnv),
+	$REnv'' := assign-variable($Var2, $Etype2, $RElem2, $REnv'),
+	$REnv''' := assign-variable($Var3, $Etype3, $RElem3, $REnv'')
 	=====================================================
 	match-rvars($Etype1 $Var1, $Etype2 $Var2, $Etype3 $Var3, <$RElem1, $RElem2, $RElem3>, $Exp, $REnv) = 
 		evalc($Exp, $REnv''')
 
 
 
-[mv3]	$REnv' := assign-variable($Var1, $RElem1, $REnv) 
+[mv3]	$REnv' := assign-variable($Var1, $Etype1, $RElem1, $REnv) 
 	====================================================
 	match-rvars($Etype1 $Var1, $Target1, $Target2, $Target+, <$RElem1, $RElem2, $RElem3, $RElem+>, $Exp, $REnv) =
 		match-rvars($Target1, $Target2, $Target+, <$RElem2, $RElem3, $RElem+>, $Exp, $REnv')
@@ -541,12 +540,12 @@ equations
 %% 2
 [mv]	$Val := evalx($Exp, $REnv),	
 	equal-rval($Val, $RElem1) == true,
-	$REnv' := assign-variable($Var, $RElem2, $REnv)
+	$REnv' := assign-variable($Var, $Etype, $RElem2, $REnv)
 	=====================================================
 	match-rvars($Exp, $Etype $Var, <$RElem1, $RElem2>, $Exp', $REnv) =
 		evalc($Exp', $REnv')
 
-[mv]	$REnv' := assign-variable($Var, $RElem1, $REnv),
+[mv]	$REnv' := assign-variable($Var, $Etype, $RElem1, $REnv),
 	$Val := evalx($Exp, $REnv'),	
 	equal-rval($Val, $RElem2) == true
 	=====================================================
@@ -559,21 +558,21 @@ equations
 	equal-rval($Val1, $RElem1) == true,
 	$Val2 := evalx($Exp2, $REnv),
 	equal-rval($Val2, $RElem2) == true,
-	$REnv' := assign-variable($Var, $RElem3, $REnv)
+	$REnv' := assign-variable($Var, $Etype, $RElem3, $REnv)
 	====
 	match-rvars($Exp1, $Exp2, $Etype $Var, <$RElem1, $RElem2, $RElem3>, $Exp', $REnv) =
 		evalc($Exp', $REnv')
 
 [mv]	$Val1 := evalx($Exp1, $REnv),
 	equal-rval($Val1, $RElem1) == true,
-	$REnv' := assign-variable($Var, $RElem2, $REnv),
+	$REnv' := assign-variable($Var, $Etype, $RElem2, $REnv),
 	$Val2 := evalx($Exp2, $REnv'),
 	equal-rval($Val2, $RElem3) == true
 	====
 	match-rvars($Exp1, $Etype $Var, $Exp2, <$RElem1, $RElem2, $RElem3>, $Exp', $REnv) =
 		evalc($Exp', $REnv')
 
-[mv]	$REnv' := assign-variable($Var, $RElem1, $REnv),
+[mv]	$REnv' := assign-variable($Var, $Etype, $RElem1, $REnv),
 	$Val1 := evalx($Exp1, $REnv'),
 	equal-rval($Val1, $RElem2) == true,
 	$Val2 := evalx($Exp2, $REnv'),
@@ -593,26 +592,26 @@ equations
 		evalc($Exp', $REnv)
 
 
-[mv]	$REnv' := assign-variable($Var1, $RElem1, $REnv),
-	$REnv'' := assign-variable($Var2, $RElem2, $REnv'),
+[mv]	$REnv' := assign-variable($Var1, $Etype1, $RElem1, $REnv),
+	$REnv'' := assign-variable($Var2, $Etype2, $RElem2, $REnv'),
 	$Val := evalx($Exp, $REnv''),
 	equal-rval($Val, $RElem3) == true
 	===
 	match-rvars($Etype1 $Var1, $Etype2 $Var2, $Exp, <$RElem1, $RElem2, $RElem3>, $Exp', $REnv) =
 		evalc($Exp', $REnv'')
 
-[mv]	$REnv' := assign-variable($Var1, $RElem1, $REnv),
+[mv]	$REnv' := assign-variable($Var1, $Etype1, $RElem1, $REnv),
 	$Val := evalx($Exp, $REnv'),
 	equal-rval($Val, $RElem2) == true,
-	$REnv'' := assign-variable($Var2, $RElem3, $REnv')
+	$REnv'' := assign-variable($Var2, $Etype2, $RElem3, $REnv')
 	===
 	match-rvars($Etype1 $Var1, $Exp, $Etype2 $Var2, <$RElem1, $RElem2, $RElem3>, $Exp', $REnv) =
 		evalc($Exp', $REnv'')
 
 [mv]	$Val := evalx($Exp, $REnv),
 	equal-rval($Val, $RElem1) == true,
-	$REnv' := assign-variable($Var1, $RElem2, $REnv),
-	$REnv'' := assign-variable($Var2, $RElem3, $REnv')
+	$REnv' := assign-variable($Var1, $Etype1, $RElem2, $REnv),
+	$REnv'' := assign-variable($Var2, $Etype2, $RElem3, $REnv')
 	===
 	match-rvars($Exp, $Etype1 $Var1, $Etype2 $Var2, <$RElem1, $RElem2, $RElem3>, $Exp', $REnv) =
 		evalc($Exp', $REnv'')
@@ -686,22 +685,22 @@ equations
 %% ---- Bind formals
 
 [bf1]	$Val := evalx($Exp, $REnv),
-	$REnv' := assign-variable($Var, $Val, $REnv)
+	$REnv' := assign-variable($Var, $Etype, $Val, $REnv)
 	====================================================
-	bind-formals($Var, $Var+, $Exp, $Exp+, $REnv) =
-	bind-formals($Var+, $Exp+, $REnv')
+	bind-formals($Etype $Var, $Formal+, $Exp, $Exp+, $REnv) =
+	bind-formals($Formal+, $Exp+, $REnv')
 
 [bf1]	$Val := evalx($Exp, $REnv),
-	$REnv' := assign-variable($Var, $Val, $REnv)
+	$REnv' := assign-variable($Var, $Etype, $Val, $REnv)
 	====================================================
-	bind-formals($Var, $Exp, $REnv) = $REnv'
+	bind-formals($Etype $Var, $Exp, $REnv) = $REnv'
 
 %% ---- General case for function application
 
 [default-fun]
-	$Var+ := formals($Var1, $REnv),
+	$Formal+ := formals($Var1, $REnv),
 	$Exp2 := body($Var1, $REnv),
-	$REnv' := bind-formals($Var+, $Exp+, $REnv)
+	$REnv' := bind-formals($Formal+, $Exp+, $REnv)
 	====================================================
 	evalx($Var1($Exp+), $REnv) = evalx($Exp2, $REnv')
 

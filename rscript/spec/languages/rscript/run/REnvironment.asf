@@ -77,6 +77,13 @@ equations
 
 equations
 
+[body-top]
+	<$Formals, $RExp> := lookup(function-store($REnv), $IdCon)
+	===
+	body($IdCon, $REnv) = $RExp
+
+equations
+
 [type-top]
 	type($IdCon, $REnv) = lookup(type-store($REnv), $IdCon)
 
@@ -113,13 +120,13 @@ equations
 	rexp-type-to-rtype(loc, $REnv) = loc
 
 [rexp-type-to-rtype-5]
-	rexp-type-to-rtype(<$RExpType>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv)>
+	rexp-type-to-rtype(<$RExpType $IdCon>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv)>
 
 [rexp-type-to-rtype-6]
 	$RType := rexp-type-to-rtype($RExpType, $REnv),
-	<$RType+> := rexp-type-to-rtype(<$RExpType+>, $REnv)
+	<$RType+> := rexp-type-to-rtype(<$Formals>, $REnv)
 	===
-	rexp-type-to-rtype(<$RExpType, $RExpType+>, $REnv) = <$RType, $RType+>
+	rexp-type-to-rtype(<$RExpType $IdCon, $Formals>, $REnv) = <$RType, $RType+>
 
 [rexp-type-to-rtype-7]
 	rexp-type-to-rtype(rel[$RExpType], $REnv) =  rel[rexp-type-to-rtype($RExpType, $REnv)]
@@ -144,6 +151,14 @@ equations
 
 [rexp-type-to-rtype-12]
 	rexp-type-to-rtype(& $IdCon, $REnv) = & $IdCon
+
+[rexp-type-to-rtype-13]
+	rexp-type-to-rtype(<$RExpType>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv)>
+
+[rexp-type-to-rtype-14]
+	<$RType+> := rexp-type-to-rtype(<$RExpType+>, $REnv)
+	===
+	rexp-type-to-rtype(<$RExpType, $RExpType+>, $REnv) = <rexp-type-to-rtype($RExpType, $REnv), $RType+>
 
 equations
 

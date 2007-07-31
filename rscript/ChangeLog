@@ -1,5 +1,14 @@
 # $Id$
 
+2007-07-31    <storm@cwi.nl>
+ * spec/languages/rscript/{check,run}/*
+   - Fixed evaluation of user-defined functions
+   - Removed REXPTYPE IdCon -> REXPTYPE and replaced with
+     a sort "Formal" (this is used for tuple fields and
+     function arguments)
+   - adapted checker/evaluator to deal with this
+   - NB: a type <int, int foo> is not allowed anymore   
+
 Thu Mar  8 14:13:38 CET 2007 <kooiker@cwi.nl>
  * spec/languages/rscript/run/Sets-and-Relations.{asf,sdf}:
    - promoted to asf-library/containers module
