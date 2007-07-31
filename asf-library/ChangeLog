@@ -1,5 +1,10 @@
 $Id$
 
+2007-07-31    <{storm,jurgenv}@cwi.nl>
+
+ * Removed duplicated cons attributes from basic/Integers
+ * Removed import of basic/Whitespace in utilities/PosInfo
+
 Tue Jun 12 17:37:30 CEST 2007 <jurgenv@cwi.nl>
  * NOTE: I've been making and committing changes in languages/asf/** that 
    correspond to the "layout" branches of asc-support and asf. The 

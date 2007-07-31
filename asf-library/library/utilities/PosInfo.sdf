@@ -5,7 +5,6 @@ imports basic/LocationOperations
 imports utilities/ATermAnnotations[X]
 imports basic/AreaOperations
 imports basic/LocationOperations
-imports basic/Whitespace
 
 exports
 
@@ -36,6 +35,8 @@ context-free syntax
   get-filename(X) -> StrCon
   
 hiddens
+
+imports basic/Whitespace
 
 context-free start-symbols
    Location NatCon StrCon
