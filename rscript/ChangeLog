@@ -1,6 +1,10 @@
 # $Id$
 
 2007-07-31    <storm@cwi.nl>
+ * rscripts/tests3.rscript
+   A test rscript for testing user defined function evaluation.
+
+2007-07-31    <storm@cwi.nl>
  * spec/languages/rscript/{check,run}/*
    - Fixed evaluation of user-defined functions
    - Removed REXPTYPE IdCon -> REXPTYPE and replaced with

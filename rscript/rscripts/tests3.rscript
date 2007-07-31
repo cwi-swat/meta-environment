@@ -1,0 +1,13 @@
+int add(int a, int b) = a + b
+
+assert "int-function-add": add(1, 2) == 3
+
+set[int] add-to-each(int a, set[int] s) = { a + e | int e : s }
+
+assert "add-to-each": add-to-each(1, {1,2,3}) == {2,3,4}
+
+type MyInt = int
+
+int add-my-int(MyInt a, MyInt b) = a + b
+
+assert "add-myints": add-my-int(12, 34) == 46
