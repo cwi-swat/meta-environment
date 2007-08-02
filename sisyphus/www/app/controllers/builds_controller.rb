@@ -6,31 +6,29 @@ class BuildsController < ApplicationController
     @movable_host_columns = true
     @components = SiComponent.find(:all)
     @table = {}
-    latest = {}
     @components.each do |c|
       @table[c] = {}
       @hosts.each do |h|
-        ## NB: the || is essential!
-        latest[h] ||= nil
-        item = latest_item2(c, h)
-        if item.nil? then
-          label = nil
-        else
-          if latest[h] then
-            if item.id > latest[h].id 
-              latest[h] = item
-            end
-          else
-            latest[h] = item
-          end
-          label = LinkLabel.new(item)
+        @table[c][h] = nil
+      end
+    end
+    builds = do_the_query(@hosts)
+    latest = {}
+    builds.each do |build|
+      h = build.si_host
+      c = build.si_revision.si_component
+      latest[h] ||= nil
+      @table[c][h] = LinkLabel.new(build)
+      if latest[h] then
+        if build.id > latest[h].id 
+          latest[h] = build
         end
-        @table[c][h] = label
+      else
+        latest[h] = build
       end
     end
     session[:latest] = latest
   end
-
     
   def changes
     latest = session[:latest]
@@ -115,21 +113,37 @@ class BuildsController < ApplicationController
 
   private
 
-  def index_old
-    @components = SiComponent.find(:all)
-    @table = {}
-    @components.each do |c|
-      @table[c] = {}
-      @hosts.each do |h|
-        item = latest_item2(c, h)
-        if item.nil? then
-          label = nil
-        else
-          label = LinkLabel.new(item)
-        end
-        @table[c][h] = label
-      end
-    end
+
+  def hosts_clause(hosts = @hosts)
+    s = @hosts.collect do |h|
+      h.id
+    end.join(' or si_host_id = ')
+    return 'si_host_id = ' + s
+  end
+
+
+  def do_the_query(hosts)
+    query=<<-EOQ
+select *, 
+  (si_items.id not in (select * from tried)) as not_tried 
+from
+    si_items
+where 
+ si_items.id in (
+select max(id) as id 
+from si_items 
+where
+  #{hosts_clause(hosts)}
+group by 
+  si_revision_id, si_host_id 
+having 
+  si_revision_id in 
+     (select max(id) 
+      from si_revisions 
+      group by si_component_id)
+) ;
+EOQ
+    return SiItem.find_by_sql(query)
   end
 
   def my_hosts
@@ -156,46 +170,11 @@ class BuildsController < ApplicationController
                        :order => 'id desc', :limit => 100)
   end
 
-  def latest_item2(component, host)
-    if host.id.nil? then #????
-      return nil
-    end
-    return  SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_items.si_revision_id = si_revisions.id and si_revisions.si_component_id = #{component.id} and si_items.si_host_id = #{host.id} order by si_items.id desc limit 1").first
-  end
-
-  def latest_item3(c, h)
-    return SiItem.find_by_sql("select si_items.* from si_items, si_revisions where si_items.si_host_id = #{h} and si_items.si_revision_id = si_revisions.id and si_revisions.si_component_id = #{c} order by si_items.id desc limit 1").first
-  end
-
-
-  def latest_itemssss() 
-    query=<<EOQ
-select * from  
-si_components inner join (select si_component_id, max(si_revisions.id) from si_revisions group by si_component_id) as bla on (si_components.id = si_component_id) order by name;
-EOQ
-  end
-
-
-  def latest_item(items, component)
-    items.each do |item|
-      if item.si_revision.component == component then
-        # return the first
-        return item
-      end
-    end
-    return nil
-  end
-
-
   def completed?(item)
     # Ugly!!!!
     label = LinkLabel.new(item)
     return label.failed? || label.success? || label.not_tried?
   end
-
-##    return (!item.in_progress? && !item.success) || (item.success) || (!item.success && item.si_results == [] || (!item.success) && item.si_results != [])
-#  end
-  
 
 end
 
@@ -236,9 +215,8 @@ class LinkLabel
   end
   
   def not_tried?
-    failed? && @item.si_results == []
+    failed? && @item.not_tried == 't'
   end
-
 
   def id
     return @item.id
@@ -256,7 +234,7 @@ class LinkLabel
     else
       if @item.success then
         return 'success'
-      elsif @item.si_results != [] then
+      elsif @item.not_tried == 'f' then
         return 'failed'
       else
         return 'not tried'
