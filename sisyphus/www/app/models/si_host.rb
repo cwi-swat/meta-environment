@@ -1,6 +1,7 @@
 
 class SiHost < ActiveRecord::Base
   # fields: uname, active
+  has_many :si_items
   belongs_to :si_platform
   
   def name

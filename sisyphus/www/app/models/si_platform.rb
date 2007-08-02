@@ -6,4 +6,5 @@ class SiPlatform < ActiveRecord::Base
   # hardware_platform
   # hardware_class
   # processor_type
+  has_many :si_hosts
 end

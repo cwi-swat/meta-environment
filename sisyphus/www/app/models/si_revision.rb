@@ -1,6 +1,7 @@
 
 class SiRevision < ActiveRecord::Base
   belongs_to :si_component
+  has_many :si_items
   # fields: version
 
   def name
