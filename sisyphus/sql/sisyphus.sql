@@ -145,3 +145,10 @@ create table si_releases (
 	si_item_id integer references si_items,
 	version char(16)
 );
+
+drop view tried;
+create view tried as
+SELECT si_items.id
+   FROM si_items
+  WHERE (si_items.id IN ( SELECT si_results.si_item_id
+           FROM si_results));
