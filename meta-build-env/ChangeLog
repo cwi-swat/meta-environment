@@ -1,5 +1,12 @@
 $Id$
 
+Thu Aug  2 16:19:02 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: The 'which' command on SunOs and MacOS X does not
+   have a return value unequal to 0 when the command is not found. 
+   There is no portable alternative command to which which does the job.
+   So, I've implemented a rudimentary for loop that checks whether a command
+   is to be found in any of the paths in ${PATH}.
+
 Sun Jun 10 09:12:25 CEST 2007 <jong@metamud.org>
  * README: corrected some typos
 

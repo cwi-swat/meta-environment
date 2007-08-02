@@ -24,9 +24,16 @@ if MAINTAINER_MODE
 # toolbus -gentifs, tifstoc, tifstojava, apigen and asfc are available
 # on the path. If not, we will use touch to update the timestamp of
 # the needed file if it exists, and fail if it does not exist.
+# Alas, the 'which' command is not portable, so we have to hack it here:
 
 check_available = \
-  @if which $1; then \
+  @found="";  \
+  for p in `echo ${PATH} | tr ':' ' '`; do \
+    if [ -f $$p/$1 ]; then \
+      found=$$p; \
+    fi; \
+  done; \
+  if [ -f $${found}/$1 ]; then \
     echo "$2"; $2; \
   else \
     echo "missing $1 to generate $@";  \
@@ -35,7 +42,7 @@ check_available = \
     else \
       echo "missing $@!";  \
       false; \
-    fi; \
+    fi;  \
   fi
 
 stemvar = $($(shell echo "$*" | tr '-' '_')$1)
