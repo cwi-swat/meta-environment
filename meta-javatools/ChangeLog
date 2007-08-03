@@ -1,0 +1,5 @@
+
+
+Fri Aug  3 14:04:47 CEST 2007 <jurgenv@cwi.nl>
+ * added package containing build dependencies of Java tools (junit.jar
+   only for the moment)
