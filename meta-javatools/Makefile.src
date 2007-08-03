@@ -1,0 +1,46 @@
+# -*- makefile -*-
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+prefix=@PREFIX@
+
+STEM=$(PACKAGE)-$(VERSION)
+DIST_DIR=$(STEM)
+
+pkgdatadir=$(prefix)/share/$(PACKAGE)
+pkglibdir=$(prefix)/lib/$(PACKAGE)
+bindir=$(prefix)/bin
+
+EXTRA_DIST = \
+	     Makefile.src \
+	     meta-autotools.pc.in \
+	     configure \
+	     reconf \
+	     ChangeLog \
+	     $(wildcard *.jar)
+
+INSTALL=cp
+
+all: 
+	@true
+
+junit-install:
+	$(INSTALL) junit.jar ${pkglibdir}
+	@echo "ADD ${prefix}/lib/junit.jar to your CLASSPATH!"
+
+install: junit-install
+
+dist: $(EXTRA_DIST)
+	rm -rf $(DIST_DIR)
+	mkdir $(DIST_DIR)
+	cp $(EXTRA_DIST) $(DIST_DIR)
+	tar cvf - $(DIST_DIR)/* | gzip > $(STEM).tar.gz
+	rm -rf $(DIST_DIR)
+
+check:
+	@true
+
+distcheck: dist
+	@true
+
+clean:
+	rm -rf *.tar.gz

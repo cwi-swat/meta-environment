@@ -1,0 +1,35 @@
+#! /bin/sh
+
+set -e
+
+parse_prefix() {
+    if [ -z "$1" ] ; then
+	PREFIX=/usr/local
+    else
+	PREFIX=`echo "$1" | sed -e 's/--prefix=\(.*\)/\1/'`
+    fi
+}
+
+parse_pkgconfig_version() {
+    PACKAGE=$1
+    VERSION=`cat ${PACKAGE}.pc.in | grep Version | sed -e 's/Version: \(.*\)/\1/'`
+}
+
+
+instantiate_files() {
+    PACKAGE=meta-javatools
+    parse_prefix $1
+    parse_pkgconfig_version $PACKAGE
+    cat Makefile.src | sed \
+	-e "s/@PACKAGE@/${PACKAGE}/g" \
+	-e "s/@VERSION@/${VERSION}/g" \
+	-e "s!@PREFIX@!${PREFIX}!g" \
+	> Makefile
+    cat ${PACKAGE}.pc.in | sed \
+	-e "s!@prefix@!${PREFIX}!g" \
+	> ${PACKAGE}.pc
+}
+	
+instantiate_files $@
+
+
