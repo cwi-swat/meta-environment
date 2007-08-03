@@ -7,7 +7,8 @@ STEM=$(PACKAGE)-$(VERSION)
 DIST_DIR=$(STEM)
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)
-pkglibdir=$(prefix)/lib/$(PACKAGE)
+libdir=$(prefix)/lib
+pkglibdir=$(libdir)/$(PACKAGE)
 bindir=$(prefix)/bin
 
 EXTRA_DIST = \
@@ -19,19 +20,20 @@ EXTRA_DIST = \
 	     $(wildcard *.jar)
 
 INSTALL=\
-	@if [ -d $2 ]; then \
-	   cp $1 $2; \
-         else \
-	   mkdir $2; \
-	   cp $1 $2; \
-	 fi;   
+        @if [ ! -d $(libdir) ]; then \
+           mkdir $(libdir); \
+        fi; \
+	if [ ! -d $(pkglibdir) ]; then \
+	   mkdir $(pkglibdir); \
+        fi; \
+	cp $1 $(pkglibdir); 
        
 
 all: 
 	@true
 
 junit-install:
-	$(call INSTALL,junit.jar,${pkglibdir})
+	$(call INSTALL,junit.jar)
 	@echo "ADD ${pkglibdir}/junit.jar to your CLASSPATH!"
 
 install: junit-install
