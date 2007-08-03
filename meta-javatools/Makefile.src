@@ -18,14 +18,21 @@ EXTRA_DIST = \
 	     ChangeLog \
 	     $(wildcard *.jar)
 
-INSTALL=cp
+INSTALL=\
+	@if [ -d $2 ]; then \
+	   cp $1 $2; \
+         else \
+	   mkdir $2; \
+	   cp $1 $2; \
+	 fi;   
+       
 
 all: 
 	@true
 
 junit-install:
-	$(INSTALL) junit.jar ${pkglibdir}
-	@echo "ADD ${prefix}/lib/junit.jar to your CLASSPATH!"
+	$(call INSTALL,junit.jar,${pkglibdir})
+	@echo "ADD ${pkglibdir}/junit.jar to your CLASSPATH!"
 
 install: junit-install
 
