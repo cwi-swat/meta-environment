@@ -74,8 +74,35 @@ module Building
         return @store.last_item_for_target(target)
       end
       @log.info("it needs one...")
-      
-      return new_build_for_target_if_not_released(target)
+      item = new_build_for_target_if_not_released(target)
+      garbage_collect_older_items_if_success(item)
+      return item
+    end
+
+    def garbage_collect_older_items_if_success(item)
+      # Clean earlier build of the same revision with prefixes items here 
+      # if the build was successful (Garbage collect):
+      if not item.success? then
+        return
+      end
+
+      query =<<EOQ
+select si_items.* from si_items, si_revisions 
+where 
+   si_items.id < #{item.id} and
+   si_items.si_revision_id = si_revisions.id and
+   si_items.si_host_id = #{item.si_host.id} and
+   si_revisions.si_component_id = #{item.si_revision.si_component.id}  
+EOQ
+      stale_items = Model::SiItem.find_by_sql(query)
+      stale_items.each do |stale_item|
+        prefix = stale_item.prefix(@config.install_dir)
+        if File.exist?(prefix) then
+          @log.info("deleting stale build #{stale_item} at #{prefix}")
+          @log.info("executing: rm -rf #{prefix}")
+          #system("rm -rf #{prefix}")
+        end       
+      end
     end
 
     def delete_stale_build_item_if_any(target)
@@ -267,6 +294,11 @@ module Building
           if closure.sort == @store.last_item_for_target(target).trans_closure.sort then
             @log.info("closure == last_item_for_target.closure")
             @log.info("don't build because the build is the same.")
+            @log.info("but it may be forced...")
+            if @forced.include?(target.name) then
+              @log.info("yes it is forced, so build it anyway.")
+              build_target_using_workingset(target, ws)
+            end
           else
             @log.info("closures are different.")
             build_target_using_workingset(target, ws)
@@ -286,6 +318,7 @@ module Building
         @log.info("firing target #{target}.")
         target.fire
         @log.info("Target has fired: #{target.item}")
+        garbage_collect_older_items_if_success(target.item)
       else
         @log.info("target #{target} not tried")
         target.not_tried

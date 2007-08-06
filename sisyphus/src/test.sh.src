@@ -8,7 +8,7 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root asfsdf-meta \
+    --root aterm \
     --profile verfrol \
     --interval 300 \
     --weekday Mon \
@@ -26,5 +26,6 @@ $SICLI \
     --User daybuild \
     --Password daybuild \
     --dbconf ../doc/dbconf.yml \
+    --force aterm \
     --no-quiet \
     --verbose

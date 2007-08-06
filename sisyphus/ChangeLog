@@ -1,3 +1,12 @@
+2007-08-06    <storm@cwi.nl>
+
+	* src/building/builder.rb
+	(Building::Builder::garbage_collect_older_items_if_success): added
+	rudimentary garbage collection; after a successful build of a
+	component, the prefixes of older builds of the same component are
+	deleted. NB: this affect backtracking, we'll see how it works
+	out...
+
 2007-03-02    <storm@cwi.nl>
 
 	* www: added the website as a subdirectory of the sisyphus source

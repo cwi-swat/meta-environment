@@ -1,5 +1,5 @@
 adapter: postgresql
 database: sisyphusdev
-host: sjofar.sen.cwi.nl
+host: verfrol.sen.cwi.nl
 username: sisyphusdev
 password: tantalu5
