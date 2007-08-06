@@ -71,12 +71,12 @@ CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
 
 else
 .idef.c: 
-	touch $*.h
-	touch $*.c
+	if [ -e $*.h ]; then touch $*.h; else cp ${srcdir}/$*.h ./$*.h; fi
+	if [ -e $*.c ]; then touch $*.c; else cp ${srcdir}/$*.c ./$*.c; fi
 
 .idef.h: 
-	touch $*.h
-	touch $*.c
+	if [ -e $*.h ]; then touch $*.h; else cp ${srcdir}/$*.h ./$*.h; fi
+	if [ -e $*.c ]; then touch $*.c; else cp ${srcdir}/$*.c ./$*.c; fi
 endif
 
 #ApiGen
