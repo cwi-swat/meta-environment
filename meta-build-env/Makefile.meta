@@ -77,6 +77,11 @@ else
 .idef.h: 
 	if [ -e $*.h ]; then touch $*.h; else cp ${srcdir}/$*.h ./$*.h; fi
 	if [ -e $*.c ]; then touch $*.c; else cp ${srcdir}/$*.c ./$*.c; fi
+
+#Hide distclean errors, see 'info automake, 13.4 Checking the distribution'
+distcleancheck_listfiles = \
+	find -type f -exec sh -c 'test -f $(srcdir)/{} || echo {}' ';'
+
 endif
 
 #ApiGen

@@ -5,6 +5,14 @@ Mon Aug  6 11:28:02 CEST 2007 <{storm,jurgenv}@cwi.nl>
    files. The current rules did not work always in distribution that were
    not compiled in maintainer-mode. This depended on what the timestamps
    of the generated source files where. 
+ * Makefile.meta: in non-maintainer-mode many generated files are in the 
+   distribution. They get copied to the build directory in this case, but
+   not cleaned. The distcheck-clean target fails because of this. We can not
+   add the files to CLEANFILES, because then 'make clean' would throw them
+   away leaving the user nothing but to unpack the distribution again. We
+   found a fix in the automake manual, which will not demand removal of
+   all generated files anymore when doing distclean-check in 
+   non-maintainer-mode.
 
 Thu Aug  2 16:19:02 CEST 2007 <jurgenv@cwi.nl>
  * Makefile.meta: The 'which' command on SunOs and MacOS X does not
