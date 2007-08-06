@@ -100,7 +100,7 @@ EOQ
         if File.exist?(prefix) then
           @log.info("deleting stale build #{stale_item} at #{prefix}")
           @log.info("executing: rm -rf #{prefix}")
-          #system("rm -rf #{prefix}")
+          system("rm -rf #{prefix}")
         end       
       end
     end
