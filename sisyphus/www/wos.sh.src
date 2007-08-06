@@ -37,4 +37,4 @@ echo "module Sisyphus" > ${CONFIG_MODULE}
 echo "CONFIGURATION_REPOSITORY = '${CONFIG_REPO}'" >> ${CONFIG_MODULE}
 echo "end" >> ${CONFIG_MODULE} 
 
-${MONGREL} -S ${CONFIG_MODULE} --daemonize $3 $4 $5 $6 $7 $8 $9 
+${MONGREL} start --script ${CONFIG_MODULE} --daemonize $3 $4 $5 $6 $7 $8 $9 
