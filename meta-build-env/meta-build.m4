@@ -88,7 +88,7 @@ AC_DEFUN([META_ARG_WITH_PACKAGE],
 
   if test "${AC_Var[]_PREFIX:+set}" = set; then
     AC_MSG_RESULT([yes])
-    TMP_PKGCONFIG_PATH="$AC_Var[]_PREFIX/lib/pkgconfig"
+    TMP_PKGCONFIG_PATH="${AC_Var[]_PREFIX}/lib/pkgconfig"
     META_IF_NOT_CONTAINS([${PKG_CONFIG_PATH}],[${TMP_PKGCONFIG_PATH}],[
       PKG_CONFIG_PATH="${TMP_PKGCONFIG_PATH}:${PKG_CONFIG_PATH}"
     ])
@@ -139,13 +139,13 @@ AC_DEFUN([META_INSPECT_PACKAGE],
 
   AC_MSG_CHECKING([prefix of package $1])
   AC_Var[]_FOUND_PREFIX=$($PKG_CONFIG --variable=prefix "$1")
-  if test -z "$AC_Var[]_FOUND_PREFIX"; then
+  if test -z "${AC_Var[]_FOUND_PREFIX}"; then
     AC_MSG_ERROR([package $1 does not specify its prefix in the pkg-config file.
            Report this error to the maintainer of this package.])
   fi
 
   if test "${AC_Var[]_PREFIX:+set}" = set; then
-    AC_MSG_RESULT([explicitly set: $AC_Var[]_PREFIX])
+    AC_MSG_RESULT([explicitly set: ${AC_Var[]_PREFIX}])
 
     AC_MSG_CHECKING([if package $1 at this prefix equals the explicitly set package])
     # in a bundle, the package will not yet be installed.
@@ -153,27 +153,27 @@ AC_DEFUN([META_INSPECT_PACKAGE],
         AC_MSG_RESULT([skipped (bundle)])
     else
       # compare found prefix to the actual prefix out of the .pc file at the given prefix
-      if test -e "$AC_Var[]_PREFIX/lib/pkgconfig/$1.pc"; then
-        AC_Var[]_ACTUAL_PREFIX="$(grep 'prefix=.*' $AC_Var[]_PREFIX/lib/pkgconfig/$1.pc | cut -f2 -d= | tr -d '@<:@:blank:@:>@')"
-        if test "x$AC_Var[]_ACTUAL_PREFIX" = "x$AC_Var[]_FOUND_PREFIX"; then
+      if test -e "${AC_Var[]_PREFIX}/lib/pkgconfig/$1.pc"; then
+        AC_Var[]_ACTUAL_PREFIX="$(grep 'prefix=.*' ${AC_Var[]_PREFIX}/lib/pkgconfig/$1.pc | cut -f2 -d= | tr -d '@<:@:blank:@:>@')"
+        if test "x${AC_Var[]_ACTUAL_PREFIX}" = "x${AC_Var[]_FOUND_PREFIX}"; then
           AC_MSG_RESULT([yes])
         else
           AC_MSG_RESULT([no])
-          AC_MSG_ERROR([prefix of $1 explicitly set to $AC_Var[]_PREFIX,
-            but pkg-config found $1 at $AC_Var[]_FOUND_PREFIX.
-            Please check your PKG_CONFIG_PATH, or remove $2 from $AC_Var[]_FOUND_PREFIX, 
+          AC_MSG_ERROR([prefix of $1 explicitly set to ${AC_Var[]_PREFIX},
+            but pkg-config found $1 at ${AC_Var[]_FOUND_PREFIX}.
+            Please check your PKG_CONFIG_PATH, or remove $2 from ${AC_Var[]_FOUND_PREFIX}, 
             or install the packages at a unique location.])
         fi
       else
         AC_MSG_RESULT([cannot check])
-        AC_MSG_ERROR([$2 does not provide a pkg-config file at $AC_Var[]_PREFIX/lib/pkgconfig/$1.pc. Please check your installation.])
+        AC_MSG_ERROR([$2 does not provide a pkg-config file at ${AC_Var[]_PREFIX}/lib/pkgconfig/$1.pc. Please check your installation.])
       fi
     fi
   else
-    AC_MSG_RESULT([$AC_Var[]_FOUND_PREFIX])
+    AC_MSG_RESULT([${AC_Var[]_FOUND_PREFIX}])
   fi
 
-  AC_Var[]_PREFIX="$AC_Var[]_FOUND_PREFIX"
+  AC_Var[]_PREFIX="${AC_Var[]_FOUND_PREFIX}"
 
   AC_SUBST(AC_Var[]_CFLAGS)
   AC_SUBST(AC_Var[]_LIBS)
@@ -305,11 +305,11 @@ AC_ARG_WITH([$1],
     AC_MSG_RESULT([no])
     AC_MSG_CHECKING([for installed $2 program])
     AC_PATH_PROGS(AC_Var[]_PREFIX,$2,[no])
-    if test "x$AC_Var[]_PREFIX" = "xno" ; then
+    if test "x${AC_Var[]_PREFIX}" = "xno" ; then
       AC_MSG_RESULT([no])
       AC_MSG_ERROR([Required software \"$1\" not found.])
     else
-      AC_Var[]_PREFIX=`dirname \`dirname $AC_Var[]_PREFIX\``
+      AC_Var[]_PREFIX=`dirname \`dirname ${AC_Var[]_PREFIX}\``
       AC_MSG_RESULT([yes])
     fi
   fi
