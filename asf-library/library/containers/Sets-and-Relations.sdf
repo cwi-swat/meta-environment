@@ -3,15 +3,15 @@ module containers/Sets-and-Relations
 imports basic/Integers
         basic/Booleans
         basic/Locations
-        basic/Strings
+        basic/StrCon
 
 exports
 sorts RElem
 
 context-free syntax
   Integer  -> RElem  
-  Boolean  -> RElem  
-  String   -> RElem  
+  BoolCon  -> RElem  
+  StrCon   -> RElem  
   Location -> RElem  
 
 context-free syntax

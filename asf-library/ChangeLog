@@ -1,5 +1,10 @@
 $Id$
 
+2007-08-13    <storm@cwi.nl>
+
+ * Injected StrCon/BoolCon into RElem instead of String and Boolean; this
+   was causing ambiguities together with basic/RStores.
+
 2007-07-31    <{storm,jurgenv}@cwi.nl>
 
  * Removed duplicated cons attributes from basic/Integers
