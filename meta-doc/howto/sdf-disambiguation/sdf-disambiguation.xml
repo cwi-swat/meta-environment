@@ -100,7 +100,7 @@
       trying to parse. If there is such a tree, the string is in the language;
       if not we have a parse error.</para>
 
-      <para>In many cases there are more than one derivation trees for the
+      <para>In many cases there is more than one derivation tree for the
       same string. This is what we call ambiguity. This may happen for parts
       of the string too: several sub-derivations for the same sub-string.
       Since we use the derivation trees later for semantical analysis, it is
@@ -1157,7 +1157,7 @@ context-free syntax
           context-free level.</para>
 
           <para>The matter becomes slightly more complex with the introduction
-          of source code comments. In this case, you can defined another
+          of source code comments. In this case, you can define another
           follow restriction:</para>
 
           <programlisting>module Layout
@@ -1351,8 +1351,8 @@ context-free syntax
       <para>For our example, this has the same disambiguating effect. Added
       feature is that all other identifiers can still be "return". However,
       this solution is a bit slower since the preference filter is a back-end
-      filter. And, this solution requires better testing: does this prefer
-      deal with all problems introduced by the return keyword?</para>
+      filter. And, this solution requires better testing: does this use of
+      prefer deal with all problems introduced by the return keyword?</para>
     </section>
 
     <section>
