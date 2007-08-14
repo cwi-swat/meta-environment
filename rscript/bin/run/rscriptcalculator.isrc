@@ -2,19 +2,30 @@ tool rscriptcalculator is {command = "__PREFIX__/bin/rscriptcalculator"}
 
 process RscriptCalculator is
 let
-  RSC        : rscriptcalculator,
-  Feedback   : term,
-  Rscript    : term
+  RSC : rscriptcalculator,
+  Rscript : term,
+  Rstore : term
 in
   (
-    rec-msg(check-rscript(Rscript?)) .
-    execute(rscriptcalculator, RSC?) .
-    snd-eval(RSC, check-rscript(Rscript)) .
-    rec-value(RSC, check-rscript(Feedback?)) .
-    snd-msg(checked-rscript(Feedback)) .
-    Rscript := none .
-    snd-terminate(RSC, "done")
-  )*
+    rec-msg(eval-rscript(Rscript?))
+    . execute(rscriptcalculator, RSC?)
+    . snd-eval(RSC, eval-rscript(Rscript))
+    . rec-value(RSC, eval-rscript(Rstore?))
+    . snd-msg(evaluated-rscript(Rstore))
+    . Rscript := undefined 
+    . Rstore := undefined 
+    . snd-terminate(RSC, "done")
+  +
+    rec-msg(eval-rscript-with-rstore(Rscript?, Rstore?))
+    . execute(rscriptcalculator, RSC?)
+    . snd-eval(RSC, eval-rscript-with-rstore(Rscript, Rstore))
+    . rec-value(RSC, eval-rscript-with-rstore(Rstore?))
+    . snd-msg(evaluated-rscript-with-rstore(Rstore))
+    . Rscript := undefined
+    . Rstore := undefined
+    . snd-terminate(RSC, "done")
+  )
+  *
   delta
 endlet
 

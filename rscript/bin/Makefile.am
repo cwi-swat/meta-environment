@@ -1,1 +1,1 @@
-SUBDIRS=checker
+SUBDIRS=check run
