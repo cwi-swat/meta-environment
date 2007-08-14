@@ -18,37 +18,37 @@ let
   PluginId: int,
   Location: term
 in
-  subscribe( vp-get-available-visualization-plugins( <term>, <int>, <str> ) )
+  subscribe(vp-get-available-visualization-plugins(<term>, <int>, <str>))
   .
   (
-      rec-msg( fb-load-rstore( Path? ) )
-      . snd-msg( rc-load-rstore( Path ) )
+      rec-msg(fb-load-rstore(Path?))
+      . snd-msg(rc-load-rstore(Path))
     +
-      rec-msg( fb-unload-rstore( RstoreId? ) )
-      . snd-msg( rc-unload-rstore( RstoreId ) )
+      rec-msg(fb-unload-rstore(RstoreId?))
+      . snd-msg(rc-unload-rstore(RstoreId))
     +
-      rec-msg( vp-rstore-exported( Path? ) )
-      . snd-msg( rc-load-rstore( Path ) )
+      rec-msg(vp-rstore-exported(Path?))
+      . snd-msg(rc-load-rstore(Path))
     +
-      rec-msg( rc-rstore-loaded( Path?, RstoreId? ) )
-      . snd-msg( rc-get-rstore-facts( RstoreId) )
-      . rec-msg( rc-get-rstore-facts( RstoreId?, RstoreFacts? ) )
-      . snd-msg( fb-show-rstore-facts( Path, RstoreId, RstoreFacts ) ) 
+      rec-msg(rc-rstore-loaded(Path?, RstoreId?))
+      . snd-msg(rc-get-rstore-facts(RstoreId))
+      . rec-msg(rc-get-rstore-facts(RstoreId?, RstoreFacts?))
+      . snd-msg(fb-show-rstore-facts(Path, RstoreId, RstoreFacts)) 
     +
-      rec-msg( fb-type-selected( Type? ) )
-      . snd-note( vp-get-available-visualization-plugins( Type ) )
+      rec-msg(fb-type-selected(Type?))
+      . snd-note(vp-get-available-visualization-plugins(Type))
     +
-      rec-note( vp-get-available-visualization-plugins( Type?, PluginId?, PluginName? ) )
-      . snd-msg( fb-visualization-plugin-available( Type, PluginId, PluginName ) )
+      rec-note(vp-get-available-visualization-plugins(Type?, PluginId?, PluginName?))
+      . snd-msg(fb-visualization-plugin-available(Type, PluginId, PluginName))
     +
-      rec-msg( fb-visualization-selected( RstoreId?, FactId?, PluginId? ) )
-      . snd-msg( rc-get-fact-data( RstoreId, FactId ) )
-      . rec-msg( rc-get-fact-data( RstoreId?, FactId?, FactData? ) )
-      . snd-msg( vp-visualize-fact( PluginId, RstoreId, FactId, FactData ) )
+      rec-msg(fb-visualization-selected(RstoreId?, FactId?, PluginId?))
+      . snd-msg(rc-get-fact-data(RstoreId, FactId))
+      . rec-msg(rc-get-fact-data(RstoreId?, FactId?, FactData?))
+      . snd-msg(vp-visualize-fact(PluginId, RstoreId, FactId, FactData))
     +
-      rec-msg( vp-link-clicked( Location? ) )
-      . snd-msg(fbmp-open-location( Location ) )
-   ) * delta
+      rec-msg(vp-link-clicked(Location?))
+      . snd-msg(fbmp-open-location(Location))
+  ) * delta
 endlet
 
 toolbus(FBMP)
