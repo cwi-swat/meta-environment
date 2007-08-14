@@ -10,8 +10,8 @@ AM_CPPFLAGS += \
 	-DASF_WITH_ANNOS \
 	-DASF_MAIN
 
-rscriptchecker_SOURCES = Rscript-Calculator.c 
+rscriptcalculator_SOURCES = Rscript-Calculator.c 
 
-rscriptchecker_LDADD = \
+rscriptcalculator_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
 	$(ASC_SUPPORT_LIBS)
