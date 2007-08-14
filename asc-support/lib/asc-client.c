@@ -4,6 +4,7 @@
 #include <MEPT-utils.h>
 #include <PTMEPT-utils.h>
 #include <Error-utils.h>
+#include <RStore-utils.h>
 #include "Library.h"
 #include "builtin-common.h"
 
@@ -61,6 +62,7 @@ static ATerm convert(const char* name, PT_Tree tree)
     PT_Symbol summary = PT_makeSymbolSort("Summary"); 
     PT_Symbol strcon = PT_makeSymbolSort("StrCon");
     PT_Symbol natcon = PT_makeSymbolSort("NatCon"); 
+    PT_Symbol rstore = PT_makeSymbolSort("RStore");
     ATerm result = NULL;
 
     rhs = (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) ? 
@@ -80,6 +82,9 @@ static ATerm convert(const char* name, PT_Tree tree)
     }
     else if (PT_isEqualSymbol(rhs, natcon)) {
       result = ATparse(PT_yieldTree(tree));
+    }
+    else if (PT_isEqualSymbol(rhs, rstore)) {
+      result = (ATerm) RS_lowerRStore((PRS_RStore) tree);
     }
     else {
       /* a possible very big parse tree should be packed */

@@ -16,6 +16,8 @@
 
 #include <atb-tool.h>
 #include <ASFME.h>
+#include <ParsedRStore.h>
+#include <RStore.h>
 
 #include "asc-support2-me.h"
 #include "Library.h"
@@ -39,6 +41,8 @@ static void initApis() {
   ASF_initASFMEApi();
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   PT_initAsFix2Api();
+  PRS_initParsedRStoreApi();
+  RS_initRStoreApi();
 }
 
 static void printStats() {

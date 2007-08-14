@@ -1,5 +1,9 @@
 $Id$
 
+Tue Aug 14 14:08:13 CEST 2007 <kooiker@cwi.nl>
+ * asc-support.pc.in: add depencency on relation-stores
+ * lib/asc-client.c: lower RStore when receiving RStore from tool
+
 Wed May 30 10:31:30 CEST 2007 <jurgenv@cwi.nl>
  * lib/asc-support.c: prepared with small modifications for rewriting
    with layout.

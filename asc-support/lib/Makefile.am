@@ -77,6 +77,7 @@ libasc_support_me_la_LIBADD = \
 	$(TOOLBUSLIB_LIBS) \
 	$(TIDE_SUPPORT_LIBS) \
 	$(ERROR_SUPPORT_LIBS) \
+	$(RELATION_STORES_LIBS) \
 	$(ATERM_LIBS)
 
 libasc_support_me_la_SOURCES = \
@@ -106,6 +107,7 @@ libasc_support_me_la_SOURCES = \
 AM_CPPFLAGS += \
 	$(PT_SUPPORT_CFLAGS) \
 	$(ASF_SUPPORT_CFLAGS) \
+	$(RELATION_STORES_CFLAGS) \
 	$(ERROR_SUPPORT_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \
 	$(SGLR_CFLAGS) \
