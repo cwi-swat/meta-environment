@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/vis-base"/>
+	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -73,7 +73,7 @@ abstract public class VisualizationPluginTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PvpFileDialogResult0);
     if (result != null) {

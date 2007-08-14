@@ -29,7 +29,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
     private Studio m_studio;
     private String m_pluginName;
     private ATerm[] m_supportedTypes;
-    private ArrayList m_openWindows;
+    private ArrayList<WindowProperties> m_openWindows;
     private VisualizationPluginBridge m_bridge;
 
     protected Factory m_factory;
@@ -75,7 +75,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
 
         VisualizationFactorySingleton.initInstances(m_pureFactory, m_factory);
 
-        m_openWindows = new ArrayList();
+        m_openWindows = new ArrayList<WindowProperties>();
         m_pluginName = getPluginName();
         m_supportedTypes = getSupportedTypes();
     }
@@ -126,8 +126,8 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
         if (m_openWindows != null) {
             for (int i = 0; i < m_openWindows.size(); i++) {
 
-                WindowProperties windowProperties = (WindowProperties) m_openWindows.get(i);
-                VisualizationPluginWindow window = (VisualizationPluginWindow) windowProperties.window;
+                WindowProperties windowProperties = m_openWindows.get(i);
+                VisualizationPluginWindow window = windowProperties.window;
 
                 if (window.getFactId() == factId && window.getStoreId() == storeId) {
                     window.factOutOfDate();
@@ -151,8 +151,8 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
         if (m_openWindows != null) {
             for (int i = 0; i < m_openWindows.size(); i++) {
 
-                WindowProperties windowProperties = (WindowProperties) m_openWindows.get(i);
-                VisualizationPluginWindow window = (VisualizationPluginWindow) windowProperties.window;
+                WindowProperties windowProperties = m_openWindows.get(i);
+                VisualizationPluginWindow window = windowProperties.window;
 
                 if (window.getStoreId() == rstoreId) {
                     window.rstoreUnloaded();
@@ -257,7 +257,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      */
     public void exportToClicked(requestType exportRequestType, int windowId) {
 
-        WindowProperties windowProperties = (WindowProperties) m_openWindows.get(windowId);
+        WindowProperties windowProperties = m_openWindows.get(windowId);
         windowProperties.exportRequestType = exportRequestType;
 
         String dialogTitle = "Export as";
@@ -307,6 +307,8 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
         case csv:
             window.exportToCsv(fileName);
             break;
+            
+        default:
         }
     }
 
@@ -321,7 +323,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      * @date 19-03-2007
      */
     public VisualizationPluginWindow getWindowById(int windowId) {
-        return ((WindowProperties) m_openWindows.get(windowId)).window;
+        return m_openWindows.get(windowId).window;
     }
 
     /**
@@ -337,7 +339,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      * @date 13-03-2007
      */
     protected requestType getWindowExportRequestType(int windowId) {
-        WindowProperties windowProperties = (WindowProperties) m_openWindows.get(windowId);
+        WindowProperties windowProperties = m_openWindows.get(windowId);
 
         return windowProperties.exportRequestType;
     }
