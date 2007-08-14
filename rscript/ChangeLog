@@ -1,5 +1,8 @@
 # $Id$
 
+Tue Aug 14 10:21:46 CEST 2007 <kooiker@cwi.nl>
+ * bin/checker: Add checker binary with ToolBus support
+
 2007-07-31    <storm@cwi.nl>
  * rscripts/tests3.rscript
    A test rscript for testing user defined function evaluation.

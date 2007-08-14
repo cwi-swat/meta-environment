@@ -3,4 +3,5 @@ Maintainers=jurgenv@cwi.nl,paulk@cwi.nl,kooiker@cwi.nl,storm@cwi.nl
 Name: rscript
 Version: 1.0
 Description:
-Requires: sglr,pt-support
+Requires: sglr,pt-support,asc-support,sdf-support
+ToolBusFlags=-I${prefix}/share/rscript
