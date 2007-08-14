@@ -8,15 +8,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import toolbus.AbstractTool;
-
+import toolbus.SwingTool;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class FactbrowserTool
-  extends AbstractTool
+  extends SwingTool
   implements FactbrowserTif
 {
   // This table will hold the complete input signature
