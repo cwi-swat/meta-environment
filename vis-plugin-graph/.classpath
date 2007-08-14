@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vis-plugin"/>
 	<classpathentry kind="lib" path="lib/prefuse.jar" sourcepath="/home/jurgenv/src/prefuse-beta/src"/>
+	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

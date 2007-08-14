@@ -92,7 +92,7 @@ public class DotAdapter extends Graph {
 	}
 
 	private Node getNode(String id) {
-		return (Node) nodeIds.get(id);
+		return nodeIds.get(id);
 	}
 
 	private void storeNode(String id, Node node) {
@@ -255,10 +255,10 @@ public class DotAdapter extends Graph {
 		Node node = getNode(id);
 
 		if (node != null) {
-			node.setInt(DOT_X, (int) x);
-			node.setInt(DOT_Y, (int) y);
-			node.setInt(DOT_WIDTH, (int) width);
-			node.setInt(DOT_HEIGHT, (int) height);
+			node.setInt(DOT_X, x);
+			node.setInt(DOT_Y, y);
+			node.setInt(DOT_WIDTH, width);
+			node.setInt(DOT_HEIGHT, height);
 		} else {
 			System.err.println("Node not found: " + id);
 		}
@@ -383,9 +383,8 @@ public class DotAdapter extends Graph {
 	private String idFromDot(String id) {
 		if (id.charAt(0) == '\"') {
 			return id;
-		} else {
-			return "\"" + id + "\"";
 		}
+		return "\"" + id + "\"";
 	}
 
 	public static void main(String[] args) {

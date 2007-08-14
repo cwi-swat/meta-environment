@@ -5,10 +5,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import nl.dancingbear.visplugin.graphplugin.GraphConstants;
-
 import prefuse.render.AbstractShapeRenderer;
-import prefuse.util.GraphicsLib;
 import prefuse.visual.VisualItem;
 
 public class DotNodeRenderer extends AbstractShapeRenderer {

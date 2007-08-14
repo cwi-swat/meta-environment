@@ -296,7 +296,7 @@ public class GraphBuilder {
 		// Check to see if node already exists.
 		if (m_nodeCache.containsKey(nodeName)) {
 			// If the node is already created, return node from cache.
-			node = (Node) m_nodeCache.get(nodeName);
+			node = m_nodeCache.get(nodeName);
 		} else {
 			// Create a new node since it didnt exist.
 			node = graph.addNode();
