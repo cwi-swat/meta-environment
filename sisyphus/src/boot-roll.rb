@@ -214,13 +214,8 @@ Note: the tunnel section is optional.
 
   def BootRoll.boot_roll(options = OpenStruct.new)
 
-    if options.tag then
-      boot_roll_rcfile = "#{Utils::Roll::boot_roll_rcfile}.#{options.tag}"
-      rcfile = "#{Utils::Roll::roll_rcfile()}.#{options.tag}"
-    else
-      boot_roll_rcfile = Utils::Roll::boot_roll_rcfile
-      rcfile = Utils::Roll::roll_rcfile()
-    end
+    boot_roll_rcfile = Utils::Roll::boot_roll_rcfile(options.tag)
+    rcfile = Utils::Roll::roll_rcfile(options.tag)
 
     if not File.exists?(boot_roll_rcfile) then
       $stderr << "File #{boot_roll_rcfile} does not exist.\n"

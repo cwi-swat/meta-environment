@@ -1,5 +1,11 @@
 2007-08-14  Tijs van der Storm  <storm@cwi.nl>
 
+	* src/{boot-roll.rb,roll.rb,utils/rcfiles.rb}
+	Roll now takes a commandline options -t tag to read config data
+	from .rollrc.tag.
+
+2007-08-14  Tijs van der Storm  <storm@cwi.nl>
+
 	* src/boot-roll.rb
 	Boot-roll is able to generate tagged rollrc files. Using "-t tag"
 	will result in boot-roll attempting to use .bootrollrc.tag and

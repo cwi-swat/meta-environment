@@ -22,26 +22,28 @@ module Roll
 
 
   class CommandlineParser
-    def self.read_roll_conf
-      if not File.exists?(Utils::Roll::roll_rcfile) then
-        $stderr << "File #{Utils::Roll::roll_rcfile} does not exist. Run boot-roll first.\n"
+    def self.read_roll_conf(tag)
+      if not File.exists?(Utils::Roll::roll_rcfile(tag)) then
+        $stderr << "File #{Utils::Roll::roll_rcfile(tag)} does not exist. Run boot-roll first.\n"
         exit(1)
       end
       conf = nil
-      File.open(Utils::Roll::roll_rcfile) do |f|
+      File.open(Utils::Roll::roll_rcfile(tag)) do |f|
         conf = YAML.load(f)
       end
       return conf
     end
     
 
-    def self.update_roll_conf(conf)
-      $stderr << "File #{Utils::Roll::boot_roll_rcfile} is newer than #{Utils::Roll::roll_rcfile}; run boot-roll? [Yn] "
+    def self.update_roll_conf(conf, tag)
+      $stderr << "File #{Utils::Roll::boot_roll_rcfile(tag)} is newer than #{Utils::Roll::roll_rcfile(tag)}; run boot-roll? [Yn] "
       answer = $stdin.gets.chomp
       if answer != 'n' then
-        BootRoll.boot_roll(conf['config']['roots'])
+        options = OpenStruct.new
+        options.tag = tag
+        BootRoll.boot_roll(options)
         # reread rollrc
-        conf = read_roll_conf
+        conf = read_roll_conf(tag)
       end
       return conf
     end
@@ -80,13 +82,13 @@ module Roll
       end
     end
 
-    def self.the_conf
+    def self.the_conf(tag)
       if not @conf then
-        @conf = read_roll_conf
+        @conf = read_roll_conf(tag)
       end
-      if File.exists?(Utils::Roll::boot_roll_rcfile) and
-          File.ctime(Utils::Roll::boot_roll_rcfile) > File.ctime(Utils::Roll::roll_rcfile) then
-        @conf = update_roll_conf(@conf)
+      if File.exists?(Utils::Roll::boot_roll_rcfile(tag)) and
+          File.ctime(Utils::Roll::boot_roll_rcfile(tag)) > File.ctime(Utils::Roll::roll_rcfile(tag)) then
+        @conf = update_roll_conf(@conf, tag)
       end
       return @conf
     end
@@ -98,6 +100,7 @@ module Roll
       options.exclusive_below = false
       options.exclusive_above = false
       options.above = nil  
+      options.tag = nil
       options.package = nil
       options.revert = false
       options.force = false
@@ -116,10 +119,14 @@ module Roll
         opts.separator ""    
         opts.separator "Options:"
 
+        opts.on("-t Tag", "--tag Tag",
+                "Use .rollrc.<tag> instead of .rollrc") do |tag|
+          options.tag = tag
+        end
 
         opts.on("-p Package", "--package Package",
                 "Execute only for package") do |package|
-          options.package = checked_package(the_conf, package)
+          options.package = checked_package(the_conf(options.tag), package)
         end
 
         opts.on("-c", "--current", "Derive package from working dir") do 
@@ -128,12 +135,12 @@ module Roll
 
         opts.on("-a Package", "--above Package",
                 "Execute actions above Package") do |above|
-          options.above = checked_package(the_conf, above)
+          options.above = checked_package(the_conf(options.tag), above)
         end
         
         opts.on("-b Package", "--below Package",
                 "Execute actions below Package") do |below|
-          options.below = checked_package(the_conf, below)
+          options.below = checked_package(the_conf(options.tag), below)
         end
         
         opts.on("-x", "--exclusive-below",
@@ -176,7 +183,7 @@ module Roll
 
 
         opts.on("-d", "--deps", "Print out dependencies") do 
-          deps = the_conf['dependencies']
+          deps = the_conf(options.tag)['dependencies']
           deps.keys.sort.each do |client|
             puts sprintf("%-24s: [%s]", client, deps[client].sort.join(', '))
           end
@@ -184,7 +191,7 @@ module Roll
         end
 
         opts.on("-l", "--list", "List available command templates") do 
-          templates = the_conf['config']['templates']
+          templates = the_conf(options.tag)['config']['templates']
           names = []
           if not templates.nil? then
             puts "Pre-configured templates:"
@@ -212,7 +219,7 @@ module Roll
       
       opts.parse!(args)
 
-      return options, the_conf
+      return options, the_conf(options.tag)
     end
   end
 
@@ -373,3 +380,4 @@ if $0 == __FILE__ then
   end
   Roll::roll(conf, options, ARGV)
 end
+m
