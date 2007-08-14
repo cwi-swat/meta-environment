@@ -18,17 +18,18 @@ module Versioning
     def repository(name, repositories = @repositories)
       repositories.each do |repo|
         if repo['components'].include?(name) then
-          return make_repository(repo['type'], repo['protocol'], repo['location'])
+          return make_repository(repo['type'], repo['protocol'], repo['location'], repo['components'])
         end
       end
       raise RuntimeError.new("cannot find module #{name} in #{repositories.inspect}")
     end
 
-    def make_repository(type, protocol, location)
+
+    def make_repository(type, protocol, location, components)
       if type == 'cvs' then
-        return CVSRepository.new(protocol, location)
+        return CVSRepository.new(protocol, location, components)
       elsif type == 'subversion' then
-        return SVNRepository.new(protocol, location)
+        return SVNRepository.new(protocol, location, components)
       end
       raise RuntimeError.new("unknown repository type: #{type}")    
     end
@@ -38,9 +39,10 @@ module Versioning
   class Repository
     include FileUtils
 
-    def initialize(protocol, location)
+    def initialize(protocol, location, components)
       @protocol = protocol
       @location = location
+      @components = components
     end
 
     def prepare(targetdir, dirname)
@@ -59,6 +61,14 @@ module Versioning
     end
 
 
+    def component_location(component)
+      name = component.name
+      if @components.include?(name) then
+        return File.join(name, @components[name])
+      end
+      raise RuntimeError.new("cannot find module #{name} in #{self.inspect}")
+    end
+
     def trunk_prepare(targetdir, dirname)
       path = File.join(targetdir, dirname)
       cd(targetdir) do
@@ -74,8 +84,8 @@ module Versioning
 
   class SVNRepository < Repository
 
-    def initialize(protocol, location)
-      super(protocol, location)
+    def initialize(protocol, location, components)
+      super(protocol, location, components)
       @shell = Utils::CommandSpecificShell.new('svn_ssh')
     end
     
@@ -105,14 +115,26 @@ module Versioning
       return t
     end
 
-    def svn_checkout(user, path, time, dirname)
+    
+
+    def svn_checkout_OLD_UGLY(user, path, time, dirname)
       url = svn_url(path, user)
       @shell.execute("svn checkout --revision {#{time}} #{url}/trunk #{dirname}")
     end
 
-    def svn_trunk_checkout(user, path, dirname)
+    def svn_trunk_checkout_OLD_UGLY(user, path, dirname)
       url = svn_url(path, user)
       @shell.execute("svn checkout #{url}/trunk #{dirname}")
+    end
+
+    def svn_checkout(user, path, time, dirname)
+      url = svn_url(path, user)
+      @shell.execute("svn checkout --revision {#{time}} #{url} #{dirname}")
+    end
+
+    def svn_trunk_checkout(user, path, dirname)
+      url = svn_url(path, user)
+      @shell.execute("svn checkout #{url} #{dirname}")
     end
 
     def svn_cat_pkgconfig_file(user, path, time)
@@ -142,6 +164,10 @@ module Versioning
       return File.join(targetdir, dirname)
     end
     
+    def tagged_checkout(user, path, targetdir, tag, dirname = File.basename(path) + "_" + tag)
+      trunk_checkout(user, path, targetdir, dirname)
+    end
+
     def trunk_checkout(user, path, targetdir, dirname = File.basename(path))  
       trunk_prepare(targetdir, dirname) do 
         svn_trunk_checkout(user, path, dirname)

@@ -1,5 +1,9 @@
 2007-08-14  Tijs van der Storm  <storm@cwi.nl>
 
+	* src/... Sources.yml now supports branch locations.
+
+2007-08-14  Tijs van der Storm  <storm@cwi.nl>
+
 	* src/{boot-roll.rb,roll.rb,utils/rcfiles.rb}
 	Roll now takes a commandline options -t tag to read config data
 	from .rollrc.tag.
