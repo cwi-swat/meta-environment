@@ -3,10 +3,7 @@ package nl.cwi.sen1.gui.plugin.prefusedot;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-import nl.dancingbear.visplugin.graphplugin.GraphConstants;
-
 import prefuse.action.layout.Layout;
-import prefuse.util.ColorLib;
 import prefuse.visual.DecoratorItem;
 import prefuse.visual.VisualItem;
 

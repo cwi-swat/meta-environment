@@ -2,7 +2,6 @@ package nl.cwi.sen1.gui.plugin.prefusedot;
 
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import nl.dancingbear.visplugin.graphplugin.GraphConstants;
 
 import prefuse.data.Edge;
 import prefuse.data.Graph;
