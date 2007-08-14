@@ -1,9 +1,8 @@
-package nl.dancingbear.visbase.factbrowser;
-
 // Java tool interface class FactbrowserTool
 // This file is generated automatically, please do not edit!
-// generation time: Mar 13, 2007 3:53:39 PM
+// generation time: Aug 14, 2007 2:41:42 PM
 
+package nl.dancingbear.visbase.factbrowser;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +60,7 @@ abstract public class FactbrowserTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PfbRstoreUnloaded0);
     if (result != null) {

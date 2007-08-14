@@ -1,9 +1,8 @@
-package nl.dancingbear.visbase.factbrowser;
-
 // Java tool bridge FactbrowserBridge
 // This file is generated automatically, please do not edit!
-// generation time: Mar 13, 2007 3:53:39 PM
+// generation time: Aug 14, 2007 2:41:42 PM
 
+package nl.dancingbear.visbase.factbrowser;
 
 import aterm.*;
 
