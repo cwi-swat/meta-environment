@@ -95,7 +95,7 @@ public class RStoreFactType extends Observable {
      * @author Renze de Vries
      * @date 14-02-2007
      */
-    public ArrayList getVisualisationPlugins() {
+    public ArrayList<VisualisationPlugin> getVisualisationPlugins() {
         return visualisationPlugins;
     }
 

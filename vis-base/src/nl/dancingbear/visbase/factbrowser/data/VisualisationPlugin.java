@@ -9,7 +9,7 @@ package nl.dancingbear.visbase.factbrowser.data;
  * @date 14-02-2007
  *
  */
-public class VisualisationPlugin implements Comparable {
+public class VisualisationPlugin implements Comparable<VisualisationPlugin> {
     private String pluginName;
 
     private int pluginId;
@@ -76,12 +76,9 @@ public class VisualisationPlugin implements Comparable {
      * @autor Renze de Vries
      * @date 15-02-2007
      */
-    public int compareTo(Object arg0) {
-        if (!(arg0 instanceof VisualisationPlugin))
-            throw new ClassCastException("Fr the comparing of objects a VisualisationPluginNode object expected.");
-
+    public int compareTo(VisualisationPlugin arg0) {
         String localVisName = this.pluginName;
-        String remoteVisName = ((VisualisationPlugin)arg0).pluginName;
+        String remoteVisName = arg0.pluginName;
 
         return localVisName.compareTo(remoteVisName);
     }

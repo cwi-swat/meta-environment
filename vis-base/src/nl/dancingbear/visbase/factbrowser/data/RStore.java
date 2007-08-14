@@ -70,7 +70,7 @@ public class RStore {
      * @author Renze de Vries
      * @date 14-02-2007
      */
-    public ArrayList getFactNodes() {
+    public ArrayList<RStoreFact> getFactNodes() {
         return this.factNodes;
     }
 

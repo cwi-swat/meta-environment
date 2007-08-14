@@ -114,10 +114,9 @@ public class FactBrowserDataManager {
      */
     private VisualisationPlugin addVisualisation(
             VisualisationPlugin visNewPlugin) {
-        Iterator iterator = visPlugins.iterator();
+        Iterator<VisualisationPlugin> iterator = visPlugins.iterator();
         while (iterator.hasNext()) {
-            VisualisationPlugin visPlugin = (VisualisationPlugin) iterator
-                    .next();
+            VisualisationPlugin visPlugin = iterator.next();
             if (visPlugin.getPluginId() == visNewPlugin.getPluginId()) {
                 return visPlugin;
             }
@@ -199,9 +198,8 @@ public class FactBrowserDataManager {
             DefaultMutableTreeNode selectedNode) {
         if (selectedNode.getUserObject() instanceof VisualisationPlugin) {
             return true;
-        } else {
-            return false;
         }
+		return false;
     }
 
     /**
@@ -217,17 +215,15 @@ public class FactBrowserDataManager {
     public boolean checkValidRStoreFact(DefaultMutableTreeNode selectedNode) {
         if (selectedNode instanceof RStoreFact) {
             return true;
-        } else {
-            return false;
         }
+		return false;
     }
 
     public boolean checkValidRStore(DefaultMutableTreeNode selectedNode) {
         if (selectedNode.getUserObject() instanceof RStore) {
             return true;
-        } else {
-            return false;
-        }            
+        }
+		return false;            
     }
     
     /**

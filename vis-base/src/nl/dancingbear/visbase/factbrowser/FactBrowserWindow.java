@@ -149,9 +149,9 @@ public class FactBrowserWindow extends JPanel {
             rstoreTreeNode.add(invalidRStore);
         }
 
-        Iterator iterator = rstoreNode.getFactNodes().iterator();
+        Iterator<RStoreFact> iterator = rstoreNode.getFactNodes().iterator();
         while (iterator.hasNext()) {
-            RStoreFact rstoreFactNode = (RStoreFact) iterator.next();
+            RStoreFact rstoreFactNode = iterator.next();
             rstoreTreeNode.add(rstoreFactNode);
         }
 

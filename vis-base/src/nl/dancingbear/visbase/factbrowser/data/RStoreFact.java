@@ -165,13 +165,12 @@ public class RStoreFact extends DefaultMutableTreeNode implements Observer {
         //Remove all the children so we can rebuild the tree
         this.removeAllChildren();
 
-        Iterator iterator = factType.getVisualisationPlugins().iterator();
+        Iterator<VisualisationPlugin> iterator = factType.getVisualisationPlugins().iterator();
 
         //While there are visualisations continue
         while (iterator.hasNext()) {
-            VisualisationPlugin visPlugin = (VisualisationPlugin) iterator
-                    .next();
-            //Display the visualisationPlugin in the visible Tree
+            VisualisationPlugin visPlugin = iterator.next();
+            // Display the visualisationPlugin in the visible Tree
             DefaultMutableTreeNode visTreeNode = new DefaultMutableTreeNode(
                     visPlugin);
 

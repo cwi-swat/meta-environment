@@ -37,136 +37,134 @@ import aterm.pure.PureFactory;
  * 
  */
 public class FactBrowserTest extends TestCase {
-    private PureFactory pureFactory = null;
+	private PureFactory pureFactory = null;
 
-    private Factory factory = null;
+	private Factory factory = null;
 
-    private FactBrowser factBrowser = null;
+	private FactBrowser factBrowser = null;
 
-    /**
-     * This method sets up the Unit Test so the nessecary factory instances are
-     * present.
-     * 
-     * @author Renze de Vries
-     * @date 22-02-2007
-     */
-    protected void setUp() {
-        pureFactory = FactBrowserFactorySingleton.getPureFactoryInstance();
-        factory = FactBrowserFactorySingleton.getFactoryInstance();
-        factBrowser = new FactBrowser();
-    }
+	/**
+	 * This method sets up the Unit Test so the nessecary factory instances are
+	 * present.
+	 * 
+	 * @author Renze de Vries
+	 * @date 22-02-2007
+	 */
+	protected void setUp() {
+		pureFactory = FactBrowserFactorySingleton.getPureFactoryInstance();
+		factory = FactBrowserFactorySingleton.getFactoryInstance();
+		factBrowser = new FactBrowser();
+	}
 
-    /**
-     * Test if the correct toolname is given for the FactBrowser
-     * 
-     * @author Renze de Vries
-     * @date 22-02-2007
-     */
-    public void testToolName() {
-        assertEquals("This is not the correct toolname", "factbrowser",
-                factBrowser.getName());
-    }
-    
-    /**
-     * This method tests is the initialisations in the "SetUp" are working
-     * as should be.
-     * 
-     * @author Renze de Vries
-     * @date 12-03-2007
-     */
-    public void testFactory()
-    {
-        assertNotNull("The factory should not be null", factory);
-        
-        assertNotNull("The FactBrowser should not be null", factBrowser);
-        
-        assertNotNull("The pureFactory should not be null", pureFactory);
-    }
+	/**
+	 * Test if the correct toolname is given for the FactBrowser
+	 * 
+	 * @author Renze de Vries
+	 * @date 22-02-2007
+	 */
+	public void testToolName() {
+		assertEquals("This is not the correct toolname", "factbrowser",
+				factBrowser.getName());
+	}
 
-    /**
-     * This method tests if it is possible to add a visualisation plugin to the
-     * FactBrowser
-     * 
-     * @author Renze de Vries
-     * @date 22-02-2007
-     */
-    public void testAddVisualisation() {
-        factBrowser.fbAddVisualizationPlugin(pureFactory.make("<str>",
-                "<str>,<str>"), 1, "Visualisatie Test Plugin");
+	/**
+	 * This method tests is the initialisations in the "SetUp" are working as
+	 * should be.
+	 * 
+	 * @author Renze de Vries
+	 * @date 12-03-2007
+	 */
+	public void testFactory() {
+		assertNotNull("The factory should not be null", factory);
 
-        RStoreFactType factType = FactBrowserDataManager.getInstance()
-                .addFactType("\"<str>,<str>\"");
+		assertNotNull("The FactBrowser should not be null", factBrowser);
 
-        RStoreFactType factTypeCompare = FactBrowserDataManager.getInstance()
-                .addFactType("<str>,<str>");
+		assertNotNull("The pureFactory should not be null", pureFactory);
+	}
 
-        assertNotSame("The two given factTypes should not be the same",
-                factType, factTypeCompare);
+	/**
+	 * This method tests if it is possible to add a visualisation plugin to the
+	 * FactBrowser
+	 * 
+	 * @author Renze de Vries
+	 * @date 22-02-2007
+	 */
+	public void testAddVisualisation() {
+		factBrowser.fbAddVisualizationPlugin(pureFactory.make("<str>",
+				"<str>,<str>"), 1, "Visualisatie Test Plugin");
 
-        assertEquals("There should be a added visualisation plugin", 1,
-                factType.getVisualisationPlugins().size());
-    }
+		RStoreFactType factType = FactBrowserDataManager.getInstance()
+				.addFactType("\"<str>,<str>\"");
 
-    /**
-     * Test it the visualisationWindow will create
-     * 
-     * @author Renze de Vries
-     * @date 07-03-2007
-     */
-    public void testVisualisationWindow() {
-        FactBrowserWindow factBrowserWindow = new FactBrowserWindow();
+		RStoreFactType factTypeCompare = FactBrowserDataManager.getInstance()
+				.addFactType("<str>,<str>");
 
-        assertNotNull("Visualisation Windows not created", factBrowserWindow);
-    }
+		assertNotSame("The two given factTypes should not be the same",
+				factType, factTypeCompare);
 
-    /**
-     * This test checks if the retrieval of data is succesfull when a double
-     * click should happen. It cannot simulate the mouseclick itself but
-     * does do the same interanlly as the mouseClicked method.
-     * 
-     * @author Renze de Vries
-     * @date 11-03-2007
-     */
-    public void testMouseClicked() {
-        FactBrowserDataManager dataManager = FactBrowserDataManager
-                .getInstance();
+		assertEquals("There should be a added visualisation plugin", 1,
+				factType.getVisualisationPlugins().size());
+	}
 
-        RStore rstore = new RStore("rstore1", 4);
+	/**
+	 * Test it the visualisationWindow will create
+	 * 
+	 * @author Renze de Vries
+	 * @date 07-03-2007
+	 */
+	public void testVisualisationWindow() {
+		FactBrowserWindow factBrowserWindow = new FactBrowserWindow();
 
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
-        DefaultMutableTreeNode rstoreNode = new DefaultMutableTreeNode(rstore);
-        rootNode.add(rstoreNode);
+		assertNotNull("Visualisation Windows not created", factBrowserWindow);
+	}
 
-        RStoreFact rstoreFact = new RStoreFact("fact1", 5, dataManager
-                .addFactType("<str,bool>"));
-        rstoreNode.add(rstoreFact);
+	/**
+	 * This test checks if the retrieval of data is succesfull when a double
+	 * click should happen. It cannot simulate the mouseclick itself but does do
+	 * the same interanlly as the mouseClicked method.
+	 * 
+	 * @author Renze de Vries
+	 * @date 11-03-2007
+	 */
+	public void testMouseClicked() {
+		FactBrowserDataManager dataManager = FactBrowserDataManager
+				.getInstance();
 
-        VisualisationPlugin visPlugin = new VisualisationPlugin("plugin1", 2);
-        dataManager.createVisualisation(visPlugin, dataManager
-                .addFactType("<str,bool>"));
+		RStore rstore = new RStore("rstore1", 4);
 
-        assertEquals("This node should be the visualisationPlugin", "plugin1",
-                rstoreFact.getFirstLeaf().toString());
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
+		DefaultMutableTreeNode rstoreNode = new DefaultMutableTreeNode(rstore);
+		rootNode.add(rstoreNode);
 
-        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) rstoreFact
-                .getFirstLeaf();
+		RStoreFact rstoreFact = new RStoreFact("fact1", 5, dataManager
+				.addFactType("<str,bool>"));
+		rstoreNode.add(rstoreFact);
 
-        assertEquals("The selectedNode should be a valid visualisationPlugin",
-                true, dataManager.checkValidVisualisationPlugin(selectedNode));
+		VisualisationPlugin visPlugin = new VisualisationPlugin("plugin1", 2);
+		dataManager.createVisualisation(visPlugin, dataManager
+				.addFactType("<str,bool>"));
 
-        assertEquals("The visualisationPlugin identifier should be 2", 2,
-                dataManager.getVisPluginID(selectedNode));
+		assertEquals("This node should be the visualisationPlugin", "plugin1",
+				rstoreFact.getFirstLeaf().toString());
 
-        assertEquals("The RstoreFact identifier should be 5", 5, dataManager
-                .getFactID(selectedNode));
+		DefaultMutableTreeNode selectedNode = rstoreFact.getFirstLeaf();
 
-        assertEquals("The RStore identifier should be 4", 4, dataManager
-                .getRStoreID(selectedNode));
+		assertEquals("The selectedNode should be a valid visualisationPlugin",
+				true, dataManager.checkValidVisualisationPlugin(selectedNode));
 
-        assertEquals("This TreeNode should not be an RStoreFact", false,
-                dataManager.checkValidRStoreFact(selectedNode));
+		assertEquals("The visualisationPlugin identifier should be 2", 2,
+				dataManager.getVisPluginID(selectedNode));
 
-        assertEquals("This TreeNode should be a RStoreFact", true, dataManager
-                .checkValidRStoreFact(rstoreFact));
-    }
+		assertEquals("The RstoreFact identifier should be 5", 5, dataManager
+				.getFactID(selectedNode));
+
+		assertEquals("The RStore identifier should be 4", 4, dataManager
+				.getRStoreID(selectedNode));
+
+		assertEquals("This TreeNode should not be an RStoreFact", false,
+				dataManager.checkValidRStoreFact(selectedNode));
+
+		assertEquals("This TreeNode should be a RStoreFact", true, dataManager
+				.checkValidRStoreFact(rstoreFact));
+	}
 }
