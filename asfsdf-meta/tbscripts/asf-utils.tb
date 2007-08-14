@@ -73,10 +73,7 @@ in
     . rec-msg(checked-asfsdf(Feedback?)) 
     . snd-msg(convert-feedback(Feedback)) 
     . rec-msg(converted-feedback(Summary?)) 
-    . snd-msg(get-summary-errors(Summary)) 
-    . rec-msg(summary-errors(Errors?)) 
-    . snd-msg(es-make-summary("asfsdf-checker", Modulename, Errors)) 
-    . rec-msg(es-summary(Summary?)) 
+    . ReplaceSummaryInfo(Summary?, "asfsdf-checker", Modulename)
     . RemoveSummary("asfsdf-checker", Modulename)
     . DisplaySummary(Summary)
     . Syntax := UNDEFINED
