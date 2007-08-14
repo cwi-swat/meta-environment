@@ -1,3 +1,13 @@
+2007-08-14  Tijs van der Storm  <storm@cwi.nl>
+
+	* src/boot-roll.rb
+	Boot-roll is able to generate tagged rollrc files. Using "-t tag"
+	will result in boot-roll attempting to use .bootrollrc.tag and
+	generate .rollrc.tag.
+
+	Roots don't have to be specified on the commandline; they are
+	taken from the .bootrollrc.
+
 2007-08-06    <storm@cwi.nl>
 
 	* src/building/builder.rb

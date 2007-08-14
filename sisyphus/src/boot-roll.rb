@@ -13,6 +13,7 @@ module BootRoll
 
   $bootrc_example = """
 boot_roll: 
+  roots: [sdf-apigen, asfsdf-meta]
   build_dir: ./bla
   install_dir: /tmp
   build-env: [meta-autotools, meta-build-env]
@@ -37,11 +38,12 @@ Note: the tunnel section is optional.
       options = OpenStruct.new
       options.sources = nil
       options.build_env = false
+      options.tag = nil
       options.bundle = false
 
       opts = OptionParser.new do |opts|
 
-        opts.banner = """Usage: boot-roll [options] <roots>
+        opts.banner = """Usage: boot-roll [options]
 
       roots represents one or more top components.
 """
@@ -63,6 +65,12 @@ Note: the tunnel section is optional.
             exit(1)
           end
         end
+
+        opts.on("-t Tag", "--tag Tag",
+                "Generate dedicated rollrc for .bootrollrc.<tag>") do |tag|
+          options.tag = tag
+        end
+
 
         opts.on("-h", "--help",  "Display usage") do |x|
           puts opts
@@ -204,21 +212,31 @@ Note: the tunnel section is optional.
 
 
 
-  def BootRoll.boot_roll(roots, options = OpenStruct.new)
-    if roots == [] then
-      $stderr << "Usage: boot-roll <rootpackages>\n"
-      exit(1)
+  def BootRoll.boot_roll(options = OpenStruct.new)
+
+    if options.tag then
+      boot_roll_rcfile = "#{Utils::Roll::boot_roll_rcfile}.#{options.tag}"
+      rcfile = "#{Utils::Roll::roll_rcfile()}.#{options.tag}"
+    else
+      boot_roll_rcfile = Utils::Roll::boot_roll_rcfile
+      rcfile = Utils::Roll::roll_rcfile()
     end
 
-    if not File.exists?(Utils::Roll::boot_roll_rcfile) then
+    if not File.exists?(boot_roll_rcfile) then
       $stderr << "File #{boot_roll_rcfile} does not exist.\n"
       $stderr << "Create it, like this:\n"
       $stderr << $bootrc_example
       exit(1)
     end
     boot_conf = nil
-    File.open(Utils::Roll::boot_roll_rcfile) do |f|
+    File.open(boot_roll_rcfile) do |f|
       boot_conf = YAML.load(f)
+    end
+
+    roots = boot_conf['boot_roll']['roots']
+    if roots.nil? or roots == [] then
+      $stderr << "No roots entry found in #{boot_roll_rcfile}\n"
+      exit(1)
     end
 
     if boot_conf['sisyphus']['protocol'] != 'svn' then
@@ -227,7 +245,6 @@ Note: the tunnel section is optional.
     end
 
 
-    rcfile = Utils::Roll::roll_rcfile()
     if File.exists?(rcfile) then
       $stderr << "File #{rcfile} exists; overwrite? [Yn] "
       answer = $stdin.gets.chomp
@@ -253,6 +270,5 @@ end
 
 if $0 == __FILE__ then
   options = BootRoll::CommandlineParser.parse(ARGV)
-  roots = ARGV
-  BootRoll::boot_roll(roots, options)
+  BootRoll::boot_roll(options)
 end
