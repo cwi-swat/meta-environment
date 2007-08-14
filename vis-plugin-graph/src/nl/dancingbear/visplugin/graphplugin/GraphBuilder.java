@@ -137,22 +137,21 @@ public class GraphBuilder {
 									.println("warning: attribute is not a tuple:"
 											+ tuple);
 							break;
-						} else {
-							RElem key = tuple.getElements().getRElemAt(0);
-							RElem value = tuple.getElements().getRElemAt(1);
-							if (value.isStr()) {
-								graph.setNodeAttribute(fromNode, key
-										.getStrCon(), value.getStrCon());
+						}
+						RElem key = tuple.getElements().getRElemAt(0);
+						RElem value = tuple.getElements().getRElemAt(1);
+						if (value.isStr()) {
+							graph.setNodeAttribute(fromNode, key
+									.getStrCon(), value.getStrCon());
 
-								if (key.getStrCon()
-										.equals(GraphConstants.LABEL)) {
-									labelFound = true;
-								}
-							} else {
-								System.err
-										.println("warning: attribute value not supported:"
-												+ value);
+							if (key.getStrCon()
+									.equals(GraphConstants.LABEL)) {
+								labelFound = true;
 							}
+						} else {
+							System.err
+									.println("warning: attribute value not supported:"
+											+ value);
 						}
 					}
 
