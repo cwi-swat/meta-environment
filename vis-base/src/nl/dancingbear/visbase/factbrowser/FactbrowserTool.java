@@ -1,6 +1,6 @@
 // Java tool interface class FactbrowserTool
 // This file is generated automatically, please do not edit!
-// generation time: Aug 14, 2007 2:41:42 PM
+// generation time: Aug 14, 2007 5:15:07 PM
 
 package nl.dancingbear.visbase.factbrowser;
 
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import toolbus.SwingTool;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -25,6 +26,7 @@ abstract public class FactbrowserTool
   private ATerm PfbRstoreUnloaded0;
   private ATerm PfbAddVisualizationPlugin0;
   private ATerm PfbShowRstoreFacts0;
+  private ATerm PgetSelectedRstoreid0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -40,6 +42,7 @@ abstract public class FactbrowserTool
   private void initSigTable()
   {
     sigTable.add(factory.parse("rec-do(<factbrowser>,fb-add-visualization-plugin(<term>,<int>,<str>))"));
+    sigTable.add(factory.parse("rec-eval(<factbrowser>,get-selected-rstoreid)"));
     sigTable.add(factory.parse("rec-do(<factbrowser>,fb-show-rstore-facts(<str>,<int>,<list>))"));
     sigTable.add(factory.parse("rec-ack-event(<factbrowser>,<term>)"));
     sigTable.add(factory.parse("rec-do(<factbrowser>,fb-rstore-unloaded(<int>))"));
@@ -52,6 +55,7 @@ abstract public class FactbrowserTool
     PfbRstoreUnloaded0 = factory.parse("rec-do(fb-rstore-unloaded(<int>))");
     PfbAddVisualizationPlugin0 = factory.parse("rec-do(fb-add-visualization-plugin(<term>,<int>,<str>))");
     PfbShowRstoreFacts0 = factory.parse("rec-do(fb-show-rstore-facts(<str>,<int>,<term>))");
+    PgetSelectedRstoreid0 = factory.parse("rec-eval(get-selected-rstoreid)");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -75,6 +79,10 @@ abstract public class FactbrowserTool
     if (result != null) {
       fbShowRstoreFacts((String)result.get(0), ((Integer)result.get(1)).intValue(), (ATerm)result.get(2));
       return null;
+    }
+    result = term.match(PgetSelectedRstoreid0);
+    if (result != null) {
+      return getSelectedRstoreid();
     }
     result = term.match(PrecAckEvent0);
     if (result != null) {

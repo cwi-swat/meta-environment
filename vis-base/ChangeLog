@@ -1,5 +1,8 @@
 
 
+Tue Aug 14 17:39:03 CEST 2007 <kooiker@cwi.nl>
+ * tbscript/fbi.tb.src: add function for getting currently selected rstore
+
 Wed May  9 08:42:01 CEST 2007 <jurgenv@cwi.nl>
  * tbscripts/fbmp-edit-location.tb: will now start an editor with
    parsing/structure editing capabilities if one is registered
