@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Aug 14 08:57:24 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/error-utils.tb: Add ReplaceSummaryInfo process that replaces the
+   producer and id by the given producer and id.
+
 Wed Jul 11 14:27:37 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/editing.tb: Process Edit returns UNDEFINED for Sid when term
    is too big (> 1 Mb) (closes #763)
