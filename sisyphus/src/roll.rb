@@ -380,4 +380,4 @@ if $0 == __FILE__ then
   end
   Roll::roll(conf, options, ARGV)
 end
-m
+
