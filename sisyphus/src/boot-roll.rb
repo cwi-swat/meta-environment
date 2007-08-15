@@ -84,17 +84,13 @@ Note: the tunnel section is optional.
     end
   end
 
-  def BootRoll.checkout_all(roots, revision_factory, tag)
+  def BootRoll.checkout_all(roots, revision_factory)
     todo = roots
     done = []
     graph = {}
     while todo != [] do
       component = todo.shift
-      if tag then
-        revision = revision_factory.tagged_revision(component, tag)
-      else
-        revision = revision_factory.trunk_revision(component)
-      end
+      revision = revision_factory.trunk_revision(component)
       if not revision.virtual? then
         $stderr << "checked out #{component}\n"
         graph[revision] ||= []
@@ -207,7 +203,7 @@ Note: the tunnel section is optional.
     root_components = roots.collect do |root|
       Versioning::Component.new(root)
     end
-    graph = checkout_all(root_components, revision_factory, options.tag)
+    graph = checkout_all(root_components, revision_factory)
     config_manager.cleanup_checkout
     return graph
   end

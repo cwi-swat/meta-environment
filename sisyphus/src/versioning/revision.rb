@@ -142,38 +142,17 @@ module Versioning
 
     def checkout(component)
       repo = @repo_factory.repository(component.name, @repositories)
-      path = repo.component_location(component)
-      return repo.checkout(@vcs_user, @time, path, @checkout_dir)
-    end
-
-    def tagged_checkout(component, tag)
-      repo = @repo_factory.repository(component.name, @repositories)   
-      path = repo.component_location(component)
-      return repo.tagged_checkout(@vcs_user, path, @checkout_dir, tag)
+      return repo.checkout(@vcs_user, @time, component.name, @checkout_dir)
     end
 
     def trunk_checkout(component)
       repo = @repo_factory.repository(component.name, @repositories)
-      path = repo.component_location(component)      
-      return repo.trunk_checkout(@vcs_user, path, @checkout_dir)
+      return repo.trunk_checkout(@vcs_user, component.name, @checkout_dir)
     end
 
   end
 
   class RevisionFactory < CheckoutFactory
-
-    def tagged_revision(component, tag)
-      if @externals.include?(component.name)
-        return VirtualRevision.new(component)
-      end
-      repo = @repo_factory.repository(component.name, @repositories)
-      version  = nil
-      checkout = tagged_checkout(component, tag)
-      revision = Revision.new(component, version, checkout, repo, @vcs_user, @time, @checkout_dir)
-
-      return revision
-
-    end
 
     def trunk_revision(component)
       if @externals.include?(component.name)
@@ -187,7 +166,7 @@ module Versioning
       #checkout = OpenStruct.new
       #checkout.path = File.join(@checkout_dir, component.name)
       # </dirty-hack>
-      checkout = trunk_checkout(component, tag)
+      checkout = trunk_checkout(component)
       revision = Revision.new(component, version, checkout, repo, @vcs_user, @time, @checkout_dir)
 
       return revision

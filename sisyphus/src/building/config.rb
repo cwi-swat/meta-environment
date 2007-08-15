@@ -139,19 +139,7 @@ module Building
     def source_configuration(time)
       synchronize_checkout(time)
       config_dir = rel_to_checkout('config')
-      sources = config_item(config_dir, 'sources')
-      table = sources.properties
-      table['repositories'].each do |repo|
-        if repo['components'].is_a?(Array) then
-          # Convert old-skool list of components
-          # to a map of component names to "trunk".
-          new_components = {}
-          repo['components'].each do |component|
-            new_components[component] = 'trunk'
-          end
-          repo['components'] = new_components
-        end
-      end
+      sources = config_item(config_dir, 'sources')   
       return sources
     end
 
