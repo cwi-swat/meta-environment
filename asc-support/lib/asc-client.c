@@ -122,6 +122,9 @@ static PT_Args kidsToArgs(ATermList kids)
     else if (ATmatch(kid, "appl(<term>,<term>)", NULL, NULL)) {
       arg = (PT_Tree) kid;
     }
+    else if (ATmatch(kid, "rstore(<term>)", NULL, NULL)) {
+      arg = (PT_Tree) RS_liftRStore((RS_RStore) kid);
+    }
     else {
       arg = (PT_Tree) PTPT_liftATerm(kid);
     }
