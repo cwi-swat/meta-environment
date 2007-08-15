@@ -98,6 +98,16 @@ libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
 
 libsglr_la_CPPFLAGS = -DFAST_API
 
+libsglr_la_LIBADD = \
+	-L$(top_builddir)/src \
+	$(PT_SUPPORT_LIBS) \
+	$(PTABLE_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(CONFIG_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) \
+	$(C_LIBRARY_LIBS)
+
 sglr_SOURCES= \
 	sglr.isrc \
 	main.c \

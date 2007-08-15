@@ -1,5 +1,9 @@
 $Id$
 
+Wed Aug 15 15:16:49 CEST 2007 <{kooiker,storm}@cwi.nl>
+ * src/Makefile.am: added sglr_la_LIBADD variable to let libtool resolve
+   symbols defined in external libraries.
+	
 Fri Jul 13 15:58:49 CEST 2007 <economop@cwi.nl>
  * src/parser/parser.c: the wrong api function was being called. Fortunately 
    it was accessing the correct argument in the ATerm!
