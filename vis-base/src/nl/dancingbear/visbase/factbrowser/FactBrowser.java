@@ -446,7 +446,8 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 			}
 		}
 		
-		return null;
+		ATerm term = metaStudio.getATermFactory().make("snd-value(no-rstore-selected)");
+		return term;
 	}
 
 	/**

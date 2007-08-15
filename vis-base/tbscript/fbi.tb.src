@@ -17,10 +17,10 @@ let
   FactType: term,
   PluginId: int,
   PluginName: str,
-  RstorePath: str,
-  RstoreName: str,
-  RstoreId: int,
-  RstoreFacts: list,
+  RStorePath: str,
+  RStoreName: str,
+  RStoreId: int,
+  RStoreFacts: list,
   FactId: int,
   FileName: str
 in
@@ -33,8 +33,14 @@ in
     +
       rec-msg(fb-get-selected-rstoreid)
       . snd-eval(Tid, get-selected-rstoreid)
-      . rec-value(Tid, selected-rstoreid(RstoreId?))
-      . snd-msg(fb-selected-rstoreid(RstoreId))
+      .
+      (
+        rec-value(Tid, selected-rstoreid(RStoreId?))
+        . snd-msg(fb-selected-rstoreid(RStoreId))
+      +
+        rec-value(Tid, no-rstore-selected)
+	. snd-msg(fb-no-rstore-selected)
+      )
     +
       rec-event(Tid, fb-load-rstore)
       . snd-ack-event(Tid, fb-load-rstore)
@@ -51,19 +57,19 @@ in
       . snd-ack-event(Tid, fb-type-selected(FactType))
       . snd-msg(fb-type-selected(FactType))
     +
-      rec-msg(fb-show-rstore-facts(RstoreName?, RstoreId?, RstoreFacts?))
-      . snd-do(Tid, fb-show-rstore-facts(RstoreName, RstoreId, RstoreFacts))
+      rec-msg(fb-show-rstore-facts(RStoreName?, RStoreId?, RStoreFacts?))
+      . snd-do(Tid, fb-show-rstore-facts(RStoreName, RStoreId, RStoreFacts))
     +
-      rec-event(Tid, fb-visualization-selected(RstoreId?, FactId?, PluginId?))
-      . snd-ack-event(Tid, fb-visualization-selected(RstoreId, FactId, PluginId))
-      . snd-msg(fb-visualization-selected(RstoreId, FactId, PluginId))
+      rec-event(Tid, fb-visualization-selected(RStoreId?, FactId?, PluginId?))
+      . snd-ack-event(Tid, fb-visualization-selected(RStoreId, FactId, PluginId))
+      . snd-msg(fb-visualization-selected(RStoreId, FactId, PluginId))
     +
-      rec-event(Tid, fb-unload-rstore(RstoreId?))
-      . snd-ack-event(Tid, fb-unload-rstore(RstoreId))
-      . snd-msg(fb-unload-rstore(RstoreId))
+      rec-event(Tid, fb-unload-rstore(RStoreId?))
+      . snd-ack-event(Tid, fb-unload-rstore(RStoreId))
+      . snd-msg(fb-unload-rstore(RStoreId))
     +
-      rec-note(rc-rstore-unloaded(RstoreId?))
-      . snd-do(Tid, fb-rstore-unloaded(RstoreId))
+      rec-note(rc-rstore-unloaded(RStoreId?))
+      . snd-do(Tid, fb-rstore-unloaded(RStoreId))
    )
    * delta
 endlet
