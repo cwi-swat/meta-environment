@@ -511,7 +511,6 @@ in
   fi
 endlet
 
-
 process GetImportsForRenaming(ModuleId: module-id, ModuleIds: list, Imports: term?) is
 let
   Modulename: str,
@@ -528,4 +527,20 @@ in
   fi
 endlet
 
-#endif
+process SDFExtraction(ModuleId: module-id) is
+let
+  Modulename: str,
+  RStore: rstore,
+  Store: term,
+  Syntax: term
+in
+  GetSyntaxDefinition(ModuleId, Syntax?)
+  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . snd-msg(es-extract-sdf(Syntax))
+  . rec-msg(es-sdf-store(Store?))
+  . snd-msg(rs-lower-rstore(Store))
+  . rec-msg(rs-lowered-rstore(RStore?))
+  . snd-msg(rc-load-rstore(Modulename, RStore))
+endlet
+
+#endif /* __SDF_UTILS__ */
