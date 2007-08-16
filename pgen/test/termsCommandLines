@@ -11,10 +11,10 @@ $SGLR -2 -p $TABLES/Casl.tbl -i $TERMS/Path.casl
 $SGLR -2 -p $TABLES/Casl.tbl -i $TERMS/Point.casl
 
 $SDF2TABLE -i $GRAMMARS/Cyclops.sdf 
-$SGLR -2 -p $TABLES/Cyclops.tbl -i $TERMS/bi.cycle 
+$SGLR -2 -p $TABLES/Cyclops.tbl -i $TERMS/bi.cycle -fi -fe
 
 $SDF2TABLE -i $GRAMMARS/Cyclops2.sdf 
-$SGLR -2 -p $TABLES/Cyclops2.tbl -i $TERMS/mdj.cycle2
+$SGLR -2 -p $TABLES/Cyclops2.tbl -i $TERMS/mdj.cycle2 -fi -fe
 
 $SDF2TABLE -i $GRAMMARS/Flat.sdf 
 $SGLR -2 -p $TABLES/Flat.tbl -i $TERMS/all-chars.flt

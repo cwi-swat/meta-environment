@@ -1,5 +1,19 @@
 $Id$
 
+Thu Aug 16 16:22:40 CEST 2007 <economop@cwi.nl>
+ * test/termsCommandLines: changed the cyclic regression tests so that the 
+   injection and preference counting filters are switched off. These filters
+   do not work correctly on cyclic trees! If an ambiguous node is encountered
+   on the traversal of a 'counting' filter we assume that we have already
+   counted all ambiguous branches (as filtering is done from the bottom up) 
+   and therefore each branch must have an equal number of injections. As an 
+   optimization we only traverse one of the branches. However, if the 
+   ambiguous tree has a cyclic branch then the assumption does not hold and
+   the filtering results depend on the order of the children of an ambiguous
+   node. This caused the mdj.cycle regression test to fail.
+ * test/terms/{bi,mdj}.asfix2.org: regenerated with the injection and 
+   preference counting filters switched off.
+
 Wed Jul 11 13:27:33 CEST 2007 <economop@cwi.nl>
  * sdf-checker/src/sdfchecker.isrc: reverted changes. 
  * sdf-checker/src/main.c: kept the -m command line option but removed the 
