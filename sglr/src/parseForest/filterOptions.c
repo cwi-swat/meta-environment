@@ -32,8 +32,8 @@ void FLT_initializeDefaultOptions() {
   REMOVECYCLES_FLAG = OPT_getFlagOptionId();
   FLT_setFilterFlag(ATtrue);
   FLT_setIndirectPreferenceFlag(ATtrue);
-  FLT_setPreferenceCountFlag(ATtrue);
-  FLT_setInjectionCountFlag(ATtrue);
+  FLT_setPreferenceCountFlag(ATfalse);
+  FLT_setInjectionCountFlag(ATfalse);
   FLT_setPriorityFlag(ATtrue);
   FLT_setRejectFlag(ATtrue);
   FLT_setSelectTopNonterminalFlag(ATfalse);
