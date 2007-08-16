@@ -1,5 +1,9 @@
 $Id$
 
+Thu Aug 16 16:43:19 CEST 2007 <economop@cwi.nl>
+ * test/erroneousCommandLines: forgot to turn on the injection and preference 
+   counting filters. 
+
 Thu Aug 16 16:34:50 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filterOptions.c: switched off the injection and preference
    counting filters by default.
