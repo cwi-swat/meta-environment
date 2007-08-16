@@ -1,5 +1,10 @@
 $Id$
 
+Thu Aug 16 16:40:06 CEST 2007 <economop@cwi.nl>
+ * test/termsCommandLines, test/errorneousCommandLines: switched on the 
+   injection and preference counting filters to match the old tests. Need to 
+   regenerate new tests with sglr's default behaviour.
+
 Thu Aug 16 16:22:40 CEST 2007 <economop@cwi.nl>
  * test/termsCommandLines: changed the cyclic regression tests so that the 
    injection and preference counting filters are switched off. These filters
