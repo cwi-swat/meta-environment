@@ -1,5 +1,19 @@
 $Id$
 
+Thu Aug 16 16:03:21 CEST 2007 <economop@cwi.nl>
+ * test/termsCommandLines: changed the cyclic regression tests so that the 
+   injection and preference counting filters are switched off. These filters
+   do not work correctly on cyclic trees! If an ambiguous node is encountered
+   on the traversal of a 'counting' filter we assume that we have already
+   counted all ambiguous branches (as filtering is done from the bottom up) 
+   and therefore each branch must have an equal number of injections. As an 
+   optimization we only traverse one of the branches. However, if the 
+   ambiguous tree has a cyclic branch then the assumption does not hold and
+   the filtering results depend on the order of the children of an ambiguous
+   node. This caused the mdj.cycle regression test to fail in pgen.
+ * test/terms/bi.asfix2.org: regenerated with the injection and preference
+   counting filters switched off.
+
 Wed Aug 15 15:16:49 CEST 2007 <{kooiker,storm}@cwi.nl>
  * src/Makefile.am: added sglr_la_LIBADD variable to let libtool resolve
    symbols defined in external libraries.

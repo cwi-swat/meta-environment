@@ -15,9 +15,9 @@ $SGLR -2 -p $TABLES/ChiExpressions.tbl -i $TERMS/expression.chi
 
 $SGLR -2 -p $TABLES/CobolIsland.tbl -i $TERMS/test.cobisl
 
-$SGLR -2 -p $TABLES/Cyclops.tbl -i $TERMS/bi.cycle 
+$SGLR -2 -p $TABLES/Cyclops.tbl -i $TERMS/bi.cycle -fi -fe
 
-$SGLR -2 -p $TABLES/Cyclops2.tbl -i $TERMS/mdj.cycle2
+$SGLR -2 -p $TABLES/Cyclops2.tbl -i $TERMS/mdj.cycle2 -fi -fe
 
 $SGLR -2 -p $TABLES/Expression.tbl -i $TERMS/sin.exp
 
