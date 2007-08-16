@@ -25,8 +25,6 @@ public class TableVisualizationController extends VisualizationPluginController 
     /**
      * Default constructor.
      *
-     * @author Arend van Beelen
-     * @date 13-03-2007
      */
     public TableVisualizationController() {
         super();
@@ -37,11 +35,6 @@ public class TableVisualizationController extends VisualizationPluginController 
     /**
      * Return Table visualization window
      *
-     * @author Srinivasan Tharmarajah
-     * @author Wasim Alsaqaf
-     * @author Antoine Savelkoul (reviewer)
-     * @author Arend van Beelen (refactoring)
-     * @date 06-03-2007
      */
     public VisualizationPluginWindow createWindow() {
         m_window = new TableVisualizationWindow();
@@ -51,9 +44,6 @@ public class TableVisualizationController extends VisualizationPluginController 
     /**
      * Gets the plugin name [Table Visualization Plugin]
      *
-     * @author Srinivasan Tharmarajah
-     * @author Wasim Alsaqaf
-     * @date 20-2-2007
      */
     public String getPluginName() {
         return "Table Visualization Plugin";
@@ -65,8 +55,6 @@ public class TableVisualizationController extends VisualizationPluginController 
      * @param windowId ID of the window that requested the export.
      * @param filename Filename returned by the file open dialog.
      *
-     * @author Arend van Beelen
-     * @date 13-03-2007
      */
     public void vpFileDialogResult(int windowId, String filename) {
         TableVisualizationWindow window = (TableVisualizationWindow) getWindowById(windowId);
@@ -85,12 +73,6 @@ public class TableVisualizationController extends VisualizationPluginController 
      * Define the supported types. Not implemented because we override the
      * isTypeSupported() function.
      *
-     * @author Srinivasan Tharmarajah
-     * @author Wasim Alsaqaf
-     * @author Antoine Savelkoul
-     * @author Anton Lycklama
-     * @author Bas Basten
-     * @date 09-03-2007
      */
     public ATerm[] getSupportedTypes() {
         ATerm[] atermList = new ATerm[0];
@@ -101,9 +83,6 @@ public class TableVisualizationController extends VisualizationPluginController 
      * Check if a type is supported
      *
      * @param type The type to check
-     * @author Anton Lycklama
-     * @author Bas Basten
-     * @date 09-03-2007
      */
     protected boolean isTypeSupported(ATerm type) {
         RType rtype = m_factory.RTypeFromTerm(type);
@@ -143,7 +122,7 @@ public class TableVisualizationController extends VisualizationPluginController 
             // If the type is complex we don't support it,
             // otherwise we do support it.
             return !isComplexType(elementType);
-        }
+	}
 
         return false;
     }
@@ -153,9 +132,6 @@ public class TableVisualizationController extends VisualizationPluginController 
      *
      * @param rtype the Rtpe to check
      * @return returns true if the given Rtype is complex
-     * @author Anton Lycklama
-     * @author Bas Basten
-     * @date 09-03-2007
      */
     private boolean isComplexType(RType rtype) {
         boolean isBag = rtype.isBag();
