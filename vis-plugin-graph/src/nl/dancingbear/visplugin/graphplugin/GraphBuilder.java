@@ -12,46 +12,28 @@ import nl.cwi.sen1.relationstores.types.RType;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 
-/**
- * 
- * @author A. Belgraver
- * @author Anton Gerdessen (reviewer)
- * @date 07-3-2007
- */
 public class GraphBuilder {
 
 	/**
 	 * Cache/registry for created nodes.
-	 * 
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 */
 	private HashMap<String, Node> m_nodeCache = new HashMap<String, Node>();
 
 	/**
 	 * Cache and register the Locations for created Nodes
 	 * 
-	 * @author Renze de Vries
-	 * @date 14-03-2007
 	 */
 	private HashMap<String, Location> m_locCache = new HashMap<String, Location>();
 
 	/**
 	 * Factory used to create types.
 	 * 
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 */
 	private Factory m_factory;
 
 	/**
 	 * Supported graph relation.
 	 * 
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 * @todo Needs better implementation needs to be resolved reflection,
 	 *       dynamic dispatch... in a the base or utility class for all plugins,
 	 *       remark by Anton G.
@@ -64,9 +46,6 @@ public class GraphBuilder {
 
 	/**
 	 * @param factory
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 */
 	public GraphBuilder(Factory factory) {
 		m_factory = factory;
@@ -78,9 +57,6 @@ public class GraphBuilder {
 	 * @param fact
 	 *            RTuple with the data
 	 * @return PieChart dataset
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 */
 	public Graph buildGraphFromRTuple(RTuple fact) {
 		RElem set = fact.getValue();
@@ -184,8 +160,6 @@ public class GraphBuilder {
 	 *            RTuple with the data
 	 * @return Graph dataset for graph
 	 * 
-	 * @author Renze de Vries
-	 * @date 14-03-2007
 	 */
 	private Graph convertRelTupleTupleToDataset(RElemElements elements) {
 		// Setup the new graph.
@@ -234,20 +208,17 @@ public class GraphBuilder {
 	}
 
 	/**
-	 * Convert RTuple relation([str,int]) into a graph dataset.
+	 * Convert RTuple relation([str,str]) into a graph dataset.
 	 * 
 	 * @param fact
 	 *            RTuple with the data
 	 * @return Graph dataset for graph
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 */
 	private Graph convertRelStrStrToDataset(RElemElements elements) {
 		// Setup the new graph.
 		m_nodeCache.clear();
 		boolean directedGraph = true;
-		Graph graph = new Graph(directedGraph);
+		DotAdapter graph = new DotAdapter();
 
 		while (elements.hasTail()) {
 			RElem headElement = elements.getHead();
@@ -270,6 +241,7 @@ public class GraphBuilder {
 			}
 		}
 
+		graph.doDotLayout();
 		return graph;
 	}
 
@@ -281,9 +253,6 @@ public class GraphBuilder {
 	 * @param nodeName
 	 * @return The node identified by the nodeName or a new node if no node
 	 *         existed with this name.
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 */
 	public Node getOrCreateNode(Graph graph, String nodeName) {
 		Node node;
@@ -317,8 +286,6 @@ public class GraphBuilder {
 	 *            Location for
 	 * @return The Location identified by the nodeName
 	 * 
-	 * @author Renze de Vries
-	 * @date 14-3-2007
 	 */
 	public Location getOrCreateLocation(String nodeName, Location nodeLocation) {
 		Location loc;
@@ -339,7 +306,6 @@ public class GraphBuilder {
 	}
 
 	/**
-	 * @author Jurgen Vinju
 	 * @param fact
 	 * @return true if the RTuple contains a fact of the expected type
 	 */
@@ -354,9 +320,6 @@ public class GraphBuilder {
 	 * @param fact
 	 *            RTuple to test.
 	 * @return True if it is the correct str,str type.
-	 * @author A. Belgraver
-	 * @author Anton Gerdessen (reviewer)
-	 * @date 07-3-2007
 	 * 
 	 * @todo Needs better implementation needs to be resolved reflection,
 	 *       dynamic dispatch... in a the base or utility class for all plugins,
@@ -374,8 +337,6 @@ public class GraphBuilder {
 	 * @param fact
 	 *            RTuple to test.
 	 * @return True if it is the correct str,str type.
-	 * @author Renze de Vries
-	 * @date 13-3-2007
 	 */
 	public boolean isRelTupleTuple(RTuple fact) {
 		RType rType = m_factory.RTypeFromString(m_relationGraphTuple);
