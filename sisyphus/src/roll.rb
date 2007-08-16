@@ -130,7 +130,7 @@ module Roll
         end
 
         opts.on("-c", "--current", "Derive package from working dir") do 
-          options.package = inferred_package(tag)
+          options.package = inferred_package(options.tag)
         end
 
         opts.on("-a Package", "--above Package",
