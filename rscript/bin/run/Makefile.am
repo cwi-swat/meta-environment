@@ -2,6 +2,8 @@ include $(top_srcdir)/Makefile.meta
 
 pkgdata_DATA = rscriptcalculator.idef
 
+EXTRA_DIST += rscriptcalculator.isrc
+
 bin_PROGRAMS = rscriptcalculator
 
 AM_CPPFLAGS += \

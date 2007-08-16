@@ -26,6 +26,12 @@ equations
 	===============================================================
 	eval-rscript($Stat*) = $REnv
 
+%% ---- Eval a complete Rscript and return a RStore
+
+[ERS1]  $REnv := eval-rscript($Stat*)
+        ===
+        eval-rscript-to-rstore($Stat*) = rstore($REnv)
+
 %% ---- Eval a complete Rscript and return value of specific variable (as string)
 
 [ERS1]	$REnv := eval-rstats($Stat*, yield-environment),
@@ -48,6 +54,12 @@ equations
 	$Var*:= yielded($REnv')
 	===============================================================
 	eval-rscript-with-rstore($Stat*, $REnv) = filter($REnv', $Var*)
+
+%% ---- Eval a complete Rscript with given Rstore and return a Rstore
+
+[ERS3]   $REnv := rstore-to-renvironment($RStore)
+         ===
+         eval-rscript-with-rstore($Stat*, $RStore) = rstore(eval-rscript-with-rstore($Stat*, $REnv))
 
 %% ---- Eval complete script with given Rstore and yield value of a variable (as string constant
 

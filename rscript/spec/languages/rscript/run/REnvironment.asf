@@ -10,6 +10,13 @@ equations
 
 equations
 
+[rstore-to-environment-top]
+         $REnv := new-renvironment()
+         ===
+         rstore-to-renvironment($RStore) = update($RStore, $REnv)
+
+equations
+
 [define-type-base]
 	define-type($IdCon, $RExpType, $REnv) = update(store(type-store($REnv), $IdCon, $RExpType), $REnv)
 

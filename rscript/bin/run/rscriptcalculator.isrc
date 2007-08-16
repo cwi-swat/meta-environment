@@ -1,32 +1,32 @@
 tool rscriptcalculator is {command = "__PREFIX__/bin/rscriptcalculator"}
 
-process RscriptCalculator is
+process RScriptCalculator is
 let
-  RSC : rscriptcalculator,
-  Rscript : term,
-  Rstore : term
+  RSC: rscriptcalculator,
+  RScript: term,
+  RStore: term
 in
   (
-    rec-msg(eval-rscript(Rscript?))
+    rec-msg(eval-rscript(RScript?))
     . execute(rscriptcalculator, RSC?)
-    . snd-eval(RSC, eval-rscript(Rscript))
-    . rec-value(RSC, eval-rscript(Rstore?))
-    . snd-msg(evaluated-rscript(Rstore))
-    . Rscript := undefined 
-    . Rstore := undefined 
+    . snd-eval(RSC, eval-rscript-to-rstore(RScript))
+    . rec-value(RSC, eval-rscript-to-rstore(RStore?))
+    . snd-msg(evaluated-rscript(RStore))
+    . RScript := undefined 
+    . RStore := undefined 
     . snd-terminate(RSC, "done")
   +
-    rec-msg(eval-rscript-with-rstore(Rscript?, Rstore?))
+    rec-msg(eval-rscript-with-rstore(RScript?, RStore?))
     . execute(rscriptcalculator, RSC?)
-    . snd-eval(RSC, eval-rscript-with-rstore(Rscript, Rstore))
-    . rec-value(RSC, eval-rscript-with-rstore(Rstore?))
-    . snd-msg(evaluated-rscript-with-rstore(Rstore))
-    . Rscript := undefined
-    . Rstore := undefined
+    . snd-eval(RSC, eval-rscript-with-rstore(RScript, RStore))
+    . rec-value(RSC, eval-rscript-with-rstore(RStore?))
+    . snd-msg(evaluated-rscript-with-rstore(RStore))
+    . RScript := undefined
+    . RStore := undefined
     . snd-terminate(RSC, "done")
   )
   *
   delta
 endlet
 
-toolbus(RscriptCalculator)
+toolbus(RScriptCalculator)

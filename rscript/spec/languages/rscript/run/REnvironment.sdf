@@ -21,6 +21,7 @@ context-free syntax
 
 context-free syntax
   new-renvironment()                                    -> REnvironment {complete} 
+  rstore-to-renvironment(RStore)                        -> REnvironment {complete}
   define-type(IdCon, REXPTYPE, REnvironment)            -> REnvironment {complete} 
   bind-function(IdCon, Formals, REXP, REnvironment)     -> REnvironment {complete} 
   assign-variable(IdCon, REXPTYPE, RElem, REnvironment) -> REnvironment {complete} 

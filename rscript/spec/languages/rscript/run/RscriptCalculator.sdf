@@ -16,9 +16,11 @@ context-free syntax
 
 context-free syntax
   eval-rscript(RSCRIPT)                                             -> REnvironment  
+  eval-rscript-to-rstore(RSCRIPT)                                   -> RStore
   eval-rscript-and-yield(RSCRIPT, StrCon)                           -> RElem         
   eval-rscript-and-yield(RSCRIPT, IdCon)                            -> RElem         
   eval-rscript-with-rstore(RSCRIPT, REnvironment)                   -> REnvironment  
+  eval-rscript-with-rstore(RSCRIPT, RStore)                         -> RStore
   eval-rscript-with-rstore-and-yield(RSCRIPT, REnvironment, StrCon) -> RElem         
   eval-rscript-with-rstore-and-yield(RSCRIPT, REnvironment, IdCon)  -> RElem         
   REnvironment "[|" RSTAT* "|]"                                     -> REnvironment  
@@ -106,7 +108,8 @@ variables
   "$Gen*" [0-9\']*      -> {GENERATOR ","}*      
   "$Gen+" [0-9\']*      -> {GENERATOR ","}+      
   "$SimpleGen" [0-9\']* -> SIMPLE-GENERATOR      
-  "$Rscript" [0-9\']*   -> RSCRIPT               
+  "$Rscript" [0-9\']*   -> RSCRIPT       
+  "$RStore" [0-9\']*    -> RStore        
   "$Stat" [0-9\']*      -> RSTAT                 
   "$Stat*" [0-9\']*     -> RSTAT*                
   "$Stat+" [0-9\']*     -> RSTAT+                

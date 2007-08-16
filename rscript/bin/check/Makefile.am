@@ -2,6 +2,8 @@ include $(top_srcdir)/Makefile.meta
 
 pkgdata_DATA = rscriptchecker.idef
 
+EXTRA_DIST += rscriptchecker.isrc
+
 bin_PROGRAMS = rscriptchecker
 
 AM_CPPFLAGS += \
