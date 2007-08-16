@@ -55,9 +55,9 @@ module Roll
       exit(retval)
     end
 
-    def self.inferred_package
+    def self.inferred_package(tag)
       wd = Dir.getwd
-      map = the_conf['locations']
+      map = the_conf(tag)['locations']
       package = nil
       map.each do |pkg, path|
         pattern = Regexp.quote(path)
@@ -130,7 +130,7 @@ module Roll
         end
 
         opts.on("-c", "--current", "Derive package from working dir") do 
-          options.package = inferred_package
+          options.package = inferred_package(tag)
         end
 
         opts.on("-a Package", "--above Package",

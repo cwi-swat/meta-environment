@@ -1,3 +1,8 @@
+2007-08-16    <storm@cwi.nl>
+
+	* src/roll.rb
+	Fixed crashing of -c commandline option (didn't cope with tags).
+
 2007-08-14  Tijs van der Storm  <storm@cwi.nl>
 
 	* src/{boot-roll.rb,roll.rb,utils/rcfiles.rb}
