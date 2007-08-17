@@ -19,4 +19,5 @@ SUBDIRS = \
 	generic-cpp \
 	java \
         xml \
-        yacc
+        yacc \
+	c90
