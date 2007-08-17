@@ -45,9 +45,15 @@ public class ModuleTree extends JPanel {
 			}
 		});
 
-		ImageIcon errorIcon = new ImageIcon(getClass().getResource(
-				"/resources/images/error.png"));
-		tree.setCellRenderer(new TreeIconCellRenderer(errorIcon));
+		ImageIcon folderIcon = new ImageIcon(getClass().getResource(
+				"/resources/images/folder.png"));
+		ImageIcon documentIcon = new ImageIcon(getClass().getResource(
+		"/resources/images/document.png"));
+		ImageIcon errorFolderIcon = new ImageIcon(getClass().getResource(
+		"/resources/images/folder-error.png"));
+		ImageIcon errorDocumentIcon = new ImageIcon(getClass().getResource(
+		"/resources/images/document-error.png"));
+		tree.setCellRenderer(new TreeIconCellRenderer(folderIcon, documentIcon, errorFolderIcon, errorDocumentIcon));
 
 		add(new JScrollPane(tree));
 
@@ -113,10 +119,16 @@ public class ModuleTree extends JPanel {
      * @date 14-02-2007
      */
     class TreeIconCellRenderer extends DefaultTreeCellRenderer {
-        private Icon errorIcon;
+        private Icon folderIcon;
+        private Icon documentIcon;
+        private Icon errorFolderIcon;
+        private Icon errorDocumentIcon;
 
-        public TreeIconCellRenderer(Icon errorIcon) {
-            this.errorIcon = errorIcon;
+        public TreeIconCellRenderer(Icon folderIcon, Icon documentIcon, Icon errorFolderIcon, Icon errorDocumentIcon) {
+        	this.folderIcon = folderIcon;
+        	this.documentIcon = documentIcon;
+        	this.errorFolderIcon = errorFolderIcon;
+        	this.errorDocumentIcon = errorDocumentIcon;
         }
 
         public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -128,7 +140,20 @@ public class ModuleTree extends JPanel {
 
             ModuleTreeNode treeNode = (ModuleTreeNode) value;
             if (treeNode.hasError() == true) {
-            	setIcon(errorIcon);
+            	if (treeNode.isLeaf() == true) {
+            		setIcon(errorDocumentIcon);
+            	}
+            	else {
+            		setIcon(errorFolderIcon);
+            	}
+            }
+            else {
+            	if (treeNode.isLeaf() == true) {
+            		setIcon(documentIcon);
+            	}
+            	else {
+            		setIcon(folderIcon);
+            	}
             }
 
             return this;
