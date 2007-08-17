@@ -1,5 +1,9 @@
 
 
+Fri Aug 17 09:50:03 CEST 2007 <kooiker@cwi.nl>
+ * src/**/FactBrowser.java,tbscripts/fbi.tb.src: changed the way mouse events
+   are handled
+
 Wed Aug 15 13:45:42 CEST 2007 <kooiker@cwi.nl>
  * src/**/FactBrowser.java: return no-rstore-selected when there is currently
    no rstore selected

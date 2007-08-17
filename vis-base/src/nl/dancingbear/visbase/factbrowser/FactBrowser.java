@@ -3,14 +3,14 @@ package nl.dancingbear.visbase.factbrowser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import nl.cwi.sen1.configapi.Factory;
+import nl.cwi.sen1.configapi.types.ActionDescriptionList;
+import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
@@ -19,6 +19,8 @@ import nl.cwi.sen1.gui.component.StudioComponent;
 import nl.cwi.sen1.gui.component.StudioComponentImpl;
 import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.relationstores.types.RType;
+import nl.cwi.sen1.util.DefaultPopupImpl;
+import nl.cwi.sen1.util.MouseAdapter;
 import nl.dancingbear.visbase.factbrowser.data.FactBrowserDataManager;
 import nl.dancingbear.visbase.factbrowser.data.RStore;
 import nl.dancingbear.visbase.factbrowser.data.RStoreFact;
@@ -32,6 +34,7 @@ import org.apache.commons.logging.LogFactory;
 
 import aterm.ATerm;
 import aterm.ATermList;
+import aterm.pure.PureFactory;
 
 /**
  * This class is the main entry point for the toolbus FactBrowserInterface
@@ -54,9 +57,7 @@ import aterm.ATermList;
  * @author Renze de Vries
  * @Date 12-02-2007
  */
-public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
-		MouseListener, ActionListener {
-	private static final int SINGLE_CLICK = 1;
+public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 	private static final int DOUBLE_CLICK = 2;
 
 	private FactBrowserDataManager dataManager;
@@ -65,14 +66,15 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 
 	private static final Log log = LogFactory.getLog(FactBrowser.class);
 
-	private Studio metaStudio;
+	private Factory configFactory;
 
-	private FactbrowserBridge factBrowserBridge;
+	private Studio studio;
+
+	private FactbrowserBridge bridge;
 
 	private FactBrowserWindow factBrowserWindow;
 
-	private JPopupMenu m_popupMenu;
-	private JMenuItem m_unloadMenu;
+	private DefaultPopupImpl popup;
 
 	/**
 	 * This is the default constructor it creates the dataManager and the
@@ -84,12 +86,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 	public FactBrowser() {
 		dataManager = FactBrowserDataManager.getInstance();
 		factBrowserWindow = new FactBrowserWindow();
-		m_popupMenu = new JPopupMenu();
-		m_unloadMenu = new JMenuItem();
-		m_unloadMenu.setText("Unload");
-		m_unloadMenu.addActionListener(this);
-		m_popupMenu.add(m_unloadMenu);
-		factBrowserWindow.add(m_popupMenu);
 	}
 
 	/**
@@ -202,6 +198,10 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 		return TOOL_NAME;
 	}
 
+	private ATerm createEventId(ATerm moduleId) {
+		return studio.getATermFactory().make(TOOL_NAME + "(<term>)", moduleId);
+	}
+
 	/**
 	 * This is the entry method for the FactBrowser. When the meta-environment
 	 * is started this will be called to add the factBrowser to the studio. It
@@ -214,13 +214,14 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 	 * @date 20-02-2007
 	 */
 	public void initStudioPlugin(Studio metaStudio) {
-		this.metaStudio = metaStudio;
+		this.studio = metaStudio;
+		this.configFactory = Factory.getInstance((PureFactory) metaStudio
+				.getATermFactory());
+		bridge = new FactbrowserBridge(metaStudio.getATermFactory(), this);
+		popup = new DefaultPopupImpl(bridge);
+		metaStudio.connect(getName(), bridge);
 
-		factBrowserBridge = new FactbrowserBridge(metaStudio.getATermFactory(),
-				this);
-		metaStudio.connect(getName(), factBrowserBridge);
-
-		initFactBrowserLayout();
+		addFactBrowserComponent();
 	}
 
 	/**
@@ -230,9 +231,44 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 	 * @author Renze de Vries
 	 * @date 20-02-2007
 	 */
-	private void initFactBrowserLayout() {
-		JMenu rstoreFileMenu = new JMenu("Facts");
+	private void addFactBrowserComponent() {
+		final ATerm id = configFactory.getPureFactory().parse(TOOL_NAME);
+		final Event popupAction = configFactory.makeEvent_Popup();
 
+		factBrowserWindow.addMouseListener(new MouseAdapter(id, bridge,
+				popupAction) {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				factBrowserWindow.selectNodeAtPosition(e.getX(), e.getY());
+
+				ATerm rStoreId = getSelectedRStoreId();
+				if (rStoreId != null) {
+					setId(createEventId(rStoreId));
+					super.mousePressed(e);
+				}
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					if (e.getClickCount() == DOUBLE_CLICK) {
+						mouseDoubleClick(e);
+					}
+				}
+			}
+		});
+
+		StudioComponent component = new StudioComponentImpl("Facts",
+				factBrowserWindow) {
+			@Override
+			public void requestClose() throws CloseAbortedException {
+				throw new CloseAbortedException();
+			}
+		};
+		((StudioWithPredefinedLayout) studio).addComponent(component,
+				StudioImplWithPredefinedLayout.TOP_LEFT);
+
+		JMenu rstoreFileMenu = new JMenu("Facts");
 		JMenuItem rstoreOpen = new JMenuItem("Load Rstore");
 		rstoreOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -240,11 +276,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 			}
 		});
 		rstoreFileMenu.add(rstoreOpen);
-
-		connectPanelWithMenu(rstoreFileMenu, factBrowserWindow, "Facts",
-				StudioImplWithPredefinedLayout.TOP_LEFT);
-
-		factBrowserWindow.setMouseListener(this);
+		studio.addComponentMenu(component, rstoreFileMenu);
 	}
 
 	/**
@@ -255,90 +287,8 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 	 * @date 20-02-2007
 	 */
 	private void openRstore() {
-		ATerm term = metaStudio.getATermFactory().make("fb-load-rstore");
-		factBrowserBridge.postEvent(term);
-	}
-
-	/**
-	 * This methods registers the visual component in the meta-studio and adds
-	 * the menu components.
-	 * 
-	 * @param menu
-	 *            This is the menu that's going to be added to the meta-studio
-	 * @param panel
-	 *            This is the visual component that contains the factBrowser
-	 * @param title
-	 *            This is the title of the tab the visual component is displayed
-	 *            in
-	 * 
-	 * @copied from ExamplePlugin
-	 * 
-	 * @author Arjen van Schie
-	 */
-	private void connectPanelWithMenu(JMenu menu, JPanel panel, String title,
-			String orientation) {
-		if (panel != null) {
-			// generate the meta-studio component from the default
-			// implementation
-			StudioComponent component = new StudioComponentImpl(title, panel) {
-				@Override
-				public void requestClose() throws CloseAbortedException {
-					throw new CloseAbortedException();
-				}
-			};
-
-			// add the component to the studio
-			((StudioWithPredefinedLayout) metaStudio).addComponent(component,
-					orientation);
-
-			// add the menu (if there is any)
-			if (menu != null) {
-				metaStudio.addComponentMenu(component, menu);
-			}
-		}
-	}
-
-	/**
-	 * This method gets the selectedNode in the visual tree and requests the
-	 * identifiers from the dataManager. Then it sends it over the toolbus. This
-	 * method handles the double clicking on tree nodes and also the right mouse
-	 * clicking on rstore nodes so users can unload rstores. Currently no Mac
-	 * support is build in.
-	 * 
-	 * @param mouseEvent
-	 *            This contains the event which was generated by the visual
-	 *            component
-	 * 
-	 * @author Renze de Vries
-	 * @date 20-02-2007
-	 */
-	public void mouseClicked(MouseEvent mouseEvent) {
-		if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-			if (mouseEvent.getClickCount() == DOUBLE_CLICK) {
-				mouseDoubleClick(mouseEvent);
-			}
-		} else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
-			if (mouseEvent.getClickCount() == SINGLE_CLICK) {
-				// TODO fix this
-				// if (mouseEvent.isPopupTrigger()) {
-				showPopupMenu(mouseEvent);
-				// }
-			}
-		}
-	}
-
-	/**
-	 * @author Bas Basten
-	 * @author Anton Lycklama a Nijeholt
-	 * 
-	 * In the future there needs to be Mac support. This isn't fully implemented
-	 * yet but it should work something like this.
-	 */
-	public void mouseReleased(MouseEvent mouseEvent) {
-		// TODO fix this
-		// if (mouseEvent.isPopupTrigger()) {
-		// showPopupMenu(mouseEvent);
-		// }
+		ATerm term = studio.getATermFactory().make("fb-load-rstore");
+		bridge.postEvent(term);
 	}
 
 	/**
@@ -374,16 +324,16 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 				int rstoreID = dataManager.getRStoreID(selectedNode);
 
 				// build the Aterm with the given identifiers and send it
-				ATerm term = metaStudio.getATermFactory().make(
+				ATerm term = studio.getATermFactory().make(
 						"fb-visualization-selected(<int>, <int>, <int>)",
 						rstoreID, factID, visPluginID);
-				factBrowserBridge.sendEvent(term);
+				bridge.sendEvent(term);
 			} else if (dataManager.checkValidRStoreFact(selectedNode)) {
 				RType rtype = dataManager.getFactRType(selectedNode);
 
-				ATerm term = metaStudio.getATermFactory().make(
+				ATerm term = studio.getATermFactory().make(
 						"fb-type-selected(<term>)", rtype.toTerm());
-				factBrowserBridge.sendEvent(term);
+				bridge.sendEvent(term);
 			} else if (dataManager.checkValidRStore(selectedNode)) {
 				// Do nothing
 			} else {
@@ -395,31 +345,13 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 	}
 
 	/**
-	 * Shows the unload popup menu at a given position (X & Y).
-	 * 
-	 * @author Bas Basten
-	 * @author Anton Lycklama a Nijeholt
-	 * @date 19-03-2007
-	 * 
-	 * @param mouseEvent
+	 * @author Taeke Kooiker
+	 * @date 14-08-2007
 	 */
-	private void showPopupMenu(MouseEvent mouseEvent) {
-		factBrowserWindow.selectNodeAtPosition(mouseEvent.getX(), mouseEvent
-				.getY());
-
-		DefaultMutableTreeNode selectedNode = factBrowserWindow
-				.getSelectedNode();
-
-		if (selectedNode != null) {
-			if (dataManager.checkValidRStore(selectedNode)) {
-				int offsetY = factBrowserWindow.getVerticalBarOffset();
-				int offsetX = factBrowserWindow.getHorizontalBarOffset();
-				mouseEvent.translatePoint(-offsetX, -offsetY);
-				m_popupMenu.show(factBrowserWindow, mouseEvent.getX(),
-						mouseEvent.getY());
-				m_popupMenu.setVisible(true);
-			}
-		}
+	public void showPopup(int RStoreId, ATerm menuList) {
+		ActionDescriptionList l = configFactory
+				.ActionDescriptionListFromTerm(menuList);
+		popup.showPopup(menuList.getFactory().makeInt(RStoreId), l);
 	}
 
 	/**
@@ -427,6 +359,24 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 	 * @date 14-08-2007
 	 */
 	public ATerm getSelectedRstoreid() {
+		ATerm rStoreId = getSelectedRStoreId();
+
+		if (rStoreId != null) {
+			ATerm term = studio.getATermFactory().make(
+					"snd-value(selected-rstoreid(<term>))", rStoreId);
+			return term;
+		}
+
+		ATerm term = studio.getATermFactory().make(
+				"snd-value(no-rstore-selected)");
+		return term;
+	}
+
+	/**
+	 * @author Taeke Kooiker
+	 * @date 15-08-2007
+	 */
+	private ATerm getSelectedRStoreId() {
 		DefaultMutableTreeNode selectedNode = factBrowserWindow
 				.getSelectedNode();
 
@@ -438,59 +388,12 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif,
 			}
 
 			if (selectedNode.getUserObject() instanceof RStore) {
-				int rstoreID = FactBrowserDataManager.getInstance()
-						.getRStoreID(selectedNode);
-				ATerm term = metaStudio.getATermFactory().make(
-						"snd-value(selected-rstoreid(<int>))", rstoreID);
-				return term;
+				int id = FactBrowserDataManager.getInstance().getRStoreID(
+						selectedNode);
+				return studio.getATermFactory().makeInt(id);
 			}
 		}
-		
-		ATerm term = metaStudio.getATermFactory().make("snd-value(no-rstore-selected)");
-		return term;
-	}
 
-	/**
-	 * Sends an unload message when the unload popup menu button has been
-	 * clicked.
-	 * 
-	 * @author Bas Basten
-	 * @author Anton Lycklama a Nijeholt
-	 * @date 19-03-2007
-	 */
-	public void actionPerformed(ActionEvent actionEvent) {
-		if (actionEvent.getSource() == m_unloadMenu) {
-			m_popupMenu.setVisible(false);
-
-			DefaultMutableTreeNode selectedNode = factBrowserWindow
-					.getSelectedNode();
-
-			if (dataManager.checkValidRStore(selectedNode)) {
-				int rstoreID = dataManager.getRStoreID(selectedNode);
-
-				// build the Aterm with RStore FactType
-				ATerm term = metaStudio.getATermFactory().make(
-						"fb-unload-rstore(<int>)", rstoreID);
-				factBrowserBridge.sendEvent(term);
-			}
-		}
-	}
-
-	/**
-	 * Redundant method required by mouseListener interface
-	 */
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	/**
-	 * Redundant method required by mouseListener interface
-	 */
-	public void mouseExited(MouseEvent e) {
-	}
-
-	/**
-	 * Redundant method required by mouseListener interface
-	 */
-	public void mousePressed(MouseEvent e) {
+		return null;
 	}
 }

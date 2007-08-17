@@ -72,7 +72,7 @@ public class FactBrowserWindow extends JPanel {
      * @author Renze de Vries
      * @date 12-02-2007
      */
-    public void setMouseListener(MouseListener listener) {
+    public void addMouseListener(MouseListener listener) {
         treeRstores.addMouseListener(listener);
     }
 

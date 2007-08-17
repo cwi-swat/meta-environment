@@ -1,6 +1,6 @@
 // Java tool bridge FactbrowserBridge
 // This file is generated automatically, please do not edit!
-// generation time: Aug 14, 2007 5:15:07 PM
+// generation time: Aug 17, 2007 9:19:04 AM
 
 package nl.dancingbear.visbase.factbrowser;
 
@@ -42,6 +42,15 @@ public class FactbrowserBridge
     }
     else {
       throw new UnsupportedOperationException("method `fbShowRstoreFacts' not supported.");
+    }
+  }
+  public void showPopup(int i0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.showPopup(i0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showPopup' not supported.");
     }
   }
   public ATerm getSelectedRstoreid()

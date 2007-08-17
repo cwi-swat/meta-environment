@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
+	<classpathentry kind="lib" path="/config-support/lib/configapi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
