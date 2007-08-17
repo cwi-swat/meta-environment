@@ -184,10 +184,14 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 	}
 
 	public void markModuleError(ATerm moduleId) {
+		tree.saveExpansionState();
 		moduleModel.markError(moduleId);
+		tree.loadExpansionState();
 	}
 
 	public void markModuleNormal(ATerm moduleId) {
+		tree.saveExpansionState();
 		moduleModel.markNormal(moduleId);
+		tree.loadExpansionState();
 	}
 }
