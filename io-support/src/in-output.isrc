@@ -100,6 +100,17 @@ in
       . snd-msg(io-file-not-written(Summary))
     )
   +
+    rec-msg(io-write-term-as-text(Filename?, Term?))
+    . snd-eval(IO, write-term-as-text(Filename, Term))
+    .
+    (
+      rec-value(IO, success)
+      . snd-msg(io-file-written)
+    +
+      rec-value(IO, failure(Summary?))
+      . snd-msg(io-file-not-written(Summary))
+    )
+  +
     rec-msg(io-write-term-in-baf(Filename?, Term?))
     . snd-eval(IO, write-in-baf(Filename, Term))
     .
@@ -228,4 +239,3 @@ in
 endlet
 
 toolbus(IO)
-

@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 17 13:56:37 CEST 2007 <kooiker@cwi.nl>
+ * src/in-output.isrc: readded functionallity to write term as text (which was
+   still implemented in main.c)
+
 Wed Jul 11 14:26:33 CEST 2007 <kooiker@cwi.nl>
  * src/{in-output.isrc,main.c}:
    - Add get-file-size

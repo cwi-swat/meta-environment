@@ -9,12 +9,13 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm read_and_pack_term(int conn, const char *);
 ATerm read_text_file(int conn, const char *);
-ATerm read_term_file(int conn, const char *);
+ATerm read_and_pack_term(int conn, const char *);
 ATerm unpack_and_write_in_baf(int conn, const char *, ATerm);
-ATerm compare_files(int conn, const char *, const char *);
+ATerm read_term_file(int conn, const char *);
 ATerm write_in_baf(int conn, const char *, ATerm);
+ATerm compare_files(int conn, const char *, const char *);
+ATerm write_term_as_text(int conn, const char *, ATerm);
 ATerm get_filename(int conn, const char *, const char *, const char *);
 ATerm write_text_list(int conn, const char *, ATerm);
 ATerm get_relative_filename(int conn, ATerm, const char *, const char *);
