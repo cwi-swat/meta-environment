@@ -26,6 +26,8 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 
 	private Studio studio;
 
+	private StudioComponent component;
+	
 	ErrorViewerBridge bridge;
 
 	errorapi.Factory errorFactory;
@@ -72,13 +74,13 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		ErrorPanel panel = new ErrorPanel();
 		addListener(panel);
 
-		StudioComponent comp = new StudioComponentImpl(panelId, panel) {
+		component = new StudioComponentImpl(panelId, panel) {
 			public void requestClose() throws CloseAbortedException {
 				throw new CloseAbortedException();
 			}
 		};
 
-		((StudioWithPredefinedLayout) studio).addComponent(comp,
+		((StudioWithPredefinedLayout) studio).addComponent(component,
 				StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
 
 		return panel;
@@ -104,6 +106,8 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 		} catch (IllegalArgumentException ex) {
 			System.err.println("Summary is not valid");
 		}
+		
+		studio.requestFocus(component);
 	}
 
 	public void refreshFeedbackSummary(String panelId, ATerm summaryTerm) {
