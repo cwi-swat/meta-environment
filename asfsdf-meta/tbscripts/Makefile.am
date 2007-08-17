@@ -19,7 +19,8 @@ TBSCRIPTS = \
 	asf-pretty-print.tb \
 	asfsdf-meta.tb \
 	asf-gui-listeners.tb \
-	asf-transactions.tb
+	asf-transactions.tb \
+	rstore-actions.tb
 
 EXTRA_DIST = \
 	$(TBSCRIPTS) \

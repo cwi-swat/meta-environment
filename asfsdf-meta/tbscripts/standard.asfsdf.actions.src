@@ -50,5 +50,7 @@ configuration([
   action([description(module-popup, menu([label("Export"),label("ASF ParseTable...")],"Export a parse table for parsing ASF equations file, for debugging purposes"))],
          "DumpEquationsParseTableAction"),
   action([description(module-popup, menu([label("Tools"), label("Compile Equations...")], "Compile the current module to a commandline source-to-source transformation tool"))],
-         "CompileModuleAction")
+         "CompileModuleAction"),
+  action([description(factbrowser-popup, menu([label("Unload")],"Unload RStore"))],
+         "UnloadRStoreAction")
 ])
