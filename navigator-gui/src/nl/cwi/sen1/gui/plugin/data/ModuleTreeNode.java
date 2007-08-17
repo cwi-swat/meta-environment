@@ -20,12 +20,28 @@ public class ModuleTreeNode {
 
 	boolean leaf;
 
+	boolean error;
+
 	public ModuleTreeNode(ATerm id, String name, String prefix, boolean leaf) {
 		this.id = id;
 		this.name = name;
 		this.prefix = prefix;
 		this.leaf = leaf;
 		children = new ArrayList<ModuleTreeNode>();
+	}
+
+	public boolean hasError() {
+		if (leaf == true) {
+			return error;
+		}
+		
+		for (int i = 0; i < children.size(); i++) {
+			if (children.get(i).hasError() == true) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public ATerm getId() {
@@ -216,5 +232,29 @@ public class ModuleTreeNode {
 
 	public String toString() {
 		return name;
+	}
+
+	public void setErrorState(File file, boolean b) {
+		SegmentList segments = file.getPath().getList();
+		segments = segments.append(file.getIoapiFactory().makeSegment_Segment(
+				file.getName()));
+		setErrorState(segments, b);
+	}
+
+	private void setErrorState(SegmentList segments, boolean b) {
+		if (!segments.isEmpty()) {
+			String childName = segments.getHead().getName();
+			int childIndex = getChild(childName);
+			ModuleTreeNode childNode = getChild(childIndex);
+
+			if (childNode != null) {
+				if (!segments.isEmpty()) {
+					childNode.setErrorState(segments.getTail(), b);
+				}
+			}
+		}
+		else {
+			error = b;
+		}
 	}
 }

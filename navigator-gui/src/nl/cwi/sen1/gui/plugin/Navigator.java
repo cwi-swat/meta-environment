@@ -182,4 +182,12 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 		moduleModel.selectModule(moduleId);
 		suspendSelectionNotification = false;
 	}
+
+	public void markModuleError(ATerm moduleId) {
+		moduleModel.markError(moduleId);
+	}
+
+	public void markModuleNormal(ATerm moduleId) {
+		moduleModel.markNormal(moduleId);
+	}
 }

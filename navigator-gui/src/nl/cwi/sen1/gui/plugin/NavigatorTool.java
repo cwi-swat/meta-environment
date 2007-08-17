@@ -1,6 +1,6 @@
 // Java tool interface class NavigatorTool
 // This file is generated automatically, please do not edit!
-// generation time: Mar 14, 2007 10:39:54 AM
+// generation time: Aug 17, 2007 11:11:44 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import toolbus.SwingTool;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -24,6 +25,8 @@ abstract public class NavigatorTool
   // Patterns that are used to match against incoming terms
   private ATerm PselectModule0;
   private ATerm PupdateModule0;
+  private ATerm PmarkModuleNormal0;
+  private ATerm PmarkModuleError0;
   private ATerm PdeleteModule0;
   private ATerm PshowPopup0;
   private ATerm PrecAckEvent0;
@@ -43,6 +46,8 @@ abstract public class NavigatorTool
     sigTable.add(factory.parse("rec-do(<navigator>,update-module(<term>,<file>))"));
     sigTable.add(factory.parse("rec-do(<navigator>,delete-module(<term>))"));
     sigTable.add(factory.parse("rec-do(<navigator>,select-module(<term>))"));
+    sigTable.add(factory.parse("rec-do(<navigator>,mark-module-error(<term>))"));
+    sigTable.add(factory.parse("rec-do(<navigator>,mark-module-normal(<term>))"));
     sigTable.add(factory.parse("rec-do(<navigator>,show-popup(<term>,<list>))"));
     sigTable.add(factory.parse("rec-ack-event(<navigator>,<term>)"));
     sigTable.add(factory.parse("rec-terminate(<navigator>,<term>)"));
@@ -53,6 +58,8 @@ abstract public class NavigatorTool
   {
     PselectModule0 = factory.parse("rec-do(select-module(<term>))");
     PupdateModule0 = factory.parse("rec-do(update-module(<term>,<term>))");
+    PmarkModuleNormal0 = factory.parse("rec-do(mark-module-normal(<term>))");
+    PmarkModuleError0 = factory.parse("rec-do(mark-module-error(<term>))");
     PdeleteModule0 = factory.parse("rec-do(delete-module(<term>))");
     PshowPopup0 = factory.parse("rec-do(show-popup(<term>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -72,6 +79,16 @@ abstract public class NavigatorTool
     result = term.match(PupdateModule0);
     if (result != null) {
       updateModule((ATerm)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PmarkModuleNormal0);
+    if (result != null) {
+      markModuleNormal((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PmarkModuleError0);
+    if (result != null) {
+      markModuleError((ATerm)result.get(0));
       return null;
     }
     result = term.match(PdeleteModule0);

@@ -118,4 +118,20 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 	public List<Module> getModules() {
 		return new LinkedList<Module>(moduleTable.values());
 	}
+
+	public void markError(ATerm moduleId) {
+		Module module = getModule(moduleId);
+		File file = module.getFile();
+		
+		root.setErrorState(file, true);
+		repaintTree();
+	}
+
+	public void markNormal(ATerm moduleId) {
+		Module module = getModule(moduleId);
+		File file = module.getFile();
+		
+		root.setErrorState(file, false);
+		repaintTree();
+	}
 }

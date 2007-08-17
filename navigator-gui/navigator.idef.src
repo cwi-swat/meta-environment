@@ -26,6 +26,12 @@ in
     rec-msg(nav-select-module(ModuleId?))
     . snd-do(T, select-module(ModuleId))
   +
+    rec-msg(nav-mark-module-error(ModuleId?))
+    . snd-do(T, mark-module-error(ModuleId))
+  +
+    rec-msg(nav-mark-module-normal(ModuleId?))
+    . snd-do(T, mark-module-normal(ModuleId))
+  +
     rec-event(T, module-selected(ModuleId?))
     . snd-note(nav-module-selected(ModuleId))
     . snd-ack-event(T, module-selected(ModuleId))

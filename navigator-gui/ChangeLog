@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 17 11:15:11 CEST 2007 <kooiker@cwi.nl>
+ * navigator.idef.src,src/**/*.java: add icon that indicates that a module has
+   an error
+
 Thu Jun 14 09:57:40 CEST 2007 <kooiker@cwi.nl>
  * navigator.idef.src:
    - Fixed nav-show-popup missing ? in receiving variable
