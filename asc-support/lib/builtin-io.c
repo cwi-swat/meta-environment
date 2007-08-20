@@ -176,6 +176,7 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file) {
   }
 
   if (loadParseTable()) {
+    SGLR_initialize(); /* TODO: Factor this out so that it is only done once.*/
     inputString = IS_createInputStringFromFile(filename);
     FLT_setSelectTopNonterminalFlag(ATtrue);
     FLT_setTopNonterminal(sort);
