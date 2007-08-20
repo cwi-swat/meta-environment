@@ -1,5 +1,13 @@
 $Id$
 
+Mon Aug 20 17:52:23 CEST 2007 <jurgenv@cwi.nl>
+ * Makefile.meta: changed EXTRA_DIST in maintainer mode for generation
+   of ToolBus interface code. In some cases the interface code is not
+   necessary (for example when compiling an ASF+SDF ToolBus tool). The
+   extra dist would ask for a .c file for every .idef file, which would
+   not be there. Fixed this by changing the wildcard to add every 
+   *.[ch] file to EXTRA_DIST regardless.
+
 Mon Aug 13 19:04:25 CEST 2007 <jurgenv@cwi.nl>
  * meta-build.m4: added { } curly's around generated dereferences of
    long shell variable names. This fixes "Bad string" warnings by autoconf

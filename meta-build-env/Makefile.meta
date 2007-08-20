@@ -58,7 +58,7 @@ CLEANFILES += $(wildcard *.idef)
 
 if MAINTAINER_MODE 
 
-EXTRA_DIST += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
+EXTRA_DIST += $(wildcard *.c) $(wildcard *.h)
 CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
 
 .idef.c:
