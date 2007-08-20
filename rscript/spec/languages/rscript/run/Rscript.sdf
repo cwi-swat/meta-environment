@@ -4,11 +4,8 @@ imports languages/rscript/run/RscriptCalculator
 
 exports
 context-free start-symbols
-  REnvironment
+  REnvironment RStore
 
 hiddens
-context-free start-symbols
-  RStore
-
 variables
   "$Rscript" [0-9\']* -> RSCRIPT

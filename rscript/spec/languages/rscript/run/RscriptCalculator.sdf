@@ -5,10 +5,11 @@ imports languages/rscript/run/REnvironment
         basic/Integers
         basic/Strings
         basic/LocationOperations
+        basic/RStores
 
 hiddens
 context-free start-symbols
-  REnvironment RElem
+  REnvironment RElem RStore
 
 exports
 context-free syntax

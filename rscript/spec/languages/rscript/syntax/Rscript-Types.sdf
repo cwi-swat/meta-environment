@@ -3,7 +3,7 @@ module languages/rscript/syntax/Rscript-Types
 imports basic/IdentifierCon
 
 exports
-sorts ElemType REXPTYPE
+sorts ElemType REXPTYPE Formal
 
 hiddens
 imports basic/Whitespace
@@ -24,15 +24,13 @@ context-free syntax
 context-free syntax
   "bool" | "int" | "str" | "loc" -> ElemType  
   ElemType                       -> REXPTYPE  
-  "<" {Formal ","}+ ">"        -> REXPTYPE  
+  "<" {Formal ","}+ ">"          -> REXPTYPE  
   "<" {REXPTYPE ","}+ ">"        -> REXPTYPE  
-  REXPTYPE IdCon -> Formal
-
-
+  REXPTYPE IdCon                 -> Formal    
   IdCon                          -> REXPTYPE  
   "&" IdCon                      -> REXPTYPE  
 
 context-free syntax
-    "bag" "[" REXPTYPE "]"        -> REXPTYPE  
-    "set" "[" REXPTYPE "]"        -> REXPTYPE  
-    "rel" "[" {REXPTYPE ","}+ "]" -> REXPTYPE
+  "bag" "[" REXPTYPE "]"        -> REXPTYPE  
+  "set" "[" REXPTYPE "]"        -> REXPTYPE  
+  "rel" "[" {REXPTYPE ","}+ "]" -> REXPTYPE  
