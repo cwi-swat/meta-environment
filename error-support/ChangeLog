@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 20 15:04:28 CEST 2007 <kooiker@cwi.nl>
+ * util/display-error.c: commandline utility that displays errors in a user
+   readable way
+
 Tue Mar 20 16:22:51 CET 2007 <kooiker@cwi.nl>
  * lib/lower.c: lowerError checks if an error is valid. If not it tries to
  create an error from the origin information, otherwise it creates an error
