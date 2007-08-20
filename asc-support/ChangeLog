@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 20 17:31:00 CEST 2007 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: fixed bug #777, parse_bytes did not initialize SGLR
+   correctly.
+
 Wed Aug 15 11:01:53 CEST 2007 <kooiker@cwi.nl>
  * lib/asc-client.c: add lifting of RStores when sending RStore to tool
 
