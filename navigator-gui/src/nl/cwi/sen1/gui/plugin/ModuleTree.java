@@ -6,10 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Enumeration;
 
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
