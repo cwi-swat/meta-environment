@@ -1,5 +1,8 @@
 $Id$
 
+Mon Aug 20 14:36:13 CEST 2007 <kooiker@cwi.nl>
+ * src/**/ModuleTree.java: use overlay for creating error icons
+
 Fri Aug 17 11:15:11 CEST 2007 <kooiker@cwi.nl>
  * navigator.idef.src,src/**/*.java: add icon that indicates that a module has
    an error
