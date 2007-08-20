@@ -8,6 +8,7 @@
 # - parse and check an Rscript and run it as test suite
 
 set -e
+set -x
 
 #   variables
 prefix=__PREFIX__
@@ -18,11 +19,11 @@ PRG=`basename $0`
 VERBOSE=
 CHECK_ONLY=
 
-RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
-RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
+RSCRIPT_PARSE_TABLE=${datadir}/rscript.trm.tbl
+RSTORE_PARSE_TABLE=${datadir}/rstore.trm.tbl
 
-EVALUATOR=${bindir}/RscriptCalculator
-RSTORE_SORT=RSTORE
+EVALUATOR=${bindir}/rscriptcalculator
+RSTORE_SORT=RStore
 SUMMARY_SORT=Summary
 EVALUATOR_RESULT=$RSTORE_SORT
 
@@ -32,10 +33,9 @@ SGLR=__SGLR__/bin/sglr
 UNPARSEPT=__PT_SUPPORT__/bin/unparsePT
 
 THE_EVALUATOR=$EVALUATOR
-EVALUATOR_FUN=eval-rscript
+EVALUATOR_FUN=eval-rscript-to-rstore
 EVALUATOR_WITH_STORE_FUN=eval-rscript-with-rstore
 CHECKER_FUN=check-rscript
-
 
 TESTSUITES=${bindir}/RscriptTestsuites
 USE_TESTSUITES=no
@@ -44,16 +44,15 @@ YIELD=
 THE_RSCRIPT=
 OUTPUT_AS_TREE=
 OUTPUT=
+DISPLAY_OUTPUT=__ERROR_SUPPORT__/bin/display-error
 RSTORE=
-TYPE_CHECKER=$EVALUATOR
+TYPE_CHECKER=${bindir}/rscriptchecker
 OUTPUT_TYPE_CHECKER=./.checker.feedback
 TYPE_CHECKING_OK="Rscript is type correct!"
 TMP_FILES=$OUTPUT_TYPE_CHECKER
 
 # 
-
 #   usage
-
 usage() {
 cat << ENDCAT >&2
 Usage: $PRG [options] [filename]
@@ -171,7 +170,7 @@ evaluate() {
     parse_rstore 
     $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt -i $PARSED_RSTORE | $THE_EVALUATOR | $OUTPUT
   else
-    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt | $THE_EVALUATOR | $OUTPUT
+    $THE_EVALUATOR -r $EVALUATOR_RESULT -i $THE_RSCRIPT.pt | $OUTPUT
   fi
   echo ""
 }
@@ -192,7 +191,7 @@ do
     -i | --input)
       shift; THE_RSCRIPT=$1 ; check_rscript_file_type ${THE_RSCRIPT};;
     -s | --store)
-      shift; RSTORE=$1;  check_rstore_file_type ${RSTORE}; WITH_RSTORE=-with-rstore;;
+      shift; RSTORE=$1;  check_rstore_file_type ${RSTORE};;
     -t | --testsuite)
       USE_TESTSUITES=yes; THE_EVALUATOR=$TESTSUITES; EVALUATOR_FUN=eval-rscript-testsuite; EVALUATOR_RESULT=TESTREPORT;;
      -c | --check-only)
@@ -216,13 +215,19 @@ then
     usage
     exit 1
 else
-    EVALUATOR_FUN=${EVALUATOR_FUN}${WITH_RSTORE}${AND_YIELD}
+  if test -n "$RSTORE" 
+  then
+    EVALUATOR_FUN=${EVALUATOR_WITH_STORE_FUN}${AND_YIELD}
+  else
+    EVALUATOR_FUN=${EVALUATOR_FUN}${AND_YIELD}
+  fi
 fi
+
+#if 0 
 
 set_output_style
 parse_rscript
 check
-
 
 if test "$CHECK_ONLY" = "yes"
 then
@@ -230,7 +235,7 @@ then
     then 
 	echo $THE_RSCRIPT is type correct
     else
-	error-support -i $OUTPUT_TYPE_CHECKER
+	$DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
 	echo ""
     fi
     exit
@@ -240,9 +245,10 @@ if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
 then 
     evaluate
 else 
-    error-support -i $OUTPUT_TYPE_CHECKER
+    $DISPLAY_OUTPUT -i $OUTPUT_TYPE_CHECKER
     echo ""
     echo "There are type errors in $THE_RSCRIPT; script is not executed"
 fi
 
-cleanup
+#cleanup
+
