@@ -217,7 +217,7 @@ equations
       <literal>basic/Booleans</literal> in the ASF+SDF library.</para>
 
       <section>
-        <title>Opening basic/Booleans</title>
+        <title>Opening basic/Booleans in The Meta-Environment</title>
 
         <para></para>
       </section>
@@ -371,7 +371,7 @@ exports
         </calloutlist>
       </section>
 
-      <section>
+      <section xml:id="Sec_basic_Booleans">
         <title><literal>basic/Booleans</literal></title>
 
         <para>After these preparations, we can now should the syntax part of
@@ -483,7 +483,7 @@ variables
         </calloutlist>
 
         <para>Having covered all syntactic aspects of the Booleans, we can now
-        trun our attention to the equations:c</para>
+        trun our attention to the equations:</para>
 
         <programlisting>equations
 
@@ -558,7 +558,7 @@ variables
       </section>
 
       <section>
-        <title>Running the example in the Meta-Environment</title>
+        <title>Running the Boolean example in The Meta-Environment</title>
 
         <para>By far the best steps to get acquainted with the
         Meta-Environment are:</para>
@@ -574,7 +574,8 @@ variables
           </listitem>
 
           <listitem>
-            <para>Hands-on experience with The Meta-Environment itself.</para>
+            <para>Get hands-on experience with The Meta-Environment
+            itself.</para>
           </listitem>
         </itemizedlist>
 
@@ -820,7 +821,7 @@ exports
     </section>
 
     <section>
-      <title>Pico-syntax</title>
+      <title>languages/pico/syntax/Pico</title>
 
       <para>After these preparations we can present the syntax for
       Pico:</para>
@@ -852,18 +853,18 @@ exports
 
   context-free syntax                                                          <co
           xml:id="comments.num" />
+
     PICO-ID ":=" EXP                                              -&gt; STATEMENT
     "if" EXP "then" {STATEMENT";" }* "else" {STATEMENT";" }* "fi" -&gt; STATEMENT
     "while" EXP "do" {STATEMENT ";" }* "od"                       -&gt; STATEMENT
  
   context-free syntax                                                          <co
           xml:id="comments.num" />
+
     PICO-ID       -&gt; EXP                                                       <co
-          xml:id="comments.num" />
-    NatCon        -&gt; EXP                                                       <co
-          xml:id="comments.num" />
-    StrCon        -&gt; EXP                                                       <co
-          xml:id="comments.num" />
+          xml:id="comments.num" />                                                
+    NatCon        -&gt; EXP                                                       
+    StrCon        -&gt; EXP                                                       
     EXP "+" EXP   -&gt; EXP {left}                                                <co
           xml:id="comments.num" />
     EXP "-" EXP   -&gt; EXP {left}
@@ -871,11 +872,11 @@ exports
     "(" EXP ")"   -&gt; EXP {bracket}                                             <co
           xml:id="comments.num" />
 
-  context-free priorities
+  context-free priorities                                                      <co
+          xml:id="comments.num" />
     EXP "||" EXP -&gt; EXP &gt;
     EXP "-" EXP -&gt; EXP &gt;
-    EXP "+" EXP -&gt; EXP
-</programlisting>
+    EXP "+" EXP -&gt; EXP</programlisting>
 
       <para>Notes:</para>
 
@@ -886,16 +887,301 @@ exports
         </callout>
 
         <callout arearefs="???">
-          <para></para>
+          <para>The sorts <literal>PROGRAM</literal>,
+          <literal>DECLS</literal>, <literal>ID-TYPE</literal>,
+          <literal>STATEMENT</literal> and <literal>EXP</literal> are declared
+          here and are used (in addition to the sorts declared in the imported
+          modules) to define the Pico grammar.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>This first context-free syntax section declares the toplevel
+          structure of a Pico program.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>The rule for PROGRAM contains the list construct<literal>
+          {STATEMENT ";"}*</literal>. It describes zero or more statements
+          separated by a semicolon (<literal>;</literal>).</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>This section declares the syntax for statements.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>This final context-free syntax section declares expression
+          syntax.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>These three rules define that natural Pico identifiers,
+          natural constants and string constants may occur as
+          expressions.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>The syntax of the operators <literal>+</literal>,
+          <literal>-</literal> and <literal>||</literal> is defined. Observe
+          that all three are left-associative. This implies that an expression
+          like <literal>1+2+3</literal> is considered to be of the form
+          <literal>(1+2)+3</literal> and that the other interpretation
+          <literal>1+(2+3)</literal> is rejected.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para><literal>(</literal> and <literal>)</literal> can be used as
+          brackets in expressions.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>Priorities define the relative ordering of operators and are
+          used to disambiguate text when more interpretations are possible.
+          The higher the priority, the stronger the binding. The expression
+          <literal>1-2+3</literal> will thus be interpreted as
+          <literal>(1-2)+3</literal>.</para>
         </callout>
       </calloutlist>
+    </section>
+
+    <section>
+      <title>Using the Pico syntax in the Meta-Environment</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Take home points</title>
+
+      <para>The syntax of Pico illustrates the following important
+      points:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All modules for a syntax definition reside in a subdirectory
+          named <literal>syntax</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The main module of the syntax definition has the same name as
+          the language (with an uppercase, since all module names start with
+          an uppercase letter).</para>
+        </listitem>
+
+        <listitem>
+          <para>The modules languages/pico/syntax/Identifiers,
+          languages/pico/syntax/Types and languages/pico/syntax/Pico define
+          (together with the modules they import) the syntax of the Pico
+          language.</para>
+        </listitem>
+
+        <listitem>
+          <para>This syntax can be used to:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Generate a parser that can parse Pico programs.</para>
+            </listitem>
+
+            <listitem>
+              <para>Generate a syntax-directed editor for Pico
+              programs.</para>
+            </listitem>
+
+            <listitem>
+              <para>Generate a parser that can parse equations containing
+              fragments of Pico programs. This is similar to the use of
+              different syntaxes in the definition of the <link
+              linkend="Sec_basic_Booleans">Booleans</link> and is used for
+              program analysis and transformation.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
   <section>
     <title>Define a typechecker for Pico</title>
 
-    <para></para>
+    <para>The typechecking rules for the Pico language are very simple:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The only types are <literal>natural</literal> and
+        <literal>string</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>All variables should be declared before use.</para>
+      </listitem>
+
+      <listitem>
+        <para>Left-hand side and Right-hand side of an assignment statement
+        should have equal type.</para>
+      </listitem>
+
+      <listitem>
+        <para>The test in while statement and if-statement should be
+        <literal>natural</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Operands of <literal>+</literal> and <literal>-</literal> should
+        be <literal>natural</literal>; their result is also
+        <literal>natural</literal>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Operands of <literal>||</literal> should be
+        <literal>string</literal>; the result is also
+        <literal>string</literal>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The task of a typechecker for Pico is to assert that a given Pico
+    program complies with the above rules.</para>
+
+    <section>
+      <title>languages/pico/check/Type-environments</title>
+
+      <para></para>
+
+      <programlisting>module languages/pico/check/Type-environments
+
+imports languages/pico/syntax/Identifiers 
+imports containers/Table[PICO-ID TYPE]
+
+exports 
+  sorts TENV TYPE 
+
+  aliases
+    Table[[PICO-ID,TYPE]] -&gt; TENV
+</programlisting>
+    </section>
+
+    <section>
+      <title>languages/pico/check/Pico</title>
+
+      <para>First consider the syntax part of the Pico typechecker:</para>
+
+      <programlisting>module languages/pico/check/Pico
+
+imports basic/Booleans
+imports basic/Errors
+imports languages/pico/syntax/Pico
+imports languages/pico/check/Type-environments
+imports utilities/PosInfo[EXP]
+imports utilities/PosInfo[PICO-ID]
+imports utilities/PosInfo[PROGRAM]
+
+exports
+context-free syntax
+  "tcp"(PROGRAM) -&gt; {Error ","}*  
+
+hiddens
+context-free syntax
+  "tcd"(DECLS)                  -&gt; TENV          
+  "tcits"({ID-TYPE ","}*, TENV) -&gt; TENV          
+  "tcit"(ID-TYPE, TENV)         -&gt; TENV          
+  "tcs"({STATEMENT ";"}*, TENV) -&gt; {Error ","}*  
+  "tcst"(STATEMENT, TENV)       -&gt; {Error ","}*  
+  "tce"(EXP, TYPE, TENV)        -&gt; {Error ","}*  
+
+context-free start-symbols
+  Summary PROGRAM {Error ","}*
+
+variables
+  "Message"          -&gt; StrCon            
+  "Error*" [0-9\']*  -&gt; {Error ","}*      
+  "Decls" [0-9\']*   -&gt; DECLS             
+  "Exp" [0-9\']*     -&gt; EXP               
+  "Id" [0-9\']*      -&gt; PICO-ID           
+  "Id-type*" [0-9]*  -&gt; {ID-TYPE ","}*    
+  "Nat-con" [0-9\']* -&gt; NatCon            
+  "Series" [0-9\']*  -&gt; {STATEMENT ";"}+  
+  "Stat" [0-9\']*    -&gt; STATEMENT         
+  "Stat*" [0-9\']*   -&gt; {STATEMENT ";"}*  
+  "Str-con" [0-9\']* -&gt; StrCon            
+  "Tenv" [0-9\']*    -&gt; TENV              
+  "Type" [0-9\']*    -&gt; TYPE              
+  "Program" [0-9\']* -&gt; PROGRAM         </programlisting>
+
+      <para>Now let's turn our attention to the equations part of the Pico
+      typechecker:</para>
+
+      <programlisting>equations
+
+[Main] start(PROGRAM, Program) = start(Summary, summary("pico-check",get-filename(get-location(Program)), [tcp(Program)]))
+
+equations
+
+[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))
+
+equations
+
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)
+
+equations
+
+[Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type, Tenv))
+
+[Tc3b] tcits(,Tenv) = Tenv
+
+equations
+
+[Tc4a] lookup(Tenv, Id) == not-in-table
+       ===========================================
+       tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
+
+[default] tcit(Id:Type, Tenv) = Tenv
+
+equations
+
+[Tc5a] tcs(Stat ; Stat*, Tenv) =
+       tcst(Stat,Tenv), tcs(Stat*,Tenv)
+
+[Tc5b] tcs(,Tenv) = 
+
+equations
+
+[Tc6a]
+    not-in-table == lookup(Tenv, Id)
+    ==========================================================================================
+    tcst(Id := Exp, Tenv) = error("Variable not declared", [localized("Id", get-location(Id))])
+
+[default] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) 
+
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =
+        tce(Exp, natural, Tenv), tcs(Series1, Tenv), tcs(Series2, Tenv)
+
+[Tc6c]  tcst(while Exp do Series od, Tenv) = 
+        tce(Exp, natural, Tenv), tcs(Series, Tenv)
+
+equations
+
+[default] tce(Exp, natural, Tenv) = error("Expression should be of type natural", [localized("Expression", get-location(Exp))])
+[default] tce(Exp, string, Tenv) = error("Expression should be of type string", [localized("Expression", get-location(Exp))])
+
+[Tc7a]  tce(Id, Type, Tenv) = when Type == lookup(Tenv, Id)
+[Tc7b]  tce(Nat-con, natural, Tenv) = 
+[Tc7c]  tce(Str-con, string, Tenv) = 
+[Tc7d]  tce(Exp1 || Exp2, string, Tenv) = tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)
+[Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
+[Tc7d]  tce(Exp1 - Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)</programlisting>
+    </section>
+
+    <section>
+      <title>Using the Pico typecheker in The Meta-Environment</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Take home points</title>
+
+      <para></para>
+    </section>
   </section>
 
   <section xml:id="fm_HistoricalNotes">
