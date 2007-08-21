@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>An Introduction to Language Definitions written in ASF+SDF</title>
+
+    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16
+    17:45:23 +0100 (Sat, 16 Dec 2006) $</pubdate>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <warning>
+    <para>This document is work in progress. See <link
+    linkend="fm_ToDo">ToDo</link> section.</para>
+  </warning>
+
+  <section xml:id="fm_Introduction">
+    <title>Introduction</title>
+
+    <para>You are interested in using ASF+SDF to define various aspects of a
+    programming language or domain-specific language but you do now want to
+    wade through all the details in the manual (The Language Specification
+    Formalism ASF+SDF)? In that case, this article may be for you. We take the
+    toy language Pico as starting point and walk you through its syntax,
+    typechecking, formatting, execution and more. We do this while assuming
+    zero knowledge of ASF+SDF or The ASF+SDF Meta-Environment.</para>
+
+    <section>
+      <title>What is the Global Picture?</title>
+
+      <para>The goal of ASF+SDF is to define the syntax (form) and semantics
+      (meaning) of programming languages and domain-specific languages. The
+      Syntax Definition Formalism (SDF) is used to define syntactic aspects
+      including:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Lexical syntax (keywords, comments, string constants, whiete
+          space, ...).</para>
+        </listitem>
+
+        <listitem>
+          <para>Context-free syntax (declarations, statements, ...).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Algebraic Specification Formalism (ASF) is used to define
+      semantic aspects such as:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Type checking (are the variables that are used declared and
+          are they used in a type-correct way?).</para>
+        </listitem>
+
+        <listitem>
+          <para>Formatting (display the original program using user-defined
+          rules for indentation and formatting).</para>
+        </listitem>
+
+        <listitem>
+          <para>Fact extraction (extract all procedure calls or all
+          declarations and uses of variables).</para>
+        </listitem>
+
+        <listitem>
+          <para>Execution (run the program with given input values).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>By convention, all these language aspects are located in dedicated
+      subdirectories:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><filename>syntax</filename> (definitions for the
+          syntax).</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>check</filename> (definitions for type
+          checking).</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>format</filename> (definitions for
+          formatting).</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>extract</filename> (definitions for fact
+          extraction).</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>run</filename> (definitions for running a
+          program).</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>debug</filename> (definitions for debugging a
+          program).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Apart from giving a standard structure to all language
+      definitions, this organization also enables the seamless integration of
+      these aspects in the user-interface of The Meta-Environment.</para>
+    </section>
+
+    <section>
+      <title>Learning more</title>
+
+      <para>In <link linkend="fm_HistoricalNotes">Historical Notes</link>, we
+      give background and key references.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Preparations</title>
+
+    <para>The anatomies of a complete ASF+SDF specification as well as that of
+    a single module are needed to understand any language definition.</para>
+
+    <section>
+      <title>Anatomy of an ASF+SDF specification</title>
+
+      <para>An ASF+SDF specification consists of a collection of modules as
+      shown inthe following <link linkend="Fig_modules">figure</link>. A
+      module can import other modules and this can be understood as the
+      textual inclusion of the imported modules.</para>
+
+      <figure xml:id="Fig_modules">
+        <title>Module structure of an ASF+SDF specification</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="modules.png" scale="100"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Anatomy of a single module</title>
+
+      <para>A single module has the following structure:</para>
+
+      <programlisting>module <replaceable>ModuleName</replaceable>            <co
+          xml:id="mod.num" />
+  <replaceable>ImportSection</replaceable>*             <co xml:id="mod.num" />
+  <replaceable>ExportOrHiddenSection</replaceable>*     <co xml:id="mod.num" />
+equations
+  <replaceable>ConditionalEquation</replaceable>*       <co xml:id="mod.num" /></programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="???">
+          <para>The name of this module. It may be followed by
+          parameters.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>Names of modules imported by this module.</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>The grammar elements (such as <literal>imports</literal>,
+          <literal>aliases</literal>, <literal>sorts</literal>,
+          <literal>lexical syntax</literal>, <literal>context-free
+          syntax</literal>, <literal>priorities</literal> or
+          <literal>variables</literal>) that are visible from the outside
+          (defined by <literal>exports</literal>) or only insoide the module
+          (defined by <literal>hiddens</literal>).</para>
+        </callout>
+
+        <callout arearefs="???">
+          <para>The equations of the module that define the meaning of the
+          grammar elements. Equations come in two flavours. Unconditional:
+          <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
+                role="bold">]</emphasis> &lt;Term&gt; <emphasis role="bold">=</emphasis> &lt;Term&gt;</programlisting></para>
+
+          <para>and conditional:<programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
+                role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
+                role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+                role="bold">,</emphasis> ... 
+           <emphasis role="bold">===============================</emphasis>
+                 &lt;Term<subscript>1</subscript>&gt; <emphasis role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
+        </callout>
+      </calloutlist>
+    </section>
+
+    <section>
+      <title>An example: Booleans</title>
+
+      <para>The Meta-Environment comes with a considerable library of built-in
+      languages and datatypes. We explore the datatype
+      <literal>basic/Booleans</literal> in the ASF+SDF library. </para>
+
+      <section>
+        <title>Opening basic/Booleans</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Modular structure</title>
+
+        <para>The module structure of <literal>basic/Booleans</literal> is
+        shown <link linkend="Fig_booleans_modules">below</link>.</para>
+
+        <figure xml:id="Fig_booleans_modules">
+          <title>Modular structure of
+          <literal>basic/Booleans</literal></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="booleans-modules.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title><literal>basic/BoolCon</literal></title>
+
+        <para>Let' start with the Boolean constants:</para>
+
+        <programlisting>module basic/BoolCon
+
+exports
+
+sorts BoolCon                             <co xml:id="boolcon.num" />
+context-free syntax
+
+    "true"  -&gt; BoolCon {cons("true")}     <co xml:id="boolcon.num" />
+    "false" -&gt; BoolCon {cons("false")}    
+
+hiddens
+context-free start-symbols
+  BoolCon                                 <co xml:id="boolcon.num" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="???">
+            <para>The sort of Boolean constants is defined as
+            <literal>BoolCon</literal>. Sort names should always start with a
+            capital letter.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>The constants <literal>true</literal> and
+            <literal>false</literal>. Such literals should always be
+            quoted.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>We add a start symbol (i.e., the syntactic notion from with
+            all strings in this language are derived) for
+            <literal>BoolCon</literal>. The net effect is that we can indeed
+            parse these constants. Note that we hide this start symbol so that
+            it can not proliferate to other modules (and cause undesired
+            ambiguities). The <literal>cons</literal> attribute plays a role
+            when generating external APIs and gives a name to this particular
+            construct.</para>
+          </callout>
+        </calloutlist>
+      </section>
+
+      <section>
+        <title><literal>basic/Whitespace</literal></title>
+
+        <para>The module Whitespace defines what the spaces and newline
+        are:</para>
+
+        <programlisting>module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r] -&gt; LAYOUT {cons("whitespace")} <co xml:id="whitespace.num" />
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]                    <co xml:id="whitespace.num" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="???">
+            <para>A regular expression that defines space (<literal>\
+            </literal>), tabulation (<literal>\t)</literal>, newline (\n) and
+            carriage return (<literal>\r)</literal> as
+            <literal>LAYOUT</literal> characters. <literal>LAYOUT</literal> is
+            a predefined name that defines the layout characters that may
+            optinally appear between the symbols in the context-free grammar
+            (e.g., between the keyword <literal>if</literal> and the test in
+            an if-statement).</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Lexical syntax tends to become highly ambiguous.e.g., are
+            two spaces one layout symbol or two consecutive ones? Context-free
+            restrictions impose restrictions that resolve this. Here, optional
+            layout (<literal>LAYOUT?</literal>) may not be followed by a
+            layout character. In other words, the longest possible sequence of
+            layout characters should be consider as one
+            <literal>LAYOUT</literal> symbol.</para>
+          </callout>
+        </calloutlist>
+      </section>
+
+      <section>
+        <title><literal>basic/Comments</literal></title>
+
+        <para>The comment conventions is defines as follows:</para>
+
+        <programlisting>module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" line:~[\n]* "\n"	-&gt; LAYOUT {cons("line"),category("Comment")}       <co
+            xml:id="comments.num" />
+    "%" content:~[\%\n]+ "%"	-&gt; LAYOUT {cons("nested"),category("Comment")}  <co
+            xml:id="comments.num" />
+  context-free restrictions
+    LAYOUT? -/- [\%]                                                         <co
+            xml:id="comments.num" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="???">
+            <para>Defines an line-based comment that starts with
+            <literal>%%</literal> and ends at the end of the line. The
+            <literal>category</literal> attribute defines the highlighting
+            category to be used while editing texts that contain this
+            comment.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Defines a comment that is contained within a single line
+            between <literal>%</literal> and <literal>%</literal>.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Again a follow restriction that forces layout followed by a
+            comment to be included in that comment.</para>
+          </callout>
+        </calloutlist>
+      </section>
+
+      <section>
+        <title><literal>basic/Booleans</literal></title>
+
+        <para>After these preparations, we can now should the syntax part of
+        basic/Booleans:</para>
+
+        <programlisting>module basic/Booleans
+
+imports basic/BoolCon&#160;                                                      <co
+            xml:id="comments.num" />
+
+exports
+sorts Boolean                                                               <co
+            xml:id="comments.num" />
+
+context-free syntax
+  BoolCon                     -&gt; Boolean {cons("constant")}                 <co
+            xml:id="comments.num" />       
+  lhs:Boolean "|" rhs:Boolean -&gt; Boolean {left, cons("or")}                 <co
+            xml:id="comments.num" />       
+  lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean {left, cons("and")}                      
+  "not" "(" Boolean ")"       -&gt; Boolean {cons("not")}                      <co
+            xml:id="comments.num" />     
+  "(" Boolean ")"             -&gt; Boolean {bracket, cons("bracket")}         <co
+            xml:id="comments.num" />
+
+context-free priorities
+  Boolean "&amp;" Boolean -&gt; Boolean &gt;                                          <co
+            xml:id="comments.num" />
+  Boolean "|" Boolean -&gt; Boolean
+
+hiddens
+context-free start-symbols
+  Boolean                                                                   <co
+            xml:id="comments.num" />
+
+imports basic/Comments                                                      <co
+            xml:id="comments.num" />
+
+variables
+  "Bool" [0-9]* -&gt; Boolean                                                  <co
+            xml:id="comments.num" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="???">
+            <para>Import the Boolean constants <literal>true</literal> and
+            <literal>false</literal> defined earlier.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>The sort of Boolean expressions.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Each Boolean constant is also a Boolean expression. This is
+            called an <emphasis>injection rule</emphasis> or a <emphasis>chain
+            rule</emphasis>.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>The infix operators for Boolean or (<literal>|</literal>)
+            and Boolean and (&amp;). Both are left-associative and this is
+            indicated by the attribute <literal>left</literal>. Also note that
+            the arguments get explicit names (<literal>lhs</literal> and
+            <literal>rhs</literal>) and that a constructor is defined
+            (<literal>or</literal>, respectively, <literal>and</literal>).
+            This information is only relevant for generated APIs that are
+            accessed by external tools.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>The prefix operator not.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para><literal>(</literal> and <literal>)</literal> may be used as
+            brackets in Boolean expressions.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>&amp; has a higher priority than |. The expression
+            <literal>Bool &amp; Bool | Bool</literal> will thus be interpreted
+            as (Bool &amp; Bool) | Bool.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Define a (hidden) start symbol for Boolean
+            expressions.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Import <literal>basic/Comments</literal> for the benefit of
+            writing equations for Booleans (see below). Observe the subtlety
+            that this a <emphasis>hidden</emphasis> import: comments are only
+            available locally in this module and are not exported. By strictly
+            adhering to this convention, low-level comment conventions cannot
+            <emphasis>pollute</emphasis> higher level modules and interfere
+            with comment conventions defined at that level.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Declares Boolean variables like <literal>Bool</literal>,
+            <literal>Bool1</literal>, <literal>Bool2</literal>,
+            <literal>Bool123</literal>, <literal>Bool'</literal>,
+            <literal>Bool''</literal>, <literal>Bool1'</literal>, and the
+            like.</para>
+          </callout>
+        </calloutlist>
+
+        <para>Having covered all syntactic aspects of the Booleans, we can now
+        trun our attention to the equations:c</para>
+
+        <programlisting>equations
+
+[B1]   true  | Bool  = true       <co xml:id="comments.num" />
+[B2]   false | Bool  = Bool
+
+[B3]   true  &amp; Bool  = Bool       <co xml:id="comments.num" />
+[B4]   false &amp; Bool  = false
+
+[B5]   not ( false ) = true       <co xml:id="comments.num" />
+[B6]   not ( true )  = false</programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="???">
+            <para>Meaning of the or operator, in other words: with these two
+            rules the <literal>|</literal> operator can be eliminated from any
+            Boolean expression.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Meaning of and operator.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Meaning of not operator.</para>
+          </callout>
+        </calloutlist>
+
+        <para>The syntax of ASF+SDF equations is not fixed but depends on the
+        syntax rules. This can be seen by making the fixed ASF+SDF syntax
+        <emphasis role="bold">bold</emphasis> and the syntax specific for
+        Booleans <emphasis>italic</emphasis>:</para>
+
+        <para><programlisting><emphasis role="bold">equations</emphasis>
+
+<emphasis role="bold">[B1]</emphasis>   <emphasis>true  | Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>true</emphasis>       
+<emphasis role="bold">[B2]</emphasis>   <emphasis>false | Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>Bool</emphasis>
+
+<emphasis role="bold">[B3]</emphasis>   <emphasis>true  &amp; Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>Bool</emphasis>       
+<emphasis role="bold">[B4]</emphasis>   <emphasis>false &amp; Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>false</emphasis>
+
+<emphasis role="bold">[B5]</emphasis>   <emphasis>not ( false )</emphasis> <emphasis>=</emphasis> <emphasis>true</emphasis>       
+<emphasis role="bold">[B6]</emphasis>   not ( true )  <emphasis role="bold">=</emphasis> <emphasis>false</emphasis></programlisting></para>
+
+        <para>This mixture of syntaxes will become even more apparent when we
+        discuss the Pico definitions later.</para>
+      </section>
+
+      <section>
+        <title>Reducing a Boolean expression</title>
+
+        <para>The Boolean term <literal>not(true &amp; not(false |
+        true))</literal> should reduce to <literal>true</literal> (check this
+        for yourself before looking at the figure <link
+        linkend="Fig_boolean_reduction">below</link>).</para>
+
+        <figure xml:id="Fig_boolean_reduction">
+          <title>Reducing a Boolean term.</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="boolean-reduction.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>Running the example in the Meta-Environment</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Take home points</title>
+
+        <para>The example of the Booleans illustrates the following important
+        points that are also valifd for more complex examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Each module <emphasis>defines a language</emphasis>: in this
+            case the language of Booleans. In other contexts one can also
+            speak about the datatype of the Booleans. We will use language and
+            datatype as synonyms.</para>
+          </listitem>
+
+          <listitem>
+            <para>We can use this language definition to;</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Create a syntax-directed editor for Boolean language and
+                create Boolean terms.</para>
+              </listitem>
+
+              <listitem>
+                <para>Apply the equations to this term and reduce it to a
+                normal form (= a term that is not further reducible).</para>
+              </listitem>
+
+              <listitem>
+                <para>Import it in another module; this makes the Boolean
+                language available for the importing module.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>The Toy Language Pico</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Define the syntax for Pico</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Define a typechecker for Pico</title>
+
+    <para></para>
+  </section>
+
+  <section xml:id="fm_HistoricalNotes">
+    <title>Historical Notes</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title></title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title></title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title></title>
+
+    <para></para>
+  </section>
+
+  <section xml:id="fm_ToDo">
+    <title>To Do</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Examples section</para>
+      </listitem>
+
+      <listitem>
+        <para>Add links to Historical notes section</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
