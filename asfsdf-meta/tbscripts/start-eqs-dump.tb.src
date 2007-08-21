@@ -38,7 +38,7 @@ in
   . rec-note(mm-attribute-changed(Event?))
   . ACE-GetNewValue(Event, Value?)
   . 
-  if or(equal(Value, error),equal(Value, unavailable)) then
+  if equal(Value, error) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
     printf("Dumping...\n").
