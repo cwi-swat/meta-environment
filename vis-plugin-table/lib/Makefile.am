@@ -1,6 +1,0 @@
-data_DATA = relationstores.jar jcommon-1.0.8.jar junit-4.1.jar
-EXTRA_DIST = relationstores.jar jcommon-1.0.8.jar junit-4.1.jar 
-
-
-
-
