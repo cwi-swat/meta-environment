@@ -9,13 +9,6 @@ import javax.swing.JTextArea;
 import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.dancingbear.visplugin.VisualizationPluginWindow;
 
-/**
- * The TableVisualizationWindows class. It Extends VisualizationPluginWindow.
- *
- * @author Srinivasan Tharmarajah
- * @author Wasim Alsaqaf
- * @date 08-03-2007
- */
 public class TextVisualizationWindow extends VisualizationPluginWindow {
 
     private JTextArea m_text;
@@ -27,7 +20,10 @@ public class TextVisualizationWindow extends VisualizationPluginWindow {
 
         try {
             m_text = new JTextArea();
-
+            m_text.setEditable(false);
+            m_text.setWrapStyleWord(true);
+            m_text.setLineWrap(true);
+            
             m_text.setText(fact.toTerm().toString());
             
             // finally add the table to a pane and add it to the JPanel
