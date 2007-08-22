@@ -13,8 +13,7 @@
   <info>
     <title>An Introduction to Language Definitions written in ASF+SDF</title>
 
-    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
-    +0100 (Sat, 16 Dec 2006) $</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date$</pubdate>
 
     <authorgroup>
       <author>
@@ -45,6 +44,14 @@
 
     <section>
       <title>What is the Global Picture?</title>
+
+      <para>ASF+SDF can be used to define various aspects of programming
+      langauges and The ASF+SDF Meta-Environment can be used to edit and run
+      these specifications.</para>
+    </section>
+
+    <section>
+      <title>ASF+SDF</title>
 
       <para>The goal of ASF+SDF is to define the syntax (form) and semantics
       (meaning) of programming languages and domain-specific languages. The
@@ -124,6 +131,49 @@
       <para>Apart from giving a standard structure to all language
       definitions, this organization also enables the seamless integration of
       these aspects in the user-interface of The Meta-Environment.</para>
+    </section>
+
+    <section>
+      <title>The ASF+SDF Meta-Environment</title>
+
+      <para>The goal of The ASF+SDF Meta-Environment (or The Meta-Environment
+      for short) is to provide an Interactive Development Environment for
+      ASF+SDF specifications. It supports interactive editing, checking and
+      execution of ASF+SDF specifications. Behind the scenes, this implies the
+      following tasks:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Providing a graphical user-interface with editors and various
+          visualization tools.</para>
+        </listitem>
+
+        <listitem>
+          <para>Tracking changes to specification modules.</para>
+        </listitem>
+
+        <listitem>
+          <para>Parsing and checking specification modules.</para>
+        </listitem>
+
+        <listitem>
+          <para>Generating parsers for the syntax modules that have been
+          changed.</para>
+        </listitem>
+
+        <listitem>
+          <para>Generating rewriter engines for the equations modules that
+          have been changed.</para>
+        </listitem>
+
+        <listitem>
+          <para>Applying the ASF+SDF specification to programs in the language
+          that is being defined by that specification.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The intended user experience of The Meta-Environment is the
+      seamless automation of all these tasks.</para>
     </section>
 
     <section>
