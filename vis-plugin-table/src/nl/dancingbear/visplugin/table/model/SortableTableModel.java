@@ -113,8 +113,7 @@ public class SortableTableModel extends DefaultTableModel {
      * @author Anton Gerdessen
      * @date 12-03-2007
      */
-    @SuppressWarnings("unchecked")
-    public Class getColumnClass(int column) {
+    public Class<?> getColumnClass(int column) {
         // Retrieve the first item of the column and base the type on that.
         return getValueAt(0,column).getClass();
     }
