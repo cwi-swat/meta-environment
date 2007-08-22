@@ -1,2 +1,2 @@
-process StartVisPluginGeneric is
+process StartVisGenericPlugins is
   snd-msg(load-jar("file://__PKGDATA__/vis-plugin-generic.jar", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
