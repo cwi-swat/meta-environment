@@ -52,7 +52,7 @@ public class CsvExportController extends VisualizationPluginController {
 	 * @date    13-03-2007
 	 */
 	public String getPluginName(){
-		return "CSV Export Visualization Plugin";
+		return "CSV export";
 	}
 	
 	

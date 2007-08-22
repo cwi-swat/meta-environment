@@ -41,7 +41,7 @@ public class TableVisualizationController extends VisualizationPluginController 
      *
      */
     public String getPluginName() {
-        return "Table Visualization Plugin";
+        return "Table";
     }
 
     /**

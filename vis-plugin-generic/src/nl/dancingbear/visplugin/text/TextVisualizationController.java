@@ -54,7 +54,7 @@ public class TextVisualizationController extends VisualizationPluginController {
 	 * 
 	 */
 	public String getPluginName() {
-		return "Text Visualization Plugin";
+		return "Text";
 	}
 
 	/**
