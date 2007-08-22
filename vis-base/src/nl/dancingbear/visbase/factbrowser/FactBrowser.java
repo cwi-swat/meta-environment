@@ -70,6 +70,8 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 
 	private Studio studio;
 
+	private StudioComponent component;
+	
 	private FactbrowserBridge bridge;
 
 	private FactBrowserWindow factBrowserWindow;
@@ -163,6 +165,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 
 		// Finally add the Rstore to the visual tree
 		factBrowserWindow.addRStore(rstoreNode);
+		studio.requestFocus(component);
 	}
 
 	/**
@@ -258,8 +261,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 			}
 		});
 
-		StudioComponent component = new StudioComponentImpl("Facts",
-				factBrowserWindow) {
+		component = new StudioComponentImpl("Facts", factBrowserWindow) {
 			@Override
 			public void requestClose() throws CloseAbortedException {
 				throw new CloseAbortedException();

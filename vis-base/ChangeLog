@@ -1,5 +1,8 @@
 
 
+Wed Aug 22 11:07:28 CEST 2007 <kooiker@cwi.nl>
+ * src/**/FactBrowser.java: request focus on data change
+
 Fri Aug 17 09:50:03 CEST 2007 <kooiker@cwi.nl>
  * src/**/FactBrowser.java,tbscripts/fbi.tb.src: changed the way mouse events
    are handled
