@@ -1,60 +1,79 @@
 package nl.dancingbear.visplugin.text;
 
+import nl.cwi.sen1.gui.Studio;
 import nl.dancingbear.visplugin.VisualizationPluginController;
 import nl.dancingbear.visplugin.VisualizationPluginWindow;
 import aterm.ATerm;
 
 /**
  * The TableVisualizationController class
- *
+ * 
  */
 public class TextVisualizationController extends VisualizationPluginController {
+	private TextVisualizationWindow m_window;
 
-    private TextVisualizationWindow m_window;
+	private VisPluginTextUnparsing unparser;
 
-    /**
-     * Default constructor.
-     *
-     */
-    public TextVisualizationController() {
-        super();
+	/**
+	 * Default constructor.
+	 * 
+	 */
+	public TextVisualizationController() {
+		super();
+		m_window = null;
+	}
 
-        m_window = null;
-    }
+	public final void initStudioPlugin(final Studio studioArgument) {
+		/* connect this vis tool via the generic vis interface */
+		super.initStudioPlugin(studioArgument);
 
-    /**
-     * Return Table visualization window
-     *
-     */
-    public VisualizationPluginWindow createWindow() {
-        m_window = new TextVisualizationWindow();
-        return m_window;
-    }
+		/* connect a second tool for communicating with lifting and unparsing tools 
+		 * asynchronously
+		 */
+		unparser = new VisPluginTextUnparsing();
+		Thread unparserThread = new Thread() {
+			public void run() {
+				unparser.initStudioPlugin(studioArgument);
+			}
+		};
+		unparserThread.setName(unparser.getName() + "-starter");
+		unparserThread.start();
+	}
 
-    /**
-     * Gets the plugin name [Table Visualization Plugin]
-     *
-     */
-    public String getPluginName() {
-        return "Text Visualization Plugin";
-    }
+	/**
+	 * Return Table visualization window
+	 * 
+	 */
+	public VisualizationPluginWindow createWindow() {
+		m_window = new TextVisualizationWindow(unparser);
+		return m_window;
+	}
 
-    /**
-     * Define the supported types. Not implemented because we override the
-     * isTypeSupported() function.
-     *
-     */
-    public ATerm[] getSupportedTypes() {
-        ATerm[] atermList = new ATerm[0];
-        return atermList;
-    }
+	/**
+	 * Gets the plugin name [Table Visualization Plugin]
+	 * 
+	 */
+	public String getPluginName() {
+		return "Text Visualization Plugin";
+	}
 
-    /**
-     * Check if a type is supported
-     *
-     * @param type The type to check
-     */
-    protected boolean isTypeSupported(ATerm type) {
-       return true;
-    }
+	/**
+	 * Define the supported types. Not implemented because we override the
+	 * isTypeSupported() function.
+	 * 
+	 */
+	public ATerm[] getSupportedTypes() {
+		ATerm[] atermList = new ATerm[0];
+		return atermList;
+	}
+
+	/**
+	 * Check if a type is supported
+	 * 
+	 * @param type
+	 *            The type to check
+	 */
+	protected boolean isTypeSupported(ATerm type) {
+		return true;
+	}
 }

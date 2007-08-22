@@ -2,6 +2,10 @@
 
 #ifndef VIS_PLUGIN_TEXT_UNPARSING
 #define VIS_PLUGIN_TEXT_UNPARSING
+
+#include <lift-rstore.idef>
+#include <unparser.idef>
+
 tool vis-plugin-text-unparsing is { }
 
 process VisPluginTextUnparsing is
@@ -16,13 +20,15 @@ in
   .
   (
     rec-event(T, unparse-rtuple(Tuple?))
+    . printf("received event\n %t", Tuple)
     . snd-msg(rs-lift-rtuple(Tuple))
     . rec-msg(rs-lifted-rtuple(Lifted?))
     . snd-msg(unparse(Lifted))
     . rec-msg(unparsed-text(Text?))
-    . snd-do(display-unparsed-rtuple(Text))
+    . snd-ack-event(T, unparse-rtuple(Tuple))
+    . snd-do(T, display-unparsed-rtuple(Text))
   )
-  * rec-disconnect(T)
+  * rec-disconnect(T) . printf("klaar!")
 endlet
 
 toolbus(VisPluginTextUnparsing)
