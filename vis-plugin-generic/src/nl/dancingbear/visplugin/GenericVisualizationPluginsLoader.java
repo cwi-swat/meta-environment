@@ -5,6 +5,7 @@ import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
 import nl.dancingbear.visplugin.csvexport.CsvExportController;
 import nl.dancingbear.visplugin.table.TableVisualizationController;
+import nl.dancingbear.visplugin.text.TextVisualizationController;
 import aterm.pure.PureFactory;
 
 /**
@@ -42,6 +43,10 @@ public class GenericVisualizationPluginsLoader extends DefaultStudioPlugin{
 		CsvExportController csv = new CsvExportController();
 		csv.initStudioPlugin(studio);
 		csv.initPluginController(factory);
+		
+		TextVisualizationController text = new TextVisualizationController();
+		text.initStudioPlugin(studio);
+		text.initPluginController(factory);
 		
 		fireStudioPluginClosed();
 	}
