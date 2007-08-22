@@ -1,5 +1,9 @@
 
 
+Wed Aug 22 15:20:44 CEST 2007 <jurgenv@cwi.nl>
+ * **/src: adapted table visualization to be able to visualize any type
+   of data.
+
 Wed Aug 22 12:01:18 CEST 2007 <jurgenv@cwi.nl>
  * **/src: added generic textual visualization of rstore.
 

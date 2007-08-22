@@ -85,64 +85,6 @@ public class TableVisualizationController extends VisualizationPluginController 
      * @param type The type to check
      */
     protected boolean isTypeSupported(ATerm type) {
-        RType rtype = m_factory.RTypeFromTerm(type);
-
-        boolean isBag = rtype.isBag();
-        boolean isRelation = rtype.isRelation();
-        boolean isSet = rtype.isSet();
-
-        if (isRelation) {
-            Relation relation = (Relation) rtype;
-            RTypeColumnTypes columnTypes = relation.getColumnTypes();
-
-            int numColumns = columnTypes.getLength();
-            if (numColumns > 0) {
-                for (int i = 0; i < numColumns; i++) {
-                    RType childType = columnTypes.getRTypeAt(i);
-                    // We don't support complex types.
-                    if (isComplexType(childType)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-        // Maybe we can refactor this when we have more time.
-        // The set and the bag use the same code to determine
-        // if the type is supported or not.
-        else if (isSet) {
-            Set set = (Set) rtype;
-            RType elementType = set.getElementType();
-            // If the type is complex we don't support it,
-            // otherwise we do support it.
-            return !isComplexType(elementType);
-        } else if (isBag) {
-            Bag bag = (Bag) rtype;
-            RType elementType = bag.getElementType();
-            // If the type is complex we don't support it,
-            // otherwise we do support it.
-            return !isComplexType(elementType);
-	}
-
-        return false;
-    }
-    /**
-     * Returns if the given Rtype is either a bag, relation, set
-     * or tuple.
-     *
-     * @param rtype the Rtpe to check
-     * @return returns true if the given Rtype is complex
-     */
-    private boolean isComplexType(RType rtype) {
-        boolean isBag = rtype.isBag();
-        boolean isRelation = rtype.isRelation();
-        boolean isSet = rtype.isSet();
-        boolean isTuple = rtype.isTuple();
-
-        if (isBag || isRelation || isSet || isTuple) {
-            return true;
-        }
-
-        return false;
+       return true;
     }
 }
