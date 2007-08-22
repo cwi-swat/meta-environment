@@ -17,3 +17,6 @@ rscriptchecker_SOURCES = Rscript-Checker.c
 rscriptchecker_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
 	$(ASC_SUPPORT_LIBS)
+
+asfc:
+	asfc -i Rscript-Checker.eqs -o Rscript-Checker.c -va

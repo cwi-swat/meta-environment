@@ -3,52 +3,50 @@ equations
 [e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [localized("expr", get-location($Exp))])
 [e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [localized("stat", get-location($Stat))])
 [e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [localized("generator", get-location($Gen))])
-[e2i-6] e2i(Undeclared $Var) 		= error("Undeclared:", [localized(idcon2str($Var), get-location($Var))])
-[e2i-7] e2i($Var redeclared) 		= error("Redeclared:", [localized(idcon2str($Var), get-location($Var))])
+[e2i-6] e2i(Undeclared $Var) 		= error("Undeclared variable", [localized(idcon2str($Var), get-location($Var))])
+[e2i-7] e2i($Var redeclared) 		= error("Illegaly redeclared variable", [localized(idcon2str($Var), get-location($Var))])
 
 [e2i-8]	e2i($Var not initialized in Rstore)
-					= error("Not initialized in Rstore: ", [localized( idcon2str($Var), get-location($Var))])
+					= error("Variable is not initialized in store", [localized( idcon2str($Var), get-location($Var))])
 
 [e2i-9]	e2i($Var conflicting initialization in Rscript and in Rstore) =
-	error("Conflicting initialization in Rscript and in Rstore: ", 
+	error("Conflicting variable initialization in Rscript and in Rstore", 
 	[localized(idcon2str($Var), get-location($Var))])
 
 [e2i-10] e2i(Incompatible argument types $Etype in $Exp) = 
 	 error("Incompatible arguments of type ", [localized(t2s($Etype), get-location($Exp))])
 
 [e2i-11] e2i($Exp should have type $Etype)= 
-	 error("Expression should have type ", [localized(t2s($Etype), get-location($Exp))])
+	 error("Expression should have different type", [localized("expression", get-location($Exp)),subject(t2s($Etype))])
 
 [e2i-12] e2i($Exp should be of type set) = 
-	 error("Expression should be of type set", [localized("exp", get-location($Exp))])
+	 error("Expression should be of type set", [localized("expression", get-location($Exp))])
 
 [e2i-13] e2i($Exp should be of type rel) = 
-	 error("Expression should be of type relation", [localized("exp", get-location($Exp))])
+	 error("Expression should be of type rel", [localized("expression", get-location($Exp))])
 
-[e2i-14] $StrCon := idcon2str($Var) || " with argument " || t2s($Etype)
-	 ==============================================================
+[e2i-14]
 	 e2i(No definition for $Var with argument $Etype) = 
-	 error("No definition found for ", [subject($StrCon)])
+	 error("Variable has unexpected type", [localized(idcon2str($Var), get-location($Var)), subject(t2s($Etype))])
 
 [e2i-15] e2i(No definition for field $Var) =  
-	 error("No definition for ", [localized(idcon2str($Var), get-location($Var))])
+	 error("Undefined field name", [localized(idcon2str($Var), get-location($Var))])
 
 [e2i-16] e2i($Var exceeds number of targets of generator) =  
 	 error("Destination contains too many targets", [localized("var", get-location($Var))])
 
-[e2i-17] $StrCon := "Field " || idcon2str($Var) || " used at different record positions"
-	===============================================================
+[e2i-17] 
 	e2i(Field name $Var used at different record positions) =
-		   error($StrCon, [localized(idcon2str($Var), get-location($Var))])
-[e2i-18] $StrCon := "Type " || t2s($Etype) || " should be bag or relation"
-	 ==============================================================
-	e2i($Etype should be set or rel type) =	error($StrCon, [localized(t2s($Etype), get-location($Etype))])
+		   error("Field name used more than once", [localized(idcon2str($Var), get-location($Var))])
+
+[e2i-18]
+	e2i($Etype should be set or rel type) =	error("Type should be set or rel", [localized(t2s($Etype), get-location($Etype))])
 
 
 %% ---- Errors to ItemList
 
 [cve-1] convert-errors(errors[$Error+]) = convert-errors1(errors[$Error+])
-[cve-1] convert-errors(errors[]) = info("Rscript is type correct!", [])
+[cve-1] convert-errors(errors[]) = 
 
 
 [cve-1] $Feedback* := convert-errors1(errors[$Error*])

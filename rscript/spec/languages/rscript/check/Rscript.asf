@@ -159,7 +159,7 @@ equations
 
 %% --- is-type-correct
 
-[itc-1] is-type-correct(summary("RscriptChecker", "Rscript", [info("Rscript is type correct!", [])])) = true
+[itc-1] is-type-correct(summary("RscriptChecker", "Rscript", [])) = true
 
 [default-itc]
 	is-type-correct($Summary) = false
