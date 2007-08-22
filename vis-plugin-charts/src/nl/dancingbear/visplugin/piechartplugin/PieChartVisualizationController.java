@@ -54,7 +54,7 @@ public class PieChartVisualizationController extends
      * @date 07-3-2007
      */
     public String getPluginName() {
-        return "Pie Chart Visualisation Plugin";
+        return "Pie chart";
     }
 
     /**

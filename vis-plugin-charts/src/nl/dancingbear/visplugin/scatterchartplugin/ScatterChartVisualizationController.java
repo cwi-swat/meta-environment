@@ -42,7 +42,7 @@ public class ScatterChartVisualizationController extends
      * @date 14-03-2007
      */
     public String getPluginName() {
-        return "scatter Chart Visualisation Plugin";
+        return "Scatter plot";
     }
 
     /**

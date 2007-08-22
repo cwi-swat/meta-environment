@@ -42,7 +42,7 @@ public class LineChartVisualizationController extends
      * @date 14-03-2007
      */
     public String getPluginName() {
-        return "Line Chart Visualisation Plugin";
+        return "Line chart";
     }
 
     /**

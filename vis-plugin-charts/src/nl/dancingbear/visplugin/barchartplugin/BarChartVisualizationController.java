@@ -41,7 +41,7 @@ public class BarChartVisualizationController extends VisualizationPluginControll
      * @date 14-03-2007
      */
     public String getPluginName() {
-        return "Bar Chart Visualisation Plugin";
+        return "Bar chart";
     }
 
     /**
