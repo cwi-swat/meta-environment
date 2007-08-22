@@ -15,7 +15,7 @@ import nl.dancingbear.visplugin.VisualizationPluginWindow;
 public class GraphVisualizationController extends
         VisualizationPluginController {
 
-    private final String m_pluginName = "Graph Visualisation Plugin";
+    private final String m_pluginName = "Graph";
     
     /**
      * @todo Needs better implementation needs to be resolved reflection, dynamic 
