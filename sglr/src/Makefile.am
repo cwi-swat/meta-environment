@@ -8,18 +8,18 @@ bin_PROGRAMS= \
 	sglr 
 
 INCLUDES= \
+	-I$(top_srcdir)/src/parseForest \
+	-I$(top_srcdir)/src/parser \
+	-I$(top_srcdir)/src/parseTable \
+	-I$(top_srcdir)/src/utils \
+	-I$(top_srcdir)/src/gss \
 	$(ATERM_CFLAGS) \
 	$(CONFIG_SUPPORT_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \
 	$(ERROR_SUPPORT_CFLAGS) \
 	$(PT_SUPPORT_CFLAGS) \
 	$(PTABLE_SUPPORT_CFLAGS) \
-	$(C_LIBRARY_CFLAGS) \
-	-I$(top_srcdir)/src/parseForest \
-	-I$(top_srcdir)/src/parser \
-	-I$(top_srcdir)/src/parseTable \
-	-I$(top_srcdir)/src/utils \
-	-I$(top_srcdir)/src/gss
+	$(C_LIBRARY_CFLAGS) 
 
 pkgdata_DATA= \
 	sglr.idef

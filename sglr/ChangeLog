@@ -1,5 +1,12 @@
 $Id$
 
+Wed Aug 22 14:29:10 CEST 2007 <economop@cwi.nl>
+ * src/Makefile.am: moved the sglr directories to the top of the header search
+   path (list of -Idir options) so that they are the first that will be 
+   searched by GCC. This fixes the error encountered during the compilation of 
+   the sglr bundle -- aterm/aterm/list.h was being found instead of
+   sglr/src/utils/list.h when compiling sglr.
+
 Thu Aug 16 16:43:19 CEST 2007 <economop@cwi.nl>
  * test/erroneousCommandLines: forgot to turn on the injection and preference 
    counting filters. 
