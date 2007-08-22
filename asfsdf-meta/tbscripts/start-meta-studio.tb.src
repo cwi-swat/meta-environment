@@ -29,7 +29,7 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
  * @author Arjen van Schie
  */
 process StartVisPlugin is
-   StartVisPluginGeneric()
+   StartVisGenericPlugins()
  . StartVisPluginCharts()
  . StartVisPluginGraph()
 
