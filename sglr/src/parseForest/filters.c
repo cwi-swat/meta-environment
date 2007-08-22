@@ -38,6 +38,8 @@
 #include <MEPT-productions.h>
 #include <MEPT-args.h>
 #include <mainOptions.h>
+#include <Error.h>
+#include <Error-manager.h>
 
 #include "posmap.h"
 #include "mem-alloc.h"
@@ -861,6 +863,7 @@ static PT_Tree filterOnTopSort(ParseTable *pt, PT_Tree t, const char *sort) {
         return t;
     }
   }
+
   return (PT_Tree) NULL;
 }
 
@@ -1455,7 +1458,9 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
      t = filterOnTopSort(pt, t, topNonterminal); 
 
      if (t == NULL) {
-       /** \todo Flag this error at start, not end, of file  */
+       char *errorDesc = "Entire parse tree removed during filtering because the tree's root node is not labelled by the given sort name";
+       ERR_Subject subject = ERR_makeSubjectSubject(FLT_getTopNonterminal());
+       ERR_managerStoreError(errorDesc, ERR_makeSubjectListSingle(subject));
        return (PT_ParseTree) NULL;
      }
    }
@@ -1486,6 +1491,9 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    ATindexedSetDestroy(cyclicLevels);
 
    if (!newT) {
+     char *errorDesc = "Entire parse tree removed during filtering";
+     ERR_Subject subject = ERR_makeSubjectSubject(IS_getPath(input));
+     ERR_managerStoreError(errorDesc, ERR_makeSubjectListSingle(subject));
      return (PT_ParseTree) NULL;
    }
        
