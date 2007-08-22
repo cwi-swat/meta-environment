@@ -1,4 +1,8 @@
 
 
+Wed Aug 22 09:58:01 CEST 2007 <jurgenv@cwi.nl>
+ * Merging vis-plugin-table and vis-plugin-csv, and adding vis-plugin-text
+   to this package.
+
 Tue Mar 20 08:08:08 CET 2007 <jurgenv@cwi.nl>
  * *: initial import from Dancing Bear project
