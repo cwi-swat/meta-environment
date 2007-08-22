@@ -1,5 +1,8 @@
 /* $Id$ */
 
+#ifndef UNPARSER_IDEF
+#define UNPARSER_IDEF
+
 tool unparser is { command = "__PREFIX__/bin/unparsePT" }
 
 process Unparser is
@@ -20,3 +23,5 @@ in
 endlet
 
 toolbus(Unparser)
+
+#endif
