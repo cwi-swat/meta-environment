@@ -53,7 +53,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      * @date 20-2-2007
      * @param Studio studioArgument
      */
-    public final void initStudioPlugin(Studio studioArgument) {
+    public void initStudioPlugin(Studio studioArgument) {
         m_studio = studioArgument;
         m_bridge = new VisualizationPluginBridge(m_studio.getATermFactory(), this);
 
