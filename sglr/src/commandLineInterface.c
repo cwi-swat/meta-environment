@@ -59,7 +59,7 @@ static void usage() {
 	  "Options:\t                                            [default]\n"
 	  "\t-2          : flatten to AsFix2ME                    [%s]\n"
 	  "\t-A          : ambiguities are treated as errors      [%s]\n"
-	  "\t c          : count position independent ambiguities [%s]\n"
+	  "\t-c          : count position independent ambiguities [%s]\n"
 	  "\t-d          : toggle debug mode                      [%s]\n"
 	  "\t-f[cdeipr]  : toggle filtering, or specific filter   [%s]\n"
 	  "\t  c         : remove cycles                          [%s]\n"

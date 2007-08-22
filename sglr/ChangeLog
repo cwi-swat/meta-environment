@@ -1,5 +1,8 @@
 $Id$
 
+Wed Aug 22 16:59:45 CEST 2007 <economop@cwi.nl>
+ * src/commandLineInterface.c: typo in usage info.
+
 Wed Aug 22 15:36:36 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: created an error message for when the filtering 
    removes all parse trees.
