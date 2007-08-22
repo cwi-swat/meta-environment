@@ -14,10 +14,9 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
 
 /* visualizations */
 #include <start-vis.tb> 
-#include <vis-plugin-table.tb>
+#include <vis-plugin-generic.tb>
 #include <vis-plugin-charts.tb>
 #include <vis-plugin-graph.tb>
-#include <vis-plugin-csv.tb>
 #include <rstore-actions.tb>
 
 /**
@@ -30,10 +29,9 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
  * @author Arjen van Schie
  */
 process StartVisPlugin is
-  StartVisPluginTable()
-  . StartVisPluginCsvExport()   
-  . StartVisPluginCharts()
-  . StartVisPluginGraph()
+   StartVisPluginGeneric()
+ . StartVisPluginCharts()
+ . StartVisPluginGraph()
 
 toolbus(StartVisPlugin)
 

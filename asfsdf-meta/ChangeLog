@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Wed Aug 22 11:21:29 CEST 2007 <jurgenv@cwi.nl>
+ * asfsdf-meta.pc.in: changed dependency of csv and table vis plugins
+   to vis-plugin-generic, because they have been merged
+
 Wed Jun  6 12:02:35 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/sdf-editor-listeners.tb:
    - Strong typing of Area
