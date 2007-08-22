@@ -18,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import nl.dancingbear.visbase.factbrowser.data.FactBrowserDataManager;
 import nl.dancingbear.visbase.factbrowser.data.RStore;
@@ -49,6 +50,8 @@ public class FactBrowserWindow extends JPanel {
     private DefaultTreeModel mdlTree;
 
     private FactBrowserDataManager m_dataManager;
+
+    private Enumeration<TreePath> expansionState;
 
     /**
      * The constructor calling the method responsible for building the panel
@@ -111,11 +114,31 @@ public class FactBrowserWindow extends JPanel {
      * @date 23-02-2007
      */
     public void redrawTree() {
+    	storeExpansionState();
         this.mdlTree.reload();
         this.treeRstores.repaint();
-
-        expandAll();
+        restoreExpansionState();
     }
+    
+    /**
+     * Stores the current expansion state of treeRstores
+     */
+    private void storeExpansionState() {
+		expansionState = treeRstores.getExpandedDescendants(new TreePath(treeRstores
+				.getModel().getRoot()));
+	}
+
+    /**
+	 * Restores the expansion state of treeRstores
+     */
+	private void restoreExpansionState() {
+		if (expansionState != null) {
+			while (expansionState.hasMoreElements()) {
+				TreePath treePath = expansionState.nextElement();
+				treeRstores.expandPath(treePath);
+			}
+		}
+	}
 
     /**
      * This method will make it possible to display the loaded RStores with the

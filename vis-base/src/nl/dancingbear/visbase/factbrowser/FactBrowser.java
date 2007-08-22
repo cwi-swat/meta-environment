@@ -3,6 +3,7 @@ package nl.dancingbear.visbase.factbrowser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -116,8 +117,8 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 		dataManager.createVisualisation(visPlugin, dataManager
 				.addFactType(pluginType.toString()));
 
+		
 		factBrowserWindow.redrawTree();
-
 	}
 
 	/**
@@ -165,6 +166,16 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 
 		// Finally add the Rstore to the visual tree
 		factBrowserWindow.addRStore(rstoreNode);
+		
+		Iterator<RStoreFact> iterator = rstoreNode.getFactNodes().iterator();
+		while (iterator.hasNext()) {
+			RType rtype = iterator.next().getRType();
+
+			ATerm term = studio.getATermFactory().make(
+					"fb-type-selected(<term>)", rtype.toTerm());
+			bridge.sendEvent(term);
+		}
+		
 		studio.requestFocus(component);
 	}
 
@@ -311,9 +322,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 	 * @date 19-03-2007
 	 */
 	private void mouseDoubleClick(MouseEvent mouseEvent) {
-		factBrowserWindow.selectNodeAtPosition(mouseEvent.getX(), mouseEvent
-				.getY());
-
 		DefaultMutableTreeNode selectedNode = factBrowserWindow
 				.getSelectedNode();
 
