@@ -30,8 +30,7 @@
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-base/trunk,vis-base"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-plugin/trunk,vis-plugin"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-plugin-charts/trunk,vis-plugin-charts"/>
-<project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-plugin-csv/trunk,vis-plugin-csv"/>
 <project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-plugin-graph/trunk,vis-plugin-graph"/>
-<project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-plugin-table/trunk,vis-plugin-table"/>
+<project reference="0.9.3,svn+ssh://svn.cwi.nl/vis-plugin-generic/trunk,vis-plugin-generic"/>
 </provider>
 </psf>
