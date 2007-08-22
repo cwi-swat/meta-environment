@@ -1,5 +1,9 @@
 $Id$
 
+Wed Aug 22 17:03:41 CEST 2007 <economop@cwi.nl>
+ * test/terms/postParsePriorityFilter.ppprio: regenerated because the forest's 
+   count of ambiguities was out of date.
+
 Wed Aug 22 16:59:45 CEST 2007 <economop@cwi.nl>
  * src/commandLineInterface.c: typo in usage info.
 

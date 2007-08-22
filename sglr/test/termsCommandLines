@@ -37,7 +37,8 @@ $SGLR -2 -p $TABLES/Lists.tbl -i $TERMS/booleans.lst -fi -fe
 
 $SGLR -2 -p $TABLES/Pico.tbl -i $TERMS/big.pico -fi -fe
 
-$SGLR -2 -fi -p $TABLES/PostParsePriorityFilter.tbl -i $TERMS/postParsePriorityFilter.ppprio -fi -fe
+#the injection counting filter IS supposed to be off for this test.
+$SGLR -2 -p $TABLES/PostParsePriorityFilter.tbl -i $TERMS/postParsePriorityFilter.ppprio -fe
 
 $SGLR -2 -p $TABLES/Prefer.tbl -i $TERMS/cond.pfr -fi -fe
 
