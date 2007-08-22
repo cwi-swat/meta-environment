@@ -1,10 +1,5 @@
 package nl.dancingbear.visplugin.table;
 
-import nl.cwi.sen1.relationstores.types.RType;
-import nl.cwi.sen1.relationstores.types.RTypeColumnTypes;
-import nl.cwi.sen1.relationstores.types.rtype.Bag;
-import nl.cwi.sen1.relationstores.types.rtype.Relation;
-import nl.cwi.sen1.relationstores.types.rtype.Set;
 import nl.dancingbear.visplugin.VisualizationPluginController;
 import nl.dancingbear.visplugin.VisualizationPluginWindow;
 import aterm.ATerm;
