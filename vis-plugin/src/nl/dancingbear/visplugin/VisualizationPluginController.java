@@ -87,7 +87,6 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      * @date 20-2-2007
      * @param Rstore id, Fact id and the fact to visualize
      */
-    @SuppressWarnings("unchecked")
     public final void vpVisualizeFact(int storeId, int factId, ATerm fact) {
 
         WindowProperties newWindowProperties = new WindowProperties();
