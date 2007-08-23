@@ -17,6 +17,7 @@ let
   Tests : term
 in
   Id := process-id
+  . subscribe(asfe-abort)
   .
   (
     (
@@ -40,6 +41,10 @@ in
     +
       rec-disconnect(Eval)
       . snd-msg(asfe-rewrite-errors([error("the ASFE reducer was aborted",[])]))
+    +
+      rec-note(asfe-abort)
+      . snd-kill(Eval, "Killed by user")
+      . snd-msg(asfe-rewrite-errors([]))
     )
     /* Equations and terms can be big, so we clear the variables here */
     . Equations := none
@@ -60,9 +65,15 @@ in
     +
       rec-disconnect(Eval)
       . snd-msg(asfe-rewrite-errors([error("the ASFE reducer was aborted",[])]))
+    +
+      rec-note(asfe-abort)
+      . snd-kill(Eval, "Killed by user")
+      . snd-msg(asfe-rewrite-errors([]))
     ) 
     . Equations := none 
     . Tests := none
+  +
+    rec-note(asfe-abort)
   ) 
   *
   delta

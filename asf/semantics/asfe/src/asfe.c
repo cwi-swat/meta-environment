@@ -5,9 +5,10 @@
 
 #include "asfe.h"
 
-#define NR_SIG_ENTRIES	3
+#define NR_SIG_ENTRIES	4
 
 static char *signature[NR_SIG_ENTRIES] = {
+  "rec-disconnect(<asfe>,<str>)",
   "rec-eval(<asfe>,interpret(<str>,<term>,<term>,<term>,<term>))",
   "rec-eval(<asfe>,run-tests(<term>,<term>,<term>,<term>))",
   "rec-terminate(<asfe>,<term>)",
