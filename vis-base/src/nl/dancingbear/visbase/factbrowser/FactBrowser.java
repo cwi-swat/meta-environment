@@ -72,7 +72,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 	private Studio studio;
 
 	private StudioComponent component;
-	
+
 	private FactbrowserBridge bridge;
 
 	private FactBrowserWindow factBrowserWindow;
@@ -117,7 +117,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 		dataManager.createVisualisation(visPlugin, dataManager
 				.addFactType(pluginType.toString()));
 
-		
 		factBrowserWindow.redrawTree();
 	}
 
@@ -166,7 +165,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 
 		// Finally add the Rstore to the visual tree
 		factBrowserWindow.addRStore(rstoreNode);
-		
+
 		Iterator<RStoreFact> iterator = rstoreNode.getFactNodes().iterator();
 		while (iterator.hasNext()) {
 			RType rtype = iterator.next().getRType();
@@ -175,7 +174,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 					"fb-type-selected(<term>)", rtype.toTerm());
 			bridge.sendEvent(term);
 		}
-		
+
 		studio.requestFocus(component);
 	}
 
@@ -338,8 +337,8 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 						"fb-visualization-selected(<int>, <int>, <int>)",
 						rstoreID, factID, visPluginID);
 				bridge.sendEvent(term);
+			} else if (dataManager.checkValidRStoreFact(selectedNode)) {
 			} else if (dataManager.checkValidRStore(selectedNode)) {
-				// Do nothing
 			} else {
 				log.warn("A node was selected which was an invalid type");
 			}
