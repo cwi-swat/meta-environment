@@ -34927,7 +34927,7 @@ CONS_EXIT ( make_nf0 ( lf_matchfailedsym ) ) ;
 int main(int argc, char *argv[])                         
 {                                                        
   ATerm bottom;
-  setKeepAnnotations(ATtrue);
+  setKeepAnnotations(ATfalse);
   setKeepLayout(ATfalse);
   return asc_support_main(&bottom, argc, argv,           
                           register_RscriptCalculator,                   

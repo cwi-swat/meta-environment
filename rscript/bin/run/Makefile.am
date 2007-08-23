@@ -9,7 +9,6 @@ bin_PROGRAMS = rscriptcalculator
 AM_CPPFLAGS += \
 	$(ASC_SUPPORT_CFLAGS) \
 	$(SDF_SUPPORT_CFLAGS) \
-	-DASF_WITH_ANNOS \
 	-DASF_MAIN
 
 rscriptcalculator_SOURCES = Rscript-Calculator.c 
