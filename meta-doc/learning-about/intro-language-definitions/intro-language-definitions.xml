@@ -1091,8 +1091,10 @@ exports
     </itemizedlist>
 
     <para>The task of a typechecker for Pico is to assert that a given Pico
-    program complies with the above rules. The import structure of the Pico
-    typechecker is shown <link
+    program complies with the above rules. The typecheker can be seen as a
+    transformation from a Pico program to an error report.</para>
+
+    <para>The import structure of the Pico typechecker is shown <link
     linkend="Fig_Pico_typechcker_modules">below</link>.</para>
 
     <figure xml:id="Fig_Pico_typechcker_modules">
@@ -1105,7 +1107,7 @@ exports
       </mediaobject>
     </figure>
 
-    <section>
+    <section xml:id="Sec_Type-environments">
       <title>languages/pico/check/Type-environments</title>
 
       <para>The purpose of type environments is to maintain a mapping between
@@ -1511,10 +1513,384 @@ equations
         </listitem>
 
         <listitem>
+          <para>All modules for a typechecker reside in a subdirectory named
+          <literal>check</literal>.</para>
+        </listitem>
+
+        <listitem>
           <para>A typechecker can be integrated with The
           Meta-Environment.</para>
         </listitem>
       </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Defining an evaluator for Pico</title>
+
+    <para>The evaluation rules for the Pico language are simple as
+    well:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Variables of type <literal>natural</literal> are initialized to
+        0.</para>
+      </listitem>
+
+      <listitem>
+        <para>Variables of type string are initalized to the empty
+        string.</para>
+      </listitem>
+
+      <listitem>
+        <para>A variable evaluates to its current value.</para>
+      </listitem>
+
+      <listitem>
+        <para>The variable on the left-hand side of an assignment statement
+        gets as value the value of the expression on the right-hand side of
+        the assignment.</para>
+      </listitem>
+
+      <listitem>
+        <para>If the test in an if-statement or while-statement evaluates to
+        0, this is interpreted as <emphasis>false</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Conversely, if the test in an if-statement or while-statement
+        evaluates to 0, this is interpreted as
+        <emphasis>true</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>The statements in a list of statements are evaluated in
+        sequential order.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The task of the Pico evaluator is to reduce a Pico program to the
+    output it generates, in this case a value environment. The Pico evaluator
+    can be seen as a transformation from a Pico program to its output.</para>
+
+    <para>The import structure of the Pico evaluator is shown <link
+    linkend="Fig_pico_eval_modules">below</link>.</para>
+
+    <figure xml:id="Fig_pico_eval_modules">
+      <title>Import structure of Pico evaluator</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="pico-eval-modules.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <section>
+      <title>languages/pico/run/Values</title>
+
+      <para>The sort <literal>VALUE</literal> is simply a container for
+      integer and string constants and is defined as follows:</para>
+
+      <programlisting>module languages/pico/run/Values
+
+imports basic/Integers basic/StrCon
+
+exports
+  sorts VALUE
+  context-free syntax
+    Integer     -&gt; VALUE
+    StrCon      -&gt; VALUE
+    "nil-value" -&gt; VALUE  <co xml:id="value.1" /></programlisting>
+
+      <caution>
+        <para>Why Integer and not IntCon?</para>
+      </caution>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="value.1">
+          <para>The constant <literal>nil-value</literal> denotes error
+          values.</para>
+        </callout>
+      </calloutlist>
+    </section>
+
+    <section>
+      <title>languages/pico/run/Value-environments</title>
+
+      <para>The purpose of value environments is to maintain a mapping between
+      identifiers and their current value. This is done as follows:</para>
+
+      <programlisting>module languages/pico/run/Value-environments
+
+imports languages/pico/syntax/Identifiers 
+imports languages/pico/run/Values 
+imports containers/Table[PICO-ID VALUE]
+    
+exports
+  sorts VENV 
+  aliases
+    Table[[PICO-ID, VALUE]] -&gt; VENV</programlisting>
+
+      <para>After the discussion of <link
+      linkend="Sec_Type-environments">Type-environments</link>, this
+      definition should be easy to follow.</para>
+    </section>
+
+    <section>
+      <title>languages/pico/run/Pico</title>
+
+      <para>The central idea of the Pico evaluator is to first visit the
+      declarations and initialise the declared variables. Next, the statements
+      are visited one-by-one and their effect on the value environment is
+      computed. The final value environment is then retruned as the result of
+      evaluation.</para>
+
+      <section>
+        <title>Syntax part</title>
+
+        <para>The syntax part of the Pico evaluator looks as follows:</para>
+
+        <programlisting>module languages/pico/run/Pico
+
+imports languages/pico/syntax/Pico
+imports languages/pico/run/Value-environments
+imports basic/Strings
+
+exports
+  sorts VALUE-ENV
+
+  context-free syntax
+    VENV                          -&gt; VALUE-ENV
+
+  context-free syntax
+    "evp"(PROGRAM)                -&gt; VALUE-ENV
+
+  context-free syntax
+    "evd"(DECLS)                  -&gt; VENV
+    "evits"({ID-TYPE  ","}*)      -&gt; VENV
+    "evs"({STATEMENT ";"}*, VENV) -&gt; VENV
+    "evst"(STATEMENT, VENV)       -&gt; VENV
+    "eve"(EXP, VENV)              -&gt; VALUE
+
+hiddens
+  imports basic/Comments
+  context-free start-symbols
+    VALUE-ENV PROGRAM
+
+  variables
+    "Decls"[0-9\']*   -&gt; DECLS
+    "Exp"[0-9\']*     -&gt; EXP
+    "Id"[0-9]*        -&gt; PICO-ID
+    "Id-type*"[0-9]*  -&gt; {ID-TYPE ","}*
+    "Nat"[0-9\']*     -&gt; Integer 
+    "Nat-con"[0-9\']* -&gt; NatCon
+    "Series"[0-9\']*  -&gt; {STATEMENT ";"}+
+    "Stat"[0-9\']*    -&gt; STATEMENT
+    "Stat*"[0-9\']*   -&gt; {STATEMENT ";"}*
+    "Str" "-con"? [0-9\']* -&gt; StrCon
+    "Value"[0-9\']*   -&gt; VALUE
+    "Venv"[0-9\']*    -&gt; VENV
+    "Program"[0-9\']* -&gt; PROGRAM</programlisting>
+
+        <caution>
+          <para>Why VENV and VALUE-ENV?</para>
+        </caution>
+
+        <para>Here again, having seen the syntax part of the Pico typechecker
+        there are no surprises here. The toplevel function
+        <literal>evp</literal> maps programs to value environments and needs
+        some auxiliary functions to achieve this.</para>
+      </section>
+
+      <section>
+        <title>Equations part</title>
+
+        <para>The equations part:</para>
+
+        <programlisting>equations
+
+[Main] start(PROGRAM, Program) = start(VALUE-ENV, evp(Program))       <co
+            xml:id="pico-eval.1" />
+
+equations
+[Ev1]  evp(begin Decls Series end) = evs(Series, evd(Decls))
+
+[Ev2]  evd(declare Id-type*;) = evits(Id-type*)
+
+[Ev3a] evits(Id:natural, Id-type*) = store(evits(Id-type*), Id, 0)    <co
+            xml:id="pico-eval.2" />
+
+[Ev3b]  evits(Id:string, Id-type*) = store(evits(Id-type*), Id, "")
+
+[Ev3c]  evits() = []
+
+[Ev4a]   Venv' := evst(Stat, Venv), Venv'' := evs(Stat*, Venv')
+        =====================================================        <co
+            xml:id="pico-eval.3" />
+           evs(Stat ; Stat*, Venv) =  Venv''
+
+[Ev4b]  evs( , Venv) = Venv
+
+[Ev5a]  evst(Id := Exp, Venv) = store(Venv, Id, eve(Exp, Venv))
+
+[Ev5b]             eve(Exp, Venv) != 0
+        ====================================================         <co
+            xml:id="pico-eval.4" />
+        evst(if Exp then Series1 else Series2 fi, Venv) = evs(Series1, Venv)
+
+[Ev5c]             eve(Exp, Venv) == 0
+        ====================================================         <co
+            xml:id="pico-eval.5" />
+        evst(if Exp then Series1 else Series2 fi, Venv) = evs(Series2, Venv)
+
+[Ev5d]           eve(Exp, Venv) == 0
+        ==========================================                   <co
+            xml:id="pico-eval.6" />
+        evst(while Exp do Series od, Venv) =  Venv
+
+[Ev5e]  eve(Exp, Venv) != 0,  Venv' := evs(Series, Venv)
+        ===============================================              <co
+            xml:id="pico-eval.7" />
+        evst(while Exp do Series od, Venv) =
+                           evst(while Exp do Series od, Venv')
+
+[Ev6a]  eve(Id, Venv) = lookup(Venv, Id)                             <co
+            xml:id="pico-eval.8" />
+[Ev6b]  eve(Nat-con, Venv) = Nat-con                                 <co
+            xml:id="pico-eval.9" />
+[Ev6c]  eve(Str-con, Venv) = Str-con
+
+[Ev6d]  Nat1 := eve(Exp1, Venv),
+        Nat2 := eve(Exp2, Venv)
+        ======================                                       <co
+            xml:id="pico-eval.10" />
+        eve(Exp1 + Exp2, Venv) = Nat1 + Nat2
+
+[Ev6e]  Nat1 := eve(Exp1, Venv),
+        Nat2 := eve(Exp2, Venv)
+        ======================
+        eve(Exp1 - Exp2, Venv) =  Nat1 -/ Nat2
+
+[Ev6f]  Str1 := eve(Exp1, Venv),
+        Str2 := eve(Exp2, Venv),
+        Str3 := concat(Str1, Str2)
+        ======================
+        eve(Exp1 || Exp2, Venv) = Str3
+
+[default-Ev6]  eve(Exp,Venv) = nil-value
+</programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="pico-eval.1">
+            <para>A start equations that connects the functions defined here
+            to The Meta-Environment: given a program, a value environment is
+            returned and this computed by applying the function
+            <literal>evp</literal> to the program.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.2">
+            <para>Here declared variables are initalized.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.3">
+            <para>Evaluation of a series of statements. Observe how the value
+            environment <literal>Venv'</literal> that is modified by executing
+            the first statement is used to evaluate the remaining statements.
+            In this way, the assignments made by the first statement become
+            available for the remaining statements.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.4">
+            <para>Evaluation of if statement; the true case.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.5">
+            <para>Evaluation of if statement; the false case.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.6">
+            <para>Evaluation of while statement; the false case.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.7">
+            <para>Evaluation of while statement; the true case. Note that the
+            body of the while statement is evaluated and that the resulting
+            value environment <literal>Venv'</literal> is used to evaluate the
+            next iteration of the while statement.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.8">
+            <para>A varaible evaluates to its current value.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.9">
+            <para>Constants evaluate to themselves.</para>
+          </callout>
+
+          <callout arearefs="pico-eval.10">
+            <para>Operators are evaluated by first evaluating their argument
+            and then applying the relevant operator to them. Observe that the
+            <literal>+</literal> in the Pico expression <literal>Exp1 +
+            Exp2</literal> is the plus operator as defined by Pico. The
+            <literal>+</literal> operator in <literal>Nat1 + Nat2</literal> is
+            the addition on integers as defined in basic/Integers. So we reuse
+            the definition of addition on integers to define addition in
+            Pico.</para>
+          </callout>
+        </calloutlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Using the Pico evaluator in the Meta-Environment</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Take home points</title>
+
+      <para>The Pico evaluator has revealed the following points:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ASF+SDF can be used to define an evaluator.</para>
+        </listitem>
+
+        <listitem>
+          <para>All modules for an evaluator reside in a subdirectory named
+          <literal>run</literal>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Defining a compiler for Pico</title>
+
+    <para></para>
+
+    <section>
+      <title></title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Using the Pico compiler in the Meta-Environment</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Take home points</title>
+
+      <para></para>
     </section>
   </section>
 
