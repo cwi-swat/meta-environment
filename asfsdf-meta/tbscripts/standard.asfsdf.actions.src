@@ -6,6 +6,8 @@ configuration([
          "EditorEditEquationsAction"),
   action([description(term-editor, menu-shortcut([label("Term"),label("Reduce")], shortcut([M_ALT,M_CTRL],VK_R),"Normalize this term by applying all available equations in an innermost (fixed point) fashion"))],
          "ReduceAction"),
+  action([description(term-editor, menu([label("Term"),label("Abort Reducer")], "Abort a running reducer"))],
+         "AbortAsfeAction"),
    action([description(term-editor, menu-shortcut([label("Term"), label("Goto Origin")], shortcut([M_ALT,M_CTRL],VK_O),"If this term was obtained by reducing another, try jumping to the origin of the current focus"))],
          "ShowOriginAction"),
  action([description(syntax-editor, menu-shortcut([label("Module"),label("Edit"),label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E), "Edit the ASF equations of this module"))],

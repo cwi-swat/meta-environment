@@ -11,6 +11,9 @@
 #include <lower-rstore.idef>
 #include <io-utils.tb>
 
+process AbortAsfeAction(EditorId : session-id) is
+  snd-note(asfe-abort)
+ 
 process PrettyPrintSdfAction(EditorId : session-id) is
 let
   Tree : term,

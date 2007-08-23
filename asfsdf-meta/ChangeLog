@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Thu Aug 23 11:24:19 CEST 2007 <{kooiker,lankamp,jurgenv}@cwi.nl>
+ * tbscripts/asf-action.tb: added menu option to kill of a running
+   asfe.
+
 Wed Aug 22 11:21:29 CEST 2007 <jurgenv@cwi.nl>
  * asfsdf-meta.pc.in: changed dependency of csv and table vis plugins
    to vis-plugin-generic, because they have been merged
