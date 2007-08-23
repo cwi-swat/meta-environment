@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Aug 23 10:31:25 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
+ * bin/run/*.isrc: added possibility to kill a running interpreter.
+
 Tue Aug 14 10:21:46 CEST 2007 <kooiker@cwi.nl>
  * bin/checker: Add checker binary with ToolBus support
 

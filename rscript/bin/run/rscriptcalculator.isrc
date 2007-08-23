@@ -6,24 +6,36 @@ let
   RScript: term,
   RStore: term
 in
+  subscribe(interrupt-rscript)
+  .
   (
-    rec-msg(eval-rscript(RScript?))
-    . execute(rscriptcalculator, RSC?)
-    . snd-eval(RSC, eval-rscript-to-rstore(RScript))
-    . rec-value(RSC, eval-rscript-to-rstore(RStore?))
-    . snd-msg(evaluated-rscript(RStore))
-    . RScript := undefined 
-    . RStore := undefined 
-    . snd-terminate(RSC, "done")
-  +
-    rec-msg(eval-rscript-with-rstore(RScript?, RStore?))
-    . execute(rscriptcalculator, RSC?)
-    . snd-eval(RSC, eval-rscript-with-rstore(RScript, RStore))
-    . rec-value(RSC, eval-rscript-with-rstore(RStore?))
-    . snd-msg(evaluated-rscript-with-rstore(RStore))
+    (
+      rec-msg(eval-rscript-with-rstore(RScript?, RStore?))
+      . execute(rscriptcalculator, RSC?)
+      . snd-eval(RSC, eval-rscript-with-rstore(RScript, RStore))
+    +
+      rec-msg(eval-rscript(RScript?))
+      . execute(rscriptcalculator, RSC?)
+      . snd-eval(RSC, eval-rscript-to-rstore(RScript))
+    )
+    .
+    (
+      (
+        rec-value(RSC, eval-rscript-to-rstore(RStore?))
+      +
+        rec-value(RSC, eval-rscript-with-rstore(RStore?))
+      )
+      . snd-msg(evaluated-rscript(RStore))
+      . snd-terminate(RSC, "done")
+    +
+      rec-note(interrupt-rscript)
+      . snd-kill(RSC, "interrupted by user")
+      . snd-msg(evaluate-rscript-aborted)
+    )
     . RScript := undefined
     . RStore := undefined
-    . snd-terminate(RSC, "done")
+  +
+    rec-note(interrupt-rscript)
   )
   *
   delta
