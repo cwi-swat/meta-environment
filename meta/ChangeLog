@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Aug 23 11:23:04 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
+ * tbscripts/editing.tb: processing of menu events is done asynchronously
+   from now on, such that an editor can do other stuff after it has initiated
+   something.
+
 Tue Aug 14 08:57:24 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/error-utils.tb: Add ReplaceSummaryInfo process that replaces the
    producer and id by the given producer and id.

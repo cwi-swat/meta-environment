@@ -248,13 +248,20 @@ endlet
  */
 process MenuSelected(Sid: session-id, EditorType: term) is
 let
-  Action: str,
   Event: term,
+  Pid: int
+in
+  rec-msg(te-event(Sid, Event?)) 
+  . create(AsyncMenuSelected(Sid, EditorType, Event), Pid?)
+endlet
+
+process AsyncMenuSelected(Sid: session-id, EditorType: term, Event: term) is
+let
+  Action: str,
   ModuleId: module-id,
   Sort: str
 in
-  rec-msg(te-event(Sid, Event?))
-  . snd-msg(em-request-transaction(Sid))
+  snd-msg(em-request-transaction(Sid))
   .
   (
     rec-msg(em-no-transaction(Sid))
