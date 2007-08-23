@@ -515,9 +515,10 @@ public class StudioImpl implements Studio, GuiTif {
 		}
 	}
 
-	public void recAckEvent(ATerm t0){}
+	public void recAckEvent(ATerm t0) {
+	}
 
-	public void recTerminate(ATerm t){
+	public void recTerminate(ATerm t) {
 		frame.dispose();
 	}
 
@@ -624,7 +625,10 @@ public class StudioImpl implements Studio, GuiTif {
 			View view = viewsById.getView(id.intValue());
 
 			if (view != null) {
-				//view.restoreFocus();
+				// Do not use view.restoreFocus() because we don't want the
+				// focus to be transferred to the view but only want it to
+				// become visible. This way the user can go on working in the
+				// view he was working in without setting the focus back himself.
 				view.makeVisible();
 			} else {
 				System.err.println("No view found for: " + component.getName());
