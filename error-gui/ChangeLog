@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Aug 23 13:13:59 CEST 2007 <kooiker@cwi.nl>
+ * src/**/ErrorViewer.java: do not show summaries with an empty error list
+
 Thu Mar  1 13:30:19 CET 2007 <kooiker@cwi.nl>
  * src/**/ErrorPanel.java:
    - Limit number of displayed errors to 100

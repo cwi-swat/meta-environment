@@ -27,7 +27,7 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 	private Studio studio;
 
 	private StudioComponent component;
-	
+
 	ErrorViewerBridge bridge;
 
 	errorapi.Factory errorFactory;
@@ -100,14 +100,15 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 	public void showFeedbackSummary(String panelId, ATerm summaryTerm) {
 		try {
 			Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
-			getPanel(panelId).addError(summary);
+			if (summary.getList().isEmpty() == false) {
+				getPanel(panelId).addError(summary);
+				studio.requestFocus(component);
+			}
 		} catch (aterm.ParseError ex) {
 			System.err.println("Summary is not a valid ATerm");
 		} catch (IllegalArgumentException ex) {
 			System.err.println("Summary is not valid");
 		}
-		
-		studio.requestFocus(component);
 	}
 
 	public void refreshFeedbackSummary(String panelId, ATerm summaryTerm) {
