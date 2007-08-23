@@ -55,10 +55,10 @@ typedef term tool_id;
 
 #define equal_tool_id(Tid1, Tid2) (int_val(Tid1) == int_val(Tid2))
 
-#define mk_tool_inst(creator, Tid, host, in, out, phase) \
-        mk_appl7(s_tool_inst,creator,mk_int(Tid),\
+#define mk_tool_inst(creator, Tid, host, in, out, phase, pid) \
+        mk_appl8(s_tool_inst,creator,mk_int(Tid),\
 		 mk_int(in), mk_int(out), mk_str(host), \
-		 mk_int(phase), NULL)
+		 mk_int(phase), NULL, mk_int(pid))
       
 
 #define ti_name(ti)    fun_sym(ti_creator(ti))
@@ -69,11 +69,13 @@ typedef term tool_id;
 #define ti_host(ti)    str_val(elm5(fun_args(ti)))
 #define ti_phase(ti)   int_val(elm6(fun_args(ti)))
 #define ti_pending(ti)         elm7(fun_args(ti))
+#define ti_pid(ti)             elm8(fun_args(ti))
 
 #define is_tool_inst(ti) ((ti) && is_appl(ti) && (fun_sym(ti) == s_tool_inst))
 
 int TCP_transition(tool_inst *, term *, TBbool);
 void destroy_ports_for_tool(tool_inst *);
+TBbool kill_tool(term_list *);
 TBbool write_to_tool(sym_idx, term_list *);
 int add_tool(char *id, char *host);
 

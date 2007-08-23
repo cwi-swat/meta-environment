@@ -151,6 +151,7 @@ env       *mk_env(var *, term *, env *);
 #define mk_list5(a1, a2, a3, a4, a5)         mk_list(a1, mk_list4(a2, a3, a4, a5))
 #define mk_list6(a1, a2, a3, a4, a5, a6)     mk_list(a1, mk_list5(a2, a3, a4, a5, a6))
 #define mk_list7(a1, a2, a3, a4, a5, a6, a7) mk_list(a1, mk_list6(a2, a3, a4, a5, a6, a7))
+#define mk_list8(a1, a2, a3, a4, a5, a6, a7, a8) mk_list(a1, mk_list7(a2, a3, a4, a5, a6, a7, a8))
 
 #define elm1(l) first(l)
 #define elm2(l) first(next(l))
@@ -159,6 +160,7 @@ env       *mk_env(var *, term *, env *);
 #define elm5(l) first(next(next(next(next(l)))))
 #define elm6(l) first(next(next(next(next(next(l))))))
 #define elm7(l) first(next(next(next(next(next(next(l)))))))
+#define elm8(l) first(next(next(next(next(next(next(next(l))))))))
 
 #define mk_appl1(sym, a1)                    mk_appl(sym, mk_list1(a1))
 #define mk_appl2(sym, a1, a2)                mk_appl(sym, mk_list2(a1, a2))
@@ -169,6 +171,8 @@ env       *mk_env(var *, term *, env *);
             mk_appl(sym, mk_list6(a1, a2, a3, a4, a5, a6))
 #define mk_appl7(sym, a1, a2, a3, a4, a5, a6, a7) \
             mk_appl(sym, mk_list7(a1, a2, a3, a4, a5, a6, a7))
+#define mk_appl8(sym, a1, a2, a3, a4, a5, a6, a7, a8) \
+            mk_appl(sym, mk_list8(a1, a2, a3, a4, a5, a6, a7, a8))
 
 
 term      *mk_list(term *, term_list *);

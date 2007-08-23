@@ -356,6 +356,7 @@ TBbool is_defined_formal_or_var_string(char *str)
 %token REC_CONNECT
 %token REC_DISCONNECT
 %token EXECUTE
+%token SND_KILL
 %token SND_TERMINATE
 %token SHUTDOWN
 %token IF
@@ -502,6 +503,13 @@ tool_atom:
            range($$,$1,$4);
            tc_tool_atom($$.u.proc);
          }  
+     | SND_KILL '(' term_list ')'
+         { $$.u.proc =
+           mk_atom(a_snd_kill, $3.u.term_list,
+		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
+           range($$,$1,$4);
+           tc_tool_atom($$.u.proc);
+         }
      | SND_TERMINATE '(' term_list ')'
          { $$.u.proc =
            mk_atom(a_snd_terminate, $3.u.term_list,

@@ -372,6 +372,42 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
 
 /*}}}  */
 
+TBbool kill_tool(term_list *args)
+{
+  int pid;
+  tool_inst_list *tools = Tools;
+  tool_inst *ti;
+  tool_id *tid;
+
+
+  if(TBverbose) { 
+    TBmsg("killing tool %t\n", args); 
+  }
+
+  tid = first(fun_args(first(args)));
+
+
+  for(tools = Tools; tools; tools = next(tools)){
+    ti = first(tools);
+    assert(is_tool_inst(ti));
+
+    if(equal_tool_id(tid, ti_tid(ti))){
+      pid = int_val(ti_pid(ti));
+      if (pid != -1) {
+	destroy_ports_for_tool(ti);
+	Tools = list_delete(Tools, ti);
+	kill(pid, SIGKILL);
+	return TBtrue;
+      }
+      else {
+	TBmsg("Can not kill a rec-connect'ed tool\n");
+	return TBfalse;
+      }
+    }
+  }
+  return TBfalse;
+}
+
 /*{{{  TBbool write_to_tool(sym_idx af, term_list *args) */
 
 TBbool write_to_tool(sym_idx af, term_list *args)
@@ -467,7 +503,7 @@ int add_tool(char *id, char *host)
   if(TBverbose)
     TBmsg("adding tool, id=%s, host=%s, tid=%d\n", id, host, n_tool_inst);
 
-  Tools = mk_list(mk_tool_inst(creator, n_tool_inst, host, -1,-1,PHASE1), Tools);
+  Tools = mk_list(mk_tool_inst(creator, n_tool_inst, host, -1,-1,PHASE1,-1), Tools);
   return n_tool_inst++;
 }
 
@@ -722,9 +758,9 @@ tool_id *create_tool(term *creator, term_list *args)
        the many recursive calls when the preprocessor expands it. I've
        tried many experiments, but haven't been able to reproduce it in
        a small example yet), so I replaced it with 'TBmake'. <PO> */
-    /*inst = mk_tool_inst(creator, n_tool_inst, td_host(td), -1,-1,PHASE1);*/
-    inst = TBmake(TBfalse, "tool-inst(%t,%d,%d,%d,%s,%d,[])",
-		  creator, n_tool_inst, -1, -1, td_host(td), PHASE1);
+    inst = mk_tool_inst(creator, n_tool_inst, td_host(td), -1,-1,PHASE1, pid);
+    /*inst = TBmake(TBfalse, "tool-inst(%t,%d,%d,%d,%s,%d,[],%d)",
+		  creator, n_tool_inst, -1, -1, td_host(td), PHASE1, pid); */
     /*TBprintf(stderr, "Inst = %t\n", inst);*/
     Tools = mk_list(inst, Tools);
     n_tool_inst++;

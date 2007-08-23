@@ -83,6 +83,7 @@ create        { ll_inc_pos(6); return(CREATE); }
 rec-connect   { ll_inc_pos(11);return(REC_CONNECT); }
 rec-disconnect { ll_inc_pos(14);return(REC_DISCONNECT); }
 execute       { ll_inc_pos(7); return(EXECUTE); }
+snd-kill      { ll_inc_pos(8);return(SND_KILL); }
 snd-terminate { ll_inc_pos(13);return(SND_TERMINATE); }
 shutdown      { ll_inc_pos(8); return(SHUTDOWN); }
 if            { ll_inc_pos(2); return(IF); }
@@ -237,7 +238,7 @@ char *get_token(int tk)
   case TOOLBUS: case PROCESS: case CALL: case IS: case DELTA: case TAU:
   case TOOL: case HOST: case COMMAND: case CREATE:
   case REC_CONNECT: case REC_DISCONNECT: case EXECUTE:
-  case SND_TERMINATE: case SHUTDOWN:
+  case SND_TERMINATE: case SHUTDOWN: case SND_KILL:
   case IF: case THEN: case ELSE: case FI: case ASSIGN:
   case REL_DELAY: case ABS_DELAY: case REL_TIMEOUT: case ABS_TIMEOUT:
   case LET: case IN: case ENDLET:

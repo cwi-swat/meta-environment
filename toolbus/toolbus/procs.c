@@ -118,6 +118,8 @@ TBbool communicate(sym_idx a1, sym_idx a2)
     case a_rec_continue:   return a2 == a_snd_continue;
     case a_snd_continue:   return a2 == a_rec_continue;
 
+    case a_snd_kill:       return a2 == a_rec_disconnect;
+
     default:
 			   return TBfalse;
   }
@@ -168,6 +170,8 @@ sym_idx reverse_role(sym_idx f)
 
     case a_snd_detach_monitor: return a_rec_detach_monitor;
     case a_rec_detach_monitor: return a_snd_detach_monitor;
+
+    case a_snd_kill:           return a_rec_disconnect;
 
     default:
 			       err_fatal("reverse_role: %d", f);
@@ -303,6 +307,7 @@ void init_procs(void)
   SYMDEF("create", a_create);
 
   SYMDEF("rec-connect", a_rec_connect);
+  SYMDEF("snd-kill", a_snd_kill);
   SYMDEF("rec-disconnect", a_rec_disconnect);
   SYMDEF("snd-execute-to-tool", a_snd_execute_to_tool);
   SYMDEF("snd-terminate", a_snd_terminate);

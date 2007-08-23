@@ -49,6 +49,7 @@ typedef enum pkind
   a_rec_event, a_snd_ack_event,
   a_create,
   a_rec_connect,
+  a_snd_kill,
   a_rec_disconnect, 
   a_snd_execute_to_tool, a_snd_terminate,
   a_shutdown,

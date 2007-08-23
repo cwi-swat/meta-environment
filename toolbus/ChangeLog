@@ -1,5 +1,11 @@
 $Id$
 
+Thu Aug 23 10:29:02 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
+ * libdeprecated*/*.c,toolbus/*.c: added a new atomic action snd-kill,
+   which (if the tool was executed from the bus) will kill the tool using
+   SIGKILL. If the tool was not executed from the bus, a rec-connect, then
+   the script will stop and an error message will be printed.
+
 Thu Apr  5 18:09:08 CEST 2007 <jurgenv@cwi.nl>
  * Makefile.toolbus: added make rules for generating C toolbus interfaces
    using the local toolbus as build in ./toolbus. This fixes the

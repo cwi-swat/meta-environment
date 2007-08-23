@@ -325,6 +325,9 @@ TBbool tc_tool_atom2(atom *a)
     case a_snd_terminate:
       return req_arg1_tool_id(a, TBtrue) && req_nargs(a, 2);
 
+    case a_snd_kill:
+      return req_arg1_tool_id(a, TBtrue) && req_nargs(a, 2);
+
     case a_snd_ack_event:
       if(req_arg1_tool_id(a, TBtrue) && req_nargs(a, 2)){
 	warn_res_vars(a, TBfalse);

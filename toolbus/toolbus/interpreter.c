@@ -1324,6 +1324,12 @@ static TBbool simple_atomic_step(atom *Atom)
 	/* add_free_list(args); */
 	return res;
       }
+
+    case a_snd_kill:
+      { term_list *args = substitute_list(at_args(Atom), pi_env(current_ProcInst));
+	TBbool res = kill_tool(args);
+	return res;
+      }
     case a_snd_monitor:         
 
       /* Note: no substitutions should be made in snd_monitor's arguments,
