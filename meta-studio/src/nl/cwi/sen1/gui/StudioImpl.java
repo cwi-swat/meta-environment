@@ -517,7 +517,9 @@ public class StudioImpl implements Studio, GuiTif {
 
 	public void recAckEvent(ATerm t0){}
 
-	public void recTerminate(ATerm t){}
+	public void recTerminate(ATerm t){
+		frame.dispose();
+	}
 
 	public void connect(String toolName, final AbstractTool tool) {
 		try {
