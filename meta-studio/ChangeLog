@@ -1,5 +1,10 @@
 $Id$
 
+Thu Aug 23 15:40:21 CEST 2007 <kooiker@cwi.nl>
+ * src/**/StudioImpl.java: on requesting focus the window that needs focus
+   only becomes visible without actually getting the focus, so focus stays at
+   the window the user is working in
+
 Tue Feb 20 09:27:19 CET 2007 <kooiker@cwi.nl>
  * src/**/StudioComponent.java:
    - Add support for Tooltips

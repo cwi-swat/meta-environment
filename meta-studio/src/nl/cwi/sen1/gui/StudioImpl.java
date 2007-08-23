@@ -624,7 +624,8 @@ public class StudioImpl implements Studio, GuiTif {
 			View view = viewsById.getView(id.intValue());
 
 			if (view != null) {
-				view.restoreFocus();
+				//view.restoreFocus();
+				view.makeVisible();
 			} else {
 				System.err.println("No view found for: " + component.getName());
 			}
