@@ -338,12 +338,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 						"fb-visualization-selected(<int>, <int>, <int>)",
 						rstoreID, factID, visPluginID);
 				bridge.sendEvent(term);
-			} else if (dataManager.checkValidRStoreFact(selectedNode)) {
-				RType rtype = dataManager.getFactRType(selectedNode);
-
-				ATerm term = studio.getATermFactory().make(
-						"fb-type-selected(<term>)", rtype.toTerm());
-				bridge.sendEvent(term);
 			} else if (dataManager.checkValidRStore(selectedNode)) {
 				// Do nothing
 			} else {
