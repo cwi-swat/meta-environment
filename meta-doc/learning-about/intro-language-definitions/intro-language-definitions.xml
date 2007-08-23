@@ -1091,47 +1091,132 @@ exports
     </itemizedlist>
 
     <para>The task of a typechecker for Pico is to assert that a given Pico
-    program complies with the above rules.</para>
+    program complies with the above rules. The import structure of the Pico
+    typechecker is shown <link
+    linkend="Fig_Pico_typechcker_modules">below</link>.</para>
+
+    <figure xml:id="Fig_Pico_typechcker_modules">
+      <title>Import structure of Pico typechecker</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="pico-typecheck-modules.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
 
     <section>
       <title>languages/pico/check/Type-environments</title>
 
-      <para></para>
+      <para>The purpose of type environments is to maintain a mapping between
+      identifiers and their type. This is done as follows:</para>
 
       <programlisting>module languages/pico/check/Type-environments
 
 imports languages/pico/syntax/Identifiers 
-imports containers/Table[PICO-ID TYPE]
+imports containers/Table[PICO-ID TYPE]          <co xml:id="type-env.1" />
 
 exports 
   sorts TENV TYPE 
 
   aliases
-    Table[[PICO-ID,TYPE]] -&gt; TENV
-</programlisting>
+    Table[[PICO-ID,TYPE]] -&gt; TENV               <co xml:id="type-env.2" /></programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="type-env.1">
+          <para>Import the library module <literal>containers/Table</literal>.
+          It is a parameterized module with first parameter denoting the sort
+          of the keys in the table and the second parameter denoting the sort
+          of the values to be stored in the table. After this import, the sort
+          <literal>Table[[PICO-ID,TYPE]]</literal> (sorry about the double
+          square brackets!) can be used as any other sort in the
+          specification.</para>
+        </callout>
+
+        <callout arearefs="type-env.2">
+          <para>It is pragmatic to give a more descriptive name to
+          Table[[PICO-ID,TYPE]] and we use the <literal>alias</literal>
+          construct for this. From now on, TENV is an alias (= an
+          abbreviation) for Table[[PICO-ID,TYPE]].</para>
+        </callout>
+      </calloutlist>
+
+      <para>For convenience, we list the most functions of Tables here:</para>
+
+      <programlisting>module containers/Table[Key Value]
+...
+context-free syntax
+  "not-in-table"                        -&gt; Value              {constructor} 
+  "new-table"                           -&gt; Table[[Key,Value]]               
+  lookup(Table[[Key,Value]], Key)       -&gt; Value                            
+  store(Table[[Key,Value]], Key, Value) -&gt; Table[[Key,Value]]               
+  delete(Table[[Key,Value]], Key)       -&gt; Table[[Key,Value]]               
+  element(Table[[Key,Value]], Key)      -&gt; Boolean                          
+  keys(Table[[Key,Value]])              -&gt; List[[Key]]                      
+  values(Table[[Key,Value]])            -&gt; List[[Value]]
+...</programlisting>
+
+      <para>In the case of <literal>Type-environments</literal>, the formal
+      parameter <literal>Key</literal> is bound to <literal>PICO-ID</literal>
+      and <literal>Value</literal> is bound to <literal>TYPE</literal>.</para>
     </section>
 
     <section>
       <title>languages/pico/check/Pico</title>
 
-      <para>First consider the syntax part of the Pico typechecker:</para>
+      <para>The central idea of the Pico typechecker is to visit all language
+      constructs in a given Pico program while maintaining a type environment
+      that maps identifiers to their declared type. Whenever an identifier is
+      used, the type correctness of that use in the given context is checked
+      against its declared type that is given by the type environment. An
+      error message is generated when any violation of the type rules is
+      detected. The following type checker is realistic in the following
+      sense:</para>
 
-      <programlisting>module languages/pico/check/Pico
+      <itemizedlist>
+        <listitem>
+          <para>It discovers all errors.</para>
+        </listitem>
+
+        <listitem>
+          <para>It generates a message for each error.</para>
+        </listitem>
+
+        <listitem>
+          <para>The error message contains the source code location of the
+          pico construct that violates the type rules.</para>
+        </listitem>
+
+        <listitem>
+          <para>The type checker can be directly embedded in and used from The
+          Meta-Environment.</para>
+        </listitem>
+      </itemizedlist>
+
+      <section>
+        <title>Syntax part</title>
+
+        <para>First consider the syntax part of the Pico typechecker:</para>
+
+        <programlisting>module languages/pico/check/Pico
 
 imports basic/Booleans
-imports basic/Errors
+imports basic/Errors                                    <co xml:id="pico-tc.1" />
 imports languages/pico/syntax/Pico
 imports languages/pico/check/Type-environments
-imports utilities/PosInfo[EXP]
+imports utilities/PosInfo[EXP]                          <co xml:id="pico-tc.2" />
 imports utilities/PosInfo[PICO-ID]
 imports utilities/PosInfo[PROGRAM]
 
 exports
 context-free syntax
-  "tcp"(PROGRAM) -&gt; {Error ","}*  
+  "tcp"(PROGRAM) -&gt; {Error ","}*                        <co
+            xml:id="pico-tc.3" />
 
 hiddens
-context-free syntax
+context-free syntax                                     <co xml:id="pico-tc.4" />
   "tcd"(DECLS)                  -&gt; TENV          
   "tcits"({ID-TYPE ","}*, TENV) -&gt; TENV          
   "tcit"(ID-TYPE, TENV)         -&gt; TENV          
@@ -1158,38 +1243,89 @@ variables
   "Type" [0-9\']*    -&gt; TYPE              
   "Program" [0-9\']* -&gt; PROGRAM         </programlisting>
 
-      <para>Now let's turn our attention to the equations part of the Pico
-      typechecker:</para>
+        <para>Notes:</para>
 
-      <programlisting>equations
+        <calloutlist>
+          <callout arearefs="pico-tc.1">
+            <para>The library module basic/Errors describes an error format
+            that is ubiquitous in The Meta-Environment. There are four
+            categories of errors: <literal>info</literal>,
+            <literal>warning</literal>, <literal>error</literal> and
+            <literal>fatal</literal>. Each error contains a text that
+            describes the error and a list of subjects where the error
+            occurred. Each subject consists of a description and actual source
+            code locations. All error messages detected by some tool are
+            collected in a <literal>summary that contains an identifier for
+            the tool, an identifier for this error summary and a list of
+            errors. In the next subsection, various examples will be
+            shown.</literal></para>
+          </callout>
+
+          <callout arearefs="pico-tc.2">
+            <para>The library module <literal>utilities/PosInfo</literal>
+            defines functions to get the source code location of any part of
+            the input program.</para>
+          </callout>
+
+          <callout arearefs="pico-tc.3">
+            <para><literal>tcp</literal> is the main type check function for
+            complete Pico programs.</para>
+          </callout>
+
+          <callout arearefs="pico-tc.4">
+            <para>Several auxiliary functions are defined that are used in the
+            definition of <literal>tcp</literal>. Note how some of these
+            functions take a TENV (type environment) as one of their arguments
+            and return a possibly modified TENV as result. Other functions
+            only use the TENV argument and directly produce error
+            messages.</para>
+          </callout>
+        </calloutlist>
+      </section>
+
+      <section>
+        <title>Equations part</title>
+
+        <para>Now let's turn our attention to the equations part of the Pico
+        typechecker:</para>
+
+        <programlisting>equations
 
 [Main] start(PROGRAM, Program) = start(Summary, summary("pico-check",get-filename(get-location(Program)), [tcp(Program)]))
+                                                                                <co
+            xml:id="pico-tc-eq.1" />
 
 equations
 
-[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))
+[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))                    <co
+            xml:id="pico-tc-eq.2" />
 
 equations
 
-[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)                      <co
+            xml:id="pico-tc-eq.3" />
 
 equations
 
-[Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type, Tenv))
+[Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type, Tenv))    <co
+            xml:id="pico-tc-eq.4" />
 
-[Tc3b] tcits(,Tenv) = Tenv
+[Tc3b] tcits(,Tenv) = Tenv                                                      <co
+            xml:id="pico-tc-eq.5" />
 
 equations
 
 [Tc4a] lookup(Tenv, Id) == not-in-table
-       ===========================================
+       ===========================================                              <co
+            xml:id="pico-tc-eq.6" />
        tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
 
 [default] tcit(Id:Type, Tenv) = Tenv
 
 equations
 
-[Tc5a] tcs(Stat ; Stat*, Tenv) =
+[Tc5a] tcs(Stat ; Stat*, Tenv) =                                                <co
+            xml:id="pico-tc-eq.7" />
        tcst(Stat,Tenv), tcs(Stat*,Tenv)
 
 [Tc5b] tcs(,Tenv) = 
@@ -1198,12 +1334,16 @@ equations
 
 [Tc6a]
     not-in-table == lookup(Tenv, Id)
-    ==========================================================================================
-    tcst(Id := Exp, Tenv) = error("Variable not declared", [localized("Id", get-location(Id))])
+    ===================================================================         <co
+            xml:id="pico-tc-eq.8" />
+    tcst(Id := Exp, Tenv) = 
+    error("Variable not declared", [localized("Id", get-location(Id))])
 
-[default] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) 
+[default] tcst(Id := Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv)              <co
+            xml:id="pico-tc-eq.9" />
 
-[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =                       <co
+            xml:id="pico-tc-eq.10" />
         tce(Exp, natural, Tenv), tcs(Series1, Tenv), tcs(Series2, Tenv)
 
 [Tc6c]  tcst(while Exp do Series od, Tenv) = 
@@ -1211,15 +1351,142 @@ equations
 
 equations
 
-[default] tce(Exp, natural, Tenv) = error("Expression should be of type natural", [localized("Expression", get-location(Exp))])
-[default] tce(Exp, string, Tenv) = error("Expression should be of type string", [localized("Expression", get-location(Exp))])
+[default] tce(Exp, natural, Tenv) =                                            <co
+            xml:id="pico-tc-eq.11" />
+          error("Expression should be of type natural", [localized("Expression", get-location(Exp))])
+[default] tce(Exp, string, Tenv) = 
+          error("Expression should be of type string", [localized("Expression", get-location(Exp))])
 
-[Tc7a]  tce(Id, Type, Tenv) = when Type == lookup(Tenv, Id)
-[Tc7b]  tce(Nat-con, natural, Tenv) = 
+[Tc7a]  tce(Id, Type, Tenv) = 
+        when Type == lookup(Tenv, Id)                                          <co
+            xml:id="pico-tc-eq.12" />
+[Tc7b]  tce(Nat-con, natural, Tenv) =                                          <co
+            xml:id="pico-tc-eq.13" />
 [Tc7c]  tce(Str-con, string, Tenv) = 
-[Tc7d]  tce(Exp1 || Exp2, string, Tenv) = tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)
+[Tc7d]  tce(Exp1 || Exp2, string, Tenv) = tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)   <co
+            xml:id="pico-tc-eq.14" />
 [Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
 [Tc7d]  tce(Exp1 - Exp2, natural, Tenv) = tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)</programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="pico-tc-eq.1">
+            <para>The first equation of this module is probably also the most
+            intimidating one. Its role is similar to the
+            <literal>main</literal> function in C programs or the
+            <literal>main</literal> method in Java programs; it is an entry
+            point for execution and indicates with which function execution
+            starts. Here, we want to establish a connection between the
+            ordinary ASF+SDF functions defined in a module and the calling
+            context of The Meta-Environment. Typically, you are editing a Pico
+            program and on the push of a button you want the typecheck
+            function to be applied to it. The left-hand side
+            <literal>start(PROGRAM, Program)</literal> defines that execution
+            operates on something of the sort <literal>PROGRAM</literal>. That
+            "something" is given as value of the variable
+            <literal>Program</literal>. The right-hand side
+            <literal>start(Summary,
+            summary("pico-check",get-filename(get-location(Program)),
+            [tcp(Program)]))</literal> defines in a similar fashion that the
+            result sort of execution is <literal>Summary</literal> and a
+            recipe how to compute that result.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.2">
+            <para>Type checking a complete program amounts to typechecking its
+            declarations (this yields a type environment) and checking its
+            statements in that environment.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.3">
+            <para>To type check declarations create a new type environment
+            (<literal>new-table</literal>) and visit all identifier-type pairs
+            in the declaration.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.4">
+            <para>To check a list of identifier-type pairs, we have to visit
+            each pair in the list. We use <emphasis>list matching</emphasis>
+            to achieve this: in the left-hand side <literal>tcits(Id:Type,
+            Id-type*, Tenv)</literal> the first argument of tcits (the list of
+            identifier-type pairs) is decomposed into three values that are
+            assigned to variables. The first pair is decomposed into an
+            identifier (<literal>Id</literal>) and a type
+            (<literal>Type</literal>). The remainder of the list is assigned
+            to the variable<literal> Id-type*</literal> (note that we use the
+            naming convention that variables that have lists of zero or more
+            elements as value end on <literal>*</literal> and, similarly,
+            variables that have one or more elements as value end on
+            <literal>+</literal>). In the right-hand side of this equation,
+            the contribution of the first pair to the type-environment is
+            computed (using tcit) and the remainder of the list of
+            identifier-type pairs is checked recursively.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.5">
+            <para>The left-hand side <literal>tcits(,Tenv)</literal> looks
+            like a type but it is not. An empty list of identifier-type pairs
+            is really denoted by the empty text!</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.6">
+            <para>An identifier that does not yet occur in the type
+            environment is stored in the type environment together with its
+            type.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.7">
+            <para>Again, list matching to decompose a list of statements into
+            a first statement and a list of remaining statements. Next, check
+            the first statement and the remining statements.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.8">
+            <para>Check an assignment statement and discover that the
+            identifier on the left-hand side of the assignment is not
+            declared. Return an error.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.9">
+            <para>Otherwise, check the type of the expression on the
+            right-hand side of the assignment. The declared type of the
+            variable on the left-hand side and the derived type of the
+            expression on the right-hand side should be the same. Note that
+            the <literal>[default]</literal> label in front of this equation
+            characterizes it as a <emphasis>default equation</emphasis> that
+            is applied after all other equations have been tried. Default
+            equations serve to catch all cases that are not handled by other
+            equations.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.10">
+            <para>Checking if-statements and while-statements amounts to
+            checking that the test is of type
+            <literal>natural</literal>.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.11">
+            <para>Two default equations that generate an error message when
+            the expected type and the actual type of an expression are
+            unequal.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.12">
+            <para>When the declared type of an identifier is equal to the
+            expected type, we generate an empty list of errors.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.13">
+            <para>Similarly, natural constants and string constants satisfy
+            the expected types natural, respectively, string.</para>
+          </callout>
+
+          <callout arearefs="pico-tc-eq.14">
+            <para>For operators, the operands are checked separately.</para>
+          </callout>
+        </calloutlist>
+      </section>
     </section>
 
     <section>
@@ -1231,7 +1498,23 @@ equations
     <section>
       <title>Take home points</title>
 
-      <para></para>
+      <para>The Pico typechecker illustrates the following points:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ASF+SDF can be used to define a type checker.</para>
+        </listitem>
+
+        <listitem>
+          <para>ASF+SDF provides support for error messages and source code
+          locations.</para>
+        </listitem>
+
+        <listitem>
+          <para>A typechecker can be integrated with The
+          Meta-Environment.</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
