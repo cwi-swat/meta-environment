@@ -20,7 +20,6 @@ in
   .
   (
     rec-event(T, unparse-rtuple(Tuple?))
-    . printf("received event\n %t", Tuple)
     . snd-msg(rs-lift-rtuple(Tuple))
     . rec-msg(rs-lifted-rtuple(Lifted?))
     . snd-msg(unparse(Lifted))
@@ -28,7 +27,7 @@ in
     . snd-ack-event(T, unparse-rtuple(Tuple))
     . snd-do(T, display-unparsed-rtuple(Text))
   )
-  * rec-disconnect(T) . printf("klaar!")
+  * rec-disconnect(T)
 endlet
 
 toolbus(VisPluginTextUnparsing)
