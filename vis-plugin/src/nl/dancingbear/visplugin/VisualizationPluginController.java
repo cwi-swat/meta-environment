@@ -31,7 +31,7 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
     private ATerm[] m_supportedTypes;
     private ArrayList<WindowProperties> m_openWindows;
     private VisualizationPluginBridge m_bridge;
-
+	
     protected Factory m_factory;
 
     /**
@@ -192,12 +192,8 @@ public abstract class VisualizationPluginController extends DefaultStudioPlugin
      * @date 09-03-2007
      */
     protected boolean isTypeSupported(ATerm type) {
-        System.out.println("type:" + type.toString());
-       
         if (m_supportedTypes != null) {
             for (int i = 0; i < m_supportedTypes.length; i++) {
-        
-            	System.out.println("check type:" + m_supportedTypes[i].toString());
                 if (m_supportedTypes[i].toString().equals(type.toString())) {
                     return true;
                 }
