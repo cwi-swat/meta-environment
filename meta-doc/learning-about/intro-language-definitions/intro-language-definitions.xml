@@ -13,7 +13,8 @@
   <info>
     <title>An Introduction to Language Definitions written in ASF+SDF</title>
 
-    <pubdate>$Rev$ by $Author$ at $Date$</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2007-08-22 17:27:53
+    +0200 (Wed, 22 Aug 2007) $</pubdate>
 
     <authorgroup>
       <author>
@@ -215,25 +216,25 @@
       <para>A single module has the following structure:</para>
 
       <programlisting>module <replaceable>ModuleName</replaceable>            <co
-          xml:id="mod.num" />
-  <replaceable>ImportSection</replaceable>*             <co xml:id="mod.num" />
-  <replaceable>ExportOrHiddenSection</replaceable>*     <co xml:id="mod.num" />
+          xml:id="mod.1" />
+  <replaceable>ImportSection</replaceable>*             <co xml:id="mod.2" />
+  <replaceable>ExportOrHiddenSection</replaceable>*     <co xml:id="mod.3" />
 equations
-  <replaceable>ConditionalEquation</replaceable>*       <co xml:id="mod.num" /></programlisting>
+  <replaceable>ConditionalEquation</replaceable>*       <co xml:id="mod.4" /></programlisting>
 
       <para>Notes:</para>
 
       <calloutlist>
-        <callout arearefs="???">
+        <callout arearefs="mod.1">
           <para>The name of this module. It may be followed by
           parameters.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="mod.2">
           <para>Names of modules imported by this module.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="mod.3">
           <para>The grammar elements (such as <literal>imports</literal>,
           <literal>aliases</literal>, <literal>sorts</literal>,
           <literal>lexical syntax</literal>, <literal>context-free
@@ -243,7 +244,7 @@ equations
           (defined by <literal>hiddens</literal>).</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="mod.4">
           <para>The equations of the module that define the meaning of the
           grammar elements. Equations come in two flavours. Unconditional:
           <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
@@ -299,32 +300,32 @@ equations
 
 exports
 
-sorts BoolCon                             <co xml:id="boolcon.num" />
+sorts BoolCon                             <co xml:id="boolcon.1" />
 context-free syntax
 
-    "true"  -&gt; BoolCon {cons("true")}     <co xml:id="boolcon.num" />
+    "true"  -&gt; BoolCon {cons("true")}     <co xml:id="boolcon.2" />
     "false" -&gt; BoolCon {cons("false")}    
 
 hiddens
 context-free start-symbols
-  BoolCon                                 <co xml:id="boolcon.num" /></programlisting>
+  BoolCon                                 <co xml:id="boolcon.3" /></programlisting>
 
         <para>Notes:</para>
 
         <calloutlist>
-          <callout arearefs="???">
+          <callout arearefs="boolcon.1">
             <para>The sort of Boolean constants is defined as
             <literal>BoolCon</literal>. Sort names should always start with a
             capital letter.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="boolcon.2">
             <para>The constants <literal>true</literal> and
             <literal>false</literal>. Such literals should always be
             quoted.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="boolcon.3">
             <para>We add a start symbol (i.e., the syntactic notion from with
             all strings in this language are derived) for
             <literal>BoolCon</literal>. The net effect is that we can indeed
@@ -347,15 +348,15 @@ context-free start-symbols
 
 exports
   lexical syntax
-    [\ \t\n\r] -&gt; LAYOUT {cons("whitespace")} <co xml:id="whitespace.num" />
+    [\ \t\n\r] -&gt; LAYOUT {cons("whitespace")} <co xml:id="whitespace.1" />
 
   context-free restrictions
-    LAYOUT? -/- [\ \t\n\r]                    <co xml:id="whitespace.num" /></programlisting>
+    LAYOUT? -/- [\ \t\n\r]                    <co xml:id="whitespace.2" /></programlisting>
 
         <para>Notes:</para>
 
         <calloutlist>
-          <callout arearefs="???">
+          <callout arearefs="whitespace.1">
             <para>A regular expression that defines space (<literal>\
             </literal>), tabulation (<literal>\t)</literal>, newline (\n) and
             carriage return (<literal>\r)</literal> as
@@ -366,7 +367,7 @@ exports
             an if-statement).</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="whitespace.2">
             <para>Lexical syntax tends to become highly ambiguous.e.g., are
             two spaces one layout symbol or two consecutive ones? Context-free
             restrictions impose restrictions that resolve this. Here, optional
@@ -391,17 +392,17 @@ imports
 exports
   lexical syntax
     "%%" line:~[\n]* "\n"	-&gt; LAYOUT {cons("line"),category("Comment")}       <co
-            xml:id="comments.num" />
+            xml:id="comments.1" />
     "%" content:~[\%\n]+ "%"	-&gt; LAYOUT {cons("nested"),category("Comment")}  <co
-            xml:id="comments.num" />
+            xml:id="comments.2" />
   context-free restrictions
     LAYOUT? -/- [\%]                                                         <co
-            xml:id="comments.num" /></programlisting>
+            xml:id="comments.3" /></programlisting>
 
         <para>Notes:</para>
 
         <calloutlist>
-          <callout arearefs="???">
+          <callout arearefs="comments.1">
             <para>Defines an line-based comment that starts with
             <literal>%%</literal> and ends at the end of the line. The
             <literal>category</literal> attribute defines the highlighting
@@ -409,12 +410,12 @@ exports
             comment.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="comments.2">
             <para>Defines a comment that is contained within a single line
             between <literal>%</literal> and <literal>%</literal>.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="comments.3">
             <para>Again a follow restriction that forces layout followed by a
             comment to be included in that comment.</para>
           </callout>
@@ -430,59 +431,59 @@ exports
         <programlisting>module basic/Booleans
 
 imports basic/BoolCon&#160;                                                      <co
-            xml:id="comments.num" />
+            xml:id="booleans.1" />
 
 exports
 sorts Boolean                                                               <co
-            xml:id="comments.num" />
+            xml:id="booleans.2" />
 
 context-free syntax
   BoolCon                     -&gt; Boolean {cons("constant")}                 <co
-            xml:id="comments.num" />       
+            xml:id="booleans.3" />       
   lhs:Boolean "|" rhs:Boolean -&gt; Boolean {left, cons("or")}                 <co
-            xml:id="comments.num" />       
+            xml:id="booleans.4" />       
   lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean {left, cons("and")}                      
   "not" "(" Boolean ")"       -&gt; Boolean {cons("not")}                      <co
-            xml:id="comments.num" />     
+            xml:id="booleans.5" />     
   "(" Boolean ")"             -&gt; Boolean {bracket, cons("bracket")}         <co
-            xml:id="comments.num" />
+            xml:id="booleans.6" />
 
 context-free priorities
   Boolean "&amp;" Boolean -&gt; Boolean &gt;                                          <co
-            xml:id="comments.num" />
+            xml:id="booleans.7" />
   Boolean "|" Boolean -&gt; Boolean
 
 hiddens
 context-free start-symbols
   Boolean                                                                   <co
-            xml:id="comments.num" />
+            xml:id="booleans.8" />
 
 imports basic/Comments                                                      <co
-            xml:id="comments.num" />
+            xml:id="booleans.9" />
 
 variables
   "Bool" [0-9]* -&gt; Boolean                                                  <co
-            xml:id="comments.num" /></programlisting>
+            xml:id="booleans.10" /></programlisting>
 
         <para>Notes:</para>
 
         <calloutlist>
-          <callout arearefs="???">
+          <callout arearefs="booleans.1">
             <para>Import the Boolean constants <literal>true</literal> and
             <literal>false</literal> defined earlier.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.2">
             <para>The sort of Boolean expressions.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.3">
             <para>Each Boolean constant is also a Boolean expression. This is
             called an <emphasis>injection rule</emphasis> or a <emphasis>chain
             rule</emphasis>.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.4">
             <para>The infix operators for Boolean or (<literal>|</literal>)
             and Boolean and (&amp;). Both are left-associative and this is
             indicated by the attribute <literal>left</literal>. Also note that
@@ -493,27 +494,27 @@ variables
             accessed by external tools.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.5">
             <para>The prefix operator not.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.6">
             <para><literal>(</literal> and <literal>)</literal> may be used as
             brackets in Boolean expressions.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.7">
             <para>&amp; has a higher priority than |. The expression
             <literal>Bool &amp; Bool | Bool</literal> will thus be interpreted
             as (Bool &amp; Bool) | Bool.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.8">
             <para>Define a (hidden) start symbol for Boolean
             expressions.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.9">
             <para>Import <literal>basic/Comments</literal> for the benefit of
             writing equations for Booleans (see below). Observe the subtlety
             that this a <emphasis>hidden</emphasis> import: comments are only
@@ -523,7 +524,7 @@ variables
             with comment conventions defined at that level.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans.10">
             <para>Declares Boolean variables like <literal>Bool</literal>,
             <literal>Bool1</literal>, <literal>Bool2</literal>,
             <literal>Bool123</literal>, <literal>Bool'</literal>,
@@ -537,29 +538,29 @@ variables
 
         <programlisting>equations
 
-[B1]   true  | Bool  = true       <co xml:id="comments.num" />
+[B1]   true  | Bool  = true       <co xml:id="booleans-eq.1" />
 [B2]   false | Bool  = Bool
 
-[B3]   true  &amp; Bool  = Bool       <co xml:id="comments.num" />
+[B3]   true  &amp; Bool  = Bool       <co xml:id="booleans-eq.2" />
 [B4]   false &amp; Bool  = false
 
-[B5]   not ( false ) = true       <co xml:id="comments.num" />
+[B5]   not ( false ) = true       <co xml:id="booleans-eq.3" />
 [B6]   not ( true )  = false</programlisting>
 
         <para>Notes:</para>
 
         <calloutlist>
-          <callout arearefs="???">
+          <callout arearefs="booleans-eq.1">
             <para>Meaning of the or operator, in other words: with these two
             rules the <literal>|</literal> operator can be eliminated from any
             Boolean expression.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans-eq.2">
             <para>Meaning of and operator.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="booleans-eq.3">
             <para>Meaning of not operator.</para>
           </callout>
         </calloutlist>
@@ -717,13 +718,13 @@ variables
     function:</para>
 
     <programlisting>begin declare input : natural,            <co
-        xml:id="comments.num" />
+        xml:id="fac.1" />
               output : natural,           
               repnr : natural,
               rep : natural;
       input := 14;
       output := 1;
-      while input - 1 do                  <co xml:id="comments.num" />
+      while input - 1 do                  <co xml:id="fac.2" />
           rep := output;
           repnr := input;
           while repnr - 1 do
@@ -737,12 +738,12 @@ end</programlisting>
     <para>Notes:</para>
 
     <calloutlist>
-      <callout arearefs="???">
+      <callout arearefs="fac.1">
         <para>Pico programs do not have input/output statements, so we use
         variables for that purpose.</para>
       </callout>
 
-      <callout arearefs="???">
+      <callout arearefs="fac.2">
         <para>Pico has no multiplication operator so we have have to simulate
         it with repeated addition (yes, simplicity comes at a price!).</para>
       </callout>
@@ -780,27 +781,27 @@ end</programlisting>
       <programlisting>module languages/pico/syntax/Types
 
 exports
-  sorts TYPE                 <co xml:id="comments.num" />
+  sorts TYPE                 <co xml:id="types.1" />
   context-free syntax
-    "natural"     -&gt; TYPE    <co xml:id="comments.num" />
+    "natural"     -&gt; TYPE    <co xml:id="types.2" />
     "string"      -&gt; TYPE
-    "nil-type"    -&gt; TYPE    <co xml:id="comments.num" /></programlisting>
+    "nil-type"    -&gt; TYPE    <co xml:id="types.3" /></programlisting>
 
       <para>Notes:</para>
 
       <calloutlist>
-        <callout arearefs="???">
+        <callout arearefs="types.1">
           <para><literal>TYPE</literal> is the sort of possible types in Pico
           programs.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="types.2">
           <para>The constants <literal>natural</literal> and
           <literal>string</literal> represent types as they can be declared in
           a Pico program.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="types.3">
           <para>The constant <literal>nil-type</literal> is used for handling
           error cases.</para>
         </callout>
@@ -818,9 +819,9 @@ exports
 imports basic/Whitespace
 
 exports
-  sorts PICO-ID                  <co xml:id="comments.num" />
+  sorts PICO-ID                  <co xml:id="id.1" />
   lexical syntax
-    [a-z] [a-z0-9]* -&gt; PICO-ID   <co xml:id="comments.num" /></programlisting>
+    [a-z] [a-z0-9]* -&gt; PICO-ID   <co xml:id="id.2" /></programlisting>
 
       <caution>
         <para>Why importing basic/Whitespace?</para>
@@ -833,12 +834,12 @@ exports
       <para>Notes:</para>
 
       <calloutlist>
-        <callout arearefs="???">
+        <callout arearefs="id.1">
           <para><literal>PICO-ID</literal> is the sort of identifiers in Pico
           programs.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="id.2">
           <para>PICO-ID is defined using a regular expression that contains
           the following elements:</para>
 
@@ -885,45 +886,45 @@ imports basic/StrCon
 
 hiddens
   context-free start-symbols                                                   <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.1" />
     PROGRAM
 
 exports
 
   sorts PROGRAM DECLS ID-TYPE STATEMENT EXP                                    <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.2" />
 
   context-free syntax                                                          <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.3" />
     
     "begin" DECLS {STATEMENT";" }* "end"                          -&gt; PROGRAM   <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.4" />
     "declare" {ID-TYPE "," }*";"                                  -&gt; DECLS 
     PICO-ID ":" TYPE                                              -&gt; ID-TYPE
 
   context-free syntax                                                          <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.5" />
 
     PICO-ID ":=" EXP                                              -&gt; STATEMENT
     "if" EXP "then" {STATEMENT";" }* "else" {STATEMENT";" }* "fi" -&gt; STATEMENT
     "while" EXP "do" {STATEMENT ";" }* "od"                       -&gt; STATEMENT
  
   context-free syntax                                                          <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.6" />
 
     PICO-ID       -&gt; EXP                                                       <co
-          xml:id="comments.num" />                                                
+          xml:id="pico-syntax.7" />                                                
     NatCon        -&gt; EXP                                                       
     StrCon        -&gt; EXP                                                       
     EXP "+" EXP   -&gt; EXP {left}                                                <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.8" />
     EXP "-" EXP   -&gt; EXP {left}
     EXP "||" EXP  -&gt; EXP {left}
     "(" EXP ")"   -&gt; EXP {bracket}                                             <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.9" />
 
   context-free priorities                                                      <co
-          xml:id="comments.num" />
+          xml:id="pico-syntax.10" />
     EXP "||" EXP -&gt; EXP &gt;
     EXP "-" EXP -&gt; EXP &gt;
     EXP "+" EXP -&gt; EXP</programlisting>
@@ -931,12 +932,12 @@ exports
       <para>Notes:</para>
 
       <calloutlist>
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.1">
           <para><literal>PROGRAM</literal> is the start symbol for this
           grammar, i.e., each Pico program is derived from it.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.2">
           <para>The sorts <literal>PROGRAM</literal>,
           <literal>DECLS</literal>, <literal>ID-TYPE</literal>,
           <literal>STATEMENT</literal> and <literal>EXP</literal> are declared
@@ -944,33 +945,33 @@ exports
           modules) to define the Pico grammar.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.3">
           <para>This first context-free syntax section declares the toplevel
           structure of a Pico program.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.4">
           <para>The rule for PROGRAM contains the list construct<literal>
           {STATEMENT ";"}*</literal>. It describes zero or more statements
           separated by a semicolon (<literal>;</literal>).</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.5">
           <para>This section declares the syntax for statements.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.6">
           <para>This final context-free syntax section declares expression
           syntax.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.7">
           <para>These three rules define that natural Pico identifiers,
           natural constants and string constants may occur as
           expressions.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.8">
           <para>The syntax of the operators <literal>+</literal>,
           <literal>-</literal> and <literal>||</literal> is defined. Observe
           that all three are left-associative. This implies that an expression
@@ -979,12 +980,12 @@ exports
           <literal>1+(2+3)</literal> is rejected.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.9">
           <para><literal>(</literal> and <literal>)</literal> can be used as
           brackets in expressions.</para>
         </callout>
 
-        <callout arearefs="???">
+        <callout arearefs="pico-syntax.10">
           <para>Priorities define the relative ordering of operators and are
           used to disambiguate text when more interpretations are possible.
           The higher the priority, the stronger the binding. The expression
