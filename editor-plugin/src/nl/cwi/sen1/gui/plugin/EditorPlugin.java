@@ -408,7 +408,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		Editor panel = editors.get(id);
 
 		if (panel != null && panel.isModified()) {
-			studio.requestFocus(comp);
+			studio.makeVisible(comp);
 			try {
 				showSaveConfirmDialog(panel, optionType);
 			} catch (CloseAbortedException e) {
@@ -629,7 +629,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			if (panel.isModified()) {
 				String id = panel.getId();
 				StudioComponent comp = componentsById.get(id);
-				studio.requestFocus(comp);
+				studio.makeVisible(comp);
 				try {
 					showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
 				} catch (CloseAbortedException e) {
