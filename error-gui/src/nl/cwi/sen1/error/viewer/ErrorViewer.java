@@ -102,7 +102,7 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 			Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
 			if (summary.getList().isEmpty() == false) {
 				getPanel(panelId).addError(summary);
-				studio.requestFocus(component);
+				studio.makeVisible(component);
 			}
 		} catch (aterm.ParseError ex) {
 			System.err.println("Summary is not a valid ATerm");
