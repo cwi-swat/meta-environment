@@ -175,7 +175,7 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 			bridge.sendEvent(term);
 		}
 
-		studio.requestFocus(component);
+		studio.makeVisible(component);
 	}
 
 	/**
