@@ -1875,10 +1875,222 @@ equations
 
     <para></para>
 
+    <figure>
+      <title>Import structure Pico compiler</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="pico-compile-modules.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
     <section>
-      <title></title>
+      <title>languages/pico/compileAsssemblyLanguage</title>
 
       <para></para>
+
+      <programlisting>module languages/pico/compile/AssemblyLanguage
+
+imports basic/Integers basic/Strings 
+imports languages/pico/syntax/Identifiers
+
+exports 
+  sorts Label Instr
+  lexical syntax
+    [a-z0-9]+         -&gt; Label 
+  context-free syntax
+    "dclnat" PICO-ID  -&gt; Instr
+    "dclstr" PICO-ID  -&gt; Instr
+
+    "push" NatCon     -&gt; Instr
+    "push" StrCon     -&gt; Instr
+    "rvalue" PICO-ID  -&gt; Instr 
+    "lvalue" PICO-ID  -&gt; Instr 
+    "assign"          -&gt; Instr 
+    "add"             -&gt; Instr 
+    "sub"             -&gt; Instr 
+    "conc"            -&gt; Instr 
+    "label" Label     -&gt; Instr 
+    "goto" Label      -&gt; Instr 
+    "gotrue" Label    -&gt; Instr 
+    "gofalse" Label   -&gt; Instr
+    "noop"            -&gt; Instr
+
+  sorts Instrs
+context-free syntax
+    {Instr";"}+       -&gt; Instrs</programlisting>
+    </section>
+
+    <section>
+      <title>languages/pico/compile/NextLabel</title>
+
+      <programlisting>module languages/pico/compile/NextLabel
+
+imports languages/pico/compile/AssemblyLanguage
+
+exports
+context-free syntax
+  "nextlabel" "(" Label ")" -&gt; Label  
+
+hiddens
+lexical variables
+  "Char+" [0-9]* -&gt; [a-z0-9]+  </programlisting>
+
+      <para></para>
+
+      <programlisting>equations
+
+ [1] nextlabel(label(Char+)) = label(Char+ x)</programlisting>
+    </section>
+
+    <section>
+      <title>languages/pico/compile/Pico</title>
+
+      <para></para>
+
+      <section>
+        <title>Syntax part</title>
+
+        <para></para>
+
+        <programlisting>module languages/pico/compile/Pico
+
+imports languages/pico/syntax/Pico
+imports languages/pico/compile/AssemblyLanguage 
+imports languages/pico/compile/NextLabel 
+
+  
+exports
+  context-free syntax
+    trp( PROGRAM ) -&gt; Instrs
+  
+hiddens
+  context-free start-symbols
+    PROGRAM Instrs
+  context-free syntax
+    trd(DECLS)                    -&gt; {Instr ";"}+
+    trits({ID-TYPE  ","}*)        -&gt; {Instr ";"}+ 
+    trs({STATEMENT ";"}*, Label)  -&gt; &lt;{Instr ";"}+ , Label&gt;
+    trst(STATEMENT, Label)        -&gt; &lt;{Instr ";"}+ , Label &gt;
+    tre(EXP)                      -&gt; {Instr ";"}+
+
+hiddens
+  variables
+    "Decls"[0-9\']*   -&gt; DECLS
+    "Exp"[0-9\']*     -&gt; EXP
+    "Id"[0-9]*        -&gt; PICO-ID
+    "Id-type*"[0-9]*  -&gt; {ID-TYPE ","}*
+    "Nat-con"[0-9\']* -&gt; NatCon
+    "Series"[0-9\']*  -&gt; {STATEMENT ";"}+
+    "Stat"[0-9\']*    -&gt; STATEMENT
+    "Stat*"[0-9\']*   -&gt; {STATEMENT ";"}*
+    "Str-con"[0-9\']* -&gt; StrCon
+    "Str"[0-9\']*     -&gt; String
+
+    "Instr*"[0-9\']*  -&gt; {Instr ";"}+
+    "Label" [0-9\']*  -&gt; Label
+    "Program" -&gt; PROGRAM</programlisting>
+      </section>
+
+      <section>
+        <title>Equations part</title>
+
+        <para></para>
+
+        <programlisting>equations
+
+[main] start(PROGRAM, Program) = start(Instrs, trp(Program))
+
+equations 
+
+[Tr1]  Instr*1 := trd(Decls),
+       &lt;Instr*2, Label&gt; := trs(Series, x)
+       =================================
+       trp(begin Decls Series end) = Instr*1; Instr*2
+
+[Tr2]  trd(declare Id-type*;) = trits(Id-type*)
+ 
+[Tr3a] trits(Id:natural, Id-type*) = 
+       dclnat Id;
+       trits(Id-type*)
+ 
+[Tr3b] trits(Id:string, Id-type*) = 
+       dclstr Id; 
+       trits(Id-type*)
+ 
+[Tr3c] trits() = noop
+
+[Tr4a] &lt;Instr*1, Label'&gt; := trst(Stat, Label), 
+       &lt;Instr*2, Label''&gt; := trs(Stat*, Label')
+       =======================================
+       trs(Stat ; Stat*, Label) = 
+       &lt; Instr*1;
+         Instr*2
+       , 
+         Label'' &gt;
+
+[Tr4b] trs( , Label) = &lt;noop, Label&gt;
+
+[Tr5a] Instr* := tre(Exp)
+       ================= 
+       trst(Id := Exp, Label) = 
+       &lt; lvalue Id;
+         Instr*; 
+         assign
+       , 
+         Label &gt;
+
+[Tr5b] Instr* := tre(Exp), 
+       &lt;Instr*1, Label'&gt; := trs(Series1, Label),
+       &lt;Instr*2, Label''&gt; := trs(Series2, Label'),
+       Label1 := nextlabel(Label''), 
+       Label2 := nextlabel(Label1) 
+       ========================================================== 
+       trst(if Exp then Series1  else Series2 fi, Label) =
+       &lt; Instr*; 
+         gofalse Label1; 
+         Instr*1;
+         goto Label2; 
+         label Label1; 
+         Instr*2;
+ 	 label Label2
+       , 
+         Label2 &gt;
+
+[Tr5c] Instr*1 := tre(Exp), &lt;Instr*2, Label'&gt; := trs(Series, Label),
+       Label1 := nextlabel(Label'), Label2 := nextlabel(Label1) 
+       =========================================================== 
+       trst(while Exp do Series od, Label) =
+       &lt; label Label1; 
+         Instr*1; 
+         gofalse Label2; 
+         Instr*2;
+         goto Label1; 
+         label Label2
+       , 
+         Label2 &gt;
+
+[Tr6a] tre(Nat-con) = push Nat-con
+
+[Tr6b] tre(Str-con) = push Str-con
+
+[Tr6c] tre(Id) = rvalue Id
+
+[Trcd] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
+       ======================================== 
+       tre(Exp1 + Exp2) = Instr*1; Instr*2; add
+
+[Tr6e] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
+       ======================================== 
+       tre(Exp1 - Exp2) = Instr*1; Instr*2; sub
+
+[Tr6f] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
+       ========================================== 
+       tre(Exp1 || Exp2) = Instr*1; Instr*2; conc
+
+</programlisting>
+      </section>
     </section>
 
     <section>
