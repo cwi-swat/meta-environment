@@ -625,10 +625,23 @@ public class StudioImpl implements Studio, GuiTif {
 			View view = viewsById.getView(id.intValue());
 
 			if (view != null) {
-				// Do not use view.restoreFocus() because we don't want the
-				// focus to be transferred to the view but only want it to
-				// become visible. This way the user can go on working in the
-				// view he was working in without setting the focus back himself.
+				view.restoreFocus();
+			} else {
+				System.err.println("No view found for: " + component.getName());
+			}
+		} else {
+			System.err.println("This component does not have a view: "
+					+ component.getName());
+		}
+	}
+
+	public void makeVisible(StudioComponent component) {
+		Integer id = idsByComponent.get(component);
+
+		if (id != null) {
+			View view = viewsById.getView(id.intValue());
+
+			if (view != null) {
 				view.makeVisible();
 			} else {
 				System.err.println("No view found for: " + component.getName());

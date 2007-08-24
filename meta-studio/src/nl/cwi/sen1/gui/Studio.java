@@ -75,4 +75,10 @@ public interface Studio {
      * @param component Component to move the focus to.
      */
     public void requestFocus(StudioComponent component);
+    
+    /**
+     * Make a specific Component visible.
+     * @param component Component to make visible.
+     */    
+    public void makeVisible(StudioComponent component);
 }

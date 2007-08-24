@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 24 09:21:22 CEST 2007 <kooiker@cwi.nl>
+ * src/**/StudioImpl.java: readded request focus for highlighting errors in
+   the editors which won't work without focus.
+
 Thu Aug 23 15:40:21 CEST 2007 <kooiker@cwi.nl>
  * src/**/StudioImpl.java: on requesting focus the window that needs focus
    only becomes visible without actually getting the focus, so focus stays at
