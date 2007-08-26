@@ -1899,7 +1899,11 @@ equations
   <section>
     <title>Defining a compiler for Pico</title>
 
-    <para></para>
+    <para>A compiler transforms a program in some higher level language (in
+    this case Pico) to a lower level, in most cases assembly language. We will
+    first define the assembly language and then define the transformation
+    rules from Pico to assembly language. The overall import structure is as
+    follows:</para>
 
     <figure>
       <title>Import structure Pico compiler</title>
@@ -1912,9 +1916,10 @@ equations
     </figure>
 
     <section>
-      <title>languages/pico/compileAsssemblyLanguage</title>
+      <title>languages/pico/compile/AsssemblyLanguage</title>
 
-      <para></para>
+      <para>Below, we define an assembly language for a stack-based
+      CPU:</para>
 
       <programlisting>module languages/pico/compile/AssemblyLanguage
 
@@ -1924,32 +1929,101 @@ imports languages/pico/syntax/Identifiers
 exports 
   sorts Label Instr
   lexical syntax
-    [a-z0-9]+         -&gt; Label 
-  context-free syntax
-    "dclnat" PICO-ID  -&gt; Instr
-    "dclstr" PICO-ID  -&gt; Instr
+    [a-z0-9]+         -&gt; Label  <co xml:id="pico-comp.1" />
 
-    "push" NatCon     -&gt; Instr
+  context-free syntax
+    "dclnat" PICO-ID  -&gt; Instr  <co xml:id="pico-comp.2" />
+    "dclstr" PICO-ID  -&gt; Instr  
+
+    "push" NatCon     -&gt; Instr  <co xml:id="pico-comp.3" />
     "push" StrCon     -&gt; Instr
-    "rvalue" PICO-ID  -&gt; Instr 
-    "lvalue" PICO-ID  -&gt; Instr 
-    "assign"          -&gt; Instr 
-    "add"             -&gt; Instr 
+    "rvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-comp.4" />
+    "lvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-comp.5" />
+    "assign"          -&gt; Instr  <co xml:id="pico-comp.6" />
+    "add"             -&gt; Instr  <co xml:id="pico-comp.7" />
     "sub"             -&gt; Instr 
     "conc"            -&gt; Instr 
-    "label" Label     -&gt; Instr 
-    "goto" Label      -&gt; Instr 
+    "label" Label     -&gt; Instr  <co xml:id="pico-comp.8" />
+    "goto" Label      -&gt; Instr  <co xml:id="pico-comp.9" />
     "gotrue" Label    -&gt; Instr 
     "gofalse" Label   -&gt; Instr
-    "noop"            -&gt; Instr
+    "noop"            -&gt; Instr  <co xml:id="pico-comp.10" />
 
   sorts Instrs
 context-free syntax
-    {Instr";"}+       -&gt; Instrs</programlisting>
+    {Instr";"}+       -&gt; Instrs <co xml:id="pico-comp.11" /></programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="pico-comp.1">
+          <para>Define an instruction label.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.2">
+          <para>Directives to allocate a variable of type
+          <literal>natural</literal> or <literal>string</literal>.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.3">
+          <para>Push a naural constant or a string constant on the
+          stack.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.4">
+          <para>Push the <emphasis>value</emphasis> of a variable on the
+          stack.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.5">
+          <para>Push the <emphasis>name</emphasis> of a variable on the
+          stack</para>
+        </callout>
+
+        <callout arearefs="pico-comp.6">
+          <para>Assign to a variable. The top entries on the stack are the
+          value to be assigned and the name of the variable. Both are removed
+          after executing this instruction.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.7">
+          <para>The three operators for addition, subtraction and
+          concatenation. The expect to values on the stack and replace them by
+          the result of the operation.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.8">
+          <para>Declare label. This can be a target of one of the goto
+          instructions.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.9">
+          <para>Goto statements. The unconditional jump
+          (<literal>goto</literal>) just continues execution at the
+          instruction with the given label. The conditional jumps first
+          inspect the top of the stack, pop it, and perform a jump depending
+          on the value they found at the top of the stack.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.10">
+          <para>A dummy instruction.</para>
+        </callout>
+
+        <callout arearefs="pico-comp.11">
+          <para>A list of instructions separated by semicolons.</para>
+        </callout>
+      </calloutlist>
     </section>
 
     <section>
       <title><literal>languages/pico/compile/NextLabel</literal></title>
+
+      <para>During code generation for Pico statements like if and while, the
+      need will arize to generate new labels to describe the control flow that
+      is implied by these statements. The function nextlabel defined below
+      describes this.</para>
+
+      <para>The syntax part looks as follows:</para>
 
       <programlisting>module languages/pico/compile/NextLabel
 
@@ -1957,17 +2031,42 @@ imports languages/pico/compile/AssemblyLanguage
 
 exports
 context-free syntax
-  "nextlabel" "(" Label ")" -&gt; Label  
+  "nextlabel" "(" Label ")" -&gt; Label  <co xml:id="nextlabel.1" />
 
 hiddens
 lexical variables
-  "Char+" [0-9]* -&gt; [a-z0-9]+  </programlisting>
+  "Char+" [0-9]* -&gt; [a-z0-9]+         <co xml:id="nextlabel.2" /></programlisting>
 
-      <para></para>
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="nextlabel.1">
+          <para>The function <literal>nextlabel</literal> takes a
+          <literal>Label</literal> as argument and creates a new, unique,
+          label.</para>
+        </callout>
+
+        <callout arearefs="nextlabel.2">
+          <para>The definition uses a so-called <emphasis>lexical
+          variable</emphasis>. Ordinary variables range over the subtrees (or
+          subterms, if you prefer) of a term. In some cases it is necessary to
+          be able to even inspect the contents of the lexical entities that
+          form the leaves of a tree. Examples are identifiers, string
+          constants and sometimes even the layout. Here we want to inspect the
+          textual content of labels and define a lexical variable that ranges
+          over the same lexical syntax as labels.</para>
+        </callout>
+      </calloutlist>
+
+      <para>Th eqaution part:</para>
 
       <programlisting>equations
 
  [1] nextlabel(label(Char+)) = label(Char+ x)</programlisting>
+
+      <para>The single equation decomposes a given label into a list of
+      characters and creates a new label with the list of characters with a
+      single character <literal>x</literal> appended.</para>
     </section>
 
     <section>
