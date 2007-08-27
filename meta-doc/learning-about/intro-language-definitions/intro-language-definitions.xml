@@ -11,7 +11,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>An Introduction to Language Definitions written in ASF+SDF</title>
+    <title>Language Definitions written in ASF+SDF</title>
 
     <pubdate>$Rev$ by $Author$ at $Date: 2007-08-22 17:27:53
     +0200 (Wed, 22 Aug 2007) $</pubdate>
@@ -1055,6 +1055,160 @@ exports
         </listitem>
       </itemizedlist>
     </section>
+
+    <section>
+      <title>Recap: symbols</title>
+
+      <para>In the syntax rules we have seen sofar, many different
+      <emphasis>symbols</emphasis> are used. <emphasis>Elementary
+      symbols</emphasis> are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Literal strings like <literal>"begin"</literal> or
+          <literal>"+"</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Sort names like <literal>PROGRAM</literal> and
+          <literal>STATEMENT</literal>. Note that sorts are usually called
+          non-terminals.</para>
+        </listitem>
+
+        <listitem>
+          <para>Character classes like <literal>[a-z]</literal>. Character
+          classes can be combined using the following operators:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>~</literal>: complement.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>/</literal>: difference.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>/\</literal>: intersection.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>\/</literal>: union.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Complex symbols are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Repetition:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>S*</literal>: zero or more times S.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>S+</literal>: one or more times S.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{S1 S2}*</literal>: zero or more times
+              <literal>S1</literal> <emphasis>separated by</emphasis>
+              <literal>S2</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{S1 S2}+</literal>: one or more times
+              <literal>S1</literal> <emphasis>separated by</emphasis>
+              <literal>S2</literal>.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Repetition is best understood by the following examples
+          (assuming the rule <literal>"a" -&gt; A</literal>):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>A</literal> accepts <literal>a</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>A+</literal> accepts <literal>a</literal>,
+              <literal>aa</literal>, ....</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{A ";"}+</literal> accepts <literal>a</literal>,
+              <literal>a;a</literal>, <literal>a;a;a</literal>, ... but not:
+              <literal>a;a;a;</literal>.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Slightly different patterns can be defined as well (suing
+          grouping and alternative as defined below):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>(<literal>A ";")+</literal> accepts <literal>a;</literal>,
+              <literal>a;a;</literal>, <literal>a;a;a;</literal> ... but not
+              <literal>a;a;a</literal>.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>(A ";"?)+</literal> accepts <literal>a</literal>,
+              <literal>a a</literal>, <literal>a;a</literal>,
+              <literal>a;a;</literal>, ...</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Grouping: <literal>(S1 S2 ...)</literal> is identical to
+          <literal>S1 S2 ...</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Optional: <literal>S?</literal>: zero or one occurence of
+          <literal>S</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Alternative: <literal>S | T</literal>: an <literal>S</literal>
+          or a <literal>T</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Tuple: <literal>&lt;S,T&gt;</literal>: shorthand for
+          <literal>"&lt;" S "," T "&gt;"</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Parameterized sort: <literal>S[[ P1, P2 ]]</literal></para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Recap: syntax rules</title>
+
+      <para>The general form of a grammar rule is:</para>
+
+      <programlisting>S1 S2 ... Sn -&gt; S0 Attributes</programlisting>
+
+      <para>Where <literal>S1</literal>, ... are symbols and
+      <literal>Attributes</literal> is a (possibly empty) list of
+      attributes.</para>
+
+      <para>Lexical syntax and context-free syntax are similar but between the
+      symbols defined in a context-free rule, optional layout symbols may
+      occur in the input text. A context-free rule (like the one above) is
+      equivalent to:</para>
+
+      <programlisting>S1 LAYOUT? S2 LAYOUT? ... LAYOUT? Sn -&gt; S0 Attributes</programlisting>
+    </section>
   </section>
 
   <section>
@@ -1869,6 +2023,35 @@ equations
             Pico.</para>
           </callout>
         </calloutlist>
+
+        <para>Now apply the evaluator function <literal>evp</literal> to our
+        Pico factorial example:</para>
+
+        <programlisting>evp(
+begin declare input : natural,
+                      output  :  natural,
+                      repnr: natural,
+                     rep: natural;
+          input := 14;
+          output := 1;
+          while input - 1 do
+              rep := output;
+              repnr := input;
+              while repnr - 1 do
+                 output := output + rep;
+                 repnr := repnr - 1
+              od;
+              input := input - 1
+          od
+end
+)</programlisting>
+
+        <para>The result is:</para>
+
+        <programlisting>[&lt;input,1&gt;,
+&lt;repnr,1&gt;,
+&lt;output,87178291200&gt;,
+&lt;rep,43589145600&gt;]</programlisting>
       </section>
     </section>
 
@@ -1929,75 +2112,75 @@ imports languages/pico/syntax/Identifiers
 exports 
   sorts Label Instr
   lexical syntax
-    [a-z0-9]+         -&gt; Label  <co xml:id="pico-comp.1" />
+    [a-z0-9]+         -&gt; Label  <co xml:id="pico-asm.1" />
 
   context-free syntax
-    "dclnat" PICO-ID  -&gt; Instr  <co xml:id="pico-comp.2" />
+    "dclnat" PICO-ID  -&gt; Instr  <co xml:id="pico-asm.2" />
     "dclstr" PICO-ID  -&gt; Instr  
 
-    "push" NatCon     -&gt; Instr  <co xml:id="pico-comp.3" />
+    "push" NatCon     -&gt; Instr  <co xml:id="pico-asm.3" />
     "push" StrCon     -&gt; Instr
-    "rvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-comp.4" />
-    "lvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-comp.5" />
-    "assign"          -&gt; Instr  <co xml:id="pico-comp.6" />
-    "add"             -&gt; Instr  <co xml:id="pico-comp.7" />
+    "rvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-asm.4" />
+    "lvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-asm.5" />
+    "assign"          -&gt; Instr  <co xml:id="pico-asm.6" />
+    "add"             -&gt; Instr  <co xml:id="pico-asm.7" />
     "sub"             -&gt; Instr 
     "conc"            -&gt; Instr 
-    "label" Label     -&gt; Instr  <co xml:id="pico-comp.8" />
-    "goto" Label      -&gt; Instr  <co xml:id="pico-comp.9" />
+    "label" Label     -&gt; Instr  <co xml:id="pico-asm.8" />
+    "goto" Label      -&gt; Instr  <co xml:id="pico-asm.9" />
     "gotrue" Label    -&gt; Instr 
     "gofalse" Label   -&gt; Instr
-    "noop"            -&gt; Instr  <co xml:id="pico-comp.10" />
+    "noop"            -&gt; Instr  <co xml:id="pico-asm.10" />
 
   sorts Instrs
 context-free syntax
-    {Instr";"}+       -&gt; Instrs <co xml:id="pico-comp.11" /></programlisting>
+    {Instr";"}+       -&gt; Instrs <co xml:id="pico-asm.11" /></programlisting>
 
       <para>Notes:</para>
 
       <calloutlist>
-        <callout arearefs="pico-comp.1">
+        <callout arearefs="pico-asm.1">
           <para>Define an instruction label.</para>
         </callout>
 
-        <callout arearefs="pico-comp.2">
+        <callout arearefs="pico-asm.2">
           <para>Directives to allocate a variable of type
           <literal>natural</literal> or <literal>string</literal>.</para>
         </callout>
 
-        <callout arearefs="pico-comp.3">
+        <callout arearefs="pico-asm.3">
           <para>Push a naural constant or a string constant on the
           stack.</para>
         </callout>
 
-        <callout arearefs="pico-comp.4">
+        <callout arearefs="pico-asm.4">
           <para>Push the <emphasis>value</emphasis> of a variable on the
           stack.</para>
         </callout>
 
-        <callout arearefs="pico-comp.5">
+        <callout arearefs="pico-asm.5">
           <para>Push the <emphasis>name</emphasis> of a variable on the
           stack</para>
         </callout>
 
-        <callout arearefs="pico-comp.6">
+        <callout arearefs="pico-asm.6">
           <para>Assign to a variable. The top entries on the stack are the
           value to be assigned and the name of the variable. Both are removed
           after executing this instruction.</para>
         </callout>
 
-        <callout arearefs="pico-comp.7">
+        <callout arearefs="pico-asm.7">
           <para>The three operators for addition, subtraction and
           concatenation. The expect to values on the stack and replace them by
           the result of the operation.</para>
         </callout>
 
-        <callout arearefs="pico-comp.8">
+        <callout arearefs="pico-asm.8">
           <para>Declare label. This can be a target of one of the goto
           instructions.</para>
         </callout>
 
-        <callout arearefs="pico-comp.9">
+        <callout arearefs="pico-asm.9">
           <para>Goto statements. The unconditional jump
           (<literal>goto</literal>) just continues execution at the
           instruction with the given label. The conditional jumps first
@@ -2005,11 +2188,11 @@ context-free syntax
           on the value they found at the top of the stack.</para>
         </callout>
 
-        <callout arearefs="pico-comp.10">
+        <callout arearefs="pico-asm.10">
           <para>A dummy instruction.</para>
         </callout>
 
-        <callout arearefs="pico-comp.11">
+        <callout arearefs="pico-asm.11">
           <para>A list of instructions separated by semicolons.</para>
         </callout>
       </calloutlist>
@@ -2066,18 +2249,26 @@ lexical variables
 
       <para>The single equation decomposes a given label into a list of
       characters and creates a new label with the list of characters with a
-      single character <literal>x</literal> appended.</para>
+      single character <literal>x</literal> appended. Note that for every
+      lexical sort (here: <literal>Label</literal>) there exeits an
+      automatically generated constructor function (here:
+      <literal>label</literal>) that can be used to access the characters of a
+      lexical value or to construct a new one. The former happens at the
+      left-hand side of the above equation, the latter on the right-hand side.
+      Also observe that this completely type safe and that only syntactically
+      correct lexical values can be constructed in this way.</para>
     </section>
 
     <section>
       <title><literal>languages/pico/compile/Pico</literal></title>
 
-      <para></para>
+      <para>The goal of the Pico compiler is to translate a Pico program into
+      an assembly language program.</para>
 
       <section>
         <title>Syntax part</title>
 
-        <para></para>
+        <para>The syntax part of the Pico compiler:</para>
 
         <programlisting>module languages/pico/compile/Pico
 
@@ -2088,17 +2279,19 @@ imports languages/pico/compile/NextLabel
   
 exports
   context-free syntax
-    trp( PROGRAM ) -&gt; Instrs
+    trp( PROGRAM ) -&gt; Instrs                              <co
+            xml:id="pico-comp.1" />
   
 hiddens
   context-free start-symbols
     PROGRAM Instrs
-  context-free syntax
-    trd(DECLS)                    -&gt; {Instr ";"}+
-    trits({ID-TYPE  ","}*)        -&gt; {Instr ";"}+ 
-    trs({STATEMENT ";"}*, Label)  -&gt; &lt;{Instr ";"}+ , Label&gt;
-    trst(STATEMENT, Label)        -&gt; &lt;{Instr ";"}+ , Label&gt;
-    tre(EXP)                      -&gt; {Instr ";"}+
+  context-free syntax                                     <co
+            xml:id="pico-comp.2" />                     
+    trd(DECLS)                   -&gt; {Instr ";"}+
+    trits({ID-TYPE  ","}*)       -&gt; {Instr ";"}+ 
+    trs({STATEMENT ";"}*, Label) -&gt; &lt;{Instr ";"}+, Label&gt;
+    trst(STATEMENT, Label)       -&gt; &lt;{Instr ";"}+, Label&gt;
+    tre(EXP)                     -&gt; {Instr ";"}+
 
 hiddens
   variables
@@ -2116,28 +2309,52 @@ hiddens
     "Instr*"[0-9\']*  -&gt; {Instr ";"}+
     "Label" [0-9\']*  -&gt; Label
     "Program"         -&gt; PROGRAM</programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="pico-comp.1">
+            <para>The main compiler function translates a Pico program into a
+            seuqnce of instructions.</para>
+          </callout>
+
+          <callout arearefs="pico-comp.2">
+            <para>Auxiliary compiler functions. Observe that some of these
+            functions have the output sort <literal>&lt;{Instr ";"}+,
+            Label&gt;</literal>. This a tuple with as first component a list
+            of instructions and as second components a label. The general idea
+            is that those functions that generate new labels (for instance, to
+            compile an if statement) return an instruction sequence
+            <emphasis>and</emphasis> the last label they have
+            generated.</para>
+          </callout>
+        </calloutlist>
       </section>
 
       <section>
         <title>Equations part</title>
 
-        <para></para>
+        <para>The equations of the Pico compiler look as follows:</para>
 
         <programlisting>equations
 
-[main] start(PROGRAM, Program) = 
+[main] start(PROGRAM, Program) =                          <co
+            xml:id="pico-comp-eqs.1" />
        start(Instrs, trp(Program))
 
 equations 
 
 [Tr1]  Instr*1 := trd(Decls),
        &lt;Instr*2, Label&gt; := trs(Series, x)
-       ==============================================
+       ==============================================     <co
+            xml:id="pico-comp-eqs.2" />
        trp(begin Decls Series end) = Instr*1; Instr*2
 
-[Tr2]  trd(declare Id-type*;) = trits(Id-type*)
+[Tr2]  trd(declare Id-type*;) = trits(Id-type*)           <co
+            xml:id="pico-comp-eqs.3" />
  
-[Tr3a] trits(Id:natural, Id-type*) = 
+[Tr3a] trits(Id:natural, Id-type*) =                      <co
+            xml:id="pico-comp-eqs.4" />
        dclnat Id;
        trits(Id-type*)
  
@@ -2149,17 +2366,20 @@ equations
 
 [Tr4a] &lt;Instr*1, Label'&gt; := trst(Stat, Label), 
        &lt;Instr*2, Label''&gt; := trs(Stat*, Label')
-       =======================================
+       =======================================             <co
+            xml:id="pico-comp-eqs.5" />
        trs(Stat ; Stat*, Label) = 
        &lt; Instr*1;
          Instr*2
        , 
          Label'' &gt;
 
-[Tr4b] trs( , Label) = &lt;noop, Label&gt;
+[Tr4b] trs( , Label) = &lt;noop, Label&gt;                       <co
+            xml:id="pico-comp-eqs.6" />
 
 [Tr5a] Instr* := tre(Exp)
-       ================= 
+       =================                                   <co
+            xml:id="pico-comp-eqs.7" />
        trst(Id := Exp, Label) = 
        &lt; lvalue Id;
          Instr*; 
@@ -2172,7 +2392,8 @@ equations
        &lt;Instr*2, Label''&gt; := trs(Series2, Label'),
        Label1 := nextlabel(Label''), 
        Label2 := nextlabel(Label1) 
-       =================================================== 
+       =================================================== <co
+            xml:id="pico-comp-eqs.8" />
        trst(if Exp then Series1  else Series2 fi, Label) =
        &lt; Instr*; 
          gofalse Label1; 
@@ -2180,7 +2401,7 @@ equations
          goto Label2; 
          label Label1; 
          Instr*2;
- 	 label Label2
+         label Label2
        , 
          Label2 &gt;
 
@@ -2188,7 +2409,8 @@ equations
        &lt;Instr*2, Label'&gt; := trs(Series, Label),
        Label1 := nextlabel(Label'), 
        Label2 := nextlabel(Label1) 
-       ======================== =============== 
+       =======================================             <co
+            xml:id="pico-comp-eqs.9" />
        trst(while Exp do Series od, Label) =
        &lt; label Label1; 
          Instr*1; 
@@ -2199,14 +2421,16 @@ equations
        , 
          Label2 &gt;
 
-[Tr6a] tre(Nat-con) = push Nat-con
+[Tr6a] tre(Nat-con) = push Nat-con                         <co
+            xml:id="pico-comp-eqs.10" />
 
 [Tr6b] tre(Str-con) = push Str-con
 
 [Tr6c] tre(Id) = rvalue Id
 
 [Trcd] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
-       ======================================== 
+       ========================================            <co
+            xml:id="pico-comp-eqs.11" />
        tre(Exp1 + Exp2) = Instr*1; Instr*2; add
 
 [Tr6e] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
@@ -2215,9 +2439,141 @@ equations
 
 [Tr6f] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
        ========================================== 
-       tre(Exp1 || Exp2) = Instr*1; Instr*2; conc
+       tre(Exp1 || Exp2) = Instr*1; Instr*2; conc</programlisting>
 
-</programlisting>
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="pico-comp-eqs.1">
+            <para>The ubiquitous start equation that establishes that trees of
+            sort <literal>PROGRAM</literal> are being transformed into a
+            result of sort <literal>Instrs</literal> and this result is
+            computed by the function <literal>trp</literal>.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.2">
+            <para>A Pico program is compiled by first compiling its
+            declarations and then is instructions. The resulting instruction
+            sequences are then concatened and returned as result. Note that
+            the translation of the series part of the program starts using the
+            label <literal>x</literal> (the single x character).</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.3">
+            <para>Compile the declarations.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.4">
+            <para>Compile an (id, type) pair. Depending on the declared type,
+            we generate a <literal>dclnat</literal> or
+            <literal>dclstr</literal> instruction.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.5">
+            <para>Compile a series of statements by first compiling the first
+            one and then the rest. Observe the carefull propagation of the
+            label information.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.6">
+            <para>An empty series of statements is translated into a
+            <literal>noop</literal> instruction.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.7">
+            <para>Compile an assignment statement.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.8">
+            <para>Compile an if statement. Labels are created to mark the
+            instructions generated for the else branch and, respectively, the
+            instructions following the code generated for the if
+            statement.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.9">
+            <para> Compile a while loop. Two new label are generated to mark
+            the instructions generated for the while statement and,
+            respectively, the instructions following the code generated for
+            the while loop.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.10">
+            <para>Constants are compiled into appropriate push
+            instructions.</para>
+          </callout>
+
+          <callout arearefs="pico-comp-eqs.11">
+            <para>Compilation of expressions. First compile both arguments
+            (when the generated code is executed it leaves the two argument
+            values on the stack) and then generate the appropriate operator
+            instructions that will replace the values on the stack by the
+            result of the operator.</para>
+          </callout>
+        </calloutlist>
+
+        <para>Recall the Pico example that computes factorial? Let's apply the
+        function trp to it:</para>
+
+        <programlisting>tcp(
+begin declare input : natural,
+                      output  :  natural,
+                      repnr: natural,
+                     rep: natural;
+          input := 14;
+          output := 1;
+          while input - 1 do
+              rep := output;
+              repnr := input;
+              while repnr - 1 do
+                 output := output + rep;
+                 repnr := repnr - 1
+              od;
+              input := input - 1
+          od
+end
+)</programlisting>
+
+        <para>The result is the following assembly language program:</para>
+
+        <programlisting>        dclnat input; 
+        dclnat output; 
+        dclnat repnr; 
+        dclnat rep; 
+        noop; lvalue input; 
+        push 14; 
+        assign ; 
+        lvalue output; 
+        push 1; 
+        assign ; 
+        label xxxx; 
+        rvalue input; push 1; sub; 
+        gofalse xxxxx; 
+        lvalue rep; 
+        rvalue output; 
+        assign ; 
+        lvalue repnr; 
+        rvalue input; 
+        assign ; 
+        label xx; 
+        rvalue repnr; push 1; sub; 
+        gofalse xxx; 
+        lvalue output; 
+        rvalue output; rvalue rep; add; 
+        assign ; 
+        lvalue repnr; 
+        rvalue repnr; push 1; sub; 
+        assign ; 
+        noop;
+        goto xx; 
+        label xxx ; 
+        lvalue input; 
+        rvalue input; push 1; sub; 
+        assign ; 
+        noop;
+        goto xxxx; 
+        label xxxxx ; 
+        noop</programlisting>
       </section>
     </section>
 
@@ -2230,7 +2586,27 @@ equations
     <section>
       <title>Take home points</title>
 
-      <para></para>
+      <para>The Pico compiler illustrates the following issues:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ASF+SDF can be used to define a compiler.</para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>ASF+SDF allows the decomposition of lexical values into
+          characters and the construction of syntactically correct new lexical
+          values.</para>
+        </listitem>
+
+        <listitem>
+          <para>Three languages are involved in the definition of the Pico
+          compiler: ASF+SDF (the specification language), Pico (source
+          language), and AssemblyLanguage (target language).</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
