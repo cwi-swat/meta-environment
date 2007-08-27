@@ -12,7 +12,7 @@ let
   Idle: term
 in
   Idle := no
-  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,available) 
+  . MM-Subscribe-Attribute-Changed(<module-id>,SDF_NAMESPACE,"status",<term>,identified) 
   .
   (
     rec-note(mm-attribute-changed(Event?))

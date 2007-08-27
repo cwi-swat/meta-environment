@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Mon Aug 27 16:04:58 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/asf-listeners.tb: register ASF module when SDF module has been
+   identified. This prevents ASF modules from using the wrong modulename,
+   since the modulename is only valid after the SDF module has been identified.
+
 Thu Aug 23 11:24:19 CEST 2007 <{kooiker,lankamp,jurgenv}@cwi.nl>
  * tbscripts/asf-action.tb: added menu option to kill of a running
    asfe.
