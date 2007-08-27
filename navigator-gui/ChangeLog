@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 27 16:21:45 CEST 2007 <kooiker@cwi.nl>
+ * src/**/Navigator.java: update only added new modules. It now also really 
+   updates modules when needed.
+
 Mon Aug 20 14:36:13 CEST 2007 <kooiker@cwi.nl>
  * src/**/ModuleTree.java: use overlay for creating error icons
 
