@@ -1,5 +1,10 @@
 # $Id$
 
+2007-08-27    <storm@cwi.nl>
+
+ * spec/languages/rscript/check/Rscript.sdf: fixed a bug in the
+ checker. User defined tuple types weren't checked properly. 
+
 Thu Aug 23 10:31:25 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
  * bin/run/*.isrc: added possibility to kill a running interpreter.
 

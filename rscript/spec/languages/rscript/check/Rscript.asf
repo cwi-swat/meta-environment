@@ -219,7 +219,6 @@ equations
 		get-field-index($Var, <$Formal+>)
 
 
-%% ---- check-duplicate-fields
 
 [cdf1-1]	get-field-index($Var, $Tenv) == 0
 	===
@@ -255,12 +254,15 @@ equations
 	check-duplicate-fields(<$Etype $Var, $Formal+>, $Integer, $Tenv) =
 		check-duplicate-fields(<$Formal+>, $Integer + 1, $Tenv')
 
-%%[cdf2]	check-duplicate-fields(, $Integer, $Tenv) = $Tenv
+[cdf2]	
+	check-duplicate-fields(, $Integer, $Tenv) = $Tenv
+
+[default-cdf3]	
+	check-duplicate-fields($Etype, $Etype*, $Integer, $Tenv) = $Tenv
+
 
 %% Skip non-labeled positions
-%%[default-cdf]
-%%	check-duplicate-fields($Etype, $Etype*, $Integer, $Tenv) =
-%%		check-duplicate-fields($Etype*, $Integer + 1, $Tenv)
+[cdf]	check-duplicate-fields(<$Etype, $Etype*>, $Integer, $Tenv) = $Tenv
 		
 
 equations
