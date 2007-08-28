@@ -23,6 +23,7 @@ TBSCRIPTS = \
 	    module-utils.tb \
 	    navigator.tb \
 	    parse-utils.tb \
+	    parsetable-utils.tb \
 	    pretty-print-utils.tb \
 	    serialization-utils.tb \
 	    text-utils.tb \
