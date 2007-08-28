@@ -31,7 +31,7 @@ let
   Pid: int
 in
   InitCache(TableName)
-  . create(ClearCacheHandler(TableName, SDF_NAMESPACE, "status", <term>, complete), Pid?)
+  . create(ClearCacheHandler(TableName, Namespace, "status", <term>, complete), Pid?)
   .
   (
     rec-msg(get-parsetable(ModuleId?, Type))
@@ -44,7 +44,7 @@ in
       . snd-msg(tm-end-transaction(syntax-definition))
       . 
       if not-equal(Syntax, UNDEFINED) then
-	MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+	MM-GetAttribute(ModuleId, Namespace, "name", Modulename?)
         . PreprocessSyntaxHandler(Modulename, Syntax, NewSyntax?)
 	. GenerateParsetable(Modulename, NewSyntax, Table?)
 	.
