@@ -6,29 +6,27 @@ process Open-Sdf2-Language is
 let 
   Error: term,
   Table: term,
-  SdfTable: term,
   Type: term,
   ModuleId: term
 in
   Type := sdf
-  . SdfTable := UNDEFINED
+  . Table := UNDEFINED
   .
   (
     rec-msg(get-parsetable(ModuleId?, Type))
     .
-    if equal(SdfTable, UNDEFINED) then 
+    if equal(Table, UNDEFINED) then 
       snd-msg(io-read-and-pack-term("__SDF2TABLE__"))
       .
       (
         rec-msg(io-packed-term(Table?))
-        . SdfTable := Table
         . snd-msg(parsetable(ModuleId, Type, Table))
       +
         rec-msg(io-error-reading(Error?))
         . snd-msg(no-parsetable(ModuleId, Type))
       )
     else
-      snd-msg(parsetable(ModuleId, Type, SdfTable))
+      snd-msg(parsetable(ModuleId, Type, Table))
     fi
   )
   * delta
