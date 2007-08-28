@@ -391,15 +391,14 @@ imports
 
 exports
   lexical syntax
-    "%%" line:~[\n]* "\n"    -&gt; LAYOUT {cons("line"),
-                                        category("Comment")}  <co
-            xml:id="comments.1" />
-    "%" content:~[\%\n]+ "%" -&gt; LAYOUT {cons("nested"),
-                                        category("Comment")}  <co
-            xml:id="comments.2" />
+    "%%" line:~[\n]* "\n"    -&gt; LAYOUT
+                                {cons("line"),
+                                 category("Comment")}  <co xml:id="comments.1" />
+    "%" content:~[\%\n]+ "%" -&gt; LAYOUT 
+                                {cons("nested"),
+                                 category("Comment")}  <co xml:id="comments.2" />
   context-free restrictions
-    LAYOUT? -/- [\%]                                          <co
-            xml:id="comments.3" /></programlisting>
+    LAYOUT? -/- [\%]                                   <co xml:id="comments.3" /></programlisting>
 
         <para>Notes:</para>
 
@@ -432,40 +431,38 @@ exports
 
         <programlisting>module basic/Booleans
 
-imports basic/BoolCon&#160;                                         <co
+imports basic/BoolCon&#160;                                 <co
             xml:id="booleans.1" />
 
 exports
-sorts Boolean                                                  <co
-            xml:id="booleans.2" />
+sorts Boolean                                          <co xml:id="booleans.2" />
 
 context-free syntax
-  BoolCon                     -&gt; Boolean {cons("constant")}    <co
-            xml:id="booleans.3" />       
-  lhs:Boolean "|" rhs:Boolean -&gt; Boolean {left, cons("or")}    <co
-            xml:id="booleans.4" />       
-  lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean {left, cons("and")}                  
-  "not" "(" Boolean ")"       -&gt; Boolean {cons("not")}         <co
-            xml:id="booleans.5" />     
-  "(" Boolean ")"             -&gt; Boolean {bracket, 
-                                          cons("bracket")}     <co
-            xml:id="booleans.6" />
+  BoolCon                     -&gt; Boolean 
+                                 {cons("constant")}    <co xml:id="booleans.3" />       
+  lhs:Boolean "|" rhs:Boolean -&gt; Boolean 
+                                 {left, cons("or")}    <co xml:id="booleans.4" />       
+  lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean 
+                                 {left, cons("and")}                  
+  "not" "(" Boolean ")"       -&gt; Boolean 
+                                 {cons("not")}         <co xml:id="booleans.5" />     
+  "(" Boolean ")"             -&gt; Boolean 
+                                 {bracket, 
+                                  cons("bracket")}     <co xml:id="booleans.6" />
 
 context-free priorities
-  Boolean "&amp;" Boolean -&gt; Boolean &gt;                             <co
+  Boolean "&amp;" Boolean -&gt; Boolean &gt;                     <co
             xml:id="booleans.7" />
   Boolean "|" Boolean -&gt; Boolean
 
 hiddens
 context-free start-symbols
-  Boolean                                                      <co
-            xml:id="booleans.8" />
+  Boolean                                              <co xml:id="booleans.8" />
 
-imports basic/Comments                                         <co
-            xml:id="booleans.9" />
+imports basic/Comments                                 <co xml:id="booleans.9" />
 
 variables
-  "Bool" [0-9]* -&gt; Boolean                                     <co
+  "Bool" [0-9]* -&gt; Boolean                             <co
             xml:id="booleans.10" /></programlisting>
 
         <para>Notes:</para>
@@ -888,47 +885,49 @@ imports basic/NatCon
 imports basic/StrCon 
 
 hiddens
-  context-free start-symbols                                 <co
+  context-free start-symbols                              <co
           xml:id="pico-syntax.1" />
     PROGRAM
 
 exports
 
-  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP                  <co
+  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP               <co
           xml:id="pico-syntax.2" />
 
-  context-free syntax                                        <co
+  context-free syntax                                     <co
           xml:id="pico-syntax.3" />
     
-    "begin" DECLS {STATEMENT";" }* "end"     -&gt; PROGRAM      <co
+    "begin" DECLS {STATEMENT";" }* "end" -&gt; PROGRAM       <co
           xml:id="pico-syntax.4" />
-    "declare" {ID-TYPE "," }*";"             -&gt; DECLS 
-    PICO-ID ":" TYPE                         -&gt; ID-TYPE
+    "declare" {ID-TYPE "," }*";"         -&gt; DECLS 
+    PICO-ID ":" TYPE                     -&gt; ID-TYPE
 
-  context-free syntax                                        <co
+  context-free syntax                                     <co
           xml:id="pico-syntax.5" />
 
-    PICO-ID ":=" EXP                         -&gt; STATEMENT
+    PICO-ID ":=" EXP                     -&gt; STATEMENT
     "if" EXP "then" {STATEMENT";" }* 
              "else" {STATEMENT";" }* 
-    "fi"                                     -&gt; STATEMENT
-    "while" EXP "do" {STATEMENT ";" }* "od"  -&gt; STATEMENT
+    "fi"                                 -&gt; STATEMENT
+    "while" EXP "do"
+                    {STATEMENT ";" }* 
+                "od"                     -&gt; STATEMENT
  
-  context-free syntax                                         <co
+  context-free syntax                                     <co
           xml:id="pico-syntax.6" />
 
-    PICO-ID                                  -&gt; EXP           <co
+    PICO-ID                              -&gt; EXP           <co
           xml:id="pico-syntax.7" />                                                
-    NatCon                                   -&gt; EXP                                   
-    StrCon                                   -&gt; EXP                                                       
-    EXP "+" EXP                              -&gt; EXP {left}    <co
+    NatCon                               -&gt; EXP                                   
+    StrCon                               -&gt; EXP                                                       
+    EXP "+" EXP                          -&gt; EXP {left}    <co
           xml:id="pico-syntax.8" />
-    EXP "-" EXP                              -&gt; EXP {left}
-    EXP "||" EXP                             -&gt; EXP {left}
-    "(" EXP ")"                              -&gt; EXP {bracket} <co
+    EXP "-" EXP                          -&gt; EXP {left}
+    EXP "||" EXP                         -&gt; EXP {left}
+    "(" EXP ")"                          -&gt; EXP {bracket} <co
           xml:id="pico-syntax.9" />
 
-  context-free priorities                                     <co
+  context-free priorities                                 <co
           xml:id="pico-syntax.10" />
     EXP "||" EXP -&gt; EXP &gt;
     EXP "-" EXP -&gt; EXP &gt;
@@ -1309,14 +1308,15 @@ exports
       <programlisting>module containers/Table[Key Value]
 ...
 context-free syntax
-  "not-in-table"                        -&gt; Value  {constructor} 
-  "new-table"                           -&gt; Table[[Key,Value]]               
-  lookup(Table[[Key,Value]], Key)       -&gt; Value                            
-  store(Table[[Key,Value]], Key, Value) -&gt; Table[[Key,Value]]               
-  delete(Table[[Key,Value]], Key)       -&gt; Table[[Key,Value]]               
-  element(Table[[Key,Value]], Key)      -&gt; Boolean                          
-  keys(Table[[Key,Value]])              -&gt; List[[Key]]                      
-  values(Table[[Key,Value]])            -&gt; List[[Value]]
+  "not-in-table"                   -&gt; Value  {constructor} 
+  "new-table"                      -&gt; Table[[Key,Value]]               
+  lookup(Table[[Key,Value]], Key)  -&gt; Value                            
+  store(Table[[Key,Value]], Key, 
+                            Value) -&gt; Table[[Key,Value]]               
+  delete(Table[[Key,Value]], Key)  -&gt; Table[[Key,Value]]               
+  element(Table[[Key,Value]], Key) -&gt; Boolean                          
+  keys(Table[[Key,Value]])         -&gt; List[[Key]]                      
+  values(Table[[Key,Value]])       -&gt; List[[Value]]
 ...</programlisting>
 
       <para>In the case of <literal>Type-environments</literal>, the formal
@@ -1364,20 +1364,19 @@ context-free syntax
         <programlisting>module languages/pico/check/Pico
 
 imports basic/Booleans
-imports basic/Errors                                    <co xml:id="pico-tc.1" />
+imports basic/Errors                              <co xml:id="pico-tc.1" />
 imports languages/pico/syntax/Pico
 imports languages/pico/check/Type-environments
-imports utilities/PosInfo[EXP]                          <co xml:id="pico-tc.2" />
+imports utilities/PosInfo[EXP]                    <co xml:id="pico-tc.2" />
 imports utilities/PosInfo[PICO-ID]
 imports utilities/PosInfo[PROGRAM]
 
 exports
 context-free syntax
-  "tcp"(PROGRAM) -&gt; {Error ","}*                        <co
-            xml:id="pico-tc.3" />
+  "tcp"(PROGRAM) -&gt; {Error ","}*                  <co xml:id="pico-tc.3" />
 
 hiddens
-context-free syntax                                     <co xml:id="pico-tc.4" />
+context-free syntax                               <co xml:id="pico-tc.4" />
   "tcd"(DECLS)                  -&gt; TENV          
   "tcits"({ID-TYPE ","}*, TENV) -&gt; TENV          
   "tcit"(ID-TYPE, TENV)         -&gt; TENV          
@@ -1416,10 +1415,10 @@ variables
             describes the error and a list of subjects where the error
             occurred. Each subject consists of a description and actual source
             code locations. All error messages detected by some tool are
-            collected in a <literal>summary that contains an identifier for
-            the tool, an identifier for this error summary and a list of
-            errors. In the next subsection, various examples will be
-            shown.</literal></para>
+            collected in a <literal>summary</literal> that contains an
+            identifier for the tool, an identifier for this error summary and
+            a list of errors. In the next subsection, various examples will be
+            shown.</para>
           </callout>
 
           <callout arearefs="pico-tc.2">
@@ -1452,35 +1451,36 @@ variables
 
         <programlisting>equations
 
-[Main] start(PROGRAM, Program) = 
-       start(Summary, summary("pico-check",
-                              get-filename(get-location(Program)), 
-                              [tcp(Program)]))                      <co
+[Main] start(PROGRAM, Program) =                            <co
             xml:id="pico-tc-eq.1" />
+       start(Summary, 
+             summary("pico-check",
+                     get-filename(get-location(Program)), 
+                     [tcp(Program)]))                     
 
 equations
 
-[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))        <co
+[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls)) <co
             xml:id="pico-tc-eq.2" />
 
 equations
 
-[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)          <co
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)   <co
             xml:id="pico-tc-eq.3" />
 
 equations
 
 [Tc3a] tcits(Id:Type, Id-type*, Tenv) = 
-       tcits(Id-type*, tcit(Id:Type, Tenv))                         <co
+       tcits(Id-type*, tcit(Id:Type, Tenv))                  <co
             xml:id="pico-tc-eq.4" />
 
-[Tc3b] tcits(,Tenv) = Tenv                                          <co
+[Tc3b] tcits(,Tenv) = Tenv                                   <co
             xml:id="pico-tc-eq.5" />
 
 equations
 
 [Tc4a] lookup(Tenv, Id) == not-in-table
-       ===========================================                  <co
+       ===========================================           <co
             xml:id="pico-tc-eq.6" />
        tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
 
@@ -1488,7 +1488,7 @@ equations
 
 equations
 
-[Tc5a] tcs(Stat ; Stat*, Tenv) =                                    <co
+[Tc5a] tcs(Stat ; Stat*, Tenv) =                             <co
             xml:id="pico-tc-eq.7" />
        tcst(Stat,Tenv), tcs(Stat*,Tenv)
 
@@ -1498,17 +1498,17 @@ equations
 
 [Tc6a]
     not-in-table == lookup(Tenv, Id)
-    ==============================================                  <co
+    ==============================================           <co
             xml:id="pico-tc-eq.8" />
     tcst(Id := Exp, Tenv) = 
     error("Variable not declared", 
           [localized("Id", get-location(Id))])
 
 [default] tcst(Id := Exp, Tenv) = 
-          tce(Exp, lookup(Tenv, Id), Tenv)                          <co
+          tce(Exp, lookup(Tenv, Id), Tenv)                   <co
             xml:id="pico-tc-eq.9" />
 
-[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =           <co
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =    <co
             xml:id="pico-tc-eq.10" />
         tce(Exp, natural, Tenv), 
         tcs(Series1, Tenv), tcs(Series2, Tenv)
@@ -1518,7 +1518,7 @@ equations
 
 equations
 
-[default] tce(Exp, natural, Tenv) =                                 <co
+[default] tce(Exp, natural, Tenv) =                          <co
             xml:id="pico-tc-eq.11" />
           error("Expression should be of type natural", 
                 [localized("Expression", get-location(Exp))])
@@ -1527,13 +1527,13 @@ equations
                 [localized("Expression", get-location(Exp))])
 
 [Tc7a]  tce(Id, Type, Tenv) = 
-        when Type == lookup(Tenv, Id)                               <co
+        when Type == lookup(Tenv, Id)                        <co
             xml:id="pico-tc-eq.12" />
-[Tc7b]  tce(Nat-con, natural, Tenv) =                               <co
+[Tc7b]  tce(Nat-con, natural, Tenv) =                        <co
             xml:id="pico-tc-eq.13" />
 [Tc7c]  tce(Str-con, string, Tenv) = 
 [Tc7d]  tce(Exp1 || Exp2, string, Tenv) = 
-        tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)            <co
+        tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)     <co
             xml:id="pico-tc-eq.14" />
 [Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = 
         tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
@@ -1878,7 +1878,7 @@ hiddens
       <section>
         <title>Equations part</title>
 
-        <para>The equations part:</para>
+        <para>The equations part of the Pico evaluator:</para>
 
         <programlisting>equations
 
@@ -2241,7 +2241,7 @@ lexical variables
         </callout>
       </calloutlist>
 
-      <para>Th eqaution part:</para>
+      <para>The equations part:</para>
 
       <programlisting>equations
 
@@ -2279,14 +2279,12 @@ imports languages/pico/compile/NextLabel
   
 exports
   context-free syntax
-    trp( PROGRAM ) -&gt; Instrs                              <co
-            xml:id="pico-comp.1" />
+    trp( PROGRAM ) -&gt; Instrs                     <co xml:id="pico-comp.1" />
   
 hiddens
   context-free start-symbols
     PROGRAM Instrs
-  context-free syntax                                     <co
-            xml:id="pico-comp.2" />                     
+  context-free syntax                            <co xml:id="pico-comp.2" />                     
     trd(DECLS)                   -&gt; {Instr ";"}+
     trits({ID-TYPE  ","}*)       -&gt; {Instr ";"}+ 
     trs({STATEMENT ";"}*, Label) -&gt; &lt;{Instr ";"}+, Label&gt;
@@ -2338,7 +2336,7 @@ hiddens
 
         <programlisting>equations
 
-[main] start(PROGRAM, Program) =                          <co
+[main] start(PROGRAM, Program) =                      <co
             xml:id="pico-comp-eqs.1" />
        start(Instrs, trp(Program))
 
@@ -2346,14 +2344,14 @@ equations
 
 [Tr1]  Instr*1 := trd(Decls),
        &lt;Instr*2, Label&gt; := trs(Series, x)
-       ==============================================     <co
+       ============================================== <co
             xml:id="pico-comp-eqs.2" />
        trp(begin Decls Series end) = Instr*1; Instr*2
 
-[Tr2]  trd(declare Id-type*;) = trits(Id-type*)           <co
+[Tr2]  trd(declare Id-type*;) = trits(Id-type*)       <co
             xml:id="pico-comp-eqs.3" />
  
-[Tr3a] trits(Id:natural, Id-type*) =                      <co
+[Tr3a] trits(Id:natural, Id-type*) =                  <co
             xml:id="pico-comp-eqs.4" />
        dclnat Id;
        trits(Id-type*)
@@ -2366,7 +2364,7 @@ equations
 
 [Tr4a] &lt;Instr*1, Label'&gt; := trst(Stat, Label), 
        &lt;Instr*2, Label''&gt; := trs(Stat*, Label')
-       =======================================             <co
+       =======================================        <co
             xml:id="pico-comp-eqs.5" />
        trs(Stat ; Stat*, Label) = 
        &lt; Instr*1;
@@ -2374,11 +2372,11 @@ equations
        , 
          Label'' &gt;
 
-[Tr4b] trs( , Label) = &lt;noop, Label&gt;                       <co
+[Tr4b] trs( , Label) = &lt;noop, Label&gt;                  <co
             xml:id="pico-comp-eqs.6" />
 
 [Tr5a] Instr* := tre(Exp)
-       =================                                   <co
+       =================                              <co
             xml:id="pico-comp-eqs.7" />
        trst(Id := Exp, Label) = 
        &lt; lvalue Id;
@@ -2391,9 +2389,9 @@ equations
        &lt;Instr*1, Label'&gt; := trs(Series1, Label),
        &lt;Instr*2, Label''&gt; := trs(Series2, Label'),
        Label1 := nextlabel(Label''), 
-       Label2 := nextlabel(Label1) 
-       =================================================== <co
+       Label2 := nextlabel(Label1)                    <co
             xml:id="pico-comp-eqs.8" />
+       ===================================================
        trst(if Exp then Series1  else Series2 fi, Label) =
        &lt; Instr*; 
          gofalse Label1; 
@@ -2409,7 +2407,7 @@ equations
        &lt;Instr*2, Label'&gt; := trs(Series, Label),
        Label1 := nextlabel(Label'), 
        Label2 := nextlabel(Label1) 
-       =======================================             <co
+       =======================================        <co
             xml:id="pico-comp-eqs.9" />
        trst(while Exp do Series od, Label) =
        &lt; label Label1; 
@@ -2421,7 +2419,7 @@ equations
        , 
          Label2 &gt;
 
-[Tr6a] tre(Nat-con) = push Nat-con                         <co
+[Tr6a] tre(Nat-con) = push Nat-con                    <co
             xml:id="pico-comp-eqs.10" />
 
 [Tr6b] tre(Str-con) = push Str-con
@@ -2429,7 +2427,7 @@ equations
 [Tr6c] tre(Id) = rvalue Id
 
 [Trcd] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
-       ========================================            <co
+       ========================================       <co
             xml:id="pico-comp-eqs.11" />
        tre(Exp1 + Exp2) = Instr*1; Instr*2; add
 
@@ -2492,7 +2490,7 @@ equations
           </callout>
 
           <callout arearefs="pico-comp-eqs.9">
-            <para> Compile a while loop. Two new label are generated to mark
+            <para>Compile a while loop. Two new label are generated to mark
             the instructions generated for the while statement and,
             respectively, the instructions following the code generated for
             the while loop.</para>
