@@ -156,7 +156,7 @@ public class DotEdgeRenderer extends EdgeRenderer {
 
 		// create the arrow head, if needed
 		// TODO: fix this hack that takes care of arrow size offsets
-		end.setLocation(end.getX(), end.getY() - m_arrowHeight);
+//		end.setLocation(end.getX(), end.getY() - m_arrowHeight);
 		Shape arrow = getArrowShape(start, end, item2);
 		setRenderType(RENDER_TYPE_DRAW_AND_FILL);
 		m_curArrow = arrow;
