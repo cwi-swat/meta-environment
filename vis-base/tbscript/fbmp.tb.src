@@ -51,4 +51,21 @@ in
   ) * delta
 endlet
 
+process FBLoadRStore(Path : str) is
+  snd-msg(fb-load-rstore(Path))
+ 
+process FBLoadRStoreAction is
+let
+  Path : str
+in
+   snd-msg(ask-for-file("Load an RStore", [], ".rstore"))
+   .
+   (   
+     rec-msg(ask-for-file-result(Path?))
+     . FBLoadRStore(Path)
+   + 
+     rec-msg(ask-for-file-cancel)
+   )	
+endlet
+  
 toolbus(FBMP)

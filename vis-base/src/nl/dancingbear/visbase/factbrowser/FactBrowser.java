@@ -1,12 +1,8 @@
 package nl.dancingbear.visbase.factbrowser;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import nl.cwi.sen1.configapi.Factory;
@@ -280,27 +276,6 @@ public class FactBrowser extends DefaultStudioPlugin implements FactbrowserTif {
 		((StudioWithPredefinedLayout) studio).addComponent(component,
 				StudioImplWithPredefinedLayout.TOP_LEFT);
 
-		JMenu rstoreFileMenu = new JMenu("Facts");
-		JMenuItem rstoreOpen = new JMenuItem("Load Rstore");
-		rstoreOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openRstore();
-			}
-		});
-		rstoreFileMenu.add(rstoreOpen);
-		studio.addComponentMenu(component, rstoreFileMenu);
-	}
-
-	/**
-	 * This method is the action when someone has pushed the menuitem "Load
-	 * Rstore". It sends an ATerm to the FactBrowserInterface
-	 * 
-	 * @author Renze de Vries
-	 * @date 20-02-2007
-	 */
-	private void openRstore() {
-		ATerm term = studio.getATermFactory().make("fb-load-rstore");
-		bridge.postEvent(term);
 	}
 
 	/**

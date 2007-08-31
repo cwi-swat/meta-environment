@@ -44,17 +44,6 @@ in
 	. snd-msg(fb-no-rstore-selected)
       )
     +
-      rec-event(Tid, fb-load-rstore)
-      . snd-ack-event(Tid, fb-load-rstore)
-      . snd-msg(ask-for-file("Select the RStore", [], ".rstore"))
-      . 
-      (   
-         rec-msg(ask-for-file-result(FileName?))
-         . snd-msg(fb-load-rstore(FileName))
-       + 
-         rec-msg(ask-for-file-cancel)
-      )	
-    +
       rec-event(Tid, fb-type-selected(FactType?))
       . snd-ack-event(Tid, fb-type-selected(FactType))
       . snd-msg(fb-type-selected(FactType))
