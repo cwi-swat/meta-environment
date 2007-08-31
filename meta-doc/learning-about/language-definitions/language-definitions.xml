@@ -2658,7 +2658,8 @@ end
           </listitem>
 
           <listitem>
-            <para>do both: <literal>traversal(accu,trafo)</literal>.</para>
+            <para>do both: <literal>traversal(accu,trafo)</literal>:
+            accumulate and transform.</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -2669,7 +2670,13 @@ end
         <itemizedlist>
           <listitem>
             <para><emphasis>top-down</emphasis> versus
-            <emphasis>bottom-up</emphasis>.</para>
+            <emphasis>bottom-up</emphasis>: In the figure <link
+            linkend="Fig_order">below</link> the difference is shown: a
+            top-down traversal starts with the root node and then traverses
+            the root's children from the left to right, and so on. A bottom-up
+            traversal, however, starts with the left-most leave of the tree
+            and works its way up in the tree towards the root which is visited
+            last.</para>
           </listitem>
 
           <listitem>
@@ -2680,6 +2687,323 @@ end
         </itemizedlist>
       </listitem>
     </itemizedlist>
+
+    <para></para>
+
+    <figure xml:id="Fig_order">
+      <title>Top-down versus bottom-up</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="traversal-order.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <section>
+      <title>Simple trees</title>
+
+      <para>Consider the following very simple language of trees:</para>
+
+      <programlisting>module Tree-syntax
+imports Naturals
+exports
+  sorts TREE
+  context-free syntax
+    NAT           -&gt; TREE  <co xml:id="tree.1" />
+    f(TREE, TREE) -&gt; TREE  <co xml:id="tree.2" /> 
+    g(TREE, TREE) -&gt; TREE
+    h(TREE, TREE) -&gt; TREE
+  variables                <co xml:id="tree.3" />
+    “N”[0-9]*     -&gt; NAT
+    “T”[0-9]*     -&gt; TREE</programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="tree.1">
+          <para>The leaves of a tree are natural numbers.</para>
+        </callout>
+
+        <callout arearefs="tree.2">
+          <para>The symbols <literal>f</literal>, <literal>g</literal> and
+          <literal>h</literal> can be used to construct composite
+          trees.</para>
+        </callout>
+
+        <callout arearefs="tree.3">
+          <para>The variables <filename>N</filename> and <literal>T</literal>
+          (both possibly followed by digits) are defined for the convenient
+          use in the following examples.</para>
+        </callout>
+      </calloutlist>
+
+      <para>An example of a tree defined in this way is <literal>f(g(1,2),
+      3)</literal>. Graphically, it looks like this:</para>
+
+      <figure xml:id="Fig_tree">
+        <title>Example <literal>f(g(1,2),3)</literal> as tree</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="tree-examp.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Counting tree nodes (classical solution)</title>
+
+      <para>The classical solution for counting the nodes in a tree is as
+      follows:</para>
+
+      <programlisting>module Tree-cnt
+imports Tree-syntax
+exports
+context-free syntax
+  cnt(TREE)       -&gt; NAT              <co xml:id="tree-cnt-class.1" />
+equations
+[1] cnt(N)        = 1                 <co xml:id="tree-cnt-class.2" />
+[2] cnt(f(T1,T2)) = 1+cnt(T1)+cnt(T2) <co xml:id="tree-cnt-class.3" />
+[3] cnt(g(T1,T2)) = 1+cnt(T1)+cnt(T2)
+[4] cnt(h(T1,T2)) = 1+cnt(T1)+cnt(T2)</programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="tree-cnt-class.1">
+          <para>The function <literal>cnt</literal> visits all nodes in a tree
+          and returns the number of nodes.</para>
+        </callout>
+
+        <callout arearefs="tree-cnt-class.2">
+          <para>Visiting a leaf (a number) count for one.</para>
+        </callout>
+
+        <callout arearefs="tree-cnt-class.3">
+          <para>Visiting a non-leaf counts for one (this node) plus the counts
+          for the left and the right subtree. An equation is needed for every
+          constructor in the tree language.</para>
+        </callout>
+      </calloutlist>
+
+      <para>Counting the nodes of our previous example is achieved as
+      follows:</para>
+
+      <programlisting>cnt(f(g(1, 2), 3))</programlisting>
+
+      <para>and returns:</para>
+
+      <programlisting>5</programlisting>
+
+      <para>The steps to arrive at this result are as follows:</para>
+
+      <figure>
+        <title>Reducing <literal>cnt(f(g(1, 2), 3))</literal></title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="cnt-reduction.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Counting tree nodes (using an accumulator)</title>
+
+      <para>Let's now reformulate the node counting example using traversal
+      functions:</para>
+
+      <programlisting>module Tree-cnt
+imports Tree-syntax
+exports
+ context-free syntax
+    cnt(TREE, NAT) -&gt; NAT {traversal(accu,     <co xml:id="tree-cnt-trav.1" />
+                                     bottom-up,
+                                     continue)}
+equations
+[1] cnt(T, N) = N + 1                          <co xml:id="tree-cnt-trav.2" /></programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="tree-cnt-trav.1">
+          <para>Define <literal>cnt</literal> as a bottom-up accumulator that
+          continues after each matching node. The second argument is the
+          accumulator used for counting. Observe that in this example, it is
+          arbitrary whether we do a bottom-up or a top-down traversal.</para>
+        </callout>
+
+        <callout arearefs="tree-cnt-trav.2">
+          <para>A single equation is needed to count any node (both leaves and
+          complex nodes). The first argument <literal>T</literal> matches any
+          tree, and the accumulator value <literal>N</literal> is incremented
+          for it. Given this incremented value, the following nodes of the
+          tree will be visited and counted.</para>
+        </callout>
+      </calloutlist>
+
+      <para>Counting the nodes of the example</para>
+
+      <programlisting>cnt( f( g( f(1,2), 3 ),
+           g( g(4,5), 6 )),
+       0)</programlisting>
+
+      <para>gives:</para>
+
+      <programlisting>11</programlisting>
+    </section>
+
+    <section>
+      <title>Increment tree leaves (using a transformer)</title>
+
+      <para>Now we switch to a simple transformation example: given a tree
+      construct a new one that is identical except that all values at the
+      leaves are incremented by one. This is achieved as follows:</para>
+
+      <programlisting>module Tree-inc
+imports Tree-syntax
+exports
+context-free syntax
+  inc(TREE) -&gt; TREE {traversal(trafo,      <co xml:id="tree-inc.1" />
+                               bottom-up,
+                               continue)}
+equations
+[1] inc(N) = N + 1                         <co xml:id="tree-inc.2" /></programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="tree-inc.1">
+          <para>The transformer <literal>inc</literal> will compute the
+          desired tree. Observe the type of this functions: it transforms
+          trees to trees.</para>
+        </callout>
+
+        <callout arearefs="tree-inc.2">
+          <para>The single equation that performs the replacement. Observe
+          that this equation only matches at nodes that contain an integer
+          (this is due to the N argument on the left-hand side). When the
+          equation is applicable it replace the give integer leaf by an
+          incremented one.</para>
+        </callout>
+      </calloutlist>
+
+      <para>The example:</para>
+
+      <programlisting>inc( f( g( f(1,2),  3 ),
+           g( g(4,5), 6 )) )</programlisting>
+
+      <para>gives:</para>
+
+      <programlisting>f( g( f(2,3), 4 ),
+      g( g(5,6), 7 ))</programlisting>
+    </section>
+
+    <section>
+      <title>Increment leaves with variable amount (using transformer)</title>
+
+      <para>Continuing the incrementing example, we now want to make the
+      <emphasis>amount</emphasis> of the increment variable.</para>
+
+      <programlisting>module Tree-incp
+imports Tree-syntax
+exports
+context-free syntax
+  inc(TREE, NAT) -&gt; TREE {traversal(trafo,     <co xml:id="tree-incp.1" />
+                                    bottom-up,
+                                    continue)}
+equations
+[1] inc(N1, N2) = N1 + N2                      <co xml:id="tree-incp.2" /></programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="tree-incp.1">
+          <para>We define a new <literal>inc</literal> function with a second
+          argument that represents the amount of the increment.</para>
+        </callout>
+
+        <callout arearefs="tree-incp.2">
+          <para>The equation has to be adjusted as well. <literal>N1</literal>
+          matches an node (as before) and <literal>N2</literal> represents the
+          desired increment. Application of this equation replaces the current
+          leaf by its value increment with <literal>N2</literal>.</para>
+        </callout>
+      </calloutlist>
+
+      <para>Example:</para>
+
+      <programlisting>inc( f( g( f(1,2),  3 ),
+           g( g(4,5), 6 )),
+       7 )</programlisting>
+
+      <para>Result:</para>
+
+      <programlisting>f( g( f( 8,  9), 10),
+      g( g(11,12),  13))</programlisting>
+    </section>
+
+    <section>
+      <title>Term replacement</title>
+
+      <para></para>
+
+      <section>
+        <title>Deep replacement</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Shallow replacement</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Full replacement</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>A real example: COBOL transformation</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>A funny Pico typechecker</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Take home points</title>
+
+      <para>This intermezzo introduces the following points:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>For tree traversals that have to do work at every node, it is
+          unavoidable to write many equations to describe the traversal: at
+          least one equation is needed for every rule in the grammar of the
+          language in question. Examples are typechecking, ecaluation and code
+          generation.</para>
+        </listitem>
+
+        <listitem>
+          <para>Traversal functions automate this process: only equations are
+          needed for the cases where real work has to be done at a node; the
+          other cases handled automatically. Examples are many forms of fact
+          extraction.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 
   <section>
@@ -2995,12 +3319,6 @@ equations
 
   <section xml:id="fm_HistoricalNotes">
     <title>Historical Notes</title>
-
-    <para></para>
-  </section>
-
-  <section>
-    <title></title>
 
     <para></para>
   </section>
