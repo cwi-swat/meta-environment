@@ -673,7 +673,7 @@ variables
   </section>
 
   <section>
-    <title>The Toy Language Pico</title>
+    <title>The toy language Pico</title>
 
     <para>The toy language Pico has a single purpose in life: being so simple
     that specifications of every possible language aspect are so simple that
@@ -2608,20 +2608,393 @@ end
     </section>
   </section>
 
+  <section>
+    <title>Intermezzo: traversal functions</title>
+
+    <para>As we have seen in the preceeding examples, functions like
+    typechecking, evaluation and compilation recursively visit all nodes in
+    the parse tree of a program and perform their task at each node, being
+    checking, evaluation or code generation. In these cases it is unavoidable
+    that we need to define an equation for each possible language construct
+    that has to be processed. The number of equations will then be at least
+    equal to the number of grammar rules in the syntax of the language. In the
+    case of real languages, like Java or COBOL, this amounts to hundreds and
+    hundreds of syntax rules and by implication of hundreds of equations as
+    well.</para>
+
+    <para>There are, fortunately, also many other applications where something
+    interesting has to be done at only a few nodes. Examples are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Counting the number of identifiers, goto statements, and the
+        like.</para>
+      </listitem>
+
+      <listitem>
+        <para>Extracting function calls.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>ASF+SDF provides <emphasis>traversal functions</emphasis> that
+    automate these cases. There are two important aspects of traversal
+    functions:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The <emphasis>kind of traversal</emphasis>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>accumulate</emphasis> a value during the
+            traversal: <literal>traversal(accu)</literal>. A typical example
+            is a function that counts statements.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>transform</emphasis> the tree during the
+            traversal: <literal>traversal(trafo)</literal>. A typical example
+            is a function that replaces certain statements.</para>
+          </listitem>
+
+          <listitem>
+            <para>do both: <literal>traversal(accu,trafo)</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>The <emphasis>order of traversal</emphasis>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>top-down</emphasis> versus
+            <emphasis>bottom-up</emphasis>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>break</emphasis> (stop at the first node where
+            something can be done) or <emphasis>continue</emphasis> after
+            visiting a node.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Define a fact extractor for Pico</title>
+
+    <para>The goal of a fact extractor is to extract information from source
+    files that can be used by later analysis tools. Fact extraction is tightly
+    coupled to the requirements of the analysis tools and can differ widely
+    per application. here we show a simple fact extractor that
+    extracts:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A control flow graph.</para>
+      </listitem>
+
+      <listitem>
+        <para>A statement histogram.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The import structure is shown in the figure <link
+    linkend="Fig-pico-extract-modules">below</link>.</para>
+
+    <figure xml:id="Fig-pico-extract-modules">
+      <title>Import structure Pico fact extractor</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="pico-extract-modules.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Two imported modules require explanation, but we do not go into too
+    much details.</para>
+
+    <para>The module <literal>utilitities/Rstores</literal> defines
+    <emphasis>rstores</emphasis>, relation stores, that are used to maintain
+    mapping between a typed variable and a set or relation. Rstores are used
+    to collect the extracted facts and can be used later on by analysis tools.
+    Typical operations are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>create-store</literal>: creat a new rstore.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>declare</literal>: define a new variable with its type
+        and initial value.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>set</literal>: assign a value to a variabel in the
+        rstore.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The module utilities/Parsing defines parsing and unparsing functions
+    for values of specific sorts. The only function that we will use
+    is:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>unparse-to-string</literal>: convert an arbitrary value
+        (like an identifier, expression, or statement in a Pico program) to a
+        string value. This conversion is necessary since sets and relations
+        can only contain basic values like integers and strings and no complex
+        value like frgaments from parse trees.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>languages/pico/extract/Pico</title>
+
+      <para>The syntax definition of the Pico fact extractor:</para>
+
+      <programlisting>module languages/pico/extract/Pico
+
+imports utilities/RStores
+imports languages/pico/syntax/Pico
+imports basic/Integers
+imports utilities/Parsing[PICO-ID]               <co xml:id="pico-extract.1" />
+imports utilities/Parsing[STATEMENT]
+imports utilities/Parsing[EXP]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
+
+hiddens
+context-free syntax
+  controlFlow(PROGRAM, RStore)        -&gt; RStore  <co
+          xml:id="pico-extract.2" />
+  statementHistogram(PROGRAM, RStore) -&gt; RStore  <co
+          xml:id="pico-extract.3" />
+
+context-free syntax                              <co xml:id="pico-extract.4" />
+  countStatements(PROGRAM, RStore)    -&gt; RStore  
+                                         {traversal(accu, 
+                                                    bottom-up, 
+                                                    continue)} 
+  countStatements(STATEMENT, RStore)  -&gt; RStore 
+                                         {traversal(accu, 
+                                                    bottom-up, 
+                                                    continue)} 
+  cflow({STATEMENT ";"}*)             -&gt; &lt;RElem,RElem,RElem&gt;                                        
+
+context-free start-symbols
+  PROGRAM RStore RElem
+
+variables
+  "Program" [0-9]* -&gt; PROGRAM           
+  "Decls" [0-9]*   -&gt; DECLS             
+  "Stat" [0-9]*    -&gt; STATEMENT         
+  "Stat*" [0-9]*   -&gt; {STATEMENT ";"}*  
+  "Stat+" [0-9]*   -&gt; {STATEMENT ";"}+  
+  "Exp" [0-9]*     -&gt; EXP               
+  "Id" [0-9]*      -&gt; PICO-ID           
+  "Entry" [0-9]*   -&gt; RElem             
+  "Exit" [0-9]*    -&gt; RElem             
+  "Rel" [0-9]*     -&gt; RElem             
+  "Control" [0-9]* -&gt; RElem             
+
+variables
+  "Store"[0-9]* -&gt; RStore {strict}
+  "Int" [0-9]*    -&gt; Integer      {strict} 
+</programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="pico-extract.1">
+          <para>The modules <literal>utilities/Parsing</literal> and
+          <literal>utilities/PosInfo</literal> are instantiated for all
+          relevant sorts.</para>
+        </callout>
+
+        <callout arearefs="pico-extract.2">
+          <para>Given a Pico program and an rstore, the function
+          <literal>controlFlow</literal> adds a controlflow relation to the
+          given rstore.</para>
+        </callout>
+
+        <callout arearefs="pico-extract.3">
+          <para>Similarly, function <literal>statementHistogram</literal> adds
+          a histoigram relation to the rstore.</para>
+        </callout>
+
+        <callout arearefs="pico-extract.4">
+          <para>These two functions are implemented using auxiliary traversal
+          functions.</para>
+        </callout>
+      </calloutlist>
+
+      <para>The equations for the Pico fact extractor:</para>
+
+      <programlisting>equations
+
+[main] Store1 := create-store(),
+       Store2 := statementHistogram(Program, Store1),
+       Store3 := controlFlow(Program, Store2)
+       =============================================== <co
+          xml:id="pico-extract-eqs.1" />
+       start(PROGRAM, Program) = start(RStore, Store3)
+
+equations
+
+[hist] statementHistogram(Program, Store) =            <co
+          xml:id="pico-extract-eqs.2" />
+       countStatements(Program, 
+                       declare(Store, 
+                               StatementHistogram, 
+                               rel[str,int]))
+
+equations
+
+[cS1] countStatements(Id := Exp, Store)  =             <co
+          xml:id="pico-extract-eqs.3" />
+      inc(Store, StatementHistogram, "Assignment")
+
+[cS2] countStatements(if Exp 
+                      then Stat*1 
+                      else Stat*2 fi, 
+                      Store) = 
+      inc(Store, StatementHistogram, "Conditional")
+
+[cS3] countStatements(while Exp do Stat* od, Store) = 
+      inc(Store, StatementHistogram, "Loop")
+
+equations
+
+[cfg] Store1 := declare(Store, 
+                        ControlFlow, 
+                        rel[&lt;str,loc&gt;,&lt;str,loc&gt;]),
+      &lt;Entry, Rel, Exit&gt; := cflow(Stat*)
+      ============================================     <co
+          xml:id="pico-extract-eqs.4" />
+      controlFlow(begin Decls Stat* end, Store) = 
+      set(Store1, ControlFlow, Rel)
+
+equations
+
+[cfg-1] 
+     &lt;Entry1, Rel1, Exit1&gt; := cflow(Stat), 
+     &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat+)
+     =====================================             <co
+          xml:id="pico-extract-eqs.5" />
+     cflow(Stat ; Stat+) = 
+     &lt; 
+      Entry1, 
+      union(Rel1, union(Rel2, product(Exit1, Entry2))), 
+      Exit2
+     &gt;
+
+[cfg-2] cflow() = &lt;{}, {}, {}&gt;
+
+equations
+
+[cfg-3]  
+     &lt;Entry, Rel, Exit&gt; := cflow(Stat*),
+     Control := &lt;unparse-to-string(Exp), 
+                 get-location(Exp)&gt;
+     ==================================                <co
+          xml:id="pico-extract-eqs.6" />
+     cflow(while Exp do Stat* od) = 
+     &lt; 
+      {Control},
+      union(product({Control}, Entry), 
+            union(Rel, product(Exit, {Control}))),
+      {Control}
+     &gt;
+
+[cfg-4]  
+     &lt;Entry1, Rel1, Exit1&gt; := cflow(Stat*1), 
+     &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat*2),
+     Control := &lt;unparse-to-string(Exp), 
+                 get-location(Exp)&gt;
+     ==========================================        <co
+          xml:id="pico-extract-eqs.7" />
+     cflow(if Exp then Stat*1 else Stat*2 fi) =
+     &lt; 
+      {Control},
+      union(product({Control}, Entry1), 
+            union(product({Control}, Entry2), 
+                  union(Rel1, Rel2))),
+      union(Exit1, Exit2)
+    &gt; 
+
+[default-cfg]
+    Control := &lt;unparse-to-string(Stat), 
+                get-location(Stat)&gt;
+    =========================================
+    cflow(Stat) = &lt;{Control}, {}, {Control}&gt;</programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="pico-extract-eqs.1">
+          <para>A start equation that links the extractor to the
+          Meta-Environment: it creates a new rstore, fills it with the two
+          defined extractions, and returns it as result.</para>
+        </callout>
+
+        <callout arearefs="pico-extract-eqs.2">
+          <para></para>
+        </callout>
+
+        <callout arearefs="pico-extract-eqs.3">
+          <para></para>
+        </callout>
+
+        <callout arearefs="pico-extract-eqs.4">
+          <para></para>
+        </callout>
+
+        <callout arearefs="pico-extract-eqs.5">
+          <para></para>
+        </callout>
+
+        <callout arearefs="pico-extract-eqs.6">
+          <para></para>
+        </callout>
+
+        <callout arearefs="pico-extract-eqs.7">
+          <para></para>
+        </callout>
+      </calloutlist>
+    </section>
+
+    <section>
+      <title>Using the Pico extractor in the Meta-Environment</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Take home points</title>
+
+      <para>The Pico extractor illustrates the following points:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Traversal functions are very usefull for writing relatively
+          short extraction functions.</para>
+        </listitem>
+
+        <listitem>
+          <para>Rstores can be used to represent extracted facts.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
   <section xml:id="fm_HistoricalNotes">
     <title>Historical Notes</title>
-
-    <para></para>
-  </section>
-
-  <section>
-    <title></title>
-
-    <para></para>
-  </section>
-
-  <section>
-    <title></title>
 
     <para></para>
   </section>
@@ -2637,11 +3010,11 @@ end
 
     <itemizedlist>
       <listitem>
-        <para>Examples section</para>
+        <para>Write all "Using ... in the Meta-Environment" sections.</para>
       </listitem>
 
       <listitem>
-        <para>Add links to Historical notes section</para>
+        <para>Write "Historical notes" section.</para>
       </listitem>
     </itemizedlist>
   </section>
