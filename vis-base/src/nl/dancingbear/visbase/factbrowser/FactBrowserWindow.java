@@ -4,7 +4,9 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -241,9 +243,19 @@ public class FactBrowserWindow extends JPanel {
         rootNode = new DefaultMutableTreeNode("ROOT");
         mdlTree = new DefaultTreeModel(rootNode);
         scrlTreeScroller = new JScrollPane();
-        treeRstores = new JTree(mdlTree);
+        treeRstores = new JTree(mdlTree) {
+        	public String getToolTipText(MouseEvent e) {
+				Object tip = null;
+				TreePath path = getPathForLocation(e.getX(), e.getY());
+				if (path != null) {
+					tip = path.getLastPathComponent();
+				}
+				return tip == null ? null : tip.toString();
+			}
+        };
         treeRstores.setRootVisible(false);
         treeRstores.setShowsRootHandles(true);
+        treeRstores.setToolTipText("hoi");
 
         ImageIcon factIcon = new ImageIcon(getClass().getResource(
                 "/resources/images/fact.png"));
@@ -309,7 +321,6 @@ public class FactBrowserWindow extends JPanel {
             if (value instanceof RStoreFact) {
                 setIcon(factIcon);
                 setText(((RStoreFact) value).getFactName());
-                setToolTipText(((RStoreFact) value).getType());
             } else if (userObject instanceof RStore) {
                 setIcon(rstoreIcon);
             } else if (userObject instanceof VisualisationPlugin) {
