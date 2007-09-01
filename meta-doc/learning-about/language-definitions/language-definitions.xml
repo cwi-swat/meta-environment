@@ -180,8 +180,41 @@
     <section>
       <title>Learning more</title>
 
+      <para>This article guides you through the various stages of writing
+      language definitions in ASF+SDF. The following documents (all available
+      at <uri>www.meta-environment.org</uri>) will help you to learn
+      more:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The basic concepts of syntax analysis are given in "Syntax
+          Analysis".</para>
+        </listitem>
+
+        <listitem>
+          <para>The basic concepts of term rewriting are discussed in "Term
+          Rewriting".</para>
+        </listitem>
+
+        <listitem>
+          <para>"The Syntax Definition Formalism SDF" is a reference manual
+          for the SDF formalism.</para>
+        </listitem>
+
+        <listitem>
+          <para>"The Language Specification Formalism ASF+SDF" is the
+          reference manual for the ASF+SDF formalism.</para>
+        </listitem>
+
+        <listitem>
+          <para>Guided tour: Playing with Booleans" is a flash movie that
+          gives a quick overview of the user-interface of the
+          Meta-Environment.</para>
+        </listitem>
+      </itemizedlist>
+
       <para>In <link linkend="fm_HistoricalNotes">Historical Notes</link>, we
-      give background and key references.</para>
+      give further background and key references.</para>
     </section>
   </section>
 
@@ -195,7 +228,7 @@
       <title>Anatomy of an ASF+SDF specification</title>
 
       <para>An ASF+SDF specification consists of a collection of modules as
-      shown inthe following <link linkend="Fig_modules">figure</link>. A
+      shown in the following <link linkend="Fig_modules">figure</link>. A
       module can import other modules and this can be understood as the
       textual inclusion of the imported modules.</para>
 
@@ -215,12 +248,12 @@
 
       <para>A single module has the following structure:</para>
 
-      <programlisting>module <replaceable>ModuleName</replaceable>            <co
+      <programlisting>module <replaceable>ModuleName</replaceable> <co
           xml:id="mod.1" />
-  <replaceable>ImportSection</replaceable>*             <co xml:id="mod.2" />
-  <replaceable>ExportOrHiddenSection</replaceable>*     <co xml:id="mod.3" />
+  <replaceable>ImportSection</replaceable>*  <co xml:id="mod.2" />
+  <replaceable>ExportOrHiddenSection</replaceable>* <co xml:id="mod.3" />
 equations
-  <replaceable>ConditionalEquation</replaceable>*       <co xml:id="mod.4" /></programlisting>
+  <replaceable>ConditionalEquation</replaceable>* <co xml:id="mod.4" /></programlisting>
 
       <para>Notes:</para>
 
@@ -240,7 +273,7 @@ equations
           <literal>lexical syntax</literal>, <literal>context-free
           syntax</literal>, <literal>priorities</literal> or
           <literal>variables</literal>) that are visible from the outside
-          (defined by <literal>exports</literal>) or only insoide the module
+          (defined by <literal>exports</literal>) or only inside the module
           (defined by <literal>hiddens</literal>).</para>
         </callout>
 
@@ -300,15 +333,15 @@ equations
 
 exports
 
-sorts BoolCon                             <co xml:id="boolcon.1" />
+sorts BoolCon  <co xml:id="boolcon.1" />
 context-free syntax
 
-    "true"  -&gt; BoolCon {cons("true")}     <co xml:id="boolcon.2" />
+    "true"  -&gt; BoolCon {cons("true")} <co xml:id="boolcon.2" />
     "false" -&gt; BoolCon {cons("false")}    
 
 hiddens
 context-free start-symbols
-  BoolCon                                 <co xml:id="boolcon.3" /></programlisting>
+  BoolCon <co xml:id="boolcon.3" /></programlisting>
 
         <para>Notes:</para>
 
@@ -351,7 +384,7 @@ exports
     [\ \t\n\r] -&gt; LAYOUT {cons("whitespace")} <co xml:id="whitespace.1" />
 
   context-free restrictions
-    LAYOUT? -/- [\ \t\n\r]                    <co xml:id="whitespace.2" /></programlisting>
+    LAYOUT? -/- [\ \t\n\r]  <co xml:id="whitespace.2" /></programlisting>
 
         <para>Notes:</para>
 
@@ -362,7 +395,7 @@ exports
             carriage return (<literal>\r)</literal> as
             <literal>LAYOUT</literal> characters. <literal>LAYOUT</literal> is
             a predefined name that defines the layout characters that may
-            optinally appear between the symbols in the context-free grammar
+            optionally appear between the symbols in the context-free grammar
             (e.g., between the keyword <literal>if</literal> and the test in
             an if-statement).</para>
           </callout>
@@ -398,7 +431,7 @@ exports
                                 {cons("nested"),
                                  category("Comment")}  <co xml:id="comments.2" />
   context-free restrictions
-    LAYOUT? -/- [\%]                                   <co xml:id="comments.3" /></programlisting>
+    LAYOUT? -/- [\%] <co xml:id="comments.3" /></programlisting>
 
         <para>Notes:</para>
 
@@ -431,39 +464,36 @@ exports
 
         <programlisting>module basic/Booleans
 
-imports basic/BoolCon&#160;                                 <co
-            xml:id="booleans.1" />
+imports basic/BoolCon&#160;<co xml:id="booleans.1" />
 
 exports
-sorts Boolean                                          <co xml:id="booleans.2" />
+sorts Boolean <co xml:id="booleans.2" />
 
 context-free syntax
   BoolCon                     -&gt; Boolean 
-                                 {cons("constant")}    <co xml:id="booleans.3" />       
+                                 {cons("constant")}  <co xml:id="booleans.3" />       
   lhs:Boolean "|" rhs:Boolean -&gt; Boolean 
-                                 {left, cons("or")}    <co xml:id="booleans.4" />       
+                                 {left, cons("or")}  <co xml:id="booleans.4" />       
   lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean 
                                  {left, cons("and")}                  
   "not" "(" Boolean ")"       -&gt; Boolean 
-                                 {cons("not")}         <co xml:id="booleans.5" />     
+                                 {cons("not")} <co xml:id="booleans.5" />     
   "(" Boolean ")"             -&gt; Boolean 
                                  {bracket, 
-                                  cons("bracket")}     <co xml:id="booleans.6" />
+                                  cons("bracket")} <co xml:id="booleans.6" />
 
 context-free priorities
-  Boolean "&amp;" Boolean -&gt; Boolean &gt;                     <co
-            xml:id="booleans.7" />
+  Boolean "&amp;" Boolean -&gt; Boolean &gt; <co xml:id="booleans.7" />
   Boolean "|" Boolean -&gt; Boolean
 
 hiddens
 context-free start-symbols
-  Boolean                                              <co xml:id="booleans.8" />
+  Boolean <co xml:id="booleans.8" />
 
-imports basic/Comments                                 <co xml:id="booleans.9" />
+imports basic/Comments <co xml:id="booleans.9" />
 
 variables
-  "Bool" [0-9]* -&gt; Boolean                             <co
-            xml:id="booleans.10" /></programlisting>
+  "Bool" [0-9]* -&gt; Boolean <co xml:id="booleans.10" /></programlisting>
 
         <para>Notes:</para>
 
@@ -534,17 +564,17 @@ variables
         </calloutlist>
 
         <para>Having covered all syntactic aspects of the Booleans, we can now
-        trun our attention to the equations:</para>
+        turn our attention to the equations:</para>
 
         <programlisting>equations
 
-[B1]   true  | Bool  = true       <co xml:id="booleans-eq.1" />
+[B1]   true  | Bool  = true  <co xml:id="booleans-eq.1" />
 [B2]   false | Bool  = Bool
 
-[B3]   true  &amp; Bool  = Bool       <co xml:id="booleans-eq.2" />
+[B3]   true  &amp; Bool  = Bool  <co xml:id="booleans-eq.2" />
 [B4]   false &amp; Bool  = false
 
-[B5]   not ( false ) = true       <co xml:id="booleans-eq.3" />
+[B5]   not ( false ) = true  <co xml:id="booleans-eq.3" />
 [B6]   not ( true )  = false</programlisting>
 
         <para>Notes:</para>
@@ -621,7 +651,7 @@ variables
           </listitem>
 
           <listitem>
-            <para>Read the explanations and screenshots below.</para>
+            <para>Read the explanations and screen shots below.</para>
           </listitem>
 
           <listitem>
@@ -637,7 +667,7 @@ variables
         <title>Take home points</title>
 
         <para>The example of the Booleans illustrates the following important
-        points that are also valifd for more complex examples:</para>
+        points that are also valid for more complex examples:</para>
 
         <itemizedlist>
           <listitem>
@@ -694,7 +724,7 @@ variables
 
       <listitem>
         <para>Expressions may contain naturals, strings, addition
-        (<literal>+</literal>), substraction (<literal>-</literal>) and
+        (<literal>+</literal>), subtraction (<literal>-</literal>) and
         concatenation (<literal>||</literal>).</para>
       </listitem>
 
@@ -717,14 +747,13 @@ variables
     <para>Let's look at a simple Pico program that computes the factorial
     function:</para>
 
-    <programlisting>begin declare input : natural,            <co
-        xml:id="fac.1" />
+    <programlisting>begin declare input : natural,  <co xml:id="fac.1" />
               output : natural,           
               repnr : natural,
               rep : natural;
       input := 14;
       output := 1;
-      while input - 1 do                  <co xml:id="fac.2" />
+      while input - 1 do <co xml:id="fac.2" />
           rep := output;
           repnr := input;
           while repnr - 1 do
@@ -744,8 +773,8 @@ end</programlisting>
       </callout>
 
       <callout arearefs="fac.2">
-        <para>Pico has no multiplication operator so we have have to simulate
-        it with repeated addition (yes, simplicity comes at a price!).</para>
+        <para>Pico has no multiplication operator so we have to simulate it
+        with repeated addition (yes, simplicity comes at a price!).</para>
       </callout>
     </calloutlist>
   </section>
@@ -781,11 +810,11 @@ end</programlisting>
       <programlisting>module languages/pico/syntax/Types
 
 exports
-  sorts TYPE                 <co xml:id="types.1" />
+  sorts TYPE <co xml:id="types.1" />
   context-free syntax
-    "natural"     -&gt; TYPE    <co xml:id="types.2" />
+    "natural"     -&gt; TYPE <co xml:id="types.2" />
     "string"      -&gt; TYPE
-    "nil-type"    -&gt; TYPE    <co xml:id="types.3" /></programlisting>
+    "nil-type"    -&gt; TYPE <co xml:id="types.3" /></programlisting>
 
       <para>Notes:</para>
 
@@ -819,9 +848,9 @@ exports
 imports basic/Whitespace
 
 exports
-  sorts PICO-ID                  <co xml:id="id.1" />
+  sorts PICO-ID <co xml:id="id.1" />
   lexical syntax
-    [a-z] [a-z0-9]* -&gt; PICO-ID   <co xml:id="id.2" /></programlisting>
+    [a-z] [a-z0-9]* -&gt; PICO-ID <co xml:id="id.2" /></programlisting>
 
       <caution>
         <para>Why importing basic/Whitespace?</para>
@@ -859,7 +888,7 @@ exports
               more repetitions of the character class
               <literal>[a-z0-9]</literal>. In other cases the postfix
               <literal>+</literal> operator can be used that defines
-              <emphasis>one</emphasis> or more repetitions of the preceeding
+              <emphasis>one</emphasis> or more repetitions of the preceding
               construct.</para>
             </listitem>
           </itemizedlist>
@@ -885,25 +914,21 @@ imports basic/NatCon
 imports basic/StrCon 
 
 hiddens
-  context-free start-symbols                              <co
-          xml:id="pico-syntax.1" />
+  context-free start-symbols <co xml:id="pico-syntax.1" />
     PROGRAM
 
 exports
 
-  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP               <co
-          xml:id="pico-syntax.2" />
+  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP <co xml:id="pico-syntax.2" />
 
-  context-free syntax                                     <co
-          xml:id="pico-syntax.3" />
+  context-free syntax <co xml:id="pico-syntax.3" />
     
-    "begin" DECLS {STATEMENT";" }* "end" -&gt; PROGRAM       <co
+    "begin" DECLS {STATEMENT";" }* "end" -&gt; PROGRAM <co
           xml:id="pico-syntax.4" />
     "declare" {ID-TYPE "," }*";"         -&gt; DECLS 
     PICO-ID ":" TYPE                     -&gt; ID-TYPE
 
-  context-free syntax                                     <co
-          xml:id="pico-syntax.5" />
+  context-free syntax <co xml:id="pico-syntax.5" />
 
     PICO-ID ":=" EXP                     -&gt; STATEMENT
     "if" EXP "then" {STATEMENT";" }* 
@@ -913,22 +938,19 @@ exports
                     {STATEMENT ";" }* 
                 "od"                     -&gt; STATEMENT
  
-  context-free syntax                                     <co
-          xml:id="pico-syntax.6" />
+  context-free syntax <co xml:id="pico-syntax.6" />
 
-    PICO-ID                              -&gt; EXP           <co
-          xml:id="pico-syntax.7" />                                                
+    PICO-ID                              -&gt; EXP  <co xml:id="pico-syntax.7" />                                                
     NatCon                               -&gt; EXP                                   
     StrCon                               -&gt; EXP                                                       
-    EXP "+" EXP                          -&gt; EXP {left}    <co
+    EXP "+" EXP                          -&gt; EXP {left} <co
           xml:id="pico-syntax.8" />
     EXP "-" EXP                          -&gt; EXP {left}
     EXP "||" EXP                         -&gt; EXP {left}
     "(" EXP ")"                          -&gt; EXP {bracket} <co
           xml:id="pico-syntax.9" />
 
-  context-free priorities                                 <co
-          xml:id="pico-syntax.10" />
+  context-free priorities <co xml:id="pico-syntax.10" />
     EXP "||" EXP -&gt; EXP &gt;
     EXP "-" EXP -&gt; EXP &gt;
     EXP "+" EXP -&gt; EXP</programlisting>
@@ -950,7 +972,7 @@ exports
         </callout>
 
         <callout arearefs="pico-syntax.3">
-          <para>This first context-free syntax section declares the toplevel
+          <para>This first context-free syntax section declares the top level
           structure of a Pico program.</para>
         </callout>
 
@@ -1058,7 +1080,7 @@ exports
     <section>
       <title>Recap: symbols</title>
 
-      <para>In the syntax rules we have seen sofar, many different
+      <para>In the syntax rules we have seen so far, many different
       <emphasis>symbols</emphasis> are used. <emphasis>Elementary
       symbols</emphasis> are:</para>
 
@@ -1170,7 +1192,7 @@ exports
         </listitem>
 
         <listitem>
-          <para>Optional: <literal>S?</literal>: zero or one occurence of
+          <para>Optional: <literal>S?</literal>: zero or one occurrence of
           <literal>S</literal>.</para>
         </listitem>
 
@@ -1213,6 +1235,32 @@ exports
   <section>
     <title>Define a typechecker for Pico</title>
 
+    <para>For most programming and application languages, it is not enough
+    that programs are syntactically correct, i.e., that they strictly conform
+    to the syntax rules of the language. In many cases, extra requirements are
+    imposed on programs such as:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Variables have to be declared before they can be used.</para>
+      </listitem>
+
+      <listitem>
+        <para>The operands of operators have to be of certain types.</para>
+      </listitem>
+
+      <listitem>
+        <para>Procedures can only be called with parameters that correspond in
+        number and type with the formal parameters with the procedure has been
+        declared.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These extra requirements are usually called <emphasis>type
+    constraints</emphasis>, <emphasis>typechecking rules</emphasis>, or
+    <emphasis>static semantics</emphasis>. We illustrate these requirements
+    for the case of Pico.</para>
+
     <para>The typechecking rules for the Pico language are very simple:</para>
 
     <itemizedlist>
@@ -1249,7 +1297,7 @@ exports
     </itemizedlist>
 
     <para>The task of a typechecker for Pico is to assert that a given Pico
-    program complies with the above rules. The typecheker can be seen as a
+    program complies with the above rules. The typechecker can be seen as a
     transformation from a Pico program to an error report.</para>
 
     <para>The import structure of the Pico typechecker is shown <link
@@ -1274,13 +1322,13 @@ exports
       <programlisting>module languages/pico/check/Type-environments
 
 imports languages/pico/syntax/Identifiers 
-imports containers/Table[PICO-ID TYPE]          <co xml:id="type-env.1" />
+imports containers/Table[PICO-ID TYPE] <co xml:id="type-env.1" />
 
 exports 
   sorts TENV TYPE 
 
   aliases
-    Table[[PICO-ID,TYPE]] -&gt; TENV               <co xml:id="type-env.2" /></programlisting>
+    Table[[PICO-ID,TYPE]] -&gt; TENV <co xml:id="type-env.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -1297,9 +1345,10 @@ exports
 
         <callout arearefs="type-env.2">
           <para>It is pragmatic to give a more descriptive name to
-          Table[[PICO-ID,TYPE]] and we use the <literal>alias</literal>
-          construct for this. From now on, TENV is an alias (= an
-          abbreviation) for Table[[PICO-ID,TYPE]].</para>
+          <literal>Table[[PICO-ID,TYPE]]</literal> and we use the
+          <literal>alias</literal> construct for this. From now on,
+          <literal>TENV</literal> is an alias (= an abbreviation) for
+          <literal>Table[[PICO-ID,TYPE]]</literal>.</para>
         </callout>
       </calloutlist>
 
@@ -1347,7 +1396,7 @@ context-free syntax
 
         <listitem>
           <para>The error message contains the source code location of the
-          pico construct that violates the type rules.</para>
+          Pico construct that violates the type rules.</para>
         </listitem>
 
         <listitem>
@@ -1364,19 +1413,19 @@ context-free syntax
         <programlisting>module languages/pico/check/Pico
 
 imports basic/Booleans
-imports basic/Errors                              <co xml:id="pico-tc.1" />
+imports basic/Errors <co xml:id="pico-tc.1" />
 imports languages/pico/syntax/Pico
 imports languages/pico/check/Type-environments
-imports utilities/PosInfo[EXP]                    <co xml:id="pico-tc.2" />
+imports utilities/PosInfo[EXP] <co xml:id="pico-tc.2" />
 imports utilities/PosInfo[PICO-ID]
 imports utilities/PosInfo[PROGRAM]
 
 exports
 context-free syntax
-  "tcp"(PROGRAM) -&gt; {Error ","}*                  <co xml:id="pico-tc.3" />
+  "tcp"(PROGRAM) -&gt; {Error ","}* <co xml:id="pico-tc.3" />
 
 hiddens
-context-free syntax                               <co xml:id="pico-tc.4" />
+context-free syntax <co xml:id="pico-tc.4" />
   "tcd"(DECLS)                  -&gt; TENV          
   "tcits"({ID-TYPE ","}*, TENV) -&gt; TENV          
   "tcit"(ID-TYPE, TENV)         -&gt; TENV          
@@ -1451,8 +1500,7 @@ variables
 
         <programlisting>equations
 
-[Main] start(PROGRAM, Program) =                            <co
-            xml:id="pico-tc-eq.1" />
+[Main] start(PROGRAM, Program) =  <co xml:id="pico-tc-eq.1" />
        start(Summary, 
              summary("pico-check",
                      get-filename(get-location(Program)), 
@@ -1465,31 +1513,27 @@ equations
 
 equations
 
-[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table)   <co
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table) <co
             xml:id="pico-tc-eq.3" />
 
 equations
 
 [Tc3a] tcits(Id:Type, Id-type*, Tenv) = 
-       tcits(Id-type*, tcit(Id:Type, Tenv))                  <co
-            xml:id="pico-tc-eq.4" />
+       tcits(Id-type*, tcit(Id:Type, Tenv)) <co xml:id="pico-tc-eq.4" />
 
-[Tc3b] tcits(,Tenv) = Tenv                                   <co
-            xml:id="pico-tc-eq.5" />
+[Tc3b] tcits(,Tenv) = Tenv <co xml:id="pico-tc-eq.5" />
 
 equations
 
 [Tc4a] lookup(Tenv, Id) == not-in-table
-       ===========================================           <co
-            xml:id="pico-tc-eq.6" />
+       =========================================== <co xml:id="pico-tc-eq.6" />
        tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
 
 [default] tcit(Id:Type, Tenv) = Tenv
 
 equations
 
-[Tc5a] tcs(Stat ; Stat*, Tenv) =                             <co
-            xml:id="pico-tc-eq.7" />
+[Tc5a] tcs(Stat ; Stat*, Tenv) =  <co xml:id="pico-tc-eq.7" />
        tcst(Stat,Tenv), tcs(Stat*,Tenv)
 
 [Tc5b] tcs(,Tenv) = 
@@ -1498,17 +1542,15 @@ equations
 
 [Tc6a]
     not-in-table == lookup(Tenv, Id)
-    ==============================================           <co
-            xml:id="pico-tc-eq.8" />
+    ==========================================  <co xml:id="pico-tc-eq.8" />
     tcst(Id := Exp, Tenv) = 
     error("Variable not declared", 
           [localized("Id", get-location(Id))])
 
 [default] tcst(Id := Exp, Tenv) = 
-          tce(Exp, lookup(Tenv, Id), Tenv)                   <co
-            xml:id="pico-tc-eq.9" />
+          tce(Exp, lookup(Tenv, Id), Tenv) <co xml:id="pico-tc-eq.9" />
 
-[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) =    <co
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) = <co
             xml:id="pico-tc-eq.10" />
         tce(Exp, natural, Tenv), 
         tcs(Series1, Tenv), tcs(Series2, Tenv)
@@ -1518,8 +1560,7 @@ equations
 
 equations
 
-[default] tce(Exp, natural, Tenv) =                          <co
-            xml:id="pico-tc-eq.11" />
+[default] tce(Exp, natural, Tenv) = <co xml:id="pico-tc-eq.11" />
           error("Expression should be of type natural", 
                 [localized("Expression", get-location(Exp))])
 [default] tce(Exp, string, Tenv) = 
@@ -1527,13 +1568,11 @@ equations
                 [localized("Expression", get-location(Exp))])
 
 [Tc7a]  tce(Id, Type, Tenv) = 
-        when Type == lookup(Tenv, Id)                        <co
-            xml:id="pico-tc-eq.12" />
-[Tc7b]  tce(Nat-con, natural, Tenv) =                        <co
-            xml:id="pico-tc-eq.13" />
+        when Type == lookup(Tenv, Id) <co xml:id="pico-tc-eq.12" />
+[Tc7b]  tce(Nat-con, natural, Tenv) = <co xml:id="pico-tc-eq.13" />
 [Tc7c]  tce(Str-con, string, Tenv) = 
 [Tc7d]  tce(Exp1 || Exp2, string, Tenv) = 
-        tce(Exp1, string, Tenv), tce(Exp2, string, Tenv)     <co
+        tce(Exp1, string, Tenv), tce(Exp2, string, Tenv) <co
             xml:id="pico-tc-eq.14" />
 [Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = 
         tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
@@ -1611,7 +1650,7 @@ equations
           <callout arearefs="pico-tc-eq.7">
             <para>Again, list matching to decompose a list of statements into
             a first statement and a list of remaining statements. Next, check
-            the first statement and the remining statements.</para>
+            the first statement and the remaining statements.</para>
           </callout>
 
           <callout arearefs="pico-tc-eq.8">
@@ -1662,7 +1701,7 @@ equations
     </section>
 
     <section>
-      <title>Using the Pico typecheker in The Meta-Environment</title>
+      <title>Using the Pico typechecker in The Meta-Environment</title>
 
       <para></para>
     </section>
@@ -1708,7 +1747,7 @@ equations
       </listitem>
 
       <listitem>
-        <para>Variables of type string are initalized to the empty
+        <para>Variables of type string are initialized to the empty
         string.</para>
       </listitem>
 
@@ -1757,7 +1796,7 @@ equations
     </figure>
 
     <section>
-      <title>languages/pico/run/Values</title>
+      <title><literal>languages/pico/run/Values</literal></title>
 
       <para>The sort <literal>VALUE</literal> is simply a container for
       integer and string constants and is defined as follows:</para>
@@ -1788,7 +1827,7 @@ exports
     </section>
 
     <section>
-      <title>languages/pico/run/Value-environments</title>
+      <title><literal>languages/pico/run/Value-environments</literal></title>
 
       <para>The purpose of value environments is to maintain a mapping between
       identifiers and their current value. This is done as follows:</para>
@@ -1815,7 +1854,7 @@ exports
       <para>The central idea of the Pico evaluator is to first visit the
       declarations and initialise the declared variables. Next, the statements
       are visited one-by-one and their effect on the value environment is
-      computed. The final value environment is then retruned as the result of
+      computed. The final value environment is then returned as the result of
       evaluation.</para>
 
       <section>
@@ -1870,7 +1909,7 @@ hiddens
         </caution>
 
         <para>Here again, having seen the syntax part of the Pico typechecker
-        there are no surprises here. The toplevel function
+        there are no surprises here. The top level function
         <literal>evp</literal> maps programs to value environments and needs
         some auxiliary functions to achieve this.</para>
       </section>
@@ -1883,8 +1922,7 @@ hiddens
         <programlisting>equations
 
 [Main] start(PROGRAM, Program) = 
-       start(VALUE-ENV, evp(Program))                     <co
-            xml:id="pico-eval.1" />
+       start(VALUE-ENV, evp(Program)) <co xml:id="pico-eval.1" />
 
 equations
 
@@ -1894,8 +1932,7 @@ equations
 [Ev2]  evd(declare Id-type*;) = evits(Id-type*)
 
 [Ev3a] evits(Id:natural, Id-type*) = 
-       store(evits(Id-type*), Id, 0)                      <co
-            xml:id="pico-eval.2" />
+       store(evits(Id-type*), Id, 0) <co xml:id="pico-eval.2" />
 
 [Ev3b] evits(Id:string, Id-type*) = 
        store(evits(Id-type*), Id, "")
@@ -1904,8 +1941,7 @@ equations
 
 [Ev4a] Venv' := evst(Stat, Venv), 
        Venv'' := evs(Stat*, Venv')
-       =========================================          <co
-            xml:id="pico-eval.3" />
+       =================================  <co xml:id="pico-eval.3" />
        evs(Stat ; Stat*, Venv) =  Venv''
 
 [Ev4b] evs( , Venv) = Venv
@@ -1914,38 +1950,34 @@ equations
        store(Venv, Id, eve(Exp, Venv))
 
 [Ev5b]             eve(Exp, Venv) != 0
-       =================================================  <co
+       ================================================= <co
             xml:id="pico-eval.4" />
        evst(if Exp then Series1 else Series2 fi, Venv) = 
        evs(Series1, Venv)
 
 [Ev5c]             eve(Exp, Venv) == 0
-       =================================================  <co
+       ================================================= <co
             xml:id="pico-eval.5" />
        evst(if Exp then Series1 else Series2 fi, Venv) = 
        evs(Series2, Venv)
 
 [Ev5d]           eve(Exp, Venv) == 0
-       ==========================================         <co
-            xml:id="pico-eval.6" />
+       ========================================== <co xml:id="pico-eval.6" />
        evst(while Exp do Series od, Venv) =  Venv
 
 [Ev5e] eve(Exp, Venv) != 0,  Venv' := evs(Series, Venv)
-       ================================================   <co
+       ================================================ <co
             xml:id="pico-eval.7" />
        evst(while Exp do Series od, Venv) =
        evst(while Exp do Series od, Venv')
 
-[Ev6a] eve(Id, Venv) = lookup(Venv, Id)                   <co
-            xml:id="pico-eval.8" />
-[Ev6b] eve(Nat-con, Venv) = Nat-con                       <co
-            xml:id="pico-eval.9" />
+[Ev6a] eve(Id, Venv) = lookup(Venv, Id) <co xml:id="pico-eval.8" />
+[Ev6b] eve(Nat-con, Venv) = Nat-con <co xml:id="pico-eval.9" />
 [Ev6c] eve(Str-con, Venv) = Str-con
 
 [Ev6d] Nat1 := eve(Exp1, Venv),
        Nat2 := eve(Exp2, Venv)
-       ====================================               <co
-            xml:id="pico-eval.10" />
+       ==================================== <co xml:id="pico-eval.10" />
        eve(Exp1 + Exp2, Venv) = Nat1 + Nat2
 
 [Ev6e] Nat1 := eve(Exp1, Venv),
@@ -1974,7 +2006,7 @@ equations
           </callout>
 
           <callout arearefs="pico-eval.2">
-            <para>Here declared variables are initalized.</para>
+            <para>Here declared variables are initialized.</para>
           </callout>
 
           <callout arearefs="pico-eval.3">
@@ -2005,7 +2037,7 @@ equations
           </callout>
 
           <callout arearefs="pico-eval.8">
-            <para>A varaible evaluates to its current value.</para>
+            <para>A variable evaluates to its current value.</para>
           </callout>
 
           <callout arearefs="pico-eval.9">
@@ -2099,7 +2131,7 @@ end
     </figure>
 
     <section>
-      <title>languages/pico/compile/AsssemblyLanguage</title>
+      <title><literal>languages/pico/compile/AsssemblyLanguage</literal></title>
 
       <para>Below, we define an assembly language for a stack-based
       CPU:</para>
@@ -2149,7 +2181,7 @@ context-free syntax
         </callout>
 
         <callout arearefs="pico-asm.3">
-          <para>Push a naural constant or a string constant on the
+          <para>Push a natural constant or a string constant on the
           stack.</para>
         </callout>
 
@@ -2202,7 +2234,7 @@ context-free syntax
       <title><literal>languages/pico/compile/NextLabel</literal></title>
 
       <para>During code generation for Pico statements like if and while, the
-      need will arize to generate new labels to describe the control flow that
+      need will arise to generate new labels to describe the control flow that
       is implied by these statements. The function nextlabel defined below
       describes this.</para>
 
@@ -2214,11 +2246,11 @@ imports languages/pico/compile/AssemblyLanguage
 
 exports
 context-free syntax
-  "nextlabel" "(" Label ")" -&gt; Label  <co xml:id="nextlabel.1" />
+  "nextlabel" "(" Label ")" -&gt; Label <co xml:id="nextlabel.1" />
 
 hiddens
 lexical variables
-  "Char+" [0-9]* -&gt; [a-z0-9]+         <co xml:id="nextlabel.2" /></programlisting>
+  "Char+" [0-9]* -&gt; [a-z0-9]+ <co xml:id="nextlabel.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2250,7 +2282,7 @@ lexical variables
       <para>The single equation decomposes a given label into a list of
       characters and creates a new label with the list of characters with a
       single character <literal>x</literal> appended. Note that for every
-      lexical sort (here: <literal>Label</literal>) there exeits an
+      lexical sort (here: <literal>Label</literal>) there exits an
       automatically generated constructor function (here:
       <literal>label</literal>) that can be used to access the characters of a
       lexical value or to construct a new one. The former happens at the
@@ -2279,12 +2311,12 @@ imports languages/pico/compile/NextLabel
   
 exports
   context-free syntax
-    trp( PROGRAM ) -&gt; Instrs                     <co xml:id="pico-comp.1" />
+    trp( PROGRAM ) -&gt; Instrs <co xml:id="pico-comp.1" />
   
 hiddens
   context-free start-symbols
     PROGRAM Instrs
-  context-free syntax                            <co xml:id="pico-comp.2" />                     
+  context-free syntax <co xml:id="pico-comp.2" />                     
     trd(DECLS)                   -&gt; {Instr ";"}+
     trits({ID-TYPE  ","}*)       -&gt; {Instr ";"}+ 
     trs({STATEMENT ";"}*, Label) -&gt; &lt;{Instr ";"}+, Label&gt;
@@ -2313,7 +2345,7 @@ hiddens
         <calloutlist>
           <callout arearefs="pico-comp.1">
             <para>The main compiler function translates a Pico program into a
-            seuqnce of instructions.</para>
+            sequence of instructions.</para>
           </callout>
 
           <callout arearefs="pico-comp.2">
@@ -2336,8 +2368,7 @@ hiddens
 
         <programlisting>equations
 
-[main] start(PROGRAM, Program) =                      <co
-            xml:id="pico-comp-eqs.1" />
+[main] start(PROGRAM, Program) = <co xml:id="pico-comp-eqs.1" />
        start(Instrs, trp(Program))
 
 equations 
@@ -2348,11 +2379,9 @@ equations
             xml:id="pico-comp-eqs.2" />
        trp(begin Decls Series end) = Instr*1; Instr*2
 
-[Tr2]  trd(declare Id-type*;) = trits(Id-type*)       <co
-            xml:id="pico-comp-eqs.3" />
+[Tr2]  trd(declare Id-type*;) = trits(Id-type*) <co xml:id="pico-comp-eqs.3" />
  
-[Tr3a] trits(Id:natural, Id-type*) =                  <co
-            xml:id="pico-comp-eqs.4" />
+[Tr3a] trits(Id:natural, Id-type*) = <co xml:id="pico-comp-eqs.4" />
        dclnat Id;
        trits(Id-type*)
  
@@ -2364,20 +2393,17 @@ equations
 
 [Tr4a] &lt;Instr*1, Label'&gt; := trst(Stat, Label), 
        &lt;Instr*2, Label''&gt; := trs(Stat*, Label')
-       =======================================        <co
-            xml:id="pico-comp-eqs.5" />
+       ======================================= <co xml:id="pico-comp-eqs.5" />
        trs(Stat ; Stat*, Label) = 
        &lt; Instr*1;
          Instr*2
        , 
          Label'' &gt;
 
-[Tr4b] trs( , Label) = &lt;noop, Label&gt;                  <co
-            xml:id="pico-comp-eqs.6" />
+[Tr4b] trs( , Label) = &lt;noop, Label&gt; <co xml:id="pico-comp-eqs.6" />
 
 [Tr5a] Instr* := tre(Exp)
-       =================                              <co
-            xml:id="pico-comp-eqs.7" />
+       ================== <co xml:id="pico-comp-eqs.7" />
        trst(Id := Exp, Label) = 
        &lt; lvalue Id;
          Instr*; 
@@ -2407,8 +2433,7 @@ equations
        &lt;Instr*2, Label'&gt; := trs(Series, Label),
        Label1 := nextlabel(Label'), 
        Label2 := nextlabel(Label1) 
-       =======================================        <co
-            xml:id="pico-comp-eqs.9" />
+       ======================================= <co xml:id="pico-comp-eqs.9" />
        trst(while Exp do Series od, Label) =
        &lt; label Label1; 
          Instr*1; 
@@ -2419,16 +2444,14 @@ equations
        , 
          Label2 &gt;
 
-[Tr6a] tre(Nat-con) = push Nat-con                    <co
-            xml:id="pico-comp-eqs.10" />
+[Tr6a] tre(Nat-con) = push Nat-con <co xml:id="pico-comp-eqs.10" />
 
 [Tr6b] tre(Str-con) = push Str-con
 
 [Tr6c] tre(Id) = rvalue Id
 
 [Trcd] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
-       ========================================       <co
-            xml:id="pico-comp-eqs.11" />
+       ========================================= <co xml:id="pico-comp-eqs.11" />
        tre(Exp1 + Exp2) = Instr*1; Instr*2; add
 
 [Tr6e] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
@@ -2452,7 +2475,7 @@ equations
           <callout arearefs="pico-comp-eqs.2">
             <para>A Pico program is compiled by first compiling its
             declarations and then is instructions. The resulting instruction
-            sequences are then concatened and returned as result. Note that
+            sequences are then concatenated and returned as result. Note that
             the translation of the series part of the program starts using the
             label <literal>x</literal> (the single x character).</para>
           </callout>
@@ -2469,7 +2492,7 @@ equations
 
           <callout arearefs="pico-comp-eqs.5">
             <para>Compile a series of statements by first compiling the first
-            one and then the rest. Observe the carefull propagation of the
+            one and then the rest. Observe the careful propagation of the
             label information.</para>
           </callout>
 
@@ -2511,9 +2534,9 @@ equations
         </calloutlist>
 
         <para>Recall the Pico example that computes factorial? Let's apply the
-        function trp to it:</para>
+        function <literal>trp</literal> to it:</para>
 
-        <programlisting>tcp(
+        <programlisting>trp(
 begin declare input : natural,
                       output  :  natural,
                       repnr: natural,
@@ -2611,7 +2634,7 @@ end
   <section>
     <title>Intermezzo: traversal functions</title>
 
-    <para>As we have seen in the preceeding examples, functions like
+    <para>As we have seen in the preceding examples, functions like
     typechecking, evaluation and compilation recursively visit all nodes in
     the parse tree of a program and perform their task at each node, being
     checking, evaluation or code generation. In these cases it is unavoidable
@@ -2710,11 +2733,11 @@ imports Naturals
 exports
   sorts TREE
   context-free syntax
-    NAT           -&gt; TREE  <co xml:id="tree.1" />
-    f(TREE, TREE) -&gt; TREE  <co xml:id="tree.2" /> 
+    NAT           -&gt; TREE <co xml:id="tree.1" />
+    f(TREE, TREE) -&gt; TREE <co xml:id="tree.2" /> 
     g(TREE, TREE) -&gt; TREE
     h(TREE, TREE) -&gt; TREE
-  variables                <co xml:id="tree.3" />
+  variables <co xml:id="tree.3" />
     “N”[0-9]*     -&gt; NAT
     “T”[0-9]*     -&gt; TREE</programlisting>
 
@@ -2762,9 +2785,9 @@ exports
 imports Tree-syntax
 exports
 context-free syntax
-  cnt(TREE)       -&gt; NAT              <co xml:id="tree-cnt-class.1" />
+  cnt(TREE)       -&gt; NAT <co xml:id="tree-cnt-class.1" />
 equations
-[1] cnt(N)        = 1                 <co xml:id="tree-cnt-class.2" />
+[1] cnt(N)        = 1 <co xml:id="tree-cnt-class.2" />
 [2] cnt(f(T1,T2)) = 1+cnt(T1)+cnt(T2) <co xml:id="tree-cnt-class.3" />
 [3] cnt(g(T1,T2)) = 1+cnt(T1)+cnt(T2)
 [4] cnt(h(T1,T2)) = 1+cnt(T1)+cnt(T2)</programlisting>
@@ -2820,11 +2843,11 @@ equations
 imports Tree-syntax
 exports
  context-free syntax
-    cnt(TREE, NAT) -&gt; NAT {traversal(accu,     <co xml:id="tree-cnt-trav.1" />
+    cnt(TREE, NAT) -&gt; NAT {traversal(accu,  <co xml:id="tree-cnt-trav.1" />
                                      bottom-up,
                                      continue)}
 equations
-[1] cnt(T, N) = N + 1                          <co xml:id="tree-cnt-trav.2" /></programlisting>
+[1] cnt(T, N) = N + 1  <co xml:id="tree-cnt-trav.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2867,11 +2890,11 @@ equations
 imports Tree-syntax
 exports
 context-free syntax
-  inc(TREE) -&gt; TREE {traversal(trafo,      <co xml:id="tree-inc.1" />
+  inc(TREE) -&gt; TREE {traversal(trafo, <co xml:id="tree-inc.1" />
                                bottom-up,
                                continue)}
 equations
-[1] inc(N) = N + 1                         <co xml:id="tree-inc.2" /></programlisting>
+[1] inc(N) = N + 1  <co xml:id="tree-inc.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2912,11 +2935,11 @@ equations
 imports Tree-syntax
 exports
 context-free syntax
-  inc(TREE, NAT) -&gt; TREE {traversal(trafo,     <co xml:id="tree-incp.1" />
+  inc(TREE, NAT) -&gt; TREE {traversal(trafo, <co xml:id="tree-incp.1" />
                                     bottom-up,
                                     continue)}
 equations
-[1] inc(N1, N2) = N1 + N2                      <co xml:id="tree-incp.2" /></programlisting>
+[1] inc(N1, N2) = N1 + N2 <co xml:id="tree-incp.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2947,39 +2970,416 @@ equations
     </section>
 
     <section>
-      <title>Term replacement</title>
+      <title>Tree replacement</title>
 
-      <para></para>
+      <para>Performing replacements in trees is a frequently occurring
+      operation. Typically, certain values in a tree have to be replaced by
+      other ones. These values can be simple or complex. One can distinguish
+      different forms of replacement:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Deep replacement</emphasis> replaces only
+          occurrences close to the leaves of the tree.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Shallow replacement</emphasis> replaces only
+          occurrences close to the root.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Full replacement</emphasis> replaces all occurrences
+          in a tree.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These forms of replacement form a nice test case for traversal
+      functions and we will discuss each in detail. The task at hand will be:
+      perform a deep/shallow/full replacement of all function symbols
+      <literal>g</literal> by a new function symbol
+      <literal>i</literal>.</para>
 
       <section>
         <title>Deep replacement</title>
 
-        <para></para>
+        <para>Deep replacement only replaces occurrences close to the leaves
+        of the tree. This suggests a bottom-up approach where on each path
+        from the root of the tree to each leaf, at most one replacement may
+        occur. This is exactly what the break attribute of traversal function
+        achieves.</para>
+
+        <programlisting>module Tree-drepl
+imports Tree-syntax
+exports
+context-free syntax
+   i(TREE, TREE)   -&gt; TREE <co xml:id="drepl.1" />
+   drepl(TREE)      -&gt; TREE {traversal(trafo,
+                                       bottom-up,
+                                       break)} <co xml:id="drepl.2" />
+equations
+[1] drepl(g(T1, T2)) = i(T1, T2) <co xml:id="drepl.3" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="drepl.1">
+            <para>Add the additional tree constructor i to make examples
+            slightly more interesting.</para>
+          </callout>
+
+          <callout arearefs="drepl.2">
+            <para>The function <literal>drepl</literal> is a bottom-up
+            transformer that stops at the first match on each path from root
+            to leaf.</para>
+          </callout>
+
+          <callout arearefs="drepl.3">
+            <para>The equation that performs the actual replacement: the
+            subtree <literal>g(T1, T2)</literal> is replaced by <literal>i(T1,
+            T2)</literal>.</para>
+          </callout>
+        </calloutlist>
+
+        <para>An example:</para>
+
+        <programlisting>drepl( f( g( f(1,2), 3 ),
+          g( g(4,5), 6 )) )</programlisting>
+
+        <para>results in:</para>
+
+        <programlisting>f( i( f(1,2), 3 ),
+     g( i(4,5), 6 ))</programlisting>
+
+        <para>Indeed, only the deepest occurrences of <literal>g</literal>
+        have been replaced.</para>
       </section>
 
       <section>
         <title>Shallow replacement</title>
 
-        <para></para>
+        <para>Shallow replacement only replaces occurrences close to the root
+        of the tree. This suggests a top-down approach where on each path from
+        the root of the tree to each leaf, at most one replacement may occur.
+        This is exactly what the break attribute of traversal function
+        achieves.</para>
+
+        <programlisting>module Tree-srepl
+imports Tree-syntax
+exports
+context-free syntax
+   i(TREE, TREE)   -&gt; TREE
+   srepl(TREE)      -&gt; TREE {traversal(trafo, 
+                                       top-down, 
+                                       break)} <co xml:id="srepl.1" />
+equations
+[1] srepl(g(T1, T2)) = i(T1, T2)</programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="srepl.1">
+            <para>The function <literal>srepl</literal> is a top-down
+            transformer that stops at the first match on each path from root
+            to leaf.</para>
+          </callout>
+        </calloutlist>
+
+        <para>The example:</para>
+
+        <programlisting>srepl( f( g( f(1,2), 3 ),
+          g( g(4,5), 6 )) )</programlisting>
+
+        <para>results in:</para>
+
+        <programlisting>f( i( f(1,2), 3 ),
+     i( g(4,5), 6 ))</programlisting>
+
+        <para>As expected, only the outermost occurrences of
+        <literal>g</literal> have been replaced.</para>
       </section>
 
       <section>
         <title>Full replacement</title>
 
-        <para></para>
+        <para>Full replacement replaces all occurrences in the tree. In this
+        case, there is no difference between a top-down or a bottom-up
+        approach. The continue attribute of traversal function achieves
+        traversal of all tree nodes.</para>
+
+        <programlisting>module Tree-frepl
+imports Tree-syntax
+exports
+context-free syntax
+   i(TREE, TREE)   -&gt; TREE
+   frepl(TREE)      -&gt; TREE {traversal(trafo,
+                                       top-down,
+                                       continue)}
+equations
+[1] frepl(g(T1, T2)) = i(T1, T2)</programlisting>
+
+        <para>The example</para>
+
+        <programlisting>frepl( f( g( f(1,2), 3 ),
+          g( g(4,5), 6 )) )</programlisting>
+
+        <para>results in:</para>
+
+        <programlisting>f( i( f(1,2), 3 ),
+     i( i(4,5), 6 ))</programlisting>
+
+        <para>Indeed, all occurrences of <literal>g</literal> have now been
+        replaced.</para>
       </section>
     </section>
 
     <section>
       <title>A real example: COBOL transformation</title>
 
-      <para></para>
+      <para>Now let's turn our attention to a real example of traversal
+      functions. The problem is that COBOL75 has two forms of if
+      statement:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>"IF" Expr "THEN" Stats "END-IF"?</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>"IF" Expr "THEN" Stats "ELSE" Stats
+          "END-IF"?</literal></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In other words, COBOL75 has an if-then statement and an
+      if-then-else statement and both end on an optional keyword
+      <literal>END-IF</literal>. This leads to the well known dangling else
+      problem that may cause ambiguities in nested if statements. Given</para>
+
+      <programlisting>IF expr1 THEN IF expr2 THEN stats1 ELSE stats2</programlisting>
+
+      <para>Is this an if-then statement with an if-then-else statement as
+      then branch as suggested by the following layout:</para>
+
+      <programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1 
+   ELSE 
+      stats2</programlisting>
+
+      <para>Or is it the other way around, an if-then-else statement with an
+      if-then statement as then branch:</para>
+
+      <programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1 
+ELSE 
+   stats2</programlisting>
+
+      <para>This is utterly confusing and error-prone, therefore it is a good
+      idea to add END-IF to all if-statement to indicate that either</para>
+
+      <para><programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1 
+   ELSE 
+      stats2
+   END-IF
+END-IF</programlisting>or</para>
+
+      <para><programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1
+   END-IF
+ELSE 
+   stats2
+END-IF</programlisting>is intended.</para>
+
+      <para>The following excerpt from a real application achieves
+      this:</para>
+
+      <programlisting>module End-If-Trafo
+imports Cobol   <co xml:id="cobol.1" />
+exports
+context-free syntax
+  addEndIf(Program) -&gt; Program {traversal(trafo,
+                                          continue,
+                                          top-down)} <co xml:id="cobol.2" />
+variables
+ "Stats"[0-9]*      -&gt; StatsOptIfNotClosed
+ "Expr"[0-9]*       -&gt; L-exp
+ "OptThen"[0-9]*    -&gt; OptThen
+equations
+[1] addEndIf(IF Expr OptThen Stats)  =
+             IF Expr OptThen Stats END-IF <co xml:id="cobol.3" />
+
+[2] addEndIf(IF Expr OptThen Stats1 ELSE Stats2) =
+             IF Expr OptThen Stats1 ELSE Stats2 END-IF</programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="cobol.1">
+          <para>Import the COBOL grammar. It is huge and consists of hundreds
+          of syntax rules.</para>
+        </callout>
+
+        <callout arearefs="cobol.3">
+          <para>The transformer <literal>addEndIf</literal> will perform the
+          desired transformation.</para>
+        </callout>
+
+        <callout arearefs="cobol.3">
+          <para>Two equations define the transformation for an if-then,
+          respectively ,an if-then-else statement with missing
+          <literal>END-IF</literal> keyword.</para>
+        </callout>
+      </calloutlist>
+
+      <para>It must be stressed that, due to the nesting of if-statements,
+      such a kind of transformation can never be done by a tool that is based
+      on lexical analysis alone.</para>
     </section>
 
     <section>
       <title>A funny Pico typechecker</title>
 
-      <para></para>
+      <para>To conclude these illustrations of the use of traversal functions,
+      we reconsider the problem of Pico typechecking and present a completely
+      alternative solution that does not use type environments. Given a Pico
+      program, the overall approach is to remove those part that are type
+      correct and to repeat this process as long as possible. A type correct
+      program will hence be reduced to an empty program, while a
+      type-incorrect program will be reduced to a program that precisely
+      contains the incorrect statements. The replacement strategy is as
+      follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Replace all constants by their type, e.g.,
+          <literal>3</literal> becomes
+          <literal>type(natural)</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Replace all variables by their declared type, e.g., <literal>x
+          + 3</literal> becomes <literal>type(natural) +
+          type(natural)</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Simplify type correct expressions, e.g.,
+          <literal>type(natural) + type(natural)</literal> becomes
+          <literal>type(natural)</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Remove all type correct statements, e.g.,
+          <literal>type(natural) := type(natural)</literal> is removed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Consider the erroneous program:</para>
+
+      <programlisting>begin 
+   declare x : natural,
+                y : natural,
+                s : string;
+      x := 10; s := "abc";
+      if x then 
+             x := x + 1
+      else 
+             s := x + 2
+      fi;
+      y := x + 2;
+end</programlisting>
+
+      <para>(take a second to spot the error) will thus reduce to:</para>
+
+      <programlisting>begin
+  declare;
+  type(string) := type(natural);
+end</programlisting>
+
+      <para>This style of type checking leads to descriptive messages
+      concerning the cause of errors and is an alternative to the style where
+      explicit error location have to be taken into account in the
+      specification.</para>
+
+      <para>The "funny" Pico typechecker is defined as follows:</para>
+
+      <programlisting>module Pico-typecheck
+imports Pico-syntax
+exports
+context-free syntax
+ type(TYPE)                  -&gt; ID  <co xml:id="pico-funny.1" />
+ replace(STATS, ID-TYPE) <co xml:id="pico-funny.2" /> -&gt; STATS {traversal(trafo,
+                                                 bottom-up,
+                                                 break)}
+ replace(EXP     , ID-TYPE)  -&gt; EXP   {traversal(trafo,
+                                                 bottom-up,
+                                                 break)}
+variables
+   ...
+equations
+[0] begin declare Id-type, Decl*; Stat* end = <co xml:id="pico-funny.3" />
+      begin declare Decl*; replace(Stat*, Id-type) end
+
+[1] replace(Id     , Id : Type) = type(Type) <co xml:id="pico-funny.4" />
+[2] replace(Nat-con, Id : Type) = type(natural)
+[3] replace(Str-con, Id : Type) = type(string)
+
+[4] type(string) || type(string)  = type(string) <co xml:id="pico-funny.5" />
+[5] type(natural) + type(natural) = type(natural)
+[6] type(natural) - type(natural) = type(natural)
+
+[7] Stat*1; if type(natural) then Stat*2 else Stat*3 fi ; Stat*4
+     = Stat*1; Stat*2; Stat*3; Stat*4 <co xml:id="pico-funny.6" />
+
+[8] Stat*1; while type(natural) do Stat*2 od; Stat*3
+     = Stat*1; Stat*2; Stat*3
+
+[9] Stat*1; type(Type) := type(Type); Stat*2
+     = Stat*1; Stat*2</programlisting>
+
+      <para>Notes:</para>
+
+      <calloutlist>
+        <callout arearefs="pico-funny.1">
+          <para>First we have to extend the Pico syntax, to allow type
+          indications in the code. Here, we allow at every position where an
+          identifier may occur a type indication of the form
+          <literal>type(natural)</literal> or
+          <literal>type(string)</literal>.</para>
+        </callout>
+
+        <callout arearefs="pico-funny.2">
+          <para>The traversal function <literal>replace</literal> will replace
+          a specific identifier (as defined by its second argument) in a Pico
+          program. Since programs are composed of subtrees of various sorts
+          (e.g., PROGRAM, DECL, STAT, EXP, ...) the first argument of replace
+          may range over all these sorts. Each variant that is <emphasis>used
+          in the equations</emphasis> has to be declared here.</para>
+        </callout>
+
+        <callout arearefs="pico-funny.3">
+          <para>Visit each variable declaration and use
+          <literal>replace</literal> to replace the variable by its type in
+          the body of the program.</para>
+        </callout>
+
+        <callout arearefs="pico-funny.4">
+          <para>Replace constants and variables by their type.</para>
+        </callout>
+
+        <callout arearefs="pico-funny.5">
+          <para>Replace type-correct expressions by their type.</para>
+        </callout>
+
+        <callout arearefs="pico-funny.6">
+          <para>Remove type-correct expressions and statements.</para>
+        </callout>
+      </calloutlist>
     </section>
 
     <section>
@@ -2992,15 +3392,48 @@ equations
           <para>For tree traversals that have to do work at every node, it is
           unavoidable to write many equations to describe the traversal: at
           least one equation is needed for every rule in the grammar of the
-          language in question. Examples are typechecking, ecaluation and code
+          language in question. Examples are typechecking, evaluation and code
           generation.</para>
         </listitem>
 
         <listitem>
-          <para>Traversal functions automate this process: only equations are
-          needed for the cases where real work has to be done at a node; the
-          other cases handled automatically. Examples are many forms of fact
+          <para>Other applications only have to do work at a few types of
+          nodes. This is exemplified by various forms of fact
           extraction.</para>
+        </listitem>
+
+        <listitem>
+          <para>Traversal functions automate such applications: only equations
+          are needed for the cases where real work has to be done at a node;
+          the other cases handled automatically. </para>
+        </listitem>
+
+        <listitem>
+          <para>An <emphasis>accumulator</emphasis> is a traversal function
+          that computes a certain value during the traversal of the
+          tree.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>transformer</emphasis> is a traversal function
+          that transform the tree during the traversal.</para>
+        </listitem>
+
+        <listitem>
+          <para>An <emphasis>accumulating transformer</emphasis> combines
+          these functionalities.</para>
+        </listitem>
+
+        <listitem>
+          <para>Traversal functions can traverse the tree from root to leaves
+          (<emphasis>top-down</emphasis>) or from leaves to root
+          (<emphasis>bottom-up</emphasis>).</para>
+        </listitem>
+
+        <listitem>
+          <para>Traversal functions can visit all nodes on each path from root
+          to tree (<emphasis>continuous</emphasis>) or only the first matching
+          node (<emphasis>break</emphasis>).</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -3012,7 +3445,7 @@ equations
     <para>The goal of a fact extractor is to extract information from source
     files that can be used by later analysis tools. Fact extraction is tightly
     coupled to the requirements of the analysis tools and can differ widely
-    per application. here we show a simple fact extractor that
+    per application. Here we show a simple fact extractor that
     extracts:</para>
 
     <itemizedlist>
@@ -3049,7 +3482,7 @@ equations
 
     <itemizedlist>
       <listitem>
-        <para><literal>create-store</literal>: creat a new rstore.</para>
+        <para><literal>create-store</literal>: create a new rstore.</para>
       </listitem>
 
       <listitem>
@@ -3058,7 +3491,7 @@ equations
       </listitem>
 
       <listitem>
-        <para><literal>set</literal>: assign a value to a variabel in the
+        <para><literal>set</literal>: assign a value to a variable in the
         rstore.</para>
       </listitem>
     </itemizedlist>
@@ -3073,12 +3506,12 @@ equations
         (like an identifier, expression, or statement in a Pico program) to a
         string value. This conversion is necessary since sets and relations
         can only contain basic values like integers and strings and no complex
-        value like frgaments from parse trees.</para>
+        value like fragments from parse trees.</para>
       </listitem>
     </itemizedlist>
 
     <section>
-      <title>languages/pico/extract/Pico</title>
+      <title><literal>languages/pico/extract/Pico</literal></title>
 
       <para>The syntax definition of the Pico fact extractor:</para>
 
@@ -3087,7 +3520,7 @@ equations
 imports utilities/RStores
 imports languages/pico/syntax/Pico
 imports basic/Integers
-imports utilities/Parsing[PICO-ID]               <co xml:id="pico-extract.1" />
+imports utilities/Parsing[PICO-ID] <co xml:id="pico-extract.1" />
 imports utilities/Parsing[STATEMENT]
 imports utilities/Parsing[EXP]
 imports utilities/PosInfo[STATEMENT]
@@ -3100,7 +3533,7 @@ context-free syntax
   statementHistogram(PROGRAM, RStore) -&gt; RStore  <co
           xml:id="pico-extract.3" />
 
-context-free syntax                              <co xml:id="pico-extract.4" />
+context-free syntax <co xml:id="pico-extract.4" />
   countStatements(PROGRAM, RStore)    -&gt; RStore  
                                          {traversal(accu, 
                                                     bottom-up, 
@@ -3127,9 +3560,9 @@ variables
   "Rel" [0-9]*     -&gt; RElem             
   "Control" [0-9]* -&gt; RElem             
 
-variables
-  "Store"[0-9]* -&gt; RStore {strict}
-  "Int" [0-9]*    -&gt; Integer      {strict} 
+variables <co xml:id="pico-extract.5" />
+  "Store"[0-9]*    -&gt; RStore  {strict}
+  "Int" [0-9]*     -&gt; Integer {strict} 
 </programlisting>
 
       <para>Notes:</para>
@@ -3149,12 +3582,16 @@ variables
 
         <callout arearefs="pico-extract.3">
           <para>Similarly, function <literal>statementHistogram</literal> adds
-          a histoigram relation to the rstore.</para>
+          a histogram relation to the rstore.</para>
         </callout>
 
         <callout arearefs="pico-extract.4">
           <para>These two functions are implemented using auxiliary traversal
           functions.</para>
+        </callout>
+
+        <callout arearefs="pico-extract.5">
+          <para></para>
         </callout>
       </calloutlist>
 
@@ -3171,8 +3608,7 @@ variables
 
 equations
 
-[hist] statementHistogram(Program, Store) =            <co
-          xml:id="pico-extract-eqs.2" />
+[hist] statementHistogram(Program, Store) = <co xml:id="pico-extract-eqs.2" />
        countStatements(Program, 
                        declare(Store, 
                                StatementHistogram, 
@@ -3180,8 +3616,7 @@ equations
 
 equations
 
-[cS1] countStatements(Id := Exp, Store)  =             <co
-          xml:id="pico-extract-eqs.3" />
+[cS1] countStatements(Id := Exp, Store)  =  <co xml:id="pico-extract-eqs.3" />
       inc(Store, StatementHistogram, "Assignment")
 
 [cS2] countStatements(if Exp 
@@ -3199,7 +3634,7 @@ equations
                         ControlFlow, 
                         rel[&lt;str,loc&gt;,&lt;str,loc&gt;]),
       &lt;Entry, Rel, Exit&gt; := cflow(Stat*)
-      ============================================     <co
+      ============================================ <co
           xml:id="pico-extract-eqs.4" />
       controlFlow(begin Decls Stat* end, Store) = 
       set(Store1, ControlFlow, Rel)
@@ -3209,8 +3644,7 @@ equations
 [cfg-1] 
      &lt;Entry1, Rel1, Exit1&gt; := cflow(Stat), 
      &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat+)
-     =====================================             <co
-          xml:id="pico-extract-eqs.5" />
+     ===================================== <co xml:id="pico-extract-eqs.5" />
      cflow(Stat ; Stat+) = 
      &lt; 
       Entry1, 
@@ -3226,8 +3660,7 @@ equations
      &lt;Entry, Rel, Exit&gt; := cflow(Stat*),
      Control := &lt;unparse-to-string(Exp), 
                  get-location(Exp)&gt;
-     ==================================                <co
-          xml:id="pico-extract-eqs.6" />
+     ================================== <co xml:id="pico-extract-eqs.6" />
      cflow(while Exp do Stat* od) = 
      &lt; 
       {Control},
@@ -3241,7 +3674,7 @@ equations
      &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat*2),
      Control := &lt;unparse-to-string(Exp), 
                  get-location(Exp)&gt;
-     ==========================================        <co
+     ==========================================  <co
           xml:id="pico-extract-eqs.7" />
      cflow(if Exp then Stat*1 else Stat*2 fi) =
      &lt; 
@@ -3306,7 +3739,7 @@ equations
 
       <itemizedlist>
         <listitem>
-          <para>Traversal functions are very usefull for writing relatively
+          <para>Traversal functions are very useful for writing relatively
           short extraction functions.</para>
         </listitem>
 
@@ -3333,6 +3766,10 @@ equations
 
       <listitem>
         <para>Write "Historical notes" section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Complete the extraction section.</para>
       </listitem>
     </itemizedlist>
   </section>
