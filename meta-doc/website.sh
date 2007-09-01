@@ -28,6 +28,10 @@ echo "</title></head><body>" >> ${INDEX}
 mkdir -p ${WEB}/logos
 cp logos/*.{png,gif} ${WEB}/logos
 
+mkdir -p ${WEB}/images
+mkdir -p ${WEB}/images/callouts
+cp images/callouts/*.png $WEB/images/callouts
+
 # Convert all books in all categories
 
 for cat in ${CATEGORIES}; do
@@ -45,6 +49,7 @@ for cat in ${CATEGORIES}; do
 	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
                    --output ${WEB}/$cat/$book/$book.html \
 		   --xinclude \
+                   --stringparam callout.graphics.path ../../images/callouts/ \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
                    --param xref.with.number.and.title 0 \
@@ -55,6 +60,7 @@ for cat in ${CATEGORIES}; do
 		   --param section.autolabel 1 \
 		   --param shade.verbatim 1 \
 		   --xinclude \
+                   --stringparam callout.graphics.path ../../images/callouts/ \
                    --stringparam paper.type A4 \
                    ${DOCBOOKXSLFO} $cat/$book/$book.xml)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
