@@ -212,9 +212,6 @@
           Meta-Environment.</para>
         </listitem>
       </itemizedlist>
-
-      <para>In <link linkend="fm_HistoricalNotes">Historical Notes</link>, we
-      give further background and key references.</para>
     </section>
   </section>
 
@@ -1953,21 +1950,21 @@ equations
             <imagedata fileref="screen-pico-tc3.png" scale="55" scalefit="1"></imagedata>
           </imageobject>
         </mediaobject>
+      </figure>
 
-        <para>The error message is more informative than it seems: unfolding
-        it reveals the location of the error. Just click on the message to
-        highlight the error in the source code. That is shown <link
-        linkend="Fig-pico-tc4">here</link>.</para>
+      <para>The error message is more informative than it seems: unfolding it
+      reveals the location of the error. Just click on the message to
+      highlight the error in the source code. That is shown <link
+      linkend="Fig-pico-tc4">here</link>.</para>
 
-        <figure pgwide="1" xml:id="Fig-pico-tc4">
-          <title>Click on the error message to highlight its source.</title>
+      <figure pgwide="1" xml:id="Fig-pico-tc4">
+        <title>Click on the error message to highlight its source.</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="screen-pico-tc4.png" scale="55" scalefit="1"></imagedata>
-            </imageobject>
-          </mediaobject>
-        </figure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-tc4.png" scale="55" scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
       </figure>
     </section>
 
@@ -4008,27 +4005,54 @@ equations
         </callout>
 
         <callout arearefs="pico-extract-eqs.2">
-          <para></para>
+          <para>Add a new variable <literal>StatementHistogram</literal> of
+          type <literal>rel[str,int]</literal> to the store and apply the
+          auxiliary function <literal>countStatements</literal> to collect the
+          desired facts.</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.3">
-          <para></para>
+          <para>Perform the counting for three statement categories:
+          assignments, conditionals and loops. For each category a tuple of
+          the form <literal>&lt;<replaceable>Category</replaceable>,
+          <replaceable>N</replaceable>&gt;</literal> is added to the relation.
+          The function <literal>inc</literal> (imported via the module
+          <literal>RStores</literal>) adds the value of
+          <literal><replaceable>N</replaceable></literal> for the relavant
+          category (or creates a new tuple if it did not yet exist).</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.4">
-          <para></para>
+          <para>The function <literal>controlFlow</literal> declares a new
+          variable <literal>ControlFlow</literal> of type
+          <literal>rel[&lt;str,loc&gt;,&lt;str,loc&gt;]</literal> and applies
+          the auxilary function <literal>cflow</literal> to collect the
+          facts.</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.5">
-          <para></para>
+          <para>The function cflow retruns a triple: the entry points, the
+          internal control flow, and the exit points of the investigated
+          language construct. In the case of a statement sequence, the exits
+          of the first statement and the entries of the following statements
+          have to be connected via a Carthesian product to create all possible
+          control flow transfers between them. The internal relations Rel1 and
+          Rel2 are added to this and the appropriate triple is
+          returned.</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.6">
-          <para></para>
+          <para>A slightly more complex construction in order to cater for all
+          control flows in a while loop. Observe that the control expression
+          is the entry as well as the exit of the while loop. Internally, the
+          exits of the body of the loop have to be connected whith the control
+          expression.</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.7">
-          <para></para>
+          <para>Here again, some plumbing is necessary to collect all the
+          possible control flow from control expression, via then or else
+          branch to the exits of the statement.</para>
         </callout>
       </calloutlist>
     </section>
@@ -4065,10 +4089,9 @@ equations
       the left pane under <guilabel>Facts</guilabel>. For the various
       variables in the rstore different visualisations are available (they
       depend on the actual type of each variable). The effect of selecting the
-      graph visualization for the ControlFlow variable is shown in the figure
-      <link linkend="Fig-pico-extract">below</link>.</para>
-
-      <para></para>
+      graph visualization for the <literal>ControlFlow</literal> variable is
+      shown in the figure <link
+      linkend="Fig-pico-extract">below</link>.</para>
 
       <figure pgwide="1" xml:id="Fig-pico-extract">
         <title>Graph display of ControlFlow</title>
@@ -4081,9 +4104,9 @@ equations
         </mediaobject>
       </figure>
 
-      <para>Another example is the visualization of the StatementHistogram
-      variable as bar chart shown in the figure <link
-      linkend="Fig-pico-extract2">below</link>.</para>
+      <para>Another example is the visualization of the
+      <literal>StatementHistogram</literal> variable as bar chart shown in the
+      figure <link linkend="Fig-pico-extract2">below</link>.</para>
 
       <figure pgwide="1" xml:id="Fig-pico-extract2">
         <title>Bar chart display of StatementHistogram</title>
@@ -4120,26 +4143,12 @@ equations
     </section>
   </section>
 
-  <section xml:id="fm_HistoricalNotes">
-    <title>Historical Notes</title>
-
-    <para></para>
-  </section>
-
   <section xml:id="fm_ToDo">
     <title>To Do</title>
 
     <itemizedlist>
       <listitem>
-        <para>Write all "Using ... in the Meta-Environment" sections.</para>
-      </listitem>
-
-      <listitem>
-        <para>Write "Historical notes" section.</para>
-      </listitem>
-
-      <listitem>
-        <para>Complete the extraction section.</para>
+        <para>Complete the compiler section.</para>
       </listitem>
     </itemizedlist>
   </section>
