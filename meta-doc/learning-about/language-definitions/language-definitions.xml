@@ -207,7 +207,7 @@
         </listitem>
 
         <listitem>
-          <para>Guided tour: Playing with Booleans" is a flash movie that
+          <para>"Guided tour: Playing with Booleans" is a flash movie that
           gives a quick overview of the user-interface of the
           Meta-Environment.</para>
         </listitem>
@@ -299,12 +299,6 @@ equations
       <para>The Meta-Environment comes with a considerable library of built-in
       languages and datatypes. We explore the datatype
       <literal>basic/Booleans</literal> in the ASF+SDF library.</para>
-
-      <section>
-        <title>Opening basic/Booleans in The Meta-Environment</title>
-
-        <para></para>
-      </section>
 
       <section>
         <title>Modular structure</title>
@@ -641,26 +635,128 @@ variables
       <section>
         <title>Running the Boolean example in The Meta-Environment</title>
 
-        <para>By far the best steps to get acquainted with the
-        Meta-Environment are:</para>
+        <para>The flash movie "Guided tour: Playing with Booleans" gives you a
+        quick overview of the user-interface of The Meta-Environment. Here we
+        give you only some quick hints to get started. After installation, the
+        The Meta-Environment is available as the command:
+        <command>asfsdf-meta</command>. Typing this command results in the
+        screen shown <link linkend="Fig-initial-screen">below</link>.</para>
+
+        <figure pgwide="1" xml:id="Fig-initial-screen">
+          <title>Initial screen of The meta-Environment</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="screen-initial.png" scale="55" scalefit="1"
+                         width=""></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>Opening the module basic/Booleans is achieved as follows:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Have a look at the Flash movie: <emphasis>Guided Tour:
-            Playing with Booleans</emphasis>.</para>
+            <para>Press the menu <guimenu>Module</guimenu> and select the
+            button <guimenuitem>Open...</guimenuitem>.</para>
           </listitem>
 
           <listitem>
-            <para>Read the explanations and screen shots below.</para>
+            <para>An <guilabel>Open Module</guilabel> dialog appears that asks
+            for the directory to <guilabel>Look in</guilabel>.</para>
           </listitem>
 
           <listitem>
-            <para>Get hands-on experience with The Meta-Environment
-            itself.</para>
+            <para>Select the entry ASF+SDF library and a list of choices
+            appears.</para>
+          </listitem>
+
+          <listitem>
+            <para>Select the subdirectory <filename>basic</filename> and
+            select Booleans.sdf in the list of modules that is provided. The
+            progree so far, is shown in the figure <link
+            linkend="Fig-open-basic-Booleans">below</link>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Now pushing the Open Module button will open basic/Booleans
+            and all its imported modules. The result is shown <link
+            linkend="Fig-Booleans-opened">below</link>.</para>
           </listitem>
         </itemizedlist>
 
-        <para></para>
+        <figure xml:id="Fig-open-basic-Booleans">
+          <title>Selecting <literal>basic/Booleans.sdf</literal></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="screen-open-module.png" scale="55"
+                         scalefit="1"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <figure pgwide="1" xml:id="Fig-Booleans-opened">
+          <title>After opening <literal>basic/Booleans</literal></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="screen-Booleans-opened.png" scale="55"
+                         scalefit="1" width=""></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>Now that the Booleans have been opened, you may want to inspect
+        their definition yourself. There two ways to achieve this:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Right click (= click with the right-most mouse button) on
+            <literal>Booleans</literal> in the <guilabel>Modules</guilabel>
+            pane on the left, or</para>
+          </listitem>
+
+          <listitem>
+            <para>Right click on the oval labelled <literal>Booleans</literal>
+            in the <guilabel>Import Graph</guilabel> pane on the right.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>In both cases, a hierarchical pop-up menu will appear:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Select the menu entry <guimenuitem>Editing...</guimenuitem>.
+            A new pop-up menu will appear.</para>
+          </listitem>
+
+          <listitem>
+            <para>Select the menu entry <guimenuitem>Syntax</guimenuitem>, and
+            the syntax part of module Booleans will appear in an editor pane.
+            The result is shown in the figure <link
+            linkend="Fig-Booleans-syntax">below</link>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <figure pgwide="1" xml:id="Fig-Booleans-syntax">
+          <title>Opening the syntax of module Booleans</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="screen-Booleans-syntax.png" scale="55"
+                         scalefit="1" width=""></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>After these initial steps, viewing the equations and opening and
+        reducing a Boolean term will require similar interactions with The
+        Meta-Environment.</para>
+
+        <important>
+          <para>There is no substitute for trying this out yourself.</para>
+        </important>
       </section>
 
       <section>
@@ -1024,7 +1120,67 @@ exports
     <section>
       <title>Using the Pico syntax in the Meta-Environment</title>
 
-      <para></para>
+      <para>Now we will create a tiny Pico program:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Right click on the module syntax/Pico (since we want to
+            create a term using that syntax). A pop-up menu appears.</para>
+          </listitem>
+
+          <listitem>
+            <para>Select the menu entry <guimenuitem>Editing...</guimenuitem>.
+            A new pop-up menu will appear.</para>
+          </listitem>
+
+          <listitem>
+            <para>Select the menu entry <guimenuitem>Term</guimenuitem> and a
+            dialog window will appear to select the desired term. You may
+            select an exiting file or create a new one. We do the latter: type
+            in pico-trial.trm. The result is a new editor pane labelled with
+            the name of the file.</para>
+          </listitem>
+
+          <listitem>
+            <para>Now start typing the following (syntactically correct) Pico
+            program:</para>
+
+            <programlisting>begin
+ declare
+   x : natural;
+   x := "abc"
+end</programlisting>
+          </listitem>
+        </itemizedlist>The result is shown in the figure <link
+      linkend="Fig-pico-trial1">below</link>.</para>
+
+      <figure pgwide="1" xml:id="Fig-pico-trial1">
+        <title>First program after typing it in.</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-trial1.png" scale="55"
+                       scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Next, goto to the <guimenu>File</guimenu> menu and select the
+      <guimenuitem>Save</guimenuitem> entry (or, alternatively, type Ctrl-S).
+      The result is that the file is saved and parsed. As a result, all
+      keywords will be highlighted as shown <link
+      linkend="Fig-pico-trial2">below</link>.</para>
+
+      <figure pgwide="1" xml:id="Fig-pico-trial2">
+        <title>First program after saving it.</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-trial2.png" scale="55"
+                       scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
 
     <section>
@@ -1061,8 +1217,8 @@ exports
             </listitem>
 
             <listitem>
-              <para>Generate a syntax-directed editor for Pico
-              programs.</para>
+              <para>Generate a syntax-directed editor for Pico programs
+              (including keyword highlighting).</para>
             </listitem>
 
             <listitem>
@@ -1703,7 +1859,116 @@ equations
     <section>
       <title>Using the Pico typechecker in The Meta-Environment</title>
 
-      <para></para>
+      <para>Restart The Meta-Environment do the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Open the <guimenu>Module</guimenu> menu and select
+          <guimenuitem>Open...</guimenuitem>.</para>
+        </listitem>
+
+        <listitem>
+          <para>In the dialog select <filename>ASF+SDF Library</filename> to
+          look for modules.</para>
+        </listitem>
+
+        <listitem>
+          <para>Select succesively the directories
+          <filename>languages</filename>, <filename>pico</filename>,
+          <filename>check</filename>, and then finally the module
+          <filename>Pico.sdf</filename>. This is the top level module of the
+          Pico typechecker.</para>
+        </listitem>
+
+        <listitem>
+          <para>After some processing the <link
+          linkend="Fig-pico-tc1">following</link> screen results.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The display of the import graph can be changed in various
+      ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Left click and drag on the display to move to other parts of
+          the import graph.</para>
+        </listitem>
+
+        <listitem>
+          <para>Right click on the display to adjust the size of the graph to
+          let it fit on the display.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1" xml:id="Fig-pico-tc1">
+        <title>After opening languages/pico/check/Pico</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-tc1.png" scale="55" scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Now select <filename>languages/pico/check/Pico</filename> and open
+      our previously created <filename>pico-trial.trm</filename> over it (by
+      right clicking on it, following the pop-up menus, and opening
+      <filename>pico-trial.trm</filename>). Click somewhere in pico-trial.trm
+      and observe that several term editing menus have appeared. Of particular
+      interest is the menu labelled <guimenu>Pico</guimenu>, see the figure
+      <link linkend="Fig-pico-tc2">below</link>.</para>
+
+      <important>
+        <para>The version of The meta-Environment produced to create these
+        screen dumps gives two messages "constructor used more than one".
+        Ignore them.</para>
+      </important>
+
+      <figure pgwide="1" xml:id="Fig-pico-tc2">
+        <title>Opening trial term over <filename>module
+        languages/pico/check/Pico</filename></title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-tc2.png" scale="55" scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The final step is now to open the <guimenu>Pico</guimenu> menu and
+      to select the <guimenuitem>check</guimenuitem> button. The effect is
+      that the trial Pico program will be type checked and that an error
+      message will be displayed. Recall that the typecheck function
+      <literal>tcp</literal> is invoked with the current Pico program as
+      argument and is then reduced. See the figure <link
+      linkend="Fig-pico-tc3">below</link>.</para>
+
+      <figure pgwide="1" xml:id="Fig-pico-tc3">
+        <title>After pushing the <guimenuitem>check</guimenuitem> button in
+        the <guimenu>Pico</guimenu> menu.</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-tc3.png" scale="55" scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+
+        <para>The error message is more informative than it seems: unfolding
+        it reveals the location of the error. Just click on the message to
+        highlight the error in the source code. That is shown <link
+        linkend="Fig-pico-tc4">here</link>.</para>
+
+        <figure pgwide="1" xml:id="Fig-pico-tc4">
+          <title>Click on the error message to highlight its source.</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="screen-pico-tc4.png" scale="55" scalefit="1"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </figure>
     </section>
 
     <section>
@@ -1729,6 +1994,11 @@ equations
         <listitem>
           <para>A typechecker can be integrated with The
           Meta-Environment.</para>
+        </listitem>
+
+        <listitem>
+          <para>Error messages are linked back to locations in the source
+          text.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2088,9 +2358,43 @@ end
     </section>
 
     <section>
-      <title>Using the Pico evaluator in the Meta-Environment</title>
+      <title>Using the Pico evaluator in the Meta-EnvironmentOpen</title>
 
-      <para></para>
+      <para>To evaluate a Pico program perform the following steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Open the module
+          <filename>languages/pico/run/Pico.sdf</filename> from the
+          <literal>ASF+SDF Library</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Open the term pico-trial.trm over this module.</para>
+        </listitem>
+
+        <listitem>
+          <para>The program is automatically evaluated and the result is shown
+          in a new editor pane called <filename>run.out</filename>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The result is shown in the figure <link
+      linkend="Fig-pico-run">below</link>.</para>
+
+      <important>
+        <para>Here again, more warnings appear. They can be ignored.</para>
+      </important>
+
+      <figure pgwide="1" xml:id="Fig-pico-run">
+        <title>After running the trial program.</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-run.png" scale="55" scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
 
     <section>
@@ -2601,7 +2905,12 @@ end
     <section>
       <title>Using the Pico compiler in the Meta-Environment</title>
 
-      <para></para>
+      <para>TBD</para>
+
+      <caution>
+        <para>compile does not generate a Pico menu entry but we need to use
+        Reduce instead.</para>
+      </caution>
     </section>
 
     <section>
@@ -2710,8 +3019,6 @@ end
         </itemizedlist>
       </listitem>
     </itemizedlist>
-
-    <para></para>
 
     <figure xml:id="Fig_order">
       <title>Top-down versus bottom-up</title>
@@ -3405,7 +3712,7 @@ equations
         <listitem>
           <para>Traversal functions automate such applications: only equations
           are needed for the cases where real work has to be done at a node;
-          the other cases handled automatically. </para>
+          the other cases handled automatically.</para>
         </listitem>
 
         <listitem>
@@ -3729,7 +4036,65 @@ equations
     <section>
       <title>Using the Pico extractor in the Meta-Environment</title>
 
+      <para>To run a fact extraction on a Pico program perform the following
+      steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Open the module
+          <filename>languages/pico/extract/Pico.sdf</filename> from the
+          <literal>ASF+SDF Library</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Open the term <filename>fac.trm</filename> over this module
+          (you may need to copy it first from this article or from the
+          <filename>SDF Library</filename> in the examples
+          <filename>directory</filename>).</para>
+        </listitem>
+
+        <listitem>
+          <para>Open the <guimenu>Pico</guimenu> menu and select the entry
+          <guimenuitem>extract</guimenuitem>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>After some delay the extraction is complete (check, for instance,
+      the progress messages at the bottom of the window). The result is an
+      rstore that we can inspect with the fact browser that is available in
+      the left pane under <guilabel>Facts</guilabel>. For the various
+      variables in the rstore different visualisations are available (they
+      depend on the actual type of each variable). The effect of selecting the
+      graph visualization for the ControlFlow variable is shown in the figure
+      <link linkend="Fig-pico-extract">below</link>.</para>
+
       <para></para>
+
+      <figure pgwide="1" xml:id="Fig-pico-extract">
+        <title>Graph display of ControlFlow</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-extract.png" scale="55"
+                       scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Another example is the visualization of the StatementHistogram
+      variable as bar chart shown in the figure <link
+      linkend="Fig-pico-extract2">below</link>.</para>
+
+      <figure pgwide="1" xml:id="Fig-pico-extract2">
+        <title>Bar chart display of StatementHistogram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="screen-pico-extract2.png" scale="55"
+                       scalefit="1"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
 
     <section>
@@ -3745,6 +4110,11 @@ equations
 
         <listitem>
           <para>Rstores can be used to represent extracted facts.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Meta-Environment supports various visualizations for
+          rstores.</para>
         </listitem>
       </itemizedlist>
     </section>
