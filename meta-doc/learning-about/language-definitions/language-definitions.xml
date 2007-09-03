@@ -95,7 +95,7 @@
       </itemizedlist>
 
       <para>By convention, all these language aspects are located in dedicated
-      subdirectories:</para>
+      subdirectories of a language definition:</para>
 
       <itemizedlist>
         <listitem>
@@ -158,13 +158,13 @@
         </listitem>
 
         <listitem>
-          <para>Generating parsers for the syntax modules that have been
+          <para>Generating parsers for the syntax modules (SDF) that have been
           changed.</para>
         </listitem>
 
         <listitem>
-          <para>Generating rewriter engines for the equations modules that
-          have been changed.</para>
+          <para>Generating rewriter engines for the equations modules (ASF)
+          that have been changed.</para>
         </listitem>
 
         <listitem>
@@ -182,22 +182,22 @@
 
       <para>This article guides you through the various stages of writing
       language definitions in ASF+SDF. The following documents (all available
-      at <uri>www.meta-environment.org</uri>) will help you to learn
+      at <uri>http://www.meta-environment.org</uri>) will help you to learn
       more:</para>
 
       <itemizedlist>
         <listitem>
-          <para>The basic concepts of syntax analysis are given in "Syntax
-          Analysis".</para>
+          <para>The basic concepts of syntax analysis are given in the article
+          "Syntax Analysis".</para>
         </listitem>
 
         <listitem>
-          <para>The basic concepts of term rewriting are discussed in "Term
-          Rewriting".</para>
+          <para>The basic concepts of term rewriting are discussed in the
+          article "Term Rewriting".</para>
         </listitem>
 
         <listitem>
-          <para>"The Syntax Definition Formalism SDF" is a reference manual
+          <para>"The Syntax Definition Formalism SDF" is the reference manual
           for the SDF formalism.</para>
         </listitem>
 
@@ -208,7 +208,7 @@
 
         <listitem>
           <para>"Guided tour: Playing with Booleans" is a flash movie that
-          gives a quick overview of the user-interface of the
+          gives you a quick overview of the user-interface of the
           Meta-Environment.</para>
         </listitem>
       </itemizedlist>
@@ -227,7 +227,10 @@
       <para>An ASF+SDF specification consists of a collection of modules as
       shown in the following <link linkend="Fig_modules">figure</link>. A
       module can import other modules and this can be understood as the
-      textual inclusion of the imported modules.</para>
+      textual inclusion of the imported modules. In this example, the text of
+      modules <literal>B</literal>, <literal>C</literal> and
+      <literal>D</literal> is literally inserted in module
+      <literal>A</literal>.</para>
 
       <figure xml:id="Fig_modules">
         <title>Module structure of an ASF+SDF specification</title>
@@ -261,7 +264,8 @@ equations
         </callout>
 
         <callout arearefs="mod.2">
-          <para>Names of modules imported by this module.</para>
+          <para>Zero or more sections that describe modules to be imported by
+          this module.</para>
         </callout>
 
         <callout arearefs="mod.3">
@@ -278,7 +282,8 @@ equations
           <para>The equations of the module that define the meaning of the
           grammar elements. Equations come in two flavours. Unconditional:
           <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
-                role="bold">]</emphasis> &lt;Term&gt; <emphasis role="bold">=</emphasis> &lt;Term&gt;</programlisting></para>
+                role="bold">]</emphasis> &lt;Term<subscript>1</subscript>&gt; <emphasis
+                role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
 
           <para>and conditional:<programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
                 role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
@@ -286,6 +291,17 @@ equations
                 role="bold">,</emphasis> ... 
            <emphasis role="bold">===============================</emphasis>
                  &lt;Term<subscript>1</subscript>&gt; <emphasis role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
+
+          <para>In the unconditional case, an attempt is made to match
+          Term<subscript>1</subscript> and if this succeeds it is replaced by
+          Term<subscript>2</subscript> (after proper replacement of variables
+          that result from the match). In the conditional case, an attempt is
+          made to match Term<subscript>1</subscript> and if this succeeds the
+          conditions are evaluated. If all conditions are true,
+          Term<subscript>1</subscript> is replaced by
+          Term<subscript>2</subscript> (again after proper replacement of
+          variables that may in this case result both from the match and from
+          the evaluation of the conditions.).</para>
         </callout>
       </calloutlist>
     </section>
@@ -294,7 +310,7 @@ equations
       <title>An example: Booleans</title>
 
       <para>The Meta-Environment comes with a considerable library of built-in
-      languages and datatypes. We explore the datatype
+      languages and datatypes. We explore here the datatype
       <literal>basic/Booleans</literal> in the ASF+SDF library.</para>
 
       <section>
@@ -313,6 +329,8 @@ equations
             </imageobject>
           </mediaobject>
         </figure>
+
+        <para>We will now discuss all these modules in turn.</para>
       </section>
 
       <section>
@@ -345,8 +363,10 @@ context-free start-symbols
 
           <callout arearefs="boolcon.2">
             <para>The constants <literal>true</literal> and
-            <literal>false</literal>. Such literals should always be
-            quoted.</para>
+            <literal>false</literal>. Such literals should always be quoted.
+            The <literal>cons</literal> attribute plays only a role when
+            generating external APIs and gives a name to this particular
+            construct. In the current presentation it can be ignored.</para>
           </callout>
 
           <callout arearefs="boolcon.3">
@@ -355,9 +375,7 @@ context-free start-symbols
             <literal>BoolCon</literal>. The net effect is that we can indeed
             parse these constants. Note that we hide this start symbol so that
             it can not proliferate to other modules (and cause undesired
-            ambiguities). The <literal>cons</literal> attribute plays a role
-            when generating external APIs and gives a name to this particular
-            construct.</para>
+            ambiguities).</para>
           </callout>
         </calloutlist>
       </section>
@@ -382,22 +400,22 @@ exports
         <calloutlist>
           <callout arearefs="whitespace.1">
             <para>A regular expression that defines space (<literal>\
-            </literal>), tabulation (<literal>\t)</literal>, newline (\n) and
-            carriage return (<literal>\r)</literal> as
-            <literal>LAYOUT</literal> characters. <literal>LAYOUT</literal> is
-            a predefined name that defines the layout characters that may
-            optionally appear between the symbols in the context-free grammar
-            (e.g., between the keyword <literal>if</literal> and the test in
-            an if-statement).</para>
+            </literal>), tabulation (<literal>\t)</literal>, newline
+            (<literal>\n</literal>) and carriage return
+            (<literal>\r)</literal> as <literal>LAYOUT</literal> characters.
+            <literal>LAYOUT</literal> is a predefined name that defines the
+            layout characters that may optionally appear between the symbols
+            in the context-free grammar (e.g., between the keyword
+            <literal>if</literal> and the test in an if-statement).</para>
           </callout>
 
           <callout arearefs="whitespace.2">
-            <para>Lexical syntax tends to become highly ambiguous.e.g., are
+            <para>Lexical syntax tends to become highly ambiguous, e.g., are
             two spaces one layout symbol or two consecutive ones? Context-free
             restrictions impose restrictions that resolve this. Here, optional
             layout (<literal>LAYOUT?</literal>) may not be followed by a
             layout character. In other words, the longest possible sequence of
-            layout characters should be consider as one
+            layout characters should be considered as one
             <literal>LAYOUT</literal> symbol.</para>
           </callout>
         </calloutlist>
@@ -406,7 +424,7 @@ exports
       <section>
         <title><literal>basic/Comments</literal></title>
 
-        <para>The comment conventions is defines as follows:</para>
+        <para>The comment conventions are defined as follows:</para>
 
         <programlisting>module basic/Comments
 
@@ -428,7 +446,7 @@ exports
 
         <calloutlist>
           <callout arearefs="comments.1">
-            <para>Defines an line-based comment that starts with
+            <para>Defines a line-based comment that starts with
             <literal>%%</literal> and ends at the end of the line. The
             <literal>category</literal> attribute defines the highlighting
             category to be used while editing texts that contain this
@@ -436,7 +454,7 @@ exports
           </callout>
 
           <callout arearefs="comments.2">
-            <para>Defines a comment that is contained within a single line
+            <para>Define a comment that is contained within a single line
             between <literal>%</literal> and <literal>%</literal>.</para>
           </callout>
 
@@ -450,8 +468,8 @@ exports
       <section xml:id="Sec_basic_Booleans">
         <title><literal>basic/Booleans</literal></title>
 
-        <para>After these preparations, we can now should the syntax part of
-        basic/Booleans:</para>
+        <para>After these preparations, we can now discuss the syntax part of
+        <literal>basic/Booleans</literal>:</para>
 
         <programlisting>module basic/Booleans
 
@@ -495,7 +513,8 @@ variables
           </callout>
 
           <callout arearefs="booleans.2">
-            <para>The sort of Boolean expressions.</para>
+            <para>The sort <literal>Boolean</literal> will represent Boolean
+            expressions.</para>
           </callout>
 
           <callout arearefs="booleans.3">
@@ -506,28 +525,30 @@ variables
 
           <callout arearefs="booleans.4">
             <para>The infix operators for Boolean or (<literal>|</literal>)
-            and Boolean and (&amp;). Both are left-associative and this is
-            indicated by the attribute <literal>left</literal>. Also note that
-            the arguments get explicit names (<literal>lhs</literal> and
-            <literal>rhs</literal>) and that a constructor is defined
-            (<literal>or</literal>, respectively, <literal>and</literal>).
-            This information is only relevant for generated APIs that are
-            accessed by external tools.</para>
+            and Boolean and (<literal>&amp;</literal>). Both are
+            left-associative and this is indicated by the attribute
+            <literal>left</literal>. Also note that the arguments get explicit
+            names (<literal>lhs</literal> and <literal>rhs</literal>) and that
+            a constructor is defined (<literal>or</literal>, respectively,
+            <literal>and</literal>). This information is only relevant for
+            generated APIs that are accessed by external tools.</para>
           </callout>
 
           <callout arearefs="booleans.5">
-            <para>The prefix operator not.</para>
+            <para>The prefix operator <literal>not</literal>.</para>
           </callout>
 
           <callout arearefs="booleans.6">
-            <para><literal>(</literal> and <literal>)</literal> may be used as
-            brackets in Boolean expressions.</para>
+            <para>The parentheses <literal>(</literal> and
+            <literal>)</literal> may be used as brackets in Boolean
+            expressions.</para>
           </callout>
 
           <callout arearefs="booleans.7">
-            <para>&amp; has a higher priority than |. The expression
-            <literal>Bool &amp; Bool | Bool</literal> will thus be interpreted
-            as (Bool &amp; Bool) | Bool.</para>
+            <para><literal>&amp;</literal> has a higher priority than
+            <literal>|</literal>. The expression <literal>Bool &amp; Bool |
+            Bool</literal> will thus be interpreted as <literal>(Bool &amp;
+            Bool) | Bool</literal>.</para>
           </callout>
 
           <callout arearefs="booleans.8">
@@ -538,19 +559,19 @@ variables
           <callout arearefs="booleans.9">
             <para>Import <literal>basic/Comments</literal> for the benefit of
             writing equations for Booleans (see below). Observe the subtlety
-            that this a <emphasis>hidden</emphasis> import: comments are only
-            available locally in this module and are not exported. By strictly
-            adhering to this convention, low-level comment conventions cannot
-            <emphasis>pollute</emphasis> higher level modules and interfere
-            with comment conventions defined at that level.</para>
+            that this is a <emphasis>hidden</emphasis> import: comments are
+            only available locally in this module and are not exported. By
+            strictly adhering to this convention, low-level comment
+            conventions cannot <emphasis>pollute</emphasis> higher level
+            modules and interfere with comment conventions defined at that
+            level.</para>
           </callout>
 
           <callout arearefs="booleans.10">
             <para>Declares Boolean variables like <literal>Bool</literal>,
             <literal>Bool1</literal>, <literal>Bool2</literal>,
             <literal>Bool123</literal>, <literal>Bool'</literal>,
-            <literal>Bool''</literal>, <literal>Bool1'</literal>, and the
-            like.</para>
+            <literal>Bool''</literal>, and <literal>Bool1'</literal>.</para>
           </callout>
         </calloutlist>
 
@@ -572,17 +593,17 @@ variables
 
         <calloutlist>
           <callout arearefs="booleans-eq.1">
-            <para>Meaning of the or operator, in other words: with these two
-            rules the <literal>|</literal> operator can be eliminated from any
-            Boolean expression.</para>
+            <para>Meaning of the <literal>|</literal> operator, in other
+            words: with these two rules the <literal>|</literal> operator can
+            be eliminated from any Boolean expression.</para>
           </callout>
 
           <callout arearefs="booleans-eq.2">
-            <para>Meaning of and operator.</para>
+            <para>Meaning of <literal>&amp;</literal> operator.</para>
           </callout>
 
           <callout arearefs="booleans-eq.3">
-            <para>Meaning of not operator.</para>
+            <para>Meaning of <literal>not</literal> operator.</para>
           </callout>
         </calloutlist>
 
@@ -603,8 +624,10 @@ variables
 <emphasis role="bold">[B4]</emphasis>   <emphasis>false &amp; Bool</emphasis>  <emphasis
               role="bold">=</emphasis> <emphasis>false</emphasis>
 
-<emphasis role="bold">[B5]</emphasis>   <emphasis>not ( false )</emphasis> <emphasis>=</emphasis> <emphasis>true</emphasis>       
-<emphasis role="bold">[B6]</emphasis>   not ( true )  <emphasis role="bold">=</emphasis> <emphasis>false</emphasis></programlisting></para>
+<emphasis role="bold">[B5]</emphasis>   <emphasis>not ( false )</emphasis> <emphasis
+              role="bold">=</emphasis> <emphasis>true</emphasis>       
+<emphasis role="bold">[B6]</emphasis>   <emphasis>not ( true )</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>false</emphasis></programlisting></para>
 
         <para>This mixture of syntaxes will become even more apparent when we
         discuss the Pico definitions later.</para>
@@ -640,7 +663,7 @@ variables
         screen shown <link linkend="Fig-initial-screen">below</link>.</para>
 
         <figure pgwide="1" xml:id="Fig-initial-screen">
-          <title>Initial screen of The meta-Environment</title>
+          <title>Initial screen of The Meta-Environment</title>
 
           <mediaobject>
             <imageobject>
@@ -650,7 +673,8 @@ variables
           </mediaobject>
         </figure>
 
-        <para>Opening the module basic/Booleans is achieved as follows:</para>
+        <para>Opening the module <literal>basic/Booleans</literal> is achieved
+        as follows:</para>
 
         <itemizedlist>
           <listitem>
@@ -670,14 +694,15 @@ variables
 
           <listitem>
             <para>Select the subdirectory <filename>basic</filename> and
-            select Booleans.sdf in the list of modules that is provided. The
-            progree so far, is shown in the figure <link
+            select <literal>Booleans.sdf</literal> in the list of modules that
+            is provided. The progress so far, is shown in the figure <link
             linkend="Fig-open-basic-Booleans">below</link>.</para>
           </listitem>
 
           <listitem>
-            <para>Now pushing the Open Module button will open basic/Booleans
-            and all its imported modules. The result is shown <link
+            <para>Now pushing the <guibutton>Open Module</guibutton> button
+            will open <literal>basic/Booleans</literal> and all its imported
+            modules. The result is shown <link
             linkend="Fig-Booleans-opened">below</link>.</para>
           </listitem>
         </itemizedlist>
@@ -705,7 +730,7 @@ variables
         </figure>
 
         <para>Now that the Booleans have been opened, you may want to inspect
-        their definition yourself. There two ways to achieve this:</para>
+        their definition yourself. There are two ways to achieve this:</para>
 
         <itemizedlist>
           <listitem>
@@ -759,29 +784,35 @@ variables
       <section>
         <title>Take home points</title>
 
-        <para>The example of the Booleans illustrates the following important
-        points that are also valid for more complex examples:</para>
+        <para>The example of the Booleans illustrates the following points
+        that are also valid for more complex examples:</para>
 
         <itemizedlist>
           <listitem>
             <para>Each module <emphasis>defines a language</emphasis>: in this
             case the language of Booleans. In other contexts one can also
             speak about the datatype of the Booleans. We will use language and
-            datatype as synonyms.</para>
+            datatype as synonyms. Other examples of languages are integers,
+            stacks, C, and Java. We treat them all in a uniform
+            fashion.</para>
           </listitem>
 
           <listitem>
-            <para>We can use this language definition to;</para>
+            <para>We can use the language definition for Booleans (and by
+            implication for any language) to:</para>
 
             <itemizedlist>
               <listitem>
-                <para>Create a syntax-directed editor for Boolean language and
-                create Boolean terms.</para>
+                <para>Create a syntax-directed editor for the Boolean language
+                and create Boolean terms. In the context of, for instance,
+                Java, it would be more common to say: create a syntax-directed
+                editor for Java and create Java programs.</para>
               </listitem>
 
               <listitem>
                 <para>Apply the equations to this term and reduce it to a
-                normal form (= a term that is not further reducible).</para>
+                <emphasis>normal form</emphasis> (= a term that is not further
+                reducible).</para>
               </listitem>
 
               <listitem>
@@ -816,7 +847,7 @@ variables
       </listitem>
 
       <listitem>
-        <para>Expressions may contain naturals, strings, addition
+        <para>Expressions may contain naturals, strings, variables, addition
         (<literal>+</literal>), subtraction (<literal>-</literal>) and
         concatenation (<literal>||</literal>).</para>
       </listitem>
@@ -898,7 +929,7 @@ end</programlisting>
       <title><literal>languages/pico/syntax/Types</literal></title>
 
       <para>Variables can be declared in Pico programs with one of two types:
-      "natural number" or "string". This defined as follows:</para>
+      "natural number" or "string". This is defined as follows:</para>
 
       <programlisting>module languages/pico/syntax/Types
 
@@ -934,7 +965,7 @@ exports
       <title><literal>languages/pico/syntax/Identifiers</literal></title>
 
       <para>Identifiers are used for the names of variables in Pico programs.
-      The are defined as follows:</para>
+      They are defined as follows:</para>
 
       <programlisting>module languages/pico/syntax/Identifiers
 
@@ -962,8 +993,8 @@ exports
         </callout>
 
         <callout arearefs="id.2">
-          <para>PICO-ID is defined using a regular expression that contains
-          the following elements:</para>
+          <para><literal>PICO-ID</literal> is defined using a regular
+          expression that contains the following elements:</para>
 
           <itemizedlist>
             <listitem>
@@ -1070,9 +1101,10 @@ exports
         </callout>
 
         <callout arearefs="pico-syntax.4">
-          <para>The rule for PROGRAM contains the list construct<literal>
-          {STATEMENT ";"}*</literal>. It describes zero or more statements
-          separated by a semicolon (<literal>;</literal>).</para>
+          <para>The rule for <literal>PROGRAM</literal> contains the list
+          construct<literal> {STATEMENT ";"}*</literal>. It describes zero or
+          more statements separated by a semicolon
+          (<literal>;</literal>).</para>
         </callout>
 
         <callout arearefs="pico-syntax.5">
@@ -1085,9 +1117,8 @@ exports
         </callout>
 
         <callout arearefs="pico-syntax.7">
-          <para>These three rules define that natural Pico identifiers,
-          natural constants and string constants may occur as
-          expressions.</para>
+          <para>These three rules define that Pico identifiers, natural
+          constants and string constants may occur in expressions.</para>
         </callout>
 
         <callout arearefs="pico-syntax.8">
@@ -1133,9 +1164,9 @@ exports
           <listitem>
             <para>Select the menu entry <guimenuitem>Term</guimenuitem> and a
             dialog window will appear to select the desired term. You may
-            select an exiting file or create a new one. We do the latter: type
-            in pico-trial.trm. The result is a new editor pane labelled with
-            the name of the file.</para>
+            select an exitsing file or create a new one. We do the latter:
+            type in <filename>pico-trial.trm</filename>. The result is a new
+            editor pane labelled with the name of the file.</para>
           </listitem>
 
           <listitem>
@@ -1183,8 +1214,7 @@ end</programlisting>
     <section>
       <title>Take home points</title>
 
-      <para>The syntax of Pico illustrates the following important
-      points:</para>
+      <para>The syntax of Pico illustrates the following points:</para>
 
       <itemizedlist>
         <listitem>
@@ -1199,10 +1229,11 @@ end</programlisting>
         </listitem>
 
         <listitem>
-          <para>The modules languages/pico/syntax/Identifiers,
-          languages/pico/syntax/Types and languages/pico/syntax/Pico define
-          (together with the modules they import) the syntax of the Pico
-          language.</para>
+          <para>The modules
+          <literal>languages/pico/syntax/Identifiers</literal>,
+          <literal>languages/pico/syntax/Types</literal> and
+          <literal>languages/pico/syntax/Pico</literal> define (together with
+          the modules they import) the syntax of the Pico language.</para>
         </listitem>
 
         <listitem>
@@ -1246,7 +1277,7 @@ end</programlisting>
         <listitem>
           <para>Sort names like <literal>PROGRAM</literal> and
           <literal>STATEMENT</literal>. Note that sorts are usually called
-          non-terminals.</para>
+          <emphasis>non-terminals</emphasis>.</para>
         </listitem>
 
         <listitem>
@@ -1281,11 +1312,13 @@ end</programlisting>
 
           <itemizedlist>
             <listitem>
-              <para><literal>S*</literal>: zero or more times S.</para>
+              <para><literal>S*</literal>: zero or more times
+              <literal>S</literal>.</para>
             </listitem>
 
             <listitem>
-              <para><literal>S+</literal>: one or more times S.</para>
+              <para><literal>S+</literal>: one or more times
+              <literal>S</literal>.</para>
             </listitem>
 
             <listitem>
@@ -1310,31 +1343,31 @@ end</programlisting>
             </listitem>
 
             <listitem>
-              <para><literal>A+</literal> accepts <literal>a</literal>,
-              <literal>aa</literal>, ....</para>
+              <para><literal>A+</literal> accepts <literal>a</literal>,and
+              <literal>aa</literal>, and ....</para>
             </listitem>
 
             <listitem>
               <para><literal>{A ";"}+</literal> accepts <literal>a</literal>,
-              <literal>a;a</literal>, <literal>a;a;a</literal>, ... but not:
-              <literal>a;a;a;</literal>.</para>
+              and <literal>a;a</literal>, and <literal>a;a;a</literal>, and
+              ... but not: <literal>a;a;a;</literal>.</para>
             </listitem>
           </itemizedlist>
 
-          <para>Slightly different patterns can be defined as well (suing
+          <para>Slightly different patterns can be defined as well (using
           grouping and alternative as defined below):</para>
 
           <itemizedlist>
             <listitem>
               <para>(<literal>A ";")+</literal> accepts <literal>a;</literal>,
-              <literal>a;a;</literal>, <literal>a;a;a;</literal> ... but not
-              <literal>a;a;a</literal>.</para>
+              and <literal>a;a;</literal>, and <literal>a;a;a;</literal> and
+              ... but not <literal>a;a;a</literal>.</para>
             </listitem>
 
             <listitem>
               <para><literal>(A ";"?)+</literal> accepts <literal>a</literal>,
-              <literal>a a</literal>, <literal>a;a</literal>,
-              <literal>a;a;</literal>, ...</para>
+              and <literal>a a</literal>, and <literal>a;a</literal>, and
+              <literal>a;a;</literal>, and ...</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -1373,8 +1406,10 @@ end</programlisting>
       <programlisting>S1 S2 ... Sn -&gt; S0 Attributes</programlisting>
 
       <para>Where <literal>S1</literal>, ... are symbols and
-      <literal>Attributes</literal> is a (possibly empty) list of
-      attributes.</para>
+      <literal>Attributes</literal> is a (possibly empty) list of attributes.
+      Attributes are used to define associativity (e.g,
+      <literal>left</literal>), constructor functions
+      (<literal>cons</literal>), and the like.</para>
 
       <para>Lexical syntax and context-free syntax are similar but between the
       symbols defined in a context-free rule, optional layout symbols may
@@ -1427,12 +1462,12 @@ end</programlisting>
       </listitem>
 
       <listitem>
-        <para>Left-hand side and Right-hand side of an assignment statement
+        <para>Left-hand side and right-hand side of an assignment statement
         should have equal type.</para>
       </listitem>
 
       <listitem>
-        <para>The test in while statement and if-statement should be
+        <para>The test in while-statement and if-statement should be
         <literal>natural</literal>.</para>
       </listitem>
 
@@ -1505,7 +1540,7 @@ exports
         </callout>
       </calloutlist>
 
-      <para>For convenience, we list the most functions of Tables here:</para>
+      <para>For convenience, we list the functions of Tables here:</para>
 
       <programlisting>module containers/Table[Key Value]
 ...
@@ -1609,9 +1644,9 @@ variables
 
         <calloutlist>
           <callout arearefs="pico-tc.1">
-            <para>The library module basic/Errors describes an error format
-            that is ubiquitous in The Meta-Environment. There are four
-            categories of errors: <literal>info</literal>,
+            <para>The library module <literal>basic/Errors</literal> describes
+            an error format that is ubiquitous in The Meta-Environment. There
+            are four categories of errors: <literal>info</literal>,
             <literal>warning</literal>, <literal>error</literal> and
             <literal>fatal</literal>. Each error contains a text that
             describes the error and a list of subjects where the error
@@ -1637,10 +1672,11 @@ variables
           <callout arearefs="pico-tc.4">
             <para>Several auxiliary functions are defined that are used in the
             definition of <literal>tcp</literal>. Note how some of these
-            functions take a TENV (type environment) as one of their arguments
-            and return a possibly modified TENV as result. Other functions
-            only use the TENV argument and directly produce error
-            messages.</para>
+            functions take a <literal>TENV</literal> (type environment) as one
+            of their arguments and return a possibly modified
+            <literal>TENV</literal> as result. Other functions only use the
+            <literal>TENV</literal> argument and directly produce error
+            messages when necessary.</para>
           </callout>
         </calloutlist>
       </section>
@@ -1753,14 +1789,14 @@ equations
             <literal>start(Summary,
             summary("pico-check",get-filename(get-location(Program)),
             [tcp(Program)]))</literal> defines in a similar fashion that the
-            result sort of execution is <literal>Summary</literal> and a
+            result sort of execution is a <literal>Summary</literal> and a
             recipe how to compute that result.</para>
           </callout>
 
           <callout arearefs="pico-tc-eq.2">
             <para>Type checking a complete program amounts to typechecking its
-            declarations (this yields a type environment) and checking its
-            statements in that environment.</para>
+            declarations (this yields a type environment) and then checking
+            its statements in that environment.</para>
           </callout>
 
           <callout arearefs="pico-tc-eq.3">
@@ -1773,24 +1809,25 @@ equations
             <para>To check a list of identifier-type pairs, we have to visit
             each pair in the list. We use <emphasis>list matching</emphasis>
             to achieve this: in the left-hand side <literal>tcits(Id:Type,
-            Id-type*, Tenv)</literal> the first argument of tcits (the list of
-            identifier-type pairs) is decomposed into three values that are
-            assigned to variables. The first pair is decomposed into an
-            identifier (<literal>Id</literal>) and a type
-            (<literal>Type</literal>). The remainder of the list is assigned
-            to the variable<literal> Id-type*</literal> (note that we use the
-            naming convention that variables that have lists of zero or more
-            elements as value end on <literal>*</literal> and, similarly,
-            variables that have one or more elements as value end on
-            <literal>+</literal>). In the right-hand side of this equation,
-            the contribution of the first pair to the type-environment is
-            computed (using tcit) and the remainder of the list of
+            Id-type*, Tenv)</literal> the first argument of
+            <literal>tcits</literal> (the list of identifier-type pairs) is
+            decomposed into three values that are assigned to variables. The
+            first pair is decomposed into an identifier
+            (<literal>Id</literal>) and a type (<literal>Type</literal>). The
+            remainder of the list is assigned to the variable<literal>
+            Id-type*</literal> (note that we use the naming convention that
+            variables that have lists of zero or more elements as value end on
+            <literal>*</literal> and, similarly, variables that have one or
+            more elements as value end on <literal>+</literal>). In the
+            right-hand side of this equation, the contribution of the first
+            pair to the type-environment is computed (using
+            <literal>tcit</literal>) and the remainder of the list of
             identifier-type pairs is checked recursively.</para>
           </callout>
 
           <callout arearefs="pico-tc-eq.5">
             <para>The left-hand side <literal>tcits(,Tenv)</literal> looks
-            like a type but it is not. An empty list of identifier-type pairs
+            like a typo but it is not. An empty list of identifier-type pairs
             is really denoted by the empty text!</para>
           </callout>
 
@@ -1856,7 +1893,7 @@ equations
     <section>
       <title>Using the Pico typechecker in The Meta-Environment</title>
 
-      <para>Restart The Meta-Environment do the following:</para>
+      <para>Restart The Meta-Environment and do the following:</para>
 
       <itemizedlist>
         <listitem>
@@ -1908,9 +1945,11 @@ equations
         </mediaobject>
       </figure>
 
-      <para>Now select <filename>languages/pico/check/Pico</filename> and open
-      our previously created <filename>pico-trial.trm</filename> over it (by
-      right clicking on it, following the pop-up menus, and opening
+      <para>Now select <filename>languages/pico/check/Pico</filename> (in the
+      <guilabel>Modules</guilabel> panel on the left or in the import graph)
+      and open our previously created Pico program
+      <filename>pico-trial.trm</filename> over it (by right clicking on it,
+      following the pop-up menus, and opening
       <filename>pico-trial.trm</filename>). Click somewhere in pico-trial.trm
       and observe that several term editing menus have appeared. Of particular
       interest is the menu labelled <guimenu>Pico</guimenu>, see the figure
@@ -1943,7 +1982,7 @@ equations
 
       <figure pgwide="1" xml:id="Fig-pico-tc3">
         <title>After pushing the <guimenuitem>check</guimenuitem> button in
-        the <guimenu>Pico</guimenu> menu.</title>
+        the <guimenu>Pico</guimenu> menu</title>
 
         <mediaobject>
           <imageobject>
@@ -1958,7 +1997,7 @@ equations
       linkend="Fig-pico-tc4">here</link>.</para>
 
       <figure pgwide="1" xml:id="Fig-pico-tc4">
-        <title>Click on the error message to highlight its source.</title>
+        <title>Click on the error message to highlight its source</title>
 
         <mediaobject>
           <imageobject>
@@ -1989,8 +2028,8 @@ equations
         </listitem>
 
         <listitem>
-          <para>A typechecker can be integrated with The
-          Meta-Environment.</para>
+          <para>A typechecker can be integrated with The Meta-Environment. It
+          is activated via the <guimenuitem>check</guimenuitem> button.</para>
         </listitem>
 
         <listitem>
@@ -2004,8 +2043,13 @@ equations
   <section>
     <title>Defining an evaluator for Pico</title>
 
-    <para>The evaluation rules for the Pico language are simple as
-    well:</para>
+    <para>In addition to syntax rules and typechecking rules, most languages
+    also need evaluation rules that determine how a program is to be executed.
+    Execution amounts to taking a program and all its input and computing the
+    program's result by a step-by-step execution of the statements in the
+    program.</para>
+
+    <para>The evaluation rules for the Pico language are simple:</para>
 
     <itemizedlist>
       <listitem>
@@ -2014,8 +2058,8 @@ equations
       </listitem>
 
       <listitem>
-        <para>Variables of type string are initialized to the empty
-        string.</para>
+        <para>Variables of type <literal>string</literal> are initialized to
+        the empty string.</para>
       </listitem>
 
       <listitem>
@@ -2024,8 +2068,8 @@ equations
 
       <listitem>
         <para>The variable on the left-hand side of an assignment statement
-        gets as value the value of the expression on the right-hand side of
-        the assignment.</para>
+        gets as value the value that results from evaluating the expression on
+        the right-hand side of the assignment.</para>
       </listitem>
 
       <listitem>
@@ -2035,7 +2079,7 @@ equations
 
       <listitem>
         <para>Conversely, if the test in an if-statement or while-statement
-        evaluates to 0, this is interpreted as
+        evaluates to a value unequal to 0, this is interpreted as
         <emphasis>true</emphasis>.</para>
       </listitem>
 
@@ -2175,10 +2219,10 @@ hiddens
           <para>Why VENV and VALUE-ENV?</para>
         </caution>
 
-        <para>Here again, having seen the syntax part of the Pico typechecker
-        there are no surprises here. The top level function
-        <literal>evp</literal> maps programs to value environments and needs
-        some auxiliary functions to achieve this.</para>
+        <para>Having seen the syntax part of the Pico typechecker there are no
+        surprises here. The top level function <literal>evp</literal> maps
+        programs to value environments and needs some auxiliary functions to
+        achieve this.</para>
       </section>
 
       <section>
@@ -2266,9 +2310,9 @@ equations
 
         <calloutlist>
           <callout arearefs="pico-eval.1">
-            <para>A start equations that connects the functions defined here
-            to The Meta-Environment: given a program, a value environment is
-            returned and this computed by applying the function
+            <para>A start equation that connects the functions defined here to
+            The Meta-Environment: given a program, a value environment is
+            returned and this is computed by applying the function
             <literal>evp</literal> to the program.</para>
           </callout>
 
@@ -2312,14 +2356,14 @@ equations
           </callout>
 
           <callout arearefs="pico-eval.10">
-            <para>Operators are evaluated by first evaluating their argument
+            <para>Operators are evaluated by first evaluating their arguments
             and then applying the relevant operator to them. Observe that the
             <literal>+</literal> in the Pico expression <literal>Exp1 +
             Exp2</literal> is the plus operator as defined by Pico. The
             <literal>+</literal> operator in <literal>Nat1 + Nat2</literal> is
-            the addition on integers as defined in basic/Integers. So we reuse
-            the definition of addition on integers to define addition in
-            Pico.</para>
+            the addition on integers as defined in
+            <literal>basic/Integers</literal>. So we reuse the definition of
+            addition on integers to define addition in Pico.</para>
           </callout>
         </calloutlist>
 
@@ -2367,12 +2411,15 @@ end
         </listitem>
 
         <listitem>
-          <para>Open the term pico-trial.trm over this module.</para>
+          <para>Open the Pico program <literal>fac.trm</literal> over this
+          module.</para>
         </listitem>
 
         <listitem>
-          <para>The program is automatically evaluated and the result is shown
-          in a new editor pane called <filename>run.out</filename>.</para>
+          <para>Open the <guimenu>Pico</guimenu> menu and to select the
+          <guimenuitem>run</guimenuitem> button. The program is evaluated and
+          the result is shown in a new editor pane called
+          <filename>run.out</filename>. This may take a while!</para>
         </listitem>
       </itemizedlist>
 
@@ -2384,7 +2431,7 @@ end
       </important>
 
       <figure pgwide="1" xml:id="Fig-pico-run">
-        <title>After running the trial program.</title>
+        <title>After running the factorial program.</title>
 
         <mediaobject>
           <imageobject>
@@ -2407,6 +2454,11 @@ end
         <listitem>
           <para>All modules for an evaluator reside in a subdirectory named
           <literal>run</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>An evaluator can be integrated in The Meta-Environment. It is
+          activated via the <guimenuitem>run</guimenuitem> button.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2434,8 +2486,7 @@ end
     <section>
       <title><literal>languages/pico/compile/AsssemblyLanguage</literal></title>
 
-      <para>Below, we define an assembly language for a stack-based
-      CPU:</para>
+      <para>Now we define an assembly language for a stack-based CPU:</para>
 
       <programlisting>module languages/pico/compile/AssemblyLanguage
 
@@ -2504,12 +2555,12 @@ context-free syntax
 
         <callout arearefs="pico-asm.7">
           <para>The three operators for addition, subtraction and
-          concatenation. The expect to values on the stack and replace them by
-          the result of the operation.</para>
+          concatenation. They expect two values on the stack and replace them
+          by the result of the operation.</para>
         </callout>
 
         <callout arearefs="pico-asm.8">
-          <para>Declare label. This can be a target of one of the goto
+          <para>Declare a label. This can be a target of one of the goto
           instructions.</para>
         </callout>
 
@@ -2534,10 +2585,10 @@ context-free syntax
     <section>
       <title><literal>languages/pico/compile/NextLabel</literal></title>
 
-      <para>During code generation for Pico statements like if and while, the
+      <para>During code generation for if-statement and while-statement, the
       need will arise to generate new labels to describe the control flow that
-      is implied by these statements. The function nextlabel defined below
-      describes this.</para>
+      is implied by these statements. The function
+      <literal>nextlabel</literal> defined below describes this.</para>
 
       <para>The syntax part looks as follows:</para>
 
@@ -2580,23 +2631,24 @@ lexical variables
 
  [1] nextlabel(label(Char+)) = label(Char+ x)</programlisting>
 
-      <para>The single equation decomposes a given label into a list of
-      characters and creates a new label with the list of characters with a
-      single character <literal>x</literal> appended. Note that for every
-      lexical sort (here: <literal>Label</literal>) there exits an
-      automatically generated constructor function (here:
+      <para>This single equation decomposes a given label into a list of
+      characters. Next, it creates a new label consisting of the original list
+      of characters extended with a single character <literal>x</literal>.
+      Note that for every lexical sort (here: <literal>Label</literal>) there
+      exits an automatically generated constructor function (here:
       <literal>label</literal>) that can be used to access the characters of a
       lexical value or to construct a new one. The former happens at the
       left-hand side of the above equation, the latter on the right-hand side.
-      Also observe that this completely type safe and that only syntactically
-      correct lexical values can be constructed in this way.</para>
+      Also observe that this is completely type safe and that only
+      syntactically correct lexical values can be constructed in this
+      way.</para>
     </section>
 
     <section>
       <title><literal>languages/pico/compile/Pico</literal></title>
 
       <para>The goal of the Pico compiler is to translate a Pico program into
-      an assembly language program.</para>
+      an equivalent assembly language program.</para>
 
       <section>
         <title>Syntax part</title>
@@ -2655,7 +2707,7 @@ hiddens
             Label&gt;</literal>. This a tuple with as first component a list
             of instructions and as second components a label. The general idea
             is that those functions that generate new labels (for instance, to
-            compile an if statement) return an instruction sequence
+            compile an if-statement) return an instruction sequence
             <emphasis>and</emphasis> the last label they have
             generated.</para>
           </callout>
@@ -2775,10 +2827,11 @@ equations
 
           <callout arearefs="pico-comp-eqs.2">
             <para>A Pico program is compiled by first compiling its
-            declarations and then is instructions. The resulting instruction
+            declarations and then its instructions. The resulting instruction
             sequences are then concatenated and returned as result. Note that
             the translation of the series part of the program starts using the
-            label <literal>x</literal> (the single x character).</para>
+            label <literal>x</literal> (the single <literal>x</literal>
+            character).</para>
           </callout>
 
           <callout arearefs="pico-comp-eqs.3">
@@ -2807,15 +2860,15 @@ equations
           </callout>
 
           <callout arearefs="pico-comp-eqs.8">
-            <para>Compile an if statement. Labels are created to mark the
+            <para>Compile an if-statement. Labels are created to mark the
             instructions generated for the else branch and, respectively, the
             instructions following the code generated for the if
             statement.</para>
           </callout>
 
           <callout arearefs="pico-comp-eqs.9">
-            <para>Compile a while loop. Two new label are generated to mark
-            the instructions generated for the while statement and,
+            <para>Compile a while-statement. Two new label are generated to
+            mark the instructions generated for the while statement and,
             respectively, the instructions following the code generated for
             the while loop.</para>
           </callout>
@@ -2829,13 +2882,13 @@ equations
             <para>Compilation of expressions. First compile both arguments
             (when the generated code is executed it leaves the two argument
             values on the stack) and then generate the appropriate operator
-            instructions that will replace the values on the stack by the
+            instruction that will replace the two values on the stack by the
             result of the operator.</para>
           </callout>
         </calloutlist>
 
-        <para>Recall the Pico example that computes factorial? Let's apply the
-        function <literal>trp</literal> to it:</para>
+        <para>Recall the Pico example that computes factorial and let's apply
+        the function <literal>trp</literal> to it:</para>
 
         <programlisting>trp(
 begin declare input : natural,
@@ -2933,6 +2986,11 @@ end
           compiler: ASF+SDF (the specification language), Pico (source
           language), and AssemblyLanguage (target language).</para>
         </listitem>
+
+        <listitem>
+          <para>The compiler can be integrated in The Meta-Environment and is
+          activated via the <guimenuitem>compile</guimenuitem> button.</para>
+        </listitem>
       </itemizedlist>
     </section>
   </section>
@@ -2956,8 +3014,8 @@ end
 
     <itemizedlist>
       <listitem>
-        <para>Counting the number of identifiers, goto statements, and the
-        like.</para>
+        <para>Computing program metrics like counting the number of
+        identifiers, goto statements, McCabe complexity and the like.</para>
       </listitem>
 
       <listitem>
@@ -2976,19 +3034,21 @@ end
         <itemizedlist>
           <listitem>
             <para><emphasis>accumulate</emphasis> a value during the
-            traversal: <literal>traversal(accu)</literal>. A typical example
-            is a function that counts statements.</para>
+            traversal, this is indicated by:
+            <literal>traversal(accu)</literal>. A typical example is a
+            function that counts statements.</para>
           </listitem>
 
           <listitem>
             <para><emphasis>transform</emphasis> the tree during the
-            traversal: <literal>traversal(trafo)</literal>. A typical example
-            is a function that replaces certain statements.</para>
+            traversal, this is indicated by:
+            <literal>traversal(trafo)</literal>. A typical example is a
+            function that replaces certain statements.</para>
           </listitem>
 
           <listitem>
-            <para>do both: <literal>traversal(accu,trafo)</literal>:
-            accumulate and transform.</para>
+            <para>accumulate and transform at the same time, this is indicated
+            by: <literal>traversal(accu,trafo)</literal>: </para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -3105,7 +3165,7 @@ equations
         </callout>
 
         <callout arearefs="tree-cnt-class.2">
-          <para>Visiting a leaf (a number) count for one.</para>
+          <para>Visiting a leaf (a number) counts for one.</para>
         </callout>
 
         <callout arearefs="tree-cnt-class.3">
@@ -3184,7 +3244,7 @@ equations
     </section>
 
     <section>
-      <title>Increment tree leaves (using a transformer)</title>
+      <title>Increment and modify tree leaves (using a transformer)</title>
 
       <para>Now we switch to a simple transformation example: given a tree
       construct a new one that is identical except that all values at the
@@ -3212,9 +3272,9 @@ equations
         <callout arearefs="tree-inc.2">
           <para>The single equation that performs the replacement. Observe
           that this equation only matches at nodes that contain an integer
-          (this is due to the N argument on the left-hand side). When the
-          equation is applicable it replace the give integer leaf by an
-          incremented one.</para>
+          (this is due to the <literal>N</literal> argument on the left-hand
+          side). When the equation is applicable it replaces the give integer
+          leaf by an incremented one.</para>
         </callout>
       </calloutlist>
 
@@ -3230,7 +3290,8 @@ equations
     </section>
 
     <section>
-      <title>Increment leaves with variable amount (using transformer)</title>
+      <title>Increment with variable amount and modify tree leaves (using
+      transformer)</title>
 
       <para>Continuing the incrementing example, we now want to make the
       <emphasis>amount</emphasis> of the increment variable.</para>
@@ -3441,8 +3502,8 @@ equations
       <title>A real example: COBOL transformation</title>
 
       <para>Now let's turn our attention to a real example of traversal
-      functions. The problem is that COBOL75 has two forms of if
-      statement:</para>
+      functions. The problem is that COBOL75 has two forms of
+      if-statement:</para>
 
       <itemizedlist>
         <listitem>
@@ -3535,14 +3596,18 @@ equations
 
         <callout arearefs="cobol.3">
           <para>Two equations define the transformation for an if-then,
-          respectively ,an if-then-else statement with missing
+          respectively, an if-then-else statement with missing
           <literal>END-IF</literal> keyword.</para>
         </callout>
       </calloutlist>
 
       <para>It must be stressed that, due to the nesting of if-statements,
       such a kind of transformation can never be done by a tool that is based
-      on lexical analysis alone.</para>
+      on lexical analysis alone. The enormous savings due to the use of
+      traversal functions should also be stressed: only two equations suffice
+      to define the required transformation. Compare this with the hundreds of
+      equations that would have been needed without traversal
+      functions.</para>
     </section>
 
     <section>
@@ -3607,7 +3672,7 @@ end</programlisting>
 
       <para>This style of type checking leads to descriptive messages
       concerning the cause of errors and is an alternative to the style where
-      explicit error location have to be taken into account in the
+      explicit error locations have to be taken into account in the
       specification.</para>
 
       <para>The "funny" Pico typechecker is defined as follows:</para>
@@ -3661,9 +3726,11 @@ equations
           <para>The traversal function <literal>replace</literal> will replace
           a specific identifier (as defined by its second argument) in a Pico
           program. Since programs are composed of subtrees of various sorts
-          (e.g., PROGRAM, DECL, STAT, EXP, ...) the first argument of replace
-          may range over all these sorts. Each variant that is <emphasis>used
-          in the equations</emphasis> has to be declared here.</para>
+          (e.g., <literal>PROGRAM</literal>, <literal>DECL</literal>,
+          <literal>STAT</literal>, <literal>EXP</literal>, ...) the first
+          argument of replace may range over all these sorts. Each variant
+          that is <emphasis>used in the equations</emphasis> has to be
+          declared here.</para>
         </callout>
 
         <callout arearefs="pico-funny.3">
@@ -3702,14 +3769,14 @@ equations
 
         <listitem>
           <para>Other applications only have to do work at a few types of
-          nodes. This is exemplified by various forms of fact
-          extraction.</para>
+          nodes. This is exemplified by various forms of metrics calculation
+          and fact extraction.</para>
         </listitem>
 
         <listitem>
           <para>Traversal functions automate such applications: only equations
           are needed for the cases where real work has to be done at a node;
-          the other cases handled automatically.</para>
+          the other cases are handled automatically.</para>
         </listitem>
 
         <listitem>
@@ -3800,9 +3867,9 @@ equations
       </listitem>
     </itemizedlist>
 
-    <para>The module utilities/Parsing defines parsing and unparsing functions
-    for values of specific sorts. The only function that we will use
-    is:</para>
+    <para>The module <literal>utilities/Parsing</literal> defines parsing and
+    unparsing functions for values of specific sorts. The only function that
+    we will use is:</para>
 
     <itemizedlist>
       <listitem>
@@ -3810,7 +3877,7 @@ equations
         (like an identifier, expression, or statement in a Pico program) to a
         string value. This conversion is necessary since sets and relations
         can only contain basic values like integers and strings and no complex
-        value like fragments from parse trees.</para>
+        values like fragments from parse trees.</para>
       </listitem>
     </itemizedlist>
 
@@ -3898,6 +3965,10 @@ variables <co xml:id="pico-extract.5" />
           <para></para>
         </callout>
       </calloutlist>
+
+      <warning>
+        <para>Explain strict variables.</para>
+      </warning>
 
       <para>The equations for the Pico fact extractor:</para>
 
@@ -4044,9 +4115,9 @@ equations
         <callout arearefs="pico-extract-eqs.6">
           <para>A slightly more complex construction in order to cater for all
           control flows in a while loop. Observe that the control expression
-          is the entry as well as the exit of the while loop. Internally, the
-          exits of the body of the loop have to be connected whith the control
-          expression.</para>
+          is the entry as well as the exit of the while-statement. Internally,
+          the exits of the body of the loop have to be connected whith the
+          control expression.</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.7">
@@ -4073,8 +4144,8 @@ equations
         <listitem>
           <para>Open the term <filename>fac.trm</filename> over this module
           (you may need to copy it first from this article or from the
-          <filename>SDF Library</filename> in the examples
-          <filename>directory</filename>).</para>
+          <filename>SDF Library</filename> in the
+          <filename>examples</filename> directory).</para>
         </listitem>
 
         <listitem>
@@ -4136,6 +4207,11 @@ equations
         </listitem>
 
         <listitem>
+          <para>Fact extract can be integrated in The Meta-Environment and is
+          activated via the <guimenuitem>extract</guimenuitem> button.</para>
+        </listitem>
+
+        <listitem>
           <para>The Meta-Environment supports various visualizations for
           rstores.</para>
         </listitem>
@@ -4149,6 +4225,10 @@ equations
     <itemizedlist>
       <listitem>
         <para>Complete the compiler section.</para>
+      </listitem>
+
+      <listitem>
+        <para>Explain strict variables.</para>
       </listitem>
     </itemizedlist>
   </section>
