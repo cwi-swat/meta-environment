@@ -1,9 +1,10 @@
 module languages/pico/syntax/Identifiers
 
-imports basic/Whitespace
-
 exports
-  sorts PICO-ID
-  lexical syntax
-    [a-z] [a-z0-9]* -> PICO-ID
+sorts PICO-ID
 
+lexical syntax
+  [a-z] [a-z0-9]* -> PICO-ID  
+
+lexical restrictions
+  PICO-ID -/- [a-z0-9]

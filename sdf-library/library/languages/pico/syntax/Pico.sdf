@@ -4,6 +4,7 @@ imports languages/pico/syntax/Identifiers
 imports languages/pico/syntax/Types
 imports basic/NatCon 
 imports basic/StrCon 
+imports basic/Whitespace
 
 hiddens
   context-free start-symbols 
