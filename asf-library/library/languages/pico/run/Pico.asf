@@ -1,6 +1,6 @@
 equations
 
-[Main] start(PROGRAM, Program) = start(VALUE-ENV, evp(Program))
+[Main] start(PROGRAM, Program) = start(VENV, evp(Program))
 
 equations
 [Ev1]  evp(begin Decls Series end) = evs(Series, evd(Decls))

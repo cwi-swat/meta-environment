@@ -5,13 +5,8 @@ imports languages/pico/run/Value-environments
 imports basic/Strings
 
 exports
-  sorts VALUE-ENV
-
   context-free syntax
-    VENV                          -> VALUE-ENV
-
-  context-free syntax
-    "evp"(PROGRAM)                -> VALUE-ENV
+    "evp"(PROGRAM)                -> VENV
 
   context-free syntax
     "evd"(DECLS)                  -> VENV
@@ -23,7 +18,7 @@ exports
 hiddens
   imports basic/Comments
   context-free start-symbols
-    VALUE-ENV PROGRAM
+    VENV PROGRAM
 
   variables
     "Decls"[0-9\']*   -> DECLS
