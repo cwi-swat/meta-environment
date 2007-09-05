@@ -39,7 +39,12 @@ ATerm layout_graph(int conn, ATerm g)
 
   graph = layoutGraph(graph);
 
-  return ATmake("snd-value(graph-layouted(<term>))", GraphToTerm(graph));
+  if (graph != NULL) {
+	  return ATmake("snd-value(graph-layouted(<term>))", GraphToTerm(graph));
+  }
+  else {
+	  return ATmake("snd-value(graph-not-layouted)");
+  }
 }
 
 /*}}}  */

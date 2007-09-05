@@ -1,9 +1,10 @@
 $Id$
 
 2007-09-05    <storm@cwi.nl>
-
  * utils/layoutgraph/Makefile.am: changed layoutgraph to take the location
    of dot from the path instead of the configured path in the Makefile.
+ * utils/layoutgraph/*.{isrc,c}: fixed error handling for non-existing
+   dot command.
 
 Thu Mar  8 19:06:02 CET 2007 <jurgenv@cwi.nl>
  * utils/tree2graph/PT2graph.c: removed illegal use of pattern variable

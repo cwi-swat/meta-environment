@@ -16,7 +16,7 @@ in
       . snd-terminate(GL, "done")
       . snd-msg(gl-graph(Graph))
     + 
-      rec-disconnect(GL)
+      rec-value(GL, graph-not-layouted)
       . snd-msg(gl-graph(Graph))
     )
   ) * delta

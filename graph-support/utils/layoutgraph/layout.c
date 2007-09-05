@@ -288,13 +288,13 @@ Graph layoutGraph(Graph graph)
   fd = mkstemp(dot_input);
   if (fd < 0) {
     perror("mkstemp:dot_input");
-    exit(errno);
+    return NULL;
   }
 
   f = fdopen(fd, "w");
   if (f == NULL) {
     perror("fdopen:dot_input");
-    exit(errno);
+    return NULL;
   }
 
   initTermStore();
@@ -305,46 +305,53 @@ Graph layoutGraph(Graph graph)
 
   if (fclose(f) == -1) {
     perror("fclose:dot_input");
-    exit(errno);
+    return NULL;
   }
 
   fd = mkstemp(dot_output);
   if (fd < 0) {
     perror("mkstemp:dot_output");
-    exit(errno);
+    return NULL;
   }
 
   yyin = fdopen(fd, "r");
   if (yyin == NULL) {
     perror("fdopen:dot_output");
-    exit(errno);
+    return NULL;
   }
 
   sprintf(invoke_dot, "%s -y -o %s %s", DOT_COMMAND, dot_output, dot_input);
-  if (system(invoke_dot) == -1) {
-    perror(invoke_dot);
-    exit(errno);
+  {
+    int result = system(invoke_dot);
+    if (result == -1) {
+	    perror("could not exec dot");
+	    return NULL;
+    }
+    else if (WEXITSTATUS(result) != 0) {
+	ATwarning("execution of dot failed");
+	return NULL;
+    }
   }
 
   if (fseek(yyin, 0, SEEK_SET) == -1) {
     perror("fseek");
-    exit(errno);
+    return NULL;
   }
 
   yyparse();
   if (fclose(yyin) == -1) {
     perror("fclose:dot_output");
-    exit(errno);
+    return NULL;
   }
 
   if (unlink(dot_input) == -1) {
     perror("unlink:dot_input");
-    exit(errno);
+    return NULL;
   }
 
   if (unlink(dot_output) == -1) {
     perror("unlink:dot_output");
-    exit(errno);
+    return NULL;
   }
 
   return buildGraph(graph);
