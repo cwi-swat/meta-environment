@@ -11,7 +11,7 @@ CLEANFILES += lex.yy.c y.tab.c y.tab.h y.output
 YFLAGS = -d
 
 INCLUDES = \
-	-DDOT_COMMAND=\"${GRAPHVIZ_PREFIX}/bin/dot\" \
+	-DDOT_COMMAND=\"dot\" \
         -I$(top_srcdir)/lib \
 	${ATERM_CFLAGS} \
 	${TOOLBUSLIB_CFLAGS}

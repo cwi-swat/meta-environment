@@ -10,9 +10,15 @@ in
     rec-msg(gl-layout-graph(Graph?))
     . execute(layoutgraph, GL?)
     . snd-eval(GL, layout-graph(Graph))
-    . rec-value(GL, graph-layouted(Graph?))
-    . snd-terminate(GL, "done")
-    . snd-msg(gl-graph(Graph))
+    .
+    (
+      rec-value(GL, graph-layouted(Graph?))
+      . snd-terminate(GL, "done")
+      . snd-msg(gl-graph(Graph))
+    + 
+      rec-disconnect(GL)
+      . snd-msg(gl-graph(Graph))
+    )
   ) * delta
 endlet
 
