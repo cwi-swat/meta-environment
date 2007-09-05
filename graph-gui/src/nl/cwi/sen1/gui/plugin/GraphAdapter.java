@@ -87,21 +87,25 @@ public class GraphAdapter extends prefuse.data.Graph {
 
 	private Point2D[] getControlPoints(Edge edge) {
 		Polygon poly = getPolygon(edge);
-		List<Point2D> points = new LinkedList<Point2D>();
+                
+		if (poly != null) {
+			List<Point2D> points = new LinkedList<Point2D>();
 
-		for (; !poly.isEmpty(); poly = poly.getTail()) {
-			Point cp1 = poly.getHead();
-			points.add(new Point2D.Float(cp1.getX(), cp1.getY()));
+			for (; !poly.isEmpty(); poly = poly.getTail()) {
+				Point cp1 = poly.getHead();
+				points.add(new Point2D.Float(cp1.getX(), cp1.getY()));
+			}
+
+			Point2D[] result = new Point2D[points.size()];
+			Iterator<Point2D> iter = points.iterator();
+
+			for (int i = 0; iter.hasNext(); i++) {
+				result[i] = iter.next();
+			}
+			return result;
 		}
 
-		Point2D[] result = new Point2D[points.size()];
-		Iterator<Point2D> iter = points.iterator();
-
-		for (int i = 0; iter.hasNext(); i++) {
-			result[i] = iter.next();
-		}
-
-		return result;
+		return new Point2D[0];
 	}
 
 	private Polygon getPolygon(Edge edge) {
@@ -171,22 +175,34 @@ public class GraphAdapter extends prefuse.data.Graph {
 
 	static public int getX(Node node) {
 		Location location = getLocationAttribute(node);
-		return location.getX();
+		if (location != null) {
+			return location.getX();
+		}
+		return 0;
 	}
 
 	static public int getY(Node node) {
 		Location location = getLocationAttribute(node);
-		return location.getY();
+		if (location != null) {
+			return location.getY();
+		}
+		return 0;
 	}
 
 	static public int getWidth(Node node) {
 		Size size = getSizeAttribute(node);
-		return size.getWidth();
+		if (size != null) {
+			return size.getWidth();
+		}
+		return 0;
 	}
 
 	static public int getHeight(Node node) {
 		Size size = getSizeAttribute(node);
-		return size.getHeight();
+		if (size != null) {
+			return size.getHeight();
+		}
+		return 0;
 	}
 
 	static private String getLabel(Node node) {

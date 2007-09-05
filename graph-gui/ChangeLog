@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep  5 17:50:48 CEST 2007 <{storm,jurgenv}@cwi.nl>
+ * src/**/GraphAdapter.java: made adapter robust against the non-existence
+   of node and edge attributes that should have been added by dot.
+
 Wed May  9 16:08:51 CEST 2007 <kooiker@cwi.nl>
  * src/**/GraphPanel.java:
    - Center on node when node is selected from outside prefuse (closes #128)
