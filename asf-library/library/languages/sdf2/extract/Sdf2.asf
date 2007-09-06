@@ -6,9 +6,10 @@ equations
        Store4 := declare(Store3, Symbols, rel[str, loc]),
        Store5 := declare(Store4, Dependencies, rel[<str,loc>,<str,loc>]),
        Store6 := declare(Store5, ModuleProductions, rel[str,int]),
-       Store7 := declare(Store6, SymbolProductions, rel[str,int])
+       Store7 := declare(Store6, SymbolProductions, rel[str,int]),
+       Store8 := declare(Store7, Functions, rel[str, loc])
        ===>
-       start(SDF, definition Module*) = start(RStore, summarize(Module*, Store7))
+       start(SDF, definition Module*) = start(RStore, summarize(Module*, Store8))
 
 equations
 
@@ -25,6 +26,15 @@ equations
      Store2 := insert(Store, Productions, unparse-to-string(Symbol* -> Symbol), get-location(Production)),
      Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
      Store4 := link(Symbol*, Store3, Symbol),
+     Store5 := inc(Store4, ModuleProductions, unparse-to-string(ModuleName)),
+     Store6 := inc(Store5, SymbolProductions, unparse-to-string(Symbol))
+    
+[] collect(Production, Store, ModuleName) = Store6
+     when
+     FunctionName(Symbol,*) -> Symbol Attributes := Production,
+     Store2 := insert(Store, Functions, unparse-to-string(FunctionName(Symbol,*) -> Symbol), get-location(Production)),
+     Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
+     Store4 := link(Symbol,*, Store3, Symbol),
      Store5 := inc(Store4, ModuleProductions, unparse-to-string(ModuleName)),
      Store6 := inc(Store5, SymbolProductions, unparse-to-string(Symbol))
 

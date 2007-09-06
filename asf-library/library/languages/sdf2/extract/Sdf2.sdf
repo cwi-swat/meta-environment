@@ -22,31 +22,33 @@ context-free syntax
   collect(Symbol, RStore, ModuleName?)     -> RStore {traversal(accu, top-down, break)} 
   collect(Module, RStore, ModuleName?)     -> RStore {traversal(accu, top-down, break)} 
   collect(Sections, RStore, ModuleName?)   -> RStore {traversal(accu, top-down, break)} 
-  collect(Grammar, RStore, ModuleName?)    -> RStore {traversal(accu, top-down, break)}
+  collect(Grammar, RStore, ModuleName?)    -> RStore {traversal(accu, top-down, break)} 
 
 context-free syntax
-  link(Symbol*, RStore, Symbol) -> RStore {traversal(accu, top-down, break)} 
-  link(Symbol, RStore, Symbol)  -> RStore {traversal(accu, top-down, break)} 
+  link(Symbol*, RStore, Symbol)       -> RStore {traversal(accu, top-down, break)} 
+  link({Symbol ","}*, RStore, Symbol) -> RStore {traversal(accu, top-down, break)} 
+  link(Symbol, RStore, Symbol)        -> RStore {traversal(accu, top-down, break)} 
 
 variables
   "Store" [0-9]* -> RStore      {strict} 
   "ModuleName?"  -> ModuleName?          
 
-variables 
-  "CC"[0-9]*           -> CharClass
-  "Literal"[0-9]*      -> StrCon
-  "Sort"[0-9]*         -> Sort
-  "Sections" [0-9]*    -> Sections       
-  "ImpSection*" [0-9]* -> ImpSection*    
-  "Def" [0-9]*         -> Definition     
-  "Module" [0-9]*      -> Module         
-  "Module*" [0-9]*     -> Module*        
-  "Symbol" [0-9]*      -> Symbol         
-  "Symbol*" [0-9]*     -> Symbol*        
-  "Symbol,*" [0-9]*    -> {Symbol ","}*  
-  "Production" [0-9]*  -> Production     
-  "Attributes" [0-9]*  -> Attributes     
-  "ModuleName" [0-9]*  -> ModuleName     
+variables
+  "CC" [0-9]*           -> CharClass      
+  "Literal" [0-9]*      -> StrCon         
+  "Sort" [0-9]*         -> Sort           
+  "Sections" [0-9]*     -> Sections       
+  "ImpSection*" [0-9]*  -> ImpSection*    
+  "Def" [0-9]*          -> Definition     
+  "Module" [0-9]*       -> Module         
+  "Module*" [0-9]*      -> Module*        
+  "Symbol" [0-9]*       -> Symbol         
+  "Symbol*" [0-9]*      -> Symbol*        
+  "Symbol,*" [0-9]*     -> {Symbol ","}*  
+  "Production" [0-9]*   -> Production     
+  "Attributes" [0-9]*   -> Attributes     
+  "ModuleName" [0-9]*   -> ModuleName     
+  "FunctionName" [0-9]* -> FunctionName   
 
 lexical variables
   "c*" [0-9]* -> StrChar*  
