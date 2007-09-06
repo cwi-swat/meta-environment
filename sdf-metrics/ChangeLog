@@ -1,5 +1,8 @@
 
 
+Thu Sep  6 08:00:27 CEST 2007 <jurgenv@cwi.nl>
+ * src/ExtractSDF.eqs: added extraction of prefix functions.
+
 Tue Apr 10 09:58:47 CEST 2007 <jurgenv@cwi.nl>
  * src/Makefile.am: fixed distcheck
 
