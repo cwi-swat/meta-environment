@@ -11,7 +11,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Language Definitions written in ASF+SDF</title>
+    <title>Writing Language Definitions in ASF+SDF</title>
 
     <pubdate>$Rev$ by $Author$ at $Date: 2007-08-22 17:27:53
     +0200 (Wed, 22 Aug 2007) $</pubdate>
@@ -969,20 +969,13 @@ exports
 
       <programlisting>module languages/pico/syntax/Identifiers
 
-imports basic/Whitespace
-
 exports
-  sorts PICO-ID <co xml:id="id.1" />
+  sorts PICO-ID  <co xml:id="id.1" />
   lexical syntax
-    [a-z] [a-z0-9]* -&gt; PICO-ID <co xml:id="id.2" /></programlisting>
+    [a-z] [a-z0-9]* -&gt; PICO-ID  <co xml:id="id.2" />
 
-      <caution>
-        <para>Why importing basic/Whitespace?</para>
-      </caution>
-
-      <caution>
-        <para>Why are the lexical restrictions missing?</para>
-      </caution>
+  context-free restrictions
+    PICO-ID -/- [a-z0-9] <co xml:id="id.3" /></programlisting>
 
       <para>Notes:</para>
 
@@ -1020,6 +1013,10 @@ exports
           <para>The overall effect of this definition is that Pico identifiers
           start with a lower case letter that can be followed by lower case
           letters or by digits.</para>
+        </callout>
+
+        <callout arearefs="id.3">
+          <para>Defines the longest match for Pico identifiers.</para>
         </callout>
       </calloutlist>
     </section>
@@ -2119,18 +2116,20 @@ imports basic/Integers basic/StrCon
 exports
   sorts VALUE
   context-free syntax
-    Integer     -&gt; VALUE
+    Integer     -&gt; VALUE  <co xml:id="value.1" />
     StrCon      -&gt; VALUE
-    "nil-value" -&gt; VALUE  <co xml:id="value.1" /></programlisting>
-
-      <caution>
-        <para>Why Integer and not IntCon?</para>
-      </caution>
+    "nil-value" -&gt; VALUE  <co xml:id="value.2" /></programlisting>
 
       <para>Notes:</para>
 
       <calloutlist>
         <callout arearefs="value.1">
+          <para>It would be better to use here <literal>IntCon</literal>
+          rather than <literal>Integer</literal>. This is a historic relict in
+          the specification.</para>
+        </callout>
+
+        <callout arearefs="value.2">
           <para>The constant <literal>nil-value</literal> denotes error
           values.</para>
         </callout>
@@ -2180,13 +2179,9 @@ imports languages/pico/run/Value-environments
 imports basic/Strings
 
 exports
-  sorts VALUE-ENV
 
   context-free syntax
-    VENV                          -&gt; VALUE-ENV
-
-  context-free syntax
-    "evp"(PROGRAM)                -&gt; VALUE-ENV
+    "evp"(PROGRAM)                -&gt; VENV
 
   context-free syntax
     "evd"(DECLS)                  -&gt; VENV
@@ -2215,10 +2210,6 @@ hiddens
     "Venv"[0-9\']*    -&gt; VENV
     "Program"[0-9\']* -&gt; PROGRAM</programlisting>
 
-        <caution>
-          <para>Why VENV and VALUE-ENV?</para>
-        </caution>
-
         <para>Having seen the syntax part of the Pico typechecker there are no
         surprises here. The top level function <literal>evp</literal> maps
         programs to value environments and needs some auxiliary functions to
@@ -2233,7 +2224,7 @@ hiddens
         <programlisting>equations
 
 [Main] start(PROGRAM, Program) = 
-       start(VALUE-ENV, evp(Program)) <co xml:id="pico-eval.1" />
+       start(VENV, evp(Program)) <co xml:id="pico-eval.1" />
 
 equations
 
@@ -3048,7 +3039,7 @@ end
 
           <listitem>
             <para>accumulate and transform at the same time, this is indicated
-            by: <literal>traversal(accu,trafo)</literal>: </para>
+            by: <literal>traversal(accu,trafo)</literal>:</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -3962,13 +3953,33 @@ variables <co xml:id="pico-extract.5" />
         </callout>
 
         <callout arearefs="pico-extract.5">
-          <para></para>
+          <para>Variables can be annotated with the attributes
+          <literal>wild</literal> and <literal>strict</literal>. They do not
+          change the meaning of variables but help in enforcing their correct
+          usage:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Wild variables may only be used once in an equation to
+              receive a value (as a result of matching or evaluating a
+              condition) but that value may not be user later on in the
+              equation. Wild variables serve to match an arbitrary part of the
+              input that is not re-used later. Typical error case: using the
+              same variable to match two arbitrary parts of the input term and
+              by doing so erroneously enforcing that both arbitrary parts are
+              identical.</para>
+            </listitem>
+
+            <listitem>
+              <para>Strict variables receive a value and that value may be
+              used precisely once. Typical error case: using some intermediate
+              variables to represent a global state and incorrectly passing
+              the latest version of the global state to another
+              function.</para>
+            </listitem>
+          </itemizedlist>
         </callout>
       </calloutlist>
-
-      <warning>
-        <para>Explain strict variables.</para>
-      </warning>
 
       <para>The equations for the Pico fact extractor:</para>
 
@@ -4225,10 +4236,6 @@ equations
     <itemizedlist>
       <listitem>
         <para>Complete the compiler section.</para>
-      </listitem>
-
-      <listitem>
-        <para>Explain strict variables.</para>
       </listitem>
     </itemizedlist>
   </section>
