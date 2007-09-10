@@ -1,5 +1,13 @@
 $Id$
 
+Mon Sep 10 11:19:59 CEST 2007 <economop@cwi.nl>
+ * Attempting to merge the collection of performance statistics from the
+   srnglr branch into the trunk. According to the svnmerge manual it is
+   necessary to first initialize the merge tracking support on the trunk,
+   related to the given branch.
+ * Initialized merge tracking via "svnmerge" with revisions "1-23517" from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/srnglr
+
 Wed Aug 22 17:03:41 CEST 2007 <economop@cwi.nl>
  * test/terms/postParsePriorityFilter.ppprio: regenerated because the forest's 
    count of ambiguities was out of date.
