@@ -4,9 +4,8 @@
 #include "aterm2.h"
 #include <MEPT-utils.h>
 
-static char version[] = "1.0";
+static char version[] = "1.1";
 static ATbool modLayout = ATtrue;
-static ATbool modAmbOrdering = ATfalse;
 
 /*{{{  static void usage(const char *prg) */
 
@@ -15,7 +14,6 @@ static void usage(const char *prg)
   fprintf(stderr, "Compares to parse trees modulo layout.\n\n");
   fprintf(stderr, "Usage: %s -[hVal] <file1> <file2>\n", prg);
   fprintf(stderr, "Parameters:\n");
-  fprintf(stderr, "\t-a\t: ignore order of alternatives in ambiguity-clusters\t[%s]\n", modAmbOrdering ? "on" : "off");
   fprintf(stderr, "\t-l\t: ignore layout-trees while comparing\t\t\t[%s]\n", modLayout ? "on" : "off");
   exit(2);
 }
@@ -48,9 +46,6 @@ int main(int argc, char *argv[])
     else if (strcmp(argv[i], "-l") == 0) {
       modLayout = !modLayout; 
     }
-    else if (strcmp(argv[i], "-a") == 0) {
-      modAmbOrdering = !modAmbOrdering;
-    }
     else {
       if (t1 == NULL) {
 	t1 = ATreadFromNamedFile(argv[i]);
@@ -72,7 +67,7 @@ int main(int argc, char *argv[])
   
   result = PT_compareTree(PT_getParseTreeTop(PT_ParseTreeFromTerm(t1)), 
 			  PT_getParseTreeTop(PT_ParseTreeFromTerm(t2)),
-                          modAmbOrdering, modLayout);
+                          modLayout);
 
   if (result < 0) {
     return -1;

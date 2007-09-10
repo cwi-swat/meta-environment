@@ -8,7 +8,6 @@
  */
 static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2);
 
-static ATbool moduloAmbOrdering;
 static ATbool moduloLayout;
 
 
@@ -80,31 +79,11 @@ static int PT_compareProduction(PT_Production prod1, PT_Production prod2)
   return 0;
 }
 
-
-
-static int ambiguityOrdering(const ATerm t1, const ATerm t2) 
-{
-  if (t1 < t2) {
-    return -1;
-  } else if (t2 < t1) {
-    return 1;
-  }
-
-  return 0;
-}
-
-
-
 static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2)
 {
   PT_Tree amb1;
   PT_Tree amb2;
   int result = 0;
-
-  if (moduloAmbOrdering == ATtrue) {
-    ambs1 = (PT_Args) ATsort((ATermList) ambs1, ambiguityOrdering);
-    ambs2 = (PT_Args) ATsort((ATermList) ambs2, ambiguityOrdering);
-  }
 
   while (result == 0 && !PT_isArgsEmpty(ambs1)) {
     amb1 = PT_getArgsHead(ambs1);
@@ -215,9 +194,8 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
  * \param modLayout ignore layout during the comparision (results in partial order)
  * \returns 0 if trees are equal, -1 of tree1 < tree2, 1 if tree1 > tree2
  */
-int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool modLayout) 
+int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modLayout) 
 {
-  moduloAmbOrdering = modAmbOrdering;
   moduloLayout = modLayout;
 
   assert(PT_isTreeAmb(tree1) 
@@ -228,6 +206,10 @@ int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool m
   return PT_compareTreeRec(tree1, tree2);
 }
 
+int alternativesOrdering(const ATerm a1, const ATerm a2) {
+  return PT_compareTree((PT_Tree) a1, (PT_Tree) a2, ATfalse);
+}
+
 /**
  * Implements an insertion sort algorithm on the alternatives.
  * This assumes the contents of each alternative is already in sorted
@@ -235,40 +217,7 @@ int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool m
  */
 static PT_Args PT_orderAlternatives(PT_Args alts)
 {
-  int size = 0;
-  PT_Tree array[100];
-  PT_Args result = PT_makeArgsEmpty();
-
-  if (PT_getArgsLength(alts) > 100) {
-    ATabort("PT_orderAlternatives: cannot deal with clusters with more than a 100 alternatives\n");
-  }
-
-  for (; !PT_isArgsEmpty(alts); alts = PT_getArgsTail(alts)) {
-     PT_Tree newAlt = PT_getArgsHead(alts);
-     int i; 
-     int tmp;
-
-     /* find the index to place the new element at */
-     for (i = 0 ; i < size; i++) { 
-       if (PT_compareTree(newAlt, array[i], ATfalse, ATfalse) < 0) {
-	 break;
-       }
-     }
-     tmp = i;
-
-     /* shift the array to make place for the new element */
-     size += 1;
-     for (; i < size; i++) {
-       array[i+1] = array[i];
-     }
-     array[tmp] = newAlt;
-  }
-
-  for ( ; size >= 0; size--) {
-    result = PT_makeArgsMany(array[size], result);
-  }
-
-  return result;
+  return (PT_Args) ATsort((ATermList) alts, alternativesOrdering);
 }
 
 static PT_Args PT_orderArgs(PT_Args args)
