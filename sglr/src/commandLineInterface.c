@@ -21,7 +21,7 @@
 #include "toolbusInterface.h"
 #include "filters.h"
 #include "inputStringBuilder.h"
-
+#include "parserStatistics.h"
 
 static const char programName[] = "sglr";
 static const char myArguments[] = "2Acdf::hi:lno:p:s:tvV";
@@ -47,9 +47,9 @@ static void usage() {
   int filterRejectFlag          = FLT_getRejectFlag();
   int filterRemoveCyclesFlag    = FLT_getRemoveCyclesFlag();
   int filterTopSort             = FLT_getSelectTopNonterminalFlag();
-  int verboseFlag               = PARSER_getVerboseFlag();
+  int verboseFlag               = PARSER_getVerboseFlag;
   int debugFlag                 = PARSER_getDebugFlag;
-  int statisticsFlag            = PARSER_getStatsFlag();
+  int statisticsFlag            = MAIN_getStatsFlag;
   int ambiguityErrorFlag        = PARSER_getAmbiguityErrorFlag();
   int flattenFlag               = MAIN_getFlattenTreeFlag();
 
@@ -148,9 +148,9 @@ static void handleOptions (int argc, char **argv) {
 
   int outputflag                 = PARSER_getOutputFlag();
   int textualflag                = MAIN_getTextualOutputFlag();
-  int verboseflag                = PARSER_getVerboseFlag();
+  int verboseflag                = PARSER_getVerboseFlag;
   int debugflag                  = PARSER_getDebugFlag;
-  int statisticsflag             = PARSER_getStatsFlag();
+  int statisticsflag             = MAIN_getStatsFlag;
   int ambiguityerrorflag         = PARSER_getAmbiguityErrorFlag();
   int flattenFlag                = MAIN_getFlattenTreeFlag();
   int countPosIndependentAmbFlag = MAIN_getCountPosIndependentAmbsFlag();
@@ -208,7 +208,6 @@ static void handleOptions (int argc, char **argv) {
 
   PARSER_setDebugFlag(debugflag);
   PARSER_setVerboseFlag(verboseflag);
-  PARSER_setStatsFlag(statisticsflag);
   PARSER_setOutputFlag(outputflag);
   MAIN_setFlattenTreeFlag(flattenFlag);
   MAIN_setTextualOutputFlag(textualflag);
@@ -216,15 +215,23 @@ static void handleOptions (int argc, char **argv) {
   MAIN_setInputFileName(inputFileName);
   MAIN_setParseTableName(parseTableName);
   MAIN_setCountPosIndependentAmbsFlag(countPosIndependentAmbFlag);
+  MAIN_setStatsFlag(statisticsflag);
   FLT_setSelectTopNonterminalFlag(startSymbolFlag);
   if (startSymbolFlag) {
     FLT_setTopNonterminal(startSymbol);
   }
   PARSER_setAmbiguityErrorFlag(ambiguityerrorflag);
 
+  #ifndef SGLR_COLLECT_STATISTICS
+  if (MAIN_getStatsFlag) {
+    ATfprintf(stderr, "%s: Cannot collect SGLR statistics! Compile SGLR with the SGLR_COLLECT_STATISTICS environment variable set.\n", programName);
+    exit(1);
+  }
+  #endif
+
   /** \todo This does not belong here. (sglr-interface initialisation?)
    * Should separate the debug and stats output files.*/
-  if(PARSER_getStatsFlag() || PARSER_getDebugFlag) {
+  if(MAIN_getStatsFlag || PARSER_getDebugFlag) {
     LOG_OpenLog(programName, PARSER_getDebugFlag ?".sglr-log":"sglr-stats.txt");
   }
 }

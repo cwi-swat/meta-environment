@@ -4,6 +4,9 @@
  * \ingroup utils
  */
 
+#ifndef __MEMORY_MANAGER_H__
+#define __MEMORY_MANAGER_H__
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -79,3 +82,4 @@ static type malloc##type(int *isNew) \
   return tmp;\
 }
 
+#endif /* __MEMORY_MANAGER_H__ */

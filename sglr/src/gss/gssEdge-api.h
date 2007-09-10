@@ -12,9 +12,7 @@
 #include "gssEdge-data.h"
 #include "gssNode-data.h"
 
-int GSSEdge_getEdgesCreated();
-GSSEdge GSSEdge_createEdge(PT_Tree t, size_t numberOfLeavesInTree, 
-			   GSSNode target);
+GSSEdge GSSEdge_createEdge(PT_Tree t, size_t numberOfLeavesInTree, GSSNode target, ATbool rejected);
 void    GSSEdge_deleteGSSEdge(GSSEdge edge);
 void    GSSEdge_setTargetGSSNode(GSSEdge edge, GSSNode target);
 void    GSSEdge_setTree(GSSEdge edge, PT_Tree t);

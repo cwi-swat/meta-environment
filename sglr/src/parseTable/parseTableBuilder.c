@@ -7,6 +7,8 @@
 #include "parseTableBuilder.h"
 #include "ptable.h"
 #include "parserOptions.h"
+#include "mainOptions.h"
+#include "parserStatistics.h"
 
 #include <rsrc-usage.h>
 #include <logging.h>
@@ -26,15 +28,13 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   ParseTable         *pt = NULL;
   size_t             goto_entries = 0;
   size_t             action_entries = 0;
-  long               maxrss = 0;
-  long               allocated;
   int                nrOfStates;
   ERR_Subject subject;
   static char subjectDescription[1024];
   static char errorDescription[1024];
 
   if (!PTBL_isValidParseTable(extParseTable)) { 
-    if (PARSER_getVerboseFlag() == ATtrue) {
+    if (PARSER_getVerboseFlag) {
       ATwarning("Parse table format error\n");
     }
 
@@ -55,7 +55,7 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   version = PTBL_getParseTableVersion(extParseTable);
 
   if (!PTBL_isValidVersion(version)) {
-    if (PARSER_getVerboseFlag() == ATtrue) {
+    if (PARSER_getVerboseFlag) {
       ATwarning("Invalid parse table version\n");
     }
 
@@ -84,7 +84,7 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
   if (nrOfStates == 2 &&
       PTBL_isChoicesEmpty(PTBL_getStateChoices(PTBL_getStatesHead(states))) &&
       PTBL_isChoicesEmpty(PTBL_getStateChoices(PTBL_getStatesHead(PTBL_getStatesTail(states))))) {
-    if (PARSER_getVerboseFlag() == ATtrue) {
+    if (PARSER_getVerboseFlag) {
       ATwarning("No start state defined\n");
     }
 
@@ -111,9 +111,8 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
       }
     }
 
-    /** \todo Stats should be passed on to parseTableBuilder from the parser.*/
-    if (PARSER_getStatsFlag() == ATtrue) {
-      maxrss = STATS_ResidentSetSize();
+    if (MAIN_getStatsFlag) {
+      SGLR_STATS_beforeParseTableCreationMRSS = STATS_ResidentSetSize();
     }
   
     pt = SGLR_PTBL_initializeParseTable(startState, 
@@ -123,19 +122,9 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
         goto_entries, 
         path);
 
-    if (PARSER_getStatsFlag() == ATtrue) {
-      allocated = STATS_Allocated();
-      if (allocated > 0) {
-        fprintf(LOG_log(), 
-		"[mem] extra ATerm memory allocated for empty table: %ld\n",
-                allocated);
-      }
-      if (maxrss) {
-        fprintf(LOG_log(), 
-		"[mem] PT build: %ld before, %ld after table creation\n",
-                maxrss, STATS_ResidentSetSize());
-      }
-      maxrss = STATS_ResidentSetSize();
+    if (MAIN_getStatsFlag) {
+      SGLR_STATS_emptyParseTableMemAllocated = STATS_Allocated();
+      SGLR_STATS_emptyParseTableMRSS = STATS_ResidentSetSize();
     }
 
     SGLR_PTBL_fillParseTable(pt, states);
@@ -147,31 +136,18 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
       SGLR_PTBL_processPriorities(pt, prios);
       prios = NULL;
     } else {
-      if (PARSER_getVerboseFlag() == ATtrue) {
+      if (PARSER_getVerboseFlag) {
         ATwarning("warning: no priority information in parse table\n");
       }
     }
 
-    if (PARSER_getStatsFlag() == ATtrue) {
-      fprintf(LOG_log(), "%scludes rejects\n",
-          SGLR_PTBL_hasRejects(pt)?"In":"Ex");
-      fprintf(LOG_log(), "%scludes priorities\n",
-	      SGLR_PTBL_hasPriorities(pt)?"In":"Ex");
-      fprintf(LOG_log(), "%scludes prefer actions\n",
-	      SGLR_PTBL_hasPrefers(pt)   ?"In":"Ex");
-      fprintf(LOG_log(), "%scludes avoid actions\n",
-	      SGLR_PTBL_hasAvoids(pt)    ?"In":"Ex");
-      allocated = STATS_Allocated();
-      if (allocated > 0) {
-        fprintf(LOG_log(), 
-		"[mem] extra ATerm memory allocated while filling table: %ld\n",
-                allocated);
-      }
-      if (maxrss) {
-        fprintf(LOG_log(), 
-		"[mem] PT build: %ld before, %ld after filling table\n",
-                maxrss, STATS_ResidentSetSize());
-      }
+    if (MAIN_getStatsFlag) {
+      SGLR_STATS_rejects = SGLR_PTBL_hasRejects(pt);
+      SGLR_STATS_priorities = SGLR_PTBL_hasPriorities(pt);
+      SGLR_STATS_prefers = SGLR_PTBL_hasPrefers(pt);
+      SGLR_STATS_avoids = SGLR_PTBL_hasAvoids(pt);
+      SGLR_STATS_fullParseTableMemAllocated = STATS_Allocated();
+      SGLR_STATS_fullParseTableMRSS = STATS_ResidentSetSize();
     }
 
     return pt;

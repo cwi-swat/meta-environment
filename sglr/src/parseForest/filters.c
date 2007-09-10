@@ -49,12 +49,11 @@
 #include "filterOptions.h"
 #include "ambi-tables.h"
 #include "filters.h"
-#include "filterStats.h"
 #include "statusBar.h"
 #include "levels.h"
 #include "sglr-termstore.h"
 #include "inputString-api.h"
-
+#include "parserStatistics.h"
 /** 
  * Contains all sub-trees that have been filtered. It is used to prevent
  * multiple filtering of the same sub-tree. The table is indexed on a given 
@@ -446,8 +445,8 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
   p0 = PT_getTreeProd(t0);
   p1 = PT_getTreeProd(t1);
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    FLT_incrementNumPreferenceCountCalls();
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_preferenceCountCalls++;
   }
 
   if (SGLR_PTBL_hasPrefers(pt) || SGLR_PTBL_hasAvoids(pt)) {
@@ -484,8 +483,8 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
   }
 
   if (max) {
-    if (PARSER_getStatsFlag() == ATtrue) {
-      FLT_incrementNumPreferenceCount();
+    if (MAIN_getStatsFlag) {
+      SGLR_STATS_preferenceCount++;
     }
   }
 
@@ -536,10 +535,10 @@ static PT_Tree fullInjectionCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
   size_t in0 = countAllInjectionsInTree(pt, t0);
   size_t in1 = countAllInjectionsInTree(pt, t1);
   
-  if (PARSER_getStatsFlag()) {
-    FLT_incrementNumInjectionCountCalls();
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_injectionCountCalls++;
     if (in0 != in1) {
-      FLT_incrementNumInjectionCount();
+      SGLR_STATS_injectionCount++;
     }
   }
 
@@ -1054,7 +1053,7 @@ static PT_Tree createTreeNode(PT_Args ambChildren) {
     return PT_getArgsHead(ambChildren);
   }
   else {
-    FLT_incrementAmbCount();
+    SGLR_STATS_ambNodesCreated++;
     return PT_makeTreeAmb(ambChildren);
   }
 }
@@ -1335,7 +1334,7 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
   else {
     assert(PT_isTreeChar(t) && "we only expect appls and chars here");
     *pos = *pos + 1;
-    if (PARSER_getVerboseFlag() == ATtrue) {
+    if (PARSER_getVerboseFlag) {
       SG_printStatusBar("sglr: filtering", *pos, IS_getLength(inputString));
     }
   }
@@ -1448,10 +1447,6 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
    seenAmbiguities = ATtableCreate(2048, 75);
    cyclicLevels = ATindexedSetCreate(2048, 75);
 
-   if (PARSER_getVerboseFlag() == ATtrue) {
-     FLT_resetClustersVisitedCount();
-   }
-
    if (FLT_getSelectTopNonterminalFlag()) {
      const char *topNonterminal = FLT_getTopNonterminal();
 
@@ -1465,12 +1460,11 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
      }
    }
 
-   FLT_resetAmbCount();
    SG_initLevels();
    newT = filterRecursive(pt, t, &pos, ATfalse, ATfalse, 0);
    SG_cleanupLevels();
 
-   if (PARSER_getVerboseFlag() == ATtrue) {
+   if (PARSER_getVerboseFlag) {
      /* print 100% bar, the rest was solved by caching ambclusters */
      SG_printStatusBar("sglr: filtering", pos, IS_getLength(inputString));
      SG_printDotAndNewLine();

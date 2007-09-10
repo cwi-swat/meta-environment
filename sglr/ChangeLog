@@ -1,5 +1,38 @@
 $Id$
 
+Mon Sep 10 14:02:29 CEST 2007 <economop@cwi.nl>
+ * Merged revisions 23503-23514 via svnmerge from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/srnglr
+   This was done to introduce the statistical analysis into the trunk.
+
+........
+  r23503 | economop | 2007-09-05 16:20:10 +0200 (Wed, 05 Sep 2007) | 6 lines
+  
+   * Implemented the collection of data for the statistical analysis of the
+     parsing algorithm. The data for the histograms still needs to be collected. 
+   * src/parser/parser.c: the reductionQueue was not being reset after a level's 
+     reductions had been processed, resulting in the queue using up too much
+     memory.
+........
+  r23510 | economop | 2007-09-06 15:27:53 +0200 (Thu, 06 Sep 2007) | 5 lines
+  
+   * intermediate commit...
+   * src/parseTable/parseTable.{c,h}: added the maximum production lenght to the
+     parse table data structure. It's needed to initialize the histograms used 
+     for the statistics.
+........
+  r23511 | economop | 2007-09-07 14:47:31 +0200 (Fri, 07 Sep 2007) | 5 lines
+  
+   * Completed statistics logging (well, almost ;-)). There are still a couple 
+     of things that need to be counted and verified.
+   * src/parseForest/filterStats.{c,h}: deleted and added stats to
+     parserStatistics.c.
+........
+  r23514 | economop | 2007-09-07 16:12:18 +0200 (Fri, 07 Sep 2007) | 2 lines
+  
+   * src/parser/parserStatistics.{c,h}: forgot to add files.
+........
+
 Mon Sep 10 11:31:17 CEST 2007 <economop@cwi.nl>
  * Renitialized merge tracking via "svnmerge" with revisions "1-20305" from 
    svn+ssh://economop@svn.cwi.nl/sglr/branches/srnglr

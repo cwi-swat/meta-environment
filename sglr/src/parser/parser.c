@@ -33,13 +33,13 @@
 #include "gss.h"
 #include "gssGarbageCollector.h"
 #include "filters.h" /** \todo Remove dependency on filters.h */
-#include "filterStats.h"
 #include "ambi-tables.h" 
 #include "inputString-api.h"
 #include "parserOptions.h"
 #include "mainOptions.h"
 #include "tokens.h"
 #include "statusBar.h"
+#include "parserStatistics.h"
 
 #define GC_CYCLE 200
 
@@ -63,21 +63,12 @@ static void doLimitedReductions(GSSNode gssNode, PTBL_Action a,
 				GSSEdge links);
 static void shifter(void);
 
-static void postParse(void);
-static void postParseResult(void);
 static void parserCleanup(void);
 static void parseError();
 
 /* Some global vars, used for collecting statistics.
  * TO-DO Should move these in to a statistics file.
  */
-
-static size_t numberOfReductions = 0;
-static size_t fullReductionEdgeVisits = 0; 
-static size_t limitedReductionEdgeVisits = 0;
-
-static long majorPageFaults; 
-static long minorPageFaults;
 
 enum  SG_SORTOPS { SG_SET, SG_UNSET, SG_GET };
 
@@ -91,18 +82,13 @@ static void initialiseParser(void) {
   SG_CreateInputAmbiMap(IS_getLength(inputString));
 
   acceptingStack = NULL;
-  numberOfReductions = 0;
-
-  FLT_resetTotalAmbCount();
-  FLT_resetAmbCount();
 
   /** \todo Use GSS_addToCurrentLevel() instead. */
   GSS_createStartNode(GSSNode_createNode(SGLR_PTBL_getStartState(parseTable), 
 					 ATfalse));
   
-  if (PARSER_getStatsFlag() == ATtrue) {
-    STATS_PageFlt(&majorPageFaults, &minorPageFaults);
-    STATS_Timer();
+ if (MAIN_getStatsFlag) {
+    STATS_PageFlt(&SGLR_STATS_majorPageFaults, &SGLR_STATS_minorPageFaults);
   }
 }
 
@@ -132,7 +118,7 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
      * an accepting state then an error has occured.*/
     shifter();
 
-    if (PARSER_getVerboseFlag()) {
+    if (PARSER_getVerboseFlag) {
       /* Added 1 to length of input string to show progress during parsing of 
        * the EOS symbol. */
       SG_printStatusBar("sglr: parsing", 
@@ -141,11 +127,9 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
     }
   } while (!IS_isEndOfString(inputString) && GSS_getCurrentLevel() != NULL);
 
-  if (PARSER_getVerboseFlag() == ATtrue) {
+  if (PARSER_getVerboseFlag == ATtrue) {
     SG_printDotAndNewLine();
   }
-
-  postParse();
 
   /** \todo verify that the parser will not report success if the accept state 
    * is reached and all the string is not parsed. */
@@ -154,7 +138,10 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
   }
 
   parseError();
-  postParseResult();
+
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_parsingMemAllocated = STATS_Allocated();
+  }
 
   parserCleanup();
 
@@ -255,6 +242,7 @@ static void doReductions(GSSNode st, PTBL_Action a) {
 
   prod = PTBL_getActionLabel(a);
 
+  SGLR_STATS_addReductionLength(PTBL_getActionLength(a));
   ps = GSS_findAllPaths(st, PTBL_getActionLength(a)); 
 
   while(ps != NULL){
@@ -306,9 +294,7 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
   GSSEdge nl;
   GSSNode st1;
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    numberOfReductions++;
-  }
+  SGLR_STATS_reductionsDone++;
 
   prod = SGLR_PTBL_lookupProduction(parseTable, prodl);
   t = PT_makeTreeAppl(prod, kids);
@@ -318,13 +304,13 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
   if (st1 == NULL) {
     /* State |s| is not in the current level. */
     st1 = GSSNode_createNode(s, ATfalse);
-    nl  = GSSNode_addEdge(st1, st0, t, length);
+    nl  = GSSNode_addEdge(st1, st0, t, length, PTBL_isSpecialAttrReject(attribute));
     GSS_addToCurrentLevel(st1);
 
     /*forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);*/
     
     if (PTBL_isSpecialAttrReject(attribute)) {
-      GSSEdge_setRejected(nl);
+      /*GSSEdge_setRejected(nl);*/
       forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);
     }
     else {
@@ -349,11 +335,11 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
       /* The edge does not exist. */
       register GSSNodeList sts;
 
-      nl = GSSNode_addEdge(st1, st0, t, length);
+      nl = GSSNode_addEdge(st1, st0, t, length, PTBL_isSpecialAttrReject(attribute));
 
-      if (PTBL_isSpecialAttrReject(attribute)) {
+      /*if (PTBL_isSpecialAttrReject(attribute)) {
         GSSEdge_setRejected(nl);
-      }
+      }*/
 
       for (sts = GSS_getCurrentLevel(); sts != NULL; sts = GSS_getNodeListTail(sts)) {
         GSSNode st2 = GSS_getNodeListHead(sts);
@@ -392,6 +378,7 @@ static void doLimitedReductions(GSSNode st, PTBL_Action a, GSSEdge edge) {
 
   prod = PTBL_getActionLabel(a);
 
+  SGLR_STATS_addReductionLength(PTBL_getActionLength(a));
   ps = GSS_findLimitedPaths(st, PTBL_getActionLength(a), edge);
 
   while(ps) {
@@ -437,11 +424,11 @@ static void shifter(void) {
         newActiveStacks = GSS_addNodeListElement(st1, newActiveStacks);
       }
 
-      l = GSSNode_addEdge(st1, st0, t, 1);
+      l = GSSNode_addEdge(st1, st0, t, 1, ATfalse);
     }
     GSS_removeShiftQueueElement();
   }
-  GSS_deleteShiftQueue();
+  GSS_resetShiftQueue();
 
   oldActiveStacks[(IS_getNumberOfTokensRead(inputString)-1) % GC_CYCLE] = GSS_getCurrentLevel();
   if (((IS_getNumberOfTokensRead(inputString)-1) % GC_CYCLE) == (GC_CYCLE-1)) {
@@ -454,65 +441,7 @@ static void shifter(void) {
 
 /*-----------------------POST PARSE STUFF------------------------------------*/
 
-static void postParse(void) {
-  if (PARSER_getStatsFlag() == ATtrue) {
-    double ptm;
-
-    ptm = STATS_Timer();
-    
-    ATwarning("Logging statistics\n");
-
-    fprintf(LOG_log(), "Number of linesParseds parsed: %ld\n", 
-	    (long) IS_getLinesRead(inputString));
-    
-    fprintf(LOG_log(), "Parse time: %.6fs\n", ptm);
-    fprintf(LOG_log(), "Characters/second: %.0f\n",
-            ptm < 1.0e-4 ? 0 : IS_getNumberOfTokensRead(inputString)/ptm);
-
-    fprintf(LOG_log(), "Number of reductions: %ld\n", (long) numberOfReductions);
-    
-    fprintf(LOG_log(), "Number of reductions/token: %f\n",
-            (double) numberOfReductions/(double)IS_getNumberOfTokensRead(inputString));
-
-    fprintf(LOG_log(), "Number of edge visits for full reductions: %ld\n",
-            (long) fullReductionEdgeVisits);
-
-    fprintf(LOG_log(), "Number of edge visits for limited reductions: %ld\n",
-            (long) limitedReductionEdgeVisits);
-
-    fprintf(LOG_log(), "Number of ambiguities: %d\n",
-            FLT_getTotalAmbCount());
-    fprintf(LOG_log(), "Number of calls to Amb: %d\n",
-            FLT_getAmbCallsCount());
-  }
-}
-
-static void postParseResult(void) {
-
-  if (PARSER_getStatsFlag() == ATtrue) {  
-    long allocated;
-
-    if (FLT_getFilterFlag() == ATtrue) {
-      fprintf(LOG_log(), "Count Eagerness Comparisons: total %d, successful %d\n", FLT_getNumPreferenceCountCalls(), FLT_getNumPreferenceCount());
-      
-      fprintf(LOG_log(), "Number of Injection Counts: total %d, successful %d\n", FLT_getNumInjectionCountCalls(), FLT_getNumInjectionCount());
-    }
-
-    fprintf(LOG_log(), "Minor page faults: %ld\n", minorPageFaults);
-    fprintf(LOG_log(), "Major page faults: %ld\n", majorPageFaults);
-
-    if(minorPageFaults > 0)
-    fprintf(LOG_log(), "Characters/minor fault: %ld\n", IS_getNumberOfTokensRead(inputString)/minorPageFaults);
-
-    allocated = STATS_Allocated();
-    if(allocated > 0)
-    fprintf(LOG_log(), "[mem] extra ATerm memory allocated while parsing: %ld\n", allocated);
-  }
-}
-
 static void parserCleanup(void) {
-  long allocated;
-  
   GC_gssBranches(oldActiveStacks, 
 		 IS_getNumberOfTokensRead(inputString) % GC_CYCLE,
 		 NULL, 
@@ -524,13 +453,6 @@ static void parserCleanup(void) {
 
   GSS_clearCurrentLevel();
   acceptingStack = NULL;
-
-  if (PARSER_getStatsFlag() == ATtrue) {
-    allocated = STATS_Allocated();
-    if(allocated > 0)
-      fprintf(LOG_log(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
-              allocated);
-  }
 }
 
 /*-----------------------------ERROR HANDLING--------------------------------*/

@@ -16,7 +16,7 @@
 
 GSSNode     GSSNode_createNode(int stateNum, ATbool isShift);
 void        GSSNode_deleteGSSNode(GSSNode gssNode);
-GSSEdge     GSSNode_addEdge(GSSNode source, GSSNode target, PT_Tree t, size_t tl);
+GSSEdge     GSSNode_addEdge(GSSNode source, GSSNode target, PT_Tree t, size_t tl, ATbool rejected);
 int       GSSNode_getStateNumber(GSSNode gssNode);
 GSSEdgeList GSSNode_getEdgeList(GSSNode gssNode);
 void        GSSNode_increaseRefCount(GSSNode gssNode);

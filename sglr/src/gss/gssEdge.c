@@ -10,9 +10,9 @@
 #include "gssEdge-api.h"
 #include "gssGarbageCollector.h"
 #include "memoryManagerGenerator.h"
+#include "mainOptions.h"
+#include "parserStatistics.h"
 #include <assert.h>
-
-static int edgesCreated = 0;
 
 /** 
  * This is the GSS Edge struct.
@@ -36,10 +36,6 @@ static const int EDGE_MEM_CHUNK = (8*64);
 
 GENERATE_MEMORY_MANAGER(GSSEdge, _GSSEdge, nextFree, EDGE_MEM_CHUNK)
 
-int GSSEdge_getEdgesCreated() {
-  return edgesCreated;
-}
-
 /** 
  * Creates a new edge in the GSS, labelled with the specified parse tree node, 
  * to the specified GSS node.
@@ -48,14 +44,14 @@ int GSSEdge_getEdgesCreated() {
  * \param numberOfLeavesInTree the number of leaf nodes that the parse tree 
  * node has
  * \param target the GSS node to point to
+ * \param rejected ATtrue if the edge is rejected
  * 
  * \return the newly created edge
  */
-GSSEdge GSSEdge_createEdge(PT_Tree t, size_t numberOfLeavesInTree, GSSNode target) {
+GSSEdge GSSEdge_createEdge(PT_Tree t, size_t numberOfLeavesInTree, GSSNode target, ATbool rejected) {
   int isNew;
   GSSEdge edge = mallocGSSEdge(&isNew);
   assert((isNew == 0 || isNew == 1) && "memory allocation has gone wrong!");
-  edgesCreated++;
 
   if (edge == NULL) {
     ATerror("%s:%d Could not allocate %d bits of memory\n", __FILE__, 
@@ -68,7 +64,12 @@ GSSEdge GSSEdge_createEdge(PT_Tree t, size_t numberOfLeavesInTree, GSSNode targe
   }
   edge->numberOfLeavesOfTree = numberOfLeavesInTree;
   edge->targetGSSNode = target;
-  edge->isRejected = ATfalse;
+  edge->isRejected = rejected;
+
+  if (rejected) {
+    SGLR_STATS_rejectedEdgesCreated++;
+  }
+  SGLR_STATS_gssEdgesCreated++;
 
   return edge;
 }
@@ -124,6 +125,9 @@ void GSSEdge_setNumberOfLeavesInTree(GSSEdge edge, size_t numberOfLeaves) {
  * \param gssEdge the edge to set as rejected 
  */
 void GSSEdge_setRejected(GSSEdge gssEdge) {
+  if (gssEdge->isRejected == ATfalse) {
+    SGLR_STATS_existingEdgesRejected++;
+  }
   gssEdge->isRejected = ATtrue;	
 }
 

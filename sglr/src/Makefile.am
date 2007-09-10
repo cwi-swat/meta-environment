@@ -19,7 +19,9 @@ INCLUDES= \
 	$(ERROR_SUPPORT_CFLAGS) \
 	$(PT_SUPPORT_CFLAGS) \
 	$(PTABLE_SUPPORT_CFLAGS) \
-	$(C_LIBRARY_CFLAGS) 
+	$(C_LIBRARY_CFLAGS) \
+	-DFAST_API \
+	-DSGLR_COLLECT_STATISTICS
 
 pkgdata_DATA= \
 	sglr.idef
@@ -49,13 +51,13 @@ noinst_HEADERS=\
         gss/reductionPath.h \
         gss/shiftQueue.h \
         parseForest/filters.h \
-        parseForest/filterStats.h \
         parseForest/ambi-tables.h \
         parseForest/levels.h \
         parseTable/parseTable.h \
         parseTable/parseTableBuilder.h \
         parseTable/parseTableDB.h \
 	parser/parser.h \
+	parser/parserStatistics.h \
         utils/mem-alloc.h \
         utils/bitmap.h \
         utils/marking.h \
@@ -79,7 +81,6 @@ libsglr_la_SOURCES= \
         gss/reductionPath.c \
         gss/shiftQueue.c \
         parseForest/filters.c \
-        parseForest/filterStats.c \
         parseForest/ambi-tables.c \
         parseForest/filterOptions.c \
         parseForest/levels.c \
@@ -87,6 +88,7 @@ libsglr_la_SOURCES= \
         parseTable/parseTableBuilder.c \
         parseTable/parseTableDB.c \
         parser/parser.c \
+	parser/parserStatistics.c \
         parser/parserOptions.c \
         utils/bitmap.c \
         utils/marking.c \
@@ -94,9 +96,7 @@ libsglr_la_SOURCES= \
         utils/list.c \
         utils/statusBar.c
 
-libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
-
-libsglr_la_CPPFLAGS = -DFAST_API
+libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS) -L/export/scratch1/economop/tools/google-perftools-0.93/lib -lprofiler
 
 libsglr_la_LIBADD = \
 	-L$(top_builddir)/src \

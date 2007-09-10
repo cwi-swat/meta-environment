@@ -64,8 +64,9 @@
 #include "parseTable.h"
 #include "tokens.h"
 #include "mem-alloc.h"
-#include "parserOptions.h" 
+#include "mainOptions.h" 
 #include "ptable.h"
+#include "parserStatistics.h"
 
 #include <MEPT-utils.h>
 #include <logging.h>
@@ -109,6 +110,7 @@ struct _ParseTable {
   ATerm            noInjection;
   ATerm            userDefinedInjection;
   ATerm            kernelInjection;
+  int              maxProductionLength;
   char            *path;
 };
 
@@ -161,6 +163,15 @@ size_t SGLR_PTBL_getNumberOfStates(ParseTable *pt) {
 */
 size_t SGLR_PTBL_getNumberOfProductions(ParseTable *pt) {
   return pt->numprods;
+}
+
+/** 
+* Returns the length of the longest production.
+* 
+* \return 
+*/
+int SGLR_PTBL_getMaxProductionLength(ParseTable *pt) {
+  return pt->maxProductionLength;
 }
 
 /** 
@@ -723,7 +734,6 @@ static void processGotos(ParseTable *pt, int s, PTBL_Gotos gotos) {
 */
 void SGLR_PTBL_fillParseTable(ParseTable *pt, PTBL_States states) {
   PTBL_State curstate;
-  int numgotos = 0, numchoices = 0;
 
   for(; !PTBL_isStatesEmpty(states); states = PTBL_getStatesTail(states)) {
     if(PTBL_isStateDefault(curstate = PTBL_getStatesHead(states))) {
@@ -731,19 +741,15 @@ void SGLR_PTBL_fillParseTable(ParseTable *pt, PTBL_States states) {
       PTBL_Gotos gotos = PTBL_getStateGotos(curstate);
       PTBL_Choices choices = PTBL_getStateChoices(curstate);
 
-      if (PARSER_getStatsFlag() == ATtrue) {
-        numgotos += PTBL_getGotosLength(gotos); 
-        numchoices += PTBL_getChoicesLength(choices);
+      if (MAIN_getStatsFlag) {
+        SGLR_STATS_gotos += PTBL_getGotosLength(gotos); 
+        SGLR_STATS_actions += PTBL_getChoicesLength(choices);
       }
       processGotos(pt, s, gotos);
       processChoices(pt, s, choices);
     } else {
       ATerror("SGLR_PTBL_fillParseTable: bad state-rec %t\n", curstate);
     }
-  }
-  if (PARSER_getStatsFlag() == ATtrue) {
-    fprintf(LOG_log(), "No. of gotos: %d\nNo. of actions: %d\n",
-	    numgotos, numchoices);
   }
 }
 
@@ -785,6 +791,13 @@ void SGLR_PTBL_processProductions(ParseTable *pt, PTBL_Labels prods) {
     if (PTBL_isLabelDefault(prodLabel)) {
       PT_Production prod  = (PT_Production)PTBL_getLabelProduction(prodLabel);
       int prodNum = PTBL_getLabelNumber(prodLabel);
+
+      if (MAIN_getStatsFlag) {
+        int lhsLength = PT_getArgsLength(PT_getProductionLhs(prod));
+        if (pt->maxProductionLength < lhsLength) {
+          pt->maxProductionLength = lhsLength;
+        }
+      }
 
       if (prodNum == EOS_TOKEN) {
         ATerror("error, obsolete parse table format\n");
@@ -868,13 +881,11 @@ ParseTable *SGLR_PTBL_initializeParseTable(int startState, size_t numstates, siz
   ParseTable *pt;
   size_t      tableclass, tablesize;
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    fprintf(LOG_log(), "No. of states: %ld\n"
-	    "No. of productions: %ld\n"
-	    "No. of action entries: %ld\n"
-	    "No. of goto entries: %ld\n",
-	    (long) numstates, (long) numprods,
-	    (long) action_entries, (long) goto_entries);
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_states = numstates;
+    SGLR_STATS_prods = numprods;
+    SGLR_STATS_actionEntries = action_entries;
+    SGLR_STATS_gotoEntries = goto_entries;
   }
 
   pt               = calloc(1, sizeof(struct _ParseTable));

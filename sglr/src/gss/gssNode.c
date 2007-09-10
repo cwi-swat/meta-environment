@@ -11,6 +11,7 @@
 #include "gssGarbageCollector.h"
 #include "memoryManagerGenerator.h"
 #include "assert.h"
+#include "parserStatistics.h"
 
 /** 
  * This is the GSS node struct.
@@ -62,6 +63,8 @@ GSSNode GSSNode_createNode(int stateNum, ATbool isShift) {
   node->isShift   = isShift;
   node->nextFree  = NULL;
   
+  SGLR_STATS_gssNodesCreated++;
+  
   return node;
 }
 
@@ -82,6 +85,8 @@ void GSSNode_deleteGSSNode(GSSNode node) {
   freeGSSNode(node);
   /** \todo Comment appropriatelly. */
   node->refCount = -1;
+  
+  SGLR_STATS_gssNodesDeleted++;
 }
 
 /** 
@@ -92,11 +97,11 @@ void GSSNode_deleteGSSNode(GSSNode node) {
  * \param target the GSS node that is the target of the edge.
  * \param t the parse tree node to label the edge with.
  * \param tl the number of leaves the parse tree node has.
- * 
+ * \param rejected ATtrue if the edge is rejected.
  * \return the newly created edge.
  */
-GSSEdge GSSNode_addEdge(GSSNode source, GSSNode target, PT_Tree t, size_t tl) {
-  GSSEdge edge = GSSEdge_createEdge(t, tl, target);
+GSSEdge GSSNode_addEdge(GSSNode source, GSSNode target, PT_Tree t, size_t tl, ATbool rejected) {
+  GSSEdge edge = GSSEdge_createEdge(t, tl, target, rejected);
   
   source->edges = GSS_addEdgeListElement(edge, source->edges);
   //GSSNode_increaseRefCount(target);

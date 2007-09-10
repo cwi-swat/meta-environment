@@ -24,19 +24,15 @@
 #include "parseTableBuilder.h"
 #include "parseTableDB.h"
 #include "filters.h"
-#include "filterStats.h"
 #include "ambi-tables.h"
 #include "inputString-api.h"
 
 #include "mainOptions.h"
 #include "parserOptions.h"
 #include "sglr-termstore.h"
+#include "parserStatistics.h"
 
 static ATbool initialized = ATfalse;
-/* Controlling global behaviour: verbosity, debugging mode, dot
- * output of parse forests/parse stacks, and so on.
- */
-int _SG_Mode = 0;
 
 void SGLR_initialize() {
   
@@ -55,6 +51,7 @@ void SGLR_initialize() {
     FLT_initializeDefaultOptions();
     MAIN_initializeDefaultOptions();
     SGLR_TS_create();
+
     initialized = ATtrue;
   }
 }
@@ -69,17 +66,9 @@ ATbool SGLR_isInitialized() {
 int SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable parseTable) {
   ParseTable *internalParseTable = NULL;
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    ATfprintf(LOG_log(), "Language: %t\n", parseTableName); STATS_Timer();
-  }
-
+  if (MAIN_getStatsFlag) { STATS_Timer(); }
   internalParseTable = SG_BuildParseTable(parseTable, parseTableName);
-
-  if (PARSER_getStatsFlag() == ATtrue) {
-    ATfprintf(LOG_log(),
-	      "Obtaining parse table for %t took %.6fs\n",
-	      parseTableName, STATS_Timer());
-  }
+  if (MAIN_getStatsFlag) { SGLR_STATS_parseTableTime = STATS_Timer(); }
 
   if (internalParseTable != NULL) {
     SG_CacheParseTable(parseTableName, internalParseTable);
@@ -103,23 +92,67 @@ ATbool SGLR_isParseTableLoaded(const char *parseTableName) {
   return SG_LookupParseTable(parseTableName) ? ATtrue : ATfalse;  
 }
 
+/** \todo Where is the internal representation of the parse forest freed? */
 
-static PT_ParseTree filterTree(PT_Tree t, ParseTable *parseTable, InputString inputString) {
-  PT_ParseTree result = NULL;
+PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
+  PT_Tree t;
+  PT_ParseTree parseTree = NULL;
+    
+  assert(ATisInitialized() && 
+      "ATerm library has not been initialized to be used by SGLR");
 
-  if (t != NULL) { 
-    if (PARSER_getStatsFlag() == ATtrue) { 
-      STATS_Timer(); 
-    }
-    
-    result = FLT_filter(parseTable, t, inputString);
-    
-    if (PARSER_getStatsFlag() == ATtrue) { 
-      fprintf(LOG_log(), "Filtering took %.6fs\n", STATS_Timer());
-    }  
+  if (MAIN_getStatsFlag) { 
+    SGLR_STATS_parseTableFilename = parseTableName; 
+    SGLR_STATS_inputStringFilename = IS_getPath(inputString); 
   }
 
-  return result; 
+  ParseTable *parseTable = SG_LookupParseTable(parseTableName);  
+
+  assert(parseTable != NULL);
+
+  if (MAIN_getStatsFlag) { 
+    SGLR_STATS_initializeHistograms(SGLR_PTBL_getMaxProductionLength(parseTable)); 
+    STATS_Timer();
+  }
+  t = SG_parse(parseTable, inputString);
+  if (MAIN_getStatsFlag) { 
+    SGLR_STATS_parsingTime = STATS_Timer(); 
+    SGLR_STATS_linesParsed = IS_getLinesRead(inputString);
+    SGLR_STATS_charactersParsed = IS_getNumberOfTokensRead(inputString);
+  }
+
+  if (MAIN_getStatsFlag) { STATS_Timer(); }
+  if (t) {
+    parseTree = FLT_filter(parseTable, t, inputString);
+  }
+  if (MAIN_getStatsFlag) { SGLR_STATS_filteringTime = STATS_Timer(); }
+
+  SG_DestroyInputAmbiMap();
+  SG_AmbiTablesDestroy();
+
+  /*parseTree = ambiguityDetection(parseTree, parseTable, inputString);*/
+
+  if (parseTree) {
+    if (MAIN_getFlattenTreeFlag()) {
+      if (PARSER_getVerboseFlag) {
+        ATwarning("Flattening lists in parse forest\n");
+      }
+      
+      if (MAIN_getStatsFlag) { STATS_Timer(); }
+      parseTree = flattenPT(parseTree);
+      if (MAIN_getStatsFlag) { SGLR_STATS_flatteningTime = STATS_Timer(); }
+    }
+  }
+  
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_print();
+  }
+
+  return parseTree;
+}
+
+ERR_Summary SGLR_getErrorSummary() {
+  return ERR_getManagerSummary();
 }
 
 /** \todo reimplement ambiguity as error flag */
@@ -156,49 +189,3 @@ static PT_ParseTree ambiguityDetection(PT_ParseTree parseTree, ParseTable *parse
 }
 #endif
 
-/** \todo Where is the internal representation of the parse forest freed? */
-
-PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
-  PT_Tree t;
-  PT_ParseTree parseTree;
-
-  assert(ATisInitialized() && 
-      "ATerm library has not been initialized to be used by SGLR");
-
-  ParseTable *parseTable = SG_LookupParseTable(parseTableName);  
-
-  assert(parseTable != NULL);
-
-  t = SG_parse(parseTable, inputString);
-
-  parseTree = filterTree(t, parseTable, inputString);
-
-  SG_DestroyInputAmbiMap();
-  SG_AmbiTablesDestroy();
-
-  /*parseTree = ambiguityDetection(parseTree, parseTable, inputString);*/
-
-  if (parseTree != NULL) {
-    if (MAIN_getFlattenTreeFlag()) {
-      if (PARSER_getVerboseFlag() == ATtrue) {
-        ATwarning("Flattening lists in parse forest\n");
-      }
-      
-      if (PARSER_getStatsFlag() == ATtrue) {
-        STATS_Timer();
-      }
-      
-      parseTree = flattenPT(parseTree);
-      
-      if (PARSER_getStatsFlag() == ATtrue) {
-        fprintf(LOG_log(), "Flattening took %.6fs\n", STATS_Timer());
-      }
-    }
-  }
-  
-  return parseTree;
-}
-
-ERR_Summary SGLR_getErrorSummary() {
-  return ERR_getManagerSummary();
-}

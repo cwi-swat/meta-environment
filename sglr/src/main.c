@@ -4,7 +4,8 @@
 #include "commandLineInterface.h"
 #include "toolbusInterface.h"
 #include "filters.h"
-#include "parserOptions.h" /** \todo Stats maybe go in the main options? */
+#include "mainOptions.h" 
+#include "parserStatistics.h"
 
 #include "ptable.h"
 #include <aterm1.h>
@@ -17,7 +18,6 @@ int main(int argc, char *argv[]) {
   int result = 0;
   ATerm bottomOfStack;
   char* atargs[5];
-  long maxResidentSize = 0L;
   int useToolbus = 0;
   int i = 0;
 
@@ -29,13 +29,17 @@ int main(int argc, char *argv[]) {
   atargs[5] = "-at-silent";
   /*atargs[5] = "-at-verbose";*/
 
-  maxResidentSize = STATS_ResidentSetSize();
+  SGLR_STATS_initialMRSS = STATS_ResidentSetSize();
 
   ATinit(6, atargs, &bottomOfStack);
   /* Set to debug ATerms.*/
   /*ATsetChecking(ATtrue);*/
   SGLR_initialize();
   
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_initialMemAllocated = STATS_Allocated();
+  }
+
   for (i=1; !useToolbus && i < argc; i++) {
     useToolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
   }
@@ -45,14 +49,10 @@ int main(int argc, char *argv[]) {
   }
   else {
     result =  runCommandLineTool(argc, argv);
+  }
 
-    if (PARSER_getStatsFlag() == ATtrue) {
-      fprintf(LOG_log(), "[mem] initial ATerm memory: %ld\n",STATS_Allocated());
-      if(maxResidentSize) {
-	fprintf(LOG_log(), "[mem] ATerm init: %ld before, %ld after\n",
-	    maxResidentSize, STATS_ResidentSetSize());
-      }
-    }
+  if (MAIN_getStatsFlag) {
+    SGLR_STATS_endMRSS = STATS_ResidentSetSize();
   }
 
   return result;

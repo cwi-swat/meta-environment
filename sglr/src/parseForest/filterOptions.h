@@ -4,6 +4,9 @@
  * \ingroup parseForest
  */
 
+#ifndef __FILTER_OPTIONS_H__
+#define __FILTER_OPTIONS_H__
+
 #include <aterm2.h>
 
 void   FLT_initializeDefaultOptions();
@@ -31,3 +34,4 @@ const char* FLT_getTopNonterminal();
 
 void FLT_printOptions();
 
+#endif /* __FILTER_OPTIONS_H__ */

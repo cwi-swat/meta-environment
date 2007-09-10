@@ -10,12 +10,15 @@
 
 #include <stdlib.h>
 #include "gss.h"
+#include "parserStatistics.h"
 
 static ReductionPath findAllPathsRecursive(GSSNode st, int nrArgs, 
 					   PT_Args sons, size_t length,
 					   ReductionPath paths);
 
 static GSSNodeList currentLevel = NULL;
+
+static int edgeVisitsPerReduction; /**< used for stat logging. */
 
 /** 
  * Adds the GSS start node to the current level.
@@ -26,6 +29,7 @@ static GSSNodeList currentLevel = NULL;
  */
 void GSS_createStartNode(GSSNode s) {
   currentLevel = GSS_addNodeListElement(s,currentLevel);
+  SGLR_STATS_gssNodesCreated++;
 }
 
 /** 
@@ -108,6 +112,7 @@ GSSEdge GSS_findDirectEdge(GSSNode source, GSSNode target) {
   GSSEdgeList edges = NULL;
 
   for (edges = GSSNode_getEdgeList(source); edges; edges = GSS_getEdgeListTail(edges)) {
+    SGLR_STATS_gssEdgesSearched++;
     if (GSSEdge_getTargetGSSNode(GSS_getEdgeListHead(edges)) == target) {
       return GSS_getEdgeListHead(edges);
     }
@@ -127,8 +132,13 @@ GSSEdge GSS_findDirectEdge(GSSNode source, GSSNode target) {
  * \return the #ReductionPath traversed
  */
 ReductionPath GSS_findAllPaths(GSSNode source, int reductionLength) {
-  return findAllPathsRecursive(source, reductionLength, PT_makeArgsEmpty(), 
-      0, NULL);
+  ReductionPath result;
+
+  edgeVisitsPerReduction = 0;
+  result = findAllPathsRecursive(source, reductionLength, PT_makeArgsEmpty(), 0, NULL);
+
+  SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
+  return result; 
 }
 
 static ReductionPath findAllPathsRecursive(GSSNode node, int reductionLength, PT_Args sons, size_t length, ReductionPath paths) {
@@ -150,6 +160,9 @@ static ReductionPath findAllPathsRecursive(GSSNode node, int reductionLength, PT
 				    reductionLength - 1, newsons, 
 				    length + GSSEdge_getNumberOfLeavesInTree(edge), 
 				    paths);
+
+      SGLR_STATS_gssEdgesTraversed++;
+      edgeVisitsPerReduction++;
     }
   }
   return paths;
@@ -221,6 +234,7 @@ static ReductionPath findPaths(GSSNode source, int reductionLength, GSSEdge edge
 			edge, linkSeen || (edge == l1), newsons, 
 			numberOfLeavesInTree + GSSEdge_getNumberOfLeavesInTree(l1),
 			paths);
+      edgeVisitsPerReduction++;
     }
   }
   return paths;
@@ -240,11 +254,13 @@ static ReductionPath findPaths(GSSNode source, int reductionLength, GSSEdge edge
  * specified GSS edge
  */
 ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, GSSEdge edge) {
+  ReductionPath result = NULL;
+  edgeVisitsPerReduction = 0;
+
   if (findEdge(source, reductionLength, edge)) {
-    return findPaths(source, reductionLength, edge, ATfalse, 
-        PT_makeArgsEmpty(), 0, NULL);
+    result = findPaths(source, reductionLength, edge, ATfalse, PT_makeArgsEmpty(), 0, NULL);
   }
-  else {
-    return NULL;
-  }
+
+  SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
+  return result;
 }

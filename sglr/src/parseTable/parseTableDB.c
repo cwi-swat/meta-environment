@@ -7,6 +7,8 @@
 #include "parseTableDB.h"
 #include "parseTableBuilder.h"
 #include "parserOptions.h"
+#include "mainOptions.h"
+#include "parserStatistics.h"
 
 #include <aterm2.h>
 #include <logging.h>
@@ -36,19 +38,12 @@ ParseTable *SG_AddParseTable(const char *filename) {
     return NULL;
   }
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    ATfprintf(LOG_log(), "Language: %t\n", filename); 
-    STATS_Timer();
-  }
+  if (MAIN_getStatsFlag) { STATS_Timer(); }
 
   extParseTable = PTBL_ParseTableFromTerm(ATreadFromFile(input_file));
-
   intParseTable = SG_BuildParseTable(extParseTable, filename);
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    ATfprintf(LOG_log(), "Obtaining parse table for %t took %.6fs\n",
-	      filename, STATS_Timer());
-  }
+  if (MAIN_getStatsFlag) { SGLR_STATS_parseTableTime = STATS_Timer(); }
 
   LOG_CloseFile(input_file);
 

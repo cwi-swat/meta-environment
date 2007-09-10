@@ -4,24 +4,23 @@
  * \ingroup parser
  */
 
+#ifndef __PARSER_OPTIONS_H__
+#define __PARSER_OPTIONS_H__
+
 #include <aterm2.h>
 #include <options.h>
 
 extern int VERBOSE_FLAG;
 extern int DEBUG_FLAG;
-extern int STATS_FLAG;
-extern int OUTPUT_FLAG;
-extern int AMBIGUITY_ERROR_FLAG;
 
 void PARSER_initializeDefaultOptions();
 void   PARSER_setVerboseFlag(ATbool value);
-ATbool PARSER_getVerboseFlag();
+#define PARSER_getVerboseFlag (OPT_getFlag(VERBOSE_FLAG))
 void   PARSER_setDebugFlag(ATbool value);
-void   PARSER_setStatsFlag(ATbool value);
-ATbool PARSER_getStatsFlag();
+#define PARSER_getDebugFlag (OPT_getFlag(DEBUG_FLAG))
 void   PARSER_setOutputFlag(ATbool value);
 ATbool PARSER_getOutputFlag();
 void   PARSER_setAmbiguityErrorFlag(ATbool value);
 ATbool PARSER_getAmbiguityErrorFlag();
 
-#define PARSER_getDebugFlag (OPT_getFlag(DEBUG_FLAG))
+#endif /* __PARSER_OPTIONS_H__ */

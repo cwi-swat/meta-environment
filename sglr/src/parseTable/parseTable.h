@@ -20,6 +20,7 @@ typedef enum _ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  ActionKind;
 int    SGLR_PTBL_getStartState(ParseTable *pt);
 size_t SGLR_PTBL_getNumberOfStates(ParseTable *pt);
 size_t SGLR_PTBL_getNumberOfProductions(ParseTable *pt);
+int    SGLR_PTBL_getMaxProductionLength(ParseTable *pt);
 
 ATbool SGLR_PTBL_hasPriorities(ParseTable *pt);
 ATbool SGLR_PTBL_hasRejects(ParseTable *pt);

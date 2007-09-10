@@ -5,7 +5,6 @@
  */
 
 #include "mainOptions.h"
-#include "options.h"
 
 static int TOOLBUS_FLAG;
 static int FLATTEN_TREE_FLAG;
@@ -14,7 +13,7 @@ static int OUTPUTFILENAME_VALUE;
 static int INPUTFILENAME_VALUE;
 static int PARSETABLENAME_VALUE;
 static int COUNTPOSINDEPENDENTAMBS_FLAG;
-
+int STATS_FLAG;
 
 void MAIN_initializeDefaultOptions()  {
   TOOLBUS_FLAG = OPT_getFlagOptionId();
@@ -24,11 +23,13 @@ void MAIN_initializeDefaultOptions()  {
   INPUTFILENAME_VALUE = OPT_getStringOptionId();
   PARSETABLENAME_VALUE = OPT_getStringOptionId();
   COUNTPOSINDEPENDENTAMBS_FLAG = OPT_getFlagOptionId();
+  STATS_FLAG = OPT_getFlagOptionId();
 
   MAIN_setFlattenTreeFlag(ATtrue);
   MAIN_setTextualOutputFlag(ATfalse);
   MAIN_setOutputFileName("-");
   MAIN_setCountPosIndependentAmbsFlag(ATfalse);
+  MAIN_setStatsFlag(ATfalse);
 }
 
 void MAIN_setFlattenTreeFlag(ATbool value) {
@@ -78,4 +79,12 @@ void MAIN_setCountPosIndependentAmbsFlag(ATbool value) {
 ATbool MAIN_getCountPosIndependentAmbsFlag() {
   return OPT_getFlag(COUNTPOSINDEPENDENTAMBS_FLAG);
 }
+
+void MAIN_setStatsFlag(ATbool value) {
+  OPT_setFlag(STATS_FLAG, value);
+}
+
+/*ATbool MAIN_getStatsFlag() {
+  return OPT_getFlag(STATS_FLAG);
+}*/
 

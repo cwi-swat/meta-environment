@@ -4,6 +4,9 @@
 #define __MAIN_OPTIONS_H__
 
 #include <aterm2.h>
+#include <options.h>
+
+extern int STATS_FLAG;
 
 void MAIN_initializeDefaultOptions();
 
@@ -19,5 +22,7 @@ void         MAIN_setParseTableName(const char* parseTableName);
 const char  *MAIN_getParseTableName();
 void         MAIN_setCountPosIndependentAmbsFlag(ATbool flag);
 ATbool       MAIN_getCountPosIndependentAmbsFlag();
+void         MAIN_setStatsFlag();
+#define MAIN_getStatsFlag (OPT_getFlag(STATS_FLAG))
 
 #endif /* __MAIN_OPTIONS_H__ */

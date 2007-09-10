@@ -25,9 +25,8 @@
 #include <MEPT-utils.h>
 
 #include "ambi-tables.h"
-#include "filterStats.h"
-#include "parserOptions.h"
-
+#include "mainOptions.h"
+#include "parserStatistics.h"
 
 static ATermTable cluster_table = NULL;  
 static ATermTable index_table = NULL;  
@@ -37,7 +36,6 @@ static ATermTable index_table = NULL;
  * way ie., the positions that are ambiguous.
  */
 static Bitmap InputAmbiMap;
-
 
 void SG_CreateInputAmbiMap(int length) {
   InputAmbiMap = BitmapCreate(length+1);
@@ -171,9 +169,6 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
   PT_Args newambs;
   ATerm  ambidx;
 
-  if (PARSER_getStatsFlag() == ATtrue) {
-    FLT_incrementAmbCallsCount();
-  }
   if (!new) {
     return;
   }
@@ -181,7 +176,7 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
   ambidx = SG_AmbiTablesGetIndex(existing, pos);
   if (!ambidx) { 
     /* New ambiguity */
-    ambidx = (ATerm) ATmakeInt(FLT_incrementTotalAmbCount());
+    ambidx = (ATerm) ATmakeInt(SGLR_STATS_ambiguityClustersCreated++);
     /* Add mapping for existing term also */
     SG_AmbiTablesAddIndex(existing, pos, ambidx);
 
@@ -193,6 +188,7 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
 
     oldambs = SG_AmbiTablesGetClusterOnIndex(ambidx);
     if (PT_indexOfTreeInArgs(oldambs,  new) != -1) {
+      SGLR_STATS_existingAmbiguityClustersFound++;
       return;  /*  Already present?  Done.  */
     }
     newambs = PT_makeArgsMany(new, oldambs);

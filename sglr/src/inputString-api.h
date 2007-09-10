@@ -1,12 +1,13 @@
 /*$Id$*/
 
 #ifndef __INPUT_STRING_API__
-#define  __INPUT_STRING_API__
+#define __INPUT_STRING_API__
 
 #include <aterm1.h>
 #include <Error.h>
 #include "tokens.h"
 #include <ptable.h>
+#include <inputString-data.h>
 
 InputString IS_allocateString(const char *path, const unsigned char *buffer, int length);
 void        IS_destroyInputString(InputString inputString);

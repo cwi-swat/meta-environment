@@ -12,7 +12,7 @@
 typedef struct _StatesToBeShifted *StatesToBeShifted;
 
 void    GSS_removeShiftQueueElement(void);
-void    GSS_deleteShiftQueue(void);
+void    GSS_resetShiftQueue(void);
 void    GSS_addShiftQueueElement(int stateNum, GSSNode node);
 int     GSS_getShiftQueueStateNumber(void);
 GSSNode GSS_getShiftQueueGSSNode(void);

@@ -11,6 +11,7 @@
 
 #include <stdlib.h>
 #include <aterm1.h>
+#include <mainOptions.h>
 
 extern ATbool SGLR_STATS_rejects;
 extern ATbool SGLR_STATS_priorities;
@@ -89,14 +90,18 @@ void SGLR_STATS_print(void);
 
 #if SGLR_COLLECT_STATISTICS
 #define SGLR_STATS_addReductionLength(length)\
-  SGLR_STATS_reductionLengthsDone[length]++;
+  if (MAIN_getStatsFlag) {\
+    SGLR_STATS_reductionLengthsDone[length]++;\
+  }
 #else
 #define SGLR_STATS_addReductionLength(length) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS
 #define SGLR_STATS_addEdgeVisitForReductionLength(reductionLength, edgeVisits)\
-  SGLR_STATS_edgeVisitsPerReductionLength[reductionLength]+=edgeVisits;
+  if (MAIN_getStatsFlag) {\
+    SGLR_STATS_edgeVisitsPerReductionLength[reductionLength]+=edgeVisits;\
+  }
 #else
 #define SGLR_STATS_edgeVisitiForReductionLength(reductionLength, edgeVisits) ;
 #endif

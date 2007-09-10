@@ -13,6 +13,7 @@
 
 #include "shiftQueue.h"
 #include "mem-alloc.h"
+#include "parserStatistics.h"
 
 static const int BLOCK_SIZE = 16;
 
@@ -63,12 +64,14 @@ void GSS_addShiftQueueElement(int stateNum, GSSNode node) {
   statesToBeShifted[endOfQueue].stateNumber = stateNum;
   statesToBeShifted[endOfQueue].gssNode = node;
   endOfQueue++;
+
+  SGLR_STATS_shiftsAddedToShiftQueue++;
 }
 
 /** 
  * Resets the shift queue.
  */
-void GSS_deleteShiftQueue(void) {
+void GSS_resetShiftQueue(void) {
   startOfQueue = 0;
   endOfQueue = 0;
 }

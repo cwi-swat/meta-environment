@@ -11,7 +11,6 @@
 /** \todo Should these options be only for the parser or all of SGLR? */
 int VERBOSE_FLAG;
 int DEBUG_FLAG;
-int STATS_FLAG;
 int OUTPUT_FLAG;
 int AMBIGUITY_ERROR_FLAG;
 
@@ -19,12 +18,11 @@ int AMBIGUITY_ERROR_FLAG;
 void PARSER_initializeDefaultOptions() {
   VERBOSE_FLAG = OPT_getFlagOptionId();
   DEBUG_FLAG = OPT_getFlagOptionId();
-  STATS_FLAG = OPT_getFlagOptionId();
   OUTPUT_FLAG = OPT_getFlagOptionId();
   AMBIGUITY_ERROR_FLAG = OPT_getFlagOptionId();
+
   PARSER_setVerboseFlag(ATfalse);
   PARSER_setDebugFlag(ATfalse);
-  PARSER_setStatsFlag(ATfalse);
   PARSER_setOutputFlag(ATtrue);
   PARSER_setAmbiguityErrorFlag(ATfalse);
 }
@@ -33,21 +31,12 @@ void PARSER_setVerboseFlag(ATbool value) {
   OPT_setFlag(VERBOSE_FLAG, value);
 }
 
-ATbool PARSER_getVerboseFlag() {
+/*ATbool PARSER_getVerboseFlag() {
   return OPT_getFlag(VERBOSE_FLAG);
-}
+}*/
 
 void PARSER_setDebugFlag(ATbool value) {
   OPT_setFlag(DEBUG_FLAG, value);
-}
-
-
-void PARSER_setStatsFlag(ATbool value) {
-  OPT_setFlag(STATS_FLAG, value);
-}
-
-ATbool PARSER_getStatsFlag() {
-  return OPT_getFlag(STATS_FLAG);
 }
 
 void PARSER_setOutputFlag(ATbool value) {
