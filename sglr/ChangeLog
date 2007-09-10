@@ -1,5 +1,9 @@
 $Id$
 
+Mon Sep 10 11:31:17 CEST 2007 <economop@cwi.nl>
+ * Renitialized merge tracking via "svnmerge" with revisions "1-20305" from 
+   svn+ssh://economop@svn.cwi.nl/sglr/branches/srnglr
+
 Mon Sep 10 11:28:04 CEST 2007 <economop@cwi.nl>
  * Reinitialized merge tracking via "svnmerge" with revisions "1-23518" from 
    svn+ssh://economop@svn.cwi.nl/sglr/branches/srnglr
