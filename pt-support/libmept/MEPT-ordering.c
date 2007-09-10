@@ -228,3 +228,83 @@ int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool m
   return PT_compareTreeRec(tree1, tree2);
 }
 
+/**
+ * Implements an insertion sort algorithm on the alternatives.
+ * This assumes the contents of each alternative is already in sorted
+ * form.
+ */
+static PT_Args PT_orderAlternatives(PT_Args alts)
+{
+  int size = 0;
+  PT_Tree array[100];
+  PT_Args result = PT_makeArgsEmpty();
+
+  if (PT_getArgsLength(alts) > 100) {
+    ATabort("PT_orderAlternatives: cannot deal with clusters with more than a 100 alternatives\n");
+  }
+
+  for (; !PT_isArgsEmpty(alts); alts = PT_getArgsTail(alts)) {
+     PT_Tree newAlt = PT_getArgsHead(alts);
+     int i; 
+     int tmp;
+
+     /* find the index to place the new element at */
+     for (i = 0 ; i < size; i++) { 
+       if (PT_compareTree(newAlt, array[i], ATfalse, ATfalse) < 0) {
+	 break;
+       }
+     }
+     tmp = i;
+
+     /* shift the array to make place for the new element */
+     size += 1;
+     for (; i < size; i++) {
+       array[i+1] = array[i];
+     }
+     array[tmp] = newAlt;
+  }
+
+  for ( ; size >= 0; size--) {
+    result = PT_makeArgsMany(array[size], result);
+  }
+
+  return result;
+}
+
+static PT_Args PT_orderArgs(PT_Args args)
+{
+  PT_Args result = PT_makeArgsEmpty();
+
+  for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+    arg = PT_orderAmbiguities(arg);
+    result = PT_makeArgsMany(arg, result);
+  }
+
+  return PT_reverseArgs(result);
+}
+
+/**
+ * Orders the alternatives of all ambiguity clusters in a tree in a 
+ * canonical way. This function may be used to compare trees that are
+ * produced by different versions of sglr, or different parse tables.
+ */
+PT_Tree PT_orderAmbiguities(PT_Tree input)
+{
+  if (PT_isTreeAmb(input)) {
+    PT_Args alts = PT_getTreeArgs(input);
+    alts = PT_orderArgs(alts);
+    alts = PT_orderAlternatives(alts);
+    return PT_setTreeArgs(input, alts);
+  }
+  else if (PT_isTreeAppl(input)) {
+    PT_Args args = PT_getTreeArgs(input);
+    args = PT_orderArgs(args);
+    return PT_setTreeArgs(input, args);
+  }
+  else {
+    return input;
+  }
+}
+
+

@@ -1,5 +1,10 @@
 $Id$
 
+Mon Sep 10 15:42:26 CEST 2007 <jurgenv@cwi.nl>
+ * libmept/MEPT-ordering.[ch],utils/orderPT-main.c: added a tool that 
+   normalizes the ordering of alternatives in all ambiguity clusters to
+   a canonical ordering.:
+
 Wed May 30 11:23:43 CEST 2007 <jurgenv@cwi.nl>
  * libptmept/lift.c: to prevent memory leaks, the user of the lift function
    has to provide her own ATermTable for memoization.

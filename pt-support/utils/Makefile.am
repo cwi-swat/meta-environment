@@ -12,7 +12,8 @@ bin_PROGRAMS = \
 	ambtracker \
 	apply-function \
 	liftPT\
-	comparePT
+	comparePT \
+	orderPT
 
 INCLUDES = \
 	-I$(top_srcdir)/libmept \
@@ -71,6 +72,13 @@ comparePT_SOURCES = \
 	comparePT-main.c
 
 comparePT_LDADD = \
+	-L../libmept -lmept \
+	$(ATERM_LIBS)
+
+orderPT_SOURCES = \
+	orderPT-main.c
+
+orderPT_LDADD = \
 	-L../libmept -lmept \
 	$(ATERM_LIBS)
 
