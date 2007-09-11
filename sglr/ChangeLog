@@ -1,5 +1,8 @@
 $Id$
 
+Tue Sep 11 11:12:39 CEST 2007 <economop@cwi.nl>
+ * src/parser/parserStatistics.c: modified print function to produce rscript.
+
 Tue Sep 11 08:55:29 CEST 2007 <kooiker@cwi.nl>
  * src/Makefile.am: remove -lprofiler and static path to economop
 

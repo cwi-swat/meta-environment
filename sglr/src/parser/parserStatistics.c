@@ -108,62 +108,62 @@ void SGLR_STATS_print(void) {
     ATwarning("Logging statistics\n");
   }
 
-  fprintf(LOG_log(), "\n---Reading parse table ---\n");
-  fprintf(LOG_log(), "Parse table name: %s\n", SGLR_STATS_parseTableFilename);
-  fprintf(LOG_log(), "Obtaining parse table took %.6fs\n", SGLR_STATS_parseTableTime);
-  fprintf(LOG_log(), "%scludes rejects\n", SGLR_STATS_rejects?"In":"Ex");
-  fprintf(LOG_log(), "%scludes priorities\n", SGLR_STATS_priorities?"In":"Ex");
-  fprintf(LOG_log(), "%scludes prefer actions\n", SGLR_STATS_prefers?"In":"Ex");
-  fprintf(LOG_log(), "%scludes avoid actions\n", SGLR_STATS_avoids?"In":"Ex");
+  fprintf(LOG_log(), "\n%%%%---Reading parse table ---\n");
+  fprintf(LOG_log(), "str parse-table-name = \"%s\"\n", SGLR_STATS_parseTableFilename);
+  fprintf(LOG_log(), "%%%% obtaining-parse-table-time = %.6fs\n", SGLR_STATS_parseTableTime);
+  fprintf(LOG_log(), "%%%% %scludes rejects\n", SGLR_STATS_rejects?"in":"ex");
+  fprintf(LOG_log(), "%%%% %scludes priorities\n", SGLR_STATS_priorities?"in":"ex");
+  fprintf(LOG_log(), "%%%% %scludes prefer actions\n", SGLR_STATS_prefers?"in":"ex");
+  fprintf(LOG_log(), "%%%% %scludes avoid actions\n", SGLR_STATS_avoids?"in":"ex");
 
-  fprintf(LOG_log(), "No. of gotos: %d\nNo. of actions: %d\n", SGLR_STATS_gotos, SGLR_STATS_actions);
+  fprintf(LOG_log(), "int gotos = %d\n", SGLR_STATS_gotos);
+  fprintf(LOG_log(), "int actions = %d\n", SGLR_STATS_actions);
 
-  fprintf(LOG_log(), "No. of states: %ld\n" 
-      "No. of productions: %ld\n"
-      "No. of action entries: %ld\n"
-      "No. of goto entries: %ld\n",
-      (long) SGLR_STATS_states, (long) SGLR_STATS_prods,
-      (long) SGLR_STATS_actionEntries, (long) SGLR_STATS_gotoEntries);
+  fprintf(LOG_log(), "int states = %ld\n", (long) SGLR_STATS_states); 
+  fprintf(LOG_log(), "int productions = %ld\n", (long) SGLR_STATS_prods);
+  fprintf(LOG_log(), "int action-entries = %ld\n", (long) SGLR_STATS_actionEntries);
+  fprintf(LOG_log(), "int goto-entries = %ld\n", (long) SGLR_STATS_gotoEntries);
 
-  fprintf(LOG_log(), "[mem] extra ATerm memory allocated for empty table: %ld\n", SGLR_STATS_emptyParseTableMemAllocated);
-  fprintf(LOG_log(), "[mem] extra ATerm memory allocated while filling table: %ld\n", SGLR_STATS_fullParseTableMemAllocated);
-  fprintf(LOG_log(), "[mem] PT build: %ld before, %ld after table creation\n", SGLR_STATS_beforeParseTableCreationMRSS, SGLR_STATS_emptyParseTableMRSS);
-  fprintf(LOG_log(), "[mem] PT build: %ld before, %ld after filling table\n", SGLR_STATS_emptyParseTableMRSS, SGLR_STATS_fullParseTableMRSS);
+  fprintf(LOG_log(), "int extra-ATerm-memory-allocated-for-empty-table = %ld\n", SGLR_STATS_emptyParseTableMemAllocated);
+  fprintf(LOG_log(), "int extra-ATerm-memory-allocated-while-filling-table = %ld\n", SGLR_STATS_fullParseTableMemAllocated);
+  fprintf(LOG_log(), "int PT-build-before-table-creation = %ld\n", SGLR_STATS_beforeParseTableCreationMRSS);
+  fprintf(LOG_log(), "int PT-build-after-table-creation = %ld\n", SGLR_STATS_emptyParseTableMRSS);
+  fprintf(LOG_log(), "int PT-build-before-filling-table = %ld\n", SGLR_STATS_emptyParseTableMRSS);
+  fprintf(LOG_log(), "int PT-build-after-filling-table = %ld\n", SGLR_STATS_fullParseTableMRSS);
  
-  fprintf(LOG_log(), "\n--- Parsing ---\n");
-  fprintf(LOG_log(), "Parse time: %.6fs\n", SGLR_STATS_parsingTime);
-  fprintf(LOG_log(), "Lines parsed: %d\n", SGLR_STATS_linesParsed);
-  fprintf(LOG_log(), "Characters/second: %.0f\n\n", SGLR_STATS_parsingTime < 1.0e-4 ? 0 : SGLR_STATS_charactersParsed/SGLR_STATS_parsingTime);
+  fprintf(LOG_log(), "\n%%%%--- Parsing ---\n");
+  fprintf(LOG_log(), "%%%% parse-time: %.6fs\n", SGLR_STATS_parsingTime);
+  fprintf(LOG_log(), "int lines-parsed = %d\n", SGLR_STATS_linesParsed);
+  fprintf(LOG_log(), "%%%% characters/second = %.0f\n\n", SGLR_STATS_parsingTime < 1.0e-4 ? 0 : SGLR_STATS_charactersParsed/SGLR_STATS_parsingTime);
 
-  fprintf(LOG_log(), "Reductions done: %d\n", SGLR_STATS_reductionsDone);
-  fprintf(LOG_log(), "Follow restricted reductions done: %d\n", SGLR_STATS_reductionsLADone);
-  fprintf(LOG_log(), "Rejected reductions done: %d\n", SGLR_STATS_rejectedReductionsDone);
-  fprintf(LOG_log(), "Reductions/character: %f\n", (double)SGLR_STATS_reductionsDone/(double)SGLR_STATS_charactersParsed);
-  fprintf(LOG_log(), "Reductions added to reduction queue: %d\n", SGLR_STATS_reductionsAddedToReductionQueue);
-  fprintf(LOG_log(), "Max size of reduction queue: %d\n", SGLR_STATS_maxSizeOfReductionQueue);
+  fprintf(LOG_log(), "int reductions-done = %d\n", SGLR_STATS_reductionsDone);
+  fprintf(LOG_log(), "int follow-restricted-reductions-done = %d\n", SGLR_STATS_reductionsLADone);
+  fprintf(LOG_log(), "int rejected-reductions-done = %d\n", SGLR_STATS_rejectedReductionsDone);
+  fprintf(LOG_log(), "%%%% reductions/character: %f\n", (double)SGLR_STATS_reductionsDone/(double)SGLR_STATS_charactersParsed);
+  fprintf(LOG_log(), "int reductions-added-to-reduction-queue = %d\n", SGLR_STATS_reductionsAddedToReductionQueue);
+  fprintf(LOG_log(), "int max-size-of-reduction-queue = %d\n", SGLR_STATS_maxSizeOfReductionQueue);
 
-  fprintf(LOG_log(), "Shifts done: %d\n", SGLR_STATS_shiftsDone);
-  fprintf(LOG_log(), "Shifts added to shift queue: %d\n", SGLR_STATS_shiftsAddedToShiftQueue);
-  fprintf(LOG_log(), "Max size of shift queue: %d\n\n", SGLR_STATS_maxSizeOfShiftQueue);
+  fprintf(LOG_log(), "int shifts-done = %d\n", SGLR_STATS_shiftsDone);
+  fprintf(LOG_log(), "int shifts-added-to-shift-queue = %d\n", SGLR_STATS_shiftsAddedToShiftQueue);
+  fprintf(LOG_log(), "int max-size-of-shift-queue = %d\n\n", SGLR_STATS_maxSizeOfShiftQueue);
 
-  fprintf(LOG_log(), "GSS nodes created: %d\n", SGLR_STATS_gssNodesCreated);
-  fprintf(LOG_log(), "GSS nodes deleted: %d\n", SGLR_STATS_gssNodesDeleted);
-  fprintf(LOG_log(), "GSS edges created: %d\n", SGLR_STATS_gssEdgesCreated);
-  fprintf(LOG_log(), "GSS edges traversed: %d\n", SGLR_STATS_gssEdgesTraversed);
-  fprintf(LOG_log(), "GSS edges searched: %d\n", SGLR_STATS_gssEdgesSearched);
+  fprintf(LOG_log(), "int GSS-nodes-created = %d\n", SGLR_STATS_gssNodesCreated);
+  fprintf(LOG_log(), "int GSS-nodes-deleted = %d\n", SGLR_STATS_gssNodesDeleted);
+  fprintf(LOG_log(), "int GSS-edges-created = %d\n", SGLR_STATS_gssEdgesCreated);
+  fprintf(LOG_log(), "int GSS-edges-traversed = %d\n", SGLR_STATS_gssEdgesTraversed);
+  fprintf(LOG_log(), "int GSS-edges-searched = %d\n\n", SGLR_STATS_gssEdgesSearched);
 
-  fprintf(LOG_log(), "Rejected trees created: %d\n\n", SGLR_STATS_rejectedTreesCreated);
-  fprintf(LOG_log(), "Rejected GSS nodes: %d\n", SGLR_STATS_nodesRejected);
-  fprintf(LOG_log(), "Rejected edges created: %d\n", SGLR_STATS_rejectedEdgesCreated);
-  fprintf(LOG_log(), "Existing (non-rejected) edges marked rejected: %d\n", SGLR_STATS_existingEdgesRejected);
+  fprintf(LOG_log(), "int rejected-trees-created = %d\n", SGLR_STATS_rejectedTreesCreated);
+  fprintf(LOG_log(), "int rejected-GSS-nodes = %d\n", SGLR_STATS_nodesRejected);
+  fprintf(LOG_log(), "int rejected-edges-created = %d\n", SGLR_STATS_rejectedEdgesCreated);
+  fprintf(LOG_log(), "int existing-non-rejected-edges-marked-rejected = %d\n", SGLR_STATS_existingEdgesRejected);
 
 
-  fprintf(LOG_log(), "Production tree node created: %d\n", SGLR_STATS_prodTreeNodesCreated);
-  fprintf(LOG_log(), "Leaf nodes created: %d\n", SGLR_STATS_symbolTreeNodesCreated);
-  fprintf(LOG_log(), "Number of ambiguities created: %d\n", SGLR_STATS_ambiguityClustersCreated);
-  fprintf(LOG_log(), "Existing ambiguities found: %d\n", SGLR_STATS_existingAmbiguityClustersFound);
+  fprintf(LOG_log(), "int production-tree-node-created = %d\n", SGLR_STATS_prodTreeNodesCreated);
+  fprintf(LOG_log(), "int leaf-nodes-created = %d\n", SGLR_STATS_symbolTreeNodesCreated);
+  fprintf(LOG_log(), "int ambiguities-created = %d\n", SGLR_STATS_ambiguityClustersCreated);
+  fprintf(LOG_log(), "int existing-ambiguities-found = %d\n", SGLR_STATS_existingAmbiguityClustersFound);
 
-  fprintf(LOG_log(), "Reduction lengths done histogram:\n");
   fprintf(LOG_log(), "rel[int, int] reductionLengths = \n");
   fprintf(LOG_log(), "{\n");
   for (i = 0; i < maxReductionLength; i++) {
@@ -174,7 +174,6 @@ void SGLR_STATS_print(void) {
   }
   fprintf(LOG_log(), "\n}\n");
 
-  fprintf(LOG_log(), "Edge visits per reduction done histogram:\n");
   fprintf(LOG_log(), "rel[int, int] edgeVisitsPerReduction = \n");
   fprintf(LOG_log(), "{\n");
   for (i = 0; i < maxReductionLength; i++) {
@@ -185,24 +184,27 @@ void SGLR_STATS_print(void) {
   }
   fprintf(LOG_log(), "\n}\n");
 
-  fprintf(LOG_log(), "[mem] extra ATerm memory allocated while parsing: %ld\n", SGLR_STATS_parsingMemAllocated);
+  fprintf(LOG_log(), "int extra-ATerm-memory-allocated-while-parsing = %ld\n", SGLR_STATS_parsingMemAllocated);
 
-  fprintf(LOG_log(), "Minor page faults: %ld\n", SGLR_STATS_minorPageFaults);
-  fprintf(LOG_log(), "Major page faults: %ld\n", SGLR_STATS_majorPageFaults);
+  fprintf(LOG_log(), "int minor-page-faults = %ld\n", SGLR_STATS_minorPageFaults);
+  fprintf(LOG_log(), "int major-page-faults = %ld\n", SGLR_STATS_majorPageFaults);
 
   if(SGLR_STATS_minorPageFaults > 0)
-    fprintf(LOG_log(), "Characters/minor fault: %ld\n", SGLR_STATS_charactersParsed/SGLR_STATS_minorPageFaults);
+    fprintf(LOG_log(), "%%%% characters/minor-fault: %ld\n", SGLR_STATS_charactersParsed/SGLR_STATS_minorPageFaults);
 
 
-  fprintf(LOG_log(), "\n--- Filtering ---\n");
-  fprintf(LOG_log(), "Filtering took %.6fs\n", SGLR_STATS_filteringTime);
-  fprintf(LOG_log(), "Number of preference-count comparisons done: total %d, successful %d\n", SGLR_STATS_preferenceCountCalls, SGLR_STATS_preferenceCount);
-  fprintf(LOG_log(), "Number of injection-count comparisons done: total %d, successful %d\n", SGLR_STATS_injectionCountCalls, SGLR_STATS_injectionCount);
+  fprintf(LOG_log(), "\n%%%%--- Filtering ---\n");
+  fprintf(LOG_log(), "%%%% filtering-time %.6fs\n", SGLR_STATS_filteringTime);
+  fprintf(LOG_log(), "int total-preference-count-comparisons-done = %d\n", SGLR_STATS_preferenceCountCalls);
+  fprintf(LOG_log(), "int successful-preference-count-comparisons-done = %d\n", SGLR_STATS_preferenceCount);
+  fprintf(LOG_log(), "int total-injection-count-comparisons-done = %d\n", SGLR_STATS_injectionCountCalls);
+  fprintf(LOG_log(), "int successful-injection-count-comparisons-done = %d\n", SGLR_STATS_injectionCount);
 
 
-  fprintf(LOG_log(), "\n--- Flattening ---\n");
-  fprintf(LOG_log(), "Flattening took %.6fs\n", SGLR_STATS_flatteningTime);
+  fprintf(LOG_log(), "\n%%%%--- Flattening ---\n");
+  fprintf(LOG_log(), "%%%% flattening-time = %.6fs\n", SGLR_STATS_flatteningTime);
 
-  fprintf(LOG_log(), "[mem] initial ATerm memory: %ld\n", SGLR_STATS_initialMemAllocated);
-  fprintf(LOG_log(), "[mem] ATerm init: %ld before, %ld after\n", SGLR_STATS_initialMRSS, SGLR_STATS_endMRSS);
+  fprintf(LOG_log(), "int initial-ATerm-memory = %ld\n", SGLR_STATS_initialMemAllocated);
+  fprintf(LOG_log(), "int ATerm-init-before-flattening = %ld\n", SGLR_STATS_initialMRSS);
+  fprintf(LOG_log(), "int ATerm-init-after-flattening = %ld\n", SGLR_STATS_endMRSS);
 }
