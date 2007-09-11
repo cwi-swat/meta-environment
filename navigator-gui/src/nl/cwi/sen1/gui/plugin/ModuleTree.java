@@ -129,13 +129,6 @@ public class ModuleTree extends JPanel {
 		tree.addMouseListener(l);
 	}
 
-	/**
-	 * Internal class responsible for painting the icons on the nodes in the
-	 * Tree. For different types of nodes different icons will be used
-	 * 
-	 * @author Renze de Vries
-	 * @date 14-02-2007
-	 */
 	class TreeIconCellRenderer extends DefaultTreeCellRenderer {
 		private Icon folderIcon;
 		private Icon documentIcon;

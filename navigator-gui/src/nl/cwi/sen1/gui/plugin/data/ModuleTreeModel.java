@@ -1,6 +1,5 @@
 package nl.cwi.sen1.gui.plugin.data;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,7 +14,7 @@ import nl.cwi.sen1.ioapi.types.File;
 import aterm.ATerm;
 
 public class ModuleTreeModel extends AbstractModuleTreeModel implements
-		TreeModel, Serializable {
+		TreeModel {
 	private ModuleTreeNode root;
 
 	private List<ModuleSelectionListener> moduleSelectionListeners;
@@ -122,7 +121,7 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 	public void markError(ATerm moduleId) {
 		Module module = getModule(moduleId);
 		File file = module.getFile();
-		
+
 		root.setErrorState(file, true);
 		repaintTree();
 	}
@@ -130,7 +129,7 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 	public void markNormal(ATerm moduleId) {
 		Module module = getModule(moduleId);
 		File file = module.getFile();
-		
+
 		root.setErrorState(file, false);
 		repaintTree();
 	}
