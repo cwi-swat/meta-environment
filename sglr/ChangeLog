@@ -1,5 +1,9 @@
 $Id$
 
+Tue Sep 11 11:34:01 CEST 2007 <economop@cwi.nl>
+ * test/tables/Sdf2.tbl: regenerated the parse table for Sdf2 because I think
+   it contained errors from an earlier bug.
+
 Tue Sep 11 11:12:39 CEST 2007 <economop@cwi.nl>
  * src/parser/parserStatistics.c: modified print function to produce rscript.
 
