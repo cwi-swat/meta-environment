@@ -1,5 +1,10 @@
 $Id$
 
+Tue Sep 11 12:07:36 CEST 2007 <economop@cwi.nl>
+ * test/terms/Sdf2.asfix2.org: regenerated with the new table generated
+   earlier today.
+ * test/regressionTests.sh.src: removed redundant -a option from comparePT.
+
 Tue Sep 11 11:34:01 CEST 2007 <economop@cwi.nl>
  * test/tables/Sdf2.tbl: regenerated the parse table for Sdf2 because I think
    it contained errors from an earlier bug.

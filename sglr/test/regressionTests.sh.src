@@ -135,7 +135,7 @@ handleSGLROptions () {
 runTermTests () {
   echo "" 
   if eval $SGLR $VERBOSE $1 -o $outputFilename ; then
-    if $COMPARE -a $outputFilename $orgAsfixFilename > /dev/null ; then
+    if $COMPARE $outputFilename $orgAsfixFilename > /dev/null ; then
       success "SUCCEEDED regression test for term $inputFilename"
     else 
       error "FAILED regression test for term $inputFilename"
