@@ -1,5 +1,10 @@
 $Id$
 
+Tue Sep 11 16:22:26 CEST 2007 <kooiker@cwi.nl>
+ * lib/famfamfam_silk_icons_v013.zip: added icon set licensed under CC 2.5.
+   Credits to Mark James for developing this icon set (see also our
+   Third-party open source section on our website)
+
 Fri Aug 24 09:21:22 CEST 2007 <kooiker@cwi.nl>
  * src/**/StudioImpl.java: readded request focus for highlighting errors in
    the editors which won't work without focus.
