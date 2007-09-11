@@ -47,6 +47,7 @@ import net.infonode.docking.theme.SlimFlatDockingTheme;
 import net.infonode.docking.theme.SoftBlueIceDockingTheme;
 import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.ViewMap;
+import net.infonode.tabbedpanel.titledtab.TitledTabStateProperties;
 import net.infonode.util.Direction;
 import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.configapi.types.ActionDescriptionList;
@@ -695,9 +696,11 @@ public class StudioImpl implements Studio, GuiTif {
 				if (id != -1) {
 					View view = viewsById.getView(id);
 					if (view != null) {
-						view.getWindowProperties().getTabProperties()
-								.getTitledTabProperties().getNormalProperties()
-								.setToolTipText(component.getTooltip());
+						TitledTabStateProperties properties = view.getWindowProperties().getTabProperties()
+								.getTitledTabProperties().getNormalProperties();
+						if (properties != null) {
+								properties.setToolTipText(component.getTooltip());
+						}
 					}
 				}
 			}
