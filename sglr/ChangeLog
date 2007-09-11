@@ -1,5 +1,8 @@
 $Id$
 
+Tue Sep 11 08:55:29 CEST 2007 <kooiker@cwi.nl>
+ * src/Makefile.am: remove -lprofiler and static path to economop
+
 Mon Sep 10 14:02:29 CEST 2007 <economop@cwi.nl>
  * Merged revisions 23503-23514 via svnmerge from 
    svn+ssh://economop@svn.cwi.nl/sglr/branches/srnglr
