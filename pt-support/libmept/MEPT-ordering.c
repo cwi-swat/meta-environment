@@ -5,6 +5,8 @@
 /** 
  * \file
  * Contains the implementation of a generic full ordering on parse trees.
+ * Also, this file contains a function to order the elements of ambiguity
+ * clusters for the sake of comparing parse forests.
  */
 static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2);
 
@@ -233,27 +235,50 @@ static PT_Args PT_orderArgs(PT_Args args)
   return PT_reverseArgs(result);
 }
 
+static PT_Tree PT_orderAmbiguitiesRec(PT_Tree input, ATermTable cache)
+{
+  PT_Tree result = (PT_Tree) ATtableGet(cache, (ATerm) input);
+
+  if (result != NULL) {
+    return result;
+  }
+  else {
+    if (PT_isTreeAmb(input)) {
+      PT_Args alts = PT_getTreeArgs(input);
+      alts = PT_orderArgs(alts);
+      alts = PT_orderAlternatives(alts);
+      result = PT_setTreeArgs(input, alts);
+    }
+    else if (PT_isTreeAppl(input)) {
+      PT_Args args = PT_getTreeArgs(input);
+      args = PT_orderArgs(args);
+      result = PT_setTreeArgs(input, args);
+    }
+    else {
+      result = input;
+    }
+  }
+
+  ATtablePut(cache, (ATerm) input, (ATerm) result);
+  return result;
+}
+
 /**
  * Orders the alternatives of all ambiguity clusters in a tree in a 
  * canonical way. This function may be used to compare trees that are
  * produced by different versions of sglr, or different parse tables.
  */
-PT_Tree PT_orderAmbiguities(PT_Tree input)
+PT_Tree PT_orderAmbiguities(PT_Tree input) 
 {
-  if (PT_isTreeAmb(input)) {
-    PT_Args alts = PT_getTreeArgs(input);
-    alts = PT_orderArgs(alts);
-    alts = PT_orderAlternatives(alts);
-    return PT_setTreeArgs(input, alts);
-  }
-  else if (PT_isTreeAppl(input)) {
-    PT_Args args = PT_getTreeArgs(input);
-    args = PT_orderArgs(args);
-    return PT_setTreeArgs(input, args);
-  }
-  else {
-    return input;
-  }
+  ATermTable cache = ATtableCreate(1024, 75);
+  PT_Tree result;
+
+  result = PT_orderAmbiguitiesRec(input, cache);
+
+  ATtableDestroy(cache);
+
+  return result;
 }
+
 
 
