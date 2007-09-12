@@ -31,10 +31,10 @@ extern int pos;
 /*--- Yacc stack type --------------------------*/
 
 typedef struct {
-  int lino;
-  int pos;
-  int elino;
-  int epos;
+  int lino = 0;
+  int pos = 0;
+  int elino = 0;
+  int epos = 0;
   union {        /* Union of types that   */
   char      *string;   /* appear on parse stack */
   TBbool    bool;
