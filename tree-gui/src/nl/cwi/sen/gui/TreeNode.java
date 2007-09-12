@@ -1,4 +1,4 @@
-package nl.cwi.sen;
+package nl.cwi.sen.gui;
 
 import java.util.HashMap;
 
