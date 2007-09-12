@@ -23,7 +23,6 @@
 #include <Error.h>
 #include <aterm2.h>
 #include <Error-manager.h>
-#include <logging.h>
 #include <rsrc-usage.h>
 #include <filterOptions.h>
 

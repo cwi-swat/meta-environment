@@ -24,5 +24,7 @@ void         MAIN_setCountPosIndependentAmbsFlag(ATbool flag);
 ATbool       MAIN_getCountPosIndependentAmbsFlag();
 void         MAIN_setStatsFlag();
 #define MAIN_getStatsFlag (OPT_getFlag(STATS_FLAG))
+void         MAIN_setStatsFilename(const char* statsFilename);
+const char  *MAIN_getStatsFileName();
 
 #endif /* __MAIN_OPTIONS_H__ */

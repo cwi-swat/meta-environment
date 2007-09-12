@@ -67,6 +67,7 @@ extern int SGLR_STATS_ambiguityClustersCreated;
 extern int SGLR_STATS_existingAmbiguityClustersFound;
 extern int SGLR_STATS_prodTreeNodesCreated;
 extern int SGLR_STATS_symbolTreeNodesCreated;
+extern int SGLR_STATS_cyclicTreeNodesCreated;
 
 extern int SGLR_STATS_preferenceCount;
 extern int SGLR_STATS_preferenceCountCalls;

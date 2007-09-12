@@ -93,7 +93,7 @@ InputString IS_createInputStringFromFile(const char *path) {
   assert(bytesRead != BUFCHUNK &&  "Not enough memory for end of string.");
   length = (curbufsize-BUFCHUNK)+bytesRead;
   
-  if (readFromStdin) {
+  if (!readFromStdin) {
     fclose(in);
   }
 

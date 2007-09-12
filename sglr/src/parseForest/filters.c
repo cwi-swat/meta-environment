@@ -34,7 +34,6 @@
 #include <assert.h>
 #include <aterm2.h>
 #include <rsrc-usage.h>
-#include <logging.h>
 #include <MEPT-productions.h>
 #include <MEPT-args.h>
 #include <mainOptions.h>
@@ -276,17 +275,17 @@ static PT_Tree directPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
 
   if (findPreferredTree(pt, t0, t1)) {
     if (PARSER_getDebugFlag == ATtrue) {
-      PT_Production p0 = PT_getTreeProd(t0);
+      /*PT_Production p0 = PT_getTreeProd(t0);
       PT_Production p1 = PT_getTreeProd(t1);
-      ATfprintf(LOG_log(), "prefer/avoid result: %t > %t\n", p0, p1);
+      ATfprintf(LOG_log(), "prefer/avoid result: %t > %t\n", p0, p1);*/
     }
     return t0;
   }
   if (findPreferredTree(pt, t1, t0)) {
     if (PARSER_getDebugFlag == ATtrue) { 
-      PT_Production p0 = PT_getTreeProd(t0);
+      /*PT_Production p0 = PT_getTreeProd(t0);
       PT_Production p1 = PT_getTreeProd(t1);
-      ATfprintf(LOG_log(), "prefer/avoid result: %t < %t\n", p0, p1);
+      ATfprintf(LOG_log(), "prefer/avoid result: %t < %t\n", p0, p1);*/
     }
     return t1;
   }
@@ -458,7 +457,7 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
     if (((pT0 > pT1) && (aT0 <= aT1)) ||
         ((pT0 == pT1) && (aT0 < aT1))) { 
       if (PARSER_getDebugFlag == ATtrue) {
-        ATfprintf(LOG_log(), "prefer/avoid result: %t > %t\n", p0, p1);
+        /*ATfprintf(LOG_log(), "prefer/avoid result: %t > %t\n", p0, p1);*/
       }
       max = t0;
     }
@@ -467,15 +466,13 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
         ((pT1 == pT0) && (aT1 < aT0))) {
       if (max != NULL) {
         if (PARSER_getDebugFlag == ATtrue) {
-          ATfprintf(LOG_log(),
-              "Warning! symmetric prefer/avoid relation (%t > %t) && (%t < %t)\n", 
-              p0, p1, p0, p1);
+          /*ATfprintf(LOG_log(), "Warning! symmetric prefer/avoid relation (%t > %t) && (%t < %t)\n", p0, p1, p0, p1);*/
         }
         max = NULL;
       }
       else { 
         if (PARSER_getDebugFlag == ATtrue) {
-          ATfprintf(LOG_log(), "prefer/avoid result: %t < %t\n", p0, p1);
+          /*ATfprintf(LOG_log(), "prefer/avoid result: %t < %t\n", p0, p1);*/
         }
         max = t1;
       }
@@ -549,12 +546,12 @@ static PT_Tree fullInjectionCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
   
   if (in0 > in1) {
     if (PARSER_getDebugFlag) {
-      ATfprintf(LOG_log(), "More injections: (%d > %d)\n", in0, in1);
+      /*ATfprintf(LOG_log(), "More injections: (%d > %d)\n", in0, in1);*/
     }
       return t1;
   } else if (in0 < in1) {
     if (PARSER_getDebugFlag) {
-      ATfprintf(LOG_log(), "Fewer injections: (%d < %d)\n", in0, in1);
+      /*ATfprintf(LOG_log(), "Fewer injections: (%d < %d)\n", in0, in1);*/
     }
       return t0;
   }
@@ -755,6 +752,10 @@ static PT_Tree priorityFilter(ParseTable *pt, PT_Tree t) {
 
     if (SGLR_PTBL_hasProductionPriority(pt, prod)) {
       PT_Args children = PT_getTreeArgs(t);
+
+      if (PT_getArgsLength(children) == 0) {
+        return t;
+      }
 
       SGLR_TERM_STORE_FRAME(PT_getArgsLength(children),
       for (; !PT_isArgsEmpty(children); children = PT_getArgsTail(children), argNumber++) {
@@ -1017,8 +1018,8 @@ static PT_Args filterAmbiguousAlternatives(ParseTable *pt, PT_Args alternativeTr
   if (FLT_getDirectPreferenceFlag() || FLT_getIndirectPreferenceFlag() ||
       FLT_getPreferenceCountFlag() || FLT_getInjectionCountFlag()) {
     if (PARSER_getDebugFlag) {
-      ATfprintf(LOG_log(), "Ambiguity cluster: %d nodes originally.\n", 
-          PT_getArgsLength(alternativeTrees));
+      /*ATfprintf(LOG_log(), "Ambiguity cluster: %d nodes originally.\n", 
+          PT_getArgsLength(alternativeTrees));*/
     }
 
     if (PT_getArgsLength(alternativeTrees) > 1) {
@@ -1130,6 +1131,7 @@ static ATbool detectCycle(ATerm clusterIndex) {
  * the tree.
  */
 static PT_Tree createCycle(PT_Args ambs, int cycleLength) {
+  SGLR_STATS_cyclicTreeNodesCreated++;
   if (!FLT_getRemoveCyclesFlag()) {
     PT_Tree first = PT_getArgsHead(ambs);
     PT_Production prod = PT_getTreeProd(first);
@@ -1191,7 +1193,7 @@ static PT_Tree filterAmbiguity(ParseTable *pt, PT_Args ambiguousTrees, size_t *p
   newTreeNode = createTreeNode(ambiguousTrees); 
 
   if (PARSER_getDebugFlag) {
-    ATfprintf(LOG_log(), "Ambiguity cluster contains %d node(s).\n", PT_getArgsLength(ambiguousTrees));
+    /*ATfprintf(LOG_log(), "Ambiguity cluster contains %d node(s).\n", PT_getArgsLength(ambiguousTrees));*/
   }
 
   return newTreeNode;
@@ -1315,6 +1317,7 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
       t = filterTree(pt, t, pos, cycle, level);
     }
   }
+#if 0  
   else if (PT_isTreeAmb(t)) {
     /* The tree is part of an epsilon tree pre-constructed at parse table 
      * generation time for RN reductions, so we only want to filter; we cannot
@@ -1331,6 +1334,7 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
       return (PT_Tree)NULL;
     }
   }
+#endif
   else {
     assert(PT_isTreeChar(t) && "we only expect appls and chars here");
     *pos = *pos + 1;

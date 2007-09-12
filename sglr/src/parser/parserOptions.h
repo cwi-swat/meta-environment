@@ -22,5 +22,7 @@ void   PARSER_setOutputFlag(ATbool value);
 ATbool PARSER_getOutputFlag();
 void   PARSER_setAmbiguityErrorFlag(ATbool value);
 ATbool PARSER_getAmbiguityErrorFlag();
+void PARSER_setDebugFilename(const char *filename);
+const char *PARSER_gerDebugFilename();
 
 #endif /* __PARSER_OPTIONS_H__ */

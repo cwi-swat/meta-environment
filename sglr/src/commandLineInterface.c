@@ -10,7 +10,6 @@
 #include <Error-manager.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <logging.h>
 #include <mainOptions.h>
 #include <filterOptions.h>
 #include <parserOptions.h>
@@ -24,7 +23,7 @@
 #include "parserStatistics.h"
 
 static const char programName[] = "sglr";
-static const char myArguments[] = "2Acdf::hi:lno:p:s:tvV";
+static const char myArguments[] = "2Acd:f::hi:l:no:p:s:tvV";
 static const char myVersion[]   = VERSION;
 
 static const char *flag(ATbool value) {
@@ -160,6 +159,8 @@ static void handleOptions (int argc, char **argv) {
   char *inputFileName   = "-";
   char *outputFileName  = "-";
   char *parseTableName  = NULL;
+  char *statsFilename   = NULL;
+  char *debugFilename   = NULL;
   
   ATbool showHelp    = ATfalse;
   ATbool showVersion = ATfalse;
@@ -171,11 +172,13 @@ static void handleOptions (int argc, char **argv) {
       case 'A':   ambiguityerrorflag = !ambiguityerrorflag; break;
       case 'c':   
           countPosIndependentAmbFlag = !countPosIndependentAmbFlag; break;
-      case 'd':   debugflag          = !debugflag;          break;
+      case 'd':   debugflag          = !debugflag;
+                  debugFilename      = optarg;              break;
       case 'f':   handleFilterOptions(optarg);              break;     
       case 'h':   showHelp           = !showHelp;           break;
       case 'i':   inputFileName      = optarg;              break;
-      case 'l':   statisticsflag     = !statisticsflag;     break;
+      case 'l':   statisticsflag     = !statisticsflag;
+                  statsFilename      = optarg;              break;
       case 'n':   outputflag         = !outputflag;         break;  
       case 'o':   outputFileName     = optarg;              break;
       case 'p':   parseTableName     = optarg;              break;
@@ -207,6 +210,9 @@ static void handleOptions (int argc, char **argv) {
   }
 
   PARSER_setDebugFlag(debugflag);
+  if (debugflag) {
+    PARSER_setDebugFilename(debugFilename);
+  }
   PARSER_setVerboseFlag(verboseflag);
   PARSER_setOutputFlag(outputflag);
   MAIN_setFlattenTreeFlag(flattenFlag);
@@ -216,6 +222,9 @@ static void handleOptions (int argc, char **argv) {
   MAIN_setParseTableName(parseTableName);
   MAIN_setCountPosIndependentAmbsFlag(countPosIndependentAmbFlag);
   MAIN_setStatsFlag(statisticsflag);
+  if (statisticsflag) {
+    MAIN_setStatsFilename(statsFilename);
+  }
   FLT_setSelectTopNonterminalFlag(startSymbolFlag);
   if (startSymbolFlag) {
     FLT_setTopNonterminal(startSymbol);
@@ -229,10 +238,8 @@ static void handleOptions (int argc, char **argv) {
   }
   #endif
 
-  /** \todo This does not belong here. (sglr-interface initialisation?)
-   * Should separate the debug and stats output files.*/
-  if(MAIN_getStatsFlag || PARSER_getDebugFlag) {
-    LOG_OpenLog(programName, PARSER_getDebugFlag ?".sglr-log":"sglr-stats.txt");
+  if (PARSER_getDebugFlag) {
+    /*LOG_OpenLog(programName, debugFilename);*/
   }
 }
 

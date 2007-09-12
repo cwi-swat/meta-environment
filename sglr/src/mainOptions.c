@@ -14,6 +14,7 @@ static int INPUTFILENAME_VALUE;
 static int PARSETABLENAME_VALUE;
 static int COUNTPOSINDEPENDENTAMBS_FLAG;
 int STATS_FLAG;
+static int STATSFILENAME_VALUE;
 
 void MAIN_initializeDefaultOptions()  {
   TOOLBUS_FLAG = OPT_getFlagOptionId();
@@ -24,12 +25,14 @@ void MAIN_initializeDefaultOptions()  {
   PARSETABLENAME_VALUE = OPT_getStringOptionId();
   COUNTPOSINDEPENDENTAMBS_FLAG = OPT_getFlagOptionId();
   STATS_FLAG = OPT_getFlagOptionId();
+  STATSFILENAME_VALUE = OPT_getStringOptionId();
 
   MAIN_setFlattenTreeFlag(ATtrue);
   MAIN_setTextualOutputFlag(ATfalse);
   MAIN_setOutputFileName("-");
   MAIN_setCountPosIndependentAmbsFlag(ATfalse);
   MAIN_setStatsFlag(ATfalse);
+  MAIN_setStatsFilename("-");
 }
 
 void MAIN_setFlattenTreeFlag(ATbool value) {
@@ -88,3 +91,10 @@ void MAIN_setStatsFlag(ATbool value) {
   return OPT_getFlag(STATS_FLAG);
 }*/
 
+void MAIN_setStatsFilename(const char* statsFilename) {
+  OPT_setStringValue(STATSFILENAME_VALUE, statsFilename);
+}
+
+const char *MAIN_getStatsFileName() {
+  return OPT_getStringValue(STATSFILENAME_VALUE);
+}

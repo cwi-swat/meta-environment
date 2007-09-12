@@ -11,7 +11,6 @@
 #include "parserStatistics.h"
 
 #include <rsrc-usage.h>
-#include <logging.h>
 #include <Error-manager.h>
 
 /** 

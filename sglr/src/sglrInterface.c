@@ -12,7 +12,6 @@
 #include <MEPT-utils.h>
 #include <Error-utils.h>
 #include <Error-manager.h>
-#include <logging.h>
 #include <rsrc-usage.h>
 #include <options.h>
 #include <filterOptions.h>

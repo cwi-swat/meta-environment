@@ -69,7 +69,6 @@
 #include "parserStatistics.h"
 
 #include <MEPT-utils.h>
-#include <logging.h>
 #include <assert.h>
 
 typedef PT_Production   *productiontable;

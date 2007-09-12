@@ -11,7 +11,6 @@
 #include "parserStatistics.h"
 
 #include <aterm2.h>
-#include <logging.h>
 #include <rsrc-usage.h>
 
 #define MAX_TABLES 1
@@ -29,23 +28,34 @@ static PTDB tables[MAX_TABLES];
  * parse table database.
  */
 ParseTable *SG_AddParseTable(const char *filename) {
-  FILE       *input_file;
+  FILE       *inputFile;
   ParseTable *intParseTable = NULL;
   PTBL_ParseTable extParseTable;
+  ATbool readFromStdin = ATfalse;
 
-  input_file = LOG_OpenFile("parse table not specified", filename);
-  if (!input_file) {
+  if (filename == NULL || strcmp(filename,"") == 0 || strcmp(filename,"-") == 0) {
+    inputFile = stdin;
+    readFromStdin = ATtrue;
+  }
+  else {
+    inputFile = fopen(filename, "rb");
+  }
+
+  if (!inputFile) {
+    /** \todo Return a proper error (using strerror)! */
     return NULL;
   }
 
   if (MAIN_getStatsFlag) { STATS_Timer(); }
 
-  extParseTable = PTBL_ParseTableFromTerm(ATreadFromFile(input_file));
+  extParseTable = PTBL_ParseTableFromTerm(ATreadFromFile(inputFile));
   intParseTable = SG_BuildParseTable(extParseTable, filename);
 
   if (MAIN_getStatsFlag) { SGLR_STATS_parseTableTime = STATS_Timer(); }
 
-  LOG_CloseFile(input_file);
+  if (!readFromStdin) {
+    fclose(inputFile);
+  }
 
   if (intParseTable != NULL) { 
     SG_CacheParseTable(filename, intParseTable);
@@ -64,7 +74,7 @@ void SG_CacheParseTable(const char *parseTableName, ParseTable *pt) {
   tables[0].name  = parseTableName;
   tables[0].table = pt;
   if (PARSER_getDebugFlag == ATtrue) {
-    ATfprintf(LOG_log(), "Table for %s added to parse table database\n", parseTableName);
+    /*ATfprintf(LOG_log(), "Table for %s added to parse table database\n", parseTableName);*/
   }
 }
 
@@ -79,7 +89,7 @@ ParseTable *SG_LookupParseTable(const char *parseTableName) {
   }
   if (ATisEqual(parseTableName, tables[0].name)) {
     if (PARSER_getDebugFlag == ATtrue) {
-      ATfprintf(LOG_log(), "Table for language %s available\n", parseTableName);
+      /*ATfprintf(LOG_log(), "Table for language %s available\n", parseTableName);*/
     }
     return tables[i].table;
   }

@@ -12,7 +12,6 @@
 #include <MEPT-utils.h>
 #include <Error-utils.h>
 #include <rsrc-usage.h>
-#include <logging.h>
 
 int main(int argc, char *argv[]) {
   int result = 0;
