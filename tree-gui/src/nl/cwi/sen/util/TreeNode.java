@@ -6,7 +6,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public class TreeNode extends DefaultMutableTreeNode {
 	private String iconName;
-	private HashMap<String, OverlayPosition> overlays;
+	private HashMap<OverlayPosition, String> overlayPositions;
+	private HashMap<String, OverlayPosition> overlayNames;
 	
 	public TreeNode() {
 	}
@@ -20,14 +21,16 @@ public class TreeNode extends DefaultMutableTreeNode {
 	}
 	
 	public void addOverlay(String name, OverlayPosition position) {
-		overlays.put(name, position);
+		overlayPositions.put(position, name);
+		overlayNames.put(name, position);
 	}
 	
 	public void removeOverlay(String name) {
-		overlays.remove(name);
+		overlayPositions.remove(overlayNames.get(name));
+		overlayNames.remove(name);
 	}
 	
-	public HashMap<String, OverlayPosition> getOverlays() {
-		return overlays;
+	public HashMap<OverlayPosition, String> getOverlays() {
+		return overlayPositions;
 	}
 }	

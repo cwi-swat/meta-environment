@@ -27,12 +27,12 @@ public class TreeCellRenderer extends DefaultTreeCellRenderer {
 		TreeNode treeNode = (TreeNode) value;
 
 		ImageIcon icon = icons.get(treeNode.getIconName());
-		HashMap<String, OverlayPosition> overlays = treeNode.getOverlays();
-		for (Iterator<String> iter = overlays.keySet().iterator(); iter
+		HashMap<OverlayPosition, String> overlays = treeNode.getOverlays();
+		for (Iterator<OverlayPosition> iter = overlays.keySet().iterator(); iter
 				.hasNext();) {
-			String overlayName = iter.next();
-			icon = overlayIcon(icon, overlayIcons.get(overlayName), overlays
-					.get(overlayName));
+			OverlayPosition position = iter.next();
+			icon = overlayIcon(icon, overlayIcons.get(overlays.get(position)),
+					position);
 		}
 
 		setIcon(icon);
