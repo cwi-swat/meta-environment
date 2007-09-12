@@ -1,5 +1,8 @@
 $Id$
 
+Wed Sep 12 08:41:23 CEST 2007 <jurgenv@cwi.nl>
+ * libmept/MEPT-ordering.c: added tree cache to make the tool scalable.
+
 Mon Sep 10 15:42:26 CEST 2007 <jurgenv@cwi.nl>
  * libmept/MEPT-ordering.[ch],utils/orderPT-main.c: added a tool that 
    normalizes the ordering of alternatives in all ambiguity clusters to
