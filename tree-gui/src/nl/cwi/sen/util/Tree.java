@@ -9,7 +9,8 @@ public class Tree extends JTree {
 	private HashMap<String, ImageIcon> icons;
 	private HashMap<String, ImageIcon> overlays;
 	
-	public Tree() {
+	public Tree(TreeNode root) {
+		super(root);
 		icons = new HashMap<String, ImageIcon>();
 		overlays = new HashMap<String, ImageIcon>();
 	}

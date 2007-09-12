@@ -6,9 +6,12 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class TreePanel extends JPanel {
 	private Tree tree;
+	private TreeNode root;
 
 	public TreePanel() {
-		tree = new Tree();
+		root = new TreeNode();
+		
+		tree = new Tree(root);
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
 		tree.setExpandsSelectedPaths(true);
