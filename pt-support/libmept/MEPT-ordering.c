@@ -192,7 +192,6 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
  *
  * \param tree1 first tree
  * \param tree2 second tree
- * \param modAmbOrdering order ambiguity clusters first before comparing.
  * \param modLayout ignore layout during the comparision (results in partial order)
  * \returns 0 if trees are equal, -1 of tree1 < tree2, 1 if tree1 > tree2
  */
