@@ -222,13 +222,15 @@ static PT_Args PT_orderAlternatives(PT_Args alts)
   return (PT_Args) ATsort((ATermList) alts, alternativesOrdering);
 }
 
-static PT_Args PT_orderArgs(PT_Args args)
+static PT_Tree PT_orderAmbiguitiesRec(PT_Tree input, ATermTable cache);
+
+static PT_Args PT_orderArgs(PT_Args args, ATermTable cache)
 {
   PT_Args result = PT_makeArgsEmpty();
 
   for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
     PT_Tree arg = PT_getArgsHead(args);
-    arg = PT_orderAmbiguities(arg);
+    arg = PT_orderAmbiguitiesRec(arg, cache);
     result = PT_makeArgsMany(arg, result);
   }
 
@@ -245,13 +247,13 @@ static PT_Tree PT_orderAmbiguitiesRec(PT_Tree input, ATermTable cache)
   else {
     if (PT_isTreeAmb(input)) {
       PT_Args alts = PT_getTreeArgs(input);
-      alts = PT_orderArgs(alts);
+      alts = PT_orderArgs(alts, cache);
       alts = PT_orderAlternatives(alts);
       result = PT_setTreeArgs(input, alts);
     }
     else if (PT_isTreeAppl(input)) {
       PT_Args args = PT_getTreeArgs(input);
-      args = PT_orderArgs(args);
+      args = PT_orderArgs(args, cache);
       result = PT_setTreeArgs(input, args);
     }
     else {

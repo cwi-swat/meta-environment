@@ -12,7 +12,7 @@ static ATbool modLayout = ATtrue;
 static void usage(const char *prg)
 {
   fprintf(stderr, "Compares to parse trees modulo layout.\n\n");
-  fprintf(stderr, "Usage: %s -[hVal] <file1> <file2>\n", prg);
+  fprintf(stderr, "Usage: %s -[hVl] <file1> <file2>\n", prg);
   fprintf(stderr, "Parameters:\n");
   fprintf(stderr, "\t-l\t: ignore layout-trees while comparing\t\t\t[%s]\n", modLayout ? "on" : "off");
   exit(2);

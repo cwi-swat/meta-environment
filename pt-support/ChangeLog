@@ -1,5 +1,10 @@
 $Id$
 
+Wed Sep 12 11:30:49 CEST 2007 <economop@cwi.nl>
+ * utils/comparePT-main.c: removed the -a option from the usage information.
+ * test/mept-test.c: removed the modAmbiguityOrdering parameter passed to
+   PT_compareTrees, and added PT_orderAmbiguities where needed.
+
 Wed Sep 12 08:41:23 CEST 2007 <jurgenv@cwi.nl>
  * libmept/MEPT-ordering.c: added tree cache to make the tool scalable.
 
