@@ -26,10 +26,12 @@
 <% if @si_item.si_config.script_version != 0 then %>
 <tr><td>Script version</td><td> <%= link_to @si_item.si_config.script_version, :action => 'show', :controller => 'script', :version => @si_item.si_config.script_version %></td></tr>
 <% end %>
-<tr><td>Earlier builds:</td><td>
+<tr><td>Earlier builds: 
+</td><td>
 <% @earlier_items.each do |item| %>
 <%= link_to item.id, :controller => 'si_items', :action => 'show', :id => item.id %>&nbsp;
 <% end %>
+
 </td>
 </tr>
 <% if @may_be_bundled then %>

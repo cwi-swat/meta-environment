@@ -176,6 +176,14 @@ EOQ
     File.join(File.dirname(__FILE__), '../../public/downloads')
   end
 
+  def package_dir
+    return download_path
+  end
+
+  def package_path(item)
+    return File.join(package_dir, package_name(item))
+  end
+
   def sisyphus_download_path
     File.join(download_path, 'sisyphus')
   end
@@ -189,13 +197,6 @@ EOQ
   end
 
 
-  def package_dir
-    return '/ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads'
-  end
-
-  def package_path(item)
-    return File.join(package_dir, package_name(item))
-  end
 
   def parsed_package_name(item)
     return package_name(item) + '.af'
