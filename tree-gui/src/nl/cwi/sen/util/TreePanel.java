@@ -1,4 +1,4 @@
-package nl.cwi.sen.gui;
+package nl.cwi.sen.util;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

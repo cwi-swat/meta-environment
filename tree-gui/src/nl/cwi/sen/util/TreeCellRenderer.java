@@ -1,4 +1,4 @@
-package nl.cwi.sen.gui;
+package nl.cwi.sen.util;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
