@@ -1,5 +1,14 @@
 $Id$
 
+Wed Sep 12 13:40:15 CEST 2007 <economop@cwi.nl>
+ * src/commandLineInterface.c: added filename arguments to the statistics and
+   debug options of SGLR.
+ * src/parser/parserStatistics.c: stopped using logging.h. Opening and closing
+   of files is done locally.
+ * src/inputStringBuilder.c: fixed closing of file.
+ * src/parseTable/parseTableBuilder.c: fixed opening and closing of files.
+ * src/*: removed some debug code. This will have to be redone later.
+
 Tue Sep 11 12:07:36 CEST 2007 <economop@cwi.nl>
  * test/terms/Sdf2.asfix2.org: regenerated with the new table generated
    earlier today.
