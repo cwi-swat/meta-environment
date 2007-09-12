@@ -65,6 +65,9 @@ extern int *SGLR_STATS_edgeVisitsPerReductionLength;
 /* Tree construction statistics. */
 extern int SGLR_STATS_ambiguityClustersCreated;
 extern int SGLR_STATS_existingAmbiguityClustersFound;
+extern int SGLR_STATS_maxClusterLength; 
+extern int *SGLR_STATS_clusterHistogram;
+
 extern int SGLR_STATS_prodTreeNodesCreated;
 extern int SGLR_STATS_symbolTreeNodesCreated;
 extern int SGLR_STATS_cyclicTreeNodesCreated;
@@ -87,6 +90,7 @@ extern const char *SGLR_STATS_inputStringFilename;
 extern const char *SGLR_STATS_parseTableFilename;
 
 void SGLR_STATS_initializeHistograms(int length);
+void SGLR_STATS_initializeClusterHistogram(void);
 void SGLR_STATS_print(void);
 
 #if SGLR_COLLECT_STATISTICS
@@ -105,6 +109,15 @@ void SGLR_STATS_print(void);
   }
 #else
 #define SGLR_STATS_edgeVisitiForReductionLength(reductionLength, edgeVisits) ;
+#endif
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_clusterHistogramPut(clusterLength)\
+  if (MAIN_getStatsFlag) {\
+    SGLR_STATS_clusterHistogram[clusterLength]++;\
+  }
+#else
+#define SGLR_STATS_clusterHistogramPut(clusterLength) ;
 #endif
 
 #endif /* __PARSER_STATISTICS__ */

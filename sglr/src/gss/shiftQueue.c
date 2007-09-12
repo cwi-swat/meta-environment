@@ -72,6 +72,10 @@ void GSS_addShiftQueueElement(int stateNum, GSSNode node) {
  * Resets the shift queue.
  */
 void GSS_resetShiftQueue(void) {
+  if (SGLR_STATS_maxSizeOfShiftQueue < endOfQueue) {
+    SGLR_STATS_maxSizeOfShiftQueue = endOfQueue;
+  }
+
   startOfQueue = 0;
   endOfQueue = 0;
 }

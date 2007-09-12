@@ -24,5 +24,6 @@ void      SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos);
 void      SG_CreateInputAmbiMap(int length);
 void      SG_DestroyInputAmbiMap();
 int       SG_InputAmbiMapIsSet(int index);
+void      SG_collectAmbiTableStats(void);
 
 #endif  /* _AMBI_CLUSTER_H_ */

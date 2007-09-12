@@ -58,12 +58,15 @@ int SGLR_STATS_maxSizeOfReductionQueue = 0;
 int SGLR_STATS_shiftsAddedToShiftQueue = 0;
 int SGLR_STATS_maxSizeOfShiftQueue = 0;
 
-int *SGLR_STATS_reductionLengthsDone = 0;
-int *SGLR_STATS_edgeVisitsPerReductionLength = 0;
+int *SGLR_STATS_reductionLengthsDone = NULL;
+int *SGLR_STATS_edgeVisitsPerReductionLength = NULL;
 
 /* Tree construction statistics. */
 int SGLR_STATS_ambiguityClustersCreated = 0;
 int SGLR_STATS_existingAmbiguityClustersFound = 0;
+int SGLR_STATS_maxClusterLength = 0; 
+int *SGLR_STATS_clusterHistogram = NULL;
+
 int SGLR_STATS_prodTreeNodesCreated = 0;
 int SGLR_STATS_symbolTreeNodesCreated = 0;
 int SGLR_STATS_cyclicTreeNodesCreated = 0;
@@ -98,8 +101,12 @@ static int maxReductionLength = 0;
 
 void SGLR_STATS_initializeHistograms(int length) {
   maxReductionLength = length;
-  SGLR_STATS_reductionLengthsDone = (int*) calloc(maxReductionLength, sizeof(int));
-  SGLR_STATS_edgeVisitsPerReductionLength = (int*) calloc(maxReductionLength, sizeof(int));
+  SGLR_STATS_reductionLengthsDone = (int*) calloc(maxReductionLength+1, sizeof(int));
+  SGLR_STATS_edgeVisitsPerReductionLength = (int*) calloc(maxReductionLength+1, sizeof(int));
+}
+
+void SGLR_STATS_initializeClusterHistogram(void) {
+  SGLR_STATS_clusterHistogram = (int*) calloc(SGLR_STATS_maxClusterLength+1, sizeof(int));
 }
 
 static FILE  *openLog(const char *fnam) {
@@ -188,12 +195,25 @@ void SGLR_STATS_print(void) {
   fprintf(logFile, "int cyclic-tree-nodes-created = %d\n", SGLR_STATS_cyclicTreeNodesCreated);
  fprintf(logFile, "int ambiguities-created = %d\n", SGLR_STATS_ambiguityClustersCreated);
   fprintf(logFile, "int existing-ambiguities-found = %d\n", SGLR_STATS_existingAmbiguityClustersFound);
+  fprintf(logFile, "int max-ambiguity-cluster-length = %d\n", SGLR_STATS_maxClusterLength); 
+
+  fprintf(logFile, "rel[int, int] clusterLengths = \n");
+  fprintf(logFile, "{\n");
+
+  for (i = 0; i <= SGLR_STATS_maxClusterLength; i++) {
+    fprintf(logFile, "<%d, %d>", i, SGLR_STATS_clusterHistogram[i]);
+    if (i < SGLR_STATS_maxClusterLength) {
+      fprintf(logFile, ",\n");
+    }
+  }
+  fprintf(logFile, "\n}\n");
+
 
   fprintf(logFile, "rel[int, int] reductionLengths = \n");
   fprintf(logFile, "{\n");
-  for (i = 0; i < maxReductionLength; i++) {
+  for (i = 0; i <= maxReductionLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_reductionLengthsDone[i]);
-     if (i < maxReductionLength-1) {
+     if (i < maxReductionLength) {
       fprintf(logFile, ",\n");
     }
   }
@@ -201,9 +221,9 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] edgeVisitsPerReduction = \n");
   fprintf(logFile, "{\n");
-  for (i = 0; i < maxReductionLength; i++) {
+  for (i = 0; i <= maxReductionLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_edgeVisitsPerReductionLength[i]);
-    if (i < maxReductionLength-1) {
+    if (i < maxReductionLength) {
       fprintf(logFile, ",\n");
     }
   }

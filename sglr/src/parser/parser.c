@@ -297,6 +297,7 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
 
   prod = SGLR_PTBL_lookupProduction(parseTable, prodl);
   t = PT_makeTreeAppl(prod, kids);
+  SGLR_STATS_prodTreeNodesCreated++;
 
   st1 = GSS_findNodeInCurrentLevel(s);
 
@@ -410,6 +411,7 @@ static void shifter(void) {
   GSSEdge l;
 
   t = PT_makeTreeChar(IS_getCurrentToken(inputString));
+  SGLR_STATS_symbolTreeNodesCreated++;
 
   while (!GSS_isShiftQueueEmpty()) {
     s   = GSS_getShiftQueueStateNumber();

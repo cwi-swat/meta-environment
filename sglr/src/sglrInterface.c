@@ -124,7 +124,11 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
   if (t) {
     parseTree = FLT_filter(parseTable, t, inputString);
   }
-  if (MAIN_getStatsFlag) { SGLR_STATS_filteringTime = STATS_Timer(); }
+  if (MAIN_getStatsFlag) { 
+    SGLR_STATS_filteringTime = STATS_Timer();  
+    SGLR_STATS_initializeClusterHistogram();
+    SG_collectAmbiTableStats();
+  }
 
   SG_DestroyInputAmbiMap();
   SG_AmbiTablesDestroy();

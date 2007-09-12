@@ -192,6 +192,12 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
       return;  /*  Already present?  Done.  */
     }
     newambs = PT_makeArgsMany(new, oldambs);
+    if (MAIN_getStatsFlag) {
+      int newambsLength = PT_getArgsLength(newambs);
+      if(SGLR_STATS_maxClusterLength < newambsLength) {
+      SGLR_STATS_maxClusterLength = newambsLength;
+      }
+    }
   }
 
   /*   Update ambiguity cluster  */
@@ -200,4 +206,20 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
   SG_InputAmbiMapSet(pos);
 
   return;
+}
+
+void SG_collectAmbiTableStats(void) {
+  ATermList keys = ATtableKeys(cluster_table);
+
+  assert(SGLR_STATS_clusterHistogram && "The cluster length histogram has not been initialized!");
+
+  while (!ATisEmpty(keys)) {
+    ATerm key = ATgetFirst(keys);
+    PT_Args cluster = (PT_Args)ATtableGet(cluster_table, key);
+    int clusterLength = PT_getArgsLength(cluster);
+
+    SGLR_STATS_clusterHistogramPut(clusterLength);
+    keys = ATgetNext(keys);
+  }
+
 }
