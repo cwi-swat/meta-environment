@@ -9,8 +9,8 @@
   <info>
     <title>Planning Releases of The Meta-Environment</title>
 
-    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100
-    (Wed, 13 Dec 2006)$</pubdate>
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
 
     <authorgroup>
       <author>
@@ -58,7 +58,8 @@
       </listitem>
 
       <listitem>
-        <para>Deployment - Work on continous integration and deployment</para>
+        <para>Deployment - Work on continous integration and deployment, this
+        includes manual testing</para>
       </listitem>
     </itemizedlist>
 
@@ -263,13 +264,28 @@
 
         <tbody>
           <row>
-            <entry>ASF+SDF Meta-Environment 2.0-RC2</entry>
+            <entry><emphasis role="bold">ASF+SDF Meta-Environment
+            2.0-RC2</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry><emphasis role="bold">feb 1, 2007</emphasis></entry>
+
+            <entry>done</entry>
+          </row>
+
+          <row>
+            <entry></entry>
 
             <entry>Writing user documentation</entry>
 
             <entry>Documenting</entry>
 
-            <entry>Paul,Jurgen</entry>
+            <entry>Paul,Jurgenf</entry>
 
             <entry>feb 1, 2007</entry>
 
@@ -396,7 +412,22 @@
           </row>
 
           <row>
-            <entry>ASF+SDF Meta-Environment 2.0-RC3</entry>
+            <entry><emphasis role="bold">ASF+SDF Meta-Environment
+            2.0-RC3</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry><emphasis role="bold">september 19, 2007</emphasis></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
 
             <entry>Optimization of ATerm serialization in Java and C</entry>
 
@@ -404,7 +435,7 @@
 
             <entry>Arnold</entry>
 
-            <entry>feb 1, 2007</entry>
+            <entry></entry>
 
             <entry>done</entry>
           </row>
@@ -418,9 +449,9 @@
 
             <entry>Paul,Arnold,Tijs,Taeke,Jurgen,Rob</entry>
 
-            <entry>june 15, 2007</entry>
+            <entry></entry>
 
-            <entry>in progress</entry>
+            <entry>done quite a lot</entry>
           </row>
 
           <row>
@@ -435,20 +466,6 @@
             <entry>june 15, 2007</entry>
 
             <entry>done</entry>
-          </row>
-
-          <row>
-            <entry></entry>
-
-            <entry>ASF manual rewrite</entry>
-
-            <entry>Documenting</entry>
-
-            <entry>Jurgen,Paul</entry>
-
-            <entry>june 15, 2007</entry>
-
-            <entry></entry>
           </row>
 
           <row>
@@ -470,20 +487,6 @@
           <row>
             <entry></entry>
 
-            <entry>First class layout supported by ASF compiler</entry>
-
-            <entry>Programming</entry>
-
-            <entry>Jurgen</entry>
-
-            <entry>may, 2007</entry>
-
-            <entry>in progress</entry>
-          </row>
-
-          <row>
-            <entry></entry>
-
             <entry>Bringing up more Sisyphus builders in the CWI build farm:
             linux, MacOsX, cygwin</entry>
 
@@ -493,11 +496,280 @@
 
             <entry>june 30, 2007</entry>
 
+            <entry>in progress, macosx done, linux done, sunos done.</entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Release it</entry>
+
+            <entry>Deployment</entry>
+
+            <entry>Tijs, Taeke</entry>
+
+            <entry>september 19, 2007</entry>
+
             <entry></entry>
           </row>
 
           <row>
-            <entry>ASF+SDF Meta-Environment 2.0-RC4</entry>
+            <entry><emphasis role="bold">RScript Environment
+            1.0</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry><emphasis role="bold">september 19, 2007</emphasis></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Publish rscript documentation</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Release</entry>
+
+            <entry>Deployment</entry>
+
+            <entry>Tijs, Taeke</entry>
+
+            <entry>september 19, 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><emphasis role="bold">ASF+SDF Meta-Environment
+            2.0</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry><emphasis role="bold">december 2007</emphasis></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>First class layout supported by ASF compiler</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Jurgen</entry>
+
+            <entry></entry>
+
+            <entry>in progress</entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Bring ASF+SDF Apigen online</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Tijs, Jurgen</entry>
+
+            <entry>november 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>ASF manual rewrite</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Jurgen,Paul</entry>
+
+            <entry>october, 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Fix documentation Sisyphus</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Tijs</entry>
+
+            <entry>october, 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Cross linking documentation</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Paul</entry>
+
+            <entry>december, 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Meta on rails documentation</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Paul</entry>
+
+            <entry>december 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Convert ATerm manual</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Erik, Arnold, Paul</entry>
+
+            <entry>december 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Convert ToolBus manuals</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Arnold, Paul</entry>
+
+            <entry>december 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Document meta.actions</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Taeke</entry>
+
+            <entry>december, 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Testing</entry>
+
+            <entry>Deployment</entry>
+
+            <entry>Everybody</entry>
+
+            <entry>december 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Include documentation browser</entry>
+
+            <entry>Programming</entry>
+
+            <entry>??</entry>
+
+            <entry>november 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Documentation commandline tools SDF</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Jurgen, Paul, Tijs</entry>
+
+            <entry>november 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Documentation commandline tools ASF</entry>
+
+            <entry>Documenting</entry>
+
+            <entry>Jurgen, Paul, Tijs</entry>
+
+            <entry>november 2007</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><emphasis role="bold">ASF+SDF Meta-Environment
+            2.1</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry><emphasis role="bold">februari 2008</emphasis></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
 
             <entry>RNGLR merged into the trunk</entry>
 
@@ -505,7 +777,7 @@
 
             <entry>Rob</entry>
 
-            <entry>july, 2007</entry>
+            <entry>februari 2008</entry>
 
             <entry></entry>
           </row>
@@ -521,7 +793,35 @@
 
             <entry>Taeke</entry>
 
-            <entry>july, 2007</entry>
+            <entry>februari, 2008</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Rewrite IO-support as Java tool</entry>
+
+            <entry>Programming</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Convert all tools to using new ATerm serialization</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Arnold</entry>
+
+            <entry></entry>
 
             <entry></entry>
           </row>
@@ -537,25 +837,139 @@
 
             <entry>june 1, 2007</entry>
 
-            <entry></entry>
+            <entry>done</entry>
           </row>
 
           <row>
             <entry></entry>
 
-            <entry>Cross-compilation to native Windows iin Sisyphus</entry>
+            <entry>Cross-compilation to native Windows in Sisyphus</entry>
 
             <entry>Building</entry>
 
             <entry>Tijs,Jurgen</entry>
 
-            <entry>june, 2007</entry>
+            <entry>january, 2008</entry>
 
             <entry></entry>
           </row>
 
           <row>
-            <entry>Sometime in the future</entry>
+            <entry><emphasis role="bold">ASF+SDF Meta-Environment
+            2.2</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>may 2008</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Replace old ToolBus by new ToolBus</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Arnold, Paul</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Unit testing framework for SDF</entry>
+
+            <entry>Design , Programming</entry>
+
+            <entry>Erik Post?</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Labelled productions in SDF</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Paul, Tijs, Jurgen</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Keep member labels in SDF</entry>
+
+            <entry>Programming</entry>
+
+            <entry>Tijs, Jurgen</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry><emphasis role="bold">ASF+SDF Meta-Environment
+            3.0</emphasis></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry></entry>
+
+            <entry>december 2008</entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>Merge RScript with ASF </entry>
+
+            <entry>Design, Programming, Documenting</entry>
+
+            <entry>Jurgen, Tijs, Paul</entry>
+
+            <entry></entry>
+
+            <entry></entry>
+          </row>
+
+          <row>
+            <entry></entry>
+
+            <entry>ATerm supports relations and sets</entry>
+
+            <entry>Design, Programming</entry>
+
+            <entry>Arnold, Erik, Tijs</entry>
+
+            <entry></entry>
+
+            <entry>march 2008</entry>
+          </row>
+
+          <row>
+            <entry><emphasis role="bold"></emphasis></entry>
 
             <entry>Conservative pretty printing</entry>
 
