@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>An explanation of error messages of ASF</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+
+    <pubdate>now</pubdate>
+  </info>
+
+  <warning>
+    <para>This document is unfinished.</para>
+  </warning>
+
+  <section xml:id="introduction">
+    <title>Introduction</title>
+
+    <para>This document describes the error messages that the ASF checker and
+    the ASF interpreter or compiler may report. The first errors that ASF
+    users run into are syntax errors. Since the syntax of most of an ASF
+    program is defined by the user, the cause can always come from two ways.
+    Either the definition of the syntax is wrong, or the use of the syntax is
+    wrong. Being aware of this is the first lesson to learn when debugging ASF
+    programs.</para>
+
+    <para>There is a static ASF checker that warns the programmer of the most
+    common mistakes. Each warning or error is discussed in this document. A
+    warning may be ignored, but most warnings tend to point to actual errors.
+    An error indicates that an ASF program is guaranteed to not run
+    correctly.</para>
+
+    <section xml:id="why">
+      <title xml:id="YetAnotherFormalism">See also</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Static warnings and errors</title>
+
+    <section xml:id="ASFSDFwarnings">
+      <title>Type check warnings for ASF+SDF</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>Exported variables section</literal>: it is good
+          practice (but not enforced) to declare variables in a hiddens
+          section.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Kernel syntax construction</literal>: full SDF
+          distinguishes three syntax sections: lexical (no layout may appear
+          between symbols in a production), context-free (optional layout
+          between all symbols in aproduction), and kernel (layout between is
+          explicitly indicated by the user). ASF+SDF does not support kernel
+          syntax.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Production renamings not supported</literal>: SDF
+          does not only allow the renaming of sort names but also of complete
+          productions. ASF+SDF does not support this.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Not supported symbol</literal>: ASF+SDF imposes some
+          restrictions on the symbols that are allowed. In particular, the
+          symbols <remark>XXX</remark> are not allowed.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Lexical probably intended to be a
+          variable</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Deprecated condition syntax "="</literal>: in
+          previous versions, the equality symbol in conditions was written as
+          = instead of ==.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Constructor not expected as outermost function symbol
+          of left hand side:</literal> a function defined with the
+          <literal>constructor</literal> attribute is supposed to be
+          irreducible and should not appear as outermost symbol on the
+          left-hand side of an equation.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="ASFSDFerrors">
+      <title>Type check errors for ASF+SDF</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>Traversal attributes in non-prefix
+          function:</literal> traversal functions can only be prefix
+          functions.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Illegal traversal attribute.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Missing bottom-up or top-down
+          attribute.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Missing break or continue attribute.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Missing trafo and/or accu attribute.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Accu should return accumulated type.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Trafo should return traversed type.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Accutrafo should return tuple of correct
+          types.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Inconsistent arguments of traversal
+          productions.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Inconsistent traversal attributes.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Asf equation sort must not be used.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Charclasses not allowed in context-free
+          syntax.</literal></para>
+        </listitem>
+      </itemizedlist>
+
+      <para><itemizedlist>
+          <listitem>
+            <para><literal>Equations contain ambiguities</literal>: one or
+            more equations can be parsed in more than one way. Use the
+            graphical parse viewer to understand what is going on.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Uninstantiated variable occurrence</literal>: a
+            variable occurs in the right-hand side of a condition or of a
+            complete equation but is has not been introduced earlier on in the
+            equation.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Negative condition introduces
+            variable(s).</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Uninstantiated variables in both sides of
+            condition.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Uninstantiated variables in equality
+            condition.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Right-hand side of matching condition introduces
+            variables.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Matching condition does not introduce new
+            variables.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Strange condition encountered.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>Left hand side is contained in a
+            list.</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>No variables may be introduced in left hand side of
+            test.</literal></para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section xml:id="CommonSyntaxErrors">
+      <title>Common Syntax Errors in Specifications or Input Terms</title>
+
+      <para>Syntax errors are unavoidable when writing any program or
+      specification. Here we have collected some case that are typical for
+      ASF+SDF:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="SyntaxErrorsEquations">Parse error after
+          equations keyword</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="SyntaxErrorsTag">Equation tag does not parse
+          correctly</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="SyntaxErrorsEquals">Parse error in equation
+          just after = sign</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="SyntaxErrorsConditions">Parse error in
+          conditions</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="SyntaxErrorsTerms">Common syntax errors in
+          input terms</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="AmbiguitiesEquations">Ambiguities in
+          equations</link>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <section xml:id="SyntaxErrorsEquations">
+        <title>Parse Error after Equations Keyword</title>
+
+        <para>Consider the specification in <link
+        linkend="BlackOrWhite.sdf">BlackOrWhite.sdf</link> and <link
+        linkend="BlackOrWhite.asf">BlackOrWhite.asf</link>. They define a sort
+        <literal>BlackOrWhite</literal> which contains the values
+        <literal>black</literal> and <literal>white</literal> and a
+        <literal>flip</literal> function to switch colors.</para>
+
+        <example xml:id="BlackOrWhite.sdf">
+          <title>BlackOrWhite.sdf</title>
+
+          <programlisting>module BlackOrWhite
+exports
+   sorts BlackOrWhite
+   context-free syntax
+     "white" -&gt; BlackOrWhite
+     "black" -&gt; BlackOrWhite
+
+    flip(BlackOrWhite) -&gt; BlackOrWhite</programlisting>
+        </example>
+
+        <example xml:id="BlackOrWhite.asf">
+          <title>BlackOrWhite.asf</title>
+
+          <programlisting>equations
+[1] flip(black) = white
+[2] flip(white) = black</programlisting>
+        </example>
+
+        <para>After carefully designing this specification, you save it. To
+        your distress, you get an error message that resembles the
+        following:</para>
+
+        <screen>character '' expected, line 2, column 0</screen>
+
+        <para>What is going on here? Well, actually two things:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The message tries to tell you that it could not parse the
+            newline symbol at the end of the first line (but the actual
+            newline is not properly displayed in the message).</para>
+          </listitem>
+
+          <listitem>
+            <para>You have forgotten to include
+            <literal>basic/Comments</literal> in your module.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>This is easily corrected as shown in <link
+        linkend="BlackOrWhiteCorrected.sdf">BlackOrWhiteCorrected.sdf</link>
+        and <link
+        linkend="BlackOrWhiteCorrected.asf">BlackOrWhiteCorrected.asf</link>.</para>
+
+        <example xml:id="BlackOrWhiteCorrected.sdf">
+          <title>BlackOrWhiteCorrected.sdf</title>
+
+          <programlisting>module BlackOrWhiteCorrected
+exports
+   imports basic/Comments              <co
+              xml:id="co.blackorwhitecorreccted.1" />
+   sorts BlackOrWhite
+   context-free syntax
+     "white" -&gt; BlackOrWhite
+     "black" -&gt; BlackOrWhite
+
+    flip(BlackOrWhite) -&gt; BlackOrWhite</programlisting>
+
+          <para>Note:</para>
+
+          <calloutlist>
+            <callout arearefs="co.blackorwhitecorreccted.1">
+              <para>The missing import is inserted here.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <example xml:id="BlackOrWhiteCorrected.asf">
+          <title>BlackOrWhiteCorrected.asf</title>
+
+          <programlisting>equations
+[1] flip(black) = white
+[2] flip(white) = black</programlisting>
+        </example>
+      </section>
+
+      <section xml:id="SyntaxErrorsTag">
+        <title>Tag of Equation does not parse</title>
+
+        <para>Now let's embellish the previous example further by giving
+        better names to the equations. See <link
+        linkend="BlackOrWhiteWithTags.asf">BlackOrWhiteWithTags.asf</link>.<example
+            xml:id="BlackOrWhiteWithTags.asf">
+            <title>BlackOrWhiteWithTags.asf</title>
+
+            <programlisting>equations
+[flip] flip(black) = white
+[flip] flip(white) = black</programlisting>
+          </example></para>
+
+        <para>Unfortunately, this leads to an error message in the following
+        spirit:</para>
+
+        <screen>character ']' unexpected, line 2, column 6</screen>
+
+        <para>The explanation is that the tag of an equation (here:
+        <literal>flip</literal>) and a function name in the specification
+        (here also <literal>flip</literal>) interfere with each other. The
+        simple solution is shown in <link
+        linkend="BlackOrWhiteWithCorrectedTags.asf">BlackOrWhiteWithCorrectedTags.asf</link>.
+        Whether you change <literal>[flip]</literal> to
+        <literal>[flip1]</literal>, <literal>[flip-1]</literal>,
+        <literal>[flipa]</literal>, or something else is not important as long
+        as you avoid the tag <literal>[flip]</literal> itself.</para>
+
+        <example xml:id="BlackOrWhiteWithCorrectedTags.asf">
+          <title>BlackOrWhiteWithCorrectedTags.asf</title>
+
+          <programlisting>equations
+[flip-1] flip(black) = white
+[flip-2] flip(white) = black</programlisting>
+        </example>
+      </section>
+
+      <section xml:id="SyntaxErrorsEquals">
+        <title>Parse Error in Equation just after = Sign</title>
+
+        <para>It is not unusual to equate the Boolean values
+        <literal>true</literal> and <literal>false</literal> with the
+        respective integers <literal>1</literal> and <literal>0</literal>. You
+        specify this in <link linkend="BoolAsInt.sdf">BoolAsInt.sdf</link> and
+        <link linkend="BoolAsInt.asf">BoolAsInt.asf</link>.</para>
+
+        <example xml:id="BoolAsInt.sdf">
+          <title>BoolAsInt.sdf</title>
+
+          <programlisting>module BoolAsInt
+exports
+  imports basic/Comments</programlisting>
+        </example>
+
+        <example xml:id="BoolAsInt.asf">
+          <title>BoolAsInt.asf</title>
+
+          <programlisting>equations
+[t1] true  = 1
+[f0] false = 0</programlisting>
+        </example>
+
+        <para>You are confident that you did a good job: a proper tag, a
+        Boolean constant on the left-hand side and Integer constant on the
+        right-hand side of each equation. Unfortunately, this experiment ends
+        prematurely in the following error message:</para>
+
+        <screen>character '1' unexpected, line 2, column 14</screen>
+
+        <para>The story behind this error is as follows. The implementors of
+        The Meta-Environment are clever (maybe too clever?) and they use the
+        parser to do the type checking of equations as well. In this example,
+        the left-hand side is of type Boolean and the right-hand side of type
+        Integer, a clear type error. Unfortunately, the system reports this
+        type error as a parse error. A likely solution for this problem is to
+        introduce a new sort <literal>BoolOrInt</literal> that contains both
+        Booleans and Integers. Now, the above equations can be parsed as
+        equations over this new sort.</para>
+      </section>
+
+      <section xml:id="SyntaxErrorsConditions">
+        <title>Syntax Errors in Conditions</title>
+
+        <para>It is sometimes hard to find syntax errors in conditional
+        equations with many, complex, conditions. Here are the most likely
+        causes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A textual error in one of the sides of a condition. Remedy:
+            correct it.</para>
+          </listitem>
+
+          <listitem>
+            <para>A parse error just before the right-hand side of a
+            condition. Probably a type check error disguised as a parse error
+            (see <link linkend="SyntaxErrorsEquals">Parse Error in Equation
+            just after = Sign</link>). Remedy: check the sorts of the
+            arguments and the results of the functions on both sides of the
+            condition and correct the type error.</para>
+          </listitem>
+
+          <listitem>
+            <para>Conditions are separated by commas and, unfortunately, these
+            commas <emphasis>have</emphasis> to be there. They are easily
+            forgotten. Remedy: add the missing comma.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="SyntaxErrorsTerms">
+        <title>Common Syntax Errors in Input Terms</title>
+
+        <para>When you have completed your specification you want to write
+        some input terms and parse and reduce them in order to validate your
+        specification. As in ordinary programming when you are hit by a syntax
+        error detected by the compiler, you can also get a parse error after
+        entering an input term. There are three possible explanations for
+        this:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>You simply made a textual error in the input term. Remedy:
+            correct the textual error and try again.</para>
+          </listitem>
+
+          <listitem>
+            <para>You made an error in your syntax definition; the input can
+            impossibly be parsed according to the given syntax definition.
+            Remedy: adjust the syntax definition and try again.</para>
+          </listitem>
+
+          <listitem>
+            <para>None of the above seems to apply. In this case it is likely
+            that you want to parse an input term for some sort, say
+            <replaceable>S</replaceable>, but a start symbols declaration for
+            the sort <replaceable>S</replaceable> is missing. Remedy: add a
+            start symbols declaration for <replaceable>S</replaceable> and try
+            again. <remark>Add cross ref to start symbols.</remark></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="AmbiguitiesEquations">
+        <title>Ambiguities in Equations</title>
+
+        <para><remark>Can we give some hints here?</remark></para>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Dynamic warnings and errors</title>
+
+    <section xml:id="CommonExecutionErrors">
+      <title>Common Errors when Executing Specifications</title>
+
+      <para><remark>The examples in this section have not yet been
+      checked.</remark></para>
+
+      <para>Apart from the warnings and errors that are detected before
+      execution, various errors remain that are only discovered during
+      execution. We will use the factorial function as running example, see
+      <link linkend="Fac.sdf">Fac.sdf</link> and <link
+      linkend="Fac.asf">Fac.asf</link>.<example xml:id="Fac.sdf">
+          <title>Fac.sdf</title>
+
+          <programlisting>module Fac
+exports
+  imports Multiplier   <co xml:id="co.fac.multiplier" />
+
+  context-free syntax
+     fac(NUM) -&gt; NUM</programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.fac.multiplier">
+              <para>We re-use here the module <literal>Multiplier</literal>
+              defined <link
+              linkend="AdditionMultiplicationOfNumerals">earlier</link>.
+              Observe that <link linkend="Numerals.sdf">Numerals.sdf</link>
+              exports two variables <literal>X</literal> and
+              <literal>Y</literal> that we are now happy to re-use. Note
+              however, that it is in general considered bad practice to export
+              variables from a module.</para>
+            </callout>
+          </calloutlist>
+        </example></para>
+
+      <para><example xml:id="Fac.asf">
+          <title>Fac.asf</title>
+
+          <programlisting>equations
+[fac0] fac(0)       = succ(0)
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===&gt; fac(succ(<replaceable>X</replaceable>)) = mul(<replaceable>X</replaceable>,fac(<replaceable>X</replaceable>))</programlisting>
+        </example></para>
+
+      <section>
+        <title>Missing Equations</title>
+
+        <para>If the normal form of a term still contains function symbols
+        that should have been removed during rewriting, you probably
+        have</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>forgotten</emphasis> one or more equations that
+            define the function,</para>
+          </listitem>
+
+          <listitem>
+            <para>made an <emphasis>error in one of the conditions</emphasis>
+            that prevents one of the equations from being applied in some
+            cases.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>A typical example of a forgotten equation is shown in <link
+        linkend="FacError1.asf">FacError1.asf</link>.<example
+            xml:id="FacError1.asf">
+            <title>FacError1.asf</title>
+
+            <programlisting>equations
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===&gt; fac(succ(<replaceable>X</replaceable>)) = mul(X,fac(<replaceable>X</replaceable>))</programlisting>
+          </example></para>
+
+        <para>Trying to reduce <literal>fac(0)</literal> will now yield
+        <literal>fac(0)</literal> instead of
+        <literal>succ(0)</literal>.</para>
+      </section>
+
+      <section xml:id="CommonErrors.Order">
+        <title>Execution depends on Ordering of Equations</title>
+
+        <para>If the left-hand sides of two equations can match the same term,
+        then two reductions are possible and the outcome of rewriting becomes
+        uncertain. Consider the example in <link
+        linkend="FacError2asf">FacError2.asf</link> where the condition in
+        equation <literal>[fac2]</literal> is forgotten. Now the left-hand
+        sides of both<literal>[fac1]</literal> and <literal>[fac2]</literal>
+        can match the term <literal>fac(succ(0))</literal> and lead to
+        different outcomes depending on the implementation. Always make sure
+        that such overlapping left-hand sides are guarded by a condition that
+        determines which equation to apply.</para>
+
+        <para><example xml:id="FacError2asf">
+            <title>FacError2.asf</title>
+
+            <programlisting>equations
+[fac0] fac(0)       = succ(0)
+[fac1] fac(succ(0)) = succ(0)
+[fac2] fac(succ(<replaceable>X</replaceable>)) = mul(<replaceable>X</replaceable>,fac(<replaceable>X</replaceable>))</programlisting>
+          </example></para>
+      </section>
+
+      <section>
+        <title>Incorrect Inductive Definition</title>
+
+        <para>As in any language, if the equations that describe the induction
+        over a given structure are wrong, this may lead to infinite recursion.
+        Consider the erroneous definition of the factorial function in <link
+        linkend="FacError3.asf">FacError3.asf</link>.</para>
+
+        <para><example xml:id="FacError3.asf">
+            <title>FacError3.asf</title>
+
+            <programlisting>equations
+[fac0] fac(0)       = succ(0)
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===&gt; fac(succ(<replaceable>X</replaceable>)) = mul(<replaceable>X</replaceable>,fac(succ(<replaceable>X</replaceable>)))</programlisting>
+          </example></para>
+
+        <important>
+          <para>Don't try this at home :-)</para>
+
+          <para>Currently, The ASF+SDF Meta-Environment does not have good
+          support for recovering from non-terminating specifications. In some
+          cases the system can recover gracefully, for instance, when a stack
+          overflow is discovered, in other cases you have to restart the
+          system.</para>
+        </important>
+      </section>
+
+      <section>
+        <title>Non-termination due to Commutative Equations</title>
+
+        <para>Some operators are inherently commutative, i.e., it does not
+        matter in which order the arguments occur. It is tempting to express
+        this in a specification.</para>
+
+        <para>Consider the following, extended, definition of addition in
+        <link linkend="AdderError.asf">AdderError.asf</link>. Mathematically,
+        this is a fine specification. However, executing
+        <emphasis>may</emphasis> lead to non-termination. The careful reader
+        will observe that equation [0] also overlaps with equations [1] and
+        [2], therefore the outcome is uncertain as explained <link
+        linkend="CommonErrors.Order">above</link>.<example
+            xml:id="AdderError.asf">
+            <title><literal>AdderError.asf</literal></title>
+
+            <programlisting>equations                             
+
+[0] add(<replaceable>X</replaceable>, <replaceable>Y</replaceable>) = add(<replaceable>Y</replaceable>, X<replaceable>)</replaceable>   <co
+                xml:id="co.adder.error-1" />
+[1] add(0, <replaceable><replaceable>X</replaceable></replaceable>) = <replaceable><replaceable>X</replaceable>                     </replaceable>
+[2] add(succ(<replaceable><replaceable>X</replaceable></replaceable>), <replaceable>Y</replaceable>) = succ(add(<replaceable><replaceable>X</replaceable></replaceable>,<replaceable><replaceable>Y</replaceable></replaceable>))  </programlisting>
+
+            <para>Notes:</para>
+
+            <calloutlist>
+              <callout arearefs="co.adder.error-1">
+                <para>New equation that expresses commutativity of
+                addition.</para>
+              </callout>
+            </calloutlist>
+          </example></para>
+      </section>
+
+      <section>
+        <title>Non-termination due to Commutative List Equations</title>
+
+        <para>Commutative equations may also occur in the disguise of an
+        equation containing list matching.</para>
+
+        <para>The specification of sets in <link
+        linkend="ItemSet.sdf">ItemSet.sdf</link> and <link
+        linkend="ItemSet.asf">ItemSet.asf</link> illustrates a specification
+        that leads to non-termination since equation<literal>[2]</literal>,
+        which expresses that two elements in a set may be exchanged, will lead
+        to an infinite rewriting loop.</para>
+
+        <example xml:id="ItemSet.sdf">
+          <title>ItemSet.sdf</title>
+
+          <para><programlisting>module ItemSet
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Set
+  sorts Item Set 
+
+  lexical syntax
+    [a-z]+ -&gt; Item 
+
+  context-free syntax
+    Set[Item] -&gt; Set
+
+hiddens
+  variables
+    "<citetitle>I</citetitle>"[0-9]* -&gt; Item
+    "<replaceable>L</replaceable>"[0-9]* -&gt; {Item ","}*</programlisting></para>
+        </example>
+
+        <para><example xml:id="ItemSet.asf">
+            <title>ItemSet.asf</title>
+
+            <para><programlisting>equations
+[1] {<replaceable>L1</replaceable>, <replaceable>I</replaceable>, <replaceable>L2</replaceable>, <replaceable>I</replaceable>, <replaceable>L3</replaceable>}   = {<replaceable>L1</replaceable>, <replaceable>I</replaceable>, <replaceable>L2</replaceable>, <replaceable>L3</replaceable>} 
+[2] {<replaceable>L1</replaceable>, <replaceable>I1</replaceable>, <replaceable>L2</replaceable>, <replaceable>I2</replaceable>, <replaceable>L3</replaceable>} = {<replaceable>L1</replaceable>, <replaceable>I2</replaceable>, <replaceable>L2</replaceable>, <replaceable>I1</replaceable>, <replaceable>L3</replaceable>} </programlisting></para>
+          </example></para>
+      </section>
+
+      <section>
+        <title>Erroneous Conditions</title>
+
+        <para><remark>Add examples here.</remark></para>
+
+        <para>There are a few issues to be aware of when writing
+        conditions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>When using the inequality operator <literal>!=</literal> in
+            a condition, no new variables may be introduced in either side of
+            the inequality.</para>
+          </listitem>
+
+          <listitem>
+            <para>Be careful when a condition contains both instantiated and
+            uninstantiated variables.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+</article>
