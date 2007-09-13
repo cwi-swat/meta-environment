@@ -1,5 +1,0 @@
-equations
-
-  [fib-0] fib(0) = succ(0)
-  [fib-1] fib(succ(0)) = succ(0)
-  [fib-n] fib(succ(succ(X))) = add(fib(succ(X)), fib(X))

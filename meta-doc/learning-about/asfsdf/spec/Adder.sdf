@@ -1,9 +1,0 @@
-module Adder
-exports
-  imports Numerals
-  context-free syntax
-      add(NUM, NUM)  -> NUM
-  variables
-      "X"          -> NUM
-      "Y"          -> NUM
-

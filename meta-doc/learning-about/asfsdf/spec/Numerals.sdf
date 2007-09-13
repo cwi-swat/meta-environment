@@ -1,9 +1,0 @@
-module Numerals
-exports
- sorts NUM
- imports basic/Whitespace
-  context-free syntax
-      "0"          -> NUM
-      succ(NUM)    -> NUM
-  context-free start-symbols
-      NUM

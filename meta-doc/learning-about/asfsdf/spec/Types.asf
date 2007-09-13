@@ -1,7 +1,0 @@
-equations
-
-  [Type-1]  compatible(natural, natural) = true
-
-  [Type-2]  compatible(string, string) = true
-
-  [default-Type] compatible(Type1,Type2) = false   
