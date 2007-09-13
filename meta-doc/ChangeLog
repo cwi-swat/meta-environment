@@ -1,5 +1,9 @@
 
 
+Thu Sep 13 17:18:15 CEST 2007 <jurgenv@cwi.nl>
+ * website.xml,pubdate.xsl: documents that have a <pubdate> tag will
+   get the date of the last commit substituted inside.
+
 Mon May 14 15:31:54 CEST 2007 <jurgenv@cwi.nl>
  * sdf.xml: wrote and moved disambiguation section.
 

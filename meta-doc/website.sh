@@ -18,6 +18,11 @@ getTitle() {
   echo ${TITLE}
 }
 
+getPubdate() {
+  DOCBOOK=$1
+  svn info ${DOCBOOK} | grep "Last Changed Date" | sed 's/^.*: //'
+}
+
 INDEX="${WEB}/index.html"
 echo "<html><head><title>" > ${INDEX}
 echo " Online Documentation of The Meta-Environment" >> ${INDEX}
@@ -44,17 +49,20 @@ for cat in ${CATEGORIES}; do
       mkdir -p ${WEB}/$cat/$book
       cp $cat/$book/*.{png,jpg,gif} ${WEB}/$cat/$book >& /dev/null || true
       if [ -f $cat/$book/$book.xml ]; then
+	pubdate=`getPubdate ${cat}/${book}/${book}.xml`
 	svn log --xml ${cat}/${book}/${book}.xml  | \
 	xsltproc  --output ${WEB}/$cat/$book/$book.log.html ./svnlog2html.xsl -
-	(xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
+	(xsltproc --stringparam now "${pubdate}" ./pubdate.xsl $cat/$book/$book.xml | \
+	 xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
                    --output ${WEB}/$cat/$book/$book.html \
 		   --xinclude \
                    --stringparam callout.graphics.path ../../images/callouts/ \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
                    --param xref.with.number.and.title 0 \
-                   ${DOCBOOKXSLHTML} $cat/$book/$book.xml)
-	(xsltproc  --output ${WEB}/$cat/$book/$book.fo \
+                   ${DOCBOOKXSLHTML} -)
+	(xsltproc --stringparam now "${pubdate}" ./pubdate.xsl $cat/$book/$book.xml | \
+	 xsltproc  --output ${WEB}/$cat/$book/$book.fo \
                    --param xref.with.number.and.title 0 \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
@@ -62,7 +70,7 @@ for cat in ${CATEGORIES}; do
 		   --xinclude \
                    --stringparam callout.graphics.path ../../images/callouts/ \
                    --stringparam paper.type A4 \
-                   ${DOCBOOKXSLFO} $cat/$book/$book.xml)
+                   ${DOCBOOKXSLFO} -)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
         rm ${WEB}/$cat/$book/$book.fo
         
