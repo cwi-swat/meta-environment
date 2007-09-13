@@ -1,0 +1,3283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>The Syntax Definition Formalism SDF</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Mark</firstname><surname>van den
+        Brand</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+
+    <pubdate>now</pubdate>
+  </info>
+
+  <warning>
+    <para>This document was recently rewritten (May 11th 2007). It is
+    up-to-date with the latest version of SDF. References to ASF+SDF syntax
+    and semantics have been removed and descriptions of syntax and semantics
+    of SDF have been brought up-to-date with the current state. Please contact
+    <email>meta-devel-list@cwi.nl</email> if you would like to contribute to
+    this document.</para>
+  </warning>
+
+  <section xml:id="introduction">
+    <title>An Introduction to SDF</title>
+
+    <para>If you want to:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>describe the syntax of an existing language like C, C++, Java,
+        or Cobol,</para>
+      </listitem>
+
+      <listitem>
+        <para>describe an embedded language and need to combine several
+        language grammars,</para>
+      </listitem>
+
+      <listitem>
+        <para>describe the syntax of your newly designed domain-specific
+        language,</para>
+      </listitem>
+
+      <listitem>
+        <para>get a front-end for the semantic analysis of programming or
+        application languages,</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>then SDF may be the right technology to use.</para>
+
+    <section xml:id="why">
+      <title xml:id="YetAnotherFormalism">Why use SDF?</title>
+
+      <para>The Syntax Definition Formalism SDF is intended for the high-level
+      description of grammars for programming languages, application
+      languages, domain-specific languages, data formats and other
+      computer-based formal languages. The primary goal of any SDF definition
+      is the description of syntax. The secondary goal is to generate a
+      working parser from this definition. A parser is a tool that takes a
+      string that represents a program as input and outputs a tree that
+      represents the same program in a more structured form. SDF is based
+      mainly on context-free grammars, like EBNF is. It has a number of
+      additions that make it more apt to describe the syntax of really complex
+      programming languages. Especially the languages that were not originally
+      designed to be formally defined, or to have parsers generated for, are
+      the ones that SDF is meant to be applicable to.</para>
+
+      <para>These are the unique selling points of SDF, from the language
+      definition point of view:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>SDF allows modular grammar definitions. This enables the
+          combination and re-use of grammars and makes it easy to handle
+          embedded languages or different dialects of a common base language.
+          It means that you are allowed to write any grammar in SDF, not just
+          LALR(1) or LL(1) grammars.</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF allows more declarative grammars definitions and this
+          results in simpler and more "natural" grammars that are not polluted
+          by idiosyncrasies of particular parsing techniques. This allows an
+          SDF definition to be independent of the implementation of
+          SDF.</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF allows the integrated definition of lexical and
+          context-free syntax.</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF allows declarative disambiguation. For typical ambiguous
+          constructs in programming languages SDF allows you to define a
+          disambiguation with mathematical precision. Note however that SDF
+          does not have a disambiguation construct for every possible
+          ambiguity.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The implementation of SDF is the combination of an SLR(1) parse
+      table generator and a scannerless generalized LR parser.The goal of this
+      implementation is to fully implement all expressiveness that is
+      available in SDF, and avoiding any hidden implementation details.</para>
+
+      <para>These are the unique selling points of the implementation of SDF,
+      from the parser generation point of view:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>There is no seperate scanner. This prevents all kinds of
+          "lexical ambiguity" to occur at all, simply because the parser has
+          more context information.</para>
+        </listitem>
+
+        <listitem>
+          <para>It accepts all context-free grammars, including the ambiguous
+          ones. Many programming languages do not only have LR(1) conflicts,
+          they truly have ambiguous syntaxes (like C for example).</para>
+        </listitem>
+
+        <listitem>
+          <para>It generates all ambiguous derivations, so no implicit choices
+          are made. This is done without backtracking, and without the
+          possibility for exponential behavior.</para>
+        </listitem>
+
+        <listitem>
+          <para>It constructs parse trees automatically, and the optional
+          mapping from parse trees to abstract syntax trees is also
+          provided.</para>
+        </listitem>
+
+        <listitem>
+          <para>It implements the SDF disambiguation constructs as parse tree
+          filters in an efficient manner.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that the language definition point of view, and the parser
+      generation point of view are closely related. Because of SDF's focus on
+      the definition of languages and explicitly declaring disambiguations it
+      is particulary well suited for situations that have "language
+      multiplicity":</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Having to deal with many language dialects (such as in reverse
+          engineering COBOL programs)</para>
+        </listitem>
+
+        <listitem>
+          <para>Dealing with embedded languages (SQL in COBOL/C)</para>
+        </listitem>
+
+        <listitem>
+          <para>Dealing with language extensions (Java with AspectJ)</para>
+        </listitem>
+
+        <listitem>
+          <para>Dealing with domain specific languages (many small languages,
+          and DSL evolution)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The basic assumption of SDF is that <emphasis>all</emphasis>
+      derivations of an input string will be produced. This guarantees that
+      <emphasis>no implicit disambiguation</emphasis> will take place. To
+      disambiguate, the user has to give explicit (declarative) disambiguation
+      rules. Examples of disambiguation rules are
+      <emphasis>longest-match</emphasis> and <emphasis>priorities</emphasis>.
+      By making all these <emphasis>language design choices</emphasis>
+      explicit in a concise manner, SDF allows you to deal with language
+      multiplicity in a more visible (controlled) fashion. In that way high
+      level syntax definition in SDF is like high level programming.</para>
+    </section>
+
+    <section>
+      <title>How to use SDF</title>
+
+      <para>On the one hand, SDF can be used to simply define a language, in
+      order to communicate it as documentation. There are tools that support
+      this use case; checking the definition for inconsistencies and other
+      basic editing support. On the other hand, SDF is often used to obtain a
+      parser for the defined language. Sometimes, SDF is used for other kinds
+      of processing.</para>
+
+      <section>
+        <title>How to define a language</title>
+
+        <para>Of course you can define an SDF specification in any editor.
+        There is an IDE for SDF called the SDF Meta-Environment, of which the
+        ASF+SDF Meta-Environment is an extension. This IDE supports SDF
+        definition with all kinds of user-interface features (syntax
+        highlighting, static checking, parse forest visualization, metrics and
+        refactoring).</para>
+      </section>
+
+      <section>
+        <title>How to generate a parser</title>
+
+        <para>To generate a parser from an SDF definition you may use the
+        implementation of SDF. You can use The SDF Meta-Environment, The
+        ASF+SDF Meta-Environment or the commandline tools
+        <command>sdf2table</command> and <command>sglr</command>.</para>
+      </section>
+    </section>
+
+    <section xml:id="learningmore">
+      <title>Learning more</title>
+
+      <para>The following references on SDF may be interesting for you:</para>
+
+      <warning>
+        <para>TODO Add links!</para>
+      </warning>
+
+      <itemizedlist>
+        <listitem>
+          <para>Syntax Analysis, this documents refreshes your knowledge of
+          grammars and parsing in general</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF Disambiguation Med kit for Programming Languages, this
+          document focuses on SDF disambiguation constructs and how to solve
+          common issues when developing SDF grammars</para>
+        </listitem>
+
+        <listitem>
+          <para>Guided Tour: Playing with the Booleans, This interactive
+          demonstrations shows some of the features of SDF in the context of
+          The Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>SDF definition of SDF, this is the final reference (and
+          implementation) of the syntax of SDF</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="overview">
+      <title>This document</title>
+
+      <para>In this document we describe the syntax of SDF and its basic
+      semantics. It is a basic but complete reference manual for SDF based on
+      small examples. This document is loosely <link
+      linkend="sdfgraph">structured</link> according to the syntactic
+      structure of SDF: <link linkend="modules">modules</link>, <link
+      linkend="grammars">grammars</link> and <link
+      linkend="symbols">symbols</link>. After we have described all of it, we
+      continue with a set of <link linkend="examples">examples</link>. The
+      document ends with special sections on <link
+      linkend="wellformedness">well-formedness</link>, <link
+      linkend="disambiguation">disambiguation</link> and the <link
+      linkend="history">history of SDF</link>. This document does not detail
+      the usage of the implementations of SDF (<command>sdf2table</command>
+      and <command>sglr</command>).</para>
+
+      <para><figure xml:id="sdfgraph">
+          <title>The hierarchical structure of the SDF syntax, extracted from
+          the SDF definition of SDF</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" fileref="sdfgraph.png" scalefit="1"
+                         width="100%"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>As an index to this document, the following example exhibits
+      almost all features of SDF with references to the appropriate sections.
+      SDF keywords are highlighted in boldface.</para>
+
+      <programlisting><emphasis role="bold"><link linkend="modules">module</link></emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]           
+  <emphasis role="bold"><link linkend="imports">imports</link></emphasis> basic/Whitespace                                           
+  <emphasis role="bold">imports</emphasis> utilities/Parsing<link
+          linkend="parameters">[Expr]</link>                                     
+  <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions<link
+          linkend="renamings">[Expression =&gt; Expr]</link>   
+<emphasis role="bold"><link linkend="modules">exports</link></emphasis>                                                               
+ <emphasis role="bold"><link linkend="sorts">sorts</link></emphasis> Identifier Expr List Stat                                      
+ <emphasis role="bold"><link linkend="lexicalsyntax">lexical syntax</link></emphasis>                                                       
+   <link linkend="characters">[A-Z]</link>[a-z]<link linkend="lists">+</link> -&gt; <link
+          linkend="sort">Identifier</link>                                           
+ <emphasis role="bold">lexical <link linkend="restrictions">restrictions</link></emphasis>                                                 
+   Identifier -/- [a-z]                                              
+ <emphasis role="bold"><link linkend="contextfreesyntax">context-free syntax</link></emphasis>                                                  
+   Identifier    -&gt; Expr {<emphasis role="bold"><link linkend="attributes">cons</link></emphasis>("name")}                               
+   <link linkend="lists">Expr*</link>         -&gt; <link linkend="sort">List[[Param1]]</link>                                              
+   <link linkend="literals">"if"</link> Expr "then" <link linkend="lists">{Param2 ";"}+</link> "else" {Param2 ";"}+ "fi" -&gt; Param2           
+   "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
+          role="bold"><link linkend="attributes">prefer</link></emphasis>}   
+ <emphasis role="bold">context-free syntax</emphasis>      
+   "if" <link linkend="alternatives">|</link> "then" <link
+          linkend="alternatives">|</link> "fi"  -&gt; Identifier {<emphasis
+          role="bold"><link linkend="attributes">reject</link></emphasis>}                                 
+ <emphasis role="bold">context-free <link linkend="priorities">priorities</link></emphasis>                                                        
+   Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold"><link
+            linkend="attributes">left</link></emphasis>}  &gt;                                              
+   Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}                                                 
+<emphasis role="bold"><link linkend="modules">hiddens</link></emphasis>                                                               
+ <emphasis role="bold"><link linkend="variables">variables</link></emphasis>                                                            
+   "Id"[0-9\']* -&gt; Identifier                                     
+ <emphasis role="bold"><link linkend="lexicalvariables">lexical variables</link></emphasis>                                                    
+   "Head" -&gt; [A-Z]
+   "Tail" -&gt; [a-z]+</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="lifecycle">
+    <title>The life-cycle of an SDF definition</title>
+
+    <para>Every SDF grammar has a life-cycle, just like any other software
+    has. This is the life-cycle of an SDF grammar (see also this <link
+    linkend="architecture">overview</link> figure):</para>
+
+    <orderedlist>
+      <listitem>
+        <para>A user types in the modules of an SDF grammar, including the
+        production rules and disambiguation constructs.</para>
+      </listitem>
+
+      <listitem>
+        <para>The modules are concatenated into one single definition.</para>
+      </listitem>
+
+      <listitem>
+        <para>The syntax definition is given as input to the
+        <accel>sdf2table</accel> tool:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>The syntax definition is checked for trivial errors by the
+            <command>sdf-checker</command>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The syntax and the disambiguation constructs in the
+            definition are "normalized" to "kernel SDF", by removing all
+            syntactic sugar (expanding macros) and some other stuff.</para>
+          </listitem>
+
+          <listitem>
+            <para>The syntax is used to generate an SLR(1) parse table, and
+            the disambiguation constructs are used to filter some reductions
+            from the parse table</para>
+          </listitem>
+        </orderedlist>
+      </listitem>
+
+      <listitem>
+        <para>The resulting parse table can be used by the
+        <command>sglr</command> tool to parse strings. <command>sglr</command>
+        uses some of the disambiguation constructs to filter at parse time,
+        and just after it</para>
+      </listitem>
+
+      <listitem>
+        <para><command>sglr</command> reads in a file containing a program and
+        outputs a parse forest (or possibly a single parse tree, or a parse
+        error)</para>
+      </listitem>
+
+      <listitem>
+        <para>Other (back-end) tools take the parse forest and do
+        stuff.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>At any point in this process something may be erroneous and the
+    process starts from step 1. Step 2 can be done manually by the user, or
+    taken care of by The Meta-Environment. Step 3 and its contributing parts
+    (3.1-3.3) are done by the <command>sdf2table</command> commandline tool,
+    or by the ASF+SDF Meta-Environment. The steps 4 and 5 are done by the
+    <command>sglr</command> commandline tool, or by the ASF+SDF
+    Meta-Environment. Step 6 is open to any other tool that can read ATerms
+    (the output format of <command>sglr</command>).</para>
+
+    <para>One more thing, SDF definitions are not only used as input to parser
+    generators. There are tools that generate libraries for syntax tree
+    manipulation, and tools that analyze syntax definitions for example.
+    Recall that the primary goal of SDF is syntax definition, parser
+    generation is the most important secondary goal of SDF.</para>
+
+    <figure>
+      <title>Overview of the data flow of an SDF definition</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="parse-architecture.png" width="50%"
+                     xml:id="architecture"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Although this document is on SDF's syntax and semantics, and not its
+    implementation, the above overview is important. Especially point 3.2 is
+    an essential step for understanding the semantics of SDF. This document
+    describes in several places what certain SDF constructs mean by mapping
+    them to kernel SDF.</para>
+  </section>
+
+  <section xml:id="modules">
+    <title>Modules</title>
+
+    <section xml:id="basicmodules">
+      <title>Basic module structure</title>
+
+      <para>An SDF specification consists of a number of module declarations.
+      The <command>sdf2table</command> commandline tool takes a file with all
+      modules concatenated and the word "definition" in front of them as
+      input. The ASF+SDF Meta-Environment accepts the modules in separate
+      files, each with the extension ".sdf". In that case, an SDF module must
+      be in a file named exactly as the name of the module.</para>
+
+      <para>Each module may define lexical syntax, context-free syntax and
+      disambiguations. Modules may import other modules for reuse or
+      separation of concerns. A module may extend the definition of a
+      non-terminal in another module. A module may compose the definition of a
+      language by importing the parts of the language.</para>
+
+      <note>
+        <para>SDF modules do not hide names in principle, there is no
+        "private/public" mechanism. So beware of name clashes. Later we will
+        see how the renaming facility can be used to solve name clashes
+        declaratively. There is an "hiddens/exports" mechanism however, but it
+        does not only hide names, it also hides the complete definitions from
+        importing modules. More on that mechanism later too.</para>
+      </note>
+
+      <para>The basic structure of a module is this. The module keyword is
+      followed by the module name, then a series of imports can be made,
+      followed by the actual definition of the syntax:<programlisting><emphasis
+            role="bold">module</emphasis> &lt;ModuleName&gt;
+  &lt;ImportSection&gt;*
+  &lt;ExportOrHiddenSection&gt;*</programlisting></para>
+
+      <para>A <literal>&lt;ModuleName&gt;</literal> is either a simple
+      <literal>&lt;ModuleId&gt;</literal> or a
+      <literal>&lt;ModuleId&gt;</literal> followed by zero or more parameter
+      symbols, e.g., <literal>&lt;Module&gt;[&lt;Symbol&gt;*]</literal>, the
+      symbols will be explained <link linkend="symbols">later</link>. The
+      <literal>&lt;ModuleId&gt;</literal> may be a compound module name (i.e.
+      &lt;ModuleId&gt; separated by forward slashes), the
+      <literal>ModuleId</literal> reflects the directory structure. For
+      example <literal>basic/Booleans</literal> means that the module
+      <literal>Booleans</literal> is found in the subdirectory
+      <literal>basic</literal>.</para>
+    </section>
+
+    <section xml:id="hiddensandexports">
+      <title>Hiddens and exports sections</title>
+
+      <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
+      <emphasis>export section</emphasis> or a <emphasis>hidden
+      section</emphasis>. The former starts with the keyword
+      <literal>exports</literal> and makes all entities in the section visible
+      to other modules. The latter starts with the keyword
+      <literal>hiddens</literal> and makes all entities in the section local
+      to the module. So, hidden means that when another module imports that
+      module, none of the hiddens sections will be present in the composition.
+      The effect for parser generation is that only the hiddens sections of
+      top module of an SDF specification contribute to the parser
+      generation.</para>
+
+      <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> has thus one
+      of the two forms:<programlisting><emphasis role="bold">exports</emphasis> 
+  &lt;Grammar&gt;+</programlisting>or<programlisting><emphasis role="bold">hiddens</emphasis>
+  &lt;Grammar&gt;+</programlisting> A <literal>&lt;Grammar&gt;</literal> can
+      be a definition of one of the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="imports">Imports</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="aliases">Aliases</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="sorts">Sorts</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="startsymbols">Start-symbols</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="lexicalsyntax">Lexical syntax</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="contextfreesyntax">Context-free
+          syntax</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="priorities">Priorities</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="variables">Variables</link>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Each of these entities is described and illustrated in <link
+      linkend="grammars">Grammars</link>. Most grammars have <link
+      linkend="symbols">Symbols</link> as their basic building blocks. Symbols
+      are the SDF term for terminals and non-terminals. Note that it is
+      possible to have hidden imports as well, this means that the full
+      definition of the import definition is copied in the hiddens section of
+      the importing module.</para>
+    </section>
+
+    <section xml:id="parameters">
+      <title>Module parameters</title>
+
+      <para>Modules may have formal symbol parameters, which can be bound by
+      actual symbols using <link linkend="imports">imports</link>. The syntax
+      of module parameters is:</para>
+
+      <programlisting><emphasis role="bold">module</emphasis> &lt;ModuleName&gt; [ &lt;Symbol&gt;+ ]</programlisting>
+
+      <para>When the module is imported, all occurences of the formal
+      parameters will be substituted by the actual parameters.</para>
+    </section>
+
+    <section xml:id="definitions">
+      <title>Definitions</title>
+
+      <para>SDF modules may be collected in a single definition file, for
+      input to the <command>sdf2table</command> tool. The structure of the
+      definition file is as follows:</para>
+
+      <programlisting><emphasis role="bold">definition</emphasis>
+  &lt;Module&gt;+</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="comments">
+    <title>Comments</title>
+
+    <para>The comment convention within an SDF specification is that
+    characters between <literal>%%</literal> and the end of line is comment as
+    well as every character between two <literal>%</literal> characters
+    including the newline character. An example of the use of comments is
+    given <link linkend="CODE_sdfcomment">below</link>. This definition also
+    defines the comment convention in SDF itself. More details on defining
+    layout can be found in the section <link
+    linkend="restrictions">Restrictions</link>.</para>
+
+    <example xml:id="CODE_sdfcomments">
+      <title>SDF comments</title>
+
+      <para><programlisting xml:id="CODE_sdfcomment">module basic/Comments
+
+imports basic/Whitespace
+
+%% In this module we define the 
+%% comment convention for SDF.
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n" -&gt; LAYOUT
+    "%" ~[\%]+ "%" -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\%]</programlisting></para>
+
+      <para>Note that every line that has a <literal>%%</literal> must be
+      ended with a newline (even the last line in your SDF module
+      file).</para>
+    </example>
+  </section>
+
+  <section xml:id="symbols">
+    <title>Symbols</title>
+
+    <para>The elementary building block of SDF syntax rules is the symbol. It
+    is comparable to terminals and non-terminals in other grammar definition
+    formalisms. The elementary symbols are: <emphasis>literal</emphasis>,
+    <emphasis>sort</emphasis> and <emphasis>character class</emphasis>.</para>
+
+    <para>Since there is no real separation between lexical syntax and
+    context-free syntax in SDF, only character classes are real
+    <emphasis>terminal</emphasis> symbols. Sorts are user-defined
+    non-terminals. All other symbols are short-hands for non-terminals for
+    which the productions are generated for you by SDF (i.e. not user-defined
+    non-terminals). You may view these automatic symbols as macros that
+    generate frequently used grammatical design patterns for you.</para>
+
+    <para>Starting with the elementary symbols, more complex symbols can be
+    constructed by way of recursive symbol application. Examples of the use of
+    the various operators will be given in the section <link
+    linkend="examples">Examples</link>.</para>
+
+    <para>Remember that complex symbols such as, parameterized sorts, lists
+    and optionals are nothing but non-terminals. They carry no additional
+    semantics from the SDF point of view. However, there are back-ends (tools
+    applied after parsing) which attribute special semantics to these kinds of
+    symbols. ASF+SDF as a rewriting language is an example of a back-end that
+    provides additional semantics to SDF's symbols (but only after
+    parsing).</para>
+
+    <para>Symbols are an orthogonal feature of SDF. All symbols of SDF are
+    allowed in both lexical and context-free syntax, priorities and other
+    parts of SDF.</para>
+
+    <section xml:id="literals">
+      <title>Literal symbols</title>
+
+      <para>A <emphasis>literal</emphasis> symbol defines a fixed length word.
+      This usually corresponds to a terminal symbol in ordinary BNF grammars,
+      e.g., <literal>"true"</literal> or <literal>"&amp;"</literal>. Literals
+      must always be quoted, also the literals consisting of letters only. SDF
+      generates automatically one production for each literal in order to
+      define it in terms of terminal symbols.</para>
+
+      <programlisting>lexical syntax
+  "definition" -&gt; Definition</programlisting>
+
+      <para>will generate:</para>
+
+      <programlisting>[d][e][f][i][n][i][t][i][o][n] -&gt; "definition"</programlisting>
+
+      <para>The above obviously generates a case-sensitive implementation of
+      the defined literal. There are also case-insensitive literals. They are
+      defined using single quotes as in 'true' and 'def-word'. SDF generates a
+      different production to implement case insensitivity:</para>
+
+      <programlisting>[dD][eE][fF][\-][wW][oO][rR][dD] -&gt; 'def-word'</programlisting>
+
+      <para>In literals, the following characters are special and should be
+      escaped:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>"</literal>: double quote (\")</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>\</literal>: escape character (\\).</para>
+        </listitem>
+      </itemizedlist>
+
+      <warning>
+        <para>TODO, lookup escaping conventions of literals and ci
+        literals.</para>
+      </warning>
+    </section>
+
+    <section xml:id="sort">
+      <title>Sort symbols</title>
+
+      <para>A sort corresponds to a non-terminal, e.g.,
+      <literal>Bool</literal>. Sort names always start with a capital letter
+      and may be followed by letters and/or digits. Hyphens
+      (<literal>-</literal>) may be embedded in a sort name. Sort names should
+      be declared in a<link linkend="sorts"> <emphasis
+      role="bold">sorts</emphasis> section</link> to allow some static
+      consistency checking.</para>
+
+      <para>Sort names can have parameters. Parameterized sorts can be used to
+      implement grammar polymorphism, and to facilitate grammar reuse without
+      clashing sort names. It provides a way of distinguishing a
+      <literal>List</literal> of integers from a List of booleans, e.g.
+      <literal>List[[Int]]</literal>, versus <literal>List[[Bool]]</literal>.
+      The sort parameters are usually instantiated via the parameters of a
+      module or via renaming. A parameterized sort may have several
+      parameters, like <literal>List[[X,Y]]</literal>. See <link
+      linkend="parameters">parameters</link> for more details. Parameterized
+      sorts have the following form:<programlisting> &lt;Sort&gt;<emphasis
+            role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
+            role="bold">]]</emphasis></programlisting></para>
+    </section>
+
+    <section xml:id="characters">
+      <title>Character class symbols</title>
+
+      <para>Enumerations of characters occur frequently mostly in lexical
+      definitions. They can be abbreviated by using <emphasis>character
+      classes</emphasis> enclosed by <literal>[</literal> and
+      <literal>]</literal>. A character class contains a list of zero or more
+      characters (which stand for themselves) or character ranges such as, for
+      instance, <literal>[0-9]</literal> as an abbreviation for the characters
+      <literal>0</literal>, <literal>1</literal>, ..., <literal>9</literal>.
+      In a character range of the form
+      c<subscript>1</subscript><literal>-</literal>c<subscript>2</subscript>
+      one of the following restrictions should apply:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
+          both lower-case letters and c<subscript>2</subscript> follows
+          c<subscript>1</subscript> in the alphabet, or</para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
+          both upper-case letters and c<subscript>2</subscript> follows
+          c<subscript>1</subscript> in the alphabet, or</para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
+          both digits and the numeric value of c<subscript>2</subscript> is
+          greater than that of c<subscript>1</subscript>, or</para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>c<subscript>1</subscript> and c<subscript>2</subscript> are
+          both escaped non-printable characters and the character code of
+          c<subscript>2</subscript> is greater than that of
+          c<subscript>1</subscript></para>
+        </listitem>
+      </itemizedlist>
+
+      <para><emphasis role="bold">Escape Conventions</emphasis> Characters
+      with a special meaning in SDF may cause problems when they are needed as
+      ordinary characters in the lexical syntax. The backslash character
+      (<literal>\</literal>) is used as escape character for the quoting of
+      special characters. You should use
+      <literal>\</literal><replaceable>c</replaceable> whenever you need
+      special character <replaceable>c</replaceable> as ordinary character in
+      a definition. All individual characters in character classes, except
+      digits and letters, are <emphasis>always</emphasis> escaped with a
+      backslash.</para>
+
+      <para>You may use the following abbreviations in literals and in
+      character classes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>\n</literal>: newline character</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>\r</literal>: carriage return</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>\t</literal>: horizontal tabulation</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>\</literal><replaceable>x</replaceable>: a
+          non-printable character with the decimal code
+          <replaceable>x</replaceable>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><emphasis role="bold">Character Class Operators</emphasis> The
+      following operators are available for character classes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>~</literal>: complement of character class. Accepts
+          all characters not in the original class.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>/</literal>: difference of two character classes.
+          Accepts all characters in the first class unless they are in the
+          second class.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>/\</literal>: intersection of two character classes.
+          Accepts all characters that are accepted by both character
+          classes.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>\/</literal>: union of two character classes. Accepts
+          all characters that are accepted by either character class.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The first operator is a unary operator, whereas the other three
+      are left-associative binary operators. Note that the character class
+      operators are not applicable to symbols in general.</para>
+    </section>
+
+    <section xml:id="optionals">
+      <title>Optional symbols</title>
+
+      <para>The postfix option operator <literal>?</literal> describes an
+      optional part in a syntax rule. For instance,
+      <literal>ElsePart?</literal> defines zero or exactly one occurrence of
+      <literal>ElsePart</literal>. SDF generates the following syntax:</para>
+
+      <programlisting>          -&gt; ElsePart?
+ ElsePart -&gt; ElsePart?</programlisting>
+    </section>
+
+    <section xml:id="sequence">
+      <title>Sequence</title>
+
+      <para>The sequence operator <literal>(...)</literal> describes the
+      grouping of two or more symbols, e.g., <literal>(Bool
+      "&amp;")</literal>. Sequences are mostly used to group symbols together
+      to form a more complex symbol using one of the available operators,
+      e.g., <literal>(Bool "&amp;")*</literal>. It has no effect to construct
+      a sequence consisting of a single symbol, because then the (...)
+      brackets are simply brackets. The empty sequence is a special symbol.
+      SDF generates the following syntax for the <literal>(Bool
+      "&amp;")</literal> symbol:</para>
+
+      <programlisting>Bool "&amp;" -&gt; (Bool "&amp;")</programlisting>
+
+      <para>For <literal>()</literal> it simply generates:</para>
+
+      <programlisting> -&gt; ()</programlisting>
+    </section>
+
+    <section xml:id="lists">
+      <title>Repetition or list symbols</title>
+
+      <para>Repetition operators express that a symbol should occur several
+      times. In this way it is possible to construct flat lists and therefore
+      we usually refer to repetitions as \emph{lists}. Repetition operators
+      come in two flavors, with and without separators. Furthermore, it is
+      possible to express the minimal number of repetitions of the symbol: at
+      least zero times (<literal>*</literal>) or at least one time
+      (<literal>+</literal>). Examples are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>Bool*</literal> (a list of zero or more
+          <literal>Bool</literal>s).</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{Bool ","}+</literal> (a list of one or more
+          <literal>Bool</literal>s separated by comma's).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that the separator may be an arbitrary symbol, but that some
+      back-ends do not support parse trees that contain them. The sdf-checker
+      of the ASF+SDF Meta-Environment will warn you if you use anything but a
+      literal as a separator.</para>
+
+      <para>Again, to implement lists SDF simply generates a few production
+      for you, i.e.:</para>
+
+      <programlisting>             -&gt; Bool*
+ Bool+       -&gt; Bool*
+ Bool        -&gt; Bool+
+ Bool+ Bool+ -&gt; Bool+ {left}
+
+                             -&gt; {Bool ","}*
+ {Bool ","}+                 -&gt; {Bool ","}+
+ Bool                        -&gt; {Bool ","}+
+ {Bool ","}+ "," {Bool ","}+ -&gt; {Bool ","}+ {left}</programlisting>
+
+      <para>Note that there are some more productions generated, but they are
+      not shown here. SDF generates more productions to allow arbitrary
+      compositions of * and + lists, and also adds disambiguation filters to
+      deal with the ambiguity this introduces.</para>
+    </section>
+
+    <section xml:id="alternatives">
+      <title>Alternative symbols</title>
+
+      <para>The alternative operator <literal>|</literal> expresses the choice
+      between two symbols, e.g., <literal>"true" | "false"</literal>
+      represents that either a <literal>"true"</literal> symbol or a
+      <literal>"false"</literal> symbol may occur here. The alternative
+      operator is right associative and binds stronger than any other operator
+      on symbols. This is important because <literal>Bool "," | Bool ";"
+      </literal>expresses <literal>Bool ("," | Bool) ";"</literal> instead of
+      <literal>(Bool ",") | (Bool ";").</literal> So, in case of doubt use the
+      sequence operator in combination with the alternative operator.</para>
+
+      <para>For "," | ";" SDF generates:</para>
+
+      <programlisting>"," -&gt; "," | ";"
+";" -&gt; "," | ";"</programlisting>
+    </section>
+
+    <section xml:id="labels">
+      <title>Labelled symbols</title>
+
+      <para>It is possible to decorate the symbols with labels. The labels
+      have no semantics in SDF, and will be removed before parse table
+      generation. Other tools that take SDF definitions as input, such as API
+      generators make use of the labels.</para>
+
+      <para>So, labels are removed by replacing the labelled symbol with the
+      symbol, as in:</para>
+
+      <programlisting>mylist:{elem:Stat sep:";"}+
+is replaced by
+{Stat ";"}+</programlisting>
+    </section>
+
+    <section xml:id="tuples">
+      <title>Tuple symbols</title>
+
+      <para>The tuple operator describes the grouping of a sequence of symbols
+      of a fixed length into a tuple. The notation for tuples is <literal>&lt;
+      , , &gt;</literal>, i.e., a comma-separated list of elements enclosed in
+      angle brackets. For example, <literal>&lt;Bool, Int, Id&gt;</literal>
+      describes a tuple with three elements consisting of a
+      <literal>Bool</literal>, an <literal>Int</literal> and an
+      <literal>Id</literal> (in that order). For instance, <literal>&lt;true,
+      3, x&gt;</literal> is a valid example of such a tuple.</para>
+
+      <para>Tuple is one of the few symbols that actually introduce a fixed
+      syntax, i.e. the angular brackets. You may consider them as an arbitrary
+      shorthand. To define your own short hand, consider the use of
+      parameterized sorts and module parameters.</para>
+
+      <para>For <literal>&lt;A,B&gt;</literal> SDF generates:</para>
+
+      <programlisting>"&lt;" A "," B "&gt;" -&gt; &lt;A,B&gt;</programlisting>
+    </section>
+
+    <section xml:id="functionsymbols">
+      <title>Function symbols</title>
+
+      <para>The function operator <literal>(...=&gt;...)</literal> allows the
+      definition of function types. Left of <literal>=&gt;</literal> zero or
+      more symbols may occur, right of <literal>=&gt;</literal> exactly one
+      symbol may occur. For example, <literal>(Bool Int) =&gt; Int</literal>
+      represents a function with two argument (of types
+      <literal>Bool</literal> and <literal>Int</literal>, respectively) and a
+      result type <literal>Int</literal>. The function symbol may be used to
+      mimick a higher order type system. The function symbol also introduces
+      some arbitrary syntax (the ( ) brackets).</para>
+
+      <para>SDF generates the following syntax for (<literal>A B =&gt;
+      C</literal>):</para>
+
+      <programlisting>(A B =&gt; C) "(" A B ")" -&gt; C</programlisting>
+
+      <para>Read this as "something of type (A B =&gt; C) may be applied to A
+      and B to become a C". Note that this is the only symbol that is not
+      defined by generating productions with the defined symbol on the
+      right-hand side. The user must still define the syntax for (A B =&gt; C)
+      manually like:</para>
+
+      <programlisting>"myfunction" -&gt; (A B =&gt; C)</programlisting>
+    </section>
+
+    <section xml:id="lifting">
+      <title>Lifted Symbols</title>
+
+      <para>The lifting operator <literal>`...`</literal> translates the name
+      of an arbitrary complex symbol to a literal syntax definition of that
+      name. It makes a symbol a part of the defined syntax. An example:
+      <literal>`X?`</literal> defines the syntax <literal>("X" "?")</literal>.
+      The lifting operator is typically used in combination with parameterized
+      modules, and specifically for applications of SDF that implement
+      concrete syntax. The lifting symbol is a reflexive operator, it
+      generates different syntax for different operators.</para>
+
+      <para>Note that the lifting operator is not implemented by defining it
+      using production symbols. This operator is implemented by replacing it
+      with another symbol. Examples:</para>
+
+      <programlisting>`"foo"` is replaced by "\"foo\""
+`A ?"` is replaced by ("A" "?")
+`{A ","}+` is replaced by ("{" "A" "\",\"" "}" "+") </programlisting>
+    </section>
+
+    <section xml:id="layout">
+      <title>LAYOUT symbol</title>
+
+      <para>The <literal>LAYOUT</literal> symbol is a reserved sort name. SDF
+      does not generate any productions for it. Instead for all
+      <literal>context-free syntax</literal> grammars it will distribute
+      <literal>LAYOUT?</literal> between all members of the left-hand sides of
+      all productions. Note that the "?" in <literal>LAYOUT?</literal> will
+      take care of some production generation. The user must define all
+      alternatives for <literal>LAYOUT</literal> herself. Example:</para>
+
+      <programlisting>[\ \t\n] -&gt; <emphasis role="bold">LAYOUT</emphasis></programlisting>
+
+      <para>Note that LAYOUT may only be defined in <literal>lexical
+      syntax</literal> grammars. The LAYOUT non-terminal is used by back-ends
+      (independent of SDF) to find out what is irrelevant about a parse tree
+      and what is relevant. Still, SDF does not attribute any additional
+      semantics to it. It is just a non-terminal that is distributed over
+      context-free productions.</para>
+    </section>
+  </section>
+
+  <section xml:id="grammars">
+    <title>Grammars</title>
+
+    <para>A grammar is the entity that can be defined in an export section or
+    hidden section of a module. It is a catch-all notion that covers more than
+    pure grammar productions and includes</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="imports">Imports</link>: include one module in
+        another one.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="aliases">Aliases</link>: abbreviations for
+        complex symbols.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="sorts">Sorts</link>: the non-terminals of the
+        grammar.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="startsymbols">Start-symbols</link>: the start
+        symbols of the grammar.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="lexicalsyntax">Lexical syntax</link>: the lexical
+        productions of the grammar.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="contextfreesyntax">Context-free syntax</link>:
+        the context-free productions of the grammar.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="priorities">Priorities</link>: the disambiguation
+        rules.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="variables">Variables</link>: definitions of
+        variables.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="restrictions">Restrictions</link></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>An SDF module may contain as many grammars of any kind as you need.
+    We will now describe all these kinds of grammars. Also see the Section
+    <link linkend="examples">Examples</link>.</para>
+
+    <section xml:id="imports">
+      <title>Imports</title>
+
+      <section xml:id="plainimports">
+        <title>Plain imports</title>
+
+        <para>Apart from the import sections at the beginning of each module,
+        there may be an arbitrary number of import grammar spread through a
+        module. Each <literal>&lt;ImportSection&gt;</literal> starts with the
+        keyword <literal>imports</literal> followed by zero or more module
+        names: <programlisting><emphasis role="bold">imports</emphasis>
+  &lt;ModuleName&gt;*</programlisting>When importing modules at the topmost
+        level of a module or when the import section occurs within the scope
+        of an exports keyword, all exported entities of the imported module
+        (and of all modules that are imported indirectly by it) become
+        available in the importing module. In addition, they are also exported
+        by the importing module. However, if the import section occurs within
+        the scope of a hiddens keyword, the exported entities are only visible
+        in the importing module but they are not exported by the importing
+        module.</para>
+      </section>
+
+      <section>
+        <title>Binding module parameters</title>
+
+        <para>When an imported module has <link linkend="modules">formal
+        parameters</link>, imports can be used to bind them to actual
+        parameters. The syntax is as follows:</para>
+
+        <programlisting><emphasis role="bold">imports</emphasis> mylanguage/myModule[&lt;Symbol&gt;+]</programlisting>
+      </section>
+
+      <section xml:id="renamings">
+        <title>Renamings</title>
+
+        <para>Symbol renaming is in fact very similar to parameterization
+        except that it is not necessary to add formal parameters to a module.
+        The mechanism of symbol renaming allows the overriding of one symbol
+        or a set of symbols by another symbol or symbols, respectively. It
+        allows a flexible and concise way of adapting specifications.</para>
+
+        <programlisting>imports mylanguage/myModule[ &lt;Symbol&gt; =&gt; &lt;Symbol2&gt; ]</programlisting>
+
+        <para>Any number of renamings can be given. Note that renamings and
+        module parameters can be combined. Also note that <emphasis>renamings
+        will not be applied to renamed</emphasis> symbols.</para>
+      </section>
+    </section>
+
+    <section xml:id="aliases">
+      <title>Aliases</title>
+
+      <para>Aliases are similar to productions but not quite. An alias is used
+      to define a short hand for a complex or otherwise cumbersome
+      symbol.</para>
+
+      <programlisting><emphasis role="bold">aliases</emphasis>
+  &lt;Sort<subscript>1</subscript>&gt; -&gt; &lt;Sort<subscript>2</subscript>&gt;</programlisting>
+
+      <para>where the alias Sort<subscript>2</subscript> is given to
+      Sort<subscript>1</subscript>. An example is ("{" | "&lt;:") from the C
+      programming language. Instead of having to repeat that everywhere you
+      may write:</para>
+
+      <programlisting><emphasis role="bold">aliases</emphasis>
+  ("{" | "&lt;:") -&gt; BracketOpen</programlisting>
+
+      <para>Aliases are tricky. There are a number of rules you should adhere
+      to:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Aliases may not define each other</para>
+        </listitem>
+
+        <listitem>
+          <para>Aliased symbols may not be redefined by another alias</para>
+        </listitem>
+
+        <listitem>
+          <para>Don't forget that aliases are replaced everywhere, even on the
+          right-hand sides of productions</para>
+        </listitem>
+
+        <listitem>
+          <para>Several known other back-ends of SDF deal badly with aliases
+          (see the next point).</para>
+        </listitem>
+
+        <listitem>
+          <para>Be aware of the non-traceability of aliases, because they are
+          substituted before parse table generation time, you will not find
+          them in your parse trees or abstract syntax trees.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="sorts">
+      <title>Sort declarations</title>
+
+      <para>Sorts are declared by listing their name in a sorts section of the
+      form:<programlisting><emphasis role="bold">sorts</emphasis>
+  &lt;Symbol&gt;*</programlisting>Only plain <literal>Sort</literal>s and
+      parameterized <literal>Sort</literal>s should declared in the
+      <literal>sorts</literal> section. The <link
+      linkend="wellformedness">sdf-checker</link> will generate a warnings.
+      The checker requires that all sorts that occur in some symbol in the
+      specification are declared. Note however that the sorts declaration does
+      not carry any semantics other than simply declaring a name. The checker
+      uses this to warn the SDF user for possible typos.</para>
+    </section>
+
+    <section xml:id="lexicalandcontextfreesyntax">
+      <title>Lexical and context-free syntax</title>
+
+      <para>Lexical syntax describes the low-level structure of text while
+      context-free syntax describes the higher-level structure. In SDF, these
+      two aspects of syntax are defined in a very uniform manner. In fact,
+      <link linkend="productions">production rules</link> are used to describe
+      both lexical and concrete syntax.</para>
+
+      <para>The only difference between the two is that context-free
+      productions are pre-processed somewhat extensively by SDF before parser
+      generation, while lexical productions are not. And, it is important to
+      note that symbols defined in lexical syntax and symbols defined in
+      context-free syntax are in separate name-spaces. Example:</para>
+
+      <programlisting><emphasis role="bold">lexical syntax</emphasis>
+  "a" -&gt; A
+<emphasis role="bold">context-free syntax</emphasis>
+  "b" -&gt; A</programlisting>
+
+      <para>Here we are defining two different A's: one lexical and one
+      context-free. The two definitions are automatically linked by SDF by the
+      following transformation:</para>
+
+      <programlisting> "a"     -&gt; &lt;A-LEX&gt;
+ &lt;A-LEX&gt; -&gt; &lt;A-CF&gt;
+ "b"     -&gt; &lt;A-CF&gt;</programlisting>
+
+      <section xml:id="lexicalsyntax">
+        <title>Lexical Syntax</title>
+
+        <para>The lexical syntax usually describes the low level structure of
+        programs (often referred to as <emphasis>lexical tokens</emphasis>.)
+        However, in SDF the token concept is not really relevant, since only
+        character classes are terminals. The lexical syntax grammars in SDF
+        are simply a convenient notation for the low level syntax of a
+        language. The <literal>LAYOUT</literal> symbol should also be defined
+        in a lexical syntax grammar. A lexical syntax consists of a list of
+        <emphasis>productions</emphasis>.</para>
+
+        <para>Lexical syntax is described as follows:</para>
+
+        <programlisting><emphasis role="bold">lexical syntax</emphasis>
+  &lt;Production&gt;*</programlisting>
+      </section>
+
+      <section xml:id="contextfreesyntax">
+        <title>Context-free syntax</title>
+
+        <para>The context-free syntax describes the more high-level syntactic
+        structure of sentences in a language. A context-free syntax contains a
+        list of <emphasis>productions</emphasis>. Elements of the left-hand
+        side of a context-free function pre-processed before parser generation
+        by adding the LAYOUT? symbol everywhere. Context-free syntax has the
+        form:</para>
+
+        <programlisting><emphasis role="bold">context-free syntax</emphasis>
+   &lt;Production&gt;*</programlisting>
+
+        <para>As an example, consider the way SDF pre-processes the following
+        grammar:</para>
+
+        <programlisting>context-free syntax
+  "{" Stat* "}" -&gt; Block
+
+is pre-processed to:
+
+"{" LAYOUT? Stat* LAYOUT? "}" -&gt; Block
+
+which will be then wrapped as in:
+
+"{" &lt;LAYOUT?-CF&gt; &lt;Stat*-CF&gt; &lt;LAYOUT?-CF&gt; "}" -&gt; &lt;Block-CF&gt;</programlisting>
+
+        <para>The resulting definitions may look complex, but in fact there
+        are only non-terminals and production rules. The complexity stems from
+        the names of the non-terminals.</para>
+      </section>
+
+      <section xml:id="productions">
+        <title>Productions</title>
+
+        <para>The basic building block of a context-free syntax, lexical
+        syntax or variables grammar is the <emphasis>production</emphasis>. It
+        consists of a left-hand side of zero or more symbols, an arrow symbol
+        -&gt; and a right-hand side that contains a symbol and an optional
+        list of attributes. This is summarized as follows:</para>
+
+        <programlisting>&lt;Symbol&gt;* <emphasis role="bold">-&gt;</emphasis> &lt;Symbol&gt;</programlisting>
+
+        <para>A production is read as the <emphasis>definition</emphasis> of a
+        symbol. The symbol on the right-hand side is
+        <emphasis>defined</emphasis> by the left-hand side of the
+        production.</para>
+
+        <para>The symbols in a production can be arbitrarily complex but the
+        implementation may impose some limitations on this. Productions are
+        used to describe lexical as well as context-free syntax, variables and
+        lexical variables. Productions also occur in priority grammars. All
+        productions with the same result sort together define the alternatives
+        for that symbol.</para>
+
+        <para>The most striking (but also most trivial) difference between SDF
+        and EBNF is the way the production rules are written in SDF. In EBNF
+        one writes production rules as<programlisting> P ::= 'b' D S 'e'</programlisting>whereas
+        in SDF this is written as <programlisting>  "b" D S "e" -&gt; P</programlisting>So,
+        the left- and right-hand side of the production rules are swapped.
+        Otherwise the meaning of an SDF production is the same as a BNF
+        production. Notice however that there is a difference with the |
+        operator. When we write the following in BNF:</para>
+
+        <programlisting>A ::= C | D | E</programlisting>
+
+        <para>We would write this in SDF:</para>
+
+        <programlisting>C -&gt; A
+D -&gt; A
+E -&gt; A</programlisting>
+
+        <para>Or, we could use the alternative symbol, but that does generate
+        a different grammar:</para>
+
+        <programlisting>C | D | E -&gt; A
+will generate the following grammar:
+C | D | E -&gt; A
+C         -&gt; C | D | E
+D         -&gt; C | D | E
+E         -&gt; C | D | E</programlisting>
+
+        <section xml:id="attributes">
+          <title>Attributes</title>
+
+          <para>The definition of a lexical, context-free productions and
+          variables may be followed by <emphasis>attributes</emphasis> that
+          define additional (syntactic or semantic) properties of that
+          function. The attributes are written between curly brackets after
+          the non-terminal in the right hand side. If a production rule has
+          more than one attribute they are separated by commas. Productions
+          with attributes have thus the following form:<programlisting>&lt;Symbol&gt;* <emphasis
+                role="bold">-&gt;</emphasis> &lt;Symbol&gt; <emphasis
+                role="bold">{</emphasis> &lt;Attribute1&gt;<emphasis
+                role="bold">,</emphasis> &lt;Attribute2&gt;<emphasis
+                role="bold">,</emphasis> ...<emphasis role="bold">}</emphasis></programlisting>
+          The following syntax-related attributes exist:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>{bracket}</literal> is an attribute without SDF
+              semantics, but is important nevertheless in combination with
+              <link linkend="disambpriorities">priorities</link>. See <link
+              linkend="disambbrackets">brackets</link> attribute.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{left</literal>, <literal>right</literal>,
+              <literal>non-assoc</literal>, <literal>assoc}</literal> are
+              disambiguation constructs used to define the associativity of
+              productions. See <link
+              linkend="disambassociativity">associativity.</link></para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{prefer}</literal> and {avoid} are disambiguation
+              constructs to define preference of one derivation over others.
+              See <link linkend="disambpreferences">preferences.</link></para>
+            </listitem>
+
+            <listitem>
+              <para><literal>{reject}</literal> is a disambiguation construct
+              that implements language difference. It is used for keyword
+              reservation. See <link
+              linkend="disambrejects">rejects.</link></para>
+            </listitem>
+          </itemizedlist>
+
+          <itemizedlist>
+            <listitem>
+              <para>Arbitrary ATerms may also be used as attributes. Another
+              frequently occurring non-SDF attribute is
+              {cons("&lt;name&gt;")}. There are tools that use this cons
+              attribute to construct abstract syntax trees or to generated
+              API's in C or Java to manipulate syntax trees.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+
+        <section xml:id="merging">
+          <title>Merging productions</title>
+
+          <para>An important detail of SDF is that if two productions are
+          equal, they will not lead to ambiguity. Instead only one of the
+          productions is used to generate the parse table. In other words, the
+          collection of productions that is used to generate a parse table is
+          a <emphasis>set</emphasis>. The identity of a production is computed
+          from its left-hand side and its right-hand side. If the attributes
+          are different, the set of attributes will be merged. Example:</para>
+
+          <programlisting>"if" E "then" S -&gt; S {cons("if")}
+"if" E "then" S -&gt; S {prefer}
+<emphasis>will be merged to</emphasis>:
+"if" E "then" S -&gt; S {cons("if"), prefer}</programlisting>
+        </section>
+
+        <section xml:id="prefixfunctions">
+          <title>Prefix Functions</title>
+
+          <para><emphasis>Prefix functions</emphasis> are a special kind of
+          productions. They have a prefix syntax and are an abbreviation
+          mechanism for productions written as expected. For instance the
+          function <literal>f(X,Y) -&gt; Z</literal> is a prefix function. SDF
+          automatically replaces all prefix productions by a normal
+          productions. Example:</para>
+
+          <programlisting>f(X,Y) -&gt; Z {cons("f")} 
+is replaced by
+"f" "(" X "," Y ")" -&gt; Z {cons("f")}</programlisting>
+        </section>
+      </section>
+    </section>
+
+    <section xml:id="startsymbols">
+      <title>Lexical and context-free start-symbols</title>
+
+      <para>Via the lexical or context-free start symbols section the symbols
+      are explicitly defined which will serve as start symbols when parsing
+      terms. If no start symbols are defined it is not possible to recognize
+      terms. This has the effect that input sentences corresponding to these
+      symbols can be parsed. So, if we want to recognize booleans terms we
+      have to define explicitly the sort <literal>Boolean</literal> as a start
+      symbol in the module <literal>Booleans</literal>. Any symbol, also
+      lists, tuples, etc., can serve as a start-symbol. A definition of
+      lexical start symbols looks like<programlisting><emphasis role="bold">lexical start-symbols</emphasis>
+  &lt;Symbol&gt;*</programlisting></para>
+
+      <para>while context-free start symbols are defined as</para>
+
+      <para><programlisting><emphasis role="bold">context-free start-symbols</emphasis>
+  &lt;Symbol&gt;*</programlisting>Start symbols are short-hand notation, for
+      which SDF generates productions as in:</para>
+
+      <programlisting><emphasis role="bold">lexical start-symbols</emphasis>
+   Identifier
+<emphasis>generates</emphasis>
+   &lt;Identifier-LEX&gt; -&gt; &lt;START&gt;
+<emphasis>and</emphasis>
+<emphasis role="bold">context-free start-symbols</emphasis>
+   Program
+<emphasis>generates</emphasis>
+   &lt;LAYOUT?-CF&gt; &lt;Program-CF&gt; &lt;LAYOUT?-CF&gt; -&gt; &lt;START&gt;</programlisting>
+    </section>
+
+    <section xml:id="priorities">
+      <title>Lexical and context-free priorities</title>
+
+      <para>Priorities are one of SDF's most often used disambiguation
+      constructs. A priority 'grammar' defines the relative priorities between
+      productions. There is a lot of short-hand notation for doing this
+      concisely. Priorities are a powerful disambiguation construct. The basic
+      priority looks like this:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+&lt;Production&gt;   &gt;   &lt;Production&gt;</programlisting>
+
+      <para>Context-free priorities work on context-free productions, while
+      lexical priorities work on lexical productions. The idea behind the
+      semantics of priorities is that productions with a higher priority "bind
+      stronger" than productions with a lower priority. However, strictly
+      speaking the semantics of SDF's priorities are that they give rise to
+      parse forest filters that remove certain trees. If <literal>A &gt;
+      B</literal>, then all trees are removed that have a <literal>B</literal>
+      node as a direct child of an <literal>A</literal> node.</para>
+
+      <para>Several priorities in a priority grammar are separated by comma's.
+      Productions may be grouped between curly braces on each side of the &gt;
+      sign. Groups may have relative <link
+      linkend="disambassociativity">associativity</link> labels.
+      Examples:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+  { <emphasis role="bold">left</emphasis>: E "*" E -&gt; E {left}
+          E "/" E -&gt; E {right}
+  } &gt;
+  { <emphasis role="bold">right</emphasis>: E "+" E -&gt; E {left}
+           E "-" E -&gt; E {left}
+  ,
+  "-" E -&gt; E &gt; E "+" E -&gt; E {left}
+ </programlisting>
+
+      <para>Please note the following details on priorities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By default, the priority relation is automatically
+          transitively closed (i.e. if <literal>A &gt; B</literal> and
+          <literal>B &gt; C</literal> then <literal>A &gt; C</literal>)</para>
+        </listitem>
+
+        <listitem>
+          <para>By default, the priority relation applies to all arguments of
+          the first production (i.e. the second production can not be a child
+          of any member of the first production)</para>
+        </listitem>
+
+        <listitem>
+          <para>Priorities filter regardlessly, and assume you apply them only
+          when there is actually an ambiguity. Priorities may be used to
+          filter the last remaining tree from a forest, resulting in a parse
+          error.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are two recent additions to priorities which make them more
+      flexible. Firstly, priorities can now be targeted at specific members of
+      the first production: "priorities in specific arguments".
+      Example:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+  E "[" E "]" -&gt; E
+  <emphasis>&lt;0&gt;</emphasis> &gt; 
+  E "+" E -&gt; E {left}</programlisting>
+
+      <para>Between the angular brackets a comma separated list of argument
+      indexes indicates to which arguments the disambiguation should be
+      applied (and implicitly in which not). In fact, in this example applying
+      the filter to all arguments would result in parse errors for terms such
+      as <literal>"1 [ 2 + 3 ]"</literal>. The semantics of priorities in
+      specific arguments is thus to remove all derivations that have the
+      second production as a child of the first production at the specified
+      positions.</para>
+
+      <para>The second addition is non-transitive priorities. In rare cases
+      the automatic transitive closure may be incorrect. Note however that by
+      not transitively closing the priority relation you may have to write
+      down a high amount of priorities. Example:</para>
+
+      <programlisting><emphasis role="bold">context-free priorities</emphasis>
+  "-" E -&gt; E &gt;.
+  E "+" E -&gt; E</programlisting>
+
+      <para>The ".", or full stop, makes sure that this relation does not
+      contribute to any transitive closure.</para>
+    </section>
+
+    <section xml:id="variables">
+      <title>Variables</title>
+
+      <para>Variables are declared in the <literal>variables</literal> section
+      of a module. Like all other entities in a module, except equations,
+      variables may be exported (see section <link
+      linkend="modules">Modules</link>). A variables section consists of a
+      list of variable names followed by a symbol. In fact, a variable
+      declaration can define an infinite collection of variables by using a
+      <emphasis>naming scheme</emphasis> instead of a simple variable name. A
+      naming scheme is a regular expression like the ones allowed in the <link
+      linkend="lexicalsyntax">lexical syntax</link> except that sorts are not
+      allowed. A variable may represent any symbol. In the specification <link
+      linkend="CODE_variables">below</link>, <literal>Id</literal>,
+      <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
+      variables declared by the naming schemes in the
+      <literal>variables</literal> section. Strings that occur in the
+      left-hand side of variable declarations should
+      <emphasis>always</emphasis> be quoted.</para>
+
+      <example xml:id="CODE_variables">
+        <title>Variable declarations using naming schemes</title>
+
+        <para><programlisting>module VarDecls
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Decl
+  sorts Id Decl Type 
+
+  lexical syntax
+    [a-z]+ -&gt; Id
+ 
+  context-free syntax
+    "decl" {Id ","}+ ":" Type -&gt; Decl 
+    "integer"                 -&gt; Type 
+    "real"                    -&gt; Type 
+
+hiddens
+  variables
+    "Id"           -&gt; Id 
+    "Type"[0-9]*   -&gt; Type 
+    "Id-list"[\']* -&gt; {Id ","}* 
+    "Id-ne-list"   -&gt; {Id ","}+</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="lexicalvariables">
+      <title>Lexical variables</title>
+
+      <para>Lexical variables are similar to variables. The difference is that
+      they range over non-terminals defined in lexical syntax sections, and
+      may range over character classes and symbol operators applied to
+      character classes.</para>
+    </section>
+
+    <section xml:id="restrictions">
+      <title>Restrictions</title>
+
+      <para>The notion of <emphasis>restrictions</emphasis> enables the
+      formulation of lexical disambiguation strategies that occur in the
+      design of programming languages. Examples are "shift before reduce" and
+      "longest match". A restriction filters applications of productions for
+      certain non-terminals if the following character (lookahead) is in a
+      certain class. The result is that specific symbols may not be followed
+      by a character from a given character class. A lookahead may consist of
+      more than one character class (multiple lookahead). Restrictions come in
+      two flavors:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>lexical restrictions that apply to lexical
+          non-terminals</para>
+        </listitem>
+
+        <listitem>
+          <para>context-free restrictions that apply to context-free
+          non-terminals.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The general form of a restriction is:<programlisting>&lt;Symbol&gt;+ <emphasis
+            role="bold">-/-</emphasis> &lt;Lookaheads&gt;</programlisting>In
+      case of lexical restrictions <literal>&lt;Symbol&gt;</literal> may be
+      either a literal or sort. In case of context-free restrictions only a
+      sort or symbol is allowed. The restriction operator
+      <literal>-/-</literal> should be read as <emphasis>may not be followed
+      by</emphasis>. Before the restriction operator <literal>-/-</literal> a
+      list of symbols is given for which the restriction holds.</para>
+
+      <para>Lookaheads are lists of character classes separated by ".". Note
+      that single character restrictions are implemented faster then multiple
+      character restrictions. Example:</para>
+
+      <programlisting>Identifier -/- [i].[f]
+Identifier -/- [e].[l].[s].[e]</programlisting>
+
+      <para>The semantics of a restriction <literal>&lt;Symbol&gt; -/-
+      &lt;Lookahead&gt;</literal> are thus to remove all derivations that
+      produce a certain &lt;Symbol&gt;. The condition for this removal is that
+      the derivation tree for that symbol is followed immediately by something
+      that matches the lookahead declaration. Note that to be able to check
+      this condition, one must look past derivations that produce the empty
+      language, until the characters to the right of the filtered symbol are
+      found. Also, for finding multiple lookahead matches, one must ignore
+      nullable sub-trees that may occur in the middle of the matched
+      lookahead.</para>
+
+      <warning>
+        <para>A note on implementation of restrictions is that follow
+        restrictions with one lookahead character class are filtered at
+        parse-table generation time. This is a fast implementation. Follow
+        restrictions with multiple lookahead are implemented at parse time,
+        which takes some more time. On the whole, the application of follow
+        restrictions can make a generated parser a lot faster. Sometimes it is
+        used to remove conflicts from the parse table, even if the language is
+        not ambiguous at all. This may improve speed.</para>
+      </warning>
+    </section>
+  </section>
+
+  <section xml:id="disambiguation">
+    <title>Disambiguation</title>
+
+    <section>
+      <title>Introduction</title>
+
+      <para>As mentioned before SDF is based on two notions. The first is
+      context-free grammars, and the second is disambiguation filters. The
+      disambiguation constructs of SDF are:<itemizedlist>
+          <listitem>
+            <para><link linkend="priorities">Priorities</link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="attributes">The reject
+            mechanism</link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="attributes">Associativity</link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="attributes">Preference
+            attributes</link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="restrictions">Restrictions</link></para>
+          </listitem>
+        </itemizedlist>Each disambiguation construct gives rise to a specific
+      derivation filter. So, the semantics of SDF can be seen as two-staged.
+      First, the grammar generates all possible derivations. Second, the
+      disambiguation constructs remove a number of derivations. This section
+      mainly serves as an index to the disambiguation constructs found in the
+      <xref linkend="grammars" />, and it provides additional information
+      where needed.</para>
+
+      <para>An extensive "How To" on disambiguation can be found in the SDF
+      Disambiguation Med kit for Programming Languages. In the current
+      document there is only limited "howto" information on this
+      subject.</para>
+    </section>
+
+    <section xml:id="disambpriorities">
+      <title>Priorities</title>
+
+      <para>Priorities are described in <xref linkend="priorities" />. Note
+      that there is a link between associativity and priorities: priority
+      declarations can contain relative associativities. The <link
+      linkend="disambbrackets">{bracket}</link> attribute also plays a role in
+      priorities. The essence of the priority disambiguation construct is that
+      certain vertical (father/child) relations in derivations are
+      removed.</para>
+
+      <warning>
+        <para>A note on the implementation of priorities. Although we have
+        defined priorities here to work on direct father/child relations only,
+        the current implementation of SDF will also filter deriviations that
+        are directly linked via a chain of injection productions.</para>
+      </warning>
+    </section>
+
+    <section xml:id="disambassociativity">
+      <title>Associativity</title>
+
+      <para>Associativity declarations occur in two places in SDF. The first
+      is as <link linkend="attributes">production attributes</link>. The
+      second is as associativity declarations in <link
+      linkend="priorities">priority groups.</link> Like with priorities, the
+      essence of the associativity attribute is that certain vertical
+      (father/child) relations in derivations are removed:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The {left} associativity attribute on a production P filters
+          all occurences of P as a direct child of P in the right-most
+          argument. This implies that {left} is only effective on productions
+          that are recursive on the right (as in <literal>A B C -&gt;
+          C</literal>).</para>
+        </listitem>
+
+        <listitem>
+          <para>The {right} associativity attribute on a production P filters
+          all occurences of P as a direct child of P in the left-most
+          argument. This implies that {right} is only effective on productions
+          that are recursive on the left ( as in <literal>C A B -&gt;
+          C</literal>).</para>
+        </listitem>
+
+        <listitem>
+          <para>The {non-assoc} associativity attribute on a production P
+          filters all occurrences of P as a direct child of P in any argument.
+          This implement that {non-assoc} is only effective if a production is
+          indeed recursive (as in <literal>A C B -&gt; C</literal>).</para>
+        </listitem>
+
+        <listitem>
+          <para>The {assoc} attribute means the same as {left}</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that in general associatity attributes are thus intended to
+      work on production rules with the following pattern: <literal>X ... X
+      -&gt; X</literal>.</para>
+
+      <para>In priority <link linkend="priorities">groups</link>, the
+      associativity attribute can also be found. It has the same semantics as
+      the associativity attributes, except that the filter refers to two
+      nested productions instead of a recursive nesting of one production. The
+      group associativity attribute works pairwise and commutative on all
+      combinations of productions in the group. If there is only one element
+      in the group the attribute is reflexive, otherwise it is not
+      reflexive.</para>
+
+      <para>Note that associativity does not work transitively. Another way of
+      defining associativity is to translate associativity attributes to <link
+      linkend="priorities">non-transitive priorities in specific
+      arguments</link>.</para>
+    </section>
+
+    <section xml:id="disambbrackets">
+      <title>Bracket attribute</title>
+
+      <para>It is not used by SDF, but some back-ends use it. For example, the
+      <command>restore-brackets</command> tool uses the bracket attribute to
+      find productions to add to a parse tree before pretty printing (when the
+      tree violates priority constraints). Note that most of these tools
+      demand the production with a {bracket} attribute to have the shape:
+      <literal>"(" X ")" -&gt; X {bracket}</literal> with any kind of bracket
+      syntax but the <literal>X</literal> being the same symbol on the
+      left-hand side and the right-hand side.</para>
+
+      <para>The connection with priorities and associativity is that when a
+      non-terminal is disambiguated using either of them, a production rule
+      with the {bracket} attribute is probably also needed.</para>
+    </section>
+
+    <section xml:id="disambrejects">
+      <title>Rejects</title>
+
+      <para>The reject disambiguation construct also filters derivations. For
+      a production <literal>&lt;Symbol&gt;+ -&gt; Symbol {reject}</literal>
+      the semantics is that the set of all derivations for
+      <literal>&lt;Symbol&gt;</literal> are filtered. Namely, all derivations
+      that derive a string that can also be derived from
+      <literal>&lt;Symbol&gt;+</literal> are removed. Another way of saying
+      this is that the language (set of strings) defined by
+      <literal>&lt;Symbol&gt;</literal> has become smaller, namely the set of
+      strings defined by <literal>&lt;Symbol+&gt;</literal> is subtracted from
+      it.</para>
+
+      <para>The reject mechanism effectively defines the difference operator
+      between two context-free languages. As such it can be used to define non
+      context-free languages such as
+      a<superscript>n</superscript>b<superscript>n</superscript>c<superscript>n</superscript>.
+      This is not it's intended use.</para>
+
+      <warning>
+        <para>A note on the implementation of {reject} is that the full
+        semantics are not implemented by the current implementation of SDF.
+        The {reject} attribute works well for keyword reservation in the form
+        of productions like <literal>"keyword" -&gt; Identifier
+        {reject}</literal>. <emphasis>I.e. the language on the left-hand side
+        is regular</emphasis>. Note that the {reject} attribute implementation
+        is known to filter incompletely when:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>applied to productions that are empty or right-nullable or
+            recursive.</para>
+          </listitem>
+
+          <listitem>
+            <para>the non-terminal on the right-hand side is nullable by
+            another production.</para>
+          </listitem>
+
+          <listitem>
+            <para>there is nested {reject} productions applied to each
+            other.</para>
+          </listitem>
+        </itemizedlist>
+      </warning>
+    </section>
+
+    <section xml:id="disambpreferences">
+      <title>Preferences</title>
+
+      <para>The preferences mechanism is another disambiguation filter that
+      provides a filter semantics to a production <link
+      linkend="attributes">attribute</link>. The attributes {prefer} and
+      {avoid} are the only disambiguation constructs that compare alternative
+      derivations. They are sometimes referred to as
+      <emphasis>horizontal</emphasis> disambiguation filters.</para>
+
+      <para>The following definition assumes that derivations are represented
+      using parse forests with "packaged ambiguity nodes". This means that
+      whenever in a derivation there is a choice for several sub-derivations,
+      at that point a special choice node (ambiguity constructor) is placed
+      with all alternatives as children. We assume here that the ambiguity
+      constructor is always placed at the location where a choice is needed,
+      and not higher (i.e. a minimal parse forest representation). The
+      preference mechanism compares the top nodes of each alternative:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All alternative derivations that have {avoid} at the top node
+          will be removed, but only if other alternatives derivations are
+          there that do not have {avoid} at the top node.</para>
+        </listitem>
+
+        <listitem>
+          <para>If there are derivations that have {prefer} at the top node,
+          all other derivations that do not have {prefer} at the top node will
+          be removed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <warning>
+        <para>A note on implementation of preferences is that the current
+        implementation of SDF does not always provide a "minimal parse forest
+        representation". Therefore, it is sometimes hard to see where (at
+        which vertical level) the ambiguity constructor will be, and thus
+        which productions will be at the top to compare the preference
+        attributes.</para>
+      </warning>
+    </section>
+
+    <section>
+      <title>Restrictions</title>
+
+      <para>Restrictions, or<emphasis> follow restrictions</emphasis>, are
+      intended for filtering ambiguity that occurs on a lexical level. They
+      are described in <link
+      linkend="restrictions">restrictions</link>.</para>
+    </section>
+  </section>
+
+  <section xml:id="examples">
+    <title>Examples</title>
+
+    <para>We will now give a sequence of small examples that illustrate the
+    various constructs in SDF:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="EX_Drawing">A simple lexical
+        syntax</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_CharacterClasses">Using character
+        classes</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_Drawing">A simple drawing
+        language</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_Identifiers">Identifiers</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_Numbers">Numbers</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_Strings">Strings</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_IdLists">Identifier lists</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_Exp">An expression language</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="EX_Labels">Using labels in
+        productions</link>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In the Section <link linkend="EX_Tricky">Some tricky cases</link>,
+    we give examples of definitions that may lead to some confusion.</para>
+
+    <section xml:id="EX_SimpleLex">
+      <title>A simple lexical syntax</title>
+
+      <para><link linkend="CODE_simplelex">Below</link> we give an example of
+      a simple lexical function definition for defining the first three words
+      that Dutch children learn to read. The three sorts
+      <literal>Aap</literal>, <literal>Noot</literal> and
+      <literal>Mies</literal>, each recognize, respectively, the strings
+      <literal>aap</literal>, <literal>noot</literal> and
+      <literal>mies</literal>. The sort <literal>LeesPlank</literal> (a
+      reading-desk used in primary education) recognizes the single string
+      <literal>aapnootmies</literal>.</para>
+
+      <example xml:id="CODE_simplelex">
+        <title>Simple lexical productions</title>
+
+        <para><programlisting>module LeesPlank
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols LeesPlank
+  sorts Aap Noot Mies LeesPlank
+  lexical syntax
+    "aap"         -&gt; Aap
+    "noot"        -&gt; Noot
+    "mies"        -&gt; Mies
+    Aap Noot Mies -&gt; LeesPlank</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_CharacterClasses">
+      <title>Using Character Classes</title>
+
+      <para>Definitions for lower-case letter (<literal>LCLetter</literal>),
+      upper-case letters (<literal>UCLetter</literal>), lower-case and
+      upper-case letters (<literal>Letter</literal>) and digits
+      (<literal>Digit</literal>) are shown in the first example <link
+      linkend="CODE_LettersDigits1">below</link>}.</para>
+
+      <example xml:id="CODE_LettersDigits1">
+        <title>Defining letter (lower-case and upper-case) and digit</title>
+
+        <para><programlisting>module LettersDigits1
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Letter Digit
+  sorts LCLetter UCLetter Letter Digit
+  lexical syntax
+    [a-z]    -&gt; LCLetter
+    [A-Z]    -&gt; UCLetter
+    [a-zA-Z] -&gt; Letter
+    [0-9]    -&gt; Digit</programlisting></para>
+      </example>
+
+      <para>The <link linkend="CODE_LettersDigits2">next example</link> gives
+      a definition of the sort <literal>LetterOrDigit</literal> that
+      recognizes a single letter (upper-case or lower-case) or digit.</para>
+
+      <example xml:id="CODE_LettersDigits2">
+        <title>Defining a single letter or digit</title>
+
+        <programlisting>module LettersDigits2
+imports basic/Whitespace
+
+exports
+  context-free start-symbols LetterOrDigit
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z]    -&gt; LetterOrDigit
+    [A-Z]    -&gt; LetterOrDigit
+    [0-9]    -&gt; LetterOrDigit</programlisting>
+      </example>
+
+      <para>The example <link linkend="CODE_LettersDigits3">below</link> gives
+      the definition of a single letter or digit using the alternative
+      operator <literal>\/</literal>. This definition is equivalent to the one
+      given <link linkend="CODE_LettersDigits2">above</link>.</para>
+
+      <example xml:id="CODE_LettersDigits3">
+        <title>Defining a single letter or digit using the alternative
+        operator</title>
+
+        <para><programlisting>module LettersDigits3
+exports
+  context-free start-symbols LetterOrDigit
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z] \/ [A-Z] \/ [0-9]   -&gt; LetterOrDigit</programlisting></para>
+      </example>
+
+      <para>Another example is shown <link
+      linkend="CODE_charclasses">below</link>. This definition of characters
+      contains all possible characters, either by means of the ordinary
+      representation or via their decimal representation.</para>
+
+      <example xml:id="CODE_charclasses">
+        <title>Example of character classes</title>
+
+        <para><programlisting>module Characters
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols L-Char
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+  lexical syntax
+    "\\" ~[]                 -&gt; AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]    -&gt; DecimalEscChar
+    "\\" "2" [0-4] [0-9]     -&gt; DecimalEscChar
+    "\\" "2" "5" [0-5]       -&gt; DecimalEscChar
+
+    AlphaNumericalEscChar    -&gt; EscChar
+    DecimalEscChar           -&gt; EscChar
+
+    ~[\0-\31\"\\] \/ [\t\n]  -&gt; L-Char
+    EscChar                  -&gt; L-Char</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_Drawing">
+      <title>A simple Drawing Language</title>
+
+      <para>Consider the language of coordinates and drawing commands
+      presented <link linkend="CODE_simple-cf">below</link>.</para>
+
+      <example xml:id="CODE_simple-cf">
+        <title>Simple context-free syntax definition</title>
+
+        <para><programlisting>module DrawingCommands
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols CMND 
+  sorts NAT COORD CMND 
+
+  lexical syntax
+    [0-9]+ -&gt; NAT 
+
+  context-free syntax
+    "(" NAT "," NAT ")" -&gt; COORD
+    "line" "to" COORD   -&gt; CMND 
+    "move" "to" COORD   -&gt; CMND</programlisting></para>
+      </example>
+
+      <para>An equivalent conventional BNF grammar (and not considering
+      lexical syntax) of the <link linkend="CODE_simple-cf">above
+      grammar</link> is <link linkend="CODE_simple-bnf">as
+      follows</link>:</para>
+
+      <example xml:id="CODE_simple-bnf">
+        <title>BNF definition of simple grammar</title>
+
+        <para><programlisting>&lt;COORD&gt; ::= "(" &lt;NAT&gt; "," &lt;NAT&gt; ")" 
+&lt;CMND&gt;  ::= "line" "to" &lt;COORD&gt; | "move" "to" &lt;COORD&gt;
+</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_Identifiers">
+      <title>Identifiers</title>
+
+      <para>Lexical tokens are often described by patterns that exhibit a
+      certain repetition. The list symbols described in <link
+      linkend="lists">List Symbols</link> can be used to express repetitions.
+      The example <link linkend="CODE_repetition">below</link> demonstrates
+      the use of the repetition symbol <literal>*</literal> for defining
+      identifiers consisting of a letter followed by zero or more letters or
+      digits.</para>
+
+      <example xml:id="CODE_repetition">
+        <title>Defining identifiers using the repetition operator
+        <literal>*</literal></title>
+
+        <para><programlisting>module Identifiers-repetition
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Letter DigitLetter Id
+  lexical syntax
+    [a-z]       -&gt; Letter
+    [a-z0-9]    -&gt; DigitLetter
+
+    Letter DigitLetter* -&gt; Id</programlisting></para>
+      </example>
+
+      <para>If zero or exactly one occurrence of a lexical token is desired
+      the option operator described in <link linkend="optionals">Optional
+      symbols</link> can be used. The use of the option operator is
+      illustrated <link linkend="CODE_option">below</link>. Identifiers are
+      defined consisting of one letter followed by one, optional, digit. This
+      definition accepts <literal>a</literal> and <literal>z8</literal>, but
+      rejects <literal>ab</literal> or <literal>z789</literal>.</para>
+
+      <example xml:id="CODE_option">
+        <title>Defining a letter followed by an optional number using the
+        option operator <literal>?</literal></title>
+
+        <para><programlisting>module Identifiers-optional
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Letter Digit Id
+  lexical syntax
+    [a-z]  -&gt; Letter
+    [0-9]  -&gt; Digit
+
+    Letter Digit? -&gt; Id </programlisting></para>
+      </example>
+
+      <para>Productions with the same result sort together define the lexical
+      syntax of tokens for that sort. The left-hand sides of these function
+      definitions form the alternatives for this function. Sometimes, it is
+      more convenient to list these alternatives explicitly in a single
+      left-hand side or to list alternative parts inside a left-hand side.
+      This is precisely the role of the <link
+      linkend="alternatives">alternative operator</link>. The example <link
+      linkend="CODE_alternative1">below</link> shows how this operator can be
+      used. It describes identifiers starting with an upper-case letter
+      followed by one of the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>zero or more lower-case letters,</para>
+        </listitem>
+
+        <listitem>
+          <para>zero or more upper-case letters, or</para>
+        </listitem>
+
+        <listitem>
+          <para>zero or more digits.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>According to this definition, <literal>Aap</literal>,
+      <literal>NOOT</literal>, and <literal>B49</literal> are acceptable, but
+      <literal>MiES</literal>, <literal>B49a</literal> and
+      <literal>007</literal> are not.</para>
+
+      <example xml:id="CODE_alternative1">
+        <title>Example of alternative operator <literal>|</literal></title>
+
+        <para><programlisting>module Identifiers-alternative1
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts LCLetter UCLetter Digit Id
+  lexical syntax
+    [A-Z]   -&gt; UCLetter
+    [a-z]   -&gt; LCLetter
+    [0-9]   -&gt; Digit
+
+  UCLetter LCLetter* | UCLetter* | Digit* -&gt; Id</programlisting></para>
+      </example>
+
+      <para>Note that the relation between juxtaposition and alternative
+      operator is best understood by looking at the line defining
+      <literal>Id</literal>. A parenthesized version of this same line would
+      read as follows:<programlisting> UCLetter (LCLetter* | UCLetter* | Digit*) -&gt; Id</programlisting>As
+      an aside, note that moving the <literal>*</literal> outside the
+      parentheses as in <programlisting> UCLetter (LCLetter | UCLetter | Digit)* -&gt; Id</programlisting>yields
+      a completely different definition: it describes identifiers starting
+      with an uppercase letter followed by zero or more lower-case letters,
+      uppercase letters or digits. According to this definition
+      <literal>MiES</literal>, <literal>B49a</literal> and
+      <literal>Bond007</literal> would, for instance, be acceptable. A
+      slightly more readable definition that is equivalent to the <link
+      linkend="CODE_alternative1">previous one</link> is shown <link
+      linkend="CODE_alternative2">below</link>. In any case, we recommend to
+      use parentheses to make the scope of alternatives explicit.</para>
+
+      <example xml:id="CODE_alternative2">
+        <title>Example of alternative operator <literal>|</literal></title>
+
+        <para><programlisting>module Identifiers-alternative2
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts UCLetter LCLetter Digit Id
+  lexical syntax
+    [A-Z]   -&gt; UCLetter
+    [a-z]   -&gt; LCLetter
+    [0-9]   -&gt; Digit
+
+    (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -&gt; Id</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_Numbers">
+      <title>Numbers</title>
+
+      <para>Definitions of integers and real numbers are shown <link
+      linkend="CODE_numbers">below</link>. Note the use of the alternative
+      operator in the definitions of <literal>UnsignedInt</literal> and
+      <literal>Number</literal>. Also note the use of the option operator in
+      the definitions of <literal>SignedInt</literal> and
+      <literal>UnsignedReal</literal>.</para>
+
+      <example xml:id="CODE_numbers">
+        <title>Lexical definition of Numbers</title>
+
+        <para><programlisting>module Numbers
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Number
+  sorts UnsignedInt SignedInt UnsignedReal Number 
+
+  lexical syntax
+    [0] | ([1-9][0-9]*)                           -&gt; UnsignedInt
+
+    [\+\-]? UnsignedInt                           -&gt; SignedInt
+
+    UnsignedInt "." UnsignedInt ([eE] SignedInt)? -&gt; UnsignedReal 
+    UnsignedInt [eE] SignedInt                    -&gt; UnsignedReal
+
+    UnsignedInt | UnsignedReal                    -&gt; Number  </programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_Strings">
+      <title>Strings</title>
+
+      <para>The specification <link linkend="CODE_string">below</link>, gives
+      the lexical definition of strings which may contain escaped double quote
+      characters. It defines a <literal>StringChar</literal> as either</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>zero or more arbitrary characters except double quote or
+          newline, or</para>
+        </listitem>
+
+        <listitem>
+          <para>an escaped double quote, i.e., <literal>\"</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A string consists of zero or more <literal>StringChar</literal>s
+      surrounded by double quotes.</para>
+
+      <example xml:id="CODE_string">
+        <title>Lexical definition of String</title>
+
+        <para><programlisting>module Strings
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols String
+  sorts String StringChar
+
+  lexical syntax
+    ~[\"\n]               -&gt; StringChar
+    [\\][\"]              -&gt; StringChar
+    "\"" StringChar* "\"" -&gt; String</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_IdLists">
+      <title>Identifier Lists</title>
+
+      <para>Context-free syntax often requires the description of the
+      repetition of a syntactic notion or of list structures (with or without
+      separators) containing a syntactic notion. The <link
+      linkend="lists">list symbols</link> can be used for this purpose. Lists
+      may be used in both the left-hand side and right-hand side of a
+      context-free function as well as in the right-hand side of a <link
+      linkend="variables">variable declaration</link>.</para>
+
+      <para><link linkend="CODE_pascal-ids">Here</link> is an example of how
+      lists can be used to define the syntax of a list of identifiers
+      (occurring in a declaration in a Pascal-like language).</para>
+
+      <example xml:id="CODE_pascal-ids">
+        <title>Definition of a list of identifiers</title>
+
+        <para><programlisting>module Decls
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Decl
+  sorts Id Decl Type 
+
+  lexical syntax
+    [a-z]+ -&gt; Id 
+
+  context-free syntax
+    "decl" {Id ","}+ ":" Type -&gt; Decl
+    "integer"                 -&gt; Type 
+    "real"                    -&gt; Type
+</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_Exp">
+      <title>An Expression Language with Chain Rules</title>
+
+      <para>A context-free syntax may contain productions that do not add
+      syntax, but serve the sole purpose of including a smaller syntactic
+      notion into a larger one. This notion is also known as
+      <emphasis>injections</emphasis>. Injections are productions
+      <emphasis>without a name</emphasis> and with one argument sort
+      like<literal> Id -&gt; Data</literal>. A typical example is the
+      inclusion of identifiers in expressions or of natural numbers in reals.
+      Such a <emphasis>chain function</emphasis> has one of the following
+      forms:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>SMALL -&gt; BIG</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{SMALL SEP}* -&gt; BIG</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>SMALL* -&gt; BIG</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{SMALL SEP}+ -&gt; BIG</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>SMALL+ -&gt; BIG</literal></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It is a common misconception that chain rules will not be
+      represented in the parse tree that <command>sglr</command> outputs. An
+      injection production is a production like any other, and will lead to a
+      node in the parse tree. However, some back-ends are known to interpret
+      chain rules as <emphasis>sub-sort</emphasis> relations. In the example
+      <link linkend="CODE_inj-exp">below</link> the symbols
+      <literal>Nat</literal> and <literal>Var</literal> are injected in
+      <literal>Exp</literal>.</para>
+
+      <example xml:id="CODE_inj-exp">
+        <title>Definition of expressions that uses injections</title>
+
+        <para><programlisting>module Exp
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Exp
+  sorts Nat Var Exp
+
+  lexical syntax
+    [0-9]+   -&gt; Nat
+    [XYZ]    -&gt; Var
+
+  context-free syntax
+    Nat                 -&gt; Exp
+    Var                 -&gt; Exp
+    Exp "+" Exp         -&gt; Exp</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="EX_Labels">
+      <title>Using Labels in Productions</title>
+
+      <para>See <link linkend="CODE_labels">below</link> for an example of an
+      SDF specification containing labels. Remember that labels do not have
+      semantics in SDF.</para>
+
+      <example xml:id="CODE_labels">
+        <title>The module <literal>basic/Booleans</literal> decorated with
+        labels</title>
+
+        <para><programlisting>module Booleans
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Boolean
+  sorts Boolean
+
+  context-free syntax
+    lhs:Boolean "|" rhs:Boolean -&gt; Boolean
+    lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="GroupAssoc">
+      <title>Groups of Associative Productions</title>
+
+      <para>Groups of associative productions define how to accept or reject
+      trees containing related occurrences of different productions with the
+      same priority. They are defined by prefixing a list of context-free
+      productions in a priority declaration with one of the following
+      attributes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>left</literal>: related occurrences of
+          <replaceable>F</replaceable> and <replaceable>G</replaceable>
+          associate from left to right.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>right</literal>: related occurrences of
+          <replaceable>F</replaceable> and <replaceable>G</replaceable>
+          associate from right to left.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>non-assoc</literal>: related occurrences of
+          <replaceable>F</replaceable> and <replaceable>G</replaceable> are
+          not allowed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>where <replaceable>F</replaceable> and
+      <replaceable>G</replaceable> are productions appearing in the list.
+      <link linkend="CODE_complex-prio">Below</link> is an example of the use
+      of grouped associativity.</para>
+
+      <example xml:id="CODE_complex-prio">
+        <title>More complex associativity and priority definitions</title>
+
+        <para><programlisting>module ComplexExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E 
+
+  sorts E 
+
+  context-free syntax
+    NatCon    -&gt; E
+    E "+" E   -&gt; E {left}
+    E "-" E   -&gt; E {non-assoc}
+    E "*" E   -&gt; E {left}
+    E "/" E   -&gt; E {non-assoc}
+    E "^" E   -&gt; E {right}
+    "(" E ")" -&gt; E {bracket}
+
+  context-free priorities
+    E "^" E -&gt; E &gt; 
+    {non-assoc: E "*" E -&gt; E
+                E "/" E -&gt; E} &gt;
+    {left: E "+" E -&gt; E
+           E "-" E -&gt; E} </programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="AssociativeFunctions">
+      <title>Associative Productions</title>
+
+      <para>Associativity attributes can be attached to binary productions of
+      the form <replaceable>S</replaceable>
+      <literal><replaceable>op</replaceable></literal>
+      <replaceable>S</replaceable> <literal>-&gt;</literal>
+      <replaceable>S</replaceable>, where
+      <literal><replaceable>op</replaceable></literal> is a symbol or empty.
+      Without associativity attributes, nested occurrences of such productions
+      immediately lead to ambiguities, as is shown by the sentence
+      <replaceable>S-string</replaceable>
+      <literal><replaceable>op</replaceable></literal>
+      <replaceable>S-string</replaceable>
+      <literal><replaceable>op</replaceable></literal>
+      <replaceable>S-string</replaceable> where
+      <replaceable>S-string</replaceable> is a string produced by symbol
+      <replaceable>S</replaceable>. The particular associativity associated
+      with <replaceable>op</replaceable> determines the intended
+      interpretation of such sentences. We call two occurrences of productions
+      <replaceable>F</replaceable> and <replaceable>G</replaceable>
+      <emphasis>related</emphasis>, when the node corresponding to
+      <replaceable>F</replaceable> has a node corresponding to
+      <replaceable>G</replaceable> as first or last child. The associativity
+      attributes define how to accept or reject trees containing related
+      occurrences of the same function, <replaceable>F</replaceable>:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>left</literal>: related occurrences of
+          <replaceable>F</replaceable> associate from left to right.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>right</literal>: related occurrences of
+          <replaceable>F</replaceable> associate from right to left.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>assoc</literal>: related occurrences of
+          <replaceable>F</replaceable> associate from left to right.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>non-assoc</literal>: related occurrences of
+          <replaceable>F</replaceable> are not allowed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Currently, there is no syntactic or semantic difference between
+      <literal>left</literal> and <literal>assoc</literal>, but &#160;we may
+      change the semantics of the assoc attribute in the future. <remark>Is
+      this really true?</remark></para>
+
+      <para><link linkend="CODE_simple-prio">Below</link> we give an example
+      of a definition of simple arithmetic expressions with the usual
+      priorities and associativities.</para>
+
+      <example xml:id="CODE_simple-prio">
+        <title>Simple context-free priority definition</title>
+
+        <para><programlisting>module SimpleExpr
+
+imports basic/Whitespace
+imports basic/NatCon
+
+exports
+  context-free start-symbols E 
+  sorts E 
+
+  context-free syntax
+    NatCon    -&gt; E
+    E "+" E   -&gt; E {left}
+    E "*" E   -&gt; E {left}
+    "(" E ")" -&gt; E {bracket}
+
+  context-free priorities
+    E "*" E -&gt; E &gt; 
+    E "+" E -&gt; E
+</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="parametersexample">
+      <title>Parameterization</title>
+
+      <para>Module parameterization allows the definition of generic modules
+      for lists, pairs, sets, etc. The operations defined in these modules are
+      independent of a specific type. When importing a parameterized module
+      and instantiating the formal by actual parameters the operations become
+      sort specific. Modules can have formal parameters when defining them.
+      The module name is then followed by a list of symbols, representing the
+      formal parameters of this module. The specification <link
+      linkend="CODE_generic-pairs">below</link> shows an example of a
+      parameterized module. In this example the formal parameters are used in
+      the parameterized sorts as well, in order to increase readability and to
+      avoid name clashes between different instances of the same
+      module.</para>
+
+      <example xml:id="CODE_generic-pairs">
+        <title>Definition of generic pairs</title>
+
+        <para><programlisting>module Pair[X Y]
+
+imports basic/Whitespace
+imports basic/Booleans
+
+hiddens
+  sorts X Y
+
+exports
+  context-free start-symbols Pair[[X,Y]]
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
+
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
+      </example>
+
+      <para>When importing a parameterized module the formal parameters have
+      to be replaced by actual parameters. The specification <link
+      linkend="CODE_importing-pairs">below</link> shows an example of a rather
+      complicated import of a parameterized module. The symbols
+      <literal>Pair[[Boolean,Boolean]] </literal>and
+      <literal>Pair[[Integer,Integer]]</literal> are the actual parameters of
+      the module <literal>Pair[X Y]</literal> in the last import.</para>
+
+      <example xml:id="CODE_importing-pairs">
+        <title>Use of generic pair module</title>
+
+        <para><programlisting>module TestPair
+
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[Boolean Boolean]
+imports Pair[Integer Integer]
+imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></para>
+      </example>
+    </section>
+
+    <section xml:id="SymbolRenaming">
+      <title xml:id="renaming">Symbol Renaming</title>
+
+      <para>The specification <link linkend="CODE_pairs">below</link> shows an
+      example of the <literal>Pair</literal> module without parameters. The
+      idea is to achieve the same effect as parameterization by explicitly
+      renaming <literal>X</literal> and <literal>Y</literal> to the desired
+      names when <literal>Pair</literal> is imported.<example
+          xml:id="CODE_pairs">
+          <title>Definition of generic pairs</title>
+
+          <para><programlisting>module Pair
+
+imports basic/Whitespace
+imports basic/Booleans
+
+hiddens
+  sorts X Y
+
+exports
+  context-free start-symbols Pair[[X,Y]]
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
+
+    make-pair(X, Y)      -&gt; Pair[[X,Y]]
+    first(Pair[[X,Y]])   -&gt; X
+    second(Pair[[X,Y]])  -&gt; Y
+    is-pair(Pair[[X,Y]]) -&gt; Boolean</programlisting></para>
+        </example></para>
+
+      <para>During import such module symbols can be renamed via symbol
+      renaming. The specification <link
+      linkend="CODE_renaming-pairs">below</link> shows an example of a rather
+      complicated import of the module <literal>Pair</literal> using
+      renamings. Renaming <literal>X</literal> to <literal>Boolean</literal>
+      is, for instance, written as <literal>X =&gt; Boolean.</literal></para>
+
+      <para><example xml:id="CODE_renaming-pairs">
+          <title>Use of generic pair module</title>
+
+          <para><programlisting>module TestPair
+
+imports basic/Booleans 
+imports basic/Integers 
+imports Pair[X =&gt; Boolean Y =&gt; Boolean]
+imports Pair[X =&gt; Integer  Y =&gt; Integer]
+imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</programlisting></para>
+        </example></para>
+    </section>
+
+    <section>
+      <title>Examples on dealing with lexical ambiguity using
+      restrictions</title>
+
+      <para>In the example <link linkend="CODE_functional">below</link> both
+      <literal>let</literal> and <literal>in</literal> may not be followed by
+      a letter. This example shows how lexical restrictions can be used to
+      prevent the recognition of erroneous expressions in a small functional
+      language. The lexical restriction deals with the possible confusion
+      between the reserved words <literal>let</literal> and
+      <literal>in</literal> and variables (of sort <literal>Var</literal>). It
+      forbids the recognition of, for instance, <literal>let</literal> as part
+      of <literal>letter</literal>. Without this restriction
+      <literal>letter</literal> would be recognized as the keyword
+      <literal>let</literal> followed by the variable <literal>ter</literal>.
+      The context-free restriction forbids that a variable is directly
+      followed by a letter. It does not forbid layout characters between the
+      letters, e.g. <literal>a b</literal> is a legal recognizable
+      string.</para>
+
+      <example xml:id="CODE_functional">
+        <title>Using restrictions in the definition of a simple functional
+        language</title>
+
+        <para><programlisting>module Functional
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Term 
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -&gt; Var
+  context-free syntax
+    Var                          -&gt; Term
+    Term Term                    -&gt; Term {left}
+    "let" Var "=" Term "in" Term -&gt; Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]  </programlisting></para>
+      </example>
+
+      <para>The next example illustrates the use of restrictions to define a
+      <emphasis>safe</emphasis> way of layout. <link
+      linkend="contextfreesyntax">Recall</link> that optional layout,
+      represented by the symbol<literal> LAYOUT?</literal>, may be recognized
+      between the members of the left-hand side of a context-free syntax rule.
+      However, if a such a member recognizes the empty string, this gives rise
+      to a an ambiguity. This problem is avoided by the definition given <link
+      linkend="CODE_safe-layout">below</link>: it simply forbids that optional
+      layout is followed by layout characters.</para>
+
+      <para><example xml:id="CODE_safe-layout">
+          <title>Safe way of defining <literal>LAYOUT</literal></title>
+
+          <para><programlisting>module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n] -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]</programlisting></para>
+        </example></para>
+
+      <para>The example shown <link linkend="CODE_c-comment">below</link>
+      illustrates the use of restrictions to extend the previous layout
+      definition with C-style comments. For readability we give here
+      <emphasis>two</emphasis> restrictions whereas the first one is already
+      imported from <link linkend="CODE_safe-layout">module
+      basic/Whitespace</link>. The repetition of this first restriction is
+      redundant and could be eliminated.<example xml:id="CODE_c-comment">
+          <title>Definition of C comments</title>
+
+          <para><programlisting>module Comment
+
+imports basic/Whitespace
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    ~[\ \n\t\/]+ -&gt; ComWord
+
+  context-free syntax
+    "/*" ComWord* "*/" -&gt; Comment
+    Comment            -&gt; LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+    LAYOUT? -/- [\/].[\*]</programlisting></para>
+        </example></para>
+
+      <para>A frequently asked question is when to use
+      <emphasis>lexical</emphasis> restrictions and when to use
+      <emphasis>context-free</emphasis> restrictions. In one of the <link
+      linkend="CODE_functional">previous examples</link> the lexical
+      restrictions on <filename>let</filename> and <literal>in</literal>
+      cannot be defined using context-free restrictions because these keywords
+      do not "live" at the context-free level. Is it possible to put a lexical
+      restriction on <literal>Var</literal>? Yes, but it will have no effect,
+      because internally the lexical <literal>Var</literal> is injected in the
+      context-free <literal>Var</literal>. The general rule is to define the
+      restrictions always on the context-free level and not on the lexical
+      level unless a situation as will be discussed in the next paragraph
+      occurs. The specification <link
+      linkend="CODE_restrictedexpressions">below</link> is an example of an
+      erroneous use of context-free expressions, because it prevents the
+      recognition of <literal>(abc)def</literal>. If we want to enforce the
+      correct restriction, it is necessary to transform this context-free
+      restriction into a lexical restriction.</para>
+
+      <para><example xml:id="CODE_restrictedexpressions">
+          <title>Erroneous use of restrictions in the definition of simple
+          expressions</title>
+
+          <para><programlisting>module RestrictedExpressions
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Expr
+  sorts Expr
+
+  lexical syntax
+    [a-z]+ -&gt; Expr
+
+  context-free syntax
+    Expr Expr    -&gt; Expr {left}
+    "(" Expr ")" -&gt; Expr {bracket}
+
+  context-free restrictions
+    Expr -/- [a-z]</programlisting></para>
+        </example></para>
+    </section>
+
+    <section xml:id="EX_Tricky">
+      <title>Some Tricky Cases</title>
+
+      <para>In <link linkend="symbols">Symbols</link> a number of
+      sophisticated operators, like alternative, option, function, sequence,
+      and tuple are discussed. These operators allow a concise manner of
+      defining grammars. There are, however, a number of issues to be taken
+      into consideration when using this operators.</para>
+
+      <section>
+        <title>Definition of Lists</title>
+
+        <para>In the example <link linkend="CODE_lists-usage">below</link>,
+        two different lists are defined, <literal>List1</literal> represents a
+        list of naturals separated by commas whereas <literal>List2</literal>
+        represents a list of naturals separated by commas and terminated by a
+        comma.</para>
+
+        <example xml:id="CODE_lists-usage">
+          <title>Definition of two list variants</title>
+
+          <para><programlisting>module Lists
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols List1 List2
+  sorts Nat List1 List2
+
+  lexical syntax
+    [0-9]+   -&gt; Nat
+
+  context-free syntax
+    {Nat ","}+ -&gt; List1
+    (Nat ",")+ -&gt; List2</programlisting></para>
+        </example>
+      </section>
+
+      <section>
+        <title>Alternative Alternatives</title>
+
+        <para>The choice between two symbols can be defined in two different
+        ways: by two separate syntax rules or by a single syntax rule using an
+        alternative operator. Both styles are shown <link
+        linkend="CODE_alternative-alternatives">below</link>. The definition
+        of the binary operators <literal>|</literal> and
+        <literal>&amp;</literal> can be made more concise as shown by
+        <literal>Bool2</literal>, however, it is now impossible to express
+        that <literal>&amp;</literal> has a higher priority than
+        <literal>|</literal>, see <link linkend="priorities">Priorities</link>
+        for more details on priority definitions.</para>
+
+        <example xml:id="CODE_alternative-alternatives">
+          <title>Two ways of defining <literal>|</literal> and
+          <literal>&amp;</literal></title>
+
+          <para><programlisting>module Bool
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Bool1 Bool2
+  sorts Bool1 Bool2
+
+  context-free syntax
+    "true"                  -&gt; Bool1
+    "false"                 -&gt; Bool1
+    Bool1 "|" Bool1         -&gt; Bool1 {left}
+    Bool1 "&amp;" Bool1         -&gt; Bool1 {left}
+
+    "true" | "false"        -&gt; Bool2
+    Bool2 ("|" | "&amp;") Bool2 -&gt; Bool2 {left}</programlisting></para>
+        </example>
+      </section>
+
+      <section>
+        <title>Lists in combination with optionals or empty producing
+        sorts</title>
+
+        <para>The combination of lists and optionals or empty producing sorts
+        leads to cycles in the parse tree. Cycles are considered parse errors.
+        The parser will produce an error message whenever during parsing a
+        cycle is detected. No parse tree is constructed in such a case. Cycles
+        will not lead to non-termination during parsing. See <link
+        linkend="CODE_listcycle">below</link> for an example of such a
+        specification.</para>
+
+        <example xml:id="CODE_listcycle">
+          <title>Dangerous combination of lists and optionals}</title>
+
+          <para><programlisting>module Cycle
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols T
+  sorts A P T
+
+  context-free syntax
+    "a"        -&gt; A
+    A?         -&gt; P
+    "[" P+ "]" -&gt; T</programlisting>Sometimes commenting out parts of a
+          production rule may lead to cycles, because a non-terminal becomes
+          an empty producing non-terminal. This in combination with lists may
+          then produce unexpected cycles.</para>
+        </example>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="wellformedness">
+    <title>Well-formedness</title>
+
+    <para>In order to improve the quality of the written specifications, a
+    number of checks are performed before an SDF specification is transformed
+    into a parse table. The checks are performed on two levels: the first
+    level are SDF specific checks, the second level are ASF+SDF specific
+    checks. There are various categories of messages in The
+    Meta-Environment</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Parse errors.</para>
+      </listitem>
+
+      <listitem>
+        <para>SDF type check warnings.</para>
+      </listitem>
+
+      <listitem>
+        <para>SDF type check errors.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We will briefly discuss each of the error messages and indicate what
+    is exactly wrong in the specification. Furthermore we will hint at how the
+    error can be fixed.</para>
+
+    <section>
+      <title>Parse Errors</title>
+
+      <para>There are three different types of parse errors:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A <emphasis>syntax error</emphasis>, which is reported by
+          pinpointing the exact location in the file and a message like</para>
+
+          <programlisting><literal>Parse error near cursor</literal></programlisting>
+
+          <para>or</para>
+
+          <programlisting>Parse error: character '<replaceable>c</replaceable>' unexpected</programlisting>
+
+          <para>or</para>
+
+          <programlisting>Parse error: eof unexpected</programlisting>
+
+          <para>This means that the parser detected a syntax error in the text
+          to be parsed and cannot proceed its parsing process. Clicking on the
+          error in the <literal>Errors</literal> pane moves the cursor to the
+          exact error location and launches if needed the editor.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>cycle</emphasis> is reported whenever the parser
+          detects a non-terminating chain of reductions; the message is
+          <programlisting><literal>Cycle: &lt;list_of_production_rules&gt;</literal></programlisting></para>
+        </listitem>
+
+        <listitem>
+          <para>An <emphasis>ambiguity</emphasis> is reported whenever the
+          parser was able to recognize a (part of) the input sentence in
+          different ways and gives the message:</para>
+
+          <programlisting><literal>Ambiguity: &lt;list_of_production_rules&gt;</literal></programlisting>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="PlainSDFwarnings">
+      <title>Type check warnings for SDF</title>
+
+      <warning>
+        <para>It would be nice to rewrite this and the next section in the
+        style:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Error message</para>
+          </listitem>
+
+          <listitem>
+            <para>Explanation</para>
+          </listitem>
+
+          <listitem>
+            <para>Example of error.</para>
+          </listitem>
+
+          <listitem>
+            <para>Example of correction.</para>
+          </listitem>
+        </itemizedlist>
+      </warning>
+
+      <para>Warnings do not break the specification, but it is advisable to
+      fix them anyway. Often they point out some not well-formed part in the
+      specification.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>undeclared sorts</literal>: This warning indicates
+          that a sort is used which is not explicitly declared, or it is
+          declared but in a hidden section.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>double declared sort</literal>: This warning points
+          out that the sort is already declared somewhere in this module, or
+          in one of the imported modules.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>double declared start-symbol</literal>: This warning
+          indicates that the start-symbol is previously defined as
+          start-symbol as well. This can be in the current module or in one of
+          the imported modules.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>illegal attribute: {bracket, left, right, assoc,
+          non-assoc}</literal>: This warning is generated because the
+          syntactic form of the production rule and the attribute do not
+          match. Given this mismatch the intended behaviour will not be
+          effective.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>used in priorities but undefined</literal>: This
+          warning is generated whenever a production rule is used in a
+          priority section which is not defined in this module or in one of
+          the imported modules. It is possible that this production rule will
+          be defined in one of the modules which imports this module.
+          Normally, this indicates a typo.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>inconsistent rhs in priorities</literal>: This
+          warning is caused by a production rule which has not the same
+          right-hand side as the other production rules in the priority
+          relation. Whenever this occurs the effect of the expressed priority
+          relation will be ignored. This check is performed modulo
+          injections.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>unknown constructor used in priorities</literal>:
+          This warning indicates the use of a constructor which is not used in
+          the corresponding set of production rules with the same right-hand
+          side. This is a very weak check on consistent use of constructor
+          information.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>sort CHAR used in production rule</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>deprecated tuple notation</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>deprecated unquoted symbol notation</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>deprecated non-plain sort
+          definition</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>aliased symbol already declared</literal>:</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="PlainSDFerrors">
+      <title>Type check errors for SDF</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>module not available</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>start-symbols in &lt;ModuleName&gt; not defined in
+          any right-hand</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>literal in right-hand-side not
+          allowed</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>only sort allowed in right-hand-side of
+          lexical-function</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>double used label</literal>:</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>constructor has already been used</literal>:&#160;The
+          combination of right-hand symbol and the constructor information
+          should be unique. This warning points this out. It is advisable not
+          to ignore this warning. In fact, for the parser these double
+          constructors are no problem, but there are tools based on SDF for
+          which this is problematic.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="parseforests">
+    <title>Derivations</title>
+
+    <para>Any parser generated from an SDF definition should output a
+    representation of <emphasis>all</emphasis> derivations. For example, a
+    <emphasis>parse forest</emphasis> containing all parse trees, or any other
+    representation which encodes/serializes all derivations. A derivation
+    should include all characters of the input and also a trace of all
+    productions that are recursively applied to obtain the derivations. A
+    common representation that is used is parse forest with ambiguity packing
+    nodes serialized as ATerms.</para>
+
+    <para>Note that cyclic derivations should also be represented.</para>
+
+    <para>The essence of this requirement for SDF derivations is that no
+    information should be thrown away. A derivation represents exactly the
+    grammar that was used to generate it, and the input sentence that was
+    parsed.</para>
+  </section>
+
+  <section xml:id="history">
+    <title>Historical Notes</title>
+
+    <para>The main publications on SDF are (in historical order):</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J. Heering, P. Klint, A Syntax Definition Formalism, ESPRIT''86:
+        Results and Achievements, North-Holland, 619--630, 1986.
+        <emphasis>Describes the initial motivation and design of
+        SDF</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>J. Heering, P. Hendriks, P. Klint and J. Rekers, <link
+        xlink:href="http://www.acm.org/pubs/citations/proceedings/pldi/73141/p179-heering/">The
+        syntax definition formalism SDF - reference manual</link>, SIGPLAN
+        Notices <emphasis role="bold">24</emphasis>(11): 43-75, 1989.
+        <emphasis>The first reference manual for SDF</emphasis>.</para>
+      </listitem>
+
+      <listitem>
+        <para>E. Visser, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Visser.ps.gz">Syntax
+        Definition for Language Prototyping</link>, dissertation, University
+        of Amsterdam, 1997. <emphasis>A redesign of SDF that adds
+        modularization (modeled after the modularization constructs of ASF),
+        unifies lexical and concrete syntax, and proposes a normalisation
+        procedure.</emphasis></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The main publications on implementation techniques related to SDF
+    are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J. Heering, P. Klint and J. Rekers,<link
+        xlink:href="http://www.acm.org/pubs/citations/proceedings/pldi/73141/p179-heering/">
+        Incremental Generation of Parsers</link>, IEEE Transactions on
+        Software Engineering, <emphasis
+        role="bold">16</emphasis>(12):1344--1350, 1990. <emphasis>This and the
+        next publication describe our variant of Generalized LR parsing as
+        well as the just-in-time generation of scanners and
+        parsers.</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para>J. Heering, P. Klint and J. Rekers,<link
+        xlink:href="http://www.acm.org/pubs/citations/journals/toplas/1992-14-4/p490-heering/">
+        Incremental generation of lexical scanners</link>, ACM Transactions on
+        Programming Languages and Systems <emphasis
+        role="bold">14</emphasis>(4):490--520, October 1992.</para>
+      </listitem>
+
+      <listitem>
+        <para>J. Rekers, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Rekers.ps.gz">Parser
+        Generation for Interactive Environments</link>, dissertation,
+        University of Amsterdam, 1992. <emphasis>Detailed description of the
+        GLR algorithm.</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para>M.G. J. van den Brand, J. Scheerder, J. J. Vinju and E. Visser,
+        <link
+        xlink:href="http://www.springerlink.com/content/03359k0cerupftfh/">Disambiguation
+        Filters for Scannerless Generalized LR Parsers</link>, Proceedings of
+        the 11th International Conference on Compiler Construction (CC'02),
+        143--158, 2002. <emphasis>Describes current disambiguation methods
+        that are used in combination with scannerless
+        parsing.</emphasis></para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="sdf_ToDo">
+    <title>To Do</title>
+
+    <para>Needed:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Check error messages for correctness and add explanatory text to
+        error messages.</para>
+      </listitem>
+
+      <listitem>
+        <para>Check all examples.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>

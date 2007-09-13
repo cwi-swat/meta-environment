@@ -1,0 +1,6 @@
+module Multiplier
+exports
+  imports Adder
+
+  context-free syntax
+    mul(NUM,NUM) -> NUM

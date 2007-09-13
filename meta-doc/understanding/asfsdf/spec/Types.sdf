@@ -1,0 +1,18 @@
+module Types
+
+imports basic/Whitespace
+imports basic/Booleans
+
+exports
+  context-free start-symbols Type
+  sorts Type
+
+  context-free syntax
+    "natural"     -> Type
+    "string"      -> Type
+    "nil-type"    -> Type
+    compatible(Type, Type) -> Boolean
+
+hiddens
+  variables
+    "Type"[0-9]*  -> Type

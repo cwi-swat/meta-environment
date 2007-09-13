@@ -1,0 +1,2523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>The Language Specification Formalism ASF+SDF</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Mark</firstname><surname>van den
+        Brand</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+
+    <pubdate>to be filled in</pubdate>
+  </info>
+
+  <warning>
+    <para>This document is work in progress. It is in transition between The
+    Meta-Environment V1.5 and V2.0. It especially needs adaptations in the
+    sections on traversal functions, lexical constructor functions and
+    rewriting layout and source code comments.</para>
+  </warning>
+
+  <section>
+    <title>Introduction to ASF+SDF</title>
+
+    <para>If you want to</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>create an Interactive Development Environment (IDE) for some
+        existing or new programming language,</para>
+      </listitem>
+
+      <listitem>
+        <para>design and implement your own domain-specific language,</para>
+      </listitem>
+
+      <listitem>
+        <para>analyze existing source code, or</para>
+      </listitem>
+
+      <listitem>
+        <para>transform existing source code,</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>then ASF+SDF may be the right technology to use. This document is
+    the reference manual for ASF+SDF. It explains everything about ASF+SDF as
+    a reference for experienced users. Other more introductory material is
+    also available. ASF+SDF is a language that depends heavily on the SDF
+    formalism. We refer to the SDF manual for details. ASF is the actual
+    language that is described here. The complete language is called ASF+SDF
+    because ASF does not exist without SDF.</para>
+
+    <para>ASF+SDF programs can be used in connection with The Meta-Environment
+    tools to obtain an IDE for a programming language. Other documentation
+    about The Meta-Environment will tell you more about this.</para>
+
+    <section>
+      <title>Why use ASF+SDF?</title>
+
+      <para>ASF+SDF is intended for the high-level, modular, description of
+      the analysis and transformation of computer-based formal languages. It
+      is the result of the marriage of two formalisms ASF (Algebraic
+      Specification Formalism) and SDF (Syntax Definition Formalism). ASF+SDF
+      can be used to implement compilers, refactoring tools, reverse
+      engineering tools, re-engineering tools, etc. Basically all meta
+      programs are within the scope of ASF+SDF. It is specifically designed to
+      make the construction of meta programs more easy.</para>
+
+      <para>Key features of ASF:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Concrete syntax for source code patterns, makes writing
+          programs for complex programming languages easy.</para>
+        </listitem>
+
+        <listitem>
+          <para>Automated parse tree traversal, keeps meta programs
+          concise.</para>
+        </listitem>
+
+        <listitem>
+          <para>Static type system, makes sure you can not generate code that
+          can not be parsed (a.k.a. syntax safety).</para>
+        </listitem>
+
+        <listitem>
+          <para>List matching, so any element can be accessed in a list
+          without traversal.</para>
+        </listitem>
+
+        <listitem>
+          <para>High fidelity. Access to layout and source code comments in
+          parse trees, to analyze them, generate them, or to simply keep
+          them.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>How to use ASF+SDF?</title>
+
+      <para>There are two ways to write ASF+SDF specifications and to execute
+      them:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By far the simplest way is to use the ASF+SDF Meta-Environment
+          that enables the interactive editing and execution of ASF programs.
+          It also supports the compilation of specifications and the
+          generation of all necessary information (including parse tables and
+          compiled specifications) to execute specifications from the command
+          line.</para>
+        </listitem>
+
+        <listitem>
+          <para>Command line tools including <command>asfe</command> (for
+          interpreting ASF+SDF specifications) and <command>asfc</command>
+          (for compiling ASF+SDF specifications to C) enable the execution of
+          ASF+SDF specifications from the command line. The command line tools
+          for SDF are also needed: i.e. <command>sglr</command> (to parse a
+          file), <command>addPosinfo</command> (to annotate a parse tree with
+          location info) and <command>unparsePT</command> (to yield a program
+          text).</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Learning more</title>
+
+      <para><warning>
+          <para>Add links to the mentioned documents.</para>
+        </warning></para>
+
+      <itemizedlist>
+        <listitem>
+          <para>For a detailed description of SDF see The Syntax Definition
+          Formalism SDF.</para>
+        </listitem>
+
+        <listitem>
+          <para>In Term Rewriting the notions<emphasis>rewrite
+          rules</emphasis> and <emphasis>term rewriting</emphasis> are
+          explained that play an important role when executing ASF+SDF
+          specifications.</para>
+        </listitem>
+
+        <listitem>
+          <para>An explanation of error messages of ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>An explanation of error messages of SDF</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>The connection between ASF and SDF</title>
+
+      <para>SDF is used to describe syntax of (programming) languages using
+      context-free production rules. The parsers generated by SDF produce
+      parse trees. The nodes of the parse trees are the productions of the SDF
+      specification. The leaves of the parse trees are the characters of the
+      input text. ASF programs take parse trees as input and produce parse
+      trees as output. A node in the parse tree is a "function" for ASF. All
+      ASF does is replace functions by other functions, generating a new parse
+      tree that can be unparsed to obtain an output text.</para>
+
+      <para>ASF stands for Algebraic Specification Formalism. This paragraph
+      describes ASF in terms of algebras. ASF can be used to define
+      many-sorted algebra's. Many sorted algebra's have so-called signatures
+      to describe the shape of algebraic terms. In ASF we use SDF to describe
+      the signature of terms. An SDF production is an ASF term constructor. A
+      non-terminal in SDF is an algebraic sort in ASF. ASF specification are
+      collections of equations. The algebraic equations define which terms are
+      equal to which other terms. This is were the algebra stops, and term
+      rewriting begins. In fact the equations are interpreted as rewrite
+      rules. Each pattern on the left-hand side is searched in the input term,
+      and replaced by the right-hand side. </para>
+
+      <para>The parse trees of SDF contain the full input program text and all
+      SDF productions that have been used to parse it. ASF provides full
+      access to all details of the parse tree, such that any analysis or
+      transformation is possible.</para>
+
+      <para>Parse trees and abstract syntax trees are very complicated
+      structures. In ASF you do not have to deal with this complexity. Parse
+      tree patterns are expressed in the programming language that is analyzed
+      or transformed. This is called "concrete syntax". ASF rewrites parse
+      trees to other parse trees under the hood, but the programmer types in
+      source code of the language analyzed or transformed. This manual
+      contains many examples of this.</para>
+
+      <para>ASF+SDF uses the module mechanism provided by SDF. Each module
+      <replaceable>M</replaceable> in an SDF specification is stored in a file
+      <replaceable>M</replaceable><literal>.sdf</literal>. To each module
+      <replaceable>M</replaceable> one can simply add equations as needed by
+      providing them in a file
+      <replaceable>M</replaceable><literal>.asf</literal>. The result is an
+      ASF+SDF specification. We call
+      <replaceable>M</replaceable><literal>.sdf</literal> the <emphasis>SDF
+      part</emphasis> of module <replaceable>M</replaceable> and
+      <replaceable>M</replaceable><literal>.asf</literal> the <emphasis>ASF
+      part</emphasis> of <replaceable>M</replaceable>.</para>
+
+      <para>Note that some of the semantics of ASF is triggered by the
+      attributes of productions in SDF. The <code>{bracket} </code>attribute
+      is one example, another important example is the
+      <code>{traversal(...)}</code> attribute.</para>
+
+      <para>The <code>variables</code> and <code>lexical variables</code>
+      sections of SDF are important. In these sections you describe the syntax
+      of meta variables. These are exactly the variables used in the concrete
+      syntax patterns used in ASF to construct and deconstruct source
+      code.</para>
+    </section>
+
+    <section>
+      <title>Overview</title>
+
+      <para>This document describes the syntax of ASF and its semantics. The
+      syntax of ASF is structured as follows:</para>
+
+      <figure>
+        <title>Syntactic structure of ASF</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="grammar.png" scalefit="1" valign="middle"
+                       width="100%"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>We will now describe the ingredients of the ASF part of modules.
+      Each module contains any number of sections. There are equations
+      sections and tests sections. The equations sections contain normal
+      equations and conditional equations. The tests sections contain normal
+      tests and conditional tests. The document is split into three parts.
+      First we discuss the basic features of ASF+SDF, then we discuss the
+      advanced features of ASF+SDF. Note that both the syntax and the name of
+      the <code>Tree</code> non-terminal from the above picture is defined by
+      the programmer in SDF. It will be different for every ASF+SDF
+      program.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="SimpleEquations">Basic ASF+SDF</link>:
+          unconditional and conditional equations, default equations and
+          test</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="AdvancedEquations">Advanced ASF+SDF</link>:
+          list matching, memo functions, lexical constructor functions,
+          traversal functions, and dealing with layout and source code
+          comments</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We conclude the description of ASF+SDF with <link
+      linkend="asfsdf_HistoricalNotes">Historical notes and bibliographic
+      background on ASF+SDF</link></para>
+    </section>
+  </section>
+
+  <section xml:id="SimpleEquations">
+    <title>Simple ASF+SDF</title>
+
+    <para>Equations are used to define the semantics of functions. Each
+    equation deals with a particular case for the function. The case is
+    identified by the pattern on the left-hand side of the equation. The
+    syntax of a function is defined eaelier in SDF, in ASF we provide a
+    semantics for it by defining rewrite rules that are called
+    equations.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="EquationsSection">The equations
+        section</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="UnconditionalEquations">Unconditional
+        equations</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ConditionalEquations">Conditional
+        equations</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ExecutingEquations">Executing
+        equations</link>.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="SimpleEquationsExamples">Examples</link>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="EquationsSection">
+      <title>The Equations Section</title>
+
+      <para>Equations are always contained in an equations section that has
+      the following structure:</para>
+
+      <programlisting><emphasis role="bold">equations</emphasis>
+    &lt;Equation&gt;*</programlisting>
+
+      <para>In other words, the keyword <literal>equations</literal> followed
+      by zero or more equations. These may be unconditional or conditional
+      equations as described below.</para>
+    </section>
+
+    <section xml:id="UnconditionalEquations">
+      <title>Unconditional Equations</title>
+
+      <para>An unconditional equation has the form<programlisting><emphasis
+            role="bold">[</emphasis>&lt;TagId&gt;<emphasis role="bold">]</emphasis> &lt;Term&gt; <emphasis
+            role="bold">=</emphasis> &lt;Term&gt;</programlisting>where
+      <literal>&lt;TagId&gt;</literal> is the name of the equation. It is a
+      sequence of letters, digits, and/or minus signs (<literal>-</literal>)
+      starting with a letter or a digit. Next follows an equality between two
+      <literal>&lt;Term&gt;</literal>s. A <literal>&lt;Term&gt;</literal> is
+      any string described by the SDF part of the module in which the equation
+      occurs. There are some restrictions on the terms in an equation:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The terms on both sides of the equal sign are of the same
+          sort.</para>
+        </listitem>
+
+        <listitem>
+          <para>The term on the left-hand side is not a single
+          variable.</para>
+        </listitem>
+
+        <listitem>
+          <para>The variables that occur in the term on the right-hand side
+          also occur in the term on the left-hand side of the equal
+          sign.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It is assumed that the variables occurring in the equation are
+      universally quantified. In other words, the equality holds for all
+      possible values of the variables.</para>
+    </section>
+
+    <section xml:id="ConditionalEquations">
+      <title>Conditional Equations</title>
+
+      <para>An unconditional equation is a special case of a
+      <emphasis>conditional equation</emphasis>, i.e., an equality with one or
+      more associated conditions (premises). The equality is sometimes called
+      the <emphasis>conclusion</emphasis> of the conditional equation. In
+      ASF+SDF a conditional equation can be written in three (syntactically
+      different, but semantically equivalent) ways. Using
+      <literal>when</literal><programlisting><emphasis role="bold">[</emphasis>&lt;TagId<emphasis
+            role="bold">&gt;]</emphasis>  &lt;Term<subscript>1</subscript>&gt; <emphasis
+            role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt; <emphasis
+            role="bold">when</emphasis> &lt;Condition<subscript>1</subscript>&gt;<emphasis
+            role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+            role="bold">,</emphasis> ...</programlisting>or using an
+      implication arrow <literal>===&gt;</literal><programlisting><emphasis
+            role="bold">[</emphasis>&lt;TagId&gt;<emphasis role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
+            role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+            role="bold">,</emphasis> ... <emphasis role="bold">===&gt;</emphasis> &lt;Term<subscript>1</subscript>&gt; <emphasis
+            role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting>or
+      using a horizontal bar</para>
+
+      <para><programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
+            role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
+            role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+            role="bold">,</emphasis> ... 
+           <emphasis role="bold">===============================</emphasis>
+                 &lt;Term<subscript>1</subscript>&gt; <emphasis role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
+
+      <para>where
+      <literal>&lt;Condition<subscript>1</subscript>&gt;</literal>,
+      <literal>&lt;Condition<subscript>2</subscript>&gt;</literal>, ... are
+      conditions which may be of one of the following forms:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>&lt;Term<subscript>1</subscript>&gt;</literal>
+          <emphasis role="bold">:=</emphasis>
+          <literal>&lt;Term<subscript>2</subscript>&gt;</literal>, a
+          <emphasis>match condition</emphasis> that succeeds when the
+          reduction of <literal>&lt;Term<subscript>2</subscript>&gt;</literal>
+          matches <literal>&lt;Term<subscript>1</subscript>&gt;</literal>;
+          variables in <literal>&lt;Term<subscript>1</subscript>&gt;</literal>
+          get new values.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;Term<subscript>1</subscript>&gt; !:=
+          &lt;Term<subscript>2</subscript>&gt;</literal>, a
+          <emphasis>non-match condition</emphasis> that succeeds when the
+          reduction of <literal>&lt;Term<subscript>2</subscript>&gt;</literal>
+          does not match
+          <literal>&lt;Term<subscript>1</subscript>&gt;</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;Term<subscript>1</subscript>&gt; ==
+          &lt;Term<subscript>2</subscript>&gt;</literal>, an
+          <emphasis>equality condition</emphasis> (also known as
+          <emphasis>positive condition</emphasis>) that succeeds when the
+          reductions of
+          <literal>&lt;Term<subscript>1</subscript>&gt;</literal> and
+          <literal>&lt;Term<subscript>2</subscript>&gt;</literal> are
+          syntactically identical.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;Term<subscript>1</subscript>&gt; !=
+          &lt;Term<subscript>2</subscript>&gt;</literal>, an
+          <emphasis>inequality condition</emphasis> (also known as
+          <emphasis>negative condition</emphasis>) that succeeds when the
+          reductions of
+          <literal>&lt;Term<subscript>1</subscript>&gt;</literal> and
+          <literal>&lt;Term<subscript>2</subscript>&gt;</literal> are
+          syntactically unequal.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The conditions of an equation are evaluated from left to right.
+      Let, initially, <replaceable>Vars</replaceable> be the set of variables
+      occurring in the left-hand side of the conclusion of the
+      equation.</para>
+
+      <para>Match conditions are evaluated as follows. The left-hand side of a
+      match condition must contain at least one <emphasis>new</emphasis>
+      variable not in <replaceable>Vars</replaceable>. Reduce the right-hand
+      side of the match condition to a normal form. The match condition
+      succeeds if this normal form and the left-hand side of the condition
+      match. The new variables resulting from this match are added to
+      <replaceable>Vars</replaceable> and bound to the corresponding parts of
+      the right-hand side of the condition.</para>
+
+      <important>
+        <para>If a variable <emphasis>V</emphasis> occurs both in
+        <replaceable>Vars</replaceable> and in the left-hand side of a
+        condition, then it must match a subterm in the right hand side of the
+        condition that is syntactically identical to the current value of
+        V.</para>
+      </important>
+
+      <para>For the evaluation of each equality condition we require that the
+      condition contains only variables in <replaceable>Vars</replaceable>.
+      Reduce both sides of the condition to normal form and the condition
+      succeeds if both normal forms are identical. Technically, this is called
+      a <emphasis>join</emphasis> condition. The evaluation of negative
+      conditions is described by replacing in the above description
+      ``identical'' and ``match'' by ``not identical'' and ``do not match'',
+      respectively. <important>
+          <para>It is not allowed to introduce new variables in a negative
+          condition.</para>
+        </important>After the successful evaluation of the conditions, all
+      variables occurring in the right-hand side of the conclusion of the
+      equation should be in <replaceable>Vars</replaceable>. New variables
+      (see above) should therefore <emphasis>not</emphasis> occur on
+      <emphasis>both</emphasis> sides of a positive condition, in a negative
+      condition, or in the right-hand side of the conclusion.</para>
+    </section>
+
+    <section xml:id="ExecutingEquations">
+      <title>Executing Equations</title>
+
+      <!--\index{leftmost-innermost@leftmost-innermost} \index{rewrite rules@rewrite rules} \index{default equations@default equations}-->
+
+      <para>In the ASF+SDF Meta-Environment, equations can be executed as
+      <emphasis>rewrite rules</emphasis>. This can be used to reduce some
+      initial closed term (i.e., not containing variables) to a
+      <emphasis>normal form</emphasis> (i.e., a term that is not reducible any
+      further) by repeatedly applying rules from the specification. A term is
+      always reduced in the context of a certain module, say
+      <replaceable>M</replaceable>. The rewrite rules that may be used for the
+      reduction of the term are the rules declared in
+      <replaceable>M</replaceable> itself and in the modules that are
+      (directly or indirectly) imported by <replaceable>M</replaceable>. The
+      search for an applicable rule is determined by the reduction strategy,
+      that is, the procedure used to select a subterm for possible reduction.
+      In our case the<emphasis> leftmost-innermost</emphasis> reduction
+      strategy is used. This means that a left-to-right, depth-first traversal
+      of the term is performed and that for each subterm encountered an
+      attempt is made to reduce it. Next, the rules are traversed one after
+      the other. The textual order of the rules is irrelevant, but <link
+      linkend="DefaultEquations">default equations</link> come last.</para>
+
+      <para>If the selected subterm and the left-hand side of a rule (more
+      precisely: of the left-hand side of its conclusion) match, we say that a
+      <emphasis>redex</emphasis> has been found and the following happens. The
+      conditions of the rule are evaluated and if the evaluation of a
+      condition fails, other rules (if any) with matching left-hand sides are
+      tried. If the evaluation of all conditions succeeds, the selected
+      subterm is replaced by the right-hand side of the rule (more precisely:
+      the right-hand side of the conclusion of the rule) after performing
+      proper <emphasis>substitutions</emphasis>. Substitutions come into
+      existence by the initial matching of the rule and by the evaluation of
+      its conditions. For the resulting term the above process is repeated
+      until no further reductions are possible and a normal form is reached
+      (if any).<important>
+          <para>A specification should always be
+          <emphasis>confluent</emphasis> and <emphasis>terminating</emphasis>.
+          Confluent means that the order in which the rules are applied has no
+          effect on the outcome. Terminating means that the application of
+          rules cannot go on indefinitely. We do not check for these two
+          properties. Also see <link linkend="CommonExecutionErrors">Common
+          Errors when Executing Specifications</link>.</para>
+        </important></para>
+    </section>
+
+    <section xml:id="SimpleEquationsExamples">
+      <title>Examples</title>
+
+      <para>We give here a number of elementary examples with the sole purpose
+      to illustrate a range of features of ASF+SDF:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="AdditionMultiplicationOfNumerals">Addition and
+          Multiplication on Numerals</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="Booleans">Booleans</link>: simple truth values
+          and operations.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="FriendlyBooleans">FriendlyBooleans</link>:
+          truth values with user-defined syntax.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For larger and more <emphasis>interesting</emphasis> examples, we
+      refer to ASF+SDF by Example. <remark>Add link.</remark></para>
+
+      <section xml:id="AdditionMultiplicationOfNumerals">
+        <title>Addition and Multiplication on Numerals</title>
+
+        <para>The natural numbers 0, 1, 2, ... can be represented in a form
+        that is more convenient for formal reasoning:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>0 is represented by <literal>0</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>1 is represented by <literal>succ(0)</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>2 is represented by <literal>succ(succ(0))</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>...</para>
+          </listitem>
+
+          <listitem>
+            <para>The number <replaceable>N</replaceable> is represented by
+            <literal>succ</literal><superscript><replaceable>N</replaceable></superscript><literal>(0)</literal>,
+            i.e., <replaceable>N</replaceable> applications of
+            <literal>succ</literal> to <literal>0</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Let's first formalize the grammar of these numerals in an SDF
+        definition <link linkend="Numerals.sdf">Numerals.sdf</link>.</para>
+
+        <example xml:id="Numerals.sdf">
+          <title>Numerals.sdf</title>
+
+          <programlisting linenumbering="numbered">module Numerals
+exports
+ sorts NUM                   <co xml:id="co.num" />
+ imports basic/Whitespace    <co xml:id="co.whitespace" />
+  context-free syntax
+      "0"          -&gt; NUM    <co xml:id="co.0" />
+      succ(NUM)    -&gt; NUM    <co xml:id="co.succ" />
+  context-free start-symbols
+      NUM                    <co xml:id="co.start-num" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.num">
+              <para>Declares the sort <literal>NUM</literal> that will
+              represent all numerals.</para>
+            </callout>
+
+            <callout arearefs="co.whitespace">
+              <para>Import the library module
+              <literal>basic/Whitespace</literal> in order to define layout
+              and comments.</para>
+            </callout>
+
+            <callout arearefs="co.0">
+              <para>Define the constant <literal>0</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.succ">
+              <para>Define the successor function <literal>succ</literal>.
+              Note that we use a prefix function here (see
+              <remark>XXX</remark>); the unabbreviated definition would
+              be</para>
+
+              <programlisting>"succ" "(" NUM ")" -&gt; NUM</programlisting>
+            </callout>
+
+            <callout arearefs="co.start-num">
+              <para>Declare <literal>NUM</literal> as start symbol to enable
+              the parsing of <literal>NUM</literal>s.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>Having defined numerals, we can parse texts like
+        <literal>0</literal>, <literal>succ(0)</literal>, etc. as
+        syntactically correct <literal>NUM</literal>s.</para>
+
+        <para>The next step is to define addition and multiplication on
+        numerals. Let's start with addition. We do this by introducing a
+        module <link linkend="Adder.sdf">Adder.sdf</link> that defines syntax
+        for the <literal>add</literal> function.</para>
+
+        <example xml:id="Adder.sdf">
+          <title>Adder.sdf</title>
+
+          <programlisting>module Adder
+exports
+  imports Numerals                    <co xml:id="co.imp-numerals" />
+  context-free syntax
+      add(NUM, NUM)  -&gt; NUM           <co xml:id="co.add" /> 
+  variables
+      "<replaceable>X</replaceable>"            -&gt; NUM           <co
+              xml:id="co.adder-x" />
+      "<replaceable>Y</replaceable>"            -&gt; NUM</programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.imp-numerals">
+              <para>Import the previously defined module Numerals.</para>
+            </callout>
+
+            <callout arearefs="co.add">
+              <para>Define the syntax of the <literal>add</literal>
+              function.</para>
+            </callout>
+
+            <callout arearefs="co.adder-x">
+              <para>Define the variables
+              <literal><replaceable>X</replaceable></literal> and
+              <literal><replaceable>Y</replaceable></literal> of sort
+              <literal>NUM</literal>. They will be used in the
+              equations.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>Now we are ready for <link linkend="Adder.asf">Adder.asf</link>
+        that defines the equations for the <literal>add</literal>
+        function.</para>
+
+        <example xml:id="Adder.asf">
+          <title>Adder.asf: the ASF part of the Adder module</title>
+
+          <programlisting>equations                             <co
+              xml:id="co.numerals-equations" />
+[1] add(0, <replaceable>X</replaceable>) = <replaceable>X                     </replaceable><co
+              xml:id="co.numerals-1" />
+[2] add(succ(<replaceable>X</replaceable>), Y) = succ(add(<replaceable>X</replaceable>,<replaceable>Y</replaceable>))  <co
+              xml:id="co.numerals-2" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.numerals-equations">
+              <para>The ASF part starts with the keyword
+              <literal>equations</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.numerals-1">
+              <para>First equation: adding <literal>0</literal> to an
+              arbitrary numeral <replaceable>X</replaceable> yields that same
+              numeral.</para>
+            </callout>
+
+            <callout arearefs="co.numerals-2">
+              <para>Adding <replaceable>Y</replaceable> to the successor of
+              <replaceable>X</replaceable> is the same as applying the
+              successor to the addition of <replaceable>X</replaceable> and
+              <replaceable>Y</replaceable>.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>After these preparations we can parse and reduce terms using the
+        module Adder:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The term <literal>0</literal> reduces to
+            <literal>0</literal> in zero steps; no simplifications are
+            possible.</para>
+          </listitem>
+
+          <listitem>
+            <para>The term <literal>succ(0)</literal> reduces to
+            <literal>succ(0)</literal> in zero steps; no simplifications are
+            possible.</para>
+          </listitem>
+
+          <listitem>
+            <para>The term <literal>add(succ(succ(0)),
+            succ(succ(0)))</literal> reduces to
+            <literal>succ(succ(succ(succ(0))))</literal> in 3 steps; this
+            corresponds to 2 + 2 = 4.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>We complete this example with <link
+        linkend="Multiplier.sdf">Multiplier.sdf</link> and <link
+        linkend="Multiplier.asf">Multiplier.asf</link> that define a
+        multiplication operator on numerals as well.</para>
+
+        <example xml:id="Multiplier.sdf">
+          <title>Muliplier.sdf</title>
+
+          <programlisting>module Multiplier
+exports
+  imports Adder                       <co xml:id="co.multiplier-import-adder" />
+  context-free syntax
+    mul(NUM,NUM) -&gt; NUM               <co xml:id="co.multiplier-mul" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.multiplier-import-adder">
+              <para>Import the module Adder that have just defined
+              above.</para>
+            </callout>
+
+            <callout arearefs="co.multiplier-mul">
+              <para>Define the syntax of the function
+              <literal>mul</literal>.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>The equations for <literal>mul</literal> are defined in <link
+        linkend="Multiplier.asf">Multiplier.asf</link>.</para>
+
+        <example xml:id="Multiplier.asf">
+          <title>Multiplier.asf</title>
+
+          <para><programlisting>equations
+[1] mul(0, <replaceable>X</replaceable>) = 0                      <co
+                xml:id="co.multiplier-mul-1" />
+[2] mul(succ(<replaceable>X</replaceable>), <replaceable>Y</replaceable>) = add(mul(<replaceable>X</replaceable>,<replaceable>Y</replaceable>), <replaceable>Y</replaceable>) <co
+                xml:id="co.multiplier-mul-2" /></programlisting>Notes:<calloutlist>
+              <callout arearefs="co.multiplier-mul-1">
+                <para>Multiplying any numeral by zero yields zero.</para>
+              </callout>
+
+              <callout arearefs="co.multiplier-mul-2">
+                <para>Reduce multiplication to addition: multiplying
+                <replaceable>Y</replaceable> by <replaceable>X</replaceable>+1
+                is the same as multiplying <replaceable>Y</replaceable> by
+                <replaceable>X</replaceable> and then adding
+                <replaceable>Y</replaceable>.</para>
+              </callout>
+            </calloutlist></para>
+        </example>
+
+        <para>We can now parse and reduce terms using the module
+        Multiplier:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The term <literal>mul(succ(succ(succ(0))),
+            succ(succ(0)))</literal> reduces to
+            <literal>succ(succ(succ(succ(succ(succ(0))))))</literal>; this
+            corresponds to 3 * 2 = 6.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="Booleans">
+        <title>Booleans</title>
+
+        <para>The Boolean constants <literal>true</literal> and
+        <literal>false</literal> and the Boolean functions
+        <literal>and</literal>, <literal>or</literal> and
+        <literal>not</literal> are also completely elementary and therefore
+        well-suited for illustrating some more features of ASF+SDF. The syntax
+        of Booleans is given in <link
+        linkend="Booleans.sdf">Booleans.sdf</link>.</para>
+
+        <example xml:id="Booleans.sdf">
+          <title>Booleans.sdf</title>
+
+          <programlisting>module Booleans
+exports
+  sorts BoolCon                        <co xml:id="co.booleans.boolcon" />
+  context-free syntax
+     "true"  -&gt; BoolCon                <co xml:id="co.booleans.true" />
+     "false" -&gt; BoolCon
+
+  sorts Boolean                        <co xml:id="co.booleans.boolean" />
+  context-free start-symbols           <co xml:id="co.booleans.startsymbols" />
+        Boolean
+  context-free syntax
+     BoolCon               -&gt; Boolean  <co
+              xml:id="co.booleans.boolcon-boolean" />
+     and(Boolean, Boolean) -&gt; Boolean  <co xml:id="co.booleans.and" />
+     or(Boolean,Boolean)   -&gt; Boolean  
+     not(Boolean)          -&gt; Boolean  
+
+hiddens                                <co xml:id="co.booleans.hiddens" />
+  imports basic/Comments               <co xml:id="co.booleans.comments" />
+  variables
+     "<replaceable>B</replaceable>" -&gt; Boolean                    <co
+              xml:id="co.booleans.var" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.booleans.boolcon">
+              <para>Introduce the sort <literal>BoolCon</literal> that will
+              represent the constants <literal>true</literal> and
+              <literal>false</literal>. It is good practice to define
+              constants as a separate sort.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.true">
+              <para>Here are the definitions of the constants
+              themselves.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.boolean">
+              <para>Introduce our sort of interest:
+              <literal>Boolean</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.startsymbols">
+              <para>Since we will be dealing with Boolean terms, it is
+              mandatory that they can be parsed. Hence we need to define a
+              start symbol for them.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.boolcon-boolean">
+              <para>Every Boolean constant <literal>BoolCon</literal> is a
+              <literal>Boolean</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.and">
+              <para>Definition of the syntax of <literal>and</literal>,
+              <literal>or</literal> and <literal>not</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.hiddens">
+              <para>It is good practice to define comments (as needed in the
+              equations) and variables as hidden. This has the advantage that
+              comment conventions and variable declaration do propagate to the
+              modules that import the current module.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.comments">
+              <para>Import standard comments.</para>
+            </callout>
+
+            <callout arearefs="co.booleans.var">
+              <para>Define the single variable <replaceable>B</replaceable>
+              for later use in the equations.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>After these preparations we are ready to parse Boolean terms
+        like:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>true</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>and(true,false)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>and(or(true,not(false)),true)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>or(true,
+            <replaceable>B</replaceable>)</literal></para>
+          </listitem>
+
+          <listitem>
+            <para>and so on and so forth.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The definition of the functions on Booleans now simply requires
+        writing down the truth tables in the form of equations and is given in
+        <link linkend="Booleans.asf">Booleans.asf</link>.</para>
+
+        <example xml:id="Booleans.asf">
+          <title>Booleans.asf</title>
+
+          <programlisting>equations
+
+[or1] or(true, true)     = true
+[or2] or(true, false)    = true
+[or3] or(false, true)    = true
+[or4] or(false, false)   = false
+
+[and1] and(true, true)   = true
+[and2] and(true, false)  = false
+[and3] and(false, true)  = false
+[and4] and(false, false) = false
+
+[not1] not(true) = false
+[not2] not(false) = true</programlisting>
+        </example>
+
+        <para>We can now parse and reduce terms using Booleans:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The term <literal>true</literal> reduces to
+            <literal>true</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The term <literal>and(true,false)</literal> reduces to
+            <literal>false</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The term <literal>and(or(true,not(false)),true)</literal>
+            reduces to <literal>true</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>As a final touch, a similar but shorter definition of the
+        Boolean functions is possible. By using variable
+        <replaceable>B</replaceable>, which we did declare but have not used
+        so far, a shorter definition is possible see, for instance, the
+        definition for <literal>or</literal> <link
+        linkend="shorter-def-or">below</link>.</para>
+
+        <example xml:id="shorter-def-or">
+          <title>A shorter definition for <literal>or</literal>.</title>
+
+          <programlisting>[or1'] or(true, <replaceable>B</replaceable>)  = true
+[or2'] or(false, <replaceable>B</replaceable>) = <replaceable>B</replaceable></programlisting>
+        </example>
+      </section>
+
+      <section xml:id="FriendlyBooleans">
+        <title>Booleans with user-defined syntax</title>
+
+        <para>The Booleans we have seen in the <link
+        linkend="Booleans">previous example</link> are fine, but the strict
+        prefix notation makes Boolean terms less readable. Would it be
+        possible to use more friendly notation like <literal>true &amp;
+        false</literal> instead of <literal>and(true, false)</literal> or
+        <literal>true | false</literal> instead of <literal>or(true,
+        false)</literal>? Can this be defined in ASF+SDF? The answers are
+        <emphasis>yes</emphasis> and <emphasis>yes</emphasis>. In fact
+        user-defined syntax is one of the unique features of ASF+SDF.</para>
+
+        <para>In <link
+        linkend="FriendlyBooleans.sdf">FriendlyBooleans.sdf</link> we show a
+        version of the Booleans with user-defined syntax.</para>
+
+        <example xml:id="FriendlyBooleans.sdf">
+          <title><literal>FriendlyBooleans.sdf</literal></title>
+
+          <programlisting>module FriendlyBooleans
+exports
+  sorts BoolCon
+  context-free syntax
+     "true"  -&gt; BoolCon
+     "false" -&gt; BoolCon
+
+  sorts Boolean
+  context-free start-symbols
+        Boolean
+  context-free syntax
+     BoolCon               -&gt; Boolean
+     Boolean "&amp;" Boolean   -&gt; Boolean {left}     <co
+              xml:id="co.friendlybooleans-and" />
+     Boolean "|" Boolean   -&gt; Boolean {left}
+     not(Boolean)          -&gt; Boolean            <co
+              xml:id="co.friendlybooleans-not" />
+     "(" Boolean ")"       -&gt; Boolean {bracket}  <co
+              xml:id="co.friendlybooleans-bracket" />
+  context-free priorities                        <co
+              xml:id="co.friendlybooleans.priority" />
+     Boolean "&amp;" Boolean -&gt; Boolean &gt;
+     Boolean "|" Boolean -&gt; Boolean
+hiddens
+  imports basic/Comments
+  variables
+     "<replaceable>B</replaceable>" -&gt; Boolean</programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.friendlybooleans-and">
+              <para>Here the infix syntax for the <literal>and</literal> and
+              <literal>or</literal> function is defined.</para>
+            </callout>
+
+            <callout arearefs="co.friendlybooleans-bracket">
+              <para>Since we have infix functions, parentheses are needed for
+              grouping.</para>
+            </callout>
+
+            <callout arearefs="co.friendlybooleans-not">
+              <para>We keep the prefix version of the <literal>not</literal>
+              function to illustrate the mixture of prefix and infix
+              notation.</para>
+            </callout>
+
+            <callout arearefs="co.friendlybooleans.priority">
+              <para>A priority rules defines that <literal>&amp;</literal>
+              binds stronger than <literal>|</literal>.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>After these preparations, the equations are shown in <link
+        linkend="FriendlyBooleans.asf">FriendlyBooleans.asf</link>.</para>
+
+        <example xml:id="FriendlyBooleans.asf">
+          <title><literal>FriendlyBooleans.asf</literal></title>
+
+          <programlisting>equations
+[or1] true | <replaceable>B</replaceable>    = true
+[or2] false | <replaceable>B</replaceable>   = <replaceable>B</replaceable>
+
+[and1] true &amp; <replaceable>B</replaceable>   = <replaceable>B</replaceable>
+[and2] false &amp; <replaceable>B</replaceable>  = false
+
+[not1] not(true)  = false
+[not2] not(false) = true</programlisting>
+        </example>
+
+        <important>
+          <para>Something interesting is going on here: we defined syntax
+          rules in FriendlyBooleans.sdf and use them here in
+          FriendlyBooleans.asf. This means that we use syntax in the equations
+          that we have defined ourselves! Think about the implications of
+          this: if we have an SDF definition for a programming language, we
+          can easily write equations that contain programming language
+          fragments. This unique feature makes ASF+SDF the ultimate language
+          for writing program transformations.</para>
+        </important>
+      </section>
+    </section>
+
+    <section xml:id="Tests">
+      <title>Tests</title>
+
+      <para>Specification writers are supposed to make no errors, but we are
+      all human. It is therefore convenient to explicitly state your
+      expectations about the normal forms for some typical input terms. The
+      tests in ASF+SDF provide a convenient way to document this and to run
+      unit test for a module.</para>
+
+      <para>Tests are always contained in a tests section that has the
+      following structure:</para>
+
+      <programlisting><emphasis role="bold">tests</emphasis>
+    &lt;Test&gt;*</programlisting>
+
+      <para>The global structure of the ASF part of a module then
+      becomes:</para>
+
+      <programlisting><emphasis role="bold">equations</emphasis>
+  &lt;Equation&gt;*
+<emphasis role="bold">tests</emphasis>
+  &lt;Test&gt;*</programlisting>
+
+      <para>In fact, a module may contain an <emphasis>several</emphasis> test
+      and equations sections in arbitrary order.</para>
+
+      <para>Each test has the form of a condition preceded by a label:</para>
+
+      <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
+          role="bold">]</emphasis> &lt;Condition&gt;</programlisting>
+
+      <para>A test may not contain variables and only the operators
+      <literal>==</literal> and<literal> !=</literal> can be used.</para>
+
+      <para>The tests for each module can be run via the
+      <guimenuitem>check</guimenuitem> menu item in the user-interface of The
+      Meta-Environment.</para>
+
+      <section>
+        <title>Example</title>
+
+        <para>Reconsider the functions on lists given <link
+        linkend="ListMatching">earlier</link>. We can add tests to that
+        definition as follows.</para>
+
+        <example xml:id="ListsWithTests.asf">
+          <title>Lists with tests</title>
+
+          <programlisting>equations
+ ... see <link linkend="Lists.asf">List.asf</link> ...
+
+tests
+ [sanity]      []                      != [1]
+ [append1]     [1,2,3] ++ 4            == [1,2,3,4]
+ [append2]     1 ++ [2,3,4]            == [1,2,3,4]
+ [length1]     length([1,2,3])         == 3
+ [is-element1] is-element(2, [1,2,3])  == true
+ [is-element2] is-element(5, {1,2,3])) != true</programlisting>
+        </example>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="AdvancedEquations">
+    <title>Advanced Equations</title>
+
+    <para>The simple equations described in the previous section are powerful
+    enough to formulate the solution of any computational problem. However,
+    ASF+SDF provides some more advanced features that can make the life of the
+    specification writer a lot simpler:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="DefaultEquations">Default equations</link>:
+        equations that apply only when no other equations are
+        applicable.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ListMatching">List matching</link>: decompose and
+        compose arbitrary lists.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="MemoFunctions">Memo functions</link>: memorize
+        the values of previous function invocations.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="ConstructorFunctions">Constructor
+        functions</link>: define which functions are irreducible.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="LexicalConstructorFunctions">Lexical constructor
+        functions</link>: get access to and modify the lexical (string)
+        representation of programs.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="TraversalFunctions">Traversal functions</link>:
+        traverse complex structures with a minimal specification effort; this
+        is important for solving real-life analysis and transformation
+        problems.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="DefaultEquations">
+      <title>Default Equations</title>
+
+      <!--\index{default equations@default equations}-->
+
+      <para>As we have seen in <link linkend="ExecutingEquations">Executing
+      Equations</link>, the evaluation strategy for normalizing terms given
+      the equations is based on innermost rewriting. All equations have the
+      same priority. Given the outermost function symbol of a redex the set of
+      equations with this outermost function symbol in the left-hand side is
+      selected and all these rules will be tried. However, sometimes a
+      specification writer would like to write down a rule with a special
+      status: <emphasis>try this rule if all other rules fail</emphasis>. A
+      kind of default behaviour is needed. ASF+SDF offers functionality in
+      order to obtain this behaviour. If the <replaceable>TagId</replaceable>
+      of an equation starts with <literal>default-</literal> this equation is
+      considered to be a special equation which will only be applied if no
+      other rule matches.</para>
+
+      <section>
+        <title>Example: Comparing Types</title>
+
+        <para>Suppose we are solving a typechecking problem and have a sort
+        <literal>Type</literal> that represents the possible types. It is
+        likely that we will need a function <literal>compatible</literal> that
+        checks whether two types are compatible, for instance, when they
+        appear on the left-hand and right-hand side of an assignment statement
+        or when the actual/formal correspondence of procedure parameters has
+        to be checked. Potentially, <literal>Type</literal> may contain a lot
+        of different type values and comparing them all is a combinatorial
+        problem.</para>
+
+        <para>The modules <link linkend="Types.sdf">Types.sdf</link> and <link
+        linkend="Types.asf">Types.asf</link> show how to solve this problem
+        using a default equation. In Types.sdf, we define a sort
+        <literal>Type</literal> that can have values
+        <literal>natural</literal>, <literal>string</literal> and
+        <literal>nil-type</literal>.</para>
+
+        <example xml:id="Types.sdf">
+          <title>Types.sdf</title>
+
+          <para><programlisting>module Types
+
+imports basic/Whitespace
+imports basic/Booleans
+
+exports
+  context-free start-symbols Type
+  sorts Type
+
+  context-free syntax
+    "natural"     -&gt; Type
+    "string"      -&gt; Type
+    "nil-type"    -&gt; Type
+    compatible(Type, Type) -&gt; Boolean
+
+hiddens
+  variables
+    "<replaceable>Type</replaceable>"[0-9]*  -&gt; Type</programlisting></para>
+        </example>
+
+        <para>In <link linkend="Types.asf">Types.asf</link>, we define three
+        equations: two for checking the cases that the arguments of
+        <literal>compatible</literal> are equal and one default equation for
+        checking the remaining cases.</para>
+
+        <example xml:id="Types.asf">
+          <title>Types.asf</title>
+
+          <programlisting>equations
+[Type-1]  compatible(natural, natural) = true
+[Type-2]  compatible(string, string)   = true
+[default-Type] 
+          compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>)      = false </programlisting>
+        </example>
+
+        <para>An alternative definition is given in <link
+        linkend="Types2.asf">Types2.asf</link> where equation
+        <literal>[Type-1]</literal> has a left-hand side that contains the
+        same variable (<replaceable>Type</replaceable>) twice. This has as
+        effect that the left-hand side only matches if the two arguments of
+        <literal>compatible</literal> are identical.</para>
+
+        <example xml:id="Types2.asf">
+          <title>Types2.asf</title>
+
+          <programlisting>equations
+[Type-1]  compatible(<replaceable>Type</replaceable>, <replaceable>Type</replaceable>)  = true
+[default-Type] 
+          compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>) = false </programlisting>
+        </example>
+
+        <para>To complete this story, yet another specification style for this
+        problem exists that uses a negative condition instead of a default
+        equation. This is shown in <link
+        linkend="Types3.asf">Types3.asf</link>.<example xml:id="Types3.asf">
+            <title>Types3.asf</title>
+
+            <programlisting>equations
+[Type-1]  compatible(<replaceable>Type</replaceable>, <replaceable>Type</replaceable>)  = true
+[Type-2]       <replaceable>Type1</replaceable> != <replaceable>Type2</replaceable>
+          ===============================
+          compatible(<replaceable>Type1</replaceable>,<replaceable>Type2</replaceable>) = false </programlisting>
+          </example></para>
+
+        <para>You may not (yet) be impressed by the savings that we get in
+        this tiny example. You will, however, be pleasantly surprised when you
+        use the above techniques and see how short specification become when
+        dealing with real-life cases.</para>
+      </section>
+    </section>
+
+    <section xml:id="ListMatching">
+      <title>List Matching</title>
+
+      <!--\index{list matching@list matching} \index{associative matching@associative matching}-->
+
+      <para><emphasis>List matching</emphasis>, also known as
+      <emphasis>associative matching</emphasis>, is a powerful mechanism to
+      describe complex functionality in a compact way. Unlike the matching of
+      ordinary (non-list) variables, the matching of a list variable may have
+      more than one solution since the variable can match lists of arbitrary
+      length. As a result, backtracking is needed. For instance, to match
+      <literal><replaceable>X</replaceable>
+      <replaceable>Y</replaceable></literal> (a list expression containing the
+      two list variables <literal><replaceable>X</replaceable></literal> and
+      <literal><replaceable>Y</replaceable></literal> indicating the division
+      of a list into two sublists) with the list <literal>ab</literal> (a list
+      containing two elements) the following three alternatives have to be
+      considered:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal><replaceable>X</replaceable></literal> = (empty),
+          <replaceable>Y</replaceable> = <literal>ab</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><replaceable>X</replaceable> = <literal>a</literal>,
+          <replaceable>Y</replaceable> = <literal>b</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><replaceable>X</replaceable> = <literal>ab</literal>,
+          <replaceable>Y</replaceable> = (empty).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In the unconditional case, backtracking occurs only during
+      matching. When conditions are present, the failure of a condition
+      following the match of a list variable leads to the trial of the next
+      possible match of the list variable and the repeated evaluation of
+      following conditions.</para>
+
+      <section>
+        <title>Example: Sets</title>
+
+        <para>Let's consider the problem of removing double elements from a
+        list. This shown is in <link linkend="Sets.sdf">Sets.sdf</link> and
+        <link linkend="Sets.asf">Sets.asf</link>.</para>
+
+        <example xml:id="Sets.sdf">
+          <title>Sets.sdf</title>
+
+          <programlisting>module Sets
+exports
+  imports basic/Whitespace
+  context-free start-symbols Set
+  sorts Elem Set
+
+  lexical syntax
+    [a-z]+ -&gt; Elem                <co xml:id="co.sets.elem" />
+
+  context-free syntax
+    "{" {Elem ","}* "}" -&gt; Set    <co xml:id="co.sets.syntax" />
+
+hiddens
+  variables
+    "<replaceable>Elem</replaceable>"[0-9]*  -&gt; Elem         <co
+              xml:id="co.sets.var-elem" />
+    "<replaceable>Elem</replaceable>*"[0-9]* -&gt; {Elem ","}*  <co
+              xml:id="co.sets.var-elem-list" /></programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.sets.elem">
+              <para>This defines constants of sort <literal>Elem</literal> as
+              a sequence of one or more lowercase letters.</para>
+            </callout>
+
+            <callout arearefs="co.sets.syntax">
+              <para>This defines the syntax of a <literal>Set</literal>: an
+              opening curly bracket, a list of zero or more
+              <literal>Elem</literal>s separated by comma's, followed by a
+              closing curly bracket. This is a typical syntax pattern; don't
+              get confused by the different roles that the curly brackets
+              play: the <literal>"{"</literal> and <literal>"}"</literal> are
+              literal string that are part of the syntax of
+              <literal>Set</literal>s, while <literal>{Elem ","}*</literal>
+              describes a syntactic list of <literal>Elem</literal>s separated
+              by commas.</para>
+            </callout>
+
+            <callout arearefs="co.sets.var-elem">
+              <para>This defines variables <literal>Elem1</literal>,
+              <literal>Elem2</literal> and so on of sort
+              <literal>Elem</literal>.</para>
+            </callout>
+
+            <callout arearefs="co.sets.var-elem-list">
+              <para>This defines variables <literal>Elem*1</literal>,
+              <literal>Elem*2</literal> and so on of sort <literal>{Elem
+              ","}*</literal>. Observe the funny variable name containing the
+              non-alphanumeric character <literal>*</literal>. Some ASF+SDF
+              specification writers use the convention that variables that
+              range over list sorts end on either <literal>*</literal> or
+              <literal>+</literal> and maybe followed by digits. See <link
+              linkend="StyleVariables">How to name Variables</link>.</para>
+            </callout>
+          </calloutlist>
+        </example>
+
+        <para>We can now parse sets like:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>{}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{a}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{a, b}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q,
+            r, s, t, u, v, w, x, y, z}</literal></para>
+          </listitem>
+
+          <listitem>
+            <para>and so on.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The actual solution of our problem, removing duplicates from a
+        list, is shown in <link linkend="Sets.asf">Sets.asf</link>. Observe
+        that the single equation has a left-hand side with two occurrences of
+        variable <replaceable>Elem</replaceable>, so it will match on a list
+        that contains two identical elements.</para>
+
+        <para>In the right-hand side, one of these occurrences is removed.
+        However, this same equation remains applicable as long as the list
+        contains duplicate elements.<example xml:id="Sets.asf">
+            <title>Sets.asf</title>
+
+            <programlisting>equations
+[set] {<replaceable>Elem*1</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*2</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*3</replaceable>} = {<replaceable>Elem*1</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*2</replaceable>, <replaceable>Elem*3</replaceable>}</programlisting>
+          </example></para>
+
+        <important>
+          <para>This specification of sets is very elegant but may become very
+          expensive to execute when applied to large sets. There are several
+          strategies to solve this:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Use ordered lists and ensure that the insert operation
+              checks for duplicates.</para>
+            </listitem>
+
+            <listitem>
+              <para>Use a more sophisticated representation like, for
+              instance, a balanced tree.</para>
+            </listitem>
+          </itemizedlist>
+        </important>
+      </section>
+
+      <section>
+        <title>Example: Lists</title>
+
+        <para>A sample of operations on lists of integers is shown in <link
+        linkend="Lists.sdf">Lists.sdf</link> and <link
+        linkend="Lists.asf">Lists.asf</link>.</para>
+
+        <para><example xml:id="Lists.sdf">
+            <title>Lists.sdf</title>
+
+            <programlisting>module Lists
+
+imports basic/Booleans
+imports basic/Integers
+imports basic/Whitespace
+
+exports
+  context-free start-symbols 
+        Boolean Integer List             <co xml:id="co.lists.start" />
+  sorts List
+
+  context-free syntax
+    "[" {Integer ","}*  "]"   -&gt; List    <co xml:id="co.lists.list" />
+    List "++" Integer         -&gt; List    <co xml:id="co.lists.conc1" />
+    Integer "++" List         -&gt; List    <co xml:id="co.lists.conc2" />
+    is-element(Integer, List) -&gt; Boolean <co xml:id="co.lists.is-element" />
+    length(List)              -&gt; Integer <co xml:id="co.lists.length" />
+    reverse(List)             -&gt; List    <co xml:id="co.lists.reverse" />
+    sort(List)                -&gt; List    <co xml:id="co.lists.sort" />
+
+hiddens
+  variables
+    "<replaceable>Int</replaceable>"[0-9]*  -&gt; Integer
+    "<replaceable>Int*</replaceable>"[0-9]* -&gt; {Integer ","}* </programlisting>
+
+            <para>Notes:</para>
+
+            <calloutlist>
+              <callout arearefs="co.lists.start">
+                <para>In the context-free syntax below, we define functions
+                with result sorts <literal>Boolean</literal>,
+                <literal>Integer</literal> and <literal>List</literal> and all
+                these sorts will probably occur in input terms. It is
+                therefore a good idea to declare all these sort as start
+                symbol.</para>
+              </callout>
+
+              <callout arearefs="co.lists.list">
+                <para>Define the syntax of lists of integers. Examples
+                are:</para>
+
+                <itemizedlist>
+                  <listitem>
+                    <para>[]</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>[1]</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>[1, 3, 5, 7, 11]</para>
+                  </listitem>
+                </itemizedlist>
+              </callout>
+
+              <callout arearefs="co.lists.conc1">
+                <para>Append an integer to a list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.conc2">
+                <para>Prepend an integer to a list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.is-element">
+                <para>Check for element in list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.length">
+                <para>Determine length of list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.reverse">
+                <para>Reverse a list.</para>
+              </callout>
+
+              <callout arearefs="co.lists.sort">
+                <para>Sort a list.</para>
+              </callout>
+            </calloutlist>
+          </example></para>
+
+        <para>Given these syntax definitions, we can define the meaning of the
+        various functions in <link
+        linkend="Lists.asf">Lists.asf</link>.</para>
+
+        <example xml:id="Lists.asf">
+          <title>Lists.asf</title>
+
+          <programlisting>equations
+  [app-1] [<replaceable>Int*</replaceable>] ++ <replaceable>Int</replaceable> = [<replaceable>Int*</replaceable>, <replaceable>Int</replaceable>]                       <co
+              xml:id="co.lists.asf.app" />
+  [pre-1] <replaceable>Int</replaceable> ++ [<replaceable>Int*</replaceable>] = [<replaceable>Int</replaceable>, <replaceable>Int*</replaceable>]
+
+  [len-1] length([]) = 0                                    <co
+              xml:id="co.lists.asf.length" />
+  [len-2] length([<replaceable>Int</replaceable>, <replaceable>Int*</replaceable>]) = 1 + length([<replaceable>Int*</replaceable>])
+
+  [is-1] is-element(<replaceable>Int</replaceable>, [<replaceable>Int*1</replaceable>, <replaceable>Int</replaceable>, <replaceable>Int*2</replaceable>]) = true        <co
+              xml:id="co.lists.asf.is-element" />
+  [default-is]
+         is-element(<replaceable>Int</replaceable>, [<replaceable>Int*</replaceable>]) = false
+
+  [rev-1] reverse([]) = []                                  <co
+              xml:id="co.lists.asf.reverse" />
+  [rev-2] reverse([<replaceable>Int</replaceable>, <replaceable>Int*</replaceable>]) = reverse([<replaceable>Int*</replaceable>]) ++ <replaceable>Int</replaceable>
+
+  [srt-1]            <replaceable>Int1</replaceable> &gt; <replaceable>Int2</replaceable> == true                    <co
+              xml:id="co.lists.asf.sort" />
+         =========================================
+         sort([<replaceable>Int*1</replaceable>, <replaceable>Int1</replaceable>, <replaceable>Int*2</replaceable>, <replaceable>Int2</replaceable>, <replaceable>Int*3</replaceable>]) = 
+         sort([<replaceable>Int*1</replaceable>, <replaceable>Int2</replaceable>, <replaceable>Int*2</replaceable>, <replaceable>Int1</replaceable>, <replaceable>Int*3</replaceable>])
+  [default-srt]
+         sort([<replaceable>Int*</replaceable>]) = [<replaceable>Int*</replaceable>]</programlisting>
+
+          <para>Notes:</para>
+
+          <calloutlist>
+            <callout arearefs="co.lists.asf.app">
+              <para>The definition of the append and prepend operators
+              <literal>++</literal> illustrates how list variables like
+              <literal>Int*</literal> can be used to first extract elements
+              from a list (on the left-hand side) and later insert them in a
+              new list (on the right-hand side).</para>
+            </callout>
+
+            <callout arearefs="co.lists.asf.length">
+              <para>The <literal>length</literal> function is defined by a
+              simple induction on lists.</para>
+            </callout>
+
+            <callout arearefs="co.lists.asf.is-element">
+              <para>The two occurrences of the variable <literal>Int</literal>
+              in equation <literal>[is-1]</literal> illustrates the use of
+              list matching for a search for a given element in a list.</para>
+            </callout>
+
+            <callout arearefs="co.lists.asf.reverse">
+              <para>The reverse function is defined by recurring over the
+              elements of the list. Note how the append operator
+              <literal>++</literal> is used in equation
+              <literal>[rev-2]</literal>. One can avoid using an auxiliary
+              operator at the expense of introducing a condition and an extra
+              variable:</para>
+
+              <programlisting>[rev-2']      [<replaceable>Int*1</replaceable>] := reverse([<replaceable>Int*</replaceable>])
+          ===================================
+          reverse([<replaceable>Int</replaceable>, <replaceable>Int*</replaceable>]) = [<replaceable>Int*1</replaceable>, <replaceable>Int</replaceable>]</programlisting>
+            </callout>
+
+            <callout arearefs="co.lists.asf.sort">
+              <para>The equations for the function <literal>sort</literal>
+              show, once more, the expressive power of list matching: in the
+              left-hand side of <literal>[srt-1]</literal> two elements
+              <replaceable>Int1</replaceable> and
+              <replaceable>Int2</replaceable> are picked and if
+              <replaceable>Int1</replaceable> is greater than
+              <replaceable>Int2</replaceable>, the elements are swapped and
+              <literal>sort</literal> is applied again.</para>
+            </callout>
+          </calloutlist>
+        </example>
+      </section>
+    </section>
+
+    <section xml:id="MemoFunctions">
+      <title>Memo Functions</title>
+
+      <!--\index{memo functions@memo functions}-->
+
+      <para>Computations may contain unnecessary repetitions. This is the case
+      when a function with the same argument values is computed more than
+      once. <emphasis>Memo functions</emphasis> exploit this behaviour and can
+      improve the efficiency of ASF+SDF specifications considerably. They are
+      defined by adding a <literal>memo</literal> attribute to a function
+      definition</para>
+
+      <para>Memo functions are executed in a special manner by storing, on
+      each invocation, the set of argument values and the derived normal form
+      in a <emphasis>memo table</emphasis>. On a subsequent invocation with
+      given arguments, it is first checked whether the function has been
+      computed before with those arguments. If this is the case, the normal
+      form stored in the memo table is returned as value. If not, the function
+      is normalized as usual, the combination of arguments and computed normal
+      form is stored in the memo table, and the normal form is returned as
+      value.</para>
+
+      <para>Adding a <literal>memo</literal> attribute does not affect the
+      meaning of a function. There is, however, some overhead involved in
+      accessing the memo table and it is therefore not a good idea to add the
+      memo attribute to each function.</para>
+
+      <important>
+        <para>There are currently no good tools to determine which functions
+        should become memo functions. This can only be determined by
+        experimentation and measurement.</para>
+      </important>
+
+      <section>
+        <title>Example: Fibonacci</title>
+
+        <para>The Fibonacci function shown in <link
+        linkend="Fib.sdf">Fib.sdf</link> and <link
+        linkend="Fib.asf">Fib.asf</link> below illustrates the use of
+        memoization.</para>
+
+        <example xml:id="Fib.sdf">
+          <title>Fib.sdf</title>
+
+          <para><programlisting>module Fib
+
+imports basic/Whitespace
+imports Adder                 <co xml:id="co.fib.sdf.adder" />
+
+exports
+  context-free syntax
+    fib(NUM)  -&gt; NUM {memo}   <co xml:id="co.fib.sdf.memo" /></programlisting>Notes:<calloutlist>
+              <callout arearefs="co.fib.sdf.adder">
+                <para>Import the module Adder we have seen before in the
+                section <link
+                linkend="AdditionMultiplicationOfNumerals">Addition and
+                Multiplication of Numerals</link>.</para>
+              </callout>
+
+              <callout arearefs="co.fib.sdf.memo">
+                <para>Define the syntax of the <literal>fib</literal>
+                function. The <literal>memo</literal> attribute indicates that
+                memoization should be used when executing this
+                function.</para>
+              </callout>
+            </calloutlist>The definition of the Fibonacci function fib is
+          given in <link linkend="Fib.asf">Fib.asf</link>.</para>
+        </example>
+
+        <example xml:id="Fib.asf">
+          <title>Fib.asf</title>
+
+          <programlisting>equations
+[fib-0] fib(0)             = succ(0)
+[fib-1] fib(succ(0))       = succ(0)
+[fib-n] fib(succ(succ(<replaceable>X</replaceable>))) = add(fib(succ(<replaceable>X</replaceable>)), fib(<replaceable>X</replaceable>))</programlisting>
+        </example>
+
+        <para>The resulting improvement in performance as follows:</para>
+
+        <table border="1">
+          <caption>Execution times for the evaluation of fib(n)</caption>
+
+          <tr>
+            <td><emphasis role="bold">fib(n)</emphasis></td>
+
+            <td><emphasis role="bold">Execution time without memo
+            (sec)</emphasis></td>
+
+            <td><emphasis role="bold">Execution time with memo
+            (sec)</emphasis></td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(16)</literal></td>
+
+            <td>2.0</td>
+
+            <td>0.7</td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(17)</literal></td>
+
+            <td>3.5</td>
+
+            <td>1.1</td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(18)</literal></td>
+
+            <td>5.9</td>
+
+            <td>1.8</td>
+          </tr>
+
+          <tr>
+            <td><literal>fib(19)</literal></td>
+
+            <td>10.4</td>
+
+            <td>3.3</td>
+          </tr>
+        </table>
+      </section>
+    </section>
+
+    <section xml:id="ConstructorFunctions">
+      <title>Constructor Functions</title>
+
+      <para>Some functions symbols, like succ in the definition of Numerals
+      cannot be reduced; they are constructors that are used to build the
+      datastructures that are being defined. Other function symbols, like add
+      and mul, are reducible; the equations define how these symbols can be
+      removed from a term. There are currently, two ways to indicate that a
+      function is a constructur:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The function has an attribute named <literal>cons</literal>
+          with a string as argument. This is used by external tools to give
+          names to constructors in the syntax tree that is built. An example
+          is the tool <command>ApiGen</command> that generates C or Java
+          interfacing code given an SDF definition.</para>
+        </listitem>
+
+        <listitem>
+          <para>The function has an attribute named
+          <literal>constructor</literal> without any arguments. This attribute
+          is used by the ASF+SDF implementation to check the use of
+          constructors functions.</para>
+        </listitem>
+      </itemizedlist>
+
+      <remark>This is a confusing state of affairs that should be
+      repaired.</remark>
+    </section>
+
+    <section xml:id="LexicalConstructorFunctions">
+      <title>Lexical Constructor Functions</title>
+
+      <para><remark>This section has still to be converted to V2.0: (a)
+      Describe structured lexicals and give examples. (b) Split examples below
+      in SDF and ASF part.</remark></para>
+
+      <para>The only way to access the actual characters of a lexical token is
+      by means of <emphasis>lexical constructor functions</emphasis>. For each
+      lexical sort <literal>LEX</literal> a lexical constructor function is
+      automatically derived as follows: <programlisting><replaceable>lex</replaceable>( CHAR* ) -&gt; <replaceable>LEX</replaceable></programlisting>The
+      sort <literal>CHAR</literal> is predefined in ASF+SDF and represents
+      characters. Characters can be directly addressed by the representation
+      or via variables which may be of the sorts <literal>CHAR</literal>,
+      <literal>CHAR*</literal>, or <literal>CHAR+</literal>. The latter two
+      represent lists of characters.</para>
+
+      <section>
+        <title>Example: Removing Leading Zeros</title>
+
+        <para>In the example <link linkend="CODE_lcfs">below</link> the
+        lexical constructor function <literal>nat-con</literal> is used to
+        remove the leading zeros from a number.</para>
+
+        <para><example xml:id="CODE_lcfs">
+            <title>Use of lexical constructor</title>
+
+            <para><programlisting>module Nats
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Nat-con
+  sorts Nat-con
+
+  lexical syntax
+    [0-9]+ -&gt; Nat-con 
+
+hiddens
+  variables
+    "Char+"[0-9]* -&gt; CHAR+
+equations
+
+  [1] nat-con("0" Char+) = nat-con(Char+)</programlisting></para>
+          </example></para>
+
+        <important>
+          <para>The argument of a lexical constructor may be an arbitrary list
+          of characters and there is <emphasis>no check that they match the
+          lexical definition of the corresponding sort</emphasis>. This means
+          that when writing a specification one should be aware that it is
+          possible to construct illegal lexical entities, for instance, by
+          inserting letters in an integer. In the example <link
+          linkend="CODE_illegallcfs">below</link> via the lexical constructor
+          function <literal>nat-con</literal> a natural number containing the
+          letter <literal>a</literal> is constructed.</para>
+        </important>
+      </section>
+
+      <section>
+        <title>Example: Illegal Use of Lexical Constructor Function</title>
+
+        <example xml:id="CODE_illegallcfs">
+          <title>Illegal use of lexical constructor functions</title>
+
+          <para><programlisting>module Nats
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Nat-con
+  sorts Nat-con
+
+  lexical syntax
+    [0-9]+ -&gt; Nat-con 
+
+hiddens
+  variables
+    "Char+"[0-9]* -&gt; CHAR+
+
+equations
+
+  [1] nat-con(Char+) = nat-con(Char+ "a")      </programlisting></para>
+        </example>
+      </section>
+    </section>
+
+    <section xml:id="TraversalFunctions">
+      <title>Traversal Functions</title>
+
+      <para>Program analysis and program transformation usually take the
+      syntax tree of a program as starting point. One common problem that one
+      encounters is how to express the <emphasis>traversal</emphasis> of the
+      tree: visit all the nodes of the tree and extract information from some
+      nodes or make changes to certain other nodes. The kinds of nodes that
+      may appear in a program's syntax tree are determined by the grammar of
+      the language the program is written in. Typically, each rule in the
+      grammar corresponds to a node category in the syntax tree. Real-life
+      languages are described by grammars which can easily contain several
+      hundreds, if not thousands, of grammar rules. This immediately reveals a
+      hurdle for writing tree traversals: a naive recursive traversal function
+      should consider many node categories and the size of its definition will
+      grow accordingly. This becomes even more dramatic if we realize that the
+      traversal function will only do some real work (apart from traversing)
+      for very few node categories. Traversal functions in ASF+SDF solve this
+      problem.</para>
+
+      <section>
+        <title>Definition</title>
+
+        <para>We distinguish three kinds of traversal functions, defined as
+        follows.</para>
+
+        <formalpara>
+          <title>Transformer</title>
+
+          <para>A <emphasis>transformer</emphasis> is a sort-preserving
+          transformation that will traverse its first argument. Possible extra
+          arguments may contain additional data that can be used (but not
+          modified) during the traversal. A transformer is declared as
+          follows: <programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, ..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>1</subscript> {traversal(trafo, ...)}</programlisting>Because
+          a transformer always returns the same sort, it is type-safe. A
+          transformer is used to transform a tree.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Accumulator</title>
+
+          <para>An <emphasis>accumulator</emphasis> is a mapping of all node
+          types to a single type. It will traverse its first argument, while
+          the second argument keeps the accumulated value. An accumulator is
+          declared as follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>S</replaceable><subscript>2</subscript> {traversal(accu, ...)}</programlisting>After
+          each application of an accumulator, the accumulated argument is
+          updated. The next application of the accumulator, possibly somewhere
+          else in the term, will use the <emphasis>new</emphasis> value of the
+          accumulated argument. In other words, the accumulator acts as a
+          global, modifiable, state during the traversal. An accumulator
+          function never changes the tree, only its accumulated argument.
+          Furthermore, the type of the second argument has to be equal to the
+          result type. The end-result of an accumulator is the value of the
+          accumulated argument. By these restrictions, an accumulator is also
+          type-safe for every instantiation. An accumulator is meant to be
+          used to extract information from a tree.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Accumulating transformer</title>
+
+          <para>An <emphasis>accumulating transformer</emphasis> is a sort
+          preserving transformation that accumulates information while
+          traversing its first argument. The second argument maintains the
+          accumulated value. The return value of an accumulating transformer
+          is a tuple consisting of the transformed first argument and
+          accumulated value. An accumulating transformer is declared as
+          follows:<programlisting><replaceable>f</replaceable>(<replaceable>S</replaceable><subscript>1</subscript>, <replaceable>S</replaceable><subscript>2</subscript> ,..., <replaceable>S</replaceable><subscript>n</subscript>) -&gt; <replaceable>&lt;<replaceable>S</replaceable><subscript>1</subscript>, S</replaceable><subscript>2</subscript>&gt; {traversal(accu, trafo, ...)}</programlisting>An
+          accumulating transformer is used to simultaneously extract
+          information from a tree and transform it.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Visiting Orders</title>
+
+          <para>Having these three types of traversals, they must be completed
+          with visiting orders. Visiting orders determine the order of
+          traversal and the <emphasis>depth</emphasis> of the traversal. We
+          provide the following two strategies for each type of
+          traversal:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>Bottom-up: the traversal visits <emphasis>all</emphasis> the
+            subtrees of a node where the visiting function applies in an
+            <emphasis>bottom-up</emphasis> fashion. The annotation
+            <literal>bottom-up</literal> selects this behavior. A traversal
+            function without an explicit indication of a visiting strategy
+            also uses the bottom-up strategy.</para>
+          </listitem>
+
+          <listitem>
+            <para>Top-down: the traversal visits the subtrees of a node in an
+            top-down fashion and stops recurring at the first node where the
+            visiting function applies and does not visit the subtrees of that
+            node. The annotation <literal>top-down</literal> selects this
+            behavior.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Beside the three types of traversals and the order of visiting,
+        we can also influence whether we want to stop or continue at the
+        matching occurrences:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Break: the traversal stops at matching occurrences.</para>
+          </listitem>
+
+          <listitem>
+            <para>Continue: the traversal continues at matching
+            occurrences.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Examples</title>
+
+        <para>We give two simple examples of traversal functions that are both
+        based on a simple <link linkend="Tree-syntax.sdf">tree language</link>
+        that describes binary prefix expressions with natural numbers as
+        leaves. Examples are <literal>f(0,1)</literal> and <literal>f(g(1,2),
+        h(3,4))</literal>.</para>
+
+        <example xml:id="Tree-syntax.sdf">
+          <title>Tree-syntax.sdf: a simple tree language</title>
+
+          <para><programlisting>module Tree-syntax
+imports basic/Integer
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Tree
+  sorts Tree
+
+  context-free syntax
+    Integer       -&gt; Tree
+    f(Tree, Tree) -&gt; Tree
+    g(Tree, Tree) -&gt; Tree
+    h(Tree, Tree) -&gt; Tree</programlisting></para>
+        </example>
+
+        <para>Our first example in <link
+        linkend="Tree-inc.sdf">Tree-inc.sdf</link> and <link
+        linkend="Tree-inc.asf">Tree-inc.asf</link> transforms a given tree
+        into a new tree in which all numbers have been incremented.</para>
+
+        <para><example xml:id="Tree-inc.sdf">
+            <title>Tree-inc.sdf: increment all numbers in a tree</title>
+
+            <para><programlisting>module Tree-inc
+imports Tree-syntax
+
+exports
+  context-free syntax
+    inc(Tree) -&gt; Tree {traversal(trafo, top-down, continue)}
+  
+hiddens
+  variables
+    "<replaceable>N</replaceable>"[0-9]* -&gt; Integer</programlisting></para>
+          </example></para>
+
+        <para><example xml:id="Tree-inc.asf">
+            <title>Tree-inc.asf: increment all numbers in a tree</title>
+
+            <para><programlisting>equations
+[1] inc(<replaceable>N</replaceable>) = <replaceable>N</replaceable> + 1</programlisting></para>
+          </example></para>
+
+        <para><remark>Add explanation to the above example.</remark></para>
+
+        <para>Our second example in <link
+        linkend="Tree-sum.sdf">Tree-sum.sdf</link> and <link
+        linkend="Tree-sum.asf">Tree-sum.asf</link> computes the sum of all
+        numbers in a tree.</para>
+
+        <example xml:id="Tree-sum.sdf">
+          <title>Tree-sum.sdf: sum all numbers in a tree</title>
+
+          <para><programlisting>module Tree-sum
+imports Tree-syntax
+exports
+  context-free syntax
+    sum(Tree, Integer) -&gt; Integer {traversal(accu, top-down, continue)}
+  
+hiddens
+  variables
+    "<replaceable>N</replaceable>"[0-9]* -&gt; Integer
+
+equations
+  [1] sum(<replaceable>N1</replaceable>, <replaceable>N2</replaceable>) = <replaceable>N1</replaceable> + <replaceable>N2</replaceable></programlisting></para>
+        </example>
+
+        <para><example xml:id="Tree-sum.asf">
+            <title>Tree-sum.asf: sum all numbers in a tree</title>
+
+            <para><programlisting>equations
+[1] sum(<replaceable>N1</replaceable>, <replaceable>N2</replaceable>) = <replaceable>N1</replaceable> + <replaceable>N2</replaceable></programlisting></para>
+          </example></para>
+
+        <para><remark>Add explanations to the above example.</remark></para>
+      </section>
+
+      <section>
+        <title>Requirements</title>
+
+        <para>The ASF+SDF definition of a traversal function has to fulfill a
+        number of requirements:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Traversal functions can only be defined in the context-free
+            syntax section.</para>
+          </listitem>
+
+          <listitem>
+            <para>Traversal functions must be prefix functions, see
+            <remark>XXX</remark>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The first argument of the prefix function is always a sort
+            of a node of the tree that is traversed.</para>
+          </listitem>
+
+          <listitem>
+            <para>In case of a transformer, the result sort
+            <replaceable>Tree</replaceable> should always be same as the sort
+            of the first argument:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable> {traversal(trafo,...)}</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>In case of an accumulator, the second argument
+            <replaceable>Accu</replaceable> represents the accumulated value
+            and the result sort should be of the same sort:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Accu</replaceable> {traversal(accu,...)}</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>In case of an accumulating transformer, the first argument
+            represents the tree node <replaceable>Tree</replaceable>, the
+            second the accumulator <replaceable>Accu</replaceable>, and the
+            result sort should be a tuple consisting of the tree node sort
+            (first element of the tuple) and the accumulator (second element
+            of the tuple):<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; &lt;<replaceable>Tree</replaceable>, <replaceable>Accu</replaceable>&gt; {traversal(accu,trafo,...)}</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>The traversal functions may have more arguments, the only
+            restriction is that they should be consistent over the various
+            occurrences of the same traversal function. <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,continue,top-down)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>2</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>The order of the traversal attributes is free, but should be
+            used consistently, for instance the following definition is not
+            allowed:<programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,top-down,continue)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,...,<replaceable>A</replaceable><subscript>n</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}
+</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para>If the number of arguments of the traversal function
+            changes, you should introduce a new function name. The following
+            definitions are not correct: <programlisting><replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>)     -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,top-down,continue)}
+<replaceable>tf</replaceable>(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>,<replaceable>A</replaceable><subscript>3</subscript>)  -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}</programlisting>but
+            should be:<programlisting><replaceable>tf</replaceable>1(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>)    -&gt; <replaceable>Tree</replaceable><subscript>1</subscript> {traversal(trafo,top-down,continue)}
+<replaceable>tf</replaceable>2(<replaceable>Tree</replaceable><subscript>1</subscript>,<replaceable>Accu</replaceable>,<replaceable>A</replaceable><subscript>1</subscript>,<replaceable>A</replaceable><subscript>2</subscript>,<replaceable>A</replaceable><subscript>3</subscript>) -&gt; <replaceable>Tree</replaceable><subscript>2</subscript> {traversal(trafo,continue,top-down)}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>In the SDF part of a module it is needed to define traversal
+        functions for all sorts which are needed in the equations.</para>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="WellFormedness">
+    <title>Well-formedness of ASF+SDF</title>
+
+    <para>In order to improve the quality of the written specifications, a
+    number of checks are performed before an ASF+SDF specification can be
+    executed. The checks are performed on two levels: the first level are SDF
+    specific checks; these are further discussed in The Syntax Definition
+    Formalism SDF (<remark>XXX</remark>). The second level are ASF+SDF
+    specific checks (leading to <link linkend="ASFSDFwarnings">warnings</link>
+    or <link linkend="ASFSDFerrors">errors</link>) that we discuss
+    here.</para>
+
+    <para>There also some issues of writing style for ASF+SDF specifications
+    that we discuss here. Most messages are self-explanatory, for others we
+    add some additional explanation.</para>
+
+    <section xml:id="MatterOfStyle">
+      <title>A Matter of Style</title>
+
+      <para>We can give you some advice on the writing style for ASF+SDF
+      specifications:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="StyleEquations">Indentation style of
+          equations</link>: use the most readable layout for equations.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="StyleVariables">Naming conventions for
+          variables</link>: use names that enhance readability.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="StyleCommentImport">Importing layout and
+          comment definitions</link>: understand the best way to introduce
+          layout and comments.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="StyleLibrary">Using the ASF+SDF library</link>:
+          exploit predefined library modules.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Consider these advices as current best practices and apply them as
+      much as possible.</para>
+
+      <section xml:id="StyleEquations">
+        <title>How to indent your Equations</title>
+
+        <para>The preferred style for writing equations is as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Place the tag of the equation on a separate line.</para>
+          </listitem>
+
+          <listitem>
+            <para>Place the conditions of the equation on separate
+            lines.</para>
+          </listitem>
+
+          <listitem>
+            <para>Vertically align the left-hand sides of the conditions, the
+            implication sign, and the conclusion.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Here is an example:</para>
+
+        <programlisting>[check-tuple-exp1]
+   &lt;<replaceable>$Etype1</replaceable>, <replaceable>$Tenv'</replaceable>&gt; := check(<replaceable>$Exp1</replaceable>, <replaceable>$Tenv</replaceable>),
+   &lt;&lt;<replaceable>$Etype+</replaceable>&gt;, <replaceable>$Tenv''</replaceable>&gt; := check(&lt;<replaceable>$Exp2</replaceable>, <replaceable>$Exp+</replaceable>&gt;, <replaceable>$Tenv'</replaceable>)
+   ===================================================================
+   check(&lt;<replaceable>$Exp1</replaceable>, <replaceable>$Exp2</replaceable>, <replaceable>$Exp+</replaceable>&gt;, <replaceable>$Tenv</replaceable>) = &lt;&lt;<replaceable>$Etype1</replaceable>, <replaceable>$Etype+</replaceable>&gt;, <replaceable>$Tenv''</replaceable>&gt;
+
+[check-tuple-exp2]
+   &lt;<replaceable>$Etype1</replaceable>, <citetitle>$Tenv'</citetitle>&gt; := check(<replaceable>$Exp1</replaceable>, <replaceable>$Tenv</replaceable>),
+   &lt;<replaceable>$Etype2</replaceable>, <replaceable>$Tenv''</replaceable>&gt; := check(<replaceable>$Exp2</replaceable>, <replaceable>$Tenv'</replaceable>)
+    ============================================================
+    check(&lt;<replaceable>$Exp1</replaceable>, <citetitle>$Exp2</citetitle>&gt;, <replaceable>$Tenv</replaceable>) = &lt;&lt;<replaceable>$Etype1</replaceable>, <citetitle>$Etype2</citetitle>&gt;, <replaceable>$Tenv''</replaceable>&gt;</programlisting>
+
+        <para>Some authors prefer to make the implication sign as wide as the
+        conclusion (as shown above). This looks nice but requires some
+        maintenance when you change the conclusion. For that reason, other
+        authors always use one implication sign of a fixed length (3-4 equals
+        characters): <literal>====</literal> or even
+        <literal>===&gt;</literal></para>
+      </section>
+
+      <section xml:id="StyleVariables">
+        <title>How to name Variables</title>
+
+        <para>ASF+SDF provides a large freedom in the way you can name
+        variables; they are not limited to alphanumeric strings as in most
+        languages, but you can define arbitrary syntax for them. This freedom
+        has, unfortunately, also a dark side: using too much of this freedom
+        leads to ununderstandable specifications. Here is an example in the
+        context where the library module <literal>Integers</literal> has been
+        imported:</para>
+
+        <programlisting>variables
+ "<replaceable>2 + 3</replaceable>" -&gt; Integer</programlisting>
+
+        <para>Given this definition, nobody will understand what the meaning
+        of "<literal>1 + 2 + 3</literal>" will be. [Answer: an addition with
+        two operands, the constant <literal>1</literal> and the Integer
+        variable <literal><replaceable>2 + 3</replaceable></literal>.]</para>
+
+        <para>Although there are some rare cases where this can be used to
+        your advantage, we strongly advise against this and suggest the
+        following conventions for defining variables:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Variables start with an uppercase letter, followed by
+            letters, underscores or hyphens. Optionally they may be followed
+            by digits or single quotes.</para>
+          </listitem>
+
+          <listitem>
+            <para>If syntactic constraints make this mandatory, start
+            variables with a distinctive character. Preferred is a dollar sign
+            (<literal>$</literal>), but others like a number sign
+            (<literal>#</literal>) can be considered.</para>
+          </listitem>
+
+          <listitem>
+            <para>In case a variable is of a list sort, plus
+            (<literal>+</literal>) or star (<literal>*</literal>) characters
+            may be used.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>These rules are followed in the following variable
+        declarations:</para>
+
+        <programlisting>variables
+  "<replaceable>Integer</replaceable>" [0-9]* -&gt; Integer          <co
+            xml:id="co.vars.1" />
+  "<replaceable>Int</replaceable>" [0-9']*    -&gt; Integer          <co
+            xml:id="co.vars.2" />
+  "<replaceable>$int</replaceable>" [0-9]*    -&gt; Integer          <co
+            xml:id="co.vars.3" />
+  "<replaceable>Int*</replaceable>" [0-9']*   -&gt; {Integer ","}*   <co
+            xml:id="co.vars.4" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="co.vars.1">
+            <para>A plain variable declarations that declares<literal>
+            <replaceable>Integer</replaceable></literal>,
+            <literal><replaceable>Integer1</replaceable></literal>,
+            <literal><replaceable>Integer2</replaceable></literal>,
+            <literal><replaceable>Integer123</replaceable></literal>, ...
+            .</para>
+          </callout>
+
+          <callout arearefs="co.vars.2">
+            <para>A similar declaration but using digits and quote as suffix
+            for the variable name:
+            <literal><replaceable>Int</replaceable></literal>,
+            <literal><replaceable>Int'</replaceable></literal>,
+            <literal><replaceable>Int''</replaceable></literal>,
+            <literal><replaceable>Int'''</replaceable></literal>,
+            <literal><replaceable>Int1</replaceable></literal>,
+            <literal>Int123</literal>, ... .</para>
+          </callout>
+
+          <callout arearefs="co.vars.3">
+            <para>Using <literal>$</literal> as prefix: this declares
+            <literal><replaceable>$int</replaceable></literal>,
+            <literal><replaceable>$int1</replaceable></literal>,
+            <literal><replaceable>$int123</replaceable></literal>, ...
+            .</para>
+          </callout>
+
+          <callout arearefs="co.vars.4">
+            <para>Using <literal>*</literal> in a list variable:
+            <literal>Int*</literal>,
+            <literal><replaceable>Int*1</replaceable></literal>,
+            <literal><replaceable>Int*123</replaceable></literal>, ...
+            .</para>
+          </callout>
+        </calloutlist>
+
+        <important>
+          <para>Restrain yourself in the choice of variable names and follow
+          the above naming conventions.</para>
+        </important>
+      </section>
+
+      <section xml:id="StyleCommentImport">
+        <title>How to import Layout and Comment Definitions</title>
+
+        <para>As we have explained before, there is no built-in definition for
+        the layout or comments in the ASF part of a module
+        <replaceable>M</replaceable> and you need to import definitions for
+        layout or comments yourself. If you forget to do this, you get a parse
+        error when trying to parse the equations. There are, in principle, two
+        standard modules that do the job: <literal>basic/Whitespace</literal>
+        or <literal>basic/Comments</literal> (that imports
+        <literal>basic/Whitespace</literal>).</para>
+
+        <para>But what is the best way to do this? There are two
+        options:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Add the import of <literal>basic/Comments</literal> in the
+            exports section of module <replaceable>M</replaceable>. This is
+            the simplest method since it exports the definitions in
+            <literal>basic/Comments</literal> to all other modules that import
+            module <replaceable>M</replaceable>. However, there are cases
+            where the definitions in <literal>basic/Comments</literal>
+            interferes with the syntax definitions in the modules that import
+            <replaceable>M</replaceable>. In those cases, the second method is
+            applicable.</para>
+          </listitem>
+
+          <listitem>
+            <para>Add the import of <literal>basic/Comments</literal> to the
+            hiddens section of module <replaceable>M</replaceable>. In this
+            way, the definitions in <literal>basic/Comments</literal> remain
+            localized to <replaceable>M</replaceable>. The disadvantage of
+            this approach is that the import of
+            <literal>basic/Comments</literal> has to be repeated in every
+            module.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>It is common practice to start with the first approach and
+        switch to the second approach when syntactic problems occur.</para>
+
+        <important>
+          <para>Be aware of the way in which you import the layout and comment
+          conventions for your equations.</para>
+        </important>
+      </section>
+
+      <section xml:id="StyleLibrary">
+        <title>Using the ASF+SDF Module Library</title>
+
+        <para>ASF+SDF comes with a library of predefined grammars and
+        datatypes. Use them to save yourself work. See <remark>XXX</remark>
+        for an overview of the library.</para>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="asfsdf_HistoricalNotes">
+    <title>Historical Notes</title>
+
+    <para>The main publications on ASF+SDF are (in chronological
+    order):</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>J.A. Bergstra, J. Heering and P. Klint (eds), Algebraic
+        Specification, ACM Press/Addison-Wesley, 1989.</para>
+      </listitem>
+
+      <listitem>
+        <para>A. van Deursen, J. Heering and P. Klint, Language Prototyping:
+        An Algebraic Specification Approach Volume 5 of AMAST Series in
+        Computing, World Scientific, Singapore, 1996.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The main publications on implementation techniques related to
+    ASF+SDF are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>P.R.H. Hendriks, Implementation of Modular Algebraic
+        Specifications, dissertation, University of Amsterdam, 1991.</para>
+      </listitem>
+
+      <listitem>
+        <para>H.R. Walters, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Walters.ps.gz">On
+        Equal terms: implementing Algebraic Specifications</link>,
+        dissertation, University of Amsterdam, 1991.</para>
+      </listitem>
+
+      <listitem>
+        <para>P. Klint, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOSEM93.pdf">A
+        Meta-Environment for Generating Programming Environments</link>, ACM
+        Transactions on Software Engineering and Methodology,
+        2(2):176-201,1993.</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, H.A. de Jong, P. Klint and P.A. Olivier,
+        <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/SPE00.pdf">Efficient
+        Annotated Terms</link>, Software, Practice &amp; Experience,
+        30(3):259--291, 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>P.A. Olivier, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Olivier.ps.gz">A
+        Framework for Debugging Heterogeneous Applications</link>,
+        dissertation, University of Amsterdam, 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, J. Heering, P. Klint and P.A. Olivier,
+        <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOPLAS02.pdf">Compiling
+        language definitions: The ASF+SDF compiler.</link> ACM Transactions on
+        Programming Languages and Systems, 24 (4):334-368, July 2002,</para>
+      </listitem>
+
+      <listitem>
+        <para>M.G.J. van den Brand, P. Klint, and J.J. Vinju, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOSEM03.pdf">Term
+        Rewriting with Traversal Functions</link>, ACM Transactions on
+        Software Engineering Methodology, 12 (2):152-190, 2003.</para>
+      </listitem>
+
+      <listitem>
+        <para>J. Vinju, <link
+        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Vinju.pdf">Analysis
+        and Transformation of Source Code by Parsing and Rewriting</link>,
+        dissertation, University of Amsterdam, 2005.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Historical notes for SDF are given in the companion article The
+    Syntax Definition Formalism SDF.</para>
+  </section>
+</article>

@@ -1,0 +1,4 @@
+equations
+
+[fac1] fac(succ(0)) = succ(0)
+[fac2] X != 0 ===> fac(succ(X)) = mul(X,fac(X))

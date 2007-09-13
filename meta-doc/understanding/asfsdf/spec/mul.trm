@@ -1,0 +1,1 @@
+mul(succ(succ(succ(0))), succ(succ(0)))
