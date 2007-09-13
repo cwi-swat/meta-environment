@@ -1,5 +1,9 @@
 
 
+Thu Sep 13 22:32:07 CEST 2007 <jurgenv@cwi.nl>
+ * Moved ASF+SDF and SDF manuals to "understanding"
+ * Created documents on SDF warnings and errors and ASF warnings and errors
+
 Thu Sep 13 18:58:10 CEST 2007 <jurgenv@cwi.nl>
  * getting-started: removed guided tour for 1.5 release
 
