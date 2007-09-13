@@ -1,0 +1,4 @@
+
+
+Thu Sep 13 10:52:42 CEST 2007 <jurgenv@cwi.nl>
+ * src/**/barchart: added rel[int,int] as supported type.
