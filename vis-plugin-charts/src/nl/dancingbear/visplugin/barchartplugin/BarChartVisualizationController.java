@@ -52,7 +52,8 @@ public class BarChartVisualizationController extends VisualizationPluginControll
      * @date 07-3-2007
      */
     public ATerm[] getSupportedTypes() {
-        ATerm[] atermList = { makeATerm("relation([int,str])"), makeATerm("relation([str,int])") };
+        ATerm[] atermList = { makeATerm("relation([int,str])"), makeATerm("relation([str,int])"),
+        		makeATerm("relation([int,int])")};
         return atermList;
     }
 

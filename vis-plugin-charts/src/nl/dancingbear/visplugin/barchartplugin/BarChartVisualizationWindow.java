@@ -234,10 +234,16 @@ private JFreeChart createPieChart(String title, CategoryDataset dataset) {
             if (isRelStrInt(fact)) {
                 name = tuple.getRElemAt(0).getStrCon();
                 value = tuple.getRElemAt(1).getInteger();
-            }else if (isRelIntStr(fact))  {
+            }
+            else if (isRelIntStr(fact))  {
                 name = tuple.getRElemAt(1).getStrCon();
                 value = tuple.getRElemAt(0).getInteger();
-            }else{
+            }
+            else if (isRelIntInt(fact)) {
+            	name = tuple.getRElemAt(1).getInteger().toString();
+            	value = tuple.getRElemAt(0).getInteger();
+            }
+            else{
             	throw new RuntimeException("Unknown relation type.");
             }
             
@@ -246,5 +252,12 @@ private JFreeChart createPieChart(String title, CategoryDataset dataset) {
         }
         return dataset;
     }
+
+	private boolean isRelIntInt(RTuple fact) {
+		 RType rType = m_factory.RTypeFromString("relation([int,int])");
+	        boolean match = rType.equals(fact.getRtype());
+	        
+	        return match;
+	}
 
    }
