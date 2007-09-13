@@ -33,8 +33,9 @@
 
   <warning>
     <para>This document is work in progress. It is in transition between The
-    Meta-Environment V1.5 and V2.0. See <link
-    linkend="asfsdf_ToDo">ToDo</link> list at the end of the document.</para>
+    Meta-Environment V1.5 and V2.0. It especially needs adaptations in the
+    sections on traversal functions, lexical constructor functions and
+    rewriting layout and source code comments.</para>
   </warning>
 
   <section>
@@ -228,6 +229,12 @@
       attributes of productions in SDF. The <code>{bracket} </code>attribute
       is one example, another important example is the
       <code>{traversal(...)}</code> attribute.</para>
+
+      <para>The <code>variables</code> and <code>lexical variables</code>
+      sections of SDF are important. In these sections you describe the syntax
+      of meta variables. These are exactly the variables used in the concrete
+      syntax patterns used in ASF to construct and deconstruct source
+      code.</para>
     </section>
 
     <section>
@@ -332,8 +339,6 @@
     <section xml:id="UnconditionalEquations">
       <title>Unconditional Equations</title>
 
-      <!--\index{unconditional equations@unconditional equations}-->
-
       <para>An unconditional equation has the form<programlisting><emphasis
             role="bold">[</emphasis>&lt;TagId&gt;<emphasis role="bold">]</emphasis> &lt;Term&gt; <emphasis
             role="bold">=</emphasis> &lt;Term&gt;</programlisting>where
@@ -369,8 +374,6 @@
 
     <section xml:id="ConditionalEquations">
       <title>Conditional Equations</title>
-
-      <!--\index{conditional equations@conditional equations}-->
 
       <para>An unconditional equation is a special case of a
       <emphasis>conditional equation</emphasis>, i.e., an equality with one or
