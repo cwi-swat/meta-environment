@@ -1,5 +1,9 @@
 $Id$
 
+Thu Sep 13 10:37:29 CEST 2007 <jurgenv@cwi.nl>
+ * tbscripts/standard.sdf.actions.src: imports ./meta.actions now, such
+   that pt-dump can find modules from user defined search paths
+
 Thu Jun 14 16:29:00 CEST 2007 <{kooiker,lankamp}@cwi.nl>
  * tbscripts/sdf-actions.tb: Add ugly hack to fix OpenModuleAction scenario
    not receiving notes for already opened modules.
