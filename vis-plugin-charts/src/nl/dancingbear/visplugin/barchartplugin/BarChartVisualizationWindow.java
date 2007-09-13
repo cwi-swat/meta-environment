@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nl.cwi.sen1.relationstores.Factory;
+import nl.cwi.sen1.relationstores.types.Integer;
 import nl.cwi.sen1.relationstores.types.RElem;
 import nl.cwi.sen1.relationstores.types.RElemElements;
 import nl.cwi.sen1.relationstores.types.RTuple;
@@ -240,7 +241,16 @@ private JFreeChart createPieChart(String title, CategoryDataset dataset) {
                 value = tuple.getRElemAt(0).getInteger();
             }
             else if (isRelIntInt(fact)) {
-            	name = tuple.getRElemAt(1).getInteger().toString();
+            	Integer i = tuple.getRElemAt(1).getInteger();
+            	if (i.isNatCon()) {
+            		name = "" + i.getNatCon();
+            	}
+            	else if (i.isNegative()) {
+            		name = "-" + i.getNatCon();
+            	}
+            	else if (i.isPositive()) {
+            		name = "+" + i.getNatCon();
+            	}
             	value = tuple.getRElemAt(0).getInteger();
             }
             else{
