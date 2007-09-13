@@ -84,7 +84,7 @@ public class BarChartVisualizationWindow extends VisualizationPluginWindow {
      * @date 12-03-2007
      */
     public boolean isTypeSupported(RTuple fact) {
-        boolean match = (isRelIntStr(fact) || isRelStrInt(fact) );
+        boolean match = (isRelIntStr(fact) || isRelStrInt(fact) || isRelIntInt(fact) );
 
         return match;
     }
