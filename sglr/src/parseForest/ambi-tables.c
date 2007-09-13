@@ -89,7 +89,6 @@ static void SG_AmbiTablesCreate() {
   }
   cluster_table = ATtableCreate(4096, 75);
   index_table = ATtableCreate(4096, 75);
-  ambiguityClustersCreated = 0;
 } 
 
 static ATerm SG_IndexTableGet(PT_Tree key, size_t pos) {
@@ -218,17 +217,18 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
 }
 
 void SG_collectAmbiTableStats(void) {
-  ATermList keys = ATtableKeys(cluster_table);
+  if (cluster_table) {
+    ATermList keys = ATtableKeys(cluster_table);
 
-  assert(SGLR_STATS_clusterHistogram && "The cluster length histogram has not been initialized!");
+    assert(SGLR_STATS_clusterHistogram && "The cluster length histogram has not been initialized!");
 
-  while (!ATisEmpty(keys)) {
-    ATerm key = ATgetFirst(keys);
-    PT_Args cluster = (PT_Args)ATtableGet(cluster_table, key);
-    int clusterLength = PT_getArgsLength(cluster);
+    while (!ATisEmpty(keys)) {
+      ATerm key = ATgetFirst(keys);
+      PT_Args cluster = (PT_Args)ATtableGet(cluster_table, key);
+      int clusterLength = PT_getArgsLength(cluster);
 
-    SGLR_STATS_clusterHistogramPut(clusterLength);
-    keys = ATgetNext(keys);
+      SGLR_STATS_clusterHistogramPut(clusterLength);
+      keys = ATgetNext(keys);
+    }
   }
-
 }
