@@ -1,5 +1,8 @@
 
 
+Thu Sep 13 18:58:10 CEST 2007 <jurgenv@cwi.nl>
+ * getting-started: removed guided tour for 1.5 release
+
 Thu Sep 13 17:18:15 CEST 2007 <jurgenv@cwi.nl>
  * website.xml,pubdate.xsl: documents that have a <pubdate> tag will
    get the date of the last commit substituted inside.
