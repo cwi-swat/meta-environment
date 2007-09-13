@@ -1,6 +1,5 @@
 configuration([
   import("__SDF_META__/share/sdf-meta/standard.sdf.actions"),
-  import("./meta.actions"),
   editor("StartASFEditor","languages/asf/syntax/Asf",".asf"),
   action([description(studio-menubar, menu-shortcut([label("Facts"), label("Load RStore...")], shortcut([M_ALT,M_SHIFT],VK_L), "Load an RStore from a file"))],
          "FBLoadRStoreAction"),
