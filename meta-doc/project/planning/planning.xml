@@ -248,9 +248,9 @@
 
         <thead>
           <row>
-            <entry align="center">Deliverable&#160;</entry>
+            <entry align="center">Deliverable </entry>
 
-            <entry align="center">Activity&#160;</entry>
+            <entry align="center">Activity </entry>
 
             <entry>Category</entry>
 
@@ -692,7 +692,7 @@
 
             <entry>Taeke</entry>
 
-            <entry>december, 2007</entry>
+            <entry>october, 2007</entry>
 
             <entry></entry>
           </row>
@@ -793,7 +793,7 @@
 
             <entry>Taeke</entry>
 
-            <entry>februari, 2008</entry>
+            <entry>december, 2007</entry>
 
             <entry></entry>
           </row>
@@ -833,7 +833,7 @@
 
             <entry>Programming</entry>
 
-            <entry>Paul,Arnold</entry>
+            <entry>Paul, Arnold</entry>
 
             <entry>june 1, 2007</entry>
 
@@ -847,7 +847,7 @@
 
             <entry>Building</entry>
 
-            <entry>Tijs,Jurgen</entry>
+            <entry>Tijs, Jurgen, Taeke</entry>
 
             <entry>january, 2008</entry>
 
@@ -943,7 +943,7 @@
           <row>
             <entry></entry>
 
-            <entry>Merge RScript with ASF </entry>
+            <entry>Merge RScript with ASF</entry>
 
             <entry>Design, Programming, Documenting</entry>
 
