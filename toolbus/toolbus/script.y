@@ -185,6 +185,10 @@ TBbool parse_script(char **names, int argc, char **argv)
   
   lino = 1;
   pos = 0;
+  yylval.epos = 0;
+  yylval.pos = 0;
+  yylval.lino = 1;
+  yylval.elino = 1;
   pres = yyparse();  /* at last, the actual parse */
 
   if (unlink(namec) == -1) {
