@@ -1,5 +1,9 @@
 $Id$
 
+Thu Sep 13 18:21:02 CEST 2007 <jurgenv@cwi.nl>
+ * adapters/tcltk*/Makefile.am: removed usage of fig2dev in Makefile
+   rules to fix maxosx build.
+
 Thu Aug 23 10:29:02 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
  * libdeprecated*/*.c,toolbus/*.c: added a new atomic action snd-kill,
    which (if the tool was executed from the bus) will kill the tool using

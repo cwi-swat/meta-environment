@@ -42,6 +42,6 @@ INCLUDES     = -I$(TCLTK)/include -I$(ATERM)/include $(TCLTK_DEFS) \
 % %.tex : %.nw
 	$(NOWEB) $<
 
-adapters.ps: adapters.fig
+pictures:
 	fig2dev -Lps adapters.fig adapters.ps
 
