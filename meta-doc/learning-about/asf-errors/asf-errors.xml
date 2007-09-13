@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>An explanation of error messages of ASF</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+
+    <pubdate>now</pubdate>
+  </info>
+
+  <warning>
+    <para>This document is unfinished.</para>
+  </warning>
+
+  <section xml:id="introduction">
+    <title>Introduction</title>
+
+    <para>This document describes the error messages that the ASF checker and
+    the ASF interpreter or compiler may report.</para>
+
+    <section xml:id="why">
+      <title xml:id="YetAnotherFormalism">See also</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Static warnings and errors</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Dynamic warnings and errors</title>
+
+    <para></para>
+  </section>
+</article>
