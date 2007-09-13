@@ -28,6 +28,8 @@ int main(int argc, char *argv[]) {
   atargs[5] = "-at-silent";
   /*atargs[5] = "-at-verbose";*/
 
+  /* The main options haven't been set yet so we can't check if we're doing the 
+   * stats. */
   SGLR_STATS_initialMRSS = STATS_ResidentSetSize();
 
   ATinit(6, atargs, &bottomOfStack);
@@ -35,9 +37,7 @@ int main(int argc, char *argv[]) {
   /*ATsetChecking(ATtrue);*/
   SGLR_initialize();
   
-  if (MAIN_getStatsFlag) {
-    SGLR_STATS_initialMemAllocated = STATS_Allocated();
-  }
+  SGLR_STATS_setCount(SGLR_STATS_initialMemAllocated, STATS_Allocated());
 
   for (i=1; !useToolbus && i < argc; i++) {
     useToolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
@@ -50,9 +50,7 @@ int main(int argc, char *argv[]) {
     result =  runCommandLineTool(argc, argv);
   }
 
-  if (MAIN_getStatsFlag) {
-    SGLR_STATS_endMRSS = STATS_ResidentSetSize();
-  }
+  SGLR_STATS_setCount(SGLR_STATS_endMRSS, STATS_ResidentSetSize());
 
   return result;
 }

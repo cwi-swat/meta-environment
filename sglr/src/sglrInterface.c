@@ -67,7 +67,7 @@ int SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable parseTable) 
 
   if (MAIN_getStatsFlag) { STATS_Timer(); }
   internalParseTable = SG_BuildParseTable(parseTable, parseTableName);
-  if (MAIN_getStatsFlag) { SGLR_STATS_parseTableTime = STATS_Timer(); }
+  SGLR_STATS_setCount(SGLR_STATS_parseTableTime, STATS_Timer());
 
   if (internalParseTable != NULL) {
     SG_CacheParseTable(parseTableName, internalParseTable);
@@ -100,35 +100,31 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
   assert(ATisInitialized() && 
       "ATerm library has not been initialized to be used by SGLR");
 
-  if (MAIN_getStatsFlag) { 
-    SGLR_STATS_parseTableFilename = parseTableName; 
-    SGLR_STATS_inputStringFilename = IS_getPath(inputString); 
-  }
+  SGLR_STATS_setCount(SGLR_STATS_parseTableFilename, parseTableName); 
+  SGLR_STATS_setCount(SGLR_STATS_inputStringFilename, IS_getPath(inputString)); 
 
   ParseTable *parseTable = SG_LookupParseTable(parseTableName);  
 
   assert(parseTable != NULL);
 
   if (MAIN_getStatsFlag) { 
-    SGLR_STATS_initializeHistograms(SGLR_PTBL_getMaxProductionLength(parseTable)); 
+    SGLR_STATS_initializeHistograms(SGLR_PTBL_getMaxProductionLength(parseTable), IS_getLength(inputString)); 
     STATS_Timer();
   }
+
   t = SG_parse(parseTable, inputString);
-  if (MAIN_getStatsFlag) { 
-    SGLR_STATS_parsingTime = STATS_Timer(); 
-    SGLR_STATS_linesParsed = IS_getLinesRead(inputString);
-    SGLR_STATS_charactersParsed = IS_getNumberOfTokensRead(inputString);
-  }
+
+  SGLR_STATS_setCount(SGLR_STATS_parsingTime, STATS_Timer()); 
+  SGLR_STATS_setCount(SGLR_STATS_linesParsed, IS_getLinesRead(inputString));
+  SGLR_STATS_setCount(SGLR_STATS_charactersParsed, IS_getNumberOfTokensRead(inputString));
 
   if (MAIN_getStatsFlag) { STATS_Timer(); }
   if (t) {
     parseTree = FLT_filter(parseTable, t, inputString);
   }
-  if (MAIN_getStatsFlag) { 
-    SGLR_STATS_filteringTime = STATS_Timer();  
-    SGLR_STATS_initializeClusterHistogram();
-    SG_collectAmbiTableStats();
-  }
+  SGLR_STATS_setCount(SGLR_STATS_filteringTime, STATS_Timer());
+  SGLR_STATS_initializeClusterHistogram();
+  SG_collectAmbiTableStats();
 
   SG_DestroyInputAmbiMap();
   SG_AmbiTablesDestroy();
@@ -143,12 +139,13 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
       
       if (MAIN_getStatsFlag) { STATS_Timer(); }
       parseTree = flattenPT(parseTree);
-      if (MAIN_getStatsFlag) { SGLR_STATS_flatteningTime = STATS_Timer(); }
+      SGLR_STATS_setCount(SGLR_STATS_flatteningTime, STATS_Timer());
     }
   }
   
   if (MAIN_getStatsFlag) {
     SGLR_STATS_print();
+    SGLR_STATS_destroyHistograms();
   }
 
   return parseTree;

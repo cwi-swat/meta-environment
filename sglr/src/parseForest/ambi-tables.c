@@ -36,7 +36,8 @@ static ATermTable index_table = NULL;
  * way ie., the positions that are ambiguous.
  */
 static Bitmap InputAmbiMap;
-
+static int ambiguityClustersCreated = 0;
+ 
 void SG_CreateInputAmbiMap(int length) {
   InputAmbiMap = BitmapCreate(length+1);
 }
@@ -88,6 +89,7 @@ static void SG_AmbiTablesCreate() {
   }
   cluster_table = ATtableCreate(4096, 75);
   index_table = ATtableCreate(4096, 75);
+  ambiguityClustersCreated = 0;
 } 
 
 static ATerm SG_IndexTableGet(PT_Tree key, size_t pos) {
@@ -176,11 +178,18 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
   ambidx = SG_AmbiTablesGetIndex(existing, pos);
   if (!ambidx) { 
     /* New ambiguity */
-    ambidx = (ATerm) ATmakeInt(SGLR_STATS_ambiguityClustersCreated++);
+    ambidx = (ATerm) ATmakeInt(ambiguityClustersCreated++);
+    SGLR_STATS_incrementCount(SGLR_STATS_ambiguityClustersCreated);
     /* Add mapping for existing term also */
     SG_AmbiTablesAddIndex(existing, pos, ambidx);
 
     newambs = PT_makeArgsMany(existing, PT_makeArgsSingle(new));
+    if (MAIN_getStatsFlag) {
+      int newambsLength = PT_getArgsLength(newambs);
+      if (SGLR_STATS_maxClusterLength < newambsLength) {
+        SGLR_STATS_maxClusterLength = newambsLength;
+      }
+    }
   }
   else {
     /* Expand (or update) existing ambiguity */
@@ -188,14 +197,14 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
 
     oldambs = SG_AmbiTablesGetClusterOnIndex(ambidx);
     if (PT_indexOfTreeInArgs(oldambs,  new) != -1) {
-      SGLR_STATS_existingAmbiguityClustersFound++;
+      SGLR_STATS_incrementCount(SGLR_STATS_existingAmbiguityClustersFound);
       return;  /*  Already present?  Done.  */
     }
     newambs = PT_makeArgsMany(new, oldambs);
     if (MAIN_getStatsFlag) {
       int newambsLength = PT_getArgsLength(newambs);
       if(SGLR_STATS_maxClusterLength < newambsLength) {
-      SGLR_STATS_maxClusterLength = newambsLength;
+        SGLR_STATS_maxClusterLength = newambsLength;
       }
     }
   }

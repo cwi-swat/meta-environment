@@ -62,6 +62,8 @@ extern int SGLR_STATS_maxSizeOfShiftQueue;
 
 extern int *SGLR_STATS_reductionLengthsDone;
 extern int *SGLR_STATS_edgeVisitsPerReductionLength;
+extern int *SGLR_STATS_edgeVisitsPerLevel;
+
 /* Tree construction statistics. */
 extern int SGLR_STATS_ambiguityClustersCreated;
 extern int SGLR_STATS_existingAmbiguityClustersFound;
@@ -71,6 +73,7 @@ extern int *SGLR_STATS_clusterHistogram;
 extern int SGLR_STATS_prodTreeNodesCreated;
 extern int SGLR_STATS_symbolTreeNodesCreated;
 extern int SGLR_STATS_cyclicTreeNodesCreated;
+extern int SGLR_STATS_cyclesDetected;
 
 extern int SGLR_STATS_preferenceCount;
 extern int SGLR_STATS_preferenceCountCalls;
@@ -89,9 +92,37 @@ extern double SGLR_STATS_filteringTime;
 extern const char *SGLR_STATS_inputStringFilename;
 extern const char *SGLR_STATS_parseTableFilename;
 
-void SGLR_STATS_initializeHistograms(int length);
+void SGLR_STATS_initializeHistograms(int length, int inputLength);
 void SGLR_STATS_initializeClusterHistogram(void);
+void SGLR_STATS_destroyHistograms();
 void SGLR_STATS_print(void);
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_setCount(counter, value)\
+  if (MAIN_getStatsFlag) {\
+    counter = value;\
+  }
+#else
+#define SGLR_STATS_incrementCount(counter, value) ;
+#endif
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_incrementCount(counter)\
+  if (MAIN_getStatsFlag) {\
+    counter++;\
+  }
+#else
+#define SGLR_STATS_incrementCount(counter) ;
+#endif
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_addToCount(counter, addition)\
+  if (MAIN_getStatsFlag) {\
+    counter += addition;\
+  }
+#else
+#define SGLR_STATS_incrementCount(counter, addition) ;
+#endif
 
 #if SGLR_COLLECT_STATISTICS
 #define SGLR_STATS_addReductionLength(length)\
@@ -109,6 +140,15 @@ void SGLR_STATS_print(void);
   }
 #else
 #define SGLR_STATS_edgeVisitiForReductionLength(reductionLength, edgeVisits) ;
+#endif
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisits)\
+  if (MAIN_getStatsFlag) {\
+    SGLR_STATS_edgeVisitsPerLevel[level] += edgeVisits;\
+  }
+#else
+#define SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisits) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS

@@ -20,9 +20,9 @@ void          GSS_clearCurrentLevel(void);
 GSSNodeList   GSS_getCurrentLevel(void);
 void          GSS_setCurrentLevel(GSSNodeList list);
 void          GSS_addToCurrentLevel(GSSNode node);
-ReductionPath GSS_findAllPaths(GSSNode source, int reductionLength);
+ReductionPath GSS_findAllPaths(GSSNode source, int reductionLength, int level);
 ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, 
-				   GSSEdge edge);
+				   GSSEdge edge, int level);
 GSSEdge       GSS_findDirectEdge(GSSNode source, GSSNode target);
 
 #endif  /* _GSS_H_ */

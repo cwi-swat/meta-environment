@@ -63,7 +63,7 @@ GSSNode GSSNode_createNode(int stateNum, ATbool isShift) {
   node->isShift   = isShift;
   node->nextFree  = NULL;
   
-  SGLR_STATS_gssNodesCreated++;
+  SGLR_STATS_incrementCount(SGLR_STATS_gssNodesCreated);
   
   return node;
 }
@@ -86,7 +86,7 @@ void GSSNode_deleteGSSNode(GSSNode node) {
   /** \todo Comment appropriatelly. */
   node->refCount = -1;
   
-  SGLR_STATS_gssNodesDeleted++;
+  SGLR_STATS_incrementCount(SGLR_STATS_gssNodesDeleted);
 }
 
 /** 

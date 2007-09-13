@@ -60,6 +60,8 @@ int SGLR_STATS_maxSizeOfShiftQueue = 0;
 
 int *SGLR_STATS_reductionLengthsDone = NULL;
 int *SGLR_STATS_edgeVisitsPerReductionLength = NULL;
+int *SGLR_STATS_edgeVisitsPerLevel = NULL;
+static ATermTable levelsWithEqualEdgeVisits = NULL;
 
 /* Tree construction statistics. */
 int SGLR_STATS_ambiguityClustersCreated = 0;
@@ -70,6 +72,7 @@ int *SGLR_STATS_clusterHistogram = NULL;
 int SGLR_STATS_prodTreeNodesCreated = 0;
 int SGLR_STATS_symbolTreeNodesCreated = 0;
 int SGLR_STATS_cyclicTreeNodesCreated = 0;
+int SGLR_STATS_cyclesDetected = 0;
 
 /* Post parse filtering statistics. */
 int SGLR_STATS_treeNodesVisited = 0;
@@ -98,15 +101,30 @@ double SGLR_STATS_filteringTime = 0.0;
 const char *SGLR_STATS_inputStringFilename;
 const char *SGLR_STATS_parseTableFilename;
 static int maxReductionLength = 0;
+static int inputStringLength = 0;
 
-void SGLR_STATS_initializeHistograms(int length) {
+void SGLR_STATS_initializeHistograms(int length, int inputLength) {
   maxReductionLength = length;
+  inputStringLength = inputLength;
+
   SGLR_STATS_reductionLengthsDone = (int*) calloc(maxReductionLength+1, sizeof(int));
   SGLR_STATS_edgeVisitsPerReductionLength = (int*) calloc(maxReductionLength+1, sizeof(int));
+  /* +2 to include the end-of-string and because there are inputStringLength+1 
+   * levels in the GSS. */
+  SGLR_STATS_edgeVisitsPerLevel = (int*) calloc(inputStringLength+2, sizeof(int));
+  levelsWithEqualEdgeVisits = ATtableCreate(4096, 75);
 }
 
 void SGLR_STATS_initializeClusterHistogram(void) {
   SGLR_STATS_clusterHistogram = (int*) calloc(SGLR_STATS_maxClusterLength+1, sizeof(int));
+}
+
+void SGLR_STATS_destroyHistograms() {
+  free(SGLR_STATS_reductionLengthsDone);
+  free(SGLR_STATS_edgeVisitsPerReductionLength);
+  free(SGLR_STATS_edgeVisitsPerLevel);
+  free(SGLR_STATS_clusterHistogram);
+  ATtableDestroy(levelsWithEqualEdgeVisits);
 }
 
 static FILE  *openLog(const char *fnam) {
@@ -129,8 +147,18 @@ static void closeLog(FILE *logFile) {
   }
 }
 
+static int compareKeys(ATerm a1, ATerm a2) {
+  if (ATgetInt(a1) > ATgetInt(a2)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
 void SGLR_STATS_print(void) {
   int i;
+  ATermList keys;
   FILE *logFile;
 
   if (PARSER_getVerboseFlag) {
@@ -192,6 +220,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "int production-tree-node-created = %d\n", SGLR_STATS_prodTreeNodesCreated);
   fprintf(logFile, "int leaf-nodes-created = %d\n", SGLR_STATS_symbolTreeNodesCreated);
+  fprintf(logFile, "int cyclic-tree-nodes-detected = %d\n", SGLR_STATS_cyclesDetected);
   fprintf(logFile, "int cyclic-tree-nodes-created = %d\n", SGLR_STATS_cyclicTreeNodesCreated);
  fprintf(logFile, "int ambiguities-created = %d\n", SGLR_STATS_ambiguityClustersCreated);
   fprintf(logFile, "int existing-ambiguities-found = %d\n", SGLR_STATS_existingAmbiguityClustersFound);
@@ -199,7 +228,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] clusterLengths = \n");
   fprintf(logFile, "{\n");
-
+  fprintf(logFile, "<cluster-length, times-created>\n");
   for (i = 0; i <= SGLR_STATS_maxClusterLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_clusterHistogram[i]);
     if (i < SGLR_STATS_maxClusterLength) {
@@ -211,6 +240,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] reductionLengths = \n");
   fprintf(logFile, "{\n");
+  fprintf(logFile, "<reduction-length, times-reduced>\n");
   for (i = 0; i <= maxReductionLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_reductionLengthsDone[i]);
      if (i < maxReductionLength) {
@@ -221,9 +251,51 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] edgeVisitsPerReduction = \n");
   fprintf(logFile, "{\n");
+  fprintf(logFile, "<reduction-length, edge-visits>\n");
   for (i = 0; i <= maxReductionLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_edgeVisitsPerReductionLength[i]);
     if (i < maxReductionLength) {
+      fprintf(logFile, ",\n");
+    }
+  }
+  fprintf(logFile, "\n}\n");
+
+  fprintf(logFile, "rel[int, int] edgeVisitsPerLevel = \n");
+  fprintf(logFile, "{\n");
+  fprintf(logFile, "<level-number, edge-visits>\n");
+  for (i = 0; i < SGLR_STATS_charactersParsed+1; i++) {
+    fprintf(logFile, "<%d, %d>", i, SGLR_STATS_edgeVisitsPerLevel[i]);
+    if (i < SGLR_STATS_charactersParsed) {
+      fprintf(logFile, ",\n");
+    }
+  }
+  fprintf(logFile, "\n}\n");
+
+  for (i = 0; i < SGLR_STATS_charactersParsed+1; i++) {
+    int incValue = 0;
+    ATerm key = (ATerm)ATmakeInt(SGLR_STATS_edgeVisitsPerLevel[i]);
+    ATerm value = ATtableGet(levelsWithEqualEdgeVisits, key);
+
+    if (value) {
+      incValue = ATgetInt(value);
+    }
+    incValue++;
+    ATtablePut(levelsWithEqualEdgeVisits, key, (ATerm)ATmakeInt(incValue));
+  }
+
+  fprintf(logFile, "rel[int, int] levelsWithSameEdgeVisits = \n");
+  fprintf(logFile, "{\n");
+  fprintf(logFile, "%%%%<edge-visits, number-of-levels>\n");
+
+  keys = ATtableKeys(levelsWithEqualEdgeVisits);
+  keys = ATsort(keys, compareKeys);
+  while (!ATisEmpty(keys)) {
+    ATerm key = ATgetFirst(keys);
+    ATerm value = ATtableGet(levelsWithEqualEdgeVisits, key);
+
+    fprintf(logFile, "<%d, %d>", ATgetInt(key), ATgetInt(value));
+    keys = ATgetNext(keys);
+    if (!ATisEmpty(keys)) {
       fprintf(logFile, ",\n");
     }
   }
@@ -255,3 +327,4 @@ void SGLR_STATS_print(void) {
 
   closeLog(logFile);
 }
+

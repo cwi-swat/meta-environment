@@ -138,9 +138,7 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
 
   parseError();
 
-  if (MAIN_getStatsFlag) {
-    SGLR_STATS_parsingMemAllocated = STATS_Allocated();
-  }
+  SGLR_STATS_setCount(SGLR_STATS_parsingMemAllocated, STATS_Allocated());
 
   parserCleanup();
 
@@ -242,7 +240,7 @@ static void doReductions(GSSNode st, PTBL_Action a) {
   prod = PTBL_getActionLabel(a);
 
   SGLR_STATS_addReductionLength(PTBL_getActionLength(a));
-  ps = GSS_findAllPaths(st, PTBL_getActionLength(a)); 
+  ps = GSS_findAllPaths(st, PTBL_getActionLength(a), IS_getNumberOfTokensRead(inputString)); 
 
   while(ps != NULL){
     reducer(GSS_getReductionPathTargetGSSNode(ps),
@@ -293,11 +291,11 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
   GSSEdge nl;
   GSSNode st1;
 
-  SGLR_STATS_reductionsDone++;
+  SGLR_STATS_incrementCount(SGLR_STATS_reductionsDone);
 
   prod = SGLR_PTBL_lookupProduction(parseTable, prodl);
   t = PT_makeTreeAppl(prod, kids);
-  SGLR_STATS_prodTreeNodesCreated++;
+  SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreated);
 
   st1 = GSS_findNodeInCurrentLevel(s);
 
@@ -379,7 +377,7 @@ static void doLimitedReductions(GSSNode st, PTBL_Action a, GSSEdge edge) {
   prod = PTBL_getActionLabel(a);
 
   SGLR_STATS_addReductionLength(PTBL_getActionLength(a));
-  ps = GSS_findLimitedPaths(st, PTBL_getActionLength(a), edge);
+  ps = GSS_findLimitedPaths(st, PTBL_getActionLength(a), edge, IS_getNumberOfTokensRead(inputString));
 
   while(ps) {
     reducer(GSS_getReductionPathTargetGSSNode(ps),
@@ -411,7 +409,7 @@ static void shifter(void) {
   GSSEdge l;
 
   t = PT_makeTreeChar(IS_getCurrentToken(inputString));
-  SGLR_STATS_symbolTreeNodesCreated++;
+  SGLR_STATS_incrementCount(SGLR_STATS_symbolTreeNodesCreated);
 
   while (!GSS_isShiftQueueEmpty()) {
     s   = GSS_getShiftQueueStateNumber();

@@ -110,9 +110,7 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
       }
     }
 
-    if (MAIN_getStatsFlag) {
-      SGLR_STATS_beforeParseTableCreationMRSS = STATS_ResidentSetSize();
-    }
+    SGLR_STATS_setCount(SGLR_STATS_beforeParseTableCreationMRSS, STATS_ResidentSetSize());
   
     pt = SGLR_PTBL_initializeParseTable(startState, 
         PTBL_getStatesLength(states), 
@@ -121,10 +119,8 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
         goto_entries, 
         path);
 
-    if (MAIN_getStatsFlag) {
-      SGLR_STATS_emptyParseTableMemAllocated = STATS_Allocated();
-      SGLR_STATS_emptyParseTableMRSS = STATS_ResidentSetSize();
-    }
+    SGLR_STATS_setCount(SGLR_STATS_emptyParseTableMemAllocated, STATS_Allocated());
+    SGLR_STATS_setCount(SGLR_STATS_emptyParseTableMRSS, STATS_ResidentSetSize());
 
     SGLR_PTBL_fillParseTable(pt, states);
     states = NULL;
@@ -140,14 +136,12 @@ ParseTable *SG_BuildParseTable(PTBL_ParseTable extParseTable, const char *path) 
       }
     }
 
-    if (MAIN_getStatsFlag) {
-      SGLR_STATS_rejects = SGLR_PTBL_hasRejects(pt);
-      SGLR_STATS_priorities = SGLR_PTBL_hasPriorities(pt);
-      SGLR_STATS_prefers = SGLR_PTBL_hasPrefers(pt);
-      SGLR_STATS_avoids = SGLR_PTBL_hasAvoids(pt);
-      SGLR_STATS_fullParseTableMemAllocated = STATS_Allocated();
-      SGLR_STATS_fullParseTableMRSS = STATS_ResidentSetSize();
-    }
+    SGLR_STATS_setCount(SGLR_STATS_rejects, SGLR_PTBL_hasRejects(pt));
+    SGLR_STATS_setCount(SGLR_STATS_priorities, SGLR_PTBL_hasPriorities(pt));
+    SGLR_STATS_setCount(SGLR_STATS_prefers, SGLR_PTBL_hasPrefers(pt));
+    SGLR_STATS_setCount(SGLR_STATS_avoids, SGLR_PTBL_hasAvoids(pt));
+    SGLR_STATS_setCount(SGLR_STATS_fullParseTableMemAllocated, STATS_Allocated());
+    SGLR_STATS_setCount(SGLR_STATS_fullParseTableMRSS, STATS_ResidentSetSize());
 
     return pt;
   }

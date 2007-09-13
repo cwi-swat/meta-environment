@@ -445,7 +445,7 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
   p1 = PT_getTreeProd(t1);
 
   if (MAIN_getStatsFlag) {
-    SGLR_STATS_preferenceCountCalls++;
+    SGLR_STATS_incrementCount(SGLR_STATS_preferenceCountCalls);
   }
 
   if (SGLR_PTBL_hasPrefers(pt) || SGLR_PTBL_hasAvoids(pt)) {
@@ -481,7 +481,7 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
 
   if (max) {
     if (MAIN_getStatsFlag) {
-      SGLR_STATS_preferenceCount++;
+      SGLR_STATS_incrementCount(SGLR_STATS_preferenceCount);
     }
   }
 
@@ -533,9 +533,9 @@ static PT_Tree fullInjectionCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
   size_t in1 = countAllInjectionsInTree(pt, t1);
   
   if (MAIN_getStatsFlag) {
-    SGLR_STATS_injectionCountCalls++;
+    SGLR_STATS_incrementCount(SGLR_STATS_injectionCountCalls);
     if (in0 != in1) {
-      SGLR_STATS_injectionCount++;
+      SGLR_STATS_incrementCount(SGLR_STATS_injectionCount);
     }
   }
 
@@ -1054,7 +1054,7 @@ static PT_Tree createTreeNode(PT_Args ambChildren) {
     return PT_getArgsHead(ambChildren);
   }
   else {
-    SGLR_STATS_ambNodesCreated++;
+    SGLR_STATS_incrementCount(SGLR_STATS_ambNodesCreated);
     return PT_makeTreeAmb(ambChildren);
   }
 }
@@ -1115,6 +1115,7 @@ static PT_Args filterChildren(ParseTable *pt, PT_Args args, size_t *pos, ATbool 
  */
 static ATbool detectCycle(ATerm clusterIndex) {
   if (clusterIndex && SG_getLevel(clusterIndex) != -1) {
+    SGLR_STATS_incrementCount(SGLR_STATS_cyclesDetected);
     return ATtrue;
   }	    
 
@@ -1131,7 +1132,7 @@ static ATbool detectCycle(ATerm clusterIndex) {
  * the tree.
  */
 static PT_Tree createCycle(PT_Args ambs, int cycleLength) {
-  SGLR_STATS_cyclicTreeNodesCreated++;
+  SGLR_STATS_incrementCount(SGLR_STATS_cyclicTreeNodesCreated);
   if (!FLT_getRemoveCyclesFlag()) {
     PT_Tree first = PT_getArgsHead(ambs);
     PT_Production prod = PT_getTreeProd(first);
@@ -1317,24 +1318,6 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
       t = filterTree(pt, t, pos, cycle, level);
     }
   }
-#if 0  
-  else if (PT_isTreeAmb(t)) {
-    /* The tree is part of an epsilon tree pre-constructed at parse table 
-     * generation time for RN reductions, so we only want to filter; we cannot
-     * do any lookups in the ambi tables etc. */
-    t = filterAmbiguity(pt, PT_getTreeArgs(t), pos, cycle, level);
-  }
-  else if (PT_isTreeCycle(t)) {
-    /* This is a cyclic node pre-constructed at parse table generation time
-     * for RN reductions. */
-    if (!FLT_getRemoveCyclesFlag()) {
-      return t;
-    }
-    else {
-      return (PT_Tree)NULL;
-    }
-  }
-#endif
   else {
     assert(PT_isTreeChar(t) && "we only expect appls and chars here");
     *pos = *pos + 1;

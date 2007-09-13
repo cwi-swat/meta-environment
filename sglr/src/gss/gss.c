@@ -29,7 +29,7 @@ static int edgeVisitsPerReduction; /**< used for stat logging. */
  */
 void GSS_createStartNode(GSSNode s) {
   currentLevel = GSS_addNodeListElement(s,currentLevel);
-  SGLR_STATS_gssNodesCreated++;
+  SGLR_STATS_incrementCount(SGLR_STATS_gssNodesCreated);
 }
 
 /** 
@@ -112,7 +112,7 @@ GSSEdge GSS_findDirectEdge(GSSNode source, GSSNode target) {
   GSSEdgeList edges = NULL;
 
   for (edges = GSSNode_getEdgeList(source); edges; edges = GSS_getEdgeListTail(edges)) {
-    SGLR_STATS_gssEdgesSearched++;
+    SGLR_STATS_incrementCount(SGLR_STATS_gssEdgesSearched);
     if (GSSEdge_getTargetGSSNode(GSS_getEdgeListHead(edges)) == target) {
       return GSS_getEdgeListHead(edges);
     }
@@ -131,13 +131,14 @@ GSSEdge GSS_findDirectEdge(GSSNode source, GSSNode target) {
  * 
  * \return the #ReductionPath traversed
  */
-ReductionPath GSS_findAllPaths(GSSNode source, int reductionLength) {
+ReductionPath GSS_findAllPaths(GSSNode source, int reductionLength, int level) {
   ReductionPath result;
 
   edgeVisitsPerReduction = 0;
   result = findAllPathsRecursive(source, reductionLength, PT_makeArgsEmpty(), 0, NULL);
 
   SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
+  SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisitsPerReduction);
   return result; 
 }
 
@@ -161,7 +162,7 @@ static ReductionPath findAllPathsRecursive(GSSNode node, int reductionLength, PT
 				    length + GSSEdge_getNumberOfLeavesInTree(edge), 
 				    paths);
 
-      SGLR_STATS_gssEdgesTraversed++;
+      SGLR_STATS_incrementCount(SGLR_STATS_gssEdgesTraversed);
       edgeVisitsPerReduction++;
     }
   }
@@ -253,7 +254,7 @@ static ReductionPath findPaths(GSSNode source, int reductionLength, GSSEdge edge
  * \return the #ReductionPath from the specified GSS node that traverses the 
  * specified GSS edge
  */
-ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, GSSEdge edge) {
+ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, GSSEdge edge, int level) {
   ReductionPath result = NULL;
   edgeVisitsPerReduction = 0;
 
@@ -262,5 +263,6 @@ ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, GSSEdge 
   }
 
   SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
+  SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisitsPerReduction);
   return result;
 }

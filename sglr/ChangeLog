@@ -1,5 +1,11 @@
 $Id$
 
+Thu Sep 13 13:44:30 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: removed code for filtering of RN constructed
+   parse forests.
+ * src/*: collecting data for more histograms.
+ * src/parser/parserStatistics.h: introduced more macros for efficiency.
+
 Wed Sep 12 15:28:37 CEST 2007 <economop@cwi.nl>
  * Record the maximum number of ambiguities in an ambiguity cluster, and
    collect information for a histogram of cluster size.

@@ -65,7 +65,7 @@ void GSS_addShiftQueueElement(int stateNum, GSSNode node) {
   statesToBeShifted[endOfQueue].gssNode = node;
   endOfQueue++;
 
-  SGLR_STATS_shiftsAddedToShiftQueue++;
+  SGLR_STATS_incrementCount(SGLR_STATS_shiftsAddedToShiftQueue);
 }
 
 /** 
@@ -73,7 +73,7 @@ void GSS_addShiftQueueElement(int stateNum, GSSNode node) {
  */
 void GSS_resetShiftQueue(void) {
   if (SGLR_STATS_maxSizeOfShiftQueue < endOfQueue) {
-    SGLR_STATS_maxSizeOfShiftQueue = endOfQueue;
+    SGLR_STATS_setCount(SGLR_STATS_maxSizeOfShiftQueue, endOfQueue);
   }
 
   startOfQueue = 0;

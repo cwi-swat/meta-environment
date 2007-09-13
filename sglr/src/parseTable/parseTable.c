@@ -740,10 +740,9 @@ void SGLR_PTBL_fillParseTable(ParseTable *pt, PTBL_States states) {
       PTBL_Gotos gotos = PTBL_getStateGotos(curstate);
       PTBL_Choices choices = PTBL_getStateChoices(curstate);
 
-      if (MAIN_getStatsFlag) {
-        SGLR_STATS_gotos += PTBL_getGotosLength(gotos); 
-        SGLR_STATS_actions += PTBL_getChoicesLength(choices);
-      }
+      SGLR_STATS_addToCount(SGLR_STATS_gotos, PTBL_getGotosLength(gotos)); 
+      SGLR_STATS_addToCount(SGLR_STATS_actions, PTBL_getChoicesLength(choices));
+
       processGotos(pt, s, gotos);
       processChoices(pt, s, choices);
     } else {
@@ -880,12 +879,10 @@ ParseTable *SGLR_PTBL_initializeParseTable(int startState, size_t numstates, siz
   ParseTable *pt;
   size_t      tableclass, tablesize;
 
-  if (MAIN_getStatsFlag) {
-    SGLR_STATS_states = numstates;
-    SGLR_STATS_prods = numprods;
-    SGLR_STATS_actionEntries = action_entries;
-    SGLR_STATS_gotoEntries = goto_entries;
-  }
+  SGLR_STATS_setCount(SGLR_STATS_states, numstates);
+  SGLR_STATS_setCount(SGLR_STATS_prods, numprods);
+  SGLR_STATS_setCount(SGLR_STATS_actionEntries, action_entries);
+  SGLR_STATS_setCount(SGLR_STATS_gotoEntries, goto_entries);
 
   pt               = calloc(1, sizeof(struct _ParseTable));
   pt->startState   = startState;

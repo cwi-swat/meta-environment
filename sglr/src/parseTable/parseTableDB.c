@@ -51,7 +51,7 @@ ParseTable *SG_AddParseTable(const char *filename) {
   extParseTable = PTBL_ParseTableFromTerm(ATreadFromFile(inputFile));
   intParseTable = SG_BuildParseTable(extParseTable, filename);
 
-  if (MAIN_getStatsFlag) { SGLR_STATS_parseTableTime = STATS_Timer(); }
+  SGLR_STATS_setCount(SGLR_STATS_parseTableTime, STATS_Timer());
 
   if (!readFromStdin) {
     fclose(inputFile);
