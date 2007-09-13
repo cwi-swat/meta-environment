@@ -15,7 +15,9 @@ currentDir=`pwd`
 inputFilename=""
 inputFilenameSuffix=""
 outputFilename=""
+outputFilenameOrdered=""
 orgAsfixFilename=""
+orgAsfixFilenameOrdered=""
 orgFilename=""
 parseTableFilename=""
 
@@ -25,6 +27,7 @@ SGLR="__SGLR__/bin/sglr"
 SDF2TABLE="__TOP_BUILDDIR__/src/sdf2table.test"
 ATCOMPARE="__ATERM__/bin/atdiff"
 COMPARE="__PT_SUPPORT__/bin/comparePT"
+ORDER="__PT_SUPPORT__/bin/orderPT"
 ERRORCOMPARE="__ERROR_SUPPORT__/bin/error-diff"
 
 GRAMMARS="__TOP_BUILDDIR__/test/grammars"
@@ -191,11 +194,18 @@ runPgenTests () {
 runTermTests () {
   echo "" 
   if eval $SGLR $VERBOSE $1 -o $outputFilename ; then
-    if $COMPARE -a $outputFilename $orgAsfixFilename > /dev/null ; then
+    if $COMPARE $outputFilename $orgAsfixFilename > /dev/null ; then
       success "SUCCEEDED regression test for term $inputFilename"
     else 
-      error "FAILED regression test for term " $inputFilename
-      notify "Parse forest is different!"
+      $ORDER -i $outputFilename -o $outputFilenameOrdered
+      $ORDER -i $orgAsfixFilename -o $orgAsfixFilenameOrdered
+      if $COMPARE $outputFilenameOrdered $orgAsfixFilenameOrdered > /dev/null ; then
+        notify "Ambiguities in different order."
+        success "SUCCEEDED regression test for term $inputFilename"
+      else
+        error "FAILED regression test for term " $inputFilename
+        notify "Parse forest is different!"
+      fi
     fi
     if [ $update -eq 0 ] ; then
       if [ $error -eq 0 ] ; then 

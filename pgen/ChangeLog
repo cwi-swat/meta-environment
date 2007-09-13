@@ -1,5 +1,10 @@
 $Id$
 
+Thu Sep 13 11:40:34 CEST 2007 <economop@cwi.nl>
+ * test/regressionTests.sh.src: removed the redundant -a option from
+   comparePT and added ordering of ambiguities, using orderPT, for when 
+   comparePT fails.
+
 Thu Aug 16 16:40:06 CEST 2007 <economop@cwi.nl>
  * test/termsCommandLines, test/errorneousCommandLines: switched on the 
    injection and preference counting filters to match the old tests. Need to 
