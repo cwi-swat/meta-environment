@@ -1020,8 +1020,10 @@
     <application>xxe</application> for wysiwyg editing and
     <application>emacs</application> for editing of the XML source. Note that
     the DocBook V5.0 addon has to be installed explicitly after installation
-    of xxe itself (Start xxe, go to the Options-&gt;Install add-ons menu and
-    select DocBook 5 + XInclude configuration). </para>
+    of xxe itself (Start xxe, go to the Options-&gt;Install Add-ons... menu
+    and select either DocBook 5 + XInclude configuration or Customization of
+    the DocBook 5 configuration allowing edit &lt;xi:include&gt; elements by
+    hand).</para>
   </section>
 
   <section>
