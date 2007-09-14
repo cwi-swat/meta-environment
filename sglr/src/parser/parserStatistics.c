@@ -228,7 +228,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] clusterLengths = \n");
   fprintf(logFile, "{\n");
-  fprintf(logFile, "<cluster-length, times-created>\n");
+  fprintf(logFile, "%%%%<cluster-length, times-created>\n");
   for (i = 0; i <= SGLR_STATS_maxClusterLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_clusterHistogram[i]);
     if (i < SGLR_STATS_maxClusterLength) {
@@ -240,7 +240,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] reductionLengths = \n");
   fprintf(logFile, "{\n");
-  fprintf(logFile, "<reduction-length, times-reduced>\n");
+  fprintf(logFile, "%%%%<reduction-length, times-reduced>\n");
   for (i = 0; i <= maxReductionLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_reductionLengthsDone[i]);
      if (i < maxReductionLength) {
@@ -251,7 +251,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] edgeVisitsPerReduction = \n");
   fprintf(logFile, "{\n");
-  fprintf(logFile, "<reduction-length, edge-visits>\n");
+  fprintf(logFile, "%%%%<reduction-length, edge-visits>\n");
   for (i = 0; i <= maxReductionLength; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_edgeVisitsPerReductionLength[i]);
     if (i < maxReductionLength) {
@@ -262,7 +262,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "rel[int, int] edgeVisitsPerLevel = \n");
   fprintf(logFile, "{\n");
-  fprintf(logFile, "<level-number, edge-visits>\n");
+  fprintf(logFile, "%%%%<level-number, edge-visits>\n");
   for (i = 0; i < SGLR_STATS_charactersParsed+1; i++) {
     fprintf(logFile, "<%d, %d>", i, SGLR_STATS_edgeVisitsPerLevel[i]);
     if (i < SGLR_STATS_charactersParsed) {
