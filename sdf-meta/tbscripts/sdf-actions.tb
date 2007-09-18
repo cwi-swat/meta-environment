@@ -4,6 +4,7 @@
 #include <config-utils.tb>
 #include <sdf-namespace.h>
 #include <gui-utils.tb>
+#include <module-utils.tb>
 
 process ChangeWorkspaceAction is
 let
@@ -142,7 +143,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(ModuleId, Path, trm)
+    DumpParseTable(ModuleId, SDF_NAMESPACE, Path, trm)
   fi
 endlet
 
@@ -158,7 +159,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(ModuleId, Path, trm)
+    DumpParseTable(ModuleId, SDF_NAMESPACE, Path, trm)
   fi
 endlet
 

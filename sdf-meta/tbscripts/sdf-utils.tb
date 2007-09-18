@@ -24,8 +24,8 @@ in
   )
 endlet
 
-
-process DumpParseTable(ModuleId : module-id, Filename : str, Type : term) is
+/*
+process DumpParseTable(ModuleId : module-id, Namespace: term, Filename : str, Type : term) is
 let
   Directory: str,
   Error: term,
@@ -42,7 +42,7 @@ in
   .
   (
     rec-msg(parsetable(ModuleId, Type, Table?))
-    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . GetModulePath(ModuleId, Namespace, Path?)
     .
     if equal(Filename, "") then
       TODO("DumpParseTable got empty filename")
@@ -61,6 +61,7 @@ in
   )
   . JobDone(Filename)
 endlet
+*/
 
 process DumpSdfDefinition(ModuleId: module-id, Filename: str) is
 let
