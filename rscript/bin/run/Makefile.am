@@ -18,5 +18,5 @@ rscriptcalculator_LDADD = \
 	$(ASC_SUPPORT_LIBS)
 
 asfc:
-        asfc -i RScript-Calculator.eqs -o RScript-Calculator.c -va
+	asfc -i RScript-Calculator.eqs -o RScript-Calculator.c -va
 
