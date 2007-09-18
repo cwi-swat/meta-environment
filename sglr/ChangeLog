@@ -1,5 +1,9 @@
 $Id$
 
+Tue Sep 18 14:26:33 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: optimized the priority filter; fewer nodes get 
+   created now.
+
 Tue Sep 18 13:34:30 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: added extra statistics for parse tree nodes
    created.

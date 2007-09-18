@@ -664,8 +664,13 @@ static PT_Tree priorityFilterRecursive(ParseTable *pt, PT_Tree t, PT_Production 
 
       PT_Tree newInjChild = priorityFilterRecursive(pt, injChild, prod, argNumber);
       if (newInjChild) {
+        if (PT_isEqualTree(injChild, newInjChild)) {
+          return t;
+        }
+        else {
           SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
           return PT_setTreeArgs(t, PT_makeArgsSingle(newInjChild));
+        }
       }
       else {
         return (PT_Tree)NULL;
@@ -679,15 +684,22 @@ static PT_Tree priorityFilterRecursive(ParseTable *pt, PT_Tree t, PT_Production 
   if (PT_isTreeAmb(injChild)) {
     PT_Args ambChildren = PT_getTreeArgs(injChild);
     PT_Args newAmbChildren = PT_makeArgsEmpty();
+    ATbool ambChildrenEqual = ATtrue;
     
     for (; !PT_isArgsEmpty(ambChildren); ambChildren = PT_getArgsTail(ambChildren)) {
       PT_Tree ambChild = PT_getArgsHead(ambChildren);
-      ambChild = priorityFilterRecursive(pt, ambChild, prod, argNumber);
+      PT_Tree newAmbChild = priorityFilterRecursive(pt, ambChild, prod, argNumber);
       /* If ambChild is NULL then there is a priority conflict that has been 
        * filtered lower down the tree and hence this child branch should not be 
        * added to the ambiguity.*/
-      if (ambChild) {
-        newAmbChildren = PT_makeArgsMany(ambChild, newAmbChildren);
+      if (newAmbChild) { 
+        newAmbChildren = PT_makeArgsMany(newAmbChild, newAmbChildren);
+        if (!PT_isEqualTree(ambChild, newAmbChild)) {
+          ambChildrenEqual = ATfalse;
+        }
+      }
+      else {
+        ambChildrenEqual = ATfalse;
       }
     }
    
@@ -699,8 +711,13 @@ static PT_Tree priorityFilterRecursive(ParseTable *pt, PT_Tree t, PT_Production 
         return PT_getArgsHead(newAmbChildren);
       }
       else {
-          SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
-          return PT_setTreeArgs(injChild, PT_reverseArgs(newAmbChildren));
+        if (ambChildrenEqual) {
+          return injChild;
+        }
+        else {
+        SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
+        return PT_setTreeArgs(injChild, PT_reverseArgs(newAmbChildren));
+        }
       }
     }
    /* If all the children of the ambiguity have been removed then remove the
@@ -783,8 +800,13 @@ static PT_Tree priorityFilter(ParseTable *pt, PT_Tree t) {
       }
       );
 
-      SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
-      return PT_setTreeArgs(t, newChildren);
+      if (PT_isEqualArgs(PT_getTreeArgs(t), newChildren)) {
+        return t;
+      }
+      else {
+        SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
+        return PT_setTreeArgs(t, newChildren);
+      }
     }
   }
 
@@ -1495,8 +1517,11 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
        int pos = 0;
        numberOfAmbiguitiesInTree = countPosIndependentAmbsInTree(newT,0,&pos);
      } else {
-       /*countNodesInTree(newT);*/
        numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
+     }
+
+     if (MAIN_getStatsFlag) {
+       countNodesInTree(newT);
      }
    }
 
