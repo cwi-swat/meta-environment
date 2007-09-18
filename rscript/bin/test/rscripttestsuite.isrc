@@ -1,0 +1,33 @@
+tool rscripttestsuite is {command = "__PREFIX__/bin/rscripttestsuite"}
+
+process RScriptTestSuite is
+let
+  RTS : rscripttestsuite,
+  Feedback : term,
+  RScript : term
+in
+  subscribe(interrupt-rscript)
+  .
+  (
+    rec-msg(evaluate-rscript-testsuite(RScript?))
+    . execute(rscripttestsuite, RTS?)
+    . snd-eval(RTS, evalute-rscript-testsuite(RScript))
+    .
+    ( 
+      rec-value(RTS, check-rscript(Feedback?))
+      . snd-msg(checked-rscript(Feedback))
+      . snd-terminate(RTS, "done")
+    +
+      rec-note(interrupt-rscript)
+      . snd-kill(RTS, "interrupted by user")
+      . snd-msg(evaluate-rscript-testsuite-aborted)
+    )
+    . RScript := undefined
+  +
+    rec-note(interrupt-rscript)
+  )
+  *
+  delta
+endlet
+
+toolbus(RScriptTestSuite)
