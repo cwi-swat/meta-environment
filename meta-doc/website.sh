@@ -57,6 +57,7 @@ for cat in ${CATEGORIES}; do
                    --output ${WEB}/$cat/$book/$book.html \
 		   --xinclude \
                    --stringparam callout.graphics.path ../../images/callouts/ \
+                   --stringparam ignore.image.scaling 1 \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
                    --param xref.with.number.and.title 0 \
