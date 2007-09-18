@@ -12,11 +12,11 @@ AM_CPPFLAGS += \
 	-DASF_WITH_ANNOS \
 	-DASF_MAIN
 
-rscriptchecker_SOURCES = Rscript-Checker.c 
+rscriptchecker_SOURCES = RScript-Checker.c 
 
 rscriptchecker_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
 	$(ASC_SUPPORT_LIBS)
 
 asfc:
-	asfc -i Rscript-Checker.eqs -o Rscript-Checker.c -va
+	asfc -i RScript-Checker.eqs -o RScript-Checker.c -va

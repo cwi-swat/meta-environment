@@ -11,8 +11,12 @@ AM_CPPFLAGS += \
 	$(SDF_SUPPORT_CFLAGS) \
 	-DASF_MAIN
 
-rscriptcalculator_SOURCES = Rscript-Calculator.c 
+rscriptcalculator_SOURCES = RScript-Calculator.c 
 
 rscriptcalculator_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
 	$(ASC_SUPPORT_LIBS)
+
+asfc:
+        asfc -i RScript-Calculator.eqs -o RScript-Calculator.c -va
+

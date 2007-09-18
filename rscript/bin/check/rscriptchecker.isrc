@@ -1,22 +1,22 @@
 tool rscriptchecker is {command = "__PREFIX__/bin/rscriptchecker"}
 
-process RscriptChecker is
+process RScriptChecker is
 let
   RSC : rscriptchecker,
   Feedback : term,
-  Rscript : term
+  RScript : term
 in
   (
-    rec-msg(check-rscript(Rscript?))
+    rec-msg(check-rscript(RScript?))
     . execute(rscriptchecker, RSC?)
-    . snd-eval(RSC, check-rscript(Rscript))
+    . snd-eval(RSC, check-rscript(RScript))
     . rec-value(RSC, check-rscript(Feedback?))
     . snd-msg(checked-rscript(Feedback))
-    . Rscript := undefined
+    . RScript := undefined
     . snd-terminate(RSC, "done")
   )
   *
   delta
 endlet
 
-toolbus(RscriptChecker)
+toolbus(RScriptChecker)
