@@ -65,7 +65,6 @@ process PromptForFileWithExtension(String : str,
     . Cancel := true
   )
 
-
 process ExitAction is
   shutdown("")
 

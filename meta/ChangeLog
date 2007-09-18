@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Sep 18 10:30:11 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/parsetable-utils.tb: Add namespace parameterized DumpParseTable 
+   function 
+
 Thu Aug 23 11:23:04 CEST 2007 <{kooiker,jurgenv,lankamp}@cwi.nl>
  * tbscripts/editing.tb: processing of menu events is done asynchronously
    from now on, such that an editor can do other stuff after it has initiated
