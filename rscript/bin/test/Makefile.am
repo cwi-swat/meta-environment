@@ -19,4 +19,4 @@ rscripttestsuite = \
 	$(ASC_SUPPORT_LIBS)
 
 asfc:
-	asfc -i Rscript-Test-Suite.eqs -o Rscript-Test-Suite.c -va
+	asfc -i RScript-Test-Suite.eqs -o RScript-Test-Suite.c -va
