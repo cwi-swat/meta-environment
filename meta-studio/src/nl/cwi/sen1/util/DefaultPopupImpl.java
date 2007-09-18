@@ -6,7 +6,7 @@ import nl.cwi.sen1.configapi.types.ActionDescriptionList;
 import toolbus.AbstractTool;
 import aterm.ATerm;
 
-public class DefaultPopupImpl  {
+public class DefaultPopupImpl {
 	private AbstractTool bridge;
 
 	public DefaultPopupImpl(AbstractTool bridge) {
@@ -17,10 +17,16 @@ public class DefaultPopupImpl  {
 		MouseEvent popupEvent = MouseAdapter.getPreviousPopupEvent();
 
 		if (popupEvent != null) {
-			StudioPopupMenu popup = new StudioPopupMenu(id, bridge, menuList, null);
-			popup.show(popupEvent.getComponent(), popupEvent.getX(), popupEvent.getY());
-		}
-		else {
+			StudioPopupMenu popup = new StudioPopupMenu(id, bridge, menuList,
+					null);
+			try {
+				popup.show(popupEvent.getComponent(), popupEvent.getX(),
+						popupEvent.getY());
+			} catch (IllegalStateException e) {
+				// Happens when user selects another tab, so that the orignal
+				// component is not visible anymore
+			}
+		} else {
 			System.err.println("Popup got lost!");
 		}
 	}

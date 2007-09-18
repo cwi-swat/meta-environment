@@ -1,5 +1,10 @@
 $Id$
 
+Tue Sep 18 15:59:08 CEST 2007 <kooiker@cwi.nl>
+ * src/**/DefaultPopupImpl.java: catch IllegalStateException prevents
+ exception thrown when user hides a window by clicking on another tab, while
+ the popup request is not handled
+
 Tue Sep 11 16:22:26 CEST 2007 <kooiker@cwi.nl>
  * lib/famfamfam_silk_icons_v013.zip: added icon set licensed under CC 2.5.
    Credits to Mark James for developing this icon set (see also our
