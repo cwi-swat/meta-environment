@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Sep 18 11:44:57 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts: Removed
+ * bin/test: Added TestSuite
+
 2007-08-27    <storm@cwi.nl>
 
  * spec/languages/rscript/check/Rscript.sdf: fixed a bug in the

@@ -1,3 +1,0 @@
-configuration([
-  library-path("Relational Calculus Library", "__LIBRARY__")
-])

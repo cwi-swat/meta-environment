@@ -12,9 +12,9 @@ AM_CPPFLAGS += \
 	-DASF_WITH_ANNOS \
 	-DASF_MAIN
 
-rscripttestsuite = RScript-Test-Suite.c 
+rscripttestsuite_SOURCES = RScript-Test-Suite.c 
 
-rscripttestsuite = \
+rscripttestsuite_LDADD = \
 	$(SDF_SUPPORT_LIBS) \
 	$(ASC_SUPPORT_LIBS)
 
