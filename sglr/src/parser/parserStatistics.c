@@ -71,6 +71,7 @@ int *SGLR_STATS_clusterHistogram = NULL;
 
 int SGLR_STATS_prodTreeNodesCreated = 0;
 int SGLR_STATS_symbolTreeNodesCreated = 0;
+int SGLR_STATS_ambTreeNodesCreated = 0;
 int SGLR_STATS_cyclicTreeNodesCreated = 0;
 int SGLR_STATS_cyclesDetected = 0;
 
@@ -79,12 +80,29 @@ int SGLR_STATS_treeNodesVisited = 0;
 int SGLR_STATS_treesFiltered = 0;
 int SGLR_STATS_priorityConflictsFound = 0;
 int SGLR_STATS_rejectedTreesFound = 0;
+int SGLR_STATS_prodTreeNodesCreatedDuringFiltering = 0;
+int SGLR_STATS_ambTreeNodesCreatedDuringFiltering = 0;
+int SGLR_STATS_cyclicTreeNodesCreatedDuringFiltering = 0;
+
+int SGLR_STATS_treesDirectPreferenceFiltered = 0;
+int SGLR_STATS_treesIndirectPreferenceFiltered = 0;
+int SGLR_STATS_treesPreferred = 0;
+int SGLR_STATS_treesPreferenceCountFiltered = 0;
+int SGLR_STATS_treesInjectionCountFiltered = 0;
+int SGLR_STATS_ambiguityPriorityFiltered = 0;
+int SGLR_STATS_treesPriorityFiltered = 0;
+int SGLR_STATS_treesRejectFiltered = 0;
+
+int SGLR_STATS_ambNodesInFilteredTree = 0;
+int SGLR_STATS_prodNodesInFilteredTree = 0;
+int SGLR_STATS_symbolNodesInFilteredTree = 0;
+int SGLR_STATS_cyclicNodesInFilteredTree = 0;
+
 
 int SGLR_STATS_preferenceCount = 0;
 int SGLR_STATS_preferenceCountCalls = 0;
 int SGLR_STATS_injectionCount = 0;
 int SGLR_STATS_injectionCountCalls = 0;
-int SGLR_STATS_ambNodesCreated = 0; /**< post parse creation of amb nodes */
 int SGLR_STATS_totalAmbCount = 0; /**< the total number of ambiguities created. */
 int SGLR_STATS_ambCallsCount = 0; /**< the number of times a call to 
                                 SG_CreateAmbCluster() is done.*/
@@ -220,6 +238,7 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "int production-tree-node-created = %d\n", SGLR_STATS_prodTreeNodesCreated);
   fprintf(logFile, "int leaf-nodes-created = %d\n", SGLR_STATS_symbolTreeNodesCreated);
+  fprintf(logFile, "int ambiguity-tree-nodes-created-parse-table-gen-time = %d\n", SGLR_STATS_ambTreeNodesCreated);
   fprintf(logFile, "int cyclic-tree-nodes-detected = %d\n", SGLR_STATS_cyclesDetected);
   fprintf(logFile, "int cyclic-tree-nodes-created = %d\n", SGLR_STATS_cyclicTreeNodesCreated);
  fprintf(logFile, "int ambiguities-created = %d\n", SGLR_STATS_ambiguityClustersCreated);
@@ -317,6 +336,24 @@ void SGLR_STATS_print(void) {
   fprintf(logFile, "int total-injection-count-comparisons-done = %d\n", SGLR_STATS_injectionCountCalls);
   fprintf(logFile, "int successful-injection-count-comparisons-done = %d\n", SGLR_STATS_injectionCount);
 
+  fprintf(logFile, "\nint trees-direct-preference-filtered = %d\n", SGLR_STATS_treesDirectPreferenceFiltered);
+  fprintf(logFile, "int trees-preferred = %d\n", SGLR_STATS_treesPreferred);
+  fprintf(logFile, "int trees-indirect-preference-filtered = %d\n", SGLR_STATS_treesIndirectPreferenceFiltered);
+  fprintf(logFile, "int trees-preference-count-filtered = %d\n", SGLR_STATS_treesPreferenceCountFiltered);
+  fprintf(logFile, "int trees-injection-count-filtered = %d\n", SGLR_STATS_treesInjectionCountFiltered);
+  fprintf(logFile, "int trees-priority-filtered = %d\n", SGLR_STATS_treesPriorityFiltered);
+  fprintf(logFile, "int ambiguity-nodes-priority-filtered = %d\n", SGLR_STATS_ambiguityPriorityFiltered);
+  fprintf(logFile, "int trees-reject-filtered = %d\n", SGLR_STATS_treesRejectFiltered);
+
+
+  fprintf(logFile, "\nint prod-nodes-created-during-filtering = %d\n", SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
+  fprintf(logFile, "int ambiguity-nodes-created-during-filtering = %d\n", SGLR_STATS_ambTreeNodesCreatedDuringFiltering);
+  fprintf(logFile, "int cyclic-nodes-created-during-filtering = %d\n", SGLR_STATS_cyclicTreeNodesCreatedDuringFiltering);
+
+  fprintf(logFile, "\nint prod-nodes-in-filtered-tree = %d\n", SGLR_STATS_prodNodesInFilteredTree);
+  fprintf(logFile, "int symbol-nodes-in-filtered-tree = %d\n", SGLR_STATS_symbolNodesInFilteredTree);
+  fprintf(logFile, "int ambiguity-nodes-in-filtered-tree = %d\n", SGLR_STATS_ambNodesInFilteredTree);
+  fprintf(logFile, "int cyclic-nodes-in-filtered-tree = %d\n", SGLR_STATS_cyclicNodesInFilteredTree);
 
   fprintf(logFile, "\n%%%%--- Flattening ---\n");
   fprintf(logFile, "%%%% flattening-time = %.6fs\n", SGLR_STATS_flatteningTime);

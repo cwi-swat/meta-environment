@@ -279,6 +279,7 @@ static PT_Tree directPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
       PT_Production p1 = PT_getTreeProd(t1);
       ATfprintf(LOG_log(), "prefer/avoid result: %t > %t\n", p0, p1);*/
     }
+    SGLR_STATS_incrementCount(SGLR_STATS_treesDirectPreferenceFiltered);
     return t0;
   }
   if (findPreferredTree(pt, t1, t0)) {
@@ -287,6 +288,7 @@ static PT_Tree directPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
       PT_Production p1 = PT_getTreeProd(t1);
       ATfprintf(LOG_log(), "prefer/avoid result: %t < %t\n", p0, p1);*/
     }
+    SGLR_STATS_incrementCount(SGLR_STATS_treesPreferred);
     return t1;
   }
 
@@ -395,16 +397,16 @@ static PT_Tree indirectPreferenceFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
         if (!PT_isEqualTree(arg0, arg1)) {
           PT_Tree max = indirectPreferenceFilter(pt, arg0, arg1);
           if (max) {
-            /*ATwarning("IndF returned:\n%t\n\n",max);*/
             if (PT_isEqualTree(max, arg0)) {
+              SGLR_STATS_incrementCount(SGLR_STATS_treesIndirectPreferenceFiltered);
               return t0;
             }
             else {
+              SGLR_STATS_incrementCount(SGLR_STATS_treesIndirectPreferenceFiltered);
               return t1;
             }
           }
           else {
-            /*ATwarning("IndF returned:\nNULL\n\n");*/
             return (PT_Tree) NULL;
           }
         }
@@ -481,7 +483,7 @@ static PT_Tree preferenceCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) {
 
   if (max) {
     if (MAIN_getStatsFlag) {
-      SGLR_STATS_incrementCount(SGLR_STATS_preferenceCount);
+      SGLR_STATS_incrementCount(SGLR_STATS_treesPreferenceCountFiltered);
     }
   }
 
@@ -532,12 +534,7 @@ static PT_Tree fullInjectionCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
   size_t in0 = countAllInjectionsInTree(pt, t0);
   size_t in1 = countAllInjectionsInTree(pt, t1);
   
-  if (MAIN_getStatsFlag) {
-    SGLR_STATS_incrementCount(SGLR_STATS_injectionCountCalls);
-    if (in0 != in1) {
-      SGLR_STATS_incrementCount(SGLR_STATS_injectionCount);
-    }
-  }
+  SGLR_STATS_incrementCount(SGLR_STATS_injectionCountCalls);
 
   if (in0 == -1 || in1 == -1) {
     /* one of them had a cycle, abort */
@@ -548,11 +545,13 @@ static PT_Tree fullInjectionCountFilter(ParseTable *pt, PT_Tree t0, PT_Tree t1) 
     if (PARSER_getDebugFlag) {
       /*ATfprintf(LOG_log(), "More injections: (%d > %d)\n", in0, in1);*/
     }
+      SGLR_STATS_incrementCount(SGLR_STATS_treesInjectionCountFiltered);
       return t1;
   } else if (in0 < in1) {
     if (PARSER_getDebugFlag) {
       /*ATfprintf(LOG_log(), "Fewer injections: (%d < %d)\n", in0, in1);*/
     }
+      SGLR_STATS_incrementCount(SGLR_STATS_treesInjectionCountFiltered);
       return t0;
   }
 
@@ -665,7 +664,8 @@ static PT_Tree priorityFilterRecursive(ParseTable *pt, PT_Tree t, PT_Production 
 
       PT_Tree newInjChild = priorityFilterRecursive(pt, injChild, prod, argNumber);
       if (newInjChild) {
-        return PT_setTreeArgs(t, PT_makeArgsSingle(newInjChild));
+          SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
+          return PT_setTreeArgs(t, PT_makeArgsSingle(newInjChild));
       }
       else {
         return (PT_Tree)NULL;
@@ -699,12 +699,14 @@ static PT_Tree priorityFilterRecursive(ParseTable *pt, PT_Tree t, PT_Production 
         return PT_getArgsHead(newAmbChildren);
       }
       else {
-        return PT_setTreeArgs(injChild, PT_reverseArgs(newAmbChildren));
+          SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
+          return PT_setTreeArgs(injChild, PT_reverseArgs(newAmbChildren));
       }
     }
    /* If all the children of the ambiguity have been removed then remove the
     * ambiguity cluster as well. */ 
     else {
+      SGLR_STATS_incrementCount(SGLR_STATS_ambiguityPriorityFiltered);
       return (PT_Tree)NULL;
     }
   }
@@ -716,6 +718,7 @@ static PT_Tree priorityFilterRecursive(ParseTable *pt, PT_Tree t, PT_Production 
       return injChild;
     }
     else {
+      SGLR_STATS_incrementCount(SGLR_STATS_treesPriorityFiltered);
       return (PT_Tree)NULL;
     }
   }
@@ -780,6 +783,7 @@ static PT_Tree priorityFilter(ParseTable *pt, PT_Tree t) {
       }
       );
 
+      SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
       return PT_setTreeArgs(t, newChildren);
     }
   }
@@ -1054,7 +1058,7 @@ static PT_Tree createTreeNode(PT_Args ambChildren) {
     return PT_getArgsHead(ambChildren);
   }
   else {
-    SGLR_STATS_incrementCount(SGLR_STATS_ambNodesCreated);
+    SGLR_STATS_incrementCount(SGLR_STATS_ambTreeNodesCreatedDuringFiltering);
     return PT_makeTreeAmb(ambChildren);
   }
 }
@@ -1185,6 +1189,7 @@ static PT_Tree filterAmbiguity(ParseTable *pt, PT_Args ambiguousTrees, size_t *p
   PT_Tree newTreeNode;
 
   if (FLT_getRejectFlag() && isAmbiguityRejected(pt, ambiguousTrees, pos, cycle, level)) {
+    SGLR_STATS_incrementCount(SGLR_STATS_treesRejectFiltered);
     return (PT_Tree)NULL;
   }
 
@@ -1268,9 +1273,11 @@ static PT_Tree filterTree(ParseTable *pt, PT_Tree t, size_t *pos, ATbool cycle, 
   PT_Args newargs = filterChildren(pt, args, pos, cycle, level);
 
   if ((FLT_getRejectFlag() && isTreeRejected(pt, t)) || !newargs) {
+    SGLR_STATS_incrementCount(SGLR_STATS_treesRejectFiltered);
     return (PT_Tree) NULL;
   }
 
+  SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreatedDuringFiltering);
   return PT_setTreeArgs(t, newargs);
 }
 
@@ -1331,6 +1338,32 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
   }
   else {
     return t;
+  }
+}
+
+static void countNodesInTree(PT_Tree t) {
+  PT_Args args = NULL;
+
+  if (PT_isTreeAmb(t)) {
+    SGLR_STATS_incrementCount(SGLR_STATS_ambNodesInFilteredTree);
+    args = PT_getTreeArgs(t);
+  }
+  else if (PT_isTreeChar(t)) {
+    SGLR_STATS_incrementCount(SGLR_STATS_symbolNodesInFilteredTree);
+  }
+  else if (PT_isTreeAppl(t)) {
+    SGLR_STATS_incrementCount(SGLR_STATS_prodNodesInFilteredTree);
+    args = PT_getTreeArgs(t);
+  }
+  else if (PT_isTreeCycle(t)) {
+    SGLR_STATS_incrementCount(SGLR_STATS_cyclicNodesInFilteredTree);
+  }
+  else {
+    assert("Illegal tree node type!");
+  }
+
+  for (;args && !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    countNodesInTree(PT_getArgsHead(args));
   }
 }
 
@@ -1462,6 +1495,7 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
        int pos = 0;
        numberOfAmbiguitiesInTree = countPosIndependentAmbsInTree(newT,0,&pos);
      } else {
+       /*countNodesInTree(newT);*/
        numberOfAmbiguitiesInTree = countAmbiguitiesInTree(newT,0);
      }
    }

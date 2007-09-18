@@ -72,17 +72,34 @@ extern int *SGLR_STATS_clusterHistogram;
 
 extern int SGLR_STATS_prodTreeNodesCreated;
 extern int SGLR_STATS_symbolTreeNodesCreated;
+extern int SGLR_STATS_ambTreeNodesCreated;
 extern int SGLR_STATS_cyclicTreeNodesCreated;
 extern int SGLR_STATS_cyclesDetected;
+
+extern int SGLR_STATS_treesDirectPreferenceFiltered;
+extern int SGLR_STATS_treesIndirectPreferenceFiltered;
+extern int SGLR_STATS_treesPreferred;
+extern int SGLR_STATS_treesPreferenceCountFiltered;
+extern int SGLR_STATS_treesInjectionCountFiltered;
+extern int SGLR_STATS_ambiguityPriorityFiltered;
+extern int SGLR_STATS_treesPriorityFiltered;
+extern int SGLR_STATS_treesRejectFiltered;
 
 extern int SGLR_STATS_preferenceCount;
 extern int SGLR_STATS_preferenceCountCalls;
 extern int SGLR_STATS_injectionCount;
 extern int SGLR_STATS_injectionCountCalls;
-extern int SGLR_STATS_ambNodesCreated;
 extern int SGLR_STATS_totalAmbCount;
 extern int SGLR_STATS_ambCallsCount;
 extern int SGLR_STATS_clustersVisitedCount;
+extern int SGLR_STATS_prodTreeNodesCreatedDuringFiltering;
+extern int SGLR_STATS_ambTreeNodesCreatedDuringFiltering;
+extern int SGLR_STATS_cyclicTreeNodesCreatedDuringFiltering;
+
+extern int SGLR_STATS_ambNodesInFilteredTree;
+extern int SGLR_STATS_prodNodesInFilteredTree;
+extern int SGLR_STATS_symbolNodesInFilteredTree;
+extern int SGLR_STATS_cyclicNodesInFilteredTree;
 
 extern double SGLR_STATS_parseTableTime;
 extern double SGLR_STATS_parsingTime;

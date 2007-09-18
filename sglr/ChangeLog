@@ -1,5 +1,9 @@
 $Id$
 
+Tue Sep 18 13:34:30 CEST 2007 <economop@cwi.nl>
+ * src/parseForest/filters.c: added extra statistics for parse tree nodes
+   created.
+
 Fri Sep 14 15:42:28 CEST 2007 <economop@cwi.nl>
  * src/parser/parserStatistics.h: corrected parse error in generated rscript.
 
