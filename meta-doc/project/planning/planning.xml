@@ -251,7 +251,7 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
             <colspec align="left" colwidth="10%" />
 
@@ -387,7 +387,7 @@
               </row>
 
               <row>
-                <entry> partial implementation in the most important
+                <entry>partial implementation in the most important
                 tools.</entry>
 
                 <entry>Programming</entry>
@@ -410,9 +410,9 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
-            <colspec align="right" />
+            <colspec align="left" />
 
             <thead>
               <row>
@@ -517,9 +517,9 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
-            <colspec align="right" />
+            <colspec align="left" />
 
             <thead>
               <row>
@@ -571,9 +571,9 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
-            <colspec align="right" />
+            <colspec align="left" />
 
             <thead>
               <row>
@@ -757,7 +757,7 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
             <colspec align="left" />
 
@@ -863,9 +863,9 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
-            <colspec align="right" />
+            <colspec align="left" />
 
             <thead>
               <row>
@@ -941,9 +941,9 @@
           <title>Planning the work of the Meta-Environment</title>
 
           <tgroup cols="5">
-            <colspec align="left" />
+            <colspec align="left" colwidth="25%" />
 
-            <colspec align="right" />
+            <colspec align="left" />
 
             <thead>
               <row>
