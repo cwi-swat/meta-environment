@@ -428,7 +428,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(ModuleId, Path, eqs)
+    DumpParseTable(ModuleId, ASF_NAMESPACE, Path, eqs)
   fi
 endlet
 
@@ -444,7 +444,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(ModuleId, Path, eqs)
+    DumpParseTable(ModuleId, ASF_NAMESPACE, Path, eqs)
   fi
 endlet
 
