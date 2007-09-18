@@ -55,8 +55,8 @@ extern int SGLR_STATS_gssNodesDeleted;
 extern int SGLR_STATS_shiftsDone;
 extern int SGLR_STATS_reductionsDone;
 extern int SGLR_STATS_reductionsLADone;
-extern int SGLR_STATS_reductionsAddedToReductionQueue;
-extern int SGLR_STATS_maxSizeOfReductionQueue;
+extern int SGLR_STATS_limitedReductionsDone;
+extern int SGLR_STATS_limitedLAReductionsDone;
 extern int SGLR_STATS_shiftsAddedToShiftQueue;
 extern int SGLR_STATS_maxSizeOfShiftQueue;
 
@@ -72,7 +72,6 @@ extern int *SGLR_STATS_clusterHistogram;
 
 extern int SGLR_STATS_prodTreeNodesCreated;
 extern int SGLR_STATS_symbolTreeNodesCreated;
-extern int SGLR_STATS_ambTreeNodesCreated;
 extern int SGLR_STATS_cyclicTreeNodesCreated;
 extern int SGLR_STATS_cyclesDetected;
 
@@ -126,6 +125,15 @@ void SGLR_STATS_print(void);
 #if SGLR_COLLECT_STATISTICS
 #define SGLR_STATS_incrementCount(counter)\
   if (MAIN_getStatsFlag) {\
+    counter++;\
+  }
+#else
+#define SGLR_STATS_incrementCount(counter) ;
+#endif
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_incrementCountConditionally(counter, cond)\
+  if (MAIN_getStatsFlag && cond) {\
     counter++;\
   }
 #else

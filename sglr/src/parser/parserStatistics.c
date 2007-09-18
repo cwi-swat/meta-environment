@@ -53,8 +53,8 @@ int SGLR_STATS_gssNodesDeleted = 0;
 int SGLR_STATS_shiftsDone = 0;
 int SGLR_STATS_reductionsDone = 0;
 int SGLR_STATS_reductionsLADone = 0;
-int SGLR_STATS_reductionsAddedToReductionQueue = 0;
-int SGLR_STATS_maxSizeOfReductionQueue = 0;
+int SGLR_STATS_limitedReductionsDone = 0;
+int SGLR_STATS_limitedLAReductionsDone = 0;
 int SGLR_STATS_shiftsAddedToShiftQueue = 0;
 int SGLR_STATS_maxSizeOfShiftQueue = 0;
 
@@ -71,7 +71,6 @@ int *SGLR_STATS_clusterHistogram = NULL;
 
 int SGLR_STATS_prodTreeNodesCreated = 0;
 int SGLR_STATS_symbolTreeNodesCreated = 0;
-int SGLR_STATS_ambTreeNodesCreated = 0;
 int SGLR_STATS_cyclicTreeNodesCreated = 0;
 int SGLR_STATS_cyclesDetected = 0;
 
@@ -214,11 +213,11 @@ void SGLR_STATS_print(void) {
   fprintf(logFile, "%%%% characters/second = %.0f\n\n", SGLR_STATS_parsingTime < 1.0e-4 ? 0 : SGLR_STATS_charactersParsed/SGLR_STATS_parsingTime);
 
   fprintf(logFile, "int reductions-done = %d\n", SGLR_STATS_reductionsDone);
-  fprintf(logFile, "int follow-restricted-reductions-done = %d\n", SGLR_STATS_reductionsLADone);
+  fprintf(logFile, "int multi-symbol-follow-restricted-reductions-done = %d\n", SGLR_STATS_reductionsLADone);
+  fprintf(logFile, "int limited-reductions-done = %d\n", SGLR_STATS_limitedReductionsDone);
+  fprintf(logFile, "int multi-symbol-follow-restricted-limited-reductions-done = %d\n", SGLR_STATS_limitedLAReductionsDone);
   fprintf(logFile, "int rejected-reductions-done = %d\n", SGLR_STATS_rejectedReductionsDone);
   fprintf(logFile, "%%%% reductions/character: %f\n", (double)SGLR_STATS_reductionsDone/(double)SGLR_STATS_charactersParsed);
-  fprintf(logFile, "int reductions-added-to-reduction-queue = %d\n", SGLR_STATS_reductionsAddedToReductionQueue);
-  fprintf(logFile, "int max-size-of-reduction-queue = %d\n", SGLR_STATS_maxSizeOfReductionQueue);
 
   fprintf(logFile, "int shifts-done = %d\n", SGLR_STATS_shiftsDone);
   fprintf(logFile, "int shifts-added-to-shift-queue = %d\n", SGLR_STATS_shiftsAddedToShiftQueue);
@@ -238,7 +237,6 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "int production-tree-node-created = %d\n", SGLR_STATS_prodTreeNodesCreated);
   fprintf(logFile, "int leaf-nodes-created = %d\n", SGLR_STATS_symbolTreeNodesCreated);
-  fprintf(logFile, "int ambiguity-tree-nodes-created-parse-table-gen-time = %d\n", SGLR_STATS_ambTreeNodesCreated);
   fprintf(logFile, "int cyclic-tree-nodes-detected = %d\n", SGLR_STATS_cyclesDetected);
   fprintf(logFile, "int cyclic-tree-nodes-created = %d\n", SGLR_STATS_cyclicTreeNodesCreated);
  fprintf(logFile, "int ambiguities-created = %d\n", SGLR_STATS_ambiguityClustersCreated);

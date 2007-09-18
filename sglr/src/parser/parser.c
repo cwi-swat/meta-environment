@@ -209,7 +209,8 @@ static void actor(GSSNode st) {
         doReductions(st, a);
         break;
       case REDUCE_LA:
-        if (IS_checkLookahead(inputString, PTBL_getActionRestrictions(a) /*SG_A_LOOKAHEAD(a)*/)) {
+        if (IS_checkLookahead(inputString, PTBL_getActionRestrictions(a))) {
+          SGLR_STATS_incrementCount(SGLR_STATS_reductionsLADone);
           doReductions(st, a);
         }
         break;
@@ -243,6 +244,8 @@ static void doReductions(GSSNode st, PTBL_Action a) {
   ps = GSS_findAllPaths(st, PTBL_getActionLength(a), IS_getNumberOfTokensRead(inputString)); 
 
   while(ps != NULL){
+    SGLR_STATS_incrementCount(SGLR_STATS_reductionsDone);
+
     reducer(GSS_getReductionPathTargetGSSNode(ps),
         SGLR_PTBL_lookupGoto(parseTable, GSSNode_getStateNumber(GSS_getReductionPathTargetGSSNode(ps)), prod),
         prod, 
@@ -291,10 +294,9 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
   GSSEdge nl;
   GSSNode st1;
 
-  SGLR_STATS_incrementCount(SGLR_STATS_reductionsDone);
-
   prod = SGLR_PTBL_lookupProduction(parseTable, prodl);
   t = PT_makeTreeAppl(prod, kids);
+  SGLR_STATS_incrementCountConditionally(SGLR_STATS_rejectedTreesCreated, PTBL_isSpecialAttrReject(attribute));
   SGLR_STATS_incrementCount(SGLR_STATS_prodTreeNodesCreated);
 
   st1 = GSS_findNodeInCurrentLevel(s);
@@ -356,6 +358,7 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
             if (SGLR_PTBL_actionKind(a) == REDUCE
                 || (SGLR_PTBL_actionKind(a) == REDUCE_LA
                     && IS_checkLookahead(inputString, PTBL_getActionRestrictions(a)))) {
+              SGLR_STATS_incrementCountConditionally(SGLR_STATS_limitedLAReductionsDone, (SGLR_PTBL_actionKind(a) == REDUCE_LA && IS_checkLookahead(inputString, PTBL_getActionRestrictions(a))));
               doLimitedReductions(st2, a, nl);
             }
           }
@@ -380,6 +383,7 @@ static void doLimitedReductions(GSSNode st, PTBL_Action a, GSSEdge edge) {
   ps = GSS_findLimitedPaths(st, PTBL_getActionLength(a), edge, IS_getNumberOfTokensRead(inputString));
 
   while(ps) {
+    SGLR_STATS_incrementCount(SGLR_STATS_limitedReductionsDone);
     reducer(GSS_getReductionPathTargetGSSNode(ps),
 	    SGLR_PTBL_lookupGoto(parseTable, GSSNode_getStateNumber(GSS_getReductionPathTargetGSSNode(ps)), prod),
 	    prod, 
@@ -407,6 +411,8 @@ static void shifter(void) {
   GSSNodeList newActiveStacks = NULL;
   int s;
   GSSEdge l;
+
+  SGLR_STATS_incrementCount(SGLR_STATS_shiftsDone);
 
   t = PT_makeTreeChar(IS_getCurrentToken(inputString));
   SGLR_STATS_incrementCount(SGLR_STATS_symbolTreeNodesCreated);
