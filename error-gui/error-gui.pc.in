@@ -2,7 +2,7 @@ prefix=@prefix@
 
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: error-gui
-Version: 1.1.1
+Version: 1.1.2
 Description:
 Requires: aterm-java,error-support,meta-studio,toolbus,toolbus-java-adapter
 JarFile=error-gui.jar
