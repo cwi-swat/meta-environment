@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl
 
 Name: asc-support
-Version: 2.3
+Version: 2.4
 Description:
 Requires: asf-support,aterm,error-support,pt-support,sglr,tide-support,toolbuslib,c-library,config-support,ptable-support,relation-stores
 Cflags: -I${prefix}/include
