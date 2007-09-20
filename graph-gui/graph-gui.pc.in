@@ -2,7 +2,7 @@ prefix=@prefix@
 
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: graph-gui
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm-java,config-support,graph-support,meta-studio,module-support,toolbus,toolbus-java-adapter
 JarFile=graph-painter.jar
