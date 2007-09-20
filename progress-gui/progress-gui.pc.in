@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=kooiker@cwi.nl
 Name: progress-gui
-Version: 1.0
+Version: 1.0.1
 Description:
 Requires: aterm-java,meta-studio,toolbus,toolbus-java-adapter
 JarFile=progress.jar
