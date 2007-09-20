@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl
 
 Name: asf
-Version: 2.3
+Version: 2.4
 Description: 
 Requires: error-support,asc-support,asf-support,sdf-support,pt-support,ptable-support,aterm,toolbus,toolbuslib,tide-support
 ToolBusFlags=-I${prefix}/share/asf
