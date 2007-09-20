@@ -1,7 +1,7 @@
 prefix=@prefix@
 
 Name: vis-plugin
-Version: 1.0
+Version: 1.1
 Description: 
 Requires: aterm-java,config-support,toolbus,toolbus-java-adapter,shared-objects,JJTraveler,meta-studio,tunit
 Maintainers=dancingbear
