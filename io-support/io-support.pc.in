@@ -1,7 +1,7 @@
 prefix=@prefix@
 Maintainers=kooiker@cwi.nl
 Name: io-support
-Version: 1.0
+Version: 1.0.1
 Description:
 Requires: aterm,config-support,error-support,toolbuslib
 Cflags: -I${prefix}/include
