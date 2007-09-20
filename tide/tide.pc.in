@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl
 
 Name: tide
-Version: 1.2
+Version: 1.2.1
 Description:
 Requires: aterm,aterm-java,meta-studio,tide-support,toolbus,toolbus-java-adapter,toolbuslib
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.tide,nl.cwi.sen1.tide.adapters,nl.cwi.sen1.tide.adapters.gdb,nl.cwi.sen1.tide.tool,nl.cwi.sen1.tide.tool.proclist,nl.cwi.sen1.tide.tool.prefeditor,nl.cwi.sen1.tide.tool.stackviewer,nl.cwi.sen1.tide.tool.srcviewer,nl.cwi.sen1.tide.tool.support,nl.cwi.sen1.tide.tool.ruleinspector
