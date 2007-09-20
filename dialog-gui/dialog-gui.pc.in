@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 
 Name: dialog-gui
-Version: 1.0
+Version: 1.0.1
 Description:
 Requires: aterm-java,config-support,meta-studio,toolbus,toolbus-java-adapter
 JarFile=dialog-gui.jar
