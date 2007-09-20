@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 
 Name: navigator-gui
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm-java,config-support,graph-support,io-support,meta-studio,toolbus,toolbus-java-adapter
 JarFile=navigator.jar
