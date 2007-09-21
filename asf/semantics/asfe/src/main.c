@@ -165,12 +165,6 @@ ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm parseTable, ATerm tide)
     Tide_disconnect();
   }
 
-  result = (ATerm) runTests(eqsList, testList, debug);
-
-  if (debug) {
-    Tide_disconnect();
-  }
-
   if (RWgetErrors() == NULL || !ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(<term>)", result);
   }

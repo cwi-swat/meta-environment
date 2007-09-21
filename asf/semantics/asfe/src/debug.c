@@ -252,8 +252,8 @@ void Tide_disconnect() {
   /* Switch off debugging */
   if (TA_isConnected()) {
     TA_disconnect(ATtrue, pid);
+    ATunprotect(&pos_info);
   }
-  ATunprotect(&pos_info);
 }
 
 

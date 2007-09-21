@@ -62,6 +62,7 @@ in
         rec-value(Eval, rewrite-errors(ErrorList?)) 
         . snd-msg(asfe-rewrite-errors(ErrorList))
       )
+      . snd-terminate(Eval,"done")
     +
       rec-disconnect(Eval)
       . snd-msg(asfe-rewrite-errors([error("the ASFE reducer was aborted",[])]))
