@@ -1,5 +1,8 @@
 $Id$
 
+Tue Sep 25 15:11:56 CEST 2007 <kooiker@cwi.nl>
+ * sglr.pc.in: added src/parser and src/parseForest to uninstalled CFlags
+
 Tue Sep 18 15:23:35 CEST 2007 <economop@cwi.nl>
  * src/parser/parserStatistics.h: added conditional count macro and more
    stats.

@@ -7,6 +7,6 @@ Requires: aterm,c-library,config-support,error-support,ptable-support,pt-support
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lsglr
 #uninstalled Libs: -L@abs_top_builddir@/src -lsglr
-#uninstalled Cflags: -I@abs_top_builddir@/src
+#uninstalled Cflags: -I@abs_top_builddir@/src -I@abs_top_builddir@/src/parser -I@abs_top_builddir@/src/parseForest
 ToolBusFlags=-I${prefix}/share/sglr
 
