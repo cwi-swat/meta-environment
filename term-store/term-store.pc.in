@@ -2,7 +2,7 @@ prefix=@prefix@
 Maintainers=jurgenv@cwi.nl
 
 Name: term-store
-Version: 1.0
+Version: 1.1
 Description:
 Requires: aterm,toolbuslib
 ToolBusFlags=-I${prefix}/share/term-store
