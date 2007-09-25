@@ -21,8 +21,8 @@ AUTO_TOOLS=autoconf automake libtool pkgconfig
 
 autoconf_VERSION=2.59
 automake_VERSION=1.9.6
-libtool_VERSION=1.5.22
-pkgconfig_VERSION=0.20
+libtool_VERSION=1.5.24
+pkgconfig_VERSION=0.22
 
 automake_NAME=automake
 autoconf_NAME=autoconf
