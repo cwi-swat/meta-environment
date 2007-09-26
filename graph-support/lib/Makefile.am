@@ -1,11 +1,13 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 lib_LTLIBRARIES = libGraph.la
 include_HEADERS = Graph.h Graph_dict.h
 noinst_HEADERS = Graph.h Graph_dict.h
-pkgdata_DATA = Graph.adt ${JARFILE}
+pkgdata_DATA = Graph.adt graph.jar 
 data_DATA = graph.jar
-EXTRA_DIST = Graph.adt graph.jar
+EXTRA_DIST += Graph.adt graph.jar
 
 libGraph_la_SOURCES = Graph.c Graph_dict.c
 libGraph_la_CPPFLAGS = $(ATERM_CFLAGS)
