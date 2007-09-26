@@ -1,8 +1,10 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 data_DATA = ioapi.jar
 
-EXTRA_DIST = ioapi.jar
+EXTRA_DIST += ioapi.jar
 
 lib_LTLIBRARIES = libIOAPI.la
 
