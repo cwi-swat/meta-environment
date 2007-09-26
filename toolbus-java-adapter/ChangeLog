@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep 26 09:15:30 CEST 2007 <kooiker@cwi.nl>
+ * lib/junit-4.4.jar: add junit framework allowing ant to run tests when junit
+ target is not installed for ant
+
 Wed Dec  6 14:13:18 CET 2006 <kooiker@cwi.nl>
  * src/toolbus/JavaTif.java:
    - Change Map with signatures into Set since the Map was only used as a Set.
