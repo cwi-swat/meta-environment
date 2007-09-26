@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 lib_LTLIBRARIES = libASFME.la
 
 include_HEADERS = \
