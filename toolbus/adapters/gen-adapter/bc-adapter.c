@@ -160,7 +160,7 @@ void connect_to_bc(TBcallbackChar handler)
     TBaddCharPort(fd_from_bc, handler);
   } else {
     /* bc: the child */
-    if(execlp("bc", "bc", NULL) < 0){
+    if(execlp("bc", "bc", (char *)0) < 0){
       TBmsg("Can't execute bc\n");
       exit(1);
     }

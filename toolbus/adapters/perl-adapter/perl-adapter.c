@@ -310,7 +310,7 @@ void connect_to_perl(char *script, TBcallbackTerm handler)
     TBaddTermPort(from_perl, handler);
   } else {
     /* perl: the child */
-    if(execlp("perl", "perl", tmpname, NULL) < 0)
+    if(execlp("perl", "perl", tmpname, (char *)NULL) < 0)
       err_sys_fatal("Can't execute perl");
   }
 }
