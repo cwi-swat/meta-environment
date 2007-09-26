@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 lib_LTLIBRARIES = libstatistics.la
 include_HEADERS = rsrc-usage.h 
 
