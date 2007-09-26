@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 lib_LTLIBRARIES = libPTMEPT.la
 include_HEADERS = \
 	PTMEPT.h \
@@ -13,7 +15,7 @@ libPTMEPT_la_SOURCES = PTMEPT.c PTMEPT_dict.c $(UTILSRCS)
 
 
 UTILSRCS = lift.c lower.c
-EXTRA_DIST = AsFix.def
+EXTRA_DIST += AsFix.def
 
 # Developers only:
 LIBRARY=../../sdf-library/library
