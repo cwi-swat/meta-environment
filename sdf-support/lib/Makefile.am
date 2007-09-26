@@ -2,7 +2,9 @@
 
 #AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING # During development, DO NOT COMMIT ME!
 
-EXTRA_DIST = Sdf.label.def
+include $(top_srcdir)/Makefile.meta
+
+EXTRA_DIST += Sdf.label.def
 
 lib_LTLIBRARIES = libSDFME.la libSDF2PT.la libPT2SDF.la
 
@@ -13,7 +15,7 @@ include_HEADERS = \
 	SDFME.h \
 	SDFME_dict.h
 
-AM_CPPFLAGS = $(ATERM_CFLAGS) $(ERROR_SUPPORT_CFLAGS) $(PT_SUPPORT_CFLAGS)
+AM_CPPFLAGS += $(ATERM_CFLAGS) $(ERROR_SUPPORT_CFLAGS) $(PT_SUPPORT_CFLAGS)
 
 libSDFME_la_SOURCES = SDFME.c SDFME_dict.c $(UTILSRCS)
 libSDFME_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
