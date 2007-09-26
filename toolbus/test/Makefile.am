@@ -33,7 +33,7 @@ EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
 		  read.tb bug-481.tb bug-481.tb.ref dyncall.tb dyncall.src \
 		  concat.tb concat.src rightchoice1.tb  rightchoice1.src \
 		  rightchoice2.src \
-		  rightchoice2.tb \ 
+		  rightchoice2.tb \
                   dyncall-param-passing.tb \
                   create-param-passing.tb \
                   boolean.tb \
