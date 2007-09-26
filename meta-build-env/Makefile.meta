@@ -9,6 +9,7 @@
 # Put very common AM_CPPFLAGS, LDADD here, also here 
 # because of pkgconfig:
 AM_CPPFLAGS = 
+AM_LDFLAGS =
 LDADD = 
 
 SUFFIXES   =
