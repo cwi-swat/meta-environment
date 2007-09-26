@@ -1,8 +1,10 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 data_DATA = configapi.jar
 
-EXTRA_DIST = configapi.jar
+EXTRA_DIST += configapi.jar
 
 lib_LTLIBRARIES = libConfigAPI.la
 
@@ -19,7 +21,7 @@ libConfigAPI_la_SOURCES = \
 	Config_dict.c \
 	options.c
 
-AM_CPPFLAGS = -DDISABLE_DYNAMIC_CHECKING ${ATERM_CFLAGS}
+AM_CPPFLAGS += -DDISABLE_DYNAMIC_CHECKING ${ATERM_CFLAGS}
 
 if MAINTAINER_MODE
 CONFIG_MODULES = Keys Colors Configuration
