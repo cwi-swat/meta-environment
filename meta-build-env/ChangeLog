@@ -1,5 +1,9 @@
 $Id$
 
+Thu Sep 27 11:15:00 CEST 2007 <kooiker@cwi.nl>
+ * Makefile.meta: EXTRA_DIST and CLEANFILES not only for maintainer mode
+   anymore fixes distdir and distclean problems on MacOS X.
+
 Mon Aug 20 17:52:23 CEST 2007 <jurgenv@cwi.nl>
  * Makefile.meta: changed EXTRA_DIST in maintainer mode for generation
    of ToolBus interface code. In some cases the interface code is not

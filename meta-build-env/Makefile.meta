@@ -57,10 +57,10 @@ SUFFIXES += .idef .isrc
 
 CLEANFILES += $(wildcard *.idef)
 
-if MAINTAINER_MODE 
-
 EXTRA_DIST += $(wildcard *.c) $(wildcard *.h)
 CLEANFILES += $(foreach i,$(basename $(wildcard *.idef)),$i.c $i.h)
+
+if MAINTAINER_MODE 
 
 .idef.c:
 	$(call check_available,toolbus,toolbus -output $*.tifs -gentifs $<)
