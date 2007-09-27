@@ -1,8 +1,5 @@
 $Id$
 
-Thu Sep 27 11:44:48 CEST 2007 <kooiker@cwi.nl>
- * lib/junit-4.4.jar: add local copy of junit
-
 Tue Sep 18 15:59:08 CEST 2007 <kooiker@cwi.nl>
  * src/**/DefaultPopupImpl.java: catch IllegalStateException prevents
  exception thrown when user hides a window by clicking on another tab, while
