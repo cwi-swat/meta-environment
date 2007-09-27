@@ -23,7 +23,7 @@ public class DefaultPopupImpl {
 				popup.show(popupEvent.getComponent(), popupEvent.getX(),
 						popupEvent.getY());
 			} catch (IllegalStateException e) {
-				// Happens when user selects another tab, so that the orignal
+				// Happens when user selects another tab, so that the original
 				// component is not visible anymore
 			}
 		} else {
