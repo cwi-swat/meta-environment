@@ -1,5 +1,10 @@
 $Id$
 
+Thu Sep 27 13:10:43 CEST 2007 <economop@cwi.nl>
+ * src/parser/parser.c: removed the GSS garbage collection code and added it
+   to gss/gss.c. I also changed the status bar output to only report on the 
+   characters being parsed, and not the end-of-string symbol.
+
 Tue Sep 25 15:11:56 CEST 2007 <kooiker@cwi.nl>
  * sglr.pc.in: added src/parser and src/parseForest to uninstalled CFlags
 

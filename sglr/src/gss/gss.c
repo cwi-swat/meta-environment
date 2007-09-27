@@ -11,14 +11,20 @@
 #include <stdlib.h>
 #include "gss.h"
 #include "parserStatistics.h"
+#include "gssGarbageCollector.h"
 
 static ReductionPath findAllPathsRecursive(GSSNode st, int nrArgs, 
 					   PT_Args sons, size_t length,
 					   ReductionPath paths);
 
+#define GC_CYCLE 200
+static GSSNodeList oldLevels[GC_CYCLE];
 static GSSNodeList currentLevel = NULL;
+static int levelNumber = 0;
 
 static int edgeVisitsPerReduction; /**< used for stat logging. */
+
+static GSSNode acceptNode = NULL;
 
 /** 
  * Adds the GSS start node to the current level.
@@ -29,7 +35,14 @@ static int edgeVisitsPerReduction; /**< used for stat logging. */
  */
 void GSS_createStartNode(GSSNode s) {
   currentLevel = GSS_addNodeListElement(s,currentLevel);
-  SGLR_STATS_incrementCount(SGLR_STATS_gssNodesCreated);
+}
+
+void GSS_setAcceptNode(GSSNode s) {
+  acceptNode = s;
+}
+
+GSSNode GSS_getAcceptNode(void) {
+  return acceptNode;
 }
 
 /** 
@@ -56,15 +69,23 @@ GSSNode GSS_findNodeInCurrentLevel(int stateNum) {
 }
 
 /** 
- * Sets the current level to a new list. It is used in the shifter() once the 
- * new level has been constructed. The current level should not be freed since 
- * the garbage collector uses the old levels to find any dead branches of the 
- * GSS.
+ * Adds a new level to the GSS, garbage collects the old levels, and increments 
+ * the number of levels in the GSS. 
+ * It is used in the shifter() once the new level has been constructed. 
+ * The current level should not be freed since the garbage collector uses the 
+ * old levels to find any dead branches of the GSS.
  * 
  * \param list the list of GSS nodes to add to the current level
  */
-void GSS_setCurrentLevel(GSSNodeList list) { 
+void GSS_addNewLevel(GSSNodeList list) { 
+  oldLevels[levelNumber % GC_CYCLE] = currentLevel;
+
+  if ((levelNumber % GC_CYCLE) == (GC_CYCLE-1)) {
+    GC_gssBranches(oldLevels, GC_CYCLE, list, acceptNode);
+  }
+
   currentLevel = list;
+  levelNumber++;
 }
 
 /** 
@@ -265,4 +286,17 @@ ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, GSSEdge 
   SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
   SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisitsPerReduction);
   return result;
+}
+
+void GSS_freeGSS(void) {
+  oldLevels[(levelNumber % GC_CYCLE)] = currentLevel;
+  GC_gssBranches(oldLevels, (levelNumber % GC_CYCLE)+1, NULL, acceptNode);
+
+  if (acceptNode) {
+    GC_gssBranch(acceptNode);
+  }
+
+  GSS_clearCurrentLevel();
+  acceptNode = NULL;
+  levelNumber = 0;
 }

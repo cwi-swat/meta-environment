@@ -123,10 +123,9 @@ static void unmarkGSSNodeList(GSSNodeList list) {
  */
 static void sweepGSSNodeList(GSSNodeList list) {
   while(list != NULL) {
-    GSSNodeList tmp;
+    GSSNodeList tmp = list;
 
     GC_gssBranch(GSS_getNodeListHead(list));
-    tmp = list;
     list = GSS_getNodeListTail(list);
 
     GSS_deleteNodeList(tmp);

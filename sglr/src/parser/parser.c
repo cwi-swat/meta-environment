@@ -10,7 +10,7 @@
  *
  * If all tokens have been read or if no more GSS nodes are alive, parsing
  * is done and the the result of parsing is returned.  If parsing
- * succeeded, #acceptingStack points to a GSS node that has a direct
+ * succeeded, there is a node (the accept node) in the GSS that has a direct
  * link to the initial state.  The tree on this link is the parse forest
  * with all possible parse trees.  If parsing failed an error summary is
  * returned.  A distinction is made between an error at end of file an
@@ -40,18 +40,13 @@
 #include "statusBar.h"
 #include "parserStatistics.h"
 
-#define GC_CYCLE 200
-
 static ParseTable *parseTable;
 static InputString inputString;
 
 /** The GSS node that has a direct link (edge) to a GSS node labelled by the 
  * accepting state. */
-static GSSNode     acceptingStack;
 static GSSNodeList forActor;
 static GSSNodeList forActorDelayed;
-
-static GSSNodeList oldActiveStacks[GC_CYCLE];
 
 static void parseToken(void);
 static void actor(GSSNode gssNode);
@@ -62,7 +57,6 @@ static void doLimitedReductions(GSSNode gssNode, PTBL_Action a,
 				GSSEdge links);
 static void shifter(void);
 
-static void parserCleanup(void);
 static void parseError();
 
 /* Some global vars, used for collecting statistics.
@@ -79,8 +73,6 @@ static void initialiseParser(void) {
   assert(inputString != NULL && parseTable != NULL);
  
   SG_CreateInputAmbiMap(IS_getLength(inputString));
-
-  acceptingStack = NULL;
 
   /** \todo Use GSS_addToCurrentLevel() instead. */
   GSS_createStartNode(GSSNode_createNode(SGLR_PTBL_getStartState(parseTable), 
@@ -105,6 +97,7 @@ static void initialiseParser(void) {
  * \return The parse forest.
  */
 PT_Tree SG_parse(ParseTable *table, InputString string) {
+  GSSNode acceptNode;
   PT_Tree result = NULL;
   parseTable = table;
   inputString = string;
@@ -115,14 +108,12 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
     parseToken();
     /* If the shift queue is empty and the current level does not contain 
      * an accepting state then an error has occured.*/
-    shifter();
+    if (!IS_isEndOfString(inputString)) {
+      shifter();
 
-    if (PARSER_getVerboseFlag) {
-      /* Added 1 to length of input string to show progress during parsing of 
-       * the EOS symbol. */
-      SG_printStatusBar("sglr: parsing", 
-			IS_getNumberOfTokensRead(inputString), 
-			IS_getLength(inputString)+1);
+      if (PARSER_getVerboseFlag) {
+        SG_printStatusBar("sglr: parsing", IS_getNumberOfTokensRead(inputString), IS_getLength(inputString));
+      }
     }
   } while (!IS_isEndOfString(inputString) && GSS_getCurrentLevel() != NULL);
 
@@ -130,17 +121,19 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
     SG_printDotAndNewLine();
   }
 
+  acceptNode = GSS_getAcceptNode();
+
   /** \todo verify that the parser will not report success if the accept state 
    * is reached and all the string is not parsed. */
-  if (acceptingStack && PARSER_getOutputFlag()) {
-    result = GSSEdge_getTree(GSS_getEdgeListHead(GSSNode_getEdgeList(acceptingStack)));
+  if (acceptNode && PARSER_getOutputFlag()) {
+    result = GSSEdge_getTree(GSS_getEdgeListHead(GSSNode_getEdgeList(acceptNode)));
   }
 
   parseError();
 
   SGLR_STATS_setCount(SGLR_STATS_parsingMemAllocated, STATS_Allocated());
 
-  parserCleanup();
+  GSS_freeGSS();
 
   return result;
 }
@@ -216,7 +209,7 @@ static void actor(GSSNode st) {
         break;
       case ACCEPT:
         if (!FLT_getRejectFlag() || !GSSNode_isRejected(st)) {
-          acceptingStack = st;
+          GSS_setAcceptNode(st);
         }
         break;
       default:
@@ -435,29 +428,7 @@ static void shifter(void) {
   }
   GSS_resetShiftQueue();
 
-  oldActiveStacks[(IS_getNumberOfTokensRead(inputString)-1) % GC_CYCLE] = GSS_getCurrentLevel();
-  if (((IS_getNumberOfTokensRead(inputString)-1) % GC_CYCLE) == (GC_CYCLE-1)) {
-    GC_gssBranches(oldActiveStacks, GC_CYCLE, newActiveStacks, 
-		   acceptingStack);
-  }
-
-  GSS_setCurrentLevel(newActiveStacks);
-}
-
-/*-----------------------POST PARSE STUFF------------------------------------*/
-
-static void parserCleanup(void) {
-  GC_gssBranches(oldActiveStacks, 
-		 IS_getNumberOfTokensRead(inputString) % GC_CYCLE,
-		 NULL, 
-		 acceptingStack);
-
-  if (acceptingStack) {
-    GC_gssBranch(acceptingStack);
-  }
-
-  GSS_clearCurrentLevel();
-  acceptingStack = NULL;
+  GSS_addNewLevel(newActiveStacks);
 }
 
 /*-----------------------------ERROR HANDLING--------------------------------*/
@@ -468,7 +439,7 @@ static void parseError() {
   static char subjectDescription[1024];
   static char errorDescription[1024];
 
-  if (!acceptingStack) {
+  if (!GSS_getAcceptNode()) {
     if (IS_getCurrentToken(inputString) == EOS_TOKEN) {
       sprintf(errorDescription, "parse error, eof unexpected");
     }
