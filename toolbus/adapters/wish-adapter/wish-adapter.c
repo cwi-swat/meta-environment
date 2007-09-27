@@ -801,7 +801,7 @@ wish_create()
     close(pipe_tw[1]);
     close(pipe_wt[0]);
 
-    execlp(progname, progname, "-name", name, NULL);
+    execlp(progname, progname, "-name", name, (char *)NULL);
     fprintf(stderr, "%s: execlp: %s\n", progname, strerror(errno));
     exit(1);
   case -1:
