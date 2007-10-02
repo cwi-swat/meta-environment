@@ -12,17 +12,11 @@ public class DebugToolBridge
 {
   private DebugToolTif tool;
 
-  //{{{  public DebugToolBridge(ATermFactory factory, DebugToolTif tool)
-
   public DebugToolBridge(ATermFactory factory, DebugToolTif tool)
   {
     super(factory);
     this.tool = tool;
   }
-
-  //}}}
-
-  //{{{  public void processDestroyed(ATerm t0)
 
   public void processDestroyed(ATerm t0)
   {
@@ -34,9 +28,6 @@ public class DebugToolBridge
     }
   }
 
-  //}}}
-  //{{{  public void adapterDisconnected(ATerm t0)
-
   public void adapterDisconnected(ATerm t0)
   {
     if (tool != null) {
@@ -46,9 +37,6 @@ public class DebugToolBridge
       throw new UnsupportedOperationException("method `adapterDisconnected' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void event(ATerm t0, int i1, ATerm t2)
 
   public void event(ATerm t0, int i1, ATerm t2)
   {
@@ -60,9 +48,6 @@ public class DebugToolBridge
     }
   }
 
-  //}}}
-  //{{{  public void processCreated(ATerm t0, String s1)
-
   public void processCreated(ATerm t0, String s1)
   {
     if (tool != null) {
@@ -72,9 +57,6 @@ public class DebugToolBridge
       throw new UnsupportedOperationException("method `processCreated' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void adapterConnected(ATerm t0)
 
   public void adapterConnected(ATerm t0)
   {
@@ -86,9 +68,6 @@ public class DebugToolBridge
     }
   }
 
-  //}}}
-  //{{{  public void recAckEvent(ATerm t0)
-
   public void recAckEvent(ATerm t0)
   {
     if (tool != null) {
@@ -99,9 +78,6 @@ public class DebugToolBridge
     }
   }
 
-  //}}}
-  //{{{  public void recTerminate(ATerm t0)
-
   public void recTerminate(ATerm t0)
   {
     if (tool != null) {
@@ -111,6 +87,4 @@ public class DebugToolBridge
       throw new UnsupportedOperationException("method `recTerminate' not supported.");
     }
   }
-
-  //}}}
 }

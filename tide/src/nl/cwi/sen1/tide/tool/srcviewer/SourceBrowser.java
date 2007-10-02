@@ -21,54 +21,35 @@ class SourceBrowser extends JTextArea {
 
 	private int selectedPosition;
 
-	private Map breakpointLocations;
-	private Map watchpointLocations;
-
-	//{{{ public SourceBrowser()
+	private Map<Rule, Expr> breakpointLocations;
+	private Map<Rule, Expr> watchpointLocations;
 
 	public SourceBrowser() {
 		selectedPosition = -1;
-		breakpointLocations = new HashMap();
-		watchpointLocations = new HashMap();
+		breakpointLocations = new HashMap<Rule, Expr>();
+		watchpointLocations = new HashMap<Rule, Expr>();
 	}
-
-	//}}}
-	//{{{ public void switchToFile(String fileName)
 
 	public void clear() {
 		breakpointLocations.clear();
 		watchpointLocations.clear();
 	}
 
-	//}}}
-
-	//{{{ public void setSelectedPosition(int pos)
-
 	public void setSelectedPosition(int pos) {
 		selectedPosition = pos;
 		repaint();
 	}
-
-	//}}}
-	//{{{ public void clearSelectedPosition()
 
 	public void clearSelectedPosition() {
 		selectedPosition = -1;
 		repaint();
 	}
 
-	//}}}
-
-	//{{{ int getLine(int offset)
-
 	int getLine(int offset) {
 		Document doc = getDocument();
 		Element root = doc.getDefaultRootElement();
 		return root.getElementIndex(offset) + 1;
 	}
-
-	//}}}
-	//{{{ int getColumn(int offset)
 
 	int getColumn(int offset) {
 		Document doc = getDocument();
@@ -77,10 +58,6 @@ class SourceBrowser extends JTextArea {
 
 		return offset - line.getStartOffset();
 	}
-
-	//}}}
-
-	//{{{ private void paintLocation(Graphics g, Expr loc)
 
 	private void paintLocation(Graphics g, Expr loc) {
 		try {
@@ -100,9 +77,6 @@ class SourceBrowser extends JTextArea {
 		}
 	}
 
-	//}}}
-	//{{{ public void paint(Graphics g)
-
 	public void paint(Graphics g) {
 		super.paint(g);
 
@@ -113,93 +87,71 @@ class SourceBrowser extends JTextArea {
 
 				g.setColor(COLOR_SELECTED_POSITION);
 
-				g.drawOval(
-					rect.x - 1,
-					rect.y,
-					rect_end.x - rect.x + 1,
-					rect.height);
+				g.drawOval(rect.x - 1, rect.y, rect_end.x - rect.x + 1,
+						rect.height);
 			} catch (BadLocationException e) {
 				selectedPosition = -1;
 			}
 		}
 
 		// Paint watchpoints and breakpoints
-		Iterator iter;
+		Iterator<Expr> iter;
 
 		g.setColor(SourceFileViewer.COLOR_WATCHPOINT);
 		iter = watchpointLocations.values().iterator();
 		while (iter.hasNext()) {
-			paintLocation(g, (Expr) iter.next());
+			paintLocation(g, iter.next());
 		}
 
 		g.setColor(SourceFileViewer.COLOR_BREAKPOINT);
 		iter = breakpointLocations.values().iterator();
 		while (iter.hasNext()) {
-			paintLocation(g, (Expr) iter.next());
+			paintLocation(g, iter.next());
 		}
 	}
-
-	//}}}
-
-	//{{{ public void addWatchpoint(Rule rule, Expr location)
 
 	public void addWatchpoint(Rule rule, Expr location) {
 		watchpointLocations.put(rule, location);
 	}
 
-	//}}}
-	//{{{ public void removeWatchpoint(Rule rule)
-
 	public void removeWatchpoint(Rule rule) {
 		watchpointLocations.remove(rule);
 	}
-
-	//}}}
-	//{{{ public void addBreakpoint(Rule rule, Expr location)
 
 	public void addBreakpoint(Rule rule, Expr location) {
 		breakpointLocations.put(rule, location);
 	}
 
-	//}}}
-	//{{{ public void removeWatchpoint(Rule rule)
-
 	public void removeBreakpoint(Rule rule) {
 		breakpointLocations.remove(rule);
 	}
-
-	//}}}
-
-	//{{{ public Rule getRuleAt(int x, int y)
 
 	public Rule getRuleAt(int x, int y) {
 		int pos = viewToModel(new Point(x, y));
 		int linenr = getLine(pos);
 		int column = getColumn(pos);
 
-		Iterator iter;
+		Iterator<Rule> iter;
 		iter = breakpointLocations.keySet().iterator();
 		while (iter.hasNext()) {
-			Rule rule = (Rule) iter.next();
-			Expr location = (Expr) breakpointLocations.get(rule);
+			Rule rule = iter.next();
+			Expr location = breakpointLocations.get(rule);
 			if (location.getLocationStartLine() == linenr
-				&& location.getLocationStartColumn() == column) {
+					&& location.getLocationStartColumn() == column) {
 				return rule;
 			}
 		}
 
 		iter = watchpointLocations.keySet().iterator();
 		while (iter.hasNext()) {
-			Rule rule = (Rule) iter.next();
-			Expr location = (Expr) watchpointLocations.get(rule);
+			Rule rule = iter.next();
+			Expr location = watchpointLocations.get(rule);
 			if (location.getLocationStartLine() == linenr
-				&& location.getLocationStartColumn() == column) {
+					&& location.getLocationStartColumn() == column) {
 				return rule;
 			}
 		}
 
 		return null;
 	}
-
-	//}}}
 }

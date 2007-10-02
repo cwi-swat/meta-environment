@@ -75,14 +75,12 @@ class SourceFileViewer
 	private DebugProcess process;
 	private String file;
 	private String tag_view_var;
-	private int id;
 
 	private JPopupMenu menu;
 
 	private String tag_breakpoint;
 	private String tag_watchpoint;
 
-	private JLayeredPane pane;
 	private LineNumberCanvas lineNumbers;
 	private SourceBrowser text;
 	private JPanel glass;
@@ -94,11 +92,7 @@ class SourceFileViewer
 
 	private Highlighter.HighlightPainter variablePainter;
 
-	private Highlighter.HighlightPainter breakpointPainter;
-	private Highlighter.HighlightPainter watchpointPainter;
-	private Map ruleHighlights;
-
-	private Map variableHighlights;
+	private Map<ValuePopup, Object> variableHighlights;
 
 	private int lastSelected;
 	private Rule lastSelectedRule;
@@ -160,19 +154,12 @@ class SourceFileViewer
 		text.setHighlighter(highlighter);
 		text.setEditable(false);
 
-		breakpointPainter =
-			new DefaultHighlighter.DefaultHighlightPainter(COLOR_BREAK);
-		watchpointPainter =
-			new DefaultHighlighter.DefaultHighlightPainter(COLOR_WATCH);
-
 		cpePainter = new DefaultHighlighter.DefaultHighlightPainter(COLOR_CPE);
 
 		variablePainter =
 			new DefaultHighlighter.DefaultHighlightPainter(COLOR_VARIABLE);
 
-		ruleHighlights = new HashMap();
-
-		variableHighlights = new HashMap();
+		variableHighlights = new HashMap<ValuePopup, Object>();
 	}
 
 	public String getFile() {
@@ -184,9 +171,9 @@ class SourceFileViewer
 		prefs.removePreferenceListener(this);
 	}
 
-	protected void highlightRules(Iterator rules) {
+	protected void highlightRules(Iterator<Rule> rules) {
 		while (rules.hasNext()) {
-			Rule rule = (Rule) rules.next();
+			Rule rule = rules.next();
 			highlightRule(rule);
 		}
 	}

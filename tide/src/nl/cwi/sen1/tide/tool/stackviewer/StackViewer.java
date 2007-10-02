@@ -1,7 +1,5 @@
 package nl.cwi.sen1.tide.tool.stackviewer;
 
-//{{{ imports
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -32,23 +30,11 @@ import nl.cwi.sen1.tide.tool.support.Port;
 import nl.cwi.sen1.tide.tool.support.ProcessStatusChangeListener;
 import nl.cwi.sen1.tide.tool.support.Rule;
 
-//}}}
-
-public class StackViewer
-	extends ProcessTool
-	implements
-		DebugProcessListener,
-		ProcessStatusChangeListener,
-		DebugAdapterListener,
+public class StackViewer extends ProcessTool implements DebugProcessListener,
+		ProcessStatusChangeListener, DebugAdapterListener,
 		ListSelectionListener {
-	//{{{ Constants
-
 	private static final String TAG_STACK_TRACE = "stack-trace";
 	private static final String TAG_STACK_UNWIND = "stack-unwind";
-
-	//}}}
-
-	//{{{ Attributes
 
 	private JList trace;
 
@@ -71,52 +57,35 @@ public class StackViewer
 
 	private StackFrame selectedFrame;
 
-	//}}}
-
-	//{{{ public StackViewer(final DebugProcess process, ToolManager manager)
-
 	public StackViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
 
-		//{{{ Build tags
-
 		tag_stack_trace = TAG_STACK_TRACE + "-" + getId();
 		tag_stack_unwind = TAG_STACK_UNWIND + "-" + getId();
-
-		//}}}
-		//{{{ Build actions
 
 		unwind = new AbstractAction("Unwind", loadIcon("unwind.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				if (selectedFrame == null) {
 					getManager().displayError("Select a stackframe.");
-				}
-				else if (process.isStopped()) {
-					process.requestRuleModification(
-						ruleStackUnwind,
-						Port.makeStep(),
-						Expr.make(
-							"higher-equal("
-								+ selectedFrame.getDepth()
-								+ ",stack-level)"),
-						Expr.makeBreak(),
-						true);
+				} else if (process.isStopped()) {
+					process.requestRuleModification(ruleStackUnwind, Port
+							.makeStep(), Expr.make("higher-equal("
+							+ selectedFrame.getDepth() + ",stack-level)"), Expr
+							.makeBreak(), true);
 
 					process.requestResume();
 				}
 			}
 		};
 
-		viewSource =
-			new AbstractAction("View Source", loadIcon("view-source.gif")) {
+		viewSource = new AbstractAction("View Source",
+				loadIcon("view-source.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				getManager().displayError("Not implemented yet!");
 			}
 		};
 
-		inspectVar =
-			new AbstractAction(
-				"Inspect Variable",
+		inspectVar = new AbstractAction("Inspect Variable",
 				loadIcon("inspect-var.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				getManager().displayError("Not implemented yet!");
@@ -130,11 +99,8 @@ public class StackViewer
 		tools = new JToolBar();
 		tools.add(unwind).setToolTipText("Unwind stack upto selected frame");
 		tools.add(viewSource).setToolTipText(
-			"View source associated with selected frame");
+				"View source associated with selected frame");
 		tools.add(inspectVar).setToolTipText("Inspect selected variable");
-
-		//}}}
-		//{{{ Build UI
 
 		setLayout(new BorderLayout());
 
@@ -143,8 +109,8 @@ public class StackViewer
 		trace.setPreferredSize(new Dimension(120, 100));
 		JPanel framePanel = new JPanel();
 
-		JSplitPane pane =
-			new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, trace, framePanel);
+		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, trace,
+				framePanel);
 		add("Center", pane);
 
 		trace.addListSelectionListener(this);
@@ -178,15 +144,11 @@ public class StackViewer
 		frameLabels.add("West", leftLabels);
 		frameLabels.add("Center", rightLabels);
 
-        frameVars = new JList();
-        JScrollPane scrollFrameVars = new JScrollPane(frameVars);
+		frameVars = new JList();
+		JScrollPane scrollFrameVars = new JScrollPane(frameVars);
 
 		framePanel.add("North", frameLabels);
 		framePanel.add("Center", scrollFrameVars);
-
-		//}}}
-
-		//{{{ Listen to process events
 
 		this.process = process;
 		process.addDebugProcessListener(this);
@@ -195,51 +157,14 @@ public class StackViewer
 		DebugAdapter adapter = process.getAdapter();
 		adapter.addDebugAdapterListener(this);
 
-		//}}}
-		//{{{ Create appropriate debugging events
+		process.requestRuleCreation(Port.makeStopped(), Expr.makeTrue(), Expr
+				.makeStackTrace(), tag_stack_trace, true);
 
-		process.requestRuleCreation(
-			Port.makeStopped(),
-			Expr.makeTrue(),
-			Expr.makeStackTrace(),
-			tag_stack_trace,
-			true);
-
-		process.requestRuleCreation(
-			Port.makeStep(),
-			Expr.makeTrue(),
-			Expr.makeBreak(),
-			tag_stack_unwind,
-			false);
+		process.requestRuleCreation(Port.makeStep(), Expr.makeTrue(), Expr
+				.makeBreak(), tag_stack_unwind, false);
 
 		process.requestEvaluation(Expr.makeStackTrace(), tag_stack_trace);
-
-		//}}}
 	}
-
-	//}}}
-	//{{{ private void cleanup()
-
-	private void cleanup() {
-		if (ruleStackTrace != null) {
-			process.requestRuleDeletion(ruleStackTrace);
-		}
-
-		if (ruleStackUnwind != null) {
-			process.requestRuleDeletion(ruleStackUnwind);
-		}
-
-		getManager().removeTool(this);
-		
-		process.removeProcessStatusChangeListener(this);
-		process.removeDebugProcessListener(this);
-		process.getAdapter().removeDebugAdapterListener(this);
-	}
-
-	//}}}
-
-	//{{{ public void processDestroyed(DebugAdapter adapter, DebugProcess
-	// proc)
 
 	public void processDestroyed(DebugAdapter adapter, DebugProcess proc) {
 		if (proc == process) {
@@ -250,27 +175,20 @@ public class StackViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void processCreated(DebugAdapter adapter, DebugProcess proc)
-
 	public void processCreated(DebugAdapter adapter, DebugProcess proc) {
 	}
 
-	//}}}
-
-	//{{{ public void displayStackTrace(Expr stackTrace)
-
 	public void displayStackTrace(Expr stackTrace) {
-		Vector frames = new Vector();
+		Vector<StackFrame> frames = new Vector<StackFrame>();
 
 		if (!stackTrace.isStackTrace()) {
 			getManager().displayError("not a stacktrace: " + stackTrace);
 			return;
 		}
 
-		Iterator iter = stackTrace.frameIterator();
+		Iterator<Expr> iter = stackTrace.frameIterator();
 		while (iter.hasNext()) {
-			Expr frame = (Expr) iter.next();
+			Expr frame = iter.next();
 
 			if (!frame.isStackFrame()) {
 				getManager().displayError("not a stackframe: " + frame);
@@ -280,16 +198,13 @@ public class StackViewer
 			String name = frame.getFrameName();
 			Expr location = frame.getFrameLocation();
 			Expr variables = frame.getFrameVariables();
-			StackFrame stackFrame =
-				new StackFrame(depth, name, location, variables);
+			StackFrame stackFrame = new StackFrame(depth, name, location,
+					variables);
 			frames.addElement(stackFrame);
 		}
-		displayStackFrame((StackFrame)frames.firstElement());
+		displayStackFrame(frames.firstElement());
 		trace.setListData(frames);
 	}
-
-	//}}}
-	//{{{ public void displayStackFrame(StackFrame frame)
 
 	public void displayStackFrame(StackFrame frame) {
 		selectedFrame = frame;
@@ -313,19 +228,15 @@ public class StackViewer
 			viewSource.setEnabled(!location.isLocationUnknown());
 			inspectVar.setEnabled(false);
 
-			Vector variables = new Vector();
-			Iterator iter = frame.variableIterator();
+			Vector<Expr> variables = new Vector<Expr>();
+			Iterator<Expr> iter = frame.variableIterator();
 			while (iter.hasNext()) {
-				Expr var = (Expr) iter.next();
+				Expr var = iter.next();
 				variables.addElement(var);
 			}
 			frameVars.setListData(variables);
 		}
 	}
-
-	//}}}
-
-	//{{{ public void ruleCreated(DebugProcess process, Rule rule)
 
 	public void ruleCreated(DebugProcess process, Rule rule) {
 		if (rule.getTag().equals(tag_stack_trace)) {
@@ -334,9 +245,6 @@ public class StackViewer
 			ruleStackUnwind = rule;
 		}
 	}
-
-	//}}}
-	//{{{ public void ruleDeleted(DebugProcess process, Rule rule)
 
 	public void ruleDeleted(DebugProcess process, Rule rule) {
 		if (rule == ruleStackTrace) {
@@ -348,15 +256,8 @@ public class StackViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void ruleModified(DebugProcess process, Rule rule)
-
 	public void ruleModified(DebugProcess process, Rule rule) {
 	}
-
-	//}}}
-	//{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr
-	// value)
 
 	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {
 		if (rule == ruleStackTrace) {
@@ -364,23 +265,13 @@ public class StackViewer
 		}
 	}
 
-	//}}}
-	//{{{ public void evaluationResult(process, expr, value, tag)
-
-	public void evaluationResult(
-		DebugProcess process,
-		Expr expr,
-		Expr value,
-		String tag) {
+	public void evaluationResult(DebugProcess process, Expr expr, Expr value,
+			String tag) {
 		if (tag.equals(tag_stack_trace)) {
 			displayStackTrace(value);
 		} else if (tag.equals(tag_stack_unwind)) {
 		}
 	}
-
-	//}}}
-
-	//{{{ public void processStatusChanged(DebugProcess process)
 
 	public void processStatusChanged(DebugProcess process) {
 		boolean stopped = process.isStopped();
@@ -393,9 +284,6 @@ public class StackViewer
 			}
 		}
 	}
-
-	//}}}
-	//{{{ public void valueChanged(ListSelectionEvent evt)
 
 	public void valueChanged(ListSelectionEvent evt) {
 		if (evt.getSource() == trace) {
@@ -410,8 +298,6 @@ class StackFrame {
 	private Expr location;
 	private Expr vars;
 
-	//{{{ public StackFrame(int depth, String name, Expr location, Expr vars)
-
 	public StackFrame(int depth, String name, Expr location, Expr vars) {
 		this.depth = depth;
 		this.name = name;
@@ -419,41 +305,23 @@ class StackFrame {
 		this.vars = vars;
 	}
 
-	//}}}
-
-	//{{{ public String toString()
-
 	public String toString() {
 		return String.valueOf(depth) + " " + name;
 	}
-
-	//}}}
-	//{{{ public int getDepth()
 
 	public int getDepth() {
 		return depth;
 	}
 
-	//}}}
-	//{{{ public String getName()
-
 	public String getName() {
 		return name;
 	}
-
-	//}}}
-	//{{{ public Expr getLocation()
 
 	public Expr getLocation() {
 		return location;
 	}
 
-	//}}}
-	//{{{ public Iterator variableIterator()
-
-	public Iterator variableIterator() {
+	public Iterator<Expr> variableIterator() {
 		return vars.iterator();
 	}
-
-	//}}}
 }
