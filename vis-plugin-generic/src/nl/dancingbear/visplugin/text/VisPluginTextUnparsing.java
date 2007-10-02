@@ -21,7 +21,7 @@ public class VisPluginTextUnparsing extends DefaultStudioPlugin implements
 	}
 
 	public void recTerminate(ATerm t0) {
-		System.exit(0);
+		fireStudioPluginClosed();
 	}
 
 	public void recAckEvent(ATerm t0) {
