@@ -4,6 +4,9 @@ Wed Sep 26 19:48:30 CEST 2007 <kooiker@cwi.nl>
  * adapters/{gen-adapter/bc-adapter,perl-adapter/perl-adapter}.c: sentinel of
    execlp function must be cast to char *
 
+Tue Sep 20 10:49:39 CEST 2007 <kooiker@cwi.nl>
+ * Bumped to version 1.7
+
 Thu Sep 13 18:21:02 CEST 2007 <jurgenv@cwi.nl>
  * adapters/tcltk*/Makefile.am: removed usage of fig2dev in Makefile
    rules to fix maxosx build.
