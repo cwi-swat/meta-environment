@@ -28,7 +28,7 @@
     DocBook.</para>
   </warning>
 
-  <section xml:id="SEC_Introduction">
+  <section xml:id="SEC-Introduction">
     <title>Introduction</title>
 
     <formalpara>
@@ -250,7 +250,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
     </itemizedlist>
   </section>
 
-  <section xml:id="SEC_motivating-example">
+  <section xml:id="SEC-motivating-example">
     <title>A Motivating Example</title>
 
     <para>Suppose a mystery box ends up on your desk. When you open it, it
@@ -474,8 +474,8 @@ int nprocs = # procs</programlisting>
 
         <para>Finally, we can determine which procedures are called from both
         entry points by taking the intersection of the two sets
-        <literal>calledFromA</literal> and <literal>calledFromF</literal>
-        </para>
+        <literal>calledFromA</literal> and
+        <literal>calledFromF</literal></para>
 
         <para><programlisting>set[proc] commonProcs = calledFromA inter calledFromF</programlisting></para>
 
@@ -496,882 +496,1765 @@ int nprocs = # procs</programlisting>
     </section>
   </section>
 
-  <!--
-
-\chapter{The \rscript Language} \label{SEC:rscript-language}
-\fbox{\epsfig{figure=figs/signalpha-web.ps,width=6cm}},{}]
-\label{FIG:signalpha}
-\hspace*{0.5cm}\parbox[b]{7.8cm}{
-\rscript is based on \emph{binary relations} only and has no direct support
-for $n$-ary relations with labeled columns as usual in a general database
-language. However, some syntactic support for $n$-ary relations exists. We
-will explain this further below.
-
-An \rscript consists of a sequence of declarations for variables and/or
-functions. Usually, the value of one of these variables is what the writer of the
-script is interested in.
-
-The language has scalar types (Boolean, integer, string, location) and
-composite types (set and relation). Expressions are constructed from
-comprehensions, function invocations and operators. These are all
-described below.}
-
-\section{Types and Values}
-
-\subsection{Elementary Types and Values} \label{SEC:ElementaryTypes}
-
-\paragraph{Booleans}
-The Booleans are represented by the type {\tt bool} and have two values:
-{\tt true} and {\tt false}.
-
-\paragraph{Integers}
-The integer values are represented by the type {\tt int} and are written as
-usual, e.g., {\tt 0}, {\tt 1}, or {\tt 123}.
-
-\paragraph{Strings}
-The string values are represented by the type {\tt str} and consist
-of character sequences surrounded by double quotes. e.g., {\tt "a"} or
-{\tt "a\ long\ string"}.
-
-\paragraph{Locations}
-Location values are represented by the type {\tt loc} and serve as
-text coordinates in a specific source file. They should \emph{always} be generated automatically but
-for the curious here is an example how they look like: {\tt
-  area-in-file("/home/paulk/example.pico", area(6, 17, 6, 18, 131, 1))}.
-
-
-\section{Tuples, Sets and Relations}
-
-\paragraph{Tuples}
-
-Tuples are represented by the type {\tt <$T_1$, $T_2$>}, where $T_1$ and
-$T_2$ are arbitrary types. An example of a tuple type is {\tt <int, str>}.
-\rscript directly supports tuples consisting of two elements (also
-know as \emph{pairs}).  For convenience, $n$-ary tuples are also allowed, but
-there are some restrictions on their use, see the paragraph {\bf Relations}
-below.
-Examples are:
-\begin{itemize}
-\item \verb@<1, 2>@ is of type {\tt <int, int>},
-\item \verb@<1, 2, 3>@ is of type {\tt <int, int, int>},
-\item \verb@<1, "a", 3>@ is of type {\tt <int, str, int>},
-\end{itemize}
-
-\paragraph{Sets}
-Sets are represented by the type {\tt set[$T$]}, where $T$ is an arbitrary
-type. Examples are {\tt set[int]}, {{\tt set[<int,int>]} and {\tt
-set[set[str]]}.  Sets are denoted by a list of elements, separated by comma's
-and enclosed in braces as in  \verb@{@{\tt $E_1$, $E_2$, ..., $E_n$}\verb@}@,
-where the $E_i$ ($1 \leq i \leq n$) are expressions that yield the desired element
-type. For example, 
-\begin{itemize}
-\item \verb@{1, 2, 3}@ is of type {\tt set[int]},
-\item \verb@{<1,10>, <2,20>, <3,30>}@ is of type {\tt set[<int,int>]},
-\item \verb@{<"a",10>, <"b",20>, <"c",30>}@ is of type {\tt set[<str,int>]}, and 
-\item \verb@{{"a", "b"}, {"c", "d", "e"}}@ is of type {\tt set[set[str]]}.
-\end{itemize}
-
-\paragraph{Relations}
-Relations are nothing more than sets of tuples, but since they are used so
-often we provide some shorthand notation for them.
-
-Relations are represented by the type {\tt rel[$T_1$, $T_2$]}, where {\tt
-$T_1$} and {\tt $T_2$} are arbitrary types; it is a shorthand for {\tt
-set[<$T_1$, $T_2$>]}.  Examples are {\tt rel[int,str]} and {\tt
-rel[int,set[str]]}.  Relations are denoted by \verb@{@{\tt <$E_{11}$, $E_{12}$>, <$E_{21}$,
-$E_{22}$>, ..., <$E_{n1}$, $E_{n2}$>}\verb@}@, where the $E_{ij}$ are expressions that
-yield the desired element type. For example, \verb@{<1, "a">, <2, "b">, <3,"c">}@ is of type {\tt rel[int, str]}.
-
-Not surprisingly, $n$-ary relations are represented by the type {\tt
-rel[$T_1$, $T_2$, ..., $T_n$]} which is a shorthand for {\tt set[<$T_1$,
-$T_2$, ..., $T_n$>]}.  Most built-in operators and functions require binary
-relations as arguments.  It is, however, perfectly possible to use $n$-ary
-relations as values, or as arguments or results of functions.
-Examples are:
-\begin{itemize}
-\item \verb@{<1,10>, <2,20>, <3,30>}@ is of type {\tt rel[int,int]} (yes
-  indeed, you saw this same example before and then we gave  {\tt
-  set[<int,int>]} as its type; remember that these types are interchangeable.),
-\item \verb@{<"a",10>, <"b",20>, <"c",30>}@ is of type {\tt rel[str,int]}, and 
-\item \verb@{{"a", 1, "b"}, {"c", 2, "d"}}@ is of type {\tt rel[str,int,str]}.
-\end{itemize}
-
-
-\subsection{User-defined Types and Values}
-
-\paragraph{Alias types}
-Everything can be expressed using the elementary types and values that are
-provided by \rscript.  However, for the purpose of documentation and
-readability it is sometimes better to use a descriptive name as type
-indication, rather than an elementary type. The type declaration
-\begin{exam}
-{\tt type $T_1$ = $T_2$}
-\end{exam}
-states that the new type name $T_1$ can be used everywhere instead of the
-already defined type name $T_2$. For instance,
-\begin{exam}\begin{verbatim}
-type ModuleId = str
-type Frequency = int
-\end{verbatim}
-\end{exam}
-introduces two new type names {\tt ModuleId} and {\tt Frequency}, both an
-alias for the type {\tt str}.
-The use of type aliases is a good way to hide representation details.
-
-\paragraph{Composite Types and Values}
-In ordinary programming languages record types or classes exist to introduce a
-new type name for a collection of related, named, values and to provide access
-to the elements of such a collection through their name. In \rscript,
-tuples with named elements provide this facility. The type declaration
-\begin{exam}
-{\tt type $T$ = <$T_1$ $F_1$ ,..., $T_n$ $F_n$>}
-\end{exam}
-introduces a new composite type $T$, with $n$ elements.  The $i$-th element
-$T_i$ $N_i$ has type $T_i$ and field name $F_i$.
-The common dot notation for field access is used to address an element of
-a composite type. If $V$ is a variable of type $T$, then the $i$-th element
-can be accessed by {\tt $V$.$F_i$}. For instance,\footnote{The variable
-  declarations that appear on lines 2 and 3 of this example are explained
-  fully in Section~\ref{SEC:Declarations}.}
-\begin{exam}\begin{verbatim}
-type Triple = <int left, str middle, bool right>
-Triple TR = <3, "a", true>
-str S = TR.middle
-\end{verbatim}
-\end{exam}
-first introduces the composite type {\tt Triple} and defines the {\tt Triple} variable
-{\tt TR}. Next, the field selection {\tt TR.middle} is used to define the
-string {\tt S}.
-
-\paragraph{Implementation Note.} The current implementation severely restricts the re-use of
-field names in different type declarations.  The only re-use that is
-allowed are fields with the same name and the same type that appear at
-the same position in different type declarations.
-
-\paragraph{Type equivalence}
-An \rscript should be \emph{well-typed}, this means above all that identifiers
-that are used in expressions have been declared, and that operations and
-functions should have operands of the required type.  We use \emph{structural
-equivalence} between types as criterion for type equality.
-The equivalence of two types $T_1$ and $T_2$ can be determined as follows:
-
-\begin{itemize}
-\item Replace in both $T_1$ and $T_2$ all user-defined types by their
-  definition until all user-defined types have been eliminated.  This may
-  require repeated replacements.  This gives, respectively, $T_1'$ and $T_2'$.
-
-\item If $T_1'$ and $T_2'$ are identical, then $T_1$ and $T_2$ are equal.
-\item Otherwise $T_1$ and $T_2$ are not equal.
-\end{itemize}
-
-\section{Comprehensions}
-
-We will use the familiar notation
-\begin{exam}
-  \verb@{@{\tt $E_1$, ..., $E_m$ | $G_1$, ..., $G_n$}\verb@}@
-\end{exam}
-to denote the construction of a set consisting of the union of
-successive values of the expressions $E_1 ,..., E_m$.  The values and the
-generated set are determined by  $E_1 ,..., E_m$ and the \emph{generators}
-$G_1 ,..., G_n$.  $E$ is computed for all possible
-combinations of values produced by the generators.
-
-Each generator may introduce new variables
-that can be used in subsequent generators as well as in the expressions  $E_1 ,..., E_m$.
-A generator can use the variables introduced by preceding
-generators.  Generators may enumerate all the values in a set or
-relation, they may perform a test, or they may assign a value to
-variables.
-
-\subsection{Generators}
-
-\paragraph{Enumerator}
-Enumerators generate all the values in a given set or relation.
-They come in two flavors: 
-
-\begin{itemize}
-\item {\tt $T$ $V$~:~$E$}: the elements of the set $S$ (of type {\tt set[$T$]})
-  that results from the evaluation
-of expression $E$ are enumerated and subsequently assigned to the new variable
-  $V$ of type $T$.
-Examples are: 
-\begin{itemize}
-\item \verb@int N : {1, 2, 3, 4, 5}@,
-\item \verb@str K : KEYWORDS@, where {\tt KEYWORDS} should evaluate to a value of
-  type {\tt set[str]}.
-\end{itemize}
-
-\item {\tt <$D_1$,~...,~$D_n$>~:~$E$}: the elements of the relation $R$ (of type
-{\tt rel[<$T'_1$,...,$T'_n$]}, where $T'_i$ is determined by the type of each
-target $D_i$, see below) that results from the evaluation of expression $E$
-are enumerated. The $i$-the element ($i=1,...,n$) of the resulting $n$-tuple
-is subsequently combined with each target $D_i$ as follows:
-\begin{itemize}
-  \item If $D_i$ is a variable declaration of the form $T_i$ $V_i$, then the $i$-th element is assigned to $V_i$.
-  \item If $D_i$ is an arbitrary expression $E_i$, then the value of
-   the $i$-th element should be equal to the value of $E_i$. If they
-   are unequal, computation continues with enumerating the next
-   tuple in the  relation $R$.
-\end{itemize}
-Examples are:
-\begin{itemize}
-\item \verb@<str K, int N> : <"a",10>, <"b",20>, <"c",30>}@<
-\item \verb@<str K, int N> : FREQUENCIES@, where {\tt FREQUENCIES} should
-  evaluate to a value of type {\tt rel[str,int]}.
-\item \verb@<str K, 10> : FREQUENCIES@, will only generate pairs with {\tt 10}
-  as second element.
-\end{itemize}
-  
-\end{itemize}
-
-\paragraph{Test}
-A test is a boolean-valued expression. If the evaluation yields {\tt true}
-this indicates that the current combination of generated values up to this test
-is still as desired and execution continues with subsequent generators.  If
-the evaluation yields {\tt false} this indicates that the current combination
-of values is undesired, and that another combination should be
-tried. Examples:
-
-\begin{itemize}
-\item \verb@N >= 3@ tests whether {\tt N} has a value greater than or equal {\tt 3}.
-\item \verb@S == "coffee"@ tests whether {\tt S} is equal to the string {\tt
-"coffee"}.
-\end{itemize}
-In both examples, the variable ({\tt N}, respectively, {\tt S}) should have been introduced by a generator that
-occurs earlier in the enclosing comprehension.
-
-\paragraph{Assignment}
-Assignments assign a value to one or more variables and also come in two flavors:
-
-\begin{itemize}
-
-\item {\tt $T$ $V$ <- $E$}: assigns the value of expression $E$ to the new variable $V$ of type $T$.
-
-\item {\tt <$R_1$, ..., $R_n$> <- $E$}: combines the elements of the $n$-tuple
-resulting from the evaluation of expression $E$ with each $T_i$ as follows:
-
-\begin{itemize}
-
-\item If $R_i$ is a variable declaration of the form $T$ $V_i$, then the $i$-th element is assigned to $V_i$.
-\item If $R_i$ is an arbitrary expression $E_i$, then the value of
-   the $i$-th element should be equal to the value of $E_i$. If they
-   are unequal, the assignment acts as a test that fails (see above).
-\end{itemize}
-
-\end{itemize}
-
-Examples of assignments are:
-\begin{itemize}
-
-\item {\tt rel[str,str] ALLCALLS <- CALLS+} assigns the transitive
-closure of the relation {\tt CALLS} to the variable {\tt ALLCALLS}.
-
-\item {\tt bool Smaller <- A <= B} assigns the result of the test {\tt
-A <= B} to the Boolean variable {\tt Smaller}.
-
-\item {\tt <int N, str S, 10> <- E} evaluates expression {\tt E}
-(which should yield a tuple of type {\tt <int, str, int>}) and
-performs a tuple-wise assignment to the new variables {\tt N} and {\tt
-S} \emph{provided} that the third element of the result is equal to
-{\tt 10}. Otherwise the assignment acts as a test that fails.
-
-\end{itemize}
-
-
-\subsection{Examples of Comprehensions}
-
-\begin{itemize}
-
-\item \verb@{X | int X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5}@.
-
-\item \verb@{<X, Y> | int X : {1, 2, 3}, int Y : {2, 3, 4}, X >= Y}@ yields the
-  relation
-\newline
-\verb@{<2, 2>, <3, 2>, <3, 3>}@.
-
-
-\item \verb@{<Y, X> | <int X, int Y> : {<1,10>, <2,20>}}@ yields the inverse of
-the given relation: \verb@{<10,1>, <20,2>}@.
-
-\item 
-\verb@{X, X * X | X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set
-\verb@{3,4,5,9,16,25}@.
-\end{itemize}
-
-\section{Declarations} \label{SEC:Declarations}
-
-\subsection{Variable Declarations}
-A variable declaration has the form 
-\begin{exam}
-{\tt $T$ $V$ = $E$}
-\end{exam}
-where $T$ is a type,
-$V$ is a variable name, and $T$ is an expression that should have type
-$T$. The effect is that the value of expression $E$ is assigned to
-$V$ and can be used later on as $V$'s value. Double declarations are
-not allowed. As a convenience, also declarations without an initialization expression are
-permitted and have the form 
-\begin{exam}
-{\tt $T$ $V$} 
-\end{exam}
-and only introduce the variable $V$. Examples:
-
-\begin{itemize}
-\item \verb@int max = 100@ declares the integer variable
-{\tt max} with value {\tt 100}.
-
-\item The definition
-\begin{exam}
-\begin{verbatim}
-rel[str,int] day = {<"mon", 1>, <"tue", 2>, <"wed",3>, 
-                    <"thu", 4>, <"fri", 5>, <"sat",6>, <"sun",7>}
-\end{verbatim}
-\end{exam}
-declares the variable {\tt day}, a relation that maps strings to integers.
-\end{itemize}
-
-\subsection{Local Variable Declarations}
-Local variables can be introduced as follows:
-\begin{exam}
-{\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ end where}
-\end{exam}
-First the local variables $V_i$ are bound to their respective values
-$E_i$, and then the value of expression $E$ is yielded.
-
-
-\subsection{Function Declarations}
-A function declaration has the form
-\begin{exam}
-{\tt $T$ $F$($T_1 ~ V_1$, ..., $T_n ~ V_n$) = $E$}
-\end{exam}
-Here $T$ is the result type of the function and this should be equal to the
-type of the associated expression $E$.  Each $T_i$ $V_i$ represents a typed
-formal parameter of the function. The formal parameters may occur in $E$ and
-get their value when $F$ is invoked from another expression.
-Example:
-
-\begin{itemize}
-\item The function declaration
-\begin{exam}\begin{verbatim}
-rel[int, int] invert(rel[int,int] R) = {<Y, X> | <int X, int Y> : R }
-\end{verbatim}
-\end{exam}
-yields the inverse of the argument relation {\tt R}. For instance,
-\verb@invert({<1,10>, <2,20>})@ yields \verb@{<10,1>, <20,2>}@.
-\end{itemize}
-
-\paragraph{Parameterized types in function declarations}
-The types that occur in function declarations may also contain
-\emph{type variables} that are written as {\tt \&} followed by an identifier.
- In this way functions can be defined for arbitrary
-types. Examples:
-
-\begin{itemize}
-
-\item The declaration
-\begin{exam}\begin{verbatim}
-rel[&T2, &T1] invert2(rel[&T1,&T2] R) = {<Y, X> | <&T1 X, &T2 Y> : R }
-\end{verbatim}
-\end{exam}
-yields an inversion function that is applicable to any binary relation.
-For instance,
-\begin{itemize}
-\item \verb@invert2({<1,10>, <2,20>})@ yields \verb@{<10,1>, <20,2>}@,
-and 
-\item \verb@invert2({<"mon", 1>, <"tue", 2>})@
-yields \verb@{<1, "mon">, <2, "tue">}@.
-\end{itemize}
-
-
-\item The function
-\begin{exam}\begin{verbatim}
-<&T2, &T1> swap(&T1 A, &T2 B) = <B, A>
-\end{verbatim}
-\end{exam}
-can be used to swap the elements of pairs of arbitrary types.  For instance,
-\begin{itemize}
-\item \verb@swap(<1, 2>)@ yields \verb@<2,1>@ and 
-\item \verb@swap(<"wed", 3>)@ yields \verb@<3, "wed">@.
-\end{itemize}
-\end{itemize}
-
-\section{Assertions}
-An assert statement may occur everywhere where a declaration is allowed.  It
-has the form 
-\begin{exam}
-{\tt assert $L$: $E$}
-\end{exam}
- where $L$ is a string that serves as a
-label for this assertion, and $E$ is a boolean-value expression.  During
-execution, a list of true and false assertions is maintained.  When the script
-is executed as a \emph{test suite} (see Section~\ref{running}) a summary of this
-information is shown to the user. When the script is executed in the standard
-fashion, the assert statement has no affect. Example:
-
-\begin{itemize}
-\item \begin{exam}\begin{verbatim}
-assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}
-\end{verbatim}
-\end{exam}
-\end{itemize}
-
-\section{Equations}
-It is also possible to define mutually dependent sets of equations:
-
-\begin{exam}
-{\tt equations \\
-       \hspace*{0.5cm}initial \\
-          \hspace*{1cm}$T_1$ $V_1$ init $I_1$\\
-          \hspace*{1cm}  ... \\
-          \hspace*{1cm}$T_n$ $V_n$ init $I_n$\\
-       \hspace*{0.5cm}satisfy\\
-          \hspace*{1cm}$V_1$ = $E_1$\\
-          \hspace*{1cm}...\\
-          \hspace*{1cm}$V_n$ = $E_n$\\
-end equations}
-\end{exam}
-
-\noindent In the {\tt initial} section, the variables $V_i$ are declared and
-initialized.
-In the {\tt satisfy} section, the actual set of equations is given.
-The expressions $E_i$ may refer to any of the variables 
-  $V_i$ (and to any variables declared earlier).  This set of equations is
-  solved by evaluating the expressions $E_i$, assigning their value to
-  the corresponding variables $V_i$, and repeating this as long as the
-  value of one of the variables was changed. This is typically used for
-  solving a set of dataflow equations. Example:
-
-\begin{itemize}
-\item 
-Although transitive closure is provided as a built-in operator, we can use
-equations to define the transitive closure of a relation.
-Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R \circ R) \cup ... .\]
-This can be expressed as follows.
-
-\begin{exam}
-\begin{verbatim}
-rel[int,int] R =  {<1,2>, <2,3>, <3,4>}
+  <section xml:id="SEC-rscipt-language">
+    <title>The Rscript Language</title>
+
+    <para>Rscript is based on <emphasis>binary relations</emphasis> only and
+    has no direct support for <replaceable>n</replaceable>-ary relations with
+    labeled columns as usual in a general database language. However, some
+    syntactic support for <replaceable>n</replaceable>-ary relations exists.
+    We will explain this further below. An Rscript consists of a sequence of
+    declarations for variables and/or functions. Usually, the value of one of
+    these variables is what the writer of the script is interested in. The
+    language has scalar types (Boolean, integer, string, location) and
+    composite types (set and relation). Expressions are constructed from
+    comprehensions, function invocations and operators. These are all
+    described below.}</para>
+
+    <section xml:id="SEC-types-and-values">
+      <title>Types and Values</title>
+
+      <para></para>
+
+      <section xml:id="SEC-elementary-types">
+        <title>Elementary Types and Values</title>
+
+        <formalpara>
+          <title>Booleans</title>
+
+          <para>The Booleans are represented by the type
+          <literal>bool</literal> and have two values: <literal>true</literal>
+          and <literal>false</literal>.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Integers</title>
+
+          <para>The integer values are represented by the type
+          <literal>int</literal> and are written as usual, e.g.,
+          <literal>0</literal>, <literal>1</literal>, or
+          <literal>123</literal>.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Strings</title>
+
+          <para>The string values are represented by the type
+          <literal>str</literal> and consist of character sequences surrounded
+          by double quotes. e.g., <literal>"a"</literal> or <literal>"a\ long\
+          string"</literal>.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Locations</title>
+
+          <para>Location values are represented by the type
+          <literal>loc</literal> and serve as text coordinates in a specific
+          source file. They should <emphasis>always</emphasis> be generated
+          automatically but for the curious here is an example how they look
+          like: <literal>area-in-file("/home/paulk/example.pico", area(6, 17,
+          6, 18, 131, 1))</literal>.</para>
+        </formalpara>
+      </section>
+    </section>
+
+    <section>
+      <title>Tuples, Sets and relations</title>
+
+      <para></para>
+
+      <formalpara>
+        <title>Tuples</title>
+
+        <para>Tuples are represented by the type
+        <literal>&lt;</literal><replaceable>T</replaceable><subscript>1</subscript><literal>,</literal>
+        <replaceable>T</replaceable><subscript>2</subscript><literal>&gt;</literal>,
+        where <replaceable>T</replaceable><subscript>1</subscript> and
+        <replaceable>T</replaceable><subscript>2</subscript> are arbitrary
+        types. An example of a tuple type is <literal>&lt;int,
+        str&gt;</literal>. Rscript directly supports tuples consisting of two
+        elements (also know as <emphasis>pairs</emphasis>). For convenience,
+        <replaceable>n</replaceable>-ary tuples are also allowed, but there
+        are some restrictions on their use, see the paragraph Relations below.
+        Examples are:</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>&lt;1, 2&gt;</literal> is of type <literal>&lt;int,
+          int&gt;</literal>,</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;1, 2, 3&gt;</literal> is of type
+          <literal>&lt;int, int, int&gt;</literal>,</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;1, "a", 3&gt;</literal> is of type
+          <literal>&lt;int, str, int&gt;</literal>,</para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Sets</title>
+
+        <para>Sets are represented by the type
+        <literal>set[</literal><replaceable>T</replaceable><literal>]</literal>,
+        where <replaceable>T</replaceable> is an arbitrary type. Examples are
+        <literal>set[int]</literal>, <literal>set[&lt;int,int&gt;]</literal>
+        and <literal>set[set[str]]</literal>. Sets are denoted by a list of
+        elements, separated by comma's and enclosed in braces as in
+        <literal>{</literal><replaceable>E</replaceable><subscript>1</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>2</subscript><literal>,
+        ...,</literal>
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript><literal>}</literal>,
+        where the
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+        (1 &lt;= <replaceable>i </replaceable>&lt;=
+        <replaceable>n</replaceable>) are expressions that yield the desired
+        element type. For example,</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>{1, 2, 3}</literal> is of type
+          <literal>set[int]</literal>,</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}</literal>
+          is of type <literal>set[&lt;int,int&gt;]</literal>,</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{&lt;"a",10&gt;, &lt;"b",20&gt;,
+          &lt;"c",30&gt;}</literal> is of type
+          <literal>set[&lt;str,int&gt;]</literal>, and</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{{"a", "b"}, {"c", "d", "e"}}</literal> is of type
+          <literal>set[set[str]]</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Relations</title>
+
+        <para>Relations are nothing more than sets of tuples, but since they
+        are used so often we provide some shorthand notation for them.
+        Relations are represented by the type
+        <literal>rel[<replaceable>T</replaceable><subscript>1</subscript>,<replaceable>T</replaceable><subscript>2</subscript>]</literal>,
+        where
+        <replaceable><replaceable>T</replaceable><subscript>1</subscript></replaceable>
+        and <replaceable>T</replaceable><subscript>2</subscript> are arbitrary
+        types; it is a shorthand for
+        <literal>set[&lt;<replaceable>T</replaceable><subscript>1</subscript>,
+        <replaceable>T</replaceable><subscript>2</subscript>&gt;]</literal>.
+        Examples are <literal>rel[int,str]</literal> and
+        <literal>rel[int,set[str]]</literal>. Relations are denoted by
+        <literal>{&lt;</literal><replaceable>E</replaceable><subscript>11</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript>12</subscript><literal>&gt;,
+        &lt;</literal><replaceable>E</replaceable><subscript>21</subscript>,
+        <replaceable>E</replaceable><subscript>22</subscript><literal>&gt;,
+        ...,
+        &lt;</literal><replaceable>E</replaceable><subscript><replaceable>n</replaceable>1</subscript><literal>,</literal>
+        <replaceable>E</replaceable><subscript><replaceable>n</replaceable>2</subscript><literal>&gt;}</literal>,
+        where the
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable><replaceable>j</replaceable></subscript>
+        are expressions that yield the desired element type. For example,
+        <literal>{&lt;1, "a"&gt;, &lt;2, "b"&gt;, &lt;3,"c"&gt;}</literal> is
+        of type <literal>rel[int, str]</literal>. Not surprisingly,
+        <replaceable>n</replaceable>-ary relations are represented by the type
+        <literal>rel[<replaceable>T</replaceable><subscript>1</subscript>,
+        <replaceable>T</replaceable><subscript>2</subscript>, ...,
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>]</literal>
+        which is a shorthand for
+        <literal>set[&lt;<replaceable>T</replaceable><subscript>1</subscript>,
+        <replaceable>T</replaceable><subscript>2</subscript>, ...,
+        <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript>&gt;]</literal>.
+        Most built-in operators and functions require binary relations as
+        arguments. It is, however, perfectly possible to use
+        <replaceable>n</replaceable>-ary relations as values, or as arguments
+        or results of functions. Examples are:</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;}</literal>
+          is of type <literal>rel[int,int]</literal> (yes indeed, you saw this
+          same example before and then we gave
+          <literal>set[&lt;int,int&gt;]</literal> as its type; remember that
+          these types are interchangeable.),</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{&lt;"a",10&gt;, &lt;"b",20&gt;,
+          &lt;"c",30&gt;}</literal> is of type
+          <literal>rel[str,int]</literal>, and</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>{{"a", 1, "b"}, {"c", 2, "d"}}</literal> is of type
+          <literal>rel[str,int,str]</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <section>
+        <title>User-defined Types and Values</title>
+
+        <formalpara>
+          <title>Alias types</title>
+
+          <para>Everything can be expressed using the elementary types and
+          values that are provided by Rscript. However, for the purpose of
+          documentation and readability it is sometimes better to use a
+          descriptive name as type indication, rather than an elementary type.
+          The type declaration</para>
+        </formalpara>
+
+        <programlisting>type <replaceable>T</replaceable><subscript>1</subscript> = <replaceable>T</replaceable><subscript>2</subscript></programlisting>
+
+        <para>states that the new type name
+        <replaceable>T</replaceable><subscript>1</subscript> can be used
+        everywhere instead of the already defined type name
+        <replaceable>T</replaceable><subscript>2</subscript>. For
+        instance,</para>
+
+        <programlisting>type ModuleId = str
+type Frequency = int</programlisting>
+
+        <para>introduces two new type names <literal>ModuleId</literal> and
+        <literal>Frequency</literal>, both an alias for the type
+        <literal>str</literal>. The use of type aliases is a good way to hide
+        representation details.</para>
+
+        <formalpara>
+          <title>Composite Types and Values</title>
+
+          <para>In ordinary programming languages record types or classes
+          exist to introduce a new type name for a collection of related,
+          named, values and to provide access to the elements of such a
+          collection through their name. In \rscript, tuples with named
+          elements provide this facility. The type declaration</para>
+        </formalpara>
+
+        <programlisting>type T = &lt;<replaceable>T</replaceable><subscript>1</subscript> <replaceable>F</replaceable><subscript>1</subscript> ,..., <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>F</replaceable><subscript><replaceable>n</replaceable></subscript>&gt;</programlisting>
+
+        <para>introduces a new composite type <replaceable>T</replaceable>,
+        with <replaceable>n</replaceable> elements. The
+        <replaceable>i</replaceable>-th
+        element<replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+        <replaceable>F</replaceable><subscript><replaceable>i</replaceable></subscript>
+        has type
+        <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+        and field name
+        <replaceable>F</replaceable><subscript><replaceable>i</replaceable></subscript>.
+        The common dot notation for field access is used to address an element
+        of a composite type. If <replaceable>V</replaceable> is a variable of
+        type <replaceable>T</replaceable>, then the
+        <replaceable>i</replaceable>-th element can be accessed by
+        <replaceable>V</replaceable><literal>.</literal><replaceable>F</replaceable><subscript><replaceable>i</replaceable></subscript>.
+        For instance,\footnote{The variable declarations that appear on lines
+        2 and 3 of this example are explained fully in
+        Section~\ref{SEC:Declarations}.}</para>
+
+        <programlisting>type Triple = &lt;int left, str middle, bool right&gt;
+Triple TR = &lt;3, "a", true&gt;
+str S = TR.middle</programlisting>
+
+        <para>first introduces the composite type <literal>Triple</literal>
+        and defines the <literal>Triple</literal> variable
+        <literal>TR</literal>. Next, the field selection
+        <literal>TR.middle</literal> is used to define the string
+        <literal>S</literal>.</para>
+
+        <formalpara>
+          <title>Implementation Note</title>
+
+          <para>The current implementation severely restricts the re-use of
+          field names in different type declarations. The only re-use that is
+          allowed are fields with the same name and the same type that appear
+          at the same position in different type declarations.</para>
+        </formalpara>
+
+        <formalpara>
+          <title>Type Equivalence</title>
+
+          <para>An Rscript should be <emphasis>well-typed</emphasis>, this
+          means above all that identifiers that are used in expressions have
+          been declared, and that operations and functions should have
+          operands of the required type. We use <emphasis>structural
+          equivalence</emphasis> between types as criterion for type equality.
+          The equivalence of two types
+          <replaceable>T</replaceable><subscript>1</subscript> and
+          <replaceable>T</replaceable><subscript>2</subscript> can be
+          determined as follows:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>Replace in both
+            <replaceable>T</replaceable><subscript>1</subscript> and
+            <replaceable>T</replaceable><subscript>2</subscript> all
+            user-defined types by their definition until all user-defined
+            types have been eliminated. This may require repeated
+            replacements. This gives, respectively,
+            <replaceable>T</replaceable><subscript>1</subscript>' and
+            <replaceable>T</replaceable><subscript>2</subscript>'.</para>
+          </listitem>
+
+          <listitem>
+            <para>If <replaceable>T</replaceable><subscript>1</subscript>' and
+            <replaceable>T</replaceable><subscript>2</subscript>' are
+            identical, then
+            <replaceable>T</replaceable><subscript>1</subscript> and
+            <replaceable>T</replaceable><subscript>2</subscript> are
+            equal.</para>
+          </listitem>
+
+          <listitem>
+            <para>Otherwise
+            <replaceable>T</replaceable><subscript>1</subscript> and
+            <replaceable>T</replaceable><subscript>2</subscript> are not
+            equal.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Comprehensions</title>
+
+      <para>We will use the familiar notation<programlisting>{<replaceable>E</replaceable><subscript>1</subscript>, ..., <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript> | <replaceable>G</replaceable><subscript>1</subscript>, ..., <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>}</programlisting></para>
+
+      <para>to denote the construction of a set consisting of the union of
+      successive values of the expressions
+      <replaceable>E</replaceable><subscript>1</subscript> ,...,
+      <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript>.
+      The values and the generated set are determined by
+      <replaceable>E</replaceable><subscript>1</subscript> ,...,
+      <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript>
+      and the <emphasis>generators</emphasis>
+      <replaceable>G</replaceable><subscript>1</subscript> ,...,
+      <replaceable>G</replaceable><subscript><replaceable>n</replaceable></subscript>.
+      <replaceable>E</replaceable> is computed for all possible combinations
+      of values produced by the generators. Each generator may introduce new
+      variables that can be used in subsequent generators as well as in the
+      expressions <replaceable>E</replaceable><subscript>1</subscript> ,...,
+      <replaceable>E</replaceable><subscript><replaceable>m</replaceable></subscript>.
+      A generator can use the variables introduced by preceding generators.
+      Generators may enumerate all the values in a set or relation, they may
+      perform a test, or they may assign a value to variables.</para>
+
+      <section>
+        <title>Generators</title>
+
+        <para></para>
+
+        <formalpara>
+          <title>Enumerator</title>
+
+          <para>Enumerators generate all the values in a given set or
+          relation. They come in two flavors: </para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para><replaceable>T</replaceable> <replaceable>V</replaceable>
+            <literal>:</literal> <replaceable>E</replaceable>: the elements of
+            the set <replaceable>S</replaceable> (of type
+            <literal>set[<replaceable>T</replaceable>]</literal>) that results
+            from the evaluation of expression <replaceable>E</replaceable> are
+            enumerated and subsequently assigned to the new variable
+            <replaceable>V</replaceable> of type <replaceable>T</replaceable>.
+            Examples are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>int N : {1, 2, 3, 4, 5}</literal>,</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>str K : KEYWORDS</literal>, where
+                <literal>KEYWORDS</literal> should evaluate to a value of
+                <literal>set[str]</literal>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;<replaceable>D</replaceable><subscript>1</subscript>,
+            ...,
+            <replaceable>D</replaceable><subscript><replaceable>n</replaceable></subscript>&gt;
+            : <replaceable>E</replaceable></literal>: the elements of the
+            relation <replaceable>R</replaceable> (of type
+            rel[&lt;<replaceable>T</replaceable>'<subscript>1</subscript>,...,<replaceable>T</replaceable>'<subscript><replaceable>n</replaceable></subscript>],
+            where
+            <replaceable>T</replaceable>'<subscript><replaceable>i</replaceable></subscript>
+            is determined by the type of each target
+            <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>,
+            see below) that results from the evaluation of expression
+            <replaceable>E</replaceable> are enumerated. The
+            <replaceable>i</replaceable>-the element
+            (<replaceable>i</replaceable>=1,...,<replaceable>n</replaceable>)
+            of the resulting <replaceable>n</replaceable>-tuple is
+            subsequently combined with each target
+            <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
+            as follows:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para> If
+                <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
+                is a variable declaration of the form
+                <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+                <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>,
+                then the <replaceable>i</replaceable>-th element is assigned
+                to
+                <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>.</para>
+              </listitem>
+
+              <listitem>
+                <para>If
+                <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
+                is an arbitrary expression
+                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
+                then the value of the <replaceable>i</replaceable>-th element
+                should be equal to the value of
+                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>.
+                If they are unequal, computation continues with enumerating
+                the next tuple in the relation
+                <replaceable>R</replaceable>.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>Examples are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>&lt;str K, int N&gt; : {&lt;"a",10&gt;,
+                &lt;"b",20&gt;, &lt;"c",30&gt;}</literal>.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>&lt;str K, int N&gt; : FREQUENCIES</literal>,
+                where <literal>FREQUENCIES</literal> should evaluate to a
+                value of type <literal>rel[str,int]</literal>.</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>&lt;str K, 10&gt; : FREQUENCIES</literal>, will
+                only generate pairs with <literal>10</literal> as second
+                element.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <formalpara>
+          <title>Test</title>
+
+          <para>A test is a boolean-valued expression. If the evaluation
+          yields <literal>true</literal> this indicates that the current
+          combination of generated values up to this test is still as desired
+          and execution continues with subsequent generators. If the
+          evaluation yields <literal>false</literal> this indicates that the
+          current combination of values is undesired, and that another
+          combination should be tried. Examples:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>N &gt;= 3</literal> tests whether
+            <literal>N</literal> has a value greater than or equal
+            <literal>3</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>S == "coffee"</literal> tests whether
+            <literal>S</literal> is equal to the string
+            <literal>"coffee"</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>In both examples, the variable (<literal>N</literal>,
+        respectively, <literal>S</literal>) should have been introduced by a
+        generator that occurs earlier in the enclosing comprehension.</para>
+
+        <formalpara>
+          <title>Assignment</title>
+
+          <para>Assignments assign a value to one or more variables and also
+          come in two flavors:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal><replaceable>T</replaceable>
+            <replaceable>V</replaceable> &lt;-
+            <replaceable>E</replaceable></literal>: assigns the value of
+            expression <replaceable>E</replaceable> to the new variable
+            <replaceable>V</replaceable> of type
+            <replaceable>T</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;<replaceable>R</replaceable><subscript>1</subscript>,
+            ...,
+            <replaceable>R</replaceable><subscript><replaceable>n</replaceable></subscript>&gt;
+            &lt;- <replaceable>E</replaceable></literal>: combines the
+            elements of the <replaceable>n</replaceable>-tuple resulting from
+            the evaluation of expression <replaceable>E</replaceable> with
+            each
+            <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+            as follows:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>If
+                <replaceable>R</replaceable><subscript><replaceable>i</replaceable></subscript>
+                is a variable declaration of the form
+                <literal><replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+                <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript></literal>,
+                then the <replaceable>i</replaceable>-th element is assigned
+                to
+                <literal><replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript></literal>.</para>
+              </listitem>
+
+              <listitem>
+                <para>If
+                <replaceable>R</replaceable><subscript><replaceable>i</replaceable></subscript>
+                is an arbitrary expression
+                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
+                then the value of the <replaceable>i</replaceable>-th element
+                should be equal to the value of
+                <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>.
+                If they are unequal, the assignment acts as a test that fails
+                (see above).</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>Examples of assignments are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>rel[str,str] ALLCALLS &lt;- CALLS+</literal>
+            assigns the transitive closure of the relation
+            <literal>CALLS</literal> to the variable
+            <literal>ALLCALLS</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>bool Smaller &lt;- A &lt;= B</literal> assigns the
+            result of the test <literal>A &lt;= B</literal> to the Boolean
+            variable <literal>Smaller</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;int N, str S, 10&gt; &lt;- E</literal>
+            evaluates expression <literal>E</literal> (which should yield a
+            tuple of type <literal>&lt;int, str, int&gt;</literal>) and
+            performs a tuple-wise assignment to the new variables
+            <literal>N</literal> and <literal>S</literal>
+            <emphasis>provided</emphasis> that the third element of the result
+            is equal to <literal>10</literal>. Otherwise the assignment acts
+            as a test that fails.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Examples of Comprehensions</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>{X | int X : {1, 2, 3, 4, 5}, X &gt;= 3}</literal>
+            yields the set <literal>{3,4,5}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{&lt;X, Y&gt; | int X : {1, 2, 3}, int Y : {2, 3,
+            4}, X &gt;= Y}</literal> yields the relation <literal>{&lt;2,
+            2&gt;, &lt;3, 2&gt;, &lt;3, 3&gt;}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{&lt;Y, X&gt; | &lt;int X, int Y&gt; :
+            {&lt;1,10&gt;, &lt;2,20&gt;}}</literal> yields the inverse of the
+            given relation: <literal>{&lt;10,1&gt;,
+            &lt;20,2&gt;}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{X, X * X | X : {1, 2, 3, 4, 5}, X &gt;=
+            3}</literal> yields the set
+            <literal>{3,4,5,9,16,25}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="SEC-declarations">
+      <title>Declarations</title>
+
+      <section>
+        <title>Variable Declarations</title>
+
+        <para>A variable declaration has the form<programlisting><replaceable>T</replaceable> <replaceable>V</replaceable> = <replaceable>E</replaceable></programlisting>
+        where <replaceable>T</replaceable> is a type,
+        <replaceable>V</replaceable> is a variable name, and
+        <replaceable>E</replaceable> is an expression that should have type
+        <replaceable>T</replaceable>. The effect is that the value of
+        expression <replaceable>E</replaceable> is assigned to
+        <replaceable>V</replaceable> and can be used later on as
+        <replaceable>V</replaceable>'s value. Double declarations are not
+        allowed. As a convenience, also declarations without an initialization
+        expression are permitted and have the form <programlisting><replaceable>T</replaceable> <replaceable>V</replaceable> </programlisting>and
+        only introduce the variable <replaceable>V</replaceable>.
+        Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>int max = 100</literal> declares the integer
+            variable <literal>max</literal> with value
+            <literal>100</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The definition<programlisting>rel[str,int] day = {&lt;"mon", 1&gt;, &lt;"tue", 2&gt;, &lt;"wed",3&gt;, 
+                    &lt;"thu", 4&gt;, &lt;"fri", 5&gt;, &lt;"sat",6&gt;, &lt;"sun",7&gt;}</programlisting>declares
+            the variable <literal>day</literal>, a relation that maps strings
+            to integers.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Local Variable Declarations</title>
+
+        <para>Local variables can be introduced as follows:<programlisting><replaceable>E</replaceable> where <literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript> = <replaceable>E</replaceable><subscript>1</subscript>, ..., <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><replaceable><subscript>n</subscript></replaceable> = <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript> end where</programlisting>First
+        the local variables
+        <replaceable>V</replaceable><replaceable><subscript>i</subscript></replaceable>
+        are bound to their respective values
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        and then the value of expression <replaceable>E </replaceable>is
+        yielded.</para>
+      </section>
+
+      <section>
+        <title>Function Declarations</title>
+
+        <para>A function declaration has the form<programlisting><replaceable>T</replaceable> <replaceable>F</replaceable>(<literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript>, ..., <replaceable>T</replaceable><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><replaceable><subscript>n</subscript></replaceable>) = <replaceable>E</replaceable></programlisting>Here
+        <replaceable>T</replaceable> is the result type of the function and
+        this should be equal to the type of the associated expression
+        <replaceable>E</replaceable>. Each
+        <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
+        <replaceable>V</replaceable><replaceable><subscript>i</subscript></replaceable>
+        represents a typed formal parameter of the function. The formal
+        parameters may occur in <replaceable>E</replaceable> and get their
+        value when <replaceable>F</replaceable> is invoked from another
+        expression. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The function declaration<programlisting>rel[int, int] invert(rel[int,int] R) = {&lt;Y, X&gt; | &lt;int X, int Y&gt; : R }</programlisting>yields
+            the inverse of the argument relation R. For instance,
+            <literal>invert({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields
+            <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <formalpara>
+          <title>Parameterized types in function declarations</title>
+
+          <para>The types that occur in function declarations may also contain
+          <emphasis>type variables</emphasis> that are written as
+          <literal>&amp;</literal> followed by an identifier. In this way
+          functions can be defined for arbitrary types. Examples:</para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>The declaration<programlisting>rel[&amp;T2, &amp;T1] invert2(rel[&amp;T1,&amp;T2] R) = {&lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>yields
+            an inversion function that is applicable to any binary relation.
+            For instance,</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>invert2({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
+                yields <literal>{&lt;10,1&gt;, &lt;20,2&gt;}</literal>,</para>
+              </listitem>
+
+              <listitem>
+                <para><literal>invert2({&lt;"mon", 1&gt;, &lt;"tue",
+                2&gt;})</literal> yields <literal>{&lt;1, "mon"&gt;, &lt;2,
+                "tue"&gt;}</literal>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>The function<programlisting>&lt;&amp;T2, &amp;T1&gt; swap(&amp;T1 A, &amp;T2 B) = &lt;B, A&gt;</programlisting>can
+            be used to swap the elements of pairs of arbitrary types. For
+            instance,</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><literal>swap(&lt;1, 2&gt;)</literal> yields
+                <literal>&lt;2,1&gt;</literal> and </para>
+              </listitem>
+
+              <listitem>
+                <para><literal>swap(&lt;"wed", 3&gt;)</literal> yields
+                <literal>&lt;3, "wed"&gt;</literal>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Assertions</title>
+
+        <para>An assert statement may occur everywhere where a declaration is
+        allowed. It has the form<programlisting>assert <replaceable>L</replaceable>: <replaceable>E</replaceable></programlisting>where
+        <replaceable>L</replaceable> is a string that serves as a label for
+        this assertion, and <replaceable>E</replaceable> is a boolean-value
+        expression. During execution, a list of true and false assertions is
+        maintained. When the script is executed as a <emphasis>test
+        suite</emphasis> (see Section~\ref{running}) a summary of this
+        information is shown to the user. When the script is executed in the
+        standard fashion, the assert statement has no affect. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting>assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Equations</title>
+
+        <para>It is also possible to define mutually dependent sets of
+        equations:<programlisting>equations
+       initial
+          <literal><replaceable>T</replaceable></literal><subscript>1</subscript> <replaceable>V</replaceable><subscript>1</subscript> init <replaceable>I</replaceable><subscript>1</subscript>
+          ...
+          <literal><replaceable>T</replaceable></literal><subscript><replaceable>n</replaceable></subscript> <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> init <replaceable>I</replaceable><subscript><replaceable>n</replaceable></subscript>
+       satisfy
+          <replaceable>V</replaceable><subscript>1</subscript> = <replaceable>E</replaceable><subscript>1</subscript>
+          ...
+          <replaceable>V</replaceable><subscript><replaceable>n</replaceable></subscript> = <replaceable>E</replaceable><subscript><replaceable>n</replaceable></subscript>
+end equations</programlisting></para>
+
+        <para>In the <literal>initial</literal> section, the variables
+        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
+        are declared and initialized. In the <literal>satisfy</literal>
+        section, the actual set of equations is given. The expressions
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
+        may refer to any of the variables
+        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>
+        (and to any variables declared earlier). This set of equations is
+        solved by evaluating the expressions
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        assigning their value to the corresponding variables
+        <replaceable>V</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        and repeating this as long as the value of one of the variables was
+        changed. This is typically used for solving a set of dataflow
+        equations. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Although transitive closure is provided as a built-in
+            operator, we can use equations to define the transitive closure of
+            a relation. Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R
+            \circ R) \cup ... .\] This can be expressed as follows.</para>
+
+            <para><programlisting>rel[int,int] R =  {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;}
 
 equations
   initial
      rel[int,int] T init R
   satisfy
      T = T union (T o R)
-end equations
-\end{verbatim}
-\end{exam}
-The resulting value of {\tt T} is as expected:
-\begin{exam}
-\begin{verbatim}
- {<1,2>, <2,3>, <3,4>, <1, 3>, <2, 4>, <1, 4>}
-\end{verbatim}
-\end{exam}
-\end{itemize}
-
-
-\chapter{Built-in Operators} \label{SEC:operators}
-
-\fbox{\epsfig{figure=figs/microscope.ps,width=6cm}} \label{FIG:microscope}
-\hspace*{0.5cm}\parbox[b]{8cm}{The built-in operators can be subdivided in several broad categories:
-\begin{itemize}
-\item Operations on Booleans (Section~\ref{BO:bool}): logical operators ({\tt
-  and}, {\tt or}, {\tt implies} and {\tt  not}).
-\item Operations on integers (Section~\ref{BO:int}):
-arithmetic operators ({\tt +}, {\tt -}, {\tt *}, and {\tt /}) and 
-comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
-\item Operations on strings (Section~\ref{BO:str}):
-comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
-\item Operations on locations (Section~\ref{BO:loc}).
-comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
-\item Operations on sets or relations (Section~\ref{BO:set-or-rel}):
-membership tests ({\tt in}, {\tt notin}),
-comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt
-  >=}), and
-construction operators ({\tt union}, {\tt inter}, {\tt diff}).
-
-\item Operations on relations (Section~\ref{BO:relations}):
-composition ({\tt o}), Cartesian product ({\tt x}),
-left and right image operators, and
-transitive closures ({\tt +}, {\tt *}).
-\end{itemize}
-\noindent The following sections give detailed descriptions and examples of all built-in operators.}
-
-\section{Operations on Booleans} \label{BO:bool}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{bool}$_1$ \texttt{and} \emph{bool}$_2$ & yields {\tt true} if both arguments have the value true and
-{\tt false} otherwise\\ \hline
-
-\emph{bool}$_1$ \texttt{or} \emph{bool}$_2$ & yields {\tt true} if either argument has
-                         the value {\tt true} and {\tt false} otherwise\\ \hline
-
-\emph{bool}$_1$ \texttt{implies} \emph{bool}$_2$ & yields {\tt false} if
-                             \emph{bool}$_1$ has the value {\tt true} and
-                               \emph{bool}$_2$ has value {\tt false}, and
-                         {\tt true} otherwise\\ \hline
-
-{\tt not} \emph{bool} & yields true if \emph{bool} is {\tt false} and {\tt true} otherwise \\
-\hline
-\end{tabular}
-
-\section{Operations on Integers} \label{BO:int}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{int}$_1$ {\tt ==} \emph{int}$_2$ & yields {\tt true} if both arguments are numerically equal and {\tt false}
-otherwise\\ \hline
-
-\emph{int}$_1$ {\tt !=} \emph{int}$_2$ & yields {\tt true} if both arguments are numerically unequal  and {\tt false}
-otherwise\\ \hline
-
-\emph{int}$_1$ {\tt <=} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$ is numerically less than
-or equal to \emph{int}$_2$ and {\tt false} otherwise\\ \hline
-
-\emph{int}$_1$ {\tt <} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$ is a numerically less than \emph{int}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{int}$_1$ {\tt >=} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$ is numerically greater
-than or equal to \emph{int}$_2$  and {\tt false} otherwise\\ \hline
-
-\emph{int}$_1$ {\tt >} \emph{int}$_2$ & yields {\tt true} if \emph{int}$_1$  is numerically greater than \emph{int}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{int}$_1$ {\tt +} \emph{int}$_2$ & yields the arithmetic sum of
-\emph{int}$_1$ and \emph{int}$_2$\\ \hline
-
-\emph{int}$_1$ {\tt -} \emph{int}$_2$ & yields the arithmetic difference of
-\emph{int}$_1$ and \emph{int}$_2$\\ \hline
-
-\emph{int}$_1$ {\tt *} \emph{int}$_2$ & yields the arithmetic product of
-\emph{int}$_1$ and \emph{int}$_2$\\ \hline
-
-\emph{int}$_1$ {\tt /} \emph{int}$_2$ & yields the integer division of
-\emph{int}$_1$ and \emph{int}$_2$ \\ \hline
-
-\end{tabular}
-
-\section{Operations on Strings} \label{BO:str}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-
-\emph{str}$_1$ {\tt ==} \emph{str}$_2$ & yields {\tt true} if both arguments are equal and {\tt false}
-otherwise\\ \hline
-
-\emph{str}$_1$ {\tt !=} \emph{str}$_2$ & yields {\tt true} if both arguments are unequal  and {\tt false}
-otherwise\\ \hline
-
-\emph{str}$_1$ {\tt <=} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$ is lexicographically less than
-or equal to \emph{str}$_2$ and {\tt false} otherwise\\ \hline
-
-\emph{str}$_1$ {\tt <} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$ is a lexicographically less than \emph{str}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{str}$_1$ {\tt >=} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$ is lexicographically greater
-than or equal to \emph{str}$_2$  and {\tt false} otherwise\\ \hline
-
-\emph{str}$_1$ {\tt >} \emph{str}$_2$ & yields {\tt true} if \emph{str}$_1$  lexicographically greater than \emph{str}$_2$
-and {\tt false} otherwise\\ \hline
-
-\end{tabular}
-\section{Operations on Locations} \label{BO:loc}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{loc}$_1$ {\tt ==} \emph{loc}$_2$ & yields {\tt true} if both arguments
-are identical and {\tt false}
-otherwise\\ \hline
-
-\emph{loc}$_1$ {\tt !=} \emph{loc}$_2$ & yields {\tt true} if both arguments are unequal  and {\tt false}
-otherwise\\ \hline
-
-\emph{loc}$_1$ {\tt <=} \emph{loc}$_2$ & yields {\tt true} if
-\emph{loc}$_1$ is textually contained in 
-or equal to \emph{loc}$_2$ and {\tt false} otherwise\\ \hline
-
-\emph{loc}$_1$ {\tt <} \emph{loc}$_2$ & yields {\tt true} if \emph{loc}$_1$
-is strictly textually contained  in \emph{loc}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{loc}$_1$ {\tt >=} \emph{loc}$_2$ & yields {\tt true} if
-\emph{loc}$_1$ textually encloses or
-or is equal to \emph{loc}$_2$  and {\tt false} otherwise\\ \hline
-
-\emph{loc}$_1$ {\tt >} \emph{loc}$_2$ & yields {\tt true} if \emph{loc}$_1$
-strictly textually encloses \emph{loc}$_2$
-and {\tt false} otherwise\\ \hline
-
-\end{tabular}
-
-\paragraph{Examples}
-In the following examples the offset and length part of a location are set to
-{\tt 0}; they are not used when determining the outcome of the comparison operators.
-
-\begin{itemize}
-
- \item {\tt area-in-file("f", area(11, 1, 11, 9, 0, 0)) <} \newline 
-{\tt area-in-file("f", area(10, 2, 12, 8, 0, 0))} yields {\tt true}.
-
- \item {\tt area-in-file("f", area(10, 3, 11, 7, 0,0))  <} \newline 
-{\tt area-in-file("f", area(10, 2, 11, 8, 0, 0))} yields {\tt true}.
-
- \item {\tt area-in-file("f", area(10, 3, 11, 7, 0, 0))  <} \newline
-{\tt area-in-file("g", area(10, 3, 11, 7, 0, 0))} yields {\tt false}.
-
-\end{itemize}
-
-\section{Operations on Sets or Relations} \label{BO:set-or-rel}
-
-\subsection{Membership Tests} \label{BO:member}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-
-\emph{any} {\tt in} \emph{set} & yields {\tt true} if \emph{any} occurs as element
-in \emph{set} and {\tt false} otherwise \\ \hline
-
-\emph{any} {\tt notin} \emph{set} & yields {\tt false} if \emph{any} occurs as
-element in \emph{set} and {\tt true} otherwise \\ \hline
-
-\emph{tuple} {\tt in} \emph{rel} & yields {\tt true} if \emph{tuple} occurs as element in
-\emph{rel}  and {\tt false} otherwise \\ \hline
-
-\emph{tuple} {\tt notin} \emph{rel} & yields {\tt false} if \emph{tuple} occurs as
-element in \emph{rel} and {\tt true} otherwise \\ \hline
-\end{tabular}
-
-\paragraph{Examples}
-
-\begin{itemize}
-
-\item \verb@3 in {1, 2, 3}@ yields {\tt true}.
-\item \verb@4 in {1, 2, 3}@ yields {\tt false}.
-\item \verb@3 notin {1, 2, 3}@ yields {\tt false}.
-\item \verb@4 notin {1, 2, 3}@ yields {\tt true}.
-\item \verb@<2,20> in {<1,10>, <2,20>, <3,30>}@ yields {\tt true}.
-\item \verb@<4,40> notin {<1,10>, <2,20>, <3,30>}@ yields {\tt true}.
-
-\end{itemize}
-
-\paragraph{Note} If the first argument of these operators has type $T$, then
-the second argument should have type {\tt set[$T$]}.
-
-\subsection{Comparisons} \label{BO:set-comp}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{set}$_1$ {\tt ==} \emph{set}$_2$ & yields {\tt true} if both arguments are equal sets and {\tt false}
-otherwise\\ \hline
-
-\emph{set}$_1$ {\tt !=} \emph{set}$_2$ & yields {\tt true} if both arguments are unequal sets and {\tt false}
-otherwise\\ \hline
-
-\emph{set}$_1$ {\tt <=} \emph{set}$_2$ & yields {\tt true} if \emph{set}$_1$ is a subset of \emph{set}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{set}$_1$ {\tt <} \emph{set}$_2$ & yields {\tt true} if \emph{set}$_1$ is a
-strict subset of \emph{set}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{set}$_1$ {\tt >=} \emph{set}$_2$ & yields {\tt true} if \emph{set}$_1$  is a
-superset of \emph{set}$_2$
-and {\tt false} otherwise\\ \hline
-
-\emph{set}$_1$ {\tt >} \emph{set}$_2$ & yields {\tt true} if  \emph{set}$_1$  is a strict superset of \emph{set}$_2$
-and {\tt false} otherwise\\ \hline 
-\end{tabular}
-
-\subsection{Construction} \label{BO:set-cons}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-\emph{set}$_1$ {\tt union} \emph{set}$_2$ & yields the set resulting from the union of the two arguments.
-%%The number of occurrences of each element in the result is the {\bf maximum} of the number of occurrences of that element
-%%in \emph{set}$_1$  and \emph{set}$_2$.
- \\ \hline
-
-\emph{set}$_1$ {\tt inter} \emph{set}$_2$ & yields the set resulting from the intersection of the two arguments.
-%%The number of occurrences of each element in the result is the {\bf minimum} of the number of occurrences of that element
-%%in \emph{set}$_1$  and \emph{set}$_2$.
- \\ \hline
-
-\emph{set}$_1$ \verb+\+ \emph{set}$_2$ & yields the set resulting from the difference of the two arguments.
-%%The number of occurrences of each element in the result is the {\bf difference} of the number of occurrences of that element
-%%in \emph{set}$_1$  and \emph{set}$_2$.
- \\ \hline
-
-\end{tabular}
-
-\paragraph{Examples}
-
-\begin{itemize}
-\item \verb@{1, 2, 3} union {4, 5, 6}@ yields \verb@{1, 2, 3, 4, 5, 6}@.
-\item \verb@{1, 2, 3} union {1, 2, 3}@ yields  \verb@{1, 2, 3}@.
-\item \verb@{1, 2, 3} union {4, 5, 6}@ yields \verb@{1, 2, 3, 4, 5, 6}@.
-
-\item \verb@{1, 2, 3} inter {4, 5, 6}@ yields \verb@{ }@.
-\item \verb@{1, 2, 3} inter {1, 2, 3}@ yields  \verb@{1, 2, 3}@.
-
-\item \verb@{1, 2, 3, 4}  \ {1, 2, 3}@ yields  \verb@{4}@.
-\item \verb@{1, 2, 3}  \ {4, 5, 6}@ yields \verb@{1, 2, 3}@.
-
-\end{itemize}
-
-\subsection{Miscellaneous} \label{BO:misc}
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-
-\verb@#@ \emph{set} & yields the number of elements in \emph{set}. \\ \hline
-\verb@#@ \emph{rel} & yields the number of tuples in \emph{rel}. \\ \hline
-\end{tabular}
-
-\paragraph{Examples}
-
-\begin{itemize}
-\item \verb@#{1, 2, 3}@ yields {\tt 3}.
-\item \verb@{<1,10>, <2,20>, <3,30>}@ yield {\tt 3}.
-\end{itemize}
-
-\section{Operations on Relations} \label{BO:relations}
-
-\begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
-
-\emph{rel}$_1$ {\tt o} \emph{rel}$_2$ & yields the relation resulting from the composition of the two arguments
- \\ \hline
-
-\emph{set}$_1$ {\tt x}~ \emph{set}$_2$ & yields the relation resulting from the Cartesian product of the two arguments
- \\ \hline
-
-
-\emph{rel} {\tt [-,} \emph{set} {\tt ]} & yields the left image of the \emph{rel}
- \\ \hline
-
-\emph{rel} {\tt [-,} \emph{elem} {\tt ]} & yields the left image of the \emph{rel}
- \\ \hline
-
-\emph{rel} {\tt [} \emph{elem} {\tt ,-]} & yields the right image of \emph{rel}
- \\ \hline
-
-\emph{rel} {\tt [} \emph{set} {\tt ,-]} & yields the right image of \emph{rel}
- \\ \hline
-
-\emph{set} {\tt [} \emph{elem} {\tt ]} & yields the right image of \emph{rel}
- \\ \hline
-
-\emph{rel} {\tt [} \emph{set} {\tt ]} & yields the right image of \emph{rel}
- \\ \hline
-
-
-\emph{rel} {\tt +} & yields the relation resulting from the transitive closure of
- \emph{rel}  \\ \hline
-
-\emph{rel} {\tt *}  & yields the relation resulting from the reflexive transitive closure of
- \emph{rel}  \\ \hline
-
-\end{tabular}
-
-\paragraph{Composition: {\tt o}}
-
-The composition operator combines two relations and can be defined as follows:
-
-\begin{exam}
-\begin{verbatim}
-rel[&T1,&T3] compose(rel[&T1,&T2] R1, rel[&T2,&T3] R2) =
-   {<V, Y> | <&T1 V, &T2 W> : R1, <&T2 X, &T3 Y> : R2, W == X }
-\end{verbatim}
-\end{exam}
-
-\paragraph{Example}
-
-\begin{itemize}
-\item \verb@{<1,10>, <2,20>, <3,15>} o {<10,100>, <20,200>}@ yields  \verb@{<1,100>, <2,200>}@.
-\end{itemize}
-
-
-\paragraph{Cartesian product: {\tt x}}
-The product operator combines two sets into a relation and can be defined as
-follows:
-
-\begin{exam}
-\begin{verbatim}
-rel[&T1,&T2] product(set[&T1] S1, set[&T2] S2) = 
-   {<V, W> | &T1 V : S1, &T2 W : S2 }
-\end{verbatim}
-\end{exam}
-
-\paragraph{Example}
-\begin{itemize}
-\item \verb@{1, 2, 3} x {9}@ yields \verb@{<1, 9>, <2, 9>, <3, 9>}@.
-\end{itemize}
-
-\paragraph{Left image: {\tt [-,~]}}
-
-Taking the left image of a relation amounts to selecting
-some elements from the domain of a relation.
-
-The \emph{left} image operator takes a relation and an element {\tt E} and
-produces a set consisting of all elements {\tt E}$_i$ in the domain of the relation
-that occur in tuples of the form {\tt <E$_i$, E>}. It can be defined as
-follows:
-
-\begin{exam}
-\begin{verbatim}
-set[&T1] left-image(rel[&T1,&T2] R, &T2 E) = 
-   { V | <&T1 V, &T2 W> : R, W == E }
-\end{verbatim}
-\end{exam}
-
-The left image operator can be extended to take a set of elements as second
-element instead of a single element:
-
-\begin{exam}
-\begin{verbatim}
-set[&T1] left-image(rel[&T1,&T2] R, set[&T2] S) = 
-   { V | <&T1 V, &T2 W> : R, W in S }
-\end{verbatim}
-\end{exam}
-
-\paragraph{Examples}
-Assume that {\tt Rel} has value
-\verb@{<1,10>, <2,20>, <1,11>, <3,30>, <2,21>}@ in the following examples.
-\begin{itemize}
-\item \verb@Rel[-,10]@ yields  \verb@{1}@.
-\item \verb@Rel[-,{10}]@ yields  \verb@{1}@.
-\item \verb@Rel[-,{10, 20}]@ yields \verb@{1, 2}@.
-\end{itemize}
-
-\paragraph{Right image: {\tt [ ]} and {\tt [~,-]}}
-Taking the right image of a relation amounts to selecting
-some elements from the range of a relation.
-
-The \emph{right} image operator takes a relation and an element {\tt E} and
-produces a set consisting of all elements {\tt E}$_i$ in the range of the relation
-that occur in tuples of the form {\tt <E, E$_i$>}. It can be defined as
-follows:
-
-\begin{exam}
-\begin{verbatim}
-set[&T2] right-image(rel[&T1,&T2] R, &T1 E) = 
-   { W | <&T1 V, &T2 W> : R, V == E }
-\end{verbatim}
-\end{exam}
-
-The right image operator can be extended to take a set of elements as second
-element instead of a single element:
-
-\begin{exam}
-\begin{verbatim}
-set[&T2] right-image(rel[&T1,&T2] R, set[&T1] S) = 
-   { W | <&T1 V, &T2 W> : R, V in S}
-\end{verbatim}
-\end{exam}
-
-\paragraph{Examples}
-Assume that {\tt Rel} has value \verb@{<1,10>, <2,20>, <1,11>, <3,30>, <2,21>}@  in the following examples.
-\begin{itemize}
-\item \verb@Rel[1]@ yields \verb@{10, 11}@.
-\item \verb@Rel[{1}]@ yields \verb@{10, 11}@.
-\item \verb@Rel[{1, 2}]@ yields \verb@{10, 11, 20, 21}@.
-\end{itemize}
-
-\noindent These expressions are abbreviations for, respectively 
-\verb@Rel[1,-]@,
-\verb@Rel[{1},-]@. 
-and 
-\verb@Rel[{1, 2},-]@.
+end equations</programlisting></para>
+
+            <para>The resulting value of <literal>T</literal> is as
+            expected:<programlisting>{&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;1, 3&gt;, &lt;2, 4&gt;, &lt;1, 4&gt;}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="SEC-operators">
+    <title>Built-in Operators</title>
+
+    <para>The built-in operators can be subdivided in several broad
+    categories:</para>
+
+    <para></para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Operations on Booleans (Section~\ref{BO:bool}): logical
+        operators ( <literal>and</literal>, <literal>or</literal>,
+        <literal>implies</literal> and <literal>not</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para> Operations on integers (Section~\ref{BO:int}): arithmetic
+        operators (<literal>+</literal>, <literal>-</literal>,
+        <literal>*</literal>, and <literal>/</literal>) and comparison
+        operators (<literal>==</literal>, <literal>!=</literal>,
+        <literal>&lt;</literal>, <literal>&lt;=</literal>,
+        <literal>&gt;</literal>, and <literal>&gt;=</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Operations on strings (Section~\ref{BO:str}): comparison
+        operators (<literal>==</literal>, <literal>!=</literal>,
+        <literal>&lt;</literal>, <literal>&lt;=</literal>,
+        <literal>&gt;</literal>, and <literal>&gt;=</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Operations on locations (Section~\ref{BO:loc}). comparison
+        operators (<literal>==</literal>, <literal>!=</literal>,
+        <literal>&lt;</literal>, <literal>&lt;=</literal>,
+        <literal>&gt;</literal>, and <literal>&gt;=</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para> Operations on sets or relations (Section~\ref{BO:set-or-rel}):
+        membership tests (<literal>in</literal>, <literal>notin</literal>),
+        comparison operators (<literal>==</literal>, <literal>!=</literal>,
+        <literal>&lt;</literal>, <literal>&lt;=</literal>,
+        <literal>&gt;</literal>, and <literal>&gt;=</literal>), and
+        construction operators (<literal>union</literal>,
+        <literal>inter</literal>, <literal>diff</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Operations on relations (Section~\ref{BO:relations}):
+        composition (<literal>o</literal>), Cartesian product
+        (<literal>x</literal>), left and right image operators, and transitive
+        closures (<literal>+</literal>, <literal>*</literal>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following sections give detailed descriptions and examples of
+    all built-in operators.</para>
+
+    <section xml:id="SEC-BO-bool">
+      <title>Operations on Booleans</title>
+
+      <table>
+        <title>Operations on Booleans</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>and</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments have the
+              value true and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>and</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if either argument has the
+              value true and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>bool</replaceable><subscript>1</subscript>
+              <literal>implies</literal>
+              <replaceable>bool</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>false</literal> if
+              <replaceable>bool</replaceable><subscript>1</subscript> has the
+              value <literal>true</literal> and
+              <replaceable>bool</replaceable><subscript>2</subscript> has
+              value <literal>false</literal>, and <literal>true</literal>
+              otherwise</entry>
+            </row>
+
+            <row>
+              <entry><literal>not</literal>
+              <replaceable>bool</replaceable></entry>
+
+              <entry>yields true if bool is false and true otherwise</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="SEC-BO-int">
+      <title>Operations on Integers</title>
+
+      <table>
+        <title>Operations on Integers</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments are
+              numerically equal and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments are
+              numerically unequal and <literal>false</literal>
+              otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>int</replaceable><subscript>1</subscript> is
+              numerically less than or equal to
+              <replaceable>int</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>int</replaceable><subscript>1</subscript> is
+              numerically less than
+              <replaceable>int</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>int</replaceable><subscript>1</subscript> is
+              numerically greater than or equal than
+              <replaceable>int</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>int</replaceable><subscript>1</subscript> is
+              numerically greater than
+              <replaceable>int</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>+</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields the arithmetic sum of
+              <replaceable>int</replaceable><subscript>1</subscript> and
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>-</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields the arithmetic difference of
+              <replaceable>int</replaceable><subscript>1</subscript> and
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>*</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields the arithmetic product of
+              <replaceable>int</replaceable><subscript>1</subscript> and
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>int</replaceable><subscript>1</subscript>
+              <literal>/</literal>
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields the arithmetic division of
+              <replaceable>int</replaceable><subscript>1</subscript> and
+              <replaceable>int</replaceable><subscript>2</subscript></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="SEC-BO-str">
+      <title>Operations on Strings</title>
+
+      <table>
+        <title>Operations on Strings</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments are
+              equal and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments are
+              unequal and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>str</replaceable><subscript>1</subscript> is
+              lexicographically less than or equal to
+              <replaceable>str</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>str</replaceable><subscript>1</subscript> is
+              lexicographically less than
+              <replaceable>str</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>str</replaceable><subscript>1</subscript> is
+              lexicographically greater than or equal to
+              <replaceable>str</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>str</replaceable><subscript>1</subscript>
+              <literal>&gt;</literal>
+              <replaceable>str</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>str</replaceable><subscript>1</subscript> is
+              lexicographically greater than
+              <replaceable>str</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="SEC-BO-loc">
+      <title>Operations on Locations</title>
+
+      <table>
+        <title>Operations on Locations</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>==</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments are
+              identical and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>!=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if both arguments are not
+              identical and <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&lt;=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              textually contained in or equal to
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&lt;</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              strictly textually contained in
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              textually encloses or is equal to
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>loc</replaceable><subscript>1</subscript>
+              <literal>&gt;=</literal>
+              <replaceable>loc</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields <literal>true</literal> if
+              <replaceable>loc</replaceable><subscript>1</subscript> is
+              textually encloses
+              <replaceable>loc</replaceable><subscript>2</subscript> and
+              <literal>false</literal> otherwise</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <formalpara>
+        <title>Examples</title>
+
+        <para>In the following examples the offset and length part of a
+        location are set to <literal>0</literal>; they are not used when
+        determining the outcome of the comparison operators.</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>area-in-file("f", area(11, 1, 11, 9, 0, 0)) &lt;
+          area-in-file("f", area(10, 2, 12, 8, 0, 0))</literal> yields
+          <literal>true</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>area-in-file("f", area(10, 3, 11, 7, 0,0)) &lt;
+          area-in-file("f", area(10, 2, 11, 8, 0, 0))</literal> yields
+          <literal>true</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>area-in-file("f", area(10, 3, 11, 7, 0, 0)) &lt;
+          area-in-file("g", area(10, 3, 11, 7, 0, 0))</literal> yields
+          <literal>false</literal>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="SEC-BO-set-or-rel">
+      <title>Operations on Sets or Relations</title>
+
+      <section xml:id="SEC-BO-member">
+        <title>Membership Tests</title>
+
+        <table>
+          <title>Membership Tests</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><replaceable>any</replaceable> <literal>in</literal>
+                <replaceable>set</replaceable></entry>
+
+                <entry>yields <literal>true</literal> if
+                <replaceable>any</replaceable> occurs as element in
+                <replaceable>set</replaceable> and <literal>false</literal>
+                otherwise</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>any</replaceable> <literal>notin</literal>
+                <replaceable>set</replaceable></entry>
+
+                <entry>yields <literal>false</literal> if
+                <replaceable>any</replaceable> occurs as element in
+                <replaceable>set</replaceable> and <literal>false</literal>
+                otherwise</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>tuple</replaceable> <literal>in</literal>
+                <replaceable>rel</replaceable></entry>
+
+                <entry>yields <literal>true</literal> if
+                <replaceable>tuple</replaceable> occurs as element in
+                <replaceable>rel</replaceable> and <literal>false</literal>
+                otherwise</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>tuple</replaceable>
+                <literal>notin</literal>
+                <replaceable>rel</replaceable></entry>
+
+                <entry>yields <literal>false</literal> if
+                <replaceable>tuple</replaceable> occurs as element in
+                <replaceable>rel</replaceable> and <literal>false</literal>
+                otherwise</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <formalpara>
+          <title>Examples</title>
+
+          <para></para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>3 in {1, 2, 3}</literal> yields
+            <literal>true</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>4 in {1, 2, 3} yields <literal>false</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>3 notin {1, 2, 3}</literal> yields
+            <literal>false</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>4 notin {1, 2, 3}</literal> yields
+            <literal>true</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;2,20&gt; in {&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}</literal> yields <literal>true</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;4,40&gt; notin {&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}</literal> yields <literal>true</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <formalpara>
+          <title>Note</title>
+
+          <para>If the first argument of these operators has type
+          <replaceable>T</replaceable>, then the second argument should have
+          type <literal>set[<replaceable>T</replaceable>]</literal>.</para>
+        </formalpara>
+      </section>
+
+      <section xml:id="SEC-BO-set-comp">
+        <title>Comparisons</title>
+
+        <para><table>
+            <title>Comparisons</title>
+
+            <tgroup cols="2">
+              <tbody>
+                <row>
+                  <entry><replaceable>set</replaceable><subscript>1</subscript>
+                  <literal>==</literal>
+                  <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                  <entry>yields <literal>true</literal> if both arguments are
+                  equal sets and <literal>false</literal> otherwise</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>set</replaceable><subscript>1</subscript>
+                  <literal>!=</literal>
+                  <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                  <entry>yields <literal>true</literal> if both arguments are
+                  unequal sets and <literal>false</literal> otherwise</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>set</replaceable><subscript>1</subscript>
+                  <literal>&lt;=</literal>
+                  <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                  <entry>yields <literal>true</literal> if
+                  <replaceable>set</replaceable><subscript>1</subscript> is a
+                  subset of
+                  <replaceable>set</replaceable><subscript>2</subscript> and
+                  <literal>false</literal> otherwise</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>set</replaceable><subscript>1</subscript>
+                  <literal>&lt;</literal>
+                  <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                  <entry>yields <literal>true</literal> if
+                  <replaceable>set</replaceable><subscript>1</subscript> is a
+                  strict subset of
+                  <replaceable>set</replaceable><subscript>2</subscript> and
+                  <literal>false</literal> otherwise</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>set</replaceable><subscript>1</subscript>
+                  <literal>&gt;=</literal>
+                  <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                  <entry>yields <literal>true</literal> if
+                  <replaceable>set</replaceable><subscript>1</subscript> is a
+                  superset of
+                  <replaceable>set</replaceable><subscript>2</subscript> and
+                  <literal>false</literal> otherwise</entry>
+                </row>
+
+                <row>
+                  <entry><replaceable>set</replaceable><subscript>1</subscript>
+                  <literal>&gt;</literal>
+                  <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                  <entry>Yields <literal>true</literal> if
+                  <replaceable>set</replaceable><subscript>1</subscript> is a
+                  strict superset of
+                  <replaceable>set</replaceable><subscript>2</subscript> and
+                  <literal>false</literal> otherwise</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+      </section>
+
+      <section xml:id="SEC-BO-set-cons">
+        <title>Construction</title>
+
+        <para></para>
+
+        <table>
+          <title>Construction</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><replaceable>set</replaceable><subscript>1</subscript>
+                <literal>union</literal>
+                <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                <entry>yields the set resulting from the union of the two
+                arguments</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>set</replaceable><subscript>1</subscript>
+                <literal>inter</literal>
+                <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                <entry>yields the set resulting from the intersection of the
+                two arguments</entry>
+              </row>
+
+              <row>
+                <entry><replaceable>set</replaceable><subscript>1</subscript>
+                <literal>\</literal>
+                <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+                <entry>yields the set resulting from the difference of the two
+                arguments</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <formalpara>
+          <title>Examples</title>
+
+          <para></para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>{1, 2, 3} union {4, 5, 6}</literal> yields
+            <literal>{1, 2, 3, 4, 5, 6}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{1, 2, 3} union {1, 2, 3}</literal> yields
+            <literal>{1, 2, 3}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{1, 2, 3} union {4, 5, 6}</literal> yields
+            <literal>{1, 2, 3, 4, 5, 6}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{1, 2, 3} inter {4, 5, 6}</literal> yields
+            <literal>{ }</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{1, 2, 3} inter {1, 2, 3}</literal> yields
+            <literal>{1, 2, 3}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{1, 2, 3, 4} \ {1, 2, 3}</literal> yields
+            <literal>{4}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>{1, 2, 3} \ {4, 5, 6}</literal> yields <literal>{1,
+            2, 3}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="SEC-BO-misc">
+        <title>Miscellaneous</title>
+
+        <table>
+          <title>Miscellaneous</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry><literal>#</literal>
+                <replaceable>set</replaceable></entry>
+
+                <entry>yields the number of elements in
+                <replaceable>set</replaceable></entry>
+              </row>
+
+              <row>
+                <entry><literal>#</literal>
+                <replaceable>rel</replaceable></entry>
+
+                <entry>yields the number of elements in
+                <replaceable>rel</replaceable></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <formalpara>
+          <title>Examples</title>
+
+          <para></para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>#{1, 2, 3}</literal> yields
+            <literal>3</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>#{&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}</literal> yields <literal>3</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="SEC-BO-relations">
+      <title>Operations on Relations</title>
+
+      <para></para>
+
+      <table>
+        <title>Operations on Relations</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><replaceable>rel</replaceable><subscript>1</subscript>
+              <literal>o</literal>
+              <replaceable>rel</replaceable><subscript>2</subscript></entry>
+
+              <entry> yields the relation resulting from the composition of
+              the two arguments</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>set</replaceable><subscript>1</subscript>
+              <literal>x</literal>
+              <replaceable>set</replaceable><subscript>2</subscript></entry>
+
+              <entry>yields the relation resulting from the Cartesian product
+              of the two arguments</entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[-,</literal>
+              <replaceable>set</replaceable> <literal>]</literal></entry>
+
+              <entry>yields the left image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[-,</literal>
+              <replaceable>elem</replaceable> <literal>]</literal></entry>
+
+              <entry>yields the left image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <replaceable>set</replaceable> <literal>, -]</literal></entry>
+
+              <entry>yields the right image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <replaceable>elem</replaceable> <literal>, -]</literal></entry>
+
+              <entry>yields the right image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <replaceable>elem</replaceable> <literal>]</literal></entry>
+
+              <entry>yields the right image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable> <literal>[</literal>
+              <replaceable>set</replaceable> <literal>]</literal></entry>
+
+              <entry>yields the right image of
+              <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable>
+              <literal>+</literal></entry>
+
+              <entry>yields the relation resulting from the transitive closure
+              of <replaceable>rel</replaceable></entry>
+            </row>
+
+            <row>
+              <entry><replaceable>rel</replaceable>
+              <literal>*</literal></entry>
+
+              <entry>yields the relation resulting from the reflexive
+              transitive closure of <replaceable>rel</replaceable></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <formalpara>
+        <title>Composition: <literal>o</literal></title>
+
+        <para>The composition operator combines two relations and can be
+        defined as follows:</para>
+      </formalpara>
+
+      <programlisting>rel[&amp;T1,&amp;T3] compose(rel[&amp;T1,&amp;T2] R1, rel[&amp;T2,&amp;T3] R2) =
+   {&lt;V, Y&gt; | &lt;&amp;T1 V, &amp;T2 W&gt; : R1, &lt;&amp;T2 X, &amp;T3 Y&gt; : R2, W == X }</programlisting>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para></para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,15&gt;} o
+          {&lt;10,100&gt;, &lt;20,200&gt;}</literal> yields
+          <literal>{&lt;1,100&gt;, &lt;2,200&gt;}</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Carthesian product: <literal>x</literal></title>
+
+        <para>The product operator combines two sets into a relation and can
+        be defined as follows:<programlisting>rel[&amp;T1,&amp;T2] product(set[&amp;T1] S1, set[&amp;T2] S2) = 
+   {&lt;V, W&gt; | &amp;T1 V : S1, &amp;T2 W : S2 }</programlisting></para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para></para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>{1, 2, 3} x {9}</literal> yields <literal>{&lt;1,
+          9&gt;, &lt;2, 9&gt;, &lt;3, 9&gt;}</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Left image: <literal>[-, ]</literal></title>
+
+        <para>Taking the left image of a relation amounts to selecting some
+        elements from the domain of a relation. The <emphasis>left</emphasis>
+        image operator takes a relation and an element
+        <replaceable>E</replaceable> and produces a set consisting of all
+        elements
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
+        in the domain of the relation that occur in tuples of the form
+        <literal>&lt;<replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>,
+        <replaceable>E</replaceable>&gt;</literal>. It can be defined as
+        follows:<programlisting>set[&amp;T1] left-image(rel[&amp;T1,&amp;T2] R, &amp;T2 E) = 
+   { V | &lt;&amp;T1 V, &amp;T2 W&gt; : R, W == E }</programlisting></para>
+      </formalpara>
+
+      <para>The left image operator can be extended to take a set of elements
+      as second element instead of a single element:<programlisting>set[&amp;T1] left-image(rel[&amp;T1,&amp;T2] R, set[&amp;T2] S) = 
+   { V | &lt;&amp;T1 V, &amp;T2 W&gt; : R, W in S }</programlisting></para>
+
+      <formalpara>
+        <title>Examples</title>
+
+        <para>Assume that <literal>Rel</literal> has value
+        <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;,
+        &lt;2,21&gt;}</literal> in the following examples.</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>Rel[-,10]</literal> yields
+          <literal>{1}</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Rel[-,{10}]</literal> yields
+          <literal>{1}</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Rel[-,{10, 20}]</literal> yields <literal>{1,
+          2}</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Right image: <literal>[ ]</literal> and <literal>[
+        ,-]</literal></title>
+
+        <para>Taking the right image of a relation amounts to selecting some
+        elements from the range of a relation. The <emphasis>right</emphasis>
+        image operator takes a relation and an element
+        <replaceable>E</replaceable> and produces a set consisting of all
+        elements
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
+        in the range of the relation that occur in tuples of the form
+        <literal>&lt;<replaceable>E</replaceable>,
+        <replaceable>E</replaceable><subscript><replaceable>i</replaceable></subscript>
+        &gt;</literal>. It can be defined as follows:<programlisting>set[&amp;T2] right-image(rel[&amp;T1,&amp;T2] R, &amp;T1 E) = 
+   { W | &lt;&amp;T1 V, &amp;T2 W&gt; : R, V == E }</programlisting></para>
+      </formalpara>
+
+      <para>The right image operator can be extended to take a set of elements
+      as second element instead of a single element:</para>
+
+      <programlisting>set[&amp;T2] right-image(rel[&amp;T1,&amp;T2] R, set[&amp;T1] S) = 
+   { W | &lt;&amp;T1 V, &amp;T2 W&gt; : R, V in S}</programlisting>
+
+      <formalpara>
+        <title>Examples</title>
+
+        <para>Assume that <literal>Rel</literal> has value
+        <literal>{&lt;1,10&gt;, &lt;2,20&gt;, &lt;1,11&gt;, &lt;3,30&gt;,
+        &lt;2,21&gt;}</literal> in the following examples.</para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>Rel[1]</literal> yields <literal>{10,
+          11}</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Rel[{1}]</literal> yields {10, 11}.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Rel[{1, 2}]</literal> yields <literal>{10, 11, 20,
+          21}</literal>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These expressions are abbreviations for, respectively
+      <literal>Rel[1,-]</literal>, <literal>Rel[{1},-]</literal>, and
+      <literal>Rel[{1, 2},-]</literal>.</para>
+    </section>
+  </section>
+
+  <!--
+
+\noindent 
 
 \chapter{Built-in Functions} \label{SEC:functions}
 \fbox{\epsfig{figure=figs/declinatorium.ps,width=6cm}}
