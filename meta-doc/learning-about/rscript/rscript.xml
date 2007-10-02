@@ -857,7 +857,7 @@ str S = TR.middle</programlisting>
           <title>Enumerator</title>
 
           <para>Enumerators generate all the values in a given set or
-          relation. They come in two flavors: </para>
+          relation. They come in two flavors:</para>
         </formalpara>
 
         <itemizedlist>
@@ -906,7 +906,7 @@ str S = TR.middle</programlisting>
 
             <itemizedlist>
               <listitem>
-                <para> If
+                <para>If
                 <replaceable>D</replaceable><subscript><replaceable>i</replaceable></subscript>
                 is a variable declaration of the form
                 <replaceable>T</replaceable><subscript><replaceable>i</replaceable></subscript>
@@ -1205,7 +1205,7 @@ str S = TR.middle</programlisting>
             <itemizedlist>
               <listitem>
                 <para><literal>swap(&lt;1, 2&gt;)</literal> yields
-                <literal>&lt;2,1&gt;</literal> and </para>
+                <literal>&lt;2,1&gt;</literal> and</para>
               </listitem>
 
               <listitem>
@@ -1308,7 +1308,7 @@ end equations</programlisting></para>
       </listitem>
 
       <listitem>
-        <para> Operations on integers (Section~\ref{BO:int}): arithmetic
+        <para>Operations on integers (Section~\ref{BO:int}): arithmetic
         operators (<literal>+</literal>, <literal>-</literal>,
         <literal>*</literal>, and <literal>/</literal>) and comparison
         operators (<literal>==</literal>, <literal>!=</literal>,
@@ -1331,7 +1331,7 @@ end equations</programlisting></para>
       </listitem>
 
       <listitem>
-        <para> Operations on sets or relations (Section~\ref{BO:set-or-rel}):
+        <para>Operations on sets or relations (Section~\ref{BO:set-or-rel}):
         membership tests (<literal>in</literal>, <literal>notin</literal>),
         comparison operators (<literal>==</literal>, <literal>!=</literal>,
         <literal>&lt;</literal>, <literal>&lt;=</literal>,
@@ -2029,8 +2029,8 @@ end equations</programlisting></para>
               <literal>o</literal>
               <replaceable>rel</replaceable><subscript>2</subscript></entry>
 
-              <entry> yields the relation resulting from the composition of
-              the two arguments</entry>
+              <entry>yields the relation resulting from the composition of the
+              two arguments</entry>
             </row>
 
             <row>
@@ -2252,422 +2252,480 @@ end equations</programlisting></para>
     </section>
   </section>
 
+  <section xml:id="SEC-functions">
+    <title>Built-in Functions</title>
+
+    <para>The built-in functions can be subdivided in several broad
+    categories:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Elementary functions on sets and relations
+        (Section~\ref{elementary-functions}): identity
+        (<literal>id</literal>), inverse (<literal>inv</literal>), complement
+        (<literal>compl</literal>), and powerset (<literal>power0</literal>,
+        <literal>power1</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Extraction from relations (Section~\ref{extraction}): domain
+        (<literal>domain</literal>), range (<literal>range</literal>), and
+        carrier (<literal>carrier</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Restrictions and exclusions on relations
+        (Section~\ref{restrictions}): domain restriction
+        (<literal>domainR</literal>), range restriction
+        (<literal>rangeR</literal>), carrier restriction
+        (<literal>carrierR</literal>), domain exclusion
+        (<literal>domainX</literal>), range exclusion
+        (<literal>rangeX</literal>), and carrier exclusion
+        (<literal>carrierX</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Functions on tuples (Section~\ref{tuples}): first element
+        (<literal>first</literal>), and second element
+        (<literal>second</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Relations viewed as graphs (Section~\ref{relations-as-graphs}):
+        the root elements (<literal>top</literal>), the leaf elements
+        (<literal>bottom</literal>), reachability with restriction
+        (<literal>reachR</literal>), and reachability with exclusion
+        (<literal>reachX</literal>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Functions on locations (Section~\ref{locations}): file name
+        (<literal>filename</literal>), beginning line
+        (<literal>beginline</literal>), first column
+        (<literal>begincol</literal>), ending line
+        (<literal>endline</literal>), and ending column
+        (<literal>endcol</literal>). </para>
+      </listitem>
+
+      <listitem>
+        <para>Functions on sets of integers (Section~\ref{sets-of-integers}):
+        sum (<literal>sum</literal>), average (<literal>average</literal>),
+        maximum (<literal>max</literal>), and minimum
+        (<literal>min</literal>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following sections give detailed descriptions and examples of
+    all built-in functions.</para>
+
+    <section>
+      <title>Elementary Functions on Sets and Relations</title>
+
+      <para></para>
+
+      <section xml:id="BI-id">
+        <title>Identity Relation: <literal>id</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T, &amp;T] id(set[&amp;T] S) = { &lt;X, X&gt; | &amp;T X : S}</programlisting>Yields
+        the relation that results from transforming each element in
+        <literal>S</literal> into a pair with that element as first and second
+        element. Examples: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>id({1,2,3})</literal> yields <literal>{&lt;1,1&gt;,
+            &lt;2,2&gt;, &lt;3,3&gt;}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>id({"mon", "tue", "wed"})</literal> yields
+            <literal>{&lt;"mon","mon"&gt;, &lt;"tue","tue"&gt;,
+            &lt;"wed","wed"&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-unique">
+        <title>Deprecated: Set with unique elements:
+        <literal>unique</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T] unique(set[&amp;T] S) = primitive</programlisting>Yields
+        the set (actually the set) that results from removing all duplicate
+        elements from <literal>S</literal>. This function stems from previous
+        versions when we used bags instead of sets. It now acts as the
+        identity function and is deprecated. Example: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>unique({1,2,1,3,2})</literal> yields
+            <literal>{1,2,3}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-inv">
+        <title>Inverse of Relation: <literal>inv</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T2, &amp;T1] inv (rel[&amp;T1, &amp;T2] R) = { &lt;Y, X&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>Yields
+        the relation that is the inverse of the argument relation
+        <literal>R</literal>, i.e. the relation in which the elements of all
+        tuples in <literal>R</literal> have been interchanged. Example:
+        </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>inv({&lt;1,10&gt;, &lt;2,20&gt;})</literal> yields
+            <literal>{&lt;10,1&gt;,&lt;20,2&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Complement of a Relation: <literal>compl</literal></title>
+
+        <para>Definition:</para>
+
+        <para><programlisting>rel[&amp;T1, &amp;T2] compl(rel[&amp;T1, &amp;T2] R) = (domain(R) x range(R)) \ R}</programlisting>Yields
+        the relation that is the complement of the argument relation
+        <literal>R</literal>, using the carrier set of <literal>R</literal> as
+        universe. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>compl({&lt;1,10&gt;}</literal> yields
+            <literal>{&lt;1, 1&gt;, &lt;10, 1&gt;, &lt;10,
+            10&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-power0">
+        <title>Powerset of a Set: <literal>power0</literal></title>
+
+        <para>Definition:<programlisting>set[set[&amp;T]] power0(set[&amp;T] S) = primitive</programlisting>Yields
+        the powerset of set <literal>S</literal> (including the empty set).
+        Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>power0({1, 2, 3, 4})</literal>
+            yields<programlisting> { {}, {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, {3,4},
+    {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-power1">
+        <title>Powerset of a Set: <literal>power1</literal></title>
+
+        <para>Definition:<programlisting>set[set[&amp;T]] power1(set[&amp;T] S) = primitive</programlisting>Yields
+        the powerset of set <literal>S</literal> (excluding the empty set).}
+        Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>power1({1, 2, 3, 4})</literal>
+            yields<programlisting>{ {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, {3,4},
+  {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="SEC-extraction">
+      <title>Extraction from Relations</title>
+
+      <section xml:id="BI-domain">
+        <title>Domain of a Relation: <literal>domain</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T1] domain (rel[&amp;T1,&amp;T2] R) = { X | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>Yields
+        the set that results from taking the first element of each tuple in
+        relation <literal>R</literal>. Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>domain({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
+            yields <literal>{1, 2}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>domain({&lt;"mon", 1&gt;, &lt;"tue",
+            2&gt;})</literal> yields <literal>{"mon", "tue"}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-range">
+        <title>Range of a Relation: <literal>range</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T2] range (rel[&amp;T1,&amp;T2] R) = { Y | &lt;&amp;T1 X, &amp;T2 Y&gt; : R }</programlisting>Yields
+        the set that results from taking the second element of each tuple in
+        relation <literal>R</literal>. Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>range({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
+            yields <literal>{10, 20}</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>range({&lt;"mon", 1&gt;, &lt;"tue",
+            2&gt;})</literal> yields <literal>{1, 2}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-carrier">
+        <title>Carrier of a Relation: <literal>carrier</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T]  carrier (rel[&amp;T,&amp;T] R) = domain(R) union range(R)</programlisting>Yields
+        the set that results from taking the first and second element of each
+        tuple in the relation <literal>R</literal>. Note that the domain and
+        range type of <literal>R</literal> should be the same. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>carrier({&lt;1,10&gt;, &lt;2,20&gt;})</literal>
+            yields <literal>{1, 10, 2, 20}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="SEC-restrictions">
+      <title>Restrictions and Exclusions on Relations</title>
+
+      <section xml:id="BI-domainR">
+        <title>Domain Restriction of a Relation:
+        <literal>domainR</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] domainR (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S) =
+   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X in S }</programlisting>Yields
+        a relation identical to the relation <literal>R</literal> but only
+        containing tuples whose first element occurs in set
+        <literal>S</literal>. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>domainR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;},
+            {3, 1})</literal> yields <literal>{&lt;1,10&gt;,
+            &lt;3,30&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-rangeR">
+        <title>Range Restriction of a Relation:
+        <literal>rangeR</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] rangeR (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S) =
+   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, Y in S }</programlisting>Yields
+        a relation identical to relation <literal>R</literal> but only
+        containing tuples whose second element occurs in set
+        <literal>S</literal>. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>rangeR({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;},
+            {30, 10})</literal> yields <literal>{&lt;1,10&gt;,
+            &lt;3,30&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-carrierR">
+        <title>Carrier Restriction of a Relation:
+        <literal>carrierR</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T,&amp;T] carrierR (rel[&amp;T,&amp;T] R, set[&amp;T] S) = 
+   { &lt;X, Y&gt; | &lt;&amp;T X, &amp;T Y&gt; : R, X in S, Y in S }</programlisting>Yields
+        a relation identical to relation <literal>R</literal> but only
+        containing tuples whose first and second element occur in set
+        <literal>S</literal>. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>carrierR({&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}, {10, 1, 20})</literal> yields
+            <literal>{&lt;1,10&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-domainX">
+        <title>Domain Exclusion of a Relation:
+        <literal>domainX</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] domainX (rel[&amp;T1,&amp;T2] R, set[&amp;T1] S) =
+   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X notin S }</programlisting>Yields
+        a relation identical to relation <literal>R</literal> but with all
+        tuples removed whose first element occurs in set <literal>S</literal>.
+        Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>domainX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;},
+            {3, 1})</literal> yields <literal>{&lt;2,
+            20&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-rangeX">
+        <title>Range Exclusion of a Relation:
+        <literal>rangeX</literal></title>
+
+        <para>Definition:<programlisting>rel[&amp;T1,&amp;T2] rangeX (rel[&amp;T1,&amp;T2] R, set[&amp;T2] S) =
+   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, Y notin S }</programlisting>Yields
+        a relation identical to relation <literal>R</literal> but with all
+        tuples removed whose second element occurs in set
+        <literal>S</literal>. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>rangeX({&lt;1,10&gt;, &lt;2,20&gt;, &lt;3,30&gt;},
+            {30, 10})</literal> yields <literal>{&lt;2,
+            20&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Carrier Exclusion of a Relation: carrierX</title>
+
+        <para>Definition:<programlisting>rel[&amp;T,&amp;T] carrierX (rel[&amp;T,&amp;T] R, set[&amp;T] S) =
+   { &lt;X, Y&gt; | &lt;&amp;T1 X, &amp;T2 Y&gt; : R, X notin S, Y notin S }</programlisting>Yields
+        a relation identical to relation <literal>R</literal> but with all
+        tuples removed whose first or second element occurs in set
+        <literal>S</literal>. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>carrierX({&lt;1,10&gt;, &lt;2,20&gt;,
+            &lt;3,30&gt;}, {10, 1, 20})</literal> yields
+            <literal>{&lt;3,30&gt;}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="SEC-tuples">
+      <title>Tuples</title>
+
+      <section xml:id="BI-first">
+        <title>First Element of a Tuple: <literal>first</literal></title>
+
+        <para>Definition:<programlisting>&amp;T1 first(&lt;&amp;T1, &amp;T2&gt; P) = primitive</programlisting>Yields
+        the first element of the tuple <literal>P</literal>. Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>first(&lt;1, 10&gt;)</literal> yields
+            <literal>1</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para> <literal>first(&lt;"mon", 1&gt;)</literal> yields
+            <literal>"mon"</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-second">
+        <title>Second Element of a Tuple: <literal>second</literal></title>
+
+        <para>Definition:<programlisting>&amp;T2 second(&lt;&amp;T1, &amp;T2&gt; P) = primitive</programlisting>Yields
+        the second element of the tuple <literal>P</literal>. Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>second(&lt;1, 10&gt;)</literal> yields
+            <literal>10</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>second(&lt;"mon", 1&gt;)</literal> yields
+            <literal>1</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="SEC-relations-as-graphs">
+      <title>Relations viewed as graphs</title>
+
+      <section xml:id="BI-top">
+        <title>Top of a Relation: <literal>top</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T] top(rel[&amp;T, &amp;T] R) = unique(domain(R)) \ range(R)</programlisting>Yields
+        the set of all roots when the relation <literal>R</literal> is viewed
+        as a graph. Note that the domain and range type of
+        <literal>R</literal> should be the same. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>top({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;,
+            &lt;3,4&gt;})</literal> yields <literal>{1}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-bottom">
+        <title>Bottom of a Relation: <literal>bottom</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T] bottom(rel[&amp;T,&amp;T] R) = unique(range(R)) \ domain(R)</programlisting>Yields
+        the set of all leaves when the relation <literal>R</literal> is viewed
+        as a graph. Note that the domain and range type of
+        <literal>R</literal> should be the same. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>bottom({&lt;1,2&gt;, &lt;1,3&gt;, &lt;2,4&gt;,
+            &lt;3,4&gt;})</literal> yields <literal>{4}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-reachR">
+        <title>Reachability with Restriction:
+        <literal>reachR</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T] reachR( set[&amp;T] Start, set[&amp;T] Restr, rel[&amp;T,&amp;T] Rel) =
+   range(domainR(Rel, Start) o carrierR(Rel, Restr)+)</programlisting>Yields
+        the elements that can be reached from set <literal>Start</literal>
+        using the relation <literal>Rel</literal>, such that only elements in
+        set <literal>Restr</literal> are used. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>reachR({1}, {1, 2, 3}, {&lt;1,2&gt;, &lt;1,3&gt;,
+            &lt;2,4&gt;, &lt;3,4&gt;})</literal> yields <literal>{2,
+            3}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="BI-reachX">
+        <title>Reachability with Exclusion: <literal>reachX</literal></title>
+
+        <para>Definition:<programlisting>set[&amp;T] reachX( set[&amp;T] Start, set[&amp;T] Excl, rel[&amp;T,&amp;T] Rel) =
+   range(domainR(Rel, Start) o carrierX(Rel, Excl)+)</programlisting>Yields
+        the elements that can be reached from set <literal>Start</literal>
+        using the relation <literal>Rel</literal>, such that no elements in
+        set <literal>Excl</literal> are used. Example:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>reachX({1}, {2}, {&lt;1,2&gt;, &lt;1,3&gt;,
+            &lt;2,4&gt;, &lt;3,4&gt;})</literal> yields <literal>{3,
+            4}</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
   <!--
-
-\noindent 
-
-\chapter{Built-in Functions} \label{SEC:functions}
-\fbox{\epsfig{figure=figs/declinatorium.ps,width=6cm}}
-\label{FIG:declinatorium}
-\hspace*{0.5cm}\parbox[b]{8cm}{
-The built-in functions can be subdivided in several broad categories:
-
-\begin{itemize}
-\item Elementary functions on sets and relations
-  (Section~\ref{elementary-functions}): identity ({\tt id}), inverse ({\tt
-  inv}), complement ({\tt compl}), and powerset ({\tt power0}, {\tt power1}).
-
-\item Extraction from relations (Section~\ref{extraction}):
-domain ({\tt domain}), range ({\tt range}), and carrier ({\tt carrier}).
-
-\item Restrictions and exclusions on relations (Section~\ref{restrictions}):
-domain restriction ({\tt domainR}), range restriction ({\tt rangeR}),
-carrier restriction ({\tt carrierR}),
-domain exclusion ({\tt domainX}), range exclusion ({\tt rangeX}), and carrier
-exclusion ({\tt carrierX}).
-
-
-\end{itemize}
-}
-
-\begin{itemize}
-
-\item Functions on tuples (Section~\ref{tuples}):
-first element ({\tt first}),
-and second element ({\tt second}).
-
-\item Relations viewed as graphs (Section~\ref{relations-as-graphs}):
-the root elements ({\tt top}),
-the leaf elements ({\tt bottom}),
-reachability with restriction ({\tt reachR}), and
-reachability with exclusion ({\tt reachX}).
-
-\item Functions on locations (Section~\ref{locations}):
-file name ({\tt filename}),
-beginning line ({\tt beginline}),
-first column ({\tt begincol}),
-ending line ({\tt endline}), and
-ending column ({\tt endcol}).
-
-\item Functions on sets of integers (Section~\ref{sets-of-integers}):
-sum ({\tt sum}), average ({\tt average}), maximum ({\tt max}), and minimum
-({\tt min}).
-
-\end{itemize}
-\noindent The following sections give detailed descriptions and examples of all built-in functions.}
-
-\newcommand{\function}[5]{\subsection{#1: {\tt #2}}\label{BI:#2}
-Definition:
-\begin{quote}
-#3
-\end{quote}
-#4
-Example(s):
-\begin{itemize}
-#5
-\end{itemize}
-}
-
-\newcommand{\functiona}[2]{\subsection{#1: {\tt #2}}\label{BI:#2}
-Definition:}
-
-\section{Elementary Functions on Sets and Relations}
-\label{elementary-functions}
-
-
-\functiona{Identity Relation}{id}
-\begin{exam}
-\begin{verbatim}
-rel[&T, &T] id(set[&T] S) = { <X, X> | &T X : S}
-\end{verbatim}
-\end{exam}
-{Yields the relation that results from transforming
-each element in {\tt S} into a pair with that element as first and
-second element.
-}
-{Examples: 
-\begin{itemize}
-\item \verb@id({1,2,3})@ yields \verb@{<1,1>, <2,2>, <3,3>}@.
-\item \begin{sloppypar} 
-  \verb@id({"mon", "tue", "wed"})@ yields \verb@{<"mon","mon">, <"tue","tue">, <"wed","wed">}@.\end{sloppypar}
-\end{itemize}
-}
-
-\functiona{Deprecated: Set with unique elements}{unique}
-\begin{exam}
-\begin{verbatim}
-set[&T] unique(set[&T] S) = primitive
-\end{verbatim}
-\end{exam}
-{Yields the set (actually the set) that results from removing all duplicate
-  elements from {\tt S}. This function stems from previous versions when we used bags instead of sets.
-It now acts as the identity function and is deprecated.
-}
-{Example: 
-\begin{itemize}
-\item \verb@unique({1,2,1,3,2})@ yields \verb@{1,2,3}@.
-\end{itemize}
-}
-
-\functiona{Inverse of a Relation}{inv}
-\begin{exam}
-\begin{verbatim}
- rel[&T2, &T1] inv (rel[&T1, &T2] R) = { <Y, X> | <&T1 X, &T2 Y> : R }
-\end{verbatim}
-\end{exam}
-{ Yields the relation that is the inverse of the
-argument relation {\tt R}, i.e. the relation in which the elements of all
-tuples in {\tt R} have been
-interchanged.
-}
-{Example: \begin{itemize}
-\item \verb@inv({<1,10>, <2,20>})@ yields \verb@{<10,1>,<20,2>}@.
-\end{itemize}
-}
-\functiona{Complement of a Relation}{compl}
-\begin{exam}
-\begin{verbatim}
-rel[&T1, &T2] compl(rel[&T1, &T2] R) = (domain(R) x range(R)) \ R}
-\end{verbatim}
-\end{exam}
-{ Yields the relation that is the complement of the
-argument relation {\tt R}, using the carrier set of {\tt R} as universe.
-}
-{Example:
-\begin{itemize}
-\item \verb@compl({<1,10>}@  yields \verb@{<1, 1>, <10, 1>, <10, 10>}@.
-\end{itemize}
-}
-%%-
-\functiona{Powerset of a Set}{power0}
-\begin{exam}
-\begin{verbatim}
-set[set[&T]] power0(set[&T] S) = primitive
-\end{verbatim}
-\end{exam}
-{ Yields the powerset of set {\tt S} (including the empty set).}
-{Example:
-\begin{itemize}
-\item \verb@power0({1, 2, 3, 4})@ yields 
-\begin{exam}
-\begin{verbatim}
-  { {}, {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, {3,4},
-    {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}}
-\end{verbatim}
-\end{exam}
-\end{itemize}
-}
-%%-
-\functiona{Powerset of a Set}{power1}
-\begin{exam}
-\begin{verbatim}
-set[set[&T]] power1(set[&T] S) = primitive
-\end{verbatim}
-\end{exam}
-{ Yields the powerset of set {\tt S} (excluding the empty set).}
-{Example:
-\begin{itemize}
-\item \verb@power1({1, 2, 3, 4})@ yields 
-\begin{exam}
-\begin{verbatim}
-{ {1}, {2}, {3}, {4},{1,2}, {1,3}, {1,4}, {2,3}, {2,4}, {3,4},
-  {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}}
-\end{verbatim}
-\end{exam}
-\end{itemize}
-}
-%%-
-\section{Extraction from Relations} \label{extraction}
-%%-
-\functiona{Domain of a Relation}{domain}
-\begin{exam}
-\begin{verbatim}
-set[&T1] domain (rel[&T1,&T2] R) = { X | <&T1 X, &T2 Y> : R }
-\end{verbatim}
-\end{exam}
-{Yields the set that results from taking
-the first element of each tuple in relation {\tt R}.
-}
-{Examples:
-\begin{itemize}
-\item \verb@domain({<1,10>, <2,20>})@ yields \verb@{1, 2}@.
-\item \verb@domain({<"mon", 1>, <"tue", 2>})@ yields \verb@{"mon", "tue"}@.
-\end{itemize}
-}
-%%-
-\functiona {Range of a Relation}{range}
-\begin{exam}
-\begin{verbatim}
-set[&T2] range (rel[&T1,&T2] R) = { Y | <&T1 X, &T2 Y> : R }
-\end{verbatim}
-\end{exam}
-{Yields the set that results from taking
-the second element of each tuple in relation {\tt R}.
-}
-{Examples:
-\begin{itemize}
-\item \verb@range({<1,10>, <2,20>})@ yields \verb@{10, 20}@.
-\item \verb@range({<"mon", 1>, <"tue", 2>})@ yields \verb@{1, 2}@.
-\end{itemize}
-}
-%%-
-\functiona {Carrier of a Relation}{carrier}
-\begin{exam}
-\begin{verbatim}
-set[&T]  carrier (rel[&T,&T] R) = domain(R) union range(R)
-\end{verbatim}
-\end{exam}
-{Yields the set that results from taking
-the first and  second element of each tuple in the relation {\tt R}.
-Note that the domain and range type of {\tt R} should be the same.
-}
-{Example:
-\begin{itemize}
-\item \verb@carrier({<1,10>, <2,20>})@ yields \verb@{1, 10, 2, 20}@.
-\end{itemize}
-}
-%%-
-\section{Restrictions and Exclusions on Relations} \label{restrictions}
-%%-
-\functiona{Domain Restriction of a Relation}{domainR}
-\begin{exam}
-\begin{verbatim}
-rel[&T1,&T2] domainR (rel[&T1,&T2] R, set[&T1] S) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, X in S }
-\end{verbatim}
-\end{exam}
-{ Yields a relation identical to the relation {\tt R}
-  but only containing tuples whose first element occurs in set {\tt S}.
-}
-{Example:
-\begin{itemize}
-\item \verb@domainR({<1,10>, <2,20>, <3,30>}, {3, 1}@ yields \verb@{<1,10>, <3,30>}@.
-\end{itemize}
-}
-%%-
-\functiona{Range Restriction of a Relation}{rangeR}
-\begin{exam}
-\begin{verbatim}
-rel[&T1,&T2] rangeR (rel[&T1,&T2] R, set[&T2] S) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, Y in S }
-\end{verbatim}
-\end{exam}
-{ Yields a relation identical to relation {\tt R} but only containing tuples
-  whose second element occurs in set {\tt S}.
-}
-{Example:
-\begin{itemize}
- \item \verb@rangeR({<1,10>, <2,20>, <3,30>}, {30, 10}@ yields \verb@{<1,10>, <3,30>}@.
-\end{itemize}
-}
-%%-
-\functiona{Carrier Restriction of a Relation}{carrierR}
-\begin{exam}
-\begin{verbatim}
-rel[&T,&T] carrierR (rel[&T,&T] R, set[&T] S) = 
-   { <X, Y> | <&T X, &T Y> : R, X in S, Y in S }
-\end{verbatim}
-\end{exam}
-{ Yields a relation identical to relation {\tt R}
-  but only containing tuples whose first and second element occur in set {\tt
-    S}.
-}
-{Example:
-\begin{itemize}
- \item \verb@carrierR({<1,10>, <2,20>, <3,30>}, {10, 1, 20})@ yields \verb@{<1,10>}@.
-\end{itemize}
-}
-%%-
-\functiona{Domain Exclusion of a Relation}{domainX}
-\begin{exam}
-\begin{verbatim}
-rel[&T1,&T2] domainX (rel[&T1,&T2] R, set[&T1] S) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, X notin S }
-\end{verbatim}
-\end{exam}
-{ Yields a relation identical to relation {\tt R}
-  but with all tuples removed whose first element occurs in set {\tt S}.}
-{Example:
-\begin{itemize}
-\item \verb@domainX({<1,10>, <2,20>, <3,30>}, {3, 1})@ yields \verb@{<2, 20>}@.
-\end{itemize}
-}
-%%-
-\functiona{Range Exclusion of a Relation}{rangeX}
-\begin{exam}
-\begin{verbatim}
-rel[&T1,&T2] rangeX (rel[&T1,&T2] R, set[&T2] S) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, Y notin S }
-\end{verbatim}
-\end{exam}
-{ Yields a relation identical to relation {\tt R} but with all tuples removed
-  whose  second element occurs in set {\tt S}.}
-{Example:
-\begin{itemize}
- \item \verb@rangeX({<1,10>, <2,20>, <3,30>}, {30, 10})@ yields \verb@{<2, 20>}@.
-\end{itemize}
-}
-%%-
-\functiona{Carrier Exclusion of a Relation}{carrierX}
-\begin{exam}
-\begin{verbatim}
-rel[&T,&T] carrierX (rel[&T,&T] R, set[&T] S) =
-   { <X, Y> | <&T1 X, &T2 Y> : R, X notin S, Y notin S }
-\end{verbatim}
-\end{exam}
-{ Yields a relation identical to relation {\tt R}
-  but with all tuples removed whose first or second element occurs in set {\tt
-    S.}
-{Example:
-\begin{itemize}
- \item \verb@carrierX({<1,10>, <2,20>, <3,30>}, {10, 1, 20})@ yields \verb@{<3,30>}@.
-\end{itemize}
-}
-%%-
-\section{Tuples} \label{tuples}
-%%-
-\functiona{First Element of a Tuple}{first}
-\begin{exam}
-\begin{verbatim}
-&T1 first(<&T1, &T2> P) = primitive
-\end{verbatim}
-\end{exam}
-{ Yields the first element of the tuple {\tt P}.}
-{Examples:
-\begin{itemize}
-\item \verb@first(<1, 10>)@ yields {\tt 1}.
-\item \verb@first(<"mon", 1>)@ yields {\tt "mon"}.
-\end{itemize}
-}
-%%-
-\functiona{Second Element of a Tuple}{second}
-\begin{exam}
-\begin{verbatim}
-&T2 second(<&T1, &T2> P) = primitive
-\end{verbatim}
-\end{exam}
-{ Yields the second element of the tuple {\tt P}.}
-{Examples:
-\begin{itemize}
-\item \verb@second(<1, 10>)@ yields {\tt 10}.
-\item \verb@second(<"mon", 1>)@ yields {\tt 1}.
-\end{itemize}
-}
-%%-
-\section{Relations viewed as graphs} \label{relations-as-graphs}
-%%-
-\functiona {Top of a Relation}{top}
-\begin{exam}
-\begin{verbatim}
-set[&T] top(rel[&T, &T] R) = unique(domain(R)) \ range(R)
-\end{verbatim}
-\end{exam}
-{Yields the set of all roots when the relation {\tt R} is
-viewed as a graph. Note that the domain and range type of {\tt R} should be the same.
-}
-{Example:
-\begin{itemize}
-\item \verb@top({<1,2>, <1,3>, <2,4>, <3,4>})@ yields \verb@{1}@.
-\end{itemize}
-}
-%%-
-\functiona{Bottom of a Relation}{bottom}
-\begin{exam}
-\begin{verbatim}
-set[&T] bottom(rel[&T,&T] R) = unique(range(R)) \ domain(R)
-\end{verbatim}
-\end{exam}
-{Yields the set of all leaves when the relation {\tt R} is
-viewed as a graph. Note that the domain and range type of {\tt R} should be
-the same.
-}
-{Example:
-\begin{itemize}
-\item \verb@bottom({<1,2>, <1,3>, <2,4>, <3,4>})@ yields \verb@{4}@.
-\end{itemize}
-}
-%%-
-\functiona{Reachability with Restriction}{reachR}
-\begin{exam}
-\begin{verbatim}
-set[&T] reachR( set[&T] Start, set[&T] Restr, rel[&T,&T] Rel) =
-   range(domainR(Rel, Start) o carrierR(Rel, Restr)+)
-\end{verbatim}
-\end{exam}
-{ Yields the elements that can be reached from set {\tt Start} using the
-  relation {\tt Rel}, such that only elements in set {\tt Restr} are used.
-}
-{Example:
-\begin{itemize}
-\item  \verb@reachR({1}, {1, 2, 3}, {<1,2>, <1,3>, <2,4>, <3,4>})@ yields \verb@{2, 3}@.
-\end{itemize}
-}
-%%-
-\functiona{Reachability with Exclusion}{reachX}
-\begin{exam}
-\begin{verbatim}
-set[&T] reachX( set[&T] Start, set[&T] Excl, rel[&T,&T] Rel) =
-   range(domainR(Rel, Start) o carrierX(Rel, Excl)+)
-\end{verbatim}
-\end{exam}
-{ Yields the elements that can be reached from  set {\tt Start} using the
-  relation {\tt Rel}, such that no elements in set {\tt Excl} are used.
-}
-{Example:
-\begin{itemize}
-\item  \verb@reachX({1}, {2}, {<1,2>, <1,3>, <2,4>, <3,4>})@ yields  \verb@{3, 4}@.
-\end{itemize}
-}
 %%-
 \section{Functions on Locations} \label{locations}
 %%-
