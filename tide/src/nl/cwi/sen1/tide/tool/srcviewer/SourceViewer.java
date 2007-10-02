@@ -40,6 +40,8 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 	private static final String TAG_VIEW_VAR = "sv-view-var";
 	private static final String TAG_ADD_SOURCE = "sv-add-source";
 
+	private static final String NO_SOURCE = "*no-source*";
+
 	private JToolBar tools;
 	private JTabbedPane center;
 	private JLabel message;
@@ -67,6 +69,8 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 	private String currentFile;
 	private SourceFileViewer currentViewer;
 	private Map<String, SourceFileViewer> residentViewers;
+
+	private int prevDepth = -1;
 
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
@@ -186,6 +190,34 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 				.makeBreak(), tag_step_up, false);
 
 		highlightCpe();
+	}
+
+	private void cleanup() {
+		if (ruleStepInto != null) {
+			process.requestRuleDeletion(ruleStepInto);
+		}
+		if (ruleStepOver != null) {
+			process.requestRuleDeletion(ruleStepOver);
+		}
+		if (ruleStepUp != null) {
+			process.requestRuleDeletion(ruleStepUp);
+		}
+
+		Iterator<SourceFileViewer> iter = residentViewers.values().iterator();
+		while (iter.hasNext()) {
+			SourceFileViewer viewer = iter.next();
+			viewer.cleanup();
+		}
+
+		process.removeDebugProcessListener(this);
+		process.removeProcessStatusChangeListener(this);
+		process.getAdapter().removeDebugAdapterListener(this);
+
+		getManager().removeTool(this);
+	}
+
+	private void requestSourceFiles() {
+		System.out.println("requesting source files");
 	}
 
 	public void processDestroyed(DebugAdapter adapter, DebugProcess proc) {
@@ -358,8 +390,8 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 		}
 	}
 
-	public void addSourceFromList(Iterator<String> iter) {
-		List<String> list = new LinkedList<String>();
+	public void addSourceFromList(Iterator iter) {
+		List list = new LinkedList();
 		while (iter.hasNext()) {
 			list.add(iter.next());
 		}

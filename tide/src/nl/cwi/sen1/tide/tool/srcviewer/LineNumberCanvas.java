@@ -16,36 +16,47 @@ import nl.cwi.sen1.tide.tool.support.Rule;
 
 class LineNumberCanvas extends JComponent {
 	private final static int BORDER = 2;
-	private JTextArea text;
-	private FontMetrics fontMetrics;
-	private FontMetrics sourceMetrics;
+	JTextArea text;
+	FontMetrics fontMetrics;
+	FontMetrics sourceMetrics;
 
-	private int cpe;
+	int cpe;
 
-	private Map<Rule, Integer> rulesByRule;
-	private Map<Integer, Rule> rulesByLine;
+	Map rulesByRule;
+	Map rulesByLine;
 
-	private Polygon rulePoly;
+	Polygon rulePoly;
+
+	//{{{ public LineNumberCanvas(JTextArea text)
 
 	public LineNumberCanvas(JTextArea text) {
 		this.text = text;
-		rulesByRule = new HashMap<Rule, Integer>();
-		rulesByLine = new HashMap<Integer, Rule>();
+		rulesByRule = new HashMap();
+		rulesByLine = new HashMap();
 	}
+
+	//}}}
+
+	//{{{ private void checkMetrics()
 
 	private void checkMetrics() {
 		if (fontMetrics != getFontMetrics(getFont())
-				|| sourceMetrics != text.getFontMetrics(text.getFont())) {
+			|| sourceMetrics != text.getFontMetrics(text.getFont())) {
 			fontMetrics = getFontMetrics(getFont());
 			sourceMetrics = text.getFontMetrics(text.getFont());
 
 			rulePoly = new Polygon();
 			rulePoly.addPoint(0, 0);
-			rulePoly.addPoint(fontMetrics.stringWidth("1999"), sourceMetrics
-					.getHeight() / 2);
+			rulePoly.addPoint(
+				fontMetrics.stringWidth("1999"),
+				sourceMetrics.getHeight() / 2);
 			rulePoly.addPoint(0, sourceMetrics.getHeight());
 		}
 	}
+
+	//}}}
+
+	//{{{ public void paint(Graphics g)
 
 	public void paint(Graphics g) {
 		Dimension dim = getSize();
@@ -66,7 +77,7 @@ class LineNumberCanvas extends JComponent {
 				g.fillRect(0, y, clip.width, sourceMetrics.getHeight());
 			}
 
-			Rule rule = rulesByLine.get(new Integer(line));
+			Rule rule = (Rule) rulesByLine.get(new Integer(line));
 			if (rule != null) {
 				g.setColor(getRuleColor(rule));
 				Polygon rulePoly = getRulePoly(rule);
@@ -77,12 +88,17 @@ class LineNumberCanvas extends JComponent {
 
 			g.setColor(getForeground());
 			String label = String.valueOf(line++);
-			g.drawString(label, dim.width - fontMetrics.stringWidth(label)
-					- BORDER, y + sourceMetrics.getMaxAscent());
+			g.drawString(
+				label,
+				dim.width - fontMetrics.stringWidth(label) - BORDER,
+				y + sourceMetrics.getMaxAscent());
 			y += sourceMetrics.getHeight();
 		}
 
 	}
+
+	//}}}
+	//{{{ public Dimension getPreferredSize()
 
 	public Dimension getPreferredSize() {
 		checkMetrics();
@@ -90,31 +106,52 @@ class LineNumberCanvas extends JComponent {
 		return new Dimension(fontMetrics.stringWidth("1999") + BORDER, 0);
 	}
 
+	//}}}
+	//{{{ public Dimension getMinimumSize()
+
 	public Dimension getMinimumSize() {
 		return getPreferredSize();
 	}
+
+	//}}}
+
+	//{{{ public void setCpe(int line)
 
 	public void setCpe(int line) {
 		cpe = line;
 		repaint();
 	}
 
+	//}}}
+	//{{{ public void clearCpe()
+
 	public void clearCpe() {
 		cpe = -1;
 		repaint();
 	}
+
+	//}}}
+
+	//{{{ public void addLocationRule(Rule rule, int line)
 
 	public void addLocationRule(Rule rule, int line) {
 		rulesByRule.put(rule, new Integer(line));
 		rulesByLine.put(new Integer(line), rule);
 	}
 
+	//}}}
+	//{{{ public void removeLocationRule(Rule rule)
+
 	public void removeLocationRule(Rule rule) {
-		Integer line = rulesByRule.remove(rule);
+		Integer line = (Integer) rulesByRule.remove(rule);
 		if (line != null) {
 			rulesByLine.remove(line);
 		}
 	}
+
+	//}}}
+
+	//{{{ public Color getRuleColor(Rule rule)
 
 	public Color getRuleColor(Rule rule) {
 		if (rule.isBreakpoint()) {
@@ -124,7 +161,14 @@ class LineNumberCanvas extends JComponent {
 		return SourceFileViewer.COLOR_WATCHPOINT;
 	}
 
+	//}}}
+
+	//{{{ public Polygon getRulePoly(Rule rule)
+
 	public Polygon getRulePoly(Rule rule) {
 		return rulePoly;
 	}
+
+	//}}}
+
 }
