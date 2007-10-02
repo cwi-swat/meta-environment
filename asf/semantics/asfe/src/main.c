@@ -77,10 +77,10 @@ void abort_handler(int signal) {
 
 /* ToolBus interfacing */
 void rec_terminate(int cid, ATerm t) {
-  if (useTide) {
+  if(useTide){
     Tide_disconnect();
   }
-  exit(0);
+/*  exit(0);*/
 }
 
 
@@ -122,7 +122,11 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable, ATerm
 
   result
     = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse, ATtrue);
-
+  
+  if(debug){
+    Tide_disconnect();
+  }
+  
   if (RWgetErrors() == NULL || ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }
@@ -160,16 +164,16 @@ ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm parseTable, ATerm tide)
   testList = ASF_ASFTestEquationTestListFromTerm(tests);
 
   result = (ATerm) runTests(eqsList, testList, debug);
-
-  if (debug) {
-    Tide_disconnect();
-  }
-
+  
   if (RWgetErrors() == NULL || !ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(<term>)", result);
   }
   else {
     return ATmake("snd-value(rewrite-errors(<term>))", RWgetErrors());
+  }
+  
+  if(debug){
+    Tide_disconnect();
   }
 }
 
@@ -342,10 +346,10 @@ int main(int argc, char *argv[]) {
     }
 
     fclose(iofile);
-  }
-
-  if (use_tide) {
-    Tide_disconnect();
+    
+    if(useTide){
+      Tide_disconnect();
+    }
   }
 
   return returncode;
