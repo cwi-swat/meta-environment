@@ -1,5 +1,9 @@
 $Id$
 
+Wed Oct  3 15:34:04 CEST 2007 <kooiker@cwi.nl>
+ * tbscripts/start-pt-dump.tb.src: Fix number of arguments in call to 
+   DumpParseTable process
+
 Thu Sep 13 10:37:29 CEST 2007 <jurgenv@cwi.nl>
  * tbscripts/standard.sdf.actions.src: imports ./meta.actions now, such
    that pt-dump can find modules from user defined search paths

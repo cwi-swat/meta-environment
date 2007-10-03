@@ -36,7 +36,7 @@ in
   if or(equal(Value, error), equal(Value, unavailable)) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
-    DumpParseTable(ModuleId, OUTPUTFILE, trm)
+    DumpParseTable(ModuleId, SDF_NAMESPACE, OUTPUTFILE, trm)
   fi
   . shutdown("")
 endlet
