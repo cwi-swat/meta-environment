@@ -4,7 +4,7 @@ Name: vis-plugin-charts
 Version: 1.0
 Description: 
 Requires: vis-base,vis-plugin,aterm-java,config-support,toolbus,toolbus-java-adapter,meta-studio,rstore-container,tunit,relation-stores,shared-objects,JJTraveler
-Maintainers=dancingbear
+Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 JarFile=vis-plugin-charts.jar
 Jars=${prefix}/share/${JarFile}
 LocalJars=lib/jcommon-1.0.8.jar:lib/log4j-1.2.14.jar:lib/jfreechart-1.0.4.jar:lib/prefuse.jar
