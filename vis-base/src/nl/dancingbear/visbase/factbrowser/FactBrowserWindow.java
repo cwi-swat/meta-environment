@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -93,19 +92,6 @@ public class FactBrowserWindow extends JPanel {
     public DefaultMutableTreeNode getSelectedNode() {
         return (DefaultMutableTreeNode) this.treeRstores
                 .getLastSelectedPathComponent();
-    }
-
-    /**
-     * This method makes it possible to expand the entire tree so all nodes will
-     * directly be visible to the user and expansion is not manually nessecary.
-     * 
-     * @author Renze de Vries
-     * @date 22-02-2007
-     */
-    private void expandAll() {
-        for (int i = 0; i < treeRstores.getRowCount(); i++) {
-            treeRstores.expandRow(i);
-        }
     }
 
     /**
