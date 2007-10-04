@@ -1,4 +1,4 @@
-package nl.dancingbear.visbase.factbrowser;
+package nl.cwi.sen1.visbase.factbrowser;
 
 import java.io.File;
 import java.net.URL;

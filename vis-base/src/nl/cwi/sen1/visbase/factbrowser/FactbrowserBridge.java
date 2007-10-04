@@ -2,7 +2,7 @@
 // This file is generated automatically, please do not edit!
 // generation time: Aug 17, 2007 9:19:04 AM
 
-package nl.dancingbear.visbase.factbrowser;
+package nl.cwi.sen1.visbase.factbrowser;
 
 import aterm.*;
 

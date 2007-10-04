@@ -1,4 +1,4 @@
-package nl.dancingbear.visbase.factbrowser;
+package nl.cwi.sen1.visbase.factbrowser;
 
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -18,10 +18,10 @@ import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.relationstores.types.RType;
 import nl.cwi.sen1.util.DefaultPopupImpl;
 import nl.cwi.sen1.util.MouseAdapter;
-import nl.dancingbear.visbase.factbrowser.data.FactBrowserDataManager;
-import nl.dancingbear.visbase.factbrowser.data.RStore;
-import nl.dancingbear.visbase.factbrowser.data.RStoreFact;
-import nl.dancingbear.visbase.factbrowser.data.VisualisationPlugin;
+import nl.cwi.sen1.visbase.factbrowser.data.FactBrowserDataManager;
+import nl.cwi.sen1.visbase.factbrowser.data.RStore;
+import nl.cwi.sen1.visbase.factbrowser.data.RStoreFact;
+import nl.cwi.sen1.visbase.factbrowser.data.VisualisationPlugin;
 import nl.dancingbear.visbase.rstorecontainer.datatypes.ATermParseException;
 import nl.dancingbear.visbase.rstorecontainer.datatypes.FactInfo;
 import nl.dancingbear.visbase.rstorecontainer.datatypes.FactInfoList;

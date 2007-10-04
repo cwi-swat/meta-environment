@@ -1,4 +1,4 @@
-package nl.dancingbear.visbase.factbrowser.data;
+package nl.cwi.sen1.visbase.factbrowser.data;
 
 import java.util.ArrayList;
 import java.util.Iterator;

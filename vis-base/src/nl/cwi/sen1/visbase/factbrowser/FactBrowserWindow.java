@@ -1,4 +1,4 @@
-package nl.dancingbear.visbase.factbrowser;
+package nl.cwi.sen1.visbase.factbrowser;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -21,10 +21,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import nl.dancingbear.visbase.factbrowser.data.FactBrowserDataManager;
-import nl.dancingbear.visbase.factbrowser.data.RStore;
-import nl.dancingbear.visbase.factbrowser.data.RStoreFact;
-import nl.dancingbear.visbase.factbrowser.data.VisualisationPlugin;
+import nl.cwi.sen1.visbase.factbrowser.data.FactBrowserDataManager;
+import nl.cwi.sen1.visbase.factbrowser.data.RStore;
+import nl.cwi.sen1.visbase.factbrowser.data.RStoreFact;
+import nl.cwi.sen1.visbase.factbrowser.data.VisualisationPlugin;
 
 /**
  * This is the FactBrowserWindow responsible for displaying the tree containing

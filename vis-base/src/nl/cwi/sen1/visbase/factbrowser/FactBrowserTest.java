@@ -1,14 +1,14 @@
-package nl.dancingbear.visbase.factbrowser;
+package nl.cwi.sen1.visbase.factbrowser;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import junit.framework.TestCase;
 import nl.cwi.sen1.relationstores.Factory;
-import nl.dancingbear.visbase.factbrowser.data.FactBrowserDataManager;
-import nl.dancingbear.visbase.factbrowser.data.RStore;
-import nl.dancingbear.visbase.factbrowser.data.RStoreFact;
-import nl.dancingbear.visbase.factbrowser.data.RStoreFactType;
-import nl.dancingbear.visbase.factbrowser.data.VisualisationPlugin;
+import nl.cwi.sen1.visbase.factbrowser.data.FactBrowserDataManager;
+import nl.cwi.sen1.visbase.factbrowser.data.RStore;
+import nl.cwi.sen1.visbase.factbrowser.data.RStoreFact;
+import nl.cwi.sen1.visbase.factbrowser.data.RStoreFactType;
+import nl.cwi.sen1.visbase.factbrowser.data.VisualisationPlugin;
 import aterm.pure.PureFactory;
 
 /**
