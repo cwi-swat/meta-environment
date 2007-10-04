@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.barchartplugin;
+package nl.cwi.sen1.visplugin.barchartplugin;
 
 import junit.framework.TestCase;
 import nl.cwi.sen1.relationstores.Factory;

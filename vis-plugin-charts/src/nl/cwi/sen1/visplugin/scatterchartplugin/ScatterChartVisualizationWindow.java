@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.scatterchartplugin;
+package nl.cwi.sen1.visplugin.scatterchartplugin;
 
 import java.awt.Color;
 

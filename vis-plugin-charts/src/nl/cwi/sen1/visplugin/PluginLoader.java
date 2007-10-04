@@ -1,12 +1,12 @@
-package nl.dancingbear.visplugin;
+package nl.cwi.sen1.visplugin;
 
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
-import nl.dancingbear.visplugin.barchartplugin.BarChartVisualizationController;
-import nl.dancingbear.visplugin.linechartplugin.LineChartVisualizationController;
-import nl.dancingbear.visplugin.piechartplugin.PieChartVisualizationController;
-import nl.dancingbear.visplugin.scatterchartplugin.ScatterChartVisualizationController;
+import nl.cwi.sen1.visplugin.barchartplugin.BarChartVisualizationController;
+import nl.cwi.sen1.visplugin.linechartplugin.LineChartVisualizationController;
+import nl.cwi.sen1.visplugin.piechartplugin.PieChartVisualizationController;
+import nl.cwi.sen1.visplugin.scatterchartplugin.ScatterChartVisualizationController;
 import aterm.pure.PureFactory;
 
 /**

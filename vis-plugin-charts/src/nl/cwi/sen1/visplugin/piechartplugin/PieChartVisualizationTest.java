@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.piechartplugin;
+package nl.cwi.sen1.visplugin.piechartplugin;
 
 import junit.framework.TestCase;
 import nl.cwi.sen1.relationstores.Factory;

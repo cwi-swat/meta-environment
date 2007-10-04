@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.scatterchartplugin;
+package nl.cwi.sen1.visplugin.linechartplugin;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,11 +8,11 @@ import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.visplugin.VisualizationFactorySingleton;
 
 /**
- * scatterChart Demo/Example class
+ * lineChart Demo/Example class
  * @author Raymond Bergen
  */
 
-public class ScatterChartExample {
+public class LineChartExample {
 
 	/**
 	 * @param args
@@ -23,13 +23,13 @@ public class ScatterChartExample {
 		
 		Factory m_factory = VisualizationFactorySingleton.getFactoryInstance();
 
-        ScatterChartVisualizationController controller = new ScatterChartVisualizationController();
-        ScatterChartVisualizationWindow visualization = (ScatterChartVisualizationWindow) controller.createWindow();
+        LineChartVisualizationController controller = new LineChartVisualizationController();
+        LineChartVisualizationWindow visualization = (LineChartVisualizationWindow) controller.createWindow();
 
 		visualization.setFactory(m_factory);
 
 		JPanel barPanel = visualization.render(fact);
-		showScatterChart("scatter Chart Visualization", barPanel);
+		showLineChart("Line Chart Visualization", barPanel);
 	}
 
 	private static RTuple buildRTuple() {
@@ -53,7 +53,7 @@ public class ScatterChartExample {
 	 * 
 	 * @param panel
 	 */
-	private static void showScatterChart(String windowTitle, JPanel panel) {
+	private static void showLineChart(String windowTitle, JPanel panel) {
 		// create and set up the window.
 		JFrame frame = new JFrame(windowTitle);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

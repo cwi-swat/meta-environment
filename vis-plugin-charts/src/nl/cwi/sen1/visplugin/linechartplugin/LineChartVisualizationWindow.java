@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.linechartplugin;
+package nl.cwi.sen1.visplugin.linechartplugin;
 
 import java.awt.Color;
 

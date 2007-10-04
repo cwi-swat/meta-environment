@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.piechartplugin;
+package nl.cwi.sen1.visplugin.piechartplugin;
 
 import nl.cwi.sen1.visplugin.VisualizationPluginController;
 import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
