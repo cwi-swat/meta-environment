@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.RTuple;
-import nl.dancingbear.visplugin.VisualizationFactorySingleton;
+import nl.cwi.sen1.visplugin.VisualizationFactorySingleton;
 
 /**
  * scatterChart Demo/Example class

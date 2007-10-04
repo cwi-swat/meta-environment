@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.relationstores.types.RType;
-import nl.dancingbear.visplugin.VisualizationFactorySingleton;
+import nl.cwi.sen1.visplugin.VisualizationFactorySingleton;
 
 import org.jfree.data.category.CategoryDataset;
 

@@ -1,8 +1,8 @@
 package nl.dancingbear.visplugin.barchartplugin;
 
+import nl.cwi.sen1.visplugin.VisualizationPluginController;
+import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 import aterm.ATerm;
-import nl.dancingbear.visplugin.VisualizationPluginController;
-import nl.dancingbear.visplugin.VisualizationPluginWindow;
 
 /**
  * BarChart Plugin Visualisation Controller. Controller for the Bar Chart

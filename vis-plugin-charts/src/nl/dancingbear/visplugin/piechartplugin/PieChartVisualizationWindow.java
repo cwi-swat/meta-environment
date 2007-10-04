@@ -11,7 +11,7 @@ import nl.cwi.sen1.relationstores.types.RElemElements;
 import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.relationstores.types.RType;
 import nl.cwi.sen1.relationstores.types.idcon.IdCon;
-import nl.dancingbear.visplugin.VisualizationPluginWindow;
+import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
