@@ -11,8 +11,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>A Tutorial Introduction to Rscript --- a Relational Approach to
-    Software Analysis</title>
+    <title>Rscript --- a Relational Approach to Software Analysis</title>
 
     <authorgroup>
       <author>
@@ -28,7 +27,7 @@
     DocBook.</para>
   </warning>
 
-  <section xml:id="SEC-Introduction">
+  <section xml:id="section.introduction">
     <title>Introduction</title>
 
     <formalpara>
@@ -39,7 +38,7 @@
       software systems: from finding uninitialized variables in a single
       program to formulating queries about the architecture of a complete
       software system. Rscript fits well in the extract-enrich-view paradigm
-      shown in Figure~\ref{FIG:paradigm}.</para>
+      shown in <xref linkend="figure.paradigm" />.</para>
     </formalpara>
 
     <formalpara>
@@ -73,12 +72,12 @@
       but we will give some examples anyway.</para>
     </formalpara>
 
-    <figure xml:id="FIG_paradigm">
+    <figure xml:id="figure.paradigm">
       <title>The extract-enrich-view paradigm</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="figs/paradigm.png" scale="100"></imagedata>
+          <imagedata fileref="paradigm.png" scale="50"></imagedata>
         </imageobject>
       </mediaobject>
     </figure>
@@ -250,7 +249,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
     </itemizedlist>
   </section>
 
-  <section xml:id="SEC-motivating-example">
+  <section xml:id="section.motivating-example">
     <title>A Motivating Example</title>
 
     <para>Suppose a mystery box ends up on your desk. When you open it, it
@@ -297,36 +296,38 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
     <section>
       <title>Preparations</title>
 
-      <para>To illustrate this process consider the workflow in
-      Figure~\ref{FIG:calls-workflow}. First we have to extract the calls from
-      the source code. Recall that \rscript does not consider fact extraction
-      \emph{per se} so we assume that this call graph has been extracted from
-      the software by some other tool. Also keep in mind that a real call
-      graph of a real application will contain thousands and thousands of
-      calls. Drawing it in the way we do later on in Figure~\ref{FIG:calls}
-      makes no sense since we get a uniformly black picture due to all the
-      call dependencies. After the extraction phase, we try to understand the
-      extracted facts by writing queries to explore their properties. For
-      instance, we may want to know \emph{how many calls} there are, or
-      \emph{how many procedures}. We may also want to enrich these facts, for
-      instance, by computing who calls who in more than one step. Finally, we
-      produce a simple textual report giving answers to the questions we are
-      interested in.<figure xml:id="FIG_calls-workflow">
+      <para>To illustrate this process consider the workflow in <xref
+      linkend="figure.calls-workflow" />. First we have to extract the calls
+      from the source code. Recall that Rscript does not consider fact
+      extraction <emphasis>per se</emphasis> so we assume that this call graph
+      has been extracted from the software by some other tool. Also keep in
+      mind that a real call graph of a real application will contain thousands
+      and thousands of calls. Drawing it in the way we do later on in <xref
+      linkend="figure.calls" /> makes no sense since we get a uniformly black
+      picture due to all the call dependencies. After the extraction phase, we
+      try to understand the extracted facts by writing queries to explore
+      their properties. For instance, we may want to know <emphasis>how many
+      calls</emphasis> there are, or <emphasis>how many procedures</emphasis>.
+      We may also want to enrich these facts, for instance, by computing who
+      calls who in more than one step. Finally, we produce a simple textual
+      report giving answers to the questions we are interested in.<figure
+          xml:id="figure.calls-workflow">
           <title>Workflow for analyzing mystery box</title>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="figs/calls-workflow.png"></imagedata>
+              <imagedata fileref="./figs/calls-workflow.png" scale="100"></imagedata>
             </imageobject>
           </mediaobject>
 
-          <para>Now consider the call graph shown in Figure~\ref{FIG:calls}.
-          This section is intended to give you a first impression what can be
-          done with \rscript. Please return to this example when you have
-          digested the detailed description of \rscript in
-          Chapters~\ref{SEC:rscript-language},~\ref{SEC:operators} and
-          \ref{SEC:functions}.</para>
-        </figure><figure>
+          <para>Now consider the call graph shown in <xref
+          linkend="figure.calls" />. This section is intended to give you a
+          first impression what can be done with Rscript. Please return to
+          this example when you have digested the detailed description of
+          Rscript in <xref linkend="section.rscipt-language" />, <xref
+          linkend="section.operators" /> and <xref
+          linkend="section.functions" />.</para>
+        </figure><figure xml:id="figure.calls">
           <title>Graphical representation of the <literal>calls</literal>
           relation</title>
 
@@ -341,7 +342,8 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
       which are sufficient to formulate and answer the questions at hand.
       However, we can gain readability by introducing separately named types
       for the items we are describing. First, we introduce therefore a new
-      type {\tt proc} (an alias for strings) to denote procedures:</para>
+      type <literal>proc</literal> (an alias for strings) to denote
+      procedures:</para>
 
       <programlisting>type proc = str</programlisting>
 
@@ -359,8 +361,6 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
     <section>
       <title>Questions</title>
 
-      <para></para>
-
       <section>
         <title>How many procedure calls occur in this system?</title>
 
@@ -370,8 +370,9 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
 
         <para><programlisting>int nCalls = # Calls</programlisting>The
         operator <literal>#</literal> determines the number of elements in a
-        set or relation and is explained in Section~\ref{BO:misc}. In this
-        example, <literal>nCalls</literal> will get the value
+        set or relation and is explained in <xref
+        linkend="section.BO-misc" />. In this example,
+        <literal>nCalls</literal> will get the value
         <literal>8</literal>.</para>
       </section>
 
@@ -407,8 +408,8 @@ int nprocs = # procs</programlisting>
         tuples in a relation that do not occur in any right-hand side. When a
         relation is viewed as a graph, its top corresponds to the root nodes
         of that graph. Similarly, the <literal>bottom</literal> of a relation
-        corresponds to the leaf nodes of the graph. See
-        Section~\ref{BI:bottom} for more details. Using this knowledge, the
+        corresponds to the leaf nodes of the graph. See <xref
+        linkend="BI-bottom" /> for more details. Using this knowledge, the
         entry points can be computed by determining the top of the
         <literal>Calls</literal> relation:</para>
 
@@ -496,7 +497,7 @@ int nprocs = # procs</programlisting>
     </section>
   </section>
 
-  <section xml:id="SEC-rscipt-language">
+  <section xml:id="section.rscipt-language">
     <title>The Rscript Language</title>
 
     <para>Rscript is based on <emphasis>binary relations</emphasis> only and
@@ -511,12 +512,10 @@ int nprocs = # procs</programlisting>
     comprehensions, function invocations and operators. These are all
     described below.}</para>
 
-    <section xml:id="SEC-types-and-values">
+    <section xml:id="section.types-and-values">
       <title>Types and Values</title>
 
-      <para></para>
-
-      <section xml:id="SEC-elementary-types">
+      <section xml:id="section.elementary-types">
         <title>Elementary Types and Values</title>
 
         <formalpara>
@@ -560,8 +559,6 @@ int nprocs = # procs</programlisting>
 
     <section>
       <title>Tuples, Sets and relations</title>
-
-      <para></para>
 
       <formalpara>
         <title>Tuples</title>
@@ -757,8 +754,8 @@ type Frequency = int</programlisting>
         <replaceable>i</replaceable>-th element can be accessed by
         <replaceable>V</replaceable><literal>.</literal><replaceable>F</replaceable><subscript><replaceable>i</replaceable></subscript>.
         For instance,\footnote{The variable declarations that appear on lines
-        2 and 3 of this example are explained fully in
-        Section~\ref{SEC:Declarations}.}</para>
+        2 and 3 of this example are explained fully in <xref
+        linkend="section.declarations" />.</para>
 
         <programlisting>type Triple = &lt;int left, str middle, bool right&gt;
 Triple TR = &lt;3, "a", true&gt;
@@ -850,8 +847,6 @@ str S = TR.middle</programlisting>
 
       <section>
         <title>Generators</title>
-
-        <para></para>
 
         <formalpara>
           <title>Enumerator</title>
@@ -1098,7 +1093,7 @@ str S = TR.middle</programlisting>
       </section>
     </section>
 
-    <section xml:id="SEC-declarations">
+    <section xml:id="section.declarations">
       <title>Declarations</title>
 
       <section>
@@ -1292,7 +1287,7 @@ end equations</programlisting></para>
     </section>
   </section>
 
-  <section xml:id="SEC-operators">
+  <section xml:id="section.operators">
     <title>Built-in Operators</title>
 
     <para>The built-in operators can be subdivided in several broad
@@ -1351,7 +1346,7 @@ end equations</programlisting></para>
     <para>The following sections give detailed descriptions and examples of
     all built-in operators.</para>
 
-    <section xml:id="SEC-BO-bool">
+    <section xml:id="section.BO-bool">
       <title>Operations on Booleans</title>
 
       <table>
@@ -1401,7 +1396,7 @@ end equations</programlisting></para>
       </table>
     </section>
 
-    <section xml:id="SEC-BO-int">
+    <section xml:id="section.BO-int">
       <title>Operations on Integers</title>
 
       <table>
@@ -1520,7 +1515,7 @@ end equations</programlisting></para>
       </table>
     </section>
 
-    <section xml:id="SEC-BO-str">
+    <section xml:id="section.BO-str">
       <title>Operations on Strings</title>
 
       <table>
@@ -1598,7 +1593,7 @@ end equations</programlisting></para>
       </table>
     </section>
 
-    <section xml:id="SEC-BO-loc">
+    <section xml:id="section.BO-loc">
       <title>Operations on Locations</title>
 
       <table>
@@ -1704,10 +1699,10 @@ end equations</programlisting></para>
       </itemizedlist>
     </section>
 
-    <section xml:id="SEC-BO-set-or-rel">
+    <section xml:id="section.BO-set-or-rel">
       <title>Operations on Sets or Relations</title>
 
-      <section xml:id="SEC-BO-member">
+      <section xml:id="section.BO-member">
         <title>Membership Tests</title>
 
         <table>
@@ -1805,7 +1800,7 @@ end equations</programlisting></para>
         </formalpara>
       </section>
 
-      <section xml:id="SEC-BO-set-comp">
+      <section xml:id="section.BO-set-comp">
         <title>Comparisons</title>
 
         <para><table>
@@ -1883,7 +1878,7 @@ end equations</programlisting></para>
           </table></para>
       </section>
 
-      <section xml:id="SEC-BO-set-cons">
+      <section xml:id="section.BO-set-cons">
         <title>Construction</title>
 
         <para></para>
@@ -1967,7 +1962,7 @@ end equations</programlisting></para>
         </itemizedlist>
       </section>
 
-      <section xml:id="SEC-BO-misc">
+      <section xml:id="section.BO-misc">
         <title>Miscellaneous</title>
 
         <table>
@@ -2014,7 +2009,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-BO-relations">
+    <section xml:id="section.BO-relations">
       <title>Operations on Relations</title>
 
       <para></para>
@@ -2252,7 +2247,7 @@ end equations</programlisting></para>
     </section>
   </section>
 
-  <section xml:id="SEC-functions">
+  <section xml:id="section.functions">
     <title>Built-in Functions</title>
 
     <para>The built-in functions can be subdivided in several broad
@@ -2320,8 +2315,6 @@ end equations</programlisting></para>
 
     <section>
       <title>Elementary Functions on Sets and Relations</title>
-
-      <para></para>
 
       <section xml:id="BI-id">
         <title>Identity Relation: <literal>id</literal></title>
@@ -2431,7 +2424,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-extraction">
+    <section xml:id="section.extraction">
       <title>Extraction from Relations</title>
 
       <section xml:id="BI-domain">
@@ -2491,7 +2484,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-restrictions">
+    <section xml:id="section.restrictions">
       <title>Restrictions and Exclusions on Relations</title>
 
       <section xml:id="BI-domainR">
@@ -2608,7 +2601,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-tuples">
+    <section xml:id="section.tuples">
       <title>Tuples</title>
 
       <section xml:id="BI-first">
@@ -2650,7 +2643,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-relations-as-graphs">
+    <section xml:id="section.relations-as-graphs">
       <title>Relations viewed as graphs</title>
 
       <section xml:id="BI-top">
@@ -2723,7 +2716,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-locations">
+    <section xml:id="section.locations">
       <title>Functions on Locations</title>
 
       <section xml:id="BI-filename">
@@ -2798,7 +2791,7 @@ end equations</programlisting></para>
       </section>
     </section>
 
-    <section xml:id="SEC-sets-of-integers">
+    <section xml:id="section.sets-of-integers">
       <title>Functions on Sets of Integers</title>
 
       <para>The functions in this section operate on sets of integers. Some
@@ -2942,7 +2935,7 @@ end equations</programlisting></para>
     </section>
   </section>
 
-  <section xml:id="SEC-larger-examples">
+  <section xml:id="section.larger-examples">
     <title>Larger Examples</title>
 
     <para>Now we will have a closer look at some larger applications of
@@ -2960,7 +2953,7 @@ end equations</programlisting></para>
     Section~\ref{SEC:dataflow}. A description of program slicing concludes the
     chapter (Section~\ref{SEC:slicing}).}</para>
 
-    <section xml:id="SEC-components">
+    <section xml:id="section.components">
       <title>Analyzing the Component Structure of an Application</title>
 
       <para>A frequently occurring problem is that we know the call relation
@@ -3003,7 +2996,7 @@ rel[proc, comp] PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, &lt;"b", 
       </figure>
     </section>
 
-    <section xml:id="SEC-Java-analysis">
+    <section xml:id="section.Java-analysis">
       <title>Analyzing the Structure of Java Systems</title>
 
       <para>Now we consider the analysis of Java systems (inspired by
@@ -3278,7 +3271,7 @@ rel[expr,varname] USES = {&lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"z
       <literal>{"p"}</literal>.</para>
     </section>
 
-    <section xml:id="SEC-using-locations">
+    <section xml:id="section.using-locations">
       <title>Using Locations to Represent Program Fragments</title>
 
       <para>\begin{figure}[tb] \begin{center}
@@ -3287,34 +3280,34 @@ rel[expr,varname] USES = {&lt;5,"q"&gt;, &lt;6,"y"&gt;, &lt;6,"x"&gt;, &lt;10,"z
       \caption{\label{FIG:meta-pico}Checking undefined variables in Pico
       programs using the ASF+SDF Meta-Environment. On the left, main window of
       Meta-Environment with error messages related to Pico program shown on
-      the right.{\bf THIS FIGURE IS OUTDATED}} \end{figure} </para>
+      the right.{\bf THIS FIGURE IS OUTDATED}} \end{figure}</para>
 
       <para>One aspect of the example we have just seen is artificial: where
       do these line numbers come from that we used to indicate expressions in
       the program? One solution is to let the extraction phase generate
-      \emph{locations} to precisely indicate relevant places in the program
-      text. Recall from Section~\ref{SEC:ElementaryTypes}, that a location
-      consists of a file name, a begin line, a begin position, an end line,
-      and an end position. Also recall that locations can be compared: a
-      location <replaceable>A</replaceable><subscript>1</subscript> is smaller
-      than another location
-      <replaceable>A</replaceable><subscript>2</subscript>, if
-      <replaceable>A</replaceable><subscript>1</subscript> is textually
+      <emphasis>locations</emphasis> to precisely indicate relevant places in
+      the program text. Recall from <xref
+      linkend="section.elementary-types" />, that a location consists of a
+      file name, a begin line, a begin position, an end line, and an end
+      position. Also recall that locations can be compared: a location
+      <replaceable>A</replaceable><subscript>1</subscript> is smaller than
+      another location <replaceable>A</replaceable><subscript>2</subscript>,
+      if <replaceable>A</replaceable><subscript>1</subscript> is textually
       contained in <replaceable>A</replaceable><subscript>2</subscript>. By
       including locations in the final answer of a relational expression,
       external tools will be able to highlight places of interest in the
       source text.</para>
 
       <para>The first step, is to define the type <literal>expr</literal> as
-      aliases for <literal>loc</literal> (instead of <literal>int</literal>):
-      </para>
+      aliases for <literal>loc</literal> (instead of
+      <literal>int</literal>):</para>
 
       <para><programlisting>type expr = loc
 type varname = str </programlisting></para>
 
       <para>Of course, the actual relations are now represented differently.
-      For instance, the <literal>USES</literal> relation may now look like
-      </para>
+      For instance, the <literal>USES</literal> relation may now look
+      like</para>
 
       <para><programlisting>{ &lt;area-in-file("/home/paulk/example.pico", area(5,5,5,6,106,1)), "q"&gt;, 
   &lt;area-in-file("/home/paulk/example.pico", area(6,13,6,14,127,1)), "y"&gt;, 
@@ -3332,7 +3325,7 @@ type varname = str </programlisting></para>
       <para><programlisting>type var = loc
 set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
 
-      <para>Remains the new definition of <literal>UNINIT</literal>: </para>
+      <para>Remains the new definition of <literal>UNINIT</literal>:</para>
 
       <para><programlisting>rel[var, varname] UNINIT = 
    { &lt;V, VN&gt;| var-name VN : VARNAMES, 
@@ -3341,7 +3334,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
               V &lt;= E 
    }</programlisting></para>
 
-      <para>This definition can be understood as follows: </para>
+      <para>This definition can be understood as follows:</para>
 
       <itemizedlist>
         <listitem>
@@ -3374,10 +3367,10 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
       programs in the ASF+SDF Meta-Environment looks like.</para>
     </section>
 
-    <section xml:id="SEC-McCabe">
+    <section xml:id="section.McCabe">
       <title>McCabe Cyclomatic Complexity</title>
 
-      <para> The <emphasis>cyclomatic complexity</emphasis> of a program is
+      <para>The <emphasis>cyclomatic complexity</emphasis> of a program is
       defined as <replaceable>e</replaceable> - <replaceable>n</replaceable> +
       2, where <replaceable>e</replaceable> and <replaceable>n</replaceable>
       are the number of edges and nodes in the control flow graph,
@@ -3400,116 +3393,131 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
       carrier of PRED, i.e., all elements that occur in a tuple in
       <literal>PRED</literal>.</para>
     </section>
-  </section>
 
-  <!--
+    <section xml:id="section.dataflow">
+      <title>Dataflow Analysis</title>
 
+      <para><emphasis>Dataflow analysis</emphasis> is a program analysis
+      technique that forms the basis for many compiler optimizations. It is
+      described in any text book on compiler construction, e.g. \cite{ASU86}.
+      The goal of dataflow analysis is to determine the effect of statements
+      on their surroundings. Typical examples are:</para>
 
-\section{Dataflow Analysis}\label{SEC:dataflow}
+      <itemizedlist>
+        <listitem>
+          <para>Dominators (Section~\ref{SEC:dominators}): which nodes in the
+          flow dominate the execution of other nodes?</para>
+        </listitem>
 
-\emph{Dataflow analysis} is a program analysis technique that forms the basis
-for many compiler optimizations. It is described in any text book on compiler
-construction, e.g. \cite{ASU86}. The goal of dataflow analysis is to determine
-the effect of statements on their surroundings. Typical examples are:
+        <listitem>
+          <para>Reaching definitions (Section~\ref{SEC:reaching}): which
+          definitions of variables are still valid at each statement?</para>
+        </listitem>
 
-\begin{itemize}
+        <listitem>
+          <para>Live variables (Section~\ref{SEC:live}): of which variables
+          will the values be used by successors of a statement?</para>
+        </listitem>
 
-\item Dominators (Section~\ref{SEC:dominators}): which nodes in the
-flow dominate the execution of other nodes?
+        <listitem>
+          <para> Available expressions: an expression is available if it is
+          computed along each path from the start of the program to the
+          current statement.</para>
+        </listitem>
+      </itemizedlist>
 
-\item Reaching definitions (Section~\ref{SEC:reaching}): which
-definitions of variables are still valid at each statement?
+      <section xml:id="section.dominators">
+        <title>Dominators</title>
 
-\item Live variables (Section~\ref{SEC:live}): of which variables will
-  the values be used by successors of a statement?
+        <para></para>
 
-\item Available expressions: an expression is available if it is computed
-  along each path from the start of the program to the current statement.
+        <para><figure>
+            <title>Flow graph</title>
 
-\item and more.
-\end{itemize}
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="figs/dominators.png"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure><figure>
+            <title>Dominator tree</title>
 
-\subsection{Dominators} \label{SEC:dominators}
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="figs/dominator-tree.png"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure> A node <replaceable>d</replaceable> of a flow graph
+        <emphasis>dominates</emphasis> a node <replaceable>n</replaceable>, if
+        every path from the initial node of the flow graph to
+        <replaceable>n</replaceable> goes through
+        <replaceable>d</replaceable>~\cite[Section 10.4]{ASU86}. Dominators
+        play a role in the analysis of conditional statements and loops. The
+        function <literal>dominators</literal> that computes the dominators
+        for a given flow graph <literal>PRED</literal> and an entry node
+        <literal>ROOT</literal> is defined as follows:</para>
 
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-rel[stat,stat] dominators(rel[stat,stat] PRED, int ROOT) = 
+        <para><programlisting>rel[stat,stat] dominators(rel[stat,stat] PRED, int ROOT) = 
    DOMINATES
 where
     set[int] VERTICES = carrier(PRED)
 
     rel[int,set[int]] DOMINATES =
-    { <V,  VERTICES \ {V, ROOT} \ reachX({ROOT}, {V}, PRED)> |  int V : VERTICES }
-endwhere
-\end{verbatim} 
-\hrulefill}
-\caption{\label{FIG:dominators-function}The function {\tt dominators}}
-\end{figure}
+    { &lt;V,  VERTICES \ {V, ROOT} \ reachX({ROOT}, {V}, PRED)&gt; |  int V : VERTICES }
+endwhere</programlisting></para>
 
-\begin{figure}[tb]
+        <para> First, the auxiliary set <literal>VERTICES</literal> (all the
+        statements) is computed. The relation <literal>DOMINATES</literal>
+        consists of all pairs <literal>&lt;<replaceable>S</replaceable>,
+        {<replaceable>S</replaceable><subscript>1</subscript>,...,<replaceable>S</replaceable><subscript><replaceable>n</replaceable></subscript>}&gt;</literal>
+        such that</para>
 
-\hspace*{-2cm} \epsfig{figure=figs/dominators.eps,width=10cm} 
-\hspace*{-4cm} \epsfig{figure=figs/dominator-tree.eps,width=10cm}
-\vspace*{-4.5cm}
+        <itemizedlist>
+          <listitem>
+            <para>
+            <replaceable>S</replaceable><subscript><replaceable>i</replaceable></subscript>
+            is not an initial node or equal to
+            <replaceable>S</replaceable>.</para>
+          </listitem>
 
-\hrulefill
-\caption{\label{FIG:dominators} (a) Flow graph and (b) dominator tree}
-\end{figure}
+          <listitem>
+            <para><replaceable>S</replaceable><subscript><replaceable>i</replaceable></subscript>
+            cannot be reached from the initial node without going through
+            <replaceable>S</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
 
-A node $d$ of a flow graph \emph{dominates} a node $n$, if every path from the
-initial node of the flow graph to $n$ goes through $d$~\cite[Section
-10.4]{ASU86}. Dominators play a role in the analysis of conditional statements
-and loops. In Figure~\ref{FIG:dominators-function}, we show the function {\tt
-dominators} that computes the dominators for a given flow graph {\tt PRED} and
-an entry node {\tt ROOT}.
-First, the auxiliary set {\tt VERTICES} (all the statements) is computed. The relation {\tt
-  DOMINATES} consists of all pairs {\tt <S, \verb-S-$_1$,...,S$_n$\verb-}->} such that
-\begin{itemize}
-\item {\tt S$_i$} is not an initial node or equal to {\tt S}.
-\item {\tt S$_i$} cannot be reached from the initial node without going through {\tt S}.
-\end{itemize}
+        <para>Consider the flow graph<programlisting>rel[int,int] PRED = {
+&lt;1,2&gt;, &lt;1,3&gt;,
+&lt;2,3&gt;,
+&lt;3,4&gt;,
+&lt;4,3&gt;,&lt;4,5&gt;, &lt;4,6&gt;,
+&lt;5,7&gt;,
+&lt;6,7&gt;,
+&lt;7,4&gt;,&lt;7,8&gt;,
+&lt;8,9&gt;,&lt;8,10&gt;,&lt;8,3&gt;,
+&lt;9,1&gt;,
+&lt;10,7&gt;
+}</programlisting>and the result of applying <literal>dominators</literal> to
+        it: <programlisting>{&lt;1, {2, 3, 4, 5, 6, 7, 8, 9, 10}&gt;, 
+&lt;2, {}&gt;, 
+&lt;3, {4, 5, 6, 7, 8, 9, 10}&gt;, 
+&lt;4, {5, 6, 7, 8, 9, 10}&gt;, 
+&lt;5, {}&gt;, 
+&lt;6, {}&gt;, 
+&lt;7, {8, 9, 10}&gt;, 
+&lt;8, {9, 10}&gt;, 
+&lt;9, {}&gt;, 
+&lt;10, {}&gt;}</programlisting> The original flow graph and the resulting
+        <emphasis>dominator tree</emphasis> are shown in
+        Figure~\ref{FIG:dominators}. The dominator tree has the initial node
+        as root and each node <replaceable>d</replaceable> in the tree only
+        dominates its descendants in the tree.</para>
+      </section>
+    </section>
+  </section>
 
-\noindent Consider the flow graph
-
-\begin{exam}
-\begin{verbatim}
-rel[int,int] PRED = {
-<1,2>, <1,3>,
-<2,3>,
-<3,4>,
-<4,3>,<4,5>, <4,6>,
-<5,7>,
-<6,7>,
-<7,4>,<7,8>,
-<8,9>,<8,10>,<8,3>,
-<9,1>,
-<10,7>
-}
-\end{verbatim}
-\end{exam}
-and the result of applying {\tt dominators} to it:
-
-\begin{exam}
-\begin{verbatim}
-{<1, {2, 3, 4, 5, 6, 7, 8, 9, 10}>, 
-<2, {}>, 
-<3, {4, 5, 6, 7, 8, 9, 10}>, 
-<4, {5, 6, 7, 8, 9, 10}>, 
-<5, {}>, 
-<6, {}>, 
-<7, {8, 9, 10}>, 
-<8, {9, 10}>, 
-<9, {}>, 
-<10, {}>}
-\end{verbatim}
-\end{exam}
-
-The original flow graph and the resulting \emph{dominator tree} are
-shown in Figure~\ref{FIG:dominators}.  The dominator tree has the
-initial node as root and each node $d$ in the tree only dominates its
-descendants in the tree.
-
+  <!--
 
 
 \subsection{Reaching Definitions} \label{SEC:reaching}
