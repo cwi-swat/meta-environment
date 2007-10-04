@@ -1,59 +1,59 @@
-package nl.cwi.sen1.visplugin.scatterchartplugin;
+package nl.cwi.sen1.visplugin.barchart;
 
 import nl.cwi.sen1.visplugin.VisualizationPluginController;
 import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 import aterm.ATerm;
 
 /**
- * scatterChart Plugin Visualisation Controller. Controller for the scatter Chart
+ * BarChart Plugin Visualisation Controller. Controller for the Bar Chart
  * Window.
  * 
- * @author Raymond Bergen
+ * @author Srinivasan Tharmarajah
  * @date 14-03-2007
  */
-public class ScatterChartVisualizationController extends
-        VisualizationPluginController {
+public class BarChartVisualizationController extends VisualizationPluginController {
 
     /**
      * Constructor.
      * 
-     * @author Raymond Bergen
+     * @author Srinivasan Tharmarajah
      * @date 14-03-2007
      */
-    public ScatterChartVisualizationController() {
+    public BarChartVisualizationController() {
         super();
     }
 
     /**
-     * Creates a scatterChartVisualizationWindow.
+     * Creates a BarChartVisualizationWindow.
      * 
-     * @author Raymond Bergen
+     * @author Srinivasan Tharmarajah
      * @date 14-03-2007
      */
     public VisualizationPluginWindow createWindow() {
-        return new ScatterChartVisualizationWindow();
+        return new BarChartVisualizationWindow();
     }
 
     /**
-     * Creates a scatterChartVisualizationWindow.
+     * Creates a BarChartVisualizationWindow.
      * 
      * @return Name of this plugin.
-     * @author Raymond Bergen
+     * @author Srinivasan Tharmajah
      * @date 14-03-2007
      */
     public String getPluginName() {
-        return "Scatter plot";
+        return "Bar chart";
     }
 
     /**
      * Returns array holding the types supported by this plugin.
      * 
      * @return Array of supported ATerms
-     * @author Raymond Bergen
+     * @author Srinivasan Tharmarajah
      * @date 07-3-2007
      */
     public ATerm[] getSupportedTypes() {
-        ATerm[] atermList = { makeATerm("relation([int,int])") };
+        ATerm[] atermList = { makeATerm("relation([int,str])"), makeATerm("relation([str,int])"),
+        		makeATerm("relation([int,int])")};
         return atermList;
     }
 

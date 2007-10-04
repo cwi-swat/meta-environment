@@ -1,4 +1,4 @@
-package nl.cwi.sen1.visplugin.piechartplugin;
+package nl.cwi.sen1.visplugin.piechart;
 
 import java.awt.Font;
 

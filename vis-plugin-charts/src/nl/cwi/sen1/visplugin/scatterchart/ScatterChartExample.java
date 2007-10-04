@@ -1,4 +1,4 @@
-package nl.cwi.sen1.visplugin.scatterchartplugin;
+package nl.cwi.sen1.visplugin.scatterchart;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

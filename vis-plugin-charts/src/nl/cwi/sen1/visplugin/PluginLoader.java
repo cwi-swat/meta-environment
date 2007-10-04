@@ -3,10 +3,10 @@ package nl.cwi.sen1.visplugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
-import nl.cwi.sen1.visplugin.barchartplugin.BarChartVisualizationController;
-import nl.cwi.sen1.visplugin.linechartplugin.LineChartVisualizationController;
-import nl.cwi.sen1.visplugin.piechartplugin.PieChartVisualizationController;
-import nl.cwi.sen1.visplugin.scatterchartplugin.ScatterChartVisualizationController;
+import nl.cwi.sen1.visplugin.barchart.BarChartVisualizationController;
+import nl.cwi.sen1.visplugin.linechart.LineChartVisualizationController;
+import nl.cwi.sen1.visplugin.piechart.PieChartVisualizationController;
+import nl.cwi.sen1.visplugin.scatterchart.ScatterChartVisualizationController;
 import aterm.pure.PureFactory;
 
 /**

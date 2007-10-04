@@ -1,4 +1,4 @@
-package nl.cwi.sen1.visplugin.linechartplugin;
+package nl.cwi.sen1.visplugin.linechart;
 
 import nl.cwi.sen1.visplugin.VisualizationPluginController;
 import nl.cwi.sen1.visplugin.VisualizationPluginWindow;

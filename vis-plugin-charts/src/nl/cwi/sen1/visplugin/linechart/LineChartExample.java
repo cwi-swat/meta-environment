@@ -1,4 +1,4 @@
-package nl.cwi.sen1.visplugin.barchartplugin;
+package nl.cwi.sen1.visplugin.linechart;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,13 +8,11 @@ import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.visplugin.VisualizationFactorySingleton;
 
 /**
- * BarChart Demo/Example class
- * Original code : PieChart plugin ( A. Belgraver, R. van Remortel )
- * @author Srinivasan Tharmarajah
-
+ * lineChart Demo/Example class
+ * @author Raymond Bergen
  */
 
-public class BarChartExample {
+public class LineChartExample {
 
 	/**
 	 * @param args
@@ -25,13 +23,13 @@ public class BarChartExample {
 		
 		Factory m_factory = VisualizationFactorySingleton.getFactoryInstance();
 
-        BarChartVisualizationController controller = new BarChartVisualizationController();
-        BarChartVisualizationWindow visualization = (BarChartVisualizationWindow) controller.createWindow();
+        LineChartVisualizationController controller = new LineChartVisualizationController();
+        LineChartVisualizationWindow visualization = (LineChartVisualizationWindow) controller.createWindow();
 
 		visualization.setFactory(m_factory);
 
 		JPanel barPanel = visualization.render(fact);
-		showBarChart("Bar Chart Visualization", barPanel);
+		showLineChart("Line Chart Visualization", barPanel);
 	}
 
 	private static RTuple buildRTuple() {
@@ -43,8 +41,9 @@ public class BarChartExample {
 
 	private static RTuple createRTuple() {
         Factory factory = VisualizationFactorySingleton.getFactoryInstance();
-        RTuple rTuple = factory.RTupleFromString("rtuple(\"StatementHistogram\",relation([str,int]),set([tuple([str(\"Assignment\"),int(nat-con(7))]), tuple([str(\"Assignment2\"),int(nat-con(6))]), tuple([str(\"Assignment3\"),int(nat-con(5))]), tuple([str(\"Assignment4\"),int(nat-con(2))])]))");
         
+        RTuple rTuple = factory.RTupleFromString("rtuple(\"StatementHistogram\",relation([int,int]),set([tuple([int(nat-con(7)),int(nat-con(7))]), tuple([int(nat-con(2)),int(nat-con(2))])]))");
+       
 		return rTuple;
 		
 	}
@@ -54,7 +53,7 @@ public class BarChartExample {
 	 * 
 	 * @param panel
 	 */
-	private static void showBarChart(String windowTitle, JPanel panel) {
+	private static void showLineChart(String windowTitle, JPanel panel) {
 		// create and set up the window.
 		JFrame frame = new JFrame(windowTitle);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

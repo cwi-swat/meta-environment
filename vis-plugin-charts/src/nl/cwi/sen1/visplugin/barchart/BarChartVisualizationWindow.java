@@ -1,4 +1,4 @@
-package nl.cwi.sen1.visplugin.barchartplugin;
+package nl.cwi.sen1.visplugin.barchart;
 
 import java.awt.Color;
 
