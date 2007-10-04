@@ -316,7 +316,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="./figs/calls-workflow.png" scale="100"></imagedata>
+              <imagedata fileref="calls-workflow.png" scale="50"></imagedata>
             </imageobject>
           </mediaobject>
 
@@ -333,7 +333,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.-->
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="figs/calls.png"></imagedata>
+              <imagedata fileref="calls.png" scale="50"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -2990,7 +2990,7 @@ rel[proc, comp] PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;, &lt;"b", 
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="figs/parts.png"></imagedata>
+            <imagedata fileref="parts.png" scale="50"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3436,7 +3436,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="figs/dominators.png"></imagedata>
+                <imagedata fileref="dominators.png" scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure><figure>
@@ -3444,7 +3444,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="figs/dominator-tree.png"></imagedata>
+                <imagedata fileref="dominator-tree.png" scale="50"></imagedata>
               </imageobject>
             </mediaobject>
           </figure> A node <replaceable>d</replaceable> of a flow graph
