@@ -3,11 +3,11 @@ package nl.dancingbear.visbase.factbrowser;
 import java.io.File;
 import java.net.URL;
 
-import nl.dancingbear.tunit.StackTraceUtil;
-import nl.dancingbear.tunit.TUnitTestCase;
-import nl.dancingbear.tunit.ToolStub;
-import nl.dancingbear.tunit.ToolStub.TimeoutExceededException;
-import nl.dancingbear.tunit.ToolStub.UnexpectedTermException;
+import nl.cwi.sen1.tunit.StackTraceUtil;
+import nl.cwi.sen1.tunit.TUnitTestCase;
+import nl.cwi.sen1.tunit.ToolStub;
+import nl.cwi.sen1.tunit.ToolStub.TimeoutExceededException;
+import nl.cwi.sen1.tunit.ToolStub.UnexpectedTermException;
 import aterm.ATerm;
 
 /**
