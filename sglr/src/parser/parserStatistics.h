@@ -119,7 +119,7 @@ void SGLR_STATS_print(void);
     counter = value;\
   }
 #else
-#define SGLR_STATS_incrementCount(counter, value) ;
+#define SGLR_STATS_setCount(counter, value) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS
@@ -137,7 +137,7 @@ void SGLR_STATS_print(void);
     counter++;\
   }
 #else
-#define SGLR_STATS_incrementCount(counter) ;
+#define SGLR_STATS_incrementCountConditionally(counter, cond) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS
@@ -146,7 +146,7 @@ void SGLR_STATS_print(void);
     counter += addition;\
   }
 #else
-#define SGLR_STATS_incrementCount(counter, addition) ;
+#define SGLR_STATS_addToCount(counter, addition) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS
@@ -164,7 +164,7 @@ void SGLR_STATS_print(void);
     SGLR_STATS_edgeVisitsPerReductionLength[reductionLength]+=edgeVisits;\
   }
 #else
-#define SGLR_STATS_edgeVisitiForReductionLength(reductionLength, edgeVisits) ;
+#define SGLR_STATS_addEdgeVisitForReductionLength(reductionLength, edgeVisits) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS

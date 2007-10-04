@@ -1,5 +1,11 @@
 $Id$
 
+Thu Oct  4 18:24:13 CEST 2007 <economop@cwi.nl>
+ * src/inputStringBuilder.c: set the buffer size to 10KB.
+ * src/Makefile.am: added comments.
+ * src/*: added timings to the verbose output.
+ * src/parseForest/ambi-tables.c: removed counting from default behaviour.
+
 Thu Sep 27 13:10:43 CEST 2007 <economop@cwi.nl>
  * src/parser/parser.c: removed the GSS garbage collection code and added it
    to gss/gss.c. I also changed the status bar output to only report on the 

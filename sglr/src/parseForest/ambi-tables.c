@@ -216,6 +216,7 @@ void SG_CreateAmbCluster(PT_Tree existing, PT_Tree new, size_t pos) {
   return;
 }
 
+#if SGLR_COLLECT_STATISTICS
 void SG_collectAmbiTableStats(void) {
   if (cluster_table) {
     ATermList keys = ATtableKeys(cluster_table);
@@ -232,3 +233,8 @@ void SG_collectAmbiTableStats(void) {
     }
   }
 }
+#else 
+void SG_collectAmbiTableStats(void) {
+;
+}
+#endif

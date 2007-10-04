@@ -25,6 +25,7 @@
 #include "filters.h"
 #include "ambi-tables.h"
 #include "inputString-api.h"
+#include "inputStringBuilder.h" /* only used to get time taken */
 
 #include "mainOptions.h"
 #include "parserOptions.h"
@@ -32,6 +33,9 @@
 #include "parserStatistics.h"
 
 static ATbool initialized = ATfalse;
+static double timeTakenToParse = 0.0;
+static double timeTakenToFilter = 0.0;
+static double timeTakenToFlatten = 0.0;
 
 void SGLR_initialize() {
   
@@ -109,20 +113,21 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
 
   if (MAIN_getStatsFlag) { 
     SGLR_STATS_initializeHistograms(SGLR_PTBL_getMaxProductionLength(parseTable), IS_getLength(inputString)); 
-    STATS_Timer();
   }
 
+  STATS_Timer();
   t = SG_parse(parseTable, inputString);
-
-  SGLR_STATS_setCount(SGLR_STATS_parsingTime, STATS_Timer()); 
+  timeTakenToParse = STATS_Timer();
+  SGLR_STATS_setCount(SGLR_STATS_parsingTime, timeTakenToParse);
   SGLR_STATS_setCount(SGLR_STATS_linesParsed, IS_getLinesRead(inputString));
   SGLR_STATS_setCount(SGLR_STATS_charactersParsed, IS_getNumberOfTokensRead(inputString));
 
-  if (MAIN_getStatsFlag) { STATS_Timer(); }
   if (t) {
+    STATS_Timer();
     parseTree = FLT_filter(parseTable, t, inputString);
+    timeTakenToFilter = STATS_Timer();
+    SGLR_STATS_setCount(SGLR_STATS_filteringTime, timeTakenToFilter);
   }
-  SGLR_STATS_setCount(SGLR_STATS_filteringTime, STATS_Timer());
   SGLR_STATS_initializeClusterHistogram();
   SG_collectAmbiTableStats();
 
@@ -134,18 +139,26 @@ PT_ParseTree SGLR_parse(InputString inputString, const char *parseTableName) {
   if (parseTree) {
     if (MAIN_getFlattenTreeFlag()) {
       if (PARSER_getVerboseFlag) {
-        ATwarning("Flattening lists in parse forest\n");
+        ATwarning("sglr: flattening\n");
       }
       
-      if (MAIN_getStatsFlag) { STATS_Timer(); }
+      STATS_Timer();
       parseTree = flattenPT(parseTree);
-      SGLR_STATS_setCount(SGLR_STATS_flatteningTime, STATS_Timer());
+      timeTakenToFlatten = STATS_Timer();
+      SGLR_STATS_setCount(SGLR_STATS_flatteningTime, timeTakenToFlatten);
     }
   }
   
   if (MAIN_getStatsFlag) {
     SGLR_STATS_print();
     SGLR_STATS_destroyHistograms();
+  }
+  if (PARSER_getVerboseFlag) {
+    ATwarning("\ninput string reading and allocation: \t%f\n", IS_getTimeTakenToReadInput());
+    ATwarning("parse table reading and allocation: \t%f\n", SG_getTimeTakenToAllocateTable());
+    ATwarning("parsing time: \t\t\t\t%f\n", timeTakenToParse);
+    ATwarning("filtering time: \t\t\t%f\n", timeTakenToFilter);
+    ATwarning("flattening time: \t\t\t%f\n", timeTakenToFlatten);
   }
 
   return parseTree;

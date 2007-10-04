@@ -13,10 +13,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <rsrc-usage.h>
 
-
-/** \todo Set a sensible size. */
-static const int BUFCHUNK = 10;
+/** We got this number by calculating the average number of characters in all 
+ * c, java, asf, sdf, tb and idef files in the asfsdf-meta, rscript-meta, 
+ * apigen and sdf-apigen packages and their dependencies. */
+static const int BUFCHUNK = 10000;
+static double timeTakenToReadInput = 0.0;
 
 /** 
  * Creates an input string from the given string. When creating an input string 
@@ -61,6 +64,7 @@ InputString IS_createInputStringFromBytes(const char *path, const unsigned char 
  * \return the newly created input string.
  */
 InputString IS_createInputStringFromFile(const char *path) {
+  InputString retval;
   unsigned char *buf = NULL;
   size_t curbufsize = 0;
   size_t bytesRead = BUFCHUNK;
@@ -68,6 +72,7 @@ InputString IS_createInputStringFromFile(const char *path) {
   int length = 0;
   ATbool readFromStdin = ATfalse;
 
+  STATS_Timer();
   if (path == NULL || strcmp(path,"") == 0 || strcmp(path,"-") == 0) {
     in = stdin;
     readFromStdin = ATtrue;
@@ -97,7 +102,12 @@ InputString IS_createInputStringFromFile(const char *path) {
     fclose(in);
   }
 
-  return IS_allocateString(path, buf, length);
+  retval = IS_allocateString(path, buf, length);
+  timeTakenToReadInput = STATS_Timer();
+
+  return retval;
 }
 
-
+double IS_getTimeTakenToReadInput(void) {
+  return timeTakenToReadInput;
+}

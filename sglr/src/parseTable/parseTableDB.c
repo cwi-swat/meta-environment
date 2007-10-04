@@ -22,7 +22,7 @@ typedef struct _ptdb {
 } PTDB;
 
 static PTDB tables[MAX_TABLES];
-
+static double timeTakeToAllocateTable = 0.0;
 
 /* Read a parse table term, build a parse table, and add it to the
  * parse table database.
@@ -46,12 +46,11 @@ ParseTable *SG_AddParseTable(const char *filename) {
     return NULL;
   }
 
-  if (MAIN_getStatsFlag) { STATS_Timer(); }
-
+  STATS_Timer();
   extParseTable = PTBL_ParseTableFromTerm(ATreadFromFile(inputFile));
   intParseTable = SG_BuildParseTable(extParseTable, filename);
-
-  SGLR_STATS_setCount(SGLR_STATS_parseTableTime, STATS_Timer());
+  timeTakeToAllocateTable = STATS_Timer();
+  SGLR_STATS_setCount(SGLR_STATS_parseTableTime, timeTakeToAllocateTable);
 
   if (!readFromStdin) {
     fclose(inputFile);
@@ -100,4 +99,8 @@ ParseTable *SG_LookupParseTable(const char *parseTableName) {
   /*  SG_addParseTableErrorError(inFile, contentDescription); */
 
   return NULL;
+}
+
+double SG_getTimeTakenToAllocateTable(void) {
+  return timeTakeToAllocateTable;
 }

@@ -12,6 +12,7 @@
 ParseTable  *SG_AddParseTable(const char *filename);
 void         SG_CacheParseTable(const char *L, ParseTable *pt);
 ParseTable  *SG_LookupParseTable(const char *L);
+double       SG_getTimeTakenToAllocateTable(void);
 
 #endif /* _PARSETABLEDB_ */
 

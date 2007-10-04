@@ -15,6 +15,7 @@ InputString  IS_createInputStringFromBytes(const char *path,
 					   const unsigned char *string,
 					   const int length);
 InputString IS_createInputStringFromFile(const char *path);
+double IS_getTimeTakenToReadInput(void);
 
 #endif /* __INPUT_STRING_BUILDER__ */
 

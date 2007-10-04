@@ -20,8 +20,8 @@ INCLUDES= \
 	$(PT_SUPPORT_CFLAGS) \
 	$(PTABLE_SUPPORT_CFLAGS) \
 	$(C_LIBRARY_CFLAGS) \
-	-DFAST_API \
-	-DSGLR_COLLECT_STATISTICS
+	-DFAST_API 
+#	-DSGLR_COLLECT_STATISTICS
 
 pkgdata_DATA= \
 	sglr.idef
@@ -96,7 +96,7 @@ libsglr_la_SOURCES= \
         utils/list.c \
         utils/statusBar.c
 
-libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
+libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS) #-L/export/scratch1/economop/tools/google-perftools-0.93/lib -ltcmalloc
 
 libsglr_la_LIBADD = \
 	-L$(top_builddir)/src \
