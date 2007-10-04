@@ -22,9 +22,9 @@ import nl.cwi.sen1.visbase.factbrowser.data.FactBrowserDataManager;
 import nl.cwi.sen1.visbase.factbrowser.data.RStore;
 import nl.cwi.sen1.visbase.factbrowser.data.RStoreFact;
 import nl.cwi.sen1.visbase.factbrowser.data.VisualisationPlugin;
-import nl.dancingbear.visbase.rstorecontainer.datatypes.ATermParseException;
-import nl.dancingbear.visbase.rstorecontainer.datatypes.FactInfo;
-import nl.dancingbear.visbase.rstorecontainer.datatypes.FactInfoList;
+import nl.cwi.sen1.visbase.rstorecontainer.datatypes.ATermParseException;
+import nl.cwi.sen1.visbase.rstorecontainer.datatypes.FactInfo;
+import nl.cwi.sen1.visbase.rstorecontainer.datatypes.FactInfoList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
