@@ -1,11 +1,11 @@
-package nl.dancingbear.visplugin.graphplugin;
+package nl.cwi.sen1.visplugin.graphplugin;
 
+import junit.framework.TestCase;
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.relationstores.types.RType;
-import nl.dancingbear.visplugin.VisualizationFactorySingleton;
+import nl.cwi.sen1.visplugin.VisualizationFactorySingleton;
 import aterm.ATerm;
-import junit.framework.TestCase;
 
 /**
  * Test class for the GraphChartVisualization Plugin. Parts of the code copied

@@ -1,8 +1,8 @@
-package nl.dancingbear.visplugin.graphplugin;
+package nl.cwi.sen1.visplugin.graphplugin;
 
+import nl.cwi.sen1.visplugin.VisualizationPluginController;
+import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 import aterm.ATerm;
-import nl.dancingbear.visplugin.VisualizationPluginController;
-import nl.dancingbear.visplugin.VisualizationPluginWindow;
 
 /**
  * Graph Plugin Visualisation Controller. Controller for the graph

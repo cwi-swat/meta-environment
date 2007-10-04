@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.graphplugin;
+package nl.cwi.sen1.visplugin.graphplugin;
 
 import java.util.HashMap;
 

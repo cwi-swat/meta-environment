@@ -1,4 +1,4 @@
-package nl.dancingbear.visplugin.graphplugin;
+package nl.cwi.sen1.visplugin.graphplugin;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
@@ -11,7 +11,7 @@ import nl.cwi.sen1.relationstores.types.Location;
 import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.relationstores.types.RType;
 import nl.cwi.sen1.relationstores.types.idcon.IdCon;
-import nl.dancingbear.visplugin.VisualizationPluginWindow;
+import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 import prefuse.Display;
 import prefuse.controls.ControlAdapter;
 import prefuse.data.Graph;
