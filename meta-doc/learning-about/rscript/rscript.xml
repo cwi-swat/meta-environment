@@ -3768,95 +3768,146 @@ end equations</programlisting>The results of live variable analysis for our
             </mediaobject>
           </figure></para>
       </section>
-    </section>
-  </section>
 
-  <!--
-\section{Program Slicing} \label{SEC:slicing}
+      <section xml:id="section.program-slicing">
+        <title>Program Slicing</title>
 
-\begin{figure}[tb]
-\begin{center}
-{\small
-\begin{verbatim}
-      [ 1] read(n)           [ 1] read(n)            [ 1] read(n)
-      [ 2] i := 1            [ 2] i := 1             [ 2] i := 1
-      [ 3] sum := 0          [ 3] sum := 0          
-      [ 4] product := 1                              [ 4] product := 1
-      [ 5] while i<= n do    [ 5] while i<= n do     [ 5] while i<= n do
-           begin                  begin                   begin
-      [ 6]   sum := sum + i  [ 6]   sum := sum + i
-      [ 7]   product :=                              [ 7]   product := 
-               product * i                                    product * i
-      [ 8]   i := i + 1      [ 8]  i := i + 1        [ 8]   i := i + 1
-           end                    end                     end
-      [ 9] write(sum)        [ 9] write(sum)
-      [10] write(product)                            [10] write(product)
-\end{verbatim}
-}
-\end{center}
+        <para> \caption{\label{FIG:slicing}(a) Sample program, (b) slice for
+        statement {\tt [9]}, (c) slice for statement {\tt [10]}} \end{figure}
+        Program slicing is a technique proposed by Weiser~\cite{Weiser84} for
+        automatically decomposing programs in parts by analyzing their data
+        flow and control flow. Typically, a given statement in a program is
+        selected as the <emphasis>slicing criterion</emphasis> and the
+        original program is reduced to an independent subprogram, called a
+        <emphasis>slice</emphasis>, that is guaranteed to represent faithfully
+        the behavior of the original program at the slicing criterion. An
+        example will illustrate this:</para>
 
-\noindent\hspace{1cm}(a)\hspace{4cm}(b)\hspace{4cm}(c)
+        <para><programlisting xml:id="programlisting.slice-example">[ 1] read(n)             [ 1] read(n)             [ 1] read(n)
+[ 2] i := 1              [ 2] i := 1              [ 2] i := 1
+[ 3] sum := 0            [ 3] sum := 0          
+[ 4] product := 1                                 [ 4] product := 1
+[ 5] while i&lt;= n do      [ 5] while i&lt;= n do      [ 5] while i&lt;= n do
+     begin                    begin                    begin
+[ 6]   sum := sum + i    [ 6]   sum := sum + i
+[ 7]   product :=                                 [ 7]   product := 
+         product * i                                       product * i
+[ 8]   i := i + 1        [ 8]  i := i + 1         [ 8]   i := i + 1
+     end                      end                      end
+[ 9] write(sum)          [ 9] write(sum)
+[10] write(product)                               [10] write(product)
 
-\hrulefill
+<emphasis role="bold">(a)</emphasis> Sample program     <emphasis role="bold">(b)</emphasis> Slice for              <emphasis
+              role="bold">(c)</emphasis> Slice for
+                           statement [9]              statement [10]</programlisting></para>
 
-\caption{\label{FIG:slicing}(a) Sample program, 
-(b) slice for statement {\tt [9]}, (c) slice for statement {\tt [10]}}
-\end{figure}
+        <para>The initial program is given as (a). The slice with statement
+        [9] as slicing criterion is shown in (b): statements
+        <literal>[4]</literal> and <literal>[7]</literal> are irrelevant for
+        computing statement <literal>[9]</literal> and do not occur in the
+        slice. Similarly, (c) shows the slice with statement
+        <literal>[10]</literal> as slicing criterion. This particular form of
+        slicing is called <emphasis>backward slicing</emphasis>. Slicing can
+        be used for debugging and program understanding, optimization and
+        more. An overview of slicing techniques and applications can be found
+        in ~\cite{Tip95}. Here we will explore a relational formulation of
+        slicing adapted from a proposal in ~\cite{Jackson&amp;Rollins94}. The
+        basic ingredients of the approach are as follows:</para>
 
+        <itemizedlist>
+          <listitem>
+            <para>We assume the relations <literal>PRED</literal>,
+            <literal>DEFS</literal> and <literal>USES</literal> as
+            before.</para>
+          </listitem>
 
-Program slicing is a technique proposed by Weiser~\cite{Weiser84} for
-automatically decomposing programs in parts by analyzing their data
-flow and control flow. Typically, a given statement in a program is
-selected as the \emph{slicing criterion} and the original program is
-reduced to an independent subprogram, called a \emph{slice}, that is
-guaranteed to represent faithfully the behavior of the original
-program at the slicing criterion.  An example is given in
-Figure~\ref{FIG:slicing}.  The initial program is given in
-Figure~\ref{FIG:slicing}(a).  The slice with statement {\tt [9]} as
-slicing criterion is shown in Figure~\ref{FIG:slicing}(b): statements
-{\tt [4]} and {\tt [7]} are irrelevant for computing statement {\tt
-[9]} and do not occur in the slice. Similarly, Figure~\ref{FIG:slicing}(c)
-shows the slice with statement {\tt [10]} as slicing criterion.
-This particular form of slicing is called \emph{backward slicing}.
-Slicing can be used for debugging and program understanding,
-optimization and more. An overview of slicing techniques and
-applications can be found in ~\cite{Tip95}.
+          <listitem>
+            <para>We assume an additional set
+            <literal>CONTROL-STATEMENT</literal> that defines which statements
+            are control statements.</para>
+          </listitem>
 
-Here we will explore a relational formulation of slicing adapted from a proposal
-in ~\cite{Jackson&Rollins94}. The basic ingredients of the approach are as
-follows:
+          <listitem>
+            <para>To tie together dataflow and control flow, three auxiliary
+            variables are introduced:</para>
 
-\begin{itemize}
+            <itemizedlist>
+              <listitem>
+                <para>The variable <literal>TEST</literal> represents the
+                outcome of a specific test of a conditional statement. The
+                conditional statement defines <literal>TEST</literal> and all
+                statements that are control dependent on this conditional
+                statement will use <literal>TEST</literal>.</para>
+              </listitem>
 
-\item We assume the relations {\tt PRED}, {\tt DEFS} and {\tt USES} as before.
+              <listitem>
+                <para>The variable <literal>EXEC</literal> represents the
+                potential execution dependence of a statement on some
+                conditional statement. The dependent statement defines
+                <literal>EXEC</literal> and an explicit (control) dependence
+                is made between <literal>EXEC</literal> and the corresponding
+                <literal>TEST</literal>.</para>
+              </listitem>
 
-\item We assume an additional set {\tt CONTROL-STATEMENT} that defines which
-  statements are control statements.
+              <listitem>
+                <para>The variable <literal>CONST</literal> represents an
+                arbitrary constant. </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
 
-\item To tie together dataflow and control flow, three auxiliary variables are
-  introduced:
-  \begin{itemize}
+        <para></para>
 
-    \item The variable {\tt TEST} represents the outcome of
-    a specific test of a conditional statement. The conditional statement
-    defines {\tt TEST} and all statements that are control dependent on this
-    conditional statement will use {\tt TEST}.
+        <para>The calculation of a (backward) slice now proceeds in six
+        steps:</para>
 
-    \item The variable {\tt EXEC} represents the potential execution
-    dependence of a statement on some conditional statement.  The dependent
-    statement defines {\tt EXEC} and an explicit (control) dependence is made
-    between {\tt EXEC} and the corresponding {\tt TEST}.
+        <itemizedlist>
+          <listitem>
+            <para>Compute the relation <literal>rel[use,def] use-def</literal>
+            that relates all uses to their corresponding definitions. The
+            function <literal>reaching-definitions</literal> as shown earlier
+            in <xref linkend="section.reaching-definitions" />does most of the
+            work.</para>
+          </listitem>
 
-    \item The variable {\tt CONST} represents an arbitrary constant.	
+          <listitem>
+            <para>Compute the relation <literal>rel[def,use]
+            def-use-per-stat</literal> that relates the
+            <emphasis>internal</emphasis> definitions and uses of a
+            statement.</para>
+          </listitem>
 
-  \end{itemize}
+          <listitem>
+            <para>Compute the relation <literal>rel[def,use]
+            control-dependence</literal> that links all
+            <literal>EXEC</literal>s to the corresponding
+            <literal>TEST</literal>s.</para>
+          </listitem>
 
-\end{itemize}
+          <listitem>
+            <para>Compute the relation <literal>rel[use,def]
+            use-control-def</literal> combines use/def dependencies with
+            control dependencies.</para>
+          </listitem>
 
-\begin{figure}[tb]
-{\small
-\begin{verbatim}
-set[use] BackwardSlice(
+          <listitem>
+            <para>After these preparations, compute the relation
+            <literal>rel[use,use] USE-USE</literal> that contains dependencies
+            of uses on uses.</para>
+          </listitem>
+
+          <listitem>
+            <para>The backward slice for a given slicing criterion (a use) is
+            now simply the projection of <literal>USE-USE</literal> for the
+            slicing criterion.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para> This informal description of backward slicing can now be
+        expressed in Rscript:</para>
+
+        <para><programlisting>set[use] BackwardSlice(
     set[stat] CONTROL-STATEMENT, 
     rel[stat,stat] PRED,
     rel[stat,var] USES,
@@ -3868,181 +3919,113 @@ where
     rel[stat, def] REACH = reaching-definitions(DEFS, PRED)
 
     rel[use,def] use-def = 
-       {<<S1,V>, <S2,V>> | <stat S1, var V> : USES, <stat S2, V> : REACH[S1]}
+       {&lt;&lt;S1,V&gt;, &lt;S2,V&gt;&gt; | &lt;stat S1, var V&gt; : USES, &lt;stat S2, V&gt; : REACH[S1]}
 
     rel[def,use] def-use-per-stat  = 
-       {<<S,V1>, <S,V2>> | <stat S, var V1> : DEFS, <S, var V2> : USES}
+       {&lt;&lt;S,V1&gt;, &lt;S,V2&gt;&gt; | &lt;stat S, var V1&gt; : DEFS, &lt;S, var V2&gt; : USES}
              union
-       {<<S,V>, <S,"EXEC">> | <stat S, var V> : DEFS}
+       {&lt;&lt;S,V&gt;, &lt;S,"EXEC"&gt;&gt; | &lt;stat S, var V&gt; : DEFS}
              union
-       {<<S,"TEST">,<S,V>> | stat S : CONTROL-STATEMENT, 
-                             <S, var V> : domainR(USES, {S})}
+       {&lt;&lt;S,"TEST"&gt;,&lt;S,V&gt;&gt; | stat S : CONTROL-STATEMENT, 
+                             &lt;S, var V&gt; : domainR(USES, {S})}
 
     rel[stat, stat] CONTROL-DOMINATOR = 
        domainR(dominators(PRED), CONTROL-STATEMENT)
 
     rel[def,use] control-dependence  =
-       { <<S2, "EXEC">,<S1,"TEST">> | <stat S1, stat S2> : CONTROL-DOMINATOR}
+       { &lt;&lt;S2, "EXEC"&gt;,&lt;S1,"TEST"&gt;&gt; | &lt;stat S1, stat S2&gt; : CONTROL-DOMINATOR}
 
     rel[use,def] use-control-def = use-def union control-dependence
 
     rel[use,use] USE-USE = (use-control-def o def-use-per-stat)*
 
-endwhere
-\end{verbatim}
-\hrulefill}
-\caption{\label{FIG:backward-slice}Backward slicing}
-\end{figure}
+endwhere</programlisting></para>
 
+        <para>Let's apply this to the example<xref
+        linkend="programlisting.slice-example" /> and assume the
+        following:<programlisting>rel[stat,stat] PRED = {&lt;1,2&gt;, &lt;2,3&gt;, &lt;3,4&gt;, &lt;4,5&gt;, &lt;5,6&gt;, &lt;5,9&gt;, &lt;6,7&gt;,
+                       &lt;7,8&gt;,&lt;8,5&gt;, &lt;8,9&gt;, &lt;9,10&gt;}
 
-\noindent The calculation of a (backward) slice now proceeds in six steps:
+rel[stat,var] DEFS  = {&lt;1, "n"&gt;, &lt;2, "i"&gt;, &lt;3, "sum"&gt;, &lt;4,"product"&gt;,
+                       &lt;6, "sum"&gt;, &lt;7, "product"&gt;, &lt;8, "i"&gt;}
 
-\begin{enumerate}
+rel[stat,var] USES  = {&lt;5, "i"&gt;, &lt;5, "n"&gt;, &lt;6, "sum"&gt;, &lt;6,"i"&gt;,
+                       &lt;7, "product"&gt;, &lt;7, "i"&gt;, &lt;8, "i"&gt;, &lt;9, "sum"&gt;, 
+                       &lt;10, "product"&gt;}
 
-\item 	Compute the relation {\tt rel[use,def] use-def} that relates all uses
-  to their corresponding definitions. The function {\tt reaching-definitions}
-  as shown earlier in Figure~\ref{FIG:reaching-definitions} does most of the work.
+set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
+        slice<programlisting>BackwardSlice(CONTROL-STATEMENT, PRED, USES, DEFS, &lt;9, "sum"&gt;)</programlisting>will
+        then be<programlisting> { &lt;1, "EXEC"&gt;, &lt;2, "EXEC"&gt;,  &lt;3, "EXEC"&gt;, &lt;5, "i"&gt;, &lt;5, "n"&gt;,  
+   &lt;6, "sum"&gt;, &lt;6, "i"&gt;, &lt;6, "EXEC"&gt;, &lt;8, "i"&gt;, &lt;8, "EXEC"&gt;, 
+   &lt;9, "sum"&gt; }</programlisting> Take the domain of this result and we
+        get exactly the statements in Figure~\ref{FIG:slicing}(b).</para>
+      </section>
+    </section>
+  </section>
 
-\item 	Compute the relation {\tt rel[def,use] def-use-per-stat} that relates the ``internal''
-  definitions and uses of a statement.
+  <section xml:id="section-extracting-facts">
+    <title>Extracting Facts from Source Code</title>
 
-\item 	Compute the relation {\tt rel[def,use] control-dependence} that links
-  all {\tt EXEC}s to the corresponding {\tt TEST}s.
- 
-\item	Compute the relation {\tt rel[use,def] use-control-def} combines
-  use/def dependencies with control dependencies.
+    <para> \chapter{Extracting Facts from Source Code}
+    \label{SEC:ExtractingFacts} \begin{figure}[tb] %%\hrulefill \begin{center}
+    %% \vspace*{-1cm} \epsfig{figure=figs/extract-workflow.eps,width=10cm}
+    \vspace*{-2.5cm} \end{center} \hrulefill
+    \caption{\label{FIG:extract-workflow}Workflow for fact extraction}
+    \end{figure} \fbox{\epsfig{figure=figs/spektroskoop.ps,width=8cm}}
+    \label{FIG:spektroskoop} \hspace*{0.5cm}\parbox[b]{6cm}{ In this tutorial
+    we have, so far, concentrated on querying and enriching facts that have
+    been extracted from source code. As we have seen from the examples, once
+    these facts are available, a concise \rscript suffices to do the required
+    processing. But how is fact extraction achieved and how difficult is it?
+    To answer these questions we first describe the workflow of the fact
+    extraction process (Section~\ref{SEC:extraction-wortkflow}) and then we
+    give a more detailed account of fact extraction using ASF+SDF
+    (Section~\ref{SEC:ASF+SDF-extraction}).} \section{Workflow for Fact
+    Extraction} \label{SEC:extraction-wortkflow}
+    Figure~\ref{FIG:extract-workflow} shows a typical workflow for fact
+    extraction for a \emph{System Under Investigation} (SUI). It assumes that
+    the SUI uses only \emph{one} programming language and that you need only
+    one grammar. In realistic cases, however, several such grammars may be
+    needed. The workflow consists of three main phases: \begin{itemize} \item
+    Grammar: Obtain and improve the grammar for the source language of the
+    SUI. \item Facts: Obtain and improve facts extracted from the SUI. \item
+    Queries: Write and improve queries that give the desired answers.
+    \end{itemize} Of course, it may happen that you have a lucky day and that
+    extracted facts are readily available or that you can reuse a good quality
+    fact extractor that you can apply to the SUI. On ordinary days you have
+    the above workflow as fall-back. It may come as a surprise that there is
+    such a strong emphasis on validation in this workflow. The reason is that
+    the SUI is usually a huge system that defeats manual inspection. Therefore
+    we must be very careful that we validate the outcome of each phase.
+    \paragraph{Grammar} In many cases there is no canned grammar available
+    that can be used to parse the programming language dialect used in the
+    SUI. Usually an existing grammar can be adjusted to that dialect, but then
+    it is then mandatory to validate that the adjusted grammar can be used to
+    parse the sources of the SUI. \paragraph{Facts} It may happen that the
+    facts extracted from the source code are \emph{wrong}. Typical error
+    classes are: \begin{itemize} \item Extracted facts are \emph{wrong\/}: the
+    extracted facts incorrectly state that procedure {\tt P} calls procedure
+    {\tt Q} but this is contradicted by a source code inspection. \item
+    Extracted facts are \emph{incomplete\/}: the inheritance between certain
+    classes in Java code is missing. \end{itemize} The strategy to validate
+    extracted facts differ per case but here are three strategies:
+    \begin{itemize} \item Postprocess the extracted facts (using \rscript, of
+    course) to obtain trivial facts about the source code such as total lines
+    of source code and number of procedures, classes, interfaces and the like.
+    Next validate these trivial facts with tools like {\tt wc} (word and line
+    count), {\tt grep} (regular expression matching) and others. \item Do a
+    manual fact extraction on a small subset of the code and compare this with
+    the automatically extracted facts. \item Use another tool on the same
+    source and compare results whenever possible. A typical example is a
+    comparison of a call relation extracted with different tools.
+    \end{itemize} \paragraph{Queries} For the validation of the answers to the
+    queries essentially the same approach can be used as for validating the
+    facts. Manual checking of answers on random samples of the SUI may be
+    mandatory. It also happens frequently that answers inspire new queries
+    that lead to new answers, and so on. </para>
+  </section>
 
-\item 	After these preparations, compute the relation {\tt rel[use,use]
-  USE-USE} that contains dependencies of uses on uses.
-
-\item The backward slice for a given slicing criterion (a use) is now simply
-  the projection of {\tt USE-USE} for the slicing criterion.
-\end{enumerate}
-
-This informal description of backward slicing is described precisely in
-Figure~\ref{FIG:backward-slice}. Let's apply this to the example
-in Figure~\ref{FIG:slicing} and assume the following:
-
-\begin{exam}
-\begin{verbatim}
-rel[stat,stat] PRED = {<1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,9>, <6,7>,
-                       <7,8>,<8,5>, <8,9>, <9,10>}
-
-rel[stat,var] DEFS  = {<1, "n">, <2, "i">, <3, "sum">, <4,"product">,
-                       <6, "sum">, <7, "product">, <8, "i">}
-
-rel[stat,var] USES  = {<5, "i">, <5, "n">, <6, "sum">, <6,"i">,
-                       <7, "product">, <7, "i">, <8, "i">, <9, "sum">, 
-                       <10, "product">}
-
-set[int] CONTROL-STATEMENT = { 5 }
-\end{verbatim}
-\end{exam}
-The result of the slice
-\begin{exam}
-\begin{verbatim}
-BackwardSlice(CONTROL-STATEMENT, PRED, USES, DEFS, <9, "sum">)
-\end{verbatim}
-\end{exam}
-will then be
-\begin{exam}
-\begin{verbatim}
- { <1, "EXEC">, <2, "EXEC">,  <3, "EXEC">, <5, "i">, <5, "n">,  
-   <6, "sum">, <6, "i">, <6, "EXEC">, <8, "i">, <8, "EXEC">, 
-   <9, "sum"> }.
-\end{verbatim}
-\end{exam}
-Take the domain of this result and we get exactly the statements
-in Figure~\ref{FIG:slicing}(b).
-
-\chapter{Extracting Facts from Source Code} \label{SEC:ExtractingFacts}
-\begin{figure}[tb]
-%%\hrulefill
-\begin{center}
-%% \vspace*{-1cm}
-\epsfig{figure=figs/extract-workflow.eps,width=10cm}
-\vspace*{-2.5cm}
-\end{center}
-\hrulefill
-\caption{\label{FIG:extract-workflow}Workflow for fact extraction}
-\end{figure}
-
-
-\fbox{\epsfig{figure=figs/spektroskoop.ps,width=8cm}} \label{FIG:spektroskoop}
-\hspace*{0.5cm}\parbox[b]{6cm}{
-In this tutorial we have, so far, concentrated on querying and enriching facts
-that have been extracted from source code. As we have seen from the examples,
-once these facts are available, a concise \rscript suffices to do the required
-processing. But how is fact extraction achieved and how difficult is it? To
-answer these questions we first describe the workflow of the fact extraction
-process (Section~\ref{SEC:extraction-wortkflow}) and then we give a more
-detailed account of fact extraction using ASF+SDF
-(Section~\ref{SEC:ASF+SDF-extraction}).}
-
-\section{Workflow for Fact Extraction} \label{SEC:extraction-wortkflow}
-
-Figure~\ref{FIG:extract-workflow} shows a typical workflow for fact extraction
-for a \emph{System Under Investigation} (SUI). It assumes that the SUI uses
-only \emph{one} programming language and that you need only one grammar. In
-realistic cases, however, several such grammars may be needed. The workflow consists of
-three main phases:
-\begin{itemize}
-\item Grammar: Obtain and improve the grammar for the source language of the SUI.
-\item Facts: Obtain and improve facts extracted from the SUI.
-\item Queries: Write and improve queries that give the desired answers.
-\end{itemize}
-
-Of course, it may happen that you have a lucky day and that extracted facts
-are readily available or that you can reuse a good quality fact extractor that
-you can apply to the SUI. On ordinary days you have the above workflow as
-fall-back.
-
-It may come as a surprise that there is such a strong emphasis on validation
-in this workflow. The reason is that the SUI is usually a huge system that
-defeats manual inspection. Therefore we must be very careful that we validate
-the outcome of each phase.
-
-\paragraph{Grammar}
-In many cases there is no canned grammar available that can be used to parse
-  the programming language dialect used in the SUI. Usually an existing
-  grammar can be adjusted to that dialect, but then it is then mandatory to
-  validate that the adjusted grammar can be used to parse the sources of the
-  SUI.
-
-\paragraph{Facts}
-  It may happen that the facts extracted from the source code are
-  \emph{wrong}. Typical error classes are:
-  \begin{itemize}
-  \item Extracted facts are \emph{wrong\/}: the extracted facts incorrectly state that procedure {\tt P} calls
-  procedure {\tt Q} but this is contradicted by a source code inspection.
-  \item Extracted facts are \emph{incomplete\/}: the inheritance between certain classes
-  in Java code is missing.
-  \end{itemize}
-  The strategy to validate extracted facts differ per case but here are three
-  strategies:
-  \begin{itemize}
-  \item Postprocess the extracted facts (using \rscript, of course) to obtain
-  trivial facts about the source code such as total lines of source code and
-  number of procedures, classes, interfaces and the like. Next validate these
-  trivial facts with tools
-  like {\tt wc} (word and line count), {\tt grep} (regular expression
-  matching) and others.
-
-  \item Do a manual fact extraction on a small subset of the code and compare
-  this with the automatically extracted facts.
-
-  \item Use another tool on the same source and compare results whenever
-  possible. A typical example is a comparison of a call relation extracted
-  with different tools.
-
-  \end{itemize}
-
-\paragraph{Queries} For the validation of the answers to the queries essentially the same
-  approach can be used as for validating the facts. Manual checking of answers
-  on random samples of the SUI may be mandatory. It also happens frequently
-  that answers inspire new queries that lead to new answers, and so on.
-
-
+  <!--
 \section{Fact Extraction using ASF+SDF} \label{SEC:ASF+SDF-extraction}
 
 \begin{figure}[tb]
