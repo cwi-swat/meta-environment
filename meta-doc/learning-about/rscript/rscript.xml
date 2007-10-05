@@ -3966,113 +3966,203 @@ set[int] CONTROL-STATEMENT = { 5 }</programlisting> The result of the
   <section xml:id="section-extracting-facts">
     <title>Extracting Facts from Source Code</title>
 
-    <para> \chapter{Extracting Facts from Source Code}
-    \label{SEC:ExtractingFacts} \begin{figure}[tb] %%\hrulefill \begin{center}
-    %% \vspace*{-1cm} \epsfig{figure=figs/extract-workflow.eps,width=10cm}
-    \vspace*{-2.5cm} \end{center} \hrulefill
-    \caption{\label{FIG:extract-workflow}Workflow for fact extraction}
-    \end{figure} \fbox{\epsfig{figure=figs/spektroskoop.ps,width=8cm}}
-    \label{FIG:spektroskoop} \hspace*{0.5cm}\parbox[b]{6cm}{ In this tutorial
-    we have, so far, concentrated on querying and enriching facts that have
-    been extracted from source code. As we have seen from the examples, once
-    these facts are available, a concise \rscript suffices to do the required
-    processing. But how is fact extraction achieved and how difficult is it?
-    To answer these questions we first describe the workflow of the fact
-    extraction process (Section~\ref{SEC:extraction-wortkflow}) and then we
-    give a more detailed account of fact extraction using ASF+SDF
-    (Section~\ref{SEC:ASF+SDF-extraction}).} \section{Workflow for Fact
-    Extraction} \label{SEC:extraction-wortkflow}
-    Figure~\ref{FIG:extract-workflow} shows a typical workflow for fact
-    extraction for a \emph{System Under Investigation} (SUI). It assumes that
-    the SUI uses only \emph{one} programming language and that you need only
-    one grammar. In realistic cases, however, several such grammars may be
-    needed. The workflow consists of three main phases: \begin{itemize} \item
-    Grammar: Obtain and improve the grammar for the source language of the
-    SUI. \item Facts: Obtain and improve facts extracted from the SUI. \item
-    Queries: Write and improve queries that give the desired answers.
-    \end{itemize} Of course, it may happen that you have a lucky day and that
-    extracted facts are readily available or that you can reuse a good quality
-    fact extractor that you can apply to the SUI. On ordinary days you have
-    the above workflow as fall-back. It may come as a surprise that there is
-    such a strong emphasis on validation in this workflow. The reason is that
-    the SUI is usually a huge system that defeats manual inspection. Therefore
-    we must be very careful that we validate the outcome of each phase.
-    \paragraph{Grammar} In many cases there is no canned grammar available
-    that can be used to parse the programming language dialect used in the
-    SUI. Usually an existing grammar can be adjusted to that dialect, but then
-    it is then mandatory to validate that the adjusted grammar can be used to
-    parse the sources of the SUI. \paragraph{Facts} It may happen that the
-    facts extracted from the source code are \emph{wrong}. Typical error
-    classes are: \begin{itemize} \item Extracted facts are \emph{wrong\/}: the
-    extracted facts incorrectly state that procedure {\tt P} calls procedure
-    {\tt Q} but this is contradicted by a source code inspection. \item
-    Extracted facts are \emph{incomplete\/}: the inheritance between certain
-    classes in Java code is missing. \end{itemize} The strategy to validate
-    extracted facts differ per case but here are three strategies:
-    \begin{itemize} \item Postprocess the extracted facts (using \rscript, of
-    course) to obtain trivial facts about the source code such as total lines
-    of source code and number of procedures, classes, interfaces and the like.
-    Next validate these trivial facts with tools like {\tt wc} (word and line
-    count), {\tt grep} (regular expression matching) and others. \item Do a
-    manual fact extraction on a small subset of the code and compare this with
-    the automatically extracted facts. \item Use another tool on the same
-    source and compare results whenever possible. A typical example is a
-    comparison of a call relation extracted with different tools.
-    \end{itemize} \paragraph{Queries} For the validation of the answers to the
-    queries essentially the same approach can be used as for validating the
-    facts. Manual checking of answers on random samples of the SUI may be
-    mandatory. It also happens frequently that answers inspire new queries
-    that lead to new answers, and so on. </para>
-  </section>
+    <para>In this tutorial we have, so far, concentrated on querying and
+    enriching facts that have been extracted from source code. As we have seen
+    from the examples, once these facts are available, a concise Rscript
+    suffices to do the required processing. But how is fact extraction
+    achieved and how difficult is it? To answer these questions we first
+    describe the workflow of the fact extraction process
+    (Section~\ref{SEC:extraction-wortkflow}) and then we give a more detailed
+    account of fact extraction using ASF+SDF
+    (Section~\ref{SEC:ASF+SDF-extraction}).</para>
 
-  <!--
-\section{Fact Extraction using ASF+SDF} \label{SEC:ASF+SDF-extraction}
+    <para><figure xml:id="figure.extract-workflow">
+        <title>Workflow for fact extraction</title>
 
-\begin{figure}[tb]
-%%\hrulefill
-\begin{center}
-%%\vspace*{-1cm}
-\epsfig{figure=figs/extract-meta.eps,width=10cm}
-\vspace*{-5cm}
-\end{center}
-\hrulefill
-\caption{\label{FIG:extract-meta}The \emph{Separation-of-Concerns\/} strategy
-  for  fact extraction}
-\end{figure}
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="extract-workflow.png" scale="50"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
 
-\subsection{Strategies for Fact Extraction}
-The following global scenario's are available when writing a fact extractor in ASF+SDF:
-\begin{itemize}
-\item \emph{Dump-and-Merge\/:} Parse each source file, extract the relevant facts, and
-  return the resulting (partial) Rstore. In a separate phase, merge all the
-  partial Rstores into a complete Rstore for the whole SUI. The tool {\tt
-  merge-rstores} is available for this.
-\item \emph{Extract-and-Update\/}: Parse each source file, extract the
-  relevant facts, and add these directly to the partial Rstore that has been
-  constructed for previous source files.
-\end{itemize}
-The experience is that the \emph{Extract-and-Update} is more efficient.
+    <section xml:id="section.workflow-fact-extraction">
+      <title>Workflow for Fact Extraction</title>
 
-A second consideration is the scenario used for the fact extraction per
-file. Here there are again two possibilities:
-\begin{itemize}
-\item \emph{All-in-One\/}: Write one function that extracts all facts in one
-  traversal of the source file. Typically, this function has an Rstore as
-  argument and returns an Rstore as well. During the visit of specific
-  language constructs additions are made to named sets or relations in the
-  Rstore.
-\item \emph{Separation-of-Concerns\/}: Write a separate function for each fact
-  you want to extract. Typically, each function takes a set or relation as
-  argument and returns an updated version of it. At the top level all these
-  functions are called and their results are put into an Rstore.
-  This strategy is illustrated in Figure~\ref{FIG:extract-meta}
-\end{itemize}
-The experience here is that everybody starts with the \emph{All-in-One}
-strategy but that the complexities of the interactions between the various
-fact extraction concerns soon start to hurt. The advice is therefore to use
-the \emph{Separation-of-Concerns\/} strategy even if it may be seem to be less
-efficient since it requires a traversal of the source program for each
-extracted set or relation.
+      <para><xref linkend="figure.extract-workflow" /> shows a typical
+      workflow for fact extraction for a <emphasis>System Under
+      Investigation</emphasis> (SUI). It assumes that the SUI uses only
+      <emphasis>one</emphasis> programming language and that you need only one
+      grammar. In realistic cases, however, several such grammars may be
+      needed. The workflow consists of three main phases: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Grammar: Obtain and improve the grammar for the source
+          language of the SUI. </para>
+        </listitem>
+
+        <listitem>
+          <para>Facts: Obtain and improve facts extracted from the SUI.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Queries: Write and improve queries that give the desired
+          answers.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Of course, it may happen that you have a lucky day and that
+      extracted facts are readily available or that you can reuse a good
+      quality fact extractor that you can apply to the SUI. On ordinary days
+      you have the above workflow as fall-back. It may come as a surprise that
+      there is such a strong emphasis on validation in this workflow. The
+      reason is that the SUI is usually a huge system that defeats manual
+      inspection. Therefore we must be very careful that we validate the
+      outcome of each phase. </para>
+
+      <formalpara>
+        <title>Grammar</title>
+
+        <para>In many cases there is no canned grammar available that can be
+        used to parse the programming language dialect used in the SUI.
+        Usually an existing grammar can be adjusted to that dialect, but then
+        it is then mandatory to validate that the adjusted grammar can be used
+        to parse the sources of the SUI. </para>
+      </formalpara>
+
+      <formalpara>
+        <title>Facts</title>
+
+        <para>It may happen that the facts extracted from the source code are
+        <emphasis>wrong</emphasis>. Typical error classes are: </para>
+      </formalpara>
+
+      <itemizedlist>
+        <listitem>
+          <para>Extracted facts are <emphasis>wrong</emphasis>: the extracted
+          facts incorrectly state that procedure <literal>P</literal> calls
+          procedure <literal>Q</literal> but this is contradicted by a source
+          code inspection. </para>
+        </listitem>
+
+        <listitem>
+          <para>Extracted facts are <emphasis>incomplete</emphasis>: the
+          inheritance between certain classes in Java code is missing.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The strategy to validate extracted facts differ per case but here
+      are three strategies: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Postprocess the extracted facts (using Rscript, of course) to
+          obtain trivial facts about the source code such as total lines of
+          source code and number of procedures, classes, interfaces and the
+          like. Next validate these trivial facts with tools like
+          <literal>wc</literal> (word and line count), <literal>grep</literal>
+          (regular expression matching) and others. </para>
+        </listitem>
+
+        <listitem>
+          <para>Do a manual fact extraction on a small subset of the code and
+          compare this with the automatically extracted facts. </para>
+        </listitem>
+
+        <listitem>
+          <para>Use another tool on the same source and compare results
+          whenever possible. A typical example is a comparison of a call
+          relation extracted with different tools. </para>
+        </listitem>
+      </itemizedlist>
+
+      <formalpara>
+        <title>Queries</title>
+
+        <para>For the validation of the answers to the queries essentially the
+        same approach can be used as for validating the facts. Manual checking
+        of answers on random samples of the SUI may be mandatory. It also
+        happens frequently that answers inspire new queries that lead to new
+        answers, and so on. </para>
+      </formalpara>
+    </section>
+
+    <section xml:id="section.strategies-fact-extraction">
+      <title>Strategies for Fact Extraction</title>
+
+      <para> The following global scenario's are available when writing a fact
+      extractor:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Dump-and-Merge</emphasis>: Parse each source file,
+          extract the relevant facts, and return the resulting (partial)
+          Rstore. In a separate phase, merge all the partial Rstores into a
+          complete Rstore for the whole SUI. The tool {\tt merge-rstores} is
+          available for this.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Extract-and-Update</emphasis>: Parse each source
+          file, extract the relevant facts, and add these directly to the
+          partial Rstore that has been constructed for previous source
+          files.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The experience is that the \emph{Extract-and-Update} is more
+      efficient. A second consideration is the scenario used for the fact
+      extraction per file. Here there are again two possibilities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>All-in-One</emphasis>: Write one function that
+          extracts all facts in one traversal of the source file. Typically,
+          this function has an Rstore as argument and returns an Rstore as
+          well. During the visit of specific language constructs additions are
+          made to named sets or relations in the Rstore.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Separation-of-Concerns</emphasis>: Write a separate
+          function for each fact you want to extract. Typically, each function
+          takes a set or relation as argument and returns an updated version
+          of it. At the top level all these functions are called and their
+          results are put into an Rstore. This strategy is illustrated in
+          <xref linkend="figure.separation-of-concerns" />.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para> The experience here is that everybody starts with the
+      <emphasis>All-in-One</emphasis> strategy but that the complexities of
+      the interactions between the various fact extraction concerns soon start
+      to hurt. The advice is therefore to use the
+      <emphasis>Separation-of-Concerns</emphasis> strategy even if it may be
+      seem to be less efficient since it requires a traversal of the source
+      program for each extracted set or relation.</para>
+
+      <figure xml:id="figure.separation-of-concerns">
+        <title>Separation-of-Concerns strategy for fact extraction</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="sep-of-concerns.png" scale="50"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section xml:id="section.fact-extraction-asf-sdf">
+      <title>Fact Extraction using ASF+SDF</title>
+
+      <para>Although facts can be extracted in many ways, ASF+SDF is the tool
+      of preference to do this. Examples are given In XXX.</para>
+
+      <para><!--\section{Fact Extraction using ASF+SDF} \label{SEC:ASF+SDF-extraction}
+
+
 
 \subsection{Extracting Facts for Pico}
 
@@ -4352,42 +4442,259 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
   performs a straightforward conversion of {\tt UNINIT}'s value to the message
   format ({\tt Summary}) that is used by the Meta-Environment.
 
-\end{itemize}
+\end{itemize}--></para>
+    </section>
 
-\section{Concluding Remarks}
-As can already be seen from the very simple Pico example, over 100 lines of
-ASF+SDF specification (including variable declarations and auxiliary functions
-we did not show) are needed to extract facts, while only 10 lines of \rscript
-are sufficient for the further processing of these facts. What can we learn
-from this observation?
+    <section>
+      <title>Concluding remarks</title>
 
-First, that even in the simple case of Pico fact extraction is more
-complicated than the processing of these facts. This may be due to the following:
-\begin{itemize}
-\item The facts we are interested in may be scattered over different language
-  constructs.  This implies that the fact extractor has to cover all these
-  cases.
-\item The extracted facts are completely optimized for relational processing
-  but places a burden on the fact extractor to perform this optimization.
+      <para>It is not unusual that the effort that is needed to write a fact
+      extractor is much larger than the few lines of Rscript that are
+      sufficient for the further processing of these facts. What can we learn
+      from this observation? First, that even in simple cases fact extraction
+      is more complicated than the processing of these facts. This may be due
+      to the following:</para>
 
-\end{itemize}
+      <itemizedlist>
+        <listitem>
+          <para>The facts we are interested in may be scattered over different
+          language constructs. This implies that the fact extractor has to
+          cover all these cases.</para>
+        </listitem>
 
-Second, that several research question remain unanswered:
+        <listitem>
+          <para>The extracted facts are completely optimized for relational
+          processing but places a burden on the fact extractor to perform this
+          optimization.</para>
+        </listitem>
+      </itemizedlist>
 
-\begin{itemize}
+      <para> Second, that several research questions remain unanswered:</para>
 
-\item Is it possible to solve (parts of) the fact extraction in a
-  language-parametric way. In other words, is it possible to define generic
-  extraction methods that apply to multiple languages?
+      <itemizedlist>
+        <listitem>
+          <para>Is it possible to solve (parts of) the fact extraction in a
+          language-parametric way. In other words, is it possible to define
+          generic extraction methods that apply to multiple languages?</para>
+        </listitem>
 
-\item Is a further integration of fact extraction with relational processing
-  desirable? We have already shown some form of integration in
-  Figure~\ref{FIG:PicoFactExtraction-uninit} where an embedded \rscript occurs
-  in an ASF+SDF specification. Is it, for instance, useful to bring some of
-  the syntactic program domains like expressions and statements to the
-  relational domain?
+        <listitem>
+          <para>Is a further integration of fact extraction with relational
+          processing desirable? Is it, for instance, useful to bring some of
+          the syntactic program domains like expressions and statements to the
+          relational domain?</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
 
-\end{itemize}
+  <section>
+    <title>Table of Built-in Operators</title>
+
+    <para><table border="1">
+        <caption>Table of Built-in Operators</caption>
+
+        <tr>
+          <td>Operator</td>
+
+          <td>Description</td>
+
+          <td>Section</td>
+        </tr>
+
+        <tr>
+          <td><literal>and</literal></td>
+
+          <td>Boolean and</td>
+
+          <td><xref linkend="section.BO-bool" /></td>
+        </tr>
+
+        <tr>
+          <td><literal>implies</literal></td>
+
+          <td>Boolean implication</td>
+
+          <td><xref linkend="section.BO-bool" /></td>
+        </tr>
+
+        <tr>
+          <td><literal>in</literal></td>
+
+          <td>Membership test on sets/relations</td>
+
+          <td><xref linkend="section.BO-set-or-rel" /></td>
+        </tr>
+
+        <tr>
+          <td><literal>inter</literal></td>
+
+          <td>Intersection of sets/relations</td>
+
+          <td><xref linkend="section.BO-set-or-rel" /></td>
+        </tr>
+
+        <tr>
+          <td><literal>not</literal></td>
+
+          <td>Boolean negation</td>
+
+          <td><xref linkend="section.BO-bool" /></td>
+        </tr>
+
+        <tr>
+          <td><literal>notin</literal></td>
+
+          <td>Non-membership test on sets/relations</td>
+
+          <td><xref linkend="section.BO-set-or-rel" /></td>
+        </tr>
+
+        <tr>
+          <td><literal>or</literal></td>
+
+          <td>Boolean or</td>
+
+          <td><xref linkend="section.BO-bool" /></td>
+        </tr>
+
+        <tr>
+          <td>union</td>
+
+          <td>Union of sets/relations</td>
+
+          <td><xref linkend="section.BO-set-or-rel" /></td>
+        </tr>
+
+        <tr>
+          <td>==</td>
+
+          <td>Equality of integers</td>
+
+          <td><xref linkend="section.BO-int" /></td>
+        </tr>
+
+        <tr>
+          <td>==</td>
+
+          <td>Equality of strings</td>
+
+          <td><xref linkend="section.BO-str" /></td>
+        </tr>
+
+        <tr>
+          <td>==</td>
+
+          <td>Equality of locations</td>
+
+          <td><xref linkend="section.BO-loc" /></td>
+        </tr>
+
+        <tr>
+          <td>==</td>
+
+          <td>Equality of sets/relations</td>
+
+          <td><xref linkend="section.BO-set-or-rel" /></td>
+        </tr>
+      </table> {\tt !=} &amp; Inequality of integers &amp; \ref{BO:int}\\ {\tt
+    !=} &amp; Inequality of strings &amp; \ref{BO:str}\\ {\tt !=} &amp;
+    Inequality of locations &amp; \ref{BO:loc}\\ {\tt !=} &amp; Inequality of
+    sets/relations &amp; \ref{BO:set-or-rel}\\ {\tt &lt;=} &amp; Less than or
+    equal of integers &amp; \ref{BO:int}\\ {\tt &lt;=} &amp; Less than or
+    equal of strings &amp; \ref{BO:str}\\ {\tt &lt;=} &amp; Textual inclusion
+    of locations &amp; \ref{BO:loc}\\ {\tt &lt;=} &amp; Subset of
+    sets/relations &amp; \ref{BO:set-or-rel}\\ {\tt &lt;} &amp; Less than of
+    integers &amp; \ref{BO:int}\\ {\tt &lt;} &amp; Less than of strings &amp;
+    \ref{BO:str}\\ {\tt &lt;} &amp; Strict textual inclusion of locations
+    &amp; \ref{BO:loc}\\ {\tt &lt;} &amp; Strict subset of sets/relations
+    &amp; \ref{BO:set-or-rel}\\ {\tt &gt;=} &amp; Greater than or equal of
+    integers &amp; \ref{BO:int}\\ {\tt &gt;=} &amp; Greater than or equal of
+    strings &amp; \ref{BO:str}\\ {\tt &gt;=} &amp; Textual containment of
+    locations &amp; \ref{BO:loc}\\ {\tt &gt;=} &amp; Superset of
+    sets/relations &amp; \ref{BO:set-or-rel}\\ {\tt &gt;} &amp; Greater than
+    of integers &amp; \ref{BO:int}\\ {\tt &gt;} &amp; Greater than of strings
+    &amp; \ref{BO:str}\\ {\tt &gt;} &amp; Strict textual containment of
+    locations &amp; \ref{BO:loc}\\ {\tt &gt;} &amp; Strict superset of
+    sets/relations &amp; \ref{BO:set-or-rel}\\ {\tt +} &amp; Addition of
+    integers &amp; \ref{BO:int}\\ {\tt -} &amp; Subtraction of integers &amp;
+    \ref{BO:int}\\ {\tt *} &amp; Multiplication of integers &amp;
+    \ref{BO:int}\\ {\tt /} &amp; Division of integers &amp; \ref{BO:int}\\
+    \verb+\+ &amp; Difference of sets/relations &amp; \ref{BO:set-or-rel}\\
+    {\tt o} &amp; Composition of relations &amp; \ref{BO:relations}\\ {\tt x}
+    &amp; Carthesian product of sets &amp; \ref{BO:relations}\\ \verb@#@ &amp;
+    Number of elements of set &amp; \ref{BO:misc}\\ \verb@#@ &amp; Number of
+    tuples of relation &amp; \ref{BO:misc}\\ {\tt [-, ]} &amp; Left image of
+    relation &amp; \ref{BO:relations}\\ {\tt [ ,-]} &amp; Right image of
+    relation &amp; \ref{BO:relations}\\ {\tt [ ]} &amp; Right image of
+    relation &amp; \ref{BO:relations}\\ {\tt +} &amp; Transitive closure of a
+    relation &amp; \ref{BO:relations}\\ {\tt *} &amp; Reflexive transitive
+    closure of a relation &amp; \ref{BO:relations}\\ \hline \end{supertabular}
+    \end{center} %%\begin{figure}[h] %%\begin{center}
+    %%\epsfig{figure=figs/elektrometer.ps,height=10cm} %%\end{center}
+    %%\end{figure} </para>
+  </section>
+
+  <section>
+    <title>Table of Built-in Functions</title>
+
+    <para><!--\chapter{Tables of Built-in Functions} \label{AP:functions}
+\vspace*{-\baselineskip}
+%%\tablecaption{Built-in functions}
+\tablehead{\hline}
+\tabletail{\hline}
+
+\begin{center}
+\begin{supertabular}{|l|l|c|}
+
+{\bf Function}         & {\bf Description}   & {\bf Section} \\ \hline \hline
+
+{\tt average}          & Average of a set of integers & \ref{BI:average} \\
+{\tt average-domain}   & Average of first elements of tuples in relation & \ref{BI:average-domain} \\
+{\tt average-range}    & Average of second elements of tuples in relation & \ref{BI:average-range} \\
+{\tt begincol}         & First column of a location & \ref{BI:begincol}\\
+{\tt beginline}        & Beginning line of a location & \ref{BI:beginline}\\
+{\tt bottom}           & Bottom of a relation & \ref{BI:bottom} \\
+{\tt carrier}          & Carrier of a relation & \ref{BI:carrier} \\
+{\tt carrierR}         & Carrier restriction of a relation & \ref{BI:carrierR} \\
+{\tt carrierX}         & Carrier exclusion of a relation & \ref{BI:carrierX} \\
+
+{\tt compl}            & Complement of a relation & \ref{BI:compl} \\
+{\tt endcol}           & Last column of a location & \ref{BI:endcol}\\
+{\tt endline}          & Ending line of a location & \ref{BI:endline}\\
+{\tt filename}         & File name of a location & \ref{BI:filename}\\
+{\tt first}            & First element of a tuple & \ref{BI:first} \\
+{\tt id}               & Identity relation & \ref{BI:id} \\
+{\tt inv}              & Inverse of a relation & \ref{BI:inv} \\
+
+{\tt domain}           & Domain of a relation & \ref{BI:domain} \\
+{\tt domainR}          & Domain restriction of a relation & \ref{BI:domainR} \\
+{\tt domainX}          & Domain exclusion of a relation & \ref{BI:domainX} \\
+{\tt min}              & Minimum of a set of integers & \ref{BI:max} \\
+{\tt max}              & Maximum of a set of integers & \ref{BI:max} \\
+{\tt power0}           & Powerset of a set & \ref{BI:power0} \\
+{\tt power1}           & Powerset of a set & \ref{BI:power1} \\
+
+{\tt range}            & Range of a relation  & \ref{BI:range} \\
+{\tt rangeR}           & Range restriction of a relation & \ref{BI:rangeR} \\
+{\tt rangeX}           & Range exclusion of a relation & \ref{BI:rangeX} \\
+{\tt reachR}           & Reachability with restriction & \ref{BI:reachR} \\
+{\tt reachX}           & Reachability with exclusion& \ref{BI:reachX} \\
+
+{\tt second}           & Second element of a tuple & \ref{BI:second} \\
+{\tt sum}              & Sum of a set of integers & \ref{BI:sum} \\
+{\tt sum-domain}       & Sum of first elements of tuples in relation & \ref{BI:sum-domain} \\
+{\tt sum-range}        & Sum of a first elements of tuples in relation & \ref{BI:sum-range} \\
+{\tt top}              & Top of a relation & \ref{BI:top} \\
+{\tt unique}           & Deprecated: Set with unique elements & \ref{BI:unique}\\
+
+\end{supertabular}
+\end{center}--></para>
+  </section>
+
+  <!--
+
+
 
 
 \chapter{Installing and Running \rscript} \label{SEC:running-rscript}
@@ -4931,140 +5238,6 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 
 \end{center}
 \end{figure}
-
-\appendix
-
-\chapter{Tables of Built-in Operators} \label{AP:operators}
-
-
-\begin{center}
-\begin{supertabular}{|l|l|c|} \hline
-\tablecaption{Built-in operators}
-\tablehead{\hline}
-\tabletail{\hline} 
-{\bf Operator} & {\bf Description} & {\bf Section} \\ \hline \hline
-{\tt and}      & Boolean and & \ref{BO:bool}\\
-{\tt implies}  & Boolean implication & \ref{BO:bool}\\
-{\tt in}       & Membership test on sets/relations& \ref{BO:set-or-rel}\\
-{\tt inter}    & Intersection of sets/relations& \ref{BO:set-or-rel}\\
-{\tt not}      & Boolean negation & \ref{BO:bool}\\
-{\tt notin}    & Non-membership test on sets/relations& \ref{BO:set-or-rel}\\
-{\tt or}       & Boolean or & \ref{BO:bool}\\
-{\tt union}    & Union of sets/relations& \ref{BO:set-or-rel}\\
-{\tt ==}       & Equality of integers & \ref{BO:int}\\
-{\tt ==}       & Equality of strings & \ref{BO:str}\\
-{\tt ==}       & Equality of locations & \ref{BO:loc}\\
-{\tt ==}       & Equality of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt !=}       & Inequality of integers & \ref{BO:int}\\
-{\tt !=}       & Inequality of strings & \ref{BO:str}\\
-{\tt !=}       & Inequality of locations & \ref{BO:loc}\\
-{\tt !=}       & Inequality of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt <=}       & Less than or equal of integers & \ref{BO:int}\\
-{\tt <=}       & Less than or equal of strings & \ref{BO:str}\\
-{\tt <=}       & Textual inclusion of locations & \ref{BO:loc}\\
-{\tt <=}       & Subset of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt <}        & Less than of integers & \ref{BO:int}\\
-{\tt <}        & Less than of strings & \ref{BO:str}\\
-{\tt <}        & Strict textual inclusion of locations & \ref{BO:loc}\\
-{\tt <}        & Strict subset of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt >=}       & Greater than or equal of integers & \ref{BO:int}\\
-{\tt >=}       & Greater than or equal of strings & \ref{BO:str}\\
-{\tt >=}       & Textual containment of locations & \ref{BO:loc}\\
-{\tt >=}       & Superset of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt >}        & Greater than of integers & \ref{BO:int}\\
-{\tt >}        & Greater than of strings & \ref{BO:str}\\
-{\tt >}        & Strict textual containment of locations & \ref{BO:loc}\\
-{\tt >}        & Strict superset of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt +}        & Addition of integers & \ref{BO:int}\\
-{\tt -}        & Subtraction of integers & \ref{BO:int}\\
-{\tt *}        & Multiplication of integers & \ref{BO:int}\\
-{\tt /}        & Division of integers & \ref{BO:int}\\
-
-\verb+\+       & Difference of sets/relations & \ref{BO:set-or-rel}\\
-
-{\tt o}        & Composition of relations  & \ref{BO:relations}\\
-{\tt x}        & Carthesian product of sets & \ref{BO:relations}\\
-
-\verb@#@       & Number of elements of set & \ref{BO:misc}\\
-\verb@#@       & Number of tuples of relation & \ref{BO:misc}\\
-
-{\tt [-, ]}    & Left image of relation & \ref{BO:relations}\\
-{\tt [  ,-]}   & Right image of relation & \ref{BO:relations}\\
-{\tt [ ]}      & Right image of relation & \ref{BO:relations}\\
-
-{\tt +}        & Transitive closure of a relation  & \ref{BO:relations}\\
-{\tt *}        & Reflexive transitive closure of a relation  & \ref{BO:relations}\\ \hline
-
-\end{supertabular}
-\end{center}
-
-\chapter{Tables of Built-in Functions} \label{AP:functions}
-\vspace*{-\baselineskip}
-%%\tablecaption{Built-in functions}
-\tablehead{\hline}
-\tabletail{\hline}
-
-\begin{center}
-\begin{supertabular}{|l|l|c|}
-
-{\bf Function}         & {\bf Description}   & {\bf Section} \\ \hline \hline
-
-{\tt average}          & Average of a set of integers & \ref{BI:average} \\
-{\tt average-domain}   & Average of first elements of tuples in relation & \ref{BI:average-domain} \\
-{\tt average-range}    & Average of second elements of tuples in relation & \ref{BI:average-range} \\
-{\tt begincol}         & First column of a location & \ref{BI:begincol}\\
-{\tt beginline}        & Beginning line of a location & \ref{BI:beginline}\\
-{\tt bottom}           & Bottom of a relation & \ref{BI:bottom} \\
-{\tt carrier}          & Carrier of a relation & \ref{BI:carrier} \\
-{\tt carrierR}         & Carrier restriction of a relation & \ref{BI:carrierR} \\
-{\tt carrierX}         & Carrier exclusion of a relation & \ref{BI:carrierX} \\
-
-{\tt compl}            & Complement of a relation & \ref{BI:compl} \\
-{\tt endcol}           & Last column of a location & \ref{BI:endcol}\\
-{\tt endline}          & Ending line of a location & \ref{BI:endline}\\
-{\tt filename}         & File name of a location & \ref{BI:filename}\\
-{\tt first}            & First element of a tuple & \ref{BI:first} \\
-{\tt id}               & Identity relation & \ref{BI:id} \\
-{\tt inv}              & Inverse of a relation & \ref{BI:inv} \\
-
-{\tt domain}           & Domain of a relation & \ref{BI:domain} \\
-{\tt domainR}          & Domain restriction of a relation & \ref{BI:domainR} \\
-{\tt domainX}          & Domain exclusion of a relation & \ref{BI:domainX} \\
-{\tt min}              & Minimum of a set of integers & \ref{BI:max} \\
-{\tt max}              & Maximum of a set of integers & \ref{BI:max} \\
-{\tt power0}           & Powerset of a set & \ref{BI:power0} \\
-{\tt power1}           & Powerset of a set & \ref{BI:power1} \\
-
-{\tt range}            & Range of a relation  & \ref{BI:range} \\
-{\tt rangeR}           & Range restriction of a relation & \ref{BI:rangeR} \\
-{\tt rangeX}           & Range exclusion of a relation & \ref{BI:rangeX} \\
-{\tt reachR}           & Reachability with restriction & \ref{BI:reachR} \\
-{\tt reachX}           & Reachability with exclusion& \ref{BI:reachX} \\
-
-{\tt second}           & Second element of a tuple & \ref{BI:second} \\
-{\tt sum}              & Sum of a set of integers & \ref{BI:sum} \\
-{\tt sum-domain}       & Sum of first elements of tuples in relation & \ref{BI:sum-domain} \\
-{\tt sum-range}        & Sum of a first elements of tuples in relation & \ref{BI:sum-range} \\
-{\tt top}              & Top of a relation & \ref{BI:top} \\
-{\tt unique}           & Deprecated: Set with unique elements & \ref{BI:unique}\\
-
-\end{supertabular}
-\end{center}
-
-
-
-
-%%\begin{figure}[h]
-%%\begin{center}
-%%\epsfig{figure=figs/elektrometer.ps,height=10cm}
-%%\end{center}
-%%\end{figure}
 
 
 
