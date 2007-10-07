@@ -60,11 +60,12 @@ for cat in ${CATEGORIES}; do
                    --stringparam ignore.image.scaling 1 \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
-                   --param xref.with.number.and.title 0 \
+                   --param xref.with.number.and.title 1 \
                    ${DOCBOOKXSLHTML} -)
 	(xsltproc --stringparam now "${pubdate}" ./pubdate.xsl $cat/$book/$book.xml | \
 	 xsltproc  --output ${WEB}/$cat/$book/$book.fo \
-                   --param xref.with.number.and.title 0 \
+                   --param xref.with.number.and.title 1 \
+                   --stringparam insert.xref.page.number "no" \
 		   --param chapter.autolabel 1 \
 		   --param section.autolabel 1 \
 		   --param shade.verbatim 1 \

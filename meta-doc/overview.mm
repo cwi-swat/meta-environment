@@ -1,12 +1,22 @@
 <map version="0.9.0_Beta_8">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1189954785689" ID="Freemind_Link_646512598" LINK="http://www.meta-environment.org" MODIFIED="1189956488527">
+<node CREATED="1189954785689" ID="Freemind_Link_646512598" LINK="http://www.meta-environment.org" MODIFIED="1191091241761">
 <richcontent TYPE="NODE"><html>
   <head>
-    
+    <style type="text/css">
+      <!--
+        p { margin-top: 0 }
+      -->
+    </style>
+        
   </head>
   <body>
-    <img src="research/meta-doc/trunk/logos/ome4.png" />
+    <p style="text-align: center">
+      Meta-Environment
+    </p>
+    <p style="text-align: center">
+      documentation
+    </p>
   </body>
 </html>
 </richcontent>
