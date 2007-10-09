@@ -25,8 +25,8 @@ public class BarChartExample {
 		
 		Factory m_factory = VisualizationFactorySingleton.getFactoryInstance();
 
-        BarChartVisualizationController controller = new BarChartVisualizationController();
-        BarChartVisualizationWindow visualization = (BarChartVisualizationWindow) controller.createWindow();
+        BCVisualizationController controller = new BCVisualizationController();
+        BCVisualizationWindow visualization = (BCVisualizationWindow) controller.createWindow();
 
 		visualization.setFactory(m_factory);
 

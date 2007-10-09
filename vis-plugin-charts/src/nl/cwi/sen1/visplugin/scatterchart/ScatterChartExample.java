@@ -23,8 +23,8 @@ public class ScatterChartExample {
 		
 		Factory m_factory = VisualizationFactorySingleton.getFactoryInstance();
 
-        ScatterChartVisualizationController controller = new ScatterChartVisualizationController();
-        ScatterChartVisualizationWindow visualization = (ScatterChartVisualizationWindow) controller.createWindow();
+        SCVisualizationController controller = new SCVisualizationController();
+        SCVisualizationWindow visualization = (SCVisualizationWindow) controller.createWindow();
 
 		visualization.setFactory(m_factory);
 

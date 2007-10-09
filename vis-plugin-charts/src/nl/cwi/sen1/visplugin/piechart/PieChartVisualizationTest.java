@@ -21,8 +21,8 @@ import aterm.ATerm;
  */
 public class PieChartVisualizationTest extends TestCase {
 
-    private PieChartVisualizationController m_controller;
-    private PieChartVisualizationWindow m_window;
+    private PCVisualizationController m_controller;
+    private PCVisualizationWindow m_window;
     private Factory m_factory;
     private RTuple m_relStrInt;
     private RTuple m_relIntStr;
@@ -46,9 +46,9 @@ public class PieChartVisualizationTest extends TestCase {
 
         // Create the visualisation itself.
         m_factory = VisualizationFactorySingleton.getFactoryInstance();
-        m_controller = new PieChartVisualizationController();
+        m_controller = new PCVisualizationController();
         m_controller.initPluginController(VisualizationFactorySingleton.getPureFactoryInstance());
-        m_window = (PieChartVisualizationWindow) m_controller.createWindow();
+        m_window = (PCVisualizationWindow) m_controller.createWindow();
         m_window.setFactory(m_factory);        
         
         // Setup three Rtuples for the tests.
@@ -98,8 +98,8 @@ public class PieChartVisualizationTest extends TestCase {
      * @date 07-3-2007
      */
     public void testPieChartVisualizationController() {
-        PieChartVisualizationController controller = new PieChartVisualizationController();
-        assertEquals(PieChartVisualizationWindow.class, controller
+        PCVisualizationController controller = new PCVisualizationController();
+        assertEquals(PCVisualizationWindow.class, controller
                 .createWindow().getClass());
     }
 

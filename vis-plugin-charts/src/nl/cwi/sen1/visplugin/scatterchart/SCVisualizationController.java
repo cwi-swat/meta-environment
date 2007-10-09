@@ -1,17 +1,17 @@
-package nl.cwi.sen1.visplugin.linechart;
+package nl.cwi.sen1.visplugin.scatterchart;
 
 import nl.cwi.sen1.visplugin.VisualizationPluginController;
 import nl.cwi.sen1.visplugin.VisualizationPluginWindow;
 import aterm.ATerm;
 
 /**
- * LineChart Plugin Visualisation Controller. Controller for the Line Chart
+ * scatterChart Plugin Visualisation Controller. Controller for the scatter Chart
  * Window.
  * 
  * @author Raymond Bergen
  * @date 14-03-2007
  */
-public class LineChartVisualizationController extends
+public class SCVisualizationController extends
         VisualizationPluginController {
 
     /**
@@ -20,29 +20,29 @@ public class LineChartVisualizationController extends
      * @author Raymond Bergen
      * @date 14-03-2007
      */
-    public LineChartVisualizationController() {
+    public SCVisualizationController() {
         super();
     }
 
     /**
-     * Creates a LineChartVisualizationWindow.
+     * Creates a scatterChartVisualizationWindow.
      * 
      * @author Raymond Bergen
      * @date 14-03-2007
      */
     public VisualizationPluginWindow createWindow() {
-        return new LineChartVisualizationWindow();
+        return new SCVisualizationWindow();
     }
 
     /**
-     * Creates a LineChartVisualizationWindow.
+     * Creates a scatterChartVisualizationWindow.
      * 
      * @return Name of this plugin.
      * @author Raymond Bergen
      * @date 14-03-2007
      */
     public String getPluginName() {
-        return "Line chart";
+        return "Scatter plot";
     }
 
     /**

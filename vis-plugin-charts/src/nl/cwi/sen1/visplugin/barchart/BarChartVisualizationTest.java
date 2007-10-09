@@ -18,8 +18,8 @@ import aterm.ATerm;
  */
 public class BarChartVisualizationTest extends TestCase {
 
-    private BarChartVisualizationController m_controller;
-    private BarChartVisualizationWindow m_window;
+    private BCVisualizationController m_controller;
+    private BCVisualizationWindow m_window;
     private Factory m_factory;
     private RTuple m_relStrInt;
     private RTuple m_relIntStr;
@@ -41,9 +41,9 @@ public class BarChartVisualizationTest extends TestCase {
 
         // Create the visualisation itself.
         m_factory = VisualizationFactorySingleton.getFactoryInstance();
-        m_controller = new BarChartVisualizationController();
+        m_controller = new BCVisualizationController();
         m_controller.initPluginController(VisualizationFactorySingleton.getPureFactoryInstance());
-        m_window = (BarChartVisualizationWindow) m_controller.createWindow();
+        m_window = (BCVisualizationWindow) m_controller.createWindow();
         m_window.setFactory(m_factory);        
         
         // Setup three Rtuples for the tests.
@@ -89,8 +89,8 @@ public class BarChartVisualizationTest extends TestCase {
      */
     public void testBarChartVisualizationController() {
         
-        BarChartVisualizationController controller = new BarChartVisualizationController();
-        assertEquals(BarChartVisualizationWindow.class, controller
+        BCVisualizationController controller = new BCVisualizationController();
+        assertEquals(BCVisualizationWindow.class, controller
                 .createWindow().getClass());
     }
 

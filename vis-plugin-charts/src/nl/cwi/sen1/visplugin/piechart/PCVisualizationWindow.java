@@ -27,7 +27,7 @@ import org.jfree.data.general.DefaultPieDataset;
  * @author Aldert Boerhoop (reviewer)
  * @author Anton Gerdessen (reviewer)
  */
-public class PieChartVisualizationWindow extends VisualizationPluginWindow {
+public class PCVisualizationWindow extends VisualizationPluginWindow {
 
     /**
      * Render the RTuple in a Pie Chart.

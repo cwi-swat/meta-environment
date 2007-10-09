@@ -23,8 +23,8 @@ public class LineChartExample {
 		
 		Factory m_factory = VisualizationFactorySingleton.getFactoryInstance();
 
-        LineChartVisualizationController controller = new LineChartVisualizationController();
-        LineChartVisualizationWindow visualization = (LineChartVisualizationWindow) controller.createWindow();
+        LCVisualizationController controller = new LCVisualizationController();
+        LCVisualizationWindow visualization = (LCVisualizationWindow) controller.createWindow();
 
 		visualization.setFactory(m_factory);
 

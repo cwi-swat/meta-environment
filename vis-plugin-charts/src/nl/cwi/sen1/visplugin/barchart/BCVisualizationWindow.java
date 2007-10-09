@@ -31,7 +31,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  * Original code : PieChart plugin ( A. Belgraver, R. van Remortel )
  * @author Srinivasan Tharmarajah
  */
-public class BarChartVisualizationWindow extends VisualizationPluginWindow {
+public class BCVisualizationWindow extends VisualizationPluginWindow {
 
     /**
      * Render the RTuple in a Bar Chart.

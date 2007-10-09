@@ -3,10 +3,10 @@ package nl.cwi.sen1.visplugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.plugin.StudioPlugin;
-import nl.cwi.sen1.visplugin.barchart.BarChartVisualizationController;
-import nl.cwi.sen1.visplugin.linechart.LineChartVisualizationController;
-import nl.cwi.sen1.visplugin.piechart.PieChartVisualizationController;
-import nl.cwi.sen1.visplugin.scatterchart.ScatterChartVisualizationController;
+import nl.cwi.sen1.visplugin.barchart.BCVisualizationController;
+import nl.cwi.sen1.visplugin.linechart.LCVisualizationController;
+import nl.cwi.sen1.visplugin.piechart.PCVisualizationController;
+import nl.cwi.sen1.visplugin.scatterchart.SCVisualizationController;
 import aterm.pure.PureFactory;
 
 /**
@@ -37,19 +37,19 @@ public class PluginLoader extends DefaultStudioPlugin{
 	public void initStudioPlugin(Studio studio){
 		PureFactory pureFactory = (PureFactory) studio.getATermFactory();
 		
-		BarChartVisualizationController barChartVisualizationController = new BarChartVisualizationController();
+		BCVisualizationController barChartVisualizationController = new BCVisualizationController();
 		barChartVisualizationController.initStudioPlugin(studio);
 		barChartVisualizationController.initPluginController(pureFactory);
 		
-		LineChartVisualizationController lineChartVisualizationController = new LineChartVisualizationController();
+		LCVisualizationController lineChartVisualizationController = new LCVisualizationController();
 		lineChartVisualizationController.initStudioPlugin(studio);
 		lineChartVisualizationController.initPluginController(pureFactory);
 		
-		PieChartVisualizationController pieChartVisualizationController = new PieChartVisualizationController();
+		PCVisualizationController pieChartVisualizationController = new PCVisualizationController();
 		pieChartVisualizationController.initStudioPlugin(studio);
 		pieChartVisualizationController.initPluginController(pureFactory);
 		
-		ScatterChartVisualizationController scatterChartVisualizationController = new ScatterChartVisualizationController();
+		SCVisualizationController scatterChartVisualizationController = new SCVisualizationController();
 		scatterChartVisualizationController.initStudioPlugin(studio);
 		scatterChartVisualizationController.initPluginController(pureFactory);
 		

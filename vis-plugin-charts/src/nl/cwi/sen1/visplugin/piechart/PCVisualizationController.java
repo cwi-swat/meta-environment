@@ -14,7 +14,7 @@ import aterm.ATerm;
  * @author Anton Gerdessen (reviewer)
  * @date 07-3-2007
  */
-public class PieChartVisualizationController extends
+public class PCVisualizationController extends
         VisualizationPluginController {
 
     /**
@@ -26,7 +26,7 @@ public class PieChartVisualizationController extends
      * @author Anton Gerdessen (reviewer)
      * @date 07-3-2007
      */
-    public PieChartVisualizationController() {
+    public PCVisualizationController() {
         super();
     }
 
@@ -40,7 +40,7 @@ public class PieChartVisualizationController extends
      * @date 07-3-2007
      */
     public VisualizationPluginWindow createWindow() {
-        return new PieChartVisualizationWindow();
+        return new PCVisualizationWindow();
     }
 
     /**

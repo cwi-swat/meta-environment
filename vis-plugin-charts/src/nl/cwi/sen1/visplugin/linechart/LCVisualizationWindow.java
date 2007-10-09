@@ -25,7 +25,7 @@ import org.jfree.data.xy.XYSeriesCollection;
  * Original code : PieChart plugin ( A. Belgraver, R. van Remortel )
  * @author Raymond Bergen
  */
-public class LineChartVisualizationWindow extends VisualizationPluginWindow {
+public class LCVisualizationWindow extends VisualizationPluginWindow {
 
     /**
      * Render the RTuple in a Line Chart.
