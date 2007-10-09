@@ -1,0 +1,38 @@
+<?xml version='1.0'?>
+<xsl:stylesheet  
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    version="1.0">
+
+<!-- FO-specific customizations are defined here -->
+
+<xsl:import href="__DOCBOOKXSLPREFIX__/fo/docbook.xsl"/>
+
+<xsl:include href="common-customizations.xsl" />
+
+<xsl:param name="collect.xref.target"      select="'no'" />
+
+<xsl:param name="shade.verbatim"          select="'1'" />
+<xsl:param name="paper.type"              select="'A4'" />
+<xsl:param name="insert.xref.page.number" select="'yes'" />
+
+<xsl:template  match="sect1|sect2|sect3|sect4|sect5|section"  
+               mode="insert.title.markup">
+  <xsl:param name="purpose"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="title"/>
+
+  <xsl:choose>
+    <xsl:when test="$purpose = 'xref'">
+      <fo:inline font-style="italic">
+        <xsl:copy-of select="$title"/>
+      </fo:inline>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="$title"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+</xsl:stylesheet>

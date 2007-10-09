@@ -15,8 +15,10 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
     <title>Syntax analysis</title>
-<pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
+
+    <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
     (Wed, 13 Dec 2006)$</pubdate>
+
     <author>
       <personname>Paul Klint</personname>
     </author>
@@ -33,7 +35,8 @@
     interested in syntax analysis to determine that the source code of a
     program is correct and to convert it into a more structured representation
     (parse tree) for further processing like semantic analysis or
-    transformation.</para>
+    transformation. TEST FOR OLINKING, see <olink
+    targetdoc="formatting"></olink></para>
   </section>
 
   <section xml:id="sa_introduction">
@@ -48,7 +51,7 @@
     <para>How can we determine that this is a correct assignment statement?
     First of all, this is a sequence of individual characters
     <literal>p</literal>, <literal>o</literal> , <literal>s</literal>, and so
-    on. This is shown in <xref linkend="sa_fig_example_text"/>.</para>
+    on. This is shown in <xref linkend="sa_fig_example_text" />.</para>
 
     <figure xml:id="sa_fig_example_text">
       <title>Text of example</title>
@@ -94,9 +97,10 @@
 
     <para>This process of grouping individual characters is called
     <emphasis>lexical analysis</emphasis> or <emphasis>lexical
-    scanning</emphasis>, the result is shown in <xref linkend="sa_fig_example_lex"/>. Observe that
-    the spaces have disappeared and are left unclassified (we will come back
-    to this in <xref linkend="sa_lexical_versus_context_free_grammar"/>).</para>
+    scanning</emphasis>, the result is shown in <xref
+    linkend="sa_fig_example_lex" />. Observe that the spaces have disappeared
+    and are left unclassified (we will come back to this in <xref
+    linkend="sa_lexical_versus_context_free_grammar" />).</para>
 
     <figure xml:id="sa_fig_example_lex">
       <title>Lexical analysis of example</title>
@@ -111,8 +115,8 @@
     <para>Next, we want to determine that this is a structurally correct
     statement. This is the main province of syntax analysis or parsing as it
     is usually called. The result of parsing is a <emphasis>parse
-    tree</emphasis> as shown in <xref linkend="sa_fig_example_parsetree"/>. This parse
-    tree reflects the usual meaning of arithmetic operators: since
+    tree</emphasis> as shown in <xref linkend="sa_fig_example_parsetree" />.
+    This parse tree reflects the usual meaning of arithmetic operators: since
     multiplication is done before addition, the sub phrase <literal>rate *
     60</literal> is grouped together as a logical unit.</para>
 
@@ -349,15 +353,15 @@ Expression "*" Expression -&gt; Expression
 
       <para>In its simplest form, syntax analysis amounts to recognizing that
       a source text adheres to the rules of a given grammar. This is shown in
-      <xref linkend="sa_fig_recognizer"/>. Given a
-      grammar, it takes a source text as input and generates
-      <emphasis>Yes</emphasis> or <emphasis>No</emphasis> as answer.
-      <emphasis>Yes</emphasis>, when the source text can be parsed according
-      to the grammar, and <emphasis>No</emphasis>, when this is not the case.
-      In practice, a recognizer becomes infinitely more useful if it also
-      generates error messages that explain the negative outcome.</para>
+      <xref linkend="sa_fig_recognizer" />. Given a grammar, it takes a source
+      text as input and generates <emphasis>Yes</emphasis> or
+      <emphasis>No</emphasis> as answer. <emphasis>Yes</emphasis>, when the
+      source text can be parsed according to the grammar, and
+      <emphasis>No</emphasis>, when this is not the case. In practice, a
+      recognizer becomes infinitely more useful if it also generates error
+      messages that explain the negative outcome.</para>
 
-      <figure  xml:id="sa_fig_recognizer">
+      <figure xml:id="sa_fig_recognizer">
         <title>A recognizer</title>
 
         <mediaobject>
@@ -369,12 +373,12 @@ Expression "*" Expression -&gt; Expression
         <para>Pure recognizers are seldomly used, since the parse tree
         corresponding to the source text is needed for nearly all further
         processing such as checking or compiling. The more standard situation
-        is shown in <xref linkend="sa_fig_parser"/>. Given a
-        grammar, a parser takes a source text as input and generates as answer
-        either a parse tree or a list of error messages.</para>
+        is shown in <xref linkend="sa_fig_parser" />. Given a grammar, a
+        parser takes a source text as input and generates as answer either a
+        parse tree or a list of error messages.</para>
       </figure>
 
-      <figure xml:id="sa_fig_parser" >
+      <figure xml:id="sa_fig_parser">
         <title>A parser</title>
 
         <mediaobject>
@@ -391,16 +395,16 @@ Expression "*" Expression -&gt; Expression
       <para>Syntax analysis is one of the very mature areas of language theory
       and many methods have been proposed to implement parsers. Giving even a
       brief overview of these techniques is beyond the scope of this paper,
-      but see the references in <xref linkend="sa_further_reading"/>. In the
+      but see the references in <xref linkend="sa_further_reading" />. In the
       Meta-Environment we use a parsing method called Scannerless Generalized
       Left-to-Right parsing or SGLR for short. The least we can do, is explain
       what this method is about.</para>
 
       <para>We have already encountered the notion of
       <emphasis>scannerless</emphasis> parsing in <xref
-      linkend="sa_introduction"/>. It amounts to eliminating the classic
+      linkend="sa_introduction" />. It amounts to eliminating the classic
       distinction between the scanner (that groups characters into lexical
-      tokens) and the parser (that determines the global structure).  The
+      tokens) and the parser (that determines the global structure). The
       advantage of this approach is that more interplay between the character
       level and the structure level is possible. This is particularly true in
       combination with the "generalized" property of SGLR.</para>
@@ -435,7 +439,7 @@ Expression "*" Expression -&gt; Expression
       combine recognized parts. In doing so, it becomes possible that not one
       but <emphasis>several</emphasis> parse trees are the result of parsing.
       The bonus is that all context-free languages can be parsed by the SGLR
-      parsing algorithm. <xref linkend="sa_fig_sglr"/> summarizes the use of
+      parsing algorithm. <xref linkend="sa_fig_sglr" /> summarizes the use of
       an SGLR parser. Using SGLR has three key advantages:</para>
 
       <itemizedlist>
@@ -457,7 +461,7 @@ Expression "*" Expression -&gt; Expression
         </listitem>
       </itemizedlist>
 
-      <figure  xml:id="sa_fig_sglr">
+      <figure xml:id="sa_fig_sglr">
         <title>An SGLR parser</title>
 
         <mediaobject>
@@ -557,24 +561,25 @@ Statement ";" Statements -&gt; Statements</programlisting>
     <section xml:id="sa_modular_grammars">
       <title>Modular grammars</title>
 
-      <para>As we have seen in <xref linkend="sa_parsing_methods"/>, using an
+      <para>As we have seen in <xref linkend="sa_parsing_methods" />, using an
       SGLR parser enables the creation of modular grammars. This is more
       exciting than it sounds. Consider, a huge language like Cobol (yes it is
       still widely used!). In addition to the Cobol language itself there are
       many extensions that are embedded in Cobol programs: CICS supervisor
       calls, SQL queries, and the like. Each of these grammars works well if
       we use them with a conventional parser (see <xref
-      linkend="sa_fig_modular_parser1"/>). However, if we attempt to combine the
-      three grammars in ordere\ to be able to parse Cobol programs with
+      linkend="sa_fig_modular_parser1" />). However, if we attempt to combine
+      the three grammars in ordere\ to be able to parse Cobol programs with
       embedded CICS and SQL, then disaster strikes. Most conventional parsers
       will complain about the interference between the three grammars and just
-      refuse to work (see <xref linkend="sa_fig_modular_parser2"/>). For the technically inclined: shift-reduce
-      conflict galore! However, if we try the same with an SGLR parser things
-      go smoothly (see <xref linkend="sa_fig_modular_parser3"/>).</para>
+      refuse to work (see <xref linkend="sa_fig_modular_parser2" />). For the
+      technically inclined: shift-reduce conflict galore! However, if we try
+      the same with an SGLR parser things go smoothly (see <xref
+      linkend="sa_fig_modular_parser3" />).</para>
 
       <figure xml:id="sa_fig_modular_parser1">
-        <title >Conventional parser works well
-        with independent grammars</title>
+        <title>Conventional parser works well with independent
+        grammars</title>
 
         <mediaobject>
           <imageobject>
@@ -583,9 +588,9 @@ Statement ";" Statements -&gt; Statements</programlisting>
         </mediaobject>
       </figure>
 
-      <figure  xml:id="sa_fig_modular_parser2">
-        <title>Conventional parser does not work
-        with combined grammars</title>
+      <figure xml:id="sa_fig_modular_parser2">
+        <title>Conventional parser does not work with combined
+        grammars</title>
 
         <mediaobject>
           <imageobject>
@@ -594,9 +599,8 @@ Statement ";" Statements -&gt; Statements</programlisting>
         </mediaobject>
       </figure>
 
-      <figure  xml:id="sa_fig_modular_parser3">
-        <title>SGLR works well with combined
-        grammars</title>
+      <figure xml:id="sa_fig_modular_parser3">
+        <title>SGLR works well with combined grammars</title>
 
         <mediaobject>
           <imageobject>
@@ -618,9 +622,9 @@ Statement ";" Statements -&gt; Statements</programlisting>
         <para><emphasis>To parse source text</emphasis>. Given a grammar for
         some language (say Java) and a program in that language (a Java
         program) we can parse the program and obtain its parse tree. This is
-        an example of the approach sketched in <xref linkend="sa_fig_sglr"/>. This parse tree can then be
-        further processed by applying rewrite rules (equations) defined in an
-        ASF+SDF specification.</para>
+        an example of the approach sketched in <xref linkend="sa_fig_sglr" />.
+        This parse tree can then be further processed by applying rewrite
+        rules (equations) defined in an ASF+SDF specification.</para>
       </listitem>
 
       <listitem>
@@ -660,8 +664,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
       <listitem>
         <para>On <link
         xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>
-        you can find several articles on SDF, SGLR and related
-        techniques.</para>
+        you can find several articles related to SDF.</para>
       </listitem>
     </itemizedlist>
   </section>

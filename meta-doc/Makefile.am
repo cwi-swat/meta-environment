@@ -1,14 +1,37 @@
 include $(top_srcdir)/Makefile.top.meta
 
-EXTRA_DIST +=  website.sh
+XSL_SOURCE_FILES = \
+	html-customization.xsl.src \
+	fo-customization.xsl.src \
+	common-customizations.xsl \
+	pubdate.xsl \
+	svnlog2html.xsl
+
+GENERATED_XSL_FILES = html-customization.xsl fo-customization.xsl
+
+ALL_XSL_FILES = ${XSL_SOURCE_FILES} ${GENERATED_XSL_FILES}
+
+XML_SOURCE_FILES = olinkdb.xml.src
+
+GENERATED_XML_FILES = olinkdb.xml
+
+ALL_XML_FILES = ${XML_SOURCE_FILES} ${GENERATED_XML_FILES}
+
+EXTRA_DIST +=  website.sh ${XSL_SOURCE_FILES} ${XML_SOURCE_FILES}
 
 ACLOCAL_AMFLAGS = -I .
 
 EXTRA_DOC = books
 
-books: dummy
+books:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	DOCBOOKXSLPREFIX=${DOCBOOK_XSL_PREFIX} \
 	FOPPREFIX=${FOP_PREFIX} \
 	${top_srcdir}/website.sh
 
-dummy:
+%.xsl:	%.xsl.src Makefile
+	sed "s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" < $< > $@
+
+%.xml:	%.xml.src Makefile
+	sed "s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" < $< > $@
+
+

@@ -1,8 +1,17 @@
 #! /bin/sh
 
+# Web site generator for Meta-Environment documentation.
+
+# WARNING: the structure of the generated html directories should
+# be compatible with the structure described in olinkdb.xml,
+# otherwise incorrect cross-references will be generated between
+# documents.
+
+
 set -e
 
 CATEGORIES="learning-about howto understanding courses project"
+# CATEGORIES="learning-about"
 WEB="./doc/html"
 FOP="${FOPPREFIX}/fop"
 DOCBOOKXSLHTML=${DOCBOOKXSLPREFIX}/html/docbook.xsl
@@ -33,6 +42,7 @@ echo "</title></head><body>" >> ${INDEX}
 mkdir -p ${WEB}/logos
 cp logos/*.{png,gif} ${WEB}/logos
 
+
 mkdir -p ${WEB}/images
 mkdir -p ${WEB}/images/callouts
 cp images/callouts/*.png $WEB/images/callouts
@@ -45,6 +55,7 @@ for cat in ${CATEGORIES}; do
   BOOKS=`ls $cat`
   mkdir -p ${WEB}/$cat || true
   for book in ${BOOKS}; do
+    echo --- processing $book ---
     if [ -d $cat/$book ]; then
       mkdir -p ${WEB}/$cat/$book
       cp $cat/$book/*.{png,jpg,gif} ${WEB}/$cat/$book >& /dev/null || true
@@ -52,27 +63,16 @@ for cat in ${CATEGORIES}; do
 	pubdate=`getPubdate ${cat}/${book}/${book}.xml`
 	svn log --xml ${cat}/${book}/${book}.xml  | \
 	xsltproc  --output ${WEB}/$cat/$book/$book.log.html ./svnlog2html.xsl -
-	(xsltproc --stringparam now "${pubdate}" ./pubdate.xsl $cat/$book/$book.xml | \
-	 xsltproc  --stringparam html.stylesheet ${STYLESHEET} \
-                   --output ${WEB}/$cat/$book/$book.html \
+	(xsltproc --xinclude --stringparam now "${pubdate}"  ./pubdate.xsl $cat/$book/$book.xml | \
+	 xsltproc  --output ${WEB}/$cat/$book/$book.html \
 		   --xinclude \
-                   --stringparam callout.graphics.path ../../images/callouts/ \
-                   --stringparam ignore.image.scaling 1 \
-		   --param chapter.autolabel 1 \
-		   --param section.autolabel 1 \
-                   --param xref.with.number.and.title 1 \
-                   ${DOCBOOKXSLHTML} -)
-	(xsltproc --stringparam now "${pubdate}" ./pubdate.xsl $cat/$book/$book.xml | \
+                   --stringparam current.docid $book \
+                   ./html-customization.xsl  -)
+	(xsltproc  --xinclude --stringparam now "${pubdate}" ./pubdate.xsl $cat/$book/$book.xml | \
 	 xsltproc  --output ${WEB}/$cat/$book/$book.fo \
-                   --param xref.with.number.and.title 1 \
-                   --stringparam insert.xref.page.number "no" \
-		   --param chapter.autolabel 1 \
-		   --param section.autolabel 1 \
-		   --param shade.verbatim 1 \
-		   --xinclude \
-                   --stringparam callout.graphics.path ../../images/callouts/ \
-                   --stringparam paper.type A4 \
-                   ${DOCBOOKXSLFO} -)
+                   --xinclude \
+                   --stringparam current.docid $book \
+                   ./fo-customization.xsl -)
         ${FOP} -fo ${WEB}/$cat/$book/$book.fo -pdf ${WEB}/$cat/$book/$book.pdf
         rm ${WEB}/$cat/$book/$book.fo
         

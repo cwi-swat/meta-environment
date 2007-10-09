@@ -1,4 +1,10 @@
+Mon Oct  8 15:42:44 CEST 2007 <paulk@cwi.nl>
+* Adapted Makefile.am to do replacements in *.xsl.src files
+  used for the docbook customization layer
 
+Sun Oct  7 17:06:52 CEST 2007 <paulk@cwi.nl>
+* Added Rscript manual
+* Introduced a customization layer for docbook.xsl
 
 Thu Sep 13 22:32:07 CEST 2007 <jurgenv@cwi.nl>
  * Moved ASF+SDF and SDF manuals to "understanding"

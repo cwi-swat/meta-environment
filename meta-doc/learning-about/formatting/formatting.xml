@@ -13,8 +13,8 @@
   <info>
     <title>Formatting with Box and Pandora</title>
 
-    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
-    +0100 (Sat, 16 Dec 2006) $</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16
+    17:45:23 +0100 (Sat, 16 Dec 2006) $</pubdate>
 
     <authorgroup>
       <author>
@@ -60,8 +60,10 @@
     <para>then you need a <firstterm>formatter</firstterm> that takes the
     original source text and applies uniform formatting rules to it. In that
     case <emphasis role="bold">Box</emphasis> and <emphasis
-    role="bold">Pandora</emphasis> may be the right technologies for
-    you.</para>
+    role="bold">Pandora</emphasis> may be the right technologies for you. HERE
+    IS A TEST FOR OLINKING: a formatting definition is also part of alanguage
+    definition, see <olink targetdoc="syntax-analysis" targetptr=""></olink>
+    for more details.</para>
 
     <section>
       <title xml:id="YetAnotherFormalism">Why Formatting?</title>

@@ -144,8 +144,8 @@
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
-<node CREATED="1189957255214" ID="Freemind_Link_1822468833" MODIFIED="1190059423315" POSITION="left" STYLE="bubble" TEXT="Relational fact analysis">
-<cloud COLOR="#ff3333"/>
+<node CREATED="1189957255214" ID="Freemind_Link_1822468833" MODIFIED="1191769069067" POSITION="left" STYLE="bubble" TEXT="Relational fact analysis">
+<cloud COLOR="#eeeeee"/>
 <node CREATED="1189957635745" ID="Freemind_Link_1642142635" MODIFIED="1190059423316" TEXT="Rscript Tutorial"/>
 </node>
 <node CREATED="1189955598006" ID="Freemind_Link_710967544" MODIFIED="1189956488518" POSITION="right" STYLE="bubble" TEXT="Course material">
