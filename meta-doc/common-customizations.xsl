@@ -33,4 +33,38 @@
   </l:l10n>
 </l:i18n>
 
+<!-- Started attempt to make title in xrefs italic rather than quoted -->
+
+<xsl:param name="local.l10n.xml" select="document('')"/>
+<l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+  <l:l10n language="en">
+
+  <l:context name="xref-number-and-title">
+      <l:template name="appendix" text="Appendix&#160;%n, %t"/>
+      <l:template name="bridgehead" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="chapter" text="Chapter&#160;%n, %t"/>
+      <l:template name="equation" text="Equation&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="example" text="Example&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="figure" text="Figure&#160;%n, &lt;emphasis&gt;%t&lt;/emphasis&gt;"/>
+      <l:template name="part" text="Part&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="procedure" text="Procedure&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="productionset" text="Production&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="qandadiv" text="Q &amp; A&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="refsect1" text="the section called &#8220;%t&#8221;"/>
+      <l:template name="refsect2" text="the section called &#8220;%t&#8221;"/>
+      <l:template name="refsect3" text="the section called &#8220;%t&#8221;"/>
+      <l:template name="refsection" text="the section called &#8220;%t&#8221;"/>
+      <l:template name="sect1" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="sect2" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="sect3" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="sect4" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="sect5" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="section" text="Section&#160;%n, &#8220;%t&#8221;"/>
+      <l:template name="simplesect" text="the section called &#8220;%t&#8221;"/>
+      <l:template name="table" text="Table&#160;%n, &#8220;%t&#8221;"/>
+   </l:context>
+  </l:l10n>
+</l:i18n>
+
+
 </xsl:stylesheet>  

@@ -64,7 +64,7 @@
 
 	    <dir name="sdf"> <document targetdoc="sdf" baseuri="sdf.html">  &sdf-targets;</document> </dir>
 
-	    <dir name="asfsdf"> <document targetdoc="asfsdf" baseuri="asfsdf.html"> </document>&asfsdf-targets; </dir>
+	    <dir name="asfsdf"> <document targetdoc="asfsdf" baseuri="asfsdf.html"> &asfsdf-targets; </document> </dir>
 
 	    <dir name="aterm-saf"> 
 		<document targetdoc="aterm-saf" baseuri="aterm-saf.html"> &aterm-saf-targets; </document> </dir>
