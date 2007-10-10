@@ -84,11 +84,11 @@
         </listitem>
 
         <listitem>
-          <para>R5: functional (no side-effects)</para>
+          <para>R5: Functional (no side-effects)</para>
         </listitem>
 
         <listitem>
-          <para>R6: file I/O (contradicts R5)</para>
+          <para>R6: File I/O (contradicts R5)</para>
         </listitem>
 
         <listitem>
@@ -362,8 +362,6 @@
           the user must be able to clarify precisely.</para>
         </listitem>
       </itemizedlist></para>
-
-    <para></para>
   </section>
 
   <section>
@@ -382,11 +380,11 @@ imports Naturals
 exports TREE
 
   context-free syntax
-    NAT        -&gt; TREE
+    NAT             -&gt; TREE
     f(TREE,TREE)    -&gt; TREE
     g(TREE,TREE)    -&gt; TREE
     h(TREE,TREE)    -&gt; TREE
-       i(TREE,TREE)    -&gt; TREE
+    i(TREE,TREE)    -&gt; TREE
 
 module Examples
 imports Tree-syntax
@@ -404,7 +402,7 @@ function cnt(TREE)       -&gt; INT
 function sum_tree(TREE)       -&gt; INT
 [] sum_tree(T) = sum({N | INT N : T})
 
-%% NB sum is a built-in that add all elements in a set.
+%% NB sum is a built-in that add all elements in a set or list.
 
 %% Ex3: Increment all leaves in a TREE
 
@@ -421,12 +419,14 @@ function inc(TREE)        -&gt; TREE
 function frepl(TREE)  -&gt; TREE
 [] frepl(T) = g(T1, T2) : T =&gt; i(frepl(T1), frepl(T2))
 
-%% Ex5: deep replacement of g by i
+%% Ex5: deep replacement of g by i (*** This does not work yet ***)
+%% bu indicates bottom-up traversal
 
 function drepl(TREE)  -&gt; TREE
-[] drepl(T) = g(T1, T2) : T =&gt; i(T1, T2)
-  when T1 == drepl(T1),
-    T2 == drepl(T2)
+[] T1 == drepl(T1),
+   T2 == drepl(T2),
+   =========================================
+   drepl(T) = g(T1, T2) : bu(T) =&gt; i(T1, T2)
 
 %% Ex6: shallow replacement of g by i
 
@@ -567,6 +567,73 @@ function rename(Exp)
 
 [default]
   rename(E) = E </programlisting></para>
+    </section>
+
+    <section>
+      <title>Concise Pico Typechecker</title>
+
+      <para>The following example shows the tight integration ASF with
+      comprehensions.</para>
+
+      <programlisting>module Typecheck
+
+imports Pico-syntax
+imports Errors
+
+types
+ rel[PICO-ID,TYPE] -&gt; Environment
+
+functions
+   tcp(PROGRAM)                     -&gt; list[Error]
+   tcst(Stat, Environment)          -&gt; list[Error]
+   type-of(EXP, TYPE, Environment)  -&gt; list[Error]
+
+variables
+   "Decls"  -&gt; Decl*
+   "Series" -&gt; Series
+   "Id"     -&gt; PICO-ID
+   "Type"   -&gt; TYPE
+   "Env"    -&gt; Environment
+equations
+
+[] Env := {&lt;Id, Type&gt; | (PICO-ID ":" TYPE) Id : Type : Decls}
+   ================================================================
+   tcp(begin Decsl Series end) = [ tcst(S, Env) | Stat S : Series ]
+
+[] tcst(Id := Exp, Env) = type-of(Exp) in Env[Id]
+[] tcst(if Exp then Stats1 else Stats2, Env) =
+    type-of(Exp, natural, Env)  &amp;&amp; tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
+[] tcst(while Exp do Stats od, Env) = type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
+
+[] type-of(NatCon, natural, Env) = []
+[] type-of(StrCon, string, Env) = []
+[] type-of(Id, Type, Env) = [] when {&lt;Id,Type&gt;} := Env[Id] 
+
+[default]
+   type-of(Exp, Type, Env) = [error("Incorrect type")]</programlisting>
+    </section>
+
+    <section>
+      <title>Generating Dot files</title>
+
+      <para>This example illustrates the use of a comprehension on the
+      right-hand side of an equation.<programlisting>module Dot-generation
+
+imports Dot-syntax
+
+functions
+   gen-dot(rel[ID,ID]) -&gt; Dot
+   gen-node(&lt;ID, ID&gt;)  -&gt; DotElem*
+
+variable
+   Rel -&gt; rel[ID,ID]
+
+equations
+[] gen-dot(Rel) = digraph example {
+                       [ node(Tup) | Tup : Rel ]
+                  }
+
+[] node(&lt;Id1, Id2&gt;) = node Id1; node Id2; Id1 -&gt; Id2</programlisting></para>
     </section>
 
     <section>
