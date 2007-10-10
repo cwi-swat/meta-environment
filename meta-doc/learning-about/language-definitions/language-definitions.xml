@@ -18,13 +18,11 @@
 
     <authorgroup>
       <author>
-        <personname><firstname>Paul</firstname>
-        <surname>Klint</surname></personname>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
       </author>
 
       <author>
-        <personname><firstname>Jurgen</firstname>
-        <surname>Vinju</surname></personname>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
       </author>
     </authorgroup>
   </info>
@@ -38,7 +36,7 @@
     <title>Introduction</title>
 
     <para>You are interested in using ASF+SDF to define various aspects of a
-    programming language or domain-specific language but you do not want to
+    programming language or domain-specific language but you do now want to
     wade through all the details in the manual (The Language Specification
     Formalism ASF+SDF)? In that case, this article may be for you. We take the
     toy language Pico as starting point and walk you through its syntax,
@@ -49,7 +47,7 @@
       <title>What is the Global Picture?</title>
 
       <para>ASF+SDF can be used to define various aspects of programming
-      languages and The ASF+SDF Meta-Environment can be used to edit and run
+      langauges and The ASF+SDF Meta-Environment can be used to edit and run
       these specifications.</para>
     </section>
 
@@ -63,7 +61,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Lexical syntax (keywords, comments, string constants, white
+          <para>Lexical syntax (keywords, comments, string constants, whiete
           space, ...).</para>
         </listitem>
 
@@ -189,28 +187,23 @@
 
       <itemizedlist>
         <listitem>
-          <para>The basic concepts of syntax analysis are described in <olink
-          targetdoc="syntax-analysis"></olink>.</para>
+          <para>The basic concepts of syntax analysis are given in the article
+          "Syntax Analysis".</para>
         </listitem>
 
         <listitem>
-          <para>The basic concepts of term rewriting are discussed in <olink
-          targetdoc="term-rewriting"></olink>.</para>
+          <para>The basic concepts of term rewriting are discussed in the
+          article "Term Rewriting".</para>
         </listitem>
 
         <listitem>
-          <para><olink targetdoc="sdf"></olink> is the reference manual for
-          the SDF formalism.</para>
+          <para>"The Syntax Definition Formalism SDF" is the reference manual
+          for the SDF formalism.</para>
         </listitem>
 
         <listitem>
-          <para><olink targetdoc="asfsdf"></olink> is the reference manual for
-          the ASF+SDF formalism.</para>
-        </listitem>
-
-        <listitem>
-          <para><olink targetdoc="asfsdf-by-example"></olink> gives examples
-          of ASF+SDF specifications.</para>
+          <para>"The Language Specification Formalism ASF+SDF" is the
+          reference manual for the ASF+SDF formalism.</para>
         </listitem>
 
         <listitem>
@@ -256,10 +249,11 @@
       <para>A single module has the following structure:</para>
 
       <programlisting>module <replaceable>ModuleName</replaceable> <co
-          xml:id="mod.1" /> <replaceable>ImportSection</replaceable>* <co
-          xml:id="mod.2" /> <replaceable>ExportOrHiddenSection</replaceable>* <co
-          xml:id="mod.3" /> equations
-      <replaceable>ConditionalEquation</replaceable>* <co xml:id="mod.4" /></programlisting>
+          xml:id="mod.1" />
+  <replaceable>ImportSection</replaceable>*  <co xml:id="mod.2" />
+  <replaceable>ExportOrHiddenSection</replaceable>* <co xml:id="mod.3" />
+equations
+  <replaceable>ConditionalEquation</replaceable>* <co xml:id="mod.4" /></programlisting>
 
       <para>Notes:</para>
 
@@ -288,17 +282,15 @@
           <para>The equations of the module that define the meaning of the
           grammar elements. Equations come in two flavours. Unconditional:
           <programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
-                role="bold">]</emphasis> &lt;Term<subscript>1</subscript>&gt;
-          <emphasis role="bold">=</emphasis>
-          &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
+                role="bold">]</emphasis> &lt;Term<subscript>1</subscript>&gt; <emphasis
+                role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
 
           <para>and conditional:<programlisting><emphasis role="bold">[</emphasis>&lt;TagId&gt;<emphasis
-                role="bold">]</emphasis>
-          &lt;Condition<subscript>1</subscript>&gt;<emphasis role="bold">,</emphasis>
-          &lt;Condition<subscript>2</subscript>&gt;<emphasis role="bold">,</emphasis> ... <emphasis
-                role="bold">===============================</emphasis>
-          &lt;Term<subscript>1</subscript>&gt; <emphasis role="bold">=</emphasis>
-          &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
+                role="bold">]</emphasis>  &lt;Condition<subscript>1</subscript>&gt;<emphasis
+                role="bold">,</emphasis> &lt;Condition<subscript>2</subscript>&gt;<emphasis
+                role="bold">,</emphasis> ... 
+           <emphasis role="bold">===============================</emphasis>
+                 &lt;Term<subscript>1</subscript>&gt; <emphasis role="bold">=</emphasis> &lt;Term<subscript>2</subscript>&gt;</programlisting></para>
 
           <para>In the unconditional case, an attempt is made to match
           Term<subscript>1</subscript> and if this succeeds it is replaced by
@@ -346,11 +338,19 @@
 
         <para>Let' start with the Boolean constants:</para>
 
-        <programlisting>module basic/BoolCon exports sorts BoolCon <co
-            xml:id="boolcon.1" /> context-free syntax "true" -&gt; BoolCon
-        {cons("true")} <co xml:id="boolcon.2" /> "false" -&gt; BoolCon
-        {cons("false")} hiddens context-free start-symbols BoolCon <co
-            xml:id="boolcon.3" /></programlisting>
+        <programlisting>module basic/BoolCon
+
+exports
+
+sorts BoolCon  <co xml:id="boolcon.1" />
+context-free syntax
+
+    "true"  -&gt; BoolCon {cons("true")} <co xml:id="boolcon.2" />
+    "false" -&gt; BoolCon {cons("false")}    
+
+hiddens
+context-free start-symbols
+  BoolCon <co xml:id="boolcon.3" /></programlisting>
 
         <para>Notes:</para>
 
@@ -386,10 +386,14 @@
         <para>The module Whitespace defines what the spaces and newline
         are:</para>
 
-        <programlisting>module basic/Whitespace exports lexical syntax [\
-        \t\n\r] -&gt; LAYOUT {cons("whitespace")} <co xml:id="whitespace.1" />
-        context-free restrictions LAYOUT? -/- [\ \t\n\r] <co
-            xml:id="whitespace.2" /></programlisting>
+        <programlisting>module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r] -&gt; LAYOUT {cons("whitespace")} <co xml:id="whitespace.1" />
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]  <co xml:id="whitespace.2" /></programlisting>
 
         <para>Notes:</para>
 
@@ -422,12 +426,21 @@
 
         <para>The comment conventions are defined as follows:</para>
 
-        <programlisting>module basic/Comments imports basic/Whitespace exports
-        lexical syntax "%%" line:~[\n]* "\n" -&gt; LAYOUT {cons("line"),
-        category("Comment")} <co xml:id="comments.1" /> "%" content:~[\%\n]+
-        "%" -&gt; LAYOUT {cons("nested"), category("Comment")} <co
-            xml:id="comments.2" /> context-free restrictions LAYOUT? -/- [\%] <co
-            xml:id="comments.3" /></programlisting>
+        <programlisting>module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" line:~[\n]* "\n"    -&gt; LAYOUT
+                                {cons("line"),
+                                 category("Comment")}  <co xml:id="comments.1" />
+    "%" content:~[\%\n]+ "%" -&gt; LAYOUT 
+                                {cons("nested"),
+                                 category("Comment")}  <co xml:id="comments.2" />
+  context-free restrictions
+    LAYOUT? -/- [\%] <co xml:id="comments.3" /></programlisting>
 
         <para>Notes:</para>
 
@@ -458,19 +471,38 @@
         <para>After these preparations, we can now discuss the syntax part of
         <literal>basic/Booleans</literal>:</para>
 
-        <programlisting>module basic/Booleans imports basic/BoolCon <co
-            xml:id="booleans.1" /> exports sorts Boolean <co
-            xml:id="booleans.2" /> context-free syntax BoolCon -&gt; Boolean
-        {cons("constant")} <co xml:id="booleans.3" /> lhs:Boolean "|"
-        rhs:Boolean -&gt; Boolean {left, cons("or")} <co xml:id="booleans.4" /> lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean
-        {left, cons("and")} "not" "(" Boolean ")" -&gt; Boolean {cons("not")}
-        <co xml:id="booleans.5" /> "(" Boolean ")" -&gt; Boolean {bracket,
-        cons("bracket")} <co xml:id="booleans.6" /> context-free priorities
-        Boolean "&amp;" Boolean -&gt; Boolean &gt; <co xml:id="booleans.7" />
-        Boolean "|" Boolean -&gt; Boolean hiddens context-free start-symbols
-        Boolean <co xml:id="booleans.8" /> imports basic/Comments <co
-            xml:id="booleans.9" /> variables "Bool" [0-9]* -&gt; Boolean <co
-            xml:id="booleans.10" /></programlisting>
+        <programlisting>module basic/Booleans
+
+imports basic/BoolCon&#160;<co xml:id="booleans.1" />
+
+exports
+sorts Boolean <co xml:id="booleans.2" />
+
+context-free syntax
+  BoolCon                     -&gt; Boolean 
+                                 {cons("constant")}  <co xml:id="booleans.3" />       
+  lhs:Boolean "|" rhs:Boolean -&gt; Boolean 
+                                 {left, cons("or")}  <co xml:id="booleans.4" />       
+  lhs:Boolean "&amp;" rhs:Boolean -&gt; Boolean 
+                                 {left, cons("and")}                  
+  "not" "(" Boolean ")"       -&gt; Boolean 
+                                 {cons("not")} <co xml:id="booleans.5" />     
+  "(" Boolean ")"             -&gt; Boolean 
+                                 {bracket, 
+                                  cons("bracket")} <co xml:id="booleans.6" />
+
+context-free priorities
+  Boolean "&amp;" Boolean -&gt; Boolean &gt; <co xml:id="booleans.7" />
+  Boolean "|" Boolean -&gt; Boolean
+
+hiddens
+context-free start-symbols
+  Boolean <co xml:id="booleans.8" />
+
+imports basic/Comments <co xml:id="booleans.9" />
+
+variables
+  "Bool" [0-9]* -&gt; Boolean <co xml:id="booleans.10" /></programlisting>
 
         <para>Notes:</para>
 
@@ -546,11 +578,16 @@
         <para>Having covered all syntactic aspects of the Booleans, we can now
         turn our attention to the equations:</para>
 
-        <programlisting>equations [B1] true | Bool = true <co
-            xml:id="booleans-eq.1" /> [B2] false | Bool = Bool [B3] true &amp;
-        Bool = Bool <co xml:id="booleans-eq.2" /> [B4] false &amp; Bool =
-        false [B5] not ( false ) = true <co xml:id="booleans-eq.3" /> [B6] not
-        ( true ) = false</programlisting>
+        <programlisting>equations
+
+[B1]   true  | Bool  = true  <co xml:id="booleans-eq.1" />
+[B2]   false | Bool  = Bool
+
+[B3]   true  &amp; Bool  = Bool  <co xml:id="booleans-eq.2" />
+[B4]   false &amp; Bool  = false
+
+[B5]   not ( false ) = true  <co xml:id="booleans-eq.3" />
+[B6]   not ( true )  = false</programlisting>
 
         <para>Notes:</para>
 
@@ -575,57 +612,22 @@
         <emphasis role="bold">bold</emphasis> and the syntax specific for
         Booleans <emphasis>italic</emphasis>:</para>
 
-        <para><programlisting>
-            <emphasis role="bold">equations</emphasis>
+        <para><programlisting><emphasis role="bold">equations</emphasis>
 
-            <emphasis role="bold">[B1]</emphasis>
+<emphasis role="bold">[B1]</emphasis>   <emphasis>true  | Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>true</emphasis>       
+<emphasis role="bold">[B2]</emphasis>   <emphasis>false | Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>Bool</emphasis>
 
-            <emphasis>true | Bool</emphasis>
+<emphasis role="bold">[B3]</emphasis>   <emphasis>true  &amp; Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>Bool</emphasis>       
+<emphasis role="bold">[B4]</emphasis>   <emphasis>false &amp; Bool</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>false</emphasis>
 
-            <emphasis role="bold">=</emphasis>
-
-            <emphasis>true</emphasis>
-
-            <emphasis role="bold">[B2]</emphasis>
-
-            <emphasis>false | Bool</emphasis>
-
-            <emphasis role="bold">=</emphasis>
-
-            <emphasis>Bool</emphasis>
-
-            <emphasis role="bold">[B3]</emphasis>
-
-            <emphasis>true &amp; Bool</emphasis>
-
-            <emphasis role="bold">=</emphasis>
-
-            <emphasis>Bool</emphasis>
-
-            <emphasis role="bold">[B4]</emphasis>
-
-            <emphasis>false &amp; Bool</emphasis>
-
-            <emphasis role="bold">=</emphasis>
-
-            <emphasis>false</emphasis>
-
-            <emphasis role="bold">[B5]</emphasis>
-
-            <emphasis>not ( false )</emphasis>
-
-            <emphasis role="bold">=</emphasis>
-
-            <emphasis>true</emphasis>
-
-            <emphasis role="bold">[B6]</emphasis>
-
-            <emphasis>not ( true )</emphasis>
-
-            <emphasis role="bold">=</emphasis>
-
-            <emphasis>false</emphasis>
-          </programlisting></para>
+<emphasis role="bold">[B5]</emphasis>   <emphasis>not ( false )</emphasis> <emphasis
+              role="bold">=</emphasis> <emphasis>true</emphasis>       
+<emphasis role="bold">[B6]</emphasis>   <emphasis>not ( true )</emphasis>  <emphasis
+              role="bold">=</emphasis> <emphasis>false</emphasis></programlisting></para>
 
         <para>This mixture of syntaxes will become even more apparent when we
         discuss the Pico definitions later.</para>
@@ -869,11 +871,22 @@
     <para>Let's look at a simple Pico program that computes the factorial
     function:</para>
 
-    <programlisting>begin declare input : natural, <co xml:id="fac.1" />
-    output : natural, repnr : natural, rep : natural; input := 14; output :=
-    1; while input - 1 do <co xml:id="fac.2" /> rep := output; repnr := input;
-    while repnr - 1 do output := output + rep; repnr := repnr - 1 od; input :=
-    input - 1 od end</programlisting>
+    <programlisting>begin declare input : natural,  <co xml:id="fac.1" />
+              output : natural,           
+              repnr : natural,
+              rep : natural;
+      input := 14;
+      output := 1;
+      while input - 1 do <co xml:id="fac.2" />
+          rep := output;
+          repnr := input;
+          while repnr - 1 do
+             output := output + rep;
+             repnr := repnr - 1
+          od;
+          input := input - 1
+      od
+end</programlisting>
 
     <para>Notes:</para>
 
@@ -918,10 +931,14 @@
       <para>Variables can be declared in Pico programs with one of two types:
       "natural number" or "string". This is defined as follows:</para>
 
-      <programlisting>module languages/pico/syntax/Types exports sorts TYPE
-      <co xml:id="types.1" /> context-free syntax "natural" -&gt; TYPE <co
-          xml:id="types.2" /> "string" -&gt; TYPE "nil-type" -&gt; TYPE <co
-          xml:id="types.3" /></programlisting>
+      <programlisting>module languages/pico/syntax/Types
+
+exports
+  sorts TYPE <co xml:id="types.1" />
+  context-free syntax
+    "natural"     -&gt; TYPE <co xml:id="types.2" />
+    "string"      -&gt; TYPE
+    "nil-type"    -&gt; TYPE <co xml:id="types.3" /></programlisting>
 
       <para>Notes:</para>
 
@@ -950,10 +967,15 @@
       <para>Identifiers are used for the names of variables in Pico programs.
       They are defined as follows:</para>
 
-      <programlisting>module languages/pico/syntax/Identifiers exports sorts
-      PICO-ID <co xml:id="id.1" /> lexical syntax [a-z] [a-z0-9]* -&gt;
-      PICO-ID <co xml:id="id.2" /> context-free restrictions PICO-ID -/-
-      [a-z0-9] <co xml:id="id.3" /></programlisting>
+      <programlisting>module languages/pico/syntax/Identifiers
+
+exports
+  sorts PICO-ID  <co xml:id="id.1" />
+  lexical syntax
+    [a-z] [a-z0-9]* -&gt; PICO-ID  <co xml:id="id.2" />
+
+  context-free restrictions
+    PICO-ID -/- [a-z0-9] <co xml:id="id.3" /></programlisting>
 
       <para>Notes:</para>
 
@@ -1005,24 +1027,54 @@
       <para>After these preparations we can present the syntax for
       Pico:</para>
 
-      <programlisting>module languages/pico/syntax/Pico imports
-      languages/pico/syntax/Identifiers imports languages/pico/syntax/Types
-      imports basic/NatCon imports basic/StrCon hiddens context-free
-      start-symbols <co xml:id="pico-syntax.1" /> PROGRAM exports sorts
-      PROGRAM DECLS ID-TYPE STATEMENT EXP <co xml:id="pico-syntax.2" />
-      context-free syntax <co xml:id="pico-syntax.3" /> "begin" DECLS
-      {STATEMENT";" }* "end" -&gt; PROGRAM <co xml:id="pico-syntax.4" />
-      "declare" {ID-TYPE "," }*";" -&gt; DECLS PICO-ID ":" TYPE -&gt; ID-TYPE
-      context-free syntax <co xml:id="pico-syntax.5" /> PICO-ID ":=" EXP -&gt;
-      STATEMENT "if" EXP "then" {STATEMENT";" }* "else" {STATEMENT";" }* "fi"
-      -&gt; STATEMENT "while" EXP "do" {STATEMENT ";" }* "od" -&gt; STATEMENT
-      context-free syntax <co xml:id="pico-syntax.6" /> PICO-ID -&gt; EXP <co
-          xml:id="pico-syntax.7" /> NatCon -&gt; EXP StrCon -&gt; EXP EXP "+" EXP
-      -&gt; EXP {left} <co xml:id="pico-syntax.8" /> EXP "-" EXP -&gt; EXP
-      {left} EXP "||" EXP -&gt; EXP {left} "(" EXP ")" -&gt; EXP {bracket} <co
-          xml:id="pico-syntax.9" /> context-free priorities <co
-          xml:id="pico-syntax.10" /> EXP "||" EXP -&gt; EXP &gt; EXP "-" EXP -&gt;
-      EXP &gt; EXP "+" EXP -&gt; EXP</programlisting>
+      <programlisting>module languages/pico/syntax/Pico
+
+imports languages/pico/syntax/Identifiers 
+imports languages/pico/syntax/Types
+imports basic/NatCon 
+imports basic/StrCon 
+
+hiddens
+  context-free start-symbols <co xml:id="pico-syntax.1" />
+    PROGRAM
+
+exports
+
+  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP <co xml:id="pico-syntax.2" />
+
+  context-free syntax <co xml:id="pico-syntax.3" />
+    
+    "begin" DECLS {STATEMENT";" }* "end" -&gt; PROGRAM <co
+          xml:id="pico-syntax.4" />
+    "declare" {ID-TYPE "," }*";"         -&gt; DECLS 
+    PICO-ID ":" TYPE                     -&gt; ID-TYPE
+
+  context-free syntax <co xml:id="pico-syntax.5" />
+
+    PICO-ID ":=" EXP                     -&gt; STATEMENT
+    "if" EXP "then" {STATEMENT";" }* 
+             "else" {STATEMENT";" }* 
+    "fi"                                 -&gt; STATEMENT
+    "while" EXP "do"
+                    {STATEMENT ";" }* 
+                "od"                     -&gt; STATEMENT
+ 
+  context-free syntax <co xml:id="pico-syntax.6" />
+
+    PICO-ID                              -&gt; EXP  <co xml:id="pico-syntax.7" />                                                
+    NatCon                               -&gt; EXP                                   
+    StrCon                               -&gt; EXP                                                       
+    EXP "+" EXP                          -&gt; EXP {left} <co
+          xml:id="pico-syntax.8" />
+    EXP "-" EXP                          -&gt; EXP {left}
+    EXP "||" EXP                         -&gt; EXP {left}
+    "(" EXP ")"                          -&gt; EXP {bracket} <co
+          xml:id="pico-syntax.9" />
+
+  context-free priorities <co xml:id="pico-syntax.10" />
+    EXP "||" EXP -&gt; EXP &gt;
+    EXP "-" EXP -&gt; EXP &gt;
+    EXP "+" EXP -&gt; EXP</programlisting>
 
       <para>Notes:</para>
 
@@ -1109,7 +1161,7 @@
           <listitem>
             <para>Select the menu entry <guimenuitem>Term</guimenuitem> and a
             dialog window will appear to select the desired term. You may
-            select an existing file or create a new one. We do the latter:
+            select an exitsing file or create a new one. We do the latter:
             type in <filename>pico-trial.trm</filename>. The result is a new
             editor pane labelled with the name of the file.</para>
           </listitem>
@@ -1118,8 +1170,11 @@
             <para>Now start typing the following (syntactically correct) Pico
             program:</para>
 
-            <programlisting>begin declare x : natural; x := "abc"
-            end</programlisting>
+            <programlisting>begin
+ declare
+   x : natural;
+   x := "abc"
+end</programlisting>
           </listitem>
         </itemizedlist>The result is shown in the figure <link
       linkend="Fig-pico-trial1">below</link>.</para>
@@ -1358,8 +1413,7 @@
       occur in the input text. A context-free rule (like the one above) is
       equivalent to:</para>
 
-      <programlisting>S1 LAYOUT? S2 LAYOUT? ... LAYOUT? Sn -&gt; S0
-      Attributes</programlisting>
+      <programlisting>S1 LAYOUT? S2 LAYOUT? ... LAYOUT? Sn -&gt; S0 Attributes</programlisting>
     </section>
   </section>
 
@@ -1450,10 +1504,16 @@
       <para>The purpose of type environments is to maintain a mapping between
       identifiers and their type. This is done as follows:</para>
 
-      <programlisting>module languages/pico/check/Type-environments imports
-      languages/pico/syntax/Identifiers imports containers/Table[PICO-ID TYPE]
-      <co xml:id="type-env.1" /> exports sorts TENV TYPE aliases
-      Table[[PICO-ID,TYPE]] -&gt; TENV <co xml:id="type-env.2" /></programlisting>
+      <programlisting>module languages/pico/check/Type-environments
+
+imports languages/pico/syntax/Identifiers 
+imports containers/Table[PICO-ID TYPE] <co xml:id="type-env.1" />
+
+exports 
+  sorts TENV TYPE 
+
+  aliases
+    Table[[PICO-ID,TYPE]] -&gt; TENV <co xml:id="type-env.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -1479,14 +1539,19 @@
 
       <para>For convenience, we list the functions of Tables here:</para>
 
-      <programlisting>module containers/Table[Key Value] ... context-free
-      syntax "not-in-table" -&gt; Value {constructor} "new-table" -&gt;
-      Table[[Key,Value]] lookup(Table[[Key,Value]], Key) -&gt; Value
-      store(Table[[Key,Value]], Key, Value) -&gt; Table[[Key,Value]]
-      delete(Table[[Key,Value]], Key) -&gt; Table[[Key,Value]]
-      element(Table[[Key,Value]], Key) -&gt; Boolean keys(Table[[Key,Value]])
-      -&gt; List[[Key]] values(Table[[Key,Value]]) -&gt; List[[Value]]
-      ...</programlisting>
+      <programlisting>module containers/Table[Key Value]
+...
+context-free syntax
+  "not-in-table"                   -&gt; Value  {constructor} 
+  "new-table"                      -&gt; Table[[Key,Value]]               
+  lookup(Table[[Key,Value]], Key)  -&gt; Value                            
+  store(Table[[Key,Value]], Key, 
+                            Value) -&gt; Table[[Key,Value]]               
+  delete(Table[[Key,Value]], Key)  -&gt; Table[[Key,Value]]               
+  element(Table[[Key,Value]], Key) -&gt; Boolean                          
+  keys(Table[[Key,Value]])         -&gt; List[[Key]]                      
+  values(Table[[Key,Value]])       -&gt; List[[Value]]
+...</programlisting>
 
       <para>In the case of <literal>Type-environments</literal>, the formal
       parameter <literal>Key</literal> is bound to <literal>PICO-ID</literal>
@@ -1530,26 +1595,47 @@
 
         <para>First consider the syntax part of the Pico typechecker:</para>
 
-        <programlisting>module languages/pico/check/Pico imports
-        basic/Booleans imports basic/Errors <co xml:id="pico-tc.1" /> imports
-        languages/pico/syntax/Pico imports
-        languages/pico/check/Type-environments imports utilities/PosInfo[EXP]
-        <co xml:id="pico-tc.2" /> imports utilities/PosInfo[PICO-ID] imports
-        utilities/PosInfo[PROGRAM] exports context-free syntax "tcp"(PROGRAM)
-        -&gt; {Error ","}* <co xml:id="pico-tc.3" /> hiddens context-free
-        syntax <co xml:id="pico-tc.4" /> "tcd"(DECLS) -&gt; TENV
-        "tcits"({ID-TYPE ","}*, TENV) -&gt; TENV "tcit"(ID-TYPE, TENV) -&gt;
-        TENV "tcs"({STATEMENT ";"}*, TENV) -&gt; {Error ","}*
-        "tcst"(STATEMENT, TENV) -&gt; {Error ","}* "tce"(EXP, TYPE, TENV)
-        -&gt; {Error ","}* context-free start-symbols Summary PROGRAM {Error
-        ","}* variables "Message" -&gt; StrCon "Error*" [0-9\']* -&gt; {Error
-        ","}* "Decls" [0-9\']* -&gt; DECLS "Exp" [0-9\']* -&gt; EXP "Id"
-        [0-9\']* -&gt; PICO-ID "Id-type*" [0-9]* -&gt; {ID-TYPE ","}*
-        "Nat-con" [0-9\']* -&gt; NatCon "Series" [0-9\']* -&gt; {STATEMENT
-        ";"}+ "Stat" [0-9\']* -&gt; STATEMENT "Stat*" [0-9\']* -&gt;
-        {STATEMENT ";"}* "Str-con" [0-9\']* -&gt; StrCon "Tenv" [0-9\']* -&gt;
-        TENV "Type" [0-9\']* -&gt; TYPE "Program" [0-9\']* -&gt; PROGRAM
-        </programlisting>
+        <programlisting>module languages/pico/check/Pico
+
+imports basic/Booleans
+imports basic/Errors <co xml:id="pico-tc.1" />
+imports languages/pico/syntax/Pico
+imports languages/pico/check/Type-environments
+imports utilities/PosInfo[EXP] <co xml:id="pico-tc.2" />
+imports utilities/PosInfo[PICO-ID]
+imports utilities/PosInfo[PROGRAM]
+
+exports
+context-free syntax
+  "tcp"(PROGRAM) -&gt; {Error ","}* <co xml:id="pico-tc.3" />
+
+hiddens
+context-free syntax <co xml:id="pico-tc.4" />
+  "tcd"(DECLS)                  -&gt; TENV          
+  "tcits"({ID-TYPE ","}*, TENV) -&gt; TENV          
+  "tcit"(ID-TYPE, TENV)         -&gt; TENV          
+  "tcs"({STATEMENT ";"}*, TENV) -&gt; {Error ","}*  
+  "tcst"(STATEMENT, TENV)       -&gt; {Error ","}*  
+  "tce"(EXP, TYPE, TENV)        -&gt; {Error ","}*  
+
+context-free start-symbols
+  Summary PROGRAM {Error ","}*
+
+variables
+  "Message"          -&gt; StrCon            
+  "Error*" [0-9\']*  -&gt; {Error ","}*      
+  "Decls" [0-9\']*   -&gt; DECLS             
+  "Exp" [0-9\']*     -&gt; EXP               
+  "Id" [0-9\']*      -&gt; PICO-ID           
+  "Id-type*" [0-9]*  -&gt; {ID-TYPE ","}*    
+  "Nat-con" [0-9\']* -&gt; NatCon            
+  "Series" [0-9\']*  -&gt; {STATEMENT ";"}+  
+  "Stat" [0-9\']*    -&gt; STATEMENT         
+  "Stat*" [0-9\']*   -&gt; {STATEMENT ";"}*  
+  "Str-con" [0-9\']* -&gt; StrCon            
+  "Tenv" [0-9\']*    -&gt; TENV              
+  "Type" [0-9\']*    -&gt; TYPE              
+  "Program" [0-9\']* -&gt; PROGRAM         </programlisting>
 
         <para>Notes:</para>
 
@@ -1598,39 +1684,85 @@
         <para>Now let's turn our attention to the equations part of the Pico
         typechecker:</para>
 
-        <programlisting>equations [Main] start(PROGRAM, Program) = <co
-            xml:id="pico-tc-eq.1" /> start(Summary, summary("pico-check",
-        get-filename(get-location(Program)), [tcp(Program)])) equations [Tc1]
-        tcp(begin Decls Series end) = tcs(Series, tcd(Decls)) <co
-            xml:id="pico-tc-eq.2" /> equations [Tc2] tcd(declare Id-type*;) =
-        tcits(Id-type*, new-table) <co xml:id="pico-tc-eq.3" /> equations
-        [Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type,
-        Tenv)) <co xml:id="pico-tc-eq.4" /> [Tc3b] tcits(,Tenv) = Tenv <co
-            xml:id="pico-tc-eq.5" /> equations [Tc4a] lookup(Tenv, Id) ==
-        not-in-table =========================================== <co
-            xml:id="pico-tc-eq.6" /> tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
-        [default] tcit(Id:Type, Tenv) = Tenv equations [Tc5a] tcs(Stat ;
-        Stat*, Tenv) = <co xml:id="pico-tc-eq.7" /> tcst(Stat,Tenv),
-        tcs(Stat*,Tenv) [Tc5b] tcs(,Tenv) = equations [Tc6a] not-in-table ==
-        lookup(Tenv, Id) ========================================== <co
-            xml:id="pico-tc-eq.8" /> tcst(Id := Exp, Tenv) = error("Variable not
-        declared", [localized("Id", get-location(Id))]) [default] tcst(Id :=
-        Exp, Tenv) = tce(Exp, lookup(Tenv, Id), Tenv) <co
-            xml:id="pico-tc-eq.9" /> [Tc6b] tcst(if Exp then Series1 else Series2
-        fi, Tenv) = <co xml:id="pico-tc-eq.10" /> tce(Exp, natural, Tenv),
-        tcs(Series1, Tenv), tcs(Series2, Tenv) [Tc6c] tcst(while Exp do Series
-        od, Tenv) = tce(Exp, natural, Tenv), tcs(Series, Tenv) equations
-        [default] tce(Exp, natural, Tenv) = <co xml:id="pico-tc-eq.11" />
-        error("Expression should be of type natural", [localized("Expression",
-        get-location(Exp))]) [default] tce(Exp, string, Tenv) =
-        error("Expression should be of type string", [localized("Expression",
-        get-location(Exp))]) [Tc7a] tce(Id, Type, Tenv) = when Type ==
-        lookup(Tenv, Id) <co xml:id="pico-tc-eq.12" /> [Tc7b] tce(Nat-con,
-        natural, Tenv) = <co xml:id="pico-tc-eq.13" /> [Tc7c] tce(Str-con,
-        string, Tenv) = [Tc7d] tce(Exp1 || Exp2, string, Tenv) = tce(Exp1,
-        string, Tenv), tce(Exp2, string, Tenv) <co xml:id="pico-tc-eq.14" />
-        [Tc7d] tce(Exp1 + Exp2, natural, Tenv) = tce(Exp1, natural, Tenv),
-        tce(Exp2, natural, Tenv) [Tc7d] tce(Exp1 - Exp2, natural, Tenv) =
+        <programlisting>equations
+
+[Main] start(PROGRAM, Program) =  <co xml:id="pico-tc-eq.1" />
+       start(Summary, 
+             summary("pico-check",
+                     get-filename(get-location(Program)), 
+                     [tcp(Program)]))                     
+
+equations
+
+[Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls)) <co
+            xml:id="pico-tc-eq.2" />
+
+equations
+
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*, new-table) <co
+            xml:id="pico-tc-eq.3" />
+
+equations
+
+[Tc3a] tcits(Id:Type, Id-type*, Tenv) = 
+       tcits(Id-type*, tcit(Id:Type, Tenv)) <co xml:id="pico-tc-eq.4" />
+
+[Tc3b] tcits(,Tenv) = Tenv <co xml:id="pico-tc-eq.5" />
+
+equations
+
+[Tc4a] lookup(Tenv, Id) == not-in-table
+       =========================================== <co xml:id="pico-tc-eq.6" />
+       tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
+
+[default] tcit(Id:Type, Tenv) = Tenv
+
+equations
+
+[Tc5a] tcs(Stat ; Stat*, Tenv) =  <co xml:id="pico-tc-eq.7" />
+       tcst(Stat,Tenv), tcs(Stat*,Tenv)
+
+[Tc5b] tcs(,Tenv) = 
+
+equations
+
+[Tc6a]
+    not-in-table == lookup(Tenv, Id)
+    ==========================================  <co xml:id="pico-tc-eq.8" />
+    tcst(Id := Exp, Tenv) = 
+    error("Variable not declared", 
+          [localized("Id", get-location(Id))])
+
+[default] tcst(Id := Exp, Tenv) = 
+          tce(Exp, lookup(Tenv, Id), Tenv) <co xml:id="pico-tc-eq.9" />
+
+[Tc6b]  tcst(if Exp then Series1 else Series2 fi, Tenv) = <co
+            xml:id="pico-tc-eq.10" />
+        tce(Exp, natural, Tenv), 
+        tcs(Series1, Tenv), tcs(Series2, Tenv)
+
+[Tc6c]  tcst(while Exp do Series od, Tenv) = 
+        tce(Exp, natural, Tenv), tcs(Series, Tenv)
+
+equations
+
+[default] tce(Exp, natural, Tenv) = <co xml:id="pico-tc-eq.11" />
+          error("Expression should be of type natural", 
+                [localized("Expression", get-location(Exp))])
+[default] tce(Exp, string, Tenv) = 
+          error("Expression should be of type string", 
+                [localized("Expression", get-location(Exp))])
+
+[Tc7a]  tce(Id, Type, Tenv) = 
+        when Type == lookup(Tenv, Id) <co xml:id="pico-tc-eq.12" />
+[Tc7b]  tce(Nat-con, natural, Tenv) = <co xml:id="pico-tc-eq.13" />
+[Tc7c]  tce(Str-con, string, Tenv) = 
+[Tc7d]  tce(Exp1 || Exp2, string, Tenv) = 
+        tce(Exp1, string, Tenv), tce(Exp2, string, Tenv) <co
+            xml:id="pico-tc-eq.14" />
+[Tc7d]  tce(Exp1 + Exp2, natural, Tenv) = 
+        tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)
+[Tc7d]  tce(Exp1 - Exp2, natural, Tenv) = 
         tce(Exp1, natural, Tenv), tce(Exp2, natural, Tenv)</programlisting>
 
         <para>Notes:</para>
@@ -1977,10 +2109,16 @@
       <para>The sort <literal>VALUE</literal> is simply a container for
       integer and string constants and is defined as follows:</para>
 
-      <programlisting>module languages/pico/run/Values imports basic/Integers
-      basic/StrCon exports sorts VALUE context-free syntax Integer -&gt; VALUE
-      <co xml:id="value.1" /> StrCon -&gt; VALUE "nil-value" -&gt; VALUE <co
-          xml:id="value.2" /></programlisting>
+      <programlisting>module languages/pico/run/Values
+
+imports basic/Integers basic/StrCon
+
+exports
+  sorts VALUE
+  context-free syntax
+    Integer     -&gt; VALUE  <co xml:id="value.1" />
+    StrCon      -&gt; VALUE
+    "nil-value" -&gt; VALUE  <co xml:id="value.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2004,10 +2142,16 @@
       <para>The purpose of value environments is to maintain a mapping between
       identifiers and their current value. This is done as follows:</para>
 
-      <programlisting>module languages/pico/run/Value-environments imports
-      languages/pico/syntax/Identifiers imports languages/pico/run/Values
-      imports containers/Table[PICO-ID VALUE] exports sorts VENV aliases
-      Table[[PICO-ID, VALUE]] -&gt; VENV</programlisting>
+      <programlisting>module languages/pico/run/Value-environments
+
+imports languages/pico/syntax/Identifiers 
+imports languages/pico/run/Values 
+imports containers/Table[PICO-ID VALUE]
+    
+exports
+  sorts VENV 
+  aliases
+    Table[[PICO-ID, VALUE]] -&gt; VENV</programlisting>
 
       <para>After the discussion of <link
       linkend="Sec_Type-environments">Type-environments</link>, this
@@ -2028,21 +2172,43 @@
 
         <para>The syntax part of the Pico evaluator looks as follows:</para>
 
-        <programlisting>module languages/pico/run/Pico imports
-        languages/pico/syntax/Pico imports
-        languages/pico/run/Value-environments imports basic/Strings exports
-        context-free syntax "evp"(PROGRAM) -&gt; VENV context-free syntax
-        "evd"(DECLS) -&gt; VENV "evits"({ID-TYPE ","}*) -&gt; VENV
-        "evs"({STATEMENT ";"}*, VENV) -&gt; VENV "evst"(STATEMENT, VENV) -&gt;
-        VENV "eve"(EXP, VENV) -&gt; VALUE hiddens imports basic/Comments
-        context-free start-symbols VALUE-ENV PROGRAM variables "Decls"[0-9\']*
-        -&gt; DECLS "Exp"[0-9\']* -&gt; EXP "Id"[0-9]* -&gt; PICO-ID
-        "Id-type*"[0-9]* -&gt; {ID-TYPE ","}* "Nat"[0-9\']* -&gt; Integer
-        "Nat-con"[0-9\']* -&gt; NatCon "Series"[0-9\']* -&gt; {STATEMENT ";"}+
-        "Stat"[0-9\']* -&gt; STATEMENT "Stat*"[0-9\']* -&gt; {STATEMENT ";"}*
-        "Str" "-con"? [0-9\']* -&gt; StrCon "Value"[0-9\']* -&gt; VALUE
-        "Venv"[0-9\']* -&gt; VENV "Program"[0-9\']* -&gt;
-        PROGRAM</programlisting>
+        <programlisting>module languages/pico/run/Pico
+
+imports languages/pico/syntax/Pico
+imports languages/pico/run/Value-environments
+imports basic/Strings
+
+exports
+
+  context-free syntax
+    "evp"(PROGRAM)                -&gt; VENV
+
+  context-free syntax
+    "evd"(DECLS)                  -&gt; VENV
+    "evits"({ID-TYPE  ","}*)      -&gt; VENV
+    "evs"({STATEMENT ";"}*, VENV) -&gt; VENV
+    "evst"(STATEMENT, VENV)       -&gt; VENV
+    "eve"(EXP, VENV)              -&gt; VALUE
+
+hiddens
+  imports basic/Comments
+  context-free start-symbols
+    VALUE-ENV PROGRAM
+
+  variables
+    "Decls"[0-9\']*   -&gt; DECLS
+    "Exp"[0-9\']*     -&gt; EXP
+    "Id"[0-9]*        -&gt; PICO-ID
+    "Id-type*"[0-9]*  -&gt; {ID-TYPE ","}*
+    "Nat"[0-9\']*     -&gt; Integer 
+    "Nat-con"[0-9\']* -&gt; NatCon
+    "Series"[0-9\']*  -&gt; {STATEMENT ";"}+
+    "Stat"[0-9\']*    -&gt; STATEMENT
+    "Stat*"[0-9\']*   -&gt; {STATEMENT ";"}*
+    "Str" "-con"? [0-9\']* -&gt; StrCon
+    "Value"[0-9\']*   -&gt; VALUE
+    "Venv"[0-9\']*    -&gt; VENV
+    "Program"[0-9\']* -&gt; PROGRAM</programlisting>
 
         <para>Having seen the syntax part of the Pico typechecker there are no
         surprises here. The top level function <literal>evp</literal> maps
@@ -2055,38 +2221,81 @@
 
         <para>The equations part of the Pico evaluator:</para>
 
-        <programlisting>equations [Main] start(PROGRAM, Program) = start(VENV,
-        evp(Program)) <co xml:id="pico-eval.1" /> equations [Ev1] evp(begin
-        Decls Series end) = evs(Series, evd(Decls)) [Ev2] evd(declare
-        Id-type*;) = evits(Id-type*) [Ev3a] evits(Id:natural, Id-type*) =
-        store(evits(Id-type*), Id, 0) <co xml:id="pico-eval.2" /> [Ev3b]
-        evits(Id:string, Id-type*) = store(evits(Id-type*), Id, "") [Ev3c]
-        evits() = [] [Ev4a] Venv' := evst(Stat, Venv), Venv'' := evs(Stat*,
-        Venv') ================================= <co xml:id="pico-eval.3" />
-        evs(Stat ; Stat*, Venv) = Venv'' [Ev4b] evs( , Venv) = Venv [Ev5a]
-        evst(Id := Exp, Venv) = store(Venv, Id, eve(Exp, Venv)) [Ev5b]
-        eve(Exp, Venv) != 0 =================================================
-        <co xml:id="pico-eval.4" /> evst(if Exp then Series1 else Series2 fi,
-        Venv) = evs(Series1, Venv) [Ev5c] eve(Exp, Venv) == 0
-        ================================================= <co
-            xml:id="pico-eval.5" /> evst(if Exp then Series1 else Series2 fi,
-        Venv) = evs(Series2, Venv) [Ev5d] eve(Exp, Venv) == 0
-        ========================================== <co xml:id="pico-eval.6" />
-        evst(while Exp do Series od, Venv) = Venv [Ev5e] eve(Exp, Venv) != 0,
-        Venv' := evs(Series, Venv)
-        ================================================ <co
-            xml:id="pico-eval.7" /> evst(while Exp do Series od, Venv) =
-        evst(while Exp do Series od, Venv') [Ev6a] eve(Id, Venv) =
-        lookup(Venv, Id) <co xml:id="pico-eval.8" /> [Ev6b] eve(Nat-con, Venv)
-        = Nat-con <co xml:id="pico-eval.9" /> [Ev6c] eve(Str-con, Venv) =
-        Str-con [Ev6d] Nat1 := eve(Exp1, Venv), Nat2 := eve(Exp2, Venv)
-        ==================================== <co xml:id="pico-eval.10" />
-        eve(Exp1 + Exp2, Venv) = Nat1 + Nat2 [Ev6e] Nat1 := eve(Exp1, Venv),
-        Nat2 := eve(Exp2, Venv) ======================================
-        eve(Exp1 - Exp2, Venv) = Nat1 -/ Nat2 [Ev6f] Str1 := eve(Exp1, Venv),
-        Str2 := eve(Exp2, Venv), Str3 := concat(Str1, Str2)
-        ============================== eve(Exp1 || Exp2, Venv) = Str3
-        [default-Ev6] eve(Exp,Venv) = nil-value </programlisting>
+        <programlisting>equations
+
+[Main] start(PROGRAM, Program) = 
+       start(VENV, evp(Program)) <co xml:id="pico-eval.1" />
+
+equations
+
+[Ev1]  evp(begin Decls Series end) = 
+       evs(Series, evd(Decls))
+
+[Ev2]  evd(declare Id-type*;) = evits(Id-type*)
+
+[Ev3a] evits(Id:natural, Id-type*) = 
+       store(evits(Id-type*), Id, 0) <co xml:id="pico-eval.2" />
+
+[Ev3b] evits(Id:string, Id-type*) = 
+       store(evits(Id-type*), Id, "")
+
+[Ev3c] evits() = []
+
+[Ev4a] Venv' := evst(Stat, Venv), 
+       Venv'' := evs(Stat*, Venv')
+       =================================  <co xml:id="pico-eval.3" />
+       evs(Stat ; Stat*, Venv) =  Venv''
+
+[Ev4b] evs( , Venv) = Venv
+
+[Ev5a] evst(Id := Exp, Venv) = 
+       store(Venv, Id, eve(Exp, Venv))
+
+[Ev5b]             eve(Exp, Venv) != 0
+       ================================================= <co
+            xml:id="pico-eval.4" />
+       evst(if Exp then Series1 else Series2 fi, Venv) = 
+       evs(Series1, Venv)
+
+[Ev5c]             eve(Exp, Venv) == 0
+       ================================================= <co
+            xml:id="pico-eval.5" />
+       evst(if Exp then Series1 else Series2 fi, Venv) = 
+       evs(Series2, Venv)
+
+[Ev5d]           eve(Exp, Venv) == 0
+       ========================================== <co xml:id="pico-eval.6" />
+       evst(while Exp do Series od, Venv) =  Venv
+
+[Ev5e] eve(Exp, Venv) != 0,  Venv' := evs(Series, Venv)
+       ================================================ <co
+            xml:id="pico-eval.7" />
+       evst(while Exp do Series od, Venv) =
+       evst(while Exp do Series od, Venv')
+
+[Ev6a] eve(Id, Venv) = lookup(Venv, Id) <co xml:id="pico-eval.8" />
+[Ev6b] eve(Nat-con, Venv) = Nat-con <co xml:id="pico-eval.9" />
+[Ev6c] eve(Str-con, Venv) = Str-con
+
+[Ev6d] Nat1 := eve(Exp1, Venv),
+       Nat2 := eve(Exp2, Venv)
+       ==================================== <co xml:id="pico-eval.10" />
+       eve(Exp1 + Exp2, Venv) = Nat1 + Nat2
+
+[Ev6e] Nat1 := eve(Exp1, Venv),
+       Nat2 := eve(Exp2, Venv)
+       ======================================
+       eve(Exp1 - Exp2, Venv) =  Nat1 -/ Nat2
+
+[Ev6f] Str1 := eve(Exp1, Venv),
+       Str2 := eve(Exp2, Venv),
+       Str3 := concat(Str1, Str2)
+       ==============================
+       eve(Exp1 || Exp2, Venv) = Str3
+
+[default-Ev6]  
+       eve(Exp,Venv) = nil-value
+</programlisting>
 
         <para>Notes:</para>
 
@@ -2152,16 +2361,31 @@
         <para>Now apply the evaluator function <literal>evp</literal> to our
         Pico factorial example:</para>
 
-        <programlisting>evp( begin declare input : natural, output : natural,
-        repnr: natural, rep: natural; input := 14; output := 1; while input -
-        1 do rep := output; repnr := input; while repnr - 1 do output :=
-        output + rep; repnr := repnr - 1 od; input := input - 1 od end
-        )</programlisting>
+        <programlisting>evp(
+begin declare input : natural,
+                      output  :  natural,
+                      repnr: natural,
+                     rep: natural;
+          input := 14;
+          output := 1;
+          while input - 1 do
+              rep := output;
+              repnr := input;
+              while repnr - 1 do
+                 output := output + rep;
+                 repnr := repnr - 1
+              od;
+              input := input - 1
+          od
+end
+)</programlisting>
 
         <para>The result is:</para>
 
-        <programlisting>[&lt;input,1&gt;, &lt;repnr,1&gt;,
-        &lt;output,87178291200&gt;, &lt;rep,43589145600&gt;]</programlisting>
+        <programlisting>[&lt;input,1&gt;,
+&lt;repnr,1&gt;,
+&lt;output,87178291200&gt;,
+&lt;rep,43589145600&gt;]</programlisting>
       </section>
     </section>
 
@@ -2255,20 +2479,37 @@
 
       <para>Now we define an assembly language for a stack-based CPU:</para>
 
-      <programlisting>module languages/pico/compile/AssemblyLanguage imports
-      basic/Integers basic/Strings imports languages/pico/syntax/Identifiers
-      exports sorts Label Instr lexical syntax [a-z0-9]+ -&gt; Label <co
-          xml:id="pico-asm.1" /> context-free syntax "dclnat" PICO-ID -&gt; Instr
-      <co xml:id="pico-asm.2" /> "dclstr" PICO-ID -&gt; Instr "push" NatCon
-      -&gt; Instr <co xml:id="pico-asm.3" /> "push" StrCon -&gt; Instr
-      "rvalue" PICO-ID -&gt; Instr <co xml:id="pico-asm.4" /> "lvalue" PICO-ID
-      -&gt; Instr <co xml:id="pico-asm.5" /> "assign" -&gt; Instr <co
-          xml:id="pico-asm.6" /> "add" -&gt; Instr <co xml:id="pico-asm.7" />
-      "sub" -&gt; Instr "conc" -&gt; Instr "label" Label -&gt; Instr <co
-          xml:id="pico-asm.8" /> "goto" Label -&gt; Instr <co
-          xml:id="pico-asm.9" /> "gotrue" Label -&gt; Instr "gofalse" Label -&gt;
-      Instr "noop" -&gt; Instr <co xml:id="pico-asm.10" /> sorts Instrs
-      context-free syntax {Instr";"}+ -&gt; Instrs <co xml:id="pico-asm.11" /></programlisting>
+      <programlisting>module languages/pico/compile/AssemblyLanguage
+
+imports basic/Integers basic/Strings 
+imports languages/pico/syntax/Identifiers
+
+exports 
+  sorts Label Instr
+  lexical syntax
+    [a-z0-9]+         -&gt; Label  <co xml:id="pico-asm.1" />
+
+  context-free syntax
+    "dclnat" PICO-ID  -&gt; Instr  <co xml:id="pico-asm.2" />
+    "dclstr" PICO-ID  -&gt; Instr  
+
+    "push" NatCon     -&gt; Instr  <co xml:id="pico-asm.3" />
+    "push" StrCon     -&gt; Instr
+    "rvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-asm.4" />
+    "lvalue" PICO-ID  -&gt; Instr  <co xml:id="pico-asm.5" />
+    "assign"          -&gt; Instr  <co xml:id="pico-asm.6" />
+    "add"             -&gt; Instr  <co xml:id="pico-asm.7" />
+    "sub"             -&gt; Instr 
+    "conc"            -&gt; Instr 
+    "label" Label     -&gt; Instr  <co xml:id="pico-asm.8" />
+    "goto" Label      -&gt; Instr  <co xml:id="pico-asm.9" />
+    "gotrue" Label    -&gt; Instr 
+    "gofalse" Label   -&gt; Instr
+    "noop"            -&gt; Instr  <co xml:id="pico-asm.10" />
+
+  sorts Instrs
+context-free syntax
+    {Instr";"}+       -&gt; Instrs <co xml:id="pico-asm.11" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2342,11 +2583,17 @@
 
       <para>The syntax part looks as follows:</para>
 
-      <programlisting>module languages/pico/compile/NextLabel imports
-      languages/pico/compile/AssemblyLanguage exports context-free syntax
-      "nextlabel" "(" Label ")" -&gt; Label <co xml:id="nextlabel.1" />
-      hiddens lexical variables "Char+" [0-9]* -&gt; [a-z0-9]+ <co
-          xml:id="nextlabel.2" /></programlisting>
+      <programlisting>module languages/pico/compile/NextLabel
+
+imports languages/pico/compile/AssemblyLanguage
+
+exports
+context-free syntax
+  "nextlabel" "(" Label ")" -&gt; Label <co xml:id="nextlabel.1" />
+
+hiddens
+lexical variables
+  "Char+" [0-9]* -&gt; [a-z0-9]+ <co xml:id="nextlabel.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2371,8 +2618,9 @@
 
       <para>The equations part:</para>
 
-      <programlisting>equations [1] nextlabel(label(Char+)) = label(Char+
-      x)</programlisting>
+      <programlisting>equations
+
+ [1] nextlabel(label(Char+)) = label(Char+ x)</programlisting>
 
       <para>This single equation decomposes a given label into a list of
       characters. Next, it creates a new label consisting of the original list
@@ -2398,23 +2646,43 @@
 
         <para>The syntax part of the Pico compiler:</para>
 
-        <programlisting>module languages/pico/compile/Pico imports
-        languages/pico/syntax/Pico imports
-        languages/pico/compile/AssemblyLanguage imports
-        languages/pico/compile/NextLabel exports context-free syntax trp(
-        PROGRAM ) -&gt; Instrs <co xml:id="pico-comp.1" /> hiddens
-        context-free start-symbols PROGRAM Instrs context-free syntax <co
-            xml:id="pico-comp.2" /> trd(DECLS) -&gt; {Instr ";"}+ trits({ID-TYPE
-        ","}*) -&gt; {Instr ";"}+ trs({STATEMENT ";"}*, Label) -&gt;
-        &lt;{Instr ";"}+, Label&gt; trst(STATEMENT, Label) -&gt; &lt;{Instr
-        ";"}+, Label&gt; tre(EXP) -&gt; {Instr ";"}+ hiddens variables
-        "Decls"[0-9\']* -&gt; DECLS "Exp"[0-9\']* -&gt; EXP "Id"[0-9]* -&gt;
-        PICO-ID "Id-type*"[0-9]* -&gt; {ID-TYPE ","}* "Nat-con"[0-9\']* -&gt;
-        NatCon "Series"[0-9\']* -&gt; {STATEMENT ";"}+ "Stat"[0-9\']* -&gt;
-        STATEMENT "Stat*"[0-9\']* -&gt; {STATEMENT ";"}* "Str-con"[0-9\']*
-        -&gt; StrCon "Str"[0-9\']* -&gt; String "Instr*"[0-9\']* -&gt; {Instr
-        ";"}+ "Label" [0-9\']* -&gt; Label "Program" -&gt;
-        PROGRAM</programlisting>
+        <programlisting>module languages/pico/compile/Pico
+
+imports languages/pico/syntax/Pico
+imports languages/pico/compile/AssemblyLanguage 
+imports languages/pico/compile/NextLabel 
+
+  
+exports
+  context-free syntax
+    trp( PROGRAM ) -&gt; Instrs <co xml:id="pico-comp.1" />
+  
+hiddens
+  context-free start-symbols
+    PROGRAM Instrs
+  context-free syntax <co xml:id="pico-comp.2" />                     
+    trd(DECLS)                   -&gt; {Instr ";"}+
+    trits({ID-TYPE  ","}*)       -&gt; {Instr ";"}+ 
+    trs({STATEMENT ";"}*, Label) -&gt; &lt;{Instr ";"}+, Label&gt;
+    trst(STATEMENT, Label)       -&gt; &lt;{Instr ";"}+, Label&gt;
+    tre(EXP)                     -&gt; {Instr ";"}+
+
+hiddens
+  variables
+    "Decls"[0-9\']*   -&gt; DECLS
+    "Exp"[0-9\']*     -&gt; EXP
+    "Id"[0-9]*        -&gt; PICO-ID
+    "Id-type*"[0-9]*  -&gt; {ID-TYPE ","}*
+    "Nat-con"[0-9\']* -&gt; NatCon
+    "Series"[0-9\']*  -&gt; {STATEMENT ";"}+
+    "Stat"[0-9\']*    -&gt; STATEMENT
+    "Stat*"[0-9\']*   -&gt; {STATEMENT ";"}*
+    "Str-con"[0-9\']* -&gt; StrCon
+    "Str"[0-9\']*     -&gt; String
+
+    "Instr*"[0-9\']*  -&gt; {Instr ";"}+
+    "Label" [0-9\']*  -&gt; Label
+    "Program"         -&gt; PROGRAM</programlisting>
 
         <para>Notes:</para>
 
@@ -2442,43 +2710,101 @@
 
         <para>The equations of the Pico compiler look as follows:</para>
 
-        <programlisting>equations [main] start(PROGRAM, Program) = <co
-            xml:id="pico-comp-eqs.1" /> start(Instrs, trp(Program)) equations
-        [Tr1] Instr*1 := trd(Decls), &lt;Instr*2, Label&gt; := trs(Series, x)
-        ============================================== <co
-            xml:id="pico-comp-eqs.2" /> trp(begin Decls Series end) = Instr*1;
-        Instr*2 [Tr2] trd(declare Id-type*;) = trits(Id-type*) <co
-            xml:id="pico-comp-eqs.3" /> [Tr3a] trits(Id:natural, Id-type*) = <co
-            xml:id="pico-comp-eqs.4" /> dclnat Id; trits(Id-type*) [Tr3b]
-        trits(Id:string, Id-type*) = dclstr Id; trits(Id-type*) [Tr3c] trits()
-        = noop [Tr4a] &lt;Instr*1, Label'&gt; := trst(Stat, Label),
-        &lt;Instr*2, Label''&gt; := trs(Stat*, Label')
-        ======================================= <co xml:id="pico-comp-eqs.5" /> trs(Stat ; Stat*, Label) = &lt; Instr*1;
-        Instr*2 , Label'' &gt; [Tr4b] trs( , Label) = &lt;noop, Label&gt; <co
-            xml:id="pico-comp-eqs.6" /> [Tr5a] Instr* := tre(Exp)
-        ================== <co xml:id="pico-comp-eqs.7" /> trst(Id := Exp,
-        Label) = &lt; lvalue Id; Instr*; assign , Label &gt; [Tr5b] Instr* :=
-        tre(Exp), &lt;Instr*1, Label'&gt; := trs(Series1, Label), &lt;Instr*2,
-        Label''&gt; := trs(Series2, Label'), Label1 := nextlabel(Label''),
-        Label2 := nextlabel(Label1) <co xml:id="pico-comp-eqs.8" />
-        =================================================== trst(if Exp then
-        Series1 else Series2 fi, Label) = &lt; Instr*; gofalse Label1;
-        Instr*1; goto Label2; label Label1; Instr*2; label Label2 , Label2
-        &gt; [Tr5c] Instr*1 := tre(Exp), &lt;Instr*2, Label'&gt; :=
-        trs(Series, Label), Label1 := nextlabel(Label'), Label2 :=
-        nextlabel(Label1) ======================================= <co
-            xml:id="pico-comp-eqs.9" /> trst(while Exp do Series od, Label) = &lt;
-        label Label1; Instr*1; gofalse Label2; Instr*2; goto Label1; label
-        Label2 , Label2 &gt; [Tr6a] tre(Nat-con) = push Nat-con <co
-            xml:id="pico-comp-eqs.10" /> [Tr6b] tre(Str-con) = push Str-con [Tr6c]
-        tre(Id) = rvalue Id [Trcd] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
-        ========================================= <co
-            xml:id="pico-comp-eqs.11" /> tre(Exp1 + Exp2) = Instr*1; Instr*2; add
-        [Tr6e] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
-        ======================================== tre(Exp1 - Exp2) = Instr*1;
-        Instr*2; sub [Tr6f] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
-        ========================================== tre(Exp1 || Exp2) =
-        Instr*1; Instr*2; conc</programlisting>
+        <programlisting>equations
+
+[main] start(PROGRAM, Program) = <co xml:id="pico-comp-eqs.1" />
+       start(Instrs, trp(Program))
+
+equations 
+
+[Tr1]  Instr*1 := trd(Decls),
+       &lt;Instr*2, Label&gt; := trs(Series, x)
+       ============================================== <co
+            xml:id="pico-comp-eqs.2" />
+       trp(begin Decls Series end) = Instr*1; Instr*2
+
+[Tr2]  trd(declare Id-type*;) = trits(Id-type*) <co xml:id="pico-comp-eqs.3" />
+ 
+[Tr3a] trits(Id:natural, Id-type*) = <co xml:id="pico-comp-eqs.4" />
+       dclnat Id;
+       trits(Id-type*)
+ 
+[Tr3b] trits(Id:string, Id-type*) = 
+       dclstr Id; 
+       trits(Id-type*)
+ 
+[Tr3c] trits() = noop
+
+[Tr4a] &lt;Instr*1, Label'&gt; := trst(Stat, Label), 
+       &lt;Instr*2, Label''&gt; := trs(Stat*, Label')
+       ======================================= <co xml:id="pico-comp-eqs.5" />
+       trs(Stat ; Stat*, Label) = 
+       &lt; Instr*1;
+         Instr*2
+       , 
+         Label'' &gt;
+
+[Tr4b] trs( , Label) = &lt;noop, Label&gt; <co xml:id="pico-comp-eqs.6" />
+
+[Tr5a] Instr* := tre(Exp)
+       ================== <co xml:id="pico-comp-eqs.7" />
+       trst(Id := Exp, Label) = 
+       &lt; lvalue Id;
+         Instr*; 
+         assign
+       , 
+         Label &gt;
+
+[Tr5b] Instr* := tre(Exp), 
+       &lt;Instr*1, Label'&gt; := trs(Series1, Label),
+       &lt;Instr*2, Label''&gt; := trs(Series2, Label'),
+       Label1 := nextlabel(Label''), 
+       Label2 := nextlabel(Label1)                    <co
+            xml:id="pico-comp-eqs.8" />
+       ===================================================
+       trst(if Exp then Series1  else Series2 fi, Label) =
+       &lt; Instr*; 
+         gofalse Label1; 
+         Instr*1;
+         goto Label2; 
+         label Label1; 
+         Instr*2;
+         label Label2
+       , 
+         Label2 &gt;
+
+[Tr5c] Instr*1 := tre(Exp), 
+       &lt;Instr*2, Label'&gt; := trs(Series, Label),
+       Label1 := nextlabel(Label'), 
+       Label2 := nextlabel(Label1) 
+       ======================================= <co xml:id="pico-comp-eqs.9" />
+       trst(while Exp do Series od, Label) =
+       &lt; label Label1; 
+         Instr*1; 
+         gofalse Label2; 
+         Instr*2;
+         goto Label1; 
+         label Label2
+       , 
+         Label2 &gt;
+
+[Tr6a] tre(Nat-con) = push Nat-con <co xml:id="pico-comp-eqs.10" />
+
+[Tr6b] tre(Str-con) = push Str-con
+
+[Tr6c] tre(Id) = rvalue Id
+
+[Trcd] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
+       ========================================= <co xml:id="pico-comp-eqs.11" />
+       tre(Exp1 + Exp2) = Instr*1; Instr*2; add
+
+[Tr6e] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
+       ======================================== 
+       tre(Exp1 - Exp2) = Instr*1; Instr*2; sub
+
+[Tr6f] Instr*1 := tre(Exp1), Instr*2 := tre(Exp2)
+       ========================================== 
+       tre(Exp1 || Exp2) = Instr*1; Instr*2; conc</programlisting>
 
         <para>Notes:</para>
 
@@ -2555,22 +2881,64 @@
         <para>Recall the Pico example that computes factorial and let's apply
         the function <literal>trp</literal> to it:</para>
 
-        <programlisting>trp( begin declare input : natural, output : natural,
-        repnr: natural, rep: natural; input := 14; output := 1; while input -
-        1 do rep := output; repnr := input; while repnr - 1 do output :=
-        output + rep; repnr := repnr - 1 od; input := input - 1 od end
-        )</programlisting>
+        <programlisting>trp(
+begin declare input : natural,
+                      output  :  natural,
+                      repnr: natural,
+                     rep: natural;
+          input := 14;
+          output := 1;
+          while input - 1 do
+              rep := output;
+              repnr := input;
+              while repnr - 1 do
+                 output := output + rep;
+                 repnr := repnr - 1
+              od;
+              input := input - 1
+          od
+end
+)</programlisting>
 
         <para>The result is the following assembly language program:</para>
 
-        <programlisting> dclnat input; dclnat output; dclnat repnr; dclnat
-        rep; noop; lvalue input; push 14; assign ; lvalue output; push 1;
-        assign ; label xxxx; rvalue input; push 1; sub; gofalse xxxxx; lvalue
-        rep; rvalue output; assign ; lvalue repnr; rvalue input; assign ;
-        label xx; rvalue repnr; push 1; sub; gofalse xxx; lvalue output;
-        rvalue output; rvalue rep; add; assign ; lvalue repnr; rvalue repnr;
-        push 1; sub; assign ; noop; goto xx; label xxx ; lvalue input; rvalue
-        input; push 1; sub; assign ; noop; goto xxxx; label xxxxx ;
+        <programlisting>        dclnat input; 
+        dclnat output; 
+        dclnat repnr; 
+        dclnat rep; 
+        noop; lvalue input; 
+        push 14; 
+        assign ; 
+        lvalue output; 
+        push 1; 
+        assign ; 
+        label xxxx; 
+        rvalue input; push 1; sub; 
+        gofalse xxxxx; 
+        lvalue rep; 
+        rvalue output; 
+        assign ; 
+        lvalue repnr; 
+        rvalue input; 
+        assign ; 
+        label xx; 
+        rvalue repnr; push 1; sub; 
+        gofalse xxx; 
+        lvalue output; 
+        rvalue output; rvalue rep; add; 
+        assign ; 
+        lvalue repnr; 
+        rvalue repnr; push 1; sub; 
+        assign ; 
+        noop;
+        goto xx; 
+        label xxx ; 
+        lvalue input; 
+        rvalue input; push 1; sub; 
+        assign ; 
+        noop;
+        goto xxxx; 
+        label xxxxx ; 
         noop</programlisting>
       </section>
     </section>
@@ -2715,11 +3083,18 @@
 
       <para>Consider the following very simple language of trees:</para>
 
-      <programlisting>module Tree-syntax imports Naturals exports sorts TREE
-      context-free syntax NAT -&gt; TREE <co xml:id="tree.1" /> f(TREE, TREE)
-      -&gt; TREE <co xml:id="tree.2" /> g(TREE, TREE) -&gt; TREE h(TREE, TREE)
-      -&gt; TREE variables <co xml:id="tree.3" /> “N”[0-9]* -&gt; NAT
-      “T”[0-9]* -&gt; TREE</programlisting>
+      <programlisting>module Tree-syntax
+imports Naturals
+exports
+  sorts TREE
+  context-free syntax
+    NAT           -&gt; TREE <co xml:id="tree.1" />
+    f(TREE, TREE) -&gt; TREE <co xml:id="tree.2" /> 
+    g(TREE, TREE) -&gt; TREE
+    h(TREE, TREE) -&gt; TREE
+  variables <co xml:id="tree.3" />
+    “N”[0-9]*     -&gt; NAT
+    “T”[0-9]*     -&gt; TREE</programlisting>
 
       <para>Notes:</para>
 
@@ -2761,11 +3136,16 @@
       <para>The classical solution for counting the nodes in a tree is as
       follows:</para>
 
-      <programlisting>module Tree-cnt imports Tree-syntax exports context-free
-      syntax cnt(TREE) -&gt; NAT <co xml:id="tree-cnt-class.1" /> equations
-      [1] cnt(N) = 1 <co xml:id="tree-cnt-class.2" /> [2] cnt(f(T1,T2)) =
-      1+cnt(T1)+cnt(T2) <co xml:id="tree-cnt-class.3" /> [3] cnt(g(T1,T2)) =
-      1+cnt(T1)+cnt(T2) [4] cnt(h(T1,T2)) = 1+cnt(T1)+cnt(T2)</programlisting>
+      <programlisting>module Tree-cnt
+imports Tree-syntax
+exports
+context-free syntax
+  cnt(TREE)       -&gt; NAT <co xml:id="tree-cnt-class.1" />
+equations
+[1] cnt(N)        = 1 <co xml:id="tree-cnt-class.2" />
+[2] cnt(f(T1,T2)) = 1+cnt(T1)+cnt(T2) <co xml:id="tree-cnt-class.3" />
+[3] cnt(g(T1,T2)) = 1+cnt(T1)+cnt(T2)
+[4] cnt(h(T1,T2)) = 1+cnt(T1)+cnt(T2)</programlisting>
 
       <para>Notes:</para>
 
@@ -2814,10 +3194,15 @@
       <para>Let's now reformulate the node counting example using traversal
       functions:</para>
 
-      <programlisting>module Tree-cnt imports Tree-syntax exports context-free
-      syntax cnt(TREE, NAT) -&gt; NAT {traversal(accu, <co
-          xml:id="tree-cnt-trav.1" /> bottom-up, continue)} equations [1] cnt(T,
-      N) = N + 1 <co xml:id="tree-cnt-trav.2" /></programlisting>
+      <programlisting>module Tree-cnt
+imports Tree-syntax
+exports
+ context-free syntax
+    cnt(TREE, NAT) -&gt; NAT {traversal(accu,  <co xml:id="tree-cnt-trav.1" />
+                                     bottom-up,
+                                     continue)}
+equations
+[1] cnt(T, N) = N + 1  <co xml:id="tree-cnt-trav.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2840,8 +3225,9 @@
 
       <para>Counting the nodes of the example</para>
 
-      <programlisting>cnt( f( g( f(1,2), 3 ), g( g(4,5), 6 )),
-      0)</programlisting>
+      <programlisting>cnt( f( g( f(1,2), 3 ),
+           g( g(4,5), 6 )),
+       0)</programlisting>
 
       <para>gives:</para>
 
@@ -2855,10 +3241,15 @@
       construct a new one that is identical except that all values at the
       leaves are incremented by one. This is achieved as follows:</para>
 
-      <programlisting>module Tree-inc imports Tree-syntax exports context-free
-      syntax inc(TREE) -&gt; TREE {traversal(trafo, <co xml:id="tree-inc.1" />
-      bottom-up, continue)} equations [1] inc(N) = N + 1 <co
-          xml:id="tree-inc.2" /></programlisting>
+      <programlisting>module Tree-inc
+imports Tree-syntax
+exports
+context-free syntax
+  inc(TREE) -&gt; TREE {traversal(trafo, <co xml:id="tree-inc.1" />
+                               bottom-up,
+                               continue)}
+equations
+[1] inc(N) = N + 1  <co xml:id="tree-inc.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2880,12 +3271,13 @@
 
       <para>The example:</para>
 
-      <programlisting>inc( f( g( f(1,2), 3 ), g( g(4,5), 6 ))
-      )</programlisting>
+      <programlisting>inc( f( g( f(1,2),  3 ),
+           g( g(4,5), 6 )) )</programlisting>
 
       <para>gives:</para>
 
-      <programlisting>f( g( f(2,3), 4 ), g( g(5,6), 7 ))</programlisting>
+      <programlisting>f( g( f(2,3), 4 ),
+      g( g(5,6), 7 ))</programlisting>
     </section>
 
     <section>
@@ -2895,10 +3287,15 @@
       <para>Continuing the incrementing example, we now want to make the
       <emphasis>amount</emphasis> of the increment variable.</para>
 
-      <programlisting>module Tree-incp imports Tree-syntax exports
-      context-free syntax inc(TREE, NAT) -&gt; TREE {traversal(trafo, <co
-          xml:id="tree-incp.1" /> bottom-up, continue)} equations [1] inc(N1, N2)
-      = N1 + N2 <co xml:id="tree-incp.2" /></programlisting>
+      <programlisting>module Tree-incp
+imports Tree-syntax
+exports
+context-free syntax
+  inc(TREE, NAT) -&gt; TREE {traversal(trafo, <co xml:id="tree-incp.1" />
+                                    bottom-up,
+                                    continue)}
+equations
+[1] inc(N1, N2) = N1 + N2 <co xml:id="tree-incp.2" /></programlisting>
 
       <para>Notes:</para>
 
@@ -2918,12 +3315,14 @@
 
       <para>Example:</para>
 
-      <programlisting>inc( f( g( f(1,2), 3 ), g( g(4,5), 6 )), 7
-      )</programlisting>
+      <programlisting>inc( f( g( f(1,2),  3 ),
+           g( g(4,5), 6 )),
+       7 )</programlisting>
 
       <para>Result:</para>
 
-      <programlisting>f( g( f( 8, 9), 10), g( g(11,12), 13))</programlisting>
+      <programlisting>f( g( f( 8,  9), 10),
+      g( g(11,12),  13))</programlisting>
     </section>
 
     <section>
@@ -2966,11 +3365,16 @@
         occur. This is exactly what the break attribute of traversal function
         achieves.</para>
 
-        <programlisting>module Tree-drepl imports Tree-syntax exports
-        context-free syntax i(TREE, TREE) -&gt; TREE <co xml:id="drepl.1" />
-        drepl(TREE) -&gt; TREE {traversal(trafo, bottom-up, break)} <co
-            xml:id="drepl.2" /> equations [1] drepl(g(T1, T2)) = i(T1, T2) <co
-            xml:id="drepl.3" /></programlisting>
+        <programlisting>module Tree-drepl
+imports Tree-syntax
+exports
+context-free syntax
+   i(TREE, TREE)   -&gt; TREE <co xml:id="drepl.1" />
+   drepl(TREE)      -&gt; TREE {traversal(trafo,
+                                       bottom-up,
+                                       break)} <co xml:id="drepl.2" />
+equations
+[1] drepl(g(T1, T2)) = i(T1, T2) <co xml:id="drepl.3" /></programlisting>
 
         <para>Notes:</para>
 
@@ -2995,12 +3399,13 @@
 
         <para>An example:</para>
 
-        <programlisting>drepl( f( g( f(1,2), 3 ), g( g(4,5), 6 ))
-        )</programlisting>
+        <programlisting>drepl( f( g( f(1,2), 3 ),
+          g( g(4,5), 6 )) )</programlisting>
 
         <para>results in:</para>
 
-        <programlisting>f( i( f(1,2), 3 ), g( i(4,5), 6 ))</programlisting>
+        <programlisting>f( i( f(1,2), 3 ),
+     g( i(4,5), 6 ))</programlisting>
 
         <para>Indeed, only the deepest occurrences of <literal>g</literal>
         have been replaced.</para>
@@ -3015,10 +3420,16 @@
         This is exactly what the break attribute of traversal function
         achieves.</para>
 
-        <programlisting>module Tree-srepl imports Tree-syntax exports
-        context-free syntax i(TREE, TREE) -&gt; TREE srepl(TREE) -&gt; TREE
-        {traversal(trafo, top-down, break)} <co xml:id="srepl.1" /> equations
-        [1] srepl(g(T1, T2)) = i(T1, T2)</programlisting>
+        <programlisting>module Tree-srepl
+imports Tree-syntax
+exports
+context-free syntax
+   i(TREE, TREE)   -&gt; TREE
+   srepl(TREE)      -&gt; TREE {traversal(trafo, 
+                                       top-down, 
+                                       break)} <co xml:id="srepl.1" />
+equations
+[1] srepl(g(T1, T2)) = i(T1, T2)</programlisting>
 
         <para>Notes:</para>
 
@@ -3032,12 +3443,13 @@
 
         <para>The example:</para>
 
-        <programlisting>srepl( f( g( f(1,2), 3 ), g( g(4,5), 6 ))
-        )</programlisting>
+        <programlisting>srepl( f( g( f(1,2), 3 ),
+          g( g(4,5), 6 )) )</programlisting>
 
         <para>results in:</para>
 
-        <programlisting>f( i( f(1,2), 3 ), i( g(4,5), 6 ))</programlisting>
+        <programlisting>f( i( f(1,2), 3 ),
+     i( g(4,5), 6 ))</programlisting>
 
         <para>As expected, only the outermost occurrences of
         <literal>g</literal> have been replaced.</para>
@@ -3051,19 +3463,26 @@
         approach. The continue attribute of traversal function achieves
         traversal of all tree nodes.</para>
 
-        <programlisting>module Tree-frepl imports Tree-syntax exports
-        context-free syntax i(TREE, TREE) -&gt; TREE frepl(TREE) -&gt; TREE
-        {traversal(trafo, top-down, continue)} equations [1] frepl(g(T1, T2))
-        = i(T1, T2)</programlisting>
+        <programlisting>module Tree-frepl
+imports Tree-syntax
+exports
+context-free syntax
+   i(TREE, TREE)   -&gt; TREE
+   frepl(TREE)      -&gt; TREE {traversal(trafo,
+                                       top-down,
+                                       continue)}
+equations
+[1] frepl(g(T1, T2)) = i(T1, T2)</programlisting>
 
         <para>The example</para>
 
-        <programlisting>frepl( f( g( f(1,2), 3 ), g( g(4,5), 6 ))
-        )</programlisting>
+        <programlisting>frepl( f( g( f(1,2), 3 ),
+          g( g(4,5), 6 )) )</programlisting>
 
         <para>results in:</para>
 
-        <programlisting>f( i( f(1,2), 3 ), i( i(4,5), 6 ))</programlisting>
+        <programlisting>f( i( f(1,2), 3 ),
+     i( i(4,5), 6 ))</programlisting>
 
         <para>Indeed, all occurrences of <literal>g</literal> have now been
         replaced.</para>
@@ -3093,40 +3512,65 @@
       <literal>END-IF</literal>. This leads to the well known dangling else
       problem that may cause ambiguities in nested if statements. Given</para>
 
-      <programlisting>IF expr1 THEN IF expr2 THEN stats1 ELSE
-      stats2</programlisting>
+      <programlisting>IF expr1 THEN IF expr2 THEN stats1 ELSE stats2</programlisting>
 
       <para>Is this an if-then statement with an if-then-else statement as
       then branch as suggested by the following layout:</para>
 
-      <programlisting>IF expr1 THEN IF expr2 THEN stats1 ELSE
+      <programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1 
+   ELSE 
       stats2</programlisting>
 
       <para>Or is it the other way around, an if-then-else statement with an
       if-then statement as then branch:</para>
 
-      <programlisting>IF expr1 THEN IF expr2 THEN stats1 ELSE
-      stats2</programlisting>
+      <programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1 
+ELSE 
+   stats2</programlisting>
 
       <para>This is utterly confusing and error-prone, therefore it is a good
       idea to add END-IF to all if-statement to indicate that either</para>
 
-      <para><programlisting>IF expr1 THEN IF expr2 THEN stats1 ELSE stats2
-      END-IF END-IF</programlisting>or</para>
+      <para><programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1 
+   ELSE 
+      stats2
+   END-IF
+END-IF</programlisting>or</para>
 
-      <para><programlisting>IF expr1 THEN IF expr2 THEN stats1 END-IF ELSE
-      stats2 END-IF</programlisting>is intended.</para>
+      <para><programlisting>IF expr1 THEN 
+   IF expr2 THEN 
+      stats1
+   END-IF
+ELSE 
+   stats2
+END-IF</programlisting>is intended.</para>
 
       <para>The following excerpt from a real application achieves
       this:</para>
 
-      <programlisting>module End-If-Trafo imports Cobol <co xml:id="cobol.1" /> exports context-free syntax addEndIf(Program) -&gt;
-      Program {traversal(trafo, continue, top-down)} <co xml:id="cobol.2" />
-      variables "Stats"[0-9]* -&gt; StatsOptIfNotClosed "Expr"[0-9]* -&gt;
-      L-exp "OptThen"[0-9]* -&gt; OptThen equations [1] addEndIf(IF Expr
-      OptThen Stats) = IF Expr OptThen Stats END-IF <co xml:id="cobol.3" />
-      [2] addEndIf(IF Expr OptThen Stats1 ELSE Stats2) = IF Expr OptThen
-      Stats1 ELSE Stats2 END-IF</programlisting>
+      <programlisting>module End-If-Trafo
+imports Cobol   <co xml:id="cobol.1" />
+exports
+context-free syntax
+  addEndIf(Program) -&gt; Program {traversal(trafo,
+                                          continue,
+                                          top-down)} <co xml:id="cobol.2" />
+variables
+ "Stats"[0-9]*      -&gt; StatsOptIfNotClosed
+ "Expr"[0-9]*       -&gt; L-exp
+ "OptThen"[0-9]*    -&gt; OptThen
+equations
+[1] addEndIf(IF Expr OptThen Stats)  =
+             IF Expr OptThen Stats END-IF <co xml:id="cobol.3" />
+
+[2] addEndIf(IF Expr OptThen Stats1 ELSE Stats2) =
+             IF Expr OptThen Stats1 ELSE Stats2 END-IF</programlisting>
 
       <para>Notes:</para>
 
@@ -3197,14 +3641,25 @@
 
       <para>Consider the erroneous program:</para>
 
-      <programlisting>begin declare x : natural, y : natural, s : string; x :=
-      10; s := "abc"; if x then x := x + 1 else s := x + 2 fi; y := x + 2;
-      end</programlisting>
+      <programlisting>begin 
+   declare x : natural,
+                y : natural,
+                s : string;
+      x := 10; s := "abc";
+      if x then 
+             x := x + 1
+      else 
+             s := x + 2
+      fi;
+      y := x + 2;
+end</programlisting>
 
       <para>(take a second to spot the error) will thus reduce to:</para>
 
-      <programlisting>begin declare; type(string) := type(natural);
-      end</programlisting>
+      <programlisting>begin
+  declare;
+  type(string) := type(natural);
+end</programlisting>
 
       <para>This style of type checking leads to descriptive messages
       concerning the cause of errors and is an alternative to the style where
@@ -3213,22 +3668,39 @@
 
       <para>The "funny" Pico typechecker is defined as follows:</para>
 
-      <programlisting>module Pico-typecheck imports Pico-syntax exports
-      context-free syntax type(TYPE) -&gt; ID <co xml:id="pico-funny.1" />
-      replace(STATS, ID-TYPE) <co xml:id="pico-funny.2" /> -&gt; STATS
-      {traversal(trafo, bottom-up, break)} replace(EXP , ID-TYPE) -&gt; EXP
-      {traversal(trafo, bottom-up, break)} variables ... equations [0] begin
-      declare Id-type, Decl*; Stat* end = <co xml:id="pico-funny.3" /> begin
-      declare Decl*; replace(Stat*, Id-type) end [1] replace(Id , Id : Type) =
-      type(Type) <co xml:id="pico-funny.4" /> [2] replace(Nat-con, Id : Type)
-      = type(natural) [3] replace(Str-con, Id : Type) = type(string) [4]
-      type(string) || type(string) = type(string) <co xml:id="pico-funny.5" />
-      [5] type(natural) + type(natural) = type(natural) [6] type(natural) -
-      type(natural) = type(natural) [7] Stat*1; if type(natural) then Stat*2
-      else Stat*3 fi ; Stat*4 = Stat*1; Stat*2; Stat*3; Stat*4 <co
-          xml:id="pico-funny.6" /> [8] Stat*1; while type(natural) do Stat*2 od;
-      Stat*3 = Stat*1; Stat*2; Stat*3 [9] Stat*1; type(Type) := type(Type);
-      Stat*2 = Stat*1; Stat*2</programlisting>
+      <programlisting>module Pico-typecheck
+imports Pico-syntax
+exports
+context-free syntax
+ type(TYPE)                  -&gt; ID  <co xml:id="pico-funny.1" />
+ replace(STATS, ID-TYPE) <co xml:id="pico-funny.2" /> -&gt; STATS {traversal(trafo,
+                                                 bottom-up,
+                                                 break)}
+ replace(EXP     , ID-TYPE)  -&gt; EXP   {traversal(trafo,
+                                                 bottom-up,
+                                                 break)}
+variables
+   ...
+equations
+[0] begin declare Id-type, Decl*; Stat* end = <co xml:id="pico-funny.3" />
+      begin declare Decl*; replace(Stat*, Id-type) end
+
+[1] replace(Id     , Id : Type) = type(Type) <co xml:id="pico-funny.4" />
+[2] replace(Nat-con, Id : Type) = type(natural)
+[3] replace(Str-con, Id : Type) = type(string)
+
+[4] type(string) || type(string)  = type(string) <co xml:id="pico-funny.5" />
+[5] type(natural) + type(natural) = type(natural)
+[6] type(natural) - type(natural) = type(natural)
+
+[7] Stat*1; if type(natural) then Stat*2 else Stat*3 fi ; Stat*4
+     = Stat*1; Stat*2; Stat*3; Stat*4 <co xml:id="pico-funny.6" />
+
+[8] Stat*1; while type(natural) do Stat*2 od; Stat*3
+     = Stat*1; Stat*2; Stat*3
+
+[9] Stat*1; type(Type) := type(Type); Stat*2
+     = Stat*1; Stat*2</programlisting>
 
       <para>Notes:</para>
 
@@ -3405,27 +3877,55 @@
 
       <para>The syntax definition of the Pico fact extractor:</para>
 
-      <programlisting>module languages/pico/extract/Pico imports
-      utilities/RStores imports languages/pico/syntax/Pico imports
-      basic/Integers imports utilities/Parsing[PICO-ID] <co
-          xml:id="pico-extract.1" /> imports utilities/Parsing[STATEMENT] imports
-      utilities/Parsing[EXP] imports utilities/PosInfo[STATEMENT] imports
-      utilities/PosInfo[EXP] hiddens context-free syntax controlFlow(PROGRAM,
-      RStore) -&gt; RStore <co xml:id="pico-extract.2" />
-      statementHistogram(PROGRAM, RStore) -&gt; RStore <co
-          xml:id="pico-extract.3" /> context-free syntax <co
-          xml:id="pico-extract.4" /> countStatements(PROGRAM, RStore) -&gt; RStore
-      {traversal(accu, bottom-up, continue)} countStatements(STATEMENT,
-      RStore) -&gt; RStore {traversal(accu, bottom-up, continue)}
-      cflow({STATEMENT ";"}*) -&gt; &lt;RElem,RElem,RElem&gt; context-free
-      start-symbols PROGRAM RStore RElem variables "Program" [0-9]* -&gt;
-      PROGRAM "Decls" [0-9]* -&gt; DECLS "Stat" [0-9]* -&gt; STATEMENT "Stat*"
-      [0-9]* -&gt; {STATEMENT ";"}* "Stat+" [0-9]* -&gt; {STATEMENT ";"}+
-      "Exp" [0-9]* -&gt; EXP "Id" [0-9]* -&gt; PICO-ID "Entry" [0-9]* -&gt;
-      RElem "Exit" [0-9]* -&gt; RElem "Rel" [0-9]* -&gt; RElem "Control"
-      [0-9]* -&gt; RElem variables <co xml:id="pico-extract.5" />
-      "Store"[0-9]* -&gt; RStore {strict} "Int" [0-9]* -&gt; Integer {strict}
-      </programlisting>
+      <programlisting>module languages/pico/extract/Pico
+
+imports utilities/RStores
+imports languages/pico/syntax/Pico
+imports basic/Integers
+imports utilities/Parsing[PICO-ID] <co xml:id="pico-extract.1" />
+imports utilities/Parsing[STATEMENT]
+imports utilities/Parsing[EXP]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[EXP]
+
+hiddens
+context-free syntax
+  controlFlow(PROGRAM, RStore)        -&gt; RStore  <co
+          xml:id="pico-extract.2" />
+  statementHistogram(PROGRAM, RStore) -&gt; RStore  <co
+          xml:id="pico-extract.3" />
+
+context-free syntax <co xml:id="pico-extract.4" />
+  countStatements(PROGRAM, RStore)    -&gt; RStore  
+                                         {traversal(accu, 
+                                                    bottom-up, 
+                                                    continue)} 
+  countStatements(STATEMENT, RStore)  -&gt; RStore 
+                                         {traversal(accu, 
+                                                    bottom-up, 
+                                                    continue)} 
+  cflow({STATEMENT ";"}*)             -&gt; &lt;RElem,RElem,RElem&gt;                                        
+
+context-free start-symbols
+  PROGRAM RStore RElem
+
+variables
+  "Program" [0-9]* -&gt; PROGRAM           
+  "Decls" [0-9]*   -&gt; DECLS             
+  "Stat" [0-9]*    -&gt; STATEMENT         
+  "Stat*" [0-9]*   -&gt; {STATEMENT ";"}*  
+  "Stat+" [0-9]*   -&gt; {STATEMENT ";"}+  
+  "Exp" [0-9]*     -&gt; EXP               
+  "Id" [0-9]*      -&gt; PICO-ID           
+  "Entry" [0-9]*   -&gt; RElem             
+  "Exit" [0-9]*    -&gt; RElem             
+  "Rel" [0-9]*     -&gt; RElem             
+  "Control" [0-9]* -&gt; RElem             
+
+variables <co xml:id="pico-extract.5" />
+  "Store"[0-9]*    -&gt; RStore  {strict}
+  "Int" [0-9]*     -&gt; Integer {strict} 
+</programlisting>
 
       <para>Notes:</para>
 
@@ -3483,41 +3983,99 @@
 
       <para>The equations for the Pico fact extractor:</para>
 
-      <programlisting>equations [main] Store1 := create-store(), Store2 :=
-      statementHistogram(Program, Store1), Store3 := controlFlow(Program,
-      Store2) =============================================== <co
-          xml:id="pico-extract-eqs.1" /> start(PROGRAM, Program) = start(RStore,
-      Store3) equations [hist] statementHistogram(Program, Store) = <co
-          xml:id="pico-extract-eqs.2" /> countStatements(Program, declare(Store,
-      StatementHistogram, rel[str,int])) equations [cS1] countStatements(Id :=
-      Exp, Store) = <co xml:id="pico-extract-eqs.3" /> inc(Store,
-      StatementHistogram, "Assignment") [cS2] countStatements(if Exp then
-      Stat*1 else Stat*2 fi, Store) = inc(Store, StatementHistogram,
-      "Conditional") [cS3] countStatements(while Exp do Stat* od, Store) =
-      inc(Store, StatementHistogram, "Loop") equations [cfg] Store1 :=
-      declare(Store, ControlFlow, rel[&lt;str,loc&gt;,&lt;str,loc&gt;]),
+      <programlisting>equations
+
+[main] Store1 := create-store(),
+       Store2 := statementHistogram(Program, Store1),
+       Store3 := controlFlow(Program, Store2)
+       =============================================== <co
+          xml:id="pico-extract-eqs.1" />
+       start(PROGRAM, Program) = start(RStore, Store3)
+
+equations
+
+[hist] statementHistogram(Program, Store) = <co xml:id="pico-extract-eqs.2" />
+       countStatements(Program, 
+                       declare(Store, 
+                               StatementHistogram, 
+                               rel[str,int]))
+
+equations
+
+[cS1] countStatements(Id := Exp, Store)  =  <co xml:id="pico-extract-eqs.3" />
+      inc(Store, StatementHistogram, "Assignment")
+
+[cS2] countStatements(if Exp 
+                      then Stat*1 
+                      else Stat*2 fi, 
+                      Store) = 
+      inc(Store, StatementHistogram, "Conditional")
+
+[cS3] countStatements(while Exp do Stat* od, Store) = 
+      inc(Store, StatementHistogram, "Loop")
+
+equations
+
+[cfg] Store1 := declare(Store, 
+                        ControlFlow, 
+                        rel[&lt;str,loc&gt;,&lt;str,loc&gt;]),
       &lt;Entry, Rel, Exit&gt; := cflow(Stat*)
       ============================================ <co
-          xml:id="pico-extract-eqs.4" /> controlFlow(begin Decls Stat* end, Store)
-      = set(Store1, ControlFlow, Rel) equations [cfg-1] &lt;Entry1, Rel1,
-      Exit1&gt; := cflow(Stat), &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat+)
-      ===================================== <co xml:id="pico-extract-eqs.5" />
-      cflow(Stat ; Stat+) = &lt; Entry1, union(Rel1, union(Rel2,
-      product(Exit1, Entry2))), Exit2 &gt; [cfg-2] cflow() = &lt;{}, {},
-      {}&gt; equations [cfg-3] &lt;Entry, Rel, Exit&gt; := cflow(Stat*),
-      Control := &lt;unparse-to-string(Exp), get-location(Exp)&gt;
-      ================================== <co xml:id="pico-extract-eqs.6" />
-      cflow(while Exp do Stat* od) = &lt; {Control}, union(product({Control},
-      Entry), union(Rel, product(Exit, {Control}))), {Control} &gt; [cfg-4]
-      &lt;Entry1, Rel1, Exit1&gt; := cflow(Stat*1), &lt;Entry2, Rel2,
-      Exit2&gt; := cflow(Stat*2), Control := &lt;unparse-to-string(Exp),
-      get-location(Exp)&gt; ========================================== <co
-          xml:id="pico-extract-eqs.7" /> cflow(if Exp then Stat*1 else Stat*2 fi)
-      = &lt; {Control}, union(product({Control}, Entry1),
-      union(product({Control}, Entry2), union(Rel1, Rel2))), union(Exit1,
-      Exit2) &gt; [default-cfg] Control := &lt;unparse-to-string(Stat),
-      get-location(Stat)&gt; =========================================
-      cflow(Stat) = &lt;{Control}, {}, {Control}&gt;</programlisting>
+          xml:id="pico-extract-eqs.4" />
+      controlFlow(begin Decls Stat* end, Store) = 
+      set(Store1, ControlFlow, Rel)
+
+equations
+
+[cfg-1] 
+     &lt;Entry1, Rel1, Exit1&gt; := cflow(Stat), 
+     &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat+)
+     ===================================== <co xml:id="pico-extract-eqs.5" />
+     cflow(Stat ; Stat+) = 
+     &lt; 
+      Entry1, 
+      union(Rel1, union(Rel2, product(Exit1, Entry2))), 
+      Exit2
+     &gt;
+
+[cfg-2] cflow() = &lt;{}, {}, {}&gt;
+
+equations
+
+[cfg-3]  
+     &lt;Entry, Rel, Exit&gt; := cflow(Stat*),
+     Control := &lt;unparse-to-string(Exp), 
+                 get-location(Exp)&gt;
+     ================================== <co xml:id="pico-extract-eqs.6" />
+     cflow(while Exp do Stat* od) = 
+     &lt; 
+      {Control},
+      union(product({Control}, Entry), 
+            union(Rel, product(Exit, {Control}))),
+      {Control}
+     &gt;
+
+[cfg-4]  
+     &lt;Entry1, Rel1, Exit1&gt; := cflow(Stat*1), 
+     &lt;Entry2, Rel2, Exit2&gt; := cflow(Stat*2),
+     Control := &lt;unparse-to-string(Exp), 
+                 get-location(Exp)&gt;
+     ==========================================  <co
+          xml:id="pico-extract-eqs.7" />
+     cflow(if Exp then Stat*1 else Stat*2 fi) =
+     &lt; 
+      {Control},
+      union(product({Control}, Entry1), 
+            union(product({Control}, Entry2), 
+                  union(Rel1, Rel2))),
+      union(Exit1, Exit2)
+    &gt; 
+
+[default-cfg]
+    Control := &lt;unparse-to-string(Stat), 
+                get-location(Stat)&gt;
+    =========================================
+    cflow(Stat) = &lt;{Control}, {}, {Control}&gt;</programlisting>
 
       <para>Notes:</para>
 
@@ -3541,9 +4099,9 @@
           the form <literal>&lt;<replaceable>Category</replaceable>,
           <replaceable>N</replaceable>&gt;</literal> is added to the relation.
           The function <literal>inc</literal> (imported via the module
-          <literal>RStores</literal>) adds the value of <literal>
-          <replaceable>N</replaceable> </literal> for the relavant category
-          (or creates a new tuple if it did not yet exist).</para>
+          <literal>RStores</literal>) adds the value of
+          <literal><replaceable>N</replaceable></literal> for the relavant
+          category (or creates a new tuple if it did not yet exist).</para>
         </callout>
 
         <callout arearefs="pico-extract-eqs.4">
