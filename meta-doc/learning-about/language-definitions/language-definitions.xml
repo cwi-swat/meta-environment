@@ -29,10 +29,10 @@
 
   <warning>
     <para>This document is work in progress. See <link
-    linkend="fm_ToDo">ToDo</link> section.</para>
+    linkend="section.todo">ToDo</link> section.</para>
   </warning>
 
-  <section xml:id="fm_Introduction">
+  <section xml:id="section.introduction">
     <title>Introduction</title>
 
     <para>You are interested in using ASF+SDF to define various aspects of a
@@ -225,14 +225,13 @@
       <title>Anatomy of an ASF+SDF specification</title>
 
       <para>An ASF+SDF specification consists of a collection of modules as
-      shown in the following <link linkend="Fig_modules">figure</link>. A
-      module can import other modules and this can be understood as the
-      textual inclusion of the imported modules. In this example, the text of
-      modules <literal>B</literal>, <literal>C</literal> and
-      <literal>D</literal> is literally inserted in module
-      <literal>A</literal>.</para>
+      shown in the following <xref linkend="figure.modules" />. A module can
+      import other modules and this can be understood as the textual inclusion
+      of the imported modules. In this example, the text of modules
+      <literal>B</literal>, <literal>C</literal> and <literal>D</literal> is
+      literally inserted in module <literal>A</literal>.</para>
 
-      <figure xml:id="Fig_modules">
+      <figure xml:id="figure.modules">
         <title>Module structure of an ASF+SDF specification</title>
 
         <mediaobject>
@@ -317,9 +316,9 @@ equations
         <title>Modular structure</title>
 
         <para>The module structure of <literal>basic/Booleans</literal> is
-        shown <link linkend="Fig_booleans_modules">below</link>.</para>
+        shown in <xref linkend="figure.booleans-modules" />.</para>
 
-        <figure xml:id="Fig_booleans_modules">
+        <figure xml:id="figure.booleans-modules">
           <title>Modular structure of
           <literal>basic/Booleans</literal></title>
 
@@ -465,7 +464,7 @@ exports
         </calloutlist>
       </section>
 
-      <section xml:id="Sec_basic_Booleans">
+      <section xml:id="section.basic-Booleans">
         <title><literal>basic/Booleans</literal></title>
 
         <para>After these preparations, we can now discuss the syntax part of
@@ -638,10 +637,10 @@ variables
 
         <para>The Boolean term <literal>not(true &amp; not(false |
         true))</literal> should reduce to <literal>true</literal> (check this
-        for yourself before looking at the figure <link
-        linkend="Fig_boolean_reduction">below</link>).</para>
+        for yourself before looking at <xref
+        linkend="figure.boolean-reduction" />).</para>
 
-        <figure xml:id="Fig_boolean_reduction">
+        <figure xml:id="figure.boolean-reduction">
           <title>Reducing a Boolean term.</title>
 
           <mediaobject>
@@ -660,9 +659,9 @@ variables
         give you only some quick hints to get started. After installation, the
         The Meta-Environment is available as the command:
         <command>asfsdf-meta</command>. Typing this command results in the
-        screen shown <link linkend="Fig-initial-screen">below</link>.</para>
+        screen shown in <xref linkend="figure.initial-screen" />.</para>
 
-        <figure pgwide="1" xml:id="Fig-initial-screen">
+        <figure pgwide="1" xml:id="figure.initial-screen">
           <title>Initial screen of The Meta-Environment</title>
 
           <mediaobject>
@@ -695,19 +694,19 @@ variables
           <listitem>
             <para>Select the subdirectory <filename>basic</filename> and
             select <literal>Booleans.sdf</literal> in the list of modules that
-            is provided. The progress so far, is shown in the figure <link
-            linkend="Fig-open-basic-Booleans">below</link>.</para>
+            is provided. The progress so far, is shown in <xref
+            linkend="figure.open-basic-Booleans" />.</para>
           </listitem>
 
           <listitem>
             <para>Now pushing the <guibutton>Open Module</guibutton> button
             will open <literal>basic/Booleans</literal> and all its imported
-            modules. The result is shown <link
-            linkend="Fig-Booleans-opened">below</link>.</para>
+            modules. The result is shown in <xref
+            linkend="figure.Booleans-opened" />.</para>
           </listitem>
         </itemizedlist>
 
-        <figure xml:id="Fig-open-basic-Booleans">
+        <figure xml:id="figure.open-basic-Booleans">
           <title>Selecting <literal>basic/Booleans.sdf</literal></title>
 
           <mediaobject>
@@ -718,7 +717,7 @@ variables
           </mediaobject>
         </figure>
 
-        <figure pgwide="1" xml:id="Fig-Booleans-opened">
+        <figure pgwide="1" xml:id="figure.Booleans-opened">
           <title>After opening <literal>basic/Booleans</literal></title>
 
           <mediaobject>
@@ -756,12 +755,12 @@ variables
           <listitem>
             <para>Select the menu entry <guimenuitem>Syntax</guimenuitem>, and
             the syntax part of module Booleans will appear in an editor pane.
-            The result is shown in the figure <link
-            linkend="Fig-Booleans-syntax">below</link>.</para>
+            The result is shown in <xref
+            linkend="figure.Booleans-syntax" />.</para>
           </listitem>
         </itemizedlist>
 
-        <figure pgwide="1" xml:id="Fig-Booleans-syntax">
+        <figure pgwide="1" xml:id="figure.Booleans-syntax">
           <title>Opening the syntax of module Booleans</title>
 
           <mediaobject>
@@ -906,8 +905,8 @@ end</programlisting>
   <section>
     <title>Define the syntax for Pico</title>
 
-    <para>The import structure of the syntax definition of Pico is shown <link
-    linkend="Fig_imports_pico_syntax">below</link>. The modules
+    <para>The import structure of the syntax definition of Pico is shown in
+    <xref linkend="figure.imports-pico-syntax" />. The modules
     <literal>basic/NatCon</literal>, <literal>basic/StrCon</literal> and
     <literal>basic/Whitespace</literal> are reused from the ASF+SDF library.
     The modules <literal>languages/pico/syntax/Identifiers</literal>,
@@ -915,7 +914,7 @@ end</programlisting>
     <literal>languages/pico/syntax/Pico</literal> are specified for Pico and
     are now discussed in more detail.</para>
 
-    <figure xml:id="Fig_imports_pico_syntax">
+    <figure xml:id="figure.imports-pico-syntax">
       <title>Import structure of Pico syntax</title>
 
       <mediaobject>
@@ -1176,10 +1175,10 @@ exports
    x := "abc"
 end</programlisting>
           </listitem>
-        </itemizedlist>The result is shown in the figure <link
-      linkend="Fig-pico-trial1">below</link>.</para>
+        </itemizedlist>The result is shown in the <xref
+      linkend="figure.pico-trial1" />.</para>
 
-      <figure pgwide="1" xml:id="Fig-pico-trial1">
+      <figure pgwide="1" xml:id="figure.pico-trial1">
         <title>First program after typing it in.</title>
 
         <mediaobject>
@@ -1193,10 +1192,10 @@ end</programlisting>
       <para>Next, goto to the <guimenu>File</guimenu> menu and select the
       <guimenuitem>Save</guimenuitem> entry (or, alternatively, type Ctrl-S).
       The result is that the file is saved and parsed. As a result, all
-      keywords will be highlighted as shown <link
-      linkend="Fig-pico-trial2">below</link>.</para>
+      keywords will be highlighted as shown in <xref
+      linkend="figure.pico-trial2" />.</para>
 
-      <figure pgwide="1" xml:id="Fig-pico-trial2">
+      <figure pgwide="1" xml:id="figure.pico-trial2">
         <title>First program after saving it.</title>
 
         <mediaobject>
@@ -1249,9 +1248,10 @@ end</programlisting>
             <listitem>
               <para>Generate a parser that can parse equations containing
               fragments of Pico programs. This is similar to the use of
-              different syntaxes in the definition of the <link
-              linkend="Sec_basic_Booleans">Booleans</link> and is used for
-              program analysis and transformation.</para>
+              different syntaxes in the definition of the
+              <literal>Booleans</literal> described in <xref
+              linkend="section.basic-Booleans" /> and is used for program
+              analysis and transformation.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -1485,10 +1485,10 @@ end</programlisting>
     program complies with the above rules. The typechecker can be seen as a
     transformation from a Pico program to an error report.</para>
 
-    <para>The import structure of the Pico typechecker is shown <link
-    linkend="Fig_Pico_typechcker_modules">below</link>.</para>
+    <para>The import structure of the Pico typechecker is shown in <xref
+    linkend="figure.Pico-typechecker-modules" />.</para>
 
-    <figure xml:id="Fig_Pico_typechcker_modules">
+    <figure xml:id="figure.Pico-typechecker-modules">
       <title>Import structure of Pico typechecker</title>
 
       <mediaobject>
@@ -1498,7 +1498,7 @@ end</programlisting>
       </mediaobject>
     </figure>
 
-    <section xml:id="Sec_Type-environments">
+    <section xml:id="section.Type-environments">
       <title><literal>languages/pico/check/Type-environments</literal></title>
 
       <para>The purpose of type environments is to maintain a mapping between
@@ -1912,8 +1912,8 @@ equations
         </listitem>
 
         <listitem>
-          <para>After some processing the <link
-          linkend="Fig-pico-tc1">following</link> screen results.</para>
+          <para>After some processing the screen results shown in <xref
+          linkend="figure.pico-tc1" />.</para>
         </listitem>
       </itemizedlist>
 
@@ -1932,7 +1932,7 @@ equations
         </listitem>
       </itemizedlist>
 
-      <figure pgwide="1" xml:id="Fig-pico-tc1">
+      <figure pgwide="1" xml:id="figure.pico-tc1">
         <title>After opening languages/pico/check/Pico</title>
 
         <mediaobject>
@@ -1949,8 +1949,8 @@ equations
       following the pop-up menus, and opening
       <filename>pico-trial.trm</filename>). Click somewhere in pico-trial.trm
       and observe that several term editing menus have appeared. Of particular
-      interest is the menu labelled <guimenu>Pico</guimenu>, see the figure
-      <link linkend="Fig-pico-tc2">below</link>.</para>
+      interest is the menu labelled <guimenu>Pico</guimenu>, see <xref
+      linkend="figure.pico-tc2" />.</para>
 
       <important>
         <para>The version of The meta-Environment produced to create these
@@ -1958,7 +1958,7 @@ equations
         Ignore them.</para>
       </important>
 
-      <figure pgwide="1" xml:id="Fig-pico-tc2">
+      <figure pgwide="1" xml:id="figure.pico-tc2">
         <title>Opening trial term over <filename>module
         languages/pico/check/Pico</filename></title>
 
@@ -1974,10 +1974,10 @@ equations
       that the trial Pico program will be type checked and that an error
       message will be displayed. Recall that the typecheck function
       <literal>tcp</literal> is invoked with the current Pico program as
-      argument and is then reduced. See the figure <link
-      linkend="Fig-pico-tc3">below</link>.</para>
+      argument and is then reduced. See <xref
+      linkend="figure.pico-tc3" />.</para>
 
-      <figure pgwide="1" xml:id="Fig-pico-tc3">
+      <figure pgwide="1" xml:id="figure.pico-tc3">
         <title>After pushing the <guimenuitem>check</guimenuitem> button in
         the <guimenu>Pico</guimenu> menu</title>
 
@@ -1990,10 +1990,10 @@ equations
 
       <para>The error message is more informative than it seems: unfolding it
       reveals the location of the error. Just click on the message to
-      highlight the error in the source code. That is shown <link
-      linkend="Fig-pico-tc4">here</link>.</para>
+      highlight the error in the source code. That is shown in <xref
+      linkend="figure.pico-tc4" />.</para>
 
-      <figure pgwide="1" xml:id="Fig-pico-tc4">
+      <figure pgwide="1" xml:id="figure.pico-tc4">
         <title>Click on the error message to highlight its source</title>
 
         <mediaobject>
@@ -2090,10 +2090,10 @@ equations
     output it generates, in this case a value environment. The Pico evaluator
     can be seen as a transformation from a Pico program to its output.</para>
 
-    <para>The import structure of the Pico evaluator is shown <link
-    linkend="Fig_pico_eval_modules">below</link>.</para>
+    <para>The import structure of the Pico evaluator is shownin <xref
+    linkend="figure.pico-eval-modules" />.</para>
 
-    <figure xml:id="Fig_pico_eval_modules">
+    <figure xml:id="figure.pico-eval-modules">
       <title>Import structure of Pico evaluator</title>
 
       <mediaobject>
@@ -2153,9 +2153,9 @@ exports
   aliases
     Table[[PICO-ID, VALUE]] -&gt; VENV</programlisting>
 
-      <para>After the discussion of <link
-      linkend="Sec_Type-environments">Type-environments</link>, this
-      definition should be easy to follow.</para>
+      <para>After the discussion of <literal>Type-environments</literal> in
+      <xref linkend="section.Type-environments" /> this definition should be
+      easy to follow.</para>
     </section>
 
     <section>
@@ -2414,14 +2414,13 @@ end
         </listitem>
       </itemizedlist>
 
-      <para>The result is shown in the figure <link
-      linkend="Fig-pico-run">below</link>.</para>
+      <para>The result is shown in <xref linkend="figure.pico-run" />.</para>
 
       <important>
         <para>Here again, more warnings appear. They can be ignored.</para>
       </important>
 
-      <figure pgwide="1" xml:id="Fig-pico-run">
+      <figure pgwide="1" xml:id="figure.pico-run">
         <title>After running the factorial program.</title>
 
         <mediaobject>
@@ -2461,10 +2460,10 @@ end
     <para>A compiler transforms a program in some higher level language (in
     this case Pico) to a lower level, in most cases assembly language. We will
     first define the assembly language and then define the transformation
-    rules from Pico to assembly language. The overall import structure is as
-    follows:</para>
+    rules from Pico to assembly language. The overall import structure is
+    shown in <xref linkend="figure.pico-compiler-modules" /></para>
 
-    <figure>
+    <figure xml:id="figure.pico-compiler-modules">
       <title>Import structure Pico compiler</title>
 
       <mediaobject>
@@ -3050,13 +3049,12 @@ end
         <itemizedlist>
           <listitem>
             <para><emphasis>top-down</emphasis> versus
-            <emphasis>bottom-up</emphasis>: In the figure <link
-            linkend="Fig_order">below</link> the difference is shown: a
-            top-down traversal starts with the root node and then traverses
-            the root's children from the left to right, and so on. A bottom-up
-            traversal, however, starts with the left-most leave of the tree
-            and works its way up in the tree towards the root which is visited
-            last.</para>
+            <emphasis>bottom-up</emphasis>: In <xref linkend="figure.order" />
+            the difference is shown: a top-down traversal starts with the root
+            node and then traverses the root's children from the left to
+            right, and so on. A bottom-up traversal, however, starts with the
+            left-most leave of the tree and works its way up in the tree
+            towards the root which is visited last.</para>
           </listitem>
 
           <listitem>
@@ -3068,7 +3066,7 @@ end
       </listitem>
     </itemizedlist>
 
-    <figure xml:id="Fig_order">
+    <figure xml:id="figure.order">
       <title>Top-down versus bottom-up</title>
 
       <mediaobject>
@@ -3117,9 +3115,10 @@ exports
       </calloutlist>
 
       <para>An example of a tree defined in this way is <literal>f(g(1,2),
-      3)</literal>. Graphically, it looks like this:</para>
+      3)</literal>. Graphically, it looks as in <xref
+      linkend="figure.tree" />.</para>
 
-      <figure xml:id="Fig_tree">
+      <figure xml:id="figure.tree">
         <title>Example <literal>f(g(1,2),3)</literal> as tree</title>
 
         <mediaobject>
@@ -3175,9 +3174,10 @@ equations
 
       <programlisting>5</programlisting>
 
-      <para>The steps to arrive at this result are as follows:</para>
+      <para>The steps to arrive at this result are shown in <xref
+      linkend="figure.reducing-cnt" />.</para>
 
-      <figure>
+      <figure xml:id="figure.reducing-cnt">
         <title>Reducing <literal>cnt(f(g(1, 2), 3))</literal></title>
 
         <mediaobject>
@@ -3820,10 +3820,10 @@ equations
       </listitem>
     </itemizedlist>
 
-    <para>The import structure is shown in the figure <link
-    linkend="Fig-pico-extract-modules">below</link>.</para>
+    <para>The import structure is shown in <xref
+    linkend="figure.pico-extract-modules" />.</para>
 
-    <figure xml:id="Fig-pico-extract-modules">
+    <figure xml:id="figure.pico-extract-modules">
       <title>Import structure Pico fact extractor</title>
 
       <mediaobject>
@@ -4172,10 +4172,9 @@ equations
       variables in the rstore different visualisations are available (they
       depend on the actual type of each variable). The effect of selecting the
       graph visualization for the <literal>ControlFlow</literal> variable is
-      shown in the figure <link
-      linkend="Fig-pico-extract">below</link>.</para>
+      shown in <xref linkend="figure.pico-extract" />.</para>
 
-      <figure pgwide="1" xml:id="Fig-pico-extract">
+      <figure pgwide="1" xml:id="figure.pico-extract">
         <title>Graph display of ControlFlow</title>
 
         <mediaobject>
@@ -4187,10 +4186,10 @@ equations
       </figure>
 
       <para>Another example is the visualization of the
-      <literal>StatementHistogram</literal> variable as bar chart shown in the
-      figure <link linkend="Fig-pico-extract2">below</link>.</para>
+      <literal>StatementHistogram</literal> variable as bar chart shown in
+      <xref linkend="figure.pico-extract2" />.</para>
 
-      <figure pgwide="1" xml:id="Fig-pico-extract2">
+      <figure pgwide="1" xml:id="figure.pico-extract2">
         <title>Bar chart display of StatementHistogram</title>
 
         <mediaobject>
@@ -4230,7 +4229,7 @@ equations
     </section>
   </section>
 
-  <section xml:id="fm_ToDo">
+  <section xml:id="section.todo">
     <title>To Do</title>
 
     <itemizedlist>
