@@ -13,15 +13,10 @@ DOCBOOKXSLFO=${DOCBOOKXSLPREFIX}/fo/docbook.xsl
 STYLESHEET="meta-doc-style.css"
 
 	(xsltproc  --xinclude \
-                   --param xref.with.number.and.title 0 \
-                   --stringparam section.autolabel 1 \
-                   --stringparam section.autolabel.max.depth 3 \
-                   --stringparam section.label.includes.component 1 \
-                   --stringparam shade.verbatim 1 \
                    --stringparam callout.graphics.path ../images/callouts/ \
                    --output book.fo \
-                   --stringparam paper.type A4 \
-                   ${DOCBOOKXSLFO} book.xml)
+                   ../fo-customization.xsl \
+                   book.xml)
         ${FOP} -fo book.fo -pdf book.pdf
 
  

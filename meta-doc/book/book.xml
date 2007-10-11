@@ -16,13 +16,15 @@
   <title>The Meta-Environment: a generic language workbench</title>
 
   <part>
-    <title>Syntax</title>
+    <title>Syntax Analysis</title>
 
     <xi:include href="../learning-about/syntax-analysis/syntax-analysis.xml"></xi:include>
 
     <xi:include href="../learning-about/sdf/sdf.xml"></xi:include>
 
     <xi:include href="../howto/sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
+
+    <xi:include href="../howto/sdf-errors/sdf-errors.xml"></xi:include>
  </part>
 
   <part>
@@ -32,14 +34,24 @@
   </part>
 
   <part>
-    <title>Analysis and Transformation</title>
+    <title>Fact Extraction and Program Transformation</title>
 
     <xi:include href="../learning-about/term-rewriting/term-rewriting.xml"></xi:include>
 
-    <xi:include href="../learning-about/asfsdf/asfsdf.xml"></xi:include>
-
     <xi:include href="../howto/asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
+
+    <xi:include href="../understanding/asfsdf/asfsdf.xml"></xi:include>
+
+    <xi:include href="../howto/asf-errors/asf-errors.xml"></xi:include>
+
   </part>
+
+ <part>
+   <title>Relational Fact Analysis</title>
+
+    <xi:include href="../learning-about/rscript/rscript.xml"></xi:include>
+
+ </part>
 
   <part>
     <title>The Meta-Environment</title>
@@ -50,12 +62,23 @@
   </part>
 
   <part>
-    <title>Implementation</title>
+   <title>Software Development></title>
+    <xi:include href="../project/coding-standards/coding-standards.xml"></xi:include>
 
     <xi:include href="../project/build-environment/build-environment.xml"></xi:include>
 
-    <xi:include href="../project/version-management/version-management.xml"></xi:include>
+   <xi:include href="../project/version-management/version-management.xml"></xi:include>
+  </part>
+  
 
-    <xi:include href="../project/coding-standards/coding-standards.xml"></xi:include>
+  <part>
+    <title>Planning</title>
+
+   <xi:include href="../project/planning/planning.xml"></xi:include>
+
+   <xi:include href="../project/documentation-plan/documentation-plan.xml"></xi:include>
+
+   <xi:include href="../project/communication-plan/communication-plan.xml"></xi:include>
+
   </part>
 </book>
