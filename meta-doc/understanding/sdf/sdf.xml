@@ -40,7 +40,7 @@
     this document.</para>
   </warning>
 
-  <section xml:id="introduction">
+  <section xml:id="section.introduction">
     <title>An Introduction to SDF</title>
 
     <para>If you want to:</para>
@@ -69,8 +69,8 @@
 
     <para>then SDF may be the right technology to use.</para>
 
-    <section xml:id="why">
-      <title xml:id="YetAnotherFormalism">Why use SDF?</title>
+    <section xml:id="section.why">
+      <title xml:id="section.YetAnotherFormalism">Why use SDF?</title>
 
       <para>The Syntax Definition Formalism SDF is intended for the high-level
       description of grammars for programming languages, application
@@ -228,7 +228,7 @@
       </section>
     </section>
 
-    <section xml:id="learningmore">
+    <section xml:id="section.learningmore">
       <title>Learning more</title>
 
       <para>The following references on SDF may be interesting for you:</para>
@@ -262,25 +262,26 @@
       </itemizedlist>
     </section>
 
-    <section xml:id="overview">
+    <section xml:id="section.overview">
       <title>This document</title>
 
       <para>In this document we describe the syntax of SDF and its basic
       semantics. It is a basic but complete reference manual for SDF based on
       small examples. This document is loosely <link
-      linkend="sdfgraph">structured</link> according to the syntactic
-      structure of SDF: <link linkend="modules">modules</link>, <link
-      linkend="grammars">grammars</link> and <link
-      linkend="symbols">symbols</link>. After we have described all of it, we
-      continue with a set of <link linkend="examples">examples</link>. The
-      document ends with special sections on <link
-      linkend="wellformedness">well-formedness</link>, <link
-      linkend="disambiguation">disambiguation</link> and the <link
-      linkend="history">history of SDF</link>. This document does not detail
-      the usage of the implementations of SDF (<command>sdf2table</command>
-      and <command>sglr</command>).</para>
+      linkend="figure.sdfgraph">structured</link> according to the syntactic
+      structure of SDF: <link linkend="section.modules">modules</link>, <link
+      linkend="section.grammars">grammars</link> and <link
+      linkend="section.symbols">symbols</link>. After we have described all of
+      it, we continue with a set of <link
+      linkend="section.examples">examples</link>. The document ends with
+      special sections on <link
+      linkend="section.wellformedness">well-formedness</link>, <link
+      linkend="section.disambiguation">disambiguation</link> and the <link
+      linkend="section.history">history of SDF</link>. This document does not
+      detail the usage of the implementations of SDF
+      (<command>sdf2table</command> and <command>sglr</command>).</para>
 
-      <para><figure xml:id="sdfgraph">
+      <para><figure xml:id="figure.sdfgraph">
           <title>The hierarchical structure of the SDF syntax, extracted from
           the SDF definition of SDF</title>
 
@@ -296,48 +297,51 @@
       almost all features of SDF with references to the appropriate sections.
       SDF keywords are highlighted in boldface.</para>
 
-      <programlisting><emphasis role="bold"><link linkend="modules">module</link></emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]           
-  <emphasis role="bold"><link linkend="imports">imports</link></emphasis> basic/Whitespace                                           
+      <programlisting><emphasis role="bold"><link linkend="section.modules">module</link></emphasis> languages/mylanguage/MyFunnyExample[Param1 Param2]           
+  <emphasis role="bold"><link linkend="section.imports">imports</link></emphasis> basic/Whitespace                                           
   <emphasis role="bold">imports</emphasis> utilities/Parsing<link
-          linkend="parameters">[Expr]</link>                                     
+          linkend="section.parameters">[Expr]</link>                                     
   <emphasis role="bold">imports</emphasis> languages/mylanguage/MyExpressions<link
-          linkend="renamings">[Expression =&gt; Expr]</link>   
-<emphasis role="bold"><link linkend="modules">exports</link></emphasis>                                                               
- <emphasis role="bold"><link linkend="sorts">sorts</link></emphasis> Identifier Expr List Stat                                      
- <emphasis role="bold"><link linkend="lexicalsyntax">lexical syntax</link></emphasis>                                                       
-   <link linkend="characters">[A-Z]</link>[a-z]<link linkend="lists">+</link> -&gt; <link
-          linkend="sort">Identifier</link>                                           
- <emphasis role="bold">lexical <link linkend="restrictions">restrictions</link></emphasis>                                                 
+          linkend="section.renamings">[Expression =&gt; Expr]</link>   
+<emphasis role="bold"><link linkend="section.modules">exports</link></emphasis>                                                               
+ <emphasis role="bold"><link linkend="section.sorts">sorts</link></emphasis> Identifier Expr List Stat                                      
+ <emphasis role="bold"><link linkend="section.lexicalsyntax">lexical syntax</link></emphasis>                                                       
+   <link linkend="section.characters">[A-Z]</link>[a-z]<link
+          linkend="section.lists">+</link> -&gt; <link linkend="section.sort">Identifier</link>                                           
+ <emphasis role="bold">lexical <link linkend="section.restrictions">restrictions</link></emphasis>                                                 
    Identifier -/- [a-z]                                              
- <emphasis role="bold"><link linkend="contextfreesyntax">context-free syntax</link></emphasis>                                                  
-   Identifier    -&gt; Expr {<emphasis role="bold"><link linkend="attributes">cons</link></emphasis>("name")}                               
-   <link linkend="lists">Expr*</link>         -&gt; <link linkend="sort">List[[Param1]]</link>                                              
-   <link linkend="literals">"if"</link> Expr "then" <link linkend="lists">{Param2 ";"}+</link> "else" {Param2 ";"}+ "fi" -&gt; Param2           
+ <emphasis role="bold"><link linkend="section.contextfreesyntax">context-free syntax</link></emphasis>                                                  
+   Identifier    -&gt; Expr {<emphasis role="bold"><link
+            linkend="section.attributes">cons</link></emphasis>("name")}                               
+   <link linkend="section.lists">Expr*</link>         -&gt; <link
+          linkend="section.sort">List[[Param1]]</link>                                              
+   <link linkend="section.literals">"if"</link> Expr "then" <link
+          linkend="section.lists">{Param2 ";"}+</link> "else" {Param2 ";"}+ "fi" -&gt; Param2           
    "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
-          role="bold"><link linkend="attributes">prefer</link></emphasis>}   
+          role="bold"><link linkend="section.attributes">prefer</link></emphasis>}   
  <emphasis role="bold">context-free syntax</emphasis>      
-   "if" <link linkend="alternatives">|</link> "then" <link
-          linkend="alternatives">|</link> "fi"  -&gt; Identifier {<emphasis
-          role="bold"><link linkend="attributes">reject</link></emphasis>}                                 
- <emphasis role="bold">context-free <link linkend="priorities">priorities</link></emphasis>                                                        
+   "if" <link linkend="section.alternatives">|</link> "then" <link
+          linkend="section.alternatives">|</link> "fi"  -&gt; Identifier {<emphasis
+          role="bold"><link linkend="section.attributes">reject</link></emphasis>}                                 
+ <emphasis role="bold">context-free <link linkend="section.priorities">priorities</link></emphasis>                                                        
    Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold"><link
-            linkend="attributes">left</link></emphasis>}  &gt;                                              
+            linkend="section.attributes">left</link></emphasis>}  &gt;                                              
    Expr "|" Expr -&gt; Expr {<emphasis role="bold">right</emphasis>}                                                 
-<emphasis role="bold"><link linkend="modules">hiddens</link></emphasis>                                                               
- <emphasis role="bold"><link linkend="variables">variables</link></emphasis>                                                            
+<emphasis role="bold"><link linkend="section.modules">hiddens</link></emphasis>                                                               
+ <emphasis role="bold"><link linkend="section.variables">variables</link></emphasis>                                                            
    "Id"[0-9\']* -&gt; Identifier                                     
- <emphasis role="bold"><link linkend="lexicalvariables">lexical variables</link></emphasis>                                                    
+ <emphasis role="bold"><link linkend="section.lexicalvariables">lexical variables</link></emphasis>                                                    
    "Head" -&gt; [A-Z]
    "Tail" -&gt; [a-z]+</programlisting>
     </section>
   </section>
 
-  <section xml:id="lifecycle">
+  <section xml:id="section.lifecycle">
     <title>The life-cycle of an SDF definition</title>
 
     <para>Every SDF grammar has a life-cycle, just like any other software
     has. This is the life-cycle of an SDF grammar (see also this <link
-    linkend="architecture">overview</link> figure):</para>
+    linkend="figure.architecture">overview</link> figure):</para>
 
     <orderedlist>
       <listitem>
@@ -413,7 +417,7 @@
       <mediaobject>
         <imageobject>
           <imagedata fileref="parse-architecture.png" width="50%"
-                     xml:id="architecture"></imagedata>
+                     xml:id="figure.architecture"></imagedata>
         </imageobject>
       </mediaobject>
     </figure>
@@ -425,10 +429,10 @@
     them to kernel SDF.</para>
   </section>
 
-  <section xml:id="modules">
+  <section xml:id="section.modules">
     <title>Modules</title>
 
-    <section xml:id="basicmodules">
+    <section xml:id="section.basicmodules">
       <title>Basic module structure</title>
 
       <para>An SDF specification consists of a number of module declarations.
@@ -464,16 +468,16 @@
       <literal>&lt;ModuleId&gt;</literal> or a
       <literal>&lt;ModuleId&gt;</literal> followed by zero or more parameter
       symbols, e.g., <literal>&lt;Module&gt;[&lt;Symbol&gt;*]</literal>, the
-      symbols will be explained <link linkend="symbols">later</link>. The
-      <literal>&lt;ModuleId&gt;</literal> may be a compound module name (i.e.
-      &lt;ModuleId&gt; separated by forward slashes), the
+      symbols will be explained <link linkend="section.symbols">later</link>.
+      The <literal>&lt;ModuleId&gt;</literal> may be a compound module name
+      (i.e. &lt;ModuleId&gt; separated by forward slashes), the
       <literal>ModuleId</literal> reflects the directory structure. For
       example <literal>basic/Booleans</literal> means that the module
       <literal>Booleans</literal> is found in the subdirectory
       <literal>basic</literal>.</para>
     </section>
 
-    <section xml:id="hiddensandexports">
+    <section xml:id="section.hiddensandexports">
       <title>Hiddens and exports sections</title>
 
       <para>An <literal>&lt;ExportOrHiddenSection&gt;</literal> is either an
@@ -496,54 +500,56 @@
 
       <itemizedlist>
         <listitem>
-          <para><link linkend="imports">Imports</link>.</para>
+          <para><link linkend="section.imports">Imports</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="aliases">Aliases</link>.</para>
+          <para><link linkend="section.aliases">Aliases</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="sorts">Sorts</link>.</para>
+          <para><link linkend="section.sorts">Sorts</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="startsymbols">Start-symbols</link>.</para>
+          <para><link
+          linkend="section.startsymbols">Start-symbols</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="lexicalsyntax">Lexical syntax</link>.</para>
-        </listitem>
-
-        <listitem>
-          <para><link linkend="contextfreesyntax">Context-free
+          <para><link linkend="section.lexicalsyntax">Lexical
           syntax</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="priorities">Priorities</link>.</para>
+          <para><link linkend="section.contextfreesyntax">Context-free
+          syntax</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="variables">Variables</link>.</para>
+          <para><link linkend="section.priorities">Priorities</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para><link linkend="section.variables">Variables</link>.</para>
         </listitem>
       </itemizedlist>
 
       <para>Each of these entities is described and illustrated in <link
-      linkend="grammars">Grammars</link>. Most grammars have <link
-      linkend="symbols">Symbols</link> as their basic building blocks. Symbols
-      are the SDF term for terminals and non-terminals. Note that it is
-      possible to have hidden imports as well, this means that the full
+      linkend="section.grammars">Grammars</link>. Most grammars have <link
+      linkend="section.symbols">Symbols</link> as their basic building blocks.
+      Symbols are the SDF term for terminals and non-terminals. Note that it
+      is possible to have hidden imports as well, this means that the full
       definition of the import definition is copied in the hiddens section of
       the importing module.</para>
     </section>
 
-    <section xml:id="parameters">
+    <section xml:id="section.parameters">
       <title>Module parameters</title>
 
       <para>Modules may have formal symbol parameters, which can be bound by
-      actual symbols using <link linkend="imports">imports</link>. The syntax
-      of module parameters is:</para>
+      actual symbols using <link linkend="section.imports">imports</link>. The
+      syntax of module parameters is:</para>
 
       <programlisting><emphasis role="bold">module</emphasis> &lt;ModuleName&gt; [ &lt;Symbol&gt;+ ]</programlisting>
 
@@ -551,7 +557,7 @@
       parameters will be substituted by the actual parameters.</para>
     </section>
 
-    <section xml:id="definitions">
+    <section xml:id="section.definitions">
       <title>Definitions</title>
 
       <para>SDF modules may be collected in a single definition file, for
@@ -563,22 +569,22 @@
     </section>
   </section>
 
-  <section xml:id="comments">
+  <section xml:id="section.comments">
     <title>Comments</title>
 
     <para>The comment convention within an SDF specification is that
     characters between <literal>%%</literal> and the end of line is comment as
     well as every character between two <literal>%</literal> characters
     including the newline character. An example of the use of comments is
-    given <link linkend="CODE_sdfcomment">below</link>. This definition also
-    defines the comment convention in SDF itself. More details on defining
-    layout can be found in the section <link
-    linkend="restrictions">Restrictions</link>.</para>
+    given <link linkend="example.sdfcomments">below</link>. This definition
+    also defines the comment convention in SDF itself. More details on
+    defining layout can be found in the section <link
+    linkend="section.restrictions">Restrictions</link>.</para>
 
-    <example xml:id="CODE_sdfcomments">
+    <example xml:id="example.sdfcomments">
       <title>SDF comments</title>
 
-      <para><programlisting xml:id="CODE_sdfcomment">module basic/Comments
+      <para><programlisting xml:id="examples.sdfcomment">module basic/Comments
 
 imports basic/Whitespace
 
@@ -599,7 +605,7 @@ exports
     </example>
   </section>
 
-  <section xml:id="symbols">
+  <section xml:id="section.symbols">
     <title>Symbols</title>
 
     <para>The elementary building block of SDF syntax rules is the symbol. It
@@ -618,7 +624,7 @@ exports
     <para>Starting with the elementary symbols, more complex symbols can be
     constructed by way of recursive symbol application. Examples of the use of
     the various operators will be given in the section <link
-    linkend="examples">Examples</link>.</para>
+    linkend="section.examples">Examples</link>.</para>
 
     <para>Remember that complex symbols such as, parameterized sorts, lists
     and optionals are nothing but non-terminals. They carry no additional
@@ -632,7 +638,7 @@ exports
     allowed in both lexical and context-free syntax, priorities and other
     parts of SDF.</para>
 
-    <section xml:id="literals">
+    <section xml:id="section.literals">
       <title>Literal symbols</title>
 
       <para>A <emphasis>literal</emphasis> symbol defines a fixed length word.
@@ -675,14 +681,14 @@ exports
       </warning>
     </section>
 
-    <section xml:id="sort">
+    <section xml:id="section.sort">
       <title>Sort symbols</title>
 
       <para>A sort corresponds to a non-terminal, e.g.,
       <literal>Bool</literal>. Sort names always start with a capital letter
       and may be followed by letters and/or digits. Hyphens
       (<literal>-</literal>) may be embedded in a sort name. Sort names should
-      be declared in a<link linkend="sorts"> <emphasis
+      be declared in a<link linkend="section.sorts"> <emphasis
       role="bold">sorts</emphasis> section</link> to allow some static
       consistency checking.</para>
 
@@ -694,13 +700,13 @@ exports
       The sort parameters are usually instantiated via the parameters of a
       module or via renaming. A parameterized sort may have several
       parameters, like <literal>List[[X,Y]]</literal>. See <link
-      linkend="parameters">parameters</link> for more details. Parameterized
-      sorts have the following form:<programlisting> &lt;Sort&gt;<emphasis
+      linkend="section.parameters">parameters</link> for more details.
+      Parameterized sorts have the following form:<programlisting> &lt;Sort&gt;<emphasis
             role="bold">[[</emphasis>&lt;Symbol<subscript>1</subscript>&gt;, &lt;Symbol<subscript>2</subscript>&gt;, ... <emphasis
             role="bold">]]</emphasis></programlisting></para>
     </section>
 
-    <section xml:id="characters">
+    <section xml:id="section.characters">
       <title>Character class symbols</title>
 
       <para>Enumerations of characters occur frequently mostly in lexical
@@ -813,7 +819,7 @@ exports
       operators are not applicable to symbols in general.</para>
     </section>
 
-    <section xml:id="optionals">
+    <section xml:id="section.optionals">
       <title>Optional symbols</title>
 
       <para>The postfix option operator <literal>?</literal> describes an
@@ -825,7 +831,7 @@ exports
  ElsePart -&gt; ElsePart?</programlisting>
     </section>
 
-    <section xml:id="sequence">
+    <section xml:id="section.sequence">
       <title>Sequence</title>
 
       <para>The sequence operator <literal>(...)</literal> describes the
@@ -845,7 +851,7 @@ exports
       <programlisting> -&gt; ()</programlisting>
     </section>
 
-    <section xml:id="lists">
+    <section xml:id="section.lists">
       <title>Repetition or list symbols</title>
 
       <para>Repetition operators express that a symbol should occur several
@@ -892,7 +898,7 @@ exports
       deal with the ambiguity this introduces.</para>
     </section>
 
-    <section xml:id="alternatives">
+    <section xml:id="section.alternatives">
       <title>Alternative symbols</title>
 
       <para>The alternative operator <literal>|</literal> expresses the choice
@@ -911,7 +917,7 @@ exports
 ";" -&gt; "," | ";"</programlisting>
     </section>
 
-    <section xml:id="labels">
+    <section xml:id="section.labels">
       <title>Labelled symbols</title>
 
       <para>It is possible to decorate the symbols with labels. The labels
@@ -927,7 +933,7 @@ is replaced by
 {Stat ";"}+</programlisting>
     </section>
 
-    <section xml:id="tuples">
+    <section xml:id="section.tuples">
       <title>Tuple symbols</title>
 
       <para>The tuple operator describes the grouping of a sequence of symbols
@@ -949,7 +955,7 @@ is replaced by
       <programlisting>"&lt;" A "," B "&gt;" -&gt; &lt;A,B&gt;</programlisting>
     </section>
 
-    <section xml:id="functionsymbols">
+    <section xml:id="section.functionsymbols">
       <title>Function symbols</title>
 
       <para>The function operator <literal>(...=&gt;...)</literal> allows the
@@ -976,7 +982,7 @@ is replaced by
       <programlisting>"myfunction" -&gt; (A B =&gt; C)</programlisting>
     </section>
 
-    <section xml:id="lifting">
+    <section xml:id="section.lifting">
       <title>Lifted Symbols</title>
 
       <para>The lifting operator <literal>`...`</literal> translates the name
@@ -997,7 +1003,7 @@ is replaced by
 `{A ","}+` is replaced by ("{" "A" "\",\"" "}" "+") </programlisting>
     </section>
 
-    <section xml:id="layout">
+    <section xml:id="section.layout">
       <title>LAYOUT symbol</title>
 
       <para>The <literal>LAYOUT</literal> symbol is a reserved sort name. SDF
@@ -1019,7 +1025,7 @@ is replaced by
     </section>
   </section>
 
-  <section xml:id="grammars">
+  <section xml:id="section.grammars">
     <title>Grammars</title>
 
     <para>A grammar is the entity that can be defined in an export section or
@@ -1028,58 +1034,58 @@ is replaced by
 
     <itemizedlist>
       <listitem>
-        <para><link linkend="imports">Imports</link>: include one module in
-        another one.</para>
+        <para><link linkend="section.imports">Imports</link>: include one
+        module in another one.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="aliases">Aliases</link>: abbreviations for
-        complex symbols.</para>
+        <para><link linkend="section.aliases">Aliases</link>: abbreviations
+        for complex symbols.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="sorts">Sorts</link>: the non-terminals of the
-        grammar.</para>
+        <para><link linkend="section.sorts">Sorts</link>: the non-terminals of
+        the grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="startsymbols">Start-symbols</link>: the start
-        symbols of the grammar.</para>
+        <para><link linkend="section.startsymbols">Start-symbols</link>: the
+        start symbols of the grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="lexicalsyntax">Lexical syntax</link>: the lexical
-        productions of the grammar.</para>
+        <para><link linkend="section.lexicalsyntax">Lexical syntax</link>: the
+        lexical productions of the grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="contextfreesyntax">Context-free syntax</link>:
-        the context-free productions of the grammar.</para>
+        <para><link linkend="section.contextfreesyntax">Context-free
+        syntax</link>: the context-free productions of the grammar.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="priorities">Priorities</link>: the disambiguation
-        rules.</para>
+        <para><link linkend="section.priorities">Priorities</link>: the
+        disambiguation rules.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="variables">Variables</link>: definitions of
-        variables.</para>
+        <para><link linkend="section.variables">Variables</link>: definitions
+        of variables.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="restrictions">Restrictions</link></para>
+        <para><link linkend="section.restrictions">Restrictions</link></para>
       </listitem>
     </itemizedlist>
 
     <para>An SDF module may contain as many grammars of any kind as you need.
     We will now describe all these kinds of grammars. Also see the Section
-    <link linkend="examples">Examples</link>.</para>
+    <link linkend="section.examples">Examples</link>.</para>
 
-    <section xml:id="imports">
+    <section xml:id="section.imports">
       <title>Imports</title>
 
-      <section xml:id="plainimports">
+      <section xml:id="section.plainimports">
         <title>Plain imports</title>
 
         <para>Apart from the import sections at the beginning of each module,
@@ -1101,14 +1107,15 @@ is replaced by
       <section>
         <title>Binding module parameters</title>
 
-        <para>When an imported module has <link linkend="modules">formal
-        parameters</link>, imports can be used to bind them to actual
-        parameters. The syntax is as follows:</para>
+        <para>When an imported module has <link
+        linkend="section.modules">formal parameters</link>, imports can be
+        used to bind them to actual parameters. The syntax is as
+        follows:</para>
 
         <programlisting><emphasis role="bold">imports</emphasis> mylanguage/myModule[&lt;Symbol&gt;+]</programlisting>
       </section>
 
-      <section xml:id="renamings">
+      <section xml:id="section.renamings">
         <title>Renamings</title>
 
         <para>Symbol renaming is in fact very similar to parameterization
@@ -1125,7 +1132,7 @@ is replaced by
       </section>
     </section>
 
-    <section xml:id="aliases">
+    <section xml:id="section.aliases">
       <title>Aliases</title>
 
       <para>Aliases are similar to productions but not quite. An alias is used
@@ -1173,7 +1180,7 @@ is replaced by
       </itemizedlist>
     </section>
 
-    <section xml:id="sorts">
+    <section xml:id="section.sorts">
       <title>Sort declarations</title>
 
       <para>Sorts are declared by listing their name in a sorts section of the
@@ -1181,21 +1188,22 @@ is replaced by
   &lt;Symbol&gt;*</programlisting>Only plain <literal>Sort</literal>s and
       parameterized <literal>Sort</literal>s should declared in the
       <literal>sorts</literal> section. The <link
-      linkend="wellformedness">sdf-checker</link> will generate a warnings.
-      The checker requires that all sorts that occur in some symbol in the
-      specification are declared. Note however that the sorts declaration does
-      not carry any semantics other than simply declaring a name. The checker
-      uses this to warn the SDF user for possible typos.</para>
+      linkend="section.wellformedness">sdf-checker</link> will generate a
+      warnings. The checker requires that all sorts that occur in some symbol
+      in the specification are declared. Note however that the sorts
+      declaration does not carry any semantics other than simply declaring a
+      name. The checker uses this to warn the SDF user for possible
+      typos.</para>
     </section>
 
-    <section xml:id="lexicalandcontextfreesyntax">
+    <section xml:id="section.lexicalandcontextfreesyntax">
       <title>Lexical and context-free syntax</title>
 
       <para>Lexical syntax describes the low-level structure of text while
       context-free syntax describes the higher-level structure. In SDF, these
       two aspects of syntax are defined in a very uniform manner. In fact,
-      <link linkend="productions">production rules</link> are used to describe
-      both lexical and concrete syntax.</para>
+      <link linkend="section.productions">production rules</link> are used to
+      describe both lexical and concrete syntax.</para>
 
       <para>The only difference between the two is that context-free
       productions are pre-processed somewhat extensively by SDF before parser
@@ -1216,7 +1224,7 @@ is replaced by
  &lt;A-LEX&gt; -&gt; &lt;A-CF&gt;
  "b"     -&gt; &lt;A-CF&gt;</programlisting>
 
-      <section xml:id="lexicalsyntax">
+      <section xml:id="section.lexicalsyntax">
         <title>Lexical Syntax</title>
 
         <para>The lexical syntax usually describes the low level structure of
@@ -1234,7 +1242,7 @@ is replaced by
   &lt;Production&gt;*</programlisting>
       </section>
 
-      <section xml:id="contextfreesyntax">
+      <section xml:id="section.contextfreesyntax">
         <title>Context-free syntax</title>
 
         <para>The context-free syntax describes the more high-level syntactic
@@ -1266,7 +1274,7 @@ which will be then wrapped as in:
         the names of the non-terminals.</para>
       </section>
 
-      <section xml:id="productions">
+      <section xml:id="section.productions">
         <title>Productions</title>
 
         <para>The basic building block of a context-free syntax, lexical
@@ -1316,7 +1324,7 @@ C         -&gt; C | D | E
 D         -&gt; C | D | E
 E         -&gt; C | D | E</programlisting>
 
-        <section xml:id="attributes">
+        <section xml:id="section.attributes">
           <title>Attributes</title>
 
           <para>The definition of a lexical, context-free productions and
@@ -1336,8 +1344,9 @@ E         -&gt; C | D | E</programlisting>
             <listitem>
               <para><literal>{bracket}</literal> is an attribute without SDF
               semantics, but is important nevertheless in combination with
-              <link linkend="disambpriorities">priorities</link>. See <link
-              linkend="disambbrackets">brackets</link> attribute.</para>
+              <link linkend="section.disambpriorities">priorities</link>. See
+              <link linkend="section.disambbrackets">brackets</link>
+              attribute.</para>
             </listitem>
 
             <listitem>
@@ -1345,20 +1354,21 @@ E         -&gt; C | D | E</programlisting>
               <literal>non-assoc</literal>, <literal>assoc}</literal> are
               disambiguation constructs used to define the associativity of
               productions. See <link
-              linkend="disambassociativity">associativity.</link></para>
+              linkend="section.disambassociativity">associativity.</link></para>
             </listitem>
 
             <listitem>
               <para><literal>{prefer}</literal> and {avoid} are disambiguation
               constructs to define preference of one derivation over others.
-              See <link linkend="disambpreferences">preferences.</link></para>
+              See <link
+              linkend="section.disambpreferences">preferences.</link></para>
             </listitem>
 
             <listitem>
               <para><literal>{reject}</literal> is a disambiguation construct
               that implements language difference. It is used for keyword
               reservation. See <link
-              linkend="disambrejects">rejects.</link></para>
+              linkend="section.disambrejects">rejects.</link></para>
             </listitem>
           </itemizedlist>
 
@@ -1373,7 +1383,7 @@ E         -&gt; C | D | E</programlisting>
           </itemizedlist>
         </section>
 
-        <section xml:id="merging">
+        <section xml:id="section.merging">
           <title>Merging productions</title>
 
           <para>An important detail of SDF is that if two productions are
@@ -1390,7 +1400,7 @@ E         -&gt; C | D | E</programlisting>
 "if" E "then" S -&gt; S {cons("if"), prefer}</programlisting>
         </section>
 
-        <section xml:id="prefixfunctions">
+        <section xml:id="section.prefixfunctions">
           <title>Prefix Functions</title>
 
           <para><emphasis>Prefix functions</emphasis> are a special kind of
@@ -1407,7 +1417,7 @@ is replaced by
       </section>
     </section>
 
-    <section xml:id="startsymbols">
+    <section xml:id="section.startsymbols">
       <title>Lexical and context-free start-symbols</title>
 
       <para>Via the lexical or context-free start symbols section the symbols
@@ -1438,7 +1448,7 @@ is replaced by
    &lt;LAYOUT?-CF&gt; &lt;Program-CF&gt; &lt;LAYOUT?-CF&gt; -&gt; &lt;START&gt;</programlisting>
     </section>
 
-    <section xml:id="priorities">
+    <section xml:id="section.priorities">
       <title>Lexical and context-free priorities</title>
 
       <para>Priorities are one of SDF's most often used disambiguation
@@ -1462,7 +1472,7 @@ is replaced by
       <para>Several priorities in a priority grammar are separated by comma's.
       Productions may be grouped between curly braces on each side of the &gt;
       sign. Groups may have relative <link
-      linkend="disambassociativity">associativity</link> labels.
+      linkend="section.disambassociativity">associativity</link> labels.
       Examples:</para>
 
       <programlisting><emphasis role="bold">context-free priorities</emphasis>
@@ -1530,27 +1540,27 @@ is replaced by
       contribute to any transitive closure.</para>
     </section>
 
-    <section xml:id="variables">
+    <section xml:id="section.variables">
       <title>Variables</title>
 
       <para>Variables are declared in the <literal>variables</literal> section
       of a module. Like all other entities in a module, except equations,
       variables may be exported (see section <link
-      linkend="modules">Modules</link>). A variables section consists of a
-      list of variable names followed by a symbol. In fact, a variable
+      linkend="section.modules">Modules</link>). A variables section consists
+      of a list of variable names followed by a symbol. In fact, a variable
       declaration can define an infinite collection of variables by using a
       <emphasis>naming scheme</emphasis> instead of a simple variable name. A
       naming scheme is a regular expression like the ones allowed in the <link
-      linkend="lexicalsyntax">lexical syntax</link> except that sorts are not
-      allowed. A variable may represent any symbol. In the specification <link
-      linkend="CODE_variables">below</link>, <literal>Id</literal>,
-      <literal>Type3</literal>, and<literal> Id-list</literal> are examples of
-      variables declared by the naming schemes in the
-      <literal>variables</literal> section. Strings that occur in the
-      left-hand side of variable declarations should
+      linkend="section.lexicalsyntax">lexical syntax</link> except that sorts
+      are not allowed. A variable may represent any symbol. In the
+      specification <link linkend="example.variables">below</link>,
+      <literal>Id</literal>, <literal>Type3</literal>, and<literal>
+      Id-list</literal> are examples of variables declared by the naming
+      schemes in the <literal>variables</literal> section. Strings that occur
+      in the left-hand side of variable declarations should
       <emphasis>always</emphasis> be quoted.</para>
 
-      <example xml:id="CODE_variables">
+      <example xml:id="example.variables">
         <title>Variable declarations using naming schemes</title>
 
         <para><programlisting>module VarDecls
@@ -1578,7 +1588,7 @@ hiddens
       </example>
     </section>
 
-    <section xml:id="lexicalvariables">
+    <section xml:id="section.lexicalvariables">
       <title>Lexical variables</title>
 
       <para>Lexical variables are similar to variables. The difference is that
@@ -1587,7 +1597,7 @@ hiddens
       character classes.</para>
     </section>
 
-    <section xml:id="restrictions">
+    <section xml:id="section.restrictions">
       <title>Restrictions</title>
 
       <para>The notion of <emphasis>restrictions</emphasis> enables the
@@ -1652,7 +1662,7 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
     </section>
   </section>
 
-  <section xml:id="disambiguation">
+  <section xml:id="section.disambiguation">
     <title>Disambiguation</title>
 
     <section>
@@ -1662,33 +1672,35 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       context-free grammars, and the second is disambiguation filters. The
       disambiguation constructs of SDF are:<itemizedlist>
           <listitem>
-            <para><link linkend="priorities">Priorities</link></para>
+            <para><link linkend="section.priorities">Priorities</link></para>
           </listitem>
 
           <listitem>
-            <para><link linkend="attributes">The reject
+            <para><link linkend="section.attributes">The reject
             mechanism</link></para>
           </listitem>
 
           <listitem>
-            <para><link linkend="attributes">Associativity</link></para>
+            <para><link
+            linkend="section.attributes">Associativity</link></para>
           </listitem>
 
           <listitem>
-            <para><link linkend="attributes">Preference
+            <para><link linkend="section.attributes">Preference
             attributes</link></para>
           </listitem>
 
           <listitem>
-            <para><link linkend="restrictions">Restrictions</link></para>
+            <para><link
+            linkend="section.restrictions">Restrictions</link></para>
           </listitem>
         </itemizedlist>Each disambiguation construct gives rise to a specific
       derivation filter. So, the semantics of SDF can be seen as two-staged.
       First, the grammar generates all possible derivations. Second, the
       disambiguation constructs remove a number of derivations. This section
       mainly serves as an index to the disambiguation constructs found in the
-      <xref linkend="grammars" />, and it provides additional information
-      where needed.</para>
+      <xref linkend="section.grammars" />, and it provides additional
+      information where needed.</para>
 
       <para>An extensive "How To" on disambiguation can be found in the SDF
       Disambiguation Med kit for Programming Languages. In the current
@@ -1696,15 +1708,15 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       subject.</para>
     </section>
 
-    <section xml:id="disambpriorities">
+    <section xml:id="section.disambpriorities">
       <title>Priorities</title>
 
-      <para>Priorities are described in <xref linkend="priorities" />. Note
-      that there is a link between associativity and priorities: priority
+      <para>Priorities are described in <xref linkend="section.priorities" />.
+      Note that there is a link between associativity and priorities: priority
       declarations can contain relative associativities. The <link
-      linkend="disambbrackets">{bracket}</link> attribute also plays a role in
-      priorities. The essence of the priority disambiguation construct is that
-      certain vertical (father/child) relations in derivations are
+      linkend="section.disambbrackets">{bracket}</link> attribute also plays a
+      role in priorities. The essence of the priority disambiguation construct
+      is that certain vertical (father/child) relations in derivations are
       removed.</para>
 
       <warning>
@@ -1715,15 +1727,15 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       </warning>
     </section>
 
-    <section xml:id="disambassociativity">
+    <section xml:id="section.disambassociativity">
       <title>Associativity</title>
 
       <para>Associativity declarations occur in two places in SDF. The first
-      is as <link linkend="attributes">production attributes</link>. The
-      second is as associativity declarations in <link
-      linkend="priorities">priority groups.</link> Like with priorities, the
-      essence of the associativity attribute is that certain vertical
-      (father/child) relations in derivations are removed:</para>
+      is as <link linkend="section.attributes">production attributes</link>.
+      The second is as associativity declarations in <link
+      linkend="section.priorities">priority groups.</link> Like with
+      priorities, the essence of the associativity attribute is that certain
+      vertical (father/child) relations in derivations are removed:</para>
 
       <itemizedlist>
         <listitem>
@@ -1758,7 +1770,7 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       work on production rules with the following pattern: <literal>X ... X
       -&gt; X</literal>.</para>
 
-      <para>In priority <link linkend="priorities">groups</link>, the
+      <para>In priority <link linkend="section.priorities">groups</link>, the
       associativity attribute can also be found. It has the same semantics as
       the associativity attributes, except that the filter refers to two
       nested productions instead of a recursive nesting of one production. The
@@ -1769,11 +1781,11 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
 
       <para>Note that associativity does not work transitively. Another way of
       defining associativity is to translate associativity attributes to <link
-      linkend="priorities">non-transitive priorities in specific
+      linkend="section.priorities">non-transitive priorities in specific
       arguments</link>.</para>
     </section>
 
-    <section xml:id="disambbrackets">
+    <section xml:id="section.disambbrackets">
       <title>Bracket attribute</title>
 
       <para>It is not used by SDF, but some back-ends use it. For example, the
@@ -1790,7 +1802,7 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       with the {bracket} attribute is probably also needed.</para>
     </section>
 
-    <section xml:id="disambrejects">
+    <section xml:id="section.disambrejects">
       <title>Rejects</title>
 
       <para>The reject disambiguation construct also filters derivations. For
@@ -1838,14 +1850,14 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       </warning>
     </section>
 
-    <section xml:id="disambpreferences">
+    <section xml:id="section.disambpreferences">
       <title>Preferences</title>
 
       <para>The preferences mechanism is another disambiguation filter that
       provides a filter semantics to a production <link
-      linkend="attributes">attribute</link>. The attributes {prefer} and
-      {avoid} are the only disambiguation constructs that compare alternative
-      derivations. They are sometimes referred to as
+      linkend="section.attributes">attribute</link>. The attributes {prefer}
+      and {avoid} are the only disambiguation constructs that compare
+      alternative derivations. They are sometimes referred to as
       <emphasis>horizontal</emphasis> disambiguation filters.</para>
 
       <para>The following definition assumes that derivations are represented
@@ -1887,11 +1899,11 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       <para>Restrictions, or<emphasis> follow restrictions</emphasis>, are
       intended for filtering ambiguity that occurs on a lexical level. They
       are described in <link
-      linkend="restrictions">restrictions</link>.</para>
+      linkend="section.restrictions">restrictions</link>.</para>
     </section>
   </section>
 
-  <section xml:id="examples">
+  <section xml:id="section.examples">
     <title>Examples</title>
 
     <para>We will now give a sequence of small examples that illustrate the
@@ -1899,55 +1911,57 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><link linkend="EX_Drawing">A simple lexical
+        <para><link linkend="section.Drawing">A simple lexical
         syntax</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_CharacterClasses">Using character
+        <para><link linkend="section.CharacterClasses">Using character
         classes</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_Drawing">A simple drawing
+        <para><link linkend="section.Drawing">A simple drawing
         language</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_Identifiers">Identifiers</link>.</para>
+        <para><link linkend="section.Identifiers">Identifiers</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_Numbers">Numbers</link>.</para>
+        <para><link linkend="section.Numbers">Numbers</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_Strings">Strings</link>.</para>
+        <para><link linkend="section.Strings">Strings</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_IdLists">Identifier lists</link>.</para>
+        <para><link linkend="section.IdLists">Identifier lists</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_Exp">An expression language</link>.</para>
+        <para><link linkend="section.Exp">An expression
+        language</link>.</para>
       </listitem>
 
       <listitem>
-        <para><link linkend="EX_Labels">Using labels in
+        <para><link linkend="section.Labels">Using labels in
         productions</link>.</para>
       </listitem>
     </itemizedlist>
 
-    <para>In the Section <link linkend="EX_Tricky">Some tricky cases</link>,
-    we give examples of definitions that may lead to some confusion.</para>
+    <para>In the Section <link linkend="section.Tricky">Some tricky
+    cases</link>, we give examples of definitions that may lead to some
+    confusion.</para>
 
-    <section xml:id="EX_SimpleLex">
+    <section xml:id="section.SimpleLex">
       <title>A simple lexical syntax</title>
 
-      <para><link linkend="CODE_simplelex">Below</link> we give an example of
-      a simple lexical function definition for defining the first three words
-      that Dutch children learn to read. The three sorts
+      <para><link linkend="example.simplelex">Below</link> we give an example
+      of a simple lexical function definition for defining the first three
+      words that Dutch children learn to read. The three sorts
       <literal>Aap</literal>, <literal>Noot</literal> and
       <literal>Mies</literal>, each recognize, respectively, the strings
       <literal>aap</literal>, <literal>noot</literal> and
@@ -1955,7 +1969,7 @@ Identifier -/- [e].[l].[s].[e]</programlisting>
       reading-desk used in primary education) recognizes the single string
       <literal>aapnootmies</literal>.</para>
 
-      <example xml:id="CODE_simplelex">
+      <example xml:id="example.simplelex">
         <title>Simple lexical productions</title>
 
         <para><programlisting>module LeesPlank
@@ -1973,16 +1987,16 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_CharacterClasses">
+    <section xml:id="section.CharacterClasses">
       <title>Using Character Classes</title>
 
       <para>Definitions for lower-case letter (<literal>LCLetter</literal>),
       upper-case letters (<literal>UCLetter</literal>), lower-case and
       upper-case letters (<literal>Letter</literal>) and digits
       (<literal>Digit</literal>) are shown in the first example <link
-      linkend="CODE_LettersDigits1">below</link>}.</para>
+      linkend="example.LettersDigits1">below</link>}.</para>
 
-      <example xml:id="CODE_LettersDigits1">
+      <example xml:id="example.LettersDigits1">
         <title>Defining letter (lower-case and upper-case) and digit</title>
 
         <para><programlisting>module LettersDigits1
@@ -1999,11 +2013,11 @@ exports
     [0-9]    -&gt; Digit</programlisting></para>
       </example>
 
-      <para>The <link linkend="CODE_LettersDigits2">next example</link> gives
-      a definition of the sort <literal>LetterOrDigit</literal> that
+      <para>The <link linkend="example.LettersDigits2">next example</link>
+      gives a definition of the sort <literal>LetterOrDigit</literal> that
       recognizes a single letter (upper-case or lower-case) or digit.</para>
 
-      <example xml:id="CODE_LettersDigits2">
+      <example xml:id="example.LettersDigits2">
         <title>Defining a single letter or digit</title>
 
         <programlisting>module LettersDigits2
@@ -2018,12 +2032,12 @@ exports
     [0-9]    -&gt; LetterOrDigit</programlisting>
       </example>
 
-      <para>The example <link linkend="CODE_LettersDigits3">below</link> gives
-      the definition of a single letter or digit using the alternative
+      <para>The example <link linkend="example.LettersDigits3">below</link>
+      gives the definition of a single letter or digit using the alternative
       operator <literal>\/</literal>. This definition is equivalent to the one
-      given <link linkend="CODE_LettersDigits2">above</link>.</para>
+      given <link linkend="example.LettersDigits2">above</link>.</para>
 
-      <example xml:id="CODE_LettersDigits3">
+      <example xml:id="example.LettersDigits3">
         <title>Defining a single letter or digit using the alternative
         operator</title>
 
@@ -2036,11 +2050,11 @@ exports
       </example>
 
       <para>Another example is shown <link
-      linkend="CODE_charclasses">below</link>. This definition of characters
-      contains all possible characters, either by means of the ordinary
-      representation or via their decimal representation.</para>
+      linkend="example.charclasses">below</link>. This definition of
+      characters contains all possible characters, either by means of the
+      ordinary representation or via their decimal representation.</para>
 
-      <example xml:id="CODE_charclasses">
+      <example xml:id="example.charclasses">
         <title>Example of character classes</title>
 
         <para><programlisting>module Characters
@@ -2065,13 +2079,13 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_Drawing">
+    <section xml:id="section.Drawing">
       <title>A simple Drawing Language</title>
 
       <para>Consider the language of coordinates and drawing commands
-      presented <link linkend="CODE_simple-cf">below</link>.</para>
+      presented <link linkend="example.simple-cf">below</link>.</para>
 
-      <example xml:id="CODE_simple-cf">
+      <example xml:id="example.simple-cf">
         <title>Simple context-free syntax definition</title>
 
         <para><programlisting>module DrawingCommands
@@ -2092,11 +2106,11 @@ exports
       </example>
 
       <para>An equivalent conventional BNF grammar (and not considering
-      lexical syntax) of the <link linkend="CODE_simple-cf">above
-      grammar</link> is <link linkend="CODE_simple-bnf">as
+      lexical syntax) of the <link linkend="example.simple-cf">above
+      grammar</link> is <link linkend="example.simple-bnf">as
       follows</link>:</para>
 
-      <example xml:id="CODE_simple-bnf">
+      <example xml:id="example.simple-bnf">
         <title>BNF definition of simple grammar</title>
 
         <para><programlisting>&lt;COORD&gt; ::= "(" &lt;NAT&gt; "," &lt;NAT&gt; ")" 
@@ -2105,18 +2119,18 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_Identifiers">
+    <section xml:id="section.Identifiers">
       <title>Identifiers</title>
 
       <para>Lexical tokens are often described by patterns that exhibit a
       certain repetition. The list symbols described in <link
-      linkend="lists">List Symbols</link> can be used to express repetitions.
-      The example <link linkend="CODE_repetition">below</link> demonstrates
-      the use of the repetition symbol <literal>*</literal> for defining
-      identifiers consisting of a letter followed by zero or more letters or
-      digits.</para>
+      linkend="section.lists">List Symbols</link> can be used to express
+      repetitions. The example <link linkend="example.repetition">below</link>
+      demonstrates the use of the repetition symbol <literal>*</literal> for
+      defining identifiers consisting of a letter followed by zero or more
+      letters or digits.</para>
 
-      <example xml:id="CODE_repetition">
+      <example xml:id="example.repetition">
         <title>Defining identifiers using the repetition operator
         <literal>*</literal></title>
 
@@ -2135,14 +2149,15 @@ exports
       </example>
 
       <para>If zero or exactly one occurrence of a lexical token is desired
-      the option operator described in <link linkend="optionals">Optional
-      symbols</link> can be used. The use of the option operator is
-      illustrated <link linkend="CODE_option">below</link>. Identifiers are
-      defined consisting of one letter followed by one, optional, digit. This
+      the option operator described in <link
+      linkend="section.optionals">Optional symbols</link> can be used. The use
+      of the option operator is illustrated <link
+      linkend="example.option">below</link>. Identifiers are defined
+      consisting of one letter followed by one, optional, digit. This
       definition accepts <literal>a</literal> and <literal>z8</literal>, but
       rejects <literal>ab</literal> or <literal>z789</literal>.</para>
 
-      <example xml:id="CODE_option">
+      <example xml:id="example.option">
         <title>Defining a letter followed by an optional number using the
         option operator <literal>?</literal></title>
 
@@ -2166,10 +2181,10 @@ exports
       more convenient to list these alternatives explicitly in a single
       left-hand side or to list alternative parts inside a left-hand side.
       This is precisely the role of the <link
-      linkend="alternatives">alternative operator</link>. The example <link
-      linkend="CODE_alternative1">below</link> shows how this operator can be
-      used. It describes identifiers starting with an upper-case letter
-      followed by one of the following:</para>
+      linkend="section.alternatives">alternative operator</link>. The example
+      <link linkend="example.alternative1">below</link> shows how this
+      operator can be used. It describes identifiers starting with an
+      upper-case letter followed by one of the following:</para>
 
       <itemizedlist>
         <listitem>
@@ -2190,7 +2205,7 @@ exports
       <literal>MiES</literal>, <literal>B49a</literal> and
       <literal>007</literal> are not.</para>
 
-      <example xml:id="CODE_alternative1">
+      <example xml:id="example.alternative1">
         <title>Example of alternative operator <literal>|</literal></title>
 
         <para><programlisting>module Identifiers-alternative1
@@ -2220,11 +2235,11 @@ exports
       <literal>MiES</literal>, <literal>B49a</literal> and
       <literal>Bond007</literal> would, for instance, be acceptable. A
       slightly more readable definition that is equivalent to the <link
-      linkend="CODE_alternative1">previous one</link> is shown <link
-      linkend="CODE_alternative2">below</link>. In any case, we recommend to
-      use parentheses to make the scope of alternatives explicit.</para>
+      linkend="example.alternative1">previous one</link> is shown <link
+      linkend="example.alternative2">below</link>. In any case, we recommend
+      to use parentheses to make the scope of alternatives explicit.</para>
 
-      <example xml:id="CODE_alternative2">
+      <example xml:id="example.alternative2">
         <title>Example of alternative operator <literal>|</literal></title>
 
         <para><programlisting>module Identifiers-alternative2
@@ -2243,17 +2258,17 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_Numbers">
+    <section xml:id="section.Numbers">
       <title>Numbers</title>
 
       <para>Definitions of integers and real numbers are shown <link
-      linkend="CODE_numbers">below</link>. Note the use of the alternative
+      linkend="example.numbers">below</link>. Note the use of the alternative
       operator in the definitions of <literal>UnsignedInt</literal> and
       <literal>Number</literal>. Also note the use of the option operator in
       the definitions of <literal>SignedInt</literal> and
       <literal>UnsignedReal</literal>.</para>
 
-      <example xml:id="CODE_numbers">
+      <example xml:id="example.numbers">
         <title>Lexical definition of Numbers</title>
 
         <para><programlisting>module Numbers
@@ -2276,12 +2291,13 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_Strings">
+    <section xml:id="section.Strings">
       <title>Strings</title>
 
-      <para>The specification <link linkend="CODE_string">below</link>, gives
-      the lexical definition of strings which may contain escaped double quote
-      characters. It defines a <literal>StringChar</literal> as either</para>
+      <para>The specification <link linkend="example.string">below</link>,
+      gives the lexical definition of strings which may contain escaped double
+      quote characters. It defines a <literal>StringChar</literal> as
+      either</para>
 
       <itemizedlist>
         <listitem>
@@ -2297,7 +2313,7 @@ exports
       <para>A string consists of zero or more <literal>StringChar</literal>s
       surrounded by double quotes.</para>
 
-      <example xml:id="CODE_string">
+      <example xml:id="example.string">
         <title>Lexical definition of String</title>
 
         <para><programlisting>module Strings
@@ -2315,22 +2331,22 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_IdLists">
+    <section xml:id="section.IdLists">
       <title>Identifier Lists</title>
 
       <para>Context-free syntax often requires the description of the
       repetition of a syntactic notion or of list structures (with or without
       separators) containing a syntactic notion. The <link
-      linkend="lists">list symbols</link> can be used for this purpose. Lists
-      may be used in both the left-hand side and right-hand side of a
-      context-free function as well as in the right-hand side of a <link
-      linkend="variables">variable declaration</link>.</para>
+      linkend="section.lists">list symbols</link> can be used for this
+      purpose. Lists may be used in both the left-hand side and right-hand
+      side of a context-free function as well as in the right-hand side of a
+      <link linkend="section.variables">variable declaration</link>.</para>
 
-      <para><link linkend="CODE_pascal-ids">Here</link> is an example of how
-      lists can be used to define the syntax of a list of identifiers
+      <para><link linkend="example.pascal-ids">Here</link> is an example of
+      how lists can be used to define the syntax of a list of identifiers
       (occurring in a declaration in a Pascal-like language).</para>
 
-      <example xml:id="CODE_pascal-ids">
+      <example xml:id="example.pascal-ids">
         <title>Definition of a list of identifiers</title>
 
         <para><programlisting>module Decls
@@ -2352,7 +2368,7 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_Exp">
+    <section xml:id="section.Exp">
       <title>An Expression Language with Chain Rules</title>
 
       <para>A context-free syntax may contain productions that do not add
@@ -2392,11 +2408,11 @@ exports
       injection production is a production like any other, and will lead to a
       node in the parse tree. However, some back-ends are known to interpret
       chain rules as <emphasis>sub-sort</emphasis> relations. In the example
-      <link linkend="CODE_inj-exp">below</link> the symbols
+      <link linkend="example.inj-exp">below</link> the symbols
       <literal>Nat</literal> and <literal>Var</literal> are injected in
       <literal>Exp</literal>.</para>
 
-      <example xml:id="CODE_inj-exp">
+      <example xml:id="example.inj-exp">
         <title>Definition of expressions that uses injections</title>
 
         <para><programlisting>module Exp
@@ -2418,14 +2434,14 @@ exports
       </example>
     </section>
 
-    <section xml:id="EX_Labels">
+    <section xml:id="section.Labels">
       <title>Using Labels in Productions</title>
 
-      <para>See <link linkend="CODE_labels">below</link> for an example of an
-      SDF specification containing labels. Remember that labels do not have
+      <para>See <link linkend="example.labels">below</link> for an example of
+      an SDF specification containing labels. Remember that labels do not have
       semantics in SDF.</para>
 
-      <example xml:id="CODE_labels">
+      <example xml:id="example.labels">
         <title>The module <literal>basic/Booleans</literal> decorated with
         labels</title>
 
@@ -2443,7 +2459,7 @@ exports
       </example>
     </section>
 
-    <section xml:id="GroupAssoc">
+    <section xml:id="section.GroupAssoc">
       <title>Groups of Associative Productions</title>
 
       <para>Groups of associative productions define how to accept or reject
@@ -2474,10 +2490,10 @@ exports
 
       <para>where <replaceable>F</replaceable> and
       <replaceable>G</replaceable> are productions appearing in the list.
-      <link linkend="CODE_complex-prio">Below</link> is an example of the use
-      of grouped associativity.</para>
+      <link linkend="example.complex-prio">Below</link> is an example of the
+      use of grouped associativity.</para>
 
-      <example xml:id="CODE_complex-prio">
+      <example xml:id="example.complex-prio">
         <title>More complex associativity and priority definitions</title>
 
         <para><programlisting>module ComplexExpr
@@ -2508,7 +2524,7 @@ exports
       </example>
     </section>
 
-    <section xml:id="AssociativeFunctions">
+    <section xml:id="section.AssociativeFunctions">
       <title>Associative Productions</title>
 
       <para>Associativity attributes can be attached to binary productions of
@@ -2562,11 +2578,11 @@ exports
       change the semantics of the assoc attribute in the future. <remark>Is
       this really true?</remark></para>
 
-      <para><link linkend="CODE_simple-prio">Below</link> we give an example
-      of a definition of simple arithmetic expressions with the usual
+      <para><link linkend="example.simple-prio">Below</link> we give an
+      example of a definition of simple arithmetic expressions with the usual
       priorities and associativities.</para>
 
-      <example xml:id="CODE_simple-prio">
+      <example xml:id="example.simple-prio">
         <title>Simple context-free priority definition</title>
 
         <para><programlisting>module SimpleExpr
@@ -2591,7 +2607,7 @@ exports
       </example>
     </section>
 
-    <section xml:id="parametersexample">
+    <section xml:id="section.parametersexample">
       <title>Parameterization</title>
 
       <para>Module parameterization allows the definition of generic modules
@@ -2601,13 +2617,13 @@ exports
       sort specific. Modules can have formal parameters when defining them.
       The module name is then followed by a list of symbols, representing the
       formal parameters of this module. The specification <link
-      linkend="CODE_generic-pairs">below</link> shows an example of a
+      linkend="example.generic-pairs">below</link> shows an example of a
       parameterized module. In this example the formal parameters are used in
       the parameterized sorts as well, in order to increase readability and to
       avoid name clashes between different instances of the same
       module.</para>
 
-      <example xml:id="CODE_generic-pairs">
+      <example xml:id="example.generic-pairs">
         <title>Definition of generic pairs</title>
 
         <para><programlisting>module Pair[X Y]
@@ -2633,13 +2649,13 @@ exports
 
       <para>When importing a parameterized module the formal parameters have
       to be replaced by actual parameters. The specification <link
-      linkend="CODE_importing-pairs">below</link> shows an example of a rather
-      complicated import of a parameterized module. The symbols
+      linkend="example.importing-pairs">below</link> shows an example of a
+      rather complicated import of a parameterized module. The symbols
       <literal>Pair[[Boolean,Boolean]] </literal>and
       <literal>Pair[[Integer,Integer]]</literal> are the actual parameters of
       the module <literal>Pair[X Y]</literal> in the last import.</para>
 
-      <example xml:id="CODE_importing-pairs">
+      <example xml:id="example.importing-pairs">
         <title>Use of generic pair module</title>
 
         <para><programlisting>module TestPair
@@ -2652,15 +2668,15 @@ imports Pair[Pair[[Boolean,Boolean]] Pair[[Integer,Integer]]]</programlisting></
       </example>
     </section>
 
-    <section xml:id="SymbolRenaming">
-      <title xml:id="renaming">Symbol Renaming</title>
+    <section xml:id="section.SymbolRenaming">
+      <title xml:id="section.renaming">Symbol Renaming</title>
 
-      <para>The specification <link linkend="CODE_pairs">below</link> shows an
-      example of the <literal>Pair</literal> module without parameters. The
+      <para>The specification <link linkend="example.pairs">below</link> shows
+      an example of the <literal>Pair</literal> module without parameters. The
       idea is to achieve the same effect as parameterization by explicitly
       renaming <literal>X</literal> and <literal>Y</literal> to the desired
       names when <literal>Pair</literal> is imported.<example
-          xml:id="CODE_pairs">
+          xml:id="example.pairs">
           <title>Definition of generic pairs</title>
 
           <para><programlisting>module Pair
@@ -2686,12 +2702,12 @@ exports
 
       <para>During import such module symbols can be renamed via symbol
       renaming. The specification <link
-      linkend="CODE_renaming-pairs">below</link> shows an example of a rather
-      complicated import of the module <literal>Pair</literal> using
+      linkend="example.renaming-pairs">below</link> shows an example of a
+      rather complicated import of the module <literal>Pair</literal> using
       renamings. Renaming <literal>X</literal> to <literal>Boolean</literal>
       is, for instance, written as <literal>X =&gt; Boolean.</literal></para>
 
-      <para><example xml:id="CODE_renaming-pairs">
+      <para><example xml:id="example.renaming-pairs">
           <title>Use of generic pair module</title>
 
           <para><programlisting>module TestPair
@@ -2708,12 +2724,12 @@ imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</p
       <title>Examples on dealing with lexical ambiguity using
       restrictions</title>
 
-      <para>In the example <link linkend="CODE_functional">below</link> both
-      <literal>let</literal> and <literal>in</literal> may not be followed by
-      a letter. This example shows how lexical restrictions can be used to
-      prevent the recognition of erroneous expressions in a small functional
-      language. The lexical restriction deals with the possible confusion
-      between the reserved words <literal>let</literal> and
+      <para>In the example <link linkend="example.functional">below</link>
+      both <literal>let</literal> and <literal>in</literal> may not be
+      followed by a letter. This example shows how lexical restrictions can be
+      used to prevent the recognition of erroneous expressions in a small
+      functional language. The lexical restriction deals with the possible
+      confusion between the reserved words <literal>let</literal> and
       <literal>in</literal> and variables (of sort <literal>Var</literal>). It
       forbids the recognition of, for instance, <literal>let</literal> as part
       of <literal>letter</literal>. Without this restriction
@@ -2724,7 +2740,7 @@ imports Pair[X =&gt; Pair[[Boolean,Boolean]] Y =&gt; Pair[[Integer,Integer]]]</p
       letters, e.g. <literal>a b</literal> is a legal recognizable
       string.</para>
 
-      <example xml:id="CODE_functional">
+      <example xml:id="example.functional">
         <title>Using restrictions in the definition of a simple functional
         language</title>
 
@@ -2751,15 +2767,15 @@ exports
 
       <para>The next example illustrates the use of restrictions to define a
       <emphasis>safe</emphasis> way of layout. <link
-      linkend="contextfreesyntax">Recall</link> that optional layout,
+      linkend="section.contextfreesyntax">Recall</link> that optional layout,
       represented by the symbol<literal> LAYOUT?</literal>, may be recognized
       between the members of the left-hand side of a context-free syntax rule.
       However, if a such a member recognizes the empty string, this gives rise
       to a an ambiguity. This problem is avoided by the definition given <link
-      linkend="CODE_safe-layout">below</link>: it simply forbids that optional
-      layout is followed by layout characters.</para>
+      linkend="example.safe-layout">below</link>: it simply forbids that
+      optional layout is followed by layout characters.</para>
 
-      <para><example xml:id="CODE_safe-layout">
+      <para><example xml:id="example.safe-layout">
           <title>Safe way of defining <literal>LAYOUT</literal></title>
 
           <para><programlisting>module basic/Whitespace
@@ -2772,13 +2788,13 @@ exports
     LAYOUT? -/- [\ \t\n]</programlisting></para>
         </example></para>
 
-      <para>The example shown <link linkend="CODE_c-comment">below</link>
+      <para>The example shown <link linkend="example.c-comment">below</link>
       illustrates the use of restrictions to extend the previous layout
       definition with C-style comments. For readability we give here
       <emphasis>two</emphasis> restrictions whereas the first one is already
-      imported from <link linkend="CODE_safe-layout">module
+      imported from <link linkend="example.safe-layout">module
       basic/Whitespace</link>. The repetition of this first restriction is
-      redundant and could be eliminated.<example xml:id="CODE_c-comment">
+      redundant and could be eliminated.<example xml:id="example.c-comment">
           <title>Definition of C comments</title>
 
           <para><programlisting>module Comment
@@ -2802,7 +2818,7 @@ exports
       <para>A frequently asked question is when to use
       <emphasis>lexical</emphasis> restrictions and when to use
       <emphasis>context-free</emphasis> restrictions. In one of the <link
-      linkend="CODE_functional">previous examples</link> the lexical
+      linkend="example.functional">previous examples</link> the lexical
       restrictions on <filename>let</filename> and <literal>in</literal>
       cannot be defined using context-free restrictions because these keywords
       do not "live" at the context-free level. Is it possible to put a lexical
@@ -2812,13 +2828,13 @@ exports
       restrictions always on the context-free level and not on the lexical
       level unless a situation as will be discussed in the next paragraph
       occurs. The specification <link
-      linkend="CODE_restrictedexpressions">below</link> is an example of an
+      linkend="example.restrictedexpressions">below</link> is an example of an
       erroneous use of context-free expressions, because it prevents the
       recognition of <literal>(abc)def</literal>. If we want to enforce the
       correct restriction, it is necessary to transform this context-free
       restriction into a lexical restriction.</para>
 
-      <para><example xml:id="CODE_restrictedexpressions">
+      <para><example xml:id="example.restrictedexpressions">
           <title>Erroneous use of restrictions in the definition of simple
           expressions</title>
 
@@ -2842,10 +2858,10 @@ exports
         </example></para>
     </section>
 
-    <section xml:id="EX_Tricky">
+    <section xml:id="section.Tricky">
       <title>Some Tricky Cases</title>
 
-      <para>In <link linkend="symbols">Symbols</link> a number of
+      <para>In <link linkend="section.symbols">Symbols</link> a number of
       sophisticated operators, like alternative, option, function, sequence,
       and tuple are discussed. These operators allow a concise manner of
       defining grammars. There are, however, a number of issues to be taken
@@ -2854,13 +2870,13 @@ exports
       <section>
         <title>Definition of Lists</title>
 
-        <para>In the example <link linkend="CODE_lists-usage">below</link>,
+        <para>In the example <link linkend="example.lists-usage">below</link>,
         two different lists are defined, <literal>List1</literal> represents a
         list of naturals separated by commas whereas <literal>List2</literal>
         represents a list of naturals separated by commas and terminated by a
         comma.</para>
 
-        <example xml:id="CODE_lists-usage">
+        <example xml:id="example.lists-usage">
           <title>Definition of two list variants</title>
 
           <para><programlisting>module Lists
@@ -2886,15 +2902,16 @@ exports
         <para>The choice between two symbols can be defined in two different
         ways: by two separate syntax rules or by a single syntax rule using an
         alternative operator. Both styles are shown <link
-        linkend="CODE_alternative-alternatives">below</link>. The definition
-        of the binary operators <literal>|</literal> and
+        linkend="example.alternative-alternatives">below</link>. The
+        definition of the binary operators <literal>|</literal> and
         <literal>&amp;</literal> can be made more concise as shown by
         <literal>Bool2</literal>, however, it is now impossible to express
         that <literal>&amp;</literal> has a higher priority than
-        <literal>|</literal>, see <link linkend="priorities">Priorities</link>
-        for more details on priority definitions.</para>
+        <literal>|</literal>, see <link
+        linkend="section.priorities">Priorities</link> for more details on
+        priority definitions.</para>
 
-        <example xml:id="CODE_alternative-alternatives">
+        <example xml:id="example.alternative-alternatives">
           <title>Two ways of defining <literal>|</literal> and
           <literal>&amp;</literal></title>
 
@@ -2926,10 +2943,10 @@ exports
         The parser will produce an error message whenever during parsing a
         cycle is detected. No parse tree is constructed in such a case. Cycles
         will not lead to non-termination during parsing. See <link
-        linkend="CODE_listcycle">below</link> for an example of such a
+        linkend="example.listcycle">below</link> for an example of such a
         specification.</para>
 
-        <example xml:id="CODE_listcycle">
+        <example xml:id="example.listcycle">
           <title>Dangerous combination of lists and optionals}</title>
 
           <para><programlisting>module Cycle
@@ -2952,7 +2969,7 @@ exports
     </section>
   </section>
 
-  <section xml:id="wellformedness">
+  <section xml:id="section.wellformedness">
     <title>Well-formedness</title>
 
     <para>In order to improve the quality of the written specifications, a
@@ -3022,7 +3039,7 @@ exports
       </itemizedlist>
     </section>
 
-    <section xml:id="PlainSDFwarnings">
+    <section xml:id="section.PlainSDFwarnings">
       <title>Type check warnings for SDF</title>
 
       <warning>
@@ -3129,7 +3146,7 @@ exports
       </itemizedlist>
     </section>
 
-    <section xml:id="PlainSDFerrors">
+    <section xml:id="section.PlainSDFerrors">
       <title>Type check errors for SDF</title>
 
       <itemizedlist>
@@ -3168,7 +3185,7 @@ exports
     </section>
   </section>
 
-  <section xml:id="parseforests">
+  <section xml:id="section.parseforests">
     <title>Derivations</title>
 
     <para>Any parser generated from an SDF definition should output a
@@ -3188,7 +3205,7 @@ exports
     parsed.</para>
   </section>
 
-  <section xml:id="history">
+  <section xml:id="section.history">
     <title>Historical Notes</title>
 
     <para>The main publications on SDF are (in historical order):</para>
@@ -3264,7 +3281,7 @@ exports
     </itemizedlist>
   </section>
 
-  <section xml:id="sdf_ToDo">
+  <section xml:id="section.sdf_ToDo">
     <title>To Do</title>
 
     <para>Needed:</para>
