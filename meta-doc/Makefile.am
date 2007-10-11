@@ -17,7 +17,7 @@ GENERATED_XML_FILES = olinkdb.xml
 
 ALL_XML_FILES = ${XML_SOURCE_FILES} ${GENERATED_XML_FILES}
 
-EXTRA_DIST +=  website.sh ${XSL_SOURCE_FILES} ${XML_SOURCE_FILES}
+EXTRA_DIST +=  website.sh mk-complete-book.sh ${XSL_SOURCE_FILES} ${XML_SOURCE_FILES}
 
 ACLOCAL_AMFLAGS = -I .
 
@@ -27,6 +27,10 @@ books:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	DOCBOOKXSLPREFIX=${DOCBOOK_XSL_PREFIX} \
 	FOPPREFIX=${FOP_PREFIX} \
 	${top_srcdir}/website.sh
+complete-book:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
+	DOCBOOKXSLPREFIX=${DOCBOOK_XSL_PREFIX} \
+	FOPPREFIX=${FOP_PREFIX} \
+	${top_srcdir}/mk-complete-book.sh
 
 %.xsl:	%.xsl.src Makefile
 	sed "s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" < $< > $@
