@@ -6,8 +6,8 @@ Description:
 Requires: vis-plugin,aterm-java,config-support,toolbus,toolbus-java-adapter,meta-studio,rstore-container,tunit,relation-stores
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 JarFile=vis-plugin-charts.jar
-Jars=${prefix}/share/${JarFile}
-LocalJars=lib/jcommon-1.0.8.jar:lib/log4j-1.2.14.jar:lib/jfreechart-1.0.4.jar:lib/prefuse.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/junit-4.1.jar
+LocalJars=lib/jcommon-1.0.8.jar:lib/log4j-1.2.14.jar:lib/jfreechart-1.0.4.jar:lib/prefuse.jar:lib/junit-4.1.jar
 MainClass=nl.cwi.sen1.visplugin.PluginLoader
 Packages=nl.cwi.sen1,nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.scatterchartplugin,nl.cwi.sen1.visplugin.piechartplugin,nl.cwi.sen1.visplugin.linechartplugin,nl.cwi.sen1.visplugin.barchartplugin
 TestClass=

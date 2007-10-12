@@ -1,6 +1,5 @@
 package nl.cwi.sen1.visplugin.piechart;
 
-import junit.framework.TestCase;
 import nl.cwi.sen1.relationstores.Factory;
 import nl.cwi.sen1.relationstores.types.RTuple;
 import nl.cwi.sen1.relationstores.types.RType;

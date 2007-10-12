@@ -6,10 +6,11 @@
 	<classpathentry kind="lib" path="/config-support/lib/configapi.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vis-plugin"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/relationstores.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/prefuse.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/meta-studio"/>
+	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
