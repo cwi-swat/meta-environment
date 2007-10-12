@@ -12,5 +12,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/meta-studio"/>
 	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
