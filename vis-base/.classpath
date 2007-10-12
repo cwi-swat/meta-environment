@@ -9,7 +9,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/tunit"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/meta-studio"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/rstore-container"/>
-	<classpathentry kind="lib" path="lib/clover.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
