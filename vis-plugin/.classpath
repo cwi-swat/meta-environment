@@ -5,7 +5,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects"/>
-	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/vis-base"/>
+	<classpathentry kind="lib" path="/relation-stores/lib/relationstores.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
