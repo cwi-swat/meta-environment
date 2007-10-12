@@ -3,11 +3,11 @@ prefix=@prefix@
 Name: vis-plugin-generic
 Version: 1.0
 Description: 
-Requires: aterm-java,config-support,toolbus,toolbus-java-adapter,meta-studio,vis-plugin,tunit
+Requires: aterm-java,config-support,toolbus,toolbus-java-adapter,meta-studio,vis-plugin,tunit,relation-stores
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 JarFile=vis-plugin-generic.jar
-Jars=${prefix}/share/${JarFile}:${prefix}/share/relationstores.jar:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/junit-4.1.jar
-LocalJars=lib/relationstores.jar:lib/jcommon-1.0.8.jar:lib/junit-4.1.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/jcommon-1.0.8.jar:${prefix}/share/junit-4.1.jar
+LocalJars=lib/jcommon-1.0.8.jar:lib/junit-4.1.jar
 MainClass=nl.cwi.sen1.visplugin.GenericVisualizationPluginsLoader
 Packages=nl.cwi.sen1,nl.cwi.sen1.visplugin,nl.cwi.sen1.visplugin.table,nl.cwi.sen1.visplugin.csvexport,nl.cwi.sen1.visplugin.text
 TestClass=
