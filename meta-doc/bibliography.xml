@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<bibliography>
+
+  <biblioentry role="book" id="AhoSethiUllman86">
+    <abbrev id="AhoSethiUllman86.abbrev">ASU86</abbrev>
+  <authorgroup><author><authorname><firstname>A.V.</firstname><surname>Aho</surname></authorname></author><author><authorname><firstname>R.</firstname><surname>Sethi</surname></authorname></author><author><authorname><firstname>J.D.</firstname><surname>Ullman</surname></authorname></author></authorgroup>
+    <title>Compilers: Principles, Techniques and Tools</title>
+    <publisher><publishername>Addison-Wesley</publishername></publisher>
+    <pubdate>1986</pubdate>
+  </biblioentry>
+
+  <biblioentry role="book" id="AhoUllman72">
+    <abbrev id="AhoUllman72.abbrev">AU73</abbrev>
+  <authorgroup><author><authorname><firstname>A.V.</firstname><surname>Aho</surname></authorname></author><author><authorname><firstname>J.D.</firstname><surname>Ullman</surname></authorname></author></authorgroup>
+    <title>The theory of parsing, translation, and compiling</title>
+    <publisher><publishername>Prentice-Hall, Englewood Cliffs
+  (NJ)</publishername></publisher>
+    <pubdate>1972--73</pubdate>
+    <bibliomisc role="note">Vol. I. Parsing. Vol II. Compiling</bibliomisc>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="BrandKooikerEtAl05">
+    <abbrev id="BrandKooikerEtAl05.abbrev">BKVV05</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>M.G.J. van den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>A.T.</firstname><surname>Kooiker</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>N.P.</firstname><surname>Veerman</surname></authorname></author></authorgroup>
+      <title>An Architecture for Context-Sensitive Formatting</title>
+      <pagenums>631--634</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>ICSM '05: Proceedings of the 21st IEEE
+  International Conference on Software Maintenance</conftitle></confgroup>
+      <pubdate>2005</pubdate>
+      <publisher><publishername>IEEE Computer
+  Society</publishername></publisher>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="BrandKooikerEtAl06">
+    <abbrev id="BrandKooikerEtAl06.abbrev">BKVV06</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>M.G.J. van den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>A.T.</firstname><surname>Kooiker</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>N.P.</firstname><surname>Veerman</surname></authorname></author></authorgroup>
+      <title>A Language Independent Framework for Context-sensitive
+  Formatting</title>
+      <pagenums>103--112</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>CSMR '06: Proceedings of the Conference on Software
+  Maintenance and Reengineering</conftitle><address>Washington, DC,
+  USA</address></confgroup>
+      <pubdate>2006</pubdate>
+      <publisher><publishername>IEEE Computer Society
+  Press</publishername></publisher>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="BNL03">
+    <abbrev id="BNL03.abbrev">BNL03</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>D.</firstname><surname>Beyer</surname></authorname></author><author><authorname><firstname>A</firstname><surname>Noack</surname></authorname></author><author><authorname><firstname>C.</firstname><surname>Lewerentz</surname></authorname></author></authorgroup>
+      <title>Simple and efficient relational querying of software
+  structures</title>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings of the 10th IEEE Working Conference on
+  Reverse Engineering (WCRE 2003)</conftitle></confgroup>
+      <pubdate>2003</pubdate>
+    </biblioset>
+    <bibliomisc role="note">To appear</bibliomisc>
+  </biblioentry>
+
+  <biblioentry role="article" id="BrandVisser96">
+    <abbrev id="BrandVisser96.abbrev">BV96</abbrev>
+    <biblioset role="article">
+      <authorgroup><author><authorname><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author></authorgroup>
+      <title>Generation of formatters for context-free languages</title>
+      <pagenums>1--41</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>ACM Transactions on Software Engineering and Methodology</title>
+      <volumenum>5</volumenum>
+      <pubdate>1996</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="Chomsky56">
+    <abbrev id="Chomsky56.abbrev">Cho56</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>N.</firstname><surname>Chomsky</surname></authorname></author>
+      <title>Three models for the description of language</title>
+      <pagenums>113--124</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>IRE Transactions on Information Theory</title>
+      <volumenum>IT-2:3</volumenum>
+      <pubdate>1956</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="techreport" id="Coutaz84">
+    <abbrev id="Coutaz84.abbrev">Cou84</abbrev>
+  <author><authorname><firstname>J.</firstname><surname>Coutaz</surname></authorname></author>
+    <title>The box, a layout abstraction for user interface toolkits</title>
+    <bibliomisc role="type">Technical ReportCMU-CS-84-167</bibliomisc>
+    <orgname>Carnegie Mellon University</orgname>
+    <pubdate>1984</pubdate>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="DeJonge00">
+    <abbrev id="DeJonge00.abbrev">dJ00</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>M.</firstname><surname>de Jonge</surname></authorname></author>
+      <title>A pretty-printer for every occasion</title>
+      <pagenums>68--77</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings of the 2nd International Symposium on
+  Constructing Software Engineering Tools
+  (CoSET2000)</conftitle><address>Wollongong, Australia</address></confgroup>
+  <authorgroup><editor><authorname><firstname>I.</firstname><surname>Ferguson</surname></authorname></editor><editor><authorname><firstname>Gray</firstname><surname>J</surname></authorname></editor><editor><authorname><firstname>L.</firstname><surname>Scott</surname></authorname></editor></authorgroup>
+      <pubdate>June 2000</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="DeJonge02">
+    <abbrev id="DeJonge02.abbrev">dJ02</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>M.</firstname><surname>de Jonge</surname></authorname></author>
+      <title>Pretty-printing for software engineering</title>
+      <pagenums>550--559</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings International Conference on Software
+  Maintenance (ICSM
+  2002)</conftitle><confsponsor>IEEE</confsponsor></confgroup>
+      <pubdate>October 2002</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="FeijsKrikhaarOmmering98">
+    <abbrev id="FeijsKrikhaarOmmering98.abbrev">FKO98</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>L.M.G.</firstname><surname>Feijs</surname></authorname></author><author><authorname><firstname>R.</firstname><surname>Krikhaar</surname></authorname></author><author><authorname><firstname>R.C.</firstname><surname>Ommering</surname></authorname></author></authorgroup>
+      <title>A relational approach to support software architecture
+  analysis</title>
+      <pagenums>371--400</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>Software Practice and Experience</title>
+      <volumenum>28</volumenum><issuenum>4</issuenum>
+      <pubdate>april 1998</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="book" id="GruneJacobs90">
+    <abbrev id="GruneJacobs90.abbrev">GJ90</abbrev>
+  <authorgroup><author><authorname><firstname>D.</firstname><surname>Grune</surname></authorname></author><author><authorname><firstname>C.J.H</firstname><surname>Jacobs</surname></authorname></author></authorgroup>
+    <title>Parsing Techniques -- A Practical Guide</title>
+    <publisher><publishername>Ellis Horwood</publishername></publisher>
+    <pubdate>1990</pubdate>
+  </biblioentry>
+
+  <biblioentry role="techreport" id="Holt96">
+    <abbrev id="Holt96.abbrev">Hol96</abbrev>
+  <author><authorname><firstname>R.C.</firstname><surname>Holt</surname></authorname></author>
+    <title>Binary relational algebra applied to software architecture</title>
+    <bibliomisc role="type">CSRI345</bibliomisc>
+    <orgname>University of Toronto</orgname>
+    <pubdate>march 1996</pubdate>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="JacksonRollins94">
+    <abbrev id="JacksonRollins94.abbrev">JR94</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>D.J.</firstname><surname>Jackson</surname></authorname></author><author><authorname><firstname>E.J.</firstname><surname>Rollins</surname></authorname></author></authorgroup>
+      <title>A new model of program dependences for reverse engineering</title>
+      <pagenums>2--10</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings of the 2nd ACM SIGSOFT symposium on
+  Foundations of software engineering</conftitle></confgroup>
+      <subtitle role="series">ACM SIGSOFT Software Engineering
+  Notes</subtitle><seriesvolnum>19</seriesvolnum>
+      <pubdate>1994</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="KlintIWPC03">
+    <abbrev id="KlintIWPC03.abbrev">Kli03</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author>
+      <title>How understanding and restructuring differ from compiling---a
+  rewriting perspective</title>
+      <pagenums>2--12</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings of the 11th International Workshop on
+  Program Comprehension (IWPC03)</conftitle></confgroup>
+      <pubdate>2003</pubdate>
+      <publisher><publishername>IEEE Computer
+  Society</publishername></publisher>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="techreport" id="Dot96">
+    <abbrev id="Dot96.abbrev">KN96</abbrev>
+  <authorgroup><author><authorname><firstname>E.</firstname><surname>Koutsofios</surname></authorname></author><author><authorname><firstname>S.C.</firstname><surname>North</surname></authorname></author></authorgroup>
+    <title>Drawing graphs with dot</title>
+    <bibliomisc role="type">Technical report</bibliomisc>
+    <orgname>AT&amp;T Bell Laboratories</orgname>
+    <address>Murray Hill, NJ</address>
+    <pubdate>1996</pubdate>
+    <bibliomisc role="note">See also www.graphviz.org</bibliomisc>
+  </biblioentry>
+
+  <biblioentry role="phdthesis" id="Krikhaar99">
+    <abbrev id="Krikhaar99.abbrev">Kri99</abbrev>
+  <author><authorname><firstname>R.L.</firstname><surname>Krikhaar</surname></authorname></author>
+    <title>Software Architecture Reconstruction</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>1999</pubdate>
+  </biblioentry>
+
+  <biblioentry role="article" id="McCabe76">
+    <abbrev id="McCabe76.abbrev">McC76</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>T.J.</firstname><surname>McCabe</surname></authorname></author>
+      <title>A complexity measure</title>
+      <pagenums>308--320</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>IEEE Transactions on Software Engineering</title>
+      <volumenum>SE-12</volumenum><issuenum>3</issuenum>
+      <pubdate>1976</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="incollection" id="MorcosConchon86">
+    <abbrev id="MorcosConchon86.abbrev">MCC86</abbrev>
+    <biblioset role="chapter">
+  <authorgroup><author><authorname><firstname>E.</firstname><surname>Morcos-Chounet</surname></authorname></author><author><authorname><firstname>A.</firstname><surname>Conchon</surname></authorname></author></authorgroup>
+      <title>PPML: a general formalism to specify pretty printing</title>
+    </biblioset>
+    <biblioset role="collection">
+      <title>Information Processing 86</title>
+  <editor><authorname><firstname>H.-J.</firstname><surname>Kugler</surname></authorname></editor>
+      <publisher><publishername>Elsevier</publishername></publisher>
+      <pubdate>1986</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="Mueller88">
+    <abbrev id="Mueller88.abbrev">MK88</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>H.</firstname><surname>Müller</surname></authorname></author><author><authorname><firstname>K.</firstname><surname>Klashinsky</surname></authorname></author></authorgroup>
+      <title>Rigi -- a system for programming-in-the-large.</title>
+      <pagenums>80--86,</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings of the 10th International Conference on
+  Software Engineering (ICSE 10),</conftitle></confgroup>
+      <pubdate>April 1988</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="Tip95">
+    <abbrev id="Tip95.abbrev">Tip95</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>F.</firstname><surname>Tip</surname></authorname></author>
+      <title>A survey of program slicing techniques</title>
+      <pagenums>121--189</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>Journal of Programming Languages</title>
+      <volumenum>3</volumenum><issuenum>3</issuenum>
+      <pubdate>1995</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="mastersthesis" id="Vos90">
+    <abbrev id="Vos90.abbrev">Vos90</abbrev>
+  <author><authorname><firstname>K.</firstname><surname>Vos</surname></authorname></author>
+    <title>For an easy touch of beauty</title>
+    <bibliomisc role="type">Master's thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>1990</pubdate>
+  </biblioentry>
+
+  <biblioentry role="article" id="Weiser84">
+    <abbrev id="Weiser84.abbrev">Wei84</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>M.</firstname><surname>Weiser</surname></authorname></author>
+      <title>Program slicing</title>
+      <pagenums>352--357</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>IEEE Transactions on Software Engineering</title>
+      <volumenum>SE-10</volumenum><issuenum>4</issuenum>
+      <pubdate>July 1984</pubdate>
+    </biblioset>
+  </biblioentry>
+
+</bibliography>
