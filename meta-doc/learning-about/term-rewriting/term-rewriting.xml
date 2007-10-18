@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="term-rewriting"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -17,7 +18,7 @@
     </author>
   </info>
 
-  <section xml:id="section.motivation">
+  <section xml:id="section.tr-motivation">
     <title>Motivation</title>
 
     <para>Term rewriting is a surprisingly simple computational paradigm that
@@ -27,7 +28,7 @@
     solve such tasks in a very effective manner.</para>
   </section>
 
-  <section xml:id="section.introduction">
+  <section xml:id="section.tr-introduction">
     <title>Introduction</title>
 
     <para>Consider the following, <emphasis>back-of-an-envelope</emphasis>,
@@ -67,14 +68,14 @@
     are used during the simplification.</para>
 
     <para>A simple view on term rewriting is shown in <xref
-    linkend="figure.simple-rewriting-algorithm" />. Given a set of rewrite
+    linkend="figure.tr-simple-rewriting-algorithm" />. Given a set of rewrite
     rules and an initial term T, the rewriting algorithm is applied and will
     yield a simplified (or normalized) term T' as answer. T' is called the
     <emphasis>normal form</emphasis> of T. Later (in <xref
-    linkend="section.term-rewriting-algorithm" />) we will further explain the
-    internals of the term rewriting algorithm.</para>
+    linkend="section.tr-term-rewriting-algorithm" />) we will further explain
+    the internals of the term rewriting algorithm.</para>
 
-    <figure xml:id="figure.simple-rewriting-algorithm">
+    <figure xml:id="figure.tr-simple-rewriting-algorithm">
       <title>The rewriting process</title>
 
       <mediaobject>
@@ -126,7 +127,7 @@
     <para>In order to understand term rewriting three basic concepts are
     essential: terms, substitution and matching.</para>
 
-    <section xml:id="section.terms">
+    <section xml:id="section.tr-terms">
       <title>Terms</title>
 
       <para>Traditionally, terms are defined in a strict prefix format:</para>
@@ -151,7 +152,7 @@
       will, for instance, also write <literal>X + Y</literal>.</para>
     </section>
 
-    <section xml:id="section.substitution">
+    <section xml:id="section.tr-substitution">
       <title>Substitution</title>
 
       <para>A substitution is an important auxiliary notion that we need on
@@ -172,7 +173,7 @@
       term they are mapped to by the substitution.</para>
     </section>
 
-    <section xml:id="section.matching">
+    <section xml:id="section.tr-matching">
       <title>Matching</title>
 
       <para>Matching has as goal to determine whether two terms
@@ -186,13 +187,13 @@
     </section>
   </section>
 
-  <section xml:id="section.term-rewriting-algorithm">
+  <section xml:id="section.tr-term-rewriting-algorithm">
     <title>The term rewriting algorithm</title>
 
     <para>We can now assemble the ingredients we have described so far into a
     comprehensive description of the rewriting algorithm (<xref
-    linkend="figure.rewriting-algorithm" />).This algorithm still leaves some
-    aspects unspecified:</para>
+    linkend="figure.tr-rewriting-algorithm" />).This algorithm still leaves
+    some aspects unspecified:</para>
 
     <itemizedlist>
       <listitem>
@@ -241,7 +242,7 @@
 
     <para>We will be using no ordering of the rules.</para>
 
-    <figure xreflabel="" xml:id="figure.rewriting-algorithm">
+    <figure xreflabel="" xml:id="figure.tr-rewriting-algorithm">
       <title>The rewriting algorithm</title>
 
       <mediaobject>
@@ -253,7 +254,7 @@
     </figure>
   </section>
 
-  <section xml:id="section.examples">
+  <section xml:id="section.tr-examples">
     <title>Examples</title>
 
     <para>Let´s consider two simple examples of term rewriting systems for
@@ -284,8 +285,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>See <xref linkend="section.further-reading" /> for pointers to such
-    examples.</para>
+    <para>See <xref linkend="section.tr-further-reading" /> for pointers to
+    such examples.</para>
 
     <section>
       <title>Numerals</title>
@@ -324,16 +325,17 @@
 
 [mul2'] succ(X) * Y = mul(X * Y) + Y</programlisting>Now let's follow the
       simplification of <literal>add(succ(succ(0)), succ(succ(0)))</literal>
-      as shown in <xref linkend="figure.arithmetic" />. Each redex is shown as
-      a yellow box with a thick border. An arrow connects the redex with its
-      replacement that is surround by a rectangle with a thin border.</para>
+      as shown in <xref linkend="figure.tr-arithmetic" />. Each redex is shown
+      as a yellow box with a thick border. An arrow connects the redex with
+      its replacement that is surround by a rectangle with a thin
+      border.</para>
 
       <para>The name of the rule that is applied in each step is shown on the
       right of each vertical arrow. As expected, the answer is
       <literal>succ(succ(succ(succ0))))</literal> or, in other words,
       <literal>2 + 2</literal> equals <literal>4</literal>.</para>
 
-      <figure xml:id="figure.arithmetic">
+      <figure xml:id="figure.tr-arithmetic">
         <title>Rewriting an arithmetic term</title>
 
         <mediaobject>
@@ -369,9 +371,9 @@
 
       <para>Consider the simplification of the Boolean expression
       <literal>not(or(false, and(true,not(false))))</literal> as shown in
-      <xref linkend="figure.boolean" />.</para>
+      <xref linkend="figure.tr-boolean" />.</para>
 
-      <figure dir="lro" xml:id="figure.boolean">
+      <figure dir="lro" xml:id="figure.tr-boolean">
         <title>Rewriting as Boolean term</title>
 
         <mediaobject>
@@ -383,7 +385,7 @@
     </section>
   </section>
 
-  <section xml:id="section.extensions">
+  <section xml:id="section.tr-extensions">
     <title>Extensions of term rewriting</title>
 
     <para>Term rewriting has been extended in various ways to make it even
@@ -472,26 +474,25 @@
     get the results we want. It is as simple and exciting as that.</para>
   </section>
 
-  <section xml:id="section.further-reading">
-    <title>Further reading</title>
+  <section xml:id="section.tr-further-reading">
+    <title>Further Reading</title>
 
     <itemizedlist>
       <listitem>
-        <para>Several articles on this website (<link
-        xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>)
-        give detailed examples of term rewriting applications.</para>
+        <para>Several articles on th website (<link
+        xlink:href="http://www.meta-environment.org">www.meta-environment.org</link>
+        give detailed examples of term rewriting
+        applications.</para>
       </listitem>
 
       <listitem>
-        <para>The book <emphasis>Term Rewriting and All That</emphasis> by
-        Franz Baader and Tobias Nipkow (Cambridge University Press, 1998)
+        <para>The book <xref linkend="BaaderNipkow98" />
         gives an introduction to the theory of term rewriting.</para>
       </listitem>
 
       <listitem>
-        <para>The book <emphasis>Term Rewriting Systems</emphasis> by the
-        Terese collective (Cambridge Tracts in Theoretical Computer Science,
-        2003) gives a comprehensive overview of research in this area.</para>
+        <para>The book <xref linkend="Terese03" /> gives
+        a comprehensive overview of research in this area.</para>
       </listitem>
 
       <listitem>
@@ -501,4 +502,14 @@
       </listitem>
     </itemizedlist>
   </section>
-</article>
+
+  <section xml:id="section.tr-bibliography">
+    <title>Bibliography</title>
+
+    <para><bibliolist>
+        <bibliomixed xml:id="BaaderNipkow98"></bibliomixed>
+
+        <bibliomixed xml:id="Terese03"></bibliomixed>
+      </bibliolist></para>
+  </section>
+</chapter>

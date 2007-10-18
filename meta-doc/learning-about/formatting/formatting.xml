@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 ]>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="formatting"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -13,8 +14,8 @@
   <info>
     <title>Formatting with Box and Pandora</title>
 
-    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16
-    17:45:23 +0100 (Sat, 16 Dec 2006) $</pubdate>
+    <pubdate>$Rev$ by $Author$ at $Date: 2006-12-16 17:45:23
+    +0100 (Sat, 16 Dec 2006) $</pubdate>
 
     <authorgroup>
       <author>
@@ -33,10 +34,10 @@
 
   <warning>
     <para>This document is work in progress. See <link
-    linkend="fm_ToDo">ToDo</link> section.</para>
+    linkend="section.fm-todo">ToDo</link> section.</para>
   </warning>
 
-  <section xml:id="fm_Introduction">
+  <section xml:id="section.fm-introduction">
     <title>An introduction to Formatting</title>
 
     <para>If you want to have a uniform style to present your</para>
@@ -60,13 +61,11 @@
     <para>then you need a <firstterm>formatter</firstterm> that takes the
     original source text and applies uniform formatting rules to it. In that
     case <emphasis role="bold">Box</emphasis> and <emphasis
-    role="bold">Pandora</emphasis> may be the right technologies for you. HERE
-    IS A TEST FOR OLINKING: a formatting definition is also part of alanguage
-    definition, see <olink targetdoc="syntax-analysis" targetptr=""></olink>
-    for more details.</para>
+    role="bold">Pandora</emphasis> may be the right technologies for
+    you.</para>
 
-    <section>
-      <title xml:id="YetAnotherFormalism">Why Formatting?</title>
+    <section xml:id="section.fm-YetAnotherFormalism">
+      <title>Why Formatting?</title>
 
       <para>It is well-known that readability of source code has a major
       impact on the productivity of software development and on the quality of
@@ -76,19 +75,18 @@
       technology for achieving this uniformity.</para>
     </section>
 
-    <section>
+    <section xml:id="section.fm-global-picture">
       <title>What is the Global Picture?</title>
 
-      <para>Our global formatting architecture is shown in Figure <link
-      linkend="Fig_formatting-architecture">Formatting Architecture</link>. A
-      source code program ("Input term") is parsed and converted into a parse
-      tree. Next, the parse tree is converted into a box expression ("box
-      tree") and that box expression can finally be converted into various
-      output formats. The crucial step is from parse tree to box expression
-      where both default formatting rules and user-defined formatting rules
-      play a role.</para>
+      <para>Our global formatting architecture is shown in <xref
+      linkend="figure.fm-formatting-architecture" />. A source code program
+      ("Input term") is parsed and converted into a parse tree. Next, the
+      parse tree is converted into a box expression ("box tree") and that box
+      expression can finally be converted into various output formats. The
+      crucial step is from parse tree to box expression where both default
+      formatting rules and user-defined formatting rules play a role.</para>
 
-      <figure xml:id="Fig_formatting-architecture">
+      <figure xml:id="figure.fm-formatting-architecture">
         <title>Formatting Architecture</title>
 
         <mediaobject>
@@ -105,7 +103,7 @@
       tree, unparsing converts from parse tree to text).</para>
     </section>
 
-    <section>
+    <section xml:id="section.fm-box-and-pandora">
       <title>What are Box and Pandora?</title>
 
       <para>Box is a language-independent intermediate language for describing
@@ -123,7 +121,7 @@
       requirements and overrule the default behaviour.</para>
     </section>
 
-    <section>
+    <section xml:id="how-to-use-box-and-pandora">
       <title>How to use Box and Pandora?</title>
 
       <para>There are three ways to use Box and Pandora:</para>
@@ -153,34 +151,35 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="section.fm-learning-more">
       <title>Learning more</title>
 
       <para>We will now describe:</para>
 
       <itemizedlist>
         <listitem>
-          <para><link linkend="TheBoxLanguage">The Box Language</link>.</para>
+          <para><link linkend="section.fm-box-language">The Box
+          Language</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="Pandora">Pandora</link>.</para>
+          <para><link linkend="section.fm-Pandora">Pandora</link>.</para>
         </listitem>
 
         <listitem>
-          <para><link linkend="fm_Examples">Examples</link>.</para>
+          <para><link linkend="section.fm-Examples">Examples</link>.</para>
         </listitem>
       </itemizedlist>
 
-      <para>In <link linkend="fm_HistoricalNotes">Historical Notes</link>, we
-      give background and key references.</para>
+      <para>In <xref linkend="section.fm-HistoricalNotes" />, we give
+      background and key references.</para>
     </section>
   </section>
 
-  <section xml:id="TheBoxLanguage">
+  <section xml:id="section.fm-box-language">
     <title>The Box Language</title>
 
-    <section>
+    <section xml:id="section.fm-box-expressions">
       <title>Box Expressions</title>
 
       <para>The general format of a Box expression is either a literal
@@ -193,32 +192,37 @@
       <programlisting>BoxOperator SpaceOptions [ Box1 Box2 ... ]</programlisting>
 
       <para>Here <literal>BoxOperator</literal> is one of the operators listed
-      in the Table <link linkend="Table-BoxOperators">Box Operators</link>.
-      This operator controls the formatting of the boxes
-      <literal>Box1</literal>, <literal>Box2</literal>, ... The
-      <literal>SpaceOptions</literal> are one of the options listed in the
-      Table <link linkend="Table-SpacingAndAlignmnentOptions">Spacing and
-      Alignment Options</link> below and control the amount of horizontal,
-      vertical, or indentation space between the boxes. Some operators may
-      have additional options. Box operators never lose operands or change the
-      order of appearance of their operands on a page read left-to-right and
-      top-to-bottom.</para>
+      in <xref linkend="table.fm-BoxOperators" />. This operator controls the
+      formatting of the boxes <literal>Box1</literal>,
+      <literal>Box2</literal>, ... The <literal>SpaceOptions</literal> are one
+      of the options listed in<xref
+      linkend="table.fm-SpacingAndAlignmnentOptions" /> and control the amount
+      of horizontal, vertical, or indentation space between the boxes. Some
+      operators may have additional options. Box operators never lose operands
+      or change the order of appearance of their operands on a page read
+      left-to-right and top-to-bottom.</para>
 
-      <table xml:id="Table-BoxOperators">
+      <table xml:id="table.fm-BoxOperators">
         <title>Box Operators</title>
 
         <tgroup cols="3">
-          <colspec align="center" />
+          <colspec align="center" colname="col1" colnum="1" colwidth="2*" />
+
+          <colspec align="center" colname="col2" colnum="2" colwidth="2*" />
+
+          <colspec align="left" colname="col3" colnum="3" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Options</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
 
           <tbody>
-            <row>
-              <entry><emphasis role="bold">Operator</emphasis></entry>
-
-              <entry><emphasis role="bold">Options</emphasis></entry>
-
-              <entry><emphasis role="bold">Description</emphasis></entry>
-            </row>
-
             <row>
               <entry><literal>H</literal></entry>
 
@@ -314,19 +318,23 @@
         </tgroup>
       </table>
 
-      <table xml:id="Table-SpacingAndAlignmnentOptions">
+      <table xml:id="table.fm-SpacingAndAlignmnentOptions">
         <title>Spacing and Alignment Options</title>
 
         <tgroup cols="2">
-          <colspec align="center" />
+          <colspec align="center" colname="col1" colnum="1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
 
           <tbody>
-            <row>
-              <entry><emphasis role="bold">Operator</emphasis></entry>
-
-              <entry><emphasis role="bold">Description</emphasis></entry>
-            </row>
-
             <row>
               <entry><literal>hs</literal></entry>
 
@@ -379,19 +387,19 @@
       </table>
     </section>
 
-    <section>
+    <section xml:id="section.fm-box-operators">
       <title>Box Operators and Spacing Options</title>
 
-      <section>
+      <section xml:id="section.fm-hbox">
         <title>H Box</title>
 
         <para>The <literal>H</literal> box operator places sub-boxes
-        horizontally as shown in Figure <link linkend="Fig_hbox">Horizontal
-        Box Operator (H)</link>. Optionally, an horizontal spacing option
-        (<literal>hs</literal>) can be given to indicate the desired
-        separation between the sub-boxes.</para>
+        horizontally as shown in <xref linkend="figure.fm-hbox" />.
+        Optionally, an horizontal spacing option (<literal>hs</literal>) can
+        be given to indicate the desired separation between the
+        sub-boxes.</para>
 
-        <figure xml:id="Fig_hbox">
+        <figure xml:id="figure.fm-hbox">
           <title>Horizontal Box Operator (H)</title>
 
           <mediaobject>
@@ -402,16 +410,15 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-vbox">
         <title>V Box</title>
 
         <para>The <literal>V</literal> box operator places sub-boxes
-        vertically as shown in Figure <link linkend="Fig_vbox">Vertical Box
-        Operator (V)</link>. Optionally, a vertical spacing option
-        (<literal>vs</literal>) can be given to indicate the desired vertical
-        separation between the sub-boxes.</para>
+        vertically as shown in <xref linkend="figure.fm-vbox" />. Optionally,
+        a vertical spacing option (<literal>vs</literal>) can be given to
+        indicate the desired vertical separation between the sub-boxes.</para>
 
-        <figure xml:id="Fig_vbox">
+        <figure xml:id="figure.fm-vbox">
           <title>Vertical Box Operator (V)</title>
 
           <mediaobject>
@@ -422,16 +429,16 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-hvbox">
         <title>HV Box</title>
 
         <para>The <literal>HV</literal> box operator places as much of its
-        sub-boxes horizontally as possible as shown in Figure <link
-        linkend="Fig_hvbox">Horizontal/Vertical Box Operator (HV)</link>.
-        Optionally, a horizontal (<literal>hs</literal>) or vertical
-        (<literal>vs</literal>) spacing option can be given.</para>
+        sub-boxes horizontally as possible as shown in <xref
+        linkend="figure.fm-hvbox" />. Optionally, a horizontal
+        (<literal>hs</literal>) or vertical (<literal>vs</literal>) spacing
+        option can be given.</para>
 
-        <figure xml:id="Fig_hvbox">
+        <figure xml:id="figure.fm-hvbox">
           <title>Horizontal/Vertical Box Operator (HV)</title>
 
           <mediaobject>
@@ -442,17 +449,16 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-hovbox">
         <title>HOV Box</title>
 
         <para>The <literal>HOV</literal> box operator places its sub-boxes
         either horizontally or vertically, depending on available horizontal
-        space. This is shown in Figure <link linkend="Fig_hovbox">Horizontal
-        or Vertical Box Operator (HOV)</link>. Optionally, a horizontal
-        (<literal>hs</literal>) or vertical (<literal>vs</literal>) spacing
-        option can be given.</para>
+        space. This is shown in <xref linkend="figure.fm-hovbox" />.
+        Optionally, a horizontal (<literal>hs</literal>) or vertical
+        (<literal>vs</literal>) spacing option can be given.</para>
 
-        <figure xml:id="Fig_hovbox">
+        <figure xml:id="figure.fm-hovbox">
           <title>Horizontal or Vertical Box Operator (HOV)</title>
 
           <mediaobject>
@@ -463,17 +469,16 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-ibox">
         <title>I Box</title>
 
         <para>The <literal>I</literal> box operator indents its single sub-box
         horizontally. The effect is best illustrated in combination with a
-        vertical box operator as shown in Figure <link
-        linkend="Fig_ibox">Indentation Box Operator (I)</link>. Optionally, an
-        indentation (<literal>is</literal>) spacing option can be
-        given.</para>
+        vertical box operator as shown in <xref linkend="figure.fm-ibox" />.
+        Optionally, an indentation (<literal>is</literal>) spacing option can
+        be given.</para>
 
-        <figure xml:id="Fig_ibox">
+        <figure xml:id="figure.fm-ibox">
           <title>Indentation Box Operator (I)</title>
 
           <mediaobject>
@@ -484,7 +489,7 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-wdbox">
         <title>WD Box</title>
 
         <para>The <literal>I</literal> box operator defines a static amount of
@@ -492,10 +497,10 @@
         indentation dynamically based on the horizontal dimensions of a given,
         already formatted, box. This can be achieved with the
         <literal>WD</literal> box operator that creates a box with the width
-        of its single sub-box. The effect is shown in an example in Figure
-        <link linkend="Fig_wdbox">Width Box Operator (WD)</link>.</para>
+        of its single sub-box. The effect is shown in an example in <xref
+        linkend="figure.fm-wdbox" />.</para>
 
-        <figure xml:id="Fig_wdbox">
+        <figure xml:id="figure.fm-wdbox">
           <title>Width Box Operator (WD)</title>
 
           <mediaobject>
@@ -506,22 +511,21 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-commbox">
         <title>COMM Box</title>
 
         <para>The box operator <literal>COMM</literal> marks its sub-boxes as
         comment. It has no other effect on formatting.</para>
       </section>
 
-      <section>
+      <section xml:id="section.fm-arbox">
         <title>A and R Box</title>
 
         <para>An <literal>A</literal> box operator declares an alignment
         environment in which <literal>R</literal> boxes are aligned in columns
-        as shown in Figure <link linkend="Fig_arbox">Alignment (A) and Row (R)
-        Box Operators</link>.</para>
+        as shown in <xref linkend="figure.fm-arbox" />.</para>
 
-        <figure xml:id="Fig_arbox">
+        <figure xml:id="figure.fm-arbox">
           <title>Alignment (A) and Row (R) Box Operators</title>
 
           <mediaobject>
@@ -532,7 +536,7 @@
         </figure>
       </section>
 
-      <section>
+      <section xml:id="section.fm-gbox">
         <title>G Box</title>
 
         <para>The box operator <literal>G</literal> operator is a
@@ -551,7 +555,7 @@
         placed in a row.</para>
       </section>
 
-      <section>
+      <section xml:id="section.fm-slbox">
         <title>SL Box</title>
 
         <para>The <literal>SL</literal> box operator is an abbreviation
@@ -582,7 +586,7 @@
       </section>
     </section>
 
-    <section>
+    <section xml:id="section.fm-fonts">
       <title>Fonts</title>
 
       <para>The font operators determine the font to be used for the text in
@@ -591,26 +595,31 @@
       <literal>VAR</literal>, <literal>NUM</literal>, <literal>MATH</literal>,
       <literal>ESC</literal>, <literal>COMM</literal>, and
       <literal>STRING</literal> define fonts for some common cases as found in
-      programming languages. These operators are summarized in the Table <link
-      linkend="Table-FontOperators">Font Operators</link>. Font parameters are
-      listed in Table<link linkend="Table-FontParameters"> Parameters of Font
-      Operator F</link>.</para>
+      programming languages. These operators are summarized in <xref
+      linkend="table.fm-FontOperators" />. Font parameters are listed in <xref
+      linkend="table.fm-FontParameters" />.</para>
 
-      <table xml:id="Table-FontOperators">
+      <table xml:id="table.fm-FontOperators">
         <title>Font Operators</title>
 
         <tgroup cols="3">
-          <colspec align="center" />
+          <colspec align="center" colname="col1" colnum="1" colwidth="1*" />
+
+          <colspec align="center" colname="col2" colnum="2" colwidth="1*" />
+
+          <colspec align="left" colname="col3" colnum="3" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry>Font Operator</entry>
+
+              <entry>Font Parameters</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
 
           <tbody>
-            <row>
-              <entry><emphasis role="bold">Font Operators</emphasis></entry>
-
-              <entry><emphasis role="bold">Font Parameters</emphasis></entry>
-
-              <entry><emphasis role="bold">Description</emphasis></entry>
-            </row>
-
             <row>
               <entry><literal>F</literal></entry>
 
@@ -680,19 +689,23 @@
         </tgroup>
       </table>
 
-      <table xml:id="Table-FontParameters">
+      <table xml:id="table.fm-FontParameters">
         <title>Parameters of Font Operator F</title>
 
         <tgroup cols="2">
-          <colspec align="center" />
+          <colspec align="center" colname="col1" colnum="1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Font Parameter</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
 
           <tbody>
-            <row>
-              <entry><emphasis role="bold">Font Parameter</emphasis></entry>
-
-              <entry><emphasis role="bold">Description</emphasis></entry>
-            </row>
-
             <row>
               <entry><literal>fn</literal></entry>
 
@@ -733,7 +746,7 @@
       </table>
     </section>
 
-    <section>
+    <section xml:id="section.fm-cross-references">
       <title>Cross references</title>
 
       <para></para>
@@ -742,7 +755,17 @@
         <title>Cross-reference Operators (LBL and REF)</title>
 
         <tgroup cols="2">
-          <colspec align="center" />
+          <colspec align="center" colname="col1" colnum="1" colwidth="1*" />
+
+          <colspec align="left" colname="col2" colnum="2" colwidth="3*" />
+
+          <thead>
+            <row>
+              <entry>Operator</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
 
           <tbody>
             <row>
@@ -762,22 +785,20 @@
     </section>
   </section>
 
-  <section xml:id="Pandora">
+  <section xml:id="section.fm-Pandora">
     <title>Pandora</title>
 
-    <para>Recall our general architecture from Figure<link
-    linkend="Fig_formatting-architecture"> Formatting Architecture</link>. To
-    better understand the formatting process, consider the more detailed
-    architecture in Figure <link
-    linkend="Fig_Pandora-formatting-architecture">Pandora Formatting
-    Architecture</link>.</para>
+    <para>Recall our general architecture from <xref
+    linkend="figure.fm-formatting-architecture" />. To better understand the
+    formatting process, consider the more detailed architecture in <xref
+    linkend="figure.fm-Pandora-formatting-architecture" />.</para>
 
-    <figure xml:id="Fig_Pandora-formatting-architecture">
+    <figure xml:id="figure.fm-Pandora-formatting-architecture">
       <title>Pandora Formatting Architecture</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="pandora-architecture.png"></imagedata>
+          <imagedata fileref="pandora-architecture.png" scale="90"></imagedata>
         </imageobject>
       </mediaobject>
     </figure>
@@ -787,16 +808,17 @@
 
     <itemizedlist>
       <listitem>
-        <para>First, user-defined formatting rules are applied to the parse
-        tree. The result is a hybrid box/parse tree that contains box operator
-        wherever user-defined formatting rules have been applied and parse
-        tree operators everywhere else. The transitions between the two are
-        marked with the guards <literal>from-box </literal>(embedding of a box
-        tree in a parse tree) and <literal>to-box</literal> (embedding of a
-        parse tree in a box tree). An example of such a hybrid tree is shown
-        in Figure <link linkend="Fig_hybrid-tree">A Hybrid Box/Parse
-        Tree</link>. The parse tree of a Cobol program contains a box tree
-        that in its turn contains a Cobol parse tree.</para>
+        <para>First, user-defined formatting rules are
+        applied to the parse tree. The result is a hybrid box/parse tree that
+        contains box operator wherever user-defined formatting rules have been
+        applied and parse tree operators everywhere else. The transitions
+        between the two are marked with the guards <literal>from-box
+        </literal>(embedding of a box tree in a parse tree) and
+        <literal>to-box</literal> (embedding of a parse tree in a box tree).
+        An example of such a hybrid tree is shown in <xref
+        linkend="figure.fm-hybrid-tree" />. The parse tree of a Cobol program
+        contains a box tree that in its turn contains a Cobol parse
+        tree.</para>
       </listitem>
 
       <listitem>
@@ -805,7 +827,7 @@
       </listitem>
     </itemizedlist>
 
-    <figure xml:id="Fig_hybrid-tree">
+    <figure xml:id="figure.fm-hybrid-tree">
       <title>A Hybrid Box/Parse Tree</title>
 
       <mediaobject>
@@ -819,78 +841,27 @@
     that greatly enhances flexibility and generality of formatting.</para>
   </section>
 
-  <section xml:id="fm_Examples">
+  <section xml:id="section.fm-Examples">
     <title>Examples</title>
 
     <remark>To be written</remark>
   </section>
 
-  <section xml:id="fm_HistoricalNotes">
+  <section xml:id="section.fm-HistoricalNotes">
     <title>Historical Notes</title>
 
     <para>The main publications on the Box language and its predecessors are
-    (in historical order):</para>
+    (in historical order) <xref linkend="Coutaz84" />, <xref
+    linkend="MorcosConchon86" />,<xref linkend="Vos90" />, <xref
+    linkend="BrandVisser96" />, <xref linkend="DeJonge00" />, and <xref
+    linkend="DeJonge02" />.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>J. Coutaz, The box, a layout abstraction for user interface
-        toolkits, Technical report CMU-CS-84-167, Carnegie Mellon University,
-        1984.</para>
-      </listitem>
-
-      <listitem>
-        <para>E. Morcos-Chounet and A. Conchon, PPML: a general formalism to
-        specify prettyprinting. In H.-J Kugler, editor, <emphasis>Information
-        Processing 86</emphasis>, 583-590, Elsevier, 1986.</para>
-      </listitem>
-
-      <listitem>
-        <para>K. Vos, Pretty for an easy touch of beauty, Master's thesis,
-        University of Amsterdam, 1990.</para>
-      </listitem>
-
-      <listitem>
-        <para>M.G.J. van den Brand and E. Visser, Generation of formatters for
-        context-free languages, <emphasis>ACM Transactions on Software
-        Engineering Methodology</emphasis>, 5 (1): 1-41, 1996.</para>
-      </listitem>
-
-      <listitem>
-        <para>M. de Jonge, A pretty-printer for every occasion, in I.
-        Ferguson, J, Gray and L. Scott, editors, <emphasis>Proceedings of the
-        2nd International Symposium on Constructing Software Engineering
-        Tools</emphasis> (CoSET2000), 68-77, University of Wollongong,
-        Australia, June 2000.</para>
-      </listitem>
-
-      <listitem>
-        <para>M. de Jonge, Pretty-printing for software engineering. In
-        <emphasis>Proceedings International Conference on Software
-        Maintenance</emphasis> (ICSM 2002), 550-559, IEEE, October
-        2002.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>The main publications on Pandora are:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>M.G.J. van den Brand, A.T. Kooiker, J.J. Vinju and N.P. Veerman,
-        An architecture for context-sensitive formatting,
-        <emphasis>International Conference on Software Maintenance</emphasis>
-        (ICSM 2005), 631-634, 2005.</para>
-      </listitem>
-
-      <listitem>
-        <para>M.G.J. van den Brand, A.T. Kooiker, J.J. Vinju and N.P. Veerman,
-        A language independent framework for context-sensitive formatting,
-        <emphasis>Proceedings Conference on Software Maintenance and
-        Reengineering</emphasis> (CSMR06), 103-112, 2006.</para>
-      </listitem>
-    </itemizedlist>
+    <para>The main publications on Pandora are <xref
+    linkend="BrandKooikerEtAl05" /> and <xref
+    linkend="BrandKooikerEtAl06" />.</para>
   </section>
 
-  <section xml:id="fm_ToDo">
+  <section xml:id="section.fm-todo">
     <title>To Do</title>
 
     <itemizedlist>
@@ -903,4 +874,26 @@
       </listitem>
     </itemizedlist>
   </section>
-</article>
+
+  <section>
+    <title>Bibliography</title>
+
+    <para><bibliolist>
+        <bibliomixed xml:id="Coutaz84"></bibliomixed>
+
+        <bibliomixed xml:id="MorcosConchon86"></bibliomixed>
+
+        <bibliomixed xml:id="Vos90"></bibliomixed>
+
+        <bibliomixed xml:id="BrandVisser96"></bibliomixed>
+
+        <bibliomixed xml:id="DeJonge00"></bibliomixed>
+
+        <bibliomixed xml:id="DeJonge02"></bibliomixed>
+
+        <bibliomixed xml:id="BrandKooikerEtAl05"></bibliomixed>
+
+        <bibliomixed xml:id="BrandKooikerEtAl06"></bibliomixed>
+      </bibliolist></para>
+  </section>
+</chapter>

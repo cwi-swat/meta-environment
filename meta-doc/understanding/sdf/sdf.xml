@@ -3,13 +3,14 @@
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 ]>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns:ns="http://docbook.org/ns/docbook"
+         xml:id="sdf">
   <info>
     <title>The Syntax Definition Formalism SDF</title>
 
@@ -933,7 +934,7 @@ is replaced by
 {Stat ";"}+</programlisting>
     </section>
 
-    <section xml:id="section.tuples">
+    <section xml:id="section.sdf-tuples">
       <title>Tuple symbols</title>
 
       <para>The tuple operator describes the grouping of a sequence of symbols
@@ -3297,4 +3298,4 @@ exports
       </listitem>
     </itemizedlist>
   </section>
-</article>
+</chapter>

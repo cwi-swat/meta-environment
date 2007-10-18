@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="recommended-reading">
 <info>
    <title>Recommended titles on programming and software engineering</title>
   
@@ -60,4 +60,4 @@
       </listitem>
     </itemizedlist>
   </section>
-</article>
+</chapter>

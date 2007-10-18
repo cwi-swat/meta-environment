@@ -6,7 +6,7 @@
 <!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
 %dbcent;
 ]>
-<article version="5.0"
+<chapter version="5.0"
          xlink:href="http://homepages.cwi.nl/~daybuild/daily-books/extending-meta-environment/index.html"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -14,7 +14,8 @@
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook">
+         xmlns:db="http://docbook.org/ns/docbook"
+         xml-id="extending-meta-environment">
   <title>The Extension Points of The Meta-Environment</title>
 
   <info>
@@ -1891,4 +1892,4 @@ __TOOLBUS__/bin/toolbus \
     manual and ToolBus usage information for more information on ToolBus
     command line parameters.</para>
   </section>
-</article>
+</chapter>

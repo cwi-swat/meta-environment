@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns:ns="http://docbook.org/ns/docbook"
+	xml:id="communication-plan">
   <info>
     <title>Communication Plan for The Meta-Environment</title>
 <pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
@@ -739,4 +740,4 @@
     <para>We will also monitor values of the indicators listed in the section
     <link linkend="goals">Goals</link>.</para>
   </section>
-</article>
+</chapter>

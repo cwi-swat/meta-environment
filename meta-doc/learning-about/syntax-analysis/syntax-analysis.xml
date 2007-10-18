@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
-<!ENTITY % sgml.features "IGNORE">
-<!ENTITY % xml.features "INCLUDE">
-<!ENTITY euro "&#8364;">
-<!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
-%dbcent;
-]>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="syntax-analysis"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:svg="http://www.w3.org/2000/svg"
@@ -24,7 +18,7 @@
     </author>
   </info>
 
-  <section xml:id="section.motivation">
+  <section xml:id="section.sa-motivation">
     <title>Motivation</title>
 
     <para><emphasis>Syntax analysis</emphasis> or <emphasis>parsing</emphasis>
@@ -38,21 +32,20 @@
     transformation.</para>
   </section>
 
-  <section xml:id="section.introduction">
+  <section xml:id="section.sa-introduction">
     <title>Introduction</title>
 
     <para>Consider the following text fragment from a program (this example is
-    taken from A.V. Aho, R. Sethi and J.D. Ullman, Compiler: Principles,
-    Techniques and Tools, Addison-Wesley, 1986):</para>
+    taken from <xref linkend="AhoSethiUllman86" />):</para>
 
     <programlisting>position := initial + rate * 60</programlisting>
 
     <para>How can we determine that this is a correct assignment statement?
     First of all, this is a sequence of individual characters
     <literal>p</literal>, <literal>o</literal> , <literal>s</literal>, and so
-    on. This is shown in <xref linkend="figure.example-text" />.</para>
+    on. This is shown in <xref linkend="figure.sa-example-text" />.</para>
 
-    <figure xml:id="figure.example-text">
+    <figure xml:id="figure.sa-example-text">
       <title>Text of example</title>
 
       <mediaobject>
@@ -97,11 +90,11 @@
     <para>This process of grouping individual characters is called
     <emphasis>lexical analysis</emphasis> or <emphasis>lexical
     scanning</emphasis>, the result is shown in <xref
-    linkend="figure.example-lex" />. Observe that the spaces have disappeared
-    and are left unclassified (we will come back to this in <xref
-    linkend="section.lexical-versus-context-free-grammar" />).</para>
+    linkend="figure.sa-example-lex" />. Observe that the spaces have
+    disappeared and are left unclassified (we will come back to this in <xref
+    linkend="section.sa-lexical-versus-context-free-grammar" />).</para>
 
-    <figure xml:id="figure.example-lex">
+    <figure xml:id="figure.sa-example-lex">
       <title>Lexical analysis of example</title>
 
       <mediaobject>
@@ -114,12 +107,13 @@
     <para>Next, we want to determine that this is a structurally correct
     statement. This is the main province of syntax analysis or parsing as it
     is usually called. The result of parsing is a <emphasis>parse
-    tree</emphasis> as shown in <xref linkend="figure.example-parsetree" />.
-    This parse tree reflects the usual meaning of arithmetic operators: since
-    multiplication is done before addition, the sub phrase <literal>rate *
-    60</literal> is grouped together as a logical unit.</para>
+    tree</emphasis> as shown in <xref
+    linkend="figure.sa-example-parsetree" />. This parse tree reflects the
+    usual meaning of arithmetic operators: since multiplication is done before
+    addition, the sub phrase <literal>rate * 60</literal> is grouped together
+    as a logical unit.</para>
 
-    <figure xml:id="figure.example-parsetree">
+    <figure xml:id="figure.sa-example-parsetree">
       <title>Parse tree of example</title>
 
       <mediaobject>
@@ -150,15 +144,11 @@
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Expression</emphasis><subscript>1</subscript>
-            <literal>+</literal>
-            <emphasis>Expression</emphasis><subscript>2</subscript></para>
+            <para><emphasis>Expression</emphasis><subscript>1</subscript><literal>+</literal><emphasis>Expression</emphasis><subscript>2</subscript></para>
           </listitem>
 
           <listitem>
-            <para><emphasis>Expression</emphasis><subscript>1</subscript>
-            <literal>*</literal>
-            <emphasis>Expression</emphasis><subscript>2</subscript></para>
+            <para><emphasis>Expression</emphasis><subscript>1</subscript><literal>*</literal><emphasis>Expression</emphasis><subscript>2</subscript></para>
           </listitem>
 
           <listitem>
@@ -199,17 +189,15 @@
 
         <itemizedlist>
           <listitem>
-            <para><literal>while (</literal>
-            <emphasis>Expression</emphasis><subscript>1</subscript> <literal>)
-            do</literal>
-            <emphasis>Statement</emphasis><subscript>2</subscript></para>
+            <para><literal>while
+            (</literal><emphasis>Expression</emphasis><subscript>1</subscript><literal>)
+            do</literal><emphasis>Statement</emphasis><subscript>2</subscript></para>
           </listitem>
 
           <listitem>
-            <para><literal>if (</literal>
-            <emphasis>Expression</emphasis><subscript>1</subscript> <literal>)
-            then</literal>
-            <emphasis>Statement</emphasis><subscript>2</subscript></para>
+            <para><literal>if
+            (</literal><emphasis>Expression</emphasis><subscript>1</subscript><literal>)
+            then</literal><emphasis>Statement</emphasis><subscript>2</subscript></para>
           </listitem>
         </itemizedlist>
 
@@ -222,7 +210,7 @@
     grammar</emphasis> or <emphasis>grammar</emphasis> for short.</para>
   </section>
 
-  <section xml:id="section.basic_concepts">
+  <section xml:id="section.sa-basic_concepts">
     <title>Basic concepts</title>
 
     <para>We will now discuss the basic concepts that are vital for
@@ -231,7 +219,7 @@
     Formalism used in The Meta-Environment (see, <link
     xlink:href="???">http://www.meta-environment.org</link>)</para>
 
-    <section xml:id="section.lexical-grammar">
+    <section xml:id="section.sa-lexical-grammar">
       <title>Lexical grammar</title>
 
       <para>At the lowest level, the lexical notions of a language like
@@ -274,7 +262,7 @@
       parentheses.</para>
     </section>
 
-    <section xml:id="section.context-free-grammar">
+    <section xml:id="section.sa-context-free-grammar">
       <title>Context-free grammar</title>
 
       <para>It is time to move on to the definition of the structure of our
@@ -304,7 +292,7 @@ Expression "*" Expression -&gt; Expression
 "if" "(" Expression ")" Statement          -&gt; Statement</programlisting>
     </section>
 
-    <section xml:id="section.lexical-versus-context-free-grammar">
+    <section xml:id="section.sa-lexical-versus-context-free-grammar">
       <title>Lexical versus context-free grammar</title>
 
       <para>Traditionally, a strict distinction is being made between lexical
@@ -316,7 +304,7 @@ Expression "*" Expression -&gt; Expression
       <emphasis>scannerless parsing</emphasis>.</para>
     </section>
 
-    <section xml:id="section.ambiguous-grammars-and-disambiguation">
+    <section xml:id="section.sa-ambiguous-grammars-and-disambiguation">
       <title>Ambiguous grammars and disambiguation</title>
 
       <para>The careful reader will observe that we have skipped over an
@@ -348,20 +336,20 @@ Expression "*" Expression -&gt; Expression
       and rejection of certain parses.</para>
     </section>
 
-    <section xml:id="section.recongnizing-versus-parsing">
+    <section xml:id="section.sa-recongnizing-versus-parsing">
       <title>Recognizing versus parsing</title>
 
       <para>In its simplest form, syntax analysis amounts to recognizing that
       a source text adheres to the rules of a given grammar. This is shown in
-      <xref linkend="figure.recognizer" />. Given a grammar, it takes a source
-      text as input and generates <emphasis>Yes</emphasis> or
+      <xref linkend="figure.sa-recognizer" />. Given a grammar, it takes a
+      source text as input and generates <emphasis>Yes</emphasis> or
       <emphasis>No</emphasis> as answer. <emphasis>Yes</emphasis>, when the
       source text can be parsed according to the grammar, and
       <emphasis>No</emphasis>, when this is not the case. In practice, a
       recognizer becomes infinitely more useful if it also generates error
       messages that explain the negative outcome.</para>
 
-      <figure xml:id="figure.recognizer">
+      <figure xml:id="figure.sa-recognizer">
         <title>A recognizer</title>
 
         <mediaobject>
@@ -373,12 +361,12 @@ Expression "*" Expression -&gt; Expression
         <para>Pure recognizers are seldomly used, since the parse tree
         corresponding to the source text is needed for nearly all further
         processing such as checking or compiling. The more standard situation
-        is shown in <xref linkend="figure.parser" />. Given a grammar, a
+        is shown in <xref linkend="figure.sa-parser" />. Given a grammar, a
         parser takes a source text as input and generates as answer either a
         parse tree or a list of error messages.</para>
       </figure>
 
-      <figure xml:id="figure.parser">
+      <figure xml:id="figure.sa-parser">
         <title>A parser</title>
 
         <mediaobject>
@@ -389,25 +377,26 @@ Expression "*" Expression -&gt; Expression
       </figure>
     </section>
 
-    <section xml:id="section.parsing-methods">
+    <section xml:id="section.sa-parsing-methods">
       <title>Parsing methods</title>
 
       <para>Syntax analysis is one of the very mature areas of language theory
       and many methods have been proposed to implement parsers. Giving even a
       brief overview of these techniques is beyond the scope of this paper,
-      but see the references in <xref linkend="section.further-reading" />. In
-      the Meta-Environment we use a parsing method called Scannerless
+      but see the references in <xref linkend="section.sa-further-reading" />.
+      In the Meta-Environment we use a parsing method called Scannerless
       Generalized Left-to-Right parsing or SGLR for short. The least we can
       do, is explain what this method is about.</para>
 
       <para>We have already encountered the notion of
       <emphasis>scannerless</emphasis> parsing in <xref
-      linkend="section.introduction" />. It amounts to eliminating the classic
-      distinction between the scanner (that groups characters into lexical
-      tokens) and the parser (that determines the global structure). The
-      advantage of this approach is that more interplay between the character
-      level and the structure level is possible. This is particularly true in
-      combination with the "generalized" property of SGLR.</para>
+      linkend="section.sa-introduction" />. It amounts to eliminating the
+      classic distinction between the scanner (that groups characters into
+      lexical tokens) and the parser (that determines the global structure).
+      The advantage of this approach is that more interplay between the
+      character level and the structure level is possible. This is
+      particularly true in combination with the "generalized" property of
+      SGLR.</para>
 
       <para>The most intuitive way of parsing is predicting what you expect to
       see in the source text and checking that the prediction is right.
@@ -439,8 +428,8 @@ Expression "*" Expression -&gt; Expression
       combine recognized parts. In doing so, it becomes possible that not one
       but <emphasis>several</emphasis> parse trees are the result of parsing.
       The bonus is that all context-free languages can be parsed by the SGLR
-      parsing algorithm. <xref linkend="figure.sglr" /> summarizes the use of
-      an SGLR parser. Using SGLR has three key advantages:</para>
+      parsing algorithm. <xref linkend="figure.sa-sglr" /> summarizes the use
+      of an SGLR parser. Using SGLR has three key advantages:</para>
 
       <itemizedlist>
         <listitem>
@@ -461,7 +450,7 @@ Expression "*" Expression -&gt; Expression
         </listitem>
       </itemizedlist>
 
-      <figure xml:id="figure.sglr">
+      <figure xml:id="figure.sa-sglr">
         <title>An SGLR parser</title>
 
         <mediaobject>
@@ -474,14 +463,15 @@ Expression "*" Expression -&gt; Expression
   </section>
 
   <section>
-    <title xml:id="section.extensions-of-grammars-syntax-analysis">Extensions
-    of grammars and syntax analysis</title>
+    <title
+    xml:id="section.sa-extensions-of-grammars-syntax-analysis">Extensions of
+    grammars and syntax analysis</title>
 
     <para>There are many extensions to the grammar descriptions we have seen
     so far. We single out lists, disambiguation methods and modular grammar
     for further clarification.</para>
 
-    <section xml:id="section.lists">
+    <section xml:id="section.sa-lists">
       <title>Lists</title>
 
       <para>Repeated items are pervasive in programming language grammars:
@@ -508,7 +498,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
       equations becomes more easy.</para>
     </section>
 
-    <section xml:id="section.disambiguation-methods">
+    <section xml:id="section.sa-disambiguation-methods">
       <title>Disambiguation methods</title>
 
       <para>Many mechanisms exist to disambiguate a given grammar. We mention
@@ -558,26 +548,27 @@ Statement ";" Statements -&gt; Statements</programlisting>
       </itemizedlist>
     </section>
 
-    <section xml:id="section.modular-grammars">
+    <section xml:id="section.sa-modular-grammars">
       <title>Modular grammars</title>
 
-      <para>As we have seen in <xref linkend="section.parsing-methods" />,
+      <para>As we have seen in <xref linkend="section.sa-parsing-methods" />,
       using an SGLR parser enables the creation of modular grammars. This is
       more exciting than it sounds. Consider, a huge language like Cobol (yes
       it is still widely used!). In addition to the Cobol language itself
       there are many extensions that are embedded in Cobol programs: CICS
       supervisor calls, SQL queries, and the like. Each of these grammars
       works well if we use them with a conventional parser (see <xref
-      linkend="figure.modular-parser1" />). However, if we attempt to combine
-      the three grammars in ordere\ to be able to parse Cobol programs with
-      embedded CICS and SQL, then disaster strikes. Most conventional parsers
-      will complain about the interference between the three grammars and just
-      refuse to work (see <xref linkend="figure.modular-parser2" />). For the
-      technically inclined: shift-reduce conflict galore! However, if we try
-      the same with an SGLR parser things go smoothly (see <xref
-      linkend="figure.modular-parser3" />).</para>
+      linkend="figure.sa-modular-parser1" />). However, if we attempt to
+      combine the three grammars in ordere\ to be able to parse Cobol programs
+      with embedded CICS and SQL, then disaster strikes. Most conventional
+      parsers will complain about the interference between the three grammars
+      and just refuse to work (see <xref
+      linkend="figure.sa-modular-parser2" />). For the technically inclined:
+      shift-reduce conflict galore! However, if we try the same with an SGLR
+      parser things go smoothly (see <xref
+      linkend="figure.sa-modular-parser3" />).</para>
 
-      <figure xml:id="figure.modular-parser1">
+      <figure xml:id="figure.sa-modular-parser1">
         <title>Conventional parser works well with independent
         grammars</title>
 
@@ -588,7 +579,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
         </mediaobject>
       </figure>
 
-      <figure xml:id="figure.modular-parser2">
+      <figure xml:id="figure.sa-modular-parser2">
         <title>Conventional parser does not work with combined
         grammars</title>
 
@@ -599,7 +590,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
         </mediaobject>
       </figure>
 
-      <figure xml:id="figure.modular-parser3">
+      <figure xml:id="figure.sa-modular-parser3">
         <title>SGLR works well with combined grammars</title>
 
         <mediaobject>
@@ -611,7 +602,7 @@ Statement ";" Statements -&gt; Statements</programlisting>
     </section>
   </section>
 
-  <section xml:id="section.role-of-syntax-analysis-in-The-Meta-Environment">
+  <section xml:id="section.sa-role-of-syntax-analysis-in-The-Meta-Environment">
     <title>The role of syntax analysis in The Meta-Environment</title>
 
     <para>Syntax analysis plays a prominent role in The
@@ -622,9 +613,10 @@ Statement ";" Statements -&gt; Statements</programlisting>
         <para><emphasis>To parse source text</emphasis>. Given a grammar for
         some language (say Java) and a program in that language (a Java
         program) we can parse the program and obtain its parse tree. This is
-        an example of the approach sketched in <xref linkend="figure.sglr" />.
-        This parse tree can then be further processed by applying rewrite
-        rules (equations) defined in an ASF+SDF specification.</para>
+        an example of the approach sketched in <xref
+        linkend="figure.sa-sglr" />. This parse tree can then be further
+        processed by applying rewrite rules (equations) defined in an ASF+SDF
+        specification.</para>
       </listitem>
 
       <listitem>
@@ -636,29 +628,25 @@ Statement ";" Statements -&gt; Statements</programlisting>
     </itemizedlist>
   </section>
 
-  <section xml:id="section.further-reading">
+  <section xml:id="section.sa-further-reading">
     <title>Further reading</title>
 
     <itemizedlist>
       <listitem>
-        <para>The classical work on grammars in natural languages is N.
-        Chomsky, Three models for the description of language, <emphasis>IRE
-        Transactions on Information Theory</emphasis>, <emphasis
-        role="bold">IT-2:3</emphasis>, 113-124, 1956.</para>
+        <para>The classical work on grammars in natural languages is <xref
+        linkend="Chomsky56" />.</para>
       </listitem>
 
       <listitem>
         <para>Another monumental work on grammars in computer science is the
-        first volume of the two volume series: A.V. Aho &amp; J.D Ullman,
-        <emphasis>The Theory of Parsing, Translation and Compiling, Volume I:
-        Parsing</emphasis>, Prentice-Hall, 1972.</para>
+        first volume of the two volume series <xref
+        linkend="AhoUllman72" /></para>
       </listitem>
 
       <listitem>
-        <para>A more recent overview of parsing techniques is given in D.
-        Grune &amp; C.J.H. Jacobs, <emphasis>Parsing Techniques -- A Practical
-        Guide</emphasis>, Ellis Horwood, 1990. A second edition is in
-        preparation and will be published by Springer begin 2007.</para>
+        <para>A more recent overview of parsing techniques is given in <xref
+        linkend="GruneJacobs90" />. A second edition is in preparation and
+        will be published by Springer begin 2007.</para>
       </listitem>
 
       <listitem>
@@ -668,4 +656,24 @@ Statement ";" Statements -&gt; Statements</programlisting>
       </listitem>
     </itemizedlist>
   </section>
-</article>
+
+  <section>
+    <title>Bibliography</title>
+
+    <bibliolist>
+      <!--Here follows a list of alle bibliography entries that are referenced in this chapter. This is needed to pull in 
+the real entries from the central bibliography and to silence the validity checker. Each entry is empty except for its
+xml:id (that is identical to the xml:id of the desired entry).-->
+
+      <title></title>
+
+      <bibliomixed xml:id="AhoUllman72"></bibliomixed>
+
+      <bibliomixed xml:id="AhoSethiUllman86"></bibliomixed>
+
+      <bibliomixed xml:id="GruneJacobs90"></bibliomixed>
+
+      <bibliomixed xml:id="Chomsky56"></bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

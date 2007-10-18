@@ -15,6 +15,19 @@
 <xsl:param name="shade.verbatim"          select="'1'" />
 <xsl:param name="paper.type"              select="'A4'" />
 <xsl:param name="insert.xref.page.number" select="'yes'" />
+<xsl:param name="header.column.widths"    select="'1 4 1'" />
+
+
+<!-- Chapter titles are printed as just the title -->
+
+<xsl:param name="local.l10n.xml" select="document('')"/>
+<l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+  <l:l10n language="en">
+    <l:context name="title">
+      <l:template name="chapter" text="%t"/>
+    </l:context>
+  </l:l10n>
+</l:i18n>  
 
 <xsl:template  match="sect1|sect2|sect3|sect4|sect5|section"  
                mode="insert.title.markup">

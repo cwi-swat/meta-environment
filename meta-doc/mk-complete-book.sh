@@ -1,4 +1,3 @@
-
 #! /bin/sh
 
 set -e
@@ -14,9 +13,8 @@ STYLESHEET="meta-doc-style.css"
 
 	(xsltproc  --xinclude \
                    --output book.fo \
-                   --stringparam icurrent.docid complete-book \
                    fo-customization.xsl \
                    complete-book.xml)
-        ${FOP} -fo book.fo -pdf book.pdf
+        ${FOP} -r -fo book.fo -pdf book.pdf
 
  

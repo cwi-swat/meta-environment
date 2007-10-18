@@ -12,7 +12,8 @@
       xmlns:svg="http://www.w3.org/2000/svg"
       xmlns:mml="http://www.w3.org/1998/Math/MathML"
       xmlns:html="http://www.w3.org/1999/xhtml"
-      xmlns:db="http://docbook.org/ns/docbook">
+      xmlns:db="http://docbook.org/ns/docbook"
+      xml:id="meta-book">
   <title>The Meta-Environment: a generic language workbench</title>
 
   <part>
@@ -21,12 +22,10 @@
     <xi:include href="learning-about/syntax-analysis/syntax-analysis.xml"></xi:include>
 
     <xi:include href="understanding/sdf/sdf.xml"></xi:include>
-
     <xi:include href="howto/sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
 
     <xi:include href="howto/sdf-errors/sdf-errors.xml"></xi:include>
  </part>
-
   <part>
     <title>Formatting</title>
 

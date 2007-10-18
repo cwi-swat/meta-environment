@@ -6,13 +6,14 @@
 <!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
 %dbcent;
 ]>
-<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook">
+         xmlns:db="http://docbook.org/ns/docbook"
+	xml:id="sdf-disambiguation">
   <title>SDF Disambiguation Medkit for Programming Languages</title>
 
   <info>
@@ -1784,12 +1785,4 @@ context-free restrictions
     </section>
   </section>
 
-  <section xml:id="changes">
-    <title>Changes</title>
-
-    <para>The following version management log entries were made for this
-    document:</para>
-
-    <literallayout><xi:include href="sdf-disambiguation.log" parse="text"></xi:include></literallayout>
-  </section>
-</article>
+</chapter>

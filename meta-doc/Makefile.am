@@ -33,9 +33,13 @@ complete-book:	Makefile ${ALL_XSL_FILES} ${ALL_XML_FILES}
 	${top_srcdir}/mk-complete-book.sh
 
 %.xsl:	%.xsl.src Makefile
-	sed "s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" < $< > $@
+	sed "s@__PREFIX__@`pwd`@g; \
+	     s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g;" \
+	     < $< > $@
 
 %.xml:	%.xml.src Makefile
-	sed "s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" < $< > $@
+	sed "s@__PREFIX__@`pwd`@g; \
+	     s@__DOCBOOKXSLPREFIX__@${DOCBOOK_XSL_PREFIX}@g" \
+	     < $< > $@
 
 
