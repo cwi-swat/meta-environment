@@ -9,7 +9,7 @@ context-free start-symbols Definitions
 
 exports
 
-sorts FeatureModule ConfigurationTask ImportSection Definitions Definition Keyword ModuleKeyword ImportsKeyword Modulename Binding
+sorts FeatureModule ConfigurationTask ImportSection Definitions Definition ModuleKeyword ImportsKeyword Modulename Binding
 
 context-free syntax	
 	IdCon -> Modulename

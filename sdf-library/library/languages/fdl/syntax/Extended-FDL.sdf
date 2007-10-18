@@ -8,28 +8,57 @@ context-free start-symbols
   FeatureDiagram FeatureName FeatureExpression AtomicFeature
 
 exports
-sorts Section Description Argument Sort ArgumentChar
+sorts Section Description Argument Sort ArgumentChar Keyword FeaturesKeyword
+      ConstraintsKeyword SpecializationKeyword ShortDescriptionKeyword
+      LongDescriptionKeyword TooltipKeyword ArgumentsKeyword PublicKeyword
 
 lexical syntax
-  [a-zA-Z0-9]                                -> ArgumentChar
+  [a-zA-Z0-9] -> ArgumentChar  
 
 context-free syntax
-  "list-of" "(" {FeatureExpression ","}+ ")" -> FeatureExpression {cons("list-of")} 
+  Section+ -> FeatureDiagram  
 
-  Section+                                   -> FeatureDiagram                      
-  "features" FeatureDefinition*              -> Section                             
-  "constraints" Constraint*                  -> Section                             
-  "specialization" FeatureDefinition*        -> Section  
+context-free syntax
+  "features"          -> FeaturesKeyword          
+  "constraints"       -> ConstraintsKeyword       
+  "specialization"    -> SpecializationKeyword    
+  "short-description" -> ShortDescriptionKeyword  
+  "long-description"  -> LongDescriptionKeyword   
+  "tooltip"           -> TooltipKeyword           
+  "arguments"         -> ArgumentsKeyword         
+  "public"            -> PublicKeyword            
 
-  FeatureName StrCon                         -> Description                         
-  AtomicFeature StrCon                       -> Description                         
-  "short-description" Description*           -> Section                             
-  "long-description" Description*            -> Section                             
-  "tooltip" Description*                     -> Section                             
-  
-  AtomicFeature ArgumentChar                 -> Argument
-  "arguments" Argument*                      -> Section
+context-free syntax
+  FeaturesKeyword         -> Keyword  
+  ConstraintsKeyword      -> Keyword  
+  SpecializationKeyword   -> Keyword  
+  ShortDescriptionKeyword -> Keyword  
+  LongDescriptionKeyword  -> Keyword  
+  TooltipKeyword          -> Keyword  
+  ArgumentsKeyword        -> Keyword  
+  PublicKeyword           -> Keyword  
 
-  FeatureName                                -> Sort
-  AtomicFeature                              -> Sort
-  "public" Sort*                             -> Section                           
+context-free syntax
+  Keyword -> Sort {reject} 
+  Keyword -> Argument {reject}
+
+context-free syntax
+  FeaturesKeyword FeatureDefinition*       -> Section  
+  ConstraintsKeyword Constraint*           -> Section  
+  SpecializationKeyword FeatureDefinition* -> Section  
+
+context-free syntax
+  FeatureName StrCon                   -> Description  
+  AtomicFeature StrCon                 -> Description  
+  ShortDescriptionKeyword Description* -> Section      
+  LongDescriptionKeyword Description*  -> Section      
+  TooltipKeyword Description*          -> Section      
+
+context-free syntax
+  AtomicFeature ArgumentChar -> Argument  
+  ArgumentsKeyword Argument* -> Section   
+
+context-free syntax
+  FeatureName         -> Sort     
+  AtomicFeature       -> Sort     
+  PublicKeyword Sort* -> Section  
