@@ -53,6 +53,15 @@
     </biblioset>
   </biblioentry>
 
+  <biblioentry role="book" id="BaaderNipkow98">
+    <abbrev id="BaaderNipkow98.abbrev">BN98</abbrev>
+  <authorgroup><author><authorname><firstname>F.</firstname><surname>Baader</surname></authorname></author><author><authorname><firstname>T.</firstname><surname>Nipkow</surname></authorname></author></authorgroup>
+    <title>Term Rewriting and All That</title>
+    <publisher><publishername>Cambridge University
+  Press</publishername></publisher>
+    <pubdate>1998</pubdate>
+  </biblioentry>
+
   <biblioentry role="inproceedings" id="BNL03">
     <abbrev id="BNL03.abbrev">BNL03</abbrev>
     <biblioset role="article">
@@ -262,6 +271,15 @@
   Software Engineering (ICSE 10),</conftitle></confgroup>
       <pubdate>April 1988</pubdate>
     </biblioset>
+  </biblioentry>
+
+  <biblioentry role="book" id="Terese03">
+    <abbrev id="Terese03.abbrev">Ter03</abbrev>
+  <author><authorname><firstname></firstname><surname>Terese</surname></authorname></author>
+    <title>Term Rewriting Systems</title>
+    <publisher><publishername>Cambridge University
+  Press</publishername></publisher>
+    <pubdate>2003</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="Tip95">
