@@ -8,27 +8,35 @@ imports basic/BoolCon
 
 hiddens
 context-free start-symbols
-  FeatureDiagram FeatureName FeatureExpression AtomicFeature
+  FeatureDiagram FeatureName FeatureExpression AtomicFeature 
 
 exports
-sorts ValueType ValueDeclaration Value
+sorts ValueType ValueDeclaration Value TypesKeyword
 
 context-free syntax
-  "types" ValueDeclaration*   -> Section                      
+  "types" -> TypesKeyword
 
-  AtomicFeature "(" Value ")" -> AtomicFeature    {non-assoc} 
-  NatCon                      -> Value                        
-  StrCon                      -> Value                        
-  Color                       -> Value                        
-  BoolCon                     -> Value                        
+context-free syntax
+  TypesKeyword -> Keyword
 
-  AtomicFeature ":" ValueType -> ValueDeclaration             
-  "integer"                   -> ValueType                    
-  "string"                    -> ValueType                    
-  "color"                     -> ValueType                    
-  "path"                      -> ValueType                    
-  "date"                      -> ValueType                    
-  "font"                      -> ValueType                    
-  "uri"                       -> ValueType                    
-  "event"                     -> ValueType                    
-  "boolean"                   -> ValueType                    
+context-free syntax
+  TypesKeyword ValueDeclaration* -> Section  
+
+context-free syntax
+  AtomicFeature "(" Value ")" -> AtomicFeature {non-assoc} 
+  NatCon                      -> Value                     
+  StrCon                      -> Value                     
+  Color                       -> Value                     
+  BoolCon                     -> Value                     
+
+context-free syntax
+  AtomicFeature ":" ValueType -> ValueDeclaration  
+  "integer"                   -> ValueType         
+  "string"                    -> ValueType         
+  "color"                     -> ValueType         
+  "path"                      -> ValueType         
+  "date"                      -> ValueType         
+  "font"                      -> ValueType         
+  "uri"                       -> ValueType         
+  "event"                     -> ValueType         
+  "boolean"                   -> ValueType         

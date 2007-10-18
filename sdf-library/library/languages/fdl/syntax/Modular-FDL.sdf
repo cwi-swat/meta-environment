@@ -1,58 +1,38 @@
 module languages/fdl/syntax/Modular-FDL
 
-imports
-	languages/fdl/syntax/Value-FDL
-	basic/IdentifierCon
+imports languages/fdl/syntax/Value-FDL
+        basic/IdentifierCon
 
 hiddens
-context-free start-symbols Definitions
+context-free start-symbols
+  Definitions
 
 exports
+sorts FeatureModule ConfigurationTask ImportSection Definitions Definition
+      ModuleKeyword ImportsKeyword Modulename Binding
 
-sorts FeatureModule ConfigurationTask ImportSection Definitions Definition ModuleKeyword ImportsKeyword Modulename Binding
+context-free syntax
+  IdCon -> Modulename  
 
-context-free syntax	
-	IdCon -> Modulename
-         Keyword -> Modulename {reject}
+context-free syntax
+  "module"  -> ModuleKeyword   
+  "imports" -> ImportsKeyword  
 
-         "module" -> ModuleKeyword
-         ModuleKeyword -> Keyword
-	ModuleKeyword Modulename ImportSection* FeatureDiagram -> FeatureModule
+context-free syntax
+  ModuleKeyword  -> Keyword  
+  ImportsKeyword -> Keyword  
 
-	FeatureModule -> Definition
-	Definition+ -> Definitions
+context-free syntax
+  Keyword -> Modulename {reject} 
 
-	ConfigurationTask -> Definition
+context-free syntax
+  ImportsKeyword Modulename+ -> ImportSection  
 
-	%% Extension means:
-	%% the feature definitions of the parent
-	%% are included in the current feature module
-	%% and can be overridden in the current module.
-	%% This means there can be definitions of the
-	%% same features that *restrict* the definition
-	%% of the parent definition. Example:
-	%% module A F: one-of(a, b, c) end
-	%% module B < A F: one-of(a, b) end
-	%% You cannot add "choices" to a parent.
-	"imports" -> ImportsKeyword
-	ImportsKeyword -> Keyword
-	ImportsKeyword Modulename+ -> ImportSection
+context-free syntax
+  ModuleKeyword Modulename ImportSection* FeatureDiagram -> FeatureModule  
+  FeatureModule                                          -> Definition     
+  Definition+                                            -> Definitions    
 
-	AtomicFeature "=" Value -> Binding
-	Modulename "[" Binding+ "]" -> Modulename
-
-	%% Require is combining the Required feature module
-	%% with the current one; it is concatenating namespaces.
-	%% I.e. name clashes between features can never occur.
-	%% It works similar to package dependencies. If two
-	%% modules A and B require C they both refer to the
-	%% same instance (e.g. no copying/multiple instances)	.
-	%% It is independent of inheritance and the contents
-	%% of a module: you cannot require a module to "fill
-	%% in" an undefined FeatureName. E.g. requiring 
-	%% transmission for the Transmission feature.
-
-	%% Modules don't require: tasks do.
-
-	"task" IdCon "is" IdCon* "end" -> ConfigurationTask
-	
+context-free syntax
+  AtomicFeature "=" Value     -> Binding     
+  Modulename "[" Binding+ "]" -> Modulename  
