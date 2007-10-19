@@ -3215,17 +3215,17 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="HeeringKlint86" /><emphasis> </emphasis>describes
+        <para><biblioref linkend="HeeringKlint86" /><emphasis> </emphasis>describes
         the initial motivation and design of SDF.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="HHKR89" />J is the first reference manual for
+        <para><biblioref linkend="HHKR89" />J is the first reference manual for
         SDF.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="Vis97-thesis" /> describes a redesign of SDF that
+        <para><biblioref linkend="Vis97-thesis" /> describes a redesign of SDF that
         adds modularization (modeled after the modularization constructs of
         ASF), unifies lexical and concrete syntax, and proposes a
         normalisation procedure.</para>
@@ -3237,18 +3237,18 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="HKR90" />J and <xref linkend="HKR92" /> describe
+        <para><biblioref linkend="HKR90" />J and <biblioref linkend="HKR92" /> describe
         our variant of Generalized LR parsing as well as the just-in-time
         generation of scanners and parsers.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="Rekers92" /> gives a detailed description of the
+        <para><biblioref linkend="Rekers92" /> gives a detailed description of the
         GLR algorithm.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="BSVE02" /> describes current disambiguation
+        <para><biblioref linkend="BSVE02" /> describes current disambiguation
         methods that are used in combination with scannerless parsing.</para>
       </listitem>
     </itemizedlist>
