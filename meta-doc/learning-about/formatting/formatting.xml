@@ -851,13 +851,13 @@
     <title>Historical Notes</title>
 
     <para>The main publications on the Box language and its predecessors are
-    (in historical order) <xref linkend="Coutaz84" />, <xref
-    linkend="MorcosConchon86" />, <xref linkend="Vos90" />, <xref
-    linkend="BrandVisser96" />, <xref linkend="DeJonge00" />, and <xref
+    (in historical order) <biblioref linkend="Coutaz84" />, <biblioref
+    linkend="MorcosConchon86" />, <biblioref linkend="Vos90" />, <biblioref
+    linkend="BrandVisser96" />, <biblioref linkend="DeJonge00" />, and <biblioref
     linkend="DeJonge02" />.</para>
 
-    <para>The main publications on Pandora are <xref
-    linkend="BrandKooikerEtAl05" /> and <xref
+    <para>The main publications on Pandora are <biblioref
+    linkend="BrandKooikerEtAl05" /> and <biblioref
     linkend="BrandKooikerEtAl06" />.</para>
   </section>
 
