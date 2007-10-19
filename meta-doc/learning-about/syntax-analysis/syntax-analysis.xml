@@ -36,7 +36,7 @@
     <title>Introduction</title>
 
     <para>Consider the following text fragment from a program (this example is
-    taken from <xref linkend="AhoSethiUllman86" />):</para>
+    taken from <biblioref linkend="AhoSethiUllman86" />):</para>
 
     <programlisting>position := initial + rate * 60</programlisting>
 
@@ -215,8 +215,8 @@
 
     <para>We will now discuss the basic concepts that are vital for
     understanding syntax analysis. While doing so, we will use examples
-    written in SDF(see <olink targetdoc="sdf"></olink>), the Syntax Definition
-    Formalism used in The Meta-Environment (see, <link
+    written in SDF (see <olink targetdoc="sdf"></olink>), the Syntax
+    Definition Formalism used in The Meta-Environment (see, <link
     xlink:href="???">http://www.meta-environment.org</link>)</para>
 
     <section xml:id="section.sa-lexical-grammar">
@@ -278,7 +278,8 @@ Expression "*" Expression -&gt; Expression
       Observe, that these rules contain literal texts (indicated by double
       quotes) and these are implicitly defined as lexical tokens of the
       language. If you are worried about the priorities of addition and
-      multiplication, see XXX below.</para>
+      multiplication, see <xref linkend="section.sa-disambiguation-methods" />
+      below.</para>
 
       <para>The final step is to define the structure of the assignment
       statement:</para>
@@ -633,20 +634,20 @@ Statement ";" Statements -&gt; Statements</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>The classical work on grammars in natural languages is <xref
-        linkend="Chomsky56" />.</para>
+        <para>The classical work on grammars in natural languages is
+        <biblioref linkend="Chomsky56" />.</para>
       </listitem>
 
       <listitem>
         <para>Another monumental work on grammars in computer science is the
-        first volume of the two volume series <xref
-        linkend="AhoUllman72" /></para>
+        first volume of the two volume series <biblioref
+        linkend="AhoUllman72" />. </para>
       </listitem>
 
       <listitem>
-        <para>A more recent overview of parsing techniques is given in <xref
-        linkend="GruneJacobs90" />. A second edition is in preparation and
-        will be published by Springer begin 2007.</para>
+        <para>A more recent overview of parsing techniques is given in
+        <biblioref linkend="GruneJacobs90" />. A second edition is in
+        preparation and will be published by Springer in 2007.</para>
       </listitem>
 
       <listitem>
