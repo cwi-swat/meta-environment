@@ -1,5 +1,11 @@
 $Id$
 
+Fri Oct 19 16:07:19 CEST 2007 <economop@cwi.nl>
+ * src/parser/parserStatistics.{c,h}: added limited reduction data and changed
+   some int types to prevent overflows.
+ * gss/gss.c: added counting of edge traversals and searches for limited
+   reductions.
+
 Thu Oct  4 18:24:13 CEST 2007 <economop@cwi.nl>
  * src/inputStringBuilder.c: set the buffer size to 10KB.
  * src/Makefile.am: added comments.

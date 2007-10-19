@@ -44,17 +44,19 @@ int SGLR_STATS_existingEdgesRejected = 0;
 int SGLR_STATS_rejectedReductionsDone = 0;
 int SGLR_STATS_nodesRejected = 0;
 
-int SGLR_STATS_gssEdgesTraversed = 0;
-int SGLR_STATS_gssEdgesSearched = 0;
-int SGLR_STATS_gssEdgesCreated = 0;
-int SGLR_STATS_gssNodesCreated = 0;
-int SGLR_STATS_gssNodesDeleted = 0;
+long long SGLR_STATS_gssLimitedEdgesTraversed = 0;
+long long SGLR_STATS_gssLimitedEdgesSearched = 0;
+long long SGLR_STATS_gssEdgesTraversed = 0;
+long long SGLR_STATS_gssEdgesSearched = 0;
+unsigned int SGLR_STATS_gssEdgesCreated = 0;
+unsigned int SGLR_STATS_gssNodesCreated = 0;
+unsigned int SGLR_STATS_gssNodesDeleted = 0;
 
-int SGLR_STATS_shiftsDone = 0;
-int SGLR_STATS_reductionsDone = 0;
-int SGLR_STATS_reductionsLADone = 0;
-int SGLR_STATS_limitedReductionsDone = 0;
-int SGLR_STATS_limitedLAReductionsDone = 0;
+unsigned int SGLR_STATS_shiftsDone = 0;
+unsigned int SGLR_STATS_reductionsDone = 0;
+unsigned int SGLR_STATS_reductionsLADone = 0;
+unsigned int SGLR_STATS_limitedReductionsDone = 0;
+unsigned int SGLR_STATS_limitedLAReductionsDone = 0;
 int SGLR_STATS_shiftsAddedToShiftQueue = 0;
 int SGLR_STATS_maxSizeOfShiftQueue = 0;
 
@@ -69,7 +71,7 @@ int SGLR_STATS_existingAmbiguityClustersFound = 0;
 int SGLR_STATS_maxClusterLength = 0; 
 int *SGLR_STATS_clusterHistogram = NULL;
 
-int SGLR_STATS_prodTreeNodesCreated = 0;
+unsigned int SGLR_STATS_prodTreeNodesCreated = 0;
 int SGLR_STATS_symbolTreeNodesCreated = 0;
 int SGLR_STATS_cyclicTreeNodesCreated = 0;
 int SGLR_STATS_cyclesDetected = 0;
@@ -93,7 +95,7 @@ int SGLR_STATS_treesPriorityFiltered = 0;
 int SGLR_STATS_treesRejectFiltered = 0;
 
 int SGLR_STATS_ambNodesInFilteredTree = 0;
-int SGLR_STATS_prodNodesInFilteredTree = 0;
+unsigned int SGLR_STATS_prodNodesInFilteredTree = 0;
 int SGLR_STATS_symbolNodesInFilteredTree = 0;
 int SGLR_STATS_cyclicNodesInFilteredTree = 0;
 
@@ -225,9 +227,14 @@ void SGLR_STATS_print(void) {
 
   fprintf(logFile, "int GSS-nodes-created = %d\n", SGLR_STATS_gssNodesCreated);
   fprintf(logFile, "int GSS-nodes-deleted = %d\n", SGLR_STATS_gssNodesDeleted);
-  fprintf(logFile, "int GSS-edges-created = %d\n", SGLR_STATS_gssEdgesCreated);
-  fprintf(logFile, "int GSS-edges-traversed = %d\n", SGLR_STATS_gssEdgesTraversed);
-  fprintf(logFile, "int GSS-edges-searched = %d\n\n", SGLR_STATS_gssEdgesSearched);
+  fprintf(logFile, "int GSS-edges-created = %d\n\n", SGLR_STATS_gssEdgesCreated);
+
+  fprintf(logFile, "int GSS-edges-traversed = %lld\n", SGLR_STATS_gssEdgesTraversed);
+  fprintf(logFile, "int GSS-edges-searched = %lld\n", SGLR_STATS_gssEdgesSearched);
+  fprintf(logFile, "int GSS-limited-edges-traversed = %lld\n", SGLR_STATS_gssLimitedEdgesTraversed);
+  fprintf(logFile, "int GSS-limited-edges-searched = %lld\n", SGLR_STATS_gssLimitedEdgesSearched);
+  fprintf(logFile, "int GSS-total-edges-traversed = %lld\n", (SGLR_STATS_gssLimitedEdgesTraversed+SGLR_STATS_gssEdgesTraversed));
+  fprintf(logFile, "int GSS-total-edges-searched = %lld\n\n", (SGLR_STATS_gssLimitedEdgesSearched+SGLR_STATS_gssEdgesSearched));
 
   fprintf(logFile, "int rejected-trees-created = %d\n", SGLR_STATS_rejectedTreesCreated);
   fprintf(logFile, "int rejected-GSS-nodes = %d\n", SGLR_STATS_nodesRejected);

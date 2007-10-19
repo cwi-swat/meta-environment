@@ -209,6 +209,7 @@ static ATbool findEdge(GSSNode source, int reductionLength, GSSEdge edge) {
     
     for (edges = GSSNode_getEdgeList(source); edges; edges = GSS_getEdgeListTail(edges)) {
       
+      SGLR_STATS_incrementCount(SGLR_STATS_gssLimitedEdgesSearched);
       searchEdge = GSS_getEdgeListHead(edges);
       
       if (edge == searchEdge || 
@@ -256,6 +257,7 @@ static ReductionPath findPaths(GSSNode source, int reductionLength, GSSEdge edge
 			edge, linkSeen || (edge == l1), newsons, 
 			numberOfLeavesInTree + GSSEdge_getNumberOfLeavesInTree(l1),
 			paths);
+      SGLR_STATS_incrementCount(SGLR_STATS_gssLimitedEdgesTraversed);
       edgeVisitsPerReduction++;
     }
   }

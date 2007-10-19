@@ -46,17 +46,19 @@ extern int SGLR_STATS_existingEdgesRejected;
 extern int SGLR_STATS_rejectedReductionsDone;
 extern int SGLR_STATS_nodesRejected;
 
-extern int SGLR_STATS_gssEdgesTraversed;
-extern int SGLR_STATS_gssEdgesSearched;
-extern int SGLR_STATS_gssEdgesCreated;
-extern int SGLR_STATS_gssNodesCreated;
-extern int SGLR_STATS_gssNodesDeleted;
+extern long long SGLR_STATS_gssLimitedEdgesTraversed;
+extern long long SGLR_STATS_gssLimitedEdgesSearched;
+extern long long SGLR_STATS_gssEdgesTraversed;
+extern long long SGLR_STATS_gssEdgesSearched;
+extern unsigned int SGLR_STATS_gssEdgesCreated;
+extern unsigned int SGLR_STATS_gssNodesCreated;
+extern unsigned int SGLR_STATS_gssNodesDeleted;
 
-extern int SGLR_STATS_shiftsDone;
-extern int SGLR_STATS_reductionsDone;
-extern int SGLR_STATS_reductionsLADone;
-extern int SGLR_STATS_limitedReductionsDone;
-extern int SGLR_STATS_limitedLAReductionsDone;
+extern unsigned int SGLR_STATS_shiftsDone;
+extern unsigned int SGLR_STATS_reductionsDone;
+extern unsigned int SGLR_STATS_reductionsLADone;
+extern unsigned int SGLR_STATS_limitedReductionsDone;
+extern unsigned int SGLR_STATS_limitedLAReductionsDone;
 extern int SGLR_STATS_shiftsAddedToShiftQueue;
 extern int SGLR_STATS_maxSizeOfShiftQueue;
 
@@ -70,7 +72,7 @@ extern int SGLR_STATS_existingAmbiguityClustersFound;
 extern int SGLR_STATS_maxClusterLength; 
 extern int *SGLR_STATS_clusterHistogram;
 
-extern int SGLR_STATS_prodTreeNodesCreated;
+extern unsigned int SGLR_STATS_prodTreeNodesCreated;
 extern int SGLR_STATS_symbolTreeNodesCreated;
 extern int SGLR_STATS_cyclicTreeNodesCreated;
 extern int SGLR_STATS_cyclesDetected;
@@ -96,7 +98,7 @@ extern int SGLR_STATS_ambTreeNodesCreatedDuringFiltering;
 extern int SGLR_STATS_cyclicTreeNodesCreatedDuringFiltering;
 
 extern int SGLR_STATS_ambNodesInFilteredTree;
-extern int SGLR_STATS_prodNodesInFilteredTree;
+extern unsigned int SGLR_STATS_prodNodesInFilteredTree;
 extern int SGLR_STATS_symbolNodesInFilteredTree;
 extern int SGLR_STATS_cyclicNodesInFilteredTree;
 
