@@ -91,7 +91,8 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="formatting-architecture.png"></imagedata>
+            <imagedata fileref="formatting-architecture.png" scale="90"
+                       width=""></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -798,7 +799,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="pandora-architecture.png" scale="90"></imagedata>
+          <imagedata fileref="pandora-architecture.png" scale="80"></imagedata>
         </imageobject>
       </mediaobject>
     </figure>
@@ -808,16 +809,15 @@
 
     <itemizedlist>
       <listitem>
-        <para>First, user-defined formatting rules are
-        applied to the parse tree. The result is a hybrid box/parse tree that
-        contains box operator wherever user-defined formatting rules have been
-        applied and parse tree operators everywhere else. The transitions
-        between the two are marked with the guards <literal>from-box
-        </literal>(embedding of a box tree in a parse tree) and
-        <literal>to-box</literal> (embedding of a parse tree in a box tree).
-        An example of such a hybrid tree is shown in <xref
-        linkend="figure.fm-hybrid-tree" />. The parse tree of a Cobol program
-        contains a box tree that in its turn contains a Cobol parse
+        <para>First, user-defined formatting rules are applied to the parse
+        tree. The result is a hybrid box/parse tree that contains box operator
+        wherever user-defined formatting rules have been applied and parse
+        tree operators everywhere else. The transitions between the two are
+        marked with the guards <literal>from-box </literal>(embedding of a box
+        tree in a parse tree) and <literal>to-box</literal> (embedding of a
+        parse tree in a box tree). An example of such a hybrid tree is shown
+        in <xref linkend="figure.fm-hybrid-tree" />. The parse tree of a Cobol
+        program contains a box tree that in its turn contains a Cobol parse
         tree.</para>
       </listitem>
 
@@ -852,7 +852,7 @@
 
     <para>The main publications on the Box language and its predecessors are
     (in historical order) <xref linkend="Coutaz84" />, <xref
-    linkend="MorcosConchon86" />,<xref linkend="Vos90" />, <xref
+    linkend="MorcosConchon86" />, <xref linkend="Vos90" />, <xref
     linkend="BrandVisser96" />, <xref linkend="DeJonge00" />, and <xref
     linkend="DeJonge02" />.</para>
 
