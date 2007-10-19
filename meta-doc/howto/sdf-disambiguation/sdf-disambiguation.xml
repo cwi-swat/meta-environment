@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 <!ENTITY euro "&#8364;">
 <!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
 %dbcent;
 ]>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="sdf-disambiguation"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook"
-	xml:id="sdf-disambiguation">
+         xmlns:db="http://docbook.org/ns/docbook">
   <title>SDF Disambiguation Medkit for Programming Languages</title>
 
   <info>
@@ -103,13 +103,13 @@
       trying to parse. If there is such a tree, the string is in the language;
       if not we have a parse error.</para>
 
-      <para>In many cases there is more than one derivation tree for the
-      same string. This is what we call ambiguity. This may happen for parts
-      of the string too: several sub-derivations for the same sub-string.
-      Since we use the derivation trees later for semantical analysis, it is
-      important to have only one derivation tree. The goal of SDF is to let
-      the language designer explicitly (declaratively) express which
-      derivation is the best.</para>
+      <para>In many cases there is more than one derivation tree for the same
+      string. This is what we call ambiguity. This may happen for parts of the
+      string too: several sub-derivations for the same sub-string. Since we
+      use the derivation trees later for semantical analysis, it is important
+      to have only one derivation tree. The goal of SDF is to let the language
+      designer explicitly (declaratively) express which derivation is the
+      best.</para>
 
       <para>Frequently, the choice of derivation trees has significant
       consequences for the semantical interpretation of a string. The most
@@ -332,7 +332,8 @@
     hand. If you are not using The Meta-Environment, you may use commandline
     tools to obtain a picture:</para>
 
-    <programlisting>$ sglr -p MyLanguage.tbl -i myInputString.txt -fe -fi | tree2graph -p -c | graph2dot | dot -Tps &gt; myPicture.ps</programlisting>
+    <programlisting>$ sglr -p MyLanguage.tbl -i myInputString.txt -fe -fi | \
+          tree2graph -p -c | graph2dot | dot -Tps &gt; myPicture.ps</programlisting>
 
     <para>Meta-Environment users may click on the ambiguous substring (which
     is highlighted in red), and select one of the view tree options from the
@@ -1070,7 +1071,7 @@ lexical restrictions
     </section>
 
     <section>
-      <title>Runnaway whitespace and comments</title>
+      <title>Runaway whitespace and comments</title>
 
       <para>As SDF is implemented using scannerless parsing, whitespace and
       comments are just as important as any other language construct. In SDF
@@ -1113,29 +1114,30 @@ context-free syntax
                          width="100%"></imagedata>
             </imageobject>
           </mediaobject>
+        </figure>
 
-          <para>These trees have typical <emphasis
-          role="bold">symptoms</emphasis>:</para>
+        <para>These trees have typical <emphasis
+        role="bold">symptoms</emphasis>:</para>
 
-          <itemizedlist>
-            <listitem>
-              <para>There is a nullable symbol (for example a star list) in
-              play,e which indeed recognizes the empty language</para>
-            </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>There is a nullable symbol (for example a star list) in
+            play,e which indeed recognizes the empty language</para>
+          </listitem>
 
-            <listitem>
-              <para>The two layout nodes surrounding the nullable non-terminal
-              take turns in accepting the layout.</para>
-            </listitem>
-          </itemizedlist>
+          <listitem>
+            <para>The two layout nodes surrounding the nullable non-terminal
+            take turns in accepting the layout.</para>
+          </listitem>
+        </itemizedlist>
 
-          <para>SDF introduces the "LAYOUT?" in between every two members in a
-          production that is part of a context-free syntax section. Optional
-          layout is everywhere. The most common solution to this ambiguity is
-          to define that all layout must be recognized with the first
-          "LAYOUT?" node possible:</para>
+        <para>SDF introduces the "LAYOUT?" in between every two members in a
+        production that is part of a context-free syntax section. Optional
+        layout is everywhere. The most common solution to this ambiguity is to
+        define that all layout must be recognized with the first "LAYOUT?"
+        node possible:</para>
 
-          <programlisting>module Layout
+        <programlisting>module Layout
 
 exports
 sorts P S
@@ -1153,17 +1155,15 @@ context-free syntax
   "[" S* "]" -&gt; P  
   "s"        -&gt; S</programlisting>
 
-          <para>Notice that the lexical restriction contains every character
-          defined by LAYOUT. Also notice that it is a context-free
-          restriction, not a lexical restriction. The reason is that the
-          LAYOUT? non-terminal is introduced between every non-terminal at the
-          context-free level.</para>
+        <para>Notice that the lexical restriction contains every character
+        defined by LAYOUT. Also notice that it is a context-free restriction,
+        not a lexical restriction. The reason is that the LAYOUT? non-terminal
+        is introduced between every non-terminal at the context-free
+        level.</para>
 
-          <para>The matter becomes slightly more complex with the introduction
-          of source code comments. In this case, you can define another
-          follow restriction:</para>
-
-          <programlisting>module Layout
+        <para>The matter becomes slightly more complex with the introduction
+        of source code comments. In this case, you can define another follow
+        restriction:<programlisting>module Layout
 
 exports
 sorts P S
@@ -1181,15 +1181,12 @@ context-free restrictions
 
 context-free syntax
   "[" S* "]" -&gt; P  
-  "s"        -&gt; S</programlisting>
-
-          <note>
+  "s"        -&gt; S</programlisting><note>
             <para>The newly introduced restriction is not always safe. If
             there are tokens in your grammar that start with a % sign you are
             in trouble. Be aware of these issues. It could mean that you need
             more lookahead in the follow restriction.</para>
-          </note>
-        </figure>
+          </note></para>
       </section>
     </section>
 
@@ -1781,8 +1778,8 @@ context-free restrictions
       addPosInfo tool to attribute each node in the tree with position
       information:</para>
 
-      <programlisting>$ sglr -p MyLanguage.tbl -i myInputString.txt -fe -fi | addPosInfo -p myInputString.txt -o myOutputTreeWithPosInfo.pt</programlisting>
+      <programlisting>$ sglr -p MyLanguage.tbl -i myInputString.txt -fe -fi | \
+       addPosInfo -p myInputString.txt -o myOutputTreeWithPosInfo.pt</programlisting>
     </section>
   </section>
-
 </chapter>
