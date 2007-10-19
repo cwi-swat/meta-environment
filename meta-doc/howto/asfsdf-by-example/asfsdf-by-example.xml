@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 <!ENTITY euro "&#8364;">
 <!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
 %dbcent;
 ]>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="asfsdf-by-example"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook"
-         xml:id="asfsdf-by-example">
+         xmlns:db="http://docbook.org/ns/docbook">
   <title>ASF+SDF by example</title>
+
   <info>
-<pubdate>$Rev: 20719$ by $Author: paulk$ at $2006-12-13 22:16:02 +0100
-    (Wed, 13 Dec 2006)$</pubdate>
-</info>
+    <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
+    13 Dec 2006)$</pubdate>
+  </info>
+
   <warning>
     <para>This document is work in progress. It is in transition from The
     Meta-environment V1.5 to V2.0.</para>
@@ -137,10 +139,11 @@ equations
     the <emphasis>Dutch National Flag</emphasis> problem presented <link
     linkend="CODE_flag">below</link>: given an arbitrary list of the colours
     red, white and blue, sort them in the order as they appear in the Dutch
-    National Flag. We want:<programlisting>{white blue red blue red white red} -&gt; {red red red white white blue blue}</programlisting>In
-    this specification, the list variables <literal>Cs1</literal> and
-    <literal>Cs2</literal> permit a succinct formulation of the search for
-    adjacent colours that are in the wrong order.</para>
+    National Flag. We want:<programlisting>{white blue red blue red white red} -&gt; 
+{red red red white white blue blue}</programlisting>In this specification, the
+    list variables <literal>Cs1</literal> and <literal>Cs2</literal> permit a
+    succinct formulation of the search for adjacent colours that are in the
+    wrong order.</para>
 
     <example xml:id="CODE_flag">
       <title>ASF+SDF specification for sorting</title>
@@ -181,80 +184,96 @@ equations
     and while-statement) and suppose we want to compile this language to the
     following stack machine code:</para>
 
-    <table border="1">
-      <caption>A simple stack language</caption>
+   <table xml:id="table.stack-machine">
 
-      <tr>
-        <td><literal>push</literal> <replaceable>N</replaceable></td>
+      <title>A simple stack language</title>
 
-        <td>Push the number <replaceable>N</replaceable></td>
-      </tr>
+      <tgroup cols="2" >
 
-      <tr>
-        <td><literal>rvalue</literal> <replaceable>Loc</replaceable></td>
+	<colspec align="left" colname="col1" colnum="1" colwidth="1*" />
 
-        <td>Push the contents of data location
-        <replaceable>Loc</replaceable></td>
-      </tr>
+          <colspec align="left" colname="col2" colnum="2" colwidth="2*" />
 
-      <tr>
-        <td><literal>lvalue</literal> <replaceable>Loc</replaceable></td>
+      <thead>
+	<row>
+          <entry>Operator></entry>
+	<entry>Description</entry>
+	</row>
+      </thead>
+	<tbody>
+      <row>
+        <entry><literal>push</literal> <replaceable>N</replaceable></entry>
 
-        <td>Push the address of data location
-        <replaceable>Loc</replaceable></td>
-      </tr>
+        <entry>Push the number <replaceable>N</replaceable></entry>
+      </row>
 
-      <tr>
-        <td><literal>pop</literal></td>
+      <row>
+        <entry><literal>rvalue</literal> <replaceable>Loc</replaceable></entry>
 
-        <td>Remove the top of the stack</td>
-      </tr>
+        <entry>Push the contents of data location
+        <replaceable>Loc</replaceable></entry>
+      </row>
 
-      <tr>
-        <td><literal>copy</literal></td>
+      <row>
+        <entry><literal>lvalue</literal> <replaceable>Loc</replaceable></entry>
 
-        <td>Push a copy of the top value on the stack</td>
-      </tr>
+        <entry>Push the address of data location
+        <replaceable>Loc</replaceable></entry>
+      </row>
 
-      <tr>
-        <td><literal>assign</literal></td>
+      <row>
+        <entry><literal>pop</literal></entry>
 
-        <td>The r-value on top of the stack is stored in the l-value below it
-        and both are popped</td>
-      </tr>
+        <entry>Remove the top of the stack</entry>
+      </row>
 
-      <tr>
-        <td><literal>add</literal>, <literal>sub</literal>,
-        <literal>mul</literal></td>
+      <row>
+        <entry><literal>copy</literal></entry>
 
-        <td>Replace the two values on top of the stack by their sum
-        (difference, product)</td>
-      </tr>
+        <entry>Push a copy of the top value on the stack</entry>
+      </row>
 
-      <tr>
-        <td><literal>label</literal> <replaceable>Lab</replaceable></td>
+      <row>
+        <entry><literal>assign</literal></entry>
 
-        <td>Place a label (target of jumps)</td>
-      </tr>
+        <entry>The r-value on top of the stack is stored in the l-value below it
+        and both are popped</entry>
+      </row>
 
-      <tr>
-        <td><literal>goto</literal> <replaceable>Lab</replaceable></td>
+      <row>
+        <entry><literal>add</literal>, <literal>sub</literal>,
+        <literal>mul</literal></entry>
 
-        <td>Next instruction is taken from statement following label
-        <replaceable>Lab</replaceable></td>
-      </tr>
+        <entry>Replace the two values on top of the stack by their sum
+        (difference, product)</entry>
+      </row>
 
-      <tr>
-        <td><literal>gotrue</literal> <replaceable>Lab</replaceable></td>
+      <row>
+        <entry><literal>label</literal> <replaceable>Lab</replaceable></entry>
 
-        <td>Pop the top value; jump if it is nonzero</td>
-      </tr>
+        <entry>Place a label (target of jumps)</entry>
+      </row>
 
-      <tr>
-        <td><literal>gofalse</literal> <replaceable>Lab</replaceable></td>
+      <row>
+        <entry><literal>goto</literal> <replaceable>Lab</replaceable></entry>
 
-        <td>Pop the top value; jump if it is zero</td>
-      </tr>
+        <entry>Next instruction is taken from statement following label
+        <replaceable>Lab</replaceable></entry>
+      </row>
+
+      <row>
+        <entry><literal>gotrue</literal> <replaceable>Lab</replaceable></entry>
+
+        <entry>Pop the top value; jump if it is nonzero</entry>
+      </row>
+
+      <row>
+        <entry><literal>gofalse</literal> <replaceable>Lab</replaceable></entry>
+
+        <entry>Pop the top value; jump if it is zero</entry>
+      </row>
+     </tbody>
+    </tgroup>
     </table>
 
     <para>The statement:<programlisting>while a do a := a - 1; b := a * c od</programlisting>will
