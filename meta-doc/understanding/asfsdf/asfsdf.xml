@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 ]>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="asfsdf" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook"
-        xml:id="asfsdf"
->
+         xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>The Language Specification Formalism ASF+SDF</title>
 
@@ -200,7 +198,7 @@
       equal to which other terms. This is were the algebra stops, and term
       rewriting begins. In fact the equations are interpreted as rewrite
       rules. Each pattern on the left-hand side is searched in the input term,
-      and replaced by the right-hand side. </para>
+      and replaced by the right-hand side.</para>
 
       <para>The parse trees of SDF contain the full input program text and all
       SDF productions that have been used to parse it. ASF provides full
@@ -251,7 +249,7 @@
         <mediaobject>
           <imageobject>
             <imagedata fileref="grammar.png" scalefit="1" valign="middle"
-                       width="100%"></imagedata>
+                       width="120%"></imagedata>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1464,7 +1462,8 @@ hiddens
             <title>Sets.asf</title>
 
             <programlisting>equations
-[set] {<replaceable>Elem*1</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*2</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*3</replaceable>} = {<replaceable>Elem*1</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*2</replaceable>, <replaceable>Elem*3</replaceable>}</programlisting>
+[set] {<replaceable>Elem*1</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*2</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*3</replaceable>} = 
+      {<replaceable>Elem*1</replaceable>, <replaceable>Elem</replaceable>, <replaceable>Elem*2</replaceable>, <replaceable>Elem*3</replaceable>}</programlisting>
           </example></para>
 
         <important>
@@ -2092,7 +2091,8 @@ hiddens
 imports Tree-syntax
 exports
   context-free syntax
-    sum(Tree, Integer) -&gt; Integer {traversal(accu, top-down, continue)}
+    sum(Tree, Integer) -&gt; Integer {traversal(accu, top-down, 
+                                             continue)}
   
 hiddens
   variables
@@ -2260,8 +2260,9 @@ equations
         <programlisting>[check-tuple-exp1]
    &lt;<replaceable>$Etype1</replaceable>, <replaceable>$Tenv'</replaceable>&gt; := check(<replaceable>$Exp1</replaceable>, <replaceable>$Tenv</replaceable>),
    &lt;&lt;<replaceable>$Etype+</replaceable>&gt;, <replaceable>$Tenv''</replaceable>&gt; := check(&lt;<replaceable>$Exp2</replaceable>, <replaceable>$Exp+</replaceable>&gt;, <replaceable>$Tenv'</replaceable>)
-   ===================================================================
-   check(&lt;<replaceable>$Exp1</replaceable>, <replaceable>$Exp2</replaceable>, <replaceable>$Exp+</replaceable>&gt;, <replaceable>$Tenv</replaceable>) = &lt;&lt;<replaceable>$Etype1</replaceable>, <replaceable>$Etype+</replaceable>&gt;, <replaceable>$Tenv''</replaceable>&gt;
+   =============================================================
+   check(&lt;<replaceable>$Exp1</replaceable>, <replaceable>$Exp2</replaceable>, <replaceable>$Exp+</replaceable>&gt;, <replaceable>$Tenv</replaceable>) = 
+   &lt;&lt;<replaceable>$Etype1</replaceable>, <replaceable>$Etype+</replaceable>&gt;, <replaceable>$Tenv''</replaceable>&gt;
 
 [check-tuple-exp2]
    &lt;<replaceable>$Etype1</replaceable>, <citetitle>$Tenv'</citetitle>&gt; := check(<replaceable>$Exp1</replaceable>, <replaceable>$Tenv</replaceable>),
@@ -2433,7 +2434,9 @@ equations
 
         <para>ASF+SDF comes with a library of predefined grammars and
         datatypes. Use them to save yourself work. See <remark>XXX</remark>
-        for an overview of the library.</para>
+        for an overview of the library.<warning>
+            <para>Add reference.</para>
+          </warning></para>
       </section>
     </section>
   </section>
