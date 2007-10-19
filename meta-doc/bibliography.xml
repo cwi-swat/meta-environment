@@ -92,6 +92,22 @@
     </biblioset>
   </biblioentry>
 
+  <biblioentry role="inproceedings" id="BSVE02">
+    <abbrev id="BSVE02.abbrev">BVSV02</abbrev>
+    <biblioset role="article">
+      <authorgroup><author><authorname><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Scheerder</surname></authorname></author><author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author></authorgroup>
+      <title>Disambiguation filters for scannerless generalized lr
+  parsers</title>
+      <pagenums>143--158</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Proceedings of the 11th International Conference on
+  Compiler Construction (CC'02)</conftitle></confgroup>
+      <pubdate>2002</pubdate>
+    </biblioset>
+  </biblioentry>
+
   <biblioentry role="article" id="Chomsky56">
     <abbrev id="Chomsky56.abbrev">Cho56</abbrev>
     <biblioset role="article">
@@ -167,6 +183,60 @@
     <title>Parsing Techniques -- A Practical Guide</title>
     <publisher><publishername>Ellis Horwood</publishername></publisher>
     <pubdate>1990</pubdate>
+  </biblioentry>
+
+  <biblioentry role="article" id="HHKR89">
+    <abbrev id="HHKR89.abbrev">HHKR89</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.R.H.</firstname><surname>Hendriks</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author></authorgroup>
+      <title>The syntax definition formalism SDF - reference manual</title>
+      <pagenums>43--75</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>SIGPLAN Notices</title>
+      <volumenum>24</volumenum><issuenum>11</issuenum>
+      <pubdate>1989</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="inbook" id="HeeringKlint86">
+    <abbrev id="HeeringKlint86.abbrev">HK86</abbrev>
+  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+    <bibliomisc role=">chapter">A Syntax Definition Formalism</bibliomisc>
+    <pagenums>619--630</pagenums>
+    <title>ESPRIT'86: Results and Achievements</title>
+    <publisher><publishername>North-Holland</publishername></publisher>
+    <pubdate>1986</pubdate>
+  </biblioentry>
+
+  <biblioentry role="article" id="HKR90">
+    <abbrev id="HKR90.abbrev">HKR90</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author></authorgroup>
+      <title>Incremental generation of parsers</title>
+      <pagenums>1344--1350</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>IEEE Transactions on Software Engineering</title>
+      <volumenum>16</volumenum><issuenum>12</issuenum>
+      <pubdate>1990</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="HKR92">
+    <abbrev id="HKR92.abbrev">HKR92</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author></authorgroup>
+      <title>Incremental generation of lexical scanners</title>
+      <pagenums>490--520</pagenums>
+      <bibliosource
+  class="doi">http://doi.acm.org/10.1145/133233.133240</bibliosource>
+    </biblioset>
+    <biblioset role="journal">
+      <title>ACM Trans. Program. Lang. Syst.</title>
+      <volumenum>14</volumenum><issuenum>4</issuenum>
+      <pubdate>1992</pubdate>
+    </biblioset>
   </biblioentry>
 
   <biblioentry role="techreport" id="Holt96">
@@ -273,6 +343,19 @@
     </biblioset>
   </biblioentry>
 
+  <biblioentry role="phdthesis" id="Rekers92">
+    <abbrev id="Rekers92.abbrev">Rek92</abbrev>
+  <author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author>
+    <title>Parser Generation for Interactive Environments</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>1992</pubdate>
+    <bibliosource
+  class="uri">ftp://ftp.cwi.nl/pub/gipe/reports/Rek92.ps.Z</bibliosource>
+    <bibliomisc
+  role="note">ftp://ftp.cwi.nl/pub/gipe/reports/Rek92.ps.Z</bibliomisc>
+  </biblioentry>
+
   <biblioentry role="book" id="Terese03">
     <abbrev id="Terese03.abbrev">Ter03</abbrev>
   <author><authorname><firstname></firstname><surname>Terese</surname></authorname></author>
@@ -294,6 +377,15 @@
       <volumenum>3</volumenum><issuenum>3</issuenum>
       <pubdate>1995</pubdate>
     </biblioset>
+  </biblioentry>
+
+  <biblioentry role="phdthesis" id="Vis97-thesis">
+    <abbrev id="Vis97-thesis.abbrev">Vis97</abbrev>
+  <author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author>
+    <title>Syntax Definition for Language Prototyping</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>1997</pubdate>
   </biblioentry>
 
   <biblioentry role="mastersthesis" id="Vos90">

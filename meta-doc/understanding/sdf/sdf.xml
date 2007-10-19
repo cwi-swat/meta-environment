@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article [
+<!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
 ]>
-<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xml:id="sdf" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ns6="http://www.w3.org/1999/xhtml"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/2001/XInclude"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         xml:id="sdf">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>The Syntax Definition Formalism SDF</title>
 
@@ -2575,9 +2574,9 @@ exports
       </itemizedlist>
 
       <para>Currently, there is no syntactic or semantic difference between
-      <literal>left</literal> and <literal>assoc</literal>, but &#160;we may
-      change the semantics of the assoc attribute in the future. <remark>Is
-      this really true?</remark></para>
+      <literal>left</literal> and <literal>assoc</literal>, but  we may change
+      the semantics of the assoc attribute in the future. <remark>Is this
+      really true?</remark></para>
 
       <para><link linkend="example.simple-prio">Below</link> we give an
       example of a definition of simple arithmetic expressions with the usual
@@ -3175,7 +3174,7 @@ exports
         </listitem>
 
         <listitem>
-          <para><literal>constructor has already been used</literal>:&#160;The
+          <para><literal>constructor has already been used</literal>: The
           combination of right-hand symbol and the constructor information
           should be unique. This warning points this out. It is advisable not
           to ignore this warning. In fact, for the parser these double
@@ -3213,28 +3212,20 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para>J. Heering, P. Klint, A Syntax Definition Formalism, ESPRIT''86:
-        Results and Achievements, North-Holland, 619--630, 1986.
-        <emphasis>Describes the initial motivation and design of
-        SDF</emphasis>.</para>
+        <para><xref linkend="HeeringKlint86" /><emphasis> </emphasis>describes
+        the initial motivation and design of SDF.</para>
       </listitem>
 
       <listitem>
-        <para>J. Heering, P. Hendriks, P. Klint and J. Rekers, <link
-        xlink:href="http://www.acm.org/pubs/citations/proceedings/pldi/73141/p179-heering/">The
-        syntax definition formalism SDF - reference manual</link>, SIGPLAN
-        Notices <emphasis role="bold">24</emphasis>(11): 43-75, 1989.
-        <emphasis>The first reference manual for SDF</emphasis>.</para>
+        <para><xref linkend="HHKR89" />J is the first reference manual for
+        SDF.</para>
       </listitem>
 
       <listitem>
-        <para>E. Visser, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Visser.ps.gz">Syntax
-        Definition for Language Prototyping</link>, dissertation, University
-        of Amsterdam, 1997. <emphasis>A redesign of SDF that adds
-        modularization (modeled after the modularization constructs of ASF),
-        unifies lexical and concrete syntax, and proposes a normalisation
-        procedure.</emphasis></para>
+        <para><xref linkend="Vis97-thesis" /> describes a redesign of SDF that
+        adds modularization (modeled after the modularization constructs of
+        ASF), unifies lexical and concrete syntax, and proposes a
+        normalisation procedure.</para>
       </listitem>
     </itemizedlist>
 
@@ -3243,43 +3234,41 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para>J. Heering, P. Klint and J. Rekers,<link
-        xlink:href="http://www.acm.org/pubs/citations/proceedings/pldi/73141/p179-heering/">
-        Incremental Generation of Parsers</link>, IEEE Transactions on
-        Software Engineering, <emphasis
-        role="bold">16</emphasis>(12):1344--1350, 1990. <emphasis>This and the
-        next publication describe our variant of Generalized LR parsing as
-        well as the just-in-time generation of scanners and
-        parsers.</emphasis></para>
+        <para> <xref linkend="HKR90" />J and <xref linkend="HKR92" /> describe
+        our variant of Generalized LR parsing as well as the just-in-time
+        generation of scanners and parsers.</para>
       </listitem>
 
       <listitem>
-        <para>J. Heering, P. Klint and J. Rekers,<link
-        xlink:href="http://www.acm.org/pubs/citations/journals/toplas/1992-14-4/p490-heering/">
-        Incremental generation of lexical scanners</link>, ACM Transactions on
-        Programming Languages and Systems <emphasis
-        role="bold">14</emphasis>(4):490--520, October 1992.</para>
+        <para><xref linkend="Rekers92" /> gives a detailed description of the
+        GLR algorithm.</para>
       </listitem>
 
       <listitem>
-        <para>J. Rekers, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Rekers.ps.gz">Parser
-        Generation for Interactive Environments</link>, dissertation,
-        University of Amsterdam, 1992. <emphasis>Detailed description of the
-        GLR algorithm.</emphasis></para>
-      </listitem>
-
-      <listitem>
-        <para>M.G. J. van den Brand, J. Scheerder, J. J. Vinju and E. Visser,
-        <link
-        xlink:href="http://www.springerlink.com/content/03359k0cerupftfh/">Disambiguation
-        Filters for Scannerless Generalized LR Parsers</link>, Proceedings of
-        the 11th International Conference on Compiler Construction (CC'02),
-        143--158, 2002. <emphasis>Describes current disambiguation methods
-        that are used in combination with scannerless
-        parsing.</emphasis></para>
+        <para><xref linkend="BSVE02" /> describes current disambiguation
+        methods that are used in combination with scannerless parsing.</para>
       </listitem>
     </itemizedlist>
+  </section>
+
+  <section xml:id="section.sdf-bibliography">
+    <title>Bibliography</title>
+
+    <para><bibliolist>
+        <bibliomixed xml:id="BSVE02"></bibliomixed>
+
+        <bibliomixed xml:id="HeeringKlint86"></bibliomixed>
+
+        <bibliomixed xml:id="HHKR89"></bibliomixed>
+
+        <bibliomixed xml:id="Vis97-thesis"></bibliomixed>
+
+        <bibliomixed xml:id="HKR92"></bibliomixed>
+
+        <bibliomixed xml:id="Rekers92"></bibliomixed>
+
+        <bibliomixed xml:id="HKR90"></bibliomixed>
+      </bibliolist></para>
   </section>
 
   <section xml:id="section.sdf_ToDo">
