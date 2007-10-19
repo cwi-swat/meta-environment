@@ -2442,87 +2442,45 @@ equations
   </section>
 
   <section xml:id="asfsdf_HistoricalNotes">
-    <title>Historical Notes</title>
+    <title>Further Reading</title>
 
-    <para>The main publications on ASF+SDF are (in chronological
-    order):</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>J.A. Bergstra, J. Heering and P. Klint (eds), Algebraic
-        Specification, ACM Press/Addison-Wesley, 1989.</para>
-      </listitem>
-
-      <listitem>
-        <para>A. van Deursen, J. Heering and P. Klint, Language Prototyping:
-        An Algebraic Specification Approach Volume 5 of AMAST Series in
-        Computing, World Scientific, Singapore, 1996.</para>
-      </listitem>
-    </itemizedlist>
+    <para>The main publications on ASF+SDF are <biblioref linkend="BHK89" />
+    and <biblioref linkend="DHK96" />.</para>
 
     <para>The main publications on implementation techniques related to
-    ASF+SDF are:</para>
+    ASF+SDF are <biblioref linkend="Hendriks91" />, <biblioref
+    linkend="Walters91" />, <biblioref linkend="Klint93" />, <biblioref
+    linkend="BJKO00" />, <biblioref linkend="Olivier00" />, <biblioref
+    linkend="vdBHKO02" />, <biblioref linkend="BKV03" />, and <biblioref
+    linkend="Vinju05" /></para>
 
-    <itemizedlist>
-      <listitem>
-        <para>P.R.H. Hendriks, Implementation of Modular Algebraic
-        Specifications, dissertation, University of Amsterdam, 1991.</para>
-      </listitem>
+    <para>Historical notes for SDF are given in the companion article <olink
+    targetdoc="sdf"></olink>.</para>
+  </section>
 
-      <listitem>
-        <para>H.R. Walters, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Walters.ps.gz">On
-        Equal terms: implementing Algebraic Specifications</link>,
-        dissertation, University of Amsterdam, 1991.</para>
-      </listitem>
+  <section xml:id="section.asfsdf-bibliography">
+    <title>Bibliography</title>
 
-      <listitem>
-        <para>P. Klint, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOSEM93.pdf">A
-        Meta-Environment for Generating Programming Environments</link>, ACM
-        Transactions on Software Engineering and Methodology,
-        2(2):176-201,1993.</para>
-      </listitem>
+    <para><bibliolist>
+        <bibliomixed xml:id="BHK89"></bibliomixed>
 
-      <listitem>
-        <para>M.G.J. van den Brand, H.A. de Jong, P. Klint and P.A. Olivier,
-        <link
-        xlink:href="http://homepages.cwi.nl/~paulk/publications/SPE00.pdf">Efficient
-        Annotated Terms</link>, Software, Practice &amp; Experience,
-        30(3):259--291, 2000.</para>
-      </listitem>
+        <bibliomixed xml:id="DHK96"></bibliomixed>
 
-      <listitem>
-        <para>P.A. Olivier, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Olivier.ps.gz">A
-        Framework for Debugging Heterogeneous Applications</link>,
-        dissertation, University of Amsterdam, 2000.</para>
-      </listitem>
+        <bibliomixed xml:id="Hendriks91"></bibliomixed>
 
-      <listitem>
-        <para>M.G.J. van den Brand, J. Heering, P. Klint and P.A. Olivier,
-        <link
-        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOPLAS02.pdf">Compiling
-        language definitions: The ASF+SDF compiler.</link> ACM Transactions on
-        Programming Languages and Systems, 24 (4):334-368, July 2002,</para>
-      </listitem>
+        <bibliomixed xml:id="Walters91"></bibliomixed>
 
-      <listitem>
-        <para>M.G.J. van den Brand, P. Klint, and J.J. Vinju, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/publications/TOSEM03.pdf">Term
-        Rewriting with Traversal Functions</link>, ACM Transactions on
-        Software Engineering Methodology, 12 (2):152-190, 2003.</para>
-      </listitem>
+        <bibliomixed xml:id="Klint93"></bibliomixed>
 
-      <listitem>
-        <para>J. Vinju, <link
-        xlink:href="http://homepages.cwi.nl/~paulk/dissertations/Vinju.pdf">Analysis
-        and Transformation of Source Code by Parsing and Rewriting</link>,
-        dissertation, University of Amsterdam, 2005.</para>
-      </listitem>
-    </itemizedlist>
+        <bibliomixed xml:id="BJKO00"></bibliomixed>
 
-    <para>Historical notes for SDF are given in the companion article The
-    Syntax Definition Formalism SDF.</para>
+        <bibliomixed xml:id="Olivier00"></bibliomixed>
+
+        <bibliomixed xml:id="vdBHKO02"></bibliomixed>
+
+        <bibliomixed xml:id="BKV03"></bibliomixed>
+
+        <bibliomixed xml:id="Vinju05"></bibliomixed>
+      </bibliolist></para>
   </section>
 </chapter>
