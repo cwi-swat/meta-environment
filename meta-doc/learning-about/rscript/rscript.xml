@@ -67,8 +67,8 @@
       <title>View</title>
 
       <para>The result of the enrichment phase are again bags and relations.
-      These can be displayed with various tools like, Dot <xref
-      linkend="Dot96" />, Rigi <xref linkend="Mueller88" /> and others.
+      These can be displayed with various tools like, Dot <biblioref
+      linkend="Dot96" />, Rigi <biblioref linkend="Mueller88" /> and others.
       Rscript is not concerned with viewing but we will give some examples
       anyway.</para>
     </formalpara>
@@ -132,10 +132,10 @@
 
     <itemizedlist>
       <listitem>
-        <para>We use sets and relations like Rigi<xref linkend="Mueller88" />
-        and GROK <xref linkend="Holt96" /> do. After extensive experimentation
+        <para>We use sets and relations like Rigi <biblioref linkend="Mueller88" />
+        and GROK <biblioref linkend="Holt96" /> do. After extensive experimentation
         we have decided <emphasis>not</emphasis> to use bags and
-        multi-relations like in RPA <xref
+        multi-relations like in RPA <biblioref
         linkend="FeijsKrikhaarOmmering98" />.</para>
       </listitem>
 
@@ -153,8 +153,8 @@
       </listitem>
 
       <listitem>
-        <para>Unlike Rigi <xref linkend="Mueller88" />, GROK <xref
-        linkend="Holt96" /> and RPA <xref
+        <para>Unlike Rigi <biblioref linkend="Mueller88" />, GROK <biblioref
+        linkend="Holt96" /> and RPA <biblioref
         linkend="FeijsKrikhaarOmmering98" />we provide a relational
         <emphasis>calculus</emphasis> as opposed to a relational algebra.
         Although the two have the same expressive power, a calculus increases,
@@ -3101,7 +3101,7 @@ end equations</programlisting></para>
     locations can be included in a such an analysis (<xref
     linkend="section.using-locations" />). As an example of computing code
     metrics, we describe the calculation of McCabe's cyclomatic complexity in
-    <xref linkend="section.McCabe" />. Several examples of dataflow analysis
+    <biblioref linkend="section.McCabe" />. Several examples of dataflow analysis
     follow in <xref linkend="section.dataflow" />. A description of program
     slicing concludes the chapter (<xref
     linkend="section.program-slicing" />).</para>
@@ -3113,7 +3113,7 @@ end equations</programlisting></para>
       of a system but that we want to understand it at the component level
       rather than at the procedure level. If it is known to which component
       each procedure belongs, it is possible to <emphasis>lift</emphasis> the
-      call relation to the component level as proposed in <xref
+      call relation to the component level as proposed in <biblioref
       linkend="Krikhaar99" />. First, introduce new types to denote procedure
       calls as well as components of a system:<programlisting>type proc = str
 type comp = str</programlisting>Given a calls relation
@@ -3154,7 +3154,7 @@ rel[proc, comp] PartOf = {&lt;"main", "Appl"&gt;, &lt;"a", "Appl"&gt;,
     <section xml:id="section.analyzing-java">
       <title>Analyzing the Structure of Java Systems</title>
 
-      <para>Now we consider the analysis of Java systems (inspired by <xref
+      <para>Now we consider the analysis of Java systems (inspired by <biblioref
       linkend="BNL03" />. Suppose that the type <literal>class</literal> is
       defined as follows<programlisting>type class = str</programlisting>and
       that the following relations are available about a Java
@@ -3287,7 +3287,7 @@ rel[class,set[class]] ClassCycles =
       <title>Finding Uninitialized and Unused Variables in a Program</title>
 
       <para>Consider the following program in the toy language Pico: (This is
-      an extended version of the example presented earlier in <xref
+      an extended version of the example presented earlier in <biblioref
       linkend="KlintIWPC03" />.)<programlisting>[ 1] begin declare x : natural, y : natural,
 [ 2]              z : natural, p : natural;
 [ 3]  x := 3;
@@ -3546,7 +3546,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
       defined as <replaceable>e</replaceable> - <replaceable>n</replaceable> +
       2, where <replaceable>e</replaceable> and <replaceable>n</replaceable>
       are the number of edges and nodes in the control flow graph,
-      respectively. It was proposed by McCabe <xref linkend="McCabe76" /> as a
+      respectively. It was proposed by McCabe <biblioref linkend="McCabe76" /> as a
       measure of program complexity. Experiments have shown that programs with
       a higher cyclomatic complexity are more difficult to understand and test
       and have more errors. It is generally accepted that a program, module or
@@ -3571,7 +3571,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
 
       <para><emphasis>Dataflow analysis</emphasis> is a program analysis
       technique that forms the basis for many compiler optimizations. It is
-      described in any text book on compiler construction, e.g. <xref
+      described in any text book on compiler construction, e.g. <biblioref
       linkend="AhoSethiUllman86" />. The goal of dataflow analysis is to
       determine the effect of statements on their surroundings. Typical
       examples are:</para>
@@ -3608,7 +3608,7 @@ set[varname] VARNAMES = range(DEFS) union range(USES)</programlisting></para>
         <emphasis>dominates</emphasis> a node <replaceable>n</replaceable>, if
         every path from the initial node of the flow graph to
         <replaceable>n</replaceable> goes through <replaceable>d</replaceable>
-        <xref linkend="AhoSethiUllman86" /> (Section 10.4). Dominators play a
+        <biblioref linkend="AhoSethiUllman86" /> (Section 10.4). Dominators play a
         role in the analysis of conditional statements and loops. The function
         <literal>dominators</literal> that computes the dominators for a given
         flow graph <literal>PRED</literal> and an entry node
@@ -3696,7 +3696,7 @@ endwhere</programlisting></para>
 
         <para>We illustrate the calculation of reaching definitions using the
         example in <xref linkend="figure.dataflow-graph" /> which was inspired
-        by <xref linkend="AhoSethiUllman86" /> (Example 10.15).</para>
+        by <biblioref linkend="AhoSethiUllman86" /> (Example 10.15).</para>
 
         <para><figure xml:id="figure.dataflow-graph">
             <title>Flow graph for various dataflow problems</title>
@@ -3962,7 +3962,7 @@ end equations</programlisting>The results of live variable analysis for our
     <section xml:id="section.program-slicing">
       <title>Program Slicing</title>
 
-      <para>Program slicing is a technique proposed by Weiser <xref
+      <para>Program slicing is a technique proposed by Weiser <biblioref
       linkend="Weiser84" /> for automatically decomposing programs in parts by
       analyzing their data flow and control flow. Typically, a given statement
       in a program is selected as the <emphasis>slicing criterion</emphasis>
@@ -3997,9 +3997,9 @@ end equations</programlisting>The results of live variable analysis for our
       criterion. This particular form of slicing is called <emphasis>backward
       slicing</emphasis>. Slicing can be used for debugging and program
       understanding, optimization and more. An overview of slicing techniques
-      and applications can be found in <xref linkend="Tip95" />. Here we will
+      and applications can be found in <biblioref linkend="Tip95" />. Here we will
       explore a relational formulation of slicing adapted from a proposal in
-      <xref linkend="JacksonRollins94" />J. The basic ingredients of the
+      <biblioref linkend="JacksonRollins94" />J. The basic ingredients of the
       approach are as follows:</para>
 
       <itemizedlist>
