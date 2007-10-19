@@ -288,7 +288,7 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" fileref="sdfgraph.png" scalefit="1"
-                         width="100%"></imagedata>
+                         width="130%"></imagedata>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -311,17 +311,18 @@
  <emphasis role="bold">lexical <link linkend="section.restrictions">restrictions</link></emphasis>                                                 
    Identifier -/- [a-z]                                              
  <emphasis role="bold"><link linkend="section.contextfreesyntax">context-free syntax</link></emphasis>                                                  
-   Identifier    -&gt; Expr {<emphasis role="bold"><link
+   Identifier                          -&gt; Expr {<emphasis role="bold"><link
             linkend="section.attributes">cons</link></emphasis>("name")}                               
-   <link linkend="section.lists">Expr*</link>         -&gt; <link
+   <link linkend="section.lists">Expr*</link>                               -&gt; <link
           linkend="section.sort">List[[Param1]]</link>                                              
    <link linkend="section.literals">"if"</link> Expr "then" <link
-          linkend="section.lists">{Param2 ";"}+</link> "else" {Param2 ";"}+ "fi" -&gt; Param2           
-   "if" Expr "then" {Param2 ";"}+ "fi"                      -&gt; Param2 {<emphasis
-          role="bold"><link linkend="section.attributes">prefer</link></emphasis>}   
+          linkend="section.lists">{Param2 ";"}+</link> 
+             "else" {Param2 ";"}+ "fi" -&gt; Param2           
+   "if" Expr "then" {Param2 ";"}+ "fi" -&gt; Param2 {<emphasis role="bold"><link
+            linkend="section.attributes">prefer</link></emphasis>}   
  <emphasis role="bold">context-free syntax</emphasis>      
    "if" <link linkend="section.alternatives">|</link> "then" <link
-          linkend="section.alternatives">|</link> "fi"  -&gt; Identifier {<emphasis
+          linkend="section.alternatives">|</link> "fi"                -&gt; Identifier {<emphasis
           role="bold"><link linkend="section.attributes">reject</link></emphasis>}                                 
  <emphasis role="bold">context-free <link linkend="section.priorities">priorities</link></emphasis>                                                        
    Expr "&amp;" Expr -&gt; Expr {<emphasis role="bold"><link
@@ -416,7 +417,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="parse-architecture.png" width="50%"
+          <imagedata fileref="parse-architecture.png" width="75%"
                      xml:id="figure.architecture"></imagedata>
         </imageobject>
       </mediaobject>
@@ -2250,11 +2251,13 @@ exports
   context-free start-symbols Id
   sorts UCLetter LCLetter Digit Id
   lexical syntax
-    [A-Z]   -&gt; UCLetter
-    [a-z]   -&gt; LCLetter
-    [0-9]   -&gt; Digit
+    [A-Z]                     -&gt; UCLetter
+    [a-z]                     -&gt; LCLetter
+    [0-9]                     -&gt; Digit
 
-    (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -&gt; Id</programlisting></para>
+    (UCLetter LCLetter*) | 
+    (UCLetter UCLetter*) | 
+    (UCLetter Digit*)          -&gt; Id</programlisting></para>
       </example>
     </section>
 
@@ -2574,9 +2577,9 @@ exports
       </itemizedlist>
 
       <para>Currently, there is no syntactic or semantic difference between
-      <literal>left</literal> and <literal>assoc</literal>, but  we may change
-      the semantics of the assoc attribute in the future. <remark>Is this
-      really true?</remark></para>
+      <literal>left</literal> and <literal>assoc</literal>, but &#160;we may
+      change the semantics of the assoc attribute in the future. <remark>Is
+      this really true?</remark></para>
 
       <para><link linkend="example.simple-prio">Below</link> we give an
       example of a definition of simple arithmetic expressions with the usual
@@ -3174,7 +3177,7 @@ exports
         </listitem>
 
         <listitem>
-          <para><literal>constructor has already been used</literal>: The
+          <para><literal>constructor has already been used</literal>:&#160;The
           combination of right-hand symbol and the constructor information
           should be unique. This warning points this out. It is advisable not
           to ignore this warning. In fact, for the parser these double
@@ -3234,7 +3237,7 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para> <xref linkend="HKR90" />J and <xref linkend="HKR92" /> describe
+        <para><xref linkend="HKR90" />J and <xref linkend="HKR92" /> describe
         our variant of Generalized LR parsing as well as the just-in-time
         generation of scanners and parsers.</para>
       </listitem>
