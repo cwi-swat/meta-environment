@@ -486,12 +486,12 @@
       </listitem>
 
       <listitem>
-        <para>The book <xref linkend="BaaderNipkow98" />
+        <para>The book <biblioref linkend="BaaderNipkow98" />
         gives an introduction to the theory of term rewriting.</para>
       </listitem>
 
       <listitem>
-        <para>The book <xref linkend="Terese03" /> gives
+        <para>The book <biblioref linkend="Terese03" /> gives
         a comprehensive overview of research in this area.</para>
       </listitem>
 
