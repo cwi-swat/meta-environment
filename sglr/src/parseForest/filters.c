@@ -74,6 +74,7 @@ static ATermTable seenAmbiguities = NULL;
 
 static ATermIndexedSet cyclicLevels = NULL;
 
+static ATermTable nodeCountTable = NULL;
 /** 
  * Counts the (non-nested) avoided productions in the given tree.
  * It counts the number of \c avoid productions encountered on a top down 
@@ -1363,29 +1364,78 @@ static PT_Tree filterRecursive(ParseTable *pt, PT_Tree t, size_t *pos, ATbool in
   }
 }
 
-static void countNodesInTree(PT_Tree t) {
+static void countNodesInTree(PT_Tree t, int *leaves, int *prodNodes, int *ambNodes) {
   PT_Args args = NULL;
+  int newLeaves = 0;
+  int newProdNodes = 0;
+  int newAmbNodes = 0;
+  AFun countAFun = ATmakeAFun("count", 3, ATfalse);
+  ATermAppl nodeCountEntry = NULL;
 
   if (PT_isTreeAmb(t)) {
+    int ambLeaves = 0;
+    int ambProdNodes = 0;
+    int ambAmbNodes = 0;
+
     SGLR_STATS_incrementCount(SGLR_STATS_ambNodesInFilteredTree);
     args = PT_getTreeArgs(t);
+    nodeCountEntry = (ATermAppl)ATtableGet(nodeCountTable, (ATerm)t);
+
+    if (nodeCountEntry == NULL) {
+      for (;args && !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+        newLeaves = 0;
+        newProdNodes = 0;
+        newAmbNodes = 0;
+        countNodesInTree(PT_getArgsHead(args), &newLeaves, &newProdNodes, &newAmbNodes);
+        ambLeaves += newLeaves;
+        ambProdNodes += newProdNodes;
+        ambAmbNodes += newAmbNodes;
+      }
+
+      (*leaves) += ambLeaves;
+      (*prodNodes) += ambProdNodes;
+      (*ambNodes) += ambAmbNodes;
+
+      ATtablePut(nodeCountTable, (ATerm)t, (ATerm)ATmakeAppl3(countAFun, (ATerm)ATmakeInt(ambLeaves), (ATerm)ATmakeInt(ambProdNodes), (ATerm)ATmakeInt(ambAmbNodes)));
+      (*ambNodes)++;
+    }
+    /*else {
+        (*leaves) += ATgetInt((ATermInt)ATgetArgument(nodeCountEntry, 0));
+        (*prodNodes) += ATgetInt((ATermInt)ATgetArgument(nodeCountEntry, 1));
+        (*ambNodes) += ATgetInt((ATermInt)ATgetArgument(nodeCountEntry, 2));
+      }
+
+      (*ambNodes)++;*/
   }
+
   else if (PT_isTreeChar(t)) {
     SGLR_STATS_incrementCount(SGLR_STATS_symbolNodesInFilteredTree);
+    (*leaves)++;
   }
+
   else if (PT_isTreeAppl(t)) {
     SGLR_STATS_incrementCount(SGLR_STATS_prodNodesInFilteredTree);
     args = PT_getTreeArgs(t);
+
+    for (;args && !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+      newLeaves = 0;
+      newProdNodes = 0;
+      newAmbNodes = 0;
+      countNodesInTree(PT_getArgsHead(args), &newLeaves, &newProdNodes, &newAmbNodes);
+      (*leaves) += newLeaves;
+      (*prodNodes) += newProdNodes;
+      (*ambNodes) += newAmbNodes;
+    }
+
+    (*prodNodes)++;
   }
+
   else if (PT_isTreeCycle(t)) {
     SGLR_STATS_incrementCount(SGLR_STATS_cyclicNodesInFilteredTree);
+    assert("Can't deal with cycles yet!");
   }
   else {
     assert("Illegal tree node type!");
-  }
-
-  for (;args && !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
-    countNodesInTree(PT_getArgsHead(args));
   }
 }
 
@@ -1521,7 +1571,17 @@ PT_ParseTree FLT_filter(ParseTable *pt, PT_Tree t, InputString input) {
      }
 
      if (MAIN_getStatsFlag) {
-       countNodesInTree(newT);
+       int leaves = 0;
+       int prodNodes = 0;
+       int ambNodes = 0;
+
+       nodeCountTable = ATtableCreate(2048, 75);
+       countNodesInTree(newT, &leaves, &prodNodes, &ambNodes);
+       ATtableDestroy(nodeCountTable);
+
+       SGLR_STATS_setCount(SGLR_STATS_symbolNodesInFilteredTree, leaves);
+       SGLR_STATS_setCount(SGLR_STATS_prodNodesInFilteredTree, prodNodes);
+       SGLR_STATS_setCount(SGLR_STATS_ambNodesInFilteredTree, ambNodes);
      }
    }
 
