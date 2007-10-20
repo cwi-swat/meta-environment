@@ -19,6 +19,63 @@
     <bibliomisc role="note">Vol. I. Parsing. Vol II. Compiling</bibliomisc>
   </biblioentry>
 
+  <biblioentry role="book" id="BHK89">
+    <abbrev id="BHK89.abbrev">BHK89</abbrev>
+  <authorgroup><editor><authorname><firstname>J. A.</firstname><surname>Bergstra</surname></authorname></editor><editor><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></editor><editor><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></editor></authorgroup>
+    <title>Algebraic Specification</title>
+    <publisher><publishername>ACM
+  Press/Addison-Wesley</publishername></publisher>
+    <pubdate>1989</pubdate>
+  </biblioentry>
+
+  <biblioentry role="article" id="vdBHKO02">
+    <abbrev id="vdBHKO02.abbrev">BHKO02</abbrev>
+    <biblioset role="article">
+      <authorgroup><author><authorname><firstname>M.G.J.
+  van den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>P.A.</firstname><surname>Olivier</surname></authorname></author></authorgroup>
+      <title>Compiling language definitions: The ASF+SDF compiler</title>
+      <pagenums>334--368</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>ACM Transactions on Programming Languages and Systems</title>
+      <volumenum>24</volumenum><issuenum>4</issuenum>
+      <pubdate>2002</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="BJKO00">
+    <abbrev id="BJKO00.abbrev">BJKO00</abbrev>
+    <biblioset role="article">
+      <authorgroup><author><authorname><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>H.A.
+  de</firstname><surname>Jong</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Olivier</surname></authorname></author></authorgroup>
+      <title>Efficient Annotated Terms</title>
+      <pagenums>259--291</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>Software, Practice &amp; Experience</title>
+      <volumenum>30</volumenum>
+      <pubdate>2000</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="BKV03">
+    <abbrev id="BKV03.abbrev">BKV03</abbrev>
+    <biblioset role="article">
+      <authorgroup><author><authorname><firstname>M.G.J. van
+  den</firstname><surname>Brand</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author><author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author></authorgroup>
+      <title>Term rewriting with traversal functions</title>
+      <pagenums>152--190</pagenums>
+      <bibliosource
+  class="doi">http://doi.acm.org/10.1145/941566.941568</bibliosource>
+    </biblioset>
+    <biblioset role="journal">
+      <title>ACM Trans. Softw. Eng. Methodol.</title>
+      <volumenum>12</volumenum><issuenum>2</issuenum>
+      <pubdate>2003</pubdate>
+    </biblioset>
+  </biblioentry>
+
   <biblioentry role="inproceedings" id="BrandKooikerEtAl05">
     <abbrev id="BrandKooikerEtAl05.abbrev">BKVV05</abbrev>
     <biblioset role="article">
@@ -131,6 +188,17 @@
     <pubdate>1984</pubdate>
   </biblioentry>
 
+  <biblioentry role="book" id="DHK96">
+    <abbrev id="DHK96.abbrev">DHK96</abbrev>
+  <authorgroup><editor><authorname><firstname>A. van</firstname><surname>Deursen</surname></authorname></editor><editor><authorname><firstname>J.</firstname><surname>Heering</surname></authorname></editor><editor><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></editor></authorgroup>
+    <title>Language Prototyping: An Algebraic Specification Approach</title>
+    <subtitle role="series">AMAST Series in
+  Computing</subtitle><seriesvolnum>5</seriesvolnum>
+    <publisher><publishername>World Scientific Publishing
+  Co.</publishername></publisher>
+    <pubdate>1996</pubdate>
+  </biblioentry>
+
   <biblioentry role="inproceedings" id="DeJonge00">
     <abbrev id="DeJonge00.abbrev">dJ00</abbrev>
     <biblioset role="article">
@@ -183,6 +251,15 @@
     <title>Parsing Techniques -- A Practical Guide</title>
     <publisher><publishername>Ellis Horwood</publishername></publisher>
     <pubdate>1990</pubdate>
+  </biblioentry>
+
+  <biblioentry role="phdthesis" id="Hendriks91">
+    <abbrev id="Hendriks91.abbrev">Hen91</abbrev>
+  <author><authorname><firstname>P.R.H.</firstname><surname>Hendriks</surname></authorname></author>
+    <title>Implementation of Modular Algebraic Specifications</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>1991</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="HHKR89">
@@ -261,6 +338,20 @@
       <subtitle role="series">ACM SIGSOFT Software Engineering
   Notes</subtitle><seriesvolnum>19</seriesvolnum>
       <pubdate>1994</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="article" id="Klint93">
+    <abbrev id="Klint93.abbrev">Kli93</abbrev>
+    <biblioset role="article">
+  <author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author>
+      <title>A meta-environment for generating programming environments</title>
+      <pagenums>176--201</pagenums>
+    </biblioset>
+    <biblioset role="journal">
+      <title>ACM Transactions on Software Engineering and Methodology</title>
+      <volumenum>2</volumenum><issuenum>2</issuenum>
+      <pubdate>April 1993</pubdate>
     </biblioset>
   </biblioentry>
 
@@ -343,6 +434,15 @@
     </biblioset>
   </biblioentry>
 
+  <biblioentry role="phdthesis" id="Olivier00">
+    <abbrev id="Olivier00.abbrev">Oli00</abbrev>
+  <author><authorname><firstname>P.A.</firstname><surname>Olivier</surname></authorname></author>
+    <title>A Framework for Debugging Heterogeneous Applications</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>2000</pubdate>
+  </biblioentry>
+
   <biblioentry role="phdthesis" id="Rekers92">
     <abbrev id="Rekers92.abbrev">Rek92</abbrev>
   <author><authorname><firstname>J.</firstname><surname>Rekers</surname></authorname></author>
@@ -379,6 +479,16 @@
     </biblioset>
   </biblioentry>
 
+  <biblioentry role="phdthesis" id="Vinju05">
+    <abbrev id="Vinju05.abbrev">Vin05</abbrev>
+  <author><authorname><firstname>J.J.</firstname><surname>Vinju</surname></authorname></author>
+    <title>Analysis and Transformation of Source Code by Parsing and
+  Rewriting</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>November 2005</pubdate>
+  </biblioentry>
+
   <biblioentry role="phdthesis" id="Vis97-thesis">
     <abbrev id="Vis97-thesis.abbrev">Vis97</abbrev>
   <author><authorname><firstname>E.</firstname><surname>Visser</surname></authorname></author>
@@ -395,6 +505,15 @@
     <bibliomisc role="type">Master's thesis</bibliomisc>
     <orgname>University of Amsterdam</orgname>
     <pubdate>1990</pubdate>
+  </biblioentry>
+
+  <biblioentry role="phdthesis" id="Walters91">
+    <abbrev id="Walters91.abbrev">Wal91</abbrev>
+  <author><authorname><firstname>H.R.</firstname><surname>Walters</surname></authorname></author>
+    <title>On Equal Terms --- Implementing Algebraic Specifications</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>1991</pubdate>
   </biblioentry>
 
   <biblioentry role="article" id="Weiser84">
