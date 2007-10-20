@@ -11,7 +11,7 @@
 set -e
 
 # CATEGORIES="learning-about howto understanding courses project"
-CATEGORIES="getting-started syntax extraction-transformation"
+CATEGORIES="getting-started syntax  extraction-transformation formatting analysis"
 WEB="./doc/html"
 FOP="${FOPPREFIX}/fop"
 DOCBOOKXSLHTML=${DOCBOOKXSLPREFIX}/html/docbook.xsl

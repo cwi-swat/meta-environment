@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+]>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2001/XInclude"
+         xmlns:ns="http://docbook.org/ns/docbook"
+	xml:id="sdf-errors"
+>
+  <info>
+    <title>An explanation of error messages of SDF</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+
+    <pubdate>now</pubdate>
+  </info>
+
+  <warning>
+    <para>This document is unfinished.</para>
+  </warning>
+
+  <section xml:id="introduction">
+    <title>Introduction</title>
+
+    <para>This document describes the error messages that the SDF checker, the
+    SDF parse table generator interpreter or the SGLR parser may
+    report.</para>
+
+    <section xml:id="why">
+      <title xml:id="YetAnotherFormalism">See also</title>
+
+      <para></para>
+
+      <itemizedlist>
+        <listitem>
+          <para>SDF Disambiguation MedKit</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Static warnings and errors</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Dynamic warnings and errors</title>
+
+    <para>Parse errors and ambiguities</para>
+  </section>
+</chapter>
