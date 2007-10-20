@@ -11,7 +11,7 @@
 set -e
 
 # CATEGORIES="learning-about howto understanding courses project"
-CATEGORIES="learning-about"
+CATEGORIES="getting-started syntax"
 WEB="./doc/html"
 FOP="${FOPPREFIX}/fop"
 DOCBOOKXSLHTML=${DOCBOOKXSLPREFIX}/html/docbook.xsl
@@ -61,8 +61,8 @@ for cat in ${CATEGORIES}; do
       cp $cat/$book/*.{png,jpg,gif} ${WEB}/$cat/$book >& /dev/null || true
       if [ -f $cat/$book/$book.xml ]; then
 	pubdate=`getPubdate ${cat}/${book}/${book}.xml`
-	svn log --xml ${cat}/${book}/${book}.xml  | \
-	xsltproc  --output ${WEB}/$cat/$book/$book.log.html ./svnlog2html.xsl -
+	# svn log --xml ${cat}/${book}/${book}.xml  | \
+	# xsltproc  --output ${WEB}/$cat/$book/$book.log.html ./svnlog2html.xsl -
 	(xsltproc --xinclude --stringparam now "${pubdate}"  ./pubdate.xsl $cat/$book/$book.xml | \
 	 xsltproc  --output ${WEB}/$cat/$book/$book.html \
 		   --xinclude \
