@@ -87,9 +87,9 @@ for cat in ${CATEGORIES}; do
 	title=`getTitle $cat/$obook/$book.xml`
 
 	echo "<li> ${title}" >> ${INDEX}
-        echo "(<a href=\"./$cat/$obook/$book.html\">html</a>,"  >> ${INDEX}
-	echo "<a href=\"./$cat/$obook/$book.pdf\">pdf</a>" >> ${INDEX}
-	echo ",<a href=\"./$cat/$obook/$book.log.html\">changes</a>)" >> ${INDEX}
+        echo "(<a href=\"./$cat/$obook/$book.html\">html</a>, "  >> ${INDEX}
+	echo "<a href=\"./$cat/$obook/$book.pdf\">pdf</a>, " >> ${INDEX}
+	echo "<a href=\"./$cat/$obook/$book.log.html\">changes</a>)" >> ${INDEX}
         echo "</li>" >> ${INDEX}
 
         cp ${STYLESHEET} ${WEB}/$cat/$obook/${STYLESHEET}
@@ -99,7 +99,8 @@ for cat in ${CATEGORIES}; do
 	  cp $cat/$obook/$book.odp ${WEB}/$cat/$obook/$book.odp
 	  cp $cat/$obook/$book.pdf ${WEB}/$cat/$obook/$book.pdf
 	  title=`cat $cat/$obook/TITLE`
-	  echo "<li>[Slides] ${title} (<a href=\"./$cat/$obook/$book.pdf\">pdf</a>,<a href=\"./$cat/$obook/$book.odp\">odp</a>)</li>" >> ${INDEX}
+	  echo "<li>[Slides] ${title} (<a href=\"./$cat/$obook/$book.pdf\">pdf</a>, " >> ${INDEX}
+          echo "<a href=\"./$cat/$obook/$book.odp\">odp</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$obook/$book.pdf ]; then
       # It contains only a PDF file
 	  mkdir -p ${WEB}/$cat/$obook
