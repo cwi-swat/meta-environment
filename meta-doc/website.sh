@@ -106,8 +106,8 @@ for cat in ${CATEGORIES}; do
       elif [ -f $cat/$obook/$book.swf ]; then
       # It contains a Flash presentation
           mkdir -p ${WEB}/$cat/$obook
-          cp $cat/$obook/$book.swf ${WEB}/$cat/$book/$book.swf
-          cp $cat/$obook/$book.htm ${WEB}/$cat/$book/$book.htm
+          cp $cat/$obook/$book.swf ${WEB}/$cat/$obook/$book.swf
+          cp $cat/$obook/$book.htm ${WEB}/$cat/$obook/$book.htm
           title=`cat $cat/$obook/TITLE`
           echo "<li>${title} (<a href=\"./$cat/$obook/$book.htm\">flash</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$obook/$book.url ]; then
