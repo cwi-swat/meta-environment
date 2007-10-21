@@ -64,6 +64,7 @@ for cat in ${CATEGORIES}; do
       mkdir -p ${WEB}/$cat/$obook
       cp $cat/$obook/*.{png,jpg,gif} ${WEB}/$cat/$obook >& /dev/null || true
       if [ -f $cat/$obook/$book.xml ]; then
+      # It contains a DocBook file, generate HTML and PDF
 	pubdate=`getPubdate ${cat}/${obook}/${book}.xml`
 	svn log --xml ${cat}/${obook}/${book}.xml  | \
         xsltproc  --output ${WEB}/$cat/$obook/$book.log.html ./svnlog2html.xsl -
@@ -89,18 +90,28 @@ for cat in ${CATEGORIES}; do
         echo "</li>" >> ${INDEX}
 
         cp ${STYLESHEET} ${WEB}/$cat/$obook/${STYLESHEET}
+      elif [ -f $cat/$obook/$book.odp ]; then
+      # It contains an OpenOffice ODP file
+	  mkdir -p ${WEB}/$cat/$obook
+	  cp $cat/$obook/$book.odp ${WEB}/$cat/$obook/$book.odp
+	  cp $cat/$obook/$book.pdf ${WEB}/$cat/$obook/$book.pdf
+	  title=`cat $cat/$obook/TITLE`
+	  echo "<li>[Slides] ${title} (<a href=\"./$cat/$obook/$book.pdf\">pdf</a>,<a href=\"./$cat/$obook/$book.odp\">odp</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$obook/$book.pdf ]; then
+      # It contains only a PDF file
 	  mkdir -p ${WEB}/$cat/$obook
 	  cp $cat/$obook/$book.pdf ${WEB}/$cat/$obook/$book.pdf
 	  title=`cat $cat/$obook/TITLE`
 	  echo "<li>${title} (<a href=\"./$cat/$obook/$book.pdf\">pdf</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$obook/$book.swf ]; then
+      # It contains a Flash presentation
           mkdir -p ${WEB}/$cat/$obook
           cp $cat/$obook/$book.swf ${WEB}/$cat/$book/$book.swf
           cp $cat/$obook/$book.htm ${WEB}/$cat/$book/$book.htm
           title=`cat $cat/$obook/TITLE`
           echo "<li>${title} (<a href=\"./$cat/$obook/$book.htm\">flash</a>)</li>" >> ${INDEX}
       elif [ -f $cat/$obook/$book.url ]; then
+      # It contains an URL
 	  title=`cat $cat/$obook/TITLE`
 	  url=`cat $cat/$obook/$book.url`
 	  echo "<li><a href=\"${url}\">${title}</a></li>" >> ${INDEX}
