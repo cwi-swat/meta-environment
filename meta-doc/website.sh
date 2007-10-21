@@ -65,8 +65,8 @@ for cat in ${CATEGORIES}; do
       cp $cat/$obook/*.{png,jpg,gif} ${WEB}/$cat/$obook >& /dev/null || true
       if [ -f $cat/$obook/$book.xml ]; then
 	pubdate=`getPubdate ${cat}/${obook}/${book}.xml`
-	# svn log --xml ${cat}/${obook}/${book}.xml  | \
-	# xsltproc  --output ${WEB}/$cat/$obook/$book.log.html ./svnlog2html.xsl -
+	svn log --xml ${cat}/${obook}/${book}.xml  | \
+        xsltproc  --output ${WEB}/$cat/$obook/$book.log.html ./svnlog2html.xsl -
 	(xsltproc --xinclude --stringparam now "${pubdate}"  ./pubdate.xsl $cat/$obook/$book.xml | \
 	 xsltproc  --output ${WEB}/$cat/$obook/$book.html \
 		   --xinclude \

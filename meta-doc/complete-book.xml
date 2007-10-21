@@ -19,54 +19,48 @@
   <part>
     <title>Syntax Analysis</title>
 
-    <xi:include href="learning-about/syntax-analysis/syntax-analysis.xml"></xi:include>
-
-    <xi:include href="understanding/sdf/sdf.xml"></xi:include>
-    <xi:include href="howto/sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
-
-    <xi:include href="howto/sdf-errors/sdf-errors.xml"></xi:include>
+    <xi:include href="syntax/1-syntax-analysis/syntax-analysis.xml"></xi:include>
+    <xi:include href="syntax/2-sdf/sdf.xml"></xi:include>
+    <xi:include href="syntax/3-sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
+    <xi:include href="syntax/4-sdf-errors/sdf-errors.xml"></xi:include>
  </part>
   <part>
     <title>Formatting</title>
 
-    <xi:include href="learning-about/formatting/formatting.xml"></xi:include>
+    <xi:include href="formatting/1-formatting/formatting.xml"></xi:include>
   </part>
 
   <part>
     <title>Fact Extraction and Program Transformation</title>
 
-    <xi:include href="learning-about/term-rewriting/term-rewriting.xml"></xi:include>
-
-    <xi:include href="howto/asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
-
-    <xi:include href="understanding/asfsdf/asfsdf.xml"></xi:include>
-
-    <xi:include href="howto/asf-errors/asf-errors.xml"></xi:include>
+    <xi:include href="extraction-transformation/1-term-rewriting/term-rewriting.xml"></xi:include>
+    <xi:include href="extraction-transformation/2-asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
+    <xi:include href="extraction-transformation/3-language-definitions/language-definitions.xml"></xi:include>
+    <xi:include href="extraction-transformation/4-asfsdf/asfsdf.xml"></xi:include>
+    <xi:include href="extraction-transformation/5-asf-errors/asf-errors.xml"></xi:include>
 
   </part>
 
  <part>
    <title>Relational Fact Analysis</title>
 
-    <xi:include href="learning-about/rscript/rscript.xml"></xi:include>
+    <xi:include href="analysis/1-rscript/rscript.xml"></xi:include>
 
  </part>
 
   <part>
     <title>The Meta-Environment</title>
 
-    <xi:include href="understanding/architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
+    <xi:include href="meta-environment/1-architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
 
-    <xi:include href="understanding/extending-meta-environment/extending-meta-environment.xml"></xi:include>
+    <xi:include href="meta-environment/2-extending-meta-environment/extending-meta-environment.xml"></xi:include>
   </part>
 
   <part>
    <title>Software Development></title>
-    <xi:include href="project/coding-standards/coding-standards.xml"></xi:include>
-
-    <xi:include href="project/build-environment/build-environment.xml"></xi:include>
-
-   <xi:include href="project/version-management/version-management.xml"></xi:include>
+    <xi:include href="software-development/1-build-environment/build-environment.xml"></xi:include>
+    <xi:include href="software-development/2-version-management/version-management.xml"></xi:include>
+    <xi:include href="software-development/3-coding-standards/coding-standards.xml"></xi:include>
   </part>
   
 
