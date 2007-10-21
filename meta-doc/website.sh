@@ -58,6 +58,9 @@ for cat in ${CATEGORIES}; do
     if [ $obook == TITLE ]; then
        continue
     fi
+    # obook is an "ordered book", i.e., a book name possibly prefixed with a number (e.g., 2-syntax-analysis)
+    # to force the order of presentation on the webpage.
+    # book refers to the book name proper, with the prefix removed.
     book=`echo $obook | sed "s@^[0-9]*-@@"`
     echo --- processing $book ---
     if [ -d $cat/$obook ]; then
