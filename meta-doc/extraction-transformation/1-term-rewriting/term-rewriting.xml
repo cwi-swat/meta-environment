@@ -8,7 +8,7 @@
          xmlns:ns3="http://www.w3.org/2001/XInclude"
          xmlns:ns="http://docbook.org/ns/docbook">
   <info>
-    <title>Term Rewriting</title>
+    <title>Quick Introduction to Term Rewriting</title>
 
     <pubdate>$Rev$Author: paulk$ at $2006-12-13 22:16:02 +0100 (Wed,
     13 Dec 2006)$</pubdate>
