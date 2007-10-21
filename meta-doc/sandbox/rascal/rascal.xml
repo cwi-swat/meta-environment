@@ -374,11 +374,8 @@
       <title>Deep tree matching instead of tree traversal</title>
 
       <para><programlisting>module Tree-syntax
-
 imports Naturals
-
 exports TREE
-
   context-free syntax
     NAT             -&gt; TREE
     f(TREE,TREE)    -&gt; TREE
@@ -402,7 +399,8 @@ function cnt(TREE)       -&gt; INT
 function sum_tree(TREE)       -&gt; INT
 [] sum_tree(T) = sum({N | INT N : T})
 
-%% NB sum is a built-in that add all elements in a set or list.
+%% NB sum is a built-in that add all elements in a set or 
+%% list.
 
 %% Ex3: Increment all leaves in a TREE
 
@@ -412,26 +410,25 @@ function inc(TREE)        -&gt; TREE
 %% Idea: INT N : T generates alle INT leaves in the tree
 %% INT N : T =&gt; N+1 replaces each N by N+1
 %% The expression as a whole returns the modified term.
-%% This is an extremely compact manner of writing a transformer!
+%% This is an extremely compact manner of writing a 
+%% transformer!
 
 %% Ex4: full replacement of g by i
 
 function frepl(TREE)  -&gt; TREE
 [] frepl(T) = g(T1, T2) : T =&gt; i(frepl(T1), frepl(T2))
 
-%% Ex5: deep replacement of g by i (*** This does not work yet ***)
-%% bu indicates bottom-up traversal
+%% Ex5: deep replacement of g by i 
+%% "bu" indicates bottom-up traversal
 
 function drepl(TREE)  -&gt; TREE
-[] T1 == drepl(T1),
-   T2 == drepl(T2),
-   =========================================
-   drepl(T) = g(T1, T2) : bu(T) =&gt; i(T1, T2)
+[] drepl(T) = g(T1, T2) : bu(T) =&gt; i(T1, T2)
 
 %% Ex6: shallow replacement of g by i
+%% "td" indicates top-down traversal
 
 function srepl(TREE)  -&gt; TREE
-[] srepl(T) = g(T1, T2) : T =&gt; i(T1, T2) </programlisting></para>
+[] srepl(T) = g(T1, T2) : td(T) =&gt; i(T1, T2) </programlisting></para>
     </section>
 
     <section>
@@ -447,10 +444,10 @@ sorts Var %% variables
       Exp %% expressions
 
 context-free functions
-     "prime" "(" Var ")"  -&gt; Var              %% generate unique name
-     Var                  -&gt; Exp              %% single variable
-     "fn" Var "=&gt;" Exp    -&gt; Exp              %% function abstraction
-     Exp Exp              -&gt; Exp              %% function application
+     "prime" "(" Var ")"  -&gt; Var  %% generate unique name
+     Var                  -&gt; Exp  %% single variable
+     "fn" Var "=&gt;" Exp    -&gt; Exp  %% function abstraction
+     Exp Exp              -&gt; Exp  %% function application
 
 function allVars(Exp) -&gt; set[Var]
 [] allVars(E) = {V | &lt;&lt;Var V&gt;&gt; : E}
@@ -462,7 +459,8 @@ function boundVars(Exp) -&gt; set[Var]
 function freeVars(Exp) -&gt; set[Var]
 [] freeVars(E) = allVars(E) \ boundVars(E)
 
-%% Generate a fresh variable if V does not occur in given set.
+%% Generate a fresh variable if V does not occur in 
+%% given set of variables.
 function fresh(Var, set[Var]) -&gt; Var
 [] fresh(V, S) = if V in S then prime(V) else V fi
 
@@ -471,35 +469,34 @@ function fresh(Var, set[Var]) -&gt; Var
 function subst(Var, Exp, Exp)  -&gt; Exp
 
 [1] subst(V1, E, V2) = V2 when V1 != V2
-
 [2] subst(V, E, V) = E
-
 [3] subst(V, E, E1 E2) = subst(V, E, E1) subst(V, E, E2)
-
 [4] subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
-[5] subst(V1, E1, fn V2 =&gt; E2) = fn V2 =&gt; subst(V1, E1, E2)
-   when V1 != V2,
-        not(V1 in freeVars(E2) and V2 in freeVars(E1))
+[5] V1 != V2,
+    not(V1 in freeVars(E2) and V2 in freeVars(E1))
+    ==============================================
+    subst(V1, E1, fn V2 =&gt; E2) = 
+    fn V2 =&gt; subst(V1, E1, E2)
 
-[6] subst(V1, E1, fn V2 =&gt; E2) = fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))
-   when
-        V1 != V2,
-        V1 in freeVars(E2) and V2 in freeVars(E1),
-        V3 := fresh(V2,  freeVars(E2) union freeVars(E1)) </programlisting></para>
+[6] V1 != V2,
+    V1 in freeVars(E2) and V2 in freeVars(E1),
+    V3 := fresh(V2,  freeVars(E2) union freeVars(E1))
+    =================================================
+    subst(V1, E1, fn V2 =&gt; E2) = 
+    fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))</programlisting></para>
     </section>
 
     <section>
       <title>Renaming</title>
 
       <para><programlisting>module Renaming
-
 sorts Var %% variables
-     Exp %% expressions
-
+      Exp %% expressions
 context-free functions
-     Var                                -&gt; Exp   %% single variable
-     "let" Var "=" Exp "in Exp "end"    -&gt; Exp   %% function
-     abstraction
+     %% single variable
+     Var                             -&gt; Exp 
+     %% function abstraction
+     "let" Var "=" Exp "in Exp "end" -&gt; Exp
 
 %% Rename all bound variables in an Exp
 %% Version 1: purely functional
@@ -509,61 +506,74 @@ context-free functions
 
 function rename(Exp E, rel[Var,Var] Rn, Int Cnt) -&gt; Exp
 
-[] rename(let V = E1 in E2 end, Rn, Cnt) =
-  let Y = rename(E1, Rn, Cnt) in rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') end
-  when
-    Y := "x" + Cnt,                             %% this + concatenates (after conversion)
-    Cnt' := Cnt + 1
+[] Y := "x" + Cnt,   %% this + operator concatenates 
+                     %% (after converting the int to str)
+   Cnt' := Cnt + 1
+   ============================================
+   rename(let V = E1 in E2 end, Rn, Cnt) =
+   let Y = rename(E1, Rn, Cnt) 
+           in 
+           rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
+   end
 
-[] rename(V, Rn, Cnt) = V1
-  when
-    { V1 } = Rn[V]
+[] { V1 } == Rn[V]
+   =======================
+   rename(V, Rn, Cnt) = V1
+     
 
 [default]
-  rename(E, Rn, Cnt) = E
+   rename(E, Rn, Cnt) = E
 
 %% Rename all bound variables in an Exp
-
-%% Version 2: using global variables to generate new variables
+%% Version 2: using a global variable
+%% to generate new variables
 
 global variable
-      Cnt -&gt; int := 0                           %% Global has to be initialyzed somewhere
+      Cnt -&gt; int := 0   %% Initialize global Cnt
 
 function newVar() -&gt; Var
-[] newVar() = "x" + Cnt        
-  when Cnt := Cnt + 1
+[] Cnt := Cnt + 1
+   ====================
+   newVar() = "x" + Cnt        
 
 %% Rename -- Version 2
 
-function rename(Exp, rel[Var,Var])
+function rename(Exp E, rel[Var,Var] Rn) -&gt; Exp
 
-[] rename(let V = E1 in E2 end, Rn) =
-  let Y = rename(E1, Rn) in rename(E2, {&lt;V, Y&gt;} union Rn) end
-  when
-    Y := newVar
+[] Y := newVar
+   ======================================
+   rename(let V = E1 in E2 end, Rn) =
+   let Y = rename(E1, Rn) 
+           in 
+           rename(E2, {&lt;V, Y&gt;} union Rn) 
+   end
 
-[] rename(V, Rn) = V1
-  when
-    { V1 } = Rn[V]
+[] { V1 } == Rn[V]
+   ==================
+   rename(V, Rn) = V1
 
 [default]
-  rename(E, Rn) = E
+   rename(E, Rn) = E
 
 %% Rename -- Version 3, with Rn also as global variabele
 global variable
-      Rn -&gt; rel[Var, Var]
+      Cnt -&gt; int := 0
+      Rn -&gt; rel[Var, Var] := {}
 
 function rename(Exp)
 
-[] rename(let V = E1 in E2 end) =
-  let Y = rename(E1) in rename(E2) end
-  when
-    Y := newVar,
-    Rn :=  {&lt;V, Y&gt;} union Rn
-
-[] rename(V) = V1
-  when
-    { V1 } = Rn[V]
+[] Y := newVar,
+   Rn :=  {&lt;V, Y&gt;} union Rn
+   ==============================
+   rename(let V = E1 in E2 end) =
+   let Y = rename(E1) 
+           in 
+           rename(E2) 
+   end
+ 
+[] { V1 } == Rn[V]
+   ===============
+   rename(V) = V1     
 
 [default]
   rename(E) = E </programlisting></para>
@@ -596,14 +606,18 @@ variables
    "Env"    -&gt; Environment
 equations
 
-[] Env := {&lt;Id, Type&gt; | (PICO-ID ":" TYPE) Id : Type : Decls}
-   ================================================================
-   tcp(begin Decsl Series end) = [ tcst(S, Env) | Stat S : Series ]
+[] Env := {&lt;Id, Type&gt; | 
+           (PICO-ID ":" TYPE) Id : Type : Decls}
+   =============================================
+   tcp(begin Decsl Series end) = 
+   [ tcst(S, Env) | Stat S : Series ]
 
 [] tcst(Id := Exp, Env) = type-of(Exp) in Env[Id]
 [] tcst(if Exp then Stats1 else Stats2, Env) =
-    type-of(Exp, natural, Env)  &amp;&amp; tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
-[] tcst(while Exp do Stats od, Env) = type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
+   type-of(Exp, natural, Env) &amp;&amp; 
+   tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
+[] tcst(while Exp do Stats od, Env) = 
+   type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
 
 [] type-of(NatCon, natural, Env) = []
 [] type-of(StrCon, string, Env) = []
@@ -659,14 +673,14 @@ variables
  "Nat"   -&gt; NatCon
  "Str"   -&gt; StrCon
 
-global variables
+global variable
  "Env"   -&gt; Environment
 
 exports
 
 function tc(PROGRAM)     -&gt; bool
 [] tc(begin Decls Stats end) = tcs(Stats)
-  when Env := tcd(Decls)
+   when Env := tcd(Decls)
 
 traversal function tcd(Decls) -&gt; void
 [] tcd(Id : Type) = void
@@ -680,7 +694,8 @@ function tcst(Stat) -&gt; bool
 [] tcst(Id := Exp) = type-of(Exp) in Env[Id]
 [] tcst(if Exp then Stats1 else Stats2) =
     type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
-[] tcst(while Exp do Stats od) = type-of(Exp) == natural &amp;&amp; tcs(Stats)
+[] tcst(while Exp do Stats od) = 
+   type-of(Exp) == natural &amp;&amp; tcs(Stats)
 
 function type-of(Exp) -&gt; PICO-TYPE
 [] type-of(NatCon) = natural
@@ -817,7 +832,7 @@ context-free syntax
     <section>
       <title>Different styles of Type Declarations</title>
 
-      <para>We have at the moment, unfortunately, a .proliferation of
+      <para>We have at the moment, unfortunately, a proliferation of
       declaration styles for types.</para>
 
       <para>Functions are declared in ASF+SDF as:</para>
@@ -872,7 +887,7 @@ process mkWave(int N) is ...</programlisting>
 
       <para>Or do we want things like:</para>
 
-      <programlisting>function typeckeck(PROGRAM P) returns Boolean is ...
+      <programlisting>function typecheck(P : PROGRAM) -&gt; Boolean is ...
 
 var X -&gt; int
 
@@ -1008,7 +1023,7 @@ process mkWave(int N) is ...</programlisting>
 
         <listitem>
           <para>We need process modules (Tscript) that provide: import,
-          export, hiding. So far</para>
+          export, hiding.</para>
         </listitem>
       </itemizedlist>
     </section>
