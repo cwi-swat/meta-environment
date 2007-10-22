@@ -1,2 +1,0 @@
-process P(X : int) is printf("%d\n",X)
-toolbus(P(123))

@@ -1,5 +1,0 @@
-S = "string"
-I = identifier
-T1 = and(true,false)
-T2 = and("a","b")
-T3 = and(and(true,false),and("a","b"))

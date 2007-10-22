@@ -1,4 +1,0 @@
-process P(X : str) is
-let X : int
-in X := 1 . Y := 2
-endlet

@@ -1,2 +1,0 @@
-process P is printf("%d\n", 123)
-toolbus(P)

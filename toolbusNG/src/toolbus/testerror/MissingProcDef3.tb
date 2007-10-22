@@ -1,2 +1,0 @@
-process P(N : int) is delta
-toolbus(P("abc"))

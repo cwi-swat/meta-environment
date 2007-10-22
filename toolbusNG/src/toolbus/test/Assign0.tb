@@ -1,6 +1,0 @@
-process P is
-  let X : int
-  in
-	X := 123 . printf("%d\n", X)
-  endlet
-toolbus(P)

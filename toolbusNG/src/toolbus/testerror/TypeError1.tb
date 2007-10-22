@@ -1,5 +1,0 @@
-process P is
-let N : int in
-   N := "abc"
-   endlet
-toolbus(P)

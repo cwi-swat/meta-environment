@@ -1,4 +1,0 @@
-process P is
-   if false then printf("ko\n") else printf("ok\n") fi
-
-toolbus(P)
