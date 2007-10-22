@@ -1,0 +1,37 @@
+process P is printf("P!\n")
+
+#define S "a_string"
+
+#ifdef S
+process Q is printf("Q: S is defined\n")
+#ifdef T
+process R is printf("R: T is defined\n")
+#endif
+#endif
+
+#ifdef T
+process R is printf("R: T is defined\n")
+#endif
+
+#ifndef S
+process Q is printf("Q: S is undefined\n")
+#endif
+
+process R is printf("R!\n")
+
+#ifdef S
+#ifndef U
+process A is printf("A!\n")
+#ifdef S
+process C is printf("C!\n")
+#endif
+#ifndef S
+process C is printf("C wrong\n")
+#endif
+#endif
+process B is printf("B!\n")
+#endif
+
+process Main is P.Q.R.A.B.C
+
+toolbus(Main)

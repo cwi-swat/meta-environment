@@ -1,0 +1,63 @@
+sglr.path=/ufs/lankamp/metaNG/installed/bin/sglr
+parsetable.path=/home/lankamp/workspace/ToolbusNG_InterTool/toolbus/parser/Tscript.trm.tbl
+implodePT.path=/ufs/lankamp/metaNG/installed/bin/implodePT
+addPosInfo.path=/ufs/lankamp/metaNG/installed/bin/addPosInfo
+workspace.path=/home/lankamp/workspace
+
+include.path=/ufs/lankamp/metaNG/installed/share/sdf-meta, \
+/ufs/lankamp/metaNG/installed/share/pgen, \
+/ufs/lankamp/metaNG/installed/share/sdf-support, \
+/ufs/lankamp/metaNG/installed/share/asf, \
+/ufs/lankamp/metaNG/installed/share/asf-library, \
+/ufs/lankamp/metaNG/installed/share/asfsdf-meta, \
+/ufs/lankamp/metaNG/installed/share/meta, \
+/ufs/lankamp/metaNG/installed/share/term-store, \
+/ufs/lankamp/metaNG/installed/share/editor-manager, \
+/ufs/lankamp/metaNG/installed/share/editor-plugin, \
+/ufs/lankamp/metaNG/installed/share/structure-editor, \
+/ufs/lankamp/metaNG/installed/share/error-support, \
+/ufs/lankamp/metaNG/installed/share/error-gui, \
+/ufs/lankamp/metaNG/installed/share/graph-support, \
+/ufs/lankamp/metaNG/installed/share/dialog-gui, \
+/ufs/lankamp/metaNG/installed/share/meta-studio, \
+/ufs/lankamp/metaNG/installed/share/progress-gui, \
+/ufs/lankamp/metaNG/installed/share/module-details-gui, \
+/ufs/lankamp/metaNG/installed/share/io-support, \
+/ufs/lankamp/metaNG/installed/share/module-manager, \
+/ufs/lankamp/metaNG/installed/share/navigator-gui, \
+/ufs/lankamp/metaNG/installed/share/sglr, \
+/ufs/lankamp/metaNG/installed/share/pt-support, \
+/ufs/lankamp/metaNG/installed/share/error-support, \
+/ufs/lankamp/metaNG/installed/share/pandora, \
+/ufs/lankamp/metaNG/installed/share/tide, \
+/ufs/lankamp/metaNG/installed/share/tide-support, \
+/ufs/lankamp/metaNG/installed/share/config-manager, \
+/ufs/lankamp/metaNG/installed/share/graph-gui, \
+/ufs/lankamp/metaNG/installed/share/sdf-metrics, \
+/ufs/lankamp/metaNG/installed/share/console-gui, \
+/ufs/lankamp/metaNG/installed/share/console-grabber, \
+/ufs/lankamp/metaNG/installed/share/svg-gui, \
+/ufs/lankamp/metaNG/installed/share/relation-stores, \
+/ufs/lankamp/metaNG/installed/share/rstore-container, \
+/ufs/lankamp/metaNG/installed/share/vis-plugin-csv, \
+/ufs/lankamp/metaNG/installed/share/vis-plugin-graph, \
+/ufs/lankamp/metaNG/installed/share/vis-plugin-charts, \
+/ufs/lankamp/metaNG/installed/share/vis-plugin-table, \
+/ufs/lankamp/metaNG/installed/share/vis-plugin, \
+/ufs/lankamp/metaNG/installed/share/vis-base
+
+java.classpath=/home/lankamp/workspace/ToolbusNG_InterTool/bin, \
+                /ufs/lankamp/metaNG/share/toolbus-java-adapter.jar
+testing.class=toolbus.Testing
+testing.classpath=/home/lankamp/workspace/ToolbusNG_InterTool/bin, \
+                  /ufs/lankamp/metaNG/toolbus/adapters/java-adapter/
+tide-control.classpath=/ufs/lankamp/metaNG/installed/share/meta-studio.jar, \
+			/ufs/lankamp/metaNG/installed/share/aterm-java.jar, \
+			/ufs/lankamp/metaNG/installed/share/shared-objects.jar, \
+			/ufs/lankamp/metaNG/installed/share/jjtraveler.jar, \
+			/ufs/lankamp/metaNG/installed/classes, \
+			/ufs/lankamp/metaNG/installed/classes/tide, \
+			/ufs/lankamp/metaNG/installed/share/error-support/errorapi.jar, \
+			/ufs/lankamp/metaNG/installed/share/error-support/locationapi.jar, \
+			/ufs/lankamp/metaNG/installed/share/tide/tide.jar
+xxxdisplay.command=/ufs/lankamp/metaNG/toolbus/bin/wish-adapter -script /ufs/lankamp/metaNG/toolbus/demos/wave/ui-wave.tcl

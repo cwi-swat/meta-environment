@@ -1,0 +1,44 @@
+
+Generating the scanner/parser for ToolBus scripts.
+
+Scanner
+-------
+
+There is a commandline method but that does not seem to work so I use:
+
+java -jar JFlex.jar
+
+This starts an interactive screen:
+- In the "Lexical specification" toolbus.jflex
+- Push the "Generate" button.
+
+The result are two files: Lexer.java and sym.java
+
+Parser
+------
+
+Run on the commandline:
+
+java -jar  java-cup-11a.jar -expect 1 toolbus.cup
+
+This generates the file parser.java that contains the actual parser.
+
+Don't forget to refresh the files in the Eclipse navigator
+when you include these generated files while developing
+in Eclipse!
+
+Switching between old and new parser
+-----------------------------------
+
+The ToolBus class has now two parse methods:
+- parse (the old parser)
+- parsecup (the CUP generated parser).
+
+
+Rough edges
+-----------
+
+No attention has been paid yet to
+- filenames and position information in error messages
+- error recovery.
+
