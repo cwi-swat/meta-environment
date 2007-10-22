@@ -1,0 +1,32 @@
+<body>
+This package implements the ToolBus coordination architecture.
+
+The ToolBus is a coordination architecture that supervises
+the cooperation of a number of tools (software components).
+The tools may be implemented in a variety of programming languages
+and may run on different computers. Truly heterogeneous,
+distributed, applications can thus be implemented.
+
+The ToolBus is based on two essential concepts: <I>Tscripts</I> and <I>ATerms</I>.
+<P>
+Tscripts are the scripting language used to describe the coordination of the various tools.
+It has the following characteristics:
+<menu>
+<li> a concurrent language with a solid theoretical foundation: the Algebra of Cooperating Processes (ACP).
+<li> primitives for process creation, synchronous and asynchronous messaging.
+<li> primitives for starting, terminating external tools and for communicting with them.
+<li> strongly typed.
+<li> automatic generation of tool interfaces.
+</menu>
+
+<P>
+ATerms (for Annotated Terms) are a language-independent data exchange format for hierarchically structured data.
+Key features:
+<menu>
+<li> ATerms can represent directed, acyclic, graphs and support <I>maximal subterm sharing</I>.
+This means that common substructures are always shared and memory is preserved.
+<li> ATerms may contain annotations that are also ATerms. In this way, tools can attach specific information
+to ATerms, such as source code location, highlighting and coloring, dataflow, etc.
+<li> ATerms have been implemented for C, Java, Perl, Python and other languages.
+</menu>
+</body>

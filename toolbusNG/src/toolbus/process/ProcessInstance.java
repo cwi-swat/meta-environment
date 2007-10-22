@@ -1,0 +1,304 @@
+package toolbus.process;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+
+import toolbus.AtomSet;
+import toolbus.State;
+import toolbus.StateElement;
+import toolbus.TBTermFactory;
+import toolbus.ToolBus;
+import toolbus.atom.Atom;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
+import aterm.ATerm;
+import aterm.ATermList;
+
+/**
+ * @author paulk, Jul 23, 2002
+ */
+public class ProcessInstance{
+	private static State empty = new State();
+	
+	private final ProcessDefinition definition;
+	private final String processName;
+	private final int processId;
+	
+	private final AtomSet elements;
+	
+	private State currentState;
+	
+	private final ToolBus toolbus;
+	private final TBTermFactory tbfactory;
+	
+	private final List<ATerm> subscriptions;
+	private final List<ATerm> notes;
+	
+	private boolean running = true;
+	
+	public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException{
+		toolbus = TB;
+		tbfactory = TB.getTBTermFactory();
+		this.processId = processId;
+		subscriptions = new LinkedList<ATerm>();
+		notes = new LinkedList<ATerm>();
+		call.setEvalArgs(false);
+		processName = call.getName();
+		
+		definition = TB.getProcessDefinition(processName, call.actuals.getLength());
+		
+		call.computeFirst();
+		call.replaceFormals(new Environment(tbfactory));
+		Stack<String> stack = new Stack<String>();
+		stack.push("TOPLEVEL");
+		call.compile(this, stack, empty);
+		
+		elements = call.getAtoms();
+		
+		currentState = call.getFirst();
+		currentState.activate();
+		
+		addPartnersToAllProcesses(elements);
+		
+		showAutomaton();
+	}
+	
+	public ProcessInstance(ToolBus TB, String name, ATermList actuals, int processId) throws ToolBusException{
+		this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory(), null), processId);
+	}
+	
+	public TBTermFactory getTBTermFactory(){
+		return tbfactory;
+	}
+	
+	public void addToAtomSignature(AtomSet atoms){
+		for(Atom a : atoms.getSet()){
+			toolbus.addToSignature(a.toATerm());
+		}
+	}
+	
+	public ToolBus getToolBus(){
+		return toolbus;
+	}
+	
+	public long getRunTime(){
+		return toolbus.getRunTime();
+	}
+	
+	public int getProcessId(){
+		return processId;
+	}
+	
+	public String getProcessName(){
+		return processName;
+	}
+	
+	public void terminate(ATerm msg){
+		running = false;
+		for(ProcessInstance P : toolbus.getProcesses()){
+			if(P != this){
+				P.delPartners(elements);
+			}
+		}
+	}
+	
+	public void addElements(AtomSet atoms){
+		for(Atom a : atoms.getSet()){
+			elements.addAtom(a);
+		}
+	}
+	
+	public void delElements(AtomSet atoms){
+		for(Atom a : atoms.getSet()){
+			elements.delAtom(a);
+		}
+	}
+	
+	/**
+	 * Add potential partners to this StateElement. This may optimize execution. Typical examples:
+	 * partnering SndMsg with RecMsg, and SndNote with Subscribe
+	 * 
+	 * @param atoms
+	 *            containing the potential partners
+	 */
+	public void addPartners(AtomSet atoms){
+		// LoggerFactory.log(this.getProcessName(), "add the partners " + atoms,
+		// IToolBusLoggerConstants.MESSAGES);
+		for(Atom e : elements.getSet()){
+			e.addPartners(atoms);
+		}
+	}
+	
+	/**
+	 * Delete partners from this StateElement. This is necessary when processes die and partners are
+	 * no longer available.
+	 * 
+	 * @param atoms
+	 *            containing the partners
+	 */
+	public void delPartners(AtomSet atoms){
+		for(Atom e : elements.getSet()){
+			e.delPartners(atoms);
+		}
+	}
+	
+	public void addPartnersToAllProcesses(AtomSet atoms){
+		// System.err.println("Enter addPartnersToAllProcesses for: " + this.getProcessName());
+		for(ProcessInstance P : toolbus.getProcesses()){
+			// System.err.println("[" + this.getProcessName() + "] addPartnersToAllProcesses: " +
+			// P.getProcessName());
+			if(P != this){
+				// LoggerFactory.log(this.getProcessName(), "add partners to " + P.getProcessName(),
+				// IToolBusLoggerConstants.MESSAGES);
+				P.addPartners(atoms);
+			}
+		}
+	}
+	
+	public void delPartnersFromAllProcesses(AtomSet atoms){
+		for(ProcessInstance P : toolbus.getProcesses()){
+			if(P != this){
+				P.delPartners(atoms);
+			}
+		}
+	}
+	
+	/*
+	 * Note manipulation
+	 */
+
+	public void subscribe(ATerm pat){
+		//LoggerFactory.log(definition.getName(), "subscribe " + pat, IToolBusLoggerConstants.NOTES);
+		if(!subscriptions.contains(pat)) subscriptions.add(pat);
+	}
+	
+	public void unsubscribe(ATerm pat){
+		//LoggerFactory.log(definition.getName(), "unsubscribe: " + pat, IToolBusLoggerConstants.NOTES);
+		subscriptions.remove(pat);
+	}
+	
+	public boolean getNoteFromQueue(ATerm pat, Environment env){
+		Iterator<ATerm> notesIterator = notes.iterator();
+		while(notesIterator.hasNext()){
+			ATerm note = notesIterator.next();
+			if(tbfactory.matchPatternToValue(pat, env, note)){
+				notesIterator.remove();
+				//LoggerFactory.log(definition.getName(), "getNotefromQueue: " + note, IToolBusLoggerConstants.NOTES);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean noNoteInQueue(ATerm pat, Environment env){
+		//LoggerFactory.log(definition.getName(), "noNoteinQueue: " + pat, IToolBusLoggerConstants.NOTES);
+		Iterator<ATerm> notesIterator = notes.iterator();
+		while(notesIterator.hasNext()){
+			ATerm note = notesIterator.next();
+			if(tbfactory.patternMatchesToValue(pat, env, note)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean putNoteInQueue(ATerm note){
+		//LoggerFactory.log(definition.getName(), "putNoteinQueue: " + note, IToolBusLoggerConstants.NOTES);
+		
+		Iterator<ATerm> subscriptionsIterator = subscriptions.iterator();
+		while(subscriptionsIterator.hasNext()){
+			ATerm sub = subscriptionsIterator.next();
+			if(tbfactory.mightMatch(sub, note)){
+				notes.add(note);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasNotes(){
+		return !notes.isEmpty();
+	}
+	
+	public List<ATerm> getSubscriptions(){
+		return subscriptions;
+	}
+	
+	public List<ATerm> getNoteQueue(){
+		return notes;
+	}
+	
+	public State getProcessState(){
+		return currentState;
+	}
+	
+	public boolean contains(StateElement a){
+		return currentState.contains(a);
+	}
+	
+	public State getCurrentState(){
+		return currentState;
+	}
+	
+	public void setCurrentState(State s){
+		currentState = s;
+	}
+	
+	public void gotoNextStateAndActivate(){
+		currentState = currentState.gotoNextStateAndActivate();
+	}
+	
+	public void gotoNextStateAndActivate(StateElement se){
+		currentState = currentState.gotoNextStateAndActivate(se);
+	}
+	
+	public boolean step() throws ToolBusException{
+		if(running && currentState.execute()){
+			gotoNextStateAndActivate();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isTerminated(){
+		if(!running || currentState.size() == 0){
+			return true;
+		}
+		return false;
+	}
+	
+	public String toString(){
+		return "ProcessInstance(" + definition.getName() + ", " + processId + ", " + currentState + ")";
+	}
+	
+	public String showStatus(){
+		String r1 = "process " + definition.getName() + "(" + processId + "):\n  " + elements.getSet().size() + " elements\n" + currentState;
+		if(subscriptions.size() > 0){
+			String r2 = "\n  Subscriptions: {";
+			for(ATerm sub : subscriptions){
+				r2 = r2 + "\n    " + sub.toString();
+			}
+			if(notes.size() > 0){
+				String r3 = "}\n  Note queue:{";
+				for(ATerm note : notes){
+					r3 = r3 + "\n    " + note.toString();
+				}
+				r3 = r3 + "}";
+				return r1 + r2 + r3;
+			}
+			return r1 + r2;
+		}
+		return r1;
+	}
+	
+	public void showAutomaton(){
+		// LoggerFactory.log("process " + processId + ": " + call, IToolBusLoggerConstants.CALLS);
+		// LoggerFactory.log("process " + processId + ": atoms: =" + elements, IToolBusLoggerConstants.CALLS);
+		// LoggerFactory.log("process " + processId + ": currentState = " + currentState, IToolBusLoggerConstants.CALLS);
+		/*for(Atom a : elements.getSet()){
+			LoggerFactory.log(definition.getName(), a + " --> " + a.getFollow(), IToolBusLoggerConstants.CALLS);
+		}*/
+	}
+}

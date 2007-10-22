@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="casestudy/|doc/|toolbus/tifs/" kind="src" path=""/>
-	<classpathentry exported="true" kind="var" path="JRE_LIB"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="junit.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/shared-objects"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/aterm-java"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/JJTraveler"/>
-	<classpathentry kind="output" path=""/>
+	<classpathentry kind="lib" path="lib/jjtraveler-0.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects_thread-safe"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/java-cup-11a.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

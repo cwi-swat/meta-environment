@@ -1,0 +1,18 @@
+process OpenModule is
+let Path : str
+in
+    Path := "abc" .
+    if false then
+      printf("wrong\n")
+    else
+      let
+        Term: path
+      in
+         Term := quote(path(Path)).
+         printf("Setting term: %t\n", Term)
+      endlet
+    fi
+  . printf("Done\n")
+endlet
+
+toolbus(OpenModule)

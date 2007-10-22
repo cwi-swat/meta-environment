@@ -1,0 +1,53 @@
+module Atom
+imports TBTerms
+
+exports
+  sorts Atom
+
+  context-free syntax
+  
+  %% communication atoms
+    "snd-msg" "(" TBTermList ")"			    -> Atom	{cons("ttt-SndMsg")}
+ %%   "snd-msg" "(" TBTermList ")" "to" TBTerm	-> Atom	{cons("ttt-SndMsg")}
+
+    "rec-msg""(" TBTermList ")"		            -> Atom {cons("ttt-RecMsg")}
+ %%   "rec-msg" "(" TBTermList ")" "from" TBTerm	-> Atom {cons("ttt-RecMsg")}
+    
+  %%note atoms
+    "subscribe" "(" TBTerm ")"                   -> Atom {cons("ttt-Subscribe")}
+    "unsubscribe" "(" TBTerm ")"                 -> Atom {cons("ttt-UnSubscribe")}
+    "snd-note" "(" TBTerm ")"			         -> Atom {cons("ttt-SndNote")}
+    "rec-note" "(" TBTerm ")"			         -> Atom {cons("ttt-RecNote")}   
+    "no-note" "(" TBTerm ")"			         -> Atom {cons("ttt-NoNote")}
+    
+  %% Tool atoms
+
+    "execute" "(" TBTerm "," TBTerm ")"          -> Atom {cons("ttt-Execute")}
+    "rec-connect" "(" TBTerm ")"                 -> Atom {cons("ttt-RecConnect")}
+    "rec-disconnect" "(" TBTerm ")"              -> Atom {cons("ttt-RecDisConnect")}
+    "snd-kill" "(" TBTerm "," TBTerm ")"         -> Atom {cons("ttt-SndKill")}
+    "snd-terminate" "(" TBTerm "," TBTerm ")"    -> Atom {cons("ttt-SndTerminate")}
+  
+    "rec-event" "(" TBTerm "," TBTerm ")"	     -> Atom {cons("ttt-Event")}
+    "snd-ack-event" "(" TBTerm "," TBTerm ")"	 -> Atom {cons("ttt-AckEvent")}
+    "snd-ack-event" "(" TBTerm "," TBTerm "," TBTerm ")" -> Atom {cons("ttt-AckEventCB")}
+    "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("ttt-Eval")}
+    "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("ttt-RecVal")} 
+    "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("ttt-Do")}
+ 
+  %% Delta and Tau
+  
+    "tau"				                         -> Atom {cons("ttt-Tau")}
+    "delta"				                         -> Atom {cons("ttt-Delta")}
+     
+  %% Read and Print
+  
+     "printf" "(" TBTermList ")"			     -> Atom {cons("ttt-Print")}
+     "read" "(" TBTermList ")"                   -> Atom {cons("ttt-Read")}
+     
+  %% Shutdown
+      "shutdown" "(" TBTerm ")"                  -> Atom {cons("ttt-ShutDown")}
+      
+  %% Assign
+
+     Var ":=" TBTerm 			                 -> Atom {cons("ttt-Assign")}

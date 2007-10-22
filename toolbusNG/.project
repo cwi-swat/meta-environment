@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>toolbusNG</name>
+	<name>ToolbusNG_InterTool</name>
 	<comment></comment>
 	<projects>
+		<project>aterm-java</project>
+		<project>JJTraveler</project>
+		<project>shared-objects</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
