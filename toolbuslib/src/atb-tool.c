@@ -779,7 +779,7 @@ int ATBhandleOne(int fd)
     case PERFORMANCE_STATS:
       result = getPerformanceStats();
       ATBwriteTermWithOp(fd, result, PERFORMANCE_STATS);
-      break;
+      return 0;
     case END_OPC:
 	  nrOfConnectedTools--;
       /* Returning -1 has as result that closeConnection will be called */
