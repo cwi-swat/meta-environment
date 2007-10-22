@@ -14,9 +14,6 @@
 <xsl:param name="figure.autolabel"           select="'0'" />
 <xsl:param name="table.autolabel"            select="'0'" />
 
-<!-- graphics -->
-<xsl:param name="callout.graphics.path"      select="'../../images/callouts/'" />
-
 <!-- cross referencing -->
 <xsl:param name="xref.with.number.and.title" select="'1'" />
 <xsl:param name="collect.xref.targets"       select= "'yes'" />
@@ -24,7 +21,7 @@
 <xsl:param name="olink.doctitle"             select="'yes'" />
 
 <!-- bibliography -->
-<xsl:param name="bibliography.collection"    select="'/home/paulk/research/meta-doc/trunk/bibliography.xml'"/>
+<xsl:param name="bibliography.collection"    select="'/ufs/paulk/research/meta-doc/trunk/bibliography.xml'"/>
 
 <!-- Adapt style of page number references in xrefs -->
 

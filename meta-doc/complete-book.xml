@@ -40,7 +40,6 @@
     <xi:include href="extraction-transformation/5-asf-errors/asf-errors.xml"></xi:include>
 
   </part>
-
  <part>
    <title>Relational Fact Analysis</title>
 
@@ -52,10 +51,8 @@
     <title>The Meta-Environment</title>
 
     <xi:include href="meta-environment/1-architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
-
     <xi:include href="meta-environment/2-extending-meta-environment/extending-meta-environment.xml"></xi:include>
   </part>
-
   <part>
    <title>Software Development></title>
     <xi:include href="software-development/1-build-environment/build-environment.xml"></xi:include>

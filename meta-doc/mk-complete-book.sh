@@ -10,10 +10,9 @@ FOP="${FOPPREFIX}/fop"
 DOCBOOKXSLHTML=${DOCBOOKXSLPREFIX}/html/docbook.xsl
 DOCBOOKXSLFO=${DOCBOOKXSLPREFIX}/fo/docbook.xsl
 STYLESHEET="meta-doc-style.css"
-
 	(xsltproc  --xinclude \
                    --output book.fo \
-                   fo-customization.xsl \
+                   fo-complete-book-customization.xsl \
                    complete-book.xml)
         ${FOP} -r -fo book.fo -pdf book.pdf
 
