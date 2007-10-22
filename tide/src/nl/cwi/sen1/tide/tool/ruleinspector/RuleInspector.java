@@ -9,8 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.InputMethodListener;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -88,18 +89,6 @@ public class RuleInspector
 
   //}}}
 
-  //{{{ private void cleanup()
-
-  private void cleanup()
-  {
-    selector.cleanup();
-    editor.cleanup();
-    process.getAdapter().removeDebugAdapterListener(this);
-    getManager().removeTool(this);
-  }
-
-  //}}}
-
   //{{{ public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
 
   public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
@@ -125,7 +114,7 @@ class RuleSelector
 {
   private DebugProcess process;
 
-  java.util.List listeners;
+  List<RuleSelectionListener> listeners;
 
   RuleSelectorTableModel tableModel;
   JTable table;
@@ -135,7 +124,7 @@ class RuleSelector
   public RuleSelector(DebugProcess process)
   {
     this.process = process;
-    listeners = new LinkedList();
+    listeners = new ArrayList<RuleSelectionListener>();
     setBorder(new TitledBorder(new LineBorder(Color.gray), "Rule Selector"));
 
     tableModel = new RuleSelectorTableModel(process);
@@ -177,9 +166,9 @@ class RuleSelector
 
   private void fireRuleSelected(Rule rule)
   {
-    Iterator iter = listeners.iterator();
+    Iterator<RuleSelectionListener> iter = listeners.iterator();
     while (iter.hasNext()) {
-      RuleSelectionListener listener = (RuleSelectionListener)iter.next();
+      RuleSelectionListener listener = iter.next();
       listener.ruleSelected(rule);
     }
   }
@@ -220,17 +209,12 @@ class RuleSelector
   //}}}
   //{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
 
-  public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
-  {
-  }
+  public void ruleTriggered(DebugProcess process, Rule rule, Expr value){}
 
   //}}}
   //{{{ public void evaluationResult(process, expr, value, tag)
 
-  public void evaluationResult(DebugProcess process, Expr expr,
-			       Expr value, String tag)
-  {
-  }
+  public void evaluationResult(DebugProcess process, Expr expr, Expr value, String tag){}
 
   //}}}
 
@@ -322,7 +306,7 @@ class RuleSelectorTableModel
   //}}}
   //{{{ public Class getColumnClass(int col)
 
-  public Class getColumnClass(int col)
+  public Class<?> getColumnClass(int col)
   {
     return getValueAt(0, col).getClass();
   }
@@ -552,9 +536,7 @@ class RuleEditor
   //}}}
   //{{{ public void ruleCreated(DebugProcess process, Rule rule)
 
-  public void ruleCreated(DebugProcess process, Rule rule)
-  {
-  }
+  public void ruleCreated(DebugProcess process, Rule rule){}
 
   //}}}
   //{{{ public void ruleDeleted(DebugProcess process, Rule rule)
@@ -580,17 +562,12 @@ class RuleEditor
   //}}}
   //{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
 
-  public void ruleTriggered(DebugProcess process, Rule rule, Expr value)
-  {
-  }
+  public void ruleTriggered(DebugProcess process, Rule rule, Expr value){}
 
   //}}}
   //{{{ public void evaluationResult(process, expr, value, tag)
 
-  public void evaluationResult(DebugProcess process, Expr expr,
-			       Expr value, String tag)
-  {
-  }
+  public void evaluationResult(DebugProcess process, Expr expr, Expr value, String tag){}
 
   //}}}
   //{{{ private void setModified(boolean on)

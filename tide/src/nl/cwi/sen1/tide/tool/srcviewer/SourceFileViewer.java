@@ -75,14 +75,12 @@ class SourceFileViewer
 	private DebugProcess process;
 	private String file;
 	private String tag_view_var;
-	private int id;
 
 	private JPopupMenu menu;
 
 	private String tag_breakpoint;
 	private String tag_watchpoint;
 
-	private JLayeredPane pane;
 	private LineNumberCanvas lineNumbers;
 	private SourceBrowser text;
 	private JPanel glass;
@@ -94,16 +92,11 @@ class SourceFileViewer
 
 	private Highlighter.HighlightPainter variablePainter;
 
-	private Highlighter.HighlightPainter breakpointPainter;
-	private Highlighter.HighlightPainter watchpointPainter;
-	private Map ruleHighlights;
-
-	private Map variableHighlights;
+	private Map<ValuePopup, Object> variableHighlights;
 
 	private int lastSelected;
 	private Rule lastSelectedRule;
 	private ValuePopup draggedPopup;
-
 
 	public SourceFileViewer(
 		ToolManager manager,
@@ -160,19 +153,11 @@ class SourceFileViewer
 		text.setHighlighter(highlighter);
 		text.setEditable(false);
 
-		breakpointPainter =
-			new DefaultHighlighter.DefaultHighlightPainter(COLOR_BREAK);
-		watchpointPainter =
-			new DefaultHighlighter.DefaultHighlightPainter(COLOR_WATCH);
-
 		cpePainter = new DefaultHighlighter.DefaultHighlightPainter(COLOR_CPE);
 
-		variablePainter =
-			new DefaultHighlighter.DefaultHighlightPainter(COLOR_VARIABLE);
+		variablePainter = new DefaultHighlighter.DefaultHighlightPainter(COLOR_VARIABLE);
 
-		ruleHighlights = new HashMap();
-
-		variableHighlights = new HashMap();
+		variableHighlights = new HashMap<ValuePopup, Object>();
 	}
 
 	public String getFile() {
@@ -184,9 +169,9 @@ class SourceFileViewer
 		prefs.removePreferenceListener(this);
 	}
 
-	protected void highlightRules(Iterator rules) {
+	protected void highlightRules(Iterator<Rule> rules) {
 		while (rules.hasNext()) {
-			Rule rule = (Rule) rules.next();
+			Rule rule = rules.next();
 			highlightRule(rule);
 		}
 	}
@@ -364,15 +349,13 @@ class SourceFileViewer
 		menu.show(glass, x, y);
 	}
 
-	public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
-	}
+	public void popupMenuWillBecomeVisible(PopupMenuEvent event) {}
 
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
 		text.clearSelectedPosition();
 	}
 
-	public void popupMenuCanceled(PopupMenuEvent event) {
-	}
+	public void popupMenuCanceled(PopupMenuEvent event) {}
 
 	public void mouseDragged(MouseEvent event) {
 		int x = event.getX() - text.getX();
@@ -396,8 +379,7 @@ class SourceFileViewer
 		}
 	}
 
-	public void mouseMoved(MouseEvent event) {
-	}
+	public void mouseMoved(MouseEvent event) {}
 
 	public void mouseClicked(MouseEvent event) {
 		if (!event.isShiftDown()
@@ -415,11 +397,9 @@ class SourceFileViewer
 		}
 	}
 
-	public void mouseEntered(MouseEvent e) {
-	}
+	public void mouseEntered(MouseEvent e) {}
 
-	public void mouseExited(MouseEvent e) {
-	}
+	public void mouseExited(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent event) {
 		Component comp = glass.findComponentAt(event.getX(), event.getY());
@@ -520,15 +500,9 @@ class SourceFileViewer
 		highlightRule(rule);
 	}
 
-	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {
-	}
+	public void ruleTriggered(DebugProcess process, Rule rule, Expr value){}
 
-	public void evaluationResult(
-		DebugProcess process,
-		Expr expr,
-		Expr value,
-		String tag) {
-	}
+	public void evaluationResult(DebugProcess process, Expr expr, Expr value, String tag){}
 
 	public void preferencesChanged(PreferenceSet prefs) {
 		String prefName = SourceViewerFactory.PREF_SOURCECODE_FONT;
@@ -541,19 +515,14 @@ class SourceFileViewer
 		repaint();
 	}
 
-	public void preferenceChanged(
-		PreferenceSet prefs,
-		String name,
-		String oldValue,
-		String newValue) {
+	public void preferenceChanged(PreferenceSet prefs, String name, String oldValue, String newValue) {
 		if (name.equals(SourceViewerFactory.PREF_SOURCECODE_FONT)
 			|| name.equals(SourceViewerFactory.PREF_LINENUMBER_FONT)) {
 			preferencesChanged(prefs);
 		}
 	}
 
-	public void preferencesStatusChanged(PreferenceSet set, boolean clean) {
-	}
+	public void preferencesStatusChanged(PreferenceSet set, boolean clean){}
 }
 
 class ScrollablePane extends JLayeredPane implements Scrollable {
@@ -567,20 +536,14 @@ class ScrollablePane extends JLayeredPane implements Scrollable {
 		add(glass, new Integer(2));
 	}
 
-	public int getScrollableBlockIncrement(
-		Rectangle visibleRect,
-		int orientation,
-		int direction) {
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
 		if (orientation == SwingConstants.HORIZONTAL) {
 			return visibleRect.width;
 		}
         return visibleRect.height;
 	}
 
-	public int getScrollableUnitIncrement(
-		Rectangle visibleRect,
-		int orientation,
-		int direction) {
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
 		Font font = text.getFont();
 		FontMetrics metrics = text.getFontMetrics(font);
 

@@ -38,7 +38,7 @@ public class ProcessList
 {
   private Info info;
   private Container adapterPanel;
-  private Map  adapters;
+  private Map<DebugAdapter, JComponent> adapters;
   private ToolManager toolManager;
 
   //{{{ public ProcessList(ToolManager manager)
@@ -53,7 +53,7 @@ public class ProcessList
     adapterPanel.setLayout(new BoxLayout(adapterPanel, BoxLayout.Y_AXIS));
     add("North", adapterPanel);
 
-    adapters = new HashMap();
+    adapters = new HashMap<DebugAdapter, JComponent>();
     setPreferredSize(new Dimension(170, 300));
 
     this.toolManager = manager;
@@ -79,7 +79,7 @@ public class ProcessList
   public void adapterDisconnected(DebugTool tool, DebugAdapter adapter)
   {
     info.info("adapterDisconnected: " + adapter);
-    final JComponent panel = (JComponent)adapters.get(adapter);
+    final JComponent panel = adapters.get(adapter);
     adapters.remove(adapter);
 
     // remove/validate/repaint must be called from the system
@@ -108,7 +108,7 @@ class AdapterPanel
   private Info info;
   private DebugAdapter adapter;
   private Container processPanel;
-  private Map processes;
+  private Map<DebugProcess, Component> processes;
 
   private ToolManager toolManager;
   private JPopupMenu adapterMenu;
@@ -130,9 +130,9 @@ class AdapterPanel
     //{{{ Handle adapter popup menu
 
     adapterMenu = new JPopupMenu("Adapter Tools");
-    Iterator iter = manager.adapterActionIterator();
+    Iterator<AdapterAction> iter = manager.adapterActionIterator();
     while (iter.hasNext()) {
-      adapterMenu.add((AdapterAction)iter.next());
+      adapterMenu.add(iter.next());
     }
 
     //}}}
@@ -148,7 +148,7 @@ class AdapterPanel
 	}
       }
     };
-    label.addMouseListener(new MouseAdapter() { });
+    label.addMouseListener(new MouseAdapter(){});
 
     label.setBorder(new EmptyBorder(2,0,2,0));
     add("North", label);
@@ -157,12 +157,11 @@ class AdapterPanel
     add("Center", processPanel);
     add("South",  Box.createVerticalStrut(3));
 
-    processes = new HashMap();
+    processes = new HashMap<DebugProcess, Component>();
 
     //{{{ Handle selection of adapters
 
-    MouseListener selectionListener =
-      new MouseAdapter()
+    MouseListener selectionListener = new MouseAdapter()
       {
 	public void mouseClicked(MouseEvent event)
 	{
@@ -195,7 +194,7 @@ class AdapterPanel
 
   public void processDestroyed(DebugAdapter adapter, DebugProcess process)
   {
-    Component panel = (Component)processes.get(process);
+    Component panel = processes.get(process);
     processes.remove(process);
     processPanel.remove(panel);
   }
@@ -231,13 +230,13 @@ class ProcessPanel
     //{{{ Handle process popup menu
 
     processMenu = new JPopupMenu("Process Tools");
-    Iterator iter = manager.processActionIterator();
+    Iterator<ProcessAction> iter = manager.processActionIterator();
     while (iter.hasNext()) {
-      processMenu.add((ProcessAction)iter.next());
+      processMenu.add(iter.next());
     }
 
     // Enable mouse events by adding a dummy listener
-    addMouseListener(new MouseAdapter() { });
+    addMouseListener(new MouseAdapter(){});
 
     //}}}
 

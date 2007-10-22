@@ -1,8 +1,8 @@
 package nl.cwi.sen1.tide.tool.support;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,14 +27,14 @@ public class DebugProcess {
 	private Rule started;
 	private Rule stopped;
 
-	private List rules;
-	private Map ruleTable;
+	private List<Rule> rules;
+	private Map<Integer, Rule> ruleTable;
 
 	private int running;
 	private Expr lastLocation;
 
-	private List statusChangeListeners;
-	private List processListeners;
+	private List<ProcessStatusChangeListener> statusChangeListeners;
+	private List<DebugProcessListener> processListeners;
 
 	private Info info;
 
@@ -52,8 +52,8 @@ public class DebugProcess {
 
 		info = new Info("DebugProcess");
 
-		statusChangeListeners = new LinkedList();
-		processListeners = new LinkedList();
+		statusChangeListeners = new ArrayList<ProcessStatusChangeListener>();
+		processListeners = new ArrayList<DebugProcessListener>();
 
 		requestRuleCreation(
 			Port.makeStarted(),
@@ -67,8 +67,8 @@ public class DebugProcess {
 			tag_stopped);
 		requestEvaluation(Expr.makeCpe(), tag_initial_cpe);
 
-		rules = new LinkedList();
-		ruleTable = new HashMap();
+		rules = new ArrayList<Rule>();
+		ruleTable = new HashMap<Integer, Rule>();
 	}
 
 	//}}}
@@ -100,13 +100,11 @@ public class DebugProcess {
 	//{{{ public void fireProcessStatusChanged()
 
 	public void fireProcessStatusChanged() {
-		Iterator iter = statusChangeListeners.iterator();
+		Iterator<ProcessStatusChangeListener> iter = statusChangeListeners.iterator();
 
 		while (iter.hasNext()) {
-			ProcessStatusChangeListener listener =
-				(ProcessStatusChangeListener) iter.next();
-			
-			  listener.processStatusChanged(this);
+			ProcessStatusChangeListener listener = iter.next();
+			listener.processStatusChanged(this);
 		}
 	}
 
@@ -130,11 +128,10 @@ public class DebugProcess {
 	//{{{ public void fireRuleCreated(Rule rule)
 
 	public void fireRuleCreated(Rule rule) {
-		Iterator iter =
-			((List) ((LinkedList) processListeners).clone()).iterator();
+		Iterator<DebugProcessListener> iter = ((List<DebugProcessListener>) ((ArrayList) processListeners).clone()).iterator();
 		
 		while (iter.hasNext()) {
-			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			DebugProcessListener listener = iter.next();
 			listener.ruleCreated(this, rule);
 		}
 	}
@@ -143,11 +140,10 @@ public class DebugProcess {
 	//{{{ public void fireRuleDeleted(Rule rule)
 
 	public void fireRuleDeleted(Rule rule) {
-		Iterator iter =
-			((List) ((LinkedList) processListeners).clone()).iterator();
+		Iterator<DebugProcessListener> iter = ((List<DebugProcessListener>) ((ArrayList) processListeners).clone()).iterator();
 
 		while (iter.hasNext()) {
-			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			DebugProcessListener listener = iter.next();
 			listener.ruleDeleted(this, rule);
 		}
 	}
@@ -156,11 +152,10 @@ public class DebugProcess {
 	//{{{ public void fireRuleModified(Rule rule)
 
 	public void fireRuleModified(Rule rule) {
-		Iterator iter =
-			((List) ((LinkedList) processListeners).clone()).iterator();
+		Iterator<DebugProcessListener> iter = ((List<DebugProcessListener>) ((ArrayList) processListeners).clone()).iterator();
 
 		while (iter.hasNext()) {
-			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			DebugProcessListener listener = iter.next();
 			listener.ruleModified(this, rule);
 		}
 	}
@@ -169,11 +164,10 @@ public class DebugProcess {
 	//{{{ public void fireRuleTriggered(Rule rule, Expr value)
 
 	public void fireRuleTriggered(Rule rule, Expr value) {
-		Iterator iter =
-			((List) ((LinkedList) processListeners).clone()).iterator();
+		Iterator<DebugProcessListener> iter = ((List<DebugProcessListener>) ((ArrayList) processListeners).clone()).iterator();
 
 		while (iter.hasNext()) {
-			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			DebugProcessListener listener = iter.next();
 			listener.ruleTriggered(this, rule, value);
 		}
 	}
@@ -182,11 +176,10 @@ public class DebugProcess {
 	//{{{ public void fireEvaluationResult(Expr expr, Expr value, String tag)
 
 	public void fireEvaluationResult(Expr expr, Expr value, String tag) {
-		Iterator iter =
-			((List) ((LinkedList) processListeners).clone()).iterator();
+		Iterator<DebugProcessListener> iter = ((List<DebugProcessListener>) ((ArrayList) processListeners).clone()).iterator();
 
 		while (iter.hasNext()) {
-			DebugProcessListener listener = (DebugProcessListener) iter.next();
+			DebugProcessListener listener = iter.next();
 			listener.evaluationResult(this, expr, value, tag);
 		}
 	}
@@ -254,7 +247,7 @@ public class DebugProcess {
 	synchronized public void ruleDeleted(int rid) {
 		Integer ridKey = new Integer(rid);
 
-		Rule rule = (Rule) ruleTable.get(ridKey);
+		Rule rule = ruleTable.get(ridKey);
 		fireRuleDeleted(rule);
 
 		rules.remove(rule);
@@ -279,7 +272,7 @@ public class DebugProcess {
 		boolean enabled) {
 		Integer ridKey = new Integer(rid);
 
-		Rule rule = (Rule) ruleTable.get(ridKey);
+		Rule rule = ruleTable.get(ridKey);
 
 		rule.modify(port, cond, action, enabled);
 
@@ -301,7 +294,7 @@ public class DebugProcess {
 
 	//{{{ public Iterator ruleIterator()
 
-	public Iterator ruleIterator() {
+	public Iterator<Rule> ruleIterator() {
 		return rules.iterator();
 	}
 
@@ -316,7 +309,7 @@ public class DebugProcess {
 	//{{{ public Rule getRuleAt(int index)
 
 	public Rule getRuleAt(int index) {
-		return (Rule) rules.get(index);
+		return rules.get(index);
 	}
 
 	//}}}
@@ -333,7 +326,7 @@ public class DebugProcess {
 	public void event(int rid, ATerm result) {
 		info.info("event: " + result);
 
-		Rule rule = (Rule) ruleTable.get(new Integer(rid));
+		Rule rule = ruleTable.get(new Integer(rid));
 		Expr value = Expr.fromTerm(result);
 
 		fireRuleTriggered(rule, value);

@@ -7,8 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,9 +22,9 @@ public class PreferenceSet {
 	private boolean is_clean;
 
 	public PreferenceSet(Properties defaults) {
-		preferenceNames = new LinkedList<String>();
+		preferenceNames = new ArrayList<String>();
 		preferences = new Properties(defaults);
-		listeners = new LinkedList<PreferenceListener>();
+		listeners = new ArrayList<PreferenceListener>();
 	}
 
 	public void registerPreference(String name) {

@@ -195,7 +195,7 @@ public class Expr
 
   public String getErrorMessage()
   {
-    List result = term.match(PAT_ERROR);
+    List<?> result = term.match(PAT_ERROR);
 
     if (result != null) {
       return (String)result.get(0);
@@ -209,7 +209,7 @@ public class Expr
 
   public Expr getErrorData()
   {
-    List result = term.match(PAT_ERROR);
+    List<?> result = term.match(PAT_ERROR);
 
     if (result != null) {
       return Expr.make((ATerm)result.get(1));
@@ -232,7 +232,7 @@ public class Expr
 
   public String getLocationFileName()
   {
-    List args = term.match(PATTERN_LOC_LINE);
+    List<?> args = term.match(PATTERN_LOC_LINE);
     if (args != null) {
       return (String)args.get(0);
     }
@@ -265,7 +265,7 @@ public class Expr
 
   public int getLocationStartLine()
   {
-    List args = term.match(PATTERN_LOC_LINE);
+    List<?> args = term.match(PATTERN_LOC_LINE);
     if (args != null) {
       return ((Integer)args.get(1)).intValue();
     }
@@ -288,7 +288,7 @@ public class Expr
 
   public int getLocationStartColumn()
   {
-    List args = term.match(PATTERN_LOC_LINE);
+    List<?> args = term.match(PATTERN_LOC_LINE);
     if (args != null) {
       return 0;
     }
@@ -311,7 +311,7 @@ public class Expr
 
   public int getLocationEndLine()
   {
-    List args = term.match(PATTERN_LOC_LINE);
+    List<?> args = term.match(PATTERN_LOC_LINE);
     if (args != null) {
       return ((Integer)args.get(1)).intValue();
     }
@@ -334,7 +334,7 @@ public class Expr
 
   public int getLocationEndColumn()
   {
-    List args = term.match(PATTERN_LOC_LINE);
+    List<?> args = term.match(PATTERN_LOC_LINE);
     if (args != null) {
       return -1;
     }
@@ -358,7 +358,7 @@ public class Expr
 
   public boolean isVariable()
   {
-    List result = term.match(PAT_VARIABLE);
+    List<?> result = term.match(PAT_VARIABLE);
     return result != null;
   }
 
@@ -367,7 +367,7 @@ public class Expr
 
   public String getVariableName()
   {
-    List result = term.match(PAT_VARIABLE);
+    List<?> result = term.match(PAT_VARIABLE);
     if (result != null) {
       return (String)result.get(0);
     }
@@ -380,7 +380,7 @@ public class Expr
 
   public Expr getVariableValue()
   {
-    List result = term.match(PAT_VARIABLE);
+    List<?> result = term.match(PAT_VARIABLE);
     if (result != null) {
       return Expr.make((ATerm)result.get(1));
     }
@@ -394,7 +394,7 @@ public class Expr
 
   public boolean isVar()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     return result != null;
   }
 
@@ -403,7 +403,7 @@ public class Expr
 
   public String getVarName()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     if (result != null) {
       return (String)result.get(0);
     }
@@ -416,7 +416,7 @@ public class Expr
 
   public Expr getVarValue()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     if (result != null) {
       return Expr.make((ATerm)result.get(1));
     }
@@ -429,7 +429,7 @@ public class Expr
 
   public int getVarSourceStart()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     if (result != null) {
       return ((Integer)result.get(2)).intValue();
     }
@@ -442,7 +442,7 @@ public class Expr
 
   public int getVarSourceLineNr()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     if (result != null) {
       return ((Integer)result.get(3)).intValue();
     }
@@ -455,7 +455,7 @@ public class Expr
 
   public int getVarSourceStartColumn()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     if (result != null) {
       return ((Integer)result.get(4)).intValue();
     }
@@ -468,7 +468,7 @@ public class Expr
 
   public int getVarSourceLength()
   {
-    List result = term.match(PAT_VAR);
+    List<?> result = term.match(PAT_VAR);
     if (result != null) {
       return ((Integer)result.get(5)).intValue();
     }
@@ -482,7 +482,7 @@ public class Expr
 
   public boolean isVarUnknown()
   {
-    List result = term.match(PAT_VAR_UNKNOWN);
+    List<?> result = term.match(PAT_VAR_UNKNOWN);
     return result != null;
   }
 
@@ -491,7 +491,7 @@ public class Expr
 
   public String getVarUnknownMessage()
   {
-    List result = term.match(PAT_VAR_UNKNOWN);
+    List<?> result = term.match(PAT_VAR_UNKNOWN);
     if (result != null) {
       return (String)result.get(0);
     }
@@ -513,7 +513,7 @@ public class Expr
 
   public boolean isSourcePath()
   {
-    List result = term.match(PAT_SOURCE_PATH);
+    List<?> result = term.match(PAT_SOURCE_PATH);
     return result != null;
   }
 
@@ -522,7 +522,7 @@ public class Expr
 
   public String getSourcePath()
   {
-    List result = term.match(PAT_SOURCE_PATH);
+    List<?> result = term.match(PAT_SOURCE_PATH);
     if (result != null) {
       return (String)result.get(0);
     }
@@ -536,16 +536,16 @@ public class Expr
 
   public boolean isSourceList()
   {
-    List result = term.match(PAT_SOURCE_LIST);
+    List<?> result = term.match(PAT_SOURCE_LIST);
     return result != null;
   }
 
   //}}}
   //{{{ public Iterator sourceIterator()
 
-  public Iterator sourceIterator()
+  public Iterator<String> sourceIterator()
   {
-    List result = term.match(PAT_SOURCE_LIST);
+    List<?> result = term.match(PAT_SOURCE_LIST);
     if (result != null) {
       return new StringIterator((ATermList)result.get(0));
     }
@@ -565,9 +565,9 @@ public class Expr
   //}}}
   //{{{ public Iterator frameIterator()
 
-  public Iterator frameIterator()
+  public Iterator<Expr> frameIterator()
   {
-    List result = term.match(PAT_STACK_TRACE);
+    List<?> result = term.match(PAT_STACK_TRACE);
     if (result != null) {
       return new ExprIterator((ATermList)result.get(0));
     }
@@ -588,7 +588,7 @@ public class Expr
 
   public int getFrameDepth()
   {
-    List result = term.match(PAT_STACK_FRAME);
+    List<?> result = term.match(PAT_STACK_FRAME);
     if (result != null) {
       return ((Integer)result.get(0)).intValue();
     }
@@ -600,7 +600,7 @@ public class Expr
 
   public String getFrameName()
   {
-    List result = term.match(PAT_STACK_FRAME);
+    List<?> result = term.match(PAT_STACK_FRAME);
     if (result != null) {
       return (String)result.get(1);
     }
@@ -612,7 +612,7 @@ public class Expr
 
   public Expr getFrameLocation()
   {
-    List result = term.match(PAT_STACK_FRAME);
+    List<?> result = term.match(PAT_STACK_FRAME);
     if (result != null) {
       return new Expr((ATerm)result.get(2));
     }
@@ -624,7 +624,7 @@ public class Expr
 
   public Expr getFrameVariables()
   {
-    List result = term.match(PAT_STACK_FRAME);
+    List<?> result = term.match(PAT_STACK_FRAME);
     if (result != null) {
       return new Expr((ATerm)result.get(3));
     }
@@ -635,7 +635,7 @@ public class Expr
 
   //{{{ public Iterator iterator()
 
-  public Iterator iterator()
+  public Iterator<Expr> iterator()
   {
     return new ExprIterator(term);
   }
@@ -670,7 +670,7 @@ public class Expr
 }
 
 class ExprIterator
-  implements Iterator
+  implements Iterator<Expr>
 {
   private ATerm term;
 
@@ -698,7 +698,7 @@ class ExprIterator
   //}}}
   //{{{ public Object next()
 
-  public Object next()
+  public Expr next()
   {
     ATerm result;
 
@@ -725,7 +725,7 @@ class ExprIterator
 }
 
 class StringIterator
-  implements Iterator
+  implements Iterator<String>
 {
   private ATermList list;
 
@@ -751,7 +751,7 @@ class StringIterator
   //}}}
   //{{{ public Object next()
 
-  public Object next()
+  public String next()
   {
     ATerm result;
 

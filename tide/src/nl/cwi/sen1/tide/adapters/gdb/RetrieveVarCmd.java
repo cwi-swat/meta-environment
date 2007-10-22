@@ -1,6 +1,6 @@
 package nl.cwi.sen1.tide.adapters.gdb;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +28,7 @@ public class RetrieveVarCmd extends Command
 
 	static {
 		patternVar = Pattern.compile("\\$[0-9]*\\s+=\\s+(.+)");
-		reservedKeywords = new LinkedList<String>();
+		reservedKeywords = new ArrayList<String>();
 		
 		String[] keywords = { "auto", "break", "case", "char", "const", "continue", "default", "do", "double",
 				"else", "enum", "extern", "float", "for", "goto", "if", "int", "long", "register", "return", "short",
@@ -40,6 +40,7 @@ public class RetrieveVarCmd extends Command
 		}
 		
 	}
+	
 	public RetrieveVarCmd(GdbAdapter adapter, ATerm file, ATerm offset, ATerm line, ATerm col, ATerm text)
 	{
 		super(adapter);

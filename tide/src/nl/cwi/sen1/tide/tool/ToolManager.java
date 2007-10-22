@@ -1,9 +1,9 @@
 package nl.cwi.sen1.tide.tool;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 
@@ -44,12 +44,12 @@ public class ToolManager {
 
 		tideTools = new HashMap<String, TideToolFactory>();
 
-		processToolList = new LinkedList<String>();
-		processActionList = new LinkedList<ProcessAction>();
+		processToolList = new ArrayList<String>();
+		processActionList = new ArrayList<ProcessAction>();
 		processTools = new HashMap<String, ProcessToolFactory>();
 
-		adapterToolList = new LinkedList<String>();
-		adapterActionList = new LinkedList<AdapterAction>();
+		adapterToolList = new ArrayList<String>();
+		adapterActionList = new ArrayList<AdapterAction>();
 		adapterTools = new HashMap<String, AdapterToolFactory>();
 
 		toolInstances = new HashMap<String, Map<Object, TideTool>>();

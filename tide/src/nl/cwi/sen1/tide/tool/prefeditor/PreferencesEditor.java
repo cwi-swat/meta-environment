@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import nl.cwi.sen1.gui.component.TooltipChangedListener;
 import nl.cwi.sen1.tide.PreferenceListener;
 import nl.cwi.sen1.tide.PreferenceSet;
 import nl.cwi.sen1.tide.tool.TideTool;
@@ -26,7 +25,6 @@ public class PreferencesEditor extends TideTool implements PreferenceListener,
 
 	private JButton buttonUpdate;
 	private JButton buttonRevert;
-	private JButton buttonClose;
 
 	// {{{ public PreferencesEditor(ToolManager manager)
 
@@ -64,24 +62,14 @@ public class PreferencesEditor extends TideTool implements PreferenceListener,
 		add("South", buttons);
 	}
 
-	private void cleanup() {
-		fontPrefs.cleanup();
-		preferences.removePreferenceListener(this);
-		getManager().removeTool(this);
-	}
+	public void preferenceChanged(PreferenceSet prefs, String name,String oldValue, String newValue) {}
 
-	public void preferenceChanged(PreferenceSet prefs, String name,
-			String oldValue, String newValue) {
-	}
-
-	public void preferencesChanged(PreferenceSet prefs) {
-	}
+	public void preferencesChanged(PreferenceSet prefs) {}
 
 	// }}}
 	// {{{ public void preferencesStatusChanged(boolean clean)
 
-	public void preferencesStatusChanged(PreferenceSet set, boolean clean) {
-	}
+	public void preferencesStatusChanged(PreferenceSet set, boolean clean) {}
 
 	// }}}
 

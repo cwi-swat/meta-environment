@@ -272,8 +272,7 @@ class ValuePopup
 			RuleInspector inspector =
 				(RuleInspector) manager.launchProcessTool(toolName, process);
 			inspector.editRule(updateRule);
-		} else if (event.getActionCommand().equals(ITEM_VIEW_VARIABLE)) {
-		}
+		} else if (event.getActionCommand().equals(ITEM_VIEW_VARIABLE)) {}
 	}
 
 	//}}}
@@ -336,11 +335,7 @@ class ValuePopup
 	//}}}
 	//{{{ public void evaluationResult(process, expr, value, tag)
 
-	public void evaluationResult(
-		DebugProcess process,
-		Expr expr,
-		Expr value,
-		String tag) {
+	public void evaluationResult(DebugProcess process, Expr expr, Expr value, String tag) {
 		if (tag.equals(tag_update)) {
 			updateValue(value);
 		}
@@ -349,8 +344,7 @@ class ValuePopup
 	//}}}
 	//{{{ public void selectRule(DebugProcess process, Rule rule)
 
-	public void selectRule(DebugProcess process, Rule rule) {
-	}
+	public void selectRule(DebugProcess process, Rule rule) {}
 
 	//}}}
 }

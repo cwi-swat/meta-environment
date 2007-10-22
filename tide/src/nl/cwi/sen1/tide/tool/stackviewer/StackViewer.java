@@ -115,9 +115,7 @@ public class StackViewer
 		};
 
 		inspectVar =
-			new AbstractAction(
-				"Inspect Variable",
-				loadIcon("inspect-var.gif")) {
+			new AbstractAction("Inspect Variable", loadIcon("inspect-var.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				getManager().displayError("Not implemented yet!");
 			}
@@ -218,25 +216,6 @@ public class StackViewer
 	}
 
 	//}}}
-	//{{{ private void cleanup()
-
-	private void cleanup() {
-		if (ruleStackTrace != null) {
-			process.requestRuleDeletion(ruleStackTrace);
-		}
-
-		if (ruleStackUnwind != null) {
-			process.requestRuleDeletion(ruleStackUnwind);
-		}
-
-		getManager().removeTool(this);
-		
-		process.removeProcessStatusChangeListener(this);
-		process.removeDebugProcessListener(this);
-		process.getAdapter().removeDebugAdapterListener(this);
-	}
-
-	//}}}
 
 	//{{{ public void processDestroyed(DebugAdapter adapter, DebugProcess
 	// proc)
@@ -253,24 +232,23 @@ public class StackViewer
 	//}}}
 	//{{{ public void processCreated(DebugAdapter adapter, DebugProcess proc)
 
-	public void processCreated(DebugAdapter adapter, DebugProcess proc) {
-	}
+	public void processCreated(DebugAdapter adapter, DebugProcess proc) {}
 
 	//}}}
 
 	//{{{ public void displayStackTrace(Expr stackTrace)
 
 	public void displayStackTrace(Expr stackTrace) {
-		Vector frames = new Vector();
+		Vector<StackFrame> frames = new Vector<StackFrame>();
 
 		if (!stackTrace.isStackTrace()) {
 			getManager().displayError("not a stacktrace: " + stackTrace);
 			return;
 		}
 
-		Iterator iter = stackTrace.frameIterator();
+		Iterator<Expr> iter = stackTrace.frameIterator();
 		while (iter.hasNext()) {
-			Expr frame = (Expr) iter.next();
+			Expr frame = iter.next();
 
 			if (!frame.isStackFrame()) {
 				getManager().displayError("not a stackframe: " + frame);
@@ -284,7 +262,7 @@ public class StackViewer
 				new StackFrame(depth, name, location, variables);
 			frames.addElement(stackFrame);
 		}
-		displayStackFrame((StackFrame)frames.firstElement());
+		displayStackFrame(frames.firstElement());
 		trace.setListData(frames);
 	}
 
@@ -313,10 +291,10 @@ public class StackViewer
 			viewSource.setEnabled(!location.isLocationUnknown());
 			inspectVar.setEnabled(false);
 
-			Vector variables = new Vector();
-			Iterator iter = frame.variableIterator();
+			Vector<Expr> variables = new Vector<Expr>();
+			Iterator<Expr> iter = frame.variableIterator();
 			while (iter.hasNext()) {
-				Expr var = (Expr) iter.next();
+				Expr var = iter.next();
 				variables.addElement(var);
 			}
 			frameVars.setListData(variables);
@@ -351,8 +329,7 @@ public class StackViewer
 	//}}}
 	//{{{ public void ruleModified(DebugProcess process, Rule rule)
 
-	public void ruleModified(DebugProcess process, Rule rule) {
-	}
+	public void ruleModified(DebugProcess process, Rule rule) {}
 
 	//}}}
 	//{{{ public void ruleTriggered(DebugProcess process, Rule rule, Expr
@@ -367,15 +344,10 @@ public class StackViewer
 	//}}}
 	//{{{ public void evaluationResult(process, expr, value, tag)
 
-	public void evaluationResult(
-		DebugProcess process,
-		Expr expr,
-		Expr value,
-		String tag) {
+	public void evaluationResult(DebugProcess process, Expr expr, Expr value, String tag) {
 		if (tag.equals(tag_stack_trace)) {
 			displayStackTrace(value);
-		} else if (tag.equals(tag_stack_unwind)) {
-		}
+		} else if (tag.equals(tag_stack_unwind)) {}
 	}
 
 	//}}}
@@ -451,7 +423,7 @@ class StackFrame {
 	//}}}
 	//{{{ public Iterator variableIterator()
 
-	public Iterator variableIterator() {
+	public Iterator<Expr> variableIterator() {
 		return vars.iterator();
 	}
 

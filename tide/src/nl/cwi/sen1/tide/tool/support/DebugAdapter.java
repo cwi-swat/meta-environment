@@ -1,8 +1,8 @@
 package nl.cwi.sen1.tide.tool.support;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +12,8 @@ public class DebugAdapter
 {
   private DebugTool tool;
   private ATerm dap;
-  private Map processes;
-  private List listeners;
+  private Map<Integer, DebugProcess> processes;
+  private List<DebugAdapterListener> listeners;
   private Info info;
 
   //{{{ public DebugAdapter(ATerm dap)
@@ -22,8 +22,8 @@ public class DebugAdapter
   {
     this.tool = tool;
     this.dap = dap;
-    processes = new HashMap();
-    listeners = new LinkedList();
+    processes = new HashMap<Integer, DebugProcess>();
+    listeners = new ArrayList<DebugAdapterListener>();
     info = new Info("DebugAdapter");
   }
 
@@ -74,9 +74,9 @@ public class DebugAdapter
 
   public void removeAllProcesses()
   {
-    Iterator iter = processes.values().iterator();
+    Iterator<DebugProcess> iter = processes.values().iterator();
     while (iter.hasNext()) {
-      DebugProcess process = (DebugProcess)iter.next();
+      DebugProcess process = iter.next();
       fireProcessDestroyed(process);
     }
     processes.clear();
@@ -104,7 +104,7 @@ public class DebugAdapter
 
   private DebugProcess findProcess(int pid)
   {
-    return (DebugProcess)processes.get(new Integer(pid));
+    return processes.get(new Integer(pid));
   }
 
   //}}}
@@ -125,9 +125,9 @@ public class DebugAdapter
   {
     DebugAdapterListener listener;
 
-    Iterator iter = listeners.iterator();
+    Iterator<DebugAdapterListener> iter = listeners.iterator();
     while (iter.hasNext()) {
-      listener = (DebugAdapterListener)iter.next();
+      listener = iter.next();
       listener.processCreated(this, proc);
     }
   }
@@ -151,9 +151,9 @@ public class DebugAdapter
   {
     DebugAdapterListener listener;
 
-    Iterator iter = listeners.iterator();
+    Iterator<DebugAdapterListener> iter = listeners.iterator();
     while (iter.hasNext()) {
-      listener = (DebugAdapterListener)iter.next();
+      listener = iter.next();
       listener.processDestroyed(this, proc);
     }
   }
@@ -180,8 +180,7 @@ public class DebugAdapter
   //}}}
   //{{{ public void ruleModified(int pid, int rid, port, cond, action, enabled)
 
-  public void ruleModified(int pid, int rid, Port port, Expr cond, Expr action,
-			   boolean enabled)
+  public void ruleModified(int pid, int rid, Port port, Expr cond, Expr action, boolean enabled)
   {
     DebugProcess process = findProcess(pid);
     process.ruleModified(rid, port, cond, action, enabled);
@@ -191,8 +190,7 @@ public class DebugAdapter
 
   //{{{ public void evaluationResult(pid, expr, value, tag)
 
-  public void evaluationResult(int pid, Expr expr, Expr value,
-			       String tag)
+  public void evaluationResult(int pid, Expr expr, Expr value, String tag)
   {
     DebugProcess process = findProcess(pid);
     process.evaluationResult(expr, value, tag);
@@ -202,9 +200,7 @@ public class DebugAdapter
 
   //{{{ public void requestRuleCreation(pid, port, cond, act, tag)
 
-  public void requestRuleCreation(int pid, Port port,
-				  Expr cond, Expr act,
-				  String tag, boolean enabled)
+  public void requestRuleCreation(int pid, Port port, Expr cond, Expr act, String tag, boolean enabled)
   {
     tool.requestRuleCreation(dap, pid, port, cond, act, tag, enabled);
   }
@@ -220,8 +216,7 @@ public class DebugAdapter
   //}}}
   //{{{ public void requestRuleModification(pid, rule, port, cond, act, enabled)
 
-  public void requestRuleModification(int pid, Rule rule, Port port, Expr cond,
-				      Expr act, boolean enabled)
+  public void requestRuleModification(int pid, Rule rule, Port port, Expr cond, Expr act, boolean enabled)
   {
     tool.requestRuleModification(dap, pid, rule, port, cond, act, enabled);
   }

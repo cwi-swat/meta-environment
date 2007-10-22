@@ -2,9 +2,8 @@ package nl.cwi.sen1.tide.adapters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -18,7 +17,7 @@ abstract public class DebugAdapterProcess {
 	public final static int STATE_STOPPED = 0;
 	public final static int STATE_RUNNING = 1;
 
-	private Class[][] protos = new Class[MAXIMUM_METHOD_ARITY][];
+	private Class<?>[][] protos = new Class[MAXIMUM_METHOD_ARITY][];
 	final static int MAX_RULES = 256;
 	public DebugAdapter adapter;
 
@@ -28,7 +27,7 @@ abstract public class DebugAdapterProcess {
 	private boolean debug = true;
 
 	public DebugAdapterRule[] rules = new DebugAdapterRule[MAX_RULES];
-	public List[] rulesPerPort = new List[DebugAdapterRule.NR_PORT_TYPES];
+	public List<DebugAdapterRule>[] rulesPerPort = (List<DebugAdapterRule>[]) new List[DebugAdapterRule.NR_PORT_TYPES];
 	public DebugAdapterRule current_rule = null;
 
 	int exec_state = STATE_STOPPED;
@@ -51,7 +50,7 @@ abstract public class DebugAdapterProcess {
 		this.factory = adapter.getFactory();
 
 		for (int i = 0; i < DebugAdapterRule.NR_PORT_TYPES; i++) {
-			rulesPerPort[i] = new Vector();
+			rulesPerPort[i] = new ArrayList<DebugAdapterRule>();
 		}
 
 		initializeATermClassObjects();
@@ -70,7 +69,7 @@ abstract public class DebugAdapterProcess {
 
 	private void initializeATermClassObjects() {
 		try {
-			Class aterm = Class.forName("aterm.ATerm");
+			Class<?> aterm = Class.forName("aterm.ATerm");
 			for (int i = 0; i < MAXIMUM_METHOD_ARITY; i++) {
 				protos[i] = new Class[i];
 				for (int j = 0; j < i; j++)
@@ -106,40 +105,7 @@ abstract public class DebugAdapterProcess {
 		return exec_state == STATE_RUNNING;
 	}
 
-	public void fireLocationRules(
-		String filename,
-		int sl,
-		int sc,
-		int el,
-		int ec) {
-		List result;
-		Object[] elems;
-		String file;
-		int line, col;
-		/*
-		 * elems = rulesPerPort[DebugAdapterRule.PORT_LOCATION].toArray();
-		 * for(int i=0; i <elems.length; i++) { DebugAdapterRule rule =
-		 * (DebugAdapterRule)elems[i]; ATerm port = rule.getPort();
-		 * 
-		 * result = port.match("location(pos( <str> , <int> , <int> ))");
-		 * if(result != null) { file = (String)result.get(0); line =
-		 * ((Integer)result.get(1)).intValue(); col =
-		 * ((Integer)result.get(2)).intValue(); } else { result =
-		 * port.match("location(line( <str> , <int> ))"); if(result != null) {
-		 * file = (String)result.get(0); line =
-		 * ((Integer)result.get(1)).intValue(); col = 0; } else { throw new
-		 * RuntimeException("strange port spec: " + port); } }
-		 * 
-		 * System.out.println("port = " + port); System.out.println("filename=" +
-		 * filename + ",sl=" + sl + ",sc=" + sc + ",el=" + el + ",ec=" + ec +
-		 * ",file=" + file + ",line=" + line + ",col=" + col);
-		 * 
-		 * if(filename.equals(file)) { if(line > sl || (line == sl && col >=
-		 * sc)) { // Start is ok if(line
-		 * < el || (line == el && (col <= ec || ec == -1))) { // End is also ok
-		 * fireRule(rule); } } } }
-		 */
-	}
+	public void fireLocationRules(String filename, int sl, int sc, int el,int ec) {}
 
 	public void fireRules(int porttype) {
 		Object[] elems = rulesPerPort[porttype].toArray();
@@ -169,13 +135,7 @@ abstract public class DebugAdapterProcess {
 		current_rule = old_rule;
 	}
 
-	public DebugAdapterRule createRule(
-		int pid,
-		ATerm port,
-		ATerm cond,
-		ATerm act,
-		ATerm tag,
-		boolean enabled) {
+	public DebugAdapterRule createRule(int pid, ATerm port, ATerm cond, ATerm act, ATerm tag, boolean enabled) {
 		int rid;
 
 		/* Find a free rule */
@@ -208,7 +168,7 @@ abstract public class DebugAdapterProcess {
 		int porttype = rule.getPortType();
 
 		rule.setEnabled(true);
-		synchronized (rulesPerPort[porttype]) {
+		synchronized(rulesPerPort[porttype]){
 			rulesPerPort[porttype].add(rule);
 		}
 		handleRuleEnabling(rule);
@@ -277,7 +237,7 @@ abstract public class DebugAdapterProcess {
 				//{ Evaluate all elements in a list
 
 				ATermList list = (ATermList) act;
-				List result = new LinkedList();
+				List<ATerm> result = new ArrayList<ATerm>();
 				while (!list.isEmpty()) {
 					ATerm elem = list.getFirst();
 					ATerm val = evaluate(elem);
@@ -289,7 +249,7 @@ abstract public class DebugAdapterProcess {
 					return termTrue;
 				list = factory.makeList();
 				for (int idx = result.size() - 1; idx >= 0; idx--)
-					list = factory.makeList((ATerm) result.get(idx), list);
+					list = factory.makeList(result.get(idx), list);
 				return list;
 
 				//}
@@ -302,7 +262,7 @@ abstract public class DebugAdapterProcess {
 					return act;
 				} 
 				String action = appl.getName();
-				Class myclass = getClass();
+				Class<?> myclass = getClass();
 				String name = "action" + capitalize(action, true);
 				int arity = appl.getArity();
 
@@ -359,17 +319,13 @@ abstract public class DebugAdapterProcess {
 		return name.toString();
 	}
 
-	public void handleRuleCreation(DebugAdapterRule rule) {
-	}
+	public void handleRuleCreation(DebugAdapterRule rule){}
 
-	public void handleRuleDestruction(DebugAdapterRule rule) {
-	}
+	public void handleRuleDestruction(DebugAdapterRule rule){}
 
-	public void handleRuleEnabling(DebugAdapterRule rule) {
-	}
+	public void handleRuleEnabling(DebugAdapterRule rule){}
 
-	public void handleRuleDisabling(DebugAdapterRule rule) {
-	}
+	public void handleRuleDisabling(DebugAdapterRule rule){}
 
 	public void doBreak() {
 		changeExecState(STATE_STOPPED);
@@ -382,7 +338,7 @@ abstract public class DebugAdapterProcess {
 
 	public void doDisable(DebugAdapterRule rule) {
 		disableRule(rule.getId());
-		List args = new LinkedList();
+		List<Object> args = new ArrayList<Object>();
 		args.add(new Integer(getPid()));
 		args.add(new Integer(rule.getId()));
 		adapter.postEvent(

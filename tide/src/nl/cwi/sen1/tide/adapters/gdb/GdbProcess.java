@@ -13,7 +13,6 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 	private GdbAdapter adapter;
 	private Thread thread;
 
-	private String name;
 	private int pid = -1;
 	private String file;
 	private int line;
@@ -26,7 +25,6 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 	public GdbProcess(GdbAdapter adapter, String name) {
 		super(adapter, name);
 		this.adapter = adapter;
-		this.name = name;
 		this.factory = adapter.getFactory();
 
 		rulesByBreak = new HashMap<Integer, DebugAdapterRule>();
@@ -50,7 +48,7 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 
 	public void handleRuleCreation(DebugAdapterRule rule) {
 		super.handleRuleCreation(rule);
-		List result;
+		List<?> result;
 
 		result = rule.getAction().match("location(pos(<str>,<int>,<int>))");
 		if (result != null) {
@@ -134,10 +132,6 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 		RetrieveVarCmd cmd = new RetrieveVarCmd(adapter, file, offset, line, col, text);
 		adapter.evaluate(cmd);
 		return cmd.getValue();
-	}
-
-	private String getVariableName(ATerm col, ATerm text) {
-		return name;
 	}
 
 	public int getStackLevel() {

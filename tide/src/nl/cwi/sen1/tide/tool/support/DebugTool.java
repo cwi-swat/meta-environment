@@ -1,8 +1,8 @@
 package nl.cwi.sen1.tide.tool.support;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +12,8 @@ import aterm.ATermFactory;
 import aterm.ATermInt;
 
 public class DebugTool extends DebugToolTool {
-	private Map adapters;
-	private List listeners;
+	private Map<ATerm, DebugAdapter> adapters;
+	private List<DebugToolListener> listeners;
 
 	private Info info;
 
@@ -22,8 +22,8 @@ public class DebugTool extends DebugToolTool {
 	public DebugTool(ATermFactory factory) {
 		super(factory);
 		info = new Info("DebugTool");
-		adapters = new HashMap();
-		listeners = new LinkedList();
+		adapters = new HashMap<ATerm, DebugAdapter>();
+		listeners = new ArrayList<DebugToolListener>();
 	}
 
 	//}}}
@@ -91,21 +91,17 @@ public class DebugTool extends DebugToolTool {
 	//{{{ public void recAckEvent(ATerm event)
 
 	public void recAckEvent(ATerm event) {
-		List result;
+		List<?> result;
 
 		info.info("recAckEvent: " + event);
 
-		result =
-			event.match("evaluate(proc(<term>,<int>),<term>,<term>,<term>))");
+		result = event.match("evaluate(proc(<term>,<int>),<term>,<term>,<term>))");
 		if (result != null) {
 			handleEvaluationResults(result);
 			return;
 		}
 
-		result =
-			event.match(
-				"create-rule(proc(<term>,<int>),<term>,<term>,"
-					+ "<term>,<term>,<term>,<int>)");
+		result = event.match("create-rule(proc(<term>,<int>),<term>,<term>,<term>,<term>,<term>,<int>)");
 		if (result != null) {
 			handleRuleCreation(result);
 			return;
@@ -117,10 +113,7 @@ public class DebugTool extends DebugToolTool {
 			return;
 		}
 
-		result =
-			event.match(
-				"modify-rule(proc(<term>,<int>),<int>,<term>,<term>,"
-					+ "<term>,<term>)");
+		result = event.match("modify-rule(proc(<term>,<int>),<int>,<term>,<term>,<term>,<term>)");
 		if (result != null) {
 			handleRuleModification(result);
 			return;
@@ -130,7 +123,7 @@ public class DebugTool extends DebugToolTool {
 	//}}}
 	//{{{ public void recTerminate(ATerm msg)
 
-	private void handleEvaluationResults(List result) {
+	private void handleEvaluationResults(List<?> result) {
 		int index = 0;
 
 		DebugAdapter adapter = findAdapter((ATerm) result.get(index++));
@@ -141,7 +134,7 @@ public class DebugTool extends DebugToolTool {
 		adapter.evaluationResult(pid, expr, value, tag);
 	}
 
-	private void handleRuleCreation(List result) {
+	private void handleRuleCreation(List<?> result) {
 		DebugAdapter adapter = findAdapter((ATerm) result.get(0));
 		int pid = ((Integer) result.get(1)).intValue();
 		Port port = Port.fromTerm((ATerm) result.get(2));
@@ -154,7 +147,7 @@ public class DebugTool extends DebugToolTool {
 		adapter.ruleCreated(pid, rule);
 	}
 
-	private void handleRuleModification(List result) {
+	private void handleRuleModification(List<?> result) {
 		int arg = 0;
 		DebugAdapter adapter = findAdapter((ATerm) result.get(arg++));
 		int pid = ((Integer) result.get(arg++)).intValue();
@@ -169,15 +162,14 @@ public class DebugTool extends DebugToolTool {
 		return;
 	}
 
-	private void handleRuleDeletion(List result) {
+	private void handleRuleDeletion(List<?> result) {
 		DebugAdapter adapter = findAdapter((ATerm) result.get(0));
 		int pid = ((Integer) result.get(1)).intValue();
 		int rid = ((Integer) result.get(2)).intValue();
 		adapter.ruleDeleted(pid, rid);
 	}
 
-	public void recTerminate(ATerm msg) {
-	}
+	public void recTerminate(ATerm msg) {}
 
 	public void addDebugToolListener(DebugToolListener listener) {
 		listeners.add(listener);
@@ -188,37 +180,26 @@ public class DebugTool extends DebugToolTool {
 	}
 
 	private DebugAdapter findAdapter(ATerm dap) {
-		return (DebugAdapter) adapters.get(dap);
+		return adapters.get(dap);
 	}
 
 	private void fireAdapterConnected(DebugAdapter adapter) {
-		DebugToolListener listener;
-
-		Iterator iter = listeners.iterator();
+		Iterator<DebugToolListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
-			listener = (DebugToolListener) iter.next();
+			DebugToolListener listener = iter.next();
 			listener.adapterConnected(this, adapter);
 		}
 	}
 
 	private void fireAdapterDisconnected(DebugAdapter adapter) {
-		DebugToolListener listener;
-
-		Iterator iter = listeners.iterator();
+		Iterator<DebugToolListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
-			listener = (DebugToolListener) iter.next();
+			DebugToolListener listener = iter.next();
 			listener.adapterDisconnected(this, adapter);
 		}
 	}
 
-	public void requestRuleCreation(
-		ATerm dap,
-		int pid,
-		Port port,
-		Expr cond,
-		Expr act,
-		String tag,
-		boolean enabled) {
+	public void requestRuleCreation(ATerm dap, int pid, Port port, Expr cond, Expr act, String tag, boolean enabled) {
 		String pat =
 			"create-rule(proc(<term>,<int>),<term>,<term>,<term>,<term>,<term>)";
 		ATerm event =
@@ -246,14 +227,7 @@ public class DebugTool extends DebugToolTool {
 		postEvent(event);
 	}
 
-	public void requestRuleModification(
-		ATerm dap,
-		int pid,
-		Rule rule,
-		Port port,
-		Expr cond,
-		Expr act,
-		boolean enabled) {
+	public void requestRuleModification(ATerm dap, int pid, Rule rule, Port port, Expr cond, Expr act, boolean enabled) {
 		String pat =
 			"modify-rule(proc(<term>,<int>),<int>,<term>,<term>,<term>,<term>)";
 		ATerm event =

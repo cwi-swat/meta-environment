@@ -51,9 +51,9 @@ public class FontPreferenceEditor
     fontPanel.add(new JPanel());
 
     fontPanels = new FontPanel[MAX_FONTS];
-    Iterator fonts = preferences.preferenceNameIterator("font.spec.");
+    Iterator<String> fonts = preferences.preferenceNameIterator("font.spec.");
     while (fonts.hasNext()) {
-      String name = (String)fonts.next();
+      String name = fonts.next();
       String key  = name.substring("font.spec.".length());
       String fontName = preferences.getPreference("font.name." + key);
       if (fontName == null) {
@@ -113,8 +113,7 @@ public class FontPreferenceEditor
 
   //{{{ public void preferenceChanged(prefs, name, oldValue, newValue)
 
-  public void preferenceChanged(PreferenceSet prefs, String name,
-				String oldValue, String newValue)
+  public void preferenceChanged(PreferenceSet prefs, String name, String oldValue, String newValue)
   {
     doRevert();
   }
@@ -130,9 +129,7 @@ public class FontPreferenceEditor
   //}}}
   //{{{ public void preferencesStatusChanged(boolean clean)
 
-  public void preferencesStatusChanged(PreferenceSet set, boolean clean)
-  {
-  }
+  public void preferencesStatusChanged(PreferenceSet set, boolean clean){}
 
   //}}}
 }

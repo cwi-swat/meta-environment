@@ -5,9 +5,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +40,6 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 	private static final String TAG_VIEW_VAR = "sv-view-var";
 	private static final String TAG_ADD_SOURCE = "sv-add-source";
 
-	private static final String NO_SOURCE = "*no-source*";
-
 	private JToolBar tools;
 	private JTabbedPane center;
 	private JLabel message;
@@ -69,8 +67,6 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 	private String currentFile;
 	private SourceFileViewer currentViewer;
 	private Map<String, SourceFileViewer> residentViewers;
-
-	private int prevDepth = -1;
 
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
@@ -129,16 +125,14 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 		run.setEnabled(stopped);
 		stop.setEnabled(!stopped);
 
-		addSourceFile = new AbstractAction("Add File",
-				loadIcon("add-source.gif")) {
+		addSourceFile = new AbstractAction("Add File", loadIcon("add-source.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				process.requestEvaluation(Expr.makeListSources(),
 						tag_add_source);
 			}
 		};
 
-		delSourceFile = new AbstractAction("Remove File",
-				loadIcon("del-source.gif")) {
+		delSourceFile = new AbstractAction("Remove File", loadIcon("del-source.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				unhighlightCpe();
 				if (currentViewer != null) {
@@ -192,34 +186,6 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 		highlightCpe();
 	}
 
-	private void cleanup() {
-		if (ruleStepInto != null) {
-			process.requestRuleDeletion(ruleStepInto);
-		}
-		if (ruleStepOver != null) {
-			process.requestRuleDeletion(ruleStepOver);
-		}
-		if (ruleStepUp != null) {
-			process.requestRuleDeletion(ruleStepUp);
-		}
-
-		Iterator<SourceFileViewer> iter = residentViewers.values().iterator();
-		while (iter.hasNext()) {
-			SourceFileViewer viewer = iter.next();
-			viewer.cleanup();
-		}
-
-		process.removeDebugProcessListener(this);
-		process.removeProcessStatusChangeListener(this);
-		process.getAdapter().removeDebugAdapterListener(this);
-
-		getManager().removeTool(this);
-	}
-
-	private void requestSourceFiles() {
-		System.out.println("requesting source files");
-	}
-
 	public void processDestroyed(DebugAdapter adapter, DebugProcess proc) {
 		if (proc == process) {
 			// Rules do not need to be removed!
@@ -230,8 +196,7 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 		}
 	}
 
-	public void processCreated(DebugAdapter adapter, DebugProcess proc) {
-	}
+	public void processCreated(DebugAdapter adapter, DebugProcess proc){}
 
 	public void ruleCreated(DebugProcess process, Rule rule) {
 		if (rule.getTag().equals(tag_step_into)) {
@@ -255,11 +220,9 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 		}
 	}
 
-	public void ruleModified(DebugProcess process, Rule rule) {
-	}
+	public void ruleModified(DebugProcess process, Rule rule) {}
 
-	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {
-	}
+	public void ruleTriggered(DebugProcess process, Rule rule, Expr value) {}
 
 	public void evaluationResult(DebugProcess process, Expr expr, Expr value,
 			String tag) {
@@ -390,8 +353,8 @@ public class SourceViewer extends ProcessTool implements DebugProcessListener,
 		}
 	}
 
-	public void addSourceFromList(Iterator iter) {
-		List list = new LinkedList();
+	public void addSourceFromList(Iterator<String> iter) {
+		List<String> list = new ArrayList<String>();
 		while (iter.hasNext()) {
 			list.add(iter.next());
 		}

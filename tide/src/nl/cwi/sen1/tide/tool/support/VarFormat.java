@@ -1,6 +1,6 @@
 package nl.cwi.sen1.tide.tool.support;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import aterm.ATerm;
@@ -28,14 +28,14 @@ public class VarFormat
 
   public static ATerm  makeVarUnknown(ATermFactory factory, String msg)
      {            
-  	       List args = new LinkedList();
+  	       List<Object> args = new ArrayList<Object>();
   	       args.add(msg);
   	       return factory.make(PAT_UNKNOWN_VAR, args);
   	   }
    
      public static ATerm makeExprVar(ATermFactory factory, String var, ATerm value,  int pos, int line, int column, int length)
      {
-  	       List args = new LinkedList();
+  	       List<Object> args = new ArrayList<Object>();
   	       args.add(var);
   	       args.add(value);
   	       args.add(new Integer(pos));

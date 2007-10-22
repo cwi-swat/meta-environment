@@ -94,10 +94,10 @@ public class Rule
 
   public Expr getLocation()
   {
-    Iterator iter = cond.iterator();
+    Iterator<Expr> iter = cond.iterator();
 
     while (iter.hasNext()) {
-      Expr expr = (Expr)iter.next();
+      Expr expr = iter.next();
       if (expr.isLocation()) {
 	return expr;
       }
@@ -114,10 +114,10 @@ public class Rule
     if (type == TYPE_UNKNOWN) {
       type = TYPE_WATCHPOINT;
 
-      Iterator iter = act.iterator();
+      Iterator<Expr> iter = act.iterator();
 
       while (iter.hasNext()) {
-	Expr expr = (Expr)iter.next();
+	Expr expr = iter.next();
 	if (expr.isBreak()) {
 	  type = TYPE_BREAKPOINT;
 	  break;

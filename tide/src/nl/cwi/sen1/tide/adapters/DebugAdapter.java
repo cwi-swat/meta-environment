@@ -1,8 +1,8 @@
 package nl.cwi.sen1.tide.adapters;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class DebugAdapter implements DebugAdapterTif {
 
 	protected void processCreated(DebugAdapterProcess process) {
 		processes.put(new Integer(process.getPid()), process);
-		List args = new LinkedList();
+		List<Object> args = new ArrayList<Object>();
 		args.add(new Integer(process.getPid()));
 		args.add(process.getProcessName());
 		postEvent(factory.make("process-created(<int>,<str>)", args));
@@ -45,7 +45,7 @@ public class DebugAdapter implements DebugAdapterTif {
 	}
 
 	public void event(int pid, DebugAdapterRule rule, ATerm value) {
-		List args = new LinkedList();
+		List<Object> args = new ArrayList<Object>();
 		args.add(new Integer(pid));
 		args.add(new Integer(rule.getId()));
 		args.add(value);
@@ -76,7 +76,7 @@ public class DebugAdapter implements DebugAdapterTif {
 				enabled.equals(factory.parse("true")));
 
 		
-		List<Integer> args = new LinkedList<Integer>();
+		List<Integer> args = new ArrayList<Integer>();
 		args.add(new Integer(rule.getId()));
 
 		return factory.make("snd-value(rule-created(<int>))", args);
@@ -124,17 +124,15 @@ public class DebugAdapter implements DebugAdapterTif {
 	public ATerm evaluate(int pid, ATerm act) {
 		DebugAdapterProcess proc = getProcess(pid);
 		ATerm result = proc.evaluate(act);
-		List<ATerm> args = new LinkedList<ATerm>();
+		List<ATerm> args = new ArrayList<ATerm>();
 		args.add(result);
 
 		return factory.make("snd-value(evaluated(<term>))", args);
 	}
 
-	public void recTerminate(ATerm arg) {
-	}
+	public void recTerminate(ATerm arg){}
 
-	public void recAckEvent(ATerm event) {
-	}
+	public void recAckEvent(ATerm event){}
 
 	public void run() {
 		bridge.run();

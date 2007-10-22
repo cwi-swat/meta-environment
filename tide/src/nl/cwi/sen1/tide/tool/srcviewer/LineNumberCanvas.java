@@ -22,8 +22,8 @@ class LineNumberCanvas extends JComponent {
 
 	int cpe;
 
-	Map rulesByRule;
-	Map rulesByLine;
+	Map<Rule, Integer> rulesByRule;
+	Map<Integer, Rule> rulesByLine;
 
 	Polygon rulePoly;
 
@@ -31,8 +31,8 @@ class LineNumberCanvas extends JComponent {
 
 	public LineNumberCanvas(JTextArea text) {
 		this.text = text;
-		rulesByRule = new HashMap();
-		rulesByLine = new HashMap();
+		rulesByRule = new HashMap<Rule, Integer>();
+		rulesByLine = new HashMap<Integer, Rule>();
 	}
 
 	//}}}
@@ -77,7 +77,7 @@ class LineNumberCanvas extends JComponent {
 				g.fillRect(0, y, clip.width, sourceMetrics.getHeight());
 			}
 
-			Rule rule = (Rule) rulesByLine.get(new Integer(line));
+			Rule rule = rulesByLine.get(new Integer(line));
 			if (rule != null) {
 				g.setColor(getRuleColor(rule));
 				Polygon rulePoly = getRulePoly(rule);
@@ -143,7 +143,7 @@ class LineNumberCanvas extends JComponent {
 	//{{{ public void removeLocationRule(Rule rule)
 
 	public void removeLocationRule(Rule rule) {
-		Integer line = (Integer) rulesByRule.remove(rule);
+		Integer line = rulesByRule.remove(rule);
 		if (line != null) {
 			rulesByLine.remove(line);
 		}

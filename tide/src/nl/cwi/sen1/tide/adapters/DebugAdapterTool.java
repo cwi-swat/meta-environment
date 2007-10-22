@@ -77,7 +77,7 @@ abstract public class DebugAdapterTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PmodifyRule0);
     if (result != null) {

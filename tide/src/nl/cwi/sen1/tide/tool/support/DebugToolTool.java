@@ -19,7 +19,7 @@ abstract public class DebugToolTool
   implements DebugToolTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
   //{{{  Patterns that are used to match against incoming terms
 
@@ -90,7 +90,7 @@ abstract public class DebugToolTool
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
   {
-    List result;
+    List<?> result;
 
     result = term.match(PprocessDestroyed0);
     if (result != null) {

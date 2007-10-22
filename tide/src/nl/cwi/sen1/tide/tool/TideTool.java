@@ -109,17 +109,13 @@ public abstract class TideTool extends JPanel implements StudioComponent {
         listenerList.remove(StudioComponentListener.class, l);
     }
 
-    public void addNameChangedListener(NameChangedListener l) {
-    }
+    public void addNameChangedListener(NameChangedListener l) {}
 
-    public void removeNameChangedListener(NameChangedListener l) {
-    }
+    public void removeNameChangedListener(NameChangedListener l) {}
 
-    public void addTooltipChangedListener(TooltipChangedListener l) {
-    }
+    public void addTooltipChangedListener(TooltipChangedListener l) {}
 
-    public void removeTooltipChangedListener(TooltipChangedListener l) {
-    }
+    public void removeTooltipChangedListener(TooltipChangedListener l) {}
 
     // Take from javax.swing.event.EventListenerList example
     protected void fireStatusMessageChanged(String oldMessage, String newMessage) {
@@ -164,9 +160,7 @@ public abstract class TideTool extends JPanel implements StudioComponent {
         }
     }
 
-    public void requestClose() {
-    }
+    public void requestClose() {}
 
-    public void close() {
-    }
+    public void close() {}
 }

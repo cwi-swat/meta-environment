@@ -19,7 +19,6 @@ public class GdbAdapter extends DebugAdapter {
 	static public final int MODE_RUN = 2;
 
 	private String name;
-	private Process gdb;
 	private GdbProcess process;
 
 	private BufferedReader input;
@@ -85,7 +84,6 @@ public class GdbAdapter extends DebugAdapter {
 
 		File file = new File(filename);
 		this.name = file.getName();
-		gdb = proc;
 
 		createGdbIOReaders(proc);
 		buildGdbConnection(processArguments, name);
@@ -113,10 +111,8 @@ public class GdbAdapter extends DebugAdapter {
 	}
 
 	private void createGdbIOReaders(Process proc) {
-		input =
-			new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		error =
-			new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+		input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		error = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 		output = new OutputStreamWriter(proc.getOutputStream());
 	}
 
@@ -160,10 +156,9 @@ public class GdbAdapter extends DebugAdapter {
 		}
 
 		// Look for any 'non step-over' rules
-		Iterator iter =
-			process.rulesPerPort[DebugAdapterRule.PORT_STEP].iterator();
+		Iterator<DebugAdapterRule> iter = process.rulesPerPort[DebugAdapterRule.PORT_STEP].iterator();
 		while (iter.hasNext()) {
-			DebugAdapterRule rule = (DebugAdapterRule) iter.next();
+			DebugAdapterRule rule = iter.next();
 			if (!rule.isStepOver()) {
 				return MODE_STEP_INTO;
 			}
