@@ -6,7 +6,6 @@ OUTPUTFILE=""
 me=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
 myarguments="hm:o:V"
-options="viewer"
 
 Usage() {
 cat << E_O_USAGE >&2
@@ -15,7 +14,6 @@ Options:
     -V                   reveal program version (i.e. $myversion)
     -m <modulename>      open module <modulename>
     -o <outputfile>      output filename
-    --viewer             start with ToolBus viewer
 E_O_USAGE
 }
 
@@ -23,14 +21,11 @@ Version() {
     echo "$me v$myversion" >&2
 }
 
-# getopt handles command line...
-args=`getopt --options $myarguments --longoptions $options -- $* 2> /dev/null`
 if test $? != 0
 then
         Usage
         exit 2
 fi
-set -- $args
 
 # Argument interpretation...
 while [ $#  -gt 0 ]
@@ -45,8 +40,6 @@ do
         -o)
 	    shift;
             OUTPUTFILE=$1 ;;
-	--viewer)
-	    VIEWER="-viewer" ;;
         -V)
             Version ; exit 0 ;;
         --)
@@ -70,11 +63,12 @@ if [ "a${OUTPUTFILE}" == "a" ]; then
   exit 1
 fi
 
-__TOOLBUS__/bin/toolbus \
-  ${VIEWER} \
-  -DMODULENAME=\\\"${MODULENAME}\\\" \
-  -DOUTPUTFILE=\\\"${OUTPUTFILE}\\\" \
-  __TBSCRIPTS__ \
+export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
+
+java toolbus.Main \
+  -DMODULENAME=${MODULENAME} \
+  -DOUTPUTFILE=${OUTPUTFILE} \
+  -S__TBSCRIPTS__ \
   __PREFIX__/share/sdf-meta/start-pt-dump.tb \
   `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/sdf-meta/standard.sdf.actions` \
   $*

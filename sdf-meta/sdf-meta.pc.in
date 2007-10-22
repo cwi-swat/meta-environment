@@ -3,5 +3,5 @@ Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 Name: sdf-meta
 Version: 1.0.2
 Description:
-Requires: meta,pgen,sdf,sdf-library,asf-library,sdf-support,toolbus,config-manager,console-grabber,sdf-metrics
+Requires: meta,pgen,sdf,sdf-library,asf-library,sdf-support,toolbus,config-manager,console-grabber,sdf-metrics,toolbus-ng
 ToolBusFlags=-I${prefix}/share/sdf-meta
