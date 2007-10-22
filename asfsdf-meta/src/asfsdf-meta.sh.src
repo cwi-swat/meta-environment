@@ -5,8 +5,6 @@ MODULENAME=""
 me=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
 myarguments="hm:V"
-myoptions="viewer"
-VIEWER=""
 
 Usage() {
 cat << E_O_USAGE >&2
@@ -14,7 +12,6 @@ Usage: $myname [options]
 Options:
     -V                   reveal program version (i.e. $myversion)
     -m <modulename>      open module <modulename>
-    --viewer             start up with ToolBus viewer
 E_O_USAGE
 }
 
@@ -22,14 +19,11 @@ Version() {
     echo "$me v$myversion" >&2
 }
 
-# getopt handles command line...
-args=`getopt --options $myarguments --longoptions $myoptions -- $* 2> /dev/null`
 if test $? != 0
 then
         Usage
         exit 2
 fi
-set -- $args
 
 # Argument interpretation...
 while [ $#  -gt 0 ]
@@ -43,8 +37,6 @@ do
             MODULENAME=$1 ;;
         -V)
             Version ; exit 0 ;;
-	--viewer)
-	    VIEWER="-viewer" ;;
         --)
            ;;
     # Add additional command line options here...
@@ -54,10 +46,11 @@ do
     shift
 done
 
-__TOOLBUS__/bin/toolbus \
-  ${VIEWER} \
-  -DMODULENAME=\\\"${MODULENAME}\\\" \
+export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
+
+java toolbus.Main \
+  -DMODULENAME=${MODULENAME} \
   __TBSCRIPTS__ \
-  __PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
+  -S__PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
   `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.asfsdf.actions` \
   $* 2>&1 | __CONSOLE_GRABBER__/bin/console-grabber
