@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary version="5.0" xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:db="http://docbook.org/ns/docbook">
+  <glossdiv>
+    <title>Glossary of Meta-Environment Terminology</title>
+
+    <glossentry>
+      <glossterm>Abstract Data Type (ADT)</glossterm>
+
+      <glossdef>
+        <para>Structural description of the interface of a component. Used by
+        APIGEN to generate an Application Programmer's Interface (API) for the
+        component.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>APIGEN</glossterm>
+
+      <glossdef>
+        <para>Application Programming Interface (API) generator. Given a
+        datastructure definition (in the form of an Abstract Data Type),
+        APIGEN generates C or Java code to access that datastructure.
+        Internally, the datastructure is represented as ATerm.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF</glossterm>
+
+      <glossdef>
+        <para>Algebraic Specification Formalism. This a notation for
+        describing rewrite rules and is mostly used for defining software
+        analysis, fact extraction, and software transformation.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF checker</glossterm>
+
+      <glossdef>
+        <para>ASF checker performs static checking on ASF definitions.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF compiler</glossterm>
+
+      <glossdef>
+        <para>The ASF compiler transforms ASF specifications to C code. That C
+        code is compiled and linked with a run-time library. This leads very
+        efficient execution of specifications.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF interpreter</glossterm>
+
+      <glossdef>
+        <para>The ASF interpreter takes the equation sections from the ASF+SDF
+        specification and applies them to the parsed input term. It produces
+        another parse tree as output.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF operations</glossterm>
+
+      <glossdef>
+        <para>ASF operations provides all operations to read and modify ASF
+        definitions.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF+SDF</glossterm>
+
+      <glossdef>
+        <para>The combination of the formalisms ASF and SDF. ASF+SDF can
+        describe both the syntax of a language and the operations on that
+        language (checking, execution, analysis, transformation).</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF+SDF checker</glossterm>
+
+      <glossdef>
+        <para>The ASF+SDF checker checks an SDF definition for compatibility
+        for use with ASF, and also checks some production attributes that are
+        specifically interpreted by ASF rewriting engines. It is an extension
+        of the SDF checker.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF+SDF library</glossterm>
+
+      <glossdef>
+        <para>A collection of elementary datatypes (lists, tables, etc.),
+        language grammars (C, COBOL, Java, SDF, etc.) and utilities.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ASF+SDF modules</glossterm>
+
+      <glossdef>
+        <para>The ASF+SDF modules describe:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the syntax of the base language,</para>
+          </listitem>
+
+          <listitem>
+            <para>the functions that can be applied to base language
+            programs.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Note that the ASF+SDF modules may define several base languages
+        at the same time.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>AsFix</glossterm>
+
+      <glossdef>
+        <para>ASF+SDF Fixed format. The dataformat used to represent parse
+        trees. AsFix is a specialized view on ATerms. Important features
+        are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The AsFix format is a full parse trees that contains all the
+            original layout and comments from the original source code program
+            that was parsed.</para>
+          </listitem>
+
+          <listitem>
+            <para>The AsFix format is self-descriptive: each subtree contains
+            information about the exact grammar production that has been used
+            to parse the text that has resulted in that parse tree.</para>
+          </listitem>
+
+          <listitem>
+            <para>The AsFix format does not contain source code coordinates
+            per se, but a separate tool (<command>addPosInfo</command>) can
+            easily compute these coordinates and add them to the parse tree in
+            the form of annotations.</para>
+          </listitem>
+        </itemizedlist>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ATerm</glossterm>
+
+      <glossdef>
+        <para>Annotated terms. A dataformat used for the internal
+        representation of all data. Distinguishing features are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>ATerms are language-independent and can be processed by
+            programs in any language.</para>
+          </listitem>
+
+          <listitem>
+            <para>ATerms can be annotated with auxiliary information that does
+            not affect the tree structure.</para>
+          </listitem>
+
+          <listitem>
+            <para>ATerms preserve <emphasis>maximal subterm
+            sharing</emphasis>. This means that common parts of the data are
+            not duplicated but shared. This leads to considerable
+            size-reduction of the data.</para>
+          </listitem>
+        </itemizedlist>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Box</glossterm>
+
+      <glossdef>
+        <para>Intermediate representation of the prettyprinter. A parse tree
+        is first converted to a box term that includes all desired formatting
+        directives (alignment, font and color directives, and the like). Next,
+        the box term is converted to various output formats (plain text, HTML,
+        etc.).</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Configuration manager</glossterm>
+
+      <glossdef>
+        <para>The configuration manager handles user settings and
+        preferences.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Compiled specification</glossterm>
+
+      <glossdef>
+        <para>It is possible to compile the ASF+SDF into a very efficient
+        executable form. Compiled specifications can be used via the command
+        line interface of The Meta-Environment by power users.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Debugger</glossterm>
+
+      <glossdef>
+        <para>The debugger allows a step-by-step execution of the rewrite
+        rules defined in ASF+SDF specifications.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Errors &amp; warnings</glossterm>
+
+      <glossdef>
+        <para>Errors &amp; warnings pinpoint any errors in the ASF+SDF modules
+        or input terms.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Graph</glossterm>
+
+      <glossdef>
+        <para>Data format to represent graphs. Used as representation of
+        import graphs and parse trees that are displayed in the GUI.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Graphical user interface (GUI)</glossterm>
+
+      <glossdef>
+        <para><package>The graphical user-interface (GUI) gives end-users
+        access to the system's functionality. It is a "sovereign"
+        user-interface that occupies the complete desktop window and provides
+        functionality like:</package><itemizedlist>
+            <listitem>
+              <para>Opening, editing and closing ASF+SDF modules.</para>
+            </listitem>
+
+            <listitem>
+              <para>Opening, editing, reducing and closing input terms.</para>
+            </listitem>
+
+            <listitem>
+              <para>A graphical and tree-structured display of the import
+              relations between ASF+SDF modules.</para>
+            </listitem>
+
+            <listitem>
+              <para>A graphical display of parse trees.</para>
+            </listitem>
+
+            <listitem>
+              <para>Error and progress indications.</para>
+            </listitem>
+          </itemizedlist></para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Location</glossterm>
+
+      <glossdef>
+        <para>Data format to describe locations in source code.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Input term</glossterm>
+
+      <glossdef>
+        <para>A text that conforms to the syntax defined in the ASF+SDF
+        modules. This includes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the syntax of the base language (e.g., C, Java, Boolean
+            expressions, a domain-specific language),</para>
+          </listitem>
+
+          <listitem>
+            <para>the functions that can be applied to base language programs
+            (e.g., typecheck, extract facts, compile, remove unused
+            methods).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The input term can be freely edited and is checked for syntactic
+        correctness before any function is applied to it. It is possible to
+        simultaneously edit different input terms in different base
+        languages.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Module manager</glossterm>
+
+      <glossdef>
+        <para>The module manager is responsible for all information related to
+        the ASF+SDF modules that reside in the system.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Output term</glossterm>
+
+      <glossdef>
+        <para>A text that describes the result of applying a function to a
+        program in the base language. Note that this text conforms to the
+        syntax R, where R is the result sort of the function that was applied.
+        With Java-to-Java transformation the result sort will be Java. When no
+        function is applied, the output term is identical to the input
+        term.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parser</glossterm>
+
+      <glossdef>
+        <para>The parser takes a parse table (as produced by the parse table
+        generator) and text (as provided by a text editor) as input and
+        produces a parse tree as output. Any errors are shown in the error
+        display of the GUI.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parse table</glossterm>
+
+      <glossdef>
+        <para>A parse table is an efficient representation (ATerm) of the base
+        language as defined by the ASF+SDF modules and enables efficient
+        parsing.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parse table generator</glossterm>
+
+      <glossdef>
+        <para>The parse table generator takes syntax sections from the ASF+SDF
+        specification and converts them to a parse table to be used for the
+        parsing of terms.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Parse tree</glossterm>
+
+      <glossdef>
+        <para>Tree-structured representation (in AsFix) of a text that has
+        been analyzed by a parser.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Prettyprinter</glossterm>
+
+      <glossdef>
+        <para>The prettyprinter converts parse trees to text. The
+        prettyprinter uses default rules to insert layout in a parse tree so
+        that its corresponding text is presented in a uniform way. Optionally,
+        the ASF+SDF specification may contain formatting rules that can
+        replace this default behaviour.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Rscript</glossterm>
+
+      <glossdef>
+        <para>A small scripting language for defining relational expressions.
+        Used for the analysis of facts extracted from software.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>SDF</glossterm>
+
+      <glossdef>
+        <para>Syntax Definition Formalism. A notation for describing the
+        grammar of programming and application languages.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>SDF checker</glossterm>
+
+      <glossdef>
+        <para>SDF checker performs static checking on SDF definitions.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>SDF operations</glossterm>
+
+      <glossdef>
+        <para>SDF operations provides all operations to read and modify SDF
+        definitions.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Sisyphus</glossterm>
+
+      <glossdef>
+        <para>A system for continuous integration that rebuilds the system
+        after each change that is committed by a developer.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Structure editor</glossterm>
+
+      <glossdef>
+        <para>A syntax-directed editor that closely cooperates with the text
+        editor. It is mostly used for syntax-directed navigation through the
+        text. The structure-editor does not appear as such in the GUI but all
+        its functionality is visible through the text editor.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Summary</glossterm>
+
+      <glossdef>
+        <para>An error or message summary. A dataformat for the internal
+        representation of errors and messages. Summaries are produced by
+        checker and compilers and are used by the GUI.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Term store</glossterm>
+
+      <glossdef>
+        <para>The term store contains all parse tables, parse trees and other
+        intermediate data that is generated during execution of The
+        Meta-Environment. This includes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The parse tree for each ASF+SDF module.</para>
+          </listitem>
+
+          <listitem>
+            <para>The parse tree for each parsed input term.</para>
+          </listitem>
+
+          <listitem>
+            <para>The parse tree for each generated output term.</para>
+          </listitem>
+        </itemizedlist>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Text editor</glossterm>
+
+      <glossdef>
+        <para>The text editor allows text editing on ASF+SDF modules and input
+        terms. Multiple editors may be opened; each appears as a tabbed window
+        in one of the panes of the GUI.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>The Meta-Environment</glossterm>
+
+      <glossdef>
+        <para>The architecture of The Meta-Environment (or just "the system")
+        is the primary object of study of this document.</para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>ToolBus</glossterm>
+
+      <glossdef>
+        <para><package>The ToolBus coordination architecture enables the
+        flexible and controlled combination and orchestration of software
+        components. It is used as backbone for The Meta-Environment. The
+        ToolBus has the following characteristics:</package><itemizedlist>
+            <listitem>
+              <para>Components (or <emphasis>tools</emphasis> in ToolBus
+              parlance) can be written in different programming
+              languages.</para>
+            </listitem>
+
+            <listitem>
+              <para>Components can be running on different machines.</para>
+            </listitem>
+
+            <listitem>
+              <para>All interactions between components are regulated by a
+              ToolBus script (or Tscript for short) that is executing in the
+              ToolBus. Tscript is a concurrent language that allows the
+              definition of parallel processes, messaging between these
+              processes and interaction between processes and tools.</para>
+            </listitem>
+          </itemizedlist></para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry>
+      <glossterm>Tscript</glossterm>
+
+      <glossdef>
+        <para>The script that describes the cooperation between components in
+        a ToolBus-based application.</para>
+      </glossdef>
+    </glossentry>
+  </glossdiv>
+</glossary>
