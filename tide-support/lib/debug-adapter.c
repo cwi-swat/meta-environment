@@ -72,10 +72,7 @@ void ta_rec_ack_event(int conn, ATerm event)
 /*}}}  */
 /*{{{  void ta_rec_terminate(int conn, ATerm event) */
 
-void ta_rec_terminate(int conn, ATerm event)
-{
-  TA_disconnect(ATfalse, conn);
-}
+void ta_rec_terminate(int conn, ATerm event){}
 
 /*}}}  */
 /*{{{  ATerm ta_evaluate(int conn, int pid, ATerm expr) */

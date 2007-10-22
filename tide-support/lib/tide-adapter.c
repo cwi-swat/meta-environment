@@ -398,10 +398,7 @@ void TA_registerFunction(int pid, AFun name, TA_Function func)
 void TA_disconnect(ATbool close, int pid)
 {
   int cid = findProcess(pid)->cid;
-
-  if (close) {
-    ATBwriteTerm(cid, ATparse("snd-disconnect"));
-  }
+  
   ATBdisconnect(cid);
 
   /* Activate all processes */
