@@ -71,7 +71,6 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
 
   term = ATreadFromNamedFile(inputName);
-  term = ATBunpack(term);
   ATwriteToNamedTextFile(term, outputName);
 
   return 0;

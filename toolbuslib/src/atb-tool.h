@@ -10,12 +10,18 @@ typedef ATerm (*ATBhandler)(int file_desc, ATerm input_term);
 /* ToolBus tool functions */
 int   ATBinitialize(int argc, char *argv[]);
 int    ATBinit(int argc, char *argv[], ATerm *stack_bottom);
-int    ATBconnect(char *tool, char *host, int port, ATBhandler h);
+int    ATBconnect(char *toolname, char *host, int port, ATBhandler h);
 void   ATBdisconnect(int file_desc);
 int    ATBeventloop(void);
 
 ATerm ATBpack(ATerm t);
 ATerm ATBunpack(ATerm t);
+
+typedef struct _OperationTermPair
+{
+	int operation;
+	ATerm term;
+} *OperationTermPair;
 
 ATerm  ATBreadTerm(int file_desc);
 int    ATBwriteTerm(int file_desc, ATerm term);
