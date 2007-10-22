@@ -34,7 +34,7 @@
     linkend="section.todo">ToDo</link> section.</para>
   </warning>
 
-  <section xml:id="section.introduction">
+  <section xml:id="section.langdef-introduction">
     <title>Introduction</title>
 
     <para>You are interested in using ASF+SDF to define various aspects of a

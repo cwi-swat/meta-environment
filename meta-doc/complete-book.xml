@@ -26,49 +26,49 @@
  </part>
   <part>
     <title>Formatting</title>
-
     <xi:include href="formatting/1-formatting/formatting.xml"></xi:include>
   </part>
 
   <part>
     <title>Fact Extraction and Program Transformation</title>
-
     <xi:include href="extraction-transformation/1-term-rewriting/term-rewriting.xml"></xi:include>
     <xi:include href="extraction-transformation/2-asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
     <xi:include href="extraction-transformation/3-language-definitions/language-definitions.xml"></xi:include>
     <xi:include href="extraction-transformation/4-asfsdf/asfsdf.xml"></xi:include>
     <xi:include href="extraction-transformation/5-asf-errors/asf-errors.xml"></xi:include>
-
   </part>
+
  <part>
    <title>Relational Fact Analysis</title>
-
     <xi:include href="analysis/1-rscript/rscript.xml"></xi:include>
-
  </part>
 
   <part>
     <title>The Meta-Environment</title>
-
     <xi:include href="meta-environment/1-architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
     <xi:include href="meta-environment/2-extending-meta-environment/extending-meta-environment.xml"></xi:include>
   </part>
+
   <part>
-   <title>Software Development></title>
+    <title>Technology</title>
+    <xi:include href="technology/2-aterm-saf/aterm-saf.xml"></xi:include>
+  </part>
+
+  <part>
+   <title>Software Development</title>
     <xi:include href="software-development/1-build-environment/build-environment.xml"></xi:include>
     <xi:include href="software-development/2-version-management/version-management.xml"></xi:include>
     <xi:include href="software-development/3-coding-standards/coding-standards.xml"></xi:include>
   </part>
-  
 
   <part>
     <title>Planning</title>
-
    <xi:include href="project/planning/planning.xml"></xi:include>
-
    <xi:include href="project/documentation-plan/documentation-plan.xml"></xi:include>
-
    <xi:include href="project/communication-plan/communication-plan.xml"></xi:include>
-
   </part>
+
+
+  <xi:include href="getting-started/3-glossary/glossary.xml"></xi:include>
+  <xi:include href="bibliography.xml"></xi:include>
 </book>
