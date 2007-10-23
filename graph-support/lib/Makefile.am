@@ -25,7 +25,6 @@ java-api: Graph.adt
 		--input Graph.adt \
 		--package nl.cwi.sen1 \
 		--name graph \
-		--import 'aterm.*' \
 		--version ${VERSION}
 	mv graph-${VERSION}.jar graph.jar
 endif
