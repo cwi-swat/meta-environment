@@ -97,7 +97,7 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 	}
 
 	public void recTerminate(ATerm t0) {
-		System.exit(0);
+		//System.exit(0);
 	}
 
 	public void recAckEvent(ATerm t0) {
