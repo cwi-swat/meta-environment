@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>ToolBus Design Issues</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>This hopefully "living" document is intended to record design issues
+    for ToolBusNG.</para>
+  </section>
+
+  <section>
+    <title>Current Situation</title>
+
+    <para>We have just switched to ToolBusNG as replacement for good old
+    ToolBusC who has served us so well. The ToolBusNG implementation currently
+    lacks some functionality/needs some additional work:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>No source code locations are attached to each atom (for better
+        error messages).</para>
+      </listitem>
+
+      <listitem>
+        <para>Syntax errors are very brutal.</para>
+      </listitem>
+
+      <listitem>
+        <para>The viewer lacks graphical features (but is useable). It has
+        been implemnted directkly in Java and does not follow the
+        <emphasis>monitor</emphasis> protocol of the old ToolBus.</para>
+      </listitem>
+
+      <listitem>
+        <para>The timing primitives need to reintroduced. All atoms are
+        prepared for this, but the top-level they disappeared during
+        testing.</para>
+      </listitem>
+
+      <listitem>
+        <para>Several adapters are still missing (Tcl/Tk, Python, ...).</para>
+      </listitem>
+
+      <listitem>
+        <para>Documentation not uo-to-date and not in DocBook.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The good news is that ToolBusNG is already, in some respects, better
+    than ToolBusC:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Architecture is really flexible.</para>
+      </listitem>
+
+      <listitem>
+        <para>Better performance, both on single core and on multi-core
+        machines.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Desired situation</title>
+
+    <para>Recently, some features have already been added to increase
+    usability:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The "dynamic" Process calls: is <literal>P</literal> is a
+        string-values variable in the given context, then the process call
+        <literal>P(...)</literal> is interpreted as a call to
+        <literal>P</literal>'s value.</para>
+      </listitem>
+
+      <listitem>
+        <para>Cancel has been added to the tool protocol. (Historical note:
+        the cancel was already part of the original protocol but was never
+        implemented).</para>
+      </listitem>
+
+      <listitem>
+        <para>Execution profiling for tools.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The ToolBus has primarily been designed as middleware solution for
+    tool integration. What are the longer term needs for this? Some
+    thoughts:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Adding computation intensive tools (proof and model checkers)
+        increases the need for horse power and distributed
+        computations.</para>
+      </listitem>
+
+      <listitem>
+        <para>This also implies a need for fault tolerance.</para>
+      </listitem>
+
+      <listitem>
+        <para>We live in an increasingly service-oriented world. How can we
+        offer services and use third-party services (and what would these
+        services be?)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Here follows an unstructured list of wishes and (perhaps
+    overlapping) ideas for solutions.</para>
+
+    <section>
+      <title>More flexibility: dynamic scripts</title>
+
+      <para>Dynamic process calls were a first steps towards run-time
+      customization of ToolBus applications. An obvious next step (and need)
+      is to allow script additions/modifications <emphasis>after</emphasis>
+      the application has started. It is not yet clear how powerfull we want
+      this to be.</para>
+    </section>
+
+    <section>
+      <title>More customizability: properties</title>
+
+      <para>The need to customize ToolBus-based applications will grow. We
+      need a good property system to support this or design another
+      customization mechanism.</para>
+    </section>
+
+    <section>
+      <title>Modularization</title>
+
+      <para>As suggested by Dennis Hendriks, we need some form of namespaces
+      and structure to limit the scope of messages and notes. Such a mechanism
+      can also form the basis for fault tolerance.</para>
+    </section>
+
+    <section>
+      <title>Fault tolerance</title>
+
+      <para>What to do when an error is detected by a tool or Tscript? What to
+      do when a tool crashes? What to do when the whole ToolBus crashes? We
+      need mechanisms to relieve these situations. Some issues:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ToolBusNG already implements the disrupt operator
+          (<literal>&gt;&gt;</literal>) that can be used for try/catch style
+          solutions.</para>
+        </listitem>
+
+        <listitem>
+          <para>In the original ToolBus we had the monitor protocol where a
+          tool could observe all steps of one or more processes. Perhaps we
+          need a monitoring mechanism at the level of processes.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Erlang approach of <emphasis>process groups</emphasis> is
+          also appealing: when a process dies, a message is sent to all
+          processes in its group and they decide what to do. We can easily
+          introduce a note-like action <literal>snd-error</literal> to do this
+          (or just use notes for this!)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Work offloading: remote tool execution</title>
+
+      <para>In order to offload computation-intensive tools we need to be able
+      start a tool on another machine. We used to have this with
+      <productname>rsh</productname>, but this did not survive the switch to
+      <productname>ssh</productname>. For the record: tools can already
+      execute on a remote machine but then they should also be started on that
+      same machine.</para>
+    </section>
+
+    <section>
+      <title>Work distribution: distributed process execution</title>
+
+      <para>In terms of work distribution it is reasonable to try to execute
+      the processes in the ToolBus itself on several CPU's. Issues are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Synchronous communication
+          (<literal>snd-msg</literal>/<literal>rec-msg</literal>) requires
+          global knowledge to find a match. This is undesirable from a
+          distribution perspective.</para>
+        </listitem>
+
+        <listitem>
+          <para>We can analyze a given Tscript and automatically cluster the
+          processes that use synchronous communication among each other. Each
+          cluster can be executed by a separate ToolBus. It is unclear what
+          the gains of this approach can be.</para>
+        </listitem>
+
+        <listitem>
+          <para>We can also add primitives to describe the clustering
+          manually.</para>
+        </listitem>
+
+        <listitem>
+          <para>Forms of load balancing and tool migration can be
+          considered.</para>
+        </listitem>
+
+        <listitem>
+          <para>Metering of the distributed applications is needed for load
+          balancing decisions.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Tool2Tool communication</title>
+
+      <para>How does Arnold's efficient tool-to-tool communication fit
+      in?</para>
+    </section>
+
+    <section>
+      <title>Integration issues</title>
+
+      <para>ToolBus can be and is being used independently but close
+      cooperation with ASF+SDF and Rscript is desirable. Issues:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Should we add more extensive typing of terms (a la
+          APIGEN)?</para>
+        </listitem>
+
+        <listitem>
+          <para>Do we want to unify the types in the ToolBus with, for
+          instance, the Rscript types? What are the pros and cons?</para>
+        </listitem>
+
+        <listitem>
+          <para>How can we make the integration of ASF+SDF tools more
+          seamless?</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Wrap up</title>
+
+    <para>TBD</para>
+  </section>
+</chapter>
