@@ -487,7 +487,8 @@ public class ToolBus{
 		tbConnectionHandler.setName("ToolBus connection handler");
 		tbConnectionHandler.start();
 		
-		System.err.println("ToolBus execution starts ...\n");
+		//System.err.println("ToolBus execution starts ...\n");
+		System.err.println("The ToolBus server allocated port ("+portNumber+")");
 		//int passes = 0;
 		//int noWorkPasses = 0;
 		ProcessInstance P = null;
