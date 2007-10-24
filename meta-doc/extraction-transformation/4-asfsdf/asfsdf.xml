@@ -1836,16 +1836,13 @@ exports
       entities. Furthermore, ensure the lexical constructor functions that
       the underlying structure is not violated or that illegal lexical
       entities are created.
+      </para>
 
       <para>The only way to access the actual characters of a lexical token is
       by means of <emphasis>lexical constructor functions</emphasis>. For each
       lexical sort <literal>LEX</literal> a lexical constructor function is
       automatically derived as follows: <programlisting><replaceable>lex</replaceable>( <replaceable>LEX</replaceable> ) -&gt; <replaceable>LEX</replaceable></programlisting>
-      The sort <literal>CHAR</literal> is predefined in ASF+SDF and represents
-      characters. Characters can be directly addressed by the representation
-      or via variables which may be of the sorts <literal>CHAR</literal>,
-      <literal>CHAR*</literal>, or <literal>CHAR+</literal>. The latter two
-      represent lists of characters.</para>
+      </para>
 
       <section>
         <title>Example: Removing Leading Zeros</title>
