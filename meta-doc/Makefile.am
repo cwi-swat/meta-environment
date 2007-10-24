@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.top.meta
 XSL_SOURCE_FILES = \
 	html-customization.xsl.src \
 	fo-customization.xsl.src \
-        fo-comple-book-customization.xsl \
+        fo-complete-book-customization.xsl \
 	common-customizations.xsl \
 	pubdate.xsl \
 	svnlog2html.xsl
