@@ -68,7 +68,8 @@ public class Print extends Atom{
 			Environment e = getEnv();
 			// System.err.println("Print.execute: " + this + "; env = " + e);
 			PrintWriter out = getToolBus().getPrintWriter();
-			ATerm res = tbfactory.substitute(arg.value, e);
+			ATerm res = tbfactory.fullSubstitute(arg.value, e);
+			if(res == null) throw new ToolBusException("Illegal printf pattern: "+arg.value+".");
 			// System.err.println("res =" + res);
 			out.print(sprintf((ATermList) res));
 			out.flush();

@@ -915,14 +915,14 @@ public class parser extends java_cup.runtime.lr_parser {
 	
 	private void doParse(String filename) {
 		if(includedFiles.contains(filename)){
-			System.err.println("Skipping include of " + filename);
+			//System.err.println("Skipping include of " + filename);
 			return;
 		}
 		
 		includedFiles.add(filename);
-		System.err.println("Parse: " + filename);
+		//System.err.println("Parse: " + filename);
 		toolbus.parsecup1(includedFiles, toolbusProcessCalls, filename);
-        System.err.println("Parse: back to " + filename);
+        //System.err.println("Parse: back to " + filename);
 	}
 	
 	public void generateInitialProcessCalls() throws ToolBusException {

@@ -54,6 +54,12 @@ public class DisConnect extends Atom{
 			}
 		}
 		
+		// If the connection is already lost don't try to terminate the connection, since it will fail.
+		if(toolInstance.isKilled() || toolInstance.isUnreachable()){
+			toolInstance.shutDown();
+			return true;
+		}
+		
 		if(toolInstance.isDisconnected()){
 			toolInstance.shutDown();
 			toolInstance.terminate();

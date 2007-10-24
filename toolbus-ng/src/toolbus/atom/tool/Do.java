@@ -1,6 +1,7 @@
 package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
@@ -41,7 +42,7 @@ public class Do extends Atom{
 		if(!isEnabled()) return false;
 		
 		if(toolInstance == null){
-			ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
 			if(tid == tbfactory.Undefined) return false;
 			
 			toolInstance = getToolBus().getToolInstanceManager().get(tid);
@@ -50,6 +51,8 @@ public class Do extends Atom{
 		
 		if(toolInstance.tryDoEval()){
 			ATerm req = tbfactory.substitute(request.value, getEnv());
+			if(req == null) throw new ToolBusException("Illegal do request pattern: "+request.value+".");
+			
 			toolInstance.sendDo(req);
 			//LoggerFactory.log(this.getProcess().getProcessName(), "Do " + request.value, IToolBusLoggerConstants.TOOLCOM);
 			return true;

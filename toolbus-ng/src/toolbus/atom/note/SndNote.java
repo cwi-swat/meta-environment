@@ -33,7 +33,12 @@ public class SndNote extends Atom{
 	}
 	
 	void addPartnerIfMatch(Subscribe subs){
-		ATerm subscribeValue = tbfactory.substitute(subs.getMatchPattern(), subs.getEnv());
+		ATerm subscribeValue = tbfactory.fullSubstitute(subs.getMatchPattern(), subs.getEnv());
+		if(subscribeValue == null){
+			//LoggerFactory.log(this.getProcess().getProcessName(), "Illegal subscription pattern: "+subs.getMatchPattern()+".", IToolBusLoggerConstants.NOTES);
+			return;
+		}
+		
 		if(tbfactory.mightMatch(subscribeValue, note.value)){
 			ProcessInstance pi = subs.getProcess();
 			if(!notePartners.contains(pi)) notePartners.add(pi);
@@ -51,7 +56,8 @@ public class SndNote extends Atom{
 	
 	public boolean execute() throws ToolBusException{
 		if(isEnabled()){
-			ATerm theNote = tbfactory.substitute(note.value, getEnv());
+			ATerm theNote = tbfactory.fullSubstitute(note.value, getEnv());
+			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
 			
 			for(ProcessInstance pi : notePartners){
 				pi.putNoteInQueue(theNote);

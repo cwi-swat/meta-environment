@@ -51,6 +51,8 @@ public class Eval extends Atom{
 		
 		if(toolInstance.tryDoEval()){
 			ATerm req = tbfactory.substitute(request.value, getEnv());
+			if(req == null) throw new ToolBusException("Illegal eval request pattern: "+request.value+".");
+			
 			toolInstance.sendEval(req);
 			//LoggerFactory.log(this.getProcess().getProcessName(), "Eval " + request.value, IToolBusLoggerConstants.TOOLCOM);
 			return true;

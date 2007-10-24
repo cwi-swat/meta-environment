@@ -4,6 +4,7 @@
 package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
@@ -37,13 +38,15 @@ public class Terminate extends Atom{
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
 		if(tid == tbfactory.Undefined) return false;
 		
 		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
 		if(toolInstance == null) return false;
 		
-		ATerm req = tbfactory.substitute(request.value, getEnv());
+		ATerm req = tbfactory.fullSubstitute(request.value, getEnv());
+		if(req == null) throw new ToolBusException("Illegal terminate request pattern: "+request.value+".");
+		
 		toolInstance.sendTerminate(req);
 		//LoggerFactory.log(this.getProcess().getProcessName(), "Terminate " + request.value, IToolBusLoggerConstants.TOOLCOM);
 		return true;

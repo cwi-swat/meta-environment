@@ -280,7 +280,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	public void shutDown(){
 		boolean connected = isConnected();
 		
-		goUnconnected();
+		goTerminated();
 		
 		ToolInstanceManager tim = toolbus.getToolInstanceManager();
 		if(connected){ // If the tool is connected we only need to check in one collection.
@@ -299,7 +299,18 @@ public class ToolInstance implements IDataHandler, IOperations{
 	}
 	
 	public void kill(){
-		shutDown();
+		boolean connected = isConnected();
+		
+		goKilled();
+		
+		ToolInstanceManager tim = toolbus.getToolInstanceManager();
+		if(connected){ // If the tool is connected we only need to check in one collection.
+			tim.remove(toolKey);
+		}else{
+			tim.remove(toolKey);
+			tim.removePendingTool(toolKey);
+			tim.removeDynamiclyConnectedTool(this);
+		}
 		
 		if(streamHandler != null) streamHandler.destroy();
 	}
@@ -358,7 +369,9 @@ public class ToolInstance implements IDataHandler, IOperations{
 	private final static int READY = 2; // Ready to send (DO or EVAL).
 	private final static int BLOCKED = 3; // Waiting for response (ACKDO or VALUE).
 	private final static int DISCONNECTED = 4; // Termination requested by tool.
-	private final static int UNREACHABLE = 5; // Error state.
+	private final static int KILLED = 5; // User imposed error state.
+	private final static int UNREACHABLE = 6; // Error state.
+	private final static int TERMINATED = 7; // End state.
 	
 	private int state = UNCONNECTED;
 	
@@ -367,12 +380,6 @@ public class ToolInstance implements IDataHandler, IOperations{
 	private void goConnected(){
 		synchronized(stateLock){
 			state = READY;
-		}
-	}
-	
-	private void goUnconnected(){
-		synchronized(stateLock){
-			state = UNCONNECTED;
 		}
 	}
 	
@@ -388,9 +395,21 @@ public class ToolInstance implements IDataHandler, IOperations{
 		}
 	}
 	
+	private void goTerminated(){
+		synchronized(stateLock){
+			state = TERMINATED;
+		}
+	}
+	
 	private void goUnreachable(){
 		synchronized(stateLock){
 			state = UNREACHABLE;
+		}
+	}
+	
+	private void goKilled(){
+		synchronized(stateLock){
+			state = KILLED;
 		}
 	}
 	
@@ -409,6 +428,18 @@ public class ToolInstance implements IDataHandler, IOperations{
 	public boolean isUnreachable(){
 		synchronized(stateLock){
 			return (state == UNREACHABLE);
+		}
+	}
+	
+	public boolean isTerminated(){
+		synchronized(stateLock){
+			return (state == KILLED);
+		}
+	}
+	
+	public boolean isKilled(){
+		synchronized(stateLock){
+			return (state == KILLED);
 		}
 	}
 	

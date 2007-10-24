@@ -39,8 +39,7 @@ public class SndMsg extends MsgAtom{
 	}
 
 	public boolean matchesPartner(RecMsg recMsg){
-		ATerm sndMsgPattern = tbfactory.substitute(matchPattern, getEnv());
-		return tbfactory.match(recMsg.getMatchPattern(), recMsg.getEnv(), sndMsgPattern, getEnv());
+		return tbfactory.match(recMsg.getMatchPattern(), recMsg.getEnv(), matchPattern, getEnv());
 	}
 	
 	public void addMsgPartner(RecMsg a){

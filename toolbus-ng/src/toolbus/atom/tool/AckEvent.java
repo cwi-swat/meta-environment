@@ -1,6 +1,7 @@
 package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
@@ -46,7 +47,7 @@ public class AckEvent extends Atom{
 		if(!isEnabled()) return false;
 		
 		if(toolInstance == null){
-			ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
 			if(tid == tbfactory.Undefined) return false;
 			
 			toolInstance = getToolBus().getToolInstanceManager().get(tid);
@@ -64,8 +65,12 @@ public class AckEvent extends Atom{
 		
 		// Get the callback data if present.
 		ATerm callbackTerm = callbackData.value;
-		if(callbackTerm == null) callbackTerm = tbfactory.EmptyList;
-		else callbackTerm = tbfactory.substitute(callbackTerm, getEnv());
+		if(callbackTerm == null){
+			callbackTerm = tbfactory.EmptyList;
+		}else{
+			callbackTerm = tbfactory.fullSubstitute(callbackTerm, getEnv());
+			if(callbackTerm == null) throw new ToolBusException("Illegal callback term pattern: "+callbackTerm+".");
+		}
 		
 		// Construct the ack event.
 		ATermList ackEvent = tbfactory.makeList();

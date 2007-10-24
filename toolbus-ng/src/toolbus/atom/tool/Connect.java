@@ -44,14 +44,14 @@ public class Connect extends Atom{
 		if(!isEnabled()) return false;
 		
 		// System.err.println("Connect.execute called; toolname = " + toolId.value);
-		ATerm id = getEnv().getValue((TBTermVar) toolId.value);
+		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
 		
 		String toolname = ((ATermAppl) ((TBTermVar) toolId.value).getVarType()).getName();
 		ToolInstanceManager toolInstanceManager = getToolBus().getToolInstanceManager();
 		
 		ToolInstance ti;
 		if(followsExecute){
-			ti = toolInstanceManager.activatePendingTool(id);
+			ti = toolInstanceManager.activatePendingTool(tid);
 		}else{
 			ti = toolInstanceManager.activateDynamiclyConnectedTool(toolname);
 		}

@@ -532,7 +532,7 @@ public class TBTermFactory extends PureFactory{
 				
 			case ATerm.APPL:
 				ATermAppl apt = (ATermAppl) t;
-				if(isBoolean(apt) || apt.getArity() == 0) return t;
+				if(apt.getArity() == 0) return t;
 				
 				AFun afun = apt.getAFun();
 				ATerm args[] = apt.getArgumentArray();
@@ -566,7 +566,76 @@ public class TBTermFactory extends PureFactory{
 				
 				return lst;
 		}
-		throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
+		throw new ToolBusInternalError("Illegal ATerm in substitute: " + t);
+	}
+	
+	/**
+	 * Replaces all variables in an ATerm by their value. If a variable result variable is present
+	 * the full substitue can not be completed and null will be returned instead.
+	 * @param t
+	 *            The term in which variables need to be substituted.
+	 * @param env
+	 *            The environment from which the variable values can be retrieved.
+	 * @return A complete ATerm tree that doesn't contain any variables; null if the substitute could
+	 * not be completed.
+	 */
+	public ATerm fullSubstitute(ATerm t, Environment env){
+		if(t == Undefined) return t;
+		
+		switch(t.getType()){
+			case ATerm.BLOB:
+			case ATerm.INT:
+			case ATerm.PLACEHOLDER:
+			case ATerm.REAL:
+				return t;
+				
+			case VAR:
+				TBTermVar var = (TBTermVar) t;
+				if(var.isResultVar()) return null;
+					
+				return env.getValue(var);
+				
+			case ATerm.APPL:
+				ATermAppl apt = (ATermAppl) t;
+				if(apt.getArity() == 0) return t;
+				
+				AFun afun = apt.getAFun();
+				ATerm args[] = apt.getArgumentArray();
+				ATermList annos = apt.getAnnotations();
+				
+				int nargs = args.length;
+				ATerm vargs[] = new ATerm[nargs];
+				for(int i = 0; i < nargs; i++){
+					ATerm result = fullSubstitute(args[i], env);
+					if(result == null) return null;
+					vargs[i] = result;
+				}
+				return makeAppl(afun, vargs, annos);
+				
+			case ATerm.LIST:
+				ATermList tlst = (ATermList) t;
+				
+				if(tlst == EmptyList) return t;
+				
+				int len = tlst.getLength();
+				ATerm[] listContent = new ATerm[len];
+				for(int i = len - 1; i >= 0; i--){
+					listContent[i] = tlst.getFirst();
+					tlst = tlst.getNext();
+				}
+				
+				ATermList lst = EmptyList;
+				for(int i = 0; i < len; i++){
+					ATerm result = fullSubstitute(listContent[i], env);
+					if(result == null) return null;
+					lst = lst.insert(result);
+				}
+				
+				// We can ignore annotations, since lists with annotations aren't supported
+				
+				return lst;
+		}
+		throw new ToolBusInternalError("Illegal ATerm in substitute: " + t);
 	}
 	
 	public boolean match(ATerm left, Environment leftEnv, ATerm right, Environment rightEnv){
@@ -675,18 +744,26 @@ public class TBTermFactory extends PureFactory{
 						ATerm leftValue = leftEnv.getValue(leftVar);
 						
 						if(Functions.compatibleTypes(rightVar.getVarType(), leftValue)){
-							Binding deltaBinding = new Binding(rightVar, leftValue);
-							rightDeltaEnv.add(deltaBinding);
-							return true;
+							ATerm fullySubstitutedLeftValue = fullSubstitute(leftValue, leftEnv);
+							if(fullySubstitutedLeftValue != null){
+								Binding deltaBinding = new Binding(rightVar, fullySubstitutedLeftValue);
+								rightDeltaEnv.add(deltaBinding);
+								return true;
+							}
+							return false;
 						}
 					}else{
 						return false;
 					}
 				}else{
 					if(Functions.compatibleTypes(rightVar.getVarType(), left)){
-						Binding deltaBinding = new Binding(rightVar, substitute(left, leftEnv));
-						rightDeltaEnv.add(deltaBinding);
-						return true;
+						ATerm fullySubstitutedLeft = fullSubstitute(left, leftEnv);
+						if(fullySubstitutedLeft != null){
+							Binding deltaBinding = new Binding(rightVar, fullySubstitutedLeft);
+							rightDeltaEnv.add(deltaBinding);
+							return true;
+						}
+						return false;
 					}
 				}
 				return false;
@@ -700,9 +777,13 @@ public class TBTermFactory extends PureFactory{
 				TBTermVar pVar = (TBTermVar) left;
 				if(pVar.isResultVar()){
 					if(Functions.compatibleTypes(pVar.getVarType(), rightTerm)){
-						Binding deltaBinding = new Binding(pVar, rightTerm);
-						leftDeltaEnv.add(deltaBinding);
-						return true;
+						ATerm fullySubstitutedRightValue = fullSubstitute(rightTerm, rightEnv);
+						if(fullySubstitutedRightValue != null){
+							Binding deltaBinding = new Binding(pVar, fullySubstitutedRightValue);
+							leftDeltaEnv.add(deltaBinding);
+							return true;
+						}
+						return false;
 					}
 					return false;
 				}
@@ -749,7 +830,7 @@ public class TBTermFactory extends PureFactory{
 	public boolean mightMatch(ATerm terma, ATerm termb){
 		switch(terma.getType()){
 			case VAR:
-				return true;
+				return Functions.compatibleTypes(((TBTermVar) terma).getVarType(), termb);
 			case ATerm.BLOB:
 				if(isAnyVar(termb)) return true;
 				return terma.isEqual(termb) || (termb == StrPlaceholder) || (termb == TermPlaceholder);

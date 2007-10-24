@@ -4,6 +4,7 @@
 package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
@@ -40,7 +41,7 @@ public class SndKill extends Atom{
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
 		if(tid == tbfactory.Undefined) return false;
 		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
 		if(toolInstance == null) return false;

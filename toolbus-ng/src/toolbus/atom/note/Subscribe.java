@@ -41,7 +41,11 @@ public class Subscribe extends Atom{
 	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
-		getProcess().subscribe(tbfactory.substitute(msgpat.value, getEnv()));
+		
+		ATerm subscribePattern = tbfactory.fullSubstitute(msgpat.value, getEnv());
+		if(subscribePattern == null) throw new ToolBusException("Illegal subscription pattern: "+msgpat.value+".");
+		
+		getProcess().subscribe(subscribePattern);
 		return true;
 	}
 }
