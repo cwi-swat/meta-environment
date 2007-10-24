@@ -1826,11 +1826,22 @@ exports
       Describe structured lexicals and give examples. (b) Split examples below
       in SDF and ASF part.</remark></para>
 
+      <para>A context-free syntax rule describes the underlying tree structure.
+      A lexical syntax rule defines in fact the underlying structure of the
+      lexical tokens. Sometimes it is necessary to create or manipulate
+      the characters of lexical tokens, for instance when converting one
+      lexical entity into another. ASF+SDF provide the so-called 
+      <emphasis>lexical constructor functions</emphasis>
+      to manipulate the characters of the lexical
+      entities. Furthermore, ensure the lexical constructor functions that
+      the underlying structure is not violated or that illegal lexical
+      entities are created.
+
       <para>The only way to access the actual characters of a lexical token is
       by means of <emphasis>lexical constructor functions</emphasis>. For each
       lexical sort <literal>LEX</literal> a lexical constructor function is
-      automatically derived as follows: <programlisting><replaceable>lex</replaceable>( CHAR* ) -&gt; <replaceable>LEX</replaceable></programlisting>The
-      sort <literal>CHAR</literal> is predefined in ASF+SDF and represents
+      automatically derived as follows: <programlisting><replaceable>lex</replaceable>( <replaceable>LEX</replaceable> ) -&gt; <replaceable>LEX</replaceable></programlisting>
+      The sort <literal>CHAR</literal> is predefined in ASF+SDF and represents
       characters. Characters can be directly addressed by the representation
       or via variables which may be of the sorts <literal>CHAR</literal>,
       <literal>CHAR*</literal>, or <literal>CHAR+</literal>. The latter two
@@ -1858,23 +1869,25 @@ exports
     [0-9]+ -&gt; Nat-con 
 
 hiddens
-  variables
-    "Char+"[0-9]* -&gt; CHAR+
+  lexical variables
+    "Char+"[0-9]* -&gt; [0-9]+
 equations
 
-  [1] nat-con("0" Char+) = nat-con(Char+)</programlisting></para>
+  [1] nat-con(0 Char+) = nat-con(Char+)</programlisting></para>
           </example></para>
 
         <important>
-          <para>The argument of a lexical constructor may be an arbitrary list
-          of characters and there is <emphasis>no check that they match the
-          lexical definition of the corresponding sort</emphasis>. This means
-          that when writing a specification one should be aware that it is
-          possible to construct illegal lexical entities, for instance, by
+          <para>The argument of a lexical constructor may only be character
+          that fit in the underlying lexical definition. 
+          There is <emphasis>an explicit check that the characters and sorts
+          match the lexical definition of the corresponding sort</emphasis>. 
+          This means that when writing a specification it is impossible 
+          to construct illegal lexical entities, for instance, by
           inserting letters in an integer. In the example <link
           linkend="CODE_illegallcfs">below</link> via the lexical constructor
           function <literal>nat-con</literal> a natural number containing the
-          letter <literal>a</literal> is constructed.</para>
+          letter <literal>a</literal> is constructed. But this will result
+          in a syntax error.</para>
         </important>
       </section>
 
@@ -1896,12 +1909,12 @@ exports
     [0-9]+ -&gt; Nat-con 
 
 hiddens
-  variables
-    "Char+"[0-9]* -&gt; CHAR+
+  lexical variables
+    "Char+"[0-9]* -&gt; [0-9]+
 
 equations
 
-  [1] nat-con(Char+) = nat-con(Char+ "a")      </programlisting></para>
+  [1] nat-con(Char+) = nat-con(Char+ a)      </programlisting></para>
         </example>
       </section>
     </section>
