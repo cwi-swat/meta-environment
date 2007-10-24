@@ -21,7 +21,7 @@ public class VisPluginTextUnparsing extends DefaultStudioPlugin implements
 	}
 
 	public void recTerminate(ATerm t0) {
-		System.exit(0);
+		//System.exit(0);
 	}
 
 	public void recAckEvent(ATerm t0) {
