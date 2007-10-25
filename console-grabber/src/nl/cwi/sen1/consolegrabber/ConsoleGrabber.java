@@ -1,5 +1,7 @@
 package nl.cwi.sen1.consolegrabber;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
@@ -18,8 +20,7 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 			bridge.init(args);
 			bridge.connect();
 		} catch (IOException e) {
-			System.err.println("Could not establish connection to ToolBus: "
-					+ e);
+			System.err.println("Could not establish connection to ToolBus: "+ e);
 			System.exit(1);
 		}
 
@@ -41,53 +42,52 @@ public class ConsoleGrabber implements ConsoleGrabberTif {
 		bridge.postEvent(event);
 	}
 
-	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
-		MatchResult result = null;
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String line = null;
 		int maxTries = 100;
-
-		while (maxTries-- > 0) {
+		
+		while (maxTries-- > 0 && (line = br.readLine()) != null) {
 			try {
-				s.findInLine("The ToolBus server allocated port (\\d+)");
-				result = s.match();
+				Scanner s = new Scanner(line);
+				s.findInLine("The ToolBus server allocated port \\((\\d+)\\)");
+				MatchResult result = s.match();
+				
+				System.out.println(line); // Print the message we matched on.
+				
 				String port = result.group(1);
 				args = buildToolArgs(port);
 
 				ConsoleGrabber grabber = new ConsoleGrabber(args);
 
-				// eat up all input and send it line by line to the ToolBus
-				while (s.hasNext()) {
-					String message = s.nextLine();
-					grabber.sendMessage(message + "\n");
+				// Eat up all input and send it line by line to the ToolBus
+				while((line = br.readLine()) != null) {
+					grabber.sendMessage(line + "\n");
 				}
 
-				break; // end of file
+				break; // End of file
 			} catch (IllegalStateException e) {
 				// ToolBus port not yet found, echo the input to stderr
-				if (s.hasNext()) {
-					System.err.println(s.nextLine());
-				}
-				continue; // try the next line
+				System.err.println(line);
 			}
 		}
 
 		if (maxTries == 0) {
-			System.err
-					.println("console-grabber: failed to find ToolBus port. Continuing to print on stderr...");
+			System.err.println("console-grabber: failed to find ToolBus port. Continuing to print on stderr...");
 
-			// if we have something to print left, simply print it
-			while (s.hasNext()) {
-				System.err.print(s.nextLine());
+			// If we have something to print left, simply print it
+			while((line = br.readLine()) != null){
+				System.err.print(line);
 			}
 		}
 
-		s.close();
+		br.close();
 	}
 
 	private static String[] buildToolArgs(String port) {
 		String[] args;
 		args = new String[6];
-		args[0] = "-TB_HOST_NAME";
+		args[0] = "-TB_HOST";
 		args[1] = "localhost";
 		args[2] = "-TB_PORT";
 		args[3] = port;
