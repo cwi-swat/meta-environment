@@ -65,7 +65,7 @@ abstract class NodeBuilder{
 	/**
 	 * Method NodeBuilder.
 	 * 
-	 * @param name:
+	 * @param name
 	 *            the name of the cons attribute in the SDF definition
 	 */
 	public NodeBuilder(String name){
@@ -81,8 +81,8 @@ abstract class NodeBuilder{
 	 * 
 	 * @param posInfo
 	 *            TODO
-	 * @param args:
-	 *            the already built arguments of this build function
+	 * @param args
+	 *            The already built arguments of this build function
 	 * @return Object: the resulting node.
 	 * @throws ToolBusException
 	 */
@@ -109,7 +109,7 @@ class TScriptNodeBuilders{
 	/**
 	 * Method define: Define one build function.
 	 * 
-	 * @param b:
+	 * @param b
 	 *            description of the build function
 	 */
 	private void define(NodeBuilder b){
@@ -550,7 +550,7 @@ class TScriptNodeBuilders{
 	 * Since node builders can return arbitrary classes we have to be carefull with appropriate
 	 * casting between ATerm and Object.
 	 * 
-	 * @param t:
+	 * @param t
 	 *            input tree as produced by the parser
 	 * @return Object: the resulting tree of class instances
 	 * @throws ToolBusException

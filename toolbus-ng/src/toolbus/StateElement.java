@@ -98,7 +98,7 @@ public interface StateElement{
 	 * should be combined with the previous one.
 	 * 
 	 * @param elem
-	 * @return
+	 * @return the successor State of the StateElement
 	 */
 	public State gotoNextStateAndActivate(StateElement elem);
 }

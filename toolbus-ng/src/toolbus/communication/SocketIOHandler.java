@@ -352,7 +352,7 @@ public class SocketIOHandler implements IIOHandler{
 	 * orderly manner. All data that was queued for writing will be written to the socket before the
 	 * end message will be send.
 	 * 
-	 * @see IIOHandler#terminate(ATerm)
+	 * @see IIOHandler#terminate()
 	 */
 	public void terminate(){
 		OperationTermPair otp = new OperationTermPair();

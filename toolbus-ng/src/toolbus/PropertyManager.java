@@ -40,9 +40,9 @@ public class PropertyManager{
 	}
 	
 	public void handleComandLineArguments(String args[]){
-		//for(String arg : args){
-		//	System.err.println(arg);
-		//}
+		for(String arg : args){
+			System.err.println(arg);
+		}
 		Pattern pdefine = Pattern.compile("-D(.*)=(.*)");
 		Pattern pinclude = Pattern.compile("-I(.*)");
 		Pattern pscript = Pattern.compile("-S(.*)");
@@ -58,19 +58,19 @@ public class PropertyManager{
 			if(mdefine.matches()){
 				String name = mdefine.group(1);
 				String val = "\"" + mdefine.group(2) + "\"";
-				//System.err.println("define: name = " + name + ", " + " val = " + val);
+				System.err.println("define: name = " + name + ", " + " val = " + val);
 				defines.put(name, val);
 			}else{
 				Matcher idefine = pinclude.matcher(arg);
 				if(idefine.matches()){
 					String name = idefine.group(1);
-					//System.err.println("include: name = " + name);
+					System.err.println("include: name = " + name);
 					includes = (includes == "") ? name : includes + ", " + name;
 				}else{
 					Matcher sdefine = pscript.matcher(arg);
 					if (sdefine.matches()) {
 						String name = sdefine.group(1);
-						//System.err.println("tbscript: name = " + name);
+						System.err.println("tbscript: name = " + name);
 						if (tbscript != null) {
 							System.err.println("tbscript: already defined (" + tbscript + ")");
 						}

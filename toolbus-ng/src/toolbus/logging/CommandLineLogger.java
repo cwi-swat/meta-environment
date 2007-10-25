@@ -54,7 +54,7 @@ public class CommandLineLogger implements ILogger{
 	}
 
 	/**
-	 * @see ILogger#log(String, byte)
+	 * @see ILogger#log(String, int)
 	 */
 	public void log(String message, int loglevel){
 		if(shouldLog(loglevel)){
@@ -74,7 +74,7 @@ public class CommandLineLogger implements ILogger{
 	}
 
 	/**
-	 * @see ILogger#log(String, Throwable, byte)
+	 * @see ILogger#log(String, Throwable, int)
 	 */
 	public void log(String message, Throwable throwable, int loglevel){
 		if(shouldLog(loglevel)){

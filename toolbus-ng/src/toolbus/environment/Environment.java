@@ -68,13 +68,15 @@ public class Environment{
 	}
 	
 	/**
-	 * introduceBinding adds new variables for the case of formal/actual correspondence in process
+	 * introduceBinding adds a new variable for the case of formal/actual correspondence in process
 	 * calls. Special care is taken for result variables.
 	 * 
-	 * @param formals
-	 *            list of formal parameters.
-	 * @param actuals
-	 *            list of actual values.
+	 * @param formalVar
+	 *            A formal parameter.
+	 * @param actual
+	 *            An actual value.
+	 * @param isFormal
+	 *            Indicate if the variable is a formal.
 	 */
 	public void introduceBinding(TBTermVar formalVar, ATerm actual, boolean isFormal) throws ToolBusException{
 		// System.err.println(this.hashCode() + " introduceBinding: " + formalVar + ", " + actual);
@@ -99,10 +101,12 @@ public class Environment{
 	/**
 	 * introduceBindings adds new (formal.actual) bindings
 	 * 
-	 * @param f
+	 * @param formals
 	 *            list of formal parameters.
 	 * @param actual
 	 *            list of actual parameters.
+	 * @param isFormal
+	 *            Indicate if the variables are formals.
 	 */
 	public void introduceBindings(ATermList formals, ATermList actual, boolean isFormal) throws ToolBusException{
 		ATermList f = formals;
