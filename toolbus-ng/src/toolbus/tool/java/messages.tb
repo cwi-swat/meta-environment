@@ -1,5 +1,5 @@
 process P1 is 		
-let Message : term, Tidr : receive, Tids : send
+let Message : term, Tidr : receive, Tids : send, Stats : term
 in
     execute(receive, Tidr?) .
     execute(send, Tids?) .
@@ -7,6 +7,9 @@ in
 	    (
 	    	rec-event(Tids, available) .
 	    	snd-ack-event(Tids, available) .
+	    	/*get-perf-stats(Tidr) .
+	    	rec-perf-stats(Tidr, Stats?) .
+	    	printf("%t\n", Stats) .*/
 	    	snd-eval(Tids, getText) .
 	    	rec-value(Tids, getText(Message?)) .
 	    	snd-do(Tidr, set(Message))

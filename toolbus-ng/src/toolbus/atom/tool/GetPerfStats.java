@@ -9,24 +9,20 @@ import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
 
-/**
- * @author paulk, Aug 1, 2002
- */
-public class RecVal extends Atom{
+public class GetPerfStats extends Atom{
 	private final Ref toolId;
-	private final Ref result;
 	private ToolInstance toolInstance;
 	
-	public RecVal(ATerm toolId, ATerm result, TBTermFactory tbfactory, ATerm posInfo){
+	public GetPerfStats(ATerm toolId, TBTermFactory tbfactory, ATerm posInfo){
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);
-		this.result = new Ref(result);
-		setAtomArgs(this.toolId, this.result);
+		setAtomArgs(this.toolId);
+		externalNameAsReceivedByTool = "snd-perf-stats";
 	}
 	
 	public ProcessExpression copy(){
-		Atom a = new RecVal(this.toolId.value, this.result.value, tbfactory, getPosInfo());
+		Atom a = new GetPerfStats(toolId.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		
 		return a;
@@ -48,15 +44,11 @@ public class RecVal extends Atom{
 			if(toolInstance == null) return false;
 		}
 		
-		if(toolInstance.getValueFromTool(result.value, getEnv())){
-			//LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + res, IToolBusLoggerConstants.TOOLCOM);
-			// LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + res,
-			// IToolBusLoggerConstants.TOOLCOM);
-			// LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + getEnv(),
-			// IToolBusLoggerConstants.TOOLCOM);
-			
+		if(toolInstance.tryDoEval()){
+			toolInstance.sendPerformanceStatsRequest(tbfactory.makeList());
+			//LoggerFactory.log(this.getProcess().getProcessName(), "Sending performace statistics request to tool: " + toolInstance.getToolKey(), IToolBusLoggerConstants.TOOLCOM);
 			return true;
-			}
+		}
 		return false;
 	}
 }

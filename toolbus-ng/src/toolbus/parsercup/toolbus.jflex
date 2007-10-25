@@ -81,6 +81,8 @@ Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
   "snd-terminate"                { return symbol(sym.SND_TERMINATE); }
   "snd-kill"                     { return symbol(sym.SND_KILL); }
   "shutdown"                     { return symbol(sym.SHUTDOWN); }
+  "get-perf-stats"               { return symbol(sym.GET_PERF_STATS); }
+  "rec-perf-stats"               { return symbol(sym.REC_PERF_STATS); }
   "if"                           { return symbol(sym.IF); }
   "then"                         { return symbol(sym.THEN); }
   "else"                         { return symbol(sym.ELSE); }

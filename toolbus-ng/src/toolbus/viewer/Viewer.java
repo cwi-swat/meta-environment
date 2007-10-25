@@ -38,7 +38,10 @@ import toolbus.atom.Atom;
 import toolbus.environment.Binding;
 import toolbus.environment.Environment;
 import toolbus.process.ProcessInstance;
+import aterm.AFun;
 import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 public class Viewer{
 	protected volatile DebugToolBus debugToolBus;
@@ -304,7 +307,7 @@ public class Viewer{
 		List<ATerm> subscriptions = processInstance.getSubscriptions();
 		Iterator<ATerm> subscriptionIterator = subscriptions.iterator();
 		while(subscriptionIterator.hasNext()){
-			String subscription = getTermSignature(subscriptionIterator.next());
+			String subscription = getSubscriptionSignature(subscriptionIterator.next());
 			subscriptionsTableModel.addRow(new Object[]{subscription});
 		}
 		
@@ -314,7 +317,7 @@ public class Viewer{
 		List<ATerm> noteQueue = processInstance.getNoteQueue();
 		Iterator<ATerm> noteQueueIterator = noteQueue.iterator();
 		while(noteQueueIterator.hasNext()){
-			String note = getTermSignature(noteQueueIterator.next());
+			String note = getNoteSignature(noteQueueIterator.next());
 			noteQueueTableModel.addRow(new Object[]{note});
 		}
 		
@@ -340,8 +343,8 @@ public class Viewer{
 			Iterator<Binding> bindingIterator = bindings.iterator();
 			while(bindingIterator.hasNext()){
 				Binding binding = bindingIterator.next();
-				String var = getTermSignature(binding.getVar());
-				String val = getTermSignature(binding.getVal());
+				String var = binding.getVar().toString();
+				String val = getVariableSignature(binding.getVal());
 				variablesTableModel.addRow(new Object[]{var, val});
 			}
 		}
@@ -436,15 +439,74 @@ public class Viewer{
 	}
 	
 	private final static TBTermFactory tbFactory = TBTermFactory.getInstance();
-	private final static ATerm emptyTerm = tbFactory.makeAppl(tbFactory.makeAFun("...", 0, true));
+	private final static ATerm emptyTerm = tbFactory.makeAppl(tbFactory.makeAFun("...", 0, false));
 	
-	private static String getTermSignature(ATerm term){
+	private static ATerm substituteTerm(ATerm term, int maxDept){
+		int termType = term.getType();
+		switch(termType){
+			case ATerm.APPL:
+				ATermAppl apt = (ATermAppl) term;
+				if(apt.getArity() == 0) return term;
+				
+				AFun afun = apt.getAFun();
+				ATerm args[] = apt.getArgumentArray();
+				ATermList annos = tbFactory.EmptyList; // Strip the annotations.
+				
+				if(maxDept <= 0) return tbFactory.makeAppl(tbFactory.makeAFun(afun.getName(), 1, false), new ATerm[]{emptyTerm}, annos);
+				
+				int nargs = args.length;
+				ATerm vargs[] = new ATerm[nargs];
+				for(int i = 0; i < nargs; i++){
+					vargs[i] = substituteTerm(args[i], maxDept - 1);
+				}
+				return tbFactory.makeAppl(afun, vargs, annos);
+				
+			case ATerm.LIST:
+				if(maxDept <= 0){
+					ATermList emptyListTerm = tbFactory.EmptyList;
+					return emptyListTerm.insert(emptyTerm);
+				}
+				
+				ATermList tlst = (ATermList) term;
+				
+				if(tlst == tbFactory.EmptyList) return term;
+				
+				int len = tlst.getLength();
+				ATerm[] listContent = new ATerm[len];
+				for(int i = len - 1; i >= 0; i--){
+					listContent[i] = tlst.getFirst();
+					tlst = tlst.getNext();
+				}
+				
+				ATermList lst = tbFactory.EmptyList;
+				for(int i = 0; i < len; i++){
+					lst = lst.insert((substituteTerm(listContent[i], maxDept - 1)));
+				}
+				
+				// We can ignore annotations, since lists with annotations aren't supported anyway
+				
+				return lst;
+			default:
+				return term;
+		}
+	}
+	
+	private static String getSubscriptionSignature(ATerm term){
+		ATerm result = substituteTerm(term, 3);
 		
+		return result.toString();
+	}
+	
+	private static String getNoteSignature(ATerm term){
+		ATerm result = substituteTerm(term, 3);
 		
+		return result.toString();
+	}
+	
+	private static String getVariableSignature(ATerm term){
+		ATerm result = substituteTerm(term, 2);
 		
-		// TODO
-		
-		return term.toString(); // Temp.
+		return result.toString();
 	}
 	
 	public static void main(String[] args){
@@ -454,8 +516,6 @@ public class Viewer{
 		viewer.setToolBus(debugToolBus);
 		
 		debugToolBus.doStop(); // The initial state is stopped.
-		
-//		String tbScript = "/ufs/lankamp/metaNG/installed/share/asfsdf-meta/start-meta-studio.tb";
 		
 		try{
 			if(debugToolBus.parsecup()){

@@ -46,6 +46,8 @@ public class ToolInstance implements IDataHandler, IOperations{
 	private final List<ATerm> valuesFromTool;
 	private final List<ATerm> eventsFromTool;
 	
+	private final List<ATerm> performanceStats;
+	
 	/**
 	 * Construct a ToolInstance.
 	 * 
@@ -70,6 +72,8 @@ public class ToolInstance implements IDataHandler, IOperations{
 		
 		valuesFromTool = new LinkedList<ATerm>();
 		eventsFromTool = new LinkedList<ATerm>();
+		
+		performanceStats = new LinkedList<ATerm>();
 	}
 	
 	public void executeTool() throws ToolBusException{
@@ -238,7 +242,8 @@ public class ToolInstance implements IDataHandler, IOperations{
 				goConnected();
 				break;
 			case PERFORMANCESTATS:
-				System.out.println(toolKey + " : " + aTerm);
+				goReady();
+				performanceStats.add(aTerm);
 				break;
 			default:
 				LoggerFactory.log("Message with unknown operation received from Tool: " + operation, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
@@ -261,7 +266,6 @@ public class ToolInstance implements IDataHandler, IOperations{
 	}
 	
 	public void sendTerminate(ATerm aTerm){
-		//sendPerformanceStatsRequest(aTerm); // Temp
 		send(TERMINATE, aTerm);
 	}
 	
@@ -337,11 +341,11 @@ public class ToolInstance implements IDataHandler, IOperations{
 		LoggerFactory.log("Tool crashed / disconnected: "+toolKey, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
 	}
 	
-	public boolean getValueFromTool(ATerm trm, Environment env){
+	public boolean getValueFromTool(ATerm aTerm, Environment env){
 		synchronized(valuesFromTool){
 			Iterator<ATerm> valuesIterator = valuesFromTool.iterator();
 			while(valuesIterator.hasNext()){
-				boolean matches = tbfactory.matchPatternToValue(trm, env, valuesIterator.next());
+				boolean matches = tbfactory.matchPatternToValue(aTerm, env, valuesIterator.next());
 				if(matches){
 					valuesIterator.remove();
 					return true;
@@ -358,6 +362,20 @@ public class ToolInstance implements IDataHandler, IOperations{
 				boolean matches = tbfactory.matchPatternToValue(aTerm, env, eventsIterator.next());
 				if(matches){
 					eventsIterator.remove();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean getPerformanceStats(ATerm aTerm, Environment env){
+		synchronized(performanceStats){
+			Iterator<ATerm> performanceStatsIterator = performanceStats.iterator();
+			while(performanceStatsIterator.hasNext()){
+				boolean matches = tbfactory.matchPatternToValue(aTerm, env, performanceStatsIterator.next());
+				if(matches){
+					performanceStatsIterator.remove();
 					return true;
 				}
 			}

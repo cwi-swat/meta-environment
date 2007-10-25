@@ -98,14 +98,14 @@ parser code {:
 	
 	private void doParse(String filename) {
 		if(includedFiles.contains(filename)){
-			System.err.println("Skipping include of " + filename);
+			//System.err.println("Skipping include of " + filename);
 			return;
 		}
 		
 		includedFiles.add(filename);
-		System.err.println("Parse: " + filename);
+		//System.err.println("Parse: " + filename);
 		toolbus.parsecup1(includedFiles, toolbusProcessCalls, filename);
-        System.err.println("Parse: back to " + filename);
+        //System.err.println("Parse: back to " + filename);
 	}
 	
 	public void generateInitialProcessCalls() throws ToolBusException {
@@ -150,6 +150,8 @@ terminal EXECUTE;
 terminal SND_TERMINATE;
 terminal SND_KILL;
 terminal SHUTDOWN;
+terminal GET_PERF_STATS;
+terminal REC_PERF_STATS;
 terminal IF;
 terminal THEN;
 terminal ELSE;
@@ -322,6 +324,12 @@ tool_atom::=
         
      | SND_EVAL LPAR term:t1 COMMA term:t2 RPAR
                                             {: RESULT= new Eval(t1, t2, parser.tbfactory, null); :}
+     
+     | GET_PERF_STATS LPAR term:t1 RPAR
+                                            {: RESULT= new GetPerfStats(t1, parser.tbfactory, null); :}
+     
+     | REC_PERF_STATS LPAR term:t1 COMMA term:t2 RPAR
+                                            {: RESULT= new RecPerfStats(t1, t2, parser.tbfactory, null); :}
           
      | SND_CANCEL LPAR term:t1 COMMA term:t2 RPAR /* not implemented */
      

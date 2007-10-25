@@ -359,6 +359,8 @@ TBbool is_defined_formal_or_var_string(char *str)
 %token SND_TERMINATE
 %token SND_KILL
 %token SHUTDOWN
+%token GET_PERF_STATS
+%token REC_PERF_STATS
 %token IF
 %token THEN
 %token ELSE
@@ -514,6 +516,22 @@ tool_atom:
      | SND_KILL '(' term_list ')'
          { $$.u.proc =
            mk_atom(a_snd_kill, $3.u.term_list,
+		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
+           range($$,$1,$4);
+           tc_tool_atom($$.u.proc);
+         }
+     
+     | GET_PERF_STATS '(' term_list ')'
+         { $$.u.proc =
+           mk_atom(a_get_perf_stats, $3.u.term_list,
+		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
+           range($$,$1,$4);
+           tc_tool_atom($$.u.proc);
+         }
+     
+     | REC_PERF_STATS '(' term_list ')'
+         { $$.u.proc =
+           mk_atom(a_rec_perf_stats, $3.u.term_list,
 		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
            range($$,$1,$4);
            tc_tool_atom($$.u.proc);

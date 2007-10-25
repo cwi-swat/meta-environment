@@ -86,6 +86,8 @@ execute       { ll_inc_pos(7); return(EXECUTE); }
 snd-terminate { ll_inc_pos(13);return(SND_TERMINATE); }
 snd-kill      { ll_inc_pos(8);return(SND_KILL); }
 shutdown      { ll_inc_pos(8); return(SHUTDOWN); }
+get-perf-stats { ll_inc_pos(14); return(GET_PERF_STATS); }
+rec-perf-stats { ll_inc_pos(14); return(REC_PERF_STATS); }
 if            { ll_inc_pos(2); return(IF); }
 then          { ll_inc_pos(4); return(THEN); }
 else          { ll_inc_pos(4); return(ELSE); }
@@ -239,6 +241,7 @@ char *get_token(int tk)
   case TOOL: case HOST: case COMMAND: case CREATE:
   case REC_CONNECT: case REC_DISCONNECT: case EXECUTE:
   case SND_TERMINATE: case SND_KILL: case SHUTDOWN:
+  case GET_PERF_STATS: case REC_PERF_STATS:
   case IF: case THEN: case ELSE: case FI: case ASSIGN:
   case REL_DELAY: case ABS_DELAY: case REL_TIMEOUT: case ABS_TIMEOUT:
   case LET: case IN: case ENDLET:
