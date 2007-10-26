@@ -700,7 +700,222 @@ function tcst(Stat) -&gt; bool
 function type-of(Exp) -&gt; PICO-TYPE
 [] type-of(NatCon) = natural
 [] type-of(StrCon) = string
-[] type-of(Id) = Type when {&lt;Id,Type&gt;} := Env[Id] </programlisting></para>
+[] type-of(Id)     = Type when {&lt;Id,Type&gt;} := Env[Id] </programlisting></para>
+    </section>
+
+    <section>
+      <title>Pico control flow extraction</title>
+
+      <programlisting>module Pico-controlflow
+imports pico/syntax/Pico
+
+sorts CODEPOINT
+
+context-free syntax
+    EXP | STATEMENT  -&gt; CODEPOINT %% Waar moet dit staan?
+
+function cflow({STATEMENT ";"}*) -&gt; 
+         &lt; set[CODEPOINT], 
+           rel[CODEPOINT,CODEPOINT], 
+           set[CODEPOINT] &gt;
+
+[] &lt;En1, R1, Ex1&gt; := cflow(Stat),
+   &lt;En2, R2, Ex2&gt; := cflow(Stat+)
+   ===============================
+   cflow(Stat ; Stat+) = 
+   &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+
+[] cflow() = &lt;{}, {}, {}&gt;
+
+[] &lt;En, R, Ex&gt; := cflow(Stat*)
+   ==============================
+   cflow(while Exp do Stat* od) = 
+   &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
+
+[] &lt;En1, R1, Ex1&gt; := cflow(Stat*1),
+   &lt;En2, R2, Ex2&gt; := cflow(Stat*2)
+   ===============================
+   cflow(if Exp then Stat*1 else Stat*2 fi) = 
+   &lt;{Exp}, 
+    ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+    Ex1 union Ex2
+   &gt;
+
+[default]
+    cflow(Stat) = &lt;{Stat}, {}, {Stat}&gt;</programlisting>
+    </section>
+
+    <section>
+      <title>Pico use def extraction</title>
+
+      <programlisting>module Pico-use-def
+
+imports pico/syntax/Pico
+
+function uses(PROGRAM) -&gt; rel[EXP,PICO-ID]
+
+[] uses(P) = {&lt;E,Id&gt; | EXP E : P, PICO-ID Id == E}
+
+function defs(PROGRAM) -&gt; rel[STATEMENT, PICO-ID]
+
+[] defs(P) = {&lt;S, Id&gt; | STATEMENT S : P, 
+                        &lt;&lt;PICO-ID Id ":=" EXP Exp&gt;&gt; == S}</programlisting>
+
+      <para>The above uses a "matching condition" to decompose
+      <literal>S</literal>. The problem solved is that we want to have a name
+      for the whole assignment <emphasis>and</emphasis> for the lhs
+      identifier.</para>
+    </section>
+
+    <section>
+      <title>Pico uninitialized variables</title>
+
+      <para><programlisting>module Pico-uninit
+imports pico/syntax/Pico Pico-controlflow Pico-use-def
+
+function uninit(PROGRAM) -&gt; set[PICO-ID]
+
+[] Uses := uses(P),
+   Defs := defs(P),
+   Pred := cflow(P)
+   =======================================
+   uninit(P) = {Id | &lt;EXP E, PICO-ID Id&gt; : range(Uses),
+                     E in reachX({ROOT}, defs[-,Id], Pred)
+               }</programlisting>Questions: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Where do we define ROOT? </para>
+        </listitem>
+
+        <listitem>
+          <para>There is, maybe, a typing issue here. De type of
+          <literal>reachX</literal> is: </para>
+
+          <para><literal>set[&amp;T] reachX(set[&amp;T]
+          Start,</literal></para>
+
+          <para><literal> set[&amp;T] Excl, </literal></para>
+
+          <para><literal> rel[&amp;T,&amp;T] Rel)</literal></para>
+
+          <para>but <literal>E</literal> has type <literal>EXP</literal>,
+          <literal>{ROOT}</literal> has type
+          <literal>set[STATEMENT]</literal>, and <literal>cflow</literal> has
+          type <literal>rel[CODEPOINT,CODEPOINT]</literal>, with <literal>EXP
+          | STATEMENT -&gt; CODEPOINT</literal>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Pico common subsexpression elimination</title>
+
+      <para><programlisting>module Pico-common-subexpression
+
+function cse(PROGRAM) -&gt; PROGRAM
+
+[] Uses := uses(P),
+   Defs := defs(P),
+   Pred := cflow(P)
+   =====================================================
+   cse(P) = STATEMENT S : P, 
+            PICO-ID Id ":=" EXP E == S,
+            Id notin E,
+            EXP E2 : reachX({S}, defs[-,Id], Pred) =&gt; Id</programlisting></para>
+
+      <para>Paraphrased: Replace in P all expressions E2 by Id, such
+      that</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>P contains a statement S of the form Id := E,</para>
+        </listitem>
+
+        <listitem>
+          <para>Id does not occur in E,</para>
+        </listitem>
+
+        <listitem>
+          <para>E2 can be reached from S,</para>
+        </listitem>
+
+        <listitem>
+          <para>There is no redefinition of Id between S and E2.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The above has a form not yet seen: the rhs consists of a list of
+      generators and the last step is a transformation. Clearly, P, is the
+      <emphasis>subject</emphasis> of the replacement and E2 occurs in
+      P.</para>
+
+      <para>The replacement operator <literal>=&gt;</literal> should replace
+      the <emphasis>last bound variable</emphasis>. In this way, tests may
+      follow a generator before replacement takes place.</para>
+
+      <para>Questions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Do we allow more than one subject?</para>
+        </listitem>
+
+        <listitem>
+          <para>Is there a better notation?</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Pico constant propagation</title>
+
+      <para><programlisting>module Pico-constant-propagation
+
+function is-constant(EXP) -&gt; Boolean
+
+[] is-Constant(Int) = true
+[] is-constant(Str) = true
+[default]
+   is-constant(E) = false
+
+function cp(PROGRAM) -&gt; PROGRAM
+
+[] Uses := uses(P),
+   Defs := defs(P),
+   Pred := cflow(P)
+   ======================================================
+   cp(P) = STATEMENT S : P, 
+           PICO-ID Id ":=" EXP E == S,
+           is-constant(E),
+           PICO-ID Id2 : reachX({S},defs[-,Id],Pred),
+           Id2 == Id
+           =&gt; E</programlisting></para>
+
+      <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
+      such that</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>P contains a statement S of the form Id := E,</para>
+        </listitem>
+
+        <listitem>
+          <para>E is constant,</para>
+        </listitem>
+
+        <listitem>
+          <para>Id2 can be reached from S,</para>
+        </listitem>
+
+        <listitem>
+          <para>Id2 is equal to Id,</para>
+        </listitem>
+
+        <listitem>
+          <para>There is no redefinition of Id between S and Id2.</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
