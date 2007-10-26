@@ -12,6 +12,7 @@ Usage: $myname [options]
 Options:
     -V                   reveal program version (i.e. $myversion)
     -m <modulename>      open module <modulename>
+    --viewer             run with the (experimental) viewer
 E_O_USAGE
 }
 
@@ -26,6 +27,8 @@ then
 fi
 
 # Argument interpretation...
+STARTUP_CLASS="toolbus.Main"
+
 while [ $#  -gt 0 ]
 do
     case "$1"
@@ -35,6 +38,8 @@ do
         -m)
 	    shift;
             MODULENAME=$1 ;;
+        --viewer)
+            STARTUP_CLASS="toolbus.viewer.Viewer" ;;
         -V)
             Version ; exit 0 ;;
         --)
@@ -48,7 +53,7 @@ done
 
 export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
 
-java toolbus.Main \
+java $STARTUP_CLASS \
   -DMODULENAME=${MODULENAME} \
   __TBSCRIPTS__ \
   -S__PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
