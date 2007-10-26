@@ -43,7 +43,7 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
-public class Viewer{
+public class Viewer implements IViewer{
 	protected volatile DebugToolBus debugToolBus;
 	
 	private final JFrame frame;
@@ -67,6 +67,7 @@ public class Viewer{
 	private final JScrollPane processesScrollPane;
 	
 	private volatile int highlightedRow = -1;
+	private volatile int breakHighlightedRow = -1;
 	
 	public Viewer(){
 		super();
@@ -92,18 +93,28 @@ public class Viewer{
 		processesPanel.setLayout(new BorderLayout());
 		processesTableHeader = new String[]{"Break", "Process name", "Identifier"};
 		processesTableModel = new DefaultTableModel(new Object[0][0], processesTableHeader){
-			public synchronized Object getValueAt(int row, int column){
+			public Object getValueAt(int row, int column){
 				return super.getValueAt(row, column);
 			}
-			public synchronized void setValueAt(Object aValue, int row, int column){
+			public void setValueAt(Object aValue, int row, int column){
 				super.setValueAt(aValue, row, column);
+				
+				if(column == 0){
+					int processId = ((Integer) processesTable.getValueAt(row, 2)).intValue();
+					
+					if(((Boolean) aValue).booleanValue()) debugToolBus.addProcessInstanceBreakPoint(processId);
+					else debugToolBus.removeProcessInstanceBreakPoint(processId);
+				}
 			}
 		};
 		processesTable = new JTable(processesTableModel){
 			public Component prepareRenderer(TableCellRenderer cr, int row, int col){
                 Component c = super.prepareRenderer(cr, row, col);
+                
                 if(row == highlightedRow) c.setBackground(Color.GREEN);
+                else if(row == breakHighlightedRow) c.setBackground(Color.YELLOW);
                 else c.setBackground(Color.WHITE);
+                
                 return c;
             }
         };
@@ -133,10 +144,10 @@ public class Viewer{
 		JPanel subscriptionsPanel = new JPanel();
 		subscriptionsPanel.setLayout(new BorderLayout());
 		subscriptionsTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Subscriptions"}){
-			public synchronized Object getValueAt(int row, int column){
+			public Object getValueAt(int row, int column){
 				return super.getValueAt(row, column);
 			}
-			public synchronized void setValueAt(Object aValue, int row, int column){
+			public void setValueAt(Object aValue, int row, int column){
 				super.setValueAt(aValue, row, column);
 			}
 		};
@@ -149,10 +160,10 @@ public class Viewer{
 		statePanel.setLayout(new BorderLayout());
 		stateTableHeader = new String[]{"State"};
 		stateTableModel = new DefaultTableModel(new Object[0][0], stateTableHeader){
-			public synchronized Object getValueAt(int row, int column){
+			public Object getValueAt(int row, int column){
 				return super.getValueAt(row, column);
 			}
-			public synchronized void setValueAt(Object aValue, int row, int column){
+			public void setValueAt(Object aValue, int row, int column){
 				super.setValueAt(aValue, row, column);
 			}
 		};
@@ -167,10 +178,10 @@ public class Viewer{
 		JPanel noteQueuePanel = new JPanel();
 		noteQueuePanel.setLayout(new BorderLayout());
 		noteQueueTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Note Queue"}){
-			public synchronized Object getValueAt(int row, int column){
+			public Object getValueAt(int row, int column){
 				return super.getValueAt(row, column);
 			}
-			public synchronized void setValueAt(Object aValue, int row, int column){
+			public void setValueAt(Object aValue, int row, int column){
 				super.setValueAt(aValue, row, column);
 			}
 		};
@@ -182,10 +193,10 @@ public class Viewer{
 		JPanel variablesPanel = new JPanel();
 		variablesPanel.setLayout(new BorderLayout());
 		variablesTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Variable", "Value"}){
-			public synchronized Object getValueAt(int row, int column){
+			public Object getValueAt(int row, int column){
 				return super.getValueAt(row, column);
 			}
-			public synchronized void setValueAt(Object aValue, int row, int column){
+			public void setValueAt(Object aValue, int row, int column){
 				super.setValueAt(aValue, row, column);
 			}
 		};
@@ -231,50 +242,99 @@ public class Viewer{
 	}
 	
 	public void start(){
-		gather(); // Gather the intial data.
-		
 		frame.setVisible(true);
 	}
 	
 	public void stop(){
 		frame.dispose();
 	}
-
-	// Get all necessary data.
-	private void gather(){
-		clearProcessesTable();
-		
-		List<ProcessInstance> processInstances = debugToolBus.getProcesses();
-		Iterator<ProcessInstance> processInstancesIterator = processInstances.iterator();
-		while(processInstancesIterator.hasNext()){
-			ProcessInstance pi = processInstancesIterator.next();
-			processesTableModel.addRow(new Object[]{Boolean.FALSE, pi.getProcessName(), Integer.valueOf(pi.getProcessId())});
-		}
-	}
 	
 	// Update the state of the given process.
-	public void update(ProcessInstance processInstance){
-		highlightedRow = -1;
-		for(int row = processesTableModel.getRowCount() - 1; row >= 0; row--){
-			int processId = ((Integer) processesTableModel.getValueAt(row, 2)).intValue();
-			if(processId == processInstance.getProcessId()){
-				highlightedRow = row;
-				final int hlr = row;
-				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
-						processesTable.scrollRectToVisible(processesTable.getCellRect(hlr, 1, true));
-						processesTable.getSelectionModel().setSelectionInterval(hlr, hlr);
+	public void update(final ProcessInstance processInstance){
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				highlightedRow = -1;
+				for(int row = processesTableModel.getRowCount() - 1; row >= 0; row--){
+					int processId = ((Integer) processesTableModel.getValueAt(row, 2)).intValue();
+					if(processId == processInstance.getProcessId()){
+						highlightedRow = row;
+						processesTable.scrollRectToVisible(processesTable.getCellRect(row, 1, true));
+						ListSelectionModel selectionModel = processesTable.getSelectionModel();
+						selectionModel.clearSelection();
+						selectionModel.setSelectionInterval(row, row);
+						break;
 					}
-				});
-				break;
+				}
+				processesTable.repaint();
 			}
+		});
+	}
+	
+	public void updateState(int state){
+		switch(state){
+			case IViewerConstants.UNKNOWN_STATE:
+				status.setText("Unkown");
+				break;
+			case IViewerConstants.STOPPING_STATE:
+				status.setText("Stopping");
+				break;
+			case IViewerConstants.WAITING_STATE:
+				status.setText("Waiting");
+				break;
+			case IViewerConstants.READY_STATE:
+				status.setText("Ready");
+				break;
+			case IViewerConstants.RUNNING_STATE:
+				status.setText("Running");
+				break;
+			case IViewerConstants.STEPPING_STATE:
+				status.setText("Stepping");
+				break;
+			default:
+				System.err.println("Unknown state: "+state);
 		}
 	}
 	
-	private void clearProcessesTable(){
-		for(int i = processesTableModel.getRowCount() - 1; i >= 0; i--){
-			processesTableModel.removeRow(i);
-		}
+	public void processInstanceAdded(final ProcessInstance processInstance){
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				processesTableModel.insertRow(0, new Object[]{Boolean.FALSE, processInstance.getProcessName(), Integer.valueOf(processInstance.getProcessId())});
+			}
+		});
+	}
+	
+	public void processInstanceTerminated(final ProcessInstance processInstance){
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				for(int i = processesTableModel.getRowCount() - 1; i >= 0; i--){
+					if(new Integer(processInstance.getProcessId()).equals(processesTableModel.getValueAt(i, 2))){
+						debugToolBus.removeProcessInstanceBreakPoint(processInstance.getProcessId()); // Remove breakpoints (if present).
+						processesTableModel.removeRow(i);
+					}
+				}
+			}
+		});
+	}
+	
+	public void breakPointHit(final int processId){
+		debugToolBus.doStop();
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				breakHighlightedRow = -1;
+				for(int row = processesTableModel.getRowCount() - 1; row >= 0; row--){
+					int pid = ((Integer) processesTableModel.getValueAt(row, 2)).intValue();
+					if(pid == processId){
+						breakHighlightedRow = row;
+						processesTable.scrollRectToVisible(processesTable.getCellRect(row, 1, true));
+						ListSelectionModel selectionModel = processesTable.getSelectionModel();
+						selectionModel.clearSelection();
+						selectionModel.setSelectionInterval(row, row);
+						break;
+					}
+				}
+				processesTable.repaint();
+			}
+		});
 	}
 	
 	private void clearSubscriptionsTable(){
@@ -333,8 +393,6 @@ public class Viewer{
 	}
 	
 	private void fillVariables(StateElement stateElement){
-		clearVariablesTable();
-		
 		// Insert the new data in case the state element is an atom (and thus has an environment).
 		if(stateElement != null && stateElement instanceof Atom){
 			Atom atom = (Atom) stateElement;
@@ -350,31 +408,6 @@ public class Viewer{
 		}
 	}
 	
-	public void updateState(int state){
-		switch(state){
-			case DebugToolBus.UNKNOWN_STATE:
-				status.setText("Unkown");
-				break;
-			case DebugToolBus.STOPPING_STATE:
-				status.setText("Stopping");
-				break;
-			case DebugToolBus.WAITING_STATE:
-				status.setText("Waiting");
-				break;
-			case DebugToolBus.READY_STATE:
-				status.setText("Ready");
-				break;
-			case DebugToolBus.RUNNING_STATE:
-				status.setText("Running");
-				break;
-			case DebugToolBus.STEPPING_STATE:
-				status.setText("Stepping");
-				break;
-			default:
-				System.err.println("Unknown state: "+state);
-		}
-	}
-	
 	private class TableSelectionListener implements ListSelectionListener{
 		
 		public TableSelectionListener(){
@@ -383,6 +416,11 @@ public class Viewer{
 		
 		public void valueChanged(ListSelectionEvent e){
 			if(e.getSource() == processesTable.getSelectionModel() && !e.getValueIsAdjusting()){
+				clearSubscriptionsTable();
+				clearNoteQueueTable();
+				clearStateTable();
+				clearVariablesTable();
+				
 				int row = processesTable.getSelectedRow();
 				if(row != -1){
 					int processId = ((Integer) processesTableModel.getValueAt(row, 2)).intValue();
@@ -392,17 +430,14 @@ public class Viewer{
 					while(processInstancesIterator.hasNext()){
 						ProcessInstance pi = processInstancesIterator.next();
 						if(pi.getProcessId() == processId){
-							clearSubscriptionsTable();
-							clearNoteQueueTable();
-							clearStateTable();
-							clearVariablesTable();
-							
 							fillProcessTables(pi);
 							break;
 						}
 					}
 				}
             }else if(e.getSource() == stateTable.getSelectionModel() && !e.getValueIsAdjusting()){
+            	clearVariablesTable();
+            	
             	int row = stateTable.getSelectedRow();
             	if(row != -1){
 	            	StateElement stateElement = (StateElement) stateTableModel.getValueAt(row, 0);
@@ -414,6 +449,14 @@ public class Viewer{
 		}
 	}
 	
+	private void clearProcessTableModifications(){
+		highlightedRow = -1;
+		breakHighlightedRow = -1;
+		ListSelectionModel selectionModel = processesTable.getSelectionModel();
+		selectionModel.clearSelection();
+		processesTable.repaint();
+	}
+	
 	private class ButtonActionListener implements ActionListener{
 		
 		public ButtonActionListener(){
@@ -423,11 +466,13 @@ public class Viewer{
 		public void actionPerformed(ActionEvent e){
 			Object source = e.getSource();
 			if(source == runButton){
+				clearProcessTableModifications();
 				debugToolBus.doRun();
 			}else if(source == stopButton){
+				clearProcessTableModifications();
 				debugToolBus.doStop();
-				gather();
 			}else if(source == stepButton){
+				breakHighlightedRow = -1;
 				debugToolBus.doStep();
 			}else if(source == killButton){
 				debugToolBus.doTerminate();

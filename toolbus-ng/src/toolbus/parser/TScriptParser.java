@@ -31,6 +31,8 @@ import toolbus.atom.tool.Do;
 import toolbus.atom.tool.Eval;
 import toolbus.atom.tool.Event;
 import toolbus.atom.tool.Execute;
+import toolbus.atom.tool.GetPerfStats;
+import toolbus.atom.tool.RecPerfStats;
 import toolbus.atom.tool.RecVal;
 import toolbus.atom.tool.SndKill;
 import toolbus.atom.tool.Terminate;
@@ -491,6 +493,18 @@ class TScriptNodeBuilders{
 		define(new NodeBuilder("ttt-AckEventCB"){
 			public Object build(Object args[], ATerm posInfo){
 				return new AckEvent((ATerm) args[0], (ATerm) args[1], (ATerm) args[2], tbfactory, posInfo);
+			}
+		});
+		
+		define(new NodeBuilder("ttt-GetPerfStats"){
+			public Object build(Object args[], ATerm posInfo){
+				return new GetPerfStats((ATerm) args[0], tbfactory, posInfo);
+			}
+		});
+		
+		define(new NodeBuilder("ttt-RecPerfStats"){
+			public Object build(Object args[], ATerm posInfo){
+				return new RecPerfStats((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
 			}
 		});
 		

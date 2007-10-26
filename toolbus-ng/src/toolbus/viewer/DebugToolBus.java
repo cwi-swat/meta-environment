@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 import aterm.ATerm;
+import aterm.ATermList;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
@@ -11,17 +12,12 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.process.ProcessCall;
 import toolbus.process.ProcessInstance;
+import toolbus.util.collections.ConcurrentHashSet;
 
 public class DebugToolBus extends ToolBus{
-	public final static int UNKNOWN_STATE = -1;
-	public final static int STOPPING_STATE = 0;
-	public final static int WAITING_STATE = 1;
-	public final static int READY_STATE = 2;
-	public final static int RUNNING_STATE = 3;
-	public final static int STEPPING_STATE = 4;
-	
-	private volatile int currentState = UNKNOWN_STATE;
+	private volatile int currentState = IViewerConstants.UNKNOWN_STATE;
 	
 	private volatile boolean running = false;
 	private final Object processLock = new Object();
@@ -30,12 +26,30 @@ public class DebugToolBus extends ToolBus{
 	private volatile boolean doRun = false;
 	private volatile boolean doStep = false;
 	
-	private final Viewer viewer;
+	private final IViewer viewer;
 	
-	public DebugToolBus(String[] args, Viewer viewer){
+	private final ConcurrentHashSet<Integer> processInstanceBreakPoints;
+	private final ConcurrentHashSet<String> processBreakPoints;
+	
+	public DebugToolBus(String[] args, IViewer viewer){
 		super(args);
 		
 		this.viewer = viewer;
+		
+		processInstanceBreakPoints = new ConcurrentHashSet<Integer>();
+		processBreakPoints = new ConcurrentHashSet<String>();
+	}
+	
+	public ProcessInstance addProcess(String name, ATermList actuals) throws ToolBusException{
+		ProcessInstance pi = super.addProcess(name, actuals);
+		viewer.processInstanceAdded(pi);
+		return pi;
+	}
+	
+	public ProcessInstance addProcess(ProcessCall call) throws ToolBusException{
+		ProcessInstance pi = super.addProcess(call);
+		viewer.processInstanceAdded(pi);
+		return pi;
 	}
 	
 	public void shutdown(ATerm msg){
@@ -73,6 +87,7 @@ public class DebugToolBus extends ToolBus{
 		running = true;
 		try{
 			boolean work = false;
+			boolean reset = false;
 			workHasArrived = true; // This is just to get things started.
 			
 			PROCESSLOOP: do{
@@ -83,7 +98,7 @@ public class DebugToolBus extends ToolBus{
 					}
 					
 					while((!workHasArrived && running) || !(doStep || doRun)){
-						fireStateChange(WAITING_STATE);
+						fireStateChange(IViewerConstants.WAITING_STATE);
 						
 						try{
 							processLock.wait();
@@ -94,38 +109,51 @@ public class DebugToolBus extends ToolBus{
 						if(shuttingDown) return; // Stop executing if a shutdown is triggered.
 					}
 					
-					if(doStep) fireStateChange(STEPPING_STATE);
-					else if(doRun) fireStateChange(RUNNING_STATE);
-					else fireStateChange(UNKNOWN_STATE);
+					if(doStep) fireStateChange(IViewerConstants.STEPPING_STATE);
+					else if(doRun) fireStateChange(IViewerConstants.RUNNING_STATE);
+					else fireStateChange(IViewerConstants.UNKNOWN_STATE);
 				}
 				
-				do{
+				WORKLOOP : do{
 					work = false;
 					workHasArrived = false;
 					
-					if(processesIterator.hasNext()){
-						while(processesIterator.hasNext() && (doRun || (doStep && !work))){
-							if(shuttingDown){
-								viewer.stop();
-								return;
-							}
-							
-							P = processesIterator.next();
-							work |= P.step();
-							if(P.isTerminated()){
-								processesIterator.remove();
-								P.terminate(tbfactory.EmptyList);
-								
-								if(processes.size() == 0) break PROCESSLOOP;
-							}
-						}
-					}else{
+					if(!processesIterator.hasNext()){
 						processesIterator.reset();
 						Collections.rotate(processes, 1);
 						
-						if(doRun) work = true;
+						reset = true;
+					}else{
+						reset = false; // We might start iterating in the middle of the collections, so ensure we do at least a full one if we're running.
 					}
-				}while((doRun && work) || (doStep && !work));
+					
+					while(processesIterator.hasNext() && (doRun || doStep)){
+						if(shuttingDown){
+							viewer.stop();
+							return;
+						}
+						
+						P = processesIterator.next();
+						boolean stepSuccessFull = P.step();
+						
+						String processName = P.getProcessName();
+						int processId = P.getProcessId();
+						if(stepSuccessFull && (processInstanceBreakPoints.contains(new Integer(processId)) || processBreakPoints.contains(processName))){
+							viewer.breakPointHit(processId);
+						}
+						
+						if(P.isTerminated()){
+							processesIterator.remove();
+							P.terminate(tbfactory.EmptyList);
+							
+							viewer.processInstanceTerminated(P);
+							
+							if(processes.size() == 0) break PROCESSLOOP;
+						}
+						work |= stepSuccessFull;
+						if(stepSuccessFull) break WORKLOOP;
+					}
+				}while((doRun && (work || !reset)) || (doStep && !work));
 				workHasArrived |= work; // If we did something, set this to ensure we can release the lock when needed.
 			}while(running);
 		}catch(ToolBusException e){
@@ -139,9 +167,9 @@ public class DebugToolBus extends ToolBus{
 	
 	public void workArrived(){
 		if(!workHasArrived){
-			fireStateChange(READY_STATE);
-			
 			synchronized(processLock){
+				fireStateChange(IViewerConstants.READY_STATE);
+				
 				workHasArrived = true;
 				
 				processLock.notify();
@@ -156,16 +184,16 @@ public class DebugToolBus extends ToolBus{
 			doStep = false;
 			doRun = true;
 			
-			fireStateChange(RUNNING_STATE);
+			fireStateChange(IViewerConstants.RUNNING_STATE);
 			
 			processLock.notify();
 		}
 	}
 	
 	public void doStop(){
-		fireStateChange(STOPPING_STATE);
-		
 		synchronized(processLock){
+			fireStateChange(IViewerConstants.STOPPING_STATE);
+			
 			doRun = false;
 			doStep = false;
 			
@@ -180,7 +208,7 @@ public class DebugToolBus extends ToolBus{
 			doRun = false;
 			doStep = true;
 
-			fireStateChange(STEPPING_STATE);
+			fireStateChange(IViewerConstants.STEPPING_STATE);
 			
 			processLock.notify();
 		}
@@ -194,10 +222,26 @@ public class DebugToolBus extends ToolBus{
 		}
 	}
 	
-	public void fireStateChange(int state){
+	private void fireStateChange(int state){
 		if(state != currentState){
 			currentState = state;
 			viewer.updateState(state);
 		}
+	}
+	
+	public void addProcessInstanceBreakPoint(int processId){
+		processInstanceBreakPoints.put(new Integer(processId));
+	}
+	
+	public void removeProcessInstanceBreakPoint(int processId){
+		processInstanceBreakPoints.remove(new Integer(processId));
+	}
+	
+	public void addProcessBreakPoint(String processName){
+		processBreakPoints.put(processName);
+	}
+	
+	public void removeProcessBreakPoint(String processName){
+		processBreakPoints.remove(processName);
 	}
 }

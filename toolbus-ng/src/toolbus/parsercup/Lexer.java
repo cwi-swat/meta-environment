@@ -383,9 +383,7 @@ public class Lexer implements java_cup.runtime.Scanner {
 
   /* error codes */
   final private static int YY_UNKNOWN_ERROR = 0;
-  final private static int YY_ILLEGAL_STATE = 1;
   final private static int YY_NO_MATCH = 2;
-  final private static int YY_PUSHBACK_2BIG = 3;
 
   /* error messages for the codes above */
   final private static String YY_ERROR_MSG[] = {
@@ -455,19 +453,11 @@ public class Lexer implements java_cup.runtime.Scanner {
   /** number of newlines encountered up to the start of the matched text */
   private int yyline;
 
-  /** the number of characters up to the start of the matched text */
-  private int yychar;
-
   /**
    * the number of characters from the last newline up to the start of the 
    * matched text
    */
   private int yycolumn; 
-
-  /** 
-   * yy_atBOL == true <=> the scanner is currently at the beginning of a line
-   */
-  private boolean yy_atBOL = true;
 
   /** yy_atEOF == true <=> the scanner is at the EOF */
   private boolean yy_atEOF;
@@ -594,10 +584,8 @@ public class Lexer implements java_cup.runtime.Scanner {
     if (numRead < 0) {
       return true;
     }
-    else {
-      yy_endRead+= numRead;  
-      return false;
-    }
+    yy_endRead+= numRead;  
+    return false;
   }
 
 
@@ -626,11 +614,10 @@ public class Lexer implements java_cup.runtime.Scanner {
   final public void yyreset(java.io.Reader reader) throws java.io.IOException {
     yyclose();
     yy_reader = reader;
-    yy_atBOL  = true;
     yy_atEOF  = false;
     yy_endRead = yy_startRead = 0;
     yy_currentPos = yy_markedPos = yy_pushbackPos = 0;
-    yyline = yychar = yycolumn = 0;
+    yyline = yycolumn = 0;
     yy_lexical_state = YYINITIAL;
   }
 
@@ -709,24 +696,7 @@ public class Lexer implements java_cup.runtime.Scanner {
     }
 
     throw new Error(message);
-  } 
-
-
-  /**
-   * Pushes the specified amount of characters back into the input stream.
-   *
-   * They will be read again by then next call of the scanning method
-   *
-   * @param number  the number of characters to be read again.
-   *                This number must not be greater than yylength()!
-   */
-  private void yypushback(int number)  {
-    if ( number > yylength() )
-      yy_ScanError(YY_PUSHBACK_2BIG);
-
-    yy_markedPos -= number;
   }
-
 
   /**
    * Contains user EOF-code, which will be executed exactly once,
@@ -753,7 +723,6 @@ public class Lexer implements java_cup.runtime.Scanner {
 
     // cached fields:
     int yy_currentPos_l;
-    int yy_startRead_l;
     int yy_markedPos_l;
     int yy_endRead_l = yy_endRead;
     char [] yy_buffer_l = yy_buffer;
@@ -818,7 +787,7 @@ public class Lexer implements java_cup.runtime.Scanner {
       }
       yy_action = -1;
 
-      yy_startRead_l = yy_currentPos_l = yy_currentPos = 
+      yy_currentPos_l = yy_currentPos = 
                        yy_startRead = yy_markedPos_l;
 
       yy_state = yy_lexical_state;
@@ -847,9 +816,7 @@ public class Lexer implements java_cup.runtime.Scanner {
               yy_input = YYEOF;
               break yy_forAction;
             }
-            else {
-              yy_input = yy_buffer_l[yy_currentPos_l++];
-            }
+            yy_input = yy_buffer_l[yy_currentPos_l++];
           }
           int yy_next = yytrans_l[ yy_rowMap_l[yy_state] + yycmap_l[yy_input] ];
           if (yy_next == -1) break yy_forAction;
@@ -890,7 +857,7 @@ public class Lexer implements java_cup.runtime.Scanner {
         case 345: break;
         case 12: 
         case 13: 
-          {  return symbol(sym.INT, Integer.parseInt(yytext()));  }
+          {  return symbol(sym.INT, new Integer(yytext()));  }
         case 346: break;
         case 307: 
           {  return symbol(sym.ABS_DELAY);  }
@@ -1366,10 +1333,8 @@ public class Lexer implements java_cup.runtime.Scanner {
             yy_atEOF = true;
             yy_do_eof();
               { return new java_cup.runtime.Symbol(sym.EOF); }
-          } 
-          else {
-            yy_ScanError(YY_NO_MATCH);
           }
+          yy_ScanError(YY_NO_MATCH);
       }
     }
   }

@@ -34,6 +34,9 @@ exports
     "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("ttt-Eval")}
     "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("ttt-RecVal")} 
     "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("ttt-Do")}
+    
+    "get-perf-stats" "(" TBTerm ")"              -> Atom {cons("ttt-GetPerfStats")}
+    "rec-perf-stats" "(" TBTerm "," TBTerm ")"   -> Atom {cons("ttt-RecPerfStats")}
  
   %% Delta and Tau
   
