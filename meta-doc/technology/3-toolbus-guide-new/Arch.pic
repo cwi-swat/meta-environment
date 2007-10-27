@@ -1,0 +1,49 @@
+.PS
+dw = 0.2i
+Bus: [ P1: circle "$P_1$"; move right 4*dw
+       P2: circle "$P_2$"; move right 4*dw
+       P3: circle "$P_3$"; move right dw
+       Pdots: circle invis "$...$"; move
+       Pn: circle "$P_n$"
+
+spline -> "{\tt snd}" above from P2.nw by (-2*dw, dw) to P1.ne chop
+spline -> from P2.ne by (3*dw, dw) to Pn.nw chop
+]
+
+"{\tt snd}" at Bus.P3 + (-3*dw, 1.3*dw)
+
+box ht last [].ht+dw wid last [].wid+dw at last []
+
+
+
+"\TB:" rjust at Bus.w+(-dw,0)
+
+fac=-9
+T1: box "$T_1$" at Bus.P1.s +(3*dw,fac*dw)
+T2: box "$T_2$" at Bus.P2.s +(3*dw,fac*dw)
+box invis "$...$" at Bus.Pdots.s +(-3*dw,fac*dw)
+Tm: box "$T_m$" at Bus.Pn.s +(-4*dw,fac*dw)
+
+box ht 0.1 with .n at T1.n fill 0.5
+box ht 0.1 with .n at T2.n fill 0.5
+box ht 0.1 with .n at Tm.n fill 0.5
+
+fac2=7
+A1: arrow <- from T1.n+(-dw,0) up fac2*dw  "\spec{eval~}" rjust "\spec{do~}" rjust "\spec{ack-event~}" rjust 
+arrow -> from T1.n+(dw,0) up fac2*dw "\spec{~value}" ljust "" ljust "\spec{~event}" ljust
+
+box invis
+
+
+arrow <- from T2.n+(-dw,0) up fac2*dw
+arrow -> from T2.n+(dw,0) up fac2*dw
+
+
+arrow <- from Tm.n+(-dw,0) up fac2*dw
+arrow -> from Tm.n+(dw,0) up fac2*dw
+
+"Tools:" rjust at T1.w+(-dw,0)
+"Adapters:" rjust at T1.w+(-dw, 0.2)
+
+.PE
+

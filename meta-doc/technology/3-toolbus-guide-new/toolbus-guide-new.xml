@@ -1,0 +1,2184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>Guide to ToolBus Programming</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <section>
+      <title>Background and Motivation</title>
+
+      <para>Building large, heterogeneous, distributed software systems poses
+      serious problems for the software engineer. Systems grow
+      <emphasis>larger</emphasis> because the complexity of the tasks we want
+      to automate increases. They become <emphasis>heterogeneous</emphasis>
+      because large systems may be constructed by re-using existing software
+      as components. It is more than likely that these components have been
+      developed using different implementation languages and run on different
+      hardware platforms. Systems become <emphasis>distributed</emphasis>
+      because they have to operate in the context of local area
+      networks.</para>
+
+      <para>Three aspects of heterogeneous, distributed, systems should be
+      considered: <emphasis>coordination</emphasis>,
+      <emphasis>representation</emphasis> and
+      <emphasis>computation</emphasis>.</para>
+
+      <formalpara>
+        <title>Coordination</title>
+
+        <para>Coordination is the way in which program and system parts
+        interact with each other using, ordinary procedure calls, remote
+        procedure calls (RPC), remote method invocation (RMI), and
+        others.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Representation</title>
+
+        <para>Representation is the language and machine neutral format for
+        data being exchanged between components.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Computation</title>
+
+        <para>Computation is done by specialized program code that carries out
+        a specific task, e.g., providing a user-interface, providing database
+        access, and the like.</para>
+      </formalpara>
+
+      <para>Our key assumption is as follows:<important>
+          <para>A rigorous separation of coordination from computation is the
+          key to flexible and reusable systems.</para>
+        </important></para>
+
+      <para>A system organization that respects this separation is shown
+      in</para>
+
+      <figure>
+        <title>Separating coordination from computation</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="coordination.png" scale="60"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>We propose to get control over the possible interactions between
+      software components (<emphasis>tools</emphasis>) by forbidding direct
+      inter-tool communication. Instead, all interactions are controlled by a
+      process-oriented <emphasis>script</emphasis> that formalizes all the
+      desired interactions among tools. This leads to a component
+      interconnection architecture resembling a hardware communication bus,
+      and therefore we call it a ``ToolBus''.</para>
+    </section>
+
+    <section>
+      <title>The ToolBus architecture</title>
+
+      <para>The global architecture of the ToolBus is shown in <xref
+      linkend="figure.toolbus-organization" />. The ToolBus serves the purpose
+      of defining the cooperation of a variable number of
+      <emphasis>tools</emphasis> <replaceable>T</replaceable><subscript>i
+      </subscript>(<replaceable>i</replaceable> = 1, ...,
+      <replaceable>m</replaceable>) that are to be combined into a complete
+      system. The internal behaviour or implementation of each tool is
+      irrelevant: they may be implemented in different programming languages,
+      be generated from specifications, etc. Tools may, or may not, maintain
+      their own internal state. Here we concentrate on the external behaviour
+      of each tool. In general an <emphasis>adapter</emphasis> will be needed
+      for each tool to adapt it to the common data representation and message
+      protocols imposed by the ToolBus.</para>
+
+      <figure xml:id="figure.toolbus-organization">
+        <title>Global organization of the ToolBus</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="architecture.png" scale="60"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The ToolBus itself consists of a variable number of processes
+      <replaceable>P</replaceable><subscript>i</subscript>
+      (<replaceable>i</replaceable> = 1, ...,
+      <replaceable>n</replaceable>)<footnote>
+          <para>By ``processes'' we mean here computational activities
+          <emphasis>inside</emphasis> the ToolBus as opposed to, for instance,
+          processes at the operating system level. When confusing might arise,
+          we will call the former ``ToolBus processes'' and the latter
+          ``operating system level tasks''.</para>
+        </footnote>The parallel composition of the processes
+      <replaceable>P</replaceable><subscript>i</subscript> represents the
+      intended behaviour of the whole system. Tools are external,
+      computational activities, most likely corresponding with operating
+      system level tasks. They come into existence either by an execution
+      command issued by the ToolBus or their execution is initiated
+      externally, in which case an explicit connect command has to be
+      performed by the ToolBus. Although a one-to-one correspondence between
+      tools and processes seems simple and desirable, we do not enforce this
+      and permit tools that are being controlled by more than one process as
+      well as clusters of tools being controlled by a single process.</para>
+
+      <formalpara>
+        <title>Communication inside the ToolBus</title>
+
+        <para>Inside the ToolBus, there are two communication mechanisms
+        available. First, a process can send a <emphasis>message</emphasis>
+        (using <literal>snd-msg</literal>) which should be received,
+        synchronously, by one other process (using
+        <literal>rec-msg</literal>). Messages are intended to request a
+        service from another process. When the receiving process has completed
+        the desired service it may inform the sender, synchronously, by means
+        of another message (using <literal>snd-msg</literal>). The original
+        sender can receive the reply using <literal>rec-msg</literal>. By
+        convention, part of the the original message is contained in the reply
+        (but this is not enforced).</para>
+      </formalpara>
+
+      <para>Second, a process can send a <emphasis>note</emphasis> (using
+      <literal>snd-note</literal>) which is broadcasted to other, interested,
+      processes. The sending process does not expect an answer while the
+      receiving processes read notes asynchronously (using
+      <literal>rec-note</literal>) at a low priority. Notes are intended to
+      notify others of state changes in the sending process. Sending notes
+      amounts to <emphasis>asynchronous selective broadcasting</emphasis>.
+      Processes will only receive notes to which they have
+      <emphasis>subscribed</emphasis>.</para>
+
+      <para><figure xml:id="figure.tool-communication">
+          <title>Communication between ToolBus and tools</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="tool-protocol.png" scale="80"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <formalpara>
+        <title>Communication between ToolBus and tools</title>
+
+        <para>The communication between ToolBus and tools is based on
+        handshaking communication between a ToolBus process and a tool. A
+        process may send messages in several formats to a tool
+        (<literal>snd-eval</literal>, <literal>snd-do</literal>, and
+        <literal>snd-ack-event</literal>) while a tool may send the messages
+        <literal>snd-event</literal> and <literal>snd-value</literal> to a
+        ToolBus process. There is no direct communication possible between
+        tools. These communication patterns are shown in <xref
+        linkend="figure.tool-communication" />.</para>
+      </formalpara>
+
+      <para>The execution and termination of the tools attached to the ToolBus
+      can be explicitly controlled. It is also possible to connect or
+      disconnect tools that have been executing independently of the
+      ToolBus.</para>
+
+      <formalpara>
+        <title>Knowledge separation</title>
+
+        <para>Equipped with the mechanisms provided by the ToolBus, carefull
+        control over application knowledge can be achieved as shown in <xref
+        linkend="figure.toolbus-application" /> where an application is
+        depicted consisting of a user-interface (UI) and a database (DB). In a
+        more conventional approach, elements of the user-interface, say a
+        button, would be directly connected with functions in the database
+        component and a strong coupling between the two components would be
+        the result. Using the ToolBus, the two components can be completely
+        oblivious of each other. It is only in the ToolBus script that they
+        are configured to work together. The extra level of indirection
+        introduced by the ToolBus thus leads to extra flexibility and
+        decoupling.</para>
+      </formalpara>
+
+      <para><figure xml:id="figure.toolbus-application">
+          <title>Knowledge separation in ToolBus-based application</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="application.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+    </section>
+
+    <section>
+      <title>How to go from here?</title>
+
+      <para>After this brief motivation and explanation of the ToolBus
+      architecture it is time to delve into more details. In the remainder of
+      this chapter, we will have a look at the following topics:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ToolBus scripts (or Tscripts, for short).</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write ToolBus tools.</para>
+        </listitem>
+
+        <listitem>
+          <para>A brief peek at the ToolBus implementation.</para>
+        </listitem>
+
+        <listitem>
+          <para>Historical notes</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Tscripts</title>
+
+    <para>Tscripts describe how the tools in an application cooperate. They
+    allow the definition of a collection of concurrent processes that can
+    communicate with eachother and with the tools in the application.</para>
+
+    <section>
+      <title>Terms</title>
+
+      <para>Tscripts make heavy use of <emphasis>terms</emphasis>, simple
+      prefix expressions that are used to exchange structured data between
+      processes and tools. Terms are recursively defined as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A Boolean constant, integer constant, real constant, or string
+          constant is a term, e.g., <literal>true</literal>,
+          <literal>37</literal>, <literal>314e-12</literal>, or
+          <literal>"rose"</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>value occurrence</emphasis> of a variable is a
+          term, e.g., <literal>X</literal>, <literal>InitialAmount</literal>,
+          or <literal>Highest-Bid</literal>.</para>
+
+          <important>
+            <para>Variables always start with a capital letter. A value
+            occurence serves the purpose of using the current value of a
+            variable.</para>
+          </important>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>result occurrence</emphasis> of a variable is a
+          term, e.g., <literal>X?</literal>, <literal>InItialAmount?</literal>
+          or <literal>Highest-Bid?</literal>.</para>
+
+          <important>
+            <para>A result occurrence of a variable plays a role when this
+            term is <emphasis>matched</emphasis> with another term. In the
+            case that the match succeeds, the corresponding part of the other
+            term is assigned to the result variable.</para>
+          </important>
+        </listitem>
+
+        <listitem>
+          <para>A single <emphasis>identifier</emphasis> is a term, e.g.,
+          <literal>f</literal>, <literal>pair</literal>, or
+          <literal>zero</literal>.</para>
+
+          <important>
+            <para>Identifier alwas start with a lowercase letter.</para>
+          </important>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>function application</emphasis> is a term, e.g.,
+          <literal>pair("rose", address("STREE", 12345)</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>A <emphasis>list</emphasis> is a term, e.g., <literal>[a, b,
+          c]</literal> or <literal>[a, 1.25, "lost"]</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>A placeholder is a term, e.g., <literal>&lt;int&gt;</literal>
+          or <literal>add(&lt;int&gt;,&lt;int&gt;)</literal>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Matching</title>
+
+      <para>Term matching is used for several purposes in the ToolBus:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>To determine which actions can communicate with each other.
+          For instance, a <literal>snd-msg</literal> and a
+          <literal>rec-msg</literal> can only communicate if their arguments
+          match.</para>
+        </listitem>
+
+        <listitem>
+          <para>To transfer information between sender and receiver.</para>
+        </listitem>
+
+        <listitem>
+          <para>To do case analysis, for instance, when receiving events from
+          a tool.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Intuitively, the matching between two terms works as
+      follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Two terms match if they are structurally identical.</para>
+        </listitem>
+
+        <listitem>
+          <para>For a value occurrence of a variable: use its current
+          value.</para>
+        </listitem>
+
+        <listitem>
+          <para>For a result occurrence of a variable: assign the matched
+          subterm of the other term to the variable (but make this only
+          permanent if the overall match succeeds).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This illustrated in <xref linkend="figure.match-example" />.
+      Before the match, two contexts are given. Each context associates some
+      variables with a value. For instance, Context 1 associates the value
+      <literal>3</literal> with variable <literal>X</literal>. For each
+      context a term is given and the challenge is to match these two terms
+      and to observe the effects on the two contexts. The matching of the two
+      terms can be understood as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The toplevel function names are identical (both
+          <literal>f</literal>) and both have the same number of arguments.
+          The left term and the right term match if their arguments
+          match.</para>
+        </listitem>
+
+        <listitem>
+          <para>The first argument in the left term is <literal>X</literal>
+          and <literal>3</literal> in the right term. Since,
+          <literal>X</literal> has value <literal>3</literal> in Context 1,
+          they match.</para>
+        </listitem>
+
+        <listitem>
+          <para>The second argument in the left term is <literal>4</literal>
+          and <literal>Z?</literal> in the right term. By assigning
+          <literal>4</literal> to <literal>Z</literal> in Context 2 we achieve
+          a match.</para>
+        </listitem>
+
+        <listitem>
+          <para>The third argument in the leftvterm is <literal>Y?</literal>
+          and <literal>5</literal> in the right term. Here we achieve a match
+          by assigning <literal>5</literal> to <literal>Y</literal> in Context
+          1.</para>
+        </listitem>
+
+        <listitem>
+          <para>The fourth and last argument of both terms is
+          <literal>6</literal> and thus matches.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The net result is that both terms match and that Context 1 and
+      Context 2 are modified as shown iat the bottom of the figure.</para>
+
+      <para><figure xml:id="figure.match-example">
+          <title>Example of term matching</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="match-example.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+    </section>
+
+    <section>
+      <title>Types</title>
+
+      <para>The ToolBus uses a type system that is a compromise between the
+      safety of static checking and the flexibility of dynamic typing. Another
+      objective of the type system is to provide sufficient information to
+      enable the automatic generation of adapter code for tools. Type are
+      defined as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>bool</literal>, <literal>int</literal>,
+          <literal>real</literal> and <literal>str</literal> are the types of
+          the elementary terms.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>list</literal> is the type of arbitrary lists.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>list(<replaceable>Type</replaceable>)</literal> is
+          the type of lists with elements of type
+          <replaceable>Type</replaceable>. For instance,
+          <literal>list(int)</literal> is the type of lists of
+          integers.</para>
+        </listitem>
+
+        <listitem>
+          <para><replaceable>Id</replaceable> is the type of all terms with
+          function symbol <replaceable>Id</replaceable> (this allows the
+          declaration of partial types). The type <literal>f</literal>, thus
+          corresponds to the terms <literal>f</literal>,
+          <literal>f(1)</literal>, <literal>f("abc", 3)</literal> and the
+          like.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Id(<replaceable>Type</replaceable><subscript>1</subscript>,
+          ...,
+          <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript>)</literal>
+          is the type of terms with function symbol
+          <replaceable>Id</replaceable> and the given types
+          <replaceable>Type</replaceable><subscript>1</subscript>, ...,
+          <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript>a
+          s argument types. For instance, <literal>f(int,str)</literal>
+          accepts <literal>f(3,"abc")</literal> but not
+          <literal>f(3)</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>[<replaceable>Type</replaceable><subscript>1</subscript>, ...,
+          <replaceable>Type</replaceable><subscript><replaceable>n</replaceable></subscript>]
+          is the type of a list of elements with the given types
+          <replaceable>Type</replaceable><subscript>1</subscript>, ...,
+          <replaceable>Type<subscript>n</subscript>.</replaceable> For
+          instance, <literal>[int, str]</literal> accepts <literal>[1,
+          "abc"]</literal>, but not <literal>[1,2,3]</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>term</literal> is the type of an arbitrary term. And
+          is used as escape from the more precise typing by the preceeding
+          types.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Types are used in the following ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>All variables have a type.</para>
+        </listitem>
+
+        <listitem>
+          <para>Types are statically checked whenever possible. Only in the
+          case of type <literal>term</literal>, dynamic checks are
+          needed.</para>
+        </listitem>
+
+        <listitem>
+          <para>Types play a role during matching: a match can also fail if
+          the types of corresponding subterms are unequal. For instance, given
+          <literal>I</literal> as <literal>int</literal> variable,
+          <literal>S</literal> as <literal>str</literal> variable and
+          <literal>T</literal> as <literal>term</literal> variable,</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>f(13)</literal> and <literal>f(I?)</literal> will
+              match.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>f(13)</literal> and <literal>f(S?)</literal> will
+              fail.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>f(13)</literal> and <literal>f(T?)</literal> will
+              succeed.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Tscripts</title>
+
+      <section>
+        <title>Overall structure</title>
+
+        <para>A Tscript can define the following ingredients:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A <emphasis>process definition</emphasis> consisting of a
+            process name, optional parameters and a process expression that
+            describes the behaviour of this process. </para>
+          </listitem>
+
+          <listitem>
+            <para>A <emphasis>tool definition</emphasis> consisting of a tool
+            name and some operational details, such as the command to execute
+            when the tool is started.</para>
+          </listitem>
+
+          <listitem>
+            <para>A <emphasis>ToolBus configuration</emphasis> consisting of
+            one or more process names (optionally followed by actual
+            parameters) that will be created when the application is started.
+            A Tscript may contain more than one ToolBus configuration.</para>
+          </listitem>
+
+          <listitem>
+            <para>An <emphasis>include file</emphasis> that contains another
+            Tscript that will be literally included.</para>
+          </listitem>
+
+          <listitem>
+            <para>A <emphasis>constant definition</emphasis>.</para>
+          </listitem>
+
+          <listitem>
+            <para>A <emphasis>conditional</emphasis> that allows the condional
+            inclusion or exclusion of parts of the Tscript.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>A first example</title>
+
+        <para>Beforer delving into the details of Tscripts, it is good to have
+        a look at the hello world application
+        <filename>hello1.tb</filename>:</para>
+
+        <programlisting>process HELLO <co xml:id="co.hello1-1" />
+is <co xml:id="co.hello1-2" />
+  printf(“Hello world, my first Tscript!\n”) <co xml:id="co.hello1-3" />
+
+toolbus(HELLO) <co xml:id="co.hello1-4" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="co.hello1-1">
+            <para>Here starts the definition of a process with name
+            <literal>HELLO</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.hello1-2">
+            <para>After the keyword <literal>is</literal> follows the process
+            expression that defines the behaviour of this process.</para>
+          </callout>
+
+          <callout arearefs="co.hello1-3">
+            <para>The process expression consists of a single action that
+            prints a string.</para>
+          </callout>
+
+          <callout arearefs="co.hello1-4">
+            <para>Define the initial ToolBus configuration, in this case only
+            process HELLO will be started.</para>
+          </callout>
+        </calloutlist>
+
+        <para>Running this example will yield the following command line
+        dialog:</para>
+
+        <screen>1&gt; toolbus hello1.tb
+Hello world, my first Tscript!
+2&gt;</screen>
+
+        <para>Becoming more courageous, we show now a more ambituous Tscript
+        <literal>hello2.tb</literal> that does not print the hello string
+        itself, but executes a tool to compute it.</para>
+
+        <programlisting>process HELLO is <co xml:id="co.hello2-1" />
+  let H : hello, <co xml:id="co.hello2-2" />
+      S : str    <co xml:id="co.hello2-3" />
+  in
+         execute(hello, H?) <co xml:id="co.hello2-4" /> .   <co
+            xml:id="co.hello2-5" />
+         snd-eval(H, get-text) .   <co xml:id="co.hello2-6" />
+         rec-value(H, text(S?)).   <co xml:id="co.hello2-7" />
+         printf(S)                 <co xml:id="co.hello2-8" />
+  endlet
+
+tool hello is {command = “hello” } <co xml:id="co.hello2-9" />
+toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
+
+        <para>Notes:</para>
+
+        <calloutlist>
+          <callout arearefs="co.hello2-1">
+            <para>Define a process <literal>HELLO</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-2">
+            <para>Use a <literal>let ... in ... endlet</literal> construct to
+            declare local variables. Variable <literal>H</literal> is declared
+            with type <literal>hello</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-3">
+            <para>Variable <literal>S</literal> is declared with type
+            <literal>str</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-4">
+            <para>Execute the <literal>hello</literal> tool (according to the
+            tool definition at <xref linkend="co.hello2-9" />). The resulting
+            tool identifier is assigned to variable <literal>H</literal>.
+            Observe that the name of the tool and the type of
+            <literal>H</literal> are identical.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-5">
+            <para>Use the sequential composition operator <literal>.</literal>
+            to combine atom actions into a larger process expression.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-6">
+            <para>Send an evaluation request to the tool we have just
+            executed. <literal>H</literal> identifies the tool instance, and
+            <literal>get-text</literal> is the term to be sent to the hello
+            tool.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-7">
+            <para>In response to the evaluation request, the hello tool
+            returns a value of the form <literal>text("Hello world from my
+            first tool")</literal>. The actual text is extracted by the result
+            variable <literal>S?</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-8">
+            <para>Print the string value of <literal>S</literal>.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-9">
+            <para>The definition for the hello tool. It contains the name of
+            an executable program to be run when this tool is executed.</para>
+          </callout>
+
+          <callout arearefs="co.hello2-10">
+            <para>The initial ToolBus configuration consisting of just the
+            <literal>HELLO</literal> process.</para>
+          </callout>
+        </calloutlist>
+
+        <para>All the Tscript primitives (including the ones that occur in
+        these two simple examples) will now be described in more depth.</para>
+      </section>
+
+      <section>
+        <title>Process primitives</title>
+
+        <para>During execution, the ToolBus consists of a parallel composition
+        of processes. The ToolBus configurations define the processes that are
+        created at the start of the start of the application, but later on
+        processes may die and new ones may be created.</para>
+
+        <para>Each process has a local state in the form of private local
+        variables. These variables get their value through assignment and
+        matching. They are only visible inside each process.</para>
+
+        <para>Processes are built-in up from atomic actions (detailed below)
+        and atomic actions can be combined into process expressions using the
+        following operators:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Sequential composition</emphasis>
+            <literal><replaceable>P</replaceable><subscript>1</subscript> .
+            <replaceable>P</replaceable><subscript>2</subscript></literal>.
+            First the actions in <replaceable>
+            P</replaceable><subscript>1</subscript>are executed and then the
+            ones in
+            <replaceable>P</replaceable><subscript>2</subscript>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Choice</emphasis>
+            <literal><replaceable>P</replaceable><subscript>1</subscript> +
+            <replaceable>P</replaceable><subscript>2</subscript></literal>. A
+            choice is made between the first action in
+            <replaceable>P</replaceable><subscript>1</subscript>and the first
+            action in <replaceable>P</replaceable><subscript>2</subscript>.
+            This choice is based on two criteria:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>An action to be selected must be
+                <emphasis>enabled</emphasis>.</para>
+              </listitem>
+
+              <listitem>
+                <para>If more than one action is enabled, a random choice is
+                made.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>There are various ways in which an action can be enabled
+            (this depends on the precise action):</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>An associated condition evaluates to true (see
+                conditional and guarded command, below).</para>
+              </listitem>
+
+              <listitem>
+                <para>An associated timing constraint is true.</para>
+              </listitem>
+
+              <listitem>
+                <para>Required external tool results are available.</para>
+              </listitem>
+
+              <listitem>
+                <para>Communication conditions are satisfied.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>Once the choice for the first action has been made all
+            remaining actions of the selected process expression
+            <replaceable>P</replaceable><subscript>1</subscript> or
+            <replaceable>P</replaceable><subscript>2</subscript> are executed
+            as well.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Parallel composition</emphasis>
+            <literal><replaceable>P</replaceable><subscript>1</subscript> ||
+            <replaceable>P</replaceable><subscript>2</subscript></literal>.
+            The actions in
+            <replaceable>P</replaceable><subscript>1</subscript>and
+            <replaceable>P</replaceable><subscript>2</subscript> are executed
+            in parallel. This means that the sequential order of the actions
+            in
+            <replaceable>P</replaceable><subscript>1</subscript>respectively
+            <replaceable>P</replaceable><subscript>2</subscript> is respected
+            but that apart from this constraint the actions can be executed in
+            arbitrary order.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Iteration</emphasis>
+            <literal><replaceable>P</replaceable><subscript>1</subscript> *
+            <replaceable>P</replaceable><subscript>2</subscript></literal>.
+            <replaceable>P</replaceable><subscript>1</subscript> is executed
+            repeatedly, until an action of
+            <replaceable>P</replaceable><subscript>2</subscript> is executed.
+            Execution then continues with the remaining actions of
+            <replaceable>P</replaceable><subscript>2</subscript>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Conditional</emphasis> <literal>if
+            <replaceable>T</replaceable> then
+            <replaceable>P</replaceable><subscript>1</subscript> else
+            <replaceable>P</replaceable><subscript>2</subscript> fi</literal>.
+            The test <replaceable>T</replaceable> is evaluated and if the
+            result is true then
+            <replaceable>P</replaceable><subscript>1</subscript> is executed,
+            otherwise <replaceable>P</replaceable><subscript>2</subscript> is
+            executed. Note that the evaluation of the test does not count as a
+            separate atomic action; the test is effectively attached to the
+            first atom of
+            <replaceable>P</replaceable><subscript>1</subscript>respectively
+            <replaceable>P</replaceable><subscript>2</subscript>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Guarded command</emphasis> <literal>if
+            <replaceable>T</replaceable> then <replaceable>P</replaceable>
+            fi</literal>. The test <replaceable>T</replaceable> is evaluated
+            and if the result is true then
+            <replaceable>P</replaceable><subscript>1</subscript> is executed,
+            otherwise this command deadlocks.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Local variables</title>
+
+        <para>As we have seen local variables play a key role in the execution
+        of Tscripts. They are defined using the <literal>let</literal>
+        construct:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>let Var1 : Type1, ... in P endlet. Variables Var1, ... are
+            declared with respective type Type1, .... These variables act as
+            local variables during the execution of the process expression P.
+            P may contain other <literal>let</literal> constructs.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Primitive actions</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Deadlock</emphasis> <literal>delta</literal>. This
+            constant represents the process that cannot execute any further
+            steps. During execution deadlock is always avoided as long as this
+            is possible. A process that end in deadlock effectively terminates
+            and disappears.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Silent step</emphasis> <literal>tau</literal>.
+            This constant represents one internal step in a process and
+            resemble a dummy statement in a conventional programming
+            language.</para>
+          </listitem>
+
+          <listitem>
+            <para>Print printf. An action for generating formatted
+            output.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Assignment</emphasis>
+            <literal><replaceable>V</replaceable> :=
+            <replaceable>T</replaceable></literal>. The term
+            <literal>T</literal> is evaluated as expression (using the
+            built-in functions) and the result is assigned to the local
+            variable <replaceable>V</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Messages: synchronous communication primitives</title>
+
+        <para>Synchronous communication resembles an ordinary phone call: it
+        involves two processes that can communicate at the same instant in
+        time. In ToolBus terminology <emphasis>messages</emphasis> are used
+        for synchronous communication. There are two primitives
+        involved:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>snd-msg</literal> sends a message to another
+            process.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-msg</literal> receives a message from another
+            process.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Two requirements have to be satisfied before communication can
+        take place:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The arguments of <literal>snd-msg</literal> and
+            <literal>rec-msg</literal> match with each other.</para>
+          </listitem>
+
+          <listitem>
+            <para>In addition, <literal>snd-msg</literal> respectively
+            <literal>rec-msg</literal> are enabled in each process.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>When communication takes place, the effects of the argument
+        matching is recorded in the local state of each process and both
+        continue execution. The observant reader may have noticed that sending
+        and receiving is actually symmetric: by way of result variablesin the
+        arguments of <literal>snd-msg</literal> and <literal>rec-msg</literal>
+        information may flow from sender to receiver and <emphasis>vice
+        versa</emphasis>.</para>
+      </section>
+
+      <section>
+        <title>Notes: asynchronous broadcasting primitives</title>
+
+        <para>Asynchronous communication resembles conventional e-mail: it
+        involves one sending and zero or more receiving processes that read
+        the communicated information at a later instant in time. In ToolBus
+        terminology <emphasis>notes</emphasis> are used for asynchronous
+        communication. There four primitives involved:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>subscribe(<replaceable>T</replaceable>)</literal>.
+            Subscribes a process to notes that match the term
+            <replaceable>T</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>unsubscribe(<replaceable>T</replaceable>)</literal>.
+            Unsubscribes a process from notes that match
+            <replaceable>T</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-note(<replaceable>T</replaceable>)</literal>.
+            Broadcast the term <replaceable>T</replaceable> to all subscribed
+            processes. Effectively, <replaceable>T</replaceable> is placed in
+            the private inbox of each subscribed process to be read at a later
+            moment.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-note(<replaceable>T</replaceable>)</literal>.
+            Receive a note that matches <replaceable>T</replaceable>.
+            Effectively, the private inbox is searched for a note that matches
+            <replaceable>T</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>no-note(<replaceable>T</replaceable>)</literal>.
+            There is no note that matches <replaceable>T</replaceable> in the
+            private inbox.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Using named processes</title>
+
+        <para>A process definition associates a name
+        <replaceable>Pnm</replaceable> (optinally followed by parameters) with
+        a process expression <replaceable>P</replaceable>. These process names
+        can be used in two ways in process expressions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>An <emphasis>inline process expression</emphasis>
+            <literal><replaceable>Pnm</replaceable>(...)</literal>:
+            Effectively, this amount to macro substitution:
+            <replaceable>Pnm</replaceable> is replaced by the process
+            expression <replaceable>P</replaceable> (after proper parameter
+            substitution).</para>
+          </listitem>
+
+          <listitem>
+            <para>A <emphasis>process creation</emphasis>
+            <literal>create(<replaceable>Pnm</replaceable>(...),
+            <replaceable>Pid</replaceable>?)</literal>: a completely new
+            process is created that runs in parallel with all other processes
+            currently running in the ToolBus. The process identifier of this
+            new process is assigned to <replaceable>Pid</replaceable>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Tool primitives</title>
+
+        <para>There two possible scenarios for a ToolBus tool. In scenario 1,
+        the tool is executed from the ToolBus, the tool receives a number of
+        evaluation requests and/or generates an number of events, and finally,
+        the ToolBus decides to terminate the execution of the tool. A
+        variation of scenario 1 is that the tool decides to disconnect from
+        the ToolBus and continues execution disconnect from the ToolBus
+        application. In scenario 2, the tool is executed separately and
+        startes its cooperation by requesting a connection with the ToolBus.
+        Once connected, it follows the same steps as in scenario 1. The
+        following primitives achieve this (also see <xref
+        linkend="figure.tool-communication" /> for the various communication
+        patterns between ToolBus and tools):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>execute(<replaceable>Tnm</replaceable>,
+            <replaceable>Tid</replaceable>?)</literal>: Execute a tool with
+            name <replaceable>Tnm</replaceable>. The result is a
+            <emphasis>tool identifier</emphasis> that is bound to
+            <replaceable>Tid</replaceable>. Tool indentifiers are unique; if
+            more than one instance of the same tool is executing they can be
+            distinguished via their tool indentifier. There are two additional
+            constraints:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The Tscript should contain a tool definition for
+                <replaceable>Tnm</replaceable>.</para>
+              </listitem>
+
+              <listitem>
+                <para>The variable Tid should have a type that corresponds
+                with the tool name, i.e., it should be declared as
+                <literal><replaceable>Tid</replaceable> :
+                <replaceable>Tnm</replaceable></literal>. Why? Well this in
+                this way the implementation can track via the type of the tool
+                indentifier in each tool request, <emphasis>which</emphasis>
+                tool it is and that information is essential for the automatic
+                generation of adapter code.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-terminate(<replaceable>Tid</replaceable>,
+            <replaceable>T</replaceable>)</literal>: terminates the execution
+            of the tool instance <replaceable>Tid</replaceable>. The term
+            <replaceable>T</replaceable> contains a reason for the termination
+            and is usually printed by the tool on termination.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-connect(<replaceable>Tnm</replaceable>,
+            <replaceable>Tid</replaceable>?)</literal>: receive a connection
+            request for a tool with name <replaceable>Tnm</replaceable>.
+            <literal>rec-connect</literal> is very similar to
+            <literal>execute</literal>. The only difference is the initiating
+            party: for <literal>execute</literal> the ToolBus and for
+            <literal>rec-connect</literal> the tool.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-disconnect(<replaceable>Tid</replaceable>?)</literal>:
+            receive a disconnection request from a tool. It does not matter
+            whether the connection with the tool was originally established
+            via <literal>execute</literal> or
+            <literal>rec-connect</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-eval(<replaceable>Tid</replaceable>,
+            <replaceable>T</replaceable>)</literal>: send an evaluation
+            request to a tool. All value occurrences in
+            <replaceable>T</replaceable> are first replaced by their value
+            before sending <replaceable>T</replaceable> to the tool. It is up
+            to the tool to interpret the term. The usual scenario is that the
+            outermost function symbol of <replaceable>T</replaceable> is
+            identical to the name of a procedure in the tool and that that
+            procedure is called. The ToolBus can only send one evaluation
+            request at a time. Only when the request is cancelled, or a value
+            is returned by the tool, the next request can be sent to the
+            tool.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-cancel(<replaceable>Tid</replaceable>)</literal>:
+            cancel a previous evaluation request.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-value(<replaceable>Tid</replaceable>,
+            <replaceable>T</replaceable>)</literal>: recieve a value from a
+            tool in response to a previous <literal>snd-eval</literal>
+            request. <replaceable>T</replaceable> has to match the value from
+            the tool; this is usefull for case distinctions. In many case, T
+            consists of a single result variable, or a is a term that contains
+            result variables.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-do(<replaceable>Tid</replaceable>,
+            <replaceable>T</replaceable>)</literal>: send an evaluation
+            request to a tool but do not expect a return value. Typically used
+            to implement printing or logging activities.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-event(<replaceable>Tid</replaceable>,
+            <replaceable>T</replaceable><subscript>1</subscript>,
+            ...)</literal>: receive an event from a tool. Events need not be
+            handled one-by-one. The same tool may generate more than one event
+            provided that the value of argument
+            <replaceable>T</replaceable><subscript>1</subscript> differs.
+            <replaceable>T</replaceable><subscript>1</subscript> thus serves
+            as identification for this event.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-ack-event(<replaceable>Tid</replaceable>,
+            <replaceable><replaceable>T</replaceable><subscript>1</subscript></replaceable>)</literal>:
+            acknowledge the completion of the handling of a previous event.
+            Since, <replaceable>T</replaceable><subscript>1</subscript> is
+            identical to the
+            <replaceable>T</replaceable><subscript>1</subscript> in a
+            preceeding <literal>snd-event</literal> and is used to identify
+            that event.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Timing primitives</title>
+
+        <para><warning>
+            <para>Timing primitives not yet enabled in ToolBusNG.</para>
+          </warning>Time can play an important role in applications, be it as
+        ingredient in a protocol that prescribes certain time constraints, be
+        it as watchdog that certain operations are carried out in time. The
+        general approach in Tscripts is that a delay or timeout may be
+        attached to every atom action. Delays and timeouts may be relative to
+        the current time or they may be specified in absolute time. The
+        primitives are as follows (for arbitrary atomic action
+        <replaceable>A</replaceable>):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Relative delay</emphasis>:
+            <literal><replaceable>A</replaceable>
+            delay(<replaceable>E</replaceable>)</literal>. Atom
+            <replaceable>A</replaceable> can only become enabled after
+            <replaceable>E</replaceable><replaceable> </replaceable>seconds
+            have passed.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Absolute delay</emphasis>:
+            <literal><replaceable>A</replaceable>
+            abs-delay(<replaceable>Year</replaceable>,
+            <replaceable>Month</replaceable>, <replaceable>Day</replaceable>,
+            <replaceable>Hour</replaceable>, <replaceable>Min</replaceable>,
+            <replaceable>Sec</replaceable>)</literal>. Atom
+            <replaceable>A</replaceable> can only become enabled after the
+            specified absolute date and time.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Relative timeout</emphasis>:
+            <literal><replaceable>A</replaceable>
+            timeout(<replaceable>E</replaceable>)</literal>. Atom
+            <replaceable>A</replaceable> is only enabled during the next
+            <replaceable>E</replaceable> seconds.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Absolute timeout</emphasis>:
+            <literal><replaceable>A</replaceable>
+            abs-timeout(<replaceable>Year</replaceable>,
+            <replaceable>Month</replaceable>, <replaceable>Day</replaceable>,
+            <replaceable>Hour</replaceable>, <replaceable>Min</replaceable>,
+            <replaceable>Sec</replaceable>)</literal>. Atom
+            <replaceable>A</replaceable> is only enabled until the specified
+            absolute date and time.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Expressions</title>
+
+        <para>Terms can occur in Tscripts on various locations. In the
+        majority of cases these terms are used as such; only variables are
+        replaced by their value but no further evaluation of terms take place.
+        There are, however, two exceptions to this general rule. In three
+        cases, terms are evaluated:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The test in <literal>if <replaceable>T</replaceable> then
+            ... fi</literal> and <literal>if <replaceable>T</replaceable> then
+            ... else ... fi</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The right-hand side of the assignment
+            <literal><replaceable>V</replaceable> :=
+            <replaceable>T</replaceable></literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>In delays or timeouts.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The term is evaluated in a bottom-up manner, i.e., first
+        aguments are evaluated and then the function is applied. Here are some
+        examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>not(true)</literal> evaluates to
+            <literal>false</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>add(mul(2,3), 4)</literal> evaluates to
+            <literal>9</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>greater(6,5)</literal> evaluates to
+            <literal>true</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>first([9, 8, 7])</literal> evaluates to
+            <literal>9</literal>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>A detailed overview of all built-in functions is given in XXX.
+        They can be summarized as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Functions on <emphasis>Booleans</emphasis>:
+            <literal>not</literal>, <literal>and</literal>,
+            <literal>or</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Functions on <emphasis>Integers</emphasis>:
+            <literal>add</literal>, <literal>sub</literal>,
+            <literal>mul</literal>, <literal>mod</literal>,
+            <literal>less</literal>, <literal>less-equal</literal>,
+            <literal>greater</literal>,
+            <literal>greater-equal</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Functions on <emphasis>lists</emphasis>:
+            <literal>first</literal>, <literal>next</literal>,
+            <literal>get</literal>, <literal>put</literal>,
+            <literal>join</literal>, <literal>member</literal>,
+            <literal>subset</literal>, <literal>diff</literal>,
+            <literal>inter</literal>, <literal>size</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Miscellaneous</emphasis> functions:
+            <filename>equal</filename>, <literal>not-equal</literal>,
+            <literal>process-id</literal>, <literal>process-name</literal>,
+            <literal>current-time</literal>, <literal>quote</literal>.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Examples of Tscripts</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Writing ToolBus Tools</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>The ToolBus Implementation</title>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Reference Information</title>
+
+    <para></para>
+
+    <section>
+      <title>Boolean functions</title>
+
+      <table>
+        <title>Boolean functions</title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description </entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>not(&lt;bool&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry>¬
+              <literal>&lt;bool&gt;<subscript>1</subscript></literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>and(&lt;bool&gt;<subscript>1</subscript>,
+              &lt;bool&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;bool&gt;<subscript>1</subscript> ∧
+              &lt;bool&gt;<subscript>2</subscript></literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>or(&lt;bool&gt;<subscript>1</subscript>,
+              &lt;bool&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;bool&gt;<subscript>1</subscript> ∨
+              &lt;bool&gt;<subscript>2</subscript></literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>equal(&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;term&gt;<subscript>1</subscript> =
+              &lt;term&gt;<subscript>2</subscript></literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>not-equal(&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;term&gt;<subscript>1</subscript> ≠
+              &lt;term&gt;<subscript>2</subscript></literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Integer functions</title>
+
+      <table>
+        <title>Integer functions</title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>add(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> +
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><literal>sub(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> −
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>mul(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ×
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>div(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ∕
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>mod(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript>
+              <emphasis role="bold">mod</emphasis>
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><literal>abs(&lt;int&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry>| <literal>&lt;int&gt;</literal><subscript>1</subscript>
+              |</entry>
+            </row>
+
+            <row>
+              <entry>less(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript>
+              &lt;
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry><literal>less-equal(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ≤
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>greater(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</entry>
+
+              <entry>&lt;bool&gt;</entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript>
+              &gt;
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+
+            <row>
+              <entry>greater-equal(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</entry>
+
+              <entry>&lt;bool&gt;</entry>
+
+              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ≥
+              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Real functions</title>
+
+      <para><table>
+          <title>Real functions</title>
+
+          <tgroup cols="3">
+            <colspec align="left" colwidth="3*" />
+
+            <colspec align="left" colwidth="1*" />
+
+            <colspec align="left" colwidth="2*" />
+
+            <thead>
+              <row>
+                <entry align="center">Function </entry>
+
+                <entry align="center">Result type </entry>
+
+                <entry align="center">Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>radd(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                +
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><literal>rsub(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                −
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry>rmul(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                ×
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry>rdiv(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                ∕
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry>mod(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <emphasis role="bold">mod</emphasis>
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><literal>rabs(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry>|
+                <literal>&lt;real&gt;</literal><subscript>1</subscript>
+                |</entry>
+              </row>
+
+              <row>
+                <entry>rless(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                &lt;
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry><literal>rless-equal(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                ≤
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry>rgreater(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</entry>
+
+                <entry>&lt;bool&gt;</entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                &gt;
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+
+              <row>
+                <entry>rgreater-equal(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</entry>
+
+                <entry>&lt;bool&gt;</entry>
+
+                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                ≥
+                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+    </section>
+
+    <section>
+      <title>Goniometric functions</title>
+
+      <table>
+        <title>Goniometric functions</title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>sin(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry><emphasis>sin</emphasis>(<literal>&lt;real&gt;<subscript>1</subscript></literal>)</entry>
+            </row>
+
+            <row>
+              <entry><literal>cos(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry><emphasis>cos</emphasis>(<literal>&lt;real&gt;<subscript>1</subscript></literal>)</entry>
+            </row>
+
+            <row>
+              <entry><literal>atan(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry><emphasis>tan</emphasis><superscript>-1</superscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>)
+              in the range [-π/2, π/2]</entry>
+            </row>
+
+            <row>
+              <entry><literal>atan2(&lt;real&gt;<subscript>1</subscript>,
+              &lt;real&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry><emphasis>tan</emphasis><superscript>-1</superscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>/<literal>&lt;real&gt;</literal><subscript>2</subscript>)
+              in the range [-π, π]</entry>
+            </row>
+
+            <row>
+              <entry><literal>exp(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry><emphasis>e</emphasis><superscript>&lt;real&gt;<subscript>1</subscript></superscript></entry>
+            </row>
+
+            <row>
+              <entry><literal>log(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry>natural logarithm
+              <emphasis>ln</emphasis>(<literal>&lt;real&gt;<subscript>1</subscript></literal>),
+              with <literal>&lt;real&gt;<subscript>1</subscript></literal>
+              &gt; 0</entry>
+            </row>
+
+            <row>
+              <entry><literal>log10(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry>base 10 logarithm
+              <emphasis>log</emphasis><subscript>10</subscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>),
+              with <literal>&lt;real&gt;<subscript>1</subscript></literal>
+              &gt; 0</entry>
+            </row>
+
+            <row>
+              <entry><literal>sqrt(&lt;real&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;real&gt;</literal></entry>
+
+              <entry>base 10 logarithm
+              <emphasis>√</emphasis><literal>&lt;real&gt;<subscript>1</subscript></literal>,
+              with <literal>&lt;real&gt;<subscript>1</subscript></literal> ≥
+              0</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title></title>
+
+      <para></para>
+
+      <table>
+        <title></title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>first</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>XXX</title>
+
+      <para><table>
+          <title>Synopsis of primitives available in Tscripts</title>
+
+          <tgroup cols="3">
+            <colspec align="left" colname="col1" colwidth="2*" />
+
+            <colspec align="left" colname="col2" colwidth="3*" />
+
+            <colspec align="left" colname="col3" colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry>Primitive</entry>
+
+                <entry>Synopsis</entry>
+
+                <entry>See</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>delta</entry>
+
+                <entry>Inaction (deadlock)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>tau</entry>
+
+                <entry>Internal step</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>P</replaceable><subscript>1</subscript> +
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry>Choice between
+                <replaceable>P</replaceable><subscript>1</subscript> and
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>P</replaceable><subscript>1</subscript> .
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry><replaceable>P</replaceable><subscript>1</subscript>
+                followed by
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>P</replaceable><subscript>1</subscript> ||
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry><replaceable>P</replaceable><subscript>1</subscript>
+                parallel with
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><replaceable>P</replaceable><subscript>1</subscript> *
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry>Repeat
+                <replaceable>P</replaceable><subscript>1</subscript> until
+                <replaceable>P</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>if <replaceable>T</replaceable> then
+                <replaceable>P</replaceable> fi</literal></entry>
+
+                <entry>Guarded command</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>if <replaceable>T</replaceable> then
+                <replaceable>P</replaceable><subscript>1</subscript> else
+                <replaceable>P</replaceable><subscript>2</subscript>
+                fi</literal></entry>
+
+                <entry>Conditional</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>create(Pnm(T, ...), Pid?)</entry>
+
+                <entry>Create new process</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal><replaceable>V</replaceable> :=
+                <replaceable>T</replaceable></literal></entry>
+
+                <entry>Assign <replaceable>T</replaceable> ( seen as
+                expression) to <replaceable>V</replaceable></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>snd-msg(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Send synchronous message</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>rec-msg(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Receive a synchronous message</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>snd-note(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Broadcast an asynchronous note</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>rec-note(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Receive an asynchronous note</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>no-note(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>No note available</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>subscribe(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Subscribe to notes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal><replaceable>A</replaceable>
+                delay(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Relative delay of atom execution</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal><replaceable>A</replaceable>
+                abs-delay(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Absolute delay of atom execution</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal><replaceable>A</replaceable>
+                timeout(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Relative timeout of atom execution</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal><replaceable>A</replaceable>
+                abs-timeout(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Absolute timeout of atom execution</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>rec-connect(<replaceable>Tid</replaceable>?)</literal></entry>
+
+                <entry>Receive connection request from tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>rec-disconnect(<replaceable>Tid</replaceable>?)</entry>
+
+                <entry>Receive disconnection request from tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>execute(<replaceable>Tnm</replaceable>(<replaceable>T</replaceable>,...),
+                <replaceable>Tid</replaceable>?)</literal></entry>
+
+                <entry>Execute a tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>snd-terminate(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Terminate execution of a tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>shutdown(<replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Terminate ToolBus application</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>snd-eval(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Send evaluation request to tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>snd-cancel(<replaceable>Tid</replaceable>)</literal></entry>
+
+                <entry>Cancel previous evaluation request</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>rec-value(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</literal></entry>
+
+                <entry>Receive answer to evaluation request</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>snd-do(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</entry>
+
+                <entry>Send evaluation request to tool (no return
+                value)</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>rec-event(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>, ...)</entry>
+
+                <entry>Receive event from tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>snd-ack-event(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</entry>
+
+                <entry>Acknowledge previous event from tool</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>printf(<replaceable>S</replaceable>,
+                <replaceable>T</replaceable>, ...)</literal></entry>
+
+                <entry>Print terms according to format string S</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>read(<replaceable>T</replaceable><subscript>1</subscript>,
+                <replaceable>T</replaceable><subscript>2</subscript>)</literal></entry>
+
+                <entry>Give prompt
+                <replaceable>T</replaceable><subscript>1</subscript>and read
+                term that should match with
+                <replaceable>T</replaceable><subscript>2</subscript></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>process
+                <replaceable>Pnm</replaceable>(<replaceable>F</replaceable>,
+                ...) is <replaceable>P</replaceable></literal></entry>
+
+                <entry>Define process <literal> <replaceable>Pnm</replaceable>
+                </literal></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>let <replaceable>F</replaceable>, ... in
+                <replaceable>P</replaceable> endlet</literal></entry>
+
+                <entry>Declare local variables in
+                <replaceable>P</replaceable></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>tool <replaceable>Tnm</replaceable> is {
+                <replaceable>Feat</replaceable>, ... }</literal></entry>
+
+                <entry>Define tool <replaceable>Tnm</replaceable></entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>host =
+                <replaceable>Str</replaceable></literal></entry>
+
+                <entry>Host feature in tool definition</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>command =
+                <replaceable>Str</replaceable></literal></entry>
+
+                <entry>Command feature in tool definition</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry><literal>toolbus(<replaceable>Pnm</replaceable>(<replaceable>T</replaceable>,...),
+                ...)</literal></entry>
+
+                <entry>Define initial ToolBus process configuration</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+
+      <para>In the above table we use the following conventions:</para>
+    </section>
+  </section>
+
+  <section>
+    <title></title>
+
+    <para></para>
+  </section>
+</chapter>
