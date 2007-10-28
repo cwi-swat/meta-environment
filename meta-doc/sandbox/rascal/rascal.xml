@@ -780,7 +780,7 @@ function uninit(PROGRAM) -&gt; set[PICO-ID]
    Pred := cflow(P)
    =======================================
    uninit(P) = {Id | &lt;EXP E, PICO-ID Id&gt; : range(Uses),
-                     E in reachX({ROOT}, defs[-,Id], Pred)
+                     E in reachX({ROOT}, Defs[-,Id], Pred)
                }</programlisting>Questions: </para>
 
       <itemizedlist>
@@ -815,14 +815,13 @@ function uninit(PROGRAM) -&gt; set[PICO-ID]
 
 function cse(PROGRAM) -&gt; PROGRAM
 
-[] Uses := uses(P),
-   Defs := defs(P),
+[] Defs := defs(P),
    Pred := cflow(P)
    =====================================================
    cse(P) = STATEMENT S : P, 
             PICO-ID Id ":=" EXP E == S,
             Id notin E,
-            EXP E2 : reachX({S}, defs[-,Id], Pred) =&gt; Id</programlisting></para>
+            EXP E2 : reachX({S}, Defs[-,Id], Pred) =&gt; Id</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
       that</para>
@@ -881,14 +880,13 @@ function is-constant(EXP) -&gt; Boolean
 
 function cp(PROGRAM) -&gt; PROGRAM
 
-[] Uses := uses(P),
-   Defs := defs(P),
+[] Defs := defs(P),
    Pred := cflow(P)
    ======================================================
    cp(P) = STATEMENT S : P, 
            PICO-ID Id ":=" EXP E == S,
            is-constant(E),
-           PICO-ID Id2 : reachX({S},defs[-,Id],Pred),
+           PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
            Id2 == Id
            =&gt; E</programlisting></para>
 

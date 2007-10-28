@@ -51,8 +51,9 @@
 
   <part>
     <title>Technology</title>
-    <xi:include href="technology/2-aterm-saf/aterm-saf.xml"></xi:include>
   </part>
+    <xi:include href="technology/2-aterm-saf/aterm-saf.xml"></xi:include>
+    <xi:include href="technology/3-toolbus-guide-new/toolbus-guide-new.xml"></xi:include>
 
   <part>
    <title>Software Development</title>

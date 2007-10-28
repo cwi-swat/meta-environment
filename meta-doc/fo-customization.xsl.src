@@ -10,7 +10,11 @@
 
 <xsl:include href="common-customizations.xsl" />
 
-<xsl:param name="collect.xref.target"      select="'no'" />
+<!-- graphics -->
+<xsl:param name="callout.graphics.path"   select="'../../images/callouts/'" />
+
+
+<xsl:param name="collect.xref.target"     select="'no'" />
 
 <xsl:param name="shade.verbatim"          select="'1'" />
 <xsl:param name="paper.type"              select="'A4'" />
