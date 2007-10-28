@@ -8,6 +8,13 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <title>Guide to ToolBus Programming</title>
 
+  <warning>
+    <para>This document is in the state of being created and will further
+    evolve. It provides a description of the classic C-based ToolBus as well
+    as of the Java-based ToolBusNG. Eventually, it will exclusively focus on
+    ToolBusNG.</para>
+  </warning>
+
   <section>
     <title>Introduction</title>
 
@@ -532,7 +539,7 @@
           <listitem>
             <para>A <emphasis>process definition</emphasis> consisting of a
             process name, optional parameters and a process expression that
-            describes the behaviour of this process. </para>
+            describes the behaviour of this process.</para>
           </listitem>
 
           <listitem>
@@ -1276,6 +1283,320 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
     <title>Examples of Tscripts</title>
 
     <para></para>
+
+    <section>
+      <title>Calculator</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Wave</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Auction</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Executing Toolbus and tools</title>
+
+    <para>The ToolBus interpreter (<command>toolbus</command>) and all tools
+    have some standard program arguments in common, but they have some
+    specific arguments as well. In this section we describe all possible
+    program arguments and the way to execute <command>toolbus</command> and
+    tools.</para>
+
+    <section>
+      <title>Common arguments</title>
+
+      <para>ToolBus and tools have the following optional arguments in
+      common:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>-help</literal>: prints a description of all
+          arguments of the toolbus or tool.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-verbose</literal>: produces a log of steps taken by
+          toolbus or tool that may be useful to debug your script or tool. The
+          same effect may be obtained by setting the environment variable
+          <literal>TB_VERBOSE</literal> to <literal>true</literal> and export
+          it. In the Korn shell this can, for instance, be achieved by:
+          <programlisting>TB_VERBOSE=true 
+export TB_VERBOSE</programlisting></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-TB_PORT
+          <replaceable>port_name</replaceable></literal>: defines the
+          <emphasis>well known socket</emphasis> <literal>port_name</literal>
+          to which all tools temporarily connect in order to set up their own
+          private socket that connects them permanently to the ToolBus
+          interpreter. When omitted, socket 8998 will be used.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that explicit arguments defining the sockets are
+      <emphasis>only</emphasis> needed when several ToolBus interpreters are
+      running simultaneously on the <emphasis>same</emphasis> host
+      machine.</para>
+    </section>
+
+    <section>
+      <title>ToolBus arguments</title>
+
+      <para>The <replaceable>script_name</replaceable> (see below) given as
+      argument to the ToolBus is always preprocessed by a preprocessor before
+      it is parsed as a Tscript. In this way, directives like, e.g.,
+      <literal>#define</literal>, <literal>#include</literal> and
+      <literal>#ifdef</literal> can be used freely in Tscripts. The following
+      preprocessor arguments are accepted by the <command>toolbus</command>
+      command:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>-I<replaceable>dir</replaceable></literal>: append
+          directory <literal><replaceable>dir</replaceable></literal> to the
+          list of directories searched for include files.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-D<replaceable>name</replaceable></literal>: defines
+          <literal><replaceable>name</replaceable></literal> with the string
+          <literal>"1" </literal>as its definition.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>D<replaceable>name</replaceable>=<replaceable>defn</replaceable></literal>:
+          defines <literal><replaceable>name</replaceable></literal> with
+          <literal><replaceable>defn</replaceable></literal> as
+          definition.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Other arguments specific for the {\tt toolbus} command are:</para>
+
+      <warning>
+        <para>The following arguments will probably be supported differently
+        in ToolBusNG.</para>
+      </warning>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>-logger</literal>: execute a logger tool that will be
+          attached to all processes in the ToolBus. If the script contains a
+          tool definition for a tool named <literal>logger</literal>, that
+          will be used for executing the logger. Otherwise a default tool
+          definition is used.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-viewer</literal>: similar as above, for a viewer
+          tool. The default viewer is the ``ToolBus viewer'' (previously known
+          as the ToolBus debugger).</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-controller</literal>: similar as above, for a
+          controller tool. Currently, no default controller tool is
+          provided.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-gentifs</literal>: only generate tool interfaces for
+          all tools used in the script in a language independent format. For a
+          script file named <filename>script.tb</filename> the tool interfaces
+          are written to <filename>script.tifs</filename>. Do not execute the
+          script.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-fixed-seed</literal>: use a fixed seed for the
+          random generator used by the interpreter for scheduling processes
+          and selecting alternatives in processes. By default, the random
+          generator is initialized with the current time the
+          <command>toolbus</command> command is given. Using the
+          <literal>-fixed-seed</literal> option makes the execution of the
+          script reproducible across multiple runs of the
+          <command>toolbus</command> command.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal><replaceable>script_name</replaceable></literal>: any
+          other argument is the name of the ToolBus script to be
+          interpreted.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>As an example, consider first <programlisting>toolbus hello.tb</programlisting>which
+      starts interpreting the script <filename>hello.tb</filename>. Next,
+      consider<programlisting>toolbus -TB_PORT 4000 hello.tb</programlisting>which
+      interprets the same script, but uses socket <literal>4000</literal> to
+      find the ToolBus. Next, consider <programlisting>toolbus -Imy-include-dir -DCNT=33 wave.tb</programlisting>which
+      searches the directory <filename>my-include-dir</filename> for files
+      used in <literal>#include</literal> directives in the script
+      <filename>wave.tb</filename> and it will define the name
+      <literal>CNT</literal> with value <literal>33</literal>. All occurrences
+      of <literal>CNT</literal> in the script will be replaced by this value
+      before parsing it as a Tscript. Finally, <programlisting>toolbus -gentifs hello.tb </programlisting>produces
+      the tool interfaces file <filename>hello.tifs</filename>.</para>
+    </section>
+
+    <section>
+      <title>Tool arguments</title>
+
+      <para>Arguments specific for tools are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>-TB_HOST
+          <replaceable>host_name</replaceable></literal>: defines the host
+          machine <literal><replaceable>host_name</replaceable></literal> on
+          which the ToolBus interpreter is running and to which the tool
+          should be connected. When omitted, the ToolBus interpreter should be
+          running on the same host as the tool.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-TB_TOOL_NAME tool_name</literal>: the tool name as
+          defined in the Tscript (added automatically, when a tool is executed
+          by the ToolBus).</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-TB_TOOL_ID <replaceable>Id</replaceable></literal>:
+          internal tool identifier of this tool execution (added
+          automatically, when a tool is executed by the ToolBus).</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>-TB_SINGLE</literal>: execute the tool stand-alone
+          and do not connect it with the ToolBus.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The execution of a tool can start in two ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The tool is started by an <literal>execute</literal> command
+          in the Tscript.</para>
+        </listitem>
+
+        <listitem>
+          <para>The initiative to execute the tool is taken outside the
+          ToolBus. This requires that the script contains a
+          <literal>rec-connect</literal> for this particular tool.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>When ToolBus and tool are running on different host machines, it
+      is important to define the host machine on which the ToolBus interpreter
+      is running when starting the execution of the tool. As an example,
+      consider the <command>hello</command> application described in Section
+      XXX. The <command>hello</command> tool will be executed by the ToolBus
+      using the command <programlisting>hello -TB_PORT 8998 -TB_HOST host1.institute.nl</programlisting>when
+      running on machine <literal>host1.institute.nl</literal>. Suppose, we
+      replace the explicit <literal>execute</literal> in
+      Figure~\ref{fig:hello2.tb} by a <literal>rec-connect</literal> as shown
+      in Figure~\ref{fig:hello3.tb}. We may then manually start the
+      <command>hello</command> tool by typing <programlisting>hello</programlisting>where
+      we use the default values for the input/output sockets and assume that
+      tool and ToolBus interpreter are both running on the same host (i.e.,
+      <literal>host1.institute.nl</literal>). Starting the execution from
+      <emphasis>another</emphasis> host is achieved by typing (on, say, {\tt
+      host2.institute.nl}): <programlisting>hello -TB_HOST host1.institute.nl </programlisting></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Adapters for tools and languages</title>
+
+    <figure xml:id="figure.organization-tool-adapter">
+      <title>Two organizations of a tool adapter</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="tool-adapter.png" scale="60"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The main purpose of adapters is to act as small
+    <emphasis>wrappers</emphasis> around existing programs or programming
+    languages in order to transform them into tools that can be connected to
+    the ToolBus. There exist two global strategies for constructing
+    adapters:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The adapter and the program to be adapted are executed as
+        separate (Unix) processes. This structure is sketched in <xref
+        linkend="figure.organization-tool-adapter" />. The advantage of this
+        approach is that no access is needed to the source code of the
+        program: it can remain a black box. Another advantage is that adapters
+        may be reused for the adaptation of different programs. A possible
+        disadvantage is some loss in efficiency.</para>
+
+        <para> In this category a further subdivision is possible: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The program is executed once as a child process of the
+            adapter and all
+            <literal>snd-eval</literal>/<literal>snd-do</literal> requests are
+            directed to this child process. The program can thus maintain an
+            internal state between requests. </para>
+          </listitem>
+
+          <listitem>
+            <para>The same program is executed as a child process of the
+            adapter for each
+            <literal>snd-eval</literal>/<literal>snd-do</literal> request.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>A different program is executed as a child process of the
+            adapter for each
+            <literal>snd-eval</literal>/<literal>snd-do</literal>
+            request.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Integrate the adapter and the software to be adapted into a
+        single (Unix) process. This approach permits the most detailed
+        adaptation of the program and is also the most efficient solution.
+        This approach leads, however, to potentially less reusable adapters
+        than the previous approach.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In order to achieve some uniformity, the current collection of
+    adapters have the following optional program arguments in common: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>-cmd</literal>: the (default) program to be executed by
+        the adapter. All arguments of the adapter that follow
+        <literal>-cmd</literal> are interpreted as the name and arguments of
+        the program to be executed. </para>
+      </listitem>
+
+      <listitem>
+        <para>All tool arguments (see Section~\ref{ToolArgs}.)</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
@@ -1293,7 +1614,137 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
   <section>
     <title>Reference Information</title>
 
-    <para></para>
+    <section>
+      <title>The syntax of Tscripts</title>
+
+      <para>A Tscript may contain directives like, e.g.,
+      <literal>#define</literal>, <literal>#include</literal> and
+      <literal>#ifdef</literal> that are replaced by a preprocessor similar to
+      the C preprocessor. We summarize the most frequently used
+      directives:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>#define <replaceable>Identifier</replaceable>
+          <replaceable>Token-sequence</replaceable></literal> causes the
+          preprocessor to replace all occurrences of
+          <replaceable>Identifier</replaceable> by
+          <replaceable>Token-sequence</replaceable>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>#include
+          "<replaceable>Filename</replaceable>"</literal> will be replaced by
+          the entire contents of the named file.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>#ifdef</literal> and <literal>#ifndef</literal> can
+          be used for the conditional incorporation or exclusion of parts of a
+          script.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The syntax of Tscripts (without preprocessor directives) is as
+      follows:</para>
+
+      <warning>
+        <para>This definition is slightly out-of-date.</para>
+      </warning>
+
+      <programlisting>
+exports
+  sorts BOOL NAT INT SIGN EXP UNSIGNED-REAL REAL STRING ID 
+        NAME VNAME BSTR TERM TERM-LIST VAR GEN-VAR TYPE ATOM 
+        ATOMIC-FUN PROC PROC-APPL FORMALS TIMER-FUN 
+        FEATURE-ASG FEATURES TB-CONFIG DEF T-SCRIPT
+  lexical syntax
+        [ \t\n]                              -&gt; LAYOUT
+        "%%" ~[\n]*                          -&gt; LAYOUT
+
+        [0-9]+                               -&gt; NAT
+        NAT                                  -&gt; INT
+        SIGN NAT                             -&gt; INT
+        [+\-]                                -&gt; SIGN
+
+        [eE] NAT                             -&gt; EXP
+        [eE] SIGN NAT                        -&gt; EXP
+        NAT "." NAT                          -&gt; UNSIGNED-REAL
+        NAT "." NAT EXP                      -&gt; UNSIGNED-REAL
+        UNSIGNED-REAL                        -&gt; REAL
+        SIGN UNSIGNED-REAL                   -&gt; REAL
+
+        [a-z][A-Za-z0-9\-]*                  -&gt; ID
+        "\"" ~[\"]* "\""                     -&gt; STRING
+        [A-Z][A-Za-z0-9\-]*                  -&gt; NAME
+        [A-Z][A-Za-z0-9\-]*                  -&gt; VNAME
+        [a-z][a-z\-]*                        -&gt; ATOMIC-FUN
+
+        delay                                -&gt; TIMER-FUN
+        abs-delay                            -&gt; TIMER-FUN
+        timeout                              -&gt; TIMER-FUN
+        abs-timeout                          -&gt; TIMER-FUN
+  context-free syntax
+        true                                 -&gt; BOOL
+        false                                -&gt; BOOL
+        BOOL                                 -&gt; TERM
+        INT                                  -&gt; TERM
+        REAL                                 -&gt; TERM
+        STRING                               -&gt; TERM
+
+        TERM                                 -&gt; TYPE
+
+        VNAME                                -&gt; VAR
+        VNAME ":" TYPE                       -&gt; VAR
+        VAR                                  -&gt; GEN-VAR
+        VAR "?"                              -&gt; GEN-VAR
+        GEN-VAR                              -&gt; TERM
+        "&lt;" TERM "&gt;"                         -&gt; TERM
+        ID                                   -&gt; TERM
+        ID "(" TERM-LIST ")"                 -&gt; TERM
+        {TERM ","}*                          -&gt; TERM-LIST
+        "[" TERM-LIST "]"                    -&gt; TERM
+
+        NAME                                 -&gt; VNAME
+
+        ATOMIC-FUN "(" TERM-LIST ")"         -&gt; ATOM
+        delta                                -&gt; ATOM
+        tau                                  -&gt; ATOM
+        create "(" NAME "(" TERM-LIST ")" ","  
+                   TERM ")"                  -&gt; ATOM
+        ATOM TIMER-FUN "(" TERM ")"          -&gt; ATOM
+        VNAME ":=" TERM                      -&gt; ATOM
+
+        ATOM                                 -&gt; PROC
+        PROC "+" PROC                        -&gt; PROC  {left}
+        PROC "." PROC                        -&gt; PROC  {right}
+        PROC "||" PROC                       -&gt; PROC  {right}
+        PROC "*" PROC                        -&gt; PROC  {left}
+        "(" PROC ")"                         -&gt; PROC  {bracket}
+        if TERM then PROC else PROC fi       -&gt; PROC
+        if TERM then PROC fi                 -&gt; PROC
+        execute(TERM-LIST)                   -&gt; PROC
+        let {VAR ","}* in PROC endlet        -&gt; PROC
+
+        NAME                                 -&gt; PROC-APPL
+        NAME "(" TERM-LIST ")"               -&gt; PROC-APPL
+        PROC-APPL                            -&gt; PROC
+
+        "(" {GEN-VAR ","}* ")"               -&gt; FORMALS
+                                             -&gt; FORMALS
+
+        process NAME FORMALS is PROC         -&gt; DEF
+        ID "=" STRING                        -&gt; FEATURE-ASG
+       "{" { FEATURE-ASG  ";"}* "}"          -&gt; FEATURES
+        tool ID FORMALS is FEATURES          -&gt; DEF
+        toolbus "("{PROC-APPL ","}+ ")"      -&gt; TB-CONFIG
+        DEF* TB-CONFIG                       -&gt; T-SCRIPT
+
+ priorities
+       PROC "*" PROC -&gt; PROC &gt; PROC "." PROC -&gt; PROC &gt;
+       PROC "+" PROC -&gt; PROC &gt; PROC "||" PROC -&gt; PROC
+   </programlisting>
+    </section>
 
     <section>
       <title>Boolean functions</title>
@@ -1334,7 +1785,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;bool&gt;<subscript>1</subscript> ∧
+              <entry><literal>&lt;bool&gt;<subscript>1</subscript> and
               &lt;bool&gt;<subscript>2</subscript></literal></entry>
             </row>
 
@@ -1344,7 +1795,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;bool&gt;<subscript>1</subscript> ∨
+              <entry><literal>&lt;bool&gt;<subscript>1</subscript> OR
               &lt;bool&gt;<subscript>2</subscript></literal></entry>
             </row>
 
@@ -1354,8 +1805,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;term&gt;<subscript>1</subscript> =
-              &lt;term&gt;<subscript>2</subscript></literal></entry>
+              <entry><literal>&lt;term&gt;<subscript>1</subscript> </literal>=
+              <literal>&lt;term&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
@@ -1364,7 +1815,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;term&gt;<subscript>1</subscript> ≠
+              <entry><literal>&lt;term&gt;<subscript>1</subscript> NE
               &lt;term&gt;<subscript>2</subscript></literal></entry>
             </row>
           </tbody>
@@ -1402,8 +1853,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;int&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> +
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal> +
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
@@ -1412,39 +1863,41 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;int&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> −
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal> -
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>mul(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry
+              char="02306"><literal>&lt;int&gt;<subscript>1</subscript></literal>
+              TIMES
               <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
             </row>
 
             <row>
-              <entry>mul(&lt;int&gt;<subscript>1</subscript>,
-              &lt;int&gt;<subscript>2</subscript>)</entry>
+              <entry><literal>div(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
 
               <entry><literal>&lt;int&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ×
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal> /
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
-              <entry>div(&lt;int&gt;<subscript>1</subscript>,
-              &lt;int&gt;<subscript>2</subscript>)</entry>
+              <entry><literal>mod(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
 
               <entry><literal>&lt;int&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ∕
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
-            </row>
-
-            <row>
-              <entry>mod(&lt;int&gt;<subscript>1</subscript>,
-              &lt;int&gt;<subscript>2</subscript>)</entry>
-
-              <entry><literal>&lt;int&gt;</literal></entry>
-
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal>
               <emphasis role="bold">mod</emphasis>
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
@@ -1452,19 +1905,19 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;int&gt;</literal></entry>
 
-              <entry>| <literal>&lt;int&gt;</literal><subscript>1</subscript>
+              <entry>| <literal>&lt;int&gt;<subscript>1</subscript></literal>
               |</entry>
             </row>
 
             <row>
-              <entry>less(&lt;int&gt;<subscript>1</subscript>,
-              &lt;int&gt;<subscript>2</subscript>)</entry>
+              <entry><literal>less(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
 
               <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal>
               &lt;
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
@@ -1473,29 +1926,31 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ≤
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript>
+              </literal>LEQ
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
-              <entry>greater(&lt;int&gt;<subscript>1</subscript>,
-              &lt;int&gt;<subscript>2</subscript>)</entry>
+              <entry><literal>greater(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
 
-              <entry>&lt;bool&gt;</entry>
+              <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal>
               &gt;
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
 
             <row>
-              <entry>greater-equal(&lt;int&gt;<subscript>1</subscript>,
-              &lt;int&gt;<subscript>2</subscript>)</entry>
+              <entry><literal>greater-equal(&lt;int&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>2</subscript>)</literal></entry>
 
-              <entry>&lt;bool&gt;</entry>
+              <entry><literal>&lt;bool&gt;</literal></entry>
 
-              <entry><literal>&lt;int&gt;</literal><subscript>1</subscript> ≥
-              <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
+              <entry><literal>&lt;int&gt;<subscript>1</subscript></literal>
+              GEQ
+              <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1532,9 +1987,9 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
                 <entry><literal>&lt;real&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
                 +
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
@@ -1543,42 +1998,42 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
                 <entry><literal>&lt;real&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
-                −
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
+                -
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
-                <entry>rmul(&lt;real&gt;<subscript>1</subscript>,
-                &lt;real&gt;<subscript>2</subscript>)</entry>
+                <entry><literal>rmul(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
 
                 <entry><literal>&lt;real&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
                 ×
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
-                <entry>rdiv(&lt;real&gt;<subscript>1</subscript>,
-                &lt;real&gt;<subscript>2</subscript>)</entry>
+                <entry><literal>rdiv(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
 
                 <entry><literal>&lt;real&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
-                ∕
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
+                /
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
-                <entry>mod(&lt;real&gt;<subscript>1</subscript>,
-                &lt;real&gt;<subscript>2</subscript>)</entry>
+                <entry><literal>mod(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
 
                 <entry><literal>&lt;real&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
                 <emphasis role="bold">mod</emphasis>
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
@@ -1587,19 +2042,19 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
                 <entry><literal>&lt;real&gt;</literal></entry>
 
                 <entry>|
-                <literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <literal>&lt;real&gt;<subscript>1</subscript></literal>
                 |</entry>
               </row>
 
               <row>
-                <entry>rless(&lt;real&gt;<subscript>1</subscript>,
-                &lt;real&gt;<subscript>2</subscript>)</entry>
+                <entry><literal>rless(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
 
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
                 &lt;
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
@@ -1608,31 +2063,31 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;&gt;<subscript>1</subscript></literal>
                 ≤
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
-                <entry>rgreater(&lt;real&gt;<subscript>1</subscript>,
-                &lt;real&gt;<subscript>2</subscript>)</entry>
+                <entry><literal>rgreater(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
 
-                <entry>&lt;bool&gt;</entry>
+                <entry><literal>&lt;bool&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
                 &gt;
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
 
               <row>
-                <entry>rgreater-equal(&lt;real&gt;<subscript>1</subscript>,
-                &lt;real&gt;<subscript>2</subscript>)</entry>
+                <entry><literal>rgreater-equal(&lt;real&gt;<subscript>1</subscript>,
+                &lt;real&gt;<subscript>2</subscript>)</literal></entry>
 
-                <entry>&lt;bool&gt;</entry>
+                <entry><literal>&lt;bool&gt;</literal></entry>
 
-                <entry><literal>&lt;real&gt;</literal><subscript>1</subscript>
+                <entry><literal>&lt;real&gt;&gt;<subscript>1</subscript></literal>
                 ≥
-                <literal>&lt;real&gt;</literal><subscript>2</subscript></entry>
+                <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
               </row>
             </tbody>
           </tgroup>
@@ -1694,7 +2149,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
               <entry><literal>&lt;real&gt;</literal></entry>
 
-              <entry><emphasis>tan</emphasis><superscript>-1</superscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>/<literal>&lt;real&gt;</literal><subscript>2</subscript>)
+              <entry><emphasis>tan</emphasis><superscript>-1</superscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>/<literal>&lt;real&gt;<subscript>2</subscript></literal>)
               in the range [-π, π]</entry>
             </row>
 
@@ -1744,12 +2199,10 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
     </section>
 
     <section>
-      <title></title>
-
-      <para></para>
+      <title>Functions on lists</title>
 
       <table>
-        <title></title>
+        <title>Functions on lists</title>
 
         <tgroup cols="3">
           <colspec align="left" colwidth="3*" />
@@ -1770,23 +2223,493 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
           <tbody>
             <row>
-              <entry>first</entry>
+              <entry><literal>first(&lt;list&gt;<subscript>1</subscript>)</literal></entry>
 
-              <entry></entry>
+              <entry><literal>&lt;term&gt;</literal></entry>
 
-              <entry></entry>
+              <entry>First element of
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>; The
+              empty list <literal>[]</literal> when applied to non-list or
+              empty list.</entry>
             </row>
 
             <row>
-              <entry></entry>
+              <entry><literal>next(&lt;list&gt;<subscript>1</subscript>)</literal></entry>
 
-              <entry></entry>
+              <entry><literal>&lt;list&gt;</literal></entry>
 
-              <entry></entry>
+              <entry>Remaining elements of
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>.</entry>
+            </row>
+
+            <row>
+              <entry><literal>join(&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;list&gt;</literal></entry>
+
+              <entry>Concatenation of
+              <literal>&lt;term&gt;<subscript>1</subscript></literal> and
+              <literal>&lt;term&gt;<subscript>2</subscript></literal>. When
+              both arguments are lists their elements are spliced into a new
+              list. A non-list argument is included as single element in the
+              new list.</entry>
+            </row>
+
+            <row>
+              <entry><literal>size(&lt;list&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;int&gt;</literal></entry>
+
+              <entry>The number of elements in
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>.</entry>
             </row>
           </tbody>
         </tgroup>
       </table>
+
+      <table>
+        <title>Functions on lists as arrays</title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>index(&lt;list&gt;<subscript>1</subscript>,
+              &lt;int&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;term&gt;</literal></entry>
+
+              <entry>The
+              <literal>&lt;int&gt;<subscript>1</subscript></literal>-th
+              element of
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>, if it
+              exists; otherwise <literal>[]</literal>.</entry>
+            </row>
+
+            <row>
+              <entry><literal>replace(&lt;list&gt;<subscript>1</subscript>,&lt;int<subscript>1</subscript>&gt;,&lt;term&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;list&gt;</literal></entry>
+
+              <entry>If the
+              &lt;<literal>int&gt;<subscript>1</subscript></literal>-the
+              element exists, replace it by
+              <literal>&lt;term&gt;<subscript>1</subscript></literal> and
+              returned the modifed list; otherwise return
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>
+              unmodified.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Functions on lists as symbol tables</title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>get(&lt;list&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;term&gt;</literal></entry>
+
+              <entry>If
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>contains
+              a pair <literal>[&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>1</subscript>']</literal> then return
+              <literal>&lt;term&gt;<subscript>1</subscript>'</literal>;
+              otherwise [].</entry>
+            </row>
+
+            <row>
+              <entry><literal>put(&lt;list&gt;<subscript>1</subscript>,&lt;term&gt;<subscript>1</subscript>,&lt;term&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;list&gt;</literal></entry>
+
+              <entry>If
+              <literal>&lt;list&gt;<subscript>1</subscript></literal>contains
+              a pair <literal>[&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>1</subscript>']</literal> then replace it
+              by <literal>[&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>2</subscript>]</literal>; otherwise add a
+              new pair [&lt;term&gt;<subscript>1</subscript>,
+              &lt;term&gt;<subscript>2</subscript>] to
+              &lt;list&gt;<subscript>1</subscript>.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Functions on lists as multi-sets</title>
+
+        <tgroup cols="3">
+          <colspec align="left" colwidth="3*" />
+
+          <colspec align="left" colwidth="1*" />
+
+          <colspec align="left" colwidth="2*" />
+
+          <thead>
+            <row>
+              <entry align="center">Function </entry>
+
+              <entry align="center">Result type </entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>member(&lt;term&gt;<subscript>1</subscript>,
+              &lt;list&gt;<subscript>1</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;term&gt;<subscript>1</subscript></literal>
+              IN <literal>&lt;list&gt;<subscript>2</subscript></literal>
+              (membership in multi-set)</entry>
+            </row>
+
+            <row>
+              <entry><literal>subset(&lt;list&gt;<subscript>1</subscript>,&lt;list&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;bool&gt;</literal></entry>
+
+              <entry><literal>&lt;list&gt;<subscript>1</subscript></literal>
+              SUBSET <literal>&lt;list&gt;<subscript>2</subscript></literal>
+              (subset on multi-set)</entry>
+            </row>
+
+            <row>
+              <entry><literal>diff(&lt;list&gt;<subscript>1</subscript>,&lt;list&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;list&gt;</literal></entry>
+
+              <entry><literal>&lt;list&gt;<subscript>1</subscript></literal>
+              DIFF <literal>&lt;list&gt;<subscript>2</subscript></literal>
+              (difference on multi-set)</entry>
+            </row>
+
+            <row>
+              <entry><literal>inter(&lt;list&gt;<subscript>1</subscript>,&lt;list&gt;<subscript>2</subscript>)</literal></entry>
+
+              <entry><literal>&lt;list&gt;</literal></entry>
+
+              <entry><literal>&lt;list&gt;<subscript>1</subscript></literal>
+              INTER <literal>&lt;list&gt;<subscript>2</subscript></literal>
+              (intersection on multi-set)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Functions on terms</title>
+
+      <para><table>
+          <title>Functions on lterms</title>
+
+          <tgroup cols="3">
+            <colspec align="left" colwidth="3*" />
+
+            <colspec align="left" colwidth="1*" />
+
+            <colspec align="left" colwidth="2*" />
+
+            <thead>
+              <row>
+                <entry align="center">Function </entry>
+
+                <entry align="center">Result type </entry>
+
+                <entry align="center">Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>is-bool(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is of type
+                <literal>bool</literal> then <literal>true</literal>;
+                otherwise <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-int(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is of type
+                <literal>int</literal> then <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-real(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is of type
+                <literal>real</literal> then <literal>true</literal>;
+                otherwise <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-str(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is of type
+                <literal>str</literal> then <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-bstr(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is of type
+                <literal>bstr</literal> then <literal>true</literal>;
+                otherwise <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-appl(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is an application
+                then <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-list(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a list then
+                <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-empty(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> isequal to
+                <literal>[] </literal> then <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-var(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a variable then
+                <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-var(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a variable then
+                <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-result-var(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a result variable
+                then <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>is-formal(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;bool&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a formal variable
+                then <literal>true</literal>; otherwise
+                <literal>false</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>fun(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;str&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a function
+                application then its function symbol; otherwise
+                <literal>""</literal>.</entry>
+              </row>
+
+              <row>
+                <entry><literal>args(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;list&gt;</literal></entry>
+
+                <entry>If<literal> &lt;term&gt;</literal> is a function
+                application then its argument; otherwise
+                <literal>[]</literal>.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+    </section>
+
+    <section>
+      <title>Time-related functions</title>
+
+      <para><table>
+          <title>Time-related functions</title>
+
+          <tgroup cols="3">
+            <colspec align="left" colwidth="3*" />
+
+            <colspec align="left" colwidth="1*" />
+
+            <colspec align="left" colwidth="2*" />
+
+            <thead>
+              <row>
+                <entry align="center">Function </entry>
+
+                <entry align="center">Result type </entry>
+
+                <entry align="center">Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>current-time</literal></entry>
+
+                <entry><literal>&lt;list&gt;</literal></entry>
+
+                <entry>Six-tuple describing the urrent absolute time</entry>
+              </row>
+
+              <row>
+                <entry><literal>sec(&lt;int&gt;)</literal></entry>
+
+                <entry><literal>&lt;int&gt;</literal></entry>
+
+                <entry>Convert &lt;int&gt; into seconds</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+    </section>
+
+    <section>
+      <title>Miscellaneous functions</title>
+
+      <para><table>
+          <title>Miscellaneous functions</title>
+
+          <tgroup cols="3">
+            <colspec align="left" colwidth="3*" />
+
+            <colspec align="left" colwidth="1*" />
+
+            <colspec align="left" colwidth="2*" />
+
+            <thead>
+              <row>
+                <entry align="center">Function </entry>
+
+                <entry align="center">Result type </entry>
+
+                <entry align="center">Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>process-id</literal></entry>
+
+                <entry><literal>&lt;int&gt;</literal></entry>
+
+                <entry>Process id of the current process</entry>
+              </row>
+
+              <row>
+                <entry><literal>process-name</literal></entry>
+
+                <entry><literal>&lt;str&gt;</literal></entry>
+
+                <entry>Name of the current process</entry>
+              </row>
+
+              <row>
+                <entry><literal>quote(&lt;term&gt;)</literal></entry>
+
+                <entry><literal>&lt;term&gt;</literal></entry>
+
+                <entry>Quoted (unevaluated) term; only variables are replaced
+                by their values</entry>
+              </row>
+
+              <row>
+                <entry><literal>functions</literal></entry>
+
+                <entry><literal>&lt;list&gt;</literal></entry>
+
+                <entry>List of all built-in functions</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
 
     <section>
@@ -1894,7 +2817,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               </row>
 
               <row>
-                <entry>create(Pnm(T, ...), Pid?)</entry>
+                <entry><literal>create(<replaceable>Pnm</replaceable>(<replaceable>T</replaceable>,
+                ...), <replaceable>Pid</replaceable>?)</literal></entry>
 
                 <entry>Create new process</entry>
 
@@ -2004,7 +2928,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               </row>
 
               <row>
-                <entry>rec-disconnect(<replaceable>Tid</replaceable>?)</entry>
+                <entry><literal>rec-disconnect(<replaceable>Tid</replaceable>?)</literal></entry>
 
                 <entry>Receive disconnection request from tool</entry>
 
@@ -2064,8 +2988,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               </row>
 
               <row>
-                <entry>snd-do(<replaceable>Tid</replaceable>,
-                <replaceable>T</replaceable>)</entry>
+                <entry><literal>snd-do(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</literal></entry>
 
                 <entry>Send evaluation request to tool (no return
                 value)</entry>
@@ -2074,8 +2998,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               </row>
 
               <row>
-                <entry>rec-event(<replaceable>Tid</replaceable>,
-                <replaceable>T</replaceable>, ...)</entry>
+                <entry><literal>rec-event(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>, ...)</literal></entry>
 
                 <entry>Receive event from tool</entry>
 
@@ -2083,8 +3007,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               </row>
 
               <row>
-                <entry>snd-ack-event(<replaceable>Tid</replaceable>,
-                <replaceable>T</replaceable>)</entry>
+                <entry><literal>snd-ack-event(<replaceable>Tid</replaceable>,
+                <replaceable>T</replaceable>)</literal></entry>
 
                 <entry>Acknowledge previous event from tool</entry>
 
@@ -2171,14 +3095,6 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
             </tbody>
           </tgroup>
         </table></para>
-
-      <para>In the above table we use the following conventions:</para>
     </section>
-  </section>
-
-  <section>
-    <title></title>
-
-    <para></para>
   </section>
 </chapter>
