@@ -9,9 +9,9 @@
   <title>Guide to ToolBus Programming</title>
 
   <warning>
-    <para>This document is in the state of being created and will further
-    evolve. It provides a description of the classic C-based ToolBus as well
-    as of the Java-based ToolBusNG. Eventually, it will exclusively focus on
+    <para>This document is in state of creation and will further evolve. It
+    provides a description of the classic C-based ToolBus as well as of the
+    Java-based ToolBusNG. Eventually, it will exclusively focus on
     ToolBusNG.</para>
   </warning>
 
@@ -1603,6 +1603,42 @@ export TB_VERBOSE</programlisting></para>
     <title>Writing ToolBus Tools</title>
 
     <para></para>
+
+    <section>
+      <title>Writing tools in Java</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Writing tools in C</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Writing tools in other languages</title>
+
+      <para></para>
+
+      <section>
+        <title>Tcl/TK</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Python</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Perl</title>
+
+        <para></para>
+      </section>
+    </section>
   </section>
 
   <section>
