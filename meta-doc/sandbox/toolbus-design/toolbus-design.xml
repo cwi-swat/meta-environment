@@ -19,42 +19,10 @@
     <title>Current Situation</title>
 
     <para>We have just switched to ToolBusNG as replacement for good old
-    ToolBusC who has served us so well. The ToolBusNG implementation currently
-    lacks some functionality/needs some additional work:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>No source code locations are attached to each atom (for better
-        error messages).</para>
-      </listitem>
-
-      <listitem>
-        <para>Syntax errors are very brutal.</para>
-      </listitem>
-
-      <listitem>
-        <para>The viewer lacks graphical features (but is useable). It has
-        been implemnted directkly in Java and does not follow the
-        <emphasis>monitor</emphasis> protocol of the old ToolBus.</para>
-      </listitem>
-
-      <listitem>
-        <para>The timing primitives need to reintroduced. All atoms are
-        prepared for this, but the top-level they disappeared during
-        testing.</para>
-      </listitem>
-
-      <listitem>
-        <para>Several adapters are still missing (Tcl/Tk, Python, ...).</para>
-      </listitem>
-
-      <listitem>
-        <para>Documentation not uo-to-date and not in DocBook.</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>The good news is that ToolBusNG is already, in some respects, better
-    than ToolBusC:</para>
+    ToolBusC who has served us so well. Although the ToolBusNG implementation
+    currently still needs some additional work (see <xref
+    linkend="section.toolbusNG-todo" />), the good news is that ToolBusNG is
+    already, in some respects, better than ToolBusC:</para>
 
     <itemizedlist>
       <listitem>
@@ -65,7 +33,69 @@
         <para>Better performance, both on single core and on multi-core
         machines.</para>
       </listitem>
+
+      <listitem>
+        <para>Good starting point for new ideas.</para>
+      </listitem>
     </itemizedlist>
+
+    <section xml:id="section.toolbusNG-todo">
+      <title>To Do list ToolBusNG</title>
+
+      <para>The following short-time issues have to be addressed before we
+      can, for instance, use ToolBusNG in the courses in january (with
+      priority indicated):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>[High] The parser should generate error messages with precise
+          source code locations.</para>
+        </listitem>
+
+        <listitem>
+          <para>[High] The parser should generate for each atom its source
+          code location (to be used in run-time errors and in the ToolBus
+          Viewer).</para>
+        </listitem>
+
+        <listitem>
+          <para>[High] The standard demos (calculator, wave, auction) require
+          work:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>All demo's require a working Tcl/Tk adapter.</para>
+            </listitem>
+
+            <listitem>
+              <para>The auction demo requires the timing primitives to work.
+              (They are mostly implemented, but they should be used in the
+              top-level loop.)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>[High] Documentation not yet up-to-date and only partially in
+          DocBook. In particular, there is currently a confusing interaction
+          with the ATerm documentation that should be resolved.</para>
+        </listitem>
+
+        <listitem>
+          <para>[Medium] Handling of ack-event not very elegant.</para>
+        </listitem>
+
+        <listitem>
+          <para>[Medium] The viewer lacks graphical features (but is
+          useable).</para>
+        </listitem>
+
+        <listitem>
+          <para>[Low] Several other adapters have to be converted (Python,
+          Perl, ...)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 
   <section>
