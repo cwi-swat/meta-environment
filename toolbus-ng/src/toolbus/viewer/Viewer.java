@@ -93,8 +93,8 @@ public class Viewer implements IViewer{
 		processesPanel.setLayout(new BorderLayout());
 		processesTableHeader = new String[]{"Break", "Process name", "Identifier"};
 		processesTableModel = new DefaultTableModel(new Object[0][0], processesTableHeader){
-			public Object getValueAt(int row, int column){
-				return super.getValueAt(row, column);
+			public boolean isCellEditable(int row, int column){
+				return (column == 0); // Only the checkbox is editable.
 			}
 			public void setValueAt(Object aValue, int row, int column){
 				super.setValueAt(aValue, row, column);
@@ -144,11 +144,8 @@ public class Viewer implements IViewer{
 		JPanel subscriptionsPanel = new JPanel();
 		subscriptionsPanel.setLayout(new BorderLayout());
 		subscriptionsTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Subscriptions"}){
-			public Object getValueAt(int row, int column){
-				return super.getValueAt(row, column);
-			}
-			public void setValueAt(Object aValue, int row, int column){
-				super.setValueAt(aValue, row, column);
+			public boolean isCellEditable(int row, int column){
+				return false;
 			}
 		};
 		JTable subscriptionsTable = new JTable(subscriptionsTableModel);
@@ -160,11 +157,8 @@ public class Viewer implements IViewer{
 		statePanel.setLayout(new BorderLayout());
 		stateTableHeader = new String[]{"State"};
 		stateTableModel = new DefaultTableModel(new Object[0][0], stateTableHeader){
-			public Object getValueAt(int row, int column){
-				return super.getValueAt(row, column);
-			}
-			public void setValueAt(Object aValue, int row, int column){
-				super.setValueAt(aValue, row, column);
+			public boolean isCellEditable(int row, int column){
+				return false;
 			}
 		};
 		stateTable = new JTable(stateTableModel);
@@ -178,11 +172,8 @@ public class Viewer implements IViewer{
 		JPanel noteQueuePanel = new JPanel();
 		noteQueuePanel.setLayout(new BorderLayout());
 		noteQueueTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Note Queue"}){
-			public Object getValueAt(int row, int column){
-				return super.getValueAt(row, column);
-			}
-			public void setValueAt(Object aValue, int row, int column){
-				super.setValueAt(aValue, row, column);
+			public boolean isCellEditable(int row, int column){
+				return false;
 			}
 		};
 		JTable noteQueueTable = new JTable(noteQueueTableModel);
@@ -193,11 +184,8 @@ public class Viewer implements IViewer{
 		JPanel variablesPanel = new JPanel();
 		variablesPanel.setLayout(new BorderLayout());
 		variablesTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Variable", "Value"}){
-			public Object getValueAt(int row, int column){
-				return super.getValueAt(row, column);
-			}
-			public void setValueAt(Object aValue, int row, int column){
-				super.setValueAt(aValue, row, column);
+			public boolean isCellEditable(int row, int column){
+				return false;
 			}
 		};
 		JTable variablesTable = new JTable(variablesTableModel);
