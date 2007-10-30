@@ -4,6 +4,7 @@ import java.net.InetAddress;
 
 import toolbus.IOperations;
 import aterm.ATerm;
+import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 /**
@@ -119,6 +120,14 @@ public abstract class AbstractTool implements IOperations{
 	public void terminate(){
 		toolBridge.terminate();
 	}
+	
+	/**
+	 * Receives an acknowledgement message.
+	 * 
+	 * @param aTerm
+	 *            The term containing information about the acknowledgement.
+	 */
+	public abstract void receiveAckEvent(ATerm aTerm);
 
 	/**
 	 * Receives a termination message.

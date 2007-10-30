@@ -436,7 +436,8 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 				send(VALUE, result);
 				break;
 			case ACKEVENT:
-				ATerm event = ((ATermList) aTerm).getFirst();
+				ATermList ackEvent = ((ATermList) aTerm);
+				ATerm event = ackEvent.getFirst();
 				
 				AFun sourceFun = ((ATermAppl) event).getAFun();
 				
@@ -445,6 +446,9 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 					eventQueue = queues.get(sourceFun);
 				}
 				eventQueue.ackEvent();
+				
+				ATerm callBackInfo = ackEvent.elementAt(1);
+				tool.receiveAckEvent(callBackInfo);
 				break;
 			case TERMINATE:
 				tool.receiveTerminate(aTerm);

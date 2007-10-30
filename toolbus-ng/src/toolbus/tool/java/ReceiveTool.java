@@ -54,6 +54,10 @@ public class ReceiveTool extends AbstractTool{
 		textPane.setText(message.toString());
 	}
 	
+	public void receiveAckEvent(ATerm aTerm){
+		// Left blank intentionally.
+	}
+	
 	public void receiveTerminate(ATerm msg){
 		frame.dispose();
 	}

@@ -93,6 +93,10 @@ public class SendTool extends AbstractTool{
 		return factory.makeAppl(factory.makeAFun("getText", 1, false), factory.makeAppl(factory.makeAFun(textPane.getText(), 0, false)));
 	}
 	
+	public void receiveAckEvent(ATerm aTerm){
+		// Left blank intentionally.
+	}
+	
 	public void receiveTerminate(ATerm msg){
 		frame.dispose();
 	}
