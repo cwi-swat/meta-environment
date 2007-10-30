@@ -8,6 +8,7 @@ import toolbus.adapter.ToolBridge;
 
 public class WishAdapter extends AbstractTool{
 	private ToolBridge toolBridge = null;
+	private String scriptName = null;
 	
 	public WishAdapter(){
 		super();
@@ -34,13 +35,25 @@ public class WishAdapter extends AbstractTool{
 				host = InetAddress.getByName(args[++i]);
 			}else if(arg.equals("-TB_PORT")){
 				port = Integer.parseInt(args[++i]);
+			}else if(arg.equals("-script")){
+				scriptName = args[++i];
 			}
 		}
 
 		if(type == null || toolName == null) throw new RuntimeException("Missing tool identification.");
+		if(scriptName == null) throw new RuntimeException("No script name supplied.");
 
 		toolBridge = new WishAdapterBridge(type, this, toolName, toolID, host, port);
 		toolBridge.run();
+	}
+	
+	public void receiveDo(ATerm aTerm){
+		// TODO Implement.
+	}
+	
+	public ATerm receiveEval(ATerm aTerm){
+		// TODO Implement.
+		return null; // Temp
 	}
 	
 	public void receiveTerminate(ATerm aTerm){
