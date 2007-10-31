@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.InetAddress;
 
 import toolbus.adapter.AbstractTool;
@@ -19,14 +20,23 @@ public class WishAdapter extends AbstractTool{
 	private ToolBridge toolBridge = null;
 	private String scriptName = null;
 	private Process process = null;
+	private OutputStream wishInputStream = null;
 	private OutputStreamHandler outputStreamHandler = null;
 	private ErrorStreamHandler errorStreamHandler = null;
+	
+	private final byte[] spaceBytes;
+	private final byte[] startCallBytes;
+	private final byte[] endCallBytes;
 	
 	private final Object valueLock = new Object();
 	private ATerm value = null;
 	
 	public WishAdapter(){
 		super();
+		
+		spaceBytes = " ".getBytes();
+		startCallBytes = "if [catch {".getBytes();
+		endCallBytes = "} msg] {TBerror $msg}\n".getBytes();
 	}
 	
 	public void connect(String[] args) throws Exception{
@@ -78,6 +88,7 @@ public class WishAdapter extends AbstractTool{
 		
 		process = pb.start();
 		
+		wishInputStream = process.getOutputStream();
 		outputStreamHandler = new OutputStreamHandler(process.getInputStream());
 		errorStreamHandler = new ErrorStreamHandler(process.getErrorStream());
 	}
@@ -110,8 +121,27 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public ATerm receiveEval(ATerm aTerm){
-		// TODO Implement sending the Eval.
+		ATermAppl evalTerm = (ATermAppl) aTerm;
+		AFun fun = evalTerm.getAFun();
+		String functionName = fun.getName();
+		ATerm[] arguments = evalTerm.getArgumentArray();
+		int nrOfArguments = arguments.length;
 		
+		try{
+			wishInputStream.write(startCallBytes);
+			wishInputStream.write(functionName.getBytes());
+			wishInputStream.write(spaceBytes);
+			int i = 0;
+			while(i++ < nrOfArguments){
+				wishInputStream.write(arguments[i].toString().getBytes());
+				wishInputStream.write(spaceBytes);
+			}
+			wishInputStream.write(endCallBytes);
+		}catch(IOException ioex){
+			ioex.printStackTrace();
+			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
+			System.exit(0); // Kill yourself.
+		}
 		
 		// Receive the value.
 		synchronized(valueLock){
@@ -125,7 +155,7 @@ public class WishAdapter extends AbstractTool{
 		}
 		
 		ATerm result = value;
-		value = null;
+		value = null; // Reset the value field.
 		
 		return result;
 	}
