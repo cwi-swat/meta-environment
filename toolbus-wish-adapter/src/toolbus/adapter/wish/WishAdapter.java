@@ -8,7 +8,10 @@ import java.net.InetAddress;
 
 import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
+import aterm.AFun;
 import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.pure.PureFactory;
 
 public class WishAdapter extends AbstractTool{
 	private final static String WISH_COMMAND = "wish";
@@ -144,11 +147,25 @@ public class WishAdapter extends AbstractTool{
 		
 		public void run(){
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+			PureFactory factory = getFactory();
 			
 			String line = null;
 			try{
 				while((line = reader.readLine()) != null){
-					System.out.println(line); // TODO do something usefull with this.
+					ATermAppl term = (ATermAppl) factory.parse(line);
+					AFun fun = term.getAFun();
+					String operation = fun.getName();
+					
+					// The operation has already been interned, so match pointers instead of using equals.
+					if(operation == "snd-event"){
+						ATerm sndEventTerm = term.getArgument(0);
+						sendEvent(sndEventTerm);
+					}else if(operation == "rec-value"){
+						ATerm recValueTerm = term.getArgument(0);
+						valueReady(recValueTerm);
+					}else if(operation == "snd-disconnect"){
+						disconnect(factory.makeList());
+					}
 				}
 			}catch(IOException ioex){
 				ioex.printStackTrace();
