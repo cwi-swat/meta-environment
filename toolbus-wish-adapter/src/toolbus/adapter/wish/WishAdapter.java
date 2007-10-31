@@ -117,7 +117,27 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveDo(ATerm aTerm){
-		// TODO Implement.
+		ATermAppl evalTerm = (ATermAppl) aTerm;
+		AFun fun = evalTerm.getAFun();
+		String functionName = fun.getName();
+		ATerm[] arguments = evalTerm.getArgumentArray();
+		int nrOfArguments = arguments.length;
+		
+		try{
+			wishInputStream.write(startCallBytes);
+			wishInputStream.write(functionName.getBytes());
+			wishInputStream.write(spaceBytes);
+			int i = 0;
+			while(i++ < nrOfArguments){
+				wishInputStream.write(arguments[i].toString().getBytes());
+				wishInputStream.write(spaceBytes);
+			}
+			wishInputStream.write(endCallBytes);
+		}catch(IOException ioex){
+			ioex.printStackTrace();
+			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
+			System.exit(0); // Kill yourself.
+		}
 	}
 	
 	public ATerm receiveEval(ATerm aTerm){
