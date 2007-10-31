@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.util.logging.StreamHandler;
 
 import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
@@ -19,6 +18,9 @@ public class WishAdapter extends AbstractTool{
 	private Process process = null;
 	private OutputStreamHandler outputStreamHandler = null;
 	private ErrorStreamHandler errorStreamHandler = null;
+	
+	private final Object valueLock = new Object();
+	private ATerm value = null;
 	
 	public WishAdapter(){
 		super();
@@ -74,7 +76,6 @@ public class WishAdapter extends AbstractTool{
 		process = pb.start();
 		
 		outputStreamHandler = new OutputStreamHandler(process.getInputStream());
-		
 		errorStreamHandler = new ErrorStreamHandler(process.getErrorStream());
 	}
 	
@@ -94,13 +95,36 @@ public class WishAdapter extends AbstractTool{
 		process.destroy();
 	}
 	
+	protected void valueReady(ATerm value){
+		this.value = value;
+		synchronized(valueLock){
+			valueLock.notify();
+		}
+	}
+	
 	public void receiveDo(ATerm aTerm){
 		// TODO Implement.
 	}
 	
 	public ATerm receiveEval(ATerm aTerm){
-		// TODO Implement.
-		return null; // Temp
+		// TODO Implement sending the Eval.
+		
+		
+		// Receive the value.
+		synchronized(valueLock){
+			while(value == null){
+				try{
+					valueLock.wait();
+				}catch(InterruptedException irex){
+					// Ignore this exception.
+				}
+			}
+		}
+		
+		ATerm result = value;
+		value = null;
+		
+		return result;
 	}
 	
 	public void receiveTerminate(ATerm aTerm){
