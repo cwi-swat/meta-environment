@@ -27,6 +27,10 @@ public class WishAdapter extends AbstractTool{
 	private final byte[] spaceBytes;
 	private final byte[] startCallBytes;
 	private final byte[] endCallBytes;
+	private final byte[] startAckEventBytes;
+	private final byte[] endAckEventBytes;
+	private final byte[] startTerminateBytes;
+	private final byte[] endTerminateBytes;
 	
 	private final Object valueLock = new Object();
 	private ATerm value = null;
@@ -37,6 +41,10 @@ public class WishAdapter extends AbstractTool{
 		spaceBytes = " ".getBytes();
 		startCallBytes = "if [catch {".getBytes();
 		endCallBytes = "} msg] {TBerror $msg}\n".getBytes();
+		startAckEventBytes = "rec-ack-event {".getBytes();
+		endAckEventBytes = "}".getBytes();
+		startTerminateBytes = "rec-terminate {".getBytes();
+		endTerminateBytes = "}".getBytes();
 	}
 	
 	public void connect(String[] args) throws Exception{
@@ -181,11 +189,49 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveTerminate(ATerm aTerm){
-		// TODO Implement.
+		ATermAppl evalTerm = (ATermAppl) aTerm;
+		ATerm[] arguments = evalTerm.getArgumentArray();
+		int nrOfArguments = arguments.length;
+		
+		try{
+			wishInputStream.write(startCallBytes);
+			wishInputStream.write(startTerminateBytes);
+			wishInputStream.write(spaceBytes);
+			int i = 0;
+			while(i++ < nrOfArguments){
+				wishInputStream.write(arguments[i].toString().getBytes());
+				wishInputStream.write(spaceBytes);
+			}
+			wishInputStream.write(endTerminateBytes);
+			wishInputStream.write(endCallBytes);
+		}catch(IOException ioex){
+			ioex.printStackTrace();
+			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
+			System.exit(0); // Kill yourself.
+		}
 	}
 	
 	public void receiveAckEvent(ATerm aTerm){
-		// TODO Implement.
+		ATermAppl evalTerm = (ATermAppl) aTerm;
+		ATerm[] arguments = evalTerm.getArgumentArray();
+		int nrOfArguments = arguments.length;
+		
+		try{
+			wishInputStream.write(startCallBytes);
+			wishInputStream.write(startAckEventBytes);
+			wishInputStream.write(spaceBytes);
+			int i = 0;
+			while(i++ < nrOfArguments){
+				wishInputStream.write(arguments[i].toString().getBytes());
+				wishInputStream.write(spaceBytes);
+			}
+			wishInputStream.write(endAckEventBytes);
+			wishInputStream.write(endCallBytes);
+		}catch(IOException ioex){
+			ioex.printStackTrace();
+			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
+			System.exit(0); // Kill yourself.
+		}
 	}
 	
 	private class OutputStreamHandler implements Runnable{
