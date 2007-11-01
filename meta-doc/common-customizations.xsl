@@ -24,7 +24,7 @@
 <xsl:param name="olink.doctitle"             select="'yes'" />
 
 <!-- bibliography -->
-<xsl:param name="bibliography.collection"    select="'/home/paulk/research/meta-doc/trunk/bibliography.xml'"/>
+<xsl:param name="bibliography.collection"    select="'/ufs/paulk/research/meta-doc/trunk/bibliography.xml'"/>
 
 <!-- Adapt style of page number references in xrefs -->
 
