@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
@@ -18,7 +20,12 @@ public class WishAdapter extends AbstractTool{
 	private final static String WISH_COMMAND = "wish";
 	
 	private ToolBridge toolBridge = null;
+	
 	private String scriptName = null;
+	private String tbtcl = null;
+	private String libdir = null;
+	private final List<String> arguments;
+	
 	private Process process = null;
 	private OutputStream wishInputStream = null;
 	private OutputStreamHandler outputStreamHandler = null;
@@ -38,6 +45,8 @@ public class WishAdapter extends AbstractTool{
 	public WishAdapter(){
 		super();
 		
+		arguments = new ArrayList<String>();
+		
 		spaceBytes = " ".getBytes();
 		startCallBytes = "if [catch {".getBytes();
 		endCallBytes = "} msg] {TBerror $msg}\n".getBytes();
@@ -55,7 +64,9 @@ public class WishAdapter extends AbstractTool{
 
 		InetAddress host = null;
 		int port = -1;
-
+		
+		arguments.clear(); // Insurance, this isn't strictly needed.
+		
 		for(int i = 0; i < args.length; i++){
 			String arg = args[i];
 			if(arg.equals("-TYPE")){
@@ -70,11 +81,18 @@ public class WishAdapter extends AbstractTool{
 				port = Integer.parseInt(args[++i]);
 			}else if(arg.equals("-script")){
 				scriptName = args[++i];
+			}else if(arg.equals("-tbtcl")){
+				tbtcl = args[++i];
+			}else if(arg.equals("-libdir")){
+				libdir = args[++i];
+			}else{
+				arguments.add(args[i]);
 			}
 		}
 
 		if(type == null || toolName == null) throw new RuntimeException("Missing tool identification.");
 		if(scriptName == null) throw new RuntimeException("No script name supplied.");
+		if(tbtcl == null || libdir == null) throw new RuntimeException("No library paths supplied.");
 		
 		executeScript();
 
@@ -89,7 +107,7 @@ public class WishAdapter extends AbstractTool{
 		sb.append(WISH_COMMAND);
 		sb.append(' ');
 		sb.append("-name ");
-		sb.append(scriptName);
+		sb.append(getToolBridge().getToolName());
 		String command = sb.toString();
 		
 		ProcessBuilder pb = new ProcessBuilder(command);
@@ -99,6 +117,35 @@ public class WishAdapter extends AbstractTool{
 		wishInputStream = process.getOutputStream();
 		outputStreamHandler = new OutputStreamHandler(process.getInputStream());
 		errorStreamHandler = new ErrorStreamHandler(process.getErrorStream());
+		
+		initWish();
+	}
+	
+	private void initWish() throws IOException{
+		wishInputStream.write("source ".getBytes());
+		wishInputStream.write(tbtcl.getBytes());
+		wishInputStream.write("\n".getBytes());
+		
+		wishInputStream.write("set argv {".getBytes());
+		int nrOfArguments = arguments.size();
+		int i = 0;
+		while(i++ < nrOfArguments){
+			wishInputStream.write(arguments.get(i).getBytes());
+			wishInputStream.write(spaceBytes);
+		}
+		wishInputStream.write("}\n".getBytes());
+		
+		wishInputStream.write("set argc ".getBytes());
+		wishInputStream.write((""+nrOfArguments).getBytes());
+		wishInputStream.write("\n".getBytes());
+		
+		wishInputStream.write("set TB_LIBDIR ".getBytes());
+		wishInputStream.write(libdir.getBytes());
+		wishInputStream.write("\n".getBytes());
+		
+		wishInputStream.write("source ".getBytes());
+		wishInputStream.write(scriptName.getBytes());
+		wishInputStream.write("\n".getBytes());
 	}
 	
 	private void startHandlingIO(){
@@ -113,12 +160,8 @@ public class WishAdapter extends AbstractTool{
 		errorStreamHandlerThread.start();
 	}
 	
-	private void killProcess(){
-		process.destroy();
-	}
-	
-	protected void valueReady(ATerm value){
-		this.value = value;
+	protected void valueReady(ATerm v){
+		value = v;
 		synchronized(valueLock){
 			valueLock.notify();
 		}
