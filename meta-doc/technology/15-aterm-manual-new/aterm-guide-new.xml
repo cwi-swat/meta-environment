@@ -878,78 +878,194 @@ int main(int argc, char *argv[])
         </listitem>
       </itemizedlist>
     </section>
+
+    <section>
+      <title>A note on `blobs' and BAF</title>
+
+      <para> Although the word <emphasis>binary</emphasis> is used in the
+      abbreviations of both ``blob'' and BAF, these are two very different
+      notions. A <emphasis>blob</emphasis> represents an ATerm that holds
+      binary data, with no specific meaning to the Aterm library. This notion
+      can be used as a means of escape in case you find that you need a type
+      of ATerm that is not on the list above. The notion of BAF is explained
+      in Section~\ref{baf} and refers to a specific format used for reading
+      and writing ATerms. Thus an ATerm of type <literal>AT_BLOB</literal> can
+      be saved in BAF. It could also be written in its textual representation,
+      although this does not guarantee that the blob will be readable, after
+      all it represents binary data.</para>
+    </section>
+
+    <section>
+      <title>Level One Functionality</title>
+
+      <para>In this section, all functions are summarized. To obtain access to
+      the level one interface, your application should contain
+      <literal>#include &lt;aterm1.h&gt;</literal>.</para>
+
+      <section xml:id="section.ATmake">
+        <title>ATmake</title>
+
+        <para><programlisting>ATerm ATmake(const char *pattern, ...)</programlisting></para>
+
+        <para>Create an ATerm from a string pattern and a variable number of
+        arguments. Creates an ATerm given a pattern and corresponding values.
+        <xref linkend="table.atmake" /> shows which patterns can be used, and
+        which type of arguments should be passed if such a pattern is
+        used.</para>
+
+        <table xml:id="table.atmake">
+          <title>Argument types for ATmake</title>
+
+          <tgroup cols="3">
+            <colspec align="left" />
+
+            <thead>
+              <row>
+                <entry align="center">Type </entry>
+
+                <entry align="center">Pattern</entry>
+
+                <entry align="center">Argument</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>Integer</entry>
+
+                <entry><literal>&lt;int&gt;</literal></entry>
+
+                <entry><literal>int value</literal></entry>
+              </row>
+
+              <row>
+                <entry>Real</entry>
+
+                <entry><literal>&lt;real&gt;</literal></entry>
+
+                <entry><literal>double value</literal></entry>
+              </row>
+
+              <row>
+                <entry>Application</entry>
+
+                <entry><literal>&lt;appl&gt;</literal></entry>
+
+                <entry><literal>char *pattern</literal>, arguments</entry>
+              </row>
+
+              <row>
+                <entry>String</entry>
+
+                <entry><literal>&lt;str&gt;</literal></entry>
+
+                <entry><literal>char *pattern</literal>, arguments </entry>
+              </row>
+
+              <row>
+                <entry>List</entry>
+
+                <entry><literal>&lt;list&gt;</literal></entry>
+
+                <entry><literal>ATerm value</literal></entry>
+              </row>
+
+              <row>
+                <entry>Term</entry>
+
+                <entry><literal>&lt;term&gt;</literal></entry>
+
+                <entry><literal>ATerm value</literal></entry>
+              </row>
+
+              <row>
+                <entry>Blob</entry>
+
+                <entry><literal>&lt;blob&gt;</literal></entry>
+
+                <entry><literal>int length, void *data</literal></entry>
+              </row>
+
+              <row>
+                <entry>Placeholder</entry>
+
+                <entry><literal>&lt;placeholder&gt;</literal></entry>
+
+                <entry><literal>char *type value</literal></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Types <literal>&lt;appl&gt;</literal> and
+        <literal>&lt;str&gt;</literal> should contain a pattern consisting of
+        the function symbol to be used and the types of the arguments. This
+        pattern must be followed by exactly the number of arguments that are
+        used in the pattern. The types of the arguments must match the
+        respective types used in the pattern. Both
+        <literal>&lt;appl&gt;</literal> and <literal>&lt;str&gt;</literal>
+        create function applications. The difference is that
+        <literal>&lt;appl&gt;</literal> creates one with an
+        <emphasis>unquoted</emphasis> function symbol, whereas
+        <literal>&lt;str&gt;</literal> yields a <emphasis>quoted</emphasis>
+        version. Here are some examples of ATmake:</para>
+
+        <para><programlisting>#include &lt;aterm2.h&gt;
+
+int    ival = 42;
+char  *sval = "example";
+char  *blob = "12345678";
+double rval = 3.14;
+char  *func = "f";
+
+void foo()
+{
+    ATerm term[4];
+    ATerm list[3];
+    ATerm appl[3];
+
+    term[0] = ATmake("&lt;int&gt;" , ival);       /* integer value: 42                */
+    term[1] = ATmake("&lt;str&gt;" , func);       /* quoted application: "f", no args */
+    term[2] = ATmake("&lt;real&gt;", rval);       /* real value: 3.14                 */
+    term[3] = ATmake("&lt;blob&gt;", 8, blob);    /* blob of size 8, data: 12345678   */
+
+    list[0] = ATmake("[]");
+    list[1] = ATmake("[1,&lt;int&gt;,&lt;real&gt;]", ival, rval);
+    list[2] = ATmake("[&lt;int&gt;,&lt;list&gt;]", ival+1, list[1]);
+
+    appl[0] = ATmake("&lt;appl&gt;", func);
+    appl[1] = ATmake("&lt;appl(&lt;int&gt;)&gt;", func, ival);
+    appl[2] = ATmake("&lt;appl(&lt;int&gt;, &lt;term&gt;, &lt;list&gt;)&gt;", func, 42, term[3], list[2]);
+
+    ATprintf("appl[2] = %t\n", appl[2]);
+}
+
+int main(int argc, char *argv[])
+{
+    ATerm bottomOfStack;
+
+    ATinit(argc, argv, &amp;bottomOfStack);
+    foo();
+    return 0;
+}
+</programlisting></para>
+      </section>
+
+      <section>
+        <title>ATvmake</title>
+
+        <para><programlisting>ATerm ATvmake(const char *pattern, va_list args)</programlisting>Create
+        an ATerm from a string pattern and a list of arguments} See <xref
+        linkend="section.ATmake" />.</para>
+      </section>
+    </section>
   </section>
 
   <section>
     <title></title>
 
     <para><!--
-====================[ LEVEL ONE INTERFACE ]====================
 
-
-\subsection{A note on `blobs' and {\sc baf}}\label{blob-vs-baf}
-Please note that although the word \emph{binary} is used in the
-abbreviations of both ``blob'' and {\sc baf}, these are two very different
-notions.  A \emph{blob} represents an ATerm that holds binary data, with
-no specific meaning to the \ATlib. This notion can be used as a means of
-escape in case you find that you need a type of ATerm that is not on the
-list above.  The notion of {\sc baf} is explained in Section~\ref{baf} and
-refers to a specific format used for reading and writing \aterms.  Thus an
-ATerm of type {\tt AT\_BLOB} can be saved in {\sc baf}. It could also be
-written in its textual representation, although this does not guarantee
-that the blob will be readable, after all it represents binary data.
-
-\subsection{Level One Functionality}\label{func1}
-In this section, all functions and macros ({\tt \#define}'s in {\tt C}) are
-listed. Although all macros could have been implemented as a function as
-well, the macros listed here were chosen to be macros instead of functions
-for efficiency reasons. To obtain access to the level one interface, your
-application should {\tt \#include <aterm1.h>}.
-
-\Function{ATmake}{\ATerm}{const char *pattern, ...}
-{Create an ATerm from a string pattern and a variable number of arguments}
-\Describe{
-	Creates an ATerm given a pattern and corresponding values.
-	The following table shows which patterns can be used, and which type
-	of arguments should be passed if such a pattern is used.
-
-	\smallskip
-	\begin{small}
-	\begin{tabular}{|l|l|l|}
-	\hline
-	Type & Pattern & Argument \\
-	\hline
-	Application & {\tt <appl>}        & {\tt char *pattern}, arguments \\
-	Blob        & {\tt <blob>}        & {\tt int length}, {\tt void *data}\\
-	Integer     & {\tt <int>}         & {\tt int value}\\
-	List        & {\tt <list>}        & {\tt ATerm} \\
-	Placeholder & {\tt <placeholder>} & {\tt char *type} \\
-	Real        & {\tt <real>}        & {\tt double value}\\
-	String      & {\tt <str>}         & {\tt char *pattern}, arguments \\
-	Term        & {\tt <term>}        & {\tt ATerm} \\
-	\hline
-	\end{tabular}
-	\end{small}
-
-	\medskip\noindent
-	Types {\tt <appl>} and {\tt <str>} should contain a pattern consisting
-	of the function symbol to be used and the types of the arguments.  This
-	pattern must be followed by exactly the number of arguments that are
-	used in the pattern. The types of the arguments must match the
-	respective types used in the pattern. Both {\tt <appl>} and {\tt <str>}
-	create function applications. The difference is that {\tt <appl>}
-	creates one with an \emph{unquoted} function symbol, whereas {\tt
-	<str>} yields a \emph{quoted} version.
-
-	\smallskip\noindent
-	Here are some examples of {\tt ATmake}:
-
-	\example{make.c}
-}
-
-\Function{ATvmake}{\ATerm}{const char *pattern, va\_list args}
-{Create an ATerm from a string pattern and a list of arguments}
-\Describe{See {\tt ATmake}.}
 
 \Function{ATmakeTerm}{\ATerm}{ATerm pat, ...}
 {Create an ATerm from an ATerm pattern and a variable number of
