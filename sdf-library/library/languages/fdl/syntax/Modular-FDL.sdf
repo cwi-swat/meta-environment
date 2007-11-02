@@ -8,7 +8,7 @@ context-free start-symbols
   Definitions
 
 exports
-sorts FeatureModule ConfigurationTask ImportSection Definitions Definition
+sorts FeatureModule ImportSection Definitions Definition
       ModuleKeyword ImportsKeyword Modulename Binding
 
 context-free syntax
