@@ -2101,13 +2101,14 @@ int main(int argc, char *argv[])
           <replaceable>l</replaceable>. As such, the complexity of
           <literal>ATappend</literal> is linear in the number of elements in
           <replaceable>l</replaceable>. When <literal>ATappend</literal> is
-          needed inside a loop that traverses a list (see {\tt parse\_list1}
-          below), behaviour of the loop will demonstrate quadratic complexity.
-          </para>
+          needed inside a loop that traverses a list (see <xref
+          linkend="example.parse-list1" />), behaviour of the loop will
+          demonstrate quadratic complexity. </para>
 
-          <para>\example{app1.c}</para>
+          <para><example xml:id="example.parse-list1">
+              <title>Parse lists, version 1</title>
 
-          <para><programlisting>/* Example of parse_list that demonstrates quadratic complexity */
+              <para><programlisting>/* Example of parse_list that demonstrates quadratic complexity */
 ATermList parse_list1(ATermList list)
 {
     ATerm     elem;
@@ -2131,6 +2132,7 @@ ATermList parse_list1(ATermList list)
     return result;
 }
 </programlisting></para>
+            </example></para>
 
           <para>To avoid this behaviour, the inner loop could use
           <literal>ATinsert</literal> instead of <literal>ATappend</literal>
@@ -2141,12 +2143,12 @@ ATermList parse_list1(ATermList list)
           at the cost of two <literal>ATinsert</literal>s per element (one for
           each <literal>ATinsert</literal> in the loop, and an implicit one
           for each element through the use of <literal>ATreverse</literal>).
-          An example is shown here in the implementation of {\tt
-          parse\_list2}. </para>
+          An example in <xref linkend="example.parse-list2" />.</para>
 
-          <para>\example{app2.c}</para>
+          <para><example xml:id="example.parse-list2">
+              <title>Parse lists, version 2</title>
 
-          <para><programlisting>/* Example of parse_list that demonstrates linear complexity,
+              <para><programlisting>/* Example of parse_list that demonstrates linear complexity,
  * using ATinsert instead of ATappend and reversing the list
  * outside the loop just once.  */
 ATermList parse_list2(ATermList list)
@@ -2172,6 +2174,7 @@ ATermList parse_list2(ATermList list)
     return ATreverse(result);
 }
 </programlisting></para>
+            </example></para>
 
           <para>An even further optimisation could make use of a locally
           allocated buffer. While traversing the list, all elements that would
@@ -2181,12 +2184,12 @@ ATermList parse_list2(ATermList list)
           buffer in reverse order. As the cost of allocating and freeing a
           local buffer is by no means marginal, this solution should probably
           only be applied when the loop appends more than just a few elements.
-          The following example shows such an implementation in {\tt
-          parse\_list3}.</para>
+          This is shown in <xref linkend="example.parse-list3" /></para>
 
-          <para> \example{app3.c}</para>
+          <example xml:id="example.parse-list3">
+            <title>Parse lists, version 3</title>
 
-          <programlisting>/* Example of parse_list that demonstrates linear complexity,
+            <para><programlisting>/* Example of parse_list that demonstrates linear complexity,
  * but which avoids using ATinsert twice, by inlining ATreverse
  * using a local buffer. */
 ATermList parse_list3(ATermList list)
@@ -2224,7 +2227,8 @@ ATermList parse_list3(ATermList list)
 
     /* Return result */
     return result;
-}</programlisting>
+}</programlisting></para>
+          </example>
         </section>
 
         <section>
@@ -2324,67 +2328,141 @@ ATermList parse_list3(ATermList list)
           skipped.</para>
         </section>
       </section>
+
+      <section>
+        <title><literal>ATermPlaceholder</literal></title>
+
+        <para>A placeholder is a special subtype used to indicate a typed hole
+        in an ATerm. This can be used to create a term of a specific type,
+        even though its actual contents are not filled in.</para>
+
+        <section>
+          <title><literal>ATmakePlaceholder</literal></title>
+
+          <para><programlisting>ATermPlaceholder ATmakePlaceholder(ATerm <replaceable>type</replaceable>)</programlisting>Build
+          an ATerm Placeholder of a specific type. The type is taken from the
+          <replaceable>type</replaceable> parameter. See <xref
+          linkend="example.placeholders" />.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetPlaceholder</literal></title>
+
+          <para><programlisting>ATerm ATgetPlaceholder(ATermPlaceholder <replaceable>ph</replaceable>)</programlisting>Get
+          the type of an ATerm Placeholder.</para>
+
+          <example xml:id="example.placeholders">
+            <title>Examples of placeholders</title>
+
+            <para><programlisting>#include &lt;assert.h&gt;
+#include &lt;aterm2.h&gt;
+
+/* This example demonstrates the use of an ATermPlaceholder. It creates
+ * the function application "add" defined on two integers without actually
+ * using a specific integer:  add(&lt;int&gt;,&lt;int&gt;).
+ */
+void demo_placeholder()
+{
+    Symbol           sym_int, sym_add;
+    ATermAppl        app_add;
+    ATermPlaceholder ph_int;
+
+    /* Construct placeholder &lt;int&gt; using zero-arity function symbol "int" */
+    sym_int = ATmakeSymbol("int", 0, ATfalse);
+    ph_int = ATmakePlaceholder((ATerm)ATmakeAppl0(sym_int));
+
+    /* Construct add(&lt;int&gt;,&lt;int&gt;) using function symbol "add" with 2 args */
+    sym_add = ATmakeSymbol("add", 2, ATfalse);
+    app_add = ATmakeAppl2(sym_add, (ATerm)ph_int, (ATerm)ph_int);
+
+    /* Equal to constructing it using the level one interface */
+    assert(ATisEqual(app_add, ATparse("add(&lt;int&gt;,&lt;int&gt;)")));
+
+    /* Prints: Placeholder &lt;int&gt; is of type: int */
+    ATprintf("Placeholder %t is of type: %t\n", ph_int, ATgetPlaceholder(ph_int));
+}
+
+int main(int argc, char *argv[])
+{
+    ATerm bottomOfStack;
+
+    ATinit(argc, argv, &amp;bottomOfStack);
+    demo_placeholder();
+    return 0;
+}</programlisting></para>
+          </example>
+        </section>
+      </section>
+
+      <section>
+        <title><literal>ATermBlob</literal></title>
+
+        <para></para>
+
+        <section>
+          <title><literal>ATmakeBlob</literal></title>
+
+          <para><programlisting>ATermBlob ATmakeBlob(int <replaceable>size</replaceable>, void *<replaceable>data</replaceable>)</programlisting></para>
+
+          <para>Build a Binary Large OBject given
+          <replaceable>size</replaceable> (in bytes) of
+          <replaceable>data</replaceable>. This function can be used to create
+          an <literal>ATerm</literal> of type blob, holding the data pointed
+          to by <replaceable>data</replaceable>. No copy of this data area is
+          made, so the user should allocate this himself. Due to the internal
+          representation of a blob, size cannot exceed
+          2<superscript>24</superscript> in the current implementation. This
+          limits the size of the data area to 16 Mb.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetBlobData</literal></title>
+
+          <para><programlisting>void *ATgetBlobData(ATermBlob <replaceable>blob</replaceable>)</programlisting></para>
+
+          <para>Macro to get the data section of a given
+          <replaceable>blob</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetBlobSize</literal></title>
+
+          <para><programlisting>int ATgetBlobSize(ATermBlob <replaceable>blob</replaceable>)</programlisting></para>
+
+          <para>Macro to get the size (in bytes) of the data section of a
+          given <replaceable>blob</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATregisterBlobDestructor</literal></title>
+
+          <para><programlisting>void ATregisterBlobDestructor(ATbool (*<replaceable>destructor</replaceable>)(ATermBlob))</programlisting></para>
+
+          <para>Register a blob-destructor function. When a blob-destructor
+          function has been registered, it will be called whenever the garbage
+          collector deletes an ATermBlob. The destructor function can then
+          handle the deletion of the data area of the blob. At most 16 blob
+          destructor functions can be registered in the current
+          implementation.</para>
+        </section>
+
+        <section>
+          <title><literal>ATunregisterBlobDestructor</literal></title>
+
+          <para><programlisting>void ATunregisterBlobDestructor(ATbool (*<replaceable>destructor</replaceable>)(ATermBlob))</programlisting></para>
+
+          <para>Unregister a blob-destructor function that has been previously
+          registered through a call to
+          <literal>ATregisterBlobDestructor</literal>.</para>
+        </section>
+      </section>
     </section>
   </section>
 
   <section>
     <title></title>
 
-    <para><!----><!--
-
-\subsubsection{ATermPlaceholder}
-A placeholder is a special subtype used to indicate a typed hole in an
-\ATerm. This can be used to create a term of a specific type, even though
-its actual contents are not filled in.
-
-\Function{ATmakePlaceholder}{ATermPlaceholder}{ATerm type}
-{
-  Build an ATerm Placeholder of a specific type. The type is taken from
-  the {\tt type} parameter. See {\tt demo\_placeholder} below.
-}
-
-\Macro{ATgetPlaceholder}{\ATerm}{\ATerm Placeholder ph}
-{Get the type of an ATerm Placeholder}
-
-\example{plac.c}
-
-\subsubsection{ATermBlob}
-\Function{ATmakeBlob}{ATermBlob}{int size, void *data)}
-{Build a Binary Large OBject given {\tt size} (in bytes) and {\tt data}}
-\Describe{
- This function can be used to create an ATerm of type blob, holding
- the data pointed to by {\tt data}. No copy of this data area is made, so
- the user should allocate this himself.
-
- Note: due to the internal representation of a blob, size cannot exceed
- $2^{24}$ in the current implementation. This limits the size of the data
- area to 16 Mb.
-}
-
-\Macro{ATgetBlobData}{void *}{ATermBlob blob}
-{Get the data section of {\tt blob}}
-
-\Macro{ATgetBlobSize}{int}{ATermBlob blob}
-{Get the size (in bytes) of {\tt blob}}
-
-\Function{ATregisterBlobDestructor}{void}
-{ATbool (*destructor)(ATermBlob)}
-{Register a blob-destructor function}
-\Describe{
- When a blob-destructor function has been registered, it will be called
- whenever the garbage collector deletes an ATermBlob. The destructor
- function can then handle the deletion of the data area of the blob. At
- most 16 blob destructor functions can be registered in the current
- implementation.
-}
-
-\Function{ATunregisterBlobDestructor}{void}
-{ATbool (*destructor)(ATermBlob)}
-{Unregister a previously registered blob-destructor function}
-\Describe{
-	This removes a blob-destructor that has been previously installed
-	through a call to {\tt ATregisterBlobDestructor}.
-}
+    <para><!--
 
 \subsection{Dictionaries}\label{dicts}
 Dictionaries are datastructures which allow looking up a certain ATerm
