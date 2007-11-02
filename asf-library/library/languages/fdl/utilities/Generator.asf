@@ -11,7 +11,8 @@ equations
 
 [] Keys := keys(TypeEnv),
    Declaration* := generateFunctionDeclarations(Keys, TypeEnv, ValueEnv),
-   Statement* := generateFunctionStatements(FeatureModule, , ParameterEnv)
+   module Modulename ImportSection* Section*1 arguments Argument* Section*2 := FeatureModule,
+   Statement* := generateFunctionStatements(Argument*, , ParameterEnv)
    ===
    generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) = 
 
