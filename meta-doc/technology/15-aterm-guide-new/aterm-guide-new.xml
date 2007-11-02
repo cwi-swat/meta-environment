@@ -1927,183 +1927,410 @@ int main(int argc, char *argv[])
           an application given an AFun and an array of arguments.</para>
         </section>
       </section>
+
+      <section>
+        <title>ATermList</title>
+
+        <para>The type ATermList is the Aterm representation of linear
+        lists.</para>
+
+        <section>
+          <title><literal>ATmakeList</literal></title>
+
+          <para><programlisting>ATermList ATmakeList(int <replaceable>n</replaceable>, ...)</programlisting></para>
+
+          <para>Create an <literal>ATermList</literal> of
+          <replaceable>n</replaceable> elements. The elements should be passed
+          as arguments 1, ..., <replaceable>n</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeList0</literal></title>
+
+          <para><programlisting>ATermList ATmakeList0()</programlisting>Macro
+          that yields the empty list <literal>[]</literal>.</para>
+        </section>
+
+        <section>
+          <title>ATmakeList1</title>
+
+          <para><programlisting>ATermList ATmakeList1(ATerm <replaceable>a1</replaceable>)</programlisting></para>
+
+          <para>Construct a list of one element.</para>
+        </section>
+
+        <section>
+          <title>ATmakeList2</title>
+
+          <para><programlisting>ATermList ATmakeList2(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>)</programlisting></para>
+
+          <para>Construct a list of two elements.</para>
+        </section>
+
+        <section>
+          <title>ATmakeList3</title>
+
+          <para><programlisting>ATermList ATmakeList3(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>)</programlisting></para>
+
+          <para>Construct a list of three elements.</para>
+        </section>
+
+        <section>
+          <title>ATmakeList4</title>
+
+          <para><programlisting>ATermList ATmakeList4(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>)</programlisting></para>
+
+          <para>Construct a list of four elements.</para>
+        </section>
+
+        <section>
+          <title>ATmakeList5</title>
+
+          <para><programlisting>ATermList ATmakeList5(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>)</programlisting></para>
+
+          <para>Construct a list of five elements.</para>
+        </section>
+
+        <section>
+          <title>ATmakeList6</title>
+
+          <para><programlisting>ATermList ATmakeList6(ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>, <replaceable>a6</replaceable>)</programlisting></para>
+
+          <para>Construct a list of six elements.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetLength</literal></title>
+
+          <para><programlisting>int ATgetLength(ATermList <replaceable>l</replaceable>)</programlisting></para>
+
+          <para>Macro to get the length of list
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section>
+          <title>ATgetFirst</title>
+
+          <para><programlisting>ATerm ATgetFirst(ATermList <replaceable>l</replaceable>)</programlisting>Macro
+          to get the first element of list
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetNext</literal></title>
+
+          <para><programlisting>ATermList ATgetNext(ATermList <replaceable>l</replaceable>)</programlisting>Macro
+          to get the next part (the tail) of list
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATisEmpty</literal></title>
+
+          <para><programlisting>ATbool ATisEmpty(ATermList <replaceable>l</replaceable>)</programlisting>Macro
+          to test if list <replaceable>l</replaceable> is empty.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetTail</literal></title>
+
+          <para><programlisting>ATermList ATgetTail(ATermList <replaceable>l</replaceable>, int <replaceable>start</replaceable>)</programlisting>Return
+          the sublist from <replaceable>start</replaceable> to the end of
+          <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATreplaceTail</literal></title>
+
+          <para><programlisting>ATermList ATreplaceTail(ATermList <replaceable>l</replaceable>, ATermList <replaceable>tail</replaceable>, int <replaceable>start</replaceable>)</programlisting>Replace
+          the tail of <replaceable>l</replaceable> from position
+          <replaceable>start</replaceable> with
+          <replaceable>tail</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetPrefix</literal></title>
+
+          <para><programlisting>ATermList ATgetPrefix(ATermList <replaceable>l</replaceable>)</programlisting>Return
+          all but the last element of <replaceable>l</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetSlice</literal></title>
+
+          <para><programlisting>ATermList ATgetSlice(ATermList <replaceable>l</replaceable>, int <replaceable>start</replaceable>, int <replaceable>end</replaceable>)</programlisting>Get
+          a portion (slice) of a list.</para>
+
+          <para>Return the portion of <replaceable>l</replaceable> that lies
+          between <replaceable>start</replaceable> and
+          <replaceable>end</replaceable>. Thus
+          <replaceable>start</replaceable> is included,
+          <replaceable>end</replaceable> is not.</para>
+        </section>
+
+        <section>
+          <title><literal>ATinsert</literal></title>
+
+          <para><programlisting>ATermList ATinsert(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          list <replaceable>l</replaceable> with element
+          <replaceable>a</replaceable> inserted. The behaviour of
+          <literal>ATinsert</literal> is of constant complexity. That is, the
+          behaviour of <literal>ATinsert</literal> does not degrade as the
+          length of <replaceable>l</replaceable> increases. </para>
+        </section>
+
+        <section>
+          <title>ATinsertAt</title>
+
+          <para><programlisting>ATermList ATinsertAt(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          <replaceable>l</replaceable> with <replaceable>a</replaceable>
+          inserted at position <replaceable>idx</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATappend</literal></title>
+
+          <para><programlisting>ATermList ATappend(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          <replaceable>l</replaceable> with <replaceable>a</replaceable>
+          appended to it.</para>
+
+          <para><literal>ATappend</literal> is implemented in terms of
+          <literal>ATinsert</literal> by making a new list with
+          <replaceable>a</replaceable> as the first element and then
+          <literal>ATinsert</literal>ing all elements from
+          <replaceable>l</replaceable>. As such, the complexity of
+          <literal>ATappend</literal> is linear in the number of elements in
+          <replaceable>l</replaceable>. When <literal>ATappend</literal> is
+          needed inside a loop that traverses a list (see {\tt parse\_list1}
+          below), behaviour of the loop will demonstrate quadratic complexity.
+          </para>
+
+          <para>\example{app1.c}</para>
+
+          <para><programlisting>/* Example of parse_list that demonstrates quadratic complexity */
+ATermList parse_list1(ATermList list)
+{
+    ATerm     elem;
+    ATermList result = ATempty;
+
+    /* while list has elements */
+    while (!ATisEmpty(list))
+    {
+        /* Get head of list */
+        elem = ATgetFirst(list);
+
+        /* If elem satisfies some predicate (not shown here) then APPEND it to result */
+        if (some_predicate(elem) == ATtrue)
+            result = ATappend(result, elem);
+
+        /* Continue with tail of list */
+        list = ATgetNext(list);
+    }
+
+    /* Return the result list */
+    return result;
+}
+</programlisting></para>
+
+          <para>To avoid this behaviour, the inner loop could use
+          <literal>ATinsert</literal> instead of <literal>ATappend</literal>
+          to make the new list. This will cause the resulting list to be in
+          reverse order. A single <literal>ATreverse</literal> must therefore
+          be performed, but this can be done after the loop has terminated,
+          bringing the behaviour down from quadratic to linear complexity, but
+          at the cost of two <literal>ATinsert</literal>s per element (one for
+          each <literal>ATinsert</literal> in the loop, and an implicit one
+          for each element through the use of <literal>ATreverse</literal>).
+          An example is shown here in the implementation of {\tt
+          parse\_list2}. </para>
+
+          <para>\example{app2.c}</para>
+
+          <para><programlisting>/* Example of parse_list that demonstrates linear complexity,
+ * using ATinsert instead of ATappend and reversing the list
+ * outside the loop just once.  */
+ATermList parse_list2(ATermList list)
+{
+    ATerm     elem;
+    ATermList result = ATempty;
+
+    /* while list has elements */
+    while (!ATisEmpty(list))
+    {
+        /* Get head of list */
+        elem = ATgetFirst(list);
+
+        /* If elem satisfies some predicate (not shown here) then INSERT it to result */
+        if (some_predicate(elem) == ATtrue)
+            result = ATinsert(result, elem);
+
+        /* Continue with tail of list */
+        list = ATgetNext(list);
+    }
+
+    /* Return result after reversal */
+    return ATreverse(result);
+}
+</programlisting></para>
+
+          <para>An even further optimisation could make use of a locally
+          allocated buffer. While traversing the list, all elements that would
+          normally be <literal>ATappend</literal>ed, are now placed in this
+          buffer. Finally, the result is obtained by starting with an empty
+          list and <literal>ATinsert</literal>ing all elements from this
+          buffer in reverse order. As the cost of allocating and freeing a
+          local buffer is by no means marginal, this solution should probably
+          only be applied when the loop appends more than just a few elements.
+          The following example shows such an implementation in {\tt
+          parse\_list3}.</para>
+
+          <para> \example{app3.c}</para>
+
+          <programlisting>/* Example of parse_list that demonstrates linear complexity,
+ * but which avoids using ATinsert twice, by inlining ATreverse
+ * using a local buffer. */
+ATermList parse_list3(ATermList list)
+{
+    int        pos = 0;
+    ATerm      elem;
+    ATerm     *buffer = NULL;
+    ATermList  result = ATempty;
+
+    /* Allocate local buffer that can hold all elements of list */
+    buffer = (ATerm *) calloc(ATgetLength(list), sizeof(ATerm));
+    if (buffer == NULL) abort();
+
+    /* while list has elements */
+    while (!ATisEmpty(list))
+    {
+        /* Get head of list */
+        elem = ATgetFirst(list);
+
+        /* If elem satisfies some predicate (not shown here)
+         * then add it to buffer at next available position */
+        if (some_predicate(elem) == ATtrue)
+            buffer[pos++] = elem;
+
+        /* Continue with tail of list */
+        list = ATgetNext(list);
+    }
+
+    /* Now insert all elems in buffer to result */
+    for(--pos; pos &gt;= 0; pos--)
+        result = ATinsert(result, buffer[pos]);
+
+    /* Release allocated resources */
+    free(buffer);
+
+    /* Return result */
+    return result;
+}</programlisting>
+        </section>
+
+        <section>
+          <title><literal>ATconcat</literal></title>
+
+          <para><programlisting>ATermList ATconcat(ATermList <replaceable>l1</replaceable>, ATermList <replaceable>l2</replaceable>)</programlisting>Return
+          the concatenation of <replaceable>l1</replaceable> and
+          <replaceable>l2</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATindexOf</literal></title>
+
+          <para><programlisting>int ATindexOf(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>start</replaceable>)</programlisting>Return
+          the index of an ATerm in a list. Return the index where element
+          <replaceable>a</replaceable> can be found in the list
+          <replaceable>l</replaceable>. Start looking at position
+          <replaceable>start</replaceable>. Returns <literal>-1</literal> if
+          <replaceable>a</replaceable> is not in the list.</para>
+        </section>
+
+        <section>
+          <title><literal>ATlastIndexOf</literal></title>
+
+          <para><programlisting>int ATlastIndexOf(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>start</replaceable>)</programlisting>Return
+          the index of an ATerm in a list (searching in reverse order).</para>
+
+          <para>Search backwards for element <replaceable>a</replaceable> in
+          the list <replaceable>l</replaceable>. Start searching at position
+          <replaceable>start</replaceable>. Return the index of the first
+          occurrence of <replaceable>a</replaceable> encountered, or
+          <literal>-1</literal> when <replaceable>a</replaceable> is not
+          present before <replaceable>start</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATelementAt</literal></title>
+
+          <para><programlisting>ATerm ATelementAt(ATermList <replaceable>l</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          a specific element of a list. Return the element at position
+          <replaceable>idx</replaceable> in list <replaceable>l</replaceable>.
+          Return <literal>NULL</literal> when <replaceable>idx</replaceable>
+          is not in the list.</para>
+        </section>
+
+        <section>
+          <title><literal>ATremoveElement</literal></title>
+
+          <para><programlisting>ATermList ATremoveElement(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with one occurrence of element
+          <replaceable>a</replaceable> removed.</para>
+        </section>
+
+        <section>
+          <title><literal>ATremoveAll</literal></title>
+
+          <para><programlisting>ATermList ATremoveAll(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with all occurrences of
+          element <replaceable>a</replaceable> removed.</para>
+        </section>
+
+        <section>
+          <title><literal>ATremoveElementAt</literal></title>
+
+          <para><programlisting>ATermList ATremoveElementAt(ATermList <replaceable>l</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with the element at position
+          <replaceable>idx</replaceable> removed.</para>
+        </section>
+
+        <section>
+          <title><literal>ATreplace</literal></title>
+
+          <para><programlisting>ATermList ATreplace(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with the element at position
+          <replaceable>idx</replaceable> replaced by
+          <replaceable>a</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATreverse</literal></title>
+
+          <para><programlisting>ATermList ATreplace(ATermList <replaceable>l</replaceable>, ATerm <replaceable>a</replaceable>, int <replaceable>idx</replaceable>)</programlisting>Return
+          the list <replaceable>l</replaceable> with its elements in reverse
+          order.</para>
+        </section>
+
+        <section>
+          <title><literal>ATfilter</literal></title>
+
+          <para><programlisting>ATermList ATfilter(ATermList <replaceable>l</replaceable>, ATbool (*<replaceable>pred</replaceable>)(ATerm))</programlisting></para>
+
+          <para>Filter list elements that satisfy a given predicate. The
+          predicate <replaceable>pred</replaceable> is applied to each element
+          in list <replaceable>l</replaceable>. If
+          <replaceable>pred</replaceable> returns <literal>ATtrue</literal>
+          the entry is added to the result list, otherwise it is
+          skipped.</para>
+        </section>
+      </section>
     </section>
   </section>
 
   <section>
     <title></title>
 
-    <para><!--\subsubsection{ATermList}
-\Function{ATmakeList}{ATermList}{int n, ...}
-{Create an {\tt ATermList} of $n$ elements}
-\Describe{
-	This function can be used to build an {\tt ATermList} of $n$ elements.
-	The elements should be passed as arguments $1\ldots n$.
-}
-
-\Macro{ATmakeList0}{ATermList}{}
-{Macro defined to point to the empty list {\tt []}}
-
-\Function{ATmakeList1}{ATermList}{ATerm el0}
-{Construct a list of one element}
-
-\Function{ATmakeList2}{ATermList}{ATerm el0, el1}
-{Construct a list of two elements}
-
-\Function{ATmakeList3}{ATermList}{ATerm el0, el1, el2}
-{Construct a list of three elements}
-
-\Function{ATmakeList4}{ATermList}{ATerm el0, el1, el2, el3}
-{Construct a list of four elements}
-
-\Function{ATmakeList5}{ATermList}{ATerm el0, el1, el2, el3, el4}
-{Construct a list of five elements}
-
-\Function{ATmakeList6}{ATermList}{ATerm el0, el1, el2, el3, el4, el5}
-{Construct a list of six elements}
-\Describe{
-	These functions build an {\tt ATermList} of $1\ldots 6$ elements.
-	Longer lists should be created using the generic {\tt ATmakeList}
-	function described above.
-}
-
-\Macro{ATgetLength}{int}{ATermList l}
-{Macro to get the length of list {\tt l}}
-
-\Macro{ATgetFirst}{\ATerm}{ATermList l}
-{Macro to get the first element of list {\tt l}}
-
-\Macro{ATgetNext}{ATermList}{ATermList l}
-{Macro to get the next part (the tail) of list {\tt l}}
-
-\Macro{ATisEmpty}{ATbool}{ATermList l}
-{Macro to test if list {\tt l} is empty}
-
-\Function{ATgetTail}{ATermList}{ATermList list, int start}
-{Return the sublist from {\tt start} to the end of {\tt list}.}
-
-\Function{ATreplaceTail}{ATermList}{ATermList list, ATermList newtail, 
-int start}
-{Replace the tail of {\tt list} from position {\tt start} with {\tt newtail}}
-
-\Function{ATgetPrefix}{ATermList}{ATermList list}
-{Return all but the last element of {\tt list}}
-
-\Function{ATgetLast}{\ATerm}{ATermList list}
-{Return the last element of {\tt list}}
-
-\Function{ATgetSlice}{ATermList}
-{ATermList list, int start, int end}
-{Get a portion (slice) of a list}
-\Describe{
-	Return the portion of {\tt list} that lies between {\tt start} and
-	{\tt end}. Thus {\tt start} is included, {\tt end} is not.
-}
-
-\Function{ATinsert}{ATermlist}{ATermList list, ATerm el}
-{Return {\tt list} with {\tt el} inserted.}
-\Describe{
-  The behaviour of {\tt ATinsert} is of constant complexity.  That is, the
-  behaviour of {\tt ATinsert} does not degrade as the length of {\tt list}
-  increases.  }
-
-\Function{ATinsertAt}{ATermList}
-{(ATermList list, ATerm el, int index}
-  {Return {\tt list} with {\tt el} inserted at position {\tt index}}
-
-\Function{ATappend}{ATermList}{ATermList list, ATerm el}
-{Return {\tt list} with {\tt el} appended to it}
-\Describe{
-  Note that {\tt ATappend} is implemented in terms of {\tt ATinsert} by
-  making a new list with {\tt el} as the first element and then {\tt
-  ATinsert}ing all elements from {\tt list}. As such, the complexity of
-  {\tt ATappend} is linear in the number of elements in {\tt list}.
-
-  When {\tt ATappend} is needed inside a loop that traverses a list (see
-  {\tt parse\_list1} below), behaviour of the loop will demonstrate
-  quadratic complexity.
-
-  \example{app1.c}\smallskip
-
-  To avoid this behaviour, the inner loop could use {\tt ATinsert} instead
-  of {\tt ATappend} to make the new list. This will cause the resulting
-  list to be in reverse order. A single {\tt ATreverse} must therefore be
-  performed, but this can be done after the loop has terminated, bringing
-  the behaviour down from quadratic to linear complexity, but at the cost
-  of two {\tt ATinsert}s per element (one for each {\tt ATinsert} in the
-  loop, and an implicit one for each element through the use of {\tt
-  ATreverse}).  An example is shown here in the implementation of {\tt
-  parse\_list2}.
-
-  \example{app2.c}\smallskip
-
-  An even further optimisation could make use of a locally allocated
-  buffer.  While traversing the list, all elements that would normally be
-  {\tt ATappend}ed, are now placed in this buffer. Finally, the result is
-  obtained by starting with an empty list and {\tt ATinsert}ing all
-  elements from this buffer in reverse order. As the cost of allocating and
-  freeing a local buffer is by no means marginal, this solution should
-  probably only be applied when the loop appends more than just a few
-  elements. The following example shows such an implementation in {\tt
-  parse\_list3}.
-
-  \example{app3.c}
-}
-
-\Function{ATconcat}{ATermList}{ATermList list1, ATermList list2}
-{Return the concatenation of {\tt list1} and {\tt list2}}
-
-\Function{ATindexOf}{int}{ATermList list, ATerm el, int start)}
-{Return the index of an ATerm in a list}
-\Describe{
-	Return the index where {\tt el} can be found in {\tt list}. Start
-	looking at position {\tt start}. Returns {\tt -1} if {\tt el} is
-	not in {\tt list}.
-}
-
-\Function{ATlastIndexOf}{int}
-{\tt ATermList list, ATerm el, int start)}
-{Return the index of an ATerm in a list (reverse)}
-\Describe{
-	Search backwards for {\tt el} in {\tt list}. Start searching at
-	{\tt start}. Return the index of the first occurrence of {\tt l}
-	encountered, or {\tt -1} when {\tt el} is not present before
-	{\tt start}.
-}
-
-\Function{ATelementAt}{\ATerm}{ATermList list, int index)}
-{Return a specific element of a list}
-\Describe{
-	Return the element at position {\tt index} in {\tt list}. Return
-	\NULL\ when {\tt index} is not in {\tt list}.
-}
-
-\Function{ATremoveElement}{ATermList}{ATermList list, ATerm el}
-{Return {\tt list} with one occurrence of {\tt el} removed}
-
-\Function{ATremoveAll}{ATermList}{ATermList list, ATerm el}
-{Return {\tt list} with all occurrences of {\tt el} removed}
-
-\Function{ATremoveElementAt}{ATermList}
-{\tt ATermList list, int index}
-{Return {\tt list} with the element at {\tt index} removed}
-
-\Function{ATreplace}{ATermList}{ATermList list, ATerm el, int idx}
-{Return {\tt list} with the element at {\tt index} replaced by {\tt el}}
-
-\Function{ATreverse}{ATermList}{ATermList list)}
-{Return {\tt list} with its elements in reversed order}
-
-\Function{ATfilter}{ATermList}
-{ATermList list, ATbool (*predicate)(ATerm)}
-{Filter entries from a list using a predicate}
-\Describe{
- This function can be used to filter entries that satisfy a given predicate
- from a list. Each item in {\tt list} is judged through a call to {\tt
- predicate}. If {\tt predicate} returns {\tt ATtrue} the entry is added to
- a list, otherwise it is skipped. The function returns the list containing
- exactly those items that satisfy {\tt predicate}.
-}
+    <para><!----><!--
 
 \subsubsection{ATermPlaceholder}
 A placeholder is a special subtype used to indicate a typed hole in an
