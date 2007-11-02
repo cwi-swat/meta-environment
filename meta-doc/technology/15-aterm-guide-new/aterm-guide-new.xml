@@ -22,7 +22,7 @@
     transaction records, and more complex data are exchanged between different
     parts of a distributed application. Compilers and programming environments
     consist of tools such as editors, parsers, optimizers, and code generators
-    that exchange syntax trees, intermediate code, and the like. </para>
+    that exchange syntax trees, intermediate code, and the like.</para>
 
     <para>Annotated Terms (ATerms) provide a solution for implementation needs
     in the areas of compilers, interactive programming environments and
@@ -38,12 +38,12 @@
 
       <listitem>
         <para><emphasis>Simple</emphasis>: the procedural interface should
-        contain 10 rather than 100 functions. </para>
+        contain 10 rather than 100 functions.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Efficient</emphasis>: operations on data structures
-        should be fast. </para>
+        should be fast.</para>
       </listitem>
 
       <listitem>
@@ -58,14 +58,14 @@
 
       <listitem>
         <para><emphasis>Language-independent</emphasis>: data structures can
-        be created and manipulated in any suitable programming language.
-        </para>
+        be created and manipulated in any suitable programming
+        language.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Annotations</emphasis>: applications can transparently
         extend the main data structures with annotations of their own to
-        represent non-structural information. </para>
+        represent non-structural information.</para>
       </listitem>
     </itemizedlist>
 
@@ -77,7 +77,7 @@
     add annotations to nodes in the tree describing the coordinates of their
     corresponding source text and a formatter may add font or color
     information to be used by an editor when displaying the textual
-    representation of the tree. </para>
+    representation of the tree.</para>
 
     <para>The ATerm data type has been designed to represent such tree-like
     data structures and it is therefore very natural to use ATerms both for
@@ -90,7 +90,7 @@
     placeholders to represent typed gaps in ATerms. Using the comprehensive
     set of primitives and operations on ATerms, it is possible to perform
     operations on an ATerm received from another application without first
-    converting it to an application-specific representation. </para>
+    converting it to an application-specific representation.</para>
 
     <para>One particular aspect of ATerms makes them unique and should be
     mentioned here explicitly: ATerms are based on <emphasis>maximal subterm
@@ -119,23 +119,23 @@
       <title>The Aterm data type</title>
 
       <para>The data type of ATerms (<literal>ATerm</literal>) is defined as
-      follows: </para>
+      follows:</para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>INT</literal>: An integer constant is an ATerm.
-          </para>
+          <para><literal>INT</literal>: An integer constant is an
+          ATerm.</para>
         </listitem>
 
         <listitem>
-          <para><literal>REAL</literal>: A real constant is an ATerm. </para>
+          <para><literal>REAL</literal>: A real constant is an ATerm.</para>
         </listitem>
 
         <listitem>
           <para><literal>APPL</literal>: A function application consisting of
           a function symbol and zero or more ATerms (arguments) is an ATerm.
           The number of arguments of the function is called the
-          <emphasis>arity</emphasis> of the function. </para>
+          <emphasis>arity</emphasis> of the function.</para>
         </listitem>
 
         <listitem>
@@ -145,13 +145,13 @@
 
         <listitem>
           <para>PLACEHOLDER: A placeholder term containing an ATerm
-          representing the type of the placeholder is an ATerm. </para>
+          representing the type of the placeholder is an ATerm.</para>
         </listitem>
 
         <listitem>
           <para><literal>BLOB</literal>: A ``blob'' (Binary Large data OBject)
           containing a length indication and a byte array of arbitrary
-          (possibly very large) binary data is an ATerm. </para>
+          (possibly very large) binary data is an ATerm.</para>
         </listitem>
 
         <listitem>
@@ -195,26 +195,26 @@
           parentheses may be omitted. Examples are: <literal>f(a,b)</literal>
           and <literal>"test!"(1,2.1,"Hello world!")</literal>. These examples
           show that double quotes can be used to delimit function names that
-          are not identifiers. </para>
+          are not identifiers.</para>
         </listitem>
 
         <listitem>
           <para>Lists are represented by an opening square bracket, a number
           of list elements separated by commas and a closing square bracket:
           <literal>[1,2,"abc"]</literal>, <literal>[]</literal>, and
-          <literal>[f,g([1,2]),x]</literal> are examples. </para>
+          <literal>[f,g([1,2]),x]</literal> are examples.</para>
         </listitem>
 
         <listitem>
           <para>A placeholder is represented by an opening angular bracket
           followed by a subterm and a closing angular bracket. Examples are
           <literal>&lt;int&gt;</literal>, <literal>&lt;[3]&gt;</literal>, and
-          <literal>&lt;f(&lt;int&gt;,&lt;real&gt;)&gt;</literal>. </para>
+          <literal>&lt;f(&lt;int&gt;,&lt;real&gt;)&gt;</literal>.</para>
         </listitem>
 
         <listitem>
           <para>Blobs do not have a concrete syntax because their
-          human-readable form depends on the actual blob content. </para>
+          human-readable form depends on the actual blob content.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -238,7 +238,7 @@
       two constructs. The level two interface is a strict superset of the
       level one interface. Observe that ATerms are a purely functional data
       type and that no destructive updates are possible, see the section on
-      maximal sharing for more details. </para>
+      maximal sharing for more details.</para>
 
       <section>
         <title>Making and Matching ATerms</title>
@@ -255,7 +255,7 @@
           <listitem>
             <para><emphasis>match</emphasis> (decompose) an existing ATerm by
             comparing it with a pattern and decompose it according to this
-            pattern. </para>
+            pattern.</para>
           </listitem>
         </itemizedlist>
 
@@ -266,7 +266,7 @@
         appear as string argument of both make and match and are remotely
         comparable to the format strings in the
         <literal>printf</literal>/<literal>scanf</literal> functions in C. The
-        operations for making and matching ATerms are: </para>
+        operations for making and matching ATerms are:</para>
 
         <itemizedlist>
           <listitem>
@@ -406,14 +406,14 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
           </footnote></para>
 
         <para>The binary format (Binary ATerm Format) is portable,
-        machine-readable, very compact, and preserves all in-memory sharing.
-        </para>
+        machine-readable, very compact, and preserves all in-memory
+        sharing.</para>
 
         <warning>
           <para>Mention SAF here.</para>
         </warning>
 
-        <para>The operations for reading and writing ATerms are: </para>
+        <para>The operations for reading and writing ATerms are:</para>
 
         <itemizedlist>
           <listitem>
@@ -421,7 +421,7 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
             <replaceable>s</replaceable>)</literal>: Creates a new term by
             parsing the string <replaceable>s</replaceable>. When a parse
             error occurs, a message is printed, and a special error value is
-            returned. </para>
+            returned.</para>
           </listitem>
 
           <listitem>
@@ -429,21 +429,21 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
             <replaceable>f</replaceable>)</literal>: Creates a new term by
             parsing the data from file <replaceable>f</replaceable>. Again,
             parse e rrors result in a message being printed and an error value
-            being returned. </para>
+            being returned.</para>
           </listitem>
 
           <listitem>
             <para><literal>ATerm ATreadFromBinaryFile(File
             <replaceable>f</replaceable>)</literal>: Creates a new term by
             reading a binary representation from file
-            <replaceable>f</replaceable>. </para>
+            <replaceable>f</replaceable>.</para>
           </listitem>
 
           <listitem>
             <para><literal>String ATwriteToString(ATerm
             <replaceable>t</replaceable>)</literal>: Return the text
-            representation of term <replaceable>t</replaceable> as a string.
-            </para>
+            representation of term <replaceable>t</replaceable> as a
+            string.</para>
           </listitem>
 
           <listitem>
@@ -452,7 +452,7 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
             <replaceable>f</replaceable>)</literal>: Write the text
             representation of term <replaceable>t</replaceable> to file
             <replaceable>f</replaceable>. Returns true for success and false
-            for failure. </para>
+            for failure.</para>
           </listitem>
 
           <listitem>
@@ -461,19 +461,19 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
             <replaceable>f</replaceable>)</literal>: Write a binary
             representation of term <replaceable>t</replaceable> to file
             <replaceable>f</replaceable>. Returns true for success, and false
-            for failure. </para>
+            for failure.</para>
           </listitem>
         </itemizedlist>
 
         <para>Either format (textual or binary) can be used on any linear
-        stream, including files, sockets, pipes, etc. </para>
+        stream, including files, sockets, pipes, etc.</para>
 
         <para>For instance, in the context: <programlisting>FILE *f = fopen("foo", "wb");
 ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlisting>the
         statement<programlisting>ATwriteToTextFile(Trm1, f);</programlisting>will
         write the value of <literal>Trm1</literal> (i.e.,
-        <literal>freq(red,17)</literal>) to file ``<filename>foo</filename>''.
-        </para>
+        <literal>freq(red,17)</literal>) to file
+        ``<filename>foo</filename>''.</para>
 
         <para>When end of file is encountered or the term could not be read,
         the operation is aborted.The user can redefine this behaviour using
@@ -490,7 +490,7 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
         pairs that may be attached to an ATerm. Recall that ATerms are a
         completely functional data type and that no destructive updates are
         possible. This is evident in the following operations for manipulating
-        annotations: </para>
+        annotations:</para>
 
         <itemizedlist>
           <listitem>
@@ -511,7 +511,7 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
             labeled with <replaceable>l</replaceable> from term
             <replaceable>t</replaceable>. If <replaceable>t</replaceable> does
             not have an annotation with the specified label, a special error
-            value is returned. </para>
+            value is returned.</para>
           </listitem>
 
           <listitem>
@@ -587,13 +587,13 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &amp;bottomOfStack); <co xml:id="co.main.2" />
   /* ... code that uses ATerms ... */
 }</programlisting>Notes:<calloutlist>
-          <callout arearefs="???">
+          <callout arearefs="co.main.1">
             <para>The local variable <literal>bottomOfStack</literal> is used
             to indicate the bottom of C's run-time stack and needed when
             initlaizing the ATerm library.</para>
           </callout>
 
-          <callout arearefs="???">
+          <callout arearefs="co.main.2">
             <para>Initialize the ATerm library. Observe that the program
             arguments are passed to ATinit (see below).</para>
           </callout>
@@ -622,7 +622,7 @@ int main(int argc, char *argv[])
               <entry><literal>-at-symboltable
               <replaceable>nsymbols</replaceable></literal></entry>
 
-              <entry>Initial size of symboltable </entry>
+              <entry>Initial size of symboltable</entry>
             </row>
 
             <row>
@@ -637,7 +637,7 @@ int main(int argc, char *argv[])
               <entry><literal>-at-hashinfo</literal></entry>
 
               <entry>Write hashtable statistics to the file
-              <filename>hashing.stats</filename> after execution </entry>
+              <filename>hashing.stats</filename> after execution</entry>
             </row>
 
             <row>
@@ -650,8 +650,8 @@ int main(int argc, char *argv[])
             <row>
               <entry><literal>-at-print-gc-info</literal></entry>
 
-              <entry> print verbose information about garbage collector to
-              <filename>stderr</filename> after execution </entry>
+              <entry>print verbose information about garbage collector to
+              <filename>stderr</filename> after execution</entry>
             </row>
 
             <row>
@@ -820,7 +820,7 @@ int main(int argc, char *argv[])
     avoid confusion between {\sc baf} and the \aterm\ type \emph{blob},
     Section~\ref{blob-vs-baf} is dedicated to explaining the difference
     between these two notions. Finally, Section~\ref{func1} describes all the
-    functions that are available in the level one interface. </para>
+    functions that are available in the level one interface.</para>
 
     <section>
       <title>Level One Types</title>
@@ -830,20 +830,20 @@ int main(int argc, char *argv[])
 
       <itemizedlist>
         <listitem>
-          <para><literal>AT_INT</literal>: An ATerm of type: integer; </para>
+          <para><literal>AT_INT</literal>: An ATerm of type: integer;</para>
         </listitem>
 
         <listitem>
-          <para><literal>AT_REAL</literal>: An ATerm of type: real; </para>
+          <para><literal>AT_REAL</literal>: An ATerm of type: real;</para>
         </listitem>
 
         <listitem>
           <para><literal>AT_APPL</literal>: An ATerm of type: function
-          application; </para>
+          application;</para>
         </listitem>
 
         <listitem>
-          <para><literal>AT_LIST</literal>: An ATerm of type: list; </para>
+          <para><literal>AT_LIST</literal>: An ATerm of type: list;</para>
         </listitem>
 
         <listitem>
@@ -864,13 +864,13 @@ int main(int argc, char *argv[])
         </listitem>
       </itemizedlist>
 
-      <para>The following C-types are defined in the level one interface:
-      </para>
+      <para>The following C-types are defined in the level one
+      interface:</para>
 
       <itemizedlist>
         <listitem>
           <para><literal>ATbool</literal>: a boolean value, either
-          <literal>ATtrue</literal> or <literal>ATfalse</literal>; </para>
+          <literal>ATtrue</literal> or <literal>ATfalse</literal>;</para>
         </listitem>
 
         <listitem>
@@ -882,7 +882,7 @@ int main(int argc, char *argv[])
     <section>
       <title>A note on `blobs' and BAF</title>
 
-      <para> Although the word <emphasis>binary</emphasis> is used in the
+      <para>Although the word <emphasis>binary</emphasis> is used in the
       abbreviations of both ``blob'' and BAF, these are two very different
       notions. A <emphasis>blob</emphasis> represents an ATerm that holds
       binary data, with no specific meaning to the Aterm library. This notion
@@ -959,7 +959,7 @@ int main(int argc, char *argv[])
 
                 <entry><literal>&lt;str&gt;</literal></entry>
 
-                <entry><literal>char *pattern</literal>, arguments </entry>
+                <entry><literal>char *pattern</literal>, arguments</entry>
               </row>
 
               <row>
@@ -1095,7 +1095,7 @@ int main(int argc, char *argv[])
         <literal>&lt;list&gt;</literal> pattern can be used to match the tail
         of a list as well as a variable number of arguments in a function
         application. Thus the first few arguments may be matched explicitly
-        while the tail of the arguments is directed to a list. </para>
+        while the tail of the arguments is directed to a list.</para>
 
         <para>Here are a few examples of ATmatch:</para>
 
@@ -1149,7 +1149,7 @@ int main(int argc, char *argv[])
         a ATerm from a string in BAF format.</para>
 
         <para>This function decodes a BAF-encoded character string into an
-        ATerm. </para>
+        ATerm.</para>
       </section>
 
       <section>
@@ -1187,8 +1187,8 @@ int main(int argc, char *argv[])
         <para><programlisting>ATerm ATreadFromBinaryFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
         an ATerm from a shared text (TAF) file.</para>
 
-        <para>This function reads a shared text file and buils an ATerm.
-        </para>
+        <para>This function reads a shared text file and buils an
+        ATerm.</para>
       </section>
 
       <section>
@@ -1198,7 +1198,7 @@ int main(int argc, char *argv[])
         an ATerm from binary or text file.</para>
 
         <para>This function reads an ATerm from a file. A test is performed to
-        see if the file is in BAF, TAF, or plain text. </para>
+        see if the file is in BAF, TAF, or plain text.</para>
       </section>
 
       <section>
@@ -1207,7 +1207,7 @@ int main(int argc, char *argv[])
         <para><programlisting>ATerm ATreadFromNamendFile(char *<replaceable>filename</replaceable>)</programlisting>Read
         an ATerm from named binary or text file.</para>
 
-        <para> This function reads an ATerm file
+        <para>This function reads an ATerm file
         <replaceable>filename</replaceable>. A test is performed to see if the
         file is in BAF, TAF or plain text. <literal>"-" </literal>is standard
         input's filename.</para>
@@ -1252,207 +1252,364 @@ int main(int argc, char *argv[])
         are completely equal, inclusive any annotations they might
         have!</para>
       </section>
+
+      <section>
+        <title><literal>ATwriteToTextFile</literal></title>
+
+        <para><programlisting>ATBool ATwriteToTextFile(ATerm <replaceable>t</replaceable>, FILE *<replaceable>f</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to file <replaceable>f</replaceable>
+        in textual format.</para>
+
+        <para>This function writes ATerm <replaceable>t</replaceable> to the
+        file <replaceable>f</replaceable> in textual format. This term can
+        later be read again by <literal>ATreadFromTextFile</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToSharedTextFile</literal></title>
+
+        <para><programlisting>long ATwriteToSharedTextFile(ATerm <replaceable>t</replaceable>, FILE *<replaceable>f</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to file <replaceable>f</replaceable>
+        in shared Textual ATerm Format (TAF).</para>
+
+        <para>This function writes ATerm <replaceable>t</replaceable> to the
+        file <replaceable>f</replaceable> in TAF format, and returns the
+        number of characters written. This term can later be read again by
+        <literal>ATreadFromSharedTextFile</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToBinaryFile</literal></title>
+
+        <para><programlisting>ATbool ATwriteToBinaryFile(ATerm <replaceable>t</replaceable>, FILE *<replaceable>f</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to file <replaceable>f</replaceable>
+        in Binary ATerm Format (BAF).</para>
+
+        <para>This function writes ATerm <replaceable>t</replaceable> to the
+        file <replaceable>f</replaceable> in BAF. This term can later be read
+        again by <literal>ATreadFromBinaryFile</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToNamedTextFile</literal></title>
+
+        <para><programlisting>ATbool ATwriteToNamedTextFile(ATerm <replaceable>t</replaceable>, char *<replaceable>filename</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to file named
+        <replaceable>filename</replaceable> in textual format.</para>
+
+        <para>This function writes ATerm <replaceable>t</replaceable> in
+        textual representation to file <replaceable>filename</replaceable>.
+        <literal>"-"</literal> is standard output's filename.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToNamedBinaryFile</literal></title>
+
+        <para><programlisting>ATbool ATwriteToNamedBinaryFile(ATerm <replaceable>t</replaceable>, char *<replaceable>filename</replaceable>)</programlisting>Writes
+        term <literal>t</literal> to file named
+        <replaceable>filename</replaceable> in Binary ATerm Format
+        (BAF).</para>
+
+        <para>This function writes ATerm <replaceable>t</replaceable> in
+        binary representation to file <replaceable>filename</replaceable>.
+        <literal>"-"</literal> is standard output's filename.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToString</literal></title>
+
+        <para><programlisting>char *ATwriteToString(ATerm <replaceable>t</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to a string.</para>
+
+        <para>Writes term <replaceable>t</replaceable> to an internal string
+        buffer. The start of this buffer is returned. Note that the contents
+        of this buffer are volatile and may be overwritten by any call to the
+        ATerm library.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToSharedString</literal></title>
+
+        <para><programlisting>char *ATwriteToSharedString(ATerm <replaceable>t</replaceable>, int *<replaceable>len</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to a shared text string in
+        TAF.</para>
+
+        <para>Writes term <replaceable>t</replaceable> to an internal string
+        buffer in TAF. The start of this buffer is returned, and the length of
+        the resulting string is stored in <replaceable>len</replaceable>. Note
+        that the contents of this buffer are volatile and may be overwritten
+        by any call to the ATerm library.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwriteToBinaryString</literal></title>
+
+        <para><programlisting>char *ATwriteToBinaryString(ATerm <replaceable>t</replaceable>, int *<replaceable>len</replaceable>)</programlisting>Writes
+        term <replaceable>t</replaceable> to a shared text string in
+        BAF.</para>
+
+        <para>Writes term <replaceable>t</replaceable> to an internal string
+        buffer in BAF. The start of this buffer is returned, and the length of
+        the resulting string is stored in <replaceable>len</replaceable>. Note
+        that the contents of this buffer are volatile and may be overwritten
+        by any call to the ATerm library.</para>
+      </section>
+
+      <section>
+        <title><literal>ATsetAnnotation</literal></title>
+
+        <para><programlisting>ATerm ATsetAnnotation(ATerm <replaceable>t</replaceable>, ATerm <replaceable>label</replaceable>, ATerm <replaceable>anno</replaceable>)</programlisting>Annotate
+        a term with a labeled annotation.</para>
+
+        <para>Creates a version of <replaceable>t</replaceable> that is
+        annotated with annotation <replaceable>anno</replaceable> which is
+        labeled by <replaceable>label</replaceable>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATgetAnnotation</literal></title>
+
+        <para><programlisting>ATerm ATgetAnnotation(ATerm <replaceable>t</replaceable>, ATerm <replaceable>label</replaceable>)</programlisting>Retrieves
+        annotation of <replaceable>t</replaceable> with label
+        <replaceable>label</replaceable>.</para>
+
+        <para>This function can be used to retrieve a specific annotation of a
+        term. If <replaceable>t</replaceable> has no annotations, or no
+        annotation labeled with <replaceable>label</replaceable> exists,
+        <literal>NULL</literal> is returned. Otherwise the annotation is
+        returned.</para>
+      </section>
+
+      <section>
+        <title><literal>ATremoveAnnotation</literal></title>
+
+        <para><programlisting>ATerm ATremoveAnnotation(ATerm <replaceable>t</replaceable>, ATerm <replaceable>label</replaceable>)</programlisting>Remove
+        a specific annotation from a term.</para>
+
+        <para>This function returns a version of <replaceable>t</replaceable>
+        which has its annotation with label <replaceable>label</replaceable>
+        removed. If <replaceable>t</replaceable> has no annotations, or no
+        annotation labeled with <replaceable>label</replaceable> exists,
+        <replaceable>t</replaceable> itself is returned.</para>
+      </section>
+
+      <section>
+        <title>ATinit</title>
+
+        <para><programlisting>void ATinit(int <replaceable>argc</replaceable>, char *<replaceable>argv</replaceable>[], ATerm *<replaceable>bottomOfStack</replaceable>)</programlisting>Initialize
+        the ATerm library.</para>
+
+        <para>See Section~\ref{init}.}</para>
+      </section>
+
+      <section>
+        <title>ATprintf</title>
+
+        <para><programlisting>int ATprintf(const char *<replaceable>format</replaceable>, ...)</programlisting>ATerm
+        version of <literal>printf</literal>.</para>
+
+        <para>See ATvfprintf.</para>
+      </section>
+
+      <section>
+        <title>ATfprintf</title>
+
+        <para><programlisting>int ATfprintf(FILE *<replaceable>stream</replaceable>, const char *<replaceable>format</replaceable>, ...)</programlisting>ATerm
+        version of <literal>fprintf</literal>.</para>
+
+        <para>See ATvfprintf.</para>
+      </section>
+
+      <section>
+        <title><literal>ATvfprintf</literal></title>
+
+        <para><programlisting>int ATvfprintf(File *stream, const char *format, va_list args)</programlisting>ATerm
+        version of <literal>vfprintf</literal>.</para>
+
+        <para>The functions <literal>ATprintf</literal>,
+        <literal>ATfprintf</literal> and <literal>ATvfprintf</literal> are
+        used for formatted output to file. The conversion specifiers
+        <literal>c</literal>, <literal>d</literal>, <literal>i</literal>,
+        <literal>o</literal>, <literal>u</literal>, <literal>x</literal>,
+        <literal>X</literal>, <literal>e</literal>, <literal>E</literal>,
+        <literal>f</literal>, <literal>g</literal>, <literal>G</literal>,
+        <literal>p</literal>, <literal>s</literal> behave as can be expected
+        from <literal>fprintf</literal>. In addition the conversion specifiers
+        <literal>a</literal>, <literal>h</literal>, <literal>l</literal>,
+        <literal>n</literal> and <literal>t</literal> are supported as
+        summarized in x<xref linkend="table.print-conversions" /></para>
+
+        <table xml:id="table.print-conversions">
+          <title>Specifiers for print conversion</title>
+
+          <tgroup cols="2">
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="center"> Conversion specifier</entry>
+
+                <entry align="center">Action </entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><literal>a</literal></entry>
+
+                <entry>Print the symbol of an ATerm-application </entry>
+              </row>
+
+              <row>
+                <entry><literal>h</literal></entry>
+
+                <entry>Print the MD5 checksum of an ATerm</entry>
+              </row>
+
+              <row>
+                <entry><literal>l</literal></entry>
+
+                <entry>Print an ATerm-list</entry>
+              </row>
+
+              <row>
+                <entry>n</entry>
+
+                <entry>Print information about an ATerm node</entry>
+              </row>
+
+              <row>
+                <entry>t</entry>
+
+                <entry>Print an ATerm</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title><literal>ATsetWarningHandler</literal></title>
+
+        <para><programlisting>void ATsetWarningHandler(void (*<replaceable>handler</replaceable>)(const char *, va_list))</programlisting>Specify
+        a warning handler for the ATerm library.</para>
+
+        <para>Sets a warning handler for the ATerm library. This handler will
+        be called when an error message is issued via
+        <literal>ATwarning</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATwarning</literal></title>
+
+        <para><programlisting>void ATwarning(const char *<replaceable>format</replaceable>, ...)</programlisting></para>
+
+        <para>Issue a warning message.</para>
+
+        <para>If an errorhandler has been installed through a call to
+        <literal>ATsetWarningHandler</literal>, this handler will be called.
+        Otherwise <literal>ATwarning</literal> uses
+        <literal>ATvfprintf</literal> to print a formatted message to
+        <filename>stderr</filename> and returns.</para>
+      </section>
+
+      <section>
+        <title><literal>ATsetErrorHandler</literal></title>
+
+        <para><programlisting>void ATsetErrorHandler(void (*<replaceable>handler</replaceable>)(const char *, va_list))</programlisting>Specify
+        an errorhandler for the Aterm library.</para>
+
+        <para>Sets an errorhandler for the ATerm library This handler will be
+        called when an error message is issued via
+        <literal>ATerror</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATerror</literal></title>
+
+        <para><programlisting>void ATerror(const char *<replaceable>format</replaceable>, ...)</programlisting>Issue
+        an errormessage and exit the ATerm library.</para>
+
+        <para>If an errorhandler has been installed through a call to
+        <literal>ATsetErrorHandler</literal>, this handler will be called.
+        Otherwise <literal>ATerror</literal> uses
+        <literal>ATvfprintf</literal> to print a formatted message to
+        <literal>stderr</literal> and exits with errorcode 1.</para>
+      </section>
+
+      <section>
+        <title><literal>ATsetAbortHandler</literal></title>
+
+        <para><programlisting>void ATsetAbortHandler(void (*<replaceable>handler</replaceable>)(const char *, va_list))</programlisting>Specify
+        an aborthandler for the ATerm library.</para>
+
+        <para>Sets an aborthandler for the ATerm library. This handler will be
+        called when an error message is issued via
+        <literal>ATabort</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATabort</literal></title>
+
+        <para><programlisting>void ATabort(const char *<replaceable>format</replaceable>, ...)</programlisting>Issue
+        a errormessage and abort the ATerm library.</para>
+
+        <para>If an aborthandler has been installed through a call to
+        <literal>ATsetAbortHandler</literal>, this handler will be called.
+        Otherwise <literal>ATabort</literal> uses
+        <literal>ATvfprintf</literal> to print a formatted message to
+        <literal>stderr</literal> and calls <literal>abort</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATprotect</literal></title>
+
+        <para><programlisting>void ATprotect(ATerm *<replaceable>atp</replaceable>)</programlisting></para>
+
+        <para>Protect an ATerm.</para>
+
+        <para>Protects an ATerm from being freed by the garbage collector. See
+        Section~\ref{prot}.</para>
+      </section>
+
+      <section>
+        <title><literal>ATunprotect</literal></title>
+
+        <para><programlisting>void ATunprotect(ATerm *<replaceable>atp</replaceable>)</programlisting>Unprotect
+        an ATerm.</para>
+
+        <para>Releases protection of an ATerm which has previously been
+        protected through a call to <literal>ATprotect</literal>. See
+        Section~\ref{unprot}.</para>
+      </section>
+
+      <section>
+        <title><literal>ATprotectArray</literal></title>
+
+        <para><programlisting>void ATprotectArray(ATerm *<replaceable>start</replaceable>, int <replaceable>size</replaceable>)</programlisting>Protect
+        an array of ATerms.</para>
+
+        <para>Protects an entire array of <replaceable>size</replaceable>
+        ATerms starting at <replaceable>start</replaceable>.</para>
+      </section>
+
+      <section>
+        <title>ATunprotectArray</title>
+
+        <para><programlisting>void ATunprotectArray(ATerm *<replaceable>start</replaceable>)</programlisting>Unprotect
+        an array of ATerms.</para>
+
+        <para>Releases protection of the array of ATerms which starts at
+        <replaceable>start</replaceable>.</para>
+      </section>
     </section>
   </section>
 
   <section>
     <title></title>
 
-    <para> \Describe{ \Function{ATwriteToTextFile}{ATbool}{ATerm t, FILE *f}
-    {Writes term {\tt t} to file {\tt f} in textual format} \Describe{ This
-    function writes ATerm {\tt t} to the file {\tt f} in textual format. This
-    term can later be read again by {\tt ATreadFromTextFile}. }
-    \Function{ATwriteToSharedTextFile}{long}{ATerm t, FILE *f} {Writes term
-    {\tt t} to file {\tt f} in shared Textual ATerm Format ({\sc taf})}
-    \Describe{ This function writes ATerm {\tt t} to the file {\tt f} in {\sc
-    taf}, and returns the number of characters written. This term can later be
-    read again by {\tt ATreadFromSharedTextFile}. }
-    \Function{ATwriteToBinaryFile}{ATbool}{ATerm t, FILE *F} {Writes term {\tt
-    t} to file {\tt f} in Binary ATerm Format ({\sc baf})} \Describe{ This
-    function writes ATerm {\tt t} to the file {\tt f} in {\sc baf}. This term
-    can later be read again by {\tt ATreadFromBinaryFile}. }
-    \Function{ATwriteToNamedTextFile}{\ATbool}{ATerm t, char *filename}
-    {Writes term {\tt t} to file named {\tt filename} in textual format}
-    \Describe{ This function writes ATerm {\tt t} in textual representation to
-    file {\tt filename}. "-" is standard output's filename. } <!--
-\Function{ATwriteToNamedBinaryFile}{\ATbool}{ATerm t, char *filename}
-{Writes term {\tt t} to file named {\tt filename} in Binary ATerm Format ({\sc baf})}
-\Describe{
-	This function writes ATerm {\tt t} in textual representation
-        to file  {\tt filename}.  "-" is standard output's filename.
-}
-
-\Function{ATwriteToString}{char *}{ATerm t}
-{Writes term {\tt t} to a string}
-\Describe{
-	Writes term {\tt t} to an internal string buffer. The start of this
-	buffer is returned. Note that the contents of this buffer are volatile
-	and may be overwritten by any call to the \ATlib.
-}
-
-\Function{ATwriteToSharedString}{char *}{ATerm t, int *len}
-{Writes term {\tt t} to a shared text string in {\sc taf}}
-\Describe{
-	Writes term {\tt t} to an internal string buffer in {\sc taf}. 
-        The start of this buffer is returned, and the length of the resulting string
-        is stored in len. Note that the contents of this buffer are volatile
-	and may be overwritten by any call to the \ATlib.
-}
-
-\Function{ATwriteToBinaryString}{char *}{ATerm t, int *len}
-{Writes term {\tt t} to a shared text string in {\sc baf}}
-\Describe{
-	Writes term {\tt t} to an internal string buffer in {\sc baf}. 
-        The start of this buffer is returned, and the length of the resulting string
-        is stored in len. Note that the contents of this buffer are volatile
-	and may be overwritten by any call to the \ATlib.
-}
-
-\Function{ATsetAnnotation}{\ATerm}{ATerm t, ATerm label, ATerm anno}
-{Annotate a term with a labeled annotation}
-\Describe{
-	Creates a version of {\tt t} that is annotated with annotation {\tt anno}
-	which is labeled by {\tt label}.
-}
-
-\Function{ATgetAnnotation}{\ATerm}{ATerm t, ATerm label}
-{Retrieves annotation of {\tt t} with label {\tt label}}
-\Describe{
-	This function can be used to retrieve a specific annotation of a term.
-	If {\tt t} has no annotations, or no annotation labeled with {\tt label}
-	exists, \NULL\ is returned. Otherwise the annotation is returned.
-}
-
-\Function{ATremoveAnnotation}{\ATerm}{ATerm t, ATerm label}
-{Remove a specific annotation from a term}
-\Describe{
-	This function returns a version of {\tt t} which has its annotation with
-	label {\tt label} removed. If {\tt t} has no annotations, or no annotation
-	labeled with {\tt label} exists, {\tt t} itself is returned.
-}
-
-\Function{ATinit}{void}
-{\tt int argc, char *argv[], ATerm *bottomOfStack}
-{Initialise the \ATlib.}
-\Describe{See Section~\ref{init}.}
-
-\Function{ATprintf}{int}{const char *format, ...}
-{ATerm version of {\tt printf}}
-\Describe{See ATvfprintf.}
-
-\Function{ATfprintf}{int}{FILE *stream, const char *format, ...}
-{ATerm version of {\tt fprintf}}
-\Describe{See ATvfprintf.}
-
-\Function{ATvfprintf}{int}{FILE *stream, const char *format, va\_list args}
-{ATerm version of {\tt vfprintf}}
-\Describe{
-	The functions {\tt ATprintf}, {\tt ATfprintf} and {\tt ATvfprintf}
-	are used for formatted output to file. The conversion specifiers
-	{\tt c, d, i, o, u, x, X, e, E, f, g, G, p, s} behave as can be
-	expected from {\tt (f)printf}. In addition the conversion specifiers
-	{\tt a, h, l, n} and {\tt t} are supported:
-
-	\begin{small}
-	\begin{center}
-	\begin{tabular}{|c|l|}
-	\hline
-	Conversion specifier & Action \\
-	\hline
-	{\tt a} & print the symbol of an ATerm-application \\
-	{\tt h} & print the MD5 checksum of an ATerm \\
-	{\tt l} & print an ATerm-list \\
-	{\tt n} & print information about an ATerm node \\
-	{\tt t} & print an ATerm \\
-	\hline
-	\end{tabular}
-	\end{center}
-	\end{small}
-}
-
-\Function{ATsetWarningHandler}{void}
-{\tt (void (*handler)(const char *, va\_list))}
-{Specify a warninghandler for the \ATlib}
-\Describe{
-	Sets a warninghandler for the \ATlib. This handler will be called
-	when an error message is sent to {\tt ATwarning}. }
-
-\Function{ATwarning}{void}{(const char *format, ...)}
-{Issue a warning message}
-\Describe{
-	If an errorhandler has been installed through a call to
-	{\tt ATsetWarningHandler}, this handler will be called. Otherwise
-	{\tt ATwarning} uses {\tt ATvfprintf} to print a formatted message
-	to {\tt stderr} and returns.
-}
-
-\Function{ATsetErrorHandler}{void}
-{\tt (void (*handler)(const char *, va\_list))}
-{Specify an errorhandler for the \ATlib}
-\Describe{
-	Sets an errorhandler for the \ATlib.  This handler will be called
-	when an error message is sent to {\tt ATerror}.
-}
-
-\Function{ATerror}{void}{(const char *format, ...)}
-{Issue an errormessage and exit the \ATlib}
-\Describe{
-	If an errorhandler has been installed through a call to
-	{\tt ATsetErrorHandler}, this handler will be called. Otherwise
-	{\tt ATerror} uses {\tt ATvfprintf} to print a formatted message
-	to {\tt stderr} and {\tt exit}s with errorcode 1.
-}
-
-\Function{ATsetAbortHandler}{void}
-{\tt (void (*handler)(const char *, va\_list))}
-{Specify an aborthandler for the \ATlib}
-\Describe{
-	Sets an aborthandler for the \ATlib.  This handler will be called
-	when an error message is sent to {\tt ATabort}.
-}
-
-\Function{ATabort}{void}{(const char *format, ...)}
-{Issue an errormessage and abort the \ATlib}
-\Describe{
-  If an aborthandler has been installed through a call to
-  {\tt ATsetAbortHandler}, this handler will be called.  Otherwise
-  {\tt ATabort} uses {\tt ATvfprintf} to print a formatted message
-  to {\tt stderr} calls {\tt abort}.
-}
-
-
-\Function{ATprotect}{void}{ATerm *atp}{Protect an ATerm}
-\Describe{
-	Protects an ATerm from being freed at garbage collection. See
-	Section~\ref{prot}.
-}
-
-\Function{ATunprotect}{void}{ATerm *atp}{Unprotect an ATerm}
-\label{at-unprot}
-\Describe{
-	Releases protection of an ATerm which has previously been protected
-	through a call to {\tt ATprotect}. See Section~\ref{unprot}.
-}
-
-\Function{ATprotectArray}{void}{ATerm *start, int size)}
-{Protect an array of \ATerms}
-\label{at-unprot-arr}
-\Describe{
-	Protects an entire array of {\tt size} ATerms starting at {\tt start}.
-}
-
-\Function{ATunprotectArray}{void}{ATerm *start)}
-{Unprotect an array of \ATerms}
-\Describe{
-	Releases protection of the array of ATerms which starts at {\tt
-	start}.
-}
-
-====================[ LEVEL TWO INTERFACE ]====================
-
-}}}
-{{{ Level Two Interface
-
+    <para> ====================[ LEVEL TWO INTERFACE ]==================== }}}
+    {{{ Level Two Interface <!--
 \section{Level Two Interface}\label{lvl2}
 This section explains in detail the types and functions that are defined in
 the level two interface. These functions are declared in {\tt aterm2.h}
