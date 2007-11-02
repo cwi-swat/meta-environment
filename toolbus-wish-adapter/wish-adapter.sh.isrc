@@ -53,4 +53,4 @@ fi
 
 export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
 
-java toolbus.adapter.wish.WishAdapter -tbtcl $TBTCL -libdir $LIBDIR $ARGUMENTS
+java toolbus.adapter.wish.WishAdapter -tbtcl $__TBTCL__ -libdir $__LIBDIR__ $ARGUMENTS

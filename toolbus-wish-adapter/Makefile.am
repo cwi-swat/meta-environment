@@ -11,4 +11,6 @@ CLEANFILES += wish-adapter
 EXTRA_DIST += tb.tcl $(wildcard *.src)
 
 % : %.sh.src Makefile
-        sed "s@__TBTCL__@\"$(pkgdatadir)/tb.tcl\"@g;s@__LIBDIR__@\"$(pkgdatadir)\"@g;" < $< > $@ && chmod +x $@
+	sed "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g;\
+	s@__TBTCL__@\"$(pkgdatadir)/tb.tcl\"@g;\
+	s@__LIBDIR__@\"$(pkgdatadir)\"@g;" < $< > $@ && chmod +x $@
