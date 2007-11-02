@@ -903,9 +903,9 @@ int main(int argc, char *argv[])
       <literal>#include &lt;aterm1.h&gt;</literal>.</para>
 
       <section xml:id="section.ATmake">
-        <title>ATmake</title>
+        <title><literal>ATmake</literal></title>
 
-        <para><programlisting>ATerm ATmake(const char *pattern, ...)</programlisting></para>
+        <para><programlisting>ATerm ATmake(const char *<replaceable>pattern</replaceable>, ...)</programlisting></para>
 
         <para>Create an ATerm from a string pattern and a variable number of
         arguments. Creates an ATerm given a pattern and corresponding values.
@@ -1052,11 +1052,205 @@ int main(int argc, char *argv[])
       </section>
 
       <section>
-        <title>ATvmake</title>
+        <title><literal>ATvmake</literal></title>
 
-        <para><programlisting>ATerm ATvmake(const char *pattern, va_list args)</programlisting>Create
+        <para><programlisting>ATerm ATvmake(const char *<replaceable>pattern</replaceable>, va_list <replaceable>args</replaceable>)</programlisting>Create
         an ATerm from a string pattern and a list of arguments} See <xref
         linkend="section.ATmake" />.</para>
+      </section>
+
+      <section>
+        <title><literal>ATmakeTerm</literal></title>
+
+        <para><programlisting>ATerm ATmakeTerm(ATerm <replaceable>pattern</replaceable>, ...)</programlisting>Create
+        an ATerm from an ATerm pattern and a variable number of
+        arguments.</para>
+
+        <para>Note that <replaceable>pattern</replaceable> is here declared as
+        <literal>ATerm</literal> and not as a string as in
+        <literal>ATmake</literal>.</para>
+
+        <para>See <xref linkend="section.ATmake" />.</para>
+      </section>
+
+      <section>
+        <title><literal>ATvmakeTerm</literal></title>
+
+        <para><programlisting>ATerm ATvmakeTerm(ATerm <replaceable>pattern</replaceable>, va_list <replaceable>args</replaceable>)</programlisting>Create
+        an ATerm from an ATerm pattern and a list of arguments.</para>
+
+        <para>See <xref linkend="section.ATmake" />.</para>
+      </section>
+
+      <section>
+        <title><literal>ATmatch</literal></title>
+
+        <para><programlisting>ATbool ATmatch(ATerm <replaceable>t</replaceable>, const char *<replaceable>pattern</replaceable>, ...)</programlisting>Match
+        an ATerm against a pattern.</para>
+
+        <para>Matches an ATerm against a pattern, attempting to fill the
+        `holes'. If the ATerm matches the pattern, <literal>ATtrue</literal>
+        is returned and the variables will be filled according to the pattern,
+        otherwise <literal>ATfalse</literal> is returned. The
+        <literal>&lt;list&gt;</literal> pattern can be used to match the tail
+        of a list as well as a variable number of arguments in a function
+        application. Thus the first few arguments may be matched explicitly
+        while the tail of the arguments is directed to a list. </para>
+
+        <para>Here are a few examples of ATmatch:</para>
+
+        <para><programlisting>#include &lt;aterm2.h&gt;
+
+void foo()
+{
+    ATbool result;
+    ATerm  list;
+    double rval;
+    int    ival;
+
+    /* Sets result to ATtrue and ival to 16. */
+    result = ATmatch(ATmake("f(16)"), "f(&lt;int&gt;)", &amp;ival);
+
+    /* Sets result to ATtrue and rval to 3.14. */
+    result = ATmatch(ATmake("3.14"), "&lt;real&gt;", &amp;rval);
+
+    /* Sets result to ATfalse because f(g) != g(f) */
+    result = ATmatch(ATmake("f(g)"), "g(f)");
+
+    /* fills ival with 1 and list with [2,3] */
+    result = ATmatch(ATmake("[1,2,3]"), "[&lt;int&gt;,&lt;list&gt;]", &amp;ival, &amp;list);
+}
+
+int main(int argc, char *argv[])
+{
+    ATerm bottomOfStack;
+
+    ATinit(argc, argv, &amp;bottomOfStack);
+    foo();
+    return 0;
+}</programlisting></para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromString</literal></title>
+
+        <para><programlisting>ATerm ATreadFromString(const char *<replaceable>string</replaceable>)</programlisting>Read
+        an ATerm from a string.</para>
+
+        <para>This function parses a character string into an ATerm. A
+        convenience macro <literal>ATparse</literal> is included in
+        <literal>aterm1.h</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromBinaryString</literal></title>
+
+        <para><programlisting>ATerm ATreadFromBinaryString(const char *<replaceable>string</replaceable>, int <replaceable>size</replaceable>)</programlisting>Read
+        a ATerm from a string in BAF format.</para>
+
+        <para>This function decodes a BAF-encoded character string into an
+        ATerm. </para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromSharedString</literal></title>
+
+        <para><programlisting>ATerm ATreadFromSharedString(const char *<replaceable>string</replaceable>, int <replaceable>size</replaceable>)</programlisting>Read
+        a ATerm from a string in TAF format.</para>
+
+        <para>This function decodes a TAF-encoded character string into an
+        ATerm.</para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromTextFile</literal></title>
+
+        <para><programlisting>ATerm ATreadFromTextFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+        an ATerm from text file.</para>
+
+        <para>This function reads a text file and parses the contents into an
+        ATerm.</para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromBinaryFile</literal></title>
+
+        <para><programlisting>ATerm ATreadFromBinaryFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+        an ATerm from binary (BAF) file.</para>
+
+        <para>This function reads a BAF file and builds an ATerm.</para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromSharedTextFile</literal></title>
+
+        <para><programlisting>ATerm ATreadFromBinaryFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+        an ATerm from a shared text (TAF) file.</para>
+
+        <para>This function reads a shared text file and buils an ATerm.
+        </para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromFile</literal></title>
+
+        <para><programlisting>ATerm ATreadFromFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
+        an ATerm from binary or text file.</para>
+
+        <para>This function reads an ATerm from a file. A test is performed to
+        see if the file is in BAF, TAF, or plain text. </para>
+      </section>
+
+      <section>
+        <title><literal>ATreadFromNamedFile</literal></title>
+
+        <para><programlisting>ATerm ATreadFromNamendFile(char *<replaceable>filename</replaceable>)</programlisting>Read
+        an ATerm from named binary or text file.</para>
+
+        <para> This function reads an ATerm file
+        <replaceable>filename</replaceable>. A test is performed to see if the
+        file is in BAF, TAF or plain text. <literal>"-" </literal>is standard
+        input's filename.</para>
+      </section>
+
+      <section>
+        <title><literal>ATparse</literal></title>
+
+        <para><programlisting>ATerm ATparse(const char *<replaceable>str</replaceable>)</programlisting>A
+        convenience macro for <literal>ATreadFromString</literal>.</para>
+
+        <para>This macro is simply a shortcut for
+        <literal>ATreadFromString(<replaceable>str</replaceable>)</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATgetType</literal></title>
+
+        <para><programlisting>int ATgetType(ATerm <replaceable>term</replaceable>)</programlisting>Return
+        the type of <replaceable>term</replaceable>.</para>
+
+        <para>A macro that returns the type of an ATerm. Result is one of
+        <literal>AT_APPL</literal>, <literal>AT_INT</literal>,
+        <literal>AT_REAL</literal>, <literal>AT_LIST</literal>,
+        <literal>AT_PLACEHOLDER</literal>, or
+        <literal>AT_BLOB</literal>.</para>
+      </section>
+
+      <section>
+        <title><literal>ATisEqual</literal></title>
+
+        <para><programlisting>ATBool ATisEqual(ATerm <replaceable>t1</replaceable>, ATerm <replaceable>t2</replaceable>)</programlisting>A
+        macro that tests equality of ATerms <replaceable>t1</replaceable> and
+        <replaceable>t2</replaceable>.</para>
+
+        <para>As ATerms are created using <emphasis>maximal sharing</emphasis>
+        (see Section~\ref{sharing}), testing equality is performed in constant
+        time by comparing the addresses of <replaceable>t1</replaceable> and
+        <replaceable>t2</replaceable>. Note however that
+        <literal>ATisEqual</literal> only returns <literal>ATtrue</literal>
+        when <replaceable>t1</replaceable> and <replaceable>t2</replaceable>
+        are completely equal, inclusive any annotations they might
+        have!</para>
       </section>
     </section>
   </section>
@@ -1064,144 +1258,23 @@ int main(int argc, char *argv[])
   <section>
     <title></title>
 
-    <para><!--
-
-
-\Function{ATmakeTerm}{\ATerm}{ATerm pat, ...}
-{Create an ATerm from an ATerm pattern and a variable number of
-arguments}
-\Describe{See {\tt ATmake}.}
-
-\Function{ATvmakeTerm}{\ATerm}{ATerm pat, va\_list args}
-{Create an ATerm from an ATerm pattern and a list of arguments}
-\Describe{See {\tt ATmake}.}
-
-\Function{ATmatch}{ATbool}{ATerm t, const char *pattern, ...}
-{Match an ATerm against a pattern}
-\Describe{
-	Matches an ATerm against a pattern, attempting to fill the `holes'.
-	If the ATerm matches the pattern, \ATtrue\ is returned and the
-	variables will be filled according to the pattern, otherwise \ATfalse\
-	is returned.
-
-	The {\tt <list>} pattern can be used to match the tail of a list as
-	well as a variable number of arguments in a function application. Thus
-	the first few arguments may be matched explicitly while the tail of
-	the arguments is directed to a list.
-
-
-	\smallskip\noindent
-	Here are a few examples of {\tt ATmatch}:
-
-	\example{match.c}
-}
-
-\Function{ATreadFromString}{\ATerm}{const char *string}
-{Read an ATerm from string}
-\Describe{
-	This function parses a character string into an \aterm.
-	A convenience macro {\tt ATparse} is included in {\tt aterm1.h}.
-}
-
-\Function{ATreadFromBinaryString}{\ATerm}{const char *string, int size}
-{Read a ATerm from a string in {\sc baf} format.}
-\Describe{
-	This function decodes a {\sc baf} character string into an \aterm.
-}
-
-\Function{ATreadFromSharedString}{\ATerm}{const char *string, int size}
-{Read a ATerm from a string in {\sc taf} format.}
-\Describe{
-	This function decodes a {\sc taf} character string into an \aterm.
-}
-
-\Function{ATreadFromTextFile}{\ATerm}{FILE *file}
-{Read an ATerm from text file}
-\Describe{
-	This function reads a text file and parses the contents into an \aterm.
-}
-
-\Function{ATreadFromBinaryFile}{\ATerm}{FILE *file}
-{Read an ATerm from binary file ({\sc baf})}
-\Describe{
-	This function reads a binary file and builds an \aterm.
-}
-
-\Function{ATreadFromSharedTextFile}{\ATerm}{FILE *file}
-{Read an ATerm from a shared text file ({\sc taf})}
-\Describe{
-        This function reads a shared text file and buils an \aterm. 
-}
-
-\Function{ATreadFromFile}{\ATerm}{FILE *file}
-{Read an ATerm from binary or text file}
-\Describe{
-	This function reads an ATerm from a file. A test is performed
-	to see if the file is in {\sc baf}, {\sc taf}, or plain text. 
-}
-
-\Function{ATreadFromNamedFile}{\ATerm}{char *filename}
-{Read an ATerm from named binary or text file}
-\Describe{
-        This function reads an ATerm file {\tt filename}. A test is
-        performed to see if the file is in {\sc baf}, {\sc taf}, or plain text.
-        "-" is standard input's filename.
-}
-
-\Macro{ATparse}{\ATerm}{const char *str}
-{A convenience macro for {\tt ATreadFromString}}
-\Describe{
-	This macro is simply a shortcut to {\tt ATreadFromString(str)}.
-}
-
-
-
-\Macro{ATgetType}{int}{ATerm term}
-{Return the type of {\tt term}}
-\Describe{
-	A macro that returns the type of an \aterm. Result is one of
-	{\tt AT\_APPL}, {\tt AT\_INT}, {\tt AT\_REAL}, {\tt AT\_LIST},
-	{\tt AT\_PLACEHOLDER}, or {\tt AT\_BLOB}.
-}
-
-\Macro{ATisEqual}{int}{ATerm t1, ATerm t2}
-{A macro that tests equality of ATerms {\tt t1} and {\tt t2}}
-\Describe{
-	As ATerms are created using \emph{maximal sharing} (see
-	Section~\ref{sharing}), testing equality is performed in constant time
-	by comparing the addresses of {\tt t1} and {\tt t2}. Note however
-that {\tt ATisEqual} only returns {\tt ATtrue} when {\tt t1} and {\tt t2}
-are completely equal, inclusive any annotations they might have!}
-
-\Function{ATwriteToTextFile}{ATbool}{ATerm t, FILE *f}
-{Writes term {\tt t} to file {\tt f} in textual format}
-\Describe{
-	This function writes ATerm {\tt t} to the file {\tt f} in textual format.
-	This term can later be read again by {\tt ATreadFromTextFile}.
-}
-
-\Function{ATwriteToSharedTextFile}{long}{ATerm t, FILE *f}
-{Writes term {\tt t} to file {\tt f} in shared Textual ATerm Format ({\sc taf})}
-\Describe{
-	This function writes ATerm {\tt t} to the file {\tt f} in {\sc taf},
-	and returns the number of characters written.
-	This term can later be read again by {\tt ATreadFromSharedTextFile}.
-}
-
-\Function{ATwriteToBinaryFile}{ATbool}{ATerm t, FILE *F}
-{Writes term {\tt t} to file {\tt f} in Binary ATerm Format ({\sc baf})}
-\Describe{
-	This function writes ATerm {\tt t} to the file {\tt f} in {\sc baf}.
-	This term can later be read again by {\tt ATreadFromBinaryFile}.
-}
-
-\Function{ATwriteToNamedTextFile}{\ATbool}{ATerm t, char *filename}
-{Writes term {\tt t} to file named {\tt filename} in textual format}
-\Describe{
-	This function writes ATerm {\tt t} in textual representation
-        to file  {\tt filename}.  "-" is standard output's filename.
-}
-
+    <para> \Describe{ \Function{ATwriteToTextFile}{ATbool}{ATerm t, FILE *f}
+    {Writes term {\tt t} to file {\tt f} in textual format} \Describe{ This
+    function writes ATerm {\tt t} to the file {\tt f} in textual format. This
+    term can later be read again by {\tt ATreadFromTextFile}. }
+    \Function{ATwriteToSharedTextFile}{long}{ATerm t, FILE *f} {Writes term
+    {\tt t} to file {\tt f} in shared Textual ATerm Format ({\sc taf})}
+    \Describe{ This function writes ATerm {\tt t} to the file {\tt f} in {\sc
+    taf}, and returns the number of characters written. This term can later be
+    read again by {\tt ATreadFromSharedTextFile}. }
+    \Function{ATwriteToBinaryFile}{ATbool}{ATerm t, FILE *F} {Writes term {\tt
+    t} to file {\tt f} in Binary ATerm Format ({\sc baf})} \Describe{ This
+    function writes ATerm {\tt t} to the file {\tt f} in {\sc baf}. This term
+    can later be read again by {\tt ATreadFromBinaryFile}. }
+    \Function{ATwriteToNamedTextFile}{\ATbool}{ATerm t, char *filename}
+    {Writes term {\tt t} to file named {\tt filename} in textual format}
+    \Describe{ This function writes ATerm {\tt t} in textual representation to
+    file {\tt filename}. "-" is standard output's filename. } <!--
 \Function{ATwriteToNamedBinaryFile}{\ATbool}{ATerm t, char *filename}
 {Writes term {\tt t} to file named {\tt filename} in Binary ATerm Format ({\sc baf})}
 \Describe{
@@ -1286,11 +1359,11 @@ are completely equal, inclusive any annotations they might have!}
 	\hline
 	Conversion specifier & Action \\
 	\hline
-	{\tt a} & print the symbol of an \aterm-application \\
-	{\tt h} & print the MD5 checksum of an \aterm \\
-	{\tt l} & print an \aterm-list \\
+	{\tt a} & print the symbol of an ATerm-application \\
+	{\tt h} & print the MD5 checksum of an ATerm \\
+	{\tt l} & print an ATerm-list \\
 	{\tt n} & print information about an ATerm node \\
-	{\tt t} & print an \aterm \\
+	{\tt t} & print an ATerm \\
 	\hline
 	\end{tabular}
 	\end{center}
@@ -1348,13 +1421,13 @@ are completely equal, inclusive any annotations they might have!}
 }
 
 
-\Function{ATprotect}{void}{ATerm *atp}{Protect an \aterm}
+\Function{ATprotect}{void}{ATerm *atp}{Protect an ATerm}
 \Describe{
 	Protects an ATerm from being freed at garbage collection. See
 	Section~\ref{prot}.
 }
 
-\Function{ATunprotect}{void}{ATerm *atp}{Unprotect an \aterm}
+\Function{ATunprotect}{void}{ATerm *atp}{Unprotect an ATerm}
 \label{at-unprot}
 \Describe{
 	Releases protection of an ATerm which has previously been protected
@@ -1394,8 +1467,8 @@ interface also uses the following types:
 	\item {\tt ATermList}: a list;
 	\item {\tt ATermPlaceholder}: a placeholder;
 	\item {\tt ATermBlob}: a Binary Large OBject;
-	\item {\tt ATermTable}: a hashtable of \aterms;
-	\item {\tt ATermIndexedSet}: a set of \aterms where each
+	\item {\tt ATermTable}: a hashtable of ATerms;
+	\item {\tt ATermIndexedSet}: a set of ATerms where each
 		element has a unique index.
 \end{itemize}
 
@@ -1414,20 +1487,20 @@ The type {\tt ATermInt} is the ATerm representation of an integer. It
 abides by the rules of the {\tt C}-type: {\tt int}.
 
 \Function{ATmakeInt}{ATermInt}{int value}
-{Build an \aterm Int from an integer ({\tt int})}
+{Build an ATerm Int from an integer ({\tt int})}
 
 \Macro{ATgetInt}{int}{ATermInt t}
-{Get the integer value from an \aterm Int.}
+{Get the integer value from an ATerm Int.}
 
 \subsubsection{ATermReal}
 The type {\tt ATermReal} is the ATerm representation of a real. It
 abides by the rules of the {\tt C}-type: {\tt double}.
 
 \Function{ATmakeReal}{ATermReal}{double value}
-{Build an \aterm Real from a real ({\tt double}).}
+{Build an ATerm Real from a real ({\tt double}).}
 
 \Macro{ATgetReal}{double}{ATerm t}
-{Macro to get the real value from an \aterm Real.}
+{Macro to get the real value from an ATerm Real.}
 
 \subsubsection{ATermAppl}
 The type {\tt ATermAppl} denotes a function application. In order to build
@@ -1730,12 +1803,12 @@ its actual contents are not filled in.
 
 \Function{ATmakePlaceholder}{ATermPlaceholder}{ATerm type}
 {
-  Build an \aterm Placeholder of a specific type. The type is taken from
+  Build an ATerm Placeholder of a specific type. The type is taken from
   the {\tt type} parameter. See {\tt demo\_placeholder} below.
 }
 
 \Macro{ATgetPlaceholder}{\ATerm}{\ATerm Placeholder ph}
-{Get the type of an \aterm Placeholder}
+{Get the type of an ATerm Placeholder}
 
 \example{plac.c}
 
@@ -1814,7 +1887,7 @@ found (if the element is present at all). For a more efficient
 
 \subsection{Tables}\label{tables} The dictionaries described in
 Section~\ref{dicts} are in essence nothing more than linked lists, which
-makes them less suitable for large \aterm-to-ATerm mappings. To this end,
+makes them less suitable for large ATerm-to-ATerm mappings. To this end,
 ATerm tables were created. These are efficiently implemented using
 a hash table
 requiring approximately 16 bytes per stored entry, assuming that
