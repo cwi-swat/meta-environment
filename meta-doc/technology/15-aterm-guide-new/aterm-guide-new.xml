@@ -1605,183 +1605,335 @@ int main(int argc, char *argv[])
     </section>
   </section>
 
+  <section xml:id="section.level-2-interface">
+    <title>Level Two Interface</title>
+
+    <para> This section explains in detail the types and functions that are
+    defined in the level two interface of the Term library. These functions
+    are declared in <filename>aterm2.h</filename>.</para>
+
+    <section xml:id="section-types2">
+      <title>Level Two Types</title>
+
+      <para>In addition to the C-types explained in Section~\ref{types1}, the
+      level two interface also uses the following types: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>ATermInt</literal>: an integer value;</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermReal</literal>: a real value;</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermAppl</literal>: a function application; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermList</literal>: a list; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermPlaceholder</literal>: a placeholder; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermBlob</literal>: a Binary Large OBject; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermTable</literal>: a hashtable of ATerms; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATermIndexedSet</literal>: a set of ATerms where each
+          element has a unique index.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="section-functionality2">
+      <title>Level Two Functionality</title>
+
+      <para>This section describes all functions and macros that are available
+      in the level two interface. To obtain access to this functionality you
+      need to <literal>#include &lt;aterm2.h&gt;</literal> instead of
+      <literal>&lt;aterm1.h&gt;</literal> in your application.</para>
+
+      <section>
+        <title><literal>ATermInt</literal></title>
+
+        <para>The type <literal>ATermInt</literal> is the ATerm representation
+        of an integer. It abides by the rules of the C-type:
+        <literal>int</literal>.</para>
+
+        <section>
+          <title><literal>ATmakeInt</literal></title>
+
+          <para><programlisting>AtermInt ATmakeInt(int <replaceable>value</replaceable>)</programlisting></para>
+
+          <para>Build an ATerm Int from an integer
+          <replaceable>value</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetInt</literal></title>
+
+          <para><programlisting>int ATgetInt(ATermInt <replaceable>t</replaceable>)</programlisting></para>
+
+          <para>Macro to get the integer value from the ATerm
+          <replaceable>t</replaceable>.</para>
+        </section>
+      </section>
+
+      <section>
+        <title><literal>ATermReal</literal></title>
+
+        <para>The type <literal>ATermReal</literal> is the ATerm
+        representation of a real. It abides by the rules of the C-type:
+        <literal>double</literal>.</para>
+
+        <section>
+          <title><literal>ATmakeReal</literal></title>
+
+          <para><programlisting>AtermReal ATmakeReal(double <replaceable>value</replaceable>)</programlisting>Build
+          an ATerm Real from a real <replaceable>value</replaceable>.</para>
+        </section>
+
+        <section>
+          <title>ATgetReal</title>
+
+          <para><programlisting>double ATgetReal(ATermInt <replaceable>t</replaceable>)</programlisting>Macro
+          to get the real value from the ATerm
+          <replaceable>t</replaceable>.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>ATermAppl</title>
+
+        <para>The type <literal>ATermAppl</literal> denotes a function
+        application. In order to build a function application, first its
+        function symbol (<literal>AFun</literal>) must be built. This symbol
+        holds the name of the function application, its arity (how many
+        arguments the function has) and whether the function name is quoted.
+        Below are some examples of function applications and the symbols
+        needed to create them. </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>true</literal>: a zero arity, unquoted function
+            application that is created by: <programlisting>sym = ATmakeAFun("true", 0, ATfalse);</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>"true"</literal>; the same function application,
+            but now with quoted function symbol:<programlisting>sym = ATmakeAFun("true", 0, ATtrue);</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>f(0)</literal>: an unquoted function application of
+            arity 1:<programlisting>sym = ATmakeAFun("f", 1, ATfalse); </programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>"prod"(2, b, [])</literal>: a quoted function
+            application of arity 3:<programlisting>sym = ATmakeAFun("prod", 3, ATtrue);</programlisting></para>
+          </listitem>
+        </itemizedlist>
+
+        <section>
+          <title><literal>ATmakeAFun</literal></title>
+
+          <para><programlisting>AFun ATmakeAFun(char *<replaceable>name</replaceable>, int <replaceable>arity</replaceable>, ATbool <replaceable>quoted</replaceable>)</programlisting></para>
+
+          <para>Creates a function symbol (AFun).</para>
+
+          <para>Creates an AFun, representing a function symbol with name
+          <replaceable>name</replaceable> and arity
+          <replaceable>arity</replaceable>. Quoting of the function
+          application is defined via the <replaceable>quoted</replaceable>
+          argument.</para>
+        </section>
+
+        <section>
+          <title><literal>ATprotectAFun</literal></title>
+
+          <para><programlisting>void ATprotectAFun(AFun <replaceable>sym</replaceable>)</programlisting></para>
+
+          <para>Just as ATerms which are not on the stack or in registers must
+          be protected through a call to <literal>ATprotect</literal>, so must
+          AFuns be protected by calling
+          <literal>ATprotectAFun</literal>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATunprotectAFun</literal></title>
+
+          <para><programlisting>void ATunprotectAFun(AFun <replaceable>sym</replaceable>)</programlisting>Release
+          an AFun's protection.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetName</literal></title>
+
+          <para><programlisting>char *ATgetName(AFun <replaceable>sym</replaceable>)</programlisting></para>
+
+          <para>Return the name of an AFun.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetArity</literal></title>
+
+          <para><programlisting>int ATgetArity(AFun <replaceable>sym</replaceable>)</programlisting>Return
+          the arity (number of arguments) of a function symbol (AFun).</para>
+        </section>
+
+        <section>
+          <title><literal>ATisQuoted</literal></title>
+
+          <para><programlisting>ATbool ATisQuoted(AFun <replaceable>sym</replaceable>)</programlisting>Determine
+          if a function symbol (AFun) is quoted or not.</para>
+        </section>
+
+        <section>
+          <title>ATmakeAppl</title>
+
+          <para><programlisting>ATermAppl ATmakeAppl(AFun <replaceable>sym</replaceable>, ...)</programlisting></para>
+
+          <para>Build an application from an AFun and a variable number of
+          arguments.</para>
+
+          <para>The arity is taken from the first argument
+          <replaceable>sym</replaceable>, the other arguments of
+          <literal>ATmakeAppl</literal> should be the arguments for the
+          application. For arity <replaceable>N</replaceable> = 0, 1, ... 6
+          the corresponding
+          <literal>ATmakeAppl</literal><replaceable>N</replaceable> can be
+          used instead for greater efficiency.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl0</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl0(AFun <replaceable>sym</replaceable>)</programlisting>Make
+          a function application with zero arguments.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl1</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl1(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>)</programlisting>Make
+          a function application with one argument.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl2</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl2(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>)</programlisting>Make
+          a function application with two arguments.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl3</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl3(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>)</programlisting>Make
+          a function application with three arguments.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl4</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl4(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>)</programlisting>Make
+          a function application with four arguments.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl5</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl5(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>)</programlisting>Make
+          a function application with five arguments.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeAppl6</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeAppl6(AFun <replaceable>sym</replaceable>, ATerm <replaceable>a1</replaceable>, <replaceable>a2</replaceable>, <replaceable>a3</replaceable>, <replaceable>a4</replaceable>, <replaceable>a5</replaceable>, <replaceable>a6</replaceable>)</programlisting>Make
+          a function application with six arguments.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetAFun</literal></title>
+
+          <para><programlisting>AFun ATgetAFun(ATermAppl <replaceable>appl</replaceable>)</programlisting></para>
+
+          <para>Get the function symbol (AFun) of an application.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetArgument</literal></title>
+
+          <para><programlisting>ATerm ATgetArgument(ATermAppl <replaceable>appl</replaceable>, int <replaceable>n</replaceable>)</programlisting>Get
+          the <replaceable>n</replaceable>-th argument of an
+          application.</para>
+        </section>
+
+        <section>
+          <title><literal>ATsetArgument</literal></title>
+
+          <para><programlisting>ATermAppl ATsetArgument(ATermAppl <replaceable>appl</replaceable>, ATerm <replaceable>arg,</replaceable> int <replaceable>n</replaceable>)</programlisting>Set
+          the <replaceable>n</replaceable>-th argument of an application to
+          <replaceable>arg</replaceable>.</para>
+
+          <para>This function returns a copy of
+          <replaceable>appl</replaceable> with argument
+          <replaceable>n</replaceable> replaced by
+          <replaceable>arg</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATgetArguments</literal></title>
+
+          <para><programlisting>ATermList ATgetArguments(ATermAppl <replaceable>appl</replaceable>)</programlisting>Get
+          a list of arguments of an application.</para>
+
+          <para>Return the arguments of <replaceable>appl</replaceable> in
+          <literal>ATermList</literal> format. Note: traversing the arguments
+          of <replaceable>appl</replaceable> can be done more efficiently
+          using the <literal>ATgetArgument</literal> macro.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeApplList</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeApplList(AFun <replaceable>sym</replaceable>, ATermList <replaceable>args</replaceable>)</programlisting></para>
+
+          <para>Build an application given an AFun and a list of
+          arguments.</para>
+
+          <para>Build an application from <replaceable>sym</replaceable> and
+          the argument list <replaceable>args</replaceable>. Note: unless the
+          arguments are already in an <literal>ATermList</literal>, it is
+          probably more efficient to use the appropriate
+          <literal>ATmakeAppl</literal><replaceable>N</replaceable>.</para>
+        </section>
+
+        <section>
+          <title><literal>ATmakeApplArray</literal></title>
+
+          <para><programlisting>ATermAppl ATmakeApplArray(AFun <replaceable>sym</replaceable>, ATerm <replaceable>args</replaceable>[])</programlisting>Build
+          an application given an AFun and an array of arguments.</para>
+        </section>
+      </section>
+    </section>
+  </section>
+
   <section>
     <title></title>
 
-    <para> ====================[ LEVEL TWO INTERFACE ]==================== }}}
-    {{{ Level Two Interface <!--
-\section{Level Two Interface}\label{lvl2}
-This section explains in detail the types and functions that are defined in
-the level two interface. These functions are declared in {\tt aterm2.h}
-
-\subsection{Level Two Types}\label{types2}
-In addition to the C-types explained in Section~\ref{types1}, the level two
-interface also uses the following types:
-\begin{itemize}
-	\item {\tt ATermInt}: an integer value;
-	\item {\tt ATermReal}: a real value;
-	\item {\tt ATermAppl}: a function application;
-	\item {\tt ATermList}: a list;
-	\item {\tt ATermPlaceholder}: a placeholder;
-	\item {\tt ATermBlob}: a Binary Large OBject;
-	\item {\tt ATermTable}: a hashtable of ATerms;
-	\item {\tt ATermIndexedSet}: a set of ATerms where each
-		element has a unique index.
-\end{itemize}
-
-\subsection{Level Two Functionality}\label{func2}
-This section describes all functions and macros that are available in the
-level two interface. To obtain access to this functionality you need to
-{\tt \#include <aterm2.h>} instead of {\tt <aterm1.h>} in your application.
-
-In Section~\ref{func1} we explained that the macros used in the level one
-interface could just as well have been implemented as functions, but were
-chosen to be implemented as macros for efficiency reasons. The same goes
-for all macros described in this section.
-
-\subsubsection{ATermInt}
-The type {\tt ATermInt} is the ATerm representation of an integer. It
-abides by the rules of the {\tt C}-type: {\tt int}.
-
-\Function{ATmakeInt}{ATermInt}{int value}
-{Build an ATerm Int from an integer ({\tt int})}
-
-\Macro{ATgetInt}{int}{ATermInt t}
-{Get the integer value from an ATerm Int.}
-
-\subsubsection{ATermReal}
-The type {\tt ATermReal} is the ATerm representation of a real. It
-abides by the rules of the {\tt C}-type: {\tt double}.
-
-\Function{ATmakeReal}{ATermReal}{double value}
-{Build an ATerm Real from a real ({\tt double}).}
-
-\Macro{ATgetReal}{double}{ATerm t}
-{Macro to get the real value from an ATerm Real.}
-
-\subsubsection{ATermAppl}
-The type {\tt ATermAppl} denotes a function application. In order to build
-a function application, first its function symbol (\Symbol) must be built.
-This symbol holds the name of the function application, its arity (how many
-arguments the function has) and whether the function name is quoted. Below
-are some examples of function applications and the symbols needed to create
-them.
-
-\begin{small}
-\begin{verbatim}
-    true               - a zero arity, unquoted function application
-                         sym = ATmakeAFun("true", 0, ATfalse);
-
-    "true"             - the same function application, but quoted
-                         sym = ATmakeAFun("true", 0, ATtrue);
-
-    f(0)               - an unquoted function application of arity 1
-                         sym = ATmakeAFun("f", 1, ATfalse);
-
-    "prod"(2, b, [])   - a quoted function application of arity 3
-                         sym = ATmakeAFun("prod", 3, ATtrue);
-\end{verbatim}
-\end{small}
-
-\Function{ATmake\Symbol}{\Symbol}
-{\tt char *name, int arity, ATbool quoted}
-{Create a function symbol (\Symbol)}
-\Describe{
-	Creates an \Symbol, representing a function symbol with name {\tt name}
-	and arity {\tt arity}. Quotedness is passed through the {\tt quoted}
-	argument.
-}
-
-\Function{ATprotect\Symbol}{void}{\Symbol\ sym}
-{Protect a function symbol}
-\label{at-unprot-sym}
-\Describe{Just as ATerms which are not on the stack or in registers must
-	be protected through a call to {\tt ATprotect}, so must \Symbol s be
-	protected by calling {\tt ATprotect\Symbol}.
-}
-
-\Function{ATunprotect\Symbol}{void}{\Symbol\ sym}
-{Release an \Symbol's protection.}
-
-\Macro{ATgetName}{char *}{\Symbol\ sym}
-{Return the name of an \Symbol}.
-
-\Macro{ATgetArity}{int}{\Symbol\ sym}
-{Return the arity (number of arguments) of a function symbol (\Symbol)}
-
-\Macro{ATisQuoted}{ATbool}{\Symbol\ sym}
-{Determine if a function symbol (\Symbol) is quoted or not}
-
-\Function{ATmakeAppl}{ATermAppl}{\Symbol\ sym, ...}
-{Build an application from an \Symbol\ and a variable number of arguments.}
-\Describe{
-	The arity is taken from the first argument {\tt sym}, the other
-	arguments to {\tt ATmakeAppl} should be the arguments for the
-	application. For arity $0\ldots 6$ the corresponding {\tt ATmakeAppl<N>}
-	can be used instead for greater efficiency.  }
-
-\Function{ATmakeAppl0}{ATermAppl}{\Symbol\ s}
-{Make a function application with zero arguments}
-
-\Function{ATmakeAppl1}{ATermAppl}{\Symbol\ s, ATerm a0}
-{Make a function application with one argument}
-
-\Function{ATmakeAppl2}{ATermAppl}{\Symbol\ s, ATerm a0, a1}
-{Make a function application with two arguments}
-
-\Function{ATmakeAppl3}{ATermAppl}{\Symbol\ s, ATerm a0, a1, a2}
-{Make a function application with three arguments}
-
-\Function{ATmakeAppl4}{ATermAppl}{\Symbol\ s, ATerm a0, a1, a2, a3}
-{Make a function application with four arguments}
-
-\Function{ATmakeAppl5}{ATermAppl}{\Symbol\ s,
-	ATerm a0, a1, a2, a3, a4}
-{Make a function application with five arguments}
-
-\Function{ATmakeAppl6}{ATermAppl}
-{\Symbol\ s, ATerm a0, a1, a2, a3, a4, a5}
-{Make a function application with six arguments}
-\Describe{
-	These functions build an application of arity zero through six, i.e.
-	an application with $0\ldots 6$ arguments. Use these functions to
-	build {\tt ATermAppl}s with small arity in favour of the generic
-	{\tt ATmakeAppl} described above.
-}
-
-\Macro{ATget\Symbol}{\Symbol}{ATermAppl appl}
-{Get the function symbol (\Symbol) of an application}
-
-\Macro{ATgetArgument}{\ATerm}{ATermAppl appl, int nr}
-{Get the {\tt nr}-th argument of an application}
-
-\Function{ATsetArgument}{ATermAppl}{ATermAppl appl, ATerm arg, int n}
-{Set the {\tt nr}-th argument of an application to {\tt arg}}
-\Describe{
-	This function returns a copy of {\tt appl} with argument {\tt n}
-	replaced by {\tt arg}.
-}
-
-\Function{ATgetArguments}{ATermList}{ATermAppl appl}
-{Get a list of arguments of an application}
-\Describe{
-	Return the arguments of {\tt appl} in {\tt ATermList} format.
-	Note: traversing the arguments of {\tt appl} can be done more
-	efficiently using the {\tt ATgetArgument} macro.
-}
-
-\Function{ATmakeApplList}{ATermAppl}{\Symbol\ sym, ATermList args}
-{Build an application given an \Symbol\ and a list of arguments}
-\Describe{
-	Build an application from {\tt sym} and the argument list {\tt args}.
-	Note: unless the arguments are already in an {\tt ATermList}, it is
-	probably more efficient to use the appropriate {\tt ATmakeAppl<N>}.
-}
-
-\Function{ATmakeApplArray}{ATermAppl}{\Symbol\ sym, ATerm args[]}
-{Build an application given an \Symbol\ and an array of arguments}
-
-\subsubsection{ATermList}
+    <para><!--\subsubsection{ATermList}
 \Function{ATmakeList}{ATermList}{int n, ...}
 {Create an {\tt ATermList} of $n$ elements}
 \Describe{
