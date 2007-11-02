@@ -1,0 +1,2556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <title>The ATerm Guide</title>
+
+  <warning>
+    <para>This document is in the process of being created.</para>
+  </warning>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Cut and paste operations on complex data structures are standard in
+    most desktop software environments: one can easily clip a part of a
+    spreadsheet and paste it into a text document. The exchange of complex
+    data is also common in distributed applications: complex queries,
+    transaction records, and more complex data are exchanged between different
+    parts of a distributed application. Compilers and programming environments
+    consist of tools such as editors, parsers, optimizers, and code generators
+    that exchange syntax trees, intermediate code, and the like. </para>
+
+    <para>Annotated Terms (ATerms) provide a solution for implementation needs
+    in the areas of compilers, interactive programming environments and
+    distributed applications but are more widely applicable in areas like
+    model checking and ontology definition. They have the following
+    characteristics:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Open</emphasis>: independent of any specific hardware
+        or software platform.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Simple</emphasis>: the procedural interface should
+        contain 10 rather than 100 functions. </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Efficient</emphasis>: operations on data structures
+        should be fast. </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Concise</emphasis>: inside an application the storage
+        of data structures should be as small as possible by using compact
+        representations and by exploiting sharing. Between applications the
+        transmission of data structures should be fast by using a compressed
+        representation with fast encoding and decoding. Transmission should
+        preserve any sharing of in-memory representation in the data
+        structures.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Language-independent</emphasis>: data structures can
+        be created and manipulated in any suitable programming language.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Annotations</emphasis>: applications can transparently
+        extend the main data structures with annotations of their own to
+        represent non-structural information. </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Typically, we want to exchange and process tree-like data structures
+    such as parse trees, abstract syntax trees, parse tables, generated code,
+    and formatted source texts. The applications involved include parsers,
+    type checkers, compilers, formatters, syntax-directed editors, and
+    user-interfaces written in a variety of languages. Typically, a parser may
+    add annotations to nodes in the tree describing the coordinates of their
+    corresponding source text and a formatter may add font or color
+    information to be used by an editor when displaying the textual
+    representation of the tree. </para>
+
+    <para>The ATerm data type has been designed to represent such tree-like
+    data structures and it is therefore very natural to use ATerms both for
+    the internal representation of data inside an application and for the
+    exchange of information between applications. Besides function
+    applications that are needed to represent the basic tree structure, a
+    small number of other primitives are provided to make the ATerm data type
+    more generally applicable. These include integer constants, real number
+    constants, binary large data objects (``blobs''), lists of ATerms, and
+    placeholders to represent typed gaps in ATerms. Using the comprehensive
+    set of primitives and operations on ATerms, it is possible to perform
+    operations on an ATerm received from another application without first
+    converting it to an application-specific representation. </para>
+
+    <para>One particular aspect of ATerms makes them unique and should be
+    mentioned here explicitly: ATerms are based on <emphasis>maximal subterm
+    sharing</emphasis>. This is a strategy to achieve "conciseness" as
+    mentioned above and is a simple and effective way to minimize memory
+    usage: terms are only created when they are <emphasis>new</emphasis>,
+    i.e., that do not exist already. If a term to be constructed already
+    exists, that term is reused, ensuring maximal sharing. This strategy fully
+    exploits the redundancy that is typically present in the terms to be built
+    and leads to maximal sharing of subterms. The library functions that
+    construct terms make sure that shared terms are returned whenever
+    possible. The sharing of terms is thus invisible to the library user.
+    Apart from reduced memory usage, maximal subterm sharing has another
+    benefit: the equality check on terms becomes very cheap: it reduces from
+    an operation that is linear in the number of subterms to be compared to a
+    constant operation (pointer equality).</para>
+  </section>
+
+  <section>
+    <title>ATerms at a glance</title>
+
+    <para>We now describe the constructors of the ATerm data type and the
+    operations defined on it.</para>
+
+    <section>
+      <title>The Aterm data type</title>
+
+      <para>The data type of ATerms (<literal>ATerm</literal>) is defined as
+      follows: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>INT</literal>: An integer constant is an ATerm.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>REAL</literal>: A real constant is an ATerm. </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>APPL</literal>: A function application consisting of
+          a function symbol and zero or more ATerms (arguments) is an ATerm.
+          The number of arguments of the function is called the
+          <emphasis>arity</emphasis> of the function. </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>LIST</literal>: A list of zero or more ATerms is an
+          ATerm.</para>
+        </listitem>
+
+        <listitem>
+          <para>PLACEHOLDER: A placeholder term containing an ATerm
+          representing the type of the placeholder is an ATerm. </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>BLOB</literal>: A ``blob'' (Binary Large data OBject)
+          containing a length indication and a byte array of arbitrary
+          (possibly very large) binary data is an ATerm. </para>
+        </listitem>
+
+        <listitem>
+          <para>A list of ATerm pairs may be associated with every ATerm
+          representing a list of
+          (<replaceable>label</replaceable>,<replaceable>annotation</replaceable>)
+          pairs.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Each of these constructs except the last one (i.e.,
+      <literal>INT</literal>, <literal>REAL</literal>,
+      <literal>APPL</literal>, <literal>LIST</literal>,
+      <literal>PLACEHOLDER</literal>, and <literal>BLOB</literal>) form
+      subtypes of the data type ATerm. These subtypes are needed when
+      determining the type of an arbitrary \ATerm. Depending on the actual
+      implementation language the type is represented as a constant (C) or a
+      subclass (Java, C#). The last construct is the <emphasis>annotation
+      construct</emphasis> which makes it possible to annotate terms with
+      transparent information.<footnote>
+          <para>Transparent in the sense that the result of most operations is
+          independent of the annotations. This makes it easy to completely
+          ignore annotations. Examples of the use of annotations include
+          annotating parse trees with positional or typesetting information,
+          and annotating abstract syntax trees with the results of type
+          checking.</para>
+        </footnote>We will now give a number of examples to show some of the
+      features of the textual representation of ATerms.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Integer and real constants are written conventionally:
+          <literal>1</literal>, <literal>3.1</literal>4, and
+          <literal>-0.7E34</literal> are all valid ATerms.</para>
+        </listitem>
+
+        <listitem>
+          <para>Function applications are represented by a function name
+          followed by an open parenthesis, a list of arguments separated by
+          commas, and a closing parenthesis. When there are no arguments, the
+          parentheses may be omitted. Examples are: <literal>f(a,b)</literal>
+          and <literal>"test!"(1,2.1,"Hello world!")</literal>. These examples
+          show that double quotes can be used to delimit function names that
+          are not identifiers. </para>
+        </listitem>
+
+        <listitem>
+          <para>Lists are represented by an opening square bracket, a number
+          of list elements separated by commas and a closing square bracket:
+          <literal>[1,2,"abc"]</literal>, <literal>[]</literal>, and
+          <literal>[f,g([1,2]),x]</literal> are examples. </para>
+        </listitem>
+
+        <listitem>
+          <para>A placeholder is represented by an opening angular bracket
+          followed by a subterm and a closing angular bracket. Examples are
+          <literal>&lt;int&gt;</literal>, <literal>&lt;[3]&gt;</literal>, and
+          <literal>&lt;f(&lt;int&gt;,&lt;real&gt;)&gt;</literal>. </para>
+        </listitem>
+
+        <listitem>
+          <para>Blobs do not have a concrete syntax because their
+          human-readable form depends on the actual blob content. </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Operations on ATerms</title>
+
+      <para>The operations on ATerms fall into three categories: making and
+      matching ATerms, reading and writing ATerms, and annotating ATerms. The
+      total of only 13 functions provides enough functionality for most users
+      to build simple applications with ATerms. We refer to this interface as
+      the <emphasis>level one</emphasis> interface of the ATerm data type. To
+      accommodate ``power'' users of ATerms we also provide a <emphasis>level
+      two</emphasis> interface, which contains a more sophisticated set of
+      data types and functions. It is typically used in generated C or Java
+      code that calls ATerm primitives, or in efficiency-critical
+      applications. These extensions are useful only when more control over
+      the underlying implementation is needed or in situations where some
+      operations that can be implemented using level one constructs can be
+      expressed more concisely and implemented more efficiently using level
+      two constructs. The level two interface is a strict superset of the
+      level one interface. Observe that ATerms are a purely functional data
+      type and that no destructive updates are possible, see the section on
+      maximal sharing for more details. </para>
+
+      <section>
+        <title>Making and Matching ATerms</title>
+
+        <para>The simplicity of the level one interface is achieved by the
+        <emphasis>make-and-match</emphasis> paradigm:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>make</emphasis> (compose) a new ATerm by providing
+            a pattern for it and filling in the holes in the pattern.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>match</emphasis> (decompose) an existing ATerm by
+            comparing it with a pattern and decompose it according to this
+            pattern. </para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Patterns are just ATerms containing placeholders. These
+        placeholders determine the places where ATerms\must be substituted or
+        matched. An example of a pattern is
+        <literal>"and(&lt;int&gt;,&lt;appl&gt;)"</literal>. These patterns
+        appear as string argument of both make and match and are remotely
+        comparable to the format strings in the
+        <literal>printf</literal>/<literal>scanf</literal> functions in C. The
+        operations for making and matching ATerms are: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATmake(String <replaceable>p</replaceable>,
+            ATerm <replaceable>a</replaceable><subscript>1</subscript>, ...,
+            ATerm
+            <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>)</literal>:
+            Create a new term by taking the string pattern
+            <replaceable>p</replaceable>, parsing it as an ATerm and filling
+            the placeholders in the resulting term with values taken from
+            <replaceable>a</replaceable><subscript>1</subscript> through
+            <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>.
+            If the parse fails, a message is printed and the program is
+            aborted. The types of the arguments depend on the specific
+            placeholders used in the pattern <replaceable>p</replaceable>. For
+            instance, when the placeholder <literal>&lt;int&gt;</literal> is
+            used an integer is expected as argument and a new integer ATerm is
+            constructed.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATbool ATmatch(ATerm <replaceable>t</replaceable>,
+            String <replaceable>p</replaceable>, ATerm
+            *<replaceable>a</replaceable><subscript>1</subscript>, ..., ATerm
+            *<replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>)</literal>:
+            Match term <replaceable>t</replaceable> against pattern
+            <replaceable>p</replaceable>, and bind subterms that match with
+            placeholders in <replaceable>p</replaceable> with the result
+            variables <replaceable>a</replaceable><subscript>1</subscript>
+            through
+            <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>.
+            Again, the type of the result variables depends on the place
+            holders used. If the parse of pattern <replaceable>p</replaceable>
+            fails, a message is printed and the program is aborted. If the
+            term itself contains placeholders these may occur in the resulting
+            substitutions. The function returns true when the match succeeds,
+            false otherwise.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For instance, assuming the declarations<programlisting>int n = 10;
+char *fun = "pair", name = "any";
+ATerm yellow = ATmake("yellow"), t;</programlisting>the call<programlisting>t = ATmake("exam(&lt;appl(&lt;term&gt;,9)&gt;,&lt;int&gt;,&lt;str&gt;)", 
+           fun, yellow, n, 10, name)</programlisting>will construct the term
+        <literal>t</literal> with value<programlisting>exam(pair(yellow,9),10,10,"any")</programlisting>Binary
+        strings (<emphasis>Binary Large OBjects</emphasis> or
+        <emphasis>blobs</emphasis>) are used to represent arbitrary length,
+        binary data that cannot be represented by ordinary C strings because
+        they may contain ``null'' characters. A binary string is represented
+        by a character pointer and a length. For instance,
+        given<programlisting>char buf[12];
+ATerm bstr;
+buf[0] = 0; buf[1] = 1; buf[2] = 2;</programlisting>the call<programlisting>bstr = ATmake("exam(&lt;blob&gt;)", 3, buf);</programlisting>will
+        construct a term with function symbol <literal>exam</literal> and as
+        single argument a binary string of length 3 consisting of the three
+        values <literal>0</literal>, <literal>1</literal>, and
+        <literal>2</literal>.</para>
+
+        <para>Matching terms amounts to</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>determining whether there is a match or not,</para>
+          </listitem>
+
+          <listitem>
+            <para>selectively assigning matched subterms to given
+            variables.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For instance, in the context <programlisting>ATerm t = ATmake("exam(pair(yellow,9),10, \"any\")");
+ATerm t1;
+int n;
+char *ex, *s;</programlisting>the call<programlisting>ATmatch(t, "appl(&lt;term&gt;,&lt;int&gt;,&lt;str&gt;)", &amp;ex, &amp;t1, &amp;n, &amp;s);</programlisting>yields
+        true and is equivalent to the following assignments: <programlisting>ex = "exam";
+t1 = ATmake("pair(yellow,9)");
+n = 10;
+s = "any";</programlisting>As explained in full detail in
+        Section~\ref{Memory}, memory is managed automatically by the ATerm
+        library. As a general rule, the values for <literal>ex</literal>,
+        <literal>t1</literal>, and <literal>s</literal> are pointers into the
+        original term <literal>t</literal> rather than newly created values.
+        As a result, they have a life time that is equal to that of
+        <literal>t</literal>. Matching binary strings is the inverse of
+        constructing them. Given the term <literal>bstr</literal> constructed
+        at the end of the previous paragraph, its size and contents can be
+        extracted as follows:<programlisting>int n;
+char *p;
+
+ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>ATmatch</literal>
+        will succeed and will assign 3 to the variable <literal>n</literal>
+        and will assign a pointer to the character data in the binary string
+        to the variable <literal>p</literal>. Here, again, the value of
+        <literal>p</literal> is a pointer into the term
+        <literal>bstr</literal> rather than a newly allocated string.
+        Notes</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Double quotes (``<literal>"</literal>'') appearing
+            <emphasis>inside</emphasis> the pattern argument of both
+            <literal>ATmake</literal> and <literal>ATmatch</literal> have to
+            be escaped using ``<literal>\"</literal>''.</para>
+          </listitem>
+
+          <listitem>
+            <para>The number and type of the variables whose addresses appear
+            as arguments of <literal>ATmatch</literal> should correspond,
+            otherwise disaster will strike (as usual when using C).</para>
+          </listitem>
+
+          <listitem>
+            <para>Assignments are being made during matching. As a result,
+            some assignments may be performed, even if the match as a whole
+            fails.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Reading and Writing ATerms</title>
+
+        <para>For reasons of efficiency and conciseness, reading and writing
+        can take place in two forms: text and binary. The text format uses the
+        textual representation discussed earlier. This format is
+        human-readable, space-inefficient, and any sharing of the in-memory
+        representation of terms is lost. <footnote>
+            <para>We also support a textual format in which the unnecessary
+            size explosion is avoided using a mechanism for implicit labeling
+            and referring to terms. Instead of
+            <literal>f(g(a),g(a))</literal>, one could then write
+            <literal>f(g(a),#A)</literal>. The first occurrence of
+            <literal>g(a)</literal> is implicitly labeled with
+            ``<literal>A</literal>'', and the second occurrence refers to this
+            label (``<literal>#A</literal>'').</para>
+          </footnote></para>
+
+        <para>The binary format (Binary ATerm Format) is portable,
+        machine-readable, very compact, and preserves all in-memory sharing.
+        </para>
+
+        <warning>
+          <para>Mention SAF here.</para>
+        </warning>
+
+        <para>The operations for reading and writing ATerms are: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATreadFromString(String
+            <replaceable>s</replaceable>)</literal>: Creates a new term by
+            parsing the string <replaceable>s</replaceable>. When a parse
+            error occurs, a message is printed, and a special error value is
+            returned. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATreadFromTextFile(File
+            <replaceable>f</replaceable>)</literal>: Creates a new term by
+            parsing the data from file <replaceable>f</replaceable>. Again,
+            parse e rrors result in a message being printed and an error value
+            being returned. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATreadFromBinaryFile(File
+            <replaceable>f</replaceable>)</literal>: Creates a new term by
+            reading a binary representation from file
+            <replaceable>f</replaceable>. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>String ATwriteToString(ATerm
+            <replaceable>t</replaceable>)</literal>: Return the text
+            representation of term <replaceable>t</replaceable> as a string.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATbool ATwriteToTextFile(ATerm
+            <replaceable>t</replaceable>, File
+            <replaceable>f</replaceable>)</literal>: Write the text
+            representation of term <replaceable>t</replaceable> to file
+            <replaceable>f</replaceable>. Returns true for success and false
+            for failure. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATbool ATwriteToBinaryFile(ATerm
+            <replaceable>t</replaceable>, File
+            <replaceable>f</replaceable>)</literal>: Write a binary
+            representation of term <replaceable>t</replaceable> to file
+            <replaceable>f</replaceable>. Returns true for success, and false
+            for failure. </para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Either format (textual or binary) can be used on any linear
+        stream, including files, sockets, pipes, etc. </para>
+
+        <para>For instance, in the context: <programlisting>FILE *f = fopen("foo", "wb");
+ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlisting>the
+        statement<programlisting>ATwriteToTextFile(Trm1, f);</programlisting>will
+        write the value of <literal>Trm1</literal> (i.e.,
+        <literal>freq(red,17)</literal>) to file ``<filename>foo</filename>''.
+        </para>
+
+        <para>When end of file is encountered or the term could not be read,
+        the operation is aborted.The user can redefine this behaviour using
+        <literal>ATsetAbortHandler</literal>, which allows the definition of a
+        user-defined abort handler. See the \emph{ATerm Library User Manual}
+        for further details.</para>
+      </section>
+
+      <section>
+        <title>Annotating ATerms</title>
+
+        <para>Annotations are
+        (<replaceable>label</replaceable>,<replaceable>annotation</replaceable>)
+        pairs that may be attached to an ATerm. Recall that ATerms are a
+        completely functional data type and that no destructive updates are
+        possible. This is evident in the following operations for manipulating
+        annotations: </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>ATerm ATsetAnnotation(ATerm
+            <replaceable>t</replaceable>, ATerm <replaceable>l</replaceable>,
+            ATerm <replaceable>a</replaceable>):</literal> Return a copy of
+            term <replaceable>t</replaceable> in which the annotation labeled
+            with <replaceable>l</replaceable> has been changed into
+            <replaceable>a</replaceable>. If <replaceable>t</replaceable> does
+            not have an annotation with the specified label, it is
+            added.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATgetAnnotation(ATerm
+            <replaceable>t</replaceable>, ATerm
+            <replaceable>l</replaceable>)</literal>: Retrieve the annotation
+            labeled with <replaceable>l</replaceable> from term
+            <replaceable>t</replaceable>. If <replaceable>t</replaceable> does
+            not have an annotation with the specified label, a special error
+            value is returned. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATremoveAnnotation(ATerm
+            <replaceable>t</replaceable>, ATerm
+            <replaceable>l</replaceable>)</literal>: Return a copy of term
+            <replaceable>t</replaceable> from which the annotation labeled
+            with <replaceable>l</replaceable> has been removed. If
+            <replaceable>t</replaceable> does not have an annotation with the
+            specified label, it is returned unchanged.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Using the Aterm Library</title>
+
+    <section>
+      <title>Initializing and using the ATerm library</title>
+
+      <para>Using the ATerm library requires the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Include the header file <literal>aterm1.h</literal> (or
+          <literal>aterm2.h</literal> if you want to use the level 2
+          interface). <literal>aterm1.h</literal> defines:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>ATbool</literal>: the boolean data type defined
+              by<programlisting>typedef enum ATbool {ATfalse=0, ATtrue} ATbool;</programlisting>It
+              is mainly used as the return value of library functions.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>ATerm</literal>: the type definition of ATerms.
+              The ATerm library has been designed in such a way that only
+              pointers to terms must be passed to or are returned by library
+              functions. The primitives that are provided for constructing and
+              decomposing terms are of such a high level that it is
+              unnecessary to know the internal representation of terms. When
+              necessary, you can access the internal structure of ATerms using
+              the level 2 interface.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Declare in your <literal>main</literal> program a local ATerm
+          variable that will be used to determine the bottom of C's runtime
+          stack.</para>
+        </listitem>
+
+        <listitem>
+          <para>Call <literal>ATinit</literal> to initialize the ATerm
+          library.</para>
+        </listitem>
+
+        <listitem>
+          <para>Link the ATerm library <literal>libATerm.a</literal> when
+          compiling your application. This is achieved using the
+          -<literal>lATerm</literal> option of the C compiler.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A typical usage pattern is as follows:<programlisting>#include &lt;aterm1.h&gt;
+int main(int argc, char *argv[])
+{
+  ATerm bottomOfStack;                <co xml:id="co.main.1" />
+  ATinit(argc, argv, &amp;bottomOfStack); <co xml:id="co.main.2" />
+  /* ... code that uses ATerms ... */
+}</programlisting>Notes:<calloutlist>
+          <callout arearefs="???">
+            <para>The local variable <literal>bottomOfStack</literal> is used
+            to indicate the bottom of C's run-time stack and needed when
+            initlaizing the ATerm library.</para>
+          </callout>
+
+          <callout arearefs="???">
+            <para>Initialize the ATerm library. Observe that the program
+            arguments are passed to ATinit (see below).</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>The commandline options can be passed to an application that use
+      the ATerm library are listed in <xref
+      linkend="table.commandline-options" />.</para>
+
+      <table xml:id="table.commandline-options">
+        <title>Commandline options ATerm library</title>
+
+        <tgroup cols="2">
+          <colspec align="left" />
+
+          <thead>
+            <row>
+              <entry align="center">Option </entry>
+
+              <entry align="center">Description </entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>-at-symboltable
+              <replaceable>nsymbols</replaceable></literal></entry>
+
+              <entry>Initial size of symboltable </entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-termtable
+              <replaceable>tableclass</replaceable></literal></entry>
+
+              <entry>Start with termtable of
+              2<superscript>tableclass</superscript> entries</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-hashinfo</literal></entry>
+
+              <entry>Write hashtable statistics to the file
+              <filename>hashing.stats</filename> after execution </entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-print-gc-time</literal></entry>
+
+              <entry>Print timing information about garbage collector to
+              <filename>stderr</filename> after execution</entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-print-gc-info</literal></entry>
+
+              <entry> print verbose information about garbage collector to
+              <filename>stderr</filename> after execution </entry>
+            </row>
+
+            <row>
+              <entry><literal>-at-silent</literal></entry>
+
+              <entry>Do not print status and version information</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Memory Management of ATerms</title>
+
+      <para>The functions in the ATerm library provide automatic memory
+      management of terms. Terms that have been created but are no longer
+      referenced are removed by a method called <emphasis>garbage
+      collection</emphasis>. The global model is that there is a set of
+      <emphasis>protected</emphasis> terms that are guaranteed to survive a
+      garbage collection. Effectively, all protected terms (and their
+      subterms) are conserved and all other terms are considered as garbage
+      and can be collected. It is guaranteed that no garbage collection takes
+      place during the execution of an event handler, hence it is not
+      necessary to protect temporary terms that are constructed during the
+      execution of an event handler. However, terms that should have a longer
+      life time must be protected in order to survive. In order to protect
+      terms from being collected, the function <programlisting>void ATprotect(ATerm *<replaceable>TrmPtr</replaceable>)</programlisting>can
+      be used that has as single argument <emphasis>a pointer to a variable
+      with an ATerm as value</emphasis>. The protection can be undone by the
+      function<programlisting>void ATunprotect(ATerm *TrmPtr)</programlisting>
+      The interplay between garbage collection and program variables is
+      subtle. The following points are therefore worth mentioning:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Functions that return a term as value (e.g.,
+          <literal>TBreadTermfromFile</literal>) do not explicitly protect it
+          but the result may, of course, be protected because it is a subterm
+          of an already protected term.</para>
+        </listitem>
+
+        <listitem>
+          <para>The function <literal>ATmake</literal> uses strings and terms
+          and includes them into a new term <replaceable>T</replaceable>. The
+          implications for memory management are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>All string arguments (using
+              <literal>&lt;str&gt;</literal>, <literal>&lt;blob&gt;</literal>
+              or <literal>&lt;appl&gt;</literal>) are copied before they are
+              included into <literal><replaceable>T</replaceable></literal>.
+              They can thus safely be deallocated (e.g., using
+              <literal>free</literal>) by the C program.</para>
+            </listitem>
+
+            <listitem>
+              <para>All term arguments (using <literal>&lt;term&gt;</literal>)
+              are included into <replaceable>T</replaceable> by means of a
+              pointer. They thus become reachable from
+              <replaceable>T</replaceable> and their life time becomes at
+              least as large as that of <replaceable>T</replaceable>; it is
+              unnecessary to explicitly protect them.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The function <literal>ATmatch</literal> assigns strings and
+          terms to program variables by extracting them from an existing term
+          <replaceable>T</replaceable>. The general rule here is that
+          extracted values have a life time that is equal to that of
+          <replaceable>T</replaceable>. The implications for memory management
+          are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>All string values (obtained using
+              <literal>&lt;str&gt;</literal>, <literal>&lt;blob&gt;</literal>
+              or <literal>&lt;appl&gt;</literal>) should be copied if they
+              should survive <replaceable>T</replaceable>.</para>
+            </listitem>
+
+            <listitem>
+              <para>All term values (obtained using
+              <literal>&lt;term&gt;</literal>) should be explicitly protected
+              if they should survive <replaceable>T</replaceable>.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Binary Aterm Format</title>
+
+      <para>In addition to being able to parse terms in textual format and
+      write textual representations of \aterms, the \ATlib\ is also equipped
+      to store and restore ATerms in a compact, portable binary
+      representation. This representation is called {\sc baf} which stands for
+      ``Binary \ATerm\ Format''. This format can be used to write a binary
+      version of an \ATerm\ to file, which can later be restored in a much
+      more efficient way than would be possible had the \ATerm's textual
+      counterpart been used. This is due to the fact that textual
+      representations have to be (re-)parsed each time they are read from
+      file, whereas {\sc baf} directly describes how to rebuild the internal
+      representation of an \ATerm, thus skipping the parsing phase. Moreover,
+      the maximal sharing of ATerms is exploited when writing {\sc
+      baf}-representations, making them take up much less space than their
+      textual representations would have needed. Users of the \ATlib\ are
+      encouraged to use {\sc baf} representations when saving ATerms to file.
+      {\sc baf} was designed to be platform independent, which facilitates the
+      exchange of \ATerms. The \ATlib\ comes with a utility that is able to
+      convert an \ATerm's textual representation into its {\sc baf}
+      counterpart and vice versa (see Section~\ref{util-baffle}). This
+      conversion makes it possible to always work with {\sc baf}
+      representations, while still being able to look at the textual
+      representation any time an error is suspected. It also allows conversion
+      of textual ATerms written by programs unable to write {\sc baf} which is
+      especially convenient when these ATerms are bulky. Although the \ATlib\
+      does not put any constraints on the names of \aterm-files, users are
+      encouraged to use the extension {\tt .baf} for {\sc baf} files. This
+      will avoid confusion between textual representations and binary ones.
+      Textual representations could use the extension {\tt .trm}.</para>
+    </section>
+
+    <section>
+      <title>Textual Aterm Format (TAF)</title>
+
+      <para>In addition to the binary aterm format there is also a textual
+      aterm format which supports maximal sharing but uses a much less complex
+      algorithm than the one used to encode and decode BAF files. This results
+      in files that are somewhat larger than their baf counterparts, but are
+      often (if the terms contain redundancy) significantly smaller than their
+      unparsed form. TAF files always start with a '<literal>!</literal>'
+      character to distinguish them from aterm formats. The format uses
+      abbreviations to refer to previously written terms. An abbreviation
+      consists of a hash character ('<literal>#</literal>') followed by a
+      number in encoded using the Base64 Alphabet (see RFC2045). Each term
+      whose unparsed representation would take up more bytes than the textual
+      representation of the next available abbreviation is assigned such an
+      abbreviation it has been written. Subsequent occurences of this term are
+      then written by emitting the abbreviation instead of the term itself.
+      For example the term <literal>f(test,test)</literal> is represented as
+      <literal>!f(test,\#A)</literal> in SAF, whereas
+      <literal>f(a,a)</literal> is respresented as <literal>!f(a,a)</literal>
+      because <literal>test</literal> is longer than its abbreviation
+      <literal>#A</literal>, but <literal>a</literal> is not.</para>
+    </section>
+
+    <section>
+      <title>SAF</title>
+
+      <para></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Level One Interface</title>
+
+    <para>All types and functions that are defined in the level one interface
+    are declared in <literal>aterm1.h</literal>. Section~\ref{types1} reveals
+    the types of ATerms that are used in the \ATlib, as well as the extension
+    to the standard {\tt C}-types introduced in the level one interface. To
+    avoid confusion between {\sc baf} and the \aterm\ type \emph{blob},
+    Section~\ref{blob-vs-baf} is dedicated to explaining the difference
+    between these two notions. Finally, Section~\ref{func1} describes all the
+    functions that are available in the level one interface. </para>
+
+    <section>
+      <title>Level One Types</title>
+
+      <para>The following C-defines are used to represent the different Aterm
+      types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>AT_INT</literal>: An ATerm of type: integer; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AT_REAL</literal>: An ATerm of type: real; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AT_APPL</literal>: An ATerm of type: function
+          application; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AT_LIST</literal>: An ATerm of type: list; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AT_PLACEHOLDER</literal>: An ATerm of type:
+          placeholder;</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AT_BLOB</literal>: An ATerm of type: binary large
+          object;</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AT_FREE</literal>: An Aterm that is marked
+          <emphasis>free</emphasis> will be reused when needed. This is not a
+          type users will want to create themselves, but it can be used to
+          detect an ATerm that has been freed by the garbage collector.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following C-types are defined in the level one interface:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>ATbool</literal>: a boolean value, either
+          <literal>ATtrue</literal> or <literal>ATfalse</literal>; </para>
+        </listitem>
+
+        <listitem>
+          <para><literal>ATerm</literal>: an annotated term.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title></title>
+
+    <para><!--
+====================[ LEVEL ONE INTERFACE ]====================
+
+
+\subsection{A note on `blobs' and {\sc baf}}\label{blob-vs-baf}
+Please note that although the word \emph{binary} is used in the
+abbreviations of both ``blob'' and {\sc baf}, these are two very different
+notions.  A \emph{blob} represents an ATerm that holds binary data, with
+no specific meaning to the \ATlib. This notion can be used as a means of
+escape in case you find that you need a type of ATerm that is not on the
+list above.  The notion of {\sc baf} is explained in Section~\ref{baf} and
+refers to a specific format used for reading and writing \aterms.  Thus an
+ATerm of type {\tt AT\_BLOB} can be saved in {\sc baf}. It could also be
+written in its textual representation, although this does not guarantee
+that the blob will be readable, after all it represents binary data.
+
+\subsection{Level One Functionality}\label{func1}
+In this section, all functions and macros ({\tt \#define}'s in {\tt C}) are
+listed. Although all macros could have been implemented as a function as
+well, the macros listed here were chosen to be macros instead of functions
+for efficiency reasons. To obtain access to the level one interface, your
+application should {\tt \#include <aterm1.h>}.
+
+\Function{ATmake}{\ATerm}{const char *pattern, ...}
+{Create an ATerm from a string pattern and a variable number of arguments}
+\Describe{
+	Creates an ATerm given a pattern and corresponding values.
+	The following table shows which patterns can be used, and which type
+	of arguments should be passed if such a pattern is used.
+
+	\smallskip
+	\begin{small}
+	\begin{tabular}{|l|l|l|}
+	\hline
+	Type & Pattern & Argument \\
+	\hline
+	Application & {\tt <appl>}        & {\tt char *pattern}, arguments \\
+	Blob        & {\tt <blob>}        & {\tt int length}, {\tt void *data}\\
+	Integer     & {\tt <int>}         & {\tt int value}\\
+	List        & {\tt <list>}        & {\tt ATerm} \\
+	Placeholder & {\tt <placeholder>} & {\tt char *type} \\
+	Real        & {\tt <real>}        & {\tt double value}\\
+	String      & {\tt <str>}         & {\tt char *pattern}, arguments \\
+	Term        & {\tt <term>}        & {\tt ATerm} \\
+	\hline
+	\end{tabular}
+	\end{small}
+
+	\medskip\noindent
+	Types {\tt <appl>} and {\tt <str>} should contain a pattern consisting
+	of the function symbol to be used and the types of the arguments.  This
+	pattern must be followed by exactly the number of arguments that are
+	used in the pattern. The types of the arguments must match the
+	respective types used in the pattern. Both {\tt <appl>} and {\tt <str>}
+	create function applications. The difference is that {\tt <appl>}
+	creates one with an \emph{unquoted} function symbol, whereas {\tt
+	<str>} yields a \emph{quoted} version.
+
+	\smallskip\noindent
+	Here are some examples of {\tt ATmake}:
+
+	\example{make.c}
+}
+
+\Function{ATvmake}{\ATerm}{const char *pattern, va\_list args}
+{Create an ATerm from a string pattern and a list of arguments}
+\Describe{See {\tt ATmake}.}
+
+\Function{ATmakeTerm}{\ATerm}{ATerm pat, ...}
+{Create an ATerm from an ATerm pattern and a variable number of
+arguments}
+\Describe{See {\tt ATmake}.}
+
+\Function{ATvmakeTerm}{\ATerm}{ATerm pat, va\_list args}
+{Create an ATerm from an ATerm pattern and a list of arguments}
+\Describe{See {\tt ATmake}.}
+
+\Function{ATmatch}{ATbool}{ATerm t, const char *pattern, ...}
+{Match an ATerm against a pattern}
+\Describe{
+	Matches an ATerm against a pattern, attempting to fill the `holes'.
+	If the ATerm matches the pattern, \ATtrue\ is returned and the
+	variables will be filled according to the pattern, otherwise \ATfalse\
+	is returned.
+
+	The {\tt <list>} pattern can be used to match the tail of a list as
+	well as a variable number of arguments in a function application. Thus
+	the first few arguments may be matched explicitly while the tail of
+	the arguments is directed to a list.
+
+
+	\smallskip\noindent
+	Here are a few examples of {\tt ATmatch}:
+
+	\example{match.c}
+}
+
+\Function{ATreadFromString}{\ATerm}{const char *string}
+{Read an ATerm from string}
+\Describe{
+	This function parses a character string into an \aterm.
+	A convenience macro {\tt ATparse} is included in {\tt aterm1.h}.
+}
+
+\Function{ATreadFromBinaryString}{\ATerm}{const char *string, int size}
+{Read a ATerm from a string in {\sc baf} format.}
+\Describe{
+	This function decodes a {\sc baf} character string into an \aterm.
+}
+
+\Function{ATreadFromSharedString}{\ATerm}{const char *string, int size}
+{Read a ATerm from a string in {\sc taf} format.}
+\Describe{
+	This function decodes a {\sc taf} character string into an \aterm.
+}
+
+\Function{ATreadFromTextFile}{\ATerm}{FILE *file}
+{Read an ATerm from text file}
+\Describe{
+	This function reads a text file and parses the contents into an \aterm.
+}
+
+\Function{ATreadFromBinaryFile}{\ATerm}{FILE *file}
+{Read an ATerm from binary file ({\sc baf})}
+\Describe{
+	This function reads a binary file and builds an \aterm.
+}
+
+\Function{ATreadFromSharedTextFile}{\ATerm}{FILE *file}
+{Read an ATerm from a shared text file ({\sc taf})}
+\Describe{
+        This function reads a shared text file and buils an \aterm. 
+}
+
+\Function{ATreadFromFile}{\ATerm}{FILE *file}
+{Read an ATerm from binary or text file}
+\Describe{
+	This function reads an ATerm from a file. A test is performed
+	to see if the file is in {\sc baf}, {\sc taf}, or plain text. 
+}
+
+\Function{ATreadFromNamedFile}{\ATerm}{char *filename}
+{Read an ATerm from named binary or text file}
+\Describe{
+        This function reads an ATerm file {\tt filename}. A test is
+        performed to see if the file is in {\sc baf}, {\sc taf}, or plain text.
+        "-" is standard input's filename.
+}
+
+\Macro{ATparse}{\ATerm}{const char *str}
+{A convenience macro for {\tt ATreadFromString}}
+\Describe{
+	This macro is simply a shortcut to {\tt ATreadFromString(str)}.
+}
+
+
+
+\Macro{ATgetType}{int}{ATerm term}
+{Return the type of {\tt term}}
+\Describe{
+	A macro that returns the type of an \aterm. Result is one of
+	{\tt AT\_APPL}, {\tt AT\_INT}, {\tt AT\_REAL}, {\tt AT\_LIST},
+	{\tt AT\_PLACEHOLDER}, or {\tt AT\_BLOB}.
+}
+
+\Macro{ATisEqual}{int}{ATerm t1, ATerm t2}
+{A macro that tests equality of ATerms {\tt t1} and {\tt t2}}
+\Describe{
+	As ATerms are created using \emph{maximal sharing} (see
+	Section~\ref{sharing}), testing equality is performed in constant time
+	by comparing the addresses of {\tt t1} and {\tt t2}. Note however
+that {\tt ATisEqual} only returns {\tt ATtrue} when {\tt t1} and {\tt t2}
+are completely equal, inclusive any annotations they might have!}
+
+\Function{ATwriteToTextFile}{ATbool}{ATerm t, FILE *f}
+{Writes term {\tt t} to file {\tt f} in textual format}
+\Describe{
+	This function writes ATerm {\tt t} to the file {\tt f} in textual format.
+	This term can later be read again by {\tt ATreadFromTextFile}.
+}
+
+\Function{ATwriteToSharedTextFile}{long}{ATerm t, FILE *f}
+{Writes term {\tt t} to file {\tt f} in shared Textual ATerm Format ({\sc taf})}
+\Describe{
+	This function writes ATerm {\tt t} to the file {\tt f} in {\sc taf},
+	and returns the number of characters written.
+	This term can later be read again by {\tt ATreadFromSharedTextFile}.
+}
+
+\Function{ATwriteToBinaryFile}{ATbool}{ATerm t, FILE *F}
+{Writes term {\tt t} to file {\tt f} in Binary ATerm Format ({\sc baf})}
+\Describe{
+	This function writes ATerm {\tt t} to the file {\tt f} in {\sc baf}.
+	This term can later be read again by {\tt ATreadFromBinaryFile}.
+}
+
+\Function{ATwriteToNamedTextFile}{\ATbool}{ATerm t, char *filename}
+{Writes term {\tt t} to file named {\tt filename} in textual format}
+\Describe{
+	This function writes ATerm {\tt t} in textual representation
+        to file  {\tt filename}.  "-" is standard output's filename.
+}
+
+\Function{ATwriteToNamedBinaryFile}{\ATbool}{ATerm t, char *filename}
+{Writes term {\tt t} to file named {\tt filename} in Binary ATerm Format ({\sc baf})}
+\Describe{
+	This function writes ATerm {\tt t} in textual representation
+        to file  {\tt filename}.  "-" is standard output's filename.
+}
+
+\Function{ATwriteToString}{char *}{ATerm t}
+{Writes term {\tt t} to a string}
+\Describe{
+	Writes term {\tt t} to an internal string buffer. The start of this
+	buffer is returned. Note that the contents of this buffer are volatile
+	and may be overwritten by any call to the \ATlib.
+}
+
+\Function{ATwriteToSharedString}{char *}{ATerm t, int *len}
+{Writes term {\tt t} to a shared text string in {\sc taf}}
+\Describe{
+	Writes term {\tt t} to an internal string buffer in {\sc taf}. 
+        The start of this buffer is returned, and the length of the resulting string
+        is stored in len. Note that the contents of this buffer are volatile
+	and may be overwritten by any call to the \ATlib.
+}
+
+\Function{ATwriteToBinaryString}{char *}{ATerm t, int *len}
+{Writes term {\tt t} to a shared text string in {\sc baf}}
+\Describe{
+	Writes term {\tt t} to an internal string buffer in {\sc baf}. 
+        The start of this buffer is returned, and the length of the resulting string
+        is stored in len. Note that the contents of this buffer are volatile
+	and may be overwritten by any call to the \ATlib.
+}
+
+\Function{ATsetAnnotation}{\ATerm}{ATerm t, ATerm label, ATerm anno}
+{Annotate a term with a labeled annotation}
+\Describe{
+	Creates a version of {\tt t} that is annotated with annotation {\tt anno}
+	which is labeled by {\tt label}.
+}
+
+\Function{ATgetAnnotation}{\ATerm}{ATerm t, ATerm label}
+{Retrieves annotation of {\tt t} with label {\tt label}}
+\Describe{
+	This function can be used to retrieve a specific annotation of a term.
+	If {\tt t} has no annotations, or no annotation labeled with {\tt label}
+	exists, \NULL\ is returned. Otherwise the annotation is returned.
+}
+
+\Function{ATremoveAnnotation}{\ATerm}{ATerm t, ATerm label}
+{Remove a specific annotation from a term}
+\Describe{
+	This function returns a version of {\tt t} which has its annotation with
+	label {\tt label} removed. If {\tt t} has no annotations, or no annotation
+	labeled with {\tt label} exists, {\tt t} itself is returned.
+}
+
+\Function{ATinit}{void}
+{\tt int argc, char *argv[], ATerm *bottomOfStack}
+{Initialise the \ATlib.}
+\Describe{See Section~\ref{init}.}
+
+\Function{ATprintf}{int}{const char *format, ...}
+{ATerm version of {\tt printf}}
+\Describe{See ATvfprintf.}
+
+\Function{ATfprintf}{int}{FILE *stream, const char *format, ...}
+{ATerm version of {\tt fprintf}}
+\Describe{See ATvfprintf.}
+
+\Function{ATvfprintf}{int}{FILE *stream, const char *format, va\_list args}
+{ATerm version of {\tt vfprintf}}
+\Describe{
+	The functions {\tt ATprintf}, {\tt ATfprintf} and {\tt ATvfprintf}
+	are used for formatted output to file. The conversion specifiers
+	{\tt c, d, i, o, u, x, X, e, E, f, g, G, p, s} behave as can be
+	expected from {\tt (f)printf}. In addition the conversion specifiers
+	{\tt a, h, l, n} and {\tt t} are supported:
+
+	\begin{small}
+	\begin{center}
+	\begin{tabular}{|c|l|}
+	\hline
+	Conversion specifier & Action \\
+	\hline
+	{\tt a} & print the symbol of an \aterm-application \\
+	{\tt h} & print the MD5 checksum of an \aterm \\
+	{\tt l} & print an \aterm-list \\
+	{\tt n} & print information about an ATerm node \\
+	{\tt t} & print an \aterm \\
+	\hline
+	\end{tabular}
+	\end{center}
+	\end{small}
+}
+
+\Function{ATsetWarningHandler}{void}
+{\tt (void (*handler)(const char *, va\_list))}
+{Specify a warninghandler for the \ATlib}
+\Describe{
+	Sets a warninghandler for the \ATlib. This handler will be called
+	when an error message is sent to {\tt ATwarning}. }
+
+\Function{ATwarning}{void}{(const char *format, ...)}
+{Issue a warning message}
+\Describe{
+	If an errorhandler has been installed through a call to
+	{\tt ATsetWarningHandler}, this handler will be called. Otherwise
+	{\tt ATwarning} uses {\tt ATvfprintf} to print a formatted message
+	to {\tt stderr} and returns.
+}
+
+\Function{ATsetErrorHandler}{void}
+{\tt (void (*handler)(const char *, va\_list))}
+{Specify an errorhandler for the \ATlib}
+\Describe{
+	Sets an errorhandler for the \ATlib.  This handler will be called
+	when an error message is sent to {\tt ATerror}.
+}
+
+\Function{ATerror}{void}{(const char *format, ...)}
+{Issue an errormessage and exit the \ATlib}
+\Describe{
+	If an errorhandler has been installed through a call to
+	{\tt ATsetErrorHandler}, this handler will be called. Otherwise
+	{\tt ATerror} uses {\tt ATvfprintf} to print a formatted message
+	to {\tt stderr} and {\tt exit}s with errorcode 1.
+}
+
+\Function{ATsetAbortHandler}{void}
+{\tt (void (*handler)(const char *, va\_list))}
+{Specify an aborthandler for the \ATlib}
+\Describe{
+	Sets an aborthandler for the \ATlib.  This handler will be called
+	when an error message is sent to {\tt ATabort}.
+}
+
+\Function{ATabort}{void}{(const char *format, ...)}
+{Issue an errormessage and abort the \ATlib}
+\Describe{
+  If an aborthandler has been installed through a call to
+  {\tt ATsetAbortHandler}, this handler will be called.  Otherwise
+  {\tt ATabort} uses {\tt ATvfprintf} to print a formatted message
+  to {\tt stderr} calls {\tt abort}.
+}
+
+
+\Function{ATprotect}{void}{ATerm *atp}{Protect an \aterm}
+\Describe{
+	Protects an ATerm from being freed at garbage collection. See
+	Section~\ref{prot}.
+}
+
+\Function{ATunprotect}{void}{ATerm *atp}{Unprotect an \aterm}
+\label{at-unprot}
+\Describe{
+	Releases protection of an ATerm which has previously been protected
+	through a call to {\tt ATprotect}. See Section~\ref{unprot}.
+}
+
+\Function{ATprotectArray}{void}{ATerm *start, int size)}
+{Protect an array of \ATerms}
+\label{at-unprot-arr}
+\Describe{
+	Protects an entire array of {\tt size} ATerms starting at {\tt start}.
+}
+
+\Function{ATunprotectArray}{void}{ATerm *start)}
+{Unprotect an array of \ATerms}
+\Describe{
+	Releases protection of the array of ATerms which starts at {\tt
+	start}.
+}
+
+====================[ LEVEL TWO INTERFACE ]====================
+
+}}}
+{{{ Level Two Interface
+
+\section{Level Two Interface}\label{lvl2}
+This section explains in detail the types and functions that are defined in
+the level two interface. These functions are declared in {\tt aterm2.h}
+
+\subsection{Level Two Types}\label{types2}
+In addition to the C-types explained in Section~\ref{types1}, the level two
+interface also uses the following types:
+\begin{itemize}
+	\item {\tt ATermInt}: an integer value;
+	\item {\tt ATermReal}: a real value;
+	\item {\tt ATermAppl}: a function application;
+	\item {\tt ATermList}: a list;
+	\item {\tt ATermPlaceholder}: a placeholder;
+	\item {\tt ATermBlob}: a Binary Large OBject;
+	\item {\tt ATermTable}: a hashtable of \aterms;
+	\item {\tt ATermIndexedSet}: a set of \aterms where each
+		element has a unique index.
+\end{itemize}
+
+\subsection{Level Two Functionality}\label{func2}
+This section describes all functions and macros that are available in the
+level two interface. To obtain access to this functionality you need to
+{\tt \#include <aterm2.h>} instead of {\tt <aterm1.h>} in your application.
+
+In Section~\ref{func1} we explained that the macros used in the level one
+interface could just as well have been implemented as functions, but were
+chosen to be implemented as macros for efficiency reasons. The same goes
+for all macros described in this section.
+
+\subsubsection{ATermInt}
+The type {\tt ATermInt} is the ATerm representation of an integer. It
+abides by the rules of the {\tt C}-type: {\tt int}.
+
+\Function{ATmakeInt}{ATermInt}{int value}
+{Build an \aterm Int from an integer ({\tt int})}
+
+\Macro{ATgetInt}{int}{ATermInt t}
+{Get the integer value from an \aterm Int.}
+
+\subsubsection{ATermReal}
+The type {\tt ATermReal} is the ATerm representation of a real. It
+abides by the rules of the {\tt C}-type: {\tt double}.
+
+\Function{ATmakeReal}{ATermReal}{double value}
+{Build an \aterm Real from a real ({\tt double}).}
+
+\Macro{ATgetReal}{double}{ATerm t}
+{Macro to get the real value from an \aterm Real.}
+
+\subsubsection{ATermAppl}
+The type {\tt ATermAppl} denotes a function application. In order to build
+a function application, first its function symbol (\Symbol) must be built.
+This symbol holds the name of the function application, its arity (how many
+arguments the function has) and whether the function name is quoted. Below
+are some examples of function applications and the symbols needed to create
+them.
+
+\begin{small}
+\begin{verbatim}
+    true               - a zero arity, unquoted function application
+                         sym = ATmakeAFun("true", 0, ATfalse);
+
+    "true"             - the same function application, but quoted
+                         sym = ATmakeAFun("true", 0, ATtrue);
+
+    f(0)               - an unquoted function application of arity 1
+                         sym = ATmakeAFun("f", 1, ATfalse);
+
+    "prod"(2, b, [])   - a quoted function application of arity 3
+                         sym = ATmakeAFun("prod", 3, ATtrue);
+\end{verbatim}
+\end{small}
+
+\Function{ATmake\Symbol}{\Symbol}
+{\tt char *name, int arity, ATbool quoted}
+{Create a function symbol (\Symbol)}
+\Describe{
+	Creates an \Symbol, representing a function symbol with name {\tt name}
+	and arity {\tt arity}. Quotedness is passed through the {\tt quoted}
+	argument.
+}
+
+\Function{ATprotect\Symbol}{void}{\Symbol\ sym}
+{Protect a function symbol}
+\label{at-unprot-sym}
+\Describe{Just as ATerms which are not on the stack or in registers must
+	be protected through a call to {\tt ATprotect}, so must \Symbol s be
+	protected by calling {\tt ATprotect\Symbol}.
+}
+
+\Function{ATunprotect\Symbol}{void}{\Symbol\ sym}
+{Release an \Symbol's protection.}
+
+\Macro{ATgetName}{char *}{\Symbol\ sym}
+{Return the name of an \Symbol}.
+
+\Macro{ATgetArity}{int}{\Symbol\ sym}
+{Return the arity (number of arguments) of a function symbol (\Symbol)}
+
+\Macro{ATisQuoted}{ATbool}{\Symbol\ sym}
+{Determine if a function symbol (\Symbol) is quoted or not}
+
+\Function{ATmakeAppl}{ATermAppl}{\Symbol\ sym, ...}
+{Build an application from an \Symbol\ and a variable number of arguments.}
+\Describe{
+	The arity is taken from the first argument {\tt sym}, the other
+	arguments to {\tt ATmakeAppl} should be the arguments for the
+	application. For arity $0\ldots 6$ the corresponding {\tt ATmakeAppl<N>}
+	can be used instead for greater efficiency.  }
+
+\Function{ATmakeAppl0}{ATermAppl}{\Symbol\ s}
+{Make a function application with zero arguments}
+
+\Function{ATmakeAppl1}{ATermAppl}{\Symbol\ s, ATerm a0}
+{Make a function application with one argument}
+
+\Function{ATmakeAppl2}{ATermAppl}{\Symbol\ s, ATerm a0, a1}
+{Make a function application with two arguments}
+
+\Function{ATmakeAppl3}{ATermAppl}{\Symbol\ s, ATerm a0, a1, a2}
+{Make a function application with three arguments}
+
+\Function{ATmakeAppl4}{ATermAppl}{\Symbol\ s, ATerm a0, a1, a2, a3}
+{Make a function application with four arguments}
+
+\Function{ATmakeAppl5}{ATermAppl}{\Symbol\ s,
+	ATerm a0, a1, a2, a3, a4}
+{Make a function application with five arguments}
+
+\Function{ATmakeAppl6}{ATermAppl}
+{\Symbol\ s, ATerm a0, a1, a2, a3, a4, a5}
+{Make a function application with six arguments}
+\Describe{
+	These functions build an application of arity zero through six, i.e.
+	an application with $0\ldots 6$ arguments. Use these functions to
+	build {\tt ATermAppl}s with small arity in favour of the generic
+	{\tt ATmakeAppl} described above.
+}
+
+\Macro{ATget\Symbol}{\Symbol}{ATermAppl appl}
+{Get the function symbol (\Symbol) of an application}
+
+\Macro{ATgetArgument}{\ATerm}{ATermAppl appl, int nr}
+{Get the {\tt nr}-th argument of an application}
+
+\Function{ATsetArgument}{ATermAppl}{ATermAppl appl, ATerm arg, int n}
+{Set the {\tt nr}-th argument of an application to {\tt arg}}
+\Describe{
+	This function returns a copy of {\tt appl} with argument {\tt n}
+	replaced by {\tt arg}.
+}
+
+\Function{ATgetArguments}{ATermList}{ATermAppl appl}
+{Get a list of arguments of an application}
+\Describe{
+	Return the arguments of {\tt appl} in {\tt ATermList} format.
+	Note: traversing the arguments of {\tt appl} can be done more
+	efficiently using the {\tt ATgetArgument} macro.
+}
+
+\Function{ATmakeApplList}{ATermAppl}{\Symbol\ sym, ATermList args}
+{Build an application given an \Symbol\ and a list of arguments}
+\Describe{
+	Build an application from {\tt sym} and the argument list {\tt args}.
+	Note: unless the arguments are already in an {\tt ATermList}, it is
+	probably more efficient to use the appropriate {\tt ATmakeAppl<N>}.
+}
+
+\Function{ATmakeApplArray}{ATermAppl}{\Symbol\ sym, ATerm args[]}
+{Build an application given an \Symbol\ and an array of arguments}
+
+\subsubsection{ATermList}
+\Function{ATmakeList}{ATermList}{int n, ...}
+{Create an {\tt ATermList} of $n$ elements}
+\Describe{
+	This function can be used to build an {\tt ATermList} of $n$ elements.
+	The elements should be passed as arguments $1\ldots n$.
+}
+
+\Macro{ATmakeList0}{ATermList}{}
+{Macro defined to point to the empty list {\tt []}}
+
+\Function{ATmakeList1}{ATermList}{ATerm el0}
+{Construct a list of one element}
+
+\Function{ATmakeList2}{ATermList}{ATerm el0, el1}
+{Construct a list of two elements}
+
+\Function{ATmakeList3}{ATermList}{ATerm el0, el1, el2}
+{Construct a list of three elements}
+
+\Function{ATmakeList4}{ATermList}{ATerm el0, el1, el2, el3}
+{Construct a list of four elements}
+
+\Function{ATmakeList5}{ATermList}{ATerm el0, el1, el2, el3, el4}
+{Construct a list of five elements}
+
+\Function{ATmakeList6}{ATermList}{ATerm el0, el1, el2, el3, el4, el5}
+{Construct a list of six elements}
+\Describe{
+	These functions build an {\tt ATermList} of $1\ldots 6$ elements.
+	Longer lists should be created using the generic {\tt ATmakeList}
+	function described above.
+}
+
+\Macro{ATgetLength}{int}{ATermList l}
+{Macro to get the length of list {\tt l}}
+
+\Macro{ATgetFirst}{\ATerm}{ATermList l}
+{Macro to get the first element of list {\tt l}}
+
+\Macro{ATgetNext}{ATermList}{ATermList l}
+{Macro to get the next part (the tail) of list {\tt l}}
+
+\Macro{ATisEmpty}{ATbool}{ATermList l}
+{Macro to test if list {\tt l} is empty}
+
+\Function{ATgetTail}{ATermList}{ATermList list, int start}
+{Return the sublist from {\tt start} to the end of {\tt list}.}
+
+\Function{ATreplaceTail}{ATermList}{ATermList list, ATermList newtail, 
+int start}
+{Replace the tail of {\tt list} from position {\tt start} with {\tt newtail}}
+
+\Function{ATgetPrefix}{ATermList}{ATermList list}
+{Return all but the last element of {\tt list}}
+
+\Function{ATgetLast}{\ATerm}{ATermList list}
+{Return the last element of {\tt list}}
+
+\Function{ATgetSlice}{ATermList}
+{ATermList list, int start, int end}
+{Get a portion (slice) of a list}
+\Describe{
+	Return the portion of {\tt list} that lies between {\tt start} and
+	{\tt end}. Thus {\tt start} is included, {\tt end} is not.
+}
+
+\Function{ATinsert}{ATermlist}{ATermList list, ATerm el}
+{Return {\tt list} with {\tt el} inserted.}
+\Describe{
+  The behaviour of {\tt ATinsert} is of constant complexity.  That is, the
+  behaviour of {\tt ATinsert} does not degrade as the length of {\tt list}
+  increases.  }
+
+\Function{ATinsertAt}{ATermList}
+{(ATermList list, ATerm el, int index}
+  {Return {\tt list} with {\tt el} inserted at position {\tt index}}
+
+\Function{ATappend}{ATermList}{ATermList list, ATerm el}
+{Return {\tt list} with {\tt el} appended to it}
+\Describe{
+  Note that {\tt ATappend} is implemented in terms of {\tt ATinsert} by
+  making a new list with {\tt el} as the first element and then {\tt
+  ATinsert}ing all elements from {\tt list}. As such, the complexity of
+  {\tt ATappend} is linear in the number of elements in {\tt list}.
+
+  When {\tt ATappend} is needed inside a loop that traverses a list (see
+  {\tt parse\_list1} below), behaviour of the loop will demonstrate
+  quadratic complexity.
+
+  \example{app1.c}\smallskip
+
+  To avoid this behaviour, the inner loop could use {\tt ATinsert} instead
+  of {\tt ATappend} to make the new list. This will cause the resulting
+  list to be in reverse order. A single {\tt ATreverse} must therefore be
+  performed, but this can be done after the loop has terminated, bringing
+  the behaviour down from quadratic to linear complexity, but at the cost
+  of two {\tt ATinsert}s per element (one for each {\tt ATinsert} in the
+  loop, and an implicit one for each element through the use of {\tt
+  ATreverse}).  An example is shown here in the implementation of {\tt
+  parse\_list2}.
+
+  \example{app2.c}\smallskip
+
+  An even further optimisation could make use of a locally allocated
+  buffer.  While traversing the list, all elements that would normally be
+  {\tt ATappend}ed, are now placed in this buffer. Finally, the result is
+  obtained by starting with an empty list and {\tt ATinsert}ing all
+  elements from this buffer in reverse order. As the cost of allocating and
+  freeing a local buffer is by no means marginal, this solution should
+  probably only be applied when the loop appends more than just a few
+  elements. The following example shows such an implementation in {\tt
+  parse\_list3}.
+
+  \example{app3.c}
+}
+
+\Function{ATconcat}{ATermList}{ATermList list1, ATermList list2}
+{Return the concatenation of {\tt list1} and {\tt list2}}
+
+\Function{ATindexOf}{int}{ATermList list, ATerm el, int start)}
+{Return the index of an ATerm in a list}
+\Describe{
+	Return the index where {\tt el} can be found in {\tt list}. Start
+	looking at position {\tt start}. Returns {\tt -1} if {\tt el} is
+	not in {\tt list}.
+}
+
+\Function{ATlastIndexOf}{int}
+{\tt ATermList list, ATerm el, int start)}
+{Return the index of an ATerm in a list (reverse)}
+\Describe{
+	Search backwards for {\tt el} in {\tt list}. Start searching at
+	{\tt start}. Return the index of the first occurrence of {\tt l}
+	encountered, or {\tt -1} when {\tt el} is not present before
+	{\tt start}.
+}
+
+\Function{ATelementAt}{\ATerm}{ATermList list, int index)}
+{Return a specific element of a list}
+\Describe{
+	Return the element at position {\tt index} in {\tt list}. Return
+	\NULL\ when {\tt index} is not in {\tt list}.
+}
+
+\Function{ATremoveElement}{ATermList}{ATermList list, ATerm el}
+{Return {\tt list} with one occurrence of {\tt el} removed}
+
+\Function{ATremoveAll}{ATermList}{ATermList list, ATerm el}
+{Return {\tt list} with all occurrences of {\tt el} removed}
+
+\Function{ATremoveElementAt}{ATermList}
+{\tt ATermList list, int index}
+{Return {\tt list} with the element at {\tt index} removed}
+
+\Function{ATreplace}{ATermList}{ATermList list, ATerm el, int idx}
+{Return {\tt list} with the element at {\tt index} replaced by {\tt el}}
+
+\Function{ATreverse}{ATermList}{ATermList list)}
+{Return {\tt list} with its elements in reversed order}
+
+\Function{ATfilter}{ATermList}
+{ATermList list, ATbool (*predicate)(ATerm)}
+{Filter entries from a list using a predicate}
+\Describe{
+ This function can be used to filter entries that satisfy a given predicate
+ from a list. Each item in {\tt list} is judged through a call to {\tt
+ predicate}. If {\tt predicate} returns {\tt ATtrue} the entry is added to
+ a list, otherwise it is skipped. The function returns the list containing
+ exactly those items that satisfy {\tt predicate}.
+}
+
+\subsubsection{ATermPlaceholder}
+A placeholder is a special subtype used to indicate a typed hole in an
+\ATerm. This can be used to create a term of a specific type, even though
+its actual contents are not filled in.
+
+\Function{ATmakePlaceholder}{ATermPlaceholder}{ATerm type}
+{
+  Build an \aterm Placeholder of a specific type. The type is taken from
+  the {\tt type} parameter. See {\tt demo\_placeholder} below.
+}
+
+\Macro{ATgetPlaceholder}{\ATerm}{\ATerm Placeholder ph}
+{Get the type of an \aterm Placeholder}
+
+\example{plac.c}
+
+\subsubsection{ATermBlob}
+\Function{ATmakeBlob}{ATermBlob}{int size, void *data)}
+{Build a Binary Large OBject given {\tt size} (in bytes) and {\tt data}}
+\Describe{
+ This function can be used to create an ATerm of type blob, holding
+ the data pointed to by {\tt data}. No copy of this data area is made, so
+ the user should allocate this himself.
+
+ Note: due to the internal representation of a blob, size cannot exceed
+ $2^{24}$ in the current implementation. This limits the size of the data
+ area to 16 Mb.
+}
+
+\Macro{ATgetBlobData}{void *}{ATermBlob blob}
+{Get the data section of {\tt blob}}
+
+\Macro{ATgetBlobSize}{int}{ATermBlob blob}
+{Get the size (in bytes) of {\tt blob}}
+
+\Function{ATregisterBlobDestructor}{void}
+{ATbool (*destructor)(ATermBlob)}
+{Register a blob-destructor function}
+\Describe{
+ When a blob-destructor function has been registered, it will be called
+ whenever the garbage collector deletes an ATermBlob. The destructor
+ function can then handle the deletion of the data area of the blob. At
+ most 16 blob destructor functions can be registered in the current
+ implementation.
+}
+
+\Function{ATunregisterBlobDestructor}{void}
+{ATbool (*destructor)(ATermBlob)}
+{Unregister a previously registered blob-destructor function}
+\Describe{
+	This removes a blob-destructor that has been previously installed
+	through a call to {\tt ATregisterBlobDestructor}.
+}
+
+\subsection{Dictionaries}\label{dicts}
+Dictionaries are datastructures which allow looking up a certain ATerm
+given another \ATerm. The dictionary itself is also an ATerm and as such
+is subject to the \ATlib\ rules of garbage collection. Each dictionary
+consists of its own list of \ATerms. For each lookup in the dictionary,
+the list is traversed to see if the current element's key matches the one
+being looked up. A lookup in a dictionary demonstrates behaviour linear in
+the number of elements the dictionary contains. On average fifty percent of
+the number of elements in the dictionary are examined before a match is
+found (if the element is present at all). For a more efficient
+\ATerm-to-ATerm mapping, see Tables in section~\ref{tables}.
+
+\Function{ATdictCreate}{\ATerm}{}{Create a new dictionary}
+
+\Function{ATdictGet}{\ATerm}{ATerm dict, ATerm key}
+{Get the value belonging to a given key in a dictionary.}
+
+\Function{ATdictPut}{\ATerm}
+{ATerm dict, ATerm key, ATerm value}
+{Add / update a (key, value)-pair in a dictionary}
+\Describe{
+ If {\tt key} does not already exist in the dictionary, this function adds
+ the ({\tt key}, {\tt value})-pair to the dictionary. Otherwise, it updates
+ the value to {\tt value}. The modified dictionary is returned.
+}
+
+\Function{ATdictRemove}{\ATerm}{ATerm dict, ATerm key}
+{Remove the ({\tt key}, value)-pair from the dictionary}
+\Describe{
+	This function can be used to remove an entry from the dictionary.
+	If the entry was actually in the dictionary, the modified dictionary is
+	returned. If the entry was not in the dictionary in the first place,
+	the (unmodified) dictionary itself is returned.
+}
+
+\subsection{Tables}\label{tables} The dictionaries described in
+Section~\ref{dicts} are in essence nothing more than linked lists, which
+makes them less suitable for large \aterm-to-ATerm mappings. To this end,
+ATerm tables were created. These are efficiently implemented using
+a hash table
+requiring approximately 16 bytes per stored entry, assuming that
+the hash table is filled for 50\%.
+
+\Function{ATtableCreate}{ATermTable}{int initial\_size, int max\_load\_pct}
+{Create an ATermTable}
+\Describe{
+ This function creates an ATermTable given an initial size and a maximum
+ load percentage. Whenever this percentage is exceeded (which is detected
+ when a new entry is added using {\tt ATtablePut}), the table is
+ automatically expanded and all existing entries are rehashed into the new
+ table.  If you know in advance approximately how many items will be in the
+ table, you may set it up in such a way that no resizing (and thus no
+ rehashing) is necessary. For example, if you expect about $1000$ items in
+ the table, you can create it with its initial size set to $1333$ and a
+ maximum load percentage of $75\%$. You are not required to do this, it
+ merely saves a runtime expansion and rehashing of the table which
+ increases efficiency. 
+}
+
+\Function{ATtableDestroy}{void}{ATermTable table}
+{Destroy an ATermTable}
+\Describe{
+ Contrary to ATermDictionaries, ATermTables are themselves \emph{not}
+ \ATerms. This means they are \emph{not} freed by the garbage collector
+ when they are no longer referred to. Therefore, when the table is no
+ longer needed, the user should release the resources allocated by the
+ table by calling {\tt ATtableDestroy}. All references the table has to
+ ATerms will then also be removed, so that those may be freed by the
+ garbage collector (if no other references to them exist of course).
+}
+
+\Function{ATtableReset}{void}{ATermTable table}
+{Reset an ATermTable}
+\Describe{This function resets an ATerm table, without freeing the
+memory it occupies. Its effect is the same as the subsequent execution
+of a destroy and a create of a table, but as no memory is released
+and obtained from the  C memeory management system this function is
+generally cheaper. but if subsequent tables differ very much 
+in size, the use of {\tt ATtableDestroy} and {\tt ATtableCreate}
+may be prefered, because in such a way the sizes of the table
+adapt automatically to the requirements of the application.
+}
+
+\Function{ATtablePut}{void}{ATermTable table, ATerm key, ATerm value}
+{Add / update a (key, value)-pair in a table}
+\Describe{
+ If {\tt key} does not already exist in the table, this function adds the
+ ({\tt key}, {\tt value})-pair to the table. Otherwise, it updates the
+ value to {\tt value}.
+}
+
+\Function{ATtableGet}{ATerm}{ATermTable table, ATerm key}
+{Get the value belonging to a given key in a table}
+
+
+\Function{ATtableRemove}{void}{ATermTable table, ATerm key}
+{Remove the (key, value)-pair from {\tt table}}
+
+\Function{ATtableKeys}{ATermList}{ATermTable table}
+{Get an ATermList of all the keys in a table}
+\Describe{
+ This function can be useful if you need to iterate over all elements in a
+ table. It returns an ATermList containing all the keys in the table. The
+ corresponding values of each key you are interested in can then be
+ retrieved through respective calls to {\tt ATtableGet}.
+}
+
+\subsection{Indexed sets}\label{IndexedSets}
+The data type {\tt ATermIndexedSet} provides a mapping or table from {\tt
+ATerm}s to numbers, where it attempts to assign the numbers from 
+one upwards subsequently to each entered term. If a number is assigned
+to a term, the term will remain assigned until the term is removed from
+the table. When assigning numbers to newly entered elements, numbers 
+previously assigned to elements that have been removed are used first. 
+
+This datatype can be used for different purposes. In the first place
+one can make a mapping from {\tt ATerm}s to elements in any arbitrary
+domain $D$ with it. By entering the {\tt ATerm}s in an {\tt
+ATermIndexedSet} each {\tt ATerm} gets a subsequent number. These
+numbers can be used as entries in a table to obtain the element of sort
+$D$ belonging to the {\tt ATerm}.
+
+Another type of application is the use as a set. Suppose that
+a sequence of {\tt ATerm}s must be dealt with. Suppose that the sequence
+can contain identical {\tt ATerm}s, and that each unique {\tt ATerm} needs
+to be treated only once. Then each treated {\tt ATerm} can be entered
+in the indexed set. For each to be investigated {\tt ATerm} one
+inspection of the indexed set suffices to know whether this {\tt ATerm}
+has already been considered. 
+A particular instance of this kind of application is
+the exploration of state spaces, where each state is represented by
+an {\tt ATerm}.
+
+The implementation {\tt ATermIndexedSet}s and {\tt ATermTable}s are 
+strongly connected. The implementation is quite efficient both
+in time and space, only requiring 12 bytes for each entry in
+an indexed set, if the hash table, which forms it core, is half full. 
+
+\Function{ATindexedSetCreate}{ATermIndexedSet}
+{long initial\_size, int max\_load\_pct}
+{Create a new {\tt ATermIndexedSet}}
+\Describe{This function creates an {\tt ATermIndexedSet} with
+approximately the size {\tt initial\_size}, where it guarantees that
+the internal hash table, will be filled up to 
+{\tt max\_load\_pct} percent. If
+needed, the size of the hash table is dynamically extended to hold the
+entries inserted into it. If 
+extension of the hash table fails due to lack of memory. 
+it is attempted to fill the hash table up to 100\%. 
+All elements entered
+into the indexed set are automatically protected. Note that for
+each {\tt ATindexedSetCreate} an {\tt ATindexedSetDestroy} must be 
+carried out to free memory, and to allow inserted elements to be released by
+the automatic garbage system of the {\tt ATerm} library. Carrying out
+a {\tt ATindexedSetReset} does not free the memory, but allows inserted
+elements to be garbage collected.
+}
+
+\Function{ATindexedSetDestroy}{void}{ATermIndexedSet set}
+{This function releases all memory occupied by the 
+{\tt ATermIndexedSet}.
+}
+
+\Function{ATindexedSetReset}{void}{ATermIndexedSet set}
+{Clear the hash table in the set.}
+\Describe{
+This function clears the hash table in the set, but does not release the memory.
+Using {\tt ATindexedSetReset}
+instead of {\tt ATindexedSetDestroy} is preferable when
+indexed sets of approximately the same size are being used.
+}
+
+\Function{ATindexedSetPut}{long}{ATermIndexedSet set, ATerm elem, ATbool *new}
+{Enter {\tt elem} into the set.}
+\Describe{This functions enters {\tt elem} into the set. If {\tt elem} was
+already in the set the previously assigned index of {\tt elem}
+is returned, and {\tt new} is set to false. If {\tt elem} did not
+yet occur in {\tt set} a new number is assigned, and {\tt new} is
+set to true. This number can either be the number of an element
+that has been removed, or, if such a number is not available, 
+the lowest non used number is assigned to {\tt elem} and returned. 
+The lowest number that is used is $0$.
+}
+
+\Function{ATindexedSetGetIndex}{long}{ATermIndexedSet set, ATerm elem}
+{Find the index of {\tt elem} in {\tt set}}
+\Describe{The index assigned to {\tt elem} is returned, except
+when {\tt elem} is not in the set, in which case the return value
+is a negative number.
+}
+
+\Function{ATindexedSetGetElem}{ATerm}{ATermIndexedSet set, long index}
+{Retrieve the element at {\tt index} in {\tt set}}
+\Describe{This function must be invoked with a valid index and
+it returns the {\tt elem} assigned to this index. If it is invoked
+with an invalid index, effects are not predictable.}
+
+\Function{ATindexedSetRemove}{void}{ATermIndexedSet set, ATerm elem}
+{Remove {\tt elem} from {\tt set}}
+\Describe{The {\tt elem} is removed from the indexed set, and if a number
+was assigned to {\tt elem},
+it is freed to be reassigned to an element, that may be put into the set at
+some later instance.
+}
+
+\Function{ATindexedSetElements}{ATermList}{ATermIndexedSet set}
+{Retrieve all elements in {\tt set}}
+\Describe{A list with all valid elements stored in the 
+indexed set is returned. The list is ordered from element with index 0 onwards.
+}
+
+
+}}}
+{{{ Utilities
+
+\section{Utilities}\label{utils}
+This section describes the utilities that come with the \ATlib. These
+utilities are automatically built when the \ATlib\ is compiled and
+installed.
+
+\subsection{ATerm-conversion: {\tt baffle}}\label{util-baffle}
+This utility can be used to convert between the different ATerm formats:
+{\tt text}, {\tt baf}, and {\tt taf}.
+
+\smallskip\noindent
+\begin{small}
+\begin{verbatim}
+Usage: baffle [-i <input>] [-o <output> | -c] [-v] [-rb | -rt | -rs] [-wb | -wt | -rs]
+
+    -i <input>    - Read input from file <input>        (Default: stdin)
+    -o <output>   - Write output to file <output>       (Default: stdout)
+    -c            - Check validity of input-term
+    -v            - Print version information
+    -h            - Display help
+    -rb, -rt, -rs - Choose between BAF, TEXT, and TAF input (Default: autodetect)
+    -wb, -wt      - Choose between BAF, TEXT and TAF output (Default: -wb)
+\end{verbatim}
+\end{small}
+
+
+Some small scripts are included which can be used to
+connect a process producing one ATerm format to a process which expects 
+another. These scripts just set up {\tt baffle} with the appropriate switches and
+redirect {\tt stdin} and {\tt stdout} accordingly. These scripts are appropriately
+called: {\tt trm2baf}, {\tt baf2trm}, {\tt trm2taf}, {\tt taf2trm}, {\tt baf2taf},
+and {\tt taf2baf}.
+
+\subsection{Calculating an ATerm's size: {\tt termsize}}
+\label{util-termsize}
+This utility can be used to calculate three things:
+\begin{itemize}
+  \item core size: the amount of memory a given ATerm needs;
+  \item text size: the amount of memory needed to hold a textual
+  representation of an ATerm;
+  \item tree depth: the maximum depth of a term.
+\end{itemize}
+The results are written to {\tt stdout}. As {\tt termsize} uses {\tt
+ATreadFromFile}, it can calculate the size of both textual and {\sc baf}
+representations of ATerms.
+
+\smallskip\noindent Usage: {\tt termsize < }\emph{inputfile}.
+
+\subsection{Calculating MD5 checksum of an ATerm: {\tt atsum}}
+\label{util-atsum}
+This utility can be used to print the MD5 checksum of the
+{\sc taf} representation of an ATerm. The algorithm used is
+the RSA Data Security, Inc. MD5 Message-Digest Algorithm (see RFC1321).
+
+\smallskip\noindent Usage: {\tt atsum [\emph{inputfile}]}.
+
+\subsection{Calculating differences between two ATerms: {\tt atdiff}}
+\label{util-atdiff}
+This utility compares two terms and prints a template term that
+covers the common parts containing {\tt <diff>} placeholders for
+subterms that differed, and a list of their differing subterms.
+
+\smallskip\noindent
+\begin{small}
+\begin{verbatim}
+Usage: atdiff [<options>] <file1> <file2>
+Options:
+    ==nodiffs | ==diffs <diff-file>              (default: stdout)
+    ==notemplate | ==template <template-file>    (default: stdout)
+\end{verbatim}
+\end{small}
+
+}}}
+{{{ Index
+
+====[ INDEX ]====
+
+\renewcommand{\indexname}
+	{Index\addcontentsline{toc}{section}{\numberline{}Index}}
+\printindex
+
+}}}
+{{{ Bibliography
+
+====[ BIBLIOGRAPHY ]====
+\bibliographystyle{alpha}
+\bibliography{thesis}
+
+}}}
+
+\appendix
+
+{{{ The ToolBus layer
+
+\section{The ToolBus layer}
+
+The ATerm library also provides functionality needed to implement
+\toolbus\ tools. This section describes this \toolbus\ layer in detail.
+
+{{{ Generation of tool interfaces
+
+\subsection{Generation of tool interfaces}
+
+The ATerm library provides a program that takes a standard
+\toolbus\ \emph{tifs} file, which is generated by the toolbus interpreter
+when started with the {\tt -gentifs} option, and generates
+a tool interface in C for use with the ATerm library.
+
+The generated interface consists of two files, a C source file
+and a C header (include) file. In the header file a number of interface
+functions is declared, one for each element in the input signature of the tool.
+It is up to the writer of the tool to provide an implementation for
+these functions. The generated C file contains a handler function
+that analyzes incoming terms from the \toolbus, and delegates to the
+appropriate interface function.
+
+}}}
+{{{ Example
+
+\subsection{Example}
+
+Suppose we take the following simple \toolbus\ script {\tt "test.tb"}:
+
+\begin{verbatim}
+  tool testing is { command = "./testing" }
+
+  process TEST is
+  let
+    T : testing,
+    R : str
+  in
+    execute(testing, T?) .
+    snd-do(T, f1(42)) .
+    snd-eval(T, f2("hello world!")) .
+    rec-value(T, result(R?)) .
+    printf("result: %s\n", R)
+  endlet
+
+  toolbus(TEST)
+\end{verbatim}
+
+Using the command:
+\begin{verbatim}
+   toolbus -gentifs test.tb
+\end{verbatim}
+we generate a file called {\tt "test.tifs"}. Using the command:
+\begin{verbatim}
+   tifstoc -tool testing test.tifs
+\end{verbatim}
+we generate the header file {\tt "testing.tif.h"} and the source
+file {\tt "testing.tif.c"}.
+
+{\tt "testing.tif.h"} looks like this:
+\begin{verbatim}
+  /**
+   * This file is generated by tifstoc. Do not edit!
+   * Generated from tifs for tool 'testing'
+   * Headerfile generated at Thu Apr 22 11:37:36 1999
+   */
+
+  #ifndef _TESTING_H
+  #define _TESTING_H
+
+  #include <atb-tool.h>
+
+  /* Prototypes for functions called from the event handler */
+  void f1(int conn, int);
+  ATerm f2(int conn, char *);
+  void rec_terminate(int conn, ATerm);
+  extern ATerm testing_handler(int conn, ATerm term);
+  extern ATerm testing_checker(int conn, ATerm sigs);
+
+  #endif
+\end{verbatim}
+
+Only the functions {\tt f1}, {\tt f2}, and {\tt rec\_terminate}
+together with a simple {\tt main} function
+have to be implemented to build a fully functional \toolbus\ tool.
+The implementation of the functions {\tt testing\_handler} and
+{\tt testing\_checker} has been generated in the file {\tt "testing.tif.c"},
+which looks like this:
+
+\begin{verbatim}
+  /**
+   * This file is generated by tifstoc. Do not edit!
+   * Generated from tifs for tool 'testing'
+   * Implementation generated at Thu Apr 22 11:37:36 1999
+   */
+
+  #include "testing.tif.h"
+
+  #define NR_SIG_ENTRIES  3
+
+  static char *signature[NR_SIG_ENTRIES] = {
+    "rec-terminate(<testing>,<term>)",
+    "rec-eval(<testing>,f2(<str>))",
+    "rec-do(<testing>,f1(<int>))",
+  };
+
+  /* Event handler for tool 'testing' */
+  ATerm testing_handler(int conn, ATerm term)
+  {
+    ATerm in, out;
+    /* We need some temporary variables during matching */
+    int i0;
+    char *s0;
+    ATerm t0;
+
+    if(ATmatch(term, "rec-eval(f2(<str>))", &s0)) {
+      return f2(conn, s0);
+    }
+    if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
+      rec_terminate(conn, t0);
+      return NULL;
+    }
+    if(ATmatch(term, "rec-do(f1(<int>))", &i0)) {
+      f1(conn, i0);
+      return NULL;
+    }
+    if(ATmatch(term, "rec-do(signature(<term>,<term>))", &in, &out)) {
+      ATerm result = testing_checker(conn, in);
+      if(!ATmatch(result, "[]"))
+        ATfprintf(stderr, "warning: not in input signature:\n\t%\n\tl\n", result);
+      return NULL;
+    }
+
+    ATerror("tool testing cannot handle term %t", term);
+    return NULL; /* Silence the compiler */
+  }
+
+  /* Check the signature of the tool 'testing' */
+  ATerm testing_checker(int conn, ATerm siglist)
+  {
+    return ATBcheckSignature(siglist, signature, NR_SIG_ENTRIES);
+  }
+\end{verbatim}
+
+This file contains an array of signature definitions ({\tt signature}),
+the handler function ({\tt testing\_handler}), and the signature
+checker ({\tt testing\_checker}). The only thing the handler does
+is differentiating between the different possible input terms
+coming from the \toolbus, and delegating the actual work to the
+appropriate function.
+
+As mentioned earlier, the only thing needed to implement the
+actual tool, is the implementation of the three interface
+functions {\tt f1}, {\tt f2}, and {\tt rec\_terminate}, and
+the implementation of {\tt main} to get things going.
+We will first take a look at the initialization stuff that
+the {\tt main} function has to do:
+
+\begin{verbatim}
+  #include "testing.tif.h"
+
+  int main(int argc, char *argv[])
+  {
+    ATerm bottomOfStack;
+
+    ATBinit(argc, argv, &bottomOfStack);
+    if(ATBconnect(NULL, NULL, -1, testing_handler) >= 0) {
+      ATBeventloop();
+    } else {
+      fprintf(stderr, "Could not connect to the ToolBus, giving up!\n");
+      return -1;
+    }
+
+    return 0;
+  }
+\end{verbatim}
+
+The variable {\tt bottomOfStack} is needed by the ATerm library
+to determine where to look for the stack. {\tt argc} and {\tt argv}
+are passed unchanged to {\tt ATBinit}, so the \toolbus\ library can
+look for default values for things like the \toolbus\ socket address
+and the \toolbus\ host name.
+
+The call to {\tt ATBconnect} connects to a running \toolbus, and
+requires four arguments: a character
+string representing the tool name, a character string representing
+the host name of the \toolbus\ to connect to, the port number of the
+\toolbus\ to connect to, and a handler function. Passing {\tt NULL},
+{\tt NULL}, and {\tt -1} respectively as the tool name, the
+host name, and the port number cause the defaults for these values
+to be used instead.
+
+When all goes well, the call to {\tt ATBeventloop} starts the main
+\toolbus\ eventloop and the tool will be ready to receive requests
+from the \toolbus.
+
+Now we only need the implementation of the three interface functions:
+\begin{verbatim}
+  void f1(int conn, int value)
+  {
+    printf("f1 called: %d\n", value);
+  }
+
+  ATerm f2(int conn, char *value)
+  {
+    return ATmake("snd-value(result(<str>))", value);
+  }
+
+  void rec_terminate(int conn, ATerm arg)
+  {
+    exit(0);
+  }
+\end{verbatim}
+
+Note that the {\tt conn} argument identifies the \toolbus\ connection,
+making it possible to distinguish which \toolbus\ made the request
+when connected to more than one \toolbus\ at the same time.
+
+}}}
+{{{ Functions in the \toolbus\ layer
+
+\subsection{Functions in the \toolbus\ layer}
+
+The \toolbus\ layer offers the following functions:
+
+\Function{ATBinit}{int}{int argc, char *argv[], ATerm *stack\_bottom}
+{Initialize the \toolbus\ layer and the underlying ATerm library
+when needed.}
+\Describe{The return value indicates whether or not the \toolbus\
+host could be found. {\tt 0} indicates that all is well, and {\tt -1}
+indicates an error, in which case {\tt errno} is set to indicate
+which error.}
+
+\Function{ATBconnect}{int}{char *toolname, char *host, int port, ATBhandler h}
+{Connect to a running \toolbus.}
+\Describe{When {\tt NULL} is passed as {\tt toolname} or {\tt host}, or
+{\tt -1} is passed as {\tt port}, default values are taken from {\tt argv}
+passed to {\tt ATBinit}. The return value indicates whether or not the
+connection succeeded. {\tt -1} means that the connection failed and a
+positive number or zero indicates a succesful connection attempt. In this
+case this number is also the file descriptor of the socket connection
+to the \toolbus.}
+
+\Function{ATBdisconnect}{void}{int fd}
+{Disconnect a from a \toolbus.}
+\Describe{This function can be used to terminate a connection that
+has been established earlier using {\tt ATBconnect}}
+
+\Function{ATBeventloop}{int}{void}
+{Start the tool event loop, reading and handling terms until
+a connection is broken.}
+\Describe{This function will not return unless something goes wrong!}
+
+\Function{ATBwriteTerm}{int}{int fd, ATerm term}
+{Send a term to the \toolbus.}
+\Describe{A term is send using the \toolbus\ connection indicated by
+{\tt fd}. This function is typically used to generate \toolbus\
+events, for instance:
+
+{\tt ATBwriteTerm(fd, ATparse("snd-event(some-event)"));}
+When something goes wrong, {\tt -1} is returned, otherwise {\tt 0} is
+returned.}
+
+\subsection{Control flow without the {\tt ATBeventloop}}
+In some situations, the {\tt ATBeventloop} function does not offer
+the right flow of control for a specific application. In this case,
+the following set of functions can be used to create custom control
+flow patterns:
+
+\Function{ATBpeekOne}{ATbool}{int fd}
+{Check if there is input waiting on a \toolbus\ connection}
+\Describe{If there is input waiting on the specified connection,
+{\tt ATtrue} is returned. Otherwise, {\tt ATfalse} is returned.}
+
+\Function{ATBpeekAny}{int}{}
+{Check if there is input waiting on any \toolbus\ connection}
+\Describe{If there is input waiting on one of the \toolbus\
+connections, the appropriate file-descriptor is returned. Otherwise,
+{\tt -1} is returned. This function provides for some `fairness' by
+using a round-robin scheme in traversing the connections between
+calls.}
+
+\Function{ATBreadTerm}{ATerm}{int fd}
+{Read a term from a \toolbus\ connection.}
+
+\Function{ATBhandleOne}{int}{int fd}
+{Read one term from a \toolbus\ connection, and call the
+appropriate handler. {\tt -1} is returned when something goes wrong.}
+
+\Function{ATBhandleAny}{int}{}
+{Read a single term from any \toolbus\ connection and call
+the appropriate handler. {\tt -1} is returned when something
+goes wrong.}
+
+\Function{ATBgetDescriptors}{int}{fd\_set *set}
+{Gather all \toolbus\ connection file descriptor in a single
+descriptor set. The return value indicates the maximum
+value of any descriptor in the set.}
+
+Note that the standard {\tt ATBeventloop} can be expressed using
+the following code:
+\begin{verbatim}
+  int ATBeventloop(void)
+  {
+    int fd;
+    while(ATtrue) {
+      fd = ATBhandleAny();
+      if(fd < 0)
+        return -1;
+    }
+  }
+\end{verbatim}
+
+}}}
+
+}}}
+{{{ The Java implementation
+
+\section{Java implementation}
+
+Besides the C implementaton discussed upto now, we also developed
+a Java implementation of the ATerm datatype. We have tried to
+keep the interfaces of the C implementation and the Java implementation
+as close together as possible. Unfortunately, constraints imposed by
+both languages prohibit the use of a single interface for both languages.
+In this section we will discuss the Java interface, and highlight the
+differences with the C interface where appropriate.
+
+Most differences are introduced by the fact that Java is a much more
+powerful language than C. Garbage collection for instance is a built-in
+feature of the Java language, so no {\tt protect} and {\tt unprotect}
+functions are needed in Java.
+
+ {{{  Interfaces and Implementation
+
+\subsection{Interfaces and Implementation}
+The interface {\tt ATerm} defines functionality relevant for all ATerm
+subtypes. Each of these ATerm subtypes has its own interface, describing
+the additional functionality relevant for that particular subtype.
+
+An interface {\tt ATermFactory} describes the various methods used to
+create new ATerm objects. It is used to implement maximal sharing.
+
+A complete description of these interfaces can be found in the file
+{\tt java-api.ps} which is distributed with this manual.
+
+The ATerm library distribution so far comes with a single implementation
+of the ATerm interfaces. This implementation is a ``pure'' Java one,
+but plans exist to experiment with an implementation using the Java
+Native Interface (JNI) to build a layer of Java code on top of the
+C implementation.
+
+A very basic example that shows the creation of some ATerms and how
+to read one from a stream is shown below.
+
+\begin{verbatim}
+import java.io.*;
+import aterm.*;
+
+public class Basic
+{
+  private ATermFactory factory;
+
+  public static final void main(String[] args) throws IOException {
+    Basic basic = new Basic(args);
+  }
+
+  public Basic(String[] args) throws IOException {
+    factory = new aterm.pure.PureFactory();
+
+    ATermInt i = factory.makeInt(42);
+    System.out.println("i = " + i);
+
+    AFun fun = factory.makeAFun("foo", 2, false);
+    ATermAppl foo = factory.makeAppl(fun, i, i);
+    System.out.println("foo = " + foo);
+
+    ATerm t = factory.parse("this(is(a(term(0))))");
+    System.out.println("t = " + t);
+
+    try {
+      ATerm input = factory.readFromFile(System.in);
+      System.out.println("You typed a valid term: " + input);
+    } catch (ParseError error) {
+      System.out.println("Your input was not a valid term!");
+    }
+  }
+}
+\end{verbatim}
+
+ }}}
+{{{ Class hierarchy
+
+\subsection{Class hierarchy}
+
+Because Java is an object oriented language, we have partitioned
+the Java implementation in a number of classes. The resulting class
+hierarchy is shown in Figure \ref{class-hierarchy}.
+
+\begin{figure}[htb]
+\centerline{\epsfig{scale=0.4, file=hierarchy.eps}}
+\caption{\label{class-hierarchy}Simple ATerm class library}
+\end{figure}
+
+}}}
+ {{{ Connecting Java tools
+
+\section{Connecting Java tools}
+
+This section shows how to write a simple Java application and which
+steps need to be taken to connect it to the ToolBus.
+
+The example tool is a simple Java Application which pops up a GUI with
+a button that can be pressed by the user. Further, it contains a method
+{\tt msg} which can be called by the ToolBus. This method prints the
+string that was passed and returns a count indicating the message number.
+
+In order to get from the ToolBus script {\tt example.tb} to the generated
+{\tt .java} files, we follow steps similar to the procedure to connect
+a {\tt C} program to the ToolBus.
+
+\begin{itemize}
+  \item Generate Tool Interface file {\tt example.tifs}
+    \begin{verbatim}
+	~/tmp > toolbus -gentifs example.tb
+	Tool interfaces written to `example.tifs'
+	\end{verbatim}
+
+  \item Generate Java code for tool {\tt example}
+    \begin{verbatim}
+	~/tmp > tifstojava -tool example -tifs example.tifs 
+	generating file ExampleTif.java
+	generating file ExampleTool.java
+	generating file ExampleBridge.java
+	\end{verbatim}
+\end{itemize}
+
+
+As you can see, three files are generated for our Example tool:
+\begin{itemize}
+  \item {\tt ExampleTif.java}
+    the Java interface describing our Tool's functionality.
+  \item {\tt ExampleTool.java}
+    an \emph{abstract} implementation of {\tt ExampleTif.java}
+    containing just enough code to check the input/output signature
+    of our tool and handle incoming messages by dispatching them
+    to the correct method.
+  \item {\tt ExampleBridge.java}
+    a \emph{concrete} class extending {\tt ExampleTool.java}
+    which can be used as a bridge between your Tool class and
+    the ToolBus.
+\end{itemize}
+
+Remember that Java only allows extention of a single class, but
+\emph{does} allow your class to implement multiple interfaces. Using
+the generated {\tt Bridge} allows your class to extend another
+class, but still save you the arduous task of extending the generic
+\emph{AbstractTool} class for each new tool. Have a look at the source
+code of {\tt example.tb} and {\tt Example.java} below.
+
+\noindent
+{\tt example.tb} looks like this:
+ {{{ example.tb
+
+\begin{verbatim}
+
+tool example is { command="java-adapter -class Example" }
+
+process EXAMPLE is
+let
+  T : example,
+  Value : int,
+  Name  : str
+in
+  execute(example, T?) .
+  (
+    snd-eval(T, msg("Hello World!")) delay(sec(3)) .
+    rec-value(T, count(Value?)) .
+    printf("Hello number %d\n", Value)
+  ) * delta 
+  ||
+  (
+    rec-event(T, button(Name?)) .
+    printf("Button pressed: %s\n", Name) .
+    snd-ack-event(T, button(Name))
+  ) * delta
+endlet
+
+toolbus(EXAMPLE)
+
+\end{verbatim}
+
+ }}}
+\noindent
+{\tt Example.java} looks like this:
+ {{{  Example.java
+
+\begin{verbatim}
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+
+import aterm.*;
+
+public class Example
+  extends Frame
+  implements ExampleTif, ActionListener
+{
+  private ATermFactory factory;
+  private ExampleBridge bridge;
+  private Button button;
+  private int count;
+
+  public static final void main(String[] args)
+    throws IOException
+  {
+    Example example = new Example(args);
+  }
+
+  public Example(String[] args)
+    throws IOException
+  {
+    factory = new aterm.pure.PureFactory();
+
+    // Build the user interface: just a single button
+    button = new Button("Button");
+    button.addActionListener(this);
+    add(button);
+    pack();
+    show();
+
+    // Create the bridge that will forward incoming messages
+    // to method calls in this Example object
+    bridge = new ExampleBridge(factory, this);
+
+    // Initialize vital parameters, like the ToolBus TCP/IP port, tool name,
+    // etc. that are passed to us using the command line arguments.
+    bridge.init(args);
+    
+    // Actually establish the connection with the ToolBus
+    bridge.connect();
+
+    // Start the tool event loop
+    bridge.run();
+  }
+
+  public void actionPerformed(ActionEvent event)
+  {
+    if (event.getSource() == button) {
+      // When the user presses the button, we send an event to the ToolBus
+      bridge.postEvent(factory.make("button(<str>)", button.getLabel()));
+    }
+  }
+
+  public ATerm msg(String message)
+  {
+    // Print the incoming message
+    System.out.println("Example tool received msg: " + message);
+
+    // Increase the counter and return the current value to the ToolBus
+    return factory.make("snd-value(count(<int>))", new Integer(count++));
+  }
+
+  public void recAckEvent(ATerm event)
+  {
+    // This simple tool ignores event acknowledgements
+  }
+
+  public void recTerminate(ATerm arg)
+  {
+    // Just exit when the ToolBus terminates
+    System.exit(0);
+  }
+}
+\end{verbatim}
+
+ }}}
+
+ }}}
+
+}}}
+
+\end{document}
+--></para>
+  </section>
+</chapter>

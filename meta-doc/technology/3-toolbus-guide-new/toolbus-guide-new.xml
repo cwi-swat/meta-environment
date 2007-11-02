@@ -1991,7 +1991,7 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
       </section>
 
       <section>
-        <title>Initializing and using the ATerm library}</title>
+        <title>Initializing and using the ATerm library</title>
 
         <para>Using the ATerm library requires the following:</para>
 
@@ -2145,10 +2145,10 @@ int main(int argc, char *argv[])
       </itemizedlist>
 
       <para>A tool is thus on the one hand a reactive engine that responds to
-      a request from the \TB\ and returns the result back to the \TB\ in the
-      form of a term (e.g., calculate the value of some expression), but on
-      the other hand it can also take the initiative to send a term to the
-      \TB\ (e.g., generate an event when a user pushes some button). At the
+      a request from the \TB\ and returns the result back to the ToolBus in
+      the form of a term (e.g., calculate the value of some expression), but
+      on the other hand it can also take the initiative to send a term to the
+      ToolBus (e.g., generate an event when a user pushes some button). At the
       level of the source code, the global structure of a purely reactive tool
       without additional term or character ports has already been illustrated
       in Figure~\ref{fig:hello.c}.</para>
@@ -2192,7 +2192,7 @@ int main(int argc, char *argv[])
 
           <listitem>
             <para><literal>ATBconnect</literal>: to connect the tool to the
-            ToolBus (Sections~\ref{ATBconnect}). </para>
+            ToolBus (Sections~\ref{ATBconnect}).</para>
           </listitem>
 
           <listitem>
@@ -2201,8 +2201,8 @@ int main(int argc, char *argv[])
           </listitem>
 
           <listitem>
-            <para> <literal>ATBeventloop</literal>: a standard event loop for
-            a tool (Section~\ref{ATBeventloop}).</para>
+            <para><literal>ATBeventloop</literal>: a standard event loop for a
+            tool (Section~\ref{ATBeventloop}).</para>
           </listitem>
 
           <listitem>
@@ -2216,7 +2216,7 @@ int main(int argc, char *argv[])
           </listitem>
         </itemizedlist>
 
-        <para> In the following section, we will describe these
+        <para>In the following section, we will describe these
         functions.</para>
       </section>
     </section>
@@ -2461,7 +2461,7 @@ int main(int argc, char *argv[])
         </listitem>
 
         <listitem>
-          <para> <literal>-lATerm</literal></para>
+          <para><literal>-lATerm</literal></para>
         </listitem>
 
         <listitem>
@@ -2479,95 +2479,62 @@ int main(int argc, char *argv[])
 
       <para>Strategy 2: write a make file that encodes this information. As a
       result, the location information is hardwired in the make file rather
-      than in a command that has to be repeated over and over again.
-      \begin{figure}[h] \rule{\textwidth}{0.5mm} \input{Tifs.tex}
-      \centerline{\box\graph} \caption{Automatic generation of tool
-      interfaces.} \label{fig:Tifs} \rule{\textwidth}{0.5mm} \end{figure}
-      </para>
+      than in a command that has to be repeated over and over again.</para>
+    </section>
+
+    <section>
+      <title>Generating C tool interfaces with tifstoc</title>
+
+      <para><figure xml:id="figure.tifs">
+          <title>Automatic generation of tool interfaces</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="tifs.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>The interface code for each tool depends on the particulars
+      of the Tscript in which it is used. Changing the number of arguments in
+      an evaluation request to the tool, or adding a new request, requires
+      making changes to the interface code that are easily forgotten and
+      therefore error prone. As already mentioned in Section~\ref{Hello},
+      another observation is that the interface code for different tools has a
+      lot in common. An obvious solution to both problems is to
+      <emphasis>generate</emphasis> tool interfaces automatically, given a
+      Tscript. This generation process is shown in <xref
+      linkend="figure.tifs" /> and consists of two steps: </para>
 
       <itemizedlist>
         <listitem>
-          <para></para>
+          <para>Generate a language-independent description of all tool
+          interfaces used in the script. This amounts to a static analysis of
+          all tool communication in the script. It is achieved by using the
+          <literal>-gentifs</literal> option of the ToolBus interpreter. For
+          instance, <programlisting>toolbus -gentifs hello2.tb</programlisting>
+          will create a file <filename>hello2.tifs</filename> containing the
+          tool interfaces.</para>
+        </listitem>
+
+        <listitem>
+          <para>Use the language independent interface description to generate
+          a tool interface for a specific tool in a specific implementation
+          language. The generator <command>tifstoc</command> exists for
+          generating C tool interfaces. It is called as follows:
+          <programlisting>tifstoc -tool <replaceable>Name</replaceable> <replaceable>TifsFile</replaceable></programlisting>and
+          generates a file named
+          <literal><replaceable>Name</replaceable>.tif.c</literal>. For the
+          hello example, we would have, for instance: <programlisting>tifstoc -tool hello hello2.tifs</programlisting>
+          %The resulting file {\tt hello.tif.c} is shown in
+          %Figure~\ref{fig:hello.tif.c}. \end{itemize}</para>
         </listitem>
       </itemizedlist>
-    </section>
 
-    <section>
-      <title></title>
-
-      <para><!--
-
-
-\subsection{\label{tifstoc}Generating C tool interfaces with {\tt tifstoc}}
-
-The interface code for each tool depends on the particulars
-of the \T\ script in which it is used. Changing the number
-of arguments in an evaluation request to the tool,
-or adding a new request, requires making changes to the interface
-code that are easily forgotten and therefore error prone.
-
-As already mentioned in Section~\ref{Hello}, another observation
-is that the interface code for different tools has a lot in common.
-
-An obvious solution to both problems is to {\em generate}
-tool interfaces automatically, given a \T\ script.
-This generation process is shown in Figure~\ref{fig:Tifs}
-and consists of two steps:
-
-\begin{itemize}
-\item Generate a language-independent
-description of all tool interfaces used in the script.
-This amounts to a static analysis of all tool communication
-in the script. It is achieved by using the ``{\tt -gentifs}''
-option of the \TB\ interpreter. For instance,
-\begin{verbatim}
-      toolbus -gentifs hello2.tb
-\end{verbatim}
-will create a file {\tt hello2.tifs} containing the tool interfaces.
-
-\item Use the language independent interface description
-to generate a tool interface for a specific tool in a specific
-implementation language. The generator {\tt tifstoc}\footnote{
-This is an ATerm-compatible version of a similar generator called {\tt ctif}.
-{\tt ctif} is still in use for some older tools but will be gradually phased out.}
-exists for generating C tool interfaces. It is called as follows:
-\begin{quote}
-      {\tt tifstoc -tool $Name  $ $TifsFile$}
-\end{quote}
-and generates a file named {\tt $Name$.tif.c}.
-For the hello example, we would have, for instance:
-\begin{verbatim}
-      tifstoc -tool hello hello2.tifs
-\end{verbatim}
-%The resulting file {\tt hello.tif.c} is shown in
-%Figure~\ref{fig:hello.tif.c}.
-\end{itemize}
-
-%\begin{figure}[tb]
-%\rule{\textwidth}{0.5mm}
-%\input{hello.tif.c.tex}
-%  \caption{{\tt hello.tif.c}: generated tool interface {\tt hello.tif.c}.}
-%  \label{fig:hello.tif.c}
-%\rule{\textwidth}{0.5mm}
-%\end{figure}
-
-In Figure~\ref{fig:Tifs} it is also shown how tool interface generators for
-{\em other} languages (e.g., Java, Cobol) fit into this scheme.  In addition
-to {\tt tifstoc}, we alo support the generation of Java interfaces by way of
-{\tt javatif} (See Section~\ref{ToolsInJava}).
---></para>
-    </section>
-
-    <section>
-      <title></title>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title></title>
-
-      <para></para>
+      <para>In <xref linkend="figure.tifs" /> it is also shown how tool
+      interface generators for <emphasis>other</emphasis> languages (e.g.,
+      Java, Cobol) fit into this scheme. In addition to
+      <command>tifstoc</command>, we alo support the generation of Java
+      interfaces by way of <command>tifstojava</command> (See
+      Section~\ref{ToolsInJava}).</para>
     </section>
 
     <section>
@@ -2751,11 +2718,11 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
-              <entry align="center">Description&#160;</entry>
+              <entry align="center">Description </entry>
             </row>
           </thead>
 
@@ -2828,9 +2795,9 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
               <entry align="center">Description</entry>
             </row>
@@ -2962,9 +2929,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3099,9 +3066,9 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
               <entry align="center">Description</entry>
             </row>
@@ -3203,9 +3170,9 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
               <entry align="center">Description</entry>
             </row>
@@ -3270,9 +3237,9 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
               <entry align="center">Description</entry>
             </row>
@@ -3321,9 +3288,9 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
               <entry align="center">Description</entry>
             </row>
@@ -3375,9 +3342,9 @@ exports
 
           <thead>
             <row>
-              <entry align="center">Function&#160;</entry>
+              <entry align="center">Function </entry>
 
-              <entry align="center">Result type&#160;</entry>
+              <entry align="center">Result type </entry>
 
               <entry align="center">Description</entry>
             </row>
@@ -3444,9 +3411,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3612,9 +3579,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3656,9 +3623,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
