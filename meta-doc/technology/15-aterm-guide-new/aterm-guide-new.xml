@@ -845,9 +845,9 @@ int main(int argc, char *argv[])
       abbreviation it has been written. Subsequent occurences of this term are
       then written by emitting the abbreviation instead of the term itself.
       For example the term <literal>f(test,test)</literal> is represented as
-      <literal>!f(test,\#A)</literal> in SAF, whereas
-      <literal>f(a,a)</literal> is respresented as <literal>!f(a,a)</literal>
-      because <literal>test</literal> is longer than its abbreviation
+      <literal>!f(test,#A)</literal> in SAF, whereas <literal>f(a,a)</literal>
+      is respresented as <literal>!f(a,a)</literal> because
+      <literal>test</literal> is longer than its abbreviation
       <literal>#A</literal>, but <literal>a</literal> is not.</para>
     </section>
 
@@ -3098,8 +3098,8 @@ int main(int argc, char *argv[])
   <section xml:id="section.java">
     <title>Java implementation</title>
 
-    <para>In addition to the C implementaton discussed upto now, we also
-    developed a Java implementation of the ATerm datatype. The interfaces of
+    <para>In addition to the C implementaton discussed upto now, a Java
+    implementation of the ATerm datatype is also available. The interfaces of
     the C implementation and the Java implementation are as similar as
     possible. Unfortunately, constraints imposed by both languages prohibit
     the use of a single interface for both languages. In this section we will
@@ -3117,23 +3117,38 @@ int main(int argc, char *argv[])
       own interface, describing the additional functionality relevant for that
       particular subtype. An interface <literal>ATermFactory</literal>
       describes the various methods used to create new ATerm objects. It is
-      used to implement maximal sharing. A complete description of these
-      interfaces can be found in the file {\tt java-api.ps} which is
-      distributed with this manual.</para>
+      used to implement maximal sharing.</para>
 
-      <para><warning>
-          <para>TODO!</para>
-        </warning></para>
+      <para>The interface hierachy is shown in <xref
+      linkend="figure.interface-hierarchy" />.</para>
 
-      <para>The ATerm library distribution so far comes with a single
-      implementation of the ATerm interfaces. This implementation is a
-      ``pure'' Java one, but it would be possible to build a layer of Java
+      <para><figure xml:id="figure.interface-hierarchy">
+          <title>Interface hierarchy</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="interface-hierarchy.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>The ATerm library comes with a single implementation of the ATerm
+      interfaces. For instance, the interface ATermList is implemented by the
+      class called ATermListImpl. The AtermFactory is implemented by the class
+      PureFactory. This implementation is a ``pure'' Java one, but given this
+      intercafe organization it would be possible to build a layer of Java
       code on top of the C implementation using the Java Native Interface
-      (JNI) .</para>
+      (JNI) . A complete and up-to-date description of the Java implementation
+      of the ATerm library can be found at <link
+      xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>.</para>
+    </section>
 
-      <para> A very basic example that shows the creation of some ATerms and
-      how to read one from a stream is shown in <xref
-      linkend="example.aterms-java" />.<example xml:id="example.aterms-java">
+    <section>
+      <title>Java Example</title>
+
+      <para>To give a flavour of the manipulation oof ATerms in Java, <xref
+      linkend="example.aterms-java" /> shows the creation of some ATerms and
+      reading of an ATerm fron a stream.<example xml:id="example.aterms-java">
           <title>Using Aterms in Java</title>
 
           <para><programlisting>import java.io.*;
@@ -3173,31 +3188,13 @@ public class Basic
   </section>
 
   <section>
-    <title></title>
+    <title>Historical Notes</title>
 
-    <para><!-- 
-{{{ Class hierarchy
-
-\subsection{Class hierarchy}
-
-Because Java is an object oriented language, we have partitioned
-the Java implementation in a number of classes. The resulting class
-hierarchy is shown in Figure \ref{class-hierarchy}.
-
-\begin{figure}[htb]
-\centerline{\epsfig{scale=0.4, file=hierarchy.eps}}
-\caption{\label{class-hierarchy}Simple ATerm class library}
-\end{figure}
-
-}}}
-
-
-\end{document}
---></para>
+    <para></para>
   </section>
 
   <section>
-    <title></title>
+    <title>Bibliography</title>
 
     <para></para>
   </section>
