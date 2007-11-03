@@ -1536,7 +1536,7 @@ int main(int argc, char *argv[])
         from <literal>fprintf</literal>. In addition the conversion specifiers
         <literal>a</literal>, <literal>h</literal>, <literal>l</literal>,
         <literal>n</literal> and <literal>t</literal> are supported as
-        summarized in x<xref linkend="table.print-conversions" /></para>
+        summarized in <xref linkend="table.print-conversions" /></para>
 
         <table xml:id="table.print-conversions">
           <title>Specifiers for print conversion</title>

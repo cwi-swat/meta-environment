@@ -52,6 +52,7 @@
   <part>
     <title>Technology</title>
   </part>
+    <xi:include href="technology/15-aterm-guide-new/aterm-guide-new.xml"></xi:include>
     <xi:include href="technology/2-aterm-saf/aterm-saf.xml"></xi:include>
     <xi:include href="technology/3-toolbus-guide-new/toolbus-guide-new.xml"></xi:include>
 
