@@ -8,9 +8,9 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <title>The ATerm Guide</title>
 
-  <warning>
-    <para>This document is in the process of being created.</para>
-  </warning>
+  <important>
+    <para>See the ToDo list for this document.</para>
+  </important>
 
   <section xml:id="section.aterm-introduction">
     <title>Introduction</title>
@@ -111,21 +111,40 @@
     operations on an ATerm received from another application without first
     converting it to an application-specific representation.</para>
 
+    <para><figure xml:id="figure.maximal-sharing">
+        <title>Maximal subterm sharing for x*(y+2) + (y+2)*z. <emphasis
+        role="bold">(a)</emphasis> Tree representation. <emphasis
+        role="bold">(b)</emphasis> Maximal subterm sharing</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="sharing.png" scale="60"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
     <para>One particular aspect of ATerms makes them unique and should be
     mentioned here explicitly: ATerms are based on <emphasis>maximal subterm
-    sharing</emphasis>. This is a strategy to achieve "conciseness" as
-    mentioned above and is a simple and effective way to minimize memory
-    usage: terms are only created when they are <emphasis>new</emphasis>,
-    i.e., that do not exist already. If a term to be constructed already
-    exists, that term is reused, ensuring maximal sharing. This strategy fully
-    exploits the redundancy that is typically present in the terms to be built
-    and leads to maximal sharing of subterms. The library functions that
-    construct terms make sure that shared terms are returned whenever
-    possible. The sharing of terms is thus invisible to the library user.
-    Apart from reduced memory usage, maximal subterm sharing has another
-    benefit: the equality check on terms becomes very cheap: it reduces from
-    an operation that is linear in the number of subterms to be compared to a
-    constant operation (pointer equality).</para>
+    sharing</emphasis>. This is illustrated in <xref
+    linkend="figure.maximal-sharing" /> for the expression <literal>x*(y+2) +
+    (y+2)*z</literal>. In <emphasis role="bold">(a)</emphasis> the ordinary
+    tree representation is shown and in <emphasis role="bold">(b)</emphasis>
+    the common subexpression <literal>(y+2)</literal> is shared thus turning
+    the tree into a Directed Acyclic Graph (DAG).</para>
+
+    <para>Maximal subterm sharing is a strategy to achieve "conciseness" as
+    mentioned in the characterristics of ATerms above and is a simple and
+    effective way to minimize memory usage: terms are only created when they
+    are <emphasis>new</emphasis>, i.e., that do not exist already. If a term
+    to be constructed already exists, that term is reused, ensuring maximal
+    sharing. This strategy fully exploits the redundancy that is typically
+    present in the terms to be built and leads to maximal sharing of subterms.
+    The library functions that construct terms make sure that shared terms are
+    returned whenever possible. The sharing of terms is thus invisible to the
+    library user. Apart from reduced memory usage, maximal subterm sharing has
+    another benefit: the equality check on terms becomes very cheap: it
+    reduces from an operation that is linear in the number of subterms to be
+    compared to a constant operation (pointer equality).</para>
   </section>
 
   <section xml:id="section.aterms-at-a-glance">
@@ -227,7 +246,7 @@
       <itemizedlist>
         <listitem>
           <para>Integer and real constants are written conventionally:
-          <literal>1</literal>, <literal>3.1</literal>4, and
+          <literal>1</literal>, <literal>3.14</literal>, and
           <literal>-0.7E34</literal> are all valid ATerms.</para>
         </listitem>
 
@@ -287,7 +306,8 @@
         <title>Making and Matching ATerms</title>
 
         <para>The simplicity of the level one interface is achieved by the
-        <emphasis>make-and-match</emphasis> paradigm:<variablelist>
+        <emphasis>make-and-match</emphasis> paradigm that is alo illustrated
+        in <xref linkend="figure.make-and-match" />:<variablelist>
             <varlistentry>
               <term>Make</term>
 
@@ -306,6 +326,16 @@
               </listitem>
             </varlistentry>
           </variablelist></para>
+
+        <para><figure xml:id="figure.make-and-match">
+            <title>The make-and-match paradigm</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="make-match.png" scale="60"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
 
         <para>Patterns are just ATerms containing placeholders. These
         placeholders determine the places where ATerms must be substituted or
@@ -535,10 +565,25 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
 
         <para>Annotations are
         (<replaceable>label</replaceable>,<replaceable>annotation</replaceable>)
-        pairs that may be attached to an ATerm. Recall that ATerms are a
-        completely functional data type and that no destructive updates are
-        possible. This is evident in the following operations for manipulating
-        annotations:</para>
+        pairs that may be attached to an ATerm. Annotations can be considered
+        to be a "third dimension" for ATerms, see <xref
+        linkend="figure.annotations" />. Ordinary ATerms (bottom plane) can be
+        extended in this dimension with arbitrary ATerms (that, indeed, may
+        agian contain annotations).</para>
+
+        <para xml:id="figure.annotations"><figure>
+            <title>ATerm annotations</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="annotations.png" scale="60"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>The following operations for manipulating annotations are
+        available (recall that ATerms are a completely functional data type
+        and that no destructive updates are possible):</para>
 
         <itemizedlist>
           <listitem>
@@ -3190,12 +3235,96 @@ public class Basic
   <section>
     <title>Historical Notes</title>
 
-    <para></para>
+    <para>The first term structure to be used for data exchange in The
+    Meta-Environment was designed as part of the ToolBus coordination
+    architecture and is described in <xref linkend="BergstraKlint94" />. These
+    "ToolBus terms" already provided the make-and-match paradigm (<xref
+    linkend="section.making-matching" />) for constructing and deconstructing
+    terms. They also provided a linear string representation for the exchange
+    of terms between components as well as automatic garbage
+    collection.</para>
+
+    <para>The ATerms as discussed here are described in detail in <xref
+    linkend="BJKO00" /> and introduced several innovations over the original
+    design: maximal subterm sharing, annotations, a compressed binary exchange
+    format, and a two-level Application Programming Interface (API) that
+    enables both simple and efficient use of ATerms. The Java implementation
+    uses SharedObjects as described in <xref
+    linkend="VdBrandMoreauVinju05" />.</para>
+
+    <para>In order to further control the type safe acces to ATerms, the API
+    generator <command>apigen</command> has been developed, see <xref
+    linkend="deJongOlivier04" /> and <xref
+    linkend="VdBrandMoreauVinju05" />.</para>
+
+    <para>Since their inception, ATerms have been used in a wide range of
+    application:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Data exchange between interoperating components.</para>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of term rewriting languages and engines.</para>
+      </listitem>
+
+      <listitem>
+        <para>Source code representation and transformation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Software renovation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Representation of web ontologies.</para>
+      </listitem>
+
+      <listitem>
+        <para>Representation of state spaces that are used for model
+        checking.</para>
+      </listitem>
+
+      <listitem>
+        <para>Representation of feature diagrams as used for domein-specific
+        engineering and software product lines.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>An overview can be found in <xref
+    linkend="vdBrandKlint07" />.</para>
   </section>
 
   <section>
     <title>Bibliography</title>
 
-    <para></para>
+    <para><bibliolist>
+        <bibliomixed xml:id="BergstraKlint94"></bibliomixed>
+
+        <bibliomixed xml:id="BJKO00"></bibliomixed>
+
+        <bibliomixed xml:id="VdBrandMoreauVinju05"></bibliomixed>
+
+        <bibliomixed xml:id="vdBrandKlint07"></bibliomixed>
+
+        <bibliomixed xml:id="deJongOlivier04"></bibliomixed>
+      </bibliolist></para>
+  </section>
+
+  <section>
+    <title>ATerm ToDo List</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Describe the new SAF format and mention it at various
+        places.</para>
+      </listitem>
+
+      <listitem>
+        <para>The description of the Java implementation is really short,
+        extend it.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
