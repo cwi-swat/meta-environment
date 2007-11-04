@@ -93,6 +93,15 @@
     <pubdate>1994</pubdate>
   </biblioentry>
 
+  <biblioentry role="techreport" id="BergstraKlint95">
+    <abbrev id="BergstraKlint95.abbrev">BK95</abbrev>
+  <authorgroup><author><authorname><firstname>J.A.</firstname><surname>Bergstra</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+    <title>The discrete time toolbus</title>
+    <bibliomisc role="type">Technical ReportP9502</bibliomisc>
+    <orgname>University of Amsterdam, Programming Research Group</orgname>
+    <pubdate>1995</pubdate>
+  </biblioentry>
+
   <biblioentry role="article" id="BergstraKlint98">
     <abbrev id="BergstraKlint98.abbrev">BK98</abbrev>
     <biblioset role="article">
@@ -328,6 +337,33 @@
   Maintenance (ICSM
   2002)</conftitle><confsponsor>IEEE</confsponsor></confgroup>
       <pubdate>October 2002</pubdate>
+    </biblioset>
+  </biblioentry>
+
+  <biblioentry role="phdthesis" id="deJong07">
+    <abbrev id="deJong07.abbrev">dJ07</abbrev>
+  <author><authorname><firstname>H.A.</firstname><surname>de Jong</surname></authorname></author>
+    <title>Flexible Heterogeneous Software Systems</title>
+    <bibliomisc role="type">PhD thesis</bibliomisc>
+    <orgname>University of Amsterdam</orgname>
+    <pubdate>2007</pubdate>
+  </biblioentry>
+
+  <biblioentry role="inproceedings" id="deJongKlint03">
+    <abbrev id="deJongKlint03.abbrev">dJK03</abbrev>
+    <biblioset role="article">
+  <authorgroup><author><authorname><firstname>H.A.</firstname><surname>de Jong</surname></authorname></author><author><authorname><firstname>P.</firstname><surname>Klint</surname></authorname></author></authorgroup>
+      <title>Toolbus: the next generation</title>
+      <pagenums>220--241</pagenums>
+    </biblioset>
+    <biblioset role="proceedings">
+      <confgroup><conftitle>Formal Methods for Components and
+  Objects</conftitle></confgroup>
+  <authorgroup><editor><authorname><firstname>F.S.</firstname><surname>de Boer</surname></authorname></editor><editor><authorname><firstname>M.</firstname><surname>Bonsangue</surname></authorname></editor><editor><authorname><firstname>S.</firstname><surname>Graf</surname></authorname></editor><editor><authorname><firstname>W.P</firstname><surname>de Roever</surname></authorname></editor></authorgroup>
+      <subtitle role="series">Lecture Notes in Computer
+  Science</subtitle><seriesvolnum>2852</seriesvolnum>
+      <pubdate>2003</pubdate>
+      <publisher><publishername>Springer</publishername></publisher>
     </biblioset>
   </biblioentry>
 

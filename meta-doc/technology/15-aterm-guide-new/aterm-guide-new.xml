@@ -337,6 +337,65 @@
             </mediaobject>
           </figure></para>
 
+        <para>Composition and decomposition of terms is
+        <emphasis>not</emphasis> based on the direct manipulation of the
+        underlying representation of terms. Instead, <emphasis>term
+        patterns</emphasis> are used to guide composition and decomposition.
+        Such term patterns play the same role as format strings in the
+        printf/scanf paradigm in C. In a first approximation, a term pattern
+        is a literal string that would be obtained by a preorder traversal of
+        a term. For instance, the term pattern<programlisting>"or(true, false)"</programlisting>
+        corresponds to a term whose root is labeled with the symbol
+        <literal>or</literal>, and whose children are labeled with,
+        respectively, <literal>true</literal> and <literal>false</literal>. In
+        this way, term patterns can be used to construct and to match terms.
+        Term patterns become, however, much more useful if they can be
+        parameterized with subterms that have been computed separately. To
+        this end, we introduce the notion of <emphasis>directives</emphasis>
+        as follows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>&lt;int&gt;</literal>: corresponds to an integer
+            (in C: <literal>int</literal>};</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;str&gt;</literal>: corresponds to a string (in
+            C: <literal>char *</literal>);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;blob&gt;</literal> corresponds to a binary
+            string (in C: a (length, pointer) pair represented by two values
+            of types, respectively, <literal>int</literal> and <literal>void
+            *</literal>);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;term&gt;</literal>: corresponds to an aterm (in
+            C: <literal>ATerm</literal>);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;appl&gt;</literal>: corresponds to one function
+            application(in C: <literal>char
+            *<replaceable>pattern</replaceable></literal>, followed by
+            arguments);</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>&lt;list&gt;</literal>: corresponds to a list of
+            terms (in C: <literal>ATerm</literal>).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The precise interpretation of these directives depends on the
+        context in which they are used. When constructing a term, directives
+        indicate that a subterm should be obtained from some given variable.
+        When matching a term, directives indicate the assignment of subterms
+        to given variables. </para>
+
         <para>Patterns are just ATerms containing placeholders. These
         placeholders determine the places where ATerms must be substituted or
         matched. An example of a pattern is
@@ -468,6 +527,14 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
       <section xml:id="section.aterms-reading-writing">
         <title>Reading and Writing ATerms</title>
 
+        <para>We make a distinction between the ``raw'' input and output of
+        terms as they are, for instance, being sent through communication
+        channels between ToolBus and tools, versus formatted input and output
+        of terms. Raw term i/o is provided by <literal>TBwrite</literal> and
+        <literal>TBread</literal>. Formatted term output is provided by
+        <literal>TBprintf</literal> and <literal>TBsprintf</literal>. There
+        are currently no primitives for formatted term input.</para>
+
         <para>For reasons of efficiency and conciseness, reading and writing
         can take place in two forms: text and binary. The text format uses the
         textual representation discussed earlier. This format is
@@ -544,9 +611,8 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
         </itemizedlist>
 
         <para>Either format (textual or binary) can be used on any linear
-        stream, including files, sockets, pipes, etc.</para>
-
-        <para>For instance, in the context: <programlisting>FILE *f = fopen("foo", "wb");
+        stream, including files, sockets, pipes, etc. For instance, in the
+        context: <programlisting>FILE *f = fopen("foo", "wb");
 ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlisting>the
         statement<programlisting>ATwriteToTextFile(Trm1, f);</programlisting>will
         write the value of <literal>Trm1</literal> (i.e.,
@@ -558,6 +624,22 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
         <literal>ATsetAbortHandler</literal>, which allows the definition of a
         user-defined abort handler. See <xref
         linkend="function.ATsetAbortHandler" /> for further details.</para>
+
+        <para>The last form of output that is supported by the ATerm library
+        is formatted output. The function<programlisting>int ATfprintf(FILE *<replaceable>File</replaceable>, const char *<replaceable>Pattern</replaceable>, ...)</programlisting>writes
+        formatted output to <replaceable>File</replaceable>.
+        <replaceable>Pattern</replaceable> is printed literally except for
+        occurrences of directives which are replaced by the textual
+        representation of the values appearing in <literal>...</literal>. For
+        instance,<programlisting>ATfprintf(stderr, "Wrong event \"%t\" ignored\n", 
+                   ATmake("failure(&lt;int&gt;)", 13));</programlisting></para>
+
+        <para>will print:<programlisting>Wrong event "failure(13)" ignored</programlisting>Note
+        that <literal>ATprintf</literal> uses the normal
+        <literal>printf</literal> conversion specifiers extended with
+        aterm-specific specifiers. The most frequently used specifier is {\tt
+        \%t} which stands for an aterm argument whose textual representation
+        is to be inserted in the output stream.</para>
       </section>
 
       <section xml:id="section.aterms-annotating">
