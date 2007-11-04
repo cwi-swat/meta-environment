@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <bibliography>
-
+<title>Bibliography</title>
   <biblioentry role="book" id="AhoSethiUllman86">
     <abbrev id="AhoSethiUllman86.abbrev">ASU86</abbrev>
   <authorgroup><author><authorname><firstname>A.V.</firstname><surname>Aho</surname></authorname></author><author><authorname><firstname>R.</firstname><surname>Sethi</surname></authorname></author><author><authorname><firstname>J.D.</firstname><surname>Ullman</surname></authorname></author></authorgroup>

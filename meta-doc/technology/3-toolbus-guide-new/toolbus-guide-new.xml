@@ -1966,7 +1966,7 @@ export TB_VERBOSE</programlisting></para>
         associated handler is activated. A connection can be terminated as
         follows:<programlisting>void ATBdisconnect(int <replaceable>conn</replaceable>)</programlisting>where
         <replaceable>conn</replaceable> is a connection that has been created
-        eralier using <literal>ATBconnect</literal>. </para>
+        eralier using <literal>ATBconnect</literal>.</para>
       </section>
 
       <section>
@@ -2238,7 +2238,7 @@ tool hello is {command = "./hello"}</programlisting></para>
       <section>
         <title>Step 2: generate C tool interface</title>
 
-        <para>Using the command: </para>
+        <para>Using the command:</para>
 
         <para><programlisting>tifstoc -tool hello test.tifs </programlisting></para>
 
@@ -2401,7 +2401,7 @@ int main(int argc, char *argv[])
                   <literal>argv</literal> are passed unchanged to
                   <literal>ATBinit</literal>, so the ToolBus library can look
                   for default values for things like the ToolBus' well-known
-                  socket address and the ToolBus host name. </para>
+                  socket address and the ToolBus host name.</para>
                 </callout>
 
                 <callout arearefs="co.hello2.main.3">
@@ -2413,7 +2413,7 @@ int main(int argc, char *argv[])
                   function. Passing <literal>NULL</literal>,
                   <literal>NULL</literal>, and -1 respectively as the tool
                   name, the host name, and the port number cause the defaults
-                  for these values to be used instead. </para>
+                  for these values to be used instead.</para>
                 </callout>
 
                 <callout arearefs="co.hello2.main.4">
@@ -4238,7 +4238,8 @@ exports
     ToolBus were published in <xref linkend="deJongKlint03" />. <xref
     linkend="deJong07" /> describes architectural aspects of ToolBus-based
     applications.<warning>
-        <para>Add: thesis Dennis Hendriks.</para>
+        <para>Add: theses of Peter Heibrink, Arnold Lankamp, Dennis
+        Hendriks.</para>
       </warning></para>
   </section>
 
