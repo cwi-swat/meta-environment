@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 me=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
@@ -44,7 +44,7 @@ do
     shift
 done
 
-arg_test = "x$ARGUMENTS"
+arg_test="x$ARGUMENTS"
 if test arg_test == "x"
 then
 	Usage
@@ -53,4 +53,4 @@ fi
 
 export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
 
-java toolbus.adapter.wish.WishAdapter -tbtcl $__TBTCL__ -libdir $__LIBDIR__ $ARGUMENTS
+java toolbus.adapter.wish.WishAdapter -script $SCRIPTNAME -tbtcl $__TBTCL__ -libdir $__LIBDIR__ $ARGUMENTS
