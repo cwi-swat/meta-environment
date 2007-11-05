@@ -154,7 +154,7 @@
     operations defined on it.</para>
 
     <section xml:id="section.aterm-datatype">
-      <title>The Aterm data type</title>
+      <title>The ATerm data type</title>
 
       <para>The data type of ATerms (<literal>ATerm</literal>) is defined as
       follows:<variablelist>
@@ -394,7 +394,7 @@
         context in which they are used. When constructing a term, directives
         indicate that a subterm should be obtained from some given variable.
         When matching a term, directives indicate the assignment of subterms
-        to given variables. </para>
+        to given variables.</para>
 
         <para>Patterns are just ATerms containing placeholders. These
         placeholders determine the places where ATerms must be substituted or
@@ -536,27 +536,31 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
         are currently no primitives for formatted term input.</para>
 
         <para>For reasons of efficiency and conciseness, reading and writing
-        can take place in two forms: text and binary. The text format uses the
-        textual representation discussed earlier. This format is
-        human-readable, space-inefficient, and any sharing of the in-memory
-        representation of terms is lost. <footnote>
-            <para>We also support a textual format in which the unnecessary
-            size explosion is avoided using a mechanism for implicit labeling
-            and referring to terms. Instead of
-            <literal>f(g(a),g(a))</literal>, one could then write
-            <literal>f(g(a),#A)</literal>. The first occurrence of
-            <literal>g(a)</literal> is implicitly labeled with
-            ``<literal>A</literal>'', and the second occurrence refers to this
-            label (``<literal>#A</literal>'').</para>
-          </footnote></para>
+        can take place in four formats:</para>
 
-        <para>The binary format (Binary ATerm Format) is portable,
-        machine-readable, very compact, and preserves all in-memory
-        sharing.</para>
+        <itemizedlist>
+          <listitem>
+            <para>ASCII text (the textual representation discussed earlier)
+            This format is human-readable, space-inefficient, and any sharing
+            of the in-memory representation of terms is lost. </para>
+          </listitem>
 
-        <warning>
-          <para>Mention SAF here.</para>
-        </warning>
+          <listitem>
+            <para>Textual ATerm Format (TAF), a textual format that preserves
+            maximal subterm sharing.</para>
+          </listitem>
+
+          <listitem>
+            <para>Binary ATerm Format (BAF) is a portable, machine-readable,
+            very compact format and preserves all in-memory sharing.</para>
+          </listitem>
+
+          <listitem>
+            <para>Streamable ATerm Format (SAF) allows the streaming of ATerms
+            between applications (using a fixed buffer size) and optimizes
+            encoding/decoding speed.</para>
+          </listitem>
+        </itemizedlist>
 
         <para>The operations for reading and writing ATerms are:</para>
 
@@ -580,7 +584,14 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
           <listitem>
             <para><literal>ATerm ATreadFromBinaryFile(File
             <replaceable>f</replaceable>)</literal>: Creates a new term by
-            reading a binary representation from file
+            reading a BAF representation from file
+            <replaceable>f</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATerm ATreadFromSAFFile(File
+            <replaceable>f</replaceable>)</literal>: Creates a new term by
+            reading a SAF representation from file
             <replaceable>f</replaceable>.</para>
           </listitem>
 
@@ -603,7 +614,16 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
           <listitem>
             <para><literal>ATbool ATwriteToBinaryFile(ATerm
             <replaceable>t</replaceable>, File
-            <replaceable>f</replaceable>)</literal>: Write a binary
+            <replaceable>f</replaceable>)</literal>: Write a BAF
+            representation of term <replaceable>t</replaceable> to file
+            <replaceable>f</replaceable>. Returns true for success, and false
+            for failure.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>ATbool ATwriteToSAFFile(ATerm
+            <replaceable>t</replaceable>, File
+            <replaceable>f</replaceable>)</literal>: Write a SAF
             representation of term <replaceable>t</replaceable> to file
             <replaceable>f</replaceable>. Returns true for success, and false
             for failure.</para>
@@ -704,7 +724,7 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
   </section>
 
   <section xml:id="section.using-aterm-library">
-    <title>Using the Aterm Library</title>
+    <title>Using the ATerm Library</title>
 
     <section xml:id="section.initializing-aterm-library">
       <title>Initializing and using the ATerm library</title>
@@ -921,67 +941,248 @@ int main(int argc, char *argv[])
       </itemizedlist>
     </section>
 
-    <section xml:id="section.baf">
-      <title>Binary Aterm Format</title>
+    <section>
+      <title>ATerm formats</title>
 
-      <para>In addition to being able to parse terms in textual format and
-      write textual representations of ATerms, the ATerm library is also
-      equipped to store and restore ATerms in a compact, portable binary
-      representation. This representation is called BAF which stands for
-      ``Binary ATerm Format''. This format can be used to write a binary
-      version of an ATerm to file, which can later be restored in a much more
-      efficient way than would be possible had the ATerm's textual counterpart
-      been used. This is due to the fact that textual representations have to
-      be (re-)parsed each time they are read from file, whereas BAF directly
-      describes how to rebuild the internal representation of an ATerm, thus
-      skipping the parsing phase. Moreover, the maximal sharing of ATerms is
-      exploited when writing BAF-representations, making them take up much
-      less space than their textual representations would have needed. Users
-      of the ATerm library are encouraged to use BAF representations when
-      saving ATerms to file. BAF was designed to be platform independent,
-      which facilitates the exchange of ATerms. The ATerm library comes with a
-      utility that is able to convert an ATerm's textual representation into
-      its BAF counterpart and vice versa, see <xref
-      linkend="section.baffle" />. This conversion makes it possible to always
-      work with BAF representations, while still being able to look at the
-      textual representation any time an error is suspected. It also allows
-      conversion of textual ATerms written by programs unable to write BAF
-      which is especially convenient when these ATerms are bulky. Although the
-      ATerm library does not impose any constraints on the names of
-      ATerm-files, users are encouraged to use the extension
-      <literal>.baf</literal> for BAF files. This will avoid confusion between
-      textual representations and binary ones. Textual representations could
-      use the extension <literal>.trm</literal>.</para>
-    </section>
+      <para>ATerms can be represented in four formats:</para>
 
-    <section xml:id="section.taf">
-      <title>Textual Aterm Format (TAF)</title>
+      <itemizedlist>
+        <listitem>
+          <para>ASCII text.</para>
+        </listitem>
 
-      <para>In addition to the binary aterm format there is also a textual
-      aterm format which supports maximal sharing but uses a much less complex
-      algorithm than the one used to encode and decode BAF files. This results
-      in files that are somewhat larger than their baf counterparts, but are
-      often (if the terms contain redundancy) significantly smaller than their
-      unparsed form. TAF files always start with a '<literal>!</literal>'
-      character to distinguish them from aterm formats. The format uses
-      abbreviations to refer to previously written terms. An abbreviation
-      consists of a hash character ('<literal>#</literal>') followed by a
-      number in encoded using the Base64 Alphabet (see RFC2045). Each term
-      whose unparsed representation would take up more bytes than the textual
-      representation of the next available abbreviation is assigned such an
-      abbreviation it has been written. Subsequent occurences of this term are
-      then written by emitting the abbreviation instead of the term itself.
-      For example the term <literal>f(test,test)</literal> is represented as
-      <literal>!f(test,#A)</literal> in SAF, whereas <literal>f(a,a)</literal>
-      is respresented as <literal>!f(a,a)</literal> because
-      <literal>test</literal> is longer than its abbreviation
-      <literal>#A</literal>, but <literal>a</literal> is not.</para>
-    </section>
+        <listitem>
+          <para>Textual ATerm Format (TAF).</para>
+        </listitem>
 
-    <section xml:id="section.saf">
-      <title>SAF</title>
+        <listitem>
+          <para>Binary Aterm Format (BAF).</para>
+        </listitem>
 
-      <para>TBD</para>
+        <listitem>
+          <para>Streamable ATerm Format (SAF).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We now briefly discuss each format and conclude with a decision
+      table when to use which format.</para>
+
+      <section>
+        <title>ASCII ATerm Format (ASCII)</title>
+
+        <para>The simplest format available for ATerms is plain ASCII text:
+        the ATerm is read and written in prefix form. Its main advantage are
+        simplicty and readability. The main disadavantage is that maximal
+        subterm sharing is lost and that size may become huge. The ASCII ATerm
+        Format is mainly used for debugging purposes.</para>
+      </section>
+
+      <section xml:id="section.taf">
+        <title>Textual ATerm Format (TAF)</title>
+
+        <para>There is also a textual aterm format which supports maximal
+        sharing but uses a much less complex algorithm than the one used to
+        encode and decode BAF files. This results in files that are somewhat
+        larger than their BAF counterparts, but are often (if the terms
+        contain redundancy) significantly smaller than their unparsed form.
+        TAF files always start with a '<literal>!</literal>' character to
+        distinguish them from aterm formats. The format uses abbreviations to
+        refer to previously written terms. An abbreviation consists of a hash
+        character ('<literal>#</literal>') followed by a number in encoded
+        using the Base64 Alphabet (see RFC2045). Each term whose unparsed
+        representation would take up more bytes than the textual
+        representation of the next available abbreviation is assigned such an
+        abbreviation it has been written. Subsequent occurences of this term
+        are then written by emitting the abbreviation instead of the term
+        itself. For example the term <literal>f(test,test)</literal> is
+        represented as <literal>!f(test,#A)</literal> in SAF, whereas
+        <literal>f(a,a)</literal> is respresented as
+        <literal>!f(a,a)</literal> because <literal>test</literal> is longer
+        than its abbreviation <literal>#A</literal>, but <literal>a</literal>
+        is not.</para>
+      </section>
+
+      <section xml:id="section.baf">
+        <title>Binary ATerm Format (BAF)</title>
+
+        <para>The ATerm library is also equipped to store and restore ATerms
+        in a compact, portable binary representation. This representation is
+        called BAF which stands for ``Binary ATerm Format''. This format can
+        be used to write a binary version of an ATerm to file, which can later
+        be restored in a much more efficient way than would be possible had
+        the ATerm's textual counterpart been used. This is due to the fact
+        that textual representations have to be (re-)parsed each time they are
+        read from file, whereas BAF directly describes how to rebuild the
+        internal representation of an ATerm, thus skipping the parsing phase.
+        Moreover, the maximal sharing of ATerms is exploited when writing
+        BAF-representations, making them take up much less space than their
+        textual representations would have needed. Users of the ATerm library
+        are encouraged to use BAF representations when saving ATerms to file.
+        BAF was designed to be platform independent, which facilitates the
+        exchange of ATerms. The ATerm library comes with a utility that is
+        able to convert an ATerm's textual representation into its BAF
+        counterpart and vice versa, see <xref linkend="section.baffle" />.
+        This conversion makes it possible to always work with BAF
+        representations, while still being able to look at the textual
+        representation any time an error is suspected. It also allows
+        conversion of textual ATerms written by programs unable to write BAF
+        which is especially convenient when these ATerms are bulky. Although
+        the ATerm library does not impose any constraints on the names of
+        ATerm-files, users are encouraged to use the extension
+        <literal>.baf</literal> for BAF files. This will avoid confusion
+        between textual representations and binary ones. Textual
+        representations could use the extension
+        <literal>.trm</literal>.</para>
+      </section>
+
+      <section xml:id="section.saf">
+        <title>Streamable ATerm Format (SAF)</title>
+
+        <para>The Streamable ATerm Format is the newest format that attempts
+        to optimize:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Encoding/decoding speed.</para>
+          </listitem>
+
+          <listitem>
+            <para>Memory usage.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>As the name suggests, SAF allows the partial reading and writing
+        of ATerms, thus using ATerms in a streamlike fashion.</para>
+      </section>
+
+      <section>
+        <title>What is the best format?</title>
+
+        <para>Given these four formats it is not so easy to choose the right
+        one. Their properties are summarized in <xref
+        linkend="table.file-format-properties" />. For high performance
+        applications BAF and TAF are the most likely candidates. BAF achieves
+        a higher compression factor for the encoded term but is only available
+        for C. SAF achieves slightly less compression but uses less memory to
+        achieve this. Since SAF is available for C and Java it is a safe
+        choice for most applications.</para>
+
+        <table xml:id="table.file-format-properties">
+          <title>Properties of ATerm file formats</title>
+
+          <tgroup cols="5">
+            <colspec align="left" />
+
+            <colspec align="center" />
+
+            <colspec align="center" />
+
+            <colspec align="center" />
+
+            <colspec align="center" />
+
+            <thead>
+              <row>
+                <entry align="center">Property </entry>
+
+                <entry align="center">ASCII </entry>
+
+                <entry align="center">TAF</entry>
+
+                <entry align="center">BAF</entry>
+
+                <entry align="center">SAF</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>Readability</entry>
+
+                <entry>++</entry>
+
+                <entry>+</entry>
+
+                <entry>--</entry>
+
+                <entry>--</entry>
+              </row>
+
+              <row>
+                <entry>Efficiency writing</entry>
+
+                <entry>--</entry>
+
+                <entry>-</entry>
+
+                <entry>++</entry>
+
+                <entry>++</entry>
+              </row>
+
+              <row>
+                <entry>Efficiency reading</entry>
+
+                <entry>--</entry>
+
+                <entry>-</entry>
+
+                <entry>++</entry>
+
+                <entry>++</entry>
+              </row>
+
+              <row>
+                <entry>Compression factor</entry>
+
+                <entry>--</entry>
+
+                <entry>-</entry>
+
+                <entry>++</entry>
+
+                <entry>+</entry>
+              </row>
+
+              <row>
+                <entry>Memory usage</entry>
+
+                <entry>-</entry>
+
+                <entry>-</entry>
+
+                <entry>-</entry>
+
+                <entry>++</entry>
+              </row>
+
+              <row>
+                <entry>C implementation</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+              </row>
+
+              <row>
+                <entry>Java implementation</entry>
+
+                <entry>+</entry>
+
+                <entry>+</entry>
+
+                <entry>-</entry>
+
+                <entry>+</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
     </section>
   </section>
 
@@ -1002,7 +1203,7 @@ int main(int argc, char *argv[])
     <section xml:id="section.level1-types">
       <title>Level One Types</title>
 
-      <para>The following C-defines are used to represent the different Aterm
+      <para>The following C-defines are used to represent the different ATerm
       types:<variablelist>
           <varlistentry>
             <term><literal>AT_INT</literal></term>
@@ -1056,7 +1257,7 @@ int main(int argc, char *argv[])
             <term><literal>AT_FREE</literal></term>
 
             <listitem>
-              <para>An Aterm that is marked <emphasis>free</emphasis> will be
+              <para>An ATerm that is marked <emphasis>free</emphasis> will be
               reused when needed. This is not a type users will want to create
               themselves, but it can be used to detect an ATerm that has been
               freed by the garbage collector.</para>
@@ -1091,7 +1292,7 @@ int main(int argc, char *argv[])
       <para>Although the word <emphasis>binary</emphasis> is used in the
       abbreviations of both ``blob'' and BAF, these are two very different
       notions. A <emphasis>blob</emphasis> represents an ATerm that holds
-      binary data, with no specific meaning to the Aterm library. This notion
+      binary data, with no specific meaning to the ATerm library. This notion
       can be used as a means of escape in case you find that you need a type
       of ATerm that is not on the list above. The notion of BAF is explained
       in <xref linkend="section.baf" /> and refers to a specific format used
@@ -1683,7 +1884,7 @@ int main(int argc, char *argv[])
               <row>
                 <entry><literal>a</literal></entry>
 
-                <entry>Print the symbol of an ATerm-application </entry>
+                <entry>Print the symbol of an ATerm-application</entry>
               </row>
 
               <row>
@@ -1743,7 +1944,7 @@ int main(int argc, char *argv[])
         <title><literal>ATsetErrorHandler</literal></title>
 
         <para><programlisting>void ATsetErrorHandler(void (*<replaceable>handler</replaceable>)(const char *, va_list))</programlisting>Specify
-        an errorhandler for the Aterm library.</para>
+        an errorhandler for the ATerm library.</para>
 
         <para>Sets an errorhandler for the ATerm library This handler will be
         called when an error message is issued via
@@ -1834,7 +2035,7 @@ int main(int argc, char *argv[])
   <section xml:id="section.level2-interface">
     <title>Level Two Interface</title>
 
-    <para> This section explains in detail the types and functions that are
+    <para>This section explains in detail the types and functions that are
     defined in the level two interface of the Term library. These functions
     are declared in <filename>aterm2.h</filename>.</para>
 
@@ -1929,7 +2130,7 @@ int main(int argc, char *argv[])
         <section xml:id="function.ATmakeInt">
           <title><literal>ATmakeInt</literal></title>
 
-          <para><programlisting>AtermInt ATmakeInt(int <replaceable>value</replaceable>)</programlisting></para>
+          <para><programlisting>ATermInt ATmakeInt(int <replaceable>value</replaceable>)</programlisting></para>
 
           <para>Build an ATerm Int from an integer
           <replaceable>value</replaceable>.</para>
@@ -1955,7 +2156,7 @@ int main(int argc, char *argv[])
         <section xml:id="function.ATmakeReal">
           <title><literal>ATmakeReal</literal></title>
 
-          <para><programlisting>AtermReal ATmakeReal(double <replaceable>value</replaceable>)</programlisting>Build
+          <para><programlisting>ATermReal ATmakeReal(double <replaceable>value</replaceable>)</programlisting>Build
           an ATerm Real from a real <replaceable>value</replaceable>.</para>
         </section>
 
@@ -1977,7 +2178,7 @@ int main(int argc, char *argv[])
         holds the name of the function application, its arity (how many
         arguments the function has) and whether the function name is quoted.
         Below are some examples of function applications and the symbols
-        needed to create them. </para>
+        needed to create them.</para>
 
         <itemizedlist>
           <listitem>
@@ -2188,7 +2389,7 @@ int main(int argc, char *argv[])
       <section xml:id="section.ATermList">
         <title>The type <literal>ATermList</literal></title>
 
-        <para>The type ATermList is the Aterm representation of linear
+        <para>The type ATermList is the ATerm representation of linear
         lists.</para>
 
         <section xml:id="function.ATmakeList">
@@ -2333,7 +2534,7 @@ int main(int argc, char *argv[])
           <replaceable>a</replaceable> inserted. The behaviour of
           <literal>ATinsert</literal> is of constant complexity. That is, the
           behaviour of <literal>ATinsert</literal> does not degrade as the
-          length of <replaceable>l</replaceable> increases. </para>
+          length of <replaceable>l</replaceable> increases.</para>
         </section>
 
         <section xml:id="function.ATinsertAt">
@@ -2360,7 +2561,7 @@ int main(int argc, char *argv[])
           <replaceable>l</replaceable>. When <literal>ATappend</literal> is
           needed inside a loop that traverses a list (see <xref
           linkend="example.parse-list1" />), behaviour of the loop will
-          demonstrate quadratic complexity. </para>
+          demonstrate quadratic complexity.</para>
 
           <para><example xml:id="example.parse-list1">
               <title>Parse lists, version 1</title>
@@ -2778,7 +2979,7 @@ int main(int argc, char *argv[])
       </section>
 
       <section xml:id="section.ATermTable">
-        <title>The type <literal>AtermTable</literal></title>
+        <title>The type <literal>ATermTable</literal></title>
 
         <para>The dictionaries described in <xref
         linkend="section.ATermDictionary" /> are in essence nothing more than
@@ -2803,7 +3004,7 @@ int main(int argc, char *argv[])
           if you expect about 1000 items in the table, you can create it with
           its initial size set to 1333 and a maximum load percentage of 75%.
           You are not required to do this, it merely saves a runtime expansion
-          and rehashing of the table which increases efficiency. </para>
+          and rehashing of the table which increases efficiency.</para>
         </section>
 
         <section xml:id="function.ATtableDestroy">
@@ -2911,7 +3112,7 @@ int main(int argc, char *argv[])
         <literal>ATermIndexedSet</literal> and ATermTable are strongly
         related. The implementation is quite efficient both in time and space,
         only requiring 12 bytes for each entry in an indexed set, if the hash
-        table, which forms its core, is half full. </para>
+        table, which forms its core, is half full.</para>
 
         <section xml:id="function.ATindexedSetCreate">
           <title><literal>ATindexedSetCreate</literal></title>
@@ -3131,12 +3332,12 @@ int main(int argc, char *argv[])
         </listitem>
 
         <listitem>
-          <para> text size: the amount of memory needed to hold a textual
+          <para>text size: the amount of memory needed to hold a textual
           representation of an ATerm;</para>
         </listitem>
 
         <listitem>
-          <para> tree depth: the maximum depth of an ATerm.</para>
+          <para>tree depth: the maximum depth of an ATerm.</para>
         </listitem>
       </itemizedlist>
 
@@ -3166,7 +3367,7 @@ int main(int argc, char *argv[])
       <para><command>atdiff</command> compares two terms and prints a template
       term that covers the common parts containing placeholders of the form
       <literal>&lt;diff&gt;</literal> for subterms that differed, and a list
-      of their differing subterms. Usage: </para>
+      of their differing subterms. Usage:</para>
 
       <para><programlisting><command>atdiff</command> [&lt;<replaceable>options</replaceable>&gt;] <replaceable>file1</replaceable> <replaceable>file2</replaceable></programlisting>The
       options are explained in <xref linkend="table.atdiff-options" />.</para>
@@ -3261,7 +3462,7 @@ int main(int argc, char *argv[])
 
       <para>The ATerm library comes with a single implementation of the ATerm
       interfaces. For instance, the interface ATermList is implemented by the
-      class called ATermListImpl. The AtermFactory is implemented by the class
+      class called ATermListImpl. The ATermFactory is implemented by the class
       PureFactory. This implementation is a ``pure'' Java one, but given this
       intercafe organization it would be possible to build a layer of Java
       code on top of the C implementation using the Java Native Interface
@@ -3276,7 +3477,7 @@ int main(int argc, char *argv[])
       <para>To give a flavour of the manipulation oof ATerms in Java, <xref
       linkend="example.aterms-java" /> shows the creation of some ATerms and
       reading of an ATerm fron a stream.<example xml:id="example.aterms-java">
-          <title>Using Aterms in Java</title>
+          <title>Using ATerms in Java</title>
 
           <para><programlisting>import java.io.*;
 import aterm.*;
