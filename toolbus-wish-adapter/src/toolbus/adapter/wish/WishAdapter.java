@@ -94,20 +94,29 @@ public class WishAdapter extends AbstractTool{
 		if(scriptName == null) throw new RuntimeException("No script name supplied.");
 		if(tbtcl == null || libdir == null) throw new RuntimeException("No library paths supplied.");
 		
-		executeScript();
-
 		toolBridge = new WishAdapterBridge(type, this, toolName, toolID, host, port);
+		
+		executeScript();
+		
 		toolBridge.run();
 		
 		startHandlingIO();
 	}
 	
+	public ToolBridge getToolBridge(){
+		return toolBridge;
+	}
+	
+	public PureFactory getFactory(){
+		return toolBridge.getFactory();
+	}
+	
 	private void executeScript() throws IOException{
 		StringBuilder sb = new StringBuilder();
 		sb.append(WISH_COMMAND);
-		sb.append(' ');
+		/*sb.append(' ');
 		sb.append("-name ");
-		sb.append(getToolBridge().getToolName());
+		sb.append(getToolBridge().getToolName());*/
 		String command = sb.toString();
 		
 		ProcessBuilder pb = new ProcessBuilder(command);

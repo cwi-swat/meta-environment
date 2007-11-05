@@ -15,6 +15,10 @@ public class WishAdapterBridge extends ToolBridge{
 		wishAdapter = tool;
 	}
 	
+	public boolean checkSignature(ATerm signatures){
+		return true;
+	}
+	
 	public void receive(byte operation, ATerm aTerm){
 		switch(operation){
 			case DO:
