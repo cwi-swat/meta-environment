@@ -235,23 +235,13 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveTerminate(ATerm aTerm){
-		ATermList terminateTerm = (ATermList) aTerm;
-		
 		try{
 			wishInputStream.write(startCallBytes);
 			wishInputStream.write(startTerminateBytes);
 			wishInputStream.write(spaceBytes);
 			
-			ATermList empty = getFactory().makeList();
-			ATermList next = terminateTerm.getNext();
-			while(next != empty){
-				ATerm first = terminateTerm.getFirst();
-				
-				wishInputStream.write(first.toString().getBytes());
-				wishInputStream.write(spaceBytes);
-				
-				terminateTerm = next;
-			}
+			wishInputStream.write(aTerm.toString().getBytes());
+			wishInputStream.write(spaceBytes);
 			
 			wishInputStream.write(endTerminateBytes);
 			wishInputStream.write(endCallBytes);
