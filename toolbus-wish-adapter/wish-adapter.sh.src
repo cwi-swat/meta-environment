@@ -51,6 +51,6 @@ then
 	exit 2
 fi
 
-export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
+export CLASSPATH="__WISH_JAR__:__EXTERNAL_JARS__:$CLASSPATH"
 
 java toolbus.adapter.wish.WishAdapter -script $SCRIPTNAME -tbtcl __TBTCL__ -libdir __LIBDIR__ $ARGUMENTS
