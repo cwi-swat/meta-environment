@@ -2013,7 +2013,7 @@ int main(int argc, char *argv[])
       </section>
 
       <section>
-        <title>Level one; handling warnings, errors and aborts</title>
+        <title>Level one: handling warnings, errors and aborts</title>
 
         <section xml:id="function.ATsetWarningHandler">
           <title><literal>ATsetWarningHandler</literal></title>
@@ -3591,6 +3591,206 @@ int main(int argc, char *argv[])
     </section>
 
     <section>
+      <title>Java ATerm Interfaces</title>
+
+      <para>We give here, withou further ado, the methods defined by the Java
+      Aterm Interfaces. For the meaning of individual methods we refer to both
+      the description given for the C implementation and to <link
+      xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/.</link></para>
+
+      <section>
+        <title>Interface AtermInt</title>
+
+        <para><programlisting>public int getInt();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface AtermReal</title>
+
+        <programlisting>public double getReal();</programlisting>
+      </section>
+
+      <section>
+        <title>Interface AFun</title>
+
+        <para><programlisting>public String getName();
+public int getArity();
+public boolean isQuoted();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface ATermAppl</title>
+
+        <para><programlisting>public AFun getAFun();
+public String getName();
+public ATermList getArguments();
+public ATerm[] getArgumentArray();
+public ATerm getArgument(int i);
+public ATermAppl setArgument(ATerm arg, int i);
+public boolean isQuoted();
+public int getArity();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface ATermBlob</title>
+
+        <para><programlisting>public int getBlobSize();
+public byte[] getBlobData();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface ATerm Factory</title>
+
+        <para><programlisting>ATerm parse(String trm);
+ATerm make(String trm);
+ATerm make(String pattern, List&lt;Object&gt; args);
+ATerm make(String pattern, Object arg1);
+ATerm make(String pattern, Object arg1, Object arg2);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4, Object arg5);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4, Object arg5, Object arg6);
+ATerm make(String pattern, Object arg1, Object arg2, Object arg3,
+             Object arg4, Object arg5, Object arg6, Object arg7);
+ATermInt makeInt(int val);
+ATermLong makeLong(long val);
+ATermReal makeReal(double val);
+ATermList makeList();
+ATermList makeList(ATerm single);
+ATermList makeList(ATerm head, ATermList tail);
+ATermPlaceholder makePlaceholder(ATerm type);
+ATermBlob makeBlob(byte[] data);
+AFun makeAFun(String name, int arity, boolean isQuoted);
+ATermAppl makeAppl(AFun fun);
+ATermAppl makeAppl(AFun fun, ATerm arg);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3, 
+                   ATerm arg4);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3, 
+                   ATerm arg4, ATerm arg5);
+ATermAppl makeAppl(AFun fun, ATerm arg1, ATerm arg2, ATerm arg3, 
+                   ATerm arg4, ATerm arg5, ATerm arg6);
+ATermAppl makeAppl(AFun fun, ATerm[] args);
+ATermAppl makeApplList(AFun fun, ATermList args);
+ATerm readFromTextFile(InputStream stream) 
+      throws IOException;
+ATerm readFromSharedTextFile(InputStream stream) 
+      throws IOException;
+ATerm readFromBinaryFile(InputStream stream) 
+      throws IOException;
+ATerm readFromFile(String file) 
+      throws IOException;
+ATerm importTerm(ATerm term); /* from other factory */</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface ATermList</title>
+
+        <para><programlisting>public boolean isEmpty();
+public int getLength();
+public ATerm getFirst();
+public ATerm getLast();
+public ATermList getNext();
+public int indexOf(ATerm el, int start);
+public int lastIndexOf(ATerm el, int start);
+public ATermList concat(ATermList rhs);
+public ATermList append(ATerm el);
+public ATerm elementAt(int i);
+public ATermList remove(ATerm el);
+public ATermList removeElementAt(int i);
+public ATermList removeAll(ATerm el);
+public ATermList insert(ATerm el);
+public ATermList insertAt(ATerm el, int i);
+public ATermList getPrefix();
+public ATermList getSlice(int start, int end);
+public ATermList replace(ATerm el, int i);
+public ATermList reverse();
+public ATerm dictGet(ATerm key);
+public ATermList dictPut(ATerm key, ATerm value);
+public ATermList dictRemove(ATerm key);</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface ATermPlaceholder</title>
+
+        <para><programlisting>public ATerm getPlaceholder();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface Identifiable</title>
+
+        <para><programlisting>public int getUniqueIdentifier();</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface Visitable</title>
+
+        <para><programlisting>public aterm.Visitable accept(aterm.Visitor visitor) 
+       throws jjtraveler.VisitFailure;</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface Visitor</title>
+
+        <para><programlisting>public aterm.Visitable visitATerm(ATerm arg) 
+       throws VisitFailure;
+public aterm.Visitable visitInt(ATermInt arg) 
+       throws VisitFailure;
+public aterm.Visitable visitLong(ATermLong arg) 
+       throws VisitFailure;
+public aterm.Visitable visitReal(ATermReal arg) 
+       throws VisitFailure;
+public aterm.Visitable visitAppl(ATermAppl arg) 
+       throws VisitFailure;
+public aterm.Visitable visitList(ATermList arg) 
+       throws VisitFailure;
+public aterm.Visitable visitPlaceholder(ATermPlaceholder arg) 
+       throws VisitFailure;
+public aterm.Visitable visitBlob(ATermBlob arg) 
+       throws VisitFailure;
+public aterm.Visitable visitAFun(AFun fun) 
+       throws VisitFailure;</programlisting></para>
+      </section>
+
+      <section>
+        <title>Interface ATerm</title>
+
+        <para><programlisting>public static final int INT = 2;
+public static final int REAL = 3;
+public static final int APPL = 1;
+public static final int LIST = 4;
+public static final int PLACEHOLDER = 5;
+public static final int BLOB = 6;
+public static final int AFUN = 7;
+public static final int LONG = 8;
+public int getType();
+public int hashCode();
+public List&lt;Object&gt; match(String pattern);
+public List&lt;Object&gt; match(ATerm pattern);
+public boolean hasAnnotations();
+public ATerm getAnnotation(ATerm label);
+public ATerm setAnnotation(ATerm label, ATerm anno);
+public ATerm removeAnnotation(ATerm label);
+public ATermList getAnnotations();
+public ATerm setAnnotations(ATermList annos);
+public ATerm removeAnnotations();
+public boolean isEqual(ATerm term);
+public boolean equals(Object obj);
+public void writeToTextFile(OutputStream stream)
+      throws IOException;
+public void writeToSharedTextFile(OutputStream stream)
+      throws IOException;
+public ATerm make(List&lt;Object&gt; args);
+public ATermFactory getFactory();
+public String toString();</programlisting></para>
+      </section>
+    </section>
+
+    <section>
       <title>Java Example</title>
 
       <para>To give a flavour of the manipulation oof ATerms in Java, <xref
@@ -3719,8 +3919,8 @@ public class Basic
 
     <itemizedlist>
       <listitem>
-        <para>The description of the Java implementation is really short,
-        extend it.</para>
+        <para>The description of the Java implementation should be further
+        extended.</para>
       </listitem>
     </itemizedlist>
   </section>
