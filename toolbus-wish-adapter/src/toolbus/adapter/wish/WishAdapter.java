@@ -92,7 +92,7 @@ public class WishAdapter extends AbstractTool{
 			}
 		}
 
-		if(type == null || toolName == null) throw new RuntimeException("Missing tool identification.");
+		if(toolName == null) throw new RuntimeException("Missing tool identification.");
 		if(scriptName == null) throw new RuntimeException("No script name supplied.");
 		if(tbtcl == null || libdir == null) throw new RuntimeException("No library paths supplied.");
 		
