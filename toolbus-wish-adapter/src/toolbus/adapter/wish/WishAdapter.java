@@ -265,7 +265,7 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveAckEvent(ATerm aTerm){
-		ATermList evalTerm = (ATermList) aTerm;
+		ATermList ackCallbackData = (ATermList) aTerm;
 		
 		try{
 			wishInputStream.write(startCallBytes);
@@ -273,14 +273,14 @@ public class WishAdapter extends AbstractTool{
 			wishInputStream.write(spaceBytes);
 			
 			ATermList empty = getFactory().makeList();
-			ATermList next = evalTerm.getNext();
-			while(next != empty){
-				ATerm first = evalTerm.getFirst();
+			while(ackCallbackData != empty){
+				ATermList next = ackCallbackData.getNext();
+				ATerm first = ackCallbackData.getFirst();
 				
 				wishInputStream.write(first.toString().getBytes());
 				wishInputStream.write(spaceBytes);
 				
-				evalTerm = next;
+				ackCallbackData = next;
 			}
 			wishInputStream.write(endAckEventBytes);
 			wishInputStream.write(endCallBytes);
