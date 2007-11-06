@@ -16,6 +16,7 @@ public class WishAdapterBridge extends ToolBridge{
 	}
 	
 	public boolean checkSignature(ATerm signatures){
+		// TODO Can't be bothered to implement.
 		return true;
 	}
 	

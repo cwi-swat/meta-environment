@@ -112,12 +112,10 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	private void executeScript() throws IOException{
-		StringBuilder sb = new StringBuilder();
-		sb.append(WISH_COMMAND);
-		/*sb.append(' ');
-		sb.append("-name ");
-		sb.append(getToolBridge().getToolName());*/
-		String command = sb.toString();
+		String[] command = new String[3];
+		command[0] = WISH_COMMAND;
+		command[1] = "-name";
+		command[2] = getToolBridge().getToolName();
 		
 		ProcessBuilder pb = new ProcessBuilder(command);
 		
