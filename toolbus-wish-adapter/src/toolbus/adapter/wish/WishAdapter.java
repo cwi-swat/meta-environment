@@ -83,8 +83,10 @@ public class WishAdapter extends AbstractTool{
 				tbtcl = args[++i];
 			}else if(arg.equals("-libdir")){
 				libdir = args[++i];
-			}else{
-				arguments.add(args[i]);
+			}else if(arg.equals("-script-args")){
+				while(++i < args.length){
+					arguments.add(args[i]);
+				}
 			}
 		}
 
