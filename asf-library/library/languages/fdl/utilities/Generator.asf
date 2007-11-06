@@ -77,18 +77,31 @@ equations
 equations
 
 [] ArgumentChar := lookup(ParameterEnv, AtomicFeature),
-   CharacterConstant := ac2cc(ArgumentChar)
+   CharacterConstant := ac2cc(ArgumentChar),
+   Identifier1 := af2os(AtomicFeature),
+   Identifier2 := af2og(AtomicFeature)
    ===
    generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) = 
 
 Statement* 
 case CharacterConstant:
-  OPT_setFlag(!OPT_getFlag());
+  Identifier1(!Identifier2());
   break;
 
 [] lookup(ParameterEnv, AtomicFeature) == not-in-table
    ===
    generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) = Statement*
+
+
+equations
+
+[] identifier(caphead tail) := af2cid(AtomicFeature)
+   ===
+   af2og(AtomicFeature) = identifier(OPT\_getFlag caphead tail)
+
+[] identifier(caphead tail) := af2cid(AtomicFeature)
+   ===
+   af2os(AtomicFeature) = identifier(OPT\_setFlag caphead tail)
 
 
 equations
@@ -100,3 +113,10 @@ equations
 equations
 
 [] ac2cc(argumentchar(argchar)) = characterconstant(\' argchar \')
+
+
+equations
+
+[] bytes(byte(caphead)) := capitalize(bytes(byte(head)))
+   ===
+   af2cid(atomicfeature(head tail)) = identifier(caphead tail)

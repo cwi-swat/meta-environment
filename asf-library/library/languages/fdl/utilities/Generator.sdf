@@ -5,6 +5,7 @@ imports languages/ansi-c/syntax/Default-C-With-CPP
 imports languages/fdl/check/TypeEnvironment
 imports languages/fdl/run/ValueEnvironment
 imports languages/fdl/utilities/ParameterEnvironment
+imports basic/Bytes
 
 exports
 sorts Keys
@@ -22,6 +23,9 @@ aliases
 context-free syntax
   af2id(AtomicFeature) -> Identifier        {complete} 
   ac2cc(ArgumentChar)  -> CharacterConstant {complete} 
+  af2og(AtomicFeature) -> Identifier        {complete} 
+  af2os(AtomicFeature) -> Identifier        {complete}
+  af2cid(AtomicFeature) -> Identifier       {complete}
 
 context-free syntax
   generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)    -> FunctionDefinition                                       
@@ -32,25 +36,27 @@ context-free syntax
   addIncludeSection(ExternalDeclaration+)                             -> ExternalDeclaration+                                     
 
 variables
-  "ArgumentChar" [0-9]*      -> ArgumentChar   
-  "Argument*" [0-9]*         -> Argument*       
+  "ArgumentChar" [0-9]*      -> ArgumentChar          
+  "Argument*" [0-9]*         -> Argument*             
   "AtomicFeature" [0-9]*     -> AtomicFeature         
   "AtomicFeature*" [0-9]*    -> {AtomicFeature ","}*  
   "CharacterConstant" [0-9]* -> CharacterConstant     
   "C-Program" [0-9]*         -> ExternalDeclaration+  
   "Declaration" [0-9]*       -> Declaration           
   "Declaration*" [0-9]*      -> Declaration*          
-  "FeatureModule" [0-9]*     -> FeatureModule         
-  "ImportSection*" [0-9]*    -> ImportSection*
-  "Keys" [0-9]*              -> Keys           
-  "Modulename" [0-9]*        -> Modulename       
+  "FeatureModule" [0-9]*     -> FeatureModule  
+  "Identifier" [0-9]*        -> Identifier       
+  "ImportSection*" [0-9]*    -> ImportSection*        
+  "Keys" [0-9]*              -> Keys                  
+  "Modulename" [0-9]*        -> Modulename            
   "ParameterEnv" [0-9]*      -> ParameterEnv          
-  "Section*" [0-9]*          -> Section*
+  "Section*" [0-9]*          -> Section*              
   "Statement*" [0-9]*        -> Statement*            
   "TypeEnv" [0-9]*           -> TypeEnv               
   "ValueEnv" [0-9]*          -> ValueEnv              
 
 lexical variables
-  "head" [0-9]*    -> [a-z]           
+  "head" [0-9]*    -> [a-z]  
+  "caphead" [0-9]* -> [A-Z]         
   "tail" [0-9]*    -> [a-zA-Z0-9\_]*  
   "argchar" [0-9]* -> [a-zA-Z0-9]     
