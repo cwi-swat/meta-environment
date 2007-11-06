@@ -183,6 +183,8 @@ public class WishAdapter extends AbstractTool{
 				wishInputStream.write(spaceBytes);
 			}
 			wishInputStream.write(endCallBytes);
+			
+			wishInputStream.flush();
 		}catch(IOException ioex){
 			ioex.printStackTrace();
 			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
@@ -207,6 +209,8 @@ public class WishAdapter extends AbstractTool{
 				wishInputStream.write(spaceBytes);
 			}
 			wishInputStream.write(endCallBytes);
+			
+			wishInputStream.flush();
 		}catch(IOException ioex){
 			ioex.printStackTrace();
 			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
@@ -251,6 +255,8 @@ public class WishAdapter extends AbstractTool{
 			
 			wishInputStream.write(endTerminateBytes);
 			wishInputStream.write(endCallBytes);
+			
+			wishInputStream.flush();
 		}catch(IOException ioex){
 			ioex.printStackTrace();
 			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
@@ -278,6 +284,8 @@ public class WishAdapter extends AbstractTool{
 			}
 			wishInputStream.write(endAckEventBytes);
 			wishInputStream.write(endCallBytes);
+			
+			wishInputStream.flush();
 		}catch(IOException ioex){
 			ioex.printStackTrace();
 			System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
