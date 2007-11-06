@@ -87,6 +87,8 @@ public class WishAdapter extends AbstractTool{
 				while(++i < args.length){
 					arguments.add(args[i]);
 				}
+			}else{
+				throw new RuntimeException("Unknown argument: "+arg);
 			}
 		}
 
