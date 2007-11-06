@@ -16,7 +16,7 @@ public abstract class AbstractTool implements IOperations{
 	public final static String DIRECTTOOL = "direct";
 	public final static String REMOTETOOL = "remote";
 
-	private ToolBridge toolBridge = null;
+	protected ToolBridge toolBridge = null;
 
 	/**
 	 * Default constructor.
