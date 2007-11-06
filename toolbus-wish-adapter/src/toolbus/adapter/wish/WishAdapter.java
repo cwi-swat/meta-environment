@@ -55,7 +55,7 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void connect(String[] args) throws Exception{
-		String type = null;
+		String type = AbstractTool.REMOTETOOL;
 
 		String toolName = null;
 		int toolID = -1;
@@ -126,8 +126,8 @@ public class WishAdapter extends AbstractTool{
 		wishInputStream.write("set argv { ".getBytes());
 		int nrOfArguments = arguments.size();
 		int i = 0;
-		while(i++ < nrOfArguments){
-			wishInputStream.write(arguments.get(i).getBytes());
+		while(i < nrOfArguments){
+			wishInputStream.write(arguments.get(i++).getBytes());
 			wishInputStream.write(spaceBytes);
 		}
 		wishInputStream.write("}\n".getBytes());
