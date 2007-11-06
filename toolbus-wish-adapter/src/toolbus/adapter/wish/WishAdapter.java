@@ -10,16 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import toolbus.adapter.AbstractTool;
-import toolbus.adapter.ToolBridge;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
+import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class WishAdapter extends AbstractTool{
 	private final static String WISH_COMMAND = "wish";
-	
-	private ToolBridge toolBridge = null;
 	
 	private String scriptName = null;
 	private String tbtcl = null;
@@ -103,14 +101,6 @@ public class WishAdapter extends AbstractTool{
 		startHandlingIO();
 	}
 	
-	public ToolBridge getToolBridge(){
-		return toolBridge;
-	}
-	
-	public PureFactory getFactory(){
-		return toolBridge.getFactory();
-	}
-	
 	private void executeScript() throws IOException{
 		String[] command = new String[3];
 		command[0] = WISH_COMMAND;
@@ -133,7 +123,7 @@ public class WishAdapter extends AbstractTool{
 		wishInputStream.write(tbtcl.getBytes());
 		wishInputStream.write("\n".getBytes());
 		
-		wishInputStream.write("set argv {".getBytes());
+		wishInputStream.write("set argv { ".getBytes());
 		int nrOfArguments = arguments.size();
 		int i = 0;
 		while(i++ < nrOfArguments){
@@ -153,6 +143,8 @@ public class WishAdapter extends AbstractTool{
 		wishInputStream.write("source ".getBytes());
 		wishInputStream.write(scriptName.getBytes());
 		wishInputStream.write("\n".getBytes());
+		
+		wishInputStream.flush();
 	}
 	
 	private void startHandlingIO(){
@@ -175,10 +167,10 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveDo(ATerm aTerm){
-		ATermAppl evalTerm = (ATermAppl) aTerm;
-		AFun fun = evalTerm.getAFun();
+		ATermAppl doTerm = (ATermAppl) aTerm;
+		AFun fun = doTerm.getAFun();
 		String functionName = fun.getName();
-		ATerm[] arguments = evalTerm.getArgumentArray();
+		ATerm[] arguments = doTerm.getArgumentArray();
 		int nrOfArguments = arguments.length;
 		
 		try{
@@ -186,8 +178,8 @@ public class WishAdapter extends AbstractTool{
 			wishInputStream.write(functionName.getBytes());
 			wishInputStream.write(spaceBytes);
 			int i = 0;
-			while(i++ < nrOfArguments){
-				wishInputStream.write(arguments[i].toString().getBytes());
+			while(i < nrOfArguments){
+				wishInputStream.write(arguments[i++].toString().getBytes());
 				wishInputStream.write(spaceBytes);
 			}
 			wishInputStream.write(endCallBytes);
@@ -210,8 +202,8 @@ public class WishAdapter extends AbstractTool{
 			wishInputStream.write(functionName.getBytes());
 			wishInputStream.write(spaceBytes);
 			int i = 0;
-			while(i++ < nrOfArguments){
-				wishInputStream.write(arguments[i].toString().getBytes());
+			while(i < nrOfArguments){
+				wishInputStream.write(arguments[i++].toString().getBytes());
 				wishInputStream.write(spaceBytes);
 			}
 			wishInputStream.write(endCallBytes);
@@ -239,19 +231,24 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveTerminate(ATerm aTerm){
-		ATermAppl evalTerm = (ATermAppl) aTerm;
-		ATerm[] arguments = evalTerm.getArgumentArray();
-		int nrOfArguments = arguments.length;
+		ATermList terminateTerm = (ATermList) aTerm;
 		
 		try{
 			wishInputStream.write(startCallBytes);
 			wishInputStream.write(startTerminateBytes);
 			wishInputStream.write(spaceBytes);
-			int i = 0;
-			while(i++ < nrOfArguments){
-				wishInputStream.write(arguments[i].toString().getBytes());
+			
+			ATermList empty = getFactory().makeList();
+			ATermList next = terminateTerm.getNext();
+			while(next != empty){
+				ATerm first = terminateTerm.getFirst();
+				
+				wishInputStream.write(first.toString().getBytes());
 				wishInputStream.write(spaceBytes);
+				
+				terminateTerm = next;
 			}
+			
 			wishInputStream.write(endTerminateBytes);
 			wishInputStream.write(endCallBytes);
 		}catch(IOException ioex){
@@ -262,18 +259,22 @@ public class WishAdapter extends AbstractTool{
 	}
 	
 	public void receiveAckEvent(ATerm aTerm){
-		ATermAppl evalTerm = (ATermAppl) aTerm;
-		ATerm[] arguments = evalTerm.getArgumentArray();
-		int nrOfArguments = arguments.length;
+		ATermList evalTerm = (ATermList) aTerm;
 		
 		try{
 			wishInputStream.write(startCallBytes);
 			wishInputStream.write(startAckEventBytes);
 			wishInputStream.write(spaceBytes);
-			int i = 0;
-			while(i++ < nrOfArguments){
-				wishInputStream.write(arguments[i].toString().getBytes());
+			
+			ATermList empty = getFactory().makeList();
+			ATermList next = evalTerm.getNext();
+			while(next != empty){
+				ATerm first = evalTerm.getFirst();
+				
+				wishInputStream.write(first.toString().getBytes());
 				wishInputStream.write(spaceBytes);
+				
+				evalTerm = next;
 			}
 			wishInputStream.write(endAckEventBytes);
 			wishInputStream.write(endCallBytes);
