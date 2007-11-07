@@ -6,11 +6,7 @@
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <title>The ATerm Guide</title>
-
-  <important>
-    <para>See the ToDo list for this document.</para>
-  </important>
+  <title>The ATerm Programming Guide</title>
 
   <section xml:id="section.aterm-introduction">
     <title>Introduction</title>
@@ -135,16 +131,48 @@
     <para>Maximal subterm sharing is a strategy to achieve "conciseness" as
     mentioned in the characterristics of ATerms above and is a simple and
     effective way to minimize memory usage: terms are only created when they
-    are <emphasis>new</emphasis>, i.e., that do not exist already. If a term
-    to be constructed already exists, that term is reused, ensuring maximal
-    sharing. This strategy fully exploits the redundancy that is typically
-    present in the terms to be built and leads to maximal sharing of subterms.
-    The library functions that construct terms make sure that shared terms are
+    are <emphasis>new</emphasis>, i.e., do not exist already. If a term to be
+    constructed already exists, that term is reused, ensuring maximal sharing.
+    This strategy fully exploits the redundancy that is typically present in
+    the terms to be built and leads to maximal sharing of subterms. The
+    library functions that construct terms make sure that shared terms are
     returned whenever possible. The sharing of terms is thus invisible to the
-    library user. Apart from reduced memory usage, maximal subterm sharing has
-    another benefit: the equality check on terms becomes very cheap: it
-    reduces from an operation that is linear in the number of subterms to be
-    compared to a constant operation (pointer equality).</para>
+    library user. Apart from <emphasis>reduced memory usage</emphasis>,
+    maximal subterm sharing has another benefit: the <emphasis>equality check
+    on terms becomes very cheap</emphasis>: it reduces from an operation that
+    is linear in the number of subterms to be compared to a constant operation
+    (only pointer equality has to be checked).</para>
+
+    <para>Where to go from here?</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Read <xref linkend="section.aterms-at-a-glance" /> to get a
+        quick overview of the functionality of ATerms.</para>
+      </listitem>
+
+      <listitem>
+        <para>Read <xref linkend="section.using-aterm-library" /> for details
+        about initialization, memory management and file format.</para>
+      </listitem>
+
+      <listitem>
+        <para>A detailed description of the C Aterm library can be found in
+        <xref linkend="section.level1-interface" /> and <xref
+        linkend="section.level2-interface" />.</para>
+      </listitem>
+
+      <listitem>
+        <para>On overview of the Java ATerm library is given in <xref
+        linkend="section.java" />.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="section.aterm-historical-notes" /> and <xref
+        linkend="section.aterm-bibliography" /> complete this ATerm
+        guide.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section xml:id="section.aterms-at-a-glance">
@@ -662,7 +690,7 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
   </section>
 
   <section xml:id="section.using-aterm-library">
-    <title>Using the ATerm Library</title>
+    <title>Using the C ATerm Library</title>
 
     <section xml:id="section.initializing-aterm-library">
       <title>Initializing and using the ATerm library</title>
@@ -1226,7 +1254,7 @@ int main(int argc, char *argv[])
   </section>
 
   <section xml:id="section.level1-interface">
-    <title>Level One Interface</title>
+    <title>Level One Interface of C ATerm Library</title>
 
     <para>All types and functions that are defined in the level one interface
     are declared in <literal>aterm1.h</literal>.<xref
@@ -2218,7 +2246,7 @@ int main(int argc, char *argv[])
     </section>
 
     <section xml:id="section.level2-functionality">
-      <title>Level Two Functionality</title>
+      <title>Level Two Functionality of C ATerm Library</title>
 
       <para>This section describes all functions and macros that are available
       in the level two interface. To obtain access to this functionality you
@@ -3543,7 +3571,7 @@ int main(int argc, char *argv[])
   </section>
 
   <section xml:id="section.java">
-    <title>Java implementation</title>
+    <title>Using the Java ATerm Library</title>
 
     <para>In addition to the C implementaton discussed upto now, a Java
     implementation of the ATerm datatype is also available. The interfaces of
@@ -3557,7 +3585,7 @@ int main(int argc, char *argv[])
     and <literal>ATunprotect</literal> functions are needed in Java.</para>
 
     <section>
-      <title>Interfaces and Implementation</title>
+      <title>Overview of the Java ATerm Library</title>
 
       <para>The interface <literal>ATerm</literal> defines functionality
       relevant for all ATerm subtypes. Each of these ATerm subtypes has its
@@ -3599,27 +3627,43 @@ int main(int argc, char *argv[])
       xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/.</link></para>
 
       <section>
-        <title>Interface AtermInt</title>
+        <title>Interface <literal>ATermInt</literal></title>
 
         <para><programlisting>public int getInt();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermInt" /> for a descriptions of
+        the corresponding C functions.</para>
       </section>
 
       <section>
-        <title>Interface AtermReal</title>
+        <title>Interface <literal>ATermReal</literal></title>
 
         <programlisting>public double getReal();</programlisting>
+
+        <para>See <xref linkend="section.ATermReal" /> for a descriptions of
+        the corresponding C functions.</para>
       </section>
 
       <section>
-        <title>Interface AFun</title>
+        <title>Interface <literal>ATermLong</literal></title>
+
+        <para><programlisting>public long getLong();</programlisting>The
+        support for long integers is unique for the Java lATerm ibrary.</para>
+      </section>
+
+      <section>
+        <title>Interface <literal>AFun</literal></title>
 
         <para><programlisting>public String getName();
 public int getArity();
 public boolean isQuoted();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermAppl" /> for a descriptions of
+        the corresponding C functions.</para>
       </section>
 
       <section>
-        <title>Interface ATermAppl</title>
+        <title>Interface <literal>ATermAppl</literal></title>
 
         <para><programlisting>public AFun getAFun();
 public String getName();
@@ -3629,17 +3673,23 @@ public ATerm getArgument(int i);
 public ATermAppl setArgument(ATerm arg, int i);
 public boolean isQuoted();
 public int getArity();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermAppl" /> for a descriptions of
+        the corresponding C functions.</para>
       </section>
 
       <section>
-        <title>Interface ATermBlob</title>
+        <title>Interface <literal>ATermBlob</literal></title>
 
         <para><programlisting>public int getBlobSize();
 public byte[] getBlobData();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermBlob" /> for a descriptions of
+        the corresponding C functions.</para>
       </section>
 
       <section>
-        <title>Interface ATerm Factory</title>
+        <title>Interface <literal>ATermFactory</literal></title>
 
         <para><programlisting>ATerm parse(String trm);
 ATerm make(String trm);
@@ -3685,10 +3735,15 @@ ATerm readFromBinaryFile(InputStream stream)
 ATerm readFromFile(String file) 
       throws IOException;
 ATerm importTerm(ATerm term); /* from other factory */</programlisting></para>
+
+        <para>See <xref linkend="section.making-matching" /> for descriptions
+        of the make-like functions and <xref
+        linkend="section.aterms-reading-writing" /> for the reading-writing
+        related functions. </para>
       </section>
 
       <section>
-        <title>Interface ATermList</title>
+        <title>Interface <literal>ATermList</literal></title>
 
         <para><programlisting>public boolean isEmpty();
 public int getLength();
@@ -3712,29 +3767,43 @@ public ATermList reverse();
 public ATerm dictGet(ATerm key);
 public ATermList dictPut(ATerm key, ATerm value);
 public ATermList dictRemove(ATerm key);</programlisting></para>
+
+        <para>See <xref linkend="section.ATermList" /> and <xref
+        linkend="section.ATermDictionary" /> for a descriptions of the
+        corresponding C functions. Note that ATermIndexSet (see <xref
+        linkend="section.ATermIndexedSet" />) is not available in the Java
+        ATerm library.</para>
       </section>
 
       <section>
-        <title>Interface ATermPlaceholder</title>
+        <title>Interface <literal>ATermPlaceholder</literal></title>
 
         <para><programlisting>public ATerm getPlaceholder();</programlisting></para>
+
+        <para>See <xref linkend="section.ATermPlaceholder" /> for a
+        descriptions of the corresponding C functions.</para>
       </section>
 
       <section>
-        <title>Interface Identifiable</title>
+        <title>Interface <literal>Identifiable</literal></title>
 
         <para><programlisting>public int getUniqueIdentifier();</programlisting></para>
       </section>
 
       <section>
-        <title>Interface Visitable</title>
+        <title>Interface <literal>Visitable</literal></title>
 
         <para><programlisting>public aterm.Visitable accept(aterm.Visitor visitor) 
        throws jjtraveler.VisitFailure;</programlisting></para>
+
+        <para>The visitor functionality is unique for the Java ATerm library.
+        See <link
+        xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>
+        for details.</para>
       </section>
 
       <section>
-        <title>Interface Visitor</title>
+        <title>Interface <literal>Visitor</literal></title>
 
         <para><programlisting>public aterm.Visitable visitATerm(ATerm arg) 
        throws VisitFailure;
@@ -3754,10 +3823,15 @@ public aterm.Visitable visitBlob(ATermBlob arg)
        throws VisitFailure;
 public aterm.Visitable visitAFun(AFun fun) 
        throws VisitFailure;</programlisting></para>
+
+        <para>The visitor functionality is unique for the Java ATerm library.
+        See <link
+        xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>
+        for details.</para>
       </section>
 
       <section>
-        <title>Interface ATerm</title>
+        <title>Interface <literal>ATerm</literal></title>
 
         <para><programlisting>public static final int INT = 2;
 public static final int REAL = 3;
@@ -3787,11 +3861,16 @@ public void writeToSharedTextFile(OutputStream stream)
 public ATerm make(List&lt;Object&gt; args);
 public ATermFactory getFactory();
 public String toString();</programlisting></para>
+
+        <para>See <xref linkend="section.making-matching" /> for descriptions
+        of the make-like functions and <xref
+        linkend="section.aterms-reading-writing" /> for the reading-writing
+        related functions.</para>
       </section>
     </section>
 
     <section>
-      <title>Java Example</title>
+      <title>Example Using the Java ATerms</title>
 
       <para>To give a flavour of the manipulation oof ATerms in Java, <xref
       linkend="example.aterms-java" /> shows the creation of some ATerms and
@@ -3834,30 +3913,38 @@ public class Basic
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.aterm-historical-notes">
     <title>Historical Notes</title>
 
     <para>The first term structure to be used for data exchange in The
     Meta-Environment was designed as part of the ToolBus coordination
-    architecture and is described in <xref linkend="BergstraKlint94" />. These
-    "ToolBus terms" already provided the make-and-match paradigm (<xref
-    linkend="section.making-matching" />) for constructing and deconstructing
-    terms. They also provided a linear string representation for the exchange
-    of terms between components as well as automatic garbage
-    collection.</para>
+    architecture and is described in <xref linkend="BergstraKlint94" /> and
+    was implemented by Paul Klint. These "ToolBus terms" already provided the
+    make-and-match paradigm (<xref linkend="section.making-matching" />) for
+    constructing and deconstructing terms. They also provided a linear string
+    representation for the exchange of terms between components as well as
+    automatic garbage collection.</para>
 
     <para>The ATerms as discussed here are described in detail in <xref
-    linkend="BJKO00" /> and introduced several innovations over the original
-    design: maximal subterm sharing, annotations, a compressed binary exchange
-    format, and a two-level Application Programming Interface (API) that
-    enables both simple and efficient use of ATerms. The Java implementation
-    uses SharedObjects as described in <xref
-    linkend="VdBrandMoreauVinju05" />.</para>
+    linkend="BJKO00" /> and were implemented by Hayco de Jong and Pieter
+    Olivier (both in C and Java). They introduced several innovations over the
+    original design: maximal subterm sharing, annotations, a compressed binary
+    exchange format, and a two-level Application Programming Interface (API)
+    that enables both simple and efficient use of ATerms. The Java
+    implementation uses SharedObjects as described in <xref
+    linkend="VdBrandMoreauVinju05" /> and implemented by Pierre-Etienne
+    Moreau. Erik Scheffers adapted the C ATerm Library to 64 bit
+    architectures. Arnold Lankamp added the streamable ATerm format (SAF),
+    performed major optimizations on both the C and the Java version and made
+    the Java version ready for efficient execution on multi-core
+    machines.</para>
 
     <para>In order to further control the type safe acces to ATerms, the API
-    generator <command>apigen</command> has been developed, see <xref
-    linkend="deJongOlivier04" /> and <xref
-    linkend="VdBrandMoreauVinju05" />.</para>
+    generator <command>apigen</command> has been developed. First in C,
+    described in <xref linkend="deJongOlivier04" /> and implemented by Hayco
+    de Jong and Pieter Olivier. Later in Java, described in <xref
+    linkend="VdBrandMoreauVinju05" /> and implemented by Pierre-Etienne Moreau
+    and Jurgen Vinju.</para>
 
     <para>Since their inception, ATerms have been used in a wide range of
     application:</para>
@@ -3894,11 +3981,11 @@ public class Basic
       </listitem>
     </itemizedlist>
 
-    <para>An overview can be found in <xref
+    <para>An overview of the application of ATerms can be found in <xref
     linkend="vdBrandKlint07" />.</para>
   </section>
 
-  <section>
+  <section xml:id="section.aterm-bibliography">
     <title>Bibliography</title>
 
     <para><bibliolist>
@@ -3912,16 +3999,5 @@ public class Basic
 
         <bibliomixed xml:id="deJongOlivier04"></bibliomixed>
       </bibliolist></para>
-  </section>
-
-  <section>
-    <title>ATerm ToDo List</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The description of the Java implementation should be further
-        extended.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
