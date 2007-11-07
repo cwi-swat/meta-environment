@@ -168,8 +168,8 @@
       </listitem>
 
       <listitem>
-        <para><xref linkend="section.aterm-historical-notes" /> and <xref
-        linkend="section.aterm-bibliography" /> complete this ATerm
+        <para>With<xref linkend="section.aterm-historical-notes" /> and <xref
+        linkend="section.aterm-bibliography" /> we complete this ATerm
         guide.</para>
       </listitem>
     </itemizedlist>
@@ -598,7 +598,7 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
           </listitem>
         </itemizedlist>
 
-        <para> For instance, in the context: <programlisting>FILE *f = fopen("foo", "wb");
+        <para>For instance, in the context: <programlisting>FILE *f = fopen("foo", "wb");
 ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlisting>the
         statement<programlisting>ATwriteToTextFile(Trm1, f);</programlisting>will
         write the value of <literal>Trm1</literal> (i.e.,
@@ -3216,8 +3216,8 @@ int main(int argc, char *argv[])
           <para><programlisting>ATermList ATtableKeys(ATermTable <replaceable>table</replaceable>)</programlisting></para>
 
           <para>Get an ATermList of all the keys in a table. This function can
-          be useful if you need to iterate over all elements in a table.
-          </para>
+          be useful if you need to iterate over all elements in a
+          table.</para>
         </section>
 
         <section xml:id="function.ATtableValues">
@@ -3226,8 +3226,8 @@ int main(int argc, char *argv[])
           <para><programlisting>ATermList ATtableValues(ATermTable <replaceable>table</replaceable>)</programlisting></para>
 
           <para>Get an ATermList of all the values in a table. This function
-          can be useful if you need to iterate over all values in a table.
-          </para>
+          can be useful if you need to iterate over all values in a
+          table.</para>
         </section>
       </section>
 
@@ -3739,7 +3739,7 @@ ATerm importTerm(ATerm term); /* from other factory */</programlisting></para>
         <para>See <xref linkend="section.making-matching" /> for descriptions
         of the make-like functions and <xref
         linkend="section.aterms-reading-writing" /> for the reading-writing
-        related functions. </para>
+        related functions.</para>
       </section>
 
       <section>
