@@ -694,8 +694,9 @@
 
     <para>This block-wise writing and reading method enables us to suspend the
     (de-)serialization process at fixed intervals, without the need to assign
-    a different thread to each process. This enables us to construct multiple
-    trees of terms concurrently in a single threaded environment.</para>
+    a different thread to each process. This enables us to interleave the 
+    simultaineous construction of multiple trees of terms in a single threaded
+    environment.</para>
 
     <sect2>
       <title>Splitting elements</title>
