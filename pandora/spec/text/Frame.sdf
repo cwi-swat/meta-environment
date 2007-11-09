@@ -38,6 +38,6 @@ hiddens
     "Defs"[0-9]*    -> Defs
     "Point"[0-9]*   -> Point
     "Int"[0-9]*     -> NatCon
-    "Nat"[0-9]*     -> Natural
+    "Nat"[0-9]*     -> NatCon
     "ss"[0-9]*      -> SpaceSymbol
     "so""*"[0-9]*   -> SpaceOption*

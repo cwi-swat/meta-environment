@@ -1,5 +1,24 @@
 /* $Id$ */
 
+Fri Nov  9 15:13:39 EST 2007 <jurgenv@cwi.nl>
+ * spec/text/LengthOfBoxes.asf: fixed non-rewriting of very long I boxes
+   with multiple child boxes. This bug was introduced by letting I boxes
+   have more than one child. The fix lets the I boxes degenerate to normal
+   H boxes in horizontal contexts, instead of relying on a in-place
+   computation of the length of the children of the I box. This also makes the
+   I boxes implement the hs option correctly from now on.
+ * spec/text/Basic-to-Text.asf: HV boxes did not respect nested I boxes. This
+   was a not so nice bug. Fixed by splitting the case for the hvplace
+   function. When a box flows to the next line it is placed in a vertical 
+   context, such that possible I boxes can implement their proper semantics.
+   When a box does not flow to the next line, it is placed in a horizontal
+   context as before.
+ * spec/text/Integer-ops.{asf,sdf}: removed because basic/Integers now
+   has all of this functionality. Had to fix the other modules to make this
+   work of course.
+ * spec/text/*.sdf: removed all occurences of Natural sorts
+ * spec/text/*.sdf: added hidden imports of basic/Whitespace where necessary.
+
 Fri Jan 26 09:34:56 CET 2007 <jurgenv@cwi.nl>
  * src/pandora.c: adapted to new interface of toasfix.
 

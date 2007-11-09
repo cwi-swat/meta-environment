@@ -16,6 +16,7 @@ exports
     Bytes "||" Bytes -> Bytes {left}
 
 hiddens
+  imports basic/Whitespace
   context-free syntax
   %% invisible concatenation
     Bytes Bytes -> Bytes {non-assoc}

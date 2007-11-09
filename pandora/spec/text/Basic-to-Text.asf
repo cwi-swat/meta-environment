@@ -236,7 +236,7 @@ equations
 
   [BtT5'1]   hvplace B h Hs v Vs i Is with Frame1 and Struct =
                place B with Frame1 and Struct and H
-
+ 
   [BtT5'2]   Text1 && Point1 := hvplace B+ h Hs v Vs i Is with Frame1 and Struct1,
              Frame2 := hsep Point1 h Hs with Frame1
              =====================================
@@ -268,21 +268,25 @@ equations
 %% a {\sf HV} operator at the appropiate place. Either at the current line, if the box
 %% fits and consists of only one line of text, or at the next line starting at the current
 %% left margin.
-%%\smallskip
+%%\smallskip 
 
-  [BtT7'1]   Point := if X1 + Int <= rightm of (X1,Y1) & Defs
-             then (X1,Y1)
-             else (leftm of (X1,Y1) & Defs+Is,Y1+Vs)
-             fi
+  [BtT7'1]   X1 + Int <= (rightm of (X1, Y1) & Defs) == true,
+             Point := (X1, Y1)
              ==========
              reshuffle B (Int,0) given (X1,Y1) & Defs and Struct h Hs v Vs i Is =
                place B (Int,0) with Point & Defs and Struct and H
+
+ [BtT7'1]    X1 + Int > rightm of (X1, Y1) & Defs == true,
+             Point := (leftm of (X1,Y1) & Defs+Is,Y1+Vs)
+             ==========
+             reshuffle B (Int,0) given (X1,Y1) & Defs and Struct h Hs v Vs i Is =
+               place B (Int,0) with Point & Defs and Struct and V
 
   [BtT7'2]   Int2 > 0 == true,
              Point := (leftm of (X1,Y1) & Defs+Is,Y1+Vs)
              ==========================================
              reshuffle B (Int1,Int2) given (X1,Y1) & Defs and Struct h Hs v Vs i Is =
-               place B (Int1,Int2) with Point & Defs and Struct and H
+               place B (Int1,Int2) with Point & Defs and Struct and V
 
 %% The equation \ref{Eq:BtT8'1} deals with the situation the box is extended
 %% with length information.

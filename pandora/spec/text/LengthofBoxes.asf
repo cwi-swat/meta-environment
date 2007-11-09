@@ -68,16 +68,16 @@ equations
 %%\smallskip
 
   [LoB1'14]  Is := set is value given so* and Frame,
-             B*2 ## (Int1,Int2) := length of B*1 with Frame and V
+             B*2 ## (Int1,Int2) := length of H so* [B*1] with Frame and V
              =================================================
              length of I so* [B*1] with Frame and V =
-               I so* [H [B*2]] (Int1,Int2) ## (Int1 + Is,Int2)
+               I so* [ B*2 ] (Int1,Int2) ## (Int1 + Is,Int2)
 
   [LoB1'15]  'C != V,
-             B*2 ## Point := length of B*1 with Frame and 'C
+             B*2 ## Point := length of H so* [B*1] with Frame and H
              ============================================
              length of I so* [B*1] with Frame and 'C =
-               I so* [H [B*2]] Point ## Point
+               I so* [ B*2 ] Point ## Point
 
 %% The {\sf WD} has no textual effect except for a number of space characters
 %% that are to be produced. Only the length of the last line is relevant

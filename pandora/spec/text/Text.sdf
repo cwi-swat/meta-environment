@@ -13,6 +13,7 @@ exports
     concat-reverse(Text) -> Bytes
 
 hiddens
+  imports basic/Whitespace
   context-free syntax
     concat-reverse(Text,Bytes) -> Bytes
 

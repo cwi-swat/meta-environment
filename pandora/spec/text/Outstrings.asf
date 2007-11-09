@@ -25,5 +25,5 @@ equations
 
 equations
 
-  [concat]
+  [concat-0]
     bytes(byte*1) || bytes(byte*2) = bytes(byte*1 byte*2)

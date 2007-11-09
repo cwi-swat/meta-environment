@@ -1,7 +1,7 @@
 module Points
 
 imports 
-  Integer-Ops
+  basic/Integers
 
 exports
   sorts Point

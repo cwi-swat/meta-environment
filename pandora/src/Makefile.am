@@ -21,7 +21,8 @@ pandora_LDADD = ${ASC_SUPPORT_LIBS}
 asfc:
 	asfc \
 		-i ${top_builddir}/spec/text/Box-to-Text.eqs \
-		-o Box-to-Text.c -v
+		-o Box-to-Text.c -v 
+
 api:
 	sdf2-to-c -i Box.def --prefix BOX_ -v
 
