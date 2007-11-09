@@ -309,9 +309,9 @@ public class WishAdapter extends AbstractTool{
 					if(operation == "snd-event"){
 						ATerm sndEventTerm = term.getArgument(0);
 						sendEvent(sndEventTerm);
-					}else if(operation == "rec-value"){
-						ATerm recValueTerm = term.getArgument(0);
-						valueReady(recValueTerm);
+					}else if(operation == "snd-value"){
+						ATerm valueTerm = term.getArgument(0);
+						valueReady(valueTerm);
 					}else if(operation == "snd-disconnect"){
 						disconnect(factory.makeList());
 					}
