@@ -18,7 +18,7 @@ equations
 
 equations
 
-[norm] G gs=Nat op=Op [ B* ] = G [ distribute(Op,Nat,B*) ]
+[default-norm] G gs=Nat op=Op [ B* ] = G [ distribute(Op,Nat,B*) ]
 
 equations
 

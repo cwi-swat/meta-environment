@@ -1,5 +1,13 @@
 /* $Id$ */
 
+Fri Nov  9 15:40:20 EST 2007 <jurgenv@cwi.nl>
+ * spec/text/Normalize-Groups.asf: fixed a non-confluence issue with the
+   removal of nested G group boxes. If two G boxes where directly nested,
+   the deepest being a plain G [ ] group with no gs and op options, the
+   innermost G would not be spliced into the outermost first. Fixed by
+   adding a [default] tag to the outermost reduction, such that it waits
+   properly.
+
 Fri Nov  9 15:13:39 EST 2007 <jurgenv@cwi.nl>
  * spec/text/LengthOfBoxes.asf: fixed non-rewriting of very long I boxes
    with multiple child boxes. This bug was introduced by letting I boxes
