@@ -142,13 +142,13 @@
     subterm sharing has another benefit: the <emphasis>equality check on terms
     becomes very cheap</emphasis>: it reduces from an operation that is linear
     in the number of subterms to be compared to a constant operation (only
-    pointer equality has to be checked). </para>
+    pointer equality has to be checked).</para>
 
     <para>Maximal subterm sharing has, however, a price. In order to optimize
     sharing, ATerms are immutable and "updating" an ATerm in any way always
     leads to the construction of a new ATerm that may, however, share many
     subterms with the original ATerm. ATerm construction is also penalized by
-    an additional lookup operation to check for existing terms. </para>
+    an additional lookup operation to check for existing terms.</para>
 
     <para>Despite these disadvantages, there are many application areas where
     ATerms lead to more transparent program code and to more efficient
@@ -1087,7 +1087,7 @@ int main(int argc, char *argv[])
         between textual representations and binary ones. Textual
         representations could use the extension <literal>.trm</literal>. BAF
         files always start with a '<literal>?</literal>' character to
-        distinguish them from other ATerm formats. </para>
+        distinguish them from other ATerm formats.</para>
 
         <para>The available functions are:</para>
 
@@ -1695,8 +1695,7 @@ int main(int argc, char *argv[])
           an ATerm from binary or text file.</para>
 
           <para>This function reads an ATerm from a file. A test is performed
-          to see if the file is in plain text, BAF, TAF, or SAF format.
-          </para>
+          to see if the file is in plain text, BAF, TAF, or SAF format.</para>
         </section>
 
         <section xml:id="function.ATreadFromNamedFile">
@@ -2194,7 +2193,7 @@ int main(int argc, char *argv[])
   </section>
 
   <section xml:id="section.level2-interface">
-    <title>Level Two Interface</title>
+    <title>Level Two Interface of C ATerm Library</title>
 
     <para>This section explains in detail the types and functions that are
     defined in the level two interface of the Term library. These functions
@@ -2283,7 +2282,7 @@ int main(int argc, char *argv[])
     </section>
 
     <section xml:id="section.level2-functionality">
-      <title>Level Two Functionality of C ATerm Library</title>
+      <title>Level Two Functionality</title>
 
       <para>This section describes all functions and macros that are available
       in the level two interface. To obtain access to this functionality you
@@ -3403,7 +3402,7 @@ int main(int argc, char *argv[])
   </section>
 
   <section xml:id="section.utilities">
-    <title>Command line utilities</title>
+    <title>Command Line Utilities</title>
 
     <para>This section describes the utilities that come with the ATerm
     library. These utilities are automatically built when the ATerm library is
@@ -3954,7 +3953,7 @@ public class Basic
     </section>
 
     <section xml:id="section.C-Java-differences">
-      <title>Differences between C and Java version of ATerm Library</title>
+      <title>Differences between C and Java Version of ATerm Library</title>
 
       <para>The differences between the C and Java version of the ATerm
       library are summarized in <xref
