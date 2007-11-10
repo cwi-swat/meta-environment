@@ -47,7 +47,8 @@
           <term>Efficient</term>
 
           <listitem>
-            <para>Operations on data structures should be fast.</para>
+            <para>Operations on data structures should be fast as
+            possible.</para>
           </listitem>
         </varlistentry>
 
@@ -102,7 +103,7 @@
     small number of other primitives are provided to make the ATerm data type
     more generally applicable. These include integer constants, real number
     constants, binary large data objects (``blobs''), lists of ATerms, and
-    placeholders to represent typed gaps in ATerms. Using the comprehensive
+    place holders to represent typed gaps in ATerms. Using the comprehensive
     set of primitives and operations on ATerms, it is possible to perform
     operations on an ATerm received from another application without first
     converting it to an application-specific representation.</para>
@@ -129,26 +130,38 @@
     the tree into a Directed Acyclic Graph (DAG).</para>
 
     <para>Maximal subterm sharing is a strategy to achieve "conciseness" as
-    mentioned in the characterristics of ATerms above and is a simple and
+    mentioned in the characteristics of ATerms above and is a simple and
     effective way to minimize memory usage: terms are only created when they
     are <emphasis>new</emphasis>, i.e., do not exist already. If a term to be
     constructed already exists, that term is reused, ensuring maximal sharing.
     This strategy fully exploits the redundancy that is typically present in
     the terms to be built and leads to maximal sharing of subterms. The
-    library functions that construct terms make sure that shared terms are
-    returned whenever possible. The sharing of terms is thus invisible to the
-    library user. Apart from <emphasis>reduced memory usage</emphasis>,
-    maximal subterm sharing has another benefit: the <emphasis>equality check
-    on terms becomes very cheap</emphasis>: it reduces from an operation that
-    is linear in the number of subterms to be compared to a constant operation
-    (only pointer equality has to be checked).</para>
+    library functions that construct terms always return maximally shared
+    terms as result. The sharing of terms is thus invisible to the library
+    user. Apart from <emphasis>reduced memory usage</emphasis>, maximal
+    subterm sharing has another benefit: the <emphasis>equality check on terms
+    becomes very cheap</emphasis>: it reduces from an operation that is linear
+    in the number of subterms to be compared to a constant operation (only
+    pointer equality has to be checked). </para>
+
+    <para>Maximal subterm sharing has, however, a price. In order to optimize
+    sharing, ATerms are immutable and "updating" an ATerm in any way always
+    leads to the construction of a new ATerm that may, however, share many
+    subterms with the original ATerm. ATerm construction is also penalized by
+    an additional lookup operation to check for existing terms. </para>
+
+    <para>Despite these disadvantages, there are many application areas where
+    ATerms lead to more transparent program code and to more efficient
+    execution. Some examples are term rewriting and model checking, see <xref
+    linkend="vdBrandKlint07" /> for these and other examples.</para>
 
     <para>Where to go from here?</para>
 
     <itemizedlist>
       <listitem>
         <para>Read <xref linkend="section.aterms-at-a-glance" /> to get a
-        quick overview of the functionality of ATerms.</para>
+        quick overview of the functionality of ATerms. These and the following
+        sections are written from the C perspective.</para>
       </listitem>
 
       <listitem>
@@ -157,20 +170,22 @@
       </listitem>
 
       <listitem>
-        <para>A detailed description of the C Aterm library can be found in
+        <para>A detailed description of the C ATerm library can be found in
         <xref linkend="section.level1-interface" /> and <xref
         linkend="section.level2-interface" />.</para>
       </listitem>
 
       <listitem>
         <para>On overview of the Java ATerm library is given in <xref
-        linkend="section.java" />.</para>
+        linkend="section.java" />. It also summarizes the differences between
+        the C and the Java version, see <xref
+        linkend="section.C-Java-differences" />.</para>
       </listitem>
 
       <listitem>
         <para>With<xref linkend="section.aterm-historical-notes" /> and <xref
         linkend="section.aterm-bibliography" /> we complete this ATerm
-        guide.</para>
+        programming guide.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -261,15 +276,13 @@
       implementation language the type is represented as a constant (C) or a
       subclass (Java, C#). The last construct is the <emphasis>annotation
       construct</emphasis> which makes it possible to annotate terms with
-      transparent information.<footnote>
-          <para>Transparent in the sense that the result of most operations is
-          independent of the annotations. This makes it easy to completely
-          ignore annotations. Examples of the use of annotations include
-          annotating parse trees with positional or typesetting information,
-          and annotating abstract syntax trees with the results of type
-          checking.</para>
-        </footnote>We will now give a number of examples to show some of the
-      features of the textual representation of ATerms.</para>
+      transparent information. We will now give a number of examples to show
+      some of the features of the textual representation of ATerms.<note>
+          <para>The textual representation of ATerms is readable and is useful
+          for explanation and debugging. It is hardly ever used in large
+          applications. See <xref linkend="section.aterm-formats" /> for the
+          various ATerm formats.</para>
+        </note></para>
 
       <itemizedlist>
         <listitem>
@@ -313,10 +326,10 @@
       <title>Operations on ATerms</title>
 
       <para>The operations on ATerms fall into three categories: making and
-      matching ATerms, reading and writing ATerms, and annotating ATerms. The
-      total of only 13 functions provides enough functionality for most users
-      to build simple applications with ATerms. We refer to this interface as
-      the <emphasis>level one</emphasis> interface of the ATerm data type. To
+      matching ATerms, reading and writing ATerms, and annotating ATerms.
+      These functions provide enough functionality for most users to build
+      simple applications with ATerms. We refer to this interface as the
+      <emphasis>level one</emphasis> interface of the ATerm data type. To
       accommodate ``power'' users of ATerms we also provide a <emphasis>level
       two</emphasis> interface, which contains a more sophisticated set of
       data types and functions. It is typically used in generated C or Java
@@ -327,14 +340,13 @@
       expressed more concisely and implemented more efficiently using level
       two constructs. The level two interface is a strict superset of the
       level one interface. Observe that ATerms are a purely functional data
-      type and that no destructive updates are possible, see the section on
-      maximal sharing for more details.</para>
+      type and that no destructive updates are possible.</para>
 
       <section xml:id="section.making-matching">
         <title>Making and Matching ATerms</title>
 
         <para>The simplicity of the level one interface is achieved by the
-        <emphasis>make-and-match</emphasis> paradigm that is alo illustrated
+        <emphasis>make-and-match</emphasis> paradigm that is also illustrated
         in <xref linkend="figure.make-and-match" />:<variablelist>
             <varlistentry>
               <term>Make</term>
@@ -401,7 +413,7 @@
           </listitem>
 
           <listitem>
-            <para><literal>&lt;term&gt;</literal>: corresponds to an aterm (in
+            <para><literal>&lt;term&gt;</literal>: corresponds to an ATerm (in
             C: <literal>ATerm</literal>);</para>
           </listitem>
 
@@ -424,8 +436,8 @@
         When matching a term, directives indicate the assignment of subterms
         to given variables.</para>
 
-        <para>Patterns are just ATerms containing placeholders. These
-        placeholders determine the places where ATerms must be substituted or
+        <para>Patterns are just ATerms containing place holders. These place
+        holders determine the places where ATerms must be substituted or
         matched. An example of a pattern is
         <literal>"and(&lt;int&gt;,&lt;appl&gt;)"</literal>. These patterns
         appear as string argument of both make and match and are remotely
@@ -441,12 +453,12 @@
             <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>)</literal>:
             Create a new term by taking the string pattern
             <replaceable>p</replaceable>, parsing it as an ATerm and filling
-            the placeholders in the resulting term with values taken from
+            the place holders in the resulting term with values taken from
             <replaceable>a</replaceable><subscript>1</subscript> through
             <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>.
             If the parse fails, a message is printed and the program is
-            aborted. The types of the arguments depend on the specific
-            placeholders used in the pattern <replaceable>p</replaceable>. For
+            aborted. The types of the arguments depend on the specific place
+            holders used in the pattern <replaceable>p</replaceable>. For
             instance, when the placeholder <literal>&lt;int&gt;</literal> is
             used an integer is expected as argument and a new integer ATerm is
             constructed.</para>
@@ -459,16 +471,16 @@
             *<replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>)</literal>:
             Match term <replaceable>t</replaceable> against pattern
             <replaceable>p</replaceable>, and bind subterms that match with
-            placeholders in <replaceable>p</replaceable> with the result
+            place holders in <replaceable>p</replaceable> with the result
             variables <replaceable>a</replaceable><subscript>1</subscript>
             through
             <replaceable>a</replaceable><replaceable><subscript>n</subscript></replaceable>.
             Again, the type of the result variables depends on the place
             holders used. If the parse of pattern <replaceable>p</replaceable>
             fails, a message is printed and the program is aborted. If the
-            term itself contains placeholders these may occur in the resulting
-            substitutions. The function returns true when the match succeeds,
-            false otherwise.</para>
+            term itself contains place holders these may occur in the
+            resulting substitutions. The function returns true when the match
+            succeeds, false otherwise.</para>
           </listitem>
         </itemizedlist>
 
@@ -577,7 +589,7 @@ ATmatch(bstr, "exam(&lt;blob&gt;)", &amp;n, &amp;p);</programlisting><literal>AT
             <para><literal>ATerm ATreadFromTextFile(File
             <replaceable>f</replaceable>)</literal>: Creates a new term by
             parsing the data from file <replaceable>f</replaceable>. Again,
-            parse e rrors result in a message being printed and an error value
+            parse errors result in a message being printed and an error value
             being returned.</para>
           </listitem>
 
@@ -623,8 +635,8 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
         <para>will print:<programlisting>Wrong event "failure(13)" ignored</programlisting>Note
         that <literal>ATprintf</literal> uses the normal
         <literal>printf</literal> conversion specifiers extended with
-        aterm-specific specifiers. The most frequently used specifier is {\tt
-        \%t} which stands for an aterm argument whose textual representation
+        ATerm-specific specifiers. The most frequently used specifier is {\tt
+        \%t} which stands for an ATerm argument whose textual representation
         is to be inserted in the output stream.</para>
       </section>
 
@@ -637,7 +649,7 @@ ATerm Trm1 = ATmake("&lt;appl(red,&lt;int&gt;)&gt;", "freq", 17);</programlistin
         to be a "third dimension" for ATerms, see <xref
         linkend="figure.annotations" />. Ordinary ATerms (bottom plane) can be
         extended in this dimension with arbitrary ATerms (that, indeed, may
-        agian contain annotations).</para>
+        again contain annotations).</para>
 
         <para xml:id="figure.annotations"><figure>
             <title>ATerm annotations</title>
@@ -751,7 +763,7 @@ int main(int argc, char *argv[])
           <callout arearefs="co.main.1">
             <para>The local variable <literal>bottomOfStack</literal> is used
             to indicate the bottom of C's run-time stack and needed when
-            initlaizing the ATerm library.</para>
+            initializing the ATerm library.</para>
           </callout>
 
           <callout arearefs="co.main.2">
@@ -760,12 +772,12 @@ int main(int argc, char *argv[])
           </callout>
         </calloutlist></para>
 
-      <para>The commandline options can be passed to an application that use
+      <para>The command line options can be passed to an application that use
       the ATerm library are listed in <xref
       linkend="table.commandline-options" />.</para>
 
       <table xml:id="table.commandline-options">
-        <title>Commandline options ATerm library</title>
+        <title>Command line options ATerm library</title>
 
         <tgroup cols="2">
           <colspec align="left" />
@@ -783,21 +795,21 @@ int main(int argc, char *argv[])
               <entry><literal>-at-symboltable
               <replaceable>nsymbols</replaceable></literal></entry>
 
-              <entry>Initial size of symboltable</entry>
+              <entry>Initial size of symbol table</entry>
             </row>
 
             <row>
               <entry><literal>-at-termtable
               <replaceable>tableclass</replaceable></literal></entry>
 
-              <entry>Start with termtable of
+              <entry>Start with term table of
               2<superscript>tableclass</superscript> entries</entry>
             </row>
 
             <row>
               <entry><literal>-at-hashinfo</literal></entry>
 
-              <entry>Write hashtable statistics to the file
+              <entry>Write hash table statistics to the file
               <filename>hashing.stats</filename> after execution</entry>
             </row>
 
@@ -831,16 +843,30 @@ int main(int argc, char *argv[])
       <para>The functions in the ATerm library provide automatic memory
       management of terms. Terms that have been created but are no longer
       referenced are removed by a method called <emphasis>garbage
-      collection</emphasis>. The global model is that there is a set of
-      <emphasis>protected</emphasis> terms that are guaranteed to survive a
-      garbage collection. Effectively, all protected terms (and their
-      subterms) are conserved and all other terms are considered as garbage
-      and can be collected. It is guaranteed that no garbage collection takes
-      place during the execution of an event handler, hence it is not
-      necessary to protect temporary terms that are constructed during the
-      execution of an event handler. However, terms that should have a longer
-      life time must be protected in order to survive. In order to protect
-      terms from being collected, the function <programlisting>void ATprotect(ATerm *<replaceable>TrmPtr</replaceable>)</programlisting>can
+      collection</emphasis>. There are two categories of terms that will
+      survive a garbage collection:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Terms that are referenced via a local variable of a currently
+          active procedure.</para>
+        </listitem>
+
+        <listitem>
+          <para>Terms that are explicitly <emphasis>protected</emphasis> by
+          the user.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Effectively, all terms referenced by local variables and all
+      protected terms (and their subterms) are conserved and all other terms
+      are considered as garbage and can be collected. It is guaranteed that no
+      garbage collection takes place during the execution of an event handler,
+      hence it is not necessary to protect temporary terms that are
+      constructed during the execution of an event handler. However, terms
+      that should have a longer life time must be protected in order to
+      survive. In order to protect terms from being collected, the function
+      <programlisting>void ATprotect(ATerm *<replaceable>TrmPtr</replaceable>)</programlisting>can
       be used that has as single argument <emphasis>a pointer to a variable
       with an ATerm as value</emphasis>. The protection can be undone by the
       function<programlisting>void ATunprotect(ATerm *TrmPtr)</programlisting>
@@ -850,9 +876,9 @@ int main(int argc, char *argv[])
       <itemizedlist>
         <listitem>
           <para>Functions that return a term as value (e.g.,
-          <literal>TBreadTermfromFile</literal>) do not explicitly protect it
-          but the result may, of course, be protected because it is a subterm
-          of an already protected term.</para>
+          <literal>ATBreadTermfromFile</literal>) do not explicitly protect
+          it. However, since the result will be referenced via local variable
+          it will be safe for the garbage collector.</para>
         </listitem>
 
         <listitem>
@@ -867,7 +893,8 @@ int main(int argc, char *argv[])
               or <literal>&lt;appl&gt;</literal>) are copied before they are
               included into <literal><replaceable>T</replaceable></literal>.
               They can thus safely be deallocated (e.g., using
-              <literal>free</literal>) by the C program.</para>
+              <literal>free</literal>) by the C program in case they were
+              globally allocated.</para>
             </listitem>
 
             <listitem>
@@ -876,7 +903,8 @@ int main(int argc, char *argv[])
               pointer. They thus become reachable from
               <replaceable>T</replaceable> and their life time becomes at
               least as large as that of <replaceable>T</replaceable>; it is
-              unnecessary to explicitly protect them.</para>
+              not required to explicitly protect them unless the user decides
+              otherwise.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -893,8 +921,9 @@ int main(int argc, char *argv[])
             <listitem>
               <para>All string values (obtained using
               <literal>&lt;str&gt;</literal>, <literal>&lt;blob&gt;</literal>
-              or <literal>&lt;appl&gt;</literal>) should be copied if they
-              should survive <replaceable>T</replaceable>.</para>
+              or <literal>&lt;appl&gt;</literal>) should be copied if they are
+              used outside the scope of the function in which they were
+              created.</para>
             </listitem>
 
             <listitem>
@@ -931,8 +960,9 @@ int main(int argc, char *argv[])
 
         <listitem>
           <para>Streamable ATerm Format (SAF) allows the streaming of ATerms
-          between applications (using a fixed buffer size) and optimizes
-          encoding/decoding speed.</para>
+          between applications (using a fixed buffer size), also preserves
+          sharing and optimizes the balance between speed, memory usage and
+          compression.</para>
         </listitem>
       </itemizedlist>
 
@@ -944,7 +974,7 @@ int main(int argc, char *argv[])
 
         <para>The simplest format available for ATerms is plain ASCII text:
         the ATerm is read and written in prefix form. Its main advantage are
-        simplicty and readability. The main disadavantage is that maximal
+        simplicity and readability. The main disadvantage is that maximal
         subterm sharing is lost and that size may become huge. The ASCII ATerm
         Format is mainly used for debugging purposes.</para>
 
@@ -961,7 +991,7 @@ int main(int argc, char *argv[])
               <para><literal>ATerm ATreadFromTextFile(File
               <replaceable>f</replaceable>)</literal>: Creates a new term by
               parsing the data from file <replaceable>f</replaceable>. Again,
-              parse e rrors result in a message being printed and an error
+              parse errors result in a message being printed and an error
               value being returned.</para>
             </listitem>
 
@@ -986,26 +1016,25 @@ int main(int argc, char *argv[])
       <section xml:id="section.taf">
         <title>Textual ATerm Format (TAF)</title>
 
-        <para>There is also a textual aterm format which supports maximal
+        <para>There is also a textual ATerm format which supports maximal
         sharing but uses a much less complex algorithm than the one used to
         encode and decode BAF files. This results in files that are somewhat
         larger than their BAF counterparts, but are often (if the terms
-        contain redundancy) significantly smaller than their unparsed form.
+        contain redundancy) significantly smaller than their unshared form.
         TAF files always start with a '<literal>!</literal>' character to
-        distinguish them from aterm formats. The format uses abbreviations to
-        refer to previously written terms. An abbreviation consists of a hash
-        character ('<literal>#</literal>') followed by a number in encoded
-        using the Base64 Alphabet (see RFC2045). Each term whose unparsed
-        representation would take up more bytes than the textual
-        representation of the next available abbreviation is assigned such an
-        abbreviation it has been written. Subsequent occurences of this term
-        are then written by emitting the abbreviation instead of the term
-        itself. For example the term <literal>f(test,test)</literal> is
-        represented as <literal>!f(test,#A)</literal> in SAF, whereas
-        <literal>f(a,a)</literal> is respresented as
-        <literal>!f(a,a)</literal> because <literal>test</literal> is longer
-        than its abbreviation <literal>#A</literal>, but <literal>a</literal>
-        is not.</para>
+        distinguish them from other ATerm formats. The format uses
+        abbreviations to refer to previously written terms. An abbreviation
+        consists of a hash character ('<literal>#</literal>') followed by a
+        number in encoded using the Base64 Alphabet (see RFC2045). Each term
+        whose unparsed representation would take up more bytes than the
+        textual representation of the next available abbreviation is assigned
+        such an abbreviation it has been written. Subsequent occurrences of
+        this term are then written by emitting the abbreviation instead of the
+        term itself. For example the term <literal>f(test,test)</literal> is
+        represented as <literal>!f(test,#A)</literal> in TAF, whereas
+        <literal>f(a,a)</literal> is represented as <literal>!f(a,a)</literal>
+        because <literal>test</literal> is longer than its abbreviation
+        <literal>#A</literal>, but <literal>a</literal> is not.</para>
 
         <para>The main functions are:</para>
 
@@ -1056,8 +1085,9 @@ int main(int argc, char *argv[])
         ATerm-files, users are encouraged to use the extension
         <literal>.baf</literal> for BAF files. This will avoid confusion
         between textual representations and binary ones. Textual
-        representations could use the extension
-        <literal>.trm</literal>.</para>
+        representations could use the extension <literal>.trm</literal>. BAF
+        files always start with a '<literal>?</literal>' character to
+        distinguish them from other ATerm formats. </para>
 
         <para>The available functions are:</para>
 
@@ -1083,8 +1113,8 @@ int main(int argc, char *argv[])
       <section xml:id="section.saf">
         <title>Streamable ATerm Format (SAF)</title>
 
-        <para>The Streamable ATerm Format is the newest format that attempts
-        to optimize:</para>
+        <para>The Streamable ATerm Format is the newest format designed for
+        use in high-performance applications. It attempts to balance:</para>
 
         <itemizedlist>
           <listitem>
@@ -1092,7 +1122,15 @@ int main(int argc, char *argv[])
           </listitem>
 
           <listitem>
+            <para>Streaming functionality.</para>
+          </listitem>
+
+          <listitem>
             <para>Memory usage.</para>
+          </listitem>
+
+          <listitem>
+            <para>Compression rate.</para>
           </listitem>
         </itemizedlist>
 
@@ -1126,13 +1164,16 @@ int main(int argc, char *argv[])
         <para>Given these four formats it is not so easy to choose the right
         one. Their properties are summarized in <xref
         linkend="table.file-format-properties" />. For high performance
-        applications BAF and TAF are the most likely candidates. BAF achieves
-        a higher compression factor for the encoded term but is only available
-        for C. SAF achieves slightly less compression but uses less memory to
-        achieve this. <tip>
+        applications BAF and SAF are the most likely candidates. BAF achieves
+        a slightly higher compression factor for the encoded term than SAF but
+        is only available for C. Although SAF achieves slightly less
+        compression it uses less memory to achieve this. <tip>
             <para>Since SAF is available for C and Java and is very efficient,
             it is a safe choice for most applications.</para>
-          </tip></para>
+          </tip><warning>
+            <para>Refer to SAF implementation document for
+            measurements.</para>
+          </warning></para>
 
         <table xml:id="table.file-format-properties">
           <title>Properties of ATerm file formats</title>
@@ -1168,7 +1209,7 @@ int main(int argc, char *argv[])
 
                 <entry>++</entry>
 
-                <entry>+</entry>
+                <entry>-+</entry>
 
                 <entry>--</entry>
 
@@ -1180,9 +1221,9 @@ int main(int argc, char *argv[])
 
                 <entry>--</entry>
 
-                <entry>-</entry>
+                <entry>-+</entry>
 
-                <entry>++</entry>
+                <entry>-+</entry>
 
                 <entry>++</entry>
               </row>
@@ -1192,9 +1233,9 @@ int main(int argc, char *argv[])
 
                 <entry>--</entry>
 
-                <entry>-</entry>
+                <entry>-+</entry>
 
-                <entry>++</entry>
+                <entry>+</entry>
 
                 <entry>++</entry>
               </row>
@@ -1204,7 +1245,7 @@ int main(int argc, char *argv[])
 
                 <entry>--</entry>
 
-                <entry>-</entry>
+                <entry>-+</entry>
 
                 <entry>++</entry>
 
@@ -1216,9 +1257,9 @@ int main(int argc, char *argv[])
 
                 <entry>-</entry>
 
-                <entry>-</entry>
+                <entry>-+</entry>
 
-                <entry>-</entry>
+                <entry>-+</entry>
 
                 <entry>++</entry>
               </row>
@@ -1317,17 +1358,6 @@ int main(int argc, char *argv[])
 
             <listitem>
               <para>An ATerm of type: binary large object.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term><literal>AT_FREE</literal></term>
-
-            <listitem>
-              <para>An ATerm that is marked <emphasis>free</emphasis> will be
-              reused when needed. This is not a type users will want to create
-              themselves, but it can be used to detect an ATerm that has been
-              freed by the garbage collector.</para>
             </listitem>
           </varlistentry>
         </variablelist></para>
@@ -1666,9 +1696,7 @@ int main(int argc, char *argv[])
 
           <para>This function reads an ATerm from a file. A test is performed
           to see if the file is in plain text, BAF, TAF, or SAF format.
-          <warning>
-              <para>Is this correct?</para>
-            </warning></para>
+          </para>
         </section>
 
         <section xml:id="function.ATreadFromNamedFile">
@@ -1718,7 +1746,7 @@ int main(int argc, char *argv[])
           <para><programlisting>ATerm ATreadFromBinaryFile(FILE *<replaceable>file</replaceable>)</programlisting>Read
           an ATerm from a shared text (TAF) file.</para>
 
-          <para>This function reads a shared text file and buils an
+          <para>This function reads a shared text file and builds an
           ATerm.</para>
         </section>
 
@@ -2061,7 +2089,7 @@ int main(int argc, char *argv[])
 
           <para>Issue a warning message.</para>
 
-          <para>If an errorhandler has been installed through a call to
+          <para>If an error handler has been installed through a call to
           <literal>ATsetWarningHandler</literal>, this handler will be called.
           Otherwise <literal>ATwarning</literal> uses
           <literal>ATvfprintf</literal> to print a formatted message to
@@ -2072,9 +2100,9 @@ int main(int argc, char *argv[])
           <title><literal>ATsetErrorHandler</literal></title>
 
           <para><programlisting>void ATsetErrorHandler(void (*<replaceable>handler</replaceable>)(const char *<replaceable>format</replaceable>, va_list <replaceable>args</replaceable>))</programlisting>Specify
-          an errorhandler for the ATerm library.</para>
+          an error handler for the ATerm library.</para>
 
-          <para>Sets an errorhandler for the ATerm library This handler will
+          <para>Sets an error handler for the ATerm library This handler will
           be called when an error message is issued via
           <literal>ATerror</literal>.</para>
         </section>
@@ -2083,9 +2111,9 @@ int main(int argc, char *argv[])
           <title><literal>ATerror</literal></title>
 
           <para><programlisting>void ATerror(const char *<replaceable>format</replaceable>, ...)</programlisting>Issue
-          an errormessage and exit the ATerm library.</para>
+          an error message and exit the ATerm library.</para>
 
-          <para>If an errorhandler has been installed through a call to
+          <para>If an error handler has been installed through a call to
           <literal>ATsetErrorHandler</literal>, this handler will be called.
           Otherwise <literal>ATerror</literal> uses
           <literal>ATvfprintf</literal> to print a formatted message to
@@ -2096,9 +2124,9 @@ int main(int argc, char *argv[])
           <title><literal>ATsetAbortHandler</literal></title>
 
           <para><programlisting>void ATsetAbortHandler(void (*<replaceable>handler</replaceable>)(const char *<replaceable>format</replaceable>, va_list <replaceable>args</replaceable>))</programlisting>Specify
-          an aborthandler for the ATerm library.</para>
+          an abort handler for the ATerm library.</para>
 
-          <para>Sets an aborthandler for the ATerm library. This handler will
+          <para>Sets an abort handler for the ATerm library. This handler will
           be called when an error message is issued via
           <literal>ATabort</literal>.</para>
         </section>
@@ -2107,9 +2135,9 @@ int main(int argc, char *argv[])
           <title><literal>ATabort</literal></title>
 
           <para><programlisting>void ATabort(const char *<replaceable>format</replaceable>, ...)</programlisting>Issue
-          a errormessage and abort the ATerm library.</para>
+          a error message and abort the ATerm library.</para>
 
-          <para>If an aborthandler has been installed through a call to
+          <para>If an abort handler has been installed through a call to
           <literal>ATsetAbortHandler</literal>, this handler will be called.
           Otherwise <literal>ATabort</literal> uses
           <literal>ATvfprintf</literal> to print a formatted message to
@@ -2177,7 +2205,7 @@ int main(int argc, char *argv[])
 
       <para>In addition to the C-types explained in <xref
       linkend="section.level1-types" />, the level two interface also uses the
-      following types: <variablelist>
+      following ATerm types: <variablelist>
           <varlistentry>
             <term>ATermInt</term>
 
@@ -2225,12 +2253,17 @@ int main(int argc, char *argv[])
               <para>A Binary Large OBject.</para>
             </listitem>
           </varlistentry>
+        </variablelist></para>
 
+      <para>In addition to these pure ATerm types, two additional types are
+      supported:</para>
+
+      <para><variablelist>
           <varlistentry>
             <term>ATermTable</term>
 
             <listitem>
-              <para>A hashtable of ATerms.</para>
+              <para>A hash table of ATerms.</para>
             </listitem>
           </varlistentry>
 
@@ -2242,7 +2275,11 @@ int main(int argc, char *argv[])
               index.</para>
             </listitem>
           </varlistentry>
-        </variablelist></para>
+        </variablelist>Both datatypes are <emphasis>containers</emphasis> for
+      ATerms and provide mutable operations on the container itself. <note>
+          <para>Of course, mutations on the containers do not affect the
+          ATerms that occur as elements in the containers!</para>
+        </note></para>
     </section>
 
     <section xml:id="section.level2-functionality">
@@ -2952,7 +2989,7 @@ ATermList parse_list3(ATermList list)
           the type of an ATerm Placeholder.</para>
 
           <example xml:id="example.placeholders">
-            <title>Examples of placeholders</title>
+            <title>Examples of place holders</title>
 
             <para><programlisting>#include &lt;assert.h&gt;
 #include &lt;aterm2.h&gt;
@@ -3011,10 +3048,8 @@ int main(int argc, char *argv[])
           <replaceable>data</replaceable>. This function can be used to create
           an <literal>ATerm</literal> of type blob, holding the data pointed
           to by <replaceable>data</replaceable>. No copy of this data area is
-          made, so the user should allocate this himself. Due to the internal
-          representation of a blob, size cannot exceed
-          2<superscript>24</superscript> in the current implementation. This
-          limits the size of the data area to 16 Mb.</para>
+          made, so the user should allocate this himself. The size of a blob
+          is limited by the maximal value of integers.</para>
         </section>
 
         <section xml:id="function.ATgetBlobData">
@@ -3062,17 +3097,17 @@ int main(int argc, char *argv[])
       <section xml:id="section.ATermDictionary">
         <title>Level two: the type <literal>ATermDictionary</literal></title>
 
-        <para>Dictionaries are datastructures which allow looking up a certain
-        ATerm given another ATerm. The dictionary itself is also an ATerm and
-        as such is subject to the garbage collection rules of the ATerm. Each
-        dictionary consists of its own list of ATerms. For each lookup in the
-        dictionary, the list is traversed to see if the current element's key
-        matches the one being looked up. A lookup in a dictionary demonstrates
-        behaviour linear in the number of elements the dictionary contains. On
-        average fifty percent of the number of elements in the dictionary are
-        examined before a match is found (if the element is present at all).
-        For a more efficient ATerm-to-ATerm mapping, see <xref
-        linkend="section.ATermTable" />.</para>
+        <para>Dictionaries are data structures which allow looking up a
+        certain ATerm given another ATerm. The dictionary itself is also an
+        ATerm and as such is subject to the garbage collection rules of the
+        ATerm. Each dictionary consists of its own list of ATerms. For each
+        lookup in the dictionary, the list is traversed to see if the current
+        element's key matches the one being looked up. A lookup in a
+        dictionary demonstrates behaviour linear in the number of elements the
+        dictionary contains. On average fifty percent of the number of
+        elements in the dictionary are examined before a match is found (if
+        the element is present at all). For a more efficient ATerm-to-ATerm
+        mapping, see <xref linkend="section.ATermTable" />.</para>
 
         <section xml:id="function.ATdictCreate">
           <title><literal>ATdictCreate</literal></title>
@@ -3173,7 +3208,7 @@ int main(int argc, char *argv[])
           released and obtained from the C memory management system this
           function is generally cheaper. However, if subsequent tables differ
           very much in size, the use of <literal>ATtableDestroy</literal> and
-          <literal>ATtableCreate</literal> may be prefered, because in such a
+          <literal>ATtableCreate</literal> may be preferred, because in such a
           way the sizes of the table adapt automatically to the requirements
           of the application.</para>
         </section>
@@ -3240,9 +3275,9 @@ int main(int argc, char *argv[])
         between a term and an integer remains fixed until the term is removed
         from the table. When assigning integers to newly entered elements,
         integers previously assigned to removed elements are used first. The
-        range of assigned integers is thus as compact as possible. This
-        datatype can be used for various purposes. First, one can make a
-        mapping from ATerms to elements in any arbitrary domain
+        range of assigned integers is thus as compact as possible. This data
+        type can be used for various purposes. First, one can make a mapping
+        from ATerms to elements in any arbitrary domain
         <replaceable>D</replaceable>. By entering the ATerms in an
         <literal>ATermIndexedSet</literal> each ATerm gets a subsequent
         integer assigned. These integers can be used as entries in an array to
@@ -3258,7 +3293,7 @@ int main(int argc, char *argv[])
         represented by an ATerm. The implementations of
         <literal>ATermIndexedSet</literal> and ATermTable are strongly
         related. The implementation is quite efficient both in time and space,
-        only requiring 12 bytes for each entry in an indexed set, if the hash
+        only requiring 16 bytes for each entry in an indexed set, if the hash
         table, which forms its core, is half full.</para>
 
         <section xml:id="function.ATindexedSetCreate">
@@ -3273,7 +3308,7 @@ int main(int argc, char *argv[])
           to <replaceable>max_load_pct</replaceable> percent. If needed, the
           size of the hash table is dynamically extended to hold the entries
           inserted into it. If extension of the hash table fails due to lack
-          of memory. it is attempted to fill the hash table up to 100%. All
+          of memory, it is attempted to fill the hash table up to 100%. All
           elements entered into the indexed set are automatically protected.
           Note that for each <literal>ATindexedSetCreate</literal> an
           <literal>ATindexedSetDestroy</literal> must be carried out to free
@@ -3368,7 +3403,7 @@ int main(int argc, char *argv[])
   </section>
 
   <section xml:id="section.utilities">
-    <title>Command line utitilities</title>
+    <title>Command line utilities</title>
 
     <para>This section describes the utilities that come with the ATerm
     library. These utilities are automatically built when the ATerm library is
@@ -3378,8 +3413,8 @@ int main(int argc, char *argv[])
       <title>ATerm-conversion: <command>baffle</command></title>
 
       <para>This utility can be used to convert between the different ATerm
-      formats: TEXT, BAF, and TAF. Usage: <programlisting><command>baffle</command> [-i &lt;input&gt;] [-o &lt;output&gt; | -c] [-v] [-rb | -rt | -rs] 
-       [-wb | -wt | -rs]</programlisting></para>
+      formats: TEXT, BAF, and TAF. Usage: <programlisting><command>baffle</command> [-i &lt;input&gt;] [-o &lt;output&gt; | -c] [-v] [-rb | -rt | -rs | -rS] 
+       [-wb | -wt | -ws | -wS]</programlisting></para>
 
       <para>The options are explained in <xref
       linkend="table.baffle-options" />.</para>
@@ -3437,16 +3472,17 @@ int main(int argc, char *argv[])
 
             <row>
               <entry><literal>-rb</literal>, <literal>-rt</literal>,
-              <literal>-rs</literal></entry>
+              <literal>-rs</literal>, <literal>-rS</literal></entry>
 
-              <entry>Choose between BAF, TEXT, and TAF input (default:
-              autodetect)</entry>
+              <entry>Choose between BAF, TEXT, TAF or SAF input (default: auto
+              detected)</entry>
             </row>
 
             <row>
-              <entry><literal>-wb</literal>, <literal>-wt</literal></entry>
+              <entry><literal>-wb</literal>, <literal>-wt</literal>,
+              <literal>-ws</literal>, <literal>-wS</literal></entry>
 
-              <entry>Choose between BAF, TEXT and TAF output (Default:
+              <entry>Choose between BAF, TEXT, TAF or SAF output (Default:
               <literal>-wb</literal>)</entry>
             </row>
           </tbody>
@@ -3463,12 +3499,14 @@ int main(int argc, char *argv[])
       <command>baf2taf</command>, and <command>taf2baf</command>.</para>
 
       <warning>
-        <para>Where does SAF fit in?</para>
+        <para>Do we want to add <command>trm2saf</command>,
+        <command>saf2baf</command>, etc?</para>
       </warning>
     </section>
 
     <section xml:id="section.termsize">
-      <title>Calculating an ATerm's size: <command>termsize</command></title>
+      <title>Calculating the size of an ATerm:
+      <command>termsize</command></title>
 
       <para><command>termsize</command> can be used to calculate three
       things:</para>
@@ -3490,11 +3528,11 @@ int main(int argc, char *argv[])
 
       <para>Usage:</para>
 
-      <para><programlisting><command>termsize</command> &lt; <replaceable>inputfile</replaceable> </programlisting>termsize
+      <para><programlisting><command>termsize</command> &lt; <replaceable>inputfile</replaceable> </programlisting><command>termsize</command>
       reads an ATerm from standard input
       (<replaceable>inputfile</replaceable>) and writes the results to
       standard output (<filename>stdout</filename>). The input term can be in
-      any format (TEXT, BAF, TAF).</para>
+      any format (TEXT, BAF, TAF, SAF).</para>
     </section>
 
     <section xml:id="section.atsum">
@@ -3502,7 +3540,7 @@ int main(int argc, char *argv[])
       <command>atsum</command></title>
 
       <para><command>atsum</command> calculates and prints the MD5 checksum of
-      the TAFrepresentation of an ATerm. The algorithm used is the RSA Data
+      the TAF representation of an ATerm. The algorithm used is the RSA Data
       Security, Inc. MD5 Message-Digest Algorithm (see RFC1321).
       Usage:<programlisting><command>atsum</command> [<replaceable>inputfile</replaceable>]</programlisting></para>
     </section>
@@ -3512,7 +3550,7 @@ int main(int argc, char *argv[])
       <command>atdiff</command></title>
 
       <para><command>atdiff</command> compares two terms and prints a template
-      term that covers the common parts containing placeholders of the form
+      term that covers the common parts containing place holders of the form
       <literal>&lt;diff&gt;</literal> for subterms that differed, and a list
       of their differing subterms. Usage:</para>
 
@@ -3573,16 +3611,17 @@ int main(int argc, char *argv[])
   <section xml:id="section.java">
     <title>Using the Java ATerm Library</title>
 
-    <para>In addition to the C implementaton discussed upto now, a Java
-    implementation of the ATerm datatype is also available. The interfaces of
+    <para>In addition to the C implementation discussed upto now, a Java
+    implementation of the ATerm Library is also available. The interfaces of
     the C implementation and the Java implementation are as similar as
     possible. Unfortunately, constraints imposed by both languages prohibit
     the use of a single interface for both languages. In this section we will
     discuss the Java interface, and highlight the differences with the C
     interface where appropriate. Most differences are introduced by the fact
-    that Java is a much more powerful language than C. For instance, Java
-    provides built-in garbage collection, so no <literal>ATprotect</literal>
-    and <literal>ATunprotect</literal> functions are needed in Java.</para>
+    that Java is a much more structured and higher-level language than C. For
+    instance, Java provides built-in garbage collection, so no
+    <literal>ATprotect</literal> and <literal>ATunprotect</literal> functions
+    are needed in Java.</para>
 
     <section>
       <title>Overview of the Java ATerm Library</title>
@@ -3594,7 +3633,7 @@ int main(int argc, char *argv[])
       describes the various methods used to create new ATerm objects. It is
       used to implement maximal sharing.</para>
 
-      <para>The interface hierachy is shown in <xref
+      <para>The interface hierarchy is shown in <xref
       linkend="figure.interface-hierarchy" />.</para>
 
       <para><figure xml:id="figure.interface-hierarchy">
@@ -3611,18 +3650,20 @@ int main(int argc, char *argv[])
       interfaces. For instance, the interface ATermList is implemented by the
       class called ATermListImpl. The ATermFactory is implemented by the class
       PureFactory. This implementation is a ``pure'' Java one, but given this
-      intercafe organization it would be possible to build a layer of Java
-      code on top of the C implementation using the Java Native Interface
-      (JNI) . A complete and up-to-date description of the Java implementation
-      of the ATerm library can be found at <link
+      interface organization it would, in principle, be possible to build a
+      layer of Java code on top of the C implementation using the Java Native
+      Interface (JNI) . The advances and disadvantages of such an
+      implementation have never been explored in detail. A complete and
+      up-to-date description of the Java implementation of the ATerm library
+      can be found at <link
       xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/</link>.</para>
     </section>
 
     <section>
       <title>Java ATerm Interfaces</title>
 
-      <para>We give here, withou further ado, the methods defined by the Java
-      Aterm Interfaces. For the meaning of individual methods we refer to both
+      <para>We give here, without further ado, the methods defined by the Java
+      ATerm Interfaces. For the meaning of individual methods we refer to both
       the description given for the C implementation and to <link
       xlink:href="http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/">http://homepages.cwi.nl/~daybuild/daily-docs/aterm-java/.</link></para>
 
@@ -3648,7 +3689,7 @@ int main(int argc, char *argv[])
         <title>Interface <literal>ATermLong</literal></title>
 
         <para><programlisting>public long getLong();</programlisting>The
-        support for long integers is unique for the Java lATerm ibrary.</para>
+        support for long integers is unique for the Java ATerm library.</para>
       </section>
 
       <section>
@@ -3730,8 +3771,6 @@ ATerm readFromTextFile(InputStream stream)
       throws IOException;
 ATerm readFromSharedTextFile(InputStream stream) 
       throws IOException;
-ATerm readFromBinaryFile(InputStream stream) 
-      throws IOException;
 ATerm readFromFile(String file) 
       throws IOException;
 ATerm importTerm(ATerm term); /* from other factory */</programlisting></para>
@@ -3739,7 +3778,8 @@ ATerm importTerm(ATerm term); /* from other factory */</programlisting></para>
         <para>See <xref linkend="section.making-matching" /> for descriptions
         of the make-like functions and <xref
         linkend="section.aterms-reading-writing" /> for the reading-writing
-        related functions.</para>
+        related functions. Observe that the Java implementation does not
+        support reading or writing from BAF files.</para>
       </section>
 
       <section>
@@ -3865,16 +3905,17 @@ public String toString();</programlisting></para>
         <para>See <xref linkend="section.making-matching" /> for descriptions
         of the make-like functions and <xref
         linkend="section.aterms-reading-writing" /> for the reading-writing
-        related functions.</para>
+        related functions. Observe that <literal>LONG</literal> is only
+        supported by the Java implementation.</para>
       </section>
     </section>
 
     <section>
       <title>Example Using the Java ATerms</title>
 
-      <para>To give a flavour of the manipulation oof ATerms in Java, <xref
+      <para>To give a flavour of the manipulation of ATerms in Java, <xref
       linkend="example.aterms-java" /> shows the creation of some ATerms and
-      reading of an ATerm fron a stream.<example xml:id="example.aterms-java">
+      reading of an ATerm from a stream.<example xml:id="example.aterms-java">
           <title>Using ATerms in Java</title>
 
           <para><programlisting>import java.io.*;
@@ -3911,6 +3952,82 @@ public class Basic
 }</programlisting></para>
         </example></para>
     </section>
+
+    <section xml:id="section.C-Java-differences">
+      <title>Differences between C and Java version of ATerm Library</title>
+
+      <para>The differences between the C and Java version of the ATerm
+      library are summarized in <xref
+      linkend="table.C-Java-differences" />.</para>
+
+      <table xml:id="table.C-Java-differences">
+        <title>Differences C and Java version</title>
+
+        <tgroup cols="3">
+          <colspec align="left" />
+
+          <thead>
+            <row>
+              <entry align="center"> Feature</entry>
+
+              <entry align="center">C </entry>
+
+              <entry align="center">Java</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>(Un)protecting ATerms</entry>
+
+              <entry>yes</entry>
+
+              <entry>no (automatic)</entry>
+            </row>
+
+            <row>
+              <entry>LONG</entry>
+
+              <entry>no</entry>
+
+              <entry>yes</entry>
+            </row>
+
+            <row>
+              <entry>ATermTable</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+
+            <row>
+              <entry>AtermIndexedSet</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+
+            <row>
+              <entry>BAF</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+
+            <row>
+              <entry>Distinction level 1/level 2 interface</entry>
+
+              <entry>yes</entry>
+
+              <entry>no</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
   </section>
 
   <section xml:id="section.aterm-historical-notes">
@@ -3939,7 +4056,7 @@ public class Basic
     the Java version ready for efficient execution on multi-core
     machines.</para>
 
-    <para>In order to further control the type safe acces to ATerms, the API
+    <para>In order to further control the type safe access to ATerms, the API
     generator <command>apigen</command> has been developed. First in C,
     described in <xref linkend="deJongOlivier04" /> and implemented by Hayco
     de Jong and Pieter Olivier. Later in Java, described in <xref
@@ -3976,7 +4093,7 @@ public class Basic
       </listitem>
 
       <listitem>
-        <para>Representation of feature diagrams as used for domein-specific
+        <para>Representation of feature diagrams as used for domain-specific
         engineering and software product lines.</para>
       </listitem>
     </itemizedlist>
