@@ -784,9 +784,9 @@ int main(int argc, char *argv[])
 
           <thead>
             <row>
-              <entry align="center">Option </entry>
+              <entry align="center">Option&#160;</entry>
 
-              <entry align="center">Description </entry>
+              <entry align="center">Description&#160;</entry>
             </row>
           </thead>
 
@@ -1086,7 +1086,7 @@ int main(int argc, char *argv[])
         <literal>.baf</literal> for BAF files. This will avoid confusion
         between textual representations and binary ones. Textual
         representations could use the extension <literal>.trm</literal>. BAF
-        files always start with a '<literal>?</literal>' character to
+        files always start with a NULL character and then 0xBAF (hex) to
         distinguish them from other ATerm formats.</para>
 
         <para>The available functions are:</para>
@@ -1111,14 +1111,17 @@ int main(int argc, char *argv[])
       </section>
 
       <section xml:id="section.saf">
-        <title>Streamable ATerm Format (SAF)</title>
+        <title>(Semi-) Streamable ATerm Format (SAF)</title>
 
-        <para>The Streamable ATerm Format is the newest format designed for
-        use in high-performance applications. It attempts to balance:</para>
+        <para>The (Semi-) Streamable ATerm Format is a recent addition of the
+        library. It is designed for usage in high-performance applications and
+        was initially developed for exchanging ATerms accross network
+        connections in a portable way. It attempts to find a balance between
+        the following characteristics:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Encoding/decoding speed.</para>
+            <para>Encoding / decoding speed.</para>
           </listitem>
 
           <listitem>
@@ -1126,16 +1129,19 @@ int main(int argc, char *argv[])
           </listitem>
 
           <listitem>
-            <para>Memory usage.</para>
+            <para>Compression rate.</para>
           </listitem>
 
           <listitem>
-            <para>Compression rate.</para>
+            <para>Memory usage.</para>
           </listitem>
         </itemizedlist>
 
-        <para>As the name suggests, SAF allows the partial reading and writing
-        of ATerms, thus using ATerms in a streamlike fashion.</para>
+        <para>As the name suggests, this format enables the transmission of
+        ATerms in a semi streamlike fashion. This is achieved by reading and
+        writing the serial representation of an ATerm in blocks of a variable
+        size; allowing the encoding and decoding process to be suspended at
+        any point in time.</para>
 
         <para>The available functions are:</para>
 
@@ -1165,9 +1171,9 @@ int main(int argc, char *argv[])
         one. Their properties are summarized in <xref
         linkend="table.file-format-properties" />. For high performance
         applications BAF and SAF are the most likely candidates. BAF achieves
-        a slightly higher compression factor for the encoded term than SAF but
-        is only available for C. Although SAF achieves slightly less
-        compression it uses less memory to achieve this. <tip>
+        a slightly better compression rates, but SAF is able to encode and
+        decode ATerms much faster. Another factor to consider is that there is
+        only a BAF implementation for C.<tip>
             <para>Since SAF is available for C and Java and is very efficient,
             it is a safe choice for most applications.</para>
           </tip><warning>
@@ -1191,9 +1197,9 @@ int main(int argc, char *argv[])
 
             <thead>
               <row>
-                <entry align="center">Property </entry>
+                <entry align="center">Property&#160;</entry>
 
-                <entry align="center">ASCII </entry>
+                <entry align="center">ASCII&#160;</entry>
 
                 <entry align="center">TAF</entry>
 
@@ -1221,7 +1227,7 @@ int main(int argc, char *argv[])
 
                 <entry>--</entry>
 
-                <entry>-+</entry>
+                <entry>+</entry>
 
                 <entry>-+</entry>
 
@@ -1261,7 +1267,7 @@ int main(int argc, char *argv[])
 
                 <entry>-+</entry>
 
-                <entry>++</entry>
+                <entry>+</entry>
               </row>
 
               <row>
@@ -1442,7 +1448,7 @@ int main(int argc, char *argv[])
 
               <thead>
                 <row>
-                  <entry align="center">Type </entry>
+                  <entry align="center">Type&#160;</entry>
 
                   <entry align="center">Pattern</entry>
 
@@ -1982,9 +1988,9 @@ int main(int argc, char *argv[])
 
               <thead>
                 <row>
-                  <entry align="center"> Conversion specifier</entry>
+                  <entry align="center">&#160;Conversion specifier</entry>
 
-                  <entry align="center">Action </entry>
+                  <entry align="center">Action&#160;</entry>
                 </row>
               </thead>
 
@@ -3428,9 +3434,9 @@ int main(int argc, char *argv[])
 
           <thead>
             <row>
-              <entry align="center">Option </entry>
+              <entry align="center">Option&#160;</entry>
 
-              <entry align="center">Description </entry>
+              <entry align="center">Description&#160;</entry>
             </row>
           </thead>
 
@@ -3566,9 +3572,9 @@ int main(int argc, char *argv[])
 
           <thead>
             <row>
-              <entry align="center">Option </entry>
+              <entry align="center">Option&#160;</entry>
 
-              <entry align="center">Description </entry>
+              <entry align="center">Description&#160;</entry>
             </row>
           </thead>
 
@@ -3967,9 +3973,9 @@ public class Basic
 
           <thead>
             <row>
-              <entry align="center"> Feature</entry>
+              <entry align="center">&#160;Feature</entry>
 
-              <entry align="center">C </entry>
+              <entry align="center">C&#160;</entry>
 
               <entry align="center">Java</entry>
             </row>
