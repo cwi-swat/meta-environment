@@ -103,6 +103,12 @@ public class WishAdapter extends AbstractTool{
 		toolBridge.run();
 		
 		startHandlingIO();
+		
+		int exitCode = process.waitFor();
+		if(exitCode != 0){
+			System.err.println("Script exited with error code: "+exitCode);
+			System.exit(exitCode);
+		}
 	}
 	
 	private void executeScript() throws IOException{
