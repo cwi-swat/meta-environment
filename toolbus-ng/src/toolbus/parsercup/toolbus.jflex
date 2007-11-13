@@ -14,7 +14,7 @@ import java_cup.runtime.*;
 %column
 
 %{
-  StringBuffer string = new StringBuffer();
+  StringBuilder string = new StringBuilder();
 
   private Symbol symbol(int type) {
     return new Symbol(type, yyline, yycolumn);

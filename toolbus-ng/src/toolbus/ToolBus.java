@@ -72,7 +72,6 @@ public class ToolBus{
 	private int nwarnings = 0;
 	
 	private long startTime;
-	private long currentTime;
 	private long nextTime = 0;
 	
 	protected volatile boolean shuttingDown = false;
@@ -214,13 +213,12 @@ public class ToolBus{
 	}
 	
 	public void setNextTime(long next){
-		System.err.println("setNextTime: " + next);
-		if(nextTime <= currentTime){
-			nextTime = next;
-		}else if(next < nextTime){
+		//System.err.println("setNextTime: " + next);
+		long currentTime = getRunTime();
+		if(nextTime < currentTime || (next < nextTime && next > currentTime)){
 			nextTime = next;
 		}
-		System.err.println("setNextTime: set to " + next);
+		//System.err.println("setNextTime: set to " + nextTime);
 	}
 	
 	/**
@@ -466,6 +464,37 @@ public class ToolBus{
 		}
 	}
 	
+	public void dumpUnhandledMessages(){
+		if(workHasArrived == true || workHasArrived == false){ // Volatile read; triggers some cache coherency actions, so we see a reasonably up to date version of the data we're trying to dump.
+			ProcessInstanceIterator processInstanceIterator = new ProcessInstanceIterator(processes);
+			try{
+				while(processInstanceIterator.hasNext()){
+					ProcessInstance pi = processInstanceIterator.next();
+					List<ATerm> unhandledNotes = pi.getNoteQueue();
+					List<StateElement> unhandledMessage = pi.getCurrentState().getUnhandledMessages();
+					
+					if((unhandledNotes.size() + unhandledMessage.size()) > 0){
+						System.err.println(pi.getProcessName()+"("+pi.getProcessId()+"):");
+						
+						try{
+							System.err.println(unhandledNotes);
+						}catch(RuntimeException rex){
+							// Ignore this so we can go on.
+						}
+						
+						try{
+							System.err.println(unhandledMessage);
+						}catch(RuntimeException rex){
+							// Ignore this so we can go on.
+						}
+					}
+				}
+			}catch(RuntimeException rex){
+				// This will probably never happen, but it's necessary none the less.
+			}
+		}
+	}
+	
 	public void execute(){
 		if(nerrors > 0){
 			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
@@ -496,11 +525,11 @@ public class ToolBus{
 		running = true;
 		try{
 			PROCESSLOOP: do{
+				long currentNextTime = nextTime;
 				boolean work;
 				do{
 					workHasArrived = false;
 					work = false;
-					//passes++;
 					
 					while(processesIterator.hasNext()){
 						if(shuttingDown) return;
@@ -516,31 +545,32 @@ public class ToolBus{
 						}
 					}
 					
-					/*if(passes % 100 == 0){
-						System.err.print("TOOLBUS.execute STATISTICS:");
-						System.err.printf("%d passes over script (%.1f%% no work done)\n", new Integer(passes), new Double((100.0 * noWorkPasses) / passes));
-					}*/
-					
 					Collections.rotate(processes, 1);
 					
 					processesIterator.reset();
 				}while(work);
-				
-				// The last iteration never does any work.
-				//noWorkPasses++;
 				
 				synchronized(processLock){
 					// If we got nothing left to do and we are still running, wait for work to
 					// arrive.
 					while(!workHasArrived && running){
 						try{
-							/*long ct = System.currentTimeMillis();
-							processLock.wait(15000);
-							if(System.currentTimeMillis() >= ct + 15000){
-								showStatus();
-								running = false;
-							}*/
-							processLock.wait();
+							long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
+							if(blockTime > 0){
+								processLock.wait(blockTime);
+								workHasArrived = true;
+							}else if(currentNextTime != nextTime){ // if the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
+								workHasArrived = true;
+							}else{
+								processLock.wait();
+								
+								/*long ct = System.currentTimeMillis();
+								processLock.wait(15000);
+								if(System.currentTimeMillis() >= ct + 15000){
+									showStatus();
+									running = false;
+								}*/
+							}
 						}catch(InterruptedException irex){
 							// Just ignore this, it's not harmfull.
 						}
@@ -576,19 +606,15 @@ public class ToolBus{
 		}
 		
 		public boolean hasNext(){
-			boolean hasNext;
 			synchronized(list){
-				hasNext = (list.size() > index);
+				return (list.size() > index);
 			}
-			return hasNext;
 		}
 		
 		public ProcessInstance next(){
-			ProcessInstance pi;
 			synchronized(list){
-				pi = list.get(index++);
+				return list.get(index++);
 			}
-			return pi;
 		}
 		
 		// You can only call this once per iteration!

@@ -537,7 +537,8 @@ class TScriptNodeBuilders{
 		define(new NodeBuilder("ttt-TimeExpr"){
 			public Object build(Object args[], ATerm posInfo){
 				Atom a = (Atom) args[0];
-				a.addTimeExpr((ATerm) args[1]);
+				//a.addTimeExpr((ATerm) args[1]);
+				// TODO implement
 				return a;
 			}
 		});

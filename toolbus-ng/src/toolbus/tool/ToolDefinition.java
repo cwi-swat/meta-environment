@@ -48,7 +48,7 @@ public class ToolDefinition{
 	}
 	
 	public boolean isDirectlyStartableJavaNGTool(){
-		return ("javaNG".equals(kind) && (hostName == null || hostName == "localhost"));
+		return false;//return ("javaNG".equals(kind) && (hostName == null || hostName == "localhost"));
 	}
 	
 	public void setToolBus(ToolBus tb){

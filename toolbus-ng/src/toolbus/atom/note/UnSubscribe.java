@@ -30,7 +30,12 @@ public class UnSubscribe extends Atom{
 	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
-		getProcess().unsubscribe(msgpat.value);
+		
+		ATerm unsubscribePattern = tbfactory.fullSubstitute(msgpat.value, getEnv());
+		if(unsubscribePattern == null) throw new ToolBusException("Illegal subscription pattern: "+msgpat.value+".");
+		
+		getProcess().unsubscribe(unsubscribePattern);
+		
 		return true;
 	}
 }

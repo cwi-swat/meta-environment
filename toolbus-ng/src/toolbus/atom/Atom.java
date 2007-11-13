@@ -21,6 +21,9 @@ import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.AFun;
 import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermInt;
+import aterm.ATermList;
 
 /**
  * This class represents a test associated with an atom.
@@ -48,14 +51,19 @@ class Test{
  */
 
 abstract public class Atom extends ProcessExpression implements StateElement{
-	private ProcessInstance processInstance; // process instance to which the atom belongs
-	private Environment env;                 // the environment of this atom
-	private List<Test> tests;              // optional tests that guard this atom
-	private Ref[] atomArgs = new Ref[0];    // arguments of the atom
-	private int delay = 0;                  // time delay before atom can be executed
-	private int timeout = 0;                // timeout after which atom can no longer be executed
-	private boolean timeExpr = false;      // the actual time expression for delay/timeout
-	private int startTime;                  // when execution of this atom started
+	private final static String SECS = "secs";
+	private final static String MSECS = "msecs";
+	
+	private ProcessInstance processInstance;	// process instance to which the atom belongs
+	private Environment env;					// the environment of this atom
+	private List<Test> tests;					// optional tests that guard this atom
+	private Ref[] atomArgs = new Ref[0];		// arguments of the atom
+	private int delay = 0;						// time delay before atom can be executed
+	private int timeout = 0;					// timeout after which atom can no longer be executed
+	private boolean timeExpr = false;			// the actual time expression for delay/timeout
+	private long activateTime;					// when this atom was activated
+	private long enabledTime;					// When this atom becomes ready for execution
+	private long timeoutTime;					// When this atom becomes no longer eligable for execution
 	protected String externalNameAsReceivedByTool;
 /*	
 	static private HashMap<String, Integer> instances = new HashMap<String, Integer>(32);
@@ -170,31 +178,63 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		}
 	}
 	
-	public void addTimeExpr(ATerm t){
-		try{
-			List<?> matches = t.match("delay(<int>)");
-			
-			if(matches != null){
-				Integer n = (Integer) matches.get(0);
-				delay = n.intValue();
-				timeExpr = true;
-				System.err.println("Added delay " + delay);
-				return;
+	public void setDelay(ATerm delay){
+		if(delay instanceof ATermAppl){
+			ATermAppl timeExpression = (ATermAppl) delay;
+			AFun timeFun = timeExpression.getAFun();
+			if(timeFun.getArity() == 1){
+				String order = timeFun.getName();
+				ATerm argument = timeExpression.getArgument(0);
+				if(argument instanceof ATermInt){
+					ATermInt time = (ATermInt) argument;
+					if(order == SECS){
+						this.delay = time.getInt() * 1000;
+						timeExpr = true;
+						return;
+					}else if(order == MSECS){
+						this.delay = time.getInt();
+						timeExpr = true;
+						return;
+					}
+				}
 			}
-			
-			matches = t.match("timeout(<int>)");
-			
-			if(matches != null){
-				Integer n = (Integer) matches.get(0);
-				timeout = n.intValue();
-				timeExpr = true;
-				System.err.println("Added timeout " + timeout);
-				return;
-			}
-		}catch(Exception e){
-			System.out.println("addTimeExpr, cannot handle: " + e);
 		}
+		// If the function didn't return before this point the argument wasn't formatted properly.
+		throw new RuntimeException("Not a time expression: "+delay);
 	}
+	
+	public void setAbsoluteDelay(ATermList delay){
+		// TODO Implement.
+	} 
+	
+	public void setTimeout(ATerm timeout){
+		if(timeout instanceof ATermAppl){
+			ATermAppl timeExpression = (ATermAppl) timeout;
+			AFun timeFun = timeExpression.getAFun();
+			if(timeFun.getArity() == 1){
+				String order = timeFun.getName();
+				ATerm argument = timeExpression.getArgument(0);
+				if(argument instanceof ATermInt){
+					ATermInt time = (ATermInt) argument;
+					if(order == SECS){
+						this.timeout = time.getInt() * 1000;
+						timeExpr = true;
+						return;
+					}else if(order == MSECS){
+						this.timeout = time.getInt();
+						timeExpr = true;
+						return;
+					}
+				}
+			}
+		}
+		// If the function didn't return before this point the argument wasn't formatted properly.
+		throw new RuntimeException("Not a time expression: "+delay);
+	}
+	
+	public void setAbsoluteTimeout(ATermList timeout){
+		// TODO Implement.
+	} 
 	
 	public ToolBus getToolBus(){
 		return processInstance.getToolBus();
@@ -278,14 +318,15 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		// System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
 		if(timeExpr){
 			// System.err.println("Has a TimeExpr; delay = " + delay + "; timeout = " + timeout);
-			int currentTime = (int) getToolBus().getRunTime();
+			long currentTime = getToolBus().getRunTime();
 			// System.err.println("startTime = " + startTime + "; currentTime = " + currentTime);
-			if(delay != 0 && currentTime < startTime + delay){
+			if(currentTime < enabledTime){
+				getToolBus().setNextTime(enabledTime);
 				// System.err.println("currentTime < startTime + delay");
 				/*incr(notEnabled);*/
 				return false;
 			}
-			if(timeout != 0 && currentTime > startTime + timeout){
+			if(timeout != 0 && currentTime > timeoutTime){
 				// System.err.println("currentTime > startTime + timeout");
 				/*incr(notEnabled);*/
 				return false;
@@ -339,11 +380,10 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	}
 	
 	public void activate(){
-		if(timeExpr){
-			startTime = (int) getToolBus().getRunTime();
-			int next = (delay != 0) ? startTime + delay : startTime;
-			getToolBus().setNextTime(next);
-		}
+		activateTime = getToolBus().getRunTime();
+		enabledTime = activateTime + delay;
+		timeoutTime = activateTime + timeout;
+		
 		/*incr(size_env, env.size());*/
 		
 		/*ATermList collected = tbfactory.EmptyList;

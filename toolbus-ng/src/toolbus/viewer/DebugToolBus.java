@@ -31,6 +31,8 @@ public class DebugToolBus extends ToolBus{
 	private final ConcurrentHashSet<Integer> processInstanceBreakPoints;
 	private final ConcurrentHashSet<String> processBreakPoints;
 	
+	private long nextTime;
+	
 	public DebugToolBus(String[] args, IViewer viewer){
 		super(args);
 		
@@ -38,6 +40,8 @@ public class DebugToolBus extends ToolBus{
 		
 		processInstanceBreakPoints = new ConcurrentHashSet<Integer>();
 		processBreakPoints = new ConcurrentHashSet<String>();
+		
+		nextTime = 0;
 	}
 	
 	public ProcessInstance addProcess(String name, ATermList actuals) throws ToolBusException{
@@ -60,6 +64,15 @@ public class DebugToolBus extends ToolBus{
 		synchronized(processLock){
 			processLock.notify();
 		}
+	}
+	
+	public void setNextTime(long next){
+		//System.err.println("setNextTime: " + next);
+		long currentTime = getRunTime();
+		if(nextTime < currentTime || (next < nextTime && next > currentTime)){
+			nextTime = next;
+		}
+		//System.err.println("setNextTime: set to " + nextTime);
 	}
 	
 	public void execute(){
@@ -88,6 +101,7 @@ public class DebugToolBus extends ToolBus{
 		try{
 			boolean work = false;
 			boolean reset = false;
+			long currentNextTime = 0;
 			workHasArrived = true; // This is just to get things started.
 			
 			PROCESSLOOP: do{
@@ -100,14 +114,28 @@ public class DebugToolBus extends ToolBus{
 					while((!workHasArrived && running) || !(doStep || doRun)){
 						fireStateChange(IViewerConstants.WAITING_STATE);
 						
-						try{
-							processLock.wait();
-						}catch(InterruptedException irex){
-							// Just ignore this, it's not harmfull.
+						long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
+						if(blockTime > 0){
+							try{
+								processLock.wait(blockTime);
+							}catch(InterruptedException irex){
+								// Just ignore this, it's not harmfull.
+							}
+							workHasArrived = true;
+						}else if(currentNextTime != nextTime){ // if the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
+							workHasArrived = true;
+							currentNextTime = nextTime;
+						}else{
+							try{
+								processLock.wait();
+							}catch(InterruptedException irex){
+								// Just ignore this, it's not harmfull.
+							}
 						}
 						
 						if(shuttingDown) return; // Stop executing if a shutdown is triggered.
 					}
+					currentNextTime = nextTime;
 					
 					if(doStep) fireStateChange(IViewerConstants.STEPPING_STATE);
 					else if(doRun) fireStateChange(IViewerConstants.RUNNING_STATE);

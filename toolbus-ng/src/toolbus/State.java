@@ -8,6 +8,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 
 import toolbus.atom.Atom;
+import toolbus.atom.msg.SndMsg;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
@@ -166,5 +167,24 @@ public class State{
 			}
 		}
 		return false;
+	}
+	
+	public List<StateElement> getUnhandledMessages(){
+		List<StateElement> unhandledMessages = new ArrayList<StateElement>();
+		
+		int nrOfElements = elements.size();
+		
+		try{
+			while((--nrOfElements) >= 0){
+				StateElement element = elements.get(nrOfElements);
+				if(element instanceof SndMsg){
+					unhandledMessages.add(element);
+				}
+			}
+		}catch(RuntimeException rex){
+			// This will never happen, it's here just in case.
+		}
+		
+		return unhandledMessages;
 	}
 }

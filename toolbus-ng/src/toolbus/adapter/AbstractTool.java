@@ -4,7 +4,6 @@ import java.net.InetAddress;
 
 import toolbus.IOperations;
 import aterm.ATerm;
-import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 /**
@@ -92,16 +91,6 @@ public abstract class AbstractTool implements IOperations{
 	 */
 	public void sendEvent(ATerm aTerm){
 		toolBridge.send(EVENT, aTerm);
-	}
-
-	/**
-	 * Transmits a value to the ToolBus in response to the last received eval.
-	 * 
-	 * @param aTerm
-	 *            The term containing the value.
-	 */
-	public void sendValue(ATerm aTerm){
-		toolBridge.send(VALUE, aTerm);
 	}
 
 	/**

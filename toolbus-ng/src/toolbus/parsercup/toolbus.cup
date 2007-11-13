@@ -377,19 +377,28 @@ assign::=
 proc ::= 
        atom:a                                {: RESULT = a; :}  
 
-     | atom REL_DELAY LPAR term RPAR        /* not yet implemented */
-        
-     | atom REL_DELAY LPAR term RPAR REL_TIMEOUT LPAR term RPAR 
-        
+/* Delay and timeout are not fully implemented yet. */
 
-     | atom ABS_DELAY LPAR term_list RPAR
-        
-
-     | atom ABS_DELAY LPAR term_list RPAR ABS_TIMEOUT LPAR term_list RPAR  
+     | atom:a REL_DELAY LPAR term:d RPAR {:	a.setDelay(d);
+											RESULT = a; :}
                                          
-     | atom REL_TIMEOUT LPAR term RPAR  
+     | atom:a REL_TIMEOUT LPAR term:t RPAR {:	a.setTimeout(t);
+												RESULT = a; :}
+        
+     | atom:a REL_DELAY LPAR term:d RPAR REL_TIMEOUT LPAR term:t RPAR {:	a.setDelay(d);
+																			a.setTimeout(t);
+																			RESULT = a; :}
+
+     | atom:a ABS_DELAY LPAR term_list:dl RPAR {:	a.setAbsoluteDelay(dl);
+     												RESULT = a; :}
+
+     | atom:a ABS_DELAY LPAR term_list:dl RPAR ABS_TIMEOUT LPAR term_list:tl RPAR {:	a.setAbsoluteDelay(dl);
+     																					a.setAbsoluteTimeout(tl);
+     																					RESULT = a; :}
           
-     | atom ABS_TIMEOUT LPAR term_list RPAR 
+     | atom:a ABS_TIMEOUT LPAR term_list:tl RPAR {:	a.setAbsoluteTimeout(tl);
+     												RESULT = a; :}
+     
          
      | proc:p1 CHOICE proc:p2               {: RESULT = new Alternative(p1, p2,parser.tbfactory, null); :}
      
