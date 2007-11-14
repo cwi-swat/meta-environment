@@ -1,5 +1,8 @@
 $Id$
 
+Wed Nov 14 14:51:10 EST 2007 <jurgenv@cwi.nl>
+ * library/languages/box/format: added a formatter for Box
+
 2007-08-13    <storm@cwi.nl>
 
  * Injected StrCon/BoolCon into RElem instead of String and Boolean; this
