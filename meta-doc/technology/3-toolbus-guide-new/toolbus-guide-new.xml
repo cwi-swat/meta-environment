@@ -575,38 +575,43 @@
         <title>A first example</title>
 
         <para>Beforer delving into the details of Tscripts, it is good to have
-        a look at the hello world application
-        <filename>hello1.tb</filename>:</para>
+        a look at the hello world application <filename>hello1.tb</filename>
+        shown in <xref linkend="example.hello1" />.</para>
 
-        <programlisting>process HELLO <co xml:id="co.hello1-1" />
+        <para><example xml:id="example.hello1">
+            <title>hello1.tb</title>
+
+            <programlisting>process HELLO <co xml:id="co.hello1-1" />
 is <co xml:id="co.hello1-2" />
   printf(“Hello world, my first Tscript!\n”) <co xml:id="co.hello1-3" />
 
 toolbus(HELLO) <co xml:id="co.hello1-4" /></programlisting>
 
-        <para>Notes:</para>
+            <para>Notes:</para>
 
-        <calloutlist>
-          <callout arearefs="co.hello1-1">
-            <para>Here starts the definition of a process with name
-            <literal>HELLO</literal>.</para>
-          </callout>
+            <calloutlist>
+              <callout arearefs="co.hello1-1">
+                <para>Here starts the definition of a process with name
+                <literal>HELLO</literal>.</para>
+              </callout>
 
-          <callout arearefs="co.hello1-2">
-            <para>After the keyword <literal>is</literal> follows the process
-            expression that defines the behaviour of this process.</para>
-          </callout>
+              <callout arearefs="co.hello1-2">
+                <para>After the keyword <literal>is</literal> follows the
+                process expression that defines the behaviour of this
+                process.</para>
+              </callout>
 
-          <callout arearefs="co.hello1-3">
-            <para>The process expression consists of a single action that
-            prints a string.</para>
-          </callout>
+              <callout arearefs="co.hello1-3">
+                <para>The process expression consists of a single action that
+                prints a string.</para>
+              </callout>
 
-          <callout arearefs="co.hello1-4">
-            <para>Define the initial ToolBus configuration, in this case only
-            process HELLO will be started.</para>
-          </callout>
-        </calloutlist>
+              <callout arearefs="co.hello1-4">
+                <para>Define the initial ToolBus configuration, in this case
+                only process HELLO will be started.</para>
+              </callout>
+            </calloutlist>
+          </example></para>
 
         <para>Running this example will yield the following command line
         dialog:</para>
@@ -616,15 +621,19 @@ Hello world, my first Tscript!
 2&gt;</screen>
 
         <para>Becoming more courageous, we show now a more ambituous Tscript
-        <literal>hello2.tb</literal> that does not print the hello string
-        itself, but executes a tool to compute it.</para>
+        <literal>hello2.tb</literal> in <xref linkend="example.hello2" /> that
+        does not print the hello string itself, but executes a tool to compute
+        it.</para>
 
-        <programlisting>process HELLO is <co xml:id="co.hello2-1" />
+        <para><example xml:id="example.hello2">
+            <title>hello2.tb</title>
+
+            <programlisting>process HELLO is <co xml:id="co.hello2-1" />
   let H : hello, <co xml:id="co.hello2-2" />
       S : str    <co xml:id="co.hello2-3" />
   in
          execute(hello, H?) <co xml:id="co.hello2-4" /> .   <co
-            xml:id="co.hello2-5" />
+                xml:id="co.hello2-5" />
          snd-eval(H, get-text) .   <co xml:id="co.hello2-6" />
          rec-value(H, text(S?)).   <co xml:id="co.hello2-7" />
          printf(S)                 <co xml:id="co.hello2-8" />
@@ -633,65 +642,68 @@ Hello world, my first Tscript!
 tool hello is {command = “hello” } <co xml:id="co.hello2-9" />
 toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
-        <para>Notes:</para>
+            <para>Notes:</para>
 
-        <calloutlist>
-          <callout arearefs="co.hello2-1">
-            <para>Define a process <literal>HELLO</literal>.</para>
-          </callout>
+            <calloutlist>
+              <callout arearefs="co.hello2-1">
+                <para>Define a process <literal>HELLO</literal>.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-2">
-            <para>Use a <literal>let ... in ... endlet</literal> construct to
-            declare local variables. Variable <literal>H</literal> is declared
-            with type <literal>hello</literal>.</para>
-          </callout>
+              <callout arearefs="co.hello2-2">
+                <para>Use a <literal>let ... in ... endlet</literal> construct
+                to declare local variables. Variable <literal>H</literal> is
+                declared with type <literal>hello</literal>.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-3">
-            <para>Variable <literal>S</literal> is declared with type
-            <literal>str</literal>.</para>
-          </callout>
+              <callout arearefs="co.hello2-3">
+                <para>Variable <literal>S</literal> is declared with type
+                <literal>str</literal>.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-4">
-            <para>Execute the <literal>hello</literal> tool (according to the
-            tool definition at <xref linkend="co.hello2-9" />). The resulting
-            tool identifier is assigned to variable <literal>H</literal>.
-            Observe that the name of the tool and the type of
-            <literal>H</literal> are identical.</para>
-          </callout>
+              <callout arearefs="co.hello2-4">
+                <para>Execute the <literal>hello</literal> tool (according to
+                the tool definition at <xref linkend="co.hello2-9" />). The
+                resulting tool identifier is assigned to variable
+                <literal>H</literal>. Observe that the name of the tool and
+                the type of <literal>H</literal> are identical.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-5">
-            <para>Use the sequential composition operator <literal>.</literal>
-            to combine atom actions into a larger process expression.</para>
-          </callout>
+              <callout arearefs="co.hello2-5">
+                <para>Use the sequential composition operator
+                <literal>.</literal> to combine atom actions into a larger
+                process expression.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-6">
-            <para>Send an evaluation request to the tool we have just
-            executed. <literal>H</literal> identifies the tool instance, and
-            <literal>get-text</literal> is the term to be sent to the hello
-            tool.</para>
-          </callout>
+              <callout arearefs="co.hello2-6">
+                <para>Send an evaluation request to the tool we have just
+                executed. <literal>H</literal> identifies the tool instance,
+                and <literal>get-text</literal> is the term to be sent to the
+                hello tool.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-7">
-            <para>In response to the evaluation request, the hello tool
-            returns a value of the form <literal>text("Hello world from my
-            first tool")</literal>. The actual text is extracted by the result
-            variable <literal>S?</literal>.</para>
-          </callout>
+              <callout arearefs="co.hello2-7">
+                <para>In response to the evaluation request, the hello tool
+                returns a value of the form <literal>text("Hello world from my
+                first tool")</literal>. The actual text is extracted by the
+                result variable <literal>S?</literal>.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-8">
-            <para>Print the string value of <literal>S</literal>.</para>
-          </callout>
+              <callout arearefs="co.hello2-8">
+                <para>Print the string value of <literal>S</literal>.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-9">
-            <para>The definition for the hello tool. It contains the name of
-            an executable program to be run when this tool is executed.</para>
-          </callout>
+              <callout arearefs="co.hello2-9">
+                <para>The definition for the hello tool. It contains the name
+                of an executable program to be run when this tool is
+                executed.</para>
+              </callout>
 
-          <callout arearefs="co.hello2-10">
-            <para>The initial ToolBus configuration consisting of just the
-            <literal>HELLO</literal> process.</para>
-          </callout>
-        </calloutlist>
+              <callout arearefs="co.hello2-10">
+                <para>The initial ToolBus configuration consisting of just the
+                <literal>HELLO</literal> process.</para>
+              </callout>
+            </calloutlist>
+          </example></para>
 
         <para>All the Tscript primitives (including the ones that occur in
         these two simple examples) will now be described in more depth.</para>
@@ -2203,27 +2215,9 @@ int main(int argc, char *argv[])
       terms from the ToolBus, and delegates actual processing to the
       appropriate interface function.</para>
 
-      <para>We will use the Tscript <literal>hello2.tb</literal> shown in
-      <xref linkend="example.hello2" /> and describe all the steps needed to
-      write and compile the hello tool.</para>
-
-      <para><example xml:id="example.hello2">
-          <title>hello2.tb</title>
-
-          <para><programlisting>/* hello2.tb -- hello script using a separate hello tool */
-
-process HELLO is
-  let H : hello,               %% H will represent the hello tool
-      S : str                  %% S is a string valued variable
-  in
-      execute(hello, H?) .     %% Execute hello, H gets a tool id as value
-      snd-eval(H, get-text) .  %% Request a text from the hello tool
-      rec-value(H, text(S?)).  %% Receive it, S gets the text as value
-      printf(S)                %% Print it
-  endlet
-
-tool hello is {command = "./hello"}</programlisting></para>
-        </example></para>
+      <para>We will use the Tscript <literal>hello2.tb</literal> shown earlier
+      in <xref linkend="example.hello2" /> and describe all the steps needed
+      to write and compile the hello tool.</para>
 
       <section>
         <title>Step 1: generate tifs</title>
@@ -2382,7 +2376,8 @@ int main(int argc, char *argv[])
     ATBeventloop();                                      <co
                   xml:id="co.hello2.main.4" />
   } else {
-    fprintf(stderr, "Could not connect to the ToolBus, giving up!\n");
+    fprintf(stderr, 
+            "Could not connect to the ToolBus, giving up!\n");
     return -1;
   }
   return 0;
@@ -2442,7 +2437,7 @@ int main(int argc, char *argv[])
 {
   return 
     ATmake(
-     "snd-value(text(\"Hello World, my first ToolBus tool in C!\n\"))"
+     "snd-value(text(\"Hello World, my first tool in C!\n\"))"
     );
 }
 
@@ -2466,11 +2461,12 @@ void rec_terminate(int conn, ATerm msg){  <co xml:id="co.hello2.interface.2" />
           </example></para>
       </section>
     </section>
+  </section>
 
-    <section>
-      <title>Writing tools in Java</title>
+  <section>
+    <title>Writing tools in Java</title>
 
-      <para><!-- {{{ Connecting Java tools
+    <para><!-- {{{ Connecting Java tools
 
 \section{Connecting Java tools}
 
@@ -2641,7 +2637,6 @@ public class Example
 }
 \end{verbatim}
 --></para>
-    </section>
 
     <section>
       <title>Writing tools in other languages</title>
@@ -4266,11 +4261,36 @@ exports
 
     <itemizedlist>
       <listitem>
+        <para>Write the demo sections.</para>
+      </listitem>
+
+      <listitem>
         <para>Write Java section.</para>
       </listitem>
 
       <listitem>
-        <para>Write Tcl/Tk etc section.</para>
+        <para>Write Tcl/Tk etc. section.</para>
+      </listitem>
+
+      <listitem>
+        <para>What do we do with the other adapters?</para>
+      </listitem>
+
+      <listitem>
+        <para>Describe current viewer.</para>
+      </listitem>
+
+      <listitem>
+        <para>Describe console commands.</para>
+      </listitem>
+
+      <listitem>
+        <para>Do we describe the global structure of the Java implementation
+        (or partially refer to online docs)?</para>
+      </listitem>
+
+      <listitem>
+        <para>Describe viewer interface.</para>
       </listitem>
 
       <listitem>
