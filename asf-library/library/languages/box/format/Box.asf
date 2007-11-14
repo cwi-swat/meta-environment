@@ -25,15 +25,12 @@ equations
  
 equations
 
-[] get-hs(_so*1 hs=N _so*2) = N
-[default] get-hs(_so*) = 1
-
-equations
-
-[] get-vs(_so*1 vs=N _so*2) = N
-[default] get-vs(_so*) = 1
-
-equations
-
-[] get-is(_so*1 is=N _so*2) = N
-[default] get-is(_so*) = 2
+[] format(gs = N) = from-box(H hs=0 [ "gs" "=" to-box(N) ])
+[] format(op = H so*) = from-box(H hs=0 [ "op" "=" "H" to-box(format(so*)) ])
+[] format(op = V so*) = from-box(H hs=0 [ "op" "=" "V" to-box(format(so*)) ])
+[] format(op = I so*) = from-box(H hs=0 [ "op" "=" "I" to-box(format(so*)) ])
+[] format(op = HV so*) = from-box(H hs=0 [ "op" "=" "HV" to-box(format(so*)) ])
+[] format(op = HOV so*) = from-box(H hs=0 [ "op" "=" "HOV" to-box(format(so*)) ])
+[] format(op = G go*) = from-box(H hs=0 [ "op" "=" "G" to-box(format(go*)) ])
+[] format(op = A ao so*) = from-box(H hs=0 [ "op" "=" "A" H [to-box(format(ao)) to-box(format(so*)) ] ])
+[] format(op = R ) = from-box(H hs=0 [ "op" "=" "R"  ])
