@@ -1,0 +1,39 @@
+equations
+
+[] start(Box, B) = start(Box, format(B)) when from-box(_B) !:= B
+
+equations
+
+[] format(I so* [ B* ]) = from-box(V [ H [ "I" to-box(format(so*)) "[" ] I so* [ to-boxes(format(B*)) ] "]" ])
+[] format(H so* [ B* ]) = from-box(H [ "H" to-box(format(so*)) "[" H so* [ to-boxes(format(B*)) ] "]" ])
+[] format(HV so* [ B* ]) = from-box(H [ "HV" to-box(format(so*)) "["  H so* [ to-boxes(format(B*)) ] "]" ])
+[] format(V so* [ B* ]) = from-box(V [ H [ "V"  to-box(format(so*)) "[" ] V so* [to-boxes(format(B*)) ] "]" ])
+[] format(HOV so* [ B* ]) = from-box(V [ H [ "HOV" to-box(format(so*)) "[" ] V so* [ to-boxes(format(B*)) ] "]" ])
+[] format(G go* [ B* ]) = from-box(G [ H ["G" to-box(format(go*)) "[" ]  to-boxes(format(B*)) "]" ])
+[] format(A ao so* [ B* ]) = from-box(V [ H ["A" to-box(format(ao)) to-box(format(so*)) "[" ] I [ V so* [ to-boxes(format(B*)) ] ] "]" ])
+[] format(R [ B* ] ) = from-box(H [ "R" "[" to-boxes(format(B*)) "]" ])
+
+equations
+
+[] format(hs = N) = from-box(H hs=0 ["hs" "=" to-box(N) ]) 
+[] format(is = N) = from-box(H hs=0 ["is" "=" to-box(N) ]) 
+[] format(vs = N) = from-box(H hs=0 ["vs" "=" to-box(N) ]) 
+
+equations
+
+[] format((ao*)) = from-box(H hs=0 ["(" H [ SL op=H hs=0 [ to-boxes(ao*) ] ] ")" ])
+ 
+equations
+
+[] get-hs(_so*1 hs=N _so*2) = N
+[default] get-hs(_so*) = 1
+
+equations
+
+[] get-vs(_so*1 vs=N _so*2) = N
+[default] get-vs(_so*) = 1
+
+equations
+
+[] get-is(_so*1 is=N _so*2) = N
+[default] get-is(_so*) = 2

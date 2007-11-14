@@ -1,0 +1,56 @@
+module languages/box/format/Box
+
+imports languages/box/syntax/Box
+
+hiddens
+
+imports basic/Whitespace
+
+context-free start-symbols
+  Box
+
+context-free syntax
+ format(Box) -> Box {traversal(trafo, top-down, break)}
+ format(Box*) -> Box* {traversal(trafo, top-down, break)}
+ format(SpaceOption) -> SpaceOption {traversal(trafo, top-down, break)}
+ format(SpaceOption*) -> SpaceOption* {traversal(trafo, top-down, break)}
+ format(GroupOption) -> GroupOption {traversal(trafo, top-down, break)}
+ format(GroupOption*) -> GroupOption* {traversal(trafo, top-down, break)}
+ format(AlignmentOptions) -> AlignmentOptions {to-box}
+
+context-free syntax
+  get-hs(SpaceOption*) -> NatCon
+  get-vs(SpaceOption*) -> NatCon
+  get-is(SpaceOption*) -> NatCon
+
+context-free syntax
+  to-box(Box) -> Box {to-box}
+  from-box(Box) -> Box {from-box}
+  from-boxes(Box*) -> Box* {from-box}
+  to-boxes(Box*) -> Box* {to-box}
+  to-box(SpaceOption*) -> Box* {to-box}
+  to-box(NatCon) -> Box {to-box}
+  to-box(SpaceOption) -> Box {to-box}
+  from-box(Box) -> SpaceOption {from-box}
+  to-box(GroupOption) -> Box {to-box}
+  from-box(Box) -> GroupOption {from-box}
+  to-box(GroupOption*) -> Box {to-box}
+  to-box(AlignmentOptions) -> Box {to-box}
+  from-box(Box) -> AlignmentOptions {from-box}
+  to-boxes({AlignmentOption ","}*) -> Box* {to-box}
+ 
+ 
+variables
+
+ "_B"[0-9]* -> Box {wild}
+ "B"[0-9]* -> Box {strict}
+ "B*"[0-9]* -> Box* {strict}
+ "_B*"[0-9]* -> Box* {wild}
+ "so*"[0-9]* -> SpaceOption* {strict}
+ "_so*"[0-9]* -> SpaceOption* {wild}
+ "go*"[0-9]* -> GroupOption* {strict}
+ "_go*"[0-9]* -> GroupOption* {wild}
+ "ao"[0-9]* -> AlignmentOptions {strict}
+ "N"[0-9]* -> NatCon {strict}
+ "ao*"[0-9]* -> {AlignmentOption ","}* {strict}
+ "_ao*"[0-9]* -> {AlignmentOption ","}* {wild}
