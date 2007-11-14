@@ -21,19 +21,25 @@ aliases
   List[[AtomicFeature]] -> Keys
 
 context-free syntax
-  af2id(AtomicFeature) -> Identifier        {complete} 
-  ac2cc(ArgumentChar)  -> CharacterConstant {complete} 
-  af2og(AtomicFeature) -> Identifier        {complete} 
-  af2os(AtomicFeature) -> Identifier        {complete}
-  af2cid(AtomicFeature) -> Identifier       {complete}
-
-context-free syntax
   generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)    -> FunctionDefinition                                       
   generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)               -> Declaration*                                             
   generateFunctionStatements(Argument*, Statement*, ParameterEnv)     -> Statement*           {traversal(accu, bottom-up, break)} 
   generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateGlobals(ExternalDeclaration+, ParameterEnv)                 -> ExternalDeclaration+                                     
+  generateGlobals(Modulename, ExternalDeclaration+, ParameterEnv)     -> ExternalDeclaration+                                     
   addIncludeSection(ExternalDeclaration+)                             -> ExternalDeclaration+                                     
+  generateArguments(Argument*, StringConstant, ParameterEnv)          -> StringConstant       {traversal(accu, bottom-up, break)} 
+  generateArguments(AtomicFeature, StringConstant, ParameterEnv)      -> StringConstant       {traversal(accu, bottom-up, break)} 
+  generateArguments(FeatureName, StringConstant, ParameterEnv)        -> StringConstant       {traversal(accu, bottom-up, break)} 
+
+context-free syntax
+  af2id(AtomicFeature)  -> Identifier        {complete} 
+  ac2cc(ArgumentChar)   -> CharacterConstant {complete} 
+  af2og(AtomicFeature)  -> Identifier        {complete} 
+  af2os(AtomicFeature)  -> Identifier        {complete} 
+  af2cid(AtomicFeature) -> Identifier        {complete} 
+
+context-free syntax
+  idcon2stringconstant(IdCon) -> StringConstant {complete} 
 
 variables
   "ArgumentChar" [0-9]*      -> ArgumentChar          
@@ -44,19 +50,27 @@ variables
   "C-Program" [0-9]*         -> ExternalDeclaration+  
   "Declaration" [0-9]*       -> Declaration           
   "Declaration*" [0-9]*      -> Declaration*          
-  "FeatureModule" [0-9]*     -> FeatureModule  
-  "Identifier" [0-9]*        -> Identifier       
+  "FeatureDiagram" [0-9]*    -> FeatureDiagram        
+  "FeatureModule" [0-9]*     -> FeatureModule       
+  "IdCon" [0-9]*             -> IdCon  
+  "Identifier" [0-9]*        -> Identifier            
   "ImportSection*" [0-9]*    -> ImportSection*        
   "Keys" [0-9]*              -> Keys                  
   "Modulename" [0-9]*        -> Modulename            
   "ParameterEnv" [0-9]*      -> ParameterEnv          
   "Section*" [0-9]*          -> Section*              
   "Statement*" [0-9]*        -> Statement*            
+  "StringConstant" [0-9]*    -> StringConstant        
   "TypeEnv" [0-9]*           -> TypeEnv               
   "ValueEnv" [0-9]*          -> ValueEnv              
 
 lexical variables
-  "head" [0-9]*    -> [a-z]  
-  "caphead" [0-9]* -> [A-Z]         
-  "tail" [0-9]*    -> [a-zA-Z0-9\_]*  
-  "argchar" [0-9]* -> [a-zA-Z0-9]     
+  "head" [0-9]*     -> [a-z]                  
+  "caphead" [0-9]*  -> [A-Z]                  
+  "tail" [0-9]*     -> [a-zA-Z0-9\_]*         
+  "argchar" [0-9]*  -> [a-zA-Z0-9]            
+  "idhead" [0-9]*   -> [A-Za-z]               
+  "idmiddle" [0-9]* -> [A-Za-z\-0-9]          
+  "idtail" [0-9]*   -> [A-Za-z\-0-9]*         
+  "char*" [0-9]*    -> StringChar*
+  "char" [0-9]      -> StringChar

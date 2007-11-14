@@ -4,7 +4,8 @@ equations
    ValueEnv := construct-value-environment(FeatureModule),
    ParameterEnv := construct-parameter-environment(FeatureModule),
    C-Program1 := generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv),
-   C-Program2 := generateGlobals(C-Program1, ParameterEnv),
+   module Modulename ImportSection* FeatureDiagram := FeatureModule,
+   C-Program2 := generateGlobals(Modulename, C-Program1, ParameterEnv),
    C-Program3 := addIncludeSection(C-Program2)
    ===
    generate(FeatureModule) = C-Program3
@@ -31,9 +32,11 @@ void handleOptions(int argc, char **argv) {
 
 equations
 
-[] generateGlobals(C-Program1, ParameterEnv) = 
+[] StringConstant := idcon2stringconstant(IdCon)
+   ===
+   generateGlobals(IdCon, C-Program1, ParameterEnv) = 
 
-static const char programname[] = "Programname";
+static const char programname[] = StringConstant;
 static const char myArguments[] = "";
 static const char myVersion[] = VERSION;
 C-Program1
@@ -120,3 +123,13 @@ equations
 [] bytes(byte(caphead)) := capitalize(bytes(byte(head)))
    ===
    af2cid(atomicfeature(head tail)) = identifier(caphead tail)
+
+
+equations
+
+[] idcon2stringconstant(idcon(idhead)) = stringconstant(\" stringchar(idhead) \")
+
+[] stringconstant(\" stringchar(idhead) char* \") := idcon2stringconstant(idcon(idhead idtail))
+   ===
+   idcon2stringconstant(idcon(idhead idmiddle idtail)) = stringconstant(\" stringchar(idhead) stringchar(idmiddle) char* \")
+
