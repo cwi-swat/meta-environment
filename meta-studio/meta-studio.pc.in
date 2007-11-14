@@ -3,7 +3,7 @@ prefix=@prefix@
 Name: meta-studio
 Version: 1.2
 Description:
-Requires: aterm-java,config-support,toolbus,toolbus-java-adapter,svg-support
+Requires: aterm-java,config-support,toolbus-java-adapter,svg-support
 Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 JarFile= meta-studio.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/idw-gpl-1.5.0.jar
