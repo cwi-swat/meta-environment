@@ -204,7 +204,8 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	}
 	
 	public void setAbsoluteDelay(ATermList delay){
-		// TODO Implement.
+		// TODO Implement as soon as we know how to do it properly.
+		throw new UnsupportedOperationException("Absolute delays are currently unsupported.");
 	} 
 	
 	public void setTimeout(ATerm timeout){
@@ -233,7 +234,8 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	}
 	
 	public void setAbsoluteTimeout(ATermList timeout){
-		// TODO Implement.
+		// TODO Implement as soon as we know how to do it properly.
+		throw new UnsupportedOperationException("Absolute timeouts are currently unsupported.");
 	} 
 	
 	public ToolBus getToolBus(){

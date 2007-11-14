@@ -466,6 +466,7 @@ public class ToolBus{
 	
 	public void dumpUnhandledMessages(){
 		if(workHasArrived == true || workHasArrived == false){ // Volatile read; triggers some cache coherency actions, so we see a reasonably up to date version of the data we're trying to dump.
+			boolean anythingUnhandled = false;
 			ProcessInstanceIterator processInstanceIterator = new ProcessInstanceIterator(processes);
 			try{
 				while(processInstanceIterator.hasNext()){
@@ -474,6 +475,8 @@ public class ToolBus{
 					List<StateElement> unhandledMessage = pi.getCurrentState().getUnhandledMessages();
 					
 					if((unhandledNotes.size() + unhandledMessage.size()) > 0){
+						anythingUnhandled = true;
+						
 						System.err.println(pi.getProcessName()+"("+pi.getProcessId()+"):");
 						
 						try{
@@ -491,6 +494,10 @@ public class ToolBus{
 				}
 			}catch(RuntimeException rex){
 				// This will probably never happen, but it's necessary none the less.
+			}
+			
+			if(!anythingUnhandled){
+				System.err.println("No unhandled messages.");
 			}
 		}
 	}
