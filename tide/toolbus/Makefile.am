@@ -16,8 +16,5 @@ INCLUDES = \
 	-I${srcdir} \
 	-I${TIDE_SUPPORT}/share/tide-support
 
-tifs: tide.tb 
-	${TOOLBUS}/bin/toolbus ${INCLUDES} -output tide.tifs -gentifs $<
-
 control.tb: control.tb.src Makefile
 	sed 's@__DATA__@${datadir}@' < $< > $@
