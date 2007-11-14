@@ -4,8 +4,7 @@ equations
    ValueEnv := construct-value-environment(FeatureModule),
    ParameterEnv := construct-parameter-environment(FeatureModule),
    C-Program1 := generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv),
-   module Modulename ImportSection* FeatureDiagram := FeatureModule,
-   C-Program2 := generateGlobals(Modulename, C-Program1, ParameterEnv),
+   C-Program2 := generateGlobals(FeatureModule, C-Program1, ParameterEnv),
    C-Program3 := addIncludeSection(C-Program2)
    ===
    generate(FeatureModule) = C-Program3
@@ -32,12 +31,15 @@ void handleOptions(int argc, char **argv) {
 
 equations
 
-[] StringConstant := idcon2stringconstant(IdCon)
+[] module Modulename ImportSection* Section*1 arguments Argument* Section*2 := FeatureModule,
+   IdCon := Modulename,
+   StringConstant := idcon2stringconstant(IdCon),
+   StringConstant2 := generateArguments(Argument*, "", ParameterEnv)
    ===
-   generateGlobals(IdCon, C-Program1, ParameterEnv) = 
+   generateGlobals(FeatureModule, C-Program1, ParameterEnv) = 
 
 static const char programname[] = StringConstant;
-static const char myArguments[] = "";
+static const char myArguments[] = StringConstant2;
 static const char myVersion[] = VERSION;
 C-Program1
 
@@ -94,6 +96,13 @@ case CharacterConstant:
 [] lookup(ParameterEnv, AtomicFeature) == not-in-table
    ===
    generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) = Statement*
+
+
+equations
+[] argumentchar(argchar) := lookup(ParameterEnv, AtomicFeature)
+   ===
+   generateArguments(AtomicFeature, stringconstant(\" char* \"), ParameterEnv) = stringconstant(\" char* stringchar(argchar) \")
+
 
 
 equations

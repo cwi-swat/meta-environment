@@ -25,7 +25,7 @@ context-free syntax
   generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)               -> Declaration*                                             
   generateFunctionStatements(Argument*, Statement*, ParameterEnv)     -> Statement*           {traversal(accu, bottom-up, break)} 
   generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateGlobals(Modulename, ExternalDeclaration+, ParameterEnv)     -> ExternalDeclaration+                                     
+  generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv)  -> ExternalDeclaration+                                     
   addIncludeSection(ExternalDeclaration+)                             -> ExternalDeclaration+                                     
   generateArguments(Argument*, StringConstant, ParameterEnv)          -> StringConstant       {traversal(accu, bottom-up, break)} 
   generateArguments(AtomicFeature, StringConstant, ParameterEnv)      -> StringConstant       {traversal(accu, bottom-up, break)} 
