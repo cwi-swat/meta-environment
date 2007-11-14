@@ -4,7 +4,7 @@ Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: error-gui
 Version: 1.1.2
 Description:
-Requires: aterm-java,error-support,meta-studio,toolbus,toolbus-java-adapter
+Requires: aterm-java,error-support,meta-studio,toolbus-java-adapter
 JarFile=error-gui.jar
 LocalJars=lib/jlfgr-1_0.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/jlfgr-1_0.jar
