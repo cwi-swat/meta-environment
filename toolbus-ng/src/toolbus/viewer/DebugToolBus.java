@@ -93,8 +93,7 @@ public class DebugToolBus extends ToolBus{
 		tbConnectionHandler.setName("ToolBus connection handler");
 		tbConnectionHandler.start();
 		
-		//System.err.println("ToolBus execution starts ...\n");
-		System.err.println("The ToolBus server allocated port ("+portNumber+")");
+		System.out.println("The ToolBus server allocated port ("+portNumber+")");
 		ProcessInstance P = null;
 		ProcessInstanceIterator processesIterator = new ProcessInstanceIterator(processes);
 		running = true;

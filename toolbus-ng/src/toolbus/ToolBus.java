@@ -445,7 +445,7 @@ public class ToolBus{
 		long heapMemoryUsage = mmxb.getHeapMemoryUsage().getUsed();
 		long nonHeapMemoryUsage = mmxb.getNonHeapMemoryUsage().getUsed();
 		
-		System.out.println("Memory usage: heap = " + (heapMemoryUsage / 1024) + "KB, non-heap = " + (nonHeapMemoryUsage / 1024) + "KB");
+		System.err.println("Memory usage: heap = " + (heapMemoryUsage / 1024) + "KB, non-heap = " + (nonHeapMemoryUsage / 1024) + "KB");
 		
 		// Thread stuff
 		ThreadMXBean tmxb = ManagementFactory.getThreadMXBean();
@@ -459,7 +459,7 @@ public class ToolBus{
 				long userTime = tmxb.getThreadUserTime(threadIds[i]);
 				long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
 				
-				if((userTime + systemTime) > 0) System.out.println(threadName + " : user time = " + (userTime / 1000000) + ", system time = " + (systemTime / 1000000));
+				if((userTime + systemTime) > 0) System.err.println(threadName + " : user time = " + (userTime / 1000000) + ", system time = " + (systemTime / 1000000));
 			}
 		}
 	}
@@ -508,8 +508,6 @@ public class ToolBus{
 			return;
 		}
 		
-		//dumpPerformanceStats();
-		
 		// Initialize and start the connection handler.
 		try{
 			toolBusConnectionHandler.initialize();
@@ -523,10 +521,7 @@ public class ToolBus{
 		tbConnectionHandler.setName("ToolBus connection handler");
 		tbConnectionHandler.start();
 		
-		//System.err.println("ToolBus execution starts ...\n");
-		System.err.println("The ToolBus server allocated port ("+portNumber+")");
-		//int passes = 0;
-		//int noWorkPasses = 0;
+		System.out.println("The ToolBus server allocated port ("+portNumber+")");
 		ProcessInstance P = null;
 		ProcessInstanceIterator processesIterator = new ProcessInstanceIterator(processes);
 		running = true;
@@ -570,13 +565,6 @@ public class ToolBus{
 								workHasArrived = true;
 							}else{
 								processLock.wait();
-								
-								/*long ct = System.currentTimeMillis();
-								processLock.wait(15000);
-								if(System.currentTimeMillis() >= ct + 15000){
-									showStatus();
-									running = false;
-								}*/
 							}
 						}catch(InterruptedException irex){
 							// Just ignore this, it's not harmfull.
