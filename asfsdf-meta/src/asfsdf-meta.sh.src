@@ -58,4 +58,4 @@ exec java $STARTUP_CLASS \
   __TBSCRIPTS__ \
   -S__PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
   `__CONFIG_MANAGER__/bin/configmanager -s -i __PREFIX__/share/asfsdf-meta/standard.asfsdf.actions` \
-  $* 2>&1 | __CONSOLE_GRABBER__/bin/console-grabber
+  $* | __CONSOLE_GRABBER__/bin/console-grabber
