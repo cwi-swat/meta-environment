@@ -29,7 +29,7 @@ context-free syntax
   from-box(Box) -> SpaceOption {from-box}
   to-box(GroupOption) -> Box {to-box}
   from-box(Box) -> GroupOption {from-box}
-  to-box(GroupOption*) -> Box {to-box}
+  to-box(GroupOption*) -> Box* {to-box}
   to-box(AlignmentOptions) -> Box {to-box}
   from-box(Box) -> AlignmentOptions {from-box}
   to-boxes({AlignmentOption ","}*) -> Box* {to-box}

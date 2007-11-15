@@ -9,7 +9,7 @@ equations
 [] format(HV so* [ B* ]) = from-box(H [ "HV" to-box(format(so*)) "["  H so* [ to-boxes(format(B*)) ] "]" ])
 [] format(V so* [ B* ]) = from-box(V [ H [ "V"  to-box(format(so*)) "[" ] V so* [to-boxes(format(B*)) ] "]" ])
 [] format(HOV so* [ B* ]) = from-box(V [ H [ "HOV" to-box(format(so*)) "[" ] V so* [ to-boxes(format(B*)) ] "]" ])
-[] format(G go* [ B* ]) = from-box(G [ H ["G" to-box(format(go*)) "[" ]  to-boxes(format(B*)) "]" ])
+[] format(G go* [ B* ]) = from-box(H [ H ["G" H [ to-box(format(go*)) ]  "[" ]  to-boxes(format(B*)) "]" ])
 [] format(A ao so* [ B* ]) = from-box(V [ H ["A" to-box(format(ao)) to-box(format(so*)) "[" ] I [ V so* [ to-boxes(format(B*)) ] ] "]" ])
 [] format(R [ B* ] ) = from-box(H [ "R" "[" to-boxes(format(B*)) "]" ])
 
@@ -26,11 +26,11 @@ equations
 equations
 
 [] format(gs = N) = from-box(H hs=0 [ "gs" "=" to-box(N) ])
-[] format(op = H so*) = from-box(H hs=0 [ "op" "=" "H" to-box(format(so*)) ])
-[] format(op = V so*) = from-box(H hs=0 [ "op" "=" "V" to-box(format(so*)) ])
-[] format(op = I so*) = from-box(H hs=0 [ "op" "=" "I" to-box(format(so*)) ])
-[] format(op = HV so*) = from-box(H hs=0 [ "op" "=" "HV" to-box(format(so*)) ])
-[] format(op = HOV so*) = from-box(H hs=0 [ "op" "=" "HOV" to-box(format(so*)) ])
-[] format(op = G go*) = from-box(H hs=0 [ "op" "=" "G" to-box(format(go*)) ])
-[] format(op = A ao so*) = from-box(H hs=0 [ "op" "=" "A" H [to-box(format(ao)) to-box(format(so*)) ] ])
+[] format(op = H so*) = from-box(H hs=0 [ "op" "=" H ["H" to-box(format(so*)) ]])
+[] format(op = V so*) = from-box(H hs=0 [ "op" "=" H ["V" to-box(format(so*)) ]])
+[] format(op = I so*) = from-box(H hs=0 [ "op" "=" H ["I" to-box(format(so*)) ]])
+[] format(op = HV so*) = from-box(H hs=0 [ "op" "=" H ["HV" to-box(format(so*)) ]])
+[] format(op = HOV so*) = from-box(H hs=0 [ "op" "=" H ["HOV" to-box(format(so*)) ] ])
+[] format(op = G go*) = from-box(H hs=0 [ "op" "=" H ["G" to-box(format(go*)) ]])
+[] format(op = A ao so*) = from-box(H hs=0 [ "op" "=" H ["A" H [to-box(format(ao)) to-box(format(so*)) ] ]])
 [] format(op = R ) = from-box(H hs=0 [ "op" "=" "R"  ])
