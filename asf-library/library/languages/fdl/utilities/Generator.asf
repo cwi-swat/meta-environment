@@ -4,7 +4,7 @@ equations
    ValueEnv := construct-value-environment(FeatureModule),
    ParameterEnv := construct-parameter-environment(FeatureModule),
    C-Program1 := generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv),
-   C-Program2 := generateGlobals(FeatureModule, C-Program1, ParameterEnv),
+   C-Program2 := generateGlobals(FeatureModule, C-Program1, ParameterEnv, TypeEnv),
    C-Program3 := addIncludeSection(C-Program2)
    ===
    generate(FeatureModule) = C-Program3
@@ -34,9 +34,9 @@ equations
 [] module Modulename ImportSection* Section*1 arguments Argument* Section*2 := FeatureModule,
    IdCon := Modulename,
    StringConstant := idcon2stringconstant(IdCon),
-   StringConstant2 := generateArguments(Argument*, "", ParameterEnv)
+   StringConstant2 := generateArguments(Argument*, "", ParameterEnv, TypeEnv)
    ===
-   generateGlobals(FeatureModule, C-Program1, ParameterEnv) = 
+   generateGlobals(FeatureModule, C-Program1, ParameterEnv, TypeEnv) = 
 
 static const char programname[] = StringConstant;
 static const char myArguments[] = StringConstant2;
@@ -99,13 +99,21 @@ case CharacterConstant:
 
 
 equations
-[] argumentchar(argchar) := lookup(ParameterEnv, AtomicFeature)
+[] lookup(TypeEnv, AtomicFeature) == boolean,
+   argumentchar(argchar) := lookup(ParameterEnv, AtomicFeature)
    ===
-   generateArguments(AtomicFeature, stringconstant(\" char* \"), ParameterEnv) = stringconstant(\" char* stringchar(argchar) \")
+   generateArguments(AtomicFeature, stringconstant(\" char* \"), ParameterEnv, TypeEnv) = stringconstant(\" char* stringchar(argchar) \")
 
-[] argumentchar(argchar) := lookup(ParameterEnv, CompositeFeature)
+[default-generateArguments] 
+  argumentchar(argchar) := lookup(ParameterEnv, AtomicFeature),
+  stringconstant(\" char*2 \") := ":"
+  ===
+  generateArguments(AtomicFeature, stringconstant(\" char*1 \"), ParameterEnv, TypeEnv) = stringconstant(\" char*1 stringchar(argchar) char*2 \")
+
+[] argumentchar(argchar) := lookup(ParameterEnv, CompositeFeature),
+   stringconstant(\" char*2 \") := ":"
    ===
-   generateArguments(CompositeFeature, stringconstant(\" char* \"), ParameterEnv) = stringconstant(\" char* stringchar(argchar) \")
+   generateArguments(CompositeFeature, stringconstant(\" char*1 \"), ParameterEnv, TypeEnv) = stringconstant(\" char*1 stringchar(argchar) char*2 \")
 
 
 equations

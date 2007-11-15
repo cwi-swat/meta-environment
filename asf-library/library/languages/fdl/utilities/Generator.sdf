@@ -21,14 +21,14 @@ aliases
   List[[AtomicFeature]] -> Keys
 
 context-free syntax
-  generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)    -> FunctionDefinition                                       
-  generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)               -> Declaration*                                             
-  generateFunctionStatements(Argument*, Statement*, ParameterEnv)     -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv)  -> ExternalDeclaration+                                     
-  addIncludeSection(ExternalDeclaration+)                             -> ExternalDeclaration+                                     
-  generateArguments(Argument*, StringConstant, ParameterEnv)          -> StringConstant       {traversal(accu, bottom-up, break)} 
-  generateArguments(FeatureName, StringConstant, ParameterEnv)        -> StringConstant       {traversal(accu, bottom-up, break)} 
+  generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)            -> FunctionDefinition                                       
+  generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)                       -> Declaration*                                             
+  generateFunctionStatements(Argument*, Statement*, ParameterEnv)             -> Statement*           {traversal(accu, bottom-up, break)} 
+  generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv)         -> Statement*           {traversal(accu, bottom-up, break)} 
+  generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv, TypeEnv) -> ExternalDeclaration+                                     
+  addIncludeSection(ExternalDeclaration+)                                     -> ExternalDeclaration+                                     
+  generateArguments(Argument*, StringConstant, ParameterEnv, TypeEnv)         -> StringConstant       {traversal(accu, bottom-up, break)} 
+  generateArguments(FeatureName, StringConstant, ParameterEnv, TypeEnv)       -> StringConstant       {traversal(accu, bottom-up, break)}
 
 context-free syntax
   af2id(AtomicFeature)  -> Identifier        {complete} 
@@ -46,13 +46,13 @@ variables
   "AtomicFeature" [0-9]*     -> AtomicFeature         
   "AtomicFeature*" [0-9]*    -> {AtomicFeature ","}*  
   "CharacterConstant" [0-9]* -> CharacterConstant     
-  "CompositeFeature" [0-9]*  -> CompositeFeature
+  "CompositeFeature" [0-9]*  -> CompositeFeature      
   "C-Program" [0-9]*         -> ExternalDeclaration+  
   "Declaration" [0-9]*       -> Declaration           
   "Declaration*" [0-9]*      -> Declaration*          
   "FeatureDiagram" [0-9]*    -> FeatureDiagram        
-  "FeatureModule" [0-9]*     -> FeatureModule       
-  "IdCon" [0-9]*             -> IdCon  
+  "FeatureModule" [0-9]*     -> FeatureModule         
+  "IdCon" [0-9]*             -> IdCon                 
   "Identifier" [0-9]*        -> Identifier            
   "ImportSection*" [0-9]*    -> ImportSection*        
   "Keys" [0-9]*              -> Keys                  
@@ -65,12 +65,12 @@ variables
   "ValueEnv" [0-9]*          -> ValueEnv              
 
 lexical variables
-  "head" [0-9]*     -> [a-z]                  
-  "caphead" [0-9]*  -> [A-Z]                  
-  "tail" [0-9]*     -> [a-zA-Z0-9\_]*         
-  "argchar" [0-9]*  -> [a-zA-Z0-9]            
-  "idhead" [0-9]*   -> [A-Za-z]               
-  "idmiddle" [0-9]* -> [A-Za-z\-0-9]          
-  "idtail" [0-9]*   -> [A-Za-z\-0-9]*         
-  "char*" [0-9]*    -> StringChar*
-  "char" [0-9]      -> StringChar
+  "head" [0-9]*     -> [a-z]           
+  "caphead" [0-9]*  -> [A-Z]           
+  "tail" [0-9]*     -> [a-zA-Z0-9\_]*  
+  "argchar" [0-9]*  -> [a-zA-Z0-9]     
+  "idhead" [0-9]*   -> [A-Za-z]        
+  "idmiddle" [0-9]* -> [A-Za-z\-0-9]   
+  "idtail" [0-9]*   -> [A-Za-z\-0-9]*  
+  "char*" [0-9]*    -> StringChar*     
+  "char" [0-9]      -> StringChar      
