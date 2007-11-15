@@ -53,7 +53,7 @@ done
 
 export CLASSPATH="__EXTERNAL_JARS__:$CLASSPATH"
 
-java $STARTUP_CLASS \
+exec java $STARTUP_CLASS \
   -DMODULENAME=${MODULENAME} \
   __TBSCRIPTS__ \
   -S__PREFIX__/share/asfsdf-meta/start-meta-studio.tb \
