@@ -103,6 +103,9 @@ equations
    ===
    generateArguments(AtomicFeature, stringconstant(\" char* \"), ParameterEnv) = stringconstant(\" char* stringchar(argchar) \")
 
+[] argumentchar(argchar) := lookup(ParameterEnv, CompositeFeature)
+   ===
+   generateArguments(CompositeFeature, stringconstant(\" char* \"), ParameterEnv) = stringconstant(\" char* stringchar(argchar) \")
 
 
 equations

@@ -28,7 +28,6 @@ context-free syntax
   generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv)  -> ExternalDeclaration+                                     
   addIncludeSection(ExternalDeclaration+)                             -> ExternalDeclaration+                                     
   generateArguments(Argument*, StringConstant, ParameterEnv)          -> StringConstant       {traversal(accu, bottom-up, break)} 
-  generateArguments(AtomicFeature, StringConstant, ParameterEnv)      -> StringConstant       {traversal(accu, bottom-up, break)} 
   generateArguments(FeatureName, StringConstant, ParameterEnv)        -> StringConstant       {traversal(accu, bottom-up, break)} 
 
 context-free syntax
@@ -47,6 +46,7 @@ variables
   "AtomicFeature" [0-9]*     -> AtomicFeature         
   "AtomicFeature*" [0-9]*    -> {AtomicFeature ","}*  
   "CharacterConstant" [0-9]* -> CharacterConstant     
+  "CompositeFeature" [0-9]*  -> CompositeFeature
   "C-Program" [0-9]*         -> ExternalDeclaration+  
   "Declaration" [0-9]*       -> Declaration           
   "Declaration*" [0-9]*      -> Declaration*          

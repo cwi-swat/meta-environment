@@ -1,11 +1,11 @@
 module languages/fdl/utilities/ParameterEnvironment
 
 imports languages/fdl/syntax/Modular-FDL
-imports containers/Table[AtomicFeature ArgumentChar]
+imports containers/Table[FeatureName ArgumentChar]
 
 exports
 aliases
-  Table[[AtomicFeature,ArgumentChar]] -> ParameterEnv
+  Table[[FeatureName,ArgumentChar]] -> ParameterEnv
 
 sorts ParameterEnv
 
@@ -16,7 +16,7 @@ context-free syntax
 
 hiddens
 variables
-  "AtomicFeature" [0-9]*  -> AtomicFeature   
+  "AtomicFeature" [0-9]*  -> FeatureName   
   "FeatureDiagram" [0-9]* -> FeatureDiagram  
   "ImportSection*" [0-9]* -> ImportSection*  
   "Modulename" [0-9]*     -> Modulename      
