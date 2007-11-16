@@ -38,6 +38,9 @@ context-free syntax
   af2cid(AtomicFeature) -> Identifier        {complete} 
 
 context-free syntax
+  cf2handleoptions(CompositeFeature) -> Identifier {complete}
+
+context-free syntax
   idcon2stringconstant(IdCon) -> StringConstant {complete} 
 
 variables

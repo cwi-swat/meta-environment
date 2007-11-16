@@ -94,12 +94,14 @@ case CharacterConstant:
   break;
 
 [] ArgumentChar := lookup(ParameterEnv, CompositeFeature),
-   CharacterConstant := ac2cc(ArgumentChar)
+   CharacterConstant := ac2cc(ArgumentChar),
+   Identifier := cf2handleoptions(CompositeFeature)
    ===
    generateFunctionStatements(CompositeFeature, Statement*, ParameterEnv) =
 
 Statement*
 case CharacterConstant:
+  Identifier(optarg);
   break;
 
 [] lookup(ParameterEnv, FeatureName) == not-in-table
@@ -151,6 +153,11 @@ equations
 [] bytes(byte(caphead)) := capitalize(bytes(byte(head)))
    ===
    af2cid(atomicfeature(head tail)) = identifier(caphead tail)
+
+
+equations
+
+[] cf2handleoptions(compositefeature(caphead tail)) = identifier(handle caphead tail Options)
 
 
 equations
