@@ -93,10 +93,18 @@ case CharacterConstant:
   Identifier1(!Identifier2());
   break;
 
-[] lookup(ParameterEnv, AtomicFeature) == not-in-table
+[] ArgumentChar := lookup(ParameterEnv, CompositeFeature),
+   CharacterConstant := ac2cc(ArgumentChar)
    ===
-   generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) = Statement*
+   generateFunctionStatements(CompositeFeature, Statement*, ParameterEnv) =
 
+Statement*
+case CharacterConstant:
+  break;
+
+[] lookup(ParameterEnv, FeatureName) == not-in-table
+   ===
+   generateFunctionStatements(FeatureName, Statement*, ParameterEnv) = Statement*
 
 equations
 [] lookup(TypeEnv, AtomicFeature) == boolean,

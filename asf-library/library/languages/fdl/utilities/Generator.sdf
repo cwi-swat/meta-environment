@@ -24,7 +24,7 @@ context-free syntax
   generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)            -> FunctionDefinition                                       
   generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)                       -> Declaration*                                             
   generateFunctionStatements(Argument*, Statement*, ParameterEnv)             -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv)         -> Statement*           {traversal(accu, bottom-up, break)} 
+  generateFunctionStatements(FeatureName, Statement*, ParameterEnv)           -> Statement*           {traversal(accu, bottom-up, break)} 
   generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv, TypeEnv) -> ExternalDeclaration+                                     
   addIncludeSection(ExternalDeclaration+)                                     -> ExternalDeclaration+                                     
   generateArguments(Argument*, StringConstant, ParameterEnv, TypeEnv)         -> StringConstant       {traversal(accu, bottom-up, break)} 
@@ -51,7 +51,8 @@ variables
   "Declaration" [0-9]*       -> Declaration           
   "Declaration*" [0-9]*      -> Declaration*          
   "FeatureDiagram" [0-9]*    -> FeatureDiagram        
-  "FeatureModule" [0-9]*     -> FeatureModule         
+  "FeatureModule" [0-9]*     -> FeatureModule  
+  "FeatureName" [0-9]*       -> FeatureName       
   "IdCon" [0-9]*             -> IdCon                 
   "Identifier" [0-9]*        -> Identifier            
   "ImportSection*" [0-9]*    -> ImportSection*        
