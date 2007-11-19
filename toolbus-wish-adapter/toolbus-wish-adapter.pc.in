@@ -4,7 +4,7 @@ Maintainers=lankamp@cwi.nl
 Name: toolbus-wish-adapter
 Version: 1.0
 Description:
-Requires: aterm-java, toolbus-ng
+Requires: aterm-java,toolbus-ng
 JarFile=toolbus-wish-adapter.jar
 Jars=${prefix}/share/${JarFile}
 Packages=toolbus.adapter.wish
