@@ -36,6 +36,15 @@ public class Main{
 						toolbus.getToolInstanceManager().showStatus();
 					}else if(line.equals("dump toolbus state")){
 						toolbus.showStatus();
+					}else if(line.equals("help")) {
+						System.err.println("\"dump unhandled messages\"");
+						System.err.println("\"dump performance stats\"");
+						System.err.println("\"dump tools status\"");
+						System.err.println("\"dump toolbus state\"");
+						System.err.println("\"help\"");
+					}else if(line.equals("quit")) {
+						System.err.println("Quitting");
+						System.exit(0);
 					}else{
 						System.err.println("Unknown ToolBus command: '"+line+"'");
 					}

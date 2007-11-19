@@ -1,4 +1,7 @@
 
 
+Mon Nov 19 14:52:45 EST 2007 <jurgenv@cwi.nl>
+ * src/toolbus/Main.java: added "help" message to the shell commands.
+
 Mon Sep 24 10:02:51 CEST 2007 <kooiker@cwi.nl>
  * toolbus-ng.pc.in: fix LocalJars
