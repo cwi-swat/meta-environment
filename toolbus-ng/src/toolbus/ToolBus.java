@@ -400,7 +400,7 @@ public class ToolBus{
 	public void shutdown(ATerm msg){
 		shuttingDown = true;
 		//dumpPerformanceStats(); // Temp
-		System.out.println("Shutting down ToolBus: " + msg);
+		System.err.println("Shutting down ToolBus: " + msg);
 		
 		Iterator<ProcessInstance> processIterator = new ProcessInstanceIterator(processes);
 		while(processIterator.hasNext()){

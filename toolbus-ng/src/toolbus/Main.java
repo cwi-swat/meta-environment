@@ -36,17 +36,16 @@ public class Main{
 						toolbus.getToolInstanceManager().showStatus();
 					}else if(line.equals("dump toolbus state")){
 						toolbus.showStatus();
-					}else if(line.equals("help")) {
-						System.err.println("\"dump unhandled messages\"");
-						System.err.println("\"dump performance stats\"");
-						System.err.println("\"dump tools status\"");
-						System.err.println("\"dump toolbus state\"");
-						System.err.println("\"help\"");
-					}else if(line.equals("quit")) {
-						System.err.println("Quitting");
-						System.exit(0);
+					}else if(line.equals("shutdown")){
+						toolbus.shutdown(toolbus.getTBTermFactory().makeList());
+					}else if(line.equals("help")){
+						System.err.println("dump unhandled messages: Prints all (currently) unhandled messages and enqueued notes.");
+						System.err.println("dump performance stats: Prints some performance statistics related to the execution of the ToolBus.");
+						System.err.println("dump tools status: Prints a listing of currently connected tools with their corresponding state.");
+						System.err.println("dump toolbus state: Dumps all available information about the current state of the process logic to the command line.");
+						System.err.println("shutdown: Initiates the forcefully termination of the ToolBus.");
 					}else{
-						System.err.println("Unknown ToolBus command: '"+line+"'");
+						System.err.println("Unknown ToolBus command: '"+line+"'.\nEnter 'help' for a list of available ToolBus commands.");
 					}
 				}
 			}catch(IOException ioex){

@@ -1,4 +1,6 @@
-
+Wen Nov 21 11:14:11 EST 2007 <lankamp@cwi.nl>
+ * src/toolbus/Main.java: Added more info to the help message, renamed 'quit' to 'shutdown' and replaced the System.exit(0) by a call to toolbus.shutdown(ATerm), so all tools will be notified that the ToolBus will be terminating.
+ And oh yes, I updated the changelog as well ;).
 
 Mon Nov 19 14:52:45 EST 2007 <jurgenv@cwi.nl>
  * src/toolbus/Main.java: added "help" message to the shell commands.
