@@ -299,7 +299,7 @@
           <literal>zero</literal>.</para>
 
           <important>
-            <para>Identifier alwas start with a lowercase letter.</para>
+            <para>Identifier always start with a lowercase letter.</para>
           </important>
         </listitem>
 
@@ -2466,198 +2466,209 @@ void rec_terminate(int conn, ATerm msg){  <co xml:id="co.hello2.interface.2" />
   <section>
     <title>Writing tools in Java</title>
 
-    <para><!-- {{{ Connecting Java tools
+    <para>Now we will show how ToolBus tools can be implemented in Java. The
+    overall organization is shown in <xref
+    linkend="figure.java-tool-organization" />. The actual communication
+    between ToolBus and tool is taken care of by an instance of the class
+    <literal>ToolBridge</literal> that takes care of low-level communication
+    details. The ToolBridge is used by <literal>AbstractTool</literal>, an
+    abstract class that defines the possible interactions between ToolBus and
+    tool. The actual tool, in the figure <literal>MyTool</literal>, extends
+    <literal>AbstractTool</literal>, gives implementations for its abstract
+    methods, and implements tool-specific behaviour.</para>
 
-\section{Connecting Java tools}
+    <para>Compared to writing a tool in C, using Java is simpler because there
+    is no need for generating a tool interface using a tif file.<footnote>
+        <para>This is due to the use of Java reflection in the class
+        ToolBridge. In older versions, a generation step was also needed for
+        Java tools.</para>
+      </footnote></para>
 
-This section shows how to write a simple Java application and which
-steps need to be taken to connect it to the ToolBus.
+    <para><figure xml:id="figure.java-tool-organization">
+        <title>Global organization of a tool implemented in Java</title>
 
-The example tool is a simple Java Application which pops up a GUI with
-a button that can be pressed by the user. Further, it contains a method
-{\tt msg} which can be called by the ToolBus. This method prints the
-string that was passed and returns a count indicating the message number.
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="java-tool-organization.png" scale="60"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </figure>Before showing the Java implementation of the hello tool, we
+    first explain the AbstractTool class.</para>
 
-In order to get from the ToolBus script {\tt example.tb} to the generated
-{\tt .java} files, we follow steps similar to the procedure to connect
-a {\tt C} program to the ToolBus.
+    <section>
+      <title>The AbstractTool class</title>
 
-\begin{itemize}
-  \item Generate Tool Interface file {\tt example.tifs}
-    \begin{verbatim}
-	~/tmp > toolbus -gentifs example.tb
-	Tool interfaces written to `example.tifs'
-	\end{verbatim}
+      <para><programlisting>public abstract class AbstractTool implements IOperations {
 
-  \item Generate Java code for tool {\tt example}
-    \begin{verbatim}
-	~/tmp > tifstojava -tool example -tifs example.tifs 
-	generating file ExampleTif.java
-	generating file ExampleTool.java
-	generating file ExampleBridge.java
-	\end{verbatim}
-\end{itemize}
+public AbstractTool(){ ... } <co xml:id="co.AbstractTool.1" />
 
+public void connect(String[] args) throws Exception{ ... } <co
+            xml:id="co.AbstractTool.2" />
 
-As you can see, three files are generated for our Example tool:
-\begin{itemize}
-  \item {\tt ExampleTif.java}
-    the Java interface describing our Tool's functionality.
-  \item {\tt ExampleTool.java}
-    an \emph{abstract} implementation of {\tt ExampleTif.java}
-    containing just enough code to check the input/output signature
-    of our tool and handle incoming messages by dispatching them
-    to the correct method.
-  \item {\tt ExampleBridge.java}
-    a \emph{concrete} class extending {\tt ExampleTool.java}
-    which can be used as a bridge between your Tool class and
-    the ToolBus.
-\end{itemize}
+public ToolBridge getToolBridge(){ ... } <co xml:id="co.AbstractTool.3" />
 
-Remember that Java only allows extention of a single class, but
-\emph{does} allow your class to implement multiple interfaces. Using
-the generated {\tt Bridge} allows your class to extend another
-class, but still save you the arduous task of extending the generic
-\emph{AbstractTool} class for each new tool. Have a look at the source
-code of {\tt example.tb} and {\tt Example.java} below.
+public PureFactory getFactory(){ ... } <co xml:id="co.AbstractTool.4" />
 
-\noindent
-{\tt example.tb} looks like this:
- {{{ example.tb
+public void sendEvent(ATerm aTerm){ ... }  <co xml:id="co.AbstractTool.5" />
 
-\begin{verbatim}
+public void disconnect(ATerm aTerm){ ... } <co xml:id="co.AbstractTool.6" />
 
-tool example is { command="java-adapter -class Example" }
+public abstract void receiveAckEvent(ATerm aTerm); <co
+            xml:id="co.AbstractTool.7" />
 
-process EXAMPLE is
-let
-  T : example,
-  Value : int,
-  Name  : str
-in
-  execute(example, T?) .
-  (
-    snd-eval(T, msg("Hello World!")) delay(sec(3)) .
-    rec-value(T, count(Value?)) .
-    printf("Hello number %d\n", Value)
-  ) * delta 
-  ||
-  (
-    rec-event(T, button(Name?)) .
-    printf("Button pressed: %s\n", Name) .
-    snd-ack-event(T, button(Name))
-  ) * delta
-endlet
+public abstract void receiveTerminate(ATerm aTerm); <co
+            xml:id="co.AbstractTool.8" />
+} </programlisting>Notes:</para>
 
-toolbus(EXAMPLE)
+      <calloutlist>
+        <callout arearefs="co.AbstractTool.1">
+          <para>The default constructor of AbstractTool.</para>
+        </callout>
 
-\end{verbatim}
+        <callout arearefs="co.AbstractTool.2">
+          <para>Connect to the ToolBus. The argument <literal>args</literal>
+          contains the required information for running a tool (name, id and
+          additionally the host and port of the ToolBus, depending on how this
+          tool is connected to the ToolBus). An exception is thrown when
+          something goes wrong during parsing of the arguments or while
+          establishing the connection.</para>
+        </callout>
 
- }}}
-\noindent
-{\tt Example.java} looks like this:
- {{{  Example.java
+        <callout arearefs="co.AbstractTool.3">
+          <para>Returns a reference to the tool bridge that this tool instance
+          is using.</para>
+        </callout>
 
-\begin{verbatim}
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
+        <callout arearefs="co.AbstractTool.4">
+          <para>Returns a reference to the ATerm factory that is being
+          used.</para>
+        </callout>
 
-import aterm.*;
+        <callout arearefs="co.AbstractTool.5">
+          <para>Send an event to the ToolBus.</para>
+        </callout>
 
-public class Example
-  extends Frame
-  implements ExampleTif, ActionListener
+        <callout arearefs="co.AbstractTool.6">
+          <para>Send a disconnect request to the ToolBus. The argument
+          <literal>aTerm</literal> gives additional information about the
+          request.</para>
+        </callout>
+
+        <callout arearefs="co.AbstractTool.7">
+          <para>Receive an acknowledgement (in response to a previous event
+          generated by this tool instance by way of
+          <literal>sendEvent</literal>). The argument <literal>aTerm</literal>
+          gives further details about the acknowledgement.</para>
+        </callout>
+
+        <callout arearefs="co.AbstractTool.8">
+          <para>Receive a request from the ToolBus to terminate the execution
+          of this tool instance.</para>
+        </callout>
+      </calloutlist>
+    </section>
+
+    <section>
+      <title>The hello script</title>
+
+      <para>The hello script from <xref linkend="example.hello2" /> can be
+      used as is, except that the definition of the hello tool has to be
+      changed to reflect the Java implementation:</para>
+
+      <para><programlisting>tool hello is { kind = "javaNG" class = "toolbus.tool.java.hello.HelloTool"}</programlisting></para>
+    </section>
+
+    <section>
+      <title>The hello example in Java</title>
+
+      <para><example>
+          <title>Hello tool implemented in Java</title>
+
+          <para><programlisting>package toolbus.tool.java.hello;
+
+import toolbus.adapter.AbstractTool;
+import aterm.ATerm;
+import aterm.ATermFactory;
+
+public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
 {
-  private ATermFactory factory;
-  private ExampleBridge bridge;
-  private Button button;
-  private int count;
-
-  public static final void main(String[] args)
-    throws IOException
-  {
-    Example example = new Example(args);
-  }
-
-  public Example(String[] args)
-    throws IOException
-  {
-    factory = new aterm.pure.PureFactory();
-
-    // Build the user interface: just a single button
-    button = new Button("Button");
-    button.addActionListener(this);
-    add(button);
-    pack();
-    show();
-
-    // Create the bridge that will forward incoming messages
-    // to method calls in this Example object
-    bridge = new ExampleBridge(factory, this);
-
-    // Initialize vital parameters, like the ToolBus TCP/IP port, tool name,
-    // etc. that are passed to us using the command line arguments.
-    bridge.init(args);
-    
-    // Actually establish the connection with the ToolBus
-    bridge.connect();
-
-    // Start the tool event loop
-    bridge.run();
-  }
-
-  public void actionPerformed(ActionEvent event)
-  {
-    if (event.getSource() == button) {
-      // When the user presses the button, we send an event to the ToolBus
-      bridge.postEvent(factory.make("button(<str>)", button.getLabel()));
+  public HelloTool(String[] args){ <co xml:id="co.hello-java.2" />
+    super(); 
+    try {
+      connect(args); 
+    } catch(Exception ex){
+      throw new RuntimeException(ex);
     }
   }
 
-  public ATerm msg(String message)
-  {
-    // Print the incoming message
-    System.out.println("Example tool received msg: " + message);
-
-    // Increase the counter and return the current value to the ToolBus
-    return factory.make("snd-value(count(<int>))", new Integer(count++));
+  protected ATerm getText(){ <co xml:id="co.hello-java.3" />
+    ATermFactory factory = getFactory();
+    return factory.make("text(&lt;str&gt;)", 
+                             "Hello world in Java!\n");
   }
 
-  public void recAckEvent(ATerm event)
-  {
-    // This simple tool ignores event acknowledgements
+  public void receiveAckEvent(ATerm aTerm){
+  // Left blank intentionally. 
   }
 
-  public void recTerminate(ATerm arg)
-  {
-    // Just exit when the ToolBus terminates
-    System.exit(0);
+  public void receiveTerminate(ATerm msg){
+     System.out.print("rec-terminate received: " + msg);
+ }
+  
+  public static void main(String[] args) {
+    new HelloTool(args);
   }
-}
-\end{verbatim}
---></para>
+}</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.hello-java.1">
+                <para>The class <literal>HelloTool</literal> extends
+                <literal>AbstractTool</literal> and provides an implementation
+                for the hello tool.</para>
+              </callout>
+
+              <callout arearefs="co.hello-java.2">
+                <para>The constructor for <literal>HelloTool</literal> first
+                calls its super class and then attempt to make a connection.
+                The arguments of the constructor are passed to the
+                <literal>connect</literal> call.</para>
+              </callout>
+
+              <callout arearefs="co.hello-java.3">
+                <para>The evaluation request <literal>snd-eval(H,
+                get-text)</literal> in the Tscript is implemented by the
+                method <literal>getText</literal>. It constructs the required
+                ATerm that <literal>text("Hello world in Java!\n")</literal>
+                and returns it as result. This result will passed to the
+                ToolBus and will be accepted by the atom <literal>rec-value(H,
+                text(S?))</literal> in the Tscript. Note that in this example
+                <literal>H</literal> is the tool identifier of the hello
+                tool.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Writing tools in other languages</title>
 
     <section>
-      <title>Writing tools in other languages</title>
+      <title>Tcl/TK</title>
 
-      <section>
-        <title>Tcl/TK</title>
+      <para>TBD</para>
+    </section>
 
-        <para>TBD</para>
-      </section>
+    <section>
+      <title>Python</title>
 
-      <section>
-        <title>Python</title>
+      <para>A Python adapter is only available for older versions of the
+      ToolBus. It is currently not supported.</para>
+    </section>
 
-        <para>TBD</para>
-      </section>
+    <section>
+      <title>Perl</title>
 
-      <section>
-        <title>Perl</title>
-
-        <para>TBD</para>
-      </section>
+      <para>A Perl adapter is only available for older versions of the
+      ToolBus. It is currently not supported.</para>
     </section>
   </section>
 
