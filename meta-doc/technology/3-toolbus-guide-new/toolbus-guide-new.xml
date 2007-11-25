@@ -89,6 +89,49 @@
     </section>
 
     <section>
+      <title>ToolBus requirements</title>
+
+      <para>Given the motivation for the ToolBus we can briefly summarize the
+      requirements that the ToolBus should satisfy:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Provide a flexible interconnection architecture for software
+          components that are not only written in different languages and
+          executing on different hardware and software platforms, but are also
+          running in a distributed fashion on a system of networked computers
+          and devices.</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide good control over the communication between
+          components.</para>
+        </listitem>
+
+        <listitem>
+          <para>The description of communication should be based on existing
+          concurrency theory and provide the option for formal verification of
+          the cooperation between software components.</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide relatively simple application descriptions that can be
+          understood by most programmers.</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide a uniform data exchange mechanism between
+          heterogeneous components.</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide multi-lingual support, at least C, Java, ASF+SDF,
+          Tcl/Tk, Perl, Python and Ruby should be supported.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
       <title>The ToolBus architecture</title>
 
       <para>The global architecture of the ToolBus is shown in <xref
@@ -246,14 +289,14 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.tscripts">
     <title>Tscripts</title>
 
     <para>Tscripts describe how the tools in an application cooperate. They
     allow the definition of a collection of concurrent processes that can
     communicate with eachother and with the tools in the application.</para>
 
-    <section>
+    <section xml:id="section.terms">
       <title>Terms</title>
 
       <para>Tscripts make heavy use of <emphasis>terms</emphasis>, simple
@@ -320,7 +363,7 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="section.matching">
       <title>Matching</title>
 
       <para>Term matching is used for several purposes in the ToolBus:</para>
@@ -420,7 +463,7 @@
         </figure></para>
     </section>
 
-    <section>
+    <section xml:id="section.types">
       <title>Types</title>
 
       <para>The ToolBus uses a type system that is a compromise between the
@@ -527,10 +570,10 @@
       </itemizedlist>
     </section>
 
-    <section>
-      <title>Tscripts</title>
+    <section xml:id="section.tscript-in-detail">
+      <title>Tscripts in detail</title>
 
-      <section>
+      <section xml:id="section.overall-structure-tscripts">
         <title>Overall structure</title>
 
         <para>A Tscript can define the following ingredients:</para>
@@ -571,7 +614,7 @@
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.tscripts-first-example">
         <title>A first example</title>
 
         <para>Beforer delving into the details of Tscripts, it is good to have
@@ -709,7 +752,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         these two simple examples) will now be described in more depth.</para>
       </section>
 
-      <section>
+      <section xml:id="section.process-primitives">
         <title>Process primitives</title>
 
         <para>During execution, the ToolBus consists of a parallel composition
@@ -839,7 +882,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.local-variables">
         <title>Local variables</title>
 
         <para>As we have seen local variables play a key role in the execution
@@ -856,7 +899,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.primitive-actions">
         <title>Primitive actions</title>
 
         <itemizedlist>
@@ -891,7 +934,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.messages">
         <title>Messages: synchronous communication primitives</title>
 
         <para>Synchronous communication resembles an ordinary phone call: it
@@ -936,7 +979,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         versa</emphasis>.</para>
       </section>
 
-      <section>
+      <section xml:id="section.notes">
         <title>Notes: asynchronous broadcasting primitives</title>
 
         <para>Asynchronous communication resembles conventional e-mail: it
@@ -981,7 +1024,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.named-processes">
         <title>Using named processes</title>
 
         <para>A process definition associates a name
@@ -1010,7 +1053,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.tool-primitives">
         <title>Tool primitives</title>
 
         <para>There two possible scenarios for a ToolBus tool. In scenario 1,
@@ -1143,12 +1186,10 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.timing-primitives">
         <title>Timing primitives</title>
 
-        <para><warning>
-            <para>Timing primitives not yet enabled in ToolBusNG.</para>
-          </warning>Time can play an important role in applications, be it as
+        <para>Time can play an important role in applications, be it as
         ingredient in a protocol that prescribes certain time constraints, be
         it as watchdog that certain operations are carried out in time. The
         general approach in Tscripts is that a delay or timeout may be
@@ -1199,7 +1240,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
       </section>
 
-      <section>
+      <section xml:id="section.expressions">
         <title>Expressions</title>
 
         <para>Terms can occur in Tscripts on various locations. In the
@@ -1291,31 +1332,395 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.tscript-examples">
     <title>Examples of Tscripts</title>
 
-    <para></para>
+    <para>We are now ready to have a look at some larger examples of
+    Tscripts.</para>
 
-    <section>
+    <section xml:id="section.example-calculator">
       <title>Calculator</title>
 
-      <para></para>
+      <para>The calculator example illustrates how a calculator tool that can
+      compute simple arithmetic expressions is shared by cooperating
+      processes. The overall architecture is shown in <xref
+      linkend="figure.clock-architecture" />. The application consists of the
+      following 5 processes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>CALC</literal>: the calculator
+          <emphasis>process</emphasis> that regulates the access to the
+          calculator <emphasis>tool</emphasis> <literal>calc</literal>, see
+          <xref linkend="example.CALC" />.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>BATCH</literal>: a batch process that uses the tool
+          <literal>batch</literal> to read an expression from file, calculate
+          its value and write the result back to file, see <xref
+          linkend="example.BATCH" />.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>UI</literal>: a user-interface process that uses the
+          tool ui to allow a user to enter an expression and get its value
+          back, see <xref linkend="example.UI" />. Observe that the processes
+          <literal>BATCH</literal> and <literal>UI</literal> are both
+          competing for the shared resource calculator (implemented by the
+          process <literal>CALC</literal> and the tool
+          <literal>calc</literal>).</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>LOG</literal>: a logging process that maintains a log
+          of all calculations that have been performed by the application, see
+          <xref linkend="example.LOG" />.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>CLOCK</literal>: a clock process that uses the tool
+          <literal>clock</literal> to provide the current time, see <xref
+          linkend="example.CLOCK" />.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para xml:id="figure.calc-gui"><figure
+          xml:id="figure.clock-architecture">
+          <title>Architecture of the clock application</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="clock-architecture.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure><example xml:id="example.CALC">
+          <title>Process <literal>CALC</literal> and tool
+          <literal>calc</literal></title>
+
+          <para><programlisting>process CALC is
+    let Tid : calc, E : str, V : term
+    in
+         execute(calc, Tid?). <co xml:id="co.calc.1" />
+          (<co xml:id="co.calc.2" />
+              rec-msg(compute, E?) . <co xml:id="co.calc.3" />
+              snd-eval(Tid, expr(E)) . rec-value(Tid, val(V?)) . <co
+                xml:id="co.calc.4" />
+               snd-msg(compute, E, V) . snd-note(compute(E, V))  <co
+                xml:id="co.calc.5" />
+           )* delta <co xml:id="co.calc.6" />
+    endlet
+
+tool calc is { command = “calc”}</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.calc.1">
+                <para>Execute the <literal>calc</literal> tool. The tool
+                identifier is assigned to the variable <literal>Tid</literal>,
+                that is of type <literal>calc</literal>.</para>
+              </callout>
+
+              <callout arearefs="co.calc.2">
+                <para>Begin of endless loop.</para>
+              </callout>
+
+              <callout arearefs="co.calc.3">
+                <para>Receive a compute message.</para>
+              </callout>
+
+              <callout arearefs="co.calc.4">
+                <para>Send an evaluation request to the
+                <literal>calc</literal> tool and receive its value
+                back.</para>
+              </callout>
+
+              <callout arearefs="co.calc.5">
+                <para>Send a reply to the original compute request. By
+                convention, the original message is included in the reply.
+                Also send a note regarding this (expression,result) pair for
+                the sake of logging.</para>
+              </callout>
+
+              <callout arearefs="co.calc.6">
+                <para>End of the endless loop.</para>
+              </callout>
+            </calloutlist></para>
+        </example><example xml:id="example.BATCH">
+          <title>Process <literal>BATCH</literal> and tool
+          <literal>batch</literal></title>
+
+          <para><programlisting>process BATCH is
+    let Tid : batch, E : str, V : int
+    in
+         execute(batch, Tid?).
+         (
+             snd-eval(Tid, fromFile) . rec-value(Tid, expr(E?)) . <co
+                xml:id="co.batch.1" />
+             snd-msg(compute, E) . rec-msg(compute, E, V?) .      <co
+                xml:id="co.batch.2" />
+             snd-do(Tid, toFile(E, V))  <co xml:id="co.batch.3" />
+          ) * delta
+    endlet
+
+tool batch is {command = “batch”}</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.batch.1">
+                <para>Send an evaluation request to the
+                <literal>batch</literal> tool and receive an expression
+                back.</para>
+              </callout>
+
+              <callout arearefs="co.batch.2">
+                <para>Communicate with the <literal>CALC</literal> process
+                (and thus with the <literal>calc</literal> tool) to get the
+                expression evaluated.</para>
+              </callout>
+
+              <callout arearefs="co.batch.3">
+                <para>Send the result back to the <literal>batch</literal>
+                tool.</para>
+              </callout>
+            </calloutlist></para>
+        </example>The user-interface is shown in <xref
+      linkend="figure.calc-gui" /> and behaves as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>When the user presses <guimenuitem>Calc</guimenuitem>, a
+          dialog window appears to enter an expression. The result is shown in
+          a separate window. See <xref linkend="figure.calc-dialog" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pressing <guimenuitem>showLog</guimenuitem> displays all
+          calculations sofar.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pressing <guimenuitem>showTime</guimenuitem> displays the
+          current time in a separate window.</para>
+        </listitem>
+
+        <listitem>
+          <para>Pressing <guimenuitem>Quit</guimenuitem> end the
+          application.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><figure>
+          <title>The calc GUI</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="calc-gui.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure><example xml:id="example.UI">
+          <title>Process <literal>UI</literal> and tool
+          <literal>ui</literal></title>
+
+          <para><programlisting>process UI is
+    let Tid : ui
+    in
+            execute(ui, Tid?) .
+            ( CALC-BUTTON(Tid) + LOG-BUTTON(Tid))* delta <co xml:id="co.UI.1" />
+             ||
+             TIME-BUTTON(Tid) * delta <co xml:id="co.UI.2" />
+             ||
+             QUIT-BUTTON(Tid) <co xml:id="co.UI.3" />
+    endlet
+
+tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.UI.1">
+                <para><literal>CALC-BUTTON</literal> and
+                <literal>LOG-BUTTON</literal> are mutually exclusive and they
+                can be activated indefinitely.</para>
+              </callout>
+
+              <callout arearefs="co.UI.2">
+                <para><literal>TIME-BUTTON</literal> is independent and can
+                also be repeated indefinitely.</para>
+              </callout>
+
+              <callout arearefs="co.UI.3">
+                <para><literal>QUIT-BUTTON</literal> is also independent but
+                be activated only once (for obvious reasons).</para>
+              </callout>
+            </calloutlist>Also observe the extensive use of named process
+          expressions like <literal>CALC-BUTTON</literal>, etc. to give an
+          high-level overview of the <literal>UI</literal> process. See <xref
+          linkend="example.CALC-BUTTON" />, <xref
+          linkend="example.LOG-BUTTON" />, <xref
+          linkend="example.TIME-BUTTON" />, and <xref
+          linkend="example.QUIT-BUTTON" /> for their definitions.</para>
+        </example><example xml:id="example.CALC-BUTTON">
+          <title>Process <literal>CALC-BUTTON</literal></title>
+
+          <para><programlisting>process CALC-BUTTON(Tid : ui) is
+    let N : int, E : str, V : term
+    in
+            rec-event(Tid, N?, button(calc)) . <co xml:id="co.CALC-BUTTON.1" />
+            snd-eval(Tid, get-expr-dialog) .   <co xml:id="co.CALC-BUTTON.2" />
+            (  rec-value(Tid, cancel)          <co xml:id="co.CALC-BUTTON.3" />
+            +  rec-value(Tid, expr(E?)) .      <co xml:id="co.CALC-BUTTON.4" />
+                snd-msg(compute, E) .
+                rec-msg(compute, E, V?) .
+                 snd-do(Tid, display-value(V)) <co xml:id="co.CALC-BUTTON.5" />
+            ) . snd-ack-event(Tid, N)          <co xml:id="co.CALC-BUTTON.6" />
+    endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.CALC-BUTTON.1">
+                <para>The <guimenuitem>Calc</guimenuitem> button is pressed;
+                the <literal>ui</literal> tool generates an event.</para>
+              </callout>
+
+              <callout arearefs="co.CALC-BUTTON.2">
+                <para>Ask the <literal>ui</literal> tool for an expression,
+                see <xref linkend="figure.calc-dialog" /> for examples.</para>
+              </callout>
+
+              <callout arearefs="co.CALC-BUTTON.3">
+                <para>The user cancels the dialog; no further actions are
+                needed.</para>
+              </callout>
+
+              <callout arearefs="co.CALC-BUTTON.4">
+                <para>The user has entered an expression. Communicate with the
+                CALC process to compute a value.</para>
+              </callout>
+
+              <callout arearefs="co.CALC-BUTTON.5">
+                <para>Ask the <literal>ui</literal> tool to display the
+                value.</para>
+              </callout>
+
+              <callout arearefs="co.CALC-BUTTON.6">
+                <para>Acknowledge the event to the tool.</para>
+              </callout>
+            </calloutlist></para>
+        </example><figure xml:id="figure.calc-dialog">
+          <title>Dialog resulting from <literal>CALC-BUTTON</literal></title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="calc-dialog.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure><example xml:id="example.LOG-BUTTON">
+          <title>Process <literal>LOG-BUTTON</literal></title>
+
+          <para><programlisting>process LOG-BUTTON(Tid : ui) is
+    let N : int, L : term
+    in
+            rec-event(Tid, N?, button(showLog)) .
+            snd-msg(showLog) .
+            rec-msg(showLog, L?) .
+            snd-do(Tid, display-log(L)) .
+            snd-ack-event(Tid, N)
+    endlet</programlisting></para>
+        </example><example xml:id="example.TIME-BUTTON">
+          <title>Process <literal>TIME-BUTTON</literal></title>
+
+          <para><programlisting>process TIME-BUTTON(Tid : ui) is
+    let N : int, T : str
+    in     rec-event(Tid, N?, button(showTime)) .
+            snd-msg(showTime) .
+            rec-msg(showTime, T?) .
+            snd-do(Tid, display-time(T)) .
+            snd-ack-event(Tid, N)
+    endlet</programlisting></para>
+        </example><example xml:id="example.QUIT-BUTTON">
+          <title>Process <literal>QUIT-BUTTON</literal></title>
+
+          <para><programlisting>process QUIT-BUTTON(Tid : ui) is
+        rec-event(Tid, button(quit)) .
+        shutdown("End of calc demo")</programlisting></para>
+        </example><example xml:id="example.LOG">
+          <title>Process <literal>LOG</literal> and tool
+          <literal>log</literal></title>
+
+          <para><programlisting>process LOG is
+    let Tid : log, E : str, V : term, L : term
+    in    subscribe(compute(&lt;str&gt;, &lt;term&gt;)) .
+            execute(log, Tid?).
+                (       rec-note(compute(E?, V?)) . <co xml:id="co.LOG.1" />
+                        snd-do(Tid, writeLog(E, V))
+                +
+                        rec-msg(showLog) .          <co xml:id="co.LOG.2" />
+                        snd-eval(Tid, readLog) .
+                        rec-value(Tid, history(L?)) .
+                        snd-msg(showLog, history(L))
+                ) * delta
+    endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.LOG.1">
+                <para>Receive a note about a computation that has taken place
+                and log it.</para>
+              </callout>
+
+              <callout arearefs="co.LOG.2">
+                <para>Receive a message to show the value of the current log.
+                Retrieve it from the <literal>log</literal> tool and return
+                the result.</para>
+              </callout>
+            </calloutlist></para>
+
+          <para>An alternnative way to describe the LOG process is shown in
+          <xref linkend="example.LOG1" />. Instead of running a separate log
+          tool, the process LOG1 maintains the log in a local process variable
+          TheLog. See <xref linkend="section.built-in-functions" /> for a
+          description of the function <literal>join</literal> that is used
+          this example.</para>
+        </example><example xml:id="example.LOG1">
+          <title>Process <literal>LOG1</literal>: maintaining the log inside
+          the ToolBus</title>
+
+          <para><programlisting>process LOG1 is
+    let TheLog : list, E : str, V : term
+    in      subscribe(compute(&lt;str&gt;, &lt;term&gt;)) .
+            TheLog := [] .
+                (       rec-note(compute(E?, V?)) .
+                        TheLog := join(TheLog, [[E, V]])
+                 +
+                        rec-msg(showLog) .
+                        snd-msg(showLog, TheLog)
+                ) * delta
+    endlet</programlisting></para>
+        </example><example xml:id="example.CLOCK">
+          <title>Process <literal>CLOCK</literal> and tool
+          <literal>clock</literal></title>
+
+          <para><programlisting>process CLOCK is
+    let Tid : clock, T : str
+    in
+            execute(clock, Tid?).
+             (     rec-msg(showTime) .
+                    snd-eval(Tid, readTime) .
+                    rec-value(Tid, time(T?)) .
+                    snd-msg(showTime, T)
+              ) * delta
+    endlet</programlisting></para>
+        </example>The comple ToolBus configurations that describes the start
+      of the calculator demo is shown in <xref
+      linkend="example.calculator-toolbus-configuration" />. It starts the
+      mentioned processes in parallel and from that moment on user-interaction
+      and the activities of the BATCH process will drive the
+      execution.<example xml:id="example.calculator-toolbus-configuration">
+          <title>ToolBus configuration for calculator demo</title>
+
+          <para><programlisting>toolbus (CALC, BATCH, UI, LOG, CLOCK)</programlisting></para>
+        </example></para>
     </section>
 
-    <section>
-      <title>Wave</title>
-
-      <para></para>
-    </section>
-
-    <section>
+    <section xml:id="section.example-auction">
       <title>Auction</title>
+
+      <para></para>
+    </section>
+
+    <section xml:id="section.example-wave">
+      <title>Wave</title>
 
       <para></para>
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.executing-toolbus-and-tools">
     <title>Executing Toolbus and tools</title>
 
     <para>The ToolBus interpreter (<command>toolbus</command>) and all tools
@@ -1324,7 +1729,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
     program arguments and the way to execute <command>toolbus</command> and
     tools.</para>
 
-    <section>
+    <section xml:id="section.common-arguments">
       <title>Common arguments</title>
 
       <para>ToolBus and tools have the following optional arguments in
@@ -1362,7 +1767,7 @@ export TB_VERBOSE</programlisting></para>
       machine.</para>
     </section>
 
-    <section>
+    <section xml:id="section.toolbus-arguments">
       <title>ToolBus arguments</title>
 
       <para>The <replaceable>script_name</replaceable> (see below) given as
@@ -1394,7 +1799,7 @@ export TB_VERBOSE</programlisting></para>
         </listitem>
       </itemizedlist>
 
-      <para>Other arguments specific for the {\tt toolbus} command are:</para>
+      <para>Other arguments specific for the ToolBus command are:</para>
 
       <warning>
         <para>The following arguments will probably be supported differently
@@ -1462,7 +1867,7 @@ export TB_VERBOSE</programlisting></para>
       the tool interfaces file <filename>hello.tifs</filename>.</para>
     </section>
 
-    <section>
+    <section xml:id="section.tool-arguments">
       <title>Tool arguments</title>
 
       <para>Arguments specific for tools are:</para>
@@ -1529,12 +1934,12 @@ export TB_VERBOSE</programlisting></para>
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.toolbus-tools">
     <title>ToolBus tools</title>
 
     <para></para>
 
-    <section>
+    <section xml:id="section.global-structure-tool">
       <title>The global structure of a ToolBus tool</title>
 
       <para><figure xml:id="figure-tool-organization">
@@ -1639,7 +2044,7 @@ export TB_VERBOSE</programlisting></para>
       in Figure~\ref{fig:hello.c}.</para>
     </section>
 
-    <section>
+    <section xml:id="section.tool-adapters">
       <title>Adapters for tools and languages</title>
 
       <figure xml:id="figure.organization-tool-adapter">
@@ -1777,7 +2182,7 @@ export TB_VERBOSE</programlisting></para>
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.C-tools">
     <title>Writing ToolBus tools in C</title>
 
     <para>Although ToolBus tools can be implemented in many languages
@@ -1814,7 +2219,7 @@ export TB_VERBOSE</programlisting></para>
       </listitem>
     </itemizedlist>
 
-    <section>
+    <section xml:id="section.atb-tool.h">
       <title>The include file <literal>atb-tool.h</literal></title>
 
       <para>Each tool needs to include the file <literal>atb-tool.h</literal>
@@ -1837,7 +2242,7 @@ export TB_VERBOSE</programlisting></para>
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="section.libATB.h">
       <title>The tool library <literal>libATB.a</literal></title>
 
       <para>When compiling tools, the library <literal>libATB.a</literal> must
@@ -1880,7 +2285,7 @@ export TB_VERBOSE</programlisting></para>
       <para>In the following section, we will describe these functions.</para>
     </section>
 
-    <section>
+    <section xml:id="section.toolbus-API">
       <title>The ToolBus API</title>
 
       <para>During the initialization of each tool, some preparations have to
@@ -1914,7 +2319,7 @@ export TB_VERBOSE</programlisting></para>
       possible for a tool to both respond to ToolBus requests and
       <emphasis>asynchronously</emphasis> send terms to the ToolBus.</para>
 
-      <section>
+      <section xml:id="section.ATBinit">
         <title><literal>ATBinit</literal></title>
 
         <para>The initialization of the ToolBus API is achieved
@@ -1940,7 +2345,7 @@ export TB_VERBOSE</programlisting></para>
         run-time system is set to indicate which error.</para>
       </section>
 
-      <section>
+      <section xml:id="section.ATBconnect">
         <title><literal>ATBconnect</literal></title>
 
         <para>A tool can be connected to the ToolBus using <replaceable>term
@@ -1981,7 +2386,7 @@ export TB_VERBOSE</programlisting></para>
         eralier using <literal>ATBconnect</literal>.</para>
       </section>
 
-      <section>
+      <section xml:id="section.ATBeventloop">
         <title>ATBeventloop</title>
 
         <para>Many tools first establish a number of term ports and then enter
@@ -2007,7 +2412,7 @@ int main(int argc, char *argv[])
 }</programlisting></para>
       </section>
 
-      <section>
+      <section xml:id="section.ATBwrite-read-Term">
         <title><literal>ATBwriteTerm</literal> and
         <literal>ATBreadTerm</literal></title>
 
@@ -2022,7 +2427,7 @@ int main(int argc, char *argv[])
         follows:<programlisting>ATerm ATBreadTerm(int <replaceable>conn</replaceable>).</programlisting></para>
       </section>
 
-      <section>
+      <section xml:id="section.advanced-control-flow">
         <title>Primitives for advanved control flow</title>
 
         <para>Tool programming amounts, in essence, to event driven
@@ -2068,7 +2473,7 @@ int main(int argc, char *argv[])
         descriptor in the set.</para>
       </section>
 
-      <section>
+      <section xml:id="section.control-flow-patterns">
         <title>Control flow patterns</title>
 
         <para>Given, the control flow primitives in the previous section, we
@@ -2106,7 +2511,7 @@ int main(int argc, char *argv[])
       </section>
     </section>
 
-    <section>
+    <section xml:id="section.compiling-C-tools">
       <title>Compiling ToolBus tools written in C</title>
 
       <para>When compiling a tool written in C the following questions should
@@ -2184,7 +2589,7 @@ int main(int argc, char *argv[])
       than in a command that has to be repeated over and over again.</para>
     </section>
 
-    <section>
+    <section xml:id="section.automatic-generation-C-tool-interfaces">
       <title>Automatic generation of C tool interfaces</title>
 
       <para>As already explained in <xref
@@ -2463,8 +2868,8 @@ void rec_terminate(int conn, ATerm msg){  <co xml:id="co.hello2.interface.2" />
     </section>
   </section>
 
-  <section>
-    <title>Writing tools in Java</title>
+  <section xml:id="section.Java-tools">
+    <title>Writing ToolBus tools in Java</title>
 
     <para>Now we will show how ToolBus tools can be implemented in Java. The
     overall organization is shown in <xref
@@ -2495,8 +2900,8 @@ void rec_terminate(int conn, ATerm msg){  <co xml:id="co.hello2.interface.2" />
       </figure>Before showing the Java implementation of the hello tool, we
     first explain the AbstractTool class.</para>
 
-    <section>
-      <title>The AbstractTool class</title>
+    <section xml:id="section.AbstractTool">
+      <title>The <literal>AbstractTool</literal> class</title>
 
       <para><programlisting>public abstract class AbstractTool implements IOperations {
 
@@ -2568,8 +2973,8 @@ public abstract void receiveTerminate(ATerm aTerm); <co
       </calloutlist>
     </section>
 
-    <section>
-      <title>The hello script</title>
+    <section xml:id="section.hello-Java-tool-definition">
+      <title>Tool definition in the hello script</title>
 
       <para>The hello script from <xref linkend="example.hello2" /> can be
       used as is, except that the definition of the hello tool has to be
@@ -2578,7 +2983,7 @@ public abstract void receiveTerminate(ATerm aTerm); <co
       <para><programlisting>tool hello is { kind = "javaNG" class = "toolbus.tool.java.hello.HelloTool"}</programlisting></para>
     </section>
 
-    <section>
+    <section xml:id="section.hello-Java">
       <title>The hello example in Java</title>
 
       <para><example>
@@ -2648,23 +3053,23 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
     </section>
   </section>
 
-  <section>
-    <title>Writing tools in other languages</title>
+  <section xml:id="section.tools-other-languages">
+    <title>Writing ToolBus tools in other languages</title>
 
-    <section>
+    <section xml:id="section.TclTk-adapter">
       <title>Tcl/TK</title>
 
       <para>TBD</para>
     </section>
 
-    <section>
+    <section xml:id="section.Python-adapter">
       <title>Python</title>
 
       <para>A Python adapter is only available for older versions of the
       ToolBus. It is currently not supported.</para>
     </section>
 
-    <section>
+    <section xml:id="section.Perl-adapter">
       <title>Perl</title>
 
       <para>A Perl adapter is only available for older versions of the
@@ -2672,16 +3077,16 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.ToolBus-implementation">
     <title>The ToolBus Implementation</title>
 
     <para>TBD</para>
   </section>
 
-  <section>
+  <section xml:id="section.toolbus-reference">
     <title>Reference Information</title>
 
-    <section>
+    <section xml:id="section.syntax-Tscripts">
       <title>The syntax of Tscripts</title>
 
       <para>A Tscript may contain directives like, e.g.,
@@ -2813,7 +3218,7 @@ exports
    </programlisting>
     </section>
 
-    <section>
+    <section xml:id="section.built-in-functions">
       <title>Built-in functions</title>
 
       <para>Tscripts provide a limited form of built-in functions that are
@@ -2834,7 +3239,7 @@ exports
         </listitem>
       </itemizedlist>
 
-      <section>
+      <section xml:id="section.Boolean-functions">
         <title>Boolean functions</title>
 
         <para><table>
@@ -2912,7 +3317,7 @@ exports
           </table></para>
       </section>
 
-      <section>
+      <section xml:id="section.Integer-functions">
         <title>Integer functions</title>
 
         <table>
@@ -3050,7 +3455,7 @@ exports
         </table>
       </section>
 
-      <section>
+      <section xml:id="section.Real-functions">
         <title>Real functions</title>
 
         <para><table>
@@ -3187,7 +3592,7 @@ exports
           </table></para>
       </section>
 
-      <section>
+      <section xml:id="section.Goniometric-functions">
         <title>Goniometric functions</title>
 
         <table>
@@ -3290,7 +3695,7 @@ exports
         </table>
       </section>
 
-      <section>
+      <section xml:id="section.list-functions">
         <title>Functions on lists</title>
 
         <table>
@@ -3531,7 +3936,7 @@ exports
         </table>
       </section>
 
-      <section>
+      <section xml:id="section.term-functions">
         <title>Functions on terms</title>
 
         <para><table>
@@ -3699,7 +4104,7 @@ exports
           </table></para>
       </section>
 
-      <section>
+      <section xml:id="section.time-functions">
         <title>Time-related functions</title>
 
         <para><table>
@@ -3743,7 +4148,7 @@ exports
           </table></para>
       </section>
 
-      <section>
+      <section xml:id="section.misc-functions">
         <title>Miscellaneous functions</title>
 
         <para><table>
@@ -3805,13 +4210,13 @@ exports
       </section>
     </section>
 
-    <section>
+    <section xml:id="section.synopsis-toolbus-primitives">
       <title>Synopsis of ToolBus primitives</title>
 
       <para>In the following two sections all primitives are summarized that
       can occur in a Tscript.</para>
 
-      <section>
+      <section xml:id="section.process-related-primitives">
         <title>Process-related primitives in Tscripts</title>
 
         <para><table>
@@ -4085,7 +4490,7 @@ exports
           </table></para>
       </section>
 
-      <section>
+      <section xml:id="section.tool-related-primitives">
         <title>Tool-related primitives in Tscripts</title>
 
         <para><table>
