@@ -1,5 +1,9 @@
 $Id$
 
+Mon Nov 26 18:06:32 EST 2007 <jurgenv@cwi.nl>
+ * src/commandlineInterface.c: fixed one todo: a proper error message
+   when the parse table file is not found.
+
 Fri Oct 19 16:21:59 CEST 2007 <economop@cwi.nl>
  * src/parseForest/filters.c: changed counting of nodes in filtered tree.
 

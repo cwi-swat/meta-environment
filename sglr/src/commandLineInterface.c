@@ -269,6 +269,7 @@ int runCommandLineTool (int argc, char **argv) {
    * is blank or - is used. */
   inputString = IS_createInputStringFromFile(MAIN_getInputFileName());
   if (SG_AddParseTable(MAIN_getParseTableName()) == NULL) {
+    ERR_displaySummary(ERR_getManagerSummary());
     outputResult(ERR_SummaryToTerm(ERR_getManagerSummary()), MAIN_getOutputFileName());
     return 1;
   }
@@ -280,11 +281,10 @@ int runCommandLineTool (int argc, char **argv) {
     return 0;
   }
   else {
-    outputResult(ERR_SummaryToTerm(ERR_getManagerSummary()), 
-        MAIN_getOutputFileName());
+    ERR_displaySummary(ERR_getManagerSummary());
+    outputResult(ERR_SummaryToTerm(ERR_getManagerSummary()), MAIN_getOutputFileName());
     return 1;
   }
-
 }
 
 

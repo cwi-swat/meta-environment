@@ -42,7 +42,7 @@ ParseTable *SG_AddParseTable(const char *filename) {
   }
 
   if (!inputFile) {
-    /** \todo Return a proper error (using strerror)! */
+    ERR_managerStoreError("could not open parse table file", ERR_makeSubjectListEmpty());
     return NULL;
   }
 
