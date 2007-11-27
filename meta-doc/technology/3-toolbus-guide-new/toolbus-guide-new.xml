@@ -1385,8 +1385,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </listitem>
       </itemizedlist>
 
-      <para xml:id="figure.calc-gui"><figure
-          xml:id="figure.clock-architecture">
+      <para><figure xml:id="figure.clock-architecture">
           <title>Architecture of the clock application</title>
 
           <mediaobject>
@@ -1394,40 +1393,57 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               <imagedata fileref="clock-architecture.png" scale="60"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure>The global structure of the Tscript calc.tb is sketched in
-      <xref linkend="example.global-structure-calc.tb" />.<example
+        </figure>The global structure of the Tscript
+      <literal>calc.tb</literal> is sketched in <xref
+      linkend="example.global-structure-calc.tb" />.<example
           xml:id="example.global-structure-calc.tb">
           <title>Global structure of <literal>calc.tb</literal></title>
 
           <para><programlisting>process CALC is ... <annotation>
-                <para>        See <xref linkend="example.CALC" /></para>
-              </annotation>
+                <para>        </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.CALC" /></para>
+                </annotation></lineannotation>
 tool calc is ...
 process BATCH is ...<annotation>
-                <para>        See <xref linkend="example.BATCH" /></para>
-              </annotation>
+                <para>        </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.BATCH" /></para>
+                </annotation></lineannotation>
 tool batch is ...
 process UI is ...<annotation>
-                <para>           See <xref linkend="example.UI" /></para>
-              </annotation>
+                <para>           </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.UI" /></para>
+                </annotation></lineannotation>
 process CALC-BUTTON is ... <annotation>
-                <para> See <xref linkend="example.CALC-BUTTON" /></para>
-              </annotation>
+                <para> </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.CALC-BUTTON" /></para>
+                </annotation></lineannotation>
 process LOG-BUTTON is ...<annotation>
-                <para>   See <xref linkend="example.LOG-BUTTON" /></para>
-              </annotation>
-process TIME-BUTTON is ...  <annotation>
-                <para>See <xref linkend="example.LOG-BUTTON" /></para>
-              </annotation>
+                <para>   </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.LOG-BUTTON" /></para>
+                </annotation></lineannotation>
+process TIME-BUTTON is ...  <lineannotation><annotation>
+                  <para>See <xref linkend="example.LOG-BUTTON" /></para>
+                </annotation></lineannotation>
 process QUIT-BUTTON is ...<annotation>
-                <para>  See <xref linkend="example.QUIT-BUTTON" /></para>
-              </annotation>
+                <para>  </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.QUIT-BUTTON" /></para>
+                </annotation></lineannotation>
 process LOG is ...<annotation>
-                <para>          See <xref linkend="example.LOG" /></para>
-              </annotation>
+                <para>          </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.LOG" /></para>
+                </annotation></lineannotation>
 process CLOCK is ...<annotation>
-                <para>        See <xref linkend="example.CLOCK" /></para>
-              </annotation>
+                <para>        </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.CLOCK" /></para>
+                </annotation></lineannotation>
 
 toolbus(CALC, BATCH, UI, LOG, CLOCK)
                             <annotation>
@@ -1443,12 +1459,12 @@ toolbus(CALC, BATCH, UI, LOG, CLOCK)
     in
          execute(calc, Tid?). <co xml:id="co.calc.1" />
           (<co xml:id="co.calc.2" />
-              rec-msg(compute, E?) . <co xml:id="co.calc.3" />
-              snd-eval(Tid, expr(E)) . rec-value(Tid, val(V?)) . <co
+            rec-msg(compute, E?) . <co xml:id="co.calc.3" />
+            snd-eval(Tid, expr(E)) . rec-value(Tid, val(V?)) . <co
                 xml:id="co.calc.4" />
-               snd-msg(compute, E, V) . snd-note(compute(E, V))  <co
+            snd-msg(compute, E, V) . snd-note(compute(E, V))  <co
                 xml:id="co.calc.5" />
-           )* delta <co xml:id="co.calc.6" />
+          )* delta <co xml:id="co.calc.6" />
     endlet
 
 tool calc is { command = “calc”}</programlisting>Notes:<calloutlist>
@@ -1492,12 +1508,12 @@ tool calc is { command = “calc”}</programlisting>Notes:<calloutlist>
     in
          execute(batch, Tid?).
          (
-             snd-eval(Tid, fromFile) . rec-value(Tid, expr(E?)) . <co
+           snd-eval(Tid, fromFile) . rec-value(Tid, expr(E?)) . <co
                 xml:id="co.batch.1" />
-             snd-msg(compute, E) . rec-msg(compute, E, V?) .      <co
+           snd-msg(compute, E) . rec-msg(compute, E, V?) .      <co
                 xml:id="co.batch.2" />
-             snd-do(Tid, toFile(E, V))  <co xml:id="co.batch.3" />
-          ) * delta
+           snd-do(Tid, toFile(E, V))  <co xml:id="co.batch.3" />
+         ) * delta
     endlet
 
 tool batch is {command = “batch”}</programlisting>Notes:<calloutlist>
@@ -1544,7 +1560,7 @@ tool batch is {command = “batch”}</programlisting>Notes:<calloutlist>
         </listitem>
       </itemizedlist>
 
-      <para><figure>
+      <para><figure xml:id="figure.calc-gui">
           <title>The calc GUI</title>
 
           <mediaobject>
@@ -1875,19 +1891,27 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
           <title>Global structure of <literal>auction.tb</literal></title>
 
           <para><programlisting>process Auction is ... <annotation>
-                <para>       See <xref linkend="example.Auction" /></para>
-              </annotation>
+                <para>       </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.Auction" /></para>
+                </annotation></lineannotation>
 tool master is ...
 process ConnectBidder is ...<annotation>
-                <para>  See <xref linkend="example.ConnectBidder" /></para>
-              </annotation>
+                <para>  </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.ConnectBidder" /></para>
+                </annotation></lineannotation>
 tool batch is ...
 process OneSale is ...<annotation>
-                <para>        See <xref linkend="example.OneSale" /></para>
-              </annotation>
+                <para>        </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.OneSale" /></para>
+                </annotation></lineannotation>
 process Bidder is ... <annotation>
-                <para>        See <xref linkend="example.Bidder" /></para>
-              </annotation>
+                <para>        </para>
+              </annotation><lineannotation><annotation>
+                  <para>See <xref linkend="example.Bidder" /></para>
+                </annotation></lineannotation>
 toolbus(Auction)</programlisting></para>
         </example><example xml:id="example.Auction">
           <title>Process <literal>Auction</literal></title>
@@ -1980,9 +2004,8 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       HighestBid := InAmount .
       snd-note(new-item(Descr, InAmount)) .        <co xml:id="co.OneSale.8" />
       Final := false . Sold := false .
-      ( <emphasis role="bold"><annotation>
-                  <para>Here is the action</para>
-                </annotation> </emphasis>                        <co
+      ( <lineannotation>
+         Here is the main logic of OneSale</lineannotation>          <co
                 xml:id="co.OneSale.9" />
       ) * if Sold then 
              snd-ack-event(Mid, new-item(Descr, InAmount)) 
@@ -2048,27 +2071,29 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
 + if and(Final, not(Sold)) then ... <co xml:id="co.OneSale-main.3" />fi
 + ConnectBidder(Mid, Bid?) ... <co xml:id="co.OneSale-main.4" />
 ) * if Sold then ... fi</programlisting></para>
-        </example>The main process logic consists of four parts:<calloutlist>
-          <callout arearefs="co.OneSale-main.1">
-            <para>Handle one incoming bid, see <xref
-            linkend="example.OneSale-one-bid" />.</para>
-          </callout>
 
-          <callout arearefs="co.OneSale-main.2">
-            <para>Start the "any higher bid" procedure, see <xref
-            linkend="example.OneSale-other-cases" />.</para>
-          </callout>
+          <para>The main process logic consists of four parts:<calloutlist>
+              <callout arearefs="co.OneSale-main.1">
+                <para>Handle one incoming bid, see <xref
+                linkend="example.OneSale-one-bid" />.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-main.3">
-            <para>Sell the item when no further bids are received, see <xref
-            linkend="example.OneSale-other-cases" />.</para>
-          </callout>
+              <callout arearefs="co.OneSale-main.2">
+                <para>Start the "any higher bid" procedure, see <xref
+                linkend="example.OneSale-other-cases" />.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-main.4">
-            <para>Connect a bidder during the sale, see <xref
-            linkend="example.OneSale-other-cases" />.</para>
-          </callout>
-        </calloutlist></para>
+              <callout arearefs="co.OneSale-main.3">
+                <para>Sell the item when no further bids are received, see
+                <xref linkend="example.OneSale-other-cases" />.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale-main.4">
+                <para>Connect a bidder during the sale, see <xref
+                linkend="example.OneSale-other-cases" />.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
 
       <para><example xml:id="example.OneSale-one-bid">
           <title>Process <literal>OneSale</literal>, handling one bid</title>
@@ -2091,36 +2116,38 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
 + if and(Final, not(Sold)) then ... fi
 + ConnectBidder(Mid, Bid?) ...
 ) * if Sold then ... fi</programlisting></para>
-        </example>Notes:<calloutlist>
-          <callout arearefs="co.OneSale-one-bid.1">
-            <para>Receive a bid from a bidder.</para>
-          </callout>
 
-          <callout arearefs="co.OneSale-one-bid.2">
-            <para>Inform the auction master about the new bid.</para>
-          </callout>
+          <para>Notes:<calloutlist>
+              <callout arearefs="co.OneSale-one-bid.1">
+                <para>Receive a bid from a bidder.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-one-bid.3">
-            <para>Reject the bid when it is too low.</para>
-          </callout>
+              <callout arearefs="co.OneSale-one-bid.2">
+                <para>Inform the auction master about the new bid.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-one-bid.4">
-            <para>Remember this bid as the highest bid so far.</para>
-          </callout>
+              <callout arearefs="co.OneSale-one-bid.3">
+                <para>Reject the bid when it is too low.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-one-bid.5">
-            <para>Inform the bidder that his bid is accepted.</para>
-          </callout>
+              <callout arearefs="co.OneSale-one-bid.4">
+                <para>Remember this bid as the highest bid so far.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-one-bid.6">
-            <para>Inform all connected bidders that there is higher
-            bid.</para>
-          </callout>
+              <callout arearefs="co.OneSale-one-bid.5">
+                <para>Inform the bidder that his bid is accepted.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-one-bid.7">
-            <para>Update the status of the auction master.</para>
-          </callout>
-        </calloutlist></para>
+              <callout arearefs="co.OneSale-one-bid.6">
+                <para>Inform all connected bidders that there is higher
+                bid.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale-one-bid.7">
+                <para>Update the status of the auction master.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
 
       <para><example xml:id="example.OneSale-other-cases">
           <title>Process OneSale, handling other cases</title>
@@ -2146,49 +2173,51 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
    Final := false                                 <co
                 xml:id="co.OneSale-other.9" />
 ) * if Sold then ... fi</programlisting></para>
-        </example>Notes:<calloutlist>
-          <callout arearefs="co.OneSale-other.1">
-            <para>The item is not yet sold, but we have not yet asked for a
-            final bid.</para>
-          </callout>
 
-          <callout arearefs="co.OneSale-other.2">
-            <para>Wait for 10 seconds and then ask for final bids.</para>
-          </callout>
+          <para>Notes:<calloutlist>
+              <callout arearefs="co.OneSale-other.1">
+                <para>The item is not yet sold, but we have not yet asked for
+                a final bid.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.3">
-            <para>Inform the auction master and remember that we asked for
-            final bids.</para>
-          </callout>
+              <callout arearefs="co.OneSale-other.2">
+                <para>Wait for 10 seconds and then ask for final bids.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.4">
-            <para>The item is not yet sold but we have already asked for final
-            bids.</para>
-          </callout>
+              <callout arearefs="co.OneSale-other.3">
+                <para>Inform the auction master and remember that we asked for
+                final bids.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.5">
-            <para>Wait another 10 seconds and inform all bidders that the item
-            has been sold.</para>
-          </callout>
+              <callout arearefs="co.OneSale-other.4">
+                <para>The item is not yet sold but we have already asked for
+                final bids.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.6">
-            <para>Record that the item is sold.</para>
-          </callout>
+              <callout arearefs="co.OneSale-other.5">
+                <para>Wait another 10 seconds and inform all bidders that the
+                item has been sold.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.7">
-            <para>During the sale a new bidder wants to connect.</para>
-          </callout>
+              <callout arearefs="co.OneSale-other.6">
+                <para>Record that the item is sold.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.8">
-            <para>Inform the new bidder about the progress of the
-            auction.</para>
-          </callout>
+              <callout arearefs="co.OneSale-other.7">
+                <para>During the sale a new bidder wants to connect.</para>
+              </callout>
 
-          <callout arearefs="co.OneSale-other.9">
-            <para>Restart the bidding procedure; this overrules the call for
-            final bids.</para>
-          </callout>
-        </calloutlist></para>
+              <callout arearefs="co.OneSale-other.8">
+                <para>Inform the new bidder about the progress of the
+                auction.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale-other.9">
+                <para>Restart the bidding procedure; this overrules the call
+                for final bids.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
 
       <para><example xml:id="example.Bidder">
           <title>Process <literal>Bidder</literal></title>
@@ -2965,7 +2994,8 @@ int main(int argc, char *argv[])
   {
      ATBeventloop();
   } else 
-     fprintf(stderr, "my_tool: Could not connect to the ToolBus, giving up!\n");
+     fprintf(stderr, 
+             "my_tool: Could not connect to the ToolBus, giving up!\n");
   ATBeventloop();
   return 0; 
 }</programlisting></para>
@@ -3051,9 +3081,9 @@ int main(int argc, char *argv[])
         with other computations: <programlisting>   while(ATtrue)
    { 
      if(n = ATBpeekAny() &gt;= 0) /* if there is an incoming event */
-        ATBhandleOne(n);             /* handle it                     */
+        ATBhandleOne(n);       /* handle it                     */
      else {
-        ...                         /* perform other computation     */
+        ...                    /* perform other computation     */
      }
    }</programlisting>In some tools, a mixture of passively awaiting input and
         actively sending terms to the ToolBus can be seen. Using
@@ -3269,7 +3299,8 @@ ATerm hello_handler(int conn, ATerm term)      <co xml:id="co.hello2.tif.c.2" />
     rec_terminate(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(signature(&lt;term&gt;,&lt;term&gt;))", &amp;in, &amp;out)) {
+  if(ATmatch(term, 
+             "rec-do(signature(&lt;term&gt;,&lt;term&gt;))", &amp;in, &amp;out)) {
     ATerm result = hello_checker(conn, in);
     if(!ATmatch(result, "[]"))
       ATfprintf(stderr, 
@@ -3813,11 +3844,11 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
-                  <entry align="center">Description&#160;</entry>
+                  <entry align="center">Description </entry>
                 </row>
               </thead>
 
@@ -3891,9 +3922,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4029,9 +4060,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4166,9 +4197,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4269,9 +4300,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4336,9 +4367,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4387,9 +4418,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4441,9 +4472,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4510,9 +4541,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4678,9 +4709,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4722,9 +4753,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5237,10 +5268,6 @@ exports
     <itemizedlist>
       <listitem>
         <para>Write the demo sections.</para>
-      </listitem>
-
-      <listitem>
-        <para>Write Java section.</para>
       </listitem>
 
       <listitem>
