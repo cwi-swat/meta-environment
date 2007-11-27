@@ -1710,6 +1710,106 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
     <section xml:id="section.example-auction">
       <title>Auction</title>
 
+      <para>In the <emphasis>classical auction</emphasis>, the auction master
+      and all bidders are in the same room and interact with each other
+      according to a fixed protocol. It is shown in <xref
+      linkend="figure.classical-auction" />. The steps in the protocol
+      are:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>The auction master introduces a new item for sale and sets an
+          initial price for it.</para>
+        </listitem>
+
+        <listitem>
+          <para>Next, bidders raise their hand and shout a new bid that is to
+          be acknowledged by the auction master.</para>
+        </listitem>
+
+        <listitem>
+          <para>Step 2 is repeated as long as new bids come in.</para>
+        </listitem>
+
+        <listitem>
+          <para>When no new bids are being made, the auction master asks for
+          "any higher bid?" and waits during a fixed period.</para>
+        </listitem>
+
+        <listitem>
+          <para>If no new bids come in during this period, the auction master
+          declares the item for sale to be sold to the highest bidder.</para>
+        </listitem>
+
+        <listitem>
+          <para>If a new bid comes in during this period, the procedure
+          continues with step 2.</para>
+        </listitem>
+      </orderedlist>
+
+      <para><figure xml:id="figure.classical-auction">
+          <title>Classical auction</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="classic-auction.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure>A striking aspect of the classical auction is that the
+      auction master and the bidders can <emphasis>see</emphasis> each other.
+      This is a great communication and synchronization tool. In the case of a
+      <emphasis>distributed auction</emphasis>, auction master and bidders are
+      on different locations and can only communicate via the Internet, see
+      <xref linkend="figure.distributed-auction" />.</para>
+
+      <para><figure xml:id="figure.distributed-auction">
+          <title>Distributed auction</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="distributed-auction.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>The communication and synschronization in a distrubuted auction
+      has to be described explicitly and requires answers to questions
+      like:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>How are bids synchronized?</para>
+        </listitem>
+
+        <listitem>
+          <para>How to inform bidders about the highest bid?</para>
+        </listitem>
+
+        <listitem>
+          <para>How to decide when bidding is over and the item is to be
+          sold?</para>
+        </listitem>
+
+        <listitem>
+          <para>How to handle bidders that come and go during the
+          auction?</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The auction application to be described answers these questions
+      and has an architecture as shown in <xref
+      linkend="figure.auction-architecture" />.</para>
+
+      <para><figure xml:id="figure.auction-architecture">
+          <title>Architecture of the auction application</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="auction-architecture.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
       <para></para>
     </section>
 
@@ -3254,11 +3354,11 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
-                  <entry align="center">Description </entry>
+                  <entry align="center">Description&#160;</entry>
                 </row>
               </thead>
 
@@ -3332,9 +3432,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3470,9 +3570,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -3607,9 +3707,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3710,9 +3810,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3777,9 +3877,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3828,9 +3928,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3882,9 +3982,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -3951,9 +4051,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4119,9 +4219,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4163,9 +4263,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
