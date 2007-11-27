@@ -1394,7 +1394,47 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               <imagedata fileref="clock-architecture.png" scale="60"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure><example xml:id="example.CALC">
+        </figure>The global structure of the Tscript calc.tb is sketched in
+      <xref linkend="example.global-structure-calc.tb" />.<example
+          xml:id="example.global-structure-calc.tb">
+          <title>Global structure of <literal>calc.tb</literal></title>
+
+          <para><programlisting>process CALC is ... <annotation>
+                <para>        See <xref linkend="example.CALC" /></para>
+              </annotation>
+tool calc is ...
+process BATCH is ...<annotation>
+                <para>        See <xref linkend="example.BATCH" /></para>
+              </annotation>
+tool batch is ...
+process UI is ...<annotation>
+                <para>           See <xref linkend="example.UI" /></para>
+              </annotation>
+process CALC-BUTTON is ... <annotation>
+                <para> See <xref linkend="example.CALC-BUTTON" /></para>
+              </annotation>
+process LOG-BUTTON is ...<annotation>
+                <para>   See <xref linkend="example.LOG-BUTTON" /></para>
+              </annotation>
+process TIME-BUTTON is ...  <annotation>
+                <para>See <xref linkend="example.LOG-BUTTON" /></para>
+              </annotation>
+process QUIT-BUTTON is ...<annotation>
+                <para>  See <xref linkend="example.QUIT-BUTTON" /></para>
+              </annotation>
+process LOG is ...<annotation>
+                <para>          See <xref linkend="example.LOG" /></para>
+              </annotation>
+process CLOCK is ...<annotation>
+                <para>        See <xref linkend="example.CLOCK" /></para>
+              </annotation>
+
+toolbus(CALC, BATCH, UI, LOG, CLOCK)
+                            <annotation>
+                <para>See <xref
+                    linkend="example.calculator-toolbus-configuration" /></para>
+              </annotation></programlisting></para>
+        </example><example xml:id="example.CALC">
           <title>Process <literal>CALC</literal> and tool
           <literal>calc</literal></title>
 
@@ -1808,9 +1848,428 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
               <imagedata fileref="auction-architecture.png" scale="60"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure></para>
+        </figure>The auction application consists of a variable number of
+      processes:</para>
 
-      <para></para>
+      <itemizedlist>
+        <listitem>
+          <para><literal>Auction</literal>: the process Auction orchestrates
+          the complete auction and is controlled by the tool
+          <literal>master</literal> that enables the auction master to offer
+          new items for sale and to monitor the progress of the
+          auction.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>Bidder</literal>: for each new bidder that enters the
+          auction a new process <literal>Bidder</literal> and tool
+          <literal>bidder</literal> are created. The tool bidder keep the user
+          informed and allows her or him to submit new bids.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The global structure of the Tscript auction.tb is sketched in
+      <xref linkend="example.global-structure-auction.tb" />.</para>
+
+      <para><example xml:id="example.global-structure-auction.tb">
+          <title>Global structure of <literal>auction.tb</literal></title>
+
+          <para><programlisting>process Auction is ... <annotation>
+                <para>       See <xref linkend="example.Auction" /></para>
+              </annotation>
+tool master is ...
+process ConnectBidder is ...<annotation>
+                <para>  See <xref linkend="example.ConnectBidder" /></para>
+              </annotation>
+tool batch is ...
+process OneSale is ...<annotation>
+                <para>        See <xref linkend="example.OneSale" /></para>
+              </annotation>
+process Bidder is ... <annotation>
+                <para>        See <xref linkend="example.Bidder" /></para>
+              </annotation>
+toolbus(Auction)</programlisting></para>
+        </example><example xml:id="example.Auction">
+          <title>Process <literal>Auction</literal></title>
+
+          <para><programlisting>process Auction is
+  let Mid : master, Bid : bidder
+  in
+      execute(master, Mid?) .      <co xml:id="co.Auction.1" />
+      ( ConnectBidder(Mid, Bid?)   <co xml:id="co.Auction.2" />
+      +      
+        OneSale(Mid) 
+      ) *
+      rec-event(Mid, quit) .        <co xml:id="co.Auction.3" />
+      shutdown("Auction is closed") <co xml:id="co.Auction.4" />
+  endlet
+
+
+tool master is { command = "wish-adapter -script master.tcl" }</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.Auction.1">
+                <para>Execute the <literal>master</literal> tool.</para>
+              </callout>
+
+              <callout arearefs="co.AbstractTool.2">
+                <para>Repeat:</para>
+
+                <itemizedlist>
+                  <listitem>
+                    <para>Add new bidders between sales, or</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Perform one sale.</para>
+                  </listitem>
+                </itemizedlist>
+              </callout>
+
+              <callout arearefs="co.Auction.3">
+                <para>Until auction master quits</para>
+              </callout>
+
+              <callout arearefs="co.Auction.4">
+                <para>Close the auction application.</para>
+              </callout>
+            </calloutlist></para>
+        </example><example xml:id="example.ConnectBidder">
+          <title>Process <literal>ConnectBidder</literal></title>
+
+          <para><programlisting>process ConnectBidder(Mid : master, Bid : bidder?) is
+  let Pid : int, Name : str
+  in
+     rec-connect(Bid?) .               <co xml:id="co.ConnectBidder.1" />     
+     create(Bidder(Bid), Pid?) .       <co xml:id="co.ConnectBidder.2" />
+     snd-eval(Bid, get-name) .         <co xml:id="co.ConnectBidder.3" />
+     rec-value(Bid, name(Name?)) . 
+     snd-do(Mid, new-bidder(Bid, Name))<co xml:id="co.ConnectBidder.4" />
+  endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.ConnectBidder.1">
+                <para>Receive a connection request from a new
+                <literal>bidder</literal> tool.</para>
+              </callout>
+
+              <callout arearefs="co.ConnectBidder.2">
+                <para>Create a new <literal>Bidder</literal> process that
+                orchestrates the behaviour of this bidder.</para>
+              </callout>
+
+              <callout arearefs="co.ConnectBidder.3">
+                <para>Ask <literal>bidder</literal> for its name.</para>
+              </callout>
+
+              <callout arearefs="co.ConnectBidder.4">
+                <para>Send the name of the bidder to the
+                <literal>master</literal> tool.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
+
+      <para><example xml:id="example.OneSale">
+          <title>Process <literal>OneSale</literal></title>
+
+          <para><programlisting>process OneSale(Mid : master) is
+  let Descr : str,                <co xml:id="co.OneSale.1" /> 
+      InAmount : int,             <co xml:id="co.OneSale.2" /> 
+      Amount : int,               <co xml:id="co.OneSale.3" />
+      HighestBid : int,           <co xml:id="co.OneSale.4" />
+      Final : bool,               <co xml:id="co.OneSale.5" />
+      Sold : bool,            
+      Bid : bidder                <co xml:id="co.OneSale.6" />
+  in rec-event(Mid, new-item(Descr?, InAmount?)) . <co xml:id="co.OneSale.7" />
+      HighestBid := InAmount .
+      snd-note(new-item(Descr, InAmount)) .        <co xml:id="co.OneSale.8" />
+      Final := false . Sold := false .
+      ( <emphasis role="bold"><annotation>
+                  <para>Here is the action</para>
+                </annotation> </emphasis>                        <co
+                xml:id="co.OneSale.9" />
+      ) * if Sold then 
+             snd-ack-event(Mid, new-item(Descr, InAmount)) 
+          fi
+  endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.OneSale.1">
+                <para><literal>Descr</literal> contains a textual description
+                of the current item for sale.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale.2">
+                <para><literal>InAmount</literal> is the initial amount asked
+                for the item.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale.3">
+                <para><literal>Amount</literal> is the value of the current
+                bid.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale.4">
+                <para><literal>HighestBid</literal> is the highest bid so far
+                for this item.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale-one-bid.5">
+                <para>Two Boolean values control the logic of the bidding
+                process. <literal>Final</literal> is true when the call for
+                final bids has been issued and <literal>Sold</literal> is true
+                when the item has been sold.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale-one-bid.6">
+                <para>Bidder is a new bidder tool that has connected during
+                the sale.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale.7">
+                <para>The auction master wants to initiate the sale of a new
+                item.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale.8">
+                <para>Inform all connected bidders about the new item that is
+                for sale.</para>
+              </callout>
+
+              <callout arearefs="co.OneSale.9">
+                <para>The detailed logic is explained in <xref
+                linkend="example.OneSale-main-logic" />, <xref
+                linkend="example.OneSale-one-bid" />, and <xref
+                linkend="example.OneSale-other-cases" />.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
+
+      <para><example xml:id="example.OneSale-main-logic">
+          <title>Process <literal>OneSale</literal>, main logic</title>
+
+          <para><programlisting>( if not(Sold) then ... <co
+                xml:id="co.OneSale-main.1" /> fi
++ if not(or(Final, Sold)) then ... <co xml:id="co.OneSale-main.2" />fi 
++ if and(Final, not(Sold)) then ... <co xml:id="co.OneSale-main.3" />fi
++ ConnectBidder(Mid, Bid?) ... <co xml:id="co.OneSale-main.4" />
+) * if Sold then ... fi</programlisting></para>
+        </example>The main process logic consists of four parts:<calloutlist>
+          <callout arearefs="co.OneSale-main.1">
+            <para>Handle one incoming bid, see <xref
+            linkend="example.OneSale-one-bid" />.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-main.2">
+            <para>Start the "any higher bid" procedure, see <xref
+            linkend="example.OneSale-other-cases" />.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-main.3">
+            <para>Sell the item when no further bids are received, see <xref
+            linkend="example.OneSale-other-cases" />.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-main.4">
+            <para>Connect a bidder during the sale, see <xref
+            linkend="example.OneSale-other-cases" />.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para><example xml:id="example.OneSale-one-bid">
+          <title>Process <literal>OneSale</literal>, handling one bid</title>
+
+          <para><programlisting>( if not(Sold) then
+    rec-msg(bid(Bid?, Amount?)) .          <co xml:id="co.OneSale-one-bid.1" />
+    snd-do(Mid, new-bid(Bid, Amount)) .    <co xml:id="co.OneSale-one-bid.2" />
+    if less-equal(Amount, HighestBid) then
+        snd-msg(Bid, rejected)             <co xml:id="co.OneSale-one-bid.3" />
+    else 
+        HighestBid := Amount .             <co xml:id="co.OneSale-one-bid.4" />
+        snd-msg(Bid, accepted) .           <co xml:id="co.OneSale-one-bid.5" />
+        snd-note(update-bid(Amount)) .     <co xml:id="co.OneSale-one-bid.6" />
+        snd-do(Mid, update-highest-bid(Bid, Amount)) . <co
+                xml:id="co.OneSale-one-bid.7" />
+        Final := false
+    fi
+  fi
++ if not(or(Final, Sold)) then    ... fi 
++ if and(Final, not(Sold)) then ... fi
++ ConnectBidder(Mid, Bid?) ...
+) * if Sold then ... fi</programlisting></para>
+        </example>Notes:<calloutlist>
+          <callout arearefs="co.OneSale-one-bid.1">
+            <para>Receive a bid from a bidder.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-one-bid.2">
+            <para>Inform the auction master about the new bid.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-one-bid.3">
+            <para>Reject the bid when it is too low.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-one-bid.4">
+            <para>Remember this bid as the highest bid so far.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-one-bid.5">
+            <para>Inform the bidder that his bid is accepted.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-one-bid.6">
+            <para>Inform all connected bidders that there is higher
+            bid.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-one-bid.7">
+            <para>Update the status of the auction master.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para><example xml:id="example.OneSale-other-cases">
+          <title>Process OneSale, handling other cases</title>
+
+          <para><programlisting>( if not(Sold) then ... fi
++ if not(or(Final, Sold))  <co xml:id="co.OneSale-other.1" /> then
+      snd-note(any-higher-bid) delay(sec(10)) .   <co
+                xml:id="co.OneSale-other.2" />
+      snd-do(Mid, any-higher-bid(10)) .
+      Final := true                               <co
+                xml:id="co.OneSale-other.3" />
+  fi
++ if and(Final, not(Sold)) <co xml:id="co.OneSale-other.4" /> then
+      snd-note(sold(HighestBid)) delay(sec(10)) . <co
+                xml:id="co.OneSale-other.5" />
+      Sold := true                                <co
+                xml:id="co.OneSale-other.6" />
+   fi
++ ConnectBidder(Mid, Bid?) .                      <co
+                xml:id="co.OneSale-other.7" />
+   snd-msg(Bid, new-item(Descr, HighestBid)) .    <co
+                xml:id="co.OneSale-other.8" />
+   Final := false                                 <co
+                xml:id="co.OneSale-other.9" />
+) * if Sold then ... fi</programlisting></para>
+        </example>Notes:<calloutlist>
+          <callout arearefs="co.OneSale-other.1">
+            <para>The item is not yet sold, but we have not yet asked for a
+            final bid.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.2">
+            <para>Wait for 10 seconds and then ask for final bids.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.3">
+            <para>Inform the auction master and remember that we asked for
+            final bids.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.4">
+            <para>The item is not yet sold but we have already asked for final
+            bids.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.5">
+            <para>Wait another 10 seconds and inform all bidders that the item
+            has been sold.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.6">
+            <para>Record that the item is sold.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.7">
+            <para>During the sale a new bidder wants to connect.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.8">
+            <para>Inform the new bidder about the progress of the
+            auction.</para>
+          </callout>
+
+          <callout arearefs="co.OneSale-other.9">
+            <para>Restart the bidding procedure; this overrules the call for
+            final bids.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para><example xml:id="example.Bidder">
+          <title>Process <literal>Bidder</literal></title>
+
+          <para><programlisting>process Bidder(Bid : bidder) is
+  let Descr : str,  Amount : int,  Acceptance : term  
+  in
+     subscribe(new-item(&lt;str&gt;, &lt;int&gt;)) .         <co
+                xml:id="co.Bidder.1" />
+     subscribe(update-bid(&lt;int&gt;)) .
+     subscribe(sold(&lt;int&gt;)) . 
+     subscribe(any-higher-bid) .
+     ( ( rec-msg(Bid, new-item(Descr?, Amount?)) <co xml:id="co.Bidder.2" />
+         + rec-note(new-item(Descr?, Amount?))   <co xml:id="co.Bidder.3" />
+         + rec-disconnect(Bid) <co xml:id="co.Bidder.4" />. delta
+        ) .
+       snd-do(Bid, new-item(Descr, Amount)) .    <co xml:id="co.Bidder.5" />
+       ( rec-event(Bid, bid(Amount?)) .          <co xml:id="co.Bidder.6" />
+         snd-msg(bid(Bid, Amount)) .             <co xml:id="co.Bidder.7" />
+         rec-msg(Bid, Acceptance?) .
+         snd-do(Bid, accept(Acceptance)) . 
+         snd-ack-event(Bid, bid(Amount))
+       )*
+     + rec-note(update-bid(Amount?)) .           <co xml:id="co.Bidder.8" />
+       snd-do(Bid, update-bid(Amount))
+     + rec-note(any-higher-bid) . 
+       snd-do(Bid, any-higher-bid)
+     + rec-disconnect(Bid) . delta               <co xml:id="co.Bidder.9" />
+     ) *
+       rec-note(sold(Amount?)) .                 <co xml:id="co.Bidder.10" />
+       snd-do(Bid, sold(Amount))
+     )* delta
+  endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.Bidder.1">
+                <para>Subscribe to all relevant notes.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.2">
+                <para>Get information about the current item for sale,
+                directly after connecting.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.3">
+                <para>Get information about the current item for sale during
+                regular progress of the auction.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.4">
+                <para>Disconnect between sales.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.5">
+                <para>Inform the bidder tool by updating the information about
+                the item for sale.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.6">
+                <para>This bidder want to bid on the current item for
+                sale.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.7">
+                <para>Pass this bid on and await its acceptance. The result is
+                returned to the bidder tool and the event is
+                acknowledged.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.8">
+                <para>Handle the informative notes about the update of the
+                highest bid and the request for any higher bids.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.9">
+                <para>Disconnect during a sale.</para>
+              </callout>
+
+              <callout arearefs="co.Bidder.10">
+                <para>The item is sold.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
     </section>
 
     <section xml:id="section.example-wave">
