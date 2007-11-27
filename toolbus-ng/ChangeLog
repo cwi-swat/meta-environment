@@ -1,3 +1,6 @@
+Tue Nov 27 13:40:11 EST 2007 <lankamp@cwi.nl>
+ * toolbus.tool.java.hello.*: Fixed the HelloWorld examples.
+
 Tue Nov 27 13:02:06 EST 2007 <lankamp@cwi.nl>
  * *.*: The 'new' parser now adds position information to the state elements.
  * toolbus.viewer.Viewer: Extended the viewer, so you can see what state element a step actually executed.
