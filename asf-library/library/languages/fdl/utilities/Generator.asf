@@ -12,7 +12,7 @@ equations
 [] Keys := keys(TypeEnv),
    Declaration* := generateFunctionDeclarations(Keys, TypeEnv, ValueEnv),
    module Modulename ImportSection* Section*1 arguments Argument* Section*2 := FeatureModule,
-   Statement* := generateFunctionStatements(Argument*, , ParameterEnv)
+   Statement* := generateFunctionStatements(Argument*, , ParameterEnv, TypeEnv)
    ===
    generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) = 
 
@@ -81,23 +81,36 @@ equations
 
 equations
 
-[] ArgumentChar := lookup(ParameterEnv, AtomicFeature),
+[] lookup(TypeEnv, AtomicFeature) == boolean,
+   ArgumentChar := lookup(ParameterEnv, AtomicFeature),
    CharacterConstant := ac2cc(ArgumentChar),
-   Identifier1 := af2os(AtomicFeature),
-   Identifier2 := af2og(AtomicFeature)
+   Identifier1 := af2cid(AtomicFeature),
+   Identifier2 := af2cid(AtomicFeature)
    ===
-   generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv) = 
+   generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv, TypeEnv) = 
 
 Statement* 
 case CharacterConstant:
-  Identifier1(!Identifier2());
+  OPT_setFlag(Identifier1, !OPT_getFlag(Identifier2));
+  break;
+
+[default-generateFunctionStatements] 
+   ArgumentChar := lookup(ParameterEnv, AtomicFeature),
+   CharacterConstant := ac2cc(ArgumentChar),
+   Identifier := af2os(AtomicFeature)
+   ===
+   generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv, TypeEnv) = 
+
+Statement* 
+case CharacterConstant:
+  Identifier = optarg;
   break;
 
 [] ArgumentChar := lookup(ParameterEnv, CompositeFeature),
    CharacterConstant := ac2cc(ArgumentChar),
    Identifier := cf2handleoptions(CompositeFeature)
    ===
-   generateFunctionStatements(CompositeFeature, Statement*, ParameterEnv) =
+   generateFunctionStatements(CompositeFeature, Statement*, ParameterEnv, TypeEnv) =
 
 Statement*
 case CharacterConstant:
@@ -106,7 +119,7 @@ case CharacterConstant:
 
 [] lookup(ParameterEnv, FeatureName) == not-in-table
    ===
-   generateFunctionStatements(FeatureName, Statement*, ParameterEnv) = Statement*
+   generateFunctionStatements(FeatureName, Statement*, ParameterEnv, TypeEnv) = Statement*
 
 equations
 [] lookup(TypeEnv, AtomicFeature) == boolean,
@@ -124,17 +137,6 @@ equations
    stringconstant(\" char*2 \") := ":"
    ===
    generateArguments(CompositeFeature, stringconstant(\" char*1 \"), ParameterEnv, TypeEnv) = stringconstant(\" char*1 stringchar(argchar) char*2 \")
-
-
-equations
-
-[] identifier(caphead tail) := af2cid(AtomicFeature)
-   ===
-   af2og(AtomicFeature) = identifier(OPT\_getFlag caphead tail)
-
-[] identifier(caphead tail) := af2cid(AtomicFeature)
-   ===
-   af2os(AtomicFeature) = identifier(OPT\_setFlag caphead tail)
 
 
 equations

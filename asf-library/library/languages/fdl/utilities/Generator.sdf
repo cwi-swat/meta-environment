@@ -23,22 +23,20 @@ aliases
 context-free syntax
   generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)            -> FunctionDefinition                                       
   generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)                       -> Declaration*                                             
-  generateFunctionStatements(Argument*, Statement*, ParameterEnv)             -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateFunctionStatements(FeatureName, Statement*, ParameterEnv)           -> Statement*           {traversal(accu, bottom-up, break)} 
+  generateFunctionStatements(Argument*, Statement*, ParameterEnv, TypeEnv)    -> Statement*           {traversal(accu, bottom-up, break)} 
+  generateFunctionStatements(FeatureName, Statement*, ParameterEnv, TypeEnv)  -> Statement*           {traversal(accu, bottom-up, break)} 
   generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv, TypeEnv) -> ExternalDeclaration+                                     
   addIncludeSection(ExternalDeclaration+)                                     -> ExternalDeclaration+                                     
   generateArguments(Argument*, StringConstant, ParameterEnv, TypeEnv)         -> StringConstant       {traversal(accu, bottom-up, break)} 
-  generateArguments(FeatureName, StringConstant, ParameterEnv, TypeEnv)       -> StringConstant       {traversal(accu, bottom-up, break)}
+  generateArguments(FeatureName, StringConstant, ParameterEnv, TypeEnv)       -> StringConstant       {traversal(accu, bottom-up, break)} 
 
 context-free syntax
   af2id(AtomicFeature)  -> Identifier        {complete} 
-  ac2cc(ArgumentChar)   -> CharacterConstant {complete} 
-  af2og(AtomicFeature)  -> Identifier        {complete} 
-  af2os(AtomicFeature)  -> Identifier        {complete} 
   af2cid(AtomicFeature) -> Identifier        {complete} 
+  ac2cc(ArgumentChar)   -> CharacterConstant {complete} 
 
 context-free syntax
-  cf2handleoptions(CompositeFeature) -> Identifier {complete}
+  cf2handleoptions(CompositeFeature) -> Identifier {complete} 
 
 context-free syntax
   idcon2stringconstant(IdCon) -> StringConstant {complete} 
@@ -54,8 +52,8 @@ variables
   "Declaration" [0-9]*       -> Declaration           
   "Declaration*" [0-9]*      -> Declaration*          
   "FeatureDiagram" [0-9]*    -> FeatureDiagram        
-  "FeatureModule" [0-9]*     -> FeatureModule  
-  "FeatureName" [0-9]*       -> FeatureName       
+  "FeatureModule" [0-9]*     -> FeatureModule         
+  "FeatureName" [0-9]*       -> FeatureName           
   "IdCon" [0-9]*             -> IdCon                 
   "Identifier" [0-9]*        -> Identifier            
   "ImportSection*" [0-9]*    -> ImportSection*        
