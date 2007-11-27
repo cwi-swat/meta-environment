@@ -6,7 +6,30 @@
          xmlns:mml="http://www.w3.org/1998/Math/MathML"
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns:db="http://docbook.org/ns/docbook">
-  <title>Guide to ToolBus Programming</title>
+  <info>
+    <title>Guide to ToolBus Programming</title>
+
+    <authorgroup>
+      <author>
+        <personname><firstname>Hayco</firstname><surname>de
+        Jong</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Arnold</firstname><surname>Lankamp</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Pieter</firstname><surname>Olivier</surname></personname>
+      </author>
+    </authorgroup>
+
+    <pubdate>Not yet released</pubdate>
+  </info>
 
   <warning>
     <para>This document is in state of creation and will further evolve. It
@@ -5267,7 +5290,7 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para>Write the demo sections.</para>
+        <para>Write the wave demo section.</para>
       </listitem>
 
       <listitem>
