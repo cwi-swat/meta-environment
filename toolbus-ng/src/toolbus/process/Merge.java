@@ -1,7 +1,6 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
@@ -9,6 +8,7 @@ import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import aterm.ATerm;
 
 /**
@@ -30,7 +30,7 @@ public class Merge extends ProcessExpression implements StateElement{
 	
 	private boolean leftLast = false;
 	
-	public Merge(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, ATerm posInfo){
+	public Merge(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		state = new State[2];
@@ -208,10 +208,6 @@ public class Merge extends ProcessExpression implements StateElement{
 	
 	public String toString(){
 		return "Merge(" + state[LEFT] + "; " + state[RIGHT] + ")";
-	}
-	
-	public boolean isTerminated(){
-		return false;
 	}
 	
 	/*public void addPartners(AtomSet s) throws ToolBusException{

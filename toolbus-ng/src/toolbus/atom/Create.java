@@ -4,13 +4,14 @@
 package toolbus.atom;
 
 import java.util.Stack;
-
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBus;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
+import toolbus.process.ProcessCall;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -21,7 +22,7 @@ public class Create extends Atom{
 	private final Ref pcall;
 	private final Ref rvar;
 	
-	public Create(ATerm c, ATerm v, TBTermFactory tbfactory, ATerm posInfo){
+	public Create(ATerm c, ATerm v, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		pcall = new Ref(c);
 		rvar = new Ref(v);
@@ -50,7 +51,7 @@ public class Create extends Atom{
 		
 		ToolBus TB = getProcess().getToolBus();
 		
-		ProcessInstance P = TB.addProcess(name, evargs);
+		ProcessInstance P = TB.addProcess(new ProcessCall(name, evargs, false, TB.getTBTermFactory(), null));
 		
 		getEnv().assignVar((TBTermVar) rvar.value, tbfactory.makeInt(P.getProcessId()));
 		return true;

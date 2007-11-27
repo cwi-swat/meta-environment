@@ -11,7 +11,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
 import java.util.List;
-
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -20,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -31,7 +33,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -53,6 +54,9 @@ public class Viewer implements IViewer{
 	protected final JButton stepButton;
 	protected final JButton killButton;
 	
+	protected final JTextField lastExecutedProcessInstanceField;
+	protected final JTextField lastExecutedStateElementField;
+	
 	protected final JTable processesTable;
 	private final String[] processesTableHeader;
 	protected final JTable stateTable;
@@ -66,7 +70,7 @@ public class Viewer implements IViewer{
 	
 	private final JScrollPane processesScrollPane;
 	
-	private volatile int highlightedRow = -1;
+	private volatile int stepHighlightedRow = -1;
 	private volatile int breakHighlightedRow = -1;
 	
 	public Viewer(){
@@ -80,7 +84,6 @@ public class Viewer implements IViewer{
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				debugToolBus.doTerminate();
-				stop();
 			}
 		});
 		
@@ -111,7 +114,7 @@ public class Viewer implements IViewer{
 			public Component prepareRenderer(TableCellRenderer cr, int row, int col){
                 Component c = super.prepareRenderer(cr, row, col);
                 
-                if(row == highlightedRow) c.setBackground(Color.GREEN);
+                if(row == stepHighlightedRow) c.setBackground(Color.GREEN);
                 else if(row == breakHighlightedRow) c.setBackground(Color.YELLOW);
                 else c.setBackground(Color.WHITE);
                 
@@ -137,9 +140,9 @@ public class Viewer implements IViewer{
 		ListSelectionModel processesSelectionModel = processesTable.getSelectionModel();
 		processesSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		processesSelectionModel.addListSelectionListener(tableSelectionListener);
-		processesPanel.add(processesTable, BorderLayout.CENTER);
 		processesScrollPane = new JScrollPane(processesTable);
-		frame.add(processesScrollPane, BorderLayout.WEST);
+		processesPanel.add(processesScrollPane, BorderLayout.CENTER);
+		frame.add(processesPanel, BorderLayout.WEST);
 		
 		JPanel subscriptionsPanel = new JPanel();
 		subscriptionsPanel.setLayout(new BorderLayout());
@@ -203,6 +206,29 @@ public class Viewer implements IViewer{
 		statusBar.add(status);
 		controlPanel.add(statusBar, BorderLayout.WEST);
 		
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new BorderLayout());
+		
+		JPanel lastExecutedAtomPanel = new JPanel();
+		lastExecutedAtomPanel.setLayout(new GridLayout(2, 1));
+		Box topBox = new Box(BoxLayout.X_AXIS);
+		JLabel lastExecutedProcessInstanceLabel = new JLabel("Last executed process instance: ");
+		topBox.add(lastExecutedProcessInstanceLabel);
+		lastExecutedProcessInstanceField = new JTextField();
+		lastExecutedProcessInstanceField.setEditable(false);
+		lastExecutedProcessInstanceField.setBackground(Color.WHITE);
+		topBox.add(lastExecutedProcessInstanceField);
+		lastExecutedAtomPanel.add(topBox);
+		Box bottomBox = new Box(BoxLayout.X_AXIS);
+		JLabel lastExecutedStateElementLabel = new JLabel("Last executed state element: ");
+		bottomBox.add(lastExecutedStateElementLabel);
+		lastExecutedStateElementField = new JTextField();
+		lastExecutedStateElementField.setEditable(false);
+		lastExecutedStateElementField.setBackground(Color.WHITE);
+		bottomBox.add(lastExecutedStateElementField);
+		lastExecutedAtomPanel.add(bottomBox);
+		bottomPanel.add(lastExecutedAtomPanel, BorderLayout.NORTH);
+		
 		JPanel controlBar = new JPanel();
 		controlBar.setLayout(new FlowLayout());
 		ButtonActionListener buttonActionListener = new ButtonActionListener();
@@ -219,8 +245,9 @@ public class Viewer implements IViewer{
 		killButton.addActionListener(buttonActionListener);
 		controlBar.add(killButton);
 		controlPanel.add(controlBar, BorderLayout.EAST);
+		bottomPanel.add(controlPanel, BorderLayout.CENTER);
 		
-		frame.add(controlPanel, BorderLayout.SOUTH);
+		frame.add(bottomPanel, BorderLayout.SOUTH);
 		
 		frame.add(mainPanel, BorderLayout.CENTER);
 	}
@@ -229,23 +256,37 @@ public class Viewer implements IViewer{
 		this.debugToolBus = debugToolBus;
 	}
 	
-	public void start(){
+	public void toolbusStarting(){
 		frame.setVisible(true);
 	}
 	
-	public void stop(){
+	public void toolbusTerminating(){
 		frame.dispose();
 	}
 	
-	// Update the state of the given process.
-	public void update(final ProcessInstance processInstance){
+	// Update the state of the given process after the execution of the step.
+	public void stepExecuted(final ProcessInstance processInstance, final StateElement executedStateElement){
+		if(executedStateElement.getPosInfo() == null){
+			// If the posInfo was 'null', the stateElement isn't related directly related to anything in the ToolBus script (it will be an atom that was inserted during the creation of the statemachine, by the parser).
+			// In this case do another step.
+			debugToolBus.doStep();
+			return;
+		}
+		
+		//System.out.println(executedStateElement+" - "+executedStateElement.getPosInfo());
+		
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
-				highlightedRow = -1;
+				lastExecutedProcessInstanceField.setText(processInstance.getProcessName()+":"+processInstance.getProcessId());
+				lastExecutedProcessInstanceField.setCaretPosition(0);
+				lastExecutedStateElementField.setText(executedStateElement.toString());
+				lastExecutedStateElementField.setCaretPosition(0);
+				
+				stepHighlightedRow = -1;
 				for(int row = processesTableModel.getRowCount() - 1; row >= 0; row--){
 					int processId = ((Integer) processesTableModel.getValueAt(row, 2)).intValue();
 					if(processId == processInstance.getProcessId()){
-						highlightedRow = row;
+						stepHighlightedRow = row;
 						processesTable.scrollRectToVisible(processesTable.getCellRect(row, 1, true));
 						ListSelectionModel selectionModel = processesTable.getSelectionModel();
 						selectionModel.clearSelection();
@@ -283,7 +324,7 @@ public class Viewer implements IViewer{
 		}
 	}
 	
-	public void processInstanceAdded(final ProcessInstance processInstance){
+	public void processInstanceStarted(final ProcessInstance processInstance){
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				processesTableModel.insertRow(0, new Object[]{Boolean.FALSE, processInstance.getProcessName(), Integer.valueOf(processInstance.getProcessId())});
@@ -304,8 +345,9 @@ public class Viewer implements IViewer{
 		});
 	}
 	
-	public void breakPointHit(final int processId){
+	public void processBreakPointHit(ProcessInstance processInstance){
 		debugToolBus.doStop();
+		final int processId = processInstance.getProcessId();
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				breakHighlightedRow = -1;
@@ -323,6 +365,10 @@ public class Viewer implements IViewer{
 				processesTable.repaint();
 			}
 		});
+	}
+	
+	public void stateElementBreakPointHit(StateElement stateElement){
+		// Ignore, this viewer doesn't support breakpoints on state elements (yet).
 	}
 	
 	private void clearSubscriptionsTable(){
@@ -438,7 +484,9 @@ public class Viewer implements IViewer{
 	}
 	
 	private void clearProcessTableModifications(){
-		highlightedRow = -1;
+		lastExecutedProcessInstanceField.setText("");
+		lastExecutedStateElementField.setText("");
+		stepHighlightedRow = -1;
 		breakHighlightedRow = -1;
 		ListSelectionModel selectionModel = processesTable.getSelectionModel();
 		selectionModel.clearSelection();
@@ -460,7 +508,7 @@ public class Viewer implements IViewer{
 				clearProcessTableModifications();
 				debugToolBus.doStop();
 			}else if(source == stepButton){
-				breakHighlightedRow = -1;
+				clearProcessTableModifications();
 				debugToolBus.doStep();
 			}else if(source == killButton){
 				debugToolBus.doTerminate();
@@ -552,8 +600,6 @@ public class Viewer implements IViewer{
 		
 		try{
 			if(debugToolBus.parsecup()){
-				viewer.start(); // Delay showing the viewer till the ToolBus is started.
-				
 				debugToolBus.execute();
 			}else{
 				System.err.println("Failed to parse");

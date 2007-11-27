@@ -4,14 +4,13 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
-import aterm.ATerm;
+import toolbus.parsercup.PositionInformation;
 
 /**
  * ProcesssExpression represents abstract syntax operators for operators in process expressions of
@@ -37,9 +36,9 @@ abstract public class ProcessExpression{
 	/**
 	 * Position information (i.e., source code location) of this process expression.
 	 */
-	protected final ATerm posInfo;
+	protected final PositionInformation posInfo;
 	
-	public ProcessExpression(TBTermFactory tbfactory, ATerm posInfo){
+	public ProcessExpression(TBTermFactory tbfactory, PositionInformation posInfo){
 		this.tbfactory = tbfactory;
 		this.posInfo = posInfo;
 		
@@ -54,7 +53,7 @@ abstract public class ProcessExpression{
 		this.first = first;
 	}
 	
-	public ATerm getPosInfo(){
+	public PositionInformation getPosInfo(){
 		return posInfo;
 	}
 	

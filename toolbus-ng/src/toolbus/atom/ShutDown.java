@@ -2,6 +2,7 @@ package toolbus.atom;
 
 import toolbus.TBTermFactory;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
@@ -11,7 +12,7 @@ import aterm.ATerm;
 public class ShutDown extends Atom{
 	private final Ref arg;
 	
-	public ShutDown(ATerm trm, TBTermFactory tbfactory, ATerm posInfo){
+	public ShutDown(ATerm trm, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		arg = new Ref(trm);
 		setAtomArgs(arg);

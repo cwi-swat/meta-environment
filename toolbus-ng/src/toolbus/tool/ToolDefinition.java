@@ -6,7 +6,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import aterm.ATerm;
@@ -32,16 +31,13 @@ public class ToolDefinition{
 	
 	private final TBTermFactory tbfactory;
 	
-	private final ATerm posInfo;
-	
-	public ToolDefinition(String toolName, String host, String kind, String command, String className, TBTermFactory tbfactory, ATerm posInfo){
+	public ToolDefinition(String toolName, String host, String kind, String command, String className, TBTermFactory tbfactory){
 		this.toolName = toolName;
 		this.hostName = host;
 		this.kind = kind;
 		this.command = command;
 		this.className = className;
 		this.tbfactory = tbfactory;
-		this.posInfo = posInfo;
 		
 		inputSignature = tbfactory.EmptyList;
 		outputSignature = tbfactory.EmptyList;
@@ -105,10 +101,6 @@ public class ToolDefinition{
 	
 	public String getClassName(){
 		return className;
-	}
-	
-	public ATerm getPosInfo(){
-		return posInfo;
 	}
 	
 	public ATermList getInputSignature(){

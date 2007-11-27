@@ -1,8 +1,8 @@
 package toolbus.atom;
 
-import aterm.ATerm;
 import toolbus.TBTermFactory;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 
 /**
@@ -10,7 +10,7 @@ import toolbus.process.ProcessExpression;
  */
 public class Tau extends Atom{
 	
-	public Tau(TBTermFactory tbfactory, ATerm posInfo){
+	public Tau(TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 	}
 	

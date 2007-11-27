@@ -212,6 +212,12 @@ public class ToolBus{
 		return System.currentTimeMillis() - startTime;
 	}
 	
+	/**
+	 * Notifies the ToolBus that an atom with a delay on it, which could not be executed, has just been touched.
+	 * 
+	 * @param next
+	 *            The relative time in milliseconds that needs to elapse before the atom can be executed.
+	 */
 	public void setNextTime(long next){
 		//System.err.println("setNextTime: " + next);
 		long currentTime = getRunTime();
@@ -300,23 +306,10 @@ public class ToolBus{
 	}
 	
 	/**
-	 * Add a process (with actuals).
-	 */
-	public ProcessInstance addProcess(String name, ATermList actuals) throws ToolBusException{
-		ProcessInstance pi;
-		synchronized(processes){
-			pi = new ProcessInstance(this, name, actuals, processIdCounter++);
-			processes.add(pi);
-		}
-		return pi;
-	}
-	
-	/**
 	 * Add a process (as ProcessCall); previous two will become obsolete.
 	 */
 	public ProcessInstance addProcess(ProcessCall call) throws ToolBusException{
 		ProcessInstance pi;
-		//System.err.println("addProcess: " + call);
 		synchronized(processes){
 			pi = new ProcessInstance(this, call, processIdCounter++);
 			processes.add(pi);
@@ -339,7 +332,6 @@ public class ToolBus{
 	}
 	
 	public boolean existsProcessDefinition(String name, int numberOfActuals){
-		// System.err.println("existsProcessDefinition: " + name + " " + numberOfActuals);
 		return procdefs.contains(name + numberOfActuals);
 	}
 	
@@ -377,15 +369,21 @@ public class ToolBus{
 		return asih.res;
 	}
 	
+	// TODO Fix the concurrency problems in here.
+	/**
+	 * Dumps the current state of all the processes in the ToolBus and the state of all the tools to stderr.
+	 */
 	public void showStatus(){
-		System.err.println("--- ToolBus status: " + processes.size() + " processes; " + toolInstanceManager.numberOfConnectedTools() + " tools ----");
-		Iterator<ProcessInstance> processesIterator = new ProcessInstanceIterator(processes);
-		while(processesIterator.hasNext()){
-			ProcessInstance P = processesIterator.next();
-			System.err.println(P.showStatus());
+		if(workHasArrived == true || workHasArrived == false){ // Volatile read; triggers some cache coherency actions, so we see a reasonably up to date version of the data we're trying to dump (this variable is written to very often by the process logic thread; which is the one we want to sync with).
+			System.err.println("--- ToolBus status: " + processes.size() + " processes; " + toolInstanceManager.numberOfConnectedTools() + " tools ----");
+			Iterator<ProcessInstance> processesIterator = new ProcessInstanceIterator(processes);
+			while(processesIterator.hasNext()){
+				ProcessInstance P = processesIterator.next();
+				System.err.println(P.showStatus());
+			}
+			toolInstanceManager.showStatus();
+			System.err.println("------------------------");
 		}
-		toolInstanceManager.showStatus();
-		System.err.println("------------------------");
 	}
 	
 	private volatile boolean running = false;
@@ -394,12 +392,9 @@ public class ToolBus{
 	
 	/**
 	 * Shutdown of this ToolBus.
-	 * 
-	 * @throws ToolBusException
 	 */
 	public void shutdown(ATerm msg){
 		shuttingDown = true;
-		//dumpPerformanceStats(); // Temp
 		System.err.println("Shutting down ToolBus: " + msg);
 		
 		Iterator<ProcessInstance> processIterator = new ProcessInstanceIterator(processes);
@@ -464,8 +459,12 @@ public class ToolBus{
 		}
 	}
 	
+	// TODO Fix the concurrency problems in here.
+	/**
+	 * Prints all unhandled messages and queued notes to stderr.
+	 */
 	public void dumpUnhandledMessages(){
-		if(workHasArrived == true || workHasArrived == false){ // Volatile read; triggers some cache coherency actions, so we see a reasonably up to date version of the data we're trying to dump.
+		if(workHasArrived == true || workHasArrived == false){ // Volatile read; triggers some cache coherency actions, so we see a reasonably up to date version of the data we're trying to dump (this variable is written to very often by the process logic thread; which is the one we want to sync with).
 			boolean anythingUnhandled = false;
 			ProcessInstanceIterator processInstanceIterator = new ProcessInstanceIterator(processes);
 			try{
@@ -502,6 +501,11 @@ public class ToolBus{
 		}
 	}
 	
+	// TODO Replace the process logic loop stuff by a full blown scheduler. This code is rather ugly and fragile.
+	/**
+	 * The ToolBus's main process loop.
+	 * This method handles the execution of the process logic.
+	 */
 	public void execute(){
 		if(nerrors > 0){
 			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
@@ -522,7 +526,7 @@ public class ToolBus{
 		tbConnectionHandler.start();
 		
 		System.out.println("The ToolBus server allocated port ("+portNumber+")");
-		ProcessInstance P = null;
+		ProcessInstance pi = null;
 		ProcessInstanceIterator processesIterator = new ProcessInstanceIterator(processes);
 		running = true;
 		try{
@@ -536,11 +540,11 @@ public class ToolBus{
 					while(processesIterator.hasNext()){
 						if(shuttingDown) return;
 						
-						P = processesIterator.next();
-						work |= P.step();
-						if(P.isTerminated()){
+						pi = processesIterator.next();
+						work |= pi.step();
+						if(pi.isTerminated()){
 							processesIterator.remove();
-							P.terminate(tbfactory.EmptyList);
+							pi.terminate(tbfactory.EmptyList);
 							
 							// Shut down the ToolBus when there are no more running processes left.
 							if(processes.size() == 0) break PROCESSLOOP;
@@ -573,7 +577,7 @@ public class ToolBus{
 				}
 			}while(running);
 		}catch(ToolBusException e){
-			error("Process " + (P != null ? P.getProcessName() : "?"), e.getMessage());
+			error("Process " + (pi != null ? pi.getProcessName() : "?"), e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -581,6 +585,10 @@ public class ToolBus{
 		if(!shuttingDown) shutdown(tbfactory.make("ToolBus halted"));
 	}
 	
+	/**
+	 * Notifies the ToolBus that work has arrived.
+	 * This will wake the ToolBus's process loop up if it's currently sleeping.
+	 */
 	public void workArrived(){
 		// Only notify when needed.
 		if(!workHasArrived){
@@ -591,6 +599,12 @@ public class ToolBus{
 		}
 	}
 	
+	/**
+	 * Custom iterator class.
+	 * This is souly needed, so we aren't being bothered by the 'fail-fast eventhough it's completely pointless, since it's the currently iterating thread that modified something and not a concurrently running one, in which case I'm probably unable to detect it anyway' behaviour.
+	 * 
+	 * @author Arnold Lankamp
+	 */
 	protected static class ProcessInstanceIterator implements Iterator<ProcessInstance>{
 		private List<ProcessInstance> list;
 		private int index;

@@ -6,12 +6,12 @@ package toolbus.atom.msg;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import toolbus.AtomSet;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -21,7 +21,7 @@ public class SndMsg extends MsgAtom{
 	private final List<RecMsg> msgPartners;
 	private int index;
 	
-	public SndMsg(ATerm msg, TBTermFactory tbfactory, ATerm posInfo){
+	public SndMsg(ATerm msg, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(msg, tbfactory, posInfo);
 		
 		msgPartners = new ArrayList<RecMsg>();

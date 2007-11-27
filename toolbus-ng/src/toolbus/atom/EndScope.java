@@ -43,9 +43,4 @@ public class EndScope extends Atom{
 		}
 		return false;
 	}
-	
-	public boolean isTerminated(){
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

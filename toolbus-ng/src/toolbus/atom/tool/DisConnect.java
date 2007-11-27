@@ -8,6 +8,7 @@ import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
@@ -17,9 +18,8 @@ import aterm.ATerm;
  */
 public class DisConnect extends Atom{
 	private final Ref toolId;
-	private ToolInstance toolInstance;
 	
-	public DisConnect(ATerm toolId, TBTermFactory tbfactory, ATerm posInfo){
+	public DisConnect(ATerm toolId, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);
@@ -33,26 +33,17 @@ public class DisConnect extends Atom{
 		return a;
 	}
 	
-	public void activate(){
-		toolInstance = null;
-		super.activate();
-	}
-	
 	/**
 	 * @see toolbus.StateElement#execute()
 	 */
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		if(toolInstance == null){
-			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-			if(tid == tbfactory.Undefined) return false;
-			
-			toolInstance = getToolBus().getToolInstanceManager().get(tid);
-			if(toolInstance == null){
-				return false;
-			}
-		}
+		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+		if(tid == tbfactory.Undefined) return false;
+		
+		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
+		if(toolInstance == null) return false;
 		
 		// If the connection is already lost don't try to terminate the connection, since it will fail.
 		if(toolInstance.isKilled() || toolInstance.isUnreachable()){

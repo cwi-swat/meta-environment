@@ -5,12 +5,12 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import aterm.ATerm;
 
 /**
@@ -23,7 +23,7 @@ public class IfElse extends ProcessExpression{
 	private final ProcessExpression right;
 	private Environment env;
 	
-	public IfElse(ATerm test, ProcessExpression Pthen, ProcessExpression Pelse, TBTermFactory tbfactory, ATerm posInfo){
+	public IfElse(ATerm test, ProcessExpression Pthen, ProcessExpression Pelse, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.test = test;
 		this.left = Pthen;

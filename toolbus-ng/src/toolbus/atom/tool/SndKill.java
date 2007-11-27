@@ -11,6 +11,7 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
@@ -19,7 +20,7 @@ public class SndKill extends Atom{
 	private final Ref toolId;
 	private final Ref message;
 	
-	public SndKill(ATerm toolId, ATerm value, TBTermFactory tbfactory, ATerm posInfo){
+	public SndKill(ATerm toolId, ATerm value, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);

@@ -7,13 +7,14 @@ import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
 public class NoNote extends Atom{
 	private final Ref msgpat;
 	
-	public NoNote(ATerm msgpat, TBTermFactory tbfactory, ATerm posInfo){
+	public NoNote(ATerm msgpat, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.msgpat = new Ref(msgpat);
 		setAtomArgs(this.msgpat);

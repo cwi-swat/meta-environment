@@ -4,13 +4,13 @@
 package toolbus.atom;
 
 import java.util.Stack;
-
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -19,7 +19,7 @@ public class Assign extends Atom{
 	private final Ref var;
 	private final Ref exp;
 	
-	public Assign(ATerm v, ATerm e, TBTermFactory tbfactory, ATerm posInfo){
+	public Assign(ATerm v, ATerm e, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		var = new Ref(v);

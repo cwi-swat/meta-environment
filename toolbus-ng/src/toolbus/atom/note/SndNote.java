@@ -5,12 +5,12 @@ package toolbus.atom.note;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import toolbus.AtomSet;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -20,7 +20,7 @@ public class SndNote extends Atom{
 	
 	private List<ProcessInstance> notePartners = new ArrayList<ProcessInstance>();
 	
-	public SndNote(ATerm note, TBTermFactory tbfactory, ATerm posInfo){
+	public SndNote(ATerm note, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.note = new Ref(note);
 		setAtomArgs(this.note);

@@ -2,6 +2,7 @@ package toolbus;
 
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
@@ -20,7 +21,7 @@ public interface StateElement{
 	 *            the StateElement
 	 * @return true (contained in) or false (not contained in)
 	 */
-	public boolean contains(StateElement elem);
+	boolean contains(StateElement elem);
 	
 	/**
 	 * Add a test to this StateElem. Tests implement conditionals as well as delay/timeout.
@@ -30,7 +31,7 @@ public interface StateElement{
 	 *            to be used for executing the test
 	 * @throws ToolBusException
 	 */
-	public void setTest(ATerm test, Environment env) throws ToolBusException;
+	void setTest(ATerm test, Environment env) throws ToolBusException;
 	
 	/**
 	 * Add potential partners to this StateElement. This may optimize execution. Typical examples:
@@ -58,26 +59,18 @@ public interface StateElement{
 	 * @return true (enabled) or false (not enabled).
 	 * @throws ToolBusException
 	 */
-	public boolean isEnabled() throws ToolBusException;
-	
-	/**
-	 * Is the execution of this StateElelement terminated?,
-	 * 
-	 * @return true (terminated) or false (not terminated).
-	 * @throws ToolBusException
-	 */
-	public boolean isTerminated() throws ToolBusException;
+	boolean isEnabled() throws ToolBusException;
 	
 	/**
 	 * @return the ProcessInstance to which the StateElement belongs
 	 */
-	public ProcessInstance getProcess();
+	ProcessInstance getProcess();
 	
 	/**
 	 * Activate the StateElement, i.e. make it ready for execution. This may involve initialization
 	 * and the setting of timers.
 	 */
-	public void activate();
+	void activate();
 	
 	/**
 	 * Execute this StateElement
@@ -85,12 +78,12 @@ public interface StateElement{
 	 * @return true if execution was completed.
 	 * @throws ToolBusException
 	 */
-	public boolean execute() throws ToolBusException;
+	boolean execute() throws ToolBusException;
 	
 	/**
 	 * @return the successor State of the StateElement
 	 */
-	public State gotoNextStateAndActivate();
+	State gotoNextStateAndActivate();
 	
 	/**
 	 * Get the successor of the StateElement for a given other StateElement elem. This typically
@@ -100,5 +93,11 @@ public interface StateElement{
 	 * @param elem
 	 * @return the successor State of the StateElement
 	 */
-	public State gotoNextStateAndActivate(StateElement elem);
+	State gotoNextStateAndActivate(StateElement elem);
+	
+	/**
+	 * Returns the position information associated to the implementing state element.
+	 * @return The position information associated to the implementing state element.
+	 */
+	PositionInformation getPosInfo();
 }

@@ -3,7 +3,7 @@ package toolbus.util.collections;
 /**
  * This is a high performance queue implementation that uses very little memory and produces only
  * very little garbage (only during resizing of the backing array). It's about 3 to 5 times as fast
- * as Java's LinkedList queue implementation and uses about 3 times as little memory.
+ * as Sun's queue (which uses a LinkedList) implementation and uses about 3 times as little memory.
  * 
  * NOTE: This implementation does not contain any locking, so if you want to use this implementation 
  * in a concurrent environment you will have to take care of the locking yourself.

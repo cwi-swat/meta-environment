@@ -5,13 +5,12 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
-import aterm.ATerm;
+import toolbus.parsercup.PositionInformation;
 import aterm.ATermList;
 
 public class LetDefinition extends ProcessExpression{
@@ -20,7 +19,7 @@ public class LetDefinition extends ProcessExpression{
 	private final ProcessExpression PE;
 	private Environment env;
 	
-	public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, ATerm posInfo){
+	public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.locals = formals;
 		PEinit = PE;
@@ -53,10 +52,6 @@ public class LetDefinition extends ProcessExpression{
 	public State getFirst(){
 		return PE.getFirst();
 	}
-	
-	//public State getStartState(){
-	//	return PE.getStartState();
-	//}
 	
 	public State getFollow(){
 		return PE.getFollow();

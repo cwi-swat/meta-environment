@@ -280,31 +280,6 @@ public class ConcurrentHashMap<T, R> {
 		}
 		
 		/**
-		 * Locates and returns the value associated with the given key.
-		 * 
-		 * @param key
-		 *            The key.
-		 * @param hash
-		 *            The hashcode of the key.
-		 * @return The value associated with the given key; null otherwise.
-		 */
-		private R find(T key, int hash){
-			int position = hash & hashMask;
-			
-			Entry<T, R> e = entries[position]; // Volatile read.
-			if(e != null){
-				do{
-					if(hash == e.hash && key.equals(e.key)){
-						return e.value;
-					}
-					e = e.next;
-				}while(e != null);
-			}
-			
-			return null;
-		}
-		
-		/**
 		 * Returns the value associated with the given key.
 		 * 
 		 * @param key
@@ -316,12 +291,40 @@ public class ConcurrentHashMap<T, R> {
 		public R get(T key, int hash){
 			if(key == null) return null;
 			
-			R result = find(key, hash);
-			if(result != null) return result;
-			// It could be that we didn't find it because we were rehashing, so try again while
-			// holding the global lock for this segment.
+			int position = hash & hashMask;
+			Entry<T, R> e = entries[position]; // Volatile read.
+			if(e != null){
+				do{
+					if(hash == e.hash && key.equals(e.key)){
+						R value = e.value;
+						if(value == null){
+							// Recheck while holding the lock, when e.value is null.
+							// The initialization of the field can happen out of order with the assignment of the entry in the table.
+							// Naturally it's important is that we return a valid value.
+							synchronized(this){
+								value = e.value;
+							}
+						}
+						
+						return value;
+					}
+					e = e.next;
+				}while(e != null);
+			}
+			
+			// Try again while holding the global lock for this segment, if we couldn't find what we're looking for.
 			synchronized(this){
-				return find(key, hash);
+				position = hash & hashMask;
+				e = entries[position];
+				if(e != null){
+					do{
+						if(hash == e.hash && key.equals(e.key)){
+							return e.value;
+						}
+						e = e.next;
+					}while(e != null);
+				}
+				return null;
 			}
 		}
 		

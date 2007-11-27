@@ -4,7 +4,6 @@
 package toolbus.atom.tool;
 
 import java.util.Stack;
-
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
@@ -14,6 +13,7 @@ import toolbus.ToolInstanceManager;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
@@ -27,7 +27,7 @@ public class Execute extends Atom{
 	private final Ref tool;
 	private final Ref rvar;
 	
-	public Execute(ATerm tool, ATerm rvar, TBTermFactory tbfactory, ATerm posInfo){
+	public Execute(ATerm tool, ATerm rvar, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.tool = new Ref(tool);
 		this.rvar = new Ref(rvar);

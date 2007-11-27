@@ -5,6 +5,7 @@ import toolbus.TBTermVar;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.AFun;
@@ -19,9 +20,8 @@ public class AckEvent extends Atom{
 	private final Ref toolId;
 	private final Ref event;
 	private final Ref callbackData;
-	private ToolInstance toolInstance;
 	
-	public AckEvent(ATerm toolId, ATerm event, ATerm callbackData, TBTermFactory tbfactory, ATerm posInfo){
+	public AckEvent(ATerm toolId, ATerm event, ATerm callbackData, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);
@@ -38,21 +38,14 @@ public class AckEvent extends Atom{
 		return a;
 	}
 	
-	public void activate(){
-		toolInstance = null;
-		super.activate();
-	}
-	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		if(toolInstance == null){
-			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-			if(tid == tbfactory.Undefined) return false;
-			
-			toolInstance = getToolBus().getToolInstanceManager().get(tid);
-			if(toolInstance == null) return false;
-		}
+		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+		if(tid == tbfactory.Undefined) return false;
+		
+		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
+		if(toolInstance == null) return false;
 		
 		// Construct an ack appl with the right amount of arguments.
 		AFun ackFun = ((ATermAppl) event.value).getAFun();

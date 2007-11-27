@@ -5,12 +5,12 @@
 package toolbus.atom.msg;
 
 import java.util.Stack;
-
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
@@ -19,7 +19,7 @@ public abstract class MsgAtom extends Atom{
 	
 	protected ATerm matchPattern;
 	
-	public MsgAtom(ATerm msg, TBTermFactory tbfactory, ATerm posInfo){
+	public MsgAtom(ATerm msg, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.msg = new Ref(msg);
 		setAtomArgs(this.msg);

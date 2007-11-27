@@ -40,7 +40,7 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 Identifier = [a-z][A-Za-z0-9\-]*
 Name = [A-Z_][A-Za-z0-9\-_]*
 
-Int   = 0 | [1-9][0-9]*
+Int   = -?0 | -?[1-9][0-9]*
 Real  = -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
 
 %state STRING, INCLUDE

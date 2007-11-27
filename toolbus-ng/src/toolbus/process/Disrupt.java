@@ -1,14 +1,13 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
-import aterm.ATerm;
+import toolbus.parsercup.PositionInformation;
 
 /**
  * Disrupt is the abstract syntax operator for the disrupt operator (>>) in Tscripts. It is compiled
@@ -18,7 +17,7 @@ public class Disrupt extends ProcessExpression{
 	private ProcessExpression left;
 	private ProcessExpression right;
 	
-	public Disrupt(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, ATerm posInfo){
+	public Disrupt(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.left = left;
 		this.right = right;

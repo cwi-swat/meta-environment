@@ -30,7 +30,7 @@ public class State{
 	public State(){
 		elements = new ArrayList<StateElement>();
 		
-		cache = new IdentityHashMap<StateElement, Boolean>(10);
+		cache = new IdentityHashMap<StateElement, Boolean>();
 	}
 	
 	public void addElement(StateElement a){
@@ -87,16 +87,6 @@ public class State{
 			}
 		}
 		return false;
-	}
-	
-	public boolean isTerminated() throws ToolBusException{
-		if(nElements == 0) return true;
-		for(StateElement a : elements){
-			if(!a.isTerminated()){
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	public String toString(){
@@ -167,6 +157,36 @@ public class State{
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Executes one step in debug mode and returns the executed state element as result.
+	 * 
+	 * @return The executed state element; null if none was executed.
+	 * @throws ToolBusException Thrown if something went wrong.
+	 */
+	public StateElement debugExecute() throws ToolBusException{
+		if(nElements == 0) return null;
+		
+		for(int index = (lastElement + 1) % nElements, nleft = nElements; nleft > 0; index = (index + 1) % nElements, nleft--){
+			StateElement a = elements.get(index);
+			
+			if(a.execute()){
+				lastElement = index;
+				
+				return a;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the last executed state element in the current state.
+	 * (This method is used for debugging only).
+	 * @return The last executed state element in the current state.
+	 */
+	public StateElement getLastExecutedStateElement(){
+		return elements.get(lastElement);
 	}
 	
 	public List<StateElement> getUnhandledMessages(){

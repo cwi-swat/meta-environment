@@ -1,31 +1,31 @@
 process P1 is 		
 let Message : term, Tidr : receive, Tids : send, Stats : term
 in
-    execute(receive, Tidr?) .
-    execute(send, Tids?) .
-    (
-	    (
-	    	rec-event(Tids, available) /*timeout(secs(10))*/ .
-	    	snd-ack-event(Tids, available) .
-	    	/*get-perf-stats(Tidr) .
-	    	rec-perf-stats(Tidr, Stats?) .
-	    	printf("%t\n", Stats) .*/
-	    	snd-eval(Tids, getText) /*delay(msecs(1000))*/ .
-	    	rec-value(Tids, getText(Message?)) .
-	    	snd-do(Tidr, set(Message))
+	execute(receive, Tidr?) .
+	execute(send, Tids?) .
+	(
+		(
+			rec-event(Tids, available) /*timeout(secs(10))*/ .
+			snd-ack-event(Tids, available) .
+			/*get-perf-stats(Tidr) .
+			rec-perf-stats(Tidr, Stats?) .
+			printf("%t\n", Stats) .*/
+			snd-eval(Tids, getText) /*delay(msecs(1000))*/ .
+			rec-value(Tids, getText(Message?)) .
+			snd-do(Tidr, set(Message))
+		)
+		+
+		(
+			rec-event(Tids, exit(Message?)) .
+			snd-ack-event(Tids, exit(Message)) .
+			shutdown("Shutdown by sending tool")
 	    )
-	    +
-	    (
-	    	rec-event(Tids, exit(Message?)) .
-	    	snd-ack-event(Tids, exit(Message)) .
-	    	shutdown("Shutdown by sending tool")
-	    )
-	    +
-	    (
-	    	rec-event(Tidr, exit(Message?)) .
-	    	snd-ack-event(Tidr, exit(Message)) .
-	    	shutdown("Shutdown by receiving tool")
-	    )
+		+
+		(
+			rec-event(Tidr, exit(Message?)) .
+			snd-ack-event(Tidr, exit(Message)) .
+			shutdown("Shutdown by receiving tool")
+		)
 	) * delta
 endlet
 

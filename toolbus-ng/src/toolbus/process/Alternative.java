@@ -4,14 +4,12 @@ package toolbus.process;
  * @author paulk
  */
 import java.util.Stack;
-
-import aterm.ATerm;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 
 /**
  * Alternative is the abstract syntax operator for the choice operator (+) in Tscripts. It is
@@ -21,7 +19,7 @@ public class Alternative extends ProcessExpression{
 	private final ProcessExpression left;
 	private final ProcessExpression right;
 	
-	public Alternative(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, ATerm posInfo){
+	public Alternative(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.left = left;
 		this.right = right;

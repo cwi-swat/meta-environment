@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.Functions;
 import toolbus.State;
@@ -17,6 +16,7 @@ import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.AFun;
@@ -73,9 +73,8 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	static private HashMap<String, Integer> size_used_env = new HashMap<String, Integer>(32);
 */
 	
-	public Atom(TBTermFactory tbfactory, ATerm posInfo){
+	public Atom(TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
-		assert tbfactory != null;
 		addToFirst(this);
 		externalNameAsReceivedByTool = shortName();
 		/* incr(instances);*/
@@ -395,15 +394,7 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		
 		/*incr(size_used_env, collected.getLength());*/
 		
-		
 		// System.err.println("used_vars = " + collected);
 		// System.err.println("Atom.activate: " + this);
-		
 	}
-	
-	public boolean isTerminated(){
-		return false;
-	}
-	
-	abstract public boolean execute() throws ToolBusException;
 }

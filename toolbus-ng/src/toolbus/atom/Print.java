@@ -4,10 +4,10 @@
 package toolbus.atom;
 
 import java.io.PrintWriter;
-
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -16,7 +16,7 @@ import aterm.ATermList;
 public class Print extends Atom{
 	private final Ref arg;
 	
-	public Print(ATerm a, TBTermFactory tbfactory, ATerm posInfo){
+	public Print(ATerm a, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		arg = new Ref(a);

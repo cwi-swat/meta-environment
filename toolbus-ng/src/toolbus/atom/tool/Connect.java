@@ -9,6 +9,7 @@ import toolbus.ToolInstanceManager;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
@@ -21,7 +22,7 @@ public class Connect extends Atom{
 	private final Ref toolId;
 	private final boolean followsExecute;
 	
-	public Connect(ATerm toolId, TBTermFactory tbfactory, ATerm posInfo, boolean followsExecute){
+	public Connect(ATerm toolId, TBTermFactory tbfactory, PositionInformation posInfo, boolean followsExecute){
 		super(tbfactory, posInfo);
 		
 		this.toolId = new Ref(toolId);

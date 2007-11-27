@@ -19,7 +19,7 @@ Parser
 
 Run on the commandline:
 
-java -jar  java-cup-11a.jar -expect 1 toolbus.cup
+java -jar  java-cup-11a.jar -expect 1 -nopositions toolbus.cup
 
 This generates the file parser.java that contains the actual parser.
 

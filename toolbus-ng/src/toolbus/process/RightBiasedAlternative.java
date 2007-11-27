@@ -1,13 +1,13 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import aterm.ATerm;
 
 /**
@@ -28,7 +28,7 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 	
 	private boolean rightLast = false;
 	
-	public RightBiasedAlternative(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, ATerm posInfo){
+	public RightBiasedAlternative(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		
 		expr = new ProcessExpression[2];
@@ -135,9 +135,5 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 	
 	public String toString(){
 		return "RightBiasedAlternative(" + state[LEFT] + "; " + state[RIGHT] + ")";
-	}
-	
-	public boolean isTerminated(){
-		return false;
 	}
 }

@@ -4,14 +4,12 @@ package toolbus.process;
  * @author paulk
  */
 import java.util.Stack;
-
-import aterm.ATerm;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 
 /**
  * Iteration implements the process expression P1 * P2. The current implementation does not handle
@@ -26,7 +24,7 @@ public class Iteration extends ProcessExpression{
 	private final ProcessExpression left;
 	private final ProcessExpression right;
 	
-	public Iteration(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, ATerm posInfo){
+	public Iteration(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.left = left;
 		this.right = right;

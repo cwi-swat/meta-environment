@@ -5,7 +5,6 @@
 package toolbus.process;
 
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
@@ -13,6 +12,7 @@ import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.parsercup.PositionInformation;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -63,7 +63,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	private ATerm test;
 	private Environment testEnv;
 	
-	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, ATerm posInfo){
+	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 		this.name = name;
 		this.originalActuals = actuals;
@@ -73,11 +73,11 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		firstState.addElement(this);
 	}
 	
-	public ProcessCall(ATerm call, TBTermFactory tbfactory, ATerm posInfo){
+	public ProcessCall(ATerm call, TBTermFactory tbfactory, PositionInformation posInfo){
 		this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments(), tbfactory, posInfo);
 	}
 	
-	public ProcessCall(String name, ATermList actuals, boolean evalArgs, TBTermFactory tbfactory, ATerm posInfo){
+	public ProcessCall(String name, ATermList actuals, boolean evalArgs, TBTermFactory tbfactory, PositionInformation posInfo){
 		this(name, actuals, tbfactory, posInfo);
 		this.evalArgs = evalArgs;
 	}
@@ -137,8 +137,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		actuals = (ATermList) tbfactory.replaceFormals(originalActuals, env);
 		PE = definition.getProcessExpression(actuals);
 		
-		// System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE +
-		// ")");
+		// System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
 		formals = definition.getFormals();
 		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
 		
@@ -233,22 +232,20 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	}
 	
 	public State gotoNextStateAndActivate(){
-		if(!(activated || executing)){
+		if(!executing){
 			State follow = getFollow();
 			follow.activate();
 			return follow;
 		}
-		executing = true;
 		return PE.getFirst().gotoNextStateAndActivate();
 	}
 	
 	public State gotoNextStateAndActivate(StateElement se){
-		if(!(activated || executing)){
+		if(!executing){
 			State follow = getFollow();
 			follow.activate();
 			return follow;
 		}
-		executing = true;
 		return PE.getFirst().gotoNextStateAndActivate(se);
 	}
 	
@@ -268,7 +265,6 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 				initDynamicCall();
 				if(definition == null){
 					activated = true;
-					executing = false;
 					return;
 				}
 			}catch(ToolBusException e){
@@ -278,15 +274,12 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		}
 		// System.err.println("ProcessCall: activate first set of PE");
 		activated = true;
-		executing = false;
 		PE.getFirst().activate();
 	}
 	
 	public boolean execute() throws ToolBusException{
-		// System.err.println("ProcessCall.execute: [" + getProcess().getProcessName() + "]" +
-		// this);
-		// System.err.println("activated = " + activated + "; executing = " + executing + "; first =
-		// " + PE.getFirst());
+		// System.err.println("ProcessCall.execute: [" + getProcess().getProcessName() + "]" + this);
+		// System.err.println("activated = " + activated + "; executing = " + executing + "; first = " + PE.getFirst());
 		if(activated && !executing){
 			if(definition == null){
 				return false;
@@ -300,8 +293,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 			// System.err.println("case size != 0");
 			executing = PE.getFirst().execute();
 			// System.err.println("executing => " + executing);
-			// if(executing)System.err.println("ProcessCall [" + getProcess().getProcessName() + "]
-			// enter");
+			// if(executing)System.err.println("ProcessCall [" + getProcess().getProcessName() + "] enter");
 			return executing;
 		}
 		// System.err.println("execute: moving on to: " + follows);
@@ -310,7 +302,18 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		return true;
 	}
 	
-	public boolean isTerminated(){
-		return false;
+	/**
+	 * Returns the last, by this process call, executed state element.
+	 * (This method is used for debugging only).
+	 * @return The last, by this process call, executed state element; null if this process call isn't currently executing.
+	 */
+	public StateElement getExecutedStateElement(){
+		if(!executing) return null;
+		
+		StateElement executedStateElement = PE.getFirst().getLastExecutedStateElement();
+		while(executedStateElement instanceof ProcessCall){
+			executedStateElement = ((ProcessCall) executedStateElement).getExecutedStateElement();
+		}
+		return executedStateElement;
 	}
 }

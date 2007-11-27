@@ -3,6 +3,7 @@ package toolbus.atom.msg;
 import toolbus.AtomSet;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
@@ -11,7 +12,7 @@ import aterm.ATerm;
  */
 public class RecMsg extends MsgAtom{
 	
-	public RecMsg(ATerm msg, TBTermFactory tbfactory, ATerm posInfo){
+	public RecMsg(ATerm msg, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(msg, tbfactory, posInfo);
 	}
 	

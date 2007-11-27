@@ -1,8 +1,8 @@
 package toolbus.atom;
 
-import aterm.ATerm;
 import toolbus.State;
 import toolbus.TBTermFactory;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessExpression;
 
 /**
@@ -11,7 +11,7 @@ import toolbus.process.ProcessExpression;
 
 public class Delta extends Atom{
 	
-	public Delta(TBTermFactory tbfactory, ATerm posInfo){
+	public Delta(TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
 	}
 	

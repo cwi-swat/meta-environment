@@ -19,14 +19,12 @@ public class ProcessDefinition{
 	private final ATermList formals;
 	private final ProcessExpression PE;
 	private final TBTermFactory tbfactory;
-	private final ATerm posInfo;
 	
-	public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, ATerm posInfo){
+	public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory){
 		this.name = name;
 		this.formals = formals;
 		this.PE = PE;
 		this.tbfactory = tbfactory;
-		this.posInfo = posInfo;
 	}
 	
 	public String getName(){
@@ -44,10 +42,6 @@ public class ProcessDefinition{
 		return formals.getLength();
 	}
 	
-	public ATerm getPosInfo(){
-		return posInfo;
-	}
-	
 	public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusError{
 		// System.err.println("ProcessDefiniton:" + name + " formals = " + formals + "; actuals = "
 		// + actuals);
@@ -62,8 +56,7 @@ public class ProcessDefinition{
 			}
 			if(!Functions.compatibleTypes(formal, actual)) throw new ToolBusError("argument #" + (i + 1) + " of process " + name + " should have type " + formal.getVarType() + " instead of " + actual);
 		}
-		ProcessExpression PE1 = PE.copy();
-		return PE1;
+		return PE.copy();
 	}
 	
 	public String toString(){

@@ -214,13 +214,13 @@ class TScriptNodeBuilders{
 		
 		define(new NodeBuilder("ttt-Delta"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Delta(tbfactory, posInfo);
+				return new Delta(tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Tau"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Tau(tbfactory, posInfo);
+				return new Tau(tbfactory, null);
 			}
 		});
 		
@@ -230,19 +230,19 @@ class TScriptNodeBuilders{
 		
 		define(new NodeBuilder("ttt-Sequence"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Alternative"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Alternative((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new Alternative((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-RightBiasedAlternative"){
 			public Object build(Object args[], ATerm posInfo){
-				return new RightBiasedAlternative((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new RightBiasedAlternative((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
@@ -255,37 +255,37 @@ class TScriptNodeBuilders{
 				 * that the test can never become true! Temporary solution: prefix the iteration
 				 * with an extra tau (so the test is always executed in an unmodified environment).
 				 */
-				return new Sequence(new Tau(tbfactory, posInfo), new Iteration((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, posInfo), tbfactory, posInfo);
+				return new Sequence(new Tau(tbfactory, null), new Iteration((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, null), tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Disrupt"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Disrupt((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new Disrupt((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Merge"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Merge((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new Merge((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-IfElse"){
 			public Object build(Object args[], ATerm posInfo){
-				return new IfElse((ATerm) args[0], (ProcessExpression) args[1], (ProcessExpression) args[2], tbfactory, posInfo);
+				return new IfElse((ATerm) args[0], (ProcessExpression) args[1], (ProcessExpression) args[2], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-IfThen"){
 			public Object build(Object args[], ATerm posInfo){
-				return new IfThen((ATerm) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new IfThen((ATerm) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-LetDefinition"){
 			public Object build(Object args[], ATerm posInfo){
-				return new LetDefinition((ATermList) args[0], (ProcessExpression) args[1], tbfactory, posInfo);
+				return new LetDefinition((ATermList) args[0], (ProcessExpression) args[1], tbfactory, null);
 			}
 		});
 		
@@ -295,25 +295,25 @@ class TScriptNodeBuilders{
 		
 		define(new NodeBuilder("ttt-ProcessCall"){
 			public Object build(Object args[], ATerm posInfo){
-				return new ProcessCall(((ATerm) args[0]), tbfactory, posInfo);
+				return new ProcessCall(((ATerm) args[0]), tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-ProcessDefinition0"){
 			public Object build(Object args[], ATerm posInfo){
-				return new ProcessDefinition(((ATermAppl) args[0]).getName(), tbfactory.EmptyList, (ProcessExpression) args[1], tbfactory, posInfo);
+				return new ProcessDefinition(((ATermAppl) args[0]).getName(), tbfactory.EmptyList, (ProcessExpression) args[1], tbfactory);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-ProcessDefinition"){
 			public Object build(Object args[], ATerm posInfo){
-				return new ProcessDefinition(((ATermAppl) args[0]).getName(), (ATermList) args[1], (ProcessExpression) args[2], tbfactory, posInfo);
+				return new ProcessDefinition(((ATermAppl) args[0]).getName(), (ATermList) args[1], (ProcessExpression) args[2], tbfactory);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Create"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Create((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new Create((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
@@ -324,7 +324,7 @@ class TScriptNodeBuilders{
 		define(new NodeBuilder("ttt-RecMsg"){
 			public Object build(Object args[], ATerm posInfo){
 				if(args.length == 1){
-					return new RecMsg((ATerm) args[0], tbfactory, posInfo);
+					return new RecMsg((ATerm) args[0], tbfactory, null);
 				}
 				System.err.println("ttt-RecMsg: too many arguments");
 				return null;
@@ -336,7 +336,7 @@ class TScriptNodeBuilders{
 		define(new NodeBuilder("ttt-SndMsg"){
 			public Object build(Object args[], ATerm posInfo){
 				if(args.length == 1){
-					return new SndMsg((ATerm) args[0], tbfactory, posInfo);
+					return new SndMsg((ATerm) args[0], tbfactory, null);
 				}
 				System.err.println("ttt-SndMsg: too many arguments");
 				return null;
@@ -351,31 +351,31 @@ class TScriptNodeBuilders{
 		
 		define(new NodeBuilder("ttt-Subscribe"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Subscribe((ATerm) args[0], tbfactory, posInfo);
+				return new Subscribe((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-UnSubscribe"){
 			public Object build(Object args[], ATerm posInfo){
-				return new UnSubscribe((ATerm) args[0], tbfactory, posInfo);
+				return new UnSubscribe((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-SndNote"){
 			public Object build(Object args[], ATerm posInfo){
-				return new SndNote((ATerm) args[0], tbfactory, posInfo);
+				return new SndNote((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-RecNote"){
 			public Object build(Object args[], ATerm posInfo){
-				return new RecNote((ATerm) args[0], tbfactory, posInfo);
+				return new RecNote((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-NoNote"){
 			public Object build(Object args[], ATerm posInfo){
-				return new NoNote((ATerm) args[0], tbfactory, posInfo);
+				return new NoNote((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
@@ -424,87 +424,87 @@ class TScriptNodeBuilders{
 				String clazz = ((ATermAppl) args[4]).getName();
 				clazz = (clazz == "None") ? null : ((clazz == "Some") ? ((ATermAppl) ((ATermAppl) args[4]).getArgument(0)).getName() : clazz);
 				
-				return new ToolDefinition(name, host, kind, command, clazz, tbfactory, posInfo);
+				return new ToolDefinition(name, host, kind, command, clazz, tbfactory);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Execute"){
 			public Object build(Object args[], ATerm posInfo){
-				Execute ex = new Execute((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
-				Connect con = new Connect((ATerm) args[1], tbfactory, posInfo, true);
-				return new Sequence(ex, con, tbfactory, posInfo);
+				Execute ex = new Execute((ATerm) args[0], (ATerm) args[1], tbfactory, null);
+				Connect con = new Connect((ATerm) args[1], tbfactory, null, true);
+				return new Sequence(ex, con, tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-SndTerminate"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Terminate((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new Terminate((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-SndKill"){
 			public Object build(Object args[], ATerm posInfo){
-				return new SndKill((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new SndKill((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-RecConnect"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Connect((ATerm) args[0], tbfactory, posInfo, false);
+				return new Connect((ATerm) args[0], tbfactory, null, false);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-RecDisConnect"){
 			public Object build(Object args[], ATerm posInfo){
-				return new DisConnect((ATerm) args[0], tbfactory, posInfo);
+				return new DisConnect((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Eval"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Eval((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new Eval((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-RecVal"){
 			public Object build(Object args[], ATerm posInfo){
-				return new RecVal((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new RecVal((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Do"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Do((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new Do((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Event"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Event((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new Event((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-AckEvent"){
 			public Object build(Object args[], ATerm posInfo){
-				return new AckEvent((ATerm) args[0], (ATerm) args[1], null, tbfactory, posInfo);
+				return new AckEvent((ATerm) args[0], (ATerm) args[1], null, tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-AckEventCB"){
 			public Object build(Object args[], ATerm posInfo){
-				return new AckEvent((ATerm) args[0], (ATerm) args[1], (ATerm) args[2], tbfactory, posInfo);
+				return new AckEvent((ATerm) args[0], (ATerm) args[1], (ATerm) args[2], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-GetPerfStats"){
 			public Object build(Object args[], ATerm posInfo){
-				return new GetPerfStats((ATerm) args[0], tbfactory, posInfo);
+				return new GetPerfStats((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-RecPerfStats"){
 			public Object build(Object args[], ATerm posInfo){
-				return new RecPerfStats((ATerm) args[0], (ATerm) args[1], tbfactory, posInfo);
+				return new RecPerfStats((ATerm) args[0], (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
@@ -514,19 +514,19 @@ class TScriptNodeBuilders{
 		
 		define(new NodeBuilder("ttt-Assign"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Assign(tbfactory.mkVar((ATerm) args[0], processName, tbfactory.make("none")), (ATerm) args[1], tbfactory, posInfo);
+				return new Assign(tbfactory.mkVar((ATerm) args[0], processName, tbfactory.make("none")), (ATerm) args[1], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-Print"){
 			public Object build(Object args[], ATerm posInfo){
-				return new Print((ATerm) args[0], tbfactory, posInfo);
+				return new Print((ATerm) args[0], tbfactory, null);
 			}
 		});
 		
 		define(new NodeBuilder("ttt-ShutDown"){
 			public Object build(Object args[], ATerm posInfo){
-				return new ShutDown((ATerm) args[0], tbfactory, posInfo);
+				return new ShutDown((ATerm) args[0], tbfactory, null);
 			}
 		});
 		

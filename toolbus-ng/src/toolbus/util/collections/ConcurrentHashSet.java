@@ -240,34 +240,9 @@ public class ConcurrentHashSet<T> {
 			e = new Entry<T>(next, value, hash);
 			table[position] = e;
 			
-			entries = table; // Volatile write.
-			
 			load++;
-		}
-		
-		/**
-		 * Checks if the given value is present in this segment.
-		 * 
-		 * @param value
-		 *            The value.
-		 * @param hash
-		 *            The hashcode of the value.
-		 * @return True if the value is present; false otherwise.
-		 */
-		private boolean isPresent(T value, int hash){
-			int position = hash & hashMask;
 			
-			Entry<T> e = entries[position]; // Volatile read.
-			if(e != null){
-				do{
-					if(hash == e.hash && value.equals(e.value)){
-						return true;
-					}
-					e = e.next;
-				}while(e != null);
-			}
-			
-			return false;
+			entries = table; // Volatile write.
 		}
 		
 		/**
@@ -282,14 +257,31 @@ public class ConcurrentHashSet<T> {
 		public boolean contains(T value, int hash){
 			if(value == null) return false;
 			
-			if(!isPresent(value, hash)){
-				// It could be that we didn't find it because we were rehashing, so try again while
-				// holding the global lock for this segment.
-				synchronized(this){
-					return isPresent(value, hash);
-				}
+			int position = hash & hashMask;
+			Entry<T> e = entries[position]; // Volatile read.
+			if(e != null){
+				do{
+					if(hash == e.hash && value.equals(e.value)){
+						return true;
+					}
+					e = e.next;
+				}while(e != null);
 			}
-			return true;
+			
+			// Try again while holding the global lock for this segment, if we couldn't find what we're looking for.
+			synchronized(this){
+				position = hash & hashMask;
+				e = entries[position];
+				if(e != null){
+					do{
+						if(hash == e.hash && value.equals(e.value)){
+							return true;
+						}
+						e = e.next;
+					}while(e != null);
+				}
+				return false;
+			}
 		}
 		
 		/**

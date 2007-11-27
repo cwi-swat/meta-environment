@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
@@ -14,7 +13,6 @@ import toolbus.atom.Atom;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
-import aterm.ATermList;
 
 /**
  * @author paulk, Jul 23, 2002
@@ -63,10 +61,6 @@ public class ProcessInstance{
 		addPartnersToAllProcesses(elements);
 		
 		showAutomaton();
-	}
-	
-	public ProcessInstance(ToolBus TB, String name, ATermList actuals, int processId) throws ToolBusException{
-		this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory(), null), processId);
 	}
 	
 	public TBTermFactory getTBTermFactory(){
@@ -262,6 +256,26 @@ public class ProcessInstance{
 		return false;
 	}
 	
+	/**
+	 * Executes on step in debug mode, where the state element that was executed is returned as result.
+	 * 
+	 * @return The executed state element; null if nothing was executed.
+	 * @throws ToolBusException Thrown if something went wrong.
+	 */
+	public StateElement debugStep() throws ToolBusException{
+		if(running){
+			StateElement stateElement = currentState.debugExecute();
+			if(stateElement != null){
+				if(stateElement instanceof ProcessCall){ // If we just encountered a process call, find out what element it executed (so we can pretent it got inlined).
+					stateElement = ((ProcessCall)stateElement).getExecutedStateElement();
+				}
+				gotoNextStateAndActivate();
+				return stateElement;
+			}
+		}
+		return null;
+	}
+	
 	public boolean isTerminated(){
 		if(!running || currentState.size() == 0){
 			return true;
@@ -300,5 +314,16 @@ public class ProcessInstance{
 		/*for(Atom a : elements.getSet()){
 			LoggerFactory.log(definition.getName(), a + " --> " + a.getFollow(), IToolBusLoggerConstants.CALLS);
 		}*/
+	}
+	
+	/**
+	 * Returns a complete list of atoms in this process instance.
+	 * This method is only required for obtaining a reference to an atom, so we can set a break point on it
+	 * when running the toolbus in debug mode.
+	 * 
+	 * @return A complete list of atoms in this process instance.
+	 */
+	public AtomSet getAtomSet(){
+		return elements;
 	}
 }
