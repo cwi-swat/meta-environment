@@ -11,6 +11,7 @@
 #include "parserStatistics.h"
 
 #include <aterm2.h>
+#include <Error-manager.h>
 #include <rsrc-usage.h>
 
 #define MAX_TABLES 1
