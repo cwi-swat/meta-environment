@@ -3,30 +3,51 @@ equations
 [] TypeEnv := construct-type-environment(FeatureModule),
    ValueEnv := construct-value-environment(FeatureModule),
    ParameterEnv := construct-parameter-environment(FeatureModule),
-   C-Program1 := generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv),
+   C-Program1 := genHandleOptionsFunctions(FeatureModule, TypeEnv, ValueEnv, ParameterEnv),
    C-Program2 := generateGlobals(FeatureModule, C-Program1, ParameterEnv, TypeEnv),
    C-Program3 := addIncludeSection(C-Program2)
    ===
    generate(FeatureModule) = C-Program3
 
-[] Keys := keys(TypeEnv),
-   Declaration* := generateFunctionDeclarations(Keys, TypeEnv, ValueEnv),
-   module Modulename ImportSection* Section*1 arguments Argument* Section*2 := FeatureModule,
-   Statement* := generateFunctionStatements(Argument*, , ParameterEnv, TypeEnv)
+
+equations
+
+[] module Modulename ImportSection* Section*1 features FeatureDefinition* Section*2 := FeatureModule,
+   C-Program := genHandleOptionsFunction(FeatureDefinition*, , Modulename, TypeEnv, ValueEnv, ParameterEnv)
    ===
-   generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) = 
+   genHandleOptionsFunctions(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) = C-Program
+
+[] unparse-to-string(Modulename) == unparse-to-string(CompositeFeature),
+   Statement* := generateFunctionStatements(CompositeFeature: FeatureExpression, , ParameterEnv, TypeEnv)
+   ===
+   genHandleOptionsFunction(CompositeFeature: FeatureExpression, C-Program*, Modulename, TypeEnv, ValueEnv, ParameterEnv) = 
+
+C-Program*
 
 void handleOptions(int argc, char **argv) {
   int c;
- 
-  Declaration* 
 
   while ((c = getopt(argc, argv, myArguments)) != -1) {
     switch(c) {
       Statement*
     }
   }
-}
+} 
+
+[default-genHandleOptionsFunction] 
+   Statement* := generateFunctionStatements(FeatureDefinition, , ParameterEnv, TypeEnv)
+   ===
+   genHandleOptionsFunction(FeatureDefinition, C-Program*, Modulename, TypeEnv, ValueEnv, ParameterEnv) = 
+
+C-Program*
+
+void handleOptions(const char *arg) {
+  if (strlen(arg) == 1) {
+    switch(arg[0]) {
+      Statement*
+    }
+  }
+} 
 
 
 equations
@@ -97,13 +118,13 @@ case CharacterConstant:
 [default-generateFunctionStatements] 
    ArgumentChar := lookup(ParameterEnv, AtomicFeature),
    CharacterConstant := ac2cc(ArgumentChar),
-   Identifier := af2os(AtomicFeature)
+   Identifier := af2cid(AtomicFeature)
    ===
    generateFunctionStatements(AtomicFeature, Statement*, ParameterEnv, TypeEnv) = 
 
 Statement* 
 case CharacterConstant:
-  Identifier = optarg;
+  OPT_setStringValue(Identifier, optarg);
   break;
 
 [] ArgumentChar := lookup(ParameterEnv, CompositeFeature),

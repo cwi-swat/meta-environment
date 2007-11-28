@@ -6,6 +6,8 @@ imports languages/fdl/check/TypeEnvironment
 imports languages/fdl/run/ValueEnvironment
 imports languages/fdl/utilities/ParameterEnvironment
 imports basic/Bytes
+imports utilities/Parsing[Modulename]
+imports utilities/Parsing[CompositeFeature]
 
 exports
 sorts Keys
@@ -21,10 +23,21 @@ aliases
   List[[AtomicFeature]] -> Keys
 
 context-free syntax
-  generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv)            -> FunctionDefinition                                       
+  generateFunction(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) -> FunctionDefinition
+
+context-free syntax
+  genHandleOptionsFunctions(FeatureModule, TypeEnv, ValueEnv, ParameterEnv) -> ExternalDeclaration*                        
+  genHandleOptionsFunction(FeatureDefinition*, ExternalDeclaration*, Modulename, TypeEnv, ValueEnv, ParameterEnv) 
+    -> ExternalDeclaration* {traversal(accu, top-down, break)}
+  genHandleOptionsFunction(FeatureDefinition, ExternalDeclaration*, Modulename, TypeEnv, ValueEnv, ParameterEnv) 
+    -> ExternalDeclaration* {traversal(accu, top-down, break)}
+
+context-free syntax
+  generateFunctionStatements(FeatureDefinition, Statement*, ParameterEnv, TypeEnv) -> Statement* {traversal(accu, bottom-up, break)} 
+  generateFunctionStatements(FeatureName, Statement*, ParameterEnv, TypeEnv)       -> Statement* {traversal(accu, bottom-up, break)} 
+
+context-free syntax               
   generateFunctionDeclarations(Keys, TypeEnv, ValueEnv)                       -> Declaration*                                             
-  generateFunctionStatements(Argument*, Statement*, ParameterEnv, TypeEnv)    -> Statement*           {traversal(accu, bottom-up, break)} 
-  generateFunctionStatements(FeatureName, Statement*, ParameterEnv, TypeEnv)  -> Statement*           {traversal(accu, bottom-up, break)} 
   generateGlobals(FeatureModule, ExternalDeclaration+, ParameterEnv, TypeEnv) -> ExternalDeclaration+                                     
   addIncludeSection(ExternalDeclaration+)                                     -> ExternalDeclaration+                                     
   generateArguments(Argument*, StringConstant, ParameterEnv, TypeEnv)         -> StringConstant       {traversal(accu, bottom-up, break)} 
@@ -48,10 +61,14 @@ variables
   "AtomicFeature*" [0-9]*    -> {AtomicFeature ","}*  
   "CharacterConstant" [0-9]* -> CharacterConstant     
   "CompositeFeature" [0-9]*  -> CompositeFeature      
-  "C-Program" [0-9]*         -> ExternalDeclaration+  
+  "C-Program" [0-9]*         -> ExternalDeclaration+ 
+  "C-Program*" [0-9]*        -> ExternalDeclaration*
   "Declaration" [0-9]*       -> Declaration           
-  "Declaration*" [0-9]*      -> Declaration*          
-  "FeatureDiagram" [0-9]*    -> FeatureDiagram        
+  "Declaration*" [0-9]*      -> Declaration*    
+  "FeatureDefinition" [0-9]* -> FeatureDefinition
+  "FeatureDefinition*" [0-9]* -> FeatureDefinition*      
+  "FeatureDiagram" [0-9]*    -> FeatureDiagram   
+  "FeatureExpression" [0-9]* -> FeatureExpression     
   "FeatureModule" [0-9]*     -> FeatureModule         
   "FeatureName" [0-9]*       -> FeatureName           
   "IdCon" [0-9]*             -> IdCon                 
