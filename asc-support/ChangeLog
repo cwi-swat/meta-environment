@@ -1,5 +1,10 @@
 $Id$
 
+Thu Nov 29 09:16:04 EST 2007 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: fixed another initialization bug. loadParseTable
+   did not need SGLR to be initialized before, now it does because 
+   the options data structure needs to have been initialized.
+
 Mon Aug 20 17:31:00 CEST 2007 <jurgenv@cwi.nl>
  * lib/builtin-io.c: fixed bug #777, parse_bytes did not initialize SGLR
    correctly.

@@ -7,6 +7,7 @@
 
 static PTBL_ParseTable parseTable = NULL;
 static const char PARSETABLE_ID[] = "ascParseTable";
+static ATbool initialized = ATfalse;
 
 void setParseTable(PTBL_ParseTable pt) {
   ATprotect((ATerm *)((void *)&parseTable));
@@ -22,6 +23,11 @@ PTBL_ParseTable getParseTable() {
 }
 
 ATbool loadParseTable() {
+  if (!initialized) {
+    SGLR_initialize();
+    initialized = ATtrue;
+  }
+
   if (!SGLR_isParseTableLoaded(PARSETABLE_ID)) { 
     if (parseTable != NULL) {
       SGLR_loadParseTable(PARSETABLE_ID, parseTable);
