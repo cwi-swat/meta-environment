@@ -1,4 +1,9 @@
-Fri Nov 27 11:36:02 EST 2007 <lankamp@cwi.nl>
+Fri Nov 30 15:37:01 EST 2007 <lankamp@cwi.nl>
+ * toolbus.commandline.*: Factored out the command line out of toolbus.Main.
+ * toolbus.*: The user can now specify the port the ToolBus should run on with -Pxxxxx (where xxxxx is a number).
+ * toolbus.adapter.*: Made a change that prevents a potential NullPointer when the AbstractTool is incorrectly used.
+
+Fri Nov 30 11:36:02 EST 2007 <lankamp@cwi.nl>
  * toolbus.tool.ToolInstance: Because of a recent change rec-disconnect was unable to retrieve a reference to an 'unreachable' tool.
 
 Tue Nov 27 13:02:06 EST 2007 <lankamp@cwi.nl>

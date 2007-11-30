@@ -1,8 +1,8 @@
 package toolbus.adapter;
 
 import java.net.InetAddress;
-
 import toolbus.IOperations;
+import toolbus.TBTermFactory;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 
@@ -12,6 +12,8 @@ import aterm.pure.PureFactory;
  * @author Arnold Lankamp
  */
 public abstract class AbstractTool implements IOperations{
+	private final static PureFactory termFactory = TBTermFactory.getInstance();
+
 	public final static String DIRECTTOOL = "direct";
 	public final static String REMOTETOOL = "remote";
 
@@ -61,7 +63,7 @@ public abstract class AbstractTool implements IOperations{
 
 		if(type == null || toolName == null) throw new RuntimeException("Missing tool identification.");
 
-		toolBridge = new ToolBridge(type, this, toolName, toolID, host, port);
+		toolBridge = new ToolBridge(termFactory, type, this, toolName, toolID, host, port);
 		toolBridge.run();
 	}
 
@@ -80,7 +82,7 @@ public abstract class AbstractTool implements IOperations{
 	 * @return A reference to the aterm factory.
 	 */
 	public PureFactory getFactory(){
-		return toolBridge.getFactory();
+		return termFactory;
 	}
 
 	/**

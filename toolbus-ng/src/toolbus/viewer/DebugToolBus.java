@@ -110,7 +110,12 @@ public class DebugToolBus extends ToolBus{
 		viewer.toolbusStarting();
 		
 		try{
-			toolBusConnectionHandler.initialize();
+			int userSpecifiedPort = propertyManager.getUserSpecifiedPort();
+			if(userSpecifiedPort == -1){
+				toolBusConnectionHandler.initialize();
+			}else{
+				toolBusConnectionHandler.initialize(userSpecifiedPort);
+			}
 		}catch(IOException ioex){
 			LoggerFactory.log("Unable initialize the ToolBus connection handler.", ioex, ILogger.FATAL, IToolBusLoggerConstants.COMMUNICATION);
 			throw new RuntimeException(ioex);

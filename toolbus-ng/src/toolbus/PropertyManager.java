@@ -14,8 +14,11 @@ public class PropertyManager{
 	private final HashMap<String, String> defines;
 	private String includes = "";
 	private String tbscript = null;
+	private int port;
 	
 	public PropertyManager(String[] args){
+		port = -1;
+		
 		defines = new HashMap<String, String>();
 		
 		handleComandLineArguments(args);
@@ -46,6 +49,7 @@ public class PropertyManager{
 		Pattern pdefine = Pattern.compile("-D(.*)=(.*)");
 		Pattern pinclude = Pattern.compile("-I(.*)");
 		Pattern pscript = Pattern.compile("-S(.*)");
+		Pattern pport = Pattern.compile("-P(.*)");
 		
 		for(int i = 0; i < args.length; i++){
 			String arg = args[i];
@@ -75,6 +79,12 @@ public class PropertyManager{
 							System.err.println("tbscript: already defined (" + tbscript + ")");
 						}
 						tbscript = name;					
+					}else{
+						Matcher portDefine = pport.matcher(arg);
+						if(portDefine.matches()){
+							String portNumber = portDefine.group(1);
+							port = Integer.parseInt(portNumber);
+						}
 					}
 				}
 			}
@@ -121,5 +131,9 @@ public class PropertyManager{
 	
 	public void set(String key, String val){
 		properties.setProperty(key, val);
+	}
+	
+	public int getUserSpecifiedPort(){
+		return port;
 	}
 }

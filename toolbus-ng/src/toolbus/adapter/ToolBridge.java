@@ -12,9 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import toolbus.IOperations;
-import toolbus.TBTermFactory;
 import toolbus.communication.IDataHandler;
 import toolbus.communication.IIOHandler;
 import toolbus.logging.ILogger;
@@ -34,7 +32,7 @@ import aterm.pure.PureFactory;
  * @author Arnold Lankamp
  */
 public class ToolBridge implements IDataHandler, Runnable, IOperations{
-	private final static PureFactory termFactory = TBTermFactory.getInstance();
+	private final PureFactory termFactory;
 
 	private final Map<CallableMethodSignature, Method> callableFunctions;
 
@@ -68,9 +66,10 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @param port
 	 *            The port on which the ToolBus is running.
 	 */
-	public ToolBridge(String type, AbstractTool tool, String toolName, int toolID, InetAddress host, int port){
+	public ToolBridge(PureFactory termFactory, String type, AbstractTool tool, String toolName, int toolID, InetAddress host, int port){
 		super();
-
+		
+		this.termFactory = termFactory;
 		this.type = type;
 		this.tool = tool;
 		this.toolName = toolName;

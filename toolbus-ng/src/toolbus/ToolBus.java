@@ -49,7 +49,7 @@ public class ToolBus{
 	
 	private final static Random rand = new Random();
 	
-	private final PropertyManager propertyManager;
+	protected final PropertyManager propertyManager;
 	
 	protected volatile int portNumber;
 	
@@ -514,7 +514,12 @@ public class ToolBus{
 		
 		// Initialize and start the connection handler.
 		try{
-			toolBusConnectionHandler.initialize();
+			int userSpecifiedPort = propertyManager.getUserSpecifiedPort();
+			if(userSpecifiedPort == -1){
+				toolBusConnectionHandler.initialize();
+			}else{
+				toolBusConnectionHandler.initialize(userSpecifiedPort);
+			}
 		}catch(IOException ioex){
 			LoggerFactory.log("Unable initialize the ToolBus connection handler.", ioex, ILogger.FATAL, IToolBusLoggerConstants.COMMUNICATION);
 			throw new RuntimeException(ioex);

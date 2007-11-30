@@ -36,6 +36,7 @@ import javax.swing.table.TableColumnModel;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
+import toolbus.commandline.CommandLine;
 import toolbus.environment.Binding;
 import toolbus.environment.Environment;
 import toolbus.process.ProcessInstance;
@@ -595,6 +596,8 @@ public class Viewer implements IViewer{
 
 		DebugToolBus debugToolBus = new DebugToolBus(args, viewer);
 		viewer.setToolBus(debugToolBus);
+		
+		CommandLine.createCommandLine(debugToolBus);
 		
 		debugToolBus.doStop(); // The initial state is stopped.
 		

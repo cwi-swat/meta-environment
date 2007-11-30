@@ -1,12 +1,12 @@
 package toolbus;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-
 import jjtraveler.VisitFailure;
 import toolbus.communication.AbstractConnectionHandler;
 import toolbus.communication.SocketIOHandler;
@@ -68,8 +68,7 @@ public class ToolBusConnectionHandler extends AbstractConnectionHandler implemen
 	}
 
 	/**
-	 * Initializes the connection handler. This method MUST be called before executing the run
-	 * method.
+	 * Initializes the connection handler. Initialization MUST occur before executing the run method.
 	 * 
 	 * @throws IOException
 	 */
@@ -87,6 +86,31 @@ public class ToolBusConnectionHandler extends AbstractConnectionHandler implemen
 		writeThread.start();
 	}
 	
+	/**
+	 * Initializes the connection handler on a user specified port. Initialization MUST occur before
+	 * executing the run method.
+	 * 
+	 * @throws IOException
+	 */
+	public void initialize(int port) throws IOException{
+		ServerSocket serverSocket = serverSocketChannel.socket();
+		serverSocket.bind(new InetSocketAddress(port));
+		serverSocketChannel.configureBlocking(true);
+		
+		Thread readThread = new Thread(readMultiplexer);
+		readThread.setName("Read multiplexer");
+		readThread.start();
+
+		Thread writeThread = new Thread(writeMultiplexer);
+		writeThread.setName("Write multiplexer");
+		writeThread.start();
+	}
+	
+	/**
+	 * Returns the port number the ToolBus is currently running on.
+	 * 
+	 * @return The port number the ToolBus is currently running on.
+	 */
 	public int getPort(){
 		return serverSocketChannel.socket().getLocalPort();
 	}
