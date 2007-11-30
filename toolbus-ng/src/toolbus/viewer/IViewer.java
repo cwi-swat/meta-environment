@@ -47,7 +47,7 @@ public interface IViewer{
 	void processInstanceTerminated(ProcessInstance processInstance);
 	
 	/**
-	 * Informs the viewer that a registered breakpoint on a process of process instance was hit. The
+	 * Informs the viewer that a registered breakpoint on a process or process instance was hit. The
 	 * debug toolbus will not suspend it's execution by itself; the action that will be taken is
 	 * completely up to the viewer implementation. In case the execution needs to be paused this will
 	 * need to be done explicitly by calling the doStop method.

@@ -1,5 +1,5 @@
-Tue Nov 27 13:40:11 EST 2007 <lankamp@cwi.nl>
- * toolbus.tool.java.hello.*: Fixed the HelloWorld examples.
+Fri Nov 27 11:36:02 EST 2007 <lankamp@cwi.nl>
+ * toolbus.tool.ToolInstance: Because of a recent change rec-disconnect was unable to retrieve a reference to an 'unreachable' tool.
 
 Tue Nov 27 13:02:06 EST 2007 <lankamp@cwi.nl>
  * *.*: The 'new' parser now adds position information to the state elements.

@@ -44,10 +44,11 @@ public class Disrupt extends ProcessExpression{
 		State rightFirst = right.getFirst();
 		setFollow(follow);
 		
-		for(Atom at : left.getAtoms().getSet())
+		for(Atom at : left.getAtoms().getSet()){
 			if(at.getFollow().size() != 0){
 				at.addToFollow(rightFirst);
 			}
+		}
 	}
 	
 	public AtomSet getAtoms(){

@@ -325,18 +325,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 	 * @see IDataHandler#exceptionOccured()
 	 */
 	public void exceptionOccured(){
-		boolean connected = isConnected();
-		
 		goUnreachable();
-		
-		ToolInstanceManager tim = toolbus.getToolInstanceManager();
-		if(connected){ // If the tool is connected we only need to check in one collection.
-			tim.remove(toolKey);
-		}else{
-			tim.remove(toolKey);
-			tim.removePendingTool(toolKey);
-			tim.removeDynamiclyConnectedTool(this);
-		}
 		
 		LoggerFactory.log("Tool crashed / disconnected: "+toolKey, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
 	}

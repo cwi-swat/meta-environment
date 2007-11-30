@@ -2,11 +2,11 @@ package toolbus;
 
 import java.util.HashSet;
 import java.util.Iterator;
-
+import java.util.Set;
 import toolbus.atom.Atom;
 
 public class AtomSet implements Iterable<Atom>{
-	private final HashSet<Atom> elements;
+	private final Set<Atom> elements;
 	
 	public AtomSet(){
 		elements = new HashSet<Atom>();
@@ -41,7 +41,7 @@ public class AtomSet implements Iterable<Atom>{
 		return elements.iterator();
 	}
 	
-	public HashSet<Atom> getSet(){
+	public Set<Atom> getSet(){
 		return elements;
 	}
 	
