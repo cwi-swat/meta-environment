@@ -92,6 +92,12 @@ module Building
       end
     end
 
+    def build_env_deps
+      return @deps.select do |dep| 
+        @config.build_env_packages.include?(dep.name)
+      end
+    end
+
     def actions
       @config.actions.each do |name|
         yield name, instantiate(@config.action_template(name))
