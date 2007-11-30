@@ -99,6 +99,8 @@ GSSNodeList GSS_getCurrentLevel(void) {
 
 /** 
  * Removes all GSS nodes from the current level in the GSS.
+ *
+ * \todo I think this function is now redundant and should be removed.
  */
 void GSS_clearCurrentLevel(void) {
   GSSNodeList tmp = currentLevel;
@@ -298,7 +300,7 @@ void GSS_freeGSS(void) {
     GC_gssBranch(acceptNode);
   }
 
-  GSS_clearCurrentLevel();
+  currentLevel = NULL;
   acceptNode = NULL;
   levelNumber = 0;
 }
