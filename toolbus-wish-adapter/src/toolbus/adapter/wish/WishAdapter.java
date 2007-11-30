@@ -96,7 +96,7 @@ public class WishAdapter extends AbstractTool{
 		if(scriptName == null) throw new RuntimeException("No script name supplied.");
 		if(tbtcl == null || libdir == null) throw new RuntimeException("No library paths supplied.");
 		
-		toolBridge = new WishAdapterBridge(type, this, toolName, toolID, host, port);
+		toolBridge = new WishAdapterBridge(getFactory(), type, this, toolName, toolID, host, port);
 		
 		executeScript();
 		

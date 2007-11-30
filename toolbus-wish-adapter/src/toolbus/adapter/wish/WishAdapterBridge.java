@@ -9,8 +9,8 @@ import aterm.pure.PureFactory;
 public class WishAdapterBridge extends ToolBridge{
 	private final WishAdapter wishAdapter;
 	
-	public WishAdapterBridge(String type, WishAdapter tool, String toolName, int toolID, InetAddress host, int port){
-		super(type, tool, toolName, toolID, host, port);
+	public WishAdapterBridge(PureFactory termFactory, String type, WishAdapter tool, String toolName, int toolID, InetAddress host, int port){
+		super(termFactory, type, tool, toolName, toolID, host, port);
 		
 		wishAdapter = tool;
 	}
