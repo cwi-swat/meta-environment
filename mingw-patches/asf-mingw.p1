@@ -1,0 +1,34 @@
+Index: semantics/asfc/src/main.c
+===================================================================
+--- semantics/asfc/src/main.c	(revision 24286)
++++ semantics/asfc/src/main.c	(working copy)
+@@ -7,7 +7,6 @@
+ #include <ctype.h>
+ #include <stdio.h>
+ #include <unistd.h>  
+-#include <sys/times.h>
+ #include <stdlib.h>
+ #include <limits.h>
+ #include <time.h>
+@@ -379,7 +378,7 @@
+ 
+     if ((use_c_compiler || recompile) 
+ 	&& !output_muasf && strcmp(output, "-") == 0) {
+-      char tmp[_POSIX_PATH_MAX];
++      char tmp[256];
+       sprintf(tmp, "%s.c", name);
+       output = strdup(tmp);
+       if (!output) {
+Index: semantics/asfe/src/main.c
+===================================================================
+--- semantics/asfe/src/main.c	(revision 24286)
++++ semantics/asfe/src/main.c	(working copy)
+@@ -210,8 +210,6 @@
+     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
+   }
+ 
+-  signal(SIGUSR1, abort_handler);
+-
+   ATinit(argc, argv, &bottomOfStack);
+   /*ATsetChecking(ATtrue);*/
+   PT_initMEPTApi();

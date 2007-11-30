@@ -1,0 +1,13 @@
+Index: src/main.c
+===================================================================
+--- src/main.c	(revision 24286)
++++ src/main.c	(working copy)
+@@ -18,7 +18,7 @@
+ #include "in-output.h"
+ 
+ #define EOS '\0'
+-#define PATH_LEN (_POSIX_PATH_MAX)
++#define PATH_LEN (256)
+ #define PATH_SEPARATOR '/'
+ #define EXTENSION_SEPARATOR '.'
+ #define TOOL_NAME "in-output"

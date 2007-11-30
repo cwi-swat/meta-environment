@@ -1,0 +1,107 @@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 24289)
++++ configure.ac	(working copy)
+@@ -6,13 +6,8 @@
+ 
+ AC_CHECK_HEADER([assert.h],[:],[AC_MSG_ERROR("*** no assert.h")])
+ AC_CHECK_HEADER([errno.h],[:],[AC_MSG_ERROR("*** no errno.h")])
+-AC_CHECK_HEADER([netdb.h],[:],[AC_MSG_ERROR("*** no netdb.h")])
+-AC_CHECK_HEADER([netinet/in.h],[:],[AC_MSG_ERROR("*** no netinet/in.h")])
+-AC_CHECK_HEADER([netinet/tcp.h],[:],[AC_MSG_ERROR("*** no netinet/tcp.h")])
+ AC_CHECK_HEADER([sys/param.h],[:],[AC_MSG_ERROR("*** no sys/param.h")])
+-AC_CHECK_HEADER([sys/socket.h],[:],[AC_MSG_ERROR("*** no sys/socket.h")])
+ AC_CHECK_HEADER([sys/time.h],[:],[AC_MSG_ERROR("*** no sys/time.h")])
+-AC_CHECK_HEADER([sys/un.h],[:],[AC_MSG_ERROR("*** no sys/un.h")])
+ AC_CHECK_HEADER([unistd.h],[:],[AC_MSG_ERROR("*** no unistd.h")])
+ 
+ AC_CHECK_FUNCS([strerror])
+Index: src/atb-tool.c
+===================================================================
+--- src/atb-tool.c	(revision 24289)
++++ src/atb-tool.c	(working copy)
+@@ -6,18 +6,12 @@
+ #include <stdlib.h> 
+ #include <unistd.h>
+ #include <errno.h>
+-#include <netdb.h>
+-#include <sys/socket.h>
+ #include <sys/time.h>
+-#include <sys/un.h>
+ #include <sys/param.h>
+-#include <netinet/in.h>
+-#include <netinet/tcp.h>
+ #include <signal.h>
+ #include <string.h>
++#include <winsock2.h>
+ 
+-#include <sys/resource.h>
+-
+ #include <aterm2.h>
+ #include "safio.h"
+ 
+@@ -39,6 +33,8 @@
+ #define MAX_NR_QUEUES	64
+ #define MAX_QUEUE_LEN	128
+ 
++#define MAXHOSTNAMELEN 256
++
+ /* Operation codes. */
+ /* From Tool to ToolBus. */
+ #define CONNECT 1
+@@ -153,8 +149,6 @@
+  * Gathers performance stats. 
+  */
+ static ATerm getPerformanceStats(){
+-	struct rusage resourceUsage;
+-	
+ 	// Type stuff
+ 	ATerm remote = (ATerm) ATmakeAppl0(ATmakeAFun("remote", 0, ATtrue));
+ 	ATerm toolType = (ATerm) ATmakeAppl1(ATmakeAFun("type", 1, ATfalse), remote);
+@@ -170,11 +164,9 @@
+ 	// Thread stuff
+ 	ATerm threads;
+ 	
+-	getrusage(RUSAGE_SELF, &resourceUsage);
+-	
+ 	{
+-		int userTime = (int) (resourceUsage.ru_utime.tv_sec * 1000) + (resourceUsage.ru_utime.tv_usec / 1000);
+-		int systemTime = (int) (resourceUsage.ru_stime.tv_sec * 1000) + (resourceUsage.ru_stime.tv_usec / 1000);
++		int userTime = 0; 
++		int systemTime = 0;
+ 		
+ 		ATerm userTimeTerm = (ATerm) ATmakeAppl1(ATmakeAFun("user-time", 1, ATfalse), (ATerm) ATmakeInt(userTime));
+ 		ATerm systemTimeTerm = (ATerm) ATmakeAppl1(ATmakeAFun("system-time", 1, ATfalse), (ATerm) ATmakeInt(systemTime));
+@@ -304,16 +296,6 @@
+   for (lcv=0; lcv<MAX_NR_QUEUES; lcv++)
+     event_queues[lcv].afun = -1;
+ 
+-  /* Initialize handlers for OS signals */
+-  {
+-    struct sigaction disconnect;
+-    disconnect.sa_handler = disconnectHandler;
+-    sigemptyset(&disconnect.sa_mask);
+-
+-    sigaction(SIGTERM, &disconnect, NULL);
+-    sigaction(SIGQUIT, &disconnect, NULL);
+-  }
+-
+   /* Get hostname of machine that runs this particular tool */
+   return gethostname(this_host, MAXHOSTNAMELEN);
+ }
+Index: src/Makefile.am
+===================================================================
+--- src/Makefile.am	(revision 24289)
++++ src/Makefile.am	(working copy)
+@@ -10,9 +10,9 @@
+ libATB_la_SOURCES  = atb-tool.c
+ libATB_la_CPPFLAGS = $(ATERM_CFLAGS)
+ libATB_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+-libATB_la_LIBADD   = $(ATERM_LIBS) $(SOCKETLIBS)
++libATB_la_LIBADD   = $(ATERM_LIBS) $(SOCKETLIBS) -lwsock32
+ 
+ bin_PROGRAMS = tbunpack
+ 
+ tbunpack_SOURCES = tbunpack.c atb-tool.c
+-tbunpack_LDADD = $(ATERM_LIBS)
++tbunpack_LDADD = $(ATERM_LIBS) -lwsock32
