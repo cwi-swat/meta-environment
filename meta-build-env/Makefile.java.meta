@@ -32,9 +32,6 @@ ANT_ENV = \
   PACKAGE=${PACKAGE} \
   DOCHEADER="$(shell cat $(top_srcdir)/doc-header.html | sed 's@\"@\\\"@g;')"
 
-
-if MAINTAINER_MODE
-
 ANT_BUILDFILE=$(top_srcdir)/meta-build.ant
 ANT = $(ANT_ENV) ant $(foreach j, $(JAVA_LOCAL_JARS), -lib $j) -buildfile $(ANT_BUILDFILE)
 
@@ -42,6 +39,8 @@ dummy:
 
 ${JAVA_JAR}: dummy
 	$(ANT) dist
+
+if MAINTAINER_MODE
 
 clean-local:
 	$(ANT) clean
