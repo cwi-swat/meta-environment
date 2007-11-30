@@ -370,7 +370,8 @@
         because IEEE 754 encoded floating point numbers always occupy a couple
         of bits in the highest order byte, restricting us from using the same
         trick as with the <link linkend="IntegerCompression">encoding of
-        integers</link>.</para>
+        integers</link>. They are written in two blocks of 4 bytes, in little
+        endian order.</para>
       </sect3>
 
       <sect3>
@@ -694,7 +695,7 @@
 
     <para>This block-wise writing and reading method enables us to suspend the
     (de-)serialization process at fixed intervals, without the need to assign
-    a different thread to each process. This enables us to interleave the 
+    a different thread to each process. This enables us to interleave the
     simultaineous construction of multiple trees of terms in a single threaded
     environment.</para>
 
