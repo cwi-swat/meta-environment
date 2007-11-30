@@ -123,33 +123,54 @@
           components that are not only written in different languages and
           executing on different hardware and software platforms, but are also
           running in a distributed fashion on a system of networked computers
-          and devices.</para>
+          and devices. <emphasis role="bold">Rationale</emphasis>: it is more
+          and more common that applications are built using existing
+          commercial or open source components. This reduces implementation
+          effort but increases the need for usable interconnection
+          technology.</para>
         </listitem>
 
         <listitem>
           <para>Provide good control over the communication between
+          components. <emphasis role="bold">Rationale</emphasis>: component
+          integration requires both control over the communication between
+          components and over the data that are being exchanged (see next
+          requirement).</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide a uniform data exchange mechanism between
+          heterogeneous components. <emphasis
+          role="bold">Rationale</emphasis>: a common understanding about data
+          formats is needed in order to exchange data between
           components.</para>
         </listitem>
 
         <listitem>
           <para>The description of communication should be based on existing
           concurrency theory and provide the option for formal verification of
-          the cooperation between software components.</para>
+          the cooperation between software components. <emphasis
+          role="bold">Rationale</emphasis>: when components are integrated
+          that run on different machines or on multi-core machines, it is
+          unavoidable that concurrency is taken into account and to use
+          existing theory to describe it. The long term perspective of
+          checking formal aspects of these cooperation is appealing for
+          certain, safety-critical, applications.</para>
         </listitem>
 
         <listitem>
           <para>Provide relatively simple application descriptions that can be
-          understood by most programmers.</para>
-        </listitem>
-
-        <listitem>
-          <para>Provide a uniform data exchange mechanism between
-          heterogeneous components.</para>
+          understood by most programmers. <emphasis
+          role="bold">Rationale</emphasis>: we don't want to frighten
+          programmers by using formal notations. </para>
         </listitem>
 
         <listitem>
           <para>Provide multi-lingual support, at least C, Java, ASF+SDF,
-          Tcl/Tk, Perl, Python and Ruby should be supported.</para>
+          Tcl/Tk, and possibly Perl, Python and Ruby should be supported.
+          Rationale: various tools of interest are currently implemented in
+          the first four languages, and the last three languages are
+          interesting for future developments.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -222,10 +243,10 @@
       <literal>snd-note</literal>) which is broadcasted to other, interested,
       processes. The sending process does not expect an answer while the
       receiving processes read notes asynchronously (using
-      <literal>rec-note</literal>) at a low priority. Notes are intended to
-      notify others of state changes in the sending process. Sending notes
-      amounts to <emphasis>asynchronous selective broadcasting</emphasis>.
-      Processes will only receive notes to which they have
+      <literal>rec-note</literal>). Notes are intended to notify others of
+      state changes in the sending process. Sending notes amounts to
+      <emphasis>asynchronous selective broadcasting</emphasis>. Processes will
+      only receive notes to which they have
       <emphasis>subscribed</emphasis>.</para>
 
       <para><figure xml:id="figure.tool-communication">
@@ -348,7 +369,7 @@
 
         <listitem>
           <para>A <emphasis>result occurrence</emphasis> of a variable is a
-          term, e.g., <literal>X?</literal>, <literal>InItialAmount?</literal>
+          term, e.g., <literal>X?</literal>, <literal>InitialAmount?</literal>
           or <literal>Highest-Bid?</literal>.</para>
 
           <important>
@@ -700,7 +721,7 @@ Hello world, my first Tscript!
   in
          execute(hello, H?) <co xml:id="co.hello2-4" /> .   <co
                 xml:id="co.hello2-5" />
-         snd-eval(H, get-text) .   <co xml:id="co.hello2-6" />
+         snd-eval(H, get_text) .   <co xml:id="co.hello2-6" />
          rec-value(H, text(S?)).   <co xml:id="co.hello2-7" />
          printf(S)                 <co xml:id="co.hello2-8" />
   endlet
@@ -743,7 +764,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
               <callout arearefs="co.hello2-6">
                 <para>Send an evaluation request to the tool we have just
                 executed. <literal>H</literal> identifies the tool instance,
-                and <literal>get-text</literal> is the term to be sent to the
+                and <literal>get_text</literal> is the term to be sent to the
                 hello tool.</para>
               </callout>
 
@@ -1164,11 +1185,6 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
           </listitem>
 
           <listitem>
-            <para><literal>snd-cancel(<replaceable>Tid</replaceable>)</literal>:
-            cancel a previous evaluation request.</para>
-          </listitem>
-
-          <listitem>
             <para><literal>rec-value(<replaceable>Tid</replaceable>,
             <replaceable>T</replaceable>)</literal>: recieve a value from a
             tool in response to a previous <literal>snd-eval</literal>
@@ -1302,7 +1318,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
           <listitem>
             <para><literal>add(mul(2,3), 4)</literal> evaluates to
-            <literal>9</literal>.</para>
+            <literal>10</literal>.</para>
           </listitem>
 
           <listitem>
@@ -1329,9 +1345,9 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
           <listitem>
             <para>Functions on <emphasis>Integers</emphasis>:
             <literal>add</literal>, <literal>sub</literal>,
-            <literal>mul</literal>, <literal>mod</literal>,
-            <literal>less</literal>, <literal>less-equal</literal>,
-            <literal>greater</literal>,
+            <literal>mul</literal>, <literal>div</literal>,
+            <literal>mod</literal>, <literal>less</literal>,
+            <literal>less-equal</literal>, <literal>greater</literal>,
             <literal>greater-equal</literal>.</para>
           </listitem>
 
@@ -2353,22 +2369,14 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         </listitem>
 
         <listitem>
-          <para><literal>-verbose</literal>: produces a log of steps taken by
-          toolbus or tool that may be useful to debug your script or tool. The
-          same effect may be obtained by setting the environment variable
-          <literal>TB_VERBOSE</literal> to <literal>true</literal> and export
-          it. In the Korn shell this can, for instance, be achieved by:
-          <programlisting>TB_VERBOSE=true 
-export TB_VERBOSE</programlisting></para>
-        </listitem>
-
-        <listitem>
           <para><literal>-TB_PORT
           <replaceable>port_name</replaceable></literal>: defines the
           <emphasis>well known socket</emphasis> <literal>port_name</literal>
           to which all tools temporarily connect in order to set up their own
           private socket that connects them permanently to the ToolBus
-          interpreter. When omitted, socket 8998 will be used.</para>
+          interpreter. When omitted, socket 8998 will be used.<warning>
+              <para>Not yet implemented.</para>
+            </warning></para>
         </listitem>
       </itemizedlist>
 
@@ -2419,23 +2427,9 @@ export TB_VERBOSE</programlisting></para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>-logger</literal>: execute a logger tool that will be
-          attached to all processes in the ToolBus. If the script contains a
-          tool definition for a tool named <literal>logger</literal>, that
-          will be used for executing the logger. Otherwise a default tool
-          definition is used.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>-viewer</literal>: similar as above, for a viewer
-          tool. The default viewer is the ``ToolBus viewer'' (previously known
-          as the ToolBus debugger).</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>-controller</literal>: similar as above, for a
-          controller tool. Currently, no default controller tool is
-          provided.</para>
+          <para><literal>-viewer</literal>: execute the ToolBus viewer that
+          enables step-by-step execution and inspection of the state of each
+          process state.</para>
         </listitem>
 
         <listitem>
@@ -2443,7 +2437,9 @@ export TB_VERBOSE</programlisting></para>
           all tools used in the script in a language independent format. For a
           script file named <filename>script.tb</filename> the tool interfaces
           are written to <filename>script.tifs</filename>. Do not execute the
-          script.</para>
+          script.<warning>
+              <para>Not yet implemented.</para>
+            </warning></para>
         </listitem>
 
         <listitem>
@@ -2454,27 +2450,27 @@ export TB_VERBOSE</programlisting></para>
           <command>toolbus</command> command is given. Using the
           <literal>-fixed-seed</literal> option makes the execution of the
           script reproducible across multiple runs of the
-          <command>toolbus</command> command.</para>
+          <command>toolbus</command> command.<warning>
+              <para>Not yet implemented.</para>
+            </warning></para>
         </listitem>
 
         <listitem>
-          <para><literal><replaceable>script_name</replaceable></literal>: any
-          other argument is the name of the ToolBus script to be
+          <para><literal>-S<replaceable>script_name</replaceable></literal>:
+          any other argument is the name of the ToolBus script to be
           interpreted.</para>
         </listitem>
       </itemizedlist>
 
-      <para>As an example, consider first <programlisting>toolbus hello.tb</programlisting>which
+      <para>As an example, consider first <programlisting>toolbus -Shello.tb</programlisting>which
       starts interpreting the script <filename>hello.tb</filename>. Next,
-      consider<programlisting>toolbus -TB_PORT 4000 hello.tb</programlisting>which
-      interprets the same script, but uses socket <literal>4000</literal> to
-      find the ToolBus. Next, consider <programlisting>toolbus -Imy-include-dir -DCNT=33 wave.tb</programlisting>which
+      consider <programlisting>toolbus -Imy-include-dir -DCNT=33 -Swave.tb</programlisting>which
       searches the directory <filename>my-include-dir</filename> for files
       used in <literal>#include</literal> directives in the script
       <filename>wave.tb</filename> and it will define the name
       <literal>CNT</literal> with value <literal>33</literal>. All occurrences
       of <literal>CNT</literal> in the script will be replaced by this value
-      before parsing it as a Tscript. Finally, <programlisting>toolbus -gentifs hello.tb </programlisting>produces
+      before parsing it as a Tscript. Finally, <programlisting>toolbus -gentifs -Shello.tb </programlisting>produces
       the tool interfaces file <filename>hello.tifs</filename>.</para>
     </section>
 
@@ -2504,11 +2500,6 @@ export TB_VERBOSE</programlisting></para>
           internal tool identifier of this tool execution (added
           automatically, when a tool is executed by the ToolBus).</para>
         </listitem>
-
-        <listitem>
-          <para><literal>-TB_SINGLE</literal>: execute the tool stand-alone
-          and do not connect it with the ToolBus.</para>
-        </listitem>
       </itemizedlist>
 
       <para>The execution of a tool can start in two ways:</para>
@@ -2529,19 +2520,19 @@ export TB_VERBOSE</programlisting></para>
       <para>When ToolBus and tool are running on different host machines, it
       is important to define the host machine on which the ToolBus interpreter
       is running when starting the execution of the tool. As an example,
-      consider the <command>hello</command> application described in Section
-      XXX. The <command>hello</command> tool will be executed by the ToolBus
-      using the command <programlisting>hello -TB_PORT 8998 -TB_HOST host1.institute.nl</programlisting>when
+      consider the <command>hello</command> application described in <xref
+      linkend="example.hello2" />. The <command>hello</command> tool will be
+      executed by the ToolBus using the command <programlisting>hello -TB_PORT 8998 -TB_HOST host1.institute.nl</programlisting>when
       running on machine <literal>host1.institute.nl</literal>. Suppose, we
-      replace the explicit <literal>execute</literal> in
-      Figure~\ref{fig:hello2.tb} by a <literal>rec-connect</literal> as shown
+      replace the explicit <literal>execute</literal> in <xref
+      linkend="example.hello2" /> by a <literal>rec-connect</literal> as shown
       in Figure~\ref{fig:hello3.tb}. We may then manually start the
       <command>hello</command> tool by typing <programlisting>hello</programlisting>where
       we use the default values for the input/output sockets and assume that
       tool and ToolBus interpreter are both running on the same host (i.e.,
       <literal>host1.institute.nl</literal>). Starting the execution from
-      <emphasis>another</emphasis> host is achieved by typing (on, say, {\tt
-      host2.institute.nl}): <programlisting>hello -TB_HOST host1.institute.nl </programlisting></para>
+      <emphasis>another</emphasis> host is achieved by typing (on, say,
+      <literal>host2.institute.nl</literal>): <programlisting>hello -TB_HOST host1.institute.nl </programlisting></para>
     </section>
   </section>
 
@@ -2646,13 +2637,11 @@ export TB_VERBOSE</programlisting></para>
       </itemizedlist>
 
       <para>A tool is thus on the one hand a reactive engine that responds to
-      a request from the \TB\ and returns the result back to the ToolBus in
+      a request from the ToolBus and returns the result back to the ToolBus in
       the form of a term (e.g., calculate the value of some expression), but
       on the other hand it can also take the initiative to send a term to the
-      ToolBus (e.g., generate an event when a user pushes some button). At the
-      level of the source code, the global structure of a purely reactive tool
-      without additional term or character ports has already been illustrated
-      in Figure~\ref{fig:hello.c}.</para>
+      ToolBus (e.g., generate an event when a user pushes some button).
+      </para>
     </section>
 
     <section xml:id="section.tool-adapters">
@@ -2732,7 +2721,8 @@ export TB_VERBOSE</programlisting></para>
         </listitem>
 
         <listitem>
-          <para>All tool arguments (see Section~\ref{ToolArgs}.)</para>
+          <para>All tool arguments, see <xref
+          linkend="section.tool-arguments" />.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2752,12 +2742,11 @@ export TB_VERBOSE</programlisting></para>
       of the Tscript in which it is used. Changing the number of arguments in
       an evaluation request to the tool, or adding a new request, requires
       making changes to the interface code that are easily forgotten and
-      therefore error prone. As already mentioned in Section~\ref{Hello},
-      another observation is that the interface code for different tools has a
-      lot in common. An obvious solution to both problems is to
-      <emphasis>generate</emphasis> tool interfaces automatically, given a
-      Tscript. This generation process is shown in <xref
-      linkend="figure.tifs" /> and consists of two steps:</para>
+      therefore error prone. Another observation is that the interface code
+      for different tools has a lot in common. An obvious solution to both
+      problems is to <emphasis>generate</emphasis> tool interfaces
+      automatically, given a Tscript. This generation process is shown in
+      <xref linkend="figure.tifs" /> and consists of two steps:</para>
 
       <itemizedlist>
         <listitem>
@@ -2779,17 +2768,18 @@ export TB_VERBOSE</programlisting></para>
           generates a file named
           <literal><replaceable>Name</replaceable>.tif.c</literal>. For the
           hello example, we would have, for instance: <programlisting>tifstoc -tool hello hello2.tifs</programlisting>
-          %The resulting file {\tt hello.tif.c} is shown in
-          %Figure~\ref{fig:hello.tif.c}. \end{itemize}</para>
+          The resulting file <filename>hello.tif.c</filename> is shown in
+          <xref linkend="example.hello.tif.c" />.</para>
         </listitem>
       </itemizedlist>
 
       <para>In <xref linkend="figure.tifs" /> it is also shown how tool
       interface generators for <emphasis>other</emphasis> languages (e.g.,
       Java, Cobol) fit into this scheme. In addition to
-      <command>tifstoc</command>, we alo support the generation of Java
-      interfaces by way of <command>tifstojava</command> (See
-      Section~\ref{ToolsInJava}).</para>
+      <command>tifstoc</command>, we used to support the generation of Java
+      interfaces by way of <command>tifstojava</command>. In the current
+      ToolBus implementation, this is no longer necessary, see <xref
+      linkend="section.Java-tools" />.</para>
     </section>
   </section>
 
@@ -2797,11 +2787,10 @@ export TB_VERBOSE</programlisting></para>
     <title>Writing ToolBus tools in C</title>
 
     <para>Although ToolBus tools can be implemented in many languages
-    (including Java, C++, Perl, Tcl/Tk, Prolog, ASF+SDF, Cobol and others) we
-    start explaining how tools can be written in C. In other languages
-    identical notions will be used with only minor adjustements to
-    language-specific features and limitations. Writing tools in C amounts
-    to:</para>
+    (including Java, C++, Tcl/Tk, ASF+SDF, and others) we start explaining how
+    tools can be written in C. In other languages identical notions will be
+    used with only minor adjustements to language-specific features and
+    limitations. Writing tools in C amounts to:</para>
 
     <itemizedlist>
       <listitem>
@@ -2883,12 +2872,7 @@ export TB_VERBOSE</programlisting></para>
         </listitem>
 
         <listitem>
-          <para><literal>ATBreadTerm</literal>: process one input event on a
-          port (Section~\ref{ATBreadTerm}).</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>ATBwriteTerm</literal>: send a term to the ToolBus
+          <para><literal>ATB</literal>postEvent send an event to the ToolBus
           (Section~\ref{ATBreadTerm}).</para>
         </listitem>
       </itemizedlist>
@@ -3025,18 +3009,15 @@ int main(int argc, char *argv[])
       </section>
 
       <section xml:id="section.ATBwrite-read-Term">
-        <title><literal>ATBwriteTerm</literal> and
-        <literal>ATBreadTerm</literal></title>
+        <title><literal>ATB</literal>postEvent</title>
 
         <para>So far, we have seen primitives for tools that only receive
-        terms from the ToolBus. In the case of, for instance, events that are
-        generated by a tool, a term needs to be sent from the tool to the
-        ToolBus. This can be achieved using<programlisting>int ATBwriteTerm(int <replaceable>conn</replaceable>, ATerm <replaceable>term</replaceable>)</programlisting>which
+        terms from the ToolBus. In the case of events that are generated by a
+        tool, a term needs to be sent from the tool to the ToolBus. This can
+        be achieved using<programlisting>int ATBpostEvent(int <replaceable>conn</replaceable>, ATerm <replaceable>term</replaceable>)</programlisting>which
         sends <replaceable>term</replaceable> along the port
         <replaceable>conn</replaceable>. Failure is indicated by the return
-        value <literal>-1</literal>. A typical usage is:<programlisting>ATBwriteTerm(conn, ATmake(snd-event(button("ok")).</programlisting>Symmetrically,
-        a term can be read from a ToolBus connection as
-        follows:<programlisting>ATerm ATBreadTerm(int <replaceable>conn</replaceable>).</programlisting></para>
+        value <literal>-1</literal>. A typical usage is:<programlisting>ATBpostEvent(conn, ATmake(button("ok"))).</programlisting></para>
       </section>
 
       <section xml:id="section.advanced-control-flow">
@@ -3243,7 +3224,9 @@ int main(int argc, char *argv[])
 
         <para>we generate a file called <literal>hello2.tifs</literal>. It
         contains information amount the interfaces for all tools that are used
-        in a given Tscript.</para>
+        in a given Tscript.<warning>
+            <para>The -gentifs flag is mnot yet implemented.</para>
+          </warning></para>
       </section>
 
       <section>
@@ -3304,7 +3287,7 @@ extern ATerm hello_checker(int conn, ATerm sigs);
 #define NR_SIG_ENTRIES  2
 
 static char *signature[NR_SIG_ENTRIES] = {     <co xml:id="co.hello2.tif.c.1" />
-  "rec-eval(&lt;hello&gt;,get-text)",
+  "rec-eval(&lt;hello&gt;,get_text)",
   "rec-terminate(&lt;hello&gt;,&lt;term&gt;)",
 };
 
@@ -3315,7 +3298,7 @@ ATerm hello_handler(int conn, ATerm term)      <co xml:id="co.hello2.tif.c.2" />
   /* We need some temporary variables during matching */
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(get-text)")) {
+  if(ATmatch(term, "rec-eval(get_text)")) {
     return get_text(conn);
   }
   if(ATmatch(term, "rec-terminate(&lt;term&gt;)", &amp;t0)) {
@@ -3652,7 +3635,7 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
 
               <callout arearefs="co.hello-java.3">
                 <para>The evaluation request <literal>snd-eval(H,
-                get-text)</literal> in the Tscript is implemented by the
+                get_text)</literal> in the Tscript is implemented by the
                 method <literal>getText</literal>. It constructs the required
                 ATerm that <literal>text("Hello world in Java!\n")</literal>
                 and returns it as result. This result will passed to the
@@ -3867,11 +3850,11 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
-                  <entry align="center">Description </entry>
+                  <entry align="center">Description&#160;</entry>
                 </row>
               </thead>
 
@@ -3945,9 +3928,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4083,9 +4066,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4220,9 +4203,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4323,9 +4306,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4390,9 +4373,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4441,9 +4424,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4495,9 +4478,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4564,9 +4547,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4732,9 +4715,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4776,9 +4759,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
