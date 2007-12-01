@@ -1,5 +1,10 @@
 $Id$
 
+Sat Dec  1 02:39:41 EST 2007 <jurgenv@cwi.nl>
+ * lib/builtin-io.c: added two new builtins for parsing and adding
+   position information in one go. Also, the parse errors of files
+   now get the correct file name stored in their description.
+
 Thu Nov 29 09:16:04 EST 2007 <jurgenv@cwi.nl>
  * lib/builtin-io.c: fixed another initialization bug. loadParseTable
    did not need SGLR to be initialized before, now it does because 
