@@ -25,9 +25,9 @@ context-free syntax
   load-all(StrCon*, ATerm, StrCon*) -> Module* | Error { }
   head(StrCon*) -> StrCon
   tail(StrCon*) -> StrCon*
-  read-file(StrCon, ATerm) -> Bytes | Error { }
+  read-file(StrCon, ATerm) -> <Bytes, StrCon> | Error { }
   compose(StrCon, StrCon) -> StrCon
-  parse(Bytes) -> Module | Error
+  parse(Bytes,StrCon) -> Module | Error
   imports(Module, StrCon*) -> StrCon* {traversal(accu,top-down,break)}
   imports(Import, StrCon*) -> StrCon* {traversal(accu,top-down,break)}
 

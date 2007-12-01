@@ -24,21 +24,21 @@ equations
   load-all(Filename _Filename*, Paths, _Filename*2) = Error
 
 [default-report-parse-error]
-  Contents := read-file(Filename, Paths),
-  Error    := parse(Contents)
+  <Contents, Filename2> := read-file(Filename, Paths),
+  Error    := parse(Contents, Filename2)
   ===>
   load-all(Filename _Filename*, Paths, _Filename*2) = Error
 
 [default-fresh-module] 
-   Contents := read-file(Filename, Paths),
-   Module   := parse(Contents),
+   <Contents, Filename2> := read-file(Filename, Paths),
+   Module   := parse(Contents, Filename2),
    Module*  := load-all(Filename* imports(Module,), Paths, Filename Filename*2)
    ===>
    load-all(Filename Filename*, Paths, Filename*2) = Module Module*
 
 [default-propagate] 
-   Contents := read-file(Filename, Paths),
-   Module   := parse(Contents),
+   <Contents, Filename2> := read-file(Filename, Paths),
+   Module   := parse(Contents, Filename2),
    Error    := load-all(Filename* imports(Module,), Paths, Filename Filename*2)
    ===>
    load-all(Filename Filename*, Paths, Filename*2) = Error
@@ -51,28 +51,30 @@ equations
 
 [] imports(Modulename, Filename*) = bytes-to-string(unparse(Modulename)) Filename*
 [] imports(Modulename _Renamings, Filename*) = imports(Modulename, Filename*)
-
+ 
 equations
 
-[] read(Contents) := read-bytes(compose("",Filename))
+[] Filename2 := compose("",Filename),
+   read(Contents) := read-bytes(Filename2)
    ===>
-   read-file(Filename, []) = Contents
+   read-file(Filename, []) = <Contents,Filename2>
 
 [default]
    read-file(Filename, []) = error("Module could not be found anywhere in the search path",
                                    [subject(Filename)])
 
-[] read(Contents) := read-bytes(compose(Path, Filename))
+[] Filename2 := compose(Path, Filename),
+   read(Contents) := read-bytes(Filename2)
    ===>
-   read-file(Filename, [Path, _Path*]) = Contents
+   read-file(Filename, [Path, _Path*]) = <Contents, Filename2>
 
 [default]  read-file(Filename, [_Path, Path*]) = read-file(Filename, [Path*])
 
 equations
 
-[] parse(Contents) = Module when parse-tree(Layout1, Module, Layout2, Ambs) := parse-bytes(Contents)
+[] parse(Contents,Filename) = Module when parse-tree(Layout1, Module, Layout2, Ambs) := parse-bytes(Contents, Filename)
 
-[] parse(Contents) = Error when parse-error(summary(Producer, Id, [Error, _Error*])) := parse-bytes(Contents)
+[] parse(Contents,Filename) = Error when parse-error(summary(Producer, Id, [Error, _Error*])) := parse-bytes(Contents, Filename)
 
 equations
 
