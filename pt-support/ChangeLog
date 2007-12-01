@@ -1,5 +1,10 @@
 $Id$
 
+Sat Dec  1 10:37:17 EST 2007 <jurgenv@cwi.nl>
+ * libmept/*.c: removed usage of Location.h and LOC_ functions. Two
+   versions of Location was to confusing. You forget to initialize
+   the API's for example.
+
 Wed Sep 12 11:30:49 CEST 2007 <economop@cwi.nl>
  * utils/comparePT-main.c: removed the -a option from the usage information.
  * test/mept-test.c: removed the modAmbiguityOrdering parameter passed to

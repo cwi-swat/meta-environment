@@ -34,10 +34,10 @@ PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree)
 
   if (PT_hasTreeLocation(tree)) {
     ATerm term;
-    LOC_Location loc = PT_getTreeLocation(tree);
+    ERR_Location loc = PT_getTreeLocation(tree);
     tree = PT_removeTreeLocation(tree);
     term = PT_TreeToTerm(tree);
-    term = ATsetAnnotation(term, ORIGIN, LOC_LocationToTerm(loc));
+    term = ATsetAnnotation(term, ORIGIN, ERR_LocationToTerm(loc));
     tree = PT_TreeFromTerm(term);
   }
 
@@ -49,7 +49,7 @@ PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree)
  * \param tree input tree
  * \returns origin information encoded as a standard location.
  */
-LOC_Location PT_getTreeOrigin(PT_Tree tree)
+ERR_Location PT_getTreeOrigin(PT_Tree tree)
 {
   ATerm term;
   ATerm origin;
@@ -63,7 +63,7 @@ LOC_Location PT_getTreeOrigin(PT_Tree tree)
     return NULL;
   }
   else {
-    return LOC_LocationFromTerm(origin);
+    return ERR_LocationFromTerm(origin);
   }
 }
 

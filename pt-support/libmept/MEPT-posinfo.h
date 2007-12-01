@@ -1,6 +1,6 @@
 #ifndef POS_INFO_H
 #define POS_INFO_H
-#include <Location.h>
+#include <Error.h>
 #include <MEPT.h>
 #include <aterm2.h>
 
@@ -17,7 +17,7 @@ PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree, int depth,
 			      int start_col);
 
 ATbool PT_hasTreeLocation(PT_Tree tree);
-LOC_Location PT_getTreeLocation(PT_Tree tree);
+ERR_Location PT_getTreeLocation(PT_Tree tree);
 PT_Tree PT_removeTreeLocation(PT_Tree tree);
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path, int *start_line,
 			 int *start_col, int *end_line, int *end_col);
