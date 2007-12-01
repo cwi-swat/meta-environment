@@ -7,8 +7,10 @@ imports basic/Bytes
 
 exports
 context-free syntax
-  parse-bytes(Bytes)      -> Parsetree[[X]] {built-in("parse-bytes")}            
-  parse-file(file:StrCon) -> Parsetree[[X]] {built-in("parse-file"), side-effct} 
+  parse-bytes(Bytes)             -> Parsetree[[X]] {built-in("parse-bytes")} 
+  parse-bytes(Bytes,file:StrCon) -> Parsetree[[X]] {built-in("parse-bytes-pos-info")}          
+  parse-file(file:StrCon)        -> Parsetree[[X]] {built-in("parse-file"), side-effect} 
+  parse-file-pos(file:StrCon)    -> Parsetree[[X]] {built-in("parse-file-pos-info"), side-effect} 
 
 context-free syntax
   read-parse-tree(file:StrCon)     -> Parsetree[[X]] {built-in("read-term-from-file"), side-effect} 
