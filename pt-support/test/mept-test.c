@@ -83,8 +83,8 @@ void testCompare()
 void testPosInfo() {
   PT_ParseTree parseTree = PT_addParseTreePosInfo("-", PT_ParseTreeFromTerm(Integers));
   PT_Tree tree = PT_getParseTreeTree(parseTree);
-  LOC_Location location;
-  LOC_Area area;
+  ERR_Location location;
+  ERR_Area area;
   int beginLine;
   int endLine;
   int beginColumn;
@@ -95,13 +95,13 @@ void testPosInfo() {
   assert(PT_hasTreeLocation(tree));
 
   location = PT_getTreeLocation(tree);
-  area = LOC_getLocationArea(location);
-  beginLine = LOC_getAreaBeginLine(area);
-  endLine = LOC_getAreaEndLine(area);
-  beginColumn = LOC_getAreaBeginColumn(area);
-  endColumn = LOC_getAreaEndColumn(area);
-  offset = LOC_getAreaOffset(area);
-  length = LOC_getAreaLength(area);
+  area = ERR_getLocationArea(location);
+  beginLine = ERR_getAreaBeginLine(area);
+  endLine = ERR_getAreaEndLine(area);
+  beginColumn = ERR_getAreaBeginColumn(area);
+  endColumn = ERR_getAreaEndColumn(area);
+  offset = ERR_getAreaOffset(area);
+  length = ERR_getAreaLength(area);
 
   test_assert("beginline", beginLine == 1);
   test_assert("endline", endLine == 2);
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
-  LOC_initLocationApi();
+  ERR_initErrorApi();
   init_terms_dict();
 
   testCompare();
