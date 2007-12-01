@@ -16,7 +16,9 @@ BUILTIN_NAMES_ARITY=\
 	lift-to-term_1 \
 	implode_1\
 	parse-file_1 \
+	parse-file-pos-info_1 \
 	parse-bytes_1 \
+	parse-bytes-pos-info_2 \
 	unparse-to-bytes_1 \
 	unparse-to-file_2 \
 	read-term-from-file_1 \

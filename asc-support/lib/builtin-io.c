@@ -98,14 +98,49 @@ static char* getSort(PT_Symbol type) {
   return NULL;
 }
 
+static ERR_Error setFile(ERR_Error error, const char* filename)
+{
+  ERR_SubjectList result = ERR_makeSubjectListEmpty();
+  ERR_SubjectList subjects = ERR_getErrorList(error);
 
-static PT_Tree parse_result(const char *sort, PT_ParseTree pt) {
+  while (!ERR_isSubjectListEmpty(subjects)) {
+    ERR_Subject subject = ERR_getSubjectListHead(subjects);
+    ERR_Location location;
+    if (ERR_isSubjectLocalized(subject)) {
+      ERR_Area area;
+      location = ERR_getSubjectLocation(subject);
+      area = ERR_getLocationArea(location);
+      location = ERR_makeLocationAreaInFile(filename, area);
+      subject = ERR_setSubjectLocation(subject, location);
+    }
+    else {
+      char *description = ERR_getSubjectDescription(subject);
+      location = ERR_makeLocationFile(filename);
+      subject = ERR_makeSubjectLocalized(description, location);
+    }
+    result = ERR_makeSubjectListMany(subject, result);
+    subjects = ERR_getSubjectListTail(subjects);
+  }
+
+  return ERR_setErrorList(error, ERR_reverseSubjectList(result));
+}
+
+static PT_Tree parse_result(const char *sort, PT_ParseTree pt, PT_Tree posFile, ATbool pos) {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   PT_Symbol type = PT_makeSymbolSort(sort);
   CO_Summary error;
 
   if (pt == NULL) {
     ERR_Summary parseErrorSummary = SGLR_getErrorSummary();
+
+    if (posFile != NULL) {
+      const char* name = getFilename(posFile);
+      ERR_ErrorList list = ERR_getSummaryList(parseErrorSummary);
+      ERR_Error error = setFile(ERR_getErrorListHead(list), name);
+      list = ERR_makeErrorListMany(error, ERR_getErrorListTail(list));
+      parseErrorSummary = ERR_setSummaryList(parseErrorSummary, list);
+    }
+
     if (ERR_isValidSummary(parseErrorSummary)) {
       error = (CO_Summary)ERR_liftSummary(parseErrorSummary);
       return (PT_Tree) CO_makeParsetreeXFailure((ATerm) type, l, l, error, l);
@@ -118,9 +153,16 @@ static PT_Tree parse_result(const char *sort, PT_ParseTree pt) {
 
   if (PT_isValidParseTree(pt)) {
     int ambs = PT_getParseTreeAmbCnt(pt);
-    PT_Tree tree = PT_getParseTreeTree(pt);
+    PT_Tree tree;
     PT_Tree before;
     PT_Tree after;
+
+    if (pos) {
+      const char* name = getFilename(posFile);
+      pt = PT_addParseTreePosInfo(name, pt);
+    }
+
+    tree = PT_getParseTreeTree(pt);
 
     if (PT_isValidTree(tree)) {
       if (PT_isTreeAmb(tree)) {
@@ -162,7 +204,7 @@ static PT_Tree parse_result(const char *sort, PT_ParseTree pt) {
 }
 
 
-static PT_Tree parse_file(PT_Symbol type, PT_Tree file) {
+static PT_Tree parse_file(PT_Symbol type, PT_Tree file, ATbool pos) {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   char *sort = getSort(type);
   char *filename = getFilename(file);
@@ -181,7 +223,7 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file) {
     FLT_setSelectTopNonterminalFlag(ATtrue);
     FLT_setTopNonterminal(sort);
     PT_ParseTree result = SGLR_parse(inputString, getParseTableID());
-    return parse_result(sort, result);
+    return parse_result(sort, result, file, pos);
   }
 
   return (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
@@ -191,19 +233,28 @@ static PT_Tree parse_file(PT_Symbol type, PT_Tree file) {
 }
 
 
-PT_Tree ASFE_parse_file(PT_Symbol type, PT_Tree file) {
-  return parse_file(type, file);
+PT_Tree ASFE_parse_file_pos_info(PT_Symbol type, PT_Tree file) {
+  return parse_file(type, file, ATtrue);
 }
 
+PT_Tree ASFE_parse_file(PT_Symbol type, PT_Tree file) {
+  return parse_file(type, file, ATfalse);
+}
+
+PT_Tree ASC_parse_file_pos_info(ATerm type, ATerm aterm) {
+  PT_Tree file = muASFToTree(aterm);
+
+  return parse_file((PT_Symbol) type, file, ATtrue);
+}
 
 PT_Tree ASC_parse_file(ATerm type, ATerm aterm) {
   PT_Tree file = muASFToTree(aterm);
 
-  return parse_file((PT_Symbol) type, file);
+  return parse_file((PT_Symbol) type, file, ATfalse);
 }
 
 
-static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes) {
+static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes, PT_Tree file, ATbool pos) {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
   const char *sort = getSort(type);
   InputString inputString;
@@ -221,7 +272,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes) {
     FLT_setTopNonterminal(sort);
   
     PT_ParseTree result = SGLR_parse(inputString, getParseTableID());
-    return parse_result(sort, result);
+    return parse_result(sort, result, file, pos);
   }
 
   return (PT_Tree) CO_makeParsetreeXFailure((ATerm) PT_makeSymbolSort(sort), l,l,
@@ -229,16 +280,27 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes) {
 		     l);
 }
 
+PT_Tree ASFE_parse_bytes_pos_info(PT_Symbol type, PT_Tree bytes, PT_Tree file) {
+  return parse_bytes(type, bytes, file, ATtrue);
+}
+
+
+PT_Tree ASC_parse_bytes_pos_info(ATerm type, ATerm aterm, ATerm file) {
+  PT_Tree bytes = muASFToTree(aterm);
+  PT_Tree name = muASFToTree(file);
+
+  return parse_bytes((PT_Symbol) type, bytes, name, ATtrue);
+}
 
 PT_Tree ASFE_parse_bytes(PT_Symbol type, PT_Tree bytes) {
-  return parse_bytes(type, bytes);
+  return parse_bytes(type, bytes, NULL, ATfalse);
 }
 
 
 PT_Tree ASC_parse_bytes(ATerm type, ATerm aterm) {
   PT_Tree bytes = muASFToTree(aterm);
 
-  return parse_bytes((PT_Symbol) type, bytes);
+  return parse_bytes((PT_Symbol) type, bytes, NULL, ATfalse);
 }
 
 
@@ -299,7 +361,7 @@ static PT_Tree read_term_from_file(PT_Symbol type, PT_Tree file_arg) {
 
   inputParseTree = PT_ParseTreeFromTerm(ATreadFromNamedFile(filestr));
 
-  return parse_result(sort, inputParseTree);
+  return parse_result(sort, inputParseTree, NULL, ATfalse);
 }
 
 
