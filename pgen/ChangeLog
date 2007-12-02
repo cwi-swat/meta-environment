@@ -1,5 +1,8 @@
 $Id$
 
+Sun Dec  2 16:08:25 EST 2007 <jurgenv@cwi.nl>
+ * Bumped version to 2.6
+
 Sun Dec  2 15:52:41 EST 2007 <jurgenv@cwi.nl>
  * src/sdf2table.src,src/parse-sdf2.src: removed scripts
  * src/parsetablegen: renamed to sdf2table
