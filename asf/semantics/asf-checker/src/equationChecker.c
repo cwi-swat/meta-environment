@@ -22,7 +22,7 @@
 #include "equationChecker.h"
 #include "statistics.h"
 
-static LOC_Location currentLocation = NULL;
+static ERR_Location currentLocation = NULL;
 
 /*{{{  static ATbool isCHARinjection(PT_Tree tree) */
 
@@ -173,7 +173,7 @@ static int ASF_getASFConditionsListLength(ASF_ASFConditionList l)
 static ERR_SubjectList treeToSubjectList(PT_Tree tree)
 {
   ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
-  LOC_Location location = PT_getTreeLocation(tree);
+  ERR_Location location = PT_getTreeLocation(tree);
   const char *yield = PT_yieldTreeToString(tree, ATfalse);
   ERR_Subject sub;
 
@@ -1251,7 +1251,7 @@ ERR_ErrorList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationL
 
 ERR_ErrorList checkEquations(ASF_ASFConditionalEquationList equations) 
 {
-  LOC_protectLocation(&currentLocation);
+  ERR_protectLocation(&currentLocation);
 
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) equations))) {
     return makeAmbiguityMessage(equations);
@@ -1265,7 +1265,7 @@ ERR_ErrorList checkEquations(ASF_ASFConditionalEquationList equations)
 
 ERR_ErrorList checkTests(ASF_ASFTestEquationTestList tests) 
 {
-  LOC_protectLocation(&currentLocation);
+  ERR_protectLocation(&currentLocation);
 
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) tests))) {
     return makeAmbiguityMessage(tests);
