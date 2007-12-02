@@ -9,8 +9,8 @@ void PGEN_initializeDefaultOptions(void);
 
 void PGEN_setBafModeFlag(ATbool value);
 ATbool PGEN_getBafModeFlag(void);
-void PGEN_setATermDebugFlag(ATbool value);
-ATbool PGEN_getATermDebugFlag(void);
+void PGEN_setCollectFlag(ATbool value);
+ATbool PGEN_getCollectFlag(void);
 void PGEN_setGenerationModeFlag(ATbool value);
 ATbool PGEN_getGenerationModeFlag(void);
 void PGEN_setInputFilename(const char *value);
@@ -21,8 +21,12 @@ void PGEN_setTopModule(const char *value);
 const char *PGEN_getTopModule(void);
 void PGEN_setNormalizationModeFlag(ATbool value);
 ATbool PGEN_getNormalizationModeFlag(void);
+void PGEN_setDefinitionModeFlag(ATbool value);
+ATbool PGEN_getDefinitionModeFlag(void);
 void PGEN_setOutputFilename(const char *value);
 const char *PGEN_getOutputFilename(void);
+void PGEN_setSearchPath(const char *value);
+const char *PGEN_getSearchPath(void);
 void PGEN_setVerboseModeFlag(ATbool value);
 ATbool PGEN_getVerboseModeFlag(void);
 

@@ -1,0 +1,95 @@
+#include "generate.h"
+#include "normalize.h"
+#include "ksdf2table.h"
+#include "characters.h"
+#include "item.h"
+#include "first.h"
+#include "follow.h"
+#include "goto.h"
+#include "parseTable-data.h"
+#include "pgenOptions.h"
+#include "parseTable-stats.h"
+#include <logging.h>
+#include <rsrc-usage.h>
+
+static PTBL_ParseTable generateParseTable() {
+  int i;
+
+  ATermList vertex; 
+
+  PTBL_State state;
+  PTBL_States statelist = PTBL_makeStatesEmpty();
+  PTBL_Gotos gotos; 
+  PTBL_Choices actions;
+
+  
+  calc_first_table();
+  calc_follow_table();
+  createDFA();
+
+  for (i = PGEN_getNumberOfStates()-1; i >= 0; i--) {
+    vertex = PGEN_getStateOfStateNumber(i);
+
+    gotos = (PTBL_Gotos)PGEN_getGotosOfState(vertex);
+    if (!gotos) {
+      gotos = PTBL_makeGotosEmpty();
+    } 
+    else if (PGEN_getStatsFlag()) {
+      PGEN_increaseNumberOfGotos(PTBL_getGotosLength(gotos));
+    }
+
+    actions = PGEN_getActionsOfState(vertex);
+    if (!actions) {
+      actions = PTBL_makeChoicesEmpty();
+    }
+    else if (PGEN_getStatsFlag()) {
+      PGEN_increaseNumberOfActions(PTBL_getChoicesLength(actions));
+    }
+
+    state = PTBL_makeStateDefault(i, gotos, actions);
+    statelist = PTBL_makeStatesMany(state, statelist);
+  }
+
+  if (PGEN_getStatsFlag()) { PGEN_printStats(); }
+
+  return PTBL_makeParseTableParseTable(PTBL_makeVersionDefault(), PGEN_getInitialStateNumber(), PGEN_getLabelSection(), statelist, PGEN_getPrioSection());
+}
+
+ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
+  PTBL_ParseTable pt = NULL;
+  PT_Tree ksdf;
+
+  if (PGEN_getStatsFlag()) {
+    STATS_Timer(); 
+  } 
+
+  if (PGEN_getGenerationModeFlag()) {
+    ksdf = PT_getParseTreeTree(sdf2term);
+  } else {
+    ksdf = normalizeGrammar(name, sdf2term); 
+  }
+
+  if (PGEN_getStatsFlag()) {
+      fprintf(LOG_log(), "Normalization to Kernel-Sdf took %.6fs\n", STATS_Timer());
+  }
+
+  if (PGEN_getNormalizationModeFlag()) {
+    return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(ksdf));
+  }
+
+  if (ksdf)  {
+    PGEN_initTableGen();
+    PGEN_processGrammar(ksdf);
+    
+    pt = generateParseTable();
+    
+    PGEN_destroyTableGen();       
+  }
+
+  if (PGEN_getStatsFlag()) { 
+    fprintf(LOG_log(), "Parse table generation took %.6fs\n", STATS_Timer()); 
+  }
+  
+  return (ATerm)pt;
+}
+

@@ -1,5 +1,18 @@
 $Id$
 
+Sun Dec  2 15:52:41 EST 2007 <jurgenv@cwi.nl>
+ * src/sdf2table.src,src/parse-sdf2.src: removed scripts
+ * src/parsetablegen: renamed to sdf2table
+ * src/main.c,Load-Sdf2.c: added functionality of sdf2table script and
+   some more to the main parse table generator program. It can find and
+   parse SDF modules on a search path now. It can parse full SDF definitions
+   if given as input. See sdf2table -h for an explanation. 
+ * ChangeLog: The reason for these changes is to get rid of the shell 
+   script dependency, to increase the usability of SDF on Windows. 
+   Also, there was never a good commandline for collecting SDF modules 
+   offered by SDF. Both Meta-Environment and StrategoXT provided their 
+   own stuff. SDF should be fully functional independent of these two products.
+
 Thu Sep 13 11:40:34 CEST 2007 <economop@cwi.nl>
  * test/regressionTests.sh.src: removed the redundant -a option from
    comparePT and added ordering of ambiguities, using orderPT, for when 

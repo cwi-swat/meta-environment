@@ -14,15 +14,13 @@ AM_CPPFLAGS += \
 
 TESTS		= $(check_PROGRAMS)
 check_PROGRAMS	= test-chars
-bin_PROGRAMS	= parsetablegen
-bin_SCRIPTS	= sdf2table parse-sdf2
-noinst_SCRIPTS	= sdf2table.test
+bin_PROGRAMS	= sdf2table
 pkgdata_DATA	= parsetablegen.idef
 
-EXTRA_DIST	+= sdf2table.src \
-                  parse-sdf2.src 
-
 noinst_HEADERS = \
+	normalize.h
+	generate.h \
+	load.h \
 	atsets.h \
 	ksdf2table.h \
 	flatten.h \
@@ -40,8 +38,11 @@ noinst_HEADERS = \
 	parseTable-data.h \
 	parseTable-stats.h
 
-parsetablegen_SOURCES = \
+sdf2table_SOURCES = \
 	parsetablegen.isrc \
+	normalize.c \
+	generate.c \
+	load.c \
 	main.c \
 	ksdf2table.c \
 	atsets.c \
@@ -52,6 +53,7 @@ parsetablegen_SOURCES = \
 	goto.c \
 	predicted.c \
 	priorities.c \
+	Sdf2-Load.c \
 	Sdf2-Normalization.c \
 	intset.c \
 	item.c \
@@ -66,7 +68,7 @@ test_chars_LDADD	= \
 	$(ATERM_LIBS) \
 	$(PT_SUPPORT_LIBS)
 
-parsetablegen_LDADD = \
+sdf2table_LDADD = \
 	$(ASC_SUPPORT_LIBS) \
 	$(SDF_SUPPORT_LIBS) \
 	$(PT_SUPPORT_LIBS) \
@@ -110,4 +112,10 @@ asfc: Sdf2-Normalization.eqs
 
 Sdf2-Normalization.eqs:
 	eqs-dump -m languages/sdf2/normalization/Sdf2-Normalization -o $@
+
+asfc-load: Sdf2-Load.eqs
+	asfc -v -i Sdf2-Load.eqs -p ${top_builddir}/grammar/Sdf2.baf -o Sdf2-Load.c
+
+Sdf2-Load.eqs:
+	eqs-dump -m languages/sdf2/load/Sdf2 -o $@
 

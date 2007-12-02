@@ -1,7 +1,7 @@
 #ifndef __PARSETABLEGEN__
 #define __PARSETABLEGEN__
 
-tool parsetablegen is { command = "__PREFIX__/bin/parsetablegen" }
+tool parsetablegen is { command = "__PREFIX__/bin/sdf2table" }
 
 process PGen is
 let
