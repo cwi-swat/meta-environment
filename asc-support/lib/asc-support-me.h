@@ -125,6 +125,7 @@ extern void print_memo_table_sizes();
 typedef ATerm (*funcptr)();
 
 void c_rehash(int newsize);
+void unregister_all();
 unsigned int calc_hash(ATerm t);
 void register_prod(ATerm prod, funcptr func, AFun sym);
 

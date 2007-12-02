@@ -134,6 +134,13 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
 
 /*}}}  */
 
+void unregister_all() {
+  free(prod_table);
+  prod_table = NULL;
+  free(sym_table);
+  sym_table = NULL;
+}
+
 /*{{{  funcptr lookup_func_given_sym(Symbol sym) */
 
 funcptr lookup_func_given_sym(Symbol sym)
