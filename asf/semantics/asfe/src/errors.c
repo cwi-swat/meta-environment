@@ -54,7 +54,7 @@ void RWaddError(char *msg, char *subject) {
 }
 
 
-void RWaddLocatedError(char *msg, char *subject, LOC_Location loc) {
+void RWaddLocatedError(char *msg, char *subject, ERR_Location loc) {
   ERR_Subject sub = ERR_makeSubjectLocalized(subject, (ERR_Location) loc); 
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectListSingle(sub));
 
@@ -68,7 +68,7 @@ void RWaddLocatedError(char *msg, char *subject, LOC_Location loc) {
 }
 
 
-void RWaddDoubleLocatedError(char *msg, char *subject1, LOC_Location loc1, char *subject2, LOC_Location loc2) {
+void RWaddDoubleLocatedError(char *msg, char *subject1, ERR_Location loc1, char *subject2, ERR_Location loc2) {
   ERR_Subject sub1 = ERR_makeSubjectLocalized(subject1, (ERR_Location) loc1); 
   ERR_Subject sub2 = ERR_makeSubjectLocalized(subject2, (ERR_Location) loc2); 
   ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectList2(sub1,sub2));

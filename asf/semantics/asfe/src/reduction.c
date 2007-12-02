@@ -141,7 +141,7 @@ static PT_Tree reduce(PT_Tree trm, int depth) {
 			      term_prefix(trm),
 			      PT_getTreeLocation(trm),
 			      "term dump",
-			      LOC_makeLocationFile(filename)
+			      ERR_makeLocationFile(filename)
 		      );
     }
     else {
@@ -637,7 +637,7 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra) {
     reduct = ASC_constructorToAmb(reduct);
 
     if (PT_isArgsEmpty(PT_getTreeArgs(reduct))) {
-      LOC_Location loc = PT_getTreeLocation(reduct);
+      ERR_Location loc = PT_getTreeLocation(reduct);
 
       if (loc == NULL) {
 	RWaddError("Rewriting failed: empty ambiguity cluster returned", "");

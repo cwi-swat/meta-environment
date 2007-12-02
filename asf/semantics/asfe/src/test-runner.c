@@ -24,7 +24,7 @@ static PT_Tree rightSubject;
 
 
 
-static ERR_Subject makeSubject(PT_Tree trm, LOC_Location loc) {
+static ERR_Subject makeSubject(PT_Tree trm, ERR_Location loc) {
   if (loc != NULL) {
     return ERR_makeSubjectLocalized(term_prefix(trm), (ERR_Location) loc);
   }
@@ -42,8 +42,8 @@ static ERR_Error testOne(ASF_ASFTestEquation test) {
   PT_Tree rhs = (PT_Tree) ASF_getASFConditionRhs(tobetested);
   PT_Tree lhsResult;
   PT_Tree rhsResult;
-  LOC_Location lhsLocation = NULL;
-  LOC_Location rhsLocation = NULL;
+  ERR_Location lhsLocation = NULL;
+  ERR_Location rhsLocation = NULL;
   ATbool equal = ATfalse;
 
   if (PT_hasTreeLocation(lhs)) {

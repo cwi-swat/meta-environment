@@ -16,7 +16,7 @@
 
 #include <tide-adapter.h>
 #include <asc-support-me.h>
-#include <Location.h>
+#include <Error.h>
 
 
 ATerm pos_info;
@@ -37,15 +37,15 @@ static PT_Tree find_variable(PT_Tree tree, int *line, int *col, int target_line,
    * , we return it, * otherwise just keep on searching
    */
   if (PT_isTreeVar(tree)) {
-    LOC_Location loc = PT_getTreeLocation(tree);
+    ERR_Location loc = PT_getTreeLocation(tree);
 
     if (loc != NULL) {
-      LOC_Area area = LOC_getLocationArea(loc);
+      ERR_Area area = ERR_getLocationArea(loc);
 
-      if (LOC_getAreaBeginLine(area) <= target_line 
-	  && LOC_getAreaEndLine(area) >= target_line 
-	  && LOC_getAreaBeginColumn(area) <= target_col
-	  && LOC_getAreaEndColumn(area) >= target_col) {
+      if (ERR_getAreaBeginLine(area) <= target_line 
+	  && ERR_getAreaEndLine(area) >= target_line 
+	  && ERR_getAreaBeginColumn(area) <= target_col
+	  && ERR_getAreaEndColumn(area) >= target_col) {
 	return tree;
       }
     }
