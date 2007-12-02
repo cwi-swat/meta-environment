@@ -74,8 +74,8 @@ static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
     data = ATwriteToBinaryString(parsetable, &size);
 
     if (size > 1) {
-      fprintf(file, "static size_t %s_parsetable_size = %d;\n", name, size);
-      fprintf(file, "static unsigned const char %s_parsetable_baf[%d] = {\n\t", name, size); 
+      fprintf(file, "size_t %s_parsetable_size = %d;\n", name, size);
+      fprintf(file, "unsigned const char %s_parsetable_baf[%d] = {\n\t", name, size); 
 
       for (i = 0; i < size - 1; i++) {
 	fprintf(file,"0x%02X, ", (unsigned char) data[i]);
