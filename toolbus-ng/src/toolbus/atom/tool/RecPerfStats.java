@@ -13,6 +13,7 @@ import aterm.ATerm;
 public class RecPerfStats extends Atom{
 	private final Ref toolId;
 	private final Ref result;
+	private ToolInstance toolInstance;
 	
 	public RecPerfStats(ATerm toolId, ATerm result, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -29,14 +30,19 @@ public class RecPerfStats extends Atom{
 		return a;
 	}
 	
+	public void activate(){
+		toolInstance = null;
+		super.activate();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-		if(tid == tbfactory.Undefined) return false;
-		
-		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
-		if(toolInstance == null) return false;
+		if(toolInstance == null){
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+			toolInstance = getToolBus().getToolInstanceManager().get(tid);
+			if(toolInstance == null) return false;
+		}
 		
 		if(toolInstance.getPerformanceStats(result.value, getEnv())) return true;
 		

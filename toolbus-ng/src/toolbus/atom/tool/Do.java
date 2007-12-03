@@ -16,6 +16,7 @@ import aterm.ATerm;
 public class Do extends Atom{
 	private final Ref toolId;
 	private final Ref request;
+	private ToolInstance toolInstance;
 	
 	public Do(ATerm toolId, ATerm request, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -33,14 +34,19 @@ public class Do extends Atom{
 		return a;
 	}
 	
+	public void activate(){
+		toolInstance = null;
+		super.activate();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-		if(tid == tbfactory.Undefined) return false;
-		
-		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
-		if(toolInstance == null) return false;
+		if(toolInstance == null){
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+			toolInstance = getToolBus().getToolInstanceManager().get(tid);
+			if(toolInstance == null) return false;
+		}
 		
 		if(toolInstance.tryDoEval()){
 			ATerm req = tbfactory.substitute(request.value, getEnv());

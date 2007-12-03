@@ -1,10 +1,10 @@
 package toolbus.tool.java.hello;
 
-import toolbus.adapter.AbstractTool;
+import toolbus.adapter.java.AbstractJavaTool;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
-public class HelloTool extends AbstractTool{
+public class HelloTool extends AbstractJavaTool{
 	
 	public HelloTool(String[] args){
 		super();

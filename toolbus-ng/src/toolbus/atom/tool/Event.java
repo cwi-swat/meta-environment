@@ -16,6 +16,7 @@ import aterm.ATerm;
 public class Event extends Atom{
 	private final Ref toolId;
 	private final Ref result;
+	private ToolInstance toolInstance;
 	
 	public Event(ATerm toolId, ATerm result, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -33,14 +34,19 @@ public class Event extends Atom{
 		return a;
 	}
 	
+	public void activate(){
+		toolInstance = null;
+		super.activate();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-		if(tid == tbfactory.Undefined) return false;
-		
-		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
-		if(toolInstance == null) return false;
+		if(toolInstance == null){
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+			toolInstance = getToolBus().getToolInstanceManager().get(tid);
+			if(toolInstance == null) return false;
+		}
 		
 		if(toolInstance.getEventFromTool(result.value, getEnv())){
 			//LoggerFactory.log(this.getProcess().getProcessName(), "Event " + result.value, IToolBusLoggerConstants.TOOLCOM);

@@ -1,6 +1,5 @@
 package toolbus.adapter;
 
-import java.net.InetAddress;
 import toolbus.IOperations;
 import toolbus.TBTermFactory;
 import aterm.ATerm;
@@ -37,34 +36,16 @@ public abstract class AbstractTool implements IOperations{
 	 *             Thrown when something goes wrong during the parsing of the arguments or the
 	 *             establishing of the connection.
 	 */
-	public void connect(String[] args) throws Exception{
-		String type = null;
-
-		String toolName = null;
-		int toolID = -1;
-
-		InetAddress host = null;
-		int port = -1;
-
-		for(int i = 0; i < args.length; i++){
-			String arg = args[i];
-			if(arg.equals("-TYPE")){
-				type = args[++i];
-			}else if(arg.equals("-TB_TOOL_NAME")){
-				toolName = args[++i];
-			}else if(arg.equals("-TB_TOOL_ID")){
-				toolID = Integer.parseInt(args[++i]);
-			}else if(arg.equals("-TB_HOST")){
-				host = InetAddress.getByName(args[++i]);
-			}else if(arg.equals("-TB_PORT")){
-				port = Integer.parseInt(args[++i]);
-			}
-		}
-
-		if(type == null || toolName == null) throw new RuntimeException("Missing tool identification.");
-
-		toolBridge = new ToolBridge(termFactory, type, this, toolName, toolID, host, port);
-		toolBridge.run();
+	public abstract void connect(String[] args) throws Exception;
+	
+	/**
+	 * Sets the reference ot the tool bridge we're using.
+	 * 
+	 * @param toolBridge
+	 *            The reference ot the tool bridge we're using.
+	 */
+	public void setToolBridge(ToolBridge toolBridge){
+		this.toolBridge = toolBridge;
 	}
 
 	/**

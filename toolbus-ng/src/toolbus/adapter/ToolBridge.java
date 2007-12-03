@@ -1,18 +1,12 @@
 package toolbus.adapter;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import toolbus.IOperations;
+import toolbus.adapter.AbstractTool;
 import toolbus.communication.IDataHandler;
 import toolbus.communication.IIOHandler;
 import toolbus.logging.ILogger;
@@ -22,7 +16,6 @@ import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
-import aterm.ATermPlaceholder;
 import aterm.pure.PureFactory;
 
 /**
@@ -31,15 +24,12 @@ import aterm.pure.PureFactory;
  * 
  * @author Arnold Lankamp
  */
-public class ToolBridge implements IDataHandler, Runnable, IOperations{
+public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 	private final PureFactory termFactory;
-
-	private final Map<CallableMethodSignature, Method> callableFunctions;
 
 	private final Map<Long, ThreadLocalEventQueue> threadLocalQueues;
 	private final Map<AFun, EventQueue> queues;
 
-	private final AbstractTool tool;
 	private IIOHandler ioHandler;
 
 	private final String type;
@@ -55,8 +45,6 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * 
 	 * @param type
 	 *            The type of the tool (Remote of direct).
-	 * @param tool
-	 *            The tool that this tool bridge needs to be associated with.
 	 * @param toolName
 	 *            The name of the with this bridge associated tool.
 	 * @param toolID
@@ -66,22 +54,27 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 	 * @param port
 	 *            The port on which the ToolBus is running.
 	 */
-	public ToolBridge(PureFactory termFactory, String type, AbstractTool tool, String toolName, int toolID, InetAddress host, int port){
+	public ToolBridge(PureFactory termFactory, String type,  String toolName, int toolID, InetAddress host, int port){
 		super();
 		
 		this.termFactory = termFactory;
 		this.type = type;
-		this.tool = tool;
 		this.toolName = toolName;
 		this.toolID = toolID;
 		this.host = host;
 		this.port = port;
 
-		callableFunctions = new HashMap<CallableMethodSignature, Method>();
-		initCallableMethods();
-
 		threadLocalQueues = new HashMap<Long, ThreadLocalEventQueue>();
 		queues = new HashMap<AFun, EventQueue>();
+	}
+	
+	/**
+	 * Returns what type of connection we have with the ToolBus.
+	 * 
+	 * @return What type of connection we have with the ToolBus.
+	 */
+	public String getType(){
+		return type;
 	}
 
 	/**
@@ -139,214 +132,7 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 	protected int getPort(){
 		return port;
 	}
-
-	/**
-	 * Reads all the callable methods of the tool associated with this tool bridge.
-	 */
-	private void initCallableMethods(){
-		Class<?> toolClass = tool.getClass();
-		Method[] toolMethods = toolClass.getMethods();
-		for(int i = 0; i < toolMethods.length; i++){
-			Method toolMethod = toolMethods[i];
-			if(Modifier.isPublic(toolMethod.getModifiers())){
-
-				Class<?> returnType = toolMethod.getReturnType();
-				if(isImplementationOf(returnType, ATerm.class)) returnType = ATerm.class;
-				if(returnType == void.class || returnType == ATerm.class || isImplementationOf(returnType, ATerm.class)){
-
-					Class<?>[] parameters = toolMethod.getParameterTypes();
-					boolean paramsAreTerms = true;
-					for(int j = parameters.length - 1; j >= 0; j--){
-						Class<?> param = parameters[j];
-						if(param != ATerm.class && !isImplementationOf(param, ATerm.class)){
-							paramsAreTerms = false;
-							break;
-						}
-					}
-
-					if(paramsAreTerms){
-						CallableMethodSignature cms = new CallableMethodSignature();
-						cms.methodName = toolMethod.getName();
-						cms.returnType = returnType;
-						cms.parameters = parameters;
-
-						callableFunctions.put(cms, toolMethod);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Checks the the given class satisfies the given interface.
-	 * 
-	 * @param clazz
-	 *            The class from which we want to know if it satisfies the given interface.
-	 * @param superInterface
-	 *            The interface to satisfy.
-	 * @return True if clazz implements the specified interface; false otherwise.
-	 */
-	protected static boolean isImplementationOf(Class<?> clazz, Class<?> superInterface){
-		Class<?>[] interfaces = clazz.getInterfaces();
-
-		for(int i = 0; i < interfaces.length; i++){
-			Class<?> interfaceX = interfaces[i];
-			if(interfaceX.equals(superInterface) || isImplementationOf(interfaceX, superInterface)){
-				return true;
-			}
-		}
-
-		if(!clazz.isInterface()){
-			Class<?> superClass = clazz.getSuperclass();
-			if(superClass != null) return isImplementationOf(superClass, superInterface);
-		}
-
-		return false;
-	}
-
-	/**
-	 * This class represents a signature of a method (Name + return type + params).
-	 * 
-	 * @author Arnold Lankamp
-	 */
-	protected static class CallableMethodSignature{
-		public String methodName;
-		public Class<?> returnType;
-		public Class<?>[] parameters;
-
-		/**
-		 * Custom hashcode function. This is needed because we use this object as a key in a
-		 * HashMap.
-		 */
-		public int hashCode(){
-			return methodName.hashCode();
-		}
-
-		/**
-		 * Custom equals method. Matches when the object we are comparing ourselfs to can be called
-		 * by this method signature.<br />
-		 * <br />
-		 * For example: void method(String o) equals void method(Object o), but method(Object o)
-		 * does not equal method(String o).
-		 * 
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
-		public boolean equals(Object o){
-			if(o == this){
-				return true;
-			}else if(o instanceof CallableMethodSignature){
-				CallableMethodSignature cms = (CallableMethodSignature) o;
-
-				if(!methodName.equals(cms.methodName)) return false;
-
-				if(cms.returnType != returnType && returnType != void.class && !isImplementationOf(cms.returnType, returnType)) return false;
-
-				if(parameters.length != cms.parameters.length) return false;
-				for(int i = 0; i < parameters.length; i++){
-					if(parameters[i] != cms.parameters[i] && !isImplementationOf(parameters[i], cms.parameters[i])){
-						return false;
-					}
-				}
-
-				return true;
-			}
-
-			return false;
-		}
-	}
-
-	/**
-	 * Checks if the tool associated with this tool bridge supplies the given signature.
-	 * 
-	 * @param signatures
-	 *            The signature we need to compare the interface of the tool too.
-	 * @return True if the tool supplies the expected interface; false otherwise.
-	 */
-	public boolean checkSignature(ATerm signatures){
-		boolean correct = true;
-
-		ATermList inputSignatures = (ATermList) ((ATermAppl) signatures).getArgument(0);
-		while(!inputSignatures.isEmpty()){
-			ATermAppl sig = (ATermAppl) inputSignatures.getFirst();
-			String operation = sig.getName();
-			if(operation.equals("rec-eval")){
-				ATermAppl methodTerm = (ATermAppl) sig.getArgument(0);
-
-				ATerm[] arguments = methodTerm.getArgumentArray();
-				Class<?>[] parameters = new Class[arguments.length];
-				for(int i = 0; i < parameters.length; i++){
-					// All the arguments are placeholders, so retrieve the type they represent.
-					parameters[i] = ((ATermPlaceholder) arguments[i]).getPlaceholder().getClass();
-				}
-
-				Method toolMethod = findMethod(EVAL, methodTerm.getName(), parameters);
-				if(toolMethod == null){
-					LoggerFactory.log("Unable to locate method matching the following signature: " + sig, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-					correct = false;
-					break;
-				}
-			}else if(operation.equals("rec-do")){
-				ATermAppl methodTerm = (ATermAppl) sig.getArgument(0);
-
-				ATerm[] arguments = methodTerm.getArgumentArray();
-				Class<?>[] parameters = new Class[arguments.length];
-				for(int i = 0; i < parameters.length; i++){
-					// Retrieve the types of the parameters.
-					ATerm parameter = arguments[i];
-					if(parameter instanceof ATermPlaceholder){
-						parameters[i] = ((ATermPlaceholder) parameter).getPlaceholder().getClass();
-					}else{
-						parameters[i] = parameter.getClass();
-					}
-				}
-
-				Method toolMethod = findMethod(DO, methodTerm.getName(), parameters);
-				if(toolMethod == null){
-					LoggerFactory.log("Unable to locate method matching the following signature: " + sig, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-					correct = false;
-					break;
-				}
-			}else if(operation.equals("rec-ack-event")){
-				// Ignore this, you can always handle event acknowledgements.
-			}else if(operation.equals("rec-terminate")){
-				// Why even bother to check this?
-				// It's impossible to write a tool that doesn't have it.
-			}else{
-				LoggerFactory.log("Unknown operation in signature: " + sig, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-				correct = false;
-				break;
-			}
-			inputSignatures = inputSignatures.getNext();
-		}
-
-		return correct;
-	}
-
-	/**
-	 * Returns the tool method that matches the given name, arguments and operation.
-	 * 
-	 * @param operation
-	 *            The operation associated with the given term.
-	 * @param methodName
-	 *            The name of the method we want to find.
-	 * @param parameters
-	 *            The list of parameters that the method needs be able to accept.
-	 * @return The method corresponding to the given term.
-	 */
-	private Method findMethod(byte operation, String methodName, Class<?>[] parameters){
-		CallableMethodSignature cms = new CallableMethodSignature();
-		cms.methodName = methodName;
-		cms.parameters = parameters;
-
-		if(operation == EVAL){
-			cms.returnType = ATerm.class;
-		}else if(operation == DO){
-			cms.returnType = void.class;
-		}
-
-		return callableFunctions.get(cms);
-	}
-
+	
 	/**
 	 * Associates an I/O handler with this tool bridge.
 	 * 
@@ -356,7 +142,56 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 	public void setIOHandler(IIOHandler ioHandler){
 		this.ioHandler = ioHandler;
 	}
-
+	
+	/**
+	 * Checks if the tool associated with this tool bridge supplies the given signature.
+	 * 
+	 * @param signatures
+	 *            The signature we need to compare the interface of the tool too.
+	 * @return True if the tool supplies the expected interface; false otherwise.
+	 */
+	public abstract boolean checkSignature(ATerm signature);
+	
+	/**
+	 * Executes a DO operation with the given ATerm.
+	 * 
+	 * @param aTerm
+	 *            The ATerm that contains the necessary data to complete the DO request.
+	 */
+	public abstract void doDo(ATerm aTerm);
+	
+	/**
+	 * Executes an EVAL operation with the given ATerm.
+	 * 
+	 * @param aTerm
+	 *            The ATerm that contains the necessary data to complete the EVAL request.
+	 * @return The result the EVAL request produced (may not be null).
+	 */
+	public abstract ATerm doEval(ATerm aTerm);
+	
+	/**
+	 * Executes a RECACKEVENT operation with the given ATerm.
+	 * 
+	 * @param aTerm
+	 *            The ATerm that can potentially contain callback data.
+	 */
+	public abstract void doReceiveAckEvent(ATerm aTerm);
+	
+	/**
+	 * Executes a TERMINATE operation with the given ATerm.
+	 * 
+	 * @param aTerm
+	 *            The ATerm that can potentially contain background informantion about the termination request.
+	 */
+	public abstract void doTerminate(ATerm aTerm);
+	
+	/**
+	 * Retrieves performance statistic information from the tool (if possible).
+	 * 
+	 * @return The gathered performance information (may not be null).
+	 */
+	public abstract ATerm doGetPerformanceStats();
+	
 	/**
 	 * @see IDataHandler#send(byte, ATerm)
 	 */
@@ -377,62 +212,17 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 		}
 	}
 
-	private ATerm invokeMethod(byte operation, ATerm aTerm) throws MethodInvokationException{
-		ATerm returnValue = null;
-		try{
-			// We will always get an appl, otherwise we wouldn't know what method to invoke.
-			ATermAppl methodTerm = (ATermAppl) aTerm;
-
-			String methodName = methodTerm.getName();
-
-			ATerm[] arguments = methodTerm.getArgumentArray();
-			Class<?>[] parameters = new Class[arguments.length];
-			for(int i = 0; i < parameters.length; i++){
-				parameters[i] = arguments[i].getClass();
-			}
-
-			Method toolMethod = findMethod(operation, methodName, parameters);
-			if(toolMethod == null){
-				String error = "No such method: " + methodName + ", with " + parameters.length + " arguments.";
-				LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-				throw new MethodInvokationException(error);
-			}
-			returnValue = (ATerm) toolMethod.invoke(tool, (Object[]) arguments);
-		}catch(ClassCastException ccex){
-			LoggerFactory.log("A class cast exception occured during the invokation of a method. Discarding term ....", ccex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-			throw new MethodInvokationException(ccex);
-		}catch(InvocationTargetException itex){
-			LoggerFactory.log("Something went wrong during the invokation of a method. Discarding associated term ....", itex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-			throw new MethodInvokationException(itex);
-		}catch(IllegalAccessException iaex){
-			LoggerFactory.log("Unable to invoke the with the term associated method. Discarding term ....", iaex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-			throw new MethodInvokationException(iaex);
-		}
-
-		return returnValue;
-	}
-
 	/**
 	 * @see IDataHandler#receive(byte, ATerm)
 	 */
 	public void receive(byte operation, ATerm aTerm){
 		switch(operation){
 			case DO:
-				try{
-					invokeMethod(operation, aTerm);
-				}catch(MethodInvokationException miex){
-					LoggerFactory.log("Unable to execute DO request.", miex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-				}
+				doDo(aTerm);
 				send(ACKDO, termFactory.makeList());
 				break;
 			case EVAL:
-				ATerm result = null;
-				try{
-					result = invokeMethod(operation, aTerm);
-				}catch(MethodInvokationException miex){
-					LoggerFactory.log("Unable to execute EVAL request.", miex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-				}
-				send(VALUE, result);
+				send(VALUE, doEval(aTerm));
 				break;
 			case ACKEVENT:
 				ATermList ackEvent = ((ATermList) aTerm);
@@ -447,14 +237,14 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 				eventQueue.ackEvent();
 				
 				ATerm callBackInfo = ackEvent.elementAt(1);
-				tool.receiveAckEvent(callBackInfo);
+				doReceiveAckEvent(callBackInfo);
 				break;
 			case TERMINATE:
-				tool.receiveTerminate(aTerm);
+				doTerminate(aTerm);
 				terminate();
 				break;
 			case PERFORMANCESTATS:
-				ATerm performaceStats = getPerformanceStats();
+				ATerm performaceStats = doGetPerformanceStats();
 				send(PERFORMANCESTATS, performaceStats);
 				break;
 			default:
@@ -698,105 +488,5 @@ public class ToolBridge implements IDataHandler, Runnable, IOperations{
 				eventQueue.postEvent(term, next.threadId);
 			}
 		}
-	}
-
-	/**
-	 * Custom exception. Thrown whenever the method associated with a certain DO or EVAL request
-	 * could not be located, or something goes wrong during execution of that request.
-	 * 
-	 * @author Arnold Lankamp
-	 */
-	private static class MethodInvokationException extends Exception{
-		private final static long serialVersionUID = 7944846564197962451L;
-
-		/**
-		 * Constructor.
-		 * 
-		 * @see Exception#Exception(java.lang.String)
-		 */
-		public MethodInvokationException(String message){
-			super(message);
-		}
-
-		/**
-		 * Constructor.
-		 * 
-		 * @see Exception#Exception(java.lang.Throwable)
-		 */
-		public MethodInvokationException(Throwable exception){
-			super(exception);
-		}
-
-		/**
-		 * Constructor.
-		 * 
-		 * @see Exception#Exception(java.lang.String, java.lang.Throwable)
-		 */
-		public MethodInvokationException(String message, Throwable exception){
-			super(message, exception);
-		}
-	}
-	
-	/**
-	 * Gathers performance statistics about this tool, like memory usage and the user-/system-time
-	 * spend per thread.
-	 * 
-	 * @return performance statictics.
-	 */
-	private ATerm getPerformanceStats(){
-		if(type == AbstractTool.DIRECTTOOL) return termFactory.make("performance-stats(unsupported-operation)"); // You can't request the stats from a direct tool in this way.
-		
-		// Type stuff
-		ATerm remote = termFactory.makeAppl(termFactory.makeAFun(type, 0, true));
-		ATerm toolType = termFactory.makeAppl(termFactory.makeAFun("type", 1, false), remote);
-		
-		ATerm java = termFactory.makeAppl(termFactory.makeAFun("Java", 0, true));
-		ATerm toolLanguage = termFactory.makeAppl(termFactory.makeAFun("language", 1, false), java);
-		
-		ATerm toolData = termFactory.makeAppl(termFactory.makeAFun("tool", 2, false), toolType, toolLanguage);
-		
-		// Memory stuff
-		MemoryMXBean mmxb = ManagementFactory.getMemoryMXBean();
-		long heapMemoryUsage = mmxb.getHeapMemoryUsage().getUsed();
-		long nonHeapMemoryUsage = mmxb.getNonHeapMemoryUsage().getUsed();
-		
-		ATerm heapUsage = termFactory.makeAppl(termFactory.makeAFun("heap-usage", 1, false), termFactory.makeInt(((int) (heapMemoryUsage / 1024))));
-		ATerm nonHeapUsage = termFactory.makeAppl(termFactory.makeAFun("non-heap-usage", 1, false), termFactory.makeInt(((int) (nonHeapMemoryUsage / 1024))));
-		
-		ATerm memory = termFactory.makeAppl(termFactory.makeAFun("memory-usage", 2, false), heapUsage, nonHeapUsage);
-		
-		// Thread stuff
-		ThreadMXBean tmxb = ManagementFactory.getThreadMXBean();
-		
-		ATerm threads;
-		
-		long[] threadIds = tmxb.getAllThreadIds();
-		int nrOfThreads = threadIds.length;
-		try{
-			ATermList threadsList = termFactory.makeList();
-			for(int i = 0; i < nrOfThreads; i++){
-				ThreadInfo ti = tmxb.getThreadInfo(threadIds[i]);
-				if(ti != null){
-					String threadName = ti.getThreadName();
-					long userTime = tmxb.getThreadUserTime(threadIds[i]);
-					long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
-					
-					if((userTime + systemTime) <= 0) continue;
-					
-					ATerm userTimeTerm = termFactory.makeAppl(termFactory.makeAFun("user-time", 1, false), termFactory.makeInt(((int) (userTime / 1000000))));
-					ATerm systemTimeTerm = termFactory.makeAppl(termFactory.makeAFun("system-time", 1, false), termFactory.makeInt(((int) (systemTime / 1000000))));
-					ATerm thread = termFactory.makeAppl(termFactory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
-					
-					threadsList = termFactory.makeList(thread, threadsList);
-				}
-			}
-			
-			threads = termFactory.makeAppl(termFactory.makeAFun("threads", 1, false), threadsList);
-		}catch(UnsupportedOperationException uoex){
-			threads = termFactory.make("threads(unsupported-operation)");
-			LoggerFactory.log("Thread time profiling is not supported by this JVM.", ILogger.ERROR, IToolBusLoggerConstants.TOOL);
-		}
-		
-		return termFactory.makeAppl(termFactory.makeAFun("performance-stats", 3, false), toolData, memory, threads);
 	}
 }

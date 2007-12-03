@@ -16,6 +16,7 @@ import aterm.ATerm;
 public class RecVal extends Atom{
 	private final Ref toolId;
 	private final Ref result;
+	private ToolInstance toolInstance;
 	
 	public RecVal(ATerm toolId, ATerm result, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -32,24 +33,29 @@ public class RecVal extends Atom{
 		return a;
 	}
 	
+	public void activate(){
+		toolInstance = null;
+		super.activate();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-		if(tid == tbfactory.Undefined) return false;
-		
-		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
-		if(toolInstance == null) return false;
+		if(toolInstance == null){
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+			toolInstance = getToolBus().getToolInstanceManager().get(tid);
+			if(toolInstance == null) return false;
+		}
 		
 		if(toolInstance.getValueFromTool(result.value, getEnv())){
-			//LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + res, IToolBusLoggerConstants.TOOLCOM);
+			// LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + res, IToolBusLoggerConstants.TOOLCOM);
 			// LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + res,
 			// IToolBusLoggerConstants.TOOLCOM);
 			// LoggerFactory.log(this.getProcess().getProcessName(), "RecVal " + getEnv(),
 			// IToolBusLoggerConstants.TOOLCOM);
 			
 			return true;
-			}
+		}
 		return false;
 	}
 }

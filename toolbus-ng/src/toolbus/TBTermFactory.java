@@ -704,7 +704,7 @@ public class TBTermFactory extends PureFactory{
 				
 				ATerm[] patternChildren = pa.getArgumentArray();
 				ATerm[] valueChildren = va.getArgumentArray();
-				for(int i = 0; i < patternChildren.length; i++){
+				for(int i = patternChildren.length - 1; i >= 0; i--){
 					if(!performPatternMatch(patternChildren[i], patternEnv, valueChildren[i], deltaEnv)) return false;
 				}
 				
@@ -798,7 +798,7 @@ public class TBTermFactory extends PureFactory{
 				
 				ATerm[] patternChildren = pa.getArgumentArray();
 				ATerm[] valueChildren = va.getArgumentArray();
-				for(int i = 0; i < patternChildren.length; i++){
+				for(int i = patternChildren.length - 1; i >= 0; i--){
 					if(!performMatch(patternChildren[i], leftEnv, leftDeltaEnv, valueChildren[i], rightEnv, rightDeltaEnv)) return false;
 				}
 				
@@ -876,8 +876,7 @@ public class TBTermFactory extends PureFactory{
 							
 						ATerm a_args[] = apta.getArgumentArray();
 						ATerm b_args[] = aptb.getArgumentArray();
-						int nargs = a_args.length;
-						for(int i = 0; i < nargs; i++){
+						for(int i = a_args.length - 1; i >= 0; i--){
 							if(!mightMatch(a_args[i], b_args[i])) return false;
 						}
 						return true;
@@ -938,7 +937,7 @@ public class TBTermFactory extends PureFactory{
 			
 			if(arity != ta.getLength()) return false;
 			
-			for(int i = 0; i < arity; i++){
+			for(int i = arity - 1; i >= 0; i--){
 				ATerm elemtype = aplPlaceholder.getArgument(i);
 				ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
 				
@@ -964,7 +963,7 @@ public class TBTermFactory extends PureFactory{
 			
 			if(arity != ta.getArity()) return false;
 			
-			for(int i = 0; i < arity; i++){
+			for(int i = arity - 1; i >= 0; i--){
 				ATerm elemtype = aplPlaceholder.getArgument(i);
 				ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
 				

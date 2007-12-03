@@ -20,6 +20,7 @@ public class AckEvent extends Atom{
 	private final Ref toolId;
 	private final Ref event;
 	private final Ref callbackData;
+	private ToolInstance toolInstance;
 	
 	public AckEvent(ATerm toolId, ATerm event, ATerm callbackData, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -38,14 +39,19 @@ public class AckEvent extends Atom{
 		return a;
 	}
 	
+	public void activate(){
+		toolInstance = null;
+		super.activate();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-		if(tid == tbfactory.Undefined) return false;
-		
-		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
-		if(toolInstance == null) return false;
+		if(toolInstance == null){
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+			toolInstance = getToolBus().getToolInstanceManager().get(tid);
+			if(toolInstance == null) return false;
+		}
 		
 		// Construct an ack appl with the right amount of arguments.
 		AFun ackFun = ((ATermAppl) event.value).getAFun();

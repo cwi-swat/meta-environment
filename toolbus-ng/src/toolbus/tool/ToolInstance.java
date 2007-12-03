@@ -14,8 +14,8 @@ import toolbus.IOperations;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolInstanceManager;
-import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
+import toolbus.adapter.java.AbstractJavaTool;
 import toolbus.communication.DirectClientIOHandler;
 import toolbus.communication.DirectServerIOHandler;
 import toolbus.communication.IDataHandler;
@@ -91,12 +91,12 @@ public class ToolInstance implements IDataHandler, IOperations{
 			}
 			
 			// Instantiate the tool.
-			AbstractTool tool;
+			AbstractJavaTool tool;
 			try{
 				Constructor<?> toolConstructor = toolClass.getConstructor(new Class[]{String[].class});
 				
-				Object[] args = new Object[]{new String[]{"-TYPE", AbstractTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)}};
-				tool = (AbstractTool) toolConstructor.newInstance(args);
+				Object[] args = new Object[]{new String[]{"-TYPE", AbstractJavaTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)}};
+				tool = (AbstractJavaTool) toolConstructor.newInstance(args);
 			}catch(InstantiationException iex){
 				String error = "Unable to instantiate the tool. Classname: " + toolClass.getName();
 				LoggerFactory.log(error, iex, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
@@ -152,7 +152,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			// can only share about 50% of this memory between JVMs, so this is simply not true.
 			// The last time I checked 1.5MB < (50% of 12.5MB). Thanks Sun for turning this
 			// rubbish feature on by default on the client VM.
-			String[] command = new String[]{"java", "-Xshare:off", "-cp", classpath, toolDef.getClassName(), "-TYPE", AbstractTool.REMOTETOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID), "-TB_HOST", "localhost", "-TB_PORT", "" + toolbus.getPort()};
+			String[] command = new String[]{"java", "-Xshare:off", "-cp", classpath, toolDef.getClassName(), "-TYPE", AbstractJavaTool.REMOTETOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID), "-TB_HOST", "localhost", "-TB_PORT", "" + toolbus.getPort()};
 			
 			ProcessBuilder pb = new ProcessBuilder(command);
 			pb.redirectErrorStream(true);
@@ -175,7 +175,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			String[] command = new String[commandLength + 10];
 			System.arraycopy(toolCommand, 0, command, 0, commandLength);
 			command[commandLength] = "-TYPE";
-			command[commandLength + 1] = AbstractTool.REMOTETOOL;
+			command[commandLength + 1] = AbstractJavaTool.REMOTETOOL;
 			command[commandLength + 2] = "-TB_TOOL_NAME";
 			command[commandLength + 3] = toolDef.getName();
 			command[commandLength + 4] = "-TB_TOOL_ID";

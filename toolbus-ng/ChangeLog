@@ -1,22 +1,25 @@
-Mon Dec 03 11:01:24 EST 2007 <lankamp@cwi.nl>
+Mon Dec 03 14:56:07 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.adapter.*: Split the adapter in a generic and Java specific part to encourage subclassing.
+
+Mon Dec 03 11:01:24 CEST 2007 <lankamp@cwi.nl>
  * toolbus.atom.ProcessCall: Fixed a problem that could cause the viewer's execution to stall unexpectedly.
 
-Mon Dec 03 10:18:23 EST 2007 <lankamp@cwi.nl>
+Mon Dec 03 10:18:23 CEST 2007 <lankamp@cwi.nl>
  * toolbus.atom.ProcessCall: Fixed a problem with dynamic process calls.
 
-Fri Nov 30 15:37:01 EST 2007 <lankamp@cwi.nl>
+Fri Nov 30 15:37:01 CEST 2007 <lankamp@cwi.nl>
  * toolbus.commandline.*: Factored out the command line out of toolbus.Main.
  * toolbus.*: The user can now specify the port the ToolBus should run on with -Pxxxxx (where xxxxx is a number).
  * toolbus.adapter.*: Made a change that prevents a potential NullPointer when the AbstractTool is incorrectly used.
 
-Fri Nov 30 11:36:02 EST 2007 <lankamp@cwi.nl>
+Fri Nov 30 11:36:02 CEST 2007 <lankamp@cwi.nl>
  * toolbus.tool.ToolInstance: Because of a recent change rec-disconnect was unable to retrieve a reference to an 'unreachable' tool.
 
-Tue Nov 27 13:02:06 EST 2007 <lankamp@cwi.nl>
+Tue Nov 27 13:02:06 CEST 2007 <lankamp@cwi.nl>
  * *.*: The 'new' parser now adds position information to the state elements.
  * toolbus.viewer.Viewer: Extended the viewer, so you can see what state element a step actually executed.
 
-Wen Nov 21 11:14:11 EST 2007 <lankamp@cwi.nl>
+Wen Nov 21 11:14:11 CEST 2007 <lankamp@cwi.nl>
  * src/toolbus/Main.java: Added more info to the help message, renamed 'quit' to 'shutdown' and replaced the System.exit(0) by a call to toolbus.shutdown(ATerm), so all tools will be notified that the ToolBus will be terminating.
  And oh yes, I updated the changelog as well ;).
 

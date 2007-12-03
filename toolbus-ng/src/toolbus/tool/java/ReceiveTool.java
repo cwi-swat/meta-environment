@@ -9,11 +9,11 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
 
-import toolbus.adapter.AbstractTool;
+import toolbus.adapter.java.AbstractJavaTool;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
-public class ReceiveTool extends AbstractTool{
+public class ReceiveTool extends AbstractJavaTool{
 	private final JFrame frame;
 	private final JTextPane textPane;
 

@@ -19,6 +19,7 @@ import aterm.ATerm;
 public class SndKill extends Atom{
 	private final Ref toolId;
 	private final Ref message;
+	private ToolInstance toolInstance;
 	
 	public SndKill(ATerm toolId, ATerm value, TBTermFactory tbfactory, PositionInformation posInfo){
 		super(tbfactory, posInfo);
@@ -39,18 +40,24 @@ public class SndKill extends Atom{
 		return a;
 	}
 	
+	public void activate(){
+		toolInstance = null;
+		super.activate();
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(!isEnabled()) return false;
 		
-		ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
-		if(tid == tbfactory.Undefined) return false;
-		ToolInstance toolInstance = getToolBus().getToolInstanceManager().get(tid);
-		if(toolInstance == null) return false;
+		if(toolInstance == null){
+			ATerm tid = getEnv().getValue((TBTermVar) toolId.value);
+			toolInstance = getToolBus().getToolInstanceManager().get(tid);
+			if(toolInstance == null) return false;
+		}
 		
 		if(toolInstance.isExecutedTool()){
 			toolInstance.kill();
 		}else{
-			LoggerFactory.log("Unable to kill tool with id: "+tid+", since it wasn't executed.", ILogger.ERROR, IToolBusLoggerConstants.TOOLCOM);
+			LoggerFactory.log("Unable to kill tool with id: "+getEnv().getValue((TBTermVar) toolId.value)+", since it it's not an executed tool.", ILogger.ERROR, IToolBusLoggerConstants.TOOLCOM);
 		}
 		//LoggerFactory.log(getProcess().getProcessName(), "Send kill: "+message.value, IToolBusLoggerConstants.TOOLCOM);
 		return true;
