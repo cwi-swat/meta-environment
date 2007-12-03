@@ -312,8 +312,6 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	 * @return The last, by this process call, executed state element; null if this process call isn't currently executing.
 	 */
 	public StateElement getExecutedStateElement(){
-		if(!executing) return null;
-		
 		StateElement executedStateElement = PE.getFirst().getLastExecutedStateElement();
 		while(executedStateElement instanceof ProcessCall){
 			executedStateElement = ((ProcessCall) executedStateElement).getExecutedStateElement();

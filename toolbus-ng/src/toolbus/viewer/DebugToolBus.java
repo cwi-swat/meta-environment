@@ -149,7 +149,7 @@ public class DebugToolBus extends ToolBus{
 								// Just ignore this, it's not harmfull.
 							}
 							workHasArrived = true;
-						}else if(currentNextTime != nextTime){ // if the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
+						}else if(currentNextTime != nextTime){ // If the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
 							workHasArrived = true;
 							currentNextTime = nextTime;
 						}else{
