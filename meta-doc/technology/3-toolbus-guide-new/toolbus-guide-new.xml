@@ -1438,57 +1438,36 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
           xml:id="example.global-structure-calc.tb">
           <title>Global structure of <literal>calc.tb</literal></title>
 
-          <para><programlisting>process CALC is ... <annotation>
-                <para>        </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.CALC" /></para>
-                </annotation></lineannotation>
+          <para><programlisting>process CALC is ... <lineannotation>       See <xref
+                  linkend="example.CALC" />
+                </lineannotation>
 tool calc is ...
-process BATCH is ...<annotation>
-                <para>        </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.BATCH" /></para>
-                </annotation></lineannotation>
+process BATCH is ... <lineannotation>      See <xref linkend="example.BATCH" />
+                </lineannotation>
 tool batch is ...
-process UI is ...<annotation>
-                <para>           </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.UI" /></para>
-                </annotation></lineannotation>
-process CALC-BUTTON is ... <annotation>
-                <para> </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.CALC-BUTTON" /></para>
-                </annotation></lineannotation>
-process LOG-BUTTON is ...<annotation>
-                <para>   </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.LOG-BUTTON" /></para>
-                </annotation></lineannotation>
-process TIME-BUTTON is ...  <lineannotation><annotation>
-                  <para>See <xref linkend="example.LOG-BUTTON" /></para>
-                </annotation></lineannotation>
-process QUIT-BUTTON is ...<annotation>
-                <para>  </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.QUIT-BUTTON" /></para>
-                </annotation></lineannotation>
-process LOG is ...<annotation>
-                <para>          </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.LOG" /></para>
-                </annotation></lineannotation>
-process CLOCK is ...<annotation>
-                <para>        </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.CLOCK" /></para>
-                </annotation></lineannotation>
+process UI is ...         <lineannotation> See <xref linkend="example.UI" />
+                </lineannotation>
+process CALC-BUTTON is ... <lineannotation>See <xref
+                  linkend="example.CALC-BUTTON" />
+                </lineannotation>
+process LOG-BUTTON is ...  <lineannotation>See <xref
+                  linkend="example.LOG-BUTTON" />
+                </lineannotation>
+process TIME-BUTTON is ... <lineannotation>See <xref
+                  linkend="example.LOG-BUTTON" />
+                </lineannotation>
+process QUIT-BUTTON is ... <lineannotation>See <xref
+                  linkend="example.QUIT-BUTTON" />
+                </lineannotation>
+process LOG is ... <lineannotation>        See <xref linkend="example.LOG" />
+                </lineannotation>
+process CLOCK is ...       <lineannotation>See <xref linkend="example.CLOCK" />
+                </lineannotation>
 
 toolbus(CALC, BATCH, UI, LOG, CLOCK)
-                            <annotation>
-                <para>See <xref
-                    linkend="example.calculator-toolbus-configuration" /></para>
-              </annotation></programlisting></para>
+              <lineannotation>             See <xref
+                  linkend="example.calculator-toolbus-configuration" />
+                </lineannotation></programlisting></para>
         </example><example xml:id="example.CALC">
           <title>Process <literal>CALC</literal> and tool
           <literal>calc</literal></title>
@@ -1929,28 +1908,20 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
       <para><example xml:id="example.global-structure-auction.tb">
           <title>Global structure of <literal>auction.tb</literal></title>
 
-          <para><programlisting>process Auction is ... <annotation>
-                <para>       </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.Auction" /></para>
-                </annotation></lineannotation>
+          <para><programlisting>process Auction is ... <lineannotation>       See <xref
+                  linkend="example.Auction" />
+                </lineannotation>
 tool master is ...
-process ConnectBidder is ...<annotation>
-                <para>  </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.ConnectBidder" /></para>
-                </annotation></lineannotation>
+process ConnectBidder is ... <lineannotation> See <xref
+                  linkend="example.ConnectBidder" />
+                </lineannotation>
 tool batch is ...
-process OneSale is ...<annotation>
-                <para>        </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.OneSale" /></para>
-                </annotation></lineannotation>
-process Bidder is ... <annotation>
-                <para>        </para>
-              </annotation><lineannotation><annotation>
-                  <para>See <xref linkend="example.Bidder" /></para>
-                </annotation></lineannotation>
+process OneSale is ... <lineannotation>       See <xref
+                  linkend="example.OneSale" />
+                </lineannotation>
+process Bidder is ...      <lineannotation>   See <xref
+                  linkend="example.Bidder" />
+                </lineannotation>
 toolbus(Auction)</programlisting></para>
         </example><example xml:id="example.Auction">
           <title>Process <literal>Auction</literal></title>
@@ -2469,7 +2440,20 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
               <imagedata fileref="wave-architecture.png" scale="60"></imagedata>
             </imageobject>
           </mediaobject>
-        </figure><example xml:id="example.MakeWave">
+        </figure>The global structure of the Tscript
+      <literal>wave.tb</literal> is shown in <xref
+      linkend="example.global-structure-wave.tb" />.<example
+          xml:id="example.global-structure-wave.tb">
+          <title>Global structure of <literal>wave.tb</literal></title>
+
+          <para><programlisting>process MakeWave ... <lineannotation>See <xref
+                  linkend="example.MakeWave" /></lineannotation>
+process Pend ...     <lineannotation>See <xref linkend="example.Pend" /></lineannotation>
+process P ...        <lineannotation>See <xref linkend="example.P" /></lineannotation>
+process F ...        <lineannotation>See <xref linkend="example.F" /></lineannotation>
+
+toolbus(MakeWave(...))</programlisting></para>
+        </example><example xml:id="example.MakeWave">
           <title>Process <literal>MakeWave</literal></title>
 
           <para><programlisting>process MakeWave(N : int) is
@@ -2627,6 +2611,8 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
               </callout>
             </calloutlist></para>
         </example></para>
+
+      <para></para>
 
       <para><example xml:id="example.F">
           <title>Auxiliary process <literal>F</literal></title>
@@ -4181,11 +4167,11 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
-                  <entry align="center">Description&#160;</entry>
+                  <entry align="center">Description </entry>
                 </row>
               </thead>
 
@@ -4259,9 +4245,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4397,9 +4383,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4534,9 +4520,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4637,9 +4623,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4704,9 +4690,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4755,9 +4741,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4809,9 +4795,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4878,9 +4864,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5046,9 +5032,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5091,9 +5077,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
