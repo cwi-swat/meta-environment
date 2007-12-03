@@ -141,8 +141,7 @@ public class DebugToolBus extends ToolBus{
 					while((!workHasArrived && running) || !(doStep || doRun)){
 						fireStateChange(IViewerConstants.WAITING_STATE);
 						
-						long blockTime = nextTime - getRunTime(); // Recalculate the delay before
-																	// sleeping.
+						long blockTime = nextTime - getRunTime(); // Recalculate the delay before sleeping.
 						if(blockTime > 0){
 							try{
 								processLock.wait(blockTime);
@@ -150,10 +149,7 @@ public class DebugToolBus extends ToolBus{
 								// Just ignore this, it's not harmfull.
 							}
 							workHasArrived = true;
-						}else if(currentNextTime != nextTime){ // if the nextTime changed and the
-																// blockTime is zero or less, don't
-																// block as there might be work to
-																// do.
+						}else if(currentNextTime != nextTime){ // if the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
 							workHasArrived = true;
 							currentNextTime = nextTime;
 						}else{
@@ -168,10 +164,8 @@ public class DebugToolBus extends ToolBus{
 					}
 					currentNextTime = nextTime;
 					
-					if(doStep)
-						fireStateChange(IViewerConstants.STEPPING_STATE);
-					else if(doRun)
-						fireStateChange(IViewerConstants.RUNNING_STATE);
+					if(doStep) fireStateChange(IViewerConstants.STEPPING_STATE);
+					else if(doRun) fireStateChange(IViewerConstants.RUNNING_STATE);
 					else fireStateChange(IViewerConstants.UNKNOWN_STATE);
 				}
 				
@@ -185,9 +179,7 @@ public class DebugToolBus extends ToolBus{
 						
 						reset = true;
 					}else{
-						reset = false; // We might start iterating in the middle of the
-										// collections, so ensure we do at least a full one if we're
-										// running.
+						reset = false; // We might start iterating in the middle of the collections, so ensure we do at least a full one if we're running.
 					}
 					
 					while(processesIterator.hasNext() && (doRun || doStep)){
@@ -231,8 +223,7 @@ public class DebugToolBus extends ToolBus{
 						}
 					}
 				}while((doRun && (work || !reset)) || (doStep && !reset));
-				workHasArrived |= work; // If we did something, set this to ensure we can release
-										// the lock when needed.
+				workHasArrived |= work; // If we did something, set this to ensure we can release the lock when needed.
 			}while(running);
 		}catch(ToolBusException e){
 			error("Process " + (pi != null ? pi.getProcessName() : "?"), e.getMessage());
@@ -262,8 +253,7 @@ public class DebugToolBus extends ToolBus{
 	 */
 	public void doRun(){
 		synchronized(processLock){
-			workHasArrived = true; // This should not be needed; it's just here to ensure we will
-									// escape the wait loop.
+			workHasArrived = true; // This should not be needed; it's just here to ensure we will escape the wait loop.
 			
 			doStep = false;
 			doRun = true;
@@ -293,8 +283,7 @@ public class DebugToolBus extends ToolBus{
 	 */
 	public void doStep(){
 		synchronized(processLock){
-			workHasArrived = true; // This should not be needed; it's just here to ensure we will
-									// escape the wait loop.
+			workHasArrived = true; // This should not be needed; it's just here to ensure we will escape the wait loop.
 			
 			doRun = false;
 			doStep = true;

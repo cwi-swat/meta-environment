@@ -232,20 +232,22 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	}
 	
 	public State gotoNextStateAndActivate(){
-		if(!executing){
+		if(!(activated || executing)){
 			State follow = getFollow();
 			follow.activate();
 			return follow;
 		}
+		executing = true;
 		return PE.getFirst().gotoNextStateAndActivate();
 	}
 	
 	public State gotoNextStateAndActivate(StateElement se){
-		if(!executing){
+		if(!(activated || executing)){
 			State follow = getFollow();
 			follow.activate();
 			return follow;
 		}
+		executing = true;
 		return PE.getFirst().gotoNextStateAndActivate(se);
 	}
 	
@@ -265,6 +267,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 				initDynamicCall();
 				if(definition == null){
 					activated = true;
+					executing = false;
 					return;
 				}
 			}catch(ToolBusException e){
@@ -274,6 +277,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		}
 		// System.err.println("ProcessCall: activate first set of PE");
 		activated = true;
+		executing = false;
 		PE.getFirst().activate();
 	}
 	

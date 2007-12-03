@@ -1,3 +1,6 @@
+Mon Dec 03 10:18:23 EST 2007 <lankamp@cwi.nl>
+ * toolbus.atom.ProcessCall: Fixed a problem with dynamic process calls.
+
 Fri Nov 30 15:37:01 EST 2007 <lankamp@cwi.nl>
  * toolbus.commandline.*: Factored out the command line out of toolbus.Main.
  * toolbus.*: The user can now specify the port the ToolBus should run on with -Pxxxxx (where xxxxx is a number).
