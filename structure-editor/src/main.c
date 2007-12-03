@@ -293,8 +293,8 @@ ATerm get_focus_at_cursor(int cid, ATerm editorId) {
 
   if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
     SE_Tree cursor = SE_getStructureEditorCursor(editor);
-    LOC_Location location = PT_getTreeLocation(cursor);
-    LOC_Area area = LOC_getLocationArea(location);
+    ERR_Location location = PT_getTreeLocation(cursor);
+    ERR_Area area = ERR_getLocationArea(location);
     return ATmake("snd-value(focus(<term>))", area);
   }
 
@@ -371,7 +371,7 @@ int main(int argc, char *argv[]) {
 
   ATBinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
-  LOC_initLocationApi();
+  ERR_initErrorApi();
   SE_initStructureEditorApi();
 
   editors = ATtableCreate(100, 75);

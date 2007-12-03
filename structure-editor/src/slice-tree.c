@@ -75,8 +75,8 @@ static ATerm getAnnotationCategory(PT_Tree tree)
 static void storeTree(PT_Tree tree, const char *category)
 {
   ATerm key;
-  LOC_AreaAreas slice;
-  LOC_Location location;
+  ERR_AreaAreas slice;
+  ERR_Location location;
 
   if (category[0] == '\"') {
     key = ATparse(category);
@@ -85,17 +85,17 @@ static void storeTree(PT_Tree tree, const char *category)
     key = ATmake("<str>",category);
   }
 
-  slice = LOC_AreaAreasFromTerm(ATtableGet(slices, key));
+  slice = ERR_AreaAreasFromTerm(ATtableGet(slices, key));
 
   if (slice == NULL) {
-    slice = LOC_makeAreaAreasEmpty();
+    slice = ERR_makeAreaAreasEmpty();
   }
 
   location = PT_getTreeLocation(tree);
-  if (location != NULL && LOC_hasLocationArea(location)) {
-    LOC_Area area = LOC_getLocationArea(location);
-    slice = LOC_makeAreaAreasMany((LOC_Area) area, slice);
-    ATtablePut(slices, key, LOC_AreaAreasToTerm(slice));
+  if (location != NULL && ERR_hasLocationArea(location)) {
+    ERR_Area area = ERR_getLocationArea(location);
+    slice = ERR_makeAreaAreasMany((ERR_Area) area, slice);
+    ATtablePut(slices, key, ERR_AreaAreasToTerm(slice));
   }
 }
 
@@ -193,14 +193,14 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);
     const char* cat = ATgetName(ATgetAFun((ATermAppl) key));
-    LOC_AreaAreas areas;
-    LOC_Slice slice; 
+    ERR_AreaAreas areas;
+    ERR_Slice slice; 
 
-    areas = LOC_AreaAreasFromTerm(ATtableGet(slices, key));
+    areas = ERR_AreaAreasFromTerm(ATtableGet(slices, key));
 
-    slice = LOC_makeSliceSlice(cat, areas);
+    slice = ERR_makeSliceSlice(cat, areas);
 
-    result = ATinsert(result, LOC_SliceToTerm(slice));
+    result = ATinsert(result, ERR_SliceToTerm(slice));
   }
 
   ATtableDestroy(slices);

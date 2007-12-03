@@ -1,5 +1,8 @@
 $Id$
 
+Mon Dec  3 10:45:54 EST 2007 <jurgenv@cwi.nl>
+ * src/*.c: replaced all LOC_ calls to ERR_ calls.
+
 Fri Apr 11 11:55:57 CET 2006 <jurgenv@cwi.nl>
  * src/slice-tree.c: added memoization to scale up to highly
    ambiguous languages.
