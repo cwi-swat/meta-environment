@@ -38,10 +38,10 @@
     See <xref linkend="section.toolbus-to-do" />.</para>
   </warning>
 
-  <section>
+  <section xml:id="section.toolbus-introduction">
     <title>Introduction</title>
 
-    <section>
+    <section xml:id="section.toolbus-background">
       <title>Background and Motivation</title>
 
       <para>Building large, heterogeneous, distributed software systems poses
@@ -111,7 +111,7 @@
       and therefore we call it a ``ToolBus''.</para>
     </section>
 
-    <section>
+    <section xml:id="section.toolbus-requirements">
       <title>ToolBus requirements</title>
 
       <para>Given the motivation for the ToolBus we can briefly summarize the
@@ -162,7 +162,7 @@
           <para>Provide relatively simple application descriptions that can be
           understood by most programmers. <emphasis
           role="bold">Rationale</emphasis>: we don't want to frighten
-          programmers by using formal notations. </para>
+          programmers by using formal notations.</para>
         </listitem>
 
         <listitem>
@@ -175,7 +175,7 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="section.toolbus-architecture">
       <title>The ToolBus architecture</title>
 
       <para>The global architecture of the ToolBus is shown in <xref
@@ -235,7 +235,7 @@
         the desired service it may inform the sender, synchronously, by means
         of another message (using <literal>snd-msg</literal>). The original
         sender can receive the reply using <literal>rec-msg</literal>. By
-        convention, part of the the original message is contained in the reply
+        convention, part of the original message is contained in the reply
         (but this is not enforced).</para>
       </formalpara>
 
@@ -281,7 +281,7 @@
       <formalpara>
         <title>Knowledge separation</title>
 
-        <para>Equipped with the mechanisms provided by the ToolBus, carefull
+        <para>Equipped with the mechanisms provided by the ToolBus, careful
         control over application knowledge can be achieved as shown in <xref
         linkend="figure.toolbus-application" /> where an application is
         depicted consisting of a user-interface (UI) and a database (DB). In a
@@ -338,7 +338,7 @@
 
     <para>Tscripts describe how the tools in an application cooperate. They
     allow the definition of a collection of concurrent processes that can
-    communicate with eachother and with the tools in the application.</para>
+    communicate with each other and with the tools in the application.</para>
 
     <section xml:id="section.terms">
       <title>Terms</title>
@@ -362,7 +362,7 @@
 
           <important>
             <para>Variables always start with a capital letter. A value
-            occurence serves the purpose of using the current value of a
+            occurrence serves the purpose of using the current value of a
             variable.</para>
           </important>
         </listitem>
@@ -460,7 +460,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>The toplevel function names are identical (both
+          <para>The top level function names are identical (both
           <literal>f</literal>) and both have the same number of arguments.
           The left term and the right term match if their arguments
           match.</para>
@@ -481,7 +481,7 @@
         </listitem>
 
         <listitem>
-          <para>The third argument in the leftvterm is <literal>Y?</literal>
+          <para>The third argument in the left term is <literal>Y?</literal>
           and <literal>5</literal> in the right term. Here we achieve a match
           by assigning <literal>5</literal> to <literal>Y</literal> in Context
           1.</para>
@@ -494,7 +494,7 @@
       </itemizedlist>
 
       <para>The net result is that both terms match and that Context 1 and
-      Context 2 are modified as shown iat the bottom of the figure.</para>
+      Context 2 are modified as shown at the bottom of the figure.</para>
 
       <para><figure xml:id="figure.match-example">
           <title>Example of term matching</title>
@@ -569,7 +569,7 @@
 
         <listitem>
           <para><literal>term</literal> is the type of an arbitrary term. And
-          is used as escape from the more precise typing by the preceeding
+          is used as escape from the more precise typing by the preceding
           types.</para>
         </listitem>
       </itemizedlist>
@@ -652,8 +652,8 @@
           </listitem>
 
           <listitem>
-            <para>A <emphasis>conditional</emphasis> that allows the condional
-            inclusion or exclusion of parts of the Tscript.</para>
+            <para>A <emphasis>conditional</emphasis> that allows the
+            conditional inclusion or exclusion of parts of the Tscript.</para>
           </listitem>
         </itemizedlist>
       </section>
@@ -661,7 +661,7 @@
       <section xml:id="section.tscripts-first-example">
         <title>A first example</title>
 
-        <para>Beforer delving into the details of Tscripts, it is good to have
+        <para>Before delving into the details of Tscripts, it is good to have
         a look at the hello world application <filename>hello1.tb</filename>
         shown in <xref linkend="example.hello1" />.</para>
 
@@ -707,7 +707,7 @@ toolbus(HELLO) <co xml:id="co.hello1-4" /></programlisting>
 Hello world, my first Tscript!
 2&gt;</screen>
 
-        <para>Becoming more courageous, we show now a more ambituous Tscript
+        <para>Becoming more courageous, we show now a more ambitious Tscript
         <literal>hello2.tb</literal> in <xref linkend="example.hello2" /> that
         does not print the hello string itself, but executes a tool to compute
         it.</para>
@@ -1017,7 +1017,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         <para>When communication takes place, the effects of the argument
         matching is recorded in the local state of each process and both
         continue execution. The observant reader may have noticed that sending
-        and receiving is actually symmetric: by way of result variablesin the
+        and receiving is actually symmetric: by way of result variables in the
         arguments of <literal>snd-msg</literal> and <literal>rec-msg</literal>
         information may flow from sender to receiver and <emphasis>vice
         versa</emphasis>.</para>
@@ -1072,7 +1072,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         <title>Using named processes</title>
 
         <para>A process definition associates a name
-        <replaceable>Pnm</replaceable> (optinally followed by parameters) with
+        <replaceable>Pnm</replaceable> (optimally followed by parameters) with
         a process expression <replaceable>P</replaceable>. These process names
         can be used in two ways in process expressions:</para>
 
@@ -1106,10 +1106,10 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         the ToolBus decides to terminate the execution of the tool. A
         variation of scenario 1 is that the tool decides to disconnect from
         the ToolBus and continues execution disconnect from the ToolBus
-        application. In scenario 2, the tool is executed separately and
-        startes its cooperation by requesting a connection with the ToolBus.
-        Once connected, it follows the same steps as in scenario 1. The
-        following primitives achieve this (also see <xref
+        application. In scenario 2, the tool is executed separately and starts
+        its cooperation by requesting a connection with the ToolBus. Once
+        connected, it follows the same steps as in scenario 1. The following
+        primitives achieve this (also see <xref
         linkend="figure.tool-communication" /> for the various communication
         patterns between ToolBus and tools):</para>
 
@@ -1119,9 +1119,9 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
             <replaceable>Tid</replaceable>?)</literal>: Execute a tool with
             name <replaceable>Tnm</replaceable>. The result is a
             <emphasis>tool identifier</emphasis> that is bound to
-            <replaceable>Tid</replaceable>. Tool indentifiers are unique; if
+            <replaceable>Tid</replaceable>. Tool identifiers are unique; if
             more than one instance of the same tool is executing they can be
-            distinguished via their tool indentifier. There are two additional
+            distinguished via their tool identifier. There are two additional
             constraints:</para>
 
             <itemizedlist>
@@ -1136,7 +1136,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
                 <literal><replaceable>Tid</replaceable> :
                 <replaceable>Tnm</replaceable></literal>. Why? Well this in
                 this way the implementation can track via the type of the tool
-                indentifier in each tool request, <emphasis>which</emphasis>
+                identifier in each tool request, <emphasis>which</emphasis>
                 tool it is and that information is essential for the automatic
                 generation of adapter code.</para>
               </listitem>
@@ -1177,7 +1177,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
             before sending <replaceable>T</replaceable> to the tool. It is up
             to the tool to interpret the term. The usual scenario is that the
             outermost function symbol of <replaceable>T</replaceable> is
-            identical to the name of a procedure in the tool and that that
+            identical to the name of a procedure in the tool and that
             procedure is called. The ToolBus can only send one evaluation
             request at a time. Only when the request is cancelled, or a value
             is returned by the tool, the next request can be sent to the
@@ -1186,10 +1186,10 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
           <listitem>
             <para><literal>rec-value(<replaceable>Tid</replaceable>,
-            <replaceable>T</replaceable>)</literal>: recieve a value from a
+            <replaceable>T</replaceable>)</literal>: receive a value from a
             tool in response to a previous <literal>snd-eval</literal>
             request. <replaceable>T</replaceable> has to match the value from
-            the tool; this is usefull for case distinctions. In many case, T
+            the tool; this is useful for case distinctions. In many case, T
             consists of a single result variable, or a is a term that contains
             result variables.</para>
           </listitem>
@@ -1219,7 +1219,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
             Since, <replaceable>T</replaceable><subscript>1</subscript> is
             identical to the
             <replaceable>T</replaceable><subscript>1</subscript> in a
-            preceeding <literal>snd-event</literal> and is used to identify
+            preceding <literal>snd-event</literal> and is used to identify
             that event.</para>
           </listitem>
         </itemizedlist>
@@ -1307,8 +1307,8 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
         </itemizedlist>
 
         <para>The term is evaluated in a bottom-up manner, i.e., first
-        aguments are evaluated and then the function is applied. Here are some
-        examples:</para>
+        arguments are evaluated and then the function is applied. Here are
+        some examples:</para>
 
         <itemizedlist>
           <listitem>
@@ -1378,7 +1378,7 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
     Tscripts.</para>
 
     <section xml:id="section.example-calculator">
-      <title>Calculator</title>
+      <title>Calculator Example</title>
 
       <para>The calculator example illustrates how a calculator tool that can
       compute simple arithmetic expressions is shared by cooperating
@@ -1585,7 +1585,7 @@ tool batch is {command = “batch”}</programlisting>Notes:<calloutlist>
 
         <listitem>
           <para>Pressing <guimenuitem>showLog</guimenuitem> displays all
-          calculations sofar.</para>
+          calculations so far.</para>
         </listitem>
 
         <listitem>
@@ -1639,9 +1639,9 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
                 be activated only once (for obvious reasons).</para>
               </callout>
             </calloutlist>Also observe the extensive use of named process
-          expressions like <literal>CALC-BUTTON</literal>, etc. to give an
-          high-level overview of the <literal>UI</literal> process. See <xref
-          linkend="example.CALC-BUTTON" />, <xref
+          expressions like, for instance, <literal>CALC-BUTTON</literal> to
+          give an high-level overview of the <literal>UI</literal> process.
+          See <xref linkend="example.CALC-BUTTON" />, <xref
           linkend="example.LOG-BUTTON" />, <xref
           linkend="example.TIME-BUTTON" />, and <xref
           linkend="example.QUIT-BUTTON" /> for their definitions.</para>
@@ -1755,7 +1755,7 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
               </callout>
             </calloutlist></para>
 
-          <para>An alternnative way to describe the LOG process is shown in
+          <para>An alternative way to describe the LOG process is shown in
           <xref linkend="example.LOG1" />. Instead of running a separate log
           tool, the process LOG1 maintains the log in a local process variable
           TheLog. See <xref linkend="section.built-in-functions" /> for a
@@ -1790,7 +1790,7 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
                     snd-msg(showTime, T)
               ) * delta
     endlet</programlisting></para>
-        </example>The comple ToolBus configurations that describes the start
+        </example>The complete ToolBus configuration that describes the start
       of the calculator demo is shown in <xref
       linkend="example.calculator-toolbus-configuration" />. It starts the
       mentioned processes in parallel and from that moment on user-interaction
@@ -1803,7 +1803,7 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
     </section>
 
     <section xml:id="section.example-auction">
-      <title>Auction</title>
+      <title>Auction Example</title>
 
       <para>In the <emphasis>classical auction</emphasis>, the auction master
       and all bidders are in the same room and interact with each other
@@ -1867,8 +1867,8 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
           </mediaobject>
         </figure></para>
 
-      <para>The communication and synschronization in a distrubuted auction
-      has to be described explicitly and requires answers to questions
+      <para>The communication and synchronization in a distributed auction has
+      to be described explicitly and requires answers to questions
       like:</para>
 
       <itemizedlist>
@@ -1896,7 +1896,7 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
       linkend="figure.auction-architecture" />.</para>
 
       <para><figure xml:id="figure.auction-architecture">
-          <title>Architecture of the auction application</title>
+          <title>Architecture of the auction example</title>
 
           <mediaobject>
             <imageobject>
@@ -2341,19 +2341,351 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
     </section>
 
     <section xml:id="section.example-wave">
-      <title>Wave</title>
+      <title>Wave Example</title>
 
-      <para></para>
+      <para>Have you ever considered a (guitar) string that is attached at
+      both ends and wondered how the movements of the strings can be
+      simulated? Although this is a completely atypical application of the
+      ToolBus, it is fun to do so we will delve into the details.</para>
+
+      <para>In mathematical physics, the vibrating string is described by the
+      so-called one-dimensional wave equation that describes a discrete
+      approximation of the continuous string. The discretization is achieved
+      by sampling the amplitude of the string at certain points
+      <replaceable>i</replaceable> = 1, ... <replaceable>N</replaceable>,
+      where <replaceable>N</replaceable> is the number of points. The
+      amplitude at point <replaceable>i</replaceable> at time
+      <replaceable>t</replaceable> can now be described by
+      y<subscript><replaceable>i</replaceable>+1</subscript>(<replaceable>t</replaceable>)
+      (see also <xref linkend="figure.wave-graph" />) that is defined as
+      follows:<equation>
+          <mathphrase><replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>+Δ<replaceable>t</replaceable>)
+          =
+          <replaceable>F</replaceable>(<replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>),
+          <replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>-Δ<replaceable>t</replaceable>)
+          ,
+          <replaceable>y</replaceable><subscript><replaceable>i</replaceable>-1</subscript>(<replaceable>t</replaceable>),
+          <replaceable>y</replaceable><subscript><replaceable>i</replaceable>+1</subscript>(<replaceable>t</replaceable>))</mathphrase>
+        </equation>In other words, the amplitude at point
+      <replaceable>i</replaceable> and time <replaceable>t</replaceable>
+      depends on:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the current amplitude,</para>
+        </listitem>
+
+        <listitem>
+          <para>the previous amplitude at this point,</para>
+        </listitem>
+
+        <listitem>
+          <para>the current amplitude of the left neighbour, and</para>
+        </listitem>
+
+        <listitem>
+          <para>the current amplitude of the right neighbour.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It also depends on the function <replaceable>F</replaceable>
+      defined as follows:</para>
+
+      <para><equation>
+          <mathphrase><replaceable>F</replaceable>(<replaceable>z</replaceable><subscript>1</subscript>,<replaceable>z</replaceable><subscript>2</subscript>,<replaceable>z</replaceable><subscript>3</subscript>,<replaceable>z</replaceable><subscript>4</subscript>)
+          = 2<replaceable>z</replaceable><subscript>1</subscript>-
+          <replaceable>z</replaceable><subscript>2</subscript> + (c
+          Δ<replaceable>t</replaceable>/Δ<replaceable>x)<superscript>2</superscript>
+          (<replaceable>z</replaceable><subscript>3</subscript> -
+          2<replaceable>z</replaceable><subscript>1</subscript>+
+          <replaceable>z</replaceable><subscript>4</subscript>)</replaceable></mathphrase>
+        </equation>where</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Δ<replaceable>x</replaceable> is the (small) interval between
+          sampling points, and</para>
+        </listitem>
+
+        <listitem>
+          <para>c is a constant representing the propagation velocity of the
+          wave.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><figure xml:id="figure.wave-graph">
+          <title>One-dimensional wave equation</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="wave-graph.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>After these preparations, we have to define the architecture of a
+      ToolBus application that can simulate the behaviour of a string. The key
+      idea is to use a separate ToolBus process to represent the behaviour of
+      each sampling point. The architecture is shown in <xref
+      linkend="figure.wave-architecture" /> and consists of the following
+      processes and tools:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Process <literal>Pend</literal> models an end point of the
+          string, see <xref linkend="example.Pend" /> .Two instances are used
+          to model the left and right end point.</para>
+        </listitem>
+
+        <listitem>
+          <para>Process <literal>P</literal> models one sampling point, see
+          <xref linkend="example.P" />. <replaceable>N</replaceable>-1
+          instances are used to model all intermediate points.</para>
+        </listitem>
+
+        <listitem>
+          <para>The auxiliary process <literal>F</literal> computes the
+          function <replaceable>F</replaceable> discussed above, see <xref
+          linkend="example.F" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>Process <literal>makeWave</literal> constructs
+          <replaceable>N</replaceable> connected instances of processes
+          <literal>P</literal> and two end points <literal>Pend</literal>, see
+          <xref linkend="example.MakeWave" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>The tool display visualizes the simulation.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><figure xml:id="figure.wave-architecture">
+          <title>Architecture of the wave example</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="wave-architecture.png" scale="60"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure><example xml:id="example.MakeWave">
+          <title>Process <literal>MakeWave</literal></title>
+
+          <para><programlisting>process MakeWave(N : int) is
+  let Tid : display, Id : int, I : int, L : int, R : int
+  in
+     execute(display, Tid?) .       <co xml:id="co.MakeWave.1" />
+     snd-do(Tid, mk-wave(N)) .
+     create(Pend(Tid, 0, 1), Id?).  <co xml:id="co.MakeWave.2" />
+     L := sub(N,1) .
+     create(Pend(Tid, N, L), Id?) . 
+     I := 1 .                       <co xml:id="co.MakeWave.3" />
+     if less(I, N) then
+        L := sub(I, 1) . R := add(I, 1) .
+        create(P(Tid, L, I, R, 1.0, 1.0), Id?) .
+        I := add(I, 1)
+     fi *
+     shutdown("end") delay(sec(60)) <co xml:id="co.MakeWave.4" />
+  endlet
+
+tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.MakeWave.1">
+                <para>Execute the display tool and initialize it to show
+                <replaceable>N</replaceable> points. <xref
+                linkend="figure.wave-gui" /> shows the display tool in action
+                during a later stage of the simulation.</para>
+              </callout>
+
+              <callout arearefs="co.MakeWave.2">
+                <para>Create the two end points with index 0 and
+                <replaceable>N</replaceable>.</para>
+              </callout>
+
+              <callout arearefs="co.MakeWave.3">
+                <para>Create the intermediate points 1,...,
+                <replaceable>N</replaceable>-1 in a loop.</para>
+              </callout>
+
+              <callout arearefs="co.MakeWave.4">
+                <para>Run the demo for one minute.</para>
+              </callout>
+            </calloutlist></para>
+        </example><figure xml:id="figure.wave-gui">
+          <title>User-interface of wave demo</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" fileref="wave-ui.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </figure><example>
+          <title>ToolBus configuration for wave</title>
+
+          <para><programlisting>toolbus(MakeWave(8))</programlisting></para>
+        </example><example xml:id="example.Pend">
+          <title>Process <literal>Pend</literal></title>
+
+          <para><programlisting>process Pend(Tid : display, I <co
+                xml:id="co.Pend.1" />: int, NB <co xml:id="co.Pend.2" />: int) is
+  let W : real
+  in
+   ( rec-msg(NB, I, W?) || snd-msg(I, NB, 0.0) || <co xml:id="co.Pend.3" />
+     snd-do(Tid, update(I, 0.0))                  <co xml:id="co.Pend.4" />
+   ) * delta
+  endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.Pend.1">
+                <para><literal>I</literal> is the index of this end
+                point.</para>
+              </callout>
+
+              <callout arearefs="co.Pend.2">
+                <para><literal>NB</literal> is the index of the neighbouring
+                point.</para>
+              </callout>
+
+              <callout arearefs="co.Pend.3">
+                <para>Receive the amplitude of the neighbour and send our own
+                zero amplitude to the neighbour. Since a parallel operator
+                <literal>||</literal> is used, these communications can appear
+                in any order.</para>
+              </callout>
+
+              <callout arearefs="co.Pend.4">
+                <para>Display the zero amplitude of this end point on the
+                display.</para>
+              </callout>
+            </calloutlist></para>
+        </example><example xml:id="example.P">
+          <title>Process <literal>P</literal></title>
+
+          <para><programlisting>process P(Tid : display, <co xml:id="co.P.1" />
+          L : int,       <co xml:id="co.P.2" />
+          I : int,       <co xml:id="co.P.3" />
+          R : int,       <co xml:id="co.P.4" />
+          Dstart : real, <co xml:id="co.P.5" />
+          Estart : real  <co xml:id="co.P.6" />
+         ) is
+  let AL : real, AR : real, D : real, D1 : real, E : real
+  in
+     D := Dstart . E := Estart .
+     ( (  rec-msg(L, I, AL?)        <co xml:id="co.P.7" />
+       || rec-msg(R, I, AR?) 
+       || snd-msg(I, L, E)          <co xml:id="co.P.8" />
+       || snd-msg(I, R, E) 
+       || snd-do(Tid, update(I, E)) <co xml:id="co.P.9" />
+       ) .
+       D1 := E .
+       F(E, D, AL, AR, E?) .        <co xml:id="co.P.10" />
+       D := D1
+     ) * delta
+  endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.P.1">
+                <para><literal>Tid</literal> is the tool identifier of the
+                display tool.</para>
+              </callout>
+
+              <callout arearefs="co.P.2">
+                <para><literal>L</literal> is the index of the left neighbour
+                of this point.</para>
+              </callout>
+
+              <callout arearefs="co.P.3">
+                <para><literal>I</literal> is the index of this point.</para>
+              </callout>
+
+              <callout arearefs="co.P.4">
+                <para><literal>R</literal> is the index of the right neighbour
+                of this point.</para>
+              </callout>
+
+              <callout arearefs="co.P.5">
+                <para><literal>Dstart</literal> is the previous amplitude of
+                this point.</para>
+              </callout>
+
+              <callout arearefs="co.P.6">
+                <para><literal>Estart</literal> is the current amplitude of
+                this point.</para>
+              </callout>
+
+              <callout arearefs="co.P.7">
+                <para>Receive amplitudes from our neighbours.</para>
+              </callout>
+
+              <callout arearefs="co.P.8">
+                <para>Send our own amplitude to our neighbours.</para>
+              </callout>
+
+              <callout arearefs="co.P.9">
+                <para>Show current amplitude on the display.</para>
+              </callout>
+
+              <callout arearefs="co.P.10">
+                <para>Compute a new value for our amplitude by applying
+                <literal>F</literal>.</para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
+
+      <para><example xml:id="example.F">
+          <title>Auxiliary process <literal>F</literal></title>
+
+          <para><programlisting>process F(Z1 : real, Z2 : real, Z3 : real, Z4 : real, Res : real?) is
+  let CdTdX2 : real
+  in <co xml:id="co.F.1" />
+     CdTdX2 := 0.01 . <co xml:id="co.F.2" />                               
+     Res := radd(rsub(rmul(2.0, Z1), Z2), <co xml:id="co.F.3" />
+                 rmul(CdTdX2, <co xml:id="co.F.4" />
+                     radd(rsub(Z3, rmul(2.0, Z1)), Z4))) <co xml:id="co.F.5" />
+  endlet</programlisting>Notes:<calloutlist>
+              <callout arearefs="co.F.1">
+                <para>Recall that we are computing
+                2<replaceable>z</replaceable><subscript>1</subscript>-
+                <replaceable>z</replaceable><subscript>2</subscript> + (c
+                Δ<replaceable>t</replaceable>/Δ<replaceable>x</replaceable>)<superscript>2</superscript>
+                (z<subscript>3</subscript> -
+                2<replaceable><replaceable>z</replaceable></replaceable><subscript>1</subscript>+
+                <replaceable><replaceable>z</replaceable></replaceable><subscript>4</subscript>)
+                and that the main challenge is to write this formula in prefix
+                form.</para>
+              </callout>
+
+              <callout arearefs="co.F.2">
+                <para>Take an arbitrary (small) value for (c
+                Δ<replaceable>t</replaceable>/Δ<replaceable>x)<superscript>2</superscript>.</replaceable></para>
+              </callout>
+
+              <callout arearefs="co.F.3">
+                <para>2<replaceable>z</replaceable><subscript>1</subscript>-
+                <replaceable>z</replaceable><subscript>2</subscript>
+                +...</para>
+              </callout>
+
+              <callout arearefs="co.F.4">
+                <para>(c
+                Δ<replaceable>t</replaceable>/Δ<replaceable>x)<superscript>2</superscript></replaceable>
+                * ...</para>
+              </callout>
+
+              <callout arearefs="co.F.5">
+                <para><replaceable>... +
+                (<replaceable>z</replaceable><subscript>3</subscript> -
+                2<replaceable>z</replaceable><subscript>1</subscript>+
+                <replaceable>z</replaceable><subscript>4</subscript>)</replaceable></para>
+              </callout>
+            </calloutlist></para>
+        </example></para>
     </section>
   </section>
 
   <section xml:id="section.executing-toolbus-and-tools">
-    <title>Executing Toolbus and tools</title>
+    <title>Executing ToolBus and tools</title>
 
-    <para>The ToolBus interpreter (<command>toolbus</command>) and all tools
+    <para>The ToolBus interpreter (<command>ToolBus</command>) and all tools
     have some standard program arguments in common, but they have some
     specific arguments as well. In this section we describe all possible
-    program arguments and the way to execute <command>toolbus</command> and
+    program arguments and the way to execute <command>ToolBus</command> and
     tools.</para>
 
     <section xml:id="section.common-arguments">
@@ -2365,7 +2697,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       <itemizedlist>
         <listitem>
           <para><literal>-help</literal>: prints a description of all
-          arguments of the toolbus or tool.</para>
+          arguments of the ToolBus or tool.</para>
         </listitem>
 
         <listitem>
@@ -2394,7 +2726,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       it is parsed as a Tscript. In this way, directives like, e.g.,
       <literal>#define</literal>, <literal>#include</literal> and
       <literal>#ifdef</literal> can be used freely in Tscripts. The following
-      preprocessor arguments are accepted by the <command>toolbus</command>
+      preprocessor arguments are accepted by the <command>ToolBus</command>
       command:</para>
 
       <itemizedlist>
@@ -2447,10 +2779,10 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
           random generator used by the interpreter for scheduling processes
           and selecting alternatives in processes. By default, the random
           generator is initialized with the current time the
-          <command>toolbus</command> command is given. Using the
+          <command>ToolBus</command> command is given. Using the
           <literal>-fixed-seed</literal> option makes the execution of the
           script reproducible across multiple runs of the
-          <command>toolbus</command> command.<warning>
+          <command>ToolBus</command> command.<warning>
               <para>Not yet implemented.</para>
             </warning></para>
         </listitem>
@@ -2640,8 +2972,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       a request from the ToolBus and returns the result back to the ToolBus in
       the form of a term (e.g., calculate the value of some expression), but
       on the other hand it can also take the initiative to send a term to the
-      ToolBus (e.g., generate an event when a user pushes some button).
-      </para>
+      ToolBus (e.g., generate an event when a user pushes some button).</para>
     </section>
 
     <section xml:id="section.tool-adapters">
@@ -2789,7 +3120,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
     <para>Although ToolBus tools can be implemented in many languages
     (including Java, C++, Tcl/Tk, ASF+SDF, and others) we start explaining how
     tools can be written in C. In other languages identical notions will be
-    used with only minor adjustements to language-specific features and
+    used with only minor adjustments to language-specific features and
     limitations. Writing tools in C amounts to:</para>
 
     <itemizedlist>
@@ -2920,7 +3251,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         <para>The initialization of the ToolBus API is achieved
         by<programlisting>int ATBinit(int <replaceable>argc</replaceable>, char *<replaceable>argv</replaceable>[], ATerm *<replaceable>bottomOfStack</replaceable>).</programlisting></para>
 
-        <para>This initializes the ToolBus API as weel as the ATerm library
+        <para>This initializes the ToolBus API as well as the ATerm library
         that is used by it.</para>
 
         <para>The standard program arguments that are passed (via
@@ -2934,7 +3265,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         ATerm library (hence the <replaceable>bottomOfStack</replaceable>
         argument, see Section \ref{ATinit}).</para>
 
-        <para>The return value indicates whether or not the Toolbus host could
+        <para>The return value indicates whether or not the ToolBus host could
         be found: 0 indicates that all is well, and -1 indicates an error, in
         which case the standard variable <literal>errno</literal> of the C
         run-time system is set to indicate which error.</para>
@@ -2953,7 +3284,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
                int <replaceable>port</replaceable>, ATBhandler <replaceable>h</replaceable>);</programlisting>Here,
         <replaceable>toolname</replaceable> is the tool name to be used,
         <replaceable>host</replaceable> is the machine where the ToolBus is
-        executing, <replaceable>port</replaceable> is the file descriptior of
+        executing, <replaceable>port</replaceable> is the file descriptor of
         the channel to be used, and <replaceable>h</replaceable> is the
         handler to associated with this connection. If value
         <literal>NULL</literal> is passed as
@@ -2970,7 +3301,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         ATerm and have the type:<programlisting>ATerm some_handler(int <replaceable>conn</replaceable>, ATerm <replaceable>input</replaceable>)</programlisting>The
         argument <replaceable>conn</replaceable> is the connection along which
         the input term was received and <replaceable>input</replaceable> is
-        the actual term received. The term retruned by the handler is the
+        the actual term received. The term returned by the handler is the
         reply to be sent to the ToolBus in response to this input event, or
         <literal>NULL</literal> if no reply is needed. In this fashion, an
         arbitrary number of term input ports can be set up which will be read
@@ -2978,7 +3309,7 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         associated handler is activated. A connection can be terminated as
         follows:<programlisting>void ATBdisconnect(int <replaceable>conn</replaceable>)</programlisting>where
         <replaceable>conn</replaceable> is a connection that has been created
-        eralier using <literal>ATBconnect</literal>.</para>
+        earlier using <literal>ATBconnect</literal>.</para>
       </section>
 
       <section xml:id="section.ATBeventloop">
@@ -3021,7 +3352,7 @@ int main(int argc, char *argv[])
       </section>
 
       <section xml:id="section.advanced-control-flow">
-        <title>Primitives for advanved control flow</title>
+        <title>Primitives for advanced control flow</title>
 
         <para>Tool programming amounts, in essence, to event driven
         programming: most of the time a tool is awaiting the arrival of data
@@ -3061,7 +3392,7 @@ int main(int argc, char *argv[])
 
         <para><programlisting>int ATBgetDescriptors(fd_set *set)</programlisting></para>
 
-        <para>Gathers all Toolbus connection file descriptors in a single
+        <para>Gathers all ToolBus connection file descriptors in a single
         descriptor set. The return value indicates the maximum value of any
         descriptor in the set.</para>
       </section>
@@ -3225,7 +3556,7 @@ int main(int argc, char *argv[])
         <para>we generate a file called <literal>hello2.tifs</literal>. It
         contains information amount the interfaces for all tools that are used
         in a given Tscript.<warning>
-            <para>The -gentifs flag is mnot yet implemented.</para>
+            <para>The -gentifs flag is not yet implemented.</para>
           </warning></para>
       </section>
 
@@ -3358,7 +3689,7 @@ ATerm hello_checker(int conn, ATerm siglist)   <co xml:id="co.hello2.tif.c.3" />
         <literal>rec_terminate</literal>, and the implementation of
         <literal>main</literal> to get things going. We will first take a look
         at the initialization stuff that the <literal>main</literal> function
-        of the hllo tool has to do, see <xref
+        of the hello tool has to do, see <xref
         linkend="example.hello.main" />.<example xml:id="example.hello.main">
             <title><literal>main</literal> function of hello tool</title>
 
@@ -3450,7 +3781,7 @@ void rec_terminate(int conn, ATerm msg){  <co xml:id="co.hello2.interface.2" />
                   <literal>conn</literal> argument identifies the ToolBus
                   connection, making it possible to distinguish
                   <emphasis>which</emphasis> ToolBus made the request. This
-                  enables connecting to more than one Toolbus at the same
+                  enables connecting to more than one ToolBus at the same
                   time.</para>
                 </callout>
 
@@ -4404,7 +4735,7 @@ exports
                 &lt;<literal>int&gt;<subscript>1</subscript></literal>-the
                 element exists, replace it by
                 <literal>&lt;term&gt;<subscript>1</subscript></literal> and
-                returned the modifed list; otherwise return
+                returned the modified list; otherwise return
                 <literal>&lt;list&gt;<subscript>1</subscript></literal>
                 unmodified.</entry>
               </row>
@@ -4536,7 +4867,7 @@ exports
         <title>Functions on terms</title>
 
         <para><table>
-            <title>Functions on lterms</title>
+            <title>Functions on ATerms</title>
 
             <tgroup cols="3">
               <colspec align="left" colwidth="3*" />
@@ -4631,7 +4962,7 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry>If<literal> &lt;term&gt;</literal> isequal to
+                  <entry>If<literal> &lt;term&gt;</literal> is equal to
                   <literal>[] </literal> then <literal>true</literal>;
                   otherwise <literal>false</literal>.</entry>
                 </row>
@@ -4729,7 +5060,8 @@ exports
 
                   <entry><literal>&lt;list&gt;</literal></entry>
 
-                  <entry>Six-tuple describing the urrent absolute time</entry>
+                  <entry>Six-tuple describing the current absolute
+                  time</entry>
                 </row>
 
                 <row>
@@ -5074,7 +5406,7 @@ exports
                 </row>
 
                 <row>
-                  <entry><literal>toolbus(<replaceable>Pnm</replaceable>(<replaceable>T</replaceable>,...),
+                  <entry><literal>ToolBus(<replaceable>Pnm</replaceable>(<replaceable>T</replaceable>,...),
                   ...)</literal></entry>
 
                   <entry>Define initial ToolBus process configuration</entry>
@@ -5231,10 +5563,10 @@ exports
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.toolbus-historical-notes">
     <title>Historical notes</title>
 
-    <para>The first generation Toolbus is described in <xref
+    <para>The first generation ToolBus is described in <xref
     linkend="BergstraKlint94" />. In addition to the design, the complete C
     implementation is discussed in detail. The second generation ("discrete
     time") ToolBus includes timing primitives as well as built-in functions.
@@ -5250,7 +5582,7 @@ exports
       </warning></para>
   </section>
 
-  <section>
+  <section xml:id="section.toolbus-bibliography">
     <title>Bibliography</title>
 
     <para><bibliolist>
@@ -5272,10 +5604,6 @@ exports
     <title>To Do</title>
 
     <itemizedlist>
-      <listitem>
-        <para>Write the wave demo section.</para>
-      </listitem>
-
       <listitem>
         <para>Write Tcl/Tk etc. section.</para>
       </listitem>
