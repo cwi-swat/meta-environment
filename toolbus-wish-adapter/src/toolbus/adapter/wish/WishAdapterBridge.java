@@ -10,7 +10,7 @@ public class WishAdapterBridge extends ToolBridge{
 	private final WishAdapter wishAdapter;
 	
 	public WishAdapterBridge(PureFactory termFactory, String type, WishAdapter tool, String toolName, int toolID, InetAddress host, int port){
-		super(termFactory, type, tool, toolName, toolID, host, port);
+		super(termFactory, type, toolName, toolID, host, port);
 		
 		wishAdapter = tool;
 	}
@@ -20,24 +20,26 @@ public class WishAdapterBridge extends ToolBridge{
 		return true;
 	}
 	
-	public void receive(byte operation, ATerm aTerm){
-		switch(operation){
-			case DO:
-				wishAdapter.receiveDo(aTerm);
-				send(ACKDO, getFactory().makeList());
-				break;
-			case EVAL:
-				ATerm result = wishAdapter.receiveEval(aTerm);
-				send(VALUE, result);
-				break;
-			case PERFORMANCESTATS:
-				PureFactory factory = getFactory();
-				ATerm unsupportedOperation = factory.make("unsupported-operation");
-				ATerm performanceStats = factory.makeAppl(factory.makeAFun("performance-stats", 3, false), unsupportedOperation, unsupportedOperation, unsupportedOperation);
-				send(PERFORMANCESTATS, performanceStats);
-				break;
-			default:
-				super.receive(operation, aTerm);
-		}
+	public void doDo(ATerm aTerm){
+		wishAdapter.receiveDo(aTerm);
+	}
+	
+	public ATerm doEval(ATerm aTerm){
+		return wishAdapter.receiveEval(aTerm);
+	}
+	
+	public ATerm doGetPerformanceStats(){
+		PureFactory factory = getFactory();
+		ATerm unsupportedOperation = factory.make("unsupported-operation");
+		ATerm performanceStats = factory.makeAppl(factory.makeAFun("performance-stats", 3, false), unsupportedOperation, unsupportedOperation, unsupportedOperation);
+		return performanceStats;
+	}
+	
+	public void doReceiveAckEvent(ATerm aTerm){
+		wishAdapter.receiveAckEvent(aTerm);
+	}
+	
+	public void doTerminate(ATerm aTerm){
+		wishAdapter.receiveTerminate(aTerm);
 	}
 }
