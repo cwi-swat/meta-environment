@@ -18,7 +18,7 @@ bin_PROGRAMS	= sdf2table
 pkgdata_DATA	= parsetablegen.idef
 
 noinst_HEADERS = \
-	normalize.h
+	normalize.h \
 	generate.h \
 	load.h \
 	atsets.h \
