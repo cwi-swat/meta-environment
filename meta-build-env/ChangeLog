@@ -19,7 +19,6 @@ Mon Aug 13 19:04:25 CEST 2007 <jurgenv@cwi.nl>
  * meta-build.m4: added { } curly's around generated dereferences of
    long shell variable names. This fixes "Bad string" warnings by autoconf
    on Solaris 10.
-   
 
 Mon Aug  6 11:28:02 CEST 2007 <{storm,jurgenv}@cwi.nl>
  * Makefile.meta: Changed make rules of generation of c files from idef
