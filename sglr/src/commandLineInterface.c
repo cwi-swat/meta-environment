@@ -23,7 +23,7 @@
 #include "parserStatistics.h"
 
 static const char programName[] = "sglr";
-static const char myArguments[] = "2Acd:f::hi:l:no:p:s:tvV";
+static const char myArguments[] = "2Acd:f::hi:l:mno:p:s:tvV";
 static const char myVersion[]   = VERSION;
 
 static const char *flag(ATbool value) {
@@ -34,6 +34,7 @@ static const char *flag(ATbool value) {
 }
 
 static void usage() {
+  int parserFlag                = PARSER_getParserFlag();
   int outputFlag                = PARSER_getOutputFlag();
   int textualOutputFlag         = MAIN_getTextualOutputFlag();
   int countPosIndAmbsFlag       = MAIN_getCountPosIndependentAmbsFlag();
@@ -71,6 +72,7 @@ static void usage() {
 	  "\t-h          : display usage information\n"
 	  "\t-i file     : input from |file|                      [stdin]\n"
 	  "\t-l          : toggle statistics logging              [%s]\n"
+	  "\t-m          : toggle parse tree output               [%s]\n"
 	  "\t-n          : toggle parse tree creation             [%s]\n"
 	  "\t-o file     : output to |file|                       [stdout]\n"
 	  "\t-p file     : use parse table |file| (required)\n"
@@ -94,6 +96,7 @@ static void usage() {
 	  flag(filterRejectFlag),
 	  flag(statisticsFlag),
 	  flag(outputFlag),
+	  flag(parserFlag),
       flag(filterTopSort),
 	  flag(textualOutputFlag),
 	  flag(verboseFlag)
@@ -145,6 +148,7 @@ static void handleFilterOptions(const char *arg) {
 static void handleOptions (int argc, char **argv) {
   int c;
 
+  int parser                     = PARSER_getParserFlag();
   int outputflag                 = PARSER_getOutputFlag();
   int textualflag                = MAIN_getTextualOutputFlag();
   int verboseflag                = PARSER_getVerboseFlag;
@@ -162,6 +166,7 @@ static void handleOptions (int argc, char **argv) {
   char *statsFilename   = NULL;
   char *debugFilename   = NULL;
   
+  ATbool outputToFile = ATfalse;
   ATbool showHelp    = ATfalse;
   ATbool showVersion = ATfalse;
 
@@ -179,8 +184,12 @@ static void handleOptions (int argc, char **argv) {
       case 'i':   inputFileName      = optarg;              break;
       case 'l':   statisticsflag     = !statisticsflag;
                   statsFilename      = optarg;              break;
-      case 'n':   outputflag         = !outputflag;         break;  
-      case 'o':   outputFileName     = optarg;              break;
+      case 'm':   outputflag         = !outputflag;         break;  
+      case 'n':   parser             = !parser;             break;  
+      case 'o':   
+          outputFileName = optarg;
+          outputToFile = ATtrue;
+          break;
       case 'p':   parseTableName     = optarg;              break;
       case 's':   
           startSymbolFlag = !startSymbolFlag;
@@ -203,6 +212,12 @@ static void handleOptions (int argc, char **argv) {
     exit(0);
   }
 
+  if (!outputflag && outputToFile) { 
+    ATfprintf(stderr, "%s: Cannot output parse tree because -m flag is off.\n", programName);
+    usage();
+    exit(1);
+  }
+
   if(!parseTableName) {
     ATfprintf(stderr, "%s: Parse table argument missing.\n", programName);
     usage();
@@ -214,6 +229,7 @@ static void handleOptions (int argc, char **argv) {
     PARSER_setDebugFilename(debugFilename);
   }
   PARSER_setVerboseFlag(verboseflag);
+  PARSER_setParserFlag(parser);
   PARSER_setOutputFlag(outputflag);
   MAIN_setFlattenTreeFlag(flattenFlag);
   MAIN_setTextualOutputFlag(textualflag);

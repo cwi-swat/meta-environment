@@ -125,7 +125,7 @@ PT_Tree SG_parse(ParseTable *table, InputString string) {
 
   /** \todo verify that the parser will not report success if the accept state 
    * is reached and all the string is not parsed. */
-  if (acceptNode && PARSER_getOutputFlag()) {
+  if (acceptNode && PARSER_getParserFlag()) {
     result = GSSEdge_getTree(GSS_getEdgeListHead(GSSNode_getEdgeList(acceptNode)));
   }
 

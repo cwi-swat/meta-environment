@@ -18,6 +18,8 @@ void   PARSER_setVerboseFlag(ATbool value);
 #define PARSER_getVerboseFlag (OPT_getFlag(VERBOSE_FLAG))
 void   PARSER_setDebugFlag(ATbool value);
 #define PARSER_getDebugFlag (OPT_getFlag(DEBUG_FLAG))
+void   PARSER_setParserFlag(ATbool value);
+ATbool PARSER_getParserFlag();
 void   PARSER_setOutputFlag(ATbool value);
 ATbool PARSER_getOutputFlag();
 void   PARSER_setAmbiguityErrorFlag(ATbool value);

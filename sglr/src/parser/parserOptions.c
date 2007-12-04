@@ -12,6 +12,7 @@
 int VERBOSE_FLAG;
 int DEBUG_FLAG;
 static int OUTPUT_FLAG;
+static int PARSER_FLAG;
 static int AMBIGUITY_ERROR_FLAG;
 static int DEBUGFILENAME_VALUE;
 
@@ -19,12 +20,14 @@ static int DEBUGFILENAME_VALUE;
 void PARSER_initializeDefaultOptions() {
   VERBOSE_FLAG = OPT_getFlagOptionId();
   DEBUG_FLAG = OPT_getFlagOptionId();
+  PARSER_FLAG = OPT_getFlagOptionId();
   OUTPUT_FLAG = OPT_getFlagOptionId();
   AMBIGUITY_ERROR_FLAG = OPT_getFlagOptionId();
   DEBUGFILENAME_VALUE = OPT_getStringOptionId();
 
   PARSER_setVerboseFlag(ATfalse);
   PARSER_setDebugFlag(ATfalse);
+  PARSER_setParserFlag(ATtrue);
   PARSER_setOutputFlag(ATtrue);
   PARSER_setAmbiguityErrorFlag(ATfalse);
   PARSER_setDebugFilename("");
@@ -40,6 +43,14 @@ void PARSER_setVerboseFlag(ATbool value) {
 
 void PARSER_setDebugFlag(ATbool value) {
   OPT_setFlag(DEBUG_FLAG, value);
+}
+
+void PARSER_setParserFlag(ATbool value) {
+  OPT_setFlag(PARSER_FLAG, value);
+}
+
+ATbool PARSER_getParserFlag() {
+  return OPT_getFlag(PARSER_FLAG);
 }
 
 void PARSER_setOutputFlag(ATbool value) {

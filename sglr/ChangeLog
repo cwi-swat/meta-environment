@@ -1,5 +1,10 @@
 $Id$
 
+Tue Dec  4 11:45:13 CET 2007 <economop@cwi.nl>
+ * src/commandLineInterface.c: added the -m flag to stop the parse tree from
+   being output. Useful for performace comparisons with other tools.
+ * src/parserOptions.{c,h}: added code to handle new flag.
+
 Tue Dec  4 11:17:02 CET 2007 <economop@cwi.nl>
  * src/parser/parserStatistics.{c,h}: commented out the code that collects and
    prints the stats on the number of edge visits done for each level. I don't
