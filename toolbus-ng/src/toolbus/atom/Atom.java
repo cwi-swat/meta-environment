@@ -51,8 +51,8 @@ class Test{
  */
 
 abstract public class Atom extends ProcessExpression implements StateElement{
-	private final static String SECS = "secs";
-	private final static String MSECS = "msecs";
+	private final static String SECS = "sec";
+	private final static String MSECS = "msec";
 	
 	private ProcessInstance processInstance;	// process instance to which the atom belongs
 	private Environment env;					// the environment of this atom
