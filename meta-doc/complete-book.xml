@@ -19,48 +19,48 @@
   <part>
     <title>Syntax Analysis</title>
 
-    <xi:include href="syntax/1-syntax-analysis/syntax-analysis.xml"></xi:include>
-    <xi:include href="syntax/2-sdf/sdf.xml"></xi:include>
-    <xi:include href="syntax/3-sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
-    <xi:include href="syntax/4-sdf-errors/sdf-errors.xml"></xi:include>
+    <xi:include href="syntax/syntax-analysis/syntax-analysis.xml"></xi:include>
+    <xi:include href="syntax/sdf/sdf.xml"></xi:include>
+    <xi:include href="syntax/sdf-disambiguation/sdf-disambiguation.xml"></xi:include>
+    <xi:include href="syntax/sdf-errors/sdf-errors.xml"></xi:include>
  </part>
   <part>
     <title>Formatting</title>
-    <xi:include href="formatting/1-formatting/formatting.xml"></xi:include>
+    <xi:include href="formatting/formatting/formatting.xml"></xi:include>
   </part>
 
   <part>
     <title>Fact Extraction and Program Transformation</title>
-    <xi:include href="extraction-transformation/1-term-rewriting/term-rewriting.xml"></xi:include>
-    <xi:include href="extraction-transformation/2-asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
-    <xi:include href="extraction-transformation/3-language-definitions/language-definitions.xml"></xi:include>
-    <xi:include href="extraction-transformation/4-asfsdf/asfsdf.xml"></xi:include>
-    <xi:include href="extraction-transformation/5-asf-errors/asf-errors.xml"></xi:include>
+    <xi:include href="extraction-transformation/term-rewriting/term-rewriting.xml"></xi:include>
+    <xi:include href="extraction-transformation/asfsdf-by-example/asfsdf-by-example.xml"></xi:include>
+    <xi:include href="extraction-transformation/language-definitions/language-definitions.xml"></xi:include>
+    <xi:include href="extraction-transformation/asfsdf/asfsdf.xml"></xi:include>
+    <xi:include href="extraction-transformation/asf-errors/asf-errors.xml"></xi:include>
   </part>
 
  <part>
    <title>Relational Fact Analysis</title>
-    <xi:include href="analysis/1-rscript/rscript.xml"></xi:include>
+    <xi:include href="analysis/rscript/rscript.xml"></xi:include>
  </part>
 
   <part>
     <title>The Meta-Environment</title>
-    <xi:include href="meta-environment/1-architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
-    <xi:include href="meta-environment/2-extending-meta-environment/extending-meta-environment.xml"></xi:include>
+    <xi:include href="meta-environment/architecture-meta-environment/architecture-meta-environment.xml"></xi:include>
+    <xi:include href="meta-environment/extending-meta-environment/extending-meta-environment.xml"></xi:include>
   </part>
 
   <part>
     <title>Technology</title>
   </part>
-    <xi:include href="technology/15-aterm-guide-new/aterm-guide-new.xml"></xi:include>
-    <xi:include href="technology/2-aterm-saf/aterm-saf.xml"></xi:include>
-    <xi:include href="technology/3-toolbus-guide-new/toolbus-guide-new.xml"></xi:include>
+    <xi:include href="technology/aterm-guide/aterm-guide.xml"></xi:include>
+    <xi:include href="technology/aterm-saf/aterm-saf.xml"></xi:include>
+    <xi:include href="technology/toolbus-guide/toolbus-guide.xml"></xi:include>
 
   <part>
    <title>Software Development</title>
-    <xi:include href="software-development/1-build-environment/build-environment.xml"></xi:include>
-    <xi:include href="software-development/2-version-management/version-management.xml"></xi:include>
-    <xi:include href="software-development/3-coding-standards/coding-standards.xml"></xi:include>
+    <xi:include href="software-development/build-environment/build-environment.xml"></xi:include>
+    <xi:include href="software-development/version-management/version-management.xml"></xi:include>
+    <xi:include href="software-development/coding-standards/coding-standards.xml"></xi:include>
   </part>
 
   <part>
