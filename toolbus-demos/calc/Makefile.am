@@ -1,5 +1,5 @@
-EXTRA_DIST			+= calc.tb ui-calc.tcl
-CLEANFILES			+= *.tif.[ch] calc.tifs
+EXTRA_DIST			= calc.tb ui-calc.tcl
+CLEANFILES			= *.tif.[ch] calc.tifs
 
 INCLUDES			= $(TOOLBUSLIB_CFLAGS) $(ATERM_CFLAGS) 
 
