@@ -87,7 +87,7 @@ process MakeWave(N : int) is
         create(P(Tid, L, I, R, 1.0, 1.0), Id?) .
         I := add(I, 1)
      fi *
-     shutdown("end") delay(secs(60))
+     shutdown("end") delay(sec(60))
   endlet
 
 %% Define the {\tt display} tool.
