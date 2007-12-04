@@ -52,7 +52,11 @@ cp images/callouts/*.png $WEB/images/callouts
 for cat in ${CATEGORIES}; do
   cat $cat/TITLE  >> ${INDEX}
   echo "<ul>" >> ${INDEX}
-  BOOKS=`ls $cat`
+  if [ -r $cat/ENTRIES ]; then
+     BOOKS=`cat $cat/ENTRIES`
+  else
+     BOOKS=`ls $cat`
+  fi
   mkdir -p ${WEB}/$cat || true
   for obook in ${BOOKS}; do
     if [ $obook == TITLE ]; then
