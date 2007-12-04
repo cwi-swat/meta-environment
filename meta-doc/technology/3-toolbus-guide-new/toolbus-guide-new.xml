@@ -1438,34 +1438,37 @@ toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
           xml:id="example.global-structure-calc.tb">
           <title>Global structure of <literal>calc.tb</literal></title>
 
-          <para><programlisting>process CALC is ... <lineannotation>       See <xref
-                  linkend="example.CALC" />
-                </lineannotation>
+          <para><programlisting>process CALC is ... 
 tool calc is ...
-process BATCH is ... <lineannotation>      See <xref linkend="example.BATCH" />
-                </lineannotation>
+     <lineannotation>See <xref linkend="example.CALC" /> </lineannotation>
+
+process BATCH is ... 
 tool batch is ...
-process UI is ...         <lineannotation> See <xref linkend="example.UI" />
-                </lineannotation>
-process CALC-BUTTON is ... <lineannotation>See <xref
-                  linkend="example.CALC-BUTTON" />
-                </lineannotation>
-process LOG-BUTTON is ...  <lineannotation>See <xref
-                  linkend="example.LOG-BUTTON" />
-                </lineannotation>
-process TIME-BUTTON is ... <lineannotation>See <xref
-                  linkend="example.LOG-BUTTON" />
-                </lineannotation>
-process QUIT-BUTTON is ... <lineannotation>See <xref
-                  linkend="example.QUIT-BUTTON" />
-                </lineannotation>
-process LOG is ... <lineannotation>        See <xref linkend="example.LOG" />
-                </lineannotation>
-process CLOCK is ...       <lineannotation>See <xref linkend="example.CLOCK" />
-                </lineannotation>
+     <lineannotation>See <xref linkend="example.BATCH" /> </lineannotation>
+
+process UI is ...         
+     <lineannotation>See <xref linkend="example.UI" /> </lineannotation>
+
+process CALC-BUTTON is ... 
+     <lineannotation>See <xref linkend="example.CALC-BUTTON" /> </lineannotation>
+
+process LOG-BUTTON is ...  
+     <lineannotation>See <xref linkend="example.LOG-BUTTON" /> </lineannotation>
+
+process TIME-BUTTON is ... 
+     <lineannotation>See <xref linkend="example.LOG-BUTTON" /> </lineannotation>
+
+process QUIT-BUTTON is ...
+     <lineannotation>See <xref linkend="example.QUIT-BUTTON" /> </lineannotation>
+
+process LOG is ...
+     <lineannotation>See <xref linkend="example.LOG" /> </lineannotation>
+
+process CLOCK is ...
+     <lineannotation>See <xref linkend="example.CLOCK" /> </lineannotation>
 
 toolbus(CALC, BATCH, UI, LOG, CLOCK)
-              <lineannotation>             See <xref
+     <lineannotation>See <xref
                   linkend="example.calculator-toolbus-configuration" />
                 </lineannotation></programlisting></para>
         </example><example xml:id="example.CALC">
@@ -1908,20 +1911,22 @@ tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:
       <para><example xml:id="example.global-structure-auction.tb">
           <title>Global structure of <literal>auction.tb</literal></title>
 
-          <para><programlisting>process Auction is ... <lineannotation>       See <xref
-                  linkend="example.Auction" />
-                </lineannotation>
+          <para><programlisting>process Auction is ... 
+     <lineannotation>See <xref linkend="example.Auction" /> </lineannotation>
+
 tool master is ...
-process ConnectBidder is ... <lineannotation> See <xref
-                  linkend="example.ConnectBidder" />
-                </lineannotation>
+
+process ConnectBidder is ...
+     <lineannotation>See <xref linkend="example.ConnectBidder" /> </lineannotation>
+
 tool batch is ...
-process OneSale is ... <lineannotation>       See <xref
-                  linkend="example.OneSale" />
-                </lineannotation>
-process Bidder is ...      <lineannotation>   See <xref
-                  linkend="example.Bidder" />
-                </lineannotation>
+
+process OneSale is ...
+     <lineannotation>See <xref linkend="example.OneSale" /> </lineannotation>
+
+process Bidder is ...
+     <lineannotation>See <xref linkend="example.Bidder" /> </lineannotation>
+
 toolbus(Auction)</programlisting></para>
         </example><example xml:id="example.Auction">
           <title>Process <literal>Auction</literal></title>
