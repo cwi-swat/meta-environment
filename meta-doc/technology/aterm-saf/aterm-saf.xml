@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-<chapter lang="en-US" xml:id="aterm-saf">
-  <articleinfo>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
     <title>ATerm SAF: A High Performance Streamable Format</title>
-
+    <authorgroup>
     <author>
-      <surname>Arnold Lankamp</surname>
+      <personname><firstname>Arnold</firstname><surname>Arnold Lankamp</surname></personname>
     </author>
+    </authorgroup>
 
     <pubdate>24-05-2007</pubdate>
-  </articleinfo>
+  </info>
 
   <sect1>
     <title>Introduction</title>
@@ -269,7 +274,7 @@
       room for extension.</para>
     </sect2>
 
-    <sect2 id="TypeEncoding">
+    <sect2 xml:id="TypeEncoding">
       <title>Encoding of types</title>
 
       <para>Every term type has a different encoding.</para>
@@ -717,7 +722,7 @@
     </sect2>
   </sect1>
 
-  <sect1 id="Compression">
+  <sect1 xml:id="Compression">
     <title>Compression</title>
 
     <para>As noted before compression, generally speaking, incurs
@@ -731,7 +736,7 @@
     we know what the data and composition look like and can use that knowledge
     to our advantage.</para>
 
-    <para id="Sharing" />
+    <para xml:id="Sharing" />
 
     <para>We use a LZW like compression technique to handle the sharing. What
     we do is, every time we encounter an element we have not seen before we
@@ -747,7 +752,7 @@
     separate tables and arrays for both shared terms / sub trees and shared
     function symbols.</para>
 
-    <sect2 id="IntegerCompression">
+    <sect2 xml:id="IntegerCompression">
       <title>Integer encoding / compression</title>
 
       <para>We also make use of the fact that small unsigned integers are most
@@ -1631,7 +1636,7 @@
     (de-)serialization of a certain term.</para>
   </sect1>
 
-  <sect1 id="Example">
+  <sect1 xml:id="Example">
     <title>Example</title>
 
     <para>The following term:</para>
