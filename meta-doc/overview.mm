@@ -58,12 +58,13 @@
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#ff0000" CREATED="1194291671819" ID="Freemind_Link_367846466" MODIFIED="1194291732928" TEXT="sglr"/>
 <node CREATED="1189957072386" ID="Freemind_Link_320023932" MODIFIED="1189957074434" TEXT="ToolBus">
 <node CREATED="1189955400386" ID="Freemind_Link_634994340" MODIFIED="1189956488525" TEXT="How to write ToolBus scripts">
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
-<node CREATED="1189955419627" ID="Freemind_Link_772013" MODIFIED="1189956488525" TEXT="The Java backend of Apigen">
+<node BACKGROUND_COLOR="#ff0000" CREATED="1189955419627" ID="Freemind_Link_772013" MODIFIED="1194291768789" TEXT="The Java backend of Apigen">
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 <node CREATED="1189957091616" ID="Freemind_Link_1343297237" MODIFIED="1189957096905" TEXT="Meta-Environment">
@@ -163,6 +164,9 @@
 <node BACKGROUND_COLOR="#ccffcc" CREATED="1190059211430" ID="Freemind_Link_890807433" MODIFIED="1190059367174" TEXT="Easy/tutorial level document"/>
 <node CREATED="1190059287776" ID="Freemind_Link_1593198124" MODIFIED="1190059372425" TEXT="Medium/advanced level document"/>
 <node BACKGROUND_COLOR="#ff3333" CREATED="1190059254308" ID="Freemind_Link_1769259586" MODIFIED="1190059406248" TEXT="Document not yet available"/>
+</node>
+<node BACKGROUND_COLOR="#ff0000" CREATED="1194291804039" ID="Freemind_Link_559308409" MODIFIED="1194291880891" POSITION="left" TEXT="Applications &amp; success stories">
+<cloud/>
 </node>
 </node>
 </map>

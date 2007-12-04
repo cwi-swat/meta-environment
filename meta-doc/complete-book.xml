@@ -71,6 +71,6 @@
   </part>
 
 
-  <xi:include href="getting-started/3-glossary/glossary.xml"></xi:include>
-  <xi:include href="getting-started/4-bibliography/bibliography.xml"></xi:include>
+  <xi:include href="getting-started/glossary/glossary.xml"></xi:include>
+  <xi:include href="getting-started/bibliography/bibliography.xml"></xi:include>
 </book>

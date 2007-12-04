@@ -24,7 +24,7 @@
 <xsl:param name="olink.doctitle"             select="'yes'" />
 
 <!-- bibliography -->
-<xsl:param name="bibliography.collection"    select="'__PREFIX__/getting-started/4-bibliography/bibliography.xml'"/>
+<xsl:param name="bibliography.collection"    select="'__PREFIX__/getting-started/bibliography/bibliography.xml'"/>
 
 <!-- Adapt style of page number references in xrefs -->
 
