@@ -2799,7 +2799,9 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
     <section xml:id="section.tool-arguments">
       <title>Tool arguments</title>
 
-      <para>Arguments specific for tools are:</para>
+      <para><warning>
+          <para>This section needs some work.</para>
+        </warning>Arguments specific for tools are:</para>
 
       <itemizedlist>
         <listitem>
@@ -2861,7 +2863,13 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
   <section xml:id="section.toolbus-tools">
     <title>ToolBus tools</title>
 
-    <para></para>
+    <para>There are some general issues to understand about ToolBus tools and
+    we cover them here. First, the global structure of a tool is explained in
+    <xref linkend="section.global-structure-tool" />. Next, we describe how
+    tool adapters work in <xref linkend="section.tool-adapters" />. Finally,
+    we cover in <xref linkend="section.generating-tool-interfaces" /> the
+    automatic generation of tool interfaces that is needed for some tool
+    implementation languages .</para>
 
     <section xml:id="section.global-structure-tool">
       <title>The global structure of a ToolBus tool</title>
@@ -3175,28 +3183,28 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><literal>ATBinit</literal>: tool initialization
-          (Sections~\ref{ATBinit}).</para>
+          <para><literal>ATBinit</literal>: tool initialization, see <xref
+          linkend="section.ATBinit" />.</para>
         </listitem>
 
         <listitem>
           <para><literal>ATBconnect</literal>: to connect the tool to the
-          ToolBus (Sections~\ref{ATBconnect}).</para>
+          ToolBus, <xref linkend="section.ATBconnect" />.</para>
         </listitem>
 
         <listitem>
           <para><literal>ATBdisconnect</literal>: to disconnect the tool from
-          the ToolBus (Sections~\ref{ATBconnect}).</para>
+          the ToolBus, <xref linkend="section.ATBconnect" />.</para>
         </listitem>
 
         <listitem>
           <para><literal>ATBeventloop</literal>: a standard event loop for a
-          tool (Section~\ref{ATBeventloop}).</para>
+          tool, see <xref linkend="section.ATBeventloop" />.</para>
         </listitem>
 
         <listitem>
-          <para><literal>ATB</literal>postEvent send an event to the ToolBus
-          (Section~\ref{ATBreadTerm}).</para>
+          <para><literal>ATB</literal>postEvent send an event to the ToolBus,
+          see <xref linkend="section.ATBpostEvent" />.</para>
         </listitem>
       </itemizedlist>
 
@@ -3248,14 +3256,17 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
 
         <para>The standard program arguments that are passed (via
         <replaceable>argc</replaceable> and <replaceable>argv</replaceable>)
-        are fully described in Section~\ref{Executing}. Particularly important
-        is that the tool is initialized with a proper name. It should be
-        literally equal (including the case of letters) to a tool name as
-        appearing in a tool declaration in the Tscript. This is important
-        since the tool name will be used when the tool is connected to the
-        ToolBus. Note that <literal>ATBinit</literal> also initializes the
-        ATerm library (hence the <replaceable>bottomOfStack</replaceable>
-        argument, see Section \ref{ATinit}).</para>
+        are fully described in <xref
+        linkend="section.executing-toolbus-and-tools" />. Particularly
+        important is that the tool is initialized with a proper name. It
+        should be literally equal (including the case of letters) to a tool
+        name as appearing in a tool declaration in the Tscript. This is
+        important since the tool name will be used when the tool is connected
+        to the ToolBus. Note that <literal>ATBinit</literal> also initializes
+        the ATerm library (hence the <replaceable>bottomOfStack</replaceable>
+        argument, see <note>
+            <para>Ref to Section \ref{ATinit}) in ATerm manual.</para>
+          </note></para>
 
         <para>The return value indicates whether or not the ToolBus host could
         be found: 0 indicates that all is well, and -1 indicates an error, in
@@ -3331,7 +3342,7 @@ int main(int argc, char *argv[])
 }</programlisting></para>
       </section>
 
-      <section xml:id="section.ATBwrite-read-Term">
+      <section xml:id="section.ATBpostEvent">
         <title><literal>ATB</literal>postEvent</title>
 
         <para>So far, we have seen primitives for tools that only receive
@@ -4170,8 +4181,9 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
           </listitem>
 
           <listitem>
-            <para>Replace hello's tool definition in {\tt hello2.tb} (see
-            <xref linkend="example.hello2" />) by: <programlisting>tool hello is {command = "wish-adapter -script hello.tcl"}</programlisting></para>
+            <para>Replace hello's tool definition in
+            <filename>hello2.tb</filename> (see <xref
+            linkend="example.hello2" />) by: <programlisting>tool hello is {command = "wish-adapter -script hello.tcl"}</programlisting></para>
           </listitem>
         </itemizedlist>
 
@@ -5801,10 +5813,6 @@ exports
 
     <itemizedlist>
       <listitem>
-        <para>Write Tcl/Tk etc. section.</para>
-      </listitem>
-
-      <listitem>
         <para>What do we do with the other adapters?</para>
       </listitem>
 
@@ -5823,14 +5831,6 @@ exports
 
       <listitem>
         <para>Describe viewer interface.</para>
-      </listitem>
-
-      <listitem>
-        <para>Add id's to sections.</para>
-      </listitem>
-
-      <listitem>
-        <para>Add cross references.</para>
       </listitem>
     </itemizedlist>
 
