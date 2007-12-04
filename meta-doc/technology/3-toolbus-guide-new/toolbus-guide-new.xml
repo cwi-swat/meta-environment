@@ -2692,9 +2692,8 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
         </listitem>
 
         <listitem>
-          <para><literal>-TB_PORT
-          <replaceable>port_name</replaceable></literal>: defines the
-          <emphasis>well known socket</emphasis> <literal>port_name</literal>
+          <para><literal>-P<replaceable>port_name</replaceable></literal>:
+          defines the "well known socket" <replaceable>port_name</replaceable>
           to which all tools temporarily connect in order to set up their own
           private socket that connects them permanently to the ToolBus
           interpreter. When omitted, socket 8998 will be used.<warning>
@@ -2845,7 +2844,7 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
       is running when starting the execution of the tool. As an example,
       consider the <command>hello</command> application described in <xref
       linkend="example.hello2" />. The <command>hello</command> tool will be
-      executed by the ToolBus using the command <programlisting>hello -TB_PORT 8998 -TB_HOST host1.institute.nl</programlisting>when
+      executed by the ToolBus using the command <programlisting>hello -P8998 -TB_HOST host1.institute.nl</programlisting>when
       running on machine <literal>host1.institute.nl</literal>. Suppose, we
       replace the explicit <literal>execute</literal> in <xref
       linkend="example.hello2" /> by a <literal>rec-connect</literal> as shown
@@ -3117,27 +3116,29 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
     <itemizedlist>
       <listitem>
         <para>ATerms: the essential data type that is used to exchange
-        information between tool and \TB\ (Section~\ref{ATerms}).</para>
+        information between tool and TB <note>
+            <para>Add ref to ATerms</para>
+          </note></para>
       </listitem>
 
       <listitem>
-        <para>The global structure of a \TB\ tool
-        (Section~\ref{GlobalStructureTool}).</para>
+        <para>The global structure of a ToolBus tool, see <xref
+        linkend="section.global-structure-tool" />.</para>
       </listitem>
 
       <listitem>
-        <para>The \TB\ Application Programmer's Interface
-        (Section~\ref{ToolBusAPI}).</para>
+        <para>The ToolBus Application Programmer's Interface , see <xref
+        linkend="section.toolbus-API" />.</para>
       </listitem>
 
       <listitem>
-        <para>Compiling \TB\ tools written in C
-        (Section~\ref{CompilingTools}).</para>
+        <para>Compiling ToolBus tools written in C, <xref
+        linkend="section.compiling-C-tools" />.</para>
       </listitem>
 
       <listitem>
-        <para>Generating tool interfaces with {\tt tifstoc}
-        (Section~\ref{tifstoc}).</para>
+        <para>Generating tool interfaces with {\tt tifstoc}, <xref
+        linkend="section.generating-tool-interfaces" />.</para>
       </listitem>
     </itemizedlist>
 
@@ -3974,10 +3975,220 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
   <section xml:id="section.tools-other-languages">
     <title>Writing ToolBus tools in other languages</title>
 
-    <section xml:id="section.TclTk-adapter">
-      <title>Tcl/TK</title>
+    <section xml:id="section.TclTk-tools">
+      <title>Writing tools in Tcl/TK</title>
 
-      <para>TBD</para>
+      <para>Writing ToolBus tools in Tcl is greatly simplified by the
+      <command>wish-adapter</command> to be explained in <xref
+      linkend="section.wish-adapter" />. Next, a small set of predefined Tcl
+      functions is described that are always loaded by the
+      <command>wish-adapter</command> and can be used in any Tcl script, see
+      <xref linkend="section.predefined-Tcl-functions" />. Finally, we present
+      the Tcl version of the hello tool in <xref
+      linkend="section.hello-tcl" />.</para>
+
+      <section xml:id="section.wish-adapter">
+        <title>wish-adapter</title>
+
+        <para>The purpose of the wish-adapter is to execute Tcl/Tk's windowing
+        shell <command>wish</command> as a tool. For instance,<programlisting>wish-adapter -script calculator.tcl</programlisting></para>
+
+        <para>executes <command>wish</command> as a TooBus tool and executes
+        the Tcl script <filename>calculator.tcl</filename>.</para>
+
+        <para>In addition to the common tool arguments, wish-adapter has the
+        following specific arguments:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>-wish <replaceable>Name</replaceable></literal>:
+            Use <replaceable>Name</replaceable> rather than
+            <command>wish</command> as Tcl/Tk's windowing shell.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>-lazy-exec</literal>: Postpone execution of
+            <command>wish</command> until needed. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>-script</literal>: The Tcl script to be executed.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>-script-args</literal>: The arguments for the Tcl
+            script to be executed. These arguments are available to the Tcl
+            script throught the variables <replaceable>argc</replaceable> and
+            <replaceable>argv</replaceable>. </para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Various communication patterns are supported by wish-adapter.
+        Communication is described here from the point of view of the ToolBus,
+        i.e., <literal>snd-</literal> and <literal>rec-</literal> mean,
+        respectively, send by ToolBus and receive by ToolBus. The
+        communication patterns are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>snd-do(<replaceable>Tid</replaceable>,
+            <replaceable>Fun</replaceable>(<replaceable>A</replaceable><subscript>1</subscript>,
+            ...,
+            </literal><replaceable>A</replaceable><subscript>n</subscript>))
+            perform the Tcl function call
+            <literal><replaceable>Fun</replaceable>(<replaceable>A</replaceable><subscript>1</subscript>,
+            ...,</literal><replaceable>A</replaceable><subscript>n</subscript>).
+            Here <replaceable>Tid</replaceable> is a tool identifier (as
+            produced by <literal>execute</literal> or
+            <literal>rec-connect</literal>) for an instance of the
+            <command>wish-adapter</command>. </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>snd-do(<replaceable>Tid</replaceable>,
+            <replaceable>Fun</replaceable>(<replaceable>A</replaceable><subscript>1</subscript>,
+            ...,</literal><replaceable>A</replaceable><subscript>n</subscript>)):
+            perform the Tcl function call
+            <literal><replaceable>Fun</replaceable>(<replaceable>A</replaceable><subscript>1</subscript>,
+            ...,</literal><replaceable>A</replaceable><subscript>n</subscript>).
+            Here <replaceable>Tid</replaceable> is a tool identifier (as
+            produced by <literal>execute</literal> or
+            <literal>rec-connect</literal>) for an instance of the
+            <command>wish-adapter</command>. Note that the function
+            <replaceable>Fun</replaceable> must send an answer back to the
+            ToolBus (using <literal>TBsend "snd-eval(...)"</literal>). </para>
+          </listitem>
+
+          <listitem>
+            <para><literal>rec-value(<replaceable>Tid</replaceable>,
+            <replaceable>Res</replaceable>)</literal>: the return value for a
+            previous evaluation request. </para>
+          </listitem>
+
+          <listitem>
+            <para>rec-event(Tid,
+            <literal><replaceable>A</replaceable><subscript>1</subscript>,
+            ...,</literal><replaceable>A</replaceable><subscript>n</subscript>):
+            event generated by wish.</para>
+          </listitem>
+
+          <listitem>
+            <para>snd-ack-event(<replaceable>Tid</replaceable>,
+            <replaceable>A</replaceable><subscript>1</subscript>):
+            acknowledgement of a previously generated event. </para>
+          </listitem>
+
+          <listitem>
+            <para>snd-terminate(<replaceable>Tid</replaceable>,
+            <replaceable>A</replaceable><subscript>1</subscript>): terminate
+            execution of wish-adapter.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The command <command>wish</command> is executed once, an initial
+        Tcl script is read, and all further requests are directed to this
+        incarnation of <command>wish</command>. A small set of Tcl procedures
+        is available for unpacking and packing ToolBus terms (see
+        below).</para>
+      </section>
+
+      <section xml:id="section.predefined-Tcl-functions">
+        <title>Predefined Tcl functions</title>
+
+        <para>The following Tcl functions are predefined and can be used
+        freely in Tcl script executed via the wish-adapter:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>TBstring <replaceable>Str</replaceable></literal>:
+            converts a Tcl string to a ToolBus string by surrounding it with
+            double quotes and escaping double quotes occurring inside
+            <replaceable>Str</replaceable>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>TCLstring <replaceable>Str</replaceable></literal>:
+            converts a ToolBus string into a Tcl string by removing
+            surrounding double quotes.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>TBlist <replaceable>List</replaceable></literal>:
+            converts a Tcl list to a ToolBus list by separating the elements
+            with commas and surrounding the list by curly braces.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>TBerror <replaceable>Msg</replaceable></literal>:
+            constructs an error message that can be sent to the
+            ToolBus.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>TBsend <replaceable>Trm</replaceable></literal>:
+            send <replaceable>Trm</replaceable> back to the ToolBus.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>TBevent <replaceable>Event</replaceable></literal>:
+            send event <literal>Event</literal> to the ToolBus.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>TBrequire <replaceable>ToolName</replaceable>
+            <replaceable>ProcName</replaceable>
+            <replaceable>Nargs</replaceable></literal>: check that the Tcl
+            code for <replaceable>ToolName</replaceable> contains a procedure
+            declaration for <replaceable>ProcName</replaceable> with
+            <replaceable>Nargs</replaceable> formal parameters. This function
+            is mainly used by the <command>wish-adapter</command> to check
+            compatibility of the Tcl code with the expected input signature of
+            the tool.</para>
+          </listitem>
+        </itemizedlist>
+
+        <warning>
+          <para>All communication between <command>wish-adapter</command> and
+          a tool written in Tcl is done via standard input/output. Only use
+          the standard error stream for print statements in the Tcl script,
+          since using standard output will disrupt the communication with the
+          ToolBus.</para>
+        </warning>
+      </section>
+
+      <section xml:id="section.hello-tcl">
+        <title>The hello example in Tcl</title>
+
+        <para>Writing the hello tool in Tcl requires two steps:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Write the required Tcl code <filename>hello.tcl</filename>.
+            The result is shown in <xref
+            linkend="example.hello.tcl" />.</para>
+          </listitem>
+
+          <listitem>
+            <para>Replace hello's tool definition in {\tt hello2.tb} (see
+            <xref linkend="example.hello2" />) by: <programlisting>tool hello is {command = "wish-adapter -script hello.tcl"}</programlisting></para>
+          </listitem>
+        </itemizedlist>
+
+        <para><example xml:id="example.hello.tcl">
+            <title>hello.tcl: the hello tool in Tcl</title>
+
+            <para><programlisting># hello.tcl -- hello tool in Tcl/Tk
+
+proc get-text {} {
+   TBsend "snd-value(text(\"Hello World, my first ToolBus tool in Tcl!\n\"))"
+}
+
+proc rec-terminate { n } {
+   exit
+}</programlisting></para>
+          </example></para>
+      </section>
     </section>
 
     <section xml:id="section.Python-adapter">
@@ -3993,12 +4204,6 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
       <para>A Perl adapter is only available for older versions of the
       ToolBus. It is currently not supported.</para>
     </section>
-  </section>
-
-  <section xml:id="section.ToolBus-implementation">
-    <title>The ToolBus Implementation</title>
-
-    <para>TBD</para>
   </section>
 
   <section xml:id="section.toolbus-reference">
@@ -4172,11 +4377,11 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
-                  <entry align="center">Description </entry>
+                  <entry align="center">Description&#160;</entry>
                 </row>
               </thead>
 
@@ -4250,9 +4455,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4388,9 +4593,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4525,9 +4730,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4628,9 +4833,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4695,9 +4900,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4746,9 +4951,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4800,9 +5005,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function </entry>
+                <entry align="center">Function&#160;</entry>
 
-                <entry align="center">Result type </entry>
+                <entry align="center">Result type&#160;</entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4869,9 +5074,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5037,9 +5242,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5082,9 +5287,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function </entry>
+                  <entry align="center">Function&#160;</entry>
 
-                  <entry align="center">Result type </entry>
+                  <entry align="center">Result type&#160;</entry>
 
                   <entry align="center">Description</entry>
                 </row>
