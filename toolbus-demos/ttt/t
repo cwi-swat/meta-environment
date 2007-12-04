@@ -1,0 +1,3 @@
+#!/bin/sh
+
+wish-adapter -TB_TOOL_NAME player -script tic-tac-toe.tcl -TB_HOST $1 -TB_PORT $2
