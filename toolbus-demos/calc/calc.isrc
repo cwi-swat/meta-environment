@@ -1,0 +1,20 @@
+
+tool calc is { command = "./calc"}
+process CALC is
+    let Tid : calc, E : str, V : term
+    in 
+        (
+            execute(calc, Tid?).
+            (
+                (
+                    rec-msg(compute, E?) .
+                    snd-eval(Tid, expr(E)) .
+                    rec-value(Tid, val(V?)) .
+                    snd-msg(compute, E, V) .
+                    snd-note(compute(E, V)) 
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% while any of the other two buttons has been pushed.

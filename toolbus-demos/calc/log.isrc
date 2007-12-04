@@ -1,0 +1,27 @@
+
+
+tool log is { command = "./log"}
+process LOG is
+    let Tid : log, E : str, V : term, L : term
+    in 
+        (
+            subscribe(compute(<str>, <term>)) .
+            execute(log, Tid?).
+            (
+                (
+                    (
+                        rec-note(compute(E?, V?)) .
+                        snd-do(Tid, writeLog(E, V)) 
+                    )+
+                    (
+                        rec-msg(showLog) .
+                        snd-eval(Tid, readLog) .
+                        rec-value(Tid, history(L?)) .
+                        snd-msg(showLog, history(L)) 
+                    )
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% be defined without resorting to a tool in the following manner:
