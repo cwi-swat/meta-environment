@@ -80,13 +80,13 @@ process OneSale(Mid : master) is
         fi
       +
         if not(or(Final, Sold)) then
-           snd-note(any-higher-bid) delay(sec(10)) .
+           snd-note(any-higher-bid) delay(secs(10)) .
 	   snd-do(Mid, any-higher-bid(10)) .
            Final := true
         fi
       +
         if and(Final, not(Sold)) then
-           snd-note(sold(HighestBid)) delay(sec(10)) .
+           snd-note(sold(HighestBid)) delay(secs(10)) .
            Sold := true
         fi
       +
@@ -128,7 +128,7 @@ process Bidder(Bid : bidder) is
      * delta
   endlet
 
-tool bidder(Name : str) is
+tool bidder is
   { command = "wish-adapter -script bidder.tcl -script-args Name" }
 
 %% The complete auction is, finally, defined by the \TB\ configuration:
