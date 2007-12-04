@@ -64,7 +64,7 @@ extern int SGLR_STATS_maxSizeOfShiftQueue;
 
 extern int *SGLR_STATS_reductionLengthsDone;
 extern int *SGLR_STATS_edgeVisitsPerReductionLength;
-extern int *SGLR_STATS_edgeVisitsPerLevel;
+/*extern int *SGLR_STATS_edgeVisitsPerLevel;*/
 
 /* Tree construction statistics. */
 extern int SGLR_STATS_ambiguityClustersCreated;
@@ -172,7 +172,7 @@ void SGLR_STATS_print(void);
 #if SGLR_COLLECT_STATISTICS
 #define SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisits)\
   if (MAIN_getStatsFlag) {\
-    SGLR_STATS_edgeVisitsPerLevel[level] += edgeVisits;\
+    /*SGLR_STATS_edgeVisitsPerLevel[level] += edgeVisits;*/ ;\
   }
 #else
 #define SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisits) ;

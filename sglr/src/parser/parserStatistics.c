@@ -62,8 +62,8 @@ int SGLR_STATS_maxSizeOfShiftQueue = 0;
 
 int *SGLR_STATS_reductionLengthsDone = NULL;
 int *SGLR_STATS_edgeVisitsPerReductionLength = NULL;
-int *SGLR_STATS_edgeVisitsPerLevel = NULL;
-static ATermTable levelsWithEqualEdgeVisits = NULL;
+/*int *SGLR_STATS_edgeVisitsPerLevel = NULL;
+static ATermTable levelsWithEqualEdgeVisits = NULL;*/
 
 /* Tree construction statistics. */
 int SGLR_STATS_ambiguityClustersCreated = 0;
@@ -130,8 +130,8 @@ void SGLR_STATS_initializeHistograms(int length, int inputLength) {
   SGLR_STATS_edgeVisitsPerReductionLength = (int*) calloc(maxReductionLength+1, sizeof(int));
   /* +2 to include the end-of-string and because there are inputStringLength+1 
    * levels in the GSS. */
-  SGLR_STATS_edgeVisitsPerLevel = (int*) calloc(inputStringLength+2, sizeof(int));
-  levelsWithEqualEdgeVisits = ATtableCreate(4096, 75);
+  /*SGLR_STATS_edgeVisitsPerLevel = (int*) calloc(inputStringLength+2, sizeof(int));
+  levelsWithEqualEdgeVisits = ATtableCreate(4096, 75);*/
 }
 
 void SGLR_STATS_initializeClusterHistogram(void) {
@@ -141,9 +141,9 @@ void SGLR_STATS_initializeClusterHistogram(void) {
 void SGLR_STATS_destroyHistograms() {
   free(SGLR_STATS_reductionLengthsDone);
   free(SGLR_STATS_edgeVisitsPerReductionLength);
-  free(SGLR_STATS_edgeVisitsPerLevel);
+  /*free(SGLR_STATS_edgeVisitsPerLevel);*/
   free(SGLR_STATS_clusterHistogram);
-  ATtableDestroy(levelsWithEqualEdgeVisits);
+  /*ATtableDestroy(levelsWithEqualEdgeVisits);*/
 }
 
 static FILE  *openLog(const char *fnam) {
@@ -166,7 +166,7 @@ static void closeLog(FILE *logFile) {
   }
 }
 
-static int compareKeys(ATerm a1, ATerm a2) {
+/*static int compareKeys(ATerm a1, ATerm a2) {
   if (ATgetInt(a1) > ATgetInt(a2)) {
     return 1;
   }
@@ -174,10 +174,10 @@ static int compareKeys(ATerm a1, ATerm a2) {
     return 0;
   }
 }
-
+*/
 void SGLR_STATS_print(void) {
   int i;
-  ATermList keys;
+  /*ATermList keys;*/
   FILE *logFile;
 
   if (PARSER_getVerboseFlag) {
@@ -283,7 +283,7 @@ void SGLR_STATS_print(void) {
     }
   }
   fprintf(logFile, "\n}\n");
-
+/*
   fprintf(logFile, "rel[int, int] edgeVisitsPerLevel = \n");
   fprintf(logFile, "{\n");
   fprintf(logFile, "%%%%<level-number, edge-visits>\n");
@@ -324,7 +324,7 @@ void SGLR_STATS_print(void) {
     }
   }
   fprintf(logFile, "\n}\n");
-
+*/
   fprintf(logFile, "int extra-ATerm-memory-allocated-while-parsing = %ld\n", SGLR_STATS_parsingMemAllocated);
 
   fprintf(logFile, "int minor-page-faults = %ld\n", SGLR_STATS_minorPageFaults);

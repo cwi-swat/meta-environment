@@ -1,5 +1,10 @@
 $Id$
 
+Tue Dec  4 11:17:02 CET 2007 <economop@cwi.nl>
+ * src/parser/parserStatistics.{c,h}: commented out the code that collects and
+   prints the stats on the number of edge visits done for each level. I don't
+   think they are useful and should probably be completely removed.
+
 Fri Nov 30 13:58:27 CET 2007 <economop@cwi.nl>
  * src/gss/gss.c: fixed bug 800. The currentLevel was being cleared after
    garbage collection was performed on the GSS. I think this is what caused sglr   to fail to terminate after the second parse was completed.
