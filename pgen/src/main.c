@@ -104,7 +104,7 @@ static int handleOptions(int argc, char **argv) {
       case 'c':  PGEN_setCollectFlag(ATtrue);	         break;
       case 'd':  PGEN_setDefinitionModeFlag(ATtrue);     break;
       case 'g':  PGEN_setGenerationModeFlag(ATtrue);     break;
-      case 'i':  PGEN_setInputFilename(optarg);
+      case 'i':  PGEN_setInputFilename(optarg);          break;
       case 'l':  PGEN_setStatsFlag(ATtrue);              break;
       case 'm':  PGEN_setTopModule(optarg);              break;
       case 'n':  PGEN_setNormalizationModeFlag(ATtrue);  break;
