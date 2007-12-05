@@ -1,7 +1,10 @@
 # $Id$
 
 Wed Dec 5 9:24:45 CEST 2007 <kooiker@cwi.nl>
- * tbscripts/gui-utils.tb: Start StatusDisplay process to be able to show errors on console. This process should be substituted by proper error handling.
+ * tbscripts/gui-utils.tb: 
+   - Start StatusDisplay process to be able to show errors on console. This 
+     process should be substituted by proper error handling.
+   - Already removed unused notes
 
 Tue Sep 18 10:30:11 CEST 2007 <kooiker@cwi.nl>
  * tbscripts/parsetable-utils.tb: Add namespace parameterized DumpParseTable 
