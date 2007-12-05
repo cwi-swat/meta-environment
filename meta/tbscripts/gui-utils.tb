@@ -143,30 +143,36 @@ let
   Str: str,
   Summary: summary
 in
-  printf("TODO: Remove this process and use error-support\n").
   subscribe(ui-status(<term>))
   . subscribe(show-feedback-summary(<term>))
   .
   (
     rec-note(ui-status(error(Str?)))
+    . printf("TODO: Remove this process and use error-support\n").
     . printf("Error: %s", Str)
   +
     rec-note(ui-status(errorf(Str?, Lst?)))
+    . printf("TODO: Remove this process and use error-support\n").
     . printf("Error: %s [%t]\n", Str, Lst)
   +
     rec-note(ui-status(warning(Str?)))
+    . printf("TODO: Remove this process and use error-support\n").
     . printf("Warning: %s", Str)
   +
     rec-note(ui-status(warningf(Str?, Lst?)))
+    . printf("TODO: Remove this process and use error-support\n").
     . printf("Warning: %s [%t]\n", Str, Lst)
   +
     rec-note(ui-status(message(Str?)))
+    . printf("TODO: Remove this process and use error-support\n").
     . printf("Message: %s", Str)
   +
     rec-note(ui-status(messagef(Str?, Lst?)))
+    . printf("TODO: Remove this process and use error-support\n").
     . printf("Message: %s [%t]\n", Str, Lst)
   +
     rec-note(show-feedback-summary(Summary?))
+    . printf("TODO: Remove this process and use error-support\n").
     . snd-msg(display-feedback(Summary))
   )
   *
