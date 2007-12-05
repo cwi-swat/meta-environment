@@ -22,6 +22,7 @@ public interface IOperations{
 	
 	// Stats
 	public final static byte PERFORMANCESTATS = 21;
+	public final static byte DEBUGPERFORMANCESTATS = 22;
 
 	// Generic.
 	public final static byte END_OPC = 127;

@@ -361,6 +361,10 @@ abstract public class AbstractTool implements Tool, Runnable, IOperations{
 				ATerm performaceStats = getPerformanceStats();
 				sendTerm(PERFORMANCESTATS, performaceStats);
 				break;
+			case DEBUGPERFORMANCESTATS:
+				ATerm debugPerformaceStats = getPerformanceStats();
+				sendTerm(DEBUGPERFORMANCESTATS, debugPerformaceStats);
+				break;
 			case END_OPC:
 				connected = false;
 				setRunning(false);
