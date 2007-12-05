@@ -1,3 +1,11 @@
+
+
+Wed Dec  5 10:34:40 EST 2007 <jurgenv@cwi.nl>
+ * generate-installer.sh: added commandline options to the generated
+   scripts for skipping certain tests and providing answers to the questions.
+   Using these options another script may use the generated scripts without
+   the need for a dialog on stdin.
+
 2007-08-16    <storm@cwi.nl>
 
 	* src/roll.rb

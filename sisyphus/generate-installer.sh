@@ -26,10 +26,19 @@ else
     SED=sed
 fi
     
-
+Usage() {
+    echo >&2 "Usage: $0 [--help] --prefixes <list of (package-)prefixes> [--externals <list of (package-) external dependencies>]"
+    exit 1
+}
 
 while [ $# -gt 0 ]; do
   case $1 in
+   --help)
+     Usage 
+   ;;
+   -h)
+     Usage 
+   ;;
    --prefixes)
      collect_prefixes=1
    ;;
@@ -48,8 +57,7 @@ done
 
 # Check for prefixes given on the commandline
 if [ -z "${prefixes}" ]; then
-    echo >&2 "Usage: $0 --prefixes <list of (package-)prefixes> [--externals <list of (package-) external dependencies>]"
-    exit 1
+  Usage
 fi
 
 # Check that given prefixes exist and are well-formed.
@@ -195,6 +203,62 @@ cat > ${installer_script}<<EOF
 #! /bin/sh
 set -e
 
+echo >&2 "Parsing commandline options"
+JAVA_CHECK="yes"
+CLIB_CHECK="yes"
+PLATFORM_CHECK="yes"
+OVERWRITE_CHECK="yes"
+PREFIX=""
+
+Usage() {
+  echo >&2 "Usage: \$0 <options>"
+  echo >&2 ""
+  echo >&2 "If no commandline options are provided, this script will ask"
+  echo >&2 "the user for information and confirmation. The commandline options"
+  echo >&2 "may be used to skip these questions."
+  echo >&2 ""
+  echo >&2 "Options:"
+  echo >&2 "  --no-java-check       Ignore Java version mismatches"
+  echo >&2 "  --no-clib-check       Ignore C standard library version mismatches"
+  echo >&2 "  --no-platform-check   Ignore OS & architecture mismatches"
+  echo >&2 "  --no-overwrite-check  Ignore check for overwriting previous installations"
+  echo >&2 "  --prefix <path>       Provide installation prefix path"
+  exit 1
+}
+
+while [ \$# -gt 0 ]
+do
+  case "\$1"
+  in
+    -h)
+      Usage 
+    ;;
+    --help)
+      Usage
+    ;;
+    --no-java-check)
+      JAVA_CHECK="no"
+    ;;
+    --no-clib-check)
+      CLIB_CHECK="no" 
+    ;;
+    --no-platform-check)
+      PLATFORM_CHECK="no" 
+    ;;
+    --no-overwrite-check)
+      OVERWRITE_CHECK="no" 
+    ;;
+    --prefix)
+      shift;
+      PREFIX=\$1 
+    ;;
+    default)
+      Usage
+    ;;
+  esac
+  shift
+done
+
 echo >&2 "Checking installation conditions..."
 
 if [ `uname` = "SunOS" ]; then
@@ -273,32 +337,41 @@ checkfor grep
 checkfor ldd
 checkfor cut
 
-if [ "a`java_version`" != "a\`java_version\`" ]; then
-  continue_dialog "java code was compiled with version `java_version`, but is \`java_version\` on this system. The resulting installation may be unstable."
+if [ "\${JAVA_CHECK}" = "yes" ]; then
+  if [ "a`java_version`" != "a\`java_version\`" ]; then
+    continue_dialog "java code was compiled with version `java_version`, but is \`java_version\` on this system. The resulting installation may be unstable."
+  fi
 fi
 
-if [ "a`libc_version`" != "a\`libc_version\`" ]; then
-  continue_dialog "C code was compiled with libc version `libc_version`, but is \`libc_version\` on this system. The resulting installation may be unstable."
+if [ "\${CLIB_CHECK}" = "yes" ]; then
+  if [ "a`libc_version`" != "a\`libc_version\`" ]; then
+    continue_dialog "C code was compiled with libc version `libc_version`, but is \`libc_version\` on this system. The resulting installation may be unstable."
+  fi
 fi
 
 platform() {
     uname -mo 2> /dev/null || uname -ps
 }
 
-
-if [ "a`platform`" != "a\`platform\`" ]; then
-  continue_dialog "this binary release was built on a `platform` system, but this system is a \`platform\`. The resulting installation may be unstable."
+if [ "\${PLATFORM_CHECK}" = "yes" ]; then
+  if [ "a`platform`" != "a\`platform\`" ]; then
+    continue_dialog "this binary release was built on a `platform` system, but this system is a \`platform\`. The resulting installation may be unstable."
+  fi
 fi
 
 echo >&2 "Installation conditions checked."
 
-default_target_prefix="\${HOME}/\`basename \$0 .bin.sh\`"
-printf "Where to install? [\${default_target_prefix}]:"
-read read_target_prefix
-if [ -z \${read_target_prefix} ]; then
-  target_prefix=\${default_target_prefix}
+if [ "a\${PREFIX}" = "a" ]; then  
+  default_target_prefix="\${HOME}/\`basename \$0 .bin.sh\`"
+  printf "Where to install? [\${default_target_prefix}]:"
+  read read_target_prefix
+  if [ -z \${read_target_prefix} ]; then
+    target_prefix=\${default_target_prefix}
+  else
+    target_prefix=\${read_target_prefix}
+  fi
 else
-  target_prefix=\${read_target_prefix}
+  target_prefix=\${PREFIX}
 fi
  
 target_prefix_length=\${#target_prefix}
@@ -310,10 +383,12 @@ fi
 
 mkdir -p \${target_prefix}
 
-file_count=\`ls -1 \${target_prefix} | wc -l\`
+if [ "\${OVERWRITE_CHECK}" = "yes" ]; then
+  file_count=\`ls -1 \${target_prefix} | wc -l\`
 
-if [ \${file_count} -gt 0 ]; then
-  continue_dialog "There are files in \${target_prefix}, really overwrite (yes,no) ? [no]"
+  if [ \${file_count} -gt 0 ]; then
+    continue_dialog "There are files in \${target_prefix}, really overwrite (yes,no) ? [no]"
+  fi
 fi
 
 
