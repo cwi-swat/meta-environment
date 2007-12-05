@@ -136,12 +136,14 @@ endlet
 
 toolbus(UserInterfaceHandler)
 
+/* StatusDisplay should be removed. Errors should be handled by error-support */
 process StatusDisplay is
 let
   Lst: list,
   Str: str,
   Summary: summary
 in
+  printf("TODO: Remove this process and use error-support\n").
   subscribe(ui-status(<term>))
   . subscribe(show-feedback-summary(<term>))
   .
@@ -170,5 +172,7 @@ in
   *
   delta
 endlet
+
+toolbus(StatusDisplay)
 
 #endif /* __GUI_UTILS__ */
