@@ -53,6 +53,7 @@
 #define TERMINATE 14
 /* Stats. */
 #define PERFORMANCE_STATS 21
+#define DEBUG_PERFORMANCE_STATS 22
 /* Generic. */
 #define END_OPC  127
 #define UNDEFINED -1
@@ -779,6 +780,10 @@ int ATBhandleOne(int fd)
     case PERFORMANCE_STATS:
       result = getPerformanceStats();
       ATBwriteTermWithOp(fd, result, PERFORMANCE_STATS);
+      return 0;
+    case DEBUG_PERFORMANCE_STATS:
+      result = getPerformanceStats();
+      ATBwriteTermWithOp(fd, result, DEBUG_PERFORMANCE_STATS);
       return 0;
     case END_OPC:
 	  nrOfConnectedTools--;
