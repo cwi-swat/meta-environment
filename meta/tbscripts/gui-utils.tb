@@ -147,15 +147,15 @@ in
   .
   (
     rec-note(ui-status(error(Str?)))
-    . printf("TODO: Remove this process and use error-support or Display processes\n").
+    . printf("TODO: Remove this process and use error-support or Display processes\n")
     . printf("Error: %s", Str)
   +
     rec-note(ui-status(errorf(Str?, Lst?)))
-    . printf("TODO: Remove this process and use error-support or Display processes\n").
+    . printf("TODO: Remove this process and use error-support or Display processes\n")
     . printf("Error: %s [%t]\n", Str, Lst)
   +
     rec-note(ui-status(messagef(Str?, Lst?)))
-    . printf("TODO: Remove this process and use error-support or Display processes\n").
+    . printf("TODO: Remove this process and use error-support or Display processes\n")
     . printf("Message: %s [%t]\n", Str, Lst)
   )
   *
