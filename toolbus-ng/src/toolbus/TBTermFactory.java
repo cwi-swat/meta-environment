@@ -937,7 +937,7 @@ public class TBTermFactory extends PureFactory{
 			
 			if(arity != ta.getLength()) return false;
 			
-			for(int i = arity - 1; i >= 0; i--){
+			for(int i = 0; i < arity; i++){
 				ATerm elemtype = aplPlaceholder.getArgument(i);
 				ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
 				

@@ -1,3 +1,6 @@
+Fir Dec 07 15:30:10 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.TBTermFactory: Fixed a bug in the list placeholder code.
+
 Fri Dec 07 14:15:19 CEST 2007 <lankamp@cwi.nl>
  * toolbus.*: Added support for monitoring tool and ToolBus performance in the debugToolBus and the viewer interface.
 
