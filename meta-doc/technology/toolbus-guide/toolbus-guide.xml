@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter [
+<!ENTITY % sgml.features "IGNORE">
+<!ENTITY % xml.features "INCLUDE">
+<!ENTITY % dbcent PUBLIC "-//OASIS//ENTITIES DocBook Character Entities V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/dbcentx.mod">
+%dbcent;
+]>
 <chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -38,6 +44,7 @@
     See <xref linkend="section.toolbus-to-do" />.</para>
   </warning>
 
+ 
   <section xml:id="section.toolbus-introduction">
     <title>Introduction</title>
 
@@ -2317,12 +2324,18 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
     </section>
 
     <section xml:id="section.example-wave">
+       
+
       <title>Wave Example</title>
+
+       
 
       <para>Have you ever considered a (guitar) string that is attached at
       both ends and wondered how the movements of the strings can be
       simulated? Although this is a completely atypical application of the
       ToolBus, it is fun to do so we will delve into the details.</para>
+
+       
 
       <para>In mathematical physics, the vibrating string is described by the
       so-called one-dimensional wave equation that describes a discrete
@@ -2334,17 +2347,29 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       <replaceable>t</replaceable> can now be described by
       y<subscript><replaceable>i</replaceable>+1</subscript>(<replaceable>t</replaceable>)
       (see also <xref linkend="figure.wave-graph" />) that is defined as
-      follows:<equation>
-          <mathphrase><replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>+Δ<replaceable>t</replaceable>)
+      follows:</para>
+
+       
+
+      <para><informalequation>
+          <mathphrase><replaceable>y</replaceable><subscript>
+              <replaceable>i</replaceable>
+            </subscript>(<replaceable>t</replaceable>+&Delta;<replaceable>t</replaceable>)
           =
-          <replaceable>F</replaceable>(<replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>),
-          <replaceable>y</replaceable><subscript><replaceable>i</replaceable></subscript>(<replaceable>t</replaceable>-Δ<replaceable>t</replaceable>)
+          <replaceable>F</replaceable>(<replaceable>y</replaceable><subscript>
+              <replaceable>i</replaceable>
+            </subscript>(<replaceable>t</replaceable>),
+          <replaceable>y</replaceable><subscript>
+              <replaceable>i</replaceable>
+            </subscript>(<replaceable>t</replaceable>-&Delta;<replaceable>t</replaceable>)
           ,
           <replaceable>y</replaceable><subscript><replaceable>i</replaceable>-1</subscript>(<replaceable>t</replaceable>),
           <replaceable>y</replaceable><subscript><replaceable>i</replaceable>+1</subscript>(<replaceable>t</replaceable>))</mathphrase>
-        </equation>In other words, the amplitude at point
+        </informalequation>In other words, the amplitude at point
       <replaceable>i</replaceable> and time <replaceable>t</replaceable>
       depends on:</para>
+
+       
 
       <itemizedlist>
         <listitem>
@@ -2364,22 +2389,28 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         </listitem>
       </itemizedlist>
 
+       
+
       <para>It also depends on the function <replaceable>F</replaceable>
       defined as follows:</para>
 
-      <para><equation>
+       
+
+      <para><informalequation>
           <mathphrase><replaceable>F</replaceable>(<replaceable>z</replaceable><subscript>1</subscript>,<replaceable>z</replaceable><subscript>2</subscript>,<replaceable>z</replaceable><subscript>3</subscript>,<replaceable>z</replaceable><subscript>4</subscript>)
           = 2<replaceable>z</replaceable><subscript>1</subscript>-
           <replaceable>z</replaceable><subscript>2</subscript> + (c
-          Δ<replaceable>t</replaceable>/Δ<replaceable>x)<superscript>2</superscript>
+          &Delta;<replaceable>t</replaceable>/&Delta;<replaceable>x)<superscript>2</superscript>
           (<replaceable>z</replaceable><subscript>3</subscript> -
           2<replaceable>z</replaceable><subscript>1</subscript>+
           <replaceable>z</replaceable><subscript>4</subscript>)</replaceable></mathphrase>
-        </equation>where</para>
+        </informalequation>where</para>
+
+       
 
       <itemizedlist>
         <listitem>
-          <para>Δ<replaceable>x</replaceable> is the (small) interval between
+          <para><symbol role="symbolfont">&Delta;</symbol><replaceable>x</replaceable> is the (small) interval between
           sampling points, and</para>
         </listitem>
 
@@ -2389,15 +2420,21 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         </listitem>
       </itemizedlist>
 
-      <para><figure xml:id="figure.wave-graph">
+       
+
+      <para>
+        <figure xml:id="figure.wave-graph">
           <title>One-dimensional wave equation</title>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="wave-graph.png" scale="60"></imagedata>
+              <imagedata fileref="wave-graph.png" scale="60" />
             </imageobject>
           </mediaobject>
-        </figure></para>
+        </figure>
+      </para>
+
+       
 
       <para>After these preparations, we have to define the architecture of a
       ToolBus application that can simulate the behaviour of a string. The key
@@ -2405,6 +2442,8 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       each sampling point. The architecture is shown in <xref
       linkend="figure.wave-architecture" /> and consists of the following
       processes and tools:</para>
+
+       
 
       <itemizedlist>
         <listitem>
@@ -2437,12 +2476,14 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
         </listitem>
       </itemizedlist>
 
+       
+
       <para><figure xml:id="figure.wave-architecture">
           <title>Architecture of the wave example</title>
 
           <mediaobject>
             <imageobject>
-              <imagedata fileref="wave-architecture.png" scale="60"></imagedata>
+              <imagedata fileref="wave-architecture.png" scale="60" />
             </imageobject>
           </mediaobject>
         </figure>The global structure of the Tscript
@@ -2451,13 +2492,15 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
           xml:id="example.global-structure-wave.tb">
           <title>Global structure of <literal>wave.tb</literal></title>
 
-          <para><programlisting>process MakeWave ... <lineannotation>See <xref
+          <para>
+            <programlisting>process MakeWave ... <lineannotation>See <xref
                   linkend="example.MakeWave" /></lineannotation>
 process Pend ...     <lineannotation>See <xref linkend="example.Pend" /></lineannotation>
 process P ...        <lineannotation>See <xref linkend="example.P" /></lineannotation>
 process F ...        <lineannotation>See <xref linkend="example.F" /></lineannotation>
 
-toolbus(MakeWave(...))</programlisting></para>
+toolbus(MakeWave(...))</programlisting>
+          </para>
         </example><example xml:id="example.MakeWave">
           <title>Process <literal>MakeWave</literal></title>
 
@@ -2505,13 +2548,15 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
 
           <mediaobject>
             <imageobject>
-              <imagedata align="center" fileref="wave-ui.png"></imagedata>
+              <imagedata align="center" fileref="wave-ui.png" />
             </imageobject>
           </mediaobject>
         </figure><example>
           <title>ToolBus configuration for wave</title>
 
-          <para><programlisting>toolbus(MakeWave(8))</programlisting></para>
+          <para>
+            <programlisting>toolbus(MakeWave(8))</programlisting>
+          </para>
         </example><example xml:id="example.Pend">
           <title>Process <literal>Pend</literal></title>
 
@@ -2617,9 +2662,14 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
             </calloutlist></para>
         </example></para>
 
-      <para></para>
+       
 
-      <para><example xml:id="example.F">
+      <para />
+
+       
+
+      <para>
+        <example xml:id="example.F">
           <title>Auxiliary process <literal>F</literal></title>
 
           <para><programlisting>process F(Z1 : real, Z2 : real, Z3 : real, Z4 : real, Res : real?) is
@@ -2635,11 +2685,12 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
                 2<replaceable>z</replaceable><subscript>1</subscript>-
                 <replaceable>z</replaceable><subscript>2</subscript> + (c
                 Δ<replaceable>t</replaceable>/Δ<replaceable>x</replaceable>)<superscript>2</superscript>
-                (z<subscript>3</subscript> -
-                2<replaceable><replaceable>z</replaceable></replaceable><subscript>1</subscript>+
-                <replaceable><replaceable>z</replaceable></replaceable><subscript>4</subscript>)
-                and that the main challenge is to write this formula in prefix
-                form.</para>
+                (z<subscript>3</subscript> - 2<replaceable>
+                    <replaceable>z</replaceable>
+                  </replaceable><subscript>1</subscript>+ <replaceable>
+                    <replaceable>z</replaceable>
+                  </replaceable><subscript>4</subscript>) and that the main
+                challenge is to write this formula in prefix form.</para>
               </callout>
 
               <callout arearefs="co.F.2">
@@ -2660,13 +2711,16 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
               </callout>
 
               <callout arearefs="co.F.5">
-                <para><replaceable>... +
-                (<replaceable>z</replaceable><subscript>3</subscript> -
-                2<replaceable>z</replaceable><subscript>1</subscript>+
-                <replaceable>z</replaceable><subscript>4</subscript>)</replaceable></para>
+                <para>
+                  <replaceable>... +
+                  (<replaceable>z</replaceable><subscript>3</subscript> -
+                  2<replaceable>z</replaceable><subscript>1</subscript>+
+                  <replaceable>z</replaceable><subscript>4</subscript>)</replaceable>
+                </para>
               </callout>
             </calloutlist></para>
-        </example></para>
+        </example>
+      </para>
     </section>
   </section>
 
@@ -4019,19 +4073,19 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
 
           <listitem>
             <para><literal>-lazy-exec</literal>: Postpone execution of
-            <command>wish</command> until needed. </para>
+            <command>wish</command> until needed.</para>
           </listitem>
 
           <listitem>
-            <para><literal>-script</literal>: The Tcl script to be executed.
-            </para>
+            <para><literal>-script</literal>: The Tcl script to be
+            executed.</para>
           </listitem>
 
           <listitem>
             <para><literal>-script-args</literal>: The arguments for the Tcl
             script to be executed. These arguments are available to the Tcl
             script throught the variables <replaceable>argc</replaceable> and
-            <replaceable>argv</replaceable>. </para>
+            <replaceable>argv</replaceable>.</para>
           </listitem>
         </itemizedlist>
 
@@ -4053,7 +4107,7 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
             Here <replaceable>Tid</replaceable> is a tool identifier (as
             produced by <literal>execute</literal> or
             <literal>rec-connect</literal>) for an instance of the
-            <command>wish-adapter</command>. </para>
+            <command>wish-adapter</command>.</para>
           </listitem>
 
           <listitem>
@@ -4068,13 +4122,13 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
             <literal>rec-connect</literal>) for an instance of the
             <command>wish-adapter</command>. Note that the function
             <replaceable>Fun</replaceable> must send an answer back to the
-            ToolBus (using <literal>TBsend "snd-eval(...)"</literal>). </para>
+            ToolBus (using <literal>TBsend "snd-eval(...)"</literal>).</para>
           </listitem>
 
           <listitem>
             <para><literal>rec-value(<replaceable>Tid</replaceable>,
             <replaceable>Res</replaceable>)</literal>: the return value for a
-            previous evaluation request. </para>
+            previous evaluation request.</para>
           </listitem>
 
           <listitem>
@@ -4087,7 +4141,7 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
           <listitem>
             <para>snd-ack-event(<replaceable>Tid</replaceable>,
             <replaceable>A</replaceable><subscript>1</subscript>):
-            acknowledgement of a previously generated event. </para>
+            acknowledgement of a previously generated event.</para>
           </listitem>
 
           <listitem>
@@ -4389,11 +4443,11 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
-                  <entry align="center">Description&#160;</entry>
+                  <entry align="center">Description </entry>
                 </row>
               </thead>
 
@@ -4403,7 +4457,7 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry>¬
+                  <entry>¬&not;
                   <literal>&lt;bool&gt;<subscript>1</subscript></literal></entry>
                 </row>
 
@@ -4413,7 +4467,7 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry><literal>&lt;bool&gt;<subscript>1</subscript> and
+                  <entry><literal>&lt;bool&gt;<subscript>1</subscript> &and;
                   &lt;bool&gt;<subscript>2</subscript></literal></entry>
                 </row>
 
@@ -4423,7 +4477,7 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry><literal>&lt;bool&gt;<subscript>1</subscript> OR
+                  <entry><literal>&lt;bool&gt;<subscript>1</subscript> &or;
                   &lt;bool&gt;<subscript>2</subscript></literal></entry>
                 </row>
 
@@ -4444,7 +4498,7 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry><literal>&lt;term&gt;<subscript>1</subscript> NE
+                  <entry><literal>&lt;term&gt;<subscript>1</subscript> &ne;
                   &lt;term&gt;<subscript>2</subscript></literal></entry>
                 </row>
               </tbody>
@@ -4467,9 +4521,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4506,7 +4560,7 @@ exports
 
                 <entry
                 char="02306"><literal>&lt;int&gt;<subscript>1</subscript></literal>
-                TIMES
+                &times;
                 <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
               </row>
 
@@ -4560,7 +4614,7 @@ exports
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
                 <entry><literal>&lt;int&gt;<subscript>1</subscript>
-                </literal>LEQ
+                </literal>&le;
                 <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
               </row>
 
@@ -4582,7 +4636,7 @@ exports
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
                 <entry><literal>&lt;int&gt;<subscript>1</subscript></literal>
-                GEQ
+                &ge;
                 <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
               </row>
             </tbody>
@@ -4605,9 +4659,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -4696,8 +4750,8 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry><literal>&lt;real&gt;&gt;<subscript>1</subscript></literal>
-                  ≤
+                  <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
+                --- TEST[  ≤ LESS-EQUAL &#165; -- &plusmn; &le; &#x22B2;]TEST ---
                   <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
                 </row>
 
@@ -4742,9 +4796,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4845,9 +4899,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4912,9 +4966,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -4963,9 +5017,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -5017,9 +5071,9 @@ exports
 
             <thead>
               <row>
-                <entry align="center">Function&#160;</entry>
+                <entry align="center">Function </entry>
 
-                <entry align="center">Result type&#160;</entry>
+                <entry align="center">Result type </entry>
 
                 <entry align="center">Description</entry>
               </row>
@@ -5086,9 +5140,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5254,9 +5308,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>
@@ -5299,9 +5353,9 @@ exports
 
               <thead>
                 <row>
-                  <entry align="center">Function&#160;</entry>
+                  <entry align="center">Function </entry>
 
-                  <entry align="center">Result type&#160;</entry>
+                  <entry align="center">Result type </entry>
 
                   <entry align="center">Description</entry>
                 </row>

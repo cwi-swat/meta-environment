@@ -13,6 +13,8 @@
 <!-- graphics -->
 <xsl:param name="callout.graphics.path"   select="'../../images/callouts/'" />
 
+<xsl:param name="font-selection-strategy" select="'character-by-character'" />
+
 
 <xsl:param name="collect.xref.target"     select="'no'" />
 
@@ -49,6 +51,14 @@
       <xsl:copy-of select="$title"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- Force character entities like &le; into the Symbol font -->
+
+<xsl:template match="symbol[@role = 'symbolfont']">
+  <fo:inline font-family="Symbol">
+    <xsl:call-template name="inline.charseq"/>
+  </fo:inline>
 </xsl:template>
 
 

@@ -6,8 +6,9 @@
 
 <!-- FO- and complete-book specific customizations are defined here -->
 
-<xsl:include href="fo-customization.xsl" />
 
 <xsl:param name="callout.graphics.path"      select="'./images/callouts/'" />
+
+<xsl:include href="fo-customization.xsl" />
 
 </xsl:stylesheet>
