@@ -350,6 +350,7 @@ public class ConcurrentHashSet<T> {
 					do{
 						int action = entryHandler.handle(e.value);
 						if((action & EntryHandlerConstants.REMOVE) == EntryHandlerConstants.REMOVE){
+							if(!entryHandler.canRemove) throw new UnsupportedOperationException("Removal of entries is not allowed for the type of iterator you're using.");
 							if(previous != null){
 								previous.next = e.next;
 							}else{
@@ -401,7 +402,30 @@ public class ConcurrentHashSet<T> {
 	 * @param <T>
 	 *            The value type.
 	 */
-	public interface HashSetEntryHandler<T> extends EntryHandlerConstants{
-		int handle(T value);
+	public abstract static class HashSetEntryHandler<T> implements EntryHandlerConstants{
+		public boolean canRemove = true;
+		
+		/**
+		 * Handles one entry.
+		 * 
+		 * @param value
+		 *            The value.
+		 * @see toolbus.util.collections.EntryHandlerConstants
+		 * @return The operation the iterator should take (continue, break or remove).
+		 */
+		public abstract int handle(T value);
+	}
+	
+	/**
+	 * A read only version of the entry handler (e.g. removal is disabled).
+	 * 
+	 * @author Arnold Lankamp
+	 * @param <T>
+	 *            The value type.
+	 */
+	public abstract static class ReadOnlyHashSetEntryHandler<T> extends HashSetEntryHandler<T>{
+		{
+			canRemove = false; // Disable removal
+		}
 	}
 }

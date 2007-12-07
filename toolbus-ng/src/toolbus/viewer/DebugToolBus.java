@@ -1,7 +1,12 @@
 package toolbus.viewer;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.util.Collections;
+import toolbus.IOperations;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
@@ -11,8 +16,13 @@ import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolInstance;
+import toolbus.util.collections.ConcurrentHashMap;
+import toolbus.util.collections.EntryHandlerConstants;
+import toolbus.util.collections.ConcurrentHashMap.HashMapEntryHandler;
 import toolbus.util.collections.ConcurrentHashSet;
 import aterm.ATerm;
+import aterm.ATermList;
 
 /**
  * A specialized version of the ToolBus, which executes the process logic in debug mode. Viewer
@@ -31,10 +41,17 @@ public class DebugToolBus extends ToolBus{
 	private volatile boolean doStep = false;
 	
 	private final IViewer viewer;
+	private final IPerformanceMonitor performanceMonitor;
 	
 	private final ConcurrentHashSet<Integer> processInstanceBreakPoints;
 	private final ConcurrentHashSet<String> processBreakPoints;
 	private final ConcurrentHashSet<StateElement> stateElementBreakPoints;
+
+	private final ConcurrentHashSet<ATerm> toolInstancesToMonitor;
+	private final ConcurrentHashSet<String> toolTypesToMonitor;
+	
+	private final ConcurrentHashMap<ToolInstance, ATerm> arrivedPerformanceStats;
+	private final PerformanceStatsEntryHandler performanceStatsEntryHandler;
 	
 	private long nextTime;
 	
@@ -45,15 +62,25 @@ public class DebugToolBus extends ToolBus{
 	 *            The arguments the ToolBus need to start (like include path and main script name).
 	 * @param viewer
 	 *            The viewer that is attached to this ToolBus.
+	 * @param performanceMonitor
+	 *            The tool performance monitor to use (optional argument; pass null in case
+	 *            monitoring is not required).
 	 */
-	public DebugToolBus(String[] args, IViewer viewer){
+	public DebugToolBus(String[] args, IViewer viewer, IPerformanceMonitor performanceMonitor){
 		super(args);
 		
 		this.viewer = viewer;
+		this.performanceMonitor = performanceMonitor;
 		
 		processInstanceBreakPoints = new ConcurrentHashSet<Integer>();
 		processBreakPoints = new ConcurrentHashSet<String>();
 		stateElementBreakPoints = new ConcurrentHashSet<StateElement>();
+
+		toolInstancesToMonitor = new ConcurrentHashSet<ATerm>();
+		toolTypesToMonitor = new ConcurrentHashSet<String>();
+		
+		arrivedPerformanceStats = new ConcurrentHashMap<ToolInstance, ATerm>();
+		performanceStatsEntryHandler = new PerformanceStatsEntryHandler(performanceMonitor);
 		
 		nextTime = 0;
 	}
@@ -88,12 +115,12 @@ public class DebugToolBus extends ToolBus{
 	 * @see toolbus.ToolBus#setNextTime(long)
 	 */
 	public void setNextTime(long next){
-		// System.err.println("setNextTime: " + next);
+		//System.err.println("setNextTime: " + next);
 		long currentTime = getRunTime();
 		if(nextTime < currentTime || (next < nextTime && next > currentTime)){
 			nextTime = next;
 		}
-		// System.err.println("setNextTime: set to " + nextTime);
+		//System.err.println("setNextTime: set to " + nextTime);
 	}
 	
 	/**
@@ -158,6 +185,8 @@ public class DebugToolBus extends ToolBus{
 							}catch(InterruptedException irex){
 								// Just ignore this, it's not harmfull.
 							}
+							
+							if(performanceMonitor != null) arrivedPerformanceStats.iterate(performanceStatsEntryHandler); // Handle the arrived performance stats before continueing to execute the process logic.
 						}
 						
 						if(shuttingDown) return; // Stop executing if a shutdown is triggered.
@@ -222,6 +251,8 @@ public class DebugToolBus extends ToolBus{
 							}
 						}
 					}
+					
+					if(performanceMonitor != null) arrivedPerformanceStats.iterate(performanceStatsEntryHandler); // Handle the arrived performance stats before continueing the process.
 				}while((doRun && (work || !reset)) || (doStep && !reset));
 				workHasArrived |= work; // If we did something, set this to ensure we can release the lock when needed.
 			}while(running);
@@ -236,7 +267,22 @@ public class DebugToolBus extends ToolBus{
 	/**
 	 * @see toolbus.ToolBus#workArrived()
 	 */
-	public void workArrived(){
+	public void workArrived(ToolInstance toolInstance, byte operation){
+		if(performanceMonitor != null){
+			if(operation == IOperations.DEBUGPERFORMANCESTATS){
+				arrivedPerformanceStats.put(toolInstance, toolInstance.getLastDebugPerformanceStats());
+			}else if(operation == IOperations.CONNECT){
+				performanceMonitor.toolConnected(toolInstance);
+			}else if(operation == IOperations.END){
+				performanceMonitor.toolConnectionClosed(toolInstance);
+			}else if(toolInstance.isConnected()){
+				// TODO Add timeouts and deadlines and such.
+				if(toolInstancesToMonitor.contains(toolInstance.getToolKey()) || toolTypesToMonitor.contains(toolInstance.getToolName())){
+					toolInstance.sendDebugPerformanceStatsRequest();
+				}
+			}
+		}
+		
 		if(!workHasArrived){
 			synchronized(processLock){
 				fireStateChange(IViewerConstants.READY_STATE);
@@ -246,6 +292,60 @@ public class DebugToolBus extends ToolBus{
 				processLock.notify();
 			}
 		}
+	}
+	
+	/**
+	 * Gathers performance statistics related to JVM the current ToolBus is running in.
+	 * 
+	 * @return Performance statictics.
+	 */
+	public ATerm getToolBusPerformanceStats(){
+		// Type stuff (for standard compliance only).
+		ATerm toolData = tbfactory.makeAppl(tbfactory.makeAFun("unsupported-operation", 0, false));
+		
+		// Memory stuff
+		MemoryMXBean mmxb = ManagementFactory.getMemoryMXBean();
+		long heapMemoryUsage = mmxb.getHeapMemoryUsage().getUsed();
+		long nonHeapMemoryUsage = mmxb.getNonHeapMemoryUsage().getUsed();
+		
+		ATerm heapUsage = tbfactory.makeAppl(tbfactory.makeAFun("heap-usage", 1, false), tbfactory.makeInt(((int) (heapMemoryUsage / 1024))));
+		ATerm nonHeapUsage = tbfactory.makeAppl(tbfactory.makeAFun("non-heap-usage", 1, false), tbfactory.makeInt(((int) (nonHeapMemoryUsage / 1024))));
+		
+		ATerm memory = tbfactory.makeAppl(tbfactory.makeAFun("memory-usage", 2, false), heapUsage, nonHeapUsage);
+		
+		// Thread stuff
+		ThreadMXBean tmxb = ManagementFactory.getThreadMXBean();
+		
+		ATerm threads;
+		
+		long[] threadIds = tmxb.getAllThreadIds();
+		int nrOfThreads = threadIds.length;
+		try{
+			ATermList threadsList = tbfactory.makeList();
+			for(int i = 0; i < nrOfThreads; i++){
+				ThreadInfo ti = tmxb.getThreadInfo(threadIds[i]);
+				if(ti != null){
+					String threadName = ti.getThreadName();
+					long userTime = tmxb.getThreadUserTime(threadIds[i]);
+					long systemTime = tmxb.getThreadCpuTime(threadIds[i]) - userTime;
+					
+					if((userTime + systemTime) <= 0) continue;
+					
+					ATerm userTimeTerm = tbfactory.makeAppl(tbfactory.makeAFun("user-time", 1, false), tbfactory.makeInt(((int) (userTime / 1000000))));
+					ATerm systemTimeTerm = tbfactory.makeAppl(tbfactory.makeAFun("system-time", 1, false), tbfactory.makeInt(((int) (systemTime / 1000000))));
+					ATerm thread = tbfactory.makeAppl(tbfactory.makeAFun(threadName, 2, false), userTimeTerm, systemTimeTerm);
+					
+					threadsList = tbfactory.makeList(thread, threadsList);
+				}
+			}
+			
+			threads = tbfactory.makeAppl(tbfactory.makeAFun("threads", 1, false), threadsList);
+		}catch(UnsupportedOperationException uoex){
+			threads = tbfactory.make("threads(unsupported-operation)");
+			LoggerFactory.log("Thread time profiling is not supported by this JVM.", ILogger.ERROR, IToolBusLoggerConstants.EXECUTE);
+		}
+		
+		return tbfactory.makeAppl(tbfactory.makeAFun("performance-stats", 3, false), toolData, memory, threads);
 	}
 	
 	/**
@@ -298,11 +398,7 @@ public class DebugToolBus extends ToolBus{
 	 * Requests the termination of the ToolBus.
 	 */
 	public void doTerminate(){
-		synchronized(processLock){
-			shutdown(TBTermFactory.getInstance().EmptyList);
-			
-			processLock.notify();
-		}
+		shutdown(TBTermFactory.getInstance().EmptyList);
 	}
 	
 	/**
@@ -383,5 +479,77 @@ public class DebugToolBus extends ToolBus{
 	 */
 	public void removeStateElementBreakPoint(StateElement stateElement){
 		stateElementBreakPoints.remove(stateElement);
+	}
+	
+	/**
+	 * Initiates the monitoring of the tool associated with the given tool key (in case performance
+	 * monitoring is enabled for this debug ToolBus).
+	 * 
+	 * @param toolKey
+	 *            The tool key associated with the tool we want to monitor.
+	 */
+	public void startMonitoringTool(ATerm toolKey){
+		toolInstancesToMonitor.put(toolKey);
+	}
+	
+	/**
+	 * Stops monitoring the tool associated with the given tool key.
+	 * 
+	 * @param toolKey
+	 *            The tool key associated with the tool which we want to stop monitoring.
+	 */
+	public void stopMonitoringTool(ATerm toolKey){
+		toolInstancesToMonitor.remove(toolKey);
+	}
+	
+	/**
+	 * Initiates the monitoring of the given tool type (in case performance monitoring is enabled
+	 * for this debug ToolBus).
+	 * 
+	 * @param toolName
+	 *            The tool type of tool we want to monitor.
+	 */
+	public void startMonitorToolType(String toolName){
+		toolTypesToMonitor.put(toolName);
+	}
+	
+	/**
+	 * Stops monitoring tools of the given type.
+	 * 
+	 * @param toolName
+	 *            The type of tool which we want to stop monitoring.
+	 */
+	public void stopMonitoringToolType(String toolName){
+		toolTypesToMonitor.remove(toolName);
+	}
+	
+	/**
+	 * Entry handler used for iterating over the arrived performance statistics.
+	 * 
+	 * @author Arnold Lankamp
+	 */
+	private static class PerformanceStatsEntryHandler extends HashMapEntryHandler<ToolInstance, ATerm>{
+		private final IPerformanceMonitor performanceMonitor;
+	
+		/**
+		 * Costructor.
+		 * 
+		 * @param performanceMonitor
+		 *            The performance monitor that handles the data.
+		 */
+		public PerformanceStatsEntryHandler(IPerformanceMonitor performanceMonitor){
+			super();
+			
+			this.performanceMonitor = performanceMonitor;
+		}
+		
+		/**
+		 * @see toolbus.util.collections.ConcurrentHashMap.HashMapEntryHandler#handle(Object, Object)
+		 */
+		public int handle(ToolInstance toolInstance, ATerm performanceStats){
+			performanceMonitor.performanceStatsArrived(toolInstance, performanceStats);
+			
+			return EntryHandlerConstants.REMOVE;
+		}
 	}
 }

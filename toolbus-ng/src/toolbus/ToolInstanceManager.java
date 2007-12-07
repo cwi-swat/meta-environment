@@ -8,7 +8,9 @@ import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashSet;
 import toolbus.util.collections.EntryHandlerConstants;
 import toolbus.util.collections.ConcurrentHashMap.HashMapEntryHandler;
+import toolbus.util.collections.ConcurrentHashMap.ReadOnlyHashMapEntryHandler;
 import toolbus.util.collections.ConcurrentHashSet.HashSetEntryHandler;
+import toolbus.util.collections.ConcurrentHashSet.ReadOnlyHashSetEntryHandler;
 import aterm.ATerm;
 
 /**
@@ -94,7 +96,7 @@ public class ToolInstanceManager{
 	 * @return The located tool instance (if present); if none is found NULL will be returned.
 	 */
 	private ToolInstance getReadyDynamiclyConnectedTool(final String toolName){
-		class DynamicToolsIterationHandler implements HashSetEntryHandler<ToolInstance>{
+		class DynamicToolsIterationHandler extends HashSetEntryHandler<ToolInstance>{
 			public ToolInstance toolInstance = null;
 			
 			public int handle(ToolInstance ti){
@@ -192,7 +194,7 @@ public class ToolInstanceManager{
 	 */
 	public void shutDown(final ATerm message){
 		// Shut down the active tools.
-		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new HashMapEntryHandler<ATerm, ToolInstance>(){
+		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
 			public int handle(ATerm toolKey, ToolInstance toolInstance){
 				toolInstance.sendTerminate(message);
 				
@@ -204,7 +206,7 @@ public class ToolInstanceManager{
 		// Don't attempt to terminate the pending tools, since they are not connected.
 		
 		// Shut down the dynamicly connected tools.
-		HashSetEntryHandler<ToolInstance> dynamicToolsIterationHandler = new HashSetEntryHandler<ToolInstance>(){
+		HashSetEntryHandler<ToolInstance> dynamicToolsIterationHandler = new ReadOnlyHashSetEntryHandler<ToolInstance>(){
 			public int handle(ToolInstance toolInstance){
 				toolInstance.sendTerminate(message);
 				
@@ -218,7 +220,7 @@ public class ToolInstanceManager{
 	 * Kills all known executed tools immidiately.
 	 */
 	public void killExecutedToolsNow(){
-		HashMapEntryHandler<ATerm, ToolInstance> toolsIterationHandler = new HashMapEntryHandler<ATerm, ToolInstance>(){
+		HashMapEntryHandler<ATerm, ToolInstance> toolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
 			public int handle(ATerm toolKey, ToolInstance toolInstance){
 				toolInstance.kill();
 				
@@ -247,7 +249,7 @@ public class ToolInstanceManager{
 	
 	public void showStatus(){
 		// Show the active tools.
-		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new HashMapEntryHandler<ATerm, ToolInstance>(){
+		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
 			public int handle(ATerm toolKey, ToolInstance toolInstance){
 				System.err.println("A: " + toolInstance.showStatus());
 				
@@ -257,7 +259,7 @@ public class ToolInstanceManager{
 		activeTools.iterate(activeToolsIterationHandler);
 		
 		// Show the pending tools.
-		HashMapEntryHandler<ATerm, ToolInstance> pendingToolsIterationHandler = new HashMapEntryHandler<ATerm, ToolInstance>(){
+		HashMapEntryHandler<ATerm, ToolInstance> pendingToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
 			public int handle(ATerm toolKey, ToolInstance toolInstance){
 				System.err.println("P: " + toolInstance.showStatus());
 				
@@ -267,7 +269,7 @@ public class ToolInstanceManager{
 		pendingTools.iterate(pendingToolsIterationHandler);
 		
 		// Show the dynamicly connected tools.
-		HashSetEntryHandler<ToolInstance> dynamicToolsIterationHandler = new HashSetEntryHandler<ToolInstance>(){
+		HashSetEntryHandler<ToolInstance> dynamicToolsIterationHandler = new ReadOnlyHashSetEntryHandler<ToolInstance>(){
 			public int handle(ToolInstance toolInstance){
 				System.err.println("D: " + toolInstance.showStatus());
 				

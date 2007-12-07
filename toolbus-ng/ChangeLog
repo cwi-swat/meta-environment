@@ -1,3 +1,6 @@
+Fri Dec 07 14:15:19 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.*: Added support for monitoring tool and ToolBus performance in the debugToolBus and the viewer interface.
+
 Mon Dec 03 14:56:07 CEST 2007 <lankamp@cwi.nl>
  * toolbus.adapter.*: Split the adapter in a generic and Java specific part to encourage subclassing.
 

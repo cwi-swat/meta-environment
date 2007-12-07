@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import toolbus.exceptions.ToolBusError;
 import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
@@ -31,10 +30,11 @@ import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
+import toolbus.tool.ToolInstance;
 import toolbus.util.collections.ConcurrentHashMap;
 import toolbus.util.collections.ConcurrentHashSet;
 import toolbus.util.collections.EntryHandlerConstants;
-import toolbus.util.collections.ConcurrentHashSet.HashSetEntryHandler;
+import toolbus.util.collections.ConcurrentHashSet.ReadOnlyHashSetEntryHandler;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -221,7 +221,7 @@ public class ToolBus{
 	public void setNextTime(long next){
 		//System.err.println("setNextTime: " + next);
 		long currentTime = getRunTime();
-		if(nextTime < currentTime || (next < nextTime && next > currentTime)){
+		if((next < nextTime && next > currentTime) || nextTime < currentTime){
 			nextTime = next;
 		}
 		//System.err.println("setNextTime: set to " + nextTime);
@@ -354,7 +354,7 @@ public class ToolBus{
 	}
 	
 	private ATermList getSignature(){
-		class AtomSignatureIterationHandler implements HashSetEntryHandler<ATerm>{
+		class AtomSignatureIterationHandler extends ReadOnlyHashSetEntryHandler<ATerm>{
 			public ATermList res = tbfactory.EmptyList;
 
 			public int handle(ATerm value){
@@ -570,7 +570,7 @@ public class ToolBus{
 							if(blockTime > 0){
 								processLock.wait(blockTime);
 								workHasArrived = true;
-							}else if(currentNextTime != nextTime){ // if the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
+							}else if(currentNextTime != nextTime){ // If the nextTime changed and the blockTime is zero or less, don't block as there might be work to do.
 								workHasArrived = true;
 							}else{
 								processLock.wait();
@@ -593,8 +593,13 @@ public class ToolBus{
 	/**
 	 * Notifies the ToolBus that work has arrived.
 	 * This will wake the ToolBus's process loop up if it's currently sleeping.
+	 * 
+	 * @param toolInstance
+	 *            The tool instance associated with the tool that send us data.
+	 * @param operation
+	 *            The operation associated with the package that arrived.
 	 */
-	public void workArrived(){
+	public void workArrived(ToolInstance toolInstance, byte operation){
 		// Only notify when needed.
 		if(!workHasArrived){
 			workHasArrived = true;
@@ -611,7 +616,7 @@ public class ToolBus{
 	 * @author Arnold Lankamp
 	 */
 	protected static class ProcessInstanceIterator implements Iterator<ProcessInstance>{
-		private List<ProcessInstance> list;
+		private final List<ProcessInstance> list;
 		private int index;
 		
 		public ProcessInstanceIterator(List<ProcessInstance> list){

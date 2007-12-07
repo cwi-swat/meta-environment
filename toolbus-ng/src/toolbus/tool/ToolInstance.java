@@ -9,11 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import toolbus.IOperations;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolInstanceManager;
+import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
 import toolbus.adapter.java.AbstractJavaTool;
 import toolbus.communication.DirectClientIOHandler;
@@ -47,6 +47,8 @@ public class ToolInstance implements IDataHandler, IOperations{
 	private final List<ATerm> eventsFromTool;
 	
 	private final List<ATerm> performanceStats;
+	
+	private volatile ATerm lastDebugPerformanceStats = null;
 	
 	/**
 	 * Construct a ToolInstance.
@@ -95,7 +97,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			try{
 				Constructor<?> toolConstructor = toolClass.getConstructor(new Class[]{String[].class});
 				
-				Object[] args = new Object[]{new String[]{"-TYPE", AbstractJavaTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)}};
+				Object[] args = new Object[]{new String[]{"-TYPE", AbstractTool.DIRECTTOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID)}};
 				tool = (AbstractJavaTool) toolConstructor.newInstance(args);
 			}catch(InstantiationException iex){
 				String error = "Unable to instantiate the tool. Classname: " + toolClass.getName();
@@ -142,7 +144,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			goConnected();
 			
 			// Notify the ToolBus that something happend (we connected).
-			toolbus.workArrived();
+			toolbus.workArrived(this, CONNECT);
 		}else if(toolDef.getClassName() != null){
 			String classpath = System.getProperty("java.class.path");
 			// Use the -Xshare=off switch to conserve memory. We don't want to load the entire
@@ -152,7 +154,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			// can only share about 50% of this memory between JVMs, so this is simply not true.
 			// The last time I checked 1.5MB < (50% of 12.5MB). Thanks Sun for turning this
 			// rubbish feature on by default on the client VM.
-			String[] command = new String[]{"java", "-Xshare:off", "-cp", classpath, toolDef.getClassName(), "-TYPE", AbstractJavaTool.REMOTETOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID), "-TB_HOST", "localhost", "-TB_PORT", "" + toolbus.getPort()};
+			String[] command = new String[]{"java", "-Xshare:off", "-cp", classpath, toolDef.getClassName(), "-TYPE", AbstractTool.REMOTETOOL, "-TB_TOOL_NAME", toolDef.getName(), "-TB_TOOL_ID", Integer.toString(toolID), "-TB_HOST", "localhost", "-TB_PORT", "" + toolbus.getPort()};
 			
 			ProcessBuilder pb = new ProcessBuilder(command);
 			pb.redirectErrorStream(true);
@@ -175,7 +177,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			String[] command = new String[commandLength + 10];
 			System.arraycopy(toolCommand, 0, command, 0, commandLength);
 			command[commandLength] = "-TYPE";
-			command[commandLength + 1] = AbstractJavaTool.REMOTETOOL;
+			command[commandLength + 1] = AbstractTool.REMOTETOOL;
 			command[commandLength + 2] = "-TB_TOOL_NAME";
 			command[commandLength + 3] = toolDef.getName();
 			command[commandLength + 4] = "-TB_TOOL_ID";
@@ -209,6 +211,10 @@ public class ToolInstance implements IDataHandler, IOperations{
 	
 	public ATermAppl getToolKey(){
 		return toolKey;
+	}
+	
+	public String getToolName(){
+		return toolKey.getName();
 	}
 	
 	public ATerm getSignature(){
@@ -245,12 +251,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 				goReady();
 				performanceStats.add(aTerm);
 				break;
+			case DEBUGPERFORMANCESTATS:
+				goReady();
+				lastDebugPerformanceStats = aTerm;
+				break;
 			default:
 				LoggerFactory.log("Message with unknown operation received from Tool: " + operation, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
 		}
 		
 		// Notify the ToolBus of the arrival of a message.
-		toolbus.workArrived();
+		toolbus.workArrived(this, operation);
 	}
 	
 	public void sendAckEvent(ATerm aTerm){
@@ -271,6 +281,10 @@ public class ToolInstance implements IDataHandler, IOperations{
 	
 	public void sendPerformanceStatsRequest(ATerm aTerm){
 		send(PERFORMANCESTATS, aTerm);
+	}
+	
+	public void sendDebugPerformanceStatsRequest(){
+		send(DEBUGPERFORMANCESTATS, toolbus.getTBTermFactory().makeList());
 	}
 	
 	public void send(byte operation, ATerm aTerm){
@@ -295,7 +309,7 @@ public class ToolInstance implements IDataHandler, IOperations{
 			tim.removeDynamiclyConnectedTool(this);
 		}
 		
-/* TEMP *//*System.out.println(getToolKey().toString() + " was shut down.");*//* END TEMP */
+		toolbus.workArrived(this, IOperations.END);
 	}
 	
 	public boolean isExecutedTool(){
@@ -370,6 +384,10 @@ public class ToolInstance implements IDataHandler, IOperations{
 			}
 		}
 		return false;
+	}
+	
+	public ATerm getLastDebugPerformanceStats(){
+		return lastDebugPerformanceStats;
 	}
 	
 	private final static int UNCONNECTED = 0; // Start and end state.

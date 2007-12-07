@@ -9,6 +9,7 @@ import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 
+// TODO More then one ToolBus can run in the same VM; handle this.
 public class CommandLine{
 	private final ToolBusInputStreamHandler toolBusInputStreamHandler;
 	
@@ -60,6 +61,8 @@ public class CommandLine{
 						System.err.println("dump tools status: Prints a listing of currently connected tools with their corresponding state.");
 						System.err.println("dump toolbus state: Dumps all available information about the current state of the process logic to the command line.");
 						System.err.println("shutdown: Initiates the forcefully termination of the ToolBus.");
+					}else if(line.equals("")){
+						// Ignore this.
 					}else{
 						System.err.println("Unknown ToolBus command: '"+line+"'.\nEnter 'help' for a list of available ToolBus commands.");
 					}

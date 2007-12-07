@@ -3,7 +3,6 @@ package toolbus.adapter.java;
 import java.net.InetAddress;
 import toolbus.TBTermFactory;
 import toolbus.adapter.AbstractTool;
-import toolbus.adapter.ToolBridge;
 import aterm.pure.PureFactory;
 
 /**
@@ -13,8 +12,6 @@ import aterm.pure.PureFactory;
  */
 public abstract class AbstractJavaTool extends AbstractTool{
 	private final static PureFactory termFactory = TBTermFactory.getInstance();
-
-	protected ToolBridge toolBridge = null;
 
 	/**
 	 * Default constructor.
@@ -61,7 +58,6 @@ public abstract class AbstractJavaTool extends AbstractTool{
 		if(type == null || toolName == null) throw new RuntimeException("Missing tool identification.");
 
 		toolBridge = new JavaToolBridge(termFactory, type, this, toolName, toolID, host, port);
-		setToolBridge(toolBridge);
 		toolBridge.run();
 	}
 }

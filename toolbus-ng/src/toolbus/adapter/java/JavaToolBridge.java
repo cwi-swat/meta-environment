@@ -393,7 +393,7 @@ public class JavaToolBridge extends ToolBridge{
 	 * Gathers performance statistics about this tool, like memory usage and the user-/system-time
 	 * spend per thread.
 	 * 
-	 * @return performance statictics.
+	 * @return Performance statictics.
 	 */
 	private ATerm getPerformanceStats(){
 		String type = getType();

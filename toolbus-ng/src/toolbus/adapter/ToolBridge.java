@@ -244,8 +244,12 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				terminate();
 				break;
 			case PERFORMANCESTATS:
-				ATerm performaceStats = doGetPerformanceStats();
-				send(PERFORMANCESTATS, performaceStats);
+				ATerm performanceStats = doGetPerformanceStats();
+				send(PERFORMANCESTATS, performanceStats);
+				break;
+			case DEBUGPERFORMANCESTATS:
+				ATerm debugPerformanceStats = doGetPerformanceStats();
+				send(DEBUGPERFORMANCESTATS, debugPerformanceStats);
 				break;
 			default:
 				LoggerFactory.log("Unkown operation id: " + operation, ILogger.ERROR, IToolBusLoggerConstants.TOOL);

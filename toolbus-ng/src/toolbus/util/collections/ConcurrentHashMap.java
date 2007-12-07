@@ -414,6 +414,7 @@ public class ConcurrentHashMap<T, R> {
 					do{
 						int action = entryHandler.handle(e.key, e.value);
 						if((action & EntryHandlerConstants.REMOVE) == EntryHandlerConstants.REMOVE){
+							if(!entryHandler.canRemove) throw new UnsupportedOperationException("Removal of entries is not allowed for the type of iterator you're using.");
 							if(previous != null){
 								previous.next = e.next;
 							}else{
@@ -472,7 +473,34 @@ public class ConcurrentHashMap<T, R> {
 	 * @param <R>
 	 *            The value type.
 	 */
-	public interface HashMapEntryHandler<T, R> extends EntryHandlerConstants{
-		int handle(T key, R value);
+	public abstract static class HashMapEntryHandler<T, R> implements EntryHandlerConstants{
+		public boolean canRemove = true;
+		
+		/**
+		 * Handles one entry.
+		 * 
+		 * @param key
+		 *            The key.
+		 * @param value
+		 *            The value.
+		 * @see toolbus.util.collections.EntryHandlerConstants
+		 * @return The operation the iterator should take (continue, break or remove).
+		 */
+		public abstract int handle(T key, R value);
+	}
+	
+	/**
+	 * A read only version of the entry handler (e.g. removal is disabled).
+	 * 
+	 * @author Arnold Lankamp
+	 * @param <T>
+	 *            The key type.
+	 * @param <R>
+	 *            The value type.
+	 */
+	public abstract static class ReadOnlyHashMapEntryHandler<T, R> extends HashMapEntryHandler<T, R>{
+		{
+			canRemove = false; // Disable removal
+		}
 	}
 }

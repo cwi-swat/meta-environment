@@ -3,7 +3,6 @@ package toolbus.communication;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-
 import jjtraveler.VisitFailure;
 import toolbus.TBTermFactory;
 import toolbus.logging.ILogger;
@@ -83,13 +82,6 @@ public class SocketIOHandler implements IIOHandler{
 	 * @see IIOHandler#send(byte, ATerm)
 	 */
 	public void send(byte op, ATerm aTerm){
-/* TEMP */
-//String term = aTerm.toString();
-//if(((ToolInstance) dataHandler).getToolKey().getAFun().getName().toLowerCase().indexOf("debug") != -1) System.out.println("Send. Operation: "+op+", tool: "+((ToolInstance) dataHandler).getToolKey()+" Term: "+term);
-//if(((ATermAppl) aTerm).getName().equals("asfc-progress")) System.out.println("Send. Operation: "+op+" Term: "+term);
-//if(term.length() < 200) System.out.println("Send. Operation: "+op+" Term: "+term);
-//else System.out.println("Send. Operation: "+op+" Term: BIG, name: "+((ATermAppl) aTerm).getName());
-/* END TEMP */
 		OperationTermPair otp = new OperationTermPair();
 		otp.operation = op;
 		otp.term = aTerm;
@@ -104,13 +96,6 @@ public class SocketIOHandler implements IIOHandler{
 	 * @see IIOHandler#receive(byte, ATerm)
 	 */
 	public void receive(byte op, ATerm aTerm){
-/* TEMP */
-//String term = aTerm.toString();
-//if(((ToolInstance) dataHandler).getToolKey().getAFun().getName().toLowerCase().indexOf("debug") != -1) System.out.println("Receive. Operation: "+op+", tool: "+((ToolInstance) dataHandler).getToolKey()+" Term: "+term);
-//if(aTerm instanceof ATermAppl && ((ATermAppl) aTerm).getName().equals("asfc-progress")) System.out.println("Recieved. Operation: "+op+" Term: "+term);
-//if(term.length() < 200) System.out.println("Received. Operation: "+op+" Term: "+term);
-//else System.out.println("Received. Operation: "+op+" Term: BIG, name: "+((ATermAppl) aTerm).getName());
-/* END TEMP */
 		dataHandler.receive(op, aTerm);
 	}
 
@@ -131,9 +116,6 @@ public class SocketIOHandler implements IIOHandler{
 		}else if(binaryReader.isDone()){
 			ATerm term = binaryReader.getRoot();
 			if(operation == END_OPC){
-/* TEMP */
-//System.out.println("Received END_OPC for: "+((ToolInstance) dataHandler).getToolKey());
-/* END TEMP */
 				shutDown();
 				connectionHandler.closeConnection(socketChannel);
 			}else{
@@ -388,9 +370,6 @@ public class SocketIOHandler implements IIOHandler{
 	 * called depending on whether or not we anticipated the disconnect.
 	 */
 	private void handleDisconnect(){
-/* TEMP */
-//System.out.println("Disconnected: "+((ToolInstance) dataHandler).getToolKey()+", expected: "+expectingDisconnect);
-/* END TEMP */
 		if(expectingDisconnect) connectionHandler.closeConnection(socketChannel);
 		else connectionHandler.closeDueToDisconnect(socketChannel, this);
 	}

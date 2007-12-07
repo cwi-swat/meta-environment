@@ -46,7 +46,7 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class Viewer implements IViewer{
-	protected volatile DebugToolBus debugToolBus;
+	protected final DebugToolBus debugToolBus;
 	
 	private final JFrame frame;
 	private final JLabel status;
@@ -74,8 +74,10 @@ public class Viewer implements IViewer{
 	private volatile int stepHighlightedRow = -1;
 	private volatile int breakHighlightedRow = -1;
 	
-	public Viewer(){
+	public Viewer(String[] args){
 		super();
+		
+		debugToolBus = new DebugToolBus(args, this, null);
 		
 		frame = new JFrame("ToolBus Viewer");
 		frame.setSize(800, 600);
@@ -97,6 +99,8 @@ public class Viewer implements IViewer{
 		processesPanel.setLayout(new BorderLayout());
 		processesTableHeader = new String[]{"Break", "Process name", "Identifier"};
 		processesTableModel = new DefaultTableModel(new Object[0][0], processesTableHeader){
+			private static final long serialVersionUID = 6515489257737761296L;
+			
 			public boolean isCellEditable(int row, int column){
 				return (column == 0); // Only the checkbox is editable.
 			}
@@ -112,6 +116,8 @@ public class Viewer implements IViewer{
 			}
 		};
 		processesTable = new JTable(processesTableModel){
+			private static final long serialVersionUID = -3338875681802391368L;
+
 			public Component prepareRenderer(TableCellRenderer cr, int row, int col){
                 Component c = super.prepareRenderer(cr, row, col);
                 
@@ -125,6 +131,8 @@ public class Viewer implements IViewer{
 		TableColumnModel processesTableColumnModel = processesTable.getColumnModel();
 		TableColumn breakPointColumn = processesTableColumnModel.getColumn(0);
 		breakPointColumn.setCellRenderer(new DefaultTableCellRenderer(){
+			private static final long serialVersionUID = 5811556489112969680L;
+
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 				JCheckBox checkBox = new JCheckBox();
 		        if(Boolean.TRUE.equals(value)) checkBox.setSelected(true);
@@ -148,6 +156,8 @@ public class Viewer implements IViewer{
 		JPanel subscriptionsPanel = new JPanel();
 		subscriptionsPanel.setLayout(new BorderLayout());
 		subscriptionsTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Subscriptions"}){
+			private static final long serialVersionUID = 2407227292333227911L;
+
 			public boolean isCellEditable(int row, int column){
 				return false;
 			}
@@ -161,6 +171,8 @@ public class Viewer implements IViewer{
 		statePanel.setLayout(new BorderLayout());
 		stateTableHeader = new String[]{"State"};
 		stateTableModel = new DefaultTableModel(new Object[0][0], stateTableHeader){
+			private static final long serialVersionUID = 7405647403653515348L;
+
 			public boolean isCellEditable(int row, int column){
 				return false;
 			}
@@ -176,6 +188,8 @@ public class Viewer implements IViewer{
 		JPanel noteQueuePanel = new JPanel();
 		noteQueuePanel.setLayout(new BorderLayout());
 		noteQueueTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Note Queue"}){
+			private static final long serialVersionUID = -5038729871288100318L;
+
 			public boolean isCellEditable(int row, int column){
 				return false;
 			}
@@ -188,6 +202,8 @@ public class Viewer implements IViewer{
 		JPanel variablesPanel = new JPanel();
 		variablesPanel.setLayout(new BorderLayout());
 		variablesTableModel = new DefaultTableModel(new Object[0][0], new String[]{"Variable", "Value"}){
+			private static final long serialVersionUID = 4345972041423779621L;
+
 			public boolean isCellEditable(int row, int column){
 				return false;
 			}
@@ -253,8 +269,8 @@ public class Viewer implements IViewer{
 		frame.add(mainPanel, BorderLayout.CENTER);
 	}
 	
-	public void setToolBus(DebugToolBus debugToolBus){
-		this.debugToolBus = debugToolBus;
+	public DebugToolBus getDebugToolBus(){
+		return debugToolBus;
 	}
 	
 	public void toolbusStarting(){
@@ -592,10 +608,8 @@ public class Viewer implements IViewer{
 	}
 	
 	public static void main(String[] args){
-		Viewer viewer = new Viewer();
-
-		DebugToolBus debugToolBus = new DebugToolBus(args, viewer);
-		viewer.setToolBus(debugToolBus);
+		Viewer viewer = new Viewer(args);
+		DebugToolBus debugToolBus = viewer.getDebugToolBus();
 		
 		CommandLine.createCommandLine(debugToolBus);
 		
@@ -609,7 +623,6 @@ public class Viewer implements IViewer{
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			System.exit(0);
 		}
 	}
 }
