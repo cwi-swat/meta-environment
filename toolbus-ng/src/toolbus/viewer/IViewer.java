@@ -69,12 +69,12 @@ public interface IViewer{
 	void stateElementBreakPointHit(StateElement stateElement);
 	
 	/**
-	 * Fired when the debug toolbus starts.
+	 * Fired right before the debug ToolBus starts executing the process logic.
 	 */
 	void toolbusStarting();
 	
 	/**
-	 * Fired right before then debug toolbus shuts down.
+	 * Fired right before then debug ToolBus shuts down.
 	 */
 	void toolbusTerminating();
 }
