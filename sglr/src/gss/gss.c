@@ -68,6 +68,20 @@ GSSNode GSS_findNodeInCurrentLevel(int stateNum) {
   return NULL;
 }
 
+#if SGLR_COLLECT_STATISTICS
+static void countRejectedNodesInCurrentLevel(void) {
+  GSSNodeList tmp;
+  GSSNode node;
+
+  for (tmp = currentLevel; tmp != NULL; tmp = GSS_getNodeListTail(tmp)) {
+    node = GSS_getNodeListHead(tmp);
+    GSSNode_rejectStatus(node);
+  }
+}
+#else
+static void countRejectedNodesInCurrentLevel(void) { ; }
+#endif
+
 /** 
  * Adds a new level to the GSS, garbage collects the old levels, and increments 
  * the number of levels in the GSS. 
@@ -78,6 +92,7 @@ GSSNode GSS_findNodeInCurrentLevel(int stateNum) {
  * \param list the list of GSS nodes to add to the current level
  */
 void GSS_addNewLevel(GSSNodeList list) { 
+  countRejectedNodesInCurrentLevel();
   oldLevels[levelNumber % GC_CYCLE] = currentLevel;
 
   if ((levelNumber % GC_CYCLE) == (GC_CYCLE-1)) {

@@ -66,9 +66,7 @@ GSSEdge GSSEdge_createEdge(PT_Tree t, size_t numberOfLeavesInTree, GSSNode targe
   edge->targetGSSNode = target;
   edge->isRejected = rejected;
 
-  if (rejected) {
-    SGLR_STATS_incrementCount(SGLR_STATS_rejectedEdgesCreated);
-  }
+  SGLR_STATS_incrementCountConditionally(SGLR_STATS_rejectedEdgesCreated,rejected);
   SGLR_STATS_incrementCount(SGLR_STATS_gssEdgesCreated);
 
   return edge;
@@ -125,9 +123,9 @@ void GSSEdge_setNumberOfLeavesInTree(GSSEdge edge, size_t numberOfLeaves) {
  * \param gssEdge the edge to set as rejected 
  */
 void GSSEdge_setRejected(GSSEdge gssEdge) {
-  if (gssEdge->isRejected == ATfalse) {
-    SGLR_STATS_incrementCount(SGLR_STATS_existingEdgesRejected);
-  }
+  /* Need to check if all edges are rejected and increment or decrement 
+   * the number of rejected nodes. */
+  SGLR_STATS_incrementCountConditionally(SGLR_STATS_existingEdgesRejected, gssEdge->isRejected == ATfalse);
   gssEdge->isRejected = ATtrue;	
 }
 

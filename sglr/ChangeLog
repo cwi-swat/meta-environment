@@ -1,5 +1,9 @@
 $Id$
 
+Wed Dec 12 17:13:04 CET 2007 <economop@cwi.nl>
+ * src/*: added some more stat counting (rejected GSS nodes) and removed some 
+   redundant counting.
+
 Tue Dec  4 11:45:13 CET 2007 <economop@cwi.nl>
  * src/commandLineInterface.c: added the -m flag to stop the parse tree from
    being output. Useful for performace comparisons with other tools.

@@ -106,6 +106,7 @@ GSSEdge GSSNode_addEdge(GSSNode source, GSSNode target, PT_Tree t, size_t tl, AT
   source->edges = GSS_addEdgeListElement(edge, source->edges);
   //GSSNode_increaseRefCount(target);
 
+  SGLR_STATS_changeRejectedNodeCount(GSSNode_isRejected(source));
   return edge;
 }
 
@@ -195,4 +196,53 @@ ATbool GSSNode_isRejected(GSSNode st) {
   }
   /*  All edges are rejected  */
   return ATtrue;
+}
+
+/** 
+* Only used to gather statistics on reject filter implementation. 
+* 
+* \param st 
+* 
+* \return 0 if the node is not rejected, 1 if it is partially rejected, 
+* 2 if it is completely rejected and -1 otherwise.
+*/
+int GSSNode_rejectStatus(GSSNode source) {
+  GSSEdgeList edges = GSSNode_getEdgeList(source);
+  int rejectedEdges = 0;
+  int nonRejectedEdges = 0;
+  int totalEdges = 0;
+
+  if (edges == NULL) {
+    return -1;
+  }
+
+  for (; edges; edges = GSS_getEdgeListTail(edges)) {
+    if (!GSSEdge_isRejected(GSS_getEdgeListHead(edges))) {
+      /*  An edge is not rejected  */
+      /* This is the changed edge */ 
+      nonRejectedEdges++;
+    }
+    else {
+      rejectedEdges++;
+    }
+    totalEdges++;
+  }
+  
+  if (rejectedEdges == totalEdges) {
+    /* completely rejected */
+    SGLR_STATS_incrementCount(SGLR_STATS_nodesRejected);
+    return 2;
+  }
+  else if (rejectedEdges > 0 && nonRejectedEdges > 0) {
+    /* partially rejected */
+    SGLR_STATS_incrementCount(SGLR_STATS_nodesPartiallyRejected);
+    return 1;
+  } 
+  else if (rejectedEdges == 0 && nonRejectedEdges > 0) {
+    /* not rejected */
+    SGLR_STATS_incrementCount(SGLR_STATS_nodesNormal);
+    return 0;
+  }
+
+  return -1;
 }

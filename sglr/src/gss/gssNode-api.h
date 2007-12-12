@@ -24,5 +24,6 @@ void        GSSNode_decreaseRefCount(GSSNode gssNode);
 short       GSSNode_getRefCount(GSSNode gssNode);
 ATbool      GSSNode_isShift(GSSNode gssNode); /* currently not used. */
 ATbool      GSSNode_isRejected(GSSNode node);
+int         GSSNode_rejectStatus(GSSNode source);
 
 #endif /* _GSSNODE_API_ */

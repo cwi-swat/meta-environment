@@ -303,8 +303,8 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
     /*forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);*/
     
     if (PTBL_isSpecialAttrReject(attribute)) {
-      /*GSSEdge_setRejected(nl);*/
       forActorDelayed = GSS_addNodeListElement(st1, forActorDelayed);
+      SGLR_STATS_incrementCount(SGLR_STATS_nodesRejected);
     }
     else {
       forActor= GSS_addNodeListElement(st1, forActor);
@@ -329,10 +329,6 @@ static void reducer(GSSNode st0, int s, int prodl, PT_Args kids, size_t length, 
       register GSSNodeList sts;
 
       nl = GSSNode_addEdge(st1, st0, t, length, PTBL_isSpecialAttrReject(attribute));
-
-      /*if (PTBL_isSpecialAttrReject(attribute)) {
-        GSSEdge_setRejected(nl);
-      }*/
 
       for (sts = GSS_getCurrentLevel(); sts != NULL; sts = GSS_getNodeListTail(sts)) {
         GSSNode st2 = GSS_getNodeListHead(sts);

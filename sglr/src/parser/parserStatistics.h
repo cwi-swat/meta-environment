@@ -44,7 +44,9 @@ extern int SGLR_STATS_rejectedTreesCreated; /* these two are prob the same */
 extern int SGLR_STATS_rejectedEdgesCreated;
 extern int SGLR_STATS_existingEdgesRejected;
 extern int SGLR_STATS_rejectedReductionsDone;
-extern int SGLR_STATS_nodesRejected;
+extern unsigned int SGLR_STATS_nodesNormal;
+extern unsigned int SGLR_STATS_nodesRejected;
+extern unsigned int SGLR_STATS_nodesPartiallyRejected;
 
 extern long long SGLR_STATS_gssLimitedEdgesTraversed;
 extern long long SGLR_STATS_gssLimitedEdgesSearched;
@@ -149,6 +151,22 @@ void SGLR_STATS_print(void);
   }
 #else
 #define SGLR_STATS_addToCount(counter, addition) ;
+#endif
+
+#if SGLR_COLLECT_STATISTICS
+#define SGLR_STATS_changeRejectedNodeCount(function)\
+  if (MAIN_getStatsFlag) {\
+    if (function) {\
+      SGLR_STATS_nodesRejected++;\
+      SGLR_STATS_nodesPartiallyRejected--;\
+    }\
+    else {\
+      SGLR_STATS_nodesPartiallyRejected++;\
+      SGLR_STATS_nodesRejected--;\
+    }\
+  }
+#else
+#define SGLR_STATS_changeRejectedNodeCount(function) ;
 #endif
 
 #if SGLR_COLLECT_STATISTICS

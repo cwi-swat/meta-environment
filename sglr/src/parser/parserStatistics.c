@@ -42,7 +42,9 @@ int SGLR_STATS_rejectedTreesCreated = 0; /* these two are prob the same */
 int SGLR_STATS_rejectedEdgesCreated = 0;
 int SGLR_STATS_existingEdgesRejected = 0;
 int SGLR_STATS_rejectedReductionsDone = 0;
-int SGLR_STATS_nodesRejected = 0;
+unsigned int SGLR_STATS_nodesNormal = 0;
+unsigned int SGLR_STATS_nodesRejected = 0;
+unsigned int SGLR_STATS_nodesPartiallyRejected = 0;
 
 long long SGLR_STATS_gssLimitedEdgesTraversed = 0;
 long long SGLR_STATS_gssLimitedEdgesSearched = 0;
@@ -214,13 +216,15 @@ void SGLR_STATS_print(void) {
   fprintf(logFile, "int lines-parsed = %d\n", SGLR_STATS_linesParsed);
   fprintf(logFile, "%%%% characters/second = %.0f\n\n", SGLR_STATS_parsingTime < 1.0e-4 ? 0 : SGLR_STATS_charactersParsed/SGLR_STATS_parsingTime);
 
-  fprintf(logFile, "int reductions-done = %d\n", SGLR_STATS_reductionsDone);
+  fprintf(logFile, "int total-reductions-done = %d\n", SGLR_STATS_reductionsDone);
   fprintf(logFile, "int multi-symbol-follow-restricted-reductions-done = %d\n", SGLR_STATS_reductionsLADone);
   fprintf(logFile, "int limited-reductions-done = %d\n", SGLR_STATS_limitedReductionsDone);
   fprintf(logFile, "int multi-symbol-follow-restricted-limited-reductions-done = %d\n", SGLR_STATS_limitedLAReductionsDone);
   fprintf(logFile, "int rejected-reductions-done = %d\n", SGLR_STATS_rejectedReductionsDone);
   fprintf(logFile, "%%%% reductions/character: %f\n", (double)SGLR_STATS_reductionsDone/(double)SGLR_STATS_charactersParsed);
 
+  /** \todo probably redundant because it is the same as the number of shifts
+   *  added to the shift queue. */
   fprintf(logFile, "int shifts-done = %d\n", SGLR_STATS_shiftsDone);
   fprintf(logFile, "int shifts-added-to-shift-queue = %d\n", SGLR_STATS_shiftsAddedToShiftQueue);
   fprintf(logFile, "int max-size-of-shift-queue = %d\n\n", SGLR_STATS_maxSizeOfShiftQueue);
@@ -229,15 +233,20 @@ void SGLR_STATS_print(void) {
   fprintf(logFile, "int GSS-nodes-deleted = %d\n", SGLR_STATS_gssNodesDeleted);
   fprintf(logFile, "int GSS-edges-created = %d\n\n", SGLR_STATS_gssEdgesCreated);
 
-  fprintf(logFile, "int GSS-edges-traversed = %lld\n", SGLR_STATS_gssEdgesTraversed);
-  fprintf(logFile, "int GSS-edges-searched = %lld\n", SGLR_STATS_gssEdgesSearched);
-  fprintf(logFile, "int GSS-limited-edges-traversed = %lld\n", SGLR_STATS_gssLimitedEdgesTraversed);
-  fprintf(logFile, "int GSS-limited-edges-searched = %lld\n", SGLR_STATS_gssLimitedEdgesSearched);
-  fprintf(logFile, "int GSS-total-edges-traversed = %lld\n", (SGLR_STATS_gssLimitedEdgesTraversed+SGLR_STATS_gssEdgesTraversed));
-  fprintf(logFile, "int GSS-total-edges-searched = %lld\n\n", (SGLR_STATS_gssLimitedEdgesSearched+SGLR_STATS_gssEdgesSearched));
+  fprintf(logFile, "int GSS-edges-traversed-for-normal-reductions = %lld\n", SGLR_STATS_gssEdgesTraversed);
+  fprintf(logFile, "int GSS-edges-traversed-during-search-for-existing-edge = %lld\n", SGLR_STATS_gssEdgesSearched);
+  fprintf(logFile, "int GSS-edges-traversed-for-farshi-reductions = %lld\n", SGLR_STATS_gssLimitedEdgesTraversed);
+  fprintf(logFile, "int GSS-edges-traversed-during-farshi-search-for-new-edge-in-level = %lld\n", SGLR_STATS_gssLimitedEdgesSearched);
+  fprintf(logFile, "int GSS-total-edges-traversed = %lld\n", (SGLR_STATS_gssLimitedEdgesTraversed+SGLR_STATS_gssEdgesTraversed+SGLR_STATS_gssLimitedEdgesSearched+SGLR_STATS_gssEdgesSearched));
+  /* This is the total count of redundant edge traversals. */
+  fprintf(logFile, "int GSS-total-edges-traversed-during-search-for-existing-edges = %lld\n\n", (SGLR_STATS_gssLimitedEdgesSearched+SGLR_STATS_gssEdgesSearched));
 
+  /** /todo probably redundant because it is the same as the number of rejected
+   * reductions done. */
   fprintf(logFile, "int rejected-trees-created = %d\n", SGLR_STATS_rejectedTreesCreated);
-  fprintf(logFile, "int rejected-GSS-nodes = %d\n", SGLR_STATS_nodesRejected);
+  fprintf(logFile, "int normal-GSS-nodes = %d\n", SGLR_STATS_nodesNormal);
+  fprintf(logFile, "int completely-rejected-GSS-nodes = %d\n", SGLR_STATS_nodesRejected);
+  fprintf(logFile, "int partially-rejected-GSS-nodes = %d\n", SGLR_STATS_nodesPartiallyRejected);
   fprintf(logFile, "int rejected-edges-created = %d\n", SGLR_STATS_rejectedEdgesCreated);
   fprintf(logFile, "int existing-non-rejected-edges-marked-rejected = %d\n", SGLR_STATS_existingEdgesRejected);
 
