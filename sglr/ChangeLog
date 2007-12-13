@@ -1,5 +1,9 @@
 $Id$
 
+Thu Dec 13 15:10:34 CET 2007 <economop@cwi.nl>
+ * src/gss/gss.c: corrected an off-by-one error. It was causing a segmentation 
+   fault in some experiments.
+
 Wed Dec 12 17:13:04 CET 2007 <economop@cwi.nl>
  * src/*: added some more stat counting (rejected GSS nodes) and removed some 
    redundant counting.

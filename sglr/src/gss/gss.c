@@ -175,7 +175,7 @@ ReductionPath GSS_findAllPaths(GSSNode source, int reductionLength, int level) {
   edgeVisitsPerReduction = 0;
   result = findAllPathsRecursive(source, reductionLength, PT_makeArgsEmpty(), 0, NULL);
 
-  SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
+  SGLR_STATS_addEdgeVisitForReductionLength(reductionLength, edgeVisitsPerReduction);
   SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisitsPerReduction);
   return result; 
 }
@@ -302,7 +302,7 @@ ReductionPath GSS_findLimitedPaths(GSSNode source, int reductionLength, GSSEdge 
     result = findPaths(source, reductionLength, edge, ATfalse, PT_makeArgsEmpty(), 0, NULL);
   }
 
-  SGLR_STATS_addEdgeVisitForReductionLength(reductionLength+1, edgeVisitsPerReduction);
+  SGLR_STATS_addEdgeVisitForReductionLength(reductionLength, edgeVisitsPerReduction);
   SGLR_STATS_addEdgeVisitsForLevel(level, edgeVisitsPerReduction);
   return result;
 }
