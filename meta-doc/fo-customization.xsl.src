@@ -8,13 +8,10 @@
 
 <xsl:import href="__DOCBOOKXSLPREFIX__/fo/docbook.xsl"/>
 
-<xsl:include href="common-customizations.xsl" />
+<xsl:import href="common-customizations.xsl" />
 
 <!-- graphics -->
 <xsl:param name="callout.graphics.path"   select="'../../images/callouts/'" />
-
-<xsl:param name="font-selection-strategy" select="'character-by-character'" />
-
 
 <xsl:param name="collect.xref.target"     select="'no'" />
 

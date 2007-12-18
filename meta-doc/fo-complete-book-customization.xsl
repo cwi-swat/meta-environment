@@ -6,9 +6,12 @@
 
 <!-- FO- and complete-book specific customizations are defined here -->
 
+<xsl:import href="fo-customization.xsl" />
+
+<!-- graphics -->
 
 <xsl:param name="callout.graphics.path"      select="'./images/callouts/'" />
 
-<xsl:include href="fo-customization.xsl" />
+<xsl:param name="body.font.family"           select="'serif,Symbol'"/>
 
 </xsl:stylesheet>
