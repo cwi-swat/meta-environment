@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter [
 <!ENTITY % sgml.features "IGNORE">
 <!ENTITY % xml.features "INCLUDE">
@@ -676,8 +676,7 @@
 
             <programlisting>process HELLO <co xml:id="co.hello1-1" />
 is <co xml:id="co.hello1-2" />
-  printf(&ldquo;Hello world, my first Tscript!\n&rdquor;) <co
-                xml:id="co.hello1-3" />
+  printf(“Hello world, my first Tscript!\n”) <co xml:id="co.hello1-3" />
 
 toolbus(HELLO) <co xml:id="co.hello1-4" /></programlisting>
 
@@ -733,7 +732,7 @@ Hello world, my first Tscript!
          printf(S)                 <co xml:id="co.hello2-8" />
   endlet
 
-tool hello is {command = &ldquo;hello&rdquor; } <co xml:id="co.hello2-9" />
+tool hello is {command = “hello” } <co xml:id="co.hello2-9" />
 toolbus(HELLO)                     <co xml:id="co.hello2-10" /></programlisting>
 
             <para>Notes:</para>
@@ -1495,7 +1494,7 @@ toolbus(CALC, BATCH, UI, LOG, CLOCK)
           )* delta <co xml:id="co.calc.6" />
     endlet
 
-tool calc is { command = &ldquo;calc&rdquor;}</programlisting>Notes:<calloutlist>
+tool calc is { command = “calc”}</programlisting>Notes:<calloutlist>
               <callout arearefs="co.calc.1">
                 <para>Execute the <literal>calc</literal> tool. The tool
                 identifier is assigned to the variable <literal>Tid</literal>,
@@ -1544,7 +1543,7 @@ tool calc is { command = &ldquo;calc&rdquor;}</programlisting>Notes:<calloutlist
          ) * delta
     endlet
 
-tool batch is {command = &ldquo;batch&rdquor;}</programlisting>Notes:<calloutlist>
+tool batch is {command = “batch”}</programlisting>Notes:<calloutlist>
               <callout arearefs="co.batch.1">
                 <para>Send an evaluation request to the
                 <literal>batch</literal> tool and receive an expression
@@ -1611,7 +1610,7 @@ tool batch is {command = &ldquo;batch&rdquor;}</programlisting>Notes:<calloutlis
              QUIT-BUTTON(Tid) <co xml:id="co.UI.3" />
     endlet
 
-tool ui is { command = wish-adapter -script calc.tcl&rdquor; }</programlisting>Notes:<calloutlist>
+tool ui is { command = wish-adapter -script calc.tcl” }</programlisting>Notes:<calloutlist>
               <callout arearefs="co.UI.1">
                 <para><literal>CALC-BUTTON</literal> and
                 <literal>LOG-BUTTON</literal> are mutually exclusive and they
@@ -2347,14 +2346,14 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
           <mathphrase><replaceable>y</replaceable><subscript>
               <replaceable>i</replaceable>
             </subscript>(<replaceable>t</replaceable>+<symbol
-          role="symbolfont">&Delta;</symbol><replaceable>t</replaceable>) =
+          role="symbolfont">Δ</symbol><replaceable>t</replaceable>) =
           <replaceable>F</replaceable>(<replaceable>y</replaceable><subscript>
               <replaceable>i</replaceable>
             </subscript>(<replaceable>t</replaceable>),
           <replaceable>y</replaceable><subscript>
               <replaceable>i</replaceable>
             </subscript>(<replaceable>t</replaceable>-<symbol
-          role="symbolfont">&Delta;</symbol><replaceable>t</replaceable>) ,
+          role="symbolfont">Δ</symbol><replaceable>t</replaceable>) ,
           <replaceable>y</replaceable><subscript><replaceable>i</replaceable>-1</subscript>(<replaceable>t</replaceable>),
           <replaceable>y</replaceable><subscript><replaceable>i</replaceable>+1</subscript>(<replaceable>t</replaceable>))</mathphrase>
         </informalequation>In other words, the amplitude at point
@@ -2386,8 +2385,8 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
           <mathphrase><replaceable>F</replaceable>(<replaceable>z</replaceable><subscript>1</subscript>,<replaceable>z</replaceable><subscript>2</subscript>,<replaceable>z</replaceable><subscript>3</subscript>,<replaceable>z</replaceable><subscript>4</subscript>)
           = 2<replaceable>z</replaceable><subscript>1</subscript>-
           <replaceable>z</replaceable><subscript>2</subscript> + (c <symbol
-          role="symbolfont">&Delta;</symbol><replaceable>t</replaceable>/<symbol
-          role="symbolfont">&Delta;</symbol><replaceable>x)<superscript>2</superscript>
+          role="symbolfont">Δ</symbol><replaceable>t</replaceable>/<symbol
+          role="symbolfont">Δ</symbol><replaceable>x)<superscript>2</superscript>
           (<replaceable>z</replaceable><subscript>3</subscript> -
           2<replaceable>z</replaceable><subscript>1</subscript>+
           <replaceable>z</replaceable><subscript>4</subscript>)</replaceable></mathphrase>
@@ -2396,8 +2395,8 @@ tool master is { command = "wish-adapter -script master.tcl" }</programlisting>N
       <itemizedlist>
         <listitem>
           <para><symbol
-          role="symbolfont">&Delta;</symbol><replaceable>x</replaceable> is
-          the (small) interval between sampling points, and</para>
+          role="symbolfont">Δ</symbol><replaceable>x</replaceable> is the
+          (small) interval between sampling points, and</para>
         </listitem>
 
         <listitem>
@@ -2652,19 +2651,19 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
                 2<replaceable>z</replaceable><subscript>1</subscript>-
                 <replaceable>z</replaceable><subscript>2</subscript> + (c
                 <symbol
-                role="symbolfont">&Delta;</symbol><replaceable>t</replaceable>/<symbol
-                role="symbolfont">&Delta;</symbol><replaceable>x</replaceable>)<superscript>2</superscript>
+                role="symbolfont">Δ</symbol><replaceable>t</replaceable>/<symbol
+                role="symbolfont">Δ</symbol><replaceable>x</replaceable>)<superscript>2</superscript>
                 (z<subscript>3</subscript> - 2<replaceable>
                 <replaceable>z</replaceable>
-                </replaceable><subscript>1</subscript>+<replaceable>z</replaceable><subscript>4</subscript>) 
-                and that the main
-                challenge is to write this formula in prefix form.</para>
+                </replaceable><subscript>1</subscript>+<replaceable>z</replaceable><subscript>4</subscript>)
+                and that the main challenge is to write this formula in prefix
+                form.</para>
               </callout>
 
               <callout arearefs="co.F.2">
                 <para>Take an arbitrary (small) value for (c <symbol
-                role="symbolfont">&Delta;</symbol><replaceable>t</replaceable>/<symbol
-                role="symbolfont">&Delta;</symbol><replaceable>x)<superscript>2</superscript>.</replaceable></para>
+                role="symbolfont">Δ</symbol><replaceable>t</replaceable>/<symbol
+                role="symbolfont">Δ</symbol><replaceable>x)<superscript>2</superscript>.</replaceable></para>
               </callout>
 
               <callout arearefs="co.F.3">
@@ -2675,8 +2674,8 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
 
               <callout arearefs="co.F.4">
                 <para>(c <symbol
-                role="symbolfont">&Delta;</symbol><replaceable>t</replaceable>/<symbol
-                role="symbolfont">&Delta;</symbol><replaceable>x)<superscript>2</superscript></replaceable>
+                role="symbolfont">Δ</symbol><replaceable>t</replaceable>/<symbol
+                role="symbolfont">Δ</symbol><replaceable>x)<superscript>2</superscript></replaceable>
                 * ...</para>
               </callout>
 
@@ -2694,10 +2693,10 @@ tool display is { command = "wish-adapter -script ui-wave.tcl"}</programlisting>
   <section xml:id="section.executing-toolbus-and-tools">
     <title>Executing ToolBus and tools</title>
 
-    <para>The ToolBus interpreter (<command>ToolBus</command>) and all tools
+    <para>The ToolBus interpreter (<command>toolbus</command>) and all tools
     have some standard program arguments in common, but they have some
     specific arguments as well. In this section we describe all possible
-    program arguments and the way to execute <command>ToolBus</command> and
+    program arguments and the way to execute <command>toolbus</command> and
     tools.</para>
 
     <section xml:id="section.common-arguments">
@@ -3357,7 +3356,7 @@ int main(int argc, char *argv[])
      ATBeventloop();
   } else 
      fprintf(stderr, 
-             "my_tool: Could not connect to the ToolBus, giving up!\n");
+             "my_tool: Could not connect to the ToolBus\n");
   ATBeventloop();
   return 0; 
 }</programlisting></para>
@@ -3931,7 +3930,8 @@ public abstract void receiveTerminate(ATerm aTerm); <co
       used as is, except that the definition of the hello tool has to be
       changed to reflect the Java implementation:</para>
 
-      <para><programlisting>tool hello is { kind = "javaNG" class = "toolbus.tool.java.hello.HelloTool"}</programlisting></para>
+      <para><programlisting>tool hello is { kind = "javaNG" 
+                class = "toolbus.tool.java.hello.HelloTool"}</programlisting></para>
     </section>
 
     <section xml:id="section.hello-Java">
@@ -4214,7 +4214,7 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
             <para><programlisting># hello.tcl -- hello tool in Tcl/Tk
 
 proc get-text {} {
-   TBsend "snd-value(text(\"Hello World, my first ToolBus tool in Tcl!\n\"))"
+   TBsend "snd-value(text(\"Hello World tool in Tcl!\n\"))"
 }
 
 proc rec-terminate { n } {
@@ -4424,7 +4424,7 @@ exports
 
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
-                  <entry><symbol role="symbolfont">&not;</symbol>
+                  <entry><symbol role="symbolfont">¬</symbol>
                   <literal>&lt;bool&gt;<subscript>1</subscript></literal></entry>
                 </row>
 
@@ -4435,7 +4435,7 @@ exports
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
                   <entry><literal>&lt;bool&gt;</literal><subscript>1</subscript>
-                  <symbol role="symbolfont">&and;</symbol>
+                  <symbol role="symbolfont">∧</symbol>
                   <literal>&lt;bool&gt;</literal><subscript>2</subscript></entry>
                 </row>
 
@@ -4446,7 +4446,7 @@ exports
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
                   <entry><literal>&lt;bool&gt;</literal><subscript>1</subscript>
-                  <symbol role="symbolfont">&or;</symbol>
+                  <symbol role="symbolfont">∨</symbol>
                   <literal>&lt;bool&gt;</literal><subscript>2</subscript></entry>
                 </row>
 
@@ -4468,7 +4468,7 @@ exports
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
                   <entry><literal>&lt;term&gt;</literal><subscript>1</subscript>
-                  <symbol role="symbolfont">&ne;</symbol>
+                  <symbol role="symbolfont">≠</symbol>
                   <literal>&lt;term&gt;</literal><subscript>2</subscript></entry>
                 </row>
               </tbody>
@@ -4530,7 +4530,7 @@ exports
 
                 <entry
                 char="02306"><literal>&lt;int&gt;<subscript>1</subscript></literal>
-                <symbol role="symbolfont">&times;</symbol>
+                <symbol role="symbolfont">×</symbol>
                 <literal>&lt;int&gt;</literal><subscript>2</subscript></entry>
               </row>
 
@@ -4584,7 +4584,7 @@ exports
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
                 <entry><literal>&lt;int&gt;<subscript>1</subscript>
-                </literal><symbol role="symbolfont">&le;</symbol>
+                </literal><symbol role="symbolfont">≤</symbol>
                 <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
               </row>
 
@@ -4606,7 +4606,7 @@ exports
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
                 <entry><literal>&lt;int&gt;<subscript>1</subscript></literal>
-                <symbol role="symbolfont">&ge;</symbol>
+                <symbol role="symbolfont">≥</symbol>
                 <literal>&lt;int&gt;<subscript>2</subscript></literal></entry>
               </row>
             </tbody>
@@ -4667,7 +4667,7 @@ exports
                   <entry><literal>&lt;real&gt;</literal></entry>
 
                   <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
-                  <symbol role="symbolfont">&times;</symbol>
+                  <symbol role="symbolfont">×</symbol>
                   <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
                 </row>
 
@@ -4721,7 +4721,7 @@ exports
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
                   <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
-                  <symbol role="symbolfont">&le;</symbol>
+                  <symbol role="symbolfont">≤</symbol>
                   <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
                 </row>
 
@@ -4743,7 +4743,7 @@ exports
                   <entry><literal>&lt;bool&gt;</literal></entry>
 
                   <entry><literal>&lt;real&gt;<subscript>1</subscript></literal>
-                  <symbol role="symbolfont">&ge;</symbol>
+                  <symbol role="symbolfont">≥</symbol>
                   <literal>&lt;real&gt;<subscript>2</subscript></literal></entry>
                 </row>
               </tbody>
@@ -4797,8 +4797,8 @@ exports
                 <entry><literal>&lt;real&gt;</literal></entry>
 
                 <entry><emphasis>tan</emphasis><superscript>-1</superscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>)
-                in the range [-<symbol role="symbolfont">&pgr;</symbol>/2,
-                <symbol role="symbolfont">&pgr;</symbol>/2]</entry>
+                in the range [-<symbol role="symbolfont">π</symbol>/2, <symbol
+                role="symbolfont">π</symbol>/2]</entry>
               </row>
 
               <row>
@@ -4808,8 +4808,8 @@ exports
                 <entry><literal>&lt;real&gt;</literal></entry>
 
                 <entry><emphasis>tan</emphasis><superscript>-1</superscript>(<literal>&lt;real&gt;<subscript>1</subscript></literal>/<literal>&lt;real&gt;<subscript>2</subscript></literal>)
-                in the range [-<symbol role="symbolfont">&pgr;</symbol>,
-                <symbol role="symbolfont">&pgr;</symbol>]</entry>
+                in the range [-<symbol role="symbolfont">π</symbol>, <symbol
+                role="symbolfont">π</symbol>]</entry>
               </row>
 
               <row>
@@ -4848,9 +4848,9 @@ exports
                 <entry><literal>&lt;real&gt;</literal></entry>
 
                 <entry><emphasis><symbol
-                role="symbolfont">&radic;</symbol></emphasis><literal>&lt;real&gt;<subscript>1</subscript></literal>,
+                role="symbolfont">√</symbol></emphasis><literal>&lt;real&gt;<subscript>1</subscript></literal>,
                 with <literal>&lt;real&gt;<subscript>1</subscript></literal>
-                <symbol role="symbolfont">&ge;</symbol> 0</entry>
+                <symbol role="symbolfont">≥</symbol> 0</entry>
               </row>
             </tbody>
           </tgroup>
@@ -5060,7 +5060,8 @@ exports
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
                 <entry><literal>&lt;term&gt;<subscript>1</subscript></literal>
-                IN <literal>&lt;list&gt;<subscript>2</subscript></literal>
+                <symbol role="symbolfont">∈</symbol>
+                <literal>&lt;list&gt;<subscript>2</subscript></literal>
                 (membership in multi-set)</entry>
               </row>
 
@@ -5070,7 +5071,8 @@ exports
                 <entry><literal>&lt;bool&gt;</literal></entry>
 
                 <entry><literal>&lt;list&gt;<subscript>1</subscript></literal>
-                SUBSET <literal>&lt;list&gt;<subscript>2</subscript></literal>
+                <symbol role="symbolfont">⊆</symbol>
+                <literal>&lt;list&gt;<subscript>2</subscript></literal>
                 (subset on multi-set)</entry>
               </row>
 
@@ -5080,7 +5082,8 @@ exports
                 <entry><literal>&lt;list&gt;</literal></entry>
 
                 <entry><literal>&lt;list&gt;<subscript>1</subscript></literal>
-                DIFF <literal>&lt;list&gt;<subscript>2</subscript></literal>
+                <symbol role="symbolfont">−</symbol>
+                <literal>&lt;list&gt;<subscript>2</subscript></literal>
                 (difference on multi-set)</entry>
               </row>
 
@@ -5090,7 +5093,8 @@ exports
                 <entry><literal>&lt;list&gt;</literal></entry>
 
                 <entry><literal>&lt;list&gt;<subscript>1</subscript></literal>
-                INTER <literal>&lt;list&gt;<subscript>2</subscript></literal>
+                <symbol role="symbolfont">∩</symbol>
+                <literal>&lt;list&gt;<subscript>2</subscript></literal>
                 (intersection on multi-set)</entry>
               </row>
             </tbody>
