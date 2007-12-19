@@ -458,7 +458,7 @@ in
       .
       if not-equal(ParseTable, UNDEFINED) then
         create(ParseTreeHandler(ModuleId, Path), Pid?)
-        . ParseText(Pid, Text, ParseTable, SDF_TOPSORT, on)
+        . ParseText(Pid, Text, ParseTable, SDF_TOPSORT, off)
         .
         (
           rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
