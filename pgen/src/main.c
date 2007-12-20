@@ -86,7 +86,7 @@ static void usage(void) {
       "\t-t              output terms in plaintext format\n"
       "\t-v              verbose mode\n"
       "\t-V              reveal program version (i.e. %s)\n",
-      myname, myversion);
+    myname, myversion);
 }
 
 static void version(void) {
@@ -97,7 +97,7 @@ static int handleOptions(int argc, char **argv) {
   int c ;
   extern char *optarg;
   extern int   optind;
- 
+
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
       case 'b':  PGEN_setBafModeFlag(ATtrue);            break;
@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
   if(toolbus_mode) {
     for (i=1; i<argc; i++) {
       if (strcmp(argv[i], "-l") == 0) {
-	PGEN_setStatsFlag(ATtrue);
+        PGEN_setStatsFlag(ATtrue);
       }
     }
     ATBinit(argc, argv, &bottomOfStack);  
@@ -184,27 +184,27 @@ int main(int argc, char *argv[]) {
   else {
     if (handleOptions(argc, argv)) {
       if (PGEN_getCollectFlag()) {
-	if (PGEN_getVerboseModeFlag()) {
-	  ATwarning("Loading definition for module %s using searchpath %s\n",
-		    PGEN_getTopModule(), PGEN_getSearchPath());
-	}
+        if (PGEN_getVerboseModeFlag()) {
+          ATwarning("Loading definition for module %s using searchpath %s\n",
+              PGEN_getTopModule(), PGEN_getSearchPath());
+        }
 
-	term = load(PGEN_getTopModule(), PGEN_getSearchPath());
+        term = load(PGEN_getTopModule(), PGEN_getSearchPath());
       }
       else {
-	if (PGEN_getVerboseModeFlag()) {
-	  ATwarning("Loading definition from file %s\n",
-		    PGEN_getInputFilename());
-	}
+        if (PGEN_getVerboseModeFlag()) {
+          ATwarning("Loading definition from file %s\n",
+              PGEN_getInputFilename());
+        }
 
-	term = PT_ParseTreeFromTerm(ATreadFromNamedFile(PGEN_getInputFilename()));
-	if (term == NULL || 
-	    !PT_isValidParseTree(term)) {
-	  if (PGEN_getVerboseModeFlag()) {
-	    ATwarning("Parsing definition from file %s\n", PGEN_getInputFilename());
-	  }
-	  term = parseDefinition(PGEN_getInputFilename());
-	}
+        term = PT_ParseTreeFromTerm(ATreadFromNamedFile(PGEN_getInputFilename()));
+        if (term == NULL || 
+            !PT_isValidParseTree(term)) {
+          if (PGEN_getVerboseModeFlag()) {
+            ATwarning("Parsing definition from file %s\n", PGEN_getInputFilename());
+          }
+          term = parseDefinition(PGEN_getInputFilename());
+        }
       }
     }
 

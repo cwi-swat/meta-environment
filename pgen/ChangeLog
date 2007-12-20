@@ -1,5 +1,12 @@
 $Id$
 
+Thu Dec 20 03:23:17 CET 2007 <economop@cwi.nl>
+ * src/Sdf2-Load.c: regenerated to update variable and function names used in 
+   load.c.
+ * src/load.c: renamed extern variables and functions to match definitions in 
+   Sdf2-Load.c.
+ * src/main.c: reformatted.
+
 Sun Dec  2 16:08:25 EST 2007 <jurgenv@cwi.nl>
  * Bumped version to 2.6
 

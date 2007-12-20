@@ -9,29 +9,28 @@
 
 /* Functions are defined in Sdf2-Normalization.c which is generated from the 
  * asf equations in Sdf2-Normailazation.eqs. */
-extern void register_Load();
-extern void resolve_Load();
-extern void init_Load();
-extern unsigned const char Load_parsetable_baf[];
-extern size_t Load_parsetable_size;
+extern void register_Sdf2_Load();
+extern void resolve_Sdf2_Load();
+extern void init_Sdf2_Load();
+extern unsigned const char Sdf2_Load_parsetable_baf[];
+extern size_t Sdf2_Load_parsetable_size;
 
 static void initialize() 
 {
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-
-  if (Load_parsetable_baf != NULL) {
-    ATerm parseTable = ATreadFromBinaryString(Load_parsetable_baf, 
-					      Load_parsetable_size);
+  if (Sdf2_Load_parsetable_baf != NULL) {
+    ATerm parseTable = ATreadFromBinaryString(Sdf2_Load_parsetable_baf, 
+					      Sdf2_Load_parsetable_size);
 
     if (parseTable != NULL) {
       setParseTable(PTBL_ParseTableFromTerm(parseTable));
     }
   }
 
-  register_Load();
-  resolve_Load();
-  init_Load();
+  register_Sdf2_Load();
+  resolve_Sdf2_Load();
+  init_Sdf2_Load();
 
   setKeepAnnotations(ATtrue);
 }
