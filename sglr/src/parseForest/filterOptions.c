@@ -132,15 +132,15 @@ ATbool FLT_getRemoveCyclesFlag() {
 }
 
 void FLT_printOptions() {
-  ATwarning("%s = %d\n", FILTER_FLAG, FLT_getFilterFlag());
-  ATwarning("%s = %d\n", DIRECT_PREFERENCE_FLAG, FLT_getDirectPreferenceFlag());
-  ATwarning("%s = %d\n", INDIRECT_PREFERENCE_FLAG, FLT_getIndirectPreferenceFlag());
-  ATwarning("%s = %d\n", PREFERENCE_COUNT_FLAG, FLT_getPreferenceCountFlag());
-  ATwarning("%s = %d\n", INJECTION_COUNT_FLAG, FLT_getInjectionCountFlag());
-  ATwarning("%s = %d\n", PRIORITY_FLAG, FLT_getPriorityFlag());
-  ATwarning("%s = %d\n", REJECT_FLAG, FLT_getRejectFlag());
-  ATwarning("%s = %d\n", SELECTTOPNONTERMINAL_FLAG, FLT_getSelectTopNonterminalFlag());
-  ATwarning("%s = %s\n", SELECTTOPNONTERMINAL_VALUE, FLT_getTopNonterminal());
-  ATwarning("%s = %d\n", REMOVECYCLES_FLAG, FLT_getRemoveCyclesFlag());
+  ATwarning("FILTER_FLAG = %s\n", FLT_getFilterFlag()?"True":"False");
+  ATwarning("DIRECT_PREFERENCE_FLAG = %s\n", FLT_getDirectPreferenceFlag()?"True":"False");
+  ATwarning("INDIRECT_PREFERENCE_FLAG = %s\n", FLT_getIndirectPreferenceFlag()?"True":"False");
+  ATwarning("PREFERENCE_COUNT_FLAG = %s\n", FLT_getPreferenceCountFlag()?"True":"False");
+  ATwarning("INJECTION_COUNT_FLAG = %s\n", FLT_getInjectionCountFlag()?"True":"False");
+  ATwarning("PRIORITY_FLAG = %s\n", FLT_getPriorityFlag()?"True":"False");
+  ATwarning("REJECT_FLAG = %s\n", FLT_getRejectFlag()?"True":"False");
+  ATwarning("SELECTTOPNONTERMINAL_FLAG = %s\n", FLT_getSelectTopNonterminalFlag()?"True":"False");
+  ATwarning("SELECTTOPNONTERMINAL_VALUE = %s\n", FLT_getTopNonterminal()?"True":"False");
+  ATwarning("REMOVECYCLES_FLAG = %s\n", FLT_getRemoveCyclesFlag()?"True":"False");
 }
 

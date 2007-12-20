@@ -106,7 +106,7 @@ GSSEdge GSSNode_addEdge(GSSNode source, GSSNode target, PT_Tree t, size_t tl, AT
   source->edges = GSS_addEdgeListElement(edge, source->edges);
   //GSSNode_increaseRefCount(target);
 
-  SGLR_STATS_changeRejectedNodeCount(GSSNode_isRejected(source));
+  //SGLR_STATS_changeRejectedNodeCount(GSSNode_isRejected(source));
   return edge;
 }
 

@@ -229,7 +229,7 @@ void SGLR_STATS_print(void) {
   fprintf(logFile, "int shifts-added-to-shift-queue = %d\n", SGLR_STATS_shiftsAddedToShiftQueue);
   fprintf(logFile, "int max-size-of-shift-queue = %d\n\n", SGLR_STATS_maxSizeOfShiftQueue);
 
-  fprintf(logFile, "int GSS-nodes-created = %d\n", SGLR_STATS_gssNodesCreated);
+  fprintf(logFile, "int GSS-nodes-created = %u\n", SGLR_STATS_gssNodesCreated);
   fprintf(logFile, "int GSS-nodes-deleted = %d\n", SGLR_STATS_gssNodesDeleted);
   fprintf(logFile, "int GSS-edges-created = %d\n\n", SGLR_STATS_gssEdgesCreated);
 
