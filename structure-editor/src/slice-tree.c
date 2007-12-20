@@ -278,6 +278,9 @@ static ATermList tokenizeTreeRec(PT_Tree tree)
 	return ATmakeList1((ATerm)  ERR_makeSliceSlice("MetaKeyword", area));
       }
     }
+    else if (PT_isTreeLexicalInjection(tree)) {
+	return ATmakeList1((ATerm)  ERR_makeSliceSlice("MetaLexical", area));
+    }
   }
 
   if (PT_isTreeAppl(tree)) {
