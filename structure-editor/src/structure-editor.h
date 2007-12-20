@@ -10,16 +10,17 @@
 
 /* Prototypes for functions called from the event handler */
 void set_cursor_at_offset(int conn, ATerm, int);
-ATerm get_tree_slices(int conn, ATerm);
 void set_cursor_at_line_column(int conn, ATerm, int, int);
-ATerm get_parse_tree(int conn, ATerm);
+ATerm get_tree_slices(int conn, ATerm);
 ATerm get_cursor(int conn, ATerm);
-void delete_editor(int conn, ATerm);
+ATerm get_parse_tree(int conn, ATerm);
 ATerm get_focus_at_cursor(int conn, ATerm);
-void update_editor(int conn, ATerm, ATerm);
+void delete_editor(int conn, ATerm);
 ATerm get_sort_at_cursor(int conn, ATerm);
-void create_editor(int conn, ATerm, ATerm);
+void update_editor(int conn, ATerm, ATerm);
 void move_cursor(int conn, ATerm, ATerm);
+void create_editor(int conn, ATerm, ATerm);
+ATerm slice_tree(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm structure_editor_handler(int conn, ATerm term);
 extern ATerm structure_editor_checker(int conn, ATerm sigs);

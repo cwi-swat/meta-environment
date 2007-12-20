@@ -77,6 +77,11 @@ in
   +
     rec-msg(se-move-cursor(EditorId?, Direction?))
     . snd-do(SE, move-cursor(EditorId, Direction))
+  +
+    rec-msg(se-slice(Tree?))
+    . snd-eval(SE, slice-tree(Tree))
+    . rec-value(SE, sliced-tree(Slices?))
+    . snd-msg(se-sliced(Tree, Slices))
   )
   * delta
 endlet

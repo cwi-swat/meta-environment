@@ -361,6 +361,18 @@ ATerm get_tree_slices(int cid, ATerm editorId) {
   return ATmake("snd-value(no-tree-slices)"); 
 }
 
+ATerm slice_tree(int cid, ATerm tree) 
+{
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(ATBunpack(tree));
+  ATermList slices;
+
+  parseTree = PT_addParseTreePosInfoSome("dummy", parseTree, -1,
+					 ATtrue, ATtrue);
+  slices = tokenizeTree(PT_getParseTreeTop(parseTree));
+
+  return ATmake("snd-value(sliced-tree(<term>))", (ATerm) ATreverse(slices));
+}
+
 void rec_terminate(int cid, ATerm message) {
   exit(0);
 }

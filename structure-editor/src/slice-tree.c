@@ -61,11 +61,42 @@ static ATerm getProductionCategory(PT_Tree tree)
 
 
 /*}}}  */
+
+/*{{{  static const char* getProductionCategoryName(PT_Tree tree)  */
+
+static const char* getProductionCategoryName(PT_Tree tree) 
+{
+  ATerm cat = getProductionCategory(tree);
+
+  if (cat != NULL) {
+    return ATgetName(ATgetAFun((ATermAppl) cat));
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
 /*{{{  static ATerm getAnnotationCategory(PT_Tree tree) */
 
 static ATerm getAnnotationCategory(PT_Tree tree)
 {
   return PT_getTreeAnnotation(tree, category);
+}
+
+/*}}}  */
+
+/*{{{  static const char* getAnnotationCategoryName(PT_Tree tree) */
+
+static const char* getAnnotationCategoryName(PT_Tree tree)
+{
+  ATerm cat = getAnnotationCategory(tree);
+
+  if (cat != NULL) {
+    return ATgetName(ATgetAFun((ATermAppl) cat));
+  }
+
+  return NULL;
 }
 
 /*}}}  */
@@ -211,3 +242,68 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
 }
 
 /*}}}  */
+
+static ATermList tokenizeTreeRec(PT_Tree tree) 
+{
+  ERR_Location loc = PT_getTreeLocation(tree);
+  ERR_AreaAreas area = NULL;
+  const char* category= NULL;
+   
+  if (loc != NULL && ERR_hasLocationArea(loc)) {
+    area =  ERR_makeAreaAreasSingle(ERR_getLocationArea(loc));
+  }
+
+  if (PT_isTreeAmb(tree)) {
+    return ATmakeList1((ATerm) ERR_makeSliceSlice("MetaAmbiguity", area));
+  }
+  else if (PT_isTreeCycle(tree)) {
+    return ATmakeList1((ATerm) ERR_makeSliceSlice("MetaCycle", area));
+  }
+  else if ((category = getAnnotationCategoryName(tree)) != NULL) {
+    return ATmakeList1((ATerm)  ERR_makeSliceSlice(category, area));
+  }
+  else if ((category = getProductionCategoryName(tree)) != NULL) {
+    return ATmakeList1((ATerm)  ERR_makeSliceSlice(category, area));
+  }
+  else {
+    /* Check var before lit, since there could be a variable
+     * of type lit.
+     */
+    if (PT_isTreeVar(tree)) {
+      return ATmakeList1((ATerm)  ERR_makeSliceSlice("MetaVariable", area));
+    }
+    else if (PT_isTreeLit(tree) || PT_isTreeCilit(tree)) {
+      PT_Args chars = PT_getTreeArgs(tree);
+      if (hasAlphanumericChars(chars)) {
+	return ATmakeList1((ATerm)  ERR_makeSliceSlice("MetaKeyword", area));
+      }
+    }
+  }
+
+  if (PT_isTreeAppl(tree)) {
+    ATermList result = ATempty;
+    PT_Args args = PT_getTreeArgs(tree);
+
+    for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+      ATermList arg = tokenizeTreeRec(PT_getArgsHead(args));
+      result = ATconcat(arg, result);
+    }
+
+    return result;
+  }
+
+  return ATempty;
+}
+
+ATermList tokenizeTree(PT_Tree tree)
+{
+  ATprotect(&category);
+  category = ATparse("category");
+
+  ATprotect(&categoryPattern);
+  categoryPattern = ATparse("category(<term>)");
+
+  return tokenizeTreeRec(tree);
+}
+
+
