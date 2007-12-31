@@ -3,5 +3,5 @@ Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: sdf
 Version: 2.5.1
 Description:
-Requires: pgen,sglr
+Requires: pgen,sglr,pandora
 ToolBusFlags=
