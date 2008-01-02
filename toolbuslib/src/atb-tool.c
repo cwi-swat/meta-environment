@@ -288,8 +288,6 @@ int ATBinit(int argc, char *argv[], ATerm *stack_bottom)
     
     packBuffer = ATcreateByteBuffer(PACKBUFFERSIZE);
   #endif
-
-  ATinitializeIntegerStore();
   
   opcodeWriteBuffer = (char*) malloc(sizeof(char));
   lengthWriteBuffer = (char*) malloc(2 * sizeof(char));
