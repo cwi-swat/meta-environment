@@ -30,23 +30,23 @@ public class IfElse extends ProcessExpression{
 		this.right = Pelse;
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new IfElse(test, left.copy(), right.copy(), tbfactory, getPosInfo());
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		left.computeFirst();
 		right.computeFirst();
 		setFirst(left.getFirst().union(right.getFirst()));
 	}
 	
-	public void replaceFormals(Environment e) throws ToolBusException{
+	protected void replaceFormals(Environment e) throws ToolBusException{
 		env = e;
 		left.replaceFormals(env);
 		right.replaceFormals(env);
 	}
 	
-	public void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
+	protected void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
 		left.compile(P, calls, follows);
 		ATerm rtest = P.getTBTermFactory().resolveVarTypes(test, env);
 		left.getFirst().setTest(rtest, env);

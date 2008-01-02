@@ -26,22 +26,22 @@ public class LetDefinition extends ProcessExpression{
 		this.PE = PE;
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new LetDefinition(locals, PEinit.copy(), tbfactory, getPosInfo());
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		PE.computeFirst();
 	}
 	
-	public void replaceFormals(Environment e) throws ToolBusException{
+	protected void replaceFormals(Environment e) throws ToolBusException{
 		env = e.copy();
 		env.introduceVars(locals);
 		PE.replaceFormals(env);
 		// env.removeBindings(formals);
 	}
 	
-	public void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
+	protected void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
 		// System.err.println("LetDef.compile: " + env);
 		env.introduceVars(locals);
 		PE.compile(P, calls, follows);

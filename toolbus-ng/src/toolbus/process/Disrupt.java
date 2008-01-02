@@ -23,22 +23,22 @@ public class Disrupt extends ProcessExpression{
 		this.right = right;
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new Disrupt(left, right, tbfactory, getPosInfo());
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		left.computeFirst();
 		right.computeFirst();
 		setFirst(left.getFirst().union(right.getFirst()));
 	}
 	
-	public void replaceFormals(Environment env) throws ToolBusException{
+	protected void replaceFormals(Environment env) throws ToolBusException{
 		left.replaceFormals(env);
 		right.replaceFormals(env);
 	}
 	
-	public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
+	protected void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
 		left.compile(P, calls, follow);
 		right.compile(P, calls, follow);
 		State rightFirst = right.getFirst();

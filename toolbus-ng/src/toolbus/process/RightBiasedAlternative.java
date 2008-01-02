@@ -41,12 +41,12 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 		mergeState.addElement(this);
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		expr[LEFT].computeFirst();
 		expr[RIGHT].computeFirst();
 	}
 	
-	public void compile(ProcessInstance processInstance, Stack<String> calls, State follows) throws ToolBusException{
+	protected void compile(ProcessInstance processInstance, Stack<String> calls, State follows) throws ToolBusException{
 		this.processInstance = processInstance;
 		
 		expr[LEFT].compile(processInstance, calls, follows);
@@ -57,12 +57,12 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 		setFollow(follows);
 	}
 	
-	public void replaceFormals(Environment env) throws ToolBusException{
+	protected void replaceFormals(Environment env) throws ToolBusException{
 		expr[LEFT].replaceFormals(env);
 		expr[RIGHT].replaceFormals(env);
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new RightBiasedAlternative(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory, getPosInfo());
 	}
 	

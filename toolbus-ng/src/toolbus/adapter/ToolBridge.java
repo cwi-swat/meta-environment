@@ -234,6 +234,10 @@ public abstract class ToolBridge implements IDataHandler, Runnable, IOperations{
 				synchronized(queues){
 					eventQueue = queues.get(sourceFun);
 				}
+				if(eventQueue == null){
+					LoggerFactory.log("Received acknowledgement for a non-existent event: " + sourceFun, ILogger.WARNING, IToolBusLoggerConstants.TOOL);
+					return;
+				}
 				eventQueue.ackEvent();
 				
 				ATerm callBackInfo = ackEvent.elementAt(1);

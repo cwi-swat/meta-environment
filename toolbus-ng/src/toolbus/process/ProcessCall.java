@@ -86,11 +86,11 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		evalArgs = b;
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new ProcessCall(name, actuals, evalArgs, tbfactory, getPosInfo());
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		// System.err.println("ProcessCall.computeFirst: " + firstState);
 		setFirst(firstState);
 	}
@@ -100,7 +100,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		return firstState;
 	}
 	
-	public void replaceFormals(Environment e) throws ToolBusException{
+	protected void replaceFormals(Environment e) throws ToolBusException{
 		//System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
 		env = e.copy();
 		
@@ -108,7 +108,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		actuals = (ATermList) tbfactory.replaceFormals(originalActuals, env);
 	}
 	
-	public void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
+	protected void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException{
 		processInstance = P;
 		this.calls = calls;
 		setFollow(follows);

@@ -22,7 +22,7 @@ public class Sequence extends ProcessExpression{
 		this.right = right;
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new Sequence(left.copy(), right.copy(), tbfactory, getPosInfo());
 	}
 	
@@ -30,20 +30,20 @@ public class Sequence extends ProcessExpression{
 		return "Seq(" + left.toString() + ", " + right.toString() + ")";
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		left.computeFirst();
 		right.computeFirst();
 		setFirst(left.getFirst());
 	}
 	
-	public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
+	protected void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
 		right.compile(P, calls, follow);
 		left.compile(P, calls, right.getFirst());
 		
 		setFollow(follow);
 	}
 	
-	public void replaceFormals(Environment env) throws ToolBusException{
+	protected void replaceFormals(Environment env) throws ToolBusException{
 		left.replaceFormals(env);
 		right.replaceFormals(env);
 	}

@@ -30,7 +30,7 @@ public class Iteration extends ProcessExpression{
 		this.right = right;
 	}
 	
-	public ProcessExpression copy(){
+	protected ProcessExpression copy(){
 		return new Iteration(left.copy(), right.copy(), tbfactory, getPosInfo());
 	}
 	
@@ -38,19 +38,19 @@ public class Iteration extends ProcessExpression{
 		return "Iter(" + left.toString() + ", " + right.toString() + ")";
 	}
 	
-	public void computeFirst(){
+	protected void computeFirst(){
 		left.computeFirst();
 		right.computeFirst();
 		setFirst(left.getFirst().union(right.getFirst()));
 	}
 	
-	public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
+	protected void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException{
 		left.compile(P, calls, getFirst());
 		right.compile(P, calls, follow);
 		setFollow(follow);
 	}
 	
-	public void replaceFormals(Environment env) throws ToolBusException{
+	protected void replaceFormals(Environment env) throws ToolBusException{
 		left.replaceFormals(env);
 		right.replaceFormals(env);
 	}

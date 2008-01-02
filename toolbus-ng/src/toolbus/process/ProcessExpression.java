@@ -73,13 +73,13 @@ abstract public class ProcessExpression{
 		follow = follow.union(set);
 	}
 	
-	abstract public void computeFirst();
+	abstract protected void computeFirst();
 	
-	abstract public void replaceFormals(Environment env) throws ToolBusException;
+	abstract protected void replaceFormals(Environment env) throws ToolBusException;
 	
-	abstract public void compile(ProcessInstance processInstance, Stack<String> calls, State followSet) throws ToolBusException;
+	abstract protected void compile(ProcessInstance processInstance, Stack<String> calls, State followSet) throws ToolBusException;
 	
-	abstract public ProcessExpression copy();
+	abstract protected ProcessExpression copy();
 	
 	abstract public AtomSet getAtoms();
 }
