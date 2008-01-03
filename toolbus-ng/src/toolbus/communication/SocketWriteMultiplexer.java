@@ -20,6 +20,7 @@ import toolbus.logging.LoggerFactory;
  */
 public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	private final Object selectPreventionLock = new Object();
+	private volatile boolean doneRegistering = true;
 	
 	private final AbstractConnectionHandler connectionHandler;
 	private final Selector selector;
@@ -71,12 +72,6 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	 */
 	public void run(){
 		while(running){
-			try{
-				selector.select(); // <-- Wait till we got stuff to do or get woken up.
-			}catch(IOException ioex){
-				LoggerFactory.log("An exception occured during the select call in the write multiplexer.", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-			}
-
 			synchronized(selectPreventionLock){
 				// This barrier is for preventing this thread from obtaining the monitor we need for
 				// registering a channel. The select() call obtains several monitors and then
@@ -84,10 +79,17 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 				// associated objects) to block indefinately when the select() call is in progress!
 				// Thanks Sun for this (incredibly) crappy design / implementation. Long live the
 				// community projects ... yeah NOT!
+				while(!doneRegistering){
+					try{
+						selectPreventionLock.wait();
+					}catch(InterruptedException irex){
+						// Ignore this
+					}
+				}
 			}
 			
 			try{
-				selector.selectNow(); // <-- Checks if we have stuff to do and clears the wakeup if needed.
+				selector.select(); // <-- Wait till we got stuff to do or get woken up.
 			}catch(IOException ioex){
 				LoggerFactory.log("An exception occured during the select call in the write multiplexer.", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 			}
@@ -143,6 +145,8 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	 */
 	public void registerForWrite(SelectableChannel channel, SocketIOHandler ioHandler){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 			try{
 				SelectionKey key = channel.keyFor(selector);
@@ -157,6 +161,10 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 
 				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 
