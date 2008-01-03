@@ -189,8 +189,32 @@ public class WishAdapter extends AbstractTool{
 			wishInputStream.write(spaceBytes);
 			int i = 0;
 			while(i < nrOfArguments){
-				wishInputStream.write(arguments[i++].toString().getBytes());
-				wishInputStream.write(spaceBytes);
+			    ATerm currentArg = arguments[i++];
+			    if (currentArg.getType() == ATerm.LIST) {
+				ATermList list = (ATermList)currentArg;
+				if (list.isEmpty()) {
+				    wishInputStream.write("{}".getBytes());
+				}
+				else {
+				    wishInputStream.write("{".getBytes());
+					while (!list.isEmpty()) {
+					    ATerm head = list.getFirst();
+					    System.out.println("writing: " + head.toString());
+					    wishInputStream.write(head.toString().getBytes());
+					    list = list.getNext();
+					    System.out.println("list = " + list.toString());
+					    System.out.println("list.isEmpty() = " + list.isEmpty());
+					    if (!list.isEmpty()) {
+						wishInputStream.write(spaceBytes);
+					    }
+					}
+				    wishInputStream.write("}".getBytes());
+				}
+			    }
+			    else {
+				wishInputStream.write(currentArg.toString().getBytes());
+			    }
+			    wishInputStream.write(spaceBytes);
 			}
 			wishInputStream.write(endCallBytes);
 			
