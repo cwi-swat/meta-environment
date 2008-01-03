@@ -159,6 +159,8 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 	 */
 	public void registerForRead(SelectableChannel channel, SocketIOHandler ioHandler){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 
 			try{
@@ -171,6 +173,10 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 
 				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 
@@ -179,6 +185,8 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 	 */
 	public void deregisterForRead(SelectableChannel channel){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 
 			SelectionKey key = channel.keyFor(selector);
@@ -194,6 +202,10 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 					key.attach(null);
 				}
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 
@@ -202,6 +214,8 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 	 */
 	public void registerForWrite(SelectableChannel channel, SocketIOHandler ioHandler){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 			try{
 				SelectionKey key = channel.keyFor(selector);
@@ -213,6 +227,10 @@ public class SocketReadWriteMultiplexer implements IReadMultiplexer, IWriteMulti
 
 				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 

@@ -173,6 +173,8 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	 */
 	public void deregisterForWrite(SelectableChannel channel){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 
 			SelectionKey key = channel.keyFor(selector);
@@ -184,6 +186,10 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 				// Remove the attachment (if any), so it can be GCed
 				key.attach(null);
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 }

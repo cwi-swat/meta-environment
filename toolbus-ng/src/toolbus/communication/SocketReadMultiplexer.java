@@ -20,6 +20,7 @@ import toolbus.logging.LoggerFactory;
  */
 public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 	private final Object selectPreventionLock = new Object();
+	private volatile boolean doneRegistering = true;
 	
 	private final AbstractConnectionHandler connectionHandler;
 	
@@ -72,12 +73,6 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 	 */
 	public void run(){
 		while(running){
-			try{
-				selector.select(); // <-- Wait till we got stuff to do or get woken up.
-			}catch(IOException ioex){
-				LoggerFactory.log("An exception occured during the select call in the read multiplexer.", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-			}
-
 			synchronized(selectPreventionLock){
 				// This barrier is for preventing this thread from obtaining the monitor we need for
 				// registering a channel. The select() call obtains several monitors and then
@@ -85,12 +80,20 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 				// associated objects) to block indefinately when the select() call is in progress!
 				// Thanks Sun for this (incredibly) crappy design / implementation. Long live the
 				// community projects ... yeah NOT!
+				
+				while(!doneRegistering){
+					try{
+						selectPreventionLock.wait();
+					}catch(InterruptedException irex){
+						// Ignore this
+					}
+				}
 			}
 			
 			try{
-				selector.selectNow(); // <-- Checks if we have stuff to do and clears the wakeup if needed.
+				selector.select(); // <-- Wait till we got stuff to do or get woken up.
 			}catch(IOException ioex){
-				LoggerFactory.log("An exception occured during the select call in the write multiplexer.", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
+				LoggerFactory.log("An exception occured during the select call in the read multiplexer.", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 			}
 
 			Set<SelectionKey> readyKeys = selector.selectedKeys();
@@ -136,6 +139,8 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 	 */
 	public void registerForRead(SelectableChannel channel, SocketIOHandler ioHandler){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 
 			try{
@@ -151,6 +156,10 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 
 				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 
@@ -159,6 +168,8 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 	 */
 	public void deregisterForRead(SelectableChannel channel){
 		synchronized(selectPreventionLock){
+			doneRegistering = false;
+			
 			selector.wakeup();
 
 			SelectionKey key = channel.keyFor(selector);
@@ -170,6 +181,10 @@ public class SocketReadMultiplexer implements IReadMultiplexer, Runnable{
 				// Remove the attachment (if any), so it can be GCed
 				key.attach(null);
 			}
+			
+			selectPreventionLock.notify();
+			
+			doneRegistering = true;
 		}
 	}
 }
