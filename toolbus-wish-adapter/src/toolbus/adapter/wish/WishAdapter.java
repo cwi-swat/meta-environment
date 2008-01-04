@@ -204,7 +204,7 @@ public class WishAdapter extends AbstractTool{
 	}
     }
 
-    public void receiveDo(ATerm aTerm){
+    private void dumpReceivedTerm(ATerm aTerm) {
 	ATermAppl doTerm = (ATermAppl) aTerm;
 	AFun fun = doTerm.getAFun();
 	String functionName = fun.getName();
@@ -229,32 +229,13 @@ public class WishAdapter extends AbstractTool{
 	    System.exit(0); // Kill yourself.
 	}
     }
+
+    public void receiveDo(ATerm aTerm){
+	dumpReceivedTerm(aTerm);
+    }
 	
     public ATerm receiveEval(ATerm aTerm){
-	ATermAppl evalTerm = (ATermAppl) aTerm;
-	AFun fun = evalTerm.getAFun();
-	String functionName = fun.getName();
-	ATerm[] arguments = evalTerm.getArgumentArray();
-	int nrOfArguments = arguments.length;
-		
-	try{
-	    wishInputStream.write(startCallBytes);
-	    wishInputStream.write(functionName.getBytes());
-	    wishInputStream.write(spaceBytes);
-	    int i = 0;
-	    while(i < nrOfArguments){
-		wishInputStream.write(arguments[i++].toString().getBytes());
-		wishInputStream.write(spaceBytes);
-	    }
-	    wishInputStream.write(endCallBytes);
-			
-	    wishInputStream.flush();
-	}catch(IOException ioex){
-	    ioex.printStackTrace();
-	    System.err.println("Something went terribly wrong with the TCL/TK tool. Committing suicide now ....");
-	    System.exit(0); // Kill yourself.
-	}
-		
+	dumpReceivedTerm(aTerm);
 	// Receive the value.
 	synchronized(valueLock){
 	    while(value == null){
