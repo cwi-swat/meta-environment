@@ -1,4 +1,7 @@
-Fir Dec 07 15:30:10 CEST 2007 <lankamp@cwi.nl>
+Fri Jan 04 11:53:00 CEST 2007 <lankamp@cwi.nl>
+ * toolbus-viewer.sh.src: Added a script that starts the ToolBusNG with the viewer.
+
+Fri Dec 07 15:30:10 CEST 2007 <lankamp@cwi.nl>
  * toolbus.TBTermFactory: Fixed a bug in the list placeholder code.
 
 Fri Dec 07 14:15:19 CEST 2007 <lankamp@cwi.nl>
@@ -25,7 +28,7 @@ Tue Nov 27 13:02:06 CEST 2007 <lankamp@cwi.nl>
  * *.*: The 'new' parser now adds position information to the state elements.
  * toolbus.viewer.Viewer: Extended the viewer, so you can see what state element a step actually executed.
 
-Wen Nov 21 11:14:11 CEST 2007 <lankamp@cwi.nl>
+Wed Nov 21 11:14:11 CEST 2007 <lankamp@cwi.nl>
  * src/toolbus/Main.java: Added more info to the help message, renamed 'quit' to 'shutdown' and replaced the System.exit(0) by a call to toolbus.shutdown(ATerm), so all tools will be notified that the ToolBus will be terminating.
  And oh yes, I updated the changelog as well ;).
 

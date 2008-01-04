@@ -68,7 +68,7 @@ public class ProcessInstance{
 	}
 	
 	public void addToAtomSignature(AtomSet atoms){
-		for(Atom a : atoms){
+		for(Atom a : atoms.getSet()){
 			toolbus.addToSignature(a.toATerm());
 		}
 	}
