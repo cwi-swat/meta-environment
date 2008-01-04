@@ -10,6 +10,7 @@ import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+
 import toolbus.IOperations;
 import toolbus.adapter.AbstractTool;
 import toolbus.adapter.ToolBridge;
@@ -18,8 +19,11 @@ import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import aterm.ATerm;
 import aterm.ATermAppl;
+import aterm.ATermBlob;
+import aterm.ATermInt;
 import aterm.ATermList;
 import aterm.ATermPlaceholder;
+import aterm.ATermReal;
 import aterm.pure.PureFactory;
 
 /**
@@ -227,29 +231,19 @@ public class JavaToolBridge extends ToolBridge{
 		for(int i = 0; i < toolMethods.length; i++){
 			Method toolMethod = toolMethods[i];
 			if(Modifier.isPublic(toolMethod.getModifiers())){
-
 				Class<?> returnType = toolMethod.getReturnType();
+				
 				if(isImplementationOf(returnType, ATerm.class)) returnType = ATerm.class;
+				
 				if(returnType == void.class || returnType == ATerm.class || isImplementationOf(returnType, ATerm.class)){
-
 					Class<?>[] parameters = toolMethod.getParameterTypes();
-					boolean paramsAreTerms = true;
-					for(int j = parameters.length - 1; j >= 0; j--){
-						Class<?> param = parameters[j];
-						if(param != ATerm.class && !isImplementationOf(param, ATerm.class)){
-							paramsAreTerms = false;
-							break;
-						}
-					}
-
-					if(paramsAreTerms){
-						CallableMethodSignature cms = new CallableMethodSignature();
-						cms.methodName = toolMethod.getName();
-						cms.returnType = returnType;
-						cms.parameters = parameters;
-
-						callableFunctions.put(cms, toolMethod);
-					}
+					
+					CallableMethodSignature cms = new CallableMethodSignature();
+					cms.methodName = toolMethod.getName();
+					cms.returnType = returnType;
+					cms.parameters = parameters;
+					
+					callableFunctions.put(cms, toolMethod);
 				}
 			}
 		}
@@ -272,7 +266,7 @@ public class JavaToolBridge extends ToolBridge{
 				Class<?>[] parameters = new Class[arguments.length];
 				for(int i = 0; i < parameters.length; i++){
 					// All the arguments are placeholders, so retrieve the type they represent.
-					parameters[i] = ((ATermPlaceholder) arguments[i]).getPlaceholder().getClass();
+					parameters[i] = determainTermType(arguments[i]);
 				}
 
 				Method toolMethod = findMethod(EVAL, methodTerm.getName(), parameters);
@@ -288,12 +282,8 @@ public class JavaToolBridge extends ToolBridge{
 				Class<?>[] parameters = new Class[arguments.length];
 				for(int i = 0; i < parameters.length; i++){
 					// Retrieve the types of the parameters.
-					ATerm parameter = arguments[i];
-					if(parameter instanceof ATermPlaceholder){
-						parameters[i] = ((ATermPlaceholder) parameter).getPlaceholder().getClass();
-					}else{
-						parameters[i] = parameter.getClass();
-					}
+					parameters[i] = determainTermType(arguments[i]);
+					
 				}
 
 				Method toolMethod = findMethod(DO, methodTerm.getName(), parameters);
@@ -338,9 +328,11 @@ public class JavaToolBridge extends ToolBridge{
 			String methodName = methodTerm.getName();
 
 			ATerm[] arguments = methodTerm.getArgumentArray();
+			Object[] convertedArguments = new Object[arguments.length];
 			Class<?>[] parameters = new Class[arguments.length];
 			for(int i = 0; i < parameters.length; i++){
-				parameters[i] = arguments[i].getClass();
+				parameters[i] = determainTermType(arguments[i]);
+				convertedArguments[i] = convertArgument(arguments[i]);
 			}
 
 			Method toolMethod = findMethod(operation, methodName, parameters);
@@ -349,7 +341,7 @@ public class JavaToolBridge extends ToolBridge{
 				LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
 				throw new MethodInvokationException(error);
 			}
-			returnValue = (ATerm) toolMethod.invoke(tool, (Object[]) arguments);
+			returnValue = (ATerm) toolMethod.invoke(tool, convertedArguments);
 		}catch(ClassCastException ccex){
 			LoggerFactory.log("A class cast exception occured during the invokation of a method. Discarding term ....", ccex, ILogger.ERROR, IToolBusLoggerConstants.TOOL);
 			throw new MethodInvokationException(ccex);
@@ -387,6 +379,74 @@ public class JavaToolBridge extends ToolBridge{
 		}
 
 		return callableFunctions.get(cms);
+	}
+	
+	/**
+	 * Determain the class type of the given aterm (depending on its signature).
+	 * 
+	 * @param aTerm
+	 *            The aterm of which we need to determain the type.
+	 * @return The Java class type the aterm corresponds to.
+	 */
+	private Class<?> determainTermType(ATerm aTerm){
+		if(aTerm instanceof ATermPlaceholder){
+			ATermPlaceholder placeHolder = (ATermPlaceholder) aTerm;
+			ATermAppl typeTerm = (ATermAppl) placeHolder.getPlaceholder();
+			String typeName = typeTerm.getName();
+			
+			if(typeName.equals("str")) return String.class;
+			if(typeName.equals("blob")) return byte[].class;
+			if(typeName.equals("int")) return int.class;
+			if(typeName.equals("real"))return double.class;
+			if(typeName.equals("list")) return ATermList.class;
+			if(typeName.equals("appl")) return ATermAppl.class;
+			if(typeName.equals("term")) return ATerm.class;
+		}else if(aTerm instanceof ATermAppl){
+			ATermAppl appl = (ATermAppl) aTerm;
+			if(appl.getAFun().isQuoted()) return String.class;
+			return ATermAppl.class;
+		}else if(aTerm instanceof ATermList){
+			return ATermList.class;
+		}else if(aTerm instanceof ATermInt){
+			return int.class;
+		}else if(aTerm instanceof ATermReal){
+			return double.class;
+		}else if(aTerm instanceof ATermBlob){
+			return byte[].class;
+		}
+		
+		// Unable to determain type (or it's a type that doesn't need conversion).
+		return ATerm.class;
+	}
+	
+	/**
+	 * Converts the given aterm to its corresponding Java type object (if needed).
+	 * 
+	 * @param aTerm
+	 *            The aterm to convert.
+	 * @return The resulting Java type object.
+	 */
+	private Object convertArgument(ATerm aTerm){
+		int type = aTerm.getType();
+		switch(type){
+			case ATerm.APPL:
+				ATermAppl appl = (ATermAppl) aTerm;
+				if(appl.getAFun().isQuoted()) return appl.getAFun().getName();
+				return appl;
+			case ATerm.LIST:
+				return (ATermList) aTerm;
+			case ATerm.INT:
+				ATermInt integer = (ATermInt) aTerm;
+				return new Integer(integer.getInt());
+			case ATerm.REAL:
+				ATermReal real = (ATermReal) aTerm;
+				return new Double(real.getReal());
+			case ATerm.BLOB:
+				ATermBlob blob = (ATermBlob) aTerm;
+				return blob.getBlobData();
+			default:
+				return aTerm; // No conversion needed, just return it.
+		}
 	}
 	
 	/**

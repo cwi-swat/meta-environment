@@ -1,3 +1,6 @@
+Fri Jan 04 15:10:00 CEST 2007 <lankamp@cwi.nl>
+ * toolbus.adapter.java.JavaToolBridge: The NG Java adapter is now able to convert aterm parameters to their corresponding Java type. The reflective calling of methods should work now.
+
 Fri Jan 04 11:53:00 CEST 2007 <lankamp@cwi.nl>
  * toolbus-viewer.sh.src: Added a script that starts the ToolBusNG with the viewer.
 
