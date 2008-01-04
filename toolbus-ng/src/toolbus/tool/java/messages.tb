@@ -1,29 +1,26 @@
 process P1 is 		
-let Message : term, Tidr : receive, Tids : send, Stats : term
+let Message : str, ExitMessage : term, Tidr : receive, Tids : send
 in
 	execute(receive, Tidr?) .
 	execute(send, Tids?) .
 	(
 		(
-			rec-event(Tids, available) /*timeout(secs(10))*/ .
+			rec-event(Tids, available) .
 			snd-ack-event(Tids, available) .
-			/*get-perf-stats(Tidr) .
-			rec-perf-stats(Tidr, Stats?) .
-			printf("%t\n", Stats) .*/
-			snd-eval(Tids, getText) /*delay(msecs(1000))*/ .
+			snd-eval(Tids, getText) .
 			rec-value(Tids, getText(Message?)) .
 			snd-do(Tidr, set(Message))
 		)
 		+
 		(
-			rec-event(Tids, exit(Message?)) .
-			snd-ack-event(Tids, exit(Message)) .
+			rec-event(Tids, exit(ExitMessage?)) .
+			snd-ack-event(Tids, exit(ExitMessage)) .
 			shutdown("Shutdown by sending tool")
 	    )
 		+
 		(
-			rec-event(Tidr, exit(Message?)) .
-			snd-ack-event(Tidr, exit(Message)) .
+			rec-event(Tidr, exit(ExitMessage?)) .
+			snd-ack-event(Tidr, exit(ExitMessage)) .
 			shutdown("Shutdown by receiving tool")
 		)
 	) * delta

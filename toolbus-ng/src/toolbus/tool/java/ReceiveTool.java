@@ -50,8 +50,8 @@ public class ReceiveTool extends AbstractJavaTool{
 		frame.setVisible(true);
 	}
 	
-	public void set(ATerm message){
-		textPane.setText(message.toString());
+	public void set(String message){
+		textPane.setText(message);
 	}
 	
 	public void receiveAckEvent(ATerm aTerm){

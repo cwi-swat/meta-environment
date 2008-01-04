@@ -90,7 +90,7 @@ public class SendTool extends AbstractJavaTool{
 	
 	public ATerm getText(){
 		ATermFactory factory = getToolBridge().getFactory();
-		return factory.makeAppl(factory.makeAFun("getText", 1, false), factory.makeAppl(factory.makeAFun(textPane.getText(), 0, false)));
+		return factory.makeAppl(factory.makeAFun("getText", 1, false), factory.makeAppl(factory.makeAFun(textPane.getText(), 0, true)));
 	}
 	
 	public void receiveAckEvent(ATerm aTerm){
