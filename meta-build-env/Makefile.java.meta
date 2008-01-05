@@ -12,7 +12,7 @@ EXTRA_DIST += $(wildcard *.m4) \
              Makefile.java.meta \
 	     meta-build.ant \
 	     $(JAVA_JAR) \
-	     $(shell find src -name "*.java")
+	     $(shell cd ${top_srcdir}; find src -name "*.java")
 
 CLEANFILES+=$(PACKAGE)-uninstalled.pc
 
@@ -23,6 +23,8 @@ data_DATA = $(JAVA_JAR)
 
 ANT_ENV = \
   BUILDFILE=$(top_srcdir)/meta-build.ant \
+  SRCDIR=$(top_srcdir) \
+  BUILDDIR=$(shell pwd) \
   JAVA_JAR=${JAVA_JAR} \
   JAVA_MAIN_CLASS=${JAVA_MAIN_CLASS} \
   JAVA_LOCAL_JARS=$(foreach j,${JAVA_LOCAL_JARS},$(top_srcdir)/$j) \
@@ -31,8 +33,6 @@ ANT_ENV = \
   JAVA_TEST_CLASS=${JAVA_TEST_CLASS} \
   PACKAGE=${PACKAGE} \
   DOCHEADER="$(shell cat $(top_srcdir)/doc-header.html | sed 's@\"@\\\"@g;')"
-
-if MAINTAINER_MODE
 
 ANT_BUILDFILE=$(top_srcdir)/meta-build.ant
 ANT = $(ANT_ENV) ant $(foreach j, $(JAVA_LOCAL_JARS), -lib $j) -buildfile $(ANT_BUILDFILE)
@@ -51,4 +51,3 @@ doc: dummy
 check: dummy
 	$(ANT) check
 
-endif

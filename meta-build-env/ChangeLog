@@ -1,5 +1,9 @@
 $Id$
 
+Sat Jan  5 13:13:09 EST 2008 <jurgenv@cwi.nl>
+ * Makefile.java.meta,meta-build.ant: allow building jars outside maintainer-
+   mode, and made distcheck target working too.
+
 Fri Nov 30 11:51:19 CEST 2007 <kooiker@cwi.nl>
  * Makefile.java.meta: allow building jars outside maintainer-mode
 
