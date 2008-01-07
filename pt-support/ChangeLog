@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jan  7 14:13:32 CET 2008 <economop@cwi.nl>
+ * libmept/MEPT-ordering.c: ATerror if a cyclic node is encountered.
+
 Sat Dec  1 10:37:17 EST 2007 <jurgenv@cwi.nl>
  * libmept/*.c: removed usage of Location.h and LOC_ functions. Two
    versions of Location was to confusing. You forget to initialize

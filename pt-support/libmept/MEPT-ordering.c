@@ -255,6 +255,9 @@ static PT_Tree PT_orderAmbiguitiesRec(PT_Tree input, ATermTable cache)
       args = PT_orderArgs(args, cache);
       result = PT_setTreeArgs(input, args);
     }
+    else if (PT_isTreeCycle(input)) {
+      ATerror("orderPT: cannot order trees containing cycles!\n");
+    }
     else {
       result = input;
     }
