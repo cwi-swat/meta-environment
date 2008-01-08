@@ -11,6 +11,7 @@ import java.util.Set;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.util.concurrency.Latch;
 
 /**
  * This class handles the multiplexing of socket channels that we are registered for write
@@ -19,8 +20,7 @@ import toolbus.logging.LoggerFactory;
  * @author Arnold Lankamp
  */
 public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
-	private final Object selectPreventionLock = new Object();
-	private volatile boolean doneRegistering = true;
+	private final Latch selectionPreventionLatch = new Latch();
 	
 	private final AbstractConnectionHandler connectionHandler;
 	private final Selector selector;
@@ -72,24 +72,24 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	 */
 	public void run(){
 		while(running){
-			synchronized(selectPreventionLock){
-				// This barrier is for preventing this thread from obtaining the monitor we need for
-				// registering a channel. The select() call obtains several monitors and then
-				// blocks. Effectively this causes just about every method of the selector (and
-				// associated objects) to block indefinately when the select() call is in progress!
-				// Thanks Sun for this (incredibly) crappy design / implementation. Long live the
-				// community projects ... yeah NOT!
-				while(!doneRegistering){
-					try{
-						selectPreventionLock.wait();
-					}catch(InterruptedException irex){
-						// Ignore this
-					}
+			boolean ready = false;
+			while(!ready){
+				try{
+					// This barrier is for preventing this thread from obtaining the monitor we need for
+					// registering a channel. The select() call obtains several monitors and then
+					// blocks. Effectively this causes just about every method of the selector (and
+					// associated objects) to block indefinately when the select() call is in progress!
+					// Thanks Sun for this (incredibly) crappy design / implementation. Long live the
+					// community projects ... yeah NOT!
+					selectionPreventionLatch.await();
+					ready = true;
+				}catch(InterruptedException irex){
+					// Ignore
 				}
 			}
 			
 			try{
-				selector.select(); // <-- Wait till we got stuff to do or get woken up.
+				selector.select(); // Wait till we got stuff to do or get woken up.
 			}catch(IOException ioex){
 				LoggerFactory.log("An exception occured during the select call in the write multiplexer.", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
 			}
@@ -135,19 +135,18 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 
 		// If there is not more data that needs to be written or the channel has been closed in the
 		// mean time, de-register it.
-		synchronized(selectPreventionLock){
-			if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
-		}
+		if(!ioHandler.hasMoreToWrite() || !channel.isOpen()) deregisterForWrite(channel);
 	}
 
 	/**
 	 * @see IWriteMultiplexer#registerForWrite(SelectableChannel, SocketIOHandler)
 	 */
 	public void registerForWrite(SelectableChannel channel, SocketIOHandler ioHandler){
-		synchronized(selectPreventionLock){
-			doneRegistering = false;
-			
+		selectionPreventionLatch.acquire();
+		
+		try{
 			selector.wakeup();
+			
 			try{
 				SelectionKey key = channel.keyFor(selector);
 				if(key == null){
@@ -158,13 +157,11 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 				}
 			}catch(IOException ioex){
 				LoggerFactory.log("Registering a channel for writing failed", ioex, ILogger.ERROR, IToolBusLoggerConstants.COMMUNICATION);
-
+	
 				connectionHandler.closeDueToException((SocketChannel) channel, ioHandler);
 			}
-			
-			selectPreventionLock.notify();
-			
-			doneRegistering = true;
+		}finally{
+			selectionPreventionLatch.release();
 		}
 	}
 
@@ -172,24 +169,22 @@ public class SocketWriteMultiplexer implements IWriteMultiplexer, Runnable{
 	 * @see IWriteMultiplexer#deregisterForWrite(SelectableChannel)
 	 */
 	public void deregisterForWrite(SelectableChannel channel){
-		synchronized(selectPreventionLock){
-			doneRegistering = false;
-			
+		selectionPreventionLatch.acquire();
+		
+		try{
 			selector.wakeup();
-
+	
 			SelectionKey key = channel.keyFor(selector);
-
+	
 			if(key != null){
 				if(key.isValid()) key.interestOps(0);
 				else key.cancel();
-
+	
 				// Remove the attachment (if any), so it can be GCed
 				key.attach(null);
 			}
-			
-			selectPreventionLock.notify();
-			
-			doneRegistering = true;
+		}finally{
+			selectionPreventionLatch.release();
 		}
 	}
 }

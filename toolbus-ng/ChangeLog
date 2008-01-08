@@ -1,3 +1,6 @@
+Tue Jan 08 13:35:28 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.communication.*Multiplexer: Removed synchronization and replaced it by a 'latch'.
+
 Fri Jan 04 15:10:00 CEST 2007 <lankamp@cwi.nl>
  * toolbus.adapter.java.JavaToolBridge: The NG Java adapter is now able to convert aterm parameters to their corresponding Java type. The reflective calling of methods should work now.
 

@@ -1,7 +1,5 @@
 package toolbus;
 
-import java.util.ArrayList;
-import java.util.List;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
@@ -279,43 +277,5 @@ public class ToolInstanceManager{
 			}
 		};
 		dynamiclyConnectedTools.iterate(dynamicToolsIterationHandler);
-	}
-	
-	/**
-	 * Returns an array, containing referencable tool instances.
-	 * 
-	 * @return An array, containing referencable tool instances.
-	 */
-	public ToolInstance[] getAllTools(){
-		final List<ToolInstance> referencableTools = new ArrayList<ToolInstance>();
-		
-		// Active tools.
-		HashMapEntryHandler<ATerm, ToolInstance> activeToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
-			public int handle(ATerm toolKey, ToolInstance toolInstance){
-				referencableTools.add(toolInstance);
-				return EntryHandlerConstants.CONTINUE;
-			}
-		};
-		activeTools.iterate(activeToolsIterationHandler);
-		
-		// Pending tools.
-		HashMapEntryHandler<ATerm, ToolInstance> pendingToolsIterationHandler = new ReadOnlyHashMapEntryHandler<ATerm, ToolInstance>(){
-			public int handle(ATerm toolKey, ToolInstance toolInstance){
-				referencableTools.add(toolInstance);
-				return EntryHandlerConstants.CONTINUE;
-			}
-		};
-		pendingTools.iterate(pendingToolsIterationHandler);
-		
-		// Dynamicly connected tools.
-		HashSetEntryHandler<ToolInstance> dynamicToolsIterationHandler = new ReadOnlyHashSetEntryHandler<ToolInstance>(){
-			public int handle(ToolInstance toolInstance){
-				referencableTools.add(toolInstance);
-				return EntryHandlerConstants.CONTINUE;
-			}
-		};
-		dynamiclyConnectedTools.iterate(dynamicToolsIterationHandler);
-		
-		return referencableTools.toArray(new ToolInstance[referencableTools.size()]);
 	}
 }
