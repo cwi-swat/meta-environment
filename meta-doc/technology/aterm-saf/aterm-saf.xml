@@ -8,10 +8,12 @@
          xmlns:db="http://docbook.org/ns/docbook">
   <info>
     <title>ATerm SAF: A High Performance Streamable Format</title>
+
     <authorgroup>
-    <author>
-      <personname><firstname>Arnold</firstname><surname>Arnold Lankamp</surname></personname>
-    </author>
+      <author>
+        <personname><firstname>Arnold</firstname><surname>Arnold
+        Lankamp</surname></personname>
+      </author>
     </authorgroup>
 
     <pubdate>24-05-2007</pubdate>
@@ -153,7 +155,7 @@
       <para>The header contains general information about a term and can
       optionally contain type specific data in the two free fields.</para>
 
-      <para />
+      <para></para>
 
       <para>This is what the fields in the header represent:</para>
 
@@ -161,75 +163,42 @@
         <tgroup cols="5">
           <tbody>
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Bit number</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Bit number</emphasis>
+              </para></entry>
 
-              <entry>
-                <para>1</para>
-              </entry>
+              <entry><para>1</para></entry>
 
-              <entry>
-                <para>2 + 3</para>
-              </entry>
+              <entry><para>2 + 3</para></entry>
 
-              <entry>
-                <para>4</para>
-              </entry>
+              <entry><para>4</para></entry>
 
-              <entry>
-                <para>5 + 6 + 7 + 8</para>
-              </entry>
+              <entry><para>5 + 6 + 7 + 8</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Bit mask</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Bit mask</emphasis>
+              </para></entry>
 
-              <entry>
-                <para>0x80</para>
-              </entry>
+              <entry><para>0x80</para></entry>
 
-              <entry>
-                <para>0x40 + 0x20</para>
-              </entry>
+              <entry><para>0x40 + 0x20</para></entry>
 
-              <entry>
-                <para>0x10</para>
-              </entry>
+              <entry><para>0x10</para></entry>
 
-              <entry>
-                <para>0x0f</para>
-              </entry>
+              <entry><para>0x0f</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Meaning</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Meaning</emphasis>
+              </para></entry>
 
-              <entry>
-                <para>IsShared?</para>
-              </entry>
+              <entry><para>IsShared?</para></entry>
 
-              <entry>
-                <para>Free / Type specific</para>
-              </entry>
+              <entry><para>Free / Type specific</para></entry>
 
-              <entry>
-                <para>HasAnnos?</para>
-              </entry>
+              <entry><para>HasAnnos?</para></entry>
 
-              <entry>
-                <para>Type field</para>
-              </entry>
+              <entry><para>Type field</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -289,35 +258,21 @@
           <tgroup cols="3">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header</para>
-                </entry>
+                <entry><para>Header</para></entry>
 
-                <entry>
-                  <para>Value</para>
-                </entry>
+                <entry><para>Value</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -334,35 +289,21 @@
           <tgroup cols="3">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header</para>
-                </entry>
+                <entry><para>Header</para></entry>
 
-                <entry>
-                  <para>Value</para>
-                </entry>
+                <entry><para>Value</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>8</para>
-                </entry>
+                <entry><para>8</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -386,43 +327,25 @@
           <tgroup cols="4">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header</para>
-                </entry>
+                <entry><para>Header</para></entry>
 
-                <entry>
-                  <para>Length</para>
-                </entry>
+                <entry><para>Length</para></entry>
 
-                <entry>
-                  <para>Data</para>
-                </entry>
+                <entry><para>Data</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
 
-                <entry>
-                  <para>0 to 2^32-1 (depends on length)</para>
-                </entry>
+                <entry><para>0 to 2^32-1 (depends on length)</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -436,51 +359,30 @@
           <tgroup cols="5">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header</para>
-                </entry>
+                <entry><para>Header</para></entry>
 
-                <entry>
-                  <para>Arity</para>
-                </entry>
+                <entry><para>Arity</para></entry>
 
-                <entry>
-                  <para>Name length</para>
-                </entry>
+                <entry><para>Name length</para></entry>
 
-                <entry>
-                  <para>Name bytes</para>
-                </entry>
+                <entry><para>Name bytes</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
 
-                <entry>
-                  <para>0 to 2^32-1 (depends on name length)</para>
-                </entry>
+                <entry><para>0 to 2^32-1 (depends on name
+                length)</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -520,35 +422,21 @@
           <tgroup cols="3">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header</para>
-                </entry>
+                <entry><para>Header</para></entry>
 
-                <entry>
-                  <para>Size</para>
-                </entry>
+                <entry><para>Size</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -562,27 +450,17 @@
           <tgroup cols="2">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header</para>
-                </entry>
+                <entry><para>Header</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -600,35 +478,21 @@
           <tgroup cols="3">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header (with isShared? Flag set)</para>
-                </entry>
+                <entry><para>Header (with isShared? Flag set)</para></entry>
 
-                <entry>
-                  <para>Term identifier</para>
-                </entry>
+                <entry><para>Term identifier</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -642,35 +506,22 @@
           <tgroup cols="3">
             <tbody>
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Field</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Field</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>Header (with isFunShared? Flag set)</para>
-                </entry>
+                <entry><para>Header (with isFunShared? Flag
+                set)</para></entry>
 
-                <entry>
-                  <para>Function symbol identifier</para>
-                </entry>
+                <entry><para>Function symbol identifier</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>1</para>
-                </entry>
+                <entry><para>1</para></entry>
 
-                <entry>
-                  <para>1 to 5</para>
-                </entry>
+                <entry><para>1 to 5</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -696,7 +547,7 @@
     intended to interface with any implementations other then themselfs, since
     compatibility can not be guaranteed in these cases).</para>
 
-    <para />
+    <para></para>
 
     <para>This block-wise writing and reading method enables us to suspend the
     (de-)serialization process at fixed intervals, without the need to assign
@@ -736,7 +587,7 @@
     we know what the data and composition look like and can use that knowledge
     to our advantage.</para>
 
-    <para xml:id="Sharing" />
+    <para xml:id="Sharing"></para>
 
     <para>We use a LZW like compression technique to handle the sharing. What
     we do is, every time we encounter an element we have not seen before we
@@ -784,13 +635,9 @@
           <tgroup cols="2">
             <tbody>
               <row>
-                <entry>
-                  <emphasis>Value</emphasis>
-                </entry>
+                <entry><emphasis>Value</emphasis></entry>
 
-                <entry>
-                  <emphasis>Encoded representation</emphasis>
-                </entry>
+                <entry><emphasis>Encoded representation</emphasis></entry>
               </row>
 
               <row>
@@ -847,9 +694,8 @@
                 <entry>-256</entry>
 
                 <entry><emphasis role="bold">1</emphasis>0000000 <emphasis
-                role="bold">1</emphasis>1111110 <firstterm>
-                    <emphasis role="bold">1</emphasis>
-                  </firstterm>1111111 <emphasis
+                role="bold">1</emphasis>1111110 <firstterm> <emphasis
+                role="bold">1</emphasis> </firstterm>1111111 <emphasis
                 role="bold">1</emphasis>1111111 <emphasis
                 role="bold">0</emphasis>0001111</entry>
               </row>
@@ -869,301 +715,153 @@
         <tgroup cols="6">
           <tbody>
             <row>
-              <entry>
-                <para>SDF syntax (a relatively large term with lots of
-                sharing)</para>
-              </entry>
+              <entry><para>SDF syntax (a relatively large term with lots of
+              sharing)</para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>BAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>BAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>SAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>GZIP</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>GZIP</emphasis> </para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Size (bytes)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+              </para></entry>
 
-              <entry>
-                <para>3387103</para>
-              </entry>
+              <entry><para>3387103</para></entry>
 
-              <entry>
-                <para>73082</para>
-              </entry>
+              <entry><para>73082</para></entry>
 
-              <entry>
-                <para>35308</para>
-              </entry>
+              <entry><para>35308</para></entry>
 
-              <entry>
-                <para>45097</para>
-              </entry>
+              <entry><para>45097</para></entry>
 
-              <entry>
-                <para>65279</para>
-              </entry>
+              <entry><para>65279</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Compression (%)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Compression (%)</emphasis>
+              </para></entry>
 
-              <entry>
-                <para>0</para>
-              </entry>
+              <entry><para>0</para></entry>
 
-              <entry>
-                <para>97.842</para>
-              </entry>
+              <entry><para>97.842</para></entry>
 
-              <entry>
-                <para>98.958</para>
-              </entry>
+              <entry><para>98.958</para></entry>
 
-              <entry>
-                <para>98.669</para>
-              </entry>
+              <entry><para>98.669</para></entry>
 
-              <entry>
-                <para>98.073</para>
-              </entry>
+              <entry><para>98.073</para></entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
 
-      <para>
-        <informaltable frame="all">
+      <para><informaltable frame="all">
           <tgroup cols="6">
             <tbody>
               <row>
-                <entry>
-                  <para>Pico syntax (a medium size term)</para>
-                </entry>
+                <entry><para>Pico syntax (a medium size term)</para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>ASCII</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>ASCII</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>TAF</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>TAF</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>BAF</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>BAF</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>SAF</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>SAF</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>GZIP</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>GZIP</emphasis> </para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>61488</para>
-                </entry>
+                <entry><para>61488</para></entry>
 
-                <entry>
-                  <para>28131</para>
-                </entry>
+                <entry><para>28131</para></entry>
 
-                <entry>
-                  <para>13653</para>
-                </entry>
+                <entry><para>13653</para></entry>
 
-                <entry>
-                  <para>15903</para>
-                </entry>
+                <entry><para>15903</para></entry>
 
-                <entry>
-                  <para>6351</para>
-                </entry>
+                <entry><para>6351</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Compression (%)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Compression (%)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>0</para>
-                </entry>
+                <entry><para>0</para></entry>
 
-                <entry>
-                  <para>54.25</para>
-                </entry>
+                <entry><para>54.25</para></entry>
 
-                <entry>
-                  <para>77.796</para>
-                </entry>
+                <entry><para>77.796</para></entry>
 
-                <entry>
-                  <para>74.136</para>
-                </entry>
+                <entry><para>74.136</para></entry>
 
-                <entry>
-                  <para>89.671</para>
-                </entry>
+                <entry><para>89.671</para></entry>
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
-      </para>
+        </informaltable></para>
 
-      <para>
-        <informaltable frame="all">
+      <para><informaltable frame="all">
           <tgroup cols="6">
             <tbody>
               <row>
-                <entry>
-                  <para>a(1) (a very small term, illustrating worst case
-                  overhead)</para>
-                </entry>
+                <entry><para>a(1) (a very small term, illustrating worst case
+                overhead)</para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>ASCII</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>ASCII</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>TAF</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>TAF</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>BAF</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>BAF</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>SAF</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>SAF</emphasis> </para></entry>
 
-                <entry>
-                  <para>
-                    <emphasis>GZIP</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis>GZIP</emphasis> </para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Size (bytes)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Size (bytes)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>4</para>
-                </entry>
+                <entry><para>4</para></entry>
 
-                <entry>
-                  <para>5</para>
-                </entry>
+                <entry><para>5</para></entry>
 
-                <entry>
-                  <para>28</para>
-                </entry>
+                <entry><para>28</para></entry>
 
-                <entry>
-                  <para>6</para>
-                </entry>
+                <entry><para>6</para></entry>
 
-                <entry>
-                  <para>31</para>
-                </entry>
+                <entry><para>31</para></entry>
               </row>
 
               <row>
-                <entry>
-                  <para>
-                    <emphasis role="bold">Compression (%)</emphasis>
-                  </para>
-                </entry>
+                <entry><para> <emphasis role="bold">Compression (%)</emphasis>
+                </para></entry>
 
-                <entry>
-                  <para>0</para>
-                </entry>
+                <entry><para>0</para></entry>
 
-                <entry>
-                  <para>-25</para>
-                </entry>
+                <entry><para>-25</para></entry>
 
-                <entry>
-                  <para>-600</para>
-                </entry>
+                <entry><para>-600</para></entry>
 
-                <entry>
-                  <para>-50</para>
-                </entry>
+                <entry><para>-50</para></entry>
 
-                <entry>
-                  <para>-775</para>
-                </entry>
+                <entry><para>-775</para></entry>
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
-      </para>
+        </informaltable></para>
 
       <para>As you can see the compression rates SAF achieves are fairly close
       to those of BAF, which was designed with compression as its main goal. A
@@ -1182,7 +880,7 @@
     is multiple times faster then that of any of the other ATerm formats (BAF,
     TAF and the ASCII ATerm format).</para>
 
-    <para />
+    <para></para>
 
     <para>Here are some benchmarks that illustrate the performance difference
     between the current C and Java implementations of the different
@@ -1202,131 +900,67 @@
         <tgroup cols="8">
           <tbody>
             <row>
-              <entry />
+              <entry></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C BAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C BAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C SAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java SAF</emphasis> </para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Serialization x10000 (ms)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Serialization x10000
+              (ms)</emphasis> </para></entry>
 
-              <entry>
-                <para>1744500</para>
-              </entry>
+              <entry><para>1744500</para></entry>
 
-              <entry>
-                <para>38376</para>
-              </entry>
+              <entry><para>38376</para></entry>
 
-              <entry>
-                <para>100749</para>
-              </entry>
+              <entry><para>100749</para></entry>
 
-              <entry>
-                <para>25620</para>
-              </entry>
+              <entry><para>23677</para></entry>
 
-              <entry>
-                <para>2810000</para>
-              </entry>
+              <entry><para>2810000</para></entry>
 
-              <entry>
-                <para>91700</para>
-              </entry>
+              <entry><para>91700</para></entry>
 
-              <entry>
-                <para>65300</para>
-              </entry>
+              <entry><para>65300</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Deserialization x10000 (ms)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Deserialization x10000
+              (ms)</emphasis> </para></entry>
 
-              <entry>
-                <para>2623500</para>
-              </entry>
+              <entry><para>2623500</para></entry>
 
-              <entry>
-                <para>91494</para>
-              </entry>
+              <entry><para>91494</para></entry>
 
-              <entry>
-                <para>52544</para>
-              </entry>
+              <entry><para>52544</para></entry>
 
-              <entry>
-                <para>22777</para>
-              </entry>
+              <entry><para>22777</para></entry>
 
-              <entry>
-                <para>8150000</para>
-              </entry>
+              <entry><para>8150000</para></entry>
 
-              <entry>
-                <para>166500</para>
-              </entry>
+              <entry><para>166500</para></entry>
 
-              <entry>
-                <para>83300</para>
-              </entry>
+              <entry><para>83300</para></entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
 
-      <para>
-        <emphasis>Note: in this specific benchmark the ASCII ATerm format
-        measurements are extrapolated from a run with a hundred iterations,
-        otherwise the test would take too long.</emphasis>
-      </para>
+      <para><emphasis>Note: in this specific benchmark the ASCII ATerm format
+      measurements are extrapolated from a run with a hundred iterations,
+      otherwise the test would take too long.</emphasis></para>
     </sect2>
 
     <sect2>
@@ -1338,123 +972,59 @@
         <tgroup cols="8">
           <tbody>
             <row>
-              <entry>
-                <para />
-              </entry>
+              <entry><para></para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C BAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C BAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C SAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java SAF</emphasis> </para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Serialization x10000 (ms)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Serialization x10000
+              (ms)</emphasis> </para></entry>
 
-              <entry>
-                <para>49756</para>
-              </entry>
+              <entry><para>49756</para></entry>
 
-              <entry>
-                <para>16742</para>
-              </entry>
+              <entry><para>16742</para></entry>
 
-              <entry>
-                <para>34024</para>
-              </entry>
+              <entry><para>34024</para></entry>
 
-              <entry>
-                <para>7678</para>
-              </entry>
+              <entry><para>6660</para></entry>
 
-              <entry>
-                <para>49100</para>
-              </entry>
+              <entry><para>49100</para></entry>
 
-              <entry>
-                <para>31300</para>
-              </entry>
+              <entry><para>31300</para></entry>
 
-              <entry>
-                <para>18830</para>
-              </entry>
+              <entry><para>18830</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Deserialization x10000 (ms)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Deserialization x10000
+              (ms)</emphasis> </para></entry>
 
-              <entry>
-                <para>46269</para>
-              </entry>
+              <entry><para>46269</para></entry>
 
-              <entry>
-                <para>34234</para>
-              </entry>
+              <entry><para>34234</para></entry>
 
-              <entry>
-                <para>17114</para>
-              </entry>
+              <entry><para>17114</para></entry>
 
-              <entry>
-                <para>5661</para>
-              </entry>
+              <entry><para>5661</para></entry>
 
-              <entry>
-                <para>144600</para>
-              </entry>
+              <entry><para>144600</para></entry>
 
-              <entry>
-                <para>58700</para>
-              </entry>
+              <entry><para>58700</para></entry>
 
-              <entry>
-                <para>26200</para>
-              </entry>
+              <entry><para>26200</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1471,122 +1041,59 @@
         <tgroup cols="8">
           <tbody>
             <row>
-              <entry />
+              <entry></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C BAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C BAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>C SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>C SAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java ASCII</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java ASCII</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java TAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java TAF</emphasis> </para></entry>
 
-              <entry>
-                <para>
-                  <emphasis>Java SAF</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis>Java SAF</emphasis> </para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Serialization x1000000 (ms)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Serialization x1000000
+              (ms)</emphasis> </para></entry>
 
-              <entry>
-                <para>697</para>
-              </entry>
+              <entry><para>697</para></entry>
 
-              <entry>
-                <para>5468</para>
-              </entry>
+              <entry><para>5468</para></entry>
 
-              <entry>
-                <para>87218</para>
-              </entry>
+              <entry><para>87218</para></entry>
 
-              <entry>
-                <para>2050</para>
-              </entry>
+              <entry><para>2050</para></entry>
 
-              <entry>
-                <para>18850</para>
-              </entry>
+              <entry><para>18850</para></entry>
 
-              <entry>
-                <para>18630</para>
-              </entry>
+              <entry><para>18630</para></entry>
 
-              <entry>
-                <para>2000</para>
-              </entry>
+              <entry><para>2000</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>
-                  <emphasis role="bold">Deserialization x1000000
-                  (ms)</emphasis>
-                </para>
-              </entry>
+              <entry><para> <emphasis role="bold">Deserialization x1000000
+              (ms)</emphasis> </para></entry>
 
-              <entry>
-                <para>539</para>
-              </entry>
+              <entry><para>539</para></entry>
 
-              <entry>
-                <para>5786</para>
-              </entry>
+              <entry><para>5786</para></entry>
 
-              <entry>
-                <para>1790</para>
-              </entry>
+              <entry><para>1790</para></entry>
 
-              <entry>
-                <para>2030</para>
-              </entry>
+              <entry><para>2030</para></entry>
 
-              <entry>
-                <para>21530</para>
-              </entry>
+              <entry><para>21530</para></entry>
 
-              <entry>
-                <para>27300</para>
-              </entry>
+              <entry><para>27300</para></entry>
 
-              <entry>
-                <para>5500</para>
-              </entry>
+              <entry><para>5500</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1617,7 +1124,7 @@
     child relations of the terms in the tree; the size of this stack scales
     linearly with the depth of the tree.</para>
 
-    <para />
+    <para></para>
 
     <para>The worst case memory usage can be calculated in the following
     way:</para>
@@ -1653,8 +1160,7 @@
     <para>Which in bits looks like this (the indent and lines were added to
     show the child-parent relationship):</para>
 
-    <para>
-      <programlisting>|00000001  appl
+    <para><programlisting>|00000001  appl
 |00000011  arity = 3
 |00000100  fun-length = 4
 |01101100  fun-bytes = line
@@ -1716,7 +1222,6 @@
     |   |00001010  value = 10
     |
     |10000000  shared term
-    |00000110  shared term identifier = 6</programlisting>
-    </para>
+    |00000110  shared term identifier = 6</programlisting></para>
   </sect1>
 </chapter>
