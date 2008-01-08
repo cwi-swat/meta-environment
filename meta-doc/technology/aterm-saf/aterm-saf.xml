@@ -1130,7 +1130,7 @@
     way:</para>
 
     <para>Serialization memory usage: (the number of unique terms in the tree
-    * 5 * 4) + (the number of unique function symbols in the tree * 4 * 4) +
+    * 4 * 4) + (the number of unique function symbols in the tree * 4 * 4) +
     (the depth of the tree * 4 * 4).</para>
 
     <para>Deserialization memory usage: (the number of unique terms in the
