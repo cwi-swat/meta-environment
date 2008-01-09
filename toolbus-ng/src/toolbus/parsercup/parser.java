@@ -921,8 +921,11 @@ public class parser extends java_cup.runtime.lr_parser {
 		}else{
 			String path = toolbus.getProperty("include.path", ".");
 			LoggerFactory.log("unknown", "doParseInclude: path = " + path, IToolBusLoggerConstants.PARSING);
+			
 			String[] elems = path.split("[ ,\t\n\r]+");
-			for(String dir : elems){
+			for(int i = 0; i < elems.length; i++){
+				String dir = elems[i];
+				
 				if(dir.length() > 0){
 					String absoluteName = dir + File.separator + filename;
 					File f = new File(absoluteName);

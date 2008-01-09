@@ -3,6 +3,7 @@
  */
 package toolbus.atom.note;
 
+import java.util.Iterator;
 import toolbus.AtomSet;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -22,7 +23,11 @@ public class Subscribe extends Atom{
 	}
 	
 	public void addPartners(AtomSet atoms){
-		for(Atom b : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		
+		while(atomSetIterator.hasNext()){
+			Atom b = atomSetIterator.next();
+			
 			if(b instanceof SndNote){
 				SndNote note = (SndNote) b;
 				note.addPartnerIfMatch(this);

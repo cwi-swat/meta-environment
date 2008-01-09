@@ -24,7 +24,10 @@ class ListBindings implements Bindings{
 	}
 	
 	public Binding get(String key){
-		for(Binding b : bindings){
+		Iterator<Binding> bindingsIterator = bindings.iterator();
+		while(bindingsIterator.hasNext()){
+			Binding b = bindingsIterator.next();
+			
 			if(b.getName().equals(key)){
 				return b;
 			}
@@ -41,7 +44,7 @@ class ListBindings implements Bindings{
 	}
 	
 	public void remove(String key){
-		Iterator<Binding> bindingIterator = bindings.listIterator();
+		Iterator<Binding> bindingIterator = bindings.iterator();
 		while(bindingIterator.hasNext()){
 			Binding b = bindingIterator.next();
 			if(b.getName().equals(key)){
@@ -62,7 +65,10 @@ class ListBindings implements Bindings{
 	public String toString(){
 		String res = "{", sep = "";
 		
-		for(Binding b : bindings){
+		Iterator<Binding> bindingsIterator = bindings.iterator();
+		while(bindingsIterator.hasNext()){
+			Binding b = bindingsIterator.next();
+			
 			res += sep + b;
 			sep = ", ";
 		}

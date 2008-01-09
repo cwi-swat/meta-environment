@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +32,10 @@ public class PropertyManager{
 		}catch(Exception e){
 			System.err.println("Cannot open configuration file; using built-in settings");
 		}
-		for(String key : defines.keySet()){
+		Iterator<String> definesIterator = defines.keySet().iterator();
+		while(definesIterator.hasNext()){
+			String key = definesIterator.next();
+			
 			set(key, defines.get(key));
 		}
 		if(includes != ""){
@@ -43,9 +47,6 @@ public class PropertyManager{
 	}
 	
 	public void handleComandLineArguments(String args[]){
-		//for(String arg : args){
-		//	System.err.println(arg);
-		//}
 		Pattern pdefine = Pattern.compile("-D(.*)=(.*)");
 		Pattern pinclude = Pattern.compile("-I(.*)");
 		Pattern pscript = Pattern.compile("-S(.*)");
@@ -103,8 +104,8 @@ public class PropertyManager{
 		String hostname = ToolBus.getHostName();
 		
 		String[] prefix = new String[]{user + "@" + hostname + "-", user + "-", ""};
-		for(String pref : prefix){
-			String fname = pref + "toolbus.props";
+		for(int i = 0; i < prefix.length; i++){
+			String fname = prefix[i] + "toolbus.props";
 			File f = new File(fname);
 			if(f.exists()){
 				return fname;

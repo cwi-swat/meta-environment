@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.atom.Assign;
@@ -781,7 +781,9 @@ public class TScriptParser{
 			String path = toolbus.getProperty("include.path", ".");
 			LoggerFactory.log("unknown", "doParseInclude: path = " + path, IToolBusLoggerConstants.PARSING);
 			String[] elems = path.split("[ ,\t\n\r]+");
-			for(String dir : elems){
+			for(int i = 0; i < elems.length; i++){
+				String dir = elems[i];
+				
 				if(dir.length() > 0){
 					String absoluteName = dir + File.separator + filename;
 					File f = new File(absoluteName);
@@ -801,7 +803,10 @@ public class TScriptParser{
 		}
 		
 		String allCalls = "";
-		for(ATerm acall : calls){
+		Iterator<ATerm> callsIterator = calls.iterator();
+		while(callsIterator.hasNext()){
+			ATerm acall = callsIterator.next();
+			
 			String pname = "";
 			try{
 				pname = "<unknown>";

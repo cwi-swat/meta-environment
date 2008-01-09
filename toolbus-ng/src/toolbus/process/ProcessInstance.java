@@ -68,7 +68,10 @@ public class ProcessInstance{
 	}
 	
 	public void addToAtomSignature(AtomSet atoms){
-		for(Atom a : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
 			toolbus.addToSignature(a.toATerm());
 		}
 	}
@@ -91,21 +94,31 @@ public class ProcessInstance{
 	
 	public void terminate(ATerm msg){
 		running = false;
-		for(ProcessInstance P : toolbus.getProcesses()){
-			if(P != this){
-				P.delPartners(elements);
+		
+		Iterator<ProcessInstance> processInstanceIterator = toolbus.getProcesses().iterator();
+		while(processInstanceIterator.hasNext()){
+			ProcessInstance pi = processInstanceIterator.next();
+			
+			if(pi != this){
+				pi.delPartners(elements);
 			}
 		}
 	}
 	
 	public void addElements(AtomSet atoms){
-		for(Atom a : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
 			elements.addAtom(a);
 		}
 	}
 	
 	public void delElements(AtomSet atoms){
-		for(Atom a : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
 			elements.delAtom(a);
 		}
 	}
@@ -120,7 +133,10 @@ public class ProcessInstance{
 	public void addPartners(AtomSet atoms){
 		// LoggerFactory.log(this.getProcessName(), "add the partners " + atoms,
 		// IToolBusLoggerConstants.MESSAGES);
-		for(Atom e : elements.getSet()){
+		Iterator<Atom> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			Atom e = elementsIterator.next();
+			
 			e.addPartners(atoms);
 		}
 	}
@@ -133,28 +149,37 @@ public class ProcessInstance{
 	 *            containing the partners
 	 */
 	public void delPartners(AtomSet atoms){
-		for(Atom e : elements.getSet()){
+		Iterator<Atom> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			Atom e = elementsIterator.next();
+			
 			e.delPartners(atoms);
 		}
 	}
 	
 	public void addPartnersToAllProcesses(AtomSet atoms){
 		// System.err.println("Enter addPartnersToAllProcesses for: " + this.getProcessName());
-		for(ProcessInstance P : toolbus.getProcesses()){
+		Iterator<ProcessInstance> processInstanceIterator = toolbus.getProcesses().iterator();
+		while(processInstanceIterator.hasNext()){
+			ProcessInstance pi = processInstanceIterator.next();
+			
 			// System.err.println("[" + this.getProcessName() + "] addPartnersToAllProcesses: " +
 			// P.getProcessName());
-			if(P != this){
+			if(pi != this){
 				// LoggerFactory.log(this.getProcessName(), "add partners to " + P.getProcessName(),
 				// IToolBusLoggerConstants.MESSAGES);
-				P.addPartners(atoms);
+				pi.addPartners(atoms);
 			}
 		}
 	}
 	
 	public void delPartnersFromAllProcesses(AtomSet atoms){
-		for(ProcessInstance P : toolbus.getProcesses()){
-			if(P != this){
-				P.delPartners(atoms);
+		Iterator<ProcessInstance> processInstanceIterator = toolbus.getProcesses().iterator();
+		while(processInstanceIterator.hasNext()){
+			ProcessInstance pi = processInstanceIterator.next();
+			
+			if(pi != this){
+				pi.delPartners(atoms);
 			}
 		}
 	}
@@ -288,15 +313,20 @@ public class ProcessInstance{
 	}
 	
 	public String showStatus(){
-		String r1 = "process " + definition.getName() + "(" + processId + "):\n  " + elements.getSet().size() + " elements\n" + currentState;
+		String r1 = "process " + definition.getName() + "(" + processId + "):\n  " + elements.size() + " elements\n" + currentState;
 		if(subscriptions.size() > 0){
 			String r2 = "\n  Subscriptions: {";
-			for(ATerm sub : subscriptions){
+			Iterator<ATerm> SubscriptionsIterator = notes.iterator();
+			while(SubscriptionsIterator.hasNext()){
+				ATerm sub = SubscriptionsIterator.next();
 				r2 = r2 + "\n    " + sub.toString();
 			}
 			if(notes.size() > 0){
 				String r3 = "}\n  Note queue:{";
-				for(ATerm note : notes){
+				Iterator<ATerm> notesIterator = notes.iterator();
+				while(notesIterator.hasNext()){
+					ATerm note = notesIterator.next();
+					
 					r3 = r3 + "\n    " + note.toString();
 				}
 				r3 = r3 + "}";
@@ -311,7 +341,10 @@ public class ProcessInstance{
 		// LoggerFactory.log("process " + processId + ": " + call, IToolBusLoggerConstants.CALLS);
 		// LoggerFactory.log("process " + processId + ": atoms: =" + elements, IToolBusLoggerConstants.CALLS);
 		// LoggerFactory.log("process " + processId + ": currentState = " + currentState, IToolBusLoggerConstants.CALLS);
-		/*for(Atom a : elements.getSet()){
+		/*Iterator<Atom> atomSetIterator = atoms.iterator();
+			while(atomSetIterator.hasNext()){
+				Atom a = atomSetIterator.next();
+			}
 			LoggerFactory.log(definition.getName(), a + " --> " + a.getFollow(), IToolBusLoggerConstants.CALLS);
 		}*/
 	}

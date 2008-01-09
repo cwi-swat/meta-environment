@@ -28,10 +28,17 @@ public class AtomSet implements Iterable<Atom>{
 	public AtomSet union(AtomSet as){
 		AtomSet r = new AtomSet();
 		
-		for(Atom a : elements){
+		Iterator<Atom> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			Atom a = elementsIterator.next();
+			
 			r.addAtom(a);
 		}
-		for(Atom a : as.getSet()){
+		
+		Iterator<Atom> atomSetIterator = as.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			
 			r.addAtom(a);
 		}
 		return r;
@@ -41,17 +48,24 @@ public class AtomSet implements Iterable<Atom>{
 		return elements.iterator();
 	}
 	
-	public Set<Atom> getSet(){
-		return elements;
+	public int size(){
+		return elements.size();
 	}
 	
 	public String toString(){
-		String S = "{";
 		String sep = "";
-		for(Atom a : elements){
-			S += sep + a.toString();
+		
+		String s = "{";
+		
+		Iterator<Atom> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			Atom a = elementsIterator.next();
+			
+			s += sep + a.toString();
 			sep = ", ";
 		}
-		return S + "}";
+		s += "}";
+		
+		return s;
 	}
 }

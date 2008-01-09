@@ -5,6 +5,7 @@
 package toolbus.atom.msg;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import toolbus.AtomSet;
 import toolbus.StateElement;
@@ -54,7 +55,10 @@ public class SndMsg extends MsgAtom{
 	}
 	
 	public void addPartners(AtomSet atoms){
-		for(Atom b : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom b = atomSetIterator.next();
+			
 			if(b instanceof RecMsg){
 				RecMsg cb = (RecMsg) b;
 				if(canCommunicate(cb)){

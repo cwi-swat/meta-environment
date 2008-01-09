@@ -5,8 +5,8 @@ package toolbus;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
-
 import toolbus.atom.Atom;
 import toolbus.atom.msg.SndMsg;
 import toolbus.environment.Environment;
@@ -50,10 +50,17 @@ public class State{
 	public State union(State b){
 		State c = new State();
 		
-		for(StateElement se : elements){
+		Iterator<StateElement> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			StateElement se = elementsIterator.next();
+			
 			c.addElement(se);
 		}
-		for(StateElement se : b.getElementsAsList()){
+		
+		Iterator<StateElement> stateIterator = b.getElementsAsList().iterator();
+		while(stateIterator.hasNext()){
+			StateElement se = stateIterator.next();
+			
 			c.addElement(se);
 		}
 		return c;
@@ -69,14 +76,20 @@ public class State{
 	
 	public void setTest(ATerm test, Environment env) throws ToolBusException{
 		if(test != null){
-			for(StateElement a : elements){
+			Iterator<StateElement> elementsIterator = elements.iterator();
+			while(elementsIterator.hasNext()){
+				StateElement a = elementsIterator.next();
+				
 				a.setTest(test, env);
 			}
 		}
 	}
 	
 	public boolean isEnabled(){
-		for(StateElement a : elements){
+		Iterator<StateElement> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			StateElement a = elementsIterator.next();
+			
 			try{
 				if(a.isEnabled()){
 					return true;
@@ -90,13 +103,21 @@ public class State{
 	}
 	
 	public String toString(){
-		String s = "{";
 		String sep = "";
-		for(StateElement a : elements){
+		
+		String s = "{";
+		
+		Iterator<StateElement> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			StateElement a = elementsIterator.next();
+			
 			s += sep + a;
 			sep = ",\n  ";
 		}
-		return s + "}";
+		
+		s += "}";
+		
+		return s;
 	}
 	
 	public boolean contains(StateElement a){
@@ -104,7 +125,10 @@ public class State{
 			Boolean bval = cache.get(a);
 			return bval.booleanValue();
 		}
-		for(StateElement b : elements){
+		Iterator<StateElement> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			StateElement b = elementsIterator.next();
+			
 			if(b.contains(a)){
 				if(allAtoms) cache.put(a, Boolean.TRUE);
 				return true;
@@ -123,7 +147,10 @@ public class State{
 	}
 	
 	public State gotoNextStateAndActivate(StateElement a){
-		for(StateElement b : elements){
+		Iterator<StateElement> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			StateElement b = elementsIterator.next();
+			
 			// System.err.println("State.getNextState2: trying " + b);
 			if(b.equals(a) || b.contains(a)){
 				return b.gotoNextStateAndActivate(a);
@@ -135,7 +162,10 @@ public class State{
 	
 	public void activate(){
 		// System.err.println("State.activate: " + this);
-		for(StateElement e : elements){
+		Iterator<StateElement> elementsIterator = elements.iterator();
+		while(elementsIterator.hasNext()){
+			StateElement e = elementsIterator.next();
+			
 			e.activate();
 		}
 	}

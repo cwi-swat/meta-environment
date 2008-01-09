@@ -1,5 +1,6 @@
 package toolbus.atom.msg;
 
+import java.util.Iterator;
 import toolbus.AtomSet;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -27,7 +28,11 @@ public class RecMsg extends MsgAtom{
 	}
 	
 	public void addPartners(AtomSet atoms){
-		for(Atom b : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		
+		while(atomSetIterator.hasNext()){
+			Atom b = atomSetIterator.next();
+			
 			if(b instanceof SndMsg){
 				SndMsg cb = (SndMsg) b;
 				if(canCommunicate(cb)){

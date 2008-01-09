@@ -1,5 +1,6 @@
 package toolbus.process;
 
+import java.util.Iterator;
 import java.util.Stack;
 import toolbus.AtomSet;
 import toolbus.State;
@@ -44,7 +45,10 @@ public class Disrupt extends ProcessExpression{
 		State rightFirst = right.getFirst();
 		setFollow(follow);
 		
-		for(Atom at : left.getAtoms().getSet()){
+		Iterator<Atom> atomSetIterator = left.getAtoms().iterator();
+		while(atomSetIterator.hasNext()){
+			Atom at = atomSetIterator.next();
+			
 			if(at.getFollow().size() != 0){
 				at.addToFollow(rightFirst);
 			}

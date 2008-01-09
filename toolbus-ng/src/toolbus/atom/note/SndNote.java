@@ -4,6 +4,7 @@
 package toolbus.atom.note;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import toolbus.AtomSet;
 import toolbus.TBTermFactory;
@@ -46,7 +47,11 @@ public class SndNote extends Atom{
 	}
 	
 	public void addPartners(AtomSet atoms){
-		for(Atom b : atoms.getSet()){
+		Iterator<Atom> atomSetIterator = atoms.iterator();
+		
+		while(atomSetIterator.hasNext()){
+			Atom b = atomSetIterator.next();
+			
 			if(b instanceof Subscribe){
 				Subscribe subs = (Subscribe) b;
 				addPartnerIfMatch(subs);
@@ -59,7 +64,10 @@ public class SndNote extends Atom{
 			ATerm theNote = tbfactory.fullSubstitute(note.value, getEnv());
 			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
 			
-			for(ProcessInstance pi : notePartners){
+			Iterator<ProcessInstance> notePartnersIterator = notePartners.iterator();
+			while(notePartnersIterator.hasNext()){
+				ProcessInstance pi = notePartnersIterator.next();
+				
 				pi.putNoteInQueue(theNote);
 			}
 			return true;
