@@ -28,7 +28,7 @@ static char *name;
 
 static char myname[] = "sdf2table";
 static char myversion[] = "5.0";
-static char myarguments[] = "bcdghi:lm:no:p:tvV";
+static char myarguments[] = "bcdghi:l:m:no:p:tvV";
 
 
 ATerm get_name(int cid) {
@@ -78,7 +78,7 @@ static void usage(void) {
       "\t-g              take kernel sdf as input and generate table\n"
       "\t-h              display help information (usage)\n"
       "\t-i filename     input from file (default stdin, can be repeated)\n"
-      "\t-l              display statistic information\n"
+      "\t-l filename     log statistic information\n"
       "\t-m modulename   name of top module (default Main)\n"
       "\t-n              only normalization of grammar\n"
       "\t-o filename     output to file (default stdout)\n"
@@ -105,7 +105,8 @@ static int handleOptions(int argc, char **argv) {
       case 'd':  PGEN_setDefinitionModeFlag(ATtrue);     break;
       case 'g':  PGEN_setGenerationModeFlag(ATtrue);     break;
       case 'i':  PGEN_setInputFilename(optarg);          break;
-      case 'l':  PGEN_setStatsFlag(ATtrue);              break;
+      case 'l':  PGEN_setStatsFlag(ATtrue);
+                 PGEN_setStatsFilename(optarg);          break;
       case 'm':  PGEN_setTopModule(optarg);              break;
       case 'n':  PGEN_setNormalizationModeFlag(ATtrue);  break;
       case 'o':  PGEN_setOutputFilename(optarg);         break;
@@ -145,6 +146,13 @@ static int handleOptions(int argc, char **argv) {
   argc -= optind;
   argv += optind;
 
+  #ifndef PGEN_COLLECT_STATISTICS
+  if (PGEN_getStatsFlag) {
+    ATfprintf(stderr, "%s: Cannot collect PGEN statistics! Compile PGEN with the PGEN_COLLECT_STATISTICS environment variable set.\n", myname);
+    exit(1);
+  }
+  #endif
+
   return ATtrue;
 }
 
@@ -168,7 +176,7 @@ int main(int argc, char *argv[]) {
   SDF_initSDFMEApi(); 
   PTBL_initPtableApi();
 
-  OPT_initialize();
+  OPT_initialize(200);
   PGEN_initializeDefaultOptions();
 
   if(toolbus_mode) {
@@ -184,7 +192,7 @@ int main(int argc, char *argv[]) {
   else {
     if (handleOptions(argc, argv)) {
       if (PGEN_getCollectFlag()) {
-        if (PGEN_getVerboseModeFlag()) {
+        if (PGEN_getVerboseModeFlag) {
           ATwarning("Loading definition for module %s using searchpath %s\n",
               PGEN_getTopModule(), PGEN_getSearchPath());
         }
@@ -192,7 +200,7 @@ int main(int argc, char *argv[]) {
         term = load(PGEN_getTopModule(), PGEN_getSearchPath());
       }
       else {
-        if (PGEN_getVerboseModeFlag()) {
+        if (PGEN_getVerboseModeFlag) {
           ATwarning("Loading definition from file %s\n",
               PGEN_getInputFilename());
         }
@@ -200,9 +208,10 @@ int main(int argc, char *argv[]) {
         term = PT_ParseTreeFromTerm(ATreadFromNamedFile(PGEN_getInputFilename()));
         if (term == NULL || 
             !PT_isValidParseTree(term)) {
-          if (PGEN_getVerboseModeFlag()) {
+          if (PGEN_getVerboseModeFlag) {
             ATwarning("Parsing definition from file %s\n", PGEN_getInputFilename());
           }
+
           term = parseDefinition(PGEN_getInputFilename());
         }
       }
@@ -213,10 +222,6 @@ int main(int argc, char *argv[]) {
     }
 
     assert(term);
-
-    if (PGEN_getStatsFlag()) {
-      LOG_OpenLog(myname, "pgen-stats.txt");
-    }
 
     if (!PGEN_getDefinitionModeFlag()) {
       pt = normalize_and_generate_table(PGEN_getTopModule(), term);

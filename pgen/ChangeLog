@@ -1,5 +1,14 @@
 $Id$
 
+Wed Jan  9 18:53:09 CET 2008 <economop@cwi.nl>
+ * src/pgenOptions.{c,h}: rewrote some get options functions to macros and 
+   added the stats filename value. Added PGEN prefix to avoid global variable
+   naming conflict with global variables in SGLR.
+ * src/parseTable-stats.{c,h}: rewrote to use macros. It is the same design as
+   the SGLR statistics logging.
+ * Added the PGEN_COLLECT_STATISTICS evironment variable. This needs to be set
+   if statistics are to be collected.
+
 Thu Dec 20 03:23:17 CET 2007 <economop@cwi.nl>
  * src/Sdf2-Load.c: regenerated to update variable and function names used in 
    load.c.

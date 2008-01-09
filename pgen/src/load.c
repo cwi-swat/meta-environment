@@ -15,8 +15,7 @@ extern void init_Sdf2_Load();
 extern unsigned const char Sdf2_Load_parsetable_baf[];
 extern size_t Sdf2_Load_parsetable_size;
 
-static void initialize() 
-{
+static void initialize() {
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
   if (Sdf2_Load_parsetable_baf != NULL) {

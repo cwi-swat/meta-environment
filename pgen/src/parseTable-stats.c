@@ -1,70 +1,103 @@
 /* $Id$ */
 
+/** \file
+ * Statistics logging for parse table generation.
+ */
+#include <rsrc-usage.h>
+
 #include "parseTable-stats.h"
 #include "parseTable-data.h"
-#include <logging.h>
 
-static int nr_of_actions; /* Total number of X in parse table. */
-static int nr_of_gotos; 
-static int nr_of_items;
+unsigned int PGEN_STATS_actions = 0; /**> number of actions in parse table. */
+unsigned int PGEN_STATS_gotos = 0;   /**> number of gotos in parse table. */
+unsigned int PGEN_STATS_items = 0;   /**> number of items in parse table. */
 
-static int max_nr_actions; /* Max number of X in one state. */
-static int max_nr_gotos;
-static int max_nr_items;
+unsigned int PGEN_STATS_maxActionsInStates = 0; /** max number of actions in 
+                                                 * any state. */
+unsigned int PGEN_STATS_maxGotosInState = 0; /** max number of gotos in any 
+                                              * state. */
+unsigned int PGEN_STATS_maxItemsInState = 0; /** max number of items in any 
+                                              * state. */
 
-void PGEN_initParseTableStats() {
-  nr_of_actions = 0;
-  nr_of_gotos = 0;
-  nr_of_items = 0;
-  max_nr_actions = 0;
-  max_nr_gotos = 0;
-  max_nr_items = 0;
+int PGEN_STATS_kernelProductions = 0;
+int PGEN_STATS_productions = 0;
+int PGEN_STATS_maxProductionLhsLength = 0;
+
+int PGEN_STATS_conficts = 0;
+unsigned int PGEN_STATS_reductions = 0;
+unsigned int PGEN_STATS_shifts = 0;
+unsigned int PGEN_STATS_followRestrictedReductions = 0;
+int PGEN_STATS_priorities = 0;
+
+double PGEN_STATS_normalizationTime = 0.0;
+double PGEN_STATS_generationTime = 0.0;
+
+/** 
+ * This is probably not necessary any more.
+ */
+void PGEN_STATS_initialize(void) {
+;
 }
 
-int PGEN_getNumberOfActions() {
-  return nr_of_actions;
+static FILE  *openLog(const char *fnam) {
+  FILE *log = NULL;
+
+  if (!fnam || !strcmp(fnam, "")) {
+    ATerror("Cannot create logfile without a filename\n", fnam);
+  }
+
+  if (!(log = fopen(fnam, "wb"))) {
+    ATerror("Cannot create logfile %s\n", fnam);
+  }
+
+  return log;
 }
 
-void PGEN_increaseNumberOfActions(int value) {
-  nr_of_actions += value;
-  if (value > max_nr_actions) {
-    max_nr_actions = value;
+static void closeLog(FILE *logFile) {
+  if(logFile) {
+    fclose(logFile);
   }
 }
 
-int PGEN_getNumberOfGotos() {
-  return nr_of_gotos;
-}
 
-void PGEN_increaseNumberOfGotos(int value) {
-  nr_of_gotos += value;
-  if (value > max_nr_gotos) {
-    max_nr_gotos = value;
-  }
-}
-
-int PGEN_getNumberOfItems() {
-  return nr_of_items;
-}
-
-void PGEN_increaseNumberOfItems(int value) {
-  nr_of_items += value;
-  if (value > max_nr_items) {
-    max_nr_items = value;
-  }
-}
-
-void PGEN_printStats() {
+void PGEN_STATS_print(void) {
+  FILE *logFile;
   int numberOfStates = PGEN_getNumberOfStates();
-  
-  fprintf(LOG_log(), "Number of states is %d\n", numberOfStates);
-  fprintf(LOG_log(), "Maximum number of items per state is %d\n", max_nr_items);
-  fprintf(LOG_log(), "Average number of items per state is %d\n", (nr_of_items/numberOfStates));
 
-  fprintf(LOG_log(), "Maximum number of gotos per state is %d\n", max_nr_gotos);
-  fprintf(LOG_log(), "Average number of gotos per state is %d\n", (nr_of_gotos/numberOfStates));
-  fprintf(LOG_log(), "Maximum number of actions per state is %d\n", max_nr_actions);
-  fprintf(LOG_log(), "Average number of actions per state is %d\n", (nr_of_actions/numberOfStates));
+  if (PGEN_getVerboseModeFlag) {
+    ATwarning("Logging statistics\n");
+  }
+
+  logFile = openLog(PGEN_getStatsFileName());
+  
+/*  fprintf(logFile, "int productions = %d\n", );
+  fprintf(logFile, "int conflicts = %d\n", );
+  fprintf(logFile, "int reductions = %d\n", );
+  fprintf(logFile, "int shifts = %d\n", );
+  fprintf(logFile, "int followRestrictedReductions = %d\n", );
+*/
+  fprintf(logFile, "int states = %u\n", numberOfStates);
+  fprintf(logFile, "int items = %u\n", PGEN_STATS_items);
+  fprintf(logFile, "int gotos = %u\n", PGEN_STATS_gotos);
+  fprintf(logFile, "int actions = %u\n\n", PGEN_STATS_actions);
+
+  fprintf(logFile, "int max-number-of-items-in-states = %u\n", PGEN_STATS_maxItemsInState);
+  fprintf(logFile, "int max-number-of-gotos-in-states = %u\n", PGEN_STATS_maxGotosInState);
+  fprintf(logFile, "int max-number-of-actions-in-states = %u\n\n", PGEN_STATS_maxActionsInStates);
+
+  fprintf(logFile, "%%%% items/states = %d\n", (PGEN_STATS_items/numberOfStates));
+  fprintf(logFile, "%%%% gotos/state = %d\n", (PGEN_STATS_gotos/numberOfStates));
+  fprintf(logFile, "%%%% actions/states = %d\n\n", (PGEN_STATS_actions/numberOfStates));
+
+  fprintf(logFile, "%%%% Normalization-to-Kernel-Sdf = %.6fs\n", PGEN_STATS_normalizationTime);
+  fprintf(logFile, "%%%% Parse-table-generation = %.6fs\n", PGEN_STATS_generationTime); 
+  fprintf(logFile, "int kernel-productions = %d\n", PGEN_STATS_kernelProductions);
+  fprintf(logFile, "int max-production-left-hand-side-length = %d\n", PGEN_STATS_maxProductionLhsLength);
+  fprintf(logFile, "%%%% production-lhs-length/kernel-productions = %d\n", (PGEN_STATS_maxProductionLhsLength/PGEN_STATS_kernelProductions));
+
+  fprintf(logFile, "int priorities = %d\n", PGEN_STATS_priorities);
+
+  closeLog(logFile);
 
 }
 

@@ -75,8 +75,8 @@ void PGEN_initTableGen() {
   CC_init();
   init_first();
   
-  if (PGEN_getStatsFlag()) {
-    PGEN_initParseTableStats();
+  if (PGEN_getStatsFlag) {
+    PGEN_STATS_initialize();
   }
 }
 
@@ -172,7 +172,7 @@ int PGEN_getProductionNumberOfProduction(SDF_Production prod) {
 
   if (!anr) {
     newProd = PT_ProductionToTerm(SDFProductionToPtProduction(prod));
-    if (PGEN_getVerboseModeFlag()) {
+    if (PGEN_getVerboseModeFlag) {
       ATwarning("No rule found for %t\n", newProd);
     }
     nr = 0;

@@ -9,6 +9,7 @@
 #include "first.h"
 #include "pgenOptions.h"
 #include "parseTable-data.h"
+#include "parseTable-stats.h"
 
 /*#include <unistd.h>
 #include <ptable.h>
@@ -100,7 +101,7 @@ static PTBL_Labels process_productions(SDF_ProductionList prods) {
     prod   = SDF_ProductionFromTerm(sdfflatprod);
     ptProd = SDFProductionToPtProduction(prod);
 
-    if (PGEN_getStatsFlag()) {
+    if (PGEN_getStatsFlag) {
       nr_of_members = PT_getSymbolsLength(PT_getProductionLhs(ptProd));
       if (nr_of_members > max_nr_lhs_members) {
         max_nr_lhs_members = nr_of_members;
@@ -145,11 +146,8 @@ static PTBL_Labels process_productions(SDF_ProductionList prods) {
   }
   nr_of_kernel_prods = max_idx;
 
-  if (PGEN_getStatsFlag()) {
-    fprintf(LOG_log(), "Number of kernel productions is %d\n", max_idx);
-    fprintf(LOG_log(), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members);
-    fprintf(LOG_log(), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods));
-  }
+  PGEN_STATS_setCount(PGEN_STATS_kernelProductions, max_idx);
+  PGEN_STATS_setCount(PGEN_STATS_maxProductionLhsLength, max_nr_lhs_members);
 
   ATindexedSetDestroy(unique_prods);
 
@@ -360,9 +358,7 @@ static PTBL_Priorities process_priorities(SDF_PriorityList prios) {
   }
 
 
-  if (PGEN_getStatsFlag()) {
-    fprintf(LOG_log (), "Number of priorities is %d\n", cnt);
-  }
+  PGEN_STATS_setCount(PGEN_STATS_priorities, cnt);
 
   /** \todo make sure that this concatenation is correct. */
   return PTBL_concatPriorities(prioentries, nonTransitivePrioEntries);

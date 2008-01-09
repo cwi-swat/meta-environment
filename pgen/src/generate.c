@@ -34,23 +34,23 @@ static PTBL_ParseTable generateParseTable() {
     if (!gotos) {
       gotos = PTBL_makeGotosEmpty();
     } 
-    else if (PGEN_getStatsFlag()) {
-      PGEN_increaseNumberOfGotos(PTBL_getGotosLength(gotos));
+    else if (PGEN_getStatsFlag) {
+      PGEN_STATS_increaseGotos(PTBL_getGotosLength(gotos));
     }
 
     actions = PGEN_getActionsOfState(vertex);
     if (!actions) {
       actions = PTBL_makeChoicesEmpty();
     }
-    else if (PGEN_getStatsFlag()) {
-      PGEN_increaseNumberOfActions(PTBL_getChoicesLength(actions));
+    else if (PGEN_getStatsFlag) {
+      PGEN_STATS_increaseActions(PTBL_getChoicesLength(actions));
     }
 
     state = PTBL_makeStateDefault(i, gotos, actions);
     statelist = PTBL_makeStatesMany(state, statelist);
   }
 
-  if (PGEN_getStatsFlag()) { PGEN_printStats(); }
+  if (PGEN_getStatsFlag) { PGEN_STATS_print(); }
 
   return PTBL_makeParseTableParseTable(PTBL_makeVersionDefault(), PGEN_getInitialStateNumber(), PGEN_getLabelSection(), statelist, PGEN_getPrioSection());
 }
@@ -59,7 +59,7 @@ ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
   PTBL_ParseTable pt = NULL;
   PT_Tree ksdf;
 
-  if (PGEN_getStatsFlag()) {
+  if (PGEN_getStatsFlag) {
     STATS_Timer(); 
   } 
 
@@ -69,9 +69,7 @@ ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
     ksdf = normalizeGrammar(name, sdf2term); 
   }
 
-  if (PGEN_getStatsFlag()) {
-      fprintf(LOG_log(), "Normalization to Kernel-Sdf took %.6fs\n", STATS_Timer());
-  }
+  PGEN_STATS_setCount(PGEN_STATS_normalizationTime, STATS_Timer());
 
   if (PGEN_getNormalizationModeFlag()) {
     return PT_ParseTreeToTerm(PT_makeValidParseTreeFromTree(ksdf));
@@ -86,9 +84,7 @@ ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
     PGEN_destroyTableGen();       
   }
 
-  if (PGEN_getStatsFlag()) { 
-    fprintf(LOG_log(), "Parse table generation took %.6fs\n", STATS_Timer()); 
-  }
+  PGEN_STATS_setCount(PGEN_STATS_generationTime, STATS_Timer());
   
   return (ATerm)pt;
 }

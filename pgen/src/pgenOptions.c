@@ -1,6 +1,9 @@
 /* $Id$ */
 
-#include <options.h>
+/**
+ * \file 
+ * 
+ */
 
 #include "pgenOptions.h"
 
@@ -8,25 +11,27 @@ static int BAF_MODE_FLAG;
 static int COLLECT_FLAG; 
 static int GENERATION_MODE_FLAG;
 static int INPUT_FILENAME_VALUE;
-static int STATS_FLAG;
+int PGEN_STATS_FLAG;
+static int STATSFILENAME_VALUE;
 static int TOP_MODULE_VALUE;
 static int NORMALIZATION_MODE_FLAG;
 static int DEFINITION_MODE_FLAG;
 static int OUTPUT_FILENAME_VALUE;
 static int SEARCH_PATH_VALUE;
-static int VERBOSE_MODE_FLAG;
+int PGEN_VERBOSE_MODE_FLAG;
 
 void PGEN_initializeDefaultOptions(void) {
   BAF_MODE_FLAG           = OPT_getFlagOptionId();
-  COLLECT_FLAG        = OPT_getFlagOptionId(); 
+  COLLECT_FLAG            = OPT_getFlagOptionId(); 
   GENERATION_MODE_FLAG    = OPT_getFlagOptionId();
   INPUT_FILENAME_VALUE    = OPT_getStringOptionId();
-  STATS_FLAG              = OPT_getFlagOptionId();
+  PGEN_STATS_FLAG         = OPT_getFlagOptionId();
+  STATSFILENAME_VALUE     = OPT_getStringOptionId();
   TOP_MODULE_VALUE        = OPT_getStringOptionId();
   NORMALIZATION_MODE_FLAG = OPT_getFlagOptionId();
   DEFINITION_MODE_FLAG    = OPT_getFlagOptionId();
   OUTPUT_FILENAME_VALUE   = OPT_getStringOptionId();
-  VERBOSE_MODE_FLAG       = OPT_getFlagOptionId();
+  PGEN_VERBOSE_MODE_FLAG  = OPT_getFlagOptionId();
   SEARCH_PATH_VALUE       = OPT_getStringOptionId();
 
   PGEN_setBafModeFlag(ATtrue);
@@ -34,6 +39,7 @@ void PGEN_initializeDefaultOptions(void) {
   PGEN_setGenerationModeFlag(ATfalse);
   PGEN_setInputFilename("-");
   PGEN_setStatsFlag(ATfalse);
+  PGEN_setStatsFilename("-");
   PGEN_setTopModule("Main");
   PGEN_setNormalizationModeFlag(ATfalse);
   PGEN_setDefinitionModeFlag(ATfalse);
@@ -75,11 +81,19 @@ const char *PGEN_getInputFilename(void) {
 }
 
 void PGEN_setStatsFlag(ATbool value) {
-  OPT_setFlag(STATS_FLAG,value);
+  OPT_setFlag(PGEN_STATS_FLAG,value);
 }
 
-ATbool PGEN_getStatsFlag(void) {
-  return OPT_getFlag(STATS_FLAG);
+/*ATbool PGEN_getStatsFlag(void) {
+  return OPT_getFlag(PGEN_STATS_FLAG);
+}*/
+
+void PGEN_setStatsFilename(const char* statsFilename) {
+  OPT_setStringValue(STATSFILENAME_VALUE, statsFilename);
+}
+
+const char *PGEN_getStatsFileName() {
+  return OPT_getStringValue(STATSFILENAME_VALUE);
 }
 
 void PGEN_setTopModule(const char *value) {
@@ -123,9 +137,9 @@ const char *PGEN_getSearchPath(void) {
 }
 
 void PGEN_setVerboseModeFlag(ATbool value) {
-  OPT_setFlag(VERBOSE_MODE_FLAG,value);
+  OPT_setFlag(PGEN_VERBOSE_MODE_FLAG,value);
 }
 
-ATbool PGEN_getVerboseModeFlag(void) {
+/*ATbool PGEN_getVerboseModeFlag(void) {
   return OPT_getFlag(VERBOSE_MODE_FLAG);
-}
+}*/

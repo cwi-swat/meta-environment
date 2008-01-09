@@ -352,8 +352,8 @@ void gotos(ATermList kernelState, ItemSet closedItems, ATermList prods, CC_Set *
   int idx;
   int newStateNumber;
 
-  if (PGEN_getStatsFlag()) {
-    PGEN_increaseNumberOfItems(ITS_size(closedItems));
+  if (PGEN_getStatsFlag) {
+    PGEN_STATS_increaseItems(ITS_size(closedItems));
   }   
 
   while(!ATisEmpty(prods)) {
