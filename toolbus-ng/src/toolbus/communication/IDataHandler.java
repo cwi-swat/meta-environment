@@ -50,7 +50,7 @@ public interface IDataHandler{
 	void shutDown();
 	
 	/**
-	 * Notifies the data handler that an exception has occured so it can take the nessacary steps.
+	 * Notifies the data handler that an exception has occured so it can take the necessary steps.
 	 */
 	void exceptionOccured();
 }

@@ -45,7 +45,7 @@ public class Latch{
 	 */
 	public void await() throws InterruptedException{
 		synchronized(lock){
-			if(count == 0){
+			if(count != 0){
 				lock.wait();
 			}
 		}

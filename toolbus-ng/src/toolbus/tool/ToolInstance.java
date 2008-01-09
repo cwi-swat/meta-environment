@@ -29,6 +29,11 @@ import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 
+/**
+ * Provides the interface to a tool instance.
+ * 
+ * @author Arnold Lankamp
+ */
 public class ToolInstance implements IDataHandler, IOperations{
 	private final ToolDefinition toolDef;
 	private final ToolBus toolbus;
@@ -51,10 +56,10 @@ public class ToolInstance implements IDataHandler, IOperations{
 	private volatile ATerm lastDebugPerformanceStats = null;
 	
 	/**
-	 * Construct a ToolInstance.
+	 * Constructor.
 	 * 
 	 * @param toolDef
-	 *            definition of the tool.
+	 *            The definition of the tool.
 	 * @param toolbus
 	 *            A reference to the toolbus associated with this tool instance.
 	 */
@@ -78,6 +83,12 @@ public class ToolInstance implements IDataHandler, IOperations{
 		performanceStats = new LinkedList<ATerm>();
 	}
 	
+	/**
+	 * Executes the tool that will be associated with this tool instance.
+	 * 
+	 * @throws ToolBusException
+	 *            Thrown when the tool could not be started.
+	 */
 	public void executeTool() throws ToolBusException{
 		if(toolDef.isDirectlyStartableJavaNGTool()){
 			// Create a new classloader for the tool instance.
@@ -209,22 +220,43 @@ public class ToolInstance implements IDataHandler, IOperations{
 		}
 	}
 	
+	/**
+	 * Returns the key that is associated with this tool instance.
+	 * 
+	 * @return The key that is associated with this tool instance.
+	 */
 	public ATermAppl getToolKey(){
 		return toolKey;
 	}
 	
+	/**
+	 * Returns the name of the tool that is associated with this tool instance.
+	 * 
+	 * @return The name of the tool that is associated with this tool instance.
+	 */
 	public String getToolName(){
 		return toolKey.getName();
 	}
 	
+	/**
+	 * Returns the signature of the tool that is associated with this tool instance.
+	 * 
+	 * @return The signature of the tool that is associated with this tool instance.
+	 */
 	public ATerm getSignature(){
 		return toolDef.getSignature();
 	}
 	
+	/**
+	 * @see toolbus.communication.IDataHandler#setIOHandler(IIOHandler)
+	 */
 	public void setIOHandler(IIOHandler ioHandler){
 		this.ioHandler = ioHandler;
 	}
 	
+	/**
+	 * @see toolbus.communication.IDataHandler#receive(byte, ATerm)
+	 */
 	public void receive(byte operation, ATerm aTerm){
 		switch(operation){
 			case EVENT:
@@ -263,38 +295,80 @@ public class ToolInstance implements IDataHandler, IOperations{
 		toolbus.workArrived(this, operation);
 	}
 	
+	/**
+	 * Sends an ack event to the with this tool instance associated tool.
+	 * 
+	 * @param aTerm
+	 *            The ack event.
+	 */
 	public void sendAckEvent(ATerm aTerm){
 		send(ACKEVENT, aTerm);
 	}
 	
+	/**
+	 * Sends a do request to the with this tool instance associated tool.
+	 * 
+	 * @param aTerm
+	 *            The do request.
+	 */
 	public void sendDo(ATerm aTerm){
 		send(DO, aTerm);
 	}
 	
+	/**
+	 * Sends an evaluation request to the with this tool instance associated tool.
+	 * 
+	 * @param aTerm
+	 *            The evaluation request.
+	 */
 	public void sendEval(ATerm aTerm){
 		send(EVAL, aTerm);
 	}
 	
+	/**
+	 * Sends a termination request to the with this tool instance associated tool.
+	 * 
+	 * @param aTerm
+	 *            The termination request.
+	 */
 	public void sendTerminate(ATerm aTerm){
 		send(TERMINATE, aTerm);
 	}
 	
+	/**
+	 * Sends a performance statistics request to the with this tool instance associated tool.
+	 * 
+	 * @param aTerm
+	 *            The performance statistics request.
+	 */
 	public void sendPerformanceStatsRequest(ATerm aTerm){
 		send(PERFORMANCESTATS, aTerm);
 	}
 	
+	/**
+	 * Sends a debug performance statistics request to the with this tool instance associated tool.
+	 */
 	public void sendDebugPerformanceStatsRequest(){
 		send(DEBUGPERFORMANCESTATS, toolbus.getTBTermFactory().makeList());
 	}
 	
+	/**
+	 * @see toolbus.communication.IDataHandler#send(byte, ATerm)
+	 */
 	public void send(byte operation, ATerm aTerm){
 		ioHandler.send(operation, aTerm);
 	}
 	
+	/**
+	 * @see toolbus.communication.IDataHandler#terminate()
+	 */
 	public void terminate(){
 		ioHandler.terminate();
 	}
 	
+	/**
+	 * @see toolbus.communication.IDataHandler#shutDown()
+	 */
 	public void shutDown(){
 		boolean connected = isConnected();
 		
@@ -312,10 +386,21 @@ public class ToolInstance implements IDataHandler, IOperations{
 		toolbus.workArrived(this, IOperations.END);
 	}
 	
+	/**
+	 * Checks if the tool that is associated with this tool instance was executed or connected on it's own initiative.
+	 * 
+	 * @return True if the tool was executed; false otherwise.
+	 */
 	public boolean isExecutedTool(){
 		return (streamHandler != null);
 	}
 	
+	/**
+	 * Forcefully terminates the with this tool instance associated tool.
+	 * NOTE: This only works for executed tools. Tools that connected on their own initiative won't
+	 * be killed by the invocation of this method; however they will become unreachable and their
+	 * state will be set to 'killed'.
+	 */
 	public void kill(){
 		boolean connected = isConnected();
 		
@@ -330,12 +415,10 @@ public class ToolInstance implements IDataHandler, IOperations{
 			tim.removeDynamiclyConnectedTool(this);
 		}
 		
-		if(streamHandler != null) streamHandler.destroy();
+		if(streamHandler != null) streamHandler.destroy(); // Forcefully kills the tool.
 	}
 	
 	/**
-	 * Deregisters the tool instance and enters the unreachable state.
-	 * 
 	 * @see IDataHandler#exceptionOccured()
 	 */
 	public void exceptionOccured(){
@@ -344,6 +427,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 		LoggerFactory.log("Tool crashed / disconnected: "+toolKey, ILogger.WARNING, IToolBusLoggerConstants.TOOLINSTANCE);
 	}
 	
+	/**
+	 * Attempts to find a value that matches the given signature. If this is the case the
+	 * environment will be updated.
+	 * 
+	 * @param aTerm
+	 *            The signature we need to match on.
+	 * @param env
+	 *            The enviroment in which we need to make updates, when a match have been made.
+	 * @return Indicates if the matches was successful.
+	 */
 	public boolean getValueFromTool(ATerm aTerm, Environment env){
 		synchronized(valuesFromTool){
 			Iterator<ATerm> valuesIterator = valuesFromTool.iterator();
@@ -358,6 +451,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 		return false;
 	}
 	
+	/**
+	 * Attempts to find a event that matches the given signature. If one is found the environment
+	 * will be updated.
+	 * 
+	 * @param aTerm
+	 *            The signature we need to match on.
+	 * @param env
+	 *            The enviroment in which we need to make updates, when a match have been made.
+	 * @return Indicates if the matches was successful.
+	 */
 	public boolean getEventFromTool(ATerm aTerm, Environment env){
 		synchronized(eventsFromTool){
 			Iterator<ATerm> eventsIterator = eventsFromTool.iterator();
@@ -372,6 +475,16 @@ public class ToolInstance implements IDataHandler, IOperations{
 		return false;
 	}
 	
+	/**
+	 * Attempts to find performance statistics that match the given signature. If one is found the
+	 * environment will be updated.
+	 * 
+	 * @param aTerm
+	 *            The signature we need to match on.
+	 * @param env
+	 *            The enviroment in which we need to make updates, when a match have been made.
+	 * @return Indicates if the matches was successful.
+	 */
 	public boolean getPerformanceStats(ATerm aTerm, Environment env){
 		synchronized(performanceStats){
 			Iterator<ATerm> performanceStatsIterator = performanceStats.iterator();
@@ -386,6 +499,12 @@ public class ToolInstance implements IDataHandler, IOperations{
 		return false;
 	}
 	
+	/**
+	 * Returns the last received batch of debug performance statistics.
+	 * NOTE: This method will only be used in debug mode, by the debug ToolBus.
+	 * 
+	 * @return The last received batch of debug performance statistics.
+	 */
 	public ATerm getLastDebugPerformanceStats(){
 		return lastDebugPerformanceStats;
 	}
@@ -402,72 +521,121 @@ public class ToolInstance implements IDataHandler, IOperations{
 	
 	private final Object stateLock = new Object();
 	
+	/**
+	 * Notifies this tool instance that the tool connected.
+	 */
 	private void goConnected(){
 		synchronized(stateLock){
 			state = READY;
 		}
 	}
 	
+	/**
+	 * Notifies this tool instance that the tool is ready to receive a new DO or EVAL request.
+	 */
 	private void goReady(){
 		synchronized(stateLock){
 			if(state == BLOCKED) state = READY;
 		}
 	}
 	
+	/**
+	 * Notifies this tool instance that the tool has disconnected.
+	 */
 	private void goDisconnected(){
 		synchronized(stateLock){
 			if(isConnected()) state = DISCONNECTED;
 		}
 	}
 	
+	/**
+	 * Notifies this tool instance that the tool has terminated.
+	 */
 	private void goTerminated(){
 		synchronized(stateLock){
 			state = TERMINATED;
 		}
 	}
 	
+	/**
+	 * Notifies this tool instance that the tool has become unreachable.
+	 */
 	private void goUnreachable(){
 		synchronized(stateLock){
 			state = UNREACHABLE;
 		}
 	}
 	
+	/**
+	 * Notifies this tool instance that the tool has been killed.
+	 */
 	private void goKilled(){
 		synchronized(stateLock){
 			state = KILLED;
 		}
 	}
 	
+	/**
+	 * Checks if the tool is connected.
+	 * 
+	 * @return True if the tool is connected; false otherwise.
+	 */
 	public boolean isConnected(){
 		synchronized(stateLock){
 			return ((state & (READY | BLOCKED)) != 0);
 		}
 	}
 	
+	/**
+	 * Checks if the tool has disconnected.
+	 * 
+	 * @return True if the tool has disconnected; false otherwise.
+	 */
 	public boolean isDisconnected(){
 		synchronized(stateLock){
 			return (state == DISCONNECTED);
 		}
 	}
 	
+	/**
+	 * Checks if the tool has become unreachable.
+	 * 
+	 * @return True if the tool has become unreachable.
+	 */
 	public boolean isUnreachable(){
 		synchronized(stateLock){
 			return (state == UNREACHABLE);
 		}
 	}
 	
+	/**
+	 * Checks if the tool has been terminated.
+	 * 
+	 * @return True if the tool has been terminated.
+	 */
 	public boolean isTerminated(){
 		synchronized(stateLock){
 			return (state == KILLED);
 		}
 	}
 	
+	/**
+	 * Checks if the tool has been killed.
+	 * 
+	 * @return True if the tool has been killed; false otherwise.
+	 */
 	public boolean isKilled(){
 		synchronized(stateLock){
 			return (state == KILLED);
 		}
 	}
 	
+	/**
+	 * Notifies the tool instance that you want to send a DO or EVAL request to the tool and checks
+	 * if this is possible.
+	 * 
+	 * @return True if it is possible to send a DO or EVAL request; false otherwise.
+	 */
 	public boolean tryDoEval(){
 		synchronized(stateLock){
 			if(state == READY){
@@ -478,23 +646,42 @@ public class ToolInstance implements IDataHandler, IOperations{
 		return false;
 	}
 	
+	/**
+	 * Returns the status of this tool instance in string format.
+	 * 
+	 * @return The status of this tool instance in string format.
+	 */
 	public String showStatus(){
-		String status;
 		synchronized(stateLock){
-			status = "tool " + toolKey.toString() + "(state = " + state + ")";
+			return "tool " + toolKey.toString() + "(state = " + state + ")";
 		}
-		return status;
 	}
 	
+	/**
+	 * Handles the output and error streams of a tool process.
+	 * 
+	 * @author Arnold Lankamp
+	 */
 	private static class StreamHandler implements Runnable{
 		private final Process process;
 		private final String toolID;
 		
+		/**
+		 * Constructor.
+		 * 
+		 * @param process
+		 *            The tool process.
+		 * @param toolID
+		 *            The tool identifier.
+		 */
 		public StreamHandler(Process process, String toolID){
 			this.process = process;
 			this.toolID = toolID;
 		}
 		
+		/**
+		 * @see java.lang.Runnable#run()
+		 */
 		public void run(){
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			
@@ -534,6 +721,9 @@ public class ToolInstance implements IDataHandler, IOperations{
 			}
 		}
 		
+		/**
+		 * Forcefully terminates the associated tool process.
+		 */
 		public void destroy(){
 			process.destroy();
 		}
