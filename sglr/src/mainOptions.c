@@ -13,7 +13,7 @@ static int OUTPUTFILENAME_VALUE;
 static int INPUTFILENAME_VALUE;
 static int PARSETABLENAME_VALUE;
 static int COUNTPOSINDEPENDENTAMBS_FLAG;
-int STATS_FLAG;
+int SGLR_STATS_FLAG;
 static int STATSFILENAME_VALUE;
 
 void MAIN_initializeDefaultOptions()  {
@@ -24,7 +24,7 @@ void MAIN_initializeDefaultOptions()  {
   INPUTFILENAME_VALUE = OPT_getStringOptionId();
   PARSETABLENAME_VALUE = OPT_getStringOptionId();
   COUNTPOSINDEPENDENTAMBS_FLAG = OPT_getFlagOptionId();
-  STATS_FLAG = OPT_getFlagOptionId();
+  SGLR_STATS_FLAG = OPT_getFlagOptionId();
   STATSFILENAME_VALUE = OPT_getStringOptionId();
 
   MAIN_setFlattenTreeFlag(ATtrue);
@@ -84,11 +84,11 @@ ATbool MAIN_getCountPosIndependentAmbsFlag() {
 }
 
 void MAIN_setStatsFlag(ATbool value) {
-  OPT_setFlag(STATS_FLAG, value);
+  OPT_setFlag(SGLR_STATS_FLAG, value);
 }
 
 /*ATbool MAIN_getStatsFlag() {
-  return OPT_getFlag(STATS_FLAG);
+  return OPT_getFlag(SGLR_STATS_FLAG);
 }*/
 
 void MAIN_setStatsFilename(const char* statsFilename) {

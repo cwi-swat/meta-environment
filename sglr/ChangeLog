@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jan  9 18:56:20 CET 2008 <economop@cwi.nl>
+ * src/mainOptions.{c,h}: added SGLR prefix to global variables to avoid 
+   conflict with PGEN.
+
 Thu Dec 20 03:29:18 CET 2007 <economop@cwi.nl>
  * src/gss/gssNode.c: corrected counting of rejected nodes.
  * src/parseForest/filterOptions.c: corrected the printing of filtering options.

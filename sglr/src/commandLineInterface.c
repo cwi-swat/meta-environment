@@ -71,7 +71,7 @@ static void usage() {
 	  "\t  r         : reject                                 [%s]\n"
 	  "\t-h          : display usage information\n"
 	  "\t-i file     : input from |file|                      [stdin]\n"
-	  "\t-l          : toggle statistics logging              [%s]\n"
+	  "\t-l file     : toggle statistics logging              [%s]\n"
 	  "\t-m          : toggle parse tree output               [%s]\n"
 	  "\t-n          : toggle parse tree creation             [%s]\n"
 	  "\t-o file     : output to |file|                       [stdout]\n"
