@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jan 10 11:18:01 CET 2008 <economop@cwi.nl>
+ * src/sglrInterface.c: corrected function call of options initialization.
+
 Wed Jan  9 18:56:20 CET 2008 <economop@cwi.nl>
  * src/mainOptions.{c,h}: added SGLR prefix to global variables to avoid 
    conflict with PGEN.

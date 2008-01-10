@@ -49,7 +49,7 @@ void SGLR_initialize() {
     PT_initAsFix2Api();
     PTBL_initPtableApi();
 
-    OPT_initialize(200);
+    OPT_initialize();
     PARSER_initializeDefaultOptions();
     FLT_initializeDefaultOptions();
     MAIN_initializeDefaultOptions();
