@@ -59,9 +59,7 @@ ATerm normalize_and_generate_table(const char *name, PT_ParseTree sdf2term) {
   PTBL_ParseTable pt = NULL;
   PT_Tree ksdf;
 
-  if (PGEN_getStatsFlag) {
-    STATS_Timer(); 
-  } 
+  if (PGEN_getStatsFlag) { STATS_Timer(); } 
 
   if (PGEN_getGenerationModeFlag()) {
     ksdf = PT_getParseTreeTree(sdf2term);

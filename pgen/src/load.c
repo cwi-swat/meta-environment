@@ -94,5 +94,6 @@ PT_ParseTree parseDefinition(const char* path) {
   if (result == NULL) {
     ERR_displaySummary(SGLR_getErrorSummary());
   }
+
   return result;
 }

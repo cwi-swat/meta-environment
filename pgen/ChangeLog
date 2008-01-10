@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jan 10 16:18:26 CET 2008 <economop@cwi.nl>
+ * src/*: collected some more statistics.
+
 Thu Jan 10 11:20:58 CET 2008 <economop@cwi.nl>
  * src/main.c: corrected function call of options initialization.
 

@@ -24,9 +24,6 @@ typedef struct _GotoBucket {
   int *entries;
 } GotoBucket;
 
-static int nr_of_lhs_members = 0;
-static int max_nr_lhs_members = 0;
-
 static PTBL_Labels labelsection;
 static PTBL_Priorities priosection;
 
@@ -53,7 +50,7 @@ static void sort_on_rhs_symbol(PT_Production prod, int prodnr) {
   }
 }
 
-/* Assign production numberrs, greoup productions on rhs symbol, save 
+/* Assign production numbers, group productions on rhs symbol, save 
  * attributes and initialize first set attributes. */
 static PTBL_Labels process_productions(SDF_ProductionList prods) {
   ATermIndexedSet unique_prods = ATindexedSetCreate(1024, 75);
@@ -66,8 +63,6 @@ static PTBL_Labels process_productions(SDF_ProductionList prods) {
   PT_Symbols args;
   ATbool isnew;
   int cnt = 0;
-  int nr_of_members;
-  int nr_of_kernel_prods;
   int idx; 
   int max_idx = 0;
   int arg; 
@@ -94,6 +89,7 @@ static PTBL_Labels process_productions(SDF_ProductionList prods) {
   maxProdNumber = cnt + MIN_PROD_NUM;
   PGEN_setMaxProductionNumber(maxProdNumber);
   PGEN_initProductionTables(maxProdNumber, MIN_PROD_NUM);
+  PGEN_STATS_setCount(PGEN_STATS_kernelProductions, max_idx);
 
   for (idx=0; idx<=max_idx; idx++) {
     ATerm sdfflatprod = ATindexedSetGetElem(unique_prods, idx);
@@ -101,13 +97,7 @@ static PTBL_Labels process_productions(SDF_ProductionList prods) {
     prod   = SDF_ProductionFromTerm(sdfflatprod);
     ptProd = SDFProductionToPtProduction(prod);
 
-    if (PGEN_getStatsFlag) {
-      nr_of_members = PT_getSymbolsLength(PT_getProductionLhs(ptProd));
-      if (nr_of_members > max_nr_lhs_members) {
-        max_nr_lhs_members = nr_of_members;
-      }
-      nr_of_lhs_members += nr_of_members;
-    }
+    PGEN_STATS_setMaxProductionLhsSymbols(PT_getSymbolsLength(PT_getProductionLhs(ptProd)));
     newProd = SDF_removeAttributes(prod);
 
     cnt = idx + MIN_PROD_NUM;
@@ -144,10 +134,6 @@ static PTBL_Labels process_productions(SDF_ProductionList prods) {
     labelentry = PTBL_makeLabelDefault((PTBL_Production)ptProd, cnt);
     labelentries = PTBL_makeLabelsMany(labelentry,labelentries);
   }
-  nr_of_kernel_prods = max_idx;
-
-  PGEN_STATS_setCount(PGEN_STATS_kernelProductions, max_idx);
-  PGEN_STATS_setCount(PGEN_STATS_maxProductionLhsLength, max_nr_lhs_members);
 
   ATindexedSetDestroy(unique_prods);
 
@@ -569,4 +555,3 @@ void PGEN_processGrammar(PT_Tree ptTree) {
     ATwriteToNamedTextFile((ATerm) grammarTerm, "./parsetablegen.bug");
   }
 }
-

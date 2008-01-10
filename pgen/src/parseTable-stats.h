@@ -13,8 +13,14 @@ extern unsigned int PGEN_STATS_maxActionsInStates;
 extern unsigned int PGEN_STATS_maxGotosInState; 
 extern unsigned int PGEN_STATS_maxItemsInState; 
 
+extern int PGEN_STATS_userRejects;
+extern int PGEN_STATS_userPrefers;
+extern int PGEN_STATS_userAvoids;
+extern int PGEN_STATS_userNoAttributes;
+
 extern int PGEN_STATS_kernelProductions;
-extern int PGEN_STATS_productions;
+extern int PGEN_STATS_userProductions;
+extern int PGEN_STATS_maxUserProductionLhsLength;
 extern int PGEN_STATS_maxProductionLhsLength;
 extern int PGEN_STATS_conficts;
 extern unsigned int PGEN_STATS_reductions;
@@ -27,6 +33,15 @@ extern double PGEN_STATS_generationTime;
 
 void PGEN_STATS_initialize(void);
 void PGEN_STATS_print(void);
+
+#if PGEN_COLLECT_STATISTICS
+#define PGEN_STATS_incrementCount(counter)\
+  if (PGEN_getStatsFlag) {\
+    counter++;\
+  }
+#else
+#define PGEN_STATS_incrementCount(counter) ;
+#endif
 
 #if PGEN_COLLECT_STATISTICS
 #define PGEN_STATS_increaseActions(value)\
@@ -73,5 +88,26 @@ void PGEN_STATS_print(void);
 #define PGEN_STATS_setCount(counter, value) ;
 #endif
 
+#if PGEN_COLLECT_STATISTICS
+#define PGEN_STATS_setMaxUserProductionLhsLength(value)\
+  if (PGEN_getStatsFlag) {\
+    if (value > PGEN_STATS_maxUserProductionLhsLength) {\
+      PGEN_STATS_maxUserProductionLhsLength = value;\
+    }\
+  }
+#else 
+#define PGEN_STATS_setMaxUserProductionLhsLength(value) ;
+#endif
+
+#if PGEN_COLLECT_STATISTICS
+#define PGEN_STATS_setMaxProductionLhsSymbols(value)\
+  if (PGEN_getStatsFlag) {\
+    if (value > PGEN_STATS_maxProductionLhsLength) {\
+      PGEN_STATS_maxProductionLhsLength = value;\
+    }\
+  }
+#else 
+#define PGEN_STATS_setMaxProductionLhsSymbols(value) ;
+#endif
 
 #endif /* __PARSETABLESTATS_H__ */

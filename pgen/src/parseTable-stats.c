@@ -18,9 +18,14 @@ unsigned int PGEN_STATS_maxGotosInState = 0; /** max number of gotos in any
                                               * state. */
 unsigned int PGEN_STATS_maxItemsInState = 0; /** max number of items in any 
                                               * state. */
+int PGEN_STATS_userRejects = 0;
+int PGEN_STATS_userPrefers = 0;
+int PGEN_STATS_userAvoids = 0;
+int PGEN_STATS_userNoAttributes = 0;
 
+int PGEN_STATS_userProductions = 0;
 int PGEN_STATS_kernelProductions = 0;
-int PGEN_STATS_productions = 0;
+int PGEN_STATS_maxUserProductionLhsLength = 0;
 int PGEN_STATS_maxProductionLhsLength = 0;
 
 int PGEN_STATS_conficts = 0;
@@ -70,12 +75,19 @@ void PGEN_STATS_print(void) {
 
   logFile = openLog(PGEN_getStatsFileName());
   
-/*  fprintf(logFile, "int productions = %d\n", );
-  fprintf(logFile, "int conflicts = %d\n", );
+  fprintf(logFile, "int user-productions = %d\n", PGEN_STATS_userProductions);
+/*  fprintf(logFile, "int conflicts = %d\n", );
   fprintf(logFile, "int reductions = %d\n", );
   fprintf(logFile, "int shifts = %d\n", );
   fprintf(logFile, "int followRestrictedReductions = %d\n", );
 */
+
+  fprintf(logFile, "int user-rejects = %d\n", PGEN_STATS_userRejects);
+  fprintf(logFile, "int user-prefers = %d\n", PGEN_STATS_userPrefers);
+  fprintf(logFile, "int user-avoids = %d\n", PGEN_STATS_userAvoids);
+  fprintf(logFile, "int user-no-attributes = %d\n", PGEN_STATS_userNoAttributes);
+
+
   fprintf(logFile, "int states = %u\n", numberOfStates);
   fprintf(logFile, "int items = %u\n", PGEN_STATS_items);
   fprintf(logFile, "int gotos = %u\n", PGEN_STATS_gotos);
@@ -92,6 +104,7 @@ void PGEN_STATS_print(void) {
   fprintf(logFile, "%%%% Normalization-to-Kernel-Sdf = %.6fs\n", PGEN_STATS_normalizationTime);
   fprintf(logFile, "%%%% Parse-table-generation = %.6fs\n", PGEN_STATS_generationTime); 
   fprintf(logFile, "int kernel-productions = %d\n", PGEN_STATS_kernelProductions);
+  fprintf(logFile, "int max-user-production-left-hand-side-length = %d\n", PGEN_STATS_maxUserProductionLhsLength);
   fprintf(logFile, "int max-production-left-hand-side-length = %d\n", PGEN_STATS_maxProductionLhsLength);
   fprintf(logFile, "%%%% production-lhs-length/kernel-productions = %d\n", (PGEN_STATS_maxProductionLhsLength/PGEN_STATS_kernelProductions));
 
