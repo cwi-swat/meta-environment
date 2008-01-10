@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jan 10 11:13:39 CET 2008 <economop@cwi.nl>
+ * src/options.{c,h}: reimplemented so that memory allocation is done
+   automatically. It is no longer necessary to pass in the number of options
+   used.
+
 Wed May  9 08:37:28 CEST 2007 <jurgenv@cwi.nl>
  * Regenerated API with new configuration option for editors.
 
