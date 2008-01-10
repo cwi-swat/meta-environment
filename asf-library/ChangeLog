@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jan 10 18:28:57 CET 2008 <economop@cwi.nl>
+ * library/languages/sdf2/extract/Sdf2.{asf,sdf}: added restrictions, prefers,
+   avoids, and rejects extraction from grammar.
+
 Wed Nov 14 14:51:10 EST 2007 <jurgenv@cwi.nl>
  * library/languages/box/format: added a formatter for Box
 

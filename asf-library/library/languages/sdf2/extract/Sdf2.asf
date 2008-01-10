@@ -7,9 +7,17 @@ equations
        Store5 := declare(Store4, Dependencies, rel[<str,loc>,<str,loc>]),
        Store6 := declare(Store5, ModuleProductions, rel[str,int]),
        Store7 := declare(Store6, SymbolProductions, rel[str,int]),
-       Store8 := declare(Store7, Functions, rel[str, loc])
+       Store8 := declare(Store7, Functions, rel[str, loc]),
+       Store9 := declare(Store8, Restrictions, rel[str, loc]),
+       Store10 := declare(Store9, ModuleRestrictions, rel[str, int]),
+       Store11 := declare(Store10, Rejects, rel[str, loc]),
+       Store12 := declare(Store11, ModuleRejects, rel[str, int]),
+       Store13 := declare(Store12, Prefers, rel[str, loc]),
+       Store14 := declare(Store13, ModulePrefers, rel[str, int]),
+       Store15 := declare(Store14, Avoids, rel[str, loc]),
+       Store16 := declare(Store15, ModuleAvoids, rel[str, int])
        ===>
-       start(SDF, definition Module*) = start(RStore, summarize(Module*, Store8))
+       start(SDF, definition Module*) = start(RStore, summarize(Module*, Store16))
 
 equations
 
@@ -20,15 +28,60 @@ equations
 [] collect(module ModuleName ImpSection* Sections, Store, ModuleName?) =
    collect(Sections, Store, ModuleName)
 
+[] collect(Restriction, Store, ModuleName) = Store3
+     when
+     Symbol* -/- Lookaheads := Restriction,
+     Store2 := insert(Store, Restrictions, unparse-to-string(Symbol* -/- Lookaheads), get-location(Restriction)),
+     Store3 := inc(Store2, ModuleRestrictions, unparse-to-string(ModuleName))
+
+[] collect(Production, Store, ModuleName) = Store8
+     when
+     Symbol* -> Symbol Attributes := Production,
+     {Attribute1 , reject , Attribute2} := Attributes,
+     Store2 := insert(Store, Productions, unparse-to-string(Symbol* -> Symbol), get-location(Production)),
+     Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
+     Store4 := insert(Store3, Rejects, unparse-to-string(Production), get-location(Production)),
+     Store5 := link(Symbol*, Store4, Symbol),
+     Store6 := inc(Store5, ModuleProductions, unparse-to-string(ModuleName)),
+     Store7 := inc(Store6, SymbolProductions, unparse-to-string(Symbol)),
+     Store8 := inc(Store7, ModuleRejects, unparse-to-string(ModuleName))
+
+[] collect(Production, Store, ModuleName) = Store8
+     when
+     Symbol* -> Symbol Attributes := Production,
+     {Attribute1 , prefer , Attribute2} := Attributes,
+     Store2 := insert(Store, Productions, unparse-to-string(Symbol* -> Symbol), get-location(Production)),
+     Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
+     Store4 := insert(Store3, Prefers, unparse-to-string(Production), get-location(Production)),
+     Store5 := link(Symbol*, Store4, Symbol),
+     Store6 := inc(Store5, ModuleProductions, unparse-to-string(ModuleName)),
+     Store7 := inc(Store6, SymbolProductions, unparse-to-string(Symbol)),
+     Store8 := inc(Store7, ModulePrefers, unparse-to-string(ModuleName))
+
+[] collect(Production, Store, ModuleName) = Store8
+     when
+     Symbol* -> Symbol Attributes := Production,
+     {Attribute1 , avoid , Attribute2} := Attributes,
+     Store2 := insert(Store, Productions, unparse-to-string(Symbol* -> Symbol), get-location(Production)),
+     Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
+     Store4 := insert(Store3, Avoids, unparse-to-string(Production), get-location(Production)),
+     Store5 := link(Symbol*, Store4, Symbol),
+     Store6 := inc(Store5, ModuleProductions, unparse-to-string(ModuleName)),
+     Store7 := inc(Store6, SymbolProductions, unparse-to-string(Symbol)),
+     Store8 := inc(Store7, ModuleAvoids, unparse-to-string(ModuleName))
+
 [] collect(Production, Store, ModuleName) = Store6
      when
      Symbol* -> Symbol Attributes := Production,
+     {Attribute1 , reject , Attribute2} !:= Attributes,
+     {Attribute3 , prefer , Attribute4} !:= Attributes,
+     {Attribute5 , avoid , Attribute6} !:= Attributes,
      Store2 := insert(Store, Productions, unparse-to-string(Symbol* -> Symbol), get-location(Production)),
      Store3 := insert(Store2, Symbols, unparse-to-string(Symbol), get-location(Symbol)),
      Store4 := link(Symbol*, Store3, Symbol),
      Store5 := inc(Store4, ModuleProductions, unparse-to-string(ModuleName)),
      Store6 := inc(Store5, SymbolProductions, unparse-to-string(Symbol))
-    
+        
 [] collect(Production, Store, ModuleName) = Store6
      when
      FunctionName(Symbol,*) -> Symbol Attributes := Production,

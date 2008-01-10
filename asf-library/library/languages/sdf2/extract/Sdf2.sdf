@@ -8,6 +8,7 @@ imports utilities/PosInfo[Symbol]
 imports utilities/Parsing[ModuleName]
 imports utilities/Parsing[Production]
 imports utilities/Parsing[Symbol]
+imports utilities/Parsing[Restriction]
 
 hiddens
 context-free start-symbols
@@ -22,7 +23,8 @@ context-free syntax
   collect(Symbol, RStore, ModuleName?)     -> RStore {traversal(accu, top-down, break)} 
   collect(Module, RStore, ModuleName?)     -> RStore {traversal(accu, top-down, break)} 
   collect(Sections, RStore, ModuleName?)   -> RStore {traversal(accu, top-down, break)} 
-  collect(Grammar, RStore, ModuleName?)    -> RStore {traversal(accu, top-down, break)} 
+  collect(Grammar, RStore, ModuleName?)    -> RStore {traversal(accu, top-down, break)}
+  collect(Restriction, RStore, ModuleName?) -> RStore {traversal(accu, top-down, break)} 
 
 context-free syntax
   link(Symbol*, RStore, Symbol)       -> RStore {traversal(accu, top-down, break)} 
@@ -46,9 +48,12 @@ variables
   "Symbol*" [0-9]*      -> Symbol*        
   "Symbol,*" [0-9]*     -> {Symbol ","}*  
   "Production" [0-9]*   -> Production     
-  "Attributes" [0-9]*   -> Attributes     
+  "Attributes" [0-9]*   -> Attributes
+  "Attribute" [0-9]*    -> {Attribute ","}*    
   "ModuleName" [0-9]*   -> ModuleName     
-  "FunctionName" [0-9]* -> FunctionName   
+  "FunctionName" [0-9]* -> FunctionName
+  "Restriction" [0-9]*   -> Restriction
+  "Lookaheads" [0-9]*   -> Lookaheads   
 
 lexical variables
   "c*" [0-9]* -> StrChar*  
