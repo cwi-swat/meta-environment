@@ -3851,11 +3851,11 @@ void rec_terminate(int conn, ATerm msg){  <co xml:id="co.hello2.interface.2" />
     first explain the AbstractTool class.</para>
 
     <section xml:id="section.AbstractTool">
-      <title>The <literal>AbstractTool</literal> class</title>
+      <title>The <literal>AbstractJavaTool</literal> class</title>
 
-      <para><programlisting>public abstract class AbstractTool implements IOperations {
+      <para><programlisting>public abstract class AbstractJavaTool implements IOperations {
 
-public AbstractTool(){ ... } <co xml:id="co.AbstractTool.1" />
+public AbstractJavaTool(){ ... } <co xml:id="co.AbstractTool.1" />
 
 public void connect(String[] args) throws Exception{ ... } <co
             xml:id="co.AbstractTool.2" />
@@ -3877,7 +3877,7 @@ public abstract void receiveTerminate(ATerm aTerm); <co
 
       <calloutlist>
         <callout arearefs="co.AbstractTool.1">
-          <para>The default constructor of AbstractTool.</para>
+          <para>The default constructor of AbstractJavaTool.</para>
         </callout>
 
         <callout arearefs="co.AbstractTool.2">
@@ -3942,11 +3942,11 @@ public abstract void receiveTerminate(ATerm aTerm); <co
 
           <para><programlisting>package toolbus.tool.java.hello;
 
-import toolbus.adapter.AbstractTool;
+import toolbus.adapter.java.AbstractJavaTool;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
-public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
+public class HelloTool extends AbstractJavaTool <co xml:id="co.hello-java.1" />
 {
   public HelloTool(String[] args){ <co xml:id="co.hello-java.2" />
     super(); 
@@ -3977,24 +3977,24 @@ public class HelloTool extends AbstractTool <co xml:id="co.hello-java.1" />
 }</programlisting>Notes:<calloutlist>
               <callout arearefs="co.hello-java.1">
                 <para>The class <literal>HelloTool</literal> extends
-                <literal>AbstractTool</literal> and provides an implementation
-                for the hello tool.</para>
+                <literal>AbstractJavaTool</literal> and provides an
+                implementation for the hello tool.</para>
               </callout>
 
               <callout arearefs="co.hello-java.2">
-                <para>The constructor for <literal>HelloTool</literal> first
-                calls its super class and then attempt to make a connection.
-                The arguments of the constructor are passed to the
-                <literal>connect</literal> call.</para>
+                <para>The constructor for <literal>HelloTool</literal> then
+                attempts to make a connection. The arguments of the
+                constructor are passed to the <literal>connect</literal>
+                call.</para>
               </callout>
 
               <callout arearefs="co.hello-java.3">
                 <para>The evaluation request <literal>snd-eval(H,
-                get_text)</literal> in the Tscript is implemented by the
-                method <literal>getText</literal>. It constructs the required
-                ATerm that <literal>text("Hello world in Java!\n")</literal>
-                and returns it as result. This result will passed to the
-                ToolBus and will be accepted by the atom <literal>rec-value(H,
+                getText)</literal> in the Tscript is implemented by the method
+                <literal>getText</literal>. It constructs the required ATerm
+                that <literal>text("Hello world in Java!\n")</literal> and
+                returns it as result. This result will passed to the ToolBus
+                and will be accepted by the atom <literal>rec-value(H,
                 text(S?))</literal> in the Tscript. Note that in this example
                 <literal>H</literal> is the tool identifier of the hello
                 tool.</para>
