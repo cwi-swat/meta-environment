@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
   SDF_initSDFMEApi(); 
   PTBL_initPtableApi();
 
-  OPT_initialize(200);
+  OPT_initialize();
   PGEN_initializeDefaultOptions();
 
   if(toolbus_mode) {
