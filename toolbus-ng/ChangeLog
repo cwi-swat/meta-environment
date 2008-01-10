@@ -1,3 +1,6 @@
+Thu Jan 10 13:08:13 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.viewer.ScriptCodeStore: Added a store for script source code to the viewer architecture.
+
 Tue Jan 08 13:35:28 CEST 2008 <lankamp@cwi.nl>
  * toolbus.communication.*Multiplexer: Removed synchronization and replaced it by a 'latch'.
 

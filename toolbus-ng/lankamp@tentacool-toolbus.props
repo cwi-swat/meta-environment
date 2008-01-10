@@ -38,7 +38,6 @@ include.path=/ufs/lankamp/metaNG/installed/share/sdf-meta, \
 /ufs/lankamp/metaNG/installed/share/svg-gui, \
 /ufs/lankamp/metaNG/installed/share/relation-stores, \
 /ufs/lankamp/metaNG/installed/share/rstore-container, \
-/ufs/lankamp/metaNG/installed/share/vis-plugin-csv, \
 /ufs/lankamp/metaNG/installed/share/vis-plugin-graph, \
 /ufs/lankamp/metaNG/installed/share/vis-plugin-charts, \
 /ufs/lankamp/metaNG/installed/share/vis-plugin-generic, \

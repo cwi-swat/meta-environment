@@ -1721,7 +1721,7 @@ class CUP$parser$actions {
 						parser.tbfactory.mkVar(tnm, parser.processName, parser.tbfactory.make("none")),
 						t,
 						parser.tbfactory, 
-						makePosInfo((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)));
+						makePosInfoWithEndColumnOffset((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2), (java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1), 2));
 				
 				CUP$parser$result = parser.getSymbolFactory().newSymbol("assign",11, RESULT);
 			}

@@ -60,7 +60,7 @@ public class ProcessInstance{
 		
 		addPartnersToAllProcesses(elements);
 		
-		showAutomaton();
+		//showAutomaton();
 	}
 	
 	public TBTermFactory getTBTermFactory(){
@@ -341,11 +341,10 @@ public class ProcessInstance{
 		// LoggerFactory.log("process " + processId + ": " + call, IToolBusLoggerConstants.CALLS);
 		// LoggerFactory.log("process " + processId + ": atoms: =" + elements, IToolBusLoggerConstants.CALLS);
 		// LoggerFactory.log("process " + processId + ": currentState = " + currentState, IToolBusLoggerConstants.CALLS);
-		/*Iterator<Atom> atomSetIterator = atoms.iterator();
-			while(atomSetIterator.hasNext()){
-				Atom a = atomSetIterator.next();
-			}
-			LoggerFactory.log(definition.getName(), a + " --> " + a.getFollow(), IToolBusLoggerConstants.CALLS);
+		/*Iterator<Atom> atomSetIterator = elements.iterator();
+		while(atomSetIterator.hasNext()){
+			Atom a = atomSetIterator.next();
+			//LoggerFactory.log(definition.getName(), a + " --> " + a.getFollow(), IToolBusLoggerConstants.CALLS);
 		}*/
 	}
 	

@@ -162,10 +162,6 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		return env;
 	}
 	
-	public State getStartState(){
-		return getFirst();
-	}
-	
 	public void setTest(ATerm test, Environment e) throws ToolBusException{
 		if(test != null){
 			//System.err.println(this + "." + "setTest: env " + env.hashCode() + " => " + e.hashCode());
