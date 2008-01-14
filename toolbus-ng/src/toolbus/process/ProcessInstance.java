@@ -1,9 +1,12 @@
 package toolbus.process;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
+
 import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
@@ -26,6 +29,7 @@ public class ProcessInstance{
 	
 	private final AtomSet elements;
 	
+	private final State initialState; // Needed for debugging purposes.
 	private State currentState;
 	
 	private final ToolBus toolbus;
@@ -56,11 +60,10 @@ public class ProcessInstance{
 		elements = call.getAtoms();
 		
 		currentState = call.getFirst();
+		initialState = call.PE.getFirst();
 		currentState.activate();
 		
 		addPartnersToAllProcesses(elements);
-		
-		//showAutomaton();
 	}
 	
 	public TBTermFactory getTBTermFactory(){
@@ -261,10 +264,6 @@ public class ProcessInstance{
 		return currentState;
 	}
 	
-	public void setCurrentState(State s){
-		currentState = s;
-	}
-	
 	public void gotoNextStateAndActivate(){
 		currentState = currentState.gotoNextStateAndActivate();
 	}
@@ -349,13 +348,31 @@ public class ProcessInstance{
 	}
 	
 	/**
-	 * Returns a complete list of atoms in this process instance.
-	 * This method is only required for obtaining a reference to an atom, so we can set a break point on it
-	 * when running the toolbus in debug mode.
+	 * Returns a complete list of state elements in this process instance.
+	 * This method is only required for obtaining a reference to a state element, so we can set a
+	 * break point on it when running the toolbus in debug mode.
 	 * 
 	 * @return A complete list of atoms in this process instance.
 	 */
-	public AtomSet getAtomSet(){
-		return elements;
+	public Set<StateElement> getStateElements(){
+		Set<StateElement> stateElementsSet = new HashSet<StateElement>();
+		List<StateElement> stateElementsToDo = new LinkedList<StateElement>();
+		
+		stateElementsToDo.addAll(initialState.getElementsAsList());
+		do{
+			StateElement stateElement = stateElementsToDo.remove(0);
+			State state = stateElement.getFollow();
+			List<StateElement> stateElements = state.getElementsAsList();
+			Iterator<StateElement> stateElementsIterator = stateElements.iterator();
+			while(stateElementsIterator.hasNext()){
+				StateElement se = stateElementsIterator.next();
+				if(!stateElementsSet.contains(se)){
+					stateElementsToDo.add(se);
+				}
+				stateElementsSet.add(se);
+			}
+		}while(!stateElementsToDo.isEmpty());
+		
+		return stateElementsSet;
 	}
 }

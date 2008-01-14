@@ -284,7 +284,6 @@ public class ToolInstance implements IDataHandler, IOperations{
 				performanceStats.add(aTerm);
 				break;
 			case DEBUGPERFORMANCESTATS:
-				goReady();
 				lastDebugPerformanceStats = aTerm;
 				break;
 			default:

@@ -434,7 +434,7 @@ public class JavaToolBridge extends ToolBridge{
 				if(appl.getAFun().isQuoted()) return appl.getAFun().getName();
 				return appl;
 			case ATerm.LIST:
-				return (ATermList) aTerm;
+				return aTerm;
 			case ATerm.INT:
 				ATermInt integer = (ATermInt) aTerm;
 				return new Integer(integer.getInt());

@@ -581,9 +581,12 @@ public class ToolBus{
 					}
 				}
 			}while(running);
-		}catch(ToolBusException e){
-			error("Process " + (pi != null ? pi.getProcessName() : "?"), e.getMessage());
-			e.printStackTrace();
+		}catch(ToolBusException ex){
+			error("ToolBus exception occured in process " + (pi != null ? pi.getProcessName() : "?"), ex.getMessage());
+			ex.printStackTrace();
+		}catch(RuntimeException rex){
+			error("ToolBus exception occured in process " + (pi != null ? pi.getProcessName() : "?"), rex.getMessage());
+			rex.printStackTrace();
 		}
 		
 		// If the ToolBus is still running, shut it down.

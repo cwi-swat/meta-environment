@@ -1,3 +1,7 @@
+Mon Jan 14 13:26:00 CEST 2008 <lankamp@cwi.nl>
+ * toolbus.*: Added better error handling for certain cases.
+ * toolbus.process.ProcessInstance: Made it possible to retrieve a list containing all state elements.
+
 Thu Jan 10 13:08:13 CEST 2008 <lankamp@cwi.nl>
  * toolbus.viewer.ScriptCodeStore: Added a store for script source code to the viewer architecture.
 

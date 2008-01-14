@@ -87,7 +87,7 @@ public class PositionInformation{
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(fileName);
-		sb.append(" : ");
+		sb.append(" @ ");
 		sb.append(beginLine);
 		sb.append(",");
 		sb.append(beginColumn);

@@ -100,4 +100,9 @@ public interface StateElement{
 	 * @return The position information associated to the implementing state element.
 	 */
 	PositionInformation getPosInfo();
+	
+	/**
+	 * @see ProcessExpression
+	 */
+	State getFollow();
 }

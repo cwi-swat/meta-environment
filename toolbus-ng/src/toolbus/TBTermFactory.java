@@ -264,8 +264,12 @@ public class TBTermFactory extends PureFactory{
 	}
 	
 	public ATerm index(ATerm l, int i){
-		ATerm res = ((ATermList) l).elementAt(i - 1);
-		// System.err.println("index(" + l + ", " + i + ")==> " + res);
+		ATerm res;
+		try{
+			res = ((ATermList) l).elementAt(i - 1);
+		}catch(IllegalArgumentException iaex){
+			throw new IllegalArgumentException("An index out of bounds exception occured while retrieving the term at index: "+i+", from the following list: "+l);
+		}
 		return res;
 	}
 	
