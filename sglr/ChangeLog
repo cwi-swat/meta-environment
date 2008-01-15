@@ -1,5 +1,8 @@
 $Id$
 
+Tue Jan 15 14:17:37 CET 2008 <economop@cwi.nl>
+ * src/InputStringBuilder.c: fixed bug 822.
+
 Thu Jan 10 11:18:01 CET 2008 <economop@cwi.nl>
  * src/sglrInterface.c: corrected function call of options initialization.
 
