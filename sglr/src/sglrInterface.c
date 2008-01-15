@@ -63,8 +63,11 @@ ATbool SGLR_isInitialized() {
   return initialized;
 }
 
-/* Convert an ATerm parse table to the internal format and cache it using the 
- * |parseTableName|.
+/** Convert an ATerm parse table to the internal format and cache it using the 
+ * \a parseTableName.
+ * \param parseTableName name to use for the new parse table
+ * \param parseTable the parse table to cache
+ * \return 1 if parse table could be cached, 0 if caching failed
  */
 int SGLR_loadParseTable(const char *parseTableName, PTBL_ParseTable parseTable) {
   ParseTable *internalParseTable = NULL;

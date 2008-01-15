@@ -26,10 +26,14 @@ struct _InputString {
 /** 
  * Creates an input string from the given buffer.
  * 
- * \param path the path to where the input string was read from.
- * \param buf the buffer containing the input string.
+ * \param path the path to where the input string was read from
+ * (data is copied to private area).
+ * \param buf the buffer containing the input string
+ * (pointer is taken from the caller, and released during
+ * IS_destroyInputString()).
  * \param length the length of the input string, excluding the end-of-string 
  * symbol.
+ * \sa IS_destroyInputString.
  * 
  * \return the newly created input string. 
  */
