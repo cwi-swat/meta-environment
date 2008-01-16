@@ -49,7 +49,7 @@ InputString IS_createInputStringFromString(const unsigned char *string) {
  * \return the newly created input string.
  */
 InputString IS_createInputStringFromBytes(const char *path, const unsigned char *string, const int length) {
-  unsigned char buf[length]; 
+  unsigned char *buf = malloc(length * sizeof(char)); 
   memcpy(buf, string, length);
  
   return IS_allocateString(path, buf, length);

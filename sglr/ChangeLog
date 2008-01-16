@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jan 16 17:20:24 CET 2008 <economop@cwi.nl>
+ * src/inputStringBuilder.c: fixed bug 822 again and hopefully didn't
+   introduce any new bugs this time ;-) 
+
 Tue Jan 15 14:25:39 CET 2008 <economop@cwi.nl>
  * src/sglrInterface.c, src/inputString.c: applied patch in bug 823.
 
