@@ -24,7 +24,7 @@
 
   <target name="dist" depends="build">
     <mkdir dir="${env.BUILDDIR}/${dist}/src"/>
-    <copy todir="${dist}/resources" failonerror="false">
+    <copy todir="${env.BUILDDIR}/${dist}/resources" failonerror="false">
       <fileset dir="${resources}"/>
     </copy>
     <copy todir="${env.BUILDDIR}/${dist}">
