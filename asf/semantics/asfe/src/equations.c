@@ -296,16 +296,16 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
 
   /* if it is a variable or we have a default equation */
   if (PT_isArgsEmpty(lhsargs) || ASF_isTagDefault(tag)) { 
-    first_ofs = (PT_Production) ATempty;
+    first_ofs = (PT_Production) NULL;
   }
   else {
     PT_Tree firstArg = PT_getArgsHead(lhsargs);
 
     if (ASC_isAmbiguityConstructor(firstArg)) {
-      first_ofs = (PT_Production) ATempty;
+      first_ofs = (PT_Production) NULL;
     }
     else if (PT_isTreeVar(firstArg)) {
-      first_ofs = (PT_Production) ATempty;
+      first_ofs = (PT_Production) NULL;
     }
     else {
       first_ofs = PT_getTreeProd(firstArg);
@@ -429,7 +429,7 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs, PT_P
     from = equations->table[hnr];
   }
 
-  if (first_ofs != (PT_Production) ATempty) {
+  if (first_ofs != (PT_Production) NULL) {
     while (from && (!PT_isEqualProduction(from->top_ofs, top_ofs))) {
       from = from->hnext;
     }
