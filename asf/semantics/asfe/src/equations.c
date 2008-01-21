@@ -308,7 +308,12 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
       first_ofs = (PT_Production) NULL;
     }
     else {
-      first_ofs = PT_getTreeProd(firstArg);
+      if (PT_isTreeAppl(firstArg)) {
+	first_ofs = PT_getTreeProd(firstArg);
+      }
+      else {
+	first_ofs = NULL;
+      }
     }
   }
 
