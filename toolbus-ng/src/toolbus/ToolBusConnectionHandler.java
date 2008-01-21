@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -183,8 +184,12 @@ public class ToolBusConnectionHandler extends AbstractConnectionHandler implemen
 		Socket socket = socketChannel.socket();
 		// Disable Nagle's algorithm, we don't want the random 500ms delays.
 		socket.setTcpNoDelay(true);
-		// Set the traffic class to high throughput and low delay.
-		socket.setTrafficClass(0x18);
+		try{
+			// Set the traffic class to high throughput and low delay.
+			socket.setTrafficClass(0x18);
+		}catch(SocketException sex){
+			// This catch block is only here because some operating systems have a problem with setting priorities.
+		}
 
 		ToolInstance toolInstance = null;
 		try{
