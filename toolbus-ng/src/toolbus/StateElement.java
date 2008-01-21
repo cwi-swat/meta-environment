@@ -1,5 +1,6 @@
 package toolbus;
 
+import java.util.List;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
@@ -24,7 +25,7 @@ public interface StateElement{
 	boolean contains(StateElement elem);
 	
 	/**
-	 * Add a test to this StateElem. Tests implement conditionals as well as delay/timeout.
+	 * Add a test to this state element. Tests implement conditionals but not delays / timeouts.
 	 * 
 	 * @param test
 	 * @param env
@@ -34,24 +35,12 @@ public interface StateElement{
 	void setTest(ATerm test, Environment env) throws ToolBusException;
 	
 	/**
-	 * Add potential partners to this StateElement. This may optimize execution. Typical examples:
-	 * partnering SndMsg with RecMsg, and SndNote with Subscribe
+	 * Returns a collection containing all tests that are associated with this state element.
 	 * 
-	 * @param atoms
-	 *            containing the potential partners
-	 * @throws ToolBusException
+	 * @return A collection containing all tests that are associated with this state element.
 	 */
-	// public void addPartners(AtomSet atoms) throws ToolBusException;
+	List<ATerm> getTests();
 	
-	/**
-	 * Delete partners from this StateElement. This is necessary when processes die and partners are
-	 * no longer available.
-	 * 
-	 * @param atoms
-	 *            containing the partners
-	 * @throws ToolBusException
-	 */
-	// public void delPartners(AtomSet atoms) throws ToolBusException;
 	/**
 	 * Is this StateElelement enabled for execution, i.e., are its associated tests all true? If
 	 * enabled, the StateElement is ready for execution.
@@ -102,7 +91,7 @@ public interface StateElement{
 	PositionInformation getPosInfo();
 	
 	/**
-	 * @see ProcessExpression
+	 * @see toolbus.process.ProcessExpression#getFollow()
 	 */
 	State getFollow();
 }

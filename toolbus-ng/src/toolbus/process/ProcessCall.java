@@ -4,6 +4,8 @@
 
 package toolbus.process;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import toolbus.AtomSet;
 import toolbus.State;
@@ -221,6 +223,12 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 			this.test = test;
 			this.testEnv = env; // TODO attach to actual PE!
 		}
+	}
+	
+	public List<ATerm> getTests(){
+		List<ATerm> testExpressions = new ArrayList<ATerm>(1);
+		if(test != null) testExpressions.add(test);
+		return testExpressions;
 	}
 	
 	public boolean isEnabled(){

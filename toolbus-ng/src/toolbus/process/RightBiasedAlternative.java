@@ -1,5 +1,7 @@
 package toolbus.process;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import toolbus.AtomSet;
 import toolbus.State;
@@ -87,6 +89,10 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 	public void setTest(ATerm test, Environment env) throws ToolBusException{
 		state[LEFT].setTest(test, env);
 		state[RIGHT].setTest(test, env);
+	}
+	
+	public List<ATerm> getTests(){
+		return new ArrayList<ATerm>(0);
 	}
 	
 	public boolean isEnabled(){

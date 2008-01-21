@@ -166,11 +166,23 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		if(test != null){
 			//System.err.println(this + "." + "setTest: env " + env.hashCode() + " => " + e.hashCode());
 			ATerm rtst = tbfactory.resolveVarTypes(test, e);
-			if(tests == null) tests = new ArrayList<Test>(3);
+			if(tests == null) tests = new ArrayList<Test>(4);
 			Test t = new Test(rtst, e);
 			//System.out.println("setTest: " + t);
 			this.tests.add(t);
 		}
+	}
+	
+	public List<ATerm> getTests(){
+		if(tests != null){
+			List<ATerm> testExpressions = new ArrayList<ATerm>(tests.size());
+			Iterator<Test> testsIterator = tests.iterator();
+			while(testsIterator.hasNext()){
+				testExpressions.add(testsIterator.next().testExpr);
+			}
+			return testExpressions;
+		}
+		return new ArrayList<ATerm>(0);
 	}
 	
 	public void setDelay(ATerm delay){
@@ -201,7 +213,11 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	public void setAbsoluteDelay(ATermList delay){
 		// TODO Implement as soon as we know how to do it properly.
 		throw new UnsupportedOperationException("Absolute delays are currently unsupported.");
-	} 
+	}
+	
+	public int getDelay(){
+		return delay;
+	}
 	
 	public void setTimeout(ATerm timeout){
 		if(timeout instanceof ATermAppl){
@@ -231,7 +247,11 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 	public void setAbsoluteTimeout(ATermList timeout){
 		// TODO Implement as soon as we know how to do it properly.
 		throw new UnsupportedOperationException("Absolute timeouts are currently unsupported.");
-	} 
+	}
+	
+	public int getTimeout(){
+		return timeout;
+	}
 	
 	public ToolBus getToolBus(){
 		return processInstance.getToolBus();
