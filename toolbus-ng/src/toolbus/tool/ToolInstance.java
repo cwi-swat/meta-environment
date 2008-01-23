@@ -717,6 +717,26 @@ public class ToolInstance implements IDataHandler, IOperations{
 				}catch(IOException ioex){
 					LoggerFactory.log("Unable to close the input stream from tool: " + toolID, ILogger.FATAL, IToolBusLoggerConstants.TOOLINSTANCE);
 				}
+				
+				int exitCode = -1;
+				do{
+					try{
+						process.waitFor();
+					}catch(InterruptedException irex){
+						// Ignore this.
+					}
+					try{
+						exitCode = process.exitValue();
+					}catch(IllegalThreadStateException itsex){
+						// Ignore this too.
+					}
+				}while(exitCode == -1);
+				
+				if(exitCode != 0){
+					String error = "Tool "+toolID+" exited unexpectedly with code: "+exitCode;
+					LoggerFactory.log(error, ILogger.ERROR, IToolBusLoggerConstants.TOOLINSTANCE);
+					throw new RuntimeException(error);
+				}
 			}
 		}
 		

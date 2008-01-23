@@ -957,7 +957,17 @@ public class parser extends java_cup.runtime.lr_parser {
 		}
 	}
 	
+	public void syntax_error(java_cup.runtime.Symbol badToken){
+    	throw new SyntaxErrorException("Syntax error at line: "+(badToken.left + 1)+", column: "+(badToken.right + 1)+", symbol id: "+badToken.sym);
+    }
 	
+	private class SyntaxErrorException extends RuntimeException{
+		private static final long serialVersionUID = 2315538188275748342L;
+
+		public SyntaxErrorException(String message){
+			super(message);
+		}
+	}
 }
 
 /** Cup generated class to encapsulate user supplied action code.*/
