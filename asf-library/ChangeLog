@@ -1,5 +1,8 @@
 $Id$
 
+Wed Jan 23 17:47:09 CET 2008 <economop@cwi.nl>
+ * library/languages/sdf2/extract/Sdf2.{asf,sdf}: added more fact extractions.
+
 Thu Jan 10 18:28:57 CET 2008 <economop@cwi.nl>
  * library/languages/sdf2/extract/Sdf2.{asf,sdf}: added restrictions, prefers,
    avoids, and rejects extraction from grammar.
