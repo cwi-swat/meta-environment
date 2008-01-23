@@ -1,5 +1,8 @@
 
 
+Wed Jan 23 13:55:49 CET 2008 <{lankamp,basten,economop}@cwi.nl>
+ * tbscripts/fbi.tb.src, tbscripts/fbmp.tb.src: fixed deadlock.
+
 Wed Aug 22 11:07:28 CEST 2007 <kooiker@cwi.nl>
  * src/**/FactBrowser.java: request focus on data change
 

@@ -28,9 +28,10 @@ let
   FileName: str
 in
     rec-connect(Tid?)
+    . subscribe(fb-visualization-plugin-available(<term>,<int>,<str>))
     .
     (
-      rec-msg(fb-visualization-plugin-available(FactType?, PluginId?, PluginName?))
+      rec-note(fb-visualization-plugin-available(FactType?, PluginId?, PluginName?))
        . snd-do(Tid, fb-add-visualization-plugin(FactType, PluginId, PluginName))
     +
       rec-msg(fb-get-selected-rstoreid)

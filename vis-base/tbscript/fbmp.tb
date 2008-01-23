@@ -39,7 +39,7 @@ in
       . snd-note(vp-get-available-visualization-plugins(Type))
     +
       rec-note(vp-get-available-visualization-plugins(Type?, PluginId?, PluginName?))
-      . snd-msg(fb-visualization-plugin-available(Type, PluginId, PluginName))
+      . snd-note(fb-visualization-plugin-available(Type, PluginId, PluginName))
     +
       rec-msg(fb-visualization-selected(RstoreId?, FactId?, PluginId?))
       . snd-msg(rc-get-fact-data(RstoreId, FactId))
