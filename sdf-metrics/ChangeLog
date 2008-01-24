@@ -1,5 +1,8 @@
 
 
+Thu Jan 24 11:45:18 CET 2008 <economop@cwi.nl>
+ * sdf-metrics.pc.in: forgot to declare where the library is installed.
+
 Wed Jan 23 15:59:31 CET 2008 <economop@cwi.nl>
  * src/ExtractSDF.c: regenerated to include new facts added to the asf-library.
  * src/sdfMetrics.{c,h}: created wrapper functions to hide the fact that 

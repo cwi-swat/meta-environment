@@ -19,7 +19,6 @@ libextractsdf_la_LIBADD= \
 extractsdf_SOURCES= \
 	ExtractSDF.c
 extractsdf_LDADD= \
-	-L$(top_builddir)/src -lextractsdf
 	$(ASC_SUPPORT_LIBS)
 
 

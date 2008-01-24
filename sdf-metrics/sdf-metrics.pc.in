@@ -5,4 +5,5 @@ Requires: asc-support
 Version: 0.1
 Description: SDF fact extraction tools
 Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lextractsdf
 ToolBusFlags=-I${prefix}/share/sdf-metrics
