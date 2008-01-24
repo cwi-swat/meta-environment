@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jan 24 11:23:03 CET 2008 <economop@cwi.nl>
+ * Removed the svnmerge-integrated property that was left over from a branch 
+   merge.
+
 Thu Jan 10 16:18:26 CET 2008 <economop@cwi.nl>
  * src/*: collected some more statistics.
 
