@@ -1,55 +1,74 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<article>
-  <title>Rascal Requirements and Design Document</title>
+<?xml version="1.0" encoding="US-ASCII"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Rascal Requirements and Design Document</title>
 
-  <authorblurb>
-    <para><authorinitials>Paul</authorinitials> <authorinitials>Klint, Tijs
-    van der Storm, and Jurgen Vinju</authorinitials>,</para>
+    <authorgroup>
+      <author>
+        <personname><firstname>Paul</firstname><surname>Klint</surname></personname>
+      </author>
 
-    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
-        <imageobject>
-          <imagedata fileref="../../logos/cwi.gif" />
-        </imageobject>
-      </mediaobject></para>
-  </authorblurb>
+      <author>
+        <personname><firstname>Tijs</firstname><surname>van der
+        Storm</surname></personname>
+      </author>
+
+      <author>
+        <personname><firstname>Jurgen</firstname><surname>Vinju</surname></personname>
+      </author>
+    </authorgroup>
+  </info>
+
+  <note>
+    <para>This document is a braindump of ideas. See <xref linkend="Issues" />
+    for the issues that have to be resolved.</para>
+  </note>
 
   <section>
     <title>Introduction</title>
 
-    <para>Rascal is the working name for a new version of the Algebraic
-    Specification Formalism, which will be extended with an efficient built-in
-    set and relation data-type. This basically means that we include most
-    features of the RScript language into ASF. The goals of this language
-    are:</para>
+    <para>Rascal is the working name for a new version of ASF+SDF, which will
+    be extended with an efficient built-in set and relation data-type. This
+    basically means that we include most features of the RScript language into
+    ASF+SDF. The goals of this language are:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Easy syntax-directed analysis of programming languages</para>
+        <para>Separating pure syntax definitions (SDF) from function
+        definitions.</para>
       </listitem>
 
       <listitem>
-        <para>Easy fact extraction</para>
+        <para>Easy syntax-directed analysis of programming languages.</para>
+      </listitem>
+
+      <listitem>
+        <para>Easy fact extraction.</para>
       </listitem>
 
       <listitem>
         <para>Easy connection of fact extraction with fact manipulation and
-        reasoning</para>
+        reasoning.</para>
       </listitem>
 
       <listitem>
         <para>Easy feedback of analysis results in source code
-        transformation</para>
+        transformation.</para>
       </listitem>
 
       <listitem>
-        <para>Efficient</para>
+        <para>Efficient and scalable implementation.</para>
       </listitem>
     </itemizedlist>
 
     <para>The above goals are all but one already met in the current design of
-    ASF, and the current design of RScript. What is missing is the
+    ASF+SDF, and the current design of RScript. What is missing is the
     <emphasis>connection.</emphasis> Alas, any bridge between the two
     languages is both complex to manage and an efficiency bottleneck. This
     work is an attempt to consolidate this engineering trade-off.</para>
@@ -71,44 +90,45 @@
         </listitem>
 
         <listitem>
-          <para>R2: Backward compatible with ASF</para>
+          <para>R2: Backward compatible with ASF+SDF.</para>
         </listitem>
 
         <listitem>
           <para>R3: Compilation speed: parsetable generation is a major
-          bottleneck in current ASF. This needs to be fixed.</para>
+          bottleneck in current ASF+SDF. This needs to be fixed.</para>
         </listitem>
 
         <listitem>
-          <para>R4: Concrete syntax: for readability</para>
+          <para>R4: Concrete syntax: for readability and easy parsing of a
+          wide range of source languages.</para>
         </listitem>
 
         <listitem>
-          <para>R5: Functional (no side-effects)</para>
+          <para>R5: Functional (no side-effects).</para>
         </listitem>
 
         <listitem>
-          <para>R6: File I/O (contradicts R5)</para>
+          <para>R6: File I/O (contradicts R5).</para>
         </listitem>
 
         <listitem>
           <para>R7: Easily accessible fact storage (similar to a heap, but
-          remember R5 and the details of backtracking)</para>
+          remember R5 and the details of backtracking).</para>
         </listitem>
 
         <listitem>
-          <para>R8: List matching (because of R2, influences R7)</para>
+          <para>R8: List matching (because of R2, influences R7).</para>
         </listitem>
 
         <listitem>
           <para>R9: Nesting of data-structures: relations can be nested to
           model nested features of programming languages (such as
-          scoping)</para>
+          scoping).</para>
         </listitem>
 
         <listitem>
           <para>R10: Syntax trees can be elements of the builtin
-          data-structures (but not vice versa)</para>
+          data-structures (but not vice versa).</para>
         </listitem>
 
         <listitem>
@@ -128,9 +148,9 @@
       <tr>
         <th>Which features work on which datatypes?</th>
 
-        <th>Context-free syntax trees</th>
+        <th>CF syntax trees</th>
 
-        <th>Context-free syntax lists</th>
+        <th>CF syntax lists</th>
 
         <th>Lexical syntax trees</th>
 
@@ -148,121 +168,121 @@
       <tr>
         <th>Pattern matching</th>
 
-        <td>Yes, Concrete syntax</td>
+        <td>Y (CS)</td>
 
-        <td>Yes, Concrete syntax, List matching</td>
+        <td>Y, CS, LM</td>
 
-        <td>Yes, prefix syntax</td>
+        <td>Y, PS</td>
 
-        <td>Yes, Prefix syntax, List matching</td>
+        <td>Y, PS, LM</td>
 
-        <td><emphasis>Yes, only head/tail matching</emphasis></td>
+        <td><emphasis>Y, HT</emphasis></td>
 
-        <td><emphasis>Yes, head/tail matching</emphasis></td>
+        <td><emphasis>Y, HT</emphasis></td>
 
-        <td><emphasis>Yes, head/tail matching</emphasis></td>
+        <td><emphasis>Y, HT</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
       </tr>
 
       <tr>
         <th>Pattern construction</th>
 
-        <td>Yes, Concrete syntax</td>
+        <td>Y, CS</td>
 
-        <td>Yes, Prefix syntax</td>
+        <td>Y, PS</td>
 
-        <td>Yes, Prefix syntax</td>
+        <td>Y, PS</td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes, only head/tail</emphasis></td>
+        <td><emphasis>Y, HT</emphasis></td>
 
-        <td><emphasis>Yes, only head/tail</emphasis></td>
+        <td><emphasis>Y, HT</emphasis></td>
 
-        <td><emphasis>Yes, head/tail</emphasis></td>
+        <td><emphasis>Y, HT</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
       </tr>
 
       <tr>
-        <th>Generator/Comprehension</th>
+        <th>Generator/ Comprehension</th>
 
-        <td>NO</td>
+        <td>N</td>
 
-        <td><emphasis>NO</emphasis></td>
+        <td>N</td>
 
-        <td>NO</td>
+        <td>N</td>
 
-        <td><emphasis>NO</emphasis></td>
+        <td>N</td>
 
-        <td>List comprehesion</td>
+        <td>LC</td>
 
-        <td>Set comprehensions</td>
+        <td>SC</td>
 
-        <td>Set comprehension</td>
+        <td>SC</td>
 
-        <td><emphasis role="bold">No</emphasis></td>
+        <td>N</td>
       </tr>
 
       <tr>
         <th>Complete Functions</th>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
       </tr>
 
       <tr>
         <th>Equations</th>
 
-        <td>Yes, backward compatible</td>
+        <td>Y, BC</td>
 
-        <td>Yes, backward compatible</td>
+        <td>Y, BC</td>
 
-        <td>Yes, backward compatible</td>
+        <td>Y, BC</td>
 
-        <td>Yes, backward compatible</td>
+        <td>Y, BC</td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
       </tr>
 
       <tr>
         <th>Polymorphism</th>
 
-        <td><emphasis role="bold">No</emphasis></td>
+        <td>N</td>
 
-        <td><emphasis role="bold">No</emphasis></td>
+        <td>N</td>
 
-        <td><emphasis role="bold">No</emphasis></td>
+        <td>N</td>
 
-        <td><emphasis role="bold">No</emphasis></td>
+        <td>N</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
       </tr>
 
       <tr>
@@ -276,55 +296,93 @@
 
         <td>AsFix</td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td>Yes</td>
+        <td>Y</td>
       </tr>
 
       <tr>
         <th>Traversal Functions</th>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
 
-        <td>Yes</td>
+        <td>Y</td>
       </tr>
 
       <tr>
         <th>Subtyping</th>
 
-        <td>No</td>
+        <td>N</td>
 
-        <td>No</td>
+        <td>N</td>
 
-        <td>No, except character class inclusion</td>
+        <td>N, except character class inclusion</td>
 
-        <td>No</td>
+        <td>N</td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Y</emphasis></td>
       </tr>
     </informaltable>
+
+    <itemizedlist>
+      <listitem>
+        <para>BC = Backward Compatible with ASF</para>
+      </listitem>
+
+      <listitem>
+        <para>CS = Concrete Syntax</para>
+      </listitem>
+
+      <listitem>
+        <para>HT= head/tail matching</para>
+      </listitem>
+
+      <listitem>
+        <para>LC = List comprehension</para>
+      </listitem>
+
+      <listitem>
+        <para>LM = List Matching</para>
+      </listitem>
+
+      <listitem>
+        <para>N = No</para>
+      </listitem>
+
+      <listitem>
+        <para>PS = Prefic Syntax</para>
+      </listitem>
+
+      <listitem>
+        <para>SC = Set Comprehension</para>
+      </listitem>
+
+      <listitem>
+        <para>Y = Yes</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section>
@@ -365,15 +423,17 @@
   </section>
 
   <section>
-    <title>Example</title>
+    <title>Examples</title>
 
-    <para>Here we list experimental example Rascal code to try out new and old
-    features.</para>
+    <para>Here we list experimental examples of Rascal code to try out new and
+    old features.</para>
 
     <section>
       <title>Deep tree matching instead of tree traversal</title>
 
-      <para><programlisting>module Tree-syntax
+      <para><programlisting>%% Mark a pure syntax modeul as such with "syntax"
+
+syntax module Tree-syntax
 imports Naturals
 exports TREE
   context-free syntax
@@ -383,52 +443,71 @@ exports TREE
     h(TREE,TREE)    -&gt; TREE
     i(TREE,TREE)    -&gt; TREE
 
-module Examples
+%%--------------------------------
+
+module Tree-Examples
 imports Tree-syntax
 
 %% Ex1: Count leaves in a TREE
-
-function cnt(TREE)       -&gt; INT
-[] cnt(T) = #{N | INT N : T}
-
 %% Idea: INT N : T generates alle INT leaves in the tree
 %% # is the built-in length-of operator
 
+fun INT cnt(TREE T) {
+    return #{N | INT N : T}
+}
+
 %% Ex2: Sum all leaves in a TREE
-
-function sum_tree(TREE)       -&gt; INT
-[] sum_tree(T) = sum({N | INT N : T})
-
-%% NB sum is a built-in that add all elements in a set or 
+%% NB sum is a built-in that adds all elements in a set or 
 %% list.
 
+fun INT sum_tree(TREE T) {
+    return sum({N | INT N : T})
+}
+
 %% Ex3: Increment all leaves in a TREE
-
-function inc(TREE)        -&gt; TREE
-[] inc(T) = INT N : T =&gt; N+1
-
 %% Idea: INT N : T generates alle INT leaves in the tree
-%% INT N : T =&gt; N+1 replaces each N by N+1
+%% replace ... occurences ... in T by N+1 replaces each N in T by N+1
 %% The expression as a whole returns the modified term.
 %% This is an extremely compact manner of writing a 
 %% transformer!
 
-%% Ex4: full replacement of g by i
+fun TREE inc(TREE T) {
+    return replace INT N : T in T by N+1
+}
 
-function frepl(TREE)  -&gt; TREE
-[] frepl(T) = g(T1, T2) : T =&gt; i(frepl(T1), frepl(T2))
+%% Ex4: full replacement of g b
 
-%% Ex5: deep replacement of g by i 
-%% "bu" indicates bottom-up traversal
+fun TREE frepl(TREE T) {
+    TREE T1, T2;
+    return replace {g(T1, T2) : T in T by i(T1, T2)
+}
 
-function drepl(TREE)  -&gt; TREE
-[] drepl(T) = g(T1, T2) : bu(T) =&gt; i(T1, T2)
+%% Ex5: deep replacement of g by i  which usually requires
+%% a bottom-up traversal + break;
 
-%% Ex6: shallow replacement of g by i
-%% "td" indicates top-down traversal
+fun TREE drepl(TREE T) {
+    TREE T1, T11, T12, T2, T21, T22;
+    return replace { g(T1, T2) | g(T1, T2) : T, 
+                                 g(T11, T12) notin T1, 
+                                 g(T21,T22) notin T2
+                   }
+           in T by i(T1, T2)
+}
 
-function srepl(TREE)  -&gt; TREE
-[] srepl(T) = g(T1, T2) : td(T) =&gt; i(T1, T2) </programlisting></para>
+%% Ex6: shallow replacement of g by i (i.e. only outermost g's are replaced);
+%% Usually done with a top-down traversal.
+%% For brevity, we use here a function variable FUN: do we want this?
+
+fun TREE srepl(TREE T) {
+    TREE T1, T2;
+    TREE x TREE -&gt; TREE FUN;
+    
+    select {
+    case g(T1, T2) = i(T1, T2)
+    default
+         FUN(T1, T2) = FUN(srepl(T1) srepl(T2))
+    }
+}</programlisting></para>
     </section>
 
     <section>
@@ -438,7 +517,7 @@ function srepl(TREE)  -&gt; TREE
       be nice to get this as simple as possible since it is a model for many
       binding mechanisms. It is also a challenge to write a generic
       substitution function that only depends on the syntax of variables and
-      argument binding.<programlisting>module Lambda
+      argument binding.<programlisting>syntax module Lambda
 
 sorts Var %% variables
       Exp %% expressions
@@ -449,47 +528,67 @@ context-free functions
      "fn" Var "=&gt;" Exp    -&gt; Exp  %% function abstraction
      Exp Exp              -&gt; Exp  %% function application
 
-function allVars(Exp) -&gt; set[Var]
-[] allVars(E) = {V | &lt;&lt;Var V&gt;&gt; : E}
+%%------------------------------
 
+module Lambda-Examples
+imports Lambda
 
-function boundVars(Exp) -&gt; set[Var]
-[] boundVars(E) = {V | &lt;&lt;fn Var V =&gt; Exp E1&gt;&gt; : E}
+fun set[Var] allVars(Exp E) {
+    return {V | &lt;&lt;Var V&gt;&gt; : E}
+}
 
-function freeVars(Exp) -&gt; set[Var]
-[] freeVars(E) = allVars(E) \ boundVars(E)
+fun set[Var] boundVars(Exp E) {
+    return {V | &lt;&lt;fn Var V =&gt; Exp E1&gt;&gt; : E}
+}
+
+fun set[Var] freeVars(Exp E) {
+    return allVars(E) \ boundVars(E)
+}
 
 %% Generate a fresh variable if V does not occur in 
 %% given set of variables.
-function fresh(Var, set[Var]) -&gt; Var
-[] fresh(V, S) = if V in S then prime(V) else V fi
+
+fun Var fresh(Var V, set[Var] S) {
+    return if V in S then prime(V) else V fi
+}
 
 %% Substitution: replace all occurrences of V in E2 by E1
+%% This functions used to be defined by separate equations,
+%% now we use a case distinction
 
-function subst(Var, Exp, Exp)  -&gt; Exp
+fun Exp subst(Var, Exp, Exp) {
+    Var V, V1, V2;
+    Exp E, E1, E2;
+    select {
+      case subst(V1, E, V2) = V2 
+           when V1 != V2
 
-[1] subst(V1, E, V2) = V2 when V1 != V2
-[2] subst(V, E, V) = E
-[3] subst(V, E, E1 E2) = subst(V, E, E1) subst(V, E, E2)
-[4] subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
-[5] V1 != V2,
-    not(V1 in freeVars(E2) and V2 in freeVars(E1))
-    ==============================================
-    subst(V1, E1, fn V2 =&gt; E2) = 
-    fn V2 =&gt; subst(V1, E1, E2)
+      case subst(V, E, V) = E
 
-[6] V1 != V2,
-    V1 in freeVars(E2) and V2 in freeVars(E1),
-    V3 := fresh(V2,  freeVars(E2) union freeVars(E1))
-    =================================================
-    subst(V1, E1, fn V2 =&gt; E2) = 
-    fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))</programlisting></para>
+      case subst(V, E, E1 E2) = subst(V, E, E1) subst(V, E, E2)
+
+      case subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
+
+      case subst(V1, E1, fn V2 =&gt; E2) = 
+           fn V2 =&gt; subst(V1, E1, E2)
+           when  { V1 != V2,
+                   not(V1 in freeVars(E2) and V2 in freeVars(E1))
+                 }
+
+      case subst(V1, E1, fn V2 =&gt; E2) = 
+           fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))
+           when { V1 != V2,
+                  V1 in freeVars(E2) and V2 in freeVars(E1),
+                  V3 := fresh(V2,  freeVars(E2) union freeVars(E1))
+                }     
+    }
+}</programlisting></para>
     </section>
 
     <section>
       <title>Renaming</title>
 
-      <para><programlisting>module Renaming
+      <para><programlisting>syntax module Let
 sorts Var %% variables
       Exp %% expressions
 context-free functions
@@ -497,6 +596,10 @@ context-free functions
      Var                             -&gt; Exp 
      %% function abstraction
      "let" Var "=" Exp "in Exp "end" -&gt; Exp
+%%------------------------------------------
+
+module Let-Example
+import Let
 
 %% Rename all bound variables in an Exp
 %% Version 1: purely functional
@@ -504,79 +607,85 @@ context-free functions
 %% rel[Var,Var]: renaming table
 %% Int: counter to generate global variables
 
-function rename(Exp E, rel[Var,Var] Rn, Int Cnt) -&gt; Exp
-
-[] Y := "x" + Cnt,   %% this + operator concatenates 
-                     %% (after converting the int to str)
-   Cnt' := Cnt + 1
-   ============================================
-   rename(let V = E1 in E2 end, Rn, Cnt) =
-   let Y = rename(E1, Rn, Cnt) 
-           in 
+fun Exp rename(Exp, rel[Var,Var], Int) {
+    INT Cnt, Cnt';
+    Var V, Y;
+    Exp E, E1, E2;
+    select {
+    case rename(let V = E1 in E2 end, Rn, Cnt) =
+         let Y = rename(E1, Rn, Cnt) 
+         in 
            rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
-   end
+         end
+         when { Y := "x" + Cnt,   %% this + operator concatenates 
+                                  %% (after converting the int to str)
+                Cnt' := Cnt + 1
+              }
 
-[] { V1 } == Rn[V]
-   =======================
-   rename(V, Rn, Cnt) = V1
-     
+    case rename(V, Rn, Cnt) = V1
+         when { V1 } == Rn[V]
 
-[default]
-   rename(E, Rn, Cnt) = E
+    default
+         rename(E, Rn, Cnt) = E
+    }
+}
 
 %% Rename all bound variables in an Exp
 %% Version 2: using a global variable
 %% to generate new variables
 
-global variable
-      Cnt -&gt; int := 0   %% Initialize global Cnt
+global INT Cnt := 0   %% Initialize global Cnt
 
-function newVar() -&gt; Var
-[] Cnt := Cnt + 1
-   ====================
-   newVar() = "x" + Cnt        
+fun Var newVar() {
+    Cnt := Cnt + 1;
+    return "x" + Cnt
+}       
 
 %% Rename -- Version 2
 
-function rename(Exp E, rel[Var,Var] Rn) -&gt; Exp
+fun Exp rename(Exp, rel[Var,Var]) {
+    Var V, Y;
+    rel[Var,Var] Rn;
+    select {
 
-[] Y := newVar
-   ======================================
-   rename(let V = E1 in E2 end, Rn) =
-   let Y = rename(E1, Rn) 
-           in 
-           rename(E2, {&lt;V, Y&gt;} union Rn) 
-   end
+    case rename(let V = E1 in E2 end, Rn) =
+         let Y = rename(E1, Rn) 
+         in 
+         rename(E2, {&lt;V, Y&gt;} union Rn) 
+         end
+         when { Y := newVar }
 
-[] { V1 } == Rn[V]
-   ==================
-   rename(V, Rn) = V1
-
-[default]
-   rename(E, Rn) = E
+    case rename(V, Rn) = V1
+         when { { V1 } == Rn[V] }
+  
+    default
+         rename(E, Rn) = E
+    }
+}
 
 %% Rename -- Version 3, with Rn also as global variabele
-global variable
-      Cnt -&gt; int := 0
-      Rn -&gt; rel[Var, Var] := {}
+global INT Cnt := 0
+       rel[Var, Var] Rn := {}
 
-function rename(Exp)
+fun rename(Exp) {
+    Var V, Y;
+    rel[Var,Var] Rn;
+    select {
 
-[] Y := newVar,
-   Rn :=  {&lt;V, Y&gt;} union Rn
-   ==============================
-   rename(let V = E1 in E2 end) =
-   let Y = rename(E1) 
-           in 
+    case rename(let V = E1 in E2 end) =
+         let Y = rename(E1) 
+         in 
            rename(E2) 
-   end
- 
-[] { V1 } == Rn[V]
-   ===============
-   rename(V) = V1     
+         end
+         when { Y := newVar,
+                Rn :=  {&lt;V, Y&gt;} union Rn
+              }
+    case rename(V) = V1
+         when { { V1 } == Rn[V] }
 
-[default]
-  rename(E) = E </programlisting></para>
+    default rename(E) = E
+    }
+}</programlisting></para>
     </section>
 
     <section>
@@ -591,40 +700,51 @@ imports Pico-syntax
 imports Errors
 
 types
- rel[PICO-ID,TYPE] -&gt; Environment
+ rel[PICO-ID,TYPE] -&gt; Env
 
-functions
-   tcp(PROGRAM)                     -&gt; list[Error]
-   tcst(Stat, Environment)          -&gt; list[Error]
-   type-of(EXP, TYPE, Environment)  -&gt; list[Error]
+var
+    Decl* Decls;
+    Series Series;
+    Id Id;
+    TYPE Type;
+    Env Env;
 
-variables
-   "Decls"  -&gt; Decl*
-   "Series" -&gt; Series
-   "Id"     -&gt; PICO-ID
-   "Type"   -&gt; TYPE
-   "Env"    -&gt; Environment
-equations
+fun list[Error] tcp(PROGRAM) {
+    select {
+    case tcp(begin Decls Series end) = 
+         [ tcst(S, Env) | Stat S : Series ]
+         when { Env := {&lt;Id, Type&gt; | 
+                (PICO-ID ":" TYPE) Id : Type : Decls}
+              }
+    }
+}
 
-[] Env := {&lt;Id, Type&gt; | 
-           (PICO-ID ":" TYPE) Id : Type : Decls}
-   =============================================
-   tcp(begin Decsl Series end) = 
-   [ tcst(S, Env) | Stat S : Series ]
+fun list[Error] tcst(Stat) {
+    select {
+    case tcst(Id := Exp, Env) = type-of(Exp) in Env[Id]
 
-[] tcst(Id := Exp, Env) = type-of(Exp) in Env[Id]
-[] tcst(if Exp then Stats1 else Stats2, Env) =
-   type-of(Exp, natural, Env) &amp;&amp; 
-   tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
-[] tcst(while Exp do Stats od, Env) = 
-   type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
+    case tcst(if Exp then Stats1 else Stats2, Env) =
+         type-of(Exp, natural, Env) &amp;&amp; 
+         tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
 
-[] type-of(NatCon, natural, Env) = []
-[] type-of(StrCon, string, Env) = []
-[] type-of(Id, Type, Env) = [] when {&lt;Id,Type&gt;} := Env[Id] 
+    case tcst(while Exp do Stats od, Env) = 
+         type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
+    }
+}
 
-[default]
-   type-of(Exp, Type, Env) = [error("Incorrect type")]</programlisting>
+fun list[Error] type-of(Exp, TYPE, Env) {
+    select {
+    case type-of(NatCon, natural, Env) = []
+
+    case type-of(StrCon, string, Env) = []
+
+    case type-of(Id, Type, Env) = [] 
+         when { {&lt;Id,Type&gt;} := Env[Id] }
+
+    default
+         type-of(Exp, Type, Env) = [error("Incorrect type")]
+    }
+}</programlisting>
     </section>
 
     <section>
@@ -635,19 +755,16 @@ equations
 
 imports Dot-syntax
 
-functions
-   gen-dot(rel[ID,ID]) -&gt; Dot
-   gen-node(&lt;ID, ID&gt;)  -&gt; DotElem*
+fun Dot gen-dot(rel[ID, ID] Rel) {
+    return
+      digraph example {
+                       [ node(Tup) | &lt;ID,ID&gt; Tup : Rel ]
+                    }
+}
 
-variable
-   Rel -&gt; rel[ID,ID]
-
-equations
-[] gen-dot(Rel) = digraph example {
-                       [ node(Tup) | Tup : Rel ]
-                  }
-
-[] node(&lt;Id1, Id2&gt;) = node Id1; node Id2; Id1 -&gt; Id2</programlisting></para>
+fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
+    return node Id1; node Id2; Id1 -&gt; Id2
+}</programlisting></para>
     </section>
 
     <section>
@@ -663,7 +780,7 @@ imports Pico-syntax
 hiddens
 
 types
- rel[PICO-ID,TYPE] -&gt; Environment
+ rel[PICO-ID,TYPE] -&gt; Env
 
 variables
  "Decls" -&gt; Decl*
@@ -678,29 +795,55 @@ global variable
 
 exports
 
-function tc(PROGRAM)     -&gt; bool
-[] tc(begin Decls Stats end) = tcs(Stats)
-   when Env := tcd(Decls)
+fun Bool tc(PROGRAM) {
+    dyn Env Env;
+    select {
+    case tc(begin Decls Stats end) = tcs(Stats)
+         when { 
+                Env := tcd(Decls) 
+              }
+}
 
-traversal function tcd(Decls) -&gt; void
-[] tcd(Id : Type) = void
-   when Env := Env union {&lt;Id,Type&gt;}
+fun Env tcd(Decls) -&gt; void
+    return {&lt; Id, Type&gt; | &lt;&lt;PICO-ID Id : TYPE Type&gt;&gt; : Decls}
 
-function tcs(Stats) -&gt; bool
-[] tcs( ) = true
-[] tcs(Stat; Stats) = tcst(Stat) &amp;&amp; tcst(Stats)
+fun Bool tcs(Stats) {
+    Stat Stat;
+    Stats Stats;
+    select {
+    case tcs( ) = true
 
-function tcst(Stat) -&gt; bool
-[] tcst(Id := Exp) = type-of(Exp) in Env[Id]
-[] tcst(if Exp then Stats1 else Stats2) =
-    type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
-[] tcst(while Exp do Stats od) = 
-   type-of(Exp) == natural &amp;&amp; tcs(Stats)
+    case tcs(Stat; Stats) = tcst(Stat) &amp;&amp; tcst(Stats)
+    }
+}
 
-function type-of(Exp) -&gt; PICO-TYPE
-[] type-of(NatCon) = natural
-[] type-of(StrCon) = string
-[] type-of(Id)     = Type when {&lt;Id,Type&gt;} := Env[Id] </programlisting></para>
+fun Bool tcst(Stat) {
+   Id Id;
+   Exp Exp;
+   Stats Stats, Stats1, Stats2;
+   select {
+   case tcst(Id := Exp) = type-of(Exp) in Env[Id]
+
+   case tcst(if Exp then Stats1 else Stats2) =
+        type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
+
+   case tcst(while Exp do Stats od) = 
+        type-of(Exp) == natural &amp;&amp; tcs(Stats)
+   }
+}
+
+fun PICO-TYPE type-of(Exp) {
+    NatCon NatCon;
+    StrCon StrCon;
+    PICO-ID Id;
+    select {
+    case type-of(NatCon) = natural
+
+    case type-of(StrCon) = string
+
+    case type-of(Id)     = Type when {&lt;Id,Type&gt;} := Env[Id]
+    }
+}</programlisting></para>
     </section>
 
     <section>
@@ -709,40 +852,55 @@ function type-of(Exp) -&gt; PICO-TYPE
       <programlisting>module Pico-controlflow
 imports pico/syntax/Pico
 
-sorts CODEPOINT
+sorts CP %% A Code Point
 
 context-free syntax
-    EXP | STATEMENT  -&gt; CODEPOINT %% Waar moet dit staan?
+    EXP | STATEMENT  -&gt; CP %% Waar moet dit staan?
 
-function cflow({STATEMENT ";"}*) -&gt; 
-         &lt; set[CODEPOINT], 
-           rel[CODEPOINT,CODEPOINT], 
-           set[CODEPOINT] &gt;
+fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}*){
+    Stat Stat;
+    Stat+ Stats;
+    rel[CP,CP] R1, R2;
+    set[CP] En1, En2, Ex1, Ex2;
+    
+    select {
+    case cflow(Stat ; Stat+) = 
+         &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+         when { 
+                &lt;En1, R1, Ex1&gt; := cflow(Stat),
+                &lt;En2, R2, Ex2&gt; := cflow(Stats)
+              }
 
-[] &lt;En1, R1, Ex1&gt; := cflow(Stat),
-   &lt;En2, R2, Ex2&gt; := cflow(Stat+)
-   ===============================
-   cflow(Stat ; Stat+) = 
-   &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+    case cflow() = &lt;{}, {}, {}&gt;
+    }
+}
 
-[] cflow() = &lt;{}, {}, {}&gt;
+fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT){
+    Exp Exp;
+    Stat Stat;
+    Stat* Stats, Stats1, Stats2;
+    rel[CP,CP] R1, R2;
+    set[CP] En1, En2, Ex1, Ex2;
 
-[] &lt;En, R, Ex&gt; := cflow(Stat*)
-   ==============================
-   cflow(while Exp do Stat* od) = 
-   &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
-
-[] &lt;En1, R1, Ex1&gt; := cflow(Stat*1),
-   &lt;En2, R2, Ex2&gt; := cflow(Stat*2)
-   ===============================
-   cflow(if Exp then Stat*1 else Stat*2 fi) = 
-   &lt;{Exp}, 
-    ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-    Ex1 union Ex2
-   &gt;
-
-[default]
-    cflow(Stat) = &lt;{Stat}, {}, {Stat}&gt;</programlisting>
+    select
+    case cflow(while Exp do Stats od) = 
+         &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
+         when {
+                &lt;En, R, Ex&gt; := cflow(Stats)
+              }
+    case cflow(if Exp then Stats1 else Stats2 fi) = 
+         &lt; {Exp}, 
+           ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+            Ex1 union Ex2
+         &gt;
+         when {
+                &lt;En1, R1, Ex1&gt; := cflow(Stats1),
+                &lt;En2, R2, Ex2&gt; := cflow(Stats2)
+              }
+    default
+         cflow(Stat) = &lt;{Stat}, {}, {Stat}&gt;
+    }
+}</programlisting>
     </section>
 
     <section>
@@ -752,14 +910,14 @@ function cflow({STATEMENT ";"}*) -&gt;
 
 imports pico/syntax/Pico
 
-function uses(PROGRAM) -&gt; rel[EXP,PICO-ID]
+fun rel[EXP,PICO-ID] uses(PROGRAM P) {
+  return {&lt;E,Id&gt; | EXP E : P, PICO-ID Id == E}
+}
 
-[] uses(P) = {&lt;E,Id&gt; | EXP E : P, PICO-ID Id == E}
-
-function defs(PROGRAM) -&gt; rel[STATEMENT, PICO-ID]
-
-[] defs(P) = {&lt;S, Id&gt; | STATEMENT S : P, 
-                        &lt;&lt;PICO-ID Id ":=" EXP Exp&gt;&gt; == S}</programlisting>
+fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
+  return {&lt;S, Id&gt; | STATEMENT S : P, 
+                        &lt;&lt;PICO-ID Id ":=" EXP Exp&gt;&gt; == S}
+}</programlisting>
 
       <para>The above uses a "matching condition" to decompose
       <literal>S</literal>. The problem solved is that we want to have a name
@@ -773,24 +931,22 @@ function defs(PROGRAM) -&gt; rel[STATEMENT, PICO-ID]
       <para><programlisting>module Pico-uninit
 imports pico/syntax/Pico Pico-controlflow Pico-use-def
 
-function uninit(PROGRAM) -&gt; set[PICO-ID]
+fun set[PICO-ID] uninit(PROGRAM P) {
+    rel[EXP,PICO-ID] Uses := uses(P);
+    rel[STATEMENT, PICO-ID] Defs := defs(P),
+    &lt; set[CP], rel[CP,CP], set[CP] &gt; CFLOW := cflow(P);
+    set[CP] Root := CFLOW.entry;  %% define these fields somewhere
+    rel[CP,CP] Pred := CFLOW.rel;
 
-[] Uses := uses(P),
-   Defs := defs(P),
-   Pred := cflow(P)
-   =======================================
-   uninit(P) = {Id | &lt;EXP E, PICO-ID Id&gt; : range(Uses),
-                     E in reachX({ROOT}, Defs[-,Id], Pred)
-               }</programlisting>Questions: </para>
+    return {Id | &lt;EXP E, PICO-ID Id&gt; : range(Uses),
+                 E in reachX(Root, Defs[-,Id], Pred)
+           }
+}</programlisting>Questions (UPDATE THIS):</para>
 
       <itemizedlist>
         <listitem>
-          <para>Where do we define ROOT? </para>
-        </listitem>
-
-        <listitem>
           <para>There is, maybe, a typing issue here. De type of
-          <literal>reachX</literal> is: </para>
+          <literal>reachX</literal> is:</para>
 
           <para><literal>set[&amp;T] reachX(set[&amp;T]
           Start,</literal></para>
@@ -802,26 +958,26 @@ function uninit(PROGRAM) -&gt; set[PICO-ID]
           <para>but <literal>E</literal> has type <literal>EXP</literal>,
           <literal>{ROOT}</literal> has type
           <literal>set[STATEMENT]</literal>, and <literal>cflow</literal> has
-          type <literal>rel[CODEPOINT,CODEPOINT]</literal>, with <literal>EXP
-          | STATEMENT -&gt; CODEPOINT</literal>.</para>
+          type <literal>rel[CP,CP]</literal>, with <literal>EXP | STATEMENT
+          -&gt; CP</literal>.</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Pico common subsexpression elimination</title>
+      <title>Pico common subsexpression elimination (UPDATE)</title>
 
       <para><programlisting>module Pico-common-subexpression
 
-function cse(PROGRAM) -&gt; PROGRAM
-
-[] Defs := defs(P),
-   Pred := cflow(P)
-   =====================================================
-   cse(P) = STATEMENT S : P, 
-            PICO-ID Id ":=" EXP E == S,
-            Id notin E,
-            EXP E2 : reachX({S}, Defs[-,Id], Pred) =&gt; Id</programlisting></para>
+fun PROGRAM cse(PROGRAM P) {
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    rel[CP,CP] Pred := cflow(P).rel
+    return replace { E2 | STATEMENT S : P, 
+                          PICO-ID Id ":=" EXP E == S,
+                          Id notin E,
+                          EXP E2 : reachX({S}, Defs[-,Id], Pred)
+                    } in P by Id
+}</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
       that</para>
@@ -843,52 +999,38 @@ function cse(PROGRAM) -&gt; PROGRAM
           <para>There is no redefinition of Id between S and E2.</para>
         </listitem>
       </itemizedlist>
-
-      <para>The above has a form not yet seen: the rhs consists of a list of
-      generators and the last step is a transformation. Clearly, P, is the
-      <emphasis>subject</emphasis> of the replacement and E2 occurs in
-      P.</para>
-
-      <para>The replacement operator <literal>=&gt;</literal> should replace
-      the <emphasis>last bound variable</emphasis>. In this way, tests may
-      follow a generator before replacement takes place.</para>
-
-      <para>Questions:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Do we allow more than one subject?</para>
-        </listitem>
-
-        <listitem>
-          <para>Is there a better notation?</para>
-        </listitem>
-      </itemizedlist>
     </section>
 
     <section>
-      <title>Pico constant propagation</title>
+      <title>Pico constant propagation (UPDATE)</title>
 
       <para><programlisting>module Pico-constant-propagation
 
-function is-constant(EXP) -&gt; Boolean
+fun Boolean is-constant(EXP) {
+   Int Int;
+   Str Str;
+   Exp E;
+   select {
+   case is-Constant(Int) = true
 
-[] is-Constant(Int) = true
-[] is-constant(Str) = true
-[default]
-   is-constant(E) = false
+   case is-constant(Str) = true
 
-function cp(PROGRAM) -&gt; PROGRAM
+   default
+        is-constant(E) = false
+   }
+}
 
-[] Defs := defs(P),
-   Pred := cflow(P)
-   ======================================================
-   cp(P) = STATEMENT S : P, 
-           PICO-ID Id ":=" EXP E == S,
-           is-constant(E),
-           PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
-           Id2 == Id
-           =&gt; E</programlisting></para>
+fun PROGRAM cp(PROGRAM P) {
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    rel[CP,CP] Pred := cflow(P).rel;
+    return replace { Id2 | STATEMENT S : P, 
+                           PICO-ID Id ":=" EXP E == S,
+                           is-constant(E),
+                           PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+                           Id2 == Id
+                   }
+           in P by E
+}</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
       such that</para>
@@ -918,7 +1060,7 @@ function cp(PROGRAM) -&gt; PROGRAM
   </section>
 
   <section>
-    <title>Syntax Definition</title>
+    <title>Syntax Definition (UPDATE THIS)</title>
 
     <para><programlisting>lexical syntax
   [0-9]+    -&gt; NatCon
@@ -1009,7 +1151,7 @@ context-free syntax
   </section>
 
   <section>
-    <title>Integration with Tscripts</title>
+    <title>Integration with Tscripts (UPDATE THIS)</title>
 
     <section>
       <title>Introduction</title>
@@ -1240,5 +1382,67 @@ process mkWave(int N) is ...</programlisting>
         </listitem>
       </itemizedlist>
     </section>
+  </section>
+
+  <section>
+    <title xml:id="Issues">Issues</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>We want to minimize the cognitive distance between Rascal and,
+        say, C and Java. In the current examples we have:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Functions with named arguments and a return statement (these
+            correspond to Rscript functions)</para>
+          </listitem>
+
+          <listitem>
+            <para>Functions with anonymous arguments and a select statement
+            (these correspond to ASF equations).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Is there a better solution?</para>
+      </listitem>
+
+      <listitem>
+        <para>The <emphasis role="bold">replace</emphasis>
+        <replaceable>Occurrences</replaceable> <emphasis
+        role="bold">in</emphasis> <replaceable>Term</replaceable> <emphasis
+        role="bold">by</emphasis> <replaceable>Replacement</replaceable>
+        construct needs more thought.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Can we better enforce that the replacements occur in
+            <replaceable>Term</replaceable>?</para>
+          </listitem>
+
+          <listitem>
+            <para>Is this the right approach to get rid of indications for
+            bottumup/topdown and continue/break?</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Dynamic variables need more thought.</para>
+      </listitem>
+
+      <listitem>
+        <para>Do we add column names in relations (as Jurgen and Bob are
+        currently doing)?</para>
+      </listitem>
+
+      <listitem>
+        <para>We keep the polymorphic types &amp;T1 as in Rscript.</para>
+      </listitem>
+
+      <listitem>
+        <para>Do we want function variables?</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </article>
