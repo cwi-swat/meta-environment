@@ -1,0 +1,19 @@
+module Modules
+
+imports Declarations
+
+hiddens
+context-free start-symbols
+  Module
+
+exports
+sorts Module ModuleWord ModuleName
+
+lexical syntax
+  letters:[A-Za-z0-9\_\-]+                       -> ModuleWord {cons("word")} 
+  ModuleWord                                     -> ModuleName {cons("leaf")} 
+  sep:"/" basename:ModuleName                    -> ModuleName {cons("root")} 
+  dirname:ModuleWord sep:"/" basename:ModuleName -> ModuleName {cons("path")} 
+
+context-free syntax
+  "module" ModuleName Declaration* -> Module  

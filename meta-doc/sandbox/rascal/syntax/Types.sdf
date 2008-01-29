@@ -1,0 +1,37 @@
+module Types
+
+imports basic/Whitespace
+        languages/sdf2/syntax/Regular
+        languages/sdf2/syntax/Sorts
+        languages/sdf2/syntax/Literals
+
+hiddens
+context-free start-symbols
+  Type
+
+exports
+sorts Type TypeVariable
+
+lexical syntax
+  [a-z] [A-Za-z0-9\-]* -> TypeVariable  
+
+lexical restrictions
+  TypeVariable -/- [A-Za-z0-9\-]
+
+context-free syntax
+  TypeVariable -> Type {cons("variable")} 
+
+context-free syntax
+  "[" Type "]" -> Type {cons("list")} 
+  "{" Type "}" -> Type {cons("set")}  
+
+context-free priorities
+  "<" Type "," {Type ","}+ ">" -> Type {cons("tuple")} >
+  Symbol -> Type {cons("symbol")}
+
+context-free priorities
+  Type "*" Type  -> Type {right, cons("relation")}  >
+  Type "->" Type -> Type {right, cons("function")} 
+
+context-free syntax
+  "(" Type ")"   -> Type {bracket}     

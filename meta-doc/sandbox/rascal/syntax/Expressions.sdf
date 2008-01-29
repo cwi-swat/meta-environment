@@ -1,0 +1,62 @@
+module Expressions
+
+imports 
+	basic/IdentifierCon
+	Types
+	languages/asfix/syntax/Tree[Symbol => ASFixSymbol]
+
+hiddens
+context-free start-symbols
+	Expression
+
+exports
+sorts Expression Tree Variable Predicate Signature
+
+lexical syntax
+	[\$\%\#\@\&\?]?[a-zA-Z][a-zA-Z0-9\-\_]*[\+\*\?]?[0-9\']* -> Variable
+
+%%lexical restrictions
+%%	Variable -/- [a-zA-Z0-9\-\_]
+
+context-free syntax
+	"[" {Expression ","}* "]" -> Expression {cons("list")}
+	"{" {Expression ","}* "}" -> Expression {cons("set")}
+	"<" Expression "," {Expression ","}+ ">" -> Expression {cons("tuple")}
+	"\\" IdCon -> Expression {cons("func-ref")}
+
+context-free syntax
+	IdCon "(" {Expression ","}* ")" -> Expression {cons("func-call")}
+	Variable -> Expression {cons("variable")}
+
+context-free syntax
+	%% Tree is the sort concrete stuff gets injected into.
+	Tree -> Expression {cons("tree")}
+
+context-free syntax
+	Signature ":" Expression -> Predicate {cons("generator")}
+	%%Type Variable -> Signature
+	Type Expression -> Signature
+	"<" Signature "," {Signature ","}+ ">" -> Signature
+
+context-free syntax
+	"{" Expression "|" {Predicate ","}+ "}" -> Expression {cons("set-comprehension")}
+	"[" Expression "|" {Predicate ","}+ "]" -> Expression {cons("list-comprehension")}
+	Expression "==" Expression -> Predicate {cons("equal")}
+	Expression "!=" Expression -> Predicate {cons("non-equal")}
+	Expression ":=" Expression -> Predicate {cons("match")}
+	Expression "!:=" Expression -> Predicate {cons("non-match")}
+	Expression "(-" Expression -> Predicate {cons("element-of")}
+
+context-free priorities
+	"not" Predicate -> Predicate {cons("not")} >
+	Predicate "&" Predicate -> Predicate {cons("and")} >
+	Predicate "|" Predicate -> Predicate {cons("or")}
+
+context-free syntax
+	"(" Predicate ")" -> Predicate {bracket}
+
+context-free syntax
+	"\\" "(" {Variable ","}* ")" Expression -> Expression
+	
+	
+

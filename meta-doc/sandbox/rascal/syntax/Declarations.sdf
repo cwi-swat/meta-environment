@@ -1,0 +1,34 @@
+module Declarations
+
+imports Types Expressions Equations
+
+hiddens
+context-free start-symbols
+        Declaration
+
+exports
+sorts Declaration DeclaredType NamedColumn VariableDecl Constructor ArgType
+
+context-free syntax
+	"equations" "for" IdCon Equation* -> Declaration {cons("equations-for")}
+	"equations" Equation* -> Declaration {cons("equations")}
+	Equation -> Declaration {cons("equation")}
+
+context-free syntax
+        	"func" IdCon ":" Type -> Declaration {cons("function")}
+
+context-free syntax
+	"type" IdCon ":" DeclaredType -> Declaration {cons("type")}
+	IdCon Type -> NamedColumn
+	"<" NamedColumn "," {NamedColumn ","}+ ">" -> DeclaredType
+	Type -> DeclaredType
+
+context-free syntax
+	"variables" VariableDecl* -> Declaration {cons("variables")}
+	Variable ":" Type -> VariableDecl {cons("variable-decl")}
+
+context-free syntax
+	"data" IdCon ":" {Constructor "|"}* -> Declaration {cons("data")}
+	IdCon "(" {ArgType ","}* ")" -> Constructor
+	IdCon ":" Type -> ArgType {cons("labeled")}
+	Type -> ArgType {cons("default")}
