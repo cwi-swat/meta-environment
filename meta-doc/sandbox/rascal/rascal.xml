@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -479,7 +479,7 @@ fun TREE inc(TREE T) {
 
 fun TREE frepl(TREE T) {
     TREE T1, T2;
-    return replace {g(T1, T2) : T in T by i(T1, T2)
+    return replace {g(T1, T2) : T} in T by i(T1, T2)
 }
 
 %% Ex5: deep replacement of g by i  which usually requires
@@ -488,8 +488,8 @@ fun TREE frepl(TREE T) {
 fun TREE drepl(TREE T) {
     TREE T1, T11, T12, T2, T21, T22;
     return replace { g(T1, T2) | g(T1, T2) : T, 
-                                 g(T11, T12) notin T1, 
-                                 g(T21,T22) notin T2
+                                 not exists g(T11, T12) : T1, 
+                                 not exists g(T21, T22) : T2
                    }
            in T by i(T1, T2)
 }
@@ -502,10 +502,10 @@ fun TREE srepl(TREE T) {
     TREE T1, T2;
     TREE x TREE -&gt; TREE FUN;
     
-    select {
-    case g(T1, T2) = i(T1, T2)
+    select (T) {
+    case g(T1, T2) : return i(T1, T2)
     default
-         FUN(T1, T2) = FUN(srepl(T1) srepl(T2))
+         FUN(T1, T2) : return FUN(srepl(T1) srepl(T2))
     }
 }</programlisting></para>
     </section>
@@ -556,31 +556,32 @@ fun Var fresh(Var V, set[Var] S) {
 %% This functions used to be defined by separate equations,
 %% now we use a case distinction
 
-fun Exp subst(Var, Exp, Exp) {
-    Var V, V1, V2;
-    Exp E, E1, E2;
-    select {
-      case subst(V1, E, V2) = V2 
-           when V1 != V2
+fun Exp subst(Var V1, Exp E1, Exp E2) {
+    Var V2;
+    Exp Ea, Eb;
 
-      case subst(V, E, V) = E
+    select (E2) {
+      case V2 : return V2
+           when { V1 != V2 }
 
-      case subst(V, E, E1 E2) = subst(V, E, E1) subst(V, E, E2)
+      case V2 : return E1
+           when { V1 == V2 }
 
-      case subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
+      case Ea Eb : return subst(V, E, Ea) subst(V, E, Eb)
 
-      case subst(V1, E1, fn V2 =&gt; E2) = 
-           fn V2 =&gt; subst(V1, E1, E2)
+      case fn V2 =&gt; Ea : return  fn V2 =&gt; Ea
+           when { V1 == V2 }
+
+      case fn V2 =&gt; Ea : return fn V2 =&gt; subst(V1, E1, Ea)
            when  { V1 != V2,
                    not(V1 in freeVars(E2) and V2 in freeVars(E1))
                  }
 
-      case subst(V1, E1, fn V2 =&gt; E2) = 
-           fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))
+      case fn V2 =&gt; Ea : return fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))
            when { V1 != V2,
-                  V1 in freeVars(E2) and V2 in freeVars(E1),
-                  V3 := fresh(V2,  freeVars(E2) union freeVars(E1))
-                }     
+                  V1 in freeVars(Ea) and V2 in freeVars(E1),
+                  V3 := fresh(V2,  freeVars(Ea) union freeVars(E1))
+                }  
     }
 }</programlisting></para>
     </section>
@@ -607,26 +608,28 @@ import Let
 %% rel[Var,Var]: renaming table
 %% Int: counter to generate global variables
 
-fun Exp rename(Exp, rel[Var,Var], Int) {
-    INT Cnt, Cnt';
+fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
+    INT Cnt';
     Var V, Y;
-    Exp E, E1, E2;
-    select {
-    case rename(let V = E1 in E2 end, Rn, Cnt) =
-         let Y = rename(E1, Rn, Cnt) 
-         in 
-           rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
-         end
+    Exp E1, E2;
+
+    select(E) {
+    case let V = E1 in E2 end : 
+         return
+           let Y = rename(E1, Rn, Cnt) 
+           in 
+             rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
+           end
          when { Y := "x" + Cnt,   %% this + operator concatenates 
                                   %% (after converting the int to str)
                 Cnt' := Cnt + 1
               }
 
-    case rename(V, Rn, Cnt) = V1
+    case V: return V1
          when { V1 } == Rn[V]
 
     default
-         rename(E, Rn, Cnt) = E
+         E : return E
     }
 }
 
@@ -643,23 +646,24 @@ fun Var newVar() {
 
 %% Rename -- Version 2
 
-fun Exp rename(Exp, rel[Var,Var]) {
+fun Exp rename(Exp E, rel[Var,Var] Rn) {
     Var V, Y;
-    rel[Var,Var] Rn;
-    select {
 
-    case rename(let V = E1 in E2 end, Rn) =
-         let Y = rename(E1, Rn) 
-         in 
-         rename(E2, {&lt;V, Y&gt;} union Rn) 
-         end
+    select (E) {
+
+    case let V = E1 in E2 end:
+         return
+           let Y = rename(E1, Rn) 
+           in 
+           rename(E2, {&lt;V, Y&gt;} union Rn) 
+           end
          when { Y := newVar }
 
-    case rename(V, Rn) = V1
+    case V: return V1
          when { { V1 } == Rn[V] }
   
     default
-         rename(E, Rn) = E
+         E: return E
     }
 }
 
@@ -667,23 +671,25 @@ fun Exp rename(Exp, rel[Var,Var]) {
 global INT Cnt := 0
        rel[Var, Var] Rn := {}
 
-fun rename(Exp) {
+fun rename(Exp E) {
     Var V, Y;
     rel[Var,Var] Rn;
-    select {
+    select E){
 
-    case rename(let V = E1 in E2 end) =
-         let Y = rename(E1) 
-         in 
-           rename(E2) 
-         end
+    case let V = E1 in E2 end:
+         return
+           let Y = rename(E1) 
+           in 
+             rename(E2) 
+           end
          when { Y := newVar,
                 Rn :=  {&lt;V, Y&gt;} union Rn
               }
-    case rename(V) = V1
+    case V: return V1
          when { { V1 } == Rn[V] }
 
-    default rename(E) = E
+    default 
+         E : return E
     }
 }</programlisting></para>
     </section>
@@ -709,40 +715,49 @@ var
     TYPE Type;
     Env Env;
 
-fun list[Error] tcp(PROGRAM) {
-    select {
-    case tcp(begin Decls Series end) = 
-         [ tcst(S, Env) | Stat S : Series ]
+fun list[Error] tcp(PROGRAM P) {
+    select (P){
+    case begin Decls Series end:
+         return
+           [ tcst(S, Env) | Stat S : Series ]
          when { Env := {&lt;Id, Type&gt; | 
                 (PICO-ID ":" TYPE) Id : Type : Decls}
               }
     }
 }
 
-fun list[Error] tcst(Stat) {
-    select {
-    case tcst(Id := Exp, Env) = type-of(Exp) in Env[Id]
+fun list[Error] tcst(Stat Stat, Env Env) {
+    select (Stat) {
+    case Id := Exp: return type-of(Exp) in Env[Id]
 
-    case tcst(if Exp then Stats1 else Stats2, Env) =
-         type-of(Exp, natural, Env) &amp;&amp; 
-         tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
+    case if Exp then Stats1 else Stats2:
+         return 
+           type-of(Exp, natural, Env) &amp;&amp; 
+           tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
 
-    case tcst(while Exp do Stats od, Env) = 
-         type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
+    case while Exp do Stats od, Env:
+         return 
+           type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
     }
 }
 
-fun list[Error] type-of(Exp, TYPE, Env) {
-    select {
-    case type-of(NatCon, natural, Env) = []
+fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
+    NatCon NatCon;
+    StrCon StrCon;
 
-    case type-of(StrCon, string, Env) = []
+    select (E) {
+    case NatCon: return []
+         when { Type == natural }
 
-    case type-of(Id, Type, Env) = [] 
-         when { {&lt;Id,Type&gt;} := Env[Id] }
+    case StrCon: return []
+         when { Type == string }
 
+    case Id, Type, Env) = [] 
+         when { {&lt;Id,Type2&gt;} := Env[Id],
+                Type2 == Type
+              }
     default
-         type-of(Exp, Type, Env) = [error("Incorrect type")]
+         Exp: return [error("Incorrect type")]
     }
 }</programlisting>
     </section>
@@ -790,58 +805,59 @@ variables
  "Nat"   -&gt; NatCon
  "Str"   -&gt; StrCon
 
-global variable
- "Env"   -&gt; Environment
-
 exports
 
-fun Bool tc(PROGRAM) {
-    dyn Env Env;
-    select {
-    case tc(begin Decls Stats end) = tcs(Stats)
+fun Bool tc(PROGRAM P) {
+    dyn Env Env := {};
+    select (P) {
+    case begin Decls Stats end: return tcs(Stats)
          when { 
                 Env := tcd(Decls) 
               }
 }
 
-fun Env tcd(Decls) -&gt; void
+fun Env tcd(Decls Decls) -&gt; void
     return {&lt; Id, Type&gt; | &lt;&lt;PICO-ID Id : TYPE Type&gt;&gt; : Decls}
 
-fun Bool tcs(Stats) {
+fun Bool tcs(Stats Stats) {
     Stat Stat;
     Stats Stats;
-    select {
-    case tcs( ) = true
+    select (Stats) {
+    case : return true
 
-    case tcs(Stat; Stats) = tcst(Stat) &amp;&amp; tcst(Stats)
+    case Stat; Stats : return tcst(Stat) &amp;&amp; tcst(Stats)
     }
 }
 
-fun Bool tcst(Stat) {
+fun Bool tcst(Stat Stat) {
    Id Id;
    Exp Exp;
    Stats Stats, Stats1, Stats2;
-   select {
-   case tcst(Id := Exp) = type-of(Exp) in Env[Id]
+   select (Stat) {
+   case Id := Exp: return type-of(Exp) in Env[Id]
 
-   case tcst(if Exp then Stats1 else Stats2) =
-        type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
+   case if Exp then Stats1 else Stats2: 
+        return
+          type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
 
-   case tcst(while Exp do Stats od) = 
-        type-of(Exp) == natural &amp;&amp; tcs(Stats)
+   case while Exp do Stats od:
+        return
+          type-of(Exp) == natural &amp;&amp; tcs(Stats)
    }
 }
 
-fun PICO-TYPE type-of(Exp) {
+fun PICO-TYPE type-of(Exp Exp) {
     NatCon NatCon;
     StrCon StrCon;
     PICO-ID Id;
-    select {
-    case type-of(NatCon) = natural
 
-    case type-of(StrCon) = string
+    select (Exp) {
+    case NatCon : return natural
 
-    case type-of(Id)     = Type when {&lt;Id,Type&gt;} := Env[Id]
+    case StrCon: return = string
+
+    case Id: return Type 
+         when {&lt;Id,Type&gt;} := Env[Id]
     }
 }</programlisting></para>
     </section>
@@ -857,48 +873,50 @@ sorts CP %% A Code Point
 context-free syntax
     EXP | STATEMENT  -&gt; CP %% Waar moet dit staan?
 
-fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}*){
+fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
     Stat Stat;
-    Stat+ Stats;
+    Stat+ Stats2;
     rel[CP,CP] R1, R2;
     set[CP] En1, En2, Ex1, Ex2;
     
-    select {
-    case cflow(Stat ; Stat+) = 
-         &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
-         when { 
-                &lt;En1, R1, Ex1&gt; := cflow(Stat),
-                &lt;En2, R2, Ex2&gt; := cflow(Stats)
-              }
+    select (Stats) {
+    case Stat ; Stats2 :
+         return
+           &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+           when { 
+                  &lt;En1, R1, Ex1&gt; := cflow(Stat),
+                  &lt;En2, R2, Ex2&gt; := cflow(Stats2)
+                }
 
-    case cflow() = &lt;{}, {}, {}&gt;
+    case  /* empty */ : return &lt;{}, {}, {}&gt;
     }
 }
 
-fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT){
+fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
     Exp Exp;
-    Stat Stat;
     Stat* Stats, Stats1, Stats2;
     rel[CP,CP] R1, R2;
     set[CP] En1, En2, Ex1, Ex2;
 
-    select
-    case cflow(while Exp do Stats od) = 
-         &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
-         when {
-                &lt;En, R, Ex&gt; := cflow(Stats)
-              }
-    case cflow(if Exp then Stats1 else Stats2 fi) = 
-         &lt; {Exp}, 
-           ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-            Ex1 union Ex2
-         &gt;
+    select (Stat) {
+    case while Exp do Stats od:
+         return
+           &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
+           when {
+                  &lt;En, R, Ex&gt; := cflow(Stats)
+                }
+    case if Exp then Stats1 else Stats2 fi:
+         return
+           &lt; {Exp}, 
+             ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+              Ex1 union Ex2
+           &gt;
          when {
                 &lt;En1, R1, Ex1&gt; := cflow(Stats1),
                 &lt;En2, R2, Ex2&gt; := cflow(Stats2)
               }
     default
-         cflow(Stat) = &lt;{Stat}, {}, {Stat}&gt;
+         Stat: return &lt;{Stat}, {}, {Stat}&gt;
     }
 }</programlisting>
     </section>
@@ -1006,17 +1024,16 @@ fun PROGRAM cse(PROGRAM P) {
 
       <para><programlisting>module Pico-constant-propagation
 
-fun Boolean is-constant(EXP) {
+fun Boolean is-constant(EXP E) {
    Int Int;
    Str Str;
-   Exp E;
-   select {
-   case is-Constant(Int) = true
+   select (E){
+   case Int: return true
 
-   case is-constant(Str) = true
+   case Str: return true
 
    default
-        is-constant(E) = false
+        E: return false
    }
 }
 
@@ -1388,25 +1405,6 @@ process mkWave(int N) is ...</programlisting>
     <title xml:id="Issues">Issues</title>
 
     <itemizedlist>
-      <listitem>
-        <para>We want to minimize the cognitive distance between Rascal and,
-        say, C and Java. In the current examples we have:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Functions with named arguments and a return statement (these
-            correspond to Rscript functions)</para>
-          </listitem>
-
-          <listitem>
-            <para>Functions with anonymous arguments and a select statement
-            (these correspond to ASF equations).</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>Is there a better solution?</para>
-      </listitem>
-
       <listitem>
         <para>The <emphasis role="bold">replace</emphasis>
         <replaceable>Occurrences</replaceable> <emphasis
