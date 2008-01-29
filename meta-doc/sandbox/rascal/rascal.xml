@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -429,9 +429,58 @@
     old features.</para>
 
     <section>
+      <title>Booleans</title>
+
+      <para>Probably a non-typical example, but let's try it anyway. (It looks
+      horrible compared to the ASF version)</para>
+
+      <programlisting>syntax module Booleans
+
+exports 
+  sorts Bool
+
+  context-free syntax
+    "true"        -&gt; Bool
+    "false"       -&gt; Bool
+    Bool "&amp;" Bool -&gt; Bool {left}
+    Bool "|" Bool -&gt; Bool {right}
+
+module Bool-examples
+imports Booleans
+
+fun Bool and(Bool B1, B2) { %% reduce &amp; operator
+    select(B1){
+    case &lt;&lt; true  &gt;&gt;: return reduce(B2)
+    case &lt;&lt; false &gt;&gt;: return false
+    default:
+         return &lt;&lt; B1 "&amp;" B2 &gt;&gt;
+    }    
+}
+
+fun Bool or(Bool B1, B2) { %% reduce | operator
+    select(B1){
+    case &lt;&lt; true  &gt;&gt;: return true
+    case &lt;&lt; false &gt;&gt;: return reduce(B2)
+    default:
+          return &lt;&lt; B1 "|" B2 &gt;&gt;
+    }    
+}
+
+fun Bool reduce(Bool B){
+    Bool B1, B2;
+    select(B){
+    case &lt;&lt; $B1 &amp; $B2 &gt;&gt;: return and(B1, B2)
+    case &lt;&lt; $B1 | $B2 &gt;&gt;: return or(B1, B2)
+    default:
+         return B
+    }
+}</programlisting>
+    </section>
+
+    <section>
       <title>Deep tree matching instead of tree traversal</title>
 
-      <para><programlisting>%% Mark a pure syntax modeul as such with "syntax"
+      <para><programlisting>%% Mark a pure syntax module as such with "syntax"
 
 syntax module Tree-syntax
 imports Naturals
@@ -465,21 +514,23 @@ fun INT sum_tree(TREE T) {
 }
 
 %% Ex3: Increment all leaves in a TREE
-%% Idea: INT N : T generates alle INT leaves in the tree
+%% Idea: INT N in T generates alle INT leaves in the tree
 %% replace ... occurences ... in T by N+1 replaces each N in T by N+1
 %% The expression as a whole returns the modified term.
 %% This is an extremely compact manner of writing a 
 %% transformer!
 
 fun TREE inc(TREE T) {
-    return replace INT N : T in T by N+1
+    return replace INT N in T by N+1
 }
 
 %% Ex4: full replacement of g b
 
 fun TREE frepl(TREE T) {
     TREE T1, T2;
-    return replace {g(T1, T2) : T} in T by i(T1, T2)
+    return foreach g(T1, T2) : T { 
+             replace g(T1, T2) in T by i(T1, T2) 
+           }
 }
 
 %% Ex5: deep replacement of g by i  which usually requires
@@ -487,11 +538,11 @@ fun TREE frepl(TREE T) {
 
 fun TREE drepl(TREE T) {
     TREE T1, T11, T12, T2, T21, T22;
-    return replace { g(T1, T2) | g(T1, T2) : T, 
-                                 not exists g(T11, T12) : T1, 
-                                 not exists g(T21, T22) : T2
-                   }
-           in T by i(T1, T2)
+    return 
+      using T do g(T1, T2) : T | not exists g(T11, T12) : T1, 
+                                 not exists g(T21, T22) : T2 {
+              replace g(T1, T2) by i(T1, T2)
+           }
 }
 
 %% Ex6: shallow replacement of g by i (i.e. only outermost g's are replaced);
@@ -534,11 +585,11 @@ module Lambda-Examples
 imports Lambda
 
 fun set[Var] allVars(Exp E) {
-    return {V | &lt;&lt;Var V&gt;&gt; : E}
+    return {V | Var V : E}
 }
 
 fun set[Var] boundVars(Exp E) {
-    return {V | &lt;&lt;fn Var V =&gt; Exp E1&gt;&gt; : E}
+    return {V | &lt;&lt; fn $(Var V) =&gt; $(Exp E1) &gt;&gt; : E}
 }
 
 fun set[Var] freeVars(Exp E) {
@@ -567,17 +618,17 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
       case V2 : return E1
            when { V1 == V2 }
 
-      case Ea Eb : return subst(V, E, Ea) subst(V, E, Eb)
+      case &lt;&lt; $Ea $Eb &gt;&gt;: return &lt;&lt; $subst(V, E, Ea) $subst(V, E, Eb) &gt;&gt;
 
-      case fn V2 =&gt; Ea : return  fn V2 =&gt; Ea
+      case &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;: return &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;
            when { V1 == V2 }
 
-      case fn V2 =&gt; Ea : return fn V2 =&gt; subst(V1, E1, Ea)
+      case &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;: return &lt;&lt; fn $V2 =&gt; $subst(V1, E1, Ea) &gt;&gt;
            when  { V1 != V2,
                    not(V1 in freeVars(E2) and V2 in freeVars(E1))
                  }
 
-      case fn V2 =&gt; Ea : return fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))
+      case &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;: return &lt;&lt; fn $V3 =&gt; $subst(V1, E1, subst(V2, V3, E2)) &gt;&gt;
            when { V1 != V2,
                   V1 in freeVars(Ea) and V2 in freeVars(E1),
                   V3 := fresh(V2,  freeVars(Ea) union freeVars(E1))
@@ -614,12 +665,13 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     Exp E1, E2;
 
     select(E) {
-    case let V = E1 in E2 end : 
+    case &lt;&lt; let $V = $E1 in $E2 end &gt;&gt; : 
          return
-           let Y = rename(E1, Rn, Cnt) 
-           in 
-             rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
-           end
+           &lt;&lt; let $Y = $rename(E1, Rn, Cnt) 
+              in 
+                 $rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
+              end 
+           &gt;&gt;
          when { Y := "x" + Cnt,   %% this + operator concatenates 
                                   %% (after converting the int to str)
                 Cnt' := Cnt + 1
@@ -651,12 +703,13 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
 
     select (E) {
 
-    case let V = E1 in E2 end:
+    case &lt;&lt; let" $V = $E1 in $E2 end &gt;&gt;:
          return
-           let Y = rename(E1, Rn) 
-           in 
-           rename(E2, {&lt;V, Y&gt;} union Rn) 
-           end
+           &lt;&lt; let $Y = $rename(E1, Rn) 
+              in 
+                $rename(E2, {&lt;V, Y&gt;} union Rn) 
+              end
+           &gt;&gt;
          when { Y := newVar }
 
     case V: return V1
@@ -674,14 +727,15 @@ global INT Cnt := 0
 fun rename(Exp E) {
     Var V, Y;
     rel[Var,Var] Rn;
-    select E){
+    select (E){
 
-    case let V = E1 in E2 end:
+    case &lt;&lt; let $V = $E1 in $E2 end &gt;&gt;:
          return
-           let Y = rename(E1) 
-           in 
-             rename(E2) 
-           end
+           &lt;&lt; let $Y = $rename(E1) 
+              in 
+                 $rename(E2) 
+              end
+           &gt;&gt;
          when { Y := newVar,
                 Rn :=  {&lt;V, Y&gt;} union Rn
               }
@@ -717,25 +771,25 @@ var
 
 fun list[Error] tcp(PROGRAM P) {
     select (P){
-    case begin Decls Series end:
+    case &lt;&lt; begin $Decls $Series end &gt;&gt;:
          return
            [ tcst(S, Env) | Stat S : Series ]
          when { Env := {&lt;Id, Type&gt; | 
-                (PICO-ID ":" TYPE) Id : Type : Decls}
+                PICO-ID Id ":" TYPE Type : Decls}
               }
     }
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
     select (Stat) {
-    case Id := Exp: return type-of(Exp) in Env[Id]
+    case &lt;&lt; $Id := $Exp &gt;&gt;: return type-of(Exp) in Env[Id]
 
-    case if Exp then Stats1 else Stats2:
+    case &lt;&lt; if $Exp then $Stats1 else $Stats2 fi &gt;&gt;:
          return 
            type-of(Exp, natural, Env) &amp;&amp; 
            tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
 
-    case while Exp do Stats od, Env:
+    case &lt;&lt; while $Exp do $Stats od &gt;&gt;:
          return 
            type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
     }
@@ -752,7 +806,7 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     case StrCon: return []
          when { Type == string }
 
-    case Id, Type, Env) = [] 
+    case Id: return [] 
          when { {&lt;Id,Type2&gt;} := Env[Id],
                 Type2 == Type
               }
@@ -810,7 +864,7 @@ exports
 fun Bool tc(PROGRAM P) {
     dyn Env Env := {};
     select (P) {
-    case begin Decls Stats end: return tcs(Stats)
+    case &lt;&lt;begin $Decls $Stats end&gt;&gt;: return tcs(Stats)
          when { 
                 Env := tcd(Decls) 
               }
@@ -825,7 +879,7 @@ fun Bool tcs(Stats Stats) {
     select (Stats) {
     case : return true
 
-    case Stat; Stats : return tcst(Stat) &amp;&amp; tcst(Stats)
+    case &lt;&lt; $Stat ; $Stats &gt;&gt; : return tcst(Stat) &amp;&amp; tcst(Stats)
     }
 }
 
@@ -834,13 +888,13 @@ fun Bool tcst(Stat Stat) {
    Exp Exp;
    Stats Stats, Stats1, Stats2;
    select (Stat) {
-   case Id := Exp: return type-of(Exp) in Env[Id]
+   case &lt;&lt; $Id := $Exp &gt;&gt;: return type-of(Exp) in Env[Id]
 
-   case if Exp then Stats1 else Stats2: 
+   case &lt;&lt; if $Exp then $Stats1 else $Stats2 fi &gt;&gt;: 
         return
           type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
 
-   case while Exp do Stats od:
+   case &lt;&lt; while $Exp do $Stats od:
         return
           type-of(Exp) == natural &amp;&amp; tcs(Stats)
    }
@@ -880,7 +934,7 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
     set[CP] En1, En2, Ex1, Ex2;
     
     select (Stats) {
-    case Stat ; Stats2 :
+    case &lt;&lt; $Stat ; $Stats2 &gt;&gt; :
          return
            &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
            when { 
@@ -899,13 +953,13 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
     set[CP] En1, En2, Ex1, Ex2;
 
     select (Stat) {
-    case while Exp do Stats od:
+    case &lt;&lt; while $Exp do $Stats od &gt;&gt;:
          return
            &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
            when {
                   &lt;En, R, Ex&gt; := cflow(Stats)
                 }
-    case if Exp then Stats1 else Stats2 fi:
+    case &lt;&lt; if $Exp then $Stats1 else $Stats2 fi &gt;&gt;:
          return
            &lt; {Exp}, 
              ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
@@ -916,7 +970,7 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
                 &lt;En2, R2, Ex2&gt; := cflow(Stats2)
               }
     default
-         Stat: return &lt;{Stat}, {}, {Stat}&gt;
+         &lt;&lt; $Stat &gt;&gt;: return &lt;{Stat}, {}, {Stat}&gt;
     }
 }</programlisting>
     </section>
@@ -934,7 +988,7 @@ fun rel[EXP,PICO-ID] uses(PROGRAM P) {
 
 fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
   return {&lt;S, Id&gt; | STATEMENT S : P, 
-                        &lt;&lt;PICO-ID Id ":=" EXP Exp&gt;&gt; == S}
+                        &lt;&lt;$(PICO-ID Id) := $(EXP Exp)&gt;&gt; == S}
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose
@@ -990,11 +1044,12 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 fun PROGRAM cse(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
     rel[CP,CP] Pred := cflow(P).rel
-    return replace { E2 | STATEMENT S : P, 
-                          PICO-ID Id ":=" EXP E == S,
-                          Id notin E,
-                          EXP E2 : reachX({S}, Defs[-,Id], Pred)
-                    } in P by Id
+    return 
+      using P do STATEMENT S : P | PICO-ID Id ":=" EXP E == S,
+                                 Id notin E,
+                                 EXP E2 : reachX({S}, Defs[-,Id], Pred){
+              replace E2 by Id
+      }
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
@@ -1040,13 +1095,13 @@ fun Boolean is-constant(EXP E) {
 fun PROGRAM cp(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
     rel[CP,CP] Pred := cflow(P).rel;
-    return replace { Id2 | STATEMENT S : P, 
-                           PICO-ID Id ":=" EXP E == S,
-                           is-constant(E),
-                           PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
-                           Id2 == Id
-                   }
-           in P by E
+    return
+      using P do STATEMENT S : P | PICO-ID Id ":=" EXP E == S,
+                                   is-constant(E),
+                                   PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+                                   Id2 == Id {
+            replace Id2 by E
+      }
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
@@ -1406,11 +1461,54 @@ process mkWave(int N) is ...</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>The <emphasis role="bold">replace</emphasis>
-        <replaceable>Occurrences</replaceable> <emphasis
-        role="bold">in</emphasis> <replaceable>Term</replaceable> <emphasis
-        role="bold">by</emphasis> <replaceable>Replacement</replaceable>
-        construct needs more thought.</para>
+        <para>How will we quote patterns and terms? Currently we use the
+        convention:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Pattern is enclosed between &lt;&lt; and &gt;&gt;</para>
+          </listitem>
+
+          <listitem>
+            <para>Variable are prefixed with $</para>
+          </listitem>
+
+          <listitem>
+            <para>A declared variable is written as $(Type Var).</para>
+          </listitem>
+
+          <listitem>
+            <para>A subterm to be reduced is also prefixed with $.</para>
+          </listitem>
+
+          <listitem>
+            <para>Examples:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>&lt;&lt; while $Exp do $Stats od &gt;&gt;</para>
+              </listitem>
+
+              <listitem>
+                <para>{&lt;S, Id&gt; | STATEMENT S : P, &lt;&lt;$(PICO-ID Id)
+                := $(EXP Exp)&gt;&gt; == S}</para>
+              </listitem>
+
+              <listitem>
+                <para>&lt;&lt; let $Y = $rename(E1) in $rename(E2) end
+                &gt;&gt;</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>This is good for disambiguation but gives notational overhead.
+        Is there a more concise scheme?</para>
+      </listitem>
+
+      <listitem>
+        <para>The <emphasis role="bold">replace</emphasis> construct needs
+        more thought.</para>
 
         <itemizedlist>
           <listitem>
@@ -1420,7 +1518,7 @@ process mkWave(int N) is ...</programlisting>
 
           <listitem>
             <para>Is this the right approach to get rid of indications for
-            bottumup/topdown and continue/break?</para>
+            bottom-up/topdown and continue/break?</para>
           </listitem>
         </itemizedlist>
       </listitem>
