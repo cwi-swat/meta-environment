@@ -60,7 +60,7 @@ public class CommandLine{
 						System.err.println("dump performance stats: Prints some performance statistics related to the execution of the ToolBus.");
 						System.err.println("dump tools status: Prints a listing of currently connected tools with their corresponding state.");
 						System.err.println("dump toolbus state: Dumps all available information about the current state of the process logic to the command line.");
-						System.err.println("shutdown: Initiates the forcefully termination of the ToolBus.");
+						System.err.println("shutdown: Initiates the forcefull termination of the ToolBus.");
 					}else if(line.equals("")){
 						// Ignore this.
 					}else{

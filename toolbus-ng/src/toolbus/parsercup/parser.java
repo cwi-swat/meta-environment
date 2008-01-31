@@ -958,7 +958,7 @@ public class parser extends java_cup.runtime.lr_parser {
 	}
 	
 	public void syntax_error(java_cup.runtime.Symbol badToken){
-    	throw new SyntaxErrorException("Syntax error at line: "+(badToken.left + 1)+", column: "+(badToken.right + 1)+", symbol id: "+badToken.sym);
+    	throw new SyntaxErrorException("Syntax error in "+fileName+", at line: "+(badToken.left + 1)+", column: "+(badToken.right + 1)+", symbol id: "+badToken.sym);
     }
 	
 	private class SyntaxErrorException extends RuntimeException{
