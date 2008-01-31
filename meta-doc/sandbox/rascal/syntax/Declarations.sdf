@@ -1,34 +1,36 @@
 module Declarations
 
-imports Types Expressions Equations
+imports Types Expressions
 
 hiddens
 context-free start-symbols
         Declaration
 
 exports
-sorts Declaration DeclaredType NamedColumn VariableDecl Constructor ArgType
+sorts Declaration DeclaredType NamedColumn Stat VarDecl VarDeclInit FunBody Case
 
 context-free syntax
-	"equations" "for" IdCon Equation* -> Declaration {cons("equations-for")}
-	"equations" Equation* -> Declaration {cons("equations")}
-	Equation -> Declaration {cons("equation")}
+	Type {Variable ","}+ -> VarDecl {cons("variable-decl")}
 
 context-free syntax
-        	"func" IdCon ":" Type -> Declaration {cons("function")}
+        	"fun" Type IdCon ("(" {VarDecl  ","}* ")")? "{" FunBody "}"   -> Declaration {cons("function")}
+         (VarDeclInit ";")* Stat                                       -> FunBody
+         "return" Expression                                           -> Stat
+         "case" Pattern ":" Stat ("when" "{" {Predicate ","}+ "}")?    -> Case
+         "default"  Pattern ":" Stat                                   -> Case
+         "select" "(" Expression ")" "{" Case+ "}"                     -> Stat
+         "return" Expression                                           -> Stat
+         "return" Pattern                                              -> Stat
 
+
+%% Not yet used
 context-free syntax
-	"type" IdCon ":" DeclaredType -> Declaration {cons("type")}
-	IdCon Type -> NamedColumn
+	"type" IdCon ":" DeclaredType              -> Declaration {cons("type")}
+	Type IdCon                                 -> NamedColumn
 	"<" NamedColumn "," {NamedColumn ","}+ ">" -> DeclaredType
-	Type -> DeclaredType
+	Type                                       -> DeclaredType
 
 context-free syntax
-	"variables" VariableDecl* -> Declaration {cons("variables")}
-	Variable ":" Type -> VariableDecl {cons("variable-decl")}
-
-context-free syntax
-	"data" IdCon ":" {Constructor "|"}* -> Declaration {cons("data")}
-	IdCon "(" {ArgType ","}* ")" -> Constructor
-	IdCon ":" Type -> ArgType {cons("labeled")}
-	Type -> ArgType {cons("default")}
+	"var" {VarDeclInit ";"}+      -> Declaration {cons("variables")}
+         VarDecl (":=" Expression)?    -> VarDeclInit
+       

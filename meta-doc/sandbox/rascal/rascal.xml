@@ -498,19 +498,19 @@ module Tree-Examples
 imports Tree-syntax
 
 %% Ex1: Count leaves in a TREE
-%% Idea: INT N : T generates alle INT leaves in the tree
+%% Idea: int N : T generates alle int leaves in the tree
 %% # is the built-in length-of operator
 
-fun INT cnt(TREE T) {
-    return #{N | INT N : T}
+fun int cnt(TREE T) {
+    return #{N | int N : T}
 }
 
 %% Ex2: Sum all leaves in a TREE
 %% NB sum is a built-in that adds all elements in a set or 
 %% list.
 
-fun INT sum_tree(TREE T) {
-    return sum({N | INT N : T})
+fun int sumtree(TREE T) {
+    return sum({N | int N : T})
 }
 
 %% Ex3: Increment all leaves in a TREE
@@ -612,25 +612,25 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
     Exp Ea, Eb;
 
     select (E2) {
-      case V2 : return V2
+      case '$V2': return V2
            when { V1 != V2 }
 
-      case V2 : return E1
+      case '$V2' : return E1
            when { V1 == V2 }
 
-      case &lt;&lt; $Ea $Eb &gt;&gt;: return &lt;&lt; $subst(V, E, Ea) $subst(V, E, Eb) &gt;&gt;
+      case '$Ea $Eb': return '$(subst(V, E, Ea)) $(subst(V, E, Eb))'
 
-      case &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;: return &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;
+      case 'fn $V2 =&gt; $Ea': return 'fn $V2 =&gt; $Ea'
            when { V1 == V2 }
 
-      case &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;: return &lt;&lt; fn $V2 =&gt; $subst(V1, E1, Ea) &gt;&gt;
+      case 'fn $V2 =&gt; $Ea': return 'fn $V2 =&gt; $(subst(V1, E1, Ea))'
            when  { V1 != V2,
-                   not(V1 in freeVars(E2) and V2 in freeVars(E1))
+                   not(V1 in freeVars(E2) &amp; V2 in freeVars(E1))
                  }
 
-      case &lt;&lt; fn $V2 =&gt; $Ea &gt;&gt;: return &lt;&lt; fn $V3 =&gt; $subst(V1, E1, subst(V2, V3, E2)) &gt;&gt;
+      case 'fn $V2 =&gt; $Ea': return 'fn $V3 =&gt; $(subst(V1, E1, subst(V2, V3, E2)))'
            when { V1 != V2,
-                  V1 in freeVars(Ea) and V2 in freeVars(E1),
+                  V1 in freeVars(Ea) &amp; V2 in freeVars(E1),
                   V3 := fresh(V2,  freeVars(Ea) union freeVars(E1))
                 }  
     }
@@ -660,28 +660,29 @@ import Let
 %% Int: counter to generate global variables
 
 fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
-    INT Cnt';
+    int Cnt1;
     Var V, Y;
     Exp E1, E2;
 
     select(E) {
-    case &lt;&lt; let $V = $E1 in $E2 end &gt;&gt; : 
+    case ' let $V = $E1 in $E2 end ' : 
          return
-           &lt;&lt; let $Y = $rename(E1, Rn, Cnt) 
+           ' let $Y = $(rename(E1, Rn, Cnt)) 
               in 
-                 $rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') 
+                 $rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1) 
               end 
-           &gt;&gt;
+           '
          when { Y := "x" + Cnt,   %% this + operator concatenates 
                                   %% (after converting the int to str)
-                Cnt' := Cnt + 1
+                Cnt1 := Cnt + 1
               }
 
-    case V: return V1
-         when { V1 } == Rn[V]
+    case '$V': return V1
+         when { { V1 } == Rn[V]
+              }
 
     default
-         E : return E
+         '$E' : return E
     }
 }
 
@@ -689,7 +690,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 %% Version 2: using a global variable
 %% to generate new variables
 
-global INT Cnt := 0   %% Initialize global Cnt
+global int Cnt := 0   %% Initialize global Cnt
 
 fun Var newVar() {
     Cnt := Cnt + 1;
@@ -703,13 +704,13 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
 
     select (E) {
 
-    case &lt;&lt; let" $V = $E1 in $E2 end &gt;&gt;:
+    case " let $V = $E1 in $E2 end ":
          return
-           &lt;&lt; let $Y = $rename(E1, Rn) 
+           " let $Y = $(rename(E1, Rn)) 
               in 
-                $rename(E2, {&lt;V, Y&gt;} union Rn) 
+                $(rename(E2, {&lt;V, Y&gt;} union Rn)) 
               end
-           &gt;&gt;
+           "
          when { Y := newVar }
 
     case V: return V1
@@ -721,29 +722,29 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
 }
 
 %% Rename -- Version 3, with Rn also as global variabele
-global INT Cnt := 0
+global int Cnt := 0
        rel[Var, Var] Rn := {}
 
-fun rename(Exp E) {
+fun Exp rename(Exp E) {
     Var V, Y;
     rel[Var,Var] Rn;
     select (E){
 
-    case &lt;&lt; let $V = $E1 in $E2 end &gt;&gt;:
+    case " let $V = $E1 in $E2 end ":
          return
-           &lt;&lt; let $Y = $rename(E1) 
+           " let $Y = $rename(E1) 
               in 
                  $rename(E2) 
               end
-           &gt;&gt;
+           "
          when { Y := newVar,
                 Rn :=  {&lt;V, Y&gt;} union Rn
               }
-    case V: return V1
+    case "$V": return V1
          when { { V1 } == Rn[V] }
 
     default 
-         E : return E
+         "$E" : return E
     }
 }</programlisting></para>
     </section>
@@ -771,47 +772,49 @@ var
 
 fun list[Error] tcp(PROGRAM P) {
     select (P){
-    case &lt;&lt; begin $Decls $Series end &gt;&gt;:
+    case ' begin $Decls $Series end ':
          return
            [ tcst(S, Env) | Stat S : Series ]
          when { Env := {&lt;Id, Type&gt; | 
-                PICO-ID Id ":" TYPE Type : Decls}
+                '$(PICO-ID Id) : $(TYPE Type)' : Decls}
               }
     }
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
     select (Stat) {
-    case &lt;&lt; $Id := $Exp &gt;&gt;: return type-of(Exp) in Env[Id]
+    case ' $Id := $Exp ': return type-of(Exp)
 
-    case &lt;&lt; if $Exp then $Stats1 else $Stats2 fi &gt;&gt;:
+    case ' if $Exp then $Stats1 else $Stats2 fi ':
          return 
-           type-of(Exp, natural, Env) &amp;&amp; 
-           tcs(Stats1, Env) &amp;&amp; tcs(Stats2, Env)
+           type-of(Exp, natural, Env) + 
+           tcs(Stats1, Env) + tcs(Stats2, Env)
 
-    case &lt;&lt; while $Exp do $Stats od &gt;&gt;:
+    case ' while $Exp do $Stats od ':
          return 
-           type-of(Exp, natural, Env) &amp;&amp; tcs(Stats, Env)
+           type-of(Exp, natural, Env) + tcs(Stats, Env)
     }
 }
 
 fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     NatCon NatCon;
     StrCon StrCon;
+    Id Id;
+    Exp Exp;
 
     select (E) {
-    case NatCon: return []
+    case '$NatCon': return []
          when { Type == natural }
 
-    case StrCon: return []
+    case '$StrCon': return []
          when { Type == string }
 
-    case Id: return [] 
+    case '$Id': return [] 
          when { {&lt;Id,Type2&gt;} := Env[Id],
                 Type2 == Type
               }
     default
-         Exp: return [error("Incorrect type")]
+         '$Exp': return [error("Incorrect type")]
     }
 }</programlisting>
     </section>
@@ -826,13 +829,14 @@ imports Dot-syntax
 
 fun Dot gen-dot(rel[ID, ID] Rel) {
     return
-      digraph example {
-                       [ node(Tup) | &lt;ID,ID&gt; Tup : Rel ]
+      ' digraph example {
+                        $([ node(Tup) | &lt;ID,ID&gt; Tup : Rel ])
                     }
+      '
 }
 
 fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
-    return node Id1; node Id2; Id1 -&gt; Id2
+    return 'node $Id1; node $Id2; $Id1 -&gt; $Id2'
 }</programlisting></para>
     </section>
 
@@ -864,22 +868,22 @@ exports
 fun Bool tc(PROGRAM P) {
     dyn Env Env := {};
     select (P) {
-    case &lt;&lt;begin $Decls $Stats end&gt;&gt;: return tcs(Stats)
+    case ' begin $Decls $Stats end ': return tcs(Stats)
          when { 
                 Env := tcd(Decls) 
               }
 }
 
 fun Env tcd(Decls Decls) -&gt; void
-    return {&lt; Id, Type&gt; | &lt;&lt;PICO-ID Id : TYPE Type&gt;&gt; : Decls}
+    return {&lt; Id, Type&gt; | ' $(PICO-ID Id) : $(TYPE Type) ' : Decls}
 
 fun Bool tcs(Stats Stats) {
     Stat Stat;
     Stats Stats;
     select (Stats) {
-    case : return true
+    case '': return true
 
-    case &lt;&lt; $Stat ; $Stats &gt;&gt; : return tcst(Stat) &amp;&amp; tcst(Stats)
+    case ' $Stat ; $Stats ' : return tcst(Stat) + tcst(Stats)
     }
 }
 
@@ -888,15 +892,15 @@ fun Bool tcst(Stat Stat) {
    Exp Exp;
    Stats Stats, Stats1, Stats2;
    select (Stat) {
-   case &lt;&lt; $Id := $Exp &gt;&gt;: return type-of(Exp) in Env[Id]
+   case '$Id := $Exp': return type-of(Exp) in Env[Id] %%?%%
 
-   case &lt;&lt; if $Exp then $Stats1 else $Stats2 fi &gt;&gt;: 
+   case 'if $Exp then $Stats1 else $Stats2 fi': 
         return
-          type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
+          type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
 
-   case &lt;&lt; while $Exp do $Stats od:
+   case ' while $Exp do $Stats od ':
         return
-          type-of(Exp) == natural &amp;&amp; tcs(Stats)
+          type-of(Exp) == natural + tcs(Stats)
    }
 }
 
@@ -906,12 +910,14 @@ fun PICO-TYPE type-of(Exp Exp) {
     PICO-ID Id;
 
     select (Exp) {
-    case NatCon : return natural
+    case '$NatCon' : return natural
 
-    case StrCon: return = string
+    case '$StrCon': return string
 
-    case Id: return Type 
-         when {&lt;Id,Type&gt;} := Env[Id]
+    case '$Id': return Type 
+         when {
+                {&lt;Id,Type&gt;} := Env[Id]
+              }
     }
 }</programlisting></para>
     </section>
@@ -934,7 +940,7 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
     set[CP] En1, En2, Ex1, Ex2;
     
     select (Stats) {
-    case &lt;&lt; $Stat ; $Stats2 &gt;&gt; :
+    case ' $Stat ; $Stats2 ' :
          return
            &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
            when { 
@@ -942,7 +948,7 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
                   &lt;En2, R2, Ex2&gt; := cflow(Stats2)
                 }
 
-    case  /* empty */ : return &lt;{}, {}, {}&gt;
+    case  '' : return &lt;{}, {}, {}&gt;
     }
 }
 
@@ -953,13 +959,13 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
     set[CP] En1, En2, Ex1, Ex2;
 
     select (Stat) {
-    case &lt;&lt; while $Exp do $Stats od &gt;&gt;:
+    case ' while $Exp do $Stats od ':
          return
            &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
            when {
                   &lt;En, R, Ex&gt; := cflow(Stats)
                 }
-    case &lt;&lt; if $Exp then $Stats1 else $Stats2 fi &gt;&gt;:
+    case ' if $Exp then $Stats1 else $Stats2 fi ':
          return
            &lt; {Exp}, 
              ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
@@ -970,7 +976,7 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
                 &lt;En2, R2, Ex2&gt; := cflow(Stats2)
               }
     default
-         &lt;&lt; $Stat &gt;&gt;: return &lt;{Stat}, {}, {Stat}&gt;
+         ' $Stat ': return &lt;{Stat}, {}, {Stat}&gt;
     }
 }</programlisting>
     </section>
@@ -983,12 +989,12 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
 imports pico/syntax/Pico
 
 fun rel[EXP,PICO-ID] uses(PROGRAM P) {
-  return {&lt;E,Id&gt; | EXP E : P, PICO-ID Id == E}
+  return {&lt;E,Id&gt; | EXP E : P, '$(PICO-ID Id) == E}
 }
 
 fun rel[STATEMENT, PICO-ID] defs(PROGRAM P) { 
   return {&lt;S, Id&gt; | STATEMENT S : P, 
-                        &lt;&lt;$(PICO-ID Id) := $(EXP Exp)&gt;&gt; == S}
+                        '$(PICO-ID Id) := $(EXP Exp)' == S}
 }</programlisting>
 
       <para>The above uses a "matching condition" to decompose

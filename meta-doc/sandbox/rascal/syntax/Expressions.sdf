@@ -2,61 +2,95 @@ module Expressions
 
 imports 
 	basic/IdentifierCon
+         basic/BoolCon
+         basic/StrCon
+         basic/IntCon
 	Types
-	languages/asfix/syntax/Tree[Symbol => ASFixSymbol]
+         Declarations
 
 hiddens
 context-free start-symbols
 	Expression
 
 exports
-sorts Expression Tree Variable Predicate Signature
+sorts Expression Tree Variable Predicate Signature Pattern PatternChar PatternSymbol
 
 lexical syntax
-	[\$\%\#\@\&\?]?[a-zA-Z][a-zA-Z0-9\-\_]*[\+\*\?]?[0-9\']* -> Variable
+	[a-zA-Z][a-zA-Z0-9\-\_]*                  -> Variable
 
-%%lexical restrictions
-%%	Variable -/- [a-zA-Z0-9\-\_]
-
-context-free syntax
-	"[" {Expression ","}* "]" -> Expression {cons("list")}
-	"{" {Expression ","}* "}" -> Expression {cons("set")}
-	"<" Expression "," {Expression ","}+ ">" -> Expression {cons("tuple")}
-	"\\" IdCon -> Expression {cons("func-ref")}
+lexical restrictions
+	Variable -/- [a-zA-Z0-9\-\_]
 
 context-free syntax
-	IdCon "(" {Expression ","}* ")" -> Expression {cons("func-call")}
-	Variable -> Expression {cons("variable")}
+         BoolCon                                    -> Expression {cons("boolcon-exp")}
+         IntCon                                     -> Expression {cons("intcon-exp")}
+         StrCon                                     -> Expression {cons("strcon-exp")}
+	IdCon "(" {Expression ","}* ")"            -> Expression {cons("fun-call")}
+	Variable                                   -> Expression {cons("variable")}
+         "#" Expression                             -> Expression {cons("size-op")}
+         Expression "union" Expression              -> Expression {cons("union-op")}
+         Expression "\\" Expression                 -> Expression {cons("diff-op")}
+         Expression "+" Expression                  -> Expression {cons("add-op")}
+         Expression "x" Expression                  -> Expression {cons("mul-op")}
+         Expression "[" Expression "]"              -> Expression {cons("image-op")}
+
+         "(" Expression ")"                         -> Expression {bracket}
+         %% and all other operators ...
+
+context-free syntax
+	"[" {Expression ","}* "]"                  -> Expression {cons("list")}
+	"{" {Expression ","}* "}"                  -> Expression {cons("set")}
+	"<" Expression "," {Expression ","}+ ">"   -> Expression {cons("tuple")}
+	"\\" IdCon                                 -> Expression {cons("func-ref")}
 
 context-free syntax
 	%% Tree is the sort concrete stuff gets injected into.
 	Tree -> Expression {cons("tree")}
 
 context-free syntax
-	Signature ":" Expression -> Predicate {cons("generator")}
-	%%Type Variable -> Signature
-	Type Expression -> Signature
-	"<" Signature "," {Signature ","}+ ">" -> Signature
+	Signature ":" Expression                  -> Predicate {cons("generator1")}
+         Pattern ":" Expression                     -> Predicate {cons("generator2")}
+	%%Type Variable                           -> Signature
+	Type Expression                           -> Signature
+	"<" Signature "," {Signature ","}+ ">"    -> Signature
 
 context-free syntax
-	"{" Expression "|" {Predicate ","}+ "}" -> Expression {cons("set-comprehension")}
-	"[" Expression "|" {Predicate ","}+ "]" -> Expression {cons("list-comprehension")}
-	Expression "==" Expression -> Predicate {cons("equal")}
-	Expression "!=" Expression -> Predicate {cons("non-equal")}
-	Expression ":=" Expression -> Predicate {cons("match")}
-	Expression "!:=" Expression -> Predicate {cons("non-match")}
-	Expression "(-" Expression -> Predicate {cons("element-of")}
+	"{" Expression "|" {Predicate ","}+ "}"   -> Expression {cons("set-comprehension")}
+	"[" Expression "|" {Predicate ","}+ "]"   -> Expression {cons("list-comprehension")}
+	Expression "==" Expression                -> Predicate {cons("equal")}
+	Expression "!=" Expression                -> Predicate {cons("non-equal")}
+	Expression ":=" Expression                -> Predicate {cons("match")}
+	Expression "!:=" Expression               -> Predicate {cons("non-match")}
+	Expression "in" Expression                -> Predicate {cons("element-of")}
 
 context-free priorities
-	"not" Predicate -> Predicate {cons("not")} >
-	Predicate "&" Predicate -> Predicate {cons("and")} >
-	Predicate "|" Predicate -> Predicate {cons("or")}
+	"not" Predicate                           -> Predicate {cons("not")} >
+	Predicate "&" Predicate                   -> Predicate {cons("and")} >
+	Predicate "|" Predicate                   -> Predicate {cons("or")}
 
 context-free syntax
 	"(" Predicate ")" -> Predicate {bracket}
 
 context-free syntax
-	"\\" "(" {Variable ","}* ")" Expression -> Expression
+         "if" Predicate "then" Expression "else" Expression "fi" -> Expression
+
+context-free syntax
+	"\\" "(" {Variable ","}* ")" Expression   -> Expression
+
+lexical syntax
+         "\\$"                                     -> PatternChar
+         "\\'"                                     -> PatternChar
+         ~[\$\']                                   -> PatternChar {avoid}
+
+context-free syntax
+         "'" PatternSymbol* "'"                    -> Pattern
+         PatternChar                               -> PatternSymbol {avoid}
+%%        Symbol                                   -> PatternSymbol
+         "$" Variable                              -> PatternSymbol
+         "$(" VarDecl ")"                          -> PatternSymbol
+         "$(" Expression ")"                       -> PatternSymbol
+%%         Pattern                                 -> Expression
+
 	
 	
 

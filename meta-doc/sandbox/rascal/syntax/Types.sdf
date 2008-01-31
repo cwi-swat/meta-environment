@@ -10,24 +10,20 @@ context-free start-symbols
   Type
 
 exports
-sorts Type TypeVariable
-
-lexical syntax
-  [a-z] [A-Za-z0-9\-]* -> TypeVariable  
-
-lexical restrictions
-  TypeVariable -/- [A-Za-z0-9\-]
+sorts Type
 
 context-free syntax
-  TypeVariable -> Type {cons("variable")} 
+   "bool"                      -> Type {cons("bool-type")} 
+   "int"                       -> Type {cons("int-type")} 
+   "str"                       -> Type {cons("str-type")} 
+   "list" "[" Type "]"         -> Type {cons("list-type")} 
+   "set" "[" Type "]"          -> Type {cons("set-type")}
+   "rel" "[" {Type ","}+ "]"   -> Type {cons("rel-type")}
 
-context-free syntax
-  "[" Type "]" -> Type {cons("list")} 
-  "{" Type "}" -> Type {cons("set")}  
 
 context-free priorities
-  "<" Type "," {Type ","}+ ">" -> Type {cons("tuple")} >
-  Symbol -> Type {cons("symbol")}
+  "<" Type "," {Type ","}+ ">" -> Type {cons("tuple-type")} >
+  Symbol                       -> Type {cons("symbol-type")}
 
 context-free priorities
   Type "*" Type  -> Type {right, cons("relation")}  >
