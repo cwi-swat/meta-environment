@@ -1,4 +1,5 @@
-module svgt/syntax/XML
+module languages/xml/syntax/XML-STRICT
+
   %% Transliteration of the XML v1.0 standard.
   %% Rule numbers refer to the corresponding rule in the standard.
   %% Known issues:
