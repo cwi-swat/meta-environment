@@ -7,30 +7,23 @@ context-free start-symbols
         Declaration
 
 exports
-sorts Declaration DeclaredType NamedColumn Stat VarDecl VarDeclInit FunBody Case
+sorts Declaration Stat VarDecl VarDeclInit FunBody Case
 
 context-free syntax
-	Type {Variable ","}+ -> VarDecl {cons("variable-decl")}
+   Type {Variable ","}+          -> VarDecl {cons("variable-decl")}
 
 context-free syntax
-        	"fun" Type IdCon ("(" {VarDecl  ","}* ")")? "{" FunBody "}"   -> Declaration {cons("function")}
-         (VarDeclInit ";")* Stat                                       -> FunBody
-         "return" Expression                                           -> Stat
-         "case" Pattern ":" Stat ("when" "{" {Predicate ","}+ "}")?    -> Case
-         "default"  Pattern ":" Stat                                   -> Case
-         "select" "(" Expression ")" "{" Case+ "}"                     -> Stat
-         "return" Expression                                           -> Stat
-         "return" Pattern                                              -> Stat
-
-
-%% Not yet used
-context-free syntax
-	"type" IdCon ":" DeclaredType              -> Declaration {cons("type")}
-	Type IdCon                                 -> NamedColumn
-	"<" NamedColumn "," {NamedColumn ","}+ ">" -> DeclaredType
-	Type                                       -> DeclaredType
+   "var" {VarDeclInit ";"}+      -> Declaration {cons("variables")}
+   VarDecl (":=" Expression)?    -> VarDeclInit
 
 context-free syntax
-	"var" {VarDeclInit ";"}+      -> Declaration {cons("variables")}
-         VarDecl (":=" Expression)?    -> VarDeclInit
+   "fun" Type IdCon ("(" {VarDecl  ","}* ")")? "{" FunBody "}"  -> Declaration {cons("function")}
+   (VarDeclInit ";")* Stat                                      -> FunBody
+   Pattern "=>" Stat ("when" {Predicate ","}+ )?                -> Case
+   "select" "(" Expression ")" "{" Case+ "}"                    -> Stat
+   Expression                                                   -> Stat
+   Pattern                                                      -> Stat
+
+
+
        

@@ -10,24 +10,22 @@ context-free start-symbols
   Type
 
 exports
-sorts Type
+sorts Type LabelledType
 
 context-free syntax
-   "bool"                      -> Type {cons("bool-type")} 
-   "int"                       -> Type {cons("int-type")} 
-   "str"                       -> Type {cons("str-type")} 
-   "list" "[" Type "]"         -> Type {cons("list-type")} 
-   "set" "[" Type "]"          -> Type {cons("set-type")}
-   "rel" "[" {Type ","}+ "]"   -> Type {cons("rel-type")}
+   Type IdCon?                                  -> LabelledType
 
+   "bool"                                       -> Type {cons("bool-type")} 
+   "int"                                        -> Type {cons("int-type")} 
+   "str"                                        -> Type {cons("str-type")} 
+   "list" "[" Type "]"                          -> Type {cons("list-type")} 
+   "set" "[" Type "]"                           -> Type {cons("set-type")}
+   "rel" "[" {LabelledType ","}+ "]"            -> Type {cons("rel-type")}
+   "<" LabelledType "," {LabelledType ","}+ ">" -> Type {cons("tuple-type")}
+   Symbol                                       -> Type {cons("symbol-type")}
 
-context-free priorities
-  "<" Type "," {Type ","}+ ">" -> Type {cons("tuple-type")} >
-  Symbol                       -> Type {cons("symbol-type")}
+   "(" Type ")"                                 -> Type {bracket}     
 
 context-free priorities
   Type "*" Type  -> Type {right, cons("relation")}  >
   Type "->" Type -> Type {right, cons("function")} 
-
-context-free syntax
-  "(" Type ")"   -> Type {bracket}     

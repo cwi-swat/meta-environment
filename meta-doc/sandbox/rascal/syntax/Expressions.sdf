@@ -79,11 +79,11 @@ context-free syntax
 
 lexical syntax
          "\\$"                                     -> PatternChar
-         "\\'"                                     -> PatternChar
-         ~[\$\']                                   -> PatternChar {avoid}
+         "\\|"                                     -> PatternChar
+         ~[\$\|]                                   -> PatternChar {avoid}
 
 context-free syntax
-         "'" PatternSymbol* "'"                    -> Pattern
+         "[|" PatternSymbol* "|]"                  -> Pattern
          PatternChar                               -> PatternSymbol {avoid}
 %%        Symbol                                   -> PatternSymbol
          "$" Variable                              -> PatternSymbol
