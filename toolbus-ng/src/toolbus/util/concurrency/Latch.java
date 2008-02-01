@@ -33,7 +33,7 @@ public class Latch{
 	public void release(){
 		synchronized(lock){
 			if(--count == 0){
-				lock.notify();
+				lock.notifyAll();
 			}
 		}
 	}
