@@ -513,8 +513,8 @@ fun int sumtree(TREE T) {
 }
 
 %% Ex3: Increment all leaves in a TREE
-%% Idea: INT N in T generates alle INT leaves in the tree
-%% replace ... occurences ... in T by N+1 replaces each N in T by N+1
+%% Idea: using T replace INT N by N+1 generates alle INT leaves in the 
+%% tree T and replaces each N in T by N+1.
 %% The expression as a whole returns the modified term.
 %% This is an extremely compact manner of writing a 
 %% transformer!
@@ -543,11 +543,12 @@ fun TREE drepl(TREE T) {
 
 %% Ex6: shallow replacement of g by i (i.e. only outermost g's are replaced);
 %% Usually done with a top-down traversal.
-%% For brevity, we use here a function variable FUN: do we want this?
+%% For brevity, we use here a string variable FUN that matches
+%% a function symbol: do we want this?
 
 fun TREE srepl(TREE T) {
     TREE T1, T2;
-    TREE x TREE -&gt; TREE FUN;
+    str FUN;
     
     select (T) {
     [| g($T1, $T2) |]    =&gt; [| i($T1, $T2) |]
@@ -580,22 +581,22 @@ module Lambda-Examples
 imports Lambda
 
 fun set[Var] allVars(Exp E) {
-    return {V | Var V : E}
+    {V | Var V : E}
 }
 
 fun set[Var] boundVars(Exp E) {
-    return {V | [| fn $(Var V) =&gt; $(Exp E1) |] : E}
+    {V | [| fn $(Var V) =&gt; $(Exp E1) |] : E}
 }
 
 fun set[Var] freeVars(Exp E) {
-    return allVars(E) \ boundVars(E)
+    allVars(E) \ boundVars(E)
 }
 
 %% Generate a fresh variable if V does not occur in 
 %% given set of variables.
 
 fun Var fresh(Var V, set[Var] S) {
-    return if V in S then prime(V) else V fi
+    if V in S then prime(V) else V fi
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
@@ -851,7 +852,7 @@ fun Bool tc(PROGRAM P) {
 }
 
 fun Env tcd(Decls Decls) -&gt; void
-    return {&lt; Id, Type&gt; | ' $(PICO-ID Id) : $(TYPE Type) ' : Decls}
+    {&lt; Id, Type&gt; | [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
 
 fun Bool tcs(Stats Stats) {
     Stat Stat;
@@ -864,18 +865,18 @@ fun Bool tcs(Stats Stats) {
 }
 
 fun Bool tcst(Stat Stat) {
-   Id Id;
-   Exp Exp;
-   Stats Stats, Stats1, Stats2;
-   select (Stat) {
-   [| $Id := $Exp' |] =&gt; type-of(Exp) in Env[Id] %%?%%
+    Id Id;
+    Exp Exp;
+    Stats Stats, Stats1, Stats2;
+    select (Stat) {
+    [| $Id := $Exp |] =&gt; type-of(Exp) in Env[Id] %%?%%
 
-   [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
-          type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
+    [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
+           type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
 
-   [| while $Exp do $Stats od |] =&gt;
+    [| while $Exp do $Stats od |] =&gt;
           type-of(Exp) == natural + tcs(Stats)
-   }
+    }
 }
 
 fun PICO-TYPE type-of(Exp Exp) {
@@ -1505,7 +1506,22 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>Do we want function variables?</para>
+        <para>Do we want string variables in patterns?</para>
+      </listitem>
+
+      <listitem>
+        <para>List matching?</para>
+      </listitem>
+
+      <listitem>
+        <para>Do we want to add regular expression matching primitives to
+        patterns? Ex.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>[| if @any@ $Stats fi |]</para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>
