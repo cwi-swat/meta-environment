@@ -400,7 +400,7 @@
           <para>Q2: Do we need to introduce the basic datatypes Integer and
           Boolean because sets and relations have typical builtin functions
           for that? Or can we put these things in a library? How about
-          Locations? We need to introduce as feq builtin syntax as possible to
+          Locations? We need to introduce as few builtin syntax as possible to
           prevent ambiguity and confusion... Can we offer efficient relations
           without introducing a dependency on a fixed Integer/Boolean
           syntax??? It would be SIMPLE if only syntax trees are the leafs of
@@ -496,41 +496,60 @@ exports TREE
 module Tree-Examples
 imports Tree-syntax
 
-%% Ex1: Count leaves in a TREE
+%% Ex1a: Count leaves in a TREE
 %% Idea: int N : T generates alle int leaves in the tree
 %% # is the built-in length-of operator
 
 fun int cnt(TREE T) {
-    #{N | int N : T}
+    #{N | NAT N : T}
+}
+
+%% Ex1b: an equivalent,  more purist, version of the same function:
+fun int cnt(TREE T) {
+    #{N | [| $(NAT N) |] : T}
 }
 
 %% Ex2: Sum all leaves in a TREE
 %% NB sum is a built-in that adds all elements in a set or 
 %% list.
+%% Here we see immediately the need to identify
+%% - the built-in sort "int"
+%% - the syntactic sort "NAT"
 
 fun int sumtree(TREE T) {
     sum({N | int N : T})
 }
 
 %% Ex3: Increment all leaves in a TREE
-%% Idea: using T replace INT N by N+1 generates alle INT leaves in the 
-%% tree T and replaces each N in T by N+1.
+%% Idea: using T replace int N by N+1 generates alle leaves in the 
+%% tree T that match an integer and replaces each N in T by N+1.
 %% The expression as a whole returns the modified term.
 %% This is an extremely compact manner of writing a 
 %% transformer!
+%% Note that two conversions are needed here:
+%% - from int to NAT to match subterms
+%% - from int to NAT to convert the result of addition into a NAT tree
 
 fun TREE inc(TREE T) {
-    using T replace INT N by N+1
+    using T replace int N by N+1
 }
 
-%% Ex4: full replacement of g b
+%% Ex4: full replacement of g by i
+%% Question: how about the traversal order?
+%% Probable answer: bottom-up and top-down are both ok so it does not matter.
+%% Bottom-up case: g are replaced by i's.
+%% Top-down case: g are replaced by i's but in the arguments of the new i-tree
+%% g's are later replaced by i's.
+%% Question: Is it relevant to fix the traversal order? 
+%% The choice should then be bottom-up since top-down can be
+%% achieved with recursion (see srepl, below).
 
 fun TREE frepl(TREE T) {
     TREE T1, T2;
     using T replace [| g($T1, $T2) |] by [| i($T1, $T2) |]
 }
 
-%% Ex5: deep replacement of g by i  which usually requires
+%% Ex5a: deep replacement of g by i which usually requires
 %% a bottom-up traversal + break;
 
 fun TREE drepl(TREE T) {
@@ -541,7 +560,25 @@ fun TREE drepl(TREE T) {
             by [| i($T1, $T2) |]
 }
 
-%% Ex6: shallow replacement of g by i (i.e. only outermost g's are replaced);
+%% Assume that the traversal is always bottom-up
+%% and introduce a "first" directive (= break).
+%% Along this line "all" would be the default.
+
+fun TREE drepl(TREE T) {
+    TREE T1, T2;
+    using T replace first [| g($T1, $T2) |]                    
+            by [| i($T1, $T2) |]
+}
+
+%% If we want the whole repertoire of traversal functions
+%% can be made available:
+%% - using T replace first bu ...
+%% - using T replcae all td ...
+%% - etc.
+%% A nice touch is that these properties are not tied to the
+%% declaration of a travesal function (as in ASF+SDF) but to its use.
+
+%% Ex6a: shallow replacement of g by i (i.e. only outermost g's are replaced);
 %% Usually done with a top-down traversal.
 %% For brevity, we use here a string variable FUN that matches
 %% a function symbol: do we want this?
@@ -554,6 +591,25 @@ fun TREE srepl(TREE T) {
     [| g($T1, $T2) |]    =&gt; [| i($T1, $T2) |]
     [| $FUN($T1, $T2) |] =&gt; [| $FUN($(srepl(T1)) $(srepl(T2))) |]
     }
+}
+
+%% Using traversal attributes, one could write this as:
+
+fun TREE srepl(TREE T) {
+    TREE T1, T2;
+    using T replace first td [| g($T1, $T2) |]                    
+            by [| i($T1, $T2) |]
+}
+
+%% Continuing this line of thought, we can also add these directives
+%% to all generators (where "all td" would be the default):
+
+fun set[TREE] find_outer_gs(TREE T) {
+    { S | first td S : T, [| g($T1, $T2) |] == S }
+}
+
+fun set[TREE] find_inner_gs(TREE T) {
+    { S | first bu S : T, [| g($T1, $T2) |] == S }
 }</programlisting></para>
     </section>
 
@@ -638,10 +694,10 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
 sorts Var %% variables
       Exp %% expressions
 context-free functions
-     %% single variable
-     Var                             -&gt; Exp 
-     %% function abstraction
-     "let" Var "=" Exp "in Exp "end" -&gt; Exp
+     
+     Var                             -&gt; Exp %% single variable
+     
+     "let" Var "=" Exp "in Exp "end" -&gt; Exp %% function abstraction
 %%------------------------------------------
 
 module Let-Example
@@ -666,7 +722,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
               end 
            |]
         when Y := "x" + Cnt,   %% this + operator concatenates 
-                                  %% (after converting the int to str)
+                               %% (after converting the int to str)
              Cnt1 := Cnt + 1
 
     [| $V' |] =&gt; V1
@@ -680,9 +736,10 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 %% Version 2: using a global variable
 %% to generate new variables
 
-global int Cnt := 0   %% Initialize global Cnt
 
 fun Var newVar() {
+    global int Cnt := 0   %% Initialize global Cnt on first call of newVar
+                          %% This is similar to a local static var in C.
     Cnt := Cnt + 1;
     return "x" + Cnt
 }       
@@ -710,12 +767,17 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
 }
 
 %% Rename -- Version 3, with Rn also as global variabele
-global int Cnt := 0
-       rel[Var, Var] Rn := {}
+
+fun Var newVar() {
+    global int Cnt := 0   %% Initialize global Cnt on first call of newVar
+    Cnt := Cnt + 1;
+    return "x" + Cnt
+}       
 
 fun Exp rename(Exp E) {
+    global rel[Var, Var] Rn := {}
     Var V, Y;
-    rel[Var,Var] Rn;
+ 
     select (E){
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $rename(E1) 
@@ -731,7 +793,15 @@ fun Exp rename(Exp E) {
  
     [| $E |] = E
     }
-}</programlisting></para>
+}
+
+%% Question: how to reset the value of global variables?
+%% Idea: model them as arguments:
+%% - fun Var newVar(global int Cnt := 0) { ... }
+%% and allow calls without arguments (as in above example) or
+%% with arguments:
+%% - newVar(13)
+%% which resets the value of Cnt.</programlisting></para>
     </section>
 
     <section>
@@ -749,8 +819,8 @@ types
  rel[PICO-ID,TYPE] -&gt; Env
 
 var
-    Decl* Decls;
-    Series Series;
+    DECLS Decls;
+    {STATEMENT ";"}* Series;
     Id Id;
     TYPE Type;
     Env Env;
@@ -759,14 +829,14 @@ fun list[Error] tcp(PROGRAM P) {
     select (P){
     [| begin $Decls $Series end |] =&gt;
            [ tcst(S, Env) | Stat S : Series ]
-       when Env := {&lt;Id, Type&gt; | 
-            [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
+       when Env := {&lt;Id, Type&gt; | [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
     }
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
     select (Stat) {
-    [| $Id := $Exp |] =&gt; type-of(Exp)
+    [| $Id := $Exp |] =&gt; type-of(Exp, Type, Env)
+       when {&lt;Id,Type&gt;} := Env[Id]
 
     [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
            type-of(Exp, natural, Env) + 
@@ -796,7 +866,22 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
             
     [| $Exp |] =&gt; [error("Incorrect type")]
     }
-}</programlisting>
+}
+
+%% Discussion: it may be interesting togeneralize select to allow 
+%% multiple arguments:
+   select (E, Type) {
+    [| $NatCon |], [| natural |] =&gt; []
+
+    [| $StrCon |], [| string |] =&gt; []
+
+    [| $Id |], Type =&gt; [] 
+       when {&lt;Id,Type2&gt;} := Env[Id],
+            Type2 == Type
+            
+    [| $Exp |], Type =&gt; [error("Incorrect type")]
+    }
+%% Even patterns and expression could be allowed as cases.</programlisting>
     </section>
 
     <section>
@@ -869,7 +954,8 @@ fun Bool tcst(Stat Stat) {
     Exp Exp;
     Stats Stats, Stats1, Stats2;
     select (Stat) {
-    [| $Id := $Exp |] =&gt; type-of(Exp) in Env[Id] %%?%%
+    [| $Id := $Exp |] =&gt; type-of(Exp, Type)
+        when {&lt;Id, Type&gt;} := Env[Id]
 
     [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
            type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
@@ -879,19 +965,25 @@ fun Bool tcst(Stat Stat) {
     }
 }
 
-fun PICO-TYPE type-of(Exp Exp) {
+fun list[Error] type-of(Exp E, TYPE Type) {
     NatCon NatCon;
     StrCon StrCon;
-    PICO-ID Id;
+    Id Id;
+    Exp Exp;
 
-    select (Exp) {
-    [| $NatCon |] =&gt; natural
+    select (E) {
+    [| $NatCon |] =&gt; []
+       when Type == natural
 
-    [| $StrCon |] =&gt; string
+    [| $StrCon |] =&gt; []
+       when Type == string
 
-    [| $Id |] =&gt; Type 
-       when {&lt;Id,Type&gt;} := Env[Id]
-   }
+    [| $Id |] =&gt; [] 
+       when {&lt;Id,Type2&gt;} := Env[Id],
+            Type2 == Type
+            
+    [| $Exp |] =&gt; [error("Incorrect type")]
+    }
 }</programlisting></para>
     </section>
 
@@ -1522,6 +1614,15 @@ process mkWave(int N) is ...</programlisting>
             <para>[| if @any@ $Stats fi |]</para>
           </listitem>
         </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>How do we identify built-in sorts (bool, int, etc) with their
+        syntactic counterparts?</para>
+      </listitem>
+
+      <listitem>
+        <para>What happens if no case in a select matches?</para>
       </listitem>
     </itemizedlist>
   </section>
