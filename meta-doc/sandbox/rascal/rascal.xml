@@ -531,7 +531,10 @@ fun int sumtree(TREE T) {
 %% - from int to NAT to convert the result of addition into a NAT tree
 
 fun TREE inc(TREE T) {
-    using T replace int N by N+1
+    int N;
+    replace T {
+      [| $N |] =&gt; [| $(N + 1) |]
+    }
 }
 
 %% Ex4: full replacement of g by i
@@ -546,18 +549,20 @@ fun TREE inc(TREE T) {
 
 fun TREE frepl(TREE T) {
     TREE T1, T2;
-    using T replace [| g($T1, $T2) |] by [| i($T1, $T2) |]
-}
+    replace T {
+      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
+    }
 
 %% Ex5a: deep replacement of g by i which usually requires
 %% a bottom-up traversal + break;
 
 fun TREE drepl(TREE T) {
     TREE T1, T11, T12, T2, T21, T22;
-    using T replace [| g($T1, $T2) |] | 
-                    not exists [| g($T11, $T12) |] : T1, 
-                    not exists [| g($T21, $T22)  |]: T2
-            by [| i($T1, $T2) |]
+    replace T { 
+      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
+         when not exists [| g($T11, $T12) |] : T1, 
+              not exists [| g($T21, $T22)  |]: T2
+    }   
 }
 
 %% Assume that the traversal is always bottom-up
@@ -566,8 +571,9 @@ fun TREE drepl(TREE T) {
 
 fun TREE drepl(TREE T) {
     TREE T1, T2;
-    using T replace first [| g($T1, $T2) |]                    
-            by [| i($T1, $T2) |]
+    replace T first {
+      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |] 
+    }
 }
 
 %% If we want the whole repertoire of traversal functions
@@ -577,11 +583,19 @@ fun TREE drepl(TREE T) {
 %% - etc.
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to its use.
+%% The above would become:
+
+fun TREE drepl(TREE T) {
+    TREE T1, T2;
+    replace T first bu {
+      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |] 
+    }
+}
 
 %% Ex6a: shallow replacement of g by i (i.e. only outermost g's are replaced);
 %% Usually done with a top-down traversal.
 %% For brevity, we use here a string variable FUN that matches
-%% a function symbol: do we want this?
+%% a function symbol: do we want this? It corresponds to a lexical variable.
 
 fun TREE srepl(TREE T) {
     TREE T1, T2;
@@ -597,8 +611,9 @@ fun TREE srepl(TREE T) {
 
 fun TREE srepl(TREE T) {
     TREE T1, T2;
-    using T replace first td [| g($T1, $T2) |]                    
-            by [| i($T1, $T2) |]
+    replace T first td {
+      [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
+    }
 }
 
 %% Continuing this line of thought, we can also add these directives
@@ -608,8 +623,18 @@ fun set[TREE] find_outer_gs(TREE T) {
     { S | first td S : T, [| g($T1, $T2) |] == S }
 }
 
+or 
+
+fun set[TREE] find_outer_gs(TREE T) {
+    search T first td {
+      [| g($T1, $T2) |]
+    }
+}
+
 fun set[TREE] find_inner_gs(TREE T) {
-    { S | first bu S : T, [| g($T1, $T2) |] == S }
+    search T first bu {
+      [| g($T1, $T2) |]
+    }
 }</programlisting></para>
     </section>
 
@@ -868,7 +893,7 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     }
 }
 
-%% Discussion: it may be interesting togeneralize select to allow 
+%% Discussion: it may be interesting to generalize select to allow 
 %% multiple arguments:
    select (E, Type) {
     [| $NatCon |], [| natural |] =&gt; []
@@ -881,7 +906,7 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
             
     [| $Exp |], Type =&gt; [error("Incorrect type")]
     }
-%% Even patterns and expression could be allowed as cases.</programlisting>
+%% Even patterns and expressions could be allowed as cases.</programlisting>
     </section>
 
     <section>
@@ -1107,12 +1132,13 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 fun PROGRAM cse(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
     rel[CP,CP] Pred := cflow(P).rel
-    return 
-      using P do STATEMENT S : P | PICO-ID Id ":=" EXP E == S,
-                                 Id notin E,
-                                 EXP E2 : reachX({S}, Defs[-,Id], Pred){
-              replace E2 by Id
-      }
+ 
+    using P do { replace E2 by Id |
+                 STATEMENT S : P,
+                 [| $(PICO-ID Id) := $(EXP E) |] == S,
+                 Id notin E,
+                 EXP E2 : reachX({S}, Defs[-,Id], Pred)
+               }
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
@@ -1154,16 +1180,29 @@ fun Boolean is-constant(EXP E) {
    }
 }
 
+fun &amp;TERM replace(&amp;TERM T, rel[&amp;SUBTERM, &amp;SUBTERM] R)
+
 fun PROGRAM cp(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
     rel[CP,CP] Pred := cflow(P).rel;
-    return
-      using P do STATEMENT S : P | [| $(PICO-ID Id) := $(EXP E) |] == S,
-                                   is-constant(E),
-                                   PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
-                                   Id2 == Id {
-            replace Id2 by E
-      }
+    replace { &lt;Id2, E&gt; |
+              STATEMENT S : P,
+              [| $(PICO-ID Id) := $(EXP E) |] == S,
+              is-constant(E),
+              PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+              Id2 == Id     
+            } in P
+
+or:
+   replace P {
+     Id2 =&gt; E
+     when STATEMENT S : P,
+          [| $(PICO-ID Id) := $(EXP E) |] == S,
+          is-constant(E),
+          PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+          Id2 == Id     
+   }
+    
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
@@ -1623,6 +1662,12 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>What happens if no case in a select matches?</para>
+      </listitem>
+
+      <listitem>
+        <para>Unexplored idea: add (possibly lazy) generators for all types;
+        this allows to generate, for instance, all statements in a
+        program.</para>
       </listitem>
     </itemizedlist>
   </section>
