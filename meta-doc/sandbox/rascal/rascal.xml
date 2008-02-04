@@ -620,18 +620,23 @@ fun TREE srepl(TREE T) {
 %% to all generators (where "all td" would be the default):
 
 fun set[TREE] find_outer_gs(TREE T) {
-    { S | first td S : T, [| g($T1, $T2) |] == S }
+    TREE T1, T2;
+    { S | first td STATEMENT S : T, [| g($T1, $T2) |] == S }
 }
 
-or 
+or may abbreviated as (eliminating the need for a variable S):
 
 fun set[TREE] find_outer_gs(TREE T) {
+    TREE T1, T2;
     search T first td {
       [| g($T1, $T2) |]
     }
 }
 
+and abbreviation:
+
 fun set[TREE] find_inner_gs(TREE T) {
+    TREE T1, T2;
     search T first bu {
       [| g($T1, $T2) |]
     }
