@@ -59,6 +59,11 @@ public class SndNote extends Atom{
 		}
 	}
 	
+	public ProcessInstance[] getNotePartners(){
+		ProcessInstance[] partners = new ProcessInstance[notePartners.size()];
+		return notePartners.toArray(partners);
+	}
+	
 	public boolean execute() throws ToolBusException{
 		if(isEnabled()){
 			ATerm theNote = tbfactory.fullSubstitute(note.value, getEnv());
