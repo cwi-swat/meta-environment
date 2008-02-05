@@ -1,5 +1,5 @@
 Tue Feb 05 10:45:49 CEST 2008 <lankamp@cwi.nl>
- * src/toolbus/atom/note/SndNote.java: Added a method that enable the
+ * src/toolbus/atom/note/SndNote.java: Added a method that enables the
  retrieval of potential message partners.
 
 Fri Feb 01 15:58:38 CEST 2008 <lankamp@cwi.nl>
