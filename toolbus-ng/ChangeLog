@@ -6,7 +6,7 @@ Fri Feb 01 15:58:38 CEST 2008 <lankamp@cwi.nl>
  * src/toolbus/test/Sieve.tb: Fixed the Sieve test script.
 
 Wed Jan 23 11:12:32 CEST 2008 <lankamp@cwi.nl>
- * src/toolbus/parsercup/toolbus.cup: The parser now generates slighly
+ * src/toolbus/parsercup/toolbus.cup: The parser now generates slightly
  better error messages when it encounters a syntax error.
 
 Mon Jan 21 09:38:32 CEST 2008 <lankamp@cwi.nl>
