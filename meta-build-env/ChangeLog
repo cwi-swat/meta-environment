@@ -2,7 +2,7 @@ $Id$
 
 Fri Jan 18 12:00:00 CEST 2008 <lankamp@cwi.nl>
  * meta-build.ant: The resources are now being packaged into the JAR files
- again. Jurgen broke it! :P
+ again.
 
 Sat Jan  5 13:13:09 EST 2008 <jurgenv@cwi.nl>
  * Makefile.java.meta,meta-build.ant: allow building jars outside maintainer-
