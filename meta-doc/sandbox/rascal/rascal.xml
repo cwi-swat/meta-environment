@@ -451,27 +451,27 @@ imports Booleans
 fun Bool and(Bool B1, B2) { %% reduce &amp; operator
     Bool B;
     select(B1){
-    [| true |]  =&gt; reduce(B2)
-    [| false |] =&gt; false
-    [| $B |]    =&gt; [| $B1 &amp; $B2 |]
+      [| true |]  =&gt; reduce(B2)
+      [| false |] =&gt; false
+      [| $B |]    =&gt; [| $B1 &amp; $B2 |]
     }    
 }
 
 fun Bool or(Bool B1, B2) { %% reduce | operator
     Bool B;
     select(B1){
-    [| true  |] =&gt; true
-    [| false |] =&gt; reduce(B2)
-    [| $B |]    =&gt; [| $B1 | $B2 |]
+      [| true  |] =&gt; true
+      [| false |] =&gt; reduce(B2)
+      [| $B |]    =&gt; [| $B1 | $B2 |]
     }    
 }
 
 fun Bool reduce(Bool B){
     Bool B1, B2, B3;
     select(B){
-    [| $B1 &amp; $B2 |] =&gt; and(B1, B2)
-    [| $B1 | $B2 |] =&gt; or(B1, B2)
-    [| $B3 |]       =&gt; B
+      [| $B1 &amp; $B2 |] =&gt; and(B1, B2)
+      [| $B1 | $B2 |] =&gt; or(B1, B2)
+      [| $B3 |]       =&gt; B
     }
 }</programlisting>
     </section>
@@ -602,8 +602,8 @@ fun TREE srepl(TREE T) {
     str FUN;
     
     select (T) {
-    [| g($T1, $T2) |]    =&gt; [| i($T1, $T2) |]
-    [| $FUN($T1, $T2) |] =&gt; [| $FUN($(srepl(T1)) $(srepl(T2))) |]
+      [| g($T1, $T2) |]    =&gt; [| i($T1, $T2) |]
+      [| $FUN($T1, $T2) |] =&gt; [| $FUN($(srepl(T1)) $(srepl(T2))) |]
     }
 }
 
@@ -935,7 +935,7 @@ fun DotElem* gen-node(&lt;ID Id1, ID Id2&gt;) {
     </section>
 
     <section>
-      <title>Dynamically scoped variables</title>
+      <title>Pico Typecheck using dynamically scoped variables</title>
 
       <para>The following example details the use of a dynscope global
       variable for building up and using an environment. Notice that we
@@ -949,21 +949,14 @@ hiddens
 types
  rel[PICO-ID,TYPE] -&gt; Env
 
-variables
- "Decls" -&gt; Decl*
- "Stats"[0-9]* -&gt; Stat*
- "Bool"  -&gt; bool
- "Exp"   -&gt; EXP
- "Nat"   -&gt; NatCon
- "Str"   -&gt; StrCon
-
 exports
 
 fun Bool tc(PROGRAM P) {
     dyn Env Env := {};
     select (P) {
-    [| begin $Decls $Stats end |] =&gt; tcs(Stats)
-       when Env := tcd(Decls) 
+      [| begin $Decls $Stats end |] =&gt; tcs(Stats)
+         when Env := tcd(Decls)
+    }
 }
 
 fun Env tcd(Decls Decls) -&gt; void
@@ -984,14 +977,14 @@ fun Bool tcst(Stat Stat) {
     Exp Exp;
     Stats Stats, Stats1, Stats2;
     select (Stat) {
-    [| $Id := $Exp |] =&gt; type-of(Exp, Type)
-        when {&lt;Id, Type&gt;} := Env[Id]
+      [| $Id := $Exp |] =&gt; type-of(Exp, Type)
+         when {&lt;Id, Type&gt;} := Env[Id]
 
-    [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
-           type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
+      [| if $Exp then $Stats1 else $Stats2y fi |] =&gt;
+         type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
 
-    [| while $Exp do $Stats od |] =&gt;
-          type-of(Exp) == natural + tcs(Stats)
+      [| while $Exp do $Stats od |] =&gt;
+         type-of(Exp) == natural + tcs(Stats)
     }
 }
 
@@ -1002,19 +995,111 @@ fun list[Error] type-of(Exp E, TYPE Type) {
     Exp Exp;
 
     select (E) {
-    [| $NatCon |] =&gt; []
-       when Type == natural
+      [| $NatCon |] =&gt; []
+         when Type == natural
 
-    [| $StrCon |] =&gt; []
-       when Type == string
+      [| $StrCon |] =&gt; []
+         when Type == string
 
-    [| $Id |] =&gt; [] 
-       when {&lt;Id,Type2&gt;} := Env[Id],
-            Type2 == Type
+      [| $Id |] =&gt; [] 
+         when {&lt;Id,Type2&gt;} := Env[Id],
+              Type2 == Type
             
-    [| $Exp |] =&gt; [error("Incorrect type")]
+      [| $Exp |] =&gt; [error("Incorrect type")]
     }
 }</programlisting></para>
+    </section>
+
+    <section>
+      <title>Pico eval with dynamically scoped variables</title>
+
+      <para>A Pico evaluator using dynamic variables. It still uses functions
+      that return VEnvs (this is not consistent and should be changed).</para>
+
+      <programlisting>fun VEnv evalProgram(Program p) {
+    dyn VEnv venv;
+    Decls decls;
+    Series series;
+
+    select(p) {
+      [| begin $decls $series end |] =&gt; evalStatements(series)
+         when venv := evalDecls(decls);
+    }
+}
+
+fun VEnv evalDecls(Decls decls) {
+    Id-Type* idtypes;
+    select(decls) {
+      [| declare $idtypes |] =&gt; evalIdTypes(idtypes);
+    }
+}
+
+fun VEnv evalIdTypes(Id-Type* idtypes) {
+    Id id;
+    Id-Type* tail;
+    select(idtypes){ 
+      [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail), id, 0);
+  
+      [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail), id, "");
+
+      [| |] =&gt; []
+    }
+}
+
+fun VEnv evalStatements(Statement* series) {
+    Statement stat; Statement* stats;
+    select(series) {
+      [| $stat; $stats |] =&gt; venv
+         when venv := evalStatement(stat);
+              venv := evalStatements(stats);
+      [| |] =&gt; venv;
+    }
+}
+
+fun VEnv evalStatement(Statement stat) {
+    Exp exp;
+    Series series, series1, series2;
+    
+    select(stat) {    
+      [| if $exp then $series1 else $series2 fi |] =&gt; evalStatements(series1)
+         when evalExp(exp, venv) != 0;
+
+      [| if $exp then $series1 else $series2 fi |} =&gt; evalStatements(series2)
+         when evalExp(exp, venv) == 0;
+        
+      [| while $exp do $series od |] =&gt; venv
+         when evalExp(exp, venv) == 0;
+
+      
+      [| while $exp do $series od |] =&gt; evalStatement([|while $exp do $series od);
+         when evalExp(exp, venv) != 0;
+              venv := evalStatements(series)
+    }
+}
+
+fun VEnv evalExp(Exp exp) {
+    Exp exp1, exp2;
+    Natural nat1, nat2;
+    StrCon str1, str2, str3;
+
+    select(exp) {
+      [| $exp1 + $exp2 |] =&gt; nat1 + nat2
+         when nat1 := eve(exp1);
+              nat2 := eve(exp2);
+       
+      [| $exp1 - $exp2 |] =&gt; nat1 -/ nat2;
+         when nat1 := eve(exp1);
+              nat2 := eve(exp2);
+        
+        
+      [| $exp1 || $exp2 |] =&gt; str3
+         when str1 := eve(exp1);
+              str2 := eve(exp2);
+              str3 := concat(str1, str2);
+
+      [| $exp1 |] =&gt; nil-value     // default "equation"
+   }
+}</programlisting>
     </section>
 
     <section>
@@ -1035,12 +1120,12 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
     set[CP] En1, En2, Ex1, Ex2;
     
     select (Stats) {
-    [| Stat ; $Stats2 |] =&gt;
-           &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
-       when &lt;En1, R1, Ex1&gt; := cflow(Stat),
-            &lt;En2, R2, Ex2&gt; := cflow(Stats2)
+      [| Stat ; $Stats2 |] =&gt;
+             &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
+         when &lt;En1, R1, Ex1&gt; := cflow(Stat),
+              &lt;En2, R2, Ex2&gt; := cflow(Stats2)
 
-    [| |] =&gt; &lt;{}, {}, {}&gt;
+      [| |] =&gt; &lt;{}, {}, {}&gt;
     }
 }
 
@@ -1051,19 +1136,19 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
     set[CP] En1, En2, Ex1, Ex2;
 
     select (Stat) {
-    [| while $Exp do $Stats od |] =&gt;
-           &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
-       when &lt;En, R, Ex&gt; := cflow(Stats)
+      [| while $Exp do $Stats od |] =&gt;
+             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
+         when &lt;En, R, Ex&gt; := cflow(Stats)
                 
-    [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
-           &lt; {Exp}, 
-             ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
-              Ex1 union Ex2
-           &gt;
-       when &lt;En1, R1, Ex1&gt; := cflow(Stats1),
-            &lt;En2, R2, Ex2&gt; := cflow(Stats2)
+      [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
+             &lt; {Exp}, 
+               ({Exp} x En1) union ({Exp} x En2) union R1 union R2,
+                Ex1 union Ex2
+             &gt;
+         when &lt;En1, R1, Ex1&gt; := cflow(Stats1),
+              &lt;En2, R2, Ex2&gt; := cflow(Stats2)
            
-    [| $Stat |]  =&gt; &lt;{Stat}, {}, {Stat}&gt;
+      [| $Stat |]  =&gt; &lt;{Stat}, {}, {Stat}&gt;
     }
 }</programlisting>
     </section>
@@ -1137,13 +1222,17 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 fun PROGRAM cse(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
     rel[CP,CP] Pred := cflow(P).rel
+    rel[EXP, PICO-ID] replacements := 
+       {&lt;E2, Id&gt; | STATEMENT S : P,
+                   [| $(PICO-ID Id) := $(EXP E) |] == S,
+                   Id notin E,
+                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+       }
  
-    using P do { replace E2 by Id |
-                 STATEMENT S : P,
-                 [| $(PICO-ID Id) := $(EXP E) |] == S,
-                 Id notin E,
-                 EXP E2 : reachX({S}, Defs[-,Id], Pred)
-               }
+    replace P {
+      [| E |] =&gt; Id
+         when { Id } := replacements[E]   
+    }
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions E2 by Id, such
@@ -1177,37 +1266,31 @@ fun Boolean is-constant(EXP E) {
    Int Int;
    Str Str;
    select (E){
-   [| $Int |] =&gt; true
+     [| $Int |] =&gt; true
 
-   [| $Str |] =&gt; true
+     [| $Str |] =&gt; true
 
-   [| $E |] =&gt; false
+     [| $E |] =&gt; false
    }
 }
-
-fun &amp;TERM replace(&amp;TERM T, rel[&amp;SUBTERM, &amp;SUBTERM] R)
 
 fun PROGRAM cp(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
     rel[CP,CP] Pred := cflow(P).rel;
-    replace { &lt;Id2, E&gt; |
-              STATEMENT S : P,
-              [| $(PICO-ID Id) := $(EXP E) |] == S,
-              is-constant(E),
-              PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
-              Id2 == Id     
-            } in P
+    PICO-ID Id, Id1, Id2;
 
-or:
-   replace P {
-     Id2 =&gt; E
-     when STATEMENT S : P,
-          [| $(PICO-ID Id) := $(EXP E) |] == S,
-          is-constant(E),
-          PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
-          Id2 == Id     
-   }
-    
+    rel[PICO-ID, EXP] replacements := 
+      {&lt;Id2, E&gt; | STATEMENT S : P,
+                  [| $(PICO-ID Id) := $(EXP E) |] == S,
+                  is-constant(E),
+                  PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
+                  Id2 == Id 
+      }  
+ 
+    replace P {
+     [| $Id |] =&gt; E
+        when { E } := replacements[Id]
+    }  
 }</programlisting></para>
 
       <para>Paraphrased: Replace in P all expressions Id2 by the constant E,
