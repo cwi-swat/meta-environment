@@ -450,17 +450,17 @@ imports Booleans
 
 fun Bool and(Bool B1, B2) { %% reduce &amp; operator
     Bool B;
-    select(B1){
+    select B1 {
       [| true |]  =&gt; reduce(B2)
-      [| false |] =&gt; false
+      [| false |] =&gt; [| false |]
       [| $B |]    =&gt; [| $B1 &amp; $B2 |]
     }    
 }
 
 fun Bool or(Bool B1, B2) { %% reduce | operator
     Bool B;
-    select(B1){
-      [| true  |] =&gt; true
+    select B1 {
+      [| true  |] =&gt; [| true |]
       [| false |] =&gt; reduce(B2)
       [| $B |]    =&gt; [| $B1 | $B2 |]
     }    
@@ -468,10 +468,10 @@ fun Bool or(Bool B1, B2) { %% reduce | operator
 
 fun Bool reduce(Bool B){
     Bool B1, B2, B3;
-    select(B){
-      [| $B1 &amp; $B2 |] =&gt; and(B1, B2)
-      [| $B1 | $B2 |] =&gt; or(B1, B2)
-      [| $B3 |]       =&gt; B
+    select B {
+      [| $B1 &amp; $B2 |]  =&gt; and(B1, B2)
+      [| $B1 \| $B2 |] =&gt; or(B1, B2)    %% Note: | has to be escaped!
+      [| $B3 |]        =&gt; B
     }
 }</programlisting>
     </section>
@@ -552,6 +552,7 @@ fun TREE frepl(TREE T) {
     replace T {
       [| g($T1, $T2) |] =&gt; [| i($T1, $T2) |]
     }
+}
 
 %% Ex5a: deep replacement of g by i which usually requires
 %% a bottom-up traversal + break;
@@ -693,7 +694,7 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
     Var V2;
     Exp Ea, Eb;
 
-    select (E2) {
+    select E2 {
       [| $V2 |] =&gt; V2
          when V1 != V2
 
@@ -953,14 +954,15 @@ exports
 
 fun Bool tc(PROGRAM P) {
     dyn Env Env := {};
-    select (P) {
+    select P {
       [| begin $Decls $Stats end |] =&gt; tcs(Stats)
          when Env := tcd(Decls)
     }
 }
 
-fun Env tcd(Decls Decls) -&gt; void
+fun Env tcd(Decls Decls) {
     {&lt; Id, Type&gt; | [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
+}
 
 fun Bool tcs(Stats Stats) {
     Stat Stat;
@@ -981,10 +983,10 @@ fun Bool tcst(Stat Stat) {
          when {&lt;Id, Type&gt;} := Env[Id]
 
       [| if $Exp then $Stats1 else $Stats2y fi |] =&gt;
-         type-of(Exp) == natural + tcs(Stats1) + tcs(Stats2)
+         type-of(Exp, natural) + tcs(Stats1) + tcs(Stats2)
 
       [| while $Exp do $Stats od |] =&gt;
-         type-of(Exp) == natural + tcs(Stats)
+         type-of(Exp, natural) + tcs(Stats)
     }
 }
 
@@ -1021,7 +1023,7 @@ fun list[Error] type-of(Exp E, TYPE Type) {
     Decls decls;
     Series series;
 
-    select(p) {
+    select p {
       [| begin $decls $series end |] =&gt; evalStatements(series)
          when venv := evalDecls(decls);
     }
@@ -1029,18 +1031,18 @@ fun list[Error] type-of(Exp E, TYPE Type) {
 
 fun VEnv evalDecls(Decls decls) {
     Id-Type* idtypes;
-    select(decls) {
-      [| declare $idtypes |] =&gt; evalIdTypes(idtypes);
+    select decls {
+      [| declare $idtypes |] =&gt; evalIdTypes(idtypes)
     }
 }
 
 fun VEnv evalIdTypes(Id-Type* idtypes) {
     Id id;
     Id-Type* tail;
-    select(idtypes){ 
-      [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail), id, 0);
+    select idtypes { 
+      [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail), id, 0)
   
-      [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail), id, "");
+      [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail), id, "")
 
       [| |] =&gt; []
     }
@@ -1048,11 +1050,11 @@ fun VEnv evalIdTypes(Id-Type* idtypes) {
 
 fun VEnv evalStatements(Statement* series) {
     Statement stat; Statement* stats;
-    select(series) {
+    select series  {
       [| $stat; $stats |] =&gt; venv
-         when venv := evalStatement(stat);
-              venv := evalStatements(stats);
-      [| |] =&gt; venv;
+         when venv := evalStatement(stat),
+              venv := evalStatements(stats)
+      [| |] =&gt; venv
     }
 }
 
@@ -1060,19 +1062,19 @@ fun VEnv evalStatement(Statement stat) {
     Exp exp;
     Series series, series1, series2;
     
-    select(stat) {    
+    select stat {    
       [| if $exp then $series1 else $series2 fi |] =&gt; evalStatements(series1)
-         when evalExp(exp, venv) != 0;
+         when evalExp(exp, venv) != 0
 
-      [| if $exp then $series1 else $series2 fi |} =&gt; evalStatements(series2)
-         when evalExp(exp, venv) == 0;
+      [| if $exp then $series1 else $series2 fi |] =&gt; evalStatements(series2)
+         when evalExp(exp, venv) == 0
         
       [| while $exp do $series od |] =&gt; venv
-         when evalExp(exp, venv) == 0;
+         when evalExp(exp, venv) == 0
 
       
-      [| while $exp do $series od |] =&gt; evalStatement([|while $exp do $series od);
-         when evalExp(exp, venv) != 0;
+      [| while $exp do $series od |] =&gt; evalStatement([|while $exp do $series od |])
+         when evalExp(exp, venv) != 0,
               venv := evalStatements(series)
     }
 }
@@ -1082,22 +1084,22 @@ fun VEnv evalExp(Exp exp) {
     Natural nat1, nat2;
     StrCon str1, str2, str3;
 
-    select(exp) {
+    select exp {
       [| $exp1 + $exp2 |] =&gt; nat1 + nat2
-         when nat1 := eve(exp1);
-              nat2 := eve(exp2);
+         when nat1 := eve(exp1),
+              nat2 := eve(exp2)
        
-      [| $exp1 - $exp2 |] =&gt; nat1 -/ nat2;
-         when nat1 := eve(exp1);
-              nat2 := eve(exp2);
+      [| $exp1 - $exp2 |] =&gt; nat1 -/ nat2
+         when nat1 := eve(exp1),
+              nat2 := eve(exp2)
         
         
-      [| $exp1 || $exp2 |] =&gt; str3
-         when str1 := eve(exp1);
-              str2 := eve(exp2);
-              str3 := concat(str1, str2);
+      [| $exp1 \|\| $exp2 |] =&gt; str3
+         when str1 := eve(exp1),
+              str2 := eve(exp2),
+              str3 := concat(str1, str2)
 
-      [| $exp1 |] =&gt; nil-value     // default "equation"
+      [| $exp1 |] =&gt; nil-value     %% default "equation"
    }
 }</programlisting>
     </section>
@@ -1227,7 +1229,7 @@ fun PROGRAM cse(PROGRAM P) {
                    [| $(PICO-ID Id) := $(EXP E) |] == S,
                    Id notin E,
                    EXP E2 : reachX({S}, Defs[-,Id], Pred)
-       }
+       };
  
     replace P {
       [| E |] =&gt; Id
@@ -1285,7 +1287,7 @@ fun PROGRAM cp(PROGRAM P) {
                   is-constant(E),
                   PICO-ID Id2 : reachX({S},Defs[-,Id],Pred),
                   Id2 == Id 
-      }  
+      };  
  
     replace P {
      [| $Id |] =&gt; E
