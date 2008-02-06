@@ -7,23 +7,27 @@ context-free start-symbols
         Declaration
 
 exports
-sorts Declaration Stat VarDecl VarDeclInit FunBody Case
+sorts Declaration VarDecl VarDeclInit FunBody SimpleCase SimpleCases RewriteCase RewriteCases
 
 context-free syntax
-   Type {Variable ","}+          -> VarDecl {cons("variable-decl")}
+   Type {Variable ","}+                                            -> VarDecl {cons("variable-decl")}
 
 context-free syntax
-   "var" {VarDeclInit ";"}+      -> Declaration {cons("variables")}
-   VarDecl (":=" Expression)?    -> VarDeclInit
+   "var" {VarDeclInit ";"}+                                        -> Declaration {cons("variables")}
+   VarDecl (":=" Expression)?                                      -> VarDeclInit
 
 context-free syntax
-   "fun" Type IdCon ("(" {VarDecl  ","}* ")")? "{" FunBody "}"  -> Declaration {cons("function")}
-   (VarDeclInit ";")* Stat                                      -> FunBody
-   Pattern "=>" Stat ("when" {Predicate ","}+ )?                -> Case
-   "select" "(" Expression ")" "{" Case+ "}"                    -> Stat
-   Expression                                                   -> Stat
-   Pattern                                                      -> Stat
+   "fun" Type Variable ("(" {VarDecl  ","}* ")")? "{" FunBody "}"  -> Declaration {cons("function")}
+   (VarDeclInit ";")* Expression                                   -> FunBody
 
+   Pattern ("when" {Predicate ","}+ )?                             -> SimpleCase
+   "{" SimpleCase+ "}"                                             -> SimpleCases
+   Pattern "=>" Expression ("when" {Predicate ","}+ )?             -> RewriteCase
+   "{" RewriteCase+ "}"                                            -> RewriteCases
 
+   "select" Expression RewriteCases                                -> Expression
+   "replace" Expression Strategy RewriteCases                      -> Expression
+   "search" Expression Strategy SimpleCases                        -> Expression
+ 
 
        

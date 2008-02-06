@@ -13,7 +13,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression Tree Variable Predicate Signature Pattern PatternChar PatternSymbol
+sorts Expression Variable Predicate Strategy Signature Pattern PatternChar PatternSymbol
 
 lexical syntax
 	[a-zA-Z][a-zA-Z0-9\-\_]*                  -> Variable
@@ -44,12 +44,10 @@ context-free syntax
 	"\\" IdCon                                 -> Expression {cons("func-ref")}
 
 context-free syntax
-	%% Tree is the sort concrete stuff gets injected into.
-	Tree -> Expression {cons("tree")}
 
-context-free syntax
-	Signature ":" Expression                  -> Predicate {cons("generator1")}
-         Pattern ":" Expression                     -> Predicate {cons("generator2")}
+        ("first" | "all")? ("td" | "bu")?          -> Strategy
+	Strategy Signature ":" Expression         -> Predicate {cons("generator1")}
+         Strategy Pattern ":" Expression           -> Predicate {cons("generator2")}
 	%%Type Variable                           -> Signature
 	Type Expression                           -> Signature
 	"<" Signature "," {Signature ","}+ ">"    -> Signature
@@ -57,6 +55,7 @@ context-free syntax
 context-free syntax
 	"{" Expression "|" {Predicate ","}+ "}"   -> Expression {cons("set-comprehension")}
 	"[" Expression "|" {Predicate ","}+ "]"   -> Expression {cons("list-comprehension")}
+         Expression                                -> Predicate
 	Expression "==" Expression                -> Predicate {cons("equal")}
 	Expression "!=" Expression                -> Predicate {cons("non-equal")}
 	Expression ":=" Expression                -> Predicate {cons("match")}
@@ -89,7 +88,7 @@ context-free syntax
          "$" Variable                              -> PatternSymbol
          "$(" VarDecl ")"                          -> PatternSymbol
          "$(" Expression ")"                       -> PatternSymbol
-%%         Pattern                                 -> Expression
+         Pattern                                   -> Expression
 
 	
 	
