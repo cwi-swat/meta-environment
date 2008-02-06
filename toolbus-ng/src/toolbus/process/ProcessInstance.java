@@ -15,6 +15,7 @@ import toolbus.ToolBus;
 import toolbus.atom.Atom;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.process.debug.ExecutionResult;
 import aterm.ATerm;
 
 /**
@@ -283,18 +284,20 @@ public class ProcessInstance{
 	/**
 	 * Executes on step in debug mode, where the state element that was executed is returned as result.
 	 * 
-	 * @return The executed state element; null if nothing was executed.
+	 * @return The result of the execution (if contains the state element and partners); null if
+	 * nothing was executed.
 	 * @throws ToolBusException Thrown if something went wrong.
 	 */
-	public StateElement debugStep() throws ToolBusException{
+	public ExecutionResult debugStep() throws ToolBusException{
 		if(running){
-			StateElement stateElement = currentState.debugExecute();
-			if(stateElement != null){
+			ExecutionResult executionResult = currentState.debugExecute();
+			if(executionResult != null){
+				StateElement stateElement = executionResult.stateElement;
 				if(stateElement instanceof ProcessCall){ // If we just encountered a process call, find out what element it executed (so we can pretent it got inlined).
-					stateElement = ((ProcessCall)stateElement).getExecutedStateElement();
+					executionResult = new ExecutionResult(((ProcessCall) stateElement).getExecutedStateElement(), executionResult.partners);
 				}
 				gotoNextStateAndActivate();
-				return stateElement;
+				return executionResult;
 			}
 		}
 		return null;

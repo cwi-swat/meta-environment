@@ -15,6 +15,7 @@ import toolbus.TBTermVar;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
+import toolbus.process.debug.ExecutionResult;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -312,6 +313,27 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		// System.err.println("ProcessCall [" + getProcess().getProcessName() + "] leave");
 		finishCall();
 		return true;
+	}
+	
+	public ProcessInstance[] debugExecute() throws ToolBusException{
+		if(activated && !executing){
+			if(definition == null){
+				return null;
+			}
+			if(PE.getFirst().size() == 0){
+				executing = true;
+				return new ProcessInstance[0];
+			}
+			ExecutionResult er = PE.getFirst().debugExecute();
+			if(er != null){
+				executing = true;
+				return er.partners;
+			}
+			executing = false;
+			return null;
+		}
+		finishCall();
+		return new ProcessInstance[0];
 	}
 	
 	/**

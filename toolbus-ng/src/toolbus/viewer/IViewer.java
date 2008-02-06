@@ -27,8 +27,10 @@ public interface IViewer{
 	 *            The process instance in which a state element was executed.
 	 * @param executedStateElement
 	 *            The state element that was executed.
+	 * @param partners
+	 *            All the process instances that cooperated during the execution of the state element.
 	 */
-	void stepExecuted(ProcessInstance processInstance, StateElement executedStateElement);
+	void stepExecuted(ProcessInstance processInstance, StateElement executedStateElement, ProcessInstance[] partners);
 	
 	/**
 	 * Fired when a new process instance is started.

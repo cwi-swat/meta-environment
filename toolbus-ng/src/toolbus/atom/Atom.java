@@ -413,4 +413,10 @@ abstract public class Atom extends ProcessExpression implements StateElement{
 		// System.err.println("used_vars = " + collected);
 		// System.err.println("Atom.activate: " + this);
 	}
+	
+	public ProcessInstance[] debugExecute() throws ToolBusException{
+		if(execute()) return new ProcessInstance[0];
+		
+		return null;
+	}
 }

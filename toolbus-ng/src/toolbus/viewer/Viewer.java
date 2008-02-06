@@ -282,13 +282,15 @@ public class Viewer implements IViewer{
 	}
 	
 	// Update the state of the given process after the execution of the step.
-	public void stepExecuted(final ProcessInstance processInstance, final StateElement executedStateElement){
+	public void stepExecuted(final ProcessInstance processInstance, final StateElement executedStateElement, final ProcessInstance[] partners){
 		if(executedStateElement.getPosInfo() == null){
 			// If the posInfo was 'null', the stateElement isn't related directly related to anything in the ToolBus script (it will be an atom that was inserted during the creation of the statemachine, by the parser).
 			// In this case do another step.
 			debugToolBus.doStep();
 			return;
 		}
+		
+		//if(partners.length > 0) System.out.println(processInstance+" -> "+partners[0]);
 		
 		//System.out.println(executedStateElement+" - "+executedStateElement.getPosInfo());
 		

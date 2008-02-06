@@ -11,6 +11,7 @@ import toolbus.ToolBus;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
+import toolbus.process.debug.ExecutionResult;
 import aterm.ATerm;
 
 /**
@@ -210,6 +211,28 @@ public class Merge extends ProcessExpression implements StateElement{
 			leftLast = (r == LEFT);
 			return true;
 		}else return false;
+	}
+	
+	public ProcessInstance[] debugExecute() throws ToolBusException{
+		int l, r;
+		if(ToolBus.nextBoolean()){
+			l = LEFT;
+			r = RIGHT;
+		}else{
+			l = RIGHT;
+			r = LEFT;
+		}
+		
+		ExecutionResult er; 
+		if((er = state[l].debugExecute()) != null){
+			leftLast = (l == LEFT);
+			return er.partners;
+		}else if((er = state[r].debugExecute()) != null){
+			leftLast = (r == LEFT);
+			return er.partners;
+		}
+		
+		return null;
 	}
 	
 	public String toString(){

@@ -16,11 +16,12 @@ import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessInstance;
+import toolbus.process.debug.ExecutionResult;
 import toolbus.tool.ToolInstance;
 import toolbus.util.collections.ConcurrentHashMap;
+import toolbus.util.collections.ConcurrentHashSet;
 import toolbus.util.collections.EntryHandlerConstants;
 import toolbus.util.collections.ConcurrentHashMap.HashMapEntryHandler;
-import toolbus.util.collections.ConcurrentHashSet;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -217,8 +218,8 @@ public class DebugToolBus extends ToolBus{
 						}
 						
 						pi = processesIterator.next();
-						StateElement executedStateElement = pi.debugStep();
-						boolean stepSuccessFull = (executedStateElement != null);
+						ExecutionResult executionResult = pi.debugStep();
+						boolean stepSuccessFull = (executionResult != null);
 						
 						String processName = pi.getProcessName();
 						int processId = pi.getProcessId();
@@ -227,6 +228,7 @@ public class DebugToolBus extends ToolBus{
 								if(processInstanceBreakPoints.contains(new Integer(processId)) || processBreakPoints.contains(processName)){
 									viewer.processBreakPointHit(pi);
 								}
+								StateElement executedStateElement = executionResult.stateElement; // Ignore the Eclipse warning here, since it's bogus.
 								if(stateElementBreakPoints.contains(executedStateElement)){
 									viewer.stateElementBreakPointHit(executedStateElement);
 								}
@@ -246,7 +248,7 @@ public class DebugToolBus extends ToolBus{
 						if(stepSuccessFull){
 							if(doStep){
 								doStep = false; // Consume the step.
-								viewer.stepExecuted(pi, executedStateElement);
+								viewer.stepExecuted(pi, executionResult.stateElement, executionResult.partners); // Ignore the Eclipse warning here, since it's bogus.
 								break WORKLOOP;
 							}
 						}

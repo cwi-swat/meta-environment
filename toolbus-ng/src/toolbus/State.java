@@ -11,6 +11,8 @@ import toolbus.atom.Atom;
 import toolbus.atom.msg.SndMsg;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import toolbus.process.ProcessInstance;
+import toolbus.process.debug.ExecutionResult;
 import aterm.ATerm;
 
 /**
@@ -192,19 +194,21 @@ public class State{
 	/**
 	 * Executes one step in debug mode and returns the executed state element as result.
 	 * 
-	 * @return The executed state element; null if none was executed.
+	 * @return The result of the execution (if contains the state element and partners); null if
+	 * none was executed.
 	 * @throws ToolBusException Thrown if something went wrong.
 	 */
-	public StateElement debugExecute() throws ToolBusException{
+	public ExecutionResult debugExecute() throws ToolBusException{
 		if(nElements == 0) return null;
 		
 		for(int index = (lastElement + 1) % nElements, nleft = nElements; nleft > 0; index = (index + 1) % nElements, nleft--){
 			StateElement a = elements.get(index);
 			
-			if(a.execute()){
+			ProcessInstance[] partners = a.debugExecute();
+			if(partners != null){
 				lastElement = index;
 				
-				return a;
+				return new ExecutionResult(a, partners);
 			}
 		}
 		return null;

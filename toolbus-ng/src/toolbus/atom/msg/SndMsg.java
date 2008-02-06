@@ -88,4 +88,24 @@ public class SndMsg extends MsgAtom{
 		}
 		return false;
 	}
+	
+	public ProcessInstance[] debugExecute() throws ToolBusException{
+		if(isEnabled()){
+			int size = msgPartners.size();
+			
+			if(size == 0) return null;
+			
+			for(int i = (index++ % size), left = size; left > 0; i = ((i + 1) % size), left--){
+				RecMsg recMsg = msgPartners.get(i);
+				ProcessInstance pb = recMsg.getProcess();
+				
+				if(pb.contains(recMsg) && recMsg.isEnabled() && matchesPartner(recMsg)){
+					pb.gotoNextStateAndActivate(recMsg);
+					
+					return new ProcessInstance[]{pb};
+				}
+			}
+		}
+		return null;
+	}
 }

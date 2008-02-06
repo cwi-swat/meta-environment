@@ -70,6 +70,16 @@ public interface StateElement{
 	boolean execute() throws ToolBusException;
 	
 	/**
+	 * Executes the state element in debug mode.
+	 * 
+	 * @return The collection of partners that cooperated with the execution of the state element.
+	 * Null if the execution did not complete.
+	 * 
+	 * @throws ToolBusException
+	 */
+	ProcessInstance[] debugExecute() throws ToolBusException;
+	
+	/**
 	 * @return the successor State of the StateElement
 	 */
 	State gotoNextStateAndActivate();

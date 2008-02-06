@@ -79,4 +79,24 @@ public class SndNote extends Atom{
 		}
 		return false;
 	}
+	
+	public ProcessInstance[] debugExecute() throws ToolBusException{
+		if(isEnabled()){
+			ATerm theNote = tbfactory.fullSubstitute(note.value, getEnv());
+			if(theNote == null) throw new ToolBusException("Illegal note pattern: "+theNote+".");
+			
+			List<ProcessInstance> subscribedPartners = new ArrayList<ProcessInstance>();
+			Iterator<ProcessInstance> notePartnersIterator = notePartners.iterator();
+			while(notePartnersIterator.hasNext()){
+				ProcessInstance pi = notePartnersIterator.next();
+				
+				pi.putNoteInQueue(theNote);
+				subscribedPartners.add(pi);
+			}
+			
+			ProcessInstance[] partners = new ProcessInstance[subscribedPartners.size()];
+			return subscribedPartners.toArray(partners);
+		}
+		return null;
+	}
 }

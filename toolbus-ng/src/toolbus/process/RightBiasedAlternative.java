@@ -10,6 +10,7 @@ import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.parsercup.PositionInformation;
+import toolbus.process.debug.ExecutionResult;
 import aterm.ATerm;
 
 /**
@@ -137,6 +138,19 @@ public class RightBiasedAlternative extends ProcessExpression implements StateEl
 			rightLast = false;
 			return true;
 		}else return false;
+	}
+	
+	public ProcessInstance[] debugExecute() throws ToolBusException{
+		ExecutionResult er;
+		if((er = state[RIGHT].debugExecute()) != null){
+			rightLast = true;
+			return er.partners;
+		}else if((er = state[LEFT].debugExecute()) != null){
+			rightLast = false;
+			return er.partners;
+		}
+		
+		return null;
 	}
 	
 	public String toString(){
