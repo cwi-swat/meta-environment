@@ -423,6 +423,112 @@
   </section>
 
   <section>
+    <title>Rascal at a glance</title>
+
+    <para>Rascal can be summarized as follows:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>"Syntax modules" are identical to standard SDF modules and
+        define concrete syntax.</para>
+      </listitem>
+
+      <listitem>
+        <para>Ordinary modules define types and functions.</para>
+      </listitem>
+
+      <listitem>
+        <para>The type system (and notation) are mostly similar to that of
+        Rscript, but</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Symbols (as defined by a syntax module) are also
+            types.</para>
+          </listitem>
+
+          <listitem>
+            <para>There are built-in types (bool, int str, loc) that have a
+            syntactic counterpart (not yet defined).</para>
+          </listitem>
+
+          <listitem>
+            <para>Relations can have optional column names.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Expressions correspond roughly to Rscript expressions with some
+        extensions:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>There is a notation of "pattern": a quoted concrete syntax
+            fragment that may contain variables.</para>
+          </listitem>
+
+          <listitem>
+            <para>A "select" expression corresponds to a set of rewrite
+            rules.</para>
+          </listitem>
+
+          <listitem>
+            <para>A "replace" expression corresponds to a traversal function
+            (transformer).</para>
+          </listitem>
+
+          <listitem>
+            <para>A "search" expression corresponds to a traversal function
+            (~accumulator).</para>
+          </listitem>
+
+          <listitem>
+            <para>Generators in comprehensions may range over syntax
+            trees.</para>
+          </listitem>
+
+          <listitem>
+            <para>Replace, search and generators have a strategy option to
+            indicate:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>all = continue</para>
+              </listitem>
+
+              <listitem>
+                <para>first = break</para>
+              </listitem>
+
+              <listitem>
+                <para>td = top-down</para>
+              </listitem>
+
+              <listitem>
+                <para>bu = bottom-up</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>A function contains a number of variable declarations followed
+        by an expression.</para>
+      </listitem>
+
+      <listitem>
+        <para>There is a notion of global (dynamically scoped) variables.
+        Status not yet clear.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>See <xref linkend="Issues" /> for the issues that still have to be
+    resolved.</para>
+  </section>
+
+  <section>
     <title>Examples</title>
 
     <para>Here we list experimental examples of Rascal code to try out new and
@@ -749,7 +855,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $(rename(E1, Rn, Cnt)) 
               in 
-                 $rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1) 
+                 $(rename(E2, {&lt;V, Y&gt;} union Rn, Cnt1)) 
               end 
            |]
         when Y := "x" + Cnt,   %% this + operator concatenates 
@@ -1765,6 +1871,12 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>Dynamic variables need more thought; do we want them?</para>
+      </listitem>
+
+      <listitem>
+        <para>The relation (no pun intended) between local variable
+        declarations in functions and comprehensions has to be
+        established.</para>
       </listitem>
 
       <listitem>
