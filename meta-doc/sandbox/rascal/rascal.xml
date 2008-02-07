@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1110,12 +1110,9 @@ fun VEnv evalExp(Exp exp) {
       <programlisting>module Pico-controlflow
 imports pico/syntax/Pico
 
-sorts CP %% A Code Point
+type CP = EXP | STATEMENT;     %% A Code Point
 
-context-free syntax
-    EXP | STATEMENT  -&gt; CP %% Waar moet dit staan?
-
-type cf_segment &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;
+type cf_segment &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
 
 fun cf_segment cflow({STATEMENT ";"}* Stats){
     Stat Stat;
@@ -1192,7 +1189,7 @@ fun set[PICO-ID] uninit(PROGRAM P) {
     set[CP] Root := CFLOW.entry;
     rel[CP,CP] Pred := CFLOW.graph;
 
-    {Id | &lt;EXP E, PICO-ID Id&gt; : range(Uses),
+    {Id | &lt;EXP E, PICO-ID Id&gt; : Uses,
                  E in reachX(Root, Defs[-,Id], Pred)
     }
 }</programlisting>Questions (UPDATE THIS):</para>
@@ -1219,7 +1216,7 @@ fun set[PICO-ID] uninit(PROGRAM P) {
     </section>
 
     <section>
-      <title>Pico common subsexpression elimination (UPDATE)</title>
+      <title>Pico common subsexpression elimination</title>
 
       <para><programlisting>module Pico-common-subexpression
 
@@ -1325,94 +1322,9 @@ fun PROGRAM cp(PROGRAM P) {
   </section>
 
   <section>
-    <title>Syntax Definition (THIS DEFINITION IS OBSOLETE)</title>
+    <title>Syntax Definition</title>
 
-    <para><programlisting>lexical syntax
-  [0-9]+    -&gt; NatCon
-  "true"    -&gt; BoolCon
-  "false"   -&gt; BoolCon
-  [\0-\255] -&gt; ByteCon
-
-context-free syntax
-  %% foreach symbol S in the user-defined grammar:
-  S                                 -&gt; Term {cons("to-term")}
-  Term                              -&gt; S    {cons("from-term")}
-  Type "(" Term ")"                 -&gt; Term {cons("cast")}
-  Name "(" {Term ","}* ")"          -&gt; Term {cons("function")}
-  "[" {Term ","}* "]"               -&gt; Term {cons("list")}
-  "{" {Term ","}* "}"               -&gt; Term {cons("set")}
-  "[" Term "|" {Generator ","}+ "]" -&gt; Term {cons("list-comprehension")}
-  "{" Term "|" {Generator ","}+ "}" -&gt; Term {cons("set-comprehension")}
-  "&lt;" {Term ","}* "&gt;"               -&gt; Term {cons("tuple")}
-  "[" Term ":" Term "]"             -&gt; Term {cons("list-construction")}
-  "{" Term ":" Term "}"             -&gt; Term {cons("set-construction")}
-  BoolCon                           -&gt; Term {cons("boolean")}
-  NatCon                            -&gt; Term {cons("number")}
-  ByteCon                           -&gt; Term {cons("blob")}
-
-context-free syntax
-  Term "in" Term    -&gt; Term
-  Term "union" Term -&gt; Term
-  "#" Term          -&gt; Term
-  %% etcetera
-
-context-free syntax
-  "module" ModuleName Section*    -&gt; Module
-
-context-free syntax
-  "variables" VariableDefinition* -&gt; Section
-  Definition Rule*                -&gt; Section
-  "equations" Rule*               -&gt; Section
-  "tests" Test*                   -&gt; Section
-  Modifier+ Section               -&gt; Section {non-assoc} %% to distribute modifiers over all 
-                                                         %% elements of a section
-
-  Modifier* Name "(" {Type ","}* ")" "-&gt;" Type -&gt; Definition
-  Modifier* {Name ","}+ "-&gt;" Type              -&gt; VariableDefinition 
-  "bottom-up"                                  -&gt; Modifier
-  "top-down"                                   -&gt; Modifier
-  "break"                                      -&gt; Modifier
-  "continue"                                   -&gt; Modifier
-  "loop"                                       -&gt; Modifier
-  "strict"                                     -&gt; Modifier
-  "wild"                                       -&gt; Modifier
-  "exports"                                    -&gt; Modifier
-  "hiddens"                                    -&gt; Modifier
-
-context-free syntax
-  Term "=" Term                         -&gt; Rule %% type preserving
-  Term "=" Term "when" {Condition ","}+ -&gt; Rule
-  {Condition ","}+ "===&gt;" Term "=" Term -&gt; Rule
-
-context-free syntax
-  Condition                             -&gt; Test
-  {Condition ","}+ "===&gt;" Condition     -&gt; Test
-  Condition "when" {Condition ","}+     -&gt; Test
-
-context-free syntax
-  Term ":=" Term  -&gt; Condition {cons("match")}     
-  Term "!:=" Term -&gt; Condition {cons("not-match")}
-  Term "==" Term  -&gt; Condition {cons("equals")}
-  Term "!=" Term  -&gt; Condition {cons("not-equals")}
-  Term "::" Term  -&gt; Condition {cons("generator")}  %% only applicable in comprehensions for now, 
-                                                    %% not rules (although a semantics similar to 
-                                                    %% list matching might apply, i.e. find the first 
-                                                    %% element that satisfies the following conditions)
-
-context-free syntax
-  %% Symbol from the Sdf definition of Sdf:
-  Symbol                    -&gt; Type
-  "&amp;" Type                  -&gt; Type
-  TypeName                  -&gt; Type
-  "list" "[" Type "]"       -&gt; Type
-  "set" "[" Type "]"        -&gt; Type
-
-  "rel" "[" {Type ","}+ "]" -&gt; Type
-  "&lt;" {Type","}* "&gt;"        -&gt; Type
-  "void"                    -&gt; Type
-  "natural"                 -&gt; Type
-  "boolean"                 -&gt; Type
-  "loc"                     -&gt; TYpe</programlisting></para>
+    <para>See separate SDF definition.</para>
   </section>
 
   <section>
@@ -1650,6 +1562,158 @@ process mkWave(int N) is ...</programlisting>
   </section>
 
   <section>
+    <title>Protyping/implementation of Rascal</title>
+
+    <para>Every prototype will have to address the following issues:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Parsing/typechecking/evaluating Rascal.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement the relational operations.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement matching.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement replacement.</para>
+      </listitem>
+
+      <listitem>
+        <para>How to implement traversals.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following options should be considered:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Implementation of a typechecker in ASF+SDF:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Gives good insight in the type system and is comparable in
+            complexity to the Rscript typechecker.</para>
+          </listitem>
+
+          <listitem>
+            <para>Work: 2 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an evaluator in ASF+SDF.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Requires reimplementation of matching &amp; rewriting in
+            ASF+SDF.</para>
+          </listitem>
+
+          <listitem>
+            <para>Bound to be very slow.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of a typechecker in Rascal.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Interesting exercise to asses Rascal.</para>
+          </listitem>
+
+          <listitem>
+            <para>Not so easy to do without working Rascal
+            implementation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Not so easy when Rascal is still in flux.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 1 week</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an evaluator in Rascal.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Ditto.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Extending the current ASF+SDF interpreter.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>This is a viable options. It requires extensions of
+            AsFix.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Translation of Rascal to ASF+SDF in ASF+SDF.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Unclear whether this has longer term merit.</para>
+          </listitem>
+
+          <listitem>
+            <para>Allows easy experimentation and reuse of current ASF+SDF
+            implementation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 4 weeks</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Implementation of an interpreter in Java.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A future proof and efficient solution.</para>
+          </listitem>
+
+          <listitem>
+            <para>Requires reimplementation of matching &amp; rewriting in
+            Java.</para>
+          </listitem>
+
+          <listitem>
+            <para>Effort: 8 weeks.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
     <title xml:id="Issues">Issues</title>
 
     <itemizedlist>
@@ -1663,7 +1727,7 @@ process mkWave(int N) is ...</programlisting>
           </listitem>
 
           <listitem>
-            <para>Variable are prefixed with $</para>
+            <para>Variables are prefixed with $</para>
           </listitem>
 
           <listitem>
@@ -1671,7 +1735,8 @@ process mkWave(int N) is ...</programlisting>
           </listitem>
 
           <listitem>
-            <para>A subterm to be reduced is also prefixed with $.</para>
+            <para>An expression <replaceable>E</replaceable> to be computed
+            and inserted is written as $(<replaceable>E</replaceable>).</para>
           </listitem>
 
           <listitem>
@@ -1688,7 +1753,7 @@ process mkWave(int N) is ...</programlisting>
               </listitem>
 
               <listitem>
-                <para>[| let $Y = $rename(E1) in $rename(E2) end |]</para>
+                <para>[| let $Y = $(rename(E1)) in $(rename(E2)) end |]</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -1699,12 +1764,12 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>Dynamic variables need more thought.</para>
+        <para>Dynamic variables need more thought; do we want them?</para>
       </listitem>
 
       <listitem>
         <para>Do we add column names in relations (as Jurgen and Bob are
-        currently doing)?</para>
+        currently doing)? Currently both are supported.</para>
       </listitem>
 
       <listitem>
