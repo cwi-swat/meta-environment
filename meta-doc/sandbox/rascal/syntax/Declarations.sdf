@@ -1,13 +1,15 @@
 module Declarations
 
-imports Types Expressions
+imports	languages/sdf2/syntax/Sorts
+	Types 
+	Expressions 
 
 hiddens
 context-free start-symbols
         Declaration
 
 exports
-sorts Declaration VarDecl VarDeclInit FunBody SimpleCase SimpleCases RewriteCase RewriteCases
+sorts Declaration VarDecl VarDeclInit FunBody 
 
 context-free syntax
    Type {Variable ","}+                                            -> VarDecl {cons("variable-decl")}
@@ -17,17 +19,13 @@ context-free syntax
    VarDecl (":=" Expression)?                                      -> VarDeclInit
 
 context-free syntax
+   "type" Sort "=" Type                                            -> Declaration
+
+context-free syntax
    "fun" Type Variable ("(" {VarDecl  ","}* ")")? "{" FunBody "}"  -> Declaration {cons("function")}
    (VarDeclInit ";")* Expression                                   -> FunBody
 
-   Pattern ("when" {Predicate ","}+ )?                             -> SimpleCase
-   "{" SimpleCase+ "}"                                             -> SimpleCases
-   Pattern "=>" Expression ("when" {Predicate ","}+ )?             -> RewriteCase
-   "{" RewriteCase+ "}"                                            -> RewriteCases
 
-   "select" Expression RewriteCases                                -> Expression
-   "replace" Expression Strategy RewriteCases                      -> Expression
-   "search" Expression Strategy SimpleCases                        -> Expression
  
 
        

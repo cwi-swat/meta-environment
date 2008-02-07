@@ -1,6 +1,7 @@
 module Types
 
 imports basic/Whitespace
+        basic/IdentifierCon
         languages/sdf2/syntax/Regular
         languages/sdf2/syntax/Sorts
         languages/sdf2/syntax/Literals

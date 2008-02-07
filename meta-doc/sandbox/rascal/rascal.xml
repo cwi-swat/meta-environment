@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -1115,7 +1115,9 @@ sorts CP %% A Code Point
 context-free syntax
     EXP | STATEMENT  -&gt; CP %% Waar moet dit staan?
 
-fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
+type cf_segment &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;
+
+fun cf_segment cflow({STATEMENT ";"}* Stats){
     Stat Stat;
     Stat+ Stats2;
     rel[CP,CP] R1, R2;
@@ -1131,7 +1133,7 @@ fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow({STATEMENT ";"}* Stats){
     }
 }
 
-fun &lt; set[CP], rel[CP,CP], set[CP] &gt; cflow(STATEMENT Stat){
+fun cf_segment cflow(STATEMENT Stat){
     Exp Exp;
     Stat* Stats, Stats1, Stats2;
     rel[CP,CP] R1, R2;
@@ -1185,10 +1187,10 @@ imports pico/syntax/Pico Pico-controlflow Pico-use-def
 
 fun set[PICO-ID] uninit(PROGRAM P) {
     rel[EXP,PICO-ID] Uses := uses(P);
-    rel[STATEMENT, PICO-ID] Defs := defs(P),
-    &lt; set[CP], rel[CP,CP], set[CP] &gt; CFLOW := cflow(P);
-    set[CP] Root := CFLOW.entry;  %% define these fields somewhere
-    rel[CP,CP] Pred := CFLOW.rel;
+    rel[STATEMENT, PICO-ID] Defs := defs(P);
+    cf_segment CFLOW := cflow(P);
+    set[CP] Root := CFLOW.entry;
+    rel[CP,CP] Pred := CFLOW.graph;
 
     {Id | &lt;EXP E, PICO-ID Id&gt; : range(Uses),
                  E in reachX(Root, Defs[-,Id], Pred)
@@ -1223,7 +1225,7 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 
 fun PROGRAM cse(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).rel
+    rel[CP,CP] Pred := cflow(P).graph
     rel[EXP, PICO-ID] replacements := 
        {&lt;E2, Id&gt; | STATEMENT S : P,
                    [| $(PICO-ID Id) := $(EXP E) |] == S,
@@ -1278,7 +1280,7 @@ fun Boolean is-constant(EXP E) {
 
 fun PROGRAM cp(PROGRAM P) {
     rel[STATEMENT, PICO-ID] Defs := defs(P);
-    rel[CP,CP] Pred := cflow(P).rel;
+    rel[CP,CP] Pred := cflow(P).graph;
     PICO-ID Id, Id1, Id2;
 
     rel[PICO-ID, EXP] replacements := 
@@ -1651,23 +1653,6 @@ process mkWave(int N) is ...</programlisting>
     <title xml:id="Issues">Issues</title>
 
     <itemizedlist>
-      <listitem>
-        <para>The <emphasis role="bold">replace</emphasis> construct needs
-        more thought.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Can we better enforce that the replacements occur in
-            <replaceable>Term</replaceable>?</para>
-          </listitem>
-
-          <listitem>
-            <para>Is this the right approach to get rid of indications for
-            bottom-up/topdown and continue/break?</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
       <listitem>
         <para>How will we quote patterns and terms? Currently we use the
         convention:</para>
