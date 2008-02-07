@@ -15,7 +15,7 @@ context-free start-symbols
 	Expression
 
 exports
-sorts Expression Variable Predicate Strategy Signature SimpleCase SimpleCases RewriteCase RewriteCases
+sorts Expression Predicate Strategy Signature SimpleCase SimpleCases RewriteCase RewriteCases
 
 context-free syntax
          BoolCon                                                 -> Expression {cons("boolcon-exp")}
@@ -57,6 +57,7 @@ context-free syntax
 	Expression ":=" Expression                              -> Predicate {cons("match")}
 	Expression "!:=" Expression                             -> Predicate {cons("non-match")}
 	Expression "in" Expression                              -> Predicate {cons("element-of")}
+	"(" Predicate ")"                                       -> Predicate {bracket}
 
 context-free priorities
 	"not" Predicate                                         -> Predicate {cons("not")} >
@@ -64,16 +65,14 @@ context-free priorities
 	Predicate "|" Predicate                                 -> Predicate {cons("or")}
 
 context-free syntax
-	"(" Predicate ")"                                       -> Predicate {bracket}
-
-context-free syntax
          "if" Predicate "then" Expression "else" Expression "fi" -> Expression
 
 context-free syntax
-   "\\" "(" {Variable ","}* ")" Expression   -> Expression
+         Pattern                                                 -> Expression
 
 	Pattern ("when" {Predicate ","}+ )?                     -> SimpleCase
    	"{" SimpleCase+ "}"                                     -> SimpleCases
+
    	Pattern "=>" Expression ("when" {Predicate ","}+ )?     -> RewriteCase
    	"{" RewriteCase+ "}"                                    -> RewriteCases
 

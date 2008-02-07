@@ -1,6 +1,6 @@
 module Patterns
 
-imports Variables
+imports Variables Expressions
 
 exports
 sorts Pattern PatternChar PatternSymbol
@@ -13,7 +13,6 @@ lexical syntax
 context-free syntax
          "[|" PatternSymbol* "|]"                  -> Pattern
          PatternChar                               -> PatternSymbol {avoid}
-%%        Symbol                                   -> PatternSymbol
          "$" Variable                              -> PatternSymbol
          "$(" VarDecl ")"                          -> PatternSymbol
          "$(" Expression ")"                       -> PatternSymbol
