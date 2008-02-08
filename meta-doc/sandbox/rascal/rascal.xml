@@ -69,13 +69,14 @@
 
     <para>The above goals are all but one already met in the current design of
     ASF+SDF, and the current design of RScript. What is missing is the
-    <emphasis>connection.</emphasis> Alas, any bridge between the two
-    languages is both complex to manage and an efficiency bottleneck. This
-    work is an attempt to consolidate this engineering trade-off.</para>
+    connection (and to be honest: an efficient implementation of relational
+    operators). Alas, any bridge between the two languages is both complex to
+    manage and an efficiency bottleneck. This work is an attempt to
+    consolidate this engineering trade-off.</para>
 
-    <para>In section Integration with Tscripts we will also explore the issues
-    when we take integration one step further and also include Tscripts in the
-    considerations.</para>
+    <para>In <xref linkend="section.integration-tscript" /> we will also
+    explore the issues when we take integration one step further and also
+    include Tscripts in the considerations.</para>
   </section>
 
   <section>
@@ -90,7 +91,8 @@
         </listitem>
 
         <listitem>
-          <para>R2: Backward compatible with ASF+SDF.</para>
+          <para>R2: Backward compatible with ASF+SDF. We need to port old
+          ASF+SDF definitions to Rascal.</para>
         </listitem>
 
         <listitem>
@@ -144,207 +146,233 @@
     <para>Emphasized cells indicate a new datatype/feature combination that
     needs to be thought out.</para>
 
-    <informaltable border="1">
-      <tr>
-        <th>Which features work on which datatypes?</th>
+    <table xml:id="table.features">
+      <title>Features vs datatypes</title>
 
-        <th>CF syntax trees</th>
+      <tgroup cols="9">
+        <colspec align="left" colname="col1" colnum="1" colwidth="2*" />
 
-        <th>CF syntax lists</th>
+        <colspec align="center" colname="col2" colnum="2" colwidth="1*" />
 
-        <th>Lexical syntax trees</th>
+        <colspec align="center" colname="col3" colnum="3" colwidth="1*" />
 
-        <th>Lexical syntax lists</th>
+        <colspec align="center" colname="col4" colnum="4" colwidth="1*" />
 
-        <th>Lists</th>
+        <colspec align="center" colname="col5" colnum="5" colwidth="1*" />
 
-        <th>Sets</th>
+        <colspec align="center" colname="col6" colnum="6" colwidth="1*" />
 
-        <th>Relations</th>
+        <colspec align="center" colname="col7" colnum="7" colwidth="1*" />
 
-        <th>Tuples</th>
-      </tr>
+        <colspec align="center" colname="col8" colnum="8" colwidth="1*" />
 
-      <tr>
-        <th>Pattern matching</th>
+        <colspec align="center" colname="col9" colnum="9" colwidth="1*" />
 
-        <td>Y (CS)</td>
+        <thead>
+          <row>
+            <entry>Which features work on which datatypes?</entry>
 
-        <td>Y, CS, LM</td>
+            <entry>CF syntax trees</entry>
 
-        <td>Y, PS</td>
+            <entry>CF syntax lists</entry>
 
-        <td>Y, PS, LM</td>
+            <entry>Lexical syntax trees</entry>
 
-        <td>Y, HT</td>
+            <entry>Lexical syntax lists</entry>
 
-        <td>Y, HT</td>
+            <entry>Lists</entry>
 
-        <td>Y, HT</td>
+            <entry>Sets</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>Relations</entry>
 
-      <tr>
-        <th>Pattern construction</th>
+            <entry>Tuples</entry>
+          </row>
+        </thead>
 
-        <td>Y, CS</td>
+        <tbody>
+          <row>
+            <entry>Pattern matching</entry>
 
-        <td>Y, PS</td>
+            <entry>Y (CS)</entry>
 
-        <td>Y, PS</td>
+            <entry>Y, CS, LM</entry>
 
-        <td>Y</td>
+            <entry>Y, PS</entry>
 
-        <td>Y, HT</td>
+            <entry>Y, PS, LM</entry>
 
-        <td>Y, HT</td>
+            <entry>Y, HT</entry>
 
-        <td>Y, HT</td>
+            <entry>Y, HT</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>Y, HT</entry>
 
-      <tr>
-        <th>Generator/ Comprehension</th>
+            <entry>Y</entry>
+          </row>
 
-        <td>N</td>
+          <row>
+            <entry>Pattern construction</entry>
 
-        <td>N</td>
+            <entry>Y, CS</entry>
 
-        <td>N</td>
+            <entry>Y, PS</entry>
 
-        <td>N</td>
+            <entry>Y, PS</entry>
 
-        <td>LC</td>
+            <entry>Y</entry>
 
-        <td>SC</td>
+            <entry>Y, HT</entry>
 
-        <td>SC</td>
+            <entry>Y, HT</entry>
 
-        <td>N</td>
-      </tr>
+            <entry>Y, HT</entry>
 
-      <tr>
-        <th>Complete Functions</th>
+            <entry>Y</entry>
+          </row>
 
-        <td><emphasis>Y</emphasis></td>
+          <row>
+            <entry>Generator/ Comprehension</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>N</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>N</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>N</entry>
 
-        <td>Y</td>
+            <entry>N</entry>
 
-        <td>Y</td>
+            <entry>LC</entry>
 
-        <td>Y</td>
+            <entry>SC</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>SC</entry>
 
-      <tr>
-        <th>Equations</th>
+            <entry>N</entry>
+          </row>
 
-        <td>Y, BC</td>
+          <row>
+            <entry>Complete Functions</entry>
 
-        <td>Y, BC</td>
+            <entry>Y</entry>
 
-        <td>Y, BC</td>
+            <entry>Y</entry>
 
-        <td>Y, BC</td>
+            <entry>Y</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>Y</entry>
 
-        <td>Y</td>
+            <entry>Y</entry>
 
-        <td>Y</td>
+            <entry>Y</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>Y</entry>
 
-      <tr>
-        <th>Polymorphism</th>
+            <entry>Y</entry>
+          </row>
 
-        <td>N</td>
+          <row>
+            <entry>Equations</entry>
 
-        <td>N</td>
+            <entry>Y, BC</entry>
 
-        <td>N</td>
+            <entry>Y, BC</entry>
 
-        <td>N</td>
+            <entry>Y, BC</entry>
 
-        <td>Y</td>
+            <entry>Y, BC</entry>
 
-        <td>Y</td>
+            <entry>Y</entry>
 
-        <td>Y</td>
+            <entry>Y</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>Y</entry>
 
-      <tr>
-        <th>Serialization</th>
+            <entry>Y</entry>
+          </row>
 
-        <td>AsFix</td>
+          <row>
+            <entry>Polymorphism</entry>
 
-        <td>AsFix</td>
+            <entry>N</entry>
 
-        <td>AsFix</td>
+            <entry>N</entry>
 
-        <td>AsFix</td>
+            <entry>N</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>N</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>Y</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>Y</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>Y</entry>
 
-      <tr>
-        <th>Traversal Functions</th>
+            <entry>Y</entry>
+          </row>
 
-        <td>Y</td>
+          <row>
+            <entry>Serialization</entry>
 
-        <td>Y</td>
+            <entry>AsFix</entry>
 
-        <td>Y</td>
+            <entry>AsFix</entry>
 
-        <td>Y</td>
+            <entry>AsFix</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>AsFix</entry>
 
-        <td>Y</td>
+            <entry>Y</entry>
 
-        <td>Y</td>
+            <entry>Y</entry>
 
-        <td>Y</td>
-      </tr>
+            <entry>Y</entry>
 
-      <tr>
-        <th>Subtyping</th>
+            <entry>Y</entry>
+          </row>
 
-        <td>N</td>
+          <row>
+            <entry>Traversal Functions</entry>
 
-        <td>N</td>
+            <entry>Y</entry>
 
-        <td>N, except character class inclusion</td>
+            <entry>Y</entry>
 
-        <td>N</td>
+            <entry>Y</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>Y</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>Y</entry>
 
-        <td><emphasis>Y</emphasis></td>
+            <entry>Y</entry>
 
-        <td><emphasis>Y</emphasis></td>
-      </tr>
-    </informaltable>
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+
+          <row>
+            <entry>Subtyping</entry>
+
+            <entry>N</entry>
+
+            <entry>N</entry>
+
+            <entry>N, except character class inclusion</entry>
+
+            <entry>N</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+
+            <entry>Y</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
 
     <itemizedlist>
       <listitem>
@@ -449,7 +477,8 @@
 
           <listitem>
             <para>There are built-in types (bool, int str, loc) that have a
-            syntactic counterpart (not yet defined).</para>
+            syntactic counterpart (not yet defined how to do this
+            exactly).</para>
           </listitem>
 
           <listitem>
@@ -465,12 +494,18 @@
         <itemizedlist>
           <listitem>
             <para>There is a notation of "pattern": a quoted concrete syntax
-            fragment that may contain variables.</para>
+            fragment that may contain variables and subexpresions to be
+            evaluated.</para>
           </listitem>
 
           <listitem>
-            <para>A "select" expression corresponds to a set of rewrite
-            rules.</para>
+            <para>There are lists, sets and relations together with
+            comprhensions for these types.</para>
+          </listitem>
+
+          <listitem>
+            <para>A "select" expression corresponds to the matching provided
+            by a set of rewrite rules.</para>
           </listitem>
 
           <listitem>
@@ -537,8 +572,9 @@
     <section>
       <title>Booleans</title>
 
-      <para>Probably a non-typical example, but let's try it anyway. (It looks
-      horrible compared to the ASF version)</para>
+      <para>Probably a non-typical example, but let's try it anyway. It looks
+      horrible compared to the ASF version but gives an indication how we can
+      convert ASF+SDF specifications to Rascal.</para>
 
       <programlisting>syntax module Booleans
 
@@ -603,7 +639,7 @@ module Tree-Examples
 imports Tree-syntax
 
 %% Ex1a: Count leaves in a TREE
-%% Idea: int N : T generates alle int leaves in the tree
+%% Idea: NAT N : T generates alle NAT leaves in the tree
 %% # is the built-in length-of operator
 
 fun int cnt(TREE T) {
@@ -616,8 +652,7 @@ fun int cnt(TREE T) {
 }
 
 %% Ex2: Sum all leaves in a TREE
-%% NB sum is a built-in that adds all elements in a set or 
-%% list.
+%% NB sum is a built-in that adds all elements in a set or list.
 %% Here we see immediately the need to identify
 %% - the built-in sort "int"
 %% - the syntactic sort "NAT"
@@ -627,11 +662,10 @@ fun int sumtree(TREE T) {
 }
 
 %% Ex3: Increment all leaves in a TREE
-%% Idea: using T replace int N by N+1 generates alle leaves in the 
+%% Idea: using the construct "replace T { ... }" all leaves in the 
 %% tree T that match an integer and replaces each N in T by N+1.
 %% The expression as a whole returns the modified term.
-%% This is an extremely compact manner of writing a 
-%% transformer!
+%% This is an extremely compact manner of writing a transformer!
 %% Note that two conversions are needed here:
 %% - from int to NAT to match subterms
 %% - from int to NAT to convert the result of addition into 
@@ -647,9 +681,9 @@ fun TREE inc(TREE T) {
 %% Ex4: full replacement of g by i
 %% Question: how about the traversal order?
 %% Probable answer: bottom-up and top-down are both ok so it does 
-%% not matter.
-%% Bottom-up case: g are replaced by i's.
-%% Top-down case: g are replaced by i's but in the arguments of 
+%% not matter in this example.
+%% Bottom-up case: g's are replaced by i's.
+%% Top-down case: g's are replaced by i's but in the arguments of 
 %% the new i-tree g's are later replaced by i's.
 %% Question: Is it relevant to fix the traversal order? 
 %% The choice should then be bottom-up since top-down can be
@@ -687,8 +721,8 @@ fun TREE drepl(TREE T) {
 
 %% If we want the whole repertoire of traversal functions
 %% can be made available:
-%% - using T replace first bu ...
-%% - using T replcae all td ...
+%% - replace T first bu { ... }
+%% - replace T all td { ... }
 %% - etc.
 %% A nice touch is that these properties are not tied to the
 %% declaration of a travesal function (as in ASF+SDF) but to 
@@ -735,7 +769,7 @@ fun set[TREE] find_outer_gs(TREE T) {
     { S | first td STATEMENT S : T, [| g($T1, $T2) |] == S }
 }
 
-or may abbreviated as (eliminating the need for a variable S):
+or maybe abbreviated as (eliminating the need for a variable S):
 
 fun set[TREE] find_outer_gs(TREE T) {
     TREE T1, T2;
@@ -744,7 +778,7 @@ fun set[TREE] find_outer_gs(TREE T) {
     }
 }
 
-and abbreviation:
+and similar for inner g's:
 
 fun set[TREE] find_inner_gs(TREE T) {
     TREE T1, T2;
@@ -797,8 +831,6 @@ fun Var fresh(Var V, set[Var] S) {
 }
 
 %% Substitution: replace all occurrences of V in E2 by E1
-%% This functions used to be defined by separate equations,
-%% now we use a case distinction
 
 fun Exp subst(Var V1, Exp E1, Exp E2) {
     Var V2;
@@ -878,13 +910,12 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 %% Version 2: using a global variable
 %% to generate new variables
 
-
 fun Var newVar() {
     global int Cnt := 0   %% Initialize global Cnt on first call 
                           %% of newVar. This is similar to a 
                           %% local static var in C.
     Cnt := Cnt + 1;
-    return "x" + Cnt
+    "x" + Cnt
 }       
 
 %% Rename -- Version 2
@@ -900,7 +931,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
                 $(rename(E2, {&lt;V, Y&gt;} union Rn)) 
               end
            |]
-       when Y := newVar
+       when Y := newVar()
 
     [| $V |] =&gt; V1
        when { V1 } == Rn[V]
@@ -914,7 +945,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
 fun Var newVar() {
     global int Cnt := 0   
     Cnt := Cnt + 1;
-    return "x" + Cnt
+    "x" + Cnt
 }       
 
 fun Exp rename(Exp E) {
@@ -958,8 +989,7 @@ fun Exp rename(Exp E) {
 imports Pico-syntax
 imports Errors
 
-types
- rel[PICO-ID,TYPE] -&gt; Env
+type Env = rel[PICO-ID,TYPE]
 
 var
     DECLS Decls;
@@ -969,16 +999,16 @@ var
     Env Env;
 
 fun list[Error] tcp(PROGRAM P) {
-    select (P){
+    select P {
     [| begin $Decls $Series end |] =&gt;
-           [ tcst(S, Env) | Stat S : Series ]
+           [ tcst(S, Env) | Stat S : Series ] %% list comprehension
        when Env := {&lt;Id, Type&gt; | 
                     [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
     }
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
-    select (Stat) {
+    select Stat {
     [| $Id := $Exp |] =&gt; type-of(Exp, Type, Env)
        when {&lt;Id,Type&gt;} := Env[Id]
 
@@ -997,7 +1027,7 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     Id Id;
     Exp Exp;
 
-    select (E) {
+    select E {
     [| $NatCon |] =&gt; []
        when Type == natural
 
@@ -1060,8 +1090,7 @@ imports Pico-syntax
 
 hiddens
 
-types
- rel[PICO-ID,TYPE] -&gt; Env
+type Env = rel[PICO-ID,TYPE]
 
 exports
 
@@ -1375,7 +1404,7 @@ fun PROGRAM cse(PROGRAM P) {
     </section>
 
     <section>
-      <title>Pico constant propagation (UPDATE)</title>
+      <title>Pico constant propagation</title>
 
       <para><programlisting>module Pico-constant-propagation
 
@@ -1443,8 +1472,14 @@ fun PROGRAM cp(PROGRAM P) {
     <para>See separate SDF definition.</para>
   </section>
 
-  <section>
-    <title>Integration with Tscripts (UPDATE THIS)</title>
+  <section xml:id="section.integration-tscript">
+    <title>Integration with Tscripts (Outdated)</title>
+
+    <note>
+      <para>It is not yet clear whether we will also include Tscript in the
+      integration effort. For the time being, this section is considered
+      outdated.</para>
+    </note>
 
     <section>
       <title>Introduction</title>
@@ -1924,6 +1959,15 @@ process mkWave(int N) is ...</programlisting>
 
       <listitem>
         <para>What happens if no case in a select matches?</para>
+      </listitem>
+
+      <listitem>
+        <para>In a list comprehension: do list values splice into the list
+        result?</para>
+      </listitem>
+
+      <listitem>
+        <para>Ditto for set comprehensions.</para>
       </listitem>
 
       <listitem>
