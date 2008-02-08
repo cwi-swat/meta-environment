@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -576,7 +576,7 @@ fun Bool reduce(Bool B){
     Bool B1, B2, B3;
     select B {
       [| $B1 &amp; $B2 |]  =&gt; and(B1, B2)
-      [| $B1 \| $B2 |] =&gt; or(B1, B2)    %% Note: | has to be escaped!
+      [| $B1 \| $B2 |] =&gt; or(B1, B2)  %% Note: | has to be escaped!
       [| $B3 |]        =&gt; B
     }
 }</programlisting>
@@ -634,7 +634,8 @@ fun int sumtree(TREE T) {
 %% transformer!
 %% Note that two conversions are needed here:
 %% - from int to NAT to match subterms
-%% - from int to NAT to convert the result of addition into a NAT tree
+%% - from int to NAT to convert the result of addition into 
+%%   a NAT tree
 
 fun TREE inc(TREE T) {
     int N;
@@ -645,10 +646,11 @@ fun TREE inc(TREE T) {
 
 %% Ex4: full replacement of g by i
 %% Question: how about the traversal order?
-%% Probable answer: bottom-up and top-down are both ok so it does not matter.
+%% Probable answer: bottom-up and top-down are both ok so it does 
+%% not matter.
 %% Bottom-up case: g are replaced by i's.
-%% Top-down case: g are replaced by i's but in the arguments of the new i-tree
-%% g's are later replaced by i's.
+%% Top-down case: g are replaced by i's but in the arguments of 
+%% the new i-tree g's are later replaced by i's.
 %% Question: Is it relevant to fix the traversal order? 
 %% The choice should then be bottom-up since top-down can be
 %% achieved with recursion (see srepl, below).
@@ -689,8 +691,8 @@ fun TREE drepl(TREE T) {
 %% - using T replcae all td ...
 %% - etc.
 %% A nice touch is that these properties are not tied to the
-%% declaration of a travesal function (as in ASF+SDF) but to its use.
-%% The above would become:
+%% declaration of a travesal function (as in ASF+SDF) but to 
+%% its use. The above would become:
 
 fun TREE drepl(TREE T) {
     TREE T1, T2;
@@ -699,10 +701,11 @@ fun TREE drepl(TREE T) {
     }
 }
 
-%% Ex6a: shallow replacement of g by i (i.e. only outermost g's are replaced);
-%% Usually done with a top-down traversal.
+%% Ex6a: shallow replacement of g by i (i.e. only outermost 
+%% g's are replaced); Usually done with a top-down traversal.
 %% For brevity, we use here a string variable FUN that matches
-%% a function symbol: do we want this? It corresponds to a lexical variable.
+%% a function symbol: do we want this? It corresponds to a 
+%% lexical variable.
 
 fun TREE srepl(TREE T) {
     TREE T1, T2;
@@ -723,8 +726,9 @@ fun TREE srepl(TREE T) {
     }
 }
 
-%% Continuing this line of thought, we can also add these directives
-%% to all generators (where "all td" would be the default):
+%% Continuing this line of thought, we can also add these 
+%% directives to all generators (where "all td" would be 
+%% the default):
 
 fun set[TREE] find_outer_gs(TREE T) {
     TREE T1, T2;
@@ -816,7 +820,8 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
          when V1 != V2,
               not(V1 in freeVars(E2) &amp; V2 in freeVars(E1))
 
-      [| fn $V2 =&gt; $Ea |] =&gt; [| fn $V3 =&gt; $(subst(V1, E1, subst(V2, V3, E2))) |]
+      [| fn $V2 =&gt; $Ea |] =&gt; 
+      [| fn $V3 =&gt; $(subst(V1, E1, subst(V2, V3, E2))) |]
          when V1 != V2,
               V1 in freeVars(Ea) &amp; V2 in freeVars(E1),
               V3 := fresh(V2,  freeVars(Ea) union freeVars(E1))
@@ -875,8 +880,9 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
 
 
 fun Var newVar() {
-    global int Cnt := 0   %% Initialize global Cnt on first call of newVar
-                          %% This is similar to a local static var in C.
+    global int Cnt := 0   %% Initialize global Cnt on first call 
+                          %% of newVar. This is similar to a 
+                          %% local static var in C.
     Cnt := Cnt + 1;
     return "x" + Cnt
 }       
@@ -906,7 +912,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn) {
 %% Rename -- Version 3, with Rn also as global variabele
 
 fun Var newVar() {
-    global int Cnt := 0   %% Initialize global Cnt on first call of newVar
+    global int Cnt := 0   
     Cnt := Cnt + 1;
     return "x" + Cnt
 }       
@@ -966,7 +972,8 @@ fun list[Error] tcp(PROGRAM P) {
     select (P){
     [| begin $Decls $Series end |] =&gt;
            [ tcst(S, Env) | Stat S : Series ]
-       when Env := {&lt;Id, Type&gt; | [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
+       when Env := {&lt;Id, Type&gt; | 
+                    [| $(PICO-ID Id) : $(TYPE Type) |] : Decls}
     }
 }
 
@@ -1146,9 +1153,9 @@ fun VEnv evalIdTypes(Id-Type* idtypes) {
     Id id;
     Id-Type* tail;
     select idtypes { 
-      [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail), id, 0)
+      [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail),id,0)
   
-      [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail), id, "")
+      [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail),id,"")
 
       [| |] =&gt; []
     }
@@ -1169,17 +1176,20 @@ fun VEnv evalStatement(Statement stat) {
     Series series, series1, series2;
     
     select stat {    
-      [| if $exp then $series1 else $series2 fi |] =&gt; evalStatements(series1)
+      [| if $exp then $series1 else $series2 fi |] =&gt; 
+         evalStatements(series1)
          when evalExp(exp, venv) != 0
 
-      [| if $exp then $series1 else $series2 fi |] =&gt; evalStatements(series2)
+      [| if $exp then $series1 else $series2 fi |] =&gt; 
+         evalStatements(series2)
          when evalExp(exp, venv) == 0
         
       [| while $exp do $series od |] =&gt; venv
          when evalExp(exp, venv) == 0
 
       
-      [| while $exp do $series od |] =&gt; evalStatement([|while $exp do $series od |])
+      [| while $exp do $series od |] =&gt; 
+         evalStatement([|while $exp do $series od |])
          when evalExp(exp, venv) != 0,
               venv := evalStatements(series)
     }
@@ -1216,7 +1226,7 @@ fun VEnv evalExp(Exp exp) {
       <programlisting>module Pico-controlflow
 imports pico/syntax/Pico
 
-type CP = EXP | STATEMENT;     %% A Code Point
+type CP = EXP | STATEMENT;     %% A Code Point, union of two types
 
 type cf_segment &lt; set[CP] entry, rel[CP,CP] graph, set[CP] exit&gt;;
 
@@ -1244,7 +1254,7 @@ fun cf_segment cflow(STATEMENT Stat){
 
     select (Stat) {
       [| while $Exp do $Stats od |] =&gt;
-             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}), {Exp}&gt;
+             &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
          when &lt;En, R, Ex&gt; := cflow(Stats)
                 
       [| if $Exp then $Stats1 else $Stats2 fi |] =&gt;
@@ -1850,16 +1860,16 @@ process mkWave(int N) is ...</programlisting>
 
             <itemizedlist>
               <listitem>
-                <para>[| while $Exp do $Stats od |]</para>
+                <para><programlisting>[| while $Exp do $Stats od |]</programlisting></para>
               </listitem>
 
               <listitem>
-                <para>{&lt;S, Id&gt; | STATEMENT S : P, [| $(PICO-ID Id) :=
-                $(EXP Exp) |] == S}</para>
+                <para><programlisting>{&lt;S, Id&gt; | STATEMENT S : P, 
+           [| $(PICO-ID Id) := $(EXP Exp) |] == S}</programlisting></para>
               </listitem>
 
               <listitem>
-                <para>[| let $Y = $(rename(E1)) in $(rename(E2)) end |]</para>
+                <para><programlisting>[| let $Y = $(rename(E1)) in $(rename(E2)) end |]</programlisting></para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -1902,7 +1912,7 @@ process mkWave(int N) is ...</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para>[| if @any@ $Stats fi |]</para>
+            <para><programlisting>[| if @any@ $Stats fi |]</programlisting></para>
           </listitem>
         </itemizedlist>
       </listitem>
