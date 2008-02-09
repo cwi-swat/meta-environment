@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -574,7 +574,9 @@
 
       <para>Probably a non-typical example, but let's try it anyway. It looks
       horrible compared to the ASF version but gives an indication how we can
-      convert ASF+SDF specifications to Rascal.</para>
+      convert ASF+SDF specifications to Rascal. See <xref
+      linkend="section.booleans-with-replace" /> for a much shorter version
+      that uses replace.</para>
 
       <programlisting>syntax module Booleans
 
@@ -786,6 +788,74 @@ fun set[TREE] find_inner_gs(TREE T) {
       [| g($T1, $T2) |]
     }
 }</programlisting></para>
+    </section>
+
+    <section xml:id="section.booleans-with-replace">
+      <title>Booleans (version2 using replace)</title>
+
+      <para>The earlier definition of Booleans was quite involved. A much
+      simpler solution exists using the replace construct that we have
+      encountered in the above examples.<programlisting>module Bool-examples2
+imports Booleans
+
+fun Bool reduce(Bool B) {
+    Bool B1, B2;
+    replace B bu {
+      [| true &amp; $B2 |]   =&gt; B2
+      [| false &amp; $B2 |]  =&gt; [| false |]
+
+      [| true \| $B2 |]  =&gt; [| true |]
+      [| false \| $B2 |] =&gt; B2
+    }
+}</programlisting></para>
+    </section>
+
+    <section>
+      <title>Dot Product</title>
+
+      <para>[Example taken from TXL documentation]</para>
+
+      <programlisting>syntax module Vectors
+sorts Vector
+
+context-free syntax
+   "(" NAT* ")"      -&gt; Vector
+
+   Vector "." Vector -&gt; NAT %% innerproduct, e.g. (1 2 3).(3 2 1)  =&gt;  10
+
+module Innerproduct
+
+imports Vectors
+
+fun int innerProduct(Vector V1, V2){
+    NAT N1, N2;
+    NAT* Rest1, Rest2;
+
+    if [| ($N1 $Rest1) |] := V1 &amp; 
+       [| ($N2 $Rest2) |] := 2 
+    then
+       (N1*N2) + innerProduct([| ($Rest1) |], [| ($Rest2) |])
+    else 
+       0
+    fi
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Bubble sort</title>
+
+      <para>[Example taken from XL documentation]</para>
+
+      <programlisting>module Bubble
+
+fun NAT* sort(NAT* Numbers){
+    NAT N1, N2;
+    NAT Rest1, Rest2;
+    replace Numbers {
+      [| $Rest1 $N1 $N2 $Rest2 |] =&gt; [| $Rest1 $N2 $N1 $Rest2 |]
+      when N1 &gt; N2
+    }
+}</programlisting>
     </section>
 
     <section>
@@ -1974,6 +2044,37 @@ process mkWave(int N) is ...</programlisting>
         <para>Unexplored idea: add (possibly lazy) generators for all types;
         this allows to generate, for instance, all statements in a
         program.</para>
+      </listitem>
+
+      <listitem>
+        <para>Shopping list of ideas in Tom:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Named patterns to avoid building a term, i.e. w@[| while
+            $Exp do $stat od |].</para>
+          </listitem>
+
+          <listitem>
+            <para>Anti-patterns, i.e. the complement of a patterns: ! [| while
+            $Exp do $stat od |] matches anything but a while.</para>
+          </listitem>
+
+          <listitem>
+            <para>Anonymous variables a la Prolog: [| while $_ do $stat od
+            |].</para>
+          </listitem>
+
+          <listitem>
+            <para>String matching in patterns.</para>
+          </listitem>
+
+          <listitem>
+            <para>Tom uses the notation %[ ... ]% for quotes string with
+            embedded @...@ constructs that are evaluated. It also has a
+            backquote construct.</para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>
