@@ -11,22 +11,33 @@ context-free start-symbols
   Type
 
 exports
-sorts Type LabelledType
+sorts Type LabelledType LabelledTypes TypeVar 
+      BasicType StructuredType FunctionType PatternType
 
 context-free syntax
-   Type IdCon?                                  -> LabelledType
 
-   "bool"                                       -> Type {cons("bool-type")} 
-   "int"                                        -> Type {cons("int-type")} 
-   "str"                                        -> Type {cons("str-type")} 
-   "list" "[" Type "]"                          -> Type {cons("list-type")} 
-   "set" "[" Type "]"                           -> Type {cons("set-type")}
-   "rel" "[" {LabelledType ","}+ "]"            -> Type {cons("rel-type")}
-   "<" LabelledType "," {LabelledType ","}+ ">" -> Type {cons("tuple-type")}
-   Symbol                                       -> Type {cons("symbol-type")}
+   "&" IdCon                                               -> TypeVar
+   TypeVar                                                 -> Sort
 
-   "(" Type ")"                                 -> Type {bracket}     
+   Type IdCon?                                             -> LabelledType
 
-context-free priorities
-  Type "*" Type  -> Type {right, cons("relation")}  >
-  Type "->" Type -> Type {right, cons("function")} 
+   "bool"                                                  -> BasicType {cons("bool-type")} 
+   "int"                                                   -> BasicType {cons("int-type")} 
+   "str"                                                   -> BasicType {cons("str-type")} 
+%% add locations
+   
+   {LabelledType ","}+                                     -> LabelledTypes
+   "list" "[" Type "]"                                     -> StructuredType {cons("list-type")} 
+   "set" "[" Type "]"                                      -> StructuredType {cons("set-type")}
+   "rel" "[" LabelledTypes "]"                             -> StructuredType {cons("rel-type")}
+   "<" LabelledType "," LabelledTypes ">"                  -> StructuredType {cons("tuple-type")}
+   Symbol                                                  -> StructuredType {cons("symbol-type")}
+
+   "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cond("function-type")}
+
+   "pat" Type Variable "(" LabelledTypes ")"                        -> PatternType
+
+   BasicType | StructuredType | FunctionType | PatternType -> Type
+ 
+   "(" Type ")"                                            -> Type {bracket}     
+

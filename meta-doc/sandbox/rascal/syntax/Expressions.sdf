@@ -66,6 +66,7 @@ context-free priorities
 
 context-free syntax
          "if" Predicate "then" Expression "else" Expression "fi" -> Expression
+%% Do we want elseif etc.?
 
 context-free syntax
          Pattern                                                 -> Expression

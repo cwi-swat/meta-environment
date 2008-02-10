@@ -505,17 +505,21 @@
 
           <listitem>
             <para>A "select" expression corresponds to the matching provided
-            by a set of rewrite rules.</para>
+            by a set of rewrite rules. However, it provides only matching at
+            the top level of its argument.</para>
           </listitem>
 
           <listitem>
             <para>A "replace" expression corresponds to a traversal function
-            (transformer).</para>
+            (transformer). Given a term and a list of pattern/replacement
+            pairs it traverses the term as long as replacements are
+            possible.</para>
           </listitem>
 
           <listitem>
-            <para>A "search" expression corresponds to a traversal function
-            (~accumulator).</para>
+            <para>A "search" expression also corresponds to a traversal
+            function. Given a term and a list of patterns, it returns a list
+            all subterms that match any of patterns.</para>
           </listitem>
 
           <listitem>
@@ -850,12 +854,38 @@ fun int innerProduct(Vector V1, V2){
 
 fun NAT* sort(NAT* Numbers){
     NAT N1, N2;
-    NAT Rest1, Rest2;
+    NAT* Rest1, Rest2;
     replace Numbers {
       [| $Rest1 $N1 $N2 $Rest2 |] =&gt; [| $Rest1 $N2 $N1 $Rest2 |]
       when N1 &gt; N2
     }
 }</programlisting>
+
+      <para>Are $Rest1 and $Rest2 needed? Would</para>
+
+      <programlisting>    replace Numbers {
+      [| $N1 $N2 |] =&gt; [| $N2 $N1 |]
+      when N1 &gt; N2
+    }</programlisting>
+
+      <para>be ok?</para>
+    </section>
+
+    <section>
+      <title>Generic Bubble sort</title>
+
+      <para>Here is a generic bubble sort wich uses type parameters
+      (&amp;ELEM) and a function parameter.<programlisting>module Bubble
+
+fun &amp;ELEM* sort(&amp;ELEM* Elements, fun bool GreaterThan(&amp;ELEM, &amp;ELEM)){
+    &amp;ELEM E1, NE2;
+    &amp;ELEM* Rest1, Rest2;
+    replace Elements {
+      [| $Rest1 $E1 $E2 $Rest2 |] =&gt; [| $Rest1 $E2 $E1 $Rest2 |]
+      when GreaterThan(E1, E2)
+    }
+}</programlisting>Do we want this generality? What are the implications for
+      the implementation?</para>
     </section>
 
     <section>
@@ -1335,7 +1365,7 @@ fun cf_segment cflow({STATEMENT ";"}* Stats){
     rel[CP,CP] R1, R2;
     set[CP] En1, En2, Ex1, Ex2;
     
-    select (Stats) {
+    select Stats {
       [| Stat ; $Stats2 |] =&gt;
              &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
          when &lt;En1, R1, Ex1&gt; := cflow(Stat),
@@ -1351,7 +1381,7 @@ fun cf_segment cflow(STATEMENT Stat){
     rel[CP,CP] R1, R2;
     set[CP] En1, En2, Ex1, Ex2;
 
-    select (Stat) {
+    select Stat {
       [| while $Exp do $Stats od |] =&gt;
              &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
          when &lt;En, R, Ex&gt; := cflow(Stats)
@@ -1471,6 +1501,46 @@ fun PROGRAM cse(PROGRAM P) {
           <para>There is no redefinition of Id between S and E2.</para>
         </listitem>
       </itemizedlist>
+
+      <para>Note that a slight abbreviation is possible if we introduce
+      labelled patterns (here S):</para>
+
+      <programlisting> rel[EXP, PICO-ID] replacements := 
+       {&lt;E2, Id&gt; | [| $(PICO-ID Id) := $(EXP E) |] S : P,
+                   Id notin E,
+                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+       };</programlisting>
+
+      <para>Also note that we could factor out the assignment pattern to make
+      cse more generic if we introduce patterns a sfirst class
+      citizens:</para>
+
+      <programlisting>fun PROGRAM cse(PROGRAM P, pat STATEMENT Assign(PICO-ID Id, EXP E)) {
+ ...
+    rel[EXP, PICO-ID] replacements := 
+       {&lt;E2, Id&gt; | Assign S : P,
+                   Id notin E,
+                   EXP E2 : reachX({S}, Defs[-,Id], Pred)
+       };
+ 
+ ...
+}</programlisting>
+
+      <para>Example invocations:</para>
+
+      <programlisting>cse(P, [| $(PICO-ID Id) := $(EXP E) |])</programlisting>
+
+      <para>or</para>
+
+      <programlisting>cse(P, [| move $(EXP E) to $(PICO-ID Id) |])</programlisting>
+
+      <para>Note that the order of variables in the pattern and its
+      declaration may differ.</para>
+
+      <para>It is to be determined how the instantiation of a pattern looks,
+      e.g.</para>
+
+      <programlisting>Assign([|x|], [| y = 1 |])</programlisting>
     </section>
 
     <section>
@@ -1985,12 +2055,42 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
+        <para>More questions about patterns:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Do we want the subexpressions in patterns?</para>
+          </listitem>
+
+          <listitem>
+            <para>Should "patterns" be first-class citizens that can be used
+            as values?</para>
+          </listitem>
+
+          <listitem>
+            <para>Do we want string variables in patterns?</para>
+          </listitem>
+
+          <listitem>
+            <para>Do we want to add regular expression matching primitives to
+            patterns? Ex.</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><programlisting>[| if @any@ $Stats fi |]</programlisting></para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
         <para>Dynamic variables need more thought; do we want them?</para>
       </listitem>
 
       <listitem>
         <para>The relation (no pun intended) between local variable
-        declarations in functions and comprehensions has to be
+        declarations in functions, patterns and comprehensions has to be
         established.</para>
       </listitem>
 
@@ -2004,22 +2104,8 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>Do we want string variables in patterns?</para>
-      </listitem>
-
-      <listitem>
-        <para>List matching?</para>
-      </listitem>
-
-      <listitem>
-        <para>Do we want to add regular expression matching primitives to
-        patterns? Ex.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><programlisting>[| if @any@ $Stats fi |]</programlisting></para>
-          </listitem>
-        </itemizedlist>
+        <para>How does list matching fit in? Probably no problem, see above
+        examples.</para>
       </listitem>
 
       <listitem>
@@ -2028,7 +2114,8 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>What happens if no case in a select matches?</para>
+        <para>What happens if no case in a select matches? Some kind of
+        failure? How does it propagate? Runtime error?</para>
       </listitem>
 
       <listitem>
@@ -2044,6 +2131,15 @@ process mkWave(int N) is ...</programlisting>
         <para>Unexplored idea: add (possibly lazy) generators for all types;
         this allows to generate, for instance, all statements in a
         program.</para>
+      </listitem>
+
+      <listitem>
+        <para>The "equations" from Rscript are not yet included.</para>
+      </listitem>
+
+      <listitem>
+        <para>Should "functions" be first-class citizens that can be used as
+        values?</para>
       </listitem>
 
       <listitem>
@@ -2070,9 +2166,24 @@ process mkWave(int N) is ...</programlisting>
           </listitem>
 
           <listitem>
-            <para>Tom uses the notation %[ ... ]% for quotes string with
+            <para>Tom uses the notation %[ ... ]% for quoted strings with
             embedded @...@ constructs that are evaluated. It also has a
             backquote construct.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Shopping list of ideas from TXL:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>"redefine" allows modification of an imported
+            grammar.</para>
+          </listitem>
+
+          <listitem>
+            <para>An "any" sort that matches anything.</para>
           </listitem>
         </itemizedlist>
       </listitem>

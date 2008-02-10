@@ -9,21 +9,22 @@ context-free start-symbols
         Declaration
 
 exports
-sorts Declaration VarDecl VarDeclInit FunBody 
+sorts Declaration VarDecl VarDeclInit 
 
 context-free syntax
-   Type {Variable ","}+                                            -> VarDecl {cons("variable-decl")}
+   (BasicType | StructuredType) {Variable ","}+                    -> VarDecl {cons("variable-decl1")}
+   FunctionType | PatternType                                      -> VarDecl {cons("variable-decl2")}
 
 context-free syntax
    "var" {VarDeclInit ";"}+                                        -> Declaration {cons("variables")}
    VarDecl (":=" Expression)?                                      -> VarDeclInit
 
 context-free syntax
-   "type" Sort "=" Type                                            -> Declaration
+   "type" Sort "=" Type                                            -> Declaration {cons("type-decl")}
 
 context-free syntax
-   "fun" Type Variable ("(" {VarDecl  ","}* ")")? "{" FunBody "}"  -> Declaration {cons("function")}
-   (VarDeclInit ";")* Expression                                   -> FunBody
+   FunctionType "{"  (VarDeclInit ";")* Expression  "}"            -> Declaration {cons("function-decl")}
+                                    
 
 
  
