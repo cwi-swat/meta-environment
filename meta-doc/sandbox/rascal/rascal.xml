@@ -580,7 +580,7 @@
       horrible compared to the ASF version but gives an indication how we can
       convert ASF+SDF specifications to Rascal. See <xref
       linkend="section.booleans-with-replace" /> for a much shorter version
-      that uses replace.</para>
+      that uses <literal>replace</literal>.</para>
 
       <programlisting>syntax module Booleans
 
@@ -836,7 +836,7 @@ fun int innerProduct(Vector V1, V2){
     NAT* Rest1, Rest2;
 
     if [| ($N1 $Rest1) |] := V1 &amp; 
-       [| ($N2 $Rest2) |] := 2 
+       [| ($N2 $Rest2) |] := V2 
     then
        (N1*N2) + innerProduct([| ($Rest1) |], [| ($Rest2) |])
     else 
@@ -848,7 +848,7 @@ fun int innerProduct(Vector V1, V2){
     <section>
       <title>Bubble sort</title>
 
-      <para>[Example taken from XL documentation]</para>
+      <para>[Example taken from TXL documentation]</para>
 
       <programlisting>module Bubble
 
@@ -956,7 +956,7 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
       [| fn $V3 =&gt; $(subst(V1, E1, subst(V2, V3, E2))) |]
          when V1 != V2,
               V1 in freeVars(Ea) &amp; V2 in freeVars(E1),
-              V3 := fresh(V2,  freeVars(Ea) union freeVars(E1))
+              V3 := fresh(V2, freeVars(Ea) union freeVars(E1))
     }
 }</programlisting></para>
     </section>
@@ -1023,7 +1023,7 @@ fun Var newVar() {
 fun Exp rename(Exp E, rel[Var,Var] Rn) {
     Var V, Y;
 
-    select (E) {
+    select E {
 
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $(rename(E1, Rn)) 
@@ -1052,7 +1052,7 @@ fun Exp rename(Exp E) {
     global rel[Var, Var] Rn := {}
     Var V, Y;
  
-    select (E){
+    select E {
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $rename(E1) 
               in 
@@ -1441,7 +1441,7 @@ fun set[PICO-ID] uninit(PROGRAM P) {
 
       <itemizedlist>
         <listitem>
-          <para>There is, maybe, a typing issue here. De type of
+          <para>There is a subtyping issue here. De type of
           <literal>reachX</literal> is:</para>
 
           <para><literal>set[&amp;T] reachX(set[&amp;T]
@@ -1454,8 +1454,9 @@ fun set[PICO-ID] uninit(PROGRAM P) {
           <para>but <literal>E</literal> has type <literal>EXP</literal>,
           <literal>{ROOT}</literal> has type
           <literal>set[STATEMENT]</literal>, and <literal>cflow</literal> has
-          type <literal>rel[CP,CP]</literal>, with <literal>EXP | STATEMENT
-          -&gt; CP</literal>.</para>
+          type <literal>rel[CP,CP]</literal>, with <literal>type CP = EXP |
+          STATEMENT</literal>. It requires proper subtyping, e.g.
+          set[STATEMENT] &lt; set[CP], to type this.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2085,7 +2086,8 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>Dynamic variables need more thought; do we want them?</para>
+        <para>Dynamic variables need more thought; do we really want
+        them?</para>
       </listitem>
 
       <listitem>
