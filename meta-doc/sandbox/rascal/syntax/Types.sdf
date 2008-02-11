@@ -1,10 +1,10 @@
 module Types
 
 imports basic/Whitespace
-        basic/IdentifierCon
         languages/sdf2/syntax/Regular
         languages/sdf2/syntax/Sorts
         languages/sdf2/syntax/Literals
+        Variables
 
 hiddens
 context-free start-symbols
@@ -16,10 +16,10 @@ sorts Type LabelledType LabelledTypes TypeVar
 
 context-free syntax
 
-   "&" IdCon                                               -> TypeVar
+   "&" Variable                                            -> TypeVar
    TypeVar                                                 -> Sort
 
-   Type IdCon?                                             -> LabelledType
+   Type Variable?                                         -> LabelledType
 
    "bool"                                                  -> BasicType {cons("bool-type")} 
    "int"                                                   -> BasicType {cons("int-type")} 
@@ -35,7 +35,7 @@ context-free syntax
 
    "fun" Type Variable "(" LabelledTypes ")"               -> FunctionType {cond("function-type")}
 
-   "pat" Type Variable "(" LabelledTypes ")"                        -> PatternType
+   "pat" Type Variable "(" LabelledTypes ")"               -> PatternType
 
    BasicType | StructuredType | FunctionType | PatternType -> Type
  

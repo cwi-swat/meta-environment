@@ -15,6 +15,9 @@ lexical syntax
   sep:"/" basename:ModuleName                    -> ModuleName {cons("root")} 
   dirname:ModuleWord sep:"/" basename:ModuleName -> ModuleName {cons("path")} 
 
+lexical restrictions
+  ModuleName -/- [A-Za-z0-9\_\-\/]
+
 context-free syntax
 
     "imports" ModuleName+                                 -> Imports

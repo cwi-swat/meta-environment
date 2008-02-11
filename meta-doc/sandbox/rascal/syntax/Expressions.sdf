@@ -27,7 +27,8 @@ context-free syntax
          Expression "union" Expression                           -> Expression {cons("union-op")}
          Expression "\\" Expression                              -> Expression {cons("diff-op")}
          Expression "+" Expression                               -> Expression {cons("add-op")}
-         Expression "x" Expression                               -> Expression {cons("mul-op")}
+         Expression "*" Expression                               -> Expression {cons("mul-op")}
+         Expression "x" Expression                               -> Expression {cons("prod-op")}
          Expression "[" Expression "]"                           -> Expression {cons("image-op")}
          Expression "." Variable                                 -> Expression {cons("field-op")}
 
@@ -57,6 +58,9 @@ context-free syntax
 	Expression ":=" Expression                              -> Predicate {cons("match")}
 	Expression "!:=" Expression                             -> Predicate {cons("non-match")}
 	Expression "in" Expression                              -> Predicate {cons("element-of")}
+
+         Expression ">" Expression                               -> Predicate {cons("greater")}
+
 	"(" Predicate ")"                                       -> Predicate {bracket}
 
 context-free priorities
@@ -79,7 +83,7 @@ context-free syntax
 
    	"select" Expression RewriteCases                        -> Expression
    	"replace" Expression Strategy RewriteCases              -> Expression
-   	"search" Expression Strategy SimpleCases                -> Expression
+%%   	"search" Expression Strategy SimpleCases                -> Expression
 
 
 

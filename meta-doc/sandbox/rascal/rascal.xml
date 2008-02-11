@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -684,6 +684,16 @@ fun TREE inc(TREE T) {
     }
 }
 
+%% EXPERIMENT: eliminate the above replace construct:
+
+fun TREE inc(TREE T) {
+    int N;
+    select T {
+      Node [| $N |] =&gt; [| $(N + 1) |]
+    }
+}
+
+
 %% Ex4: full replacement of g by i
 %% Question: how about the traversal order?
 %% Probable answer: bottom-up and top-down are both ok so it does 
@@ -773,24 +783,6 @@ fun TREE srepl(TREE T) {
 fun set[TREE] find_outer_gs(TREE T) {
     TREE T1, T2;
     { S | first td STATEMENT S : T, [| g($T1, $T2) |] == S }
-}
-
-or maybe abbreviated as (eliminating the need for a variable S):
-
-fun set[TREE] find_outer_gs(TREE T) {
-    TREE T1, T2;
-    search T first td {
-      [| g($T1, $T2) |]
-    }
-}
-
-and similar for inner g's:
-
-fun set[TREE] find_inner_gs(TREE T) {
-    TREE T1, T2;
-    search T first bu {
-      [| g($T1, $T2) |]
-    }
 }</programlisting></para>
     </section>
 
