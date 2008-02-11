@@ -6,6 +6,11 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import toolbus.IOperations;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -14,6 +19,7 @@ import toolbus.exceptions.ToolBusException;
 import toolbus.logging.ILogger;
 import toolbus.logging.IToolBusLoggerConstants;
 import toolbus.logging.LoggerFactory;
+import toolbus.parsercup.PositionInformation;
 import toolbus.process.ProcessCall;
 import toolbus.process.ProcessInstance;
 import toolbus.process.debug.ExecutionResult;
@@ -47,6 +53,7 @@ public class DebugToolBus extends ToolBus{
 	private final ConcurrentHashSet<Integer> processInstanceBreakPoints;
 	private final ConcurrentHashSet<String> processBreakPoints;
 	private final ConcurrentHashSet<StateElement> stateElementBreakPoints;
+	private final Map<String, List<Integer>> sourceCodeBreakPoints;
 
 	private final ConcurrentHashSet<ATerm> toolInstancesToMonitor;
 	private final ConcurrentHashSet<String> toolTypesToMonitor;
@@ -76,6 +83,7 @@ public class DebugToolBus extends ToolBus{
 		processInstanceBreakPoints = new ConcurrentHashSet<Integer>();
 		processBreakPoints = new ConcurrentHashSet<String>();
 		stateElementBreakPoints = new ConcurrentHashSet<StateElement>();
+		sourceCodeBreakPoints = new HashMap<String, List<Integer>>();
 
 		toolInstancesToMonitor = new ConcurrentHashSet<ATerm>();
 		toolTypesToMonitor = new ConcurrentHashSet<String>();
@@ -231,6 +239,26 @@ public class DebugToolBus extends ToolBus{
 								StateElement executedStateElement = executionResult.stateElement; // Ignore the Eclipse warning here, since it's bogus.
 								if(stateElementBreakPoints.contains(executedStateElement)){
 									viewer.stateElementBreakPointHit(executedStateElement);
+								}
+								PositionInformation posInfo = executedStateElement.getPosInfo();
+								if(posInfo != null){
+									String filename = posInfo.getFileName();
+									List<Integer> lineNumbers = sourceCodeBreakPoints.get(filename);
+									if(lineNumbers != null){
+										int beginLineNumber = posInfo.getBeginLine();
+										int endLineNumber = posInfo.getEndLine();
+										
+										Iterator<Integer> lineNumberIterator = lineNumbers.iterator();
+										synchronized(lineNumbers){
+											while(lineNumberIterator.hasNext()){
+												int lineNumber = lineNumberIterator.next().intValue();
+												if(lineNumber >= beginLineNumber && lineNumber <= endLineNumber){
+													viewer.sourceBreakPointHit(executedStateElement);
+													break;
+												}
+											}
+										}
+									}
 								}
 							}
 						}
@@ -481,6 +509,50 @@ public class DebugToolBus extends ToolBus{
 	 */
 	public void removeStateElementBreakPoint(StateElement stateElement){
 		stateElementBreakPoints.remove(stateElement);
+	}
+	
+	/**
+	 * Adds a breakpoint on the given sourcecode coordinates. When the debug toolbus executes a
+	 * state element which's position information matches the sourcecode coordiates, the attached
+	 * Viewer will be notified.
+	 * 
+	 * @param filename
+	 *            The name of the sourcefile
+	 * @param lineNumber
+	 *            The line number to add the breakpoint on. Note that sourcecode line numbers start
+	 *            counting at 0.
+	 */
+	public void addSourceCodeBreakPoint(String filename, int lineNumber){
+		synchronized(sourceCodeBreakPoints){
+			List<Integer> lineNumbers = sourceCodeBreakPoints.get(filename);
+			if(lineNumbers == null){
+				lineNumbers = new LinkedList<Integer>();
+				sourceCodeBreakPoints.put(filename, lineNumbers);
+			}
+			synchronized(lineNumbers){
+				lineNumbers.add(Integer.valueOf(lineNumber));
+			}
+		}
+	}
+	
+	/**
+	 * Removes the breakpoint from the given source code coordinates (if present).
+	 * 
+	 * @param filename
+	 *            The name of the sourcefile
+	 * @param lineNumber
+	 *            The line number to remove the breakpoint for.
+	 */
+	public void removeSourceCodeBreakPoint(String filename, int lineNumber){
+		synchronized(sourceCodeBreakPoints){
+			List<Integer> lineNumbers = sourceCodeBreakPoints.get(filename);
+			synchronized(lineNumbers){
+				lineNumbers.remove(Integer.valueOf(lineNumber));
+			}
+			if(lineNumbers.isEmpty()){
+				sourceCodeBreakPoints.remove(filename);
+			}
+		}
 	}
 	
 	/**

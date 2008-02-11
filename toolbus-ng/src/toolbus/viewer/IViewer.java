@@ -71,6 +71,18 @@ public interface IViewer{
 	void stateElementBreakPointHit(StateElement stateElement);
 	
 	/**
+	 * Informs the viewer that a registered breakpoint on a sourcecode coordinate was hit. The
+	 * debug toolbus will not suspend it's execution by itself; the action that will be taken is
+	 * completely up to the viewer implementation. In case the execution needs to be paused this
+	 * will need to be done explicitly by calling the doStop method.
+	 * 
+	 * @param stateElement
+	 *            The executed state element which's position information corresponded to a
+	 *            breakpoint set on a sourcecode coordinate.
+	 */
+	void sourceBreakPointHit(StateElement stateElement);
+	
+	/**
 	 * Fired right before the debug ToolBus starts executing the process logic.
 	 */
 	void toolbusStarting();

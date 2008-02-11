@@ -390,6 +390,10 @@ public class Viewer implements IViewer{
 		// Ignore, this viewer doesn't support breakpoints on state elements (yet).
 	}
 	
+	public void sourceBreakPointHit(StateElement stateElement){
+		// Ignore, this viewer doesn't support breakpoints on source code coordinates (yet).
+	}
+	
 	private void clearSubscriptionsTable(){
 		for(int i = subscriptionsTableModel.getRowCount() - 1; i >= 0; i--){
 			subscriptionsTableModel.removeRow(i);

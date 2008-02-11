@@ -1,3 +1,7 @@
+Mon Feb 11 10:21:58 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/viewer/DebugToolBus.java: Added the possibility to add
+ breakpoints to sourcecode coordinates.
+
 Wed Feb 06 10:04:45 CEST 2008 <lankamp@cwi.nl>
  * src/toolbus/viewer/IViewer.java: The stepExecuted event now also contains information about the process instances that were involved with the execution of the state element. These include snd-msg/rec-msg and snd-note/subscribe pairs.
 
