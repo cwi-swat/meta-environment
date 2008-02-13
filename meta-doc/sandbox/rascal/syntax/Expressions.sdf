@@ -55,8 +55,9 @@ context-free syntax
          Expression                                              -> Predicate
 	Expression "==" Expression                              -> Predicate {cons("equal")}
 	Expression "!=" Expression                              -> Predicate {cons("non-equal")}
-	Expression ":=" Expression                              -> Predicate {cons("match")}
-	Expression "!:=" Expression                             -> Predicate {cons("non-match")}
+	Pattern ":=" Expression                                 -> Predicate {cons("match")}
+	Pattern "!:=" Expression                                -> Predicate {cons("non-match")}
+         Type Expression "<-" Expression                        -> Predicate {cons("assign")}
 	Expression "in" Expression                              -> Predicate {cons("element-of")}
 
          Expression ">" Expression                               -> Predicate {cons("greater")}
@@ -73,12 +74,13 @@ context-free syntax
 %% Do we want elseif etc.?
 
 context-free syntax
-         ConstructPattern                                         -> Expression
+%%        Pattern                                                 -> Expression
+         "[|" Pattern "|]"                                        -> Expression
 
-   	MatchPattern "=>" Expression ("when" {Predicate ","}+ )? -> RewriteCase
+   	Pattern "=>" Expression ("when" {Predicate ","}+ )?      -> RewriteCase
    	"{" RewriteCase+ "}"                                     -> RewriteCases
 
-   	"select" Expression RewriteCases                         -> Expression
+   	"switch" Expression RewriteCases                         -> Expression
    	"replace" Expression Strategy RewriteCases               -> Expression
 
 

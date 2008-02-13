@@ -3,31 +3,21 @@ exports
 sorts Var %% variables
       Exp %% expressions
 lexical syntax
-     [a-z]+                          -> Var
+     [a-z]+                           -> Var
 context-free syntax
-     
-     Var                             -> Exp
-     
+     Var                              -> Exp
      "let" Var "=" Exp "in" Exp "end" -> Exp 
 
 %% Generated syntax
 hiddens
-   imports basic/Integers
+   imports
         Patterns
-        Declarations
    context-free start-symbols
         Declaration 
    context-free syntax
 %% Exp
-        Exp              -> MatchPattern
-        "`"  Exp         -> ConstructPattern
+        Exp              -> Pattern
         "$" Variable     -> Exp {prefer}
 %% Var
-        Var              -> MatchPattern
-        "`" Var          -> ConstructPattern
+%%       Var              -> Pattern      (Var already included in MatchPattern)
         "$" Variable     -> Var {prefer}
-
-    context-free priorities
-     
-       "$" Variable -> Exp > "$" Variable     -> Var,
-       "$" Variable -> Exp > Var -> Exp

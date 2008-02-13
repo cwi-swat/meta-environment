@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <article version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -504,7 +504,7 @@
           </listitem>
 
           <listitem>
-            <para>A "select" expression corresponds to the matching provided
+            <para>A "switch" expression corresponds to the matching provided
             by a set of rewrite rules. However, it provides only matching at
             the top level of its argument.</para>
           </listitem>
@@ -598,7 +598,7 @@ imports Booleans
 
 fun Bool and(Bool B1, B2) { %% reduce &amp; operator
     Bool B;
-    select B1 {
+    switch B1 {
       [| true |]  =&gt; reduce(B2)
       [| false |] =&gt; [| false |]
       [| $B |]    =&gt; [| $B1 &amp; $B2 |]
@@ -607,7 +607,7 @@ fun Bool and(Bool B1, B2) { %% reduce &amp; operator
 
 fun Bool or(Bool B1, B2) { %% reduce | operator
     Bool B;
-    select B1 {
+    switch B1 {
       [| true  |] =&gt; [| true |]
       [| false |] =&gt; reduce(B2)
       [| $B |]    =&gt; [| $B1 | $B2 |]
@@ -616,7 +616,7 @@ fun Bool or(Bool B1, B2) { %% reduce | operator
 
 fun Bool reduce(Bool B){
     Bool B1, B2, B3;
-    select B {
+    switch B {
       [| $B1 &amp; $B2 |]  =&gt; and(B1, B2)
       [| $B1 \| $B2 |] =&gt; or(B1, B2)  %% Note: | has to be escaped!
       [| $B3 |]        =&gt; B
@@ -689,7 +689,7 @@ fun TREE inc(TREE T) {
 
 fun TREE inc(TREE T) {
     int N;
-    select T {
+    switch T {
       Node [| $N |] =&gt; [| $(N + 1) |]
     }
 }
@@ -762,7 +762,7 @@ fun TREE srepl(TREE T) {
     TREE T1, T2;
     str FUN;
     
-    select (T) {
+    switch (T) {
       [| g($T1, $T2) |]    =&gt; [| i($T1, $T2) |]
       [| $FUN($T1, $T2) |] =&gt; [| $FUN($(srepl(T1)) $(srepl(T2))) |]
     }
@@ -929,7 +929,7 @@ fun Exp subst(Var V1, Exp E1, Exp E2) {
     Var V2;
     Exp Ea, Eb;
 
-    select E2 {
+    switch E2 {
       [| $V2 |] =&gt; V2
          when V1 != V2
 
@@ -984,7 +984,7 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     Var V, Y;
     Exp E1, E2;
 
-    select(E) {
+    switch(E) {
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $(rename(E1, Rn, Cnt)) 
               in 
@@ -1019,7 +1019,7 @@ fun Var newVar() {
 fun Exp rename(Exp E, rel[Var,Var] Rn) {
     Var V, Y;
 
-    select E {
+    switch E {
 
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $(rename(E1, Rn)) 
@@ -1048,7 +1048,7 @@ fun Exp rename(Exp E) {
     global rel[Var, Var] Rn := {}
     Var V, Y;
  
-    select E {
+    switch E {
     [| let $V = $E1 in $E2 end |] =&gt;
            [| let $Y = $rename(E1) 
               in 
@@ -1095,7 +1095,7 @@ var
     Env Env;
 
 fun list[Error] tcp(PROGRAM P) {
-    select P {
+    switch P {
     [| begin $Decls $Series end |] =&gt;
            [ tcst(S, Env) | Stat S : Series ] %% list comprehension
        when Env := {&lt;Id, Type&gt; | 
@@ -1104,7 +1104,7 @@ fun list[Error] tcp(PROGRAM P) {
 }
 
 fun list[Error] tcst(Stat Stat, Env Env) {
-    select Stat {
+    switch Stat {
     [| $Id := $Exp |] =&gt; type-of(Exp, Type, Env)
        when {&lt;Id,Type&gt;} := Env[Id]
 
@@ -1123,7 +1123,7 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     Id Id;
     Exp Exp;
 
-    select E {
+    switch E {
     [| $NatCon |] =&gt; []
        when Type == natural
 
@@ -1138,9 +1138,9 @@ fun list[Error] type-of(Exp E, TYPE Type, Env Env) {
     }
 }
 
-%% Discussion: it may be interesting to generalize select to allow 
+%% Discussion: it may be interesting to generalize switch to allow 
 %% multiple arguments:
-   select (E, Type) {
+   switch (E, Type) {
     [| $NatCon |], [| natural |] =&gt; []
 
     [| $StrCon |], [| string |] =&gt; []
@@ -1192,7 +1192,7 @@ exports
 
 fun Bool tc(PROGRAM P) {
     dyn Env Env := {};
-    select P {
+    switch P {
       [| begin $Decls $Stats end |] =&gt; tcs(Stats)
          when Env := tcd(Decls)
     }
@@ -1205,7 +1205,7 @@ fun Env tcd(Decls Decls) {
 fun Bool tcs(Stats Stats) {
     Stat Stat;
     Stats Stats;
-    select (Stats) {
+    switch (Stats) {
     [| |]                =&gt; true
 
     [| $Stat ; $Stats |] =&gt; tcst(Stat) + tcst(Stats)
@@ -1216,7 +1216,7 @@ fun Bool tcst(Stat Stat) {
     Id Id;
     Exp Exp;
     Stats Stats, Stats1, Stats2;
-    select (Stat) {
+    switch (Stat) {
       [| $Id := $Exp |] =&gt; type-of(Exp, Type)
          when {&lt;Id, Type&gt;} := Env[Id]
 
@@ -1234,7 +1234,7 @@ fun list[Error] type-of(Exp E, TYPE Type) {
     Id Id;
     Exp Exp;
 
-    select (E) {
+    switch (E) {
       [| $NatCon |] =&gt; []
          when Type == natural
 
@@ -1261,7 +1261,7 @@ fun list[Error] type-of(Exp E, TYPE Type) {
     Decls decls;
     Series series;
 
-    select p {
+    switch p {
       [| begin $decls $series end |] =&gt; evalStatements(series)
          when venv := evalDecls(decls);
     }
@@ -1269,7 +1269,7 @@ fun list[Error] type-of(Exp E, TYPE Type) {
 
 fun VEnv evalDecls(Decls decls) {
     Id-Type* idtypes;
-    select decls {
+    switch decls {
       [| declare $idtypes |] =&gt; evalIdTypes(idtypes)
     }
 }
@@ -1277,7 +1277,7 @@ fun VEnv evalDecls(Decls decls) {
 fun VEnv evalIdTypes(Id-Type* idtypes) {
     Id id;
     Id-Type* tail;
-    select idtypes { 
+    switch idtypes { 
       [| $id : natural, $tail |] =&gt; store(evalIdTypes(tail),id,0)
   
       [| $id : string, $ tail |] =&gt; store(evalIdTypes(tail),id,"")
@@ -1288,7 +1288,7 @@ fun VEnv evalIdTypes(Id-Type* idtypes) {
 
 fun VEnv evalStatements(Statement* series) {
     Statement stat; Statement* stats;
-    select series  {
+    switch series  {
       [| $stat; $stats |] =&gt; venv
          when venv := evalStatement(stat),
               venv := evalStatements(stats)
@@ -1300,7 +1300,7 @@ fun VEnv evalStatement(Statement stat) {
     Exp exp;
     Series series, series1, series2;
     
-    select stat {    
+    switch stat {    
       [| if $exp then $series1 else $series2 fi |] =&gt; 
          evalStatements(series1)
          when evalExp(exp, venv) != 0
@@ -1325,7 +1325,7 @@ fun VEnv evalExp(Exp exp) {
     Natural nat1, nat2;
     StrCon str1, str2, str3;
 
-    select exp {
+    switch exp {
       [| $exp1 + $exp2 |] =&gt; nat1 + nat2
          when nat1 := eve(exp1),
               nat2 := eve(exp2)
@@ -1361,7 +1361,7 @@ fun cf_segment cflow({STATEMENT ";"}* Stats){
     rel[CP,CP] R1, R2;
     set[CP] En1, En2, Ex1, Ex2;
     
-    select Stats {
+    switch Stats {
       [| Stat ; $Stats2 |] =&gt;
              &lt;En1, R1 union R2 union (Ex1 x En2), Ex2&gt;
          when &lt;En1, R1, Ex1&gt; := cflow(Stat),
@@ -1377,7 +1377,7 @@ fun cf_segment cflow(STATEMENT Stat){
     rel[CP,CP] R1, R2;
     set[CP] En1, En2, Ex1, Ex2;
 
-    select Stat {
+    switch Stat {
       [| while $Exp do $Stats od |] =&gt;
              &lt;{Exp}, ({Exp} x En) union R union (Ex x {Exp}),{Exp}&gt;
          when &lt;En, R, Ex&gt; := cflow(Stats)
@@ -1548,7 +1548,7 @@ fun PROGRAM cse(PROGRAM P) {
 fun Boolean is-constant(EXP E) {
    Int Int;
    Str Str;
-   select (E){
+   switch (E){
      [| $Int |] =&gt; true
 
      [| $Str |] =&gt; true
@@ -1603,10 +1603,100 @@ fun PROGRAM cp(PROGRAM P) {
     </section>
   </section>
 
+  <section xml:id="section.on-quoting">
+    <title>On quoting</title>
+
+    <para>How will we quote patterns and terms? Currently we use the
+    convention:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Pattern is enclosed between [| and |]</para>
+      </listitem>
+
+      <listitem>
+        <para>Variables are prefixed with $</para>
+      </listitem>
+
+      <listitem>
+        <para>A declared variable is written as $(Type Var).</para>
+      </listitem>
+
+      <listitem>
+        <para>An expression <replaceable>E</replaceable> to be computed and
+        inserted is written as $(<replaceable>E</replaceable>).</para>
+      </listitem>
+
+      <listitem>
+        <para>Examples:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><programlisting>[| while $Exp do $Stats od |]</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting>{&lt;S, Id&gt; | STATEMENT S : P, 
+           [| $(PICO-ID Id) := $(EXP Exp) |] == S}</programlisting></para>
+          </listitem>
+
+          <listitem>
+            <para><programlisting>[| let $Y = $(rename(E1)) in $(rename(E2)) end |]</programlisting></para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>This is good for disambiguation but gives notational overhead. Is
+    there a more concise scheme?</para>
+
+    <para>Here is an experiment.</para>
+  </section>
+
   <section>
     <title>Syntax Definition</title>
 
-    <para>See separate SDF definition.</para>
+    <para>See separate SDF definition. For every sort S in the syntax
+    definition add the following rules:</para>
+
+    <programlisting><replaceable>N</replaceable>                 -&gt; Pattern
+"&lt;<replaceable>N</replaceable>" Variable "&gt;" -&gt; <replaceable>N</replaceable>       %% defining occurrence in pattern
+"$" Variable      -&gt; <replaceable>N</replaceable>       %% use in pattern</programlisting>
+
+    <para>In the case of Pico, this leads to the following completely
+    unambiguous examples:</para>
+
+    <programlisting>fun VEnv evalExp(Exp exp) {
+
+    switch exp {
+      &lt;EXP exp1&gt; + &lt;EXP exp2&gt; =&gt; nat1 + nat2
+         when Natural nat1 &lt;- eve(exp1),
+              Natural nat2 &lt;- eve(exp2)
+       
+      &lt;EXP exp1&gt; - &lt;EXP exp2&gt; =&gt; nat1 + nat2
+         when Natural nat1 &lt;- eve(exp1),
+              Natural nat2 &lt;- eve(exp2)
+        
+      &lt;EXP exp1&gt; || &lt;EXP exp2&gt; =&gt; str3
+         when StrCon str1 &lt;- eve(exp1),
+              StrCon str2 &lt;- eve(exp2),
+              StrCon str3 &lt;- concat(str1, str2)
+
+      &lt;EXP exp1&gt;  =&gt; nil-value     %% default "equation"
+   } 
+}</programlisting>
+
+    <para>and</para>
+
+    <programlisting>fun VEnv evalStatements({STATEMENT ";"}* series) {
+ 
+    switch series  {
+      &lt;STATEMENT stat&gt;; &lt;{STATEMENT ";"}* stats&gt; =&gt; venv
+      when venv &lt;- evalStatement(stat),
+           venv &lt;- evalStatements(stats)
+     [| |] =&gt; venv 
+    }
+}</programlisting>
   </section>
 
   <section xml:id="section.integration-tscript">
@@ -2006,49 +2096,8 @@ process mkWave(int N) is ...</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>How will we quote patterns and terms? Currently we use the
-        convention:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Pattern is enclosed between [| and |]</para>
-          </listitem>
-
-          <listitem>
-            <para>Variables are prefixed with $</para>
-          </listitem>
-
-          <listitem>
-            <para>A declared variable is written as $(Type Var).</para>
-          </listitem>
-
-          <listitem>
-            <para>An expression <replaceable>E</replaceable> to be computed
-            and inserted is written as $(<replaceable>E</replaceable>).</para>
-          </listitem>
-
-          <listitem>
-            <para>Examples:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><programlisting>[| while $Exp do $Stats od |]</programlisting></para>
-              </listitem>
-
-              <listitem>
-                <para><programlisting>{&lt;S, Id&gt; | STATEMENT S : P, 
-           [| $(PICO-ID Id) := $(EXP Exp) |] == S}</programlisting></para>
-              </listitem>
-
-              <listitem>
-                <para><programlisting>[| let $Y = $(rename(E1)) in $(rename(E2)) end |]</programlisting></para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
-
-        <para>This is good for disambiguation but gives notational overhead.
-        Is there a more concise scheme?</para>
+        <para>How will we quote patterns and terms? See <xref
+        linkend="section.on-quoting" /> for a discussion.</para>
       </listitem>
 
       <listitem>
@@ -2112,7 +2161,7 @@ process mkWave(int N) is ...</programlisting>
       </listitem>
 
       <listitem>
-        <para>What happens if no case in a select matches? Some kind of
+        <para>What happens if no case in a switch matches? Some kind of
         failure? How does it propagate? Runtime error?</para>
       </listitem>
 

@@ -3,21 +3,17 @@ fun Exp rename(Exp E, rel[Var,Var] Rn, Int Cnt) {
     Var V, Y;
     Exp E1, E2;
 
-    select(E) {
-    let $V = $E1 in $E2 end =>
-           ` let $Y = $R1
-              in 
-                 $R2
-              end 
+    switch E {
+    let $V = $E1 in $E2 end => let $Y = $R1 in $R2 end 
         when Y := "x" + Cnt,   %% this + operator concatenates 
                                %% (after converting the int to str)
              Cnt1 := Cnt + 1,
              R1 := rename(E1, Rn, Cnt),
              R2 := rename(E2, {<V, Y>} union Rn, Cnt1)
 
-     [| $V |] => V1
+    $V => $V1
        when { V1 } == Rn[V]
 
-    case $E : => E
+    $E => $E
     }
 }

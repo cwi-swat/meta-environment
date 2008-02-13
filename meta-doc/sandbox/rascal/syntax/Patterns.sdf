@@ -1,22 +1,20 @@
 module Patterns
 
-imports Variables Expressions
+imports Variables
 
 exports
-sorts QuotedPattern Pattern PatternChar PatternSymbol MatchPattern ConstructPattern
+sorts Pattern %% PatternChar PatternSymbol
 
-lexical syntax
-         "\\$"                                     -> PatternChar
-         "\\|"                                     -> PatternChar
-         ~[\$\|]                                   -> PatternChar {avoid}
+%%lexical syntax
+%%         "\\$"                                     -> PatternChar
+%%         "\\|"                                     -> PatternChar
+%%         ~[\$\|]                                   -> PatternChar {avoid}
 
 context-free syntax
-         "[|" PatternSymbol* "|]"                  -> QuotedPattern
-         PatternChar                               -> PatternSymbol {avoid}
-         "$" Variable                              -> PatternSymbol
-         "$(" VarDecl ")"                          -> PatternSymbol
-         "$(" Expression ")"                       -> PatternSymbol
-         QuotedPattern                             -> MatchPattern
-         QuotedPattern                             -> ConstructPattern
-
+%%         "[|" PatternSymbol* "|]"                  -> QuotedPattern
+%%         PatternChar                               -> PatternSymbol {avoid}
+%%         "$" Variable                              -> PatternSymbol
+%%         "$(" VarDecl ")"                          -> PatternSymbol
+%%         "$(" Expression ")"                       -> PatternSymbol
+         "[|" Pattern "|]"                           -> Pattern
 
