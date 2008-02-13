@@ -616,6 +616,7 @@ public class Viewer implements IViewer{
 	public static void main(String[] args){
 		Viewer viewer = new Viewer(args);
 		DebugToolBus debugToolBus = viewer.getDebugToolBus();
+		debugToolBus.setBreakWhileStepping(false);
 		
 		CommandLine.createCommandLine(debugToolBus);
 		

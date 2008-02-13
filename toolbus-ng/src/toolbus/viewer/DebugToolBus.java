@@ -47,6 +47,8 @@ public class DebugToolBus extends ToolBus{
 	private volatile boolean doRun = false;
 	private volatile boolean doStep = false;
 	
+	private volatile boolean breakWhileStepping;
+	
 	private final IViewer viewer;
 	private final IPerformanceMonitor performanceMonitor;
 	
@@ -92,6 +94,8 @@ public class DebugToolBus extends ToolBus{
 		performanceStatsEntryHandler = new PerformanceStatsEntryHandler(performanceMonitor);
 		
 		nextTime = 0;
+		
+		breakWhileStepping = true;
 	}
 	
 	/**
@@ -228,10 +232,15 @@ public class DebugToolBus extends ToolBus{
 						pi = processesIterator.next();
 						ExecutionResult executionResult = pi.debugStep();
 						boolean stepSuccessFull = (executionResult != null);
+						boolean wasStep = doStep;
+						
+						if(wasStep && stepSuccessFull){
+							doStep = false; // Consume the step.
+						}
 						
 						String processName = pi.getProcessName();
 						int processId = pi.getProcessId();
-						if(!doStep){
+						if(!wasStep || breakWhileStepping){
 							if(stepSuccessFull){
 								if(processInstanceBreakPoints.contains(new Integer(processId)) || processBreakPoints.contains(processName)){
 									viewer.processBreakPointHit(pi);
@@ -274,8 +283,7 @@ public class DebugToolBus extends ToolBus{
 						work |= stepSuccessFull;
 						
 						if(stepSuccessFull){
-							if(doStep){
-								doStep = false; // Consume the step.
+							if(wasStep){
 								viewer.stepExecuted(pi, executionResult.stateElement, executionResult.partners); // Ignore the Eclipse warning here, since it's bogus.
 								break WORKLOOP;
 							}
@@ -442,6 +450,17 @@ public class DebugToolBus extends ToolBus{
 			currentState = state;
 			viewer.updateState(state);
 		}
+	}
+	
+	/**
+	 * Tells the debug toolbus whether or not it should fire 'breakPointHit' events while stepping.
+	 * This parameter is set to true by default.
+	 * 
+	 * @param breakWhileStepping
+	 *            The flag that indicates whether or not to break on breakpoints while stepping.
+	 */
+	public void setBreakWhileStepping(boolean breakWhileStepping){
+		this.breakWhileStepping = breakWhileStepping;
 	}
 	
 	/**

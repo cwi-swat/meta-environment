@@ -1,20 +1,20 @@
+Wed Feb 13 09:28:33 CEST 2008 <lankamp@cwi.nl>
+ * src/toolbus/viewer/DebugToolBus.java: Whether or not the debug toolbus should fire breakPointHit events while stepping is now configurable.
+
 Mon Feb 11 10:21:58 CEST 2008 <lankamp@cwi.nl>
- * src/toolbus/viewer/DebugToolBus.java: Added the possibility to add
- breakpoints to sourcecode coordinates.
+ * src/toolbus/viewer/DebugToolBus.java: Added the possibility to add breakpoints to sourcecode coordinates.
 
 Wed Feb 06 10:04:45 CEST 2008 <lankamp@cwi.nl>
  * src/toolbus/viewer/IViewer.java: The stepExecuted event now also contains information about the process instances that were involved with the execution of the state element. These include snd-msg/rec-msg and snd-note/subscribe pairs.
 
 Tue Feb 05 10:45:49 CEST 2008 <lankamp@cwi.nl>
- * src/toolbus/atom/note/SndNote.java: Added a method that enables the
- retrieval of potential message partners.
+ * src/toolbus/atom/note/SndNote.java: Added a method that enables the retrieval of potential message partners.
 
 Fri Feb 01 15:58:38 CEST 2008 <lankamp@cwi.nl>
  * src/toolbus/test/Sieve.tb: Fixed the Sieve test script.
 
 Wed Jan 23 11:12:32 CEST 2008 <lankamp@cwi.nl>
- * src/toolbus/parsercup/toolbus.cup: The parser now generates slightly
- better error messages when it encounters a syntax error.
+ * src/toolbus/parsercup/toolbus.cup: The parser now generates slightly better error messages when it encounters a syntax error.
 
 Mon Jan 21 09:38:32 CEST 2008 <lankamp@cwi.nl>
  * toolbus.*ConnectionHandler: Fixed a problem with setting IP priorities.
